@@ -1,0 +1,7 @@
+id: p053
+text: Τα λέμε αύριο στις έξι.
+translation: Увидимся завтра в шесть.
+provenance:
+  sourceLabel: Лексикон курса, модуль 04 (docs/course/lexicon/04.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 04 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
