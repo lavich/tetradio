@@ -1,0 +1,7 @@
+id: p220
+text: Έχω πονόλαιμο.
+translation: У меня болит горло.
+provenance:
+  sourceLabel: Лексикон курса, модуль 17 (docs/course/lexicon/17.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 17 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
