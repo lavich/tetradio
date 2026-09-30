@@ -11,7 +11,7 @@ import {
   tiles,
 } from "../src/domain/syllables";
 import { buildContent } from "../content/build";
-const seedWords = buildContent().words;
+const seedWords = buildContent("tests/fixtures/tavelori-content").words;
 
 describe("деление на слоги", () => {
   it.each([

@@ -18,9 +18,10 @@ tests/fixtures
 content/art
 content/words
 content/phrases
-content/clozes
 content/lessons
 content/courses
+content/modules
+tests/fixtures/tavelori-content
 
 # Спецификации и проза: отдельное решение, не смешиваем с правкой кода.
 openspec
