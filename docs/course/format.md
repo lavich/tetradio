@@ -1,0 +1,58 @@
+# Формат курса (схема 4)
+
+Исходники курса лежат в `content/` и собираются `node content/build.ts` в неизменяемые пакеты `public/content/`. Модель и проверки — `src/content/course.ts` (общие для сборщика и клиента), сборка — `content/build.ts`, тесты — `tests/course-build.test.ts`.
+
+## Файлы
+
+```
+content/courses/greek-a2.yaml   курс: title, modules: [m01, …, m24]
+content/modules/m01.yaml        модуль программы
+content/lessons/m01-1.yaml      урок модуля (m01-1, m01-2, m01-3, m01-test)
+content/words/<id>.yaml         слово (как в Tavelori) + forms
+content/phrases/<id>.yaml       фраза (как в Tavelori, с provenance)
+content/audio/<file>            аудио слов, фраз и аудирования
+content/art/palette.json        палитра иллюстраций (механика, не контент)
+```
+
+## Модуль
+
+```yaml
+number: 1
+title: Γνωριμία
+subtitle: Знакомство
+status: draft            # draft | published
+goal: Прочитать слово вслух, представиться, спросить имя
+grammar: [чтение и ударение, είμαι]
+sessions: 3
+lessons: [m01-1, m01-2, m01-3, m01-test]
+```
+
+`draft` — модуль виден в каталоге описанием и статусом, его уроки собираются для проверки, но не поставляются; аудио черновика может ещё не существовать. `published` — сборка отказывает, если в уроках модуля не хватает: текста для чтения с заданием, аудирования с аудиофайлом, транскриптом и заданием, письменного и устного задания, контрольной (`kind: test`) с оцениваемыми заданиями (`graded: true`).
+
+## Урок
+
+```yaml
+title: Знакомство и είμαι
+kind: lesson             # lesson | test
+items:                   # карточки урока для повторения FSRS (может быть пусто у контрольной)
+  - { kind: word, id: eimai }
+  - { kind: phrase, id: pos-se-lene }
+blocks:                  # порядок блоков — порядок урока
+  - { type: explanation, id: eimai, title: Глагол είμαι, body: "…", table: { columns: [лицо, форма], rows: [[εγώ, είμαι]] } }
+  - { type: vocabulary, id: words }
+  - { type: reading, id: text, title: Η Άννα, text: "…", glosses: [{ text: Κύπρο, russian: Кипр }] }
+  - type: exercise
+    id: text-tf
+    about: text           # задание к чтению или аудированию — навык задания
+    instruction: Верно или неверно?
+    format: choice        # choice | text | gap | match
+    items:
+      - { id: q1, prompt: "…", options: [Σωστό, Λάθος], answer: Λάθος, explanation: "…" }
+  - { type: listening, id: dialogue, title: Στο καφέ, audio: m01-dialogue.mp3, source: "…", plays: 2, transcript: [{ speaker: Άννα, text: "…" }] }
+  - { type: writing, id: about-me, register: friendly, prompt: "…", words: { min: 20, max: 40 }, model: "…", criteria: ["…"] }
+  - { type: speaking, id: intro, part: interview, prompt: "…", seconds: 60, model: "…", criteria: ["…"] }
+```
+
+Форматы заданий: `choice` — варианты и ровно один ответ из них (верно/неверно — варианты Σωστό/Λάθος); `text` — ввод, `answer` — список допустимых ответов; `gap` — пропуск `___` и слово из общего `bank`; `match` — соединение с вариантом из `bank` (лишние варианты допускаются, как на экзамене). Идентификаторы блоков и пунктов — ключи прогресса: `a-z`, `0-9`, дефис, уникальны в уроке и не меняются после публикации.
+
+Слово получает `forms` из лексикона (`docs/course/lexicon/NN.tsv`): мн. ч., аорист и будущее, три рода.

@@ -359,11 +359,11 @@ describe("каталог и пакеты", () => {
 
 describe("индекс слов в каталоге", () => {
   it("запись урока перечисляет слова пакета в порядке состава, версия схемы прежняя", () => {
-    expect(content.catalog.schemaVersion).toBe(3);
+    expect(content.catalog.schemaVersion).toBe(4);
     for (const entry of content.catalog.lessons)
       expect(entry.wordIds).toEqual(packageOf(entry.id).words.map((word) => word.id));
     const raw = JSON.parse(fileOf("content/catalog.json").body as string);
-    expect(raw.schemaVersion).toBe(3);
+    expect(raw.schemaVersion).toBe(4);
     expect(raw.lessons[0].wordIds).toEqual(content.catalog.lessons[0].wordIds);
   });
 });

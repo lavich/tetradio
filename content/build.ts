@@ -21,6 +21,14 @@ import {
   type PackageWord,
 } from "../src/content/schema.ts";
 import { CARD_KINDS, type CardKind, type Example, type Gloss, type Segment } from "../src/domain/types.ts";
+import {
+  parseBlocks,
+  parseModule,
+  publicationGaps,
+  type CatalogModule,
+  type LessonBlock,
+  type LessonKind,
+} from "../src/content/course.ts";
 import { checkArt, LEGACY_FILE, readLegacy, type ArtReport } from "./art.ts";
 
 /**
@@ -53,6 +61,7 @@ export interface WordSource {
   russian: string;
   ipa?: string;
   note?: string;
+  forms?: string;
   verified?: boolean;
   source?: string;
   image?: string;
@@ -84,12 +93,29 @@ export interface LessonSource {
   language?: string;
   words?: string[];
   items?: LessonItemSource[];
+  /** Урок курса (схема 4): вид и блоки; у аудирования `audio` — файл в audio/. */
+  kind?: LessonKind;
+  blocks?: unknown[];
 }
 export interface CourseSource {
   id?: string;
   title: string;
   source?: string;
-  lessons: string[];
+  /** Словарный курс перечисляет уроки; курс программы — модули, уроки берутся из них. */
+  lessons?: string[];
+  modules?: string[];
+}
+/** Модуль программы: `modules/NN.yaml`; уроки черновика собираются для проверки, но не поставляются. */
+export interface ModuleSource {
+  id?: string;
+  number: number;
+  title: string;
+  subtitle: string;
+  status: "draft" | "published";
+  goal: string;
+  grammar?: string[];
+  sessions: number;
+  lessons?: string[];
 }
 
 const hash = (value: string | Uint8Array, length = 12) =>
@@ -148,6 +174,7 @@ export interface ContentRoot {
   phrases: Map<string, Sourced<PhraseSource>>;
   lessons: Map<string, LessonSource>;
   courses: Map<string, Sourced<CourseSource>>;
+  modules: Map<string, Sourced<ModuleSource>>;
   files: Map<string, Uint8Array>;
 }
 export function readSources(root: string): ContentRoot {
@@ -167,7 +194,8 @@ export function readSources(root: string): ContentRoot {
   };
   const words = byId<WordSource>("words"),
     phrases = byId<PhraseSource>("phrases"),
-    courses = byId<CourseSource>("courses");
+    courses = byId<CourseSource>("courses"),
+    modules = byId<ModuleSource>("modules");
   const lessons = new Map(
     list("lessons").map((file) => [basename(file, extname(file)), load<LessonSource>("lessons", file)]),
   );
@@ -175,7 +203,7 @@ export function readSources(root: string): ContentRoot {
   for (const dir of ["art", "audio"])
     if (existsSync(join(root, dir)))
       for (const file of readdirSync(join(root, dir))) files.set(`${dir}/${file}`, readFileSync(join(root, dir, file)));
-  return { words, phrases, lessons, courses, files };
+  return { words, phrases, lessons, courses, modules, files };
 }
 
 export interface BuiltFile {
@@ -267,6 +295,8 @@ function describe(id: string, src: Sourced<WordSource>): PackageWord {
   if (draft.verified && !draft.ipa) fail(`${where}: проверенное слово должно иметь IPA`);
   const note = text(src.note, `${where}.note`, false);
   if (note) draft.note = note;
+  const forms = text(src.forms, `${where}.forms`, false);
+  if (forms) draft.forms = forms;
   if (source) draft.source = source;
   if (src.image) draft.imageAssetId = imageAssetId(id);
   if (src.audio) draft.audioAssetId = audioAssetId(id);
@@ -421,9 +451,66 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   /** Урок принадлежит ровно одному курсу: без курса он потеряется в каталоге, в двух — попадёт в занятие дважды. */
   const courseOf = new Map<string, string>();
   const courses: CatalogCourse[] = [];
+  const modules: CatalogModule[] = [];
+  /** Место урока в модуле; уроки черновиков проверяются, но не поставляются. */
+  const moduleOf = new Map<string, { id: string; position: number; draft: boolean }>();
+  const moduleOwner = new Map<string, string>();
   for (const [courseId, src] of sources.courses) {
     const where = `courses/${src.file}`;
     const title = text(src.title, `${where}.title`)!;
+    if (src.lessons !== undefined && src.modules !== undefined) fail(`${where}: укажите либо lessons, либо modules`);
+    const moduleIds: string[] = [];
+    if (src.modules !== undefined) {
+      if (!Array.isArray(src.modules) || !src.modules.length) fail(`${where}: нужен непустой список modules`);
+      const lessonIds: string[] = [];
+      const numbers = new Map<number, string>();
+      for (const moduleId of src.modules) {
+        const moduleSrc = sources.modules.get(moduleId) ?? fail(`${where}: модуля ${moduleId} нет в modules/`);
+        const at = `modules/${moduleSrc.file}`;
+        const owner = moduleOwner.get(moduleId);
+        if (owner) fail(`${where}: модуль ${moduleId} уже входит в курс ${owner}`);
+        moduleOwner.set(moduleId, courseId);
+        const ownLessons = moduleSrc.lessons ?? [];
+        if (!Array.isArray(ownLessons)) fail(`${at}.lessons: ожидался список`);
+        let module: CatalogModule;
+        try {
+          module = parseModule(
+            nfc({
+              ...moduleSrc,
+              id: moduleId,
+              courseId,
+              lessonIds: moduleSrc.status === "published" ? ownLessons : [],
+              lessons: undefined,
+              file: undefined,
+            }),
+            at,
+          );
+        } catch (error) {
+          throw error instanceof ContentError ? new ContentError(error.message) : error;
+        }
+        const twin = numbers.get(module.number);
+        if (twin) fail(`${at}.number: номер ${module.number} уже у модуля ${twin}`);
+        numbers.set(module.number, moduleId);
+        ownLessons.forEach((lessonId, position) => {
+          if (!sources.lessons.has(lessonId)) fail(`${at}: урока ${lessonId} нет в lessons/`);
+          if (moduleOf.has(lessonId)) fail(`${at}: урок ${lessonId} уже входит в модуль ${moduleOf.get(lessonId)!.id}`);
+          moduleOf.set(lessonId, { id: moduleId, position, draft: module.status === "draft" });
+          courseOf.set(lessonId, courseId);
+          if (module.status === "published") lessonIds.push(lessonId);
+        });
+        modules.push(module);
+        moduleIds.push(moduleId);
+      }
+      courses.push({
+        id: courseId,
+        title,
+        language: LANGUAGE,
+        lessonIds,
+        moduleIds,
+        ...(src.source ? { source: src.source } : {}),
+      });
+      continue;
+    }
     if (!Array.isArray(src.lessons) || !src.lessons.length) fail(`${where}: нужен непустой список lessons`);
     for (const lessonId of src.lessons) {
       if (!sources.lessons.has(lessonId)) fail(`${where}: урока ${lessonId} нет в lessons/`);
@@ -432,13 +519,13 @@ export function buildContent(root = defaultRoot()): BuiltContent {
       courseOf.set(lessonId, courseId);
     }
     // Курс учат целиком, поэтому смешанные языки внутри него — ошибка, а не особенность набора.
-    const languages = new Set(src.lessons.map((lessonId) => sources.lessons.get(lessonId)!.language ?? LANGUAGE));
+    const languages = new Set(src.lessons!.map((lessonId) => sources.lessons.get(lessonId)!.language ?? LANGUAGE));
     if (languages.size > 1) fail(`${where}: уроки курса на разных языках — ${[...languages].sort().join(", ")}`);
     const course: CatalogCourse = {
       id: courseId,
       title,
       language: [...languages][0] ?? LANGUAGE,
-      lessonIds: [...src.lessons],
+      lessonIds: [...src.lessons!],
     };
     const source = text(src.source, `${where}.source`, false);
     if (source) course.source = source;
@@ -446,6 +533,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   }
 
   const used = { word: new Set<string>(), phrase: new Set<string>() };
+  const lessonsForModule = new Map<string, { id: string; kind: LessonKind; blocks: LessonBlock[] }>();
   const cards = { word: words, phrase: phrases } as const;
   const packages: ContentPackage[] = [];
   const entries: CatalogEntry[] = [];
@@ -464,7 +552,10 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     if (src.words !== undefined && src.items !== undefined) fail(`${where}: укажите либо words, либо items, но не оба`);
     const refs: LessonItemSource[] =
       src.items !== undefined ? src.items : (src.words ?? []).map((wordId) => ({ kind: "word", id: wordId }));
-    if (!Array.isArray(refs) || !refs.length)
+    const placement = moduleOf.get(id);
+    // Урок программы может состоять только из блоков (контрольная, чтение); словарный урок без карточек пуст.
+    const hasBlocks = placement !== undefined && Array.isArray(src.blocks) && src.blocks.length > 0;
+    if (!Array.isArray(refs) || (!refs.length && !hasBlocks))
       fail(`${where}: нужен непустой список ${src.items !== undefined ? "items" : "words"}`);
     const items: PackageItem[] = refs.map((ref, position) => {
       const path = `${where}.${src.items !== undefined ? `items[${position}]` : `words[${position}]`}`;
@@ -479,26 +570,74 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     });
     if (new Set(items.map((item) => `${item.kind}/${item.id}`)).size !== items.length)
       fail(`${where}: карточка повторяется в списке`);
+    const blockMedia: PackageMedia[] = [];
+    let blocks: LessonBlock[] = [];
+    if (src.blocks !== undefined) {
+      if (!placement) fail(`${where}.blocks: блоки бывают только у уроков модуля программы`);
+      if (!Array.isArray(src.blocks)) fail(`${where}.blocks: ожидался список`);
+      const raw = src.blocks.map((block, index) => {
+        if (typeof block !== "object" || block === null || Array.isArray(block)) return block;
+        const { audio, ...rest } = block as Record<string, unknown>;
+        if (audio === undefined) return rest;
+        if (rest.type !== "listening") fail(`${where}.blocks[${index}].audio: аудиофайл бывает только у аудирования`);
+        if (typeof audio !== "string" || typeof rest.id !== "string")
+          fail(`${where}.blocks[${index}]: нужны id и имя файла audio`);
+        // Черновик готовится до записи аудио: файла может ещё не быть, и в публикацию его медиа не попадает.
+        if (placement?.draft) return rest;
+        const source = typeof rest.source === "string" ? rest.source : "";
+        if (!source.trim()) fail(`${where}.blocks[${index}].source: у аудио нужен источник и право на использование`);
+        const assetId = `snd-${id}-${rest.id as string}`;
+        const built = mediaFor(
+          assetId,
+          audio as string,
+          "audio",
+          sources.files,
+          { alt: "", source },
+          `${where}.blocks[${index}]`,
+          legacy,
+          art,
+        );
+        media.set(assetId, built);
+        blockMedia.push(built.item);
+        return { ...rest, audioAssetId: assetId };
+      });
+      try {
+        blocks = parseBlocks(nfc(raw), `${where}.blocks`);
+      } catch (error) {
+        throw error instanceof ContentError ? new ContentError(error.message) : error;
+      }
+    }
+    if (src.kind !== undefined && src.kind !== "lesson" && src.kind !== "test")
+      fail(`${where}.kind: ожидалось lesson или test`);
+    if (src.kind !== undefined && !placement) fail(`${where}.kind: вид бывает только у урока модуля программы`);
+    lessonsForModule.set(id, { id, kind: src.kind ?? "lesson", blocks });
+    // Уроки черновика проверены, но не поставляются: карточки считаются использованными, чтобы автор мог готовить модуль.
+    if (placement?.draft) continue;
     const packWords = items.filter((item) => item.kind === "word").map((item) => words.get(item.id)!);
     const packPhrases = items.filter((item) => item.kind === "phrase").map((item) => phrases.get(item.id)!);
     const packMedia = [
-      ...packWords.flatMap((word) => [word.imageAssetId, word.audioAssetId]),
-      ...packPhrases.map((p) => p.audioAssetId),
-    ]
-      .filter((ref): ref is string => !!ref)
-      .map((ref) => media.get(ref)!.item);
+      ...[
+        ...packWords.flatMap((word) => [word.imageAssetId, word.audioAssetId]),
+        ...packPhrases.map((p) => p.audioAssetId),
+      ]
+        .filter((ref): ref is string => !!ref)
+        .map((ref) => media.get(ref)!.item),
+      ...blockMedia,
+    ];
     const draft: ContentPackage = {
       schemaVersion: SCHEMA_VERSION,
       id,
       courseId,
       version: "",
       language: src.language ?? LANGUAGE,
-      lesson: { title },
+      lesson: placement ? { title, kind: src.kind ?? "lesson" } : { title },
+      ...(placement ? { module: { id: placement.id, position: placement.position } } : {}),
       words: packWords,
       phrases: packPhrases,
       items,
       links: items.filter((item) => item.kind === "word").map((item) => ({ wordId: item.id, position: item.position })),
       media: packMedia,
+      ...(blocks.length ? { blocks } : {}),
     };
     const version = hash(canonical({ ...draft, version: undefined }));
     const pack = { ...draft, version };
@@ -527,12 +666,22 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   for (const id of phrases.keys())
     if (!used.phrase.has(id))
       fail(`phrases/${sources.phrases.get(id)!.file} не входит ни в один урок и не будет опубликована`);
+  // Модуль публикуется только полным: без чтения, аудио, письма, речи или контрольной он остаётся черновиком.
+  for (const module of modules) {
+    if (module.status !== "published") continue;
+    const gaps = publicationGaps(module.lessonIds.map((lessonId) => lessonsForModule.get(lessonId)!));
+    if (gaps.length)
+      fail(
+        `modules/${sources.modules.get(module.id)!.file}: модуль ${module.id} нельзя опубликовать — ${gaps.join("; ")}`,
+      );
+  }
   for (const { item, body } of media.values()) files.push({ path: item.url, body, mimeType: item.mimeType });
   const catalog: Catalog = {
     schemaVersion: SCHEMA_VERSION,
     generatedAt: new Date().toISOString(),
     courses,
     lessons: entries,
+    ...(modules.length ? { modules } : {}),
   };
   files.push({ path: "content/catalog.json", body: JSON.stringify(catalog), mimeType: "application/json" });
   return {

@@ -42,9 +42,9 @@ const mixed: Record<string, unknown> = {
 };
 
 describe("пакет схемы 3", () => {
-  it("текущая версия — 3, читаются версии 2 и 3", () => {
-    expect(SCHEMA_VERSION).toBe(3);
-    expect(SUPPORTED_SCHEMAS).toEqual([2, 3]);
+  it("текущая версия — 4, читаются версии 2–4", () => {
+    expect(SCHEMA_VERSION).toBe(4);
+    expect(SUPPORTED_SCHEMAS).toEqual([2, 3, 4]);
   });
   it("смешанный пакет проходит проверку и сохраняет порядок карточек", () => {
     const pack = parsePackage(mixed);
@@ -165,7 +165,7 @@ describe("совместимость со схемой 2", () => {
     });
   });
   it("неизвестные версии отклоняются как неподдерживаемые", () => {
-    for (const version of [1, 4]) {
+    for (const version of [1, 5]) {
       try {
         parsePackage({ ...v2, schemaVersion: version });
         expect.unreachable();
