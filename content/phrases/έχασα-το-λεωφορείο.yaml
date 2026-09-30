@@ -1,6 +1,6 @@
 id: p174
 text: Έχασα το λεωφορείο.
-translation: Я опоздал на автобус.
+translation: Я опоздал(а) на автобус.
 provenance:
   sourceLabel: Лексикон курса, модуль 13 (docs/course/lexicon/13.tsv)
   operation: requested-generation
