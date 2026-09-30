@@ -40,6 +40,10 @@ describe("курс в продукте", () => {
       expect(lexicon.get(phrase.id), phrase.id).toBe(phrase.text);
     }
   });
+  it("экзамен: общая дата с источником, местная дата не подтверждена", () => {
+    expect(catalog.courses[0].exam).toMatchObject({ date: "2027-05-11", localConfirmed: false });
+    expect(catalog.courses[0].exam!.source).toMatch(/^https:\/\/www\.greek-language\.gr\//);
+  });
   it("контента Tavelori в продукте нет", () => {
     expect(content.words.some((word) => /^w\d{2}-\d{2}$/.test(word.id))).toBe(false);
     expect(catalog.courses.map((c) => c.id)).toEqual(["greek-a2"]);

@@ -1,6 +1,6 @@
 import type { Card, Grade } from "ts-fsrs";
 import type { PackageItem, PackageMedia, PackageWord, PackagePhrase } from "../content/schema";
-import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
+import type { CatalogModule, CourseExam, LessonBlock, LessonKind } from "../content/course";
 /**
  * Типы проверки. `listening` — узнавание написания на слух, `comprehension` — понимание значения на слух.
  * `recall` и `cloze` приложение больше не предлагает; в перечислении они нужны, чтобы читалась старая история.
@@ -123,6 +123,8 @@ export interface Course {
   schedule: Schedule;
   newItemsPerDay: number;
   syncedAt?: string;
+  /** Экзамен курса из каталога: общая дата и подтверждена ли местная. */
+  exam?: CourseExam;
   createdAt: string;
   updatedAt: string;
 }

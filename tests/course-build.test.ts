@@ -267,6 +267,35 @@ describe("задания и ключи ответов", () => {
   });
 });
 
+describe("контрольные точки", () => {
+  const withPoint = (extra: Files = {}): Files => {
+    const files = base();
+    (files["modules/m01.yaml"] as Record<string, unknown>).checkpoint = "k1";
+    return { ...files, "lessons/k1.yaml": { ...test, title: "Контрольная A1" }, ...extra };
+  };
+  it("точка публикуется после модуля: вне его уроков, в уроках курса и в каталоге", () => {
+    const content = build(withPoint());
+    const catalog = parseCatalog(
+      JSON.parse(content.files.find((f) => f.path === "content/catalog.json")!.body as string),
+    );
+    expect(catalog.modules![0]).toMatchObject({ lessonIds: ["m01-1", "m01-test"], checkpointId: "k1" });
+    expect(catalog.courses[0].lessonIds).toEqual(["m01-1", "m01-test", "k1"]);
+    expect(content.packages.find((p) => p.id === "k1")).toMatchObject({
+      lesson: { kind: "test" },
+      module: { id: "m01", position: 2 },
+    });
+  });
+  it("точка — только контрольная с оцениваемыми заданиями и не у черновика", () => {
+    expect(failure(withPoint({ "lessons/k1.yaml": { ...test, kind: "lesson" } }))).toContain("должен быть контрольной");
+    expect(
+      failure(withPoint({ "lessons/k1.yaml": { ...test, blocks: [{ ...test.blocks[0], graded: false }] } })),
+    ).toContain("нет оцениваемых заданий");
+    const draft = withPoint();
+    (draft["modules/m01.yaml"] as Record<string, unknown>).lessons = ["m01-1", "m01-test", "k1"];
+    expect(failure(draft)).toContain("контрольная точка не входит в уроки модуля");
+  });
+});
+
 describe("картинки слов из библиотеки", () => {
   const svg = new TextEncoder().encode(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="9" fill="#fb0"/></svg>',

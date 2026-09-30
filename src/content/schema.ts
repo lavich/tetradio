@@ -9,7 +9,15 @@ import type {
 } from "../domain/types.ts";
 import { CARD_KINDS } from "../domain/types.ts";
 import { ContentError } from "./schema-errors.ts";
-import { parseBlocks, parseModule, type CatalogModule, type LessonBlock, type LessonKind } from "./course.ts";
+import {
+  parseBlocks,
+  parseExam,
+  parseModule,
+  type CatalogModule,
+  type CourseExam,
+  type LessonBlock,
+  type LessonKind,
+} from "./course.ts";
 
 /**
  * Контракт поставляемого контента. Каталог — только метаданные; пакет — урок целиком.
@@ -34,6 +42,8 @@ export interface CatalogCourse {
   lessonIds: string[];
   /** Модули курса по порядку программы (схема 4). */
   moduleIds?: string[];
+  /** Экзамен, к которому ведёт курс (схема 4). */
+  exam?: CourseExam;
 }
 export interface CatalogEntry {
   id: string;
@@ -231,6 +241,7 @@ export function parseCatalog(input: unknown): Catalog {
       list(value, `${path}.moduleIds`).map((id, i) => str(id, `${path}.moduleIds[${i}]`)),
     );
     if (moduleIds) course.moduleIds = moduleIds;
+    if (schemaVersion >= 4 && item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
     return course;
   });
   unique(
@@ -251,7 +262,7 @@ export function parseCatalog(input: unknown): Catalog {
     );
     const known = new Set(lessons.map((lesson) => lesson.id));
     for (const module of modules)
-      for (const lessonId of module.lessonIds)
+      for (const lessonId of [...module.lessonIds, ...(module.checkpointId ? [module.checkpointId] : [])])
         if (!known.has(lessonId))
           throw new ContentError(`каталог.modules: урока ${lessonId} модуля ${module.id} нет в каталоге`);
     catalog.modules = modules;

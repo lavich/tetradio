@@ -23,6 +23,7 @@ import {
 import { CARD_KINDS, type CardKind, type Example, type Gloss, type Segment } from "../src/domain/types.ts";
 import {
   parseBlocks,
+  parseExam,
   parseModule,
   publicationGaps,
   type CatalogModule,
@@ -104,6 +105,7 @@ export interface CourseSource {
   /** Словарный курс перечисляет уроки; курс программы — модули, уроки берутся из них. */
   lessons?: string[];
   modules?: string[];
+  exam?: unknown;
 }
 /** Модуль программы: `modules/NN.yaml`; уроки черновика собираются для проверки, но не поставляются. */
 export interface ModuleSource {
@@ -116,6 +118,8 @@ export interface ModuleSource {
   grammar?: string[];
   sessions: number;
   lessons?: string[];
+  /** Контрольная точка после модуля: урок `kind: test`, не входящий в `lessons`. */
+  checkpoint?: string;
 }
 
 const hash = (value: string | Uint8Array, length = 12) =>
@@ -503,6 +507,8 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   /** Место урока в модуле; уроки черновиков проверяются, но не поставляются. */
   const moduleOf = new Map<string, { id: string; position: number; draft: boolean }>();
   const moduleOwner = new Map<string, string>();
+  /** Урок контрольной точки → файл модуля: точка обязана быть контрольной с оцениваемыми заданиями. */
+  const checkpoints = new Map<string, string>();
   for (const [courseId, src] of sources.courses) {
     const where = `courses/${src.file}`;
     const title = text(src.title, `${where}.title`)!;
@@ -528,7 +534,9 @@ export function buildContent(root = defaultRoot()): BuiltContent {
               id: moduleId,
               courseId,
               lessonIds: moduleSrc.status === "published" ? ownLessons : [],
+              checkpointId: moduleSrc.status === "published" ? moduleSrc.checkpoint : undefined,
               lessons: undefined,
+              checkpoint: undefined,
               file: undefined,
             }),
             at,
@@ -546,6 +554,17 @@ export function buildContent(root = defaultRoot()): BuiltContent {
           courseOf.set(lessonId, courseId);
           if (module.status === "published") lessonIds.push(lessonId);
         });
+        if (moduleSrc.checkpoint !== undefined) {
+          const checkpoint = moduleSrc.checkpoint;
+          if (typeof checkpoint !== "string" || !sources.lessons.has(checkpoint))
+            fail(`${at}.checkpoint: урока ${String(checkpoint)} нет в lessons/`);
+          if (moduleOf.has(checkpoint))
+            fail(`${at}.checkpoint: урок ${checkpoint} уже входит в модуль ${moduleOf.get(checkpoint)!.id}`);
+          moduleOf.set(checkpoint, { id: moduleId, position: ownLessons.length, draft: module.status === "draft" });
+          courseOf.set(checkpoint, courseId);
+          checkpoints.set(checkpoint, at);
+          if (module.status === "published") lessonIds.push(checkpoint);
+        }
         modules.push(module);
         moduleIds.push(moduleId);
       }
@@ -556,6 +575,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
         lessonIds,
         moduleIds,
         ...(src.source ? { source: src.source } : {}),
+        ...(src.exam !== undefined ? { exam: parseExam(nfc(src.exam), `${where}.exam`) } : {}),
       });
       continue;
     }
@@ -714,6 +734,12 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   for (const id of phrases.keys())
     if (!used.phrase.has(id))
       fail(`phrases/${sources.phrases.get(id)!.file} не входит ни в один урок и не будет опубликована`);
+  for (const [lessonId, at] of checkpoints) {
+    const lesson = lessonsForModule.get(lessonId)!;
+    if (lesson.kind !== "test") fail(`${at}.checkpoint: урок ${lessonId} должен быть контрольной (kind: test)`);
+    if (!lesson.blocks.some((block) => block.type === "exercise" && block.graded))
+      fail(`${at}.checkpoint: в контрольной ${lessonId} нет оцениваемых заданий`);
+  }
   // Модуль публикуется только полным: без чтения, аудио, письма, речи или контрольной он остаётся черновиком.
   for (const module of modules) {
     if (module.status !== "published") continue;

@@ -16,6 +16,7 @@ import {
   saveBlockProgress,
   type ModuleView,
 } from "../../storage/course";
+import { db } from "../../storage/db";
 import { lessonItems } from "../../storage/queries";
 import { startSession } from "../learning/session-actions";
 import { Exercise, Explanation, Listening, Reading, Speaking, Tick, Writing } from "./blocks";
@@ -41,6 +42,30 @@ function coverLabel(view: ModuleView) {
 }
 
 /** Полка курса; без модулей в каталоге (словарный курс) — прежний список уроков. */
+const longDate = (iso: string) =>
+  new Date(`${iso}T12:00:00`).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+
+/**
+ * Дата экзамена честно: пока местная дата не подтверждена, показывается общая дата с пометкой и источником,
+ * без обратного отсчёта.
+ */
+function ExamLine({ courseId }: { courseId: string }) {
+  const course = useLiveQuery(() => db.courses.get(courseId), [courseId]);
+  const exam = course?.exam;
+  if (!exam) return null;
+  return (
+    <p className={`${css.meta} mt-1`} data-testid="exam-line">
+      {exam.title}: {longDate(exam.date)}
+      {exam.localConfirmed ? "" : " — общая дата, дата на Кипре не подтверждена"}
+      {" · "}
+      <a href={exam.source} target="_blank" rel="noreferrer">
+        источник
+      </a>
+      , проверено {longDate(exam.checkedAt)}
+    </p>
+  );
+}
+
 export function CourseScreen() {
   const views = useLiveQuery(() => moduleViews(), []);
   if (views === undefined) return <Screen />;
@@ -55,13 +80,14 @@ export function CourseScreen() {
           {filled} из {views.length} заполнено
         </span>
       </div>
+      <ExamLine courseId={views[0].module.courseId} />
       <div className={css.shelf}>
         {views.map((view) => {
           const { module } = view;
           const draft = module.status === "draft";
           const classes = [css.cover, draft ? css.draft : "", module.id === current ? css.current : ""].join(" ");
           return (
-            <FragmentWithCheckpoint key={module.id} number={module.number}>
+            <FragmentWithCheckpoint key={module.id} view={view}>
               <Link
                 to={`/course/${module.id}`}
                 className={classes}
@@ -82,11 +108,23 @@ export function CourseScreen() {
     </Screen>
   );
 }
-function FragmentWithCheckpoint({ number, children }: { number: number; children: React.ReactNode }) {
+/** Метка контрольной точки после модуля; когда точка опубликована — ссылка на неё, после прохождения — с галочкой. */
+function FragmentWithCheckpoint({ view, children }: { view: ModuleView; children: React.ReactNode }) {
+  const point = view.checkpoint;
+  const label = CHECKPOINTS[view.module.number] ?? point?.title;
   return (
     <>
       {children}
-      {CHECKPOINTS[number] ? <div className={css.checkpoint}>{CHECKPOINTS[number]}</div> : null}
+      {label ? (
+        point ? (
+          <Link to={`/course/${view.module.id}/${point.id}`} className={`${css.checkpoint} ${css.checkpointLink}`}>
+            {point.completed ? <Tick className={css.checkpointTick} label="пройдена" /> : null}
+            {label}
+          </Link>
+        ) : (
+          <div className={css.checkpoint}>{label}</div>
+        )
+      ) : null}
     </>
   );
 }
@@ -101,7 +139,7 @@ export function ModuleScreen() {
   // Уроки опубликованного модуля скачиваются при открытии: без пакета урок не пройти.
   useEffect(() => {
     if (!view) return;
-    for (const lesson of view.lessons)
+    for (const lesson of [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : [])])
       if (!lesson.installed)
         installLesson(lesson.id).catch(() =>
           setProblem("Не удалось скачать уроки модуля. Проверьте сеть и откройте модуль снова."),
@@ -154,6 +192,24 @@ export function ModuleScreen() {
             ))}
           </ol>
         )}
+        {view.checkpoint ? (
+          <div className={css.block}>
+            {view.checkpoint.completed ? (
+              <Tick className={css.mark} label="контрольная точка пройдена" />
+            ) : (
+              <span className={css.gutter}>точка</span>
+            )}
+            <Link className={css.lessonLink} to={`/course/${module.id}/${view.checkpoint.id}`}>
+              <h3 className={css.blockTitle}>{view.checkpoint.title}</h3>
+              <span className={css.meta}>
+                {CHECKPOINTS[module.number] ?? "контрольная точка"} ·{" "}
+                {view.checkpoint.installed
+                  ? `заданий выполнено ${view.checkpoint.tally.done} из ${view.checkpoint.tally.total}`
+                  : "скачивается…"}
+              </span>
+            </Link>
+          </div>
+        ) : null}
         {problem ? <p className={css.pen}>{problem}</p> : null}
       </div>
     </Screen>
