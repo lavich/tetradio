@@ -1,0 +1,7 @@
+id: p182
+text: Μπορώ να αφήσω τις βαλίτσες μου εδώ;
+translation: Можно оставить здесь мои чемоданы?
+provenance:
+  sourceLabel: Лексикон курса, модуль 14 (docs/course/lexicon/14.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 14 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

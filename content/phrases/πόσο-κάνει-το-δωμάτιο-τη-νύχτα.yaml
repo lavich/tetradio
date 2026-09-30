@@ -1,0 +1,7 @@
+id: p179
+text: Πόσο κάνει το δωμάτιο τη νύχτα;
+translation: Сколько стоит номер за ночь?
+provenance:
+  sourceLabel: Лексикон курса, модуль 14 (docs/course/lexicon/14.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 14 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
