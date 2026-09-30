@@ -59,6 +59,11 @@ describe("проверка ответа по ключу", () => {
     const time = { ...cafe.items[0], answer: ["19:45"] };
     for (const given of ["19.45", "19,45", "19:45"]) expect(checkItem(cafe, time, given).status).toBe("correct");
     expect(checkItem(cafe, { ...cafe.items[0], answer: ["7,50 €"] }, "7.50 €").status).toBe("correct");
+    const date = { ...cafe.items[0], answer: ["06.04"] };
+    for (const given of ["6.04", "6/04", "06/04"]) expect(checkItem(cafe, date, given).status).toBe("correct");
+    expect(checkItem(cafe, { ...cafe.items[0], answer: ["09:30"] }, "9.30").status).toBe("correct");
+    expect(checkItem(cafe, { ...cafe.items[0], answer: ["10,05 €"] }, "10.5 €").status).toBe("wrong");
+    expect(checkItem(cafe, { ...cafe.items[0], answer: ["10"] }, "100").status).toBe("wrong");
   });
   it("счёт задания: неотвеченный пункт — неверный", () => {
     const score = scoreExercise(block("anna-tf"), { q1: "Λάθος" });
