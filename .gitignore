@@ -14,3 +14,4 @@ docs/art-sheet.html
 public/content/
 .playwright-mcp/
 dist-course/
+.claude/
