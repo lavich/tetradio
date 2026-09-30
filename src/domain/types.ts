@@ -1,5 +1,6 @@
 import type { Card, Grade } from "ts-fsrs";
 import type { PackageItem, PackageMedia, PackageWord, PackagePhrase } from "../content/schema";
+import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
 /**
  * Типы проверки. `listening` — узнавание написания на слух, `comprehension` — понимание значения на слух.
  * `recall` и `cloze` приложение больше не предлагает; в перечислении они нужны, чтобы читалась старая история.
@@ -175,6 +176,31 @@ export interface InstalledPackage {
   items: PackageItem[];
   media: PackageMedia[];
   removed: string[];
+  /** Урок курса (схема 4): вид, место в модуле и блоки. */
+  kind?: LessonKind;
+  module?: { id: string; position: number };
+  blocks?: LessonBlock[];
+}
+/** Модуль программы из каталога; `position` — порядок в каталоге. */
+export type StoredModule = CatalogModule & { position: number };
+/**
+ * Выполнение блока урока курса. Ключ — `урок/блок`: идентификаторы стабильны между версиями пакета.
+ * Самооценка письма и речи хранится как отмеченные критерии и не выдаётся за внешнюю оценку.
+ */
+export interface BlockProgress {
+  key: string;
+  lessonId: string;
+  blockId: string;
+  done: boolean;
+  /** Результат заданий: верных пунктов из всех (для «почти» — как верные, отдельно в `almost`). */
+  score?: { correct: number; almost: number; total: number };
+  /** Ответы по идентификатору пункта — для показа при возврате к уроку. */
+  answers?: Record<string, string>;
+  /** Номера отмеченных критериев самопроверки. */
+  checks?: number[];
+  /** Текст письменного ответа. */
+  text?: string;
+  updatedAt: string;
 }
 /** Состояние повторений одной карточки; ключ — сериализованная пара вида и идентификатора. */
 export interface LearningState {

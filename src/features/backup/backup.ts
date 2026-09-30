@@ -16,6 +16,7 @@ import {
   TABLES_V2,
   TABLES_V3,
   TABLES_V5,
+  TABLES_V7,
 } from "../../storage/db";
 import { isAppDatabaseName } from "../../storage/profile";
 import { fillSettings, type LessonItem, type Settings } from "../../domain/types";
@@ -38,6 +39,7 @@ export function requiredTables(version: number): readonly string[] {
   if (version < 3) return TABLES_V2;
   if (version < 4) return TABLES_V3;
   if (version < 6) return TABLES_V5;
+  if (version < 8) return TABLES_V7;
   return TABLES;
 }
 
@@ -47,7 +49,7 @@ export async function exportFull(database: AppDatabase = db): Promise<Blob> {
   await database.meta.put({ key: "exportedAt", value: new Date().toISOString() });
   const blob = await exportDB(database, {
     prettyJson: false,
-    skipTables: ["catalog", "syncVersions", ...LEGACY_STORES],
+    skipTables: ["catalog", "modules", "syncVersions", ...LEGACY_STORES],
     filter: (table, value) =>
       !(table === "meta" && String((value as { key?: string })?.key ?? "").startsWith(SYNC_META_PREFIX)),
   });

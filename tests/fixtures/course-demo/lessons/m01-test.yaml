@@ -1,0 +1,45 @@
+title: Контрольная модуля 01
+kind: test
+items: []
+blocks:
+  - type: reading
+    id: card
+    title: Κάρτα
+    text: Γεια σου, Ελένη! Είμαι στην Πάφο με τη Σοφία. Η Σοφία είναι από την Ιταλία.
+  - type: exercise
+    id: card-tf
+    about: card
+    graded: true
+    instruction: Верно или неверно?
+    format: choice
+    items:
+      - id: q1
+        prompt: Η Σοφία είναι από την Ιταλία.
+        options:
+          - Σωστό
+          - Λάθος
+        answer: Σωστό
+      - id: q2
+        prompt: Ο αποστολέας είναι στη Λευκωσία.
+        options:
+          - Σωστό
+          - Λάθος
+        answer: Λάθος
+        explanation: Είμαι στην Πάφο — в Пафосе.
+  - type: exercise
+    id: gaps
+    graded: true
+    instruction: Вставьте форму είμαι.
+    format: gap
+    bank:
+      - είμαι
+      - είσαι
+      - είναι
+      - είμαστε
+    items:
+      - id: g1
+        prompt: Εμείς ___ φίλοι.
+        answer: είμαστε
+      - id: g2
+        prompt: Ο Νίκος ___ από την Κύπρο.
+        answer: είναι

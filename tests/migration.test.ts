@@ -143,7 +143,7 @@ describe("миграция схемы без сети", () => {
     await seedLegacy();
     const db = new AppDatabase(NAME);
     await db.open();
-    expect(db.verno).toBe(7);
+    expect(db.verno).toBe(8);
     const l12 = wordsOf("lesson-1-2");
     expect((await lessonItems("lesson-1-2", db)).map((link) => link.ref.id)).toEqual(l12.map((w) => w.id));
     expect((await lessonItems("lesson-own", db)).map((link) => [link.ref.id, link.position])).toEqual([
@@ -189,7 +189,7 @@ describe("миграция схемы без сети", () => {
     await seedLegacy();
     const db = new AppDatabase(NAME);
     await db.open();
-    expect(db.verno).toBe(7);
+    expect(db.verno).toBe(8);
     expect(await db.courses.get("my")).toMatchObject({ id: "my", origin: "local", subscribed: true });
     expect((await db.lessons.get("lesson-own"))!.courseId).toBe("my"); // создан пользователем — пакета нет
     expect((await db.lessons.get("lesson-1-2"))!.courseId).toBeUndefined(); // пакет прежней сборки курса не знает
@@ -200,7 +200,7 @@ describe("миграция схемы без сети", () => {
     await seedLegacy();
     const db = new AppDatabase(NAME);
     await db.open();
-    expect(db.verno).toBe(7);
+    expect(db.verno).toBe(8);
     const settings = (await db.settings.get("settings"))! as unknown as Record<string, unknown>;
     expect(settings.newWordsPerDay).toBeUndefined();
     expect(settings.schedule).toBeUndefined();
@@ -394,7 +394,7 @@ describe("миграция схемы 7: снятие вида карточек"
   it("удаляет карточки, связи, состояния, навыки и отложенный прогресс снятого вида, историю оставляет", async () => {
     const db = new AppDatabase(DROPPED);
     await db.open();
-    expect(db.verno).toBe(7);
+    expect(db.verno).toBe(8);
     expect(await db.clozes.count()).toBe(0);
     expect((await lessonItems("l1", db)).map((link) => link.ref.id)).toEqual(["p1"]);
     expect((await db.cardStates.toCollection().primaryKeys()) as string[]).toEqual([key("phrase", "p1")]);
@@ -673,7 +673,7 @@ describe("резервная копия", () => {
           JSON.stringify({
             formatName: "dexie",
             formatVersion: 1,
-            data: { databaseName: "tetradio", databaseVersion: 8, tables: [], data: [] },
+            data: { databaseName: "tetradio", databaseVersion: 9, tables: [], data: [] },
           }),
         ]),
       ),

@@ -1,0 +1,11 @@
+number: 2
+title: Χώρες και γλώσσες
+subtitle: Страны и языки
+status: draft
+goal: Сказать, откуда ты и на каких языках говоришь
+grammar:
+  - род и артикли
+  - настоящее время
+sessions: 3
+lessons:
+  - m02-1

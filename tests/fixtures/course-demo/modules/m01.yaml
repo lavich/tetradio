@@ -1,0 +1,12 @@
+number: 1
+title: Γνωριμία
+subtitle: Знакомство (пример)
+status: published
+goal: Поздороваться, представиться и спросить имя
+grammar:
+  - είμαι
+  - вопросы πώς / πού
+sessions: 3
+lessons:
+  - m01-1
+  - m01-test
