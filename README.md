@@ -25,10 +25,11 @@ npm run build
 
 - [PRD: цели и требования](docs/PRD.md)
 - [Программа из 24 модулей](docs/curriculum.md)
-- [Предложение нового продукта](openspec/changes/greek-a2-learning-mvp/proposal.md)
-- [Архитектура и модель данных](openspec/changes/greek-a2-learning-mvp/design.md)
-- [Задачи реализации](openspec/changes/greek-a2-learning-mvp/tasks.md)
-- [Проверяемые спецификации](openspec/changes/greek-a2-learning-mvp/specs/)
+- Первое изменение (архив): [предложение](openspec/changes/archive/2026-09-30-greek-a2-learning-mvp/proposal.md)
+  [архитектура и модель данных](openspec/changes/archive/2026-09-30-greek-a2-learning-mvp/design.md)
+  [задачи](openspec/changes/archive/2026-09-30-greek-a2-learning-mvp/tasks.md)
+- [Базовые спецификации](openspec/specs/)
+- Текущие изменения: [course-a2-modules](openspec/changes/course-a2-modules/tasks.md) — модули 09–24 и пробники; [course-progress-sync](openspec/changes/course-progress-sync/tasks.md) — синхронизация и копия; [release](openspec/changes/release/tasks.md) — бот, хостинг, приёмка
 
 ## OpenSpec
 
