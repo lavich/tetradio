@@ -1,0 +1,8 @@
+id: p300
+text: Στο τέλος όλοι χορεύαμε.
+translation: В конце все танцевали.
+note: "имперфект (παρατατικός): длительное действие в прошлом"
+provenance:
+  sourceLabel: Лексикон курса, модуль 22 (docs/course/lexicon/22.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 22 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

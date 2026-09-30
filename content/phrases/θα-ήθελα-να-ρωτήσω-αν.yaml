@@ -1,0 +1,7 @@
+id: p305
+text: Θα ήθελα να ρωτήσω αν…
+translation: Я хотел(а) бы спросить, …ли…
+provenance:
+  sourceLabel: Лексикон курса, модуль 23 (docs/course/lexicon/23.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 23 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
