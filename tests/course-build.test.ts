@@ -217,11 +217,6 @@ describe("запрет публикации неполного модуля", ()
     ],
     ["без письма", (b: Record<string, unknown>[]) => b.filter((x) => x.type !== "writing"), "нет письменного задания"],
     ["без речи", (b: Record<string, unknown>[]) => b.filter((x) => x.type !== "speaking"), "нет устного задания"],
-    [
-      "без аудиофайла",
-      (b: Record<string, unknown>[]) => b.map((x) => (x.type === "listening" ? { ...x, audio: undefined } : x)),
-      "у аудирования dialogue нет аудиофайла",
-    ],
   ])("%s", (_name, patch, gap) => {
     const message = failure(withLesson(patch));
     expect(message).toContain("модуль m01 нельзя опубликовать");
@@ -296,6 +291,24 @@ describe("стабильность идентификаторов", () => {
   });
 });
 
+describe("аудирование без записи", () => {
+  it("публикуется с транскриптом: звук даёт синтез речи устройства, медиа не поставляется", () => {
+    const content = build(
+      withLesson((b) => b.map((x) => (x.type === "listening" ? { ...x, audio: undefined, source: undefined } : x))),
+    );
+    const pack = content.packages.find((p) => p.id === "m01-1")!;
+    expect(pack.blocks!.find((b) => b.type === "listening")).not.toHaveProperty("audioAssetId");
+    expect(pack.media).toEqual([]);
+  });
+  it("транскрипт обязателен", () => {
+    expect(
+      failure(
+        withLesson((b) => b.map((x) => (x.type === "listening" ? { ...x, audio: undefined, transcript: [] } : x))),
+      ),
+    ).toContain("у аудио нужен транскрипт");
+  });
+});
+
 describe("клиентская проверка", () => {
   it("черновик в каталоге не может объявлять уроки", () => {
     const content = build(base());
@@ -309,7 +322,7 @@ describe("клиентская проверка", () => {
   });
   it("правило полноты считается по всем урокам модуля", () => {
     const blocks = parseBlocks(
-      lesson.blocks.map((b) => (b.type === "listening" ? { ...b, audio: undefined, audioAssetId: "a" } : b)),
+      lesson.blocks.map((b) => (b.type === "listening" ? { ...b, audio: undefined } : b)),
       "t",
     );
     expect(publicationGaps([{ id: "l", kind: "lesson", blocks }])).toEqual(["нет контрольной (урок с kind: test)"]);
