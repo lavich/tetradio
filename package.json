@@ -21,7 +21,8 @@
     "test:e2e": "playwright test",
     "spec:validate": "OPENSPEC_TELEMETRY=0 openspec validate --all --strict --no-interactive",
     "spec:status": "OPENSPEC_TELEMETRY=0 openspec status --change greek-a2-learning-mvp",
-    "openspec": "openspec"
+    "openspec": "openspec",
+    "lexicon:check": "node scripts/check-lexicon.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
