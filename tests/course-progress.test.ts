@@ -56,6 +56,9 @@ describe("проверка ответа по ключу", () => {
     for (const given of ["96 31 58 02", "96-31-58-02", "96315802"])
       expect(checkItem(cafe, phone, given).status).toBe("correct");
     expect(checkItem(cafe, phone, "96 31 58 03").status).toBe("wrong");
+    const time = { ...cafe.items[0], answer: ["19:45"] };
+    for (const given of ["19.45", "19,45", "19:45"]) expect(checkItem(cafe, time, given).status).toBe("correct");
+    expect(checkItem(cafe, { ...cafe.items[0], answer: ["7,50 €"] }, "7.50 €").status).toBe("correct");
   });
   it("счёт задания: неотвеченный пункт — неверный", () => {
     const score = scoreExercise(block("anna-tf"), { q1: "Λάθος" });
