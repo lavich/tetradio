@@ -86,7 +86,10 @@ export interface ListeningBlock {
   type: "listening";
   id: string;
   title: string;
-  /** Идентификатор медиа пакета; у черновика может отсутствовать, у опубликованного модуля обязателен. */
+  /**
+   * Идентификатор медиа пакета — если есть запись. Без записи приложение читает транскрипт синтезом речи
+   * устройства (греческий голос установлен у учащегося): реплики разных говорящих — разными голосами, если их больше одного.
+   */
   audioAssetId?: string;
   transcript: TranscriptLine[];
   /** Сколько раз запись звучит до ответа; на экзамене — дважды. */
@@ -376,7 +379,7 @@ export interface LessonForPublication {
   blocks: LessonBlock[];
 }
 /**
- * Модуль публикуется только полным: четыре навыка с заданиями, аудио с транскриптом и контрольная с оцениваемыми
+ * Модуль публикуется только полным: четыре навыка с заданиями, аудирование с транскриптом и контрольная с оцениваемыми
  * заданиями. Возвращает список недостающего; пустой список — модуль можно публиковать.
  */
 export function publicationGaps(lessons: LessonForPublication[]): string[] {
@@ -391,9 +394,6 @@ export function publicationGaps(lessons: LessonForPublication[]): string[] {
   else if (!readings.some(({ block }) => answered(block.id))) gaps.push("к чтению нет заданий");
   const listenings = all.filter(({ block }) => block.type === "listening");
   if (!listenings.length) gaps.push("нет аудирования");
-  for (const { lesson, block } of listenings)
-    if (block.type === "listening" && !block.audioAssetId)
-      gaps.push(`урок ${lesson.id}: у аудирования ${block.id} нет аудиофайла`);
   if (listenings.length && !listenings.some(({ block }) => answered(block.id))) gaps.push("к аудированию нет заданий");
   if (!all.some(({ block }) => block.type === "writing")) gaps.push("нет письменного задания");
   if (!all.some(({ block }) => block.type === "speaking")) gaps.push("нет устного задания");
