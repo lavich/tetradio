@@ -267,6 +267,17 @@ describe("задания и ключи ответов", () => {
   });
 });
 
+describe("лишние поля", () => {
+  it("хвост реплики, отрезанный запятой в YAML, — ошибка сборки, а не потерянный текст", () => {
+    const split = withLesson((b) =>
+      b.map((x) =>
+        x.type === "listening" ? { ...x, transcript: [{ speaker: "Νίκος", text: "Χάρηκα πολύ", "Μαρίνα.": null }] } : x,
+      ),
+    );
+    expect(failure(split)).toContain("лишнее поле «Μαρίνα.»");
+  });
+});
+
 describe("стабильность идентификаторов", () => {
   it("повтор идентификатора блока и недопустимый идентификатор", () => {
     expect(failure(withLesson((b) => [...b, { type: "vocabulary", id: "words" }]))).toContain("«words» повторяется");

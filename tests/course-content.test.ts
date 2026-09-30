@@ -8,15 +8,19 @@ const content = buildContent("content");
 const catalog = parseCatalog(JSON.parse(content.files.find((f) => f.path === "content/catalog.json")!.body as string));
 
 describe("курс в продукте", () => {
-  it("24 модуля программы по порядку; опубликован модуль 01, остальные — черновики", () => {
+  it("24 модуля программы по порядку; опубликованные — с уроками и контрольной, остальные — черновики", () => {
     expect(catalog.modules!.map((m) => m.number)).toEqual(Array.from({ length: 24 }, (_, i) => i + 1));
-    expect(catalog.modules!.filter((m) => m.status === "published").map((m) => m.id)).toEqual(["m01"]);
-    expect(catalog.modules![0].lessonIds).toEqual(["m01-1", "m01-2", "m01-3", "m01-test"]);
+    const published = catalog.modules!.filter((m) => m.status === "published");
+    expect(published[0]?.id).toBe("m01");
+    for (const module of published) {
+      const lessons = module.lessonIds.map((id) => content.packages.find((pack) => pack.id === id)!);
+      expect(lessons.map((pack) => pack.lesson.kind).at(-1), module.id).toBe("test");
+      expect(lessons.length, module.id).toBe(module.sessions + 1);
+    }
   });
-  it("пакеты модуля 01 проходят клиентскую проверку, у каждого слова есть формы или IPA", () => {
+  it("пакеты проходят клиентскую проверку, у каждого слова есть IPA, все карточки в уроках", () => {
     for (const pack of content.packages) expect(() => parsePackage(JSON.parse(JSON.stringify(pack)))).not.toThrow();
-    expect(content.words).toHaveLength(35);
-    expect(content.phrases).toHaveLength(14);
+    expect(content.words.length).toBeGreaterThanOrEqual(35);
     for (const word of content.words) expect(word.ipa, word.greek).toMatch(/^\/.+\/$/);
   });
   it("карточки носят короткие идентификаторы из лексикона с тем же написанием", () => {

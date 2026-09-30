@@ -175,6 +175,32 @@ const oneOf = <T extends string>(value: unknown, allowed: readonly T[], path: st
     throw new ContentError(`${path}: ожидалось одно из ${allowed.join(", ")}`);
   return value as T;
 };
+/**
+ * Неизвестное поле — ошибка, а не тихий пропуск: в YAML запятая без кавычек внутри `{ … }` отрезает хвост строки
+ * в отдельный ключ, и текст урока молча теряется. Поле со значением `undefined` считается отсутствующим.
+ */
+const FIELDS: Record<string, readonly string[]> = {
+  explanation: ["type", "id", "title", "body", "table"],
+  vocabulary: ["type", "id", "title"],
+  exercise: ["type", "id", "title", "instruction", "format", "about", "bank", "items", "graded"],
+  reading: ["type", "id", "title", "text", "glosses", "source"],
+  listening: ["type", "id", "title", "audioAssetId", "transcript", "plays", "source"],
+  writing: ["type", "id", "register", "prompt", "words", "model", "criteria"],
+  speaking: ["type", "id", "part", "prompt", "seconds", "model", "criteria"],
+  item: ["id", "prompt", "options", "answer", "explanation"],
+  line: ["speaker", "text"],
+  gloss: ["text", "russian"],
+  table: ["columns", "rows"],
+  words: ["min", "max"],
+};
+function onlyKnown(raw: Record<string, unknown>, kind: string, path: string) {
+  for (const [key, value] of Object.entries(raw))
+    if (value !== undefined && !FIELDS[kind].includes(key))
+      throw new ContentError(
+        `${path}: лишнее поле «${key}» — проверьте запятые: в YAML внутри { … } текст с запятой берут в кавычки`,
+      );
+}
+
 /** Идентификаторы блоков и пунктов — ключи прогресса: только латиница, цифры и дефис, без пробелов. */
 const ID = /^[a-z0-9][a-z0-9-]*$/;
 const id = (value: unknown, path: string) => {
@@ -192,6 +218,7 @@ const unique = (ids: string[], path: string) => {
 
 function parseTable(input: unknown, path: string): BlockTable {
   const raw = obj(input, path);
+  onlyKnown(raw, "table", path);
   const rows = list(raw.rows, `${path}.rows`).map((row, i) => strings(row, `${path}.rows[${i}]`));
   if (!rows.length) throw new ContentError(`${path}.rows: нужен непустой список`);
   const columns = raw.columns === undefined ? undefined : strings(raw.columns, `${path}.columns`);
@@ -210,6 +237,7 @@ function parseExercise(raw: Record<string, unknown>, path: string, blockId: stri
   const items = list(raw.items, `${path}.items`).map((entry, i): ExerciseItem => {
     const at = `${path}.items[${i}]`;
     const item = obj(entry, at);
+    onlyKnown(item, "item", at);
     const answer =
       typeof item.answer === "string" ? [str(item.answer, `${at}.answer`)] : strings(item.answer, `${at}.answer`);
     const parsed: ExerciseItem = { id: id(item.id, `${at}.id`), prompt: str(item.prompt, `${at}.prompt`), answer };
@@ -262,6 +290,7 @@ function parseExercise(raw: Record<string, unknown>, path: string, blockId: stri
 export function parseBlock(input: unknown, path: string): LessonBlock {
   const raw = obj(input, path);
   const type = oneOf(raw.type, BLOCK_TYPES, `${path}.type`);
+  onlyKnown(raw, type, path);
   const blockId = id(raw.id, `${path}.id`);
   const title = optStr(raw.title, `${path}.title`);
   switch (type) {
@@ -285,6 +314,7 @@ export function parseBlock(input: unknown, path: string): LessonBlock {
       if (raw.glosses !== undefined)
         block.glosses = list(raw.glosses, `${path}.glosses`).map((entry, i) => {
           const gloss = obj(entry, `${path}.glosses[${i}]`);
+          onlyKnown(gloss, "gloss", `${path}.glosses[${i}]`);
           const text = str(gloss.text, `${path}.glosses[${i}].text`);
           if (!block.text.includes(text))
             throw new ContentError(`${path}.glosses[${i}]: «${text}» не найдено в тексте`);
@@ -297,6 +327,7 @@ export function parseBlock(input: unknown, path: string): LessonBlock {
     case "listening": {
       const transcript = list(raw.transcript, `${path}.transcript`).map((entry, i): TranscriptLine => {
         const line = obj(entry, `${path}.transcript[${i}]`);
+        onlyKnown(line, "line", `${path}.transcript[${i}]`);
         const speaker = optStr(line.speaker, `${path}.transcript[${i}].speaker`);
         const text = str(line.text, `${path}.transcript[${i}].text`);
         return speaker ? { speaker, text } : { text };
@@ -317,6 +348,7 @@ export function parseBlock(input: unknown, path: string): LessonBlock {
     }
     case "writing": {
       const words = obj(raw.words, `${path}.words`);
+      onlyKnown(words, "words", `${path}.words`);
       const min = int(words.min, `${path}.words.min`, 1);
       const max = int(words.max, `${path}.words.max`, min);
       return {
