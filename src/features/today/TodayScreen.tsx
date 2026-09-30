@@ -195,7 +195,6 @@ export function TodayScreen() {
             disabled={busy}
           >
             <Dumbbell data-icon="inline-start" />
-            {/* Длинное название урока не должно вылезать за кнопку на узком экране. */}
             <span className="min-w-0 truncate">Потренировать {lessonIn(drill.title, "урок")}</span>
           </Button>
         </>
