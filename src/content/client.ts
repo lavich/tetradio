@@ -104,9 +104,13 @@ export async function refreshCatalog(database: AppDatabase = db, source: Content
   setCatalogPhase("loading"); // повтор после сбоя снова ждёт; после первого успеха фаза не меняется
   try {
     const catalog = parseCatalog(await source.json("content/catalog.json"));
-    await database.transaction("rw", database.catalog, database.courses, database.lessons, database.meta, async () => {
+    const tables = [database.catalog, database.modules, database.courses, database.lessons, database.meta];
+    await database.transaction("rw", tables, async () => {
       await database.catalog.clear();
       await database.catalog.bulkAdd(catalog.lessons.map((entry, position) => ({ ...entry, position })));
+      // Модули — кеш каталога, как и записи уроков: черновики видны описанием, их уроки не поставляются.
+      await database.modules.clear();
+      await database.modules.bulkAdd((catalog.modules ?? []).map((module, position) => ({ ...module, position })));
       await adoptCourses(catalog, database);
       await database.meta.put({ key: "catalogUpdatedAt", value: new Date().toISOString() });
     });
@@ -594,6 +598,9 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         media: pack.media,
         removed: [...removed],
       };
+      if (pack.lesson.kind) record.kind = pack.lesson.kind;
+      if (pack.module) record.module = pack.module;
+      if (pack.blocks) record.blocks = pack.blocks;
       await database.packages.put(record);
       // Полученный из облака прогресс карточек этого пакета ждал установки: теперь он становится обычным состоянием.
       await adoptStash(database, pack.id, [

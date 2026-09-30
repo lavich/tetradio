@@ -1,0 +1,146 @@
+title: Знакомство и είμαι
+kind: lesson
+items:
+  - kind: word
+    id: geia
+  - kind: word
+    id: kalimera
+  - kind: word
+    id: eimai
+  - kind: word
+    id: apo
+  - kind: phrase
+    id: pos-se-lene
+blocks:
+  - type: explanation
+    id: eimai
+    title: Глагол είμαι — «быть»
+    body: |-
+      В греческом глагол «быть» не пропускают: **Είμαι η Άννα** — «Я Анна».
+
+      Личное местоимение часто опускают: форма глагола и так показывает лицо.
+    table:
+      columns:
+        - лицо
+        - форма
+      rows:
+        - - εγώ
+          - είμαι
+        - - εσύ
+          - είσαι
+        - - αυτός, αυτή
+          - είναι
+        - - εμείς
+          - είμαστε
+        - - εσείς
+          - είστε
+        - - αυτοί
+          - είναι
+  - type: vocabulary
+    id: words
+    title: Слова урока
+  - type: exercise
+    id: forms
+    title: Формы είμαι
+    instruction: Выберите форму глагола.
+    format: choice
+    items:
+      - id: q1
+        prompt: Εγώ ___ η Άννα.
+        options:
+          - είμαι
+          - είσαι
+          - είναι
+        answer: είμαι
+        explanation: "Εγώ — я, значит 1-е лицо: είμαι."
+      - id: q2
+        prompt: Εσύ ___ από την Κύπρο;
+        options:
+          - είμαι
+          - είσαι
+          - είναι
+        answer: είσαι
+        explanation: "Εσύ — ты: είσαι."
+  - type: reading
+    id: anna
+    title: Η Άννα
+    text: Γεια σας! Με λένε Άννα. Είμαι από τη Ρωσία, αλλά μένω στη Λεμεσό.
+    glosses:
+      - text: μένω
+        russian: живу
+      - text: Λεμεσό
+        russian: Лимасол
+  - type: exercise
+    id: anna-tf
+    about: anna
+    instruction: Верно или неверно?
+    format: choice
+    items:
+      - id: q1
+        prompt: Η Άννα είναι από την Κύπρο.
+        options:
+          - Σωστό
+          - Λάθος
+        answer: Λάθος
+        explanation: Είμαι από τη Ρωσία — она из России.
+      - id: q2
+        prompt: Η Άννα μένει στη Λεμεσό.
+        options:
+          - Σωστό
+          - Λάθος
+        answer: Σωστό
+  - type: listening
+    id: cafe
+    title: Στο καφέ
+    plays: 2
+    transcript:
+      - speaker: Νίκος
+        text: Γεια σου! Πώς σε λένε;
+      - speaker: Μαρία
+        text: Με λένε Μαρία. Εσένα;
+      - speaker: Νίκος
+        text: Νίκο. Από πού είσαι;
+      - speaker: Μαρία
+        text: Είμαι από την Ελλάδα.
+  - type: exercise
+    id: cafe-q
+    about: cafe
+    instruction: Ответьте по-гречески.
+    format: text
+    items:
+      - id: q1
+        prompt: Πώς λένε την κοπέλα;
+        answer:
+          - Μαρία
+          - Τη λένε Μαρία.
+        explanation: Με λένε Μαρία — меня зовут Мария.
+      - id: q2
+        prompt: Από πού είναι η Μαρία;
+        answer:
+          - από την Ελλάδα
+          - Ελλάδα
+          - Είναι από την Ελλάδα.
+        explanation: Είμαι από την Ελλάδα.
+  - type: writing
+    id: about-me
+    register: friendly
+    prompt: "Напишите 3 предложения о себе: имя, откуда вы, где живёте."
+    words:
+      min: 8
+      max: 30
+    model: Γεια σας! Με λένε Ιβάν. Είμαι από τη Ρωσία. Μένω στη Λευκωσία.
+    criteria:
+      - Есть приветствие
+      - "Названо имя: Με λένε …"
+      - "Сказано, откуда: Είμαι από …"
+      - "Сказано, где живёте: Μένω σε/στη …"
+  - type: speaking
+    id: intro
+    part: interview
+    prompt: "Ответьте вслух на вопросы экзаменатора: Πώς σε λένε; Από πού είσαι; Πού μένεις;"
+    seconds: 60
+    model: Με λένε Ιβάν. Είμαι από τη Ρωσία. Μένω στη Λευκωσία.
+    criteria:
+      - Ответил на все три вопроса
+      - Полными предложениями
+      - Без долгих пауз

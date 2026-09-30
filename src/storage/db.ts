@@ -24,6 +24,7 @@ import {
   type Word,
 } from "../domain/types";
 import type { BaseSkillRow, BaseSummaryRow, StashRow, SyncVersionRow } from "../sync/types";
+import type { BlockProgress, StoredModule } from "../domain/types";
 import { currentProfile } from "./profile";
 
 export interface MetaRow {
@@ -91,6 +92,10 @@ export class AppDatabase extends Dexie {
   baseSummary!: Table<BaseSummaryRow, string>;
   syncVersions!: Table<SyncVersionRow, string>;
   cardStash!: Table<StashRow, string>;
+  /** Модули программы из каталога — кеш, как и каталог уроков. */
+  modules!: Table<StoredModule, string>;
+  /** Выполнение блоков уроков курса: ответы, самопроверка, текст письма. */
+  blockProgress!: Table<BlockProgress, string>;
   /** Хранилища до схемы 6 с первичным ключом `wordId`: после миграции пусты. */
   lessonWords!: Table<LessonWord, [string, string]>;
   states!: Table<LegacyState, string>;
@@ -168,11 +173,13 @@ export class AppDatabase extends Dexie {
      * о том, что было. Само хранилище остаётся пустой площадкой для восстановления прежних копий.
      */
     this.version(7).upgrade((tx) => migrateDropCloze(tx));
+    // Схема 8: курс из модулей — модули каталога и выполнение блоков урока.
+    this.version(8).stores({ modules: "id,courseId,number", blockProgress: "key,lessonId" });
   }
 }
 /** База текущего профиля: обычный браузер — `tetradio`, Telegram — отдельная база на бота и пользователя. */
 export const db = new AppDatabase(currentProfile().databaseName);
-export const SCHEMA_VERSION = 7;
+export const SCHEMA_VERSION = 8;
 /** Таблицы пользовательских данных: входят в полную копию. Каталог — кеш, а не данные пользователя; альтернативные версии облака — тоже. */
 export const TABLES = [
   "words",
@@ -191,8 +198,10 @@ export const TABLES = [
   "cardSkills",
   "baseSummary",
   "cardStash",
+  "blockProgress",
 ] as const;
 /** Наборы обязательных таблиц прежних копий: копия старого файла не обязана знать новые таблицы. */
+export const TABLES_V7 = TABLES.filter((table) => table !== "blockProgress");
 export const TABLES_V5 = [
   "words",
   "lessons",
