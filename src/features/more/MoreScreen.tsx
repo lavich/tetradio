@@ -157,6 +157,10 @@ export function MoreScreen() {
           : "только на этом устройстве"}
         . Регистрация и сервер не нужны.
       </p>
+      <p className="mt-2 text-sm text-muted-foreground" data-testid="credits">
+        Картинки слов — Microsoft Fluent Emoji (лицензия MIT, © Microsoft Corporation). Звук — синтез речи вашего
+        устройства.
+      </p>
     </Screen>
   );
 }

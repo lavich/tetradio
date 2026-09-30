@@ -175,6 +175,8 @@ export interface ContentRoot {
   lessons: Map<string, LessonSource>;
   courses: Map<string, Sourced<CourseSource>>;
   modules: Map<string, Sourced<ModuleSource>>;
+  /** Картинки слов из готовой библиотеки: `pictures.yaml` (слово → файл в pictures/) и подпись источника. */
+  pictures: { source: string; words: Map<string, string> };
   files: Map<string, Uint8Array>;
 }
 export function readSources(root: string): ContentRoot {
@@ -200,10 +202,23 @@ export function readSources(root: string): ContentRoot {
     list("lessons").map((file) => [basename(file, extname(file)), load<LessonSource>("lessons", file)]),
   );
   const files = new Map<string, Uint8Array>();
-  for (const dir of ["art", "audio"])
+  const picturesDoc = existsSync(join(root, "pictures.yaml"))
+    ? (parse(readFileSync(join(root, "pictures.yaml"), "utf8")) as { source?: unknown; words?: unknown })
+    : null;
+  if (picturesDoc && (typeof picturesDoc.source !== "string" || !picturesDoc.source.trim()))
+    fail("pictures.yaml: нужен source — библиотека и лицензия картинок");
+  if (picturesDoc?.words !== undefined && (typeof picturesDoc.words !== "object" || Array.isArray(picturesDoc.words)))
+    fail("pictures.yaml.words: ожидалась карта «слово: файл»");
+  const pictures = {
+    source: (picturesDoc?.source as string | undefined) ?? "",
+    words: new Map(
+      Object.entries((picturesDoc?.words ?? {}) as Record<string, unknown>).map(([id, file]) => [id, String(file)]),
+    ),
+  };
+  for (const dir of ["art", "audio", "pictures"])
     if (existsSync(join(root, dir)))
       for (const file of readdirSync(join(root, dir))) files.set(`${dir}/${file}`, readFileSync(join(root, dir, file)));
-  return { words, phrases, lessons, courses, modules, files };
+  return { words, phrases, lessons, courses, modules, pictures, files };
 }
 
 export interface BuiltFile {
@@ -251,7 +266,7 @@ function glossesOf(words: unknown, greek: string, where: string): Gloss[] {
   });
 }
 
-function describe(id: string, src: Sourced<WordSource>): PackageWord {
+function describe(id: string, src: Sourced<WordSource>, picture = false): PackageWord {
   const where = `words/${src.file}`;
   checkId(id, where);
   const greek = text(src.greek, `${where}.greek`)!,
@@ -298,7 +313,7 @@ function describe(id: string, src: Sourced<WordSource>): PackageWord {
   const forms = text(src.forms, `${where}.forms`, false);
   if (forms) draft.forms = forms;
   if (source) draft.source = source;
-  if (src.image) draft.imageAssetId = imageAssetId(id);
+  if (src.image || picture) draft.imageAssetId = imageAssetId(id);
   if (src.audio) draft.audioAssetId = audioAssetId(id);
   return { ...draft, revision: revisionOf(draft) };
 }
@@ -324,7 +339,7 @@ function describePhrase(id: string, src: Sourced<PhraseSource>): PackagePhrase {
 function mediaFor(
   id: string,
   file: string,
-  dir: "art" | "audio",
+  dir: "art" | "audio" | "pictures",
   files: Map<string, Uint8Array>,
   labels: { alt: string; source: string },
   where: string,
@@ -335,6 +350,14 @@ function mediaFor(
   if (!body) fail(`${where}: файла ${dir}/${file} нет`);
   const ext = extname(file).toLowerCase();
   const mimeType = MIME[ext] ?? fail(`${where}: неизвестный тип файла ${file}`);
+  // Картинка из готовой библиотеки: только SVG без скриптов и внешних ссылок, небольшого размера — вне стандарта своих иллюстраций.
+  if (dir === "pictures") {
+    const svg = Buffer.from(body!).toString("utf8");
+    if (extname(file).toLowerCase() !== ".svg") fail(`${where}: картинка библиотеки — только SVG`);
+    if (body!.byteLength > 12_000) fail(`${where}: картинка ${file} больше 12 КБ`);
+    if (/<script|<foreignObject|\son\w+=|(?:href|src)=["'](?!#)/i.test(svg))
+      fail(`${where}: в ${file} скрипт, обработчик или внешняя ссылка`);
+  }
   // Иллюстрация подчиняется стандарту (docs/art-standard.md); файлы до стандарта из legacy.txt считаются в отчёте о миграции.
   if (dir === "art" && mimeType === "image/svg+xml") {
     art.files++;
@@ -345,7 +368,7 @@ function mediaFor(
     body: body!,
     item: {
       id,
-      kind: dir === "art" ? "image" : "audio",
+      kind: dir === "audio" ? "audio" : "image",
       mimeType,
       url: `content/media/${id}@${version}${ext}`,
       bytes: body!.byteLength,
@@ -371,8 +394,12 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const sources = readSources(root);
   const words = new Map<string, PackageWord>();
   const byKey = new Map<string, string>();
+  for (const [picturedId] of sources.pictures.words)
+    if (!sources.words.has(picturedId)) fail(`pictures.yaml: слова ${picturedId} нет в words/`);
   for (const [id, src] of sources.words) {
-    const word = describe(id, src);
+    if (src.image && sources.pictures.words.has(id))
+      fail(`words/${src.file}: у слова своя иллюстрация и картинка из pictures.yaml — оставьте одну`);
+    const word = describe(id, src, sources.pictures.words.has(id));
     const key = wordKey(word.greek, word.russian);
     const twin = byKey.get(key);
     if (twin)
@@ -417,6 +444,21 @@ export function buildContent(root = defaultRoot()): BuiltContent {
         word.imageAssetId!,
         mediaFor(word.imageAssetId!, src.image, "art", sources.files, labels, `words/${src.file}`, legacy, art),
       );
+    const picture = sources.pictures.words.get(id);
+    if (picture)
+      media.set(
+        word.imageAssetId!,
+        mediaFor(
+          word.imageAssetId!,
+          picture,
+          "pictures",
+          sources.files,
+          { alt: `Картинка к слову «${word.russian}»`, source: sources.pictures.source },
+          `pictures.yaml.words.${id}`,
+          legacy,
+          art,
+        ),
+      );
     if (src.audio)
       media.set(
         word.audioAssetId!,
@@ -447,6 +489,12 @@ export function buildContent(root = defaultRoot()): BuiltContent {
           art,
         ),
       );
+
+  // Картинка библиотеки без слова — забытый файл: публиковать её незачем.
+  const usedPictures = new Set(sources.pictures.words.values());
+  for (const path of sources.files.keys())
+    if (path.startsWith("pictures/") && path.endsWith(".svg") && !usedPictures.has(path.slice("pictures/".length)))
+      fail(`${path}: картинка не привязана ни к одному слову в pictures.yaml`);
 
   /** Урок принадлежит ровно одному курсу: без курса он потеряется в каталоге, в двух — попадёт в занятие дважды. */
   const courseOf = new Map<string, string>();

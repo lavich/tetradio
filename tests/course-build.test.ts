@@ -267,6 +267,46 @@ describe("задания и ключи ответов", () => {
   });
 });
 
+describe("картинки слов из библиотеки", () => {
+  const svg = new TextEncoder().encode(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="9" fill="#fb0"/></svg>',
+  );
+  const pictured = (extra: Files = {}) => ({
+    ...base(),
+    "pictures.yaml": { source: "Microsoft Fluent Emoji (Flat), MIT", words: { geia: "sun.svg" } },
+    "pictures/sun.svg": svg,
+    ...extra,
+  });
+  it("слово получает картинку как медиа пакета с источником библиотеки", () => {
+    const pack = build(pictured()).packages.find((p) => p.id === "m01-1")!;
+    expect(pack.words.find((w) => w.id === "geia")!.imageAssetId).toBe("img-geia");
+    expect(pack.media.find((m) => m.id === "img-geia")).toMatchObject({
+      kind: "image",
+      mimeType: "image/svg+xml",
+      source: "Microsoft Fluent Emoji (Flat), MIT",
+    });
+  });
+  it("неизвестное слово, не SVG, скрипт и лишний файл — ошибки", () => {
+    expect(failure(pictured({ "pictures.yaml": { source: "x", words: { nope: "sun.svg" } } }))).toContain(
+      "слова nope нет",
+    );
+    expect(
+      failure(
+        pictured({
+          "pictures.yaml": { source: "x", words: { geia: "sun.png" } },
+          "pictures/sun.png": svg,
+          "pictures/sun.svg": undefined,
+        }),
+      ),
+    ).toContain("только SVG");
+    expect(
+      failure(pictured({ "pictures/sun.svg": new TextEncoder().encode("<svg><script>alert(1)</script></svg>") })),
+    ).toContain("скрипт");
+    expect(failure(pictured({ "pictures/extra.svg": svg }))).toContain("не привязана ни к одному слову");
+    expect(failure(pictured({ "pictures.yaml": { words: { geia: "sun.svg" } } }))).toContain("нужен source");
+  });
+});
+
 describe("лишние поля", () => {
   it("хвост реплики, отрезанный запятой в YAML, — ошибка сборки, а не потерянный текст", () => {
     const split = withLesson((b) =>
