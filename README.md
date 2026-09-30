@@ -2,7 +2,7 @@
 
 Полноценный курс новогреческого и отдельное Telegram Mini App на основе Tavelori для подготовки к A2 на Кипре к маю 2027. Используются Telegram-аккаунт и синхронизация через Telegram CloudStorage; отдельная регистрация и Supabase не нужны.
 
-Рабочее название — «Τετράδιο» (дизайн-направление, см. [бриф](docs/design/brief.md)). Код приложения перенесён из Tavelori (`lavich/lexi`, ревизия `2ccae7d`) и пока работает как Tavelori под новыми идентификаторами; модель курса и пилотный модуль — следующий этап. Контент в `content/` — временная фикстура из Tavelori для тестов, он будет заменён модулями курса.
+Рабочее название — «Τετράδιο» (дизайн-направление, см. [бриф](docs/design/brief.md)). Механики перенесены из Tavelori (`lavich/lexi`, ревизия `2ccae7d`). Готовы модель курса (схема 4), экраны «Курс», модуль и урок из блоков в стиле «Τετράδιο»; содержание курса (`content/`) пока пусто — следующий шаг — пилотный модуль 01. Демо-курс для разработки — `tests/fixtures/course-demo`.
 
 ## Разработка
 
@@ -10,7 +10,9 @@
 npm ci
 npm run dev          # сборка контента и Vite dev-сервер
 npm test             # unit (Vitest)
-npm run test:e2e     # Playwright по production-сборке
+npm run test:e2e     # Playwright: механики на фикстуре Tavelori
+npm run test:e2e:course  # Playwright: экраны курса на демо-курсе
+CONTENT_ROOT=tests/fixtures/course-demo npm run dev  # посмотреть курс локально
 npm run typecheck && npm run lint && npm run format:check
 npm run build
 ```

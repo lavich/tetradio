@@ -21,6 +21,6 @@
     "scripts",
     "vite.config.ts",
     "playwright.config.ts",
-    "playwright.screenshots.config.ts"
+    "playwright.course.config.ts"
   ]
 }

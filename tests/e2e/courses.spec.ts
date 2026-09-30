@@ -34,7 +34,7 @@ test("«Учить курс» ставит все уроки курса, а но
   const catalog = await withoutLastLesson(page);
   await page.goto("/");
   await ready(page);
-  await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await expect(page.getByRole("heading", { name: "Греческий A2" })).toBeVisible();
 
   await page.getByRole("button", { name: "Учить курс" }).click();
@@ -65,7 +65,7 @@ test("«Учить курс» ставит все уроки курса, а но
 test("свой набор попадает в «Мои слова» отдельной группой", async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await page.getByRole("button", { name: "Добавить занятие" }).click();
   await page.getByLabel("Название").fill("Мой набор");
   await page.getByRole("button", { name: "Создать" }).click();
@@ -76,7 +76,7 @@ test("свой набор попадает в «Мои слова» отдель
 test("у курса своё расписание и свой предел; соседний курс их не подхватывает", async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByRole("button", { name: "Учить курс" })).toHaveCount(0);
 
@@ -124,7 +124,7 @@ test("у курса своё расписание и свой предел; со
 test("список часов занятия остаётся на экране и прокручивается внутри себя", async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await page.getByRole("button", { name: "Учить курс" }).click();
   const leeke = page.locator("section").filter({ has: page.getByRole("heading", { name: "Греческий A2" }) });
   await leeke.getByRole("button", { name: "Задать расписание" }).click();

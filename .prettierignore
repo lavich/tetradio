@@ -34,3 +34,4 @@ package-lock.json
 .impeccable
 docs/audit
 docs/design
+dist-course

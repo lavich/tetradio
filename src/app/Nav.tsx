@@ -1,16 +1,18 @@
 import { BookOpen, Home, MoreHorizontal, Rows3 } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import nav from "./Nav.module.css";
 
-const LINKS = [
+const LINKS: { to: string; label: string; Icon: typeof Home; also?: string }[] = [
   { to: "/", label: "Сегодня", Icon: Home },
-  { to: "/lessons", label: "Уроки", Icon: BookOpen },
+  /** Курс из модулей; словарный курс без модулей открывается прежним списком уроков — вкладка та же. */
+  { to: "/course", label: "Курс", Icon: BookOpen, also: "/lessons" },
   { to: "/words", label: "Слова", Icon: Rows3 },
   { to: "/more", label: "Ещё", Icon: MoreHorizontal },
 ];
 export function Nav() {
   const ref = useRef<HTMLElement>(null);
+  const { pathname } = useLocation();
   // Фокус с клавиатуры не прячется под навигацией (WCAG 2.4.11). Chromium при Tab не учитывает
   // scroll-padding страницы, а scrollIntoView учитывает — докручиваем только то, что ушло под полосу.
   useEffect(() => {
@@ -30,16 +32,20 @@ export function Nav() {
   return (
     <nav ref={ref} className={nav.nav} aria-label="Основные разделы">
       <div className={nav.inner}>
-        {LINKS.map(({ to, label, Icon }) => (
-          <NavLink key={to} to={to} end={to === "/"} className={nav.link}>
-            {({ isActive }) => (
-              <>
-                <Icon size={22} strokeWidth={isActive ? 2.4 : 1.9} aria-hidden />
-                <span>{label}</span>
-              </>
-            )}
-          </NavLink>
-        ))}
+        {LINKS.map(({ to, label, Icon, also }) => {
+          // Вкладка «Курс» активна и на прежнем списке уроков: для словарного курса это тот же раздел.
+          const alias = !!also && pathname.startsWith(also);
+          return (
+            <NavLink key={to} to={to} end={to === "/"} className={nav.link} aria-current={alias ? "page" : undefined}>
+              {({ isActive }) => (
+                <>
+                  <Icon size={22} strokeWidth={isActive || alias ? 2.4 : 1.9} aria-hidden />
+                  <span>{label}</span>
+                </>
+              )}
+            </NavLink>
+          );
+        })}
       </div>
     </nav>
   );

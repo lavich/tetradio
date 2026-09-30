@@ -16,7 +16,7 @@ test("оболочка открывается, разделы доступны �
   await expect(page.getByText("Урок 1.2")).toBeVisible();
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await expect(page.getByRole("heading", { name: "Слова" })).toBeVisible();
-  await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await expect(page.getByRole("link", { name: /1\.1/ })).toBeVisible();
   await page.keyboard.press("Tab");
   const focused = await page.evaluate(() => document.activeElement?.tagName);
@@ -153,7 +153,7 @@ test("занятие: знакомство, четыре упражнения, �
   const recorded = await page.getByText(/Всего записано/).innerText();
   expect(recorded).not.toContain("Всего записано 0");
   // Новые слова занятия были из урока 1.2: его строка прогресса больше не «24 новых».
-  await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await expect(page.getByRole("link", { name: /1\.2 ·/ })).toContainText("в повторении");
   await expect(page.getByRole("link", { name: /1\.2 ·/ })).not.toContainText("24 новых");
 });
@@ -161,7 +161,7 @@ test("занятие: знакомство, четыре упражнения, �
 test("прогресс урока виден на «Сегодня» и «Уроках» и меняется вслед за состояниями слов", async ({ page }) => {
   await useSchedule(page);
   const row = () => page.getByRole("link", { name: /1\.1 ·/ });
-  const lessons = () => page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  const lessons = () => page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   const size = (await lessonCards(page))["lesson-1-1"].length;
   await expect(row().getByTestId("lesson-progress")).toHaveText(`${size} новых`);
   await expect(row().getByRole("img", { name: `Освоено 0% · ${size} новых`, exact: true })).toBeVisible();
@@ -223,7 +223,7 @@ test("расписание: даты уроков 1.3 и 1.4, ручной пе�
     page.getByRole("link", { name: new RegExp(`${number} · К ${dativeWeekday(day)}, ${dayMonth(day)}`) });
   const lessonAt = (number: string, day: string) =>
     page.getByRole("link", { name: new RegExp(`${number} · ${dayMonth(day)}`) });
-  const lessons = () => page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  const lessons = () => page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
 
   await lessons();
   await expect(page.getByText("Не задано — даты уроков назначаются вручную")).toBeVisible();
@@ -288,7 +288,7 @@ test("расписание с первым занятием в прошлом с
   const start = addDays(today, -14);
   const days = [isoWeekday(start), isoWeekday(addDays(start, 3))];
   const SHORT = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-  const lessons = () => page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  const lessons = () => page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
 
   await page.goto("/");
   await lessons();

@@ -54,7 +54,7 @@ test("фокус с клавиатуры не прячется под нижне
   await ready(page);
   await installLessons(page, ["lesson-1-1"]);
   // Длинный список «Уроков»: строки каталога уходят ниже навигации, и Tab доходит до них.
-  await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await page.getByRole("heading", { name: "Уроки", level: 1 }).waitFor();
   const navTop = await page.getByRole("navigation").evaluate((nav) => nav.getBoundingClientRect().top);
   const focusedBottom = () =>
