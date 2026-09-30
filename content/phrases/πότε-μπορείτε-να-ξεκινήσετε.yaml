@@ -1,0 +1,7 @@
+id: p200
+text: Πότε μπορείτε να ξεκινήσετε;
+translation: Когда вы можете приступить к работе?
+provenance:
+  sourceLabel: Лексикон курса, модуль 15 (docs/course/lexicon/15.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 15 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
