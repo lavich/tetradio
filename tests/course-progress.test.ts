@@ -50,6 +50,13 @@ describe("проверка ответа по ключу", () => {
     // Пунктуация внутри ответа по-прежнему значима.
     expect(checkItem(cafe, { ...withPoint, answer: ["Καλά, ευχαριστώ."] }, "Καλά ευχαριστώ").status).toBe("wrong");
   });
+  it("в номерах пробелы и дефисы между цифрами не важны", () => {
+    const cafe = block("cafe-q");
+    const phone = { ...cafe.items[0], answer: ["96315802"] };
+    for (const given of ["96 31 58 02", "96-31-58-02", "96315802"])
+      expect(checkItem(cafe, phone, given).status).toBe("correct");
+    expect(checkItem(cafe, phone, "96 31 58 03").status).toBe("wrong");
+  });
   it("счёт задания: неотвеченный пункт — неверный", () => {
     const score = scoreExercise(block("anna-tf"), { q1: "Λάθος" });
     expect(score).toMatchObject({ correct: 1, almost: 0, total: 2 });
