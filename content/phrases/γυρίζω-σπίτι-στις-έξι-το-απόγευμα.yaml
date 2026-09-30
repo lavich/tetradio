@@ -1,0 +1,7 @@
+id: p059
+text: Γυρίζω σπίτι στις έξι το απόγευμα.
+translation: Я возвращаюсь домой в шесть вечера.
+provenance:
+  sourceLabel: Лексикон курса, модуль 05 (docs/course/lexicon/05.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 05 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
