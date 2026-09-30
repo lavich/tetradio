@@ -1,0 +1,7 @@
+id: p209
+text: Πώς το λένε αυτό στα ελληνικά;
+translation: Как это называется по-гречески?
+provenance:
+  sourceLabel: Лексикон курса, модуль 16 (docs/course/lexicon/16.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 16 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
