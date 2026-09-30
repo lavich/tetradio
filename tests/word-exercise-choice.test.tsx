@@ -55,7 +55,7 @@ const choice = (label: string) => host.querySelector<HTMLButtonElement>(`[aria-l
 
 describe("блок «Упражнения» на экране слова", () => {
   it("без файла и голоса аудирование и понимание на слух выключены с причиной, остальное доступно", async () => {
-    await installLessons(db, ["lesson-3-4"]);
+    await installLessons(db, ["lesson-1-4"]);
     await mount("/words/w34-03");
     await until(() => !!choice("Написание") && !choice("Написание")!.disabled, "блок упражнений");
     expect(choice("Узнавание")!.disabled).toBe(false);
@@ -65,7 +65,7 @@ describe("блок «Упражнения» на экране слова", () =>
     expect(text().split(NO_SOUND)).toHaveLength(3);
   });
   it("у удалённого слова блока нет", async () => {
-    await installLessons(db, ["lesson-3-4"]);
+    await installLessons(db, ["lesson-1-4"]);
     await db.words.update("w34-03", { deletedAt: "2026-01-01T00:00:00.000Z" });
     await mount("/words/w34-03");
     await until(() => text().includes("Потренировать слово"), "экран слова");

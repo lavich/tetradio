@@ -38,7 +38,7 @@ test.describe("ссылка на слово", () => {
     await expect(page.getByText("η κατσαρόλα", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("кастрюля", { exact: true })).toBeVisible();
     await expect(page.getByTestId("word-art")).toBeVisible();
-    await expect(page.getByTestId("shared-lesson")).toHaveText(/^Слово из урока 3\.4/);
+    await expect(page.getByTestId("shared-lesson")).toHaveText(/^Слово из урока 1\.4/);
     await expect(page.locator("main a[href*='/lessons']")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Потренировать слово" })).toHaveCount(0);
     await page.getByTestId("shared-lesson").click();

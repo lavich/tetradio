@@ -44,7 +44,7 @@ let host: HTMLElement;
 beforeEach(async () => {
   await Promise.all(db.tables.map((table) => table.clear()));
   resetCatalogPhase();
-  await installLessons(db, ["lesson-3-4"]);
+  await installLessons(db, ["lesson-1-4"]);
   host = document.body.appendChild(document.createElement("div"));
 });
 afterEach(() => {

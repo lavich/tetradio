@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { installLessons, ready } from "./helpers";
 
-/** Разметка слов примера: пилот на уроке 4.1, ссылка ведёт на «το πάτωμα» из урока 2.4. Случай «карточки нет» — в компонентном тесте. */
+/** Разметка слов примера: пример слова урока 1.4, ссылка ведёт на «το πάτωμα» из урока 1.3. Случай «карточки нет» — в компонентном тесте. */
 test("слово примера показывает перевод и открывает установленную карточку", async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-2-4", "lesson-4-1"]);
+  await installLessons(page, ["lesson-1-3", "lesson-1-4"]);
   await page.goto("/words/w41-03");
   const example = page.getByText("В контексте").locator("..");
   const line = page.getByTestId("example-gloss");
