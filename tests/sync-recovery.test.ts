@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
-import { LexiDatabase } from "../src/storage/db";
+import { AppDatabase } from "../src/storage/db";
 import { reopenDatabase, storageHealer } from "../src/storage/recovery";
 import { kvAdapter } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
@@ -16,13 +16,13 @@ const clockMs = Date.parse("2026-09-20T07:06:00Z");
 
 /** База, закрытая без автооткрытия, ведёт себя как IndexedDB WebKit после сна: любое чтение падает. */
 async function asleep(name: string) {
-  const database = new LexiDatabase(`lexi-sync-recovery-${name}-${++counter}`);
+  const database = new AppDatabase(`tetradio-sync-recovery-${name}-${++counter}`);
   await database.delete();
   await database.open();
   database.close({ disableAutoOpen: true });
   return database;
 }
-function coordinator(database: LexiDatabase, recover: (error: unknown) => Promise<boolean>) {
+function coordinator(database: AppDatabase, recover: (error: unknown) => Promise<boolean>) {
   const failures: string[] = [];
   const sync = new SyncCoordinator({
     database,

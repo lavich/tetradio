@@ -27,7 +27,7 @@ test("данные не переходят между origin сами; пере�
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Сохранить полную копию" }).click(),
   ]);
-  const file = join(tmpdir(), `lexi-origin-${Date.now()}.json`);
+  const file = join(tmpdir(), `tetradio-origin-${Date.now()}.json`);
   writeFileSync(file, readFileSync(await download.path()));
   await old.close();
 

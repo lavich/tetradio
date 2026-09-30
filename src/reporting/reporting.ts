@@ -39,10 +39,10 @@ export interface Sdk {
 }
 
 /** Имя отдельной базы IndexedDB офлайн-очереди SDK: не таблица приложения, не входит в копию, удаляется при выключении. */
-export const OFFLINE_DB = "lexi-error-reports";
+export const OFFLINE_DB = "tetradio-error-reports";
 export const APP_VERSION = typeof __APP_VERSION__ === "string" ? __APP_VERSION__ : "0.0.0";
 export const APP_BUILD = typeof __APP_BUILD__ === "string" ? __APP_BUILD__ : "dev";
-export const RELEASE = `lexi@${APP_VERSION}+${APP_BUILD}`;
+export const RELEASE = `tetradio@${APP_VERSION}+${APP_BUILD}`;
 const EARLY_LIMIT = 10,
   CRUMB_LIMIT = 20;
 

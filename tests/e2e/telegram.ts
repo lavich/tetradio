@@ -184,7 +184,7 @@ export const tg = (page: Page) => ({
 export async function onlyReviews(page: Page) {
   await page.evaluate(async () => {
     for (const info of await indexedDB.databases()) {
-      if (!info.name?.startsWith("lexi")) continue;
+      if (!info.name?.startsWith("tetradio")) continue;
       const database = await new Promise<IDBDatabase>((resolve) => {
         const request = indexedDB.open(info.name!);
         request.onsuccess = () => resolve(request.result);

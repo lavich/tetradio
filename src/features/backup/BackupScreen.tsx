@@ -79,7 +79,7 @@ export function BackupScreen() {
     return run(
       async () => {
         // Защитная копия обязана уйти до замены: отмена или ошибка передачи останавливают восстановление.
-        const guard = await send(await exportFull(), `lexi-before-restore-${Date.now()}.json`);
+        const guard = await send(await exportFull(), `tetradio-before-restore-${Date.now()}.json`);
         if (!handedOver(guard))
           return setProblem(`Замена отменена: защитная копия не передана (${TRANSFER_TEXT[guard].toLowerCase()})`);
         await restoreBackup(file);
@@ -137,7 +137,7 @@ export function BackupScreen() {
           <p className={ui.note}>
             Греческий, перевод и IPA для переноса в другие приложения. Прогресс обучения в этот файл не входит.
           </p>
-          <Button variant="soft" size="xl" onClick={async () => send(await exportWordsTsv(), "lexi-words.tsv")}>
+          <Button variant="soft" size="xl" onClick={async () => send(await exportWordsTsv(), "tetradio-words.tsv")}>
             Сохранить TSV
           </Button>
         </CardContent>
@@ -192,10 +192,10 @@ export function BackupScreen() {
               <AlertDialogHeader>
                 <AlertDialogTitle>Заменить все данные на этом устройстве?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Текущие слова, прогресс, ответы и настройки будут перезаписаны содержимым копии. Перед заменой Lexi
-                  передаст текущие данные отдельным файлом; если передача отменится, замена не начнётся.
+                  Текущие слова, прогресс, ответы и настройки будут перезаписаны содержимым копии. Перед заменой
+                  Τετράδιο передаст текущие данные отдельным файлом; если передача отменится, замена не начнётся.
                   {profile.kind === "telegram"
-                    ? " Облачный прогресс Telegram не откатится молча: после восстановления Lexi предложит выбрать, с какой версии продолжить."
+                    ? " Облачный прогресс Telegram не откатится молча: после восстановления Τετράδιο предложит выбрать, с какой версии продолжить."
                     : ""}
                 </AlertDialogDescription>
               </AlertDialogHeader>
@@ -212,7 +212,7 @@ export function BackupScreen() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <p className={ui.note}>Перед заменой Lexi передаст текущие данные отдельным файлом.</p>
+          <p className={ui.note}>Перед заменой Τετράδιο передаст текущие данные отдельным файлом.</p>
         </CardContent>
       </Card>
       {stored.length > 0 && (
@@ -238,7 +238,7 @@ export function BackupScreen() {
                       variant="soft"
                       onClick={async () => {
                         const blob = await sync.exportStored(row.id);
-                        if (blob) await send(blob, `lexi-version-${row.id}.json`);
+                        if (blob) await send(blob, `tetradio-version-${row.id}.json`);
                       }}
                     >
                       Сохранить файл

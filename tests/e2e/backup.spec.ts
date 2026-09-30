@@ -25,10 +25,10 @@ test("полная копия переносит слова, правки и м�
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Сохранить полную копию" }).click(),
   ]).then(([item]) => item);
-  const file = join(tmpdir(), `lexi-e2e-${Date.now()}.json`);
+  const file = join(tmpdir(), `tetradio-e2e-${Date.now()}.json`);
   writeFileSync(file, readFileSync(await download.path()));
   const parsed = JSON.parse(readFileSync(file, "utf8"));
-  expect(parsed.data.databaseName).toBe("lexi");
+  expect(parsed.data.databaseName).toBe("tetradio");
   // Копия старой версии без расписания должна читаться как незаданное расписание.
   for (const row of parsed.data.data.find((table: { tableName: string }) => table.tableName === "settings").rows) {
     delete row.schedule;
@@ -100,13 +100,13 @@ test("повреждённый и чужой файл не меняют данн
   const before = await page.getByTestId("word-count").innerText();
   await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
   await page.getByRole("link", { name: /Копия данных/ }).click();
-  const broken = join(tmpdir(), "lexi-broken.json");
+  const broken = join(tmpdir(), "tetradio-broken.json");
   writeFileSync(broken, "{не json");
   await page.locator("#backup").setInputFiles(broken);
   await expect(page.getByText(/не читается как копия/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Заменить данные копией" })).toBeDisabled();
 
-  const alien = join(tmpdir(), "lexi-alien.json");
+  const alien = join(tmpdir(), "tetradio-alien.json");
   writeFileSync(
     alien,
     JSON.stringify({
@@ -118,13 +118,13 @@ test("повреждённый и чужой файл не меняют данн
   await page.locator("#backup").setInputFiles(alien);
   await expect(page.getByText(/другим приложением/)).toBeVisible();
 
-  const future = join(tmpdir(), "lexi-future.json");
+  const future = join(tmpdir(), "tetradio-future.json");
   writeFileSync(
     future,
     JSON.stringify({
       formatName: "dexie",
       formatVersion: 1,
-      data: { databaseName: "lexi", databaseVersion: 9, tables: [], data: [] },
+      data: { databaseName: "tetradio", databaseVersion: 9, tables: [], data: [] },
     }),
   );
   await page.locator("#backup").setInputFiles(future);

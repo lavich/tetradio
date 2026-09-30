@@ -3,7 +3,7 @@ import "./helpers/self";
 import Dexie from "dexie";
 import { createEmptyCard, State } from "ts-fsrs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { LEGACY_CREATED, LexiDatabase, SCHEMA_VERSION } from "../src/storage/db";
+import { LEGACY_CREATED, AppDatabase, SCHEMA_VERSION } from "../src/storage/db";
 import { exportFull, exportWordsTsv, inspectBackup, restoreBackup } from "../src/features/backup/backup";
 import { lessonItems } from "../src/storage/queries";
 import { makeSession } from "../src/domain/learning";
@@ -43,7 +43,7 @@ class V5Database extends Dexie {
     });
   }
 }
-const NAME = "lexi-cards-migrate";
+const NAME = "tetradio-cards-migrate";
 const iso = "2026-09-16T09:00:00.000Z";
 const card = (due: string, days = 3) => ({
   ...createEmptyCard(new Date("2026-09-01")),
@@ -283,7 +283,7 @@ async function seedV5() {
   });
   await legacy.table("meta").bulkAdd([
     { key: "sync:device", value: "dev" },
-    { key: "app", value: "lexi:5" },
+    { key: "app", value: "tetradio:5" },
   ]);
   legacy.close();
 }
@@ -298,7 +298,7 @@ afterEach(async () => {
 describe("переход профиля схемы 5 к карточкам трёх видов (без сети)", () => {
   it("копирует словарные ключи в типизированные хранилища: сроки, версии, порядок, правки, удаления и медиа совпадают", async () => {
     await seedV5();
-    const db = new LexiDatabase(NAME);
+    const db = new AppDatabase(NAME);
     await db.open();
     expect(db.verno).toBe(SCHEMA_VERSION);
     // Состояния: тот же ID слова, те же даты FSRS и счётчики версий.
@@ -341,7 +341,7 @@ describe("переход профиля схемы 5 к карточкам тр�
   });
   it("события, база навыков, сводка и отложенный прогресс получают ссылки без новых событий и фиктивного прогресса", async () => {
     await seedV5();
-    const db = new LexiDatabase(NAME);
+    const db = new AppDatabase(NAME);
     await db.open();
     expect(await db.events.count()).toBe(2);
     const event = (await db.events.get("e1"))!;
@@ -377,7 +377,7 @@ describe("переход профиля схемы 5 к карточкам тр�
   });
   it("активная сессия продолжается с первого неотвеченного задания: ответы, знакомства и дополнительная попытка сохранены", async () => {
     await seedV5();
-    const db = new LexiDatabase(NAME);
+    const db = new AppDatabase(NAME);
     await db.open();
     const session = (await db.sessions.get("s-live"))!;
     expect(session.status).toBe("active");
@@ -419,9 +419,9 @@ describe("переход профиля схемы 5 к карточкам тр�
   });
   it("повторное открытие мигрированной базы ничего не меняет", async () => {
     await seedV5();
-    const first = new LexiDatabase(NAME);
+    const first = new AppDatabase(NAME);
     await first.open();
-    const snapshot = async (db: LexiDatabase) => ({
+    const snapshot = async (db: AppDatabase) => ({
       states: await db.cardStates.toArray(),
       items: await db.lessonItems.toArray(),
       events: await db.events.toArray(),
@@ -429,7 +429,7 @@ describe("переход профиля схемы 5 к карточкам тр�
     });
     const before = await snapshot(first);
     first.close();
-    const second = new LexiDatabase(NAME);
+    const second = new AppDatabase(NAME);
     await second.open();
     expect(await snapshot(second)).toEqual(before);
     second.close();
@@ -438,7 +438,7 @@ describe("переход профиля схемы 5 к карточкам тр�
 
 /** Тестовая база называется иначе, а копия проверяется по имени базы приложения. */
 const asLexi = (parsed: { data: { databaseName: string } }) =>
-  new Blob([JSON.stringify({ ...parsed, data: { ...parsed.data, databaseName: "lexi" } })], {
+  new Blob([JSON.stringify({ ...parsed, data: { ...parsed.data, databaseName: "tetradio" } })], {
     type: "application/json",
   });
 const legacyWord = (id: string, greek: string, russian: string, over: Record<string, unknown> = {}) => ({
@@ -478,7 +478,7 @@ function backupOf(version: number, tables: Record<string, unknown[]>) {
         formatName: "dexie",
         formatVersion: 1,
         data: {
-          databaseName: "lexi",
+          databaseName: "tetradio",
           databaseVersion: version,
           tables: Object.keys(tables).map((name) => ({ name, schema: SCHEMAS[name], rowCount: tables[name].length })),
           data: Object.entries(tables).map(([tableName, rows]) => ({ tableName, inbound: true, rows })),
@@ -542,11 +542,11 @@ const V2_TABLES = {
   events: [eventRow],
   sessions: [],
   settings: [{ id: "settings", timezone: "Asia/Nicosia", newWordsPerDay: 9, sessionSize: 20 }],
-  meta: [{ key: "app", value: "lexi:2" }],
+  meta: [{ key: "app", value: "tetradio:2" }],
 };
 const V3_TABLES = {
   ...V2_TABLES,
-  meta: [{ key: "app", value: "lexi:3" }],
+  meta: [{ key: "app", value: "tetradio:3" }],
   baseSkills: [{ wordId: "w12-16", skills: { types: {}, lastTypes: ["recognition"], cleanAssemblies: 0 } }],
   baseSummary: [
     {
@@ -575,7 +575,7 @@ const V3_TABLES = {
 };
 const V5_TABLES = {
   ...V3_TABLES,
-  meta: [{ key: "app", value: "lexi:5" }],
+  meta: [{ key: "app", value: "tetradio:5" }],
   courses: [
     {
       id: "my",
@@ -603,9 +603,9 @@ const V5_TABLES = {
 };
 
 describe("полная копия: прежние версии и смешанный профиль", () => {
-  let db: LexiDatabase;
+  let db: AppDatabase;
   beforeEach(async () => {
-    db = new LexiDatabase(NAME);
+    db = new AppDatabase(NAME);
     await db.open();
   });
   afterEach(() => db.close());
@@ -676,7 +676,7 @@ describe("полная копия: прежние версии и смешанн
     const names = parsed.data.tables.map((t: { name: string }) => t.name);
     expect(names).toEqual(expect.arrayContaining(["phrases", "lessonItems", "cardStates", "events", "sessions"]));
     expect(names).not.toContain("clozes"); // снятое хранилище в копию не входит
-    const fresh = new LexiDatabase("lexi-cards-restore");
+    const fresh = new AppDatabase("tetradio-cards-restore");
     await fresh.delete();
     await fresh.open();
     await restoreBackup(asLexi(parsed), fresh);
@@ -719,7 +719,7 @@ describe("полная копия: прежние версии и смешанн
     await installMixed(db, [MIXED_LESSON], noWords);
     expect(await db.words.count()).toBe(0);
     const parsed = JSON.parse(await (await exportFull(db)).text());
-    const fresh = new LexiDatabase("lexi-cards-nowords");
+    const fresh = new AppDatabase("tetradio-cards-nowords");
     await fresh.delete();
     await fresh.open();
     await restoreBackup(asLexi(parsed), fresh);

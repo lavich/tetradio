@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 import { State } from "ts-fsrs";
-import { db, isStandardWord, searchTokens, type LexiDatabase, type StoredWord } from "./db";
+import { db, isStandardWord, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import { addDays, LESSON_MATES_RADIUS, localDay, type CardFacts, type SessionSource } from "../domain/learning";
 import { isShippedCard, unitKey, wordKeyOf, wordRef } from "../domain/refs";
 import {
@@ -38,22 +38,21 @@ const span = (first: string) =>
   ] as const;
 export const PAGE_SIZE = 50;
 
-export const loadSettings = async (database: LexiDatabase = db) =>
-  fillSettings(await database.settings.get("settings"));
+export const loadSettings = async (database: AppDatabase = db) => fillSettings(await database.settings.get("settings"));
 /** Уроки с датами по расписанию: единственное место, где даты вычисляются для чтения. */
-export const loadLessons = async (database: LexiDatabase = db) =>
+export const loadLessons = async (database: AppDatabase = db) =>
   scheduleCourses(await database.lessons.toArray(), await database.courses.toArray());
 /** Связи урока в авторском порядке: по индексу, без чтения карточек. */
-export const lessonItems = (lessonId: string, database: LexiDatabase = db): Promise<LessonItem[]> =>
+export const lessonItems = (lessonId: string, database: AppDatabase = db): Promise<LessonItem[]> =>
   database.lessonItems
     .where("[lessonId+position]")
     .between(...span(lessonId))
     .toArray();
 /** Идентификаторы удалённых слов: нужны только скану словаря, остальные выборки работают с ключами карточек. */
-const deletedWordIds = async (database: LexiDatabase = db) =>
+const deletedWordIds = async (database: AppDatabase = db) =>
   new Set(await database.words.where("deletedAt").above("").primaryKeys());
 /** Ключи удалённых карточек всех видов: удалённых мало, множество дешевле точечных проверок. */
-export async function deletedKeys(database: LexiDatabase = db): Promise<Set<string>> {
+export async function deletedKeys(database: AppDatabase = db): Promise<Set<string>> {
   const [words, phrases] = await Promise.all([
     database.words.where("deletedAt").above("").primaryKeys(),
     database.phrases.where("deletedAt").above("").primaryKeys(),
@@ -66,7 +65,7 @@ const byKind = (refs: LearningRef[]) => {
   return groups;
 };
 /** Ключи существующих не удалённых карточек: только ключи индексов, записи с текстами не читаются. */
-export async function liveKeys(refs: LearningRef[], database: LexiDatabase = db): Promise<Set<string>> {
+export async function liveKeys(refs: LearningRef[], database: AppDatabase = db): Promise<Set<string>> {
   if (!refs.length) return new Set();
   const groups = byKind(refs);
   const live = new Set<string>();
@@ -82,18 +81,18 @@ export async function liveKeys(refs: LearningRef[], database: LexiDatabase = db)
   }
   return live;
 }
-export const statesOf = async (refs: LearningRef[], database: LexiDatabase = db) =>
+export const statesOf = async (refs: LearningRef[], database: AppDatabase = db) =>
   new Map(
     (await database.cardStates.bulkGet(refs.map(unitKey)))
       .filter((s): s is LearningState => !!s)
       .map((s) => [s.unitKey, s]),
   );
-export const liveWords = async (ids: string[], database: LexiDatabase = db): Promise<StoredWord[]> =>
+export const liveWords = async (ids: string[], database: AppDatabase = db): Promise<StoredWord[]> =>
   (await database.words.bulkGet(ids)).filter((w): w is StoredWord => !!w && !w.deletedAt);
-export const livePhrases = async (ids: string[], database: LexiDatabase = db): Promise<Phrase[]> =>
+export const livePhrases = async (ids: string[], database: AppDatabase = db): Promise<Phrase[]> =>
   (await database.phrases.bulkGet(ids)).filter((p): p is Phrase => !!p && !p.deletedAt);
 /** Полное содержимое перечисленных карточек; читаются только они. */
-export async function cardsOf(refs: LearningRef[], database: LexiDatabase = db): Promise<Map<string, SessionCard>> {
+export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): Promise<Map<string, SessionCard>> {
   const groups = byKind(refs);
   const cards = new Map<string, SessionCard>();
   if (groups.word.length)
@@ -104,7 +103,7 @@ export async function cardsOf(refs: LearningRef[], database: LexiDatabase = db):
   return cards;
 }
 
-export function dexieSource(database: LexiDatabase = db): SessionSource & StatsSource {
+export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
   return {
     settings: () => loadSettings(database),
     lessons: () => loadLessons(database),
@@ -264,14 +263,14 @@ export function dexieSource(database: LexiDatabase = db): SessionSource & StatsS
 }
 
 /** События карточки строго после отсечки базы: включённые в базу ответы не учитываются второй раз. */
-export const eventsAfter = (database: LexiDatabase, unitKey: string, asOf: string) =>
+export const eventsAfter = (database: AppDatabase, unitKey: string, asOf: string) =>
   database.events.where("[unitKey+createdAt]").between([unitKey, asOf], [unitKey, Dexie.maxKey], false, true).toArray();
 
 /**
  * Пул вариантов ответа. Маленький словарь берётся целиком в порядке идентификаторов, поэтому совпадает
  * с полным снимком; большой — несколькими случайными порциями без чтения всей таблицы.
  */
-export async function optionPool(want: number, database: LexiDatabase = db): Promise<Word[]> {
+export async function optionPool(want: number, database: AppDatabase = db): Promise<Word[]> {
   const total = await database.words.count();
   if (total <= want) return (await database.words.toArray()).filter((word) => !word.deletedAt);
   const chunk = Math.ceil(want / 4);
@@ -288,7 +287,7 @@ export async function optionPool(want: number, database: LexiDatabase = db): Pro
  * с пропусками, а фразы занимают их наравне со словами, поэтому соседей бывает и меньше: окно ограничивает
  * чтение, а не обещает число слов. Читаются только ссылки окна и слова по id — не весь урок.
  */
-export async function lessonMates(wordIds: string[], database: LexiDatabase = db): Promise<Map<string, Word[]>> {
+export async function lessonMates(wordIds: string[], database: AppDatabase = db): Promise<Map<string, Word[]>> {
   const links = wordIds.length
     ? await database.lessonItems.where("unitKey").anyOf(wordIds.map(wordKeyOf)).toArray()
     : [];
@@ -319,7 +318,7 @@ export async function lessonMates(wordIds: string[], database: LexiDatabase = db
   );
 }
 /** Пул фраз для вариантов: те же правила, что у слов, — целиком для маленькой таблицы, порциями для большой. */
-export async function phrasePool(want: number, database: LexiDatabase = db): Promise<Phrase[]> {
+export async function phrasePool(want: number, database: AppDatabase = db): Promise<Phrase[]> {
   const total = await database.phrases.count();
   if (total <= want) return (await database.phrases.toArray()).filter((phrase) => !phrase.deletedAt);
   const chunk = Math.ceil(want / 4);
@@ -340,7 +339,7 @@ export interface LessonView extends Lesson {
   progress?: LessonProgress;
 }
 /** С прогрессом состояния карточек урока читаются один раз здесь, по ключам связей; экраны получают группы готовыми. */
-export async function lessonViews(database: LexiDatabase = db, withProgress = false): Promise<LessonView[]> {
+export async function lessonViews(database: AppDatabase = db, withProgress = false): Promise<LessonView[]> {
   const lessons = await loadLessons(database);
   return Promise.all(
     lessons.map(async (lesson) => {
@@ -365,12 +364,12 @@ export async function lessonViews(database: LexiDatabase = db, withProgress = fa
     }),
   );
 }
-export async function lessonsOfCard(ref: LearningRef, database: LexiDatabase = db): Promise<Lesson[]> {
+export async function lessonsOfCard(ref: LearningRef, database: AppDatabase = db): Promise<Lesson[]> {
   const links = await database.lessonItems.where("unitKey").equals(unitKey(ref)).toArray();
   const lessons = await loadLessons(database);
   return lessons.filter((lesson) => links.some((link) => link.lessonId === lesson.id));
 }
-export const lessonsOfWord = (wordId: string, database: LexiDatabase = db) => lessonsOfCard(wordRef(wordId), database);
+export const lessonsOfWord = (wordId: string, database: AppDatabase = db) => lessonsOfCard(wordRef(wordId), database);
 /** Урок целиком: связи в авторском порядке, живые карточки трёх видов и их состояния — одной выборкой на таблицу. */
 export interface LessonDetail {
   lesson: Lesson;
@@ -380,7 +379,7 @@ export interface LessonDetail {
   phrases: Phrase[];
   states: Map<string, LearningState>;
 }
-export async function lessonDetail(id: string, database: LexiDatabase = db): Promise<LessonDetail | null> {
+export async function lessonDetail(id: string, database: AppDatabase = db): Promise<LessonDetail | null> {
   const lesson = (await loadLessons(database)).find((item) => item.id === id);
   if (!lesson) return null;
   const links = await lessonItems(id, database);
@@ -427,7 +426,7 @@ export interface WordPage {
   scope: "search" | "lesson" | "all";
 }
 
-export async function searchWordIds(query: string, database: LexiDatabase = db): Promise<string[]> {
+export async function searchWordIds(query: string, database: AppDatabase = db): Promise<string[]> {
   const tokens = searchTokens(query);
   if (!tokens.length) return [];
   const sets = await Promise.all(tokens.map((token) => database.words.where("tokens").startsWith(token).primaryKeys()));
@@ -439,7 +438,7 @@ export async function searchWordIds(query: string, database: LexiDatabase = db):
 /** Словарь остаётся словарём слов: страницы, поиск и фильтр урока читают только слова. */
 export async function wordPage(
   { query, filter, lessonId, cursor, limit = PAGE_SIZE }: WordPageRequest,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
 ): Promise<WordPage> {
   const items: WordPage["items"] = [];
   const groupsOf = async (words: (StoredWord | undefined)[]) => {
@@ -499,7 +498,7 @@ export async function wordPage(
     }
   }
 }
-async function matches(query: string, database: LexiDatabase) {
+async function matches(query: string, database: AppDatabase) {
   if (!query.trim()) return () => true;
   const found = new Set(await searchWordIds(query, database));
   return (id: string) => found.has(id);
@@ -507,7 +506,7 @@ async function matches(query: string, database: LexiDatabase) {
 
 export async function importPreview(
   rows: { greek: string; russian: string }[],
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
 ): Promise<{ duplicates: number; conflicts: number }> {
   let duplicates = 0,
     conflicts = 0;

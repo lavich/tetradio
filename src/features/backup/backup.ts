@@ -1,7 +1,7 @@
 import Dexie from "dexie";
 import { exportDB, importInto } from "dexie-export-import";
 import {
-  LexiDatabase,
+  AppDatabase,
   db,
   LEGACY_STORES,
   LEGACY_TABLES,
@@ -17,13 +17,13 @@ import {
   TABLES_V3,
   TABLES_V5,
 } from "../../storage/db";
-import { isLexiDatabaseName } from "../../storage/profile";
+import { isAppDatabaseName } from "../../storage/profile";
 import { fillSettings, type LessonItem, type Settings } from "../../domain/types";
 import { syncEvents } from "../../sync/events";
 
 /** Версия формата копии совпадает с версией схемы; копии прежних версий читаются через ту же миграцию, что и база. */
-export const APP_MARKER = `lexi:${SCHEMA_VERSION}`;
-const KNOWN_MARKERS = Array.from({ length: SCHEMA_VERSION }, (_, index) => `lexi:${index + 1}`);
+export const APP_MARKER = `tetradio:${SCHEMA_VERSION}`;
+const KNOWN_MARKERS = Array.from({ length: SCHEMA_VERSION }, (_, index) => `tetradio:${index + 1}`);
 export interface BackupReport {
   databaseName: string;
   tables: { name: string; rows: number }[];
@@ -42,7 +42,7 @@ export function requiredTables(version: number): readonly string[] {
 }
 
 /** Каталог — кеш, альтернативные версии облака, пустые площадки старых хранилищ и служебные ключи синхронизации — не данные пользователя: в копию не входят. */
-export async function exportFull(database: LexiDatabase = db): Promise<Blob> {
+export async function exportFull(database: AppDatabase = db): Promise<Blob> {
   await database.meta.put({ key: "app", value: APP_MARKER });
   await database.meta.put({ key: "exportedAt", value: new Date().toISOString() });
   const blob = await exportDB(database, {
@@ -117,12 +117,12 @@ export const TRANSFER_TEXT: Record<TransferOutcome, string> = {
   cancelled: "Передача отменена. Данные не изменились.",
   failed: "Не удалось передать файл. Данные не изменились.",
   unsupported:
-    "Этот клиент не поддерживает сохранение файлов из приложения. Откройте Lexi там, где доступно сохранение, или сделайте копию позже.",
+    "Этот клиент не поддерживает сохранение файлов из приложения. Откройте Τετράδιο там, где доступно сохранение, или сделайте копию позже.",
 };
-export const backupName = (now = new Date()) => `lexi-backup-${now.toISOString().slice(0, 10)}.json`;
+export const backupName = (now = new Date()) => `tetradio-backup-${now.toISOString().slice(0, 10)}.json`;
 
 /** TSV — только слова: фразы и пропуски в него не входят, и полной копией он не является. */
-export async function exportWordsTsv(database: LexiDatabase = db): Promise<Blob> {
+export async function exportWordsTsv(database: AppDatabase = db): Promise<Blob> {
   const rows: string[] = ["Греческий\tРусский\tIPA"];
   await database.words.orderBy("[sortKey+id]").each((word) => {
     if (!word.deletedAt)
@@ -138,18 +138,18 @@ export async function inspectBackup(
   try {
     parsed = JSON.parse(await file.text());
   } catch {
-    return { ok: false, message: "Файл не читается как копия Lexi — возможно, он повреждён." };
+    return { ok: false, message: "Файл не читается как копия Τετράδιο — возможно, он повреждён." };
   }
   if (parsed?.formatName !== "dexie" || !parsed?.data?.tables)
-    return { ok: false, message: "Это не файл полной копии Lexi." };
+    return { ok: false, message: "Это не файл полной копии Τετράδιο." };
   const info = parsed.data;
-  if (!isLexiDatabaseName(info.databaseName))
+  if (!isAppDatabaseName(info.databaseName))
     return { ok: false, message: `Копия сделана другим приложением (база «${info.databaseName}»).` };
   const version = Number(info.databaseVersion);
   if (version > SCHEMA_VERSION)
     return {
       ok: false,
-      message: `Копия сделана более новой версией Lexi (схема ${info.databaseVersion}). Обновите приложение.`,
+      message: `Копия сделана более новой версией Τετράδιο (схема ${info.databaseVersion}). Обновите приложение.`,
     };
   const legacy = version < SCHEMA_VERSION;
   const names = info.tables.map((table: { name: string }) => table.name);
@@ -180,10 +180,10 @@ export async function inspectBackup(
  * и проверяется на целостность; только затем одной транзакцией заменяет данные. Копия с фразами или пропусками
  * без слов допустима; связь с отсутствующей карточкой любого вида отклоняет восстановление до замены.
  */
-export async function restoreBackup(file: Blob, database: LexiDatabase = db): Promise<void> {
+export async function restoreBackup(file: Blob, database: AppDatabase = db): Promise<void> {
   const check = await inspectBackup(file);
   if (!check.ok) throw new Error(check.message);
-  const staging = new LexiDatabase("lexi-restore");
+  const staging = new AppDatabase("tetradio-restore");
   await staging.delete();
   await staging.open();
   try {
@@ -240,6 +240,6 @@ export async function restoreBackup(file: Blob, database: LexiDatabase = db): Pr
     syncEvents.emit("restored");
   } finally {
     staging.close();
-    await Dexie.delete("lexi-restore");
+    await Dexie.delete("tetradio-restore");
   }
 }

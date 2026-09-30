@@ -41,32 +41,32 @@ describe("отправка ссылки на слово", () => {
   it("в Telegram открывает выбор чата со ссылкой через бота и названием слова", async () => {
     const opened: string[] = [];
     const app = { openTelegramLink: (url: string) => opened.push(url) } as unknown as TelegramWebApp;
-    await shareWord(word, "TaveloriDevBot", app);
+    await shareWord(word, "tetradio_dev", app);
     const target = new URL(opened[0]);
     expect(`${target.origin}${target.pathname}`).toBe("https://t.me/share/url");
-    expect(target.searchParams.get("url")).toBe("https://t.me/TaveloriDevBot?startapp=w_w34-03");
+    expect(target.searchParams.get("url")).toBe("https://t.me/tetradio_dev?startapp=w_w34-03");
     expect(target.searchParams.get("text")).toBe("η κατσαρόλα — кастрюля");
     expect(copied).toEqual([]);
   });
   it("в браузере открывает системное меню, отмена ничего не копирует", async () => {
     const shared: unknown[] = [];
     nav.share = async (data: unknown) => void shared.push(data);
-    await shareWord(word, "TaveloriBot", null);
-    expect(shared).toEqual([{ url: "https://t.me/TaveloriBot?startapp=w_w34-03", text: "η κατσαρόλα — кастрюля" }]);
+    await shareWord(word, "tetradio_local", null);
+    expect(shared).toEqual([{ url: "https://t.me/tetradio_local?startapp=w_w34-03", text: "η κατσαρόλα — кастрюля" }]);
     nav.share = async () => {
       throw Object.assign(new Error("cancel"), { name: "AbortError" });
     };
-    await shareWord(word, "TaveloriBot", null);
+    await shareWord(word, "tetradio_local", null);
     expect(copied).toEqual([]);
     expect(toast.success).not.toHaveBeenCalled();
   });
   it("без системного меню или при его сбое копирует ссылку и сообщает об этом", async () => {
-    await shareWord(word, "TaveloriBot", null);
+    await shareWord(word, "tetradio_local", null);
     nav.share = async () => {
       throw Object.assign(new Error("denied"), { name: "NotAllowedError" });
     };
-    await shareWord(word, "TaveloriBot", null);
-    expect(copied).toEqual([wordLink("w34-03", "TaveloriBot"), wordLink("w34-03", "TaveloriBot")]);
+    await shareWord(word, "tetradio_local", null);
+    expect(copied).toEqual([wordLink("w34-03", "tetradio_local"), wordLink("w34-03", "tetradio_local")]);
     expect(toast.success).toHaveBeenCalledWith("Ссылка скопирована");
   });
 });
@@ -80,20 +80,20 @@ describe("бот ссылки", () => {
   it("в браузере без ?bot= — основной бот", async () => {
     open("/");
     await shareWord(word, undefined, null);
-    expect(copied).toEqual(["https://t.me/TaveloriBot?startapp=w_w34-03"]);
+    expect(copied).toEqual(["https://t.me/tetradio_local?startapp=w_w34-03"]);
   });
-  it("с ?bot=TaveloriDevBot — dev-бот, и после перехода, и после перезагрузки", async () => {
-    open("/?bot=TaveloriDevBot");
+  it("с ?bot=tetradio_dev — dev-бот, и после перехода, и после перезагрузки", async () => {
+    open("/?bot=tetradio_dev");
     await shareWord(word, undefined, null);
     window.history.pushState(null, "", "/words/w34-03"); // переход маршрутизатора убирает ?bot=
     await shareWord(word, undefined, null);
     open("/words/w34-03"); // перезагрузка
     await shareWord(word, undefined, null);
     const tg = `#tgWebAppPlatform=ios&tgWebAppData=${encodeURIComponent("auth_date=1&hash=a&start_param=w_w34-03")}`;
-    open(`/?bot=TaveloriDevBot${tg}`);
+    open(`/?bot=tetradio_dev${tg}`);
     open("/share/word/w34-03");
     await shareWord(word, undefined, null);
-    expect(copied).toEqual(Array(4).fill("https://t.me/TaveloriDevBot?startapp=w_w34-03"));
+    expect(copied).toEqual(Array(4).fill("https://t.me/tetradio_dev?startapp=w_w34-03"));
   });
 });
 

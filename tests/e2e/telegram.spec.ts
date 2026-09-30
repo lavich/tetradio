@@ -2,8 +2,8 @@ import { expect, test } from "@playwright/test";
 import { breakStorage, installLessons, seedQueue } from "./helpers";
 import { DARK, LIGHT, onlyReviews, openTelegram, tg } from "./telegram";
 
-/** База Telegram-профиля тестового пользователя: отдельная от браузерной `lexi`. */
-const TG_DB = "lexi-tg-TaveloriBot-1001";
+/** База Telegram-профиля тестового пользователя: отдельная от браузерной `tetradio`. */
+const TG_DB = "tetradio-tg-tetradio_local-1001";
 
 test.describe("запуск внутри Telegram", () => {
   test("экран «Сегодня», ready/expand, компактная шапка, первый запуск без запроса аккаунта", async ({ page }) => {
@@ -37,7 +37,7 @@ test.describe("запуск внутри Telegram", () => {
     await expect(page.getByTestId("storage-scope")).toContainText("В этом браузере");
     await expect(page.getByTestId("storage-scope")).toContainText("Вход через Telegram здесь не нужен");
     await expect(page.getByTestId("sync-status")).toHaveCount(0);
-    await expect(page.locator("header").getByText("lexi")).toBeVisible();
+    await expect(page.locator("header").getByText("τετράδιο")).toBeVisible();
   });
   test("ошибка загрузки bridge при запуске из Telegram оставляет обычный интерфейс", async ({ page }) => {
     await page.route("https://telegram.org/**", (route) => route.abort());
@@ -107,7 +107,7 @@ test.describe("навигация, тема и размеры", () => {
     await expect(page.getByTestId("today-title")).toBeVisible();
     await expect(page.getByRole("button", { name: /Начать занятие/ })).toBeVisible();
     const events = await page.evaluate(async () => {
-      const request = indexedDB.open("lexi-tg-TaveloriBot-1001");
+      const request = indexedDB.open("tetradio-tg-tetradio_local-1001");
       const database = await new Promise<IDBDatabase>((resolve) => {
         request.onsuccess = () => resolve(request.result);
       });
@@ -398,7 +398,7 @@ test.describe("аудио, копии и облако", () => {
         .or(page.getByTestId("prompt").first()),
     ).toBeVisible();
     const events = await page.evaluate(async () => {
-      const request = indexedDB.open("lexi-tg-TaveloriBot-1001");
+      const request = indexedDB.open("tetradio-tg-tetradio_local-1001");
       const database = await new Promise<IDBDatabase>((resolve) => {
         request.onsuccess = () => resolve(request.result);
       });
@@ -452,7 +452,7 @@ test.describe("аудио, копии и облако", () => {
     await web.waitForSelector("[data-testid=today-title]");
     await web.goto("/more/backup");
     await web.locator("#backup").setInputFiles(path!);
-    await expect(web.getByText(/Файл проверен: база «lexi-tg-TaveloriBot-1001»/)).toBeVisible();
+    await expect(web.getByText(/Файл проверен: база «tetradio-tg-tetradio_local-1001»/)).toBeVisible();
     await web.getByRole("button", { name: "Заменить данные копией" }).click();
     await Promise.all([
       web.waitForEvent("download"),
@@ -498,7 +498,7 @@ test.describe("аудио, копии и облако", () => {
       .poll(
         () =>
           tablet.evaluate(async () => {
-            const request = indexedDB.open("lexi-tg-TaveloriBot-1001");
+            const request = indexedDB.open("tetradio-tg-tetradio_local-1001");
             const database = await new Promise<IDBDatabase>((resolve) => {
               request.onsuccess = () => resolve(request.result);
             });
@@ -540,14 +540,14 @@ test.describe("аудио, копии и облако", () => {
 });
 
 test.describe("ссылка на слово через бота", () => {
-  const DEV_DB = "lexi-tg-TaveloriDevBot-1001";
+  const DEV_DB = "tetradio-tg-tetradio_dev-1001";
   const launch = async (
     page: import("@playwright/test").Page,
     options: import("./telegram").TelegramEmulation,
     path = "/",
   ) => {
     const { launchHash } = await import("./telegram");
-    await page.goto(`${path}?bot=TaveloriDevBot${launchHash(options)}`);
+    await page.goto(`${path}?bot=tetradio_dev${launchHash(options)}`);
   };
   const dismissWelcome = async (page: import("@playwright/test").Page) => {
     const welcome = page.getByRole("button", { name: /Понятно|Начать с чистого профиля/ });
@@ -581,7 +581,7 @@ test.describe("ссылка на слово через бота", () => {
     await page.getByRole("button", { name: "Поделиться словом" }).click();
     const link = (await tg(page).calls()).find((call) => call.startsWith("link:"))!;
     const target = new URL(link.slice(5));
-    expect(target.searchParams.get("url")).toBe("https://t.me/TaveloriDevBot?startapp=w_w34-03");
+    expect(target.searchParams.get("url")).toBe("https://t.me/tetradio_dev?startapp=w_w34-03");
     expect(target.searchParams.get("text")).toBe("η κατσαρόλα — кастрюля");
     const names = await databases(page);
     expect(names).toContain(DEV_DB);

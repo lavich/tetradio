@@ -1,6 +1,6 @@
 import { lifecycle } from "../reporting/reporting";
 
-const KEY = "lexi:stale-build-reload";
+const KEY = "tetradio:stale-build-reload";
 /** Перезагрузка чаще этого считается циклом: чанк не грузится не из-за сборки, и отказ уходит в границу ошибок. */
 const RELOAD_GUARD_MS = 30000;
 

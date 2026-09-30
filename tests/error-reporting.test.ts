@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { describe, expect, it } from "vitest";
 import { defaultSettings, fillSettings, type Settings } from "../src/domain/types";
-import { LexiDatabase } from "../src/storage/db";
+import { AppDatabase } from "../src/storage/db";
 import { loadSettings } from "../src/storage/queries";
 
 describe("настройка отчётов об ошибках", () => {
@@ -12,7 +12,7 @@ describe("настройка отчётов об ошибках", () => {
     expect(fillSettings(undefined).errorReports).toBe(true);
   });
   it("сохранённое выключение переживает перечитывание из базы", async () => {
-    const db = new LexiDatabase("lexi-error-reports");
+    const db = new AppDatabase("tetradio-error-reports");
     await db.delete();
     await db.open();
     await db.settings.put({ ...defaultSettings, errorReports: false });
@@ -23,12 +23,12 @@ describe("настройка отчётов об ошибках", () => {
 
 describe("границы данных в сообщениях ошибок", () => {
   it("ошибка сохранения ответа не несёт слово, перевод и ответ пользователя ни в сообщении, ни в стеке", async () => {
-    const { LexiDatabase } = await import("../src/storage/db");
+    const { AppDatabase } = await import("../src/storage/db");
     const { dexieSource } = await import("../src/storage/queries");
     const { makeSession } = await import("../src/domain/learning");
     const { recordAnswer } = await import("../src/storage/ops");
     const { installLessons } = await import("./helpers/content");
-    const db = new LexiDatabase("lexi-error-message");
+    const db = new AppDatabase("tetradio-error-message");
     await db.delete();
     await db.open();
     await installLessons(db, ["lesson-1-1"]);
@@ -78,7 +78,7 @@ describe("явные отчёты о критических отказах", () 
     const { installLesson, refreshCatalog } = await import("../src/content/client");
     const { content, memoryFetcher, packageOf } = await import("./helpers/content");
     resetReporting({ dsn: "https://key@o1.ingest.sentry.io/1", loader: () => Promise.reject(new Error("не в тесте")) });
-    const db = new LexiDatabase("lexi-report-content");
+    const db = new AppDatabase("tetradio-report-content");
     await db.delete();
     await db.open();
     const entry = content.catalog.lessons.find((lesson) => lesson.id === "lesson-1-1")!;
@@ -114,7 +114,7 @@ describe("явные отчёты о критических отказах", () 
     const { kvAdapter } = await import("../src/sync/adapter");
     const { memoryTransport, SyncError } = await import("../src/sync/transport");
     const { installLessons } = await import("./helpers/content");
-    const db = new LexiDatabase("lexi-report-sync");
+    const db = new AppDatabase("tetradio-report-sync");
     await db.delete();
     await db.open();
     await installLessons(db, ["lesson-1-1"]);

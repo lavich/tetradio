@@ -55,8 +55,8 @@ export function App() {
       });
     };
     if (updateReady.value) notice();
-    window.addEventListener("lexi:update", notice);
-    return () => window.removeEventListener("lexi:update", notice);
+    window.addEventListener("tetradio:update", notice);
+    return () => window.removeEventListener("tetradio:update", notice);
   }, [immersive]);
   return (
     <div className={ui.app}>

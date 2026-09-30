@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
-import { LexiDatabase } from "../src/storage/db";
+import { AppDatabase } from "../src/storage/db";
 import { applySnapshot, buildAndCommit, buildSnapshot, hasMixedProgress, META, readMeta } from "../src/sync/snapshot";
 import { decodeSnapshot, encodeRef, encodeSnapshot, SnapshotFormatError } from "../src/sync/codec";
 import { kvAdapter, splitParts } from "../src/sync/adapter";
@@ -29,7 +29,7 @@ const W = (id: string): LearningRef => ({ kind: "word", id });
 const P = (id: string): LearningRef => ({ kind: "phrase", id });
 
 async function device(name: string, options: { mixed?: boolean; maxKeys?: number } = {}) {
-  const db = new LexiDatabase(`lexi-sync-mixed-${name}-${++counter}`);
+  const db = new AppDatabase(`tetradio-sync-mixed-${name}-${++counter}`);
   await db.delete();
   await db.open();
   if (options.mixed) await installMixed(db);

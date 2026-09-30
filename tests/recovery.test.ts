@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { describe, expect, it } from "vitest";
 import Dexie from "dexie";
-import { LexiDatabase } from "../src/storage/db";
+import { AppDatabase } from "../src/storage/db";
 import { isStorageError, reopenDatabase, storageHealer } from "../src/storage/recovery";
 
 describe("восстановление после сбоя хранилища", () => {
@@ -28,7 +28,7 @@ describe("восстановление после сбоя хранилища", 
     expect(isStorageError("UnknownError")).toBe(false);
   });
   it("база переоткрывается тем же экземпляром и снова отвечает на запросы", async () => {
-    const database = new LexiDatabase("lexi-recovery");
+    const database = new AppDatabase("tetradio-recovery");
     await database.delete();
     await database.open();
     await database.meta.put({ key: "probe", value: "1" });

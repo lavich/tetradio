@@ -1,7 +1,7 @@
 import { launchContext, type LaunchContext } from "../platform/launch";
 
 /**
- * Локальные профили разделены по режиму запуска: обычный браузер хранит данные в базе `lexi`,
+ * Локальные профили разделены по режиму запуска: обычный браузер хранит данные в базе `tetradio`,
  * Telegram — в отдельной базе на пару «бот + пользователь». Telegram ID здесь лишь локальный селектор,
  * а не серверное доказательство личности; облачную область задаёт сам Telegram.
  * Без сведений о пользователе открывается отдельный анонимный профиль без облачной записи.
@@ -14,7 +14,7 @@ export interface Profile {
   syncable: boolean;
   label: string;
 }
-export const WEB_DATABASE = "lexi";
+export const WEB_DATABASE = "tetradio";
 
 export function profileFor(context: LaunchContext): Profile {
   if (context.kind !== "telegram")
@@ -31,7 +31,7 @@ export function profileFor(context: LaunchContext): Profile {
       kind: "telegram",
       bot: context.bot,
       userId: null,
-      databaseName: `lexi-tg-${context.bot}-anonymous`,
+      databaseName: `tetradio-tg-${context.bot}-anonymous`,
       syncable: false,
       label: "Telegram: профиль не определён",
     };
@@ -39,7 +39,7 @@ export function profileFor(context: LaunchContext): Profile {
     kind: "telegram",
     bot: context.bot,
     userId: context.user.id,
-    databaseName: `lexi-tg-${context.bot}-${context.user.id}`,
+    databaseName: `tetradio-tg-${context.bot}-${context.user.id}`,
     syncable: true,
     label: "Telegram: облачная синхронизация",
   };
@@ -50,6 +50,6 @@ export const currentProfile = (): Profile => current ?? (current = profileFor(la
 export const resetProfile = () => {
   current = null;
 };
-/** Имя базы допустимо для копии Lexi: основная, тестовая или профиль Telegram. */
-export const isLexiDatabaseName = (name: unknown) =>
-  typeof name === "string" && /^lexi(-[A-Za-z0-9_-]+)?$/.test(name) && name !== "lexi-restore";
+/** Имя базы допустимо для копии Τετράδιο: основная, тестовая или профиль Telegram. */
+export const isAppDatabaseName = (name: unknown) =>
+  typeof name === "string" && /^tetradio(-[A-Za-z0-9_-]+)?$/.test(name) && name !== "tetradio-restore";

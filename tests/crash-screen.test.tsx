@@ -61,7 +61,7 @@ describe("экран сбоя", () => {
       copy.click();
     });
     expect(written).toHaveLength(1);
-    expect(written[0]).toMatch(/^Lexi \d+\.\d+\.\d+ \(/);
+    expect(written[0]).toMatch(/^Τετράδιο \d+\.\d+\.\d+ \(/);
     expect(written[0]).toContain("Среда: веб");
     expect(written[0]).toContain(`Отчёт: ${reports[0].id}`);
     expect(written[0]).toContain("Ошибка: Error");

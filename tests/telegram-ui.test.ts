@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import "./helpers/self";
 import { beforeEach, describe, expect, it } from "vitest";
-import { LexiDatabase } from "../src/storage/db";
+import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { recordAnswer, skipItem } from "../src/storage/ops";
 import { makeSession } from "../src/domain/learning";
@@ -10,10 +10,10 @@ import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { installLessons } from "./helpers/content";
 
 const now = new Date("2026-09-16T09:00:00Z");
-let db: LexiDatabase;
+let db: AppDatabase;
 beforeEach(async () => {
-  await new LexiDatabase("lexi-tg-ui").delete();
-  db = new LexiDatabase("lexi-tg-ui");
+  await new AppDatabase("tetradio-tg-ui").delete();
+  db = new AppDatabase("tetradio-tg-ui");
   await db.open();
   await installLessons(db, ["lesson-1-1"]);
 });
@@ -137,7 +137,7 @@ describe("передача файла копии", () => {
     for (const text of Object.values(TRANSFER_TEXT)) expect(text).not.toMatch(/сохранена|сохранён\b/);
   });
   it("копия профиля Telegram читается обычным восстановлением и не переносит служебные ключи синхронизации", async () => {
-    const telegram = new LexiDatabase("lexi-tg-TaveloriBot-77");
+    const telegram = new AppDatabase("tetradio-tg-tetradio_local-77");
     await telegram.delete();
     await telegram.open();
     await installLessons(telegram, ["lesson-1-1"]);
@@ -145,7 +145,7 @@ describe("передача файла копии", () => {
     await writeMeta(telegram, META.dirty, "1");
     const copy = await exportFull(telegram);
     const check = await inspectBackup(copy);
-    expect(check).toMatchObject({ ok: true, report: { databaseName: "lexi-tg-TaveloriBot-77", legacy: false } });
+    expect(check).toMatchObject({ ok: true, report: { databaseName: "tetradio-tg-tetradio_local-77", legacy: false } });
     await writeMeta(db, META.device, "device-b");
     await restoreBackup(copy, db);
     expect(await readMeta(db, META.device)).toBe("device-b"); // свой идентификатор устройства сохранён

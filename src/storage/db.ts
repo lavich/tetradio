@@ -72,7 +72,7 @@ export interface LegacySkill {
 /** Запись каталога в базе: `position` — её индекс в файле каталога, ключ `id` этот порядок теряет. */
 export type StoredCatalogEntry = CatalogEntry & { position?: number };
 
-export class LexiDatabase extends Dexie {
+export class AppDatabase extends Dexie {
   words!: Table<StoredWord, string>;
   phrases!: Table<Phrase, string>;
   lessons!: Table<Lesson, string>;
@@ -98,7 +98,7 @@ export class LexiDatabase extends Dexie {
   syncStash!: Table<LegacyStash, string>;
   /** Хранилище снятого вида карточек: после миграции пусто, читается только при восстановлении копии схемы ≤6. */
   clozes!: Table<{ id: string }, string>;
-  constructor(name = "lexi") {
+  constructor(name = "tetradio") {
     super(name);
     this.version(1).stores({
       words: "id,greek,russian,deletedAt",
@@ -170,8 +170,8 @@ export class LexiDatabase extends Dexie {
     this.version(7).upgrade((tx) => migrateDropCloze(tx));
   }
 }
-/** База текущего профиля: обычный браузер — `lexi`, Telegram — отдельная база на бота и пользователя. */
-export const db = new LexiDatabase(currentProfile().databaseName);
+/** База текущего профиля: обычный браузер — `tetradio`, Telegram — отдельная база на бота и пользователя. */
+export const db = new AppDatabase(currentProfile().databaseName);
 export const SCHEMA_VERSION = 7;
 /** Таблицы пользовательских данных: входят в полную копию. Каталог — кеш, а не данные пользователя; альтернативные версии облака — тоже. */
 export const TABLES = [
@@ -531,12 +531,12 @@ const migrateSnapshot = (snapshot: LegacySnapshot): LegacySnapshot => ({
   })),
 });
 
-export async function ensureDefaults(database: LexiDatabase = db): Promise<void> {
+export async function ensureDefaults(database: AppDatabase = db): Promise<void> {
   if (!(await database.settings.get("settings"))) await database.settings.add(defaultSettings);
   await ensureLocalCourse(database);
 }
 /** Курс своих наборов заводится и в новой базе, где миграция не выполнялась. */
-export async function ensureLocalCourse(database: LexiDatabase = db): Promise<string> {
+export async function ensureLocalCourse(database: AppDatabase = db): Promise<string> {
   if (!(await database.courses.get(LOCAL_COURSE))) await database.courses.put(localCourse(new Date().toISOString()));
   return LOCAL_COURSE;
 }

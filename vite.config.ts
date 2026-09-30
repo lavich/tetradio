@@ -12,7 +12,7 @@ const appVersion = (JSON.parse(readFileSync(new URL("./package.json", import.met
   .version;
 const appBuild = process.env.GITHUB_SHA?.slice(0, 7) ?? "dev";
 /** Имя релиза для отчётов о сбоях — то же значение, что метки `app.version` и `app.build` в событии. */
-const release = `lexi@${appVersion}+${appBuild}`;
+const release = `tetradio@${appVersion}+${appBuild}`;
 /**
  * Карты кода скрытые: без ссылок из бандла и без публикации на сайте. При наличии реквизитов плагин загружает их
  * в сервис учёта ошибок и удаляет `*.map` из `dist`; без токена (проверки pull request, локальная сборка) он не подключается.
@@ -59,9 +59,9 @@ export default defineConfig({
       registerType: "prompt",
       includeAssets: ["icon.svg"],
       manifest: {
-        name: "Lexi — греческий к каждому занятию",
-        short_name: "Lexi",
-        description: "Ваш личный тренажёр греческих слов",
+        name: "Τετράδιο — курс греческого A2",
+        short_name: "Τετράδιο",
+        description: "Курс новогреческого A0 → A2",
         lang: "ru",
         theme_color: "#0d5eaf",
         background_color: "#f7f7f5",

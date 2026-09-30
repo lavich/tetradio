@@ -57,7 +57,7 @@ export function SettingsScreen() {
                 setSaved(false);
               }}
             />
-            <FieldDescription>Сколько новых слов Lexi может ввести за сутки.</FieldDescription>
+            <FieldDescription>Сколько новых слов Τετράδιο может ввести за сутки.</FieldDescription>
           </Field>
           <Field data-invalid={problem.includes("Размер") || undefined}>
             <FieldLabel htmlFor="size">Упражнений в занятии</FieldLabel>
