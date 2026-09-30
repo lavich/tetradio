@@ -6,7 +6,11 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { basename, join } from "node:path";
 import { parse, stringify } from "yaml";
 
-const REPO = "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/";
+/** Зеркала репозитория: CDN иногда отвечает 403 на отдельные файлы — тогда берём прямо с GitHub. */
+const MIRRORS = [
+  "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/",
+  "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/",
+];
 const SOURCE = "Microsoft Fluent Emoji (Flat), лицензия MIT — github.com/microsoft/fluentui-emoji";
 const dir = "content/pictures";
 mkdirSync(dir, { recursive: true });
@@ -25,9 +29,17 @@ for (const [id, , , asset] of rows) {
   const file = basename(asset).replace(/_flat(_default)?\.svg$/, ".svg");
   const target = join(dir, file);
   if (!existsSync(target)) {
-    const response = await fetch(REPO + asset.split("/").map(encodeURIComponent).join("/"));
-    if (!response.ok) throw new Error(`${asset}: ${response.status}`);
-    writeFileSync(target, Buffer.from(await response.arrayBuffer()));
+    const path = asset.split("/").map(encodeURIComponent).join("/");
+    let body: ArrayBuffer | null = null;
+    for (const mirror of MIRRORS) {
+      const response = await fetch(mirror + path);
+      if (response.ok) {
+        body = await response.arrayBuffer();
+        break;
+      }
+    }
+    if (!body) throw new Error(`${asset}: не удалось скачать ни с одного зеркала`);
+    writeFileSync(target, Buffer.from(body));
   }
   words[id] = file;
 }

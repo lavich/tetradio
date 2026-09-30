@@ -25,7 +25,8 @@
     "lexicon:check": "node scripts/check-lexicon.ts",
     "test:e2e:course": "playwright test -c playwright.course.config.ts",
     "lexicon:content": "node scripts/lexicon-to-content.ts",
-    "pictures:sync": "node scripts/pictures-sync.ts"
+    "pictures:sync": "node scripts/pictures-sync.ts",
+    "lexicon:sync": "node scripts/lexicon-sync.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
