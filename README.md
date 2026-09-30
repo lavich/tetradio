@@ -15,7 +15,9 @@ npm run typecheck && npm run lint && npm run format:check
 npm run build
 ```
 
-Переменные окружения (все необязательны локально): `VITE_TELEGRAM_BOT` — имя бота Mini App (без неё — заглушка `tetradio_local`, не совпадающая с реальным ботом); `VITE_SENTRY_DSN` и `SENTRY_*` — отчёты о сбоях, без них выключены; `BASE_PATH` — базовый путь при размещении. Бота, хостинга и деплоя пока нет.
+Переменные окружения (все необязательны локально): `VITE_TELEGRAM_BOT` — имя бота Mini App (без неё — заглушка `tetradio_local`, не совпадающая с реальным ботом); `VITE_SENTRY_DSN` и `SENTRY_*` — отчёты о сбоях, без них выключены; `BASE_PATH` — базовый путь при размещении. Бота пока нет.
+
+Деплой — `.github/workflows/deploy.yml`: каждый push в `main` публикует сборку на GitHub Pages (`https://lavich.github.io/tetradio/`). База берётся из настроек Pages; имя бота и адрес приёма отчётов — переменные репозитория `VITE_TELEGRAM_BOT` и `VITE_SENTRY_DSN`, реквизиты загрузки карт кода — секреты `SENTRY_*`.
 
 ## Документация
 
