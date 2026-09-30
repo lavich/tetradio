@@ -1,7 +1,7 @@
 # course-content Specification
 
 ## Purpose
-TBD - created by archiving change greek-a2-learning-mvp. Update Purpose after archive.
+Содержание курса новогреческого A0 → A2: программа из 24 модулей, их публикация, уроки из блоков для четырёх навыков, стабильные идентификаторы карточек и картинки слов. Формат — docs/course/format.md.
 
 ## Requirements
 

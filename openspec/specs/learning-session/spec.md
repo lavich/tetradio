@@ -1,7 +1,7 @@
 # learning-session Specification
 
 ## Purpose
-TBD - created by archiving change greek-a2-learning-mvp. Update Purpose after archive.
+Как учащийся занимается: план дня и повторение карточек по FSRS из Tavelori, прохождение урока курса по блокам с проверкой по ключу, завершение урока и итог контрольной против порога 60 %.
 
 ## Requirements
 
