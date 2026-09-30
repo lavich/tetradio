@@ -19,6 +19,7 @@ import {
 import { lessonItems } from "../../storage/queries";
 import { startSession } from "../learning/session-actions";
 import { Exercise, Explanation, Listening, Reading, Speaking, Tick, Writing } from "./blocks";
+import { VocabularyList } from "./Vocabulary";
 import css from "./course.module.css";
 
 /** Цвета обложек: греческие школьные тетради яркие; цвет повторяется по номеру модуля. */
@@ -213,6 +214,7 @@ export function CourseLessonScreen() {
                 <>
                   <h3 className={css.blockTitle}>{block.title ?? "Слова урока"}</h3>
                   <p className={css.instruction}>{items?.length ?? 0} карточек · повторяются по FSRS каждый день</p>
+                  {items?.length ? <VocabularyList items={items} /> : null}
                   <div className={css.actions}>
                     <Button variant="soft" size="md" onClick={() => void practiceWords()}>
                       Тренировать слова урока
