@@ -27,6 +27,7 @@
     ".agents",
     "docs/audit",
     "docs/design",
-    ".impeccable"
+    ".impeccable",
+    ".claude"
   ]
 }
