@@ -1,0 +1,7 @@
+id: p094
+text: Δεν μου αρέσει το ψάρι.
+translation: Я не люблю рыбу.
+provenance:
+  sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 08 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
