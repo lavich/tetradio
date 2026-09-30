@@ -1,0 +1,151 @@
+id	greek	ru	asset	note
+w042	η πόλη	город	assets/Cityscape/Flat/cityscape_flat.svg	
+w070	γράφω	писать	assets/Writing hand/Default/Flat/writing_hand_flat_default.svg	
+w090	το παιδί	ребёнок	assets/Child/Default/Flat/child_flat_default.svg	
+w091	ο άντρας	мужчина; муж	assets/Man/Default/Flat/man_flat_default.svg	
+w092	η γυναίκα	женщина; жена	assets/Woman/Default/Flat/woman_flat_default.svg	
+w093	ο παππούς	дедушка	assets/Old man/Default/Flat/old_man_flat_default.svg	≈ пожилой мужчина
+w094	η γιαγιά	бабушка	assets/Old woman/Default/Flat/old_woman_flat_default.svg	≈ пожилая женщина
+w096	ο γιατρός	врач	assets/Health worker/Default/Flat/health_worker_flat_default.svg	
+w097	ο δάσκαλος	учитель	assets/Teacher/Default/Flat/teacher_flat_default.svg	
+w098	ο άνθρωπος	человек; мн. люди	assets/Person/Default/Flat/person_flat_default.svg	
+w162	κοιμάμαι	спать; засыпать	assets/Sleeping face/Flat/sleeping_face_flat.svg	
+w180	η τηλεόραση	телевизор; телевидение	assets/Television/Flat/television_flat.svg	
+w196	το σπίτι	дом; жильё	assets/House/Flat/house_flat.svg	
+w203	η πόρτα	дверь	assets/Door/Flat/door_flat.svg	
+w204	το παράθυρο	окно	assets/Window/Flat/window_flat.svg	
+w218	τα λεφτά	деньги	assets/Money bag/Flat/money_bag_flat.svg	
+w219	το νερό	вода	assets/Potable water/Flat/potable_water_flat.svg	≈ кран и стакан с питьевой водой
+w235	το κλειδί	ключ	assets/Key/Flat/key_flat.svg	
+w237	άσπρος	белый	assets/White circle/Flat/white_circle_flat.svg	
+w238	μαύρος	чёрный	assets/Black circle/Flat/black_circle_flat.svg	
+w239	κόκκινος	красный	assets/Red circle/Flat/red_circle_flat.svg	
+w240	πράσινος	зелёный	assets/Green circle/Flat/green_circle_flat.svg	
+w241	κίτρινος	жёлтый	assets/Yellow circle/Flat/yellow_circle_flat.svg	
+w242	μπλε	синий	assets/Blue circle/Flat/blue_circle_flat.svg	
+w258	το κρεβάτι	кровать	assets/Bed/Flat/bed_flat.svg	
+w259	ο καναπές	диван	assets/Couch and lamp/Flat/couch_and_lamp_flat.svg	
+w260	η καρέκλα	стул	assets/Chair/Flat/chair_flat.svg	
+w263	το ξυπνητήρι	будильник	assets/Alarm clock/Flat/alarm_clock_flat.svg	
+w265	το ντους	душ	assets/Shower/Flat/shower_flat.svg	
+w277	ο καφές	кофе	assets/Hot beverage/Flat/hot_beverage_flat.svg	
+w278	το τσάι	чай	assets/Teapot/Flat/teapot_flat.svg	
+w279	ο χυμός	сок	assets/Beverage box/Flat/beverage_box_flat.svg	≈ пакетик сока
+w280	το γάλα	молоко	assets/Glass of milk/Flat/glass_of_milk_flat.svg	
+w281	το κρασί	вино	assets/Wine glass/Flat/wine_glass_flat.svg	
+w282	το ψωμί	хлеб	assets/Bread/Flat/bread_flat.svg	
+w283	το τυρί	сыр	assets/Cheese wedge/Flat/cheese_wedge_flat.svg	
+w284	το χαλλούμι	халлуми	assets/Cheese wedge/Flat/cheese_wedge_flat.svg	≈ общий сыр
+w286	το αυγό	яйцо	assets/Egg/Flat/egg_flat.svg	
+w287	το κρέας	мясо	assets/Cut of meat/Flat/cut_of_meat_flat.svg	
+w288	το κοτόπουλο	курица	assets/Poultry leg/Flat/poultry_leg_flat.svg	≈ куриная ножка
+w289	το ψάρι	рыба	assets/Fish/Flat/fish_flat.svg	
+w290	η σαλάτα	салат	assets/Green salad/Flat/green_salad_flat.svg	
+w299	η κατσαρόλα	кастрюля	assets/Pot of food/Flat/pot_of_food_flat.svg	≈ кастрюля с едой
+w300	το τηγάνι	сковорода	assets/Cooking/Flat/cooking_flat.svg	≈ сковорода с яичницей
+w302	η ντομάτα	помидор	assets/Tomato/Flat/tomato_flat.svg	
+w303	η πατάτα	картофель	assets/Potato/Flat/potato_flat.svg	
+w318	το μαχαίρι	нож	assets/Kitchen knife/Flat/kitchen_knife_flat.svg	
+w319	το κουτάλι	ложка	assets/Spoon/Flat/spoon_flat.svg	
+w355	η σακούλα	пакет (для покупок)	assets/Shopping bags/Flat/shopping_bags_flat.svg	≈ пакеты с покупками
+w356	το ευρώ	евро	assets/Euro banknote/Flat/euro_banknote_flat.svg	
+w359	η κάρτα	карта (банковская)	assets/Credit card/Flat/credit_card_flat.svg	
+w366	το καρπούζι	арбуз	assets/Watermelon/Flat/watermelon_flat.svg	
+w367	το πεπόνι	дыня	assets/Melon/Flat/melon_flat.svg	
+w368	το σταφύλι	виноград	assets/Grapes/Flat/grapes_flat.svg	
+w369	η φράουλα	клубника	assets/Strawberry/Flat/strawberry_flat.svg	
+w370	η πιπεριά	перец (овощ)	assets/Bell pepper/Flat/bell_pepper_flat.svg	
+w371	το καρότο	морковь	assets/Carrot/Flat/carrot_flat.svg	
+w383	το καλάθι	корзина	assets/Basket/Flat/basket_flat.svg	
+w384	τα ψιλά	мелочь (деньги)	assets/Coin/Flat/coin_flat.svg	
+w388	το μπλουζάκι	футболка	assets/T-shirt/Flat/t-shirt_flat.svg	
+w390	το τζιν	джинсы	assets/Jeans/Flat/jeans_flat.svg	
+w392	το φόρεμα	платье	assets/Dress/Flat/dress_flat.svg	
+w395	το παλτό	пальто	assets/Coat/Flat/coat_flat.svg	
+w397	η κάλτσα	носок	assets/Socks/Flat/socks_flat.svg	
+w398	το καπέλο	шляпа, кепка	assets/Billed cap/Flat/billed_cap_flat.svg	≈ кепка
+w400	το παπούτσι	ботинок, туфля; мн. обувь	assets/Mans shoe/Flat/mans_shoe_flat.svg	
+w401	η μπότα	сапог	assets/Womans boot/Flat/womans_boot_flat.svg	
+w402	το σανδάλι	сандалия	assets/Womans sandal/Flat/womans_sandal_flat.svg	
+w406	η απόδειξη	чек, квитанция	assets/Receipt/Flat/receipt_flat.svg	
+w429	το φανάρι	светофор	assets/Vertical traffic light/Flat/vertical_traffic_light_flat.svg	
+w432	η στάση	остановка	assets/Bus stop/Flat/bus_stop_flat.svg	
+w433	η τράπεζα	банк	assets/Bank/Flat/bank_flat.svg	
+w434	το ταχυδρομείο	почта	assets/Post office/Flat/post_office_flat.svg	
+w435	το νοσοκομείο	больница	assets/Hospital/Flat/hospital_flat.svg	
+w438	η εκκλησία	церковь	assets/Church/Flat/church_flat.svg	
+w444	ο χάρτης	карта	assets/World map/Flat/world_map_flat.svg	≈ карта мира
+w462	περπατάω	ходить пешком	assets/Person walking/Default/Flat/person_walking_flat_default.svg	
+w466	το λεωφορείο	автобус	assets/Bus/Flat/bus_flat.svg	
+w467	το ταξί	такси	assets/Taxi/Flat/taxi_flat.svg	
+w470	το αεροπλάνο	самолёт	assets/Airplane/Flat/airplane_flat.svg	
+w473	το εισιτήριο	билет	assets/Ticket/Flat/ticket_flat.svg	
+w478	ο σταθμός	станция, вокзал	assets/Station/Flat/station_flat.svg	
+w481	η αναχώρηση	отправление, вылет	assets/Airplane departure/Flat/airplane_departure_flat.svg	≈ вылет самолёта
+w482	η άφιξη	прибытие, прилёт	assets/Airplane arrival/Flat/airplane_arrival_flat.svg	≈ прилёт самолёта
+w488	το αυτοκίνητο	машина, автомобиль	assets/Automobile/Flat/automobile_flat.svg	
+w489	το ποδήλατο	велосипед	assets/Bicycle/Flat/bicycle_flat.svg	
+w511	το ξενοδοχείο	гостиница, отель	assets/Hotel/Flat/hotel_flat.svg	
+w518	η βαλίτσα	чемодан	assets/Luggage/Flat/luggage_flat.svg	
+w521	η παραλία	пляж	assets/Beach with umbrella/Flat/beach_with_umbrella_flat.svg	
+w527	το κάστρο	замок, крепость	assets/Castle/Flat/castle_flat.svg	
+w548	το ασανσέρ	лифт	assets/Elevator/Flat/elevator_flat.svg	
+w551	ο προγραμματιστής	программист	assets/Technologist/Default/Flat/technologist_flat_default.svg	≈ человек за ноутбуком
+w552	ο μάγειρας	повар	assets/Cook/Default/Flat/cook_flat_default.svg	
+w560	το εργοστάσιο	завод, фабрика	assets/Factory/Flat/factory_flat.svg	
+w587	ο υπάλληλος	служащий, сотрудник	assets/Office worker/Default/Flat/office_worker_flat_default.svg	≈ офисный служащий
+w593	το σχολείο	школа	assets/School/Flat/school_flat.svg	
+w613	το τετράδιο	тетрадь	assets/Notebook/Flat/notebook_flat.svg	
+w627	ο φοιτητής	студент	assets/Student/Default/Flat/student_flat_default.svg	
+w628	το βιβλίο	книга; учебник	assets/Closed book/Flat/closed_book_flat.svg	
+w631	το μάτι	глаз	assets/Eye/Flat/eye_flat.svg	
+w632	το αυτί	ухо	assets/Ear/Default/Flat/ear_flat_default.svg	
+w633	η μύτη	нос	assets/Nose/Default/Flat/nose_flat_default.svg	
+w634	το στόμα	рот	assets/Mouth/Flat/mouth_flat.svg	
+w635	το δόντι	зуб	assets/Tooth/Flat/tooth_flat.svg	
+w638	το χέρι	рука	assets/Raised hand/Default/Flat/raised_hand_flat_default.svg	
+w643	το πόδι	нога	assets/Leg/Default/Flat/leg_flat_default.svg	
+w645	η καρδιά	сердце	assets/Anatomical heart/Flat/anatomical_heart_flat.svg	
+w666	ο ύπνος	сон	assets/Zzz/Flat/zzz_flat.svg	
+w680	το χάπι	таблетка	assets/Pill/Flat/pill_flat.svg	
+w682	η σταγόνα	капля	assets/Droplet/Flat/droplet_flat.svg	
+w684	η ένεση	укол	assets/Syringe/Flat/syringe_flat.svg	
+w688	ο πυρετός	температура, жар	assets/Face with thermometer/Flat/face_with_thermometer_flat.svg	≈ лицо с градусником
+w689	το θερμόμετρο	градусник	assets/Thermometer/Flat/thermometer_flat.svg	
+w710	βρέχει	идёт дождь	assets/Umbrella with rain drops/Flat/umbrella_with_rain_drops_flat.svg	≈ зонт под дождём
+w711	χιονίζει	идёт снег	assets/Cloud with snow/Flat/cloud_with_snow_flat.svg	
+w712	φυσάει	дует (ветер)	assets/Wind face/Flat/wind_face_flat.svg	
+w713	η ζέστη	жара, тепло	assets/Hot face/Flat/hot_face_flat.svg	≈ лицо, которому жарко
+w714	το κρύο	холод	assets/Cold face/Flat/cold_face_flat.svg	≈ лицо, которому холодно
+w717	η βροχή	дождь	assets/Cloud with rain/Flat/cloud_with_rain_flat.svg	
+w718	το χιόνι	снег	assets/Snowflake/Flat/snowflake_flat.svg	
+w720	το σύννεφο	облако, туча	assets/Cloud/Flat/cloud_flat.svg	
+w721	η καταιγίδα	гроза, буря	assets/Cloud with lightning and rain/Flat/cloud_with_lightning_and_rain_flat.svg	
+w722	η ομίχλη	туман	assets/Fog/Flat/fog_flat.svg	
+w725	ο ήλιος	солнце	assets/Sun/Flat/sun_flat.svg	
+w733	το βουνό	гора, горы	assets/Mountain/Flat/mountain_flat.svg	
+w735	το δέντρο	дерево	assets/Deciduous tree/Flat/deciduous_tree_flat.svg	
+w736	το λουλούδι	цветок	assets/Blossom/Flat/blossom_flat.svg	
+w752	το ποδόσφαιρο	футбол	assets/Soccer ball/Flat/soccer_ball_flat.svg	
+w753	το μπάσκετ	баскетбол	assets/Basketball/Flat/basketball_flat.svg	
+w754	το τένις	теннис	assets/Tennis/Flat/tennis_flat.svg	
+w755	η κολύμβηση	плавание (вид спорта)	assets/Person swimming/Default/Flat/person_swimming_flat_default.svg	
+w756	το τρέξιμο	бег	assets/Person running/Default/Flat/person_running_flat_default.svg	
+w760	το γήπεδο	стадион, спортивная площадка	assets/Stadium/Flat/stadium_flat.svg	
+w767	η ζωγραφική	рисование, живопись	assets/Artist palette/Flat/artist_palette_flat.svg	
+w769	ο χορός	танец, танцы	assets/Woman dancing/Default/Flat/woman_dancing_flat_default.svg	
+w773	το σινεμά	кино, кинотеатр	assets/Cinema/Flat/cinema_flat.svg	
+w775	το θέατρο	театр	assets/Performing arts/Flat/performing_arts_flat.svg	
+w777	η μουσική	музыка	assets/Musical notes/Flat/musical_notes_flat.svg	
+w805	τα γενέθλια	день рождения	assets/Birthday cake/Flat/birthday_cake_flat.svg	≈ праздничный торт
+w806	το πάρτι	вечеринка	assets/Party popper/Flat/party_popper_flat.svg	
+w810	το δώρο	подарок	assets/Wrapped gift/Flat/wrapped_gift_flat.svg	
+w831	τα Χριστούγεννα	Рождество	assets/Christmas tree/Flat/christmas_tree_flat.svg	≈ рождественская ёлка
+w846	η λαμπάδα	(пасхальная) свеча	assets/Candle/Flat/candle_flat.svg	≈ обычная свеча
+w852	ο χαρταετός	воздушный змей	assets/Kite/Flat/kite_flat.svg	
+w862	η ταυτότητα	удостоверение личности	assets/Identification card/Flat/identification_card_flat.svg	
+w864	το δέμα	посылка	assets/Package/Flat/package_flat.svg	
+w865	ο φάκελος	конверт; папка	assets/Envelope/Flat/envelope_flat.svg	
+w902	η ανακύκλωση	переработка отходов, раздельный сбор	assets/Recycling symbol/Flat/recycling_symbol_flat.svg	
+w904	ο κάδος	(мусорный) бак	assets/Wastebasket/Flat/wastebasket_flat.svg	≈ мусорная корзина
+w915	η μονοκατοικία	частный дом	assets/House with garden/Flat/house_with_garden_flat.svg	
