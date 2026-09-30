@@ -1,6 +1,7 @@
 id: p225
 text: Σήμερα δεν μπορώ να έρθω, είμαι άρρωστος.
 translation: Сегодня не смогу прийти, я заболел.
+note: жен. άρρωστη
 provenance:
   sourceLabel: Лексикон курса, модуль 17 (docs/course/lexicon/17.tsv)
   operation: requested-generation
