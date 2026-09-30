@@ -186,9 +186,17 @@ export function TodayScreen() {
           <p className={`${ui.note} mb-2.5`} data-testid="day-done">
             План на сегодня выполнен. Тренировка урока не сдвигает интервалы повторений.
           </p>
-          <Button size="xl" variant="soft" onClick={practice} disabled={busy}>
+          <Button
+            size="xl"
+            variant="soft"
+            className="min-w-0 max-w-full"
+            title={`Потренировать ${lessonIn(drill.title, "урок")}`}
+            onClick={practice}
+            disabled={busy}
+          >
             <Dumbbell data-icon="inline-start" />
-            Потренировать {lessonIn(drill.title, "урок")}
+            {/* Длинное название урока не должно вылезать за кнопку на узком экране. */}
+            <span className="min-w-0 truncate">Потренировать {lessonIn(drill.title, "урок")}</span>
           </Button>
         </>
       ) : (
