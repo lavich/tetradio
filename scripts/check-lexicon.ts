@@ -105,8 +105,9 @@ for (const name of files) {
       if (forms !== "—" && !/^мн\. (οι|τα) /.test(forms))
         errors.push(`${at}: форма мн. ч. «${forms}» не в формате «мн. οι/τα …»`);
     }
-    if (pos === "глаг" && !/аор\. \S+; буд\. θα \S+/.test(forms))
-      errors.push(`${at}: у глагола «${greek}» нет «аор. …; буд. θα …»`);
+    // Глагол без аориста (είμαι, έχω, ξέρω) даёт прошедшее: «прош. ήμουν».
+    if (pos === "глаг" && !/(аор|прош)\. \S+; буд\. θα \S+/.test(forms))
+      errors.push(`${at}: у глагола «${greek}» нет «аор. (или прош.) …; буд. θα …»`);
     if (pos === "прил" && forms.split(",").length !== 3) errors.push(`${at}: у прилагательного «${greek}» не три рода`);
     for (const word of greek
       .replace(ARTICLES, "")
