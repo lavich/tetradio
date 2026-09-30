@@ -1,8 +1,13 @@
 number: 19
 title: Καιρός και εποχές
 subtitle: Погода и сезоны
-status: draft
+status: published
 goal: обсудить погоду и планы
 grammar:
   - "будущее время: θα + настоящее (длительное) и θα + основа аориста (однократное), θα πρέπει"
 sessions: 3
+lessons:
+  - m19-1
+  - m19-2
+  - m19-3
+  - m19-test
