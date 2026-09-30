@@ -16,12 +16,12 @@ import {
   saveBlockProgress,
   type ModuleView,
 } from "../../storage/course";
-import { db } from "../../storage/db";
 import { lessonItems } from "../../storage/queries";
 import { startSession } from "../learning/session-actions";
 import { Exercise, Explanation, Listening, Reading, Speaking, Tick, Writing } from "./blocks";
 import { VocabularyList } from "./Vocabulary";
 import css from "./course.module.css";
+import { ExamLine } from "./ExamLine";
 
 /** Цвета обложек: греческие школьные тетради яркие; цвет повторяется по номеру модуля. */
 const COVERS = ["#2f6d4f", "#b8452b", "#2c4f9e", "#b8871a", "#7b3f74", "#1f6f7a"];
@@ -42,30 +42,6 @@ function coverLabel(view: ModuleView) {
 }
 
 /** Полка курса; без модулей в каталоге (словарный курс) — прежний список уроков. */
-const longDate = (iso: string) =>
-  new Date(`${iso}T12:00:00`).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
-
-/**
- * Дата экзамена честно: пока местная дата не подтверждена, показывается общая дата с пометкой и источником,
- * без обратного отсчёта.
- */
-export function ExamLine({ courseId }: { courseId: string }) {
-  const course = useLiveQuery(() => db.courses.get(courseId), [courseId]);
-  const exam = course?.exam;
-  if (!exam) return null;
-  return (
-    <p className={`${css.meta} mt-1`} data-testid="exam-line">
-      {exam.title}: {longDate(exam.date)}
-      {exam.localConfirmed ? "" : " — общая дата, дата на Кипре не подтверждена"}
-      {" · "}
-      <a href={exam.source} target="_blank" rel="noreferrer">
-        источник
-      </a>
-      , проверено {longDate(exam.checkedAt)}
-    </p>
-  );
-}
-
 export function CourseScreen() {
   const views = useLiveQuery(() => moduleViews(), []);
   if (views === undefined) return <Screen />;

@@ -9,7 +9,7 @@ import { useActiveSession } from "../../shared/store";
 import { moduleViews } from "../../storage/course";
 import { dexieSource } from "../../storage/queries";
 import { CourseNext } from "../course/CourseNext";
-import { ExamLine } from "../course/screens";
+import { ExamLine } from "../course/ExamLine";
 import { startSession } from "../learning/session-actions";
 import { DayNotes } from "./DayNotes";
 import ui from "../../shared/ui.module.css";
