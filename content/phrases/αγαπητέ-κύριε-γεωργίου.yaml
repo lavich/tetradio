@@ -1,0 +1,8 @@
+id: p186
+text: Αγαπητέ κύριε Γεωργίου,
+translation: Уважаемый господин Георгиу,
+note: офиц. письмо; κύριε — зват. п.; фамилия на -ου не меняется
+provenance:
+  sourceLabel: Лексикон курса, модуль 14 (docs/course/lexicon/14.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 14 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
