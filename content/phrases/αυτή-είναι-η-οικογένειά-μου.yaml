@@ -1,0 +1,7 @@
+id: p037
+text: Αυτή είναι η οικογένειά μου.
+translation: Это моя семья.
+provenance:
+  sourceLabel: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 03 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
