@@ -1,0 +1,24 @@
+[
+  {
+    "cards": 1860,
+    "lessons": 144,
+    "skillTasks": 576,
+    "chars": 708535,
+    "baseChars": 600922,
+    "baseParts": 151,
+    "parts": 178,
+    "keysWithThreeVersionsAndTwoPointers": 536,
+    "maxKeys": 1024
+  },
+  {
+    "cards": 3720,
+    "lessons": 144,
+    "skillTasks": 576,
+    "chars": 1309315,
+    "baseChars": 1201702,
+    "baseParts": 301,
+    "parts": 328,
+    "keysWithThreeVersionsAndTwoPointers": 986,
+    "maxKeys": 1024
+  }
+]
