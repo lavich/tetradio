@@ -1,0 +1,8 @@
+id: p143
+text: Σου πάει πολύ!
+translation: Тебе очень идёт!
+note: μου πάει — мне идёт
+provenance:
+  sourceLabel: Лексикон курса, модуль 11 (docs/course/lexicon/11.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 11 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
