@@ -36,6 +36,20 @@ describe("проверка ответа по ключу", () => {
     expect(checkItem(cafe, cafe.items[0], "Μαρια").status).toBe("almost");
     expect(checkItem(cafe, cafe.items[0], "Άννα").status).toBe("wrong");
   });
+  it("конечная точка, «;» и «!» ответ не меняют, а ключ показывается с пунктуацией", () => {
+    const cafe = block("cafe-q");
+    const withPoint = { ...cafe.items[1], answer: ["Είναι από την Ελλάδα."] };
+    expect(checkItem(cafe, withPoint, "Είναι από την Ελλάδα")).toEqual({
+      status: "correct",
+      expected: "Είναι από την Ελλάδα.",
+    });
+    expect(checkItem(cafe, { ...withPoint, answer: ["Από πού είσαι;"] }, "Από πού είσαι").status).toBe("correct");
+    expect(checkItem(cafe, withPoint, "Είναι από την Ελλάδα!").status).toBe("correct");
+    // Греческий вопросительный знак U+037E выглядит как «;», но это другой символ.
+    expect(checkItem(cafe, { ...withPoint, answer: ["Από πού είσαι\u037e"] }, "Από πού είσαι").status).toBe("correct");
+    // Пунктуация внутри ответа по-прежнему значима.
+    expect(checkItem(cafe, { ...withPoint, answer: ["Καλά, ευχαριστώ."] }, "Καλά ευχαριστώ").status).toBe("wrong");
+  });
   it("счёт задания: неотвеченный пункт — неверный", () => {
     const score = scoreExercise(block("anna-tf"), { q1: "Λάθος" });
     expect(score).toMatchObject({ correct: 1, almost: 0, total: 2 });
