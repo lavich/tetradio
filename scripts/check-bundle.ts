@@ -15,6 +15,9 @@ import { join } from "node:path";
 const INITIAL_LIMIT = 700_000;
 const SDK_MARKER = "sentry.javascript.";
 const dist = "dist";
+/** Адреса в index.html начинаются с базы сборки (`BASE_PATH`, как в vite.config.ts): без неё это путь внутри `dist`. */
+const base = process.env.BASE_PATH ?? "/";
+const inDist = (href: string) => (href.startsWith(base) ? href.slice(base.length) : href.replace(/^\//, ""));
 const problems: string[] = [];
 
 const walk = (dir: string): string[] =>
@@ -27,11 +30,12 @@ const maps = files.filter((file) => file.endsWith(".map"));
 if (maps.length) problems.push(`карты кода в dist: ${maps.join(", ")}`);
 
 const html = readFileSync(join(dist, "index.html"), "utf8");
-const entryPath = html.match(/<script[^>]+type="module"[^>]+src="\/?([^"]+\.js)"/)?.[1];
+const entrySrc = html.match(/<script[^>]+type="module"[^>]+src="([^"]+\.js)"/)?.[1];
+const entryPath = entrySrc && inDist(entrySrc);
 if (!entryPath) problems.push("в index.html не найден стартовый модуль");
 else {
-  const preloaded = [...html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="\/?([^"]+\.js)"/g)].map(
-    (match) => match[1]!,
+  const preloaded = [...html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="([^"]+\.js)"/g)].map((match) =>
+    inDist(match[1]!),
   );
   const initialPaths = [entryPath, ...preloaded];
   const initial = initialPaths.map((path) => ({ path, code: readFileSync(join(dist, path), "utf8") }));

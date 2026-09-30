@@ -1,0 +1,55 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      # База берётся из настроек Pages: `/tetradio/` на github.io, `/` после подключения своего домена.
+      - id: pages
+        uses: actions/configure-pages@v6
+      - run: echo "BASE_PATH=${{ steps.pages.outputs.base_path }}/" >> "$GITHUB_ENV"
+      # Имя бота и адрес приёма отчётов о сбоях попадают в публичный бандл; реквизиты загрузки карт кода — только в сборку.
+      # Проверки pull request (ci.yml) идут без них: сборка без токена не загружает карты и не ходит в сервис.
+      - run: npm run build
+        env:
+          VITE_TELEGRAM_BOT: ${{ vars.VITE_TELEGRAM_BOT }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      - run: npm run check:bundle
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
