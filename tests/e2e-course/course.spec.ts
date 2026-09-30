@@ -32,6 +32,9 @@ async function start(page: Page) {
   await page.goto("/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
+  // «Сегодня» курса: без расписания уроков; карточки ждут первого пройденного урока.
+  await expect(page.getByTestId("cards-later")).toBeVisible();
+  await expect(page.getByText("Занятие не назначено")).toHaveCount(0);
 }
 const section = (page: Page, name: string) => page.getByRole("region", { name });
 
@@ -106,6 +109,12 @@ test("урок курса: задания с ключом, чтение, ауд�
   await page.getByRole("button", { name: "Завершить урок" }).click();
   await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
   await expect(page.getByRole("img", { name: "урок пройден" })).toBeVisible();
+
+  // Пройденный урок отдаёт карточки в повторение; следующий шаг курса — контрольная модуля.
+  await page.goto("/");
+  await expect(page.getByTestId("cards-today")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Повторить карточки" })).toBeVisible();
+  await expect(page.getByTestId("course-next")).toContainText("Контрольная");
 });
 
 test("полка: опубликованный модуль и черновик; черновик нельзя пройти", async ({ page }) => {

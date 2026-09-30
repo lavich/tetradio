@@ -49,7 +49,7 @@ const longDate = (iso: string) =>
  * Дата экзамена честно: пока местная дата не подтверждена, показывается общая дата с пометкой и источником,
  * без обратного отсчёта.
  */
-function ExamLine({ courseId }: { courseId: string }) {
+export function ExamLine({ courseId }: { courseId: string }) {
   const course = useLiveQuery(() => db.courses.get(courseId), [courseId]);
   const exam = course?.exam;
   if (!exam) return null;

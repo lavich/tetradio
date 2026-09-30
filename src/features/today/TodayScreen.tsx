@@ -18,7 +18,9 @@ import { nextLessonIds } from "../lessons/courses";
 import { dexieSource } from "../../storage/queries";
 import { DayNotes } from "./DayNotes";
 import { FirstRun } from "./FirstRun";
-import { CourseNext } from "../course/CourseNext";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "../../storage/db";
+import { CourseToday } from "./CourseToday";
 import ui from "../../shared/ui.module.css";
 
 export function TodayScreen() {
@@ -31,7 +33,9 @@ export function TodayScreen() {
   const unfinished = useActiveSession();
   const catalog = useCatalog();
   const courses = useCourses();
-  const ready = !!plan && !!installed && unfinished !== undefined;
+  // Курс из модулей ведёт программа; расписание занятий и список уроков — для наборов без модулей.
+  const modular = useLiveQuery(async () => (await db.modules.count()) > 0, []);
+  const ready = !!plan && !!installed && unfinished !== undefined && modular !== undefined;
   const next = plan?.deadlines[0];
   const lesson = next && installed?.find((item) => item.id === next.lessonId);
   const today = localDay(now, settings.timezone);
@@ -115,6 +119,13 @@ export function TodayScreen() {
       </Screen>
     );
 
+  if (modular)
+    return (
+      <Screen>
+        <CourseToday plan={plan} now={now} />
+      </Screen>
+    );
+
   return (
     <Screen>
       <h1 data-testid="today-title">{headline()}</h1>
@@ -137,7 +148,6 @@ export function TodayScreen() {
         </p>
       )}
 
-      <CourseNext />
       {next && lesson ? (
         <Link to={`/lessons/${lesson.id}`} className="mb-3 block rounded-[var(--radius-card)] no-underline">
           <Card className="bg-soft ring-0 transition-colors hover:bg-[color-mix(in_srgb,var(--soft),var(--primary)_6%)]">
