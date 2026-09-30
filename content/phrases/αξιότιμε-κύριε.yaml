@@ -1,0 +1,8 @@
+id: p301
+text: Αξιότιμε κύριε,
+translation: Уважаемый господин,
+note: офиц. начало письма
+provenance:
+  sourceLabel: Лексикон курса, модуль 23 (docs/course/lexicon/23.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 23 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
