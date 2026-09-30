@@ -25,7 +25,9 @@ const bare = (value: string) =>
   value
     .trim()
     .replace(/[.!;\u037e?…]+$/u, "")
-    .trim();
+    .trim()
+    // Числа и телефоны: пробелы и дефисы между цифрами не важны (96 31 58 02 = 96-31-58-02 = 96315802).
+    .replace(/(\d)[\s-]+(?=\d)/g, "$1");
 
 export function checkItem(block: ExerciseBlock, item: ExerciseItem, given: string): ItemResult {
   if (block.format === "text") {
