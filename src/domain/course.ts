@@ -20,10 +20,19 @@ export interface ItemResult {
   expected: string;
 }
 
+/** Конечная пунктуация предложения (точка, «;» — греческий вопросительный знак, «!», многоточие) ответ не меняет. */
+const bare = (value: string) =>
+  value
+    .trim()
+    .replace(/[.!;\u037e?…]+$/u, "")
+    .trim();
+
 export function checkItem(block: ExerciseBlock, item: ExerciseItem, given: string): ItemResult {
   if (block.format === "text") {
-    const result = checkTextAnswer(given, item.answer);
-    return { status: result.status, expected: result.expected };
+    const result = checkTextAnswer(bare(given), item.answer.map(bare));
+    // Показываем ответ из ключа как есть, с его пунктуацией.
+    const expected = item.answer.find((answer) => bare(answer) === result.expected) ?? result.expected;
+    return { status: result.status, expected };
   }
   const expected = item.answer[0];
   return { status: given.normalize("NFC") === expected.normalize("NFC") ? "correct" : "wrong", expected };
