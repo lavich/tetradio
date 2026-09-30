@@ -107,6 +107,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
   return {
     settings: () => loadSettings(database),
     lessons: () => loadLessons(database),
+    modularCourseIds: async () => new Set((await database.modules.orderBy("courseId").uniqueKeys()).map(String)),
     lessonRefs: async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref),
     courses: async () => {
       const rows = await database.courses.toArray();

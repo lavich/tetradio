@@ -946,3 +946,23 @@ describe("подготовка кончается в час занятия", () 
     expect(idsOf(plan.newRefs)).toEqual([]);
   });
 });
+
+describe("курс из модулей", () => {
+  const pool = words(20);
+  const ids = (from: number, to: number) => pool.slice(from, to).map((w) => w.id);
+  const data = base({
+    words: pool,
+    courses: [course("a2", 10)],
+    lessons: [
+      lesson("m01-1", ids(0, 3), null, { courseId: "a2", status: "completed" }),
+      lesson("m01-2", ids(3, 20), null, { courseId: "a2" }),
+    ],
+  });
+  it("карточки только из пройденных уроков: непройденный урок бюджет не добирает", async () => {
+    const source = { ...fromSnapshot(data), modularCourseIds: async () => new Set(["a2"]) };
+    expect(idsOf((await makePlan(source, now)).newRefs)).toEqual(ids(0, 3));
+  });
+  it("набор без модулей по-прежнему добирает бюджет из следующих уроков", async () => {
+    expect(idsOf((await planOf(data)).newRefs)).toEqual(ids(0, 10));
+  });
+});

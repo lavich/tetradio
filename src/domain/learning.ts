@@ -189,6 +189,8 @@ export interface PlanSource {
   factsOf(refs: LearningRef[]): Promise<Map<string, CardFacts>>;
   /** Число живых фраз: достаточность пула вариантов для аудирования фраз. */
   phraseCount(): Promise<number>;
+  /** Курсы из модулей: их карточки приходят только из пройденных уроков, по порядку программы. */
+  modularCourseIds?(): Promise<Set<string>>;
 }
 export interface SessionSource extends PlanSource {
   /** Полное содержимое только выбранных карточек. */
@@ -213,11 +215,12 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
   const settings = await source.settings();
   const timezone = settings.timezone;
   const today = localDay(now, timezone);
-  const [lessons, courses, introduced, phrasePool] = await Promise.all([
+  const [lessons, courses, introduced, phrasePool, modular] = await Promise.all([
     source.lessons(),
     source.courses(),
     source.introducedTodayByCourse(today, timezone),
     source.phraseCount(),
+    source.modularCourseIds?.() ?? new Set<string>(),
   ]);
   const availability: AvailabilityContext = { hasVoice: !!options.hasVoice, phrasePool };
 
@@ -296,7 +299,8 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     const overdueLessons = new Set<string>();
     for (const lesson of past) if (await take(lesson, overdue, true)) overdueLessons.add(lesson.id);
     const picked = [...dated, ...overdue];
-    if (picked.length < budget) {
+    // Курс из модулей не забегает вперёд: карточки непройденного урока ждут самого урока.
+    if (picked.length < budget && !modular.has(course.id)) {
       for (const lesson of own) {
         if (picked.length >= budget) break;
         await take(lesson, picked, false);
