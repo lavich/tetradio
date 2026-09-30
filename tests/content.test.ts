@@ -42,7 +42,8 @@ function brokenCopy(mutate: (root: string) => void) {
   const root = mkdtempSync(join(tmpdir(), "tetradio-content-"));
   // Копируются все папки контента: новый вид карточек не должен ломать фикстуру.
   for (const entry of readdirSync("tests/fixtures/tavelori-content", { withFileTypes: true }))
-    if (entry.isDirectory()) cpSync(join("tests/fixtures/tavelori-content", entry.name), join(root, entry.name), { recursive: true });
+    if (entry.isDirectory())
+      cpSync(join("tests/fixtures/tavelori-content", entry.name), join(root, entry.name), { recursive: true });
   mutate(root);
   try {
     return buildContent(root);
@@ -271,7 +272,10 @@ describe("каталог и пакеты", () => {
         writeFileSync(join(root, "words", "дубль.yaml"), house.replace("id: w12-16", "id: w99-01"));
         writeFileSync(
           join(root, "lessons", "lesson-1-2.yaml"),
-          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-2.yaml", "utf8").replace("- w12-16", "- w99-01"),
+          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-2.yaml", "utf8").replace(
+            "- w12-16",
+            "- w99-01",
+          ),
         );
       }),
     ).toThrow(/повторяет слово «το σπίτι — дом»/);
@@ -282,7 +286,10 @@ describe("каталог и пакеты", () => {
       brokenCopy((root) =>
         writeFileSync(
           join(root, "lessons", "lesson-1-2.yaml"),
-          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-2.yaml", "utf8").replace("- w12-16", "- w12-99"),
+          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-2.yaml", "utf8").replace(
+            "- w12-16",
+            "- w12-99",
+          ),
         ),
       ),
     ).toThrow(/слова w12-99 нет/);

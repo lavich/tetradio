@@ -82,7 +82,8 @@ export interface MixedFiles {
 export function buildMixed({ phrases = MIXED_PHRASES, lesson, mutate }: MixedFiles = {}): BuiltContent {
   const root = mkdtempSync(join(tmpdir(), "tetradio-mixed-"));
   for (const dir of ["words", "lessons", "art", "courses", "phrases", "audio"])
-    if (existsSync(join("tests/fixtures/tavelori-content", dir))) cpSync(join("tests/fixtures/tavelori-content", dir), join(root, dir), { recursive: true });
+    if (existsSync(join("tests/fixtures/tavelori-content", dir)))
+      cpSync(join("tests/fixtures/tavelori-content", dir), join(root, dir), { recursive: true });
   mkdirSync(join(root, "phrases"), { recursive: true });
   for (const [id, doc] of Object.entries(phrases)) writeFileSync(join(root, "phrases", `${id}.yaml`), stringify(doc));
   const items = lesson
