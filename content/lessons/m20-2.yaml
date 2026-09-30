@@ -230,6 +230,8 @@ blocks:
         russian: взрослые
       - text: Παραδοσιακοί
         russian: традиционные
+      - text: της Κύπρου
+        russian: Кипра (родительный падеж)
       - text: ηλικίες
         russian: возрасты
       - text: Λέσχη φωτογραφίας
@@ -246,6 +248,8 @@ blocks:
         russian: рыбак
       - text: χορωδία
         russian: хор
+      - text: του κέντρου
+        russian: центра (родительный падеж)
       - text: κυπριακά
         russian: кипрские
       - text: βιβλιοθήκη
