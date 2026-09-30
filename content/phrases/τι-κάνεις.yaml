@@ -1,0 +1,7 @@
+text: Τι κάνεις;
+translation: Как дела?
+note: на «ты»; на «вы» — Τι κάνετε;
+provenance:
+  sourceLabel: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 01 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
