@@ -1,0 +1,20 @@
+schema: spec-driven
+context: |
+  Language: Russian
+  All artifacts must be written in Russian.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+  Project: full Greek A2 course in a separate Telegram Mini App based on Tavelori.
+  Confirmed: exam preparation in Cyprus by May 2027, account and cross-device sync.
+  Read docs/PRD.md and docs/curriculum.md for requirements and provenance.
+  Product implementation and source transfer have not started. A pilot is an intermediate checkpoint, not the full deliverable.
+  Source: /Users/lavich/Projects/lexi (Tavelori). Reuse suitable React/TypeScript, FSRS, Dexie and YAML content tooling after audit.
+  Telegram-only product: reuse Telegram account context and CloudStorage sync from Tavelori. No Supabase or separate web auth.
+  Audit snapshot capacity and extend sync for the full course; standalone browser is development-only.
+  Cyprus exam date must be confirmed separately; do not present 11 May as confirmed locally.
+rules:
+  proposal:
+    - Distinguish user requirements from proposed scope.
+  specs:
+    - Use testable scenarios, including errors and account isolation.
+  tasks:
+    - Include verification and keep incomplete work unchecked.

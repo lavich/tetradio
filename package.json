@@ -1,0 +1,17 @@
+{
+  "devDependencies": {
+    "@fission-ai/openspec": "1.13.2"
+  },
+  "name": "greek-a2-course",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Greek A2 course and learning application planning",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "openspec": "openspec",
+    "spec:validate": "OPENSPEC_TELEMETRY=0 openspec validate --all --strict --no-interactive",
+    "spec:status": "OPENSPEC_TELEMETRY=0 openspec status --change greek-a2-learning-mvp"
+  }
+}
