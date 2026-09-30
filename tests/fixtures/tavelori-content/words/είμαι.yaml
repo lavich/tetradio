@@ -1,0 +1,17 @@
+id: w11-05
+greek: είμαι
+russian: быть
+ipa: /ˈime/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+reading:
+  - text: εί
+    ipa: i
+    explanation: ει читается одним звуком и, здесь под ударением
+  - text: αι
+    ipa: e
+    explanation: αι в конце читается как э
+examples:
+  - greek: Είμαι από τη Ρωσία.
+    russian: Я из России.
+    target: Είμαι

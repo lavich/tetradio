@@ -1,0 +1,8 @@
+title: Страны (черновик)
+items:
+  - kind: word
+    id: xora
+blocks:
+  - type: explanation
+    id: gender
+    body: Черновик урока.

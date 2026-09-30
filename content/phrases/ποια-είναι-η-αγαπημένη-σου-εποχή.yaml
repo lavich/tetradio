@@ -1,0 +1,7 @@
+id: p256
+text: Ποια είναι η αγαπημένη σου εποχή;
+translation: Какое твоё любимое время года?
+provenance:
+  sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 19 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

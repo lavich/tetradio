@@ -1,0 +1,8 @@
+id: p118
+text: Συγγνώμη, αλλά το φαγητό είναι κρύο.
+translation: Извините, но еда холодная.
+note: вежливая жалоба
+provenance:
+  sourceLabel: Лексикон курса, модуль 09 (docs/course/lexicon/09.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 09 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

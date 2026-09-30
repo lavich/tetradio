@@ -1,0 +1,18 @@
+id: w14-02
+greek: η κουζίνα
+russian: кухня
+ipa: "/i kuˈzina/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+reading:
+  - text: "ου"
+    ipa: "u"
+    explanation: "ου — всегда один звук у"
+  - text: "ζ"
+    ipa: "z"
+    explanation: "ζ — всегда звонкое з"
+examples:
+  - greek: "Η κουζίνα είναι καθαρή."
+    russian: "Кухня чистая."
+    target: "κουζίνα"
+    source: "Слова 4 (список слов преподавателя), с. 1"

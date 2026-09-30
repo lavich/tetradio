@@ -1,0 +1,7 @@
+id: p163
+text: Ένα εισιτήριο για τη Λεμεσό, παρακαλώ.
+translation: Один билет до Лимасола, пожалуйста.
+provenance:
+  sourceLabel: Лексикон курса, модуль 13 (docs/course/lexicon/13.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 13 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

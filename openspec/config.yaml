@@ -5,6 +5,7 @@ context: |
   Keep OpenSpec structural headings and SHALL/MUST keywords in English.
   Project: full Greek A2 course in a separate Telegram Mini App based on Tavelori.
   Confirmed: exam preparation in Cyprus by May 2027, account and cross-device sync.
+  Learner (confirmed 30.09.2026): knows only the Greek alphabet, 2-3 one-hour sessions per week plus 10-15 min daily card review, no teacher. Time budget is a known risk; see docs/PRD.md.
   Read docs/PRD.md and docs/curriculum.md for requirements and provenance.
   Product implementation and source transfer have not started. A pilot is an intermediate checkpoint, not the full deliverable.
   Source: /Users/lavich/Projects/lexi (Tavelori). Reuse suitable React/TypeScript, FSRS, Dexie and YAML content tooling after audit.

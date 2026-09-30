@@ -1,0 +1,18 @@
+id: w12-01
+greek: το φως
+russian: свет
+ipa: /to fos/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: το-φως.svg
+reading:
+  - text: φ
+    ipa: f
+    explanation: φ — это ф
+  - text: ς
+    ipa: s
+    explanation: ς — та же сигма, но в конце слова
+examples:
+  - greek: Το φως είναι δυνατό.
+    russian: Свет яркий.
+    target: φως

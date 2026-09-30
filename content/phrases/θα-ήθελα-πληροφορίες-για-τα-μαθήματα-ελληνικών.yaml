@@ -1,0 +1,8 @@
+id: p211
+text: Θα ήθελα πληροφορίες για τα μαθήματα ελληνικών.
+translation: Я хотел(а) бы получить информацию о курсах греческого.
+note: офиц.
+provenance:
+  sourceLabel: Лексикон курса, модуль 16 (docs/course/lexicon/16.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 16 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
