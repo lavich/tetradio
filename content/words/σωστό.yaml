@@ -1,0 +1,15 @@
+id: w11-34
+greek: Σωστό
+russian: верно
+ipa: "/soˈsto/"
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: correct.svg
+reading:
+  - text: "ω"
+    ipa: "o"
+    explanation: "ω и ο звучат одинаково — о, разница только в написании"
+examples:
+  - greek: "Ναι, αυτό είναι σωστό."
+    russian: "Да, это верно."
+    target: "σωστό"

@@ -1,0 +1,19 @@
+id: w14-25
+greek: η εβδομάδα
+russian: неделя
+ipa: "/i evðoˈmaða/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-εβδομάδα.svg
+reading:
+  - text: "β"
+    ipa: "v"
+    explanation: "β читается как в, а не как б"
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — мягкое межзубное th, как в this"
+examples:
+  - greek: "Η εβδομάδα έχει επτά ημέρες."
+    russian: "В неделе семь дней."
+    target: "εβδομάδα"
+    source: "Слова 4 (список слов преподавателя), с. 3"

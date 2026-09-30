@@ -1,0 +1,11 @@
+id: w23-02
+greek: το πορτοκάλι
+russian: апельсин
+ipa: "/to portoˈkali/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-πορτοκάλι.svg
+examples:
+  - greek: "Θέλω ένα πορτοκάλι."
+    russian: "Я хочу апельсин."
+    target: "πορτοκάλι"

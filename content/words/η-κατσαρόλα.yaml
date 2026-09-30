@@ -1,0 +1,15 @@
+id: w34-03
+greek: η κατσαρόλα
+russian: кастрюля
+ipa: "/i katsaˈrola/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-κατσαρόλα.svg
+reading:
+  - text: "τσ"
+    ipa: "ts"
+    explanation: "τσ — слитный звук, как ц в «цапля»"
+examples:
+  - greek: "Η κατσαρόλα βράζει στη φωτιά."
+    russian: "Кастрюля кипит на огне."
+    target: "κατσαρόλα"

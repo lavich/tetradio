@@ -1,0 +1,15 @@
+id: w11-06
+greek: έχω
+russian: иметь
+ipa: /ˈexo/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: έχω.svg
+reading:
+  - text: χ
+    ipa: x
+    explanation: χ перед ω — глухой х
+examples:
+  - greek: Έχω μια γάτα.
+    russian: У меня есть кошка.
+    target: Έχω

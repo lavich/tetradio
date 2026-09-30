@@ -1,0 +1,15 @@
+id: w34-13
+greek: Σκουπίζω
+russian: подметать
+ipa: "/skuˈpizo/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: σκουπίζω.svg
+reading:
+  - text: "ου"
+    ipa: "u"
+    explanation: "ου читается как одно у"
+examples:
+  - greek: "Σκουπίζω το πάτωμα το πρωί."
+    russian: "Я подметаю пол утром."
+    target: "Σκουπίζω"

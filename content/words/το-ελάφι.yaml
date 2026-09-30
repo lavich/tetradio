@@ -1,0 +1,15 @@
+id: w42-18
+greek: το ελάφι
+russian: олень
+ipa: "/to eˈlafi/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ελάφι.svg
+reading:
+  - text: "φ"
+    ipa: "f"
+    explanation: "φ читается как ф"
+examples:
+  - greek: "Το ελάφι τρέχει γρήγορα."
+    russian: "Олень быстро бегает."
+    target: "ελάφι"

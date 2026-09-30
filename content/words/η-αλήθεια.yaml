@@ -1,0 +1,15 @@
+id: w11-48
+greek: η αλήθεια
+russian: правда
+ipa: /i aˈliθça/
+verified: true
+image: η-αλήθεια.svg
+source: "Материалы класса, урок 1 (A2): слайды урока, теория чтения, практика и ДЗ; фонетика и примеры подготовлены Lexi."
+reading:
+  - text: "θ"
+    ipa: "θ"
+    explanation: "θ — глухое th, как в think"
+examples:
+  - greek: "Λέω πάντα την αλήθεια."
+    russian: "Я всегда говорю правду."
+    target: "αλήθεια"

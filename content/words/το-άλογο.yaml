@@ -1,0 +1,15 @@
+id: w42-20
+greek: το άλογο
+russian: лошадь
+ipa: "/to ˈaloɣo/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-άλογο.svg
+reading:
+  - text: "γο"
+    ipa: "ɣo"
+    explanation: "γ перед а, о, у — мягкий звонкий гортанный звук, не русское г"
+examples:
+  - greek: "Το άλογο είναι στο χωράφι."
+    russian: "Лошадь в поле."
+    target: "άλογο"

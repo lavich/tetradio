@@ -1,0 +1,15 @@
+id: w32-25
+greek: Εβδομήντα
+russian: Семьдесят
+ipa: "/evðoˈminda/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: εβδομήντα.svg
+reading:
+  - text: "β"
+    ipa: "v"
+    explanation: "β всегда читается как в"
+examples:
+  - greek: "Έχω εβδομήντα βιβλία."
+    russian: "У меня семьдесят книг."
+    target: "εβδομήντα"

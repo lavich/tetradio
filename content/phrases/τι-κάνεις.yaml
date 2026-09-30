@@ -1,0 +1,14 @@
+id: ph11-11
+text: "Τι κάνεις;"
+translation: "Как дела?"
+usage: "Неформально; та же фраза значит «что ты делаешь?»."
+provenance:
+  sourceLabel: "Материалы класса, урок 1 (A2)"
+  operation: verbatim
+  locator: "Урок 1 A2, слайд «Как дела?»"
+  excerpt: "Τι κάνεις; Как дела? (неформально)"
+  parts:
+    translation:
+      sourceLabel: "Материалы класса, урок 1 (A2)"
+      operation: verbatim
+      locator: "Урок 1 A2, слайд «Как дела?»"

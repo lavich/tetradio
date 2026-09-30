@@ -1,0 +1,18 @@
+id: w12-09
+greek: η μύτη
+russian: нос
+ipa: /i ˈmiti/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: η-μύτη.svg
+reading:
+  - text: ύ
+    ipa: i
+    explanation: υ читается как и
+  - text: τη
+    ipa: ti
+    explanation: конечная η — это тоже и
+examples:
+  - greek: Η μύτη του σκύλου είναι κρύα.
+    russian: Нос собаки холодный.
+    target: μύτη

@@ -1,0 +1,15 @@
+id: w23-18
+greek: γκρι
+russian: серый
+ipa: "/gri/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: γκρι.svg
+reading:
+  - text: "γκ"
+    ipa: "g"
+    explanation: "γκ в начале слова читается как г"
+examples:
+  - greek: "Το σύννεφο είναι γκρι."
+    russian: "Облако серое."
+    target: "γκρι"

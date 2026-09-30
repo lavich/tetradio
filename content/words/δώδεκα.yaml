@@ -1,0 +1,15 @@
+id: w32-12
+greek: Δώδεκα
+russian: Двенадцать
+ipa: "/ˈðoðeka/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: δώδεκα.svg
+reading:
+  - text: "ώ"
+    ipa: "o"
+    explanation: "ω звучит так же, как ο"
+examples:
+  - greek: "Έχω δώδεκα βιβλία."
+    russian: "У меня двенадцать книг."
+    target: "δώδεκα"

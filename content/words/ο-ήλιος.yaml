@@ -1,0 +1,18 @@
+id: w12-25
+greek: ο ήλιος
+russian: солнце
+ipa: /o ˈiʎos/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: ο-ήλιος.svg
+reading:
+  - text: ή
+    ipa: i
+    explanation: η под ударением — ударное и
+  - text: λι
+    ipa: ʎ
+    explanation: λι перед гласной даёт мягкое ль
+examples:
+  - greek: Ο ήλιος είναι δυνατός σήμερα.
+    russian: Солнце сегодня сильное.
+    target: ήλιος

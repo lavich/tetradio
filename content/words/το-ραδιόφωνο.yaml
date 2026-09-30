@@ -1,0 +1,18 @@
+id: w33-06
+greek: το ραδιόφωνο
+russian: радио
+ipa: "/to raðiˈofono/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ραδιόφωνο.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+  - text: "ω"
+    ipa: "o"
+    explanation: "ω звучит так же, как ο"
+examples:
+  - greek: "Ακούω το ραδιόφωνο."
+    russian: "Я слушаю радио."
+    target: "ραδιόφωνο"

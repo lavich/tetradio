@@ -1,0 +1,11 @@
+id: w23-10
+greek: το πιπέρι
+russian: перец
+ipa: "/to piˈperi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-πιπέρι.svg
+examples:
+  - greek: "Το πιπέρι είναι μαύρο."
+    russian: "Перец чёрный."
+    target: "πιπέρι"

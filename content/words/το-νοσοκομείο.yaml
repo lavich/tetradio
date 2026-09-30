@@ -1,0 +1,15 @@
+id: w31-18
+greek: το νοσοκομείο
+russian: больница
+ipa: "/to nosokoˈmio/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-νοσοκομείο.svg
+reading:
+  - text: "εί"
+    ipa: "i"
+    explanation: "ει читается как одно и"
+examples:
+  - greek: "Ο γιατρός δουλεύει στο νοσοκομείο."
+    russian: "Врач работает в больнице."
+    target: "νοσοκομείο"

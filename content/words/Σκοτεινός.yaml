@@ -1,0 +1,15 @@
+id: w22-22
+greek: Σκοτεινός
+russian: тёмный
+ipa: "/skotiˈnos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: σκοτεινός.svg
+reading:
+  - text: "ει"
+    ipa: "i"
+    explanation: "ει читается как один звук и"
+examples:
+  - greek: "Ο δρόμος είναι σκοτεινός τη νύχτα."
+    russian: "Ночью улица тёмная."
+    target: "σκοτεινός"

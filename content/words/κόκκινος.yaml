@@ -1,0 +1,15 @@
+id: w23-13
+greek: κόκκινος
+russian: красный
+ipa: "/ˈkokinos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: κόκκινος.svg
+reading:
+  - text: "κκ"
+    ipa: "k"
+    explanation: "двойная κ читается как одно к"
+examples:
+  - greek: "Ο ουρανός είναι κόκκινος το βράδυ."
+    russian: "Вечером небо красное."
+    target: "κόκκινος"

@@ -1,0 +1,18 @@
+id: w42-03
+greek: η κούνια
+russian: качели
+ipa: "/i ˈkuɲa/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-κούνια.svg
+reading:
+  - text: "ού"
+    ipa: "u"
+    explanation: "ου читается как у"
+  - text: "νια"
+    ipa: "ɲa"
+    explanation: "ι между ν и гласной не читается отдельно: ня"
+examples:
+  - greek: "Το παιδί παίζει στην κούνια."
+    russian: "Ребёнок качается на качелях."
+    target: "κούνια"

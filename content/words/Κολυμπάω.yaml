@@ -1,0 +1,18 @@
+id: w22-06
+greek: Κολυμπάω
+russian: плавать
+ipa: "/koliˈbao/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: κολυμπάω.svg
+reading:
+  - text: "υ"
+    ipa: "i"
+    explanation: "υ читается как и, а не как русское у"
+  - text: "μπ"
+    ipa: "b"
+    explanation: "μπ внутри слова читается как б"
+examples:
+  - greek: "Κολυμπάω στη θάλασσα το καλοκαίρι."
+    russian: "Летом я плаваю в море."
+    target: "Κολυμπάω"

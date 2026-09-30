@@ -1,0 +1,11 @@
+id: w23-24
+greek: το ποτάμι
+russian: река
+ipa: "/to poˈtami/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ποτάμι.svg
+examples:
+  - greek: "Το ποτάμι είναι κρύο."
+    russian: "Река холодная."
+    target: "ποτάμι"

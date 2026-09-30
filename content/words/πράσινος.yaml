@@ -1,0 +1,11 @@
+id: w23-21
+greek: πράσινος
+russian: зеленый
+ipa: "/ˈprasinos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: πράσινος.svg
+examples:
+  - greek: "Ο κήπος είναι πράσινος την άνοιξη."
+    russian: "Весной сад зелёный."
+    target: "πράσινος"

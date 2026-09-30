@@ -1,0 +1,15 @@
+id: w33-26
+greek: τα κλαδιά
+russian: ветки
+ipa: "/ta klaˈðia/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: τα-κλαδιά.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Τα κλαδιά είναι στο δέντρο."
+    russian: "Ветки на дереве."
+    target: "κλαδιά"

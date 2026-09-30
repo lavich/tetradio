@@ -1,0 +1,15 @@
+id: w11-69
+greek: ο γιατρός
+russian: врач
+ipa: /o ʝaˈtros/
+verified: true
+image: ο-γιατρός.svg
+source: "Материалы класса, урок 1 (A2): слайды урока, теория чтения, практика и ДЗ; фонетика и примеры подготовлены Lexi."
+reading:
+  - text: "γι"
+    ipa: "ʝ"
+    explanation: "γι перед гласной смягчается до й"
+examples:
+  - greek: "Ο γιατρός είναι εδώ."
+    russian: "Врач здесь."
+    target: "γιατρός"

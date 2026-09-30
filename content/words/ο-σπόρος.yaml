@@ -1,0 +1,11 @@
+id: w33-24
+greek: ο σπόρος
+russian: семя
+ipa: "/o ˈsporos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-σπόρος.svg
+examples:
+  - greek: "Ο σπόρος γίνεται φυτό."
+    russian: "Семя становится растением."
+    target: "σπόρος"

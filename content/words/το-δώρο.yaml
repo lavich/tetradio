@@ -1,0 +1,18 @@
+id: w21-26
+greek: το δώρο
+russian: подарок
+ipa: "/to ˈðoro/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-δώρο.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — мягкое межзубное th, как в this"
+  - text: "ώ"
+    ipa: "o"
+    explanation: "ω читается точно так же, как ο"
+examples:
+  - greek: "Το δώρο είναι για σένα."
+    russian: "Подарок для тебя."
+    target: "δώρο"

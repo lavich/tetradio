@@ -1,0 +1,11 @@
+id: w34-14
+greek: Καθαρίζω
+russian: чистить
+ipa: "/kaθaˈrizo/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: καθαρίζω.svg
+examples:
+  - greek: "Καθαρίζω τα τζάμια."
+    russian: "Я чищу стёкла."
+    target: "Καθαρίζω"

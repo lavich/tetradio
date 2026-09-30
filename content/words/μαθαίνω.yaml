@@ -1,0 +1,18 @@
+id: w11-11
+greek: μαθαίνω
+russian: учить
+ipa: /maˈθeno/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: μαθαίνω.svg
+reading:
+  - text: θ
+    ipa: θ
+    explanation: θ — глухое th
+  - text: αί
+    ipa: e
+    explanation: αι даёт один звук э, ударение падает на него
+examples:
+  - greek: Μαθαίνω ελληνικά.
+    russian: Я учу греческий.
+    target: Μαθαίνω

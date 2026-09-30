@@ -1,0 +1,15 @@
+id: w32-22
+greek: Σαράντα
+russian: Сорок
+ipa: "/saˈranda/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: σαράντα.svg
+reading:
+  - text: "ντ"
+    ipa: "nd"
+    explanation: "ντ в середине слова читается как нд"
+examples:
+  - greek: "Έχω σαράντα βιβλία."
+    russian: "У меня сорок книг."
+    target: "σαράντα"

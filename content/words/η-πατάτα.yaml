@@ -1,0 +1,11 @@
+id: w24-19
+greek: η πατάτα
+russian: картофель
+ipa: "/i paˈtata/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-πατάτα.svg
+examples:
+  - greek: "Η πατάτα είναι στο πιάτο."
+    russian: "Картофель в тарелке."
+    target: "πατάτα"

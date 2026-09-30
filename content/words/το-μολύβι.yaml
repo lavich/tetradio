@@ -1,0 +1,15 @@
+id: w23-35
+greek: το μολύβι
+russian: карандаш
+ipa: "/to moˈlivi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-μολύβι.svg
+reading:
+  - text: "ύ"
+    ipa: "i"
+    explanation: "υ отдельной буквой читается как и"
+examples:
+  - greek: "Το μολύβι γράφει στο χαρτί."
+    russian: "Карандаш пишет на бумаге."
+    target: "μολύβι"

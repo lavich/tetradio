@@ -1,0 +1,15 @@
+id: w34-21
+greek: Βγάζω
+russian: вынимать
+ipa: "/ˈvɣazo/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: βγάζω.svg
+reading:
+  - text: "Βγ"
+    ipa: "vɣ"
+    explanation: "β — звук в, γ перед α — звонкий гортанный"
+examples:
+  - greek: "Βγάζω το ψωμί από τον φούρνο."
+    russian: "Я вынимаю хлеб из печи."
+    target: "Βγάζω"

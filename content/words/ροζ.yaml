@@ -1,0 +1,11 @@
+id: w23-20
+greek: Ροζ
+russian: розовый
+ipa: "/roz/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ροζ.svg
+examples:
+  - greek: "Το λουλούδι είναι ροζ."
+    russian: "Цветок розовый."
+    target: "ροζ"

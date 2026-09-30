@@ -1,0 +1,15 @@
+id: w32-27
+greek: Ενενήντα
+russian: Девяносто
+ipa: "/eneˈninda/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ενενήντα.svg
+reading:
+  - text: "ή"
+    ipa: "i"
+    explanation: "η читается как и, а знак показывает ударение"
+examples:
+  - greek: "Έχω ενενήντα βιβλία."
+    russian: "У меня девяносто книг."
+    target: "ενενήντα"

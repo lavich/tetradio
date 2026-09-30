@@ -1,0 +1,11 @@
+# Шаблон смешанного урока: content/lessons/<id>.yaml
+# `items` — упорядоченный состав из пар {kind, id}: порядок задаёт авторскую последовательность знакомства.
+# Для словарного урока вместо `items` можно указать сокращение `words: [w11-01, ...]`.
+# Указывать `words` и `items` одновременно нельзя; `status` и `targetDate` контентом не поставляются.
+title: Урок-образец
+language: el
+items:
+  - kind: phrase
+    id: p-example
+  - kind: word
+    id: w-example

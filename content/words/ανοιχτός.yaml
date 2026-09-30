@@ -1,0 +1,23 @@
+id: w41-12
+greek: Ανοιχτός
+russian: открытый
+ipa: "/aniˈxtos/"
+verified: true
+source: "Список слов к уроку 4.1; фонетика, примеры, переводы слов примера и иллюстрации подготовлены Lexi."
+image: ανοιχτός.svg
+reading:
+  - text: "οι"
+    ipa: "i"
+    explanation: "οι читается как и"
+  - text: "χτ"
+    ipa: "xt"
+    explanation: "χ перед согласным — твёрдый х"
+examples:
+  - greek: "Το παράθυρο είναι ανοιχτό."
+    russian: "Окно открыто."
+    target: "ανοιχτό"
+    words:
+      - { text: "Το", russian: "артикль ср. р." }
+      - { text: "παράθυρο", russian: "окно", word: w14-04 }
+      - { text: "είναι", russian: "есть, является", word: w11-05 }
+      - { text: "ανοιχτό", russian: "открыто", word: w41-12 }

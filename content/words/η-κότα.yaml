@@ -1,0 +1,11 @@
+id: w42-19
+greek: η κότα
+russian: курица
+ipa: "/i ˈkota/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-κότα.svg
+examples:
+  - greek: "Η κότα κάνει αυγά."
+    russian: "Курица несёт яйца."
+    target: "κότα"

@@ -1,0 +1,11 @@
+id: w33-10
+greek: ο καναπές
+russian: диван
+ipa: "/o kanaˈpes/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-καναπές.svg
+examples:
+  - greek: "Ο καναπές είναι στο δωμάτιο."
+    russian: "Диван в комнате."
+    target: "καναπές"

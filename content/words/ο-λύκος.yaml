@@ -1,0 +1,15 @@
+id: w42-17
+greek: ο λύκος
+russian: волк
+ipa: "/o ˈlikos/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-λύκος.svg
+reading:
+  - text: "ύ"
+    ipa: "ˈi"
+    explanation: "υ читается как и"
+examples:
+  - greek: "Ο λύκος ουρλιάζει τη νύχτα."
+    russian: "Волк воет ночью."
+    target: "λύκος"

@@ -1,0 +1,19 @@
+id: w14-04
+greek: το παράθυρο
+russian: окно
+ipa: "/to paˈraθiro/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-παράθυρο.svg
+reading:
+  - text: "θ"
+    ipa: "θ"
+    explanation: "θ — глухое межзубное th, как в think"
+  - text: "υ"
+    ipa: "i"
+    explanation: "υ читается как и, а не как русское у"
+examples:
+  - greek: "Το παράθυρο είναι ανοιχτό."
+    russian: "Окно открыто."
+    target: "παράθυρο"
+    source: "Слова 4 (список слов преподавателя), с. 1"

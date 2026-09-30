@@ -1,0 +1,35 @@
+# Сборка, кеши и отчёты
+dist
+public/content
+test-results
+playwright-report
+.playwright-mcp
+tsconfig.tsbuildinfo
+docs/art-sheet.html
+
+# Файлы, которые перезаписывает не человек: prettier будет с ними воевать.
+# Эталон планировщика тест пишет сам (JSON.stringify(..., null, 1) в plan-golden.test.ts),
+# вывод репортёра переписывает каждый прогон — оба сразу уронили бы format:check.
+tests/fixtures
+.vitest
+
+# Исходники контента: их форму задаёт и проверяет content/build.ts,
+# переносы и кавычки там не косметика, а часть сверки с материалом.
+content/art
+content/words
+content/phrases
+content/clozes
+content/lessons
+content/courses
+
+# Спецификации и проза: отдельное решение, не смешиваем с правкой кода.
+openspec
+*.md
+
+package-lock.json
+
+# Навыки агентов, аудит и макеты дизайна — не код приложения.
+.agents
+.impeccable
+docs/audit
+docs/design

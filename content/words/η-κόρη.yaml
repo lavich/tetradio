@@ -1,0 +1,15 @@
+id: w11-17
+greek: η κόρη
+russian: дочь
+ipa: /i ˈkori/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: η-κόρη.svg
+reading:
+  - text: ρη
+    ipa: ri
+    explanation: конечная η читается как и
+examples:
+  - greek: Η κόρη μου διαβάζει.
+    russian: Моя дочь читает.
+    target: κόρη

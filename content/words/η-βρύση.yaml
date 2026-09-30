@@ -1,0 +1,15 @@
+id: w34-09
+greek: η βρύση
+russian: кран
+ipa: "/i ˈvrisi/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-βρύση.svg
+reading:
+  - text: "ύ"
+    ipa: "i"
+    explanation: "υ читается как и"
+examples:
+  - greek: "Η βρύση στάζει."
+    russian: "Кран капает."
+    target: "βρύση"

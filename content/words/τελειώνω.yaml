@@ -1,0 +1,18 @@
+id: w13-32
+greek: τελειώνω
+russian: заканчивать
+ipa: "/teliˈono/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: τελειώνω.svg
+reading:
+  - text: "ει"
+    ipa: "i"
+    explanation: "ει читается как один звук и"
+  - text: "ώ"
+    ipa: "o"
+    explanation: "ω читается точно так же, как ο"
+examples:
+  - greek: "Τελειώνω το μάθημα στις έξι."
+    russian: "Я заканчиваю урок в шесть."
+    target: "Τελειώνω"

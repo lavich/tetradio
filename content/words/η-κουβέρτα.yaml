@@ -1,0 +1,18 @@
+id: w42-11
+greek: η κουβέρτα
+russian: одеяло
+ipa: "/i kuˈverta/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-κουβέρτα.svg
+reading:
+  - text: "ου"
+    ipa: "u"
+    explanation: "ου читается как у"
+  - text: "β"
+    ipa: "v"
+    explanation: "β читается как в"
+examples:
+  - greek: "Τον χειμώνα κοιμάμαι με κουβέρτα."
+    russian: "Зимой я сплю под одеялом."
+    target: "κουβέρτα"

@@ -1,0 +1,15 @@
+id: w33-19
+greek: η σακούλα
+russian: мешок
+ipa: "/i saˈkula/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-σακούλα.svg
+reading:
+  - text: "ού"
+    ipa: "u"
+    explanation: "ου читается как одно у"
+examples:
+  - greek: "Η σακούλα είναι γεμάτη."
+    russian: "Мешок полный."
+    target: "σακούλα"

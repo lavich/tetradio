@@ -1,0 +1,15 @@
+id: w11-66
+greek: εύκολος
+russian: лёгкий
+ipa: /ˈefkolos/
+verified: true
+image: εύκολος.svg
+source: "Материалы класса, урок 1 (A2): слайды урока, теория чтения, практика и ДЗ; фонетика и примеры подготовлены Lexi."
+reading:
+  - text: "εύ"
+    ipa: "ˈef"
+    explanation: "ευ перед глухим κ читается как эф"
+examples:
+  - greek: "Το μάθημα είναι εύκολο."
+    russian: "Урок лёгкий."
+    target: "εύκολο"

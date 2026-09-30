@@ -1,0 +1,15 @@
+id: w21-21
+greek: ο φόβος
+russian: страх
+ipa: "/o ˈfovos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-φόβος.svg
+reading:
+  - text: "β"
+    ipa: "v"
+    explanation: "β читается как в, а не как б"
+examples:
+  - greek: "Ο φόβος είναι φυσικός."
+    russian: "Страх — это естественно."
+    target: "φόβος"

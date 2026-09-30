@@ -1,0 +1,15 @@
+id: w31-31
+greek: ο δάσκαλος
+russian: учитель
+ipa: "/o ˈðaskalos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-δάσκαλος.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Ο δάσκαλος είναι στο σχολείο."
+    russian: "Учитель в школе."
+    target: "δάσκαλος"

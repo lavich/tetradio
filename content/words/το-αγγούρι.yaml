@@ -1,0 +1,18 @@
+id: w24-18
+greek: το αγγούρι
+russian: огурец
+ipa: "/to aˈguri/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-αγγούρι.svg
+reading:
+  - text: "γγ"
+    ipa: "g"
+    explanation: "γγ читается слитно, как нг перед гласной"
+  - text: "ού"
+    ipa: "u"
+    explanation: "ου читается как одно у"
+examples:
+  - greek: "Το αγγούρι είναι πράσινο."
+    russian: "Огурец зелёный."
+    target: "αγγούρι"

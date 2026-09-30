@@ -1,0 +1,15 @@
+id: w23-05
+greek: η σούπα
+russian: суп
+ipa: "/i ˈsupa/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-σούπα.svg
+reading:
+  - text: "ού"
+    ipa: "u"
+    explanation: "ου читается как одно у"
+examples:
+  - greek: "Η σούπα είναι ζεστή."
+    russian: "Суп горячий."
+    target: "σούπα"

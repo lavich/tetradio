@@ -1,0 +1,15 @@
+id: w11-63
+greek: το αυγό
+russian: яйцо
+ipa: /to avˈɣo/
+verified: true
+image: το-αυγό.svg
+source: "Материалы класса, урок 1 (A2): слайды урока, теория чтения, практика и ДЗ; фонетика и примеры подготовлены Lexi."
+reading:
+  - text: "αυ"
+    ipa: "av"
+    explanation: "αυ перед звонким γ читается как ав"
+examples:
+  - greek: "Ο πατέρας τρώει ένα αυγό."
+    russian: "Отец ест яйцо."
+    target: "αυγό"

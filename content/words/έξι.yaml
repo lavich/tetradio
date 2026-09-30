@@ -1,0 +1,15 @@
+id: w32-06
+greek: Έξι
+russian: Шесть
+ipa: "/ˈeksi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: έξι.svg
+reading:
+  - text: "ξ"
+    ipa: "ks"
+    explanation: "ξ — слитное кс, один знак на два звука"
+examples:
+  - greek: "Έχω έξι βιβλία."
+    russian: "У меня шесть книг."
+    target: "έξι"

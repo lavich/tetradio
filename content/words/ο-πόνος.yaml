@@ -1,0 +1,11 @@
+id: w31-02
+greek: ο πόνος
+russian: боль
+ipa: "/o ˈponos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-πόνος.svg
+examples:
+  - greek: "Ο πόνος είναι δυνατός."
+    russian: "Боль сильная."
+    target: "πόνος"

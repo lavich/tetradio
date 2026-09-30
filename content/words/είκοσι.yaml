@@ -1,0 +1,15 @@
+id: w32-20
+greek: Είκοσι
+russian: Двадцать
+ipa: "/ˈikosi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: είκοσι.svg
+reading:
+  - text: "Εί"
+    ipa: "i"
+    explanation: "ει читается как одно и"
+examples:
+  - greek: "Έχω είκοσι βιβλία."
+    russian: "У меня двадцать книг."
+    target: "είκοσι"

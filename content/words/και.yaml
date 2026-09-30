@@ -1,0 +1,18 @@
+id: w11-36
+greek: και
+russian: и
+ipa: "/ce/"
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: and.svg
+reading:
+  - text: "κ"
+    ipa: "c"
+    explanation: "κ перед звуком е смягчается, почти как кь"
+  - text: "αι"
+    ipa: "e"
+    explanation: "αι — одна гласная е, а не два звука"
+examples:
+  - greek: "Ο πατέρας και η μητέρα."
+    russian: "Отец и мать."
+    target: "και"

@@ -1,0 +1,11 @@
+id: w31-08
+greek: το νεφρό
+russian: почка
+ipa: "/to neˈfro/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-νεφρό.svg
+examples:
+  - greek: "Το νεφρό καθαρίζει το αίμα."
+    russian: "Почка очищает кровь."
+    target: "νεφρό"

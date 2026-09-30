@@ -1,0 +1,15 @@
+id: w32-18
+greek: Δεκαοκτώ
+russian: Восемнадцать
+ipa: "/ðekaokˈto/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: δεκαοκτώ.svg
+reading:
+  - text: "ώ"
+    ipa: "o"
+    explanation: "ω звучит так же, как ο"
+examples:
+  - greek: "Έχω δεκαοκτώ βιβλία."
+    russian: "У меня восемнадцать книг."
+    target: "δεκαοκτώ"

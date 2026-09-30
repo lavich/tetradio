@@ -1,0 +1,15 @@
+id: w42-01
+greek: το γκαζόν
+russian: газон
+ipa: "/to ɡaˈzon/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-γκαζόν.svg
+reading:
+  - text: "γκ"
+    ipa: "ɡ"
+    explanation: "γκ в начале слова читается как г"
+examples:
+  - greek: "Ο πατέρας κόβει το γκαζόν."
+    russian: "Папа подстригает газон."
+    target: "γκαζόν"

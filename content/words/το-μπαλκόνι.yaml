@@ -1,0 +1,15 @@
+id: w12-22
+greek: το μπαλκόνι
+russian: балкон
+ipa: /to balˈkoni/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: το-μπαλκόνι.svg
+reading:
+  - text: μπ
+    ipa: b
+    explanation: μπ в начале слова — это б
+examples:
+  - greek: Το μπαλκόνι βλέπει στη θάλασσα.
+    russian: Балкон выходит на море.
+    target: μπαλκόνι

@@ -1,0 +1,18 @@
+id: w11-20
+greek: ο παππούς
+russian: дедушка
+ipa: /o paˈpus/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: ο-παππούς.svg
+reading:
+  - text: ππ
+    ipa: p
+    explanation: двойное π читается как одно п
+  - text: ού
+    ipa: u
+    explanation: ου даёт звук у
+examples:
+  - greek: Ο παππούς πίνει καφέ.
+    russian: Дедушка пьёт кофе.
+    target: παππούς

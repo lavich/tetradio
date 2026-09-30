@@ -1,0 +1,11 @@
+id: w33-11
+greek: το ράφι
+russian: полка
+ipa: "/to ˈrafi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ράφι.svg
+examples:
+  - greek: "Τα βιβλία είναι στο ράφι."
+    russian: "Книги на полке."
+    target: "ράφι"

@@ -1,0 +1,15 @@
+id: w42-07
+greek: το κερί
+russian: свеча
+ipa: "/to ceˈri/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-κερί.svg
+reading:
+  - text: "κε"
+    ipa: "ce"
+    explanation: "κ перед ε звучит мягко"
+examples:
+  - greek: "Ανάβω ένα κερί."
+    russian: "Я зажигаю свечу."
+    target: "κερί"

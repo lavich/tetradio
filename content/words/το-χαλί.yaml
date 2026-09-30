@@ -1,0 +1,15 @@
+id: w24-05
+greek: το χαλί
+russian: ковёр
+ipa: "/to xaˈli/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-χαλί.svg
+reading:
+  - text: "χ"
+    ipa: "x"
+    explanation: "χ перед α — глухой звук, как русское х"
+examples:
+  - greek: "Το χαλί είναι στο πάτωμα."
+    russian: "Ковёр на полу."
+    target: "χαλί"

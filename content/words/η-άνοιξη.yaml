@@ -1,0 +1,19 @@
+id: w14-23
+greek: η άνοιξη
+russian: весна
+ipa: "/i ˈaniksi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-άνοιξη.svg
+reading:
+  - text: "οι"
+    ipa: "i"
+    explanation: "οι читается как один звук и"
+  - text: "ξ"
+    ipa: "ks"
+    explanation: "ξ — слитное кс, один знак на два звука"
+examples:
+  - greek: "Την άνοιξη ανθίζουν τα λουλούδια."
+    russian: "Весной цветут цветы."
+    target: "άνοιξη"
+    source: "Слова 4 (список слов преподавателя), с. 3"

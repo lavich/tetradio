@@ -1,0 +1,15 @@
+id: w32-29
+greek: Διακόσια
+russian: Двести
+ipa: "/ðiaˈkosia/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: διακόσια.svg
+reading:
+  - text: "Δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Το σχολείο έχει διακόσια βιβλία."
+    russian: "В школе двести книг."
+    target: "διακόσια"

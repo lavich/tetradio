@@ -1,0 +1,15 @@
+id: w11-58
+greek: η λάμπα
+russian: лампа
+ipa: /i ˈlamba/
+verified: true
+image: η-λάμπα.svg
+source: "Материалы класса, урок 1 (A2): слайды урока, теория чтения, практика и ДЗ; фонетика и примеры подготовлены Lexi."
+reading:
+  - text: "μπ"
+    ipa: "mb"
+    explanation: "μπ в середине слова читается как мб"
+examples:
+  - greek: "Η λάμπα είναι στο τραπέζι."
+    russian: "Лампа на столе."
+    target: "λάμπα"

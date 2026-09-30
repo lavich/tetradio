@@ -1,0 +1,15 @@
+id: w32-10
+greek: Δέκα
+russian: Десять
+ipa: "/ˈðeka/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: δέκα.svg
+reading:
+  - text: "Δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Έχω δέκα βιβλία."
+    russian: "У меня десять книг."
+    target: "δέκα"

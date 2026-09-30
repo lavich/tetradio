@@ -1,0 +1,13 @@
+id: ph13-03
+text: "Χαίρω πολύ!"
+translation: "Очень приятно"
+provenance:
+  sourceLabel: "Урок 3 (подготовка к экзамену)"
+  operation: verbatim
+  locator: "Урок 3, с. 12, слайд «Разговорная часть: Как вас зовут?»"
+  excerpt: "Χαίρω πολύ! Очень приятно"
+  parts:
+    translation:
+      sourceLabel: "Урок 3 (подготовка к экзамену)"
+      operation: verbatim
+      locator: "Урок 3, с. 12, слайд «Разговорная часть: Как вас зовут?»"

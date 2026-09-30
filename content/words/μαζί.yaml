@@ -1,0 +1,15 @@
+id: w11-30
+greek: Μαζί
+russian: вместе
+ipa: /maˈzi/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: μαζί.svg
+reading:
+  - text: ζ
+    ipa: z
+    explanation: ζ — всегда звонкое з
+examples:
+  - greek: Πάμε μαζί στο σχολείο.
+    russian: Мы идём вместе в школу.
+    target: μαζί

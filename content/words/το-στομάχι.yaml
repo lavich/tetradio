@@ -1,0 +1,15 @@
+id: w31-06
+greek: το στομάχι
+russian: желудок
+ipa: "/to stoˈmaçi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-στομάχι.svg
+reading:
+  - text: "χ"
+    ipa: "ç"
+    explanation: "χ перед ι звучит мягко, ближе к хь"
+examples:
+  - greek: "Το φαγητό πάει στο στομάχι."
+    russian: "Еда попадает в желудок."
+    target: "στομάχι"

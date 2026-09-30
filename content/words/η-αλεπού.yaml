@@ -1,0 +1,15 @@
+id: w42-16
+greek: η αλεπού
+russian: лиса
+ipa: "/i aleˈpu/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-αλεπού.svg
+reading:
+  - text: "ού"
+    ipa: "ˈu"
+    explanation: "ου читается как у, ударение на последнем слоге"
+examples:
+  - greek: "Η αλεπού ζει στο δάσος."
+    russian: "Лиса живёт в лесу."
+    target: "αλεπού"

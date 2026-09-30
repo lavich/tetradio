@@ -1,0 +1,15 @@
+id: w12-11
+greek: η αγάπη
+russian: любовь
+ipa: /i aˈɣapi/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: η-αγάπη.svg
+reading:
+  - text: γ
+    ipa: ɣ
+    explanation: γ перед α — мягкий гортанный г
+examples:
+  - greek: Η αγάπη είναι δώρο.
+    russian: Любовь — это дар.
+    target: αγάπη

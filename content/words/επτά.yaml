@@ -1,0 +1,11 @@
+id: w32-07
+greek: Επτά
+russian: Семь
+ipa: "/epˈta/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: επτά.svg
+examples:
+  - greek: "Έχω επτά βιβλία."
+    russian: "У меня семь книг."
+    target: "επτά"

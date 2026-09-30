@@ -1,0 +1,22 @@
+id: w13-26
+greek: δουλεύω
+russian: работать
+ipa: "/ðuˈlevo/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: δουλεύω.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — мягкое межзубное th, как в this"
+  - text: "ου"
+    ipa: "u"
+    explanation: "ου — всегда один звук у"
+  - text: "εύ"
+    ipa: "ev"
+    explanation: "ευ перед звонким звуком читается как эв"
+examples:
+  - greek: "Δουλεύω στο σχολείο."
+    russian: "Я работаю в школе."
+    target: "Δουλεύω"
+    source: "Урок 3 (подготовка к экзамену), с. 32"

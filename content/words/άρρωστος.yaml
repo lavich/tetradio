@@ -1,0 +1,18 @@
+id: w31-16
+greek: Άρρωστος
+russian: больной
+ipa: "/ˈarostos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: άρρωστος.svg
+reading:
+  - text: "ρρ"
+    ipa: "r"
+    explanation: "двойная ρ читается как одно р"
+  - text: "ω"
+    ipa: "o"
+    explanation: "ω звучит так же, как ο"
+examples:
+  - greek: "Ο μαθητής είναι άρρωστος."
+    russian: "Ученик болен."
+    target: "άρρωστος"
