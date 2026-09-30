@@ -574,7 +574,7 @@ test.describe("ссылка на слово через бота", () => {
     await expect(page).toHaveURL(/\/share\/word\/w34-03$/);
     await expect(page.getByText("η κατσαρόλα", { exact: true }).first()).toBeVisible();
     // Урок ставится только из раздела «Уроки»; после этого у слова курса появляется кнопка.
-    await page.goto("/lessons/lesson-3-4");
+    await page.goto("/lessons/lesson-1-4");
     await page.getByRole("heading", { name: /^Слова · \d+$/ }).waitFor({ timeout: 20000 });
     await page.goto("/words/w34-03");
     await page.reload();

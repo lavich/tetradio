@@ -8,7 +8,7 @@ test("работает без сети после закрытия страни�
   // «Скачать для офлайн» получает все обязательные медиа урока; готовность показывается только после проверки файлов.
   await page.goto("/lessons/lesson-1-2");
   await page.getByRole("button", { name: "Скачать для офлайн" }).click();
-  await expect(page.getByTestId("lesson-offline")).toContainText("Медиа: 30 из 30");
+  await expect(page.getByTestId("lesson-offline")).toContainText("Медиа: 9 из 9");
   await page.goto("/");
   await ready(page);
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));

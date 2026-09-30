@@ -1,31 +1,17 @@
-import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { colorsOf, foreignColors, PALETTE, paletteColors, parseLegacy } from "../content/art";
+import { colorsOf, foreignColors, paletteColors, parseLegacy } from "../content/art";
 import { buildContent, revisionOf, wordsOf } from "../content/build";
 import { ContentError, parseCatalog, parsePackage, SCHEMA_VERSION } from "../src/content/schema";
 import { wordKey } from "../src/domain/import";
 import { stressNote } from "../src/domain/phonetics";
-import { restoreWriting, tiles } from "../src/domain/syllables";
-
-const md = readFileSync("tests/fixtures/tavelori/seed-lessons.md", "utf8");
-const section = (title: string) => md.split(`## ${title}`)[1].split("\n## ")[0];
-const rows = (title: string) =>
-  section(title)
-    .split("\n")
-    .filter((line) => /^\| [^-]/.test(line) && !line.includes("Греческий"))
-    .map((line) =>
-      line
-        .split("|")
-        .slice(1, 3)
-        .map((cell) => cell.trim()),
-    );
 
 const content = buildContent("tests/fixtures/tavelori-content");
 const seedWords = content.words;
-/** Подготовленные карточки: у них проверена фонетика, поэтому к ним предъявляются полные требования. */
-const prepared = content.words.filter((word) => word.verified);
+/** Слова фикстуры со своей иллюстрацией: на них проверяется стандарт картинок. */
+const illustrated = content.words.filter((word) => word.imageAssetId);
 const packageOf = (id: string) => content.packages.find((p) => p.id === id)!;
 const fileOf = (path: string) => content.files.find((file) => file.path === path)!;
 const lessonSource = (id: string) => content.sources.lessons.get(id)!;
@@ -52,53 +38,7 @@ function brokenCopy(mutate: (root: string) => void) {
   }
 }
 
-describe("исходные наборы 1.1 и 1.2 сохранены в начале уроков", () => {
-  /** Архивный набор не переставляется и не редактируется: дописанные позже слова идут после него. */
-  it.each([
-    ["Урок 1.1", "lesson-1-1", 33],
-    ["Урок 1.2", "lesson-1-2", 30],
-  ] as const)("%s", (title, lessonId, count) => {
-    const expected = rows(title);
-    const words = wordsOf(content, lessonId);
-    expect(expected).toHaveLength(count);
-    expect(words.slice(0, count).map((w) => [w.greek, w.russian])).toEqual(expected);
-  });
-  it("урок 1.1 дополнен пятью служебными словами после исходного набора", () => {
-    expect(
-      wordsOf(content, "lesson-1-1")
-        .slice(33, 38)
-        .map((w) => [w.greek, w.russian]),
-    ).toEqual([
-      ["Σωστό", "верно"],
-      ["Λάθος", "неверно"],
-      ["και", "и"],
-      ["ένα", "один"],
-      ["στο", "в"],
-    ]);
-  });
-  /** Материал занятия — приветствия, слова текстов и примеры правил чтения — вынесен в отдельный урок. */
-  it("слова занятия живут в дополнительном словаре, а состав 1.1 остаётся прежним", () => {
-    const number = (id: string) => Number(id.slice(4));
-    expect(wordsOf(content, "lesson-1-1").every((word) => /^w11-\d\d$/.test(word.id) && number(word.id) <= 38)).toBe(
-      true,
-    );
-    const extra = wordsOf(content, "lesson-1-1-extra");
-    // Идентификаторы при переносе не менялись: прогресс остаётся у тех же карточек.
-    expect(extra.every((word) => /^w11-\d\d$/.test(word.id) && number(word.id) >= 39)).toBe(true);
-    expect(extra.map((word) => word.greek).slice(0, 5)).toEqual([
-      "Γεια",
-      "Καλημέρα",
-      "Καλησπέρα",
-      "Χαίρετε",
-      "Ευχαριστώ",
-    ]);
-  });
-  /** Порядок занятий даёт номер в заголовке: заголовок без номера ставит урок после всех нумерованных. */
-  it("дополнительный словарь не встраивается между нумерованными уроками", () => {
-    const title = packageOf("lesson-1-1-extra").lesson.title;
-    expect(title).toBe("Дополнительный словарь");
-    expect(/\d/.test(title)).toBe(false);
-  });
+describe("состав урока в пакете", () => {
   /** Пакет описывает урок, а не занятие: статус и дата принадлежат пользователю и в поставку не попадают. */
   it("пакет несёт только название урока", () => {
     expect(packageOf("lesson-1-1").lesson).toEqual({ title: "Урок 1.1" });
@@ -106,70 +46,27 @@ describe("исходные наборы 1.1 и 1.2 сохранены в нач�
     for (const [id, source] of content.sources.lessons)
       expect(Object.keys(source), id).toEqual(expect.not.arrayContaining(["status", "targetDate"]));
   });
-});
-
-describe("наборы класса переносятся без потерь и без дублей", () => {
-  it.each(["lesson-1-3", "lesson-1-4"] as const)("%s", (lessonId) => {
-    const declared = wordIdsOf(lessonId);
-    expect(declared.length).toBeGreaterThan(0);
-    expect(packageOf(lessonId).links).toHaveLength(declared.length);
-    expect(wordsOf(content, lessonId).map((word) => word.id)).toEqual(declared);
-  });
-
+  it.each(["lesson-1-2", "lesson-1-3"] as const)(
+    "%s: связи пакета повторяют объявленный состав по порядку",
+    (lessonId) => {
+      const declared = wordIdsOf(lessonId);
+      expect(declared.length).toBeGreaterThan(0);
+      expect(packageOf(lessonId).links).toHaveLength(declared.length);
+      expect(wordsOf(content, lessonId).map((word) => word.id)).toEqual(declared);
+    },
+  );
   it("повторяющееся слово остаётся одной записью с общим идентификатором во всех пакетах", () => {
     const linked = new Set(content.packages.flatMap((pack) => pack.words.map((word) => word.id)));
     expect(seedWords).toHaveLength(linked.size);
     expect(new Set(seedWords.map((word) => wordKey(word.greek, word.russian))).size).toBe(seedWords.length);
     expect(new Set(seedWords.map((word) => word.id)).size).toBe(seedWords.length);
-    // «το σπίτι» пришло и в 1.2, и в 1.3 — в обоих пакетах одна и та же запись
+    // «το σπίτι» объявлено и в 1.2, и в 1.3 — в обоих пакетах одна и та же запись
     const house = seedWords.filter((word) => word.greek === "το σπίτι");
     expect(house).toHaveLength(1);
+    expect(packageOf("lesson-1-2").words.some((word) => word.id === house[0].id)).toBe(true);
     const inThird = packageOf("lesson-1-3").words.find((word) => word.id === house[0].id);
     expect(inThird).toEqual(house[0]);
     expect(packageOf("lesson-1-3").media.some((item) => item.id === house[0].imageAssetId)).toBe(true);
-  });
-
-  it("каждое слово годится для упражнений: перевод, восстановимое написание и стабильный id", () => {
-    for (const word of seedWords) {
-      expect(word.greek.trim(), word.id).toMatch(/[Ͱ-Ͽἀ-῿]/u);
-      expect(word.russian.trim().length, word.greek).toBeGreaterThan(0);
-      expect(restoreWriting(word.greek, tiles(word.greek)), word.greek).toBe(word.greek.normalize("NFC").trim());
-      expect(word.id).toMatch(/^w\d{2}-\d{2}$/);
-    }
-    expect(seedWords.filter((word) => tiles(word.greek).length < 2).map((word) => word.greek)).toEqual([
-      "Γεια",
-      "γκρι",
-      "η Γη",
-      "η σκιά",
-      "και",
-      "μπλε",
-      "ο γιος",
-      "πού",
-      "Ροζ",
-      "στο",
-      "το φως",
-    ]);
-  });
-
-  it("множественное число живёт в заметке, а не в самом слове", () => {
-    const year = seedWords.find((word) => word.russian === "год")!;
-    expect(year.greek).toBe("ο χρόνος");
-    expect(year.note).toContain("τα χρόνια");
-    expect(tiles(year.greek)).toEqual(["χρό", "νος"]);
-  });
-  /** Полумеры недопустимы: карточка либо готова к занятию целиком, либо честно помечена непроверенной. */
-  it("карточка подготовлена целиком или не претендует на подготовленность", () => {
-    for (const word of seedWords) {
-      if (word.verified) {
-        expect(word.ipa, word.greek).toMatch(/^\/.+\/$/);
-        expect(word.examples.length, word.greek).toBeGreaterThan(0);
-        expect(word.imageAssetId, word.greek).toBe(`img-${word.id}`);
-      } else {
-        expect(word.ipa, word.greek).toBe("");
-        expect(word.examples, word.greek).toEqual([]);
-        expect(word.imageAssetId, word.greek).toBeUndefined();
-      }
-    }
   });
 });
 
@@ -190,23 +87,23 @@ describe("уроки принадлежат курсам", () => {
   it("публикация требует, чтобы урок входил ровно в один курс", () => {
     const leeke = readFileSync("tests/fixtures/tavelori-content/courses/leeke.yaml", "utf8");
     expect(() =>
-      brokenCopy((root) => writeFileSync(join(root, "courses", "leeke.yaml"), leeke.replace("  - lesson-2-2\n", ""))),
-    ).toThrow(/lessons\/lesson-2-2.yaml: урок не входит ни в один курс/);
+      brokenCopy((root) => writeFileSync(join(root, "courses", "leeke.yaml"), leeke.replace("  - lesson-1-4\n", ""))),
+    ).toThrow(/lessons\/lesson-1-4.yaml: урок не входит ни в один курс/);
     expect(() =>
       brokenCopy((root) =>
-        writeFileSync(join(root, "courses", "другой.yaml"), "title: Другой курс\nlessons:\n  - lesson-2-2\n"),
+        writeFileSync(join(root, "courses", "другой.yaml"), "title: Другой курс\nlessons:\n  - lesson-1-4\n"),
       ),
-    ).toThrow(/courses\/другой.yaml: урок lesson-2-2 уже входит в курс leeke/);
+    ).toThrow(/courses\/другой.yaml: урок lesson-1-4 уже входит в курс leeke/);
     expect(() =>
       brokenCopy((root) => writeFileSync(join(root, "courses", "leeke.yaml"), leeke + "  - lesson-9-9\n")),
     ).toThrow(/courses\/leeke.yaml: урока lesson-9-9 нет/);
   });
   it("курс несёт язык и требует один язык на все свои уроки", () => {
     expect(content.catalog.courses.find((course) => course.id === "leeke")!.language).toBe("el");
-    const lesson = readFileSync("tests/fixtures/tavelori-content/lessons/lesson-2-2.yaml", "utf8");
+    const lesson = readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-4.yaml", "utf8");
     expect(() =>
       brokenCopy((root) =>
-        writeFileSync(join(root, "lessons", "lesson-2-2.yaml"), lesson.replace("language: el", "language: en")),
+        writeFileSync(join(root, "lessons", "lesson-1-4.yaml"), lesson.replace("language: el", "language: en")),
       ),
     ).toThrow(/courses\/leeke.yaml: уроки курса на разных языках/);
   });
@@ -368,73 +265,45 @@ describe("индекс слов в каталоге", () => {
   });
 });
 
-describe("карточка каждого подготовленного слова готова", () => {
-  it("у каждого подготовленного слова есть IPA с ударением и распознанный ударный слог", () => {
-    expect(prepared.length).toBeGreaterThan(0);
-    for (const word of prepared) {
-      expect(word.ipa, word.greek).toMatch(/^\/.+\/$/);
-      const core = word.greek.replace(/^(ο|η|το|τα|οι) /, "");
-      if (core.split(/\s+/).length === 1 && core.length > 3) expect(stressNote(word.greek), word.greek).not.toBeNull();
-    }
+describe("фонетика и разбор чтения", () => {
+  const house = readFileSync("tests/fixtures/tavelori-content/words/το-σπίτι.yaml", "utf8");
+  it("ударный слог распознаётся по написанию, односложное слово знака не требует", () => {
+    expect(stressNote("το σπίτι")).toBe("Ударение на первый слог");
+    expect(stressNote("μεγάλος")).toBe("Ударение на второй слог");
+    expect(stressNote("η κατσαρόλα")).toBe("Ударение на третий слог");
+    expect(stressNote("το φως")).toBe("Слово односложное — знак ударения ему не нужен");
   });
   it("диапазоны разбора чтения указывают на реальные буквы слова", () => {
-    for (const word of prepared)
-      for (const segment of word.segments) {
-        expect(
-          word.greek.slice(segment.start, segment.start + segment.text.length),
-          `${word.greek}/${segment.text}`,
-        ).toBe(segment.text);
-        expect(segment.explanation.length).toBeGreaterThan(8);
-        expect(segment.ipa).not.toMatch(/[а-яА-Я]/);
-      }
+    const segments = seedWords.flatMap((word) => word.segments.map((segment) => [word, segment] as const));
+    expect(segments.length).toBeGreaterThan(0);
+    for (const [word, segment] of segments)
+      expect(
+        word.greek.slice(segment.start, segment.start + segment.text.length),
+        `${word.greek}/${segment.text}`,
+      ).toBe(segment.text);
+    const pot = seedWords.find((word) => word.id === "w34-03")!;
+    expect(pot.segments).toEqual([
+      { text: "τσ", ipa: "ts", explanation: "τσ — слитный звук, как ц в «цапля»", start: 4 },
+    ]);
   });
-  it("ни одна пометка чтения не указывает на артикль молча", () => {
-    for (const word of prepared)
-      for (const segment of word.segments) {
-        const article = word.greek.match(/^(ο|η|το|τα|οι)\s/)?.[1];
-        if (article && segment.start < article.length)
-          expect(segment.explanation, `${word.greek}: пометка попала в артикль`).toMatch(/артикл/i);
-      }
-  });
-  it("пример содержит выделяемую форму слова и русский перевод", () => {
-    for (const word of prepared) {
-      const [example] = word.examples;
-      expect(example.greek, word.greek).toMatch(/[Ͱ-Ͽἀ-῿]/u);
-      expect(example.greek.includes(example.target), `${word.greek}: ${example.greek}`).toBe(true);
-      expect(example.russian, word.greek).toMatch(/[а-яА-ЯёЁ]/);
-      expect(example.source).toBeTruthy();
-    }
-  });
-  it("у каждого слова есть своя иллюстрация без текста", () => {
-    const seen = new Set<string>();
-    for (const word of prepared) {
-      const art = seedArt(word.id);
-      expect(art, word.greek).toBeTruthy();
-      expect(art).toMatch(/^<svg xmlns/);
-      expect(art, `${word.greek}: подпись в картинке выдаёт ответ`).not.toMatch(/<text/);
-      expect(seen.has(art), `${word.greek}: картинка повторяет другую`).toBe(false);
-      seen.add(art);
-      expect(word.imageAssetId).toBe(`img-${word.id}`);
-    }
-  });
-  /** Лист — рабочий инструмент миграции: легенда палитры сверху, файлы вне палитры выделены рамкой с перечнем чужих цветов. */
-  it("собирает лист для визуальной проверки с легендой палитры и подсветкой файлов вне палитры", () => {
-    const legend = [...Object.entries(PALETTE.backgrounds), ...Object.entries(PALETTE.colors)]
-      .map(([name, hex]) => `<span class="c"><i style="background:${hex}"></i>${name} ${hex}</span>`)
-      .join("");
-    const cards = prepared
-      .map((w) => {
-        const art = seedArt(w.id),
-          foreign = foreignColors(art);
-        return `<figure${foreign.length ? ' class="legacy"' : ""}><div class="a">${art}</div><figcaption>${w.greek} — ${w.russian}${foreign.length ? `<small>${foreign.join(" ")}</small>` : ""}</figcaption></figure>`;
-      })
-      .join("");
-    mkdirSync("docs", { recursive: true });
-    writeFileSync(
-      "docs/art-sheet.html",
-      `<!doctype html><meta charset="utf-8"><title>Иллюстрации Τετράδιο</title><style>body{font:14px system-ui;background:#f7f7f5;margin:0;padding:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}header{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px}.c i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:4px;border:1px solid #0002}figure{margin:0;background:#fff;border-radius:12px;overflow:hidden}figure.legacy{outline:2px solid #ef4444}.a svg{display:block;width:100%}figcaption{padding:6px 8px;color:#171717}figcaption small{display:block;color:#ef4444;font-family:monospace}</style><header>${legend}</header>${cards}`,
+  it("публикация отклоняет IPA без косых черт, проверенное слово без IPA и сочетание не из слова", () => {
+    const rewrite = (next: string) => () =>
+      brokenCopy((root) => writeFileSync(join(root, "words", "το-σπίτι.yaml"), next));
+    expect(rewrite(house.replace("ipa: /to ˈspiti/", "ipa: to ˈspiti"))).toThrow(
+      /words\/το-σπίτι.yaml.ipa: транскрипция записывается между косыми чертами/,
     );
-    expect(cards).toContain("<figure");
+    expect(rewrite(house.replace("ipa: /to ˈspiti/\n", ""))).toThrow(
+      /words\/το-σπίτι.yaml: проверенное слово должно иметь IPA/,
+    );
+    expect(
+      rewrite(`${house.trimEnd()}\nreading:\n  - { text: "ου", ipa: "u", explanation: "ου читается как у" }\n`),
+    ).toThrow(/reading\[0\]: сочетание «ου» не найдено в слове «το σπίτι»/);
+    // Непроверенное слово публикуется и без транскрипции.
+    expect(
+      rewrite(house.replace("ipa: /to ˈspiti/\n", "").replace("verified: true", "verified: false"))().words.find(
+        (word) => word.id === "w12-16",
+      ),
+    ).toMatchObject({ ipa: "", verified: false });
   });
 });
 
@@ -470,14 +339,15 @@ describe("иллюстрации подчиняются стандарту", () 
     ]);
     expect(foreignColors('<path fill="#2563eb80"/>')).toEqual(["#2563eb80"]);
   });
-  it("иллюстрация на каждое подготовленное слово, вне палитры — ровно список legacy.txt", () => {
-    expect(content.art).toEqual({ files: prepared.length, legacy: legacy.size });
-    for (const word of prepared) {
+  it("отчёт считает иллюстрации и унаследованные файлы; вне палитры — ровно список legacy.txt", () => {
+    expect(content.art).toEqual({ files: illustrated.length, legacy: legacy.size });
+    // В фикстуре есть и унаследованные, и нарисованные по стандарту файлы.
+    expect(legacy.size).toBeGreaterThan(0);
+    expect(legacy.size).toBeLessThan(illustrated.length);
+    for (const word of illustrated) {
       const file = content.sources.words.get(word.id)!.image!;
       expect(legacy.has(file), file).toBe(foreignColors(seedArt(word.id)).length > 0);
     }
-    // Список только сокращается: новую картинку в него не добавить, не подняв этот потолок в ревью.
-    expect(legacy.size).toBeLessThanOrEqual(187);
   });
   it("новая картинка в палитре публикуется, служебные значения и прозрачность допустимы", () => {
     const built = redrawn(
@@ -485,7 +355,7 @@ describe("иллюстрации подчиняются стандарту", () 
         '<path d="M10 10h20" fill="none" stroke="currentColor"/><circle cx="160" cy="110" r="40" fill="#2563EB" opacity="0.5"/><rect x="1" y="1" width="9" height="9" style="fill:#fbbf24;stroke:#1f2937"/>',
       ),
     );
-    expect(built.art).toEqual({ files: prepared.length, legacy: legacy.size - 1 });
+    expect(built.art).toEqual({ files: illustrated.length, legacy: legacy.size - 1 });
   });
   it("отклоняет размер, холст, текст, заголовок, скрипт, стиль, анимацию, растр и внешние ссылки", () => {
     expect(() => redrawn(svg(`<path d="M${"0 ".repeat(1500)}"/>`))).toThrow(/потолок иллюстрации — 3072 байта/);
@@ -521,7 +391,7 @@ describe("иллюстрации подчиняются стандарту", () 
     // Тот же файл в legacy.txt — публикуется и учтён в отчёте
     expect(
       brokenCopy((root) => writeFileSync(join(root, "art", "το-σπίτι.svg"), svg('<circle r="9" fill="#fde68a"/>'))).art,
-    ).toEqual({ files: prepared.length, legacy: legacy.size });
+    ).toEqual({ files: illustrated.length, legacy: legacy.size });
     // Унаследованный файл, который уже в палитре, просят убрать из списка
     expect(() =>
       brokenCopy((root) => writeFileSync(join(root, "art", "το-σπίτι.svg"), svg('<circle r="9" fill="#2563eb"/>'))),

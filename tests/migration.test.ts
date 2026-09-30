@@ -455,8 +455,8 @@ describe("резервная копия", () => {
     await fresh.delete();
     await fresh.open();
     await restoreBackup(copy, fresh);
-    expect(await fresh.words.count()).toBe(30);
-    expect(await fresh.lessonItems.count()).toBe(30);
+    expect(await fresh.words.count()).toBe(wordsOf("lesson-1-2").length);
+    expect(await fresh.lessonItems.count()).toBe(itemCountOf("lesson-1-2"));
     expect((await fresh.packages.get("lesson-1-2"))!.version).toBe(packageOf("lesson-1-2").version);
     expect(await fresh.words.get("w12-16")).toMatchObject({ russian: "дом (правка)", edited: true });
     expect(await fresh.catalog.count()).toBe(0);

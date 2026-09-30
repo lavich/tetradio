@@ -28,7 +28,7 @@ test("хвост пройденного урока виден на «Сегод�
   await expect(page.getByTestId("backlog")).toContainText("ещё не показаны");
   // Часть слов урока 1.1 повторяется в уроках со сроком: они готовятся к сроку, а не висят в хвосте.
   const cards = await lessonCards(page);
-  // Любой более поздний урок, а не только 1.2-1.4: слово 1.1 может повториться и в наборе третьего уровня.
+  // Любой более поздний урок: слово 1.1 может повториться в любом из следующих наборов курса.
   const upcoming = new Set(
     Object.entries(cards)
       .filter(([id]) => id !== "lesson-1-1")
@@ -152,10 +152,10 @@ test("занятие: знакомство, четыре упражнения, �
   await page.getByRole("link", { name: /Статистика/ }).click();
   const recorded = await page.getByText(/Всего записано/).innerText();
   expect(recorded).not.toContain("Всего записано 0");
-  // Новые слова занятия были из урока 1.2: его строка прогресса больше не «30 новых».
+  // Новые слова занятия были из урока 1.2: его строка прогресса больше не «24 новых».
   await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
   await expect(page.getByRole("link", { name: /1\.2 ·/ })).toContainText("в повторении");
-  await expect(page.getByRole("link", { name: /1\.2 ·/ })).not.toContainText("30 новых");
+  await expect(page.getByRole("link", { name: /1\.2 ·/ })).not.toContainText("24 новых");
 });
 
 test("прогресс урока виден на «Сегодня» и «Уроках» и меняется вслед за состояниями слов", async ({ page }) => {

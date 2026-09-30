@@ -130,12 +130,12 @@ describe("кнопка «Поделиться» на экране слова", (
   }
 
   it("есть у слова курса", async () => {
-    await installLessons(db, ["lesson-3-4"]);
+    await installLessons(db, ["lesson-1-4"]);
     await mount("w34-03");
     await until(() => !!button());
   });
   it("нет у своего слова и у удалённого слова курса", async () => {
-    await installLessons(db, ["lesson-3-4"]);
+    await installLessons(db, ["lesson-1-4"]);
     await saveWord({ ...(await db.words.get("w34-03"))!, id: "own-1", revision: undefined, greek: "το δικό μου" });
     await db.words.update("w34-03", { deletedAt: "2026-01-01T00:00:00.000Z" });
     await mount("own-1");
@@ -147,7 +147,7 @@ describe("кнопка «Поделиться» на экране слова", (
     expect(button()).toBeNull();
   });
   it("отправляет слово в версии курса, без правки пользователя", async () => {
-    await installLessons(db, ["lesson-3-4"]);
+    await installLessons(db, ["lesson-1-4"]);
     await saveWord({ ...(await db.words.get("w34-03"))!, russian: "моя кастрюлька" });
     const shared: { text?: string }[] = [];
     nav.share = async (data: { text?: string }) => void shared.push(data);
@@ -162,7 +162,7 @@ describe("кнопка «Поделиться» на экране слова", (
       ...content.catalog,
       lessons: content.catalog.lessons.map(({ wordIds: _w, ...entry }) => entry),
     };
-    await installLessons(db, ["lesson-3-4"], memoryFetcher(content, { "content/catalog.json": old }));
+    await installLessons(db, ["lesson-1-4"], memoryFetcher(content, { "content/catalog.json": old }));
     await mount("w34-03");
     await until(() => !!edit());
     expect(button()).toBeNull();

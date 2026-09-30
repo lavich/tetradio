@@ -68,9 +68,9 @@ async function upgrade(id: string, next: ContentPackage) {
 
 describe("курсы", () => {
   it("установка запоминает курс урока и в уроке, и в пакете", async () => {
-    await installLessons(db, ["lesson-2-1"]);
-    expect((await db.lessons.get("lesson-2-1"))!.courseId).toBe("leeke");
-    expect((await db.packages.get("lesson-2-1"))!.courseId).toBe("leeke");
+    await installLessons(db, ["lesson-1-3"]);
+    expect((await db.lessons.get("lesson-1-3"))!.courseId).toBe("leeke");
+    expect((await db.packages.get("lesson-1-3"))!.courseId).toBe("leeke");
   });
   it("обновление проставляет курс уроку, установленному без него", async () => {
     await installLessons(db, ["lesson-1-2"]);
@@ -111,7 +111,7 @@ describe("подписка на курс", () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
     expect(await db.courses.get("leeke")).toMatchObject({ subscribed: false });
-    await installLesson("lesson-2-1", db, fetcher);
+    await installLesson("lesson-1-3", db, fetcher);
     expect(await db.courses.get("leeke")).toMatchObject({ subscribed: true });
   });
   it("«Учить курс» ставит все уроки курса и не трогает медиа", async () => {
@@ -190,7 +190,7 @@ describe("каталог", () => {
     };
     await expect(refreshCatalog(db, broken)).rejects.toThrow("Нет сети");
     expect(await db.catalog.count()).toBe(content.catalog.lessons.length);
-    expect(await db.words.count()).toBe(30);
+    expect(await db.words.count()).toBe(wordCountOf("lesson-1-2"));
   });
   it("каталог неподдерживаемой схемы отклоняется без изменения кеша", async () => {
     await refreshCatalog(db, memoryFetcher());
@@ -206,9 +206,9 @@ describe("установка урока", () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
     const result = await installLesson("lesson-1-2", db, fetcher);
-    expect(result).toMatchObject({ status: "installed", added: 30, conflicts: [] });
+    expect(result).toMatchObject({ status: "installed", added: wordCountOf("lesson-1-2"), conflicts: [] });
     expect(fetcher.requests).toEqual(["content/catalog.json", entry("lesson-1-2").url]);
-    expect(await db.words.count()).toBe(30);
+    expect(await db.words.count()).toBe(wordCountOf("lesson-1-2"));
     expect((await lessonItems("lesson-1-2", db)).map((l) => l.ref.id)).toEqual(
       packageOf("lesson-1-2").links.map((l) => l.wordId),
     );
@@ -218,7 +218,7 @@ describe("установка урока", () => {
       status: "upcoming",
     });
     expect(await db.assets.count()).toBe(0); // медиа не скачиваются вместе с пакетом
-    expect(await db.media.count()).toBe(30);
+    expect(await db.media.count()).toBe(packageOf("lesson-1-2").media.length);
     const word = (await db.words.get("w12-16"))!;
     expect(word).toMatchObject({
       greek: "το σπίτι",
@@ -367,7 +367,7 @@ describe("обновление пакета", () => {
     expect((await db.words.get("w12-16"))!.deletedAt).toBeTruthy();
     expect(result.conflicts).toEqual([{ ref: wordRef("w12-16"), label: "το σπίτι", fields: ["deleted"] }]);
     expect(await db.lessonItems.get(["lesson-1-2", wordKeyOf("w12-01")])).toBeUndefined();
-    expect(await db.lessonItems.count()).toBe(29);
+    expect(await db.lessonItems.count()).toBe(itemCountOf("lesson-1-2") - 1);
     expect(await db.words.get("w12-01")).toBeTruthy(); // само слово остаётся
   });
   it("автор убрал карточку из урока: связь исчезает, карточка с прогрессом остаётся в словаре, личные название и дата урока не перезаписываются", async () => {
@@ -475,19 +475,19 @@ describe("медиа и готовность офлайн", () => {
     const fetcher = await installLessons(db, ["lesson-1-2"]);
     expect(await lessonReadiness("lesson-1-2", db)).toMatchObject({
       installed: true,
-      required: 30,
+      required: packageOf("lesson-1-2").media.length,
       present: 0,
       updateAvailable: false,
     });
     const media = packageOf("lesson-1-2").media[0];
     const flaky = memoryFetcher(content, { [media.url]: new Blob(["<svg"], { type: "image/svg+xml" }) }); // повреждённый файл
     const first = await downloadLessonMedia("lesson-1-2", db, flaky);
-    expect(first).toMatchObject({ fetched: 29, failed: [media.id] });
+    expect(first).toMatchObject({ fetched: packageOf("lesson-1-2").media.length - 1, failed: [media.id] });
     expect((await lessonReadiness("lesson-1-2", db)).missing).toEqual([media.id]);
     const second = await downloadLessonMedia("lesson-1-2", db, fetcher);
     expect(second).toEqual({ fetched: 1, failed: [] });
     expect((await lessonReadiness("lesson-1-2", db)).missing).toEqual([]);
-    expect(await db.assets.count()).toBe(30);
+    expect(await db.assets.count()).toBe(packageOf("lesson-1-2").media.length);
   });
   it("нехватка места при сохранении медиа поднимает ошибку хранилища, а не ложный успех", async () => {
     const fetcher = await installLessons(db, ["lesson-1-2"]);
@@ -747,7 +747,7 @@ describe("урок слова по каталогу", () => {
     memoryFetcher(content, { "content/catalog.json": { ...content.catalog, lessons } });
   it("слово одного урока находится по индексу", async () => {
     await refreshCatalog(db, memoryFetcher());
-    expect((await lessonOfWord("w34-03", db))?.id).toBe("lesson-3-4");
+    expect((await lessonOfWord("w34-03", db))?.id).toBe("lesson-1-4");
   });
   it("из нескольких уроков берётся первый в порядке каталога, а не по идентификатору", async () => {
     await refreshCatalog(db, withLessons([lesson("lesson-2-1", ["w1", "w2"]), lesson("lesson-10-1", ["w2"])]));
@@ -763,7 +763,7 @@ describe("урок слова по каталогу", () => {
   it("отсутствующее слово и каталог без индекса дают null", async () => {
     await refreshCatalog(db, memoryFetcher());
     expect(await lessonOfWord("w99-99", db)).toBeNull();
-    await refreshCatalog(db, withLessons([lesson("lesson-3-4")]));
+    await refreshCatalog(db, withLessons([lesson("lesson-1-4")]));
     expect(await lessonOfWord("w34-03", db)).toBeNull();
   });
 });
@@ -777,11 +777,11 @@ describe("просмотр пакета без установки", () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
     const before = await snapshot();
-    const { pack, entry: found } = await previewPackage("lesson-3-4", db, fetcher);
-    expect(pack.id).toBe("lesson-3-4");
-    expect(found.version).toBe(entry("lesson-3-4").version);
+    const { pack, entry: found } = await previewPackage("lesson-1-4", db, fetcher);
+    expect(pack.id).toBe("lesson-1-4");
+    expect(found.version).toBe(entry("lesson-1-4").version);
     expect(pack.words.some((word) => word.id === "w34-03")).toBe(true);
-    await previewPackage("lesson-3-4", db, fetcher);
+    await previewPackage("lesson-1-4", db, fetcher);
     expect(fetcher.requests.filter((url) => url.includes("packages/"))).toHaveLength(1);
     expect(await snapshot()).toEqual(before);
   });
@@ -794,26 +794,26 @@ describe("просмотр пакета без установки", () => {
         throw new TypeError("Failed to fetch");
       },
     };
-    await expect(previewPackage("lesson-3-4", db, offline)).rejects.toMatchObject({ kind: "network" });
-    await expect(previewPackage("lesson-3-4", db, fetcher)).resolves.toBeTruthy();
+    await expect(previewPackage("lesson-1-4", db, offline)).rejects.toMatchObject({ kind: "network" });
+    await expect(previewPackage("lesson-1-4", db, fetcher)).resolves.toBeTruthy();
   });
   it("пакет другого урока или другой версии отклоняется", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
-    const url = entry("lesson-3-4").url;
+    const url = entry("lesson-1-4").url;
     const other = packageOf("lesson-1-1");
-    await expect(previewPackage("lesson-3-4", db, memoryFetcher(content, { [url]: other }))).rejects.toThrow(
+    await expect(previewPackage("lesson-1-4", db, memoryFetcher(content, { [url]: other }))).rejects.toThrow(
       "Пакет не соответствует записи каталога.",
     );
     await expect(
-      previewPackage("lesson-3-4", db, memoryFetcher(content, { [url]: { ...packageOf("lesson-3-4"), version: "x" } })),
+      previewPackage("lesson-1-4", db, memoryFetcher(content, { [url]: { ...packageOf("lesson-1-4"), version: "x" } })),
     ).rejects.toThrow("Пакет не соответствует записи каталога.");
   });
 });
 
 describe("поставляемое слово как запись", () => {
   it("берёт поставляемые поля, ревизию и даты без локальных полей", () => {
-    const card = packageOf("lesson-3-4").words.find((word) => word.id === "w34-03")!;
+    const card = packageOf("lesson-1-4").words.find((word) => word.id === "w34-03")!;
     const word = wordFromPackage(card, "2026-01-01T00:00:00.000Z");
     expect(word).toMatchObject({
       id: "w34-03",

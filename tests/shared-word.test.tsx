@@ -54,7 +54,7 @@ const counts = async () => Object.fromEntries(await Promise.all(userTables.map(a
 
 describe("слово по ссылке", () => {
   it("установленное слово открывается обычным экраном", async () => {
-    await installLessons(db, ["lesson-3-4"]);
+    await installLessons(db, ["lesson-1-4"]);
     mount();
     await until(() => text().includes("экран слова"), "переход на экран слова");
   });
@@ -66,7 +66,7 @@ describe("слово по ссылке", () => {
     await until(() => text().includes("η κατσαρόλα"), "карточка");
     expect(text()).toContain("кастрюля");
     const label = host.querySelector("[data-testid=shared-lesson]")!;
-    expect(label.textContent).toMatch(/^Слово из урока 3\.4/);
+    expect(label.textContent).toMatch(/^Слово из урока 1\.4/);
     expect(host.querySelector("a[href^='/lessons']")).toBeNull();
     expect(text()).not.toContain("Потренировать");
     expect(host.querySelector("[aria-label='Редактировать слово']")).toBeNull();
@@ -78,7 +78,7 @@ describe("слово по ссылке", () => {
   });
 
   it("удалённое слово показывается просмотром и не восстанавливается", async () => {
-    await installLessons(db, ["lesson-3-4"]);
+    await installLessons(db, ["lesson-1-4"]);
     await db.words.update("w34-03", { deletedAt: "2026-01-01T00:00:00.000Z" });
     mount();
     await until(() => text().includes("Слово из урока"), "карточка просмотра");
@@ -138,7 +138,7 @@ describe("слово по ссылке", () => {
 
   it("пакет не загрузился или не совпал с каталогом — сбой с повтором", async () => {
     await refreshCatalog();
-    const url = content.catalog.lessons.find((l) => l.id === "lesson-3-4")!.url;
+    const url = content.catalog.lessons.find((l) => l.id === "lesson-1-4")!.url;
     const other = content.packages.find((p) => p.id === "lesson-1-1")!;
     useFetcher(memoryFetcher(content, { [url]: other }));
     mount();
