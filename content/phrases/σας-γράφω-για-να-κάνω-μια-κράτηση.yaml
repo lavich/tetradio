@@ -1,0 +1,8 @@
+id: p187
+text: Σας γράφω για να κάνω μια κράτηση.
+translation: Пишу вам, чтобы забронировать номер.
+note: офиц.
+provenance:
+  sourceLabel: Лексикон курса, модуль 14 (docs/course/lexicon/14.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 14 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
