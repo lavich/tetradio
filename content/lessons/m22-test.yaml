@@ -123,7 +123,7 @@ blocks:
         explanation: Θέλεις να έρθεις κι εσύ με τον Γιάννη; Πάρε με τηλέφωνο!
   - type: listening
     id: six-holidays
-    title: Шесть человек о праздниках
+    title: Έξι άνθρωποι και οι γιορτές τους
     plays: 2
     transcript:
       - speaker: Ξένια
