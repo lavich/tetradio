@@ -1,3 +1,4 @@
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { buildContent } from "../content/build";
 import { parseCatalog, parsePackage } from "../src/content/schema";
@@ -17,6 +18,23 @@ describe("курс в продукте", () => {
     expect(content.words).toHaveLength(35);
     expect(content.phrases).toHaveLength(14);
     for (const word of content.words) expect(word.ipa, word.greek).toMatch(/^\/.+\/$/);
+  });
+  it("карточки носят короткие идентификаторы из лексикона с тем же написанием", () => {
+    const lexicon = new Map(
+      readdirSync("docs/course/lexicon")
+        .filter((file) => /^\d{2}\.tsv$/.test(file))
+        .flatMap((file) => readFileSync(`docs/course/lexicon/${file}`, "utf8").trim().split("\n").slice(1))
+        .map((line) => line.split("\t"))
+        .map(([id, greek]) => [id, greek]),
+    );
+    for (const word of content.words) {
+      expect(word.id).toMatch(/^w\d{3,}$/);
+      expect(lexicon.get(word.id), word.id).toBe(word.greek);
+    }
+    for (const phrase of content.phrases) {
+      expect(phrase.id).toMatch(/^p\d{3,}$/);
+      expect(lexicon.get(phrase.id), phrase.id).toBe(phrase.text);
+    }
   });
   it("контента Tavelori в продукте нет", () => {
     expect(content.words.some((word) => /^w\d{2}-\d{2}$/.test(word.id))).toBe(false);
