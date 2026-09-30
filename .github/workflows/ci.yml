@@ -2,6 +2,10 @@ name: CI
 
 on:
   pull_request:
+  # Прогон на main сохраняет кеши (npm, браузер Playwright) в ветке по умолчанию: кеш из refs/pull/N/merge
+  # другим pull request недоступен, и без этого каждый PR заново ставил Chromium.
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -49,6 +53,7 @@ jobs:
       - if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
       - run: npm run test:e2e
+      - run: npm run test:e2e:course
 
       - if: failure()
         uses: actions/upload-artifact@v7

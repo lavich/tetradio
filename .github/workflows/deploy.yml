@@ -24,8 +24,8 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      # Тесты уже прошли в pull request: main меняется только через PR с обязательными проверками.
       - run: npm ci
-      - run: npm test
       # База берётся из настроек Pages: `/tetradio/` на github.io, `/` после подключения своего домена.
       - id: pages
         uses: actions/configure-pages@v6

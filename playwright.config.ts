@@ -7,8 +7,9 @@ const port = Number(process.env.PLAYWRIGHT_PORT ?? 4173);
 export default defineConfig({
   testDir: "tests/e2e",
   timeout: 60000,
-  fullyParallel: false,
-  workers: 1,
+  // У каждого теста свой контекст браузера и своя база: тесты независимы и идут параллельно.
+  fullyParallel: true,
+  workers: process.env.CI ? 4 : "50%",
   use: {
     baseURL: `http://localhost:${port}`,
     browserName: "chromium",
