@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Картинки слов — библиотеки</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,700;1,7..72,400&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f9fafc;--grid:#dde6f2;--margin:#e4686a;--print:#23262c;--soft:#5a606b;--ink:#1f47b8;--pen:#cf2f2b;--desk:#e6e3dc;--cell:24px;
+  --serif:"Literata",Georgia,serif;--ui:"Manrope",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--desk);color:var(--print);font-family:var(--ui);padding:44px 28px 72px}
+header{max-width:1180px;margin:0 auto 30px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:baseline}
+header h1{font-family:var(--serif);font-size:30px;letter-spacing:-.02em}
+header p{max-width:620px;font-size:14px;line-height:1.55;color:var(--soft)}
+.direction{max-width:1180px;margin:0 auto 34px;position:relative;border-radius:6px;padding:24px 24px 28px 84px;background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:var(--cell) var(--cell);background-position:-1px -1px;box-shadow:0 20px 40px -28px rgba(40,30,20,.45)}
+.direction::before{content:"";position:absolute;top:0;bottom:0;left:58px;width:2px;background:var(--margin);opacity:.8}
+.letter{position:absolute;left:8px;top:24px;width:42px;text-align:right;font-family:var(--serif);font-size:24px;font-weight:700;color:var(--pen)}
+h2{font-family:var(--serif);font-size:22px;line-height:36px}
+.lead{font-family:var(--serif);font-size:15.5px;line-height:24px;max-width:780px}
+.meta{margin-top:6px;font-size:13px;line-height:22px;color:var(--soft)}
+.meta b{color:var(--print)}
+.pros{display:flex;gap:28px;flex-wrap:wrap;margin-top:4px;font-size:13px;line-height:24px}
+.pros .plus b{color:var(--ink)} .pros .minus b{color:var(--pen)}
+.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px;margin-top:20px}
+@media (max-width:1000px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){body{padding:24px 12px}.direction{padding:20px 14px 24px 60px}.direction::before{left:44px}.letter{left:0}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:#fff;border:1px solid #d9e3f1;border-radius:12px;padding:12px;min-width:0}
+.art{aspect-ratio:4/3;display:grid;place-items:center;border-radius:8px;background:#f4f6fa}
+.art img{width:62%;height:auto}
+/* У OpenMoji внутри файла широкие поля — крупнее, чтобы сравнение было честным. */
+.art img[src*='openmoji']{width:86%}
+.word{font-family:var(--serif);font-size:19px;font-weight:700;line-height:26px;margin-top:10px}
+.word .le{font-weight:400;color:var(--soft)}
+.forms{font-family:var(--serif);font-size:13.5px;color:var(--soft);line-height:20px}
+.ru{font-size:13px;font-weight:600;line-height:20px;margin-top:4px}
+.dark{margin-top:14px;border-radius:10px;padding:12px;background:#17212b;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+@media (max-width:1000px){.dark{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.dark .art{background:#232e3c}
+.darklabel{font-size:12px;color:var(--soft);margin-top:12px;font-weight:600}
+footer{max-width:1180px;margin:10px auto 0;font-size:13px;line-height:1.6;color:var(--soft)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Картинки слов — готовые библиотеки</h1>
+  <p>Вместо рисования кодом — настоящие иллюстрации художников из открытых библиотек. В каждой — сотни предметов в одном стиле, поэтому большинство конкретных слов курса покрываются без ручной работы. Картинки — векторные файлы по 1–3 КБ, работают офлайн.</p>
+</header>
+<main id="root"></main>
+<footer>Картинки лежат в <code>docs/design/art-samples/</code>. Для курса: выбранная библиотека даёт картинку конкретным существительным (дом, кофе, автобус, хлеб…); слова без предмета — без картинки. Атрибуция лицензии — на экране «Ещё → О приложении».</footer>
+<script>
+const WORDS = [
+  ["το","σπίτι","τα σπίτια","дом","house"],["ο","καφές","οι καφέδες","кофе","coffee"],["η","θάλασσα","οι θάλασσες","море","sea"],
+  ["το","λεωφορείο","τα λεωφορεία","автобус","bus"],["ο","ήλιος","мн. ч. нет","солнце","sun"],["το","ψωμί","τα ψωμιά","хлеб","bread"],
+];
+const SETS = [
+  { key:"fluent", title:"Fluent Flat", lead:"Плоские иллюстрации Microsoft: чистые формы, мягкие цвета, много деталей. Ближе всего к «картинке из букваря», но нарисованы профессионально.",
+    license:"MIT — можно использовать и изменять; атрибуция в «О приложении».", plus:"аккуратно и спокойно, хорошо рядом с тетрадью; самый большой выбор предметов", minus:"узнаваемый «стиль Microsoft» в Windows и Teams" },
+  { key:"fluentcolor", title:"Fluent Color", lead:"Та же библиотека в объёмном варианте: градиенты и свет. Выглядит богаче, ближе к современным приложениям.",
+    license:"MIT.", plus:"самые «дорогие» на вид картинки", minus:"объём и блики спорят с плоской бумажной тетрадью" },
+  { key:"openmoji", title:"OpenMoji", lead:"Открытая библиотека с чёрным контуром и плоской заливкой — похоже на рисунки из детской книжки или школьной тетради.",
+    license:"CC BY-SA 4.0 — нужна атрибуция; изменённые картинки — под той же лицензией.", plus:"контур перекликается с «печатью» тетради; характерно и не банально", minus:"лицензия строже; местами проще по рисунку" },
+  { key:"twemoji", title:"Twemoji", lead:"Иллюстрации в стиле Twitter: простые, яркие, крупные формы. Лучше всех читаются в самом маленьком размере.",
+    license:"CC BY 4.0 — нужна атрибуция.", plus:"читаются даже на 24 px, узнаваемы с первого взгляда", minus:"ассоциируются с эмодзи в мессенджере, а не с учебником" },
+];
+const card = (set, [le, w, pl, ru, key]) => `<div class="card"><div class="art"><img src="art-samples/${set}-${key}.svg" alt="${ru}"></div>
+  <p class="word" lang="el"><span class="le">${le}</span> ${w}</p><p class="forms" lang="el">${pl}</p><p class="ru">${ru}</p></div>`;
+document.getElementById("root").innerHTML = SETS.map((set, i) => `
+  <section class="direction"><span class="letter">${i + 1}</span>
+    <h2>${set.title}</h2><p class="lead">${set.lead}</p>
+    <p class="meta"><b>Лицензия:</b> ${set.license}</p>
+    <div class="pros"><span class="plus"><b>+</b> ${set.plus}</span><span class="minus"><b>−</b> ${set.minus}</span></div>
+    <div class="cards">${WORDS.map((word) => card(set.key, word)).join("")}</div>
+    <p class="darklabel">Тёмная тема Telegram</p>
+    <div class="dark">${WORDS.map(([, , , ru, key]) => `<div class="art"><img src="art-samples/${set.key}-${key}.svg" alt="${ru}"></div>`).join("")}</div>
+  </section>`).join("");
+</script>
+</body>
+</html>
