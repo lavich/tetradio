@@ -178,7 +178,8 @@ function checkScripts(value: unknown, where: string): void {
         !/^(?:[A-Za-z]*\d|Α\d)/u.test(hit[0]) &&
         !/^https?:/.test(hit[0]) &&
         !hit[0].includes("[") &&
-        !/\.(?:svg|png|webp|jpe?g|mp3|ogg|m4a|wav|yaml)$/.test(hit[0])
+        !hit[0].includes("/") &&
+        !/\.(?:svg|png|webp|jpe?g|mp3|ogg|m4a|wav|yaml)\b/.test(hit[0])
       )
         fail(`${where}: в слове «${hit[0]}» смешаны алфавиты — проверьте раскладку`);
     }
