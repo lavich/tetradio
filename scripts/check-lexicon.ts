@@ -4,7 +4,9 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const DIR = "docs/course/lexicon";
-const HEADER = "greek\tpos\tforms\tru\tnote";
+const HEADER = "id\tgreek\tpos\tforms\tru\tnote";
+/** Короткий стабильный идентификатор: не зависит от написания, чтобы правка опечатки не теряла прогресс. */
+const ID = /^[wp]\d{3,}$/;
 const POS = new Set(["сущ", "глаг", "прил", "нареч", "мест", "числ", "предл", "союз", "част", "межд", "фраза"]);
 const ARTICLES = /^(ο|η|το|οι|τα) /;
 /** Минимум слов (без фраз) по номеру модуля; сверху допускается запас на числа и опорные слова. */
@@ -46,6 +48,7 @@ const lemma = (greek: string) => greek.replace(ARTICLES, "").toLowerCase().trim(
 const errors: string[] = [];
 const warnings: string[] = [];
 const seen = new Map<string, string>();
+const ids = new Map<string, string>();
 const files = readdirSync(DIR)
   .filter((name) => /^\d{2}\.tsv$/.test(name))
   .sort();
@@ -63,11 +66,17 @@ for (const name of files) {
   for (const [index, line] of lines.slice(1).entries()) {
     const at = `${name}:${index + 2}`;
     const cells = line.split("\t");
-    if (cells.length < 4 || cells.length > 5) {
-      errors.push(`${at}: ${cells.length} колонок вместо 5`);
+    if (cells.length < 5 || cells.length > 6) {
+      errors.push(`${at}: ${cells.length} колонок вместо 6`);
       continue;
     }
-    const [greek, pos, forms, ru] = cells.map((cell) => cell.trim());
+    const [id, greek, pos, forms, ru] = cells.map((cell) => cell.trim());
+    if (!ID.test(id)) errors.push(`${at}: идентификатор «${id}» — w или p и номер`);
+    else if ((pos === "фраза") !== id.startsWith("p"))
+      errors.push(`${at}: идентификатор ${id} не того вида (фраза — p, слово — w)`);
+    const twinId = ids.get(id);
+    if (twinId) errors.push(`${at}: идентификатор ${id} уже занят в ${twinId}`);
+    else ids.set(id, at);
     if (!POS.has(pos)) errors.push(`${at}: неизвестная часть речи «${pos}»`);
     if (!ru) errors.push(`${at}: нет перевода`);
     if (!GREEK_TEXT.test(greek)) errors.push(`${at}: «${greek}» содержит не греческие символы`);
