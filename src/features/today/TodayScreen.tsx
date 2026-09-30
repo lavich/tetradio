@@ -18,6 +18,7 @@ import { nextLessonIds } from "../lessons/courses";
 import { dexieSource } from "../../storage/queries";
 import { DayNotes } from "./DayNotes";
 import { FirstRun } from "./FirstRun";
+import { CourseNext } from "../course/CourseNext";
 import ui from "../../shared/ui.module.css";
 
 export function TodayScreen() {
@@ -136,6 +137,7 @@ export function TodayScreen() {
         </p>
       )}
 
+      <CourseNext />
       {next && lesson ? (
         <Link to={`/lessons/${lesson.id}`} className="mb-3 block rounded-[var(--radius-card)] no-underline">
           <Card className="bg-soft ring-0 transition-colors hover:bg-[color-mix(in_srgb,var(--soft),var(--primary)_6%)]">
@@ -169,7 +171,7 @@ export function TodayScreen() {
                 <div className="grid min-w-0 flex-1 gap-1">
                   <CardTitle className="text-xl font-bold">Занятие не назначено</CardTitle>
                   <CardDescription className="text-foreground/75">
-                    Задайте расписание на экране «Уроки», и план распределит карточки по дням занятий.
+                    Задайте дни занятий в расписании уроков, и план распределит карточки по дням.
                   </CardDescription>
                 </div>
                 <ChevronRight className="shrink-0 text-accent-foreground" />

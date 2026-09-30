@@ -20,6 +20,9 @@ const named = <K extends string>(key: K, load: () => Promise<Record<K, React.Com
   lazy(() => loadScreen(load).then((module) => ({ default: module[key] })));
 const LessonsScreen = named("LessonsScreen", () => import("../features/lessons/LessonsScreen"));
 const LessonScreen = named("LessonScreen", () => import("../features/lessons/LessonScreen"));
+const CourseScreen = named("CourseScreen", () => import("../features/course/screens"));
+const ModuleScreen = named("ModuleScreen", () => import("../features/course/screens"));
+const CourseLessonScreen = named("CourseLessonScreen", () => import("../features/course/screens"));
 const WordsScreen = named("WordsScreen", () => import("../features/words/WordsScreen"));
 const WordScreen = named("WordScreen", () => import("../features/words/WordScreen"));
 const SharedWordScreen = named("SharedWordScreen", () => import("../features/words/SharedWordScreen"));
@@ -63,6 +66,9 @@ export function App() {
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<TodayScreen />} />
+          <Route path="/course" element={<CourseScreen />} />
+          <Route path="/course/:moduleId" element={<ModuleScreen />} />
+          <Route path="/course/:moduleId/:lessonId" element={<CourseLessonScreen />} />
           <Route path="/lessons" element={<LessonsScreen />} />
           <Route path="/lessons/:id" element={<LessonScreen />} />
           <Route path="/words" element={<WordsScreen />} />

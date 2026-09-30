@@ -62,7 +62,7 @@ test("полная копия переносит слова, правки и м�
   const fresh = await clean.newPage();
   await fresh.goto("/");
   await ready(fresh);
-  await fresh.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await fresh.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await fresh.getByRole("button", { name: "Задать расписание" }).click();
   await fresh.locator("#start").fill("2026-12-01");
   await fresh.getByRole("button", { name: "Пн", exact: true }).click();
@@ -85,7 +85,7 @@ test("полная копия переносит слова, правки и м�
   await fresh.getByRole("link", { name: /το σπίτι/ }).click();
   await expect(fresh.getByText("дом (моя правка)")).toBeVisible();
   await expect(fresh.getByTestId("word-art")).toBeVisible();
-  await fresh.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+  await fresh.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await expect(fresh.getByText("Не задано — даты уроков назначаются вручную")).toBeVisible();
   await clean.close();
 });

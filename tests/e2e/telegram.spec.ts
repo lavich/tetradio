@@ -46,7 +46,7 @@ test.describe("запуск внутри Telegram", () => {
     await page.getByRole("alertdialog").getByRole("button", { name: "Понятно" }).click();
     await expect(page.getByRole("alertdialog")).toHaveCount(0);
     await expect(page.getByTestId("today-title")).toBeVisible();
-    await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
     await expect(page.getByRole("button", { name: "Назад" })).toHaveCount(0);
     await page.getByRole("link", { name: /1\.2/ }).click();
     await expect(page.getByRole("button", { name: "Назад" })).toBeVisible(); // нативной кнопки нет — внутренняя остаётся
@@ -61,7 +61,7 @@ test.describe("навигация, тема и размеры", () => {
     await installLessons(page, ["lesson-1-1"]);
     const bridge = tg(page);
     expect(await bridge.backVisible()).toBe(false);
-    await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
     await expect.poll(() => bridge.backVisible()).toBe(true);
     await page.getByRole("link", { name: /1\.1/ }).click();
     await expect(page.getByRole("heading", { name: /^Слова · \d+$/ })).toBeVisible();
@@ -596,7 +596,7 @@ test.describe("ссылка на слово через бота", () => {
     await launch(page, { startParam: "w_w34-03", queryId: "Q1" });
     await dismissWelcome(page);
     await expect(page.getByText("η κατσαρόλα", { exact: true }).first()).toBeVisible();
-    await page.getByRole("navigation").getByRole("link", { name: "Уроки" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
     await expect(page).toHaveURL(/\/lessons$/);
     await page.reload();
     await expect(page.getByRole("link", { name: /1\.2/ })).toBeVisible();
