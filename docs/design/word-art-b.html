@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Αναγνωστικό — три варианта</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f9fafc; --grid:#dde6f2; --margin:#e4686a; --print:#23262c; --soft:#5a606b; --ink:#1f47b8; --pen:#cf2f2b; --desk:#e6e3dc; --cell:24px;
+  --serif:"Literata",Georgia,serif; --ui:"Manrope",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--desk);color:var(--print);font-family:var(--ui);padding:44px 28px 72px}
+header{max-width:1180px;margin:0 auto 30px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:baseline}
+header h1{font-family:var(--serif);font-size:30px;letter-spacing:-.02em}
+header p{max-width:600px;font-size:14px;line-height:1.55;color:var(--soft)}
+.direction{max-width:1180px;margin:0 auto 34px;position:relative;border-radius:6px;padding:24px 24px 28px 84px;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:var(--cell) var(--cell);background-position:-1px -1px;box-shadow:0 20px 40px -28px rgba(40,30,20,.45)}
+.direction::before{content:"";position:absolute;top:0;bottom:0;left:58px;width:2px;background:var(--margin);opacity:.8}
+.letter{position:absolute;left:8px;top:24px;width:42px;text-align:right;font-family:var(--serif);font-size:24px;font-weight:700;color:var(--pen)}
+.direction h2{font-family:var(--serif);font-size:22px;line-height:36px}
+.lead{font-family:var(--serif);font-size:15.5px;line-height:24px;max-width:780px}
+.rules{margin-top:8px;display:grid;gap:2px;font-size:13px;line-height:22px;max-width:880px}
+.rules b{color:var(--ink)}
+.pros{display:flex;gap:28px;flex-wrap:wrap;margin-top:6px;font-size:13px;line-height:24px}
+.pros .plus b{color:var(--ink)} .pros .minus b{color:var(--pen)}
+.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px;margin-top:22px}
+@media (max-width:1000px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){body{padding:24px 12px}.direction{padding:20px 14px 24px 60px}.direction::before{left:44px}.letter{left:0}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:#fff;border:1px solid #d9e3f1;border-radius:12px;padding:12px;min-width:0}
+.art{aspect-ratio:4/3;display:grid;place-items:center}
+.art svg{width:100%;height:100%;overflow:visible}
+.word{font-family:var(--serif);font-size:19px;font-weight:700;line-height:26px;margin-top:10px}
+.word .le{font-weight:400;color:var(--soft)}
+.forms{font-family:var(--serif);font-size:13.5px;color:var(--soft);line-height:20px}
+.ru{font-size:13px;font-weight:600;line-height:20px;margin-top:4px}
+/* Б2: наклейка слегка повёрнута, как вклеенная рукой */
+.sticker .art svg{filter:drop-shadow(0 2px 2px rgba(35,38,44,.22))}
+[data-variant="stamp"] .art svg{filter:drop-shadow(0 1.5px 2px rgba(35,38,44,.28))}
+.dark{margin-top:18px;border-radius:10px;padding:14px;background:#1d2530;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+@media (max-width:1000px){.dark{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.dark .art{background:#263140;border-radius:8px}
+.darklabel{font-size:12px;color:var(--soft);margin-top:14px;font-weight:600}
+footer{max-width:1180px;margin:10px auto 0;font-size:13px;line-height:1.6;color:var(--soft)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Αναγνωστικό — три варианта</h1>
+  <p>Развитие варианта «картинка из букваря». Одни и те же формы предметов в трёх способах «печати». Цвета — только из палитры обложек тетрадей; у каждого варианта своё правило, по которому рисуются все слова курса. Внизу каждого — те же картинки в тёмной теме Telegram.</p>
+</header>
+
+<section class="direction" data-variant="litho"><span class="letter">Б1</span>
+  <h2>Литография</h2>
+  <p class="lead">Как картинки в греческих букварях 60–70-х: две-три краски печатаются отдельными формами и слегка «не попадают» друг в друга, а там, где краски ложатся внахлёст, появляется третий оттенок. На тёплой бумаге.</p>
+  <div class="rules"><span><b>Правило:</b> 2–3 краски из палитры обложек, без контуров; вторая форма сдвинута на 2 px; наложение — умножением цветов.</span><span><b>Фон:</b> тёплая бумага, одна для всех слов.</span></div>
+  <div class="pros"><span class="plus"><b>+</b> больше всего «книжного» характера, тёплое и узнаваемое</span><span class="minus"><b>−</b> сдвиг форм мелко читается на маленьком экране; в тёмной теме бумагу приходится оставлять светлой</span></div>
+  <div class="cards"></div><p class="darklabel">Тёмная тема Telegram</p><div class="dark"></div>
+</section>
+
+<section class="direction sticker" data-variant="sticker"><span class="letter">Б2</span>
+  <h2>Наклейка</h2>
+  <p class="lead">Картинка вырезана из цветной бумаги и вклеена в тетрадь чуть криво. Фон наклейки — цвет обложки модуля, в котором вводится слово: открываешь карточку и сразу видишь, из какой тетради слово.</p>
+  <div class="rules"><span><b>Правило:</b> квадрат цвета обложки модуля, предмет — светлые и цветные формы поверх, лёгкая тень бумаги; поворот −2…+2° по номеру слова.</span><span><b>Связь с курсом:</b> цвет = модуль (как на полке).</span></div>
+  <div class="pros"><span class="plus"><b>+</b> связывает слово с модулем; одинаково хорошо в светлой и тёмной теме</span><span class="minus"><b>−</b> цвет предмета иногда спорит с фоном модуля</span></div>
+  <div class="cards"></div><p class="darklabel">Тёмная тема Telegram</p><div class="dark"></div>
+</section>
+
+<section class="direction" data-variant="stamp"><span class="letter">Б3</span>
+  <h2>Марка</h2>
+  <p class="lead">Каждое слово — почтовая марка с зубцами, как марки Кипра и Греции. Номинал марки — номер модуля. Выученные слова собираются, как коллекция марок: можно показывать «альбом» пройденного модуля.</p>
+  <div class="rules"><span><b>Правило:</b> зубцы и белое поле марки, внутри — сцена в краске модуля, в углу номинал «06»; без надписей-слов.</span><span><b>Возможность:</b> экран «альбом марок» как маркер пути без очков и стриков.</span></div>
+  <div class="pros"><span class="plus"><b>+</b> самое характерное и «коллекционное»; естественный маркер пути</span><span class="minus"><b>−</b> мелкие зубцы и номинал плохо читаются в маленьких размерах; больше деталей на слово</span></div>
+  <div class="cards"></div><p class="darklabel">Тёмная тема Telegram</p><div class="dark"></div>
+</section>
+
+<footer>Все картинки собраны из одних и тех же форм — меняется только способ печати. Это и есть правило для курса: форма предмета рисуется один раз, а вид задаёт выбранный вариант. Для сотен слов формы стоит заказать художнику или сгенерировать; здесь они построены простой геометрией.</footer>
+
+<script>
+/* Палитра обложек тетрадей (как на полке) и цвета предметов */
+const C = { green:"#2f6d4f", terra:"#b8452b", blue:"#2c4f9e", ochre:"#b8871a", plum:"#7b3f74", teal:"#1f6f7a", paper:"#fbf8f1", ink:"#23262c", sun:"#e2a52c", navy:"#1d3a78" };
+const COVERS = [C.green, C.terra, C.blue, C.ochre, C.plum, C.teal];
+const cover = (n) => COVERS[(n - 1) % COVERS.length];
+
+/* Формы предметов: [роль, svg-элемент]. Роль задаёт краску «печатной формы». */
+const WORDS = [
+  { le:"το", w:"σπίτι", pl:"τα σπίτια", ru:"дом", mod:6, shapes:[
+    ["b", `<path d="M24 46 60 17l36 29z"/>`, C.terra],
+    ["a", `<rect x="33" y="44" width="54" height="32"/>`, C.teal],
+    ["p", `<rect x="54" y="56" width="12" height="20"/><rect x="40" y="51" width="9" height="9"/><rect x="71" y="51" width="9" height="9"/>`],
+    ["b", `<rect x="75" y="21" width="7" height="14"/>`, C.terra] ]},
+  { le:"ο", w:"καφές", pl:"οι καφέδες", ru:"кофе", mod:8, shapes:[
+    ["a", `<ellipse cx="58" cy="75" rx="30" ry="5"/>`, C.ochre],
+    ["a", `<path d="M38 42h40l-5 30H43z"/>`, C.terra],
+    ["p", `<path d="M41 46h34l-1 6H42z"/>`],
+    ["b", `<path d="M78 50c11 0 11 15 0 15" fill="none" stroke-width="4"/>`, C.terra, "stroke"],
+    ["b", `<path d="M52 34c-4-5 4-8 0-13M64 34c-4-5 4-8 0-13" fill="none" stroke-width="3" stroke-linecap="round"/>`, C.ochre, "stroke"] ]},
+  { le:"η", w:"θάλασσα", pl:"οι θάλασσες", ru:"море", mod:14, shapes:[
+    ["b", `<circle cx="84" cy="32" r="12"/>`, C.sun],
+    ["a", `<path d="M6 54c9-7 18-7 27 0s18 7 27 0 18-7 27 0 18 7 27 0v34H6z"/>`, C.blue],
+    ["a", `<path d="M6 69c9-6 18-6 27 0s18 6 27 0 18-6 27 0 18 6 27 0v19H6z"/>`, C.navy] ]},
+  { le:"το", w:"λεωφορείο", pl:"τα λεωφορεία", ru:"автобус", mod:13, shapes:[
+    ["a", `<rect x="14" y="22" width="92" height="44" rx="8"/>`, C.green],
+    ["p", `<rect x="22" y="30" width="16" height="14" rx="2"/><rect x="43" y="30" width="16" height="14" rx="2"/><rect x="64" y="30" width="16" height="14" rx="2"/><rect x="87" y="30" width="11" height="27" rx="2"/>`],
+    ["b", `<rect x="14" y="52" width="92" height="5"/>`, C.ochre],
+    ["i", `<circle cx="35" cy="68" r="8"/><circle cx="85" cy="68" r="8"/>`, C.ink],
+    ["p", `<circle cx="35" cy="68" r="3"/><circle cx="85" cy="68" r="3"/>`] ]},
+  { le:"ο", w:"ήλιος", pl:"мн. ч. нет", ru:"солнце", mod:19, shapes:[
+    ["a", `<rect x="57" y="8" width="6" height="14" rx="3"/><rect x="57" y="68" width="6" height="14" rx="3"/><rect x="23" y="42" width="14" height="6" rx="3"/><rect x="83" y="42" width="14" height="6" rx="3"/><rect x="33" y="17" width="6" height="12" rx="3" transform="rotate(-45 36 23)"/><rect x="81" y="61" width="6" height="12" rx="3" transform="rotate(-45 84 67)"/><rect x="81" y="17" width="6" height="12" rx="3" transform="rotate(45 84 23)"/><rect x="33" y="61" width="6" height="12" rx="3" transform="rotate(45 36 67)"/>`, C.ochre],
+    ["b", `<circle cx="60" cy="45" r="18"/>`, C.sun],
+    ["a", `<circle cx="60" cy="45" r="9"/>`, C.terra] ]},
+  { le:"το", w:"ψωμί", pl:"τα ψωμιά", ru:"хлеб", mod:8, shapes:[
+    ["a", `<path d="M18 64c0-23 18-34 42-34s42 11 42 34z"/>`, C.ochre],
+    ["b", `<rect x="18" y="62" width="84" height="9" rx="3"/>`, C.terra],
+    ["p", `<path d="M40 42l6 12M58 38l6 13M76 42l6 12" fill="none" stroke-width="4" stroke-linecap="round"/>`, null, "stroke"] ]},
+];
+
+const paint = (shape, color) => {
+  const [, body, , mode] = shape;
+  return mode === "stroke" ? `<g stroke="${color}" fill="none">${body}</g>` : `<g fill="${color}">${body}</g>`;
+};
+const colorOf = (shape, fallbackPaper) => (shape[0] === "p" ? fallbackPaper : shape[2]);
+
+function litho(word, dark) {
+  const bg = dark ? "#efe7d6" : "#f4ecdc";
+  // Две «печатные формы»: основная (a, i, p) и вторая (b) со сдвигом; наложение — умножением.
+  const plateA = word.shapes.filter((s) => s[0] !== "b").map((s) => paint(s, colorOf(s, bg))).join("");
+  const plateB = word.shapes.filter((s) => s[0] === "b").map((s) => paint(s, s[2])).join("");
+  return `<svg viewBox="0 0 120 90" role="img" aria-label="${word.ru}"><rect width="120" height="90" rx="6" fill="${bg}"/>
+    <g style="mix-blend-mode:multiply">${plateA}</g><g transform="translate(2 1.5)" style="mix-blend-mode:multiply" opacity=".92">${plateB}</g></svg>`;
+}
+function sticker(word, index) {
+  const tile = cover(word.mod);
+  const tilt = [-2, 1.5, -1, 2, -1.5, 1][index % 6];
+  // На фоне модуля предмет того же цвета пропал бы: такой цвет заменяется бумажным.
+  const shapes = word.shapes.map((s) => paint(s, s[0] === "p" ? tile : s[2] === tile ? C.paper : s[2])).join("");
+  return `<svg viewBox="0 0 120 90" role="img" aria-label="${word.ru}"><g transform="rotate(${tilt} 60 45)">
+    <rect x="10" y="4" width="100" height="82" rx="4" fill="${tile}"/><g transform="translate(6 3) scale(.9)">${shapes}</g></g></svg>`;
+}
+function stamp(word, dark) {
+  const tone = cover(word.mod);
+  const field = "#f3ecdd";
+  // Зубцы — круглые вырезы по краю поля марки.
+  const holes = [];
+  for (let x = 12; x <= 108; x += 8) holes.push(`<circle cx="${x}" cy="3" r="2.6"/><circle cx="${x}" cy="87" r="2.6"/>`);
+  for (let y = 11; y <= 81; y += 8) holes.push(`<circle cx="8" cy="${y}" r="2.6"/><circle cx="112" cy="${y}" r="2.6"/>`);
+  const shapes = word.shapes.map((s) => paint(s, s[0] === "p" ? "#fbf3e2" : s[2] === tone ? C.paper : s[2])).join("");
+  const id = `m${word.w}${dark ? "d" : ""}`;
+  return `<svg viewBox="0 0 120 90" role="img" aria-label="${word.ru}"><defs><mask id="${id}"><rect x="6" y="1" width="108" height="88" fill="#fff"/><g fill="#000">${holes.join("")}</g></mask></defs>
+    <rect x="6" y="1" width="108" height="88" fill="${field}" mask="url(#${id})"/>
+    <rect x="15" y="9" width="90" height="72" fill="${tone}"/>
+    <g transform="translate(22 13) scale(.64)">${shapes}</g>
+    <text x="100" y="76" text-anchor="end" font-family="Manrope,sans-serif" font-weight="800" font-size="11" fill="${C.paper}">${String(word.mod).padStart(2, "0")}</text></svg>`;
+}
+
+const renderers = { litho, sticker, stamp };
+for (const section of document.querySelectorAll(".direction")) {
+  const variant = section.dataset.variant;
+  const render = renderers[variant];
+  section.querySelector(".cards").innerHTML = WORDS.map((word, i) => `
+    <div class="card"><div class="art">${render(word, variant === "sticker" ? i : false)}</div>
+      <p class="word" lang="el"><span class="le">${word.le}</span> ${word.w}</p>
+      <p class="forms" lang="el">${word.pl}</p><p class="ru">${word.ru} · модуль ${String(word.mod).padStart(2, "0")}</p></div>`).join("");
+  section.querySelector(".dark").innerHTML = WORDS.map((word, i) =>
+    `<div class="art">${variant === "sticker" ? sticker(word, i) : render(word, true)}</div>`).join("");
+}
+</script>
+</body>
+</html>
