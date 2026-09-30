@@ -1,6 +1,9 @@
 import { defineConfig } from "@playwright/test";
 const port = Number(process.env.PLAYWRIGHT_PORT ?? 4173);
-/** Браузерные проверки идут по production build, как и реальное использование. */
+/**
+ * Браузерные проверки идут по production build, как и реальное использование. Механики проверяются на фикстуре
+ * контента Tavelori (tests/fixtures/tavelori-content), а не на курсе: он в продукт не входит.
+ */
 export default defineConfig({
   testDir: "tests/e2e",
   timeout: 60000,
@@ -13,7 +16,7 @@ export default defineConfig({
     deviceScaleFactor: 2,
   },
   webServer: {
-    command: `npm run build && npx vite preview --host 0.0.0.0 --port ${port} --strictPort`,
+    command: `CONTENT_ROOT=tests/fixtures/tavelori-content npm run build && npx vite preview --host 0.0.0.0 --port ${port} --strictPort`,
     url: `http://localhost:${port}`,
     reuseExistingServer: true,
     timeout: 120000,

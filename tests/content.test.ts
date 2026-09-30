@@ -22,7 +22,7 @@ const rows = (title: string) =>
         .map((cell) => cell.trim()),
     );
 
-const content = buildContent();
+const content = buildContent("tests/fixtures/tavelori-content");
 const seedWords = content.words;
 /** Подготовленные карточки: у них проверена фонетика, поэтому к ним предъявляются полные требования. */
 const prepared = content.words.filter((word) => word.verified);
@@ -41,8 +41,8 @@ const seedArt = (id: string) =>
 function brokenCopy(mutate: (root: string) => void) {
   const root = mkdtempSync(join(tmpdir(), "tetradio-content-"));
   // Копируются все папки контента: новый вид карточек не должен ломать фикстуру.
-  for (const entry of readdirSync("content", { withFileTypes: true }))
-    if (entry.isDirectory()) cpSync(join("content", entry.name), join(root, entry.name), { recursive: true });
+  for (const entry of readdirSync("tests/fixtures/tavelori-content", { withFileTypes: true }))
+    if (entry.isDirectory()) cpSync(join("tests/fixtures/tavelori-content", entry.name), join(root, entry.name), { recursive: true });
   mutate(root);
   try {
     return buildContent(root);
@@ -179,7 +179,7 @@ describe("уроки принадлежат курсам", () => {
     // Порядок состава задаёт файл курса, порядок пакетов — обход каталога уроков: совпадать они не обязаны.
     expect([...leeke.lessonIds].sort()).toEqual(content.packages.map((pack) => pack.id).sort());
     expect(leeke.lessonIds).toEqual(
-      readFileSync("content/courses/leeke.yaml", "utf8")
+      readFileSync("tests/fixtures/tavelori-content/courses/leeke.yaml", "utf8")
         .split("\n")
         .flatMap((line) => /^\s+- (\S+)$/.exec(line)?.[1] ?? []),
     );
@@ -187,7 +187,7 @@ describe("уроки принадлежат курсам", () => {
     for (const pack of content.packages) expect(pack.courseId, pack.id).toBe("leeke");
   });
   it("публикация требует, чтобы урок входил ровно в один курс", () => {
-    const leeke = readFileSync("content/courses/leeke.yaml", "utf8");
+    const leeke = readFileSync("tests/fixtures/tavelori-content/courses/leeke.yaml", "utf8");
     expect(() =>
       brokenCopy((root) => writeFileSync(join(root, "courses", "leeke.yaml"), leeke.replace("  - lesson-2-2\n", ""))),
     ).toThrow(/lessons\/lesson-2-2.yaml: урок не входит ни в один курс/);
@@ -202,7 +202,7 @@ describe("уроки принадлежат курсам", () => {
   });
   it("курс несёт язык и требует один язык на все свои уроки", () => {
     expect(content.catalog.courses.find((course) => course.id === "leeke")!.language).toBe("el");
-    const lesson = readFileSync("content/lessons/lesson-2-2.yaml", "utf8");
+    const lesson = readFileSync("tests/fixtures/tavelori-content/lessons/lesson-2-2.yaml", "utf8");
     expect(() =>
       brokenCopy((root) =>
         writeFileSync(join(root, "lessons", "lesson-2-2.yaml"), lesson.replace("language: el", "language: en")),
@@ -265,13 +265,13 @@ describe("каталог и пакеты", () => {
     expect([...content.sources.lessons.keys()]).toEqual(content.packages.map((p) => p.id));
   });
   it("публикация отклоняет дубликаты слов, битые ссылки уроков, сирот и подписи в картинках", () => {
-    const house = readFileSync("content/words/το-σπίτι.yaml", "utf8");
+    const house = readFileSync("tests/fixtures/tavelori-content/words/το-σπίτι.yaml", "utf8");
     expect(() =>
       brokenCopy((root) => {
         writeFileSync(join(root, "words", "дубль.yaml"), house.replace("id: w12-16", "id: w99-01"));
         writeFileSync(
           join(root, "lessons", "lesson-1-2.yaml"),
-          readFileSync("content/lessons/lesson-1-2.yaml", "utf8").replace("- w12-16", "- w99-01"),
+          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-2.yaml", "utf8").replace("- w12-16", "- w99-01"),
         );
       }),
     ).toThrow(/повторяет слово «το σπίτι — дом»/);
@@ -282,7 +282,7 @@ describe("каталог и пакеты", () => {
       brokenCopy((root) =>
         writeFileSync(
           join(root, "lessons", "lesson-1-2.yaml"),
-          readFileSync("content/lessons/lesson-1-2.yaml", "utf8").replace("- w12-16", "- w12-99"),
+          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-2.yaml", "utf8").replace("- w12-16", "- w12-99"),
         ),
       ),
     ).toThrow(/слова w12-99 нет/);
@@ -313,7 +313,7 @@ describe("каталог и пакеты", () => {
       writeFileSync(join(root, "words", "το-δοκίμιο.yaml"), "greek: το δοκίμιο\nrussian: очерк\n");
       writeFileSync(
         join(root, "lessons", "lesson-1-4.yaml"),
-        readFileSync("content/lessons/lesson-1-4.yaml", "utf8") + "  - το-δοκίμιο\n",
+        readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-4.yaml", "utf8") + "  - το-δοκίμιο\n",
       );
     });
     expect(built.words.find((word) => word.id === "το-δοκίμιο")).toMatchObject({
@@ -433,9 +433,9 @@ describe("карточка каждого подготовленного сло�
 
 /** Стандарт иллюстраций (docs/art-standard.md): палитра — данные, проверки — в публикации, старые файлы — в legacy.txt. */
 describe("иллюстрации подчиняются стандарту", () => {
-  const legacyText = readFileSync("content/art/legacy.txt", "utf8");
+  const legacyText = readFileSync("tests/fixtures/tavelori-content/art/legacy.txt", "utf8");
   const legacy = parseLegacy(legacyText);
-  const house = readFileSync("content/words/το-σπίτι.yaml", "utf8");
+  const house = readFileSync("tests/fixtures/tavelori-content/words/το-σπίτι.yaml", "utf8");
   const svg = (inner: string, attrs = 'viewBox="0 0 320 220"') =>
     `<svg xmlns="http://www.w3.org/2000/svg" ${attrs}><rect width="320" height="220" fill="#e7eefb"/>${inner}</svg>`;
   /** Копия, в которой το-σπίτι.svg перерисован заново и больше не числится унаследованным. */
@@ -537,7 +537,7 @@ describe("иллюстрации подчиняются стандарту", () 
         );
         writeFileSync(
           join(root, "lessons", "lesson-1-4.yaml"),
-          readFileSync("content/lessons/lesson-1-4.yaml", "utf8") + "  - το-δοκίμιο\n",
+          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-4.yaml", "utf8") + "  - το-δοκίμιο\n",
         );
       }),
     ).toThrow(/art\/το-δοκίμιο.svg: цвета вне палитры #123456/);
@@ -547,7 +547,7 @@ describe("иллюстрации подчиняются стандарту", () 
 
 /** Разметка слов примера (add-example-word-glosses): отрезки находятся сборкой, ссылки проверяются по каталогу. */
 describe("разметка слов примера", () => {
-  const house = readFileSync("content/words/το-σπίτι.yaml", "utf8");
+  const house = readFileSync("tests/fixtures/tavelori-content/words/το-σπίτι.yaml", "utf8");
   const withWords = (words: string) => (root: string) =>
     writeFileSync(join(root, "words", "το-σπίτι.yaml"), `${house.trimEnd()}\n    words:\n${words}`);
   const pilot = [

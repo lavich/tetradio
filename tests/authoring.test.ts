@@ -11,9 +11,9 @@ const DOC = "docs/lesson-authoring.md",
   TEMPLATES = "docs/lesson-authoring",
   SKILL = ".agents/skills/prepare-lesson/SKILL.md";
 /** Примеры употребления всех слов каталога: материал, из которого готовится непубликуемая фикстура. */
-const projectExamples = readdirSync("content/words").flatMap((file) =>
+const projectExamples = readdirSync("tests/fixtures/tavelori-content/words").flatMap((file) =>
   (
-    (parse(readFileSync(join("content/words", file), "utf8")) as { examples?: { greek: string; russian: string }[] })
+    (parse(readFileSync(join("tests/fixtures/tavelori-content/words", file), "utf8")) as { examples?: { greek: string; russian: string }[] })
       .examples ?? []
   ).map((example) => ({ ...example, file })),
 );
@@ -23,8 +23,8 @@ describe("шаблоны инструкции", () => {
   it("слово, фраза и смешанный урок из docs/ проходят тот же валидатор, что и каталог", () => {
     const root = mkdtempSync(join(tmpdir(), "tetradio-doc-"));
     // Копируются все папки контента: шаблон проверяется рядом с настоящим каталогом, каким бы он ни стал.
-    for (const entry of readdirSync("content", { withFileTypes: true }))
-      if (entry.isDirectory()) cpSync(join("content", entry.name), join(root, entry.name), { recursive: true });
+    for (const entry of readdirSync("tests/fixtures/tavelori-content", { withFileTypes: true }))
+      if (entry.isDirectory()) cpSync(join("tests/fixtures/tavelori-content", entry.name), join(root, entry.name), { recursive: true });
     mkdirSync(join(root, "phrases"), { recursive: true });
     const copy = (from: string, to: string) =>
       writeFileSync(join(root, to), readFileSync(join(TEMPLATES, from), "utf8"));
@@ -33,7 +33,7 @@ describe("шаблоны инструкции", () => {
     copy("lesson.yaml", "lessons/lesson-example.yaml");
     writeFileSync(
       join(root, "courses/leeke.yaml"),
-      `${readFileSync("content/courses/leeke.yaml", "utf8")}  - lesson-example\n`,
+      `${readFileSync("tests/fixtures/tavelori-content/courses/leeke.yaml", "utf8")}  - lesson-example\n`,
     );
     try {
       const built = buildContent(root);
@@ -179,7 +179,7 @@ describe("прогон инструкции на существующем мат
     expect(newGrafo).toEqual(oldGrafo);
   });
   it("реальные уроки каталога не изменились: фикстура добавляет только свой урок", () => {
-    const real = buildContent();
+    const real = buildContent("tests/fixtures/tavelori-content");
     const withFixture = mixedContent();
     expect(withFixture.packages.filter((pack) => pack.id !== MIXED_LESSON).map((pack) => pack.id)).toEqual(
       real.packages.map((pack) => pack.id),

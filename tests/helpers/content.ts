@@ -4,7 +4,7 @@ import { installLesson, refreshCatalog } from "../../src/content/client";
 import { buildContent, type BuiltContent } from "../../content/build";
 
 /** Один собранный контент на весь прогон: пакеты неизменяемы, а сборка стоит дороже теста. */
-export const content: BuiltContent = buildContent();
+export const content: BuiltContent = buildContent("tests/fixtures/tavelori-content");
 
 /** Источник контента в памяти: тесты устанавливают пакеты без сети и подменяют файлы для сценариев ошибок. */
 export function memoryFetcher(

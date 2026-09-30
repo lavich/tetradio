@@ -118,7 +118,7 @@ describe("сборка смешанного урока", () => {
     expect(two.phrases.map((p) => p.id).sort()).toEqual(["p-grafo", "p-other"]);
   });
   it("прежние YAML собираются без изменений материала", () => {
-    const before = buildContent();
+    const before = buildContent("tests/fixtures/tavelori-content");
     const after = mixed();
     for (const p of before.packages) expect(after.packages.find((q) => q.id === p.id)!.words, p.id).toEqual(p.words);
   });
