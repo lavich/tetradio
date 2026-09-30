@@ -1,0 +1,7 @@
+id: p106
+text: Θα ήθελα έναν κυπριακό καφέ μέτριο.
+translation: Я бы хотел(а) кипрский кофе средней сладости.
+provenance:
+  sourceLabel: Лексикон курса, модуль 09 (docs/course/lexicon/09.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 09 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

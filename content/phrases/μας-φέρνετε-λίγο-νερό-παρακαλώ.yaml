@@ -1,0 +1,8 @@
+id: p112
+text: Μας φέρνετε λίγο νερό, παρακαλώ;
+translation: Принесите нам, пожалуйста, воды.
+note: вежливая просьба в форме вопроса
+provenance:
+  sourceLabel: Лексикон курса, модуль 09 (docs/course/lexicon/09.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 09 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
