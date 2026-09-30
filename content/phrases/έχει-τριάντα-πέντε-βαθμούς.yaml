@@ -1,0 +1,7 @@
+id: p250
+text: Έχει τριάντα πέντε βαθμούς.
+translation: Тридцать пять градусов.
+provenance:
+  sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 19 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

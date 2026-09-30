@@ -1,0 +1,14 @@
+title: Контрольная точка (пример)
+kind: test
+items: []
+blocks:
+  - type: exercise
+    id: point
+    graded: true
+    instruction: Выберите форму είμαι.
+    format: choice
+    items:
+      - id: q1
+        prompt: Εσύ ___ από την Ελλάδα;
+        options: [είμαι, είσαι, είναι]
+        answer: είσαι

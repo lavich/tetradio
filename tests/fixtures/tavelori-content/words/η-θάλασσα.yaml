@@ -1,0 +1,18 @@
+id: w12-07
+greek: η θάλασσα
+russian: море
+ipa: /i ˈθalasa/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: η-θάλασσα.svg
+reading:
+  - text: θ
+    ipa: θ
+    explanation: θ — глухое межзубное th
+  - text: σσ
+    ipa: s
+    explanation: двойная σ читается как одно с
+examples:
+  - greek: Η θάλασσα είναι ζεστή σήμερα.
+    russian: Море сегодня тёплое.
+    target: θάλασσα

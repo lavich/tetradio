@@ -1,0 +1,1595 @@
+assets/1st place medal/Flat/1st_place_medal_flat.svg
+assets/2nd place medal/Flat/2nd_place_medal_flat.svg
+assets/3rd place medal/Flat/3rd_place_medal_flat.svg
+assets/A button blood type/Flat/a_button_blood_type_flat.svg
+assets/Ab button blood type/Flat/ab_button_blood_type_flat.svg
+assets/Abacus/Flat/abacus_flat.svg
+assets/Accordion/Flat/accordion_flat.svg
+assets/Adhesive bandage/Flat/adhesive_bandage_flat.svg
+assets/Admission tickets/Flat/admission_tickets_flat.svg
+assets/Aerial tramway/Flat/aerial_tramway_flat.svg
+assets/Airplane arrival/Flat/airplane_arrival_flat.svg
+assets/Airplane departure/Flat/airplane_departure_flat.svg
+assets/Airplane/Flat/airplane_flat.svg
+assets/Alarm clock/Flat/alarm_clock_flat.svg
+assets/Alembic/Flat/alembic_flat.svg
+assets/Alien monster/Flat/alien_monster_flat.svg
+assets/Alien/Flat/alien_flat.svg
+assets/Ambulance/Flat/ambulance_flat.svg
+assets/American football/Flat/american_football_flat.svg
+assets/Amphora/Flat/amphora_flat.svg
+assets/Anatomical heart/Flat/anatomical_heart_flat.svg
+assets/Anchor/Flat/anchor_flat.svg
+assets/Anger symbol/Flat/anger_symbol_flat.svg
+assets/Angry face with horns/Flat/angry_face_with_horns_flat.svg
+assets/Angry face/Flat/angry_face_flat.svg
+assets/Anguished face/Flat/anguished_face_flat.svg
+assets/Ant/Flat/ant_flat.svg
+assets/Antenna bars/Flat/antenna_bars_flat.svg
+assets/Anxious face with sweat/Flat/anxious_face_with_sweat_flat.svg
+assets/Aquarius/Flat/aquarius_flat.svg
+assets/Aries/Flat/aries_flat.svg
+assets/Articulated lorry/Flat/articulated_lorry_flat.svg
+assets/Artist palette/Flat/artist_palette_flat.svg
+assets/Artist/Default/Flat/artist_flat_default.svg
+assets/Astonished face/Flat/astonished_face_flat.svg
+assets/Astronaut/Default/Flat/astronaut_flat_default.svg
+assets/Atm sign/Flat/atm_sign_flat.svg
+assets/Atom symbol/Flat/atom_symbol_flat.svg
+assets/Auto rickshaw/Flat/auto_rickshaw_flat.svg
+assets/Automobile/Flat/automobile_flat.svg
+assets/Avocado/Flat/avocado_flat.svg
+assets/Axe/Flat/axe_flat.svg
+assets/B button blood type/Flat/b_button_blood_type_flat.svg
+assets/Baby angel/Default/Flat/baby_angel_flat_default.svg
+assets/Baby bottle/Flat/baby_bottle_flat.svg
+assets/Baby chick/Flat/baby_chick_flat.svg
+assets/Baby symbol/Flat/baby_symbol_flat.svg
+assets/Baby/Default/Flat/baby_flat_default.svg
+assets/Back arrow/Flat/back_arrow_flat.svg
+assets/Backhand index pointing down/Default/Flat/backhand_index_pointing_down_flat_default.svg
+assets/Backhand index pointing left/Default/Flat/backhand_index_pointing_left_flat_default.svg
+assets/Backhand index pointing right/Default/Flat/backhand_index_pointing_right_flat_default.svg
+assets/Backhand index pointing up/Default/Flat/backhand_index_pointing_up_flat_default.svg
+assets/Backpack/Flat/backpack_flat.svg
+assets/Bacon/Flat/bacon_flat.svg
+assets/Badger/Flat/badger_flat.svg
+assets/Badminton/Flat/badminton_flat.svg
+assets/Bagel/Flat/bagel_flat.svg
+assets/Baggage claim/Flat/baggage_claim_flat.svg
+assets/Baguette bread/Flat/baguette_bread_flat.svg
+assets/Balance scale/Flat/balance_scale_flat.svg
+assets/Ballet shoes/Flat/ballet_shoes_flat.svg
+assets/Balloon/Flat/balloon_flat.svg
+assets/Ballot box with ballot/Flat/ballot_box_with_ballot_flat.svg
+assets/Banana/Flat/banana_flat.svg
+assets/Banjo/Flat/banjo_flat.svg
+assets/Bank/Flat/bank_flat.svg
+assets/Bar chart/Flat/bar_chart_flat.svg
+assets/Barber pole/Flat/barber_pole_flat.svg
+assets/Baseball/Flat/baseball_flat.svg
+assets/Basket/Flat/basket_flat.svg
+assets/Basketball/Flat/basketball_flat.svg
+assets/Bat/Flat/bat_flat.svg
+assets/Bathtub/Flat/bathtub_flat.svg
+assets/Battery/Flat/battery_flat.svg
+assets/Beach with umbrella/Flat/beach_with_umbrella_flat.svg
+assets/Beaming face with smiling eyes/Flat/beaming_face_with_smiling_eyes_flat.svg
+assets/Beans/Flat/beans_flat.svg
+assets/Bear/Flat/bear_flat.svg
+assets/Beating heart/Flat/beating_heart_flat.svg
+assets/Beaver/Flat/beaver_flat.svg
+assets/Bed/Flat/bed_flat.svg
+assets/Beer mug/Flat/beer_mug_flat.svg
+assets/Beetle/Flat/beetle_flat.svg
+assets/Bell pepper/Flat/bell_pepper_flat.svg
+assets/Bell with slash/Flat/bell_with_slash_flat.svg
+assets/Bell/Flat/bell_flat.svg
+assets/Bellhop bell/Flat/bellhop_bell_flat.svg
+assets/Bento box/Flat/bento_box_flat.svg
+assets/Beverage box/Flat/beverage_box_flat.svg
+assets/Bicycle/Flat/bicycle_flat.svg
+assets/Bikini/Flat/bikini_flat.svg
+assets/Billed cap/Flat/billed_cap_flat.svg
+assets/Biohazard/Flat/biohazard_flat.svg
+assets/Bird/Flat/bird_flat.svg
+assets/Birthday cake/Flat/birthday_cake_flat.svg
+assets/Bison/Flat/bison_flat.svg
+assets/Biting lip/Flat/biting_lip_flat.svg
+assets/Black cat/Flat/black_cat_flat.svg
+assets/Black circle/Flat/black_circle_flat.svg
+assets/Black flag/Flat/black_flag_flat.svg
+assets/Black heart/Flat/black_heart_flat.svg
+assets/Black large square/Flat/black_large_square_flat.svg
+assets/Black medium square/Flat/black_medium_square_flat.svg
+assets/Black medium-small square/Flat/black_medium-small_square_flat.svg
+assets/Black nib/Flat/black_nib_flat.svg
+assets/Black small square/Flat/black_small_square_flat.svg
+assets/Black square button/Flat/black_square_button_flat.svg
+assets/Blackbird/Flat/blackbird_flat.svg
+assets/Blossom/Flat/blossom_flat.svg
+assets/Blowfish/Flat/blowfish_flat.svg
+assets/Blue book/Flat/blue_book_flat.svg
+assets/Blue circle/Flat/blue_circle_flat.svg
+assets/Blue heart/Flat/blue_heart_flat.svg
+assets/Blue square/Flat/blue_square_flat.svg
+assets/Blueberries/Flat/blueberries_flat.svg
+assets/Boar/Flat/boar_flat.svg
+assets/Bomb/Flat/bomb_flat.svg
+assets/Bone/Flat/bone_flat.svg
+assets/Bookmark tabs/Flat/bookmark_tabs_flat.svg
+assets/Bookmark/Flat/bookmark_flat.svg
+assets/Books/Flat/books_flat.svg
+assets/Boomerang/Flat/boomerang_flat.svg
+assets/Bottle with popping cork/Flat/bottle_with_popping_cork_flat.svg
+assets/Bouquet/Flat/bouquet_flat.svg
+assets/Bow and arrow/Flat/bow_and_arrow_flat.svg
+assets/Bowl with spoon/Flat/bowl_with_spoon_flat.svg
+assets/Bowling/Flat/bowling_flat.svg
+assets/Boxing glove/Flat/boxing_glove_flat.svg
+assets/Boy/Default/Flat/boy_flat_default.svg
+assets/Brain/Flat/brain_flat.svg
+assets/Bread/Flat/bread_flat.svg
+assets/Breast feeding/Default/Flat/breast_feeding_flat_default.svg
+assets/Brick/Flat/brick_flat.svg
+assets/Bridge at night/Flat/bridge_at_night_flat.svg
+assets/Briefcase/Flat/briefcase_flat.svg
+assets/Briefs/Flat/briefs_flat.svg
+assets/Bright button/Flat/bright_button_flat.svg
+assets/Broccoli/Flat/broccoli_flat.svg
+assets/Broken chain/Flat/broken_chain_flat.svg
+assets/Broken heart/Flat/broken_heart_flat.svg
+assets/Broom/Flat/broom_flat.svg
+assets/Brown circle/Flat/brown_circle_flat.svg
+assets/Brown heart/Flat/brown_heart_flat.svg
+assets/Brown mushroom/Flat/brown_mushroom_flat.svg
+assets/Brown square/Flat/brown_square_flat.svg
+assets/Bubble tea/Flat/bubble_tea_flat.svg
+assets/Bubbles/Flat/bubbles_flat.svg
+assets/Bucket/Flat/bucket_flat.svg
+assets/Bug/Flat/bug_flat.svg
+assets/Building construction/Flat/building_construction_flat.svg
+assets/Bullet train/Flat/bullet_train_flat.svg
+assets/Bullseye/Flat/bullseye_flat.svg
+assets/Burrito/Flat/burrito_flat.svg
+assets/Bus stop/Flat/bus_stop_flat.svg
+assets/Bus/Flat/bus_flat.svg
+assets/Bust in silhouette/Flat/bust_in_silhouette_flat.svg
+assets/Busts in silhouette/Flat/busts_in_silhouette_flat.svg
+assets/Butter/Flat/butter_flat.svg
+assets/Butterfly/Flat/butterfly_flat.svg
+assets/Cactus/Flat/cactus_flat.svg
+assets/Calendar/Flat/calendar_flat.svg
+assets/Call me hand/Default/Flat/call_me_hand_flat_default.svg
+assets/Camel/Flat/camel_flat.svg
+assets/Camera with flash/Flat/camera_with_flash_flat.svg
+assets/Camera/Flat/camera_flat.svg
+assets/Camping/Flat/camping_flat.svg
+assets/Cancer/Flat/cancer_flat.svg
+assets/Candle/Flat/candle_flat.svg
+assets/Candy/Flat/candy_flat.svg
+assets/Canned food/Flat/canned_food_flat.svg
+assets/Canoe/Flat/canoe_flat.svg
+assets/Capricorn/Flat/capricorn_flat.svg
+assets/Card file box/Flat/card_file_box_flat.svg
+assets/Card index dividers/Flat/card_index_dividers_flat.svg
+assets/Card index/Flat/card_index_flat.svg
+assets/Carousel horse/Flat/carousel_horse_flat.svg
+assets/Carp streamer/Flat/carp_streamer_flat.svg
+assets/Carpentry saw/Flat/carpentry_saw_flat.svg
+assets/Carrot/Flat/carrot_flat.svg
+assets/Castle/Flat/castle_flat.svg
+assets/Cat face/Flat/cat_face_flat.svg
+assets/Cat with tears of joy/Flat/cat_with_tears_of_joy_flat.svg
+assets/Cat with wry smile/Flat/cat_with_wry_smile_flat.svg
+assets/Cat/Flat/cat_flat.svg
+assets/Chains/Flat/chains_flat.svg
+assets/Chair/Flat/chair_flat.svg
+assets/Chart decreasing/Flat/chart_decreasing_flat.svg
+assets/Chart increasing with yen/Flat/chart_increasing_with_yen_flat.svg
+assets/Chart increasing/Flat/chart_increasing_flat.svg
+assets/Check box with check/Flat/check_box_with_check_flat.svg
+assets/Check mark button/Flat/check_mark_button_flat.svg
+assets/Check mark/Flat/check_mark_flat.svg
+assets/Cheese wedge/Flat/cheese_wedge_flat.svg
+assets/Chequered flag/Flat/chequered_flag_flat.svg
+assets/Cherries/Flat/cherries_flat.svg
+assets/Cherry blossom/Flat/cherry_blossom_flat.svg
+assets/Chess pawn/Flat/chess_pawn_flat.svg
+assets/Chestnut/Flat/chestnut_flat.svg
+assets/Chicken/Flat/chicken_flat.svg
+assets/Child/Default/Flat/child_flat_default.svg
+assets/Children crossing/Flat/children_crossing_flat.svg
+assets/Chipmunk/Flat/chipmunk_flat.svg
+assets/Chocolate bar/Flat/chocolate_bar_flat.svg
+assets/Chopsticks/Flat/chopsticks_flat.svg
+assets/Christmas tree/Flat/christmas_tree_flat.svg
+assets/Church/Flat/church_flat.svg
+assets/Cigarette/Flat/cigarette_flat.svg
+assets/Cinema/Flat/cinema_flat.svg
+assets/Circled m/Flat/circled_m_flat.svg
+assets/Circus tent/Flat/circus_tent_flat.svg
+assets/Cityscape at dusk/Flat/cityscape_at_dusk_flat.svg
+assets/Cityscape/Flat/cityscape_flat.svg
+assets/Cl button/Flat/cl_button_flat.svg
+assets/Clamp/Flat/clamp_flat.svg
+assets/Clapper board/Flat/clapper_board_flat.svg
+assets/Clapping hands/Default/Flat/clapping_hands_flat_default.svg
+assets/Classical building/Flat/classical_building_flat.svg
+assets/Clinking beer mugs/Flat/clinking_beer_mugs_flat.svg
+assets/Clinking glasses/Flat/clinking_glasses_flat.svg
+assets/Clipboard/Flat/clipboard_flat.svg
+assets/Clockwise vertical arrows/Flat/clockwise_vertical_arrows_flat.svg
+assets/Closed book/Flat/closed_book_flat.svg
+assets/Closed mailbox with lowered flag/Flat/closed_mailbox_with_lowered_flag_flat.svg
+assets/Closed mailbox with raised flag/Flat/closed_mailbox_with_raised_flag_flat.svg
+assets/Closed umbrella/Flat/closed_umbrella_flat.svg
+assets/Cloud with lightning and rain/Flat/cloud_with_lightning_and_rain_flat.svg
+assets/Cloud with lightning/Flat/cloud_with_lightning_flat.svg
+assets/Cloud with rain/Flat/cloud_with_rain_flat.svg
+assets/Cloud with snow/Flat/cloud_with_snow_flat.svg
+assets/Cloud/Flat/cloud_flat.svg
+assets/Clown face/Flat/clown_face_flat.svg
+assets/Club suit/Flat/club_suit_flat.svg
+assets/Clutch bag/Flat/clutch_bag_flat.svg
+assets/Coat/Flat/coat_flat.svg
+assets/Cockroach/Flat/cockroach_flat.svg
+assets/Cocktail glass/Flat/cocktail_glass_flat.svg
+assets/Coconut/Flat/coconut_flat.svg
+assets/Coffin/Flat/coffin_flat.svg
+assets/Coin/Flat/coin_flat.svg
+assets/Cold face/Flat/cold_face_flat.svg
+assets/Collision/Flat/collision_flat.svg
+assets/Comet/Flat/comet_flat.svg
+assets/Compass/Flat/compass_flat.svg
+assets/Computer disk/Flat/computer_disk_flat.svg
+assets/Computer mouse/Flat/computer_mouse_flat.svg
+assets/Confetti ball/Flat/confetti_ball_flat.svg
+assets/Confounded face/Flat/confounded_face_flat.svg
+assets/Confused face/Flat/confused_face_flat.svg
+assets/Construction worker/Default/Flat/construction_worker_flat_default.svg
+assets/Construction/Flat/construction_flat.svg
+assets/Control knobs/Flat/control_knobs_flat.svg
+assets/Convenience store/Flat/convenience_store_flat.svg
+assets/Cook/Default/Flat/cook_flat_default.svg
+assets/Cooked rice/Flat/cooked_rice_flat.svg
+assets/Cookie/Flat/cookie_flat.svg
+assets/Cooking/Flat/cooking_flat.svg
+assets/Cool button/Flat/cool_button_flat.svg
+assets/Copyright/Flat/copyright_flat.svg
+assets/Coral/Flat/coral_flat.svg
+assets/Couch and lamp/Flat/couch_and_lamp_flat.svg
+assets/Counterclockwise arrows button/Flat/counterclockwise_arrows_button_flat.svg
+assets/Cow face/Flat/cow_face_flat.svg
+assets/Cow/Flat/cow_flat.svg
+assets/Cowboy hat face/Flat/cowboy_hat_face_flat.svg
+assets/Crab/Flat/crab_flat.svg
+assets/Crayon/Flat/crayon_flat.svg
+assets/Credit card/Flat/credit_card_flat.svg
+assets/Crescent moon/Flat/crescent_moon_flat.svg
+assets/Cricket game/Flat/cricket_game_flat.svg
+assets/Cricket/Flat/cricket_flat.svg
+assets/Crocodile/Flat/crocodile_flat.svg
+assets/Croissant/Flat/croissant_flat.svg
+assets/Cross mark button/Flat/cross_mark_button_flat.svg
+assets/Cross mark/Flat/cross_mark_flat.svg
+assets/Crossed fingers/Default/Flat/crossed_fingers_flat_default.svg
+assets/Crossed flags/Flat/crossed_flags_flat.svg
+assets/Crossed swords/Flat/crossed_swords_flat.svg
+assets/Crown/Flat/crown_flat.svg
+assets/Crutch/Flat/crutch_flat.svg
+assets/Crying cat/Flat/crying_cat_flat.svg
+assets/Crying face/Flat/crying_face_flat.svg
+assets/Crystal ball/Flat/crystal_ball_flat.svg
+assets/Cucumber/Flat/cucumber_flat.svg
+assets/Cup with straw/Flat/cup_with_straw_flat.svg
+assets/Cupcake/Flat/cupcake_flat.svg
+assets/Curling stone/Flat/curling_stone_flat.svg
+assets/Curly loop/Flat/curly_loop_flat.svg
+assets/Currency exchange/Flat/currency_exchange_flat.svg
+assets/Curry rice/Flat/curry_rice_flat.svg
+assets/Custard/Flat/custard_flat.svg
+assets/Customs/Flat/customs_flat.svg
+assets/Cut of meat/Flat/cut_of_meat_flat.svg
+assets/Cyclone/Flat/cyclone_flat.svg
+assets/Dagger/Flat/dagger_flat.svg
+assets/Dango/Flat/dango_flat.svg
+assets/Dashing away/Flat/dashing_away_flat.svg
+assets/Deciduous tree/Flat/deciduous_tree_flat.svg
+assets/Deer/Flat/deer_flat.svg
+assets/Delivery truck/Flat/delivery_truck_flat.svg
+assets/Department store/Flat/department_store_flat.svg
+assets/Derelict house/Flat/derelict_house_flat.svg
+assets/Desert island/Flat/desert_island_flat.svg
+assets/Desert/Flat/desert_flat.svg
+assets/Desktop computer/Flat/desktop_computer_flat.svg
+assets/Detective/Default/Flat/detective_flat_default.svg
+assets/Diamond suit/Flat/diamond_suit_flat.svg
+assets/Diamond with a dot/Flat/diamond_with_a_dot_flat.svg
+assets/Dim button/Flat/dim_button_flat.svg
+assets/Disappointed face/Flat/disappointed_face_flat.svg
+assets/Disguised face/Flat/disguised_face_flat.svg
+assets/Divide/Flat/divide_flat.svg
+assets/Diving mask/Flat/diving_mask_flat.svg
+assets/Diya lamp/Flat/diya_lamp_flat.svg
+assets/Dizzy/Flat/dizzy_flat.svg
+assets/Dna/Flat/dna_flat.svg
+assets/Dodo/Flat/dodo_flat.svg
+assets/Dog face/Flat/dog_face_flat.svg
+assets/Dog/Flat/dog_flat.svg
+assets/Dollar banknote/Flat/dollar_banknote_flat.svg
+assets/Dolphin/Flat/dolphin_flat.svg
+assets/Donkey/Flat/donkey_flat.svg
+assets/Door/Flat/door_flat.svg
+assets/Dotted line face/Flat/dotted_line_face_flat.svg
+assets/Dotted six-pointed star/Flat/dotted_six-pointed_star_flat.svg
+assets/Double curly loop/Flat/double_curly_loop_flat.svg
+assets/Double exclamation mark/Flat/double_exclamation_mark_flat.svg
+assets/Doughnut/Flat/doughnut_flat.svg
+assets/Dove/Flat/dove_flat.svg
+assets/Down arrow/Flat/down_arrow_flat.svg
+assets/Down-left arrow/Flat/down-left_arrow_flat.svg
+assets/Down-right arrow/Flat/down-right_arrow_flat.svg
+assets/Downcast face with sweat/Flat/downcast_face_with_sweat_flat.svg
+assets/Downwards button/Flat/downwards_button_flat.svg
+assets/Dragon face/Flat/dragon_face_flat.svg
+assets/Dragon/Flat/dragon_flat.svg
+assets/Dress/Flat/dress_flat.svg
+assets/Drooling face/Flat/drooling_face_flat.svg
+assets/Drop of blood/Flat/drop_of_blood_flat.svg
+assets/Droplet/Flat/droplet_flat.svg
+assets/Drum/Flat/drum_flat.svg
+assets/Duck/Flat/duck_flat.svg
+assets/Dumpling/Flat/dumpling_flat.svg
+assets/Dvd/Flat/dvd_flat.svg
+assets/E-mail/Flat/e-mail_flat.svg
+assets/Eagle/Flat/eagle_flat.svg
+assets/Ear of corn/Flat/ear_of_corn_flat.svg
+assets/Ear with hearing aid/Default/Flat/ear_with_hearing_aid_flat_default.svg
+assets/Ear/Default/Flat/ear_flat_default.svg
+assets/Egg/Flat/egg_flat.svg
+assets/Eggplant/Flat/eggplant_flat.svg
+assets/Eight oclock/Flat/eight_oclock_flat.svg
+assets/Eight-pointed star/Flat/eight-pointed_star_flat.svg
+assets/Eight-spoked asterisk/Flat/eight-spoked_asterisk_flat.svg
+assets/Eight-thirty/Flat/eight-thirty_flat.svg
+assets/Eject button/Flat/eject_button_flat.svg
+assets/Electric plug/Flat/electric_plug_flat.svg
+assets/Elephant/Flat/elephant_flat.svg
+assets/Elevator/Flat/elevator_flat.svg
+assets/Eleven oclock/Flat/eleven_oclock_flat.svg
+assets/Eleven-thirty/Flat/eleven-thirty_flat.svg
+assets/Empty nest/Flat/empty_nest_flat.svg
+assets/End arrow/Flat/end_arrow_flat.svg
+assets/Envelope with arrow/Flat/envelope_with_arrow_flat.svg
+assets/Envelope/Flat/envelope_flat.svg
+assets/Euro banknote/Flat/euro_banknote_flat.svg
+assets/Evergreen tree/Flat/evergreen_tree_flat.svg
+assets/Ewe/Flat/ewe_flat.svg
+assets/Exclamation question mark/Flat/exclamation_question_mark_flat.svg
+assets/Exploding head/Flat/exploding_head_flat.svg
+assets/Expressionless face/Flat/expressionless_face_flat.svg
+assets/Eye in speech bubble/Flat/eye_in_speech_bubble_flat.svg
+assets/Eye/Flat/eye_flat.svg
+assets/Eyes/Flat/eyes_flat.svg
+assets/Face blowing a kiss/Flat/face_blowing_a_kiss_flat.svg
+assets/Face exhaling/Flat/face_exhaling_flat.svg
+assets/Face holding back tears/Flat/face_holding_back_tears_flat.svg
+assets/Face in clouds/Flat/face_in_clouds_flat.svg
+assets/Face savoring food/Flat/face_savoring_food_flat.svg
+assets/Face screaming in fear/Flat/face_screaming_in_fear_flat.svg
+assets/Face vomiting/Flat/face_vomiting_flat.svg
+assets/Face with diagonal mouth/Flat/face_with_diagonal_mouth_flat.svg
+assets/Face with hand over mouth/Flat/face_with_hand_over_mouth_flat.svg
+assets/Face with head-bandage/Flat/face_with_head-bandage_flat.svg
+assets/Face with medical mask/Flat/face_with_medical_mask_flat.svg
+assets/Face with monocle/Flat/face_with_monocle_flat.svg
+assets/Face with open eyes and hand over mouth/Flat/face_with_open_eyes_and_hand_over_mouth_flat.svg
+assets/Face with open mouth/Flat/face_with_open_mouth_flat.svg
+assets/Face with peeking eye/Flat/face_with_peeking_eye_flat.svg
+assets/Face with raised eyebrow/Flat/face_with_raised_eyebrow_flat.svg
+assets/Face with rolling eyes/Flat/face_with_rolling_eyes_flat.svg
+assets/Face with spiral eyes/Flat/face_with_spiral_eyes_flat.svg
+assets/Face with steam from nose/Flat/face_with_steam_from_nose_flat.svg
+assets/Face with symbols on mouth/Flat/face_with_symbols_on_mouth_flat.svg
+assets/Face with tears of joy/Flat/face_with_tears_of_joy_flat.svg
+assets/Face with thermometer/Flat/face_with_thermometer_flat.svg
+assets/Face with tongue/Flat/face_with_tongue_flat.svg
+assets/Face without mouth/Flat/face_without_mouth_flat.svg
+assets/Factory worker/Default/Flat/factory_worker_flat_default.svg
+assets/Factory/Flat/factory_flat.svg
+assets/Falafel/Flat/falafel_flat.svg
+assets/Fallen leaf/Flat/fallen_leaf_flat.svg
+assets/Farmer/Default/Flat/farmer_flat_default.svg
+assets/Fast down button/Flat/fast_down_button_flat.svg
+assets/Fast reverse button/Flat/fast_reverse_button_flat.svg
+assets/Fast up button/Flat/fast_up_button_flat.svg
+assets/Fast-forward button/Flat/fast-forward_button_flat.svg
+assets/Fax machine/Flat/fax_machine_flat.svg
+assets/Fearful face/Flat/fearful_face_flat.svg
+assets/Feather/Flat/feather_flat.svg
+assets/Female sign/Flat/female_sign_flat.svg
+assets/Ferris wheel/Flat/ferris_wheel_flat.svg
+assets/Ferry/Flat/ferry_flat.svg
+assets/Field hockey/Flat/field_hockey_flat.svg
+assets/File cabinet/Flat/file_cabinet_flat.svg
+assets/File folder/Flat/file_folder_flat.svg
+assets/Film frames/Flat/film_frames_flat.svg
+assets/Film projector/Flat/film_projector_flat.svg
+assets/Fire engine/Flat/fire_engine_flat.svg
+assets/Fire extinguisher/Flat/fire_extinguisher_flat.svg
+assets/Fire/Flat/fire_flat.svg
+assets/Firecracker/Flat/firecracker_flat.svg
+assets/Firefighter/Default/Flat/firefighter_flat_default.svg
+assets/Fireworks/Flat/fireworks_flat.svg
+assets/First quarter moon face/Flat/first_quarter_moon_face_flat.svg
+assets/First quarter moon/Flat/first_quarter_moon_flat.svg
+assets/Fish cake with swirl/Flat/fish_cake_with_swirl_flat.svg
+assets/Fish/Flat/fish_flat.svg
+assets/Fishing pole/Flat/fishing_pole_flat.svg
+assets/Five oclock/Flat/five_oclock_flat.svg
+assets/Five-thirty/Flat/five-thirty_flat.svg
+assets/Flag in hole/Flat/flag_in_hole_flat.svg
+assets/Flamingo/Flat/flamingo_flat.svg
+assets/Flashlight/Flat/flashlight_flat.svg
+assets/Flat shoe/Flat/flat_shoe_flat.svg
+assets/Flatbread/Flat/flatbread_flat.svg
+assets/Fleur-de-lis/Flat/fleur-de-lis_flat.svg
+assets/Flexed biceps/Default/Flat/flexed_biceps_flat_default.svg
+assets/Floppy disk/Flat/floppy_disk_flat.svg
+assets/Flower playing cards/Flat/flower_playing_cards_flat.svg
+assets/Flushed face/Flat/flushed_face_flat.svg
+assets/Flute/Flat/flute_flat.svg
+assets/Fly/Flat/fly_flat.svg
+assets/Flying disc/Flat/flying_disc_flat.svg
+assets/Flying saucer/Flat/flying_saucer_flat.svg
+assets/Fog/Flat/fog_flat.svg
+assets/Foggy/Flat/foggy_flat.svg
+assets/Folded hands/Default/Flat/folded_hands_flat_default.svg
+assets/Folding hand fan/Flat/folding_hand_fan_flat.svg
+assets/Fondue/Flat/fondue_flat.svg
+assets/Foot/Default/Flat/foot_flat_default.svg
+assets/Footprints/Flat/footprints_flat.svg
+assets/Fork and knife with plate/Flat/fork_and_knife_with_plate_flat.svg
+assets/Fork and knife/Flat/fork_and_knife_flat.svg
+assets/Fortune cookie/Flat/fortune_cookie_flat.svg
+assets/Fountain pen/Flat/fountain_pen_flat.svg
+assets/Fountain/Flat/fountain_flat.svg
+assets/Four leaf clover/Flat/four_leaf_clover_flat.svg
+assets/Four oclock/Flat/four_oclock_flat.svg
+assets/Four-thirty/Flat/four-thirty_flat.svg
+assets/Fox/Flat/fox_flat.svg
+assets/Framed picture/Flat/framed_picture_flat.svg
+assets/Free button/Flat/free_button_flat.svg
+assets/French fries/Flat/french_fries_flat.svg
+assets/Fried shrimp/Flat/fried_shrimp_flat.svg
+assets/Frog/Flat/frog_flat.svg
+assets/Front-facing baby chick/Flat/front-facing_baby_chick_flat.svg
+assets/Frowning face with open mouth/Flat/frowning_face_with_open_mouth_flat.svg
+assets/Frowning face/Flat/frowning_face_flat.svg
+assets/Fuel pump/Flat/fuel_pump_flat.svg
+assets/Full moon face/Flat/full_moon_face_flat.svg
+assets/Full moon/Flat/full_moon_flat.svg
+assets/Funeral urn/Flat/funeral_urn_flat.svg
+assets/Game die/Flat/game_die_flat.svg
+assets/Garlic/Flat/garlic_flat.svg
+assets/Gear/Flat/gear_flat.svg
+assets/Gem stone/Flat/gem_stone_flat.svg
+assets/Gemini/Flat/gemini_flat.svg
+assets/Ghost/Flat/ghost_flat.svg
+assets/Ginger root/Flat/ginger_root_flat.svg
+assets/Giraffe/Flat/giraffe_flat.svg
+assets/Girl/Default/Flat/girl_flat_default.svg
+assets/Glass of milk/Flat/glass_of_milk_flat.svg
+assets/Glasses/Flat/glasses_flat.svg
+assets/Globe showing americas/Flat/globe_showing_americas_flat.svg
+assets/Globe showing asia-australia/Flat/globe_showing_asia-australia_flat.svg
+assets/Globe showing europe-africa/Flat/globe_showing_europe-africa_flat.svg
+assets/Globe with meridians/Flat/globe_with_meridians_flat.svg
+assets/Gloves/Flat/gloves_flat.svg
+assets/Glowing star/Flat/glowing_star_flat.svg
+assets/Goal net/Flat/goal_net_flat.svg
+assets/Goat/Flat/goat_flat.svg
+assets/Goblin/Flat/goblin_flat.svg
+assets/Goggles/Flat/goggles_flat.svg
+assets/Goose/Flat/goose_flat.svg
+assets/Gorilla/Flat/gorilla_flat.svg
+assets/Graduation cap/Flat/graduation_cap_flat.svg
+assets/Grapes/Flat/grapes_flat.svg
+assets/Green apple/Flat/green_apple_flat.svg
+assets/Green book/Flat/green_book_flat.svg
+assets/Green circle/Flat/green_circle_flat.svg
+assets/Green heart/Flat/green_heart_flat.svg
+assets/Green salad/Flat/green_salad_flat.svg
+assets/Green square/Flat/green_square_flat.svg
+assets/Grey heart/Flat/grey_heart_flat.svg
+assets/Grimacing face/Flat/grimacing_face_flat.svg
+assets/Grinning cat with smiling eyes/Flat/grinning_cat_with_smiling_eyes_flat.svg
+assets/Grinning cat/Flat/grinning_cat_flat.svg
+assets/Grinning face with big eyes/Flat/grinning_face_with_big_eyes_flat.svg
+assets/Grinning face with smiling eyes/Flat/grinning_face_with_smiling_eyes_flat.svg
+assets/Grinning face with sweat/Flat/grinning_face_with_sweat_flat.svg
+assets/Grinning face/Flat/grinning_face_flat.svg
+assets/Grinning squinting face/Flat/grinning_squinting_face_flat.svg
+assets/Growing heart/Flat/growing_heart_flat.svg
+assets/Guard/Default/Flat/guard_flat_default.svg
+assets/Guide dog/Flat/guide_dog_flat.svg
+assets/Guitar/Flat/guitar_flat.svg
+assets/Hair pick/Flat/hair_pick_flat.svg
+assets/Hamburger/Flat/hamburger_flat.svg
+assets/Hammer and pick/Flat/hammer_and_pick_flat.svg
+assets/Hammer and wrench/Flat/hammer_and_wrench_flat.svg
+assets/Hammer/Flat/hammer_flat.svg
+assets/Hamsa/Flat/hamsa_flat.svg
+assets/Hamster/Flat/hamster_flat.svg
+assets/Hand with fingers splayed/Default/Flat/hand_with_fingers_splayed_flat_default.svg
+assets/Hand with index finger and thumb crossed/Default/Flat/hand_with_index_finger_and_thumb_crossed_flat_default.svg
+assets/Handbag/Flat/handbag_flat.svg
+assets/Handshake/Flat/handshake_flat.svg
+assets/Hatching chick/Flat/hatching_chick_flat.svg
+assets/Head shaking horizontally/Flat/head_shaking_horizontally_flat.svg
+assets/Head shaking vertically/Flat/head_shaking_vertically_flat.svg
+assets/Headphone/Flat/headphone_flat.svg
+assets/Headstone/Flat/headstone_flat.svg
+assets/Health worker/Default/Flat/health_worker_flat_default.svg
+assets/Hear-no-evil monkey/Flat/hear-no-evil_monkey_flat.svg
+assets/Heart decoration/Flat/heart_decoration_flat.svg
+assets/Heart exclamation/Flat/heart_exclamation_flat.svg
+assets/Heart hands/Default/Flat/heart_hands_flat_default.svg
+assets/Heart on fire/Flat/heart_on_fire_flat.svg
+assets/Heart suit/Flat/heart_suit_flat.svg
+assets/Heart with arrow/Flat/heart_with_arrow_flat.svg
+assets/Heart with ribbon/Flat/heart_with_ribbon_flat.svg
+assets/Heavy dollar sign/Flat/heavy_dollar_sign_flat.svg
+assets/Heavy equals sign/Flat/heavy_equals_sign_flat.svg
+assets/Hedgehog/Flat/hedgehog_flat.svg
+assets/Helicopter/Flat/helicopter_flat.svg
+assets/Herb/Flat/herb_flat.svg
+assets/Hibiscus/Flat/hibiscus_flat.svg
+assets/High voltage/Flat/high_voltage_flat.svg
+assets/High-heeled shoe/Flat/high-heeled_shoe_flat.svg
+assets/High-speed train/Flat/high-speed_train_flat.svg
+assets/Hiking boot/Flat/hiking_boot_flat.svg
+assets/Hindu temple/Flat/hindu_temple_flat.svg
+assets/Hippopotamus/Flat/hippopotamus_flat.svg
+assets/Hole/Flat/hole_flat.svg
+assets/Hollow red circle/Flat/hollow_red_circle_flat.svg
+assets/Honey pot/Flat/honey_pot_flat.svg
+assets/Honeybee/Flat/honeybee_flat.svg
+assets/Hook/Flat/hook_flat.svg
+assets/Horizontal traffic light/Flat/horizontal_traffic_light_flat.svg
+assets/Horse face/Flat/horse_face_flat.svg
+assets/Horse racing/Default/Flat/horse_racing_flat_default.svg
+assets/Horse/Flat/horse_flat.svg
+assets/Hospital/Flat/hospital_flat.svg
+assets/Hot beverage/Flat/hot_beverage_flat.svg
+assets/Hot dog/Flat/hot_dog_flat.svg
+assets/Hot face/Flat/hot_face_flat.svg
+assets/Hot pepper/Flat/hot_pepper_flat.svg
+assets/Hot springs/Flat/hot_springs_flat.svg
+assets/Hotel/Flat/hotel_flat.svg
+assets/Hourglass done/Flat/hourglass_done_flat.svg
+assets/Hourglass not done/Flat/hourglass_not_done_flat.svg
+assets/House with garden/Flat/house_with_garden_flat.svg
+assets/House/Flat/house_flat.svg
+assets/Houses/Flat/houses_flat.svg
+assets/Hugging face/Flat/hugging_face_flat.svg
+assets/Hundred points/Flat/hundred_points_flat.svg
+assets/Hushed face/Flat/hushed_face_flat.svg
+assets/Hut/Flat/hut_flat.svg
+assets/Hyacinth/Flat/hyacinth_flat.svg
+assets/Ice cream/Flat/ice_cream_flat.svg
+assets/Ice hockey/Flat/ice_hockey_flat.svg
+assets/Ice skate/Flat/ice_skate_flat.svg
+assets/Ice/Flat/ice_flat.svg
+assets/Id button/Flat/id_button_flat.svg
+assets/Identification card/Flat/identification_card_flat.svg
+assets/Inbox tray/Flat/inbox_tray_flat.svg
+assets/Incoming envelope/Flat/incoming_envelope_flat.svg
+assets/Index pointing at the viewer/Default/Flat/index_pointing_at_the_viewer_flat_default.svg
+assets/Index pointing up/Default/Flat/index_pointing_up_flat_default.svg
+assets/Infinity/Flat/infinity_flat.svg
+assets/Information/Flat/information_flat.svg
+assets/Input latin letters/Flat/input_latin_letters_flat.svg
+assets/Input latin lowercase/Flat/input_latin_lowercase_flat.svg
+assets/Input latin uppercase/Flat/input_latin_uppercase_flat.svg
+assets/Input numbers/Flat/input_numbers_flat.svg
+assets/Input symbols/Flat/input_symbols_flat.svg
+assets/Jack-o-lantern/Flat/jack-o-lantern_flat.svg
+assets/Japanese acceptable button/Flat/japanese_acceptable_button_flat.svg
+assets/Japanese application button/Flat/japanese_application_button_flat.svg
+assets/Japanese bargain button/Flat/japanese_bargain_button_flat.svg
+assets/Japanese castle/Flat/japanese_castle_flat.svg
+assets/Japanese congratulations button/Flat/japanese_congratulations_button_flat.svg
+assets/Japanese discount button/Flat/japanese_discount_button_flat.svg
+assets/Japanese dolls/Flat/japanese_dolls_flat.svg
+assets/Japanese free of charge button/Flat/japanese_free_of_charge_button_flat.svg
+assets/Japanese here button/Flat/japanese_here_button_flat.svg
+assets/Japanese monthly amount button/Flat/japanese_monthly_amount_button_flat.svg
+assets/Japanese no vacancy button/Flat/japanese_no_vacancy_button_flat.svg
+assets/Japanese not free of charge button/Flat/japanese_not_free_of_charge_button_flat.svg
+assets/Japanese open for business button/Flat/japanese_open_for_business_button_flat.svg
+assets/Japanese passing grade button/Flat/japanese_passing_grade_button_flat.svg
+assets/Japanese post office/Flat/japanese_post_office_flat.svg
+assets/Japanese prohibited button/Flat/japanese_prohibited_button_flat.svg
+assets/Japanese reserved button/Flat/japanese_reserved_button_flat.svg
+assets/Japanese secret button/Flat/japanese_secret_button_flat.svg
+assets/Japanese service charge button/Flat/japanese_service_charge_button_flat.svg
+assets/Japanese symbol for beginner/Flat/japanese_symbol_for_beginner_flat.svg
+assets/Japanese vacancy button/Flat/japanese_vacancy_button_flat.svg
+assets/Jar/Flat/jar_flat.svg
+assets/Jeans/Flat/jeans_flat.svg
+assets/Jellyfish/Flat/jellyfish_flat.svg
+assets/Joker/Flat/joker_flat.svg
+assets/Joystick/Flat/joystick_flat.svg
+assets/Judge/Default/Flat/judge_flat_default.svg
+assets/Kaaba/Flat/kaaba_flat.svg
+assets/Kangaroo/Flat/kangaroo_flat.svg
+assets/Key/Flat/key_flat.svg
+assets/Keyboard/Flat/keyboard_flat.svg
+assets/Keycap 0/Flat/keycap_0_flat.svg
+assets/Keycap 1/Flat/keycap_1_flat.svg
+assets/Keycap 10/Flat/keycap_10_flat.svg
+assets/Keycap 2/Flat/keycap_2_flat.svg
+assets/Keycap 3/Flat/keycap_3_flat.svg
+assets/Keycap 4/Flat/keycap_4_flat.svg
+assets/Keycap 5/Flat/keycap_5_flat.svg
+assets/Keycap 6/Flat/keycap_6_flat.svg
+assets/Keycap 7/Flat/keycap_7_flat.svg
+assets/Keycap 8/Flat/keycap_8_flat.svg
+assets/Keycap 9/Flat/keycap_9_flat.svg
+assets/Keycap asterisk/Flat/keycap_asterisk_flat.svg
+assets/Keycap hashtag/Flat/keycap_hashtag_flat.svg
+assets/Khanda/Flat/khanda_flat.svg
+assets/Kick scooter/Flat/kick_scooter_flat.svg
+assets/Kimono/Flat/kimono_flat.svg
+assets/Kiss mark/Flat/kiss_mark_flat.svg
+assets/Kissing cat/Flat/kissing_cat_flat.svg
+assets/Kissing face with closed eyes/Flat/kissing_face_with_closed_eyes_flat.svg
+assets/Kissing face with smiling eyes/Flat/kissing_face_with_smiling_eyes_flat.svg
+assets/Kissing face/Flat/kissing_face_flat.svg
+assets/Kitchen knife/Flat/kitchen_knife_flat.svg
+assets/Kite/Flat/kite_flat.svg
+assets/Kiwi fruit/Flat/kiwi_fruit_flat.svg
+assets/Knocked-out face/Flat/knocked-out_face_flat.svg
+assets/Knot/Flat/knot_flat.svg
+assets/Koala/Flat/koala_flat.svg
+assets/Lab coat/Flat/lab_coat_flat.svg
+assets/Label/Flat/label_flat.svg
+assets/Lacrosse/Flat/lacrosse_flat.svg
+assets/Ladder/Flat/ladder_flat.svg
+assets/Lady beetle/Flat/lady_beetle_flat.svg
+assets/Laptop/Flat/laptop_flat.svg
+assets/Large blue diamond/Flat/large_blue_diamond_flat.svg
+assets/Large orange diamond/Flat/large_orange_diamond_flat.svg
+assets/Last quarter moon face/Flat/last_quarter_moon_face_flat.svg
+assets/Last quarter moon/Flat/last_quarter_moon_flat.svg
+assets/Last track button/Flat/last_track_button_flat.svg
+assets/Latin cross/Flat/latin_cross_flat.svg
+assets/Leaf fluttering in wind/Flat/leaf_fluttering_in_wind_flat.svg
+assets/Leafy green/Flat/leafy_green_flat.svg
+assets/Ledger/Flat/ledger_flat.svg
+assets/Left arrow curving right/Flat/left_arrow_curving_right_flat.svg
+assets/Left arrow/Flat/left_arrow_flat.svg
+assets/Left luggage/Flat/left_luggage_flat.svg
+assets/Left speech bubble/Flat/left_speech_bubble_flat.svg
+assets/Left-facing fist/Default/Flat/left-facing_fist_flat_default.svg
+assets/Left-right arrow/Flat/left-right_arrow_flat.svg
+assets/Leftwards hand/Default/Flat/leftwards_hand_flat_default.svg
+assets/Leftwards pushing hand/Default/Flat/leftwards_pushing_hand_flat_default.svg
+assets/Leg/Default/Flat/leg_flat_default.svg
+assets/Lemon/Flat/lemon_flat.svg
+assets/Leo/Flat/leo_flat.svg
+assets/Leopard/Flat/leopard_flat.svg
+assets/Level slider/Flat/level_slider_flat.svg
+assets/Libra/Flat/libra_flat.svg
+assets/Light blue heart/Flat/light_blue_heart_flat.svg
+assets/Light bulb/Flat/light_bulb_flat.svg
+assets/Light rail/Flat/light_rail_flat.svg
+assets/Lime/Flat/lime_flat.svg
+assets/Link/Flat/link_flat.svg
+assets/Linked paperclips/Flat/linked_paperclips_flat.svg
+assets/Lion/Flat/lion_flat.svg
+assets/Lipstick/Flat/lipstick_flat.svg
+assets/Litter in bin sign/Flat/litter_in_bin_sign_flat.svg
+assets/Lizard/Flat/lizard_flat.svg
+assets/Llama/Flat/llama_flat.svg
+assets/Lobster/Flat/lobster_flat.svg
+assets/Locked with key/Flat/locked_with_key_flat.svg
+assets/Locked with pen/Flat/locked_with_pen_flat.svg
+assets/Locked/Flat/locked_flat.svg
+assets/Locomotive/Flat/locomotive_flat.svg
+assets/Lollipop/Flat/lollipop_flat.svg
+assets/Long drum/Flat/long_drum_flat.svg
+assets/Lotion bottle/Flat/lotion_bottle_flat.svg
+assets/Lotus/Flat/lotus_flat.svg
+assets/Loudly crying face/Flat/loudly_crying_face_flat.svg
+assets/Loudspeaker/Flat/loudspeaker_flat.svg
+assets/Love hotel/Flat/love_hotel_flat.svg
+assets/Love letter/Flat/love_letter_flat.svg
+assets/Love-you gesture/Default/Flat/love-you_gesture_flat_default.svg
+assets/Low battery/Flat/low_battery_flat.svg
+assets/Luggage/Flat/luggage_flat.svg
+assets/Lungs/Flat/lungs_flat.svg
+assets/Lying face/Flat/lying_face_flat.svg
+assets/Magic wand/Flat/magic_wand_flat.svg
+assets/Magnet/Flat/magnet_flat.svg
+assets/Magnifying glass tilted left/Flat/magnifying_glass_tilted_left_flat.svg
+assets/Magnifying glass tilted right/Flat/magnifying_glass_tilted_right_flat.svg
+assets/Mahjong red dragon/Flat/mahjong_red_dragon_flat.svg
+assets/Male sign/Flat/male_sign_flat.svg
+assets/Mammoth/Flat/mammoth_flat.svg
+assets/Man artist/Default/Flat/man_artist_flat_default.svg
+assets/Man astronaut/Default/Flat/man_astronaut_flat_default.svg
+assets/Man bald/Default/Flat/man_bald_flat_default.svg
+assets/Man beard/Default/Flat/man_beard_flat_default.svg
+assets/Man biking/Default/Flat/man_biking_flat_default.svg
+assets/Man blonde hair/Default/Flat/man_blonde_hair_flat_default.svg
+assets/Man bouncing ball/Default/Flat/man_bouncing_ball_flat_default.svg
+assets/Man bowing/Default/Flat/man_bowing_flat_default.svg
+assets/Man cartwheeling/Default/Flat/man_cartwheeling_flat_default.svg
+assets/Man climbing/Default/Flat/man_climbing_flat_default.svg
+assets/Man construction worker/Default/Flat/man_construction_worker_flat_default.svg
+assets/Man cook/Default/Flat/man_cook_flat_default.svg
+assets/Man curly hair/Default/Flat/man_curly_hair_flat_default.svg
+assets/Man dancing/Default/Flat/man_dancing_flat_default.svg
+assets/Man deaf/Default/Flat/man_deaf_flat_default.svg
+assets/Man detective/Default/Flat/man_detective_flat_default.svg
+assets/Man elf/Default/Flat/man_elf_flat_default.svg
+assets/Man facepalming/Default/Flat/man_facepalming_flat_default.svg
+assets/Man factory worker/Default/Flat/man_factory_worker_flat_default.svg
+assets/Man fairy/Default/Flat/man_fairy_flat_default.svg
+assets/Man farmer/Default/Flat/man_farmer_flat_default.svg
+assets/Man feeding baby/Default/Flat/man_feeding_baby_flat_default.svg
+assets/Man firefighter/Default/Flat/man_firefighter_flat_default.svg
+assets/Man frowning/Default/Flat/man_frowning_flat_default.svg
+assets/Man genie/Flat/man_genie_flat.svg
+assets/Man gesturing no/Default/Flat/man_gesturing_no_flat_default.svg
+assets/Man gesturing ok/Default/Flat/man_gesturing_ok_flat_default.svg
+assets/Man getting haircut/Default/Flat/man_getting_haircut_flat_default.svg
+assets/Man getting massage/Default/Flat/man_getting_massage_flat_default.svg
+assets/Man golfing/Default/Flat/man_golfing_flat_default.svg
+assets/Man guard/Default/Flat/man_guard_flat_default.svg
+assets/Man health worker/Default/Flat/man_health_worker_flat_default.svg
+assets/Man in lotus position/Default/Flat/man_in_lotus_position_flat_default.svg
+assets/Man in manual wheelchair facing right/Default/Flat/man_in_manual_wheelchair_facing_right_flat_default.svg
+assets/Man in manual wheelchair/Default/Flat/man_in_manual_wheelchair_flat_default.svg
+assets/Man in motorized wheelchair facing right/Default/Flat/man_in_motorized_wheelchair_facing_right_flat_default.svg
+assets/Man in motorized wheelchair/Default/Flat/man_in_motorized_wheelchair_flat_default.svg
+assets/Man in steamy room/Default/Flat/man_in_steamy_room_flat_default.svg
+assets/Man in tuxedo/Default/Flat/man_in_tuxedo_flat_default.svg
+assets/Man judge/Default/Flat/man_judge_flat_default.svg
+assets/Man juggling/Default/Flat/man_juggling_flat_default.svg
+assets/Man kneeling facing right/Default/Flat/man_kneeling_facing_right_flat_default.svg
+assets/Man kneeling/Default/Flat/man_kneeling_flat_default.svg
+assets/Man lifting weights/Default/Flat/man_lifting_weights_flat_default.svg
+assets/Man mage/Default/Flat/man_mage_flat_default.svg
+assets/Man mechanic/Default/Flat/man_mechanic_flat_default.svg
+assets/Man merpeople/Default/Flat/man_merpeople_flat_default.svg
+assets/Man mountain biking/Default/Flat/man_mountain_biking_flat_default.svg
+assets/Man office worker/Default/Flat/man_office_worker_flat_default.svg
+assets/Man pilot/Default/Flat/man_pilot_flat_default.svg
+assets/Man playing handball/Default/Flat/man_playing_handball_flat_default.svg
+assets/Man playing water polo/Default/Flat/man_playing_water_polo_flat_default.svg
+assets/Man police officer/Default/Flat/man_police_officer_flat_default.svg
+assets/Man pouting/Default/Flat/man_pouting_flat_default.svg
+assets/Man raising hand/Default/Flat/man_raising_hand_flat_default.svg
+assets/Man red hair/Default/Flat/man_red_hair_flat_default.svg
+assets/Man rowing boat/Default/Flat/man_rowing_boat_flat_default.svg
+assets/Man running facing right/Default/Flat/man_running_facing_right_flat_default.svg
+assets/Man running/Default/Flat/man_running_flat_default.svg
+assets/Man scientist/Default/Flat/man_scientist_flat_default.svg
+assets/Man shrugging/Default/Flat/man_shrugging_flat_default.svg
+assets/Man singer/Default/Flat/man_singer_flat_default.svg
+assets/Man standing/Default/Flat/man_standing_flat_default.svg
+assets/Man student/Default/Flat/man_student_flat_default.svg
+assets/Man superhero/Default/Flat/man_superhero_flat_default.svg
+assets/Man supervillain/Default/Flat/man_supervillain_flat_default.svg
+assets/Man surfing/Default/Flat/man_surfing_flat_default.svg
+assets/Man swimming/Default/Flat/man_swimming_flat_default.svg
+assets/Man teacher/Default/Flat/man_teacher_flat_default.svg
+assets/Man technologist/Default/Flat/man_technologist_flat_default.svg
+assets/Man tipping hand/Default/Flat/man_tipping_hand_flat_default.svg
+assets/Man vampire/Default/Flat/man_vampire_flat_default.svg
+assets/Man walking facing right/Default/Flat/man_walking_facing_right_flat_default.svg
+assets/Man walking/Default/Flat/man_walking_flat_default.svg
+assets/Man wearing turban/Default/Flat/man_wearing_turban_flat_default.svg
+assets/Man white hair/Default/Flat/man_white_hair_flat_default.svg
+assets/Man with bunny ears/Flat/man_with_bunny_ears_flat.svg
+assets/Man with veil/Default/Flat/man_with_veil_flat_default.svg
+assets/Man with white cane facing right/Default/Flat/man_with_white_cane_facing_right_flat_default.svg
+assets/Man with white cane/Default/Flat/man_with_white_cane_flat_default.svg
+assets/Man wrestling/Flat/man_wrestling_flat.svg
+assets/Man zombie/Flat/man_zombie_flat.svg
+assets/Man/Default/Flat/man_flat_default.svg
+assets/Mango/Flat/mango_flat.svg
+assets/Mans shoe/Flat/mans_shoe_flat.svg
+assets/Mantelpiece clock/Flat/mantelpiece_clock_flat.svg
+assets/Manual wheelchair/Flat/manual_wheelchair_flat.svg
+assets/Map of japan/Flat/map_of_japan_flat.svg
+assets/Maple leaf/Flat/maple_leaf_flat.svg
+assets/Maracas/Flat/maracas_flat.svg
+assets/Martial arts uniform/Flat/martial_arts_uniform_flat.svg
+assets/Mate/Flat/mate_flat.svg
+assets/Meat on bone/Flat/meat_on_bone_flat.svg
+assets/Mechanic/Default/Flat/mechanic_flat_default.svg
+assets/Mechanical arm/Flat/mechanical_arm_flat.svg
+assets/Mechanical leg/Flat/mechanical_leg_flat.svg
+assets/Medical symbol/Flat/medical_symbol_flat.svg
+assets/Megaphone/Flat/megaphone_flat.svg
+assets/Melon/Flat/melon_flat.svg
+assets/Melting face/Flat/melting_face_flat.svg
+assets/Memo/Flat/memo_flat.svg
+assets/Mending heart/Flat/mending_heart_flat.svg
+assets/Menorah/Flat/menorah_flat.svg
+assets/Mens room/Flat/mens_room_flat.svg
+assets/Metro/Flat/metro_flat.svg
+assets/Microbe/Flat/microbe_flat.svg
+assets/Microphone/Flat/microphone_flat.svg
+assets/Microscope/Flat/microscope_flat.svg
+assets/Middle finger/Default/Flat/middle_finger_flat_default.svg
+assets/Military helmet/Flat/military_helmet_flat.svg
+assets/Military medal/Flat/military_medal_flat.svg
+assets/Milky way/Flat/milky_way_flat.svg
+assets/Minibus/Flat/minibus_flat.svg
+assets/Minus/Flat/minus_flat.svg
+assets/Mirror ball/Flat/mirror_ball_flat.svg
+assets/Mirror/Flat/mirror_flat.svg
+assets/Moai/Flat/moai_flat.svg
+assets/Mobile phone off/Flat/mobile_phone_off_flat.svg
+assets/Mobile phone with arrow/Flat/mobile_phone_with_arrow_flat.svg
+assets/Mobile phone/Flat/mobile_phone_flat.svg
+assets/Money bag/Flat/money_bag_flat.svg
+assets/Money with wings/Flat/money_with_wings_flat.svg
+assets/Money-mouth face/Flat/money-mouth_face_flat.svg
+assets/Monkey face/Flat/monkey_face_flat.svg
+assets/Monkey/Flat/monkey_flat.svg
+assets/Monorail/Flat/monorail_flat.svg
+assets/Moon cake/Flat/moon_cake_flat.svg
+assets/Moon viewing ceremony/Flat/moon_viewing_ceremony_flat.svg
+assets/Moose/Flat/moose_flat.svg
+assets/Mosque/Flat/mosque_flat.svg
+assets/Mosquito/Flat/mosquito_flat.svg
+assets/Motor boat/Flat/motor_boat_flat.svg
+assets/Motor scooter/Flat/motor_scooter_flat.svg
+assets/Motorcycle/Flat/motorcycle_flat.svg
+assets/Motorized wheelchair/Flat/motorized_wheelchair_flat.svg
+assets/Motorway/Flat/motorway_flat.svg
+assets/Mount fuji/Flat/mount_fuji_flat.svg
+assets/Mountain cableway/Flat/mountain_cableway_flat.svg
+assets/Mountain railway/Flat/mountain_railway_flat.svg
+assets/Mountain/Flat/mountain_flat.svg
+assets/Mouse face/Flat/mouse_face_flat.svg
+assets/Mouse trap/Flat/mouse_trap_flat.svg
+assets/Mouse/Flat/mouse_flat.svg
+assets/Mouth/Flat/mouth_flat.svg
+assets/Movie camera/Flat/movie_camera_flat.svg
+assets/Mrs claus/Default/Flat/mrs_claus_flat_default.svg
+assets/Multiply/Flat/multiply_flat.svg
+assets/Mushroom/Flat/mushroom_flat.svg
+assets/Musical keyboard/Flat/musical_keyboard_flat.svg
+assets/Musical note/Flat/musical_note_flat.svg
+assets/Musical notes/Flat/musical_notes_flat.svg
+assets/Musical score/Flat/musical_score_flat.svg
+assets/Muted speaker/Flat/muted_speaker_flat.svg
+assets/Mx claus/Default/Flat/mx_claus_flat_default.svg
+assets/Nail polish/Default/Flat/nail_polish_flat_default.svg
+assets/Name badge/Flat/name_badge_flat.svg
+assets/National park/Flat/national_park_flat.svg
+assets/Nauseated face/Flat/nauseated_face_flat.svg
+assets/Nazar amulet/Flat/nazar_amulet_flat.svg
+assets/Necktie/Flat/necktie_flat.svg
+assets/Nerd face/Flat/nerd_face_flat.svg
+assets/Nest with eggs/Flat/nest_with_eggs_flat.svg
+assets/Nesting dolls/Flat/nesting_dolls_flat.svg
+assets/Neutral face/Flat/neutral_face_flat.svg
+assets/New button/Flat/new_button_flat.svg
+assets/New moon face/Flat/new_moon_face_flat.svg
+assets/New moon/Flat/new_moon_flat.svg
+assets/Newspaper/Flat/newspaper_flat.svg
+assets/Next track button/Flat/next_track_button_flat.svg
+assets/Ng button/Flat/ng_button_flat.svg
+assets/Night with stars/Flat/night_with_stars_flat.svg
+assets/Nine oclock/Flat/nine_oclock_flat.svg
+assets/Nine-thirty/Flat/nine-thirty_flat.svg
+assets/Ninja/Default/Flat/ninja_flat_default.svg
+assets/No bicycles/Flat/no_bicycles_flat.svg
+assets/No entry/Flat/no_entry_flat.svg
+assets/No littering/Flat/no_littering_flat.svg
+assets/No mobile phones/Flat/no_mobile_phones_flat.svg
+assets/No one under eighteen/Flat/no_one_under_eighteen_flat.svg
+assets/No pedestrians/Flat/no_pedestrians_flat.svg
+assets/No smoking/Flat/no_smoking_flat.svg
+assets/Non-potable water/Flat/non-potable_water_flat.svg
+assets/Nose/Default/Flat/nose_flat_default.svg
+assets/Notebook with decorative cover/Flat/notebook_with_decorative_cover_flat.svg
+assets/Notebook/Flat/notebook_flat.svg
+assets/Nut and bolt/Flat/nut_and_bolt_flat.svg
+assets/O button blood type/Flat/o_button_(blood_type)_flat.svg
+assets/Octopus/Flat/octopus_flat.svg
+assets/Oden/Flat/oden_flat.svg
+assets/Office building/Flat/office_building_flat.svg
+assets/Office worker/Default/Flat/office_worker_flat_default.svg
+assets/Ogre/Flat/ogre_flat.svg
+assets/Oil drum/Flat/oil_drum_flat.svg
+assets/Ok button/Flat/ok_button_flat.svg
+assets/Ok hand/Default/Flat/ok_hand_flat_default.svg
+assets/Old key/Flat/old_key_flat.svg
+assets/Old man/Default/Flat/old_man_flat_default.svg
+assets/Old woman/Default/Flat/old_woman_flat_default.svg
+assets/Older person/Default/Flat/older_person_flat_default.svg
+assets/Olive/Flat/olive_flat.svg
+assets/Om/Flat/om_flat.svg
+assets/On! arrow/Flat/on!_arrow_flat.svg
+assets/Oncoming automobile/Flat/oncoming_automobile_flat.svg
+assets/Oncoming bus/Flat/oncoming_bus_flat.svg
+assets/Oncoming fist/Default/Flat/oncoming_fist_flat_default.svg
+assets/Oncoming police car/Flat/oncoming_police_car_flat.svg
+assets/Oncoming taxi/Flat/oncoming_taxi_flat.svg
+assets/One oclock/Flat/one_oclock_flat.svg
+assets/One-piece swimsuit/Flat/one-piece_swimsuit_flat.svg
+assets/One-thirty/Flat/one-thirty_flat.svg
+assets/Onion/Flat/onion_flat.svg
+assets/Open book/Flat/open_book_flat.svg
+assets/Open file folder/Flat/open_file_folder_flat.svg
+assets/Open hands/Default/Flat/open_hands_flat_default.svg
+assets/Open mailbox with lowered flag/Flat/open_mailbox_with_lowered_flag_flat.svg
+assets/Open mailbox with raised flag/Flat/open_mailbox_with_raised_flag_flat.svg
+assets/Ophiuchus/Flat/ophiuchus_flat.svg
+assets/Optical disk/Flat/optical_disk_flat.svg
+assets/Orange book/Flat/orange_book_flat.svg
+assets/Orange circle/Flat/orange_circle_flat.svg
+assets/Orange heart/Flat/orange_heart_flat.svg
+assets/Orange square/Flat/orange_square_flat.svg
+assets/Orangutan/Flat/orangutan_flat.svg
+assets/Orthodox cross/Flat/orthodox_cross_flat.svg
+assets/Otter/Flat/otter_flat.svg
+assets/Outbox tray/Flat/outbox_tray_flat.svg
+assets/Owl/Flat/owl_flat.svg
+assets/Ox/Flat/ox_flat.svg
+assets/Oyster/Flat/oyster_flat.svg
+assets/P button/Flat/p_button_flat.svg
+assets/Package/Flat/package_flat.svg
+assets/Page facing up/Flat/page_facing_up_flat.svg
+assets/Page with curl/Flat/page_with_curl_flat.svg
+assets/Pager/Flat/pager_flat.svg
+assets/Paintbrush/Flat/paintbrush_flat.svg
+assets/Palm down hand/Default/Flat/palm_down_hand_flat_default.svg
+assets/Palm tree/Flat/palm_tree_flat.svg
+assets/Palm up hand/Default/Flat/palm_up_hand_flat_default.svg
+assets/Palms up together/Default/Flat/palms_up_together_flat_default.svg
+assets/Pancakes/Flat/pancakes_flat.svg
+assets/Panda/Flat/panda_flat.svg
+assets/Paperclip/Flat/paperclip_flat.svg
+assets/Parachute/Flat/parachute_flat.svg
+assets/Parrot/Flat/parrot_flat.svg
+assets/Part alternation mark/Flat/part_alternation_mark_flat.svg
+assets/Party popper/Flat/party_popper_flat.svg
+assets/Partying face/Flat/partying_face_flat.svg
+assets/Passenger ship/Flat/passenger_ship_flat.svg
+assets/Passport control/Flat/passport_control_flat.svg
+assets/Pause button/Flat/pause_button_flat.svg
+assets/Paw prints/Flat/paw_prints_flat.svg
+assets/Pea pod/Flat/pea_pod_flat.svg
+assets/Peace symbol/Flat/peace_symbol_flat.svg
+assets/Peach/Flat/peach_flat.svg
+assets/Peacock/Flat/peacock_flat.svg
+assets/Peanuts/Flat/peanuts_flat.svg
+assets/Pear/Flat/pear_flat.svg
+assets/Pen/Flat/pen_flat.svg
+assets/Pencil/Flat/pencil_flat.svg
+assets/Penguin/Flat/penguin_flat.svg
+assets/Pensive face/Flat/pensive_face_flat.svg
+assets/People hugging/Flat/people_hugging_flat.svg
+assets/Performing arts/Flat/performing_arts_flat.svg
+assets/Persevering face/Flat/persevering_face_flat.svg
+assets/Person bald/Default/Flat/person_bald_flat_default.svg
+assets/Person beard/Default/Flat/person_beard_flat_default.svg
+assets/Person biking/Default/Flat/person_biking_flat_default.svg
+assets/Person blonde hair/Default/Flat/person_blonde_hair_flat_default.svg
+assets/Person bouncing ball/Default/Flat/person_bouncing_ball_flat_default.svg
+assets/Person bowing/Default/Flat/person_bowing_flat_default.svg
+assets/Person cartwheeling/Default/Flat/person_cartwheeling_flat_default.svg
+assets/Person climbing/Default/Flat/person_climbing_flat_default.svg
+assets/Person curly hair/Default/Flat/person_curly_hair_flat_default.svg
+assets/Person deaf/Default/Flat/person_deaf_flat_default.svg
+assets/Person elf/Default/Flat/person_elf_flat_default.svg
+assets/Person facepalming/Default/Flat/person_facepalming_flat_default.svg
+assets/Person fairy/Default/Flat/person_fairy_flat_default.svg
+assets/Person feeding baby/Default/Flat/person_feeding_baby_flat_default.svg
+assets/Person fencing/Flat/person_fencing_flat.svg
+assets/Person frowning/Default/Flat/person_frowning_flat_default.svg
+assets/Person genie/Flat/person_genie_flat.svg
+assets/Person gesturing no/Default/Flat/person_gesturing_no_flat_default.svg
+assets/Person gesturing ok/Default/Flat/person_gesturing_ok_flat_default.svg
+assets/Person getting haircut/Default/Flat/person_getting_haircut_flat_default.svg
+assets/Person getting massage/Default/Flat/person_getting_massage_flat_default.svg
+assets/Person golfing/Default/Flat/person_golfing_flat_default.svg
+assets/Person in bed/Default/Flat/person_in_bed_flat_default.svg
+assets/Person in lotus position/Default/Flat/person_in_lotus_position_flat_default.svg
+assets/Person in manual wheelchair facing right/Default/Flat/person_in_manual_wheelchair_facing_right_flat_default.svg
+assets/Person in manual wheelchair/Default/Flat/person_in_manual_wheelchair_flat_default.svg
+assets/Person in motorized wheelchair facing right/Default/Flat/person_in_motorized_wheelchair_facing_right_flat_default.svg
+assets/Person in motorized wheelchair/Default/Flat/person_in_motorized_wheelchair_flat_default.svg
+assets/Person in steamy room/Default/Flat/person_in_steamy_room_flat_default.svg
+assets/Person in suit levitating/Default/Flat/person_in_suit_levitating_flat_default.svg
+assets/Person in tuxedo/Default/Flat/person_in_tuxedo_flat_default.svg
+assets/Person juggling/Default/Flat/person_juggling_flat_default.svg
+assets/Person kneeling facing right/Default/Flat/person_kneeling_facing_right_flat_default.svg
+assets/Person kneeling/Default/Flat/person_kneeling_flat_default.svg
+assets/Person lifting weights/Default/Flat/person_lifting_weights_flat_default.svg
+assets/Person mage/Default/Flat/person_mage_flat_default.svg
+assets/Person merpeople/Default/Flat/person_merpeople_flat_default.svg
+assets/Person mountain biking/Default/Flat/person_mountain_biking_flat_default.svg
+assets/Person playing handball/Default/Flat/person_playing_handball_flat_default.svg
+assets/Person playing water polo/Default/Flat/person_playing_water_polo_flat_default.svg
+assets/Person pouting/Default/Flat/person_pouting_flat_default.svg
+assets/Person raising hand/Default/Flat/person_raising_hand_flat_default.svg
+assets/Person red hair/Default/Flat/person_red_hair_flat_default.svg
+assets/Person rowing boat/Default/Flat/person_rowing_boat_flat_default.svg
+assets/Person running facing right/Default/Flat/person_running_facing_right_flat_default.svg
+assets/Person running/Default/Flat/person_running_flat_default.svg
+assets/Person shrugging/Default/Flat/person_shrugging_flat_default.svg
+assets/Person standing/Default/Flat/person_standing_flat_default.svg
+assets/Person superhero/Default/Flat/person_superhero_flat_default.svg
+assets/Person supervillain/Default/Flat/person_supervillain_flat_default.svg
+assets/Person surfing/Default/Flat/person_surfing_flat_default.svg
+assets/Person swimming/Default/Flat/person_swimming_flat_default.svg
+assets/Person taking bath/Default/Flat/person_taking_bath_flat_default.svg
+assets/Person tipping hand/Default/Flat/person_tipping_hand_flat_default.svg
+assets/Person vampire/Default/Flat/person_vampire_flat_default.svg
+assets/Person walking facing right/Default/Flat/person_walking_facing_right_flat_default.svg
+assets/Person walking/Default/Flat/person_walking_flat_default.svg
+assets/Person wearing turban/Default/Flat/person_wearing_turban_flat_default.svg
+assets/Person white hair/Default/Flat/person_white_hair_flat_default.svg
+assets/Person with bunny ears/Flat/person_with_bunny_ears_flat.svg
+assets/Person with crown/Default/Flat/person_with_crown_flat_default.svg
+assets/Person with skullcap/Default/Flat/person_with_skullcap_flat_default.svg
+assets/Person with veil/Default/Flat/person_with_veil_flat_default.svg
+assets/Person with white cane facing right/Default/Flat/person_with_white_cane_facing_right_flat_default.svg
+assets/Person with white cane/Default/Flat/person_with_white_cane_flat_default.svg
+assets/Person wrestling/Flat/person_wrestling_flat.svg
+assets/Person zombie/Flat/person_zombie_flat.svg
+assets/Person/Default/Flat/person_flat_default.svg
+assets/Petri dish/Flat/petri_dish_flat.svg
+assets/Phoenix bird/Flat/phoenix_bird_flat.svg
+assets/Pick/Flat/pick_flat.svg
+assets/Pickup truck/Flat/pickup_truck_flat.svg
+assets/Pie/Flat/pie_flat.svg
+assets/Pig face/Flat/pig_face_flat.svg
+assets/Pig nose/Flat/pig_nose_flat.svg
+assets/Pig/Flat/pig_flat.svg
+assets/Pile of poo/Flat/pile_of_poo_flat.svg
+assets/Pill/Flat/pill_flat.svg
+assets/Pilot/Default/Flat/pilot_flat_default.svg
+assets/Pinched fingers/Default/Flat/pinched_fingers_flat_default.svg
+assets/Pinching hand/Default/Flat/pinching_hand_flat_default.svg
+assets/Pine decoration/Flat/pine_decoration_flat.svg
+assets/Pineapple/Flat/pineapple_flat.svg
+assets/Ping pong/Flat/ping_pong_flat.svg
+assets/Pink heart/Flat/pink_heart_flat.svg
+assets/Pirate flag/Flat/pirate_flag_flat.svg
+assets/Pisces/Flat/pisces_flat.svg
+assets/Pizza/Flat/pizza_flat.svg
+assets/Piñata/Flat/piñata_flat.svg
+assets/Placard/Flat/placard_flat.svg
+assets/Place of worship/Flat/place_of_worship_flat.svg
+assets/Play button/Flat/play_button_flat.svg
+assets/Play or pause button/Flat/play_or_pause_button_flat.svg
+assets/Playground slide/Flat/playground_slide_flat.svg
+assets/Pleading face/Flat/pleading_face_flat.svg
+assets/Plunger/Flat/plunger_flat.svg
+assets/Plus/Flat/plus_flat.svg
+assets/Polar bear/Flat/polar_bear_flat.svg
+assets/Police car light/Flat/police_car_light_flat.svg
+assets/Police car/Flat/police_car_flat.svg
+assets/Police officer/Default/Flat/police_officer_flat_default.svg
+assets/Poodle/Flat/poodle_flat.svg
+assets/Pool 8 ball/Flat/pool_8_ball_flat.svg
+assets/Popcorn/Flat/popcorn_flat.svg
+assets/Post office/Flat/post_office_flat.svg
+assets/Postal horn/Flat/postal_horn_flat.svg
+assets/Postbox/Flat/postbox_flat.svg
+assets/Pot of food/Flat/pot_of_food_flat.svg
+assets/Potable water/Flat/potable_water_flat.svg
+assets/Potato/Flat/potato_flat.svg
+assets/Potted plant/Flat/potted_plant_flat.svg
+assets/Poultry leg/Flat/poultry_leg_flat.svg
+assets/Pound banknote/Flat/pound_banknote_flat.svg
+assets/Pouring liquid/Flat/pouring_liquid_flat.svg
+assets/Pouting cat/Flat/pouting_cat_flat.svg
+assets/Pouting face/Flat/pouting_face_flat.svg
+assets/Prayer beads/Flat/prayer_beads_flat.svg
+assets/Pregnant man/Default/Flat/pregnant_man_flat_default.svg
+assets/Pregnant person/Default/Flat/pregnant_person_flat_default.svg
+assets/Pregnant woman/Default/Flat/pregnant_woman_flat_default.svg
+assets/Pretzel/Flat/pretzel_flat.svg
+assets/Prince/Default/Flat/prince_flat_default.svg
+assets/Princess/Default/Flat/princess_flat_default.svg
+assets/Printer/Flat/printer_flat.svg
+assets/Prohibited/Flat/prohibited_flat.svg
+assets/Purple circle/Flat/purple_circle_flat.svg
+assets/Purple heart/Flat/purple_heart_flat.svg
+assets/Purple square/Flat/purple_square_flat.svg
+assets/Purse/Flat/purse_flat.svg
+assets/Pushpin/Flat/pushpin_flat.svg
+assets/Puzzle piece/Flat/puzzle_piece_flat.svg
+assets/Rabbit face/Flat/rabbit_face_flat.svg
+assets/Rabbit/Flat/rabbit_flat.svg
+assets/Raccoon/Flat/raccoon_flat.svg
+assets/Racing car/Flat/racing_car_flat.svg
+assets/Radio button/Flat/radio_button_flat.svg
+assets/Radio/Flat/radio_flat.svg
+assets/Radioactive/Flat/radioactive_flat.svg
+assets/Railway car/Flat/railway_car_flat.svg
+assets/Railway track/Flat/railway_track_flat.svg
+assets/Rainbow flag/Flat/rainbow_flag_flat.svg
+assets/Rainbow/Flat/rainbow_flat.svg
+assets/Raised back of hand/Default/Flat/raised_back_of_hand_flat_default.svg
+assets/Raised fist/Default/Flat/raised_fist_flat_default.svg
+assets/Raised hand/Default/Flat/raised_hand_flat_default.svg
+assets/Raising hands/Default/Flat/raising_hands_flat_default.svg
+assets/Ram/Flat/ram_flat.svg
+assets/Rat/Flat/rat_flat.svg
+assets/Razor/Flat/razor_flat.svg
+assets/Receipt/Flat/receipt_flat.svg
+assets/Record button/Flat/record_button_flat.svg
+assets/Recycling symbol/Flat/recycling_symbol_flat.svg
+assets/Red apple/Flat/red_apple_flat.svg
+assets/Red circle/Flat/red_circle_flat.svg
+assets/Red envelope/Flat/red_envelope_flat.svg
+assets/Red exclamation mark/Flat/red_exclamation_mark_flat.svg
+assets/Red heart/Flat/red_heart_flat.svg
+assets/Red paper lantern/Flat/red_paper_lantern_flat.svg
+assets/Red question mark/Flat/red_question_mark_flat.svg
+assets/Red square/Flat/red_square_flat.svg
+assets/Red triangle pointed down/Flat/red_triangle_pointed_down_flat.svg
+assets/Red triangle/Flat/red_triangle_flat.svg
+assets/Registered/Flat/registered_flat.svg
+assets/Relieved face/Flat/relieved_face_flat.svg
+assets/Reminder ribbon/Flat/reminder_ribbon_flat.svg
+assets/Repeat button/Flat/repeat_button_flat.svg
+assets/Repeat single button/Flat/repeat_single_button_flat.svg
+assets/Rescue workers helmet/Flat/rescue_workers_helmet_flat.svg
+assets/Restroom/Flat/restroom_flat.svg
+assets/Reverse button/Flat/reverse_button_flat.svg
+assets/Revolving hearts/Flat/revolving_hearts_flat.svg
+assets/Rhinoceros/Flat/rhinoceros_flat.svg
+assets/Ribbon/Flat/ribbon_flat.svg
+assets/Rice ball/Flat/rice_ball_flat.svg
+assets/Rice cracker/Flat/rice_cracker_flat.svg
+assets/Right anger bubble/Flat/right_anger_bubble_flat.svg
+assets/Right arrow curving down/Flat/right_arrow_curving_down_flat.svg
+assets/Right arrow curving left/Flat/right_arrow_curving_left_flat.svg
+assets/Right arrow curving up/Flat/right_arrow_curving_up_flat.svg
+assets/Right arrow/Flat/right_arrow_flat.svg
+assets/Right-facing fist/Default/Flat/right-facing_fist_flat_default.svg
+assets/Rightwards hand/Default/Flat/rightwards_hand_flat_default.svg
+assets/Rightwards pushing hand/Default/Flat/rightwards_pushing_hand_flat_default.svg
+assets/Ring buoy/Flat/ring_buoy_flat.svg
+assets/Ring/Flat/ring_flat.svg
+assets/Ringed planet/Flat/ringed_planet_flat.svg
+assets/Roasted sweet potato/Flat/roasted_sweet_potato_flat.svg
+assets/Robot/Flat/robot_flat.svg
+assets/Rock/Flat/rock_flat.svg
+assets/Rocket/Flat/rocket_flat.svg
+assets/Roll of paper/Flat/roll_of_paper_flat.svg
+assets/Rolled-up newspaper/Flat/rolled-up_newspaper_flat.svg
+assets/Roller coaster/Flat/roller_coaster_flat.svg
+assets/Roller skate/Flat/roller_skate_flat.svg
+assets/Rolling on the floor laughing/Flat/rolling_on_the_floor_laughing_flat.svg
+assets/Rooster/Flat/rooster_flat.svg
+assets/Rose/Flat/rose_flat.svg
+assets/Rosette/Flat/rosette_flat.svg
+assets/Round pushpin/Flat/round_pushpin_flat.svg
+assets/Rugby football/Flat/rugby_football_flat.svg
+assets/Running shirt/Flat/running_shirt_flat.svg
+assets/Running shoe/Flat/running_shoe_flat.svg
+assets/Sad but relieved face/Flat/sad_but_relieved_face_flat.svg
+assets/Safety pin/Flat/safety_pin_flat.svg
+assets/Safety vest/Flat/safety_vest_flat.svg
+assets/Sagittarius/Flat/sagittarius_flat.svg
+assets/Sailboat/Flat/sailboat_flat.svg
+assets/Sake/Flat/sake_flat.svg
+assets/Salt/Flat/salt_flat.svg
+assets/Saluting face/Flat/saluting_face_flat.svg
+assets/Sandwich/Flat/sandwich_flat.svg
+assets/Santa claus/Default/Flat/santa_claus_flat_default.svg
+assets/Sari/Flat/sari_flat.svg
+assets/Satellite antenna/Flat/satellite_antenna_flat.svg
+assets/Satellite/Flat/satellite_flat.svg
+assets/Sauropod/Flat/sauropod_flat.svg
+assets/Saxophone/Flat/saxophone_flat.svg
+assets/Scarf/Flat/scarf_flat.svg
+assets/School/Flat/school_flat.svg
+assets/Scientist/Default/Flat/scientist_flat_default.svg
+assets/Scissors/Flat/scissors_flat.svg
+assets/Scorpio/Flat/scorpio_flat.svg
+assets/Scorpion/Flat/scorpion_flat.svg
+assets/Screwdriver/Flat/screwdriver_flat.svg
+assets/Scroll/Flat/scroll_flat.svg
+assets/Seal/Flat/seal_flat.svg
+assets/Seat/Flat/seat_flat.svg
+assets/See-no-evil monkey/Flat/see-no-evil_monkey_flat.svg
+assets/Seedling/Flat/seedling_flat.svg
+assets/Selfie/Default/Flat/selfie_flat_default.svg
+assets/Service dog/Flat/service_dog_flat.svg
+assets/Seven oclock/Flat/seven_oclock_flat.svg
+assets/Seven-thirty/Flat/seven-thirty_flat.svg
+assets/Sewing needle/Flat/sewing_needle_flat.svg
+assets/Shaking face/Flat/shaking_face_flat.svg
+assets/Shallow pan of food/Flat/shallow_pan_of_food_flat.svg
+assets/Shamrock/Flat/shamrock_flat.svg
+assets/Shark/Flat/shark_flat.svg
+assets/Shaved ice/Flat/shaved_ice_flat.svg
+assets/Sheaf of rice/Flat/sheaf_of_rice_flat.svg
+assets/Shield/Flat/shield_flat.svg
+assets/Shinto shrine/Flat/shinto_shrine_flat.svg
+assets/Ship/Flat/ship_flat.svg
+assets/Shooting star/Flat/shooting_star_flat.svg
+assets/Shopping bags/Flat/shopping_bags_flat.svg
+assets/Shopping cart/Flat/shopping_cart_flat.svg
+assets/Shortcake/Flat/shortcake_flat.svg
+assets/Shorts/Flat/shorts_flat.svg
+assets/Shower/Flat/shower_flat.svg
+assets/Shrimp/Flat/shrimp_flat.svg
+assets/Shuffle tracks button/Flat/shuffle_tracks_button_flat.svg
+assets/Shushing face/Flat/shushing_face_flat.svg
+assets/Sign of the horns/Default/Flat/sign_of_the_horns_flat_default.svg
+assets/Singer/Default/Flat/singer_flat_default.svg
+assets/Six oclock/Flat/six_oclock_flat.svg
+assets/Six-thirty/Flat/six-thirty_flat.svg
+assets/Skateboard/Flat/skateboard_flat.svg
+assets/Skier/Flat/skier_flat.svg
+assets/Skis/Flat/skis_flat.svg
+assets/Skull and crossbones/Flat/skull_and_crossbones_flat.svg
+assets/Skull/Flat/skull_flat.svg
+assets/Skunk/Flat/skunk_flat.svg
+assets/Sled/Flat/sled_flat.svg
+assets/Sleeping face/Flat/sleeping_face_flat.svg
+assets/Sleepy face/Flat/sleepy_face_flat.svg
+assets/Slightly frowning face/Flat/slightly_frowning_face_flat.svg
+assets/Slightly smiling face/Flat/slightly_smiling_face_flat.svg
+assets/Slot machine/Flat/slot_machine_flat.svg
+assets/Sloth/Flat/sloth_flat.svg
+assets/Small airplane/Flat/small_airplane_flat.svg
+assets/Small blue diamond/Flat/small_blue_diamond_flat.svg
+assets/Small orange diamond/Flat/small_orange_diamond_flat.svg
+assets/Smiling cat with heart-eyes/Flat/smiling_cat_with_heart-eyes_flat.svg
+assets/Smiling face with halo/Flat/smiling_face_with_halo_flat.svg
+assets/Smiling face with heart-eyes/Flat/smiling_face_with_heart-eyes_flat.svg
+assets/Smiling face with hearts/Flat/smiling_face_with_hearts_flat.svg
+assets/Smiling face with horns/Flat/smiling_face_with_horns_flat.svg
+assets/Smiling face with smiling eyes/Flat/smiling_face_with_smiling_eyes_flat.svg
+assets/Smiling face with sunglasses/Flat/smiling_face_with_sunglasses_flat.svg
+assets/Smiling face with tear/Flat/smiling_face_with_tear_flat.svg
+assets/Smiling face/Flat/smiling_face_flat.svg
+assets/Smirking face/Flat/smirking_face_flat.svg
+assets/Snail/Flat/snail_flat.svg
+assets/Snake/Flat/snake_flat.svg
+assets/Sneezing face/Flat/sneezing_face_flat.svg
+assets/Snow-capped mountain/Flat/snow-capped_mountain_flat.svg
+assets/Snowboarder/Default/Flat/snowboarder_flat_default.svg
+assets/Snowflake/Flat/snowflake_flat.svg
+assets/Snowman without snow/Flat/snowman_without_snow_flat.svg
+assets/Snowman/Flat/snowman_flat.svg
+assets/Soap/Flat/soap_flat.svg
+assets/Soccer ball/Flat/soccer_ball_flat.svg
+assets/Socks/Flat/socks_flat.svg
+assets/Soft ice cream/Flat/soft_ice_cream_flat.svg
+assets/Softball/Flat/softball_flat.svg
+assets/Soon arrow/Flat/soon_arrow_flat.svg
+assets/Sos button/Flat/sos_button_flat.svg
+assets/Spade suit/Flat/spade_suit_flat.svg
+assets/Spaghetti/Flat/spaghetti_flat.svg
+assets/Sparkle/Flat/sparkle_flat.svg
+assets/Sparkler/Flat/sparkler_flat.svg
+assets/Sparkles/Flat/sparkles_flat.svg
+assets/Sparkling heart/Flat/sparkling_heart_flat.svg
+assets/Speak-no-evil monkey/Flat/speak-no-evil_monkey_flat.svg
+assets/Speaker high volume/Flat/speaker_high_volume_flat.svg
+assets/Speaker low volume/Flat/speaker_low_volume_flat.svg
+assets/Speaker medium volume/Flat/speaker_medium_volume_flat.svg
+assets/Speaking head/Flat/speaking_head_flat.svg
+assets/Speech balloon/Flat/speech_balloon_flat.svg
+assets/Speedboat/Flat/speedboat_flat.svg
+assets/Spider web/Flat/spider_web_flat.svg
+assets/Spider/Flat/spider_flat.svg
+assets/Spiral calendar/Flat/spiral_calendar_flat.svg
+assets/Spiral notepad/Flat/spiral_notepad_flat.svg
+assets/Spiral shell/Flat/spiral_shell_flat.svg
+assets/Sponge/Flat/sponge_flat.svg
+assets/Spoon/Flat/spoon_flat.svg
+assets/Sport utility vehicle/Flat/sport_utility_vehicle_flat.svg
+assets/Sports medal/Flat/sports_medal_flat.svg
+assets/Spouting whale/Flat/spouting_whale_flat.svg
+assets/Squid/Flat/squid_flat.svg
+assets/Squinting face with tongue/Flat/squinting_face_with_tongue_flat.svg
+assets/Stadium/Flat/stadium_flat.svg
+assets/Star and crescent/Flat/star_and_crescent_flat.svg
+assets/Star of david/Flat/star_of_david_flat.svg
+assets/Star-struck/Flat/star-struck_flat.svg
+assets/Star/Flat/star_flat.svg
+assets/Station/Flat/station_flat.svg
+assets/Statue of liberty/Flat/statue_of_liberty_flat.svg
+assets/Steaming bowl/Flat/steaming_bowl_flat.svg
+assets/Stethoscope/Flat/stethoscope_flat.svg
+assets/Stop button/Flat/stop_button_flat.svg
+assets/Stop sign/Flat/stop_sign_flat.svg
+assets/Stopwatch/Flat/stopwatch_flat.svg
+assets/Straight ruler/Flat/straight_ruler_flat.svg
+assets/Strawberry/Flat/strawberry_flat.svg
+assets/Student/Default/Flat/student_flat_default.svg
+assets/Studio microphone/Flat/studio_microphone_flat.svg
+assets/Stuffed flatbread/Flat/stuffed_flatbread_flat.svg
+assets/Sun behind cloud/Flat/sun_behind_cloud_flat.svg
+assets/Sun behind large cloud/Flat/sun_behind_large_cloud_flat.svg
+assets/Sun behind rain cloud/Flat/sun_behind_rain_cloud_flat.svg
+assets/Sun behind small cloud/Flat/sun_behind_small_cloud_flat.svg
+assets/Sun with face/Flat/sun_with_face_flat.svg
+assets/Sun/Flat/sun_flat.svg
+assets/Sunflower/Flat/sunflower_flat.svg
+assets/Sunglasses/Flat/sunglasses_flat.svg
+assets/Sunrise over mountains/Flat/sunrise_over_mountains_flat.svg
+assets/Sunrise/Flat/sunrise_flat.svg
+assets/Sunset/Flat/sunset_flat.svg
+assets/Sushi/Flat/sushi_flat.svg
+assets/Suspension railway/Flat/suspension_railway_flat.svg
+assets/Swan/Flat/swan_flat.svg
+assets/Sweat droplets/Flat/sweat_droplets_flat.svg
+assets/Synagogue/Flat/synagogue_flat.svg
+assets/Syringe/Flat/syringe_flat.svg
+assets/T-rex/Flat/t-rex_flat.svg
+assets/T-shirt/Flat/t-shirt_flat.svg
+assets/Taco/Flat/taco_flat.svg
+assets/Takeout box/Flat/takeout_box_flat.svg
+assets/Tamale/Flat/tamale_flat.svg
+assets/Tanabata tree/Flat/tanabata_tree_flat.svg
+assets/Tangerine/Flat/tangerine_flat.svg
+assets/Taurus/Flat/taurus_flat.svg
+assets/Taxi/Flat/taxi_flat.svg
+assets/Teacher/Default/Flat/teacher_flat_default.svg
+assets/Teacup without handle/Flat/teacup_without_handle_flat.svg
+assets/Teapot/Flat/teapot_flat.svg
+assets/Tear-off calendar/Flat/tear-off_calendar_flat.svg
+assets/Technologist/Default/Flat/technologist_flat_default.svg
+assets/Teddy bear/Flat/teddy_bear_flat.svg
+assets/Telephone receiver/Flat/telephone_receiver_flat.svg
+assets/Telephone/Flat/telephone_flat.svg
+assets/Telescope/Flat/telescope_flat.svg
+assets/Television/Flat/television_flat.svg
+assets/Ten oclock/Flat/ten_oclock_flat.svg
+assets/Ten-thirty/Flat/ten-thirty_flat.svg
+assets/Tennis/Flat/tennis_flat.svg
+assets/Tent/Flat/tent_flat.svg
+assets/Test tube/Flat/test_tube_flat.svg
+assets/Thermometer/Flat/thermometer_flat.svg
+assets/Thinking face/Flat/thinking_face_flat.svg
+assets/Thong sandal/Flat/thong_sandal_flat.svg
+assets/Thought balloon/Flat/thought_balloon_flat.svg
+assets/Thread/Flat/thread_flat.svg
+assets/Three oclock/Flat/three_oclock_flat.svg
+assets/Three-thirty/Flat/three-thirty_flat.svg
+assets/Thumbs down/Default/Flat/thumbs_down_flat_default.svg
+assets/Thumbs up/Default/Flat/thumbs_up_flat_default.svg
+assets/Ticket/Flat/ticket_flat.svg
+assets/Tiger face/Flat/tiger_face_flat.svg
+assets/Tiger/Flat/tiger_flat.svg
+assets/Timer clock/Flat/timer_clock_flat.svg
+assets/Tired face/Flat/tired_face_flat.svg
+assets/Toilet/Flat/toilet_flat.svg
+assets/Tokyo tower/Flat/tokyo_tower_flat.svg
+assets/Tomato/Flat/tomato_flat.svg
+assets/Tongue/Flat/tongue_flat.svg
+assets/Toolbox/Flat/toolbox_flat.svg
+assets/Tooth/Flat/tooth_flat.svg
+assets/Toothbrush/Flat/toothbrush_flat.svg
+assets/Top arrow/Flat/top_arrow_flat.svg
+assets/Top hat/Flat/top_hat_flat.svg
+assets/Tornado/Flat/tornado_flat.svg
+assets/Trackball/Flat/trackball_flat.svg
+assets/Tractor/Flat/tractor_flat.svg
+assets/Trade mark/Flat/trade_mark_flat.svg
+assets/Train/Flat/train_flat.svg
+assets/Tram car/Flat/tram_car_flat.svg
+assets/Tram/Flat/tram_flat.svg
+assets/Transgender flag/Flat/transgender_flag_flat.svg
+assets/Transgender symbol/Flat/transgender_symbol_flat.svg
+assets/Triangular flag/Flat/triangular_flag_flat.svg
+assets/Triangular ruler/Flat/triangular_ruler_flat.svg
+assets/Trident emblem/Flat/trident_emblem_flat.svg
+assets/Troll/Flat/troll_flat.svg
+assets/Trolleybus/Flat/trolleybus_flat.svg
+assets/Trophy/Flat/trophy_flat.svg
+assets/Tropical drink/Flat/tropical_drink_flat.svg
+assets/Tropical fish/Flat/tropical_fish_flat.svg
+assets/Trumpet/Flat/trumpet_flat.svg
+assets/Tulip/Flat/tulip_flat.svg
+assets/Tumbler glass/Flat/tumbler_glass_flat.svg
+assets/Turkey/Flat/turkey_flat.svg
+assets/Turtle/Flat/turtle_flat.svg
+assets/Twelve oclock/Flat/twelve_oclock_flat.svg
+assets/Twelve-thirty/Flat/twelve-thirty_flat.svg
+assets/Two hearts/Flat/two_hearts_flat.svg
+assets/Two oclock/Flat/two_oclock_flat.svg
+assets/Two-hump camel/Flat/two-hump_camel_flat.svg
+assets/Two-thirty/Flat/two-thirty_flat.svg
+assets/Umbrella on ground/Flat/umbrella_on_ground_flat.svg
+assets/Umbrella with rain drops/Flat/umbrella_with_rain_drops_flat.svg
+assets/Umbrella/Flat/umbrella_flat.svg
+assets/Unamused face/Flat/unamused_face_flat.svg
+assets/Unicorn/Flat/unicorn_flat.svg
+assets/Unlocked/Flat/unlocked_flat.svg
+assets/Up arrow/Flat/up_arrow_flat.svg
+assets/Up! button/Flat/up!_button_flat.svg
+assets/Up-down arrow/Flat/up-down_arrow_flat.svg
+assets/Up-left arrow/Flat/up-left_arrow_flat.svg
+assets/Up-right arrow/Flat/up-right_arrow_flat.svg
+assets/Upside-down face/Flat/upside-down_face_flat.svg
+assets/Upwards button/Flat/upwards_button_flat.svg
+assets/Vertical traffic light/Flat/vertical_traffic_light_flat.svg
+assets/Vibration mode/Flat/vibration_mode_flat.svg
+assets/Victory hand/Default/Flat/victory_hand_flat_default.svg
+assets/Video camera/Flat/video_camera_flat.svg
+assets/Video game/Flat/video_game_flat.svg
+assets/Videocassette/Flat/videocassette_flat.svg
+assets/Violin/Flat/violin_flat.svg
+assets/Virgo/Flat/virgo_flat.svg
+assets/Volcano/Flat/volcano_flat.svg
+assets/Volleyball/Flat/volleyball_flat.svg
+assets/Vs button/Flat/vs_button_flat.svg
+assets/Vulcan salute/Default/Flat/vulcan_salute_flat_default.svg
+assets/Waffle/Flat/waffle_flat.svg
+assets/Waning crescent moon/Flat/waning_crescent_moon_flat.svg
+assets/Waning gibbous moon/Flat/waning_gibbous_moon_flat.svg
+assets/Warning/Flat/warning_flat.svg
+assets/Wastebasket/Flat/wastebasket_flat.svg
+assets/Watch/Flat/watch_flat.svg
+assets/Water buffalo/Flat/water_buffalo_flat.svg
+assets/Water closet/Flat/water_closet_flat.svg
+assets/Water pistol/Flat/water_pistol_flat.svg
+assets/Water wave/Flat/water_wave_flat.svg
+assets/Watermelon/Flat/watermelon_flat.svg
+assets/Waving hand/Default/Flat/waving_hand_flat_default.svg
+assets/Wavy dash/Flat/wavy_dash_flat.svg
+assets/Waxing crescent moon/Flat/waxing_crescent_moon_flat.svg
+assets/Waxing gibbous moon/Flat/waxing_gibbous_moon_flat.svg
+assets/Weary cat/Flat/weary_cat_flat.svg
+assets/Weary face/Flat/weary_face_flat.svg
+assets/Wedding/Flat/wedding_flat.svg
+assets/Whale/Flat/whale_flat.svg
+assets/Wheel of dharma/Flat/wheel_of_dharma_flat.svg
+assets/Wheel/Flat/wheel_flat.svg
+assets/Wheelchair symbol/Flat/wheelchair_symbol_flat.svg
+assets/White cane/Flat/white_cane_flat.svg
+assets/White circle/Flat/white_circle_flat.svg
+assets/White exclamation mark/Flat/white_exclamation_mark_flat.svg
+assets/White flag/Flat/white_flag_flat.svg
+assets/White flower/Flat/white_flower_flat.svg
+assets/White heart/Flat/white_heart_flat.svg
+assets/White large square/Flat/white_large_square_flat.svg
+assets/White medium square/Flat/white_medium_square_flat.svg
+assets/White medium-small square/Flat/white_medium-small_square_flat.svg
+assets/White question mark/Flat/white_question_mark_flat.svg
+assets/White small square/Flat/white_small_square_flat.svg
+assets/White square button/Flat/white_square_button_flat.svg
+assets/Wilted flower/Flat/wilted_flower_flat.svg
+assets/Wind chime/Flat/wind_chime_flat.svg
+assets/Wind face/Flat/wind_face_flat.svg
+assets/Window/Flat/window_flat.svg
+assets/Wine glass/Flat/wine_glass_flat.svg
+assets/Wing/Flat/wing_flat.svg
+assets/Winking face with tongue/Flat/winking_face_with_tongue_flat.svg
+assets/Winking face/Flat/winking_face_flat.svg
+assets/Wireless/Flat/wireless_flat.svg
+assets/Wolf/Flat/wolf_flat.svg
+assets/Woman artist/Default/Flat/woman_artist_flat_default.svg
+assets/Woman astronaut/Default/Flat/woman_astronaut_flat_default.svg
+assets/Woman bald/Default/Flat/woman_bald_flat_default.svg
+assets/Woman beard/Default/Flat/woman_beard_flat_default.svg
+assets/Woman biking/Default/Flat/woman_biking_flat_default.svg
+assets/Woman blonde hair/Default/Flat/woman_blonde_hair_flat_default.svg
+assets/Woman bouncing ball/Default/Flat/woman_bouncing_ball_flat_default.svg
+assets/Woman bowing/Default/Flat/woman_bowing_flat_default.svg
+assets/Woman cartwheeling/Default/Flat/woman_cartwheeling_flat_default.svg
+assets/Woman climbing/Default/Flat/woman_climbing_flat_default.svg
+assets/Woman construction worker/Default/Flat/woman_construction_worker_flat_default.svg
+assets/Woman cook/Default/Flat/woman_cook_flat_default.svg
+assets/Woman curly hair/Default/Flat/woman_curly_hair_flat_default.svg
+assets/Woman dancing/Default/Flat/woman_dancing_flat_default.svg
+assets/Woman deaf/Default/Flat/woman_deaf_flat_default.svg
+assets/Woman detective/Default/Flat/woman_detective_flat_default.svg
+assets/Woman elf/Default/Flat/woman_elf_flat_default.svg
+assets/Woman facepalming/Default/Flat/woman_facepalming_flat_default.svg
+assets/Woman factory worker/Default/Flat/woman_factory_worker_flat_default.svg
+assets/Woman fairy/Default/Flat/woman_fairy_flat_default.svg
+assets/Woman farmer/Default/Flat/woman_farmer_flat_default.svg
+assets/Woman feeding baby/Default/Flat/woman_feeding_baby_flat_default.svg
+assets/Woman firefighter/Default/Flat/woman_firefighter_flat_default.svg
+assets/Woman frowning/Default/Flat/woman_frowning_flat_default.svg
+assets/Woman genie/Flat/woman_genie_flat.svg
+assets/Woman gesturing no/Default/Flat/woman_gesturing_no_flat_default.svg
+assets/Woman gesturing ok/Default/Flat/woman_gesturing_ok_flat_default.svg
+assets/Woman getting haircut/Default/Flat/woman_getting_haircut_flat_default.svg
+assets/Woman getting massage/Default/Flat/woman_getting_massage_flat_default.svg
+assets/Woman golfing/Default/Flat/woman_golfing_flat_default.svg
+assets/Woman guard/Default/Flat/woman_guard_flat_default.svg
+assets/Woman health worker/Default/Flat/woman_health_worker_flat_default.svg
+assets/Woman in lotus position/Default/Flat/woman_in_lotus_position_flat_default.svg
+assets/Woman in manual wheelchair facing right/Default/Flat/woman_in_manual_wheelchair_facing_right_flat_default.svg
+assets/Woman in manual wheelchair/Default/Flat/woman_in_manual_wheelchair_flat_default.svg
+assets/Woman in motorized wheelchair facing right/Default/Flat/woman_in_motorized_wheelchair_facing_right_flat_default.svg
+assets/Woman in motorized wheelchair/Default/Flat/woman_in_motorized_wheelchair_flat_default.svg
+assets/Woman in steamy room/Default/Flat/woman_in_steamy_room_flat_default.svg
+assets/Woman in tuxedo/Default/Flat/woman_in_tuxedo_flat_default.svg
+assets/Woman judge/Default/Flat/woman_judge_flat_default.svg
+assets/Woman juggling/Default/Flat/woman_juggling_flat_default.svg
+assets/Woman kneeling facing right/Default/Flat/woman_kneeling_facing_right_flat_default.svg
+assets/Woman kneeling/Default/Flat/woman_kneeling_flat_default.svg
+assets/Woman lifting weights/Default/Flat/woman_lifting_weights_flat_default.svg
+assets/Woman mage/Default/Flat/woman_mage_flat_default.svg
+assets/Woman mechanic/Default/Flat/woman_mechanic_flat_default.svg
+assets/Woman merpeople/Default/Flat/woman_merpeople_flat_default.svg
+assets/Woman mountain biking/Default/Flat/woman_mountain_biking_flat_default.svg
+assets/Woman office worker/Default/Flat/woman_office_worker_flat_default.svg
+assets/Woman pilot/Default/Flat/woman_pilot_flat_default.svg
+assets/Woman playing handball/Default/Flat/woman_playing_handball_flat_default.svg
+assets/Woman playing water polo/Default/Flat/woman_playing_water_polo_flat_default.svg
+assets/Woman police officer/Default/Flat/woman_police_officer_flat_default.svg
+assets/Woman pouting/Default/Flat/woman_pouting_flat_default.svg
+assets/Woman raising hand/Default/Flat/woman_raising_hand_flat_default.svg
+assets/Woman red hair/Default/Flat/woman_red_hair_flat_default.svg
+assets/Woman rowing boat/Default/Flat/woman_rowing_boat_flat_default.svg
+assets/Woman running facing right/Default/Flat/woman_running_facing_right_flat_default.svg
+assets/Woman running/Default/Flat/woman_running_flat_default.svg
+assets/Woman scientist/Default/Flat/woman_scientist_flat_default.svg
+assets/Woman shrugging/Default/Flat/woman_shrugging_flat_default.svg
+assets/Woman singer/Default/Flat/woman_singer_flat_default.svg
+assets/Woman standing/Default/Flat/woman_standing_flat_default.svg
+assets/Woman student/Default/Flat/woman_student_flat_default.svg
+assets/Woman superhero/Default/Flat/woman_superhero_flat_default.svg
+assets/Woman supervillain/Default/Flat/woman_supervillain_flat_default.svg
+assets/Woman surfing/Default/Flat/woman_surfing_flat_default.svg
+assets/Woman swimming/Default/Flat/woman_swimming_flat_default.svg
+assets/Woman teacher/Default/Flat/woman_teacher_flat_default.svg
+assets/Woman technologist/Default/Flat/woman_technologist_flat_default.svg
+assets/Woman tipping hand/Default/Flat/woman_tipping_hand_flat_default.svg
+assets/Woman vampire/Default/Flat/woman_vampire_flat_default.svg
+assets/Woman walking facing right/Default/Flat/woman_walking_facing_right_flat_default.svg
+assets/Woman walking/Default/Flat/woman_walking_flat_default.svg
+assets/Woman wearing turban/Default/Flat/woman_wearing_turban_flat_default.svg
+assets/Woman white hair/Default/Flat/woman_white_hair_flat_default.svg
+assets/Woman with bunny ears/Flat/woman_with_bunny_ears_flat.svg
+assets/Woman with headscarf/Default/Flat/woman_with_headscarf_flat_default.svg
+assets/Woman with veil/Default/Flat/woman_with_veil_flat_default.svg
+assets/Woman with white cane facing right/Default/Flat/woman_with_white_cane_facing_right_flat_default.svg
+assets/Woman with white cane/Default/Flat/woman_with_white_cane_flat_default.svg
+assets/Woman wrestling/Flat/woman_wrestling_flat.svg
+assets/Woman zombie/Flat/woman_zombie_flat.svg
+assets/Woman/Default/Flat/woman_flat_default.svg
+assets/Womans boot/Flat/womans_boot_flat.svg
+assets/Womans clothes/Flat/womans_clothes_flat.svg
+assets/Womans hat/Flat/womans_hat_flat.svg
+assets/Womans sandal/Flat/womans_sandal_flat.svg
+assets/Womens room/Flat/womens_room_flat.svg
+assets/Wood/Flat/wood_flat.svg
+assets/Woozy face/Flat/woozy_face_flat.svg
+assets/World map/Flat/world_map_flat.svg
+assets/Worm/Flat/worm_flat.svg
+assets/Worried face/Flat/worried_face_flat.svg
+assets/Wrapped gift/Flat/wrapped_gift_flat.svg
+assets/Wrench/Flat/wrench_flat.svg
+assets/Writing hand/Default/Flat/writing_hand_flat_default.svg
+assets/X-ray/Flat/x-ray_flat.svg
+assets/Yarn/Flat/yarn_flat.svg
+assets/Yawning face/Flat/yawning_face_flat.svg
+assets/Yellow circle/Flat/yellow_circle_flat.svg
+assets/Yellow heart/Flat/yellow_heart_flat.svg
+assets/Yellow square/Flat/yellow_square_flat.svg
+assets/Yen banknote/Flat/yen_banknote_flat.svg
+assets/Yin yang/Flat/yin_yang_flat.svg
+assets/Yo-yo/Flat/yo-yo_flat.svg
+assets/Zany face/Flat/zany_face_flat.svg
+assets/Zebra/Flat/zebra_flat.svg
+assets/Zipper-mouth face/Flat/zipper-mouth_face_flat.svg
+assets/Zzz/Flat/zzz_flat.svg

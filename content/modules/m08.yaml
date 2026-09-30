@@ -1,0 +1,14 @@
+number: 8
+title: Φαγητό και ποτό
+subtitle: Еда и напитки
+status: published
+goal: рассказать, что любишь есть и пить, и что нет
+grammar:
+  - винительный падеж (ед. и мн.), μου αρέσει/μου αρέσουν, θέλω + вин. п
+sessions: 3
+lessons:
+  - m08-1
+  - m08-2
+  - m08-3
+  - m08-test
+checkpoint: m08-k1

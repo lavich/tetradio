@@ -1,0 +1,27 @@
+{
+ "viewBox": "0 0 320 220",
+ "maxBytes": 3072,
+ "backgrounds": {
+  "sky": "#e7eefb",
+  "cream": "#fdf3dc",
+  "mist": "#eef2f7",
+  "rose": "#fdeaea",
+  "mint": "#eaf7ec"
+ },
+ "colors": {
+  "white": "#ffffff",
+  "ink": "#1f2937",
+  "steel": "#94a3b8",
+  "blue": "#2563eb",
+  "blue-soft": "#5b8def",
+  "amber": "#fbbf24",
+  "orange": "#f59e0b",
+  "red": "#ef4444",
+  "green": "#22c55e",
+  "green-deep": "#16a34a",
+  "skin": "#f3c79b",
+  "brown": "#8a6a45",
+  "brown-deep": "#4b3b2f",
+  "tan": "#d9b382"
+ }
+}

@@ -1,0 +1,15 @@
+id: w24-08
+greek: το πάτωμα
+russian: пол
+ipa: "/to ˈpatoma/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-πάτωμα.svg
+reading:
+  - text: "ω"
+    ipa: "o"
+    explanation: "ω звучит так же, как ο"
+examples:
+  - greek: "Το πάτωμα είναι καθαρό."
+    russian: "Пол чистый."
+    target: "πάτωμα"

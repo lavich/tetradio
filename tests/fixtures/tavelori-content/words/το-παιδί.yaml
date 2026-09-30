@@ -1,0 +1,17 @@
+id: w11-22
+greek: το παιδί
+russian: ребенок
+ipa: /to peˈði/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+reading:
+  - text: αι
+    ipa: e
+    explanation: αι читается как э
+  - text: δ
+    ipa: ð
+    explanation: δ — мягкое th
+examples:
+  - greek: Το παιδί παίζει στο πάρκο.
+    russian: Ребёнок играет в парке.
+    target: παιδί

@@ -1,0 +1,7 @@
+id: p126
+text: Τίποτα άλλο, ευχαριστώ.
+translation: Больше ничего, спасибо.
+provenance:
+  sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 10 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

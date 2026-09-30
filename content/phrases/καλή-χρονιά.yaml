@@ -1,0 +1,7 @@
+id: p288
+text: Καλή χρονιά!
+translation: С Новым годом!
+provenance:
+  sourceLabel: Лексикон курса, модуль 22 (docs/course/lexicon/22.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 22 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

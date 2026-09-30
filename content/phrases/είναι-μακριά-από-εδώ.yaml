@@ -1,0 +1,7 @@
+id: p150
+text: Είναι μακριά από εδώ;
+translation: Это далеко отсюда?
+provenance:
+  sourceLabel: Лексикон курса, модуль 12 (docs/course/lexicon/12.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 12 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

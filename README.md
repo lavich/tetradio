@@ -2,16 +2,34 @@
 
 Полноценный курс новогреческого и отдельное Telegram Mini App на основе Tavelori для подготовки к A2 на Кипре к маю 2027. Используются Telegram-аккаунт и синхронизация через Telegram CloudStorage; отдельная регистрация и Supabase не нужны.
 
-Сейчас подготовлены требования и план. Исходный Tavelori найден в `/Users/lavich/Projects/lexi`; перенос кода и создание полного курса ещё не выполнены. Один пилотный модуль — промежуточная проверка, а не конечный объём.
+Рабочее название — «Τετράδιο» (дизайн-направление, см. [бриф](docs/design/brief.md)). Механики перенесены из Tavelori (`lavich/lexi`, ревизия `2ccae7d`). Готовы модель курса (схема 4), экраны «Курс», модуль и урок из блоков в стиле «Τετράδιο»; содержание курса (`content/`) пока пусто — следующий шаг — пилотный модуль 01. Демо-курс для разработки — `tests/fixtures/course-demo`.
+
+## Разработка
+
+```sh
+npm ci
+npm run dev          # сборка контента и Vite dev-сервер
+npm test             # unit (Vitest)
+npm run test:e2e     # Playwright: механики на фикстуре Tavelori
+npm run test:e2e:course  # Playwright: экраны курса на демо-курсе
+CONTENT_ROOT=tests/fixtures/course-demo npm run dev  # посмотреть курс локально
+npm run typecheck && npm run lint && npm run format:check
+npm run build
+```
+
+Переменные окружения (все необязательны локально): `VITE_TELEGRAM_BOT` — имя бота Mini App (без неё — заглушка `tetradio_local`, не совпадающая с реальным ботом); `VITE_SENTRY_DSN` и `SENTRY_*` — отчёты о сбоях, без них выключены; `BASE_PATH` — базовый путь при размещении. Бота пока нет.
+
+Деплой — `.github/workflows/deploy.yml`: каждый push в `main` публикует сборку на GitHub Pages (`https://lavich.github.io/tetradio/`). База берётся из настроек Pages; имя бота и адрес приёма отчётов — переменные репозитория `VITE_TELEGRAM_BOT` и `VITE_SENTRY_DSN`, реквизиты загрузки карт кода — секреты `SENTRY_*`.
 
 ## Документация
 
 - [PRD: цели и требования](docs/PRD.md)
 - [Программа из 24 модулей](docs/curriculum.md)
-- [Предложение нового продукта](openspec/changes/greek-a2-learning-mvp/proposal.md)
-- [Архитектура и модель данных](openspec/changes/greek-a2-learning-mvp/design.md)
-- [Задачи реализации](openspec/changes/greek-a2-learning-mvp/tasks.md)
-- [Проверяемые спецификации](openspec/changes/greek-a2-learning-mvp/specs/)
+- Первое изменение (архив): [предложение](openspec/changes/archive/2026-09-30-greek-a2-learning-mvp/proposal.md)
+  [архитектура и модель данных](openspec/changes/archive/2026-09-30-greek-a2-learning-mvp/design.md)
+  [задачи](openspec/changes/archive/2026-09-30-greek-a2-learning-mvp/tasks.md)
+- [Базовые спецификации](openspec/specs/)
+- Текущие изменения: [course-a2-modules](openspec/changes/course-a2-modules/tasks.md) — модули 09–24 и пробники; [course-progress-sync](openspec/changes/course-progress-sync/tasks.md) — синхронизация и копия; [release](openspec/changes/release/tasks.md) — бот, хостинг, приёмка
 
 ## OpenSpec
 
@@ -30,4 +48,4 @@ npm run openspec -- list
 
 ## Решения перед разработкой
 
-Начать с аудита Tavelori и карты повторного использования. Сохранить пригодные движок, FSRS и контентный пайплайн; адаптировать существующую Telegram-интеграцию и синхронизацию под полный курс. Уточнить исходный уровень и доступное время. Бот нового приложения и размещение ещё не настроены. Дата экзамена на Кипре требует отдельного подтверждения.
+Аудит Tavelori выполнен ([отчёт](docs/audit/tavelori-audit.md)). Сохранить пригодные движок, FSRS и контентный пайплайн; адаптировать существующую Telegram-интеграцию и синхронизацию под полный курс. Учащийся знает только алфавит, занимается 2–3 раза в неделю без преподавателя (риск по времени описан в PRD). Бот нового приложения и размещение ещё не настроены. Дата экзамена на Кипре требует отдельного подтверждения.

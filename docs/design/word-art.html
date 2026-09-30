@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Τετράδιο — картинки слов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f9fafc; --grid:#dde6f2; --margin:#e4686a; --print:#23262c; --soft:#5a606b;
+  --ink:#1f47b8; --pen:#cf2f2b; --desk:#e6e3dc; --cell:24px;
+  --c1:#2f6d4f; --c2:#b8452b; --c3:#2c4f9e; --c4:#b8871a; --c5:#7b3f74; --c6:#1f6f7a;
+  --serif:"Literata",Georgia,serif; --ui:"Manrope",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--desk);color:var(--print);font-family:var(--ui);padding:44px 28px 72px}
+::selection{background:#c9d6f5}
+header{max-width:1180px;margin:0 auto 30px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:baseline}
+header h1{font-family:var(--serif);font-size:30px;letter-spacing:-.02em}
+header p{max-width:560px;font-size:14px;line-height:1.55;color:var(--soft)}
+.direction{max-width:1180px;margin:0 auto 34px;background:var(--paper);border-radius:6px;position:relative;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:var(--cell) var(--cell);background-position:-1px -1px;padding:24px 24px 28px 84px;box-shadow:0 20px 40px -28px rgba(40,30,20,.45)}
+.direction::before{content:"";position:absolute;top:0;bottom:0;left:58px;width:2px;background:var(--margin);opacity:.8}
+.letter{position:absolute;left:14px;top:22px;width:34px;text-align:right;font-family:var(--serif);font-size:30px;font-weight:700;color:var(--pen)}
+.direction h2{font-family:var(--serif);font-size:22px;line-height:36px}
+.direction .lead{font-family:var(--serif);font-size:15.5px;line-height:24px;max-width:760px}
+.pros{display:flex;gap:28px;flex-wrap:wrap;margin-top:6px;font-size:13px;line-height:24px}
+.pros b{font-weight:700}
+.pros .plus b{color:var(--ink)} .pros .minus b{color:var(--pen)}
+.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;margin-top:22px}
+@media (max-width:1000px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){body{padding:24px 12px}.direction{padding:20px 14px 24px 60px}.direction::before{left:44px}.letter{left:4px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.typo .cards{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #d9e3f1;border-radius:12px;padding:12px 12px 12px;position:relative;min-width:0}
+.art{height:92px;display:grid;place-items:center;border-radius:8px}
+.art svg{width:100%;height:100%}
+.word{font-family:var(--serif);font-size:19px;font-weight:700;line-height:26px;margin-top:10px;overflow-wrap:break-word;hyphens:manual}
+.word .art-le{font-weight:400;color:var(--soft)}
+.forms{font-family:var(--serif);font-size:13.5px;color:var(--soft);line-height:20px}
+.ru{font-size:13px;font-weight:600;line-height:20px;margin-top:4px}
+/* В: без картинки — крупное слово и значок рода */
+.typo .card{padding-left:40px}
+.gender{position:absolute;left:10px;top:14px;width:20px;display:grid;justify-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--soft)}
+.gender svg{width:16px;height:16px}
+.typo .word{font-size:clamp(18px,1.7vw,22px);line-height:28px;margin-top:0}
+.typo .example{font-family:var(--serif);font-style:italic;font-size:14px;line-height:21px;margin-top:10px;color:var(--ink)}
+.typo .example span{display:block;font-family:var(--ui);font-style:normal;font-size:12px;color:var(--soft)}
+.legend{display:flex;gap:18px;margin-top:14px;font-size:12.5px;color:var(--soft);align-items:center;flex-wrap:wrap}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend svg{width:14px;height:14px}
+footer{max-width:1180px;margin:10px auto 0;font-size:13px;line-height:1.6;color:var(--soft)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Картинки для слов в «Τετράδιο»</h1>
+  <p>Три направления на шести конкретных словах курса (модули 06–19). Картинки нужны только таким словам: у «привет» или «где» изображения нет. Все варианты — вектор до 2–3 КБ, работают офлайн и в тёмной теме Telegram.</p>
+</header>
+
+<!-- А. Штамп чернилами -->
+<section class="direction" aria-labelledby="a-title">
+  <span class="letter">А</span>
+  <h2 id="a-title">Штамп чернилами</h2>
+  <p class="lead">Пиктограмма двумя «голосами» тетради: контур синими чернилами, одна деталь — красной ручкой. Похоже на значки, которые рисуют на полях конспекта, но построено геометрией, одной толщиной линии.</p>
+  <div class="pros"><span class="plus"><b>+</b> самое цельное с дизайном; легко рисовать сотни слов по одному правилу</span><span class="minus"><b>−</b> сдержанно; абстрактным словам не помогает</span></div>
+  <div class="cards">
+    <div class="card"><div class="art"><svg viewBox="0 0 120 90" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="дом">
+      <path d="M28 44 60 18l32 26"/><path d="M36 38v36h48V38"/><path d="M54 74V56h12v18" stroke="var(--pen)"/><path d="M76 26v10"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">το</span> σπίτι</p><p class="forms" lang="el">τα σπίτια</p><p class="ru">дом; жильё</p></div>
+    <div class="card"><div class="art"><svg viewBox="0 0 120 90" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="кофе">
+      <path d="M40 44h36l-4 24H44z"/><path d="M76 49c9 0 9 12 0 12"/><path d="M32 74h52"/><path d="M50 36c-4-5 4-8 0-14M62 36c-4-5 4-8 0-14" stroke="var(--pen)"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">ο</span> καφές</p><p class="forms" lang="el">οι καφέδες</p><p class="ru">кофе</p></div>
+    <div class="card"><div class="art"><svg viewBox="0 0 120 90" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="море">
+      <path d="M44 42a16 16 0 0 1 32 0" stroke="var(--pen)"/><path d="M20 52c7-6 13-6 20 0s13 6 20 0 13-6 20 0 13 6 20 0"/><path d="M20 64c7-6 13-6 20 0s13 6 20 0 13-6 20 0 13 6 20 0"/><path d="M30 76c7-5 13-5 20 0s13 5 20 0 13-5 20 0"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">η</span> θάλασσα</p><p class="forms" lang="el">οι θάλασσες</p><p class="ru">море</p></div>
+    <div class="card"><div class="art"><svg viewBox="0 0 120 90" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="автобус">
+      <rect x="18" y="24" width="84" height="40" rx="7"/><path d="M18 44h84"/><path d="M36 24v20M54 24v20M72 24v20"/><circle cx="36" cy="68" r="6" stroke="var(--pen)"/><circle cx="84" cy="68" r="6" stroke="var(--pen)"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">το</span> λεωφορείο</p><p class="forms" lang="el">τα λεωφορεία</p><p class="ru">автобус</p></div>
+    <div class="card"><div class="art"><svg viewBox="0 0 120 90" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" role="img" aria-label="солнце">
+      <circle cx="60" cy="46" r="14" stroke="var(--pen)"/><path d="M60 16v8M60 68v8M30 46h8M82 46h8M39 25l6 6M75 61l6 6M81 25l-6 6M45 61l-6 6"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">ο</span> ήλιος</p><p class="forms">мн. ч. нет</p><p class="ru">солнце</p></div>
+    <div class="card"><div class="art"><svg viewBox="0 0 120 90" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="хлеб">
+      <path d="M22 62c0-22 16-32 38-32s38 10 38 32z"/><path d="M22 62h76"/><path d="M42 40l6 12M58 36l6 13M74 40l6 12" stroke="var(--pen)"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">το</span> ψωμί</p><p class="forms" lang="el">τα ψωμιά</p><p class="ru">хлеб</p></div>
+  </div>
+</section>
+
+<!-- Б. Αναγνωστικό -->
+<section class="direction" aria-labelledby="b-title">
+  <span class="letter">Б</span>
+  <h2 id="b-title">Αναγνωστικό — картинка из букваря</h2>
+  <p class="lead">Плоские цветные формы в палитре обложек, как в греческих школьных книгах для чтения. Цвет — тот же, что у обложки модуля, где слово вводится: картинка «помнит», из какой тетради слово.</p>
+  <div class="pros"><span class="plus"><b>+</b> ярко, лучше запоминается; связь слова с модулем</span><span class="minus"><b>−</b> больше работы на каждое слово; рядом с интерфейсом шумнее</span></div>
+  <div class="cards">
+    <div class="card"><div class="art" style="background:#eef4f0"><svg viewBox="0 0 120 90" role="img" aria-label="дом">
+      <path d="M26 46 60 18l34 28z" fill="var(--c2)"/><rect x="34" y="44" width="52" height="32" fill="var(--c1)"/><rect x="54" y="56" width="12" height="20" fill="#fff"/><rect x="40" y="52" width="9" height="9" fill="#fff"/><rect x="71" y="52" width="9" height="9" fill="#fff"/><rect x="74" y="22" width="7" height="14" fill="var(--c2)"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">το</span> σπίτι</p><p class="forms" lang="el">τα σπίτια</p><p class="ru">дом · модуль 06</p></div>
+    <div class="card"><div class="art" style="background:#f6efe2"><svg viewBox="0 0 120 90" role="img" aria-label="кофе">
+      <ellipse cx="58" cy="74" rx="30" ry="5" fill="var(--c4)"/><path d="M38 42h40l-5 30H43z" fill="#fff" stroke="var(--c4)" stroke-width="3"/><path d="M40 46h36" stroke="var(--c2)" stroke-width="6"/><path d="M78 50c10 0 10 14 0 14" fill="none" stroke="var(--c4)" stroke-width="3"/><path d="M52 34c-4-5 4-8 0-13M64 34c-4-5 4-8 0-13" stroke="var(--c4)" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">ο</span> καφές</p><p class="forms" lang="el">οι καφέδες</p><p class="ru">кофе · модуль 08</p></div>
+    <div class="card"><div class="art" style="background:#e8eef9"><svg viewBox="0 0 120 90" role="img" aria-label="море">
+      <circle cx="84" cy="32" r="12" fill="var(--c4)"/><path d="M8 56c9-7 17-7 26 0s17 7 26 0 17-7 26 0 17 7 26 0v34H8z" fill="var(--c3)"/><path d="M8 70c9-6 17-6 26 0s17 6 26 0 17-6 26 0 17 6 26 0v20H8z" fill="#1d3a78"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">η</span> θάλασσα</p><p class="forms" lang="el">οι θάλασσες</p><p class="ru">море · модуль 14</p></div>
+    <div class="card"><div class="art" style="background:#f3eaf1"><svg viewBox="0 0 120 90" role="img" aria-label="автобус">
+      <rect x="16" y="22" width="88" height="44" rx="8" fill="var(--c5)"/><rect x="24" y="30" width="16" height="14" rx="2" fill="#fff"/><rect x="45" y="30" width="16" height="14" rx="2" fill="#fff"/><rect x="66" y="30" width="16" height="14" rx="2" fill="#fff"/><rect x="87" y="30" width="10" height="26" rx="2" fill="#fff"/><circle cx="36" cy="68" r="8" fill="var(--print)"/><circle cx="84" cy="68" r="8" fill="var(--print)"/><circle cx="36" cy="68" r="3" fill="#fff"/><circle cx="84" cy="68" r="3" fill="#fff"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">το</span> λεωφορείο</p><p class="forms" lang="el">τα λεωφορεία</p><p class="ru">автобус · модуль 13</p></div>
+    <div class="card"><div class="art" style="background:#e5f0f1"><svg viewBox="0 0 120 90" role="img" aria-label="солнце">
+      <g fill="var(--c4)"><circle cx="60" cy="45" r="17"/><rect x="57" y="10" width="6" height="12" rx="3"/><rect x="57" y="68" width="6" height="12" rx="3"/><rect x="25" y="42" width="12" height="6" rx="3"/><rect x="83" y="42" width="12" height="6" rx="3"/></g><circle cx="60" cy="45" r="9" fill="#e6b54a"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">ο</span> ήλιος</p><p class="forms">мн. ч. нет</p><p class="ru">солнце · модуль 19</p></div>
+    <div class="card"><div class="art" style="background:#f6efe2"><svg viewBox="0 0 120 90" role="img" aria-label="хлеб">
+      <path d="M20 64c0-22 17-33 40-33s40 11 40 33z" fill="var(--c4)"/><rect x="20" y="62" width="80" height="8" rx="3" fill="#8f6a14"/><path d="M42 42l6 12M58 38l6 13M74 42l6 12" stroke="#f3dca0" stroke-width="4" stroke-linecap="round"/></svg></div>
+      <p class="word" lang="el"><span class="art-le">το</span> ψωμί</p><p class="forms" lang="el">τα ψωμιά</p><p class="ru">хлеб · модуль 08</p></div>
+  </div>
+</section>
+
+<!-- В. Без картинки -->
+<section class="direction typo" aria-labelledby="c-title">
+  <span class="letter">В</span>
+  <h2 id="c-title">Без картинки: род на полях</h2>
+  <p class="lead">Вместо изображения — то, что взрослому учащемуся реально трудно: род и артикль. На полях карточки знак рода (форма, а не цвет), крупное слово и пример из урока чернилами. Работает для всех слов, не только конкретных.</p>
+  <div class="pros"><span class="plus"><b>+</b> полезно для каждого слова, помогает с артиклем на экзамене; ноль ручного рисования</span><span class="minus"><b>−</b> не даёт зрительного образа предмета</span></div>
+  <div class="legend">
+    <span><svg viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" fill="var(--print)"/></svg>ο — мужской</span>
+    <span><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="var(--print)"/></svg>η — женский</span>
+    <span><svg viewBox="0 0 16 16"><path d="M8 1.5 15 14.5H1z" fill="var(--print)"/></svg>το — средний</span>
+  </div>
+  <div class="cards">
+    <div class="card"><span class="gender"><svg viewBox="0 0 16 16"><path d="M8 1.5 15 14.5H1z" fill="var(--print)"/></svg>ср.</span>
+      <p class="word" lang="el">το σπίτι</p><p class="forms" lang="el">τα σπίτια</p><p class="ru">дом; жильё</p>
+      <p class="example" lang="el">Είμαι στο σπίτι.<span>Я дома.</span></p></div>
+    <div class="card"><span class="gender"><svg viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" fill="var(--print)"/></svg>м.</span>
+      <p class="word" lang="el">ο καφές</p><p class="forms" lang="el">οι καφέδες</p><p class="ru">кофе</p>
+      <p class="example" lang="el">Έναν κυπριακό καφέ, παρακαλώ.<span>Кипрский кофе, пожалуйста.</span></p></div>
+    <div class="card"><span class="gender"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="var(--print)"/></svg>ж.</span>
+      <p class="word" lang="el">η θάλασσα</p><p class="forms" lang="el">οι θάλασσες</p><p class="ru">море</p>
+      <p class="example" lang="el">Πάμε στη θάλασσα;<span>Пойдём на море?</span></p></div>
+    <div class="card"><span class="gender"><svg viewBox="0 0 16 16"><path d="M8 1.5 15 14.5H1z" fill="var(--print)"/></svg>ср.</span>
+      <p class="word" lang="el">το λεωφορείο</p><p class="forms" lang="el">τα λεωφορεία</p><p class="ru">автобус</p>
+      <p class="example" lang="el">Το λεωφορείο αργεί.<span>Автобус опаздывает.</span></p></div>
+    <div class="card"><span class="gender"><svg viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" fill="var(--print)"/></svg>м.</span>
+      <p class="word" lang="el">ο ήλιος</p><p class="forms">мн. ч. нет</p><p class="ru">солнце</p>
+      <p class="example" lang="el">Σήμερα έχει ήλιο.<span>Сегодня солнечно.</span></p></div>
+    <div class="card"><span class="gender"><svg viewBox="0 0 16 16"><path d="M8 1.5 15 14.5H1z" fill="var(--print)"/></svg>ср.</span>
+      <p class="word" lang="el">το ψωμί</p><p class="forms" lang="el">τα ψωμιά</p><p class="ru">хлеб</p>
+      <p class="example" lang="el">Θέλω ένα ψωμί.<span>Я хочу (один) хлеб.</span></p></div>
+  </div>
+</section>
+
+<footer>Можно совмещать: знак рода (В) нужен всем словам, а картинка (А или Б) — только конкретным существительным. Картинки такого уровня рисуются кодом по единому правилу; для настоящих иллюстраций нужен генератор изображений или художник.</footer>
+</body>
+</html>

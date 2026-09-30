@@ -1,0 +1,8 @@
+id: p289
+text: Καλό Πάσχα!
+translation: Хорошей Пасхи!
+note: до Пасхи
+provenance:
+  sourceLabel: Лексикон курса, модуль 22 (docs/course/lexicon/22.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 22 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

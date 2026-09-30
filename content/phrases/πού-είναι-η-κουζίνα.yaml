@@ -1,0 +1,7 @@
+id: p071
+text: Πού είναι η κουζίνα;
+translation: Где кухня?
+provenance:
+  sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 06 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

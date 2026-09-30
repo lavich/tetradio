@@ -1,0 +1,20 @@
+id: w41-03
+greek: Καθαρός
+russian: чистый
+ipa: "/kaθaˈros/"
+verified: true
+source: "Список слов к уроку 4.1; фонетика, примеры, переводы слов примера и иллюстрации подготовлены Lexi."
+image: καθαρός.svg
+reading:
+  - text: "θ"
+    ipa: "θ"
+    explanation: "θ — глухой межзубный звук, как английское th в «think»"
+examples:
+  - greek: "Το πάτωμα είναι καθαρό."
+    russian: "Пол чистый."
+    target: "καθαρό"
+    words:
+      - { text: "Το", russian: "артикль ср. р." }
+      - { text: "πάτωμα", russian: "пол", word: w24-08 }
+      - { text: "είναι", russian: "есть, является", word: w11-05 }
+      - { text: "καθαρό", russian: "чистый", word: w41-03 }

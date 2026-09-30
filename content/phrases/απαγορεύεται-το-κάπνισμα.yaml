@@ -1,0 +1,7 @@
+id: p324
+text: Απαγορεύεται το κάπνισμα.
+translation: Курить запрещено.
+provenance:
+  sourceLabel: Лексикон курса, модуль 24 (docs/course/lexicon/24.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 24 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

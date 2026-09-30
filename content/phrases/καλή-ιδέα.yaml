@@ -1,0 +1,7 @@
+id: p277
+text: Καλή ιδέα!
+translation: Хорошая идея!
+provenance:
+  sourceLabel: Лексикон курса, модуль 21 (docs/course/lexicon/21.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 21 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md

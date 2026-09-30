@@ -1,0 +1,14 @@
+id: w11-04
+greek: Εδώ
+russian: здесь
+ipa: /eˈðo/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+reading:
+  - text: δ
+    ipa: ð
+    explanation: δ — мягкое межзубное th, как в this
+examples:
+  - greek: Το σπίτι μου είναι εδώ.
+    russian: Мой дом здесь.
+    target: εδώ

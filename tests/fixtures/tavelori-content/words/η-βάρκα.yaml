@@ -1,0 +1,14 @@
+id: w12-19
+greek: η βάρκα
+russian: лодка
+ipa: /i ˈvarka/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+reading:
+  - text: β
+    ipa: v
+    explanation: β — это в
+examples:
+  - greek: Η βάρκα είναι στη θάλασσα.
+    russian: Лодка в море.
+    target: βάρκα

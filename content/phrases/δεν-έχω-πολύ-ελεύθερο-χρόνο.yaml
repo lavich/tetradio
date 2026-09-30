@@ -1,0 +1,7 @@
+id: p271
+text: Δεν έχω πολύ ελεύθερο χρόνο.
+translation: У меня мало свободного времени.
+provenance:
+  sourceLabel: Лексикон курса, модуль 20 (docs/course/lexicon/20.tsv)
+  operation: requested-generation
+  request: Лексикон и фразы модуля 20 курса A0→A2 по программе docs/curriculum.md; языковая проверка — docs/course/lexicon/REVIEW.md
