@@ -49,6 +49,7 @@ const errors: string[] = [];
 const warnings: string[] = [];
 const seen = new Map<string, string>();
 const ids = new Map<string, string>();
+const seenPhrases = new Map<string, string>();
 const files = readdirSync(DIR)
   .filter((name) => /^\d{2}\.tsv$/.test(name))
   .sort();
@@ -83,6 +84,15 @@ for (const name of files) {
     if (/σ(?=$|[\s.,;!])/u.test(greek)) errors.push(`${at}: «${greek}» — σ в конце слова вместо ς`);
     if (pos === "фраза") {
       modulePhrases++;
+      // Фраза, как и слово, вводится один раз: повтор в другом модуле — это повторение, а не новая карточка.
+      const key = greek
+        .normalize("NFC")
+        .toLocaleLowerCase("el")
+        .replace(/[!;\u037e,.?«»…]/g, "")
+        .trim();
+      const first = seenPhrases.get(key);
+      if (first) errors.push(`${at}: фраза «${greek}» уже есть в ${first}`);
+      else seenPhrases.set(key, at);
     } else {
       moduleWords++;
       const key = lemma(greek);
