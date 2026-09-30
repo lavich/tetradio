@@ -1,0 +1,15 @@
+id: w33-23
+greek: η γλάστρα
+russian: цветочный горшок
+ipa: "/i ˈɣlastra/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-γλάστρα.svg
+reading:
+  - text: "γ"
+    ipa: "ɣ"
+    explanation: "γ перед λ — звонкий гортанный призвук"
+examples:
+  - greek: "Το λουλούδι είναι στη γλάστρα."
+    russian: "Цветок в горшке."
+    target: "γλάστρα"

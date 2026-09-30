@@ -1,0 +1,15 @@
+id: w34-01
+greek: το καλαθάκι
+russian: корзина
+ipa: "/to kalaˈθaci/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-καλαθάκι.svg
+reading:
+  - text: "κι"
+    ipa: "ci"
+    explanation: "κ перед ι звучит мягко, ближе к «кь»"
+examples:
+  - greek: "Το καλαθάκι είναι στο τραπέζι."
+    russian: "Корзина на столе."
+    target: "καλαθάκι"

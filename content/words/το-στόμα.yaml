@@ -1,0 +1,11 @@
+id: w24-30
+greek: το στόμα
+russian: рот
+ipa: "/to ˈstoma/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-στόμα.svg
+examples:
+  - greek: "Το στόμα είναι κάτω από τη μύτη."
+    russian: "Рот под носом."
+    target: "στόμα"

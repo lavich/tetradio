@@ -1,0 +1,15 @@
+id: w32-01
+greek: Δύο
+russian: Два
+ipa: "/ˈðio/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: δύο.svg
+reading:
+  - text: "Δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Έχω δύο βιβλία."
+    russian: "У меня две книги."
+    target: "δύο"

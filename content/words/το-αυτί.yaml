@@ -1,0 +1,15 @@
+id: w24-28
+greek: το αυτί
+russian: ухо
+ipa: "/to afˈti/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-αυτί.svg
+reading:
+  - text: "αυ"
+    ipa: "af"
+    explanation: "αυ перед глухой согласной читается как аф"
+examples:
+  - greek: "Το αυτί μου πονάει."
+    russian: "У меня болит ухо."
+    target: "αυτί"

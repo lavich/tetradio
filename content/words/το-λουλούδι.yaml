@@ -1,0 +1,18 @@
+id: w24-01
+greek: το λουλούδι
+russian: цветок
+ipa: "/to luˈluði/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-λουλούδι.svg
+reading:
+  - text: "ου"
+    ipa: "u"
+    explanation: "ου читается как одно у"
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Το λουλούδι είναι στον κήπο."
+    russian: "Цветок в саду."
+    target: "λουλούδι"

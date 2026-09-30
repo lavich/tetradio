@@ -1,0 +1,15 @@
+id: w42-06
+greek: το κάδρο
+russian: картина, рамка
+ipa: "/to ˈkaðro/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-κάδρο.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкий межзубный звук, как английское th в «this»"
+examples:
+  - greek: "Το κάδρο είναι στον τοίχο."
+    russian: "Картина висит на стене."
+    target: "κάδρο"

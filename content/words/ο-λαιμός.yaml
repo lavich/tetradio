@@ -1,0 +1,15 @@
+id: w31-10
+greek: ο λαιμός
+russian: горло
+ipa: "/o leˈmos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-λαιμός.svg
+reading:
+  - text: "αι"
+    ipa: "e"
+    explanation: "αι читается как одно э"
+examples:
+  - greek: "Ο λαιμός μου πονάει."
+    russian: "У меня болит горло."
+    target: "λαιμός"

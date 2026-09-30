@@ -1,0 +1,15 @@
+id: w32-33
+greek: Εξακόσια
+russian: Шестьсот
+ipa: "/eksaˈkosia/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: εξακόσια.svg
+reading:
+  - text: "ξ"
+    ipa: "ks"
+    explanation: "ξ — слитное кс, один знак на два звука"
+examples:
+  - greek: "Το σχολείο έχει εξακόσια βιβλία."
+    russian: "В школе шестьсот книг."
+    target: "εξακόσια"

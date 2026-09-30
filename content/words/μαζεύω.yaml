@@ -1,0 +1,22 @@
+id: w41-01
+greek: Μαζεύω
+russian: собирать (урожай)
+ipa: "/maˈzevo/"
+verified: true
+source: "Список слов к уроку 4.1; фонетика, примеры, переводы слов примера и иллюстрации подготовлены Lexi."
+image: μαζεύω.svg
+reading:
+  - text: "εύ"
+    ipa: "ev"
+    explanation: "ευ перед звонким согласным читается как эв"
+examples:
+  - greek: "Μαζεύω τα μήλα από το δέντρο."
+    russian: "Я собираю яблоки с дерева."
+    target: "Μαζεύω"
+    words:
+      - { text: "Μαζεύω", russian: "собираю", word: w41-01 }
+      - { text: "τα", russian: "артикль ср. р. мн. ч." }
+      - { text: "μήλα", russian: "яблоки", word: w13-08 }
+      - { text: "από", russian: "с, из" }
+      - { text: "το", russian: "артикль ср. р." }
+      - { text: "δέντρο", russian: "дерево", word: w12-02 }

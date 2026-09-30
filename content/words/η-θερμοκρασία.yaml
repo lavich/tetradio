@@ -1,0 +1,18 @@
+id: w21-16
+greek: η θερμοκρασία
+russian: температура
+ipa: "/i θermokraˈsia/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-θερμοκρασία.svg
+reading:
+  - text: "θ"
+    ipa: "θ"
+    explanation: "θ — глухое межзубное th, как в think"
+  - text: "ία"
+    ipa: "ia"
+    explanation: "ударное ί и α здесь читаются двумя слогами"
+examples:
+  - greek: "Η θερμοκρασία είναι τριάντα βαθμοί."
+    russian: "Температура — тридцать градусов."
+    target: "θερμοκρασία"

@@ -1,0 +1,15 @@
+id: w24-16
+greek: το σκόρδο
+russian: чеснок
+ipa: "/to ˈskorðo/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-σκόρδο.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Βάζω σκόρδο στο κρέας."
+    russian: "Я кладу чеснок в мясо."
+    target: "σκόρδο"

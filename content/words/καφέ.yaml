@@ -1,0 +1,11 @@
+id: w23-19
+greek: καφέ
+russian: коричневый
+ipa: "/kaˈfe/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: καφέ.svg
+examples:
+  - greek: "Το τραπέζι είναι καφέ."
+    russian: "Стол коричневый."
+    target: "καφέ"

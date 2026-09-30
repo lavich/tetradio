@@ -1,0 +1,15 @@
+id: w12-05
+greek: το πόδι
+russian: нога
+ipa: /to ˈpoði/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: το-πόδι.svg
+reading:
+  - text: δ
+    ipa: ð
+    explanation: δ — мягкое th, а не д
+examples:
+  - greek: Το πόδι μου πονάει.
+    russian: У меня болит нога.
+    target: πόδι

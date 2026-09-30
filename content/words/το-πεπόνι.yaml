@@ -1,0 +1,11 @@
+id: w24-24
+greek: το πεπόνι
+russian: дыня
+ipa: "/to peˈponi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-πεπόνι.svg
+examples:
+  - greek: "Το πεπόνι είναι κίτρινο."
+    russian: "Дыня жёлтая."
+    target: "πεπόνι"

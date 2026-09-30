@@ -1,0 +1,15 @@
+id: w33-09
+greek: ο διακόπτης
+russian: выключатель
+ipa: "/o ðiaˈkoptis/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-διακόπτης.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Ο διακόπτης ανάβει το φως."
+    russian: "Выключатель включает свет."
+    target: "διακόπτης"

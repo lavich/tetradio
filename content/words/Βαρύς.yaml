@@ -1,0 +1,18 @@
+id: w22-27
+greek: Βαρύς
+russian: тяжёлый
+ipa: "/vaˈris/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: βαρύς.svg
+reading:
+  - text: "Β"
+    ipa: "v"
+    explanation: "β читается как в, а не как б"
+  - text: "ύ"
+    ipa: "i"
+    explanation: "υ читается как и, а не как русское у"
+examples:
+  - greek: "Ο σάκος μου είναι πολύ βαρύς."
+    russian: "Моя сумка очень тяжёлая."
+    target: "βαρύς"

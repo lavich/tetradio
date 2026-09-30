@@ -1,0 +1,18 @@
+id: w31-29
+greek: το γραφείο
+russian: письменный стол
+ipa: "/to ɣraˈfio/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-γραφείο.svg
+reading:
+  - text: "γ"
+    ipa: "ɣ"
+    explanation: "γ перед ρ — звонкий гортанный призвук"
+  - text: "εί"
+    ipa: "i"
+    explanation: "ει читается как одно и"
+examples:
+  - greek: "Το γραφείο είναι στο δωμάτιο."
+    russian: "Письменный стол в комнате."
+    target: "γραφείο"

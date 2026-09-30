@@ -1,0 +1,18 @@
+id: w24-15
+greek: το κρεμμύδι
+russian: лук
+ipa: "/to kreˈmiði/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-κρεμμύδι.svg
+reading:
+  - text: "μμ"
+    ipa: "m"
+    explanation: "двойная μ читается как одно м"
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Το κρεμμύδι είναι στη σαλάτα."
+    russian: "Лук в салате."
+    target: "κρεμμύδι"

@@ -1,0 +1,15 @@
+id: w11-44
+greek: ο καιρός
+russian: погода
+ipa: /o keˈros/
+verified: true
+image: ο-καιρός.svg
+source: "Материалы класса, урок 1 (A2): слайды урока, теория чтения, практика и ДЗ; фонетика и примеры подготовлены Lexi."
+reading:
+  - text: "αι"
+    ipa: "e"
+    explanation: "αι читается как э"
+examples:
+  - greek: "Ο καιρός είναι κακός."
+    russian: "Погода плохая."
+    target: "καιρός"

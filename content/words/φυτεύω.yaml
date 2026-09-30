@@ -1,0 +1,15 @@
+id: w34-18
+greek: Φυτεύω
+russian: сажать
+ipa: "/fiˈtevo/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: φυτεύω.svg
+reading:
+  - text: "υ"
+    ipa: "i"
+    explanation: "υ читается как и"
+examples:
+  - greek: "Φυτεύω ένα δέντρο."
+    russian: "Я сажаю дерево."
+    target: "Φυτεύω"

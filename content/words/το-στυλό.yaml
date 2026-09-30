@@ -1,0 +1,15 @@
+id: w23-36
+greek: το στυλό
+russian: ручка
+ipa: "/to stiˈlo/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-στυλό.svg
+reading:
+  - text: "υ"
+    ipa: "i"
+    explanation: "υ отдельной буквой читается как и"
+examples:
+  - greek: "Το στυλό μου είναι μπλε."
+    russian: "Моя ручка синяя."
+    target: "στυλό"

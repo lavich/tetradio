@@ -1,0 +1,15 @@
+id: w34-08
+greek: ο απορροφητήρας
+russian: вытяжка
+ipa: "/o aporofiˈtiras/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-απορροφητήρας.svg
+reading:
+  - text: "ρρ"
+    ipa: "r"
+    explanation: "двойное ρ читается как одно"
+examples:
+  - greek: "Ο απορροφητήρας δουλεύει δυνατά."
+    russian: "Вытяжка работает громко."
+    target: "απορροφητήρας"

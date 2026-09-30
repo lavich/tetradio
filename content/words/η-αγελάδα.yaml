@@ -1,0 +1,18 @@
+id: w42-13
+greek: η αγελάδα
+russian: корова
+ipa: "/i aʝeˈlaða/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-αγελάδα.svg
+reading:
+  - text: "γε"
+    ipa: "ʝe"
+    explanation: "γ перед ε — звонкий звук, близкий к й"
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкий межзубный звук, как английское th в «this»"
+examples:
+  - greek: "Η αγελάδα δίνει γάλα."
+    russian: "Корова даёт молоко."
+    target: "αγελάδα"

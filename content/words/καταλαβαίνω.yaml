@@ -1,0 +1,18 @@
+id: w11-26
+greek: καταλαβαίνω
+russian: понимать
+ipa: /katalaˈveno/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: καταλαβαίνω.svg
+reading:
+  - text: β
+    ipa: v
+    explanation: β — это в
+  - text: αί
+    ipa: e
+    explanation: αι даёт ударное э
+examples:
+  - greek: Δεν καταλαβαίνω καλά.
+    russian: Я плохо понимаю.
+    target: καταλαβαίνω

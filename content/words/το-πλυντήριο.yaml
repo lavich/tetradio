@@ -1,0 +1,18 @@
+id: w33-05
+greek: το πλυντήριο
+russian: стиральная машина
+ipa: "/to plinˈdirio/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-πλυντήριο.svg
+reading:
+  - text: "υ"
+    ipa: "i"
+    explanation: "υ отдельной буквой читается как и"
+  - text: "ντ"
+    ipa: "nd"
+    explanation: "ντ в середине слова читается как нд"
+examples:
+  - greek: "Το πλυντήριο είναι στο μπάνιο."
+    russian: "Стиральная машина в ванной."
+    target: "πλυντήριο"

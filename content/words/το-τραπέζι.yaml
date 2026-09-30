@@ -1,0 +1,16 @@
+id: w14-06
+greek: το τραπέζι
+russian: стол
+ipa: "/to traˈpezi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-τραπέζι.svg
+reading:
+  - text: "ζ"
+    ipa: "z"
+    explanation: "ζ — всегда звонкое з"
+examples:
+  - greek: "Το τραπέζι είναι μεγάλο."
+    russian: "Стол большой."
+    target: "τραπέζι"
+    source: "Слова 4 (список слов преподавателя), с. 1"

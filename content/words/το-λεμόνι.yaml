@@ -1,0 +1,11 @@
+id: w23-01
+greek: το λεμόνι
+russian: лимон
+ipa: "/to leˈmoni/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-λεμόνι.svg
+examples:
+  - greek: "Το λεμόνι είναι κίτρινο."
+    russian: "Лимон жёлтый."
+    target: "λεμόνι"

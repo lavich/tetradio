@@ -1,0 +1,15 @@
+id: w33-27
+greek: ο φράχτης
+russian: забор
+ipa: "/o ˈfraxtis/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-φράχτης.svg
+reading:
+  - text: "χ"
+    ipa: "x"
+    explanation: "χ перед τ — глухой звук, как русское х"
+examples:
+  - greek: "Ο φράχτης είναι γύρω από τον κήπο."
+    russian: "Забор вокруг сада."
+    target: "φράχτης"

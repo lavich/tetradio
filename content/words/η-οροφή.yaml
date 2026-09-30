@@ -1,0 +1,11 @@
+id: w24-07
+greek: η οροφή
+russian: потолок
+ipa: "/i oroˈfi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-οροφή.svg
+examples:
+  - greek: "Η οροφή είναι λευκή."
+    russian: "Потолок белый."
+    target: "οροφή"

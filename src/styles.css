@@ -1,0 +1,294 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+:root {
+  color-scheme: light;
+  /* Палитра Lexi в терминах токенов shadcn: компоненты реестра наследуют наш вид. */
+  --background: #f7f7f5;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #0d5eaf;
+  --primary-foreground: #ffffff;
+  --primary-hover: #0a4c8e;
+  --secondary: #f0f0ec;
+  --secondary-foreground: #171717;
+  --muted: #f0f0ec;
+  --muted-foreground: #6b7280;
+  --accent: #e8effd;
+  --accent-foreground: #0a4c8e;
+  --destructive: #b91c1c;
+  --border: #e9e9e4;
+  --input: #e9e9e4;
+  --ring: #0d5eaf;
+  --soft: #e8effd;
+  --ok: #15803d;
+  --radius: 0.875rem;
+  --radius-card: 18px;
+  --destructive-foreground: var(--color-red-800);
+  --success: var(--color-emerald-500);
+  --success-foreground: var(--color-emerald-900);
+  --info: var(--color-violet-500);
+  --info-foreground: var(--color-violet-900);
+  --warning: var(--color-yellow-500);
+  --warning-foreground: var(--color-yellow-900);
+  --invert: var(--color-zinc-900);
+  --invert-foreground: var(--color-zinc-50);
+  /* Отступы и высота оболочки: в браузере — системные, в Telegram их задаёт адаптер. */
+  --inset-top: env(safe-area-inset-top, 0px);
+  --inset-bottom: env(safe-area-inset-bottom, 0px);
+  --app-height: 100dvh;
+  /* Статусы ответа принадлежат Lexi и сопровождаются текстом или значком; ниже — пары для тёмного фона. */
+  --ok-bg: #ecfdf3;
+  --ok-fg: #14532d;
+  --bad-bg: #fef2f2;
+  --bad-fg: #7f1d1d;
+  --almost-bg: #fffbeb;
+  --almost-fg: #854d0e;
+  --same-bg: #dcfce7;
+  --wrong-bg: #fee2e2;
+  --track: #e3e3dd;
+  --art-bg: #eef2fa;
+  --speak-disabled: #c9ced8;
+  --shadow: rgba(0, 0, 0, 0.22);
+  --nav-bg: color-mix(in srgb, var(--background) 96%, transparent);
+}
+/*
+ * Telegram: семантические токены Lexi сопоставлены переменным темы клиента с резервными значениями.
+ * Универсального токена границы у Telegram нет — граница выводится из цвета текста с учётом контраста.
+ */
+:root[data-platform="telegram"] {
+  --background: var(--tg-theme-bg-color, #f7f7f5);
+  --foreground: var(--tg-theme-text-color, #171717);
+  --card: var(--tg-theme-section-bg-color, var(--tg-theme-secondary-bg-color, #ffffff));
+  --card-foreground: var(--tg-theme-text-color, #171717);
+  --popover: var(--tg-theme-section-bg-color, var(--tg-theme-secondary-bg-color, #ffffff));
+  --popover-foreground: var(--tg-theme-text-color, #171717);
+  --primary: var(--tg-theme-button-color, #0d5eaf);
+  --primary-foreground: var(--tg-theme-button-text-color, #ffffff);
+  --primary-hover: color-mix(in srgb, var(--primary) 85%, var(--foreground));
+  --secondary: var(--tg-theme-secondary-bg-color, #f0f0ec);
+  --secondary-foreground: var(--tg-theme-text-color, #171717);
+  --muted: var(--tg-theme-secondary-bg-color, #f0f0ec);
+  --muted-foreground: var(--tg-theme-hint-color, #6b7280);
+  --accent: color-mix(in srgb, var(--primary) 12%, var(--background));
+  --accent-foreground: var(--tg-theme-accent-text-color, var(--primary));
+  --soft: color-mix(in srgb, var(--primary) 12%, var(--background));
+  --destructive: var(--tg-theme-destructive-text-color, #b91c1c);
+  --border: color-mix(in srgb, var(--foreground) 14%, transparent);
+  --input: color-mix(in srgb, var(--foreground) 14%, transparent);
+  --ring: var(--primary);
+  --track: color-mix(in srgb, var(--foreground) 12%, transparent);
+  --art-bg: color-mix(in srgb, var(--primary) 8%, var(--card));
+  --speak-disabled: color-mix(in srgb, var(--foreground) 25%, var(--background));
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: var(--tg-theme-bg-color, #17212b);
+  --foreground: var(--tg-theme-text-color, #f5f5f5);
+  --card: var(--tg-theme-section-bg-color, var(--tg-theme-secondary-bg-color, #232e3c));
+  --card-foreground: var(--tg-theme-text-color, #f5f5f5);
+  --popover: var(--tg-theme-section-bg-color, var(--tg-theme-secondary-bg-color, #232e3c));
+  --popover-foreground: var(--tg-theme-text-color, #f5f5f5);
+  --secondary: var(--tg-theme-secondary-bg-color, #232e3c);
+  --secondary-foreground: var(--tg-theme-text-color, #f5f5f5);
+  --muted: var(--tg-theme-secondary-bg-color, #232e3c);
+  --muted-foreground: var(--tg-theme-hint-color, #a3adb8);
+  --primary: var(--tg-theme-button-color, #5288c1);
+  --primary-foreground: var(--tg-theme-button-text-color, #ffffff);
+  --destructive: var(--tg-theme-destructive-text-color, #f87171);
+  --ok: #4ade80;
+  --ok-bg: #0f2e1a;
+  --ok-fg: #bbf7d0;
+  --bad-bg: #3b1111;
+  --bad-fg: #fecaca;
+  --almost-bg: #3a2a05;
+  --almost-fg: #fde68a;
+  --same-bg: #166534;
+  --wrong-bg: #7f1d1d;
+  --shadow: rgba(0, 0, 0, 0.6);
+  --track: color-mix(in srgb, var(--foreground) 12%, transparent);
+  --success: var(--color-emerald-400);
+  --success-foreground: var(--color-emerald-100);
+  --warning: var(--color-yellow-400);
+  --warning-foreground: var(--color-yellow-100);
+  --info: var(--color-violet-400);
+  --info-foreground: var(--color-violet-100);
+  --destructive-foreground: var(--color-red-200);
+}
+/* Базовые элементы держим в слое base: иначе они перебивают утилиты Tailwind. */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  /*
+   * Фокус с клавиатуры не должен прятаться под липкой шапкой и нижней навигацией (WCAG 2.4.11):
+   * прокрутка к элементу оставляет место под обе полосы. Навигация — 60px ссылок и граница 1px.
+   */
+  html {
+    scroll-padding-top: calc(72px + var(--inset-top));
+    scroll-padding-bottom: calc(61px + 12px + var(--inset-bottom));
+  }
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font:
+      16px/1.45 system-ui,
+      -apple-system,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+  a {
+    color: var(--primary);
+  }
+  :focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 2px 0 16px;
+  }
+  h2 {
+    font-weight: 600;
+    font-size: 19px;
+    margin: 22px 0 10px;
+  }
+  h3 {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0 0 6px;
+  }
+  label {
+    display: block;
+    font-size: 14px;
+    color: var(--muted-foreground);
+    margin: 12px 0 6px;
+  }
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  input[type="search"],
+  select,
+  textarea {
+    width: 100%;
+    min-height: 50px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    padding: 10px 14px;
+    font-size: 17px;
+  }
+  /*
+   * У поля даты на iOS своя минимальная ширина нативного контрола, и она перебивает `width: 100%`:
+   * поле вылезает за карточку. Сброс внешнего вида отдаёт размер обратно CSS, нативный выбор даты
+   * при этом остаётся. На настольных движках поле и без сброса укладывается в контейнер.
+   */
+  input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    max-width: 100%;
+  }
+  textarea {
+    min-height: 160px;
+    resize: vertical;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+}
+
+/* Горизонтальные ряды прокручиваются, но своей полосы не показывают. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-soft: var(--soft);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-invert-foreground: var(--invert-foreground);
+  --color-invert: var(--invert);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning: var(--warning);
+  --color-info-foreground: var(--info-foreground);
+  --color-info: var(--info);
+  --color-success-foreground: var(--success-foreground);
+  --color-success: var(--success);
+  --color-destructive-foreground: var(--destructive-foreground);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}

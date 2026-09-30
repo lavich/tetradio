@@ -1,0 +1,15 @@
+id: w33-18
+greek: η σκούπα
+russian: метла
+ipa: "/i ˈskupa/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-σκούπα.svg
+reading:
+  - text: "ού"
+    ipa: "u"
+    explanation: "ου читается как одно у"
+examples:
+  - greek: "Καθαρίζω το πάτωμα με τη σκούπα."
+    russian: "Я убираю пол метлой."
+    target: "σκούπα"

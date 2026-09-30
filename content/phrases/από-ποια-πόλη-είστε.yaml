@@ -1,0 +1,13 @@
+id: ph13-04
+text: "Από ποια πόλη είστε;"
+translation: "Из какого города вы?"
+provenance:
+  sourceLabel: "Урок 3 (подготовка к экзамену)"
+  operation: verbatim
+  locator: "Урок 3, с. 13, слайд «Разговорная часть: Откуда вы?»"
+  excerpt: "Από ποια πόλη είστε; Из какого города вы?"
+  parts:
+    translation:
+      sourceLabel: "Урок 3 (подготовка к экзамену)"
+      operation: verbatim
+      locator: "Урок 3, с. 13, слайд «Разговорная часть: Откуда вы?»"

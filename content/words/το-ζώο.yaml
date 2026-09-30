@@ -1,0 +1,15 @@
+id: w23-30
+greek: το ζώο
+russian: животное
+ipa: "/to ˈzoo/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ζώο.svg
+reading:
+  - text: "ώ"
+    ipa: "o"
+    explanation: "ω звучит так же, как ο"
+examples:
+  - greek: "Ο σκύλος είναι ζώο."
+    russian: "Собака — животное."
+    target: "ζώο"

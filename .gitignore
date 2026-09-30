@@ -7,3 +7,9 @@ coverage/
 !.env.example
 !.agents/
 !.agents/**
+*.tsbuildinfo
+playwright-report/
+test-results/
+docs/art-sheet.html
+public/content/
+.playwright-mcp/

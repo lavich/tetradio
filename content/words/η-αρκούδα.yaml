@@ -1,0 +1,18 @@
+id: w42-22
+greek: η αρκούδα
+russian: медведь
+ipa: "/i arˈkuða/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-αρκούδα.svg
+reading:
+  - text: "ού"
+    ipa: "ˈu"
+    explanation: "ου читается как у"
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкий межзубный звук, как английское th в «this»"
+examples:
+  - greek: "Η αρκούδα τρώει μέλι."
+    russian: "Медведь ест мёд."
+    target: "αρκούδα"

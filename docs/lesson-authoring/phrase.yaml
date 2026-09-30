@@ -1,0 +1,18 @@
+# Шаблон фразы: content/phrases/<id>.yaml
+# Поля языково-нейтральные: text — на изучаемом языке, translation — перевод.
+id: p-example
+text: Το δείγμα είναι απλό.
+translation: Образец простой.
+# Необязательные: ситуация употребления и примечание — только из материала.
+usage: Так говорят о простом примере.
+# Без перевода и озвучки фраза остаётся справочной и не занимает дневную квоту;
+# перевод ради обхода этого состояния не дописывается.
+provenance:
+  sourceLabel: Создано агентом для шаблона документации Lexi
+  operation: requested-generation
+  request: Пример формата фразы для docs/lesson-authoring.md
+  parts:
+    usage:
+      sourceLabel: Создано агентом для шаблона документации Lexi
+      operation: requested-generation
+      request: Показать необязательное поле usage

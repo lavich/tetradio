@@ -1,0 +1,15 @@
+id: w42-10
+greek: το σεντόνι
+russian: простыня
+ipa: "/to senˈdoni/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-σεντόνι.svg
+reading:
+  - text: "ντ"
+    ipa: "nd"
+    explanation: "ντ внутри слова читается как нд"
+examples:
+  - greek: "Αλλάζω το σεντόνι στο κρεβάτι."
+    russian: "Я меняю простыню на кровати."
+    target: "σεντόνι"

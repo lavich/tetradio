@@ -1,0 +1,18 @@
+id: w42-02
+greek: το χαλίκι
+russian: гравий
+ipa: "/to xaˈlici/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-χαλίκι.svg
+reading:
+  - text: "χα"
+    ipa: "xa"
+    explanation: "χ перед α — твёрдый х"
+  - text: "κι"
+    ipa: "ci"
+    explanation: "κ перед ι звучит мягко, ближе к «кь»"
+examples:
+  - greek: "Στην αυλή έχουμε χαλίκι."
+    russian: "Во дворе у нас гравий."
+    target: "χαλίκι"

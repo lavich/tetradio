@@ -1,0 +1,18 @@
+id: w33-08
+greek: το ποδήλατο
+russian: велосипед
+ipa: "/to poˈðilato/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ποδήλατο.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+  - text: "ή"
+    ipa: "i"
+    explanation: "η читается как и, а знак показывает ударение"
+examples:
+  - greek: "Το ποδήλατο είναι κόκκινο."
+    russian: "Велосипед красный."
+    target: "ποδήλατο"

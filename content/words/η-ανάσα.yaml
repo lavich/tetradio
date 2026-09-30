@@ -1,0 +1,11 @@
+id: w31-13
+greek: η ανάσα
+russian: дыхание
+ipa: "/i aˈnasa/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-ανάσα.svg
+examples:
+  - greek: "Παίρνω μια βαθιά ανάσα."
+    russian: "Я делаю глубокий вдох."
+    target: "ανάσα"

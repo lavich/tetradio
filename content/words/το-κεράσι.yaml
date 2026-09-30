@@ -1,0 +1,11 @@
+id: w24-20
+greek: το κεράσι
+russian: черешня
+ipa: "/to keˈrasi/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-κεράσι.svg
+examples:
+  - greek: "Το κεράσι είναι κόκκινο."
+    russian: "Черешня красная."
+    target: "κεράσι"

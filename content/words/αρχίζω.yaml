@@ -1,0 +1,18 @@
+id: w13-31
+greek: αρχίζω
+russian: начинать
+ipa: "/arˈçizo/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: αρχίζω.svg
+reading:
+  - text: "χί"
+    ipa: "çi"
+    explanation: "χ перед ι звучит мягко, как хь"
+  - text: "ζ"
+    ipa: "z"
+    explanation: "ζ — всегда звонкое з"
+examples:
+  - greek: "Αρχίζω τη δουλειά νωρίς."
+    russian: "Я начинаю работу рано."
+    target: "Αρχίζω"

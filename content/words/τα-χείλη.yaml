@@ -1,0 +1,18 @@
+id: w21-03
+greek: τα χείλη
+russian: губы
+ipa: "/ta ˈçili/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: τα-χείλη.svg
+reading:
+  - text: "χ"
+    ipa: "ç"
+    explanation: "χ перед ε и ι звучит мягко, как хь"
+  - text: "εί"
+    ipa: "i"
+    explanation: "ει — один звук и, а не два гласных"
+examples:
+  - greek: "Τα χείλη μου είναι στεγνά."
+    russian: "Мои губы сухие."
+    target: "χείλη"

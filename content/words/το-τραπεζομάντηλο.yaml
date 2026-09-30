@@ -1,0 +1,18 @@
+id: w42-08
+greek: το τραπεζομάντηλο
+russian: скатерть
+ipa: "/to trapezoˈmandilo/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-τραπεζομάντηλο.svg
+reading:
+  - text: "ντ"
+    ipa: "nd"
+    explanation: "ντ внутри слова читается как нд"
+  - text: "η"
+    ipa: "i"
+    explanation: "η читается как и"
+examples:
+  - greek: "Το τραπεζομάντηλο είναι άσπρο."
+    russian: "Скатерть белая."
+    target: "τραπεζομάντηλο"

@@ -1,0 +1,15 @@
+id: w11-23
+greek: βλέπω
+russian: видеть
+ipa: /ˈvlepo/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: βλέπω.svg
+reading:
+  - text: β
+    ipa: v
+    explanation: β — это в
+examples:
+  - greek: Βλέπω τη θάλασσα.
+    russian: Я вижу море.
+    target: Βλέπω

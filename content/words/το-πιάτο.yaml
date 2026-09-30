@@ -1,0 +1,11 @@
+id: w24-10
+greek: το πιάτο
+russian: тарелка
+ipa: "/to ˈpiato/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-πιάτο.svg
+examples:
+  - greek: "Το πιάτο είναι στο τραπέζι."
+    russian: "Тарелка на столе."
+    target: "πιάτο"

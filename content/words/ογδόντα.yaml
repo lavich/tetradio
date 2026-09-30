@@ -1,0 +1,15 @@
+id: w32-26
+greek: Ογδόντα
+russian: Восемьдесят
+ipa: "/oɣˈðonda/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ογδόντα.svg
+reading:
+  - text: "γ"
+    ipa: "ɣ"
+    explanation: "γ перед δ — звонкий гортанный призвук"
+examples:
+  - greek: "Έχω ογδόντα βιβλία."
+    russian: "У меня восемьдесят книг."
+    target: "ογδόντα"

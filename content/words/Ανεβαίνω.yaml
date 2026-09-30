@@ -1,0 +1,18 @@
+id: w22-11
+greek: Ανεβαίνω
+russian: подниматься
+ipa: "/aneˈveno/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ανεβαίνω.svg
+reading:
+  - text: "β"
+    ipa: "v"
+    explanation: "β читается как в, а не как б"
+  - text: "αί"
+    ipa: "e"
+    explanation: "αι читается как один звук е"
+examples:
+  - greek: "Ανεβαίνω στο βουνό με τους φίλους μου."
+    russian: "Я поднимаюсь на гору с друзьями."
+    target: "Ανεβαίνω"

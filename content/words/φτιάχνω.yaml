@@ -1,0 +1,15 @@
+id: w34-15
+greek: Φτιάχνω
+russian: чинить
+ipa: "/ˈftjaxno/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: φτιάχνω.svg
+reading:
+  - text: "χν"
+    ipa: "xn"
+    explanation: "χ перед согласной — глухой х, как в «хор»"
+examples:
+  - greek: "Φτιάχνω τη βρύση μόνος μου."
+    russian: "Я чиню кран сам."
+    target: "Φτιάχνω"

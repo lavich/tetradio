@@ -1,0 +1,15 @@
+id: w21-23
+greek: η ελπίδα
+russian: надежда
+ipa: "/i elˈpiða/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-ελπίδα.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — мягкое межзубное th, как в this"
+examples:
+  - greek: "Η ελπίδα πεθαίνει τελευταία."
+    russian: "Надежда умирает последней."
+    target: "ελπίδα"

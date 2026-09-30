@@ -1,0 +1,11 @@
+id: w34-20
+greek: Βάζω
+russian: класть
+ipa: "/ˈvazo/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: βάζω.svg
+examples:
+  - greek: "Βάζω το βιβλίο στο τραπέζι."
+    russian: "Я кладу книгу на стол."
+    target: "Βάζω"

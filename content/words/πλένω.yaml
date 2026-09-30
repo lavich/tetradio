@@ -1,0 +1,11 @@
+id: w34-12
+greek: Πλένω
+russian: мыть
+ipa: "/ˈpleno/"
+verified: true
+source: "Список слов к уроку 3.4; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: πλένω.svg
+examples:
+  - greek: "Πλένω τα πιάτα μετά το φαγητό."
+    russian: "Я мою посуду после еды."
+    target: "Πλένω"

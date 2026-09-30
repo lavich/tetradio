@@ -1,0 +1,15 @@
+id: w11-12
+greek: Ακριβώς
+russian: точно
+ipa: /akriˈvos/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: ακριβώς.svg
+reading:
+  - text: β
+    ipa: v
+    explanation: β читается как в, а не как б
+examples:
+  - greek: Είναι ακριβώς αυτό που θέλω.
+    russian: Это именно то, что я хочу.
+    target: ακριβώς

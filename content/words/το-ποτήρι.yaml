@@ -1,0 +1,15 @@
+id: w21-35
+greek: το ποτήρι
+russian: стакан
+ipa: "/to poˈtiri/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ποτήρι.svg
+reading:
+  - text: "ή"
+    ipa: "i"
+    explanation: "η читается как и — в греческом несколько букв для звука и"
+examples:
+  - greek: "Το ποτήρι είναι γεμάτο νερό."
+    russian: "Стакан полон воды."
+    target: "ποτήρι"

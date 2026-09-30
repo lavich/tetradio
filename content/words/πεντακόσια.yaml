@@ -1,0 +1,15 @@
+id: w32-32
+greek: Πεντακόσια
+russian: Пятьсот
+ipa: "/pendaˈkosia/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: πεντακόσια.svg
+reading:
+  - text: "ντ"
+    ipa: "nd"
+    explanation: "ντ в середине слова читается как нд"
+examples:
+  - greek: "Το σχολείο έχει πεντακόσια βιβλία."
+    russian: "В школе пятьсот книг."
+    target: "πεντακόσια"

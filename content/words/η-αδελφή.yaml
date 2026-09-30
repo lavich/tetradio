@@ -1,0 +1,18 @@
+id: w11-19
+greek: η αδελφή
+russian: сестра
+ipa: /i aðelˈfi/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: η-αδελφή.svg
+reading:
+  - text: δ
+    ipa: ð
+    explanation: δ — мягкое th
+  - text: ή
+    ipa: i
+    explanation: η под ударением — это ударное и
+examples:
+  - greek: Η αδελφή μου είναι δασκάλα.
+    russian: Моя сестра — учительница.
+    target: αδελφή

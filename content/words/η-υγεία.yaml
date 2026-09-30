@@ -1,0 +1,18 @@
+id: w31-15
+greek: η υγεία
+russian: здоровье
+ipa: "/i iˈʝia/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-υγεία.svg
+reading:
+  - text: "υ"
+    ipa: "i"
+    explanation: "υ отдельной буквой читается как и"
+  - text: "γ"
+    ipa: "ʝ"
+    explanation: "γ перед ε и ι звучит мягко, близко к й"
+examples:
+  - greek: "Η υγεία του παιδιού είναι καλή."
+    russian: "Здоровье ребёнка хорошее."
+    target: "υγεία"

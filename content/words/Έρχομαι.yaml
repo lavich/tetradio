@@ -1,0 +1,18 @@
+id: w22-02
+greek: Έρχομαι
+russian: приходить
+ipa: "/ˈerxome/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: έρχομαι.svg
+reading:
+  - text: "χ"
+    ipa: "x"
+    explanation: "χ перед α, ο, υ и согласной — глухой х, как в «хор»"
+  - text: "αι"
+    ipa: "e"
+    explanation: "конечное αι в глаголах читается как е"
+examples:
+  - greek: "Έρχομαι αμέσως."
+    russian: "Я сейчас приду."
+    target: "Έρχομαι"

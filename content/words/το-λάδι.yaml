@@ -1,0 +1,15 @@
+id: w23-11
+greek: το λάδι
+russian: масло (растительное)
+ipa: "/to ˈlaði/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-λάδι.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Βάζω λάδι στη σαλάτα."
+    russian: "Я добавляю масло в салат."
+    target: "λάδι"

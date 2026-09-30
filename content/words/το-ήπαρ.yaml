@@ -1,0 +1,15 @@
+id: w31-07
+greek: το ήπαρ
+russian: печень
+ipa: "/to ˈipar/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ήπαρ.svg
+reading:
+  - text: "ή"
+    ipa: "i"
+    explanation: "η читается как и, а знак показывает ударение"
+examples:
+  - greek: "Το ήπαρ είναι μεγάλο όργανο."
+    russian: "Печень — большой орган."
+    target: "ήπαρ"

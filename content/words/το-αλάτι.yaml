@@ -1,0 +1,11 @@
+id: w23-09
+greek: το αλάτι
+russian: соль
+ipa: "/to aˈlati/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-αλάτι.svg
+examples:
+  - greek: "Το αλάτι είναι λευκό."
+    russian: "Соль белая."
+    target: "αλάτι"

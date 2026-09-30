@@ -1,0 +1,15 @@
+id: w13-35
+greek: γελώ
+russian: смеяться
+ipa: "/ʝeˈlo/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: γελώ.svg
+reading:
+  - text: "γε"
+    ipa: "ʝe"
+    explanation: "γ перед ε звучит мягко, почти как й"
+examples:
+  - greek: "Γελώ με την ιστορία σου."
+    russian: "Я смеюсь над твоей историей."
+    target: "Γελώ"

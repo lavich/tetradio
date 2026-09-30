@@ -1,0 +1,15 @@
+id: w21-34
+greek: το μαχαίρι
+russian: нож
+ipa: "/to maˈçeri/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-μαχαίρι.svg
+reading:
+  - text: "χαί"
+    ipa: "çe"
+    explanation: "χ перед αι звучит мягко, а само αι даёт е"
+examples:
+  - greek: "Το μαχαίρι κόβει το ψωμί."
+    russian: "Нож режет хлеб."
+    target: "μαχαίρι"

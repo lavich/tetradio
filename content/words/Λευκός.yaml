@@ -1,0 +1,15 @@
+id: w22-23
+greek: Λευκός
+russian: белый
+ipa: "/lefˈkos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: λευκός.svg
+reading:
+  - text: "ευ"
+    ipa: "ef"
+    explanation: "ευ перед глухой согласной читается как эф"
+examples:
+  - greek: "Ο τοίχος του σπιτιού είναι λευκός."
+    russian: "Стена дома белая."
+    target: "λευκός"

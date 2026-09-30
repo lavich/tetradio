@@ -1,0 +1,18 @@
+id: w42-24
+greek: το φίδι
+russian: змея
+ipa: "/to ˈfiði/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-φίδι.svg
+reading:
+  - text: "φ"
+    ipa: "f"
+    explanation: "φ читается как ф"
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкий межзубный звук, как английское th в «this»"
+examples:
+  - greek: "Το φίδι κρύβεται κάτω από την πέτρα."
+    russian: "Змея прячется под камнем."
+    target: "φίδι"

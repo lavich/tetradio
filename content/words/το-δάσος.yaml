@@ -1,0 +1,15 @@
+id: w23-22
+greek: το δάσος
+russian: лес
+ipa: "/to ˈðasos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-δάσος.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Το δάσος έχει πολλά δέντρα."
+    russian: "В лесу много деревьев."
+    target: "δάσος"

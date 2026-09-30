@@ -1,0 +1,15 @@
+id: w21-18
+greek: ο εχθρός
+russian: враг
+ipa: "/o exˈθros/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-εχθρός.svg
+reading:
+  - text: "χθ"
+    ipa: "xθ"
+    explanation: "χθ — сочетание двух глухих: х и межзубного th"
+examples:
+  - greek: "Ο εχθρός δεν είναι φίλος."
+    russian: "Враг — не друг."
+    target: "εχθρός"

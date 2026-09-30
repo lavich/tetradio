@@ -1,0 +1,13 @@
+id: ph11-20
+text: "Ο παππούς βλέπει τηλεόραση."
+translation: "Дедушка смотрит телевизор."
+provenance:
+  sourceLabel: "Материалы класса, урок 1 (A2)"
+  operation: verbatim
+  locator: "Урок 1 A2, слайд «Перевод предложений»"
+  excerpt: "Ο παππούς βλέπει τηλεόραση Дедушка смотрит телевизор"
+  parts:
+    translation:
+      sourceLabel: "Материалы класса, урок 1 (A2)"
+      operation: verbatim
+      locator: "Урок 1 A2, слайд «Перевод предложений»"

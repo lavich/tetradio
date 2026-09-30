@@ -1,0 +1,15 @@
+id: w22-16
+greek: Ζεστός
+russian: тёплый
+ipa: "/zeˈstos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ζεστός.svg
+reading:
+  - text: "Ζ"
+    ipa: "z"
+    explanation: "ζ — всегда звонкое з, даже в начале слова"
+examples:
+  - greek: "Ο καφές μου είναι ακόμα ζεστός."
+    russian: "Мой кофе ещё тёплый."
+    target: "ζεστός"

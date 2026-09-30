@@ -1,0 +1,15 @@
+id: w32-15
+greek: Δεκαπέντε
+russian: Пятнадцать
+ipa: "/ðekaˈpende/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: δεκαπέντε.svg
+reading:
+  - text: "ντ"
+    ipa: "nd"
+    explanation: "ντ в середине слова читается как нд"
+examples:
+  - greek: "Έχω δεκαπέντε βιβλία."
+    russian: "У меня пятнадцать книг."
+    target: "δεκαπέντε"

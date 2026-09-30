@@ -1,0 +1,18 @@
+id: w33-04
+greek: το ψυγείο
+russian: холодильник
+ipa: "/to psiˈʝio/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ψυγείο.svg
+reading:
+  - text: "ψ"
+    ipa: "ps"
+    explanation: "ψ — слитное пс, один знак на два звука"
+  - text: "εί"
+    ipa: "i"
+    explanation: "ει читается как одно и"
+examples:
+  - greek: "Το γάλα είναι στο ψυγείο."
+    russian: "Молоко в холодильнике."
+    target: "ψυγείο"

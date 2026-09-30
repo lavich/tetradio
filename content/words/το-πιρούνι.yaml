@@ -1,0 +1,15 @@
+id: w21-33
+greek: το πιρούνι
+russian: вилка
+ipa: "/to piˈruni/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-πιρούνι.svg
+reading:
+  - text: "ού"
+    ipa: "u"
+    explanation: "ου — всегда один звук у"
+examples:
+  - greek: "Το πιρούνι είναι δίπλα στο πιάτο."
+    russian: "Вилка лежит рядом с тарелкой."
+    target: "πιρούνι"

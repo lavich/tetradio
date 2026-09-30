@@ -1,0 +1,15 @@
+id: w33-01
+greek: το χωριό
+russian: деревня
+ipa: "/to xoˈrio/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-χωριό.svg
+reading:
+  - text: "χ"
+    ipa: "x"
+    explanation: "χ перед ω — глухой звук, как русское х"
+examples:
+  - greek: "Το χωριό είναι μικρό."
+    russian: "Деревня маленькая."
+    target: "χωριό"

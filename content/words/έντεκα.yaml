@@ -1,0 +1,15 @@
+id: w32-11
+greek: Έντεκα
+russian: Одиннадцать
+ipa: "/ˈendeka/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: έντεκα.svg
+reading:
+  - text: "ντ"
+    ipa: "nd"
+    explanation: "ντ в середине слова читается как нд"
+examples:
+  - greek: "Έχω έντεκα βιβλία."
+    russian: "У меня одиннадцать книг."
+    target: "έντεκα"

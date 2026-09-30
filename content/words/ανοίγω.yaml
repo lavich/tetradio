@@ -1,0 +1,18 @@
+id: w13-33
+greek: ανοίγω
+russian: открывать
+ipa: "/aˈniɣo/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ανοίγω.svg
+reading:
+  - text: "οί"
+    ipa: "i"
+    explanation: "οι читается как один звук и"
+  - text: "γω"
+    ipa: "ɣo"
+    explanation: "γ перед ω — звонкий гортанный, как украинское «г»"
+examples:
+  - greek: "Ανοίγω το παράθυρο."
+    russian: "Я открываю окно."
+    target: "Ανοίγω"

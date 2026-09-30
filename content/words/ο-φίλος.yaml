@@ -1,0 +1,15 @@
+id: w12-12
+greek: ο φίλος
+russian: друг
+ipa: /o ˈfilos/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: ο-φίλος.svg
+reading:
+  - text: φ
+    ipa: f
+    explanation: φ — это ф
+examples:
+  - greek: Ο φίλος μου μένει εδώ.
+    russian: Мой друг живёт здесь.
+    target: φίλος

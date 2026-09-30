@@ -1,0 +1,15 @@
+id: w21-30
+greek: η ομπρέλα
+russian: зонт
+ipa: "/i oˈbrela/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-ομπρέλα.svg
+reading:
+  - text: "μπ"
+    ipa: "b"
+    explanation: "μπ внутри слова читается как б"
+examples:
+  - greek: "Η ομπρέλα με σώζει από τη βροχή."
+    russian: "Зонт спасает меня от дождя."
+    target: "ομπρέλα"

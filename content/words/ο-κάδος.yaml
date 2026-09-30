@@ -1,0 +1,15 @@
+id: w33-21
+greek: ο κάδος
+russian: мусорное ведро
+ipa: "/o ˈkaðos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-κάδος.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+examples:
+  - greek: "Ο κάδος είναι έξω από το σπίτι."
+    russian: "Мусорное ведро снаружи дома."
+    target: "κάδος"

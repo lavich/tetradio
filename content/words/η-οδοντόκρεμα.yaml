@@ -1,0 +1,18 @@
+id: w33-16
+greek: η οδοντόκρεμα
+russian: зубная паста
+ipa: "/i oðonˈdokrema/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: η-οδοντόκρεμα.svg
+reading:
+  - text: "δ"
+    ipa: "ð"
+    explanation: "δ — звонкое межзубное th, не д"
+  - text: "ντ"
+    ipa: "nd"
+    explanation: "ντ в середине слова читается как нд"
+examples:
+  - greek: "Η οδοντόκρεμα είναι στο ράφι."
+    russian: "Зубная паста на полке."
+    target: "οδοντόκρεμα"

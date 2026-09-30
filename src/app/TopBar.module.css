@@ -1,0 +1,34 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--background);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(10px + var(--inset-top)) 16px 10px;
+  max-width: 560px;
+  margin: 0 auto;
+  width: 100%;
+}
+.compact {
+  padding-top: calc(4px + var(--inset-top));
+  padding-bottom: 4px;
+  min-height: 0;
+}
+.brand {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+.spacer {
+  flex: 1;
+}
+.title {
+  font-size: 17px;
+  margin: 0;
+  letter-spacing: 0;
+}
+.flag {
+  font-size: 22px;
+}

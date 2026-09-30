@@ -1,0 +1,18 @@
+id: w11-24
+greek: ακούω
+russian: слышать
+ipa: /aˈkuo/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: ακούω.svg
+reading:
+  - text: ού
+    ipa: u
+    explanation: ου даёт у, ударение на нём
+  - text: ω
+    ipa: o
+    explanation: ω — отдельный слог в конце
+examples:
+  - greek: Ακούω μουσική.
+    russian: Я слушаю музыку.
+    target: Ακούω

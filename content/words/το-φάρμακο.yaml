@@ -1,0 +1,11 @@
+id: w31-19
+greek: το φάρμακο
+russian: медикамент
+ipa: "/to ˈfarmako/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-φάρμακο.svg
+examples:
+  - greek: "Το φάρμακο είναι στο τραπέζι."
+    russian: "Медикамент на столе."
+    target: "φάρμακο"

@@ -1,0 +1,15 @@
+id: w32-14
+greek: Δεκατέσσερα
+russian: Четырнадцать
+ipa: "/ðekaˈtesera/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: δεκατέσσερα.svg
+reading:
+  - text: "σσ"
+    ipa: "s"
+    explanation: "двойная σ читается как одно с"
+examples:
+  - greek: "Έχω δεκατέσσερα βιβλία."
+    russian: "У меня четырнадцать книг."
+    target: "δεκατέσσερα"

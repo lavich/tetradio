@@ -1,0 +1,18 @@
+id: w23-32
+greek: ο άνθρωπος
+russian: человек
+ipa: "/o ˈanθropos/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: ο-άνθρωπος.svg
+reading:
+  - text: "θ"
+    ipa: "θ"
+    explanation: "θ — глухое межзубное th"
+  - text: "ω"
+    ipa: "o"
+    explanation: "ω звучит так же, как ο"
+examples:
+  - greek: "Ο άνθρωπος περπατάει στο δάσος."
+    russian: "Человек идёт по лесу."
+    target: "άνθρωπος"

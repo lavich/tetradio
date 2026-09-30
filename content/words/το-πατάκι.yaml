@@ -1,0 +1,15 @@
+id: w42-04
+greek: το πατάκι
+russian: коврик
+ipa: "/to paˈtaci/"
+verified: true
+source: "Список слов к уроку 4.2; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-πατάκι.svg
+reading:
+  - text: "κι"
+    ipa: "ci"
+    explanation: "κ перед ι звучит мягко, ближе к «кь»"
+examples:
+  - greek: "Το πατάκι είναι μπροστά στην πόρτα."
+    russian: "Коврик лежит перед дверью."
+    target: "πατάκι"

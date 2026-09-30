@@ -1,0 +1,15 @@
+id: w11-10
+greek: λέω
+russian: говорить
+ipa: /ˈleo/
+verified: true
+source: "Собственная подготовка Lexi: правила чтения стандартного новогреческого, ручная проверка ударений и примеров."
+image: λέω.svg
+reading:
+  - text: έω
+    ipa: eo
+    explanation: ε и ω читаются раздельно, двумя слогами
+examples:
+  - greek: Λέω πάντα την αλήθεια.
+    russian: Я всегда говорю правду.
+    target: Λέω

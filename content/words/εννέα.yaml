@@ -1,0 +1,15 @@
+id: w32-09
+greek: Εννέα
+russian: Девять
+ipa: "/eˈnea/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: εννέα.svg
+reading:
+  - text: "νν"
+    ipa: "n"
+    explanation: "двойная ν читается как одно н"
+examples:
+  - greek: "Έχω εννέα βιβλία."
+    russian: "У меня девять книг."
+    target: "εννέα"

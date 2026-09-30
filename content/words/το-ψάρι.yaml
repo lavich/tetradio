@@ -1,0 +1,16 @@
+id: w13-03
+greek: το ψάρι
+russian: рыба
+ipa: "/to ˈpsari/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-ψάρι.svg
+reading:
+  - text: "ψ"
+    ipa: "ps"
+    explanation: "ψ — слитное пс, один знак на два звука"
+examples:
+  - greek: "Μου αρέσει να τρώω ψάρι."
+    russian: "Мне нравится есть рыбу."
+    target: "ψάρι"
+    source: "Урок 3 (подготовка к экзамену), с. 16"

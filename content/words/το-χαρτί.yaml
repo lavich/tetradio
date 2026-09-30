@@ -1,0 +1,15 @@
+id: w23-34
+greek: το χαρτί
+russian: бумага
+ipa: "/to xarˈti/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: το-χαρτί.svg
+reading:
+  - text: "χ"
+    ipa: "x"
+    explanation: "χ перед α — глухой звук, как русское х"
+examples:
+  - greek: "Γράφω σε ένα χαρτί."
+    russian: "Я пишу на бумаге."
+    target: "χαρτί"

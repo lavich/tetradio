@@ -1,0 +1,11 @@
+id: w32-13
+greek: Δεκατρία
+russian: Тринадцать
+ipa: "/ðekaˈtria/"
+verified: true
+source: "Набор класса A2 — 26-27; фонетика, примеры и иллюстрации подготовлены Lexi."
+image: δεκατρία.svg
+examples:
+  - greek: "Έχω δεκατρία βιβλία."
+    russian: "У меня тринадцать книг."
+    target: "δεκατρία"

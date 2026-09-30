@@ -1,0 +1,20 @@
+id: w41-07
+greek: Φρέσκος
+russian: свежий
+ipa: "/ˈfreskos/"
+verified: true
+source: "Список слов к уроку 4.1; фонетика, примеры, переводы слов примера и иллюстрации подготовлены Lexi."
+image: φρέσκος.svg
+reading:
+  - text: "Φ"
+    ipa: "f"
+    explanation: "φ читается как ф"
+examples:
+  - greek: "Το ψάρι είναι φρέσκο."
+    russian: "Рыба свежая."
+    target: "φρέσκο"
+    words:
+      - { text: "Το", russian: "артикль ср. р." }
+      - { text: "ψάρι", russian: "рыба", word: w13-03 }
+      - { text: "είναι", russian: "есть, является", word: w11-05 }
+      - { text: "φρέσκο", russian: "свежая", word: w41-07 }
