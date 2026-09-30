@@ -26,9 +26,9 @@ modules:
   - m23
   - m24
 exam:
-  title: Экзамен A2 КΕΓ
+  title: Экзамен A2 ΚΕΓ
   date: 2027-05-11
   source: https://www.greek-language.gr/certification/node/15.html
   checkedAt: 2026-09-30
   localConfirmed: false
-  note: Общая дата КΕΓ; даты и центр на Кипре объявляются отдельно
+  note: Общая дата ΚΕΓ; даты и центр на Кипре объявляются отдельно

@@ -161,6 +161,32 @@ const nfc = (value: unknown): unknown =>
       : value && typeof value === "object"
         ? Object.fromEntries(Object.entries(value as Record<string, unknown>).map(([k, v]) => [k, nfc(v)]))
         : value;
+/**
+ * Слово из букв двух алфавитов — почти всегда опечатка раскладки: греческая «α» в русском «аор.», латинская «o»
+ * в греческом слове. Глазами её не видно, а проверка ответа и синтез речи на ней ломаются. IPA не проверяется:
+ * в транскрипции законно стоят θ, β, χ.
+ */
+const MIXED = [/(?=\S*\p{Script=Greek})(?=\S*\p{Script=Cyrillic})\S+/u, /(?=\S*\p{Script=Greek})(?=\S*[A-Za-z])\S+/u];
+function checkScripts(value: unknown, where: string): void {
+  if (typeof value === "string") {
+    for (const pattern of MIXED) {
+      const hit = value.match(pattern);
+      // Исключения: подсказки произношения в квадратных скобках ([аθи́на] — θ вместо звука, которого нет в русском),
+      // имена файлов, ссылки и уровни вроде Α2.
+      if (
+        hit &&
+        !/^(?:[A-Za-z]*\d|Α\d)/u.test(hit[0]) &&
+        !/^https?:/.test(hit[0]) &&
+        !hit[0].includes("[") &&
+        !/\.(?:svg|png|webp|jpe?g|mp3|ogg|m4a|wav|yaml)$/.test(hit[0])
+      )
+        fail(`${where}: в слове «${hit[0]}» смешаны алфавиты — проверьте раскладку`);
+    }
+  } else if (Array.isArray(value)) value.forEach((item, index) => checkScripts(item, `${where}[${index}]`));
+  else if (value && typeof value === "object")
+    for (const [key, item] of Object.entries(value))
+      if (key !== "ipa" && key !== "file") checkScripts(item, `${where}.${key}`);
+}
 const idOf = (doc: { id?: unknown }, file: string) => {
   // id приходит из YAML нетипизированным: карта или список молча стали бы идентификатором «[object Object]».
   const raw = doc.id ?? basename(file, extname(file));
@@ -396,6 +422,13 @@ const KIND_LABEL: Record<CardKind, { one: string; dir: string }> = {
  */
 export function buildContent(root = defaultRoot()): BuiltContent {
   const sources = readSources(root);
+  for (const [dir, map] of [
+    ["words", sources.words],
+    ["phrases", sources.phrases],
+    ["modules", sources.modules],
+  ] as const)
+    for (const [, src] of map as Map<string, { file: string }>) checkScripts(src, `${dir}/${src.file}`);
+  for (const [id, src] of sources.lessons) checkScripts(src, `lessons/${id}.yaml`);
   const words = new Map<string, PackageWord>();
   const byKey = new Map<string, string>();
   for (const [picturedId] of sources.pictures.words)
