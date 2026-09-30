@@ -39,7 +39,7 @@ describe("сборка смешанного урока", () => {
   it("собирает фразы и слова в авторском порядке и проходит проверку пакета", () => {
     const built = mixed({ phrases: { "p-grafo": phrase, "p-vouno": second } });
     const mixedPack = pack(built);
-    expect(mixedPack.schemaVersion).toBe(3);
+    expect(mixedPack.schemaVersion).toBe(4);
     expect(mixedPack.items.map((item) => [item.kind, item.id, item.position])).toEqual([
       ["phrase", "p-grafo", 0],
       ["phrase", "p-vouno", 1],

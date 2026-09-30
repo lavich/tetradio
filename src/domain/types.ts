@@ -38,6 +38,8 @@ export interface Word {
   russian: string;
   ipa: string;
   note?: string;
+  /** Грамматические формы строкой (мн. ч., аорист и будущее, три рода) — поставляются курсом. */
+  forms?: string;
   segments: Segment[];
   examples: Example[];
   imageAssetId?: string;
