@@ -74,7 +74,8 @@ export default defineConfig({
         sourcemap: false,
         clientsClaim: true,
         skipWaiting: false,
-        globPatterns: ["**/*.{js,css,html,svg,png,webp,json}"],
+        // Шрифты — только наборы символов курса (латиница, кириллица, греческий): Mini App должен открываться без сети.
+        globPatterns: ["**/*.{js,css,html,svg,png,webp,json}", "**/*-{latin,cyrillic,greek}-wght-*.woff2"],
         globIgnores: ["**/content/**"],
         navigateFallbackDenylist: [/\/content\//],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
