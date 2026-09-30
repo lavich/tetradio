@@ -2,3 +2,9 @@ title: Греческий A2 (пример)
 modules:
   - m01
   - m02
+exam:
+  title: Экзамен A2 КΕΓ
+  date: 2027-05-11
+  source: https://www.greek-language.gr/certification/node/15.html
+  checkedAt: 2026-09-30
+  localConfirmed: false

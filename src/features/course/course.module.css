@@ -437,6 +437,18 @@
   color: var(--pen);
   min-height: var(--cell);
 }
+.checkpointLink {
+  text-decoration: none;
+}
+.checkpointLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.checkpointTick {
+  width: 20px;
+  height: 18px;
+  color: var(--pen);
+}
 .checkpoint::before,
 .checkpoint::after {
   content: "";

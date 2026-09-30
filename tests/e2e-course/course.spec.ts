@@ -112,7 +112,15 @@ test("полка: опубликованный модуль и черновик;
   await start(page);
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await expect(page.getByRole("heading", { name: "Полка", level: 1 })).toBeVisible();
+  // Дата экзамена — общая, с пометкой; обратного отсчёта нет, пока дата на Кипре не подтверждена.
+  await expect(page.getByTestId("exam-line")).toContainText(
+    "11 мая 2027 г. — общая дата, дата на Кипре не подтверждена",
+  );
+  await expect(page.getByText(/осталось \d+ дн/)).toHaveCount(0);
   await expect(page.getByRole("link", { name: /Модуль 1: Знакомство \(пример\)\. Открыта/ })).toBeVisible();
+  await page.getByRole("link", { name: "Контрольная точка (пример)" }).click();
+  await expect(page.getByRole("heading", { name: "Контрольная точка (пример)", level: 1 })).toBeVisible();
+  await page.goBack();
   await page.getByRole("link", { name: /Модуль 2: Страны и языки\. Готовится/ }).click();
   await expect(page.getByText("Модуль готовится")).toBeVisible();
   await expect(page.getByRole("list")).toHaveCount(0);

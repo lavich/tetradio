@@ -91,6 +91,8 @@ export interface ModuleLessonView {
 export interface ModuleView {
   module: CatalogModule;
   lessons: ModuleLessonView[];
+  /** Контрольная точка программы после модуля (K1, M1–M3), если есть. */
+  checkpoint?: ModuleLessonView;
   /** Все уроки модуля завершены. */
   completed: boolean;
 }
@@ -100,7 +102,10 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
     ? await database.modules.where("courseId").equals(courseId).toArray()
     : await database.modules.toArray();
   modules.sort((a, b) => a.number - b.number);
-  const lessonIds = modules.flatMap((module) => module.lessonIds);
+  const lessonIds = modules.flatMap((module) => [
+    ...module.lessonIds,
+    ...(module.checkpointId ? [module.checkpointId] : []),
+  ]);
   const [packs, lessons, entries, progress] = await Promise.all([
     database.packages.bulkGet(lessonIds),
     database.lessons.bulkGet(lessonIds),
@@ -115,7 +120,7 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
   }
   let at = 0;
   return modules.map(({ position: _position, ...module }) => {
-    const views = module.lessonIds.map((id): ModuleLessonView => {
+    const view = (id: string): ModuleLessonView => {
       const index = at++;
       const pack = packs[index],
         lesson = lessons[index],
@@ -128,8 +133,15 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
         completed: lesson?.status === "completed",
         tally: lessonTally(pack?.blocks ?? [], byLesson.get(id) ?? new Map()),
       };
-    });
-    return { module, lessons: views, completed: views.length > 0 && views.every((view) => view.completed) };
+    };
+    const views = module.lessonIds.map(view);
+    const checkpoint = module.checkpointId ? view(module.checkpointId) : undefined;
+    return {
+      module,
+      lessons: views,
+      ...(checkpoint ? { checkpoint } : {}),
+      completed: views.length > 0 && views.every((item) => item.completed),
+    };
   });
 }
 
@@ -142,6 +154,8 @@ export async function nextCourseLesson(
     if (view.module.status !== "published") continue;
     const lesson = view.lessons.find((item) => !item.completed);
     if (lesson) return { module: view.module, lesson };
+    // Уроки модуля пройдены — следующий шаг контрольная точка после него.
+    if (view.checkpoint && !view.checkpoint.completed) return { module: view.module, lesson: view.checkpoint };
   }
   return null;
 }

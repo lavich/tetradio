@@ -128,6 +128,40 @@ export const BLOCK_TYPES = [
   "speaking",
 ] as const;
 
+/**
+ * Экзамен курса: общая дата КΕΓ с источником и датой проверки. Пока местная дата не подтверждена,
+ * интерфейс не показывает обратный отсчёт — только общую дату с пометкой.
+ */
+export interface CourseExam {
+  title: string;
+  date: string;
+  source: string;
+  checkedAt: string;
+  localConfirmed: boolean;
+  note?: string;
+}
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+export function parseExam(input: unknown, path: string): CourseExam {
+  const raw = obj(input, path);
+  for (const key of Object.keys(raw))
+    if (!["title", "date", "source", "checkedAt", "localConfirmed", "note"].includes(key))
+      throw new ContentError(`${path}: лишнее поле «${key}»`);
+  const date = str(raw.date, `${path}.date`);
+  const checkedAt = str(raw.checkedAt, `${path}.checkedAt`);
+  if (!DATE.test(date) || !DATE.test(checkedAt)) throw new ContentError(`${path}: даты в формате ГГГГ-ММ-ДД`);
+  if (typeof raw.localConfirmed !== "boolean") throw new ContentError(`${path}.localConfirmed: ожидалось да/нет`);
+  const exam: CourseExam = {
+    title: str(raw.title, `${path}.title`),
+    date,
+    source: str(raw.source, `${path}.source`),
+    checkedAt,
+    localConfirmed: raw.localConfirmed,
+  };
+  const note = optStr(raw.note, `${path}.note`);
+  if (note) exam.note = note;
+  return exam;
+}
+
 export interface CatalogModule {
   id: string;
   courseId: string;
@@ -142,6 +176,8 @@ export interface CatalogModule {
   sessions: number;
   /** Уроки опубликованного модуля; у черновика — пусто: его уроки не поставляются. */
   lessonIds: string[];
+  /** Контрольная точка программы после модуля (K1, M1–M3): урок-контрольная вне уроков модуля. */
+  checkpointId?: string;
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -447,7 +483,13 @@ export function parseModule(input: unknown, path: string): CatalogModule {
     throw new ContentError(`${path}.lessonIds: уроки черновика не поставляются`);
   if (status === "published" && !lessonIds.length)
     throw new ContentError(`${path}.lessonIds: у опубликованного модуля нет уроков`);
+  const checkpointId = optStr(raw.checkpointId, `${path}.checkpointId`);
+  if (checkpointId && status === "draft")
+    throw new ContentError(`${path}.checkpointId: контрольная черновика не поставляется`);
+  if (checkpointId && lessonIds.includes(checkpointId))
+    throw new ContentError(`${path}.checkpointId: контрольная точка не входит в уроки модуля`);
   return {
+    ...(checkpointId ? { checkpointId } : {}),
     id: id(raw.id, `${path}.id`),
     courseId: str(raw.courseId, `${path}.courseId`),
     number: int(raw.number, `${path}.number`, 1),
