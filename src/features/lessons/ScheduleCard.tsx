@@ -125,7 +125,7 @@ export function ScheduleCard({ course, today, first }: { course: Course; today: 
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <FieldDescription>После этого часа Lexi переходит к следующему набору.</FieldDescription>
+              <FieldDescription>После этого часа Τετράδιο переходит к следующему набору.</FieldDescription>
             </Field>
             {problem && (
               <p className={ui.error} role="alert">

@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
-import { indexWord, LexiDatabase } from "../src/storage/db";
+import { indexWord, AppDatabase } from "../src/storage/db";
 import {
   dexieSource,
   importPreview,
@@ -27,10 +27,10 @@ import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
 import { recordFor, scenarios } from "./plan-golden.test";
 import { content, installLessons, wordCountOf } from "./helpers/content";
 
-let db: LexiDatabase;
+let db: AppDatabase;
 beforeEach(async () => {
-  await new LexiDatabase("lexi-queries").delete();
-  db = new LexiDatabase("lexi-queries");
+  await new AppDatabase("tetradio-queries").delete();
+  db = new AppDatabase("tetradio-queries");
   await db.open();
 });
 const now = new Date("2026-09-15T09:00:00Z");

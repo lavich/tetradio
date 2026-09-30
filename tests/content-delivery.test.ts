@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
-import { LexiDatabase } from "../src/storage/db";
+import { AppDatabase } from "../src/storage/db";
 import {
   applyPackage,
   catalogPhase,
@@ -34,10 +34,10 @@ import { buildMixed, installMixed, MIXED_LESSON, MIXED_PHRASES, mixedContent, mi
 import { unitKey } from "./helpers/cards";
 import { phraseRevisionOf } from "../content/build";
 
-let db: LexiDatabase;
+let db: AppDatabase;
 beforeEach(async () => {
-  await new LexiDatabase("lexi-content").delete();
-  db = new LexiDatabase("lexi-content");
+  await new AppDatabase("tetradio-content").delete();
+  db = new AppDatabase("tetradio-content");
   await db.open();
 });
 const entry = (id: string) => content.catalog.lessons.find((l) => l.id === id)!;
@@ -683,7 +683,7 @@ describe("установка и обновление смешанного пак
         ],
       },
     });
-    const other = new LexiDatabase("lexi-content-text");
+    const other = new AppDatabase("tetradio-content-text");
     await other.delete();
     await other.open();
     await installMixed(other, [MIXED_LESSON], noWords);
@@ -700,8 +700,8 @@ describe("установка и обновление смешанного пак
 describe("адрес контента", () => {
   it("база с косой чертой и без неё даёт один адрес без двойной черты", () => {
     expect(contentUrl("content/catalog.json", "/")).toBe("/content/catalog.json");
-    expect(contentUrl("content/catalog.json", "/lexi")).toBe("/lexi/content/catalog.json");
-    expect(contentUrl("content/catalog.json", "/lexi/")).toBe("/lexi/content/catalog.json");
+    expect(contentUrl("content/catalog.json", "/tetradio")).toBe("/tetradio/content/catalog.json");
+    expect(contentUrl("content/catalog.json", "/tetradio/")).toBe("/tetradio/content/catalog.json");
   });
 });
 

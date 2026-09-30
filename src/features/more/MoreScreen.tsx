@@ -118,7 +118,7 @@ export function MoreScreen() {
           </p>
           <p className="m-0 text-sm text-muted-foreground">
             {telegram
-              ? "Уже открытое приложение продолжает работать со скачанными уроками при потере сети. Повторный запуск Mini App без сети зависит от клиента Telegram, и Lexi его не обещает."
+              ? "Уже открытое приложение продолжает работать со скачанными уроками при потере сети. Повторный запуск Mini App без сети зависит от клиента Telegram, и Τετράδιο его не обещает."
               : offline.ready
                 ? "Оболочка приложения открывается без сети. Слова и медиа доступны для уроков, скачанных на экране урока."
                 : offline.unsupported
@@ -149,7 +149,7 @@ export function MoreScreen() {
         ))}
       </ItemGroup>
       <p className="mt-5 text-sm text-muted-foreground">
-        Lexi хранит{" "}
+        Τετράδιο хранит{" "}
         {counts && counts.cards > counts.words ? withCount(counts.cards, CARDS) : withCount(counts?.words ?? 0, WORDS)}{" "}
         и {withCount(counts?.answers ?? 0, ["ответ", "ответа", "ответов"])}{" "}
         {telegram

@@ -299,7 +299,7 @@ test("полная копия переносит смешанный урок с 
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Сохранить полную копию" }).click(),
   ]).then(([item]) => item);
-  const file = join(tmpdir(), `lexi-mixed-${Date.now()}.json`);
+  const file = join(tmpdir(), `tetradio-mixed-${Date.now()}.json`);
   writeFileSync(file, readFileSync(await download.path()));
   const parsed = JSON.parse(readFileSync(file, "utf8"));
   const rows = (name: string) => parsed.data.data.find((table: { tableName: string }) => table.tableName === name).rows;
@@ -347,7 +347,7 @@ test("внутри Telegram: возврат из свёрнутого клиен
   await page.addInitScript(NO_VOICE);
   await openTelegram(page, { noCloud: true });
   await installLessons(page, ["lesson-1-1"]);
-  const TG_DB = "lexi-tg-TaveloriBot-1001";
+  const TG_DB = "tetradio-tg-tetradio_local-1001";
   await onlyReviews(page);
   await setCourseLimit(page, "leeke", 2, TG_DB);
   await seedMixedLesson(page, { targetDate: today(), only: ["p-grafo", "p-vouno"], databaseName: TG_DB });

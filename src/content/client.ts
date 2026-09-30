@@ -1,4 +1,4 @@
-import { db, indexWord, type LexiDatabase, type StoredCatalogEntry } from "../storage/db";
+import { db, indexWord, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
 import { reportError } from "../reporting/reporting";
 import { adoptStash } from "../sync/snapshot";
 import {
@@ -100,7 +100,7 @@ export const resetCatalogPhase = () => {
   catalogState = "loading";
 };
 
-export async function refreshCatalog(database: LexiDatabase = db, source: ContentFetcher = fetcher): Promise<Catalog> {
+export async function refreshCatalog(database: AppDatabase = db, source: ContentFetcher = fetcher): Promise<Catalog> {
   setCatalogPhase("loading"); // повтор после сбоя снова ждёт; после первого успеха фаза не меняется
   try {
     const catalog = parseCatalog(await source.json("content/catalog.json"));
@@ -124,7 +124,7 @@ export function firstLessonOf(entries: StoredCatalogEntry[], wordId: string): St
   const sorted = [...entries].sort((a, b) => order(a) - order(b) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   return sorted.find((entry) => entry.wordIds?.includes(wordId)) ?? null;
 }
-export async function lessonOfWord(wordId: string, database: LexiDatabase = db): Promise<StoredCatalogEntry | null> {
+export async function lessonOfWord(wordId: string, database: AppDatabase = db): Promise<StoredCatalogEntry | null> {
   return firstLessonOf(await database.catalog.toArray(), wordId);
 }
 
@@ -139,7 +139,7 @@ const previews = new Map<string, Promise<PackagePreview>>();
  */
 export function previewPackage(
   lessonId: string,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
   source: ContentFetcher = fetcher,
 ): Promise<PackagePreview> {
   const task = (async () => {
@@ -172,7 +172,7 @@ export const previewMedia = (pack: ContentPackage): Map<string, PackageMedia> =>
  * Каталог — единственное место, где известен курс урока, установленного прежней версией.
  * Шаг безвреден при повторе: он только дописывает недостающее и не трогает подписку, которую уже включили.
  */
-async function adoptCourses(catalog: Catalog, database: LexiDatabase) {
+async function adoptCourses(catalog: Catalog, database: AppDatabase) {
   const now = new Date().toISOString();
   const courseOf = new Map(catalog.lessons.map((entry) => [entry.id, entry.courseId]));
   for (const lesson of await database.lessons.toArray()) {
@@ -246,7 +246,7 @@ export const coursePhase = (courseId: string) => installPhase(courseKey(courseId
 export async function setCourseSubscription(
   courseId: string,
   subscribed: boolean,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
 ): Promise<void> {
   const stored = await database.courses.get(courseId);
   if (!stored || stored.subscribed === subscribed) return;
@@ -266,7 +266,7 @@ export interface CourseInstallResult {
  */
 export async function installCourse(
   courseId: string,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
   source: ContentFetcher = fetcher,
 ): Promise<CourseInstallResult> {
   await setCourseSubscription(courseId, true, database);
@@ -300,7 +300,7 @@ export async function installCourse(
 }
 
 /** Фоновая догрузка подписанных курсов: вызывается после обновления каталога при запуске. */
-export async function syncCourses(database: LexiDatabase = db, source: ContentFetcher = fetcher): Promise<void> {
+export async function syncCourses(database: AppDatabase = db, source: ContentFetcher = fetcher): Promise<void> {
   const subscribed = (await database.courses.toArray()).filter(
     (course) => course.origin === "content" && course.subscribed,
   );
@@ -309,7 +309,7 @@ export async function syncCourses(database: LexiDatabase = db, source: ContentFe
 
 export function installLesson(
   lessonId: string,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
   source: ContentFetcher = fetcher,
 ): Promise<InstallResult> {
   const running = inflight.get(lessonId);
@@ -497,7 +497,7 @@ async function applyCards<
  * Установка одной транзакцией: слова, фразы, связи, медиа и запись пакета. Ошибка в любой карточке
  * откатывает всё — корректная часть отдельно не устанавливается. Убранные пользователем связи не восстанавливаются.
  */
-export async function applyPackage(pack: ContentPackage, database: LexiDatabase = db): Promise<InstallResult> {
+export async function applyPackage(pack: ContentPackage, database: AppDatabase = db): Promise<InstallResult> {
   const now = new Date().toISOString();
   return database.transaction(
     "rw",
@@ -608,7 +608,7 @@ export async function applyPackage(pack: ContentPackage, database: LexiDatabase 
 const mediaInflight = new Map<string, Promise<Asset | null>>();
 export function ensureAsset(
   id: string,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
   source: ContentFetcher = fetcher,
 ): Promise<Asset | null> {
   const running = mediaInflight.get(id);
@@ -649,7 +649,7 @@ export interface Readiness {
   present: number;
   missing: string[];
 }
-export async function lessonReadiness(lessonId: string, database: LexiDatabase = db): Promise<Readiness> {
+export async function lessonReadiness(lessonId: string, database: AppDatabase = db): Promise<Readiness> {
   const [pack, entry] = await Promise.all([database.packages.get(lessonId), database.catalog.get(lessonId)]);
   if (!pack) return { installed: false, version: null, updateAvailable: false, required: 0, present: 0, missing: [] };
   const required = pack.media.filter((item) => item.required);
@@ -669,7 +669,7 @@ export async function lessonReadiness(lessonId: string, database: LexiDatabase =
 }
 export async function downloadLessonMedia(
   lessonId: string,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
   source: ContentFetcher = fetcher,
 ): Promise<{ fetched: number; failed: string[] }> {
   const readiness = await lessonReadiness(lessonId, database);

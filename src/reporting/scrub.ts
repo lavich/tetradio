@@ -8,7 +8,7 @@ import type { Breadcrumb, ErrorEvent } from "@sentry/react";
  */
 export const ALLOWED_EXTRA = new Set(["category", "kind", "packageId", "packageVersion", "componentStack"]);
 /** Категория собственных крошек приложения: события жизненного цикла Mini App с размерами области просмотра. */
-export const LIFECYCLE_CATEGORY = "lexi.lifecycle";
+export const LIFECYCLE_CATEGORY = "tetradio.lifecycle";
 const HTTP_CATEGORIES = new Set(["fetch", "xhr"]);
 
 const origin = () => (typeof location !== "undefined" ? location.origin : "");

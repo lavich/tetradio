@@ -1,5 +1,5 @@
 import type { Card } from "ts-fsrs";
-import { isStandardWord, SEED_LESSON, type LexiDatabase } from "../storage/db";
+import { isStandardWord, SEED_LESSON, type AppDatabase } from "../storage/db";
 import { byTime, emptySkills, emptyStats, foldSkill, foldStats, type SkillSummary } from "../domain/skills";
 import { unitKey } from "../domain/refs";
 import {
@@ -59,8 +59,8 @@ const reviveState = (state: CompactState): LearningState => ({
   version: state.version,
 });
 
-export const readMeta = async (database: LexiDatabase, key: string) => (await database.meta.get(key))?.value ?? null;
-export const writeMeta = (database: LexiDatabase, key: string, value: string | null) =>
+export const readMeta = async (database: AppDatabase, key: string) => (await database.meta.get(key))?.value ?? null;
+export const writeMeta = (database: AppDatabase, key: string, value: string | null) =>
   value === null ? database.meta.delete(key) : database.meta.put({ key, value });
 export const parseClock = (raw: string | null): Clock => {
   try {
@@ -76,7 +76,7 @@ const isStandardLesson = (id: string, packages: Set<string>) => packages.has(id)
  * Ключи поставляемых карточек среди перечисленных: слово — по ревизии или исходному набору,
  * фраза — по наличию записи с ревизией. Пользовательские слова в облако не уходят.
  */
-async function standardKeys(database: LexiDatabase, refs: LearningRef[]): Promise<Set<string>> {
+async function standardKeys(database: AppDatabase, refs: LearningRef[]): Promise<Set<string>> {
   const ids: Record<CardKind, string[]> = { word: [], phrase: [] };
   for (const ref of refs) ids[ref.kind]?.push(ref.id);
   const keys = new Set<string>();
@@ -95,7 +95,7 @@ const byKey = (a: { ref: LearningRef }, b: { ref: LearningRef }) => unitKey(a.re
  * Компактный снимок из локальной базы: база предыдущего снимка плюс локальные события после её отсечки.
  * Вызывается внутри транзакции чтения-записи вместе с `commitBase`, чтобы отсечка совпала с прочитанным.
  */
-export async function buildSnapshot(database: LexiDatabase, now: Date): Promise<CompactSnapshot> {
+export async function buildSnapshot(database: AppDatabase, now: Date): Promise<CompactSnapshot> {
   const base = await database.baseSummary.get("base");
   const settings = await loadSettings(database);
   const packages = new Set((await database.packages.toArray()).map((pack) => pack.lessonId));
@@ -148,7 +148,7 @@ export async function buildSnapshot(database: LexiDatabase, now: Date): Promise<
   };
 }
 /** Новая база: отсечка — момент сборки, локальные события до неё считаются учтёнными в снимке. */
-export async function commitBase(database: LexiDatabase, snapshot: CompactSnapshot, versionId: string, asOf: string) {
+export async function commitBase(database: AppDatabase, snapshot: CompactSnapshot, versionId: string, asOf: string) {
   await database.cardSkills.clear();
   await database.cardSkills.bulkPut(
     snapshot.skills.map((entry) => ({ unitKey: unitKey(entry.ref), ref: entry.ref, skills: entry.skills })),
@@ -170,7 +170,7 @@ export const SNAPSHOT_TABLES = [
   "meta",
 ] as const;
 /** Сборка и фиксация базы одной транзакцией: ответ, записанный после, гарантированно попадёт в следующую версию. */
-export async function buildAndCommit(database: LexiDatabase, now: Date, versionId: string): Promise<CompactSnapshot> {
+export async function buildAndCommit(database: AppDatabase, now: Date, versionId: string): Promise<CompactSnapshot> {
   return database.transaction(
     "rw",
     SNAPSHOT_TABLES.map((name) => database.table(name)),
@@ -183,7 +183,7 @@ export async function buildAndCommit(database: LexiDatabase, now: Date, versionI
 }
 
 export type PendingLessons = Record<string, CompactLesson>;
-export const readPending = async (database: LexiDatabase): Promise<PendingLessons> => {
+export const readPending = async (database: AppDatabase): Promise<PendingLessons> => {
   try {
     return JSON.parse((await readMeta(database, META.pendingLessons)) ?? "{}");
   } catch {
@@ -192,7 +192,7 @@ export const readPending = async (database: LexiDatabase): Promise<PendingLesson
 };
 
 /** Есть ли сохранённый прогресс фраз: состояния, события или сводки. Само наличие их контента не считается. */
-export async function hasMixedProgress(database: LexiDatabase): Promise<boolean> {
+export async function hasMixedProgress(database: AppDatabase): Promise<boolean> {
   const mixed = (ref: LearningRef) => ref.kind !== "word";
   if (await database.cardStates.where("ref.kind").equals("phrase").count()) return true;
   if ((await database.cardStash.toArray()).some((row) => mixed(row.ref))) return true;
@@ -213,7 +213,7 @@ export async function hasMixedProgress(database: LexiDatabase): Promise<boolean>
  * фразы и пропуски: при уже сохранённом прогрессе новых видов он отклоняется до изменения данных.
  */
 export async function applySnapshot(
-  database: LexiDatabase,
+  database: AppDatabase,
   snapshot: CompactSnapshot,
   versionId: string,
   clock: Clock,
@@ -288,7 +288,7 @@ export async function applySnapshot(
  * Пакет установлен: отложенные состояния его карточек переходят в обычную таблицу, дата урока — из снимка.
  * Вызывается внутри транзакции установки пакета.
  */
-export async function adoptStash(database: LexiDatabase, lessonId: string, refs: LearningRef[]): Promise<void> {
+export async function adoptStash(database: AppDatabase, lessonId: string, refs: LearningRef[]): Promise<void> {
   const rows = (await database.cardStash.bulkGet(refs.map(unitKey))).filter(
     (row): row is NonNullable<typeof row> => !!row,
   );
@@ -322,5 +322,5 @@ export const describeSnapshot = (snapshot: CompactSnapshot): SnapshotDescription
   lastDay: snapshot.stats.days.length ? snapshot.stats.days[snapshot.stats.days.length - 1].date : null,
 });
 /** Есть ли локальный прогресс, который нельзя молча заменить облаком при первом подключении. */
-export const hasLocalProgress = async (database: LexiDatabase) =>
+export const hasLocalProgress = async (database: AppDatabase) =>
   (await database.cardStates.count()) > 0 || (await database.events.count()) > 0;

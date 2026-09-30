@@ -47,7 +47,7 @@ describe("переход по параметру запуска", () => {
     const mount = await page(tgHash("w_w34-03", "Q1"));
     expect(await mount()).toBe("/share/word/w34-03");
     expect(await mount()).toBe("/");
-    expect(sessionStorage.getItem("lexi:start-consumed")).toBe("Q1");
+    expect(sessionStorage.getItem("tetradio:start-consumed")).toBe("Q1");
     const reload = await page("");
     expect(await reload()).toBe("/");
   });
@@ -63,7 +63,7 @@ describe("переход по параметру запуска", () => {
     expect(await mount()).toBe("/share/word/w34-03");
     expect(await mount()).toBe("/");
     expect(await (await page(tgHash("w_w34-03")))()).toBe("/share/word/w34-03");
-    expect(sessionStorage.getItem("lexi:start-consumed")).toBeNull();
+    expect(sessionStorage.getItem("tetradio:start-consumed")).toBeNull();
   });
   it("неизвестный параметр оставляет «Сегодня»", async () => {
     expect(await (await page(tgHash("promo", "Q1")))()).toBe("/");

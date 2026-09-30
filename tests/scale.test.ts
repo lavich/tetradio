@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
-import { indexWord, LexiDatabase } from "../src/storage/db";
+import { indexWord, AppDatabase } from "../src/storage/db";
 import { dexieSource, lessonViews, searchWordIds, wordPage } from "../src/storage/queries";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
@@ -21,7 +21,7 @@ const WORDS = 100_000,
   LESSONS = 200;
 const now = new Date("2026-09-15T09:00:00Z");
 const iso = now.toISOString();
-let db: LexiDatabase;
+let db: AppDatabase;
 const reads: Record<string, number> = {};
 const track = () => {
   for (const key of Object.keys(reads)) reads[key] = 0;
@@ -29,8 +29,8 @@ const track = () => {
 const pad = (index: number) => String(index).padStart(6, "0");
 
 beforeAll(async () => {
-  await new LexiDatabase("lexi-scale").delete();
-  db = new LexiDatabase("lexi-scale");
+  await new AppDatabase("tetradio-scale").delete();
+  db = new AppDatabase("tetradio-scale");
   await db.open();
   for (const table of db.tables) {
     reads[table.name] = 0;

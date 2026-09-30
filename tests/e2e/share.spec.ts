@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
 const stored = (page: import("@playwright/test").Page) =>
   page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open("lexi");
+      const request = indexedDB.open("tetradio");
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });

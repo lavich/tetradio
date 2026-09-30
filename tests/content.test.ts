@@ -39,7 +39,7 @@ const seedArt = (id: string) =>
 
 /** Копия исходников, в которой можно сломать один файл и проверить отказ публикации. */
 function brokenCopy(mutate: (root: string) => void) {
-  const root = mkdtempSync(join(tmpdir(), "lexi-content-"));
+  const root = mkdtempSync(join(tmpdir(), "tetradio-content-"));
   // Копируются все папки контента: новый вид карточек не должен ломать фикстуру.
   for (const entry of readdirSync("content", { withFileTypes: true }))
     if (entry.isDirectory()) cpSync(join("content", entry.name), join(root, entry.name), { recursive: true });
@@ -425,7 +425,7 @@ describe("карточка каждого подготовленного сло�
     mkdirSync("docs", { recursive: true });
     writeFileSync(
       "docs/art-sheet.html",
-      `<!doctype html><meta charset="utf-8"><title>Иллюстрации Lexi</title><style>body{font:14px system-ui;background:#f7f7f5;margin:0;padding:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}header{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px}.c i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:4px;border:1px solid #0002}figure{margin:0;background:#fff;border-radius:12px;overflow:hidden}figure.legacy{outline:2px solid #ef4444}.a svg{display:block;width:100%}figcaption{padding:6px 8px;color:#171717}figcaption small{display:block;color:#ef4444;font-family:monospace}</style><header>${legend}</header>${cards}`,
+      `<!doctype html><meta charset="utf-8"><title>Иллюстрации Τετράδιο</title><style>body{font:14px system-ui;background:#f7f7f5;margin:0;padding:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}header{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px}.c i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:4px;border:1px solid #0002}figure{margin:0;background:#fff;border-radius:12px;overflow:hidden}figure.legacy{outline:2px solid #ef4444}.a svg{display:block;width:100%}figcaption{padding:6px 8px;color:#171717}figcaption small{display:block;color:#ef4444;font-family:monospace}</style><header>${legend}</header>${cards}`,
     );
     expect(cards).toContain("<figure");
   });

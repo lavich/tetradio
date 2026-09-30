@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { db, LexiDatabase } from "../storage/db";
+import { db, AppDatabase } from "../storage/db";
 import { currentProfile, WEB_DATABASE } from "../storage/profile";
 import { sync, useSyncStatus } from "../sync";
 import { META, readMeta, writeMeta } from "../sync/snapshot";
@@ -25,8 +25,8 @@ export const SYNC_BOUNDARIES =
 
 /** Есть ли на этом устройстве старая браузерная база с данными, которую можно перенести в Telegram-профиль явным действием. */
 async function legacyWebWords(): Promise<number> {
-  if (!(await LexiDatabase.exists(WEB_DATABASE))) return 0;
-  const web = new LexiDatabase(WEB_DATABASE);
+  if (!(await AppDatabase.exists(WEB_DATABASE))) return 0;
+  const web = new AppDatabase(WEB_DATABASE);
   try {
     await web.open();
     return await web.words.count();
@@ -63,7 +63,7 @@ export function TelegramWelcome() {
     run(async () => {
       // Чтение и запись полной копии нужны только здесь и на экране копий: модуль с ними в стартовую загрузку не входит.
       const { exportFull, restoreBackup } = await import("../features/backup/backup");
-      const web = new LexiDatabase(WEB_DATABASE);
+      const web = new AppDatabase(WEB_DATABASE);
       await web.open();
       try {
         await restoreBackup(await exportFull(web), db);
@@ -76,14 +76,14 @@ export function TelegramWelcome() {
     <AlertDialog open>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Lexi в Telegram</AlertDialogTitle>
+          <AlertDialogTitle>Τετράδιο в Telegram</AlertDialogTitle>
           <AlertDialogDescription>
             {SYNC_BOUNDARIES} Номер телефона, доступ к сообщениям и отдельный аккаунт не нужны.
           </AlertDialogDescription>
         </AlertDialogHeader>
         {legacy > 0 && (
           <p className={ui.small}>
-            В браузере на этом устройстве уже есть данные Lexi ({withCount(legacy, WORDS)}). Их можно перенести в
+            В браузере на этом устройстве уже есть данные Τετράδιο ({withCount(legacy, WORDS)}). Их можно перенести в
             Telegram-профиль один раз; браузерные данные останутся на месте, дальше профили независимы.
           </p>
         )}

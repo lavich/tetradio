@@ -21,7 +21,7 @@ const norm = (text: string) => text.normalize("NFC").replace(/\s+/g, " ").trim()
 
 describe("шаблоны инструкции", () => {
   it("слово, фраза и смешанный урок из docs/ проходят тот же валидатор, что и каталог", () => {
-    const root = mkdtempSync(join(tmpdir(), "lexi-doc-"));
+    const root = mkdtempSync(join(tmpdir(), "tetradio-doc-"));
     // Копируются все папки контента: шаблон проверяется рядом с настоящим каталогом, каким бы он ни стал.
     for (const entry of readdirSync("content", { withFileTypes: true }))
       if (entry.isDirectory()) cpSync(join("content", entry.name), join(root, entry.name), { recursive: true });

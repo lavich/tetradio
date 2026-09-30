@@ -1,4 +1,4 @@
-import { db, type LexiDatabase } from "./db";
+import { db, type AppDatabase } from "./db";
 
 /** Ошибки хранилища, которые лечит переоткрытие базы: WebKit после сна WebView отдаёт `UnknownError` на чтение IndexedDB. */
 const STORAGE_ERRORS = new Set([
@@ -18,7 +18,7 @@ export function isStorageError(error: unknown, depth = 0): boolean {
   return isStorageError(inner, depth + 1);
 }
 
-export async function reopenDatabase(database: LexiDatabase = db): Promise<void> {
+export async function reopenDatabase(database: AppDatabase = db): Promise<void> {
   database.close({ disableAutoOpen: false });
   await database.open();
 }

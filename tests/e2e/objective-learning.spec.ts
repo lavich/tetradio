@@ -5,7 +5,7 @@ async function installSession(page: Page, type: string, isNew = false, count = 1
   await page.evaluate(
     async ({ type, isNew, count }) => {
       const db = await new Promise<IDBDatabase>((resolve) => {
-        const r = indexedDB.open("lexi");
+        const r = indexedDB.open("tetradio");
         r.onsuccess = () => resolve(r.result);
       });
       const tx = db.transaction(["words", "sessions"], "readwrite");
@@ -58,7 +58,7 @@ async function installSession(page: Page, type: string, isNew = false, count = 1
 async function stored(page: Page) {
   return page.evaluate(async () => {
     const db = await new Promise<IDBDatabase>((resolve) => {
-      const r = indexedDB.open("lexi");
+      const r = indexedDB.open("tetradio");
       r.onsuccess = () => resolve(r.result);
     });
     const read = (name: string) =>

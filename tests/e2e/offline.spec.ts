@@ -20,7 +20,7 @@ test("работает без сети после закрытия страни�
   // Подписанный курс доустанавливает все уроки, поэтому неустановленный урок для проверки готовим сами.
   await page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve) => {
-      const request = indexedDB.open("lexi");
+      const request = indexedDB.open("tetradio");
       request.onsuccess = () => resolve(request.result);
     });
     const tx = database.transaction(["lessons", "packages", "lessonItems"], "readwrite");

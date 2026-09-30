@@ -13,7 +13,7 @@ export interface TelegramUser {
 }
 export interface LaunchContext {
   kind: "web" | "telegram";
-  /** Имя бота из адреса Mini App (`?bot=TaveloriDevBot`); без параметра — основной бот. */
+  /** Имя бота из адреса Mini App (`?bot=tetradio_dev`); без параметра — основной бот. */
   bot: string;
   platform: string | null;
   version: string | null;
@@ -25,9 +25,10 @@ export interface LaunchContext {
    */
   launchId: string | null;
 }
-export const DEFAULT_BOT = "TaveloriBot";
-const STORAGE_KEY = "lexi:launch";
-const CONSUMED_KEY = "lexi:start-consumed";
+/** Бот задаётся при сборке (`VITE_TELEGRAM_BOT`); без него — заглушка без суффикса «bot», она не совпадёт с реальным ботом. */
+export const DEFAULT_BOT: string = import.meta.env.VITE_TELEGRAM_BOT || "tetradio_local";
+const STORAGE_KEY = "tetradio:launch";
+const CONSUMED_KEY = "tetradio:start-consumed";
 
 const parseUser = (raw: string | null): TelegramUser | null => {
   if (!raw) return null;

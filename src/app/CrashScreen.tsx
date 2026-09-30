@@ -16,7 +16,7 @@ export function diagnostics(error: unknown, reportId: string | null, at: Date = 
       : "веб";
   const kind = error instanceof Error ? error.name : typeof error;
   return [
-    `Lexi ${APP_VERSION} (${APP_BUILD})`,
+    `Τετράδιο ${APP_VERSION} (${APP_BUILD})`,
     `Среда: ${env}`,
     `Время: ${at.toISOString()}`,
     `Отчёт: ${reportId ?? "не отправлен"}`,

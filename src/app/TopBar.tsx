@@ -20,7 +20,7 @@ export function BrandBar({ subtitle }: { subtitle?: string }) {
     <header className={cx(top.topbar, compact && top.compact)}>
       {!compact && (
         <>
-          <span className={top.brand}>lexi</span>
+          <span className={top.brand}>τετράδιο</span>
           <span aria-hidden style={{ fontSize: 22 }}>
             🇬🇷
           </span>

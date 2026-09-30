@@ -155,7 +155,7 @@ describe("фильтр хлебных крошек", () => {
   });
   it("оставляет крошки жизненного цикла Mini App как есть", () => {
     const lifecycle = crumb({
-      category: "lexi.lifecycle",
+      category: "tetradio.lifecycle",
       message: "viewportChanged",
       data: { stableHeight: 640, height: 640, visible: true },
     });

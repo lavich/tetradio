@@ -32,7 +32,7 @@ const itemVariants = cva(
         default: "border-transparent",
         outline: "border-border",
         muted: "border-transparent bg-muted/50",
-        // Свой вариант Lexi: строка списка уроков, слов, разделов «Ещё» и карточек урока.
+        // Свой вариант Τετράδιο: строка списка уроков, слов, разделов «Ещё» и карточек урока.
         row: "min-h-16 rounded-[var(--radius-card)] border-border bg-card text-foreground",
       },
       size: {

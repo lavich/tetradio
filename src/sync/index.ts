@@ -20,7 +20,7 @@ export const sync = new SyncCoordinator({
   database: db,
   adapter: kvAdapter(disabledTransport()),
   label: launchContext().platform ?? "",
-  lock: webLock(`lexi-sync-${db.name}`),
+  lock: webLock(`tetradio-sync-${db.name}`),
   recover: heal,
 });
 sync.onMissingPackages = (ids) => {

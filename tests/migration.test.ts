@@ -3,7 +3,7 @@ import "./helpers/self";
 import Dexie from "dexie";
 import { createEmptyCard } from "ts-fsrs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { LEGACY_CREATED, LexiDatabase } from "../src/storage/db";
+import { LEGACY_CREATED, AppDatabase } from "../src/storage/db";
 import { installLesson, refreshCatalog } from "../src/content/client";
 import { exportFull, inspectBackup, restoreBackup } from "../src/features/backup/backup";
 import { lessonItems, searchWordIds } from "../src/storage/queries";
@@ -27,7 +27,7 @@ class LegacyDatabase extends Dexie {
     });
   }
 }
-const NAME = "lexi-migrate";
+const NAME = "tetradio-migrate";
 const legacyWord = (id: string, greek: string, russian: string, over: Record<string, unknown> = {}) => ({
   id,
   greek,
@@ -141,7 +141,7 @@ afterEach(async () => {
 describe("миграция схемы без сети", () => {
   it("переносит wordIds в связи с порядком, отмечает исходные уроки установленными и не трогает данные пользователя", async () => {
     await seedLegacy();
-    const db = new LexiDatabase(NAME);
+    const db = new AppDatabase(NAME);
     await db.open();
     expect(db.verno).toBe(7);
     const l12 = wordsOf("lesson-1-2");
@@ -187,7 +187,7 @@ describe("миграция схемы без сети", () => {
   });
   it("заводит локальный курс и кладёт в него наборы без пакета, а поставляемые оставляет без курса", async () => {
     await seedLegacy();
-    const db = new LexiDatabase(NAME);
+    const db = new AppDatabase(NAME);
     await db.open();
     expect(db.verno).toBe(7);
     expect(await db.courses.get("my")).toMatchObject({ id: "my", origin: "local", subscribed: true });
@@ -198,7 +198,7 @@ describe("миграция схемы без сети", () => {
   });
   it("переносит общее расписание и лимит в каждый курс и убирает их из настроек", async () => {
     await seedLegacy();
-    const db = new LexiDatabase(NAME);
+    const db = new AppDatabase(NAME);
     await db.open();
     expect(db.verno).toBe(7);
     const settings = (await db.settings.get("settings"))! as unknown as Record<string, unknown>;
@@ -211,7 +211,7 @@ describe("миграция схемы без сети", () => {
   });
   it("после миграции первое обновление пакета заменяет нетронутые слова и сохраняет правки, удаления и порядок", async () => {
     await seedLegacy();
-    const db = new LexiDatabase(NAME);
+    const db = new AppDatabase(NAME);
     await db.open();
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
@@ -244,7 +244,7 @@ describe("миграция схемы без сети", () => {
 
 /** Тестовая база называется иначе, а копия проверяется по имени базы приложения. */
 const asLexi = (parsed: { data: { databaseName: string } }) =>
-  new Blob([JSON.stringify({ ...parsed, data: { ...parsed.data, databaseName: "lexi" } })], {
+  new Blob([JSON.stringify({ ...parsed, data: { ...parsed.data, databaseName: "tetradio" } })], {
     type: "application/json",
   });
 
@@ -279,7 +279,7 @@ class V6Database extends Dexie {
     });
   }
 }
-const DROPPED = "lexi-drop-cloze";
+const DROPPED = "tetradio-drop-cloze";
 const key = (kind: string, id: string) => JSON.stringify([kind, id]);
 const at = "2026-09-16T09:00:00.000Z";
 const stateRow = (kind: string, id: string) => ({
@@ -305,7 +305,7 @@ const sessionItem = (kind: string, id: string, index: number, over: Record<strin
 /** Схема 7 снимает вид карточек «заполни пропуск»: ключи уходят, история ответов остаётся. */
 describe("миграция схемы 7: снятие вида карточек", () => {
   beforeEach(async () => {
-    await new LexiDatabase(DROPPED).delete();
+    await new AppDatabase(DROPPED).delete();
     const legacy = new V6Database(DROPPED);
     await legacy.open();
     await legacy.table("phrases").add({ id: "p1", text: "Καλημέρα.", createdAt: at, updatedAt: at });
@@ -389,10 +389,10 @@ describe("миграция схемы 7: снятие вида карточек"
     legacy.close();
   });
   afterEach(async () => {
-    await new LexiDatabase(DROPPED).delete();
+    await new AppDatabase(DROPPED).delete();
   });
   it("удаляет карточки, связи, состояния, навыки и отложенный прогресс снятого вида, историю оставляет", async () => {
-    const db = new LexiDatabase(DROPPED);
+    const db = new AppDatabase(DROPPED);
     await db.open();
     expect(db.verno).toBe(7);
     expect(await db.clozes.count()).toBe(0);
@@ -413,7 +413,7 @@ describe("миграция схемы 7: снятие вида карточек"
     db.close();
   });
   it("незавершённая сессия продолжается с оставшегося задания, сессия только из снятых завершается", async () => {
-    const db = new LexiDatabase(DROPPED);
+    const db = new AppDatabase(DROPPED);
     await db.open();
     const live = (await db.sessions.get("s1"))!;
     expect(live.items.map((item) => item.ref.id)).toEqual(["p1"]);
@@ -428,9 +428,9 @@ describe("миграция схемы 7: снятие вида карточек"
 });
 
 describe("резервная копия", () => {
-  let db: LexiDatabase;
+  let db: AppDatabase;
   beforeEach(async () => {
-    db = new LexiDatabase(NAME);
+    db = new AppDatabase(NAME);
     await db.open();
   });
   afterEach(() => db.close());
@@ -451,7 +451,7 @@ describe("резервная копия", () => {
     const copy = asLexi(parsed);
     const check = await inspectBackup(copy);
     expect(check.ok && check.report.legacy).toBe(false);
-    const fresh = new LexiDatabase("lexi-restore-target");
+    const fresh = new AppDatabase("tetradio-restore-target");
     await fresh.delete();
     await fresh.open();
     await restoreBackup(copy, fresh);
@@ -470,7 +470,7 @@ describe("резервная копия", () => {
     const glosses = [{ start: 3, length: 5, russian: "дом", wordId: "w12-16" }];
     await db.words.put({ ...house, examples: [{ ...house.examples[0], glosses }] });
     const copy = asLexi(JSON.parse(await (await exportFull(db)).text()));
-    const fresh = new LexiDatabase("lexi-restore-glosses");
+    const fresh = new AppDatabase("tetradio-restore-glosses");
     await fresh.delete();
     await fresh.open();
     await restoreBackup(copy, fresh);
@@ -484,7 +484,7 @@ describe("резервная копия", () => {
       formatName: "dexie",
       formatVersion: 1,
       data: {
-        databaseName: "lexi",
+        databaseName: "tetradio",
         databaseVersion: 1,
         tables: Object.entries({
           words: "id,greek,russian,deletedAt",
@@ -533,7 +533,7 @@ describe("резервная копия", () => {
             tableName: "meta",
             inbound: true,
             rows: [
-              { key: "app", value: "lexi:1" },
+              { key: "app", value: "tetradio:1" },
               { key: "seed", value: "2026-09-16.2" },
             ],
           },
@@ -610,7 +610,7 @@ describe("резервная копия", () => {
       ],
       sessions: [],
       settings: [{ id: "settings", timezone: "Asia/Nicosia", sessionSize: 20 }],
-      meta: [{ key: "app", value: "lexi:1" }],
+      meta: [{ key: "app", value: "tetradio:1" }],
       cardSkills: [{ unitKey: clozeKey, ref: { kind: "cloze", id: "c1" }, skills: {} }],
       baseSummary: [],
       cardStash: [],
@@ -640,7 +640,7 @@ describe("резервная копия", () => {
         formatName: "dexie",
         formatVersion: 1,
         data: {
-          databaseName: "lexi",
+          databaseName: "tetradio",
           databaseVersion: 6,
           tables: Object.keys(rows).map((name) => ({
             name,
@@ -673,7 +673,7 @@ describe("резервная копия", () => {
           JSON.stringify({
             formatName: "dexie",
             formatVersion: 1,
-            data: { databaseName: "lexi", databaseVersion: 8, tables: [], data: [] },
+            data: { databaseName: "tetradio", databaseVersion: 8, tables: [], data: [] },
           }),
         ]),
       ),
@@ -684,7 +684,7 @@ describe("резервная копия", () => {
           JSON.stringify({
             formatName: "dexie",
             formatVersion: 1,
-            data: { databaseName: "lexi", databaseVersion: 2, tables: [{ name: "words", rowCount: 0 }], data: [] },
+            data: { databaseName: "tetradio", databaseVersion: 2, tables: [{ name: "words", rowCount: 0 }], data: [] },
           }),
         ]),
       ),

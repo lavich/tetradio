@@ -1,4 +1,4 @@
-import type { LexiDatabase } from "../../src/storage/db";
+import type { AppDatabase } from "../../src/storage/db";
 import type { ContentFetcher } from "../../src/content/client";
 import { installLesson, refreshCatalog } from "../../src/content/client";
 import { buildContent, type BuiltContent } from "../../content/build";
@@ -33,7 +33,7 @@ export function memoryFetcher(
   };
 }
 /** Каталог плюс установка перечисленных уроков — замена старого `ensureSeed()` в тестах. */
-export async function installLessons(db: LexiDatabase, ids: string[], fetcher = memoryFetcher()) {
+export async function installLessons(db: AppDatabase, ids: string[], fetcher = memoryFetcher()) {
   await refreshCatalog(db, fetcher);
   for (const id of ids) await installLesson(id, db, fetcher);
   return fetcher;

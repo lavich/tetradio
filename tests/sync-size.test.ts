@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { describe, expect, it } from "vitest";
 import { createEmptyCard } from "ts-fsrs";
-import { indexWord, LexiDatabase } from "../src/storage/db";
+import { indexWord, AppDatabase } from "../src/storage/db";
 import { buildSnapshot } from "../src/sync/snapshot";
 import { splitParts } from "../src/sync/adapter";
 import { decodeSnapshot, encodeSnapshot } from "../src/sync/codec";
@@ -13,7 +13,7 @@ import { wordEvent, wordState } from "./helpers/cards";
 const TYPES: ExerciseType[] = ["recognition", "assembly", "spelling", "listening"];
 const now = new Date("2026-09-16T09:00:00Z");
 /** Полная история: у каждого слова по десять ответов каждого типа — верхняя граница сводки навыков. */
-async function fill(db: LexiDatabase, ids: string[], perType = 10) {
+async function fill(db: AppDatabase, ids: string[], perType = 10) {
   const states = ids.map((wordId, index) =>
     wordState(wordId, {
       version: perType * TYPES.length,
@@ -57,7 +57,7 @@ async function fill(db: LexiDatabase, ids: string[], perType = 10) {
       }
   await db.events.bulkPut(events);
 }
-const measure = async (db: LexiDatabase) => {
+const measure = async (db: AppDatabase) => {
   const snapshot = await db.transaction("r", db.tables, () => buildSnapshot(db, now));
   const text = encodeSnapshot(snapshot);
   expect(decodeSnapshot(text)).toEqual(snapshot); // кодек обратим
@@ -68,7 +68,7 @@ const keysFor = (parts: number) => parts * 3 + 2;
 
 describe("размер компактного снимка (задача 0.4)", () => {
   it("текущий каталог из четырёх уроков укладывается в единицы частей даже с полной историей навыков", async () => {
-    const db = new LexiDatabase("lexi-size-catalog");
+    const db = new AppDatabase("tetradio-size-catalog");
     await db.delete();
     await db.open();
     await installLessons(db, ["lesson-1-1", "lesson-1-2", "lesson-1-3", "lesson-1-4"]);
@@ -86,7 +86,7 @@ describe("размер компактного снимка (задача 0.4)", 
   it("растущий набор: границы вместимости с резервом на две версии и конфликт", async () => {
     const results: { words: number; chars: number; parts: number; keys: number }[] = [];
     for (const total of [500, 1000, 2000]) {
-      const db = new LexiDatabase(`lexi-size-${total}`);
+      const db = new AppDatabase(`tetradio-size-${total}`);
       await db.delete();
       await db.open();
       const words: Word[] = Array.from({ length: total }, (_, index) => ({

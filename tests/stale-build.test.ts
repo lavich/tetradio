@@ -4,7 +4,7 @@ import { loadScreen } from "../src/app/stale-build";
 const staleChunk = () => Promise.reject(new TypeError("Importing a module script failed."));
 function environment(options: { online?: boolean; stored?: string } = {}) {
   const store = new Map<string, string>();
-  if (options.stored !== undefined) store.set("lexi:stale-build-reload", options.stored);
+  if (options.stored !== undefined) store.set("tetradio:stale-build-reload", options.stored);
   const env = {
     reloads: 0,
     at: 100_000,
@@ -45,7 +45,7 @@ describe("экран из удалённой сборки", () => {
     const loading = loadScreen(staleChunk, env.options);
     expect(await settled(loading)).toBe("pending");
     expect(env.reloads).toBe(1);
-    expect(env.store.get("lexi:stale-build-reload")).toBe("100000");
+    expect(env.store.get("tetradio:stale-build-reload")).toBe("100000");
   });
   it("повторный отказ вскоре после перезагрузки уходит в границу ошибок: без бесконечного цикла", async () => {
     const env = environment({ stored: "90000" });

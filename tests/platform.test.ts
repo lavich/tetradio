@@ -15,31 +15,34 @@ describe("контекст запуска", () => {
   it("обычный адрес — веб даже при наличии глобального объекта Telegram", () => {
     (window as unknown as { Telegram: unknown }).Telegram = { WebApp: { initData: "" } };
     expect(parseLaunch(location("")).kind).toBe("web");
-    expect(parseLaunch(location("", "?bot=TaveloriDevBot"))).toMatchObject({ kind: "web", bot: "TaveloriDevBot" });
+    expect(parseLaunch(location("", "?bot=tetradio_dev"))).toMatchObject({ kind: "web", bot: "tetradio_dev" });
     delete (window as unknown as { Telegram?: unknown }).Telegram;
   });
   it("параметры Telegram в hash дают контекст с пользователем, платформой и ботом из query", () => {
     const context = parseLaunch(
       location(
         `#tgWebAppData=${encodeURIComponent(initData({ id: 42, first_name: "Άννα", language_code: "el" }))}&tgWebAppVersion=8.0&tgWebAppPlatform=ios`,
-        "?bot=@TaveloriDevBot",
+        "?bot=@tetradio_dev",
       ),
     );
     expect(context).toMatchObject({
       kind: "telegram",
-      bot: "TaveloriDevBot",
+      bot: "tetradio_dev",
       platform: "ios",
       version: "8.0",
       user: { id: 42, firstName: "Άννα", languageCode: "el" },
     });
-    expect(profileFor(context).databaseName).toBe("lexi-tg-TaveloriDevBot-42");
+    expect(profileFor(context).databaseName).toBe("tetradio-tg-tetradio_dev-42");
   });
   it("без сведений о пользователе профиль анонимный и не синхронизируется; плохое имя бота заменяется основным", () => {
     const context = parseLaunch(
       location(`#tgWebAppPlatform=android&tgWebAppData=${encodeURIComponent(initData(null))}`, "?bot=bad name!"),
     );
-    expect(context).toMatchObject({ kind: "telegram", user: null, bot: "TaveloriBot" });
-    expect(profileFor(context)).toMatchObject({ syncable: false, databaseName: "lexi-tg-TaveloriBot-anonymous" });
+    expect(context).toMatchObject({ kind: "telegram", user: null, bot: "tetradio_local" });
+    expect(profileFor(context)).toMatchObject({
+      syncable: false,
+      databaseName: "tetradio-tg-tetradio_local-anonymous",
+    });
   });
   it("контекст запоминается на время вкладки, даже если маршрутизация убрала hash", () => {
     resetLaunchContext();
@@ -383,25 +386,25 @@ describe("контекст запуска между переходами и п�
 
   it("перезагрузка Telegram без hash и ?bot= сохраняет вид, пользователя, launchId и профиль, запись не заменяется веб-контекстом", () => {
     const first = open(tgHash(undefined, "&query_id=AAH1"));
-    const stored = sessionStorage.getItem("lexi:launch");
+    const stored = sessionStorage.getItem("tetradio:launch");
     const again = open("");
-    expect(again).toMatchObject({ kind: "telegram", user: { id: 7 }, launchId: "AAH1", bot: "TaveloriBot" });
+    expect(again).toMatchObject({ kind: "telegram", user: { id: 7 }, launchId: "AAH1", bot: "tetradio_local" });
     expect(profileFor(again).databaseName).toBe(profileFor(first).databaseName);
-    expect(sessionStorage.getItem("lexi:launch")).toBe(stored);
+    expect(sessionStorage.getItem("tetradio:launch")).toBe(stored);
   });
-  it("Telegram с ?bot=TaveloriDevBot после перезагрузки без параметра сохраняет dev-бота и базу профиля", () => {
-    open(tgHash(), "?bot=TaveloriDevBot");
+  it("Telegram с ?bot=tetradio_dev после перезагрузки без параметра сохраняет dev-бота и базу профиля", () => {
+    open(tgHash(), "?bot=tetradio_dev");
     const again = open("");
-    expect(again.bot).toBe("TaveloriDevBot");
-    expect(profileFor(again).databaseName).toBe("lexi-tg-TaveloriDevBot-7");
+    expect(again.bot).toBe("tetradio_dev");
+    expect(profileFor(again).databaseName).toBe("tetradio-tg-tetradio_dev-7");
   });
   it("веб с ?bot= сохраняет бота, когда адрес потерял параметр", () => {
-    expect(open("", "?bot=TaveloriDevBot")).toMatchObject({ kind: "web", bot: "TaveloriDevBot" });
-    expect(open("")).toMatchObject({ kind: "web", bot: "TaveloriDevBot" });
-    expect(JSON.parse(sessionStorage.getItem("lexi:launch")!)).toEqual({ kind: "web", bot: "TaveloriDevBot" });
+    expect(open("", "?bot=tetradio_dev")).toMatchObject({ kind: "web", bot: "tetradio_dev" });
+    expect(open("")).toMatchObject({ kind: "web", bot: "tetradio_dev" });
+    expect(JSON.parse(sessionStorage.getItem("tetradio:launch")!)).toEqual({ kind: "web", bot: "tetradio_dev" });
   });
   it("явный ?bot= в новом адресе заменяет сохранённый", () => {
-    open(tgHash(), "?bot=TaveloriDevBot");
+    open(tgHash(), "?bot=tetradio_dev");
     expect(open("", "?bot=OtherTestBot").bot).toBe("OtherTestBot");
     expect(open("").bot).toBe("OtherTestBot");
   });

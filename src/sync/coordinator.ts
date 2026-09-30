@@ -1,4 +1,4 @@
-import type { LexiDatabase } from "../storage/db";
+import type { AppDatabase } from "../storage/db";
 import type { SyncAdapter } from "./adapter";
 import { dominates, mergeClocks, sameClock } from "./clock";
 import { syncEvents } from "./events";
@@ -55,7 +55,7 @@ export interface SyncStatus {
 }
 export type LockResult = "acquired" | "busy" | "unsupported";
 export interface CoordinatorOptions {
-  database: LexiDatabase;
+  database: AppDatabase;
   adapter: SyncAdapter;
   now?: () => Date;
   /** Подпись устройства для конфликта (платформа Telegram). */
@@ -517,7 +517,7 @@ export class SyncCoordinator {
   async exportStored(id: string): Promise<Blob | null> {
     const row = await this.options.database.syncVersions.get(id);
     return row
-      ? new Blob([JSON.stringify({ kind: "lexi-sync-version", meta: row.meta, snapshot: row.snapshot })], {
+      ? new Blob([JSON.stringify({ kind: "tetradio-sync-version", meta: row.meta, snapshot: row.snapshot })], {
           type: "application/json",
         })
       : null;

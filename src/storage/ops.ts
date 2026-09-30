@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import { db, ensureLocalCourse, indexWord, type LexiDatabase } from "./db";
+import { db, ensureLocalCourse, indexWord, type AppDatabase } from "./db";
 import { lessonMates, optionPool, phrasePool } from "./queries";
 import {
   closeSources,
@@ -34,7 +34,7 @@ import { syncEvents } from "../sync/events";
 
 /** Отметка «есть неопубликованные изменения» пишется в той же транзакции, что и само изменение. */
 export const DIRTY_KEY = "sync:dirty";
-const markChanged = (database: LexiDatabase) => database.meta.put({ key: DIRTY_KEY, value: "1" });
+const markChanged = (database: AppDatabase) => database.meta.put({ key: DIRTY_KEY, value: "1" });
 const announceChange = () => syncEvents.emit("changed");
 const settled = (items: SessionItem[]) => items.filter((entry) => entry.eventId || entry.skipped).length;
 
@@ -58,7 +58,7 @@ export interface AnswerInput {
   activeTimeMs: number;
   timezone: string;
   now?: Date;
-  database?: LexiDatabase;
+  database?: AppDatabase;
 }
 /** Один ответ = одно событие, один пересчёт FSRS и одна позиция сессии, в одной транзакции. */
 export async function submitAnswer(input: AnswerInput): Promise<ReviewEvent> {
@@ -158,7 +158,7 @@ export async function recordAnswer({
 async function easierRetry(
   item: SessionItem,
   session: Session,
-  database: LexiDatabase,
+  database: AppDatabase,
 ): Promise<Pick<SessionItem, "type" | "options"> | null> {
   if (!hasEasierStep(item.type)) return null;
   const card = item.card;
@@ -175,12 +175,12 @@ async function easierRetry(
  * Живые слова занятия: в элементах лежат снимки на момент сборки, поэтому слова перечитываются по id,
  * а удалённые с тех пор отбрасываются.
  */
-async function liveSessionWords(session: Session, database: LexiDatabase): Promise<Word[]> {
+async function liveSessionWords(session: Session, database: AppDatabase): Promise<Word[]> {
   const ids = [...new Set(session.items.flatMap((item) => (item.card.kind === "word" ? [item.card.word.id] : [])))];
   return (await database.words.bulkGet(ids)).flatMap((word) => (word && !word.deletedAt ? [word] : []));
 }
 /** Источники вариантов слова в занятии: соседи по урокам, живые слова занятия и пул словаря. */
-async function wordSourcesOf(wordId: string, session: Session, database: LexiDatabase) {
+async function wordSourcesOf(wordId: string, session: Session, database: AppDatabase) {
   const [mates, sessionWords, pool] = await Promise.all([
     lessonMates([wordId], database),
     liveSessionWords(session, database),
@@ -197,7 +197,7 @@ export async function skipItem(
   sessionId: string,
   itemId: string,
   activeTimeMs: number,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
 ): Promise<void> {
   await database.transaction("rw", database.sessions, async () => {
     const session = await database.sessions.get(sessionId);
@@ -215,13 +215,13 @@ export async function skipItem(
     });
   });
 }
-export const saveSession = (session: Session, database: LexiDatabase = db) => database.sessions.put(session);
-export const endSession = async (session: Session, database: LexiDatabase = db) => {
+export const saveSession = (session: Session, database: AppDatabase = db) => database.sessions.put(session);
+export const endSession = async (session: Session, database: AppDatabase = db) => {
   await database.sessions.put({ ...session, status: session.index >= session.items.length ? "done" : "ended" });
 };
 
 /** Правка поставленного слова помечается локальной: обновление пакета её не перезапишет. */
-export async function saveWord(word: Word, database: LexiDatabase = db) {
+export async function saveWord(word: Word, database: AppDatabase = db) {
   const previous = await database.words.get(word.id);
   const greekChanged = previous && normalize(previous.greek) !== normalize(word.greek);
   const edited = (previous?.revision ?? word.revision) ? true : word.edited;
@@ -235,12 +235,12 @@ export async function saveWord(word: Word, database: LexiDatabase = db) {
   );
 }
 /** Мягкое удаление: история ответов остаётся достоверной. */
-export async function deleteWord(id: string, database: LexiDatabase = db) {
+export async function deleteWord(id: string, database: AppDatabase = db) {
   await database.words.update(id, { deletedAt: stamp(new Date()) });
 }
 export type LessonPatch = Partial<Pick<Lesson, "title" | "targetDate" | "status">>;
 /** Частичная правка сырой записи: вычисленная по расписанию дата из снимка не попадает в базу. */
-export async function updateLesson(id: string, patch: LessonPatch, database: LexiDatabase = db) {
+export async function updateLesson(id: string, patch: LessonPatch, database: AppDatabase = db) {
   await database.transaction("rw", database.lessons, database.meta, async () => {
     await database.lessons.update(id, { ...patch, updatedAt: stamp(new Date()) });
     await markChanged(database);
@@ -248,7 +248,7 @@ export async function updateLesson(id: string, patch: LessonPatch, database: Lex
   announceChange();
 }
 /** Для поставленного урока удаление связи запоминается, чтобы обновление пакета её не вернуло. Карточка, прогресс и история остаются. */
-export async function removeFromLesson(lessonId: string, ref: LearningRef, database: LexiDatabase = db) {
+export async function removeFromLesson(lessonId: string, ref: LearningRef, database: AppDatabase = db) {
   const key = unitKey(ref);
   await database.transaction(
     "rw",
@@ -265,7 +265,7 @@ export async function removeFromLesson(lessonId: string, ref: LearningRef, datab
     },
   );
 }
-export async function linkCards(lessonId: string, refs: LearningRef[], database: LexiDatabase = db): Promise<number> {
+export async function linkCards(lessonId: string, refs: LearningRef[], database: AppDatabase = db): Promise<number> {
   const existing = await database.lessonItems
     .where("[lessonId+position]")
     .between([lessonId, Dexie.minKey], [lessonId, Dexie.maxKey])
@@ -281,10 +281,10 @@ export async function linkCards(lessonId: string, refs: LearningRef[], database:
   );
   return fresh.length;
 }
-export const linkWords = (lessonId: string, wordIds: string[], database: LexiDatabase = db) =>
+export const linkWords = (lessonId: string, wordIds: string[], database: AppDatabase = db) =>
   linkCards(lessonId, wordIds.map(wordRef), database);
 /** Новый набор без даты: её назначит расписание, а своя дата задаётся на экране урока. */
-export async function createLesson(title: string, database: LexiDatabase = db): Promise<Lesson> {
+export async function createLesson(title: string, database: AppDatabase = db): Promise<Lesson> {
   const now = stamp(new Date());
   const lesson: Lesson = {
     id: newId("lesson"),
@@ -302,7 +302,7 @@ export async function createLesson(title: string, database: LexiDatabase = db): 
  * Урок, чей день по расписанию уже прошёл, становится проведённым, а дата — его собственной,
  * поэтому дальнейшие изменения расписания его не трогают. Повторный вызов ничего не пишет.
  */
-export async function settleLessons(now: Date, database: LexiDatabase = db): Promise<number> {
+export async function settleLessons(now: Date, database: AppDatabase = db): Promise<number> {
   return database.transaction("rw", database.lessons, database.courses, database.settings, database.meta, async () => {
     const settings = fillSettings(await database.settings.get("settings"));
     const stored = await database.lessons.toArray();
@@ -320,7 +320,7 @@ export async function settleLessons(now: Date, database: LexiDatabase = db): Pro
     return passed.length;
   });
 }
-export async function putAsset(asset: Asset, database: LexiDatabase = db) {
+export async function putAsset(asset: Asset, database: AppDatabase = db) {
   await database.assets.put(asset);
 }
 
@@ -335,7 +335,7 @@ export interface ImportOutcome {
   linked: number;
   conflicts: number;
 }
-export async function commitImport(plan: ImportPlan, database: LexiDatabase = db): Promise<ImportOutcome> {
+export async function commitImport(plan: ImportPlan, database: AppDatabase = db): Promise<ImportOutcome> {
   const now = stamp(new Date());
   return database.transaction(
     "rw",
@@ -399,7 +399,7 @@ export async function commitImport(plan: ImportPlan, database: LexiDatabase = db
     },
   );
 }
-export async function saveSettings(settings: Settings, database: LexiDatabase = db) {
+export async function saveSettings(settings: Settings, database: AppDatabase = db) {
   await database.transaction("rw", database.settings, database.meta, async () => {
     await database.settings.put(settings);
     await markChanged(database);
@@ -411,7 +411,7 @@ export async function saveCourseTempo(
   courseId: string,
   tempo: Partial<Pick<Course, "schedule" | "newItemsPerDay">>,
   now: Date,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
 ): Promise<number> {
   await database.transaction("rw", database.courses, database.meta, async () => {
     const course = await database.courses.get(courseId);
@@ -423,7 +423,7 @@ export async function saveCourseTempo(
 }
 
 /** Старые неотвеченные recall заменяются один раз, история остаётся неизменной. */
-export async function prepareObjectiveSession(id: string, database: LexiDatabase = db): Promise<void> {
+export async function prepareObjectiveSession(id: string, database: AppDatabase = db): Promise<void> {
   // Соседи по урокам читаются до транзакции: так её область не расширяется на связи уроков.
   const before = await database.sessions.get(id);
   if (!before || before.objectiveVersion === 1) return;
@@ -465,7 +465,7 @@ export async function markIntroduced(
   id: string,
   key: string,
   activeTimeMs: number,
-  database: LexiDatabase = db,
+  database: AppDatabase = db,
 ): Promise<void> {
   await database.transaction("rw", database.sessions, async () => {
     const session = await database.sessions.get(id);

@@ -82,7 +82,9 @@ describe("модуль отчётов с адресом приёма", () => {
     expect(calls.init[0].dsn).toBe(DSN);
     expect(calls.init[0].tags.env).toBe("web");
     expect(calls.init[0].tags["app.version"]).toBeTypeOf("string");
-    expect(calls.crumbs).toEqual([{ category: "lexi.lifecycle", message: "activated", data: { stableHeight: 600 } }]);
+    expect(calls.crumbs).toEqual([
+      { category: "tetradio.lifecycle", message: "activated", data: { stableHeight: 600 } },
+    ]);
     expect(calls.capture.map((entry) => (entry.error as Error).message)).toEqual([
       "early-0",
       "e-1",
@@ -128,7 +130,7 @@ describe("модуль отчётов с адресом приёма", () => {
     setReportingEnabled(false);
     await flush();
     expect(calls.closed).toBe(1);
-    expect(deleted).toHaveBeenCalledWith("lexi-error-reports");
+    expect(deleted).toHaveBeenCalledWith("tetradio-error-reports");
     expect(reportError(new Error("after-off"))).toBeNull();
     expect(calls.capture).toHaveLength(0);
     // Повторное включение поднимает SDK заново.
@@ -142,10 +144,10 @@ describe("модуль отчётов с адресом приёма", () => {
 
 describe("привязка к настройке", () => {
   it("SDK поднимается только при включённой настройке и закрывается при выключении, без перезапуска", async () => {
-    const { LexiDatabase } = await import("../src/storage/db");
+    const { AppDatabase } = await import("../src/storage/db");
     const { defaultSettings } = await import("../src/domain/types");
     const { bindReportingToSettings } = await import("../src/reporting/settings");
-    const db = new LexiDatabase("lexi-reporting-settings");
+    const db = new AppDatabase("tetradio-reporting-settings");
     await db.delete();
     await db.open();
     await db.settings.put({ ...defaultSettings, errorReports: false });

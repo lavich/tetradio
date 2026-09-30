@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
-import { LexiDatabase } from "../src/storage/db";
+import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { saveCourseTempo, saveSettings, submitAnswer, updateLesson } from "../src/storage/ops";
 import { defaultSettings } from "../src/domain/types";
@@ -26,7 +26,7 @@ const tick = (minutes = 1) => {
 const now = () => new Date(clockMs);
 let counter = 0;
 async function device(name: string, options: { lessons?: string[]; label?: string; maxKeys?: number } = {}) {
-  const db = new LexiDatabase(`lexi-sync-${name}-${++counter}`);
+  const db = new AppDatabase(`tetradio-sync-${name}-${++counter}`);
   await db.delete();
   await db.open();
   if (options.lessons) await installLessons(db, options.lessons);
@@ -436,7 +436,7 @@ describe("надёжность публикации и лимиты", () => {
     expect(await readMeta(tablet.db, META.dirty)).toBe("1");
   });
   it("вторая вкладка не пишет параллельно, а без блокировок запись приостанавливается", async () => {
-    const db = new LexiDatabase(`lexi-sync-tabs-${++counter}`);
+    const db = new AppDatabase(`tetradio-sync-tabs-${++counter}`);
     await db.delete();
     await db.open();
     await installLessons(db, ["lesson-1-1"]);
@@ -465,7 +465,7 @@ describe("надёжность публикации и лимиты", () => {
   });
   it("ошибка CloudStorage не показывается успехом, повтор планируется с задержкой", async () => {
     const delays: number[] = [];
-    const db = new LexiDatabase(`lexi-sync-err-${++counter}`);
+    const db = new AppDatabase(`tetradio-sync-err-${++counter}`);
     await db.delete();
     await db.open();
     await installLessons(db, ["lesson-1-1"]);
@@ -492,7 +492,7 @@ describe("надёжность публикации и лимиты", () => {
     expect(delays).toEqual([1000, 2000]);
   });
   it("обычный браузер: синхронизация отключена явно, CloudStorage не вызывается", async () => {
-    const db = new LexiDatabase(`lexi-sync-web-${++counter}`);
+    const db = new AppDatabase(`tetradio-sync-web-${++counter}`);
     await db.delete();
     await db.open();
     const sync = new SyncCoordinator({
@@ -505,14 +505,14 @@ describe("надёжность публикации и лимиты", () => {
     expect(
       profileFor({
         kind: "web",
-        bot: "TaveloriBot",
+        bot: "tetradio_local",
         platform: null,
         version: null,
         user: null,
         startParam: null,
         launchId: null,
       }),
-    ).toMatchObject({ databaseName: "lexi", syncable: false });
+    ).toMatchObject({ databaseName: "tetradio", syncable: false });
   });
 });
 
@@ -521,7 +521,7 @@ describe("изоляция профилей", () => {
     const user = (id: number) => ({ id, firstName: "A" });
     const main = profileFor({
       kind: "telegram",
-      bot: "TaveloriBot",
+      bot: "tetradio_local",
       platform: "ios",
       version: "8.0",
       user: user(1),
@@ -530,7 +530,7 @@ describe("изоляция профилей", () => {
     });
     const other = profileFor({
       kind: "telegram",
-      bot: "TaveloriBot",
+      bot: "tetradio_local",
       platform: "ios",
       version: "8.0",
       user: user(2),
@@ -539,7 +539,7 @@ describe("изоляция профилей", () => {
     });
     const dev = profileFor({
       kind: "telegram",
-      bot: "TaveloriDevBot",
+      bot: "tetradio_dev",
       platform: "ios",
       version: "8.0",
       user: user(1),
@@ -548,7 +548,7 @@ describe("изоляция профилей", () => {
     });
     const anonymous = profileFor({
       kind: "telegram",
-      bot: "TaveloriBot",
+      bot: "tetradio_local",
       platform: "ios",
       version: "8.0",
       user: null,
@@ -556,10 +556,10 @@ describe("изоляция профилей", () => {
       launchId: null,
     });
     expect(
-      new Set([main.databaseName, other.databaseName, dev.databaseName, anonymous.databaseName, "lexi"]).size,
+      new Set([main.databaseName, other.databaseName, dev.databaseName, anonymous.databaseName, "tetradio"]).size,
     ).toBe(5);
     expect(main.syncable).toBe(true);
     expect(anonymous.syncable).toBe(false);
-    expect(main.databaseName).toBe("lexi-tg-TaveloriBot-1");
+    expect(main.databaseName).toBe("tetradio-tg-tetradio_local-1");
   });
 });

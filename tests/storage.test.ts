@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createEmptyCard, Rating, State } from "ts-fsrs";
-import { indexWord, LexiDatabase } from "../src/storage/db";
+import { indexWord, AppDatabase } from "../src/storage/db";
 import { dexieSource, lessonItems, loadLessons } from "../src/storage/queries";
 import { wordRef } from "./helpers/cards";
 import {
@@ -28,10 +28,10 @@ import { tiles } from "../src/domain/syllables";
 import { phraseRevisionOf } from "../content/build";
 
 const now = new Date("2026-09-15T09:00:00Z");
-let db: LexiDatabase;
+let db: AppDatabase;
 beforeEach(async () => {
-  await new LexiDatabase("lexi-test").delete();
-  db = new LexiDatabase("lexi-test");
+  await new AppDatabase("tetradio-test").delete();
+  db = new AppDatabase("tetradio-test");
   await db.open();
 });
 const ALL = ["lesson-1-1", "lesson-1-2", "lesson-1-3", "lesson-1-4"];

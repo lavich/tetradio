@@ -37,7 +37,7 @@ test.describe("упражнение по выбору на странице сл
     await page.goto("/");
     await installLessons(page, ["lesson-3-4"]);
     await page.goto("/words/w34-03");
-    const before = await trace(page, "lexi");
+    const before = await trace(page, "tetradio");
     await page.getByRole("button", { name: "Написание: пройти" }).click();
     await expect(page).toHaveURL(/\/words\/w34-03\/exercise\/spelling$/);
     await expect(page.getByText("Без учёта прогресса")).toBeVisible();
@@ -49,19 +49,19 @@ test.describe("упражнение по выбору на странице сл
     await expect(page.getByTestId("feedback")).toContainText("Правильно");
     await page.getByRole("button", { name: "К слову" }).click();
     await expect(page).toHaveURL(/\/words\/w34-03$/);
-    expect(await trace(page, "lexi")).toEqual({ ...before, events: 0, states: 0 });
+    expect(await trace(page, "tetradio")).toEqual({ ...before, events: 0, states: 0 });
   });
 
   test("в Telegram «Назад» ведёт на экран слова", async ({ page }) => {
     await openTelegram(page, { noCloud: true });
     await installLessons(page, ["lesson-3-4"]);
     await page.goto("/words/w34-03");
-    const before = await trace(page, "lexi-tg-TaveloriBot-1001");
+    const before = await trace(page, "tetradio-tg-tetradio_local-1001");
     await page.getByRole("button", { name: "Написание: пройти" }).click();
     await spell(page, "η κατσαρόλα");
     await expect(page.getByTestId("feedback")).toContainText("Правильно");
     await tg(page).back();
     await expect(page).toHaveURL(/\/words\/w34-03$/);
-    expect(await trace(page, "lexi-tg-TaveloriBot-1001")).toEqual({ ...before, events: 0, states: 0 });
+    expect(await trace(page, "tetradio-tg-tetradio_local-1001")).toEqual({ ...before, events: 0, states: 0 });
   });
 });

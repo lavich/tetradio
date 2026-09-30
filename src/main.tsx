@@ -23,7 +23,7 @@ try {
     const update = registerSW({
       onNeedRefresh() {
         updateReady.value = true;
-        window.dispatchEvent(new CustomEvent("lexi:update"));
+        window.dispatchEvent(new CustomEvent("tetradio:update"));
       },
       onRegisterError(error) {
         console.warn("Service worker недоступен", error);
