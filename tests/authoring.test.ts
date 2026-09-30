@@ -13,8 +13,11 @@ const DOC = "docs/lesson-authoring.md",
 /** Примеры употребления всех слов каталога: материал, из которого готовится непубликуемая фикстура. */
 const projectExamples = readdirSync("tests/fixtures/tavelori-content/words").flatMap((file) =>
   (
-    (parse(readFileSync(join("tests/fixtures/tavelori-content/words", file), "utf8")) as { examples?: { greek: string; russian: string }[] })
-      .examples ?? []
+    (
+      parse(readFileSync(join("tests/fixtures/tavelori-content/words", file), "utf8")) as {
+        examples?: { greek: string; russian: string }[];
+      }
+    ).examples ?? []
   ).map((example) => ({ ...example, file })),
 );
 const norm = (text: string) => text.normalize("NFC").replace(/\s+/g, " ").trim();
@@ -24,7 +27,8 @@ describe("шаблоны инструкции", () => {
     const root = mkdtempSync(join(tmpdir(), "tetradio-doc-"));
     // Копируются все папки контента: шаблон проверяется рядом с настоящим каталогом, каким бы он ни стал.
     for (const entry of readdirSync("tests/fixtures/tavelori-content", { withFileTypes: true }))
-      if (entry.isDirectory()) cpSync(join("tests/fixtures/tavelori-content", entry.name), join(root, entry.name), { recursive: true });
+      if (entry.isDirectory())
+        cpSync(join("tests/fixtures/tavelori-content", entry.name), join(root, entry.name), { recursive: true });
     mkdirSync(join(root, "phrases"), { recursive: true });
     const copy = (from: string, to: string) =>
       writeFileSync(join(root, to), readFileSync(join(TEMPLATES, from), "utf8"));
