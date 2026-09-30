@@ -37,6 +37,23 @@ async function start(page: Page) {
   await expect(page.getByText("Занятие не назначено")).toHaveCount(0);
 }
 const section = (page: Page, name: string) => page.getByRole("region", { name });
+/** Урок листается страницами: вперёд, пока нужный блок не окажется на открытой странице. */
+async function turnTo(page: Page, name: string) {
+  const target = page.getByRole("region", { name });
+  const sheet = page.getByRole("article").first();
+  const forward = page
+    .getByRole("navigation", { name: "Страницы урока" })
+    .getByRole("button", { name: /Далее|К итогу/ });
+  await expect(sheet).toHaveAttribute("aria-label", /^Страница/);
+  for (let turns = 0; turns < 20 && !(await target.count()); turns++) {
+    // Ждём смены страницы, а не счётчика: счётчик меняется и от сохранения выполненного задания.
+    const before = await sheet.getAttribute("aria-label");
+    await forward.click();
+    await expect(sheet).not.toHaveAttribute("aria-label", before!);
+  }
+  await expect(target).toBeVisible();
+  return target;
+}
 
 test("урок курса: задания с ключом, чтение, аудирование, письмо и речь — и только потом завершение", async ({
   page,
@@ -45,11 +62,11 @@ test("урок курса: задания с ключом, чтение, ауд�
   await start(page);
   await page.getByTestId("course-next").click();
   await expect(page.getByRole("heading", { name: "Знакомство и είμαι", level: 1 })).toBeVisible();
-  await expect(page.getByTestId("lesson-left")).toContainText("Осталось заданий: 5 из 5");
+  await expect(page.getByTestId("page-count")).toContainText("заданий 0 из 5");
   await expect(page.getByRole("button", { name: "Завершить урок" })).toHaveCount(0);
 
   // Выбор формы: одна ошибка показывает правильный ответ и пояснение красной ручкой.
-  const forms = section(page, "Формы είμαι");
+  const forms = await turnTo(page, "Формы είμαι");
   await forms.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "είμαι" }).click();
   await forms.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "είναι" }).click();
   await forms.getByRole("button", { name: "Проверить" }).click();
@@ -57,7 +74,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await expect(forms).toContainText("Верно: είσαι — Εσύ — ты: είσαι.");
 
   // Чтение: глосса открывается касанием; задание верно/неверно.
-  const reading = section(page, "Чтение: Η Άννα");
+  const reading = await turnTo(page, "Чтение: Η Άννα");
   await reading.getByRole("button", { name: "μένω" }).click();
   await expect(reading).toContainText("— живу");
   const tf = section(page, "Верно или неверно?");
@@ -67,7 +84,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await expect(tf.getByRole("status")).toHaveText("2 из 2");
 
   // Аудирование: текст закрыт до ответа; без греческого голоса предлагается открыть текст.
-  const listening = section(page, "Аудирование: Στο καφέ");
+  const listening = await turnTo(page, "Аудирование: Στο καφέ");
   await expect(listening.getByRole("list")).toHaveCount(0);
   await listening.getByRole("button", { name: "Слушать" }).click();
   await expect(listening).toContainText("На устройстве нет греческого голоса");
@@ -82,7 +99,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await expect(listening.getByRole("list")).toContainText("Είμαι από την Ελλάδα.");
 
   // Письмо: образец открывается после минимального объёма; самопроверка подписана как самопроверка.
-  const writing = section(page, "Письмо");
+  const writing = await turnTo(page, "Письмо");
   const compare = writing.getByRole("button", { name: "Сравнить с образцом" });
   await writing.getByRole("textbox", { name: "Ваш текст" }).fill("Γεια σας! Με λένε Ιβάν.");
   await expect(compare).toBeDisabled();
@@ -96,16 +113,18 @@ test("урок курса: задания с ключом, чтение, ауд�
   await expect(writing.getByRole("button", { name: "Сохранить самопроверку" })).toBeVisible();
 
   // Речь: таймер, затем образец и критерии.
-  const speaking = section(page, "Речь");
+  const speaking = await turnTo(page, "Речь");
   await speaking.getByRole("button", { name: "Начать" }).click();
   await speaking.getByRole("button", { name: "Закончить" }).click();
   await expect(speaking).toContainText("Образец ответа");
   await speaking.getByRole("button", { name: "Готово" }).click();
   await expect(speaking.getByRole("button", { name: "Сохранить самопроверку" })).toBeVisible();
 
-  // Все задания выполнены — урок можно завершить; после перезагрузки прогресс на месте.
+  // Все задания выполнены — урок можно завершить; после перезагрузки открыта та же страница, прогресс на месте.
   await page.reload();
-  await expect(section(page, "Формы είμαι").getByRole("status")).toHaveText("1 из 2");
+  await expect(section(page, "Речь")).toBeVisible();
+  await expect(page.getByTestId("page-count")).toContainText("заданий 5 из 5");
+  await page.getByRole("button", { name: "К итогу" }).click();
   await page.getByRole("button", { name: "Завершить урок" }).click();
   await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
   await expect(page.getByRole("img", { name: "урок пройден" })).toBeVisible();
@@ -138,15 +157,15 @@ test("полка: опубликованный модуль и черновик;
 test("контрольная: итог по навыкам против порога 60 %", async ({ page }) => {
   await start(page);
   await page.goto("/course/m01/m01-test");
-  const tf = section(page, "Верно или неверно?");
+  const tf = await turnTo(page, "Верно или неверно?");
   await tf.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "Σωστό" }).click();
   await tf.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "Σωστό" }).click();
   await tf.getByRole("button", { name: "Проверить" }).click();
-  const gaps = section(page, "Вставьте форму είμαι.");
+  const gaps = await turnTo(page, "Вставьте форму είμαι.");
   await gaps.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "είμαστε" }).click();
   await gaps.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "είναι" }).click();
   await gaps.getByRole("button", { name: "Проверить" }).click();
-  const result = page.getByRole("region", { name: "Итог контрольной" });
+  const result = await turnTo(page, "Итог контрольной");
   await expect(result).toContainText("Итог: 3 из 4 (75 %) — порог 60 % пройден");
   await expect(result).toContainText("чтение: 1 из 2 — не сдано");
 });
@@ -155,7 +174,7 @@ test("аудирование синтезом: две прослушки, зат
   await voices(page, "instant");
   await start(page);
   await page.getByTestId("course-next").click();
-  const listening = section(page, "Аудирование: Στο καφέ");
+  const listening = await turnTo(page, "Аудирование: Στο καφέ");
   const play = listening.getByRole("button", { name: "Слушать" });
   await play.click();
   await expect(listening).toContainText("Прослушано 1 из 2");
@@ -164,4 +183,16 @@ test("аудирование синтезом: две прослушки, зат
   await expect(play).toBeDisabled();
   await expect(listening.getByRole("button", { name: "Открыть текст" })).toBeVisible();
   await expect(listening.getByRole("list")).toHaveCount(0);
+});
+
+test("разворот: на широком экране две страницы рядом, стрелки листают разворот", async ({ page }) => {
+  await start(page);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/course/m01/m01-1?p=1");
+  await expect(page.getByRole("article")).toHaveCount(2);
+  await expect(page.getByTestId("page-count")).toContainText("стр. 1–2 из");
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByTestId("page-count")).toContainText("стр. 3–4 из");
+  await page.keyboard.press("ArrowLeft");
+  await expect(page.getByTestId("page-count")).toContainText("стр. 1–2 из");
 });
