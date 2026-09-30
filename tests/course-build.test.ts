@@ -347,6 +347,15 @@ describe("лишние поля", () => {
   });
 });
 
+describe("смешанные алфавиты", () => {
+  it("греческая буква в русском слове или латинская в греческом — ошибка; подсказка произношения в скобках — нет", () => {
+    const withBody = (body: string) => withLesson((b) => b.map((x) => (x.type === "explanation" ? { ...x, body } : x)));
+    expect(failure(withBody("Экзамен КΕΓ: ..."))).toContain("смешаны алфавиты");
+    expect(failure(withBody("Γεια σoυ"))).toContain("смешаны алфавиты");
+    expect(() => build(withBody("θ читается как [θ]: [аθи́на]. Уровень Α2."))).not.toThrow();
+  });
+});
+
 describe("стабильность идентификаторов", () => {
   it("повтор идентификатора блока и недопустимый идентификатор", () => {
     expect(failure(withLesson((b) => [...b, { type: "vocabulary", id: "words" }]))).toContain("«words» повторяется");

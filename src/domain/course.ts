@@ -80,7 +80,7 @@ export const lessonTally = (blocks: LessonBlock[], progress: Map<string, BlockPr
   return { done: tasks.filter((block) => progress.get(block.id)?.done).length, total: tasks.length };
 };
 
-/** Порог сдачи навыка на экзамене КΕΓ A2 — 60 % в каждом навыке. */
+/** Порог сдачи навыка на экзамене ΚΕΓ A2 — 60 % в каждом навыке. */
 export const PASS_SHARE = 0.6;
 export interface SkillResult {
   skill: Skill;
