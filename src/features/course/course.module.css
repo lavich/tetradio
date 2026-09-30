@@ -463,3 +463,55 @@
 .lessonLink:hover .blockTitle {
   color: var(--primary);
 }
+
+/* Словарик урока: картинка на полях строки, слово печатью, формы и перевод мельче. */
+.vocab {
+  list-style: none;
+  margin: calc(var(--cell) / 2) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.vocabRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 8px;
+  margin: 0 -8px;
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+.vocabRow:hover {
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+}
+.thumb {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.vocabText {
+  display: grid;
+  min-width: 0;
+}
+.vocabGreek {
+  font-family: var(--font-print);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: var(--cell);
+}
+.vocabForms {
+  font-family: var(--font-print);
+  font-size: 13.5px;
+  color: var(--muted-foreground);
+  line-height: 20px;
+}
+.vocabRu {
+  font-size: 13.5px;
+  line-height: 20px;
+}
+.vocabPhrase {
+  display: grid;
+  padding: 2px 0;
+}
