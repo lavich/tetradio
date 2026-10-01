@@ -4,8 +4,9 @@ import { dominates, mergeClocks, sameClock } from "./clock";
 import { syncEvents } from "./events";
 import {
   applySnapshot,
-  buildAndCommit,
+  buildAndCommitMarked,
   buildSnapshot,
+  clearDirty,
   describeSnapshot,
   hasLocalProgress,
   META,
@@ -153,12 +154,19 @@ export class SyncCoordinator {
 
   /** Обмен запускается при открытии, возврате, после изменений и восстановлении сети; параллельные вызовы объединяются. */
   exchange(): Promise<SyncStatus> {
-    if (this.running) return this.running;
+    if (this.running) {
+      // Изменение во время обмена: ещё один заход сразу после текущего.
+      this.again = true;
+      return this.running;
+    }
+    this.again = false;
     this.running = this.run().finally(() => {
       this.running = null;
+      if (this.again && this.status.phase !== "error" && this.status.phase !== "conflict") void this.exchange();
     });
     return this.running;
   }
+  private again = false;
   /**
    * Обмен идёт вне дерева React, поэтому граница восстановления его не прикрывает: отказ хранилища после сна
    * WebView лечится здесь переоткрытием базы и повтором захода. Отчёт о сбое уходит, когда лечение не помогло.
@@ -360,14 +368,21 @@ export class SyncCoordinator {
     if (!flags.dirty) {
       if (remote.length === 1) {
         const [branch] = remote;
-        await applySnapshot(
+        const applied = await applySnapshot(
           database,
           branch.snapshot,
           branch.id,
           branch.meta!.clock,
           this.options.now(),
           branch.meta!.format,
+          { ifClean: true },
         );
+        // Локальное изменение появилось во время чтения облака: это уже расхождение, решаем заново.
+        if (!applied) {
+          if (depth < 1) return this.decide(writes, depth + 1);
+          this.update({ phase: "idle", dirty: true });
+          return;
+        }
         await this.confirm();
         await this.installMissing(branch.snapshot.packages);
         return;
@@ -383,8 +398,9 @@ export class SyncCoordinator {
   private async confirm() {
     const at = this.options.now().toISOString();
     await writeMeta(this.options.database, META.lastOk, at);
+    const dirty = !!(await readMeta(this.options.database, META.dirty));
     this.retryMs = this.options.retryBaseMs ?? 30000;
-    this.update({ phase: "synced", lastConfirmedAt: at, dirty: false, conflict: null, error: null, reason: null });
+    this.update({ phase: "synced", lastConfirmedAt: at, dirty, conflict: null, error: null, reason: null });
   }
 
   /** Публикация нового поколения: части, затем указатель; после подтверждения — очистка своих устаревших поколений. */
@@ -401,7 +417,9 @@ export class SyncCoordinator {
     clock[device] = (clock[device] ?? 0) + 1;
     const id = `${device}-${clock[device]}`;
     const now = this.options.now();
-    const snapshot = override ?? (await buildAndCommit(database, now, id));
+    const { snapshot, mark } = override
+      ? { snapshot: override, mark: await readMeta(database, META.dirty) }
+      : await buildAndCommitMarked(database, now, id);
     await adapter.publishVersion(
       {
         id,
@@ -417,7 +435,7 @@ export class SyncCoordinator {
     await database.transaction("rw", database.meta, async () => {
       await writeMeta(database, META.applied, id);
       await writeMeta(database, META.clock, JSON.stringify(clock));
-      await writeMeta(database, META.dirty, null);
+      await clearDirty(database, mark);
       await writeMeta(database, META.restored, null);
     });
     await this.confirm();

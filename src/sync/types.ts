@@ -4,12 +4,14 @@ import type { LearningRef, Schedule } from "../domain/types";
 
 /**
  * Версия облачного формата: другая версия не применяется и не перезаписывается старым клиентом.
+ * Формат 3 — формат 2 плюс прогресс блоков уроков курса; формат 2 читается без блоков (локальные не трогаются).
  * Формат 2 — типизированные ссылки на карточки по видам; формат 1 читается как словарный. Коды снятых видов
  * и снятых типов проверки остаются занятыми: снимки старых клиентов их содержат.
  */
-export const SNAPSHOT_FORMAT = 2;
+export const SNAPSHOT_FORMAT = 3;
+export const BLOCKS_SNAPSHOT_FORMAT = 3;
 export const LEGACY_SNAPSHOT_FORMAT = 1;
-export const SUPPORTED_SNAPSHOT_FORMATS = [1, 2] as const;
+export const SUPPORTED_SNAPSHOT_FORMATS = [1, 2, 3] as const;
 /** Вектор счётчиков устройств: причинная база версии. */
 export type Clock = Record<string, number>;
 
@@ -31,6 +33,18 @@ export interface CompactSettings {
   timezone: string;
   sessionSize: number;
 }
+/**
+ * Выполнение блока курса без введённых ответов и текста: они остаются на устройстве.
+ * Завершение урока курса передаётся в `lessons[]`.
+ */
+export interface CompactBlock {
+  lessonId: string;
+  blockId: string;
+  done: boolean;
+  score?: { correct: number; almost: number; total: number };
+  checks?: number[];
+  updatedAt: string;
+}
 /** Темп курса переносится между устройствами: без него второе устройство считало бы дни иначе. */
 export interface CompactCourse {
   id: string;
@@ -40,7 +54,7 @@ export interface CompactCourse {
 }
 /**
  * Компактный снимок стандартного прогресса: состояния FSRS и навыков поставляемых карточек, настройки,
- * даты/статусы стандартных уроков, требуемые пакеты и сводки статистики. Полная история, сессии,
+ * даты/статусы стандартных уроков, выполнение блоков курса, требуемые пакеты и сводки статистики. Полная история, сессии,
  * пользовательские слова, тексты карточек, введённые ответы, описания целей и медиа в снимок не входят.
  */
 export interface CompactSnapshot {
@@ -50,6 +64,8 @@ export interface CompactSnapshot {
   courses: CompactCourse[];
   lessons: CompactLesson[];
   packages: string[];
+  /** Включает блоки ещё не установленных уроков. */
+  blocks: CompactBlock[];
   states: CompactState[];
   skills: { ref: LearningRef; skills: SkillSummary }[];
   stats: StatsSummary;

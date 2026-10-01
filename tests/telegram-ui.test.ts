@@ -34,6 +34,7 @@ describe("жизненный цикл ответа", () => {
       now,
       database: db,
     });
+    const mark = await readMeta(db, META.dirty);
     const second = await recordAnswer({
       session,
       item,
@@ -49,7 +50,9 @@ describe("жизненный цикл ответа", () => {
     expect(second.created).toBe(false);
     expect(second.event).toEqual(first.event);
     expect(await db.events.count()).toBe(1);
-    expect(await readMeta(db, META.dirty)).toBe("1");
+    // Отметка изменений не обновилась: повтор не считается новым изменением.
+    expect(mark).toBeTruthy();
+    expect(await readMeta(db, META.dirty)).toBe(mark);
   });
   it("пропуск аудирования не создаёт события и не двигает интервал, но сдвигает позицию занятия", async () => {
     const session = await makeSession({ source: dexieSource(db), now, random: () => 0.3 });

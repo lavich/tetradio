@@ -144,7 +144,7 @@ describe("компактный снимок формата 2", () => {
     expect(decoded.skills).toEqual(snapshot.skills);
     expect(decoded.stats).toEqual(snapshot.stats);
     expect(encodeSnapshot(decoded)).not.toContain(dropped); // свой снимок ссылку снятого вида не публикует
-    expect(await applySnapshot(phone.db, decoded, "mixed-1", { other: 1 }, now())).toBeUndefined();
+    expect(await applySnapshot(phone.db, decoded, "mixed-1", { other: 1 }, now())).toBe(true);
     expect((await phone.db.cardStates.toArray()).map((state) => state.ref.kind)).not.toContain("cloze");
   });
   it("ключ снятого вида в своей сводке не срывает публикацию снимка", async () => {
@@ -185,7 +185,7 @@ describe("компактный снимок формата 2", () => {
     expect(status.error?.kind).toBe("limit");
     expect(cloud.store.size).toBe(0); // частичной версии нет
     expect(await statesOf(phone)).toEqual(before); // локальные ответы сохранены
-    expect(await readMeta(phone.db, META.dirty)).toBe("1");
+    expect(await readMeta(phone.db, META.dirty)).toBeTruthy();
   });
   it("словарный формат 1 читается как прогресс слов с теми же сроками и счётчиками", () => {
     const due = Date.parse("2026-09-20T08:00:00Z"),
@@ -240,6 +240,7 @@ describe("компактный снимок формата 2", () => {
       courses: [],
       lessons: [],
       packages: [MIXED_LESSON],
+      blocks: [],
       states: [
         {
           ref: W("w11-27"),
@@ -353,6 +354,6 @@ describe("обмен смешанным прогрессом между устр
     expect(status.error?.message).toMatch(/Обновите приложение/);
     expect(await statesOf(tablet)).toEqual(before);
     expect(cloud.store.has(`p_${await tablet.sync.deviceId()}`)).toBe(false);
-    expect(await readMeta(tablet.db, META.dirty)).toBe("1");
+    expect(await readMeta(tablet.db, META.dirty)).toBeTruthy();
   });
 });

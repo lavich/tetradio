@@ -95,16 +95,44 @@ export function memoryTransport(options: MemoryTransportOptions = {}): MemoryTra
   };
 }
 
-const wrap = <T>(run: (done: (error: string | null, value?: T) => void) => void, fallback: T): Promise<T> =>
+export const CLOUD_TIMEOUT_MS = 15000;
+/**
+ * Зависший callback CloudStorage не должен навсегда занять обмен: без ответа за `timeoutMs` — повторяемая ошибка.
+ * Поздний ответ игнорируется; запись могла состояться, но повтор той же версии пишет те же ключи.
+ */
+const call = <T>(
+  run: (done: (error: string | null, value?: T) => void) => void,
+  fallback: T,
+  timeoutMs: number,
+): Promise<T> =>
   new Promise((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new SyncError("transport", `Telegram CloudStorage не ответил за ${Math.round(timeoutMs / 1000)} с.`));
+    }, timeoutMs);
+    const finish = (action: () => void) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      action();
+    };
     try {
-      run((error, value) => (error ? reject(new SyncError("transport", error)) : resolve(value ?? fallback)));
+      run((error, value) =>
+        finish(() => (error ? reject(new SyncError("transport", error)) : resolve(value ?? fallback))),
+      );
     } catch (error) {
-      reject(new SyncError("unavailable", "Telegram CloudStorage недоступен", error));
+      finish(() => reject(new SyncError("unavailable", "Telegram CloudStorage недоступен", error)));
     }
   });
 /** Официальный CloudStorage через callback API; порционные запросы укладываются в лимит одного вызова. */
-export function cloudStorageTransport(storage: TelegramCloudStorage): KeyValueTransport {
+export function cloudStorageTransport(
+  storage: TelegramCloudStorage,
+  { timeoutMs = CLOUD_TIMEOUT_MS }: { timeoutMs?: number } = {},
+): KeyValueTransport {
+  const wrap = <T>(run: (done: (error: string | null, value?: T) => void) => void, fallback: T) =>
+    call(run, fallback, timeoutMs);
   return {
     limits: CLOUD_LIMITS,
     available: () => typeof storage?.getItems === "function",
