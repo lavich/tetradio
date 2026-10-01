@@ -2,6 +2,10 @@ title: Слабый навык (пример)
 kind: lesson
 items: []
 blocks:
+  - type: explanation
+    id: recap
+    title: Повторим είμαι
+    body: "Во множественном числе: Εμείς είμαστε φίλοι — «Мы друзья»."
   - type: exercise
     id: again
     instruction: Ещё раз — форма είμαι.

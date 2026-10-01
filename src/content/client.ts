@@ -603,6 +603,7 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
       if (pack.lesson.kind) record.kind = pack.lesson.kind;
       if (pack.module) record.module = pack.module;
       if (pack.blocks) record.blocks = pack.blocks;
+      if (pack.marks) record.marks = pack.marks;
       await database.packages.put(record);
       // Полученный из облака прогресс карточек этого пакета ждал установки: теперь он становится обычным состоянием.
       await adoptStash(database, pack.id, [

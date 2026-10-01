@@ -3,6 +3,7 @@
  * Прогресс блоков — данные пользователя (входят в копию); модули — кеш каталога.
  */
 import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
+import { cardRef, decodeMarks, type BlockMarks } from "../content/schema";
 import { lessonDone, lessonTally, type LessonTally } from "../domain/course";
 import type { BlockProgress, Lesson, StoredModule } from "../domain/types";
 import { db, type AppDatabase } from "./db";
@@ -51,6 +52,18 @@ export interface CourseLesson {
   position: number;
   blocks: LessonBlock[];
   lesson: Lesson | undefined;
+  marks: BlockMarks;
+  cards: Map<string, TapCard>;
+}
+/** `lesson` («1.2») — только у слова прошлого урока. */
+export interface TapCard {
+  ref: string;
+  greek: string;
+  russian: string;
+  ipa?: string;
+  forms?: string;
+  lesson?: string;
+  audioAssetId?: string;
 }
 /** Урок курса из установленного пакета; без пакета (не скачан, черновик) — `null`. */
 export async function courseLesson(lessonId: string, database: AppDatabase = db): Promise<CourseLesson | null> {
@@ -64,6 +77,30 @@ export async function courseLesson(lessonId: string, database: AppDatabase = db)
     position: pack.module.position,
     blocks: pack.blocks,
     lesson,
+    marks: pack.marks ? decodeMarks(pack.marks, pack.items) : {},
+    cards: new Map<string, TapCard>([
+      ...pack.words.map((word): [string, TapCard] => [
+        cardRef("word", word.id),
+        {
+          ref: cardRef("word", word.id),
+          greek: word.greek,
+          russian: word.russian,
+          ipa: word.ipa,
+          forms: word.forms,
+          audioAssetId: word.audioAssetId,
+        },
+      ]),
+      ...pack.phrases.map((phrase): [string, TapCard] => [
+        cardRef("phrase", phrase.id),
+        {
+          ref: cardRef("phrase", phrase.id),
+          greek: phrase.text,
+          russian: phrase.translation ?? "",
+          audioAssetId: phrase.audioAssetId,
+        },
+      ]),
+      ...(pack.marks?.cards ?? []).map((card): [string, TapCard] => [card.ref, card]),
+    ]),
   };
 }
 

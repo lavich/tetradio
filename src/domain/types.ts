@@ -1,5 +1,5 @@
 import type { Card, Grade } from "ts-fsrs";
-import type { PackageItem, PackageMedia, PackageWord, PackagePhrase } from "../content/schema";
+import type { PackageItem, PackageMarks, PackageMedia, PackageWord, PackagePhrase } from "../content/schema";
 import type { CatalogModule, CourseExam, LessonBlock, LessonKind } from "../content/course";
 /**
  * Типы проверки. `listening` — узнавание написания на слух, `comprehension` — понимание значения на слух.
@@ -185,6 +185,7 @@ export interface InstalledPackage {
   kind?: LessonKind;
   module?: { id: string; position: number };
   blocks?: LessonBlock[];
+  marks?: PackageMarks;
 }
 /** Модуль программы из каталога; `position` — порядок в каталоге. */
 export type StoredModule = CatalogModule & { position: number };

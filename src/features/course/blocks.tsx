@@ -1,5 +1,5 @@
 import { Mic, Pause, Play, Square } from "lucide-react";
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import type {
   ExerciseBlock,
@@ -9,6 +9,8 @@ import type {
   SpeakingBlock,
   WritingBlock,
 } from "../../content/course";
+import { glossSpans } from "../../content/course";
+import type { WordMark } from "../../content/schema";
 import { scoreExercise, spokenChoice, wordCount, type ItemResult } from "../../domain/course";
 import { speakPhrase } from "../../shared/audio";
 import type { BlockProgress } from "../../domain/types";
@@ -16,26 +18,48 @@ import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
 import type { BlockPatch } from "../../storage/course";
 import css from "./course.module.css";
 import { Tick } from "../../shared/Tick";
+import { Marked, useFieldMarks } from "./WordTaps";
+
+function paragraphs(text: string) {
+  const out: { from: number; to: number }[] = [];
+  const gap = /\n\s*\n/g;
+  let from = 0;
+  for (let match = gap.exec(text); match; match = gap.exec(text)) {
+    out.push({ from, to: match.index });
+    from = match.index + match[0].length;
+  }
+  out.push({ from, to: text.length });
+  return out;
+}
 
 /** `**…**` — выделение; остальной текст печатью. */
-function Rich({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return (
-    <>
-      {parts.map((part, index) =>
-        part.startsWith("**") && part.endsWith("**") ? <strong key={index}>{part.slice(2, -2)}</strong> : part,
-      )}
-    </>
-  );
+function Rich({ text, from, to, marks }: { text: string; from: number; to: number; marks: WordMark[] }) {
+  const parts: ReactNode[] = [];
+  const bold = /\*\*([^*]+)\*\*/g;
+  bold.lastIndex = from;
+  let at = from;
+  for (let match = bold.exec(text); match && match.index < to; match = bold.exec(text)) {
+    if (match.index + match[0].length > to) break;
+    if (match.index > at) parts.push(<Marked key={at} text={text} marks={marks} from={at} to={match.index} />);
+    parts.push(
+      <strong key={match.index}>
+        <Marked text={text} marks={marks} from={match.index + 2} to={match.index + match[0].length - 2} />
+      </strong>,
+    );
+    at = match.index + match[0].length;
+  }
+  if (at < to) parts.push(<Marked key={at} text={text} marks={marks} from={at} to={to} />);
+  return <>{parts}</>;
 }
 
 export function Explanation({ block }: { block: ExplanationBlock }) {
+  const marks = useFieldMarks(block.id, "body");
   return (
     <>
       {block.title ? <h3 className={css.blockTitle}>{block.title}</h3> : null}
-      {block.body.split(/\n\s*\n/).map((paragraph, index) => (
-        <p key={index} className={css.print}>
-          <Rich text={paragraph} />
+      {paragraphs(block.body).map(({ from, to }) => (
+        <p key={from} className={css.print}>
+          <Rich text={block.body} from={from} to={to} marks={marks} />
         </p>
       ))}
       {block.table ? (
@@ -67,43 +91,34 @@ export function Explanation({ block }: { block: ExplanationBlock }) {
 }
 
 export function Reading({ block }: { block: ReadingBlock }) {
-  const [open, setOpen] = useState<string | null>(null);
-  // Глоссы размечаются в порядке появления в тексте; каждая — кнопка с переводом.
-  const pieces: ReactNode[] = [];
-  let rest = block.text;
-  let key = 0;
-  for (const gloss of [...(block.glosses ?? [])].sort(
-    (a, b) => block.text.indexOf(a.text) - block.text.indexOf(b.text),
-  )) {
-    const at = rest.indexOf(gloss.text);
-    if (at < 0) continue;
-    pieces.push(rest.slice(0, at));
-    pieces.push(
-      <Fragment key={key++}>
-        <button
-          type="button"
-          className={css.gloss}
-          aria-expanded={open === gloss.text}
-          onClick={() => setOpen(open === gloss.text ? null : gloss.text)}
-        >
-          {gloss.text}
-        </button>
-        {open === gloss.text ? <span className={css.glossNote}>— {gloss.russian}</span> : null}
-      </Fragment>,
-    );
-    rest = rest.slice(at + gloss.text.length);
-  }
-  pieces.push(rest);
+  const marks = useFieldMarks(block.id, "text");
+  const glosses = glossSpans(block.text, block.glosses).map(({ start, length, gloss }) => ({
+    start,
+    length,
+    text: gloss.text,
+    russian: gloss.russian,
+  }));
   return (
     <>
       <h3 className={`${css.blockTitle} ${css.greek}`} lang="el">
         {block.title}
       </h3>
       <p className={css.reading} lang="el">
-        {pieces}
+        <Marked text={block.text} marks={marks} glosses={glosses} />
       </p>
       {block.glosses?.length ? <p className={css.instruction}>Подчёркнутые слова — нажмите для перевода.</p> : null}
     </>
+  );
+}
+
+function Line({ blockId, index, text }: { blockId: string; index: number; text: string }) {
+  return <Marked text={text} marks={useFieldMarks(blockId, `transcript.${index}`)} />;
+}
+function Model({ blockId, text }: { blockId: string; text: string }) {
+  return (
+    <p className={css.model} lang="el">
+      <Marked text={text} marks={useFieldMarks(blockId, "model")} />
+    </p>
   );
 }
 
@@ -169,7 +184,7 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
           {block.transcript.map((entry, index) => (
             <li key={index} className={index === line ? css.speaking : undefined}>
               {entry.speaker ? <span className={css.speaker}>{entry.speaker}</span> : null}
-              {entry.text}
+              <Line blockId={block.id} index={index} text={entry.text} />
             </li>
           ))}
         </ol>
@@ -379,9 +394,7 @@ export function Writing({
       {review ? (
         <>
           <p className={css.instruction}>Образец</p>
-          <p className={css.model} lang="el">
-            {block.model}
-          </p>
+          <Model blockId={block.id} text={block.model} />
           <Criteria criteria={block.criteria} checks={checks} toggle={toggle} />
           <div className={css.actions}>
             <Button variant="soft" size="md" onClick={() => void save({ done: true, text, checks })}>
@@ -497,9 +510,7 @@ export function Speaking({
           {block.model ? (
             <>
               <p className={css.instruction}>Образец ответа</p>
-              <p className={css.model} lang="el">
-                {block.model}
-              </p>
+              <Model blockId={block.id} text={block.model} />
             </>
           ) : null}
           <Criteria criteria={block.criteria} checks={checks} toggle={toggle} />
