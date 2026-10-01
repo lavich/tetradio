@@ -72,6 +72,19 @@ test("урок курса: задания с ключом, чтение, ауд�
   await forms.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "είναι" }).click();
   await forms.getByRole("button", { name: "Проверить" }).click();
   await expect(forms.getByRole("status")).toHaveText("1 из 2");
+  // Счёт с ошибками — янтарный, без ошибок — зелёный.
+  const colorOf = (name: string) =>
+    page.evaluate((name) => {
+      const probe = document.createElement("span");
+      probe.style.color = `var(${name})`;
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }, name);
+  expect(await forms.getByRole("status").evaluate((node) => getComputedStyle(node).color)).toBe(
+    await colorOf("--almost"),
+  );
   await expect(forms).toContainText("Верно: είσαι — Εσύ — ты: είσαι.");
 
   // Чтение: глосса открывается касанием; задание верно/неверно.
@@ -83,6 +96,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await tf.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "Σωστό" }).click();
   await tf.getByRole("button", { name: "Проверить" }).click();
   await expect(tf.getByRole("status")).toHaveText("2 из 2");
+  expect(await tf.getByRole("status").evaluate((node) => getComputedStyle(node).color)).toBe(await colorOf("--ok"));
 
   // Аудирование: текст закрыт до ответа; без греческого голоса предлагается открыть текст.
   const listening = await turnTo(page, "Аудирование: Στο καφέ");
