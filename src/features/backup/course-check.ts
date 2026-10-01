@@ -58,7 +58,7 @@ export async function courseProblem(rows: CourseRows, database: AppDatabase): Pr
   for (const lesson of rows.lessons) {
     if (!record(lesson) || !text(lesson.id)) return "Копия повреждена: урок без идентификатора.";
     if (lesson.status !== undefined && lesson.status !== "upcoming" && lesson.status !== "completed")
-      return `Копия повреждена: у урока ${lesson.id} неизвестный статус «${String(lesson.status)}».`;
+      return `Копия повреждена: у урока ${lesson.id} неизвестный статус «${JSON.stringify(lesson.status)}».`;
   }
   for (const row of rows.blockProgress) {
     const problem = blockRowProblem(row);

@@ -122,7 +122,7 @@ describe("отказ до изменения текущих данных", () =>
   it("блок урока, которого нет ни в копии, ни в каталоге, отклоняется", async () => {
     const dump = await courseOnly(await open("source"));
     const rows = table(dump, "blockProgress").rows;
-    setRows(dump, "blockProgress", [...rows, { ...rows[0], key: `ghost/${rows[0].blockId}`, lessonId: "ghost" }]);
+    setRows(dump, "blockProgress", [...rows, { ...rows[0], key: `ghost/${String(rows[0].blockId)}`, lessonId: "ghost" }]);
     const before = await state(target);
     await expect(restoreBackup(blob(dump), target)).rejects.toThrow(/урок ghost/);
     expect(await state(target)).toEqual(before);
