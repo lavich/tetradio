@@ -1,14 +1,9 @@
 import { launchContext, type LaunchContext } from "../platform/launch";
 
 /**
- * Владелец локальных данных — пара «бот + Telegram-пользователь»: у каждой пары своя база
- * `tetradio-tg-<bot>-<id>`. Telegram ID здесь лишь локальный селектор, а не серверное доказательство личности;
- * облачную область задаёт сам Telegram.
- *
- * Анонимного и браузерного профиля нет. Вне Telegram и без пользователя в initData владелец не определён:
- * запуск останавливается до открытия базы (`Blocked`), ничего не читается и не отправляется.
- * Исключение — сборка с флагом `VITE_TELEGRAM_MOCK=<id>` (разработка и e2e): вне Telegram она работает под
- * тестовым пользователем в отдельной базе `tetradio-mock-<id>` без облачной синхронизации.
+ * Владелец локальных данных — пара «бот + Telegram-пользователь», у каждой своя база. Telegram ID здесь лишь
+ * локальный селектор, а не серверное доказательство личности; облачную область задаёт сам Telegram.
+ * Без владельца запуск останавливается до открытия базы; исключение — сборка с `VITE_TELEGRAM_MOCK=<id>` вне Telegram.
  */
 export interface Profile {
   kind: "telegram" | "mock";
@@ -18,7 +13,6 @@ export interface Profile {
   syncable: boolean;
   label: string;
 }
-/** Запуск без определённого владельца: вне Telegram или Telegram не передал пользователя. */
 export interface Blocked {
   kind: "blocked";
   reason: "outside-telegram" | "no-user";
@@ -26,7 +20,6 @@ export interface Blocked {
 }
 export const MOCK_PREFIX = "tetradio-mock-";
 
-/** Тестовый пользователь из флага сборки: положительное целое — его ID; без флага или с другим значением — `null`. */
 export const parseMockUser = (raw: unknown): number | null => {
   const value = typeof raw === "string" ? raw.trim() : "";
   if (!/^[1-9]\d{0,15}$/.test(value)) return null;
@@ -60,20 +53,15 @@ export function profileFor(context: LaunchContext, mockUser: number | null = MOC
   };
 }
 let current: Profile | Blocked | null = null;
-/** Результат запуска: профиль владельца или причина остановки. Вычисляется один раз на страницу. */
 export const launchProfile = (): Profile | Blocked => current ?? (current = profileFor(launchContext()));
-/**
- * Профиль работающего приложения. Экраны и синхронизация рендерятся только при определённом владельце,
- * поэтому вызов при остановленном запуске — ошибка программы, а не штатное состояние.
- */
+/** Экраны рендерятся только при определённом владельце: остановленный запуск здесь — ошибка программы. */
 export const currentProfile = (): Profile => {
   const profile = launchProfile();
   if (profile.kind === "blocked") throw new Error(`Запуск остановлен: ${profile.reason}`);
   return profile;
 };
 /**
- * Пользователь bridge Telegram совпадает с владельцем открытой базы. Bridge разбирает тот же initData, что и
- * адрес; расхождение значит, что контекст восстановлен не от этого запуска, — данные такого владельца не трогаются.
+ * Расхождение с пользователем bridge значит, что контекст восстановлен не от этого запуска.
  * Bridge без пользователя (не загрузился, старый клиент) владельца не опровергает.
  */
 export const ownerMatches = (profile: Profile, bridgeUserId: number | undefined) =>

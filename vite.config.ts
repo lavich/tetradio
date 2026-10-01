@@ -83,6 +83,6 @@ export default defineConfig({
       },
     }),
   ],
-  // Unit-тесты работают с базой приложения вне Telegram — как сборка разработки с моком (`tetradio-mock-1`).
+  // Unit-тесты открывают базу вне Telegram, как сборка с моком (`tetradio-mock-1`).
   test: { include: ["tests/**/*.test.{ts,tsx}"], environment: "node", env: { VITE_TELEGRAM_MOCK: "1" } },
 });

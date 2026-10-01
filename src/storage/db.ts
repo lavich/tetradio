@@ -179,9 +179,8 @@ export class AppDatabase extends Dexie {
 }
 const launch = launchProfile();
 /**
- * База текущего владельца: отдельная на бота и Telegram-пользователя (`tetradio-tg-<bot>-<id>`), в сборке с моком —
- * `tetradio-mock-<id>`. Без владельца (вне Telegram, нет пользователя) база не открывается вовсе: автооткрытие
- * выключено, и случайный запрос падает с ошибкой, а не создаёт базу под предполагаемым владельцем.
+ * База владельца: своя на бота и Telegram-пользователя. Без владельца автооткрытие выключено: случайный запрос
+ * падает с ошибкой, а не создаёт базу под предполагаемым владельцем.
  */
 export const db = new AppDatabase(launch.kind === "blocked" ? "tetradio-unopened" : launch.databaseName);
 if (launch.kind === "blocked") db.close({ disableAutoOpen: true });

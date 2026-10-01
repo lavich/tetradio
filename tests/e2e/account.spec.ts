@@ -53,7 +53,7 @@ test.describe("production вне Telegram", () => {
     await expect(gate).toContainText("Найдите бота курса в Telegram"); // сборка тестов без VITE_TELEGRAM_BOT: ссылки нет
     await expect(page.getByText("το σπίτι")).toHaveCount(0);
     await expect(page.getByRole("navigation")).toHaveCount(0);
-    expect(await databases(page)).toEqual(["tetradio"]); // ничего нового, ни мока, ни анонимного профиля
+    expect(await databases(page)).toEqual(["tetradio"]);
     expect(await count(page, "tetradio", "words")).toBe(1);
   });
   test("Telegram без пользователя: ошибка запуска, база не открывается, облако не трогается", async ({ page }) => {
@@ -61,13 +61,13 @@ test.describe("production вне Telegram", () => {
     await page.addInitScript(`window.Telegram.WebApp.initDataUnsafe={}`);
     const hash = `#tgWebAppData=${encodeURIComponent("auth_date=1&hash=e2e")}&tgWebAppVersion=8.0&tgWebAppPlatform=ios`;
     for (const path of ["/web/", "/"]) {
-      // И production, и сборка с моком: мок не подменяет Telegram-запуск без пользователя.
+      // Мок не подменяет Telegram-запуск без пользователя.
       await page.goto(`${path}${hash}`);
       await expect(page.getByTestId("launch-error")).toContainText("Telegram не передал сведения о пользователе");
       await expect(page.getByTestId("today-title")).toHaveCount(0);
       expect(await databases(page)).toEqual([]);
       expect((await tg(page).calls()).filter((call) => call.startsWith("cloud."))).toEqual([]);
-      expect(await tg(page).calls()).toContain("ready"); // экран загрузки Telegram снят
+      expect(await tg(page).calls()).toContain("ready");
     }
   });
 });
@@ -75,7 +75,6 @@ test.describe("production вне Telegram", () => {
 test("смена аккаунта A → B на том же устройстве: B не видит прогресс A, синхронизация B идёт в его базу и облако", async ({
   page,
 }) => {
-  // A занимается: урок, ответ, облачная версия.
   await openTelegram(page, { userId: A });
   await installLessons(page, ["lesson-1-1"]);
   await onlyReviews(page);
@@ -99,18 +98,17 @@ test("смена аккаунта A → B на том же устройстве:
   // Перезагрузка без hash восстанавливает контекст вкладки — это B, а не A.
   expect(await page.evaluate(() => JSON.parse(sessionStorage.getItem("tetradio:launch")!).user.id)).toBe(B);
   const cloud = await tg(page).cloud();
-  expect(Object.keys(cloud)).toEqual([]); // у B нечего публиковать: прогресс A не ушёл в его облако
+  expect(Object.keys(cloud)).toEqual([]);
   expect(await databases(page)).toEqual([dbOf(A), dbOf(B)].sort());
   expect(await count(page, dbOf(B), "cardStates")).toBe(0);
   expect(await count(page, dbOf(B), "events")).toBe(0);
-  expect(await count(page, dbOf(A), "cardStates")).toBeGreaterThan(0); // данные A на месте, просто не показываются B
+  expect(await count(page, dbOf(A), "cardStates")).toBeGreaterThan(0);
 
-  // Контекст вкладки от B, а bridge сообщает A (контекст восстановлен не от этого запуска): запуск останавливается.
+  // Контекст вкладки от B, а bridge сообщает A: запуск останавливается.
   await page.addInitScript(bridgeScript({ userId: A }));
   await page.goto("/");
   await expect(page.getByTestId("launch-error")).toContainText("не совпали с этим запуском");
   expect(await page.evaluate(() => sessionStorage.getItem("tetradio:launch"))).toBeNull();
-  // Новый запуск A из Telegram снова открывает его прогресс.
   await page.goto(`/lessons${launchHash({ userId: A })}`); // другой путь: не переход по hash в том же документе
   await expect(page.getByRole("navigation")).toBeVisible();
   await page.goto("/more");

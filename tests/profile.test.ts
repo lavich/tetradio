@@ -57,7 +57,7 @@ describe("владелец локальных данных", () => {
     expect(ownerMatches(a, 1)).toBe(true);
     expect(ownerMatches(a, undefined)).toBe(true);
     expect(ownerMatches(a, 2)).toBe(false);
-    expect(ownerMatches(owner(web, 1), 99)).toBe(true); // мок не сверяется с bridge
+    expect(ownerMatches(owner(web, 1), 99)).toBe(true);
   });
 });
 
@@ -86,7 +86,7 @@ describe("смена аккаунта в одной вкладке", () => {
       kind: "blocked",
       reason: "no-user",
     });
-    expect(open("")).toMatchObject({ kind: "blocked", reason: "no-user" }); // перезагрузка не восстанавливает A
+    expect(open("")).toMatchObject({ kind: "blocked", reason: "no-user" });
   });
   it("повреждённая запись вкладки не даёт владельца", () => {
     sessionStorage.setItem(

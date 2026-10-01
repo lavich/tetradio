@@ -43,7 +43,6 @@ try {
 }
 
 const root = createRoot(document.getElementById("root")!);
-/** Запуск без владельца данных: экран вместо приложения, база не открывается, синхронизация не подключается. */
 let stopped = false;
 const stop = (reason: LaunchStop) => {
   stopped = true;

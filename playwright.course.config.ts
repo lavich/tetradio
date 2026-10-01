@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 const port = Number(process.env.PLAYWRIGHT_COURSE_PORT ?? 4174);
 /**
  * Экраны курса из модулей — на демонстрационном курсе (tests/fixtures/course-demo), отдельно от фикстуры механик:
- * у сборок разный контент, поэтому свой порт и свой каталог сборки. Сборка с моком Telegram, как и у механик.
+ * у сборок разный контент, поэтому свой порт и свой каталог сборки.
  */
 export default defineConfig({
   testDir: "tests/e2e-course",

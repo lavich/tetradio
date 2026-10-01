@@ -4,10 +4,7 @@ import ui from "../shared/ui.module.css";
 
 export type LaunchStop = "outside-telegram" | "no-user" | "owner-mismatch";
 
-/**
- * Экран остановленного запуска. Рисуется вместо приложения, до открытия базы: не читает и не пишет
- * пользовательские данные. Вне Telegram — приглашение открыть бота; внутри без владельца — ошибка запуска.
- */
+/** Рисуется вместо приложения до открытия базы: пользовательские данные не читаются и не пишутся. */
 export function LaunchGate({ reason, bot = CONFIGURED_BOT }: { reason: LaunchStop; bot?: string | null }) {
   const outside = reason === "outside-telegram";
   return (

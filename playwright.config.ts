@@ -3,10 +3,8 @@ const port = Number(process.env.PLAYWRIGHT_PORT ?? 4173);
 /**
  * Браузерные проверки идут по production build, как и реальное использование. Механики проверяются на фикстуре
  * контента Tavelori (tests/fixtures/tavelori-content), а не на курсе: он в продукт не входит.
- *
- * Тесты открывают приложение в обычном Chromium, поэтому основная сборка собрана с моком Telegram
- * (`VITE_TELEGRAM_MOCK=1`: вне Telegram — тестовый пользователь 1, база `tetradio-mock-1`). Рядом в `dist/web/`
- * лежит та же сборка без флага — как на GitHub Pages: на ней проверяется экран «Откройте в Telegram».
+ * Сборка — с моком Telegram (`VITE_TELEGRAM_MOCK=1`), т. к. тесты идут в обычном Chromium; в `dist/web/` — та же
+ * сборка без флага, как на GitHub Pages: на ней проверяется экран «Откройте в Telegram».
  */
 export default defineConfig({
   testDir: "tests/e2e",
