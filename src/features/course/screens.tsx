@@ -264,7 +264,6 @@ export function CourseLessonScreen() {
     }
   };
   const result = lesson.kind === "test" ? testResult(lesson.blocks, progress) : null;
-  const heading = lesson.kind === "test" ? "Контрольная модуля" : "Урок модуля";
   const pending = pages.flatMap((page, index) =>
     page.filter((block) => isTask(block) && !progress.get(block.id)?.done).map((block) => ({ block, index })),
   );
@@ -346,18 +345,15 @@ export function CourseLessonScreen() {
       )}
     </>
   );
-  // Заголовок урока — на каждой открытой странице, в развороте — только на левой.
-  const renderPage = (index: number, position: number) => (
+  const renderPage = (index: number) => (
     <article key={index} className={`${css.page} notebook`} aria-label={`Страница ${index + 1} из ${total}`}>
-      <p className={css.meta}>{heading}</p>
-      {position === 0 ? <h1 className={css.title}>{lesson.title}</h1> : null}
       {index < pages.length ? pages[index].map(renderBlock) : summary}
     </article>
   );
   const shown = spread ? [first, first + 1].filter((index) => index < total) : [current];
   const last = shown[shown.length - 1];
   return (
-    <Screen back={lesson.kind === "test" ? "Контрольная" : "Урок"} wide>
+    <Screen back={lesson.title} wide>
       <div className={css.frame}>
         <div
           key={first}
