@@ -66,7 +66,10 @@
   --art-bg: #eef2fa;
   --speak-disabled: #c9ced8;
   --shadow: rgba(0, 0, 0, 0.22);
-  --nav-bg: color-mix(in srgb, var(--background) 96%, transparent);
+  --nav-bg: color-mix(in srgb, var(--card) 86%, transparent);
+  --cloud-shadow: 0 8px 28px rgb(35 38 44 / 0.12), 0 1px 3px rgb(35 38 44 / 0.08);
+  /* Плавающее облачко снизу: высота 60px, отступ 14px от края. */
+  --cloud-space: calc(60px + 14px + var(--inset-bottom));
 }
 /*
  * Telegram: семантические токены Τετράδιο сопоставлены переменным темы клиента с резервными значениями.
@@ -150,11 +153,11 @@
   }
   /*
    * Фокус с клавиатуры не должен прятаться под липкой шапкой и нижней навигацией (WCAG 2.4.11):
-   * прокрутка к элементу оставляет место под обе полосы. Навигация — 60px ссылок и граница 1px.
+   * прокрутка к элементу оставляет место под шапку и облачко снизу.
    */
   html {
     scroll-padding-top: calc(72px + var(--inset-top));
-    scroll-padding-bottom: calc(61px + 12px + var(--inset-bottom));
+    scroll-padding-bottom: calc(var(--cloud-space) + 12px);
   }
   body {
     margin: 0;

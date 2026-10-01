@@ -240,3 +240,17 @@ test("слова урока: нажатие произносит слово ил
   await expect(page).toHaveURL(/\/course\//);
   await expect(words.getByRole("link")).toHaveCount(0);
 });
+
+test("снизу одно облачко: в разделах — меню, в уроке — листание", async ({ page }) => {
+  await start(page);
+  await page.setViewportSize({ width: 1180, height: 820 });
+  const menu = page.getByRole("navigation", { name: "Основные разделы" });
+  const box = (await menu.boundingBox())!;
+  // Облачко, а не полоса на всю ширину: компактное, по центру, с отступом от нижнего края.
+  expect(box.width).toBeLessThan(400);
+  expect(Math.abs(box.x + box.width / 2 - 590)).toBeLessThan(2);
+  expect(box.y + box.height).toBeLessThan(820);
+  await page.goto("/course/m01/m01-1?p=1");
+  await expect(page.getByRole("navigation", { name: "Страницы урока" })).toBeVisible();
+  await expect(menu).toHaveCount(0);
+});

@@ -403,16 +403,25 @@
   }
 }
 .pager {
-  position: sticky;
-  bottom: calc(60px + 8px + var(--inset-bottom));
-  z-index: 1;
+  position: fixed;
+  left: 50%;
+  bottom: calc(14px + var(--inset-bottom));
+  transform: translateX(-50%);
+  z-index: 6;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: calc(var(--cell) * 2) 0 0;
-  padding: 8px 0;
-  background: var(--background);
-  box-shadow: 0 -1px 0 var(--border);
+  gap: 4px;
+  width: min(360px, 100% - 32px);
+  height: 60px;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--cloud-shadow);
+}
+.pager > button {
+  border-radius: 999px;
 }
 .pageCount {
   flex: 1;
