@@ -1,0 +1,11 @@
+id: w028
+greek: επτά
+russian: семь
+ipa: /epˈta/
+note: разг. εφτά
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Η εβδομάδα έχει επτά μέρες."
+    russian: "В неделе семь дней."
+    target: "επτά"

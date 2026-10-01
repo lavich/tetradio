@@ -34,7 +34,7 @@ beforeEach(async () => {
   db = new AppDatabase("tetradio-test");
   await db.open();
 });
-const ALL = ["lesson-1-1", "lesson-1-2", "lesson-1-3", "lesson-1-4"];
+const ALL = ["mech-1", "mech-2", "mech-3", "mech-4"];
 /** Слова установленных уроков: каталог шире, чем набор, который тесты разворачивают в базе. */
 const seedWords = [...new Map(ALL.flatMap((id) => wordsOf(id)).map((word) => [word.id, word])).values()];
 /** Замена старого seed: все четыре урока устанавливаются из пакетов в памяти. */
@@ -298,7 +298,7 @@ describe("свои наборы", () => {
 describe("импорт", () => {
   it("связывает известное слово с набором и не создаёт дубликат", async () => {
     await ensureSeed(db);
-    const rows = parseImport("το σπίτι\nдом\nη ομπρέλα\nзонт").rows;
+    const rows = parseImport("ο φίλος\nдруг\nη ομπρέλα\nзонт").rows;
     const outcome = await commitImport({ rows, lessonId: null, lessonTitle: "Урок 1.5" }, db);
     expect(outcome).toMatchObject({ added: 1, linked: 1 });
     expect(await db.words.count()).toBe(seedWords.length + 1);
@@ -314,11 +314,11 @@ describe("импорт", () => {
   });
   it("меняет перевод без потери истории и сбрасывает проверку фонетики после правки греческого", async () => {
     await ensureSeed(db);
-    const word = (await db.words.get("w12-16"))!;
+    const word = (await db.words.get("w034"))!;
     await saveWord({ ...word, russian: "жилище" }, db);
-    expect((await db.words.get("w12-16"))!.verified).toBe(true);
+    expect((await db.words.get("w034"))!.verified).toBe(true);
     await saveWord({ ...word, greek: "το σπιτάκι" }, db);
-    expect((await db.words.get("w12-16"))!.verified).toBe(false);
+    expect((await db.words.get("w034"))!.verified).toBe(false);
   });
 });
 
@@ -334,23 +334,23 @@ describe("расписание занятий", () => {
     await ensureSeed(db);
     await db.settings.put(legacy);
     expect((await source().settings()).sessionSize).toBe(20);
-    expect((await db.courses.get("leeke"))!.schedule).toEqual({ startDate: null, weekdays: [], lessonHour: 12 });
+    expect((await db.courses.get("mechanics"))!.schedule).toEqual({ startDate: null, weekdays: [], lessonHour: 12 });
   });
   it("снимок даёт урокам 1.3 и 1.4 дни расписания после 1.2, а план считает сроки по ним", async () => {
     await ensureSeed(db);
-    await db.courses.update("leeke", { schedule: monThu }); // как saveSettings раньше: без закрепления прошедших
+    await db.courses.update("mechanics", { schedule: monThu }); // как saveSettings раньше: без закрепления прошедших
     const byId = Object.fromEntries((await loadLessons(db)).map((l) => [l.id, l]));
     // Поставка не несёт дат: все четыре урока раскладывает расписание курса по порядку номеров.
-    expect(byId["lesson-1-1"]).toMatchObject({ targetDate: "2026-09-14", dateSource: "schedule", status: "upcoming" });
-    expect(byId["lesson-1-2"]).toMatchObject({ targetDate: "2026-09-17", dateSource: "schedule" });
-    expect(byId["lesson-1-3"]).toMatchObject({ targetDate: "2026-09-21", dateSource: "schedule" });
-    expect(byId["lesson-1-4"]).toMatchObject({ targetDate: "2026-09-24", dateSource: "schedule" });
-    expect((await db.lessons.get("lesson-1-3"))!.targetDate).toBeNull();
+    expect(byId["mech-1"]).toMatchObject({ targetDate: "2026-09-14", dateSource: "schedule", status: "upcoming" });
+    expect(byId["mech-2"]).toMatchObject({ targetDate: "2026-09-17", dateSource: "schedule" });
+    expect(byId["mech-3"]).toMatchObject({ targetDate: "2026-09-21", dateSource: "schedule" });
+    expect(byId["mech-4"]).toMatchObject({ targetDate: "2026-09-24", dateSource: "schedule" });
+    expect((await db.lessons.get("mech-3"))!.targetDate).toBeNull();
     const plan = await makePlan(source(), new Date("2026-09-16T09:00:00Z"));
     expect(plan.deadlines.map((d) => [d.lessonId, d.daysLeft])).toEqual([
-      ["lesson-1-2", 1],
-      ["lesson-1-3", 5],
-      ["lesson-1-4", 8],
+      ["mech-2", 1],
+      ["mech-3", 5],
+      ["mech-4", 8],
     ]);
   });
 });
@@ -359,18 +359,18 @@ describe("операции над уроками при расписании", (
   const monThu = { startDate: "2026-09-14", weekdays: [1, 4], lessonHour: 12 };
   const prepare = async () => {
     await ensureSeed(db);
-    await db.courses.update("leeke", { schedule: monThu });
+    await db.courses.update("mechanics", { schedule: monThu });
   };
   const raw = (id: string) => db.lessons.get(id).then((l) => l!);
   const shown = scheduled;
   it("правка названия урока по расписанию не записывает дату в базу", async () => {
     await prepare();
-    await updateLesson("lesson-1-3", { title: "Урок 1.3 (мебель)" }, db);
-    expect(await raw("lesson-1-3")).toMatchObject({ title: "Урок 1.3 (мебель)", targetDate: null });
-    expect((await shown("lesson-1-3")).targetDate).toBe("2026-09-21");
+    await updateLesson("mech-3", { title: "Урок 1.3 (мебель)" }, db);
+    expect(await raw("mech-3")).toMatchObject({ title: "Урок 1.3 (мебель)", targetDate: null });
+    expect((await shown("mech-3")).targetDate).toBe("2026-09-21");
   });
   it("новый набор живёт по расписанию своего курса, а не соседнего", async () => {
-    await prepare(); // расписание задано курсу leeke
+    await prepare(); // расписание задано курсу mechanics
     const created = await createLesson("Урок 2.1", db);
     expect(created.courseId).toBe("my");
     expect(created.targetDate).toBeNull();
@@ -381,44 +381,44 @@ describe("операции над уроками при расписании", (
   it("закрепляет прошедший урок один раз и не трогает его при смене дней недели", async () => {
     await prepare();
     expect(await settleLessons(new Date("2026-09-22T06:00:00Z"), db)).toBe(3); // 1.1, 1.2 и 1.3
-    expect(await raw("lesson-1-1")).toMatchObject({ targetDate: "2026-09-14", status: "completed" });
-    expect(await raw("lesson-1-2")).toMatchObject({ targetDate: "2026-09-17", status: "completed" });
-    expect(await raw("lesson-1-3")).toMatchObject({ targetDate: "2026-09-21", status: "completed" });
-    expect(await raw("lesson-1-4")).toMatchObject({ targetDate: null, status: "upcoming" });
+    expect(await raw("mech-1")).toMatchObject({ targetDate: "2026-09-14", status: "completed" });
+    expect(await raw("mech-2")).toMatchObject({ targetDate: "2026-09-17", status: "completed" });
+    expect(await raw("mech-3")).toMatchObject({ targetDate: "2026-09-21", status: "completed" });
+    expect(await raw("mech-4")).toMatchObject({ targetDate: null, status: "upcoming" });
     const before = await db.lessons.toArray();
     expect(await settleLessons(new Date("2026-09-22T06:00:00Z"), db)).toBe(0);
     expect(await db.lessons.toArray()).toEqual(before);
     await saveCourseTempo(
-      "leeke",
+      "mechanics",
       { schedule: { startDate: "2026-09-14", weekdays: [2, 5], lessonHour: 12 } },
       new Date("2026-09-22T06:00:00Z"),
       db,
     );
-    expect(await shown("lesson-1-3")).toMatchObject({
+    expect(await shown("mech-3")).toMatchObject({
       targetDate: "2026-09-21",
       status: "completed",
       dateSource: "manual",
     });
-    expect((await shown("lesson-1-4")).targetDate).toBe("2026-09-22");
+    expect((await shown("mech-4")).targetDate).toBe("2026-09-22");
   });
   it("закрепляет урок в его час занятия, а не на следующие сутки", async () => {
-    await prepare(); // курс leeke: понедельник и четверг, час занятия 12
+    await prepare(); // курс mechanics: понедельник и четверг, час занятия 12
     // 09:00 в Asia/Nicosia: занятие 1.3 сегодня, но его час ещё не настал.
     expect(await settleLessons(new Date("2026-09-21T06:00:00Z"), db)).toBe(2); // 1.1 и 1.2
-    expect(await raw("lesson-1-3")).toMatchObject({ targetDate: null, status: "upcoming" });
+    expect(await raw("mech-3")).toMatchObject({ targetDate: null, status: "upcoming" });
     // 12:00 в Asia/Nicosia: подготовка к 1.3 окончена.
     expect(await settleLessons(new Date("2026-09-21T09:00:00Z"), db)).toBe(1);
-    expect(await raw("lesson-1-3")).toMatchObject({ targetDate: "2026-09-21", status: "completed" });
-    expect(await raw("lesson-1-4")).toMatchObject({ targetDate: null, status: "upcoming" });
+    expect(await raw("mech-3")).toMatchObject({ targetDate: "2026-09-21", status: "completed" });
+    expect(await raw("mech-4")).toMatchObject({ targetDate: null, status: "upcoming" });
     expect(await settleLessons(new Date("2026-09-21T09:00:00Z"), db)).toBe(0);
   });
   it("вечерний час занятия отодвигает закрепление на тот же вечер", async () => {
     await ensureSeed(db);
-    await db.courses.update("leeke", { schedule: { ...monThu, lessonHour: 19 } });
+    await db.courses.update("mechanics", { schedule: { ...monThu, lessonHour: 19 } });
     expect(await settleLessons(new Date("2026-09-21T09:00:00Z"), db)).toBe(2); // 1.1 и 1.2, но не 1.3
-    expect(await raw("lesson-1-3")).toMatchObject({ status: "upcoming" });
+    expect(await raw("mech-3")).toMatchObject({ status: "upcoming" });
     expect(await settleLessons(new Date("2026-09-21T16:00:00Z"), db)).toBe(1);
-    expect(await raw("lesson-1-3")).toMatchObject({ targetDate: "2026-09-21", status: "completed" });
+    expect(await raw("mech-3")).toMatchObject({ targetDate: "2026-09-21", status: "completed" });
   });
   it("закрепляет ручную дату в прошлом у предстоящего урока и не трогает будущие", async () => {
     await prepare();
@@ -426,24 +426,24 @@ describe("операции над уроками при расписании", (
     await updateLesson(past.id, { targetDate: "2026-09-10" }, db);
     expect(await settleLessons(new Date("2026-09-16T06:00:00Z"), db)).toBe(2); // «Повторение» и 1.1
     expect(await raw(past.id)).toMatchObject({ targetDate: "2026-09-10", status: "completed" });
-    expect(await raw("lesson-1-2")).toMatchObject({ status: "upcoming" });
+    expect(await raw("mech-2")).toMatchObject({ status: "upcoming" });
   });
   it("первое занятие в прошлом: сохранение расписания сразу закрепляет прошедшие уроки", async () => {
     await ensureSeed(db);
-    await updateLesson("lesson-1-2", { targetDate: null }, db);
+    await updateLesson("mech-2", { targetDate: null }, db);
     expect(
       await saveCourseTempo(
-        "leeke",
+        "mechanics",
         { schedule: { startDate: "2026-09-01", weekdays: [2, 5], lessonHour: 12 } },
         new Date("2026-09-16T06:00:00Z"),
         db,
       ),
     ).toBe(4);
-    expect(await raw("lesson-1-1")).toMatchObject({ targetDate: "2026-09-01", status: "completed" });
-    expect(await raw("lesson-1-2")).toMatchObject({ targetDate: "2026-09-04", status: "completed" });
-    expect(await raw("lesson-1-3")).toMatchObject({ targetDate: "2026-09-08", status: "completed" });
-    expect(await raw("lesson-1-4")).toMatchObject({ targetDate: "2026-09-11", status: "completed" });
-    expect((await db.courses.get("leeke"))!.schedule).toEqual({
+    expect(await raw("mech-1")).toMatchObject({ targetDate: "2026-09-01", status: "completed" });
+    expect(await raw("mech-2")).toMatchObject({ targetDate: "2026-09-04", status: "completed" });
+    expect(await raw("mech-3")).toMatchObject({ targetDate: "2026-09-08", status: "completed" });
+    expect(await raw("mech-4")).toMatchObject({ targetDate: "2026-09-11", status: "completed" });
+    expect((await db.courses.get("mechanics"))!.schedule).toEqual({
       startDate: "2026-09-01",
       weekdays: [2, 5],
       lessonHour: 12,
@@ -456,18 +456,18 @@ describe("операции над уроками при расписании", (
   });
   it("отметка проведённым до даты закрепляет дату и не сдвигает следующие уроки", async () => {
     await prepare();
-    const lesson = await shown("lesson-1-3");
+    const lesson = await shown("mech-3");
     await updateLesson(lesson.id, { status: "completed", targetDate: lesson.targetDate }, db);
-    expect(await raw("lesson-1-3")).toMatchObject({ targetDate: "2026-09-21", status: "completed" });
-    expect((await shown("lesson-1-4")).targetDate).toBe("2026-09-24");
+    expect(await raw("mech-3")).toMatchObject({ targetDate: "2026-09-21", status: "completed" });
+    expect((await shown("mech-4")).targetDate).toBe("2026-09-24");
   });
   it("возврат в расписание очищает дату и снова даёт день по порядку", async () => {
     await prepare();
-    await updateLesson("lesson-1-3", { targetDate: "2026-09-28" }, db);
-    expect(await shown("lesson-1-4")).toMatchObject({ targetDate: "2026-10-01" });
-    await updateLesson("lesson-1-3", { targetDate: null }, db);
-    expect(await shown("lesson-1-3")).toMatchObject({ targetDate: "2026-09-21", dateSource: "schedule" });
-    expect((await shown("lesson-1-4")).targetDate).toBe("2026-09-24");
+    await updateLesson("mech-3", { targetDate: "2026-09-28" }, db);
+    expect(await shown("mech-4")).toMatchObject({ targetDate: "2026-10-01" });
+    await updateLesson("mech-3", { targetDate: null }, db);
+    expect(await shown("mech-3")).toMatchObject({ targetDate: "2026-09-21", dateSource: "schedule" });
+    expect((await shown("mech-4")).targetDate).toBe("2026-09-24");
   });
 });
 
@@ -476,12 +476,12 @@ describe("запись ответа на смешанном уроке", () => {
   const K = (kind: "word" | "phrase", id: string) => unitKey({ kind, id });
   const prepare = async (
     refs = [
-      { kind: "phrase" as const, id: "p-vouno" },
-      { kind: "word" as const, id: "w11-27" },
+      { kind: "phrase" as const, id: "p-xora" },
+      { kind: "word" as const, id: "w070" },
       { kind: "phrase" as const, id: "p-grafo" },
       { kind: "phrase" as const, id: "p-paidi" },
-      { kind: "phrase" as const, id: "p-anoixi" },
-      { kind: "phrase" as const, id: "p-ilios" },
+      { kind: "phrase" as const, id: "p-lemeso" },
+      { kind: "phrase" as const, id: "p-oikogeneia" },
     ],
   ) => {
     await installMixed(db);
@@ -509,7 +509,7 @@ describe("запись ответа на смешанном уроке", () => {
     });
   it("ошибка во фразе добавляет ровно одну дополнительную попытку в режиме тренировки", async () => {
     const { session, item } = await prepare();
-    const target = item("p-vouno");
+    const target = item("p-xora");
     await answer(session, target, { correct: false, answer: "διαβάζω" });
     const retries = (await db.sessions.get(session.id))!.items.filter((entry) => entry.retryOf === target.id);
     expect(retries).toHaveLength(1);
@@ -517,24 +517,24 @@ describe("запись ответа на смешанном уроке", () => {
   });
   it("слово и фразы независимы; ошибка во фразе не трогает слово и соседние фразы", async () => {
     const { session, item } = await prepare();
-    expect(item("p-vouno").card.kind).toBe("phrase");
-    await answer(session, item("w11-27"));
-    const word = await db.cardStates.get(K("word", "w11-27"));
+    expect(item("p-xora").card.kind).toBe("phrase");
+    await answer(session, item("w070"));
+    const word = await db.cardStates.get(K("word", "w070"));
     expect(word!.version).toBe(1);
-    const event = await answer(session, item("p-vouno"), { correct: false, answer: "κάτι" });
+    const event = await answer(session, item("p-xora"), { correct: false, answer: "κάτι" });
     expect(event.rating).toBe(Rating.Again);
     expect(event).toMatchObject({
-      ref: { kind: "phrase", id: "p-vouno" },
-      unitKey: K("phrase", "p-vouno"),
-      snapshot: { text: "Το βουνό είναι ψηλό.", translation: "Гора высокая." },
+      ref: { kind: "phrase", id: "p-xora" },
+      unitKey: K("phrase", "p-xora"),
+      snapshot: { text: "Η Κύπρος είναι μια μικρή χώρα.", translation: "Кипр — маленькая страна." },
     });
-    expect(await db.cardStates.get(K("word", "w11-27"))).toEqual(word); // слово не изменилось
+    expect(await db.cardStates.get(K("word", "w070"))).toEqual(word); // слово не изменилось
     expect(await db.cardStates.get(K("phrase", "p-grafo"))).toBeUndefined();
     const good = await answer(session, item("p-grafo"), { responseTimeMs: 9000 }); // неспешный верный ответ — Good
     expect(good.rating).toBe(Rating.Good);
     expect(good.snapshot).toEqual({ text: "Γράφω ένα γράμμα.", translation: "Я пишу письмо." });
     // Again и Good дают разные интервалы; у каждой фразы своё состояние.
-    const again = (await db.cardStates.get(K("phrase", "p-vouno")))!,
+    const again = (await db.cardStates.get(K("phrase", "p-xora")))!,
       goodState = (await db.cardStates.get(K("phrase", "p-grafo")))!;
     expect(new Date(goodState.card.due).getTime()).toBeGreaterThan(new Date(again.card.due).getTime());
     expect(again.version).toBe(1);
@@ -544,17 +544,17 @@ describe("запись ответа на смешанном уроке", () => {
     const { session, item } = await prepare();
     await answer(session, item("p-paidi"));
     expect(await db.cardStates.get(K("phrase", "p-paidi"))).toBeTruthy();
-    expect(await db.cardStates.get(K("phrase", "p-anoixi"))).toBeUndefined();
+    expect(await db.cardStates.get(K("phrase", "p-lemeso"))).toBeUndefined();
     const first = (await db.cardStates.get(K("phrase", "p-paidi")))!;
-    await answer(session, item("p-anoixi"), { correct: false });
+    await answer(session, item("p-lemeso"), { correct: false });
     expect(await db.cardStates.get(K("phrase", "p-paidi"))).toEqual(first); // ответ на вторую карточку не тронул первую
-    const second = (await db.cardStates.get(K("phrase", "p-anoixi")))!;
+    const second = (await db.cardStates.get(K("phrase", "p-lemeso")))!;
     expect(second.unitKey).not.toBe(first.unitKey);
     expect(new Date(second.card.due).getTime()).toBeLessThan(new Date(first.card.due).getTime());
   });
   it("двойное нажатие и вторая вкладка: одно событие, не более одной дополнительной попытки, конфликт версии", async () => {
     const { session, item } = await prepare();
-    const target = item("p-vouno");
+    const target = item("p-xora");
     await Promise.all([answer(session, target, { correct: false }), answer(session, target, { correct: false })]);
     expect(await db.events.count()).toBe(1);
     const stored = (await db.sessions.get(session.id))!;
@@ -563,17 +563,17 @@ describe("запись ответа на смешанном уроке", () => {
     const stale = { ...target, id: `${target.id}-copy` };
     await expect(answer(session, stale)).rejects.toBeInstanceOf(ConflictError);
     expect(await db.events.count()).toBe(1);
-    expect((await db.cardStates.get(K("phrase", "p-vouno")))!.version).toBe(1);
+    expect((await db.cardStates.get(K("phrase", "p-xora")))!.version).toBe(1);
   });
   it("дополнительная и ручная тренировки сохраняют результат без сдвига расписания", async () => {
     const { session, item } = await prepare();
-    await answer(session, item("p-vouno"), { correct: false });
-    const before = await db.cardStates.get(K("phrase", "p-vouno"));
+    await answer(session, item("p-xora"), { correct: false });
+    const before = await db.cardStates.get(K("phrase", "p-xora"));
     const stored = (await db.sessions.get(session.id))!;
-    const retry = stored.items.find((entry) => entry.retryOf === item("p-vouno").id)!;
+    const retry = stored.items.find((entry) => entry.retryOf === item("p-xora").id)!;
     expect(retry).toMatchObject({ mode: "practice", isNew: false, expectedVersion: 1 });
     await answer(stored, retry, { correct: false });
-    expect(await db.cardStates.get(K("phrase", "p-vouno"))).toEqual(before);
+    expect(await db.cardStates.get(K("phrase", "p-xora"))).toEqual(before);
     expect((await db.sessions.get(session.id))!.items).toHaveLength(stored.items.length); // второй попытки нет
     const practice = await makeSession({
       source: source(),
@@ -593,17 +593,17 @@ describe("запись ответа на смешанном уроке", () => {
       throw new Error("storage failed");
     };
     db.sessions.hook("updating", fail);
-    await expect(answer(session, item("p-vouno"), { correct: false })).rejects.toThrow("storage failed");
+    await expect(answer(session, item("p-xora"), { correct: false })).rejects.toThrow("storage failed");
     db.sessions.hook("updating").unsubscribe(fail);
     expect(await db.events.count()).toBe(0);
     expect(await db.cardStates.count()).toBe(0);
     expect(await db.sessions.get(session.id)).toEqual(session);
-    await answer(session, item("p-vouno"), { correct: false });
+    await answer(session, item("p-xora"), { correct: false });
     expect(await db.events.count()).toBe(1);
   });
   it("исправление пакета во время занятия: сессия проверяет снимок, новая сессия — обновлённый пакет", async () => {
     const { session, item } = await prepare([
-      { kind: "phrase", id: "p-vouno" },
+      { kind: "phrase", id: "p-xora" },
       { kind: "phrase", id: "p-paidi" },
     ]);
     const pack = mixedPackage();
@@ -616,17 +616,17 @@ describe("запись ответа на смешанном уроке", () => {
       ...pack,
       version: `${pack.version}-fix`,
       phrases: pack.phrases.map((p) =>
-        p.id === "p-vouno" ? bump(p, { text: "Το βουνό είναι πολύ ψηλό.", note: "Исправлено" }) : p,
+        p.id === "p-xora" ? bump(p, { text: "Η Κύπρος είναι μια πολύ μικρή χώρα.", note: "Исправлено" }) : p,
       ),
     };
     await applyPackage(next, db);
     // Активная сессия хранит прежний текст: проверка идёт по снимку задания.
     const live = (await db.sessions.get(session.id))!;
-    const vouno = live.items.find((entry) => entry.ref.id === "p-vouno")!;
-    expect(vouno.card.kind === "phrase" && vouno.card.phrase.text).toBe("Το βουνό είναι ψηλό.");
-    expect(checkTextAnswer("το βουνο ειναι ψηλο.", ["Το βουνό είναι ψηλό."]).status).toBe("almost");
-    const event = await answer(live, vouno, { correct: false, answer: "Το βουνό είναι πολύ ψηλό." });
-    expect(event.snapshot).toEqual({ text: "Το βουνό είναι ψηλό.", translation: "Гора высокая." });
+    const xora = live.items.find((entry) => entry.ref.id === "p-xora")!;
+    expect(xora.card.kind === "phrase" && xora.card.phrase.text).toBe("Η Κύπρος είναι μια μικρή χώρα.");
+    expect(checkTextAnswer("η κυπρος ειναι μια μικρη χωρα.", ["Η Κύπρος είναι μια μικρή χώρα."]).status).toBe("almost");
+    const event = await answer(live, xora, { correct: false, answer: "Η Κύπρος είναι μια πολύ μικρή χώρα." });
+    expect(event.snapshot).toEqual({ text: "Η Κύπρος είναι μια μικρή χώρα.", translation: "Кипр — маленькая страна." });
     // Новая сессия читает исправленный пакет: текст новый, состояние и история прежние.
     const fresh = await makeSession({
       source: source(),
@@ -634,23 +634,23 @@ describe("запись ответа на смешанном уроке", () => {
       random: () => 0.1,
       mode: "practice",
       refs: [
-        { kind: "phrase", id: "p-vouno" },
+        { kind: "phrase", id: "p-xora" },
         { kind: "phrase", id: "p-paidi" },
       ],
     });
-    const updated = fresh.items.find((entry) => entry.ref.id === "p-vouno")!.card as { phrase: { text: string } };
-    expect(updated.phrase.text).toBe("Το βουνό είναι πολύ ψηλό.");
-    expect(fresh.items.find((entry) => entry.ref.id === "p-vouno")!.expectedVersion).toBe(1);
+    const updated = fresh.items.find((entry) => entry.ref.id === "p-xora")!.card as { phrase: { text: string } };
+    expect(updated.phrase.text).toBe("Η Κύπρος είναι μια πολύ μικρή χώρα.");
+    expect(fresh.items.find((entry) => entry.ref.id === "p-xora")!.expectedVersion).toBe(1);
     expect(await db.events.count()).toBe(1);
-    expect(item("p-vouno").expectedVersion).toBe(0);
+    expect(item("p-xora").expectedVersion).toBe(0);
   });
   it("знакомство сохраняется по ключу карточки любого вида без события и без сдвига интервала", async () => {
     const { session, item } = await prepare();
-    await markIntroduced(session.id, K("phrase", "p-vouno"), 3000, db);
+    await markIntroduced(session.id, K("phrase", "p-xora"), 3000, db);
     await markIntroduced(session.id, K("phrase", "p-grafo"), 4000, db);
-    await markIntroduced(session.id, K("phrase", "p-vouno"), 5000, db);
+    await markIntroduced(session.id, K("phrase", "p-xora"), 5000, db);
     expect((await db.sessions.get(session.id))!.introducedKeys).toEqual([
-      K("phrase", "p-vouno"),
+      K("phrase", "p-xora"),
       K("phrase", "p-grafo"),
     ]);
     expect(await db.events.count()).toBe(0);

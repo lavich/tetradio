@@ -17,7 +17,7 @@ test("данные не переходят между origin сами; пере�
   const page = await old.newPage();
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-2"]);
+  await installLessons(page, ["mech-2"]);
   await page.goto("/words");
   // Подписанный курс догружается фоном: копию снимаем с устоявшегося словаря и с ним же сверяем перенос.
   await expect(page.getByTestId("word-count")).toHaveText("Показано 50 слов, есть ещё");

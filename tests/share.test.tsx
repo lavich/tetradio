@@ -19,7 +19,7 @@ import { content, installLessons, memoryFetcher } from "./helpers/content";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
-const word = { id: "w34-03", greek: "η κατσαρόλα", russian: "кастрюля" };
+const word = { id: "w093", greek: "ο παππούς", russian: "дедушка" };
 const nav = navigator as { share?: unknown; clipboard?: unknown };
 let copied: string[];
 beforeEach(() => {
@@ -44,15 +44,15 @@ describe("отправка ссылки на слово", () => {
     await shareWord(word, "tetradio_dev", app);
     const target = new URL(opened[0]);
     expect(`${target.origin}${target.pathname}`).toBe("https://t.me/share/url");
-    expect(target.searchParams.get("url")).toBe("https://t.me/tetradio_dev?startapp=w_w34-03");
-    expect(target.searchParams.get("text")).toBe("η κατσαρόλα — кастрюля");
+    expect(target.searchParams.get("url")).toBe("https://t.me/tetradio_dev?startapp=w_w093");
+    expect(target.searchParams.get("text")).toBe("ο παππούς — дедушка");
     expect(copied).toEqual([]);
   });
   it("в браузере открывает системное меню, отмена ничего не копирует", async () => {
     const shared: unknown[] = [];
     nav.share = async (data: unknown) => void shared.push(data);
     await shareWord(word, "tetradio_local", null);
-    expect(shared).toEqual([{ url: "https://t.me/tetradio_local?startapp=w_w34-03", text: "η κατσαρόλα — кастрюля" }]);
+    expect(shared).toEqual([{ url: "https://t.me/tetradio_local?startapp=w_w093", text: "ο παππούς — дедушка" }]);
     nav.share = async () => {
       throw Object.assign(new Error("cancel"), { name: "AbortError" });
     };
@@ -66,7 +66,7 @@ describe("отправка ссылки на слово", () => {
       throw Object.assign(new Error("denied"), { name: "NotAllowedError" });
     };
     await shareWord(word, "tetradio_local", null);
-    expect(copied).toEqual([wordLink("w34-03", "tetradio_local"), wordLink("w34-03", "tetradio_local")]);
+    expect(copied).toEqual([wordLink("w093", "tetradio_local"), wordLink("w093", "tetradio_local")]);
     expect(toast.success).toHaveBeenCalledWith("Ссылка скопирована");
   });
 });
@@ -80,20 +80,20 @@ describe("бот ссылки", () => {
   it("в браузере без ?bot= — основной бот", async () => {
     open("/");
     await shareWord(word, undefined, null);
-    expect(copied).toEqual(["https://t.me/tetradio_local?startapp=w_w34-03"]);
+    expect(copied).toEqual(["https://t.me/tetradio_local?startapp=w_w093"]);
   });
   it("с ?bot=tetradio_dev — dev-бот, и после перехода, и после перезагрузки", async () => {
     open("/?bot=tetradio_dev");
     await shareWord(word, undefined, null);
-    window.history.pushState(null, "", "/words/w34-03"); // переход маршрутизатора убирает ?bot=
+    window.history.pushState(null, "", "/words/w093"); // переход маршрутизатора убирает ?bot=
     await shareWord(word, undefined, null);
-    open("/words/w34-03"); // перезагрузка
+    open("/words/w093"); // перезагрузка
     await shareWord(word, undefined, null);
-    const tg = `#tgWebAppPlatform=ios&tgWebAppData=${encodeURIComponent("auth_date=1&hash=a&start_param=w_w34-03")}`;
+    const tg = `#tgWebAppPlatform=ios&tgWebAppData=${encodeURIComponent("auth_date=1&hash=a&start_param=w_w093")}`;
     open(`/?bot=tetradio_dev${tg}`);
-    open("/share/word/w34-03");
+    open("/share/word/w093");
     await shareWord(word, undefined, null);
-    expect(copied).toEqual(Array(4).fill("https://t.me/tetradio_dev?startapp=w_w34-03"));
+    expect(copied).toEqual(Array(4).fill("https://t.me/tetradio_dev?startapp=w_w093"));
   });
 });
 
@@ -130,40 +130,40 @@ describe("кнопка «Поделиться» на экране слова", (
   }
 
   it("есть у слова курса", async () => {
-    await installLessons(db, ["lesson-1-4"]);
-    await mount("w34-03");
+    await installLessons(db, ["mech-4"]);
+    await mount("w093");
     await until(() => !!button());
   });
   it("нет у своего слова и у удалённого слова курса", async () => {
-    await installLessons(db, ["lesson-1-4"]);
-    await saveWord({ ...(await db.words.get("w34-03"))!, id: "own-1", revision: undefined, greek: "το δικό μου" });
-    await db.words.update("w34-03", { deletedAt: "2026-01-01T00:00:00.000Z" });
+    await installLessons(db, ["mech-4"]);
+    await saveWord({ ...(await db.words.get("w093"))!, id: "own-1", revision: undefined, greek: "το δικό μου" });
+    await db.words.update("w093", { deletedAt: "2026-01-01T00:00:00.000Z" });
     await mount("own-1");
     await until(() => !!edit());
     expect(button()).toBeNull();
     act(() => root!.unmount());
-    await mount("w34-03");
+    await mount("w093");
     await until(() => !!edit());
     expect(button()).toBeNull();
   });
   it("отправляет слово в версии курса, без правки пользователя", async () => {
-    await installLessons(db, ["lesson-1-4"]);
-    await saveWord({ ...(await db.words.get("w34-03"))!, russian: "моя кастрюлька" });
+    await installLessons(db, ["mech-4"]);
+    await saveWord({ ...(await db.words.get("w093"))!, russian: "мой дедуля" });
     const shared: { text?: string }[] = [];
     nav.share = async (data: { text?: string }) => void shared.push(data);
-    await mount("w34-03");
+    await mount("w093");
     await until(() => !!button());
     await act(async () => (button() as HTMLElement).click());
     await until(() => shared.length === 1);
-    expect(shared[0].text).toBe("η κατσαρόλα — кастрюля");
+    expect(shared[0].text).toBe("ο παππούς — дедушка");
   });
   it("появляется без перемонтажа, когда каталог с индексом слов записан", async () => {
     const old = {
       ...content.catalog,
       lessons: content.catalog.lessons.map(({ wordIds: _w, ...entry }) => entry),
     };
-    await installLessons(db, ["lesson-1-4"], memoryFetcher(content, { "content/catalog.json": old }));
-    await mount("w34-03");
+    await installLessons(db, ["mech-4"], memoryFetcher(content, { "content/catalog.json": old }));
+    await mount("w093");
     await until(() => !!edit());
     expect(button()).toBeNull();
     await act(async () => {

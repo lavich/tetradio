@@ -15,7 +15,7 @@ beforeEach(async () => {
   await new AppDatabase("tetradio-tg-ui").delete();
   db = new AppDatabase("tetradio-tg-ui");
   await db.open();
-  await installLessons(db, ["lesson-1-1"]);
+  await installLessons(db, ["mech-1"]);
 });
 
 describe("жизненный цикл ответа", () => {
@@ -143,7 +143,7 @@ describe("передача файла копии", () => {
     const telegram = new AppDatabase("tetradio-tg-tetradio_local-77");
     await telegram.delete();
     await telegram.open();
-    await installLessons(telegram, ["lesson-1-1"]);
+    await installLessons(telegram, ["mech-1"]);
     await writeMeta(telegram, META.device, "device-a");
     await writeMeta(telegram, META.dirty, "1");
     const copy = await exportFull(telegram);

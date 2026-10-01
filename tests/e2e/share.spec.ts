@@ -34,15 +34,15 @@ const stored = (page: import("@playwright/test").Page) =>
 
 test.describe("ссылка на слово", () => {
   test("на чистой базе показывает карточку из пакета и ничего не сохраняет", async ({ page }) => {
-    await page.goto("/share/word/w34-03");
-    await expect(page.getByText("η κατσαρόλα", { exact: true }).first()).toBeVisible();
-    await expect(page.getByText("кастрюля", { exact: true })).toBeVisible();
+    await page.goto("/share/word/w093");
+    await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("дедушка", { exact: true })).toBeVisible();
     await expect(page.getByTestId("word-art")).toBeVisible();
     await expect(page.getByTestId("shared-lesson")).toHaveText(/^Слово из урока 1\.4/);
     await expect(page.locator("main a[href*='/lessons']")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Потренировать слово" })).toHaveCount(0);
     await page.getByTestId("shared-lesson").click();
-    await expect(page).toHaveURL(/\/share\/word\/w34-03$/);
+    await expect(page).toHaveURL(/\/share\/word\/w093$/);
     expect(await stored(page)).toEqual({
       lessons: 0,
       words: 0,

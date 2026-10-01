@@ -1,0 +1,10 @@
+id: w026
+greek: πέντε
+russian: пять
+ipa: /ˈpende/
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Είμαι τριάντα πέντε χρονών."
+    russian: "Мне тридцать пять лет."
+    target: "πέντε"

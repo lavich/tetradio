@@ -7,7 +7,7 @@ import { dativeWeekday, dayMonth } from "../../src/shared/format";
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-1", "lesson-1-2", "lesson-1-3", "lesson-1-4"]);
+  await installLessons(page, ["mech-1", "mech-2", "mech-3", "mech-4"]);
 });
 
 test("оболочка открывается, разделы доступны с клавиатуры", async ({ page }) => {
@@ -31,11 +31,11 @@ test("хвост пройденного урока виден на «Сегод�
   // Любой более поздний урок: слово 1.1 может повториться в любом из следующих наборов курса.
   const upcoming = new Set(
     Object.entries(cards)
-      .filter(([id]) => id !== "lesson-1-1")
+      .filter(([id]) => id !== "mech-1")
       .flatMap(([, keys]) => keys),
   );
-  const tail = cards["lesson-1-1"].filter((key) => !upcoming.has(key)).length;
-  expect(tail).toBeLessThan(cards["lesson-1-1"].length);
+  const tail = cards["mech-1"].filter((key) => !upcoming.has(key)).length;
+  expect(tail).toBeLessThan(cards["mech-1"].length);
   await expect(page.getByTestId("backlog")).toContainText(String(tail));
   await expect(page.getByTestId("backlog")).toContainText("из 1 занятия");
   await page.getByRole("button", { name: "Начать занятие" }).click();
@@ -62,7 +62,7 @@ test("хвост пройденного урока виден на «Сегод�
       const own = new Set(links.filter((link) => link.lessonId === lessonId).map((link) => link.unitKey));
       return session.items.filter((item) => own.has(item.unitKey)).length;
     };
-    return { past: count("lesson-1-1"), next: count("lesson-1-2") };
+    return { past: count("mech-1"), next: count("mech-2") };
   });
   expect(counts.next).toBeGreaterThan(0);
   expect(counts.past).toBe(0);
@@ -70,11 +70,11 @@ test("хвост пройденного урока виден на «Сегод�
 
 test("исходные уроки, карточка слова и ручная тренировка", async ({ page }) => {
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
-  await page.getByRole("searchbox").fill("σπίτι");
-  await page.getByRole("link", { name: /το σπίτι/ }).click();
-  await expect(page.getByText("/to ˈspiti/")).toBeVisible();
+  await page.getByRole("searchbox").fill("φίλος");
+  await page.getByRole("link", { name: /ο φίλος/ }).click();
+  await expect(page.getByText("/o ˈfilos/")).toBeVisible();
   await expect(page.getByText("Ударение на первый слог")).toBeVisible();
-  await expect(page.getByText("Το σπίτι μας είναι μεγάλο.")).toBeVisible();
+  await expect(page.getByText("Ο φίλος μας είναι παντρεμένος.")).toBeVisible();
   await expect(page.getByTestId("word-art")).toBeVisible();
   await page.getByRole("button", { name: "Потренировать слово" }).click();
   await expect(page.getByText("Новое слово")).toBeVisible();
@@ -83,10 +83,10 @@ test("исходные уроки, карточка слова и ручная �
 test("занятие: знакомство, четыре упражнения, результат и продолжение после перезапуска", async ({ page }) => {
   await useSchedule(page);
   await seedQueue(page, [
-    { wordId: "w11-01", tested: ["recall"] },
-    { wordId: "w11-02", tested: ["recall", "recognition"] },
-    { wordId: "w11-03", tested: ["recall", "recognition", "assembly", "assembly"], audio: false },
-    { wordId: "w11-04", tested: ["recall", "recognition", "assembly", "assembly", "spelling"], audio: true },
+    { wordId: "w038", tested: ["recall"] },
+    { wordId: "w032", tested: ["recall", "recognition"] },
+    { wordId: "w019", tested: ["recall", "recognition", "assembly", "assembly"], audio: false },
+    { wordId: "w057", tested: ["recall", "recognition", "assembly", "assembly", "spelling"], audio: true },
   ]);
   await page.getByRole("button", { name: /Начать занятие/ }).click();
   await page.waitForURL("**/session");
@@ -162,7 +162,7 @@ test("прогресс урока виден на «Сегодня» и «Уро
   await useSchedule(page);
   const row = () => page.getByRole("link", { name: /1\.1 ·/ });
   const lessons = () => page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
-  const size = (await lessonCards(page))["lesson-1-1"].length;
+  const size = (await lessonCards(page))["mech-1"].length;
   await expect(row().getByTestId("lesson-progress")).toHaveText(`${size} новых`);
   await expect(row().getByRole("img", { name: `Освоено 0% · ${size} новых`, exact: true })).toBeVisible();
   await lessons();
@@ -170,10 +170,10 @@ test("прогресс урока виден на «Сегодня» и «Уро
   await expect(row()).toContainText("проведён");
   await page.getByRole("navigation").getByRole("link", { name: "Сегодня" }).click(); // засев перезагружает страницу и ждёт «Сегодня»
   await seedQueue(page, [
-    { wordId: "w11-01", tested: ["recall"] },
-    { wordId: "w11-02", tested: [] },
-    { wordId: "w11-03", tested: [] },
-    { wordId: "w11-04", tested: [] },
+    { wordId: "w038", tested: ["recall"] },
+    { wordId: "w032", tested: [] },
+    { wordId: "w019", tested: [] },
+    { wordId: "w057", tested: [] },
   ]);
   await expect(row().getByTestId("lesson-progress")).toHaveText(`4 в повторении · ${size - 4} новых`);
   // Четыре слова с двухдневным интервалом на весь урок — полоса едва тронута, а не полна.
@@ -195,7 +195,7 @@ test("будущие занятия: импорт нового набора бе
   await useSchedule(page);
   await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
   await page.getByRole("link", { name: /Импорт слов/ }).click();
-  await page.locator("#text").fill("το τραπέζι\nстол\nη καρέκλα\nстул\nτο σπίτι\nдом");
+  await page.locator("#text").fill("το τραπέζι\nстол\nη καρέκλα\nстул\nο φίλος\nдруг");
   await expect(page.getByText(/распознано 3 слова/)).toBeVisible();
   await expect(page.getByText(/уже есть в словаре/)).toBeVisible();
   await expect(page.locator("#date")).toHaveCount(0); // дату назначает расписание

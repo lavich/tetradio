@@ -1,0 +1,13 @@
+id: w051
+greek: τα αγγλικά
+russian: английский язык
+ipa: /ta aŋɡliˈka/
+note: только мн. ч.
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "γγ", ipa: "ŋg", explanation: "γγ читается как нг" }
+examples:
+  - greek: "Μιλάτε αγγλικά;"
+    russian: "Вы говорите по-английски?"
+    target: "αγγλικά"

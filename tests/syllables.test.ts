@@ -11,7 +11,7 @@ import {
   tiles,
 } from "../src/domain/syllables";
 import { buildContent } from "../content/build";
-const seedWords = buildContent("tests/fixtures/tavelori-content").words;
+const seedWords = buildContent("tests/fixtures/mechanics").words;
 
 describe("деление на слоги", () => {
   it.each([
@@ -83,7 +83,7 @@ describe("деление на слоги", () => {
   });
   it("односложные слова считаются по слову без артикля", () => {
     const short = seedWords.filter((word) => tiles(word.greek).length < 2).map((word) => word.greek);
-    expect(short).toEqual(["και", "ο γιος", "το φως"]);
+    expect(short).toEqual(["και", "ο γιος"]);
   });
   it("восстанавливает пробелы и форматирует обратную связь", () => {
     expect(restoreWriting("η οικογένεια", ["οι", "κο", "γέ", "νεια"])).toBe("η οικογένεια");

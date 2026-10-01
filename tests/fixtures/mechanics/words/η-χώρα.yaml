@@ -1,0 +1,13 @@
+id: w041
+greek: η χώρα
+russian: страна
+ipa: /i ˈxora/
+forms: мн. οι χώρες
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "χ", ipa: "x", explanation: "χ перед α, ο, ου — как русское х" }
+examples:
+  - greek: "Η Κύπρος είναι μια μικρή χώρα."
+    russian: "Кипр — маленькая страна."
+    target: "χώρα"

@@ -71,7 +71,7 @@ describe("модуль отчётов с адресом приёма", () => {
     raise("early-0");
     const ids: string[] = [];
     for (let i = 1; i <= 12; i++)
-      ids.push(reportError(new Error(`e-${i}`), { category: "content", extra: { packageId: "lesson-1-1" } })!);
+      ids.push(reportError(new Error(`e-${i}`), { category: "content", extra: { packageId: "mech-1" } })!);
     expect(ids.every((id) => /^[0-9a-f]{32}$/.test(id))).toBe(true);
     expect(pendingReports()).toHaveLength(10);
     expect(loader).not.toHaveBeenCalled(); // до чтения настройки SDK не загружается
@@ -101,7 +101,7 @@ describe("модуль отчётов с адресом приёма", () => {
     expect(calls.capture[1]).toMatchObject({
       id: ids[0],
       category: "content",
-      extra: { packageId: "lesson-1-1" },
+      extra: { packageId: "mech-1" },
       mechanism: "explicit",
     });
     expect(pendingReports()).toHaveLength(0);

@@ -80,7 +80,7 @@ beforeEach(() => {
 describe("компактный снимок формата 2", () => {
   it("кодек обратим, числа FSRS не меняются, а тексты и ответы в снимок не попадают", async () => {
     const phone = await device("phone", { mixed: true });
-    await study(phone, [W("w11-27"), P("p-grafo"), P("p-vouno"), P("p-paidi")], [true, false, true, true]);
+    await study(phone, [W("w070"), P("p-grafo"), P("p-xora"), P("p-paidi")], [true, false, true, true]);
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     expect(snapshot.format).toBe(SNAPSHOT_FORMAT);
     const text = encodeSnapshot(snapshot);
@@ -130,7 +130,7 @@ describe("компактный снимок формата 2", () => {
   });
   it("ссылка снятого вида из чужого снимка отбрасывается, а слова и фразы применяются", async () => {
     const phone = await device("phone", { mixed: true });
-    await study(phone, [W("w11-27"), P("p-grafo")], [true, true]);
+    await study(phone, [W("w070"), P("p-grafo")], [true, true]);
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     const wire = JSON.parse(encodeSnapshot(snapshot));
     // Снимок старого клиента: те же записи плюс прогресс карточки снятого вида под своим кодом `c`.
@@ -149,7 +149,7 @@ describe("компактный снимок формата 2", () => {
   });
   it("ключ снятого вида в своей сводке не срывает публикацию снимка", async () => {
     const phone = await device("phone", { mixed: true });
-    await study(phone, [W("w11-27"), P("p-grafo")], [true, true]);
+    await study(phone, [W("w070"), P("p-grafo")], [true, true]);
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     // История ответов снятый вид сохранила, поэтому его ключ остаётся в сводке дня и в списке отвеченных.
     const dropped = JSON.stringify(["cloze", "c-grafo"]);
@@ -167,7 +167,7 @@ describe("компактный снимок формата 2", () => {
   });
   it("смешанный снимок укладывается в лимиты Telegram и не публикуется частично при их превышении", async () => {
     const phone = await device("phone", { mixed: true });
-    await study(phone, [P("p-grafo"), P("p-vouno")], [true, true]);
+    await study(phone, [P("p-grafo"), P("p-xora")], [true, true]);
     const snapshot = await buildSnapshot(phone.db, now());
     const parts = splitParts(encodeSnapshot(snapshot));
     expect(parts.length * 3 + 2).toBeLessThan(CLOUD_LIMITS.maxKeys);
@@ -195,28 +195,33 @@ describe("компактный снимок формата 2", () => {
       c: Date.parse("2026-09-16T08:00:00Z"),
       s: { timezone: "Asia/Nicosia", sessionSize: 12 },
       cs: [
-        { id: "leeke", subscribed: true, newWordsPerDay: 7, schedule: { startDate: "2026-09-14", weekdays: [1, 4] } },
+        {
+          id: "mechanics",
+          subscribed: true,
+          newWordsPerDay: 7,
+          schedule: { startDate: "2026-09-14", weekdays: [1, 4] },
+        },
       ],
-      l: [["lesson-1-1", null, "upcoming", Date.parse("2026-09-15T08:00:00Z")]],
-      p: ["lesson-1-1"],
-      st: [["w11-01", due, 2.5, 5.25, 1, 3, 2, 0, 2, 0, 0, intro, 4]],
-      sk: [["w11-01", "r", 1, { r: ["101", Date.parse("2026-09-15T08:00:00Z")] }]],
-      x: { d: [["2026-09-15", 3, ["w11-01"]]], r: { r: "101" }, n: 3, w: ["w11-01"] },
+      l: [["mech-1", null, "upcoming", Date.parse("2026-09-15T08:00:00Z")]],
+      p: ["mech-1"],
+      st: [["w038", due, 2.5, 5.25, 1, 3, 2, 0, 2, 0, 0, intro, 4]],
+      sk: [["w038", "r", 1, { r: ["101", Date.parse("2026-09-15T08:00:00Z")] }]],
+      x: { d: [["2026-09-15", 3, ["w038"]]], r: { r: "101" }, n: 3, w: ["w038"] },
     });
     const snapshot = decodeSnapshot(wire);
     expect(snapshot.format).toBe(SNAPSHOT_FORMAT);
     expect(snapshot.states).toHaveLength(1);
     expect(snapshot.states[0]).toMatchObject({
-      ref: W("w11-01"),
+      ref: W("w038"),
       version: 4,
       introducedAt: new Date(intro).toISOString(),
     });
     expect(snapshot.states[0].card.due).toBe(new Date(due).toISOString());
     expect(snapshot.states[0].card.stability).toBe(2.5);
-    expect(snapshot.skills[0].ref).toEqual(W("w11-01"));
-    expect(snapshot.stats.answeredKeys).toEqual([unitKey(W("w11-01"))]);
-    expect(snapshot.stats.days[0].keys).toEqual([unitKey(W("w11-01"))]);
-    expect(snapshot.courses[0]).toMatchObject({ id: "leeke", newItemsPerDay: 7 }); // прежний предел слов стал пределом карточек
+    expect(snapshot.skills[0].ref).toEqual(W("w038"));
+    expect(snapshot.stats.answeredKeys).toEqual([unitKey(W("w038"))]);
+    expect(snapshot.stats.days[0].keys).toEqual([unitKey(W("w038"))]);
+    expect(snapshot.courses[0]).toMatchObject({ id: "mechanics", newItemsPerDay: 7 }); // прежний предел слов стал пределом карточек
     expect(() =>
       decodeSnapshot(
         JSON.stringify({
@@ -243,7 +248,7 @@ describe("компактный снимок формата 2", () => {
       blocks: [],
       states: [
         {
-          ref: W("w11-27"),
+          ref: W("w070"),
           card: {
             due: "2026-09-25T08:00:00.000Z",
             stability: 3,
@@ -265,7 +270,7 @@ describe("компактный снимок формата 2", () => {
     // Наличие контента фраз не мешает: важен сохранённый прогресс.
     expect(await hasMixedProgress(phone.db)).toBe(false);
     await applySnapshot(phone.db, legacy, "legacy-1", { other: 1 }, now(), LEGACY_SNAPSHOT_FORMAT);
-    expect((await phone.db.cardStates.get(unitKey(W("w11-27"))))!.version).toBe(2);
+    expect((await phone.db.cardStates.get(unitKey(W("w070"))))!.version).toBe(2);
     // Появился прогресс фразы — словарный снимок больше не может заменить смешанную историю.
     await study(phone, [P("p-grafo")], [true]);
     expect(await hasMixedProgress(phone.db)).toBe(true);
@@ -287,7 +292,7 @@ describe("обмен смешанным прогрессом между устр
   it("второе устройство получает сроки и навыки фраз, прогресс слова не подменяется", async () => {
     const phone = await device("phone", { mixed: true });
     const tablet = await device("tablet", { mixed: true });
-    await study(phone, [W("w11-27"), P("p-grafo"), P("p-vouno"), P("p-paidi")], [true, false, true, false]);
+    await study(phone, [W("w070"), P("p-grafo"), P("p-xora"), P("p-paidi")], [true, false, true, false]);
     expect((await phone.sync.exchange()).phase).toBe("synced");
     expect((await tablet.sync.exchange()).phase).toBe("synced");
     expect(await statesOf(tablet)).toEqual(await statesOf(phone));
@@ -295,14 +300,14 @@ describe("обмен смешанным прогрессом между устр
     expect(new Set(kinds)).toEqual(new Set(["word", "phrase"]));
     // Навыки совпадают покарточно, а связанное слово не получает прогресс фразы.
     const source = dexieSource(tablet.db);
-    const cards = await source.cardsOf([P("p-grafo"), W("w11-27")]);
+    const cards = await source.cardsOf([P("p-grafo"), W("w070")]);
     const phraseSkills = await source.skillsOf(cards.get(unitKey(P("p-grafo")))!);
-    const wordSkills = await source.skillsOf(cards.get(unitKey(W("w11-27")))!);
+    const wordSkills = await source.skillsOf(cards.get(unitKey(W("w070")))!);
     // Исходы лежат каждый у своей карточки: слово отвечено верно, фраза — неверно.
     const outcomes = (summary: SkillSummary) => Object.values(summary.types).flatMap((skill) => skill?.recent ?? []);
     expect(outcomes(phraseSkills)).toEqual([false]);
     expect(outcomes(wordSkills)).toEqual([true]);
-    expect((await tablet.db.cardStates.get(unitKey(W("w11-27"))))!.card.due).not.toEqual(
+    expect((await tablet.db.cardStates.get(unitKey(W("w070"))))!.card.due).not.toEqual(
       (await tablet.db.cardStates.get(unitKey(P("p-grafo"))))!.card.due,
     );
     // Повторный обмен без изменений ничего не публикует.
@@ -314,7 +319,7 @@ describe("обмен смешанным прогрессом между устр
   it("прогресс карточек неустановленного пакета ждёт установки, не участвует в обучении и принимается после неё", async () => {
     const phone = await device("phone", { mixed: true });
     const fresh = await device("fresh");
-    await study(phone, [P("p-grafo"), P("p-vouno")], [true, true]);
+    await study(phone, [P("p-grafo"), P("p-xora")], [true, true]);
     await phone.sync.exchange();
     const missing: string[][] = [];
     fresh.sync.onMissingPackages = (ids) => {
@@ -346,7 +351,7 @@ describe("обмен смешанным прогрессом между устр
       `p_${device1}`,
       JSON.stringify({ ...pointer, id: `${device1}-9`, format: SNAPSHOT_FORMAT + 1, clock: { [device1]: 9 } }),
     );
-    await study(tablet, [P("p-vouno")], [false]);
+    await study(tablet, [P("p-xora")], [false]);
     const before = await statesOf(tablet);
     const status = await tablet.sync.exchange();
     expect(status.phase).toBe("error");

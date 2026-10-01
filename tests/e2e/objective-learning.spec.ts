@@ -12,7 +12,7 @@ async function installSession(page: Page, type: string, isNew = false, count = 1
       const request = tx.objectStore("words").getAll();
       request.onsuccess = () => {
         const pool = request.result;
-        const selected = count === 1 ? [pool.find((word) => word.id === "w12-16")] : pool.slice(0, count);
+        const selected = count === 1 ? [pool.find((word) => word.id === "w034")] : pool.slice(0, count);
         const items = selected.map((word, index) => ({
           id: `objective-${index}`,
           ref: { kind: "word", id: word.id },
@@ -75,7 +75,7 @@ async function stored(page: Page) {
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-2"]);
+  await installLessons(page, ["mech-2"]);
 });
 
 for (const type of ["recognition", "assembly", "spelling", "listening"]) {
@@ -110,9 +110,9 @@ test("аудирование: после ответа раскрывается �
   await page.getByTestId("option").filter({ hasText: "ναι" }).click();
   const reveal = page.getByTestId("reveal");
   await expect(reveal).toBeVisible();
-  await expect(reveal).toContainText("дом");
-  await expect(reveal).toContainText("ˈspiti");
-  await expect(reveal).toContainText("Наш дом большой.");
+  await expect(reveal).toContainText("друг");
+  await expect(reveal).toContainText("ˈfilos");
+  await expect(reveal).toContainText("Наш друг женат.");
   // Показ ничего не сохраняет: событие ровно одно, от самого ответа.
   expect((await stored(page)).events).toHaveLength(1);
 });
@@ -135,13 +135,13 @@ test("понимание на слух: звучит само, письменн�
   // Звучит само, а написания до ответа нет: иначе проверялось бы чтение.
   await expect
     .poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken))
-    .toContain("το σπίτι");
+    .toContain("ο φίλος");
   await expect(page.getByTestId("reveal")).toHaveCount(0);
   await expect(page.getByTestId("option").first()).toBeVisible();
   await page.getByRole("button", { name: "Повторить аудио" }).click();
   await page.getByTestId("option").first().click();
   // После ответа видно, что именно прозвучало.
-  await expect(page.getByTestId("reveal")).toContainText("το σπίτι");
+  await expect(page.getByTestId("reveal")).toContainText("ο φίλος");
   const after = await stored(page);
   expect(after.events[0]).toMatchObject({ type: "comprehension" });
 });
@@ -152,7 +152,7 @@ test("знакомство озвучивается само, а с выключ
   await expect(page.getByTestId("prompt")).toHaveText("Новое слово");
   await expect
     .poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken))
-    .toContain("το σπίτι");
+    .toContain("ο φίλος");
   // Узнавание звучит тем же порядком: на экране показано греческое слово, ответ — перевод.
   await page.getByRole("button", { name: "Далее", exact: true }).click();
   await expect(page.getByTestId("prompt")).toHaveText("Что значит это слово?");
@@ -166,7 +166,7 @@ test("знакомство озвучивается само, а с выключ
   await page.getByRole("button", { name: "Послушать слово" }).click();
   await expect
     .poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken))
-    .toContain("το σπίτι");
+    .toContain("ο φίλος");
 });
 
 test("знакомство идёт отдельным проходом и переживает перезагрузку без ответа", async ({ page }) => {

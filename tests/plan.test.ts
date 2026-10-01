@@ -104,10 +104,10 @@ describe("очередь ведёт ближайшее занятие", () => {
   it("карточки следующего занятия не берутся, пока ближайшее впереди", async () => {
     const data = base({
       words: pool,
-      courses: [course("leeke", 10)],
+      courses: [course("mechanics", 10)],
       lessons: [
-        lesson("l3", ids(0, 10), "2026-09-22", { courseId: "leeke" }),
-        lesson("l4", ids(10, 45), "2026-09-25", { courseId: "leeke" }),
+        lesson("l3", ids(0, 10), "2026-09-22", { courseId: "mechanics" }),
+        lesson("l4", ids(10, 45), "2026-09-25", { courseId: "mechanics" }),
       ],
       // Все карточки 1.3 уже вводили: срок ещё не наступил, но непоказанных у занятия не осталось.
       states: ids(0, 10).map((id) => learned(id, "2026-09-30T09:00:00Z")),
@@ -118,10 +118,10 @@ describe("очередь ведёт ближайшее занятие", () => {
   it("срок дальнего занятия остаётся в плане с требуемым темпом", async () => {
     const data = base({
       words: pool,
-      courses: [course("leeke", 10)],
+      courses: [course("mechanics", 10)],
       lessons: [
-        lesson("l3", ids(0, 10), "2026-09-22", { courseId: "leeke" }),
-        lesson("l4", ids(10, 45), "2026-09-18", { courseId: "leeke" }),
+        lesson("l3", ids(0, 10), "2026-09-22", { courseId: "mechanics" }),
+        lesson("l4", ids(10, 45), "2026-09-18", { courseId: "mechanics" }),
       ],
       states: ids(0, 10).map((id) => learned(id, "2026-09-30T09:00:00Z")),
     });
@@ -136,10 +136,10 @@ describe("очередь ведёт ближайшее занятие", () => {
   it("добор бюджета не заглядывает в дальние занятия", async () => {
     const data = base({
       words: pool,
-      courses: [course("leeke", 10)],
+      courses: [course("mechanics", 10)],
       lessons: [
-        lesson("l3", ids(0, 3), "2026-09-22", { courseId: "leeke" }),
-        lesson("l4", ids(10, 45), "2026-09-25", { courseId: "leeke" }),
+        lesson("l3", ids(0, 3), "2026-09-22", { courseId: "mechanics" }),
+        lesson("l4", ids(10, 45), "2026-09-25", { courseId: "mechanics" }),
       ],
     });
     const plan = await planOf(data);
@@ -160,8 +160,8 @@ describe("досрочная подготовка к ближайшему зан
   it("берёт несозревшие карточки ближайшего занятия от наименее зрелых", async () => {
     const data = base({
       words: pool,
-      courses: [course("leeke", 10)],
-      lessons: [lesson("l3", ids(0, 4), "2026-09-22", { courseId: "leeke" })],
+      courses: [course("mechanics", 10)],
+      lessons: [lesson("l3", ids(0, 4), "2026-09-22", { courseId: "mechanics" })],
       states: [
         at(pool[0].id, "2026-09-20T09:00:00Z", State.Review, 14),
         at(pool[1].id, "2026-09-16T09:00:00Z", State.Relearning, 0),
@@ -175,8 +175,8 @@ describe("досрочная подготовка к ближайшему зан
   it("срочная карточка идёт в повторения и в подготовку не попадает", async () => {
     const data = base({
       words: pool,
-      courses: [course("leeke", 10)],
-      lessons: [lesson("l3", ids(0, 2), "2026-09-22", { courseId: "leeke" })],
+      courses: [course("mechanics", 10)],
+      lessons: [lesson("l3", ids(0, 2), "2026-09-22", { courseId: "mechanics" })],
       states: [
         at(pool[0].id, "2026-09-14T09:00:00Z", State.Review, 3),
         at(pool[1].id, "2026-09-20T09:00:00Z", State.Review, 3),
@@ -189,8 +189,8 @@ describe("досрочная подготовка к ближайшему зан
   it("подготовка добирает места, не тронув квоту новых", async () => {
     const data = base({
       words: pool,
-      courses: [course("leeke", 10)],
-      lessons: [lesson("l3", ids(0, 30), "2026-09-22", { courseId: "leeke" })],
+      courses: [course("mechanics", 10)],
+      lessons: [lesson("l3", ids(0, 30), "2026-09-22", { courseId: "mechanics" })],
       states: ids(0, 30).map((id) => learned(id, "2026-09-30T09:00:00Z")),
       settings: { ...defaultSettings, sessionSize: 20 },
     });
@@ -202,8 +202,8 @@ describe("досрочная подготовка к ближайшему зан
   it("подготовка не вытесняет новые карточки и повторения", async () => {
     const data = base({
       words: pool,
-      courses: [course("leeke", 10)],
-      lessons: [lesson("l3", ids(0, 40), "2026-09-22", { courseId: "leeke" })],
+      courses: [course("mechanics", 10)],
+      lessons: [lesson("l3", ids(0, 40), "2026-09-22", { courseId: "mechanics" })],
       states: [
         ...ids(0, 4).map((id) => learned(id, "2026-09-14T09:00:00Z")), // срочные
         ...ids(4, 20).map((id) => learned(id, "2026-09-30T09:00:00Z")), // подготовка
@@ -219,8 +219,8 @@ describe("досрочная подготовка к ближайшему зан
   it("курс без предстоящих занятий подготовки не даёт", async () => {
     const data = base({
       words: pool,
-      courses: [course("leeke", 10)],
-      lessons: [lesson("l1", ids(0, 2), "2026-09-10", { courseId: "leeke" })],
+      courses: [course("mechanics", 10)],
+      lessons: [lesson("l1", ids(0, 2), "2026-09-10", { courseId: "mechanics" })],
       states: [at(pool[0].id, "2026-09-20T09:00:00Z", State.Review, 3)],
     });
     const plan = await planOf(data);
@@ -421,8 +421,8 @@ describe("подготовка к нескольким занятиям", () => 
       loose = pool.slice(40, 43).map((w) => w.id);
     const data = base({
       words: [...pool.slice(0, 5), ...pool.slice(40, 43)],
-      courses: [course("leeke", 10), course("my", 10, { origin: "local" })],
-      lessons: [lesson("done", foreign, null, { status: "completed", courseId: "leeke" })],
+      courses: [course("mechanics", 10), course("my", 10, { origin: "local" })],
+      lessons: [lesson("done", foreign, null, { status: "completed", courseId: "mechanics" })],
     });
     const plan = await planOf(data);
     const local = plan.courses.find((item) => item.courseId === "my")!;
@@ -908,10 +908,10 @@ describe("подготовка кончается в час занятия", () 
   const data = (lessonHour = 12, introducedToday = 0) =>
     base({
       words: pool,
-      courses: [course("leeke", 12, { schedule: { ...defaultSchedule, lessonHour } })],
+      courses: [course("mechanics", 12, { schedule: { ...defaultSchedule, lessonHour } })],
       lessons: [
-        lesson("l3", ids(0, 10), "2026-09-15", { courseId: "leeke" }),
-        lesson("l4", ids(10, 30), "2026-09-18", { courseId: "leeke" }),
+        lesson("l3", ids(0, 10), "2026-09-15", { courseId: "mechanics" }),
+        lesson("l4", ids(10, 30), "2026-09-18", { courseId: "mechanics" }),
       ],
       states: [
         ...ids(0, 10).map((id) => learned(id, "2026-09-30T09:00:00Z")),

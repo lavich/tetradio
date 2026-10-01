@@ -44,8 +44,8 @@ afterEach(() => {
 
 describe("переход по параметру запуска", () => {
   it("с launchId: первый монтаж переходит, повторный и перезагрузка того же запуска — нет", async () => {
-    const mount = await page(tgHash("w_w34-03", "Q1"));
-    expect(await mount()).toBe("/share/word/w34-03");
+    const mount = await page(tgHash("w_w093", "Q1"));
+    expect(await mount()).toBe("/share/word/w093");
     expect(await mount()).toBe("/");
     expect(sessionStorage.getItem("tetradio:start-consumed")).toBe("Q1");
     const reload = await page("");
@@ -53,16 +53,16 @@ describe("переход по параметру запуска", () => {
   });
   it("новый launchId при старой метке переходит — и с другим, и с тем же параметром", async () => {
     await (
-      await page(tgHash("w_w34-03", "Q1"))
+      await page(tgHash("w_w093", "Q1"))
     )();
-    expect(await (await page(tgHash("w_w12-01", "Q2")))()).toBe("/share/word/w12-01");
-    expect(await (await page(tgHash("w_w12-01", "Q3")))()).toBe("/share/word/w12-01");
+    expect(await (await page(tgHash("w_w041", "Q2")))()).toBe("/share/word/w041");
+    expect(await (await page(tgHash("w_w041", "Q3")))()).toBe("/share/word/w041");
   });
   it("без launchId: повторный монтаж в странице не переходит, перезагрузка переходит, метки нет", async () => {
-    const mount = await page(tgHash("w_w34-03"));
-    expect(await mount()).toBe("/share/word/w34-03");
+    const mount = await page(tgHash("w_w093"));
+    expect(await mount()).toBe("/share/word/w093");
     expect(await mount()).toBe("/");
-    expect(await (await page(tgHash("w_w34-03")))()).toBe("/share/word/w34-03");
+    expect(await (await page(tgHash("w_w093")))()).toBe("/share/word/w093");
     expect(sessionStorage.getItem("tetradio:start-consumed")).toBeNull();
   });
   it("неизвестный параметр оставляет «Сегодня»", async () => {

@@ -1,0 +1,10 @@
+id: w019
+greek: καλά
+russian: хорошо
+ipa: /kaˈla/
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Είμαι καλά."
+    russian: "У меня всё хорошо."
+    target: "καλά"

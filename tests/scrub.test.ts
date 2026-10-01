@@ -2,13 +2,13 @@ import { describe, expect, it } from "vitest";
 import type { Breadcrumb, ErrorEvent } from "@sentry/react";
 import { filterBreadcrumb, scrubEvent, scrubUrl } from "../src/reporting/scrub";
 
-const ORIGIN = "https://tavelori.app";
+const ORIGIN = "https://lavich.github.io";
 const event = (over: Partial<ErrorEvent> = {}): ErrorEvent => ({ type: undefined, event_id: "e1", ...over });
 
 describe("очистка адресов", () => {
   it("режет параметры запроса и фрагмент, оставляя путь", () => {
-    expect(scrubUrl("https://tavelori.app/words/w11-01?from=today#tgWebAppData=user%3D1", ORIGIN)).toBe(
-      "/words/w11-01",
+    expect(scrubUrl("https://lavich.github.io/words/w038?from=today#tgWebAppData=user%3D1", ORIGIN)).toBe(
+      "/words/w038",
     );
     expect(scrubUrl("/session?x=1", ORIGIN)).toBe("/session");
     expect(scrubUrl("https://other.example/a/b?q=1", ORIGIN)).toBe("https://other.example/a/b");
@@ -22,7 +22,7 @@ describe("очистка события", () => {
       event({
         user: { id: "42", username: "anna", ip_address: "{{auto}}" },
         request: {
-          url: "https://tavelori.app/more?bot=X#tgWebAppData=abc",
+          url: "https://lavich.github.io/more?bot=X#tgWebAppData=abc",
           headers: { Cookie: "a=b" },
           cookies: { a: "b" },
           data: "body",
@@ -40,7 +40,7 @@ describe("очистка события", () => {
         extra: {
           category: "content",
           kind: "schema",
-          packageId: "lesson-1-1",
+          packageId: "mech-1",
           packageVersion: "3",
           componentStack: "\n    at SessionScreen\n    at Recovery",
           words: [{ greek: "σπίτι" }],
@@ -53,7 +53,7 @@ describe("очистка события", () => {
     expect(out.extra).toEqual({
       category: "content",
       kind: "schema",
-      packageId: "lesson-1-1",
+      packageId: "mech-1",
       packageVersion: "3",
       componentStack: "\n    at SessionScreen\n    at Recovery",
     });
@@ -63,13 +63,13 @@ describe("очистка события", () => {
       event({
         breadcrumbs: [
           { category: "console", message: "σπίτι — дом", level: "warning" },
-          { category: "navigation", data: { from: "/?x=1", to: "/words/w11-01#frag" } },
+          { category: "navigation", data: { from: "/?x=1", to: "/words/w038#frag" } },
           { category: "ui.click", message: "button.answer" },
         ],
       }),
       ORIGIN,
     );
-    expect(out.breadcrumbs).toEqual([{ category: "navigation", data: { from: "/", to: "/words/w11-01" } }]);
+    expect(out.breadcrumbs).toEqual([{ category: "navigation", data: { from: "/", to: "/words/w038" } }]);
   });
   it("не трогает метки и не падает на пустом событии", () => {
     const out = scrubEvent(event({ tags: { env: "telegram", "tg.version": "8.0" } }), ORIGIN);
@@ -102,7 +102,7 @@ describe("фильтр хлебных крошек", () => {
           category: "fetch",
           type: "http",
           data: {
-            url: "https://tavelori.app/content/catalog.json?v=2",
+            url: "https://lavich.github.io/content/catalog.json?v=2",
             method: "GET",
             status_code: 200,
             request_body_size: 0,
@@ -122,7 +122,7 @@ describe("фильтр хлебных крошек", () => {
         crumb({
           category: "xhr",
           type: "http",
-          data: { url: "/content/lesson-1-1.json", method: "GET", status_code: 404 },
+          data: { url: "/content/mech-1.json", method: "GET", status_code: 404 },
         }),
         ORIGIN,
       ),
@@ -130,7 +130,7 @@ describe("фильтр хлебных крошек", () => {
       timestamp: 1,
       category: "xhr",
       type: "http",
-      data: { url: "/content/lesson-1-1.json", method: "GET", status_code: 404 },
+      data: { url: "/content/mech-1.json", method: "GET", status_code: 404 },
     });
     expect(
       filterBreadcrumb(

@@ -1,0 +1,10 @@
+id: w046
+greek: η Ρωσία
+russian: Россия
+ipa: /i roˈsia/
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Είμαι από τη Ρωσία."
+    russian: "Я из России."
+    target: "Ρωσία"

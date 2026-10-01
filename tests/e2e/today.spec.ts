@@ -5,7 +5,7 @@ test("первый запуск: «Учить курс» на «Сегодня»
   await page.goto("/");
   await ready(page);
   await expect(page.getByTestId("today-title")).toHaveText("Начните с курса");
-  await expect(page.getByTestId("first-course")).toContainText("Греческий A2");
+  await expect(page.getByTestId("first-course")).toContainText("Механики");
   // Пока уроков нет, начинать нечего: кнопки занятия нет, а не пустая очередь после нажатия.
   await expect(page.getByRole("button", { name: /Начать занятие/ })).toHaveCount(0);
   await page.getByRole("button", { name: "Учить курс" }).click();
@@ -19,8 +19,8 @@ test("первый запуск: «Учить курс» на «Сегодня»
 test("пустая очередь: «На сегодня всё» и тренировка урока вместо «Начать занятие»", async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-1"]);
-  await setCourseLimit(page, "leeke", 0);
+  await installLessons(page, ["mech-1"]);
+  await setCourseLimit(page, "mechanics", 0);
   await page.reload();
   await ready(page);
   await expect(page.getByTestId("today-title")).toHaveText("На сегодня всё");
@@ -34,12 +34,12 @@ test("пустая очередь: «На сегодня всё» и трени�
 test("нехватка предела: решение под кнопкой занятия, предел поднимается на месте", async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-1"]);
-  await setCourseLimit(page, "leeke", 1);
-  await useSchedule(page, "leeke", "tetradio-mock-1", 2);
+  await installLessons(page, ["mech-1"]);
+  await setCourseLimit(page, "mechanics", 1);
+  await useSchedule(page, "mechanics", "tetradio-mock-1", 2);
   const shortfall = page.getByTestId("shortfall");
   await expect(shortfall).toContainText(/Чтобы успеть к сроку, нужно \d+ карточ/);
-  await expect(shortfall).toContainText("Дневной предел курса «Греческий A2» — 1.");
+  await expect(shortfall).toContainText("Дневной предел курса «Механики» — 1.");
   // Кнопка занятия стоит выше справки: план сначала, объяснения потом.
   const cta = await page.getByRole("button", { name: /Начать занятие/ }).boundingBox();
   expect(cta!.y).toBeLessThan((await shortfall.boundingBox())!.y);
@@ -52,7 +52,7 @@ test("нехватка предела: решение под кнопкой за
 test("фокус с клавиатуры не прячется под нижней навигацией", async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-1"]);
+  await installLessons(page, ["mech-1"]);
   // Длинный список «Уроков»: строки каталога уходят ниже навигации, и Tab доходит до них.
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await page.getByRole("heading", { name: "Уроки", level: 1 }).waitFor();

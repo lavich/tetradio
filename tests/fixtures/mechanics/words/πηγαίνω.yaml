@@ -1,0 +1,14 @@
+id: w065
+greek: πηγαίνω
+russian: идти, ехать
+ipa: /piˈʝeno/
+forms: аор. πήγα; буд. θα πάω
+note: неправ.; разг. πάω (πας, πάει…); πηγαίνω με το λεωφορείο — модуль 13
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "αί", ipa: "e", explanation: "αι читается как э" }
+examples:
+  - greek: "Πηγαίνω στη δουλειά."
+    russian: "Я иду на работу."
+    target: "Πηγαίνω"

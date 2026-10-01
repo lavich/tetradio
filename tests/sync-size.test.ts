@@ -75,7 +75,7 @@ describe("размер компактного снимка (задача 0.4)", 
     const db = new AppDatabase("tetradio-size-catalog");
     await db.delete();
     await db.open();
-    await installLessons(db, ["lesson-1-1", "lesson-1-2", "lesson-1-3", "lesson-1-4"]);
+    await installLessons(db, ["mech-1", "mech-2", "mech-3", "mech-4"]);
     const ids = (await db.words.toArray()).map((word) => word.id);
     await fill(db, ids);
     const { snapshot, chars, parts } = await measure(db);

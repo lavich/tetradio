@@ -27,7 +27,7 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(path = "/share/word/w34-03") {
+function mount(path = "/share/word/w093") {
   root = createRoot(host);
   act(() =>
     root!.render(
@@ -54,7 +54,7 @@ const counts = async () => Object.fromEntries(await Promise.all(userTables.map(a
 
 describe("слово по ссылке", () => {
   it("установленное слово открывается обычным экраном", async () => {
-    await installLessons(db, ["lesson-1-4"]);
+    await installLessons(db, ["mech-4"]);
     mount();
     await until(() => text().includes("экран слова"), "переход на экран слова");
   });
@@ -63,8 +63,8 @@ describe("слово по ссылке", () => {
     await refreshCatalog();
     const before = await counts();
     mount();
-    await until(() => text().includes("η κατσαρόλα"), "карточка");
-    expect(text()).toContain("кастрюля");
+    await until(() => text().includes("ο παππούς"), "карточка");
+    expect(text()).toContain("дедушка");
     const label = host.querySelector("[data-testid=shared-lesson]")!;
     expect(label.textContent).toMatch(/^Слово из урока 1\.4/);
     expect(host.querySelector("a[href^='/lessons']")).toBeNull();
@@ -78,11 +78,11 @@ describe("слово по ссылке", () => {
   });
 
   it("удалённое слово показывается просмотром и не восстанавливается", async () => {
-    await installLessons(db, ["lesson-1-4"]);
-    await db.words.update("w34-03", { deletedAt: "2026-01-01T00:00:00.000Z" });
+    await installLessons(db, ["mech-4"]);
+    await db.words.update("w093", { deletedAt: "2026-01-01T00:00:00.000Z" });
     mount();
     await until(() => text().includes("Слово из урока"), "карточка просмотра");
-    expect((await db.words.get("w34-03"))?.deletedAt).toBeTruthy();
+    expect((await db.words.get("w093"))?.deletedAt).toBeTruthy();
   });
 
   it("пока каталог грузится — загрузка, а после его ответа — карточка", async () => {
@@ -92,13 +92,13 @@ describe("слово по ссылке", () => {
     await act(async () => {
       await refreshCatalog();
     });
-    await until(() => text().includes("η κατσαρόλα"), "карточка");
+    await until(() => text().includes("ο παππούς"), "карточка");
   });
 
   it("повторное обновление каталога не возвращает карточку в загрузку", async () => {
     await refreshCatalog();
     mount();
-    await until(() => text().includes("η κατσαρόλα"), "карточка");
+    await until(() => text().includes("ο παππούς"), "карточка");
     let flashed = false;
     const observer = new MutationObserver(() => {
       if (busy()) flashed = true;
@@ -110,7 +110,7 @@ describe("слово по ссылке", () => {
     await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
     observer.disconnect();
     expect(flashed).toBe(false);
-    expect(text()).toContain("η κατσαρόλα");
+    expect(text()).toContain("ο παππούς");
   });
 
   it("слова нет в каталоге — «Слово не найдено»", async () => {
@@ -133,21 +133,21 @@ describe("слово по ссылке", () => {
     await act(async () => {
       [...host.querySelectorAll("button")].find((b) => b.textContent?.includes("Повторить"))!.click();
     });
-    await until(() => text().includes("η κατσαρόλα"), "карточка после повтора");
+    await until(() => text().includes("ο παππούς"), "карточка после повтора");
   });
 
   it("пакет не загрузился или не совпал с каталогом — сбой с повтором", async () => {
     await refreshCatalog();
-    const url = content.catalog.lessons.find((l) => l.id === "lesson-1-4")!.url;
-    const other = content.packages.find((p) => p.id === "lesson-1-1")!;
+    const url = content.catalog.lessons.find((l) => l.id === "mech-4")!.url;
+    const other = content.packages.find((p) => p.id === "mech-1")!;
     useFetcher(memoryFetcher(content, { [url]: other }));
     mount();
     await until(() => text().includes("Пакет не соответствует записи каталога"), "сбой пакета");
-    expect(text()).not.toContain("η κατσαρόλα");
+    expect(text()).not.toContain("ο παππούς");
     useFetcher(memoryFetcher());
     await act(async () => {
       [...host.querySelectorAll("button")].find((b) => b.textContent?.includes("Повторить"))!.click();
     });
-    await until(() => text().includes("η κατσαρόλα"), "карточка после повтора");
+    await until(() => text().includes("ο παππούς"), "карточка после повтора");
   });
 });

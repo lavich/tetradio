@@ -266,15 +266,10 @@ export const LEGACY_TABLES = [
 /** Снятые хранилища: пусты после миграции, в копию не входят, читаются при восстановлении старых копий. */
 export const LEGACY_STORES = ["lessonWords", "states", "baseSkills", "syncStash", "clozes"] as const;
 export { LOCAL_COURSE } from "../domain/types";
-export const SEED_LESSON = /^lesson-1-[1-4]$/,
-  SEED_WORD = /^w1[1-4]-\d{2}$/;
-/** Стандартное слово поставлено пакетом (есть ревизия) либо исходным набором старой версии. */
-export const isStandardWord = (word: Pick<Word, "id" | "revision">) =>
-  word.revision !== undefined || SEED_WORD.test(word.id);
+/** Стандартное слово поставлено пакетом: у него есть ревизия. */
+export const isStandardWord = (word: Pick<Word, "revision">) => word.revision !== undefined;
 /** Служебные ключи синхронизации в `meta`: идентификатор устройства и очередь не переносятся копией. */
 export const SYNC_META_PREFIX = "sync:";
-/** Дата создания исходных слов старой версии: слово с ней не редактировалось пользователем. */
-export const LEGACY_CREATED = "2026-09-15T00:00:00.000Z";
 
 const localCourse = (now: string): Course => ({
   id: LOCAL_COURSE,
@@ -325,18 +320,13 @@ export async function migrateCourseTempo(tx: Pick<Transaction, "table">): Promis
 }
 
 /**
- * Миграция старой схемы: массивы `wordIds` становятся связями с сохранением порядка, слова получают индексы,
- * а исходные уроки, установленные старой версией, отмечаются как установленные без известной базы.
+ * Миграция старой схемы: массивы `wordIds` становятся связями с сохранением порядка, слова получают индексы.
  * Ничего не скачивает и не трогает прогресс, историю и удаления пользователя.
  */
 export async function migrateLegacy(tx: Pick<Transaction, "table">): Promise<void> {
   const lessons = tx.table("lessons") as Table<Lesson & { wordIds?: string[] }, string>;
   const links = tx.table("lessonWords") as Table<LessonWord, [string, string]>;
   const words = tx.table("words") as Table<StoredWord, string>;
-  const packages = tx.table("packages") as Table<InstalledPackage, string>;
-  const meta = tx.table("meta") as Table<MetaRow, string>;
-  const seeded = !!(await meta.get("seed"));
-  const now = new Date().toISOString();
   for (const lesson of await lessons.toArray()) {
     const wordIds = lesson.wordIds;
     if (wordIds) {
@@ -344,24 +334,10 @@ export async function migrateLegacy(tx: Pick<Transaction, "table">): Promise<voi
       delete lesson.wordIds;
       await lessons.put(lesson);
     }
-    if (seeded && SEED_LESSON.test(lesson.id) && !(await packages.get(lesson.id)))
-      await packages.put({
-        lessonId: lesson.id,
-        version: "legacy",
-        schemaVersion: 0,
-        installedAt: now,
-        words: [],
-        phrases: [],
-        items: [],
-        media: [],
-        removed: [],
-      });
   }
   await words.toCollection().modify((word) => {
     Object.assign(word, indexWord(word));
-    if (seeded && SEED_WORD.test(word.id) && word.edited === undefined) word.edited = word.updatedAt !== LEGACY_CREATED;
   });
-  await meta.delete("seed");
 }
 
 type LegacyItem = Partial<SessionItem> & { wordId?: string; word?: Word };

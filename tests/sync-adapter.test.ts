@@ -12,7 +12,7 @@ const snapshot = (size = 0): CompactSnapshot => ({
   settings: { timezone: defaultSettings.timezone, sessionSize: 20 },
   courses: [],
   lessons: [],
-  packages: ["lesson-1-1"],
+  packages: ["mech-1"],
   blocks: [],
   states: Array.from({ length: size }, (_, index) => ({
     ref: { kind: "word" as const, id: `w11-${String(index).padStart(2, "0")}` },

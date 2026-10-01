@@ -1,0 +1,16 @@
+id: w083
+greek: η οικογένεια
+russian: семья
+ipa: /i ikoˈʝenia/
+forms: мн. οι οικογένειες
+note: η οικογένειά μου
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+image: η-οικογένεια.svg
+reading:
+  - { text: "οι", ipa: "i", explanation: "οι читается как и" }
+  - { text: "γέ", ipa: "ʝe", explanation: "γ перед е звучит как мягкое й" }
+examples:
+  - greek: "Η οικογένειά μου μένει στη Ρωσία."
+    russian: "Моя семья живёт в России."
+    target: "οικογένειά"

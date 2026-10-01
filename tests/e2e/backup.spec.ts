@@ -9,13 +9,13 @@ test("полная копия переносит слова, правки и м�
   const page = await source.newPage();
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-2"]);
+  await installLessons(page, ["mech-2"]);
   // Правка, которой нет в исходном наборе: по ней и проверяем перенос.
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
-  await page.getByRole("searchbox").fill("σπίτι");
-  await page.getByRole("link", { name: /το σπίτι/ }).click();
+  await page.getByRole("searchbox").fill("φίλος");
+  await page.getByRole("link", { name: /ο φίλος/ }).click();
   await page.getByRole("link", { name: "Редактировать слово" }).click();
-  await page.locator("#russian").fill("дом (моя правка)");
+  await page.locator("#russian").fill("друг (моя правка)");
   await page.getByRole("button", { name: "Сохранить" }).click();
   await expect(page.getByText("Сохранено.")).toBeVisible();
 
@@ -50,7 +50,7 @@ test("полная копия переносит слова, правки и м�
       "meta",
     ]),
   );
-  // Картинка σπίτι скачана при просмотре карточки и входит в копию; остальные медиа не тянулись.
+  // Картинка «ο φίλος» скачана при просмотре карточки и входит в копию; остальные медиа не тянулись.
   expect(parsed.data.tables.find((table: { name: string }) => table.name === "assets").rowCount).toBe(1);
   // Курс подписан открытием урока, поэтому в профиле лежат пакеты всех его уроков — по одному на урок.
   const rows = (name: string) => parsed.data.tables.find((table: { name: string }) => table.name === name).rowCount;
@@ -81,9 +81,9 @@ test("полная копия переносит слова, правки и м�
   expect(saved.suggestedFilename()).toContain("before-restore");
   await expect(fresh.getByText("Данные восстановлены полностью.")).toBeVisible();
   await fresh.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
-  await fresh.getByRole("searchbox").fill("σπίτι");
-  await fresh.getByRole("link", { name: /το σπίτι/ }).click();
-  await expect(fresh.getByText("дом (моя правка)")).toBeVisible();
+  await fresh.getByRole("searchbox").fill("φίλος");
+  await fresh.getByRole("link", { name: /ο φίλος/ }).click();
+  await expect(fresh.getByText("друг (моя правка)")).toBeVisible();
   await expect(fresh.getByTestId("word-art")).toBeVisible();
   await fresh.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await expect(fresh.getByText("Не задано — даты уроков назначаются вручную")).toBeVisible();
@@ -93,7 +93,7 @@ test("полная копия переносит слова, правки и м�
 test("повреждённый и чужой файл не меняют данные", async ({ page }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-2"]);
+  await installLessons(page, ["mech-2"]);
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   // Курс догружается фоном: ждём устоявшийся словарь, иначе снимок поймает промежуточное число.
   await expect(page.getByTestId("word-count")).toHaveText("Показано 50 слов, есть ещё");

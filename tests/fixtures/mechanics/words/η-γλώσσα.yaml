@@ -1,0 +1,11 @@
+id: w043
+greek: η γλώσσα
+russian: язык
+ipa: /i ˈɣlosa/
+forms: мн. οι γλώσσες
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Η ελληνική γλώσσα είναι ωραία."
+    russian: "Греческий язык красивый."
+    target: "γλώσσα"

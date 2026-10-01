@@ -35,7 +35,7 @@ test("«Учить курс» ставит все уроки курса, а но
   await page.goto("/");
   await ready(page);
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
-  await expect(page.getByRole("heading", { name: "Греческий A2" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Механики" })).toBeVisible();
 
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByRole("button", { name: "Учить курс" })).toHaveCount(0); // курс подписан
@@ -84,25 +84,25 @@ test("у курса своё расписание и свой предел; со
   await page.getByRole("button", { name: "Добавить занятие" }).click();
   await page.getByLabel("Название").fill("Мой набор");
   await page.getByRole("button", { name: "Создать" }).click();
-  const leeke = page.locator("section").filter({ has: page.getByRole("heading", { name: "Греческий A2" }) });
+  const mechanics = page.locator("section").filter({ has: page.getByRole("heading", { name: "Механики" }) });
   const mine = page.locator("section").filter({ has: page.getByRole("heading", { name: "Мои слова" }) });
 
   // Предлог «К» достаётся только предстоящему занятию, поэтому первое занятие — ближайший будущий понедельник.
   const monday = nextLessonDay(new Date().toISOString().slice(0, 10), [1], false);
   const third = addDays(monday, 14);
   const link = (text: string) => new RegExp(text.replace(/\./g, "\\."));
-  await leeke.getByRole("button", { name: "Задать расписание" }).click();
-  await leeke.getByLabel("Первое занятие").fill(monday);
-  await leeke.getByRole("button", { name: "Пн", exact: true }).click();
-  await leeke.getByRole("button", { name: "Сохранить" }).click();
-  await expect(leeke.getByText(`Пн, первое занятие ${dayMonth(monday)}`)).toBeVisible();
-  await expect(leeke.getByRole("link", { name: link(`1.1 · К понедельнику, ${dayMonth(monday)}`) })).toBeVisible();
-  await expect(leeke.getByRole("link", { name: link(`1.3 · ${dayMonth(third)}`) })).toBeVisible(); // не ближайшее занятие — только дата
+  await mechanics.getByRole("button", { name: "Задать расписание" }).click();
+  await mechanics.getByLabel("Первое занятие").fill(monday);
+  await mechanics.getByRole("button", { name: "Пн", exact: true }).click();
+  await mechanics.getByRole("button", { name: "Сохранить" }).click();
+  await expect(mechanics.getByText(`Пн, первое занятие ${dayMonth(monday)}`)).toBeVisible();
+  await expect(mechanics.getByRole("link", { name: link(`1.1 · К понедельнику, ${dayMonth(monday)}`) })).toBeVisible();
+  await expect(mechanics.getByRole("link", { name: link(`1.3 · ${dayMonth(third)}`) })).toBeVisible(); // не ближайшее занятие — только дата
   await expect(mine.getByRole("link", { name: /Мой набор · Без даты/ })).toBeVisible();
 
   // Предел тоже принадлежит курсу.
-  await leeke.getByLabel("Новых карточек в день").fill("3");
-  await leeke.getByLabel("Новых карточек в день").blur();
+  await mechanics.getByLabel("Новых карточек в день").fill("3");
+  await mechanics.getByLabel("Новых карточек в день").blur();
   await expect
     .poll(() =>
       page.evaluate(async () => {
@@ -118,7 +118,7 @@ test("у курса своё расписание и свой предел; со
         return Object.fromEntries(rows.map((row) => [row.id, row.newItemsPerDay]));
       }),
     )
-    .toEqual({ leeke: 3, my: 12 }); // «Мои слова» остаются на пределе по умолчанию: правка соседнего курса их не задела
+    .toEqual({ mechanics: 3, my: 12 }); // «Мои слова» остаются на пределе по умолчанию: правка соседнего курса их не задела
 });
 
 test("список часов занятия остаётся на экране и прокручивается внутри себя", async ({ page }) => {
@@ -126,9 +126,9 @@ test("список часов занятия остаётся на экране 
   await ready(page);
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await page.getByRole("button", { name: "Учить курс" }).click();
-  const leeke = page.locator("section").filter({ has: page.getByRole("heading", { name: "Греческий A2" }) });
-  await leeke.getByRole("button", { name: "Задать расписание" }).click();
-  await leeke.getByLabel("Время занятия").click();
+  const mechanics = page.locator("section").filter({ has: page.getByRole("heading", { name: "Механики" }) });
+  await mechanics.getByRole("button", { name: "Задать расписание" }).click();
+  await mechanics.getByLabel("Время занятия").click();
 
   const popup = page.locator('[data-slot="select-content"]');
   await expect(popup).toBeVisible();

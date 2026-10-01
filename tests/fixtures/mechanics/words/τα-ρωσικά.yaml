@@ -1,0 +1,11 @@
+id: w050
+greek: τα ρωσικά
+russian: русский язык
+ipa: /ta rosiˈka/
+note: только мн. ч.
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Μιλάω ρωσικά."
+    russian: "Я говорю по-русски."
+    target: "ρωσικά"

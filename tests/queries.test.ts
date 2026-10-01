@@ -78,11 +78,11 @@ describe("эквивалентность планирования на базе 
     });
   }
   it("слова неустановленного урока не существуют локально и не попадают в очередь", async () => {
-    await installLessons(db, ["lesson-1-1"]);
+    await installLessons(db, ["mech-1"]);
     const plan = await dexieSource(db).lessons();
-    expect(plan.map((l) => l.id)).toEqual(["lesson-1-1"]);
+    expect(plan.map((l) => l.id)).toEqual(["mech-1"]);
     expect(await db.catalog.count()).toBe(content.catalog.lessons.length);
-    expect(await db.words.count()).toBe(wordCountOf("lesson-1-1"));
+    expect(await db.words.count()).toBe(wordCountOf("mech-1"));
   });
 });
 
@@ -273,14 +273,14 @@ describe("страницы словаря", () => {
 
 describe("локальный поиск", () => {
   it("ищет по началу токенов без учёта диакритики и регистра, по греческому и русскому", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    expect(await searchWordIds("σπι", db)).toEqual(["w12-16"]);
-    expect(await searchWordIds("ΣΠΊ", db)).toEqual(["w12-16"]);
-    expect(await searchWordIds("дом", db)).toContain("w12-16");
-    expect(await searchWordIds("πίτι", db)).toEqual([]); // не подстрока, а префикс токена
-    const page = await wordPage({ query: "σπ", filter: "all", lessonId: null, cursor: null }, db);
+    await installLessons(db, ["mech-2"]);
+    expect(await searchWordIds("φιλο", db)).toEqual(["w034"]);
+    expect(await searchWordIds("ΦΊΛΟ", db)).toEqual(["w034"]);
+    expect(await searchWordIds("друг", db)).toContain("w034");
+    expect(await searchWordIds("ίλος", db)).toEqual([]); // не подстрока, а префикс токена
+    const page = await wordPage({ query: "φί", filter: "all", lessonId: null, cursor: null }, db);
     expect(page.scope).toBe("search");
-    expect(page.items.some((item) => item.word.id === "w12-16")).toBe(true);
+    expect(page.items.some((item) => item.word.id === "w034")).toBe(true);
   });
   it("несколько слов запроса сужают выборку, результаты выдаются страницами по идентификаторам", async () => {
     const words = Array.from({ length: 120 }, (_, i) =>
@@ -297,11 +297,11 @@ describe("локальный поиск", () => {
     expect(new Set([...first.items, ...second.items].map((i) => i.word.id)).size).toBe(60);
   });
   it("правка слова и импорт обновляют индекс вместе с записью", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    const house = (await db.words.get("w12-16"))!;
-    await saveWord({ ...house, russian: "жилище" }, db);
-    expect(await searchWordIds("жил", db)).toEqual(["w12-16"]);
-    expect(await searchWordIds("дом", db)).not.toContain("w12-16");
+    await installLessons(db, ["mech-2"]);
+    const friend = (await db.words.get("w034"))!;
+    await saveWord({ ...friend, russian: "приятель" }, db);
+    expect(await searchWordIds("прият", db)).toEqual(["w034"]);
+    expect(await searchWordIds("друг", db)).not.toContain("w034");
     const rows = parseImport("η καρέκλα\nстул").rows;
     const outcome = await commitImport({ rows, lessonId: null, lessonTitle: "Мебель" }, db);
     expect(outcome.added).toBe(1);
@@ -309,8 +309,8 @@ describe("локальный поиск", () => {
     expect(await searchWordIds("стул", db)).toHaveLength(1);
   });
   it("предпросмотр импорта считает дубликаты и совпадения по индексам ключей", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    const rows = parseImport("το σπίτι\nдом\nτο σπίτι\nздание\nη καρέκλα\nстул").rows;
+    await installLessons(db, ["mech-2"]);
+    const rows = parseImport("ο φίλος\nдруг\nο φίλος\nприятель\nη καρέκλα\nстул").rows;
     expect(await importPreview(rows, db)).toEqual({ duplicates: 1, conflicts: 1 });
   });
 });
@@ -319,8 +319,8 @@ describe("смешанный урок в выборках", () => {
   it("список уроков считает состав по видам и прогресс по ключам связей; урок без слов не пуст", async () => {
     await installMixed(db);
     await db.cardStates.add({
-      unitKey: unitKey({ kind: "phrase", id: "p-vouno" }),
-      ref: { kind: "phrase", id: "p-vouno" },
+      unitKey: unitKey({ kind: "phrase", id: "p-xora" }),
+      ref: { kind: "phrase", id: "p-xora" },
       introducedAt: iso,
       version: 1,
       card: { due: now, state: State.Review, scheduled_days: 30 } as never,
@@ -341,13 +341,13 @@ describe("смешанный урок в выборках", () => {
     });
     const detail = (await lessonDetail(MIXED_LESSON, db))!;
     expect(detail.items.map((item) => item.ref.kind)).toEqual(mixedPackage().items.map((item) => item.kind));
-    expect(detail.words.map((w) => w.id)).toEqual(["w11-27"]);
+    expect(detail.words.map((w) => w.id)).toEqual(["w070"]);
     expect(detail.phrases.map((p) => p.id)).toEqual([
       "p-grafo",
-      "p-vouno",
+      "p-xora",
       "p-paidi",
-      "p-anoixi",
-      "p-ilios",
+      "p-lemeso",
+      "p-oikogeneia",
       "p-silent",
     ]);
     expect(detail.states.size).toBe(2);
@@ -356,7 +356,7 @@ describe("смешанный урок в выборках", () => {
     expect((await lessonDetail(MIXED_LESSON, db))!.phrases).toHaveLength(5);
     expect(await db.phrases.get("p-silent")).toBeTruthy();
     const page = await wordPage({ query: "", filter: "all", lessonId: MIXED_LESSON, cursor: null }, db);
-    expect(page.items.map((item) => item.word.id)).toEqual(["w11-27"]);
+    expect(page.items.map((item) => item.word.id)).toEqual(["w070"]);
     expect(await lessonsOfCard({ kind: "phrase", id: "p-grafo" }, db)).toHaveLength(1);
   });
   it("план и сессия на базе совпадают со снимком для смешанного урока при том же источнике случайности", async () => {
@@ -374,9 +374,9 @@ describe("смешанный урок в выборках", () => {
       settings: (await db.settings.get("settings")) ?? defaultSettings,
     };
     const refs = [
-      { kind: "phrase" as const, id: "p-vouno" },
+      { kind: "phrase" as const, id: "p-xora" },
       { kind: "phrase" as const, id: "p-grafo" },
-      { kind: "word" as const, id: "w11-27" },
+      { kind: "word" as const, id: "w070" },
     ];
     const record = async (source: ReturnType<typeof dexieSource>) => ({
       plan: (({ newRefs, unavailable, budget, deadlines }) => ({ newRefs, unavailable, budget, deadlines }))(

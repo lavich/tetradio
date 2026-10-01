@@ -3,7 +3,7 @@ import "./helpers/self";
 import Dexie from "dexie";
 import { createEmptyCard, State } from "ts-fsrs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { LEGACY_CREATED, AppDatabase, SCHEMA_VERSION } from "../src/storage/db";
+import { AppDatabase, SCHEMA_VERSION } from "../src/storage/db";
 import { exportFull, exportWordsTsv, inspectBackup, restoreBackup } from "../src/features/backup/backup";
 import { lessonItems } from "../src/storage/queries";
 import { makeSession } from "../src/domain/learning";
@@ -14,6 +14,8 @@ import { phraseRevisionOf } from "../content/build";
 import { unitKey, wordKeyOf, wordRef } from "./helpers/cards";
 import { content, wordsOf } from "./helpers/content";
 import { buildMixed, installMixed, MIXED_LESSON, MIXED_PHRASES, mixedPackage } from "./helpers/mixed";
+
+const CREATED = "2026-09-15T00:00:00.000Z";
 
 /**
  * Схема 5: так выглядит база пользователя перед переходом к карточкам трёх видов. Индексы повторяют
@@ -57,11 +59,11 @@ const card = (due: string, days = 3) => ({
 async function seedV5() {
   const legacy = new V5Database(NAME);
   await legacy.open();
-  const l12 = wordsOf("lesson-1-2");
+  const l12 = wordsOf("mech-2");
   const stored = (word: (typeof l12)[number], over: Record<string, unknown> = {}) => ({
     ...word,
-    createdAt: LEGACY_CREATED,
-    updatedAt: LEGACY_CREATED,
+    createdAt: CREATED,
+    updatedAt: CREATED,
     key: "",
     greekKey: "",
     sortKey: "",
@@ -75,8 +77,8 @@ async function seedV5() {
       updatedAt: iso,
     }),
   ]);
-  await legacy.table("words").update("w12-01", { russian: "моя правка", edited: true, updatedAt: iso });
-  await legacy.table("words").update("w12-02", { deletedAt: iso });
+  await legacy.table("words").update("w041", { russian: "моя правка", edited: true, updatedAt: iso });
+  await legacy.table("words").update("w043", { deletedAt: iso });
   await legacy.table("courses").bulkAdd([
     {
       id: "my",
@@ -89,7 +91,7 @@ async function seedV5() {
       updatedAt: iso,
     },
     {
-      id: "leeke",
+      id: "mechanics",
       title: "Греческий A2",
       origin: "content",
       subscribed: true,
@@ -101,13 +103,13 @@ async function seedV5() {
   ]);
   await legacy.table("lessons").bulkAdd([
     {
-      id: "lesson-1-2",
-      courseId: "leeke",
+      id: "mech-2",
+      courseId: "mechanics",
       title: "Урок 1.2",
       targetDate: "2026-09-18",
       status: "upcoming",
-      createdAt: LEGACY_CREATED,
-      updatedAt: LEGACY_CREATED,
+      createdAt: CREATED,
+      updatedAt: CREATED,
     },
     {
       id: "lesson-own",
@@ -122,12 +124,12 @@ async function seedV5() {
   await legacy
     .table("lessonWords")
     .bulkAdd([
-      ...l12.map((w, position) => ({ lessonId: "lesson-1-2", wordId: w.id, position })),
+      ...l12.map((w, position) => ({ lessonId: "mech-2", wordId: w.id, position })),
       { lessonId: "lesson-own", wordId: "w-own", position: 0 },
-      { lessonId: "lesson-own", wordId: "w12-16", position: 1 },
+      { lessonId: "lesson-own", wordId: "w034", position: 1 },
     ]);
   await legacy.table("assets").add({
-    id: "img-w12-16",
+    id: "img-w034",
     kind: "image",
     blob: new Blob(['<svg xmlns="http://www.w3.org/2000/svg"/>'], { type: "image/svg+xml" }),
     mimeType: "image/svg+xml",
@@ -135,10 +137,10 @@ async function seedV5() {
     alt: "",
   });
   await legacy.table("media").add({
-    id: "img-w12-16",
+    id: "img-w034",
     kind: "image",
     mimeType: "image/svg+xml",
-    url: "content/media/img-w12-16@x.svg",
+    url: "content/media/img-w034@x.svg",
     bytes: 10,
     version: "x",
     required: true,
@@ -146,37 +148,37 @@ async function seedV5() {
     source: "",
   });
   await legacy.table("packages").add({
-    lessonId: "lesson-1-2",
-    courseId: "leeke",
+    lessonId: "mech-2",
+    courseId: "mechanics",
     version: "v-old",
     schemaVersion: 2,
     installedAt: iso,
     words: l12,
     media: [],
-    removed: ["w12-03"],
+    removed: ["w044"],
   });
   await legacy.table("states").bulkAdd([
-    { wordId: "w12-16", card: card("2026-09-14T08:00:00Z", 30), introducedAt: "2026-09-01T09:00:00Z", version: 4 },
-    { wordId: "w12-05", card: card("2026-09-20T08:00:00Z", 3), introducedAt: "2026-09-10T09:00:00Z", version: 1 },
+    { wordId: "w034", card: card("2026-09-14T08:00:00Z", 30), introducedAt: "2026-09-01T09:00:00Z", version: 4 },
+    { wordId: "w046", card: card("2026-09-20T08:00:00Z", 3), introducedAt: "2026-09-10T09:00:00Z", version: 1 },
     { wordId: "w-own", card: card("2026-09-17T08:00:00Z", 1), introducedAt: "2026-09-15T09:00:00Z", version: 2 },
   ]);
   const word = (id: string) => ({
     ...l12.find((w) => w.id === id)!,
-    createdAt: LEGACY_CREATED,
-    updatedAt: LEGACY_CREATED,
+    createdAt: CREATED,
+    updatedAt: CREATED,
   });
   await legacy.table("events").bulkAdd([
     {
       id: "e1",
       sessionId: "s-old",
       itemId: "i1",
-      wordId: "w12-16",
-      snapshot: { greek: "το σπίτι", russian: "дом" },
+      wordId: "w034",
+      snapshot: { greek: "ο φίλος", russian: "друг" },
       type: "recognition",
       mode: "scheduled",
       rating: 3,
       correct: true,
-      answer: "дом",
+      answer: "друг",
       createdAt: "2026-09-14T09:00:00Z",
       localDate: "2026-09-14",
       responseTimeMs: 900,
@@ -185,7 +187,7 @@ async function seedV5() {
       id: "e-s-live-0",
       sessionId: "s-live",
       itemId: "s-live-0",
-      wordId: "w12-05",
+      wordId: "w046",
       snapshot: { greek: "x", russian: "y" },
       type: "spelling",
       mode: "scheduled",
@@ -215,12 +217,12 @@ async function seedV5() {
       status: "active",
       activeTimeMs: 5000,
       objectiveVersion: 1,
-      introducedWordIds: ["w12-07"],
+      introducedWordIds: ["w048"],
       items: [
         {
           id: "s-live-0",
-          wordId: "w12-05",
-          word: word("w12-05"),
+          wordId: "w046",
+          word: word("w046"),
           type: "spelling",
           options: [],
           isNew: false,
@@ -230,8 +232,8 @@ async function seedV5() {
         },
         {
           id: "s-live-1",
-          wordId: "w12-07",
-          word: word("w12-07"),
+          wordId: "w048",
+          word: word("w048"),
           type: "recognition",
           options: ["a", "b", "c", "d"],
           isNew: true,
@@ -240,8 +242,8 @@ async function seedV5() {
         },
         {
           id: "s-live-0-retry",
-          wordId: "w12-05",
-          word: word("w12-05"),
+          wordId: "w046",
+          word: word("w046"),
           type: "spelling",
           options: [],
           isNew: false,
@@ -254,7 +256,7 @@ async function seedV5() {
   ]);
   await legacy.table("settings").add({ id: "settings", timezone: "Asia/Nicosia", sessionSize: 12, errorReports: true });
   await legacy.table("baseSkills").add({
-    wordId: "w12-16",
+    wordId: "w034",
     skills: {
       types: { recognition: { recent: [true], lastAt: "2026-09-14T09:00:00Z" } },
       lastTypes: ["recognition"],
@@ -266,16 +268,16 @@ async function seedV5() {
     asOf: "2026-09-14T10:00:00Z",
     versionId: "dev-1",
     stats: {
-      days: [{ date: "2026-09-14", answers: 1, wordIds: ["w12-16"] }],
+      days: [{ date: "2026-09-14", answers: 1, wordIds: ["w034"] }],
       recentByType: { recognition: [true] },
       answers: 1,
-      answeredWordIds: ["w12-16"],
+      answeredWordIds: ["w034"],
     },
   });
   await legacy.table("syncStash").add({
-    wordId: "w13-01",
+    wordId: "w098",
     state: {
-      wordId: "w13-01",
+      wordId: "w098",
       card: { ...card("2026-09-19T08:00:00Z"), due: "2026-09-19T08:00:00.000Z" },
       introducedAt: "2026-09-12T09:00:00.000Z",
       version: 1,
@@ -302,37 +304,35 @@ describe("переход профиля схемы 5 к карточкам тр�
     await db.open();
     expect(db.verno).toBe(SCHEMA_VERSION);
     // Состояния: тот же ID слова, те же даты FSRS и счётчики версий.
-    const house = (await db.cardStates.get(wordKeyOf("w12-16")))!;
-    expect(house).toMatchObject({ ref: wordRef("w12-16"), version: 4, introducedAt: "2026-09-01T09:00:00Z" });
+    const house = (await db.cardStates.get(wordKeyOf("w034")))!;
+    expect(house).toMatchObject({ ref: wordRef("w034"), version: 4, introducedAt: "2026-09-01T09:00:00Z" });
     expect(new Date(house.card.due).toISOString()).toBe("2026-09-14T08:00:00.000Z");
     expect(house.card.scheduled_days).toBe(30);
     expect((await db.cardStates.get(wordKeyOf("w-own")))!.version).toBe(2);
     expect(await db.cardStates.count()).toBe(3);
     // Связи: порядок и принадлежность сохранены.
-    expect((await lessonItems("lesson-1-2", db)).map((link) => link.ref.id)).toEqual(
-      wordsOf("lesson-1-2").map((w) => w.id),
-    );
+    expect((await lessonItems("mech-2", db)).map((link) => link.ref.id)).toEqual(wordsOf("mech-2").map((w) => w.id));
     expect((await lessonItems("lesson-own", db)).map((link) => [link.ref.id, link.position])).toEqual([
       ["w-own", 0],
-      ["w12-16", 1],
+      ["w034", 1],
     ]);
     // Правка, удаление, медиа, курс и настройки — как были.
-    expect(await db.words.get("w12-01")).toMatchObject({ russian: "моя правка", edited: true });
-    expect((await db.words.get("w12-02"))!.deletedAt).toBeTruthy();
+    expect(await db.words.get("w041")).toMatchObject({ russian: "моя правка", edited: true });
+    expect((await db.words.get("w043"))!.deletedAt).toBeTruthy();
     expect(await db.assets.count()).toBe(1);
     expect(await db.media.count()).toBe(1);
     expect((await db.settings.get("settings"))!.sessionSize).toBe(12);
     // Предел слов стал пределом карточек с тем же числом.
     expect(await db.courses.get("my")).toMatchObject({ newItemsPerDay: 7 });
-    expect(await db.courses.get("leeke")).toMatchObject({
+    expect(await db.courses.get("mechanics")).toMatchObject({
       newItemsPerDay: 12,
       schedule: { startDate: "2026-09-14", weekdays: [1, 4] },
     });
-    expect("newWordsPerDay" in (await db.courses.get("leeke"))!).toBe(false);
+    expect("newWordsPerDay" in (await db.courses.get("mechanics"))!).toBe(false);
     // Пакет: убранная связь — ключ карточки, фразы пустые.
-    expect(await db.packages.get("lesson-1-2")).toMatchObject({
+    expect(await db.packages.get("mech-2")).toMatchObject({
       version: "v-old",
-      removed: [wordKeyOf("w12-03")],
+      removed: [wordKeyOf("w044")],
       phrases: [],
     });
     // Прежние хранилища пусты: данные скопированы, не продублированы.
@@ -346,31 +346,31 @@ describe("переход профиля схемы 5 к карточкам тр�
     expect(await db.events.count()).toBe(2);
     const event = (await db.events.get("e1"))!;
     expect(event).toMatchObject({
-      ref: wordRef("w12-16"),
-      unitKey: wordKeyOf("w12-16"),
-      snapshot: { greek: "το σπίτι", russian: "дом" },
+      ref: wordRef("w034"),
+      unitKey: wordKeyOf("w034"),
+      snapshot: { greek: "ο φίλος", russian: "друг" },
       rating: 3,
     });
     expect("wordId" in event).toBe(false);
     expect(
       await db.events
         .where("[unitKey+createdAt]")
-        .between([wordKeyOf("w12-16"), Dexie.minKey], [wordKeyOf("w12-16"), Dexie.maxKey])
+        .between([wordKeyOf("w034"), Dexie.minKey], [wordKeyOf("w034"), Dexie.maxKey])
         .count(),
     ).toBe(1);
-    expect(await db.cardSkills.get(wordKeyOf("w12-16"))).toMatchObject({
-      ref: wordRef("w12-16"),
+    expect(await db.cardSkills.get(wordKeyOf("w034"))).toMatchObject({
+      ref: wordRef("w034"),
       skills: { lastTypes: ["recognition"] },
     });
     expect((await db.baseSummary.get("base"))!.stats).toEqual({
-      days: [{ date: "2026-09-14", answers: 1, keys: [wordKeyOf("w12-16")] }],
+      days: [{ date: "2026-09-14", answers: 1, keys: [wordKeyOf("w034")] }],
       recentByType: { recognition: [true] },
       answers: 1,
-      answeredKeys: [wordKeyOf("w12-16")],
+      answeredKeys: [wordKeyOf("w034")],
     });
-    expect(await db.cardStash.get(wordKeyOf("w13-01"))).toMatchObject({
-      ref: wordRef("w13-01"),
-      state: { ref: wordRef("w13-01"), version: 1, introducedAt: "2026-09-12T09:00:00.000Z" },
+    expect(await db.cardStash.get(wordKeyOf("w098"))).toMatchObject({
+      ref: wordRef("w098"),
+      state: { ref: wordRef("w098"), version: 1, introducedAt: "2026-09-12T09:00:00.000Z" },
     });
     expect(await db.meta.get("sync:device")).toEqual({ key: "sync:device", value: "dev" });
     db.close();
@@ -382,19 +382,19 @@ describe("переход профиля схемы 5 к карточкам тр�
     const session = (await db.sessions.get("s-live"))!;
     expect(session.status).toBe("active");
     expect(session.index).toBe(1);
-    expect(session.introducedKeys).toEqual([wordKeyOf("w12-07")]);
+    expect(session.introducedKeys).toEqual([wordKeyOf("w048")]);
     expect("introducedWordIds" in session).toBe(false);
     expect(
       session.items.map((item) => [item.unitKey, item.card.kind, item.eventId ?? null, item.retryOf ?? null]),
     ).toEqual([
-      [wordKeyOf("w12-05"), "word", "e-s-live-0", null],
-      [wordKeyOf("w12-07"), "word", null, null],
-      [wordKeyOf("w12-05"), "word", null, "s-live-0"],
+      [wordKeyOf("w046"), "word", "e-s-live-0", null],
+      [wordKeyOf("w048"), "word", null, null],
+      [wordKeyOf("w046"), "word", null, "s-live-0"],
     ]);
-    expect(session.items[1].card.kind === "word" && session.items[1].card.word.id).toBe("w12-07");
+    expect(session.items[1].card.kind === "word" && session.items[1].card.word.id).toBe("w048");
     expect("wordId" in session.items[0]).toBe(false);
     expect("word" in session.items[0]).toBe(false);
-    // Первое неотвеченное — знакомое задание w12-07: ответ на w12-05 не запрашивается снова.
+    // Первое неотвеченное — знакомое задание w048: ответ на w046 не запрашивается снова.
     expect(session.items.findIndex((item) => !item.eventId && !item.skipped)).toBe(1);
     // Ответ в перенесённой сессии пишется по типизированному ключу и не дублирует событие.
     const event = await submitAnswer({
@@ -409,12 +409,12 @@ describe("переход профиля схемы 5 к карточкам тр�
       database: db,
     });
     expect(event).toMatchObject({
-      ref: wordRef("w12-07"),
-      unitKey: wordKeyOf("w12-07"),
+      ref: wordRef("w048"),
+      unitKey: wordKeyOf("w048"),
       snapshot: { greek: expect.any(String) },
     });
     expect(await db.events.count()).toBe(3);
-    expect((await db.cardStates.get(wordKeyOf("w12-07")))!.version).toBe(1);
+    expect((await db.cardStates.get(wordKeyOf("w048")))!.version).toBe(1);
     db.close();
   });
   it("повторное открытие мигрированной базы ничего не меняет", async () => {
@@ -449,8 +449,8 @@ const legacyWord = (id: string, greek: string, russian: string, over: Record<str
   segments: [],
   examples: [],
   verified: false,
-  createdAt: LEGACY_CREATED,
-  updatedAt: LEGACY_CREATED,
+  createdAt: CREATED,
+  updatedAt: CREATED,
   ...over,
 });
 /** Файл копии прежней версии: таблицы и строки в формате dexie-export-import. */
@@ -489,7 +489,7 @@ function backupOf(version: number, tables: Record<string, unknown[]>) {
   );
 }
 const stateRow = {
-  wordId: "w12-16",
+  wordId: "w034",
   card: card("2026-09-14T08:00:00Z", 30),
   introducedAt: "2026-09-01T09:00:00Z",
   version: 4,
@@ -498,38 +498,38 @@ const eventRow = {
   id: "e1",
   sessionId: "s",
   itemId: "i1",
-  wordId: "w12-16",
-  snapshot: { greek: "το σπίτι", russian: "дом" },
+  wordId: "w034",
+  snapshot: { greek: "ο φίλος", russian: "друг" },
   type: "recognition",
   mode: "scheduled",
   rating: 3,
   correct: true,
-  answer: "дом",
+  answer: "друг",
   createdAt: "2026-09-14T09:00:00Z",
   localDate: "2026-09-14",
   responseTimeMs: 900,
 };
 const V2_TABLES = {
-  words: [legacyWord("w12-16", "το σπίτι", "дом"), legacyWord("w-own", "η καρέκλα", "стул")],
+  words: [legacyWord("w034", "ο φίλος", "друг"), legacyWord("w-own", "η καρέκλα", "стул")],
   lessons: [
     {
-      id: "lesson-1-2",
+      id: "mech-2",
       title: "Урок 1.2",
       targetDate: "2026-09-18",
       status: "upcoming",
-      createdAt: LEGACY_CREATED,
-      updatedAt: LEGACY_CREATED,
+      createdAt: CREATED,
+      updatedAt: CREATED,
     },
   ],
   lessonWords: [
-    { lessonId: "lesson-1-2", wordId: "w12-16", position: 0 },
-    { lessonId: "lesson-1-2", wordId: "w-own", position: 1 },
+    { lessonId: "mech-2", wordId: "w034", position: 0 },
+    { lessonId: "mech-2", wordId: "w-own", position: 1 },
   ],
   assets: [],
   media: [],
   packages: [
     {
-      lessonId: "lesson-1-2",
+      lessonId: "mech-2",
       version: "legacy",
       schemaVersion: 0,
       installedAt: iso,
@@ -547,25 +547,25 @@ const V2_TABLES = {
 const V3_TABLES = {
   ...V2_TABLES,
   meta: [{ key: "app", value: "tetradio:3" }],
-  baseSkills: [{ wordId: "w12-16", skills: { types: {}, lastTypes: ["recognition"], cleanAssemblies: 0 } }],
+  baseSkills: [{ wordId: "w034", skills: { types: {}, lastTypes: ["recognition"], cleanAssemblies: 0 } }],
   baseSummary: [
     {
       id: "base",
       asOf: "2026-09-14T10:00:00Z",
       versionId: "v",
       stats: {
-        days: [{ date: "2026-09-14", answers: 1, wordIds: ["w12-16"] }],
+        days: [{ date: "2026-09-14", answers: 1, wordIds: ["w034"] }],
         recentByType: {},
         answers: 1,
-        answeredWordIds: ["w12-16"],
+        answeredWordIds: ["w034"],
       },
     },
   ],
   syncStash: [
     {
-      wordId: "w13-01",
+      wordId: "w098",
       state: {
-        wordId: "w13-01",
+        wordId: "w098",
         card: { ...card("2026-09-19T08:00:00Z"), due: "2026-09-19T08:00:00.000Z" },
         introducedAt: "2026-09-12T09:00:00.000Z",
         version: 1,
@@ -590,13 +590,13 @@ const V5_TABLES = {
   ],
   lessons: [
     {
-      id: "lesson-1-2",
+      id: "mech-2",
       courseId: "my",
       title: "Урок 1.2",
       targetDate: "2026-09-18",
       status: "upcoming",
-      createdAt: LEGACY_CREATED,
-      updatedAt: LEGACY_CREATED,
+      createdAt: CREATED,
+      updatedAt: CREATED,
     },
   ],
   settings: [{ id: "settings", timezone: "Asia/Nicosia", sessionSize: 20, errorReports: true }],
@@ -619,15 +619,15 @@ describe("полная копия: прежние версии и смешанн
       const file = backupOf(version, tables as Record<string, unknown[]>);
       expect(await inspectBackup(file)).toMatchObject({ ok: true, report: { legacy: true } });
       await restoreBackup(file, db);
-      expect((await lessonItems("lesson-1-2", db)).map((link) => link.ref.id)).toEqual(["w12-16", "w-own"]);
-      expect(await db.cardStates.get(wordKeyOf("w12-16"))).toMatchObject({ ref: wordRef("w12-16"), version: 4 });
-      expect(await db.events.get("e1")).toMatchObject({ ref: wordRef("w12-16"), unitKey: wordKeyOf("w12-16") });
+      expect((await lessonItems("mech-2", db)).map((link) => link.ref.id)).toEqual(["w034", "w-own"]);
+      expect(await db.cardStates.get(wordKeyOf("w034"))).toMatchObject({ ref: wordRef("w034"), version: 4 });
+      expect(await db.events.get("e1")).toMatchObject({ ref: wordRef("w034"), unitKey: wordKeyOf("w034") });
       expect((await db.courses.get("my"))!.newItemsPerDay).toBe(perDay);
-      expect((await db.packages.get("lesson-1-2"))!.removed).toEqual([wordKeyOf("w-x")]);
+      expect((await db.packages.get("mech-2"))!.removed).toEqual([wordKeyOf("w-x")]);
       if (version >= 3) {
-        expect(await db.cardSkills.get(wordKeyOf("w12-16"))).toBeTruthy();
-        expect((await db.baseSummary.get("base"))!.stats.answeredKeys).toEqual([wordKeyOf("w12-16")]);
-        expect(await db.cardStash.get(wordKeyOf("w13-01"))).toMatchObject({ ref: wordRef("w13-01") });
+        expect(await db.cardSkills.get(wordKeyOf("w034"))).toBeTruthy();
+        expect((await db.baseSummary.get("base"))!.stats.answeredKeys).toEqual([wordKeyOf("w034")]);
+        expect(await db.cardStash.get(wordKeyOf("w098"))).toMatchObject({ ref: wordRef("w098") });
       }
       for (const table of [db.states, db.lessonWords, db.baseSkills, db.syncStash]) expect(await table.count()).toBe(0);
     },
@@ -642,13 +642,13 @@ describe("полная копия: прежние версии и смешанн
       mode: "practice",
       refs: [
         { kind: "phrase", id: "p-grafo" },
-        { kind: "phrase", id: "p-vouno" },
-        { kind: "word", id: "w11-27" },
+        { kind: "phrase", id: "p-xora" },
+        { kind: "word", id: "w070" },
       ],
     });
     await db.sessions.add(session);
     const grafo = session.items.find((item) => item.ref.id === "p-grafo")!,
-      vouno = session.items.find((item) => item.ref.id === "p-vouno")!;
+      xora = session.items.find((item) => item.ref.id === "p-xora")!;
     await submitAnswer({
       session,
       item: grafo,
@@ -662,9 +662,9 @@ describe("полная копия: прежние версии и смешанн
     });
     await submitAnswer({
       session,
-      item: vouno,
+      item: xora,
       correct: true,
-      answer: "Το βουνό είναι ψηλό.",
+      answer: "Η Κύπρος είναι μια μικρή χώρα.",
       responseTimeMs: 800,
       activeTimeMs: 1600,
       timezone: "Asia/Nicosia",
@@ -696,9 +696,9 @@ describe("полная копия: прежние версии и смешанн
       text: "Γράφω ένα γράμμα.",
       translation: "Я пишу письмо.",
     });
-    expect(events.find((e) => e.ref.id === "p-vouno")!.snapshot).toEqual({
-      text: "Το βουνό είναι ψηλό.",
-      translation: "Гора высокая.",
+    expect(events.find((e) => e.ref.id === "p-xora")!.snapshot).toEqual({
+      text: "Η Κύπρος είναι μια μικρή χώρα.",
+      translation: "Кипр — маленькая страна.",
     });
     expect((await fresh.sessions.get(session.id))!.status).toBe("active");
     fresh.close();
@@ -706,13 +706,13 @@ describe("полная копия: прежние версии и смешанн
   });
   it("копия с фразами без слов допустима, а связь с отсутствующей карточкой отклоняется до замены данных", async () => {
     const noWords = buildMixed({
-      phrases: { "p-grafo": MIXED_PHRASES["p-grafo"], "p-vouno": MIXED_PHRASES["p-vouno"] },
+      phrases: { "p-grafo": MIXED_PHRASES["p-grafo"], "p-xora": MIXED_PHRASES["p-xora"] },
       lesson: {
         title: "Без слов",
         language: "el",
         items: [
           { kind: "phrase", id: "p-grafo" },
-          { kind: "phrase", id: "p-vouno" },
+          { kind: "phrase", id: "p-xora" },
         ],
       },
     });
@@ -751,18 +751,18 @@ describe("полная копия: прежние версии и смешанн
   it("обновление пакета, исправившее примечание фразы, меняет ревизию, но не ID и не прогресс", async () => {
     await installMixed(db);
     const pack = mixedPackage();
-    const vouno = pack.phrases.find((p) => p.id === "p-vouno")!;
-    const { revision: _r, ...fields } = vouno;
+    const xora = pack.phrases.find((p) => p.id === "p-xora")!;
+    const { revision: _r, ...fields } = xora;
     const fixed = { ...fields, note: "Прилагательное согласуется с существительным." };
     const next = {
       ...pack,
       version: `${pack.version}-note`,
-      phrases: pack.phrases.map((p) => (p.id === "p-vouno" ? { ...fixed, revision: phraseRevisionOf(fixed) } : p)),
+      phrases: pack.phrases.map((p) => (p.id === "p-xora" ? { ...fixed, revision: phraseRevisionOf(fixed) } : p)),
     };
     await applyPackage(next, db);
-    const stored = (await db.phrases.get("p-vouno"))!;
+    const stored = (await db.phrases.get("p-xora"))!;
     expect(stored.note).toBe("Прилагательное согласуется с существительным.");
-    expect(stored.revision).not.toBe(vouno.revision);
+    expect(stored.revision).not.toBe(xora.revision);
     expect(content.packages.length).toBeGreaterThan(0);
   });
 });

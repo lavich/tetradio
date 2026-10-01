@@ -11,7 +11,7 @@ describe("типизированная ссылка на карточку", () =
     expect(parseUnitKey(unitKey(ref))).toEqual(ref);
   });
   it("ссылка на слово сохраняет прежний идентификатор", () => {
-    expect(wordRef("w11-01")).toEqual({ kind: "word", id: "w11-01" });
+    expect(wordRef("w038")).toEqual({ kind: "word", id: "w038" });
   });
   it("ключ не совпадает с голым ID и не путает разделитель внутри ID", () => {
     expect(unitKey(wordRef("w1"))).not.toBe("w1");

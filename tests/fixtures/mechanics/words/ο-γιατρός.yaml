@@ -1,0 +1,21 @@
+id: w096
+greek: ο γιατρός
+russian: врач
+ipa: /o ʝaˈtros/
+forms: мн. οι γιατροί
+note: "о женщине: η γιατρός"
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+image: ο-γιατρός.svg
+reading:
+  - { text: "γι", ipa: "ʝ", explanation: "γι перед гласной звучит как й" }
+examples:
+  - greek: "Ο άντρας μου είναι γιατρός."
+    russian: "Мой муж — врач."
+    target: "γιατρός"
+    words:
+      - { text: "Ο", russian: "артикль м. р." }
+      - { text: "άντρας", russian: "муж", word: w091 }
+      - { text: "μου", russian: "мой" }
+      - { text: "είναι", russian: "есть, является", word: w009 }
+      - { text: "γιατρός", russian: "врач", word: w096 }

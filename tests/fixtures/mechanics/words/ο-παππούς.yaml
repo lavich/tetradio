@@ -1,0 +1,14 @@
+id: w093
+greek: ο παππούς
+russian: дедушка
+ipa: /o paˈpus/
+forms: мн. οι παππούδες
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+image: ο-παππούς.svg
+reading:
+  - { text: "ππ", ipa: "p", explanation: "двойная согласная читается как одна" }
+examples:
+  - greek: "Ο παππούς μου μένει στην Κύπρο."
+    russian: "Мой дедушка живёт на Кипре."
+    target: "παππούς"

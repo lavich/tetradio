@@ -1,5 +1,5 @@
 import type { Card } from "ts-fsrs";
-import { isStandardWord, SEED_LESSON, type AppDatabase } from "../storage/db";
+import { isStandardWord, type AppDatabase } from "../storage/db";
 import { byTime, emptySkills, emptyStats, foldSkill, foldStats, type SkillSummary } from "../domain/skills";
 import { unitKey } from "../domain/refs";
 import {
@@ -75,9 +75,8 @@ export const parseClock = (raw: string | null): Clock => {
   }
 };
 
-const isStandardLesson = (id: string, packages: Set<string>) => packages.has(id) || SEED_LESSON.test(id);
 /**
- * Ключи поставляемых карточек среди перечисленных: слово — по ревизии или исходному набору,
+ * Ключи поставляемых карточек среди перечисленных: слово — по ревизии,
  * фраза — по наличию записи с ревизией. Пользовательские слова в облако не уходят.
  */
 async function standardKeys(database: AppDatabase, refs: LearningRef[]): Promise<Set<string>> {
@@ -140,7 +139,7 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
   const settings = await loadSettings(database);
   const packages = new Set((await database.packages.toArray()).map((pack) => pack.lessonId));
   const lessons: CompactLesson[] = (await database.lessons.toArray())
-    .filter((lesson) => isStandardLesson(lesson.id, packages))
+    .filter((lesson) => packages.has(lesson.id))
     .map((lesson) => ({
       id: lesson.id,
       targetDate: lesson.targetDate,

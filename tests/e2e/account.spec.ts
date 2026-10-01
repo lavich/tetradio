@@ -76,9 +76,9 @@ test("смена аккаунта A → B на том же устройстве:
   page,
 }) => {
   await openTelegram(page, { userId: A });
-  await installLessons(page, ["lesson-1-1"]);
+  await installLessons(page, ["mech-1"]);
   await onlyReviews(page);
-  await seedQueue(page, [{ wordId: "w11-01", tested: ["recall"] }], dbOf(A));
+  await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], dbOf(A));
   await page.getByRole("button", { name: /Начать занятие/ }).click();
   await page.waitForURL("**/session");
   await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();

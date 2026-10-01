@@ -11,7 +11,7 @@ import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport, disabledTransport, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
-import { installLessons, memoryFetcher } from "./helpers/content";
+import { installLessons, memoryFetcher, packageOf } from "./helpers/content";
 import { installLesson, refreshCatalog } from "../src/content/client";
 import type { Word } from "../src/domain/types";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
@@ -87,16 +87,16 @@ beforeEach(() => {
 
 describe("перенос компактного прогресса между устройствами одного аккаунта", () => {
   it("второе устройство получает сроки FSRS, навыки, настройки, даты уроков, бюджет и статистику без двойного учёта", async () => {
-    const phone = await device("phone", { lessons: ["lesson-1-1"] });
-    const tablet = await device("tablet", { lessons: ["lesson-1-1"] });
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
     await saveSettings({ ...defaultSettings, timezone: "Europe/Athens", sessionSize: 6 }, phone.db);
     await saveCourseTempo(
-      "leeke",
+      "mechanics",
       { newItemsPerDay: 7, schedule: { startDate: "2026-09-14", weekdays: [1, 3], lessonHour: 12 } },
       new Date("2026-09-16T09:00:00Z"),
       phone.db,
     );
-    await updateLesson("lesson-1-1", { targetDate: "2026-10-01" }, phone.db);
+    await updateLesson("mech-1", { targetDate: "2026-10-01" }, phone.db);
     const studied = await study(phone, [true, false, true, true, false]);
     await study(phone, [true, true, false]);
     expect((await phone.sync.exchange()).phase).toBe("synced");
@@ -108,11 +108,11 @@ describe("перенос компактного прогресса между у
     expect(await skillsOf(tablet, studied)).toEqual(await skillsOf(phone, studied));
     expect(await tablet.db.settings.get("settings")).toMatchObject({ timezone: "Europe/Athens", sessionSize: 6 });
     // Темп принадлежит курсу и переносится вместе с ним, иначе второе устройство считало бы дни иначе.
-    expect(await tablet.db.courses.get("leeke")).toMatchObject({
+    expect(await tablet.db.courses.get("mechanics")).toMatchObject({
       newItemsPerDay: 7,
       schedule: { startDate: "2026-09-14", weekdays: [1, 3], lessonHour: 12 },
     });
-    expect((await tablet.db.lessons.get("lesson-1-1"))?.targetDate).toBe("2026-10-01");
+    expect((await tablet.db.lessons.get("mech-1"))?.targetDate).toBe("2026-10-01");
     const [planPhone, planTablet] = await Promise.all([plan(phone), plan(tablet)]);
     expect(planTablet).toEqual(planPhone);
     const [statsPhone, statsTablet] = await Promise.all([stats(phone), stats(tablet)]);
@@ -144,7 +144,7 @@ describe("перенос компактного прогресса между у
     expect((await stats(phone)).totals.answers).toBe(10);
   });
   it("состояния слов неустановленного пакета ждут загрузки, не обнуляются и не попадают в план", async () => {
-    const phone = await device("phone", { lessons: ["lesson-1-1", "lesson-1-2"] });
+    const phone = await device("phone", { lessons: ["mech-1", "mech-2"] });
     const fresh = await device("fresh");
     await study(phone, [true, true, true, true]);
     await phone.sync.exchange();
@@ -155,14 +155,15 @@ describe("перенос компактного прогресса между у
     expect((await fresh.sync.exchange()).phase).toBe("synced");
     expect(await fresh.db.cardStates.count()).toBe(0);
     expect(await fresh.db.cardStash.count()).toBe(await phone.db.cardStates.count());
-    expect(missing[0]).toEqual(["lesson-1-1", "lesson-1-2"]);
+    expect(missing[0]).toEqual(["mech-1", "mech-2"]);
     expect((await plan(fresh)).reviews).toHaveLength(0);
     const fetcher = memoryFetcher();
     await refreshCatalog(fresh.db, fetcher);
-    await installLesson("lesson-1-1", fresh.db, fetcher);
+    await installLesson("mech-1", fresh.db, fetcher);
     const phoneStates = await statesOf(phone);
     const adopted = await statesOf(fresh);
-    expect(adopted).toEqual(phoneStates.filter((state) => state.ref.id.startsWith("w11-")));
+    const first = new Set(packageOf("mech-1").items.map((item) => item.id));
+    expect(adopted).toEqual(phoneStates.filter((state) => first.has(state.ref.id)));
     expect(await fresh.db.cardStash.count()).toBe(phoneStates.length - adopted.length);
     // Повторная публикация с нового устройства не теряет ещё не загруженные состояния.
     await study(fresh, [true]);
@@ -173,7 +174,7 @@ describe("перенос компактного прогресса между у
     expect(merged).toHaveLength(phoneStates.length + 1); // плюс новое слово, отвеченное на новом устройстве
   });
   it("пользовательские слова и полная история остаются локальными", async () => {
-    const phone = await device("phone", { lessons: ["lesson-1-1"] });
+    const phone = await device("phone", { lessons: ["mech-1"] });
     const own: Word = {
       id: "w-own",
       greek: "η καρέκλα",
@@ -206,7 +207,7 @@ describe("перенос компактного прогресса между у
     );
     await study(phone, [true, true]);
     await phone.sync.exchange();
-    const tablet = await device("tablet", { lessons: ["lesson-1-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
     await tablet.sync.exchange();
     expect(await tablet.db.cardStates.get(wordKeyOf("w-own"))).toBeUndefined();
     expect(await tablet.db.events.count()).toBe(0);
@@ -217,8 +218,8 @@ describe("перенос компактного прогресса между у
 
 describe("конфликты независимых изменений", () => {
   async function pair() {
-    const phone = await device("phone", { lessons: ["lesson-1-1"], label: "ios" });
-    const tablet = await device("tablet", { lessons: ["lesson-1-1"], label: "android" });
+    const phone = await device("phone", { lessons: ["mech-1"], label: "ios" });
+    const tablet = await device("tablet", { lessons: ["mech-1"], label: "android" });
     await study(phone, [true, true, true]);
     await phone.sync.exchange();
     await tablet.sync.exchange();
@@ -284,7 +285,7 @@ describe("конфликты независимых изменений", () => {
   });
   it("поздняя независимая ветвь после разрешения вызывает новый конфликт, а не молчаливую перезапись", async () => {
     const { phone, tablet } = await pair();
-    const laptop = await device("laptop", { lessons: ["lesson-1-1"], label: "web" });
+    const laptop = await device("laptop", { lessons: ["mech-1"], label: "web" });
     await laptop.sync.exchange(); // общая база у трёх устройств
     await study(phone, [false]);
     await study(tablet, [true]);
@@ -298,10 +299,10 @@ describe("конфликты независимых изменений", () => {
     expect(late.conflict?.branches.filter((branch) => !branch.local)).toHaveLength(1);
   });
   it("первое подключение непустой базы к непустому облаку и восстановление копии требуют выбора", async () => {
-    const phone = await device("phone", { lessons: ["lesson-1-1"] });
+    const phone = await device("phone", { lessons: ["mech-1"] });
     await study(phone, [true, true]);
     await phone.sync.exchange();
-    const tablet = await device("tablet", { lessons: ["lesson-1-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
     await study(tablet, [true]);
     const initial = await tablet.sync.exchange();
     expect(initial.phase).toBe("conflict");
@@ -316,7 +317,7 @@ describe("конфликты независимых изменений", () => {
   });
   it("конфликт двух других устройств при чистой локальной базе тоже требует выбора", async () => {
     const { phone, tablet } = await pair();
-    const clean = await device("clean", { lessons: ["lesson-1-1"] });
+    const clean = await device("clean", { lessons: ["mech-1"] });
     await clean.sync.exchange();
     await study(phone, [true]);
     await study(tablet, [false]);
@@ -347,8 +348,8 @@ describe("конфликты независимых изменений", () => {
 
 describe("надёжность публикации и лимиты", () => {
   it("обрыв публикации не даёт частичной версии; повтор с тем же идентификатором завершает её без удвоения", async () => {
-    const phone = await device("phone", { lessons: ["lesson-1-1"] });
-    const tablet = await device("tablet", { lessons: ["lesson-1-1"] });
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
     await study(phone, [true, true]);
     await phone.sync.exchange();
     await tablet.sync.exchange();
@@ -372,8 +373,8 @@ describe("надёжность публикации и лимиты", () => {
   });
   it("после публикации свои устаревшие поколения удаляются, чужие и сохранённые альтернативы — нет", async () => {
     const { kvAdapter: makeAdapter } = await import("../src/sync/adapter");
-    const phone = await device("phone", { lessons: ["lesson-1-1"] });
-    const tablet = await device("tablet", { lessons: ["lesson-1-1"] });
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
     await study(phone, [true]);
     await phone.sync.exchange();
     await tablet.sync.exchange();
@@ -395,7 +396,7 @@ describe("надёжность публикации и лимиты", () => {
   });
   it("нехватка места останавливает облачную запись, сохраняет очередь и локальные данные", async () => {
     cloud = memoryTransport({ limits: { maxKeys: 1 } }); // одна часть плюс указатель уже не помещаются
-    const phone = await device("phone", { lessons: ["lesson-1-1", "lesson-1-2", "lesson-1-3", "lesson-1-4"] });
+    const phone = await device("phone", { lessons: ["mech-1", "mech-2", "mech-3", "mech-4"] });
     await study(phone, [true, true, true, true, true, true]);
     const before = await statesOf(phone);
     const status = await phone.sync.exchange();
@@ -408,15 +409,15 @@ describe("надёжность публикации и лимиты", () => {
     // Место появилось — тот же прогресс публикуется, без удвоения.
     cloud.limits.maxKeys = 1024;
     expect((await phone.sync.exchange()).phase).toBe("synced");
-    const tablet = await device("tablet", { lessons: ["lesson-1-1", "lesson-1-2", "lesson-1-3", "lesson-1-4"] });
+    const tablet = await device("tablet", { lessons: ["mech-1", "mech-2", "mech-3", "mech-4"] });
     await tablet.sync.exchange();
     expect((await stats(tablet)).totals.answers).toBe(6);
   });
   it("версия более нового формата не применяется, не перезаписывается и просит обновить приложение", async () => {
-    const phone = await device("phone", { lessons: ["lesson-1-1"] });
+    const phone = await device("phone", { lessons: ["mech-1"] });
     await study(phone, [true]);
     await phone.sync.exchange();
-    const tablet = await device("tablet", { lessons: ["lesson-1-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
     await tablet.sync.exchange();
     const phoneDevice = await phone.sync.deviceId();
     const pointer = JSON.parse(cloud.store.get(`p_${phoneDevice}`)!);
@@ -438,7 +439,7 @@ describe("надёжность публикации и лимиты", () => {
     const db = new AppDatabase(`tetradio-sync-tabs-${++counter}`);
     await db.delete();
     await db.open();
-    await installLessons(db, ["lesson-1-1"]);
+    await installLessons(db, ["mech-1"]);
     const busy = new SyncCoordinator({
       database: db,
       adapter: kvAdapter(cloud),
@@ -467,7 +468,7 @@ describe("надёжность публикации и лимиты", () => {
     const db = new AppDatabase(`tetradio-sync-err-${++counter}`);
     await db.delete();
     await db.open();
-    await installLessons(db, ["lesson-1-1"]);
+    await installLessons(db, ["mech-1"]);
     const broken = memoryTransport({
       intercept: (op) => {
         if (op === "getKeys") throw Object.assign(new Error("CloudStorage timeout"), { kind: "transport" });

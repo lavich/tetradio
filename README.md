@@ -2,7 +2,7 @@
 
 Курс новогреческого A0 → A2 в виде Telegram Mini App — подготовка к экзамену ΚΕΓ A2 на Кипре. Используются Telegram-аккаунт и синхронизация через Telegram CloudStorage; отдельная регистрация не нужна.
 
-Рабочее название — «Τετράδιο» (дизайн-направление, см. [бриф](docs/design/brief.md)). Содержание курса — в `content/`; правила подготовки и происхождения материалов — в [подготовке уроков](docs/lesson-authoring.md) и [формате курса](docs/course/format.md). Демо-курс для разработки — `tests/fixtures/course-demo`.
+Рабочее название — «Τετράδιο» (дизайн-направление, см. [бриф](docs/design/brief.md)). Содержание курса — в `content/`; правила подготовки и происхождения материалов — в [подготовке уроков](docs/lesson-authoring.md) и [формате курса](docs/course/format.md). Демо-курс для разработки — `tests/fixtures/course-demo`; механики карточек проверяются на маленькой фикстуре `tests/fixtures/mechanics` из слов и фраз лексикона.
 
 ## Разработка
 
@@ -11,7 +11,7 @@ npm ci
 npm run dev          # сборка контента и Vite dev-сервер (вне Telegram — экран «Откройте в Telegram»)
 npm run dev:mock     # то же с моком Telegram: тестовый пользователь 1, база tetradio-mock-1
 npm test             # unit (Vitest)
-npm run test:e2e     # Playwright: механики карточек на тестовом контенте
+npm run test:e2e     # Playwright: механики карточек на фикстуре tests/fixtures/mechanics
 npm run test:e2e:course  # Playwright: экраны курса на демо-курсе
 CONTENT_ROOT=tests/fixtures/course-demo npm run dev  # посмотреть курс локально
 npm run typecheck && npm run lint && npm run format:check

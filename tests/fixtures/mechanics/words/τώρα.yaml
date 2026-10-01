@@ -1,0 +1,12 @@
+id: w032
+greek: τώρα
+russian: сейчас, теперь
+ipa: /ˈtora/
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+reading:
+  - { text: "ώ", ipa: "o", explanation: "ω звучит так же, как ο" }
+examples:
+  - greek: "Τώρα μένω στην Κύπρο."
+    russian: "Сейчас я живу на Кипре."
+    target: "Τώρα"

@@ -1,0 +1,12 @@
+id: w071
+greek: έχω
+russian: иметь; у меня есть
+ipa: /ˈexo/
+forms: прош. είχα; буд. θα έχω
+note: аориста нет, είχα — прошедшее
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+examples:
+  - greek: "Έχω δύο αδελφές."
+    russian: "У меня две сестры."
+    target: "Έχω"

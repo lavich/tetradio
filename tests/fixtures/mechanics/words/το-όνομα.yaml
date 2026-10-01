@@ -1,0 +1,12 @@
+id: w020
+greek: το όνομα
+russian: имя
+ipa: /to ˈonoma/
+forms: мн. τα ονόματα
+note: το όνομά μου — перед μου появляется второй тонос
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Το όνομά μου είναι Άννα."
+    russian: "Моё имя — Анна."
+    target: "όνομά"

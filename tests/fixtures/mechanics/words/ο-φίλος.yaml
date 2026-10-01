@@ -1,0 +1,13 @@
+id: w034
+greek: ο φίλος
+russian: друг
+ipa: /o ˈfilos/
+forms: мн. οι φίλοι
+note: ο φίλος μου — мой друг
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+image: ο-φίλος.svg
+examples:
+  - greek: "Ο φίλος μας είναι παντρεμένος."
+    russian: "Наш друг женат."
+    target: "φίλος"

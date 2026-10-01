@@ -1,0 +1,13 @@
+id: w070
+greek: γράφω
+russian: писать
+ipa: /ˈɣrafo/
+forms: аор. έγραψα; буд. θα γράψω
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "φ", ipa: "f", explanation: "φ — звук ф" }
+examples:
+  - greek: "Γράφω ένα γράμμα."
+    russian: "Я пишу письмо."
+    target: "Γράφω"

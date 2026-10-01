@@ -1,0 +1,14 @@
+id: w039
+greek: μαθαίνω
+russian: учить, изучать; узнавать
+ipa: /maˈθeno/
+forms: аор. έμαθα; буд. θα μάθω
+note: неправ. аорист
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "αί", ipa: "e", explanation: "αι читается как э" }
+examples:
+  - greek: "Μαθαίνω ελληνικά."
+    russian: "Я учу греческий."
+    target: "Μαθαίνω"
