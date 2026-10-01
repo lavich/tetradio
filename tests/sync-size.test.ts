@@ -124,7 +124,7 @@ describe("размер компактного снимка (задача 0.4)", 
     expect(capacity).toBeGreaterThan(3000);
   }, 60_000); // три базы по тысячам событий: на CI-раннере дольше стандартных 5 секунд
 
-  it("бюджет курса: 2 500 карточек, худшая история и 97 уроков со всеми блоками — 198 частей, 596 из 1 024 ключей, запас 428", async () => {
+  it("бюджет курса: 2 500 карточек, худшая история и все уроки курса со всеми блоками — не больше 1 024 ключей", async () => {
     const db = new AppDatabase("tetradio-size-course");
     await db.delete();
     await db.open();
@@ -279,10 +279,11 @@ describe("размер компактного снимка (задача 0.4)", 
         `(блоки курса ${courseChars}), ${parts} частей, ${keysNeeded} ключей с резервом из ${CLOUD_LIMITS.maxKeys} ` +
         `(запас ${CLOUD_LIMITS.maxKeys - keysNeeded})`,
     );
-    expect(course.length).toBe(97);
+    // Весь курс, а не фиксированное число: новые уроки входят в бюджет сами.
+    expect(course.length).toBeGreaterThanOrEqual(99);
     expect(snapshot.states).toHaveLength(2500);
     expect(snapshot.blocks).toHaveLength(blocks.length);
-    expect(snapshot.lessons.filter((item) => item.status === "completed")).toHaveLength(97);
+    expect(snapshot.lessons.filter((item) => item.status === "completed")).toHaveLength(course.length);
     expect(encodeSnapshot(snapshot)).not.toContain("απάντηση");
     expect(keysNeeded).toBeLessThanOrEqual(CLOUD_LIMITS.maxKeys);
     expect(courseChars / blocks.length).toBeLessThan(50);
