@@ -1,6 +1,8 @@
+/** `fix` у замены — что должно стоять на месте лишнего: ручка пишет его над зачёркнутым. */
 export interface DiffPart {
   type: "same" | "wrong" | "missing";
   text: string;
+  fix?: string;
 }
 const normalizeForDiff = (value: string) => value.normalize("NFC").trim().replace(/\s+/g, " ");
 
@@ -17,10 +19,12 @@ export function diffChars(answer: string, expected: string): DiffPart[] {
           ? table[i - 1][j - 1]
           : 1 + Math.min(table[i - 1][j - 1], table[i - 1][j], table[i][j - 1]);
   const parts: DiffPart[] = [];
-  const push = (type: DiffPart["type"], text: string) => {
+  const push = ({ type, text, fix }: DiffPart) => {
     const last = parts[parts.length - 1];
-    if (last && last.type === type) last.text += text;
-    else parts.push({ type, text });
+    if (last && last.type === type && (last.fix === undefined) === (fix === undefined)) {
+      last.text += text;
+      if (fix !== undefined) last.fix += fix;
+    } else parts.push(fix === undefined ? { type, text } : { type, text, fix });
   };
   let i = a.length,
     j = b.length;
@@ -38,7 +42,7 @@ export function diffChars(answer: string, expected: string): DiffPart[] {
       continue;
     }
     if (i > 0 && j > 0 && table[i][j] === table[i - 1][j - 1] + 1) {
-      steps.push({ type: "wrong", text: a[i - 1] });
+      steps.push({ type: "wrong", text: a[i - 1], fix: b[j - 1] });
       i--;
       j--;
       continue;
@@ -51,6 +55,6 @@ export function diffChars(answer: string, expected: string): DiffPart[] {
     steps.push({ type: "wrong", text: a[i - 1] });
     i--;
   }
-  for (const step of steps.reverse()) push(step.type, step.text);
+  for (const step of steps.reverse()) push(step);
   return parts;
 }

@@ -1,0 +1,98 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="base.css"><script src="icons.js"></script>
+<style>
+.page{min-height:100vh;padding:0 16px 150px;max-width:640px;margin:0 auto}
+.date{font:italic 17px/24px var(--print);text-align:right;margin:0;padding-top:8px}
+.title{font:600 22px/36px var(--print);margin:0 0 6px}
+.done{display:grid;grid-template-columns:28px 1fr 28px;align-items:center;min-height:48px;font:17px/24px var(--print);color:var(--muted)}
+.done b{font-weight:600;color:var(--fg)}.done em{font-style:normal;color:var(--ink)}
+.done s{color:var(--pen);text-decoration-color:var(--pen)}
+.n{font:15px var(--print);color:var(--muted)}
+.fold{font:600 13px var(--ui);color:var(--ink);margin:4px 0 0 28px}
+.done.hidden{display:none}
+.cur{margin-top:12px;padding:16px;background:var(--paper);border:1px solid #c9d5e6;border-radius:14px;box-shadow:0 10px 30px -12px rgb(35 38 44 / .22)}
+.k{font:600 13.5px/24px var(--ui);color:var(--muted);margin:0}
+.word{font:600 40px/1.15 var(--print);letter-spacing:-.01em;margin:4px 0 0}
+.phrase{font:600 26px/1.25 var(--print);margin:4px 0 0}
+.ipa{font:16px var(--print);color:var(--muted)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pic{width:84px;height:84px;flex:none}
+.mean{font:20px/1.35 var(--print);margin:6px 0 0}
+.ex{font:17px/24px var(--print);margin:10px 0 0}.ex small{display:block;font:14px var(--ui);color:var(--muted)}
+/* варианты: короткие — сетка 2×2, длинные — строки столбцом */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.chip{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:52px;padding:0 14px;border:1px solid #c9d5e6;border-radius:12px;font:18px var(--print);background:var(--paper)}
+.list{margin-top:10px}
+.line{display:grid;grid-template-columns:26px 1fr 28px;align-items:start;gap:4px;padding:11px 0;border-bottom:1.5px solid #c9d5e6;font:17px/24px var(--print)}
+.line:last-child{border-bottom:0}
+.line i{font-style:normal;font:16px/24px var(--print);color:var(--muted)}
+.line.pick{color:var(--ink)}.line.pick span{text-decoration:underline;text-decoration-color:var(--ink);text-underline-offset:5px;text-decoration-thickness:1.5px}
+.line.bad span{color:var(--pen);text-decoration:line-through;text-decoration-color:var(--pen)}
+.line.right span{color:var(--fg)}
+.line .tick{margin-top:-2px}
+.chip.right{border-color:var(--ok)}.chip.bad{border-color:var(--pen);color:var(--pen)}.chip.bad span{text-decoration:line-through}
+.play{display:flex;align-items:center;gap:12px;margin:10px 0 2px}
+.play b{display:grid;place-items:center;width:56px;height:56px;border-radius:999px;background:var(--ink);color:#fff}
+.play b svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.play span{font:15px var(--ui);color:var(--muted)}
+.slow{font:600 13px var(--ui);color:var(--ink);border:1px solid var(--border);border-radius:999px;padding:6px 12px;margin-left:auto}
+.cells{display:flex;gap:6px;margin:14px 0 6px;min-height:52px;border-bottom:1.5px solid var(--ink);align-items:flex-end;padding-bottom:6px}
+.cells span{font:28px/1 var(--print);color:var(--ink)}
+.tiles{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tile{min-width:52px;height:48px;padding:0 14px;display:grid;place-items:center;border:1px solid #c9d5e6;border-radius:12px;font:22px var(--print);background:var(--paper)}
+.tile.used{opacity:.35}
+.write{font:28px/48px var(--print);color:var(--ink);border-bottom:1.5px solid var(--ink);margin-top:12px;min-height:50px}
+.write.ph{font-size:22px;line-height:36px}
+.write s{color:var(--pen);text-decoration-color:var(--pen)}.write sup{font:italic 18px var(--print);color:var(--pen)}
+.caret{display:inline-block;width:2px;height:28px;background:var(--ink);vertical-align:-4px;margin-left:2px}
+.hint{font:14px var(--ui);color:var(--muted);margin:6px 0 0}
+.fix{font:italic 15px/22px var(--print);color:var(--pen);margin:8px 0 0}
+.okline{font:italic 15px/22px var(--print);color:var(--ok);margin:8px 0 0}
+.idk{display:block;text-align:center;font:600 15px var(--ui);color:var(--muted);margin:14px 0 0}
+.sum{margin-top:18px;padding:14px 0 0 28px;border-top:1.5px solid var(--fg)}
+.sum p{margin:0;font:17px/26px var(--print)}
+.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(360px,100% - 32px);display:flex;align-items:center;gap:6px;height:60px;padding:5px;border:1px solid var(--border);border-radius:999px;background:color-mix(in srgb,#fff 86%,transparent);backdrop-filter:blur(14px);box-shadow:0 8px 28px rgb(35 38 44 / .12),0 1px 3px rgb(35 38 44 / .08)}
+.dock .c{flex:1;text-align:center;font:15px var(--print);color:var(--muted);line-height:1.2}.dock .c small{display:block;font:600 11.5px var(--ui)}
+.dock .go{height:100%;padding:0 22px;border-radius:999px;background:var(--ink);color:#fff;display:flex;align-items:center;font:600 16px var(--ui)}
+.dock .go.off{background:#8fa3d9}
+.dock .x{margin-left:8px;color:var(--muted)}
+@media (min-width:900px){
+ .page{max-width:1180px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);column-gap:48px;align-items:start;align-content:start;padding:24px 32px 120px}
+ .page>.date,.page>.title,.page>.done,.page>.fold{grid-column:1}
+ .page>.sum{grid-column:2;grid-row:1 / span 40;margin:0;padding:28px 32px;background:var(--paper);border:1px solid #c9d5e6;border-top:1px solid #c9d5e6;border-radius:14px;box-shadow:0 10px 30px -12px rgb(35 38 44 / .22)}
+ .page>.date{text-align:left}
+ .page>.cur{grid-column:2;grid-row:1 / span 40;position:sticky;top:24px;margin-top:0;padding:28px 32px}
+ .page>.fold{display:none}
+ .page .hidden{display:grid}
+ .dock{left:auto;right:calc(50% - 590px + 32px);transform:none;width:min(420px,46%)}
+}
+</style></head><body>
+<div class="page grid" id="p"></div>
+<div class="dock"><span class="x" data-ic="x"></span><span class="c" id="cnt">5 из 12<small>2 новых · 3 повторения</small></span><span class="go" id="go">Далее</span></div>
+<script>
+const s=new URLSearchParams(location.search).get('s')||'intro-word';const p=document.getElementById('p');
+const T=IC.tick, sound='<span class="speak" data-ic="sound"></span>';
+const done=`<p class="date">Πέμπτη, 1 Οκτωβρίου</p><h1 class="title">Повторение</h1>
+<div class="done"><span class="n">2.</span><span><b>ο φίλος</b> — <em>друг</em></span>${T}</div>
+<div class="done"><span class="n">3.</span><span>книга — <em><s>βηβλίο</s> βιβλίο</em></span><span></span></div>
+<div class="done"><span class="n">4.</span><span><b>Καλημέρα!</b> — <em>доброе утро</em></span>${T}</div>`;
+const folded=`<p class="date">Πέμπτη, 1 Οκτωβρίου</p><h1 class="title">Повторение</h1><p class="fold">Сделано 4 — показать</p>`+[['1.','<b>η θάλασσα</b> — <em>море</em>',T],['2.','<b>ο φίλος</b> — <em>друг</em>',T],['3.','книга — <em><s>βηβλίο</s> βιβλίο</em>',''],['4.','<b>Καλημέρα!</b> — <em>доброе утро</em>',T]].map(([n,t,k])=>`<div class="done hidden"><span class="n">${n}</span><span>${t}</span>${k||'<span></span>'}</div>`).join('');
+const word=`<div class="row"><div><p class="word">το ψωμί</p><span class="ipa">/to psoˈmi/</span></div>${sound}</div>`;
+const L=(rows)=>`<div class="list">${rows.map(([l,t,c])=>`<div class="line ${c||''}"><i>${l})</i><span>${t}</span>${c==='right'||c==='pick right'?T:'<span></span>'}</div>`).join('')}</div>`;
+const V={
+'intro-word':()=>done+`<div class="cur"><div class="row"><p class="k">5. Новое слово · к уроку 8.2</p><img class="pic" src="bread.svg" alt=""></div>${word}<p class="mean">хлеб <span style="color:var(--muted);font-size:15px">· мн. τα ψωμιά</span></p><p class="ex">Αγοράζω <b>ψωμί</b> στον φούρνο.<small>Покупаю хлеб в пекарне.</small></p></div>`,
+'intro-phrase':()=>done+`<div class="cur"><p class="k">5. Новая фраза · к уроку 23.1</p><div class="row" style="align-items:flex-start"><p class="phrase">Θα ήθελα να ανοίξω λογαριασμό.</p>${sound}</div><p class="mean">Я хотел(а) бы открыть счёт.</p><p class="hint">Вежливая просьба: θα ήθελα να + форма от основы аориста.</p></div>`,
+'recog-word':()=>done+`<div class="cur"><p class="k">5. Что значит это слово?</p>${word}<div class="grid2">${[['молоко'],['хлеб','right'],['сыр'],['вода']].map(([t,c])=>`<span class="chip ${c||''}"><span>${t}</span>${c?T:''}</span>`).join('')}</div><p class="okline">Верно.</p></div>`,
+'recog-phrase':()=>folded+`<div class="cur"><div class="row" style="align-items:flex-start"><div><p class="k">5. Что значит эта фраза?</p><p class="phrase">Θα ήθελα να ανοίξω λογαριασμό.</p></div>${sound}</div>${L([['α','Мне нужно заплатить по счёту за электричество.'],['β','Я хотел(а) бы открыть счёт.','right'],['γ','Не могли бы вы прислать мне бланк?','pick bad'],['δ','Я хотел(а) бы снять деньги со счёта.']])}<p class="fix">Верно: <span style="font-style:normal">β)</span> — ανοίξω значит «открыть».</p></div>`,
+'listen-phrase':()=>folded+`<div class="cur"><p class="k">5. Что прозвучало?</p><div class="play"><b data-ic="sound"></b><span>Прослушано 1 раз</span><span class="slow">Медленнее</span></div>${L([['α','Θα ήθελα να ανοίξω λογαριασμό.'],['β','Θα ήθελα να κλείσω λογαριασμό.'],['γ','Θα μπορούσατε να μου στείλετε το έντυπο;'],['δ','Πού μπορώ να πληρώσω τον λογαριασμό;']])}<span class="idk">Не могу послушать сейчас</span></div>`,
+'compr-word':()=>done+`<div class="cur"><p class="k">5. Что это значит?</p><div class="play"><b data-ic="sound"></b><span>Слушайте — текста нет до ответа</span></div><div class="grid2">${['молоко','хлеб','сыр','вода'].map(t=>`<span class="chip"><span>${t}</span></span>`).join('')}</div><span class="idk">Не знаю</span></div>`,
+'assembly':()=>done+`<div class="cur"><div class="row"><div><p class="k">5. Соберите слово из слогов</p><p class="mean" style="font-size:28px;margin:2px 0 0">хлеб</p></div><img class="pic" src="bread.svg" alt=""></div><div class="cells"><span>το</span><span>ψω</span><span class="caret"></span></div><div class="tiles"><span class="tile">μί</span><span class="tile used">ψω</span><span class="tile">μα</span><span class="tile used">το</span></div><span class="idk">Не знаю</span></div>`,
+'spell':()=>done+`<div class="cur"><div class="row"><div><p class="k">5. Напишите по-гречески</p><p class="mean" style="font-size:28px;margin:2px 0 0">хлеб</p></div><img class="pic" src="bread.svg" alt=""></div><div class="write">το ψ<s>ο</s><sup>ω</sup>μί</div><p class="fix">Верно: το ψωμί — во втором слоге ω (омега).</p></div>`,
+'spell-phrase':()=>folded+`<div class="cur"><p class="k">5. Напишите по-гречески</p><p class="mean" style="font-size:22px;margin:2px 0 0">Я хотел(а) бы открыть счёт.</p><div class="write ph">Θα ήθελα να ανοίξω λογ<span class="caret" style="height:22px"></span></div><p class="hint">Тонос и конечная ς проверяются; точку в конце можно не ставить.</p><span class="idk">Не знаю</span></div>`,
+'end':()=>`<p class="date">Πέμπτη, 1 Οκτωβρίου</p><h1 class="title">Повторение</h1>
+${[['1.','<b>η θάλασσα</b> — <em>море</em>',T],['2.','<b>ο φίλος</b> — <em>друг</em>',T],['3.','книга — <em><s>βηβλίο</s> βιβλίο</em>',''],['4.','<b>Καλημέρα!</b> — <em>доброе утро</em>',T],['5.','хлеб — <em><s>το ψομί</s> το ψωμί</em>',''],['6.','<b>Θα ήθελα να ανοίξω λογαριασμό.</b> — <em>Я хотел(а) бы открыть счёт.</em>',T],['7.','<b>το νερό</b> — <em>вода</em>',T]].map(([n,t,k])=>`<div class="done"><span class="n">${n}</span><span>${t}</span>${k||'<span></span>'}</div>`).join('')}
+<div class="sum"><p>7 карточек · 5 сразу, 2 с исправлением.</p><p style="color:var(--muted);font:15px var(--ui);margin-top:4px">Ошибки вернутся завтра: βιβλίο, ψωμί.</p></div>`
+};
+p.innerHTML=V[s]();
+if(s==='end'){document.getElementById('cnt').innerHTML='Готово<small>7 из 7</small>';document.getElementById('go').textContent='На главную'}
+if(s==='listen-phrase'||s==='compr-word'||s==='assembly'||s==='spell-phrase')document.getElementById('go').classList.add('off'),document.getElementById('go').textContent=s==='assembly'||s==='spell-phrase'?'Проверить':'Далее';
+</script></body></html>

@@ -19,7 +19,8 @@ import {
 } from "../../storage/course";
 import { lessonItems } from "../../storage/queries";
 import { startSession } from "../learning/session-actions";
-import { Exercise, Explanation, Listening, Reading, Speaking, Tick, Writing } from "./blocks";
+import { Exercise, Explanation, Listening, Reading, Speaking, Writing } from "./blocks";
+import { Tick } from "../../shared/Tick";
 import { VocabularyList } from "./Vocabulary";
 import css from "./course.module.css";
 import { ExamLine } from "./ExamLine";

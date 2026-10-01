@@ -686,7 +686,7 @@ describe("проверка написания", () => {
   it("показывает посимвольно, что совпало, что лишнее и чего не хватает", () => {
     expect(diffChars("το σπιτι", "το σπίτι")).toEqual([
       { type: "same", text: "το σπ" },
-      { type: "wrong", text: "ι" },
+      { type: "wrong", text: "ι", fix: "ί" },
       { type: "same", text: "τι" },
     ]);
     expect(diffChars("σπίτι", "το σπίτι")).toEqual([

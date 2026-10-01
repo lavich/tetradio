@@ -13,6 +13,7 @@ import { stopAudio, useGreekVoice } from "../../shared/audio";
 import { useSettings } from "../../shared/store";
 import { db } from "../../storage/db";
 import { Assembly, Comprehension, Listening, Recognition, Spelling, type Answer } from "../learning/exercises";
+import { PlaceProvider } from "../learning/notebook";
 import { EXERCISE_LABELS, isWordExercise, wordSources } from "./word-exercises";
 import ui from "../../shared/ui.module.css";
 import s from "../learning/session.module.css";
@@ -79,22 +80,30 @@ export function WordExerciseScreen() {
     setAttempt((n) => n + 1);
   };
   const title = isWordExercise(type) ? EXERCISE_LABELS[type] : "Упражнение";
-  const shell = (body: React.ReactNode) => (
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
+  const shell = (body: React.ReactNode, sheet = true) => (
     <main className={s.session}>
-      <div className={s.top}>
+      <div className={s.page}>
+        {sheet ? (
+          <section className={s.sheet} aria-label={title}>
+            <PlaceProvider value={{ slot }}>{body}</PlaceProvider>
+          </section>
+        ) : (
+          body
+        )}
+      </div>
+      <div className={s.cloud} role="group" aria-label={title}>
         {!nativeBack && (
-          <Button variant="ghost" size="icon-lg" className="size-11" onClick={back} aria-label="К слову">
+          <Button variant="ghost" size="icon-lg" className={s.close} onClick={back} aria-label="К слову">
             <X />
           </Button>
         )}
-        <div className="min-w-0 flex-1">
-          <p className="m-0 truncate font-semibold">{title}</p>
-          <p className={ui.note} style={{ margin: 0 }}>
-            Без учёта прогресса
-          </p>
-        </div>
+        <span className={s.count}>
+          <span>{title}</span>
+          <small>Без учёта прогресса</small>
+        </span>
+        <span ref={setSlot} className="contents" />
       </div>
-      {body}
     </main>
   );
   const message = (text: string) =>
@@ -105,12 +114,13 @@ export function WordExerciseScreen() {
           К слову
         </Button>
       </div>,
+      false,
     );
 
-  if (word === undefined) return shell(<Skeleton className="h-48 w-full" />);
+  if (word === undefined) return shell(<Skeleton className="h-48 w-full" />, false);
   if (!live) return message("Слово не найдено.");
   if (!isWordExercise(type)) return message("Упражнение недоступно.");
-  if (item === undefined) return shell(<Skeleton className="h-48 w-full" />);
+  if (item === undefined) return shell(<Skeleton className="h-48 w-full" />, false);
   if (item === null) return message(`Это упражнение для слова недоступно. ${reason}`.trim());
 
   const props = { item, onAnswer: answer, onNext: again, nextLabel: "Ещё раз" };
@@ -127,5 +137,5 @@ export function WordExerciseScreen() {
     ) : (
       <Spelling key={item.id} {...props} autoSpeak={autoSpeak} />
     );
-  return shell(<div className={s.body}>{view}</div>);
+  return shell(view);
 }

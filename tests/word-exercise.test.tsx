@@ -80,7 +80,7 @@ const click = async (element: Element | undefined) => {
   expect(element).toBeTruthy();
   await act(async () => (element as HTMLElement).click());
 };
-const answered = () => !!button("Ещё раз");
+const answered = () => button("Ещё раз")?.disabled === false;
 
 /** Ответ в упражнении любого вида: `right` — верный, иначе заведомо неверный. */
 async function respond(type: WordExerciseType, right: boolean) {
