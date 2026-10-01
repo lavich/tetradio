@@ -513,10 +513,7 @@ export function parseModule(input: unknown, path: string): CatalogModule {
   };
 }
 
-/**
- * Поля блока с греческим текстом, в которых слова нажимаются: объяснение, чтение, реплики транскрипта и образцы.
- * Задания сюда не входят: подсказка не должна решать задание.
- */
+/** Задания сюда не входят: подсказка не должна решать задание. */
 export function tapFields(block: LessonBlock): [field: string, text: string][] {
   switch (block.type) {
     case "explanation":
@@ -539,7 +536,7 @@ export interface GlossSpan {
   length: number;
   gloss: Gloss;
 }
-/** Глоссы автора в тексте — по порядку первого вхождения, каждая после предыдущей; так их видят и сборщик, и экран. */
+/** Общая для сборщика и экрана: разметка глосс должна совпасть с тем, что видит учащийся. */
 export function glossSpans(text: string, glosses: Gloss[] = []): GlossSpan[] {
   const spans: GlossSpan[] = [];
   let from = 0;

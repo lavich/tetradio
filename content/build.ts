@@ -22,9 +22,8 @@ import {
   parsePackage,
   type MarkCard,
   type PackageMarks,
-  encodeMarks,
 } from "../src/content/schema.ts";
-import { buildMatcher, lessonMarks, type Ambiguity } from "./marks.ts";
+import { buildMatcher, encodeMarks, lessonMarks, type Ambiguity } from "./marks.ts";
 import { CARD_KINDS, type CardKind, type Example, type Gloss, type Segment } from "../src/domain/types.ts";
 import {
   parseBlocks,
@@ -771,14 +770,13 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     };
     drafts.set(id, draft);
   }
-  // Разметка слов нужна всем урокам курса сразу: слова прошлых уроков известны только после разбора всех уроков.
+  // Слова прошлых уроков известны только после разбора всех уроков, поэтому версии считаются после разметки.
   const marks = markCourses(courses, modules, moduleOf, drafts, words, phrases);
   for (const [id, draft] of drafts) {
     const marked = marks.packages.get(id);
     if (marked) draft.marks = marked;
     const version = hash(canonical({ ...draft, version: undefined }));
     const pack = { ...draft, version };
-    // Пакет проверяется тем же читателем, что и в приложении: неверная разметка — ошибка сборки, а не урок без звука.
     if (marked) {
       try {
         parsePackage(JSON.parse(JSON.stringify(pack)));
@@ -852,16 +850,11 @@ export function buildContent(root = defaultRoot()): BuiltContent {
 }
 
 export interface MarksReport {
-  /** Урок → число вхождений слов этого урока и прошлых уроков. */
   lessons: Map<string, { lesson: number; earlier: number }>;
   ambiguous: (Ambiguity & { lessonId: string })[];
-  /** Однословные карточки-омографы, которые отдельно не ищутся. */
   skipped: string[];
 }
-/**
- * Слова в тексте уроков каждого курса программы. «Прошлые» — по порядку программы (модули, их уроки, контрольная
- * точка, занятия после неё), а не по прогрессу учащегося: набор не зависит от устройства и считается здесь.
- */
+/** «Прошлые» — по порядку программы, а не по прогрессу учащегося: набор не зависит от устройства. */
 function markCourses(
   courses: CatalogCourse[],
   modules: CatalogModule[],
@@ -894,7 +887,6 @@ function markCourses(
       }),
     );
     report.skipped.push(...matcher.skipped);
-    /** Карточка → номер урока, где она появилась впервые, и его подпись «N.M». */
     const introduced = new Map<string, { at: number; label: string }>();
     lessons.forEach((pack, at) => {
       const own = new Set(pack.items.map((item) => cardRef(item.kind, item.id)));
@@ -976,7 +968,6 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   console.log(
     `Слова в тексте: ${sum("lesson")} слов урока и ${sum("earlier")} прошлых уроков в ${counts.filter((c) => c.lesson + c.earlier).length} уроках; спорных мест ${built.marks.ambiguous.length}, омографов вне поиска ${built.marks.skipped.length}`,
   );
-  // Полный список спорных мест — по запросу: автор правит текст или карточку, а не читает отчёт при каждой сборке.
   const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);
   for (const entry of shown)
     console.log(`  ${entry.lessonId} ${entry.block}.${entry.field}: «${entry.text}» → ${entry.refs.join(" или ")}`);

@@ -74,9 +74,9 @@ describe("поиск слова в тексте", () => {
     expect(found(`${decomposed} φιλοσ`, [word("w:filos", "ο φίλος")])).toEqual([`${decomposed}→w:filos`]);
   });
   it("служебные омографы отдельно не ищутся", () => {
-    const matcher = buildMatcher([word("w:se", "σε"), word("w:mou", "μου")]);
-    expect(choose(candidates("σε μου", matcher), () => 0)).toEqual([]);
-    expect(matcher.skipped).toHaveLength(2);
+    const matcher = buildMatcher([word("w:se", "σε"), word("w:mou", "μου"), word("w:sas", "σας")]);
+    expect(choose(candidates("σε μου Σας", matcher), () => 0)).toEqual([]);
+    expect(matcher.skipped).toHaveLength(3);
   });
   it("равные карточки на одном месте — спорное место, без разметки и в отчёте", () => {
     const report: string[][] = [];

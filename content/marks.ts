@@ -1,22 +1,14 @@
-/**
- * Поиск слов урока в тексте урока при сборке. Карточка даёт написания: слово с артиклем и без, формы из `forms`
- * и частые окончания по части речи, которые выводятся без морфологического словаря. Окончания добавляются только
- * там, где ударение остаётся на том же слоге, а основа не короче трёх букв: лучше не найти форму, чем привязать
- * чужое слово. Поиск идёт по целым греческим словам, фраза совпадает только целиком, длинное совпадение важнее
- * короткого.
- */
+/** Окончания выводятся только с тем же ударением и основой от трёх букв: лучше не найти форму, чем привязать чужое слово. */
 import { glossSpans, tapFields, type LessonBlock } from "../src/content/course.ts";
-import type { BlockMarks, WordMark } from "../src/content/schema.ts";
+import type { BlockMarks, MarkCard, PackageMarks, WordMark } from "../src/content/schema.ts";
 
 export interface MatchCard {
   ref: string;
-  /** Написание карточки: слово с артиклем или текст фразы. */
   text: string;
   forms?: string;
   phrase?: boolean;
 }
 
-/** Правило, по которому найдено написание: точное важнее выведенного окончания. */
 type Tier = 0 | 1;
 interface Pattern {
   tokens: string[];
@@ -25,13 +17,11 @@ interface Pattern {
   tier: Tier;
 }
 
-const ARTICLES = new Set(["ο", "η", "το", "οι", "τα", "τον", "την", "τη", "του", "της", "των", "τους", "τις", "τ"]);
-/**
- * Однословные карточки-омографы служебных слов: «σε» — и «в», и «тебя», «του» — и «его», и артикль. Отдельно они
- * не ищутся (внутри фразы — да): перевод карточки чаще был бы неверен, чем верен.
- */
-export const HOMOGRAPHS = new Set(["σε", "με", "του", "της", "μου", "σου", "μας", "σας", "τους", "ένα", "τα", "το"]);
-/** Неправильные глаголы, у которых окончания не выводятся правилом: только частые формы настоящего (и είμαι). */
+export const norm = (value: string) => value.normalize("NFC").toLowerCase().replace(/ς/g, "σ");
+const normSet = (values: string[]) => new Set(values.map(norm));
+const ARTICLES = normSet(["ο", "η", "το", "οι", "τα", "τον", "την", "τη", "του", "της", "των", "τους", "τις", "τ"]);
+/** «σε» — и «в», и «тебя», «του» — и «его», и артикль: отдельно (не во фразе) перевод карточки чаще неверен. */
+export const HOMOGRAPHS = normSet(["σε", "με", "του", "της", "μου", "σου", "μας", "σας", "τους", "ένα", "τα", "το"]);
 const IRREGULAR: Record<string, string[]> = {
   είμαι: ["είσαι", "είναι", "είμαστε", "είστε", "είσαστε", "ήμουν", "ήμουνα", "ήσουν", "ήταν", "ήμασταν", "ήσασταν"],
   πάω: ["πας", "πάει", "πάμε", "πάτε", "πάνε"],
@@ -42,8 +32,7 @@ const IRREGULAR: Record<string, string[]> = {
 
 const isGreekLetter = (char: string) => /\p{M}/u.test(char) || (/\p{L}/u.test(char) && /\p{Script=Greek}/u.test(char));
 const isLetter = (char: string) => /[\p{L}\p{M}]/u.test(char);
-export const norm = (value: string) => value.normalize("NFC").toLowerCase().replace(/ς/g, "σ");
-/** Промежуток между словами: пробелы равны друг другу, остальное (запятая, апостроф) должно совпасть. */
+
 const gapKey = (gap: string) => {
   const flat = gap.replace(/[’ʼ′]/g, "'").replace(/\s+/g, " ");
   return flat.trim() ? flat.trim() : " ";
@@ -54,7 +43,6 @@ interface Token {
   end: number;
   norm: string;
 }
-/** Греческие слова текста; слово, слитое с буквами другого алфавита, не считается. */
 export function tokenize(text: string): Token[] {
   const tokens: Token[] = [];
   let at = 0;
@@ -79,14 +67,12 @@ const gapsOf = (text: string, tokens: Token[]) =>
 const ACCENTED = /[άέήίόύώΐΰ]/;
 const VOWEL = /[αεηιουωάέήίόύώϊϋΐΰ]/;
 const letters = (value: string) => [...value].filter((char) => isLetter(char)).length;
-/** Ударение основы — на последнем её слоге (после ударной гласной согласные): окончание его не сдвигает. */
 const stressOnLastStemSyllable = (stem: string) => {
   const at = [...stem].findLastIndex((char) => ACCENTED.test(char));
   return at >= 0 && ![...stem].slice(at + 1).some((char) => VOWEL.test(char));
 };
 const stressed = (value: string) => ACCENTED.test(value);
 
-/** Формы, которые надёжно выводятся из одного слова; пустой список — правило не подходит. */
 function inflect(word: string, gender: "m" | "f" | "n" | null, adjective = false): string[] {
   const out: string[] = [];
   const add = (stem: string, endings: string[]) => {
@@ -114,7 +100,6 @@ function inflect(word: string, gender: "m" | "f" | "n" | null, adjective = false
   }
   return out;
 }
-/** Окончания настоящего времени и подобных ему основ (будущее, аорист с ударением на основе). */
 function conjugate(word: string): string[] {
   const out: string[] = [];
   const add = (stem: string, endings: string[]) => {
@@ -131,7 +116,6 @@ function conjugate(word: string): string[] {
   return out;
 }
 
-/** Куски строки форм без помет: «аор. έγραψα; буд. θα γράψω» → «έγραψα», «γράψω». */
 export function formPieces(forms: string): string[] {
   return forms
     .split(/[;,]/)
@@ -149,7 +133,6 @@ export interface Matcher {
   patterns: Map<string, Pattern[]>;
   skipped: string[];
 }
-/** Написания всех карточек; ключ — первое слово написания. */
 export function buildMatcher(cards: MatchCard[]): Matcher {
   const patterns = new Map<string, Pattern[]>();
   const skipped: string[] = [];
@@ -166,7 +149,6 @@ export function buildMatcher(cards: MatchCard[]): Matcher {
     list.push(pattern);
     patterns.set(pattern.tokens[0], list);
   };
-  /** Слово и его вариант без ведущего артикля. */
   const withArticle = (surface: string, ref: string, tier: Tier) => {
     add(surface, ref, tier);
     const tokens = tokenize(surface);
@@ -207,11 +189,10 @@ export function buildMatcher(cards: MatchCard[]): Matcher {
         const form = piece.toLowerCase();
         if (tokenize(form).length !== 1) continue;
         // Аорист: единственное число и 3-е множественного сохраняют ударение основы (έγραψα → έγραψες, έγραψαν).
-        if (/α$/.test(form) && !form.endsWith("ά")) {
+        if (form.endsWith("α")) {
           const stem = form.slice(0, -1);
           if (letters(stem) >= 3) derived.push(stem + "ες", stem + "ε", stem + "αν");
         }
-        // Будущее/сослагательное: те же окончания, что у настоящего (θα γράψω → γράψουμε, γράψαμε).
         if (/[ωώ]$/.test(form) && form !== word) {
           derived.push(...conjugate(form));
           if (form.endsWith("ω") && letters(form.slice(0, -1)) >= 3 && stressOnLastStemSyllable(form.slice(0, -1)))
@@ -234,7 +215,6 @@ export interface Candidate extends Span {
   tier: Tier;
 }
 
-/** Все совпадения написаний в тексте, до выбора: на одном месте их может быть несколько. */
 export function candidates(text: string, matcher: Matcher): Candidate[] {
   const tokens = tokenize(text);
   const found: Candidate[] = [];
@@ -255,11 +235,7 @@ export function candidates(text: string, matcher: Matcher): Candidate[] {
   return found;
 }
 
-/**
- * Выбор на тексте: сначала длинные совпадения, на одном месте — точное раньше выведенного, затем порядок
- * предпочтения карточек (`rank`, меньше — лучше: слово урока, затем более поздний прошлый урок). Если лучших
- * карточек на месте две равных — место считается спорным и не размечается.
- */
+/** Две равные лучшие карточки на одном месте — спорное место: оно не размечается и идёт в отчёт. */
 export function choose(
   found: Candidate[],
   rank: (ref: string) => number,
@@ -315,9 +291,7 @@ export function choose(
 export interface LessonMarksInput {
   blocks: LessonBlock[];
   matcher: Matcher;
-  /** Карточки этого урока. */
   own: Set<string>;
-  /** Меньше — предпочтительнее; карточки вне урока и прошлых уроков отсутствуют. */
   rank: (ref: string) => number | undefined;
 }
 export interface Ambiguity {
@@ -326,10 +300,7 @@ export interface Ambiguity {
   text: string;
   refs: string[];
 }
-/**
- * Разметка урока: блок → поле → вхождения. Глоссы автора в чтении важнее найденного: совпадения поверх них
- * снимаются, а сама глосса ведёт на карточку, если её текст совпадает с написанием карточки или содержит его.
- */
+/** Глосса автора важнее найденного; карточкой она становится, если совпадает с написанием или содержит его. */
 export function lessonMarks({ blocks, matcher, own, rank }: LessonMarksInput) {
   const out: BlockMarks = {};
   const ambiguous: Ambiguity[] = [];
@@ -371,4 +342,17 @@ export function lessonMarks({ blocks, matcher, own, rank }: LessonMarksInput) {
     }
   }
   return { blocks: out, ambiguous };
+}
+
+export function encodeMarks(blocks: BlockMarks, cards: MarkCard[]): PackageMarks {
+  const refs: string[] = [];
+  const index = new Map<string, number>();
+  const encoded: PackageMarks["blocks"] = {};
+  for (const [blockId, fields] of Object.entries(blocks))
+    for (const [field, marks] of Object.entries(fields))
+      (encoded[blockId] ??= {})[field] = marks.map((mark) => {
+        if (!index.has(mark.ref)) index.set(mark.ref, refs.push(mark.ref) - 1);
+        return [mark.start, mark.length, index.get(mark.ref)!, mark.first ? 1 : 0];
+      });
+  return { refs, cards, blocks: encoded };
 }

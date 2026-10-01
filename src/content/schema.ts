@@ -135,11 +135,9 @@ export interface ContentPackage {
   media: PackageMedia[];
   /** Блоки урока по порядку (схема 4). */
   blocks?: LessonBlock[];
-  /** Слова урока и прошлых уроков, найденные при сборке в тексте блоков. */
   marks?: PackageMarks;
 }
 
-/** Вхождение карточки в текст поля; `first` — первое вхождение слова этого урока в блоке, оно выделяется штрихом. */
 export interface WordMark {
   start: number;
   length: number;
@@ -147,7 +145,7 @@ export interface WordMark {
   kind: "lesson" | "earlier";
   first: boolean;
 }
-/** Карточка прошлого урока: в пакете её нет, поэтому подсказка берёт данные отсюда. `lesson` — «1.2». */
+/** Карточки прошлого урока в пакете нет, поэтому её данные едут здесь. */
 export interface MarkCard {
   ref: string;
   greek: string;
@@ -156,14 +154,10 @@ export interface MarkCard {
   forms?: string;
   lesson: string;
 }
-/**
- * Разметка в пакете — компактная: вхождений в уроке сотни, поэтому каждое — `[начало, длина, номер в refs,
- * первое 0|1]`. Чьё слово, выводится из состава урока: карточка из `items` — слово урока, из `cards` — прошлого.
- */
+/** Вхождений в уроке сотни, поэтому каждое — `[начало, длина, номер в refs, first 0|1]`; чьё слово, видно по `items`. */
 export interface PackageMarks {
   refs: string[];
   cards: MarkCard[];
-  /** Блок → поле (`body`, `text`, `transcript.N`, `model`) → вхождения по порядку. */
   blocks: Record<string, Record<string, [number, number, number, 0 | 1][]>>;
 }
 export type BlockMarks = Record<string, Record<string, WordMark[]>>;
@@ -569,18 +563,6 @@ export function parsePackage(input: unknown): ContentPackage {
   return pack;
 }
 
-export function encodeMarks(blocks: BlockMarks, cards: MarkCard[]): PackageMarks {
-  const refs: string[] = [];
-  const index = new Map<string, number>();
-  const encoded: PackageMarks["blocks"] = {};
-  for (const [blockId, fields] of Object.entries(blocks))
-    for (const [field, marks] of Object.entries(fields))
-      (encoded[blockId] ??= {})[field] = marks.map((mark) => {
-        if (!index.has(mark.ref)) index.set(mark.ref, refs.push(mark.ref) - 1);
-        return [mark.start, mark.length, index.get(mark.ref)!, mark.first ? 1 : 0];
-      });
-  return { refs, cards, blocks: encoded };
-}
 export function decodeMarks(marks: PackageMarks, items: PackageItem[]): BlockMarks {
   const own = new Set(items.map((item) => cardRef(item.kind, item.id)));
   const out: BlockMarks = {};
@@ -593,10 +575,6 @@ export function decodeMarks(marks: PackageMarks, items: PackageItem[]): BlockMar
   return out;
 }
 
-/**
- * Разметка слов проверяется так же строго, как блоки: вхождение лежит внутри поля, не пересекает соседнее и ведёт
- * на карточку урока или на карточку прошлого урока из `cards`.
- */
 export function parseMarks(input: unknown, blocks: LessonBlock[], items: PackageItem[]): PackageMarks {
   const raw = obj(input, "пакет.marks");
   const cards = list(raw.cards ?? [], "пакет.marks.cards").map((entry, i): MarkCard => {
