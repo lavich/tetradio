@@ -68,7 +68,7 @@
   align-self: center;
   width: 26px;
   height: 24px;
-  color: var(--pen);
+  color: var(--ok);
 }
 .blockHead {
   display: flex;
@@ -125,7 +125,7 @@
   top: 2px;
   width: 26px;
   height: 24px;
-  color: var(--pen);
+  color: var(--ok);
 }
 .item > .prompt {
   padding-right: 32px;
@@ -201,7 +201,7 @@
 .score {
   font-family: var(--font-print);
   font-style: italic;
-  color: var(--pen);
+  color: var(--ok);
   font-size: 16px;
 }
 
@@ -562,7 +562,7 @@
 .checkpointTick {
   width: 20px;
   height: 18px;
-  color: var(--pen);
+  color: var(--ok);
 }
 .checkpoint::before,
 .checkpoint::after {
@@ -654,4 +654,12 @@
 .vocabRu {
   font-size: 13.5px;
   line-height: 20px;
+}
+
+/* Оттенки проверки поверх базовых цветов: «почти» — янтарный, проваленный итог — красная ручка. */
+.almost {
+  color: var(--almost);
+}
+.failed {
+  color: var(--pen);
 }

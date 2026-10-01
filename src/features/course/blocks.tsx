@@ -15,7 +15,7 @@ import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
 import type { BlockPatch } from "../../storage/course";
 import css from "./course.module.css";
 
-/** Галочка красной ручкой: знак проверки, а не цветовая заливка. */
+/** Галочка проверки: зелёная — сделано или верно, янтарная — почти; ошибки остаются красной ручкой. */
 export function Tick({ className, label = "выполнено" }: { className?: string; label?: string }) {
   return (
     <svg className={className} viewBox="0 0 34 30" role="img" aria-label={label}>
@@ -251,7 +251,10 @@ export function Exercise({
         return (
           <div key={item.id} className={css.item}>
             {result && result.status !== "wrong" ? (
-              <Tick className={css.itemMark} label={statusLabel[result.status]} />
+              <Tick
+                className={result.status === "almost" ? `${css.itemMark} ${css.almost}` : css.itemMark}
+                label={statusLabel[result.status]}
+              />
             ) : null}
             <p className={css.prompt} lang="el">
               <span className={css.soft}>{index + 1}. </span>
@@ -288,7 +291,7 @@ export function Exercise({
             )}
             {result ? (
               result.status === "correct" ? null : (
-                <p className={css.pen}>
+                <p className={result.status === "almost" ? `${css.pen} ${css.almost}` : css.pen}>
                   {result.status === "almost" ? "Почти — проверьте ударение: " : "Верно: "}
                   <span lang="el">{result.expected}</span>
                   {item.explanation ? ` — ${item.explanation}` : ""}
