@@ -512,3 +512,42 @@ export function parseModule(input: unknown, path: string): CatalogModule {
     lessonIds,
   };
 }
+
+/**
+ * Поля блока с греческим текстом, в которых слова нажимаются: объяснение, чтение, реплики транскрипта и образцы.
+ * Задания сюда не входят: подсказка не должна решать задание.
+ */
+export function tapFields(block: LessonBlock): [field: string, text: string][] {
+  switch (block.type) {
+    case "explanation":
+      return [["body", block.body]];
+    case "reading":
+      return [["text", block.text]];
+    case "listening":
+      return block.transcript.map((line, index) => [`transcript.${index}`, line.text]);
+    case "writing":
+      return [["model", block.model]];
+    case "speaking":
+      return block.model ? [["model", block.model]] : [];
+    default:
+      return [];
+  }
+}
+
+export interface GlossSpan {
+  start: number;
+  length: number;
+  gloss: Gloss;
+}
+/** Глоссы автора в тексте — по порядку первого вхождения, каждая после предыдущей; так их видят и сборщик, и экран. */
+export function glossSpans(text: string, glosses: Gloss[] = []): GlossSpan[] {
+  const spans: GlossSpan[] = [];
+  let from = 0;
+  for (const gloss of [...glosses].sort((a, b) => text.indexOf(a.text) - text.indexOf(b.text))) {
+    const at = text.indexOf(gloss.text, from);
+    if (at < 0) continue;
+    spans.push({ start: at, length: gloss.text.length, gloss });
+    from = at + gloss.text.length;
+  }
+  return spans;
+}

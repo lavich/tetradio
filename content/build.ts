@@ -18,7 +18,13 @@ import {
   type PackageMedia,
   type PackagePhrase,
   type PackageWord,
+  cardRef,
+  parsePackage,
+  type MarkCard,
+  type PackageMarks,
+  encodeMarks,
 } from "../src/content/schema.ts";
+import { buildMatcher, lessonMarks, type Ambiguity } from "./marks.ts";
 import { CARD_KINDS, type CardKind, type Example, type Gloss, type Segment } from "../src/domain/types.ts";
 import {
   parseBlocks,
@@ -266,6 +272,7 @@ export interface BuiltContent {
   phrases: PackagePhrase[];
   sources: ContentRoot;
   art: ArtReport;
+  marks: MarksReport;
 }
 
 /**
@@ -658,6 +665,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const lessonsForModule = new Map<string, { id: string; kind: LessonKind; blocks: LessonBlock[] }>();
   const cards = { word: words, phrase: phrases } as const;
   const packages: ContentPackage[] = [];
+  const drafts = new Map<string, ContentPackage>();
   const entries: CatalogEntry[] = [];
   const files: BuiltFile[] = [];
   for (const [id, src] of sources.lessons) {
@@ -761,21 +769,37 @@ export function buildContent(root = defaultRoot()): BuiltContent {
       media: packMedia,
       ...(blocks.length ? { blocks } : {}),
     };
+    drafts.set(id, draft);
+  }
+  // Разметка слов нужна всем урокам курса сразу: слова прошлых уроков известны только после разбора всех уроков.
+  const marks = markCourses(courses, modules, moduleOf, drafts, words, phrases);
+  for (const [id, draft] of drafts) {
+    const marked = marks.packages.get(id);
+    if (marked) draft.marks = marked;
     const version = hash(canonical({ ...draft, version: undefined }));
     const pack = { ...draft, version };
+    // Пакет проверяется тем же читателем, что и в приложении: неверная разметка — ошибка сборки, а не урок без звука.
+    if (marked) {
+      try {
+        parsePackage(JSON.parse(JSON.stringify(pack)));
+      } catch (error) {
+        throw error instanceof ContentError ? new ContentError(`lessons/${id}.yaml: ${error.message}`) : error;
+      }
+    }
     const body = JSON.stringify(pack);
     const url = `content/packages/${id}@${version}.json`;
     packages.push(pack);
     files.push({ path: url, body, mimeType: "application/json" });
+    const packMedia = pack.media;
     entries.push({
       id,
-      courseId,
+      courseId: pack.courseId,
       language: pack.language,
-      title,
-      wordCount: packWords.length,
-      wordIds: packWords.map((word) => word.id),
-      phraseCount: packPhrases.length,
-      cardCount: items.length,
+      title: pack.lesson.title,
+      wordCount: pack.words.length,
+      wordIds: pack.words.map((word) => word.id),
+      phraseCount: pack.phrases.length,
+      cardCount: pack.items.length,
       version,
       url,
       bytes: Buffer.byteLength(body),
@@ -823,7 +847,102 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     phrases: [...phrases.values()],
     sources,
     art,
+    marks: marks.report,
   };
+}
+
+export interface MarksReport {
+  /** Урок → число вхождений слов этого урока и прошлых уроков. */
+  lessons: Map<string, { lesson: number; earlier: number }>;
+  ambiguous: (Ambiguity & { lessonId: string })[];
+  /** Однословные карточки-омографы, которые отдельно не ищутся. */
+  skipped: string[];
+}
+/**
+ * Слова в тексте уроков каждого курса программы. «Прошлые» — по порядку программы (модули, их уроки, контрольная
+ * точка, занятия после неё), а не по прогрессу учащегося: набор не зависит от устройства и считается здесь.
+ */
+function markCourses(
+  courses: CatalogCourse[],
+  modules: CatalogModule[],
+  moduleOf: Map<string, { id: string; position: number; draft: boolean }>,
+  drafts: Map<string, ContentPackage>,
+  words: Map<string, PackageWord>,
+  phrases: Map<string, PackagePhrase>,
+) {
+  const packages = new Map<string, PackageMarks>();
+  const report: MarksReport = { lessons: new Map(), ambiguous: [], skipped: [] };
+  const numberOf = new Map(modules.map((module) => [module.id, module.number]));
+  const describeCard = (kind: CardKind, id: string) => {
+    if (kind === "word") {
+      const word = words.get(id)!;
+      return { text: word.greek, russian: word.russian, ipa: word.ipa, forms: word.forms };
+    }
+    const phrase = phrases.get(id)!;
+    return { text: phrase.text, russian: phrase.translation ?? "", ipa: "", forms: undefined };
+  };
+  for (const course of courses) {
+    if (!course.moduleIds) continue;
+    const lessons = course.lessonIds.map((id) => drafts.get(id)).filter((pack) => pack !== undefined);
+    const cards = new Map<string, { kind: CardKind; id: string }>();
+    for (const pack of lessons)
+      for (const item of pack.items) cards.set(cardRef(item.kind, item.id), { kind: item.kind, id: item.id });
+    const matcher = buildMatcher(
+      [...cards].map(([ref, { kind, id }]) => {
+        const card = describeCard(kind, id);
+        return { ref, text: card.text, forms: card.forms, phrase: kind === "phrase" };
+      }),
+    );
+    report.skipped.push(...matcher.skipped);
+    /** Карточка → номер урока, где она появилась впервые, и его подпись «N.M». */
+    const introduced = new Map<string, { at: number; label: string }>();
+    lessons.forEach((pack, at) => {
+      const own = new Set(pack.items.map((item) => cardRef(item.kind, item.id)));
+      if (pack.blocks?.length) {
+        // Слово урока лучше прошлого, из прошлых — более позднее: его учащийся помнит лучше.
+        const rank = (ref: string) =>
+          own.has(ref) ? 0 : introduced.has(ref) ? at - introduced.get(ref)!.at : undefined;
+        const found = lessonMarks({ blocks: pack.blocks, matcher, own, rank });
+        report.ambiguous.push(...found.ambiguous.map((entry) => ({ ...entry, lessonId: pack.id })));
+        const used = new Set<string>();
+        let lesson = 0,
+          earlier = 0;
+        for (const fields of Object.values(found.blocks))
+          for (const list of Object.values(fields))
+            for (const { ref, kind } of list) {
+              if (kind === "lesson") lesson++;
+              else {
+                earlier++;
+                used.add(ref);
+              }
+            }
+        report.lessons.set(pack.id, { lesson, earlier });
+        if (lesson + earlier)
+          packages.set(
+            pack.id,
+            encodeMarks(
+              found.blocks,
+              [...used].sort().map((ref): MarkCard => {
+                const { kind, id } = cards.get(ref)!;
+                const card = describeCard(kind, id);
+                return {
+                  ref,
+                  greek: card.text,
+                  russian: card.russian,
+                  ...(card.ipa ? { ipa: card.ipa } : {}),
+                  ...(card.forms ? { forms: card.forms } : {}),
+                  lesson: introduced.get(ref)!.label,
+                };
+              }),
+            ),
+          );
+      }
+      const placement = moduleOf.get(pack.id)!;
+      const label = `${numberOf.get(placement.id)}.${placement.position + 1}`;
+      for (const ref of own) if (!introduced.has(ref)) introduced.set(ref, { at, label });
+    });
+  }
+  return { packages, report };
 }
 
 export const wordsOf = (content: BuiltContent, lessonId: string) => {
@@ -852,4 +971,14 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     `Контент: ${built.packages.length} пакетов, ${built.words.length} слов, ${built.phrases.length} фраз, ${built.files.length} файлов → public/content`,
   );
   console.log(`Иллюстрации: ${built.art.files}, вне палитры (art/${LEGACY_FILE}): ${built.art.legacy}`);
+  const counts = [...built.marks.lessons.values()];
+  const sum = (key: "lesson" | "earlier") => counts.reduce((total, entry) => total + entry[key], 0);
+  console.log(
+    `Слова в тексте: ${sum("lesson")} слов урока и ${sum("earlier")} прошлых уроков в ${counts.filter((c) => c.lesson + c.earlier).length} уроках; спорных мест ${built.marks.ambiguous.length}, омографов вне поиска ${built.marks.skipped.length}`,
+  );
+  // Полный список спорных мест — по запросу: автор правит текст или карточку, а не читает отчёт при каждой сборке.
+  const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);
+  for (const entry of shown)
+    console.log(`  ${entry.lessonId} ${entry.block}.${entry.field}: «${entry.text}» → ${entry.refs.join(" или ")}`);
+  if (shown.length < built.marks.ambiguous.length) console.log("  … весь список: MARKS_REPORT=1 node content/build.ts");
 }
