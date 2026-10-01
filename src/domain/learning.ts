@@ -514,7 +514,7 @@ export function nextState(state: LearningState | undefined, ref: LearningRef, ra
   };
 }
 
-const shuffle = <T>(items: T[], random: () => number) => {
+export const shuffle = <T>(items: T[], random: () => number) => {
   const copy = [...items];
   for (let i = copy.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
