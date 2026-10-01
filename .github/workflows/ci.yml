@@ -2,8 +2,7 @@ name: CI
 
 on:
   pull_request:
-  # Прогон на main сохраняет кеши (npm, браузер Playwright) в ветке по умолчанию: кеш из refs/pull/N/merge
-  # другим pull request недоступен, и без этого каждый PR заново ставил Chromium.
+  # Прогон на main сохраняет кеш npm в ветке по умолчанию: кеш из refs/pull/N/merge другим PR недоступен.
   push:
     branches: [main]
   workflow_dispatch:
@@ -20,6 +19,10 @@ jobs:
     name: checks
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Браузер и системные пакеты уже в образе: установка через apt на runner занимала от 15 с до 6 мин.
+    container: mcr.microsoft.com/playwright:v1.63.0-noble
+    env:
+      PLAYWRIGHT_IMAGE_VERSION: 1.63.0
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -27,6 +30,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: Playwright version matches the container image
+        run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
 
       - run: npm run format:check
       - run: npm run lint
@@ -36,22 +41,6 @@ jobs:
       - run: npm run build
       - run: npm run check:bundle
 
-      # Браузер Playwright кешируется по версии пакета: полная установка нужна только при промахе,
-      # системные зависимости ставятся всегда — образ runner их не хранит.
-      - id: playwright
-        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-      - id: playwright-cache
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
-      # Репозиторий packages.microsoft.com в образе runner периодически отдаёт 403 и валит apt-get update,
-      # который Playwright запускает при установке системных зависимостей. Chromium из него не берётся.
-      - run: sudo find /etc/apt/sources.list.d -name 'microsoft*' -delete
-      - if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-      - if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
       - run: npm run test:e2e
       - run: npm run test:e2e:course
 
