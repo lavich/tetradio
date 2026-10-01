@@ -13,9 +13,8 @@ import { launchContext, resetLaunchContext } from "../src/platform/launch";
 import type { TelegramWebApp } from "../src/platform/telegram-types";
 import { WordScreen } from "../src/features/words/WordScreen";
 import { refreshCatalog, resetCatalogPhase } from "../src/content/client";
-import { db } from "../src/storage/db";
-import { saveWord } from "../src/storage/ops";
-import { content, installLessons, memoryFetcher } from "./helpers/content";
+import { db, indexWord } from "../src/storage/db";
+import { content, installLessons, legacyEdit, memoryFetcher } from "./helpers/content";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -123,7 +122,7 @@ describe("кнопка «Поделиться» на экране слова", (
     );
   };
   const button = () => host.querySelector("[aria-label='Поделиться словом']");
-  const edit = () => host.querySelector("[aria-label='Редактировать слово']");
+  const loaded = () => !!host.textContent?.includes("Потренировать слово");
   async function until(check: () => boolean) {
     for (let i = 0; i < 200 && !check(); i++) await act(() => new Promise((resolve) => setTimeout(resolve, 10)));
     expect(check()).toBe(true);
@@ -136,19 +135,22 @@ describe("кнопка «Поделиться» на экране слова", (
   });
   it("нет у своего слова и у удалённого слова курса", async () => {
     await installLessons(db, ["mech-4"]);
-    await saveWord({ ...(await db.words.get("w093"))!, id: "own-1", revision: undefined, greek: "το δικό μου" });
+    // Своё слово могло остаться в профиле прежней версии с импортом.
+    await db.words.add(
+      indexWord({ ...(await db.words.get("w093"))!, id: "own-1", revision: undefined, greek: "το δικό μου" }),
+    );
     await db.words.update("w093", { deletedAt: "2026-01-01T00:00:00.000Z" });
     await mount("own-1");
-    await until(() => !!edit());
+    await until(loaded);
     expect(button()).toBeNull();
     act(() => root!.unmount());
     await mount("w093");
-    await until(() => !!edit());
+    await until(loaded);
     expect(button()).toBeNull();
   });
   it("отправляет слово в версии курса, без правки пользователя", async () => {
     await installLessons(db, ["mech-4"]);
-    await saveWord({ ...(await db.words.get("w093"))!, russian: "мой дедуля" });
+    await legacyEdit(db, "w093", { russian: "мой дедуля" });
     const shared: { text?: string }[] = [];
     nav.share = async (data: { text?: string }) => void shared.push(data);
     await mount("w093");
@@ -164,7 +166,7 @@ describe("кнопка «Поделиться» на экране слова", (
     };
     await installLessons(db, ["mech-4"], memoryFetcher(content, { "content/catalog.json": old }));
     await mount("w093");
-    await until(() => !!edit());
+    await until(loaded);
     expect(button()).toBeNull();
     await act(async () => {
       await refreshCatalog(db, memoryFetcher());

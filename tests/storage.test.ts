@@ -10,7 +10,6 @@ import {
   markIntroduced,
   prepareObjectiveSession,
   saveCourseTempo,
-  saveWord,
   settleLessons,
   submitAnswer,
   updateLesson,
@@ -277,17 +276,6 @@ describe("запись ответа", () => {
     await answer(practice, practice.items[0]);
     expect(await db.cardStates.count()).toBe(0);
     expect((await db.events.toArray())[0].mode).toBe("practice");
-  });
-});
-
-describe("импорт", () => {
-  it("меняет перевод без потери истории и сбрасывает проверку фонетики после правки греческого", async () => {
-    await ensureSeed(db);
-    const word = (await db.words.get("w034"))!;
-    await saveWord({ ...word, russian: "жилище" }, db);
-    expect((await db.words.get("w034"))!.verified).toBe(true);
-    await saveWord({ ...word, greek: "το σπιτάκι" }, db);
-    expect((await db.words.get("w034"))!.verified).toBe(false);
   });
 });
 

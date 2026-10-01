@@ -7,8 +7,7 @@ import { AppDatabase } from "../src/storage/db";
 import { exportFull, inspectBackup, restoreBackup } from "../src/features/backup/backup";
 import { lessonItems, searchWordIds } from "../src/storage/queries";
 import { wordKeyOf, wordRef } from "./helpers/cards";
-import { saveWord } from "../src/storage/ops";
-import { content, installLessons, itemCountOf, packageOf, wordsOf } from "./helpers/content";
+import { content, installLessons, itemCountOf, legacyEdit, packageOf, wordsOf } from "./helpers/content";
 
 /** Схема первой версии: так выглядит база пользователя до обновления приложения. */
 class LegacyDatabase extends Dexie {
@@ -395,7 +394,7 @@ describe("резервная копия", () => {
   afterEach(() => db.close());
   it("новая копия содержит связи, медиа и метаданные пакетов, но не каталог; восстановление воспроизводит данные", async () => {
     await installLessons(db, ["mech-2"]);
-    await saveWord({ ...(await db.words.get("w034"))!, russian: "друг (правка)" }, db);
+    await legacyEdit(db, "w034", { russian: "друг (правка)" });
     await db.courses.update("mechanics", { schedule: { startDate: "2026-09-14", weekdays: [1, 4], lessonHour: 19 } });
     const blob = await exportFull(db);
     const parsed = JSON.parse(await blob.text());

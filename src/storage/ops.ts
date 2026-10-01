@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import { db, ensureLocalCourse, indexWord, type AppDatabase } from "./db";
+import { db, ensureLocalCourse, type AppDatabase } from "./db";
 import { lessonMates, optionPool, phrasePool } from "./queries";
 import {
   closeSources,
@@ -14,12 +14,11 @@ import {
   spaceSingleIntroduction,
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
-import { normalize, snapshotOf, unitKey, wordRef } from "../domain/refs";
+import { snapshotOf, unitKey, wordRef } from "../domain/refs";
 import { emptySkills } from "../domain/skills";
 import { preparedByCourse, scheduleCourses } from "../domain/schedule";
 import {
   fillSettings,
-  type Asset,
   type Course,
   type LearningRef,
   type Lesson,
@@ -225,24 +224,6 @@ export const endSession = async (session: Session, database: AppDatabase = db) =
   await database.sessions.put({ ...session, status: session.index >= session.items.length ? "done" : "ended" });
 };
 
-/** Правка поставленного слова помечается локальной: обновление пакета её не перезапишет. */
-export async function saveWord(word: Word, database: AppDatabase = db) {
-  const previous = await database.words.get(word.id);
-  const greekChanged = previous && normalize(previous.greek) !== normalize(word.greek);
-  const edited = (previous?.revision ?? word.revision) ? true : word.edited;
-  await database.words.put(
-    indexWord({
-      ...word,
-      verified: greekChanged ? false : word.verified,
-      updatedAt: stamp(new Date()),
-      ...(edited ? { edited } : {}),
-    }),
-  );
-}
-/** Мягкое удаление: история ответов остаётся достоверной. */
-export async function deleteWord(id: string, database: AppDatabase = db) {
-  await database.words.update(id, { deletedAt: stamp(new Date()) });
-}
 export type LessonPatch = Partial<Pick<Lesson, "title" | "targetDate" | "status">>;
 /** Частичная правка сырой записи: вычисленная по расписанию дата из снимка не попадает в базу. */
 export async function updateLesson(id: string, patch: LessonPatch, database: AppDatabase = db) {
@@ -342,10 +323,6 @@ export async function settleLessons(now: Date, database: AppDatabase = db): Prom
     return passed.length;
   });
 }
-export async function putAsset(asset: Asset, database: AppDatabase = db) {
-  await database.assets.put(asset);
-}
-
 export async function saveSettings(settings: Settings, database: AppDatabase = db) {
   await database.transaction("rw", database.settings, database.meta, async () => {
     await database.settings.put(settings);

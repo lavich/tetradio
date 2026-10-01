@@ -24,12 +24,20 @@ import {
 } from "../src/content/client";
 import { ContentError, type ContentPackage } from "../src/content/schema";
 import { revisionOf } from "../content/build";
-import { deleteWord, removeFromLesson, saveCourseTempo, saveWord } from "../src/storage/ops";
+import { removeFromLesson, saveCourseTempo } from "../src/storage/ops";
 import { lessonItems } from "../src/storage/queries";
 import { indexWord } from "../src/storage/db";
 import { linkWords } from "../src/storage/ops";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
-import { content, installLessons, itemCountOf, memoryFetcher, packageOf, wordCountOf } from "./helpers/content";
+import {
+  content,
+  installLessons,
+  itemCountOf,
+  legacyEdit,
+  memoryFetcher,
+  packageOf,
+  wordCountOf,
+} from "./helpers/content";
 import { buildMixed, installMixed, MIXED_LESSON, MIXED_PHRASES, mixedContent, mixedPackage } from "./helpers/mixed";
 import { unitKey } from "./helpers/cards";
 import { phraseRevisionOf } from "../content/build";
@@ -337,8 +345,7 @@ describe("обновление пакета", () => {
   });
   it("локальная правка сохраняется, изменившееся в пакете поле сообщается как конфликт, остальные поля обновляются", async () => {
     await installLessons(db, ["mech-2"]);
-    const local = (await db.words.get("w034"))!;
-    await saveWord({ ...local, russian: "дом (моя правка)" }, db);
+    await legacyEdit(db, "w034", { russian: "дом (моя правка)" });
     const next = bump(packageOf("mech-2"), (words) => {
       const w = words.find((w) => w.id === "w034")!;
       w.russian = "жилище";
@@ -354,7 +361,7 @@ describe("обновление пакета", () => {
   });
   it("удалённое слово не воскресает и убранная связь не восстанавливается", async () => {
     await installLessons(db, ["mech-2"]);
-    await deleteWord("w034", db);
+    await db.words.update("w034", { deletedAt: "2026-09-16T10:00:00.000Z" }); // удаление из прежней версии
     await removeFromLesson("mech-2", wordRef("w041"), db);
     expect((await db.packages.get("mech-2"))!.removed).toEqual([wordKeyOf("w041")]);
     const next = bump(packageOf("mech-2"), (words) => {
