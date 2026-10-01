@@ -9,8 +9,8 @@ export default defineConfig({
   timeout: 60000,
   // У каждого теста свой контекст браузера и своя база: тесты независимы и идут параллельно.
   fullyParallel: true,
-  workers: process.env.CI ? 4 : "50%",
-  // Четыре браузера и сервер на четырёх ядрах runner: ожиданию в CI нужен запас, иначе редкие ложные падения.
+  workers: process.env.CI ? 2 : "50%",
+  // Runner CI медленнее локальной машины: при четырёх потоках тесты на тайминг падали ложно.
   expect: { timeout: process.env.CI ? 10000 : 5000 },
   use: {
     baseURL: `http://localhost:${port}`,
