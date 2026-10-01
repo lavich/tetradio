@@ -593,11 +593,29 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  width: calc(100% + 16px);
   padding: 6px 8px;
   margin: 0 -8px;
+  border: 0;
   border-radius: 10px;
+  background: none;
   color: inherit;
-  text-decoration: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.vocabRow:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.vocabRow > .vocabText {
+  flex: 1;
+}
+.vocabSound {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--muted-foreground);
 }
 .vocabRow:hover {
   background: color-mix(in srgb, var(--primary) 6%, transparent);
@@ -627,8 +645,4 @@
 .vocabRu {
   font-size: 13.5px;
   line-height: 20px;
-}
-.vocabPhrase {
-  display: grid;
-  padding: 2px 0;
 }
