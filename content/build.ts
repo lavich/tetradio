@@ -120,7 +120,7 @@ export interface ModuleSource {
   lessons?: string[];
   /** Контрольная точка после модуля: урок `kind: test`, не входящий в `lessons`. */
   checkpoint?: string;
-  /** Занятия после контрольной точки: уроки `kind: lesson` — разбор пробника и слабый навык. */
+  /** Уроки после контрольной точки (`kind: lesson`). */
   review?: string[];
 }
 
@@ -545,7 +545,6 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const moduleOwner = new Map<string, string>();
   /** Урок контрольной точки → файл модуля: точка обязана быть контрольной с оцениваемыми заданиями. */
   const checkpoints = new Map<string, string>();
-  /** Занятия после точки → файл модуля: это обычные уроки, не контрольные. */
   const reviews = new Map<string, string>();
   for (const [courseId, src] of sources.courses) {
     const where = `courses/${src.file}`;

@@ -147,7 +147,6 @@ describe("прогресс курса в базе", () => {
     // Уроки модуля пройдены — следующий шаг контрольная точка после него.
     expect((await nextCourseLesson("greek-a2", db))!.lesson).toMatchObject({ id: "m01-k1", kind: "test" });
     await db.lessons.update("m01-k1", { status: "completed" });
-    // После точки — занятия на слабый навык.
     expect((await nextCourseLesson("greek-a2", db))!.lesson).toMatchObject({ id: "m01-r1", kind: "lesson" });
     await db.lessons.update("m01-r1", { status: "completed" });
     // Черновик m02 следующим шагом не становится.

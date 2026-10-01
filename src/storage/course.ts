@@ -93,7 +93,6 @@ export interface ModuleView {
   lessons: ModuleLessonView[];
   /** Контрольная точка программы после модуля (K1, M1–M3), если есть. */
   checkpoint?: ModuleLessonView;
-  /** Занятия после точки: разбор пробника и слабый навык. */
   review: ModuleLessonView[];
   /** Все уроки модуля завершены. */
   completed: boolean;
@@ -159,7 +158,7 @@ export async function nextCourseLesson(
     if (view.module.status !== "published") continue;
     const lesson = view.lessons.find((item) => !item.completed);
     if (lesson) return { module: view.module, lesson };
-    // Уроки модуля пройдены — следующий шаг контрольная точка после него, затем занятия после точки.
+    // Уроки модуля пройдены — следующий шаг контрольная точка после него.
     if (view.checkpoint && !view.checkpoint.completed) return { module: view.module, lesson: view.checkpoint };
     const review = view.review.find((item) => !item.completed);
     if (review) return { module: view.module, lesson: review };
