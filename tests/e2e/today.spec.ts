@@ -36,7 +36,7 @@ test("нехватка предела: решение под кнопкой за
   await ready(page);
   await installLessons(page, ["lesson-1-1"]);
   await setCourseLimit(page, "leeke", 1);
-  await useSchedule(page, "leeke", "tetradio", 2);
+  await useSchedule(page, "leeke", "tetradio-mock-1", 2);
   const shortfall = page.getByTestId("shortfall");
   await expect(shortfall).toContainText(/Чтобы успеть к сроку, нужно \d+ карточ/);
   await expect(shortfall).toContainText("Дневной предел курса «Греческий A2» — 1.");

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
   AlertDialog,
@@ -11,35 +11,21 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { db, AppDatabase } from "../storage/db";
-import { currentProfile, WEB_DATABASE } from "../storage/profile";
+import { db } from "../storage/db";
+import { currentProfile } from "../storage/profile";
 import { sync, useSyncStatus } from "../sync";
 import { META, readMeta, writeMeta } from "../sync/snapshot";
-import { useAction } from "../shared/action";
-import { CARDS, withCount, WORDS } from "../shared/format";
+import { CARDS, withCount } from "../shared/format";
 import ui from "../shared/ui.module.css";
 
 /** Текст границ синхронизации: одинаковый на первом запуске и на экране копий. */
 export const SYNC_BOUNDARIES =
-  "Внутри Telegram между устройствами одного аккаунта синхронизируется компактный прогресс: интервалы повторений и навыки стандартных слов, настройки, даты уроков, дневной бюджет и сводная статистика. Полная история ответов, незаконченное занятие, свои слова, правки и личные картинки и аудио остаются на устройстве и переносятся только полной копией. Обычный браузер в эту синхронизацию не входит.";
-
-/** Есть ли на этом устройстве старая браузерная база с данными, которую можно перенести в Telegram-профиль явным действием. */
-async function legacyWebWords(): Promise<number> {
-  if (!(await AppDatabase.exists(WEB_DATABASE))) return 0;
-  const web = new AppDatabase(WEB_DATABASE);
-  try {
-    await web.open();
-    return await web.words.count();
-  } catch {
-    return 0;
-  } finally {
-    web.close();
-  }
-}
+  "Внутри Telegram между устройствами одного аккаунта синхронизируется компактный прогресс: интервалы повторений и навыки стандартных слов, настройки, даты уроков, дневной бюджет и сводная статистика. Полная история ответов, незаконченное занятие, свои слова, правки и личные картинки и аудио остаются на устройстве и переносятся только полной копией. Другие аккаунты Telegram на этом устройстве — отдельные профили, их данные сюда не попадают.";
 
 /**
  * Первый запуск внутри Telegram: границы облака и локальных данных, без запроса контактов, сообщений и аккаунта.
- * Старая локальная база переносится только по явному выбору; исходник остаётся.
+ * Данные других баз на устройстве (прежний браузерный профиль, другие аккаунты) не читаются и не предлагаются
+ * к переносу: у каждого владельца своя база, перенос — только полной копией по явному выбору.
  */
 export function TelegramWelcome() {
   const profile = currentProfile();
@@ -47,31 +33,10 @@ export function TelegramWelcome() {
     () => (profile.kind === "telegram" ? db.meta.get(META.welcomed).then((row) => !!row) : true),
     [profile.kind],
   );
-  const [legacy, setLegacy] = useState(0);
-  const { busy, problem, run } = useAction("Перенос не удался, данные не изменены.");
-  useEffect(() => {
-    if (welcomed === false && profile.kind === "telegram" && profile.databaseName !== WEB_DATABASE)
-      legacyWebWords()
-        .then(setLegacy)
-        .catch(() => setLegacy(0));
-  }, [welcomed, profile.kind]);
   if (profile.kind !== "telegram" || welcomed !== false) return null;
   const finish = async () => {
     await writeMeta(db, META.welcomed, new Date().toISOString());
   };
-  const transfer = () =>
-    run(async () => {
-      // Чтение и запись полной копии нужны только здесь и на экране копий: модуль с ними в стартовую загрузку не входит.
-      const { exportFull, restoreBackup } = await import("../features/backup/backup");
-      const web = new AppDatabase(WEB_DATABASE);
-      await web.open();
-      try {
-        await restoreBackup(await exportFull(web), db);
-      } finally {
-        web.close();
-      }
-      await finish();
-    });
   return (
     <AlertDialog open>
       <AlertDialogContent>
@@ -81,26 +46,8 @@ export function TelegramWelcome() {
             {SYNC_BOUNDARIES} Номер телефона, доступ к сообщениям и отдельный аккаунт не нужны.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        {legacy > 0 && (
-          <p className={ui.small}>
-            В браузере на этом устройстве уже есть данные Τετράδιο ({withCount(legacy, WORDS)}). Их можно перенести в
-            Telegram-профиль один раз; браузерные данные останутся на месте, дальше профили независимы.
-          </p>
-        )}
-        {problem && (
-          <p className={ui.error} role="alert">
-            {problem}
-          </p>
-        )}
         <AlertDialogFooter>
-          {legacy > 0 && (
-            <Button variant="soft" size="md" disabled={busy} onClick={transfer}>
-              {busy ? "Переносим…" : "Перенести данные браузера"}
-            </Button>
-          )}
-          <AlertDialogAction onClick={finish} disabled={busy}>
-            {legacy > 0 ? "Начать с чистого профиля" : "Понятно"}
-          </AlertDialogAction>
+          <AlertDialogAction onClick={finish}>Понятно</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
