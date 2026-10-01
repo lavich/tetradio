@@ -116,7 +116,7 @@ export function ModuleScreen() {
   // Уроки опубликованного модуля скачиваются при открытии: без пакета урок не пройти.
   useEffect(() => {
     if (!view) return;
-    for (const lesson of [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : [])])
+    for (const lesson of [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : []), ...view.review])
       if (!lesson.installed)
         installLesson(lesson.id).catch(() =>
           setProblem("Не удалось скачать уроки модуля. Проверьте сеть и откройте модуль снова."),
@@ -186,6 +186,28 @@ export function ModuleScreen() {
               </span>
             </Link>
           </div>
+        ) : null}
+        {view.review.length ? (
+          <ol className={css.lessons} aria-label="После пробника">
+            {view.review.map((lesson, index) => (
+              <li key={lesson.id}>
+                {lesson.completed ? (
+                  <Tick className={css.mark} label="занятие пройдено" />
+                ) : (
+                  <span className={css.gutter}>+{index + 1}</span>
+                )}
+                <Link className={css.lessonLink} to={`/course/${module.id}/${lesson.id}`}>
+                  <h3 className={css.blockTitle}>{lesson.title}</h3>
+                  <span className={css.meta}>
+                    после пробника ·{" "}
+                    {lesson.installed
+                      ? `заданий выполнено ${lesson.tally.done} из ${lesson.tally.total}`
+                      : "скачивается…"}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
         ) : null}
         {problem ? <p className={css.pen}>{problem}</p> : null}
       </div>
@@ -264,7 +286,6 @@ export function CourseLessonScreen() {
     }
   };
   const result = lesson.kind === "test" ? testResult(lesson.blocks, progress) : null;
-  const heading = lesson.kind === "test" ? "Контрольная модуля" : "Урок модуля";
   const pending = pages.flatMap((page, index) =>
     page.filter((block) => isTask(block) && !progress.get(block.id)?.done).map((block) => ({ block, index })),
   );
@@ -346,18 +367,15 @@ export function CourseLessonScreen() {
       )}
     </>
   );
-  // Заголовок урока — на каждой открытой странице, в развороте — только на левой.
-  const renderPage = (index: number, position: number) => (
+  const renderPage = (index: number) => (
     <article key={index} className={`${css.page} notebook`} aria-label={`Страница ${index + 1} из ${total}`}>
-      <p className={css.meta}>{heading}</p>
-      {position === 0 ? <h1 className={css.title}>{lesson.title}</h1> : null}
       {index < pages.length ? pages[index].map(renderBlock) : summary}
     </article>
   );
   const shown = spread ? [first, first + 1].filter((index) => index < total) : [current];
   const last = shown[shown.length - 1];
   return (
-    <Screen back={lesson.kind === "test" ? "Контрольная" : "Урок"} wide>
+    <Screen back={lesson.title} wide>
       <div className={css.frame}>
         <div
           key={first}

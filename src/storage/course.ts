@@ -93,6 +93,7 @@ export interface ModuleView {
   lessons: ModuleLessonView[];
   /** Контрольная точка программы после модуля (K1, M1–M3), если есть. */
   checkpoint?: ModuleLessonView;
+  review: ModuleLessonView[];
   /** Все уроки модуля завершены. */
   completed: boolean;
 }
@@ -105,6 +106,7 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
   const lessonIds = modules.flatMap((module) => [
     ...module.lessonIds,
     ...(module.checkpointId ? [module.checkpointId] : []),
+    ...(module.reviewIds ?? []),
   ]);
   const [packs, lessons, entries, progress] = await Promise.all([
     database.packages.bulkGet(lessonIds),
@@ -136,10 +138,12 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
     };
     const views = module.lessonIds.map(view);
     const checkpoint = module.checkpointId ? view(module.checkpointId) : undefined;
+    const review = (module.reviewIds ?? []).map(view);
     return {
       module,
       lessons: views,
       ...(checkpoint ? { checkpoint } : {}),
+      review,
       completed: views.length > 0 && views.every((item) => item.completed),
     };
   });
@@ -156,6 +160,8 @@ export async function nextCourseLesson(
     if (lesson) return { module: view.module, lesson };
     // Уроки модуля пройдены — следующий шаг контрольная точка после него.
     if (view.checkpoint && !view.checkpoint.completed) return { module: view.module, lesson: view.checkpoint };
+    const review = view.review.find((item) => !item.completed);
+    if (review) return { module: view.module, lesson: review };
   }
   return null;
 }

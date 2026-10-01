@@ -46,7 +46,7 @@ export function BackBar({ title, right, onBack }: { title: string; right?: React
   const native = usePlatform().capabilities.back;
   useBackHandler(back);
   return (
-    <header className={top.topbar}>
+    <header className={native && !right ? `${top.topbar} ${top.native}` : top.topbar}>
       {native ? (
         <span style={{ minWidth: 44 }} />
       ) : (

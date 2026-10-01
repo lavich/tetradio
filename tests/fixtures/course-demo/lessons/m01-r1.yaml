@@ -1,0 +1,13 @@
+title: Слабый навык (пример)
+kind: lesson
+items: []
+blocks:
+  - type: exercise
+    id: again
+    instruction: Ещё раз — форма είμαι.
+    format: choice
+    items:
+      - id: q1
+        prompt: Εμείς ___ φίλοι.
+        options: [είμαστε, είναι]
+        answer: είμαστε

@@ -285,6 +285,25 @@ describe("контрольные точки", () => {
       module: { id: "m01", position: 2 },
     });
   });
+  it("занятия после точки: обычные уроки после неё, только при точке", () => {
+    const files = withPoint({ "lessons/r1.yaml": { ...lesson, title: "Слабый навык" } });
+    (files["modules/m01.yaml"] as Record<string, unknown>).review = ["r1"];
+    const content = build(files);
+    const catalog = parseCatalog(
+      JSON.parse(content.files.find((f) => f.path === "content/catalog.json")!.body as string),
+    );
+    expect(catalog.modules![0]).toMatchObject({ checkpointId: "k1", reviewIds: ["r1"] });
+    expect(catalog.courses[0].lessonIds).toEqual(["m01-1", "m01-test", "k1", "r1"]);
+    expect(content.packages.find((p) => p.id === "r1")).toMatchObject({ module: { id: "m01", position: 3 } });
+    const asTest = withPoint({ "lessons/r1.yaml": { ...test, title: "Слабый навык" } });
+    (asTest["modules/m01.yaml"] as Record<string, unknown>).review = ["r1"];
+    expect(failure(asTest)).toContain("после точки — урок (kind: lesson)");
+    const orphan = base();
+    (orphan["modules/m01.yaml"] as Record<string, unknown>).review = ["r1"];
+    expect(failure({ ...orphan, "lessons/r1.yaml": { ...lesson, title: "Слабый навык" } })).toContain(
+      "только у модуля с контрольной точкой",
+    );
+  });
   it("точка — только контрольная с оцениваемыми заданиями и не у черновика", () => {
     expect(failure(withPoint({ "lessons/k1.yaml": { ...test, kind: "lesson" } }))).toContain("должен быть контрольной");
     expect(
