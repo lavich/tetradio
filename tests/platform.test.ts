@@ -32,17 +32,15 @@ describe("контекст запуска", () => {
       version: "8.0",
       user: { id: 42, firstName: "Άννα", languageCode: "el" },
     });
-    expect(profileFor(context).databaseName).toBe("tetradio-tg-tetradio_dev-42");
+    expect(profileFor(context)).toMatchObject({ kind: "telegram", databaseName: "tetradio-tg-tetradio_dev-42" });
   });
-  it("без сведений о пользователе профиль анонимный и не синхронизируется; плохое имя бота заменяется основным", () => {
+  it("без сведений о пользователе запуск остановлен, базы нет; плохое имя бота заменяется основным", () => {
     const context = parseLaunch(
       location(`#tgWebAppPlatform=android&tgWebAppData=${encodeURIComponent(initData(null))}`, "?bot=bad name!"),
     );
     expect(context).toMatchObject({ kind: "telegram", user: null, bot: "tetradio_local" });
-    expect(profileFor(context)).toMatchObject({
-      syncable: false,
-      databaseName: "tetradio-tg-tetradio_local-anonymous",
-    });
+    expect(profileFor(context)).toEqual({ kind: "blocked", reason: "no-user", bot: "tetradio_local" });
+    expect(profileFor(context, 1)).toMatchObject({ kind: "blocked", reason: "no-user" }); // мок не подменяет Telegram
   });
   it("контекст запоминается на время вкладки, даже если маршрутизация убрала hash", () => {
     resetLaunchContext();
@@ -389,14 +387,14 @@ describe("контекст запуска между переходами и п�
     const stored = sessionStorage.getItem("tetradio:launch");
     const again = open("");
     expect(again).toMatchObject({ kind: "telegram", user: { id: 7 }, launchId: "AAH1", bot: "tetradio_local" });
-    expect(profileFor(again).databaseName).toBe(profileFor(first).databaseName);
+    expect(profileFor(again)).toEqual(profileFor(first));
     expect(sessionStorage.getItem("tetradio:launch")).toBe(stored);
   });
   it("Telegram с ?bot=tetradio_dev после перезагрузки без параметра сохраняет dev-бота и базу профиля", () => {
     open(tgHash(), "?bot=tetradio_dev");
     const again = open("");
     expect(again.bot).toBe("tetradio_dev");
-    expect(profileFor(again).databaseName).toBe("tetradio-tg-tetradio_dev-7");
+    expect(profileFor(again)).toMatchObject({ databaseName: "tetradio-tg-tetradio_dev-7" });
   });
   it("веб с ?bot= сохраняет бота, когда адрес потерял параметр", () => {
     expect(open("", "?bot=tetradio_dev")).toMatchObject({ kind: "web", bot: "tetradio_dev" });

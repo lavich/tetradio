@@ -43,7 +43,7 @@ test("хвост пройденного урока виден на «Сегод�
   await expect(page.getByTestId("lesson-label")).toHaveText("К уроку 1.2");
   const counts = await page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve) => {
-      const request = indexedDB.open("tetradio");
+      const request = indexedDB.open("tetradio-mock-1");
       request.onsuccess = () => resolve(request.result);
     });
     const session = await new Promise<{ items: { unitKey: string }[] }>((resolve) => {
@@ -135,7 +135,7 @@ test("занятие: знакомство, четыре упражнения, �
   const activeMs = await page.evaluate(
     () =>
       new Promise<number>((resolve) => {
-        const request = indexedDB.open("tetradio");
+        const request = indexedDB.open("tetradio-mock-1");
         request.onsuccess = () => {
           const rows = request.result.transaction("sessions", "readonly").objectStore("sessions").getAll();
           rows.onsuccess = () =>

@@ -37,7 +37,7 @@ test.describe("упражнение по выбору на странице сл
     await page.goto("/");
     await installLessons(page, ["lesson-1-4"]);
     await page.goto("/words/w34-03");
-    const before = await trace(page, "tetradio");
+    const before = await trace(page, "tetradio-mock-1");
     await page.getByRole("button", { name: "Написание: пройти" }).click();
     await expect(page).toHaveURL(/\/words\/w34-03\/exercise\/spelling$/);
     await expect(page.getByText("Без учёта прогресса")).toBeVisible();
@@ -49,7 +49,7 @@ test.describe("упражнение по выбору на странице сл
     await expect(page.getByTestId("feedback")).toContainText("Правильно");
     await page.getByRole("button", { name: "К слову" }).click();
     await expect(page).toHaveURL(/\/words\/w34-03$/);
-    expect(await trace(page, "tetradio")).toEqual({ ...before, events: 0, states: 0 });
+    expect(await trace(page, "tetradio-mock-1")).toEqual({ ...before, events: 0, states: 0 });
   });
 
   test("в Telegram «Назад» ведёт на экран слова", async ({ page }) => {

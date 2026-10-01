@@ -115,7 +115,7 @@ export async function openTelegram(page: Page, options: TelegramEmulation = {}, 
   await page.goto(`${path}${options.bot ? `?bot=${options.bot}` : ""}${launchHash(options)}`);
   await page.waitForSelector("[data-testid=today-title]");
   // Сообщение первого запуска появляется после чтения базы: ждём его и закрываем, если профиль ещё не видел.
-  const welcome = page.getByRole("button", { name: /Понятно|Начать с чистого профиля/ });
+  const welcome = page.getByRole("button", { name: "Понятно" });
   if (
     await welcome.waitFor({ state: "visible", timeout: 5000 }).then(
       () => true,

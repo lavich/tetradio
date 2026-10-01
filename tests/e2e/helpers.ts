@@ -44,7 +44,7 @@ export interface DuePlan {
   audio?: boolean;
 }
 /** Готовим очередь прямо в IndexedDB: сроки, история навыков и аудиофайл для аудирования. */
-export async function seedQueue(page: Page, plan: DuePlan[], databaseName = "tetradio") {
+export async function seedQueue(page: Page, plan: DuePlan[], databaseName = "tetradio-mock-1") {
   await page.evaluate(
     async ([plan, databaseName]) => {
       const open = () =>
@@ -148,7 +148,7 @@ export const ready = (page: Page) => page.waitForSelector("[data-testid=today-ti
  * три дня назад: урок 1.1 закрепляется проведённым при перезагрузке, 1.2 становится ближайшим.
  * `startInDays` сдвигает первое занятие: скриншотам README нужно расписание без прошедших уроков.
  */
-export async function useSchedule(page: Page, courseId = "leeke", databaseName = "tetradio", startInDays = -3) {
+export async function useSchedule(page: Page, courseId = "leeke", databaseName = "tetradio-mock-1", startInDays = -3) {
   const today = new Date().toISOString().slice(0, 10);
   const startDate = addDays(today, startInDays);
   const weekdays = [isoWeekday(startDate), isoWeekday(addDays(today, 1))];
@@ -265,14 +265,19 @@ export async function seedMixedLesson(
       });
       database.close();
     },
-    [payload, options.databaseName ?? "tetradio"] as const,
+    [payload, options.databaseName ?? "tetradio-mock-1"] as const,
   );
   await page.reload();
   await ready(page);
   return payload;
 }
 /** Дневной предел курса: чтобы в занятие попали именно новые карточки смешанного урока. */
-export async function setCourseLimit(page: Page, courseId: string, newItemsPerDay: number, databaseName = "tetradio") {
+export async function setCourseLimit(
+  page: Page,
+  courseId: string,
+  newItemsPerDay: number,
+  databaseName = "tetradio-mock-1",
+) {
   await page.evaluate(
     async ([courseId, newItemsPerDay, databaseName]) => {
       const database = await new Promise<IDBDatabase>((resolve, reject) => {
@@ -315,7 +320,7 @@ export const GREEK_VOICE = `
 export const setSettings = (page: Page, patch: Record<string, unknown>) =>
   page.evaluate(async (patch) => {
     const database = await new Promise<IDBDatabase>((resolve) => {
-      const request = indexedDB.open("tetradio");
+      const request = indexedDB.open("tetradio-mock-1");
       request.onsuccess = () => resolve(request.result);
     });
     const store = database.transaction("settings", "readwrite").objectStore("settings");
@@ -349,7 +354,7 @@ export async function lessonCards(page: Page): Promise<Record<string, string[]>>
   for (const row of rows) (map[row.lessonId] ??= []).push(row.unitKey);
   return map;
 }
-export const readTable = (page: Page, name: string, databaseName = "tetradio") =>
+export const readTable = (page: Page, name: string, databaseName = "tetradio-mock-1") =>
   page.evaluate(
     async ([name, databaseName]) => {
       const database = await new Promise<IDBDatabase>((resolve) => {

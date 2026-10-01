@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "predev": "npm run content",
+    "dev:mock": "VITE_TELEGRAM_MOCK=1 vite --host 0.0.0.0",
+    "predev:mock": "npm run content",
     "content": "node content/build.ts",
     "prebuild": "npm run content",
     "build": "tsc -b && vite build",
@@ -20,7 +22,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "spec:validate": "OPENSPEC_TELEMETRY=0 openspec validate --all --strict --no-interactive",
-    "spec:status": "OPENSPEC_TELEMETRY=0 openspec status --change course-progress-sync",
+    "spec:status": "OPENSPEC_TELEMETRY=0 openspec status --all",
     "openspec": "openspec",
     "lexicon:check": "node scripts/check-lexicon.ts",
     "test:e2e:course": "playwright test -c playwright.course.config.ts",

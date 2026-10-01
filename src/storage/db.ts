@@ -25,7 +25,7 @@ import {
 } from "../domain/types";
 import type { BaseSkillRow, BaseSummaryRow, StashRow, SyncVersionRow } from "../sync/types";
 import type { BlockProgress, StoredModule } from "../domain/types";
-import { currentProfile } from "./profile";
+import { launchProfile } from "./profile";
 
 export interface MetaRow {
   key: string;
@@ -103,7 +103,7 @@ export class AppDatabase extends Dexie {
   syncStash!: Table<LegacyStash, string>;
   /** Хранилище снятого вида карточек: после миграции пусто, читается только при восстановлении копии схемы ≤6. */
   clozes!: Table<{ id: string }, string>;
-  constructor(name = "tetradio") {
+  constructor(name: string) {
     super(name);
     this.version(1).stores({
       words: "id,greek,russian,deletedAt",
@@ -177,8 +177,13 @@ export class AppDatabase extends Dexie {
     this.version(8).stores({ modules: "id,courseId,number", blockProgress: "key,lessonId" });
   }
 }
-/** База текущего профиля: обычный браузер — `tetradio`, Telegram — отдельная база на бота и пользователя. */
-export const db = new AppDatabase(currentProfile().databaseName);
+const launch = launchProfile();
+/**
+ * База владельца: своя на бота и Telegram-пользователя. Без владельца автооткрытие выключено: случайный запрос
+ * падает с ошибкой, а не создаёт базу под предполагаемым владельцем.
+ */
+export const db = new AppDatabase(launch.kind === "blocked" ? "tetradio-unopened" : launch.databaseName);
+if (launch.kind === "blocked") db.close({ disableAutoOpen: true });
 export const SCHEMA_VERSION = 8;
 /** Таблицы пользовательских данных: входят в полную копию. Каталог — кеш, а не данные пользователя; альтернативные версии облака — тоже. */
 export const TABLES = [
