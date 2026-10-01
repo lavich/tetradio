@@ -82,7 +82,7 @@ test("смена аккаунта A → B на том же устройстве:
   await page.getByRole("button", { name: /Начать занятие/ }).click();
   await page.waitForURL("**/session");
   await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
-  await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
   await page.goto("/more");
   await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
   expect(await count(page, dbOf(A), "cardStates")).toBeGreaterThan(0);

@@ -207,7 +207,7 @@ test("занятие: знакомство с фразой, «Не знаю» с
       await page.getByRole("button", { name: "Проверить" }).click();
       await expect(page.getByTestId("feedback")).toBeVisible();
     } else throw new Error(`Неожиданное задание: ${prompt}`);
-    await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
     if (skipped && !restarted) {
       // Перезапуск без сети: сохранённые ответы не запрашиваются снова, знакомства не повторяются.
       restarted = true;
@@ -217,7 +217,7 @@ test("занятие: знакомство с фразой, «Не знаю» с
       await ready(page);
       await page.getByRole("button", { name: /Продолжить занятие/ }).click();
       await page.waitForURL("**/session");
-      await expect(page.getByRole("button", { name: "Далее", exact: true })).toHaveCount(0);
+      await expect(page.getByRole("button", { name: "Далее", exact: true, disabled: false })).toHaveCount(0);
       expect(INTRO).not.toContain(await page.getByTestId("prompt").first().innerText());
       expect((await readTable(page, "events")).length).toBe(answered);
       await context.setOffline(false);

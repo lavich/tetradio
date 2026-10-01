@@ -206,7 +206,9 @@ test("старое вспоминание заменяется объектив�
   expect((await stored(page)).events[0]).toMatchObject({ type: "recognition", correct: false });
 });
 
-test("неверный выбор отмечается крестиком, правильный — галочкой, без отдельной карточки", async ({ page }) => {
+test("неверный выбор зачёркнут красной ручкой, правильный — с зелёной галочкой, без отдельной карточки", async ({
+  page,
+}) => {
   await installSession(page, "recognition");
   await page.getByTestId("option").nth(1).click();
   const right = page.locator('[data-answer="correct"]');
@@ -214,11 +216,11 @@ test("неверный выбор отмечается крестиком, пр�
   await expect(right).toContainText("Правильный ответ");
   await expect(wrong).toContainText("Неправильный ответ");
   await expect(right.locator("svg")).toHaveCount(1);
-  await expect(wrong.locator("svg")).toHaveCount(1);
-  await expect(right).toHaveCSS("background-color", "rgb(236, 253, 243)");
-  await expect(wrong).toHaveCSS("background-color", "rgb(254, 242, 242)");
+  await expect(right.locator("svg")).toHaveCSS("color", "rgb(21, 128, 61)");
+  await expect(wrong.locator("span").first()).toHaveCSS("text-decoration-line", "line-through");
+  await expect(wrong.locator("span").first()).toHaveCSS("color", "rgb(207, 47, 43)");
   await expect(right).toHaveCSS("opacity", "1");
   await expect(wrong).toHaveCSS("opacity", "1");
   await expect(page.getByTestId("feedback")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
 });

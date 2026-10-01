@@ -1,199 +1,518 @@
-/* Высота — устойчивая область Telegram или 100dvh браузера; отступы — из переменных оболочки, без сложения env() и Telegram. */
-.session {
-  max-width: 560px;
-  width: 100%;
-  margin: 0 auto;
-  padding: calc(10px + var(--inset-top)) 16px 0;
-  height: var(--app-height);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-  min-height: 44px;
-}
-.top button {
-  margin-left: -10px;
-}
 /*
- * Во весь экран Telegram рисует «Назад» слева и «…» справа поверх контента. Строка прогресса встаёт
- * в ту же полосу между ними: экран отступает только на системную строку, а строка занимает высоту полосы кнопок.
+ * Занятие — страница тетради «Диктант» (docs/design/session-notebook): клетка, сделанное строками,
+ * текущее задание — лист поверх клетки, облачко действия снизу. Экран сам прокручивается в высоте оболочки
+ * (устойчивая высота Telegram или 100dvh): клавиатура уменьшает высоту, и облачко остаётся над ней.
  */
-:root[data-launch-mode="fullscreen"] .session {
-  padding-top: var(--inset-safe-top, 0px);
-}
-:root[data-launch-mode="fullscreen"] .top {
-  min-height: var(--inset-content-top, 44px);
-  margin: 0 26% 4px;
-}
-:root[data-launch-mode="fullscreen"] .counter {
-  font-size: 14px;
-}
-.counter {
-  color: var(--muted-foreground);
-  font-size: 15px;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-.progress {
-  flex: 1;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--track);
-  overflow: hidden;
-}
-.progress i {
-  display: block;
-  height: 100%;
-  background: var(--primary);
-  border-radius: 999px;
-  transition: width 0.25s;
-}
-.body {
-  flex: 1;
-  min-height: 0;
+.session {
+  position: relative;
+  height: var(--app-height);
   overflow-y: auto;
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  scrollbar-width: none;
+  padding: calc(12px + var(--inset-top)) 0 0;
+  /* Клетка едет вместе с листом: страница прокручивается, а не окно над ней. */
+  background-attachment: local;
+  scroll-padding-top: 16px;
+  scroll-padding-bottom: calc(var(--cloud-space) + 16px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--input) transparent;
 }
-/* Своя полоса прокрутки внутри занятия мешает: позицию показывают прогресс и тень дока. */
-.body::-webkit-scrollbar {
-  display: none;
+.session {
+  background-color: var(--background);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  background-position: -1px -1px;
 }
-.center {
+.result {
+  padding-top: calc(24px + var(--inset-top));
+}
+.page {
   flex: 1 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 14px;
-  padding: 12px 0;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px 24px;
 }
 
-/* Основное действие закреплено у нижнего края: за кнопкой не нужно листать карточку. */
-.dock {
-  position: sticky;
-  bottom: 0;
-  display: grid;
-  gap: 10px;
-  padding: 12px 0 calc(12px + var(--inset-bottom));
-  background: var(--background);
-  box-shadow: 0 -14px 18px -14px var(--shadow);
-}
-.dock form {
-  display: grid;
-  gap: 10px;
-}
-.dock p {
+.head {
   margin: 0;
 }
+.date {
+  margin: 0;
+  font-family: var(--font-print);
+  font-style: italic;
+  font-size: 17px;
+  line-height: var(--cell);
+  text-align: right;
+}
+.title {
+  margin: 0 0 6px;
+  font-family: var(--font-print);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: calc(var(--cell) * 1.5);
+  letter-spacing: -0.01em;
+}
 
-.slots {
+/* Сделанное: номер, карточка печатью, ответ чернилами, отметка у правого края. */
+.done {
+  margin: 0;
+}
+.doneList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.doneRow {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
+  align-items: center;
+  min-height: calc(var(--cell) * 2);
+  font-family: var(--font-print);
+  font-size: 17px;
+  line-height: var(--cell);
+  color: var(--muted-foreground);
+}
+.doneRow b {
+  font-weight: 600;
+  color: var(--foreground);
+}
+.doneText {
+  overflow-wrap: anywhere;
+}
+.doneNumber {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+.doneMark {
+  width: 26px;
+  height: 24px;
+  color: var(--ok);
+}
+.almost {
+  color: var(--almost);
+}
+.ink {
+  font-style: normal;
+  color: var(--primary);
+}
+.struck {
+  color: var(--pen);
+  text-decoration: line-through;
+  text-decoration-color: var(--pen);
+  text-decoration-thickness: 1.5px;
+}
+.struckAlmost {
+  color: var(--almost);
+  text-decoration: line-through;
+  text-decoration-color: var(--almost);
+}
+.penNote {
+  font-style: italic;
+  font-size: 15px;
+  color: var(--pen);
+}
+.quiet {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.skipped,
+.skipped b {
+  color: var(--muted-foreground);
+  font-weight: 400;
+}
+.fold {
+  display: block;
+  margin: 4px 0 0 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 600 13px/var(--cell) var(--font-ui);
+  color: var(--primary);
+  cursor: pointer;
+}
+.fold:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Лист задания: бумага поверх клетки. */
+.sheet {
+  margin-top: 12px;
+  padding: 16px;
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--input);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px -12px var(--shadow);
+}
+.sheet:focus-visible {
+  outline-offset: 4px;
+}
+.instruction {
+  margin: 0;
+  font: 600 13.5px/var(--cell) var(--font-ui);
+  color: var(--muted-foreground);
+}
+.cardRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.greekRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.word,
+.wordSmall,
+.phrase {
+  margin: 4px 0 0;
+  font-family: var(--font-print);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.word {
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.wordSmall {
+  font-size: 30px;
+  line-height: 1.2;
+}
+.phrase {
+  font-size: 26px;
+  line-height: 1.25;
+}
+.ipa {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 16px;
+  color: var(--muted-foreground);
+}
+.meaning,
+.task {
+  margin: 6px 0 0;
+  font-family: var(--font-print);
+  font-size: 20px;
+  line-height: 1.35;
+}
+.task {
+  margin-top: 2px;
+  font-size: 28px;
+  line-height: 1.25;
+}
+.hint {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--muted-foreground);
+}
+.note {
+  margin: 6px 0 0;
+}
+.cardRow > .pic {
+  flex: none;
+  width: 96px;
+  height: auto;
+  aspect-ratio: 16 / 11;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.reveal {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1.5px solid var(--input);
+}
+
+/* Варианты: короткие — сеткой 2 × 2, длинные — строками α) β) γ) δ). Текст переносится, а не режется. */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.chip,
+.line {
+  font: inherit;
+  font-family: var(--font-print);
+  color: var(--card-foreground);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease-out,
+    background-color 160ms ease-out;
+}
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 1px solid var(--input);
+  border-radius: 12px;
+  background: var(--card);
+  font-size: 18px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.chip:hover:not(:disabled) {
+  border-color: var(--primary);
+  background: var(--soft);
+}
+.lines {
+  margin-top: 10px;
+  counter-reset: option;
+}
+.line {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) 28px;
+  align-items: start;
+  gap: 4px;
+  width: 100%;
+  padding: 11px 0;
+  border: 0;
+  border-bottom: 1.5px solid var(--input);
+  background: none;
+  font-size: 17px;
+  line-height: var(--cell);
+  overflow-wrap: anywhere;
+}
+.line:last-child {
+  border-bottom: 0;
+}
+/* Буква — из счётчика, а не из текста: подпись варианта остаётся самим вариантом. */
+.line::before {
+  counter-increment: option;
+  content: counter(option, lower-greek) ")";
+  font-size: 16px;
+  color: var(--muted-foreground);
+}
+.line:hover:not(:disabled) span {
+  color: var(--primary);
+}
+.chip:disabled,
+.line:disabled {
+  cursor: default;
+}
+.optionTick {
+  flex: none;
+  width: 26px;
+  height: 24px;
+  margin-top: -2px;
+  color: var(--ok);
+}
+.chip.correct {
+  border-color: var(--ok);
+}
+.chip.wrong {
+  border-color: var(--pen);
+}
+.wrong > span:not(:global(.sr-only)) {
+  color: var(--pen);
+  text-decoration: line-through;
+  text-decoration-color: var(--pen);
+  text-decoration-thickness: 1.5px;
+}
+.okLine,
+.fixLine,
+.verdict {
+  margin: 10px 0 0;
+  font-family: var(--font-print);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 22px;
+}
+.okLine {
+  color: var(--ok);
+}
+.fixLine {
+  color: var(--pen);
+}
+.fixLine > span {
+  font-style: normal;
+}
+.verdict p {
+  margin: 0;
+}
+.verdictOk {
+  color: var(--ok);
+}
+.verdictAlmost {
+  color: var(--almost);
+}
+.verdictBad {
+  color: var(--pen);
+}
+.syllables {
+  font-style: normal;
+  font-size: 18px;
+  line-height: var(--cell);
+  color: var(--card-foreground);
+}
+.legend {
+  font-family: var(--font-ui);
+  font-style: normal;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.quietActions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 4px 20px;
+  margin-top: 10px;
+}
+.quietButton {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  font: 600 15px var(--font-ui);
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.quietButton:hover:not(:disabled) {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.quietButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Аудио: большая кнопка повтора — главный предмет листа до ответа. */
+.play {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 56px;
-  border: 2px dashed var(--border);
-  border-radius: 14px;
-  padding: 4px 8px;
+  gap: 12px;
+  margin: 10px 0 2px;
+}
+.playNote {
+  font-size: 15px;
+  color: var(--muted-foreground);
+}
+.audioFailed {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--almost-bg);
+  color: var(--almost-fg);
+  font-size: 14px;
+}
+.audioFailed p {
+  margin: 0;
+}
+
+/* Сборка: слоги ложатся в строку листа чернилами. */
+.assembled {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 4px 6px;
+  min-height: 52px;
+  margin: 14px 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--primary);
+}
+.placed {
+  padding: 0 1px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: 28px/1.15 var(--font-print);
+  color: var(--primary);
+  cursor: pointer;
+}
+.placed:hover:not(:disabled) {
+  text-decoration: line-through;
+  text-decoration-color: var(--pen);
 }
 .slotsHint {
-  color: var(--muted-foreground);
   font-size: 14px;
+  line-height: 32px;
+  color: var(--muted-foreground);
 }
 .tiles {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 8px;
+  margin-top: 12px;
 }
-.prompt {
-  color: var(--muted-foreground);
-  font-size: 15px;
-}
-.options {
+.tile {
   display: grid;
-  gap: 10px;
-}
-.option {
-  min-height: 56px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
+  place-items: center;
+  min-width: 52px;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--input);
+  border-radius: 12px;
   background: var(--card);
-  text-align: left;
-  padding: 0 16px;
-  font-size: 17px;
+  font: 22px var(--font-print);
+  color: var(--card-foreground);
   cursor: pointer;
+  transition: opacity 160ms ease-out;
 }
-.option:hover {
-  border-color: var(--muted-foreground);
+.tile:hover:not(:disabled) {
+  border-color: var(--primary);
 }
-.options .correct {
-  opacity: 1;
-  border-color: var(--ok);
-  background: var(--ok-bg);
-  color: var(--ok-fg);
-}
-.options .wrong {
-  opacity: 1;
-  border-color: var(--destructive);
-  background: var(--bad-bg);
-  color: var(--bad-fg);
-}
-.feedback {
-  border-radius: 14px;
-  padding: 14px 16px;
-  margin-top: 14px;
-}
-.feedback.ok {
-  background: var(--ok-bg);
-  color: var(--ok-fg);
-}
-.feedback.bad {
-  background: var(--bad-bg);
-  color: var(--bad-fg);
-}
-.feedback.almost {
-  background: var(--almost-bg);
-  color: var(--almost-fg);
-}
-.chars {
-  font-size: 26px;
-  letter-spacing: 0.02em;
-  margin-top: 6px;
-}
-.chars b {
-  background: var(--same-bg);
-  border-radius: 4px;
-  padding: 0 1px;
-}
-.chars s {
-  background: var(--wrong-bg);
-  border-radius: 4px;
-  padding: 0 1px;
-  text-decoration: none;
-}
-.answer {
-  font-size: 24px;
-  text-align: center;
+.tile:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
-.gap {
-  display: inline-block;
-  min-width: 3ch;
-  border-bottom: 2px solid currentColor;
-  text-align: center;
-  opacity: 0.7;
+/* Ответ на строке: чернила учащегося, поправки красной ручкой. */
+.written {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 52px;
+  margin: 12px 0 0;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid var(--primary);
+  font: 28px/1.3 var(--font-print);
+  color: var(--primary);
+  overflow-wrap: anywhere;
 }
+.written s {
+  color: var(--pen);
+  text-decoration-color: var(--pen);
+  text-decoration-thickness: 2px;
+}
+.written sup,
+.written ins {
+  font-style: italic;
+  font-size: 0.62em;
+  color: var(--pen);
+  text-decoration: none;
+}
+.written sup {
+  vertical-align: 0.9em;
+}
+.written ins {
+  vertical-align: 0.9em;
+}
+.writtenTick {
+  flex: none;
+  width: 30px;
+  height: 28px;
+  margin-bottom: 6px;
+  color: var(--ok);
+}
+.fixPair {
+  white-space: nowrap;
+}
+
 /*
  * Маска лежит подложкой в поле ответа и служит строкой ввода: собственный текст и каретка поля скрыты
  * (`.masked`), а набранное показывают ячейки. Поле остаётся настоящим полем — фокус, клавиатура и `lang`
@@ -202,6 +521,28 @@
 .field {
   position: relative;
   display: grid;
+  margin-top: 12px;
+  border-bottom: 1.5px solid var(--input);
+  transition: border-color 160ms ease-out;
+}
+.field:focus-within {
+  border-bottom-color: var(--primary);
+}
+.answer {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 2px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: 28px/1.3 var(--font-print);
+  color: var(--primary);
+}
+.answer:focus-visible {
+  outline: none;
+}
+.fieldPhrase .answer {
+  font-size: 22px;
 }
 .masked {
   color: transparent;
@@ -214,33 +555,41 @@
   flex-wrap: wrap;
   align-items: flex-end;
   align-content: center;
-  justify-content: center;
-  gap: 4px 10px;
-  padding: 0 14px;
+  justify-content: flex-start;
+  gap: 4px 14px;
+  padding: 4px 2px 8px;
   color: var(--muted-foreground);
   pointer-events: none;
 }
 .maskWord {
   display: flex;
   align-items: flex-end;
-  gap: 3px;
-  font-size: 20px;
+  gap: 0;
+  font-family: var(--font-print);
+  font-size: 24px;
   line-height: 1.2;
 }
+.fieldPhrase .maskWord {
+  font-size: 20px;
+}
 .maskLetter {
-  min-width: 0.8em;
+  min-width: 0.7em;
+  margin: 0 1.5px;
   /* Высота с запасом под базовой линией: иначе линейка съедает хвосты γ, η, μ, φ, χ, ψ. */
   height: 1.4em;
-  border-bottom: 2px solid currentColor;
+  border-bottom: 1.5px solid color-mix(in srgb, var(--muted-foreground) 55%, transparent);
+  font-weight: 400;
   text-align: center;
 }
 .maskLead {
   color: var(--muted-foreground);
-  opacity: 0.75;
 }
+/* Набранное читается обычным словом чернилами: ячейки остаются только у ещё не написанных букв. */
 .maskTyped {
-  color: var(--foreground);
-  border-color: var(--foreground);
+  min-width: 0;
+  margin: 0;
+  color: var(--primary);
+  border-bottom-color: transparent;
 }
 /* Каретка рисуется сама: собственная каретка поля стоит по скрытому тексту и в ячейки не попадает. */
 .field:focus-within .maskCaretAfter {
@@ -267,5 +616,160 @@
   50.01%,
   100% {
     box-shadow: none;
+  }
+}
+
+.problem {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--destructive);
+}
+/* Без облачка (отдельный рендер упражнения) действие стоит под листом. */
+.inlineAction {
+  display: grid;
+  margin-top: 14px;
+}
+
+/* Облачко занятия — то же, что листание урока: закрыть, «N из M» и состав, главное действие. */
+.cloud {
+  position: sticky;
+  bottom: calc(14px + var(--inset-bottom));
+  z-index: 6;
+  flex: none;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: min(360px, 100% - 32px);
+  height: 60px;
+  margin: 0 0 calc(14px + var(--inset-bottom));
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--cloud-shadow);
+}
+.close {
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+}
+.count {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-family: var(--font-print);
+  font-size: 15px;
+  line-height: 1.25;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.count > span,
+.count > small {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.count > small {
+  font: 600 11.5px/1.3 var(--font-ui);
+}
+.primary {
+  height: 100%;
+  width: auto;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Сводка итога: под списком на телефоне, листом справа на широком экране. */
+.summary {
+  margin-top: 18px;
+  padding: 14px 0 0 28px;
+  border-top: 1.5px solid var(--foreground);
+}
+.summaryTitle {
+  margin: 0 0 4px;
+  font-family: var(--font-print);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: var(--cell);
+}
+.summaryLine {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 17px;
+  line-height: 26px;
+}
+.summaryNote {
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--muted-foreground);
+}
+.summaryNote b {
+  font-family: var(--font-print);
+  font-weight: 600;
+  color: var(--foreground);
+}
+.summaryActions {
+  display: grid;
+  margin-top: 14px;
+}
+
+@media (min-width: 900px) {
+  .page {
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: 48px;
+    align-items: start;
+    align-content: start;
+    padding: 12px 32px 24px;
+  }
+  .head,
+  .done {
+    grid-column: 1;
+  }
+  .date {
+    text-align: left;
+  }
+  .sheet,
+  .summary {
+    grid-column: 2;
+    grid-row: 1 / span 40;
+    margin: 0;
+    padding: 28px 32px;
+  }
+  .sheet {
+    position: sticky;
+    top: 12px;
+  }
+  .summary {
+    background: var(--card);
+    border: 1px solid var(--input);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px -12px var(--shadow);
+  }
+  .fold {
+    display: none;
+  }
+  .cloud {
+    align-self: flex-end;
+    width: min(420px, 46%);
+    margin-right: max(32px, calc((100% - 1180px) / 2 + 32px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip,
+  .line,
+  .tile,
+  .field {
+    transition: none;
   }
 }
