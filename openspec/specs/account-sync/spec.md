@@ -1,7 +1,7 @@
 # account-sync Specification
 
 ## Purpose
-TBD - created by archiving change course-progress-sync. Update Purpose after archive.
+Аккаунт и данные учащегося: Telegram-аккаунт без отдельной регистрации, изоляция данных разных пользователей, синхронизация прогресса между устройствами через Telegram CloudStorage и резервная копия. Контракт — openspec/changes/archive/2026-10-01-course-progress-sync/design.md, docs/account.md.
 
 ## Requirements
 
