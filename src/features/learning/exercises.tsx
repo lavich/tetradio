@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Volume2 } from "lucide-react";
 import type { Phrase, SessionCard, SessionItem, Word } from "../../domain/types";
-import { checkAnswer } from "../../domain/import";
+import { checkAnswer } from "../../domain/text-answer";
 import { checkTextAnswer } from "../../domain/text-answer";
 import { diffChars } from "../../domain/spelling";
 import {
