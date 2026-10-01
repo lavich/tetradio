@@ -1,0 +1,36 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="base.css">
+<style>
+body{margin:0;background:var(--bg)}
+body.dark{--bg:#14171c;--paper:#1c2028;--fg:#e8eaee;--muted:#a3a9b4;--ink:#8fb0ff;--border:#2b323d;--grid:#222832}
+.wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:20px;max-width:1100px}
+.card{padding:16px 18px 18px;border-radius:14px;border:1px solid var(--border);background:var(--bg)}
+.card h4{font:700 13px var(--ui);margin:0 0 2px;color:var(--fg)}.card small{display:block;font:12.5px/1.4 var(--ui);color:var(--muted);margin-bottom:10px}
+p.t{font:16px/26px var(--print);margin:0;color:var(--fg)}
+.big{font:34px/50px var(--print);margin:2px 0 10px;color:var(--fg)}
+/* штрих пером: SVG-маска растягивается по ширине слова, толщина задаётся высотой полосы */
+.w{--h:4px;padding-bottom:3px;background-repeat:no-repeat;background-position:0 100%;background-size:100% var(--h);
+ -webkit-box-decoration-break:clone;box-decoration-break:clone}
+.big .w{--h:9px}
+.v1 .w{background-image:var(--s1)}.v2 .w{background-image:var(--s2)}.v3 .w{background-image:var(--s3)}.v4 .w{background-image:var(--s4)}
+.on{background-color:color-mix(in srgb,var(--ink) 12%,transparent);border-radius:3px}
+</style></head><body><div class="wrap" id="w"></div>
+<script>
+const dark=new URLSearchParams(location.search).get('dark');if(dark)document.body.classList.add('dark');
+const ink=dark?'#8fb0ff':'#1f47b8';const a=dark?.85:.78;
+// формы в координатах 100×10, растягиваются без сохранения пропорций
+const shapes={
+ s1:`M0 5.6 Q50 3.2 100 5.6 Q50 7.4 0 5.6Z`, // утоньшение к обоим концам, «линза»
+ s2:`M0 4.2 Q8 2.6 22 3.6 L100 5.4 Q60 6.6 22 6.8 Q6 7.4 0 4.2Z`, // нажим в начале, сход на нет к концу
+ s3:`M0 6.4 Q30 3.6 70 4.6 Q92 5.2 100 3.4 Q90 6.6 70 6.6 Q30 6.8 0 6.4Z`, // лёгкий изгиб, хвостик вверх в конце
+ s4:`M0 5.4 Q4 3.8 12 4.4 Q50 3.6 88 4.4 Q96 3.8 100 5.4 Q96 6.8 88 6.2 Q50 7.2 12 6.2 Q4 6.8 0 5.4Z` // перо-«ленточка»: ровная середина, утоньшения на краях
+};
+const css=Object.entries(shapes).map(([k,d])=>`--${k}:url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'><path d='${d}' fill='${ink}' fill-opacity='${a}'/></svg>`)}")`).join(';');
+document.documentElement.setAttribute('style',css);
+const W=(t,on)=>`<span class="w${on?' on':''}">${t}</span>`;
+const txt=`<p class="t" lang="el">Γεια σας! Με λένε Ιρίνα. Είμαι από τη Ρωσία. ${W('Τώρα')} είμαι στην Κύπρο. ${W('Η φίλη',1)} μου η Όλγα είναι από τη Μόσχα. ${W('Γιατί')} η Κύπρος είναι πολύ ωραία! Το τηλέφωνό μου: ${W('εννέα')}, ${W('έξι')}, ${W('τρία')}, ${W('πέντε')}.</p>`;
+const items=[['v1','A. Утоньшение к обоим концам','Перо касается и отрывается мягко: тонкие концы, чуть толще в середине.'],
+['v2','B. Нажим в начале, сход на нет','Как росчерк слева направо: в начале капля чернил, к концу линия истончается.'],
+['v3','C. С лёгким изгибом','Чуть неровная рука: середина ровная, в конце маленький хвостик вверх.'],
+['v4','D. Ленточка','Ровная середина и одинаково заострённые края — самый аккуратный штрих.']];
+document.getElementById('w').innerHTML=items.map(([c,h,s])=>`<div class="card ${c}"><h4>${h}</h4><small>${s}</small><p class="big" lang="el">${W('η φίλη')} &nbsp; ${W('τώρα')}</p>${txt}</div>`).join('');
+</script></body></html>

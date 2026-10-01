@@ -1,0 +1,32 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="base.css">
+<style>
+body{background:var(--bg);margin:0}
+.grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px;max-width:1240px}
+.card{padding:16px 18px 18px;border-radius:14px;border:1px solid var(--border);background:var(--bg)}
+.card h4{font:700 13px var(--ui);margin:0 0 2px;color:var(--fg)}.card small{display:block;font:12.5px/1.4 var(--ui);color:var(--muted);margin-bottom:10px;min-height:34px}
+p.t{font:16px/26px var(--print);margin:0}
+/* 1 точки */
+.a1 .w{text-decoration:underline dotted var(--ink) 2px;text-underline-offset:4px}.a1 .o{text-decoration:underline dotted color-mix(in srgb,var(--muted) 55%,transparent) 1.5px;text-underline-offset:4px}
+/* 2 маркер */
+.a2 .w{background:linear-gradient(transparent 58%,color-mix(in srgb,#f5d76e 70%,transparent) 58% 92%,transparent 92%);padding:0 1px}.a2 .o{background:linear-gradient(transparent 70%,color-mix(in srgb,#f5d76e 35%,transparent) 70% 92%,transparent 92%)}
+/* 3 тонкая сплошная линия чернилами */
+.a3 .w{text-decoration:underline solid color-mix(in srgb,var(--ink) 55%,transparent) 1px;text-underline-offset:5px}.a3 .o{text-decoration:none}
+/* 4 печать полужирным, прошлые — без выделения */
+.a4 .w{font-weight:600}.a4 .o{}
+/* 5 надстрочная точка-метка */
+.a5 .w{position:relative}.a5 .w:after{content:"";position:absolute;right:-5px;top:3px;width:4px;height:4px;border-radius:9px;background:var(--ink)}.a5 .o:after{}
+/* 6 ничего не видно, пока не включён режим «Слова на странице» */
+.a6 .w,.a6 .o{}
+.toggle{display:inline-flex;align-items:center;gap:8px;font:600 13px var(--ui);color:var(--ink);border:1px solid var(--border);border-radius:999px;padding:6px 12px;margin-bottom:10px;background:var(--paper)}
+</style></head><body><div class="grid2">
+<script>
+const txt=(w,o)=>`<p class="t" lang="el">${o('Γεια')} σας! Με λένε Ιρίνα. ${o('Είμαι')} ${o('από')} τη Ρωσία. ${w('Τώρα')} ${o('είμαι')} στην Κύπρο. ${w('Η φίλη')} μου η Όλγα είναι ${o('από')} τη Μόσχα. ${w('Γιατί')} η Κύπρος είναι πολύ ωραία! Το τηλέφωνό μου: ${w('εννέα')}, ${w('έξι')}, ${w('τρία')}, ${w('πέντε')}.</p>`;
+const W=t=>`<span class="w">${t}</span>`,O=t=>`<span class="o">${t}</span>`;
+const items=[["a1","1. Точки (сейчас)","Знак «нажимается» как у словарной глоссы; прошлые — серые точки."],
+["a2","2. Маркер","Как выделитель в тетради: жёлтая полоса под нижней половиной слова; прошлые — бледнее. Заметнее всего."],
+["a3","3. Тонкая линия чернилами","Одна сплошная бледно-синяя линия под словом урока; прошлые не выделены, но нажимаются."],
+["a4","4. Полужирная печать","Как ключевые слова в учебнике; прошлые не выделены. Тише всего, но жирный уже значит «правило» в объяснениях."],
+["a5","5. Метка-точка","Маленькая синяя точка над концом слова, как пометка на полях. Текст не меняется."],
+["a6","6. По кнопке","Ничего не выделено; кнопка «Слова на странице» включает выделение (любым из способов 1–5). Нажимаются всегда."]];
+document.currentScript.insertAdjacentHTML("afterend",items.map(([c,h,s])=>`<div class="card ${c}"><h4>${h}</h4><small>${s}</small>${c==='a6'?'<span class="toggle">Слова на странице</span>':''}${txt(W,O)}</div>`).join(""));
+</script></div></body></html>
