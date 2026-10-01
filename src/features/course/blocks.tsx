@@ -9,7 +9,8 @@ import type {
   SpeakingBlock,
   WritingBlock,
 } from "../../content/course";
-import { scoreExercise, wordCount, type ItemResult } from "../../domain/course";
+import { scoreExercise, spokenChoice, wordCount, type ItemResult } from "../../domain/course";
+import { speakPhrase } from "../../shared/audio";
 import type { BlockProgress } from "../../domain/types";
 import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
 import type { BlockPatch } from "../../storage/course";
@@ -282,7 +283,11 @@ export function Exercise({
                     lang="el"
                     aria-pressed={given === option}
                     disabled={checked}
-                    onClick={() => choose(item.id, option)}
+                    onClick={() => {
+                      choose(item.id, option);
+                      const text = spokenChoice(item.prompt, option);
+                      if (text) void speakPhrase(text);
+                    }}
                   >
                     {option}
                   </button>
