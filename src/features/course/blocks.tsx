@@ -267,6 +267,7 @@ export function Exercise({
                 lang="el"
                 autoComplete="off"
                 autoCapitalize="off"
+                autoCorrect="off"
                 spellCheck={false}
                 aria-label={`Ответ ${index + 1}`}
                 value={given}
@@ -382,6 +383,10 @@ export function Writing({
         className={css.writing}
         lang="el"
         aria-label="Ваш текст"
+        autoComplete="off"
+        autoCapitalize="sentences"
+        autoCorrect="off"
+        spellCheck={false}
         value={text}
         onChange={(event) => setText(event.target.value)}
         onBlur={() => void save({ text })}
