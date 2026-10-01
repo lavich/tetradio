@@ -10,6 +10,8 @@ export default defineConfig({
   // У каждого теста свой контекст браузера и своя база: тесты независимы и идут параллельно.
   fullyParallel: true,
   workers: process.env.CI ? 4 : "50%",
+  // Четыре браузера и сервер на четырёх ядрах runner: ожиданию в CI нужен запас, иначе редкие ложные падения.
+  expect: { timeout: process.env.CI ? 10000 : 5000 },
   use: {
     baseURL: `http://localhost:${port}`,
     browserName: "chromium",
