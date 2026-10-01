@@ -178,6 +178,8 @@ export interface CatalogModule {
   lessonIds: string[];
   /** Контрольная точка программы после модуля (K1, M1–M3): урок-контрольная вне уроков модуля. */
   checkpointId?: string;
+  /** Уроки после контрольной точки: работа над слабым навыком после M3. */
+  reviewIds?: string[];
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -488,8 +490,16 @@ export function parseModule(input: unknown, path: string): CatalogModule {
     throw new ContentError(`${path}.checkpointId: контрольная черновика не поставляется`);
   if (checkpointId && lessonIds.includes(checkpointId))
     throw new ContentError(`${path}.checkpointId: контрольная точка не входит в уроки модуля`);
+  const reviewIds = list(raw.reviewIds ?? [], `${path}.reviewIds`).map((value, i) =>
+    str(value, `${path}.reviewIds[${i}]`),
+  );
+  if (reviewIds.length && !checkpointId)
+    throw new ContentError(`${path}.reviewIds: занятия после точки бывают только у модуля с контрольной точкой`);
+  if (reviewIds.some((reviewId) => reviewId === checkpointId || lessonIds.includes(reviewId)))
+    throw new ContentError(`${path}.reviewIds: занятие после точки не входит в уроки модуля и не совпадает с точкой`);
   return {
     ...(checkpointId ? { checkpointId } : {}),
+    ...(reviewIds.length ? { reviewIds } : {}),
     id: id(raw.id, `${path}.id`),
     courseId: str(raw.courseId, `${path}.courseId`),
     number: int(raw.number, `${path}.number`, 1),
