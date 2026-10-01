@@ -8,10 +8,10 @@ import { ContentError, parseCatalog, parsePackage, SCHEMA_VERSION } from "../src
 import { wordKey } from "../src/domain/import";
 import { stressNote } from "../src/domain/phonetics";
 
-const content = buildContent("tests/fixtures/tavelori-content");
+const content = buildContent("tests/fixtures/mechanics");
 const seedWords = content.words;
-/** Слова фикстуры со своей иллюстрацией: на них проверяется стандарт картинок. */
-const illustrated = content.words.filter((word) => word.imageAssetId);
+/** Слова фикстуры со своей иллюстрацией в art/: на них проверяется стандарт картинок; картинки библиотеки (pictures.yaml) ему не подчиняются. */
+const illustrated = content.words.filter((word) => content.sources.words.get(word.id)!.image);
 const packageOf = (id: string) => content.packages.find((p) => p.id === id)!;
 const fileOf = (path: string) => content.files.find((file) => file.path === path)!;
 const lessonSource = (id: string) => content.sources.lessons.get(id)!;
@@ -26,10 +26,9 @@ const seedArt = (id: string) =>
 /** Копия исходников, в которой можно сломать один файл и проверить отказ публикации. */
 function brokenCopy(mutate: (root: string) => void) {
   const root = mkdtempSync(join(tmpdir(), "tetradio-content-"));
-  // Копируются все папки контента: новый вид карточек не должен ломать фикстуру.
-  for (const entry of readdirSync("tests/fixtures/tavelori-content", { withFileTypes: true }))
-    if (entry.isDirectory())
-      cpSync(join("tests/fixtures/tavelori-content", entry.name), join(root, entry.name), { recursive: true });
+  // Копируется весь контент, с pictures.yaml: новый вид карточек не должен ломать фикстуру.
+  for (const entry of readdirSync("tests/fixtures/mechanics"))
+    cpSync(join("tests/fixtures/mechanics", entry), join(root, entry), { recursive: true });
   mutate(root);
   try {
     return buildContent(root);
@@ -41,71 +40,70 @@ function brokenCopy(mutate: (root: string) => void) {
 describe("состав урока в пакете", () => {
   /** Пакет описывает урок, а не занятие: статус и дата принадлежат пользователю и в поставку не попадают. */
   it("пакет несёт только название урока", () => {
-    expect(packageOf("lesson-1-1").lesson).toEqual({ title: "Урок 1.1" });
-    expect(packageOf("lesson-1-2").lesson).toEqual({ title: "Урок 1.2" });
+    expect(packageOf("mech-1").lesson).toEqual({ title: "Урок 1.1" });
+    expect(packageOf("mech-2").lesson).toEqual({ title: "Урок 1.2" });
     for (const [id, source] of content.sources.lessons)
       expect(Object.keys(source), id).toEqual(expect.not.arrayContaining(["status", "targetDate"]));
   });
-  it.each(["lesson-1-2", "lesson-1-3"] as const)(
-    "%s: связи пакета повторяют объявленный состав по порядку",
-    (lessonId) => {
-      const declared = wordIdsOf(lessonId);
-      expect(declared.length).toBeGreaterThan(0);
-      expect(packageOf(lessonId).links).toHaveLength(declared.length);
-      expect(wordsOf(content, lessonId).map((word) => word.id)).toEqual(declared);
-    },
-  );
+  it.each(["mech-2", "mech-3"] as const)("%s: связи пакета повторяют объявленный состав по порядку", (lessonId) => {
+    const declared = wordIdsOf(lessonId);
+    expect(declared.length).toBeGreaterThan(0);
+    expect(packageOf(lessonId).links).toHaveLength(declared.length);
+    expect(wordsOf(content, lessonId).map((word) => word.id)).toEqual(declared);
+  });
   it("повторяющееся слово остаётся одной записью с общим идентификатором во всех пакетах", () => {
     const linked = new Set(content.packages.flatMap((pack) => pack.words.map((word) => word.id)));
     expect(seedWords).toHaveLength(linked.size);
     expect(new Set(seedWords.map((word) => wordKey(word.greek, word.russian))).size).toBe(seedWords.length);
     expect(new Set(seedWords.map((word) => word.id)).size).toBe(seedWords.length);
-    // «το σπίτι» объявлено и в 1.2, и в 1.3 — в обоих пакетах одна и та же запись
-    const house = seedWords.filter((word) => word.greek === "το σπίτι");
+    // «ο φίλος» объявлен и в 1.2, и в 1.3 — в обоих пакетах одна и та же запись
+    const house = seedWords.filter((word) => word.greek === "ο φίλος");
     expect(house).toHaveLength(1);
-    expect(packageOf("lesson-1-2").words.some((word) => word.id === house[0].id)).toBe(true);
-    const inThird = packageOf("lesson-1-3").words.find((word) => word.id === house[0].id);
+    expect(packageOf("mech-2").words.some((word) => word.id === house[0].id)).toBe(true);
+    const inThird = packageOf("mech-3").words.find((word) => word.id === house[0].id);
     expect(inThird).toEqual(house[0]);
-    expect(packageOf("lesson-1-3").media.some((item) => item.id === house[0].imageAssetId)).toBe(true);
+    expect(packageOf("mech-3").media.some((item) => item.id === house[0].imageAssetId)).toBe(true);
   });
 });
 
 describe("уроки принадлежат курсам", () => {
   it("каталог отдаёт состав курса, а урок и пакет знают свой курс", () => {
-    const leeke = content.catalog.courses.find((course) => course.id === "leeke")!;
-    expect(leeke.title).toBe("Греческий A2");
+    const mechanics = content.catalog.courses.find((course) => course.id === "mechanics")!;
+    expect(mechanics.title).toBe("Механики");
     // Порядок состава задаёт файл курса, порядок пакетов — обход каталога уроков: совпадать они не обязаны.
-    expect([...leeke.lessonIds].sort()).toEqual(content.packages.map((pack) => pack.id).sort());
-    expect(leeke.lessonIds).toEqual(
-      readFileSync("tests/fixtures/tavelori-content/courses/leeke.yaml", "utf8")
+    expect([...mechanics.lessonIds].sort()).toEqual(content.packages.map((pack) => pack.id).sort());
+    expect(mechanics.lessonIds).toEqual(
+      readFileSync("tests/fixtures/mechanics/courses/mechanics.yaml", "utf8")
         .split("\n")
         .flatMap((line) => /^\s+- (\S+)$/.exec(line)?.[1] ?? []),
     );
-    for (const entry of content.catalog.lessons) expect(entry.courseId, entry.id).toBe("leeke");
-    for (const pack of content.packages) expect(pack.courseId, pack.id).toBe("leeke");
+    for (const entry of content.catalog.lessons) expect(entry.courseId, entry.id).toBe("mechanics");
+    for (const pack of content.packages) expect(pack.courseId, pack.id).toBe("mechanics");
   });
   it("публикация требует, чтобы урок входил ровно в один курс", () => {
-    const leeke = readFileSync("tests/fixtures/tavelori-content/courses/leeke.yaml", "utf8");
-    expect(() =>
-      brokenCopy((root) => writeFileSync(join(root, "courses", "leeke.yaml"), leeke.replace("  - lesson-1-4\n", ""))),
-    ).toThrow(/lessons\/lesson-1-4.yaml: урок не входит ни в один курс/);
+    const mechanics = readFileSync("tests/fixtures/mechanics/courses/mechanics.yaml", "utf8");
     expect(() =>
       brokenCopy((root) =>
-        writeFileSync(join(root, "courses", "другой.yaml"), "title: Другой курс\nlessons:\n  - lesson-1-4\n"),
+        writeFileSync(join(root, "courses", "mechanics.yaml"), mechanics.replace("  - mech-4\n", "")),
       ),
-    ).toThrow(/courses\/другой.yaml: урок lesson-1-4 уже входит в курс leeke/);
+    ).toThrow(/lessons\/mech-4.yaml: урок не входит ни в один курс/);
     expect(() =>
-      brokenCopy((root) => writeFileSync(join(root, "courses", "leeke.yaml"), leeke + "  - lesson-9-9\n")),
-    ).toThrow(/courses\/leeke.yaml: урока lesson-9-9 нет/);
+      brokenCopy((root) =>
+        writeFileSync(join(root, "courses", "другой.yaml"), "title: Другой курс\nlessons:\n  - mech-4\n"),
+      ),
+    ).toThrow(/courses\/другой.yaml: урок mech-4 уже входит в курс mechanics/);
+    expect(() =>
+      brokenCopy((root) => writeFileSync(join(root, "courses", "mechanics.yaml"), mechanics + "  - lesson-9-9\n")),
+    ).toThrow(/courses\/mechanics.yaml: урока lesson-9-9 нет/);
   });
   it("курс несёт язык и требует один язык на все свои уроки", () => {
-    expect(content.catalog.courses.find((course) => course.id === "leeke")!.language).toBe("el");
-    const lesson = readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-4.yaml", "utf8");
+    expect(content.catalog.courses.find((course) => course.id === "mechanics")!.language).toBe("el");
+    const lesson = readFileSync("tests/fixtures/mechanics/lessons/mech-4.yaml", "utf8");
     expect(() =>
       brokenCopy((root) =>
-        writeFileSync(join(root, "lessons", "lesson-1-4.yaml"), lesson.replace("language: el", "language: en")),
+        writeFileSync(join(root, "lessons", "mech-4.yaml"), lesson.replace("language: el", "language: en")),
       ),
-    ).toThrow(/courses\/leeke.yaml: уроки курса на разных языках/);
+    ).toThrow(/courses\/mechanics.yaml: уроки курса на разных языках/);
   });
   it("каталог и пакет прежней версии без курса читаются как раньше", () => {
     const catalog = JSON.parse(fileOf("content/catalog.json").body as string);
@@ -129,7 +127,7 @@ describe("каталог и пакеты", () => {
       content.packages.map((pack) => [pack.id, pack.words.length, pack.media.length]),
     );
     const text = fileOf("content/catalog.json").body as string;
-    expect(text).not.toContain("σπίτι");
+    expect(text).not.toContain("φίλος");
     expect(text).not.toContain("<svg");
     // Метаданные урока — сотни символов, а не его содержимое; индекс слов — только идентификаторы, по ~10 символов на слово.
     const meta = JSON.stringify({ ...catalog, lessons: catalog.lessons.map(({ wordIds: _w, ...rest }) => rest) });
@@ -150,7 +148,7 @@ describe("каталог и пакеты", () => {
       expect(pack.links.map((l) => l.position)).toEqual(pack.links.map((_, i) => i));
       for (const item of pack.media) {
         expect(item.url).toBe(`content/media/${item.id}@${item.version}.svg`);
-        expect(Buffer.from(fileOf(item.url).body).toString("utf8")).toMatch(/^<svg xmlns/);
+        expect(Buffer.from(fileOf(item.url).body).toString("utf8")).toMatch(/^<svg\s/);
         expect(item.required).toBe(true);
       }
     }
@@ -163,52 +161,46 @@ describe("каталог и пакеты", () => {
     expect([...content.sources.lessons.keys()]).toEqual(content.packages.map((p) => p.id));
   });
   it("публикация отклоняет дубликаты слов, битые ссылки уроков, сирот и подписи в картинках", () => {
-    const house = readFileSync("tests/fixtures/tavelori-content/words/το-σπίτι.yaml", "utf8");
+    const house = readFileSync("tests/fixtures/mechanics/words/ο-φίλος.yaml", "utf8");
     expect(() =>
       brokenCopy((root) => {
-        writeFileSync(join(root, "words", "дубль.yaml"), house.replace("id: w12-16", "id: w99-01"));
+        writeFileSync(join(root, "words", "дубль.yaml"), house.replace("id: w034", "id: w99-01"));
         writeFileSync(
-          join(root, "lessons", "lesson-1-2.yaml"),
-          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-2.yaml", "utf8").replace(
-            "- w12-16",
-            "- w99-01",
-          ),
+          join(root, "lessons", "mech-2.yaml"),
+          readFileSync("tests/fixtures/mechanics/lessons/mech-2.yaml", "utf8").replace("- w034", "- w99-01"),
         );
       }),
-    ).toThrow(/повторяет слово «το σπίτι — дом»/);
+    ).toThrow(/повторяет слово «ο φίλος — друг»/);
     expect(() => brokenCopy((root) => writeFileSync(join(root, "words", "дубль.yaml"), house))).toThrow(
-      /идентификатор «w12-16» уже занят/,
+      /идентификатор «w034» уже занят/,
     );
     expect(() =>
       brokenCopy((root) =>
         writeFileSync(
-          join(root, "lessons", "lesson-1-2.yaml"),
-          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-2.yaml", "utf8").replace(
-            "- w12-16",
-            "- w12-99",
-          ),
+          join(root, "lessons", "mech-2.yaml"),
+          readFileSync("tests/fixtures/mechanics/lessons/mech-2.yaml", "utf8").replace("- w034", "- w999"),
         ),
       ),
-    ).toThrow(/слова w12-99 нет/);
+    ).toThrow(/слова w999 нет/);
     expect(() =>
       brokenCopy((root) => writeFileSync(join(root, "words", "το-τεστ.yaml"), "greek: το τεστ\nrussian: тест\n")),
     ).toThrow(/не входит ни в один урок/);
     expect(() =>
       brokenCopy((root) =>
         writeFileSync(
-          join(root, "art", "το-σπίτι.svg"),
+          join(root, "art", "ο-φίλος.svg"),
           '<svg xmlns="http://www.w3.org/2000/svg"><text>дом</text></svg>',
         ),
       ),
     ).toThrow(/выдаёт ответ/);
     expect(() =>
       brokenCopy((root) =>
-        writeFileSync(join(root, "words", "το-σπίτι.yaml"), house.replace("image: το-σπίτι.svg", "image: нет.svg")),
+        writeFileSync(join(root, "words", "ο-φίλος.yaml"), house.replace("image: ο-φίλος.svg", "image: нет.svg")),
       ),
     ).toThrow(/файла art\/нет.svg нет/);
     expect(() =>
       brokenCopy((root) =>
-        writeFileSync(join(root, "words", "το-σπίτι.yaml"), house.replace("target: σπίτι", "target: σπιτάκι")),
+        writeFileSync(join(root, "words", "ο-φίλος.yaml"), house.replace('target: "φίλος"', 'target: "φιλαράκος"')),
       ),
     ).toThrow(/не встречается в предложении/);
   });
@@ -216,15 +208,15 @@ describe("каталог и пакеты", () => {
     const built = brokenCopy((root) => {
       writeFileSync(join(root, "words", "το-δοκίμιο.yaml"), "greek: το δοκίμιο\nrussian: очерк\n");
       writeFileSync(
-        join(root, "lessons", "lesson-1-4.yaml"),
-        readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-4.yaml", "utf8") + "  - το-δοκίμιο\n",
+        join(root, "lessons", "mech-4.yaml"),
+        readFileSync("tests/fixtures/mechanics/lessons/mech-4.yaml", "utf8") + "  - το-δοκίμιο\n",
       );
     });
     expect(built.words.find((word) => word.id === "το-δοκίμιο")).toMatchObject({
       greek: "το δοκίμιο",
       russian: "очерк",
     });
-    expect(built.packages.find((p) => p.id === "lesson-1-4")!.links.at(-1)!.wordId).toBe("το-δοκίμιο");
+    expect(built.packages.find((p) => p.id === "mech-4")!.links.at(-1)!.wordId).toBe("το-δοκίμιο");
   });
   it("повреждённый, неполный и несовместимый пакет отклоняются понятной ошибкой", () => {
     const pack = JSON.parse(fileOf(content.catalog.lessons[0].url).body as string);
@@ -266,7 +258,7 @@ describe("индекс слов в каталоге", () => {
 });
 
 describe("фонетика и разбор чтения", () => {
-  const house = readFileSync("tests/fixtures/tavelori-content/words/το-σπίτι.yaml", "utf8");
+  const house = readFileSync("tests/fixtures/mechanics/words/ο-φίλος.yaml", "utf8");
   it("ударный слог распознаётся по написанию, односложное слово знака не требует", () => {
     expect(stressNote("το σπίτι")).toBe("Ударение на первый слог");
     expect(stressNote("μεγάλος")).toBe("Ударение на второй слог");
@@ -281,27 +273,27 @@ describe("фонетика и разбор чтения", () => {
         word.greek.slice(segment.start, segment.start + segment.text.length),
         `${word.greek}/${segment.text}`,
       ).toBe(segment.text);
-    const pot = seedWords.find((word) => word.id === "w34-03")!;
+    const pot = seedWords.find((word) => word.id === "w093")!;
     expect(pot.segments).toEqual([
-      { text: "τσ", ipa: "ts", explanation: "τσ — слитный звук, как ц в «цапля»", start: 4 },
+      { text: "ππ", ipa: "p", explanation: "двойная согласная читается как одна", start: 4 },
     ]);
   });
   it("публикация отклоняет IPA без косых черт, проверенное слово без IPA и сочетание не из слова", () => {
     const rewrite = (next: string) => () =>
-      brokenCopy((root) => writeFileSync(join(root, "words", "το-σπίτι.yaml"), next));
-    expect(rewrite(house.replace("ipa: /to ˈspiti/", "ipa: to ˈspiti"))).toThrow(
-      /words\/το-σπίτι.yaml.ipa: транскрипция записывается между косыми чертами/,
+      brokenCopy((root) => writeFileSync(join(root, "words", "ο-φίλος.yaml"), next));
+    expect(rewrite(house.replace("ipa: /o ˈfilos/", "ipa: o ˈfilos"))).toThrow(
+      /words\/ο-φίλος.yaml.ipa: транскрипция записывается между косыми чертами/,
     );
-    expect(rewrite(house.replace("ipa: /to ˈspiti/\n", ""))).toThrow(
-      /words\/το-σπίτι.yaml: проверенное слово должно иметь IPA/,
+    expect(rewrite(house.replace("ipa: /o ˈfilos/\n", ""))).toThrow(
+      /words\/ο-φίλος.yaml: проверенное слово должно иметь IPA/,
     );
     expect(
       rewrite(`${house.trimEnd()}\nreading:\n  - { text: "ου", ipa: "u", explanation: "ου читается как у" }\n`),
-    ).toThrow(/reading\[0\]: сочетание «ου» не найдено в слове «το σπίτι»/);
+    ).toThrow(/reading\[0\]: сочетание «ου» не найдено в слове «ο φίλος»/);
     // Непроверенное слово публикуется и без транскрипции.
     expect(
-      rewrite(house.replace("ipa: /to ˈspiti/\n", "").replace("verified: true", "verified: false"))().words.find(
-        (word) => word.id === "w12-16",
+      rewrite(house.replace("ipa: /o ˈfilos/\n", "").replace("verified: true", "verified: false"))().words.find(
+        (word) => word.id === "w034",
       ),
     ).toMatchObject({ ipa: "", verified: false });
   });
@@ -309,16 +301,16 @@ describe("фонетика и разбор чтения", () => {
 
 /** Стандарт иллюстраций (docs/art-standard.md): палитра — данные, проверки — в публикации, старые файлы — в legacy.txt. */
 describe("иллюстрации подчиняются стандарту", () => {
-  const legacyText = readFileSync("tests/fixtures/tavelori-content/art/legacy.txt", "utf8");
+  const legacyText = readFileSync("tests/fixtures/mechanics/art/legacy.txt", "utf8");
   const legacy = parseLegacy(legacyText);
-  const house = readFileSync("tests/fixtures/tavelori-content/words/το-σπίτι.yaml", "utf8");
+  const house = readFileSync("tests/fixtures/mechanics/words/ο-φίλος.yaml", "utf8");
   const svg = (inner: string, attrs = 'viewBox="0 0 320 220"') =>
     `<svg xmlns="http://www.w3.org/2000/svg" ${attrs}><rect width="320" height="220" fill="#e7eefb"/>${inner}</svg>`;
-  /** Копия, в которой το-σπίτι.svg перерисован заново и больше не числится унаследованным. */
+  /** Копия, в которой ο-φίλος.svg перерисован заново и больше не числится унаследованным. */
   const redrawn = (art: string) =>
     brokenCopy((root) => {
-      writeFileSync(join(root, "art", "το-σπίτι.svg"), art);
-      writeFileSync(join(root, "art", "legacy.txt"), legacyText.replace("το-σπίτι.svg\n", ""));
+      writeFileSync(join(root, "art", "ο-φίλος.svg"), art);
+      writeFileSync(join(root, "art", "legacy.txt"), legacyText.replace("ο-φίλος.svg\n", ""));
     });
   it("палитра — единственный источник: документ перечисляет те же цвета", () => {
     const doc = readFileSync("docs/art-standard.md", "utf8");
@@ -386,15 +378,15 @@ describe("иллюстрации подчиняются стандарту", () 
   });
   it("цвет вне палитры: новая картинка отклоняется, унаследованная публикуется, список только сокращается", () => {
     expect(() => redrawn(svg('<circle r="9" fill="#fde68a" stroke="#ABCDEF"/>'))).toThrow(
-      /art\/το-σπίτι.svg: цвета вне палитры #abcdef, #fde68a/,
+      /art\/ο-φίλος.svg: цвета вне палитры #abcdef, #fde68a/,
     );
     // Тот же файл в legacy.txt — публикуется и учтён в отчёте
     expect(
-      brokenCopy((root) => writeFileSync(join(root, "art", "το-σπίτι.svg"), svg('<circle r="9" fill="#fde68a"/>'))).art,
+      brokenCopy((root) => writeFileSync(join(root, "art", "ο-φίλος.svg"), svg('<circle r="9" fill="#fde68a"/>'))).art,
     ).toEqual({ files: illustrated.length, legacy: legacy.size });
     // Унаследованный файл, который уже в палитре, просят убрать из списка
     expect(() =>
-      brokenCopy((root) => writeFileSync(join(root, "art", "το-σπίτι.svg"), svg('<circle r="9" fill="#2563eb"/>'))),
+      brokenCopy((root) => writeFileSync(join(root, "art", "ο-φίλος.svg"), svg('<circle r="9" fill="#2563eb"/>'))),
     ).toThrow(/уже в палитре — уберите его из art\/legacy.txt/);
     // Имя без файла — мусор в списке
     expect(() =>
@@ -402,7 +394,7 @@ describe("иллюстрации подчиняются стандарту", () 
     ).toThrow(/файла art\/нет.svg нет — уберите имя из списка/);
     // Остальные проверки действуют и для унаследованных файлов
     expect(() =>
-      brokenCopy((root) => writeFileSync(join(root, "art", "το-σπίτι.svg"), svg("<text>дом</text>"))),
+      brokenCopy((root) => writeFileSync(join(root, "art", "ο-φίλος.svg"), svg("<text>дом</text>"))),
     ).toThrow(/выдаёт ответ/);
     // Новое слово со своей картинкой вне палитры не спрятать: его нет в списке
     expect(() =>
@@ -413,63 +405,63 @@ describe("иллюстрации подчиняются стандарту", () 
           "greek: το δοκίμιο\nrussian: очерк\nimage: το-δοκίμιο.svg\n",
         );
         writeFileSync(
-          join(root, "lessons", "lesson-1-4.yaml"),
-          readFileSync("tests/fixtures/tavelori-content/lessons/lesson-1-4.yaml", "utf8") + "  - το-δοκίμιο\n",
+          join(root, "lessons", "mech-4.yaml"),
+          readFileSync("tests/fixtures/mechanics/lessons/mech-4.yaml", "utf8") + "  - το-δοκίμιο\n",
         );
       }),
     ).toThrow(/art\/το-δοκίμιο.svg: цвета вне палитры #123456/);
-    expect(house).toContain("image: το-σπίτι.svg");
+    expect(house).toContain("image: ο-φίλος.svg");
   });
 });
 
 /** Разметка слов примера (add-example-word-glosses): отрезки находятся сборкой, ссылки проверяются по каталогу. */
 describe("разметка слов примера", () => {
-  const house = readFileSync("tests/fixtures/tavelori-content/words/το-σπίτι.yaml", "utf8");
+  const house = readFileSync("tests/fixtures/mechanics/words/ο-φίλος.yaml", "utf8");
   const withWords = (words: string) => (root: string) =>
-    writeFileSync(join(root, "words", "το-σπίτι.yaml"), `${house.trimEnd()}\n    words:\n${words}`);
+    writeFileSync(join(root, "words", "ο-φίλος.yaml"), `${house.trimEnd()}\n    words:\n${words}`);
   const pilot = [
-    '      - { text: "Το", russian: "артикль ср. р." }',
-    '      - { text: "σπίτι", russian: "дом", word: w12-16 }',
+    '      - { text: "Ο", russian: "артикль м. р." }',
+    '      - { text: "φίλος", russian: "друг", word: w034 }',
     '      - { text: "μας", russian: "наш" }',
     '      - { text: "είναι", russian: "есть" }',
-    '      - { text: "μεγάλο", russian: "большой", word: w13-20 }',
+    '      - { text: "παντρεμένος", russian: "женатый", word: w095 }',
   ].join("\n");
-  const houseOf = (built: ReturnType<typeof buildContent>) => built.words.find((word) => word.id === "w12-16")!;
+  const houseOf = (built: ReturnType<typeof buildContent>) => built.words.find((word) => word.id === "w034")!;
 
   it("отрезки получают смещения в предложении, ссылки и перевод", () => {
     const example = houseOf(brokenCopy(withWords(pilot))).examples[0];
     expect(example.glosses).toEqual([
-      { start: 0, length: 2, russian: "артикль ср. р." },
-      { start: 3, length: 5, russian: "дом", wordId: "w12-16" },
-      { start: 9, length: 3, russian: "наш" },
-      { start: 13, length: 5, russian: "есть" },
-      { start: 19, length: 6, russian: "большой", wordId: "w13-20" },
+      { start: 0, length: 1, russian: "артикль м. р." },
+      { start: 2, length: 5, russian: "друг", wordId: "w034" },
+      { start: 8, length: 3, russian: "наш" },
+      { start: 12, length: 5, russian: "есть" },
+      { start: 18, length: 11, russian: "женатый", wordId: "w095" },
     ]);
     expect(example.glosses!.map((g) => example.greek.slice(g.start, g.start + g.length))).toEqual([
-      "Το",
-      "σπίτι",
+      "Ο",
+      "φίλος",
       "μας",
       "είναι",
-      "μεγάλο",
+      "παντρεμένος",
     ]);
   });
   it("повтор слова размечает следующее вхождение", () => {
     const built = brokenCopy((root) =>
       writeFileSync(
-        join(root, "words", "το-σπίτι.yaml"),
-        house.replace("Το σπίτι μας είναι μεγάλο.", "Το σπίτι και το σπίτι.") +
-          '    words:\n      - { text: "σπίτι", russian: "дом" }\n      - { text: "σπίτι", russian: "дом" }\n',
+        join(root, "words", "ο-φίλος.yaml"),
+        house.replace("Ο φίλος μας είναι παντρεμένος.", "Ο φίλος και ο φίλος.") +
+          '    words:\n      - { text: "φίλος", russian: "друг" }\n      - { text: "φίλος", russian: "друг" }\n',
       ),
     );
-    expect(houseOf(built).examples[0].glosses!.map((g) => g.start)).toEqual([3, 16]);
+    expect(houseOf(built).examples[0].glosses!.map((g) => g.start)).toEqual([2, 14]);
   });
   it("сборка отклоняет отсутствующий отрезок, обратный порядок, пустой перевод и неизвестную ссылку", () => {
-    expect(() => brokenCopy(withWords('      - { text: "σπίτια", russian: "дома" }'))).toThrow(
-      /words\/το-σπίτι.yaml.examples\[0\].words\[0\]: отрезок «σπίτια» не найден/,
+    expect(() => brokenCopy(withWords('      - { text: "φίλοι", russian: "друзья" }'))).toThrow(
+      /words\/ο-φίλος.yaml.examples\[0\].words\[0\]: отрезок «φίλοι» не найден/,
     );
     expect(() =>
-      brokenCopy(withWords('      - { text: "μας", russian: "наш" }\n      - { text: "σπίτι", russian: "дом" }')),
-    ).toThrow(/words\[1\]: отрезок «σπίτι» пересекается с предыдущим или стоит не по порядку/);
+      brokenCopy(withWords('      - { text: "μας", russian: "наш" }\n      - { text: "φίλος", russian: "друг" }')),
+    ).toThrow(/words\[1\]: отрезок «φίλος» пересекается с предыдущим или стоит не по порядку/);
     expect(() => brokenCopy(withWords('      - { text: "μας", russian: " " }'))).toThrow(
       /words\[0\]: у отрезка «μας» нет перевода/,
     );
@@ -478,10 +470,10 @@ describe("разметка слов примера", () => {
     );
   });
   it("ссылка на слово другого урока принимается", () => {
-    // «το σπίτι» есть в уроке 1.2, а «μεγάλος» в него не входит: ссылка проходит между уроками.
-    const lesson = brokenCopy(withWords(pilot)).packages.find((p) => p.id === "lesson-1-2")!;
-    expect(lesson.words.some((w) => w.id === "w13-20")).toBe(false);
-    expect(lesson.words.find((w) => w.id === "w12-16")!.examples[0].glosses![4].wordId).toBe("w13-20");
+    // «ο φίλος» есть в уроке 1.2, а «παντρεμένος» в него не входит: ссылка проходит между уроками.
+    const lesson = brokenCopy(withWords(pilot)).packages.find((p) => p.id === "mech-2")!;
+    expect(lesson.words.some((w) => w.id === "w095")).toBe(false);
+    expect(lesson.words.find((w) => w.id === "w034")!.examples[0].glosses![4].wordId).toBe("w095");
   });
   it("разметка меняет ревизию слова, а пример без разметки её не трогает", () => {
     const plain = houseOf(content);
@@ -491,15 +483,15 @@ describe("разметка слов примера", () => {
   });
   it("пакет с разметкой читается, а отрезок вне предложения отклоняется", () => {
     const built = brokenCopy(withWords(pilot));
-    const pack = built.packages.find((p) => p.words.some((w) => w.id === "w12-16"))!;
+    const pack = built.packages.find((p) => p.words.some((w) => w.id === "w034"))!;
     expect(
-      parsePackage(JSON.parse(JSON.stringify(pack))).words.find((w) => w.id === "w12-16")!.examples[0].glosses,
+      parsePackage(JSON.parse(JSON.stringify(pack))).words.find((w) => w.id === "w034")!.examples[0].glosses,
     ).toHaveLength(5);
     const broken = JSON.parse(JSON.stringify(pack));
-    broken.words.find((w: { id: string }) => w.id === "w12-16").examples[0].glosses[4].length = 40;
+    broken.words.find((w: { id: string }) => w.id === "w034").examples[0].glosses[4].length = 40;
     expect(() => parsePackage(broken)).toThrow(ContentError);
     expect(() => parsePackage(broken)).toThrow(/отрезок выходит за предложение/);
-    broken.words.find((w: { id: string }) => w.id === "w12-16").examples[0].glosses[4] = {
+    broken.words.find((w: { id: string }) => w.id === "w034").examples[0].glosses[4] = {
       start: 1,
       length: 2,
       russian: "x",

@@ -104,7 +104,7 @@ const updateWord = (page: import("@playwright/test").Page, greek: string, russia
           const db = request.result;
           const tx = db.transaction("words", "readwrite");
           const store = tx.objectStore("words");
-          const get = store.get("w12-16");
+          const get = store.get("w034");
           get.onsuccess = () => store.put({ ...get.result, greek, russian });
           tx.oncomplete = () => {
             db.close();
@@ -120,8 +120,8 @@ const updateWord = (page: import("@playwright/test").Page, greek: string, russia
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await page.waitForSelector("[data-testid=today-title]");
-  await installLessons(page, ["lesson-1-2"]);
-  await dueWithHistory(page, "w12-16", ["recall", "recognition"]);
+  await installLessons(page, ["mech-2"]);
+  await dueWithHistory(page, "w034", ["recall", "recognition"]);
   await page.reload();
   await page.waitForSelector("[data-testid=today-title]");
 });
@@ -130,33 +130,33 @@ test("артикль ставит пользователь, а неверный 
   await openAssembly(page);
   await expect(page.getByTestId("article-hint")).toHaveCount(0);
   await expect(page.getByTestId("fixed-article")).toHaveCount(0);
-  expect((await page.getByTestId("tile").allInnerTexts()).sort()).toEqual(["σπί", "τι", "το"].sort());
+  expect((await page.getByTestId("tile").allInnerTexts()).sort()).toEqual(["φί", "λος", "ο"].sort());
   await expect(page.getByRole("button", { name: "Проверить" })).toBeDisabled();
 
-  await page.getByTestId("tile").filter({ hasText: /^τι$/ }).click();
-  await page.getByTestId("tile").filter({ hasText: /^σπί$/ }).click();
+  await page.getByTestId("tile").filter({ hasText: /^λος$/ }).click();
+  await page.getByTestId("tile").filter({ hasText: /^φί$/ }).click();
   await expect(page.getByRole("button", { name: "Проверить" })).toBeDisabled(); // артикль тоже входит в пул
-  await page.getByTestId("tile").filter({ hasText: /^το$/ }).click();
+  await page.getByTestId("tile").filter({ hasText: /^ο$/ }).click();
   await expect(page.getByRole("button", { name: "Проверить" })).toBeEnabled();
-  await page.getByTestId("placed").filter({ hasText: /^το$/ }).click();
+  await page.getByTestId("placed").filter({ hasText: /^ο$/ }).click();
   await expect(page.getByRole("button", { name: "Проверить" })).toBeDisabled();
-  await page.getByTestId("tile").filter({ hasText: /^το$/ }).click();
+  await page.getByTestId("tile").filter({ hasText: /^ο$/ }).click();
   await page.getByRole("button", { name: "Проверить" }).click();
   await expect(page.getByTestId("feedback")).toContainText("Пока не сходится");
-  await expect(page.getByTestId("feedback")).toContainText("το · σπί-τι");
+  await expect(page.getByTestId("feedback")).toContainText("ο · φί-λος");
   await expect(page.getByTestId("tile")).toHaveCount(0); // после ответа плитки убираются
 });
 
 test("верные слоги с артиклем не на месте дают «Почти»", async ({ page }) => {
   await openAssembly(page);
-  for (const tile of ["σπί", "τι", "το"])
+  for (const tile of ["φί", "λος", "ο"])
     await page
       .getByTestId("tile")
       .filter({ hasText: new RegExp(`^${tile}$`) })
       .click();
   await page.getByRole("button", { name: "Проверить" }).click();
   await expect(page.getByTestId("feedback")).toContainText("Почти! Проверь артикль.");
-  await expect(page.getByTestId("feedback")).toContainText("το · σπί-τι");
+  await expect(page.getByTestId("feedback")).toContainText("ο · φί-λος");
 });
 
 test("верный порядок засчитывается и остаётся в истории", async ({ page }) => {
@@ -202,7 +202,7 @@ test("старая сессия без артикля в вариантах до
             const session = all.result.find((entry: { status: string }) => entry.status === "active");
             const item = session.items[session.index] as { id: string; options: string[] };
             // Сессия, собранная до изменения: артикль из пула убран и выкладывался отдельно.
-            const at = item.options.indexOf("το");
+            const at = item.options.indexOf("ο");
             const without = item.options.filter((_: string, index: number) => index !== at);
             store.put({
               ...session,
@@ -225,8 +225,8 @@ test("старая сессия без артикля в вариантах до
   // поэтому гонкой она не управляет, а allInnerTexts читает разово и вернул бы [].
   await expect(page.getByTestId("tile")).toHaveCount(3);
   await expect(page.getByTestId("fixed-article")).toHaveCount(0);
-  expect((await page.getByTestId("tile").allInnerTexts()).sort()).toEqual(["σπί", "τι", "το"].sort());
-  for (const tile of ["το", "σπί", "τι"])
+  expect((await page.getByTestId("tile").allInnerTexts()).sort()).toEqual(["φί", "λος", "ο"].sort());
+  for (const tile of ["ο", "φί", "λος"])
     await page
       .getByTestId("tile")
       .filter({ hasText: new RegExp(`^${tile}$`) })

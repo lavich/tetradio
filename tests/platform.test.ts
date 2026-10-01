@@ -425,12 +425,12 @@ describe("путь по параметру запуска", () => {
     startParam,
   });
   it("w_<id> ведёт к слову, остальное — никуда", () => {
-    expect(startRoute(tg("w_w34-03"))).toBe("/share/word/w34-03");
+    expect(startRoute(tg("w_w093"))).toBe("/share/word/w093");
     expect(startRoute(tg("promo"))).toBeNull();
     expect(startRoute(tg("w_"))).toBeNull();
     expect(startRoute(tg("w_a/b"))).toBeNull();
     expect(startRoute(tg(`w_${"a".repeat(61)}`))).toBeNull();
     expect(startRoute(tg(`w_${"a".repeat(60)}`))).toBe(`/share/word/${"a".repeat(60)}`);
-    expect(startRoute({ ...parseLaunch(location("")), startParam: "w_w34-03" })).toBeNull();
+    expect(startRoute({ ...parseLaunch(location("")), startParam: "w_w093" })).toBeNull();
   });
 });

@@ -190,7 +190,7 @@ describe("индекс слов в записи каталога", () => {
   });
   it("нестроковый идентификатор отклоняется с путём поля", () => {
     const broken = raw();
-    broken.lessons[1].wordIds = ["w11-01", 7];
+    broken.lessons[1].wordIds = ["w038", 7];
     expect(() => parseCatalog(broken)).toThrow("каталог.lessons[1].wordIds[1]: ожидалась строка");
   });
 });

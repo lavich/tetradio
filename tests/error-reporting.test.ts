@@ -31,7 +31,7 @@ describe("границы данных в сообщениях ошибок", () 
     const db = new AppDatabase("tetradio-error-message");
     await db.delete();
     await db.open();
-    await installLessons(db, ["lesson-1-1"]);
+    await installLessons(db, ["mech-1"]);
     const now = new Date("2026-09-16T09:00:00Z");
     const session = await makeSession({ source: dexieSource(db), now, random: () => 0.3 });
     await db.sessions.add(session);
@@ -81,16 +81,16 @@ describe("явные отчёты о критических отказах", () 
     const db = new AppDatabase("tetradio-report-content");
     await db.delete();
     await db.open();
-    const entry = content.catalog.lessons.find((lesson) => lesson.id === "lesson-1-1")!;
-    const pack = packageOf("lesson-1-1");
+    const entry = content.catalog.lessons.find((lesson) => lesson.id === "mech-1")!;
+    const pack = packageOf("mech-1");
     const broken = memoryFetcher(content, { [entry.url]: { ...pack, words: pack.words.slice(1) } });
     await refreshCatalog(db, broken);
-    await expect(installLesson("lesson-1-1", db, broken)).rejects.toBeInstanceOf(Error);
+    await expect(installLesson("mech-1", db, broken)).rejects.toBeInstanceOf(Error);
     const reports = pendingReports();
     expect(reports).toHaveLength(1);
     expect(reports[0]).toMatchObject({
       category: "content",
-      extra: { kind: "schema", packageId: "lesson-1-1", packageVersion: entry.version },
+      extra: { kind: "schema", packageId: "mech-1", packageVersion: entry.version },
     });
     const text = JSON.stringify(reports[0].extra);
     for (const word of pack.words.slice(0, 3)) expect(text).not.toContain(word.greek);
@@ -104,7 +104,7 @@ describe("явные отчёты о критических отказах", () 
       // eslint-disable-next-line typescript/unbound-method -- blob — замыкание тестового источника, this не использует
       blob: memoryFetcher().blob,
     };
-    await expect(installLesson("lesson-1-2", db, offline)).rejects.toMatchObject({ kind: "network" });
+    await expect(installLesson("mech-2", db, offline)).rejects.toMatchObject({ kind: "network" });
     expect(pendingReports()).toHaveLength(1);
     resetReporting();
     db.close();
@@ -117,7 +117,7 @@ describe("явные отчёты о критических отказах", () 
     const db = new AppDatabase("tetradio-report-sync");
     await db.delete();
     await db.open();
-    await installLessons(db, ["lesson-1-1"]);
+    await installLessons(db, ["mech-1"]);
     const broken = memoryTransport({
       intercept: (op) => {
         if (op === "getKeys") throw new SyncError("transport", "CloudStorage timeout");

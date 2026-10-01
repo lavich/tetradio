@@ -63,7 +63,7 @@ test.describe("навигация, тема и размеры", () => {
     page,
   }) => {
     await openTelegram(page, { noCloud: true }); // без облака: подготовленная в базе история не отсекается базой синхронизации
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     const bridge = tg(page);
     expect(await bridge.backVisible()).toBe(false);
     await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
@@ -74,7 +74,7 @@ test.describe("навигация, тема и размеры", () => {
     await bridge.back();
     await expect(page).toHaveURL(/\/lessons$/);
     await page.getByRole("link", { name: /1\.1/ }).click();
-    await page.getByRole("link", { name: /διαβάζω/ }).click();
+    await page.getByRole("link", { name: /δουλεύω/ }).click();
     await expect(page.getByRole("button", { name: "Потренировать слово" })).toBeVisible();
     await bridge.back();
     await expect(page.getByRole("heading", { name: /^Слова · \d+$/ })).toBeVisible();
@@ -92,8 +92,8 @@ test.describe("навигация, тема и размеры", () => {
     await seedQueue(
       page,
       [
-        { wordId: "w11-01", tested: ["recall"] },
-        { wordId: "w11-02", tested: ["recall"] },
+        { wordId: "w038", tested: ["recall"] },
+        { wordId: "w032", tested: ["recall"] },
       ],
       TG_DB,
     );
@@ -127,7 +127,7 @@ test.describe("навигация, тема и размеры", () => {
     page,
   }) => {
     await openTelegram(page, { scheme: "light", noCloud: true });
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     const color = (property: string) =>
       page.evaluate((name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(), property);
     const bg = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
@@ -142,7 +142,7 @@ test.describe("навигация, тема и размеры", () => {
     expect(text).toBe("rgb(238, 238, 238)");
     expect((await color("--muted-foreground")).length).toBeGreaterThan(0);
     await onlyReviews(page);
-    await seedQueue(page, [{ wordId: "w11-01", tested: ["recall"] }], TG_DB);
+    await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
     await page.getByRole("button", { name: /Начать занятие/ }).click();
     await page.waitForURL("**/session");
     const prompt = await page.getByTestId("prompt").first().innerText();
@@ -175,9 +175,9 @@ test.describe("навигация, тема и размеры", () => {
     await tg(page).setFullscreen(true, 47, 46);
     await expect(page.getByTestId("launch-mode")).toContainText("режим: во весь экран"); // обновляется без перезагрузки
     // Занятие во весь экран: строка прогресса в полосе кнопок клиента, крестика нет — закрывает нативный «Назад».
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
-    await seedQueue(page, [{ wordId: "w11-01", tested: ["recall"] }], TG_DB);
+    await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
     await page.getByRole("button", { name: /Начать занятие/ }).click();
     await page.waitForURL("**/session");
     await expect(page.getByRole("button", { name: "Закрыть занятие" })).toHaveCount(0);
@@ -190,8 +190,8 @@ test.describe("навигация, тема и размеры", () => {
   });
   test("во весь экран заголовок экрана стоит в полосе кнопок клиента, а не строкой под ними", async ({ page }) => {
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 47, contentTop: 46 });
-    await installLessons(page, ["lesson-1-1"]);
-    await page.goto("/lessons/lesson-1-1");
+    await installLessons(page, ["mech-1"]);
+    await page.goto("/lessons/mech-1");
     const title = await page.getByRole("banner").getByRole("heading", { level: 1 }).boundingBox();
     expect(title!.y).toBeGreaterThanOrEqual(47);
     expect(title!.y + title!.height).toBeLessThanOrEqual(47 + 46);
@@ -203,8 +203,8 @@ test.describe("навигация, тема и размеры", () => {
   }) => {
     await page.setViewportSize({ width: 1000, height: 700 });
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 0, contentTop: 46 });
-    await installLessons(page, ["lesson-1-1"]);
-    await page.goto("/lessons/lesson-1-1");
+    await installLessons(page, ["mech-1"]);
+    await page.goto("/lessons/mech-1");
     const banner = await page.getByRole("banner").boundingBox();
     expect(banner!.width).toBe(1000);
     const title = page.getByRole("banner").getByRole("heading", { level: 1 });
@@ -237,8 +237,8 @@ test.describe("навигация, тема и размеры", () => {
         id: "e-done",
         sessionId: "done",
         itemId: "i-done",
-        ref: { kind: "word", id: "w11-01" },
-        unitKey: JSON.stringify(["word", "w11-01"]),
+        ref: { kind: "word", id: "w038" },
+        unitKey: JSON.stringify(["word", "w038"]),
         snapshot: { greek: "", russian: "" },
         type: "recognition",
         mode: "scheduled",
@@ -271,9 +271,9 @@ test.describe("навигация, тема и размеры", () => {
   }) => {
     await page.setViewportSize({ width: 360, height: 740 });
     await openTelegram(page, { stableHeight: 740, platform: "android", noCloud: true });
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
-    await seedQueue(page, [{ wordId: "w11-01", tested: ["recall", "recognition", "assembly", "assembly"] }], TG_DB);
+    await seedQueue(page, [{ wordId: "w038", tested: ["recall", "recognition", "assembly", "assembly"] }], TG_DB);
     await page.getByRole("button", { name: /Начать занятие/ }).click();
     await page.waitForURL("**/session");
     await expect(page.getByTestId("prompt").first()).toHaveText("Напиши по-гречески");
@@ -311,9 +311,9 @@ test.describe("навигация, тема и размеры", () => {
     page,
   }) => {
     await openTelegram(page, { noCloud: true, scheme: "light" });
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
-    await seedQueue(page, [{ wordId: "w11-01", tested: ["recall"] }], TG_DB);
+    await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
     await page.getByRole("button", { name: /Начать занятие/ }).click();
     await page.waitForURL("**/session");
     const prompt = await page.getByTestId("prompt").first().innerText();
@@ -349,7 +349,7 @@ test.describe("навигация, тема и размеры", () => {
     page,
   }) => {
     await openTelegram(page, { noCloud: true, version: "7.0", scheme: "light" });
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     expect(await tg(page).calls()).toContain("ready");
     const active = () => page.locator("html").getAttribute("data-app-active");
     expect(await active()).toBe("true");
@@ -371,7 +371,7 @@ test.describe("навигация, тема и размеры", () => {
     page,
   }) => {
     await openTelegram(page, { noCloud: true });
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     const alive = () => page.evaluate(() => (window as unknown as { __alive?: boolean }).__alive === true);
     const reopened = () => page.evaluate(() => (window as unknown as { __reopened?: number }).__reopened ?? 0);
     await page.evaluate(() => {
@@ -407,11 +407,11 @@ test.describe("навигация, тема и размеры", () => {
 test.describe("аудио, копии и облако", () => {
   test("отказ воспроизведения: повтор или продолжение без аудирования, без события и штрафа", async ({ page }) => {
     await openTelegram(page, { failAudio: true, noCloud: true });
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
     await seedQueue(
       page,
-      [{ wordId: "w11-01", tested: ["recall", "recognition", "assembly", "assembly", "spelling"], audio: true }],
+      [{ wordId: "w038", tested: ["recall", "recognition", "assembly", "assembly", "spelling"], audio: true }],
       TG_DB,
     );
     await page.getByRole("button", { name: /Начать занятие/ }).click();
@@ -445,7 +445,7 @@ test.describe("аудио, копии и облако", () => {
     browser,
   }) => {
     await openTelegram(page);
-    await installLessons(page, ["lesson-1-2"]);
+    await installLessons(page, ["mech-2"]);
     await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
     // Подписанный курс догружается фоном: копию снимаем с устоявшегося словаря и с ним же сверяем перенос.
     await expect(page.getByTestId("word-count")).toHaveText("Показано 50 слов, есть ещё");
@@ -497,8 +497,8 @@ test.describe("аудио, копии и облако", () => {
   });
   test("расхождение версий на планшете: окно выбора вмещает текст и кнопки", async ({ page, browser }) => {
     await openTelegram(page);
-    await installLessons(page, ["lesson-1-1"]);
-    await seedQueue(page, [{ wordId: "w11-01", tested: ["recall"] }], TG_DB);
+    await installLessons(page, ["mech-1"]);
+    await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
     await page.goto("/more");
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
     const cloud = await tg(page).cloud();
@@ -506,8 +506,8 @@ test.describe("аудио, копии и облако", () => {
     const context = await browser.newContext({ viewport: { width: 1024, height: 768 } });
     const offline = await context.newPage();
     await openTelegram(offline, { noCloud: true, platform: "android" });
-    await installLessons(offline, ["lesson-1-1"]);
-    await seedQueue(offline, [{ wordId: "w11-02", tested: ["recall"] }], TG_DB);
+    await installLessons(offline, ["mech-1"]);
+    await seedQueue(offline, [{ wordId: "w032", tested: ["recall"] }], TG_DB);
     const tablet = await context.newPage();
     await openTelegram(tablet, { cloud, platform: "android" });
     const dialog = tablet.getByRole("alertdialog");
@@ -528,13 +528,13 @@ test.describe("аудио, копии и облако", () => {
     browser,
   }) => {
     await openTelegram(page);
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
     await seedQueue(
       page,
       [
-        { wordId: "w11-01", tested: ["recall"] },
-        { wordId: "w11-02", tested: ["recall"] },
+        { wordId: "w038", tested: ["recall"] },
+        { wordId: "w032", tested: ["recall"] },
       ],
       TG_DB,
     );
@@ -590,11 +590,11 @@ test.describe("аудио, копии и облако", () => {
     page,
   }) => {
     await openTelegram(page, { noCloud: true, version: "6.0" });
-    await installLessons(page, ["lesson-1-1"]);
+    await installLessons(page, ["mech-1"]);
     await page.goto("/more");
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "disabled");
     await expect(page.getByTestId("sync-status")).not.toContainText("Синхронизировано");
-    await page.goto("/lessons/lesson-1-1");
+    await page.goto("/lessons/mech-1");
     await expect(page.getByRole("button", { name: "Назад" })).toBeVisible(); // BackButton требует 6.1 — внутренняя остаётся
   });
 });
@@ -627,20 +627,20 @@ test.describe("ссылка на слово через бота", () => {
   }) => {
     const { bridgeScript } = await import("./telegram");
     await page.addInitScript(bridgeScript({ noCloud: true }));
-    await launch(page, { startParam: "w_w34-03", queryId: "Q1" });
+    await launch(page, { startParam: "w_w093", queryId: "Q1" });
     await dismissWelcome(page);
-    await expect(page).toHaveURL(/\/share\/word\/w34-03$/);
-    await expect(page.getByText("η κατσαρόλα", { exact: true }).first()).toBeVisible();
+    await expect(page).toHaveURL(/\/share\/word\/w093$/);
+    await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
     // Урок ставится только из раздела «Уроки»; после этого у слова курса появляется кнопка.
-    await page.goto("/lessons/lesson-1-4");
+    await page.goto("/lessons/mech-4");
     await page.getByRole("heading", { name: /^Слова · \d+$/ }).waitFor({ timeout: 20000 });
-    await page.goto("/words/w34-03");
+    await page.goto("/words/w093");
     await page.reload();
     await page.getByRole("button", { name: "Поделиться словом" }).click();
     const link = (await tg(page).calls()).find((call) => call.startsWith("link:"))!;
     const target = new URL(link.slice(5));
-    expect(target.searchParams.get("url")).toBe("https://t.me/tetradio_dev?startapp=w_w34-03");
-    expect(target.searchParams.get("text")).toBe("η κατσαρόλα — кастрюля");
+    expect(target.searchParams.get("url")).toBe("https://t.me/tetradio_dev?startapp=w_w093");
+    expect(target.searchParams.get("text")).toBe("ο παππούς — дедушка");
     const names = await databases(page);
     expect(names).toContain(DEV_DB);
     expect(names).not.toContain(TG_DB);
@@ -651,16 +651,16 @@ test.describe("ссылка на слово через бота", () => {
   }) => {
     const { bridgeScript } = await import("./telegram");
     await page.addInitScript(bridgeScript({ noCloud: true }));
-    await launch(page, { startParam: "w_w34-03", queryId: "Q1" });
+    await launch(page, { startParam: "w_w093", queryId: "Q1" });
     await dismissWelcome(page);
-    await expect(page.getByText("η κατσαρόλα", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
     await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
     await expect(page).toHaveURL(/\/lessons$/);
     await page.reload();
     await expect(page.getByRole("link", { name: /1\.2/ })).toBeVisible();
     await expect(page).toHaveURL(/\/lessons$/);
-    await launch(page, { startParam: "w_w12-01", queryId: "Q2" }, "/more");
-    await expect(page).toHaveURL(/\/share\/word\/w12-01$/);
-    await expect(page.getByText("το φως", { exact: true }).first()).toBeVisible();
+    await launch(page, { startParam: "w_w041", queryId: "Q2" }, "/more");
+    await expect(page).toHaveURL(/\/share\/word\/w041$/);
+    await expect(page.getByText("η χώρα", { exact: true }).first()).toBeVisible();
   });
 });

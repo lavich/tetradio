@@ -36,7 +36,7 @@ test("падение во время занятия: экран сбоя с пе
 }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-1", "lesson-1-2", "lesson-1-3", "lesson-1-4"]);
+  await installLessons(page, ["mech-1", "mech-2", "mech-3", "mech-4"]);
   await page.getByRole("button", { name: "Начать занятие" }).click();
   await page.waitForURL("**/session");
   await expect(page.getByTestId("lesson-label")).toBeVisible();

@@ -10,11 +10,11 @@ import { buildMixed, MIXED_LESSON, MIXED_PHRASES, mixedContent, mixedPackage } f
 const DOC = "docs/lesson-authoring.md",
   TEMPLATES = "docs/lesson-authoring",
   SKILL = ".agents/skills/prepare-lesson/SKILL.md";
-/** Примеры употребления всех слов каталога: материал, из которого готовится непубликуемая фикстура. */
-const projectExamples = readdirSync("tests/fixtures/tavelori-content/words").flatMap((file) =>
+/** Примеры употребления всех слов фикстуры механик: материал, из которого готовится непубликуемая фикстура. */
+const projectExamples = readdirSync("tests/fixtures/mechanics/words").flatMap((file) =>
   (
     (
-      parse(readFileSync(join("tests/fixtures/tavelori-content/words", file), "utf8")) as {
+      parse(readFileSync(join("tests/fixtures/mechanics/words", file), "utf8")) as {
         examples?: { greek: string; russian: string }[];
       }
     ).examples ?? []
@@ -25,10 +25,9 @@ const norm = (text: string) => text.normalize("NFC").replace(/\s+/g, " ").trim()
 describe("шаблоны инструкции", () => {
   it("слово, фраза и смешанный урок из docs/ проходят тот же валидатор, что и каталог", () => {
     const root = mkdtempSync(join(tmpdir(), "tetradio-doc-"));
-    // Копируются все папки контента: шаблон проверяется рядом с настоящим каталогом, каким бы он ни стал.
-    for (const entry of readdirSync("tests/fixtures/tavelori-content", { withFileTypes: true }))
-      if (entry.isDirectory())
-        cpSync(join("tests/fixtures/tavelori-content", entry.name), join(root, entry.name), { recursive: true });
+    // Копируется весь контент: шаблон проверяется рядом с настоящим каталогом, каким бы он ни стал.
+    for (const entry of readdirSync("tests/fixtures/mechanics"))
+      cpSync(join("tests/fixtures/mechanics", entry), join(root, entry), { recursive: true });
     mkdirSync(join(root, "phrases"), { recursive: true });
     const copy = (from: string, to: string) =>
       writeFileSync(join(root, to), readFileSync(join(TEMPLATES, from), "utf8"));
@@ -36,8 +35,8 @@ describe("шаблоны инструкции", () => {
     copy("phrase.yaml", "phrases/p-example.yaml");
     copy("lesson.yaml", "lessons/lesson-example.yaml");
     writeFileSync(
-      join(root, "courses/leeke.yaml"),
-      `${readFileSync("tests/fixtures/tavelori-content/courses/leeke.yaml", "utf8")}  - lesson-example\n`,
+      join(root, "courses/mechanics.yaml"),
+      `${readFileSync("tests/fixtures/mechanics/courses/mechanics.yaml", "utf8")}  - lesson-example\n`,
     );
     try {
       const built = buildContent(root);
@@ -141,25 +140,25 @@ describe("прогон инструкции на существующем мат
   it("повторная обработка сохраняет идентификаторы: правка текста и позднее примечание меняют только ревизию", () => {
     const before = mixedPackage();
     const typo = {
-      ...MIXED_PHRASES["p-vouno"],
-      usage: "Описание места и высоты",
+      ...MIXED_PHRASES["p-xora"],
+      usage: "Описание места и размера",
     };
     const late = {
       ...MIXED_PHRASES["p-paidi"],
-      note: "Место действия названо предлогом «στο».",
+      note: "Язык назван без артикля: μιλάω ελληνικά.",
       provenance: {
         ...(MIXED_PHRASES["p-paidi"] as { provenance: Record<string, unknown> }).provenance,
         parts: {
           note: {
             sourceLabel: "Разметка по запросу",
             operation: "requested-transform",
-            request: "Пояснить предлог",
+            request: "Пояснить отсутствие артикля",
           },
         },
       },
     };
     const again = buildMixed({
-      phrases: { ...MIXED_PHRASES, "p-vouno": typo, "p-paidi": late },
+      phrases: { ...MIXED_PHRASES, "p-xora": typo, "p-paidi": late },
       lesson: {
         title: "Смешанный урок",
         language: "el",
@@ -170,12 +169,12 @@ describe("прогон инструкции на существующем мат
     expect(after.phrases.map((item) => item.id)).toEqual(before.phrases.map((item) => item.id)); // ID не изменились
     const pair = (id: string) =>
       [before.phrases.find((item) => item.id === id)!, after.phrases.find((item) => item.id === id)!] as const;
-    const [oldVouno, newVouno] = pair("p-vouno");
-    expect(newVouno.revision).not.toBe(oldVouno.revision);
-    expect(newVouno.text).toBe(oldVouno.text);
+    const [oldXora, newXora] = pair("p-xora");
+    expect(newXora.revision).not.toBe(oldXora.revision);
+    expect(newXora.text).toBe(oldXora.text);
     const [oldPaidi, newPaidi] = pair("p-paidi");
     expect(oldPaidi.note).toBeUndefined();
-    expect(newPaidi.note).toBe("Место действия названо предлогом «στο».");
+    expect(newPaidi.note).toBe("Язык назван без артикля: μιλάω ελληνικά.");
     expect(newPaidi.revision).not.toBe(oldPaidi.revision);
     expect(newPaidi.revision).toBe(phraseRevisionOf({ ...newPaidi, revision: "" } as never));
     // Нетронутые карточки сохраняют и ID, и ревизию.
@@ -183,7 +182,7 @@ describe("прогон инструкции на существующем мат
     expect(newGrafo).toEqual(oldGrafo);
   });
   it("реальные уроки каталога не изменились: фикстура добавляет только свой урок", () => {
-    const real = buildContent("tests/fixtures/tavelori-content");
+    const real = buildContent("tests/fixtures/mechanics");
     const withFixture = mixedContent();
     expect(withFixture.packages.filter((pack) => pack.id !== MIXED_LESSON).map((pack) => pack.id)).toEqual(
       real.packages.map((pack) => pack.id),

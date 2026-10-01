@@ -19,10 +19,10 @@ const today = () => new Date().toISOString().slice(0, 10);
 /** Тексты фикстуры: письменный ответ вводится целиком, из интерфейса до ответа он недоступен. */
 const TEXTS: Record<string, string> = {
   "Я пишу письмо.": "Γράφω ένα γράμμα.",
-  "Гора высокая.": "Το βουνό είναι ψηλό.",
-  "Ребёнок играет в парке.": "Το παιδί παίζει στο πάρκο.",
-  "Весна приносит цветы.": "Η άνοιξη φέρνει λουλούδια.",
-  "Дочь смотрит на солнце и улыбается.": "Η κόρη βλέπει τον ήλιο και χαμογελάει.",
+  "Кипр — маленькая страна.": "Η Κύπρος είναι μια μικρή χώρα.",
+  "Ребёнок говорит по-гречески.": "Το παιδί μιλάει ελληνικά.",
+  "Я работаю в Лимасоле.": "Δουλεύω στη Λεμεσό.",
+  "Моя семья живёт в России.": "Η οικογένειά μου μένει στη Ρωσία.",
 };
 const textFor = (prompt: string) => Object.entries(TEXTS).find(([hint]) => prompt.includes(hint))?.[1];
 const INTRO = ["Новая фраза", "Новое слово"];
@@ -51,8 +51,8 @@ async function lastUnanswered(page: Page) {
 async function prepare(page: Page, limit: number, options: Parameters<typeof seedMixedLesson>[1] = {}) {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-1"]);
-  await setCourseLimit(page, "leeke", limit);
+  await installLessons(page, ["mech-1"]);
+  await setCourseLimit(page, "mechanics", limit);
   return seedMixedLesson(page, { targetDate: tomorrow(), ...options });
 }
 
@@ -68,22 +68,22 @@ test("экран урока: группы двух видов, просмотр 
   await expect(page.getByRole("heading", { name: "Фразы · 6" })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Заполни пропуск/ })).toHaveCount(0); // снятого вида на экране нет
   // Фраза без перевода и озвучки помечена отдельно и объясняет ограничение при раскрытии.
-  const silent = page.getByTestId("phrase-row").filter({ hasText: "Το φρύδι της είναι λεπτό." });
+  const silent = page.getByTestId("phrase-row").filter({ hasText: "Ο γιος μου είναι γιατρός." });
   await expect(silent.getByTestId("unavailable-badge")).toHaveText("Нет доступного упражнения");
-  await silent.getByRole("button", { name: "Το φρύδι της είναι λεπτό." }).click();
+  await silent.getByRole("button", { name: "Ο γιος μου είναι γιατρός." }).click();
   await expect(silent.getByTestId("phrase-details")).toContainText("нельзя проверить объективно");
   await expect(page.getByText("1 фраза без доступного упражнения")).toBeVisible();
   // Просмотр фразы: перевод в подписи, примечание из материала — в раскрытии.
-  const ilios = page.getByTestId("phrase-row").filter({ hasText: "Η κόρη βλέπει τον ήλιο" });
-  await ilios.getByRole("button", { name: /Η κόρη βλέπει τον ήλιο/ }).click();
-  await expect(ilios.getByTestId("phrase-details")).toContainText("Винительный падеж");
+  const family = page.getByTestId("phrase-row").filter({ hasText: "Η οικογένειά μου" });
+  await family.getByRole("button", { name: /Η οικογένειά μου/ }).click();
+  await expect(family.getByTestId("phrase-details")).toContainText("Притяжательное μου");
   // Удаление связи: карточка исчезает из группы, сама карточка и запись об удалении остаются.
-  await page.getByTestId("phrase-row").filter({ hasText: "άνοιξη" }).getByRole("button", { name: "Убрать" }).click();
+  await page.getByTestId("phrase-row").filter({ hasText: "Λεμεσό" }).getByRole("button", { name: "Убрать" }).click();
   await expect(page.getByRole("heading", { name: "Фразы · 5" })).toBeVisible();
   await expect(page.getByTestId("composition")).toContainText("6 карточек");
-  expect((await readTable(page, "phrases")).some((row) => row.id === "p-anoixi")).toBe(true);
+  expect((await readTable(page, "phrases")).some((row) => row.id === "p-lemeso")).toBe(true);
   expect((await readTable(page, "packages")).find((row) => row.lessonId === "lesson-mixed").removed).toEqual([
-    JSON.stringify(["phrase", "p-anoixi"]),
+    JSON.stringify(["phrase", "p-lemeso"]),
   ]);
   // Раздел «Слова» остаётся словарём слов: фразы туда не попадают.
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
@@ -99,7 +99,7 @@ test("при системном голосе фраза без перевода 
   await page.addInitScript(GREEK_VOICE);
   await prepare(page, 4);
   await page.goto("/lessons/lesson-mixed");
-  const silent = page.getByTestId("phrase-row").filter({ hasText: "Το φρύδι της είναι λεπτό." });
+  const silent = page.getByTestId("phrase-row").filter({ hasText: "Ο γιος μου είναι γιατρός." });
   await expect(silent.getByTestId("unavailable-badge")).toHaveCount(0);
   await expect(page.getByText("без доступного упражнения")).toHaveCount(0);
   // Ручная тренировка группы фраз начинается: знакомства, затем проверки.
@@ -117,7 +117,7 @@ test("урок без слов не пуст, а группа без досту�
   await page.addInitScript(NO_VOICE);
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-1"]);
+  await installLessons(page, ["mech-1"]);
   await seedMixedLesson(page, {
     lessonId: "lesson-text",
     title: "Только фразы",
@@ -346,11 +346,11 @@ test("внутри Telegram: возврат из свёрнутого клиен
   test.setTimeout(150000);
   await page.addInitScript(NO_VOICE);
   await openTelegram(page, { noCloud: true });
-  await installLessons(page, ["lesson-1-1"]);
+  await installLessons(page, ["mech-1"]);
   const TG_DB = "tetradio-tg-tetradio_local-1001";
   await onlyReviews(page);
-  await setCourseLimit(page, "leeke", 2, TG_DB);
-  await seedMixedLesson(page, { targetDate: today(), only: ["p-grafo", "p-vouno"], databaseName: TG_DB });
+  await setCourseLimit(page, "mechanics", 2, TG_DB);
+  await seedMixedLesson(page, { targetDate: today(), only: ["p-grafo", "p-xora"], databaseName: TG_DB });
   await page.getByRole("button", { name: /Начать занятие/ }).click();
   await page.waitForURL("**/session");
   // Знакомства проходим, дальше берём первое же задание: тип выбирает планировщик.

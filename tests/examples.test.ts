@@ -6,7 +6,7 @@ const example: Example = {
   greek: "Το σπίτι μας είναι μεγάλο.",
   russian: "Наш дом большой.",
   target: "σπίτι",
-  glosses: [{ start: 3, length: 5, russian: "дом", wordId: "w12-16" }],
+  glosses: [{ start: 3, length: 5, russian: "дом", wordId: "w034" }],
 };
 
 describe("правка размеченного примера", () => {

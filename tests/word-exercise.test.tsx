@@ -37,14 +37,14 @@ import { installLessons } from "./helpers/content";
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 if (!Element.prototype.scrollIntoView) Element.prototype.scrollIntoView = () => undefined;
 
-const GREEK = "η κατσαρόλα",
-  RUSSIAN = "кастрюля";
+const GREEK = "ο παππούς",
+  RUSSIAN = "дедушка";
 let root: Root | null = null;
 let host: HTMLElement;
 beforeEach(async () => {
   await Promise.all(db.tables.map((table) => table.clear()));
   resetCatalogPhase();
-  await installLessons(db, ["lesson-1-4"]);
+  await installLessons(db, ["mech-4"]);
   host = document.body.appendChild(document.createElement("div"));
 });
 afterEach(() => {
@@ -118,12 +118,12 @@ async function snapshot() {
 
 describe("упражнение по выбору", () => {
   it("написание без ударения — «Почти» с правильным вариантом, «Ещё раз» сбрасывает ответ", async () => {
-    await mount("/words/w34-03/exercise/spelling");
+    await mount("/words/w093/exercise/spelling");
     await until(() => !!host.querySelector("input"), "поле ответа");
     expect(text()).toContain("Без учёта прогресса");
     const input = host.querySelector<HTMLInputElement>("input")!;
     await act(async () => {
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(input, "η κατσαρολα");
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(input, "ο παππους");
       input.dispatchEvent(new Event("input", { bubbles: true }));
     });
     await click(button("Проверить"));
@@ -136,7 +136,7 @@ describe("упражнение по выбору", () => {
   });
 
   it("после ошибки остаётся то же упражнение, без ступени проще", async () => {
-    await mount("/words/w34-03/exercise/spelling");
+    await mount("/words/w093/exercise/spelling");
     await until(() => !!host.querySelector("input"), "поле ответа");
     await respond("spelling", false);
     await click(button("Ещё раз"));
@@ -146,7 +146,7 @@ describe("упражнение по выбору", () => {
   });
 
   it("узнавание по «Ещё раз» открывается заново без выбранного ответа", async () => {
-    await mount("/words/w34-03/exercise/recognition");
+    await mount("/words/w093/exercise/recognition");
     await until(() => !!host.querySelector("[data-testid=option]"), "варианты");
     await respond("recognition", true);
     await click(button("Ещё раз"));
@@ -156,14 +156,14 @@ describe("упражнение по выбору", () => {
   });
 
   it("недоступный вид, неизвестный тип и нет слова — сообщение и возврат к слову", async () => {
-    await db.words.put({ ...(await db.words.get("w34-03"))!, id: "one", greek: "φως", russian: "свет" });
+    await db.words.put({ ...(await db.words.get("w093"))!, id: "one", greek: "φως", russian: "свет" });
     await mount("/words/one/exercise/assembly");
     await until(() => text().includes("недоступно"), "недоступная сборка");
     expect(text()).toContain("один слог");
     await click(button("К слову"));
     await until(() => text().includes("экран слова"), "возврат к слову");
     act(() => root!.unmount());
-    await mount("/words/w34-03/exercise/magic");
+    await mount("/words/w093/exercise/magic");
     await until(() => text().includes("Упражнение недоступно"), "неизвестный тип");
     act(() => root!.unmount());
     await mount("/words/w99-99/exercise/spelling");
@@ -171,13 +171,13 @@ describe("упражнение по выбору", () => {
   });
 
   it("ни один из пяти видов ничего не записывает: ни событий, ни состояния, ни занятия, ни метки синхронизации", async () => {
-    const session = await startSession(new Date(), { refs: [wordRef("w34-03")], mode: "practice" });
+    const session = await startSession(new Date(), { refs: [wordRef("w093")], mode: "practice" });
     expect(session).toBeTruthy();
     const before = await snapshot();
     const changes: string[] = [];
     const off = syncEvents.on((event) => changes.push(event));
     for (const type of WORD_EXERCISES) {
-      await mount(`/words/w34-03/exercise/${type}`);
+      await mount(`/words/w093/exercise/${type}`);
       await until(() => !!button("Не знаю") || !!button("Проверить"), `упражнение ${type}`);
       await respond(type, true);
       await click(button("Ещё раз"));
@@ -201,7 +201,7 @@ describe("блок «Упражнения» на экране слова с го
     root = createRoot(host);
     await act(async () =>
       root!.render(
-        <MemoryRouter initialEntries={["/words/w34-03"]}>
+        <MemoryRouter initialEntries={["/words/w093"]}>
           <Routes>
             <Route path="/words/:id" element={<WordScreen />} />
             <Route path="/words/:id/exercise/:type" element={<WordExerciseScreen />} />

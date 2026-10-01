@@ -68,39 +68,39 @@ async function upgrade(id: string, next: ContentPackage) {
 
 describe("курсы", () => {
   it("установка запоминает курс урока и в уроке, и в пакете", async () => {
-    await installLessons(db, ["lesson-1-3"]);
-    expect((await db.lessons.get("lesson-1-3"))!.courseId).toBe("leeke");
-    expect((await db.packages.get("lesson-1-3"))!.courseId).toBe("leeke");
+    await installLessons(db, ["mech-3"]);
+    expect((await db.lessons.get("mech-3"))!.courseId).toBe("mechanics");
+    expect((await db.packages.get("mech-3"))!.courseId).toBe("mechanics");
   });
   it("обновление проставляет курс уроку, установленному без него", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    await db.lessons.update("lesson-1-2", { courseId: undefined }); // база после перехода на курсы
-    await applyPackage(packageOf("lesson-1-2"), db);
-    expect((await db.lessons.get("lesson-1-2"))!.courseId).toBe("leeke");
+    await installLessons(db, ["mech-2"]);
+    await db.lessons.update("mech-2", { courseId: undefined }); // база после перехода на курсы
+    await applyPackage(packageOf("mech-2"), db);
+    expect((await db.lessons.get("mech-2"))!.courseId).toBe("mechanics");
   });
   it("обновление каталога заводит курсы и подписывает тот, чьи уроки уже стоят", async () => {
-    await installLessons(db, ["lesson-1-1"]);
-    await db.lessons.update("lesson-1-1", { courseId: undefined });
+    await installLessons(db, ["mech-1"]);
+    await db.lessons.update("mech-1", { courseId: undefined });
     await db.courses.clear();
     await refreshCatalog(db, memoryFetcher());
-    expect((await db.lessons.get("lesson-1-1"))!.courseId).toBe("leeke");
-    expect(await db.courses.get("leeke")).toMatchObject({ title: "Греческий A2", origin: "content", subscribed: true });
+    expect((await db.lessons.get("mech-1"))!.courseId).toBe("mechanics");
+    expect(await db.courses.get("mechanics")).toMatchObject({ title: "Механики", origin: "content", subscribed: true });
   });
   it("новый курс получает предел новых карточек по умолчанию, а сохранённый предел обновление не трогает", async () => {
     await refreshCatalog(db, memoryFetcher());
     // Окно подготовки к уроку — промежуток до предыдущего занятия: набор из 35 карточек за три дня требует двенадцати в день.
-    expect((await db.courses.get("leeke"))!.newItemsPerDay).toBe(12);
-    await saveCourseTempo("leeke", { newItemsPerDay: 7 }, new Date("2026-09-19T09:00:00Z"), db);
+    expect((await db.courses.get("mechanics"))!.newItemsPerDay).toBe(12);
+    await saveCourseTempo("mechanics", { newItemsPerDay: 7 }, new Date("2026-09-19T09:00:00Z"), db);
     await refreshCatalog(db, memoryFetcher());
-    expect((await db.courses.get("leeke"))!.newItemsPerDay).toBe(7);
+    expect((await db.courses.get("mechanics"))!.newItemsPerDay).toBe(7);
   });
   it("курс без установленных уроков остаётся неподписанным, а повторное обновление ничего не ломает", async () => {
     await refreshCatalog(db, memoryFetcher());
-    expect(await db.courses.get("leeke")).toMatchObject({ subscribed: false });
-    const first = await db.courses.get("leeke");
+    expect(await db.courses.get("mechanics")).toMatchObject({ subscribed: false });
+    const first = await db.courses.get("mechanics");
     await refreshCatalog(db, memoryFetcher());
     expect(await db.courses.count()).toBe(1);
-    expect((await db.courses.get("leeke"))!.createdAt).toBe(first!.createdAt);
+    expect((await db.courses.get("mechanics"))!.createdAt).toBe(first!.createdAt);
   });
 });
 
@@ -110,31 +110,31 @@ describe("подписка на курс", () => {
   it("открытие урока подписывает его курс", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
-    expect(await db.courses.get("leeke")).toMatchObject({ subscribed: false });
-    await installLesson("lesson-1-3", db, fetcher);
-    expect(await db.courses.get("leeke")).toMatchObject({ subscribed: true });
+    expect(await db.courses.get("mechanics")).toMatchObject({ subscribed: false });
+    await installLesson("mech-3", db, fetcher);
+    expect(await db.courses.get("mechanics")).toMatchObject({ subscribed: true });
   });
   it("«Учить курс» ставит все уроки курса и не трогает медиа", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
-    const result = await installCourse("leeke", db, fetcher);
+    const result = await installCourse("mechanics", db, fetcher);
     expect(result.installed).toBe(content.catalog.lessons.length);
     expect(await db.packages.count()).toBe(content.catalog.lessons.length);
     expect(media(fetcher)).toEqual([]);
-    expect(await db.courses.get("leeke")).toMatchObject({ subscribed: true });
+    expect(await db.courses.get("mechanics")).toMatchObject({ subscribed: true });
   });
   it("подписанный курс сам доустанавливает недостающее и подтягивает версию", async () => {
     const first = memoryFetcher();
     await refreshCatalog(db, first);
-    await installLesson("lesson-1-1", db, first);
-    const next = bump(packageOf("lesson-1-1"), (words) => {
+    await installLesson("mech-1", db, first);
+    const next = bump(packageOf("mech-1"), (words) => {
       words[0].russian = "новый перевод";
     });
-    const fetcher = await upgrade("lesson-1-1", next);
+    const fetcher = await upgrade("mech-1", next);
     fetcher.requests.length = 0;
     await syncCourses(db, fetcher);
     expect(await db.packages.count()).toBe(content.catalog.lessons.length);
-    expect((await db.packages.get("lesson-1-1"))!.version).toBe(next.version);
+    expect((await db.packages.get("mech-1"))!.version).toBe(next.version);
     expect(media(fetcher)).toEqual([]);
   });
   it("неподписанный курс сам не качается", async () => {
@@ -148,8 +148,8 @@ describe("подписка на курс", () => {
   it("отписка прекращает автозагрузку и ничего не удаляет", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
-    await installLesson("lesson-1-1", db, fetcher);
-    await setCourseSubscription("leeke", false, db);
+    await installLesson("mech-1", db, fetcher);
+    await setCourseSubscription("mechanics", false, db);
     fetcher.requests.length = 0;
     await syncCourses(db, fetcher);
     expect(packs(fetcher)).toEqual([]);
@@ -158,7 +158,7 @@ describe("подписка на курс", () => {
   it("ошибка сети оставляет прежние версии и сообщается на уровне курса", async () => {
     const ok = memoryFetcher();
     await refreshCatalog(db, ok);
-    await installLesson("lesson-1-1", db, ok);
+    await installLesson("mech-1", db, ok);
     const broken = memoryFetcher();
     broken.json = async (url) => {
       if (url.includes("/packages/")) throw new ContentError("Нет сети", "network");
@@ -166,9 +166,9 @@ describe("подписка на курс", () => {
     };
     await syncCourses(db, broken);
     expect(await db.packages.count()).toBe(1);
-    expect(coursePhase("leeke")).toMatchObject({ phase: "error", kind: "network" });
+    expect(coursePhase("mechanics")).toMatchObject({ phase: "error", kind: "network" });
     await syncCourses(db, memoryFetcher());
-    expect(coursePhase("leeke")).toEqual({ phase: "idle" });
+    expect(coursePhase("mechanics")).toEqual({ phase: "idle" });
     expect(await db.packages.count()).toBe(content.catalog.lessons.length);
   });
 });
@@ -183,14 +183,14 @@ describe("каталог", () => {
     expect(await db.packages.count()).toBe(0);
   });
   it("ошибка сети оставляет прежний каталог и установленные уроки", async () => {
-    await installLessons(db, ["lesson-1-2"]);
+    await installLessons(db, ["mech-2"]);
     const broken = memoryFetcher(content, { "content/catalog.json": undefined });
     broken.json = async () => {
       throw new ContentError("Нет сети", "network");
     };
     await expect(refreshCatalog(db, broken)).rejects.toThrow("Нет сети");
     expect(await db.catalog.count()).toBe(content.catalog.lessons.length);
-    expect(await db.words.count()).toBe(wordCountOf("lesson-1-2"));
+    expect(await db.words.count()).toBe(wordCountOf("mech-2"));
   });
   it("каталог неподдерживаемой схемы отклоняется без изменения кеша", async () => {
     await refreshCatalog(db, memoryFetcher());
@@ -205,59 +205,56 @@ describe("установка урока", () => {
   it("открытие урока загружает только его пакет и сохраняет слова со связями по порядку", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
-    const result = await installLesson("lesson-1-2", db, fetcher);
-    expect(result).toMatchObject({ status: "installed", added: wordCountOf("lesson-1-2"), conflicts: [] });
-    expect(fetcher.requests).toEqual(["content/catalog.json", entry("lesson-1-2").url]);
-    expect(await db.words.count()).toBe(wordCountOf("lesson-1-2"));
-    expect((await lessonItems("lesson-1-2", db)).map((l) => l.ref.id)).toEqual(
-      packageOf("lesson-1-2").links.map((l) => l.wordId),
+    const result = await installLesson("mech-2", db, fetcher);
+    expect(result).toMatchObject({ status: "installed", added: wordCountOf("mech-2"), conflicts: [] });
+    expect(fetcher.requests).toEqual(["content/catalog.json", entry("mech-2").url]);
+    expect(await db.words.count()).toBe(wordCountOf("mech-2"));
+    expect((await lessonItems("mech-2", db)).map((l) => l.ref.id)).toEqual(
+      packageOf("mech-2").links.map((l) => l.wordId),
     );
-    expect(await db.lessons.get("lesson-1-2")).toMatchObject({
+    expect(await db.lessons.get("mech-2")).toMatchObject({
       title: "Урок 1.2",
       targetDate: null,
       status: "upcoming",
     });
     expect(await db.assets.count()).toBe(0); // медиа не скачиваются вместе с пакетом
-    expect(await db.media.count()).toBe(packageOf("lesson-1-2").media.length);
-    const word = (await db.words.get("w12-16"))!;
+    expect(await db.media.count()).toBe(packageOf("mech-2").media.length);
+    const word = (await db.words.get("w034"))!;
     expect(word).toMatchObject({
-      greek: "το σπίτι",
-      revision: packageOf("lesson-1-2").words.find((w) => w.id === "w12-16")!.revision,
+      greek: "ο φίλος",
+      revision: packageOf("mech-2").words.find((w) => w.id === "w034")!.revision,
     });
-    expect(word.tokens).toContain("σπιτι");
+    expect(word.tokens).toContain("φιλος");
   });
   it("пакеты 1.1 и 1.2 дают все свои слова и предстоящие уроки без дат", async () => {
-    await installLessons(db, ["lesson-1-1", "lesson-1-2"]);
-    expect(await db.words.count()).toBe(wordCountOf("lesson-1-1", "lesson-1-2"));
+    await installLessons(db, ["mech-1", "mech-2"]);
+    expect(await db.words.count()).toBe(wordCountOf("mech-1", "mech-2"));
     // Положение урока во времени не поставляется: оба урока предстоящие и без дат, дальше ими распоряжается пользователь.
-    expect(await db.lessons.get("lesson-1-1")).toMatchObject({ status: "upcoming", targetDate: null });
-    expect(await db.lessons.get("lesson-1-2")).toMatchObject({ status: "upcoming", targetDate: null });
+    expect(await db.lessons.get("mech-1")).toMatchObject({ status: "upcoming", targetDate: null });
+    expect(await db.lessons.get("mech-2")).toMatchObject({ status: "upcoming", targetDate: null });
     expect(await db.events.count()).toBe(0);
     expect(await db.cardStates.count()).toBe(0);
   });
   it("общее слово двух уроков — одна запись и две связи", async () => {
-    await installLessons(db, ["lesson-1-2", "lesson-1-3"]);
-    expect(await db.words.where("greek").equals("το σπίτι").toArray()).toHaveLength(1);
-    expect(await db.lessonItems.where("unitKey").equals(wordKeyOf("w12-16")).count()).toBe(2);
-    expect(await db.words.count()).toBe(wordCountOf("lesson-1-2", "lesson-1-3"));
+    await installLessons(db, ["mech-2", "mech-3"]);
+    expect(await db.words.where("greek").equals("ο φίλος").toArray()).toHaveLength(1);
+    expect(await db.lessonItems.where("unitKey").equals(wordKeyOf("w034")).count()).toBe(2);
+    expect(await db.words.count()).toBe(wordCountOf("mech-2", "mech-3"));
   });
   it("одновременные запросы одного пакета объединяются, повторная установка ничего не дублирует", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
-    const [a, b] = await Promise.all([
-      installLesson("lesson-1-1", db, fetcher),
-      installLesson("lesson-1-1", db, fetcher),
-    ]);
+    const [a, b] = await Promise.all([installLesson("mech-1", db, fetcher), installLesson("mech-1", db, fetcher)]);
     expect(a).toBe(b);
-    expect(fetcher.requests.filter((url) => url.includes("lesson-1-1"))).toHaveLength(1);
-    expect(await installLesson("lesson-1-1", db, fetcher)).toMatchObject({ status: "current" });
-    expect(await db.words.count()).toBe(wordCountOf("lesson-1-1"));
-    expect(await db.lessonItems.count()).toBe(itemCountOf("lesson-1-1"));
+    expect(fetcher.requests.filter((url) => url.includes("mech-1"))).toHaveLength(1);
+    expect(await installLesson("mech-1", db, fetcher)).toMatchObject({ status: "current" });
+    expect(await db.words.count()).toBe(wordCountOf("mech-1"));
+    expect(await db.lessonItems.count()).toBe(itemCountOf("mech-1"));
     expect(await db.packages.count()).toBe(1);
   });
   it("повреждённый, чужой и несовместимый пакет отклоняются без частичного урока", async () => {
-    const url = entry("lesson-1-1").url;
-    const pack = packageOf("lesson-1-1");
+    const url = entry("mech-1").url;
+    const pack = packageOf("mech-1");
     for (const [bad, pattern] of [
       [{ ...pack, schemaVersion: 99 }, /не поддерживается/],
       [{ ...pack, words: pack.words.slice(1) }, /которой нет в пакете/],
@@ -266,7 +263,7 @@ describe("установка урока", () => {
     ] as const) {
       const fetcher = memoryFetcher(content, { [url]: bad });
       await refreshCatalog(db, fetcher);
-      await expect(installLesson("lesson-1-1", db, fetcher)).rejects.toThrow(pattern);
+      await expect(installLesson("mech-1", db, fetcher)).rejects.toThrow(pattern);
       expect(await db.words.count()).toBe(0);
       expect(await db.lessonItems.count()).toBe(0);
       expect(await db.packages.count()).toBe(0);
@@ -274,106 +271,106 @@ describe("установка урока", () => {
     }
   });
   it("ошибка записи откатывает слова, связи и версию целиком, прежняя установка сохраняется", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    const before = await db.packages.get("lesson-1-2");
-    const next = bump(packageOf("lesson-1-2"), (words) => {
+    await installLessons(db, ["mech-2"]);
+    const before = await db.packages.get("mech-2");
+    const next = bump(packageOf("mech-2"), (words) => {
       words[0].russian = "иначе";
     });
     const fail = () => {
       throw Object.assign(new Error("QuotaExceededError"), { name: "QuotaExceededError" });
     };
     db.packages.hook("updating", fail);
-    await expect(installLesson("lesson-1-2", db, await upgrade("lesson-1-2", next))).rejects.toMatchObject({
+    await expect(installLesson("mech-2", db, await upgrade("mech-2", next))).rejects.toMatchObject({
       kind: "storage",
     });
     db.packages.hook("updating").unsubscribe(fail);
-    expect(await db.packages.get("lesson-1-2")).toEqual(before);
+    expect(await db.packages.get("mech-2")).toEqual(before);
     expect((await db.words.get(next.words[0].id))!.russian).not.toBe("иначе");
   });
   it("без сети неустановленный урок даёт понятную ошибку сети, а установленные продолжают работать", async () => {
-    const fetcher = await installLessons(db, ["lesson-1-1"]);
+    const fetcher = await installLessons(db, ["mech-1"]);
     fetcher.json = async (url) => {
       if (url.endsWith("catalog.json")) return content.catalog;
       throw new ContentError("Нет сети: пакет урока ещё не загружен на это устройство.", "network");
     };
-    await expect(installLesson("lesson-1-2", db, fetcher)).rejects.toMatchObject({ kind: "network" });
-    expect(await db.words.count()).toBe(wordCountOf("lesson-1-1"));
+    await expect(installLesson("mech-2", db, fetcher)).rejects.toMatchObject({ kind: "network" });
+    expect(await db.words.count()).toBe(wordCountOf("mech-1"));
     expect(await db.lessons.count()).toBe(1);
   });
 });
 
 describe("обновление пакета", () => {
   it("нетронутое слово обновляется, ID и прогресс сохраняются", async () => {
-    const fetcher = await installLessons(db, ["lesson-1-2"]);
+    const fetcher = await installLessons(db, ["mech-2"]);
     await db.cardStates.add(
-      wordState("w12-16", {
+      wordState("w034", {
         card: { due: new Date("2026-09-20") } as never,
         introducedAt: "2026-09-10T00:00:00Z",
         version: 3,
       }),
     );
-    const next = bump(packageOf("lesson-1-2"), (words) => {
-      words.find((w) => w.id === "w12-16")!.russian = "дом, жилище";
+    const next = bump(packageOf("mech-2"), (words) => {
+      words.find((w) => w.id === "w034")!.russian = "друг, приятель";
     });
-    const result = await installLesson("lesson-1-2", db, await upgrade("lesson-1-2", next));
+    const result = await installLesson("mech-2", db, await upgrade("mech-2", next));
     expect(result).toMatchObject({ status: "updated", added: 0, changed: 1, conflicts: [] });
     expect(fetcher.requests.filter((url) => url.includes("media"))).toHaveLength(0);
-    const updated = (await db.words.get("w12-16"))!;
-    expect(updated.russian).toBe("дом, жилище");
+    const updated = (await db.words.get("w034"))!;
+    expect(updated.russian).toBe("друг, приятель");
     expect(updated.edited).toBeUndefined();
-    expect((await db.cardStates.get(wordKeyOf("w12-16")))!.version).toBe(3);
-    expect((await db.packages.get("lesson-1-2"))!.version).toBe(next.version);
+    expect((await db.cardStates.get(wordKeyOf("w034")))!.version).toBe(3);
+    expect((await db.packages.get("mech-2"))!.version).toBe(next.version);
   });
   it("разметка слов примера приходит с новой версией пакета и сохраняется в слове", async () => {
-    await installLessons(db, ["lesson-1-2"]);
+    await installLessons(db, ["mech-2"]);
     const glosses = [
-      { start: 3, length: 5, russian: "дом", wordId: "w12-16" },
-      { start: 9, length: 3, russian: "наш" },
+      { start: 2, length: 5, russian: "друг", wordId: "w034" },
+      { start: 8, length: 3, russian: "наш" },
     ];
-    const next = bump(packageOf("lesson-1-2"), (words) => {
-      const house = words.find((w) => w.id === "w12-16")!;
-      house.examples = [{ ...house.examples[0], glosses }];
+    const next = bump(packageOf("mech-2"), (words) => {
+      const friend = words.find((w) => w.id === "w034")!;
+      friend.examples = [{ ...friend.examples[0], glosses }];
     });
-    const result = await installLesson("lesson-1-2", db, await upgrade("lesson-1-2", next));
+    const result = await installLesson("mech-2", db, await upgrade("mech-2", next));
     expect(result).toMatchObject({ status: "updated", changed: 1, conflicts: [] });
-    expect((await db.words.get("w12-16"))!.examples[0].glosses).toEqual(glosses);
+    expect((await db.words.get("w034"))!.examples[0].glosses).toEqual(glosses);
   });
   it("локальная правка сохраняется, изменившееся в пакете поле сообщается как конфликт, остальные поля обновляются", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    const local = (await db.words.get("w12-16"))!;
+    await installLessons(db, ["mech-2"]);
+    const local = (await db.words.get("w034"))!;
     await saveWord({ ...local, russian: "дом (моя правка)" }, db);
-    const next = bump(packageOf("lesson-1-2"), (words) => {
-      const w = words.find((w) => w.id === "w12-16")!;
+    const next = bump(packageOf("mech-2"), (words) => {
+      const w = words.find((w) => w.id === "w034")!;
       w.russian = "жилище";
       w.note = "новая заметка";
     });
-    const result = await installLesson("lesson-1-2", db, await upgrade("lesson-1-2", next));
-    expect(result.conflicts).toEqual([{ ref: wordRef("w12-16"), label: "το σπίτι", fields: ["russian"] }]);
-    expect(await db.words.get("w12-16")).toMatchObject({
+    const result = await installLesson("mech-2", db, await upgrade("mech-2", next));
+    expect(result.conflicts).toEqual([{ ref: wordRef("w034"), label: "ο φίλος", fields: ["russian"] }]);
+    expect(await db.words.get("w034")).toMatchObject({
       russian: "дом (моя правка)",
       note: "новая заметка",
       edited: true,
     });
   });
   it("удалённое слово не воскресает и убранная связь не восстанавливается", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    await deleteWord("w12-16", db);
-    await removeFromLesson("lesson-1-2", wordRef("w12-01"), db);
-    expect((await db.packages.get("lesson-1-2"))!.removed).toEqual([wordKeyOf("w12-01")]);
-    const next = bump(packageOf("lesson-1-2"), (words) => {
-      words.find((w) => w.id === "w12-16")!.russian = "жилище";
+    await installLessons(db, ["mech-2"]);
+    await deleteWord("w034", db);
+    await removeFromLesson("mech-2", wordRef("w041"), db);
+    expect((await db.packages.get("mech-2"))!.removed).toEqual([wordKeyOf("w041")]);
+    const next = bump(packageOf("mech-2"), (words) => {
+      words.find((w) => w.id === "w034")!.russian = "жилище";
     });
-    const result = await installLesson("lesson-1-2", db, await upgrade("lesson-1-2", next));
-    expect((await db.words.get("w12-16"))!.deletedAt).toBeTruthy();
-    expect(result.conflicts).toEqual([{ ref: wordRef("w12-16"), label: "το σπίτι", fields: ["deleted"] }]);
-    expect(await db.lessonItems.get(["lesson-1-2", wordKeyOf("w12-01")])).toBeUndefined();
-    expect(await db.lessonItems.count()).toBe(itemCountOf("lesson-1-2") - 1);
-    expect(await db.words.get("w12-01")).toBeTruthy(); // само слово остаётся
+    const result = await installLesson("mech-2", db, await upgrade("mech-2", next));
+    expect((await db.words.get("w034"))!.deletedAt).toBeTruthy();
+    expect(result.conflicts).toEqual([{ ref: wordRef("w034"), label: "ο φίλος", fields: ["deleted"] }]);
+    expect(await db.lessonItems.get(["mech-2", wordKeyOf("w041")])).toBeUndefined();
+    expect(await db.lessonItems.count()).toBe(itemCountOf("mech-2") - 1);
+    expect(await db.words.get("w041")).toBeTruthy(); // само слово остаётся
   });
   it("автор убрал карточку из урока: связь исчезает, карточка с прогрессом остаётся в словаре, личные название и дата урока не перезаписываются", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    await db.lessons.update("lesson-1-2", { title: "Мой урок", targetDate: "2026-10-01" });
-    const pack = packageOf("lesson-1-2");
+    await installLessons(db, ["mech-2"]);
+    await db.lessons.update("mech-2", { title: "Мой урок", targetDate: "2026-10-01" });
+    const pack = packageOf("mech-2");
     const dropped = pack.words[0].id;
     await db.cardStates.add(
       wordState(dropped, {
@@ -395,7 +392,7 @@ describe("обновление пакета", () => {
       updatedAt: "2026-09-16T10:00:00.000Z",
     };
     await db.words.add(indexWord(own));
-    await linkWords("lesson-1-2", ["w-own"], db);
+    await linkWords("mech-2", ["w-own"], db);
     const next: ContentPackage = {
       ...pack,
       version: "trimmed",
@@ -403,20 +400,20 @@ describe("обновление пакета", () => {
       words: pack.words.slice(1),
       items: pack.items.slice(1).map((item, i) => ({ ...item, position: i })),
       links: pack.links.slice(1).map((l, i) => ({ ...l, position: i })),
-      media: pack.media.slice(1),
+      media: pack.media.filter((item) => item.id !== pack.words[0].imageAssetId),
     };
-    await installLesson("lesson-1-2", db, await upgrade("lesson-1-2", next));
+    await installLesson("mech-2", db, await upgrade("mech-2", next));
     expect(await db.words.get(dropped)).toBeTruthy(); // из словаря слово не исчезает
     expect((await db.cardStates.get(wordKeyOf(dropped)))!.version).toBe(3); // прогресс и история сохранены
-    expect(await db.lessonItems.get(["lesson-1-2", wordKeyOf(dropped)])).toBeUndefined(); // состав урока принадлежит автору
-    expect(await db.lessonItems.get(["lesson-1-2", wordKeyOf("w-own")])).toBeTruthy(); // добавленное пользователем осталось
-    expect(await lessonItems("lesson-1-2", db)).toHaveLength(pack.items.length); // минус убранная автором, плюс своя
-    expect(await db.lessons.get("lesson-1-2")).toMatchObject({ title: "Мой урок", targetDate: "2026-10-01" });
+    expect(await db.lessonItems.get(["mech-2", wordKeyOf(dropped)])).toBeUndefined(); // состав урока принадлежит автору
+    expect(await db.lessonItems.get(["mech-2", wordKeyOf("w-own")])).toBeTruthy(); // добавленное пользователем осталось
+    expect(await lessonItems("mech-2", db)).toHaveLength(pack.items.length); // минус убранная автором, плюс своя
+    expect(await db.lessons.get("mech-2")).toMatchObject({ title: "Мой урок", targetDate: "2026-10-01" });
   });
   it("карточка, убранная автором из одного урока, остаётся в другом и возвращается вместе с новой версией", async () => {
-    await installLessons(db, ["lesson-1-2", "lesson-1-3"]);
-    const pack = packageOf("lesson-1-2");
-    const shared = "w12-16"; // это слово входит и в урок 1.3
+    await installLessons(db, ["mech-2", "mech-3"]);
+    const pack = packageOf("mech-2");
+    const shared = "w034"; // это слово входит и в урок 1.3
     const without = {
       ...pack,
       version: "no-shared",
@@ -424,30 +421,30 @@ describe("обновление пакета", () => {
       items: pack.items.filter((item) => item.id !== shared).map((item, i) => ({ ...item, position: i })),
       links: pack.links.filter((link) => link.wordId !== shared).map((link, i) => ({ ...link, position: i })),
     };
-    await installLesson("lesson-1-2", db, await upgrade("lesson-1-2", without));
-    expect(await db.lessonItems.get(["lesson-1-2", wordKeyOf(shared)])).toBeUndefined();
-    expect(await db.lessonItems.get(["lesson-1-3", wordKeyOf(shared)])).toBeTruthy(); // другой урок не затронут
+    await installLesson("mech-2", db, await upgrade("mech-2", without));
+    expect(await db.lessonItems.get(["mech-2", wordKeyOf(shared)])).toBeUndefined();
+    expect(await db.lessonItems.get(["mech-3", wordKeyOf(shared)])).toBeTruthy(); // другой урок не затронут
     // Автор вернул карточку — связь появляется снова.
     const back = { ...pack, version: "shared-back" };
-    await installLesson("lesson-1-2", db, await upgrade("lesson-1-2", back));
-    expect(await db.lessonItems.get(["lesson-1-2", wordKeyOf(shared)])).toBeTruthy();
+    await installLesson("mech-2", db, await upgrade("mech-2", back));
+    expect(await db.lessonItems.get(["mech-2", wordKeyOf(shared)])).toBeTruthy();
   });
   it("убранную пользователем связь обновление не восстанавливает, даже когда автор оставил карточку в составе", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    await removeFromLesson("lesson-1-2", wordRef("w12-01"), db);
-    const pack = packageOf("lesson-1-2");
-    await installLesson("lesson-1-2", db, await upgrade("lesson-1-2", { ...pack, version: "same-items" }));
-    expect(await db.lessonItems.get(["lesson-1-2", wordKeyOf("w12-01")])).toBeUndefined();
-    expect((await db.packages.get("lesson-1-2"))!.removed).toEqual([wordKeyOf("w12-01")]);
+    await installLessons(db, ["mech-2"]);
+    await removeFromLesson("mech-2", wordRef("w041"), db);
+    const pack = packageOf("mech-2");
+    await installLesson("mech-2", db, await upgrade("mech-2", { ...pack, version: "same-items" }));
+    expect(await db.lessonItems.get(["mech-2", wordKeyOf("w041")])).toBeUndefined();
+    expect((await db.packages.get("mech-2"))!.removed).toEqual([wordKeyOf("w041")]);
   });
   it("без базы (legacy) отредактированное слово сохраняется целиком, нетронутое — заменяется", async () => {
-    const pack = packageOf("lesson-1-2");
-    const base = pack.words.find((w) => w.id === "w12-16")!;
+    const pack = packageOf("mech-2");
+    const base = pack.words.find((w) => w.id === "w034")!;
     const next = { ...base, russian: "жилище", note: "заметка", revision: "x" };
     const local = { ...base, createdAt: "", updatedAt: "", edited: true };
     expect(mergeWord(local, undefined, next)).toMatchObject({
       conflicts: ["russian", "note"],
-      word: { russian: "дом" },
+      word: { russian: "друг" },
     });
     expect(mergeWord({ ...local, edited: false }, undefined, next).word).toMatchObject({
       russian: "жилище",
@@ -455,58 +452,58 @@ describe("обновление пакета", () => {
     });
   });
   it("пакет с ревизией той же версии, установленный из другой вкладки, не применяется второй раз", async () => {
-    await installLessons(db, ["lesson-1-1"]);
-    expect(await applyPackage(packageOf("lesson-1-1"), db)).toMatchObject({ status: "current" });
+    await installLessons(db, ["mech-1"]);
+    expect(await applyPackage(packageOf("mech-1"), db)).toMatchObject({ status: "current" });
   });
 });
 
 describe("медиа и готовность офлайн", () => {
   it("картинка скачивается при первом обращении и потом читается из базы", async () => {
-    const fetcher = await installLessons(db, ["lesson-1-2"]);
+    const fetcher = await installLessons(db, ["mech-2"]);
     const before = fetcher.requests.length;
-    const asset = await ensureAsset("img-w12-16", db, fetcher);
+    const asset = await ensureAsset("img-w034", db, fetcher);
     expect(asset).toMatchObject({ kind: "image", mimeType: "image/svg+xml" });
     expect(await asset!.blob.text()).toContain("<svg");
-    await ensureAsset("img-w12-16", db, fetcher);
+    await ensureAsset("img-w034", db, fetcher);
     expect(fetcher.requests.length).toBe(before + 1);
     expect(await ensureAsset("img-нет", db, fetcher)).toBeNull();
   });
   it("слова доступны локально, но урок не готов офлайн, пока обязательное медиа не скачано; повтор докачивает", async () => {
-    const fetcher = await installLessons(db, ["lesson-1-2"]);
-    expect(await lessonReadiness("lesson-1-2", db)).toMatchObject({
+    const fetcher = await installLessons(db, ["mech-2"]);
+    expect(await lessonReadiness("mech-2", db)).toMatchObject({
       installed: true,
-      required: packageOf("lesson-1-2").media.length,
+      required: packageOf("mech-2").media.length,
       present: 0,
       updateAvailable: false,
     });
-    const media = packageOf("lesson-1-2").media[0];
+    const media = packageOf("mech-2").media[0];
     const flaky = memoryFetcher(content, { [media.url]: new Blob(["<svg"], { type: "image/svg+xml" }) }); // повреждённый файл
-    const first = await downloadLessonMedia("lesson-1-2", db, flaky);
-    expect(first).toMatchObject({ fetched: packageOf("lesson-1-2").media.length - 1, failed: [media.id] });
-    expect((await lessonReadiness("lesson-1-2", db)).missing).toEqual([media.id]);
-    const second = await downloadLessonMedia("lesson-1-2", db, fetcher);
+    const first = await downloadLessonMedia("mech-2", db, flaky);
+    expect(first).toMatchObject({ fetched: packageOf("mech-2").media.length - 1, failed: [media.id] });
+    expect((await lessonReadiness("mech-2", db)).missing).toEqual([media.id]);
+    const second = await downloadLessonMedia("mech-2", db, fetcher);
     expect(second).toEqual({ fetched: 1, failed: [] });
-    expect((await lessonReadiness("lesson-1-2", db)).missing).toEqual([]);
-    expect(await db.assets.count()).toBe(packageOf("lesson-1-2").media.length);
+    expect((await lessonReadiness("mech-2", db)).missing).toEqual([]);
+    expect(await db.assets.count()).toBe(packageOf("mech-2").media.length);
   });
   it("нехватка места при сохранении медиа поднимает ошибку хранилища, а не ложный успех", async () => {
-    const fetcher = await installLessons(db, ["lesson-1-2"]);
+    const fetcher = await installLessons(db, ["mech-2"]);
     const fail = () => {
       throw Object.assign(new Error("quota"), { name: "QuotaExceededError" });
     };
     db.assets.hook("creating", fail);
-    await expect(downloadLessonMedia("lesson-1-2", db, fetcher)).rejects.toMatchObject({ kind: "storage" });
+    await expect(downloadLessonMedia("mech-2", db, fetcher)).rejects.toMatchObject({ kind: "storage" });
     db.assets.hook("creating").unsubscribe(fail);
     expect(await db.assets.count()).toBe(0);
   });
   it("новая версия в каталоге показывается как доступное обновление, а не применяется сама", async () => {
-    await installLessons(db, ["lesson-1-2"]);
-    const next = bump(packageOf("lesson-1-2"), (words) => {
+    await installLessons(db, ["mech-2"]);
+    const next = bump(packageOf("mech-2"), (words) => {
       words[0].russian = "иначе";
     });
-    await refreshCatalog(db, withUpdate("lesson-1-2", next));
-    expect((await lessonReadiness("lesson-1-2", db)).updateAvailable).toBe(true);
-    expect((await db.packages.get("lesson-1-2"))!.version).toBe(packageOf("lesson-1-2").version);
+    await refreshCatalog(db, withUpdate("mech-2", next));
+    expect((await lessonReadiness("mech-2", db)).updateAvailable).toBe(true);
+    expect((await db.packages.get("mech-2"))!.version).toBe(packageOf("mech-2").version);
   });
 });
 
@@ -531,7 +528,7 @@ describe("установка и обновление смешанного пак
       translation: "Я пишу письмо.",
       revision: pack.phrases[0].revision,
     });
-    expect((await db.phrases.get("p-ilios"))!.note).toBe("Винительный падеж после переходного глагола.");
+    expect((await db.phrases.get("p-oikogeneia"))!.note).toBe("Притяжательное μου стоит после существительного.");
     expect(await db.packages.get(MIXED_LESSON)).toMatchObject({
       version: pack.version,
       phrases: pack.phrases,
@@ -601,7 +598,7 @@ describe("установка и обновление смешанного пак
       introducedAt: "2026-09-10T00:00:00Z",
       version: 2,
     });
-    await removeFromLesson(MIXED_LESSON, { kind: "phrase", id: "p-vouno" }, db);
+    await removeFromLesson(MIXED_LESSON, { kind: "phrase", id: "p-xora" }, db);
     const pack = mixedPackage();
     const paidi = pack.phrases.find((p) => p.id === "p-paidi")!;
     const { revision: _r, ...fields } = paidi;
@@ -628,16 +625,16 @@ describe("установка и обновление смешанного пак
     expect(stored.revision).not.toBe(paidi.revision);
     expect((await db.cardStates.get(unitKey({ kind: "phrase", id: "p-paidi" })))!.version).toBe(2); // состояние и ключ не тронуты
     expect(await db.lessons.get(MIXED_LESSON)).toMatchObject({ title: "Мой смешанный", targetDate: "2026-10-01" });
-    expect(await db.lessonItems.get([MIXED_LESSON, unitKey({ kind: "phrase", id: "p-vouno" })])).toBeUndefined(); // убранная связь не восстановлена
-    expect(await db.phrases.get("p-vouno")).toBeTruthy(); // сама фраза остаётся
-    expect((await db.packages.get(MIXED_LESSON))!.removed).toEqual([unitKey({ kind: "phrase", id: "p-vouno" })]);
+    expect(await db.lessonItems.get([MIXED_LESSON, unitKey({ kind: "phrase", id: "p-xora" })])).toBeUndefined(); // убранная связь не восстановлена
+    expect(await db.phrases.get("p-xora")).toBeTruthy(); // сама фраза остаётся
+    expect((await db.packages.get(MIXED_LESSON))!.removed).toEqual([unitKey({ kind: "phrase", id: "p-xora" })]);
   });
   it("автор убрал фразу из состава: связь исчезает, карточка и её прогресс остаются, пользовательские удаления не трогаются", async () => {
     await installMixed(db);
-    await removeFromLesson(MIXED_LESSON, { kind: "phrase", id: "p-vouno" }, db);
+    await removeFromLesson(MIXED_LESSON, { kind: "phrase", id: "p-xora" }, db);
     await db.cardStates.add({
-      unitKey: unitKey({ kind: "phrase", id: "p-anoixi" }),
-      ref: { kind: "phrase", id: "p-anoixi" },
+      unitKey: unitKey({ kind: "phrase", id: "p-lemeso" }),
+      ref: { kind: "phrase", id: "p-lemeso" },
       card: { due: new Date("2026-09-20") } as never,
       introducedAt: "2026-09-10T00:00:00Z",
       version: 5,
@@ -646,8 +643,8 @@ describe("установка и обновление смешанного пак
     const next = {
       ...pack,
       version: `${pack.version}-trim`,
-      phrases: pack.phrases.filter((phrase) => phrase.id !== "p-anoixi"),
-      items: pack.items.filter((item) => item.id !== "p-anoixi").map((item, index) => ({ ...item, position: index })),
+      phrases: pack.phrases.filter((phrase) => phrase.id !== "p-lemeso"),
+      items: pack.items.filter((item) => item.id !== "p-lemeso").map((item, index) => ({ ...item, position: index })),
     };
     const url = `content/packages/${MIXED_LESSON}@${next.version}.json`;
     const catalog = {
@@ -659,12 +656,12 @@ describe("установка и обновление смешанного пак
     const fetcher = memoryFetcher(mixedContent(), { "content/catalog.json": catalog, [url]: next });
     await refreshCatalog(db, fetcher);
     await installLesson(MIXED_LESSON, db, fetcher);
-    expect(await db.lessonItems.get([MIXED_LESSON, unitKey({ kind: "phrase", id: "p-anoixi" })])).toBeUndefined();
-    expect(await db.phrases.get("p-anoixi")).toBeTruthy(); // карточка остаётся ради истории и прогресса
-    expect((await db.cardStates.get(unitKey({ kind: "phrase", id: "p-anoixi" })))!.version).toBe(5);
+    expect(await db.lessonItems.get([MIXED_LESSON, unitKey({ kind: "phrase", id: "p-lemeso" })])).toBeUndefined();
+    expect(await db.phrases.get("p-lemeso")).toBeTruthy(); // карточка остаётся ради истории и прогресса
+    expect((await db.cardStates.get(unitKey({ kind: "phrase", id: "p-lemeso" })))!.version).toBe(5);
     expect(await db.lessonItems.where("lessonId").equals(MIXED_LESSON).count()).toBe(5); // минус убранная автором и убранная пользователем
-    expect((await db.packages.get(MIXED_LESSON))!.removed).toEqual([unitKey({ kind: "phrase", id: "p-vouno" })]);
-    expect((await db.packages.get(MIXED_LESSON))!.items.map((item) => item.id)).not.toContain("p-anoixi");
+    expect((await db.packages.get(MIXED_LESSON))!.removed).toEqual([unitKey({ kind: "phrase", id: "p-xora" })]);
+    expect((await db.packages.get(MIXED_LESSON))!.items.map((item) => item.id)).not.toContain("p-lemeso");
   });
   it("урок только из текстовых заданий готов офлайн без обязательных медиа", async () => {
     await installMixed(db);
@@ -673,13 +670,13 @@ describe("установка и обновление смешанного пак
     expect(readiness.installed).toBe(true);
     expect(readiness.required).toBe((await db.packages.get(MIXED_LESSON))!.media.filter((m) => m.required).length);
     const noWords = buildMixed({
-      phrases: { "p-grafo": MIXED_PHRASES["p-grafo"], "p-vouno": MIXED_PHRASES["p-vouno"] },
+      phrases: { "p-grafo": MIXED_PHRASES["p-grafo"], "p-xora": MIXED_PHRASES["p-xora"] },
       lesson: {
         title: "Текст",
         language: "el",
         items: [
           { kind: "phrase", id: "p-grafo" },
-          { kind: "phrase", id: "p-vouno" },
+          { kind: "phrase", id: "p-xora" },
         ],
       },
     });
@@ -747,7 +744,7 @@ describe("урок слова по каталогу", () => {
     memoryFetcher(content, { "content/catalog.json": { ...content.catalog, lessons } });
   it("слово одного урока находится по индексу", async () => {
     await refreshCatalog(db, memoryFetcher());
-    expect((await lessonOfWord("w34-03", db))?.id).toBe("lesson-1-4");
+    expect((await lessonOfWord("w093", db))?.id).toBe("mech-4");
   });
   it("из нескольких уроков берётся первый в порядке каталога, а не по идентификатору", async () => {
     await refreshCatalog(db, withLessons([lesson("lesson-2-1", ["w1", "w2"]), lesson("lesson-10-1", ["w2"])]));
@@ -763,8 +760,8 @@ describe("урок слова по каталогу", () => {
   it("отсутствующее слово и каталог без индекса дают null", async () => {
     await refreshCatalog(db, memoryFetcher());
     expect(await lessonOfWord("w99-99", db)).toBeNull();
-    await refreshCatalog(db, withLessons([lesson("lesson-1-4")]));
-    expect(await lessonOfWord("w34-03", db)).toBeNull();
+    await refreshCatalog(db, withLessons([lesson("mech-4")]));
+    expect(await lessonOfWord("w093", db)).toBeNull();
   });
 });
 
@@ -777,11 +774,11 @@ describe("просмотр пакета без установки", () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
     const before = await snapshot();
-    const { pack, entry: found } = await previewPackage("lesson-1-4", db, fetcher);
-    expect(pack.id).toBe("lesson-1-4");
-    expect(found.version).toBe(entry("lesson-1-4").version);
-    expect(pack.words.some((word) => word.id === "w34-03")).toBe(true);
-    await previewPackage("lesson-1-4", db, fetcher);
+    const { pack, entry: found } = await previewPackage("mech-4", db, fetcher);
+    expect(pack.id).toBe("mech-4");
+    expect(found.version).toBe(entry("mech-4").version);
+    expect(pack.words.some((word) => word.id === "w093")).toBe(true);
+    await previewPackage("mech-4", db, fetcher);
     expect(fetcher.requests.filter((url) => url.includes("packages/"))).toHaveLength(1);
     expect(await snapshot()).toEqual(before);
   });
@@ -794,29 +791,29 @@ describe("просмотр пакета без установки", () => {
         throw new TypeError("Failed to fetch");
       },
     };
-    await expect(previewPackage("lesson-1-4", db, offline)).rejects.toMatchObject({ kind: "network" });
-    await expect(previewPackage("lesson-1-4", db, fetcher)).resolves.toBeTruthy();
+    await expect(previewPackage("mech-4", db, offline)).rejects.toMatchObject({ kind: "network" });
+    await expect(previewPackage("mech-4", db, fetcher)).resolves.toBeTruthy();
   });
   it("пакет другого урока или другой версии отклоняется", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
-    const url = entry("lesson-1-4").url;
-    const other = packageOf("lesson-1-1");
-    await expect(previewPackage("lesson-1-4", db, memoryFetcher(content, { [url]: other }))).rejects.toThrow(
+    const url = entry("mech-4").url;
+    const other = packageOf("mech-1");
+    await expect(previewPackage("mech-4", db, memoryFetcher(content, { [url]: other }))).rejects.toThrow(
       "Пакет не соответствует записи каталога.",
     );
     await expect(
-      previewPackage("lesson-1-4", db, memoryFetcher(content, { [url]: { ...packageOf("lesson-1-4"), version: "x" } })),
+      previewPackage("mech-4", db, memoryFetcher(content, { [url]: { ...packageOf("mech-4"), version: "x" } })),
     ).rejects.toThrow("Пакет не соответствует записи каталога.");
   });
 });
 
 describe("поставляемое слово как запись", () => {
   it("берёт поставляемые поля, ревизию и даты без локальных полей", () => {
-    const card = packageOf("lesson-1-4").words.find((word) => word.id === "w34-03")!;
+    const card = packageOf("mech-4").words.find((word) => word.id === "w093")!;
     const word = wordFromPackage(card, "2026-01-01T00:00:00.000Z");
     expect(word).toMatchObject({
-      id: "w34-03",
+      id: "w093",
       greek: card.greek,
       russian: card.russian,
       revision: card.revision,

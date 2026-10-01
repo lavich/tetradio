@@ -4,11 +4,11 @@ import { installLessons, ready } from "./helpers";
 test("работает без сети после закрытия страницы для скачанного урока", async ({ context, page }) => {
   await page.goto("/");
   await ready(page);
-  await installLessons(page, ["lesson-1-2"]);
+  await installLessons(page, ["mech-2"]);
   // «Скачать для офлайн» получает все обязательные медиа урока; готовность показывается только после проверки файлов.
-  await page.goto("/lessons/lesson-1-2");
+  await page.goto("/lessons/mech-2");
   await page.getByRole("button", { name: "Скачать для офлайн" }).click();
-  await expect(page.getByTestId("lesson-offline")).toContainText("Медиа: 9 из 9");
+  await expect(page.getByTestId("lesson-offline")).toContainText("Медиа: 2 из 2");
   await page.goto("/");
   await ready(page);
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));
@@ -24,12 +24,12 @@ test("работает без сети после закрытия страни�
       request.onsuccess = () => resolve(request.result);
     });
     const tx = database.transaction(["lessons", "packages", "lessonItems"], "readwrite");
-    tx.objectStore("lessons").delete("lesson-1-3");
-    tx.objectStore("packages").delete("lesson-1-3");
+    tx.objectStore("lessons").delete("mech-3");
+    tx.objectStore("packages").delete("mech-3");
     const links = tx.objectStore("lessonItems").getAllKeys();
     links.onsuccess = () => {
       for (const key of links.result as [string, string][])
-        if (key[0] === "lesson-1-3") tx.objectStore("lessonItems").delete(key);
+        if (key[0] === "mech-3") tx.objectStore("lessonItems").delete(key);
     };
     await new Promise<void>((resolve, reject) => {
       tx.oncomplete = () => resolve();
@@ -44,15 +44,15 @@ test("работает без сети после закрытия страни�
   await offlinePage.goto("/");
   await expect(offlinePage.getByTestId("today-title")).toBeVisible();
   await offlinePage.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
-  await offlinePage.getByRole("searchbox").fill("σπίτι");
-  await offlinePage.getByRole("link", { name: /το σπίτι/ }).click();
+  await offlinePage.getByRole("searchbox").fill("φίλος");
+  await offlinePage.getByRole("link", { name: /ο φίλος/ }).click();
   // Картинка читается из IndexedDB, а не из сети.
   await expect(offlinePage.getByTestId("word-art")).toBeVisible();
-  await expect(offlinePage.getByText("Το σπίτι μας είναι μεγάλο.")).toBeVisible();
+  await expect(offlinePage.getByText("Ο φίλος μας είναι παντρεμένος.")).toBeVisible();
   await offlinePage.getByRole("button", { name: "Потренировать слово" }).click();
   await expect(offlinePage.getByText("Новое слово")).toBeVisible();
   // Неустановленный урок без сети: понятное состояние и повтор, а не пустой урок.
-  await offlinePage.goto("/lessons/lesson-1-3");
+  await offlinePage.goto("/lessons/mech-3");
   await expect(offlinePage.getByText("Пакет не загружен")).toBeVisible();
   await expect(offlinePage.getByRole("button", { name: "Повторить загрузку" })).toBeVisible();
   await expect(offlinePage.getByRole("heading", { name: /^Слова · \d+$/ })).toHaveCount(0);

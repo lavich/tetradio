@@ -20,8 +20,8 @@ afterEach(() => {
 
 describe("источник медиа просмотра", () => {
   it("иллюстрация берётся по адресу пакета, в базу медиа ничего не пишется", async () => {
-    const pack = content.packages.find((p) => p.id === "lesson-1-4")!;
-    const card = pack.words.find((w) => w.id === "w34-03")!;
+    const pack = content.packages.find((p) => p.id === "mech-4")!;
+    const card = pack.words.find((w) => w.id === "w093")!;
     const media = pack.media.find((item) => item.id === card.imageAssetId)!;
     const host = document.body.appendChild(document.createElement("div"));
     root = createRoot(host);

@@ -21,8 +21,8 @@ const trace = (page: Page, databaseName: string) =>
     const dirty = await read("meta", (s) => s.get("sync:dirty"));
     database.close();
     return {
-      events: events.filter((e) => e.ref.id === "w34-03").length,
-      states: states.filter((e) => e.ref.id === "w34-03").length,
+      events: events.filter((e) => e.ref.id === "w093").length,
+      states: states.filter((e) => e.ref.id === "w093").length,
       dirty: JSON.stringify(dirty ?? null),
     };
   }, databaseName);
@@ -35,33 +35,33 @@ async function spell(page: Page, value: string) {
 test.describe("упражнение по выбору на странице слова", () => {
   test("написание: «Почти», «Ещё раз», верный ответ, возврат к слову — и ничего не записано", async ({ page }) => {
     await page.goto("/");
-    await installLessons(page, ["lesson-1-4"]);
-    await page.goto("/words/w34-03");
+    await installLessons(page, ["mech-4"]);
+    await page.goto("/words/w093");
     const before = await trace(page, "tetradio-mock-1");
     await page.getByRole("button", { name: "Написание: пройти" }).click();
-    await expect(page).toHaveURL(/\/words\/w34-03\/exercise\/spelling$/);
+    await expect(page).toHaveURL(/\/words\/w093\/exercise\/spelling$/);
     await expect(page.getByText("Без учёта прогресса")).toBeVisible();
     await expect(page.getByRole("navigation")).toHaveCount(0);
-    await spell(page, "η κατσαρολα");
+    await spell(page, "ο παππους");
     await expect(page.getByTestId("feedback")).toContainText("Почти");
     await page.getByRole("button", { name: "Ещё раз" }).click();
-    await spell(page, "η κατσαρόλα");
+    await spell(page, "ο παππούς");
     await expect(page.getByTestId("feedback")).toContainText("Правильно");
     await page.getByRole("button", { name: "К слову" }).click();
-    await expect(page).toHaveURL(/\/words\/w34-03$/);
+    await expect(page).toHaveURL(/\/words\/w093$/);
     expect(await trace(page, "tetradio-mock-1")).toEqual({ ...before, events: 0, states: 0 });
   });
 
   test("в Telegram «Назад» ведёт на экран слова", async ({ page }) => {
     await openTelegram(page, { noCloud: true });
-    await installLessons(page, ["lesson-1-4"]);
-    await page.goto("/words/w34-03");
+    await installLessons(page, ["mech-4"]);
+    await page.goto("/words/w093");
     const before = await trace(page, "tetradio-tg-tetradio_local-1001");
     await page.getByRole("button", { name: "Написание: пройти" }).click();
-    await spell(page, "η κατσαρόλα");
+    await spell(page, "ο παππούς");
     await expect(page.getByTestId("feedback")).toContainText("Правильно");
     await tg(page).back();
-    await expect(page).toHaveURL(/\/words\/w34-03$/);
+    await expect(page).toHaveURL(/\/words\/w093$/);
     expect(await trace(page, "tetradio-tg-tetradio_local-1001")).toEqual({ ...before, events: 0, states: 0 });
   });
 });

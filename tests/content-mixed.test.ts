@@ -9,7 +9,7 @@ import { buildMixed, type MixedFiles } from "./helpers/mixed";
  */
 const provenance = {
   sourceLabel: "Существующий пример проекта, иллюстрация формата",
-  locator: "content/words/γράφω.yaml, examples[0]",
+  locator: "tests/fixtures/mechanics/words/γράφω.yaml, examples[0]",
   excerpt: "Γράφω ένα γράμμα.",
   operation: "verbatim",
 };
@@ -19,9 +19,13 @@ const phrase = {
   provenance,
 };
 const second = {
-  text: "Το βουνό είναι ψηλό.",
-  translation: "Гора высокая.",
-  provenance: { ...provenance, locator: "content/words/το-βουνό.yaml, examples[0]", excerpt: "Το βουνό είναι ψηλό." },
+  text: "Η Κύπρος είναι μια μικρή χώρα.",
+  translation: "Кипр — маленькая страна.",
+  provenance: {
+    ...provenance,
+    locator: "tests/fixtures/mechanics/words/η-χώρα.yaml, examples[0]",
+    excerpt: "Η Κύπρος είναι μια μικρή χώρα.",
+  },
 };
 const mixed = ({ phrases = { "p-grafo": phrase }, lesson, mutate }: MixedFiles = {}) =>
   buildMixed({
@@ -29,7 +33,7 @@ const mixed = ({ phrases = { "p-grafo": phrase }, lesson, mutate }: MixedFiles =
     lesson: lesson ?? {
       title: "Смешанный урок",
       language: "el",
-      items: [...Object.keys(phrases).map((id) => ({ kind: "phrase", id })), { kind: "word", id: "w11-27" }],
+      items: [...Object.keys(phrases).map((id) => ({ kind: "phrase", id })), { kind: "word", id: "w070" }],
     },
     mutate,
   });
@@ -37,20 +41,20 @@ const pack = (built: BuiltContent) => built.packages.find((p) => p.id === "lesso
 
 describe("сборка смешанного урока", () => {
   it("собирает фразы и слова в авторском порядке и проходит проверку пакета", () => {
-    const built = mixed({ phrases: { "p-grafo": phrase, "p-vouno": second } });
+    const built = mixed({ phrases: { "p-grafo": phrase, "p-xora": second } });
     const mixedPack = pack(built);
     expect(mixedPack.schemaVersion).toBe(4);
     expect(mixedPack.items.map((item) => [item.kind, item.id, item.position])).toEqual([
       ["phrase", "p-grafo", 0],
-      ["phrase", "p-vouno", 1],
-      ["word", "w11-27", 2],
+      ["phrase", "p-xora", 1],
+      ["word", "w070", 2],
     ]);
     expect(mixedPack.phrases[0]).toMatchObject({
       id: "p-grafo",
       text: "Γράφω ένα γράμμα.",
       translation: "Я пишу письмо.",
     });
-    expect(mixedPack.words.map((word) => word.id)).toEqual(["w11-27"]);
+    expect(mixedPack.words.map((word) => word.id)).toEqual(["w070"]);
     const file = built.files.find((f) => f.path === built.catalog.lessons.find((l) => l.id === "lesson-mixed")!.url)!;
     expect(parsePackage(JSON.parse(file.body as string)).items).toHaveLength(3);
     const entry = parseCatalog(
@@ -60,12 +64,12 @@ describe("сборка смешанного урока", () => {
   });
   it("урок без слов допустим, прежний список words принимается как сокращение", () => {
     const built = mixed({
-      phrases: { "p-grafo": phrase, "p-vouno": second },
+      phrases: { "p-grafo": phrase, "p-xora": second },
       lesson: {
         title: "Без слов",
         items: [
           { kind: "phrase", id: "p-grafo" },
-          { kind: "phrase", id: "p-vouno" },
+          { kind: "phrase", id: "p-xora" },
         ],
       },
     });
@@ -78,7 +82,7 @@ describe("сборка смешанного урока", () => {
         p.id,
       ).toBe(true);
     expect(() =>
-      mixed({ lesson: { title: "Оба", words: ["w11-27"], items: [{ kind: "phrase", id: "p-grafo" }] } }),
+      mixed({ lesson: { title: "Оба", words: ["w070"], items: [{ kind: "phrase", id: "p-grafo" }] } }),
     ).toThrow(/либо words, либо items/);
     expect(() => mixed({ lesson: { title: "Пусто" } })).toThrow(/нужен непустой список/);
   });
@@ -118,7 +122,7 @@ describe("сборка смешанного урока", () => {
     expect(two.phrases.map((p) => p.id).sort()).toEqual(["p-grafo", "p-other"]);
   });
   it("прежние YAML собираются без изменений материала", () => {
-    const before = buildContent("tests/fixtures/tavelori-content");
+    const before = buildContent("tests/fixtures/mechanics");
     const after = mixed();
     for (const p of before.packages) expect(after.packages.find((q) => q.id === p.id)!.words, p.id).toEqual(p.words);
   });

@@ -148,7 +148,12 @@ export const ready = (page: Page) => page.waitForSelector("[data-testid=today-ti
  * три дня назад: урок 1.1 закрепляется проведённым при перезагрузке, 1.2 становится ближайшим.
  * `startInDays` сдвигает первое занятие: скриншотам README нужно расписание без прошедших уроков.
  */
-export async function useSchedule(page: Page, courseId = "leeke", databaseName = "tetradio-mock-1", startInDays = -3) {
+export async function useSchedule(
+  page: Page,
+  courseId = "mechanics",
+  databaseName = "tetradio-mock-1",
+  startInDays = -3,
+) {
   const today = new Date().toISOString().slice(0, 10);
   const startDate = addDays(today, startInDays);
   const weekdays = [isoWeekday(startDate), isoWeekday(addDays(today, 1))];
