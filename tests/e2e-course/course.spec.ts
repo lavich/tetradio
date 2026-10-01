@@ -9,7 +9,8 @@ async function voices(page: Page, mode: "none" | "instant") {
     const greek = { lang: "el-GR", name: "Test Greek", voiceURI: "test-el", default: true, localService: true };
     const synth = {
       getVoices: () => (mode === "none" ? [] : [greek]),
-      speak(utterance: { onstart?: () => void; onend?: () => void }) {
+      speak(utterance: { text: string; onstart?: () => void; onend?: () => void }) {
+        ((window as unknown as { __spoken: string[] }).__spoken ??= []).push(utterance.text);
         setTimeout(() => {
           utterance.onstart?.();
           utterance.onend?.();
@@ -223,4 +224,19 @@ test("листание не расширяет страницу: нижнее м
   const back = widest();
   await pager.getByRole("button", { name: "Предыдущая страница" }).click();
   expect(await back).toBeLessThanOrEqual(390);
+});
+
+test("слова урока: нажатие произносит слово или фразу, а не открывает карточку", async ({ page }) => {
+  await voices(page, "instant");
+  await start(page);
+  await page.goto("/course/m01/m01-1?p=1");
+  const words = await turnTo(page, "Слова урока");
+  const first = words.getByRole("button", { name: /^Произнести: / }).first();
+  const label = (await first.getAttribute("aria-label"))!.replace("Произнести: ", "");
+  await first.click();
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken ?? []))
+    .toContain(label);
+  await expect(page).toHaveURL(/\/course\//);
+  await expect(words.getByRole("link")).toHaveCount(0);
 });
