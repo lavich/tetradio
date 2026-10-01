@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Info, Pencil, Share2 } from "lucide-react";
+import { Info, Share2 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -42,41 +42,29 @@ export function WordScreen() {
     <Screen
       back={lessons[0] ? lessons[0].title : "Слово"}
       right={
-        <div className="flex items-center">
-          {shipped && !word.deletedAt && (
-            <Button
-              variant="ghost"
-              size="icon-lg"
-              className="size-11"
-              aria-label="Поделиться словом"
-              onClick={() => void shareWord(original ?? word)}
-            >
-              <Share2 />
-            </Button>
-          )}
+        shipped &&
+        !word.deletedAt && (
           <Button
             variant="ghost"
             size="icon-lg"
             className="size-11"
-            aria-label="Редактировать слово"
-            render={<Link to={`/words/${word.id}/edit`} />}
+            aria-label="Поделиться словом"
+            onClick={() => void shareWord(original ?? word)}
           >
-            <Pencil />
+            <Share2 />
           </Button>
-        </div>
+        )
       }
     >
       <WordSummary word={word} />
-      {!word.verified && <p className={ui.note}>Фонетика не проверена — её можно уточнить в редакторе.</p>}
+      {!word.verified && <p className={ui.note}>Фонетика не проверена.</p>}
       <ReadingNotes word={word} />
       {word.examples.length ? (
         word.examples.map((example, index) => <ExampleBox key={index} example={example} linkFrom={word.id} />)
       ) : (
         <Alert className="mb-3">
           <Info />
-          <AlertDescription>
-            Примера употребления пока нет. <Link to={`/words/${word.id}/edit`}>Добавить пример</Link>
-          </AlertDescription>
+          <AlertDescription>Примера употребления пока нет.</AlertDescription>
         </Alert>
       )}
       <p>

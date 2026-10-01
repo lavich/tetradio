@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import {
   dexieSource,
-  importPreview,
   lessonDetail,
   lessonMates,
   lessonsOfCard,
@@ -12,20 +11,17 @@ import {
   wordPage,
   type WordCursor,
 } from "../src/storage/queries";
-import { removeFromLesson } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { installMixed, MIXED_LESSON, mixedPackage } from "./helpers/mixed";
 import { mulberry32 } from "./plan-golden.test";
-import { commitImport, saveWord } from "../src/storage/ops";
 import { fromSnapshot } from "../src/domain/snapshot-source";
 import { lessonProgress, progress, wordMaturity } from "../src/domain/stats";
 import { progressFill } from "../src/features/lessons/LessonRow";
 import { State } from "ts-fsrs";
-import { parseImport } from "../src/domain/import";
 import { defaultSettings, type LessonItem, type Snapshot, type Word } from "../src/domain/types";
 import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
 import { recordFor, scenarios } from "./plan-golden.test";
-import { content, installLessons, wordCountOf } from "./helpers/content";
+import { content, installLessons, legacyRemove, wordCountOf } from "./helpers/content";
 
 let db: AppDatabase;
 beforeEach(async () => {
@@ -296,23 +292,6 @@ describe("локальный поиск", () => {
     expect(second.cursor).toBeNull();
     expect(new Set([...first.items, ...second.items].map((i) => i.word.id)).size).toBe(60);
   });
-  it("правка слова и импорт обновляют индекс вместе с записью", async () => {
-    await installLessons(db, ["mech-2"]);
-    const friend = (await db.words.get("w034"))!;
-    await saveWord({ ...friend, russian: "приятель" }, db);
-    expect(await searchWordIds("прият", db)).toEqual(["w034"]);
-    expect(await searchWordIds("друг", db)).not.toContain("w034");
-    const rows = parseImport("η καρέκλα\nстул").rows;
-    const outcome = await commitImport({ rows, lessonId: null, lessonTitle: "Мебель" }, db);
-    expect(outcome.added).toBe(1);
-    expect(await searchWordIds("καρεκ", db)).toHaveLength(1);
-    expect(await searchWordIds("стул", db)).toHaveLength(1);
-  });
-  it("предпросмотр импорта считает дубликаты и совпадения по индексам ключей", async () => {
-    await installLessons(db, ["mech-2"]);
-    const rows = parseImport("ο φίλος\nдруг\nο φίλος\nприятель\nη καρέκλα\nстул").rows;
-    expect(await importPreview(rows, db)).toEqual({ duplicates: 1, conflicts: 1 });
-  });
 });
 
 describe("смешанный урок в выборках", () => {
@@ -352,7 +331,7 @@ describe("смешанный урок в выборках", () => {
     ]);
     expect(detail.states.size).toBe(2);
     // Убранная фраза исчезает из состава, но не из базы; словарь остаётся словарём слов.
-    await removeFromLesson(MIXED_LESSON, { kind: "phrase", id: "p-silent" }, db);
+    await legacyRemove(db, MIXED_LESSON, { kind: "phrase", id: "p-silent" });
     expect((await lessonDetail(MIXED_LESSON, db))!.phrases).toHaveLength(5);
     expect(await db.phrases.get("p-silent")).toBeTruthy();
     const page = await wordPage({ query: "", filter: "all", lessonId: MIXED_LESSON, cursor: null }, db);

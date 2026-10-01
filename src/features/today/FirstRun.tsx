@@ -1,4 +1,4 @@
-import { BookOpen, GraduationCap, RefreshCw, Upload } from "lucide-react";
+import { BookOpen, GraduationCap, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
@@ -22,20 +22,12 @@ export function FirstRun({ courses, entries }: { courses: Course[]; entries: Sto
 
   if (!course)
     return (
-      <>
-        <Card className="mb-3 bg-soft ring-0">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold">Каталог ещё не загружен</CardTitle>
-            <CardDescription className="text-foreground/75">
-              Проверьте сеть — курс появится сам. Или начните со своих слов из Quizlet.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-        <Link to="/more/import" className={buttonVariants({ variant: "soft", size: "xl" })}>
-          <Upload data-icon="inline-start" />
-          Импортировать слова
-        </Link>
-      </>
+      <Card className="mb-3 bg-soft ring-0">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold">Каталог ещё не загружен</CardTitle>
+          <CardDescription className="text-foreground/75">Проверьте сеть — курс появится сам.</CardDescription>
+        </CardHeader>
+      </Card>
     );
 
   const own = entries.filter((entry) => entry.courseId === course.id);

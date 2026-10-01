@@ -62,17 +62,6 @@ test("«Учить курс» ставит все уроки курса, а но
   await expect.poll(installed, { timeout: 20000 }).toEqual(catalog.published);
 });
 
-test("свой набор попадает в «Мои слова» отдельной группой", async ({ page }) => {
-  await page.goto("/");
-  await ready(page);
-  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
-  await page.getByRole("button", { name: "Добавить занятие" }).click();
-  await page.getByLabel("Название").fill("Мой набор");
-  await page.getByRole("button", { name: "Создать" }).click();
-  await expect(page.getByRole("heading", { name: "Мои слова" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Мой набор/ })).toBeVisible();
-});
-
 test("у курса своё расписание и свой предел; соседний курс их не подхватывает", async ({ page }) => {
   await page.goto("/");
   await ready(page);
@@ -80,12 +69,7 @@ test("у курса своё расписание и свой предел; со
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByRole("button", { name: "Учить курс" })).toHaveCount(0);
 
-  // Свой набор живёт в «Мои слова» и по расписанию курса дат не получает.
-  await page.getByRole("button", { name: "Добавить занятие" }).click();
-  await page.getByLabel("Название").fill("Мой набор");
-  await page.getByRole("button", { name: "Создать" }).click();
   const mechanics = page.locator("section").filter({ has: page.getByRole("heading", { name: "Механики" }) });
-  const mine = page.locator("section").filter({ has: page.getByRole("heading", { name: "Мои слова" }) });
 
   // Предлог «К» достаётся только предстоящему занятию, поэтому первое занятие — ближайший будущий понедельник.
   const monday = nextLessonDay(new Date().toISOString().slice(0, 10), [1], false);
@@ -98,7 +82,6 @@ test("у курса своё расписание и свой предел; со
   await expect(mechanics.getByText(`Пн, первое занятие ${dayMonth(monday)}`)).toBeVisible();
   await expect(mechanics.getByRole("link", { name: link(`1.1 · К понедельнику, ${dayMonth(monday)}`) })).toBeVisible();
   await expect(mechanics.getByRole("link", { name: link(`1.3 · ${dayMonth(third)}`) })).toBeVisible(); // не ближайшее занятие — только дата
-  await expect(mine.getByRole("link", { name: /Мой набор · Без даты/ })).toBeVisible();
 
   // Предел тоже принадлежит курсу.
   await mechanics.getByLabel("Новых карточек в день").fill("3");
@@ -118,7 +101,7 @@ test("у курса своё расписание и свой предел; со
         return Object.fromEntries(rows.map((row) => [row.id, row.newItemsPerDay]));
       }),
     )
-    .toEqual({ mechanics: 3, my: 12 }); // «Мои слова» остаются на пределе по умолчанию: правка соседнего курса их не задела
+    .toEqual({ mechanics: 3, my: 12 }); // служебный локальный курс остаётся на пределе по умолчанию
 });
 
 test("список часов занятия остаётся на экране и прокручивается внутри себя", async ({ page }) => {

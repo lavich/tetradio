@@ -2,23 +2,19 @@ import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createEmptyCard, Rating, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
-import { dexieSource, lessonItems, loadLessons } from "../src/storage/queries";
+import { dexieSource, loadLessons } from "../src/storage/queries";
 import { wordRef } from "./helpers/cards";
 import {
   ConflictError,
-  commitImport,
-  createLesson,
   markIntroduced,
   prepareObjectiveSession,
   saveCourseTempo,
-  saveWord,
   settleLessons,
   submitAnswer,
   updateLesson,
 } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { type Settings, type Word } from "../src/domain/types";
-import { parseImport } from "../src/domain/import";
 import { installLessons, wordsOf } from "./helpers/content";
 import { installMixed, mixedPackage } from "./helpers/mixed";
 import { unitKey } from "./helpers/cards";
@@ -282,46 +278,6 @@ describe("запись ответа", () => {
   });
 });
 
-describe("свои наборы", () => {
-  it("созданный набор и набор из импорта попадают в курс «Мои слова»", async () => {
-    await ensureSeed(db);
-    const own = await createLesson("Мой набор", db);
-    expect(own.courseId).toBe("my");
-    expect((await db.lessons.get(own.id))!.courseId).toBe("my");
-    const rows = parseImport("η ομπρέλα\nзонт").rows;
-    const outcome = await commitImport({ rows, lessonId: null, lessonTitle: "Из Quizlet" }, db);
-    expect((await db.lessons.get(outcome.lessonId))!.courseId).toBe("my");
-    expect(await db.courses.get("my")).toMatchObject({ origin: "local", subscribed: true });
-  });
-});
-
-describe("импорт", () => {
-  it("связывает известное слово с набором и не создаёт дубликат", async () => {
-    await ensureSeed(db);
-    const rows = parseImport("ο φίλος\nдруг\nη ομπρέλα\nзонт").rows;
-    const outcome = await commitImport({ rows, lessonId: null, lessonTitle: "Урок 1.5" }, db);
-    expect(outcome).toMatchObject({ added: 1, linked: 1 });
-    expect(await db.words.count()).toBe(seedWords.length + 1);
-    const lesson = await db.lessons.get(outcome.lessonId);
-    expect(await lessonItems(outcome.lessonId, db)).toHaveLength(2);
-    expect(lesson!.targetDate).toBeNull(); // дату назначит расписание
-  });
-  it("при ошибке не оставляет половину набора", async () => {
-    await ensureSeed(db);
-    const rows = parseImport("η ομπρέλα\nзонт\nτο ποτήρι\nстакан").rows;
-    await expect(commitImport({ rows, lessonId: "нет-такого", lessonTitle: "" }, db)).rejects.toThrow();
-    expect(await db.words.count()).toBe(seedWords.length);
-  });
-  it("меняет перевод без потери истории и сбрасывает проверку фонетики после правки греческого", async () => {
-    await ensureSeed(db);
-    const word = (await db.words.get("w034"))!;
-    await saveWord({ ...word, russian: "жилище" }, db);
-    expect((await db.words.get("w034"))!.verified).toBe(true);
-    await saveWord({ ...word, greek: "το σπιτάκι" }, db);
-    expect((await db.words.get("w034"))!.verified).toBe(false);
-  });
-});
-
 describe("расписание занятий", () => {
   const monThu = { startDate: "2026-09-14", weekdays: [1, 4], lessonHour: 12 };
   const legacy = {
@@ -363,20 +319,11 @@ describe("операции над уроками при расписании", (
   };
   const raw = (id: string) => db.lessons.get(id).then((l) => l!);
   const shown = scheduled;
-  it("правка названия урока по расписанию не записывает дату в базу", async () => {
+  it("правка урока по расписанию не записывает дату в базу", async () => {
     await prepare();
-    await updateLesson("mech-3", { title: "Урок 1.3 (мебель)" }, db);
-    expect(await raw("mech-3")).toMatchObject({ title: "Урок 1.3 (мебель)", targetDate: null });
+    await updateLesson("mech-3", { status: "upcoming" }, db);
+    expect(await raw("mech-3")).toMatchObject({ status: "upcoming", targetDate: null });
     expect((await shown("mech-3")).targetDate).toBe("2026-09-21");
-  });
-  it("новый набор живёт по расписанию своего курса, а не соседнего", async () => {
-    await prepare(); // расписание задано курсу mechanics
-    const created = await createLesson("Урок 2.1", db);
-    expect(created.courseId).toBe("my");
-    expect(created.targetDate).toBeNull();
-    expect((await shown(created.id)).targetDate).toBeNull(); // чужое расписание набор не подхватывает
-    await db.courses.update("my", { schedule: { startDate: "2026-09-28", weekdays: [1, 4], lessonHour: 12 } });
-    expect((await shown(created.id)).targetDate).toBe("2026-09-28");
   });
   it("закрепляет прошедший урок один раз и не трогает его при смене дней недели", async () => {
     await prepare();
@@ -422,11 +369,11 @@ describe("операции над уроками при расписании", (
   });
   it("закрепляет ручную дату в прошлом у предстоящего урока и не трогает будущие", async () => {
     await prepare();
-    const past = await createLesson("Повторение", db);
-    await updateLesson(past.id, { targetDate: "2026-09-10" }, db);
-    expect(await settleLessons(new Date("2026-09-16T06:00:00Z"), db)).toBe(2); // «Повторение» и 1.1
-    expect(await raw(past.id)).toMatchObject({ targetDate: "2026-09-10", status: "completed" });
+    await updateLesson("mech-4", { targetDate: "2026-09-10" }, db);
+    expect(await settleLessons(new Date("2026-09-16T06:00:00Z"), db)).toBe(2); // 1.4 с ручной датой и 1.1
+    expect(await raw("mech-4")).toMatchObject({ targetDate: "2026-09-10", status: "completed" });
     expect(await raw("mech-2")).toMatchObject({ status: "upcoming" });
+    expect(await raw("mech-3")).toMatchObject({ status: "upcoming" });
   });
   it("первое занятие в прошлом: сохранение расписания сразу закрепляет прошедшие уроки", async () => {
     await ensureSeed(db);

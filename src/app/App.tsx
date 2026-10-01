@@ -27,13 +27,11 @@ const WordsScreen = named("WordsScreen", () => import("../features/words/WordsSc
 const WordScreen = named("WordScreen", () => import("../features/words/WordScreen"));
 const SharedWordScreen = named("SharedWordScreen", () => import("../features/words/SharedWordScreen"));
 const WordExerciseScreen = named("WordExerciseScreen", () => import("../features/words/WordExerciseScreen"));
-const WordEditorScreen = named("WordEditorScreen", () => import("../features/words/WordEditorScreen"));
 const SessionScreen = named("SessionScreen", () => import("../features/learning/SessionScreen"));
 const ResultScreen = named("ResultScreen", () => import("../features/learning/ResultScreen"));
 const MoreScreen = named("MoreScreen", () => import("../features/more/MoreScreen"));
 const StatsScreen = named("StatsScreen", () => import("../features/progress/StatsScreen"));
 const SettingsScreen = named("SettingsScreen", () => import("../features/more/SettingsScreen"));
-const ImportScreen = named("ImportScreen", () => import("../features/more/ImportScreen"));
 const BackupScreen = named("BackupScreen", () => import("../features/backup/BackupScreen"));
 
 export function App() {
@@ -75,7 +73,6 @@ export function App() {
           <Route path="/lessons/:id" element={<LessonScreen />} />
           <Route path="/words" element={<WordsScreen />} />
           <Route path="/words/:id" element={<WordScreen />} />
-          <Route path="/words/:id/edit" element={<WordEditorScreen />} />
           <Route path="/words/:id/exercise/:type" element={<WordExerciseScreen />} />
           <Route path="/share/word/:id" element={<SharedWordScreen />} />
           <Route path="/session" element={<SessionScreen />} />
@@ -83,7 +80,6 @@ export function App() {
           <Route path="/more" element={<MoreScreen />} />
           <Route path="/more/stats" element={<StatsScreen />} />
           <Route path="/more/settings" element={<SettingsScreen />} />
-          <Route path="/more/import" element={<ImportScreen />} />
           <Route path="/more/backup" element={<BackupScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

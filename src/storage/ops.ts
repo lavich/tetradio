@@ -1,5 +1,4 @@
-import Dexie from "dexie";
-import { db, ensureLocalCourse, indexWord, type AppDatabase } from "./db";
+import { db, type AppDatabase } from "./db";
 import { lessonMates, optionPool, phrasePool } from "./queries";
 import {
   closeSources,
@@ -14,15 +13,12 @@ import {
   spaceSingleIntroduction,
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
-import { normalize, wordKey, type ImportRow } from "../domain/import";
-import { snapshotOf, unitKey, wordRef } from "../domain/refs";
+import { snapshotOf } from "../domain/refs";
 import { emptySkills } from "../domain/skills";
 import { preparedByCourse, scheduleCourses } from "../domain/schedule";
 import {
   fillSettings,
-  type Asset,
   type Course,
-  type LearningRef,
   type Lesson,
   type ReviewEvent,
   type Session,
@@ -50,8 +46,6 @@ export class ConflictError extends Error {
   }
 }
 const stamp = (now: Date) => now.toISOString();
-export const newId = (prefix: string) =>
-  `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 export interface AnswerInput {
   session: Session;
@@ -226,25 +220,7 @@ export const endSession = async (session: Session, database: AppDatabase = db) =
   await database.sessions.put({ ...session, status: session.index >= session.items.length ? "done" : "ended" });
 };
 
-/** Правка поставленного слова помечается локальной: обновление пакета её не перезапишет. */
-export async function saveWord(word: Word, database: AppDatabase = db) {
-  const previous = await database.words.get(word.id);
-  const greekChanged = previous && normalize(previous.greek) !== normalize(word.greek);
-  const edited = (previous?.revision ?? word.revision) ? true : word.edited;
-  await database.words.put(
-    indexWord({
-      ...word,
-      verified: greekChanged ? false : word.verified,
-      updatedAt: stamp(new Date()),
-      ...(edited ? { edited } : {}),
-    }),
-  );
-}
-/** Мягкое удаление: история ответов остаётся достоверной. */
-export async function deleteWord(id: string, database: AppDatabase = db) {
-  await database.words.update(id, { deletedAt: stamp(new Date()) });
-}
-export type LessonPatch = Partial<Pick<Lesson, "title" | "targetDate" | "status">>;
+export type LessonPatch = Partial<Pick<Lesson, "targetDate" | "status">>;
 /** Частичная правка сырой записи: вычисленная по расписанию дата из снимка не попадает в базу. */
 export async function updateLesson(id: string, patch: LessonPatch, database: AppDatabase = db) {
   await database.transaction("rw", database.lessons, database.meta, async () => {
@@ -252,57 +228,6 @@ export async function updateLesson(id: string, patch: LessonPatch, database: App
     await markChanged(database);
   });
   announceChange();
-}
-/** Для поставленного урока удаление связи запоминается, чтобы обновление пакета её не вернуло. Карточка, прогресс и история остаются. */
-export async function removeFromLesson(lessonId: string, ref: LearningRef, database: AppDatabase = db) {
-  const key = unitKey(ref);
-  await database.transaction(
-    "rw",
-    database.lessons,
-    database.lessonItems,
-    database.packages,
-    database.meta,
-    async () => {
-      await database.lessonItems.delete([lessonId, key]);
-      const pack = await database.packages.get(lessonId);
-      if (pack && !pack.removed.includes(key))
-        await database.packages.put({ ...pack, removed: [...pack.removed, key] });
-      await updateLesson(lessonId, {}, database);
-    },
-  );
-}
-export async function linkCards(lessonId: string, refs: LearningRef[], database: AppDatabase = db): Promise<number> {
-  const existing = await database.lessonItems
-    .where("[lessonId+position]")
-    .between([lessonId, Dexie.minKey], [lessonId, Dexie.maxKey])
-    .toArray();
-  const known = new Set(existing.map((link) => link.unitKey));
-  let position = existing.reduce((max, link) => Math.max(max, link.position + 1), 0);
-  const fresh = refs.filter((ref) => {
-    const key = unitKey(ref);
-    return !known.has(key) && known.add(key);
-  });
-  await database.lessonItems.bulkAdd(
-    fresh.map((ref) => ({ lessonId, unitKey: unitKey(ref), ref, position: position++ })),
-  );
-  return fresh.length;
-}
-export const linkWords = (lessonId: string, wordIds: string[], database: AppDatabase = db) =>
-  linkCards(lessonId, wordIds.map(wordRef), database);
-/** Новый набор без даты: её назначит расписание, а своя дата задаётся на экране урока. */
-export async function createLesson(title: string, database: AppDatabase = db): Promise<Lesson> {
-  const now = stamp(new Date());
-  const lesson: Lesson = {
-    id: newId("lesson"),
-    courseId: await ensureLocalCourse(database),
-    title,
-    targetDate: null,
-    status: "upcoming",
-    createdAt: now,
-    updatedAt: now,
-  };
-  await database.lessons.add(lesson);
-  return lesson;
 }
 /**
  * Урок, чей день по расписанию уже прошёл, становится проведённым, а дата — его собственной,
@@ -342,85 +267,6 @@ export async function settleLessons(now: Date, database: AppDatabase = db): Prom
       await updateLesson(lesson.id, { targetDate: lesson.targetDate, status: "completed" }, database);
     return passed.length;
   });
-}
-export async function putAsset(asset: Asset, database: AppDatabase = db) {
-  await database.assets.put(asset);
-}
-
-export interface ImportPlan {
-  rows: ImportRow[];
-  lessonId: string | null;
-  lessonTitle: string;
-}
-export interface ImportOutcome {
-  lessonId: string;
-  added: number;
-  linked: number;
-  conflicts: number;
-}
-export async function commitImport(plan: ImportPlan, database: AppDatabase = db): Promise<ImportOutcome> {
-  const now = stamp(new Date());
-  return database.transaction(
-    "rw",
-    database.words,
-    database.lessons,
-    database.lessonItems,
-    database.courses,
-    async () => {
-      const lesson = plan.lessonId
-        ? await database.lessons.get(plan.lessonId)
-        : {
-            id: newId("lesson"),
-            courseId: await ensureLocalCourse(database),
-            title: plan.lessonTitle,
-            targetDate: null,
-            status: "upcoming" as const,
-            createdAt: now,
-            updatedAt: now,
-          };
-      if (!lesson) throw new Error("Набор не найден");
-      const wordIds: string[] = [];
-      let added = 0,
-        conflicts = 0;
-      for (const row of plan.rows) {
-        const known = await database.words
-          .where("key")
-          .equals(wordKey(row.greek, row.russian))
-          .filter((word) => !word.deletedAt)
-          .first();
-        if (known) {
-          if (!wordIds.includes(known.id)) wordIds.push(known.id);
-          continue;
-        }
-        if (
-          await database.words
-            .where("greekKey")
-            .equals(normalize(row.greek))
-            .filter((word) => !word.deletedAt)
-            .count()
-        )
-          conflicts++;
-        const word: Word = {
-          id: newId("w"),
-          greek: row.greek,
-          russian: row.russian,
-          ipa: row.ipa,
-          segments: [],
-          examples: [],
-          verified: false,
-          source: row.ipa ? "Импорт пользователя (фонетика не проверена)" : undefined,
-          createdAt: now,
-          updatedAt: now,
-        };
-        await database.words.add(indexWord(word));
-        wordIds.push(word.id);
-        added++;
-      }
-      await database.lessons.put({ ...lesson, updatedAt: now });
-      const linked = await linkWords(lesson.id, wordIds, database);
-      return { lessonId: lesson.id, added, linked: linked - added, conflicts };
-    },
-  );
 }
 export async function saveSettings(settings: Settings, database: AppDatabase = db) {
   await database.transaction("rw", database.settings, database.meta, async () => {

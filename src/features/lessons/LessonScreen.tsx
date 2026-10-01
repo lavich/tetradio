@@ -20,7 +20,7 @@ import { useNow } from "../../shared/clock";
 import { CARDS, dayMonth, DAYS, PHRASES, withCount, WORDS } from "../../shared/format";
 import { useOfflineStatus } from "../../shared/offline";
 import { useCatalog, useInstallPhase, useLesson, usePhraseCount, usePlan, useReadiness } from "../../shared/store";
-import { removeFromLesson, updateLesson } from "../../storage/ops";
+import { updateLesson } from "../../storage/ops";
 import { SpeakText } from "../learning/exercises";
 import { startSession } from "../learning/session-actions";
 import ui from "../../shared/ui.module.css";
@@ -53,7 +53,7 @@ export function compositionLabel(counts: Record<CardKind, number>) {
     .map((group) => withCount(counts[group.kind], group.forms))
     .join(" · ")}`;
 }
-function PhraseRow({ phrase, checkable, onRemove }: { phrase: Phrase; checkable: boolean; onRemove: () => void }) {
+function PhraseRow({ phrase, checkable }: { phrase: Phrase; checkable: boolean }) {
   const [open, setOpen] = useState(false);
   return (
     <Item variant="row" data-testid="phrase-row">
@@ -99,9 +99,6 @@ function PhraseRow({ phrase, checkable, onRemove }: { phrase: Phrase; checkable:
         )}
       </ItemContent>
       <ItemActions>
-        <Button size="sm" variant="quiet" onClick={onRemove}>
-          Убрать
-        </Button>
         <Button
           variant="ghost"
           size="icon-sm"
@@ -258,7 +255,6 @@ export function LessonScreen() {
       setDownloading(false);
     }
   };
-  const remove = (item: LessonItem) => removeFromLesson(lesson!.id, item.ref);
   const rowsOf = (kind: CardKind) =>
     items
       .filter((item) => item.ref.kind === kind)
@@ -413,19 +409,11 @@ export function LessonScreen() {
                     <ItemDescription>{card.word.russian}</ItemDescription>
                   </ItemContent>
                   <ItemActions>
-                    <Button size="sm" variant="quiet" className="relative z-10" onClick={() => remove(item)}>
-                      Убрать
-                    </Button>
                     <ChevronRight className="text-muted-foreground" />
                   </ItemActions>
                 </Item>
               ) : (
-                <PhraseRow
-                  key={item.unitKey}
-                  phrase={card.phrase}
-                  checkable={checkable(card.phrase)}
-                  onRemove={() => remove(item)}
-                />
+                <PhraseRow key={item.unitKey} phrase={card.phrase} checkable={checkable(card.phrase)} />
               ),
             )}
           </ItemGroup>
@@ -437,12 +425,9 @@ export function LessonScreen() {
             <EmptyMedia variant="icon">
               <Inbox />
             </EmptyMedia>
-            <EmptyTitle>В наборе пока нет карточек</EmptyTitle>
-            <EmptyDescription>Импортируйте список из Quizlet или добавьте слова вручную.</EmptyDescription>
+            <EmptyTitle>В уроке пока нет карточек</EmptyTitle>
+            <EmptyDescription>Они появятся с новой версией урока.</EmptyDescription>
           </EmptyHeader>
-          <Button size="md" variant="soft" className="w-auto" render={<Link to="/more/import" />}>
-            Импортировать слова
-          </Button>
         </Empty>
       )}
     </Screen>

@@ -3,8 +3,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { basename, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
-import { wordKey } from "../src/domain/import.ts";
-import { phraseKey } from "../src/domain/refs.ts";
+import { phraseKey, wordKey } from "../src/domain/refs.ts";
 import {
   ContentError,
   PHRASE_FIELDS,

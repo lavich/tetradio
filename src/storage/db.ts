@@ -1,7 +1,6 @@
 import Dexie, { type Table, type Transaction } from "dexie";
 import type { CatalogEntry } from "../content/schema";
-import { normalize, wordKey } from "../domain/import";
-import { isUnitKey, unitKey, wordRef } from "../domain/refs";
+import { isUnitKey, normalize, unitKey, wordKey, wordRef } from "../domain/refs";
 import {
   defaultSchedule,
   defaultSettings,
@@ -523,10 +522,6 @@ const migrateSnapshot = (snapshot: LegacySnapshot): LegacySnapshot => ({
 
 export async function ensureDefaults(database: AppDatabase = db): Promise<void> {
   if (!(await database.settings.get("settings"))) await database.settings.add(defaultSettings);
-  await ensureLocalCourse(database);
-}
-/** Курс своих наборов заводится и в новой базе, где миграция не выполнялась. */
-export async function ensureLocalCourse(database: AppDatabase = db): Promise<string> {
+  // Служебный курс заводится и в новой базе, где миграция не выполнялась: план относит к нему слова вне уроков.
   if (!(await database.courses.get(LOCAL_COURSE))) await database.courses.put(localCourse(new Date().toISOString()));
-  return LOCAL_COURSE;
 }

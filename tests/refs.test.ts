@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { parseUnitKey, phraseKey, tryParseUnitKey, unitKey, wordRef, type LearningRef } from "../src/domain/refs";
+import {
+  normalize,
+  parseUnitKey,
+  phraseKey,
+  tryParseUnitKey,
+  unitKey,
+  wordRef,
+  type LearningRef,
+} from "../src/domain/refs";
 
 describe("типизированная ссылка на карточку", () => {
   it("одинаковые ID разных видов дают разные ключи", () => {
@@ -36,3 +44,6 @@ describe("ключ дубликата фразы", () => {
     expect(phraseKey("Καλημέρα.", undefined)).not.toBe(phraseKey("Καλημέρα.", "Доброе утро"));
   });
 });
+
+it("ключ дубликата не зависит от регистра, пробелов и формы Unicode", () =>
+  expect(normalize("  ΤΟ  ΣΠΊΤΙ ".normalize("NFD"))).toBe("το σπίτι"));

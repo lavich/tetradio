@@ -12,7 +12,6 @@ import {
   summarizeEvents,
   type DaySummary,
 } from "../domain/skills";
-import { normalize, wordKey } from "../domain/import";
 import { scheduleCourses } from "../domain/schedule";
 import { cardLabel, lessonProgress, type LessonProgress, type StatsSource } from "../domain/stats";
 import {
@@ -503,33 +502,4 @@ async function matches(query: string, database: AppDatabase) {
   if (!query.trim()) return () => true;
   const found = new Set(await searchWordIds(query, database));
   return (id: string) => found.has(id);
-}
-
-export async function importPreview(
-  rows: { greek: string; russian: string }[],
-  database: AppDatabase = db,
-): Promise<{ duplicates: number; conflicts: number }> {
-  let duplicates = 0,
-    conflicts = 0;
-  for (const row of rows) {
-    if (
-      await database.words
-        .where("key")
-        .equals(wordKey(row.greek, row.russian))
-        .filter((word) => !word.deletedAt)
-        .count()
-    ) {
-      duplicates++;
-      continue;
-    }
-    if (
-      await database.words
-        .where("greekKey")
-        .equals(normalize(row.greek))
-        .filter((word) => !word.deletedAt)
-        .count()
-    )
-      conflicts++;
-  }
-  return { duplicates, conflicts };
 }
