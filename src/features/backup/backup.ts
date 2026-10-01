@@ -21,6 +21,8 @@ import {
 import { isAppDatabaseName } from "../../storage/profile";
 import { fillSettings, type LessonItem, type Settings } from "../../domain/types";
 import { syncEvents } from "../../sync/events";
+import { assertCloudUnchanged, type CloudGuard } from "./cloud-check";
+import { courseProblem, type CourseRows } from "./course-check";
 
 /** Версия формата копии совпадает с версией схемы; копии прежних версий читаются через ту же миграцию, что и база. */
 export const APP_MARKER = `tetradio:${SCHEMA_VERSION}`;
@@ -133,8 +135,21 @@ export async function exportWordsTsv(database: AppDatabase = db): Promise<Blob> 
   return new Blob([rows.join("\n")], { type: "text/tab-separated-values" });
 }
 
+const tableRows = (data: { tableName: string; rows?: unknown[] }[], name: string): unknown[] => {
+  const rows = data.find((entry) => entry.tableName === name)?.rows;
+  return Array.isArray(rows) ? rows : [];
+};
+const courseRowsOf = (data: { tableName: string; rows?: unknown[] }[]): CourseRows => ({
+  lessons: tableRows(data, "lessons"),
+  courses: tableRows(data, "courses"),
+  packages: tableRows(data, "packages"),
+  blockProgress: tableRows(data, "blockProgress"),
+});
+
+/** Предпросмотр проверяет то же, что восстановление до замены, кроме связей карточек: им нужна миграция старых схем. */
 export async function inspectBackup(
   file: Blob,
+  database: AppDatabase = db,
 ): Promise<{ ok: true; report: BackupReport } | { ok: false; message: string }> {
   let parsed: any;
   try {
@@ -162,6 +177,9 @@ export async function inspectBackup(
   if (marker && !KNOWN_MARKERS.includes(marker.value))
     return { ok: false, message: `Неизвестная версия формата копии: ${marker.value}.` };
   const exportedAt = (meta?.rows ?? []).find((row: { key: string }) => row.key === "exportedAt")?.value ?? null;
+  if (!Array.isArray(info.data)) return { ok: false, message: "Копия повреждена: нет данных таблиц." };
+  const problem = await courseProblem(courseRowsOf(info.data), database);
+  if (problem) return { ok: false, message: problem };
   return {
     ok: true,
     report: {
@@ -179,11 +197,16 @@ export async function inspectBackup(
 
 /**
  * Копия сначала разворачивается в отдельной базе, мигрируется по тем же правилам, что и локальная схема,
- * и проверяется на целостность; только затем одной транзакцией заменяет данные. Копия с фразами или пропусками
- * без слов допустима; связь с отсутствующей карточкой любого вида отклоняет восстановление до замены.
+ * и проверяется на целостность; только затем одной транзакцией заменяет данные. Копия только с прогрессом курса
+ * (без карточек) допустима, пустая — нет; связь с отсутствующей карточкой или уроком отклоняет восстановление до замены.
+ * `cloud` — отпечаток облака из предпросмотра: изменившееся с тех пор облако останавливает замену.
  */
-export async function restoreBackup(file: Blob, database: AppDatabase = db): Promise<void> {
-  const check = await inspectBackup(file);
+export async function restoreBackup(
+  file: Blob,
+  database: AppDatabase = db,
+  options: { cloud?: CloudGuard } = {},
+): Promise<void> {
+  const check = await inspectBackup(file, database);
   if (!check.ok) throw new Error(check.message);
   const staging = new AppDatabase("tetradio-restore");
   await staging.delete();
@@ -210,13 +233,28 @@ export async function restoreBackup(file: Blob, database: AppDatabase = db): Pro
     const rows = <T>(name: (typeof TABLES)[number]) => payload.find(([table]) => table === name)![1] as T[];
     const ids = (name: "words" | "phrases") => new Set(rows<{ id: string }>(name).map((row) => row.id));
     const cards = { word: ids("words"), phrase: ids("phrases") };
-    if (!cards.word.size && !cards.phrase.size)
-      throw new Error("В копии нет ни одной карточки — восстановление отменено.");
+    const courseProgress =
+      rows("blockProgress").length > 0 ||
+      rows<{ status?: string }>("lessons").some((row) => row.status === "completed");
+    if (!cards.word.size && !cards.phrase.size && !courseProgress)
+      throw new Error("В копии нет ни карточек, ни прогресса курса — восстанавливать нечего.");
+    const course = await courseProblem(
+      {
+        lessons: rows("lessons"),
+        courses: rows("courses"),
+        packages: rows("packages"),
+        blockProgress: rows("blockProgress"),
+      },
+      database,
+    );
+    if (course) throw new Error(course);
     const lessonIds = new Set(rows<{ id: string }>("lessons").map((lesson) => lesson.id));
     const broken = rows<LessonItem>("lessonItems").find(
       (link) => !link.ref || !cards[link.ref.kind]?.has(link.ref.id) || !lessonIds.has(link.lessonId),
     );
     if (broken) throw new Error(`Копия повреждена: связь урока ${broken.lessonId} указывает на несуществующую запись.`);
+    // Сверка — последний шаг перед заменой: защитная копия и разворот файла могли занять заметное время.
+    await assertCloudUnchanged(options.cloud);
     await database.transaction(
       "rw",
       [...TABLES, ...LEGACY_STORES].map((name) => database.table(name)),
