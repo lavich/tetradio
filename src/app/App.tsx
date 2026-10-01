@@ -88,7 +88,7 @@ export function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
-      <Toaster position="bottom-center" offset={immersive ? 16 : 88} />
+      <Toaster position="bottom-center" offset={88} />
       {!immersive && !lesson && <Nav />}
       <TelegramWelcome />
       {!immersive && <SyncConflictDialog />}

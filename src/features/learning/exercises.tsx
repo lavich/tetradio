@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Volume2, X } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import type { Phrase, SessionCard, SessionItem, Word } from "../../domain/types";
 import { checkAnswer } from "../../domain/import";
 import { checkTextAnswer } from "../../domain/text-answer";
@@ -15,12 +15,14 @@ import {
   type WritingMask,
 } from "../../domain/syllables";
 import { playText, playWord, useAudioKind, useTextAudioKind } from "../../shared/audio";
-import { ExampleBox, ReadingNotes, SpeakButton, WordArt } from "../words/WordCardView";
+import { ExampleBox, QUIET_SPEAK, ReadingNotes, SpeakButton, WordArt } from "../words/WordCardView";
+import { Tick } from "../../shared/Tick";
 import ui from "../../shared/ui.module.css";
 import wordCss from "../../shared/word.module.css";
 import s from "./session.module.css";
 import { cx } from "../../shared/cx";
 import { shortTitle, withCount } from "../../shared/format";
+import { CloudAction, Instruction } from "./notebook";
 
 export interface Answer {
   correct: boolean;
@@ -36,12 +38,15 @@ interface Props {
   /** Подпись кнопки после ответа: в занятии — «Далее», в упражнении по выбору — «Ещё раз». */
   nextLabel?: string;
 }
+type Status = "correct" | "almost" | "wrong";
 
-/** Раскрытый ответ подводим к верху области прокрутки: иначе он остаётся под закреплённой кнопкой. */
-function useRevealed(active: boolean) {
+/** Раскрытый ответ подводим к верху области прокрутки: иначе он остаётся под облачком. */
+function useRevealed(active: boolean, block: ScrollLogicalPosition = "start") {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (active) requestAnimationFrame(() => ref.current?.scrollIntoView({ block: "start", behavior: "smooth" }));
+    if (!active) return;
+    const smooth = typeof matchMedia === "function" && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    requestAnimationFrame(() => ref.current?.scrollIntoView({ block, behavior: smooth ? "smooth" : "auto" }));
   }, [active]);
   return ref;
 }
@@ -85,14 +90,25 @@ function useRevealSpeech(card: SessionCard, itemId: string, answered: boolean, e
 }
 
 /** Кнопка озвучки текста фразы или полного предложения; при отсутствии файла и голоса — подпись. */
-export function SpeakText({ text, audioAssetId, label }: { text: string; audioAssetId?: string; label: string }) {
+export function SpeakText({
+  text,
+  audioAssetId,
+  label,
+  quiet,
+}: {
+  text: string;
+  audioAssetId?: string;
+  label: string;
+  quiet?: boolean;
+}) {
   const kind = useTextAudioKind(audioAssetId);
   const [failed, setFailed] = useState<"none" | "error" | null>(null);
   return (
     <div className={wordCss.speakBox}>
       <Button
         size="icon-xl"
-        className="size-14 rounded-full [&_svg:not([class*='size-'])]:size-6.5"
+        variant={quiet ? "outline" : "default"}
+        className={quiet ? QUIET_SPEAK : "size-14 rounded-full [&_svg:not([class*='size-'])]:size-6.5"}
         disabled={kind === "none"}
         aria-label={kind === "none" ? "Озвучка недоступна" : label}
         onClick={() =>
@@ -115,32 +131,101 @@ export function SpeakText({ text, audioAssetId, label }: { text: string; audioAs
   );
 }
 
+/** Основное действие листа — в облачке занятия; `disabled` держит место, пока ответа нет. */
+function Primary({
+  children,
+  disabled,
+  onClick,
+  form,
+}: {
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+  form?: string;
+}) {
+  return (
+    <CloudAction>
+      <Button
+        size="md"
+        className={s.primary}
+        type={form ? "submit" : "button"}
+        form={form}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {children}
+      </Button>
+    </CloudAction>
+  );
+}
+
+/** Тихие действия под заданием: «Не знаю» и отказ от аудио — текстом, без кнопок-плашек. */
+function QuietActions({ children }: { children: React.ReactNode }) {
+  return <div className={s.quietActions}>{children}</div>;
+}
+function QuietButton({
+  children,
+  onClick,
+  disabled,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  disabled?: boolean;
+}) {
+  return (
+    <button type="button" className={s.quietButton} disabled={disabled} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
+/** Строка греческого с озвучкой справа: слово крупно с IPA или фраза. */
+function GreekHead({
+  text,
+  ipa,
+  phrase,
+  speak,
+}: {
+  text: string;
+  ipa?: string;
+  phrase?: boolean;
+  speak?: React.ReactNode;
+}) {
+  return (
+    <div className={s.greekRow}>
+      <div className="min-w-0">
+        <p className={phrase ? s.phrase : s.word} lang="el" data-testid={phrase ? "phrase-text" : undefined}>
+          {text}
+        </p>
+        {ipa && <p className={s.ipa}>{ipa}</p>}
+      </div>
+      {speak}
+    </div>
+  );
+}
+
 /**
- * Карточка слова: картинка, написание, IPA, перевод, заметки о чтении и пример.
+ * Карточка слова на листе: написание с IPA и озвучкой, перевод, картинка, заметки о чтении и пример.
  * `speak` добавляет кнопку озвучки: в раскрытии после аудирования она лишняя — повтор уже есть в задании.
  */
-function WordReveal({ word, speak }: { word: Word; speak?: boolean }) {
+function WordReveal({ word, speak, large }: { word: Word; speak?: boolean; large?: boolean }) {
   return (
     <>
-      <WordArt word={word} />
-      <div className={cx(ui.row, ui.between)} style={{ width: "100%", gap: 12 }}>
-        <div className={ui.grow} style={{ minWidth: 0, textAlign: "left" }}>
-          <p className={wordCss.greek} style={{ margin: 0 }}>
-            {word.greek}
-          </p>
-          {word.ipa && (
-            <p className={wordCss.ipa} style={{ margin: 0 }}>
-              {word.ipa}
-            </p>
-          )}
-          <p style={{ fontSize: 19, margin: "6px 0 0" }}>{word.russian}</p>
+      <div className={s.greekRow}>
+        <p className={large ? s.word : s.wordSmall} lang="el">
+          {word.greek}
+        </p>
+        {speak && <SpeakButton word={word} quiet />}
+      </div>
+      <div className={s.cardRow}>
+        <div className="min-w-0 flex-1">
+          {word.ipa && <p className={s.ipa}>{word.ipa}</p>}
+          <p className={s.meaning}>{word.russian}</p>
         </div>
-        {speak && <SpeakButton word={word} />}
+        <WordArt word={word} className={s.pic} />
       </div>
-      <div style={{ width: "100%", textAlign: "left" }}>
-        <ReadingNotes word={word} />
-        {word.examples[0] && <ExampleBox example={word.examples[0]} />}
-      </div>
+      <ReadingNotes word={word} bare />
+      {word.examples[0] && <ExampleBox example={word.examples[0]} bare />}
     </>
   );
 }
@@ -152,38 +237,32 @@ function WordReveal({ word, speak }: { word: Word; speak?: boolean }) {
 function PhraseReveal({ phrase, speak }: { phrase: Phrase; speak?: boolean }) {
   return (
     <>
-      <div className={cx(ui.row, ui.between)} style={{ width: "100%", gap: 12 }}>
-        <div className={ui.grow} style={{ minWidth: 0, textAlign: "left" }}>
-          <p className={wordCss.greek} style={{ margin: 0 }} data-testid="phrase-text">
-            {phrase.text}
-          </p>
-          {phrase.translation ? (
-            <p style={{ fontSize: 19, margin: "6px 0 0" }}>{phrase.translation}</p>
-          ) : (
-            <p className={ui.note} style={{ margin: "6px 0 0" }}>
-              Перевода в материале нет
-            </p>
-          )}
-        </div>
-        {speak && <SpeakText text={phrase.text} audioAssetId={phrase.audioAssetId} label="Послушать фразу" />}
-      </div>
-      {(phrase.usage || phrase.note) && (
-        <div style={{ width: "100%", textAlign: "left" }}>
-          {phrase.usage && (
-            <p className={ui.small} style={{ margin: "0 0 6px" }}>
-              {phrase.usage}
-            </p>
-          )}
-          {phrase.note && (
-            <p className={ui.note} style={{ margin: 0 }}>
-              {phrase.note}
-            </p>
-          )}
-        </div>
+      <GreekHead
+        text={phrase.text}
+        phrase
+        speak={
+          speak && <SpeakText text={phrase.text} audioAssetId={phrase.audioAssetId} label="Послушать фразу" quiet />
+        }
+      />
+      {phrase.translation ? (
+        <p className={s.meaning}>{phrase.translation}</p>
+      ) : (
+        <p className={cx(ui.note, s.note)}>Перевода в материале нет</p>
       )}
+      {phrase.usage && <p className={s.hint}>{phrase.usage}</p>}
+      {phrase.note && <p className={s.hint}>{phrase.note}</p>}
     </>
   );
 }
+/** Раскрытие после ответа отделено от задания линейкой: это уже справка, а не вопрос. */
+function Reveal({ children }: { children: React.ReactNode }) {
+  return (
+    <div data-testid="reveal" className={s.reveal}>
+      {children}
+    </div>
+  );
+}
+
 export function Introduction({
   item,
   onReady,
@@ -199,42 +278,58 @@ export function Introduction({
   const label = lessonLabel(item);
   // Знакомство показывает материал, а не проверяет знание: отказ озвучки здесь не показывается — кнопка сама объясняет недоступность.
   useAutoSpeak(card, autoSpeak);
-  const title = card.kind === "word" ? "Новое слово" : "Новая фраза";
   return (
     <>
-      <div className={s.center}>
-        <p className={cx(s.prompt, card.kind === "word" && "sr-only")} data-testid="prompt">
-          {title}
-        </p>
+      <Instruction prompt={card.kind === "word" ? "Новое слово" : "Новая фраза"}>
         {label && (
-          <p className={s.prompt} style={{ margin: 0 }} data-testid="lesson-label">
-            {label}
-          </p>
+          <>
+            {" · "}
+            <span data-testid="lesson-label">{label}</span>
+          </>
         )}
-        {card.kind === "word" && <WordReveal word={card.word} speak />}
-        {card.kind === "phrase" && <PhraseReveal phrase={card.phrase} speak />}
-      </div>
-      <div className={s.dock}>
-        <Button size="xl" disabled={saving} onClick={onReady}>
-          {saving ? "Сохраняем…" : "Далее"}
-        </Button>
-      </div>
+      </Instruction>
+      {card.kind === "word" && <WordReveal word={card.word} speak large />}
+      {card.kind === "phrase" && <PhraseReveal phrase={card.phrase} speak />}
+      <Primary disabled={saving} onClick={onReady}>
+        {saving ? "Сохраняем…" : "Далее"}
+      </Primary>
     </>
   );
 }
+
+/** Короткие варианты — сеткой 2 × 2, иначе строками α) β) γ) δ). Порог — то, что помещается в половину узкого листа. */
+const SHORT_OPTION = 12;
+const LETTERS = ["α", "β", "γ", "δ", "ε", "ζ"];
+export const optionsFit = (options: string[]) =>
+  options.length <= 4 && options.every((option) => [...option].length <= SHORT_OPTION);
 
 function Choice({
   item,
   onAnswer,
   onNext,
+  onSkip,
   nextLabel = "Далее",
   prompt,
   head,
+  aside,
   options,
+  greekOptions,
   correct,
   after,
-}: Props & { prompt: string; head: React.ReactNode; options: string[]; correct: string; after?: React.ReactNode }) {
+  audio,
+}: Props & {
+  prompt: string;
+  head?: React.ReactNode;
+  aside?: React.ReactNode;
+  options: string[];
+  greekOptions?: boolean;
+  correct: string;
+  after?: React.ReactNode;
+  /** Аудиоупражнение: кроме «Не знаю» можно честно отложить задание без оценки. */
+  audio?: boolean;
+}) {
   const [picked, setPicked] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const answered = picked !== null;
   const choose = async (option: string | null) => {
     if (answered || saving) return;
@@ -243,69 +338,86 @@ function Choice({
     setSaving(false);
     if (saved) setPicked(option ?? "");
   };
-  const [saving, setSaving] = useState(false);
   useEffect(() => {
     setPicked(null);
     setSaving(false);
   }, [item.id]);
-  const revealed = useRevealed(answered);
+  // Выбор раскрывается строкой под вариантами: подводим её, не уводя варианты из вида.
+  const revealed = useRevealed(answered, "nearest");
+  const grid = optionsFit(options);
+  const letter = (index: number) => LETTERS[index] ?? String(index + 1);
+  const right = options.indexOf(correct);
   return (
     <>
-      <div className={s.center}>
-        <p className={s.prompt} data-testid="prompt">
-          {prompt}
-        </p>
-        {head}
-        <div className={s.options} style={{ width: "100%" }} ref={revealed}>
-          {options.map((option) => (
-            <Button
+      <div className={s.cardRow}>
+        <div className="min-w-0 flex-1">
+          <Instruction prompt={prompt} />
+          {head}
+        </div>
+        {aside}
+      </div>
+      <div className={grid ? s.grid : s.lines} lang={greekOptions ? "el" : undefined}>
+        {options.map((option) => {
+          const mark = answered
+            ? option === correct
+              ? "correct"
+              : option === picked
+                ? "wrong"
+                : undefined
+            : undefined;
+          return (
+            <button
               key={option}
+              type="button"
               data-testid="option"
-              variant="outline"
+              data-answer={mark}
               disabled={answered || saving}
-              data-answer={
-                answered ? (option === correct ? "correct" : option === picked ? "wrong" : undefined) : undefined
-              }
-              className={cx(
-                "h-14 justify-between rounded-[14px] text-[17px]",
-                answered && (option === correct ? s.correct : option === picked ? s.wrong : ""),
-              )}
+              className={cx(grid ? s.chip : s.line, mark && s[mark])}
               onClick={() => choose(option)}
             >
               <span>{option}</span>
-              {answered && option === correct && (
+              {mark === "correct" && (
                 <>
-                  <Check aria-hidden className="size-5 shrink-0" />
+                  <Tick className={s.optionTick} label="верно" />
                   <span className="sr-only">Правильный ответ</span>
                 </>
               )}
-              {answered && option === picked && option !== correct && (
-                <>
-                  <X aria-hidden className="size-5 shrink-0" />
-                  <span className="sr-only">Неправильный ответ</span>
-                </>
-              )}
-            </Button>
-          ))}
-        </div>
-        {answered && (
-          <span className="sr-only" role="status">
-            {picked === correct ? "Правильно" : `Правильный ответ: ${correct}`}
-          </span>
-        )}
-        {answered && after}
+              {mark === "wrong" && <span className="sr-only">Неправильный ответ</span>}
+            </button>
+          );
+        })}
       </div>
-      <div className={s.dock}>
-        {answered ? (
-          <Button size="xl" onClick={onNext}>
-            {nextLabel}
-          </Button>
-        ) : (
-          <Button variant="outline" size="xl" disabled={saving} onClick={() => choose(null)}>
+      {answered && (
+        <p className={picked === correct ? s.okLine : s.fixLine} role="status" ref={revealed}>
+          {picked === correct ? (
+            "Верно."
+          ) : (
+            <>
+              Верно:{" "}
+              <span lang={greekOptions ? "el" : undefined}>
+                {grid || right < 0 ? "" : `${letter(right)}) `}
+                {correct}
+              </span>
+            </>
+          )}
+        </p>
+      )}
+      {!answered && (
+        <QuietActions>
+          <QuietButton disabled={saving} onClick={() => choose(null)}>
             Не знаю
-          </Button>
-        )}
-      </div>
+          </QuietButton>
+          {audio && onSkip && (
+            <QuietButton disabled={saving} onClick={onSkip}>
+              Не могу послушать сейчас
+            </QuietButton>
+          )}
+        </QuietActions>
+      )}
+      {answered && after}
+      <Primary disabled={!answered} onClick={onNext}>
+        {nextLabel}
+      </Primary>
     </>
   );
 }
@@ -323,20 +435,12 @@ export function Recognition(props: Props & { autoSpeak?: boolean }) {
         correct={phrase.translation ?? ""}
         options={props.item.options}
         head={
-          <div className="flex w-full flex-wrap items-center justify-center gap-3">
-            <p className={wordCss.greek} style={{ margin: "6px 0" }}>
-              {phrase.text}
-            </p>
-            <SpeakText text={phrase.text} audioAssetId={phrase.audioAssetId} label="Послушать фразу" />
-          </div>
+          <p className={s.phrase} lang="el">
+            {phrase.text}
+          </p>
         }
-        after={
-          phrase.usage ? (
-            <p className={ui.small} style={{ width: "100%", textAlign: "left" }}>
-              {phrase.usage}
-            </p>
-          ) : undefined
-        }
+        aside={<SpeakText text={phrase.text} audioAssetId={phrase.audioAssetId} label="Послушать фразу" quiet />}
+        after={phrase.usage ? <p className={s.hint}>{phrase.usage}</p> : undefined}
       />
     );
   }
@@ -347,28 +451,8 @@ export function Recognition(props: Props & { autoSpeak?: boolean }) {
       prompt="Что значит это слово?"
       correct={word.russian}
       options={props.item.options}
-      head={
-        <div className="flex w-full flex-wrap items-center justify-center gap-3">
-          <div>
-            <p className={wordCss.greek} style={{ margin: "6px 0" }}>
-              {word.greek}
-            </p>
-            {word.ipa && (
-              <p className={wordCss.ipa} style={{ margin: 0 }}>
-                {word.ipa}
-              </p>
-            )}
-          </div>
-          <SpeakButton word={word} />
-        </div>
-      }
-      after={
-        word.examples[0] && (
-          <div style={{ width: "100%", textAlign: "left" }}>
-            <ExampleBox example={word.examples[0]} />
-          </div>
-        )
-      }
+      head={<GreekHead text={word.greek} ipa={word.ipa} speak={<SpeakButton word={word} quiet />} />}
+      after={word.examples[0] && <ExampleBox example={word.examples[0]} bare />}
     />
   );
 }
@@ -405,30 +489,26 @@ function useReplay(card: SessionCard, itemId: string, autoSpeak: boolean | undef
   if (!word && !phrase) throw new Error("Аудиоупражнение получило карточку с пропуском");
   return { text, kind: word ? wordKind : textKind, failed, play };
 }
-/** Кнопка повтора над вариантами и сообщение об отказе воспроизведения — одинаковые в обоих аудиоупражнениях. */
+/** Большая кнопка повтора над вариантами и сообщение об отказе воспроизведения — одинаковые в обоих аудиоупражнениях. */
 function ReplayHead({ replay, onSkip }: { replay: Replay; onSkip?: () => void }) {
   return (
-    <div className="flex w-full flex-col items-center gap-3">
-      <Button
-        size="icon-xl"
-        className="size-[76px] rounded-full [&_svg:not([class*='size-'])]:size-8"
-        disabled={replay.kind === "none"}
-        aria-label="Повторить аудио"
-        onClick={replay.play}
-      >
-        <Volume2 aria-hidden />
-      </Button>
-      {replay.failed && (
-        <div
-          data-testid="audio-failed"
-          role="alert"
-          className="w-full rounded-[14px] p-3 text-left"
-          style={{ background: "var(--almost-bg)", color: "var(--almost-fg)" }}
+    <>
+      <div className={s.play}>
+        <Button
+          size="icon-xl"
+          className="size-14 rounded-full [&_svg:not([class*='size-'])]:size-6.5"
+          disabled={replay.kind === "none"}
+          aria-label="Повторить аудио"
+          onClick={replay.play}
         >
-          <p className="m-0 text-sm">
-            Аудио не воспроизвелось. Это не влияет на прогресс: попробуйте ещё раз или продолжите без аудирования.
-          </p>
-          <div className="mt-2 flex gap-2">
+          <Volume2 aria-hidden />
+        </Button>
+        <span className={s.playNote}>{replay.kind === "none" ? "Озвучка недоступна" : "Послушать ещё раз"}</span>
+      </div>
+      {replay.failed && (
+        <div data-testid="audio-failed" role="alert" className={s.audioFailed}>
+          <p>Аудио не воспроизвелось. Это не влияет на прогресс: попробуйте ещё раз или продолжите без аудирования.</p>
+          <div className="mt-2 flex flex-wrap gap-2">
             <Button size="sm" variant="outline" onClick={replay.play}>
               Повторить
             </Button>
@@ -440,7 +520,7 @@ function ReplayHead({ replay, onSkip }: { replay: Replay; onSkip?: () => void })
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -456,14 +536,16 @@ export function Listening(props: Props & { autoSpeak?: boolean }) {
   return (
     <Choice
       {...props}
+      audio
       prompt="Что прозвучало?"
       correct={replay.text}
       options={props.item.options}
+      greekOptions
       head={<ReplayHead replay={replay} onSkip={props.onSkip} />}
       after={
-        <div data-testid="reveal" style={{ width: "100%" }}>
+        <Reveal>
           {card.kind === "phrase" ? <PhraseReveal phrase={card.phrase} /> : <WordReveal word={wordOf(card)} />}
-        </div>
+        </Reveal>
       }
     />
   );
@@ -482,26 +564,55 @@ export function Comprehension(props: Props & { autoSpeak?: boolean }) {
   return (
     <Choice
       {...props}
+      audio
       prompt="Что это значит?"
       correct={correct}
       options={props.item.options}
       head={<ReplayHead replay={replay} onSkip={props.onSkip} />}
       after={
-        <div data-testid="reveal" style={{ width: "100%" }}>
+        <Reveal>
           {card.kind === "word" ? (
             <WordReveal word={card.word} />
           ) : card.kind === "phrase" ? (
             <PhraseReveal phrase={card.phrase} />
           ) : null}
-        </div>
+        </Reveal>
       }
     />
   );
 }
 
+/** Итог письменного ответа красной ручкой или галочкой: сообщение проверки, цвет — по исходу. */
+function Verdict({ status, children }: { status: Status; children: React.ReactNode }) {
+  return (
+    <div
+      data-testid="feedback"
+      role="status"
+      className={cx(
+        s.verdict,
+        status === "correct" ? s.verdictOk : status === "almost" ? s.verdictAlmost : s.verdictBad,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+/** Задание письма и сборки: перевод крупно печатью, картинка справа. */
+function TaskHead({ prompt, meaning, art }: { prompt: string; meaning: string; art?: React.ReactNode }) {
+  return (
+    <div className={s.cardRow}>
+      <div className="min-w-0 flex-1">
+        <Instruction prompt={prompt} />
+        <p className={s.task}>{meaning}</p>
+      </div>
+      {art}
+    </div>
+  );
+}
+
 /**
- * Ступень перед свободным написанием: слово собирается из перемешанных слогов. Только для слов.
- * Строка со слогами остаётся в плашке над раскрытием: деления на слоги в карточке нет, а собирали именно его.
+ * Ступень перед свободным написанием: слово собирается из перемешанных слогов в строку листа. Только для слов.
+ * После проверки собранное остаётся на строке, а деление на слоги — в итоге: в карточке его нет, а собирали именно его.
  */
 export function Assembly({
   item,
@@ -512,8 +623,9 @@ export function Assembly({
 }: Props & { autoSpeak?: boolean }) {
   const [placed, setPlaced] = useState<number[]>([]);
   const [result, setResult] = useState<{
-    status: "correct" | "almost" | "wrong";
+    status: Status;
     message: string;
+    answer?: string;
     skipped?: boolean;
   } | null>(null);
   const [saving, setSaving] = useState(false);
@@ -545,89 +657,80 @@ export function Assembly({
   };
   return (
     <>
-      <div className={s.center}>
-        <p className={s.prompt} data-testid="prompt">
-          Собери слово
-        </p>
-        {!result && (
-          <>
-            <p className={wordCss.greek} style={{ margin: "6px 0" }}>
-              {word.russian}
-            </p>
-            <WordArt word={word} />
-          </>
-        )}
-        {result && (
-          <div style={{ width: "100%" }} ref={revealed}>
-            <div
-              data-testid="feedback"
-              className={cx(
-                s.feedback,
-                result.status === "correct" ? s.ok : result.status === "almost" ? s.almost : s.bad,
-              )}
-              style={{ marginTop: 0 }}
-            >
-              <div>{result.message}</div>
-              <p className="m-0 mt-1.5 text-[19px]">{formatSyllables(word.greek)}</p>
-            </div>
-            <div data-testid="reveal" className="mt-3.5 flex w-full flex-col items-center gap-3.5">
-              <WordReveal word={word} speak />
-            </div>
-          </div>
-        )}
-      </div>
-      <div className={s.dock}>
-        {!result && (
-          <>
-            <div className={s.slots} aria-label="Собранное слово" data-testid="assembled">
-              {placed.length === 0 ? (
-                <span className={s.slotsHint}>Нажимай слоги по порядку</span>
-              ) : (
-                placed.map((index, position) => (
-                  <Button
-                    key={`${index}-${position}`}
-                    variant="secondary"
-                    data-testid="placed"
-                    disabled={!!result || saving}
-                    className="h-12 rounded-[12px] px-4 text-[19px]"
-                    onClick={() => setPlaced(placed.filter((_, i) => i !== position))}
-                  >
-                    {pool[index]}
-                  </Button>
-                ))
-              )}
-            </div>
-            <div className={s.tiles}>
-              {pool.map((tile, index) => (
-                <Button
-                  key={`${tile}-${index}`}
-                  variant="outline"
-                  data-testid="tile"
-                  disabled={placed.includes(index) || !!result || saving}
-                  className="h-12 rounded-[12px] px-4 text-[19px]"
-                  onClick={() => setPlaced([...placed, index])}
+      {!result && (
+        <>
+          <TaskHead prompt="Собери слово" meaning={word.russian} art={<WordArt word={word} className={s.pic} />} />
+          <div className={s.assembled} aria-label="Собранное слово" data-testid="assembled" lang="el">
+            {placed.length === 0 ? (
+              <span className={s.slotsHint}>Нажимай слоги по порядку</span>
+            ) : (
+              placed.map((index, position) => (
+                <button
+                  key={`${index}-${position}`}
+                  type="button"
+                  data-testid="placed"
+                  disabled={saving}
+                  className={s.placed}
+                  onClick={() => setPlaced(placed.filter((_, i) => i !== position))}
                 >
-                  {tile}
-                </Button>
-              ))}
-            </div>
-          </>
-        )}
-        {result ? (
-          <Button size="xl" onClick={onNext}>
-            {nextLabel}
-          </Button>
-        ) : (
-          <Button size="xl" disabled={!complete || saving} onClick={() => check()}>
-            {saving ? "Сохраняем…" : "Проверить"}
-          </Button>
-        )}
-        {!result && (
-          <Button variant="outline" size="xl" disabled={saving} onClick={() => check(true)}>
-            Не знаю
-          </Button>
-        )}
-      </div>
+                  {pool[index]}
+                </button>
+              ))
+            )}
+          </div>
+          <div className={s.tiles} lang="el">
+            {pool.map((tile, index) => (
+              <button
+                key={`${tile}-${index}`}
+                type="button"
+                data-testid="tile"
+                disabled={placed.includes(index) || saving}
+                className={s.tile}
+                onClick={() => setPlaced([...placed, index])}
+              >
+                {tile}
+              </button>
+            ))}
+          </div>
+          <QuietActions>
+            <QuietButton disabled={saving} onClick={() => check(true)}>
+              Не знаю
+            </QuietButton>
+          </QuietActions>
+        </>
+      )}
+      {result && (
+        <div ref={revealed}>
+          <Instruction prompt="Собери слово" />
+          {!result.skipped && result.answer && (
+            <p className={s.written} lang="el">
+              <span>{result.answer}</span>
+              {result.status !== "wrong" && (
+                <Tick
+                  className={cx(s.writtenTick, result.status === "almost" && s.almost)}
+                  label={result.status === "almost" ? "почти" : "верно"}
+                />
+              )}
+            </p>
+          )}
+          <Verdict status={result.status}>
+            <p>{result.message}</p>
+            <p className={s.syllables} lang="el">
+              {formatSyllables(word.greek)}
+            </p>
+          </Verdict>
+          <Reveal>
+            <WordReveal word={word} speak />
+          </Reveal>
+        </div>
+      )}
+      {result ? (
+        <Primary onClick={onNext}>{nextLabel}</Primary>
+      ) : (
+        <Primary disabled={!complete || saving} onClick={() => check()}>
+          {saving ? "Сохраняем…" : "Проверить"}
+        </Primary>
+      )}
     </>
   );
 }
@@ -718,9 +821,31 @@ function AnswerMask({ mask, value }: { mask: WritingMask | null; value: string }
   );
 }
 
+/** Ответ на строке листа после проверки: совпавшее чернилами, лишнее зачёркнуто ручкой, нужное — ручкой сверху. */
+function Corrected({ value, expected }: { value: string; expected: string }) {
+  return (
+    <p className={s.written} data-testid="chars" lang="el">
+      <span>
+        {diffChars(value, expected).map((part, index) =>
+          part.type === "same" ? (
+            <span key={index}>{part.text}</span>
+          ) : part.type === "wrong" ? (
+            <span key={index} className={s.fixPair}>
+              <s>{part.text}</s>
+              {part.fix && <sup>{part.fix}</sup>}
+            </span>
+          ) : (
+            <ins key={index}>{part.text}</ins>
+          ),
+        )}
+      </span>
+    </p>
+  );
+}
+
 /**
  * Написание слова по переводу или фразы целиком по её переводу. У фразы проверка без послаблений артиклю.
- * После ответа задание уходит с экрана: перевод и картинка входят в раскрытие, отдельно они задвоились бы.
+ * После ответа задание уходит с листа: перевод и картинка входят в раскрытие, отдельно они задвоились бы.
  */
 export function Spelling({
   item,
@@ -731,11 +856,12 @@ export function Spelling({
 }: Props & { autoSpeak?: boolean }) {
   const [value, setValue] = useState("");
   const [result, setResult] = useState<{
-    status: "correct" | "almost" | "wrong";
+    status: Status;
     message: string;
     skipped?: boolean;
   } | null>(null);
   const [saving, setSaving] = useState(false);
+  const formId = useId();
   useEffect(() => {
     setValue("");
     setResult(null);
@@ -763,91 +889,68 @@ export function Spelling({
     setSaving(false);
     if (saved) setResult(checked);
   };
+  if (result)
+    return (
+      <>
+        <div ref={revealed}>
+          <Instruction prompt="Напиши по-гречески" />
+          {!result.skipped &&
+            (result.status === "correct" ? (
+              <p className={s.written} lang="el">
+                <span>{value}</span>
+                <Tick className={s.writtenTick} label="верно" />
+              </p>
+            ) : (
+              <Corrected value={value} expected={expected} />
+            ))}
+          <Verdict status={result.status}>
+            <p>{result.message}</p>
+            {result.status !== "correct" && !result.skipped && (
+              <p className={s.legend}>Зачёркнуто — лишнее, сверху ручкой — как надо.</p>
+            )}
+          </Verdict>
+          <Reveal>
+            {card.kind === "phrase" ? (
+              <PhraseReveal phrase={card.phrase} speak />
+            ) : (
+              <WordReveal word={wordOf(card)} speak />
+            )}
+          </Reveal>
+        </div>
+        <Primary onClick={onNext}>{nextLabel}</Primary>
+      </>
+    );
   return (
-    <>
-      <div className={s.center}>
-        <p className={s.prompt} data-testid="prompt">
-          Напиши по-гречески
-        </p>
-        {!result && (
-          <>
-            <p className={wordCss.greek} style={{ margin: "6px 0" }}>
-              {prompt}
-            </p>
-            {card.kind === "word" && <WordArt word={card.word} />}
-          </>
-        )}
-        {result && (
-          <div style={{ width: "100%" }} ref={revealed}>
-            <div
-              data-testid="feedback"
-              className={cx(
-                s.feedback,
-                result.status === "correct" ? s.ok : result.status === "almost" ? s.almost : s.bad,
-              )}
-              style={{ marginTop: 0 }}
-            >
-              <div>{result.message}</div>
-              {result.status !== "correct" && !result.skipped && (
-                <>
-                  <p className={s.chars} data-testid="chars" style={{ margin: "6px 0 0" }}>
-                    {diffChars(value, expected).map((part, index) =>
-                      part.type === "same" ? (
-                        <b key={index}>{part.text}</b>
-                      ) : part.type === "wrong" ? (
-                        <s key={index}>{part.text}</s>
-                      ) : (
-                        <u key={index}>{part.text}</u>
-                      ),
-                    )}
-                  </p>
-                  <p className={ui.small} style={{ margin: "4px 0 0", opacity: 0.85 }}>
-                    Зелёное — совпало, красное — лишнее, подчёркнутое — пропущено.
-                  </p>
-                </>
-              )}
-            </div>
-            <div data-testid="reveal" className="mt-3.5 flex w-full flex-col items-center gap-3.5">
-              {card.kind === "phrase" ? (
-                <PhraseReveal phrase={card.phrase} speak />
-              ) : (
-                <WordReveal word={wordOf(card)} speak />
-              )}
-            </div>
-          </div>
-        )}
+    <form id={formId} onSubmit={submit}>
+      <TaskHead
+        prompt="Напиши по-гречески"
+        meaning={prompt}
+        art={card.kind === "word" ? <WordArt word={card.word} className={s.pic} /> : undefined}
+      />
+      <div className={cx(s.field, card.kind === "phrase" && s.fieldPhrase)}>
+        <AnswerMask mask={mask} value={value} />
+        <input
+          className={cx(s.answer, mask && s.masked)}
+          type="text"
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          disabled={saving}
+          autoCapitalize="off"
+          autoCorrect="off"
+          autoComplete="off"
+          spellCheck={false}
+          aria-label="Твой ответ по-гречески"
+          lang="el"
+        />
       </div>
-      <div className={s.dock}>
-        {!result ? (
-          <form onSubmit={submit}>
-            <div className={s.field}>
-              <AnswerMask mask={mask} value={value} />
-              <input
-                className={cx(s.answer, mask && s.masked)}
-                type="text"
-                value={value}
-                onChange={(event) => setValue(event.target.value)}
-                disabled={saving}
-                autoCapitalize="off"
-                autoCorrect="off"
-                spellCheck={false}
-                aria-label="Твой ответ по-гречески"
-                lang="el"
-              />
-            </div>
-            <Button size="xl" type="submit" disabled={!value.trim() || saving}>
-              {saving ? "Сохраняем…" : "Проверить"}
-            </Button>
-            <Button variant="outline" size="xl" type="button" disabled={saving} onClick={skip}>
-              Не знаю
-            </Button>
-          </form>
-        ) : (
-          <Button size="xl" onClick={onNext}>
-            {nextLabel}
-          </Button>
-        )}
-      </div>
-    </>
+      <QuietActions>
+        <QuietButton disabled={saving} onClick={skip}>
+          Не знаю
+        </QuietButton>
+      </QuietActions>
+      <Primary form={formId} disabled={!value.trim() || saving}>
+        {saving ? "Сохраняем…" : "Проверить"}
+      </Primary>
+    </form>
   );
 }

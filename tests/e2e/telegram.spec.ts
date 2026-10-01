@@ -100,14 +100,14 @@ test.describe("навигация, тема и размеры", () => {
     await page.getByRole("button", { name: /Начать занятие/ }).click();
     await page.waitForURL("**/session");
     await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
-    await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
     const calls = await bridge.calls();
     expect(calls.filter((call) => call.startsWith("haptic:"))).toHaveLength(1);
     // Закрытие Mini App после ответа: перезагрузка возвращает в сохранённое занятие, ответ учтён один раз.
     await page.goto("/");
     await page.getByRole("button", { name: /Продолжить занятие/ }).click();
     await expect(page.getByTestId("prompt").first()).toBeVisible();
-    await expect(page.getByRole("button", { name: "Далее", exact: true })).toHaveCount(0); // продолжаем со следующего упражнения
+    await expect(page.getByRole("button", { name: "Далее", exact: true, disabled: false })).toHaveCount(0); // продолжаем со следующего упражнения
     await bridge.back(); // нативный «Назад» = существующий выход из занятия
     await expect(page.getByTestId("today-title")).toBeVisible();
     await expect(page.getByRole("button", { name: /Начать занятие/ })).toBeVisible();
@@ -152,10 +152,11 @@ test.describe("навигация, тема и размеры", () => {
     const correct = page.locator('[data-answer="correct"]');
     await expect(correct).toBeVisible();
     await expect(correct.locator(".sr-only")).toContainText("Правильный ответ"); // статус сопровождается текстом
-    const light = await correct.evaluate((node) => getComputedStyle(node).backgroundColor);
+    const tick = correct.locator("svg");
+    const light = await tick.evaluate((node) => getComputedStyle(node).color);
     await tg(page).setTheme("dark", DARK);
-    await expect.poll(() => correct.evaluate((node) => getComputedStyle(node).backgroundColor)).not.toBe(light);
-    await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeVisible();
+    await expect.poll(() => tick.evaluate((node) => getComputedStyle(node).color)).not.toBe(light);
+    await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
   });
   test("во весь экран: контент начинается ниже системной строки и кнопок клиента, режим виден на «Ещё»", async ({
     page,
@@ -174,17 +175,16 @@ test.describe("навигация, тема и размеры", () => {
     await expect(page.getByTestId("launch-mode")).toContainText("режим: полноразмерный");
     await tg(page).setFullscreen(true, 47, 46);
     await expect(page.getByTestId("launch-mode")).toContainText("режим: во весь экран"); // обновляется без перезагрузки
-    // Занятие во весь экран: строка прогресса в полосе кнопок клиента, крестика нет — закрывает нативный «Назад».
+    // Занятие во весь экран: страница начинается под кнопками клиента, крестика нет — закрывает нативный «Назад».
     await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
     await page.getByRole("button", { name: /Начать занятие/ }).click();
     await page.waitForURL("**/session");
     await expect(page.getByRole("button", { name: "Закрыть занятие" })).toHaveCount(0);
-    const bar = await page.getByRole("progressbar").boundingBox();
-    expect(bar!.y).toBeGreaterThanOrEqual(47);
-    expect(bar!.y + bar!.height).toBeLessThanOrEqual(47 + 46);
-    expect(bar!.x).toBeGreaterThanOrEqual(390 * 0.26 - 1);
+    const title = await page.getByRole("heading", { name: "Повторение" }).boundingBox();
+    expect(title!.y).toBeGreaterThanOrEqual(47 + 46);
+    await expect(page.getByLabel(/^(Знакомство|Упражнение) \d+ из \d+$/)).toBeVisible(); // счётчик — в облачке снизу
     await tg(page).back();
     await expect(page.getByTestId("today-title")).toBeVisible();
   });
@@ -343,7 +343,7 @@ test.describe("навигация, тема и размеры", () => {
     await expect(page.getByTestId("prompt").first()).toHaveText(prompt); // упражнение не сброшено
     expect(await sessionHeight()).toBeGreaterThan(400);
     await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
-    await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeVisible(); // занятие отвечает на касания после возврата
+    await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled(); // занятие отвечает на касания после возврата
   });
   test("клиент без Bot API 8.0: подписка на activated отвергнута — запуск не пострадал, возврат виден по видимости документа", async ({
     page,
