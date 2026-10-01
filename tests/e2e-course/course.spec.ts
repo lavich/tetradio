@@ -279,3 +279,14 @@ test("снизу одно облачко: в разделах — меню, в �
   await expect(page.getByRole("navigation", { name: "Страницы урока" })).toBeVisible();
   await expect(menu).toHaveCount(0);
 });
+
+test("выбор варианта произносит предложение с этим вариантом", async ({ page }) => {
+  await voices(page, "instant");
+  await start(page);
+  await page.goto("/course/m01/m01-1?p=1");
+  const forms = await turnTo(page, "Формы είμαι");
+  await forms.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "είμαι" }).click();
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken ?? []))
+    .toContain("Εγώ είμαι η Άννα.");
+});
