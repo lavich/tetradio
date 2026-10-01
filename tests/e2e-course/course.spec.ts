@@ -290,3 +290,13 @@ test("выбор варианта произносит предложение с
     .poll(() => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken ?? []))
     .toContain("Εγώ είμαι η Άννα.");
 });
+
+test("поля ответа и письма просят клавиатуру без автозамены и подсказок", async ({ page }) => {
+  await start(page);
+  await page.goto("/course/m01/m01-1?p=1");
+  for (const name of ["Ответьте по-гречески.", "Письмо"]) {
+    const field = (await turnTo(page, name)).locator("input:not([type=checkbox]), textarea").first();
+    await expect(field).toHaveAttribute("autocorrect", "off");
+    await expect(field).toHaveAttribute("spellcheck", "false");
+  }
+});
