@@ -10,6 +10,7 @@ import type {
   WritingBlock,
 } from "../../content/course";
 import { scoreExercise, spokenChoice, wordCount, type ItemResult } from "../../domain/course";
+import { shuffle } from "../../domain/learning";
 import { speakPhrase } from "../../shared/audio";
 import type { BlockProgress } from "../../domain/types";
 import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
@@ -218,9 +219,20 @@ export function Exercise({
   const retry = async () => {
     setChecked(false);
     setAnswers({});
+    setOrder(mix());
+    setBank(shuffle(block.bank ?? [], Math.random));
     await save({ done: false, answers: {}, score: undefined });
   };
-  const options = (itemOptions: string[] | undefined) => itemOptions ?? block.bank ?? [];
+  // Порядок вариантов в контенте часто совпадает с порядком пунктов — без перемешивания ответ угадывается.
+  const mix = () =>
+    Object.fromEntries(
+      block.items.map((item) => {
+        const options = item.options ?? block.bank ?? [];
+        return [item.id, options.length > 2 ? shuffle(options, Math.random) : options];
+      }),
+    );
+  const [order, setOrder] = useState(mix);
+  const [bank, setBank] = useState(() => shuffle(block.bank ?? [], Math.random));
   const answered = block.items.every((item) => (answers[item.id] ?? "").trim());
   return (
     <>
@@ -228,7 +240,7 @@ export function Exercise({
       <p className={css.instruction}>{block.instruction}</p>
       {block.bank && block.format === "gap" ? (
         <p className={`${css.prompt} ${css.soft}`} lang="el">
-          Слова: {block.bank.join(" · ")}
+          Слова: {bank.join(" · ")}
         </p>
       ) : null}
       {block.items.map((item, index) => {
@@ -261,7 +273,7 @@ export function Exercise({
               />
             ) : (
               <div className={css.options} role="group" aria-label={`Варианты ${index + 1}`}>
-                {options(item.options).map((option) => (
+                {(order[item.id] ?? []).map((option) => (
                   <button
                     key={option}
                     type="button"
