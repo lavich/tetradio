@@ -304,7 +304,10 @@ export function Exercise({
       <div className={css.actions}>
         {checked ? (
           <>
-            <span className={css.score} role="status">
+            <span
+              className={total && total.correct + total.almost < total.total ? `${css.score} ${css.almost}` : css.score}
+              role="status"
+            >
               {total ? `${total.correct + total.almost} из ${total.total}` : "Выполнено"}
               {elsewhere ? " · на другом устройстве" : ""}
             </span>
