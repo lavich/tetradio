@@ -15,3 +15,5 @@ FIRST VIEWPORT: телефон — дата справа курсивом, «П�
 FORM: «Диктант», вариант C из трёх (жеребьёвка f597ff12: бланк ответов, учебник и тетрадь, диктант); выбран пользователем 01.10.2026. Эталон — `D.html` и снимки рядом.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
+
+DESIGN.md: написан 01.10.2026
