@@ -14,8 +14,7 @@ import {
   spaceSingleIntroduction,
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
-import { normalize, wordKey, type ImportRow } from "../domain/import";
-import { snapshotOf, unitKey, wordRef } from "../domain/refs";
+import { normalize, snapshotOf, unitKey, wordRef } from "../domain/refs";
 import { emptySkills } from "../domain/skills";
 import { preparedByCourse, scheduleCourses } from "../domain/schedule";
 import {
@@ -347,81 +346,6 @@ export async function putAsset(asset: Asset, database: AppDatabase = db) {
   await database.assets.put(asset);
 }
 
-export interface ImportPlan {
-  rows: ImportRow[];
-  lessonId: string | null;
-  lessonTitle: string;
-}
-export interface ImportOutcome {
-  lessonId: string;
-  added: number;
-  linked: number;
-  conflicts: number;
-}
-export async function commitImport(plan: ImportPlan, database: AppDatabase = db): Promise<ImportOutcome> {
-  const now = stamp(new Date());
-  return database.transaction(
-    "rw",
-    database.words,
-    database.lessons,
-    database.lessonItems,
-    database.courses,
-    async () => {
-      const lesson = plan.lessonId
-        ? await database.lessons.get(plan.lessonId)
-        : {
-            id: newId("lesson"),
-            courseId: await ensureLocalCourse(database),
-            title: plan.lessonTitle,
-            targetDate: null,
-            status: "upcoming" as const,
-            createdAt: now,
-            updatedAt: now,
-          };
-      if (!lesson) throw new Error("Набор не найден");
-      const wordIds: string[] = [];
-      let added = 0,
-        conflicts = 0;
-      for (const row of plan.rows) {
-        const known = await database.words
-          .where("key")
-          .equals(wordKey(row.greek, row.russian))
-          .filter((word) => !word.deletedAt)
-          .first();
-        if (known) {
-          if (!wordIds.includes(known.id)) wordIds.push(known.id);
-          continue;
-        }
-        if (
-          await database.words
-            .where("greekKey")
-            .equals(normalize(row.greek))
-            .filter((word) => !word.deletedAt)
-            .count()
-        )
-          conflicts++;
-        const word: Word = {
-          id: newId("w"),
-          greek: row.greek,
-          russian: row.russian,
-          ipa: row.ipa,
-          segments: [],
-          examples: [],
-          verified: false,
-          source: row.ipa ? "Импорт пользователя (фонетика не проверена)" : undefined,
-          createdAt: now,
-          updatedAt: now,
-        };
-        await database.words.add(indexWord(word));
-        wordIds.push(word.id);
-        added++;
-      }
-      await database.lessons.put({ ...lesson, updatedAt: now });
-      const linked = await linkWords(lesson.id, wordIds, database);
-      return { lessonId: lesson.id, added, linked: linked - added, conflicts };
-    },
-  );
-}
 export async function saveSettings(settings: Settings, database: AppDatabase = db) {
   await database.transaction("rw", database.settings, database.meta, async () => {
     await database.settings.put(settings);

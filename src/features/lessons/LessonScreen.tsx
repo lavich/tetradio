@@ -437,12 +437,9 @@ export function LessonScreen() {
             <EmptyMedia variant="icon">
               <Inbox />
             </EmptyMedia>
-            <EmptyTitle>В наборе пока нет карточек</EmptyTitle>
-            <EmptyDescription>Импортируйте список из Quizlet или добавьте слова вручную.</EmptyDescription>
+            <EmptyTitle>В уроке пока нет карточек</EmptyTitle>
+            <EmptyDescription>Они появятся с новой версией урока.</EmptyDescription>
           </EmptyHeader>
-          <Button size="md" variant="soft" className="w-auto" render={<Link to="/more/import" />}>
-            Импортировать слова
-          </Button>
         </Empty>
       )}
     </Screen>

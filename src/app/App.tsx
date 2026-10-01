@@ -33,7 +33,6 @@ const ResultScreen = named("ResultScreen", () => import("../features/learning/Re
 const MoreScreen = named("MoreScreen", () => import("../features/more/MoreScreen"));
 const StatsScreen = named("StatsScreen", () => import("../features/progress/StatsScreen"));
 const SettingsScreen = named("SettingsScreen", () => import("../features/more/SettingsScreen"));
-const ImportScreen = named("ImportScreen", () => import("../features/more/ImportScreen"));
 const BackupScreen = named("BackupScreen", () => import("../features/backup/BackupScreen"));
 
 export function App() {
@@ -83,7 +82,6 @@ export function App() {
           <Route path="/more" element={<MoreScreen />} />
           <Route path="/more/stats" element={<StatsScreen />} />
           <Route path="/more/settings" element={<SettingsScreen />} />
-          <Route path="/more/import" element={<ImportScreen />} />
           <Route path="/more/backup" element={<BackupScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

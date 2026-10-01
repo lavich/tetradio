@@ -116,9 +116,6 @@ export function LessonsScreen() {
           Добавить занятие
         </Button>
       )}
-      <Button size="md" variant="quiet" className="mt-2.5" render={<Link to="/more/import" />}>
-        Импортировать слова из Quizlet
-      </Button>
     </Screen>
   );
 }

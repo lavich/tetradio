@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import {
   dexieSource,
-  importPreview,
   lessonDetail,
   lessonMates,
   lessonsOfCard,
@@ -16,12 +15,10 @@ import { removeFromLesson } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { installMixed, MIXED_LESSON, mixedPackage } from "./helpers/mixed";
 import { mulberry32 } from "./plan-golden.test";
-import { commitImport, saveWord } from "../src/storage/ops";
 import { fromSnapshot } from "../src/domain/snapshot-source";
 import { lessonProgress, progress, wordMaturity } from "../src/domain/stats";
 import { progressFill } from "../src/features/lessons/LessonRow";
 import { State } from "ts-fsrs";
-import { parseImport } from "../src/domain/import";
 import { defaultSettings, type LessonItem, type Snapshot, type Word } from "../src/domain/types";
 import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
 import { recordFor, scenarios } from "./plan-golden.test";
@@ -295,23 +292,6 @@ describe("локальный поиск", () => {
     expect(second.items).toHaveLength(10);
     expect(second.cursor).toBeNull();
     expect(new Set([...first.items, ...second.items].map((i) => i.word.id)).size).toBe(60);
-  });
-  it("правка слова и импорт обновляют индекс вместе с записью", async () => {
-    await installLessons(db, ["mech-2"]);
-    const friend = (await db.words.get("w034"))!;
-    await saveWord({ ...friend, russian: "приятель" }, db);
-    expect(await searchWordIds("прият", db)).toEqual(["w034"]);
-    expect(await searchWordIds("друг", db)).not.toContain("w034");
-    const rows = parseImport("η καρέκλα\nстул").rows;
-    const outcome = await commitImport({ rows, lessonId: null, lessonTitle: "Мебель" }, db);
-    expect(outcome.added).toBe(1);
-    expect(await searchWordIds("καρεκ", db)).toHaveLength(1);
-    expect(await searchWordIds("стул", db)).toHaveLength(1);
-  });
-  it("предпросмотр импорта считает дубликаты и совпадения по индексам ключей", async () => {
-    await installLessons(db, ["mech-2"]);
-    const rows = parseImport("ο φίλος\nдруг\nο φίλος\nприятель\nη καρέκλα\nстул").rows;
-    expect(await importPreview(rows, db)).toEqual({ duplicates: 1, conflicts: 1 });
   });
 });
 

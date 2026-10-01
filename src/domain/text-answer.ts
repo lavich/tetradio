@@ -35,3 +35,15 @@ export function checkTextAnswer(answer: string, acceptedAnswers: readonly string
   if (almost !== undefined) return { status: "almost", message: MESSAGES.almost, expected: almost };
   return { status: "wrong", message: MESSAGES.wrong, expected: canonical };
 }
+
+const ARTICLE = /^(ο|η|το|οι|τα|τον|την|τους|τις)\s+/u;
+/** Письменный ответ на слово: в отличие от фразы, пропущенный или неверный артикль — «почти». */
+export function checkAnswer(answer: string, expected: string): { status: TextAnswerStatus; message: string } {
+  const a = normalizeText(answer),
+    b = normalizeText(expected);
+  if (a === b) return { status: "correct", message: MESSAGES.correct };
+  if (stripAccent(a) === stripAccent(b)) return { status: "almost", message: MESSAGES.almost };
+  if (stripAccent(a.replace(ARTICLE, "")) === stripAccent(b.replace(ARTICLE, "")))
+    return { status: "almost", message: "Почти! Проверь артикль и ударение." };
+  return { status: "wrong", message: MESSAGES.wrong };
+}

@@ -2,11 +2,10 @@ import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createEmptyCard, Rating, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
-import { dexieSource, lessonItems, loadLessons } from "../src/storage/queries";
+import { dexieSource, loadLessons } from "../src/storage/queries";
 import { wordRef } from "./helpers/cards";
 import {
   ConflictError,
-  commitImport,
   createLesson,
   markIntroduced,
   prepareObjectiveSession,
@@ -18,7 +17,6 @@ import {
 } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { type Settings, type Word } from "../src/domain/types";
-import { parseImport } from "../src/domain/import";
 import { installLessons, wordsOf } from "./helpers/content";
 import { installMixed, mixedPackage } from "./helpers/mixed";
 import { unitKey } from "./helpers/cards";
@@ -282,36 +280,7 @@ describe("запись ответа", () => {
   });
 });
 
-describe("свои наборы", () => {
-  it("созданный набор и набор из импорта попадают в курс «Мои слова»", async () => {
-    await ensureSeed(db);
-    const own = await createLesson("Мой набор", db);
-    expect(own.courseId).toBe("my");
-    expect((await db.lessons.get(own.id))!.courseId).toBe("my");
-    const rows = parseImport("η ομπρέλα\nзонт").rows;
-    const outcome = await commitImport({ rows, lessonId: null, lessonTitle: "Из Quizlet" }, db);
-    expect((await db.lessons.get(outcome.lessonId))!.courseId).toBe("my");
-    expect(await db.courses.get("my")).toMatchObject({ origin: "local", subscribed: true });
-  });
-});
-
 describe("импорт", () => {
-  it("связывает известное слово с набором и не создаёт дубликат", async () => {
-    await ensureSeed(db);
-    const rows = parseImport("ο φίλος\nдруг\nη ομπρέλα\nзонт").rows;
-    const outcome = await commitImport({ rows, lessonId: null, lessonTitle: "Урок 1.5" }, db);
-    expect(outcome).toMatchObject({ added: 1, linked: 1 });
-    expect(await db.words.count()).toBe(seedWords.length + 1);
-    const lesson = await db.lessons.get(outcome.lessonId);
-    expect(await lessonItems(outcome.lessonId, db)).toHaveLength(2);
-    expect(lesson!.targetDate).toBeNull(); // дату назначит расписание
-  });
-  it("при ошибке не оставляет половину набора", async () => {
-    await ensureSeed(db);
-    const rows = parseImport("η ομπρέλα\nзонт\nτο ποτήρι\nстакан").rows;
-    await expect(commitImport({ rows, lessonId: "нет-такого", lessonTitle: "" }, db)).rejects.toThrow();
-    expect(await db.words.count()).toBe(seedWords.length);
-  });
   it("меняет перевод без потери истории и сбрасывает проверку фонетики после правки греческого", async () => {
     await ensureSeed(db);
     const word = (await db.words.get("w034"))!;

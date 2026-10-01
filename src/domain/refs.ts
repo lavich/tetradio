@@ -1,6 +1,5 @@
 // Расширения `.ts` обязательны: этот модуль загружает и Node при сборке контента (`node content/build.ts`),
 // а его резолвер требует точный путь. В остальном коде приложения расширения не пишутся.
-import { normalize } from "./import.ts";
 import {
   CARD_KINDS,
   type CardKind,
@@ -12,6 +11,10 @@ import {
 } from "./types.ts";
 
 export type { LearningRef } from "./types.ts";
+
+export const normalize = (text: string) => text.normalize("NFC").trim().replace(/\s+/g, " ").toLocaleLowerCase("el");
+/** Дубликат слова — то же написание с тем же переводом. */
+export const wordKey = (greek: string, russian: string) => `${normalize(greek)}\u0000${normalize(russian)}`;
 
 /** Ключ единицы повторения: сериализованная пара, чтобы ID разных видов не сталкивались и разделитель внутри ID не ломал разбор. */
 export const unitKey = (ref: LearningRef): string => JSON.stringify([ref.kind, ref.id]);

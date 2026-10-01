@@ -1,7 +1,6 @@
 import Dexie, { type Table, type Transaction } from "dexie";
 import type { CatalogEntry } from "../content/schema";
-import { normalize, wordKey } from "../domain/import";
-import { isUnitKey, unitKey, wordRef } from "../domain/refs";
+import { isUnitKey, normalize, unitKey, wordKey, wordRef } from "../domain/refs";
 import {
   defaultSchedule,
   defaultSettings,

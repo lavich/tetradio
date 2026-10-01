@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { colorsOf, foreignColors, paletteColors, parseLegacy } from "../content/art";
 import { buildContent, revisionOf, wordsOf } from "../content/build";
 import { ContentError, parseCatalog, parsePackage, SCHEMA_VERSION } from "../src/content/schema";
-import { wordKey } from "../src/domain/import";
+import { wordKey } from "../src/domain/refs";
 import { stressNote } from "../src/domain/phonetics";
 
 const content = buildContent("tests/fixtures/mechanics");

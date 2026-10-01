@@ -13,7 +13,7 @@ import {
 } from "../src/domain/learning";
 import { fromSnapshot } from "../src/domain/snapshot-source";
 import { diffChars } from "../src/domain/spelling";
-import { checkAnswer } from "../src/domain/import";
+import { checkAnswer } from "../src/domain/text-answer";
 import { progress } from "../src/domain/stats";
 import {
   defaultSchedule,
@@ -676,6 +676,8 @@ describe("проверка написания", () => {
     ["σπίτι", "almost"],
     ["το σπίτη", "wrong"],
     ["ο σπίτι", "almost"],
+    ["το σπίτι".normalize("NFD"), "correct"],
+    ["το σκύλος", "wrong"],
   ])("«%s» → %s", (answer, status) => expect(checkAnswer(answer, "το σπίτι").status).toBe(status));
   it("конечная сигма и регистр не считаются ошибкой", () => {
     expect(checkAnswer("Ο ΦΊΛΟΣ", "ο φίλος").status).toBe("correct");

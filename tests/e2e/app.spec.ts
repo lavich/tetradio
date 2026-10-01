@@ -191,27 +191,6 @@ test("прогресс урока виден на «Сегодня» и «Уро
   await expect(fresh.getByTestId("lesson-progress")).toHaveCount(0);
 });
 
-test("будущие занятия: импорт нового набора без даты, дата на экране урока и пересчёт плана", async ({ page }) => {
-  await useSchedule(page);
-  await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
-  await page.getByRole("link", { name: /Импорт слов/ }).click();
-  await page.locator("#text").fill("το τραπέζι\nстол\nη καρέκλα\nстул\nο φίλος\nдруг");
-  await expect(page.getByText(/распознано 3 слова/)).toBeVisible();
-  await expect(page.getByText(/уже есть в словаре/)).toBeVisible();
-  await expect(page.locator("#date")).toHaveCount(0); // дату назначает расписание
-  await page.locator("#title").fill("Урок 1.5");
-  await page.getByRole("button", { name: /Сохранить 3 слова/ }).click();
-  await expect(page.getByRole("heading", { name: "Урок 1.5" })).toBeVisible();
-  await expect(page.getByText(/3 слова/)).toBeVisible();
-  await expect(page.getByText("Дата не назначена")).toBeVisible();
-  // Дата заведомо дальше всех уроков расписания: ближайшим остаётся 1.2. Фиксированная дата здесь была миной — она наступила.
-  await page.locator("#date").fill(addDays(new Date().toISOString().slice(0, 10), 30));
-  await page.getByRole("button", { name: "Сохранить дату" }).click();
-  await expect(page.getByText(/План пересчитан|Дата сохранена/)).toBeVisible();
-  await page.getByRole("navigation").getByRole("link", { name: "Сегодня" }).click();
-  await expect(page.getByText("Урок 1.2")).toBeVisible();
-});
-
 test("расписание: даты уроков 1.3 и 1.4, ручной перенос сдвигает хвост, возврат в расписание", async ({ page }) => {
   // Первое занятие — урок 1.1 — не раньше сегодня, поэтому проверка не зависит от календаря.
   const today = new Date().toISOString().slice(0, 10);
