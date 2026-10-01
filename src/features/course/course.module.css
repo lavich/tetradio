@@ -411,7 +411,9 @@
   gap: 10px;
   margin: calc(var(--cell) * 2) 0 0;
   padding: 8px 0;
-  background: color-mix(in srgb, var(--background) 94%, transparent);
+  /* Непрозрачная: текст страницы под панелью не должен просвечивать. */
+  background: var(--background);
+  box-shadow: 0 -1px 0 var(--border);
 }
 .pageCount {
   flex: 1;

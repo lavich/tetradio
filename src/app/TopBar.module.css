@@ -28,7 +28,29 @@
   font-size: 17px;
   margin: 0;
   letter-spacing: 0;
+  /* Длинное название (урок курса) обрезается многоточием, а не переносит шапку на две строки. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .flag {
   font-size: 22px;
+}
+
+/*
+ * Во весь экран Telegram сам рисует «Назад» слева и «…» справа. Заголовок экрана встаёт в ту же полосу между ними,
+ * как строка прогресса занятия: отдельная строка под кнопками только отнимала бы место у страницы.
+ */
+:root[data-launch-mode="fullscreen"] .native {
+  padding: var(--inset-safe-top, 0px) 26% 0;
+  min-height: calc(var(--inset-safe-top, 0px) + var(--inset-content-top, 44px));
+  justify-content: center;
+}
+:root[data-launch-mode="fullscreen"] .native > span {
+  display: none;
+}
+:root[data-launch-mode="fullscreen"] .native .title {
+  font-size: 15px;
+  text-align: center;
 }

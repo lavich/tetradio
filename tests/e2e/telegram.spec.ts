@@ -183,6 +183,16 @@ test.describe("навигация, тема и размеры", () => {
     await tg(page).back();
     await expect(page.getByTestId("today-title")).toBeVisible();
   });
+  test("во весь экран заголовок экрана стоит в полосе кнопок клиента, а не строкой под ними", async ({ page }) => {
+    await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 47, contentTop: 46 });
+    await installLessons(page, ["lesson-1-1"]);
+    await page.goto("/lessons/lesson-1-1");
+    const title = await page.getByRole("banner").getByRole("heading", { level: 1 }).boundingBox();
+    expect(title!.y).toBeGreaterThanOrEqual(47);
+    expect(title!.y + title!.height).toBeLessThanOrEqual(47 + 46);
+    expect(title!.x).toBeGreaterThanOrEqual(390 * 0.26 - 1);
+    expect(title!.x + title!.width).toBeLessThanOrEqual(390 * 0.74 + 1);
+  });
   test("экран результата во весь экран начинается ниже системной строки и кнопок клиента", async ({ page }) => {
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 47, contentTop: 46 });
     // Занятие уже закрыто: экран результата проверяем по разметке, а не по прохождению упражнений.
