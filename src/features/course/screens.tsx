@@ -345,7 +345,6 @@ export function CourseLessonScreen() {
       )}
     </>
   );
-  // Название урока — в шапке экрана: на странице оно повторяло бы шапку и отнимало место.
   const renderPage = (index: number) => (
     <article key={index} className={`${css.page} notebook`} aria-label={`Страница ${index + 1} из ${total}`}>
       {index < pages.length ? pages[index].map(renderBlock) : summary}

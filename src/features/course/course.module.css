@@ -411,7 +411,6 @@
   gap: 10px;
   margin: calc(var(--cell) * 2) 0 0;
   padding: 8px 0;
-  /* Непрозрачная: текст страницы под панелью не должен просвечивать. */
   background: var(--background);
   box-shadow: 0 -1px 0 var(--border);
 }
