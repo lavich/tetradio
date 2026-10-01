@@ -28,11 +28,17 @@ async function seedSession(page: Page, { done, phrase }: { done: number; phrase:
         const request = indexedDB.open("tetradio-mock-1");
         request.onsuccess = () => resolve(request.result);
       });
-      const words: { id: string; greek: string; russian: string }[] = await new Promise((resolve) => {
-        const request = database.transaction("words").objectStore("words").getAll();
-        request.onsuccess = () => resolve(request.result);
-      });
-      const word = words.find((entry) => entry.greek === "ο φίλος")!;
+      // Слова урока пишутся после установки пакета асинхронно: ждём, пока нужное окажется в базе.
+      let word: { id: string; greek: string; russian: string } | undefined;
+      for (let attempt = 0; attempt < 100 && !word; attempt++) {
+        const words: { id: string; greek: string; russian: string }[] = await new Promise((resolve) => {
+          const request = database.transaction("words").objectStore("words").getAll();
+          request.onsuccess = () => resolve(request.result);
+        });
+        word = words.find((entry) => entry.greek === "ο φίλος");
+        if (!word) await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      if (!word) throw new Error("слово «ο φίλος» не установилось");
       const now = new Date().toISOString();
       const ref = { kind: "word", id: word.id };
       const unitKey = JSON.stringify(["word", word.id]);
@@ -115,6 +121,8 @@ async function seedSession(page: Page, { done, phrase }: { done: number; phrase:
 }
 
 test.beforeEach(async ({ page }) => {
+  // Дата на странице — по-гречески от сегодняшнего дня: фиксируем день, иначе проверка верна только в этот четверг.
+  await page.clock.setFixedTime(new Date("2026-10-01T09:00:00"));
   await page.goto("/");
   await installLessons(page, ["mech-1"]);
 });
