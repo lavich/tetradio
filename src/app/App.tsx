@@ -39,6 +39,8 @@ const BackupScreen = named("BackupScreen", () => import("../features/backup/Back
 export function App() {
   const { pathname } = useLocation();
   const immersive = pathname.startsWith("/session") || /^\/words\/[^/]+\/exercise\//.test(pathname);
+  // В уроке курса облачко снизу — листание страниц; выход из урока — «Назад».
+  const lesson = /^\/course\/[^/]+\/[^/]+/.test(pathname);
   const { settings } = useSettings();
   useEnvironment();
   useStartRoute();
@@ -87,7 +89,7 @@ export function App() {
         </Routes>
       </Suspense>
       <Toaster position="bottom-center" offset={immersive ? 16 : 88} />
-      {!immersive && <Nav />}
+      {!immersive && !lesson && <Nav />}
       <TelegramWelcome />
       {!immersive && <SyncConflictDialog />}
     </div>

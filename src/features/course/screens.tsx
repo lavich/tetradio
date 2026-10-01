@@ -405,9 +405,9 @@ export function CourseLessonScreen() {
       </div>
       <nav className={css.pager} aria-label="Страницы урока">
         <Button
-          variant="soft"
+          variant="ghost"
           size="md"
-          className="w-auto"
+          className="h-full w-auto text-primary"
           onClick={prev}
           disabled={first === 0}
           aria-label="Предыдущая страница"
@@ -422,7 +422,7 @@ export function CourseLessonScreen() {
             заданий {tally.done} из {tally.total}
           </span>
         </span>
-        <Button variant="soft" size="md" className="w-auto" onClick={next} disabled={last >= total - 1}>
+        <Button size="md" className="h-full w-auto" onClick={next} disabled={last >= total - 1}>
           {last + 1 >= total - 1 ? "К итогу" : "Далее"}
           <ChevronRight data-icon="inline-end" />
         </Button>
