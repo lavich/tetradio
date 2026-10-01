@@ -25,9 +25,13 @@ export function CourseToday({ plan, now }: { plan: DailyPlan; now: Date }) {
   const views = useLiveQuery(() => moduleViews(), []);
   const courseId = views?.[0]?.module.courseId;
 
-  const lessons = (views ?? []).flatMap((view) => [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : [])]);
+  const lessons = (views ?? []).flatMap((view) => [
+    ...view.lessons,
+    ...(view.checkpoint ? [view.checkpoint] : []),
+    ...view.review,
+  ]);
   const last = lessons.filter((lesson) => lesson.completed).at(-1);
-  const finished = !!views?.length && views.every((view) => view.completed);
+  const finished = !!lessons.length && lessons.every((lesson) => lesson.completed);
   const fresh = plan.newRefs.length;
   const reviews = plan.reviews.length;
 

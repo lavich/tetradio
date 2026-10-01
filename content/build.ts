@@ -120,6 +120,8 @@ export interface ModuleSource {
   lessons?: string[];
   /** Контрольная точка после модуля: урок `kind: test`, не входящий в `lessons`. */
   checkpoint?: string;
+  /** Занятия после контрольной точки: уроки `kind: lesson` — разбор пробника и слабый навык. */
+  review?: string[];
 }
 
 const hash = (value: string | Uint8Array, length = 12) =>
@@ -543,6 +545,8 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const moduleOwner = new Map<string, string>();
   /** Урок контрольной точки → файл модуля: точка обязана быть контрольной с оцениваемыми заданиями. */
   const checkpoints = new Map<string, string>();
+  /** Занятия после точки → файл модуля: это обычные уроки, не контрольные. */
+  const reviews = new Map<string, string>();
   for (const [courseId, src] of sources.courses) {
     const where = `courses/${src.file}`;
     const title = text(src.title, `${where}.title`)!;
@@ -569,8 +573,10 @@ export function buildContent(root = defaultRoot()): BuiltContent {
               courseId,
               lessonIds: moduleSrc.status === "published" ? ownLessons : [],
               checkpointId: moduleSrc.status === "published" ? moduleSrc.checkpoint : undefined,
+              reviewIds: moduleSrc.status === "published" ? moduleSrc.review : undefined,
               lessons: undefined,
               checkpoint: undefined,
+              review: undefined,
               file: undefined,
             }),
             at,
@@ -598,6 +604,22 @@ export function buildContent(root = defaultRoot()): BuiltContent {
           courseOf.set(checkpoint, courseId);
           checkpoints.set(checkpoint, at);
           if (module.status === "published") lessonIds.push(checkpoint);
+        }
+        if (moduleSrc.review !== undefined) {
+          if (!Array.isArray(moduleSrc.review)) fail(`${at}.review: ожидался список`);
+          moduleSrc.review.forEach((reviewId, index) => {
+            if (!sources.lessons.has(reviewId)) fail(`${at}.review: урока ${reviewId} нет в lessons/`);
+            if (moduleOf.has(reviewId))
+              fail(`${at}.review: урок ${reviewId} уже входит в модуль ${moduleOf.get(reviewId)!.id}`);
+            moduleOf.set(reviewId, {
+              id: moduleId,
+              position: ownLessons.length + 1 + index,
+              draft: module.status === "draft",
+            });
+            courseOf.set(reviewId, courseId);
+            reviews.set(reviewId, at);
+            if (module.status === "published") lessonIds.push(reviewId);
+          });
         }
         modules.push(module);
         moduleIds.push(moduleId);
@@ -774,6 +796,9 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     if (!lesson.blocks.some((block) => block.type === "exercise" && block.graded))
       fail(`${at}.checkpoint: в контрольной ${lessonId} нет оцениваемых заданий`);
   }
+  for (const [lessonId, at] of reviews)
+    if (lessonsForModule.get(lessonId)!.kind !== "lesson")
+      fail(`${at}.review: занятие ${lessonId} после точки — урок (kind: lesson), а не контрольная`);
   // Модуль публикуется только полным: без чтения, аудио, письма, речи или контрольной он остаётся черновиком.
   for (const module of modules) {
     if (module.status !== "published") continue;

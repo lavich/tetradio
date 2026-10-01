@@ -116,7 +116,7 @@ export function ModuleScreen() {
   // Уроки опубликованного модуля скачиваются при открытии: без пакета урок не пройти.
   useEffect(() => {
     if (!view) return;
-    for (const lesson of [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : [])])
+    for (const lesson of [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : []), ...view.review])
       if (!lesson.installed)
         installLesson(lesson.id).catch(() =>
           setProblem("Не удалось скачать уроки модуля. Проверьте сеть и откройте модуль снова."),
@@ -186,6 +186,28 @@ export function ModuleScreen() {
               </span>
             </Link>
           </div>
+        ) : null}
+        {view.review.length ? (
+          <ol className={css.lessons} aria-label="После пробника">
+            {view.review.map((lesson, index) => (
+              <li key={lesson.id}>
+                {lesson.completed ? (
+                  <Tick className={css.mark} label="занятие пройдено" />
+                ) : (
+                  <span className={css.gutter}>+{index + 1}</span>
+                )}
+                <Link className={css.lessonLink} to={`/course/${module.id}/${lesson.id}`}>
+                  <h3 className={css.blockTitle}>{lesson.title}</h3>
+                  <span className={css.meta}>
+                    после пробника ·{" "}
+                    {lesson.installed
+                      ? `заданий выполнено ${lesson.tally.done} из ${lesson.tally.total}`
+                      : "скачивается…"}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
         ) : null}
         {problem ? <p className={css.pen}>{problem}</p> : null}
       </div>

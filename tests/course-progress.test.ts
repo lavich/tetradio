@@ -104,7 +104,7 @@ describe("прогресс курса в базе", () => {
   beforeEach(async () => {
     await new AppDatabase("tetradio-course").delete();
     db = new AppDatabase("tetradio-course");
-    await installLessons(db, ["m01-1", "m01-test", "m01-k1"], memoryFetcher(demo));
+    await installLessons(db, ["m01-1", "m01-test", "m01-k1", "m01-r1"], memoryFetcher(demo));
   });
 
   it("каталог приносит модули, в том числе черновик без уроков; пакет — блоки урока", async () => {
@@ -147,6 +147,9 @@ describe("прогресс курса в базе", () => {
     // Уроки модуля пройдены — следующий шаг контрольная точка после него.
     expect((await nextCourseLesson("greek-a2", db))!.lesson).toMatchObject({ id: "m01-k1", kind: "test" });
     await db.lessons.update("m01-k1", { status: "completed" });
+    // После точки — занятия на слабый навык.
+    expect((await nextCourseLesson("greek-a2", db))!.lesson).toMatchObject({ id: "m01-r1", kind: "lesson" });
+    await db.lessons.update("m01-r1", { status: "completed" });
     // Черновик m02 следующим шагом не становится.
     expect(await nextCourseLesson("greek-a2", db)).toBeNull();
     expect((await moduleViews("greek-a2", db))[0].completed).toBe(true);
