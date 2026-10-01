@@ -86,7 +86,7 @@ export function SyncConflictDialog() {
   };
   return (
     <AlertDialog open>
-      <AlertDialogContent>
+      <AlertDialogContent className="data-[size=default]:sm:max-w-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>{titles[conflict.kind]}</AlertDialogTitle>
           <AlertDialogDescription>
@@ -120,6 +120,7 @@ export function SyncConflictDialog() {
           <Button
             variant="quiet"
             size="md"
+            className="sm:w-auto"
             disabled={saving || !!busy}
             onClick={async () => {
               setSaving(true);
@@ -133,7 +134,9 @@ export function SyncConflictDialog() {
           >
             {saving ? "Готовим копию…" : "Сначала сохранить полную копию"}
           </Button>
-          <AlertDialogCancel onClick={() => setDismissed(key)}>Решить позже</AlertDialogCancel>
+          <AlertDialogCancel size="md" className="sm:w-auto" onClick={() => setDismissed(key)}>
+            Решить позже
+          </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
