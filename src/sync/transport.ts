@@ -95,12 +95,10 @@ export function memoryTransport(options: MemoryTransportOptions = {}): MemoryTra
   };
 }
 
-/** Сколько ждать ответа CloudStorage: зависший callback не должен навсегда занять обмен. */
 export const CLOUD_TIMEOUT_MS = 15000;
 /**
- * Вызов callback API с тайм-аутом: без ответа за `timeoutMs` — `SyncError("transport")`, повторяемая ошибка.
- * Поздний ответ после тайм-аута игнорируется; запись при этом могла состояться, но повтор публикации
- * той же версии пишет те же ключи и потому идемпотентен.
+ * Зависший callback CloudStorage не должен навсегда занять обмен: без ответа за `timeoutMs` — повторяемая ошибка.
+ * Поздний ответ игнорируется; запись могла состояться, но повтор той же версии пишет те же ключи.
  */
 const call = <T>(
   run: (done: (error: string | null, value?: T) => void) => void,

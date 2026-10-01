@@ -89,7 +89,6 @@ type LegacyWireCourse = {
   newWordsPerDay: number;
   schedule: CompactCourse["schedule"];
 };
-/** Блок без идентификатора урока: `[блок, выполнен, изменён (мс), [верно, почти, всего] | 0, критерии?]`, хвост опускается. */
 type WireBlock =
   | [string, 0 | 1, number]
   | [string, 0 | 1, number, [number, number, number] | 0]

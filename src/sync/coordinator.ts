@@ -155,7 +155,7 @@ export class SyncCoordinator {
   /** Обмен запускается при открытии, возврате, после изменений и восстановлении сети; параллельные вызовы объединяются. */
   exchange(): Promise<SyncStatus> {
     if (this.running) {
-      // Повод пришёл во время обмена (изменение во время выгрузки): ещё один заход сразу после текущего.
+      // Изменение во время обмена: ещё один заход сразу после текущего.
       this.again = true;
       return this.running;
     }
@@ -417,7 +417,6 @@ export class SyncCoordinator {
     clock[device] = (clock[device] ?? 0) + 1;
     const id = `${device}-${clock[device]}`;
     const now = this.options.now();
-    // Отметка изменений до выгрузки: изменение во время неё сменит отметку и останется неопубликованным.
     const { snapshot, mark } = override
       ? { snapshot: override, mark: await readMeta(database, META.dirty) }
       : await buildAndCommitMarked(database, now, id);

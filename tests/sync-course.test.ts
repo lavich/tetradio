@@ -26,7 +26,6 @@ import { cloudStorageTransport, memoryTransport, type MemoryTransport } from "..
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
 import { installLessons, memoryFetcher } from "./helpers/content";
 
-/** Демонстрационный курс: урок m01-1 (9 блоков, 5 заданий), контрольная m01-test, точка m01-k1. */
 const demo = buildContent("tests/fixtures/course-demo");
 const fetcher = () => memoryFetcher(demo);
 const TASKS = ["forms", "anna-tf", "cafe-q", "about-me", "intro"];
@@ -66,7 +65,6 @@ async function device(name: string, { lessons = ["m01-1"], transport, scheduled 
   return { db, sync, name };
 }
 type Device = Awaited<ReturnType<typeof device>>;
-/** Блоки урока с ответами и текстом, затем завершение урока. */
 async function finishLesson(dev: Device) {
   await saveBlockProgress(
     "m01-1",
@@ -171,14 +169,11 @@ describe("снимок формата 3: прогресс курса", () => {
     };
     await applySnapshot(phone.db, remote, "other-1", { other: 1 }, now());
     const after = await blockProgressOf("m01-1", phone.db);
-    // Та же попытка (время не новее): ответы на месте.
     expect(after.get("anna-tf")).toMatchObject({ answers: { q1: "Σωστό" }, score: { correct: 1, total: 2 } });
     // Отметка «не выполнено» той же записи применяется, а черновик письма остаётся.
     expect(after.get("about-me")).toMatchObject({ done: false, text: "Με λένε Ιβάν." });
-    // Более новая попытка с другого устройства: её счёт, без чужих ей ответов.
     expect(after.get("forms")).toMatchObject({ done: true, score: { correct: 1, total: 2 }, updatedAt: later });
     expect(after.get("forms")!.answers).toBeUndefined();
-    // Блока нет в выбранной версии — нет и здесь (версия выбирается целиком).
     expect(after.has("intro")).toBe(false);
   });
 });
@@ -217,7 +212,6 @@ describe("обмен прогрессом курса между устройст
     expect((await third.sync.exchange()).phase).toBe("synced");
     expect((await third.db.lessons.get("m01-1"))?.status).toBe("completed");
     expect(await rows(third)).toEqual(await rows(phone));
-    // Установка пакета принимает отложенное завершение урока.
     await installLesson("m01-1", fresh.db, fetcher());
     expect((await fresh.db.lessons.get("m01-1"))?.status).toBe("completed");
     expect((await blockProgressOf("m01-1", fresh.db)).get("cafe-q")?.done).toBe(true);
@@ -293,7 +287,6 @@ describe("доставка: событие изменения, тайм-аут, 
     expect(first.phase).toBe("error");
     expect(first.error?.kind).toBe("transport");
     expect(await readMeta(phone.db, META.dirty)).toBeTruthy();
-    // Повтор запланирован (тайм-аут — не отказ формата).
     expect(scheduled.filter((entry) => !entry.cancelled)).toHaveLength(1);
     // Запись дошла, а ответ потерялся: в облаке уже есть указатель той же версии.
     expect(pointers(cloud.store)).toHaveLength(1);
@@ -366,7 +359,7 @@ describe("доставка: событие изменения, тайм-аут, 
     await finishLesson(accountA);
     expect((await accountA.sync.exchange()).phase).toBe("error");
     expect(await readMeta(accountA.db, META.dirty)).toBeTruthy();
-    // Приложение открыто под B: координатор A останавливается вместе с отложенным повтором, у B — своя база.
+    // Приложение открыто под B: координатор A остановлен, у B — своя база.
     accountA.sync.stop();
     expect(scheduled.every((entry) => entry.cancelled)).toBe(true);
     const accountB = await device("account-b", { transport: cloudB });
@@ -380,7 +373,6 @@ describe("доставка: событие изменения, тайм-аут, 
     const inB = await accountB.db.transaction("r", accountB.db.tables, () => buildSnapshot(accountB.db, now()));
     expect(inB.blocks).toEqual([]);
     expect(inB.lessons.find((lesson) => lesson.id === "m01-1")?.status).toBe("upcoming");
-    // Облако A пока пустое, отметка A на месте; вернувшись в A, отправка завершается туда.
     expect(cloudA.store.size).toBe(0);
     offline = false;
     expect((await accountA.sync.exchange()).phase).toBe("synced");
@@ -389,7 +381,7 @@ describe("доставка: событие изменения, тайм-аут, 
   });
 });
 
-/** CloudStorage через callback API; `drop` — ответ на вызов теряется (запись при этом выполняется). */
+/** `drop` — ответ на вызов теряется, хотя запись выполнена. */
 function fakeCloudStorage(
   memory: MemoryTransport,
   drop: (op: string, key: string) => boolean = () => false,

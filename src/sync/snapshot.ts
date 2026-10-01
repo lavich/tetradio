@@ -92,7 +92,6 @@ async function standardKeys(database: AppDatabase, refs: LearningRef[]): Promise
       if (phrase?.revision !== undefined) keys.add(unitKey({ kind: "phrase", id: phrase.id }));
   return keys;
 }
-/** Блок без введённых ответов и текста: они остаются на устройстве. */
 const compactBlock = (row: BlockProgress): CompactBlock => ({
   lessonId: row.lessonId,
   blockId: row.blockId,
@@ -104,12 +103,8 @@ const compactBlock = (row: BlockProgress): CompactBlock => ({
 const byBlock = (a: CompactBlock, b: CompactBlock) =>
   a.lessonId.localeCompare(b.lessonId) || a.blockId.localeCompare(b.blockId);
 /**
- * Блоки выбранной версии заменяют локальные целиком: блока, которого в версии нет, здесь тоже не будет.
- * Введённые ответы и текст в снимок не входят, поэтому у оставшегося блока они сохраняются, только если версия
- * не новее локальной записи (`remote.updatedAt <= local.updatedAt`) — это та же или более ранняя попытка, и ответы
- * относятся к ней или к более поздней локальной. Более новая попытка с другого устройства приходит без ответов:
- * старые ответы не соответствовали бы её счёту. Блоки ещё не установленных уроков лежат в той же таблице и
- * появляются на экране после установки пакета.
+ * Блоки версии заменяют локальные целиком. Ответы и текст остаются, только если версия не новее локальной записи:
+ * у более новой попытки с другого устройства старые ответы не соответствовали бы её счёту.
  */
 async function applyBlocks(database: AppDatabase, blocks: CompactBlock[]) {
   const local = new Map((await database.blockProgress.toArray()).map((row) => [row.key, row]));
@@ -226,10 +221,7 @@ export const SNAPSHOT_TABLES = [
 export async function buildAndCommit(database: AppDatabase, now: Date, versionId: string): Promise<CompactSnapshot> {
   return (await buildAndCommitMarked(database, now, versionId)).snapshot;
 }
-/**
- * То же плюс отметка изменений, прочитанная в той же транзакции: публикация снимает её, только если за время
- * выгрузки она не сменилась (`clearDirty`). Иначе изменение, сделанное во время выгрузки, осталось бы без отметки.
- */
+/** То же плюс отметка изменений из той же транзакции — для `clearDirty` после публикации. */
 export async function buildAndCommitMarked(
   database: AppDatabase,
   now: Date,
@@ -246,7 +238,6 @@ export async function buildAndCommitMarked(
     },
   );
 }
-/** Снимает отметку изменений, если она та же, что при сборке опубликованного снимка; вызывается в транзакции `meta`. */
 export async function clearDirty(database: AppDatabase, mark: string | null): Promise<boolean> {
   const current = await readMeta(database, META.dirty);
   if (current !== null && current !== mark) return false;
@@ -302,7 +293,6 @@ export async function applySnapshot(
     "rw",
     SNAPSHOT_TABLES.map((name) => database.table(name)),
     async () => {
-      // Изменение успело появиться после решения «применить»: версия не применяется, решение принимается заново.
       if (ifClean && (await readMeta(database, META.dirty))) return false;
       if (sourceFormat === LEGACY_SNAPSHOT_FORMAT && (await hasMixedProgress(database)))
         throw new SyncError(
@@ -396,7 +386,6 @@ export interface SnapshotDescription {
   answers: number;
   lastDay: string | null;
   lessons: number;
-  /** Завершённые уроки курса (с блоками) и выполненные блоки. */
   courseLessons: number;
   blocks: number;
 }

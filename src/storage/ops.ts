@@ -34,15 +34,13 @@ import { syncEvents } from "../sync/events";
 
 /**
  * Отметка «есть неопубликованные изменения» пишется в той же транзакции, что и само изменение.
- * Значение — новая метка на каждое изменение: публикация снимает отметку, только если она не сменилась
- * с момента сборки снимка, поэтому изменение во время выгрузки остаётся неопубликованным, а не теряется.
+ * Каждое изменение пишет новую метку: публикация снимает только ту, что прочитала при сборке снимка.
  */
 export const DIRTY_KEY = "sync:dirty";
 let changes = 0;
 export const dirtyMark = () =>
   `${Date.now().toString(36)}-${(++changes).toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 export const markChanged = (database: AppDatabase) => database.meta.put({ key: DIRTY_KEY, value: dirtyMark() });
-/** Повод для обмена: координатор откладывает его на пару секунд и объединяет соседние изменения. */
 export const announceChange = () => syncEvents.emit("changed");
 const settled = (items: SessionItem[]) => items.filter((entry) => entry.eventId || entry.skipped).length;
 
@@ -322,7 +320,6 @@ export async function settleLessons(now: Date, database: AppDatabase = db): Prom
   ];
   return database.transaction("rw", tables, async () => {
     const settings = fillSettings(await database.settings.get("settings"));
-    // Урок курса (пакет с модулем или урок модуля каталога) завершается только заданиями (`completeLesson`), не датой.
     const course = new Set([
       ...(await database.packages.toArray()).filter((pack) => pack.module).map((pack) => pack.lessonId),
       ...(await database.modules.toArray()).flatMap((module) => [

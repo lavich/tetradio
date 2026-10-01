@@ -124,13 +124,12 @@ describe("размер компактного снимка (задача 0.4)", 
     expect(capacity).toBeGreaterThan(3000);
   }, 60_000); // три базы по тысячам событий: на CI-раннере дольше стандартных 5 секунд
 
-  // Замер 2026-10-01: ≈791 000 символов (блоки курса ≈43 000), 198 частей, 596 ключей из 1 024 — запас 428 ключей (42 %).
   it("бюджет курса: 2 500 карточек, худшая история и 97 уроков со всеми блоками — 198 частей, 596 из 1 024 ключей, запас 428", async () => {
     const db = new AppDatabase("tetradio-size-course");
     await db.delete();
     await db.open();
     const stamp = now.toISOString();
-    // 2 000 слов и 500 фраз (20 %) — весь бюджет карточек курса из design.md.
+    // Весь бюджет карточек курса из design.md.
     const refs: LearningRef[] = [
       ...Array.from({ length: 2000 }, (_, index) => ({
         kind: "word" as const,
@@ -190,7 +189,7 @@ describe("размер компактного снимка (задача 0.4)", 
         },
       })),
     );
-    // Худшая история, как в тестах выше: по 10 ответов каждого из 5 типов у каждой карточки — полные сводки навыков.
+    // Худшая история, как выше: по 10 ответов каждого типа у каждой карточки.
     const types: ExerciseType[] = ["recall", "recognition", "assembly", "spelling", "listening"];
     let tick = 0;
     const skills = refs.map((ref) => {
@@ -206,7 +205,7 @@ describe("размер компактного снимка (задача 0.4)", 
       return { unitKey: unitKey(ref), ref, skills: summary };
     });
     await db.cardSkills.bulkPut(skills);
-    // Сводка статистики сверх модели выше: все 14 дней окна по 300 разных карточек в день, ответ был у каждой.
+    // Полное окно статистики: все 14 дней по 300 разных карточек.
     const keys = refs.map(unitKey);
     const stats: StatsSummary = {
       days: Array.from({ length: KEEP_DAYS }, (_, day) => ({
@@ -219,8 +218,7 @@ describe("размер компактного снимка (задача 0.4)", 
       answeredKeys: keys,
     };
     await db.baseSummary.put({ id: "base", asOf: stamp, versionId: "base", stats });
-    // Курс как он есть: все уроки из content/lessons, у каждого блока — запись выполнения (с запасом: в приложении
-    // запись заводят только задания, письмо и речь), со счётом у заданий и всеми отмеченными критериями.
+    // С запасом: запись у каждого блока, хотя в приложении её заводят только задания, письмо и речь.
     const course = buildContent("content").packages.filter((pack) => pack.blocks);
     const lesson = (id: string): Lesson => ({
       id,
@@ -286,9 +284,7 @@ describe("размер компактного снимка (задача 0.4)", 
     expect(snapshot.blocks).toHaveLength(blocks.length);
     expect(snapshot.lessons.filter((item) => item.status === "completed")).toHaveLength(97);
     expect(encodeSnapshot(snapshot)).not.toContain("απάντηση");
-    // Бюджет design.md: 3 × части + 2 ≤ 1 024.
     expect(keysNeeded).toBeLessThanOrEqual(CLOUD_LIMITS.maxKeys);
-    // Прогресс блока компактен: без ответов и текстов — десятки символов на блок.
     expect(courseChars / blocks.length).toBeLessThan(50);
   }, 60_000);
 });

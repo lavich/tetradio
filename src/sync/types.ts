@@ -9,7 +9,6 @@ import type { LearningRef, Schedule } from "../domain/types";
  * и снятых типов проверки остаются занятыми: снимки старых клиентов их содержат.
  */
 export const SNAPSHOT_FORMAT = 3;
-/** Первый формат с прогрессом блоков курса: снимок более раннего формата блоков не несёт и их не заменяет. */
 export const BLOCKS_SNAPSHOT_FORMAT = 3;
 export const LEGACY_SNAPSHOT_FORMAT = 1;
 export const SUPPORTED_SNAPSHOT_FORMATS = [1, 2, 3] as const;
@@ -35,8 +34,8 @@ export interface CompactSettings {
   sessionSize: number;
 }
 /**
- * Выполнение блока урока курса без текстов: введённые ответы (`answers`) и письменный текст (`text`) остаются
- * на устройстве. Завершение урока курса — `lessons[].status = completed`, его время — `lessons[].updatedAt`.
+ * Выполнение блока курса без введённых ответов и текста: они остаются на устройстве.
+ * Завершение урока курса передаётся в `lessons[]`.
  */
 export interface CompactBlock {
   lessonId: string;
@@ -65,7 +64,7 @@ export interface CompactSnapshot {
   courses: CompactCourse[];
   lessons: CompactLesson[];
   packages: string[];
-  /** Прогресс блоков курса, по ключу `урок/блок`; включает блоки ещё не установленных уроков. */
+  /** Включает блоки ещё не установленных уроков. */
   blocks: CompactBlock[];
   states: CompactState[];
   skills: { ref: LearningRef; skills: SkillSummary }[];
