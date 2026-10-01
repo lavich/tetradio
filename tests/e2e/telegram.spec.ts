@@ -198,6 +198,21 @@ test.describe("навигация, тема и размеры", () => {
     expect(title!.x).toBeGreaterThanOrEqual(390 * 0.26 - 1);
     expect(title!.x + title!.width).toBeLessThanOrEqual(390 * 0.74 + 1);
   });
+  test("во весь экран на широком окне (Telegram Desktop) заголовок виден, полоса шапки — на всю ширину", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1000, height: 700 });
+    await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 0, contentTop: 46 });
+    await installLessons(page, ["lesson-1-1"]);
+    await page.goto("/lessons/lesson-1-1");
+    const banner = await page.getByRole("banner").boundingBox();
+    expect(banner!.width).toBe(1000);
+    const title = page.getByRole("banner").getByRole("heading", { level: 1 });
+    // Название не обрезано до многоточия: процентный отступ считается от окна, а не от колонки шапки.
+    expect(await title.evaluate((node) => node.scrollWidth <= node.clientWidth)).toBe(true);
+    const box = await title.boundingBox();
+    expect(box!.y + box!.height).toBeLessThanOrEqual(46);
+  });
   test("экран результата во весь экран начинается ниже системной строки и кнопок клиента", async ({ page }) => {
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 47, contentTop: 46 });
     // Занятие уже закрыто: экран результата проверяем по разметке, а не по прохождению упражнений.
