@@ -327,7 +327,7 @@ export function CourseLessonScreen() {
       <h2 className={css.title}>Итог</h2>
       {result && complete ? (
         <section className={css.result} aria-label="Итог контрольной">
-          <p className={css.score}>
+          <p className={result.passed ? css.score : `${css.score} ${css.failed}`}>
             Итог: {result.correct} из {result.total} ({Math.round(result.share * 100)} %) —{" "}
             {result.passed ? "порог 60 % пройден" : "ниже порога 60 %"}
           </p>

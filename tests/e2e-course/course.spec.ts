@@ -129,6 +129,17 @@ test("урок курса: задания с ключом, чтение, ауд�
   await page.getByRole("button", { name: "Завершить урок" }).click();
   await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
   await expect(page.getByRole("img", { name: "урок пройден" })).toBeVisible();
+  // Выполненное отмечено зелёной галочкой, а не красной ручкой ошибок.
+  const tick = await page.getByRole("img", { name: "урок пройден" }).evaluate((node) => getComputedStyle(node).color);
+  const ok = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.color = "var(--ok)";
+    document.body.append(probe);
+    const color = getComputedStyle(probe).color;
+    probe.remove();
+    return color;
+  });
+  expect(tick).toBe(ok);
 
   // Пройденный урок отдаёт карточки в повторение; следующий шаг курса — контрольная модуля.
   await page.goto("/");

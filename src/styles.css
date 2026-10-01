@@ -38,6 +38,7 @@
   --cell: 24px;
   --field: 56px;
   --ok: #15803d;
+  --almost: #b7791f;
   --radius: 0.875rem;
   --radius-card: 18px;
   --destructive-foreground: var(--color-red-800);
@@ -119,6 +120,7 @@
   --primary-foreground: var(--tg-theme-button-text-color, #ffffff);
   --destructive: var(--tg-theme-destructive-text-color, #f87171);
   --ok: #4ade80;
+  --almost: #fbbf24;
   --ok-bg: #0f2e1a;
   --ok-fg: #bbf7d0;
   --bad-bg: #3b1111;
