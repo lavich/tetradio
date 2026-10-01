@@ -82,3 +82,13 @@
   text-decoration-color: var(--primary);
   text-decoration-style: solid;
 }
+/* Разбор и пример прямо на листе занятия: без своей плашки, печатью учебника. */
+.bare {
+  margin-top: 12px;
+}
+.printLine {
+  font-family: var(--font-print);
+  font-size: 18px;
+  line-height: var(--cell);
+  margin: 0 0 2px;
+}

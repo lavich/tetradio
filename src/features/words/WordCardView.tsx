@@ -11,14 +11,41 @@ import ui from "../../shared/ui.module.css";
 import wordCss from "../../shared/word.module.css";
 import { cx } from "../../shared/cx";
 
-export function WordArt({ word, hidden }: { word: Word; hidden?: boolean }) {
-  const url = useAssetUrl(hidden ? undefined : word.imageAssetId);
-  if (hidden || !word.imageAssetId) return null;
-  if (!url) return <div className={wordCss.art} aria-hidden />;
-  return <img className={wordCss.art} src={url} alt="" role="presentation" data-testid="word-art" />;
+export const QUIET_SPEAK =
+  "size-11 rounded-full bg-card text-primary hover:bg-soft hover:text-primary [&_svg:not([class*='size-'])]:size-5";
+
+/** Плашка разбора или примера; `bare` — без своей карточки, когда она уже стоит на листе. */
+function Box({ bare, label, children }: { bare?: boolean; label?: string; children: ReactNode }) {
+  if (bare)
+    return (
+      <div className={wordCss.bare} role={label ? "group" : undefined} aria-label={label}>
+        {children}
+      </div>
+    );
+  return (
+    <Card className="mb-3 bg-soft ring-0" aria-label={label}>
+      <CardContent>{children}</CardContent>
+    </Card>
+  );
 }
 
-export function SpeakButton({ word, label = "Послушать слово" }: { word: Word; label?: string }) {
+export function WordArt({ word, hidden, className }: { word: Word; hidden?: boolean; className?: string }) {
+  const url = useAssetUrl(hidden ? undefined : word.imageAssetId);
+  if (hidden || !word.imageAssetId) return null;
+  if (!url) return <div className={cx(wordCss.art, className)} aria-hidden />;
+  return <img className={cx(wordCss.art, className)} src={url} alt="" role="presentation" data-testid="word-art" />;
+}
+
+/** `quiet` — тихая кнопка в строке листа занятия: обводка и чернила вместо заливки. */
+export function SpeakButton({
+  word,
+  label = "Послушать слово",
+  quiet,
+}: {
+  word: Word;
+  label?: string;
+  quiet?: boolean;
+}) {
   const kind = useAudioKind(word);
   const source = useAssetSource();
   const [failed, setFailed] = useState<"none" | "error" | null>(null);
@@ -28,7 +55,8 @@ export function SpeakButton({ word, label = "Послушать слово" }: {
     <div className={wordCss.speakBox}>
       <Button
         size="icon-xl"
-        className="size-14 rounded-full [&_svg:not([class*='size-'])]:size-6.5"
+        variant={quiet ? "outline" : "default"}
+        className={quiet ? QUIET_SPEAK : "size-14 rounded-full [&_svg:not([class*='size-'])]:size-6.5"}
         disabled={kind === "none"}
         aria-label={kind === "none" ? "Озвучка недоступна" : label}
         onClick={() =>
@@ -72,7 +100,7 @@ export function WordSummary({ word }: { word: Word }) {
   );
 }
 
-export function ReadingNotes({ word }: { word: Word }) {
+export function ReadingNotes({ word, bare }: { word: Word; bare?: boolean }) {
   const [open, setOpen] = useState<number | null>(null);
   const segments = [...word.segments].filter((s) => s.start >= 0).sort((a, b) => a.start - b.start);
   const parts: { text: string; index: number | null }[] = [];
@@ -90,60 +118,58 @@ export function ReadingNotes({ word }: { word: Word }) {
   const active = open === null ? null : segments[open];
   if (!note && !segments.length && !word.note) return null;
   return (
-    <Card className="mb-3 bg-soft ring-0" aria-label="Как читается">
-      <CardContent>
-        {note && (
-          <p className={ui.small} style={{ margin: segments.length ? "0 0 10px" : 0 }}>
-            {note}:{" "}
-            <b style={{ fontSize: 19 }}>
-              {accent ? (
-                <>
-                  {core.slice(0, accent.start)}
-                  <span className={wordCss.target}>{core.slice(accent.start, accent.start + accent.length)}</span>
-                  {core.slice(accent.start + accent.length)}
-                </>
+    <Box bare={bare} label="Как читается">
+      {note && (
+        <p className={ui.small} style={{ margin: segments.length ? "0 0 10px" : 0 }}>
+          {note}:{" "}
+          <b style={{ fontSize: 19 }}>
+            {accent ? (
+              <>
+                {core.slice(0, accent.start)}
+                <span className={wordCss.target}>{core.slice(accent.start, accent.start + accent.length)}</span>
+                {core.slice(accent.start + accent.length)}
+              </>
+            ) : (
+              core
+            )}
+          </b>
+        </p>
+      )}
+      {word.note && (
+        <p className={cx(ui.small)} style={{ margin: segments.length ? "0 0 10px" : 0 }}>
+          {word.note}
+        </p>
+      )}
+      {segments.length > 0 && (
+        <>
+          <p style={{ fontSize: 22, margin: "0 0 6px" }}>
+            {parts.map((part, i) =>
+              part.index === null ? (
+                <span key={i}>{part.text}</span>
               ) : (
-                core
-              )}
-            </b>
+                <button
+                  key={i}
+                  className={wordCss.seg}
+                  aria-expanded={open === part.index}
+                  onClick={() => setOpen(open === part.index ? null : part.index)}
+                >
+                  {part.text}
+                </button>
+              ),
+            )}
           </p>
-        )}
-        {word.note && (
-          <p className={cx(ui.small)} style={{ margin: segments.length ? "0 0 10px" : 0 }}>
-            {word.note}
+          <p className={ui.note} style={{ margin: 0 }}>
+            {active ? (
+              <>
+                «{active.text}» → [{active.ipa}]. {active.explanation}
+              </>
+            ) : (
+              "Нажмите на подчёркнутое сочетание букв."
+            )}
           </p>
-        )}
-        {segments.length > 0 && (
-          <>
-            <p style={{ fontSize: 22, margin: "0 0 6px" }}>
-              {parts.map((part, i) =>
-                part.index === null ? (
-                  <span key={i}>{part.text}</span>
-                ) : (
-                  <button
-                    key={i}
-                    className={wordCss.seg}
-                    aria-expanded={open === part.index}
-                    onClick={() => setOpen(open === part.index ? null : part.index)}
-                  >
-                    {part.text}
-                  </button>
-                ),
-              )}
-            </p>
-            <p className={ui.note} style={{ margin: 0 }}>
-              {active ? (
-                <>
-                  «{active.text}» → [{active.ipa}]. {active.explanation}
-                </>
-              ) : (
-                "Нажмите на подчёркнутое сочетание букв."
-              )}
-            </p>
-          </>
-        )}
-      </CardContent>
-    </Card>
+        </>
+      )}
+    </Box>
   );
 }
 
@@ -156,10 +182,12 @@ export function ExampleBox({
   example,
   title = "В контексте",
   linkFrom,
+  bare,
 }: {
   example: Example;
   title?: string;
   linkFrom?: string;
+  bare?: boolean;
 }) {
   const at = example.target ? example.greek.indexOf(example.target) : -1;
   const voice = useGreekVoice();
@@ -199,45 +227,50 @@ export function ExampleBox({
   });
   parts.push(<Fragment key="end">{piece(cursor, example.greek.length)}</Fragment>);
   return (
-    <Card className="mb-3 bg-soft ring-0">
-      <CardContent>
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0 flex-1">
+    <Box bare={bare}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          {!bare && (
             <p className={ui.note} style={{ margin: "0 0 6px" }}>
               {title}
             </p>
-            <p style={{ fontSize: 20, margin: "0 0 4px" }}>{parts}</p>
-            {glosses.length > 0 && (
-              <p className={ui.small} style={{ margin: "0 0 4px" }} aria-live="polite" data-testid="example-gloss">
-                {active && (
-                  <>
-                    <b>{example.greek.slice(active.start, active.start + active.length)}</b> — {active.russian}
-                    {linked && !linked.deletedAt && (
-                      <>
-                        {" "}
-                        <Link to={`/words/${linked.id}`}>Открыть карточку</Link>
-                      </>
-                    )}
-                  </>
-                )}
-              </p>
-            )}
-            <p className={ui.note} style={{ margin: 0 }}>
-              {example.russian}
-            </p>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon-lg"
-            className="-mt-1 shrink-0 text-primary hover:bg-primary/10"
-            disabled={!voice}
-            aria-label={voice ? "Послушать предложение" : "Озвучка предложения недоступна: нет греческого голоса"}
-            onClick={() => speakPhrase(example.greek)}
+          )}
+          <p
+            className={bare ? wordCss.printLine : undefined}
+            style={bare ? undefined : { fontSize: 20, margin: "0 0 4px" }}
           >
-            <Volume2 />
-          </Button>
+            {parts}
+          </p>
+          {glosses.length > 0 && (
+            <p className={ui.small} style={{ margin: "0 0 4px" }} aria-live="polite" data-testid="example-gloss">
+              {active && (
+                <>
+                  <b>{example.greek.slice(active.start, active.start + active.length)}</b> — {active.russian}
+                  {linked && !linked.deletedAt && (
+                    <>
+                      {" "}
+                      <Link to={`/words/${linked.id}`}>Открыть карточку</Link>
+                    </>
+                  )}
+                </>
+              )}
+            </p>
+          )}
+          <p className={ui.note} style={{ margin: 0 }}>
+            {example.russian}
+          </p>
         </div>
-      </CardContent>
-    </Card>
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          className="-mt-1 shrink-0 text-primary hover:bg-primary/10"
+          disabled={!voice}
+          aria-label={voice ? "Послушать предложение" : "Озвучка предложения недоступна: нет греческого голоса"}
+          onClick={() => speakPhrase(example.greek)}
+        >
+          <Volume2 />
+        </Button>
+      </div>
+    </Box>
   );
 }
