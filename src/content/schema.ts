@@ -17,6 +17,7 @@ import {
   type CourseExam,
   type LessonBlock,
   type LessonKind,
+  tapFields,
 } from "./course.ts";
 
 /**
@@ -29,6 +30,8 @@ import {
  * аудирование, письмо, речь), вид урока (урок или контрольная) и формы слова. Урок схемы 4 может не содержать
  * карточек, если у него есть блоки.
  * Читатель принимает версии 2–4; словарный пакет версии 2 представляется уроком из слов.
+ * Необязательное поле `marks` (слова в тексте урока) добавлено в схему 4 без смены версии: прежний читатель
+ * собирает пакет по известным полям и его не видит.
  */
 export const SCHEMA_VERSION = 4;
 export const SUPPORTED_SCHEMAS = [2, 3, 4] as const;
@@ -132,7 +135,33 @@ export interface ContentPackage {
   media: PackageMedia[];
   /** Блоки урока по порядку (схема 4). */
   blocks?: LessonBlock[];
+  marks?: PackageMarks;
 }
+
+export interface WordMark {
+  start: number;
+  length: number;
+  ref: string;
+  kind: "lesson" | "earlier";
+  first: boolean;
+}
+/** Карточки прошлого урока в пакете нет, поэтому её данные едут здесь. */
+export interface MarkCard {
+  ref: string;
+  greek: string;
+  russian: string;
+  ipa?: string;
+  forms?: string;
+  lesson: string;
+}
+/** Вхождений в уроке сотни, поэтому каждое — `[начало, длина, номер в refs, first 0|1]`; чьё слово, видно по `items`. */
+export interface PackageMarks {
+  refs: string[];
+  cards: MarkCard[];
+  blocks: Record<string, Record<string, [number, number, number, 0 | 1][]>>;
+}
+export type BlockMarks = Record<string, Record<string, WordMark[]>>;
+export const cardRef = (kind: CardKind, id: string) => `${kind === "word" ? "w" : "p"}:${id}`;
 
 export { ContentError, type ContentErrorKind } from "./schema-errors.ts";
 
@@ -528,9 +557,78 @@ export function parsePackage(input: unknown): ContentPackage {
           `пакет.blocks: аудирование ${block.id} ссылается на медиа ${block.audioAssetId}, которого нет в пакете`,
         );
     if (blocks.length) pack.blocks = blocks;
+    if (raw.marks !== undefined) pack.marks = parseMarks(raw.marks, blocks, items);
   } else if (raw.blocks !== undefined || raw.module !== undefined)
     throw new ContentError(`пакет: блоки и модуль появились в схеме 4, а пакет объявлен схемой ${schemaVersion}`);
   return pack;
+}
+
+export function decodeMarks(marks: PackageMarks, items: PackageItem[]): BlockMarks {
+  const own = new Set(items.map((item) => cardRef(item.kind, item.id)));
+  const out: BlockMarks = {};
+  for (const [blockId, fields] of Object.entries(marks.blocks))
+    for (const [field, list] of Object.entries(fields))
+      (out[blockId] ??= {})[field] = list.map(([start, length, at, first]) => {
+        const ref = marks.refs[at];
+        return { start, length, ref, kind: own.has(ref) ? "lesson" : "earlier", first: first === 1 };
+      });
+  return out;
+}
+
+export function parseMarks(input: unknown, blocks: LessonBlock[], items: PackageItem[]): PackageMarks {
+  const raw = obj(input, "пакет.marks");
+  const cards = list(raw.cards ?? [], "пакет.marks.cards").map((entry, i): MarkCard => {
+    const path = `пакет.marks.cards[${i}]`;
+    const card = obj(entry, path);
+    const parsed: MarkCard = {
+      ref: str(card.ref, `${path}.ref`),
+      greek: str(card.greek, `${path}.greek`),
+      russian: str(card.russian, `${path}.russian`),
+      lesson: str(card.lesson, `${path}.lesson`),
+    };
+    for (const field of ["ipa", "forms"] as const) {
+      const value = opt(card[field], (v) => str(v, `${path}.${field}`));
+      if (value) parsed[field] = value;
+    }
+    return parsed;
+  });
+  unique(
+    cards.map((card) => card.ref),
+    "пакет.marks.cards",
+  );
+  const known = new Set([...items.map((item) => cardRef(item.kind, item.id)), ...cards.map((card) => card.ref)]);
+  const refs = list(raw.refs, "пакет.marks.refs").map((ref, i) => {
+    const value = str(ref, `пакет.marks.refs[${i}]`);
+    if (!known.has(value))
+      throw new ContentError(`пакет.marks.refs[${i}]: карточки ${value} нет ни в уроке, ни среди прошлых`);
+    return value;
+  });
+  const byId = new Map(blocks.map((block) => [block.id, new Map(tapFields(block))]));
+  const result: PackageMarks = { refs, cards, blocks: {} };
+  for (const [blockId, fields] of Object.entries(obj(raw.blocks ?? {}, "пакет.marks.blocks"))) {
+    const texts = byId.get(blockId);
+    if (!texts) throw new ContentError(`пакет.marks.blocks.${blockId}: блока с текстом нет в уроке`);
+    result.blocks[blockId] = {};
+    for (const [field, entries] of Object.entries(obj(fields, `пакет.marks.blocks.${blockId}`))) {
+      const path = `пакет.marks.blocks.${blockId}.${field}`;
+      const text = texts.get(field);
+      if (text === undefined) throw new ContentError(`${path}: такого поля у блока нет`);
+      let end = 0;
+      result.blocks[blockId][field] = list(entries, path).map((entry, i): [number, number, number, 0 | 1] => {
+        const at = `${path}[${i}]`;
+        const [start, length, ref, first] = list(entry, at);
+        if (![start, length, ref].every(Number.isInteger) || (length as number) < 1 || (first !== 0 && first !== 1))
+          throw new ContentError(`${at}: ожидалось [начало, длина, карточка, 0|1]`);
+        if ((start as number) < end) throw new ContentError(`${at}: вхождения пересекаются или идут не по порядку`);
+        if ((start as number) + (length as number) > text.length)
+          throw new ContentError(`${at}: вхождение выходит за текст`);
+        if (refs[ref as number] === undefined) throw new ContentError(`${at}: нет карточки с номером ${String(ref)}`);
+        end = (start as number) + (length as number);
+        return [start as number, length as number, ref as number, first];
+      });
+    }
+  }
+  return result;
 }
 
 /** Поля слова, которые поставляет пакет; остальное принадлежит пользователю. */

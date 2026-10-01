@@ -1,0 +1,2 @@
+window.IC={x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',sound:'<svg viewBox="0 0 24 24"><path d="M4 9.5h3l4.5-4v13L7 14.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>',tick:'<svg class="tick" viewBox="0 0 34 30"><path d="M3 16c3 1 6 5 8 9 4-9 10-16 20-22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'};
+document.addEventListener("DOMContentLoaded",()=>document.querySelectorAll('[data-ic]').forEach(n=>n.innerHTML=IC[n.dataset.ic]));

@@ -87,10 +87,10 @@ test("урок курса: задания с ключом, чтение, ауд�
   );
   await expect(forms).toContainText("Верно: είσαι — Εσύ — ты: είσαι.");
 
-  // Чтение: глосса открывается касанием; задание верно/неверно.
   const reading = await turnTo(page, "Чтение: Η Άννα");
-  await reading.getByRole("button", { name: "μένω" }).click();
-  await expect(reading).toContainText("— живу");
+  await reading.getByRole("button", { name: "Произнести и перевести: μένω" }).click();
+  await expect(page.getByRole("dialog", { name: "μένω" })).toContainText("живу");
+  await page.keyboard.press("Escape");
   const tf = section(page, "Верно или неверно?");
   await tf.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "Λάθος" }).click();
   await tf.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "Σωστό" }).click();

@@ -1,0 +1,57 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="base.css">
+<style>
+body.dark{--bg:#14171c;--paper:#1c2028;--fg:#e8eaee;--muted:#a3a9b4;--ink:#8fb0ff;--soft:#24304a;--border:#2b323d;--grid:#222832;--pen:#ff8a80;--ok:#4ade80}
+body{background:var(--bg)}
+.top{justify-content:center;font:600 17px var(--print);position:relative}.top .x{position:absolute;left:16px}
+.page{padding:12px 16px 120px;min-height:100vh;max-width:620px;margin:0 auto}
+h3{font:600 18px/24px var(--print);margin:24px 0 0}
+p.t{font:16px/24px var(--print);margin:0 0 12px}
+.ins{font:600 13.5px/24px var(--ui);color:var(--muted);margin:0}
+/* слово урока — пунктир чернилами; слово прошлых уроков — тонкий серый пунктир */
+.w{color:inherit;text-decoration:underline dotted;text-decoration-color:var(--ink);text-decoration-thickness:2px;text-underline-offset:4px;cursor:pointer;border-radius:3px}
+.w.old{text-decoration-color:color-mix(in srgb,var(--muted) 55%,transparent);text-decoration-thickness:1.5px}
+.w.on{background:color-mix(in srgb,var(--ink) 12%,transparent)}
+.gl{text-decoration:underline dotted;text-decoration-color:var(--ink);text-decoration-thickness:2px;text-underline-offset:4px}
+/* подсказка-облачко над словом */
+.tip{position:absolute;z-index:3;width:260px;padding:12px 14px 12px;background:var(--paper);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 32px -10px rgb(20 24 32 / .35),0 2px 6px rgb(20 24 32 / .08)}
+.tip:after{content:"";position:absolute;left:var(--ax,40px);bottom:-7px;width:12px;height:12px;background:var(--paper);border-right:1px solid var(--border);border-bottom:1px solid var(--border);transform:rotate(45deg)}
+.tip.below:after{bottom:auto;top:-7px;transform:rotate(225deg)}
+.tip .g{font:600 21px/26px var(--print);margin:0}
+.tip .row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.tip .ipa{font:15px var(--print);color:var(--muted)}
+.tip .ru{font:17px/22px var(--print);margin:6px 0 0}
+.tip .fm{font:13px var(--ui);color:var(--muted);margin:4px 0 0}
+.tip .nv{font:13px var(--ui);color:var(--muted);margin:8px 0 0;border-top:1px solid var(--border);padding-top:8px}
+.tip .old{font:600 11.5px var(--ui);color:var(--muted);margin:0 0 4px}
+.speak{width:36px;height:36px;flex:none}
+.rel{position:relative}
+.ex{margin-top:24px;padding-top:12px;border-top:1px dashed var(--border)}
+.ex .q{font:17px/24px var(--print);margin:8px 0}
+.opts{display:flex;gap:10px}.opt{border:1px solid #c9d5e6;border-radius:12px;padding:8px 16px;font:17px var(--print);background:var(--paper)}
+body.dark .opt{border-color:var(--border)}
+.legend{display:flex;gap:16px;font:13px var(--ui);color:var(--muted);margin:8px 0 0}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+@media (min-width:900px){.page{max-width:760px;padding-top:24px}}
+</style></head><body>
+<div class="top"><span class="x" data-ic="x"></span>Знакомство, друзья и числа</div>
+<div class="page grid" id="p"></div>
+<script src="icons.js"></script>
+<script>
+const q=new URLSearchParams(location.search),st=q.get('s')||'expl';if(q.get('dark'))document.body.classList.add('dark');
+const W=(t,cls='')=>`<span class="w ${cls}">${t}</span>`, O=(t,c='')=>W(t,'old '+c);
+const tip=(o)=>`<div class="tip" style="left:${o.x}px;top:${o.y}px;--ax:${o.ax||40}px">${o.old?'<p class="old">Из урока 1.1</p>':''}<div class="row"><div><p class="g" lang="el">${o.g}</p><span class="ipa">${o.ipa}</span></div><span class="speak" data-ic="sound"></span></div><p class="ru">${o.ru}</p>${o.fm?`<p class="fm" lang="el">${o.fm}</p>`:''}${o.nv?'<p class="nv">На устройстве нет греческого голоса — включите его в настройках речи.</p>':''}</div>`;
+const expl=(on)=>`<h3>Друг, подруга, имя</h3><p class="t">У греческих существительных три рода, и артикль сразу его показывает: <b>ο</b> — мужской, <b>η</b> — женский, <b>το</b> — средний. Учите слово вместе с артиклем: ${W('ο φίλος')}, ${W('η φίλη',on==='fili'?'on':'')}, ${W('το όνομα')}.</p><p class="t">«Мой» и «твой» ставятся <b>после</b> слова: ${W('ο φίλος')} <b>μου</b> — «мой друг», ${W('η φίλη')} <b>σου</b> — «твоя подруга». ${O('Εγώ')} ${O('είμαι',on==='ime'?'on':'')} ${O('από')} τη Ρωσία — «я из России».</p>`;
+const read=(on)=>`<h3>Η Ιρίνα</h3><p class="t" lang="el">${O('Γεια')} σας! Με λένε Ιρίνα. ${O('Είμαι')} ${O('από')} τη Ρωσία, ${O('από')} την <span class="gl">Αγία Πετρούπολη</span>. ${W('Τώρα',on==='tora'?'on':'')} ${O('είμαι')} <span class="gl">στην</span> Κύπρο, <span class="gl">στη Λάρνακα</span>.</p><p class="t" lang="el"><span class="gl">Ο φίλος μου</span> ο Μιχάλης είναι ${O('από')} τη Λάρνακα. ${W('Η φίλη')} μου η Όλγα είναι ${O('από')} τη Μόσχα, αλλά ${W('τώρα')} είναι στην Πάφο. ${O('Εμείς')} είμαστε ${W('φίλοι')}.</p><p class="t" lang="el">${W('Γιατί')} είμαι στην Κύπρο; ${W('Γιατί')} η Κύπρος είναι πολύ ωραία!</p><p class="t" lang="el">Το τηλέφωνό μου: ${W('εννέα')}, ${W('έξι')}, ${W('τρία')}, ${W('πέντε')}, ${W('μηδέν')}, ${W('δύο')}, ${W('οκτώ')}, ${W('ένα')}.</p>`;
+const ex=`<div class="ex"><p class="ins">Задание 2 · Выберите перевод</p><p class="q" lang="el">1. Η Όλγα είναι η φίλη μου.</p><div class="opts"><span class="opt">мой друг</span><span class="opt">моя подруга</span></div><p class="ins" style="margin-top:8px;font-weight:400">В заданиях слова не выделяются — подсказка не решает задание.</p></div>`;
+const legend=`<div class="legend"><span><span class="w">φίλη</span> слово этого урока</span><span><span class="w old">είμαι</span> из прошлых уроков</span></div>`;
+const p=document.getElementById('p');
+if(st==='expl')p.innerHTML=legend+`<div class="rel">${expl('fili')}${tip({x:40,y:118,ax:150,g:'η φίλη',ipa:'/i ˈfili/',ru:'подруга',fm:'мн. οι φίλες'})}</div>`+ex;
+if(st==='old')p.innerHTML=`<div class="rel">${expl('ime')}${tip({x:60,y:160,ax:70,old:1,g:'είμαι',ipa:'/ˈime/',ru:'быть',fm:'прош. ήμουν; буд. θα είμαι'})}</div>`;
+if(st==='read')p.innerHTML=`<div class="rel">${read('tora')}${tip({x:16,y:30,ax:40,g:'τώρα',ipa:'/ˈtora/',ru:'сейчас, теперь'})}</div>`;
+if(st==='novoice')p.innerHTML=`<div class="rel">${read('tora')}${tip({x:16,y:0,ax:40,g:'τώρα',ipa:'/ˈtora/',ru:'сейчас, теперь',nv:1})}</div>`;
+if(st==='desk')p.innerHTML=legend+`<div class="rel">${expl('fili')}${tip({x:330,y:94,ax:40,g:'η φίλη',ipa:'/i ˈfili/',ru:'подруга',fm:'мн. οι φίλες'})}</div>`+read('')+ex;
+
+document.fonts.ready.then(()=>{const t=document.querySelector('.tip'),w=document.querySelector('.w.on');if(!t||!w)return;const host=t.offsetParent.getBoundingClientRect(),r=w.getBoundingClientRect(),tw=t.offsetWidth,th=t.offsetHeight;
+let x=r.left+r.width/2-tw/2-host.left;x=Math.max(0,Math.min(x,host.width-tw));let y=r.top-host.top-th-10;if(r.top-th-10<56){y=r.bottom-host.top+10;t.classList.add('below')}
+t.style.left=x+'px';t.style.top=y+'px';t.style.setProperty('--ax',(r.left+r.width/2-host.left-x-6)+'px')});
+</script></body></html>
