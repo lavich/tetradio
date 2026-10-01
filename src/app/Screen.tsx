@@ -14,6 +14,7 @@ export function Screen({
   subtitle,
   bare,
   roomy,
+  wide,
   children,
 }: {
   back?: string;
@@ -22,6 +23,8 @@ export function Screen({
   subtitle?: string;
   bare?: boolean;
   roomy?: boolean;
+  /** Разворот урока на широком экране. */
+  wide?: boolean;
   children?: ReactNode;
 }) {
   return (
@@ -31,7 +34,9 @@ export function Screen({
       ) : (
         <BackBar title={back} right={right} onBack={onBack} />
       )}
-      <main className={roomy ? `${ui.screen} ${ui.roomy}` : ui.screen}>{children}</main>
+      <main className={[ui.screen, roomy ? ui.roomy : "", wide ? ui.wide : ""].filter(Boolean).join(" ")}>
+        {children}
+      </main>
     </>
   );
 }

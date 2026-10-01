@@ -1,20 +1,11 @@
-/* Страница тетради «Τετράδιο»: клетка, поля с номерами и пометками, печать учебника, чернила ответа, красная ручка. */
+/* Страница тетради «Τετράδιο»: клетка, печать учебника, чернила ответа, красная ручка. Полей нет: на узком экране
+   ширина нужнее, номера и пометки стоят в строке. */
 .page {
   position: relative;
   margin: 0 -16px;
-  padding: var(--cell) 16px var(--cell) calc(var(--field) + 12px);
+  padding: var(--cell) 16px;
   /* Лист на всю высоту окна под шапкой: тетрадь — страница, а не карточка. */
   min-height: calc(var(--app-height) - 64px - var(--inset-top));
-}
-.page::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--field) - 2px);
-  width: 2px;
-  background: var(--margin-line);
-  opacity: 0.8;
 }
 .date {
   font-family: var(--font-print);
@@ -52,29 +43,38 @@
   color: var(--muted-foreground);
 }
 
-/* Блок урока: номер и пометка — на полях, содержимое — на странице. */
+/* Блок урока. Номер задания и пометка о выполнении — строкой над блоком, а в списках — перед пунктом. */
 .block {
   position: relative;
   margin-top: calc(var(--cell) * 1.5);
 }
+/* Пометка и текст в две колонки: подписи разной длины («цель», «1.», галочка) не сдвигают текст. */
+.marked,
+.lessons li {
+  display: grid;
+  grid-template-columns: 3.6rem minmax(0, 1fr);
+  align-items: baseline;
+}
 .gutter {
-  position: absolute;
-  left: calc(-1 * var(--field) - 12px);
-  width: var(--field);
-  padding-right: 10px;
-  top: 0;
-  text-align: right;
+  flex: 0 0 auto;
+  min-width: 1.6em;
   font-family: var(--font-print);
   font-size: 15px;
   line-height: var(--cell);
   color: var(--muted-foreground);
 }
 .mark {
-  position: absolute;
-  left: calc(-1 * var(--field) + 2px);
-  width: 32px;
-  height: 28px;
+  flex: 0 0 auto;
+  align-self: center;
+  width: 26px;
+  height: 24px;
   color: var(--pen);
+}
+.blockHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--cell);
 }
 .blockTitle {
   font-family: var(--font-print);
@@ -117,6 +117,18 @@
 .item {
   position: relative;
   margin-top: calc(var(--cell) / 2);
+}
+/* Пометка пункта — у правого края строки: полей слева больше нет. */
+.itemMark {
+  position: absolute;
+  right: 0;
+  top: 2px;
+  width: 26px;
+  height: 24px;
+  color: var(--pen);
+}
+.item > .prompt {
+  padding-right: 32px;
 }
 .prompt {
   font-family: var(--font-print);
@@ -338,11 +350,104 @@
 
 /* Нижний док урока: завершение — главное действие. */
 .dock {
-  position: sticky;
-  bottom: calc(60px + 12px + var(--inset-bottom));
   margin-top: calc(var(--cell) * 2);
+}
+
+/* Урок листается, как книга: страница — блок или текст с заданиями к нему; последняя — итог. */
+.sheet {
+  touch-action: pan-y;
+}
+/* Лист въезжает со сдвигом; рамка обрезает сдвиг, иначе документ на миг шире экрана и дёргается нижнее меню. */
+.frame {
+  overflow-x: clip;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+/* Разворот: две страницы рядом, между ними корешок. */
+.spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.spread > .page {
+  margin: 0;
+  padding: var(--cell) 28px;
+  min-height: calc(var(--app-height) - 64px - var(--inset-top) - 80px);
+}
+.spread > .page + .page {
+  border-left: 1px solid var(--border);
+  box-shadow: inset 12px 0 16px -14px color-mix(in srgb, var(--foreground) 35%, transparent);
+}
+.turnNext {
+  animation: turn-next 220ms ease-out;
+}
+.turnPrev {
+  animation: turn-prev 220ms ease-out;
+}
+@keyframes turn-next {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+}
+@keyframes turn-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .turnNext,
+  .turnPrev {
+    animation: none;
+  }
+}
+.pager {
+  position: sticky;
+  bottom: calc(60px + 8px + var(--inset-bottom));
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: calc(var(--cell) * 2) 0 0;
   padding: 8px 0;
-  background: color-mix(in srgb, var(--background) 92%, transparent);
+  background: color-mix(in srgb, var(--background) 94%, transparent);
+}
+.pageCount {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-family: var(--font-print);
+  font-size: 15px;
+  line-height: 1.25;
+  color: var(--muted-foreground);
+}
+.pageCount > span {
+  display: block;
+}
+.pageTasks {
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.pending {
+  list-style: none;
+  margin: calc(var(--cell) / 2) 0 0;
+  padding: 0;
+}
+.pending li {
+  margin-top: 4px;
+}
+.pending button {
+  font: inherit;
+  color: var(--primary);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
 }
 
 /* Полка курса: тетради с цветными обложками, черновики — пунктиром. */
@@ -464,7 +569,6 @@
   padding: 0;
 }
 .lessons li {
-  position: relative;
   margin-top: calc(var(--cell) * 0.75);
 }
 .lessonLink {

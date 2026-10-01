@@ -248,7 +248,7 @@ export function Exercise({
         return (
           <div key={item.id} className={css.item}>
             {result && result.status !== "wrong" ? (
-              <Tick className={css.mark} label={statusLabel[result.status]} />
+              <Tick className={css.itemMark} label={statusLabel[result.status]} />
             ) : null}
             <p className={css.prompt} lang="el">
               <span className={css.soft}>{index + 1}. </span>
