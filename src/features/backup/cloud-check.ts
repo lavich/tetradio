@@ -3,9 +3,8 @@ import type { SyncAdapter } from "../../sync/adapter";
 import { META, readMeta } from "../../sync/snapshot";
 
 /**
- * Отпечаток облака на момент предпросмотра: указатели других устройств с их часами. Свой указатель не входит —
- * его результаты уже лежат в этой базе и уходят в защитную копию. `null` — облако недоступно или не ответило:
- * сверять не с чем, а восстановленная копия всё равно не заменит облако без выбора (`sync:restored`).
+ * Указатели облака других устройств на момент предпросмотра. Свой не входит: его результаты уже в этой базе.
+ * `null` — облако недоступно: сверять не с чем, а копия всё равно не заменит облако без выбора (`sync:restored`).
  */
 export async function cloudPrint(adapter: SyncAdapter, database: AppDatabase): Promise<string | null> {
   if (!adapter.capabilities().available) return null;
@@ -28,7 +27,6 @@ export async function cloudPrint(adapter: SyncAdapter, database: AppDatabase): P
 }
 
 export interface CloudGuard {
-  /** Отпечаток, снятый при предпросмотре. */
   seen: string | null;
   read: () => Promise<string | null>;
 }

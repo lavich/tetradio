@@ -220,7 +220,6 @@ describe("конкурентное изменение облака после п
     expect(error.message).toBe("Данные аккаунта изменились на другом устройстве — откройте предпросмотр заново.");
     expect(await state(target)).toEqual(before);
     expect(await readMeta(target, META.restored)).toBe(restored);
-    // Новый предпросмотр видит текущее облако — замена проходит.
     const fresh = { ...guard, seen: await guard.read() };
     await restoreBackup(file, target, { cloud: fresh });
     expect((await target.lessons.get("m01-1"))?.status).toBe("completed");
