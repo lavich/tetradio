@@ -56,7 +56,7 @@ async function prepare(page: Page, limit: number, options: Parameters<typeof see
   return seedMixedLesson(page, { targetDate: tomorrow(), ...options });
 }
 
-test("экран урока: группы двух видов, просмотр карточек, непроверяемая фраза, удаление связи и нетронутый раздел «Слова»", async ({
+test("экран урока: группы двух видов, просмотр карточек, непроверяемая фраза и нетронутый раздел «Слова»", async ({
   page,
 }) => {
   test.setTimeout(120000);
@@ -77,14 +77,6 @@ test("экран урока: группы двух видов, просмотр 
   const family = page.getByTestId("phrase-row").filter({ hasText: "Η οικογένειά μου" });
   await family.getByRole("button", { name: /Η οικογένειά μου/ }).click();
   await expect(family.getByTestId("phrase-details")).toContainText("Притяжательное μου");
-  // Удаление связи: карточка исчезает из группы, сама карточка и запись об удалении остаются.
-  await page.getByTestId("phrase-row").filter({ hasText: "Λεμεσό" }).getByRole("button", { name: "Убрать" }).click();
-  await expect(page.getByRole("heading", { name: "Фразы · 5" })).toBeVisible();
-  await expect(page.getByTestId("composition")).toContainText("6 карточек");
-  expect((await readTable(page, "phrases")).some((row) => row.id === "p-lemeso")).toBe(true);
-  expect((await readTable(page, "packages")).find((row) => row.lessonId === "lesson-mixed").removed).toEqual([
-    JSON.stringify(["phrase", "p-lemeso"]),
-  ]);
   // Раздел «Слова» остаётся словарём слов: фразы туда не попадают.
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await page.getByRole("searchbox").fill("Γράφω ένα");
@@ -123,28 +115,25 @@ test("урок без слов не пуст, а группа без досту�
     title: "Только фразы",
     only: ["p-grafo", "p-silent"],
   });
+  await seedMixedLesson(page, { lessonId: "lesson-silent", title: "Без перевода", only: ["p-silent"] });
   await page.goto("/lessons/lesson-text");
   await expect(page.getByTestId("composition")).toContainText("2 карточки: 2 фразы");
   await expect(page.getByRole("heading", { name: /^Слова ·/ })).toHaveCount(0);
-  await expect(page.getByText("В наборе пока нет карточек")).toHaveCount(0);
+  await expect(page.getByText("В уроке пока нет карточек")).toHaveCount(0);
   // Пока в группе есть проверяемая фраза, тренировка начинается.
   await page.getByTestId("group-phrase").getByRole("button", { name: "Потренировать группу" }).click();
   await page.waitForURL("**/session");
   await expect(page.getByTestId("prompt").first()).toHaveText(/Новая фраза|Что значит эта фраза\?|Напиши по-гречески/);
   // Группа из одной непроверяемой фразы: тренировка не начинается, сообщение на месте.
-  await page.goto("/lessons/lesson-text");
-  await page
-    .getByTestId("phrase-row")
-    .filter({ hasText: "Γράφω ένα γράμμα." })
-    .getByRole("button", { name: "Убрать" })
-    .click();
+  await page.goto("/lessons/lesson-silent");
   await expect(page.getByRole("heading", { name: "Фразы · 1" })).toBeVisible();
   await page.getByTestId("group-phrase").getByRole("button", { name: "Потренировать группу" }).click();
   await expect(page.getByRole("alert")).toContainText("В группе «Фразы» нет доступных заданий");
-  await expect(page).toHaveURL(/\/lessons\/lesson-text$/);
+  await expect(page).toHaveURL(/\/lessons\/lesson-silent$/);
   // Список уроков считает карточки, а не слова.
   await page.goto("/lessons");
-  await expect(page.getByRole("link", { name: /Только фразы/ })).toContainText("1 карточка");
+  await expect(page.getByRole("link", { name: /Только фразы/ })).toContainText("2 карточки");
+  await expect(page.getByRole("link", { name: /Без перевода/ })).toContainText("1 карточка");
 });
 
 test("занятие: знакомство с фразой, «Не знаю» с дополнительной попыткой и продолжение после перезапуска без сети", async ({

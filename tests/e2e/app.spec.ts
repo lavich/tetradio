@@ -182,13 +182,6 @@ test("прогресс урока виден на «Сегодня» и «Уро
   ).toBeVisible();
   await lessons();
   await expect(row().getByTestId("lesson-progress")).toHaveText(`4 в повторении · ${size - 4} новых`);
-  // Пустой набор: число слов есть, полосы нет.
-  await page.getByRole("button", { name: "Добавить занятие" }).click();
-  await page.locator("#title").fill("Урок 9.9");
-  await page.getByRole("button", { name: "Создать" }).click();
-  const fresh = page.getByRole("link", { name: /9\.9 ·/ });
-  await expect(fresh).toContainText("0 слов");
-  await expect(fresh.getByTestId("lesson-progress")).toHaveCount(0);
 });
 
 test("расписание: даты уроков 1.3 и 1.4, ручной перенос сдвигает хвост, возврат в расписание", async ({ page }) => {

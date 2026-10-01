@@ -6,7 +6,6 @@ import { dexieSource, loadLessons } from "../src/storage/queries";
 import { wordRef } from "./helpers/cards";
 import {
   ConflictError,
-  createLesson,
   markIntroduced,
   prepareObjectiveSession,
   saveCourseTempo,
@@ -320,20 +319,11 @@ describe("операции над уроками при расписании", (
   };
   const raw = (id: string) => db.lessons.get(id).then((l) => l!);
   const shown = scheduled;
-  it("правка названия урока по расписанию не записывает дату в базу", async () => {
+  it("правка урока по расписанию не записывает дату в базу", async () => {
     await prepare();
-    await updateLesson("mech-3", { title: "Урок 1.3 (мебель)" }, db);
-    expect(await raw("mech-3")).toMatchObject({ title: "Урок 1.3 (мебель)", targetDate: null });
+    await updateLesson("mech-3", { status: "upcoming" }, db);
+    expect(await raw("mech-3")).toMatchObject({ status: "upcoming", targetDate: null });
     expect((await shown("mech-3")).targetDate).toBe("2026-09-21");
-  });
-  it("новый набор живёт по расписанию своего курса, а не соседнего", async () => {
-    await prepare(); // расписание задано курсу mechanics
-    const created = await createLesson("Урок 2.1", db);
-    expect(created.courseId).toBe("my");
-    expect(created.targetDate).toBeNull();
-    expect((await shown(created.id)).targetDate).toBeNull(); // чужое расписание набор не подхватывает
-    await db.courses.update("my", { schedule: { startDate: "2026-09-28", weekdays: [1, 4], lessonHour: 12 } });
-    expect((await shown(created.id)).targetDate).toBe("2026-09-28");
   });
   it("закрепляет прошедший урок один раз и не трогает его при смене дней недели", async () => {
     await prepare();
@@ -379,11 +369,11 @@ describe("операции над уроками при расписании", (
   });
   it("закрепляет ручную дату в прошлом у предстоящего урока и не трогает будущие", async () => {
     await prepare();
-    const past = await createLesson("Повторение", db);
-    await updateLesson(past.id, { targetDate: "2026-09-10" }, db);
-    expect(await settleLessons(new Date("2026-09-16T06:00:00Z"), db)).toBe(2); // «Повторение» и 1.1
-    expect(await raw(past.id)).toMatchObject({ targetDate: "2026-09-10", status: "completed" });
+    await updateLesson("mech-4", { targetDate: "2026-09-10" }, db);
+    expect(await settleLessons(new Date("2026-09-16T06:00:00Z"), db)).toBe(2); // 1.4 с ручной датой и 1.1
+    expect(await raw("mech-4")).toMatchObject({ targetDate: "2026-09-10", status: "completed" });
     expect(await raw("mech-2")).toMatchObject({ status: "upcoming" });
+    expect(await raw("mech-3")).toMatchObject({ status: "upcoming" });
   });
   it("первое занятие в прошлом: сохранение расписания сразу закрепляет прошедшие уроки", async () => {
     await ensureSeed(db);

@@ -11,7 +11,6 @@ import {
   wordPage,
   type WordCursor,
 } from "../src/storage/queries";
-import { removeFromLesson } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { installMixed, MIXED_LESSON, mixedPackage } from "./helpers/mixed";
 import { mulberry32 } from "./plan-golden.test";
@@ -22,7 +21,7 @@ import { State } from "ts-fsrs";
 import { defaultSettings, type LessonItem, type Snapshot, type Word } from "../src/domain/types";
 import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
 import { recordFor, scenarios } from "./plan-golden.test";
-import { content, installLessons, wordCountOf } from "./helpers/content";
+import { content, installLessons, legacyRemove, wordCountOf } from "./helpers/content";
 
 let db: AppDatabase;
 beforeEach(async () => {
@@ -332,7 +331,7 @@ describe("смешанный урок в выборках", () => {
     ]);
     expect(detail.states.size).toBe(2);
     // Убранная фраза исчезает из состава, но не из базы; словарь остаётся словарём слов.
-    await removeFromLesson(MIXED_LESSON, { kind: "phrase", id: "p-silent" }, db);
+    await legacyRemove(db, MIXED_LESSON, { kind: "phrase", id: "p-silent" });
     expect((await lessonDetail(MIXED_LESSON, db))!.phrases).toHaveLength(5);
     expect(await db.phrases.get("p-silent")).toBeTruthy();
     const page = await wordPage({ query: "", filter: "all", lessonId: MIXED_LESSON, cursor: null }, db);

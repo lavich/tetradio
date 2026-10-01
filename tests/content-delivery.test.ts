@@ -24,16 +24,16 @@ import {
 } from "../src/content/client";
 import { ContentError, type ContentPackage } from "../src/content/schema";
 import { revisionOf } from "../content/build";
-import { removeFromLesson, saveCourseTempo } from "../src/storage/ops";
+import { saveCourseTempo } from "../src/storage/ops";
 import { lessonItems } from "../src/storage/queries";
 import { indexWord } from "../src/storage/db";
-import { linkWords } from "../src/storage/ops";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
 import {
   content,
   installLessons,
   itemCountOf,
   legacyEdit,
+  legacyRemove,
   memoryFetcher,
   packageOf,
   wordCountOf,
@@ -362,7 +362,7 @@ describe("обновление пакета", () => {
   it("удалённое слово не воскресает и убранная связь не восстанавливается", async () => {
     await installLessons(db, ["mech-2"]);
     await db.words.update("w034", { deletedAt: "2026-09-16T10:00:00.000Z" }); // удаление из прежней версии
-    await removeFromLesson("mech-2", wordRef("w041"), db);
+    await legacyRemove(db, "mech-2", wordRef("w041"));
     expect((await db.packages.get("mech-2"))!.removed).toEqual([wordKeyOf("w041")]);
     const next = bump(packageOf("mech-2"), (words) => {
       words.find((w) => w.id === "w034")!.russian = "жилище";
@@ -386,7 +386,7 @@ describe("обновление пакета", () => {
         version: 3,
       }),
     );
-    // Пользователь добавил в поставляемый урок своё слово: оно не из пакета и обновлением не трогается.
+    // Своё слово, добавленное в поставляемый урок прежней версией: оно не из пакета и обновлением не трогается.
     const own = {
       id: "w-own",
       greek: "η καρέκλα",
@@ -399,7 +399,12 @@ describe("обновление пакета", () => {
       updatedAt: "2026-09-16T10:00:00.000Z",
     };
     await db.words.add(indexWord(own));
-    await linkWords("mech-2", ["w-own"], db);
+    await db.lessonItems.add({
+      lessonId: "mech-2",
+      unitKey: wordKeyOf("w-own"),
+      ref: wordRef("w-own"),
+      position: itemCountOf("mech-2"),
+    });
     const next: ContentPackage = {
       ...pack,
       version: "trimmed",
@@ -438,7 +443,7 @@ describe("обновление пакета", () => {
   });
   it("убранную пользователем связь обновление не восстанавливает, даже когда автор оставил карточку в составе", async () => {
     await installLessons(db, ["mech-2"]);
-    await removeFromLesson("mech-2", wordRef("w041"), db);
+    await legacyRemove(db, "mech-2", wordRef("w041"));
     const pack = packageOf("mech-2");
     await installLesson("mech-2", db, await upgrade("mech-2", { ...pack, version: "same-items" }));
     expect(await db.lessonItems.get(["mech-2", wordKeyOf("w041")])).toBeUndefined();
@@ -605,7 +610,7 @@ describe("установка и обновление смешанного пак
       introducedAt: "2026-09-10T00:00:00Z",
       version: 2,
     });
-    await removeFromLesson(MIXED_LESSON, { kind: "phrase", id: "p-xora" }, db);
+    await legacyRemove(db, MIXED_LESSON, { kind: "phrase", id: "p-xora" });
     const pack = mixedPackage();
     const paidi = pack.phrases.find((p) => p.id === "p-paidi")!;
     const { revision: _r, ...fields } = paidi;
@@ -638,7 +643,7 @@ describe("установка и обновление смешанного пак
   });
   it("автор убрал фразу из состава: связь исчезает, карточка и её прогресс остаются, пользовательские удаления не трогаются", async () => {
     await installMixed(db);
-    await removeFromLesson(MIXED_LESSON, { kind: "phrase", id: "p-xora" }, db);
+    await legacyRemove(db, MIXED_LESSON, { kind: "phrase", id: "p-xora" });
     await db.cardStates.add({
       unitKey: unitKey({ kind: "phrase", id: "p-lemeso" }),
       ref: { kind: "phrase", id: "p-lemeso" },

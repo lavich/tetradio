@@ -1,5 +1,6 @@
 import { indexWord, type AppDatabase } from "../../src/storage/db";
-import type { Word } from "../../src/domain/types";
+import { unitKey } from "../../src/domain/refs";
+import type { LearningRef, Word } from "../../src/domain/types";
 import type { ContentFetcher } from "../../src/content/client";
 import { installLesson, refreshCatalog } from "../../src/content/client";
 import { buildContent, type BuiltContent } from "../../content/build";
@@ -54,4 +55,11 @@ export const itemCountOf = (...ids: string[]) => ids.reduce((sum, id) => sum + p
 export async function legacyEdit(database: AppDatabase, id: string, patch: Partial<Word>) {
   const word = (await database.words.get(id))!;
   await database.words.put(indexWord({ ...word, ...patch, edited: true }));
+}
+/** Карточка, убранная из урока в прежней версии: связи нет, а пакет помнит удаление, чтобы обновление её не вернуло. */
+export async function legacyRemove(database: AppDatabase, lessonId: string, ref: LearningRef) {
+  const key = unitKey(ref);
+  await database.lessonItems.delete([lessonId, key]);
+  const pack = (await database.packages.get(lessonId))!;
+  await database.packages.put({ ...pack, removed: [...pack.removed, key] });
 }
