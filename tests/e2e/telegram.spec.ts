@@ -495,6 +495,34 @@ test.describe("аудио, копии и облако", () => {
     await expect(web.getByTestId("word-count")).toHaveText(source);
     await clean.close();
   });
+  test("расхождение версий на планшете: окно выбора вмещает текст и кнопки", async ({ page, browser }) => {
+    await openTelegram(page);
+    await installLessons(page, ["lesson-1-1"]);
+    await seedQueue(page, [{ wordId: "w11-01", tested: ["recall"] }], TG_DB);
+    await page.goto("/more");
+    await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
+    const cloud = await tg(page).cloud();
+    // Планшет со своим прогрессом подключается к уже заполненному облаку.
+    const context = await browser.newContext({ viewport: { width: 1024, height: 768 } });
+    const offline = await context.newPage();
+    await openTelegram(offline, { noCloud: true, platform: "android" });
+    await installLessons(offline, ["lesson-1-1"]);
+    await seedQueue(offline, [{ wordId: "w11-02", tested: ["recall"] }], TG_DB);
+    const tablet = await context.newPage();
+    await openTelegram(tablet, { cloud, platform: "android" });
+    const dialog = tablet.getByRole("alertdialog");
+    await expect(dialog.getByRole("button", { name: "Продолжить с этой версии" }).first()).toBeVisible({
+      timeout: 15000,
+    });
+    const frame = (await dialog.boundingBox())!;
+    for (const item of await dialog.locator("p, button, [role=listitem]").all()) {
+      const box = await item.boundingBox();
+      if (!box) continue;
+      expect(box.x).toBeGreaterThanOrEqual(frame.x - 1);
+      expect(box.x + box.width).toBeLessThanOrEqual(frame.x + frame.width + 1);
+    }
+    await context.close();
+  });
   test("CloudStorage: статус синхронизации, перенос прогресса второму устройству, изоляция другого аккаунта", async ({
     page,
     browser,
