@@ -8,7 +8,6 @@ import { buildMatcher, candidates, choose, formPieces, lessonMarks, type MatchCa
 import { parseBlocks, type LessonBlock } from "../src/content/course";
 import { ContentError, decodeMarks, parseMarks, parsePackage } from "../src/content/schema";
 
-/** Совпадения текста с карточками: «поверхность → карточка». */
 function found(text: string, cards: MatchCard[], rank: (ref: string) => number = () => 0) {
   const matcher = buildMatcher(cards);
   return choose(candidates(text, matcher), rank).map(

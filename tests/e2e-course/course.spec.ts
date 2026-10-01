@@ -87,7 +87,6 @@ test("урок курса: задания с ключом, чтение, ауд�
   );
   await expect(forms).toContainText("Верно: είσαι — Εσύ — ты: είσαι.");
 
-  // Чтение: глосса открывается касанием — подсказка с переводом автора; задание верно/неверно.
   const reading = await turnTo(page, "Чтение: Η Άννα");
   await reading.getByRole("button", { name: "Произнести и перевести: μένω" }).click();
   await expect(page.getByRole("dialog", { name: "μένω" })).toContainText("живу");

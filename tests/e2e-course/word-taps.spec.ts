@@ -25,14 +25,12 @@ async function voices(page: Page, mode: "none" | "instant") {
   }, mode);
 }
 const spoken = (page: Page) => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken ?? []);
-/** Видимый штрих пером — фон-картинка слова. */
 const stroked = (page: Page, name: string, index = 0) =>
   page
     .getByRole("button", { name: `Произнести и перевести: ${name}`, exact: true })
     .nth(index)
     .evaluate((node) => getComputedStyle(node).backgroundImage !== "none");
 
-/** Урок листается страницами: вперёд, пока нужный блок не окажется на открытой странице. */
 async function turnTo(page: Page, name: string) {
   const target = page.getByRole("region", { name });
   const sheet = page.getByRole("article").first();
@@ -52,7 +50,6 @@ async function start(page: Page, lesson: string) {
   await page.goto("/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
-  // Модуль скачивает свои уроки при открытии.
   await page.goto("/course/m01");
   await expect(page.getByText("скачивается…")).toHaveCount(0);
   await page.goto(`/course/m01/${lesson}?p=1`);
@@ -87,13 +84,11 @@ test("слово урока в объяснении: звучит карточк
       y: box.y + box.height / 2,
     }),
   ).toBe(true);
-  // Подсказка о возможности — только до первого нажатия, и после перезагрузки не возвращается.
   await expect(hint).toHaveCount(0);
   await sheet.getByRole("button", { name: "Ещё раз" }).click();
   await expect.poll(async () => (await spoken(page)).length).toBe(2);
   await page.keyboard.press("Escape");
   await expect(sheet).toHaveCount(0);
-  // Нажатие мимо закрывает, одна подсказка за раз.
   await explanation.getByRole("button", { name: "Произнести и перевести: από", exact: true }).first().click();
   await expect(page.getByRole("dialog")).toHaveCount(1);
   await expect(page.getByRole("dialog", { name: "από" })).toBeVisible();
