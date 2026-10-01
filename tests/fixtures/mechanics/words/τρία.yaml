@@ -1,0 +1,11 @@
+id: w024
+greek: τρία
+russian: три
+ipa: /ˈtria/
+note: м. и ж. р. τρεις
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Είμαι εδώ τρία χρόνια."
+    russian: "Я здесь три года."
+    target: "τρία"

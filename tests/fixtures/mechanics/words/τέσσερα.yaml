@@ -1,0 +1,11 @@
+id: w025
+greek: τέσσερα
+russian: четыре
+ipa: /ˈtesera/
+note: м. и ж. р. τέσσερις
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Η Άννα έχει τέσσερα παιδιά."
+    russian: "У Анны четверо детей."
+    target: "τέσσερα"

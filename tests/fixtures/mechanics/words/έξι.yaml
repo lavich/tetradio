@@ -1,0 +1,12 @@
+id: w027
+greek: έξι
+russian: шесть
+ipa: /ˈeksi/
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+reading:
+  - { text: "ξ", ipa: "ks", explanation: "ξ — звук кс" }
+examples:
+  - greek: "Η τάξη έχει έξι παιδιά."
+    russian: "В классе шестеро детей."
+    target: "έξι"

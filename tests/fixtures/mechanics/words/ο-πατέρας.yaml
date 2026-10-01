@@ -1,0 +1,12 @@
+id: w084
+greek: ο πατέρας
+russian: отец
+ipa: /o paˈteras/
+forms: мн. οι πατέρες
+note: разг. ο μπαμπάς
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+examples:
+  - greek: "Ο πατέρας μου είναι δάσκαλος."
+    russian: "Мой отец — учитель."
+    target: "πατέρας"

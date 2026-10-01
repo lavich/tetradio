@@ -1,0 +1,14 @@
+id: w095
+greek: παντρεμένος
+russian: женатый; замужняя
+ipa: /pandreˈmenos/
+forms: παντρεμένος, παντρεμένη, παντρεμένο
+note: неженатый — ανύπαντρος; разведённый — διαζευγμένος
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+reading:
+  - { text: "ντ", ipa: "nd", explanation: "ντ в середине слова читается как нд" }
+examples:
+  - greek: "Είσαι παντρεμένος;"
+    russian: "Ты женат?"
+    target: "παντρεμένος"

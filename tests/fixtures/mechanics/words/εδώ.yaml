@@ -1,0 +1,12 @@
+id: w057
+greek: εδώ
+russian: здесь, тут; сюда
+ipa: /eˈðo/
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "δ", ipa: "ð", explanation: "δ звучит как английское th в this, а не как русское д" }
+examples:
+  - greek: "Μένω εδώ."
+    russian: "Я живу здесь."
+    target: "εδώ"

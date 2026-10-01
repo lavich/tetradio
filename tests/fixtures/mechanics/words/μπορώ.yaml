@@ -1,0 +1,14 @@
+id: w067
+greek: μπορώ
+russian: мочь
+ipa: /boˈro/
+forms: аор. μπόρεσα; буд. θα μπορέσω
+note: "спряжение на -ώ: μπορείς, μπορεί…; μπορώ να + глаг. — модуль 16"
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "μπ", ipa: "b", explanation: "μπ в начале слова читается как б" }
+examples:
+  - greek: "Μπορώ να μιλήσω ελληνικά."
+    russian: "Я могу говорить по-гречески."
+    target: "Μπορώ"

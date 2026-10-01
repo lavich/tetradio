@@ -1,0 +1,11 @@
+id: w049
+greek: τα ελληνικά
+russian: греческий язык
+ipa: /ta eliniˈka/
+note: только мн. ч.; μιλάω ελληνικά — без артикля
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Μαθαίνω ελληνικά."
+    russian: "Я учу греческий."
+    target: "ελληνικά"

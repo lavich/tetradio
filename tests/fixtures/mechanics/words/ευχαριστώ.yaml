@@ -1,0 +1,14 @@
+id: w004
+greek: ευχαριστώ
+russian: спасибо; благодарить
+ipa: /efxariˈsto/
+forms: аор. ευχαρίστησα; буд. θα ευχαριστήσω
+note: спряжение на -ώ
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+reading:
+  - { text: "ευ", ipa: "ef", explanation: "ευ перед глухой согласной читается как эф" }
+examples:
+  - greek: "Ευχαριστώ πολύ!"
+    russian: "Большое спасибо!"
+    target: "Ευχαριστώ"

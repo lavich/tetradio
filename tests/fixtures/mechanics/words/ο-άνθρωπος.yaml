@@ -1,0 +1,13 @@
+id: w098
+greek: ο άνθρωπος
+russian: человек; мн. люди
+ipa: /o ˈanθropos/
+forms: мн. οι άνθρωποι
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+reading:
+  - { text: "θ", ipa: "θ", explanation: "θ — глухой межзубный звук, как английское th в «think»" }
+examples:
+  - greek: "Είναι καλός άνθρωπος."
+    russian: "Он хороший человек."
+    target: "άνθρωπος"

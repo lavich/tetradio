@@ -1,0 +1,11 @@
+id: w042
+greek: η πόλη
+russian: город
+ipa: /i ˈpoli/
+forms: мн. οι πόλεις
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Η Λεμεσός είναι μεγάλη πόλη."
+    russian: "Лимасол — большой город."
+    target: "πόλη"

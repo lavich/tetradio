@@ -1,0 +1,14 @@
+id: w112
+greek: ο γονιός
+russian: родитель
+ipa: /o ɣoˈɲos/
+forms: мн. οι γονείς
+note: "обычно во мн. ч.: οι γονείς — родители"
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+reading:
+  - { text: "νι", ipa: "ɲ", explanation: "νι перед гласной звучит мягко, как нь" }
+examples:
+  - greek: "Ο γονιός μιλάει με τον δάσκαλο."
+    russian: "Родитель говорит с учителем."
+    target: "γονιός"

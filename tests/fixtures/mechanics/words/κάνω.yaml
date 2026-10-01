@@ -1,0 +1,12 @@
+id: w103
+greek: κάνω
+russian: делать
+ipa: /ˈkano/
+forms: аор. έκανα; буд. θα κάνω
+note: Τι κάνεις; — Как дела?; κάνω ντους, κάνω βόλτα
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+examples:
+  - greek: "Τι κάνω τώρα;"
+    russian: "Что мне сейчас делать?"
+    target: "κάνω"

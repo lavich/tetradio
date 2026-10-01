@@ -1,0 +1,11 @@
+id: w035
+greek: η φίλη
+russian: подруга
+ipa: /i ˈfili/
+forms: мн. οι φίλες
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Η φίλη μου μένει στη Λάρνακα."
+    russian: "Моя подруга живёт в Ларнаке."
+    target: "φίλη"

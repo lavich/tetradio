@@ -1,0 +1,15 @@
+id: w091
+greek: ο άντρας
+russian: мужчина; муж
+ipa: /o ˈandras/
+forms: мн. οι άντρες
+note: офиц. άνδρας; ο άντρας μου — мой муж
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+image: ο-άντρας.svg
+reading:
+  - { text: "ντ", ipa: "nd", explanation: "ντ в середине слова читается как нд" }
+examples:
+  - greek: "Ο άντρας μου είναι γιατρός."
+    russian: "Мой муж — врач."
+    target: "άντρας"

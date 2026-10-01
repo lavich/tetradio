@@ -1,0 +1,15 @@
+id: w038
+greek: δουλεύω
+russian: работать
+ipa: /ðuˈlevo/
+forms: аор. δούλεψα; буд. θα δουλέψω
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+image: δουλεύω.svg
+reading:
+  - { text: "ου", ipa: "u", explanation: "ου читается как у" }
+  - { text: "εύ", ipa: "ev", explanation: "ευ перед гласной и звонкой согласной читается как эв" }
+examples:
+  - greek: "Δουλεύω στη Λεμεσό."
+    russian: "Я работаю в Лимасоле."
+    target: "Δουλεύω"

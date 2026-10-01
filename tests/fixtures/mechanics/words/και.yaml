@@ -1,0 +1,13 @@
+id: w054
+greek: και
+russian: и; а
+ipa: /ˈce/
+note: перед гласной часто κι
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "αι", ipa: "e", explanation: "αι читается как э" }
+examples:
+  - greek: "Ο πατέρας και η μητέρα."
+    russian: "Отец и мать."
+    target: "και"

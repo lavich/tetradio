@@ -1,0 +1,13 @@
+id: w090
+greek: το παιδί
+russian: ребёнок
+ipa: /to peˈði/
+forms: мн. τα παιδιά
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+reading:
+  - { text: "αι", ipa: "e", explanation: "αι читается как э" }
+examples:
+  - greek: "Το παιδί μιλάει ελληνικά."
+    russian: "Ребёнок говорит по-гречески."
+    target: "παιδί"

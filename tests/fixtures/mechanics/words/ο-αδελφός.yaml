@@ -1,0 +1,12 @@
+id: w086
+greek: ο αδελφός
+russian: брат
+ipa: /o aðelˈfos/
+forms: мн. οι αδελφοί
+note: разг. αδερφός; τα αδέλφια — братья и сёстры
+source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
+verified: true
+examples:
+  - greek: "Έχω έναν αδελφό."
+    russian: "У меня есть брат."
+    target: "αδελφό"

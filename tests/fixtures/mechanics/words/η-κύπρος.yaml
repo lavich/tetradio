@@ -1,0 +1,11 @@
+id: w044
+greek: η Κύπρος
+russian: Кипр
+ipa: /i ˈcipros/
+note: жен. р., несмотря на -ος
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Μένω στην Κύπρο."
+    russian: "Я живу на Кипре."
+    target: "Κύπρο"

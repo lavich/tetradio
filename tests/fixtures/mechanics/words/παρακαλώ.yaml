@@ -1,0 +1,12 @@
+id: w005
+greek: παρακαλώ
+russian: пожалуйста; прошу
+ipa: /parakaˈlo/
+forms: аор. παρακάλεσα; буд. θα παρακαλέσω
+note: также «не за что» и «слушаю» (по телефону)
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Ένα νερό, παρακαλώ."
+    russian: "Воду, пожалуйста."
+    target: "παρακαλώ"

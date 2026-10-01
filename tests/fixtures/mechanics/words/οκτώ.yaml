@@ -1,0 +1,11 @@
+id: w029
+greek: οκτώ
+russian: восемь
+ipa: /okˈto/
+note: разг. οχτώ
+source: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
+verified: true
+examples:
+  - greek: "Το μάθημα είναι στις οκτώ."
+    russian: "Урок в восемь."
+    target: "οκτώ"

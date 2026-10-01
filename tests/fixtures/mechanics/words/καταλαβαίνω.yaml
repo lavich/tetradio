@@ -1,0 +1,14 @@
+id: w040
+greek: καταλαβαίνω
+russian: понимать
+ipa: /katalaˈveno/
+forms: аор. κατάλαβα; буд. θα καταλάβω
+note: неправ. аорист
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+reading:
+  - { text: "αί", ipa: "e", explanation: "αι читается как э" }
+examples:
+  - greek: "Δεν καταλαβαίνω."
+    russian: "Я не понимаю."
+    target: "καταλαβαίνω"

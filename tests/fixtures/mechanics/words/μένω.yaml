@@ -1,0 +1,12 @@
+id: w036
+greek: μένω
+russian: жить, проживать; оставаться
+ipa: /ˈmeno/
+forms: аор. έμεινα; буд. θα μείνω
+note: "μένω σε: μένω στη Λάρνακα"
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Μένω στη Λευκωσία."
+    russian: "Я живу в Никосии."
+    target: "Μένω"

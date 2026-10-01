@@ -1,0 +1,10 @@
+id: w045
+greek: η Ελλάδα
+russian: Греция
+ipa: /i eˈlaða/
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Η Άννα είναι από την Ελλάδα."
+    russian: "Анна из Греции."
+    target: "Ελλάδα"

@@ -1,0 +1,12 @@
+id: w069
+greek: λέω
+russian: говорить, сказать
+ipa: /ˈleo/
+forms: аор. είπα; буд. θα πω
+note: неправ.; Πώς σε λένε; — Как тебя зовут?; λέω ότι… — говорю, что…
+source: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)
+verified: true
+examples:
+  - greek: "Λέω την αλήθεια."
+    russian: "Я говорю правду."
+    target: "Λέω"
