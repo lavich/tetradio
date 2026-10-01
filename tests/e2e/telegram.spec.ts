@@ -2,8 +2,10 @@ import { expect, test } from "@playwright/test";
 import { breakStorage, installLessons, seedQueue } from "./helpers";
 import { DARK, LIGHT, onlyReviews, openTelegram, tg } from "./telegram";
 
-/** База Telegram-профиля тестового пользователя: отдельная от браузерной `tetradio`. */
+/** База Telegram-профиля тестового пользователя: отдельная от базы мока `tetradio-mock-1`. */
 const TG_DB = "tetradio-tg-tetradio_local-1001";
+const databases = (page: import("@playwright/test").Page) =>
+  page.evaluate(async () => (await indexedDB.databases()).map((info) => info.name ?? "").sort());
 
 test.describe("запуск внутри Telegram", () => {
   test("экран «Сегодня», ready/expand, компактная шапка, первый запуск без запроса аккаунта", async ({ page }) => {
@@ -27,17 +29,20 @@ test.describe("запуск внутри Telegram", () => {
     await expect(page.getByTestId("today-title")).toBeVisible();
     await expect(page.getByRole("alertdialog")).toHaveCount(0); // сообщение первого запуска не повторяется
   });
-  test("обычный браузер не ждёт Telegram, не показывает вход и хранит данные в этом браузере", async ({ page }) => {
+  test("сборка с моком вне Telegram: тестовый пользователь в своей базе, без облака и без ожидания Telegram", async ({
+    page,
+  }) => {
     await page.route("https://telegram.org/**", (route) => route.abort());
     await page.goto("/");
     await expect(page.getByTestId("today-title")).toBeVisible();
     expect(await page.locator("html").getAttribute("data-platform")).toBe("web");
     await expect(page.getByRole("alertdialog")).toHaveCount(0);
     await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
-    await expect(page.getByTestId("storage-scope")).toContainText("В этом браузере");
-    await expect(page.getByTestId("storage-scope")).toContainText("Вход через Telegram здесь не нужен");
+    await expect(page.getByTestId("storage-scope")).toContainText("Режим разработки: тестовый пользователь");
+    await expect(page.getByTestId("storage-scope")).toContainText("облачной синхронизации нет");
     await expect(page.getByTestId("sync-status")).toHaveCount(0);
     await expect(page.locator("header").getByText("τετράδιο")).toBeVisible();
+    expect(await databases(page)).toEqual(["tetradio-mock-1"]);
   });
   test("ошибка загрузки bridge при запуске из Telegram оставляет обычный интерфейс", async ({ page }) => {
     await page.route("https://telegram.org/**", (route) => route.abort());
@@ -433,7 +438,9 @@ test.describe("аудио, копии и облако", () => {
     await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
     await expect(page.getByTestId("storage-scope")).toContainText("Telegram: облачная синхронизация");
     await page.getByRole("link", { name: /Копия данных/ }).click();
-    await expect(page.getByTestId("sync-boundaries")).toContainText("Обычный браузер в эту синхронизацию не входит");
+    await expect(page.getByTestId("sync-boundaries")).toContainText(
+      "Другие аккаунты Telegram на этом устройстве — отдельные профили",
+    );
     const [download] = await Promise.all([
       page.waitForEvent("download"),
       page.getByRole("button", { name: "Сохранить полную копию" }).click(),
@@ -455,7 +462,7 @@ test.describe("аудио, копии и облако", () => {
     await page.getByRole("button", { name: "Заменить", exact: true }).click();
     await expect(page.getByRole("alert")).toContainText("Замена отменена");
     await expect(page.getByText("Данные восстановлены полностью.")).toHaveCount(0);
-    // Файл из Telegram-профиля восстанавливается в чистом браузерном профиле обычным способом.
+    // Файл из Telegram-профиля восстанавливается в чистом профиле (здесь — мок сборки тестов) обычным способом.
     const clean = await browser.newContext();
     const web = await clean.newPage();
     await web.goto("/");
@@ -560,7 +567,7 @@ test.describe("ссылка на слово через бота", () => {
     await page.goto(`${path}?bot=tetradio_dev${launchHash(options)}`);
   };
   const dismissWelcome = async (page: import("@playwright/test").Page) => {
-    const welcome = page.getByRole("button", { name: /Понятно|Начать с чистого профиля/ });
+    const welcome = page.getByRole("button", { name: "Понятно" });
     if (
       await welcome.waitFor({ state: "visible", timeout: 5000 }).then(
         () => true,
@@ -571,8 +578,6 @@ test.describe("ссылка на слово через бота", () => {
       await page.getByRole("alertdialog").waitFor({ state: "hidden" });
     }
   };
-  const databases = (page: import("@playwright/test").Page) =>
-    page.evaluate(async () => (await indexedDB.databases()).map((info) => info.name ?? ""));
 
   test("dev-запуск открывает слово, после перезагрузки «Поделиться» ведёт на dev-бота, профиль прежний", async ({
     page,

@@ -8,7 +8,8 @@
 
 ```sh
 npm ci
-npm run dev          # сборка контента и Vite dev-сервер
+npm run dev          # сборка контента и Vite dev-сервер (вне Telegram — экран «Откройте в Telegram»)
+npm run dev:mock     # то же с моком Telegram: тестовый пользователь 1, база tetradio-mock-1
 npm test             # unit (Vitest)
 npm run test:e2e     # Playwright: механики карточек на тестовом контенте
 npm run test:e2e:course  # Playwright: экраны курса на демо-курсе
@@ -17,7 +18,7 @@ npm run typecheck && npm run lint && npm run format:check
 npm run build
 ```
 
-Переменные окружения (все необязательны локально): `VITE_TELEGRAM_BOT` — имя бота Mini App (без неё — заглушка `tetradio_local`, не совпадающая с реальным ботом); `VITE_SENTRY_DSN` и `SENTRY_*` — отчёты о сбоях, без них выключены; `BASE_PATH` — базовый путь при размещении.
+Переменные окружения (все необязательны локально): `VITE_TELEGRAM_BOT` — имя бота Mini App (без неё — заглушка `tetradio_local`, не совпадающая с реальным ботом); `VITE_SENTRY_DSN` и `SENTRY_*` — отчёты о сбоях, без них выключены; `BASE_PATH` — базовый путь при размещении; `VITE_TELEGRAM_MOCK=<id>` — мок Telegram для разработки и e2e (только явным флагом, в деплое не задаётся). Владелец данных и изоляция аккаунтов — [docs/account.md](docs/account.md).
 
 Деплой — `.github/workflows/deploy.yml`: каждый push в `main` публикует сборку на GitHub Pages (`https://lavich.github.io/tetradio/`). База берётся из настроек Pages; имя бота и адрес приёма отчётов — переменные репозитория `VITE_TELEGRAM_BOT` и `VITE_SENTRY_DSN`, реквизиты загрузки карт кода — секреты `SENTRY_*`.
 

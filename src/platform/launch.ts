@@ -25,8 +25,15 @@ export interface LaunchContext {
    */
   launchId: string | null;
 }
+const BOT_NAME = /^[A-Za-z][A-Za-z0-9_]{3,31}$/;
+function botName(raw: unknown): string | null {
+  const bot = typeof raw === "string" ? raw.replace(/^@/, "") : "";
+  return BOT_NAME.test(bot) ? bot : null;
+}
 /** Бот задаётся при сборке (`VITE_TELEGRAM_BOT`); без него — заглушка без суффикса «bot», она не совпадёт с реальным ботом. */
 export const DEFAULT_BOT: string = import.meta.env.VITE_TELEGRAM_BOT || "tetradio_local";
+/** Бот из сборки, если он задан: ссылка «Открыть в Telegram» ведёт только на него, а не на `?bot=` из адреса. */
+export const CONFIGURED_BOT: string | null = botName(import.meta.env.VITE_TELEGRAM_BOT);
 const STORAGE_KEY = "tetradio:launch";
 const CONSUMED_KEY = "tetradio:start-consumed";
 
@@ -46,12 +53,8 @@ const parseUser = (raw: string | null): TelegramUser | null => {
     return null;
   }
 };
-const BOT_NAME = /^[A-Za-z][A-Za-z0-9_]{3,31}$/;
 /** Бот, явно указанный в адресе; без параметра или с плохим именем — `null`. */
-const botParam = (search: string) => {
-  const bot = new URLSearchParams(search).get("bot")?.replace(/^@/, "") ?? "";
-  return BOT_NAME.test(bot) ? bot : null;
-};
+const botParam = (search: string) => botName(new URLSearchParams(search).get("bot"));
 
 /** Разбор без побочных эффектов: параметры Telegram живут в hash, имя бота — в query. */
 export function parseLaunch(location: { hash: string; search: string }): LaunchContext {
@@ -142,6 +145,14 @@ export function launchContext(): LaunchContext {
   }
   return cached;
 }
+/** Восстановленный контекст вкладки оказался не от этого запуска: следующая загрузка возьмёт его только из адреса. */
+export const forgetLaunch = () => {
+  try {
+    sessionStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* хранилище недоступно — записи и не было */
+  }
+};
 /** Только для тестов: сбросить запомненный контекст. */
 export const resetLaunchContext = () => {
   cached = null;

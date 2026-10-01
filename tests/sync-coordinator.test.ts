@@ -11,7 +11,6 @@ import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport, disabledTransport, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
-import { profileFor } from "../src/storage/profile";
 import { installLessons, memoryFetcher } from "./helpers/content";
 import { installLesson, refreshCatalog } from "../src/content/client";
 import type { Word } from "../src/domain/types";
@@ -502,64 +501,5 @@ describe("надёжность публикации и лимиты", () => {
       schedule: () => () => undefined,
     });
     expect((await sync.exchange()).phase).toBe("disabled");
-    expect(
-      profileFor({
-        kind: "web",
-        bot: "tetradio_local",
-        platform: null,
-        version: null,
-        user: null,
-        startParam: null,
-        launchId: null,
-      }),
-    ).toMatchObject({ databaseName: "tetradio", syncable: false });
-  });
-});
-
-describe("изоляция профилей", () => {
-  it("разные аккаунты и боты получают разные базы; без контекста облачная запись не ведётся", () => {
-    const user = (id: number) => ({ id, firstName: "A" });
-    const main = profileFor({
-      kind: "telegram",
-      bot: "tetradio_local",
-      platform: "ios",
-      version: "8.0",
-      user: user(1),
-      startParam: null,
-      launchId: null,
-    });
-    const other = profileFor({
-      kind: "telegram",
-      bot: "tetradio_local",
-      platform: "ios",
-      version: "8.0",
-      user: user(2),
-      startParam: null,
-      launchId: null,
-    });
-    const dev = profileFor({
-      kind: "telegram",
-      bot: "tetradio_dev",
-      platform: "ios",
-      version: "8.0",
-      user: user(1),
-      startParam: null,
-      launchId: null,
-    });
-    const anonymous = profileFor({
-      kind: "telegram",
-      bot: "tetradio_local",
-      platform: "ios",
-      version: "8.0",
-      user: null,
-      startParam: null,
-      launchId: null,
-    });
-    expect(
-      new Set([main.databaseName, other.databaseName, dev.databaseName, anonymous.databaseName, "tetradio"]).size,
-    ).toBe(5);
-    expect(main.syncable).toBe(true);
-    expect(anonymous.syncable).toBe(false);
-    expect(main.databaseName).toBe("tetradio-tg-tetradio_local-1");
   });
 });

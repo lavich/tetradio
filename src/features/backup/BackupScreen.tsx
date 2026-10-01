@@ -100,8 +100,7 @@ export function BackupScreen() {
         <CardContent>
           <p className={ui.note}>
             Слова, наборы и их связи, скачанные картинки и аудио, версии установленных уроков и ваши правки, прогресс
-            FSRS, ответы, сессии и настройки. Этот файл переносит всё
-            {profile.kind === "telegram" ? ", в том числе между Telegram и обычным браузером" : ""}.
+            FSRS, ответы, сессии и настройки. Этот файл переносит всё.
           </p>
           {profile.kind === "telegram" && (
             <p className={ui.note} data-testid="sync-boundaries">

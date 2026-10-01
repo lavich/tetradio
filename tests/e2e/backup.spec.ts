@@ -28,7 +28,7 @@ test("полная копия переносит слова, правки и м�
   const file = join(tmpdir(), `tetradio-e2e-${Date.now()}.json`);
   writeFileSync(file, readFileSync(await download.path()));
   const parsed = JSON.parse(readFileSync(file, "utf8"));
-  expect(parsed.data.databaseName).toBe("tetradio");
+  expect(parsed.data.databaseName).toBe("tetradio-mock-1");
   // Копия старой версии без расписания должна читаться как незаданное расписание.
   for (const row of parsed.data.data.find((table: { tableName: string }) => table.tableName === "settings").rows) {
     delete row.schedule;

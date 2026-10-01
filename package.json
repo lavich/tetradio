@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "predev": "npm run content",
+    "dev:mock": "VITE_TELEGRAM_MOCK=1 vite --host 0.0.0.0",
+    "predev:mock": "npm run content",
     "content": "node content/build.ts",
     "prebuild": "npm run content",
     "build": "tsc -b && vite build",

@@ -6,7 +6,7 @@ const dueWithHistory = (page: import("@playwright/test").Page, wordId: string, t
   page.evaluate(
     async ({ wordId, types }) => {
       const db = await new Promise<IDBDatabase>((resolve) => {
-        const request = indexedDB.open("tetradio");
+        const request = indexedDB.open("tetradio-mock-1");
         request.onsuccess = () => resolve(request.result);
       });
       const due = new Date(Date.now() - 2 * 86400000);
@@ -99,7 +99,7 @@ const updateWord = (page: import("@playwright/test").Page, greek: string, russia
   page.evaluate(
     ({ greek, russian }) =>
       new Promise<void>((resolve, reject) => {
-        const request = indexedDB.open("tetradio");
+        const request = indexedDB.open("tetradio-mock-1");
         request.onsuccess = () => {
           const db = request.result;
           const tx = db.transaction("words", "readwrite");
@@ -174,7 +174,7 @@ test("верный порядок засчитывается и остаётся
   const events = await page.evaluate(
     () =>
       new Promise<{ type: string; correct: boolean; answer: string }[]>((resolve) => {
-        const request = indexedDB.open("tetradio");
+        const request = indexedDB.open("tetradio-mock-1");
         request.onsuccess = () => {
           const rows = request.result.transaction("events", "readonly").objectStore("events").getAll();
           rows.onsuccess = () =>
@@ -192,7 +192,7 @@ test("старая сессия без артикля в вариантах до
   await page.evaluate(
     () =>
       new Promise<void>((resolve, reject) => {
-        const request = indexedDB.open("tetradio");
+        const request = indexedDB.open("tetradio-mock-1");
         request.onsuccess = () => {
           const db = request.result;
           const tx = db.transaction("sessions", "readwrite");

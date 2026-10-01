@@ -43,7 +43,7 @@ test("«Учить курс» ставит все уроки курса, а но
   const installed = async () =>
     page.evaluate(async () => {
       const database = await new Promise<IDBDatabase>((resolve) => {
-        const request = indexedDB.open("tetradio");
+        const request = indexedDB.open("tetradio-mock-1");
         request.onsuccess = () => resolve(request.result);
       });
       const keys = await new Promise<string[]>((resolve) => {
@@ -107,7 +107,7 @@ test("у курса своё расписание и свой предел; со
     .poll(() =>
       page.evaluate(async () => {
         const database = await new Promise<IDBDatabase>((resolve) => {
-          const request = indexedDB.open("tetradio");
+          const request = indexedDB.open("tetradio-mock-1");
           request.onsuccess = () => resolve(request.result);
         });
         const rows = await new Promise<{ id: string; newItemsPerDay: number }[]>((resolve) => {

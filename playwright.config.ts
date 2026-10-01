@@ -3,6 +3,8 @@ const port = Number(process.env.PLAYWRIGHT_PORT ?? 4173);
 /**
  * Браузерные проверки идут по production build, как и реальное использование. Механики проверяются на фикстуре
  * контента Tavelori (tests/fixtures/tavelori-content), а не на курсе: он в продукт не входит.
+ * Сборка — с моком Telegram (`VITE_TELEGRAM_MOCK=1`), т. к. тесты идут в обычном Chromium; в `dist/web/` — та же
+ * сборка без флага, как на GitHub Pages: на ней проверяется экран «Откройте в Telegram».
  */
 export default defineConfig({
   testDir: "tests/e2e",
@@ -19,7 +21,7 @@ export default defineConfig({
     deviceScaleFactor: 2,
   },
   webServer: {
-    command: `CONTENT_ROOT=tests/fixtures/tavelori-content npm run build && npx vite preview --host 0.0.0.0 --port ${port} --strictPort`,
+    command: `CONTENT_ROOT=tests/fixtures/tavelori-content npm run content && npx tsc -b && VITE_TELEGRAM_MOCK=1 npx vite build && BASE_PATH=/web/ npx vite build --outDir dist/web && npx vite preview --host 0.0.0.0 --port ${port} --strictPort`,
     url: `http://localhost:${port}`,
     reuseExistingServer: true,
     timeout: 120000,
