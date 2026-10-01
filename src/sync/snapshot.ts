@@ -11,11 +11,15 @@ import {
   type ReviewEvent,
 } from "../domain/types";
 import { loadSettings } from "../storage/queries";
+import { blockKey } from "../storage/course";
+import type { BlockProgress } from "../domain/types";
 import { SyncError } from "./transport";
 import {
+  BLOCKS_SNAPSHOT_FORMAT,
   LEGACY_SNAPSHOT_FORMAT,
   SNAPSHOT_FORMAT,
   type Clock,
+  type CompactBlock,
   type CompactLesson,
   type CompactSnapshot,
   type CompactState,
@@ -88,6 +92,47 @@ async function standardKeys(database: AppDatabase, refs: LearningRef[]): Promise
       if (phrase?.revision !== undefined) keys.add(unitKey({ kind: "phrase", id: phrase.id }));
   return keys;
 }
+/** Блок без введённых ответов и текста: они остаются на устройстве. */
+const compactBlock = (row: BlockProgress): CompactBlock => ({
+  lessonId: row.lessonId,
+  blockId: row.blockId,
+  done: row.done,
+  ...(row.score ? { score: { correct: row.score.correct, almost: row.score.almost, total: row.score.total } } : {}),
+  ...(row.checks?.length ? { checks: [...row.checks] } : {}),
+  updatedAt: row.updatedAt,
+});
+const byBlock = (a: CompactBlock, b: CompactBlock) =>
+  a.lessonId.localeCompare(b.lessonId) || a.blockId.localeCompare(b.blockId);
+/**
+ * Блоки выбранной версии заменяют локальные целиком: блока, которого в версии нет, здесь тоже не будет.
+ * Введённые ответы и текст в снимок не входят, поэтому у оставшегося блока они сохраняются, только если версия
+ * не новее локальной записи (`remote.updatedAt <= local.updatedAt`) — это та же или более ранняя попытка, и ответы
+ * относятся к ней или к более поздней локальной. Более новая попытка с другого устройства приходит без ответов:
+ * старые ответы не соответствовали бы её счёту. Блоки ещё не установленных уроков лежат в той же таблице и
+ * появляются на экране после установки пакета.
+ */
+async function applyBlocks(database: AppDatabase, blocks: CompactBlock[]) {
+  const local = new Map((await database.blockProgress.toArray()).map((row) => [row.key, row]));
+  const rows = blocks.map((block): BlockProgress => {
+    const key = blockKey(block.lessonId, block.blockId);
+    const previous = local.get(key);
+    const keep = !!previous && block.updatedAt <= previous.updatedAt;
+    return {
+      key,
+      lessonId: block.lessonId,
+      blockId: block.blockId,
+      done: block.done,
+      ...(block.score ? { score: block.score } : {}),
+      ...(block.checks ? { checks: block.checks } : {}),
+      ...(keep && previous.answers ? { answers: previous.answers } : {}),
+      ...(keep && previous.text !== undefined ? { text: previous.text } : {}),
+      updatedAt: block.updatedAt,
+    };
+  });
+  const incoming = new Set(rows.map((row) => row.key));
+  await database.blockProgress.bulkDelete([...local.keys()].filter((key) => !incoming.has(key)));
+  await database.blockProgress.bulkPut(rows);
+}
 const uniqueRefs = (refs: LearningRef[]) => [...new Map(refs.map((ref) => [unitKey(ref), ref])).values()];
 const byKey = (a: { ref: LearningRef }, b: { ref: LearningRef }) => unitKey(a.ref).localeCompare(unitKey(b.ref));
 
@@ -107,6 +152,12 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
       status: lesson.status,
       updatedAt: lesson.updatedAt,
     }));
+  // Уроки из чужого снимка, ещё не появившиеся здесь, остаются в версии: иначе публикация отсюда их бы потеряла.
+  const present = new Set(lessons.map((lesson) => lesson.id));
+  const pending = parsePending((await database.meta.get(META.pendingLessons))?.value ?? null);
+  for (const lesson of Object.values(pending)) if (!present.has(lesson.id)) lessons.push(lesson);
+  lessons.sort((a, b) => a.id.localeCompare(b.id));
+  const blocks = (await database.blockProgress.toArray()).map(compactBlock).sort(byBlock);
   const rawStates = await database.cardStates.toArray();
   const known = await standardKeys(
     database,
@@ -142,6 +193,7 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
       .sort((a, b) => a.id.localeCompare(b.id)),
     lessons,
     packages: [...packages].sort(),
+    blocks,
     states: states.sort(byKey),
     skills: [...skills.values()].sort(byKey),
     stats: { ...stats, days: stats.days.slice(-KEEP_DAYS) },
@@ -167,29 +219,52 @@ export const SNAPSHOT_TABLES = [
   "lessons",
   "packages",
   "cardStash",
+  "blockProgress",
   "meta",
 ] as const;
 /** Сборка и фиксация базы одной транзакцией: ответ, записанный после, гарантированно попадёт в следующую версию. */
 export async function buildAndCommit(database: AppDatabase, now: Date, versionId: string): Promise<CompactSnapshot> {
+  return (await buildAndCommitMarked(database, now, versionId)).snapshot;
+}
+/**
+ * То же плюс отметка изменений, прочитанная в той же транзакции: публикация снимает её, только если за время
+ * выгрузки она не сменилась (`clearDirty`). Иначе изменение, сделанное во время выгрузки, осталось бы без отметки.
+ */
+export async function buildAndCommitMarked(
+  database: AppDatabase,
+  now: Date,
+  versionId: string,
+): Promise<{ snapshot: CompactSnapshot; mark: string | null }> {
   return database.transaction(
     "rw",
     SNAPSHOT_TABLES.map((name) => database.table(name)),
     async () => {
+      const mark = await readMeta(database, META.dirty);
       const snapshot = await buildSnapshot(database, now);
       await commitBase(database, snapshot, versionId, snapshot.createdAt);
-      return snapshot;
+      return { snapshot, mark };
     },
   );
 }
+/** Снимает отметку изменений, если она та же, что при сборке опубликованного снимка; вызывается в транзакции `meta`. */
+export async function clearDirty(database: AppDatabase, mark: string | null): Promise<boolean> {
+  const current = await readMeta(database, META.dirty);
+  if (current !== null && current !== mark) return false;
+  await writeMeta(database, META.dirty, null);
+  return true;
+}
 
 export type PendingLessons = Record<string, CompactLesson>;
-export const readPending = async (database: AppDatabase): Promise<PendingLessons> => {
+const parsePending = (raw: string | null): PendingLessons => {
   try {
-    return JSON.parse((await readMeta(database, META.pendingLessons)) ?? "{}");
+    const parsed = JSON.parse(raw ?? "{}");
+    return parsed && typeof parsed === "object" ? parsed : {};
   } catch {
     return {};
   }
 };
+export const readPending = async (database: AppDatabase): Promise<PendingLessons> =>
+  parsePending(await readMeta(database, META.pendingLessons));
 
 /** Есть ли сохранённый прогресс фраз: состояния, события или сводки. Само наличие их контента не считается. */
 export async function hasMixedProgress(database: AppDatabase): Promise<boolean> {
@@ -207,10 +282,12 @@ export async function hasMixedProgress(database: AppDatabase): Promise<boolean> 
 }
 
 /**
- * Применение целой версии одной транзакцией: настройки, даты стандартных уроков, состояния FSRS стандартных карточек,
+ * Применение целой версии одной транзакцией: настройки, даты стандартных уроков, блоки курса (с формата 3),
+ * состояния FSRS стандартных карточек,
  * база навыков и сводок. История ответов остаётся локальной. Состояния неизвестных карточек откладываются
  * до установки пакета, а не обнуляются и не попадают в план. Словарный снимок формата 1 не может представлять
  * фразы и пропуски: при уже сохранённом прогрессе новых видов он отклоняется до изменения данных.
+ * `ifClean` — применять, только если локальных неопубликованных изменений нет; иначе `false` без записи.
  */
 export async function applySnapshot(
   database: AppDatabase,
@@ -219,11 +296,14 @@ export async function applySnapshot(
   clock: Clock,
   now: Date,
   sourceFormat: number = SNAPSHOT_FORMAT,
-): Promise<void> {
-  await database.transaction(
+  { ifClean = false }: { ifClean?: boolean } = {},
+): Promise<boolean> {
+  return database.transaction(
     "rw",
     SNAPSHOT_TABLES.map((name) => database.table(name)),
     async () => {
+      // Изменение успело появиться после решения «применить»: версия не применяется, решение принимается заново.
+      if (ifClean && (await readMeta(database, META.dirty))) return false;
       if (sourceFormat === LEGACY_SNAPSHOT_FORMAT && (await hasMixedProgress(database)))
         throw new SyncError(
           "format",
@@ -254,6 +334,7 @@ export async function applySnapshot(
         else pending[lesson.id] = lesson;
       }
       await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
+      if (sourceFormat >= BLOCKS_SNAPSHOT_FORMAT) await applyBlocks(database, snapshot.blocks);
       const incoming = new Set(snapshot.states.map((state) => unitKey(state.ref)));
       const local = await database.cardStates.toArray();
       const localStandard = await standardKeys(
@@ -280,6 +361,7 @@ export async function applySnapshot(
       await writeMeta(database, META.applied, versionId);
       await writeMeta(database, META.clock, JSON.stringify(clock));
       await writeMeta(database, META.dirty, null);
+      return true;
     },
   );
 }
@@ -314,13 +396,23 @@ export interface SnapshotDescription {
   answers: number;
   lastDay: string | null;
   lessons: number;
+  /** Завершённые уроки курса (с блоками) и выполненные блоки. */
+  courseLessons: number;
+  blocks: number;
 }
 export const describeSnapshot = (snapshot: CompactSnapshot): SnapshotDescription => ({
   cards: snapshot.states.length,
   answers: snapshot.stats.answers,
   lessons: snapshot.lessons.length,
+  courseLessons: (() => {
+    const course = new Set(snapshot.blocks.map((block) => block.lessonId));
+    return snapshot.lessons.filter((lesson) => lesson.status === "completed" && course.has(lesson.id)).length;
+  })(),
+  blocks: snapshot.blocks.filter((block) => block.done).length,
   lastDay: snapshot.stats.days.length ? snapshot.stats.days[snapshot.stats.days.length - 1].date : null,
 });
 /** Есть ли локальный прогресс, который нельзя молча заменить облаком при первом подключении. */
 export const hasLocalProgress = async (database: AppDatabase) =>
-  (await database.cardStates.count()) > 0 || (await database.events.count()) > 0;
+  (await database.cardStates.count()) > 0 ||
+  (await database.events.count()) > 0 ||
+  (await database.blockProgress.count()) > 0;

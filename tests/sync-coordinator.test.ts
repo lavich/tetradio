@@ -405,7 +405,7 @@ describe("надёжность публикации и лимиты", () => {
     expect(status.dirty).toBe(true);
     expect(await statesOf(phone)).toEqual(before);
     expect(cloud.store.size).toBe(0);
-    expect(await readMeta(phone.db, META.dirty)).toBe("1");
+    expect(await readMeta(phone.db, META.dirty)).toBeTruthy();
     // Место появилось — тот же прогресс публикуется, без удвоения.
     cloud.limits.maxKeys = 1024;
     expect((await phone.sync.exchange()).phase).toBe("synced");
@@ -433,7 +433,7 @@ describe("надёжность публикации и лимиты", () => {
     expect(status.error?.message).toMatch(/Обновите приложение/);
     expect(await statesOf(tablet)).toEqual(before);
     expect(cloud.store.has(`p_${await tablet.sync.deviceId()}`)).toBe(false); // планшет ничего не опубликовал поверх неизвестного формата
-    expect(await readMeta(tablet.db, META.dirty)).toBe("1");
+    expect(await readMeta(tablet.db, META.dirty)).toBeTruthy();
   });
   it("вторая вкладка не пишет параллельно, а без блокировок запись приостанавливается", async () => {
     const db = new AppDatabase(`tetradio-sync-tabs-${++counter}`);
@@ -461,7 +461,7 @@ describe("надёжность публикации и лимиты", () => {
     expect(status.phase).toBe("paused");
     expect(status.reason).toMatch(/приостановлена/);
     expect(cloud.store.size).toBe(0);
-    expect(await readMeta(db, META.dirty)).toBe("1");
+    expect(await readMeta(db, META.dirty)).toBeTruthy();
   });
   it("ошибка CloudStorage не показывается успехом, повтор планируется с задержкой", async () => {
     const delays: number[] = [];

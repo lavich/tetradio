@@ -32,10 +32,18 @@ import {
 } from "../domain/types";
 import { syncEvents } from "../sync/events";
 
-/** Отметка «есть неопубликованные изменения» пишется в той же транзакции, что и само изменение. */
+/**
+ * Отметка «есть неопубликованные изменения» пишется в той же транзакции, что и само изменение.
+ * Значение — новая метка на каждое изменение: публикация снимает отметку, только если она не сменилась
+ * с момента сборки снимка, поэтому изменение во время выгрузки остаётся неопубликованным, а не теряется.
+ */
 export const DIRTY_KEY = "sync:dirty";
-const markChanged = (database: AppDatabase) => database.meta.put({ key: DIRTY_KEY, value: "1" });
-const announceChange = () => syncEvents.emit("changed");
+let changes = 0;
+export const dirtyMark = () =>
+  `${Date.now().toString(36)}-${(++changes).toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+export const markChanged = (database: AppDatabase) => database.meta.put({ key: DIRTY_KEY, value: dirtyMark() });
+/** Повод для обмена: координатор откладывает его на пару секунд и объединяет соседние изменения. */
+export const announceChange = () => syncEvents.emit("changed");
 const settled = (items: SessionItem[]) => items.filter((entry) => entry.eventId || entry.skipped).length;
 
 export class ConflictError extends Error {
@@ -301,16 +309,34 @@ export async function createLesson(title: string, database: AppDatabase = db): P
 /**
  * Урок, чей день по расписанию уже прошёл, становится проведённым, а дата — его собственной,
  * поэтому дальнейшие изменения расписания его не трогают. Повторный вызов ничего не пишет.
+ * Уроки курса не трогаются: их завершение — только по выполненным заданиям.
  */
 export async function settleLessons(now: Date, database: AppDatabase = db): Promise<number> {
-  return database.transaction("rw", database.lessons, database.courses, database.settings, database.meta, async () => {
+  const tables = [
+    database.lessons,
+    database.courses,
+    database.settings,
+    database.packages,
+    database.modules,
+    database.meta,
+  ];
+  return database.transaction("rw", tables, async () => {
     const settings = fillSettings(await database.settings.get("settings"));
+    // Урок курса (пакет с модулем или урок модуля каталога) завершается только заданиями (`completeLesson`), не датой.
+    const course = new Set([
+      ...(await database.packages.toArray()).filter((pack) => pack.module).map((pack) => pack.lessonId),
+      ...(await database.modules.toArray()).flatMap((module) => [
+        ...module.lessonIds,
+        ...(module.checkpointId ? [module.checkpointId] : []),
+      ]),
+    ]);
     const stored = await database.lessons.toArray();
     const raw = new Map(stored.map((lesson) => [lesson.id, lesson]));
     const courses = await database.courses.toArray();
     const prepared = preparedByCourse(courses, now, settings.timezone);
     const passed = scheduleCourses(stored, courses).filter(
       (lesson) =>
+        !course.has(lesson.id) &&
         lesson.targetDate &&
         lesson.targetDate <= prepared(lesson.courseId) &&
         (raw.get(lesson.id)!.status !== "completed" || !raw.get(lesson.id)!.targetDate),

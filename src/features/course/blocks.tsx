@@ -212,7 +212,10 @@ export function Exercise({
 }) {
   const [answers, setAnswers] = useState<Record<string, string>>(progress?.answers ?? {});
   const [checked, setChecked] = useState(!!progress?.done);
-  const score = checked ? scoreExercise(block, answers) : null;
+  // Выполнено на другом устройстве: счёт пришёл синхронизацией, а введённые ответы остались там.
+  const elsewhere = checked && !Object.keys(answers).length;
+  const score = checked && !elsewhere ? scoreExercise(block, answers) : null;
+  const total = score ?? (elsewhere ? progress?.score : undefined);
   const choose = (itemId: string, value: string) => {
     if (checked) return;
     setAnswers((prev) => ({ ...prev, [itemId]: value }));
@@ -299,7 +302,8 @@ export function Exercise({
         {checked ? (
           <>
             <span className={css.score} role="status">
-              {score!.correct + score!.almost} из {score!.total}
+              {total ? `${total.correct + total.almost} из ${total.total}` : "Выполнено"}
+              {elsewhere ? " · на другом устройстве" : ""}
             </span>
             <Button variant="quiet" size="sm" onClick={() => void retry()}>
               Ещё раз

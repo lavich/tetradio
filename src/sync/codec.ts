@@ -2,8 +2,11 @@ import type { SkillSummary, StatsSummary, TypeSkill } from "../domain/skills";
 import { tryParseUnitKey, unitKey, wordRef } from "../domain/refs";
 import type { CardKind, ExerciseType, LearningRef } from "../domain/types";
 import {
+  BLOCKS_SNAPSHOT_FORMAT,
   LEGACY_SNAPSHOT_FORMAT,
   SNAPSHOT_FORMAT,
+  SUPPORTED_SNAPSHOT_FORMATS,
+  type CompactBlock,
   type CompactCourse,
   type CompactSnapshot,
   type CompactState,
@@ -14,6 +17,7 @@ import {
  * Проводной формат снимка: массивы вместо объектов, миллисекунды вместо ISO, исходы ответов — битовой строкой.
  * Числа FSRS не округляются: второе устройство должно получить те же интервалы. Кодек обратим, что проверяется тестом.
  * Формат 2 кодирует ссылку на карточку одним символом вида и идентификатором; формат 1 читается как словарный.
+ * Формат 3 добавляет `b` — блоки курса, сгруппированные по уроку: `[урок, [[блок, выполнен 0|1, мс, счёт|0, критерии?]…]]`.
  */
 const TYPE_CODE: Record<ExerciseType, string> = {
   recall: "c",
@@ -85,6 +89,12 @@ type LegacyWireCourse = {
   newWordsPerDay: number;
   schedule: CompactCourse["schedule"];
 };
+/** Блок без идентификатора урока: `[блок, выполнен, изменён (мс), [верно, почти, всего] | 0, критерии?]`, хвост опускается. */
+type WireBlock =
+  | [string, 0 | 1, number]
+  | [string, 0 | 1, number, [number, number, number] | 0]
+  | [string, 0 | 1, number, [number, number, number] | 0, number[]];
+type WireLessonBlocks = [string, WireBlock[]];
 interface Wire {
   f: number;
   c: number;
@@ -92,6 +102,7 @@ interface Wire {
   cs?: (WireCourse | LegacyWireCourse)[];
   l: [string, string | null, "upcoming" | "completed", number][];
   p: string[];
+  b?: WireLessonBlocks[];
   st: WireState[];
   sk: WireSkill[];
   x: { d: WireDay[]; r: Record<string, string>; n: number; w: string[] };
@@ -193,6 +204,41 @@ const decodeStats = (wire: Wire["x"], key: (raw: string) => string | null): Stat
   answers: wire.n,
   answeredKeys: wire.w.map(key).filter(alive),
 });
+const encodeBlocks = (blocks: CompactBlock[]): WireLessonBlocks[] => {
+  const byLesson = new Map<string, WireBlock[]>();
+  for (const block of blocks) {
+    const score = block.score ? ([block.score.correct, block.score.almost, block.score.total] as const) : 0;
+    const head = [block.blockId, block.done ? 1 : 0, ms(block.updatedAt)] as const;
+    const row: WireBlock = block.checks?.length
+      ? [...head, score ? [...score] : 0, block.checks]
+      : score
+        ? [...head, [...score]]
+        : [...head];
+    const rows = byLesson.get(block.lessonId);
+    if (rows) rows.push(row);
+    else byLesson.set(block.lessonId, [row]);
+  }
+  return [...byLesson];
+};
+const decodeBlocks = (wire: unknown): CompactBlock[] => {
+  if (!Array.isArray(wire)) throw new SnapshotFormatError("Структура блоков курса не соответствует формату");
+  return (wire as WireLessonBlocks[]).flatMap(([lessonId, rows]) => {
+    if (typeof lessonId !== "string" || !Array.isArray(rows))
+      throw new SnapshotFormatError("Структура блоков курса не соответствует формату");
+    return rows.map(([blockId, done, updated, score, checks]): CompactBlock => {
+      if (typeof blockId !== "string" || typeof updated !== "number")
+        throw new SnapshotFormatError("Структура блока курса не соответствует формату");
+      return {
+        lessonId,
+        blockId,
+        done: done === 1,
+        ...(Array.isArray(score) ? { score: { correct: score[0], almost: score[1], total: score[2] } } : {}),
+        ...(Array.isArray(checks) && checks.length ? { checks } : {}),
+        updatedAt: iso(updated),
+      };
+    });
+  });
+};
 /** Ключи и состояния снятых видов выпадают из снимка: карточки под ними нет и не будет. */
 const alive = <T>(value: T | null): value is T => value !== null;
 
@@ -204,6 +250,7 @@ export function encodeSnapshot(snapshot: CompactSnapshot): string {
     cs: snapshot.courses,
     l: snapshot.lessons.map((lesson) => [lesson.id, lesson.targetDate, lesson.status, ms(lesson.updatedAt)]),
     p: snapshot.packages,
+    b: encodeBlocks(snapshot.blocks),
     st: snapshot.states.map(encodeState),
     sk: snapshot.skills.map((entry) => encodeSkill(entry.ref, entry.skills)),
     x: encodeStats(snapshot.stats),
@@ -217,7 +264,7 @@ export class SnapshotFormatError extends Error {}
  */
 export function decodeSnapshot(text: string): CompactSnapshot {
   const wire = JSON.parse(text) as Partial<Wire>;
-  if (wire?.f !== SNAPSHOT_FORMAT && wire?.f !== LEGACY_SNAPSHOT_FORMAT)
+  if (!(SUPPORTED_SNAPSHOT_FORMATS as readonly unknown[]).includes(wire?.f))
     throw new SnapshotFormatError(`Формат снимка ${String(wire?.f)} не поддерживается`);
   if (
     !Array.isArray(wire.st) ||
@@ -250,6 +297,8 @@ export function decodeSnapshot(text: string): CompactSnapshot {
       updatedAt: iso(updatedAt),
     })),
     packages: wire.p,
+    // Снимок до формата 3 блоков курса не знает: пустой список, а применение по формату источника их не трогает.
+    blocks: (wire.f ?? 0) >= BLOCKS_SNAPSHOT_FORMAT ? decodeBlocks(wire.b) : [],
     states: wire.st.map((state) => decodeState(state, ref)).filter(alive),
     skills: wire.sk.map((skill) => decodeSkill(skill, ref)).filter(alive),
     stats: decodeStats(wire.x, key),

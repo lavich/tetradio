@@ -6,7 +6,7 @@ import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
 import { lessonDone, lessonTally, type LessonTally } from "../domain/course";
 import type { BlockProgress, Lesson, StoredModule } from "../domain/types";
 import { db, type AppDatabase } from "./db";
-import { DIRTY_KEY } from "./ops";
+import { announceChange, markChanged } from "./ops";
 
 export const blockKey = (lessonId: string, blockId: string) => `${lessonId}/${blockId}`;
 
@@ -23,7 +23,7 @@ export async function saveBlockProgress(
   patch: BlockPatch,
   database: AppDatabase = db,
 ): Promise<BlockProgress> {
-  return database.transaction("rw", database.blockProgress, database.meta, async () => {
+  const saved = await database.transaction("rw", database.blockProgress, database.meta, async () => {
     const key = blockKey(lessonId, blockId);
     const previous = await database.blockProgress.get(key);
     const row: BlockProgress = {
@@ -36,9 +36,11 @@ export async function saveBlockProgress(
       updatedAt: new Date().toISOString(),
     };
     await database.blockProgress.put(row);
-    await database.meta.put({ key: DIRTY_KEY, value: "1" });
+    await markChanged(database);
     return row;
   });
+  announceChange();
+  return saved;
 }
 
 export interface CourseLesson {
@@ -72,12 +74,14 @@ export async function completeLesson(lessonId: string, database: AppDatabase = d
   if (!view) throw new LessonIncompleteError("Урок не установлен");
   const progress = await blockProgressOf(lessonId, database);
   if (!lessonDone(view.blocks, progress)) throw new LessonIncompleteError("В уроке остались невыполненные задания");
-  await database.transaction("rw", database.lessons, database.meta, async () => {
+  const changed = await database.transaction("rw", database.lessons, database.meta, async () => {
     const lesson = await database.lessons.get(lessonId);
-    if (!lesson || lesson.status === "completed") return;
+    if (!lesson || lesson.status === "completed") return false;
     await database.lessons.put({ ...lesson, status: "completed", updatedAt: new Date().toISOString() });
-    await database.meta.put({ key: DIRTY_KEY, value: "1" });
+    await markChanged(database);
+    return true;
   });
+  if (changed) announceChange();
 }
 
 export interface ModuleLessonView {

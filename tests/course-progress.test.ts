@@ -136,7 +136,7 @@ describe("прогресс курса в базе", () => {
       await saveBlockProgress("m01-1", blockId, { done: true }, db);
     await completeLesson("m01-1", db);
     expect((await db.lessons.get("m01-1"))!.status).toBe("completed");
-    expect(await db.meta.get("sync:dirty")).toMatchObject({ value: "1" });
+    expect((await db.meta.get("sync:dirty"))?.value).toBeTruthy();
   });
 
   it("следующий шаг курса — первый незавершённый урок опубликованного модуля", async () => {

@@ -2,7 +2,11 @@ import "fake-indexeddb/auto";
 import { describe, expect, it } from "vitest";
 import { createEmptyCard } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
-import { buildSnapshot } from "../src/sync/snapshot";
+import { buildSnapshot, KEEP_DAYS } from "../src/sync/snapshot";
+import { buildContent } from "../content/build";
+import { emptySkills, foldSkill, type SkillSummary, type StatsSummary } from "../src/domain/skills";
+import { unitKey } from "../src/domain/refs";
+import type { BlockProgress, InstalledPackage, LearningRef, LearningState, Lesson, Phrase } from "../src/domain/types";
 import { splitParts } from "../src/sync/adapter";
 import { decodeSnapshot, encodeSnapshot } from "../src/sync/codec";
 import { CLOUD_LIMITS } from "../src/sync/transport";
@@ -119,4 +123,172 @@ describe("размер компактного снимка (задача 0.4)", 
     expect(results.every((result) => result.keys < CLOUD_LIMITS.maxKeys)).toBe(true);
     expect(capacity).toBeGreaterThan(3000);
   }, 60_000); // три базы по тысячам событий: на CI-раннере дольше стандартных 5 секунд
+
+  // Замер 2026-10-01: ≈791 000 символов (блоки курса ≈43 000), 198 частей, 596 ключей из 1 024 — запас 428 ключей (42 %).
+  it("бюджет курса: 2 500 карточек, худшая история и 97 уроков со всеми блоками — 198 частей, 596 из 1 024 ключей, запас 428", async () => {
+    const db = new AppDatabase("tetradio-size-course");
+    await db.delete();
+    await db.open();
+    const stamp = now.toISOString();
+    // 2 000 слов и 500 фраз (20 %) — весь бюджет карточек курса из design.md.
+    const refs: LearningRef[] = [
+      ...Array.from({ length: 2000 }, (_, index) => ({
+        kind: "word" as const,
+        id: `w${String(index).padStart(4, "0")}`,
+      })),
+      ...Array.from({ length: 500 }, (_, index) => ({
+        kind: "phrase" as const,
+        id: `p-${String(index).padStart(4, "0")}`,
+      })),
+    ];
+    await db.words.bulkAdd(
+      refs
+        .filter((ref) => ref.kind === "word")
+        .map((ref, index) =>
+          indexWord({
+            id: ref.id,
+            greek: `λέξη${index}`,
+            russian: `слово${index}`,
+            ipa: "",
+            segments: [],
+            examples: [],
+            verified: true,
+            createdAt: stamp,
+            updatedAt: stamp,
+            revision: "r1",
+          } satisfies Word),
+        ),
+    );
+    await db.phrases.bulkAdd(
+      refs
+        .filter((ref) => ref.kind === "phrase")
+        .map((ref, index): Phrase => ({
+          id: ref.id,
+          text: `φράση ${index}`,
+          provenance: { sourceLabel: "курс", operation: "verbatim" },
+          createdAt: stamp,
+          updatedAt: stamp,
+          revision: "r1",
+        })),
+    );
+    await db.cardStates.bulkPut(
+      refs.map((ref, index): LearningState => ({
+        unitKey: unitKey(ref),
+        ref,
+        version: 50,
+        introducedAt: new Date(now.getTime() - index * 60000).toISOString(),
+        card: {
+          ...createEmptyCard(now),
+          due: new Date(now.getTime() + index * 3600000),
+          reps: 50,
+          stability: 12.3456789,
+          difficulty: 5.4321,
+          scheduled_days: 7,
+          elapsed_days: 3,
+          state: 2,
+          last_review: now,
+        },
+      })),
+    );
+    // Худшая история, как в тестах выше: по 10 ответов каждого из 5 типов у каждой карточки — полные сводки навыков.
+    const types: ExerciseType[] = ["recall", "recognition", "assembly", "spelling", "listening"];
+    let tick = 0;
+    const skills = refs.map((ref) => {
+      let summary: SkillSummary = emptySkills();
+      for (const type of types)
+        for (let index = 0; index < 10; index++)
+          summary = foldSkill(summary, {
+            type,
+            rating: index % 3 ? 3 : 1,
+            correct: index % 3 !== 0,
+            createdAt: new Date(now.getTime() - 10 ** 8 + tick++ * 1000).toISOString(),
+          });
+      return { unitKey: unitKey(ref), ref, skills: summary };
+    });
+    await db.cardSkills.bulkPut(skills);
+    // Сводка статистики сверх модели выше: все 14 дней окна по 300 разных карточек в день, ответ был у каждой.
+    const keys = refs.map(unitKey);
+    const stats: StatsSummary = {
+      days: Array.from({ length: KEEP_DAYS }, (_, day) => ({
+        date: new Date(now.getTime() - (KEEP_DAYS - 1 - day) * 86400000).toISOString().slice(0, 10),
+        answers: 900,
+        keys: keys.slice((day * 300) % 2200, ((day * 300) % 2200) + 300),
+      })),
+      recentByType: Object.fromEntries(types.map((type) => [type, Array.from({ length: 10 }, (_, i) => i % 3 !== 0)])),
+      answers: refs.length * 50,
+      answeredKeys: keys,
+    };
+    await db.baseSummary.put({ id: "base", asOf: stamp, versionId: "base", stats });
+    // Курс как он есть: все уроки из content/lessons, у каждого блока — запись выполнения (с запасом: в приложении
+    // запись заводят только задания, письмо и речь), со счётом у заданий и всеми отмеченными критериями.
+    const course = buildContent("content").packages.filter((pack) => pack.blocks);
+    const lesson = (id: string): Lesson => ({
+      id,
+      courseId: "greek-a2",
+      title: id,
+      targetDate: null,
+      status: "completed",
+      createdAt: stamp,
+      updatedAt: stamp,
+    });
+    await db.lessons.bulkPut(course.map((pack) => lesson(pack.id)));
+    await db.packages.bulkPut(
+      course.map(
+        (pack) =>
+          ({
+            lessonId: pack.id,
+            version: "v1",
+            schemaVersion: 4,
+            installedAt: stamp,
+            words: [],
+            phrases: [],
+            items: [],
+            media: [],
+            removed: [],
+            kind: pack.blocks!.some((block) => block.type === "exercise" && block.graded) ? "test" : "lesson",
+            module: pack.module,
+            blocks: pack.blocks,
+          }) as unknown as InstalledPackage,
+      ),
+    );
+    let at = now.getTime() - 10 ** 9;
+    const blocks: BlockProgress[] = course.flatMap((pack) =>
+      pack.blocks!.map((block) => ({
+        key: `${pack.id}/${block.id}`,
+        lessonId: pack.id,
+        blockId: block.id,
+        done: true,
+        ...(block.type === "exercise"
+          ? { score: { correct: block.items.length - 1, almost: 1, total: block.items.length } }
+          : {}),
+        ...(block.type === "writing" || block.type === "speaking"
+          ? { checks: block.criteria.map((_, index) => index) }
+          : {}),
+        // Тексты ответов есть локально, но в снимок не идут.
+        ...(block.type === "exercise"
+          ? { answers: Object.fromEntries(block.items.map((item) => [item.id, "απάντηση"])) }
+          : {}),
+        ...(block.type === "writing" ? { text: "Γεια σας! ".repeat(20) } : {}),
+        updatedAt: new Date((at += 61_000)).toISOString(),
+      })),
+    );
+    await db.blockProgress.bulkPut(blocks);
+    const { snapshot, chars, parts } = await measure(db);
+    const keysNeeded = keysFor(parts);
+    const courseChars = JSON.stringify(JSON.parse(encodeSnapshot(snapshot)).b).length;
+    console.log(
+      `курс: ${refs.length} карточек, ${course.length} уроков, ${blocks.length} блоков → ${chars} символов ` +
+        `(блоки курса ${courseChars}), ${parts} частей, ${keysNeeded} ключей с резервом из ${CLOUD_LIMITS.maxKeys} ` +
+        `(запас ${CLOUD_LIMITS.maxKeys - keysNeeded})`,
+    );
+    expect(course.length).toBe(97);
+    expect(snapshot.states).toHaveLength(2500);
+    expect(snapshot.blocks).toHaveLength(blocks.length);
+    expect(snapshot.lessons.filter((item) => item.status === "completed")).toHaveLength(97);
+    expect(encodeSnapshot(snapshot)).not.toContain("απάντηση");
+    // Бюджет design.md: 3 × части + 2 ≤ 1 024.
+    expect(keysNeeded).toBeLessThanOrEqual(CLOUD_LIMITS.maxKeys);
+    // Прогресс блока компактен: без ответов и текстов — десятки символов на блок.
+    expect(courseChars / blocks.length).toBeLessThan(50);
+  }, 60_000);
 });

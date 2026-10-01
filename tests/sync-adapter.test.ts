@@ -13,6 +13,7 @@ const snapshot = (size = 0): CompactSnapshot => ({
   courses: [],
   lessons: [],
   packages: ["lesson-1-1"],
+  blocks: [],
   states: Array.from({ length: size }, (_, index) => ({
     ref: { kind: "word" as const, id: `w11-${String(index).padStart(2, "0")}` },
     card: {
