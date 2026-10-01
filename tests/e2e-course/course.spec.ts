@@ -196,3 +196,31 @@ test("разворот: на широком экране две страницы
   await page.keyboard.press("ArrowLeft");
   await expect(page.getByTestId("page-count")).toContainText("стр. 1–2 из");
 });
+
+test("листание не расширяет страницу: нижнее меню не дёргается ни вперёд, ни назад", async ({ page }) => {
+  await start(page);
+  await page.goto("/course/m01/m01-1?p=1");
+  await expect(page.getByTestId("page-count")).toBeVisible();
+  // Ширина документа по кадрам анимации перелистывания.
+  const widest = () =>
+    page.evaluate(
+      () =>
+        new Promise<number>((done) => {
+          let max = 0;
+          let frames = 0;
+          const tick = () => {
+            max = Math.max(max, document.documentElement.scrollWidth);
+            if (++frames < 20) requestAnimationFrame(tick);
+            else done(max);
+          };
+          requestAnimationFrame(tick);
+        }),
+    );
+  const pager = page.getByRole("navigation", { name: "Страницы урока" });
+  const forward = widest();
+  await pager.getByRole("button", { name: "Далее" }).click();
+  expect(await forward).toBeLessThanOrEqual(390);
+  const back = widest();
+  await pager.getByRole("button", { name: "Предыдущая страница" }).click();
+  expect(await back).toBeLessThanOrEqual(390);
+});

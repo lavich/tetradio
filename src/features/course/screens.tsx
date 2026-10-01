@@ -358,30 +358,32 @@ export function CourseLessonScreen() {
   const last = shown[shown.length - 1];
   return (
     <Screen back={lesson.kind === "test" ? "Контрольная" : "Урок"} wide>
-      <div
-        key={first}
-        className={`${css.sheet} ${spread ? css.spread : ""} ${turn === "next" ? css.turnNext : turn === "prev" ? css.turnPrev : ""}`}
-        onTouchStart={(event) => {
-          const target = event.target as HTMLElement;
-          const point = event.touches[0];
-          touch.current =
-            target.closest("input, textarea") || scrollsSideways(target)
-              ? null
-              : { x: point.clientX, y: point.clientY };
-        }}
-        onTouchEnd={(event) => {
-          const start = touch.current;
-          touch.current = null;
-          if (!start) return;
-          const point = event.changedTouches[0];
-          const dx = point.clientX - start.x;
-          const dy = point.clientY - start.y;
-          if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
-          if (dx < 0) next();
-          else prev();
-        }}
-      >
-        {shown.map(renderPage)}
+      <div className={css.frame}>
+        <div
+          key={first}
+          className={`${css.sheet} ${spread ? css.spread : ""} ${turn === "next" ? css.turnNext : turn === "prev" ? css.turnPrev : ""}`}
+          onTouchStart={(event) => {
+            const target = event.target as HTMLElement;
+            const point = event.touches[0];
+            touch.current =
+              target.closest("input, textarea") || scrollsSideways(target)
+                ? null
+                : { x: point.clientX, y: point.clientY };
+          }}
+          onTouchEnd={(event) => {
+            const start = touch.current;
+            touch.current = null;
+            if (!start) return;
+            const point = event.changedTouches[0];
+            const dx = point.clientX - start.x;
+            const dy = point.clientY - start.y;
+            if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+            if (dx < 0) next();
+            else prev();
+          }}
+        >
+          {shown.map(renderPage)}
+        </div>
       </div>
       <nav className={css.pager} aria-label="Страницы урока">
         <Button
