@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 
 /**
  * Эмуляция официального bridge Telegram для браузерных проверок: события, BackButton, MainButton, HapticFeedback
- * и CloudStorage в памяти страницы. Вызовы записываются в `window.__tg.calls`, облако лежит в `window.__tg.cloud`.
+ * и CloudStorage вкладки (переживает перезагрузку, как настоящее облако). Вызовы записываются в `window.__tg.calls`, облако лежит в `window.__tg.cloud`.
  */
 export interface TelegramEmulation {
   platform?: "ios" | "android";
@@ -50,7 +50,10 @@ export const bridgeScript = (options: TelegramEmulation) => {
   const legacyField = parseFloat(options.version ?? "8.0") < 8 ? "" : "isActive:true,";
   return `(()=>{
  const calls=[];
- const cloud=new Map(Object.entries(${JSON.stringify(options.cloud ?? {})}));
+ const cloudKey='__tgCloud:${options.userId ?? 1001}';
+ const saved=sessionStorage.getItem(cloudKey);
+ const cloud=new Map(saved?JSON.parse(saved):Object.entries(${JSON.stringify(options.cloud ?? {})}));
+ const persist=()=>sessionStorage.setItem(cloudKey,JSON.stringify([...cloud]));
  const handlers=new Map();
  const legacy=${parseFloat(options.version ?? "8.0") < 8};
  const on=(name,handler)=>{if(legacy&&${JSON.stringify(LIFECYCLE_EVENTS)}.includes(name))throw new Error('WebAppMethodUnsupported');if(!handlers.has(name))handlers.set(name,new Set());handlers.get(name).add(handler)};
@@ -75,11 +78,11 @@ export const bridgeScript = (options: TelegramEmulation) => {
     options.noCloud
       ? ""
       : `CloudStorage:{
-   setItem(key,value,cb){calls.push('cloud.set:'+key);if(cloud.size>=1024&&!cloud.has(key))return later(cb,'QUOTA');cloud.set(key,value);later(cb,null,true)},
+   setItem(key,value,cb){calls.push('cloud.set:'+key);if(cloud.size>=1024&&!cloud.has(key))return later(cb,'QUOTA');cloud.set(key,value);persist();later(cb,null,true)},
    getItem(key,cb){later(cb,null,cloud.get(key)??'')},
    getItems(keys,cb){const out={};keys.forEach(k=>{if(cloud.has(k))out[k]=cloud.get(k)});later(cb,null,out)},
-   removeItem(key,cb){cloud.delete(key);later(cb,null,true)},
-   removeItems(keys,cb){keys.forEach(k=>cloud.delete(k));later(cb,null,true)},
+   removeItem(key,cb){cloud.delete(key);persist();later(cb,null,true)},
+   removeItems(keys,cb){keys.forEach(k=>cloud.delete(k));persist();later(cb,null,true)},
    getKeys(cb){later(cb,null,[...cloud.keys()])},
   },`
   }
