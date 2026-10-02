@@ -317,9 +317,7 @@ export function CourseLessonScreen() {
   const total = pages.length + 1; // последняя страница — итог урока
   const step = spread ? 2 : 1;
   const asked = Number(params.get("p"));
-  const resume = progress
-    ? pages.findIndex((page) => page.some((block) => isTask(block) && !progress.get(block.id)?.done))
-    : 0;
+  const resume = progress ? resumePage(pages, (block) => !!progress.get(block.id)?.done) : 0;
   const current = Math.min(Math.max(asked ? asked - 1 : resume < 0 ? pages.length : resume, 0), total - 1);
   const first = spread ? current - (current % 2) : current;
   const go = (target: number, direction: "next" | "prev") => {
@@ -534,6 +532,14 @@ function paginate(blocks: LessonBlock[]) {
     if (block.type === "reading" || block.type === "listening") home.set(block.id, pages.length - 1);
   }
   return pages;
+}
+/** Первая страница с невыполненным заданием, но с теорией и словами перед ним: иначе новый урок открывался бы на упражнении. */
+function resumePage(pages: LessonBlock[][], done: (block: LessonBlock) => boolean) {
+  const hasTask = (page: LessonBlock[]) => page.some(isTask);
+  let index = pages.findIndex((page) => page.some((block) => isTask(block) && !done(block)));
+  if (index < 0) return index;
+  while (index > 0 && !hasTask(pages[index - 1])) index--;
+  return index;
 }
 /** Свайп внутри прокручиваемой вбок таблицы листает таблицу, а не страницу. */
 function scrollsSideways(target: HTMLElement) {

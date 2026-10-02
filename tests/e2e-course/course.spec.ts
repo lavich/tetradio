@@ -211,6 +211,15 @@ test("аудирование синтезом: две прослушки, зат
   await expect(listening.getByRole("list")).toHaveCount(0);
 });
 
+test("новый урок открывается с первой страницы, а не с первого задания после теории", async ({ page }) => {
+  await start(page);
+  await page.goto("/course/m01/m01-1");
+  await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 из/);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/course/m01/m01-1");
+  await expect(page.getByTestId("page-count")).toContainText("стр. 1–2 из");
+});
+
 test("разворот: на широком экране две страницы рядом, стрелки листают разворот", async ({ page }) => {
   await start(page);
   await page.setViewportSize({ width: 1440, height: 900 });
