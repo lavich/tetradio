@@ -16,9 +16,11 @@ const release = `tetradio@${appVersion}+${appBuild}`;
 /**
  * Карты кода скрытые: без ссылок из бандла и без публикации на сайте. При наличии реквизитов плагин загружает их
  * в сервис учёта ошибок и удаляет `*.map` из `dist`; без токена (проверки pull request, локальная сборка) он не подключается.
+ * `SENTRY_DEBUG_IDS=1` подключает его без реквизитов: без загрузки, но с теми же debug ID в чанках, что в deploy.
  */
 const sentryUpload =
-  process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_ORG && process.env.SENTRY_PROJECT
+  (process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_ORG && process.env.SENTRY_PROJECT) ||
+  process.env.SENTRY_DEBUG_IDS === "1"
     ? [
         sentryVitePlugin({
           authToken: process.env.SENTRY_AUTH_TOKEN,

@@ -1,10 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
-import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
-import { SyncConflictDialog } from "./TelegramNotices";
 import { updateReady } from "../main";
 import { useBackHandler, useEnvironment } from "../platform/platform";
 import { useNow } from "../shared/clock";
@@ -33,6 +30,19 @@ const MoreScreen = named("MoreScreen", () => import("../features/more/MoreScreen
 const StatsScreen = named("StatsScreen", () => import("../features/progress/StatsScreen"));
 const SettingsScreen = named("SettingsScreen", () => import("../features/more/SettingsScreen"));
 const BackupScreen = named("BackupScreen", () => import("../features/backup/BackupScreen"));
+// Уведомления и диалог конфликта не нужны первому кадру: грузятся следом, без чанка — просто не показываются.
+const optional = <P extends object>(load: () => Promise<React.ComponentType<P>>) =>
+  lazy(() =>
+    load().then(
+      (component) => ({ default: component }),
+      (error: unknown) => {
+        console.warn("Необязательная часть интерфейса не загрузилась", error);
+        return { default: (() => null) as React.ComponentType<P> };
+      },
+    ),
+  );
+const Toaster = optional(() => import("@/components/ui/sonner").then((module) => module.Toaster));
+const SyncConflictDialog = optional(() => import("./TelegramNotices").then((module) => module.SyncConflictDialog));
 
 export function App() {
   const { pathname } = useLocation();
@@ -52,10 +62,14 @@ export function App() {
     // Обновление предлагаем между занятиями, чтобы не прервать ответ.
     const notice = () => {
       if (immersive) return;
-      toast("Есть обновление приложения", {
-        duration: Infinity,
-        action: { label: "Обновить", onClick: () => updateReady.apply() },
-      });
+      import("sonner")
+        .then(({ toast }) =>
+          toast("Есть обновление приложения", {
+            duration: Infinity,
+            action: { label: "Обновить", onClick: () => updateReady.apply() },
+          }),
+        )
+        .catch((error) => console.warn("Не удалось показать обновление", error));
     };
     if (updateReady.value) notice();
     window.addEventListener("tetradio:update", notice);
@@ -84,9 +98,11 @@ export function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
-      <Toaster position="bottom-center" offset={88} />
+      <Suspense fallback={null}>
+        <Toaster position="bottom-center" offset={88} />
+      </Suspense>
       {!immersive && !lesson && <Nav />}
-      {!immersive && <SyncConflictDialog />}
+      <Suspense fallback={null}>{!immersive && <SyncConflictDialog />}</Suspense>
     </div>
   );
 }

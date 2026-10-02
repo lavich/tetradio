@@ -17,7 +17,6 @@ import { bindReportingToSettings } from "./reporting/settings";
 import { db, ensureDefaults } from "./storage/db";
 import { settleLessons } from "./storage/ops";
 import { launchProfile, ownerMatches, type Profile } from "./storage/profile";
-import { connectSync } from "./sync";
 import "./styles.css";
 
 // Ранние обработчики ошибок ставятся до всего остального: отказы запуска копятся до загрузки SDK отчётов.
@@ -105,8 +104,10 @@ function start(profile: Profile) {
     }
     return matches;
   });
-  Promise.all([database, platform])
-    .then(([, matches]) => {
+  // Координатор синхронизации не нужен первому кадру: его чанк грузится параллельно с базой и bridge.
+  const syncModule = import("./sync");
+  Promise.all([database, platform, syncModule])
+    .then(([, matches, { connectSync }]) => {
       if (matches) connectSync(telegramBridge());
     })
     .catch((error) => console.warn("Синхронизация не подключена", error));

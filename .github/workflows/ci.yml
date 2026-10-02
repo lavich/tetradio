@@ -25,6 +25,7 @@ jobs:
       PLAYWRIGHT_IMAGE_VERSION: 1.63.0
     steps:
       - uses: actions/checkout@v7
+      # Node из образа не используется: версия та же, что в deploy.yml.
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -38,8 +39,17 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run spec
+      # Предел стартового графа мерится на бандле deploy: те же база, имя бота, адрес приёма и debug ID отчётов о сбоях.
       - run: npm run build
+        env:
+          BASE_PATH: /tetradio/
+          VITE_TELEGRAM_MOCK: ""
+          VITE_TELEGRAM_BOT: ${{ vars.VITE_TELEGRAM_BOT || 'TetradioBot' }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN || 'https://00000000000000000000000000000000@o0000000.ingest.de.sentry.io/0000000000000000' }}
+          SENTRY_DEBUG_IDS: "1"
       - run: npm run check:bundle
+        env:
+          BASE_PATH: /tetradio/
 
       - run: npm run test:e2e
       - run: npm run test:e2e:course
