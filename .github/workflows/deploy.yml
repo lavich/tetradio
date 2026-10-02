@@ -31,7 +31,7 @@ jobs:
         uses: actions/configure-pages@v6
       - run: echo "BASE_PATH=${{ steps.pages.outputs.base_path }}/" >> "$GITHUB_ENV"
       # Имя бота и адрес приёма отчётов о сбоях попадают в публичный бандл; реквизиты загрузки карт кода — только в сборку.
-      # Проверки pull request (ci.yml) идут без них: сборка без токена не загружает карты и не ходит в сервис.
+      # Проверки pull request (ci.yml) собирают тот же бандл без реквизитов: карты не загружаются, сервис не вызывается.
       - run: npm run build
         env:
           # Production без мока Telegram: вне Telegram — только экран «Откройте в Telegram».
