@@ -126,6 +126,7 @@ export interface ModuleSource {
   checkpoint?: string;
   /** Уроки после контрольной точки (`kind: lesson`). */
   review?: string[];
+  crib?: unknown;
 }
 
 const hash = (value: string | Uint8Array, length = 12) =>

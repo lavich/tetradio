@@ -180,6 +180,13 @@ export interface CatalogModule {
   checkpointId?: string;
   /** Уроки после контрольной точки: работа над слабым навыком после M3. */
   reviewIds?: string[];
+  /** Шпаргалка на обороте обложки: пары «подпись — форма» в две колонки. */
+  crib?: ModuleCrib;
+}
+export interface ModuleCrib {
+  title: string;
+  rows: [label: string, value: string][];
+  note?: string;
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -230,6 +237,7 @@ const FIELDS: Record<string, readonly string[]> = {
   gloss: ["text", "russian"],
   table: ["columns", "rows"],
   words: ["min", "max"],
+  crib: ["title", "rows", "note"],
 };
 function onlyKnown(raw: Record<string, unknown>, kind: string, path: string) {
   for (const [key, value] of Object.entries(raw))
@@ -265,6 +273,19 @@ function parseTable(input: unknown, path: string): BlockTable {
     if (row.length !== width) throw new ContentError(`${path}.rows[${i}]: ${row.length} ячеек вместо ${width}`);
   });
   return columns ? { columns, rows } : { rows };
+}
+
+function parseCrib(input: unknown, path: string): ModuleCrib {
+  const raw = obj(input, path);
+  onlyKnown(raw, "crib", path);
+  const rows = list(raw.rows, `${path}.rows`).map((row, i) => {
+    const cells = strings(row, `${path}.rows[${i}]`);
+    if (cells.length !== 2) throw new ContentError(`${path}.rows[${i}]: нужна пара «подпись, форма»`);
+    return cells as [string, string];
+  });
+  if (rows.length < 2 || rows.length > 8) throw new ContentError(`${path}.rows: от 2 до 8 строк`);
+  const note = optStr(raw.note, `${path}.note`);
+  return { title: str(raw.title, `${path}.title`), rows, ...(note ? { note } : {}) };
 }
 
 function parseExercise(raw: Record<string, unknown>, path: string, blockId: string): ExerciseBlock {
@@ -500,6 +521,7 @@ export function parseModule(input: unknown, path: string): CatalogModule {
   return {
     ...(checkpointId ? { checkpointId } : {}),
     ...(reviewIds.length ? { reviewIds } : {}),
+    ...(raw.crib === undefined ? {} : { crib: parseCrib(raw.crib, `${path}.crib`) }),
     id: id(raw.id, `${path}.id`),
     courseId: str(raw.courseId, `${path}.courseId`),
     number: int(raw.number, `${path}.number`, 1),
