@@ -178,6 +178,20 @@ test("от 900 px: слева страница со списком, справа
   expect(cloud.x).toBeGreaterThan(sheet.x);
   expect(Math.abs(cloud.x + cloud.width - (sheet.x + sheet.width))).toBeLessThan(2);
   await expect(page.getByRole("button", { name: /^Сделано \d+/ })).toHaveCount(0); // на широком не сворачивается
+  await page.getByTestId("option").first().click();
+  await expect(
+    page.getByRole("region", { name: "Задание" }).getByRole("button", { name: "Далее", exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("group", { name: "Занятие" }).getByRole("button", { name: "Далее" })).toHaveCount(0);
+});
+
+test("телефон: главное действие — в облачке, под пальцем", async ({ page }) => {
+  await seedSession(page, { done: 1, phrase: false });
+  await page.getByTestId("option").first().click();
+  await expect(
+    page.getByRole("group", { name: "Занятие" }).getByRole("button", { name: "Далее", exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("region", { name: "Задание" }).getByRole("button", { name: "Далее" })).toHaveCount(0);
 });
 
 test("телефон: длинный лист сворачивает сделанное в «Сделано N — показать», лист виден без прокрутки", async ({

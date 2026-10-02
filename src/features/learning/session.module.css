@@ -629,6 +629,9 @@
   display: grid;
   margin-top: 14px;
 }
+.inlineAction .primary {
+  height: 48px;
+}
 
 /* Облачко занятия — то же, что листание урока: закрыть, «N из M» и состав, главное действие. */
 .cloud {

@@ -1,4 +1,4 @@
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Rating } from "ts-fsrs";
 import type { ReviewEvent, Session, SessionCard, SessionItem } from "../../domain/types";
@@ -9,18 +9,20 @@ import s from "./session.module.css";
 
 /**
  * Место листа в занятии: номер текущего задания и ячейка облачка, куда упражнение кладёт своё действие.
- * Без поставщика (отдельный рендер упражнения в тестах) действие остаётся прямо под листом.
+ * Без поставщика (отдельный рендер упражнения в тестах) или с `inline` действие остаётся прямо под листом.
  */
 interface Place {
   number?: number;
   slot: HTMLElement | null;
+  /** На широком экране облачко далеко от листа: «Проверить» ставим в карточку, рядом с ответом. */
+  inline?: boolean;
 }
 const PlaceContext = createContext<Place | undefined>(undefined);
 export const PlaceProvider = PlaceContext.Provider;
 
 export function CloudAction({ children }: { children: ReactNode }) {
   const place = useContext(PlaceContext);
-  if (!place) return <div className={s.inlineAction}>{children}</div>;
+  if (!place || place.inline) return <div className={s.inlineAction}>{children}</div>;
   return place.slot ? createPortal(children, place.slot) : null;
 }
 
@@ -198,4 +200,18 @@ export function DoneList({
       )}
     </section>
   );
+}
+
+const WIDE = "(min-width: 900px)";
+/** Две колонки от 900 px: там список сделанного не сворачивается. */
+export function useWide() {
+  const [wide, setWide] = useState(() => typeof matchMedia === "function" && matchMedia(WIDE).matches);
+  useEffect(() => {
+    if (typeof matchMedia !== "function") return;
+    const query = matchMedia(WIDE);
+    const change = () => setWide(query.matches);
+    query.addEventListener("change", change);
+    return () => query.removeEventListener("change", change);
+  }, []);
+  return wide;
 }
