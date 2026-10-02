@@ -25,6 +25,7 @@ import { VocabularyList } from "./Vocabulary";
 import { TapHint, WordTaps } from "./WordTaps";
 import css from "./course.module.css";
 import { ExamLine } from "./ExamLine";
+import { launchContext } from "../../platform/launch";
 
 /** Цвета обложек: греческие школьные тетради яркие; цвет повторяется по номеру модуля. */
 const COVERS = ["#2f6d4f", "#b8452b", "#2c4f9e", "#b8871a", "#7b3f74", "#1f6f7a"];
@@ -114,6 +115,7 @@ export function ModuleScreen() {
     async () => (await moduleViews()).find((item) => item.module.id === moduleId) ?? null,
     [moduleId],
   );
+  const spread = useSpread();
   const [problem, setProblem] = useState("");
   // Уроки опубликованного модуля скачиваются при открытии: без пакета урок не пройти.
   useEffect(() => {
@@ -127,95 +129,172 @@ export function ModuleScreen() {
   if (view === undefined) return <Screen back="Модуль" />;
   if (view === null) return <Navigate to="/course" replace />;
   const { module } = view;
-  return (
-    <Screen back={`Модуль ${module.number}`}>
-      <div className={css.page + " notebook"}>
-        <p className={css.meta}>
-          Модуль {String(module.number).padStart(2, "0")} · {module.sessions} занятия
-        </p>
-        <h1 className={css.title} lang="el">
-          {module.title}
-        </h1>
-        <p className={css.print}>{module.subtitle}</p>
-        <div className={`${css.block} ${css.marked}`}>
-          <span className={css.gutter}>цель</span>
-          <p className={css.print}>{module.goal}</p>
-        </div>
-        {module.grammar.length ? (
-          <div className={`${css.block} ${css.marked}`}>
-            <span className={css.gutter}>грам.</span>
-            <p className={css.print}>{module.grammar.join(" · ")}</p>
-          </div>
+  const draft = module.status === "draft";
+  const done = view.lessons.filter((lesson) => lesson.completed).length;
+  const next = [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : []), ...view.review].find(
+    (lesson) => !lesson.completed,
+  )?.id;
+  const row = (lesson: ModuleView["lessons"][number], gutter: string, passed: string, kind?: string) => (
+    <li key={lesson.id} className={lesson.id === next ? css.now : undefined}>
+      {lesson.completed ? <Tick className={css.mark} label={passed} /> : <span className={css.gutter}>{gutter}</span>}
+      <Link className={css.lessonLink} to={`/course/${module.id}/${lesson.id}`}>
+        <span className={css.tocLine}>
+          <h3 className={css.blockTitle}>{lesson.title}</h3>
+          <span className={css.dots} aria-hidden="true" />
+          {lesson.installed ? (
+            <span className={lesson.completed ? `${css.tocCount} ${css.tocDone}` : css.tocCount}>
+              <span className="sr-only">заданий выполнено </span>
+              {lesson.tally.done} / {lesson.tally.total}
+            </span>
+          ) : null}
+        </span>
+        {kind || lesson.id === next || !lesson.installed ? (
+          <span className={css.meta}>
+            {[kind, lesson.id === next ? "следующий шаг" : "", lesson.installed ? "" : "скачивается…"]
+              .filter(Boolean)
+              .join(" · ")}
+          </span>
         ) : null}
-        {module.status === "draft" ? (
-          <p className={`${css.pen} mt-6`}>Модуль готовится: уроки появятся, когда будут проверены.</p>
-        ) : (
-          <ol className={css.lessons}>
-            {view.lessons.map((lesson, index) => (
-              <li key={lesson.id}>
-                {lesson.completed ? (
-                  <Tick className={css.mark} label="урок пройден" />
-                ) : (
-                  <span className={css.gutter}>{index + 1}.</span>
-                )}
-                <Link className={css.lessonLink} to={`/course/${module.id}/${lesson.id}`}>
-                  <h3 className={css.blockTitle}>{lesson.title}</h3>
-                  <span className={css.meta}>
-                    {lesson.kind === "test" ? "контрольная · " : ""}
-                    {lesson.installed
-                      ? `заданий выполнено ${lesson.tally.done} из ${lesson.tally.total}`
-                      : "скачивается…"}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        )}
-        {view.checkpoint ? (
-          <div className={`${css.block} ${css.marked}`}>
-            {view.checkpoint.completed ? (
-              <Tick className={css.mark} label="контрольная точка пройдена" />
-            ) : (
-              <span className={css.gutter}>точка</span>
-            )}
-            <Link className={css.lessonLink} to={`/course/${module.id}/${view.checkpoint.id}`}>
-              <h3 className={css.blockTitle}>{view.checkpoint.title}</h3>
-              <span className={css.meta}>
-                {CHECKPOINTS[module.number] ?? "контрольная точка"} ·{" "}
-                {view.checkpoint.installed
-                  ? `заданий выполнено ${view.checkpoint.tally.done} из ${view.checkpoint.tally.total}`
-                  : "скачивается…"}
-              </span>
-            </Link>
-          </div>
-        ) : null}
-        {view.review.length ? (
-          <ol className={css.lessons} aria-label="После пробника">
-            {view.review.map((lesson, index) => (
-              <li key={lesson.id}>
-                {lesson.completed ? (
-                  <Tick className={css.mark} label="занятие пройдено" />
-                ) : (
-                  <span className={css.gutter}>+{index + 1}</span>
-                )}
-                <Link className={css.lessonLink} to={`/course/${module.id}/${lesson.id}`}>
-                  <h3 className={css.blockTitle}>{lesson.title}</h3>
-                  <span className={css.meta}>
-                    после пробника ·{" "}
-                    {lesson.installed
-                      ? `заданий выполнено ${lesson.tally.done} из ${lesson.tally.total}`
-                      : "скачивается…"}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        ) : null}
-        {problem ? <p className={css.pen}>{problem}</p> : null}
+      </Link>
+    </li>
+  );
+  const contents = (
+    <>
+      <div className={css.tocHead}>
+        <h2 className={css.title}>Содержание</h2>
+        <span className={css.meta}>
+          {draft ? `${module.sessions} занятия` : `${done} из ${view.lessons.length} пройдено`}
+        </span>
       </div>
+      <div className={`${css.block} ${css.marked}`}>
+        <span className={css.gutter}>цель</span>
+        <p className={css.print}>{module.goal}</p>
+      </div>
+      {draft ? (
+        <p className={`${css.pen} mt-6`}>Модуль готовится: уроки появятся, когда будут проверены.</p>
+      ) : (
+        <ol className={css.lessons}>
+          {view.lessons.map((lesson, index) =>
+            row(lesson, `${index + 1}.`, "урок пройден", lesson.kind === "test" ? "контрольная" : undefined),
+          )}
+        </ol>
+      )}
+      {view.checkpoint ? (
+        <ol className={`${css.lessons} ${css.tocBreak}`} aria-label="Контрольная точка">
+          {row(view.checkpoint, "точка", "контрольная точка пройдена", CHECKPOINTS[module.number] ?? "контрольная точка")}
+        </ol>
+      ) : null}
+      {view.review.length ? (
+        <ol className={css.lessons} aria-label="После пробника">
+          {view.review.map((lesson, index) => row(lesson, `+${index + 1}`, "занятие пройдено", "после пробника"))}
+        </ol>
+      ) : null}
+      {module.grammar.length ? (
+        <div className={`${css.block} ${css.marked} ${css.tocFoot}`}>
+          <span className={css.gutter}>грам.</span>
+          <p className={`${css.print} ${css.soft}`}>{module.grammar.join(" · ")}</p>
+        </div>
+      ) : null}
+      {problem ? <p className={css.pen}>{problem}</p> : null}
+    </>
+  );
+  const cover = <ModuleCover view={view} open={spread} />;
+  return (
+    <Screen back={`Модуль ${module.number}`} wide={spread}>
+      {spread ? (
+        <div className={css.opened}>
+          {cover}
+          <div className={`${css.page} ${css.contents} notebook`}>{contents}</div>
+          <i className={css.staple} style={{ top: "30%" }} aria-hidden="true" />
+          <i className={css.staple} style={{ top: "70%" }} aria-hidden="true" />
+        </div>
+      ) : (
+        <>
+          {cover}
+          <div className={`${css.page} ${css.underFlap} notebook`}>{contents}</div>
+        </>
+      )}
     </Screen>
   );
 }
+
+/**
+ * Изнанка обложки с полки: тот же цвет и номер, школьная наклейка и шпаргалка модуля.
+ * На развороте шпаргалка видна целиком, на телефоне обложка — клапан над страницей, шпаргалка свёрнута.
+ */
+function ModuleCover({ view, open }: { view: ModuleView; open: boolean }) {
+  const { module } = view;
+  const draft = module.status === "draft";
+  const name = launchContext().user?.firstName;
+  const crib = module.crib ? (
+    <>
+      <table className={css.cribTable} lang="el">
+        <tbody>
+          {pairs(module.crib.rows).map((line, i) => (
+            <tr key={i}>
+              {line.map(([label, value]) => (
+                <td key={label + value}>
+                  <span className={css.cribLabel}>{label}</span> <b>{value}</b>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {module.crib.note ? <p className={css.cribNote}>{module.crib.note}</p> : null}
+    </>
+  ) : null;
+  const heading = (
+    <>
+      на обороте обложки <i lang="el">{module.crib?.title}</i>
+    </>
+  );
+  return (
+    <section
+      className={[open ? css.inside : css.flap, draft ? css.flapDraft : ""].join(" ")}
+      style={draft ? undefined : ({ "--cover": coverColor(module.number) } as React.CSSProperties)}
+      aria-label={`Обложка модуля ${module.number}`}
+    >
+      <p className={css.coverNum}>{String(module.number).padStart(2, "0")}</p>
+      <dl className={css.sticker}>
+        <div>
+          <dt lang="el">ΜΑΘΗΜΑ</dt>
+          <dd>
+            <h1 className={css.stickerTitle} lang="el">
+              {module.title}
+            </h1>
+            <span className={css.stickerSub}>{module.subtitle}</span>
+          </dd>
+        </div>
+        <div>
+          <dt lang="el">ΟΝΟΜΑ</dt>
+          <dd className={css.stickerInk}>{name}</dd>
+        </div>
+      </dl>
+      {crib ? (
+        open ? (
+          <div className={css.crib}>
+            <p className={css.cribHead}>{heading}</p>
+            {crib}
+          </div>
+        ) : (
+          <details className={css.crib}>
+            <summary className={css.cribHead}>{heading}</summary>
+            {crib}
+          </details>
+        )
+      ) : null}
+      {open ? null : (
+        <span className={css.flapStaples} aria-hidden="true">
+          <i style={{ left: "30%" }} />
+          <i style={{ left: "70%" }} />
+        </span>
+      )}
+    </section>
+  );
+}
+const pairs = <T,>(items: T[]) =>
+  Array.from({ length: Math.ceil(items.length / 2) }, (_, i) => items.slice(i * 2, i * 2 + 2));
 
 export function CourseLessonScreen() {
   const { moduleId = "", lessonId = "" } = useParams();
