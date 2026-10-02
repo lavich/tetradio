@@ -1,0 +1,327 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+.date {
+  margin: 0;
+  font-family: var(--font-print);
+  font-style: italic;
+  font-size: 17px;
+  line-height: var(--cell);
+  text-align: right;
+}
+.left {
+  text-align: left;
+  color: var(--muted-foreground);
+}
+.meta {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: var(--cell);
+  color: var(--muted-foreground);
+}
+
+.sheet {
+  display: grid;
+  gap: 16px;
+  margin-top: var(--cell);
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--input);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px -12px var(--shadow);
+}
+.trace {
+  background: transparent;
+  border-style: dashed;
+  box-shadow: none;
+  gap: 4px;
+}
+.sheetHead {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.count {
+  min-width: 64px;
+  font-family: var(--font-print);
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 48px;
+  color: var(--primary);
+  font-variant-numeric: lining-nums;
+}
+.bigTick {
+  flex: none;
+  width: 64px;
+  height: 48px;
+  color: var(--ok);
+}
+.blank {
+  flex: none;
+  width: 64px;
+}
+.sheetTitle {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: var(--cell);
+}
+.later {
+  color: var(--muted-foreground);
+}
+.quiet {
+  justify-self: start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 600 14px var(--font-sans);
+  color: var(--muted-foreground);
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: var(--input);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.quiet:hover:not(:disabled) {
+  color: var(--foreground);
+}
+.problem {
+  margin: 0;
+  color: var(--destructive);
+  font-size: 14px;
+}
+
+.lesson {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 16px;
+  margin-top: calc(var(--cell) * 2);
+  color: inherit;
+  text-decoration: none;
+  border-radius: 14px;
+}
+.lesson:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 6px;
+}
+.cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 128px;
+  padding: 12px 10px 10px 16px;
+  border-radius: 3px 8px 8px 3px;
+  color: #fff;
+  box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.5);
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: rgba(255, 255, 255, 0.35);
+}
+.cover b {
+  font-family: var(--font-print);
+  font-size: 26px;
+  line-height: 1;
+}
+.cover em {
+  margin-top: auto;
+  font-family: var(--font-print);
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.2;
+}
+.ribbon {
+  position: absolute;
+  top: -3px;
+  right: 14px;
+  width: 13px;
+  height: 52px;
+  background: var(--pen);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+}
+.lessonBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.lessonTitle {
+  font-family: var(--font-print);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: var(--cell);
+  overflow-wrap: anywhere;
+}
+.lesson:hover .lessonTitle {
+  color: var(--primary);
+}
+.lessonAction {
+  grid-column: 1 / -1;
+}
+.cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.cell {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--input);
+  border-radius: 6px;
+}
+.cellTick {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--ok);
+}
+.week {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+.dots {
+  display: inline-flex;
+  gap: 4px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--input);
+  border-radius: 50%;
+}
+.dotDone {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+.finished {
+  margin: calc(var(--cell) * 2) 0 0;
+  font-family: var(--font-print);
+  font-size: 16px;
+  line-height: var(--cell);
+}
+.exam {
+  margin-top: calc(var(--cell) * 2);
+}
+
+.spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(var(--app-height) - var(--cloud-space) - 120px);
+}
+.spread > .page {
+  padding: 0 48px;
+}
+.spread > .page:first-child {
+  padding-left: 0;
+}
+.spread .date {
+  text-align: left;
+}
+.spread > .page:first-child > * {
+  max-width: 440px;
+}
+.spread > .page + .page {
+  border-left: 1px solid var(--border);
+  box-shadow: inset 12px 0 16px -14px color-mix(in srgb, var(--foreground) 35%, transparent);
+}
+.moduleTitle {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: -0.015em;
+}
+.toc {
+  list-style: none;
+  margin: var(--cell) 0 0;
+  padding: 0;
+}
+.toc li {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.toc a {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  color: inherit;
+  text-decoration: none;
+}
+.toc a:hover .tocTitle {
+  color: var(--primary);
+}
+.tocNumber {
+  font-family: var(--font-print);
+  color: var(--muted-foreground);
+}
+.tocTitle {
+  font-family: var(--font-print);
+  font-size: 17px;
+  line-height: var(--cell);
+}
+.current .tocTitle {
+  color: var(--primary);
+  font-weight: 600;
+}
+.current::before {
+  content: "";
+  position: absolute;
+  left: -30px;
+  top: -2px;
+  width: 12px;
+  height: 30px;
+  background: var(--pen);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+}
+.weekRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: calc(var(--cell) * 2);
+}
+.days {
+  display: flex;
+  gap: 8px;
+}
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--input);
+  border-radius: 10px;
+  font-style: normal;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+.dayDone {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: #fff;
+}
+.dayToday {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.dayDone.dayToday {
+  color: #fff;
+}

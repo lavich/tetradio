@@ -5,6 +5,7 @@
 import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
 import { cardRef, decodeMarks, type BlockMarks } from "../content/schema";
 import { lessonDone, lessonTally, type LessonTally } from "../domain/course";
+import { localDay } from "../domain/learning";
 import type { BlockProgress, Lesson, StoredModule } from "../domain/types";
 import { db, type AppDatabase } from "./db";
 import { announceChange, markChanged } from "./ops";
@@ -205,4 +206,17 @@ export async function nextCourseLesson(
     if (review) return { module: view.module, lesson: review };
   }
   return null;
+}
+
+/** Дни с выполненными заданиями уроков с `from` включительно — занятия курса на этой неделе. */
+export async function lessonDays(from: string, timezone: string, database: AppDatabase = db): Promise<string[]> {
+  const rows = await database.blockProgress.filter((row) => row.done).toArray();
+  const days = new Set(rows.map((row) => localDay(new Date(row.updatedAt), timezone)).filter((day) => day >= from));
+  return [...days].sort();
+}
+
+/** Сколько карточек повторено в этот день по плану; тренировка не в счёт. */
+export async function reviewedOn(day: string, database: AppDatabase = db): Promise<number> {
+  const events = await database.events.where("localDate").equals(day).toArray();
+  return new Set(events.filter((event) => event.mode !== "practice").map((event) => event.unitKey)).size;
 }

@@ -15,6 +15,7 @@ export function Screen({
   bare,
   roomy,
   wide,
+  paper,
   children,
 }: {
   back?: string;
@@ -25,6 +26,7 @@ export function Screen({
   roomy?: boolean;
   /** Разворот урока на широком экране. */
   wide?: boolean;
+  paper?: boolean;
   children?: ReactNode;
 }) {
   return (
@@ -34,7 +36,11 @@ export function Screen({
       ) : (
         <BackBar title={back} right={right} onBack={onBack} />
       )}
-      <main className={[ui.screen, roomy ? ui.roomy : "", wide ? ui.wide : ""].filter(Boolean).join(" ")}>
+      <main
+        className={[ui.screen, roomy ? ui.roomy : "", wide ? ui.wide : "", paper ? `${ui.paper} notebook` : ""]
+          .filter(Boolean)
+          .join(" ")}
+      >
         {children}
       </main>
     </>

@@ -5,6 +5,7 @@ import type { ReviewEvent, Session, SessionCard, SessionItem } from "../../domai
 import { plural } from "../../shared/format";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
+import { greekDate } from "../../shared/notebook";
 import s from "./session.module.css";
 
 /**
@@ -36,19 +37,6 @@ export function Instruction({ prompt, children }: { prompt: string; children?: R
       {children}
     </p>
   );
-}
-
-const capital = (text: string) => text.charAt(0).toLocaleUpperCase("el") + text.slice(1);
-/** «Πέμπτη, 1 Οκτωβρίου»: день плана занятия, а не момент открытия экрана. */
-export function greekDate(day: string) {
-  const parts = new Intl.DateTimeFormat("el-GR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    timeZone: "UTC",
-  }).formatToParts(new Date(`${day}T12:00:00Z`));
-  const get = (type: string) => parts.find((part) => part.type === type)?.value ?? "";
-  return `${capital(get("weekday"))}, ${get("day")} ${get("month")}`;
 }
 
 export function PageHead({ day }: { day: string }) {

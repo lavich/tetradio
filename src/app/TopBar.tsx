@@ -1,5 +1,4 @@
-import { ArrowLeft, Menu } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ReactNode } from "react";
 import { useBackHandler, usePlatform } from "../platform/platform";
@@ -9,11 +8,10 @@ import { cx } from "../shared/cx";
 import { useGoBack } from "./navigation";
 
 /**
- * В Telegram шапка главных экранов не нужна: имя показывает сам клиент, а раздел «Ещё» доступен
- * из нижней навигации, поэтому дублирующая кнопка-бургер убрана. Остаётся только подзаголовок, если он есть.
+ * В Telegram шапка главных экранов не нужна: имя показывает сам клиент. Раздел «Ещё» — в облачке навигации,
+ * поэтому кнопки-бургера нет и в браузере. Остаётся только подзаголовок, если он есть.
  */
 export function BrandBar({ subtitle }: { subtitle?: string }) {
-  const navigate = useNavigate();
   const compact = usePlatform().kind === "telegram";
   if (compact && !subtitle) return null;
   return (
@@ -27,12 +25,6 @@ export function BrandBar({ subtitle }: { subtitle?: string }) {
         </>
       )}
       {subtitle && <span className={ui.note}>{subtitle}</span>}
-      <span className={top.spacer} />
-      {!compact && (
-        <Button variant="ghost" size="icon-lg" className="size-11" onClick={() => navigate("/more")} aria-label="Ещё">
-          <Menu />
-        </Button>
-      )}
     </header>
   );
 }
