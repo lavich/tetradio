@@ -19,7 +19,7 @@ import {
   skipItem,
 } from "../../storage/ops";
 import { Assembly, Comprehension, Introduction, Listening, Recognition, Spelling, type Answer } from "./exercises";
-import { compositionLine, DoneList, doneRows, PageHead, PlaceProvider } from "./notebook";
+import { compositionLine, DoneList, doneRows, PageHead, PlaceProvider, useWide } from "./notebook";
 import ui from "../../shared/ui.module.css";
 import s from "./session.module.css";
 
@@ -273,7 +273,9 @@ export function SessionScreen() {
         <PageHead day={session.planDate} />
         <DoneList rows={rows} folded={folded} onToggle={() => setOpened(!!folded)} />
         <section ref={sheet} className={s.sheet} aria-label={introduction ? "Знакомство" : "Задание"}>
-          <PlaceProvider value={{ number: introduction ? undefined : rows.length + 1, slot }}>{view}</PlaceProvider>
+          <PlaceProvider value={{ number: introduction ? undefined : rows.length + 1, slot, inline: wide }}>
+            {view}
+          </PlaceProvider>
           {problem && (
             <p className={s.problem} role="alert">
               {problem}
@@ -297,20 +299,6 @@ export function SessionScreen() {
       </div>
     </main>
   );
-}
-
-const WIDE = "(min-width: 900px)";
-/** Две колонки от 900 px: там список сделанного не сворачивается. */
-export function useWide() {
-  const [wide, setWide] = useState(() => typeof matchMedia === "function" && matchMedia(WIDE).matches);
-  useEffect(() => {
-    if (typeof matchMedia !== "function") return;
-    const query = matchMedia(WIDE);
-    const change = () => setWide(query.matches);
-    query.addEventListener("change", change);
-    return () => query.removeEventListener("change", change);
-  }, []);
-  return wide;
 }
 
 const ROW = 48;

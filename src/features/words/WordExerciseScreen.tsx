@@ -13,7 +13,7 @@ import { stopAudio, useGreekVoice } from "../../shared/audio";
 import { useSettings } from "../../shared/store";
 import { db } from "../../storage/db";
 import { Assembly, Comprehension, Listening, Recognition, Spelling, type Answer } from "../learning/exercises";
-import { PlaceProvider } from "../learning/notebook";
+import { PlaceProvider, useWide } from "../learning/notebook";
 import { EXERCISE_LABELS, isWordExercise, wordSources } from "./word-exercises";
 import ui from "../../shared/ui.module.css";
 import s from "../learning/session.module.css";
@@ -81,12 +81,13 @@ export function WordExerciseScreen() {
   };
   const title = isWordExercise(type) ? EXERCISE_LABELS[type] : "Упражнение";
   const [slot, setSlot] = useState<HTMLElement | null>(null);
+  const wide = useWide();
   const shell = (body: React.ReactNode, sheet = true) => (
     <main className={s.session}>
       <div className={s.page}>
         {sheet ? (
           <section className={s.sheet} aria-label={title}>
-            <PlaceProvider value={{ slot }}>{body}</PlaceProvider>
+            <PlaceProvider value={{ slot, inline: wide }}>{body}</PlaceProvider>
           </section>
         ) : (
           body
