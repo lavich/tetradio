@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
-import { SyncConflictDialog } from "./TelegramNotices";
 import { updateReady } from "../main";
 import { useBackHandler, useEnvironment } from "../platform/platform";
 import { useNow } from "../shared/clock";
@@ -31,7 +30,7 @@ const MoreScreen = named("MoreScreen", () => import("../features/more/MoreScreen
 const StatsScreen = named("StatsScreen", () => import("../features/progress/StatsScreen"));
 const SettingsScreen = named("SettingsScreen", () => import("../features/more/SettingsScreen"));
 const BackupScreen = named("BackupScreen", () => import("../features/backup/BackupScreen"));
-// Уведомления не нужны первому кадру: грузятся следом, без чанка — просто не показываются.
+// Уведомления и диалог конфликта не нужны первому кадру: грузятся следом, без чанка — просто не показываются.
 const optional = <P extends object>(load: () => Promise<React.ComponentType<P>>) =>
   lazy(() =>
     load().then(
@@ -43,6 +42,7 @@ const optional = <P extends object>(load: () => Promise<React.ComponentType<P>>)
     ),
   );
 const Toaster = optional(() => import("@/components/ui/sonner").then((module) => module.Toaster));
+const SyncConflictDialog = optional(() => import("./TelegramNotices").then((module) => module.SyncConflictDialog));
 
 export function App() {
   const { pathname } = useLocation();
@@ -102,7 +102,7 @@ export function App() {
         <Toaster position="bottom-center" offset={88} />
       </Suspense>
       {!immersive && !lesson && <Nav />}
-      {!immersive && <SyncConflictDialog />}
+      <Suspense fallback={null}>{!immersive && <SyncConflictDialog />}</Suspense>
     </div>
   );
 }
