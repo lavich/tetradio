@@ -37,7 +37,7 @@ export function Screen({
         <BackBar title={back} right={right} onBack={onBack} />
       )}
       <main
-        className={[ui.screen, roomy ? ui.roomy : "", wide ? ui.wide : "", paper ? `${ui.paper} notebook` : ""]
+        className={[ui.screen, roomy ? ui.roomy : "", wide ? ui.wide : "", paper ? ui.paper : ""]
           .filter(Boolean)
           .join(" ")}
       >

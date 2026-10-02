@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useSyncExternalStore } from "react";
-import { telegramAdapter, webAdapter, type HapticKind, type PlatformAdapter, type PrimaryAction } from "./adapter";
+import { telegramAdapter, webAdapter, type HapticKind, type PlatformAdapter } from "./adapter";
 import { loadTelegramBridge } from "./bridge";
 import { launchContext } from "./launch";
 import { lifecycle } from "../reporting/reporting";
@@ -139,15 +139,6 @@ export function useBackHandler(handler: (() => void) | null, priority = 1) {
     if (!handler) return;
     return current.back(handler, priority);
   }, [current, handler, priority]);
-}
-/** Главное действие экрана снимается при размонтировании и при смене адаптера. */
-export function usePrimaryAction(action: PrimaryAction | null) {
-  const current = usePlatform();
-  useEffect(() => {
-    if (!action || !current.capabilities.primaryAction) return;
-    current.primaryAction(action);
-    return () => current.clearPrimaryAction();
-  }, [current, action?.text, action?.loading, action?.disabled, action?.onClick]);
 }
 /** Режим запуска с живым обновлением: Telegram присылает fullscreenChanged и изменения отступов. */
 export function useLaunchMode() {

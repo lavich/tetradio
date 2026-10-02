@@ -16,15 +16,18 @@
     max-width: 1180px;
   }
 }
-/* Клетка на всю ширину окна: колонка содержимого задаётся отступами, а не шириной экрана. */
-.screen.paper {
-  max-width: none;
-  padding-inline: max(16px, calc((100% - 560px) / 2 + 16px));
+/* Клетка тетради на всё окно — от системной строки до облачка; страницы поверх неё прозрачные. */
+.app:has(> .paper) {
+  background-color: var(--background);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  background-position: -1px -1px;
 }
-@media (min-width: 1024px) {
-  .screen.paper.wide {
-    padding-inline: max(16px, calc((100% - 1180px) / 2 + 16px));
-  }
+/* Шапка браузера лежит на той же клетке и не липнет: иначе прозрачная полоса наезжала бы на текст. */
+.app:has(> .paper) > header {
+  position: static;
+  background: transparent;
 }
 /* Экран без шапки (главные разделы в Telegram): верхний отступ под системную строку и кнопки клиента даёт сам экран. */
 .app > .screen:first-child {

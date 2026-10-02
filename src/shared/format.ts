@@ -19,13 +19,11 @@ export const PHRASES: [string, string, string] = ["фраза", "фразы", "�
 export const DAYS: [string, string, string] = ["день", "дня", "дней"];
 export const LESSONS: [string, string, string] = ["занятия", "занятий", "занятий"];
 export const LESSONS_COUNT: [string, string, string] = ["урок", "урока", "уроков"];
-export const TIMES: [string, string, string] = ["ответ", "ответа", "ответов"];
 const day = (value: string) => new Date(`${value}T12:00:00Z`);
 export const weekday = (value: string) => day(value).toLocaleDateString("ru-RU", { weekday: "long", timeZone: "UTC" });
 export const dativeWeekday = (value: string) => DATIVE[weekday(value)] ?? weekday(value);
 export const dayMonth = (value: string) =>
   day(value).toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "UTC" });
-export const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 export const shortTitle = (title: string) => title.replace(/^Урок\s+/i, "");
 /** Название урока внутри фразы: «Урок 1.4» склоняется («урока 1.4»), свой набор идёт в кавычках. */
 export const lessonIn = (title: string, form: "урок" | "урока" | "уроку") =>
