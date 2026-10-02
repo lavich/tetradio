@@ -65,6 +65,8 @@ export function CourseToday({ plan, now }: { plan: DailyPlan; now: Date }) {
   const next = nextStep(views ?? []);
   const due = plan.newRefs.length + plan.reviews.length;
   const reviewFirst = !!unfinished || due > 0;
+  if (!views || reviewed === undefined || !week || unfinished === undefined)
+    return <div aria-busy="true" aria-label="План дня загружается" />;
 
   const page = (
     <section className={css.page}>
