@@ -362,7 +362,14 @@ describe("шпаргалка модуля", () => {
     return files;
   };
   it("попадает в каталог парами «подпись, форма»", () => {
-    const crib = { title: "είμαι — быть", rows: [["εγώ", "είμαι"], ["εμείς", "είμαστε"]], note: "ου [u]" };
+    const crib = {
+      title: "είμαι — быть",
+      rows: [
+        ["εγώ", "είμαι"],
+        ["εμείς", "είμαστε"],
+      ],
+      note: "ου [u]",
+    };
     const content = build(withCrib(crib));
     const catalog = parseCatalog(
       JSON.parse(content.files.find((f) => f.path === "content/catalog.json")!.body as string),
@@ -373,7 +380,18 @@ describe("шпаргалка модуля", () => {
   it("строка не из пары, пустая таблица и лишнее поле — ошибки", () => {
     expect(failure(withCrib({ title: "x", rows: [["εγώ"], ["εσύ", "είσαι"]] }))).toContain("нужна пара");
     expect(failure(withCrib({ title: "x", rows: [["εγώ", "είμαι"]] }))).toContain("от 2 до 8 строк");
-    expect(failure(withCrib({ title: "x", rows: [["a", "b"], ["c", "d"]], table: [] }))).toContain("лишнее поле «table»");
+    expect(
+      failure(
+        withCrib({
+          title: "x",
+          rows: [
+            ["a", "b"],
+            ["c", "d"],
+          ],
+          table: [],
+        }),
+      ),
+    ).toContain("лишнее поле «table»");
   });
 });
 

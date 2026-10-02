@@ -181,7 +181,12 @@ export function ModuleScreen() {
       )}
       {view.checkpoint ? (
         <ol className={`${css.lessons} ${css.tocBreak}`} aria-label="Контрольная точка">
-          {row(view.checkpoint, "точка", "контрольная точка пройдена", CHECKPOINTS[module.number] ?? "контрольная точка")}
+          {row(
+            view.checkpoint,
+            "точка",
+            "контрольная точка пройдена",
+            CHECKPOINTS[module.number] ?? "контрольная точка",
+          )}
         </ol>
       ) : null}
       {view.review.length ? (
