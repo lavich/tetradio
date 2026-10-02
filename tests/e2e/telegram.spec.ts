@@ -8,16 +8,12 @@ const databases = (page: import("@playwright/test").Page) =>
   page.evaluate(async () => (await indexedDB.databases()).map((info) => info.name ?? "").sort());
 
 test.describe("запуск внутри Telegram", () => {
-  test("экран «Сегодня», ready/expand, компактная шапка, первый запуск без запроса аккаунта", async ({ page }) => {
+  test("экран «Сегодня», ready/expand, компактная шапка, первый запуск без окон", async ({ page }) => {
     await page.addInitScript(`window.__tgReady=false`);
     await page.addInitScript((await import("./telegram")).bridgeScript({}));
     await page.goto(`/${(await import("./telegram")).launchHash({})}`);
-    const dialog = page.getByRole("alertdialog");
-    await expect(dialog).toContainText("компактный прогресс");
-    await expect(dialog).toContainText("Номер телефона, доступ к сообщениям и отдельный аккаунт не нужны");
-    await dialog.getByRole("button", { name: "Понятно" }).click();
-    await expect(dialog).toHaveCount(0);
     await expect(page.getByTestId("today-title")).toBeVisible();
+    await expect(page.getByRole("alertdialog")).toHaveCount(0);
     const calls = await tg(page).calls();
     expect(calls).toContain("ready");
     expect(calls).toContain("expand");
@@ -25,9 +21,6 @@ test.describe("запуск внутри Telegram", () => {
     expect(await page.locator("html").getAttribute("data-platform")).toBe("telegram");
     await expect(page.locator("header")).toHaveCount(0); // бренд и бургер не дублируют шапку клиента
     await expect(page.getByRole("navigation").getByRole("link", { name: "Ещё" })).toBeVisible(); // «Ещё» остаётся в нижней навигации
-    await page.reload();
-    await expect(page.getByTestId("today-title")).toBeVisible();
-    await expect(page.getByRole("alertdialog")).toHaveCount(0); // сообщение первого запуска не повторяется
   });
   test("сборка с моком вне Telegram: тестовый пользователь в своей базе, без облака и без ожидания Telegram", async ({
     page,
@@ -48,8 +41,6 @@ test.describe("запуск внутри Telegram", () => {
     await page.route("https://telegram.org/**", (route) => route.abort());
     const { launchHash } = await import("./telegram");
     await page.goto(`/${launchHash({})}`);
-    await page.getByRole("alertdialog").getByRole("button", { name: "Понятно" }).click();
-    await expect(page.getByRole("alertdialog")).toHaveCount(0);
     await expect(page.getByTestId("today-title")).toBeVisible();
     await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
     await expect(page.getByRole("button", { name: "Назад" })).toHaveCount(0);
@@ -609,18 +600,6 @@ test.describe("ссылка на слово через бота", () => {
     const { launchHash } = await import("./telegram");
     await page.goto(`${path}?bot=tetradio_dev${launchHash(options)}`);
   };
-  const dismissWelcome = async (page: import("@playwright/test").Page) => {
-    const welcome = page.getByRole("button", { name: "Понятно" });
-    if (
-      await welcome.waitFor({ state: "visible", timeout: 5000 }).then(
-        () => true,
-        () => false,
-      )
-    ) {
-      await welcome.click();
-      await page.getByRole("alertdialog").waitFor({ state: "hidden" });
-    }
-  };
 
   test("dev-запуск открывает слово, после перезагрузки «Поделиться» ведёт на dev-бота, профиль прежний", async ({
     page,
@@ -628,7 +607,6 @@ test.describe("ссылка на слово через бота", () => {
     const { bridgeScript } = await import("./telegram");
     await page.addInitScript(bridgeScript({ noCloud: true }));
     await launch(page, { startParam: "w_w093", queryId: "Q1" });
-    await dismissWelcome(page);
     await expect(page).toHaveURL(/\/share\/word\/w093$/);
     await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
     // Урок ставится только из раздела «Уроки»; после этого у слова курса появляется кнопка.
@@ -652,7 +630,6 @@ test.describe("ссылка на слово через бота", () => {
     const { bridgeScript } = await import("./telegram");
     await page.addInitScript(bridgeScript({ noCloud: true }));
     await launch(page, { startParam: "w_w093", queryId: "Q1" });
-    await dismissWelcome(page);
     await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
     await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
     await expect(page).toHaveURL(/\/lessons$/);

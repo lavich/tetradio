@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
-import { SyncConflictDialog, TelegramWelcome } from "./TelegramNotices";
+import { SyncConflictDialog } from "./TelegramNotices";
 import { updateReady } from "../main";
 import { useBackHandler, useEnvironment } from "../platform/platform";
 import { useNow } from "../shared/clock";
@@ -86,7 +86,6 @@ export function App() {
       </Suspense>
       <Toaster position="bottom-center" offset={88} />
       {!immersive && !lesson && <Nav />}
-      <TelegramWelcome />
       {!immersive && <SyncConflictDialog />}
     </div>
   );

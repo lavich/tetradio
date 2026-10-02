@@ -15,7 +15,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Screen } from "../../app/Screen";
-import { SYNC_BOUNDARIES } from "../../app/TelegramNotices";
 
 /** Единственный канал, по которому что-то покидает устройство помимо синхронизации: описывается так же явно. */
 export const REPORT_BOUNDARIES =
@@ -115,7 +114,10 @@ export function BackupScreen() {
           </p>
           {profile.kind === "telegram" && (
             <p className={ui.note} data-testid="sync-boundaries">
-              {SYNC_BOUNDARIES}
+              Внутри Telegram между устройствами одного аккаунта синхронизируется прогресс: интервалы повторений и
+              навыки карточек, пройденные уроки и задания, настройки и сводная статистика. Полная история ответов,
+              тексты ответов и незаконченное занятие остаются на устройстве и переносятся только полной копией. Другие
+              аккаунты Telegram на этом устройстве — отдельные профили, их данные сюда не попадают.
             </p>
           )}
           <p className={ui.note} data-testid="error-reports-boundaries">

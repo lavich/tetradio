@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { useLiveQuery } from "dexie-react-hooks";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -11,47 +9,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { db } from "../storage/db";
-import { currentProfile } from "../storage/profile";
 import { sync, useSyncStatus } from "../sync";
-import { META, readMeta, writeMeta } from "../sync/snapshot";
+import { readMeta } from "../sync/snapshot";
 import { CARDS, withCount } from "../shared/format";
 import ui from "../shared/ui.module.css";
-
-/** Текст границ синхронизации: одинаковый на первом запуске и на экране копий. */
-export const SYNC_BOUNDARIES =
-  "Внутри Telegram между устройствами одного аккаунта синхронизируется компактный прогресс: интервалы повторений и навыки стандартных слов, настройки, даты уроков, дневной бюджет и сводная статистика. Полная история ответов, незаконченное занятие, свои слова, правки и личные картинки и аудио остаются на устройстве и переносятся только полной копией. Другие аккаунты Telegram на этом устройстве — отдельные профили, их данные сюда не попадают.";
-
-/**
- * Первый запуск внутри Telegram: границы облака и локальных данных, без запроса контактов, сообщений и аккаунта.
- * Другие базы на устройстве (прежний браузерный профиль, другие аккаунты) не читаются: перенос — только полной копией.
- */
-export function TelegramWelcome() {
-  const profile = currentProfile();
-  const welcomed = useLiveQuery(
-    () => (profile.kind === "telegram" ? db.meta.get(META.welcomed).then((row) => !!row) : true),
-    [profile.kind],
-  );
-  if (profile.kind !== "telegram" || welcomed !== false) return null;
-  const finish = async () => {
-    await writeMeta(db, META.welcomed, new Date().toISOString());
-  };
-  return (
-    <AlertDialog open>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Τετράδιο в Telegram</AlertDialogTitle>
-          <AlertDialogDescription>
-            {SYNC_BOUNDARIES} Номер телефона, доступ к сообщениям и отдельный аккаунт не нужны.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogAction onClick={finish}>Понятно</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}
 
 const when = (iso: string) =>
   iso
