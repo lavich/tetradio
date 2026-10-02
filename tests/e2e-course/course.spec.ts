@@ -220,6 +220,17 @@ test("новый урок открывается с первой страниц�
   await expect(page.getByTestId("page-count")).toContainText("стр. 1–2 из");
 });
 
+test("«Сегодня» на широком экране — разворот: слева день, справа тетрадь текущего модуля", async ({ page }) => {
+  await start(page);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const module = page.getByRole("region", { name: "Модуль 1" });
+  await expect(module.getByRole("link", { name: /Знакомство и είμαι/ })).toBeVisible();
+  await expect(module.getByText("эта неделя")).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(module).toHaveCount(0);
+  await expect(page.getByTestId("course-next")).toContainText("Начать урок");
+});
+
 test("разворот: на широком экране две страницы рядом, стрелки листают разворот", async ({ page }) => {
   await start(page);
   await page.setViewportSize({ width: 1440, height: 900 });

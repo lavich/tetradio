@@ -121,7 +121,7 @@ export function TodayScreen() {
 
   if (modular)
     return (
-      <Screen>
+      <Screen wide paper>
         <CourseToday plan={plan} now={now} />
       </Screen>
     );

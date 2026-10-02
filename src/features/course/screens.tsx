@@ -26,10 +26,8 @@ import { TapHint, WordTaps } from "./WordTaps";
 import css from "./course.module.css";
 import { ExamLine } from "./ExamLine";
 import { launchContext } from "../../platform/launch";
+import { coverColor } from "../../shared/notebook";
 
-/** Цвета обложек: греческие школьные тетради яркие; цвет повторяется по номеру модуля. */
-const COVERS = ["#2f6d4f", "#b8452b", "#2c4f9e", "#b8871a", "#7b3f74", "#1f6f7a"];
-export const coverColor = (number: number) => COVERS[(number - 1) % COVERS.length];
 /** Контрольные точки программы (docs/curriculum.md): после каких модулей стоят контрольная и пробники. */
 const CHECKPOINTS: Record<number, string> = {
   8: "Контрольная A1 · декабрь",
