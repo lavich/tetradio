@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ItemGroup } from "@/components/ui/item";
 import { Screen } from "../../app/Screen";
 import { localDay } from "../../domain/learning";
@@ -99,15 +98,11 @@ export function TodayScreen() {
       void navigate("/session");
     });
 
-  // Пока план читается, панель и кнопка — заглушками: иначе на миг мелькает «Занятие не назначено».
+  // План читается из локальной базы за доли секунды: пустая клетка без заголовка и заглушек, чтобы ничего не мелькало.
   if (!ready)
     return (
-      <Screen>
-        <h1 data-testid="today-title">{headline()}</h1>
-        <div aria-busy="true" aria-label="План дня загружается" className="grid gap-3">
-          <Skeleton className="h-[150px] rounded-[var(--radius-card)] motion-reduce:animate-none" />
-          <Skeleton className="h-[54px] rounded-[14px] motion-reduce:animate-none" />
-        </div>
+      <Screen wide paper>
+        <div aria-busy="true" aria-label="План дня загружается" />
       </Screen>
     );
 
