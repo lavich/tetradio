@@ -114,17 +114,6 @@ export async function openTelegram(page: Page, options: TelegramEmulation = {}, 
   await page.addInitScript(bridgeScript(options));
   await page.goto(`${path}${options.bot ? `?bot=${options.bot}` : ""}${launchHash(options)}`);
   await page.waitForSelector("[data-testid=today-title]");
-  // Сообщение первого запуска появляется после чтения базы: ждём его и закрываем, если профиль ещё не видел.
-  const welcome = page.getByRole("button", { name: "Понятно" });
-  if (
-    await welcome.waitFor({ state: "visible", timeout: 5000 }).then(
-      () => true,
-      () => false,
-    )
-  ) {
-    await welcome.click();
-    await page.getByRole("alertdialog").waitFor({ state: "hidden" });
-  }
 }
 export const tg = (page: Page) => ({
   calls: () => page.evaluate(() => (window as unknown as { __tg: { calls: string[] } }).__tg.calls),

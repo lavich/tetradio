@@ -35,7 +35,6 @@ export const META = {
   lastOk: "sync:lastOk",
   restored: "sync:restored",
   pendingLessons: "sync:pendingLessons",
-  welcomed: "sync:welcomed",
 } as const;
 export const KEEP_DAYS = 14;
 
