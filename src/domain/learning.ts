@@ -64,8 +64,6 @@ export function preparedThrough(now: Date, timezone: string, lessonHour: number)
 }
 export const formatDay = (day: string) =>
   new Date(`${day}T12:00:00Z`).toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "UTC" });
-export const weekdayOf = (day: string) =>
-  new Date(`${day}T12:00:00Z`).toLocaleDateString("ru-RU", { weekday: "long", timeZone: "UTC" });
 /** Момент начала календарного дня в зоне; переход летнего времени учитывается повторным расчётом смещения. */
 export function zonedStart(day: string, timezone: string): Date {
   const guess = new Date(`${day}T00:00:00Z`);

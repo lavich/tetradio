@@ -92,7 +92,6 @@ export function WordTaps({
 
 const useTaps = () => useContext(TapsContext);
 export const useFieldMarks = (blockId: string, field: string): WordMark[] => useTaps()?.marks[blockId]?.[field] ?? [];
-export const useHasMarks = () => Object.keys(useTaps()?.marks ?? {}).length > 0;
 
 /** SVG в `background-image` не видит CSS-переменных, а чернила приходят из темы Telegram: штрих перекрашивается здесь. */
 const STROKE = "M0 4.2 Q8 2.6 22 3.6 L100 5.4 Q60 6.6 22 6.8 Q6 7.4 0 4.2Z";

@@ -450,7 +450,7 @@ export function CourseLessonScreen() {
     </>
   );
   const renderPage = (index: number) => (
-    <article key={index} className={`${css.page} notebook`} aria-label={`Страница ${index + 1} из ${total}`}>
+    <article key={index} className={css.page} aria-label={`Страница ${index + 1} из ${total}`}>
       {index === 0 ? <TapHint /> : null}
       {index < pages.length ? pages[index].map(renderBlock) : summary}
     </article>
@@ -458,7 +458,8 @@ export function CourseLessonScreen() {
   const shown = spread ? [first, first + 1].filter((index) => index < total) : [current];
   const last = shown[shown.length - 1];
   return (
-    <Screen back={lesson.title} wide>
+    <Screen back="" wide paper>
+      <h1 className="sr-only">{lesson.title}</h1>
       <WordTaps marks={lesson.marks} cards={lesson.cards} page={first}>
         <div className={css.frame}>
           <div

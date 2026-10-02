@@ -37,6 +37,8 @@ export function BackBar({ title, right, onBack }: { title: string; right?: React
   const back = onBack ?? goBack;
   const native = usePlatform().capabilities.back;
   useBackHandler(back);
+  // Без заголовка шапка нужна только ради своей стрелки: в Telegram её заменяет нативная «Назад».
+  if (!title && native && !right) return null;
   return (
     <header className={native && !right ? `${top.topbar} ${top.native}` : top.topbar}>
       {native ? (
@@ -47,7 +49,7 @@ export function BackBar({ title, right, onBack }: { title: string; right?: React
         </Button>
       )}
       <span className={top.spacer} />
-      <h1 className={top.title}>{title}</h1>
+      {title && <h1 className={top.title}>{title}</h1>}
       <span className={top.spacer} />
       {right ?? <span style={{ minWidth: 44 }} />}
     </header>

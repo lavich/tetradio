@@ -66,10 +66,6 @@ export const currentProfile = (): Profile => {
  */
 export const ownerMatches = (profile: Profile, bridgeUserId: number | undefined) =>
   profile.kind !== "telegram" || bridgeUserId === undefined || bridgeUserId === profile.userId;
-/** Только для тестов. */
-export const resetProfile = () => {
-  current = null;
-};
 /** Имя базы допустимо для копии Τετράδιο: основная, тестовая или профиль Telegram. */
 export const isAppDatabaseName = (name: unknown) =>
   typeof name === "string" && /^tetradio(-[A-Za-z0-9_-]+)?$/.test(name) && name !== "tetradio-restore";

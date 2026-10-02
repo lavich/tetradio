@@ -215,7 +215,6 @@ export async function skipItem(
     });
   });
 }
-export const saveSession = (session: Session, database: AppDatabase = db) => database.sessions.put(session);
 export const endSession = async (session: Session, database: AppDatabase = db) => {
   await database.sessions.put({ ...session, status: session.index >= session.items.length ? "done" : "ended" });
 };

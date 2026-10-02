@@ -62,9 +62,7 @@ export const itemOfLink = (link: LessonWord): LessonItem => ({
   position: link.position,
 });
 
-/** Ссылка на содержимое сессии и снимок для события ответа. */
-export const refOfCard = (card: SessionCard): LearningRef =>
-  card.kind === "word" ? wordRef(card.word.id) : phraseRef(card.phrase.id);
+/** Снимок карточки для события ответа. */
 export const snapshotOf = (card: SessionCard): CardSnapshot =>
   card.kind === "word"
     ? { greek: card.word.greek, russian: card.word.russian }

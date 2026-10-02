@@ -3,7 +3,6 @@ import type { Clock } from "./types";
 export const dominates = (a: Clock, b: Clock) =>
   Object.entries(b).every(([device, count]) => (a[device] ?? 0) >= count);
 export const sameClock = (a: Clock, b: Clock) => dominates(a, b) && dominates(b, a);
-export const concurrent = (a: Clock, b: Clock) => !dominates(a, b) && !dominates(b, a);
 export const mergeClocks = (...clocks: Clock[]): Clock => {
   const merged: Clock = {};
   for (const clock of clocks)

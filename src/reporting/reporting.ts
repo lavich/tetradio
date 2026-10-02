@@ -93,7 +93,6 @@ export function installEarlyHandlers() {
   window.addEventListener("unhandledrejection", onRejection);
   earlyInstalled = true;
 }
-export const reportingConfigured = () => !!dsn;
 export const reportingEnabled = () => state === "ready";
 
 /** Явный отчёт о критическом отказе. Возвращает идентификатор отчёта или `null`, когда отчёты не настроены или выключены. */

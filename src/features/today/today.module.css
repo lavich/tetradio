@@ -220,7 +220,6 @@
 .spread {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: calc(var(--app-height) - var(--cloud-space) - 120px);
 }
 .spread > .page {
   padding: 0 48px;
@@ -234,9 +233,16 @@
 .spread > .page:first-child > * {
   max-width: 440px;
 }
-.spread > .page + .page {
+.spread::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 14px;
   border-left: 1px solid var(--border);
-  box-shadow: inset 12px 0 16px -14px color-mix(in srgb, var(--foreground) 35%, transparent);
+  background: linear-gradient(to right, color-mix(in srgb, var(--foreground) 12%, transparent), transparent);
+  pointer-events: none;
 }
 .moduleTitle {
   margin: 0;
