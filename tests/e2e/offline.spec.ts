@@ -5,10 +5,10 @@ test("работает без сети после закрытия страни�
   await page.goto("/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
-  // «Скачать для офлайн» получает все обязательные медиа урока; готовность показывается только после проверки файлов.
-  await page.goto("/lessons/mech-2");
-  await page.getByRole("button", { name: "Скачать для офлайн" }).click();
-  await expect(page.getByTestId("lesson-offline")).toContainText("Медиа: 2 из 2");
+  // Картинка слова скачивается при просмотре карточки и дальше читается из базы.
+  await page.goto("/words");
+  await page.getByRole("link", { name: /ο φίλος/ }).click();
+  await expect(page.getByTestId("word-art")).toBeVisible();
   await page.goto("/");
   await ready(page);
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));
@@ -51,10 +51,5 @@ test("работает без сети после закрытия страни�
   await expect(offlinePage.getByText("Ο φίλος μας είναι παντρεμένος.")).toBeVisible();
   await offlinePage.getByRole("button", { name: "Потренировать слово" }).click();
   await expect(offlinePage.getByText("Новое слово")).toBeVisible();
-  // Неустановленный урок без сети: понятное состояние и повтор, а не пустой урок.
-  await offlinePage.goto("/lessons/mech-3");
-  await expect(offlinePage.getByText("Пакет не загружен")).toBeVisible();
-  await expect(offlinePage.getByRole("button", { name: "Повторить загрузку" })).toBeVisible();
-  await expect(offlinePage.getByRole("heading", { name: /^Слова · \d+$/ })).toHaveCount(0);
   await context.setOffline(false);
 });

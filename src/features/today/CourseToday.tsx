@@ -64,7 +64,7 @@ export function CourseToday({ plan, now }: { plan: DailyPlan; now: Date }) {
         Сегодня
       </h1>
       <Review plan={plan} now={now} reviewed={reviewed ?? 0} last={last} primary={reviewFirst} />
-      <DayNotes plan={plan} now={now} />
+      <DayNotes plan={plan} />
       {finished ? (
         <p className={css.finished} data-testid="course-finished">
           Все модули и пробники пройдены. До экзамена — повторение карточек и слабый навык по итогам M3.

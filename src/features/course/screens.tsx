@@ -28,6 +28,7 @@ import { ExamLine } from "./ExamLine";
 import { launchContext } from "../../platform/launch";
 import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/spread";
+import { CourseStart } from "../today/FirstRun";
 
 /** Контрольные точки программы (docs/curriculum.md): после каких модулей стоят контрольная и пробники. */
 const CHECKPOINTS: Record<number, string> = {
@@ -44,11 +45,16 @@ function coverLabel(view: ModuleView) {
   return done ? `Урок ${done + 1} из ${view.lessons.length}` : "Открыта";
 }
 
-/** Полка курса; без модулей в каталоге (словарный курс) — прежний список уроков. */
 export function CourseScreen() {
   const views = useLiveQuery(() => moduleViews(), []);
   if (views === undefined) return <Screen />;
-  if (!views.length) return <Navigate to="/lessons" replace />;
+  if (!views.length)
+    return (
+      <Screen>
+        <h1>Полка</h1>
+        <CourseStart />
+      </Screen>
+    );
   const filled = views.filter((view) => view.completed).length;
   const current = views.find((view) => view.module.status === "published" && !view.completed)?.module.id;
   return (

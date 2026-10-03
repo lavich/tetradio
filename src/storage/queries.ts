@@ -368,7 +368,6 @@ export async function lessonsOfCard(ref: LearningRef, database: AppDatabase = db
   const lessons = await loadLessons(database);
   return lessons.filter((lesson) => links.some((link) => link.lessonId === lesson.id));
 }
-export const lessonsOfWord = (wordId: string, database: AppDatabase = db) => lessonsOfCard(wordRef(wordId), database);
 /** Урок целиком: связи в авторском порядке, живые карточки трёх видов и их состояния — одной выборкой на таблицу. */
 export interface LessonDetail {
   lesson: Lesson;

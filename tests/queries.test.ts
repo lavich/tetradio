@@ -14,7 +14,6 @@ import { installMixed, MIXED_LESSON, mixedPackage } from "./helpers/mixed";
 import { mulberry32 } from "./plan-golden.test";
 import { fromSnapshot } from "../src/domain/snapshot-source";
 import { lessonProgress, progress, wordMaturity } from "../src/domain/stats";
-import { progressFill } from "../src/features/lessons/LessonRow";
 import { State } from "ts-fsrs";
 import { defaultSettings, type LessonItem, type Snapshot, type Word } from "../src/domain/types";
 import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
@@ -154,48 +153,6 @@ describe("прогресс урока", () => {
     expect(lesson.progress).toMatchObject({ solid: 1, review: 2, fresh: 4 }); // удалённое слово с устойчивым состоянием не считается
     expect(lesson.progress!.mature).toBeCloseTo(1 + 5 / 21 + 1 / 21, 10);
     expect(empty.progress).toEqual({ solid: 0, review: 0, fresh: 0, mature: 0 });
-  });
-});
-
-/** Полоса отвечает на вопрос «насколько освоено», а не «сколько слов показывали». */
-describe("полоса освоенности урока", () => {
-  it("нетронутый урок оставляет полосу пустой", () => {
-    expect(progressFill({ solid: 0, review: 0, fresh: 33, mature: 0 })).toEqual({
-      solid: 0,
-      review: 0,
-      rest: 1,
-      percent: 0,
-    });
-  });
-  it("слова, показанные по разу, дают узкую полосу, а не полную", () => {
-    const fill = progressFill({ solid: 0, review: 30, fresh: 0, mature: 30 * (1 / 21) });
-    expect(fill.percent).toBe(5);
-    expect(fill.solid).toBe(0);
-    expect(fill.review).toBeCloseTo(1 / 21, 10);
-    expect(fill.rest).toBeCloseTo(20 / 21, 10);
-  });
-  it("закрашенное делится на вклад устойчивых и вклад остальных", () => {
-    const fill = progressFill({ solid: 12, review: 8, fresh: 13, mature: 12 + 8 * (10 / 21) });
-    expect(fill.solid).toBeCloseTo(12 / 33, 10);
-    expect(fill.review).toBeCloseTo((8 * (10 / 21)) / 33, 10);
-    expect(fill.percent).toBe(48);
-    expect(fill.solid + fill.review + fill.rest).toBeCloseTo(1, 10);
-  });
-  it("полностью освоенный урок закрашен целиком", () => {
-    expect(progressFill({ solid: 33, review: 0, fresh: 0, mature: 33 })).toEqual({
-      solid: 1,
-      review: 0,
-      rest: 0,
-      percent: 100,
-    });
-  });
-  it("урок без слов полосы не делит", () => {
-    expect(progressFill({ solid: 0, review: 0, fresh: 0, mature: 0 })).toEqual({
-      solid: 0,
-      review: 0,
-      rest: 1,
-      percent: 0,
-    });
   });
 });
 

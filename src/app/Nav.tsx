@@ -5,8 +5,7 @@ import nav from "./Nav.module.css";
 
 const LINKS: { to: string; label: string; Icon: typeof Home; also?: string }[] = [
   { to: "/", label: "Сегодня", Icon: Home },
-  /** Курс из модулей; словарный курс без модулей открывается прежним списком уроков — вкладка та же. */
-  { to: "/course", label: "Курс", Icon: BookOpen, also: "/lessons" },
+  { to: "/course", label: "Курс", Icon: BookOpen },
   { to: "/words", label: "Слова", Icon: Rows3 },
   /** Настройки, копия и статистика открываются со страницы прогресса и остаются под этой вкладкой. */
   { to: "/progress", label: "Прогресс", Icon: ChartNoAxesColumn, also: "/more" },

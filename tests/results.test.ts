@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
 import { compositionText } from "../src/features/learning/ResultScreen";
-import { compositionLabel } from "../src/features/lessons/LessonScreen";
 import { fromSnapshot } from "../src/domain/snapshot-source";
 import { LEECH_LAPSES, lessonProgress, progress, SKILL_NAMES, SKILL_TYPES, SOLID_DAYS } from "../src/domain/stats";
 import { localDay } from "../src/domain/learning";
@@ -161,8 +160,6 @@ describe("результат смешанного занятия", () => {
     expect(groups).toMatchObject({ solid: 2, review: 2, fresh: 1 });
     expect(groups.solid + groups.review + groups.fresh).toBe(5); // числа строки урока сходятся с составом
     expect(groups.mature).toBeLessThan(5); // «освоенность» урока — доля, а не заявление об освоении темы
-    expect(compositionLabel({ word: 1, phrase: 4 })).toBe("5 карточек: 1 слово · 4 фразы");
-    expect(compositionLabel({ word: 30, phrase: 0 })).toBe("30 слов");
   });
 });
 

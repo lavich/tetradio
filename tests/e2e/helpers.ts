@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import { addDays } from "../../src/domain/learning";
 import { isoWeekday } from "../../src/domain/schedule";
 
@@ -184,12 +184,25 @@ export async function useSchedule(
   await ready(page);
   return { startDate, weekdays };
 }
-/** Уроки больше не устанавливаются при запуске: открытие урока из каталога загружает его пакет. */
+/** Отдельные уроки фикстуры ставятся тестовой точкой сборки с моком: экрана урока вне курса нет. */
 export async function installLessons(page: Page, ids: string[]) {
-  for (const id of ids) {
-    await page.goto(`/lessons/${id}`);
-    await page.getByRole("heading", { name: /^Слова · \d+$/ }).waitFor({ timeout: 20000 });
-  }
+  if (!page.url().startsWith("http")) await page.goto("/");
+  await page.waitForFunction(() => "__installLesson" in window);
+  for (const id of ids)
+    await expect
+      .poll(
+        () =>
+          page.evaluate(async (id) => {
+            const install = (window as unknown as { __installLesson: (id: string) => Promise<unknown> })
+              .__installLesson;
+            return install(id).then(
+              () => true,
+              () => false,
+            );
+          }, id),
+        { timeout: 20000 },
+      )
+      .toBe(true);
   await page.goto("/");
   await ready(page);
 }
@@ -349,16 +362,6 @@ export const setSettings = (page: Page, patch: Record<string, unknown>) =>
     database.close();
   }, patch);
 
-/**
- * Карточки установленных уроков из базы: ожидания интерфейса считаются от каталога,
- * а не вписываются числом — иначе каждое пополнение контента правит e2e.
- */
-export async function lessonCards(page: Page): Promise<Record<string, string[]>> {
-  const rows = (await readTable(page, "lessonItems")) as { lessonId: string; unitKey: string }[];
-  const map: Record<string, string[]> = {};
-  for (const row of rows) (map[row.lessonId] ??= []).push(row.unitKey);
-  return map;
-}
 export const readTable = (page: Page, name: string, databaseName = "tetradio-mock-1") =>
   page.evaluate(
     async ([name, databaseName]) => {
