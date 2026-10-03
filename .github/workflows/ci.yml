@@ -39,6 +39,7 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run spec
+      - run: npm run lexicon:check
       # Предел стартового графа мерится на бандле deploy: те же база, имя бота, адрес приёма и debug ID отчётов о сбоях.
       - run: npm run build
         env:

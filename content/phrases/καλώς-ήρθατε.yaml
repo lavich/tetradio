@@ -1,6 +1,6 @@
 id: p329
 text: Καλώς ήρθατε!
-translation: Добро пожаловать!
+translation: "Добро пожаловать! (на «вы»)"
 note: на «вы» или нескольким; одному на «ты» — Καλώς ήρθες!
 provenance:
   sourceLabel: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)
