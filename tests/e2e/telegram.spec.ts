@@ -381,18 +381,17 @@ test.describe("навигация, тема и размеры", () => {
     await expect(page.getByTestId("recovery-failed")).toHaveCount(0);
     // Отказ навсегда: экран открыт заранее, чтобы момент падения задавал тест, а не гонка фоновых запросов.
     await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
-    await expect(page.getByRole("heading", { name: "Слова" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Словарь" })).toBeVisible();
+    const row = page.getByRole("region", { name: "Словарь" }).getByRole("link").first();
+    await expect(row).toBeVisible();
     await breakStorage(page, true);
-    // Любое чтение базы теперь падает: экран доходит до предела попыток сам, ввод в поиск — лишь подстраховка.
-    await page
-      .getByRole("searchbox")
-      .fill("σπι", { timeout: 5000 })
-      .catch(() => undefined);
+    // Любое чтение базы теперь падает: открытие слова читает её и доводит до предела попыток.
+    await row.click({ timeout: 5000 }).catch(() => undefined);
     await expect(page.getByTestId("recovery-failed")).toBeVisible({ timeout: 15000 });
     await expect(page.getByTestId("recovery-failed")).toContainText("Данные на устройстве сохранены");
     expect(await reopened()).toBe(3); // предел три попытки за минуту: первое восстановление уже в счёте
     await page.getByRole("button", { name: "Перезапустить" }).click();
-    await expect(page.getByRole("heading", { name: "Слова" })).toBeVisible(); // перезапуск на том же разделе
+    await expect(page.getByTestId("entry-sheet")).toBeVisible(); // перезапуск на том же экране
     expect(await alive()).toBe(false);
   });
 });
@@ -441,7 +440,7 @@ test.describe("аудио, копии и облако", () => {
     await installLessons(page, ["mech-2"]);
     await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
     // Подписанный курс догружается фоном: копию снимаем с устоявшегося словаря и с ним же сверяем перенос.
-    await expect(page.getByTestId("word-count")).toHaveText("Показано 50 слов, есть ещё");
+    await expect(page.getByTestId("word-count")).toHaveText("56 слов · 7 фраз");
     const source = await page.getByTestId("word-count").innerText();
     await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
     await expect(page.getByTestId("storage-scope")).toContainText("Telegram: облачная синхронизация");

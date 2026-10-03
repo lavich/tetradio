@@ -38,7 +38,7 @@ test.describe("упражнение по выбору на странице сл
     await installLessons(page, ["mech-4"]);
     await page.goto("/words/w093");
     const before = await trace(page, "tetradio-mock-1");
-    await page.getByRole("button", { name: "Написание: пройти" }).click();
+    await page.getByRole("button", { name: "Написание: потренировать" }).click();
     await expect(page).toHaveURL(/\/words\/w093\/exercise\/spelling$/);
     await expect(page.getByText("Без учёта прогресса")).toBeVisible();
     await expect(page.getByRole("navigation")).toHaveCount(0);
@@ -57,7 +57,7 @@ test.describe("упражнение по выбору на странице сл
     await installLessons(page, ["mech-4"]);
     await page.goto("/words/w093");
     const before = await trace(page, "tetradio-tg-tetradio_local-1001");
-    await page.getByRole("button", { name: "Написание: пройти" }).click();
+    await page.getByRole("button", { name: "Написание: потренировать" }).click();
     await spell(page, "ο παππούς");
     await expect(page.getByTestId("feedback")).toContainText("Правильно");
     await tg(page).back();

@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 import { useLiveQuery } from "dexie-react-hooks";
-import { createContext, useCallback, useContext, useEffect, useState, useSyncExternalStore } from "react";
+import { createContext, useContext, useEffect, useState, useSyncExternalStore } from "react";
 import {
   catalogPhase,
   contentUrl,
@@ -18,16 +18,7 @@ import { makePlan } from "../domain/learning";
 import { progress } from "../domain/stats";
 import { defaultSettings, type Session } from "../domain/types";
 import { db } from "../storage/db";
-import {
-  dexieSource,
-  lessonDetail,
-  lessonsOfWord,
-  lessonViews,
-  loadSettings,
-  wordPage,
-  type WordFilter,
-  type WordPage,
-} from "../storage/queries";
+import { dexieSource, lessonDetail, lessonsOfWord, lessonViews, loadSettings } from "../storage/queries";
 
 /**
  * Каждый экран подписывается только на свою выборку. Общего реактивного снимка базы больше нет:
@@ -41,6 +32,8 @@ export const useLessons = (withProgress = false) => useLiveQuery(() => lessonVie
 /** `undefined` — ещё читается, `null` — урока нет локально. */
 export const useLesson = (id: string | undefined) => useLiveQuery(() => (id ? lessonDetail(id) : null), [id]);
 export const useWord = (id: string | undefined) => useLiveQuery(() => (id ? db.words.get(id) : undefined), [id]);
+export const usePhrase = (id: string | undefined) =>
+  useLiveQuery(async () => (id ? ((await db.phrases.get(id)) ?? null) : undefined), [id]);
 export const useWordLessons = (id: string | undefined) => useLiveQuery(() => (id ? lessonsOfWord(id) : []), [id]) ?? [];
 export const usePlan = (now: Date) => useLiveQuery(() => makePlan(dexieSource(), now), [now.getTime()]);
 export const useStats = (now: Date) => useLiveQuery(() => progress(dexieSource(), now), [now.getTime()]);
@@ -149,41 +142,4 @@ export function useAssetUrl(id: string | undefined): string | null {
     };
   }, [id, source]);
   return url;
-}
-
-export interface WordListRequest {
-  query: string;
-  filter: WordFilter;
-  lessonId: string | null;
-}
-/** Первая страница живая, следующие подгружаются по запросу и сбрасываются при смене условий. */
-export function useWordPages(request: WordListRequest) {
-  const first = useLiveQuery(
-    () => wordPage({ ...request, cursor: null }),
-    [request.query, request.filter, request.lessonId],
-  );
-  const [more, setMore] = useState<WordPage[]>([]);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setMore([]);
-  }, [request.query, request.filter, request.lessonId]);
-  const last = more[more.length - 1] ?? first;
-  const loadMore = useCallback(async () => {
-    if (!last?.cursor || loading) return;
-    setLoading(true);
-    try {
-      const page = await wordPage({ ...request, cursor: last.cursor });
-      setMore((pages) => [...pages, page]);
-    } finally {
-      setLoading(false);
-    }
-  }, [last?.cursor, loading, request.query, request.filter, request.lessonId]);
-  return {
-    items: first ? [...first.items, ...more.flatMap((page) => page.items)] : [],
-    ready: !!first,
-    hasMore: !!last?.cursor,
-    loading,
-    loadMore,
-    scope: first?.scope ?? "all",
-  };
 }

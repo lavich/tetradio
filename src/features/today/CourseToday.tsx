@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +8,7 @@ import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
 import { coverColor, greekDate } from "../../shared/notebook";
+import { useSpread } from "../../shared/spread";
 import { useActiveSession, useSettings } from "../../shared/store";
 import { Tick } from "../../shared/Tick";
 import { lessonDays, moduleViews, reviewedOn, type ModuleLessonView, type ModuleView } from "../../storage/course";
@@ -17,19 +17,6 @@ import { ExamLine } from "../course/ExamLine";
 import { startSession } from "../learning/session-actions";
 import { DayNotes } from "./DayNotes";
 import css from "./today.module.css";
-
-const SPREAD = "(min-width: 1024px)";
-function useSpread() {
-  const [wide, setWide] = useState(() => typeof matchMedia === "function" && matchMedia(SPREAD).matches);
-  useEffect(() => {
-    if (typeof matchMedia !== "function") return;
-    const query = matchMedia(SPREAD);
-    const change = () => setWide(query.matches);
-    query.addEventListener("change", change);
-    return () => query.removeEventListener("change", change);
-  }, []);
-  return wide;
-}
 
 const shiftDay = (day: string, days: number) => {
   const date = new Date(`${day}T12:00:00Z`);

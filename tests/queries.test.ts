@@ -8,8 +8,6 @@ import {
   lessonsOfCard,
   lessonViews,
   searchWordIds,
-  wordPage,
-  type WordCursor,
 } from "../src/storage/queries";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { installMixed, MIXED_LESSON, mixedPackage } from "./helpers/mixed";
@@ -201,72 +199,6 @@ describe("полоса освоенности урока", () => {
   });
 });
 
-describe("страницы словаря", () => {
-  const words = Array.from({ length: 130 }, (_, i) => word(i, i % 40 === 7 ? { deletedAt: iso } : {}));
-  const populate = () =>
-    load({
-      words,
-      lessons: [{ id: "l", title: "l", targetDate: null, status: "upcoming", createdAt: iso, updatedAt: iso }],
-      links: words.slice(0, 12).map((w, position) => ({ lessonId: "l", wordId: w.id, position })),
-      states: [],
-      events: [],
-      sessions: [],
-      settings: defaultSettings,
-    });
-  it("первая страница — не больше 50 живых карточек, курсор ведёт дальше без повторов и пропусков", async () => {
-    await populate();
-    const seen: string[] = [];
-    let cursor: WordCursor | null = null;
-    let pages = 0;
-    do {
-      const page = await wordPage({ query: "", filter: "all", lessonId: null, cursor }, db);
-      expect(page.items.length).toBeLessThanOrEqual(50);
-      seen.push(...page.items.map((item) => item.word.id));
-      cursor = page.cursor;
-      pages++;
-    } while (cursor);
-    expect(pages).toBe(3);
-    expect(new Set(seen).size).toBe(seen.length);
-    expect(seen).toHaveLength(words.filter((w) => !w.deletedAt).length);
-    expect(seen).toEqual(
-      [...seen].sort((a, b) => {
-        const x = words.find((w) => w.id === a)!,
-          y = words.find((w) => w.id === b)!;
-        return x.greek.localeCompare(y.greek);
-      }),
-    );
-  });
-  it("фильтр по состоянию заполняет страницу порциями, не читая всю таблицу за раз", async () => {
-    await populate();
-    await db.cardStates.bulkAdd(
-      words.slice(20, 25).map((w) =>
-        wordState(w.id, {
-          card: { due: new Date("2026-09-20"), state: 2, scheduled_days: 30 } as never,
-          introducedAt: iso,
-          version: 1,
-        }),
-      ),
-    );
-    const solid = await wordPage({ query: "", filter: "solid", lessonId: null, cursor: null }, db);
-    expect(solid.items.map((item) => item.word.id)).toEqual(words.slice(20, 25).map((w) => w.id));
-    expect(solid.cursor).toBeNull();
-    const fresh = await wordPage({ query: "", filter: "new", lessonId: null, cursor: null }, db);
-    expect(fresh.items).toHaveLength(50);
-    expect(fresh.items.every((item) => item.group === "new")).toBe(true);
-  });
-  it("фильтр по уроку ограничен связями урока и сохраняет их порядок", async () => {
-    await populate();
-    const page = await wordPage({ query: "", filter: "all", lessonId: "l", cursor: null }, db);
-    expect(page.scope).toBe("lesson");
-    expect(page.items.map((item) => item.word.id)).toEqual(
-      words
-        .slice(0, 12)
-        .filter((w) => !w.deletedAt)
-        .map((w) => w.id),
-    );
-  });
-});
-
 describe("локальный поиск", () => {
   it("ищет по началу токенов без учёта диакритики и регистра, по греческому и русскому", async () => {
     await installLessons(db, ["mech-2"]);
@@ -274,23 +206,14 @@ describe("локальный поиск", () => {
     expect(await searchWordIds("ΦΊΛΟ", db)).toEqual(["w034"]);
     expect(await searchWordIds("друг", db)).toContain("w034");
     expect(await searchWordIds("ίλος", db)).toEqual([]); // не подстрока, а префикс токена
-    const page = await wordPage({ query: "φί", filter: "all", lessonId: null, cursor: null }, db);
-    expect(page.scope).toBe("search");
-    expect(page.items.some((item) => item.word.id === "w034")).toBe(true);
   });
-  it("несколько слов запроса сужают выборку, результаты выдаются страницами по идентификаторам", async () => {
+  it("несколько слов запроса сужают выборку", async () => {
     const words = Array.from({ length: 120 }, (_, i) =>
       word(i, { greek: `το κοινό${i}`, russian: i % 2 ? `общее слово${i}` : `другое${i}` }),
     );
     await load({ words, lessons: [], links: [], states: [], events: [], sessions: [], settings: defaultSettings });
     const ids = await searchWordIds("κοιν общ", db);
     expect(ids).toHaveLength(60);
-    const first = await wordPage({ query: "κοιν общ", filter: "all", lessonId: null, cursor: null }, db);
-    expect(first.items).toHaveLength(50);
-    const second = await wordPage({ query: "κοιν общ", filter: "all", lessonId: null, cursor: first.cursor }, db);
-    expect(second.items).toHaveLength(10);
-    expect(second.cursor).toBeNull();
-    expect(new Set([...first.items, ...second.items].map((i) => i.word.id)).size).toBe(60);
   });
 });
 
@@ -330,12 +253,10 @@ describe("смешанный урок в выборках", () => {
       "p-silent",
     ]);
     expect(detail.states.size).toBe(2);
-    // Убранная фраза исчезает из состава, но не из базы; словарь остаётся словарём слов.
+    // Убранная фраза исчезает из состава, но не из базы.
     await legacyRemove(db, MIXED_LESSON, { kind: "phrase", id: "p-silent" });
     expect((await lessonDetail(MIXED_LESSON, db))!.phrases).toHaveLength(5);
     expect(await db.phrases.get("p-silent")).toBeTruthy();
-    const page = await wordPage({ query: "", filter: "all", lessonId: MIXED_LESSON, cursor: null }, db);
-    expect(page.items.map((item) => item.word.id)).toEqual(["w070"]);
     expect(await lessonsOfCard({ kind: "phrase", id: "p-grafo" }, db)).toHaveLength(1);
   });
   it("план и сессия на базе совпадают со снимком для смешанного урока при том же источнике случайности", async () => {

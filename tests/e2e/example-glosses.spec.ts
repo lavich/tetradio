@@ -7,7 +7,7 @@ test("слово примера показывает перевод и откр�
   await ready(page);
   await installLessons(page, ["mech-3", "mech-4"]);
   await page.goto("/words/w096");
-  const example = page.getByText("В контексте").locator("..");
+  const example = page.getByTestId("entry-sheet");
   const line = page.getByTestId("example-gloss");
   await expect(line).toBeEmpty();
   await example.getByRole("button", { name: "γιατρός", exact: true }).click();

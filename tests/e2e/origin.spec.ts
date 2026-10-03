@@ -20,7 +20,7 @@ test("данные не переходят между origin сами; пере�
   await installLessons(page, ["mech-2"]);
   await page.goto("/words");
   // Подписанный курс догружается фоном: копию снимаем с устоявшегося словаря и с ним же сверяем перенос.
-  await expect(page.getByTestId("word-count")).toHaveText("Показано 50 слов, есть ещё");
+  await expect(page.getByTestId("word-count")).toHaveText("56 слов · 7 фраз");
   const source = await page.getByTestId("word-count").innerText();
   await page.goto("/more/backup");
   const [download] = await Promise.all([
