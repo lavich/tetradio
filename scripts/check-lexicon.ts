@@ -50,6 +50,7 @@ const warnings: string[] = [];
 const seen = new Map<string, string>();
 const ids = new Map<string, string>();
 const seenPhrases = new Map<string, string>();
+const seenRu = new Map<string, string>();
 const files = readdirSync(DIR)
   .filter((name) => /^\d{2}\.tsv$/.test(name))
   .sort();
@@ -80,6 +81,11 @@ for (const name of files) {
     else ids.set(id, at);
     if (!POS.has(pos)) errors.push(`${at}: неизвестная часть речи «${pos}»`);
     if (!ru) errors.push(`${at}: нет перевода`);
+    // Написание спрашивает по переводу: с одинаковым переводом двух карточек верный ответ угадать нельзя.
+    const ruKey = `${pos === "фраза" ? "p" : "w"}:${ru.toLowerCase().replace(/\s+/g, " ")}`;
+    const sameRu = seenRu.get(ruKey);
+    if (ru && sameRu) errors.push(`${at}: перевод «${ru}» уже у ${sameRu} — уточните, чем карточки различаются`);
+    else seenRu.set(ruKey, `${at} (${greek})`);
     if (!GREEK_TEXT.test(greek)) errors.push(`${at}: «${greek}» содержит не греческие символы`);
     if (/σ(?=$|[\s.,;!])/u.test(greek)) errors.push(`${at}: «${greek}» — σ в конце слова вместо ς`);
     if (pos === "фраза") {
