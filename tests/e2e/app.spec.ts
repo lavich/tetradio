@@ -148,8 +148,8 @@ test("занятие: знакомство, четыре упражнения, �
   await ready(page);
   await page.reload();
   await ready(page);
-  await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
-  await page.getByRole("link", { name: /Статистика/ }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
+  await page.getByRole("link", { name: "Ответы и сроки повторений" }).click();
   const recorded = await page.getByText(/Всего записано/).innerText();
   expect(recorded).not.toContain("Всего записано 0");
   // Новые слова занятия были из урока 1.2: его строка прогресса больше не «24 новых».

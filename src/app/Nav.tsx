@@ -1,4 +1,4 @@
-import { BookOpen, Home, MoreHorizontal, Rows3 } from "lucide-react";
+import { BookOpen, ChartNoAxesColumn, Home, Rows3 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import nav from "./Nav.module.css";
@@ -8,7 +8,8 @@ const LINKS: { to: string; label: string; Icon: typeof Home; also?: string }[] =
   /** Курс из модулей; словарный курс без модулей открывается прежним списком уроков — вкладка та же. */
   { to: "/course", label: "Курс", Icon: BookOpen, also: "/lessons" },
   { to: "/words", label: "Слова", Icon: Rows3 },
-  { to: "/more", label: "Ещё", Icon: MoreHorizontal },
+  /** Настройки, копия и статистика открываются со страницы прогресса и остаются под этой вкладкой. */
+  { to: "/progress", label: "Прогресс", Icon: ChartNoAxesColumn, also: "/more" },
 ];
 export function Nav() {
   const ref = useRef<HTMLElement>(null);

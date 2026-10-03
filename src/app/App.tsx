@@ -27,7 +27,7 @@ const SharedWordScreen = named("SharedWordScreen", () => import("../features/wor
 const WordExerciseScreen = named("WordExerciseScreen", () => import("../features/words/WordExerciseScreen"));
 const SessionScreen = named("SessionScreen", () => import("../features/learning/SessionScreen"));
 const ResultScreen = named("ResultScreen", () => import("../features/learning/ResultScreen"));
-const MoreScreen = named("MoreScreen", () => import("../features/more/MoreScreen"));
+const ProgressScreen = named("ProgressScreen", () => import("../features/progress/ProgressScreen"));
 const StatsScreen = named("StatsScreen", () => import("../features/progress/StatsScreen"));
 const SettingsScreen = named("SettingsScreen", () => import("../features/more/SettingsScreen"));
 const BackupScreen = named("BackupScreen", () => import("../features/backup/BackupScreen"));
@@ -93,7 +93,8 @@ export function App() {
           <Route path="/share/word/:id" element={<SharedWordScreen />} />
           <Route path="/session" element={<SessionScreen />} />
           <Route path="/session/result/:id" element={<ResultScreen />} />
-          <Route path="/more" element={<MoreScreen />} />
+          <Route path="/progress" element={<ProgressScreen />} />
+          <Route path="/more" element={<Navigate to="/progress" replace />} />
           <Route path="/more/stats" element={<StatsScreen />} />
           <Route path="/more/settings" element={<SettingsScreen />} />
           <Route path="/more/backup" element={<BackupScreen />} />
