@@ -21,7 +21,7 @@ test("полная копия переносит слова, даты уроко
   await page.getByRole("link", { name: /ο φίλος/ }).click();
   await expect(page.getByTestId("word-art")).toBeVisible();
 
-  await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await page.getByRole("link", { name: /Копия данных/ }).click();
   const download = await Promise.all([
     page.waitForEvent("download"),
@@ -70,7 +70,7 @@ test("полная копия переносит слова, даты уроко
   await fresh.getByRole("button", { name: "Пн", exact: true }).click();
   await fresh.getByRole("button", { name: "Сохранить" }).click();
   await expect(fresh.getByText(/Пн, первое занятие/)).toBeVisible();
-  await fresh.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
+  await fresh.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await fresh.getByRole("link", { name: /Копия данных/ }).click();
   await fresh.locator("#backup").setInputFiles(file);
   await expect(fresh.getByText(/Файл проверен/)).toBeVisible();
@@ -101,7 +101,7 @@ test("повреждённый и чужой файл не меняют данн
   // Курс догружается фоном: ждём устоявшийся словарь, иначе снимок поймает промежуточное число.
   await expect(page.getByTestId("word-count")).toHaveText("56 слов · 7 фраз");
   const before = await page.getByTestId("word-count").innerText();
-  await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await page.getByRole("link", { name: /Копия данных/ }).click();
   const broken = join(tmpdir(), "tetradio-broken.json");
   writeFileSync(broken, "{не json");

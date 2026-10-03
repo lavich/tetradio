@@ -20,7 +20,7 @@ test.describe("запуск внутри Telegram", () => {
     expect(calls.filter((call) => call === "ready")).toHaveLength(1);
     expect(await page.locator("html").getAttribute("data-platform")).toBe("telegram");
     await expect(page.locator("header")).toHaveCount(0); // бренд и бургер не дублируют шапку клиента
-    await expect(page.getByRole("navigation").getByRole("link", { name: "Ещё" })).toBeVisible(); // «Ещё» остаётся в нижней навигации
+    await expect(page.getByRole("navigation").getByRole("link", { name: "Прогресс" })).toBeVisible(); // «Прогресс» остаётся в нижней навигации
   });
   test("сборка с моком вне Telegram: тестовый пользователь в своей базе, без облака и без ожидания Telegram", async ({
     page,
@@ -30,7 +30,7 @@ test.describe("запуск внутри Telegram", () => {
     await expect(page.getByTestId("today-title")).toBeVisible();
     expect(await page.locator("html").getAttribute("data-platform")).toBe("web");
     await expect(page.getByRole("alertdialog")).toHaveCount(0);
-    await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
     await expect(page.getByTestId("storage-scope")).toContainText("Режим разработки: тестовый пользователь");
     await expect(page.getByTestId("storage-scope")).toContainText("облачной синхронизации нет");
     await expect(page.getByTestId("sync-status")).toHaveCount(0);
@@ -162,7 +162,7 @@ test.describe("навигация, тема и размеры", () => {
     await tg(page).setFullscreen(false, 0, 0);
     await expect.poll(() => page.locator("html").getAttribute("data-launch-mode")).toBe("fullsize");
     await expect.poll(() => main.evaluate((node) => parseFloat(getComputedStyle(node).paddingTop))).toBe(12);
-    await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
     await expect(page.getByTestId("launch-mode")).toContainText("режим: полноразмерный");
     await tg(page).setFullscreen(true, 47, 46);
     await expect(page.getByTestId("launch-mode")).toContainText("режим: во весь экран"); // обновляется без перезагрузки
@@ -373,9 +373,9 @@ test.describe("навигация, тема и размеры", () => {
     await breakStorage(page);
     await tg(page).deactivate();
     await tg(page).activate(844);
-    await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click(); // новый экран читает базу и получает UnknownError
+    await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click(); // новый экран читает базу и получает UnknownError
     await expect(page.getByTestId("storage-scope")).toBeVisible(); // экран «Ещё» отрисован после переоткрытия базы
-    await expect(page).toHaveURL(/\/more$/); // маршрут не потерян
+    await expect(page).toHaveURL(/\/progress$/); // маршрут не потерян
     expect(await alive()).toBe(true); // страница не перезагружалась
     expect(await reopened()).toBe(1);
     await expect(page.getByTestId("recovery-failed")).toHaveCount(0);
@@ -442,7 +442,7 @@ test.describe("аудио, копии и облако", () => {
     // Подписанный курс догружается фоном: копию снимаем с устоявшегося словаря и с ним же сверяем перенос.
     await expect(page.getByTestId("word-count")).toHaveText("56 слов · 7 фраз");
     const source = await page.getByTestId("word-count").innerText();
-    await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
     await expect(page.getByTestId("storage-scope")).toContainText("Telegram: облачная синхронизация");
     await page.getByRole("link", { name: /Копия данных/ }).click();
     await expect(page.getByTestId("sync-boundaries")).toContainText(

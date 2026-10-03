@@ -1,0 +1,240 @@
+.page {
+  min-width: 0;
+}
+.exam {
+  margin-bottom: 4px;
+}
+.title {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: -0.015em;
+}
+.heading {
+  margin: calc(var(--cell) * 1.5) 0 4px;
+  font-family: var(--font-print);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: var(--cell);
+}
+.note {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  line-height: 18px;
+  color: var(--muted-foreground);
+}
+.skills {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.skills li {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) 44px;
+  align-items: center;
+  column-gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.skill {
+  font-family: var(--font-print);
+  font-size: 16px;
+}
+.percent {
+  font-family: var(--font-print);
+  font-size: 16px;
+  text-align: right;
+  color: var(--primary);
+}
+.basis {
+  grid-column: 2 / 4;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.weak .percent,
+.weak .basis {
+  color: var(--almost-fg);
+}
+.bar {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+  height: 16px;
+}
+.bar i {
+  border: 1.5px solid var(--input);
+  border-radius: 3px;
+}
+.bar .filled {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.bar .filled.self {
+  background: repeating-linear-gradient(135deg, var(--primary) 0 3px, transparent 3px 6px);
+}
+.threshold {
+  position: absolute;
+  left: calc(60% - 1px);
+  top: -5px;
+  bottom: -5px;
+  border-left: 1.5px dashed var(--foreground);
+}
+.module {
+  margin: 4px 0 8px;
+  font-family: var(--font-print);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 36px;
+}
+.module span {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+.spines {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+.spineSlot {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.spine {
+  width: 8px;
+  height: 22px;
+  border: 1.5px solid var(--input);
+  border-radius: 1px 3px 3px 1px;
+}
+.current {
+  border-color: var(--primary);
+  background: var(--soft);
+}
+.point {
+  margin: 0 2px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+.plan {
+  margin: 10px 0 0;
+  font-size: 13.5px;
+  line-height: 20px;
+  color: var(--muted-foreground);
+}
+.plan b {
+  color: var(--foreground);
+}
+.lag {
+  font-weight: 600;
+  color: var(--almost-fg);
+}
+.days {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.day {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid var(--input);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+.dayLesson {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: #fff;
+}
+.dayToday {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.dayLesson.dayToday {
+  color: #fff;
+}
+.dayReview {
+  position: absolute;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.links {
+  list-style: none;
+  margin: calc(var(--cell) * 1.5) 0 0;
+  padding: 0;
+}
+.links li {
+  border-bottom: 1px solid var(--border);
+}
+.links a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  font-family: var(--font-print);
+  font-size: 17px;
+  color: var(--foreground);
+  text-decoration: none;
+}
+.links a::after {
+  content: "→";
+  margin-left: 8px;
+  color: var(--muted-foreground);
+}
+@media (hover: hover) {
+  .links a:hover {
+    color: var(--primary);
+  }
+}
+.device {
+  display: grid;
+  gap: 12px;
+  margin-top: var(--cell);
+}
+.deviceTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+.deviceNote {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--muted-foreground);
+}
+
+.spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.spread > .page {
+  padding: 0 48px;
+}
+.spread > .page:first-child {
+  padding-left: 0;
+}
+.spread::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 14px;
+  border-left: 1px solid var(--border);
+  background: linear-gradient(to right, color-mix(in srgb, var(--foreground) 12%, transparent), transparent);
+  pointer-events: none;
+}

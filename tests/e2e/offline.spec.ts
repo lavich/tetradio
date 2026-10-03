@@ -15,7 +15,7 @@ test("работает без сети после закрытия страни�
   await page.reload();
   await ready(page);
   await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 20000 });
-  await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await expect(page.getByText(/Готово офлайн|Офлайн-пакет/)).toBeVisible();
   // Подписанный курс доустанавливает все уроки, поэтому неустановленный урок для проверки готовим сами.
   await page.evaluate(async () => {

@@ -7,7 +7,7 @@ test("копия: изменение облака на другом устрой
   await openTelegram(page);
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
-  await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await page.getByRole("link", { name: /Копия данных/ }).click();
   const [download] = await Promise.all([
     page.waitForEvent("download"),
