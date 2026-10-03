@@ -325,7 +325,9 @@ test.describe("навигация, тема и размеры", () => {
     await tg(page).silentTheme("dark", DARK);
     await tg(page).activate(780);
     await expect.poll(active).toBe("true");
-    await expect.poll(height).toBe("780px"); // размеры перечитаны по одному activated, без viewportChanged
+    // Устаревшая устойчивая высота после возврата меньше окна: развёрнутое занятие всё равно во всё окно, без полосы снизу.
+    await expect.poll(height).toBe("844px");
+    expect(await sessionHeight()).toBe(844);
     await expect
       .poll(() => page.evaluate(() => getComputedStyle(document.body).backgroundColor))
       .toBe("rgb(23, 33, 43)"); // тема перечитана

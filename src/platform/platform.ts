@@ -81,11 +81,16 @@ export function applyEnvironment() {
   // Режим запуска виден стилям и экрану «Ещё»: во весь экран поверх контента лежат кнопки клиента и системная строка.
   if (view.mode) root.dataset.launchMode = view.mode;
   else root.removeAttribute("data-launch-mode");
-  // Док занятия следует за устойчивой высотой Telegram, а при открытой клавиатуре — за фактически видимой областью.
+  // Развёрнутый Mini App без клавиатуры занимает всё окно: устойчивая высота после переключения приложений
+  // бывает устаревшей и меньше окна. При вводе док следует за ней и за фактически видимой областью.
   const visual = typeof window !== "undefined" && window.visualViewport?.height;
-  const heights = [view.stableHeight, visual && visual < window.innerHeight - 1 ? visual : null].filter(
-    (value): value is number => !!value && value > 0,
-  );
+  const inner = typeof window !== "undefined" ? window.innerHeight : 0;
+  const typing = document.activeElement?.matches("input, textarea, [contenteditable=true]") ?? false;
+  const heights = (
+    typing
+      ? [view.stableHeight, visual && visual < inner - 1 ? visual : null]
+      : [view.mode === "compact" || !inner ? view.stableHeight : inner]
+  ).filter((value): value is number => !!value && value > 0);
   if (heights.length) lastHeight = Math.round(Math.min(...heights));
   if (lastHeight) root.style.setProperty("--app-height", `${lastHeight}px`);
   else root.style.removeProperty("--app-height");
@@ -110,6 +115,13 @@ export function useEnvironment() {
     const telegram = current.kind === "telegram";
     const visual = telegram ? window.visualViewport : null;
     visual?.addEventListener("resize", applyEnvironment);
+    // Фокус меняется уже после focusout: пересчёт — на следующем кадре.
+    const onFocus = () => requestAnimationFrame(applyEnvironment);
+    if (telegram) {
+      window.addEventListener("resize", applyEnvironment);
+      document.addEventListener("focusin", onFocus);
+      document.addEventListener("focusout", onFocus);
+    }
     const onVisibility = () => {
       lifecycle("visibilitychange", {
         visible: document.visibilityState !== "hidden",
@@ -124,6 +136,9 @@ export function useEnvironment() {
       offViewport();
       offActive();
       visual?.removeEventListener("resize", applyEnvironment);
+      window.removeEventListener("resize", applyEnvironment);
+      document.removeEventListener("focusin", onFocus);
+      document.removeEventListener("focusout", onFocus);
       if (telegram) document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [current]);
