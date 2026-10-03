@@ -35,8 +35,10 @@
   justify-content: center;
   cursor: pointer;
 }
-.speak:hover {
-  background: var(--primary-hover);
+@media (hover: hover) {
+  .speak:hover {
+    background: var(--primary-hover);
+  }
 }
 .speakBox {
   flex: 0 0 auto;

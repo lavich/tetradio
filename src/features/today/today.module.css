@@ -86,8 +86,10 @@
   text-underline-offset: 4px;
   cursor: pointer;
 }
-.quiet:hover:not(:disabled) {
-  color: var(--foreground);
+@media (hover: hover) {
+  .quiet:hover:not(:disabled) {
+    color: var(--foreground);
+  }
 }
 .problem {
   margin: 0;
@@ -161,8 +163,10 @@
   line-height: var(--cell);
   overflow-wrap: anywhere;
 }
-.lesson:hover .lessonTitle {
-  color: var(--primary);
+@media (hover: hover) {
+  .lesson:hover .lessonTitle {
+    color: var(--primary);
+  }
 }
 .lessonAction {
   grid-column: 1 / -1;
@@ -270,8 +274,10 @@
   color: inherit;
   text-decoration: none;
 }
-.toc a:hover .tocTitle {
-  color: var(--primary);
+@media (hover: hover) {
+  .toc a:hover .tocTitle {
+    color: var(--primary);
+  }
 }
 .tocNumber {
   font-family: var(--font-print);
