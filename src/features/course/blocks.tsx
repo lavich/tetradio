@@ -382,8 +382,12 @@ export function Writing({
   const [checks, setChecks] = useState<number[]>(progress?.checks ?? []);
   const [review, setReview] = useState(!!progress?.done);
   const count = wordCount(text);
-  const toggle = (index: number) =>
-    setChecks((prev) => (prev.includes(index) ? prev.filter((value) => value !== index) : [...prev, index]));
+  const toggle = (index: number) => {
+    const next = checks.includes(index) ? checks.filter((value) => value !== index) : [...checks, index];
+    setChecks(next);
+    // В выполненном задании отметка сохраняется сразу: отдельная кнопка ничего видимого не меняла.
+    if (progress?.done) void save({ checks: next });
+  };
   return (
     <>
       <h3 className={css.blockTitle}>{block.register === "formal" ? "Официальный текст" : "Письмо"}</h3>
@@ -408,11 +412,13 @@ export function Writing({
           <p className={css.instruction}>Образец</p>
           <Model blockId={block.id} text={block.model} />
           <Criteria criteria={block.criteria} checks={checks} toggle={toggle} />
-          <div className={css.actions}>
-            <Button variant="soft" size="md" onClick={() => void save({ done: true, text, checks })}>
-              {progress?.done ? "Сохранить самопроверку" : "Готово"}
-            </Button>
-          </div>
+          {progress?.done ? null : (
+            <div className={css.actions}>
+              <Button variant="soft" size="md" onClick={() => void save({ done: true, text, checks })}>
+                Готово
+              </Button>
+            </div>
+          )}
         </>
       ) : (
         <div className={css.actions}>
@@ -493,8 +499,12 @@ export function Speaking({
   useEffect(() => {
     if (left === 0) stop();
   });
-  const toggle = (index: number) =>
-    setChecks((prev) => (prev.includes(index) ? prev.filter((value) => value !== index) : [...prev, index]));
+  const toggle = (index: number) => {
+    const next = checks.includes(index) ? checks.filter((value) => value !== index) : [...checks, index];
+    setChecks(next);
+    // В выполненном задании отметка сохраняется сразу: отдельная кнопка ничего видимого не меняла.
+    if (progress?.done) void save({ checks: next });
+  };
   return (
     <>
       <h3 className={css.blockTitle}>Речь · {PART_LABEL[block.part]}</h3>
@@ -526,11 +536,13 @@ export function Speaking({
             </>
           ) : null}
           <Criteria criteria={block.criteria} checks={checks} toggle={toggle} />
-          <div className={css.actions}>
-            <Button variant="soft" size="md" onClick={() => void save({ done: true, checks })}>
-              {progress?.done ? "Сохранить самопроверку" : "Готово"}
-            </Button>
-          </div>
+          {progress?.done ? null : (
+            <div className={css.actions}>
+              <Button variant="soft" size="md" onClick={() => void save({ done: true, checks })}>
+                Готово
+              </Button>
+            </div>
+          )}
         </>
       ) : null}
     </>
