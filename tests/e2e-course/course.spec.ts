@@ -125,7 +125,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await expect(writing).toContainText("Самопроверка — не оценка экзаменатора");
   await writing.getByRole("checkbox", { name: "Есть приветствие" }).check();
   await writing.getByRole("button", { name: "Готово" }).click();
-  await expect(writing.getByRole("button", { name: "Сохранить самопроверку" })).toBeVisible();
+  await expect(writing.getByRole("button", { name: "Готово" })).toHaveCount(0);
 
   // Речь: таймер, затем образец и критерии.
   const speaking = await turnTo(page, "Речь");
@@ -133,11 +133,29 @@ test("урок курса: задания с ключом, чтение, ауд�
   await speaking.getByRole("button", { name: "Закончить" }).click();
   await expect(speaking).toContainText("Образец ответа");
   await speaking.getByRole("button", { name: "Готово" }).click();
-  await expect(speaking.getByRole("button", { name: "Сохранить самопроверку" })).toBeVisible();
+  await expect(speaking.getByRole("button", { name: "Готово" })).toHaveCount(0);
+  // В выполненном задании отметка самопроверки сохраняется сразу, без кнопки.
+  await speaking.getByRole("checkbox").first().check();
+  await expect
+    .poll(() =>
+      page.evaluate(async () => {
+        const db = await new Promise<IDBDatabase>((resolve) => {
+          const request = indexedDB.open("tetradio-mock-1");
+          request.onsuccess = () => resolve(request.result);
+        });
+        const rows = await new Promise<{ checks?: number[] }[]>((resolve) => {
+          const request = db.transaction("blockProgress").objectStore("blockProgress").getAll();
+          request.onsuccess = () => resolve(request.result);
+        });
+        return rows.filter((row) => row.checks?.includes(0)).length;
+      }),
+    )
+    .toBe(2); // письмо и речь
 
   // Все задания выполнены — урок можно завершить; после перезагрузки открыта та же страница, прогресс на месте.
   await page.reload();
   await expect(section(page, "Речь")).toBeVisible();
+  await expect(section(page, "Речь").getByRole("checkbox").first()).toBeChecked();
   await expect(page.getByTestId("page-count")).toContainText("заданий 5 из 5");
   await page.getByRole("button", { name: "К итогу" }).click();
   await page.getByRole("button", { name: "Завершить урок" }).click();
