@@ -22,6 +22,7 @@ const ModuleScreen = named("ModuleScreen", () => import("../features/course/scre
 const CourseLessonScreen = named("CourseLessonScreen", () => import("../features/course/screens"));
 const WordsScreen = named("WordsScreen", () => import("../features/words/WordsScreen"));
 const WordScreen = named("WordScreen", () => import("../features/words/WordScreen"));
+const PhraseScreen = named("PhraseScreen", () => import("../features/words/WordScreen"));
 const SharedWordScreen = named("SharedWordScreen", () => import("../features/words/SharedWordScreen"));
 const WordExerciseScreen = named("WordExerciseScreen", () => import("../features/words/WordExerciseScreen"));
 const SessionScreen = named("SessionScreen", () => import("../features/learning/SessionScreen"));
@@ -87,6 +88,7 @@ export function App() {
           <Route path="/lessons/:id" element={<LessonScreen />} />
           <Route path="/words" element={<WordsScreen />} />
           <Route path="/words/:id" element={<WordScreen />} />
+          <Route path="/words/phrase/:id" element={<PhraseScreen />} />
           <Route path="/words/:id/exercise/:type" element={<WordExerciseScreen />} />
           <Route path="/share/word/:id" element={<SharedWordScreen />} />
           <Route path="/session" element={<SessionScreen />} />

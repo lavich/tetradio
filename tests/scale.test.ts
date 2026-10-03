@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
-import { dexieSource, lessonViews, searchWordIds, wordPage } from "../src/storage/queries";
+import { dexieSource, lessonViews, searchWordIds } from "../src/storage/queries";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { parseCatalog, SCHEMA_VERSION, type CatalogEntry } from "../src/content/schema";
@@ -156,26 +156,11 @@ beforeAll(async () => {
 afterAll(() => db.close());
 
 describe("ограниченные выборки на большой базе", () => {
-  it("первая страница словаря читает не больше 50 карточек и ни одной записи истории", async () => {
-    track();
-    const page = await wordPage({ query: "", filter: "all", lessonId: null, cursor: null }, db);
-    expect(page.items).toHaveLength(50);
-    expect(reads.words).toBeLessThanOrEqual(52);
-    expect(reads.events).toBe(0);
-    expect(reads.sessions).toBe(0);
-    track();
-    const next = await wordPage({ query: "", filter: "all", lessonId: null, cursor: page.cursor }, db);
-    expect(next.items[0].word.id).not.toBe(page.items[0].word.id);
-    expect(reads.words).toBeLessThanOrEqual(52);
-  }, 60_000);
-  it("поиск по префиксу читает только совпавшие карточки страницы", async () => {
+  it("поиск по префиксу читает только ключи индекса", async () => {
     track();
     const ids = await searchWordIds("λεξη123", db);
     expect(ids.length).toBeGreaterThan(50);
     expect(reads.words).toBe(0); // только ключи индекса
-    const page = await wordPage({ query: "λεξη123", filter: "all", lessonId: null, cursor: null }, db);
-    expect(page.items).toHaveLength(50);
-    expect(reads.words).toBeLessThanOrEqual(52);
   }, 60_000);
   it("план дня не читает таблицы слов, событий и сессий, а состояния — только по индексам и ключам; тексты новых видов — только признаки кандидатов", async () => {
     track();

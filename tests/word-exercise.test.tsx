@@ -197,7 +197,7 @@ describe("упражнение по выбору", () => {
 });
 
 describe("блок «Упражнения» на экране слова с голосом", () => {
-  it("у слова курса доступны все пять видов, «Пройти» открывает выбранное", async () => {
+  it("у слова курса доступны все пять видов, «потренировать» открывает выбранное", async () => {
     root = createRoot(host);
     await act(async () =>
       root!.render(
@@ -213,9 +213,9 @@ describe("блок «Упражнения» на экране слова с го
       () => host.querySelectorAll("[data-testid=word-exercises] button:not([disabled])").length === 5,
       "пять видов",
     );
-    expect(text()).toContain("Без учёта прогресса");
+    expect(text()).toContain("без учёта прогресса");
     expect(button("Потренировать слово")).toBeTruthy();
-    await click(host.querySelector("[aria-label='Написание: пройти']")!);
+    await click(host.querySelector("[aria-label='Написание: потренировать']")!);
     await until(() => !!host.querySelector("input[aria-label='Твой ответ по-гречески']"), "экран написания");
   });
 });

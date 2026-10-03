@@ -35,7 +35,6 @@ const span = (first: string) =>
     [first, Dexie.minKey],
     [first, Dexie.maxKey],
   ] as const;
-export const PAGE_SIZE = 50;
 
 export const loadSettings = async (database: AppDatabase = db) => fillSettings(await database.settings.get("settings"));
 /** Уроки с датами по расписанию: единственное место, где даты вычисляются для чтения. */
@@ -405,27 +404,11 @@ export async function lessonDetail(id: string, database: AppDatabase = db): Prom
 }
 
 export type WordGroup = "new" | "learning" | "review" | "solid";
-export type WordFilter = "all" | WordGroup;
 export const stateGroup = (state: LearningState | undefined): WordGroup => {
   if (!state) return "new";
   if (state.card.state === State.Learning || state.card.state === State.Relearning) return "learning";
   return state.card.scheduled_days >= 21 ? "solid" : "review";
 };
-export interface WordPageRequest {
-  query: string;
-  filter: WordFilter;
-  lessonId: string | null;
-  cursor: WordCursor | null;
-  limit?: number;
-}
-/** Курсор устойчив к вставкам: для просмотра — последняя пара «ключ сортировки + id», для поиска и урока — смещение в списке идентификаторов. */
-export type WordCursor = { kind: "browse"; sortKey: string; id: string } | { kind: "list"; offset: number };
-export interface WordPage {
-  items: { word: StoredWord; group: WordGroup }[];
-  cursor: WordCursor | null;
-  scope: "search" | "lesson" | "all";
-}
-
 export async function searchWordIds(query: string, database: AppDatabase = db): Promise<string[]> {
   const tokens = searchTokens(query);
   if (!tokens.length) return [];
@@ -433,73 +416,4 @@ export async function searchWordIds(query: string, database: AppDatabase = db): 
   const [first, ...rest] = sets;
   const others = rest.map((set) => new Set(set));
   return [...new Set(first)].filter((id) => others.every((set) => set.has(id)));
-}
-
-/** Словарь остаётся словарём слов: страницы, поиск и фильтр урока читают только слова. */
-export async function wordPage(
-  { query, filter, lessonId, cursor, limit = PAGE_SIZE }: WordPageRequest,
-  database: AppDatabase = db,
-): Promise<WordPage> {
-  const items: WordPage["items"] = [];
-  const groupsOf = async (words: (StoredWord | undefined)[]) => {
-    const live = words.filter((w): w is StoredWord => !!w && !w.deletedAt);
-    const states = await statesOf(
-      live.map((w) => wordRef(w.id)),
-      database,
-    );
-    return new Map(live.map((word) => [word.id, stateGroup(states.get(wordKeyOf(word.id)))]));
-  };
-  const wanted = (group: WordGroup) => filter === "all" || group === filter;
-  if (query.trim() || lessonId) {
-    const ids = lessonId
-      ? (await lessonItems(lessonId, database))
-          .filter((link) => link.ref.kind === "word")
-          .map((link) => link.ref.id)
-          .filter(await matches(query, database))
-      : await searchWordIds(query, database);
-    let offset = cursor?.kind === "list" ? cursor.offset : 0,
-      next: number | null = null;
-    scan: while (offset < ids.length) {
-      const slice = ids.slice(offset, offset + limit - items.length);
-      const words = await database.words.bulkGet(slice);
-      const groups = await groupsOf(words);
-      for (let index = 0; index < slice.length; index++) {
-        const word = words[index],
-          group = word && groups.get(word.id);
-        if (!word || !group || !wanted(group)) continue;
-        items.push({ word, group });
-        if (items.length === limit) {
-          next = offset + index + 1;
-          break scan;
-        }
-      }
-      offset += slice.length;
-    }
-    return {
-      items,
-      cursor: next !== null && next < ids.length ? { kind: "list", offset: next } : null,
-      scope: lessonId ? "lesson" : "search",
-    };
-  }
-  let last = cursor?.kind === "browse" ? cursor : null;
-  for (;;) {
-    const range = last
-      ? database.words.where("[sortKey+id]").above([last.sortKey, last.id])
-      : database.words.orderBy("[sortKey+id]");
-    const chunk = await range.limit(limit - items.length).toArray(); // дочитывается только недостающее
-    if (!chunk.length) return { items, cursor: null, scope: "all" };
-    const groups = await groupsOf(chunk);
-    for (const word of chunk) {
-      const group = groups.get(word.id);
-      last = { kind: "browse", sortKey: word.sortKey, id: word.id };
-      if (!group || !wanted(group)) continue;
-      items.push({ word, group });
-      if (items.length === limit) return { items, cursor: last, scope: "all" };
-    }
-  }
-}
-async function matches(query: string, database: AppDatabase) {
-  if (!query.trim()) return () => true;
-  const found = new Set(await searchWordIds(query, database));
-  return (id: string) => found.has(id);
 }

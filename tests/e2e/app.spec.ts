@@ -15,7 +15,7 @@ test("оболочка открывается, разделы доступны �
   await expect(page.getByTestId("today-title")).toBeVisible();
   await expect(page.getByText("Урок 1.2")).toBeVisible();
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
-  await expect(page.getByRole("heading", { name: "Слова" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Словарь", level: 1 })).toBeVisible();
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await expect(page.getByRole("link", { name: /1\.1/ })).toBeVisible();
   await page.keyboard.press("Tab");

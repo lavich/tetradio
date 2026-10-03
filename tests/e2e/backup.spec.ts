@@ -99,7 +99,7 @@ test("повреждённый и чужой файл не меняют данн
   await installLessons(page, ["mech-2"]);
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   // Курс догружается фоном: ждём устоявшийся словарь, иначе снимок поймает промежуточное число.
-  await expect(page.getByTestId("word-count")).toHaveText("Показано 50 слов, есть ещё");
+  await expect(page.getByTestId("word-count")).toHaveText("56 слов · 7 фраз");
   const before = await page.getByTestId("word-count").innerText();
   await page.getByRole("navigation").getByRole("link", { name: "Ещё" }).click();
   await page.getByRole("link", { name: /Копия данных/ }).click();

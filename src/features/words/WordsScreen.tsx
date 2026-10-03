@@ -1,127 +1,165 @@
 import { useState } from "react";
-import { ChevronRight, Search, SearchX } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@/components/ui/item";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useLiveQuery } from "dexie-react-hooks";
+import { Search } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
 import { Screen } from "../../app/Screen";
+import { cx } from "../../shared/cx";
 import { withCount, WORDS } from "../../shared/format";
-import { useLessons, useWordPages } from "../../shared/store";
-import { PAGE_SIZE, type WordFilter } from "../../storage/queries";
-import ui from "../../shared/ui.module.css";
+import { useSpread } from "../../shared/spread";
+import { Tick } from "../../shared/Tick";
+import { dictionary, matchesQuery, type CardMark, type DictionaryEntry } from "../../storage/dictionary";
+import { EntrySheet } from "./WordSheet";
+import css from "./dictionary.module.css";
 
-const FILTERS: { key: WordFilter; label: string }[] = [
-  { key: "all", label: "Все" },
-  { key: "new", label: "Не начаты" },
-  { key: "learning", label: "В изучении" },
-  { key: "review", label: "На повторении" },
-  { key: "solid", label: "Закреплены" },
+type Filter = "all" | "learning" | "solid";
+const FILTERS: { key: Filter; label: string }[] = [
+  { key: "all", label: "все" },
+  { key: "learning", label: "учу" },
+  { key: "solid", label: "закреплены" },
 ];
+const MARK_LABEL: Record<CardMark, string> = { new: "не начато", learning: "учу", solid: "закреплено" };
+
+export const entryPath = (entry: Pick<DictionaryEntry, "ref">) =>
+  entry.ref.kind === "word"
+    ? `/words/${encodeURIComponent(entry.ref.id)}`
+    : `/words/phrase/${encodeURIComponent(entry.ref.id)}`;
 
 export function WordsScreen() {
-  const lessons = useLessons() ?? [];
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<WordFilter>("all");
-  const [lessonId, setLessonId] = useState("all");
-  const page = useWordPages({ query, filter, lessonId: lessonId === "all" ? null : lessonId });
+  const spread = useSpread();
+  const lessons = useLiveQuery(() => dictionary(), []);
+  if (!lessons) return <Screen paper />;
   return (
-    <Screen>
-      <h1>Слова</h1>
-      <InputGroup className="mb-1">
-        <InputGroupAddon>
-          <Search />
-        </InputGroupAddon>
-        <InputGroupInput
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Поиск по греческому или русскому"
-          aria-label="Поиск слова"
-        />
-      </InputGroup>
-      <p className={`${ui.note} mt-0 mb-2.5`}>
-        Поиск по началу слов среди загруженных на устройство. Уроки из каталога, которые ещё не открывались, сюда не
-        входят.
-      </p>
-      <div className="no-scrollbar flex gap-2 overflow-x-auto pb-2">
-        {FILTERS.map((item) => (
-          <Badge
-            key={item.key}
-            variant={filter === item.key ? "default" : "secondary"}
-            render={<button type="button" aria-pressed={filter === item.key} onClick={() => setFilter(item.key)} />}
-            className="h-8 cursor-pointer px-3.5 text-sm whitespace-nowrap"
-          >
-            {item.label}
-          </Badge>
-        ))}
-      </div>
-      <Field>
-        <FieldLabel htmlFor="lesson-filter">Набор</FieldLabel>
-        <Select value={lessonId} onValueChange={(value) => setLessonId(value ?? "all")}>
-          <SelectTrigger id="lesson-filter" className="w-full">
-            <SelectValue>
-              {(value) =>
-                value === "all" ? "Все наборы" : (lessons.find((lesson) => lesson.id === value)?.title ?? "Все наборы")
-              }
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="all">Все наборы</SelectItem>
-              {lessons.map((lesson) => (
-                <SelectItem key={lesson.id} value={lesson.id}>
-                  {lesson.title}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        {lessonId !== "all" && <FieldDescription>Показаны только слова выбранного набора.</FieldDescription>}
-      </Field>
-      <p className="mt-3.5 mb-2 text-sm text-muted-foreground" data-testid="word-count">
-        {page.hasMore
-          ? `Показано ${withCount(page.items.length, WORDS)}, есть ещё`
-          : withCount(page.items.length, WORDS)}
-      </p>
-      <ItemGroup className="gap-2.5">
-        {page.items.map(({ word, group }) => (
-          <Item key={word.id} variant="row" render={<Link to={`/words/${word.id}`} />}>
-            <ItemContent>
-              <ItemTitle className="text-base">{word.greek}</ItemTitle>
-              <ItemDescription>
-                {word.russian} · {FILTERS.find((f) => f.key === group)!.label.toLowerCase()}
-              </ItemDescription>
-            </ItemContent>
-            <ItemActions>
-              <ChevronRight className="text-muted-foreground" />
-            </ItemActions>
-          </Item>
-        ))}
-      </ItemGroup>
-      {page.hasMore && (
-        <Button size="md" variant="soft" className="mt-3" disabled={page.loading} onClick={page.loadMore}>
-          {page.loading ? "Загружаем…" : `Показать ещё ${PAGE_SIZE}`}
-        </Button>
-      )}
-      {page.ready && !page.items.length && (
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <SearchX />
-            </EmptyMedia>
-            <EmptyTitle>Ничего не найдено</EmptyTitle>
-            <EmptyDescription>
-              {query.trim()
-                ? "Поиск ищет по началу слова среди загруженных уроков. Измените запрос или снимите фильтры."
-                : "Откройте урок из каталога — его слова появятся здесь."}
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+    <Screen wide={spread} paper>
+      {spread ? (
+        <div className={css.spread}>
+          <Dictionary lessons={lessons} />
+          <div className={css.page}>
+            <p className={css.pick}>Выберите слово — оно откроется на этой странице.</p>
+          </div>
+        </div>
+      ) : (
+        <Dictionary lessons={lessons} />
       )}
     </Screen>
   );
+}
+
+export function EntryScreen({ kind }: { kind: "word" | "phrase" }) {
+  const { id = "" } = useParams();
+  const spread = useSpread();
+  const lessons = useLiveQuery(() => dictionary(), []);
+  if (!lessons) return <Screen back="" paper />;
+  const sheet = <EntrySheet kind={kind} id={id} lessons={lessons} />;
+  if (!spread)
+    return (
+      <Screen back="" paper>
+        {sheet}
+      </Screen>
+    );
+  return (
+    <Screen wide paper>
+      <div className={css.spread}>
+        <Dictionary lessons={lessons} current={`${kind}:${id}`} />
+        <div className={css.page}>{sheet}</div>
+      </div>
+    </Screen>
+  );
+}
+
+function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof dictionary>>; current?: string }) {
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<Filter>("all");
+  const all = lessons.flatMap((lesson) => lesson.entries);
+  const count = (key: Filter) => (key === "all" ? all.length : all.filter((entry) => entry.mark === key).length);
+  const shown = lessons
+    .map((lesson) => ({
+      ...lesson,
+      entries: lesson.entries.filter(
+        (entry) => (filter === "all" || entry.mark === filter) && (!query.trim() || matchesQuery(entry, query)),
+      ),
+    }))
+    .filter((lesson) => lesson.entries.length);
+  const found = shown.flatMap((lesson) => lesson.entries);
+  const phrases = found.filter((entry) => entry.phrase).length;
+  return (
+    <section className={css.page} aria-label="Словарь">
+      <h1 className={css.title}>Словарь</h1>
+      <p className={css.count} data-testid="word-count">
+        {[withCount(found.length - phrases, WORDS), phrases && withCount(phrases, ["фраза", "фразы", "фраз"])]
+          .filter(Boolean)
+          .join(" · ")}
+      </p>
+      <label className={css.search}>
+        <Search aria-hidden size={18} />
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Найти слово или фразу"
+          aria-label="Поиск по греческому или русскому"
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
+        />
+      </label>
+      <p className={css.filters} role="group" aria-label="Состояние">
+        {FILTERS.map((item, index) => (
+          <span key={item.key}>
+            {index > 0 && <span aria-hidden> · </span>}
+            <button type="button" aria-pressed={filter === item.key} onClick={() => setFilter(item.key)}>
+              {item.label} {count(item.key)}
+            </button>
+          </span>
+        ))}
+      </p>
+      {!all.length ? (
+        <p className={css.empty}>Слова и фразы появятся здесь, когда вы откроете первый урок курса.</p>
+      ) : !shown.length ? (
+        <p className={css.empty}>Ничего не нашлось.</p>
+      ) : (
+        shown.map((lesson, index) => {
+          const solid = lesson.entries.filter((entry) => entry.mark === "solid").length;
+          const newModule = index === 0 || shown[index - 1].moduleId !== lesson.moduleId;
+          return (
+            <section key={lesson.id} aria-label={lesson.title} data-testid="dictionary-lesson">
+              {newModule && lesson.moduleId && (
+                <p className={css.module}>
+                  Модуль {String(lesson.moduleNumber).padStart(2, "0")} · <span lang="el">{lesson.moduleTitle}</span>
+                </p>
+              )}
+              <h2 className={css.lesson}>
+                {lesson.number && <span className={css.number}>{lesson.number}</span>}
+                <span className={css.lessonTitle}>{lesson.title}</span>
+                <span className={css.solid} aria-label={`закреплено ${solid} из ${lesson.entries.length}`}>
+                  {solid} из {lesson.entries.length}
+                </span>
+              </h2>
+              <ul className={css.rows}>
+                {lesson.entries.map((entry) => (
+                  <li key={entry.key}>
+                    <Link
+                      to={entryPath(entry)}
+                      className={css.row}
+                      aria-current={current === `${entry.ref.kind}:${entry.ref.id}` ? "page" : undefined}
+                    >
+                      <span className={cx(css.greek, entry.phrase && css.phrase)} lang="el">
+                        {entry.greek}
+                      </span>
+                      <span className={css.russian}>{entry.russian}</span>
+                      <Mark mark={entry.mark} />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })
+      )}
+    </section>
+  );
+}
+
+function Mark({ mark }: { mark: CardMark }) {
+  if (mark === "solid") return <Tick className={css.tick} label={MARK_LABEL.solid} />;
+  return <i className={cx(css.mark, mark === "learning" && css.learning)} role="img" aria-label={MARK_LABEL[mark]} />;
 }

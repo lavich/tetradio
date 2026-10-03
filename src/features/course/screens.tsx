@@ -27,6 +27,7 @@ import css from "./course.module.css";
 import { ExamLine } from "./ExamLine";
 import { launchContext } from "../../platform/launch";
 import { coverColor } from "../../shared/notebook";
+import { useSpread } from "../../shared/spread";
 
 /** Контрольные точки программы (docs/curriculum.md): после каких модулей стоят контрольная и пробники. */
 const CHECKPOINTS: Record<number, string> = {
@@ -546,18 +547,6 @@ function scrollsSideways(target: HTMLElement) {
     if (node.scrollWidth > node.clientWidth && /(auto|scroll)/.test(getComputedStyle(node).overflowX)) return true;
   }
   return false;
-}
-/** Разворот из двух страниц — когда окно широкое, как у Telegram Desktop на весь экран. */
-const SPREAD = "(min-width: 1024px)";
-function useSpread() {
-  const [wide, setWide] = useState(() => window.matchMedia(SPREAD).matches);
-  useEffect(() => {
-    const query = window.matchMedia(SPREAD);
-    const update = () => setWide(query.matches);
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-  return wide;
 }
 
 /** Номера заданий — у блоков, которые делают, а не читают. */

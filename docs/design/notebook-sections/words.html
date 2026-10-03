@@ -1,0 +1,65 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Словарь тетради</title>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..600&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+.search{display:flex;align-items:center;gap:8px;height:44px;margin:12px 0 0;border-bottom:1.5px solid var(--input);color:var(--muted-foreground);font-size:15px}
+.seg{margin:12px 0 0;font-size:13.5px;color:var(--muted-foreground)} .seg b{color:var(--primary)}
+.lh{display:flex;align-items:baseline;gap:10px;margin:28px 0 4px;font-family:var(--print);font-size:17px;font-weight:600}
+.ln{font-family:var(--ui);font-size:12.5px;color:var(--muted-foreground);font-weight:600;min-width:22px}
+.lc{margin-left:auto;font-family:var(--ui);font-size:12.5px;font-weight:600;color:var(--muted-foreground)}
+.wl{list-style:none;margin:0;padding:0}
+.wl li{display:grid;grid-template-columns:minmax(0,auto) 1fr 26px;align-items:center;gap:10px;height:48px;border-bottom:1px solid var(--border);padding-left:32px}
+.wl li.on{background:var(--soft);border-radius:8px}
+.g{font-family:var(--print);font-size:18px;font-weight:600;white-space:nowrap} .g.ph{font-weight:400;font-style:italic}
+.r{font-family:var(--print);font-size:15px;color:var(--primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{width:26px;height:24px;display:flex;align-items:center;justify-content:center}
+.st.n:before{content:"";width:16px;height:16px;border:1.5px solid var(--input);border-radius:5px}
+.st.l:before{content:"";width:16px;height:16px;border:1.5px solid var(--primary);border-radius:5px;background:linear-gradient(135deg,transparent 50%,var(--soft) 50%)}
+.mk{width:26px;height:24px}
+.ws{margin-top:12px} .wd{margin:64px 40px 0}
+.wh{display:flex;justify-content:space-between;align-items:flex-start;margin-top:8px}
+.big{font-size:44px;font-weight:600;line-height:52px;margin:0} .ipa{margin:0;color:var(--muted-foreground);font-size:14px}
+.spk{width:56px;height:56px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;flex:none}
+.tr{font-family:var(--print);font-size:22px;color:var(--primary);margin:12px 0 0}
+.forms{font-size:15px;color:var(--muted-foreground);margin:6px 0 0;font-style:italic}
+.ex{margin:16px 0 0;font-size:16px;line-height:24px;border-left:2px solid var(--input);padding-left:12px} .ex span{font-weight:600}
+.sk{list-style:none;margin:4px 0 0;padding:0}
+.sk li{display:grid;grid-template-columns:1fr 70px 110px;gap:8px;align-items:center;height:44px;border-bottom:1px solid var(--border);font-size:15px}
+.sk .go{font-size:13px;font-weight:600;color:var(--primary);text-align:right} .sk .na{font-size:12px;color:var(--muted-foreground);white-space:nowrap}
+.sk .mk,.sk .cell{justify-self:center}
+.cell{width:16px;height:16px;border:1.5px solid var(--input);border-radius:5px;display:block}
+.pg{padding:40px 56px;overflow:hidden;position:relative}
+</style></head><body><svg width="0" height="0" style="position:absolute"><symbol id="tick" viewBox="0 0 26 24"><path d="M3 13.5c2.2 1.4 4 3.3 5.6 6.2C11.8 12.6 16.6 7 23 3.2" fill="none" stroke="#15803d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+
+<div class="intro"><h1>«Слова» → словарь тетради</h1><p>Слова и фразы курса по урокам, как словарь в конце учебника. Справа у каждой строки — состояние: пустая клетка — не начато, клетка в чернилах — учу, зелёная галочка — закреплено. Фразы — курсивом. Карточка слова — лист: слово, перевод чернилами, формы, пример, навыки слова с тренировкой каждого.</p></div>
+<div class="row">
+<div><div class="frame paper"><div class="screen"><div style="height:44px"></div><p class="date">Модуль 01 · Γνωριμία</p>
+<h1 class="ptitle">Словарь</h1>
+<div class="search"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Найти слово или фразу</span></div>
+<p class="seg"><b>все 10</b> · <span>учу 3</span> · <span>закреплены 3</span></p><h3 class="lh"><span class="ln">1.1</span>Знакомство и είμαι<span class="lc">3 из 5</span></h3><ul class="wl"><li><span class="g">γεια</span><span class="r">привет; пока</span><span class="st s" title="закреплено"><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg></span></li><li><span class="g">καλημέρα</span><span class="r">доброе утро, добрый день</span><span class="st s" title="закреплено"><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg></span></li><li><span class="g">είμαι</span><span class="r">быть</span><i class="st l" title="учу"></i></li><li><span class="g">από</span><span class="r">из, от</span><i class="st l" title="учу"></i></li><li><span class="g ph">Πώς σε λένε;</span><span class="r">Как тебя зовут?</span><span class="st s" title="закреплено"><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg></span></li></ul><h3 class="lh"><span class="ln">1.2</span>Знакомство, друзья и числа<span class="lc">0 из 5</span></h3><ul class="wl"><li><span class="g">ο φίλος</span><span class="r">друг</span><i class="st l" title="учу"></i></li><li><span class="g">η φίλη</span><span class="r">подруга</span><i class="st n" title="не начато"></i></li><li><span class="g">ένα</span><span class="r">один</span><i class="st n" title="не начато"></i></li><li><span class="g">δύο</span><span class="r">два</span><i class="st n" title="не начато"></i></li><li><span class="g ph">Χάρηκα πολύ.</span><span class="r">Очень приятно.</span><i class="st n" title="не начато"></i></li></ul><div class="cloud"><i>Сегодня</i><i>Курс</i><i class="on">Слова</i><i>Прогресс</i></div></div></div><p class="cap"><b>Список.</b> Поиск — строка на линейке. Фильтр — одна тихая строка вместо пилюль, наборов нет. Сверху — текущий модуль, ниже прокручиваются остальные.</p></div>
+<div><div class="frame paper"><div class="screen"><div style="height:44px"></div><div class="sheet ws">
+<p class="instr">Урок 1.1 · Знакомство и <span class="el">είμαι</span> →</p>
+<div class="wh"><div><p class="big el">είμαι</p><p class="ipa">[ˈime]</p></div><span class="spk"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+<p class="tr">быть</p>
+<p class="forms el">прош. ήμουν · буд. θα είμαι</p>
+<p class="ex el"><span>Είμαι η Άννα.</span> — Я Анна.</p>
+<p class="instr" style="margin-top:20px">Навыки слова</p>
+<ul class="sk"><li><span class="sn">Узнавание</span><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg><span class="go">потренировать</span></li><li><span class="sn">Сборка из слогов</span><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg><span class="go">потренировать</span></li><li><span class="sn">Написание</span><i class='cell'></i><span class="go">потренировать</span></li><li><span class="sn">Аудирование</span><i class='cell'></i><span class="go">потренировать</span></li><li><span class="sn">На слух</span><span class='na'>нет аудио</span><span class="go"></span></li></ul>
+<button class="btn" style="margin-top:16px">Потренировать слово</button>
+</div><div class="cloud"><i>Сегодня</i><i>Курс</i><i class="on">Слова</i><i>Прогресс</i></div></div></div><p class="cap"><b>Слово.</b> Лист поверх клетки. Пять «Пройти» стали строками навыков: галочка — навык проверен, клетка — ещё нет; «потренировать» — без учёта прогресса. Строка урока сверху ведёт в урок курса.</p></div>
+<div class="label"><b>Десктоп</b><span>разворот: слева словарь, справа открытое слово</span></div>
+<div class="wide paper"><div class="spread"><div class="pg"><p class="date">Модуль 01 · Γνωριμία</p>
+<h1 class="ptitle">Словарь</h1>
+<div class="search"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Найти слово или фразу</span></div>
+<p class="seg"><b>все 10</b> · <span>учу 3</span> · <span>закреплены 3</span></p><h3 class="lh"><span class="ln">1.1</span>Знакомство и είμαι<span class="lc">3 из 5</span></h3><ul class="wl"><li><span class="g">γεια</span><span class="r">привет; пока</span><span class="st s" title="закреплено"><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg></span></li><li><span class="g">καλημέρα</span><span class="r">доброе утро, добрый день</span><span class="st s" title="закреплено"><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg></span></li><li class="on"><span class="g">είμαι</span><span class="r">быть</span><i class="st l" title="учу"></i></li><li><span class="g">από</span><span class="r">из, от</span><i class="st l" title="учу"></i></li><li><span class="g ph">Πώς σε λένε;</span><span class="r">Как тебя зовут?</span><span class="st s" title="закреплено"><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg></span></li></ul><h3 class="lh"><span class="ln">1.2</span>Знакомство, друзья и числа<span class="lc">0 из 5</span></h3><ul class="wl"><li><span class="g">ο φίλος</span><span class="r">друг</span><i class="st l" title="учу"></i></li><li><span class="g">η φίλη</span><span class="r">подруга</span><i class="st n" title="не начато"></i></li><li><span class="g">ένα</span><span class="r">один</span><i class="st n" title="не начато"></i></li><li><span class="g">δύο</span><span class="r">два</span><i class="st n" title="не начато"></i></li><li><span class="g ph">Χάρηκα πολύ.</span><span class="r">Очень приятно.</span><i class="st n" title="не начато"></i></li></ul></div><div class="pg"><div class="sheet ws wd">
+<p class="instr">Урок 1.1 · Знакомство и <span class="el">είμαι</span> →</p>
+<div class="wh"><div><p class="big el">είμαι</p><p class="ipa">[ˈime]</p></div><span class="spk"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+<p class="tr">быть</p>
+<p class="forms el">прош. ήμουν · буд. θα είμαι</p>
+<p class="ex el"><span>Είμαι η Άννα.</span> — Я Анна.</p>
+<p class="instr" style="margin-top:20px">Навыки слова</p>
+<ul class="sk"><li><span class="sn">Узнавание</span><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg><span class="go">потренировать</span></li><li><span class="sn">Сборка из слогов</span><svg class='mk' viewBox='0 0 26 24'><use href='#tick'/></svg><span class="go">потренировать</span></li><li><span class="sn">Написание</span><i class='cell'></i><span class="go">потренировать</span></li><li><span class="sn">Аудирование</span><i class='cell'></i><span class="go">потренировать</span></li><li><span class="sn">На слух</span><span class='na'>нет аудио</span><span class="go"></span></li></ul>
+<button class="btn" style="margin-top:16px">Потренировать слово</button>
+</div></div></div><div class="cloud"><i>Сегодня</i><i>Курс</i><i class="on">Слова</i><i>Прогресс</i></div></div>
+</div><div style="height:60px"></div></body></html>

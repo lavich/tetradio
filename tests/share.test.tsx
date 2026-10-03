@@ -122,7 +122,8 @@ describe("кнопка «Поделиться» на экране слова", (
     );
   };
   const button = () => host.querySelector("[aria-label='Поделиться словом']");
-  const loaded = () => !!host.textContent?.includes("Потренировать слово");
+  const loaded = () =>
+    !!host.textContent?.includes("Потренировать слово") || !!host.textContent?.includes("Слово не найдено");
   async function until(check: () => boolean) {
     for (let i = 0; i < 200 && !check(); i++) await act(() => new Promise((resolve) => setTimeout(resolve, 10)));
     expect(check()).toBe(true);

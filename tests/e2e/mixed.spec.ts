@@ -56,9 +56,7 @@ async function prepare(page: Page, limit: number, options: Parameters<typeof see
   return seedMixedLesson(page, { targetDate: tomorrow(), ...options });
 }
 
-test("экран урока: группы двух видов, просмотр карточек, непроверяемая фраза и нетронутый раздел «Слова»", async ({
-  page,
-}) => {
+test("экран урока: группы двух видов, просмотр карточек, непроверяемая фраза; фразы в словаре", async ({ page }) => {
   test.setTimeout(120000);
   await page.addInitScript(NO_VOICE);
   await prepare(page, 4);
@@ -77,13 +75,13 @@ test("экран урока: группы двух видов, просмотр 
   const family = page.getByTestId("phrase-row").filter({ hasText: "Η οικογένειά μου" });
   await family.getByRole("button", { name: /Η οικογένειά μου/ }).click();
   await expect(family.getByTestId("phrase-details")).toContainText("Притяжательное μου");
-  // Раздел «Слова» остаётся словарём слов: фразы туда не попадают.
+  // Словарь показывает и слова, и фразы урока.
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await page.getByRole("searchbox").fill("Γράφω ένα");
-  await expect(page.getByTestId("word-count")).toHaveText("0 слов");
+  await expect(page.getByTestId("word-count")).toHaveText("0 слов · 1 фраза");
   await page.getByRole("searchbox").fill("γράφω");
   await expect(page.getByRole("link", { name: /γράφω/ })).toBeVisible();
-  await expect(page.getByTestId("word-count")).toHaveText("1 слово");
+  await expect(page.getByTestId("word-count")).toHaveText("1 слово · 1 фраза");
 });
 
 test("при системном голосе фраза без перевода проверяема аудированием", async ({ page }) => {

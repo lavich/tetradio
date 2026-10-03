@@ -51,7 +51,7 @@ async function until(check: () => boolean, what: string) {
   }
   throw new Error(`не дождались: ${what}\n${text()}`);
 }
-const choice = (label: string) => host.querySelector<HTMLButtonElement>(`[aria-label='${label}: пройти']`);
+const choice = (label: string) => host.querySelector<HTMLButtonElement>(`[aria-label='${label}: потренировать']`);
 
 describe("блок «Упражнения» на экране слова", () => {
   it("без файла и голоса аудирование и понимание на слух выключены с причиной, остальное доступно", async () => {
@@ -60,15 +60,16 @@ describe("блок «Упражнения» на экране слова", () =>
     await until(() => !!choice("Написание") && !choice("Написание")!.disabled, "блок упражнений");
     expect(choice("Узнавание")!.disabled).toBe(false);
     expect(choice("Сборка из слогов")!.disabled).toBe(false);
-    expect(choice("Аудирование")!.disabled).toBe(true);
-    expect(choice("Понимание на слух")!.disabled).toBe(true);
+    // Недоступный вид — без кнопки, с причиной в строке навыка.
+    expect(choice("Аудирование")).toBeNull();
+    expect(choice("Понимание на слух")).toBeNull();
     expect(text().split(NO_SOUND)).toHaveLength(3);
   });
-  it("у удалённого слова блока нет", async () => {
+  it("удалённое слово не открывается, блока нет", async () => {
     await installLessons(db, ["mech-4"]);
     await db.words.update("w093", { deletedAt: "2026-01-01T00:00:00.000Z" });
     await mount("/words/w093");
-    await until(() => text().includes("Потренировать слово"), "экран слова");
+    await until(() => text().includes("Слово не найдено"), "экран слова");
     expect(host.querySelector("[data-testid=word-exercises]")).toBeNull();
   });
   it("на карточке по ссылке блока нет", async () => {
