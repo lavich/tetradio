@@ -4,17 +4,12 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { installLessons, ready } from "./helpers";
 
-test("полная копия переносит слова, даты уроков и медиа в чистый профиль", async ({ browser }) => {
+test("полная копия переносит слова, уроки и медиа в чистый профиль", async ({ browser }) => {
   const source = await browser.newContext();
   const page = await source.newPage();
   await page.goto("/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
-  // Своя дата урока есть только в этом профиле: по ней и проверяем перенос.
-  await page.goto("/lessons/mech-2");
-  await page.locator("#date").fill("2026-11-20");
-  await page.getByRole("button", { name: "Сохранить дату" }).click();
-  await expect(page.getByText(/Дата сохранена/)).toBeVisible();
   // Картинку слова скачивает просмотр карточки.
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await page.getByRole("searchbox").fill("φίλος");
@@ -64,12 +59,6 @@ test("полная копия переносит слова, даты уроко
   const fresh = await clean.newPage();
   await fresh.goto("/");
   await ready(fresh);
-  await fresh.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
-  await fresh.getByRole("button", { name: "Задать расписание" }).click();
-  await fresh.locator("#start").fill("2026-12-01");
-  await fresh.getByRole("button", { name: "Пн", exact: true }).click();
-  await fresh.getByRole("button", { name: "Сохранить" }).click();
-  await expect(fresh.getByText(/Пн, первое занятие/)).toBeVisible();
   await fresh.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await fresh.getByRole("link", { name: /Копия данных/ }).click();
   await fresh.locator("#backup").setInputFiles(file);
@@ -86,10 +75,8 @@ test("полная копия переносит слова, даты уроко
   await fresh.getByRole("searchbox").fill("φίλος");
   await fresh.getByRole("link", { name: /ο φίλος/ }).click();
   await expect(fresh.getByTestId("word-art")).toBeVisible();
-  await fresh.goto("/lessons/mech-2");
-  await expect(fresh.locator("#date")).toHaveValue("2026-11-20");
-  await fresh.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
-  await expect(fresh.getByText("Не задано — даты уроков назначаются вручную")).toBeVisible();
+  await fresh.goto("/words");
+  await expect(fresh.getByRole("link", { name: /ο φίλος/ })).toBeVisible(); // уроки и слова на месте
   await clean.close();
 });
 

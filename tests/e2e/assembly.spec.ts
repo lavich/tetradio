@@ -65,7 +65,7 @@ const dueWithHistory = (page: import("@playwright/test").Page, wordId: string, t
   );
 
 async function openAssembly(page: import("@playwright/test").Page) {
-  await page.getByRole("button", { name: /Начать занятие/ }).click();
+  await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   for (let step = 0; step < 12; step++) {
     await page.waitForTimeout(120);

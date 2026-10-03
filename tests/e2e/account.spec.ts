@@ -79,7 +79,7 @@ test("смена аккаунта A → B на том же устройстве:
   await installLessons(page, ["mech-1"]);
   await onlyReviews(page);
   await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], dbOf(A));
-  await page.getByRole("button", { name: /Начать занятие/ }).click();
+  await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
   await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
@@ -92,7 +92,7 @@ test("смена аккаунта A → B на том же устройстве:
   await page.goto("/words");
   await expect(page.getByTestId("word-count")).toHaveText("0 слов");
   await page.goto("/");
-  await expect(page.getByRole("button", { name: /Продолжить занятие/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Продолжить повторение" })).toHaveCount(0);
   await page.goto("/more");
   await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", /synced|idle/, { timeout: 15000 });
   // Перезагрузка без hash восстанавливает контекст вкладки — это B, а не A.
@@ -109,7 +109,7 @@ test("смена аккаунта A → B на том же устройстве:
   await page.goto("/");
   await expect(page.getByTestId("launch-error")).toContainText("не совпали с этим запуском");
   expect(await page.evaluate(() => sessionStorage.getItem("tetradio:launch"))).toBeNull();
-  await page.goto(`/lessons${launchHash({ userId: A })}`); // другой путь: не переход по hash в том же документе
+  await page.goto(`/words${launchHash({ userId: A })}`); // другой путь: не переход по hash в том же документе
   await expect(page.getByRole("navigation")).toBeVisible();
   await page.goto("/more");
   await expect(page.getByTestId("storage-scope")).toContainText("Telegram: облачная синхронизация");

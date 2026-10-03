@@ -42,34 +42,28 @@ test.describe("запуск внутри Telegram", () => {
     const { launchHash } = await import("./telegram");
     await page.goto(`/${launchHash({})}`);
     await expect(page.getByTestId("today-title")).toBeVisible();
-    await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
     await expect(page.getByRole("button", { name: "Назад" })).toHaveCount(0);
-    await page.getByRole("link", { name: /1\.2/ }).click();
+    await page.getByRole("link", { name: "Настройки" }).click();
     await expect(page.getByRole("button", { name: "Назад" })).toBeVisible(); // нативной кнопки нет — внутренняя остаётся
   });
 });
 
 test.describe("навигация, тема и размеры", () => {
-  test("BackButton скрыт на «Сегодня», ведёт назад из урока и слова, из занятия выходит с сохранением ответов", async ({
+  test("BackButton скрыт на «Сегодня», ведёт назад из слова, из занятия выходит с сохранением ответов", async ({
     page,
   }) => {
     await openTelegram(page, { noCloud: true }); // без облака: подготовленная в базе история не отсекается базой синхронизации
     await installLessons(page, ["mech-1"]);
     const bridge = tg(page);
     expect(await bridge.backVisible()).toBe(false);
-    await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
     await expect.poll(() => bridge.backVisible()).toBe(true);
-    await page.getByRole("link", { name: /1\.1/ }).click();
-    await expect(page.getByRole("heading", { name: /^Слова · \d+$/ })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Назад" })).toHaveCount(0); // внутренняя стрелка заменена нативной
-    await bridge.back();
-    await expect(page).toHaveURL(/\/lessons$/);
-    await page.getByRole("link", { name: /1\.1/ }).click();
     await page.getByRole("link", { name: /δουλεύω/ }).click();
     await expect(page.getByRole("button", { name: "Потренировать слово" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Назад" })).toHaveCount(0); // внутренняя стрелка заменена нативной
     await bridge.back();
-    await expect(page.getByRole("heading", { name: /^Слова · \d+$/ })).toBeVisible();
-    await bridge.back();
+    await expect(page).toHaveURL(/\/words$/);
     await bridge.back();
     await expect(page).toHaveURL(/\/$/);
     await expect.poll(() => bridge.backVisible()).toBe(false);
@@ -88,7 +82,7 @@ test.describe("навигация, тема и размеры", () => {
       ],
       TG_DB,
     );
-    await page.getByRole("button", { name: /Начать занятие/ }).click();
+    await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
     await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
     await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
@@ -96,12 +90,12 @@ test.describe("навигация, тема и размеры", () => {
     expect(calls.filter((call) => call.startsWith("haptic:"))).toHaveLength(1);
     // Закрытие Mini App после ответа: перезагрузка возвращает в сохранённое занятие, ответ учтён один раз.
     await page.goto("/");
-    await page.getByRole("button", { name: /Продолжить занятие/ }).click();
+    await page.getByRole("button", { name: "Продолжить повторение" }).click();
     await expect(page.getByTestId("prompt").first()).toBeVisible();
     await expect(page.getByRole("button", { name: "Далее", exact: true, disabled: false })).toHaveCount(0); // продолжаем со следующего упражнения
     await bridge.back(); // нативный «Назад» = существующий выход из занятия
     await expect(page.getByTestId("today-title")).toBeVisible();
-    await expect(page.getByRole("button", { name: /Начать занятие/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Повторить карточки" })).toBeVisible();
     const events = await page.evaluate(async () => {
       const request = indexedDB.open("tetradio-tg-tetradio_local-1001");
       const database = await new Promise<IDBDatabase>((resolve) => {
@@ -134,7 +128,7 @@ test.describe("навигация, тема и размеры", () => {
     expect((await color("--muted-foreground")).length).toBeGreaterThan(0);
     await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
-    await page.getByRole("button", { name: /Начать занятие/ }).click();
+    await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
     const prompt = await page.getByTestId("prompt").first().innerText();
     await tg(page).setTheme("light", LIGHT);
@@ -149,7 +143,7 @@ test.describe("навигация, тема и размеры", () => {
     await expect.poll(() => tick.evaluate((node) => getComputedStyle(node).color)).not.toBe(light);
     await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
   });
-  test("во весь экран: контент начинается ниже системной строки и кнопок клиента, режим виден на «Ещё»", async ({
+  test("во весь экран: контент начинается ниже системной строки и кнопок клиента, режим виден на «Прогрессе»", async ({
     page,
   }) => {
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 47, contentTop: 46 });
@@ -170,9 +164,10 @@ test.describe("навигация, тема и размеры", () => {
     await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
-    await page.getByRole("button", { name: /Начать занятие/ }).click();
+    await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
     await expect(page.getByRole("button", { name: "Закрыть занятие" })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Повторение" })).toBeVisible();
     const title = await page.getByRole("heading", { name: "Повторение" }).boundingBox();
     expect(title!.y).toBeGreaterThanOrEqual(47 + 46);
     await expect(page.getByLabel(/^(Знакомство|Упражнение) \d+ из \d+$/)).toBeVisible(); // счётчик — в облачке снизу
@@ -181,8 +176,7 @@ test.describe("навигация, тема и размеры", () => {
   });
   test("во весь экран заголовок экрана стоит в полосе кнопок клиента, а не строкой под ними", async ({ page }) => {
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 47, contentTop: 46 });
-    await installLessons(page, ["mech-1"]);
-    await page.goto("/lessons/mech-1");
+    await page.goto("/more/settings");
     const title = await page.getByRole("banner").getByRole("heading", { level: 1 }).boundingBox();
     expect(title!.y).toBeGreaterThanOrEqual(47);
     expect(title!.y + title!.height).toBeLessThanOrEqual(47 + 46);
@@ -194,8 +188,7 @@ test.describe("навигация, тема и размеры", () => {
   }) => {
     await page.setViewportSize({ width: 1000, height: 700 });
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 0, contentTop: 46 });
-    await installLessons(page, ["mech-1"]);
-    await page.goto("/lessons/mech-1");
+    await page.goto("/more/settings");
     const banner = await page.getByRole("banner").boundingBox();
     expect(banner!.width).toBe(1000);
     const title = page.getByRole("banner").getByRole("heading", { level: 1 });
@@ -265,7 +258,7 @@ test.describe("навигация, тема и размеры", () => {
     await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall", "recognition", "assembly", "assembly"] }], TG_DB);
-    await page.getByRole("button", { name: /Начать занятие/ }).click();
+    await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
     await expect(page.getByTestId("prompt").first()).toHaveText("Напиши по-гречески");
     const overflow = () =>
@@ -305,7 +298,7 @@ test.describe("навигация, тема и размеры", () => {
     await installLessons(page, ["mech-1"]);
     await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
-    await page.getByRole("button", { name: /Начать занятие/ }).click();
+    await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
     const prompt = await page.getByTestId("prompt").first().innerText();
     const height = () =>
@@ -406,7 +399,7 @@ test.describe("аудио, копии и облако", () => {
       [{ wordId: "w038", tested: ["recall", "recognition", "assembly", "assembly", "spelling"], audio: true }],
       TG_DB,
     );
-    await page.getByRole("button", { name: /Начать занятие/ }).click();
+    await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
     await expect(page.getByTestId("prompt").first()).toHaveText("Что прозвучало?");
     await expect(page.getByTestId("audio-failed")).toBeVisible();
@@ -530,7 +523,7 @@ test.describe("аудио, копии и облако", () => {
       ],
       TG_DB,
     );
-    await page.getByRole("button", { name: /Начать занятие/ }).click();
+    await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
     await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
     await page.getByRole("button", { name: "Далее", exact: true }).click();
@@ -562,9 +555,9 @@ test.describe("аудио, копии и облако", () => {
         { timeout: 20000 },
       )
       .toBe(2);
-    await tablet.goto("/lessons");
-    // Пакет догружен из каталога: строка урока, а не строка «не загружен».
-    await expect(tablet.getByRole("link", { name: /^1\.1 · (?!не загружен)/ })).toBeVisible();
+    // Пакет догружен из каталога: слова урока на планшете уже в словаре.
+    await tablet.goto("/words");
+    await expect(tablet.getByRole("link", { name: /δουλεύω/ })).toBeVisible();
     await second.close();
     // Другой аккаунт на том же устройстве: пустой профиль, чужие данные не показываются и не уходят в его облако.
     const third = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -586,7 +579,7 @@ test.describe("аудио, копии и облако", () => {
     await page.goto("/more");
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "disabled");
     await expect(page.getByTestId("sync-status")).not.toContainText("Синхронизировано");
-    await page.goto("/lessons/mech-1");
+    await page.goto("/more/settings");
     await expect(page.getByRole("button", { name: "Назад" })).toBeVisible(); // BackButton требует 6.1 — внутренняя остаётся
   });
 });
@@ -610,9 +603,8 @@ test.describe("ссылка на слово через бота", () => {
     await launch(page, { startParam: "w_w093", queryId: "Q1" });
     await expect(page).toHaveURL(/\/share\/word\/w093$/);
     await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
-    // Урок ставится только из раздела «Уроки»; после этого у слова курса появляется кнопка.
-    await page.goto("/lessons/mech-4");
-    await page.getByRole("heading", { name: /^Слова · \d+$/ }).waitFor({ timeout: 20000 });
+    // После установки урока у слова курса появляется кнопка.
+    await installLessons(page, ["mech-4"]);
     await page.goto("/words/w093");
     await page.reload();
     await page.getByRole("button", { name: "Поделиться словом" }).click();
@@ -632,11 +624,11 @@ test.describe("ссылка на слово через бота", () => {
     await page.addInitScript(bridgeScript({ noCloud: true }));
     await launch(page, { startParam: "w_w093", queryId: "Q1" });
     await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
-    await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
-    await expect(page).toHaveURL(/\/lessons$/);
+    await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
+    await expect(page).toHaveURL(/\/words$/);
     await page.reload();
-    await expect(page.getByRole("link", { name: /1\.2/ })).toBeVisible();
-    await expect(page).toHaveURL(/\/lessons$/);
+    await expect(page.getByRole("heading", { name: "Словарь", level: 1 })).toBeVisible();
+    await expect(page).toHaveURL(/\/words$/);
     await launch(page, { startParam: "w_w041", queryId: "Q2" }, "/more");
     await expect(page).toHaveURL(/\/share\/word\/w041$/);
     await expect(page.getByText("η χώρα", { exact: true }).first()).toBeVisible();

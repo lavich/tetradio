@@ -36,11 +36,8 @@ export function EntrySheet({
     return <p className={css.empty}>{kind === "word" ? "Слово не найдено." : "Фраза не найдена."}</p>;
   return (
     <article className={css.sheet} aria-label={kind === "word" ? word!.greek : phrase!.text} data-testid="entry-sheet">
-      {lesson && (
-        <Link
-          className={css.from}
-          to={lesson.moduleId ? `/course/${lesson.moduleId}/${lesson.id}` : `/lessons/${lesson.id}`}
-        >
+      {lesson?.moduleId && (
+        <Link className={css.from} to={`/course/${lesson.moduleId}/${lesson.id}`}>
           {lesson.number ? `Урок ${lesson.number} · ` : ""}
           <span lang="el">{lesson.title}</span> →
         </Link>

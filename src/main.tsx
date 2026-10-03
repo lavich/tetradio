@@ -9,18 +9,20 @@ import { App } from "./app/App";
 import { CrashScreen } from "./app/CrashScreen";
 import { LaunchGate, type LaunchStop } from "./app/LaunchGate";
 import { Recovery } from "./app/Recovery";
-import { refreshCatalog, syncCourses } from "./content/client";
+import { installLesson, refreshCatalog, syncCourses } from "./content/client";
 import { forgetLaunch } from "./platform/launch";
 import { initPlatform, telegramBridge } from "./platform/platform";
 import { installEarlyHandlers, reportError, setReportingEnabled } from "./reporting/reporting";
 import { bindReportingToSettings } from "./reporting/settings";
 import { db, ensureDefaults } from "./storage/db";
 import { settleLessons } from "./storage/ops";
-import { launchProfile, ownerMatches, type Profile } from "./storage/profile";
+import { launchProfile, MOCK_USER, ownerMatches, type Profile } from "./storage/profile";
 import "./styles.css";
 
 // Ранние обработчики ошибок ставятся до всего остального: отказы запуска копятся до загрузки SDK отчётов.
 installEarlyHandlers();
+// Только в сборке с моком Telegram: e2e ставят отдельные уроки фикстуры, экрана урока вне курса нет.
+if (MOCK_USER !== null) Object.assign(window, { __installLesson: installLesson });
 export const updateReady = { value: false, apply: () => {} };
 // WebView без service worker не должен обрушить запуск: регистрация обёрнута, обновления просто недоступны.
 try {

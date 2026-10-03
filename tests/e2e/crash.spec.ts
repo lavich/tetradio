@@ -37,7 +37,7 @@ test("падение во время занятия: экран сбоя с пе
   await page.goto("/");
   await ready(page);
   await installLessons(page, ["mech-1", "mech-2", "mech-3", "mech-4"]);
-  await page.getByRole("button", { name: "Начать занятие" }).click();
+  await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   await expect(page.getByTestId("lesson-label")).toBeVisible();
   // Хранилище отказывает навсегда: чтение при рендере бросает исключение, три переоткрытия не помогают.
@@ -54,5 +54,5 @@ test("падение во время занятия: экран сбоя с пе
   // Граница ошибок в базу не писала: занятие осталось активным, и «Сегодня» предлагает продолжить его.
   await page.goto("/");
   await ready(page);
-  await expect(page.getByRole("button", { name: "Продолжить занятие" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Продолжить повторение" })).toBeVisible();
 });

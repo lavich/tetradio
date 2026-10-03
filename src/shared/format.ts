@@ -16,7 +16,6 @@ export const withCount = (count: number, forms: [string, string, string]) => `${
 export const WORDS: [string, string, string] = ["слово", "слова", "слов"];
 export const CARDS: [string, string, string] = ["карточка", "карточки", "карточек"];
 export const PHRASES: [string, string, string] = ["фраза", "фразы", "фраз"];
-export const DAYS: [string, string, string] = ["день", "дня", "дней"];
 export const LESSONS: [string, string, string] = ["занятия", "занятий", "занятий"];
 export const LESSONS_COUNT: [string, string, string] = ["урок", "урока", "уроков"];
 const day = (value: string) => new Date(`${value}T12:00:00Z`);

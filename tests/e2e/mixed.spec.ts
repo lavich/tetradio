@@ -56,25 +56,10 @@ async function prepare(page: Page, limit: number, options: Parameters<typeof see
   return seedMixedLesson(page, { targetDate: tomorrow(), ...options });
 }
 
-test("экран урока: группы двух видов, просмотр карточек, непроверяемая фраза; фразы в словаре", async ({ page }) => {
+test("фразы смешанного урока — в словаре вместе со словами", async ({ page }) => {
   test.setTimeout(120000);
   await page.addInitScript(NO_VOICE);
   await prepare(page, 4);
-  await page.goto("/lessons/lesson-mixed");
-  await expect(page.getByTestId("composition")).toContainText("7 карточек: 1 слово · 6 фраз");
-  await expect(page.getByRole("heading", { name: "Слова · 1" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Фразы · 6" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Заполни пропуск/ })).toHaveCount(0); // снятого вида на экране нет
-  // Фраза без перевода и озвучки помечена отдельно и объясняет ограничение при раскрытии.
-  const silent = page.getByTestId("phrase-row").filter({ hasText: "Ο γιος μου είναι γιατρός." });
-  await expect(silent.getByTestId("unavailable-badge")).toHaveText("Нет доступного упражнения");
-  await silent.getByRole("button", { name: "Ο γιος μου είναι γιατρός." }).click();
-  await expect(silent.getByTestId("phrase-details")).toContainText("нельзя проверить объективно");
-  await expect(page.getByText("1 фраза без доступного упражнения")).toBeVisible();
-  // Просмотр фразы: перевод в подписи, примечание из материала — в раскрытии.
-  const family = page.getByTestId("phrase-row").filter({ hasText: "Η οικογένειά μου" });
-  await family.getByRole("button", { name: /Η οικογένειά μου/ }).click();
-  await expect(family.getByTestId("phrase-details")).toContainText("Притяжательное μου");
   // Словарь показывает и слова, и фразы урока.
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await page.getByRole("searchbox").fill("Γράφω ένα");
@@ -88,50 +73,15 @@ test("при системном голосе фраза без перевода 
   test.setTimeout(150000);
   await page.addInitScript(GREEK_VOICE);
   await prepare(page, 4);
-  await page.goto("/lessons/lesson-mixed");
-  const silent = page.getByTestId("phrase-row").filter({ hasText: "Ο γιος μου είναι γιατρός." });
-  await expect(silent.getByTestId("unavailable-badge")).toHaveCount(0);
-  await expect(page.getByText("без доступного упражнения")).toHaveCount(0);
-  // Ручная тренировка группы фраз начинается: знакомства, затем проверки.
-  await page.getByTestId("group-phrase").getByRole("button", { name: "Потренировать группу" }).click();
+  // Фраза без перевода: с голосом её тренировка начинается знакомством, затем идёт проверка.
+  await page.goto("/words/phrase/p-silent");
+  await page.getByRole("button", { name: "Потренировать фразу" }).click();
   await page.waitForURL("**/session");
   for (let step = 0; step < 10; step++) {
     if ((await promptOf(page)) !== "Новая фраза") break;
     await advance(page);
   }
   expect(INTRO).not.toContain(await promptOf(page)); // знакомства закончились, идёт проверка
-});
-
-test("урок без слов не пуст, а группа без доступных заданий сообщает об этом", async ({ page }) => {
-  test.setTimeout(120000);
-  await page.addInitScript(NO_VOICE);
-  await page.goto("/");
-  await ready(page);
-  await installLessons(page, ["mech-1"]);
-  await seedMixedLesson(page, {
-    lessonId: "lesson-text",
-    title: "Только фразы",
-    only: ["p-grafo", "p-silent"],
-  });
-  await seedMixedLesson(page, { lessonId: "lesson-silent", title: "Без перевода", only: ["p-silent"] });
-  await page.goto("/lessons/lesson-text");
-  await expect(page.getByTestId("composition")).toContainText("2 карточки: 2 фразы");
-  await expect(page.getByRole("heading", { name: /^Слова ·/ })).toHaveCount(0);
-  await expect(page.getByText("В уроке пока нет карточек")).toHaveCount(0);
-  // Пока в группе есть проверяемая фраза, тренировка начинается.
-  await page.getByTestId("group-phrase").getByRole("button", { name: "Потренировать группу" }).click();
-  await page.waitForURL("**/session");
-  await expect(page.getByTestId("prompt").first()).toHaveText(/Новая фраза|Что значит эта фраза\?|Напиши по-гречески/);
-  // Группа из одной непроверяемой фразы: тренировка не начинается, сообщение на месте.
-  await page.goto("/lessons/lesson-silent");
-  await expect(page.getByRole("heading", { name: "Фразы · 1" })).toBeVisible();
-  await page.getByTestId("group-phrase").getByRole("button", { name: "Потренировать группу" }).click();
-  await expect(page.getByRole("alert")).toContainText("В группе «Фразы» нет доступных заданий");
-  await expect(page).toHaveURL(/\/lessons\/lesson-silent$/);
-  // Список уроков считает карточки, а не слова.
-  await page.goto("/lessons");
-  await expect(page.getByRole("link", { name: /Только фразы/ })).toContainText("2 карточки");
-  await expect(page.getByRole("link", { name: /Без перевода/ })).toContainText("1 карточка");
 });
 
 test("занятие: знакомство с фразой, «Не знаю» с дополнительной попыткой и продолжение после перезапуска без сети", async ({
@@ -144,7 +94,7 @@ test("занятие: знакомство с фразой, «Не знаю» с
   await page.setViewportSize({ width: 360, height: 560 }); // узкая ширина с местом под экранную клавиатуру; остальные сценарии идут на 390 из конфигурации
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));
   await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 20000 });
-  await page.getByRole("button", { name: "Начать занятие" }).click();
+  await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
 
   // Знакомства всех новых видов идут общим проходом до проверок.
@@ -202,7 +152,7 @@ test("занятие: знакомство с фразой, «Не знаю» с
       await context.setOffline(true);
       await page.goto("/");
       await ready(page);
-      await page.getByRole("button", { name: /Продолжить занятие/ }).click();
+      await page.getByRole("button", { name: "Продолжить повторение" }).click();
       await page.waitForURL("**/session");
       await expect(page.getByRole("button", { name: "Далее", exact: true, disabled: false })).toHaveCount(0);
       expect(INTRO).not.toContain(await page.getByTestId("prompt").first().innerText());
@@ -243,7 +193,7 @@ test("полная копия переносит смешанный урок с 
   const page = await source.newPage();
   await page.addInitScript(NO_VOICE);
   await prepare(page, 3);
-  await page.getByRole("button", { name: "Начать занятие" }).click();
+  await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   for (let step = 0; step < 20; step++) {
     const prompt = await promptOf(page);
@@ -316,14 +266,13 @@ test("полная копия переносит смешанный урок с 
     fresh.getByRole("button", { name: "Заменить", exact: true }).click(),
   ]);
   await expect(fresh.getByText("Данные восстановлены полностью.")).toBeVisible();
-  await fresh.goto("/lessons/lesson-mixed");
-  await expect(fresh.getByTestId("composition")).toContainText("7 карточек: 1 слово · 6 фраз");
-  await expect(fresh.getByRole("heading", { name: "Фразы · 6" })).toBeVisible();
+  await fresh.goto("/words");
+  await expect(fresh.getByRole("region", { name: "Смешанный урок" })).toContainText("Η οικογένειά μου");
   expect((await readTable(fresh, "events")).length).toBe(events);
   expect((await readTable(fresh, "cardStates")).length).toBe(states);
   await fresh.goto("/");
   await ready(fresh);
-  await expect(fresh.getByRole("button", { name: /Продолжить занятие/ })).toBeVisible(); // занятие продолжается на втором профиле
+  await expect(fresh.getByRole("button", { name: "Продолжить повторение" })).toBeVisible(); // занятие продолжается на втором профиле
   await clean.close();
 });
 
@@ -338,7 +287,7 @@ test("внутри Telegram: возврат из свёрнутого клиен
   await onlyReviews(page);
   await setCourseLimit(page, "mechanics", 2, TG_DB);
   await seedMixedLesson(page, { targetDate: today(), only: ["p-grafo", "p-xora"], databaseName: TG_DB });
-  await page.getByRole("button", { name: /Начать занятие/ }).click();
+  await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   // Знакомства проходим, дальше берём первое же задание: тип выбирает планировщик.
   for (let step = 0; step < 8; step++) {

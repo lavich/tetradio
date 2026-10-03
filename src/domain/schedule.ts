@@ -25,19 +25,6 @@ export function lessonOrder(a: Lesson, b: Lesson): number {
   return a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id);
 }
 
-/**
- * Порядок показа в списках: сначала наборы с датой по возрастанию, затем без даты по времени создания.
- * Это не порядок расписания — даты назначает `lessonOrder` по номерам в названии; два правила лежат
- * рядом, чтобы не разъехались.
- */
-export const byTargetDate = (
-  a: { targetDate: string | null; createdAt: string },
-  b: { targetDate: string | null; createdAt: string },
-): number =>
-  Number(!!b.targetDate) - Number(!!a.targetDate) ||
-  (a.targetDate ?? "").localeCompare(b.targetDate ?? "") ||
-  a.createdAt.localeCompare(b.createdAt);
-
 /** Урок без известного курса живёт по часу по умолчанию. */
 export function preparedByCourse(courses: Course[], now: Date, timezone: string): (courseId?: string) => string {
   const byId = new Map(

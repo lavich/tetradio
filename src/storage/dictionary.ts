@@ -39,7 +39,7 @@ export async function dictionary(database: AppDatabase = db): Promise<Dictionary
     })),
   ]);
   const inCourse = new Set(lessons.map(({ lesson }) => lesson.id));
-  // Уроки вне модулей (старые наборы и тренировочные пакеты) — в конце, пока этот путь не удалён.
+  // Уроки вне модулей остаются в старых профилях: их слова — в конце словаря, без модуля и без ссылки на урок.
   const loose = (await database.lessons.toArray())
     .filter((lesson) => !inCourse.has(lesson.id))
     .map((lesson) => ({

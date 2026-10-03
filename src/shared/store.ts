@@ -7,8 +7,6 @@ import {
   coursePhase,
   ensureAsset,
   firstLessonOf,
-  installPhase,
-  lessonReadiness,
   previewMedia,
   subscribeCatalog,
   subscribeInstall,
@@ -18,7 +16,7 @@ import { makePlan } from "../domain/learning";
 import { progress } from "../domain/stats";
 import { defaultSettings, type Session } from "../domain/types";
 import { db } from "../storage/db";
-import { dexieSource, lessonDetail, lessonsOfWord, lessonViews, loadSettings } from "../storage/queries";
+import { dexieSource, lessonViews, loadSettings } from "../storage/queries";
 
 /**
  * Каждый экран подписывается только на свою выборку. Общего реактивного снимка базы больше нет:
@@ -30,11 +28,9 @@ export function useSettings() {
 }
 export const useLessons = (withProgress = false) => useLiveQuery(() => lessonViews(db, withProgress), [withProgress]);
 /** `undefined` — ещё читается, `null` — урока нет локально. */
-export const useLesson = (id: string | undefined) => useLiveQuery(() => (id ? lessonDetail(id) : null), [id]);
 export const useWord = (id: string | undefined) => useLiveQuery(() => (id ? db.words.get(id) : undefined), [id]);
 export const usePhrase = (id: string | undefined) =>
   useLiveQuery(async () => (id ? ((await db.phrases.get(id)) ?? null) : undefined), [id]);
-export const useWordLessons = (id: string | undefined) => useLiveQuery(() => (id ? lessonsOfWord(id) : []), [id]) ?? [];
 export const usePlan = (now: Date) => useLiveQuery(() => makePlan(dexieSource(), now), [now.getTime()]);
 export const useStats = (now: Date) => useLiveQuery(() => progress(dexieSource(), now), [now.getTime()]);
 export const useActiveSession = (): Session | undefined | null =>
@@ -61,8 +57,6 @@ export const useCounts = () =>
 
 export const useCatalog = () =>
   useLiveQuery(async () => ({ entries: await db.catalog.toArray(), packages: await db.packages.toArray() }), []);
-export const useInstallPhase = (lessonId: string | undefined) =>
-  useSyncExternalStore(subscribeInstall, () => installPhase(lessonId ?? ""));
 export const useCatalogPhase = () => useSyncExternalStore(subscribeCatalog, catalogPhase);
 /** Урок каталога, из которого слово: `undefined` — ещё читается, `null` — слова в каталоге нет. */
 export const useWordLesson = (id: string | undefined) =>
@@ -77,11 +71,6 @@ export const useShippedWord = (id: string | undefined) =>
 export const useCourses = () => useLiveQuery(() => db.courses.toArray(), []);
 export const useCoursePhase = (courseId: string | undefined) =>
   useSyncExternalStore(subscribeInstall, () => coursePhase(courseId ?? ""));
-export const useReadiness = (lessonId: string | undefined) =>
-  useLiveQuery(() => (lessonId ? lessonReadiness(lessonId) : undefined), [lessonId]);
-/** Число живых фраз: достаточность пула вариантов для аудирования фраз без перевода. */
-export const usePhraseCount = () =>
-  useLiveQuery(async () => (await db.phrases.count()) - (await db.phrases.where("deletedAt").above("").count()), []);
 
 /**
  * Откуда карточка берёт файлы медиа. По умолчанию — из базы: файл докачивается и сохраняется, как при установке.

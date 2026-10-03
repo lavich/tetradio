@@ -15,8 +15,6 @@ import ui from "../shared/ui.module.css";
 
 const named = <K extends string>(key: K, load: () => Promise<Record<K, React.ComponentType>>) =>
   lazy(() => loadScreen(load).then((module) => ({ default: module[key] })));
-const LessonsScreen = named("LessonsScreen", () => import("../features/lessons/LessonsScreen"));
-const LessonScreen = named("LessonScreen", () => import("../features/lessons/LessonScreen"));
 const CourseScreen = named("CourseScreen", () => import("../features/course/screens"));
 const ModuleScreen = named("ModuleScreen", () => import("../features/course/screens"));
 const CourseLessonScreen = named("CourseLessonScreen", () => import("../features/course/screens"));
@@ -84,8 +82,7 @@ export function App() {
           <Route path="/course" element={<CourseScreen />} />
           <Route path="/course/:moduleId" element={<ModuleScreen />} />
           <Route path="/course/:moduleId/:lessonId" element={<CourseLessonScreen />} />
-          <Route path="/lessons" element={<LessonsScreen />} />
-          <Route path="/lessons/:id" element={<LessonScreen />} />
+          <Route path="/lessons/*" element={<Navigate to="/course" replace />} />
           <Route path="/words" element={<WordsScreen />} />
           <Route path="/words/:id" element={<WordScreen />} />
           <Route path="/words/phrase/:id" element={<PhraseScreen />} />

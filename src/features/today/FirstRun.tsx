@@ -1,18 +1,16 @@
-import { BookOpen, GraduationCap, RefreshCw } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "cn";
+import { GraduationCap, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Course } from "../../domain/types";
 import { installCourse } from "../../content/client";
 import { CARDS, LESSONS_COUNT, withCount } from "../../shared/format";
-import { useCoursePhase } from "../../shared/store";
+import { useCatalog, useCoursePhase, useCourses } from "../../shared/store";
 import type { StoredCatalogEntry } from "../../storage/db";
 import ui from "../../shared/ui.module.css";
 
 /**
- * Первый запуск: на устройстве нет ни одного урока. Первый шаг — курс целиком, как «Учить курс» на «Уроках»:
- * после загрузки план сразу даёт карточки на сегодня, а расписание занятий задаётся потом, когда оно нужно.
+ * Первый запуск: на устройстве нет ни одного урока. Первый шаг — курс целиком: после загрузки «Сегодня»
+ * ведёт к первому уроку, а карточки приходят из пройденных уроков.
  */
 export function FirstRun({ courses, entries }: { courses: Course[]; entries: StoredCatalogEntry[] }) {
   const course = courses.find(
@@ -59,12 +57,15 @@ export function FirstRun({ courses, entries }: { courses: Course[]; entries: Sto
           </Button>
         </div>
       ) : (
-        <p className={ui.hint}>Уроки загрузятся на устройство; расписание занятий можно задать потом.</p>
+        <p className={ui.hint}>Уроки загрузятся на устройство и будут доступны без сети.</p>
       )}
-      <Link to="/lessons" className={cn(buttonVariants({ variant: "soft", size: "md" }), "mt-4")}>
-        <BookOpen data-icon="inline-start" />
-        Выбрать отдельный урок
-      </Link>
     </>
   );
+}
+
+/** Начало курса там, где каталог есть, а уроков на устройстве ещё нет: на полке и на «Сегодня». */
+export function CourseStart() {
+  const courses = useCourses();
+  const catalog = useCatalog();
+  return <FirstRun courses={courses ?? []} entries={catalog?.entries ?? []} />;
 }
