@@ -5,7 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { cx } from "../../shared/cx";
 import { withCount, WORDS } from "../../shared/format";
-import { useSpread } from "../../shared/spread";
+import { useSpread } from "../../shared/media";
+import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
 import { dictionary, matchesQuery, type CardMark, type DictionaryEntry } from "../../storage/dictionary";
 import { EntrySheet } from "./WordSheet";
@@ -31,9 +32,9 @@ export function WordsScreen() {
   return (
     <Screen wide={spread} paper>
       {spread ? (
-        <div className={css.spread}>
+        <div className={cx(nb.spread, nb.spine, css.spread)}>
           <Dictionary lessons={lessons} />
-          <div className={css.page}>
+          <div className={cx(nb.page, css.page)}>
             <p className={css.pick}>Выберите слово — оно откроется на этой странице.</p>
           </div>
         </div>
@@ -58,9 +59,9 @@ export function EntryScreen({ kind }: { kind: "word" | "phrase" }) {
     );
   return (
     <Screen wide paper>
-      <div className={css.spread}>
+      <div className={cx(nb.spread, nb.spine, css.spread)}>
         <Dictionary lessons={lessons} current={`${kind}:${id}`} />
-        <div className={css.page}>{sheet}</div>
+        <div className={cx(nb.page, css.page)}>{sheet}</div>
       </div>
     </Screen>
   );
@@ -82,9 +83,9 @@ function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof d
   const found = shown.flatMap((lesson) => lesson.entries);
   const phrases = found.filter((entry) => entry.phrase).length;
   return (
-    <section className={css.page} aria-label="Словарь">
-      <h1 className={css.title}>Словарь</h1>
-      <p className={css.count} data-testid="word-count">
+    <section className={cx(nb.page, css.page)} aria-label="Словарь">
+      <h1 className={nb.title}>Словарь</h1>
+      <p className={nb.meta} data-testid="word-count">
         {[withCount(found.length - phrases, WORDS), phrases && withCount(phrases, ["фраза", "фразы", "фраз"])]
           .filter(Boolean)
           .join(" · ")}

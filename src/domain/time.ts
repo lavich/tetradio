@@ -11,6 +11,8 @@ export function localDay(date: Date, timezone: string): string {
 }
 export const addDays = (day: string, count: number) =>
   new Date(Date.parse(`${day}T00:00:00Z`) + count * 86400000).toISOString().slice(0, 10);
+/** Понедельник недели, в которую входит день. */
+export const mondayOf = (day: string) => addDays(day, -((new Date(`${day}T12:00:00Z`).getUTCDay() + 6) % 7));
 export const formatDay = (day: string) =>
   new Date(`${day}T12:00:00Z`).toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "UTC" });
 /** Момент начала календарного дня в зоне; переход летнего времени учитывается повторным расчётом смещения. */

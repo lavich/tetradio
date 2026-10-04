@@ -5,7 +5,7 @@ import { Screen } from "../../app/Screen";
 import { installLesson } from "../../content/client";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { Tick } from "../../shared/Tick";
-import { useSpread } from "../../shared/spread";
+import { useSpread } from "../../shared/media";
 import { CHECKPOINTS } from "./checkpoints";
 import { ModuleCover } from "./ModuleCover";
 import base from "./course.module.css";

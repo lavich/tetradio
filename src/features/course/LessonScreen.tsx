@@ -12,7 +12,9 @@ import { lessonItems } from "../../storage/queries";
 import { startSession } from "../learning/session-actions";
 import { Exercise, Explanation, Listening, Reading, Speaking, Writing } from "./blocks";
 import { Tick } from "../../shared/Tick";
-import { useSpread } from "../../shared/spread";
+import { cx } from "../../shared/cx";
+import { useSpread } from "../../shared/media";
+import nb from "../../shared/notebook.module.css";
 import { VocabularyList } from "./Vocabulary";
 import { TapHint, WordTaps } from "./WordTaps";
 import { LessonSummary } from "./LessonSummary";
@@ -120,10 +122,15 @@ export function CourseLessonScreen() {
     <Screen back="" wide paper>
       <h1 className="sr-only">{lesson.title}</h1>
       <WordTaps marks={lesson.marks} cards={lesson.cards} page={first}>
-        <div className={css.frame}>
+        <div className={cx(css.frame, spread && nb.spine)}>
           <div
             key={first}
-            className={`${css.sheet} ${spread ? css.spread : ""} ${turn === "next" ? css.turnNext : turn === "prev" ? css.turnPrev : ""}`}
+            className={cx(
+              css.sheet,
+              spread && nb.spread,
+              spread && css.spread,
+              turn === "next" ? css.turnNext : turn === "prev" && css.turnPrev,
+            )}
             {...swipe}
           >
             {shown.map(renderPage)}

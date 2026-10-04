@@ -3,24 +3,21 @@ import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { SKILL_LABEL } from "../../content/course";
 import { PASS_SHARE } from "../../domain/course";
-import { addDays } from "../../domain/learning";
 import { CHECKPOINTS, type SkillReadiness } from "../../domain/progress";
 import { useNow } from "../../shared/clock";
 import { cx } from "../../shared/cx";
-import { withCount } from "../../shared/format";
+import { dayMonth, withCount } from "../../shared/format";
 import { coverColor } from "../../shared/notebook";
-import { useSpread } from "../../shared/spread";
+import { useSpread } from "../../shared/media";
+import nb from "../../shared/notebook.module.css";
 import { useSettings } from "../../shared/store";
+import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import { courseProgress, type CourseProgress } from "../../storage/progress";
 import { ExamLine } from "../course/ExamLine";
 import { DeviceStatus } from "./DeviceStatus";
 import css from "./progress.module.css";
 
-const WEEKDAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-const WEEK_PLAN = 3;
 const number = (value: number) => value.toLocaleString("ru-RU", { maximumFractionDigits: 1 });
-const dayMonth = (day: string) =>
-  new Date(`${day}T12:00:00Z`).toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "UTC" });
 const LESSONS: [string, string, string] = ["урок", "урока", "уроков"];
 
 export function ProgressScreen() {
@@ -37,7 +34,7 @@ export function ProgressScreen() {
           <ExamLine courseId={courseId} />
         </div>
       )}
-      <h1 className={css.title}>Прогресс</h1>
+      <h1 className={nb.title}>Прогресс</h1>
     </>
   );
   const ready = <Readiness readiness={data.readiness} done={data.pace.done} total={data.pace.total} />;
@@ -62,13 +59,13 @@ export function ProgressScreen() {
   return (
     <Screen wide paper>
       {spread ? (
-        <div className={css.spread}>
-          <div className={css.page}>
+        <div className={cx(nb.spread, nb.spine)}>
+          <div className={cx(nb.page, css.page)}>
             {head}
             {ready}
             {week}
           </div>
-          <div className={css.page}>
+          <div className={cx(nb.page, css.page)}>
             {path}
             {tail}
           </div>
@@ -199,23 +196,15 @@ function Week({ week }: { week: CourseProgress["week"] }) {
       <h2 id="week" className={css.heading}>
         Эта неделя
       </h2>
-      <div className={css.days}>
-        {WEEKDAYS.map((name, index) => {
-          const day = addDays(week.monday, index);
-          const lesson = week.lessonDays.includes(day);
-          const review = week.reviewDays.includes(day);
-          return (
-            <span
-              key={name}
-              className={cx(css.day, lesson && css.dayLesson, day === week.today && css.dayToday)}
-              aria-label={[name, lesson && "урок", review && "повторение"].filter(Boolean).join(", ")}
-            >
-              {name}
-              {review && <i className={css.dayReview} aria-hidden />}
-            </span>
-          );
-        })}
-      </div>
+      <WeekStrip
+        monday={week.monday}
+        today={week.today}
+        lessons={week.lessonDays}
+        reviews={week.reviewDays}
+        small
+        className={css.days}
+        label={(name, lesson, review) => [name, lesson && "урок", review && "повторение"].filter(Boolean).join(", ")}
+      />
       <p className={css.plan}>
         {withCount(lessons, ["занятие", "занятия", "занятий"])} из {WEEK_PLAN} · повторение{" "}
         {withCount(reviews, ["день", "дня", "дней"])} · {withCount(week.cards, ["карточка", "карточки", "карточек"])}

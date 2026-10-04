@@ -1,0 +1,45 @@
+.days {
+  display: flex;
+  gap: 8px;
+}
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--input);
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+.small {
+  gap: 6px;
+}
+.small > .day {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  font-size: 12px;
+}
+.lesson {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: #fff;
+}
+.today {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.lesson.today {
+  color: #fff;
+}
+.review {
+  position: absolute;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
