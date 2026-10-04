@@ -283,6 +283,50 @@ describe("конфликты независимых изменений", () => {
     expect((await phone.sync.exchange()).phase).toBe("synced");
     expect(await statesOf(phone)).toEqual(phoneStates);
   });
+  it("два устройства опубликовали почти одновременно: чистое устройство не принимает чужую версию молча", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [true, false]);
+    await phone.sync.exchange();
+    // Планшет публикует, не успев увидеть версию телефона: её ключи на время скрыты.
+    const hidden = new Map([...cloud.store].filter(([key]) => !key.startsWith("p_") || key.includes("tablet")));
+    const phoneKeys = new Map([...cloud.store].filter(([key]) => !hidden.has(key)));
+    for (const key of phoneKeys.keys()) cloud.store.delete(key);
+    await study(tablet, [true, true, true]);
+    expect((await tablet.sync.exchange()).phase).toBe("synced");
+    for (const [key, value] of phoneKeys) cloud.store.set(key, value);
+    const phoneStates = await statesOf(phone);
+    const result = await phone.sync.exchange();
+    expect(result.phase).toBe("conflict");
+    expect(result.conflict?.kind).toBe("diverged");
+    expect(result.conflict?.branches.some((branch) => branch.local)).toBe(true);
+    expect(await statesOf(phone)).toEqual(phoneStates); // ответы телефона на месте до выбора
+  });
+  it("ответы, данные после обнаружения конфликта, входят в сохранённую отвергнутую версию", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [true]);
+    await study(tablet, [true, true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    const before = conflict.conflict!.branches.find((branch) => branch.local)!.snapshot.stats.answers;
+    await study(tablet, [true]);
+    await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => !branch.local)!.id);
+    const [stored] = await tablet.sync.listStored();
+    expect(stored.snapshot.stats.answers).toBe(before + 1);
+  });
+  it("выбор версии не идёт параллельно с фоновым обменом", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false, true]);
+    await study(tablet, [true, false, true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    const local = conflict.conflict!.branches.find((branch) => branch.local)!;
+    const [first, second] = await Promise.all([tablet.sync.resolve(local.id), tablet.sync.exchange()]);
+    expect(first.phase).toBe("synced");
+    expect(second.phase).toBe("synced");
+    const pointers = [...cloud.store.keys()].filter((key) => key.startsWith("p_"));
+    expect(new Set(pointers).size).toBe(pointers.length);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+  });
   it("поздняя независимая ветвь после разрешения вызывает новый конфликт, а не молчаливую перезапись", async () => {
     const { phone, tablet } = await pair();
     const laptop = await device("laptop", { lessons: ["mech-1"], label: "web" });
