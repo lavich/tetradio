@@ -77,26 +77,37 @@ blocks:
     transcript:
       - speaker: Ισμήνη
         text: Καλημέρα, Νεοκλή! Είδες τον αγώνα χθες;
+        audio: m20-test/weekend-1.mp3
       - speaker: Νεοκλής
         text: Όχι, ήμουν στο θέατρο με τη γυναίκα μου. Ποιος κέρδισε;
+        audio: m20-test/weekend-2.mp3
       - speaker: Ισμήνη
         text: Η ομάδα μας έχασε, δύο μηδέν. Οι παίκτες ήταν πολύ κουρασμένοι.
+        audio: m20-test/weekend-3.mp3
       - speaker: Νεοκλής
         text: Α, όχι! Το θέατρο ήταν πολύ ωραίο. Οι ηθοποιοί ήταν πολύ καλοί.
+        audio: m20-test/weekend-4.mp3
       - speaker: Ισμήνη
         text: Εγώ προτιμώ το σινεμά. Το θέατρο είναι πιο ακριβό και συχνά βαριέμαι.
+        audio: m20-test/weekend-5.mp3
       - speaker: Νεοκλής
         text: Τι θα κάνεις αυτό το Σάββατο;
+        audio: m20-test/weekend-6.mp3
       - speaker: Ισμήνη
         text: Το πρωί θα πάω στο γυμναστήριο. Πάω κάθε Σάββατο. Το βράδυ θα ξεκουραστώ στο σπίτι.
+        audio: m20-test/weekend-7.mp3
       - speaker: Νεοκλής
         text: Θέλεις να έρθεις μαζί μας στη συναυλία στο πάρκο; Το εισιτήριο κάνει μόνο δέκα ευρώ.
+        audio: m20-test/weekend-8.mp3
       - speaker: Ισμήνη
         text: Γιατί όχι; Τι ώρα αρχίζει;
+        audio: m20-test/weekend-9.mp3
       - speaker: Νεοκλής
         text: Στις εννέα. Σε περιμένουμε μπροστά στο πάρκο στις εννέα παρά τέταρτο.
+        audio: m20-test/weekend-10.mp3
       - speaker: Ισμήνη
         text: Ωραία, τα λέμε εκεί!
+        audio: m20-test/weekend-11.mp3
   - type: exercise
     id: weekend-choice
     about: weekend

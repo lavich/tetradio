@@ -224,30 +224,43 @@ blocks:
     transcript:
       - speaker: Ορέστης
         text: Γεια σου, Ηλέκτρα! Τι κάνεις;
+        audio: m08-k1/new-flat-1.mp3
       - speaker: Ηλέκτρα
         text: Καλά, Ορέστη, ευχαριστώ. Κι εσύ;
+        audio: m08-k1/new-flat-2.mp3
       - speaker: Ορέστης
         text: Καλά. Μένεις ακόμα στη Λεμεσό;
+        audio: m08-k1/new-flat-3.mp3
       - speaker: Ηλέκτρα
         text: Όχι, τώρα μένω στη Λάρνακα, σε ένα καινούργιο διαμέρισμα.
+        audio: m08-k1/new-flat-4.mp3
       - speaker: Ορέστης
         text: Ωραία! Πώς είναι;
+        audio: m08-k1/new-flat-5.mp3
       - speaker: Ηλέκτρα
         text: Είναι μικρό, αλλά έχει ένα μεγάλο μπαλκόνι. Και είναι κοντά στη θάλασσα.
+        audio: m08-k1/new-flat-6.mp3
       - speaker: Ορέστης
         text: Πόσο είναι το ενοίκιο;
+        audio: m08-k1/new-flat-7.mp3
       - speaker: Ηλέκτρα
         text: Εξακόσια ευρώ. Δεν είναι ακριβό. Είσαι ελεύθερος το Σάββατο; Έλα για φαγητό!
+        audio: m08-k1/new-flat-8.mp3
       - speaker: Ορέστης
         text: Το Σάββατο το πρωί δουλεύω, αλλά το βράδυ είμαι ελεύθερος.
+        audio: m08-k1/new-flat-9.mp3
       - speaker: Ηλέκτρα
         text: Ωραία! Έλα στις οκτώ. Μαγειρεύω ψάρι. Σου αρέσει;
+        audio: m08-k1/new-flat-10.mp3
       - speaker: Ορέστης
         text: Όχι πολύ, συγγνώμη. Προτιμώ το κρέας.
+        audio: m08-k1/new-flat-11.mp3
       - speaker: Ηλέκτρα
         text: Δεν πειράζει. Μαγειρεύω κοτόπουλο με πατάτες.
+        audio: m08-k1/new-flat-12.mp3
       - speaker: Ορέστης
         text: Ωραία! Τα λέμε το Σάββατο!
+        audio: m08-k1/new-flat-13.mp3
   - type: exercise
     id: new-flat-choice
     about: new-flat
@@ -303,36 +316,52 @@ blocks:
     transcript:
       - speaker: Θεοπίστη
         text: Ναι, παρακαλώ;
+        audio: m08-k1/rent-call-1.mp3
       - speaker: Λάμπρος
         text: Καλημέρα σας. Με λένε Λάμπρο Σαββίδη. Νοικιάζετε διαμέρισμα;
+        audio: m08-k1/rent-call-2.mp3
       - speaker: Θεοπίστη
         text: Καλημέρα σας. Ναι, στη Λευκωσία.
+        audio: m08-k1/rent-call-3.mp3
       - speaker: Λάμπρος
         text: Πόσα υπνοδωμάτια έχει;
+        audio: m08-k1/rent-call-4.mp3
       - speaker: Θεοπίστη
         text: Δύο υπνοδωμάτια. Έχει και σαλόνι, κουζίνα και μπάνιο.
+        audio: m08-k1/rent-call-5.mp3
       - speaker: Λάμπρος
         text: Υπάρχει πλυντήριο;
+        audio: m08-k1/rent-call-6.mp3
       - speaker: Θεοπίστη
         text: Ναι, υπάρχει πλυντήριο και καινούργιο ψυγείο. Κλιματιστικό υπάρχει μόνο στο σαλόνι.
+        audio: m08-k1/rent-call-7.mp3
       - speaker: Λάμπρος
         text: Και πόσο είναι το ενοίκιο;
+        audio: m08-k1/rent-call-8.mp3
       - speaker: Θεοπίστη
         text: Επτακόσια πενήντα ευρώ.
+        audio: m08-k1/rent-call-9.mp3
       - speaker: Λάμπρος
         text: Μπορώ να δω το σπίτι αύριο;
+        audio: m08-k1/rent-call-10.mp3
       - speaker: Θεοπίστη
         text: Αύριο δεν μπορώ. Την Πέμπτη;
+        audio: m08-k1/rent-call-11.mp3
       - speaker: Λάμπρος
         text: Ναι, την Πέμπτη είμαι ελεύθερος. Τι ώρα;
+        audio: m08-k1/rent-call-12.mp3
       - speaker: Θεοπίστη
         text: Στις πέντε και μισή το απόγευμα. Ποιο είναι το τηλέφωνό σας;
+        audio: m08-k1/rent-call-13.mp3
       - speaker: Λάμπρος
         text: Ενενήντα έξι, τριάντα ένα, πενήντα οκτώ, μηδέν δύο.
+        audio: m08-k1/rent-call-14.mp3
       - speaker: Θεοπίστη
         text: Ενενήντα έξι, τριάντα ένα, πενήντα οκτώ, μηδέν δύο. Ευχαριστώ, κύριε Σαββίδη.
+        audio: m08-k1/rent-call-15.mp3
       - speaker: Λάμπρος
         text: Κι εγώ ευχαριστώ. Γεια σας!
+        audio: m08-k1/rent-call-16.mp3
   - type: exercise
     id: rent-call-notes
     about: rent-call

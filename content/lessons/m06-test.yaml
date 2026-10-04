@@ -99,26 +99,37 @@ blocks:
     transcript:
       - speaker: Κώστας
         text: "Γεια σου, Ελένη! Πού είσαι;"
+        audio: m06-test/new-home-1.mp3
       - speaker: Ελένη
         text: "Γεια σου, Κώστα! Είμαι στο σπίτι μου, στη Λάρνακα. Τώρα μένω εδώ."
+        audio: m06-test/new-home-2.mp3
       - speaker: Κώστας
         text: "Ωραία! Πόσα δωμάτια έχει το σπίτι;"
+        audio: m06-test/new-home-3.mp3
       - speaker: Ελένη
         text: "Τρία δωμάτια: σαλόνι και δύο υπνοδωμάτια. Και κουζίνα και μπάνιο."
+        audio: m06-test/new-home-4.mp3
       - speaker: Κώστας
         text: "Είναι κοντά στη θάλασσα;"
+        audio: m06-test/new-home-5.mp3
       - speaker: Ελένη
         text: "Όχι, δεν είναι κοντά στη θάλασσα. Αλλά δίπλα μένει η φίλη μου η Άννα."
+        audio: m06-test/new-home-6.mp3
       - speaker: Κώστας
         text: "Και πόσο είναι το ενοίκιο;"
+        audio: m06-test/new-home-7.mp3
       - speaker: Ελένη
         text: "Επτακόσια ευρώ, μαζί με το νερό."
+        audio: m06-test/new-home-8.mp3
       - speaker: Κώστας
         text: "Υπάρχει τραπέζι στο σαλόνι;"
+        audio: m06-test/new-home-9.mp3
       - speaker: Ελένη
         text: "Όχι ακόμα. Στο σαλόνι δεν υπάρχει τίποτα! Έλα το Σάββατο."
+        audio: m06-test/new-home-10.mp3
       - speaker: Κώστας
         text: "Καλά. Τα λέμε το Σάββατο!"
+        audio: m06-test/new-home-11.mp3
   - type: exercise
     id: new-home-choice
     about: new-home

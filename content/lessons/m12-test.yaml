@@ -95,28 +95,40 @@ blocks:
     transcript:
       - speaker: Λένα
         text: Γιώργο, γεια σου! Χάθηκα! Είμαι στη στάση του λεωφορείου, απέναντι από το δημαρχείο.
+        audio: m12-test/lost-1.mp3
       - speaker: Γιώργος
         text: Δεν πειράζει, δεν είσαι μακριά. Βλέπεις μια τράπεζα;
+        audio: m12-test/lost-2.mp3
       - speaker: Λένα
         text: Ναι, βλέπω μια τράπεζα δίπλα στο ταχυδρομείο.
+        audio: m12-test/lost-3.mp3
       - speaker: Γιώργος
         text: Ωραία. Πήγαινε ευθεία μέχρι τον κυκλικό κόμβο.
+        audio: m12-test/lost-4.mp3
       - speaker: Λένα
         text: Μέχρι τον κυκλικό κόμβο. Και εκεί;
+        audio: m12-test/lost-5.mp3
       - speaker: Γιώργος
         text: Στον κυκλικό κόμβο πάρε την τρίτη έξοδο. Όχι την πρώτη! Η πρώτη πηγαίνει στο νοσοκομείο.
+        audio: m12-test/lost-6.mp3
       - speaker: Λένα
         text: Την τρίτη. Εντάξει.
+        audio: m12-test/lost-7.mp3
       - speaker: Γιώργος
         text: Μετά συνέχισε ευθεία μέχρι το πάρκο. Το σπίτι μου είναι απέναντι από το πάρκο, δίπλα σε ένα φαρμακείο.
+        audio: m12-test/lost-8.mp3
       - speaker: Λένα
         text: Είναι μακριά από εδώ;
+        audio: m12-test/lost-9.mp3
       - speaker: Γιώργος
         text: Όχι, είναι δέκα λεπτά με τα πόδια. Μένω στον τρίτο όροφο.
+        audio: m12-test/lost-10.mp3
       - speaker: Λένα
         text: Στον τρίτο όροφο. Ωραία, έρχομαι!
+        audio: m12-test/lost-11.mp3
       - speaker: Γιώργος
         text: Σε περιμένω!
+        audio: m12-test/lost-12.mp3
   - type: exercise
     id: lost-choice
     about: lost

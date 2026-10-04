@@ -83,24 +83,34 @@ blocks:
     transcript:
       - speaker: Μιχάλης
         text: Καλημέρα, Σοφία! Ποια είναι αυτή;
+        audio: m03-test/neighbours-1.mp3
       - speaker: Σοφία
         text: Καλημέρα, Μιχάλη! Είναι η κόρη μου, η Μελίνα.
+        audio: m03-test/neighbours-2.mp3
       - speaker: Μιχάλης
         text: Η κόρη σου; Πόσων χρονών είναι;
+        audio: m03-test/neighbours-3.mp3
       - speaker: Σοφία
         text: Είναι δεκαοκτώ χρονών. Είναι εδώ τώρα, αλλά μένει στην Αθήνα.
+        audio: m03-test/neighbours-4.mp3
       - speaker: Μιχάλης
         text: Έχεις και άλλα παιδιά;
+        audio: m03-test/neighbours-5.mp3
       - speaker: Σοφία
         text: Ναι, έχω και έναν γιο, τον Άρη. Είναι είκοσι πέντε χρονών και είναι γιατρός. Κι εσύ, Μιχάλη; Είσαι παντρεμένος;
+        audio: m03-test/neighbours-6.mp3
       - speaker: Μιχάλης
         text: Ναι. Η γυναίκα μου είναι από τη Ρωσία. Έχουμε δύο παιδιά, πέντε και οκτώ χρονών.
+        audio: m03-test/neighbours-7.mp3
       - speaker: Σοφία
         text: Ωραία! Και οι γονείς σου;
+        audio: m03-test/neighbours-8.mp3
       - speaker: Μιχάλης
         text: Μένουν στη Λάρνακα, με τη γιαγιά μου. Η γιαγιά μου είναι ενενήντα χρονών!
+        audio: m03-test/neighbours-9.mp3
       - speaker: Σοφία
         text: Ενενήντα; Πολύ ωραία!
+        audio: m03-test/neighbours-10.mp3
   - type: exercise
     id: neighbours-choice
     about: neighbours

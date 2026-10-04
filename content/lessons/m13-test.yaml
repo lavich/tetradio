@@ -89,32 +89,46 @@ blocks:
     transcript:
       - speaker: Σταύρος
         text: Καλημέρα σας. Παρακαλώ;
+        audio: m13-test/ticket-1.mp3
       - speaker: Χρύσα
         text: Καλημέρα. Ένα εισιτήριο για τη Λεμεσό, παρακαλώ.
+        audio: m13-test/ticket-2.mp3
       - speaker: Σταύρος
         text: Απλό ή μετ' επιστροφής;
+        audio: m13-test/ticket-3.mp3
       - speaker: Χρύσα
         text: Απλό. Αύριο γυρίζω με τον αδελφό μου, με το αυτοκίνητο.
+        audio: m13-test/ticket-4.mp3
       - speaker: Σταύρος
         text: Πέντε ευρώ.
+        audio: m13-test/ticket-5.mp3
       - speaker: Χρύσα
         text: Ορίστε. Τι ώρα φεύγει το επόμενο λεωφορείο;
+        audio: m13-test/ticket-6.mp3
       - speaker: Σταύρος
         text: Στις δώδεκα. Έχετε σαράντα λεπτά.
+        audio: m13-test/ticket-7.mp3
       - speaker: Χρύσα
         text: Εντάξει. Πόση ώρα κάνει μέχρι τη Λεμεσό;
+        audio: m13-test/ticket-8.mp3
       - speaker: Σταύρος
         text: Περίπου μία ώρα και δέκα λεπτά. Φτάνει στη μία και δέκα.
+        audio: m13-test/ticket-9.mp3
       - speaker: Χρύσα
         text: Και από πού φεύγει;
+        audio: m13-test/ticket-10.mp3
       - speaker: Σταύρος
         text: Από τη στάση πέντε, δίπλα στο καφέ.
+        audio: m13-test/ticket-11.mp3
       - speaker: Χρύσα
         text: Ευχαριστώ. Και στη Λεμεσό υπάρχει λεωφορείο για το νοσοκομείο;
+        audio: m13-test/ticket-12.mp3
       - speaker: Σταύρος
         text: Ναι, η γραμμή τριάντα. Περνάει κάθε είκοσι λεπτά.
+        audio: m13-test/ticket-13.mp3
       - speaker: Χρύσα
         text: Ευχαριστώ πολύ! Γεια σας.
+        audio: m13-test/ticket-14.mp3
   - type: exercise
     id: ticket-choice
     about: ticket

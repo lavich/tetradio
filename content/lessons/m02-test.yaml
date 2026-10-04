@@ -66,24 +66,34 @@ blocks:
     transcript:
       - speaker: Γιώργος
         text: "Καλημέρα σας! Πώς σας λένε;"
+        audio: m02-test/office-1.mp3
       - speaker: Μαρία
         text: "Καλημέρα σας! Με λένε Μαρία Πετρόβα."
+        audio: m02-test/office-2.mp3
       - speaker: Γιώργος
         text: "Από ποια χώρα είστε, κυρία Πετρόβα;"
+        audio: m02-test/office-3.mp3
       - speaker: Μαρία
         text: "Από τη Ρωσία."
+        audio: m02-test/office-4.mp3
       - speaker: Γιώργος
         text: "Και πού μένετε; Στη Λευκωσία;"
+        audio: m02-test/office-5.mp3
       - speaker: Μαρία
         text: "Όχι, μένω στη Λάρνακα. Αλλά δουλεύω στη Λεμεσό."
+        audio: m02-test/office-6.mp3
       - speaker: Γιώργος
         text: "Τι γλώσσες μιλάτε;"
+        audio: m02-test/office-7.mp3
       - speaker: Μαρία
         text: "Μιλάω ρωσικά και αγγλικά. Ελληνικά καταλαβαίνω λίγο, αλλά δεν μιλάω."
+        audio: m02-test/office-8.mp3
       - speaker: Γιώργος
         text: "Δεν πειράζει. Ευχαριστώ, κυρία Πετρόβα. Γεια σας!"
+        audio: m02-test/office-9.mp3
       - speaker: Μαρία
         text: "Ευχαριστώ! Γεια σας!"
+        audio: m02-test/office-10.mp3
   - type: exercise
     id: office-choice
     about: office

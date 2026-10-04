@@ -81,28 +81,40 @@ blocks:
     transcript:
       - speaker: Σωτήρης
         text: Γεια σου, Άντρη! Τι θα κάνεις την Κυριακή;
+        audio: m19-test/beach-1.mp3
       - speaker: Άντρη
         text: Δεν ξέρω ακόμα. Γιατί;
+        audio: m19-test/beach-2.mp3
       - speaker: Σωτήρης
         text: Σχεδιάζουμε να πάμε στη θάλασσα, στην Αγία Νάπα. Θέλεις να έρθεις;
+        audio: m19-test/beach-3.mp3
       - speaker: Άντρη
         text: Ναι, θέλω! Αλλά τι καιρό θα κάνει;
+        audio: m19-test/beach-4.mp3
       - speaker: Σωτήρης
         text: Η πρόγνωση λέει ότι θα έχει ήλιο και θα κάνει ζέστη, τριάντα βαθμούς.
+        audio: m19-test/beach-5.mp3
       - speaker: Άντρη
         text: Και γιατί όχι το Σάββατο;
+        audio: m19-test/beach-6.mp3
       - speaker: Σωτήρης
         text: Το Σάββατο θα φυσάει πολύ. Γι' αυτό πάμε την Κυριακή.
+        audio: m19-test/beach-7.mp3
       - speaker: Άντρη
         text: Εντάξει. Τι ώρα θα φύγουμε;
+        audio: m19-test/beach-8.mp3
       - speaker: Σωτήρης
         text: Στις εννιά. Θα περάσω από το σπίτι σου με το αυτοκίνητο.
+        audio: m19-test/beach-9.mp3
       - speaker: Άντρη
         text: Ωραία! Θα φέρω εγώ φρούτα και νερό.
+        audio: m19-test/beach-10.mp3
       - speaker: Σωτήρης
         text: Και πάρε καπέλο. Θα έχει πολύ ήλιο!
+        audio: m19-test/beach-11.mp3
       - speaker: Άντρη
         text: Εντάξει. Τα λέμε την Κυριακή!
+        audio: m19-test/beach-12.mp3
   - type: exercise
     id: beach-choice
     about: beach

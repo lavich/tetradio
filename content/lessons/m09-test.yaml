@@ -94,28 +94,40 @@ blocks:
     transcript:
       - speaker: Μάριος
         text: Καλημέρα σας! Πείτε μου.
+        audio: m09-test/takeaway-1.mp3
       - speaker: Νατάσα
         text: Καλημέρα. Θα ήθελα δύο κυπριακούς καφέδες, έναν μέτριο και έναν γλυκό.
+        audio: m09-test/takeaway-2.mp3
       - speaker: Μάριος
         text: Για εδώ ή για πακέτο;
+        audio: m09-test/takeaway-3.mp3
       - speaker: Νατάσα
         text: Για πακέτο, παρακαλώ. Ο φίλος μου είναι ήδη έξω.
+        audio: m09-test/takeaway-4.mp3
       - speaker: Μάριος
         text: Θέλετε και ένα γλυκό; Σήμερα έχουμε πολύ ωραία γλυκά.
+        audio: m09-test/takeaway-5.mp3
       - speaker: Νατάσα
         text: Όχι, ευχαριστώ. Μόνο ένα νερό. Πόσο κάνει;
+        audio: m09-test/takeaway-6.mp3
       - speaker: Μάριος
         text: Οι δύο καφέδες τέσσερα ευρώ και το νερό ένα. Πέντε ευρώ.
+        audio: m09-test/takeaway-7.mp3
       - speaker: Νατάσα
         text: Ορίστε δέκα.
+        audio: m09-test/takeaway-8.mp3
       - speaker: Μάριος
         text: Και πέντε ρέστα. Ορίστε και οι καφέδες σας, ένας μέτριος και ένας σκέτος.
+        audio: m09-test/takeaway-9.mp3
       - speaker: Νατάσα
         text: Συγγνώμη, αλλά ο φίλος μου θέλει γλυκό, όχι σκέτο.
+        audio: m09-test/takeaway-10.mp3
       - speaker: Μάριος
         text: Α, συγγνώμη! Αμέσως!
+        audio: m09-test/takeaway-11.mp3
       - speaker: Νατάσα
         text: Δεν πειράζει. Ευχαριστώ, γεια σας!
+        audio: m09-test/takeaway-12.mp3
   - type: exercise
     id: takeaway-choice
     about: takeaway

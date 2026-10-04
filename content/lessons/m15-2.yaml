@@ -364,40 +364,58 @@ blocks:
     transcript:
       - speaker: Ευαγγελία
         text: Καλημέρα σας, κύριε Ανδρέου. Είμαι η Ευαγγελία Πέτρου, η διευθύντρια του ξενοδοχείου.
+        audio: m15-2/interview-1.mp3
       - speaker: Μάριος
         text: Καλημέρα σας. Χάρηκα πολύ.
+        audio: m15-2/interview-2.mp3
       - speaker: Ευαγγελία
         text: Επίσης. Πώς βρήκατε την αγγελία μας;
+        audio: m15-2/interview-3.mp3
       - speaker: Μάριος
         text: Ένας φίλος μου δουλεύει εδώ και μου είπε για τη θέση.
+        audio: m15-2/interview-4.mp3
       - speaker: Ευαγγελία
         text: Ωραία. Πόσα χρόνια εμπειρία έχετε;
+        audio: m15-2/interview-5.mp3
       - speaker: Μάριος
         text: Τέσσερα. Δούλεψα τρία χρόνια στη ρεσεψιόν σε ένα ξενοδοχείο στην Αθήνα και πέρσι ήρθα στην Κύπρο.
+        audio: m15-2/interview-6.mp3
       - speaker: Ευαγγελία
         text: Και τι κάνετε τώρα;
+        audio: m15-2/interview-7.mp3
       - speaker: Μάριος
         text: Τώρα δουλεύω σε ένα μικρό ξενοδοχείο στη Λεμεσό, αλλά μόνο με μερική απασχόληση. Θέλω μια μόνιμη θέση με πλήρες ωράριο.
+        audio: m15-2/interview-8.mp3
       - speaker: Ευαγγελία
         text: Τι γλώσσες μιλάτε;
+        audio: m15-2/interview-9.mp3
       - speaker: Μάριος
         text: Ελληνικά, αγγλικά και λίγο ρωσικά.
+        audio: m15-2/interview-10.mp3
       - speaker: Ευαγγελία
         text: Πολύ καλά. Εδώ δουλεύουμε με βάρδιες. Η πρωινή βάρδια είναι από τις επτά μέχρι τις τρεις και η απογευματινή από τις τρεις μέχρι τις έντεκα.
+        audio: m15-2/interview-11.mp3
       - speaker: Μάριος
         text: Μπορώ να δουλέψω και στις δύο, αλλά προτιμώ την πρωινή. Και πόσος είναι ο μισθός;
+        audio: m15-2/interview-12.mp3
       - speaker: Ευαγγελία
         text: Χίλια τριακόσια ευρώ τον μήνα. Και το μεσημέρι τρώτε εδώ, στο ξενοδοχείο.
+        audio: m15-2/interview-13.mp3
       - speaker: Μάριος
         text: Πολύ ωραία.
+        audio: m15-2/interview-14.mp3
       - speaker: Ευαγγελία
         text: Πότε μπορείτε να ξεκινήσετε;
+        audio: m15-2/interview-15.mp3
       - speaker: Μάριος
         text: Από την πρώτη Μαρτίου.
+        audio: m15-2/interview-16.mp3
       - speaker: Ευαγγελία
         text: Ωραία. Σας παίρνω τηλέφωνο την Παρασκευή.
+        audio: m15-2/interview-17.mp3
       - speaker: Μάριος
         text: Ευχαριστώ πολύ. Γεια σας!
+        audio: m15-2/interview-18.mp3
   - type: exercise
     id: interview-choice
     about: interview

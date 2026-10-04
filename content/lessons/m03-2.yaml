@@ -422,26 +422,37 @@ blocks:
     transcript:
       - speaker: Νίκος
         text: Ωραία φωτογραφία! Είναι η οικογένειά σου;
+        audio: m03-2/photo-1.mp3
       - speaker: Κατερίνα
         text: Ναι. Αυτή είναι η μητέρα μου και αυτός είναι ο πατέρας μου.
+        audio: m03-2/photo-2.mp3
       - speaker: Νίκος
         text: Πόσων χρονών είναι οι γονείς σου;
+        audio: m03-2/photo-3.mp3
       - speaker: Κατερίνα
         text: Η μητέρα μου είναι εξήντα δύο χρονών και ο πατέρας μου εβδομήντα.
+        audio: m03-2/photo-4.mp3
       - speaker: Νίκος
         text: Και ποιος είναι αυτός; Ο αδελφός σου;
+        audio: m03-2/photo-5.mp3
       - speaker: Κατερίνα
         text: Όχι, δεν έχω αδελφό. Αυτός είναι ο άντρας μου, ο Γιάννης. Είναι δάσκαλος.
+        audio: m03-2/photo-6.mp3
       - speaker: Νίκος
         text: Α, είσαι παντρεμένη! Έχετε παιδιά;
+        audio: m03-2/photo-7.mp3
       - speaker: Κατερίνα
         text: Ναι, έχουμε μία κόρη, τη Σοφία. Είναι έξι χρονών.
+        audio: m03-2/photo-8.mp3
       - speaker: Νίκος
         text: Και αυτή; Η αδελφή σου;
+        audio: m03-2/photo-9.mp3
       - speaker: Κατερίνα
         text: Ναι, η αδελφή μου η Ελένη. Είναι γιατρός στη Λευκωσία. Κι εσύ, Νίκο; Έχεις αδέλφια;
+        audio: m03-2/photo-10.mp3
       - speaker: Νίκος
         text: Ναι, έχω δύο αδελφές. Αλλά δεν είμαι παντρεμένος!
+        audio: m03-2/photo-11.mp3
   - type: exercise
     id: photo-tf
     about: photo

@@ -90,24 +90,34 @@ blocks:
     transcript:
       - speaker: Μιχάλης
         text: Καλώς ήρθες, Άννα! Έλα μέσα! Πεινάς;
+        audio: m08-test/dinner-1.mp3
       - speaker: Άννα
         text: Γεια σου, Μιχάλη! Ναι, λίγο.
+        audio: m08-test/dinner-2.mp3
       - speaker: Μιχάλης
         text: Σήμερα μαγειρεύω κοτόπουλο με πατάτες στον φούρνο. Σου αρέσει το κοτόπουλο;
+        audio: m08-test/dinner-3.mp3
       - speaker: Άννα
         text: Ναι, πολύ! Και η σαλάτα τι έχει;
+        audio: m08-test/dinner-4.mp3
       - speaker: Μιχάλης
         text: Ντομάτα και τυρί. Θέλεις κάτι να πιεις; Έχω κρασί, χυμό και νερό.
+        audio: m08-test/dinner-5.mp3
       - speaker: Άννα
         text: Κρασί όχι, ευχαριστώ. Θέλω έναν χυμό.
+        audio: m08-test/dinner-6.mp3
       - speaker: Μιχάλης
         text: Ωραία. Καλή όρεξη!
+        audio: m08-test/dinner-7.mp3
       - speaker: Άννα
         text: Ευχαριστώ, επίσης! Μμμ, το κοτόπουλο είναι πολύ νόστιμο!
+        audio: m08-test/dinner-8.mp3
       - speaker: Μιχάλης
         text: Ευχαριστώ! Και μετά έχουμε γλυκά.
+        audio: m08-test/dinner-9.mp3
       - speaker: Άννα
         text: Όχι, ευχαριστώ. Δεν τρώω γλυκά το βράδυ.
+        audio: m08-test/dinner-10.mp3
   - type: exercise
     id: dinner-choice
     about: dinner
