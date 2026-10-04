@@ -167,9 +167,9 @@ test.describe("навигация, тема и размеры", () => {
     await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
     await expect(page.getByRole("button", { name: "Закрыть занятие" })).toHaveCount(0);
-    await expect(page.getByRole("heading", { name: "Повторение" })).toBeVisible();
-    const title = await page.getByRole("heading", { name: "Повторение" }).boundingBox();
-    expect(title!.y).toBeGreaterThanOrEqual(47 + 46);
+    // Экран занятия дорисовывается после загрузки: ждём, пока заголовок встанет под кнопками клиента.
+    const title = page.getByRole("heading", { name: "Повторение" });
+    await expect.poll(async () => (await title.boundingBox())?.y ?? -1).toBeGreaterThanOrEqual(47 + 46);
     await expect(page.getByLabel(/^(Знакомство|Упражнение) \d+ из \d+$/)).toBeVisible(); // счётчик — в облачке снизу
     await tg(page).back();
     await expect(page.getByTestId("today-title")).toBeVisible();
