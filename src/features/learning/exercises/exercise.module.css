@@ -164,3 +164,6 @@
   margin-bottom: 6px;
   color: var(--ok);
 }
+.writtenTick.almost {
+  color: var(--almost);
+}

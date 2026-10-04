@@ -157,6 +157,18 @@ test("верные слоги с артиклем не на месте дают 
   await page.getByRole("button", { name: "Проверить" }).click();
   await expect(page.getByTestId("feedback")).toContainText("Почти! Проверь артикль.");
   await expect(page.getByTestId("feedback")).toContainText("ο · φί-λος");
+  // Галочка «почти» — янтарная, а не зелёная, как у верного ответа.
+  const tick = page.getByRole("img", { name: "почти" });
+  const color = (value: string) =>
+    page.evaluate((value) => {
+      const probe = document.createElement("span");
+      probe.style.color = value;
+      document.body.append(probe);
+      const result = getComputedStyle(probe).color;
+      probe.remove();
+      return result;
+    }, value);
+  await expect(tick).toHaveCSS("color", await color("var(--almost)"));
 });
 
 test("верный порядок засчитывается и остаётся в истории", async ({ page }) => {
