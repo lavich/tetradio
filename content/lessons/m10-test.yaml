@@ -94,26 +94,37 @@ blocks:
     transcript:
       - speaker: Λίνα
         text: Πέτρο, πας στο σούπερ μάρκετ;
+        audio: m10-test/errand-1.mp3
       - speaker: Πέτρος
         text: Ναι, τώρα. Θέλεις κάτι;
+        audio: m10-test/errand-2.mp3
       - speaker: Λίνα
         text: Ναι, αν μπορείς. Θέλω ένα κουτί γάλα και δύο μπουκάλια νερό.
+        audio: m10-test/errand-3.mp3
       - speaker: Πέτρος
         text: Εντάξει. Γάλα, νερό… Και ψωμί;
+        audio: m10-test/errand-4.mp3
       - speaker: Λίνα
         text: Όχι, ψωμί δεν θέλω. Αγοράζω πάντα ψωμί από τον φούρνο του κυρίου Γιάννη. Είναι πολύ φρέσκο.
+        audio: m10-test/errand-5.mp3
       - speaker: Πέτρος
         text: Και φρούτα;
+        audio: m10-test/errand-6.mp3
       - speaker: Λίνα
         text: Φρούτα αγοράζω το Σάββατο στη λαϊκή, εκεί είναι φτηνά. Αλλά αν οι φράουλες είναι σε προσφορά, θέλω ένα κουτί.
+        audio: m10-test/errand-7.mp3
       - speaker: Πέτρος
         text: Εντάξει. Πληρώνω εγώ με κάρτα, δεν πειράζει.
+        audio: m10-test/errand-8.mp3
       - speaker: Λίνα
         text: Όχι, όχι. Ορίστε δέκα ευρώ.
+        audio: m10-test/errand-9.mp3
       - speaker: Πέτρος
         text: Ωραία. Τα ρέστα το βράδυ!
+        audio: m10-test/errand-10.mp3
       - speaker: Λίνα
         text: Ευχαριστώ, Πέτρο! Τα λέμε!
+        audio: m10-test/errand-11.mp3
   - type: exercise
     id: errand-choice
     about: errand

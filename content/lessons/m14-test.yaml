@@ -84,28 +84,40 @@ blocks:
     transcript:
       - speaker: Δανάη
         text: Γεια σου, Μάριε! Πώς ήταν το ταξίδι σου;
+        audio: m14-test/after-trip-1.mp3
       - speaker: Μάριος
         text: Γεια σου, Δανάη! Περάσαμε πολύ ωραία. Ταξιδέψαμε στην Κρήτη για πέντε μέρες.
+        audio: m14-test/after-trip-2.mp3
       - speaker: Δανάη
         text: Στην Κρήτη; Και πού κλείσατε ξενοδοχείο;
+        audio: m14-test/after-trip-3.mp3
       - speaker: Μάριος
         text: Σε ένα μικρό ξενοδοχείο δίπλα στη θάλασσα.
+        audio: m14-test/after-trip-4.mp3
       - speaker: Δανάη
         text: Κολυμπήσατε;
+        audio: m14-test/after-trip-5.mp3
       - speaker: Μάριος
         text: Εγώ κολύμπησα πολύ, αλλά η Σοφία όχι. Εκείνη χαλάρωσε στην πισίνα του ξενοδοχείου.
+        audio: m14-test/after-trip-6.mp3
       - speaker: Δανάη
         text: Επισκεφτήκατε αξιοθέατα;
+        audio: m14-test/after-trip-7.mp3
       - speaker: Μάριος
         text: Ναι, ένα παλιό κάστρο και ένα ωραίο χωριό κοντά στο ξενοδοχείο. Η Σοφία φωτογράφισε όλο το χωριό!
+        audio: m14-test/after-trip-8.mp3
       - speaker: Δανάη
         text: Και ξοδέψατε πολλά λεφτά;
+        audio: m14-test/after-trip-9.mp3
       - speaker: Μάριος
         text: Όχι πολλά. Το ξενοδοχείο ήταν φτηνό, πενήντα ευρώ τη νύχτα.
+        audio: m14-test/after-trip-10.mp3
       - speaker: Δανάη
         text: Ωραία! Εγώ πέρσι ξόδεψα πολλά λεφτά στην Πάφο.
+        audio: m14-test/after-trip-11.mp3
       - speaker: Μάριος
         text: Την άλλη φορά πάμε μαζί!
+        audio: m14-test/after-trip-12.mp3
   - type: exercise
     id: after-trip-choice
     about: after-trip

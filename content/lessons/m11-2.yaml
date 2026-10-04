@@ -423,42 +423,61 @@ blocks:
     transcript:
       - speaker: Πέτρος
         text: Καλημέρα σας! Τι ψάχνετε;
+        audio: m11-2/shop-1.mp3
       - speaker: Δέσποινα
         text: Καλημέρα. Ψάχνω ένα παντελόνι για τη δουλειά, μαύρο ή γκρι.
+        audio: m11-2/shop-2.mp3
       - speaker: Πέτρος
         text: Τι νούμερο φοράτε;
+        audio: m11-2/shop-3.mp3
       - speaker: Δέσποινα
         text: Φοράω νούμερο τριάντα οκτώ.
+        audio: m11-2/shop-4.mp3
       - speaker: Πέτρος
         text: Έχουμε αυτό το μαύρο παντελόνι. Είναι πολύ άνετο και κοστίζει σαράντα πέντε ευρώ. Και αυτό το γκρι είναι πιο φτηνό, τριάντα ευρώ.
+        audio: m11-2/shop-5.mp3
       - speaker: Δέσποινα
         text: Μου αρέσει πιο πολύ το μαύρο. Μπορώ να το δοκιμάσω;
+        audio: m11-2/shop-6.mp3
       - speaker: Πέτρος
         text: Ναι, το δοκιμαστήριο είναι εκεί, δίπλα στο ταμείο.
+        audio: m11-2/shop-7.mp3
       - speaker: Δέσποινα
         text: Ευχαριστώ.
+        audio: m11-2/shop-8.mp3
       - speaker: Πέτρος
         text: Πώς είναι;
+        audio: m11-2/shop-9.mp3
       - speaker: Δέσποινα
         text: Μου είναι λίγο στενό. Το έχετε σε πιο μεγάλο νούμερο;
+        audio: m11-2/shop-10.mp3
       - speaker: Πέτρος
         text: Ναι, σε σαράντα. Ορίστε.
+        audio: m11-2/shop-11.mp3
       - speaker: Δέσποινα
         text: Αυτό είναι πολύ καλό. Θέλω και ένα πουκάμισο.
+        audio: m11-2/shop-12.mp3
       - speaker: Πέτρος
         text: Αυτό το άσπρο πουκάμισο είναι πολύ ελαφρύ. Κοστίζει είκοσι ευρώ.
+        audio: m11-2/shop-13.mp3
       - speaker: Δέσποινα
         text: Ωραίο. Το έχετε σε άλλο χρώμα;
+        audio: m11-2/shop-14.mp3
       - speaker: Πέτρος
         text: Σε ανοιχτό μπλε και σε ροζ.
+        audio: m11-2/shop-15.mp3
       - speaker: Δέσποινα
         text: Το ανοιχτό μπλε, παρακαλώ. Και αν το παντελόνι δεν μου αρέσει στο σπίτι;
+        audio: m11-2/shop-16.mp3
       - speaker: Πέτρος
         text: Η αλλαγή γίνεται μέσα σε δεκατέσσερις ημέρες, με την απόδειξη.
+        audio: m11-2/shop-17.mp3
       - speaker: Δέσποινα
         text: Πολύ ωραία. Πληρώνω με κάρτα.
+        audio: m11-2/shop-18.mp3
       - speaker: Πέτρος
         text: Ορίστε η απόδειξή σας. Καλή σας μέρα!
+        audio: m11-2/shop-19.mp3
   - type: exercise
     id: shop-choice
     about: shop

@@ -383,38 +383,55 @@ blocks:
     transcript:
       - speaker: Σάββας
         text: Καλημέρα σας! Φρέσκα φρούτα, ντόπια λαχανικά! Τι θέλετε, κυρία μου;
+        audio: m10-2/at-market-1.mp3
       - speaker: Ρένα
         text: Καλημέρα. Πόσο κάνουν οι ντομάτες;
+        audio: m10-2/at-market-2.mp3
       - speaker: Σάββας
         text: Ένα και ογδόντα το κιλό. Είναι ντόπιες, από την Πάφο.
+        audio: m10-2/at-market-3.mp3
       - speaker: Ρένα
         text: Ωραία. Ένα κιλό ντομάτες, παρακαλώ. Και δύο πιπεριές.
+        audio: m10-2/at-market-4.mp3
       - speaker: Σάββας
         text: Ορίστε. Οι πιπεριές κάνουν ένα ευρώ. Κάτι άλλο;
+        audio: m10-2/at-market-5.mp3
       - speaker: Ρένα
         text: Έχετε φράουλες;
+        audio: m10-2/at-market-6.mp3
       - speaker: Σάββας
         text: Φράουλες δεν έχω σήμερα, αλλά έχω πολύ ωραία σταφύλια. Κάνουν τρία ευρώ το κιλό.
+        audio: m10-2/at-market-7.mp3
       - speaker: Ρένα
         text: Τρία ευρώ; Είναι πολύ ακριβά. Έχει έκπτωση;
+        audio: m10-2/at-market-8.mp3
       - speaker: Σάββας
         text: Για σας, τα δύο κιλά πέντε ευρώ.
+        audio: m10-2/at-market-9.mp3
       - speaker: Ρένα
         text: Εντάξει, δύο κιλά. Και ένα καρπούζι. Είναι ώριμο;
+        audio: m10-2/at-market-10.mp3
       - speaker: Σάββας
         text: Πολύ ώριμο και γλυκό! Αυτό εδώ κάνει δύο ευρώ.
+        audio: m10-2/at-market-11.mp3
       - speaker: Ρένα
         text: Ωραία. Τίποτα άλλο, ευχαριστώ. Πόσο κάνουν όλα μαζί;
+        audio: m10-2/at-market-12.mp3
       - speaker: Σάββας
         text: Εννιά και ογδόντα.
+        audio: m10-2/at-market-13.mp3
       - speaker: Ρένα
         text: Δεν έχω ψιλά. Ορίστε δέκα ευρώ.
+        audio: m10-2/at-market-14.mp3
       - speaker: Σάββας
         text: Ορίστε τα ρέστα σας, είκοσι λεπτά. Θέλετε σακούλα;
+        audio: m10-2/at-market-15.mp3
       - speaker: Ρένα
         text: Όχι, ευχαριστώ. Έχω το καλάθι μου.
+        audio: m10-2/at-market-16.mp3
       - speaker: Σάββας
         text: Ευχαριστώ, κυρία μου! Γεια σας!
+        audio: m10-2/at-market-17.mp3
   - type: exercise
     id: market-notes
     about: at-market

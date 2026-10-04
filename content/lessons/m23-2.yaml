@@ -103,38 +103,55 @@ blocks:
     transcript:
       - speaker: Ευτυχία
         text: Καλημέρα σας. Πώς μπορώ να σας βοηθήσω;
+        audio: m23-2/post-office-1.mp3
       - speaker: Φοίβος
         text: Καλημέρα. Θα ήθελα να στείλω αυτό το δέμα στη Θεσσαλονίκη.
+        audio: m23-2/post-office-2.mp3
       - speaker: Ευτυχία
         text: Βεβαίως. Να το ζυγίσω… Είναι δύο κιλά. Θέλετε να φτάσει γρήγορα;
+        audio: m23-2/post-office-3.mp3
       - speaker: Φοίβος
         text: Ναι, μέσα είναι βιβλία για τον γιο μου. Τα χρειάζεται μέχρι την Παρασκευή.
+        audio: m23-2/post-office-4.mp3
       - speaker: Ευτυχία
         text: Τότε σας προτείνω την ταχεία αποστολή. Το δέμα φτάνει σε τρεις μέρες και κοστίζει δεκαοχτώ ευρώ.
+        audio: m23-2/post-office-5.mp3
       - speaker: Φοίβος
         text: Εντάξει.
+        audio: m23-2/post-office-6.mp3
       - speaker: Ευτυχία
         text: Συμπληρώστε αυτό το έντυπο, παρακαλώ. Πάνω γράψτε τα στοιχεία του παραλήπτη και κάτω τα δικά σας, του αποστολέα. Κάτι άλλο;
+        audio: m23-2/post-office-7.mp3
       - speaker: Φοίβος
         text: Ναι. Χθες ήρθε μια συστημένη επιστολή για μένα, αλλά δεν ήμουν στο σπίτι.
+        audio: m23-2/post-office-8.mp3
       - speaker: Ευτυχία
         text: Την ταυτότητά σας, παρακαλώ… Ορίστε, η επιστολή είναι από την τράπεζά σας. Υπογράψτε εδώ, παρακαλώ.
+        audio: m23-2/post-office-9.mp3
       - speaker: Φοίβος
         text: Ευχαριστώ. Θα ήθελα και δέκα γραμματόσημα.
+        audio: m23-2/post-office-10.mp3
       - speaker: Ευτυχία
         text: Τα γραμματόσημα κάνουν επτά ευρώ. Όλα μαζί, είκοσι πέντε ευρώ.
+        audio: m23-2/post-office-11.mp3
       - speaker: Φοίβος
         text: Θα μπορούσα να πληρώσω με κάρτα;
+        audio: m23-2/post-office-12.mp3
       - speaker: Ευτυχία
         text: Βεβαίως.
+        audio: m23-2/post-office-13.mp3
       - speaker: Φοίβος
         text: Και μια τελευταία ερώτηση. Τι ώρα κλείνετε το Σάββατο;
+        audio: m23-2/post-office-14.mp3
       - speaker: Ευτυχία
         text: Το Σάββατο κλείνουμε στις δώδεκα και μισή.
+        audio: m23-2/post-office-15.mp3
       - speaker: Φοίβος
         text: Ευχαριστώ πολύ. Καλή σας μέρα.
+        audio: m23-2/post-office-16.mp3
       - speaker: Ευτυχία
         text: Καλή σας μέρα.
+        audio: m23-2/post-office-17.mp3
   - type: exercise
     id: post-notes
     about: post-office

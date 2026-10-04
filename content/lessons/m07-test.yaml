@@ -101,14 +101,19 @@ blocks:
     transcript:
       - speaker: Γιάννης
         text: "Θέλω μία μικρή ντουλάπα για το υπνοδωμάτιο. Άσπρη, παρακαλώ."
+        audio: m07-test/shop-1.mp3
       - speaker: Μαρία
         text: "Ψάχνω δύο πράσινες καρέκλες για το μπαλκόνι."
+        audio: m07-test/shop-2.mp3
       - speaker: Κώστας
         text: "Θέλω έναν μεγάλο μαύρο καναπέ για το σαλόνι, παρακαλώ."
+        audio: m07-test/shop-3.mp3
       - speaker: Ελένη
         text: "Ψάχνω ένα φτηνό ψυγείο. Μικρό, γιατί η κουζίνα μου είναι πολύ μικρή."
+        audio: m07-test/shop-4.mp3
       - speaker: Σάββας
         text: "Θέλω ένα κρεβάτι για το παιδί μου. Κόκκινο, όχι μπλε."
+        audio: m07-test/shop-5.mp3
   - type: exercise
     id: shop-match
     about: shop

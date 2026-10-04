@@ -452,38 +452,55 @@ blocks:
     transcript:
       - speaker: Κώστας
         text: Καλησπέρα σας! Πείτε μου, τι θα πάρετε;
+        audio: m09-2/order-1.mp3
       - speaker: Δέσποινα
         text: Καλησπέρα. Δεν ξέρω ακόμα. Τι μου προτείνετε;
+        audio: m09-2/order-2.mp3
       - speaker: Κώστας
         text: Σήμερα έχουμε πολύ ωραίο ψάρι, ψητό, με σαλάτα.
+        audio: m09-2/order-3.mp3
       - speaker: Δέσποινα
         text: Ψάρι δεν θέλω, ευχαριστώ. Θα ήθελα το κλέφτικο. Είναι μεγάλη η μερίδα;
+        audio: m09-2/order-4.mp3
       - speaker: Κώστας
         text: Ναι, πολύ μεγάλη.
+        audio: m09-2/order-5.mp3
       - speaker: Δέσποινα
         text: Ωραία. Και για ορεκτικό ένα χαλλούμι ψητό, παρακαλώ.
+        audio: m09-2/order-6.mp3
       - speaker: Κώστας
         text: Συγγνώμη, χαλλούμι δεν έχουμε σήμερα. Έχουμε πατάτες τηγανητές ή τζατζίκι.
+        audio: m09-2/order-7.mp3
       - speaker: Δέσποινα
         text: Μια μερίδα πατάτες, παρακαλώ.
+        audio: m09-2/order-8.mp3
       - speaker: Κώστας
         text: Και τι θα πιείτε;
+        audio: m09-2/order-9.mp3
       - speaker: Δέσποινα
         text: Μια κανάτα νερό και ένα ποτήρι κόκκινο κρασί.
+        audio: m09-2/order-10.mp3
       - speaker: Κώστας
         text: Αμέσως!
+        audio: m09-2/order-11.mp3
       - speaker: Δέσποινα
         text: Συγγνώμη! Μπορείτε να μου φέρετε ένα πιρούνι;
+        audio: m09-2/order-12.mp3
       - speaker: Κώστας
         text: Ναι, έρχομαι αμέσως!
+        audio: m09-2/order-13.mp3
       - speaker: Δέσποινα
         text: Και τον λογαριασμό, παρακαλώ.
+        audio: m09-2/order-14.mp3
       - speaker: Κώστας
         text: Είκοσι δύο ευρώ. Θέλετε και έναν κυπριακό καφέ; Κερνάει το μαγαζί.
+        audio: m09-2/order-15.mp3
       - speaker: Δέσποινα
         text: Ευχαριστώ πολύ! Έναν σκέτο, παρακαλώ. Και είκοσι πέντε ευρώ — κρατήστε τα ρέστα.
+        audio: m09-2/order-16.mp3
       - speaker: Κώστας
         text: Ευχαριστώ πολύ! Καλό βράδυ!
+        audio: m09-2/order-17.mp3
   - type: exercise
     id: order-choice
     about: order

@@ -93,36 +93,52 @@ blocks:
     transcript:
       - speaker: Αντιγόνη
         text: Υπηρεσία ρεύματος, καλησπέρα σας. Με λένε Αντιγόνη.
+        audio: m23-test/electricity-1.mp3
       - speaker: Στέλιος
         text: Καλησπέρα σας. Θα ήθελα να ρωτήσω για τον λογαριασμό του ρεύματος. Είναι διακόσια δέκα ευρώ, αλλά συνήθως πληρώνω ογδόντα.
+        audio: m23-test/electricity-2.mp3
       - speaker: Αντιγόνη
         text: Το όνομά σας, παρακαλώ;
+        audio: m23-test/electricity-3.mp3
       - speaker: Στέλιος
         text: Στέλιος Ευαγγέλου.
+        audio: m23-test/electricity-4.mp3
       - speaker: Αντιγόνη
         text: Και τη διεύθυνσή σας;
+        audio: m23-test/electricity-5.mp3
       - speaker: Στέλιος
         text: Οδός Κύπρου 14, στη Λεμεσό.
+        audio: m23-test/electricity-6.mp3
       - speaker: Αντιγόνη
         text: Ναι, κύριε Ευαγγέλου. Ο λογαριασμός είναι για δύο μήνες, για τον Ιούλιο και τον Αύγουστο.
+        audio: m23-test/electricity-7.mp3
       - speaker: Στέλιος
         text: Α, καταλαβαίνω. Το καλοκαίρι έχουμε το κλιματιστικό ανοιχτό όλη μέρα.
+        audio: m23-test/electricity-8.mp3
       - speaker: Αντιγόνη
         text: Ναι, γι' αυτό ο λογαριασμός είναι πιο ακριβός.
+        audio: m23-test/electricity-9.mp3
       - speaker: Στέλιος
         text: Μέχρι πότε πρέπει να τον πληρώσω;
+        audio: m23-test/electricity-10.mp3
       - speaker: Αντιγόνη
         text: Η προθεσμία είναι μέχρι τις είκοσι Σεπτεμβρίου.
+        audio: m23-test/electricity-11.mp3
       - speaker: Στέλιος
         text: Και πού μπορώ να τον πληρώσω;
+        audio: m23-test/electricity-12.mp3
       - speaker: Αντιγόνη
         text: Με κάρτα στην ιστοσελίδα μας ή στο ταχυδρομείο.
+        audio: m23-test/electricity-13.mp3
       - speaker: Στέλιος
         text: Θα μπορούσατε να μου στείλετε τον λογαριασμό και με email;
+        audio: m23-test/electricity-14.mp3
       - speaker: Αντιγόνη
         text: Βεβαίως, θα σας τον στείλω σήμερα. Κάτι άλλο;
+        audio: m23-test/electricity-15.mp3
       - speaker: Στέλιος
         text: Όχι, ευχαριστώ πολύ. Καλησπέρα σας.
+        audio: m23-test/electricity-16.mp3
   - type: exercise
     id: electricity-notes
     about: electricity

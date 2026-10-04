@@ -76,30 +76,43 @@ blocks:
     transcript:
       - speaker: Κατερίνα
         text: Γεια σου, Άρη! Τι κάνεις; Πώς ήταν η συνέντευξη;
+        audio: m15-test/new-job-1.mp3
       - speaker: Άρης
         text: Γεια σου, Κατερίνα! Πολύ καλά. Με προσέλαβαν!
+        audio: m15-test/new-job-2.mp3
       - speaker: Κατερίνα
         text: Μπράβο! Πού;
+        audio: m15-test/new-job-3.mp3
       - speaker: Άρης
         text: Σε ένα εργοστάσιο στη Λευκωσία. Είμαι ηλεκτρολόγος εκεί.
+        audio: m15-test/new-job-4.mp3
       - speaker: Κατερίνα
         text: Και πότε ξεκινάς;
+        audio: m15-test/new-job-5.mp3
       - speaker: Άρης
         text: Ξεκίνησα χθες! Η πρώτη μέρα ήταν λίγο κουραστική, αλλά οι συνάδελφοι είναι πολύ καλοί.
+        audio: m15-test/new-job-6.mp3
       - speaker: Κατερίνα
         text: Και το ωράριο;
+        audio: m15-test/new-job-7.mp3
       - speaker: Άρης
         text: Δουλεύω με βάρδιες. Αυτή την εβδομάδα έχω πρωινή βάρδια, από τις έξι μέχρι τις δύο.
+        audio: m15-test/new-job-8.mp3
       - speaker: Κατερίνα
         text: Από τις έξι; Πολύ νωρίς!
+        audio: m15-test/new-job-9.mp3
       - speaker: Άρης
         text: Ναι, αλλά στις δύο και μισή είμαι στο σπίτι. Και ο μισθός είναι καλός, χίλια εξακόσια ευρώ.
+        audio: m15-test/new-job-10.mp3
       - speaker: Κατερίνα
         text: Ωραία! Το Σάββατο πάμε για καφέ;
+        audio: m15-test/new-job-11.mp3
       - speaker: Άρης
         text: Το Σάββατο δουλεύω. Την Κυριακή;
+        audio: m15-test/new-job-12.mp3
       - speaker: Κατερίνα
         text: Ναι, την Κυριακή!
+        audio: m15-test/new-job-13.mp3
   - type: exercise
     id: new-job-choice
     about: new-job

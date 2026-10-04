@@ -84,30 +84,43 @@ blocks:
     transcript:
       - speaker: Σταύρος
         text: Σχολή «Ορίζοντες», καλημέρα σας.
+        audio: m16-test/school-call-1.mp3
       - speaker: Ιωάννα
         text: Καλημέρα σας. Θα ήθελα πληροφορίες για τα μαθήματα ελληνικών.
+        audio: m16-test/school-call-2.mp3
       - speaker: Σταύρος
         text: Ναι, παρακαλώ. Σε ποιο επίπεδο είστε;
+        audio: m16-test/school-call-3.mp3
       - speaker: Ιωάννα
         text: Δεν ξέρω. Μαθαίνω ελληνικά εδώ και έξι μήνες.
+        audio: m16-test/school-call-4.mp3
       - speaker: Σταύρος
         text: Πρέπει να γράψετε ένα μικρό τεστ. Μπορείτε να έρθετε την Πέμπτη στις δέκα;
+        audio: m16-test/school-call-5.mp3
       - speaker: Ιωάννα
         text: Την Πέμπτη δεν μπορώ, δουλεύω. Μπορώ να έρθω την Παρασκευή;
+        audio: m16-test/school-call-6.mp3
       - speaker: Σταύρος
         text: Ναι, την Παρασκευή στις δέκα.
+        audio: m16-test/school-call-7.mp3
       - speaker: Ιωάννα
         text: Και πόσο κοστίζουν τα δίδακτρα;
+        audio: m16-test/school-call-8.mp3
       - speaker: Σταύρος
         text: Ενενήντα ευρώ τον μήνα, για δύο μαθήματα την εβδομάδα. Για τα βιβλία δεν πληρώνετε τίποτα.
+        audio: m16-test/school-call-9.mp3
       - speaker: Ιωάννα
         text: Πολύ ωραία. Και πότε αρχίζουν τα μαθήματα;
+        audio: m16-test/school-call-10.mp3
       - speaker: Σταύρος
         text: Στις δεκαπέντε Ιανουαρίου.
+        audio: m16-test/school-call-11.mp3
       - speaker: Ιωάννα
         text: Ευχαριστώ πολύ! Γεια σας.
+        audio: m16-test/school-call-12.mp3
       - speaker: Σταύρος
         text: Γεια σας, τα λέμε την Παρασκευή.
+        audio: m16-test/school-call-13.mp3
   - type: exercise
     id: school-call-choice
     about: school-call

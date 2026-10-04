@@ -362,34 +362,49 @@ blocks:
     transcript:
       - speaker: Δέσποινα
         text: "Καλημέρα σας! Με λένε Δέσποινα. Ψάχνω ένα διαμέρισμα στην Πάφο. Νοικιάζετε διαμέρισμα;"
+        audio: m06-2/landlord-1.mp3
       - speaker: Χρήστος
         text: "Καλημέρα! Ναι. Το διαμέρισμα έχει δύο υπνοδωμάτια, σαλόνι, κουζίνα και μπάνιο."
+        audio: m06-2/landlord-2.mp3
       - speaker: Δέσποινα
         text: "Πού είναι; Είναι κοντά στη θάλασσα;"
+        audio: m06-2/landlord-3.mp3
       - speaker: Χρήστος
         text: "Ναι, πολύ κοντά. Η θάλασσα είναι πίσω από το σπίτι."
+        audio: m06-2/landlord-4.mp3
       - speaker: Δέσποινα
         text: "Ωραία! Το διαμέρισμα είναι πάνω ή κάτω;"
+        audio: m06-2/landlord-5.mp3
       - speaker: Χρήστος
         text: "Είναι πάνω. Κάτω μένω εγώ με την οικογένειά μου."
+        audio: m06-2/landlord-6.mp3
       - speaker: Δέσποινα
         text: "Υπάρχει τραπέζι στην κουζίνα;"
+        audio: m06-2/landlord-7.mp3
       - speaker: Χρήστος
         text: "Ναι, στην κουζίνα υπάρχει τραπέζι και στο σαλόνι υπάρχει τηλεόραση. Αλλά στα υπνοδωμάτια δεν υπάρχει τίποτα."
+        audio: m06-2/landlord-8.mp3
       - speaker: Δέσποινα
         text: "Πόσο είναι το ενοίκιο;"
+        audio: m06-2/landlord-9.mp3
       - speaker: Χρήστος
         text: "Εξακόσια ευρώ κάθε μήνα, μαζί με το νερό."
+        audio: m06-2/landlord-10.mp3
       - speaker: Δέσποινα
         text: "Μπορώ να δω το σπίτι;"
+        audio: m06-2/landlord-11.mp3
       - speaker: Χρήστος
         text: "Ναι. Αύριο το πρωί, στις δέκα;"
+        audio: m06-2/landlord-12.mp3
       - speaker: Δέσποινα
         text: "Το πρωί δεν μπορώ, δουλεύω. Το απόγευμα, στις έξι;"
+        audio: m06-2/landlord-13.mp3
       - speaker: Χρήστος
         text: "Καλά. Τα λέμε αύριο στις έξι."
+        audio: m06-2/landlord-14.mp3
       - speaker: Δέσποινα
         text: "Ευχαριστώ πολύ! Γεια σας!"
+        audio: m06-2/landlord-15.mp3
   - type: exercise
     id: landlord-tf
     about: landlord

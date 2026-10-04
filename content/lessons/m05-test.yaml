@@ -83,12 +83,16 @@ blocks:
     transcript:
       - speaker: Πέτρος
         text: Γεια σας! Είμαι ο Πέτρος, είμαι γιατρός και μένω στη Λεμεσό.
+        audio: m05-test/petros-1.mp3
       - speaker: Πέτρος
         text: Τη Δευτέρα, την Τετάρτη και την Παρασκευή δουλεύω το πρωί. Ξυπνάω στις έξι και γυρίζω σπίτι στις τρεις.
+        audio: m05-test/petros-2.mp3
       - speaker: Πέτρος
         text: Την Τρίτη και την Πέμπτη κοιμάμαι το απόγευμα και δουλεύω τη νύχτα.
+        audio: m05-test/petros-3.mp3
       - speaker: Πέτρος
         text: Δεν έχω πολύ χρόνο, αλλά το Σάββατο κάνω πάντα βόλτα με τα παιδιά μου. Την Κυριακή έρχονται οι γονείς μου.
+        audio: m05-test/petros-4.mp3
   - type: exercise
     id: petros-choice
     about: petros

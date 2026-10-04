@@ -349,36 +349,52 @@ blocks:
     transcript:
       - speaker: Γιώργος
         text: Γεια σου, Μαρίνα! Πού πας με αυτά τα βιβλία;
+        audio: m16-2/courses-1.mp3
       - speaker: Μαρίνα
         text: Γεια σου, Γιώργο! Πάω στο μάθημα. Γράφτηκα σε μια σχολή ξένων γλωσσών.
+        audio: m16-2/courses-2.mp3
       - speaker: Γιώργος
         text: Ωραία! Σε ποιο επίπεδο είσαι;
+        audio: m16-2/courses-3.mp3
       - speaker: Μαρίνα
         text: Στο Α2. Μαθαίνω ελληνικά εδώ και έναν χρόνο. Ο στόχος μου είναι να δώσω εξετάσεις τον Μάιο.
+        audio: m16-2/courses-4.mp3
       - speaker: Γιώργος
         text: Πόσες φορές την εβδομάδα έχεις μάθημα;
+        audio: m16-2/courses-5.mp3
       - speaker: Μαρίνα
         text: Δύο φορές, την Τρίτη και την Πέμπτη το βράδυ. Το πρωί δεν μπορώ, γιατί δουλεύω.
+        audio: m16-2/courses-6.mp3
       - speaker: Γιώργος
         text: Και πώς είναι ο καθηγητής σας;
+        audio: m16-2/courses-7.mp3
       - speaker: Μαρίνα
         text: Είναι καθηγήτρια, η κυρία Ελένη. Είναι πολύ καλή! Εξηγεί πολύ καλά τη γραμματική και απαντάει σε όλες τις ερωτήσεις μας.
+        audio: m16-2/courses-8.mp3
       - speaker: Γιώργος
         text: Και τι είναι δύσκολο;
+        audio: m16-2/courses-9.mp3
       - speaker: Μαρίνα
         text: Η προφορά δεν είναι δύσκολη. Αλλά όταν γράφω, κάνω πολλά λάθη. Πρέπει να γράφω κάθε μέρα.
+        audio: m16-2/courses-10.mp3
       - speaker: Γιώργος
         text: Αν θέλεις, μπορούμε να μιλάμε μόνο ελληνικά στη δουλειά.
+        audio: m16-2/courses-11.mp3
       - speaker: Μαρίνα
         text: Ναι, ευχαριστώ πολύ!
+        audio: m16-2/courses-12.mp3
       - speaker: Γιώργος
         text: Πόσο κοστίζουν τα δίδακτρα;
+        audio: m16-2/courses-13.mp3
       - speaker: Μαρίνα
         text: Εκατόν είκοσι ευρώ τον μήνα. Και τα βιβλία κοστίζουν είκοσι ευρώ.
+        audio: m16-2/courses-14.mp3
       - speaker: Γιώργος
         text: Δεν είναι ακριβά. Καλό μάθημα! Τα λέμε αύριο στη δουλειά.
+        audio: m16-2/courses-15.mp3
       - speaker: Μαρίνα
         text: Τα λέμε!
+        audio: m16-2/courses-16.mp3
   - type: exercise
     id: courses-choice
     about: courses

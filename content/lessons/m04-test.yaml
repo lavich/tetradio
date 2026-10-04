@@ -98,24 +98,34 @@ blocks:
     transcript:
       - speaker: Μιχάλης
         text: Γεια σου, Δέσποινα! Τι κάνεις;
+        audio: m04-test/call-1.mp3
       - speaker: Δέσποινα
         text: Καλά, Μιχάλη. Κι εσύ;
+        audio: m04-test/call-2.mp3
       - speaker: Μιχάλης
         text: Καλά. Είσαι ελεύθερη την Πέμπτη το βράδυ; Πάμε σινεμά;
+        audio: m04-test/call-3.mp3
       - speaker: Δέσποινα
         text: Την Πέμπτη δεν μπορώ, δουλεύω. Αλλά την Παρασκευή είμαι ελεύθερη.
+        audio: m04-test/call-4.mp3
       - speaker: Μιχάλης
         text: Ωραία! Την Παρασκευή στις οκτώ και μισή;
+        audio: m04-test/call-5.mp3
       - speaker: Δέσποινα
         text: Στις οκτώ και μισή δεν μπορώ. Στις εννιά παρά τέταρτο;
+        audio: m04-test/call-6.mp3
       - speaker: Μιχάλης
         text: Εντάξει. Πόσο κάνει το σινεμά;
+        audio: m04-test/call-7.mp3
       - speaker: Δέσποινα
         text: Επτά ευρώ. Πού βρισκόμαστε;
+        audio: m04-test/call-8.mp3
       - speaker: Μιχάλης
         text: Στο καφέ «Μύρτο», στη Λάρνακα. Και έχω άλλο τηλέφωνο τώρα. Ενενήντα επτά, δεκαέξι, ογδόντα, τριάντα τρία.
+        audio: m04-test/call-9.mp3
       - speaker: Δέσποινα
         text: Ενενήντα επτά, δεκαέξι, ογδόντα, τριάντα τρία. Εντάξει. Τα λέμε την Παρασκευή!
+        audio: m04-test/call-10.mp3
   - type: exercise
     id: call-notes
     about: call

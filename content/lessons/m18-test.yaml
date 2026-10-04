@@ -81,38 +81,55 @@ blocks:
     transcript:
       - speaker: Κυριάκος
         text: Καλημέρα, κυρία Μαρίνα. Ελάτε. Τι έχετε;
+        audio: m18-test/doctor-1.mp3
       - speaker: Μαρίνα
         text: Καλημέρα, γιατρέ. Με πονάει πολύ το αυτί μου.
+        audio: m18-test/doctor-2.mp3
       - speaker: Κυριάκος
         text: Από πότε;
+        audio: m18-test/doctor-3.mp3
       - speaker: Μαρίνα
         text: Από την Κυριακή. Τη νύχτα δεν κοιμάμαι καλά.
+        audio: m18-test/doctor-4.mp3
       - speaker: Κυριάκος
         text: Έχετε πυρετό;
+        audio: m18-test/doctor-5.mp3
       - speaker: Μαρίνα
         text: Λίγο. Χθες το βράδυ είχα τριάντα οκτώ.
+        audio: m18-test/doctor-6.mp3
       - speaker: Κυριάκος
         text: Για να δω… Ναι, το αυτί σας είναι κόκκινο. Δεν είναι κάτι σοβαρό, αλλά χρειάζεστε θεραπεία. Σας γράφω σταγόνες για το αυτί.
+        audio: m18-test/doctor-7.mp3
       - speaker: Μαρίνα
         text: Πώς τις βάζω;
+        audio: m18-test/doctor-8.mp3
       - speaker: Κυριάκος
         text: Τρεις σταγόνες δύο φορές την ημέρα, το πρωί και το βράδυ, για πέντε μέρες.
+        audio: m18-test/doctor-9.mp3
       - speaker: Μαρίνα
         text: Χρειάζομαι αντιβίωση;
+        audio: m18-test/doctor-10.mp3
       - speaker: Κυριάκος
         text: Όχι, δεν χρειάζεται. Αν πονάτε πολύ, πάρτε ένα χάπι για τον πόνο. Και μην κολυμπάτε στη θάλασσα αυτή την εβδομάδα.
+        audio: m18-test/doctor-11.mp3
       - speaker: Μαρίνα
         text: Μπορώ να πάω στη δουλειά;
+        audio: m18-test/doctor-12.mp3
       - speaker: Κυριάκος
         text: Ναι, μπορείτε. Αν σε πέντε μέρες σας πονάει ακόμα, ελάτε πάλι.
+        audio: m18-test/doctor-13.mp3
       - speaker: Μαρίνα
         text: Οι σταγόνες καλύπτονται από το ΓεΣΥ;
+        audio: m18-test/doctor-14.mp3
       - speaker: Κυριάκος
         text: Ναι. Με τη συνταγή πληρώνετε στο φαρμακείο μόνο ένα ευρώ.
+        audio: m18-test/doctor-15.mp3
       - speaker: Μαρίνα
         text: Ευχαριστώ πολύ, γιατρέ.
+        audio: m18-test/doctor-16.mp3
       - speaker: Κυριάκος
         text: Να γίνετε γρήγορα καλά!
+        audio: m18-test/doctor-17.mp3
   - type: exercise
     id: doctor-choice
     about: doctor

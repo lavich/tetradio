@@ -471,34 +471,49 @@ blocks:
     transcript:
       - speaker: Στέλιος
         text: Ελένη, είναι μία η ώρα. Πεινάς;
+        audio: m08-2/lunch-1.mp3
       - speaker: Ελένη
         text: Ναι, πεινάω πολύ! Πού τρώμε σήμερα;
+        audio: m08-2/lunch-2.mp3
       - speaker: Στέλιος
         text: Κοντά στη δουλειά υπάρχει μια καλή ταβέρνα. Έχει πολύ νόστιμα σουβλάκια.
+        audio: m08-2/lunch-3.mp3
       - speaker: Ελένη
         text: Σουβλάκια; Όχι, δεν τρώω κρέας.
+        audio: m08-2/lunch-4.mp3
       - speaker: Στέλιος
         text: Και κοτόπουλο δεν τρως;
+        audio: m08-2/lunch-5.mp3
       - speaker: Ελένη
         text: Όχι. Ψάρι τρώω, αλλά μόνο το βράδυ. Για μεσημεριανό προτιμώ μια σαλάτα ή χαλλούμι με ψωμί.
+        audio: m08-2/lunch-6.mp3
       - speaker: Στέλιος
         text: Η ταβέρνα έχει και σαλάτες και χαλλούμι στο τηγάνι.
+        audio: m08-2/lunch-7.mp3
       - speaker: Ελένη
         text: Ωραία! Μου αρέσει πολύ το χαλλούμι. Κι εσύ τι θέλεις;
+        audio: m08-2/lunch-8.mp3
       - speaker: Στέλιος
         text: Εγώ θέλω δύο σουβλάκια με πατάτες και έναν χυμό.
+        audio: m08-2/lunch-9.mp3
       - speaker: Ελένη
         text: Δεν πίνεις καφέ;
+        audio: m08-2/lunch-10.mp3
       - speaker: Στέλιος
         text: Όχι, δεν μου αρέσει ο καφές. Προτιμώ το τσάι, αλλά στην ταβέρνα πίνω πάντα χυμό.
+        audio: m08-2/lunch-11.mp3
       - speaker: Ελένη
         text: Εγώ πίνω μόνο νερό. Και μετά τρώμε ένα γλυκό;
+        audio: m08-2/lunch-12.mp3
       - speaker: Στέλιος
         text: Όχι, ευχαριστώ. Δεν μου αρέσουν πολύ τα γλυκά.
+        audio: m08-2/lunch-13.mp3
       - speaker: Ελένη
         text: Εγώ τρώω γλυκά κάθε μέρα! Πάμε;
+        audio: m08-2/lunch-14.mp3
       - speaker: Στέλιος
         text: Πάμε!
+        audio: m08-2/lunch-15.mp3
   - type: exercise
     id: lunch-choice
     about: lunch
