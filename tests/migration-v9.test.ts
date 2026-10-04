@@ -201,7 +201,7 @@ describe("обновление копии v8", () => {
                   "kind": "lesson",
                   "tally": {
                     "done": 0,
-                    "total": 1,
+                    "total": 2,
                   },
                   "title": "Слабый навык (пример)",
                 },

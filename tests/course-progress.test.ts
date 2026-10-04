@@ -70,6 +70,20 @@ describe("проверка ответа по ключу", () => {
     expect(score).toMatchObject({ correct: 1, almost: 0, total: 2 });
     expect(score.results.q2.status).toBe("wrong");
   });
+  it("соединение сравнивается с вариантом банка точно: без «почти», неотвеченный и чужой вариант — неверно", () => {
+    const pairs = demo.packages.find((p) => p.id === "m01-r1")!.blocks!.find((b) => b.id === "pairs") as ExerciseBlock;
+    expect(pairs).toMatchObject({ format: "match", bank: ["είμαι", "είσαι", "είναι", "είμαστε"] });
+    const [m1, , m3] = pairs.items;
+    expect(checkItem(pairs, m1, "είμαι")).toEqual({ status: "correct", expected: "είμαι" });
+    expect(checkItem(pairs, m1, "είμαι".normalize("NFD")).status).toBe("correct");
+    expect(checkItem(pairs, m1, "ειμαι").status).toBe("wrong");
+    expect(checkItem(pairs, m3, "είναι")).toEqual({ status: "wrong", expected: "είμαστε" });
+    const all = scoreExercise(pairs, { m1: "είμαι", m2: "είσαι", m3: "είμαστε" });
+    expect(all).toMatchObject({ correct: 3, almost: 0, total: 3 });
+    const partly = scoreExercise(pairs, { m1: "είμαι", m3: "είναι" });
+    expect(partly).toMatchObject({ correct: 1, almost: 0, total: 3 });
+    expect([partly.results.m2.status, partly.results.m3.status]).toEqual(["wrong", "wrong"]);
+  });
   it("слова письма считаются без пунктуации", () => {
     expect(wordCount("Γεια σας! Με λένε Ιβάν. — ")).toBe(5);
   });
