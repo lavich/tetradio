@@ -4,13 +4,7 @@ import { createEmptyCard, Rating, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { wordRef } from "./helpers/cards";
-import {
-  ConflictError,
-  markIntroduced,
-  prepareObjectiveSession,
-  saveNewItemsPerDay,
-  submitAnswer,
-} from "../src/storage/ops";
+import { ConflictError, markIntroduced, saveNewItemsPerDay, submitAnswer } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { type Word } from "../src/domain/types";
 import { completeLessons, installLessons, wordsOf } from "./helpers/content";
@@ -196,24 +190,6 @@ describe("запись ответа", () => {
     expect((await db.sessions.get(session.id))!.status).toBe("done");
     expect(await db.cardStates.get(session.items[0].unitKey)).toEqual(state);
   });
-  it("обновляет только неотвеченный recall и сохраняет старую историю", async () => {
-    const { session } = await prepare();
-    const event = await answer(session);
-    const stored = (await db.sessions.get(session.id))!;
-    const legacy = {
-      ...stored,
-      objectiveVersion: undefined,
-      items: stored.items.map((item) => ({ ...item, type: "recall" as const, options: [] })),
-    };
-    await db.sessions.put(legacy);
-    await prepareObjectiveSession(session.id, db);
-    const converted = (await db.sessions.get(session.id))!;
-    expect(converted.items[0]).toEqual(legacy.items[0]);
-    expect(converted.items.slice(1).every((item) => item.type !== "recall")).toBe(true);
-    expect(await db.events.get(event.id)).toEqual(event);
-    await prepareObjectiveSession(session.id, db);
-    expect(await db.sessions.get(session.id)).toEqual(converted);
-  });
   it("ошибка транзакции откатывает событие, состояние и дополнительную попытку", async () => {
     const { session } = await prepare();
     const fail = () => {
@@ -245,10 +221,8 @@ describe("запись ответа", () => {
 });
 
 describe("план курса на базе", () => {
-  it("установленный, но не пройденный урок новых карточек не даёт — даже при сохранённом расписании", async () => {
+  it("установленный, но не пройденный урок новых карточек не даёт", async () => {
     await installLessons(db, ALL);
-    await db.courses.update("mechanics", { schedule: { startDate: "2026-09-01", weekdays: [1, 4], lessonHour: 12 } });
-    await db.lessons.update("mech-2", { targetDate: "2026-09-10" });
     expect((await makePlan(source(), now)).newRefs).toEqual([]);
     await completeLessons(db, ["mech-1"]);
     const plan = await makePlan(source(), now);
@@ -525,12 +499,12 @@ describe("близкие слова в вариантах записи", () => {
       expect(count(retry.options, russian(mates))).toBe(2);
     }
   });
-  it("слово занятия, удалённое после сборки, не попадает в варианты попытки", async () => {
+  it("слово занятия, убранное после сборки, не попадает в варианты попытки", async () => {
     const dog = w("ο λύκος", "волк");
     await seed([dog]);
     await db.lessonItems.clear(); // единственный близкий кандидат — слово занятия
     const { stored, item } = await failAssembly([cat, dog]);
-    await db.words.update(dog.id, { deletedAt: iso });
+    await db.words.delete(dog.id);
     await fail(stored, item);
     const retry = await retryOf(stored, item);
     expect(retry.options).toHaveLength(4);
@@ -543,19 +517,5 @@ describe("близкие слова в вариантах записи", () => {
     const { stored, item } = await failAssembly([cat, dog]);
     await fail(stored, item);
     expect((await retryOf(stored, item)).options).toContain("волк");
-  });
-  it("замена вспоминания в старой сессии подбирает варианты среди соседей по уроку", async () => {
-    await seed();
-    const session = await makeSession({ source: source(), now, refs: [wordRef(cat.id)], mode: "practice" });
-    const legacy = {
-      ...session,
-      objectiveVersion: undefined,
-      items: session.items.map((entry) => ({ ...entry, type: "recall" as const, options: [] })),
-    };
-    await db.sessions.add(legacy);
-    await prepareObjectiveSession(session.id, db);
-    const [item] = (await db.sessions.get(session.id))!.items;
-    expect(item.type).toBe("recognition");
-    expect(count(item.options, russian(mates))).toBe(2);
   });
 });

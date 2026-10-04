@@ -29,10 +29,7 @@ export interface Segment {
   explanation: string;
   start: number;
 }
-/**
- * `revision` — ревизия поставленного пакетом содержимого, `edited` — слово менялось локально после установки.
- * У слов пользователя обоих полей нет.
- */
+/** `revision` — ревизия поставленного пакетом содержимого: по ней установка пропускает неизменные карточки. */
 export interface Word {
   id: string;
   greek: string;
@@ -49,9 +46,7 @@ export interface Word {
   source?: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt?: string;
   revision?: string;
-  edited?: boolean;
 }
 
 /**
@@ -91,12 +86,9 @@ export interface Phrase {
   usage?: string;
   note?: string;
   audioAssetId?: string;
-  provenance: Provenance;
   createdAt: string;
   updatedAt: string;
-  deletedAt?: string;
   revision?: string;
-  edited?: boolean;
 }
 /** Содержимое карточки в сессии: снимок на момент создания занятия, обновление пакета его не меняет. */
 export type SessionCard = { kind: "word"; word: Word } | { kind: "phrase"; phrase: Phrase };
@@ -106,45 +98,22 @@ export type SessionCard = { kind: "word"; word: Word } | { kind: "phrase"; phras
  */
 export type CardSnapshot =
   { greek: string; russian: string } | { text: string; translation?: string } | { template: string; answer: string };
-/**
- * Локальный курс: он есть всегда, не обновляется из каталога и не исчезает вместе с ним. Создавать в нём
- * наборы и слова нельзя; он остаётся для плана, синхронизации и данных прежних версий с импортом.
- */
-export const LOCAL_COURSE = "my";
-/**
- * Курс: состав приходит из каталога, а подписка и время синхронизации принадлежат пользователю.
- * `newItemsPerDay` — дневной предел новых карточек любого вида; прежний предел слов перешёл в него с тем же числом.
- */
+/** Курс: название и экзамен приходят из каталога, `newItemsPerDay` — дневной предел новых карточек пользователя. */
 export interface Course {
   id: string;
   title: string;
-  source?: string;
-  language?: string;
-  origin: "content" | "local";
-  subscribed: boolean;
-  schedule: Schedule;
   newItemsPerDay: number;
-  syncedAt?: string;
   /** Экзамен курса из каталога: общая дата и подтверждена ли местная. */
   exam?: CourseExam;
-  createdAt: string;
   updatedAt: string;
 }
+/** Урок меняется только завершением, поэтому `updatedAt` пройденного урока — момент, когда он пройден. */
 export interface Lesson {
   id: string;
   courseId?: string;
   title: string;
-  targetDate: string | null;
-  status: "upcoming" | "completed";
-  createdAt: string;
+  completed: boolean;
   updatedAt: string;
-  dateSource?: "manual" | "schedule";
-}
-/** Прежняя связь слова с уроком: остаётся в тестовых снимках и старых копиях, в базе заменена `LessonItem`. */
-export interface LessonWord {
-  lessonId: string;
-  wordId: string;
-  position: number;
 }
 /** Членство карточки в уроке: уникальная пара урока и ключа карточки, порядок внутри урока. Удаление связи не трогает карточку и прогресс. */
 export interface LessonItem {
@@ -163,12 +132,7 @@ export interface Asset {
 }
 /** Описание медиа из пакета без самого файла: по нему ресурс догружается при использовании. */
 export type MediaRef = PackageMedia;
-/**
- * Установленный пакет: версия, база поставленных карточек для слияния при обновлении, авторский состав урока
- * (`items`) и связи, которые пользователь убрал сам (ключи карточек), чтобы обновление их не восстановило.
- * По прежнему составу видно, какие связи поставил пакет: только их снимает обновление, убравшее карточку из урока.
- * `version:'legacy'` — контент установлен старой версией приложения, база карточек неизвестна.
- */
+/** Установленный пакет: версия, карточки и авторский состав урока (`items`) — по нему обновление снимает ушедшие связи. */
 export interface InstalledPackage {
   lessonId: string;
   courseId?: string;
@@ -179,7 +143,6 @@ export interface InstalledPackage {
   phrases: PackagePhrase[];
   items: PackageItem[];
   media: PackageMedia[];
-  removed: string[];
   /** Урок курса (схема 4): вид, место в модуле и блоки. */
   kind?: LessonKind;
   module?: { id: string; position: number };
@@ -261,14 +224,6 @@ export interface Session {
   status: "active" | "done" | "ended";
   activeTimeMs: number;
   introducedKeys?: string[];
-  objectiveVersion?: 1;
-}
-/** Дни недели по ISO: 1 — понедельник, 7 — воскресенье. */
-export interface Schedule {
-  startDate: string | null;
-  weekdays: number[];
-  /** Час занятия 0–23 в зоне пользователя: после него подготовка к уроку окончена. */
-  lessonHour: number;
 }
 /** `errorReports` — отправка отчётов о сбоях во внешний сервис; включена по умолчанию, в компактный снимок синхронизации не входит. */
 export interface Settings {
@@ -278,8 +233,6 @@ export interface Settings {
   errorReports: boolean;
   autoSpeak: boolean;
 }
-export const DEFAULT_LESSON_HOUR = 12;
-export const defaultSchedule: Schedule = { startDate: null, weekdays: [], lessonHour: DEFAULT_LESSON_HOUR };
 export const defaultSettings: Settings = {
   id: "settings",
   timezone: "Asia/Nicosia",
@@ -295,18 +248,6 @@ export const fillSettings = (settings: Partial<Settings> | undefined): Settings 
   ...settings,
 });
 /**
- * Расписание из базы, копии или снимка: час занятия появился позже остальных полей, поэтому
- * отсутствующее, дробное и выходящее за 0–23 значение читается как полдень.
- */
-export const fillSchedule = (schedule: Partial<Schedule> | undefined): Schedule => {
-  const hour = schedule?.lessonHour;
-  return {
-    ...defaultSchedule,
-    ...schedule,
-    lessonHour: Number.isInteger(hour) && hour! >= 0 && hour! <= 23 ? hour! : DEFAULT_LESSON_HOUR,
-  };
-};
-/**
  * Полный снимок данных: используется только в тестах как источник для планировщика.
  * Экраны приложения читают ограниченные выборки, а не снимок. Словарные связи `links` и смешанные `items`
  * складываются: так прежние сценарии остаются словарными без переписывания.
@@ -318,7 +259,7 @@ export interface Snapshot {
   courses?: Course[];
   /** Модули программы: задают порядок пройденных уроков; без них — порядок массива `lessons`. */
   modules?: StoredModule[];
-  links: LessonWord[];
+  links: { lessonId: string; wordId: string; position: number }[];
   items?: LessonItem[];
   states: LearningState[];
   events: ReviewEvent[];

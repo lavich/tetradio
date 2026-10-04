@@ -13,9 +13,7 @@ import ui from "../../shared/ui.module.css";
  * ведёт к первому уроку, а карточки приходят из пройденных уроков.
  */
 export function FirstRun({ courses, entries }: { courses: Course[]; entries: StoredCatalogEntry[] }) {
-  const course = courses.find(
-    (item) => item.origin === "content" && entries.some((entry) => entry.courseId === item.id),
-  );
+  const course = courses.find((item) => entries.some((entry) => entry.courseId === item.id));
   const phase = useCoursePhase(course?.id);
 
   if (!course)

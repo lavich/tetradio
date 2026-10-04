@@ -1,11 +1,11 @@
 import type { Card } from "ts-fsrs";
-import { isStandardWord, type AppDatabase } from "../storage/db";
+import type { AppDatabase } from "../storage/db";
 import { byTime, emptySkills, emptyStats, foldSkill, foldStats, type SkillSummary } from "../domain/skills";
 import { unitKey } from "../domain/refs";
 import {
-  fillSchedule,
   fillSettings,
   type CardKind,
+  type Lesson,
   type LearningRef,
   type LearningState,
   type ReviewEvent,
@@ -21,6 +21,7 @@ import {
   type Clock,
   type CompactBlock,
   type CompactLesson,
+  type CompactSchedule,
   type CompactSnapshot,
   type CompactState,
   type SerializedCard,
@@ -74,22 +75,29 @@ export const parseClock = (raw: string | null): Clock => {
   }
 };
 
-/**
- * Ключи поставляемых карточек среди перечисленных: слово — по ревизии,
- * фраза — по наличию записи с ревизией. Пользовательские слова в облако не уходят.
- */
-async function standardKeys(database: AppDatabase, refs: LearningRef[]): Promise<Set<string>> {
+/** Ключи перечисленных карточек, которые есть на устройстве; ключи снятых видов сюда не попадают. */
+async function presentKeys(database: AppDatabase, refs: LearningRef[]): Promise<Set<string>> {
   const ids: Record<CardKind, string[]> = { word: [], phrase: [] };
   for (const ref of refs) ids[ref.kind]?.push(ref.id);
   const keys = new Set<string>();
-  if (ids.word.length)
-    for (const word of await database.words.bulkGet(ids.word))
-      if (word && isStandardWord(word)) keys.add(unitKey({ kind: "word", id: word.id }));
-  if (ids.phrase.length)
-    for (const phrase of await database.phrases.bulkGet(ids.phrase))
-      if (phrase?.revision !== undefined) keys.add(unitKey({ kind: "phrase", id: phrase.id }));
+  for (const kind of ["word", "phrase"] as const)
+    if (ids[kind].length)
+      for (const id of await database[kind === "word" ? "words" : "phrases"].where("id").anyOf(ids[kind]).primaryKeys())
+        keys.add(unitKey({ kind, id }));
   return keys;
 }
+/** Поля формата 3, которых в модели больше нет: снимок их несёт, а применение не читает. */
+const NO_SCHEDULE: CompactSchedule = { startDate: null, weekdays: [], lessonHour: 12 };
+const compactLesson = (lesson: Lesson): CompactLesson => ({
+  id: lesson.id,
+  targetDate: null,
+  status: lesson.completed ? "completed" : "upcoming",
+  updatedAt: lesson.updatedAt,
+});
+const lessonPatch = (lesson: CompactLesson) => ({
+  completed: lesson.status === "completed",
+  updatedAt: lesson.updatedAt,
+});
 const compactBlock = (row: BlockProgress): CompactBlock => ({
   lessonId: row.lessonId,
   blockId: row.blockId,
@@ -139,12 +147,7 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
   const packages = new Set((await database.packages.toArray()).map((pack) => pack.lessonId));
   const lessons: CompactLesson[] = (await database.lessons.toArray())
     .filter((lesson) => packages.has(lesson.id))
-    .map((lesson) => ({
-      id: lesson.id,
-      targetDate: lesson.targetDate,
-      status: lesson.status,
-      updatedAt: lesson.updatedAt,
-    }));
+    .map(compactLesson);
   // Уроки из чужого снимка, ещё не появившиеся здесь, остаются в версии: иначе публикация отсюда их бы потеряла.
   const present = new Set(lessons.map((lesson) => lesson.id));
   const pending = parsePending((await database.meta.get(META.pendingLessons))?.value ?? null);
@@ -152,11 +155,8 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
   lessons.sort((a, b) => a.id.localeCompare(b.id));
   const blocks = (await database.blockProgress.toArray()).map(compactBlock).sort(byBlock);
   const rawStates = await database.cardStates.toArray();
-  const known = await standardKeys(
-    database,
-    rawStates.map((state) => state.ref),
-  );
-  const states = rawStates.filter((state) => known.has(state.unitKey)).map(serializeState);
+  const known = new Set(rawStates.map((state) => state.unitKey));
+  const states = rawStates.map(serializeState);
   for (const row of await database.cardStash.toArray()) if (!known.has(row.unitKey)) states.push(row.state);
   const fresh: ReviewEvent[] = byTime(
     base ? await database.events.where("createdAt").above(base.asOf).toArray() : await database.events.toArray(),
@@ -164,7 +164,7 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
   const skills = new Map<string, { ref: LearningRef; skills: SkillSummary }>(
     (await database.cardSkills.toArray()).map((row) => [row.unitKey, { ref: row.ref, skills: row.skills }]),
   );
-  const eventKeys = await standardKeys(database, uniqueRefs(fresh.map((event) => event.ref)));
+  const eventKeys = await presentKeys(database, uniqueRefs(fresh.map((event) => event.ref)));
   for (const event of fresh)
     if (eventKeys.has(event.unitKey))
       skills.set(event.unitKey, {
@@ -179,9 +179,9 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
     courses: (await database.courses.toArray())
       .map((course) => ({
         id: course.id,
-        subscribed: course.subscribed,
+        subscribed: true,
         newItemsPerDay: course.newItemsPerDay,
-        schedule: course.schedule,
+        schedule: NO_SCHEDULE,
       }))
       .sort((a, b) => a.id.localeCompare(b.id)),
     lessons,
@@ -271,9 +271,8 @@ export async function hasMixedProgress(database: AppDatabase): Promise<boolean> 
 }
 
 /**
- * Применение целой версии одной транзакцией: настройки, даты стандартных уроков, блоки курса (с формата 3),
- * состояния FSRS стандартных карточек,
- * база навыков и сводок. История ответов остаётся локальной. Состояния неизвестных карточек откладываются
+ * Применение целой версии одной транзакцией: настройки, предел курса, завершение уроков, блоки курса (с формата 3),
+ * состояния FSRS карточек, база навыков и сводок. История ответов остаётся локальной. Состояния неизвестных карточек откладываются
  * до установки пакета, а не обнуляются и не попадают в план. Словарный снимок формата 1 не может представлять
  * фразы и пропуски: при уже сохранённом прогрессе новых видов он отклоняется до изменения данных.
  * `ifClean` — применять, только если локальных неопубликованных изменений нет; иначе `false` без записи.
@@ -299,43 +298,21 @@ export async function applySnapshot(
         );
       const current = await loadSettings(database);
       await database.settings.put(fillSettings({ ...current, ...snapshot.settings }));
-      // Темп курса переносится, а курс, которого здесь ещё нет, будет заведён каталогом с этими же значениями.
-      for (const incoming of snapshot.courses) {
-        const stored = await database.courses.get(incoming.id);
-        if (stored)
-          await database.courses.put({
-            ...stored,
-            subscribed: incoming.subscribed,
-            newItemsPerDay: incoming.newItemsPerDay,
-            // Снимок прежнего клиента приходит без часа занятия: в базу он ложится уже с полуднем.
-            schedule: fillSchedule(incoming.schedule),
-          });
-      }
+      // Дневной предел курса переносится; курс, которого здесь ещё нет, заведёт каталог.
+      for (const incoming of snapshot.courses)
+        await database.courses.update(incoming.id, { newItemsPerDay: incoming.newItemsPerDay });
       const pending: PendingLessons = {};
       for (const lesson of snapshot.lessons) {
-        if (await database.lessons.get(lesson.id))
-          await database.lessons.update(lesson.id, {
-            targetDate: lesson.targetDate,
-            status: lesson.status,
-            updatedAt: lesson.updatedAt,
-          });
+        if (await database.lessons.get(lesson.id)) await database.lessons.update(lesson.id, lessonPatch(lesson));
         else pending[lesson.id] = lesson;
       }
       await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
       if (sourceFormat >= BLOCKS_SNAPSHOT_FORMAT) await applyBlocks(database, snapshot.blocks);
       const incoming = new Set(snapshot.states.map((state) => unitKey(state.ref)));
-      const local = await database.cardStates.toArray();
-      const localStandard = await standardKeys(
-        database,
-        local.map((state) => state.ref),
-      );
-      // Стандартные карточки, которых нет в выбранной версии, снова становятся новыми; пользовательские не трогаем.
-      await database.cardStates.bulkDelete(
-        local
-          .filter((state) => localStandard.has(state.unitKey) && !incoming.has(state.unitKey))
-          .map((state) => state.unitKey),
-      );
-      const known = await standardKeys(
+      // Карточки, которых нет в выбранной версии, снова становятся новыми.
+      const local = (await database.cardStates.toCollection().primaryKeys()) as string[];
+      await database.cardStates.bulkDelete(local.filter((key) => !incoming.has(key)));
+      const known = await presentKeys(
         database,
         snapshot.states.map((state) => state.ref),
       );
@@ -355,7 +332,7 @@ export async function applySnapshot(
 }
 
 /**
- * Пакет установлен: отложенные состояния его карточек переходят в обычную таблицу, дата урока — из снимка.
+ * Пакет установлен: отложенные состояния его карточек переходят в обычную таблицу, завершение урока — из снимка.
  * Вызывается внутри транзакции установки пакета.
  */
 export async function adoptStash(database: AppDatabase, lessonId: string, refs: LearningRef[]): Promise<void> {
@@ -369,11 +346,7 @@ export async function adoptStash(database: AppDatabase, lessonId: string, refs: 
   const pending = await readPending(database);
   const lesson = pending[lessonId];
   if (lesson) {
-    await database.lessons.update(lessonId, {
-      targetDate: lesson.targetDate,
-      status: lesson.status,
-      updatedAt: lesson.updatedAt,
-    });
+    await database.lessons.update(lessonId, lessonPatch(lesson));
     delete pending[lessonId];
     await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
   }

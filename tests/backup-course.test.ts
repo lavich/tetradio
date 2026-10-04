@@ -70,7 +70,7 @@ describe("копия с прогрессом курса", () => {
     expect((await inspectBackup(blob(dump), target)).ok).toBe(true);
     await restoreBackup(blob(dump), target);
     expect(await target.words.count()).toBe(0);
-    expect((await target.lessons.get("m01-1"))?.status).toBe("completed");
+    expect((await target.lessons.get("m01-1"))?.completed).toBe(true);
     const blocks = await blockProgressOf("m01-1", target);
     expect(blocks.size).toBe(5);
     // Копия — полная локальная: в отличие от снимка облака, ответы и текст письма в ней есть.
@@ -92,7 +92,7 @@ describe("копия с прогрессом курса", () => {
     setRows(
       dump,
       "lessons",
-      table(dump, "lessons").rows.map((row) => ({ ...row, status: "upcoming" })),
+      table(dump, "lessons").rows.map((row) => ({ ...row, completed: false })),
     );
     const before = await state(target);
     await expect(restoreBackup(blob(dump), target)).rejects.toThrow(/восстанавливать нечего/);
@@ -134,12 +134,12 @@ describe("отказ до изменения текущих данных", () =>
     const dump = await courseOnly(await open("source"));
     const lessons = table(dump, "lessons").rows;
     const course = lessons.find((row) => row.id === "m01-1")!;
-    setRows(dump, "lessons", [...lessons, { ...course, id: "m99-9", status: "completed" }]);
+    setRows(dump, "lessons", [...lessons, { ...course, id: "m99-9", completed: true }]);
     const before = await state(target);
     await expect(restoreBackup(blob(dump), target)).rejects.toThrow(/m99-9.*каталоге/);
     expect(await state(target)).toEqual(before);
-    setRows(dump, "lessons", [...lessons, { ...course, status: "done" }]);
-    await expect(restoreBackup(blob(dump), target)).rejects.toThrow(/неизвестный статус/);
+    setRows(dump, "lessons", [...lessons, { ...course, completed: "yes" }]);
+    await expect(restoreBackup(blob(dump), target)).rejects.toThrow(/некорректная отметка завершения/);
   });
   it("неподдерживаемая версия схемы и маркера отклоняются", async () => {
     const dump = await courseOnly(await open("source"));
@@ -177,7 +177,7 @@ describe("владелец", () => {
     expect(await readMeta(own, META.clock)).toBeNull();
     expect(await readMeta(own, META.pendingLessons)).toBeNull();
     expect(await readMeta(own, META.restored)).not.toBeNull();
-    expect((await own.lessons.get("m01-1"))?.status).toBe("completed");
+    expect((await own.lessons.get("m01-1"))?.completed).toBe(true);
   });
 });
 
@@ -225,7 +225,7 @@ describe("конкурентное изменение облака после п
     expect(await readMeta(target, META.restored)).toBe(restored);
     const fresh = { ...guard, seen: await guard.read() };
     await restoreBackup(file, target, { cloud: fresh });
-    expect((await target.lessons.get("m01-1"))?.status).toBe("completed");
+    expect((await target.lessons.get("m01-1"))?.completed).toBe(true);
   });
   it("неизменное облако и публикация этого же устройства не мешают замене", async () => {
     const file = blob(await courseOnly(await open("source")));
@@ -237,7 +237,7 @@ describe("конкурентное изменение облака после п
     await saveSettings({ ...defaultSettings, sessionSize: 5 }, target);
     expect((await mine.exchange()).phase).toBe("synced");
     await restoreBackup(file, target, { cloud: guard });
-    expect((await target.lessons.get("m01-1"))?.status).toBe("completed");
+    expect((await target.lessons.get("m01-1"))?.completed).toBe(true);
     expect(await readMeta(target, META.restored)).not.toBeNull();
   });
   it("облако, появившееся после предпросмотра без облака, требует нового предпросмотра", async () => {
@@ -255,6 +255,6 @@ describe("конкурентное изменение облака после п
     const guard = { seen: await cloudPrint(adapter, target), read: () => cloudPrint(adapter, target) };
     expect(guard.seen).toBeNull();
     await restoreBackup(file, target, { cloud: guard });
-    expect((await target.lessons.get("m01-1"))?.status).toBe("completed");
+    expect((await target.lessons.get("m01-1"))?.completed).toBe(true);
   });
 });

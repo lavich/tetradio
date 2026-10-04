@@ -354,7 +354,7 @@ export function CourseLessonScreen() {
     saveBlockProgress(lessonId, blockId, patch);
   const complete = lessonDone(lesson.blocks, progress);
   const tally = lessonTally(lesson.blocks, progress);
-  const finished = lesson.lesson?.status === "completed";
+  const finished = !!lesson.lesson?.completed;
   const answered = (target: string) =>
     lesson.blocks.some((block) => block.type === "exercise" && block.about === target && progress.get(block.id)?.done);
   const practiceWords = async () => {

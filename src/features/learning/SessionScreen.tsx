@@ -10,14 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
 import { db } from "../../storage/db";
-import {
-  ConflictError,
-  endSession,
-  recordAnswer,
-  markIntroduced,
-  prepareObjectiveSession,
-  skipItem,
-} from "../../storage/ops";
+import { ConflictError, endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
 import { Assembly, Comprehension, Introduction, Listening, Recognition, Spelling, type Answer } from "./exercises";
 import { compositionLine, DoneList, doneRows, PageHead, PlaceProvider, useWide } from "./notebook";
 import ui from "../../shared/ui.module.css";
@@ -65,14 +58,6 @@ export function SessionScreen() {
     setProblem,
     run,
   } = useAction("Не удалось сохранить знакомство. Попробуйте ещё раз.");
-  const [preparing, setPreparing] = useState(false);
-  useEffect(() => {
-    if (!session || session.objectiveVersion === 1) return;
-    setPreparing(true);
-    prepareObjectiveSession(session.id)
-      .catch(() => setProblem("Не удалось подготовить занятие. Обновите страницу."))
-      .finally(() => setPreparing(false));
-  }, [session?.id, session?.objectiveVersion]);
   const shown = useRef(Date.now());
   const previous = useRef<string | undefined>(undefined);
   const position = cursor ?? session?.items.findIndex((entry) => !entry.eventId && !entry.skipped) ?? 0;
@@ -105,7 +90,7 @@ export function SessionScreen() {
     });
     observer.observe(main);
     return () => observer.disconnect();
-  }, [session === undefined || preparing]);
+  }, [session === undefined]);
 
   useEffect(() => {
     shown.current = Date.now();
@@ -133,7 +118,7 @@ export function SessionScreen() {
       void navigate(`/session/result/${session.id}`, { replace: true });
   }, [session?.id, position]);
 
-  const loading = session === undefined || preparing;
+  const loading = session === undefined;
   if (loading || !session || !item) {
     return (
       <main className={s.session}>
@@ -214,58 +199,57 @@ export function SessionScreen() {
     }
   };
   // key по упражнению: иначе следующая карточка успевает показаться с ответом предыдущей.
-  const view =
-    session.objectiveVersion !== 1 ? null : introduction ? (
-      <Introduction
-        key={introduction.id}
-        item={introduction}
-        onReady={introduce}
-        saving={introducing}
-        autoSpeak={settingsReady && settings.autoSpeak}
-      />
-    ) : item.type === "recognition" ? (
-      <Recognition
-        key={item.id}
-        item={item}
-        onAnswer={answer}
-        onNext={next}
-        autoSpeak={settingsReady && settings.autoSpeak}
-      />
-    ) : item.type === "listening" ? (
-      <Listening
-        key={item.id}
-        item={item}
-        onAnswer={answer}
-        onNext={next}
-        onSkip={skip}
-        autoSpeak={settingsReady && settings.autoSpeak}
-      />
-    ) : item.type === "comprehension" ? (
-      <Comprehension
-        key={item.id}
-        item={item}
-        onAnswer={answer}
-        onNext={next}
-        onSkip={skip}
-        autoSpeak={settingsReady && settings.autoSpeak}
-      />
-    ) : item.type === "assembly" ? (
-      <Assembly
-        key={item.id}
-        item={item}
-        onAnswer={answer}
-        onNext={next}
-        autoSpeak={settingsReady && settings.autoSpeak}
-      />
-    ) : (
-      <Spelling
-        key={item.id}
-        item={item}
-        onAnswer={answer}
-        onNext={next}
-        autoSpeak={settingsReady && settings.autoSpeak}
-      />
-    );
+  const view = introduction ? (
+    <Introduction
+      key={introduction.id}
+      item={introduction}
+      onReady={introduce}
+      saving={introducing}
+      autoSpeak={settingsReady && settings.autoSpeak}
+    />
+  ) : item.type === "recognition" ? (
+    <Recognition
+      key={item.id}
+      item={item}
+      onAnswer={answer}
+      onNext={next}
+      autoSpeak={settingsReady && settings.autoSpeak}
+    />
+  ) : item.type === "listening" ? (
+    <Listening
+      key={item.id}
+      item={item}
+      onAnswer={answer}
+      onNext={next}
+      onSkip={skip}
+      autoSpeak={settingsReady && settings.autoSpeak}
+    />
+  ) : item.type === "comprehension" ? (
+    <Comprehension
+      key={item.id}
+      item={item}
+      onAnswer={answer}
+      onNext={next}
+      onSkip={skip}
+      autoSpeak={settingsReady && settings.autoSpeak}
+    />
+  ) : item.type === "assembly" ? (
+    <Assembly
+      key={item.id}
+      item={item}
+      onAnswer={answer}
+      onNext={next}
+      autoSpeak={settingsReady && settings.autoSpeak}
+    />
+  ) : (
+    <Spelling
+      key={item.id}
+      item={item}
+      onAnswer={answer}
+      onNext={next}
+      autoSpeak={settingsReady && settings.autoSpeak}
+    />
+  );
 
   const rows = doneRows({ items: session.items.slice(0, position) }, events ?? new Map());
   return (

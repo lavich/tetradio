@@ -7,7 +7,7 @@ import { WORD_EXERCISES } from "../../domain/learning";
 import type { LearningRef, Phrase, Word } from "../../domain/types";
 import { shareWord } from "../../platform/share";
 import { useNow } from "../../shared/clock";
-import { usePhrase, useShippedWord, useWordLesson } from "../../shared/store";
+import { usePhrase, useWordLesson } from "../../shared/store";
 import { db } from "../../storage/db";
 import { Tick } from "../../shared/Tick";
 import type { DictionaryLesson } from "../../storage/dictionary";
@@ -32,8 +32,7 @@ export function EntrySheet({
   const lesson = lessons.find((item) => item.entries.some((entry) => entry.ref.kind === kind && entry.ref.id === id));
   const card = kind === "word" ? word : phrase;
   if (card === undefined) return null;
-  if (!card || card.deletedAt)
-    return <p className={css.empty}>{kind === "word" ? "Слово не найдено." : "Фраза не найдена."}</p>;
+  if (!card) return <p className={css.empty}>{kind === "word" ? "Слово не найдено." : "Фраза не найдена."}</p>;
   return (
     <article className={css.sheet} aria-label={kind === "word" ? word!.greek : phrase!.text} data-testid="entry-sheet">
       {lesson?.moduleId && (
@@ -49,7 +48,6 @@ export function EntrySheet({
 
 function WordBody({ word }: { word: Word }) {
   const shipped = useWordLesson(word.id);
-  const original = useShippedWord(word.id);
   return (
     <>
       <div className={css.head}>
@@ -75,12 +73,7 @@ function WordBody({ word }: { word: Word }) {
       <Skills word={word} />
       <Practice ref_={{ kind: "word", id: word.id }} label="Потренировать слово" />
       {shipped && (
-        <button
-          type="button"
-          className={css.quiet}
-          aria-label="Поделиться словом"
-          onClick={() => void shareWord(original ?? word)}
-        >
+        <button type="button" className={css.quiet} aria-label="Поделиться словом" onClick={() => void shareWord(word)}>
           <Share2 aria-hidden size={16} /> Поделиться словом
         </button>
       )}

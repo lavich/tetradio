@@ -46,7 +46,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     const blocks = pack?.blocks ?? [];
     if (!pack) return;
     const marks = progress.get(id) ?? new Map<string, BlockProgress>();
-    if (pack.kind === "test" && lessons[index]?.status === "completed")
+    if (pack.kind === "test" && lessons[index]?.completed)
       for (const result of testResult(blocks, marks).skills)
         tests.set(result.skill, {
           skill: result.skill,
@@ -74,7 +74,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
   });
 
   const completedDays = lessons
-    .filter((lesson) => lesson?.status === "completed")
+    .filter((lesson) => lesson?.completed)
     .map((lesson) => localDay(new Date(lesson!.updatedAt), timezone));
   const pace = coursePace(
     views.map((view) => ({

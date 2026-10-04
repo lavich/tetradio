@@ -12,12 +12,10 @@ import {
   installLesson,
   lessonOfWord,
   lessonReadiness,
-  mergeWord,
   previewPackage,
   refreshCatalog,
   resetCatalogPhase,
   resetPreviews,
-  setCourseSubscription,
   subscribeCatalog,
   syncCourses,
   wordFromPackage,
@@ -29,14 +27,11 @@ import { dexieSource, lessonItems } from "../src/storage/queries";
 import { makePlan } from "../src/domain/learning";
 import { indexWord } from "../src/storage/db";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
-import { LOCAL_COURSE } from "../src/domain/types";
 import {
   completeLessons,
   content,
   installLessons,
   itemCountOf,
-  legacyEdit,
-  legacyRemove,
   memoryFetcher,
   packageOf,
   wordCountOf,
@@ -89,13 +84,13 @@ describe("курсы", () => {
     await applyPackage(packageOf("mech-2"), db);
     expect((await db.lessons.get("mech-2"))!.courseId).toBe("mechanics");
   });
-  it("обновление каталога заводит курсы и подписывает тот, чьи уроки уже стоят", async () => {
+  it("обновление каталога заводит курсы и проставляет курс урокам, установленным без него", async () => {
     await installLessons(db, ["mech-1"]);
     await db.lessons.update("mech-1", { courseId: undefined });
     await db.courses.clear();
     await refreshCatalog(db, memoryFetcher());
     expect((await db.lessons.get("mech-1"))!.courseId).toBe("mechanics");
-    expect(await db.courses.get("mechanics")).toMatchObject({ title: "Механики", origin: "content", subscribed: true });
+    expect(await db.courses.get("mechanics")).toMatchObject({ title: "Механики", newItemsPerDay: 12 });
   });
   it("новый курс получает предел новых карточек по умолчанию, а сохранённый предел обновление не трогает", async () => {
     await refreshCatalog(db, memoryFetcher());
@@ -104,26 +99,18 @@ describe("курсы", () => {
     await refreshCatalog(db, memoryFetcher());
     expect((await db.courses.get("mechanics"))!.newItemsPerDay).toBe(7);
   });
-  it("курс без установленных уроков остаётся неподписанным, а повторное обновление ничего не ломает", async () => {
+  it("повторное обновление неизменного каталога курс не переписывает", async () => {
     await refreshCatalog(db, memoryFetcher());
-    expect(await db.courses.get("mechanics")).toMatchObject({ subscribed: false });
     const first = await db.courses.get("mechanics");
     await refreshCatalog(db, memoryFetcher());
     expect(await db.courses.count()).toBe(1);
-    expect((await db.courses.get("mechanics"))!.createdAt).toBe(first!.createdAt);
+    expect(await db.courses.get("mechanics")).toEqual(first);
   });
 });
 
-describe("подписка на курс", () => {
+describe("загрузка курса", () => {
   const packs = (fetcher: { requests: string[] }) => fetcher.requests.filter((url) => url.includes("/packages/"));
   const media = (fetcher: { requests: string[] }) => fetcher.requests.filter((url) => url.includes("/media/"));
-  it("открытие урока подписывает его курс", async () => {
-    const fetcher = memoryFetcher();
-    await refreshCatalog(db, fetcher);
-    expect(await db.courses.get("mechanics")).toMatchObject({ subscribed: false });
-    await installLesson("mech-3", db, fetcher);
-    expect(await db.courses.get("mechanics")).toMatchObject({ subscribed: true });
-  });
   it("«Учить курс» ставит все уроки курса и не трогает медиа", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
@@ -131,9 +118,8 @@ describe("подписка на курс", () => {
     expect(result.installed).toBe(content.catalog.lessons.length);
     expect(await db.packages.count()).toBe(content.catalog.lessons.length);
     expect(media(fetcher)).toEqual([]);
-    expect(await db.courses.get("mechanics")).toMatchObject({ subscribed: true });
   });
-  it("подписанный курс сам доустанавливает недостающее и подтягивает версию", async () => {
+  it("начатый курс сам доустанавливает недостающее и подтягивает версию", async () => {
     const first = memoryFetcher();
     await refreshCatalog(db, first);
     await installLesson("mech-1", db, first);
@@ -147,23 +133,22 @@ describe("подписка на курс", () => {
     expect((await db.packages.get("mech-1"))!.version).toBe(next.version);
     expect(media(fetcher)).toEqual([]);
   });
-  it("неподписанный курс сам не качается", async () => {
+  it("курс, чьи уроки пришли с другого устройства и ждут установки, догружается сам", async () => {
+    const fetcher = memoryFetcher();
+    await refreshCatalog(db, fetcher);
+    const lesson = { id: "mech-2", targetDate: null, status: "completed", updatedAt: "2026-09-16T07:00:00.000Z" };
+    await db.meta.put({ key: "sync:pendingLessons", value: JSON.stringify({ "mech-2": lesson }) });
+    await syncCourses(db, fetcher);
+    expect(await db.packages.count()).toBe(content.catalog.lessons.length);
+    expect(await db.lessons.get("mech-2")).toMatchObject({ completed: true });
+  });
+  it("курс без единого урока сам не качается", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
     fetcher.requests.length = 0;
     await syncCourses(db, fetcher);
     expect(packs(fetcher)).toEqual([]);
     expect(await db.packages.count()).toBe(0);
-  });
-  it("отписка прекращает автозагрузку и ничего не удаляет", async () => {
-    const fetcher = memoryFetcher();
-    await refreshCatalog(db, fetcher);
-    await installLesson("mech-1", db, fetcher);
-    await setCourseSubscription("mechanics", false, db);
-    fetcher.requests.length = 0;
-    await syncCourses(db, fetcher);
-    expect(packs(fetcher)).toEqual([]);
-    expect(await db.packages.count()).toBe(1); // установленное осталось
   });
   it("ошибка сети оставляет прежние версии и сообщается на уровне курса", async () => {
     const ok = memoryFetcher();
@@ -216,7 +201,7 @@ describe("установка урока", () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
     const result = await installLesson("mech-2", db, fetcher);
-    expect(result).toMatchObject({ status: "installed", added: wordCountOf("mech-2"), conflicts: [] });
+    expect(result).toMatchObject({ status: "installed", added: wordCountOf("mech-2") });
     expect(fetcher.requests).toEqual(["content/catalog.json", entry("mech-2").url]);
     expect(await db.words.count()).toBe(wordCountOf("mech-2"));
     expect((await lessonItems("mech-2", db)).map((l) => l.ref.id)).toEqual(
@@ -224,8 +209,7 @@ describe("установка урока", () => {
     );
     expect(await db.lessons.get("mech-2")).toMatchObject({
       title: "Урок 1.2",
-      targetDate: null,
-      status: "upcoming",
+      completed: false,
     });
     expect(await db.assets.count()).toBe(0); // медиа не скачиваются вместе с пакетом
     expect(await db.media.count()).toBe(packageOf("mech-2").media.length);
@@ -236,12 +220,11 @@ describe("установка урока", () => {
     });
     expect(word.tokens).toContain("φιλος");
   });
-  it("пакеты 1.1 и 1.2 дают все свои слова и предстоящие уроки без дат", async () => {
+  it("пакеты 1.1 и 1.2 дают все свои слова и непройденные уроки", async () => {
     await installLessons(db, ["mech-1", "mech-2"]);
     expect(await db.words.count()).toBe(wordCountOf("mech-1", "mech-2"));
-    // Положение урока во времени не поставляется: оба урока предстоящие и без дат, дальше ими распоряжается пользователь.
-    expect(await db.lessons.get("mech-1")).toMatchObject({ status: "upcoming", targetDate: null });
-    expect(await db.lessons.get("mech-2")).toMatchObject({ status: "upcoming", targetDate: null });
+    expect(await db.lessons.get("mech-1")).toMatchObject({ completed: false });
+    expect(await db.lessons.get("mech-2")).toMatchObject({ completed: false });
     expect(await db.events.count()).toBe(0);
     expect(await db.cardStates.count()).toBe(0);
   });
@@ -310,7 +293,7 @@ describe("установка урока", () => {
 });
 
 describe("обновление пакета", () => {
-  it("нетронутое слово обновляется, ID и прогресс сохраняются", async () => {
+  it("слово обновляется по новой ревизии, ID и прогресс сохраняются", async () => {
     const fetcher = await installLessons(db, ["mech-2"]);
     await db.cardStates.add(
       wordState("w034", {
@@ -323,11 +306,10 @@ describe("обновление пакета", () => {
       words.find((w) => w.id === "w034")!.russian = "друг, приятель";
     });
     const result = await installLesson("mech-2", db, await upgrade("mech-2", next));
-    expect(result).toMatchObject({ status: "updated", added: 0, changed: 1, conflicts: [] });
+    expect(result).toMatchObject({ status: "updated", added: 0, changed: 1 });
     expect(fetcher.requests.filter((url) => url.includes("media"))).toHaveLength(0);
     const updated = (await db.words.get("w034"))!;
     expect(updated.russian).toBe("друг, приятель");
-    expect(updated.edited).toBeUndefined();
     expect((await db.cardStates.get(wordKeyOf("w034")))!.version).toBe(3);
     expect((await db.packages.get("mech-2"))!.version).toBe(next.version);
   });
@@ -342,43 +324,25 @@ describe("обновление пакета", () => {
       friend.examples = [{ ...friend.examples[0], glosses }];
     });
     const result = await installLesson("mech-2", db, await upgrade("mech-2", next));
-    expect(result).toMatchObject({ status: "updated", changed: 1, conflicts: [] });
+    expect(result).toMatchObject({ status: "updated", changed: 1 });
     expect((await db.words.get("w034"))!.examples[0].glosses).toEqual(glosses);
   });
-  it("локальная правка сохраняется, изменившееся в пакете поле сообщается как конфликт, остальные поля обновляются", async () => {
+  it("новая ревизия перезаписывает поставляемые поля целиком, даже исправленные прежней версией", async () => {
     await installLessons(db, ["mech-2"]);
-    await legacyEdit(db, "w034", { russian: "дом (моя правка)" });
+    const created = (await db.words.get("w034"))!.createdAt;
+    await db.words.update("w034", { russian: "дом (старая правка)" });
     const next = bump(packageOf("mech-2"), (words) => {
       const w = words.find((w) => w.id === "w034")!;
       w.russian = "жилище";
       w.note = "новая заметка";
     });
     const result = await installLesson("mech-2", db, await upgrade("mech-2", next));
-    expect(result.conflicts).toEqual([{ ref: wordRef("w034"), label: "ο φίλος", fields: ["russian"] }]);
-    expect(await db.words.get("w034")).toMatchObject({
-      russian: "дом (моя правка)",
-      note: "новая заметка",
-      edited: true,
-    });
+    expect(result).toMatchObject({ status: "updated", changed: 1 });
+    expect(await db.words.get("w034")).toMatchObject({ russian: "жилище", note: "новая заметка", createdAt: created });
   });
-  it("удалённое слово не воскресает и убранная связь не восстанавливается", async () => {
+  it("автор убрал карточку из урока: связь исчезает, карточка с прогрессом остаётся в словаре, название урока не перезаписывается", async () => {
     await installLessons(db, ["mech-2"]);
-    await db.words.update("w034", { deletedAt: "2026-09-16T10:00:00.000Z" }); // удаление из прежней версии
-    await legacyRemove(db, "mech-2", wordRef("w041"));
-    expect((await db.packages.get("mech-2"))!.removed).toEqual([wordKeyOf("w041")]);
-    const next = bump(packageOf("mech-2"), (words) => {
-      words.find((w) => w.id === "w034")!.russian = "жилище";
-    });
-    const result = await installLesson("mech-2", db, await upgrade("mech-2", next));
-    expect((await db.words.get("w034"))!.deletedAt).toBeTruthy();
-    expect(result.conflicts).toEqual([{ ref: wordRef("w034"), label: "ο φίλος", fields: ["deleted"] }]);
-    expect(await db.lessonItems.get(["mech-2", wordKeyOf("w041")])).toBeUndefined();
-    expect(await db.lessonItems.count()).toBe(itemCountOf("mech-2") - 1);
-    expect(await db.words.get("w041")).toBeTruthy(); // само слово остаётся
-  });
-  it("автор убрал карточку из урока: связь исчезает, карточка с прогрессом остаётся в словаре, личные название и дата урока не перезаписываются", async () => {
-    await installLessons(db, ["mech-2"]);
-    await db.lessons.update("mech-2", { title: "Мой урок", targetDate: "2026-10-01" });
+    await db.lessons.update("mech-2", { title: "Мой урок" });
     const pack = packageOf("mech-2");
     const dropped = pack.words[0].id;
     await db.cardStates.add(
@@ -422,14 +386,12 @@ describe("обновление пакета", () => {
     expect(await db.lessonItems.get(["mech-2", wordKeyOf(dropped)])).toBeUndefined(); // состав урока принадлежит автору
     expect(await db.lessonItems.get(["mech-2", wordKeyOf("w-own")])).toBeTruthy(); // добавленное пользователем осталось
     expect(await lessonItems("mech-2", db)).toHaveLength(pack.items.length); // минус убранная автором, плюс своя
-    expect(await db.lessons.get("mech-2")).toMatchObject({ title: "Мой урок", targetDate: "2026-10-01" });
+    expect(await db.lessons.get("mech-2")).toMatchObject({ title: "Мой урок" });
   });
   it("слово, убранное автором из пройденного урока, не попадает в новые карточки", async () => {
     await installLessons(db, ["mech-2"]);
     await completeLessons(db, ["mech-2"]);
     await db.courses.update("mechanics", { newItemsPerDay: 100 });
-    // Прежний курс «Мои слова» вводил слова без урока сканом словаря.
-    await db.courses.add({ ...(await db.courses.get("mechanics"))!, id: LOCAL_COURSE, origin: "local" });
     const pack = packageOf("mech-2");
     const dropped = pack.words[0].id;
     const next: ContentPackage = {
@@ -463,28 +425,6 @@ describe("обновление пакета", () => {
     const back = { ...pack, version: "shared-back" };
     await installLesson("mech-2", db, await upgrade("mech-2", back));
     expect(await db.lessonItems.get(["mech-2", wordKeyOf(shared)])).toBeTruthy();
-  });
-  it("убранную пользователем связь обновление не восстанавливает, даже когда автор оставил карточку в составе", async () => {
-    await installLessons(db, ["mech-2"]);
-    await legacyRemove(db, "mech-2", wordRef("w041"));
-    const pack = packageOf("mech-2");
-    await installLesson("mech-2", db, await upgrade("mech-2", { ...pack, version: "same-items" }));
-    expect(await db.lessonItems.get(["mech-2", wordKeyOf("w041")])).toBeUndefined();
-    expect((await db.packages.get("mech-2"))!.removed).toEqual([wordKeyOf("w041")]);
-  });
-  it("без базы (legacy) отредактированное слово сохраняется целиком, нетронутое — заменяется", async () => {
-    const pack = packageOf("mech-2");
-    const base = pack.words.find((w) => w.id === "w034")!;
-    const next = { ...base, russian: "жилище", note: "заметка", revision: "x" };
-    const local = { ...base, createdAt: "", updatedAt: "", edited: true };
-    expect(mergeWord(local, undefined, next)).toMatchObject({
-      conflicts: ["russian", "note"],
-      word: { russian: "друг" },
-    });
-    expect(mergeWord({ ...local, edited: false }, undefined, next).word).toMatchObject({
-      russian: "жилище",
-      note: "заметка",
-    });
   });
   it("пакет с ревизией той же версии, установленный из другой вкладки, не применяется второй раз", async () => {
     await installLessons(db, ["mech-1"]);
@@ -551,7 +491,7 @@ describe("установка и обновление смешанного пак
       installLesson(MIXED_LESSON, db, fetcher),
     ]);
     expect(a).toBe(b);
-    expect(a).toMatchObject({ status: "installed", added: 7, conflicts: [] });
+    expect(a).toMatchObject({ status: "installed", added: 7 });
     const pack = mixedPackage();
     expect((await lessonItems(MIXED_LESSON, db)).map((item) => [item.ref.kind, item.ref.id])).toEqual(
       pack.items.map((item) => [item.kind, item.id]),
@@ -567,7 +507,6 @@ describe("установка и обновление смешанного пак
     expect(await db.packages.get(MIXED_LESSON)).toMatchObject({
       version: pack.version,
       phrases: pack.phrases,
-      removed: [],
     });
     expect(await db.catalog.get(MIXED_LESSON)).toMatchObject({ wordCount: 1, phraseCount: 6, cardCount: 7 });
     expect(await installLesson(MIXED_LESSON, db, fetcher)).toMatchObject({ status: "current" });
@@ -623,9 +562,9 @@ describe("установка и обновление смешанного пак
     expect(await db.phrases.get("p-grafo")).toEqual(before.phrase);
     expect(await db.lessonItems.count()).toBe(before.items);
   });
-  it("обновление сохраняет ID, прогресс, дату пользователя и убранную связь фразы; правка меняет только ревизию", async () => {
+  it("обновление сохраняет ID, прогресс и прохождение урока; правка фразы меняет её ревизию", async () => {
     await installMixed(db);
-    await db.lessons.update(MIXED_LESSON, { targetDate: "2026-10-01", title: "Мой смешанный" });
+    await db.lessons.update(MIXED_LESSON, { completed: true, updatedAt: "2026-09-18T10:00:00.000Z" });
     await db.cardStates.add({
       unitKey: unitKey({ kind: "phrase", id: "p-paidi" }),
       ref: { kind: "phrase", id: "p-paidi" },
@@ -633,7 +572,6 @@ describe("установка и обновление смешанного пак
       introducedAt: "2026-09-10T00:00:00Z",
       version: 2,
     });
-    await legacyRemove(db, MIXED_LESSON, { kind: "phrase", id: "p-xora" });
     const pack = mixedPackage();
     const paidi = pack.phrases.find((p) => p.id === "p-paidi")!;
     const { revision: _r, ...fields } = paidi;
@@ -654,19 +592,19 @@ describe("установка и обновление смешанного пак
     const fetcher = memoryFetcher(mixedContent(), { "content/catalog.json": catalog, [url]: next });
     await refreshCatalog(db, fetcher);
     const result = await installLesson(MIXED_LESSON, db, fetcher);
-    expect(result).toMatchObject({ status: "updated", added: 0, changed: 1, conflicts: [] });
+    expect(result).toMatchObject({ status: "updated", added: 0, changed: 1 });
     const stored = (await db.phrases.get("p-paidi"))!;
     expect(stored.usage).toBe("Описание сцены");
     expect(stored.revision).not.toBe(paidi.revision);
     expect((await db.cardStates.get(unitKey({ kind: "phrase", id: "p-paidi" })))!.version).toBe(2); // состояние и ключ не тронуты
-    expect(await db.lessons.get(MIXED_LESSON)).toMatchObject({ title: "Мой смешанный", targetDate: "2026-10-01" });
-    expect(await db.lessonItems.get([MIXED_LESSON, unitKey({ kind: "phrase", id: "p-xora" })])).toBeUndefined(); // убранная связь не восстановлена
-    expect(await db.phrases.get("p-xora")).toBeTruthy(); // сама фраза остаётся
-    expect((await db.packages.get(MIXED_LESSON))!.removed).toEqual([unitKey({ kind: "phrase", id: "p-xora" })]);
+    expect(await db.lessons.get(MIXED_LESSON)).toMatchObject({
+      completed: true,
+      updatedAt: "2026-09-18T10:00:00.000Z",
+    });
+    expect(stored).not.toHaveProperty("provenance");
   });
-  it("автор убрал фразу из состава: связь исчезает, карточка и её прогресс остаются, пользовательские удаления не трогаются", async () => {
+  it("автор убрал фразу из состава: связь исчезает, карточка и её прогресс остаются", async () => {
     await installMixed(db);
-    await legacyRemove(db, MIXED_LESSON, { kind: "phrase", id: "p-xora" });
     await db.cardStates.add({
       unitKey: unitKey({ kind: "phrase", id: "p-lemeso" }),
       ref: { kind: "phrase", id: "p-lemeso" },
@@ -694,8 +632,7 @@ describe("установка и обновление смешанного пак
     expect(await db.lessonItems.get([MIXED_LESSON, unitKey({ kind: "phrase", id: "p-lemeso" })])).toBeUndefined();
     expect(await db.phrases.get("p-lemeso")).toBeTruthy(); // карточка остаётся ради истории и прогресса
     expect((await db.cardStates.get(unitKey({ kind: "phrase", id: "p-lemeso" })))!.version).toBe(5);
-    expect(await db.lessonItems.where("lessonId").equals(MIXED_LESSON).count()).toBe(5); // минус убранная автором и убранная пользователем
-    expect((await db.packages.get(MIXED_LESSON))!.removed).toEqual([unitKey({ kind: "phrase", id: "p-xora" })]);
+    expect(await db.lessonItems.where("lessonId").equals(MIXED_LESSON).count()).toBe(next.items.length);
     expect((await db.packages.get(MIXED_LESSON))!.items.map((item) => item.id)).not.toContain("p-lemeso");
   });
   it("урок только из текстовых заданий готов офлайн без обязательных медиа", async () => {

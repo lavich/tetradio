@@ -187,7 +187,7 @@ describe("обмен прогрессом курса между устройст
     expect(await readMeta(phone.db, META.dirty)).toBeNull();
     expect((await desktop.sync.exchange()).phase).toBe("synced");
     expect(await rows(desktop)).toEqual(await rows(phone));
-    expect((await desktop.db.lessons.get("m01-1"))?.status).toBe("completed");
+    expect((await desktop.db.lessons.get("m01-1"))?.completed).toBe(true);
     expect((await desktop.db.blockProgress.toArray()).every((row) => !row.answers && !row.text)).toBe(true);
     expect((await blockProgressOf("m01-1", phone.db)).get("forms")?.answers).toEqual({ q1: "είμαι", q2: "είσαι" });
     // Обратно: B ничего не менял — A применяет ту же версию, его ответы не стираются.
@@ -210,10 +210,10 @@ describe("обмен прогрессом курса между устройст
     expect((await fresh.sync.exchange()).phase).toBe("synced");
     const third = await device("third");
     expect((await third.sync.exchange()).phase).toBe("synced");
-    expect((await third.db.lessons.get("m01-1"))?.status).toBe("completed");
+    expect((await third.db.lessons.get("m01-1"))?.completed).toBe(true);
     expect(await rows(third)).toEqual(await rows(phone));
     await installLesson("m01-1", fresh.db, fetcher());
-    expect((await fresh.db.lessons.get("m01-1"))?.status).toBe("completed");
+    expect((await fresh.db.lessons.get("m01-1"))?.completed).toBe(true);
     expect((await blockProgressOf("m01-1", fresh.db)).get("cafe-q")?.done).toBe(true);
   });
   it("первое подключение устройства с прогрессом курса к непустому облаку требует выбора, а не стирает его", async () => {

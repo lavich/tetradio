@@ -153,7 +153,7 @@ export async function completeLessons(page: Page, ids: string[], databaseName = 
       for (const id of ids) {
         const request = store.get(id);
         request.onsuccess = () =>
-          store.put({ ...request.result, status: "completed", updatedAt: new Date().toISOString() });
+          store.put({ ...request.result, completed: true, updatedAt: new Date().toISOString() });
       }
       await new Promise<void>((resolve, reject) => {
         tx.oncomplete = () => resolve();
@@ -231,9 +231,7 @@ export async function seedMixedLesson(
         id: payload.lessonId,
         courseId: payload.courseId,
         title: payload.title,
-        targetDate: null,
-        status: "completed",
-        createdAt: now,
+        completed: true,
         updatedAt: now,
       });
       for (const item of payload.items)
@@ -255,7 +253,6 @@ export async function seedMixedLesson(
         phrases: payload.phrases,
         items: payload.items,
         media: [],
-        removed: [],
       });
       await new Promise<void>((resolve, reject) => {
         tx.oncomplete = () => resolve();

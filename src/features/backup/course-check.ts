@@ -59,6 +59,8 @@ export async function courseProblem(rows: CourseRows, database: AppDatabase): Pr
     if (!record(lesson) || !text(lesson.id)) return "Копия повреждена: урок без идентификатора.";
     if (lesson.status !== undefined && lesson.status !== "upcoming" && lesson.status !== "completed")
       return `Копия повреждена: у урока ${lesson.id} неизвестный статус «${JSON.stringify(lesson.status)}».`;
+    if (lesson.completed !== undefined && typeof lesson.completed !== "boolean")
+      return `Копия повреждена: у урока ${lesson.id} некорректная отметка завершения.`;
   }
   for (const row of rows.blockProgress) {
     const problem = blockRowProblem(row);
@@ -66,9 +68,10 @@ export async function courseProblem(rows: CourseRows, database: AppDatabase): Pr
   }
   const packaged = new Set(rows.packages.filter(record).map((pack) => String(pack.lessonId)));
   const inFile = new Set([...packaged, ...rows.lessons.filter(record).map((lesson) => String(lesson.id))]);
+  // В копии v8 есть курс «Мои слова» с `origin: "local"`: его уроки не из каталога.
   const contentCourses = new Set(
     rows.courses
-      .filter((course) => record(course) && course.origin === "content")
+      .filter((course) => record(course) && course.origin !== "local")
       .map((course) => String((course as Row).id)),
   );
   const contentLessons = rows.lessons.filter(

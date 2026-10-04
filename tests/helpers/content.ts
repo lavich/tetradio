@@ -1,6 +1,4 @@
-import { indexWord, type AppDatabase } from "../../src/storage/db";
-import { unitKey } from "../../src/domain/refs";
-import type { LearningRef, Word } from "../../src/domain/types";
+import type { AppDatabase } from "../../src/storage/db";
 import type { ContentFetcher } from "../../src/content/client";
 import { installLesson, refreshCatalog } from "../../src/content/client";
 import { buildContent, type BuiltContent } from "../../content/build";
@@ -41,7 +39,7 @@ export async function installLessons(db: AppDatabase, ids: string[], fetcher = m
   return fetcher;
 }
 export async function completeLessons(db: AppDatabase, ids: string[]) {
-  for (const id of ids) await db.lessons.update(id, { status: "completed" });
+  for (const id of ids) await db.lessons.update(id, { completed: true });
 }
 /** Установленные и пройденные уроки: их карточки план вводит как новые. */
 export async function installCompleted(db: AppDatabase, ids: string[], fetcher = memoryFetcher()) {
@@ -59,16 +57,3 @@ export const wordCountOf = (...ids: string[]) =>
   new Set(ids.flatMap((id) => packageOf(id).words.map((word) => word.id))).size;
 /** Сколько связей «урок — карточка» дают перечисленные уроки: карточки всех видов. */
 export const itemCountOf = (...ids: string[]) => ids.reduce((sum, id) => sum + packageOf(id).items.length, 0);
-
-/** Правка слова из профиля прежней версии с редактором: такие записи приходят из старых копий и синхронизации. */
-export async function legacyEdit(database: AppDatabase, id: string, patch: Partial<Word>) {
-  const word = (await database.words.get(id))!;
-  await database.words.put(indexWord({ ...word, ...patch, edited: true }));
-}
-/** Карточка, убранная из урока в прежней версии: связи нет, а пакет помнит удаление, чтобы обновление её не вернуло. */
-export async function legacyRemove(database: AppDatabase, lessonId: string, ref: LearningRef) {
-  const key = unitKey(ref);
-  await database.lessonItems.delete([lessonId, key]);
-  const pack = (await database.packages.get(lessonId))!;
-  await database.packages.put({ ...pack, removed: [...pack.removed, key] });
-}

@@ -1,6 +1,6 @@
 import type { SkillSummary, StatsSummary } from "../domain/skills";
 import type { Card } from "ts-fsrs";
-import type { LearningRef, Schedule } from "../domain/types";
+import type { LearningRef } from "../domain/types";
 
 /**
  * Версия облачного формата: другая версия не применяется и не перезаписывается старым клиентом.
@@ -45,17 +45,23 @@ export interface CompactBlock {
   checks?: number[];
   updatedAt: string;
 }
-/** Темп курса переносится между устройствами: без него второе устройство считало бы дни иначе. */
+/** Расписание формата 3: приложение его больше не ведёт, но поле остаётся в снимке до смены формата. */
+export interface CompactSchedule {
+  startDate: string | null;
+  weekdays: number[];
+  lessonHour: number;
+}
+/** Дневной предел курса переносится между устройствами; подписка и расписание — поля формата 3 без значения. */
 export interface CompactCourse {
   id: string;
   subscribed: boolean;
   newItemsPerDay: number;
-  schedule: Schedule;
+  schedule: CompactSchedule;
 }
 /**
- * Компактный снимок стандартного прогресса: состояния FSRS и навыков поставляемых карточек, настройки,
- * даты/статусы стандартных уроков, выполнение блоков курса, требуемые пакеты и сводки статистики. Полная история, сессии,
- * пользовательские слова, тексты карточек, введённые ответы, описания целей и медиа в снимок не входят.
+ * Компактный снимок прогресса: состояния FSRS и навыков карточек, настройки, пройденные уроки, выполнение блоков
+ * курса, требуемые пакеты и сводки статистики. Полная история, сессии, тексты карточек, введённые ответы и медиа
+ * в снимок не входят.
  */
 export interface CompactSnapshot {
   format: typeof SNAPSHOT_FORMAT;

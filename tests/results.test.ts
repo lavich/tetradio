@@ -178,7 +178,6 @@ describe("карточки, которые не даются", () => {
   const phrase = (id: string, text: string): Phrase => ({
     id,
     text,
-    provenance: { sourceLabel: "тест", operation: "verbatim" },
     createdAt: iso,
     updatedAt: iso,
   });
@@ -191,12 +190,7 @@ describe("карточки, которые не даются", () => {
   });
   const data = () =>
     base({
-      words: [
-        word("w1", "η λέξη"),
-        word("w2", "το βιβλίο"),
-        word("w3", "ο δρόμος"),
-        { ...word("w4", "η πόρτα"), deletedAt: iso },
-      ],
+      words: [word("w1", "η λέξη"), word("w2", "το βιβλίο"), word("w3", "ο δρόμος")],
       phrases: [phrase("p1", "Γράφω κάτι.")],
       states: [
         lapsed(wordRef("w1"), LEECH_LAPSES),
@@ -214,7 +208,7 @@ describe("карточки, которые не даются", () => {
       ["η λέξη", LEECH_LAPSES],
     ]);
   });
-  it("удалённая карточка в список не попадает, даже с самым большим числом провалов", async () => {
+  it("состояние без карточки в список не попадает, даже с самым большим числом провалов", async () => {
     const stats = await progress(fromSnapshot(data()), now);
     expect(stats.leeches.some((entry) => entry.ref.id === "w4")).toBe(false);
   });

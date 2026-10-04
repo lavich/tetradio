@@ -1,11 +1,10 @@
 import { db, indexWord, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
 import { reportError } from "../reporting/reporting";
-import { adoptStash } from "../sync/snapshot";
+import { adoptStash, readPending } from "../sync/snapshot";
 import {
   ContentError,
   parseCatalog,
   parsePackage,
-  PHRASE_FIELDS,
   SHIPPED_FIELDS,
   type Catalog,
   type ContentPackage,
@@ -16,7 +15,6 @@ import {
 } from "./schema";
 import { unitKey, wordRef } from "../domain/refs";
 import {
-  defaultSchedule,
   DEFAULT_NEW_ITEMS_PER_DAY,
   type Asset,
   type Course,
@@ -174,7 +172,7 @@ export const previewMedia = (pack: ContentPackage): Map<string, PackageMedia> =>
 
 /**
  * Каталог — единственное место, где известен курс урока, установленного прежней версией.
- * Шаг безвреден при повторе: он только дописывает недостающее и не трогает подписку, которую уже включили.
+ * Название и экзамен курса берутся из каталога, дневной предел остаётся пользовательским.
  */
 async function adoptCourses(catalog: Catalog, database: AppDatabase) {
   const now = new Date().toISOString();
@@ -185,44 +183,22 @@ async function adoptCourses(catalog: Catalog, database: AppDatabase) {
   }
   for (const item of catalog.courses) {
     const stored = await database.courses.get(item.id);
-    const installed = await database.lessons.where("courseId").equals(item.id).count();
     const next: Course = {
       id: item.id,
       title: item.title,
-      origin: stored?.origin ?? "content",
-      subscribed: stored?.subscribed || installed > 0,
-      schedule: stored?.schedule ?? defaultSchedule,
       newItemsPerDay: stored?.newItemsPerDay ?? DEFAULT_NEW_ITEMS_PER_DAY,
-      createdAt: stored?.createdAt ?? now,
       updatedAt: stored?.updatedAt ?? now,
     };
-    if (item.source) next.source = item.source;
-    if (item.language) next.language = item.language;
     if (item.exam) next.exam = item.exam;
-    if (stored?.syncedAt) next.syncedAt = stored.syncedAt;
-    if (
-      !stored ||
-      stored.title !== next.title ||
-      stored.source !== next.source ||
-      stored.language !== next.language ||
-      JSON.stringify(stored.exam) !== JSON.stringify(next.exam) ||
-      stored.subscribed !== next.subscribed
-    )
+    if (!stored || stored.title !== next.title || JSON.stringify(stored.exam) !== JSON.stringify(next.exam))
       await database.courses.put({ ...next, updatedAt: now });
   }
 }
 
-/** Конфликт обновления: карточка любого вида, её подпись для сообщения и поля, где локальное значение сохранено. */
-export interface Conflict {
-  ref: LearningRef;
-  label: string;
-  fields: string[];
-}
 export interface InstallResult {
   status: "installed" | "updated" | "current";
   added: number;
   changed: number;
-  conflicts: Conflict[];
 }
 
 export type InstallPhase =
@@ -249,21 +225,10 @@ const inflight = new Map<string, Promise<InstallResult>>();
 const courseKey = (courseId: string) => `course:${courseId}`;
 export const coursePhase = (courseId: string) => installPhase(courseKey(courseId));
 
-export async function setCourseSubscription(
-  courseId: string,
-  subscribed: boolean,
-  database: AppDatabase = db,
-): Promise<void> {
-  const stored = await database.courses.get(courseId);
-  if (!stored || stored.subscribed === subscribed) return;
-  await database.courses.put({ ...stored, subscribed, updatedAt: new Date().toISOString() });
-}
-
 export interface CourseInstallResult {
   installed: number;
   updated: number;
   failed: number;
-  conflicts: Conflict[];
 }
 
 /**
@@ -275,9 +240,8 @@ export async function installCourse(
   database: AppDatabase = db,
   source: ContentFetcher = fetcher,
 ): Promise<CourseInstallResult> {
-  await setCourseSubscription(courseId, true, database);
   const entries = await database.catalog.where("courseId").equals(courseId).toArray();
-  const result: CourseInstallResult = { installed: 0, updated: 0, failed: 0, conflicts: [] };
+  const result: CourseInstallResult = { installed: 0, updated: 0, failed: 0 };
   setPhase(courseKey(courseId), { phase: "loading" });
   let failure: ContentError | null = null;
   for (const entry of entries) {
@@ -285,32 +249,27 @@ export async function installCourse(
       const outcome = await installLesson(entry.id, database, source);
       if (outcome.status === "installed") result.installed++;
       if (outcome.status === "updated") result.updated++;
-      result.conflicts.push(...outcome.conflicts);
     } catch (error) {
       result.failed++;
       failure = toContentError(error);
     }
   }
   if (failure) setPhase(courseKey(courseId), { phase: "error", message: failure.message, kind: failure.kind });
-  else {
-    setPhase(courseKey(courseId), { phase: "idle" });
-    const stored = await database.courses.get(courseId);
-    if (stored)
-      await database.courses.put({
-        ...stored,
-        syncedAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
-  }
+  else setPhase(courseKey(courseId), { phase: "idle" });
   return result;
 }
 
-/** Фоновая догрузка подписанных курсов: вызывается после обновления каталога при запуске. */
+/**
+ * Фоновая догрузка начатых курсов: вызывается после обновления каталога при запуске. Курс начат, если у него есть
+ * уроки на устройстве или пройденные на другом устройстве уроки ждут установки после синхронизации.
+ */
 export async function syncCourses(database: AppDatabase = db, source: ContentFetcher = fetcher): Promise<void> {
-  const subscribed = (await database.courses.toArray()).filter(
-    (course) => course.origin === "content" && course.subscribed,
+  const pending = (await database.catalog.bulkGet(Object.keys(await readPending(database)))).map(
+    (entry) => entry?.courseId,
   );
-  for (const course of subscribed) await installCourse(course.id, database, source);
+  const started = new Set([...(await database.lessons.orderBy("courseId").uniqueKeys()).map(String), ...pending]);
+  for (const id of await database.courses.toCollection().primaryKeys())
+    if (started.has(id)) await installCourse(id, database, source);
 }
 
 export function installLesson(
@@ -329,12 +288,11 @@ export function installLesson(
       version = entry.version;
       const installed = await database.packages.get(lessonId);
       if (installed && installed.version === entry.version)
-        return { status: "current", added: 0, changed: 0, conflicts: [] } as InstallResult;
+        return { status: "current", added: 0, changed: 0 } as InstallResult;
       const pack = parsePackage(await source.json(entry.url));
       if (pack.id !== lessonId || pack.version !== entry.version)
         throw new ContentError("Пакет не соответствует записи каталога.");
       const result = await applyPackage(pack, database);
-      if (pack.courseId) await setCourseSubscription(pack.courseId, true, database);
       setPhase(lessonId, { phase: "idle" });
       return result;
     } catch (error) {
@@ -365,17 +323,6 @@ export const toContentError = (error: unknown): ContentError => {
   return new ContentError(error instanceof Error ? error.message : "Не удалось установить урок.", "storage");
 };
 
-const canonical = (value: unknown) =>
-  JSON.stringify(value === undefined ? null : value, (_, v) =>
-    v && typeof v === "object" && !Array.isArray(v)
-      ? Object.fromEntries(
-          Object.keys(v)
-            .sort()
-            .map((k) => [k, v[k]]),
-        )
-      : v,
-  );
-const same = (a: unknown, b: unknown) => canonical(a) === canonical(b);
 const shipped = (word: PackageWord) =>
   Object.fromEntries(
     SHIPPED_FIELDS.filter((field) => word[field] !== undefined).map((field) => [field, word[field]]),
@@ -389,119 +336,46 @@ export const wordFromPackage = (card: PackageWord, at: string): Word => ({
   revision: card.revision,
 });
 
-/**
- * Слияние обновления: нетронутая запись берёт новые значения целиком; отредактированная — по полям,
- * если известна база установленной версии; без базы локальный вариант сохраняется, отличия сообщаются.
- */
-export function mergeWord(
-  local: Word,
-  base: PackageWord | undefined,
-  next: PackageWord,
-): { word: Word; conflicts: ShippedField[] } {
-  return mergeFields(
-    local as unknown as Record<string, unknown> & { edited?: boolean },
-    base as Record<string, unknown> | undefined,
-    next as unknown as Record<string, unknown>,
-    SHIPPED_FIELDS,
-  ) as unknown as { word: Word; conflicts: ShippedField[] };
-}
-function mergeFields<T extends Record<string, unknown>>(
-  local: T & { edited?: boolean },
-  base: Record<string, unknown> | undefined,
-  next: Record<string, unknown>,
-  fields: readonly string[],
-): { word: T; conflicts: string[] } {
-  const conflicts: string[] = [];
-  const merged: Record<string, unknown> = { ...local };
-  for (const field of fields) {
-    const incoming = next[field];
-    if (!local.edited) {
-      assign(merged, field, incoming);
-      continue;
-    }
-    if (base) {
-      if (same(local[field], base[field])) assign(merged, field, incoming);
-      else if (!same(incoming, base[field]) && !same(incoming, local[field])) conflicts.push(field);
-    } else if (!same(local[field], incoming)) conflicts.push(field);
-  }
-  return { word: merged as T, conflicts };
-}
-function assign(target: Record<string, unknown>, field: string, value: unknown) {
-  if (value === undefined) delete target[field];
-  else target[field] = value;
-}
+/** Поставляемая фраза в виде локальной записи: происхождение остаётся в пакете. */
+const phraseFromPackage = (card: PackagePhrase, at: string): Phrase => {
+  const { revision, provenance: _provenance, ...rest } = card;
+  return { ...rest, createdAt: at, updatedAt: at, revision };
+};
 
 /**
- * Общее слияние карточки любого вида: поставляемые поля берутся из пакета, локальные (`createdAt`, правки,
- * удаление) остаются. Возвращает конфликт, если локальная правка расходится с новой версией.
+ * Карточки принадлежат пакету: новая ревизия перезаписывает поставляемые поля целиком, `createdAt` остаётся.
+ * Карточка той же ревизии не перезаписывается.
  */
 async function applyCards<
   P extends { id: string; revision: string },
-  L extends {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt?: string;
-    revision?: string;
-    edited?: boolean;
-  },
+  L extends { createdAt: string; revision?: string },
 >(
   incoming: P[],
-  base: Map<string, P>,
-  fields: readonly string[],
-  kind: LearningRef["kind"],
-  labelOf: (card: P | L) => string,
-  table: {
-    get(id: string): Promise<L | undefined>;
-    add(row: L): Promise<unknown>;
-    put(row: L): Promise<unknown>;
-    update(id: string, patch: Partial<L>): Promise<unknown>;
-  },
-  build: (card: P, now: string) => L,
-  store: (row: L) => L,
+  table: { bulkGet(ids: string[]): Promise<(L | undefined)[]>; bulkPut(rows: L[]): Promise<unknown> },
+  build: (card: P, at: string) => L,
   now: string,
   result: InstallResult,
 ) {
-  const pickFields = (card: object) =>
-    Object.fromEntries(
-      fields
-        .filter((field) => (card as Record<string, unknown>)[field] !== undefined)
-        .map((field) => [field, (card as Record<string, unknown>)[field]]),
-    );
-  for (const card of incoming) {
-    const local = await table.get(card.id);
-    if (!local) {
-      await table.add(store(build(card, now)));
+  const local = await table.bulkGet(incoming.map((card) => card.id));
+  const rows: L[] = [];
+  incoming.forEach((card, index) => {
+    const stored = local[index];
+    if (stored?.revision === card.revision) return;
+    const row = build(card, now);
+    if (stored) {
+      result.changed++;
+      rows.push({ ...row, createdAt: stored.createdAt });
+    } else {
       result.added++;
-      continue;
+      rows.push(row);
     }
-    if (local.revision === card.revision) continue;
-    if (local.deletedAt) {
-      const known = base.get(card.id);
-      if (!same(pickFields(card), pickFields(known ?? { ...card, ...pickFields(local) })))
-        result.conflicts.push({ ref: { kind, id: local.id }, label: labelOf(local), fields: ["deleted"] });
-      await table.update(local.id, { revision: card.revision } as Partial<L>);
-      continue;
-    }
-    const merged = mergeFields(
-      local as unknown as Record<string, unknown> & { edited?: boolean },
-      base.get(card.id) as Record<string, unknown> | undefined,
-      card as unknown as Record<string, unknown>,
-      fields,
-    );
-    if (merged.conflicts.length)
-      result.conflicts.push({ ref: { kind, id: local.id }, label: labelOf(local), fields: merged.conflicts });
-    const changed = !same(pickFields(merged.word), pickFields(local));
-    if (changed) result.changed++;
-    await table.put(
-      store({ ...(merged.word as unknown as L), revision: card.revision, updatedAt: changed ? now : local.updatedAt }),
-    );
-  }
+  });
+  await table.bulkPut(rows);
 }
 
 /**
  * Установка одной транзакцией: слова, фразы, связи, медиа и запись пакета. Ошибка в любой карточке
- * откатывает всё — корректная часть отдельно не устанавливается. Убранные пользователем связи не восстанавливаются.
+ * откатывает всё — корректная часть отдельно не устанавливается.
  */
 export async function applyPackage(pack: ContentPackage, database: AppDatabase = db): Promise<InstallResult> {
   const now = new Date().toISOString();
@@ -523,65 +397,28 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
       // Курс дописывается и на неизменной версии: у базы, пережившей переход на курсы, его ещё нет.
       const known = await database.lessons.get(pack.id);
       if (known && !known.courseId && pack.courseId) await database.lessons.put({ ...known, courseId: pack.courseId });
-      if (installed && installed.version === pack.version)
-        return { status: "current", added: 0, changed: 0, conflicts: [] };
-      const result: InstallResult = {
-        status: installed ? "updated" : "installed",
-        added: 0,
-        changed: 0,
-        conflicts: [],
-      };
+      if (installed && installed.version === pack.version) return { status: "current", added: 0, changed: 0 };
+      const result: InstallResult = { status: installed ? "updated" : "installed", added: 0, changed: 0 };
       if (!known)
-        // Урок приходит без положения во времени: он предстоящий и без собственной даты, дальше им распоряжается расписание курса.
         await database.lessons.add({
           id: pack.id,
           courseId: pack.courseId || undefined,
           title: pack.lesson.title,
-          targetDate: null,
-          status: "upcoming",
-          createdAt: now,
+          completed: false,
           updatedAt: now,
         });
-      await applyCards<PackageWord, Word>(
-        pack.words,
-        new Map((installed?.words ?? []).map((word) => [word.id, word])),
-        SHIPPED_FIELDS,
-        "word",
-        (card) => card.greek,
-        database.words as never,
-        wordFromPackage,
-        indexWord,
-        now,
-        result,
-      );
-      await applyCards<PackagePhrase, Phrase>(
-        pack.phrases,
-        new Map((installed?.phrases ?? []).map((phrase) => [phrase.id, phrase])),
-        PHRASE_FIELDS,
-        "phrase",
-        (card) => card.text,
-        database.phrases,
-        (card, at) => {
-          const { revision, ...rest } = card;
-          return { ...rest, createdAt: at, updatedAt: at, revision };
-        },
-        (row) => row,
-        now,
-        result,
-      );
-      const removed = new Set(installed?.removed ?? []);
+      await applyCards(pack.words, database.words, (card, at) => indexWord(wordFromPackage(card, at)), now, result);
+      await applyCards(pack.phrases, database.phrases, phraseFromPackage, now, result);
       const incoming = new Set<string>();
       for (const item of pack.items) {
         const ref: LearningRef = { kind: item.kind, id: item.id };
         const key = unitKey(ref);
         incoming.add(key);
-        if (!removed.has(key))
-          await database.lessonItems.put({ lessonId: pack.id, unitKey: key, ref, position: item.position });
+        await database.lessonItems.put({ lessonId: pack.id, unitKey: key, ref, position: item.position });
       }
       /**
        * Состав урока принадлежит автору: карточка, исчезнувшая из новой версии, теряет связь с уроком.
        * Сама карточка, её прогресс и история остаются — она может жить в других уроках и в словаре.
-       * Снимаются только связи прежнего авторского состава: добавленное пользователем в этот урок не трогается.
        */
       for (const item of installed?.items ?? []) {
         const key = unitKey({ kind: item.kind, id: item.id });
@@ -598,7 +435,6 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         phrases: pack.phrases,
         items: pack.items,
         media: pack.media,
-        removed: [...removed],
       };
       if (pack.lesson.kind) record.kind = pack.lesson.kind;
       if (pack.module) record.module = pack.module;

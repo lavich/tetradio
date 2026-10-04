@@ -14,8 +14,8 @@ const stored = (page: import("@playwright/test").Page) =>
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
       });
-    const [lessons, words, lessonItems, packages, media, assets, courses] = await Promise.all(
-      ["lessons", "words", "lessonItems", "packages", "media", "assets", "courses"].map(all),
+    const [lessons, words, lessonItems, packages, media, assets] = await Promise.all(
+      ["lessons", "words", "lessonItems", "packages", "media", "assets"].map(all),
     );
     database.close();
     return {
@@ -25,10 +25,6 @@ const stored = (page: import("@playwright/test").Page) =>
       packages: packages.length,
       media: media.length,
       assets: assets.length,
-      // Локальный курс «Мои слова» подписан у любого профиля; считаются только курсы каталога.
-      subscribed: (courses as { subscribed: boolean; origin: string }[]).filter(
-        (course) => course.origin === "content" && course.subscribed,
-      ).length,
     };
   });
 
@@ -50,7 +46,6 @@ test.describe("ссылка на слово", () => {
       packages: 0,
       media: 0,
       assets: 0,
-      subscribed: 0,
     });
   });
   test("неизвестное слово — «Слово не найдено»", async ({ page }) => {

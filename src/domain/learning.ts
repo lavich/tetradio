@@ -140,10 +140,8 @@ export interface PlanSource {
   lessonRefs(lessonId: string): Promise<LearningRef[]>;
   introducedToday(today: string, timezone: string): Promise<number>;
   statesOf(refs: LearningRef[]): Promise<Map<string, LearningState>>;
-  /** Ключи существующих и не удалённых карточек. */
+  /** Ключи существующих карточек. */
   liveKeys(refs: LearningRef[]): Promise<Set<string>>;
-  /** Удалённых карточек мало: их множество дешевле, чем проверять существование тысяч срочных повторений. */
-  deletedKeys(): Promise<Set<string>>;
   dueStates(now: Date): Promise<LearningState[]>;
   /** Признаки доступности упражнения для перечисленных карточек; тексты при этом не нужны. */
   factsOf(refs: LearningRef[]): Promise<Map<string, CardFacts>>;
@@ -212,9 +210,7 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     }),
   );
 
-  const [due, deleted] = await Promise.all([source.dueStates(now), source.deletedKeys()]);
-  const reviews = due
-    .filter((s) => !deleted.has(s.unitKey))
+  const reviews = (await source.dueStates(now))
     .sort(
       (a, b) =>
         stateRank(a.card) - stateRank(b.card) ||
@@ -543,7 +539,6 @@ export async function makeSession({
     status: "active",
     activeTimeMs: 0,
     introducedKeys: [],
-    objectiveVersion: 1,
   };
 }
 

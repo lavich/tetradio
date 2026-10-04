@@ -246,7 +246,7 @@ export function ExampleBox({
               {active && (
                 <>
                   <b>{example.greek.slice(active.start, active.start + active.length)}</b> — {active.russian}
-                  {linked && !linked.deletedAt && (
+                  {linked && (
                     <>
                       {" "}
                       <Link to={`/words/${linked.id}`}>Открыть карточку</Link>

@@ -34,7 +34,7 @@ export function WordExerciseScreen() {
   const [attempt, setAttempt] = useState(0);
   const [item, setItem] = useState<SessionItem | null | undefined>(undefined);
   const [reason, setReason] = useState("");
-  const live = word && !word.deletedAt ? word : null;
+  const live = word ?? null;
 
   const back = useCallback(() => {
     stopAudio();

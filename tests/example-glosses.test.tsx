@@ -93,12 +93,10 @@ describe("перевод слов примера", () => {
     expect(line().textContent).toBe("μεγάλο — большой Открыть карточку");
     expect(line().querySelector("a")!.getAttribute("href")).toBe("/words/w-big");
   });
-  it("карточки нет на устройстве или она удалена — только перевод", async () => {
+  it("карточки нет на устройстве — только перевод", async () => {
     await render({ example, linkFrom: "w-house" });
     await press("μεγάλο");
     expect(line().textContent).toBe("μεγάλο — большой");
-    await db.words.put(indexWord(word("w-big", { deletedAt: "2026-09-20T00:00:00Z" })));
-    await act(async () => new Promise((resolve) => setTimeout(resolve, 20)));
     expect(line().querySelector("a")).toBeNull();
   });
   it("ссылка на ту же карточку действия не даёт", async () => {

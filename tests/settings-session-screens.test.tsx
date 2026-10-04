@@ -6,7 +6,6 @@ import { createRoot, type Root } from "react-dom/client";
 import { MemoryRouter } from "react-router-dom";
 import { SessionScreen } from "../src/features/learning/SessionScreen";
 import { SettingsScreen } from "../src/features/more/SettingsScreen";
-import { defaultSchedule } from "../src/domain/types";
 import { db } from "../src/storage/db";
 import { loadSettings } from "../src/storage/queries";
 
@@ -55,11 +54,7 @@ describe("настройки", () => {
     await db.courses.put({
       id: "a2",
       title: "Курс",
-      origin: "content",
-      subscribed: true,
-      schedule: defaultSchedule,
       newItemsPerDay: 6,
-      createdAt: "",
       updatedAt: "",
     });
   });

@@ -131,24 +131,24 @@ describe("прогресс курса в базе", () => {
     const saved = (await blockProgressOf("m01-1", db)).get("about-me")!;
     expect(saved).toMatchObject({ key: "m01-1/about-me", done: true, text: "Με λένε Ιβάν.", checks: [0, 1] });
     await expect(completeLesson("m01-1", db)).rejects.toBeInstanceOf(LessonIncompleteError);
-    expect((await db.lessons.get("m01-1"))!.status).toBe("upcoming");
+    expect((await db.lessons.get("m01-1"))!.completed).toBe(false);
     for (const blockId of ["forms", "anna-tf", "cafe-q", "intro"])
       await saveBlockProgress("m01-1", blockId, { done: true }, db);
     await completeLesson("m01-1", db);
-    expect((await db.lessons.get("m01-1"))!.status).toBe("completed");
+    expect((await db.lessons.get("m01-1"))!.completed).toBe(true);
     expect((await db.meta.get("sync:dirty"))?.value).toBeTruthy();
   });
 
   it("следующий шаг курса — первый незавершённый урок опубликованного модуля", async () => {
     expect((await nextCourseLesson("greek-a2", db))!.lesson.id).toBe("m01-1");
-    await db.lessons.update("m01-1", { status: "completed" });
+    await db.lessons.update("m01-1", { completed: true });
     expect((await nextCourseLesson("greek-a2", db))!.lesson.id).toBe("m01-test");
-    await db.lessons.update("m01-test", { status: "completed" });
+    await db.lessons.update("m01-test", { completed: true });
     // Уроки модуля пройдены — следующий шаг контрольная точка после него.
     expect((await nextCourseLesson("greek-a2", db))!.lesson).toMatchObject({ id: "m01-k1", kind: "test" });
-    await db.lessons.update("m01-k1", { status: "completed" });
+    await db.lessons.update("m01-k1", { completed: true });
     expect((await nextCourseLesson("greek-a2", db))!.lesson).toMatchObject({ id: "m01-r1", kind: "lesson" });
-    await db.lessons.update("m01-r1", { status: "completed" });
+    await db.lessons.update("m01-r1", { completed: true });
     // Черновик m02 следующим шагом не становится.
     expect(await nextCourseLesson("greek-a2", db)).toBeNull();
     expect((await moduleViews("greek-a2", db))[0].completed).toBe(true);

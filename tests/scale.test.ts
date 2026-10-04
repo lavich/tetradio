@@ -55,7 +55,6 @@ beforeAll(async () => {
         verified: false,
         createdAt: iso,
         updatedAt: iso,
-        ...(index % 97 === 0 ? { deletedAt: iso } : {}),
       };
     });
     await db.words.bulkAdd(words.map(indexWord));
@@ -100,9 +99,7 @@ beforeAll(async () => {
     Array.from({ length: LESSONS }, (_, i) => ({
       id: `lesson-${pad(i)}`,
       title: `Урок ${i}`,
-      targetDate: null,
-      status: i < COMPLETED ? ("completed" as const) : ("upcoming" as const),
-      createdAt: iso,
+      completed: i < COMPLETED,
       updatedAt: iso,
     })),
   );
@@ -112,14 +109,12 @@ beforeAll(async () => {
     ),
   );
   // Смешанный урок на той же базе: фразы и пропуски в отдельных таблицах, связи типизированы.
-  const at = iso,
-    provenance = { sourceLabel: "тест", operation: "verbatim" as const };
+  const at = iso;
   await db.phrases.bulkAdd(
     Array.from({ length: 500 }, (_, i) => ({
       id: `p${pad(i)}`,
       text: `Φράση ${i}.`,
       translation: `Фраза ${i}.`,
-      provenance,
       createdAt: at,
       updatedAt: at,
     })),
@@ -127,9 +122,7 @@ beforeAll(async () => {
   await db.lessons.add({
     id: "lesson-mixed",
     title: "Смешанный",
-    targetDate: null,
-    status: "completed",
-    createdAt: iso,
+    completed: true,
     updatedAt: iso,
   });
   const mixedRefs = Array.from({ length: 35 }, (_, i) =>
@@ -161,11 +154,7 @@ beforeAll(async () => {
   await db.courses.put({
     id: "a2",
     title: "A2",
-    origin: "content",
-    subscribed: true,
-    schedule: { startDate: null, weekdays: [], lessonHour: 12 },
     newItemsPerDay: 10,
-    createdAt: iso,
     updatedAt: iso,
   });
 }, 180_000);

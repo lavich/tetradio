@@ -15,10 +15,8 @@ import { diffChars } from "../src/domain/spelling";
 import { checkAnswer } from "../src/domain/text-answer";
 import { progress } from "../src/domain/stats";
 import {
-  defaultSchedule,
   defaultSettings,
   DEFAULT_NEW_ITEMS_PER_DAY,
-  LOCAL_COURSE,
   type Course,
   type ExerciseType,
   type LearningRef,
@@ -53,21 +51,15 @@ type LessonSpec = Lesson & { wordIds: string[] };
 const lesson = (id: string, wordIds: string[], over: Partial<Lesson> = {}): LessonSpec => ({
   id,
   title: id,
-  targetDate: null,
-  status: "completed",
+  completed: true,
   wordIds,
-  createdAt: iso,
   updatedAt: iso,
   ...over,
 });
 const course = (id: string, newItemsPerDay: number, over: Partial<Course> = {}): Course => ({
   id,
   title: id,
-  origin: "content",
-  subscribed: true,
-  schedule: defaultSchedule,
   newItemsPerDay,
-  createdAt: iso,
   updatedAt: iso,
   ...over,
 });
@@ -118,14 +110,13 @@ const module = (id: string, number: number, over: Partial<StoredModule> = {}): S
 describe("новые карточки — из пройденных уроков курса", () => {
   const pool = words(60);
   const ids = (from: number, to: number) => pool.slice(from, to).map((w) => w.id);
-  it("карточки непройденного урока не вводятся, даже если по сохранённому расписанию его день прошёл", async () => {
+  it("карточки непройденного урока не вводятся", async () => {
     const data = base({
       words: pool,
-      courses: [course("a2", 10, { schedule: { startDate: "2026-09-01", weekdays: [1, 3, 5], lessonHour: 12 } })],
       lessons: [
         lesson("done", ids(0, 2), { courseId: "a2" }),
-        lesson("missed", ids(2, 20), { courseId: "a2", status: "upcoming", targetDate: "2026-09-10" }),
-        lesson("next", ids(20, 40), { courseId: "a2", status: "upcoming", targetDate: "2026-09-16" }),
+        lesson("missed", ids(2, 20), { courseId: "a2", completed: false }),
+        lesson("next", ids(20, 40), { courseId: "a2", completed: false }),
       ],
     });
     const plan = await planOf(data);
@@ -133,10 +124,9 @@ describe("новые карточки — из пройденных уроков
     expect(plan.budget).toBe(10);
   });
   it("слово, убранное из урока обновлением, в новые не попадает", async () => {
-    // Слово осталось в словаре без связи с уроком и без состояния: прежний «Мои слова» вводил его сканом словаря.
+    // Слово осталось в словаре без связи с уроком и без состояния.
     const data = base({
       words: pool.slice(0, 5),
-      courses: [course("a2", 10), course(LOCAL_COURSE, 10, { origin: "local", title: "Мои слова" })],
       lessons: [lesson("done", ids(0, 3), { courseId: "a2" })],
     });
     const plan = await planOf(data);
@@ -192,9 +182,9 @@ describe("новые карточки — из пройденных уроков
     expect(plan.origins.get(wordKeyOf(pool[1].id))).toEqual({ lessonId: "l1", title: "l1" });
     expect(plan.origins.get(wordKeyOf(pool[4].id))).toEqual({ lessonId: "l2", title: "l2" });
   });
-  it("введённая и удалённая карточки новыми не считаются", async () => {
+  it("введённая карточка и карточка без записи новыми не считаются", async () => {
     const data = base({
-      words: pool.map((w, index) => (index === 1 ? { ...w, deletedAt: iso } : w)),
+      words: pool.filter((_, index) => index !== 1),
       lessons: [lesson("l1", ids(0, 4))],
       states: [learned(pool[0].id, "2026-09-20T09:00:00Z")],
     });
@@ -484,7 +474,6 @@ describe("дневной план со смешанными карточками
     id,
     text: `Φράση ${id}.`,
     translation: `Фраза ${id}.`,
-    provenance: { sourceLabel: "тест", operation: "verbatim" },
     createdAt: iso,
     updatedAt: iso,
     ...over,
@@ -580,7 +569,7 @@ describe("дневной план со смешанными карточками
     });
     expect((await makePlan(fromSnapshot(few), now, { hasVoice: true })).unavailable).toEqual([P("p-silent")]);
   });
-  it("повторения смешанные и идут по общей очереди; удалённая карточка выпадает", async () => {
+  it("повторения смешанные и идут по общей очереди", async () => {
     const states = [
       stateOf(P("p1"), "2026-09-15T08:00:00Z"),
       stateOf(P("q1"), "2026-09-12T08:00:00Z"),
@@ -593,11 +582,10 @@ describe("дневной план со смешанными карточками
           reps: 2,
         } as LearningState["card"],
       }),
-      stateOf(P("q2"), "2026-09-13T08:00:00Z"),
     ];
     const data = base({
       words: pool,
-      phrases: [...phrases, extra[0], { ...extra[1], deletedAt: iso }, ...extra.slice(2)],
+      phrases: [...phrases, ...extra],
       states,
     });
     const plan = await planOf(data);

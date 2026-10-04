@@ -5,7 +5,6 @@ import { cardLabel, type StatsSource } from "./stats";
 import {
   DEFAULT_NEW_ITEMS_PER_DAY,
   fillSettings,
-  LOCAL_COURSE,
   type CardKind,
   type LearningRef,
   type LessonItem,
@@ -20,26 +19,16 @@ import {
 export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
   const settings = fillSettings(data.settings);
   const modules = data.modules ?? [];
-  // Курс выбирается как в базе: курс модулей, иначе первый по id не локальный, иначе любой.
+  // Курс выбирается как в базе: курс модулей, иначе первый по id.
   const courses = [...(data.courses ?? [])].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
-  const course =
-    (modules.length ? courses.find((c) => c.id === modules[0].courseId) : undefined) ??
-    courses.find((c) => c.id !== LOCAL_COURSE) ??
-    courses[0];
+  const course = (modules.length ? courses.find((c) => c.id === modules[0].courseId) : undefined) ?? courses[0];
   const items: LessonItem[] = [...data.links.map(itemOfLink), ...(data.items ?? [])];
   const words = new Map(data.words.map((word) => [word.id, word]));
   const phrases = new Map((data.phrases ?? []).map((phrase) => [phrase.id, phrase]));
   const record = (ref: LearningRef) => (ref.kind === "word" ? words.get(ref.id) : phrases.get(ref.id));
-  const isLive = (ref: LearningRef) => {
-    const row = record(ref);
-    return !!row && !row.deletedAt;
-  };
+  const isLive = (ref: LearningRef) => !!record(ref);
   const states = new Map(data.states.map((state) => [state.unitKey, state]));
-  const deleted = new Set<string>();
-  for (const word of data.words) if (word.deletedAt) deleted.add(unitKey(wordRef(word.id)));
-  for (const phrase of phrases.values()) if (phrase.deletedAt) deleted.add(unitKey({ kind: "phrase", id: phrase.id }));
-  const liveWordIds = [...words.values()].filter((word) => !word.deletedAt).map((word) => word.id);
-  const livePhrases = [...phrases.values()].filter((phrase) => !phrase.deletedAt);
+  const livePhrases = [...phrases.values()];
   const sorted = (events: typeof data.events) => [...events].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   const cardOf = (ref: LearningRef): SessionCard | undefined => {
     if (!isLive(ref)) return undefined;
@@ -53,7 +42,7 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
     newItemsPerDay: async () => course?.newItemsPerDay ?? DEFAULT_NEW_ITEMS_PER_DAY,
     completedLessons: async () =>
       programmeOrder(
-        data.lessons.filter((lesson) => lesson.status === "completed"),
+        data.lessons.filter((lesson) => lesson.completed),
         modules,
         (id) => data.lessons.findIndex((lesson) => lesson.id === id),
       ),
@@ -98,7 +87,7 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
         unitKey(card.kind === "word" ? wordRef(card.word.id) : { kind: "phrase", id: card.phrase.id }),
         data.events,
       ),
-    optionPool: async () => liveWordIds.map((id) => words.get(id)!),
+    optionPool: async () => [...words.values()],
     lessonMatesOf: async (wordIds) =>
       new Map(
         wordIds.map((id) => {
@@ -130,7 +119,6 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
       data.states
         .filter((state) => new Date(state.card.due).getTime() < instant.getTime())
         .map((state) => state.unitKey),
-    deletedKeys: async () => deleted,
     cardCount: async () => total("word") + total("phrase"),
     eachState: async (visit) => {
       for (const state of data.states) visit(state);

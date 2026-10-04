@@ -1,14 +1,16 @@
 import "fake-indexeddb/auto";
 import "./helpers/self";
 import Dexie from "dexie";
+import { exportDB } from "dexie-export-import";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
+import { inspectBackup, restoreBackup } from "../src/features/backup/backup";
 import { dexieSource } from "../src/storage/queries";
 import { dictionary } from "../src/storage/dictionary";
 import { courseProgress } from "../src/storage/progress";
 import { makePlan } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
-import { seedV8, V8_NOW } from "./helpers/v8";
+import { seedV8, V8_NOW, V8_STORES } from "./helpers/v8";
 
 const NAME = "tetradio-v8-copy";
 let db: AppDatabase;
@@ -38,6 +40,22 @@ async function views(database: AppDatabase) {
     course: await courseProgress(V8_NOW, "Asia/Nicosia", database),
     stats: await progress(dexieSource(database), V8_NOW),
   };
+}
+
+/** Файл копии v8, как его сделало приложение до обновления. */
+async function backupV8(): Promise<Blob> {
+  const name = "tetradio-v8-file";
+  await seedV8(name);
+  const legacy = new Dexie(name);
+  legacy.version(8).stores(V8_STORES);
+  await legacy.open();
+  await legacy.table("meta").put({ key: "app", value: "tetradio:8" });
+  const file = await exportDB(legacy, {
+    skipTables: ["catalog", "modules", "syncVersions", "lessonWords", "states", "baseSkills", "syncStash", "clozes"],
+  });
+  legacy.close();
+  await Dexie.delete(name);
+  return file;
 }
 
 describe("обновление копии v8", () => {
@@ -417,5 +435,82 @@ describe("обновление копии v8", () => {
         },
       }
     `);
+  });
+
+  it("удалённое слово уходит со своим состоянием, навыками и местом в уроке; история остаётся", async () => {
+    const apo = '["word","apo"]';
+    expect(await db.words.get("apo")).toBeUndefined();
+    expect(await db.cardStates.get(apo)).toBeUndefined();
+    expect(await db.cardSkills.get(apo)).toBeUndefined();
+    expect(await db.lessonItems.where("unitKey").equals(apo).count()).toBe(0);
+    expect(await db.events.count()).toBe(6);
+    expect(await db.cardStates.count()).toBe(2);
+  });
+
+  it("курс, уроки, карточки, пакеты и занятия теряют поля Tavelori", async () => {
+    expect(await db.courses.toArray()).toEqual([
+      {
+        id: "greek-a2",
+        title: "Греческий A2 (пример)",
+        newItemsPerDay: 3,
+        exam: expect.objectContaining({ date: "2027-05-11" }),
+        updatedAt: "2026-09-10T08:00:00.000Z",
+      },
+    ]);
+    expect(await db.lessons.get("m01-1")).toEqual({
+      id: "m01-1",
+      courseId: "greek-a2",
+      title: "Знакомство и είμαι",
+      completed: true,
+      updatedAt: "2026-09-21T15:00:00.000Z",
+    });
+    expect((await db.lessons.get("m01-k1"))?.completed).toBe(false);
+    expect(await db.words.get("kalimera")).not.toHaveProperty("edited");
+    expect(await db.phrases.get("pos-se-lene")).not.toHaveProperty("provenance");
+    for (const pack of await db.packages.toArray()) expect(pack).not.toHaveProperty("removed");
+    expect((await db.sessions.get("s-recall"))?.status).toBe("ended");
+    expect((await db.sessions.get("s-old"))?.status).toBe("done");
+  });
+
+  it("пустые хранилища и индексы Tavelori удалены", async () => {
+    const names = db.tables.map((table) => table.name);
+    for (const gone of ["lessonWords", "states", "baseSkills", "syncStash", "clozes"])
+      expect(names).not.toContain(gone);
+    const indexes = (name: string) => db.table(name).schema.indexes.map((index) => index.name);
+    expect(indexes("words")).not.toContain("deletedAt");
+    expect(indexes("phrases")).not.toContain("deletedAt");
+    expect(indexes("lessons")).toEqual(["courseId"]);
+    expect(indexes("courses")).toEqual([]);
+  });
+});
+
+describe("копия данных v8", () => {
+  it("восстанавливается через ту же миграцию с тем же планом, словарём и статистикой", async () => {
+    const expected = await views(db);
+    const file = await backupV8();
+    const target = new AppDatabase("tetradio-v8-restore");
+    await target.open();
+    try {
+      const check = await inspectBackup(file, target);
+      expect(check.ok && check.report.legacy).toBe(true);
+      await restoreBackup(file, target);
+      // Каталог и модули — кеш, в копию не входят: их приносит обновление каталога.
+      await target.catalog.bulkPut(await db.catalog.toArray());
+      await target.modules.bulkPut(await db.modules.toArray());
+      expect(await views(target)).toEqual(expected);
+      expect(await target.courses.get("my")).toBeUndefined();
+      expect(await target.words.get("apo")).toBeUndefined();
+    } finally {
+      target.close();
+      await Dexie.delete("tetradio-v8-restore");
+    }
+  });
+
+  it("копия старше v8 отклоняется", async () => {
+    const file = await backupV8();
+    const text = (await file.text()).replace('"databaseVersion":8', '"databaseVersion":7');
+    expect(text).toContain('"databaseVersion":7');
+    const check = await inspectBackup(new Blob([text]), db);
+    expect(check).toEqual({ ok: false, message: expect.stringMatching(/слишком старой версией/) });
   });
 });
