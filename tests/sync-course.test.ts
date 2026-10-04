@@ -6,7 +6,7 @@ import { makeSession } from "../src/domain/learning";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { blockProgressOf, completeLesson, saveBlockProgress } from "../src/storage/course";
-import { saveSettings, settleLessons, submitAnswer } from "../src/storage/ops";
+import { saveSettings, submitAnswer } from "../src/storage/ops";
 import { defaultSettings } from "../src/domain/types";
 import type { TelegramCloudStorage } from "../src/platform/telegram-types";
 import { kvAdapter } from "../src/sync/adapter";
@@ -226,30 +226,6 @@ describe("обмен прогрессом курса между устройст
     expect(status.phase).toBe("conflict");
     expect(status.conflict?.kind).toBe("initial");
     expect(status.conflict?.branches.find((branch) => branch.local)?.description.blocks).toBe(1);
-  });
-});
-
-describe("даты расписания и уроки курса", () => {
-  it("прошедший день расписания не завершает урок курса — только выполненные задания", async () => {
-    const phone = await device("phone", { lessons: ["m01-1", "m01-test"] });
-    await phone.db.courses.toCollection().modify((course) => {
-      course.subscribed = true;
-      course.schedule = { startDate: "2026-01-05", weekdays: [1, 2, 3, 4, 5, 6, 0], lessonHour: 12 };
-    });
-    // Свой набор того же расписания по-прежнему закрепляется датой: проверка не выключает правило целиком.
-    await phone.db.lessons.add({
-      id: "own-1",
-      courseId: (await phone.db.courses.toArray())[0].id,
-      title: "Свой",
-      targetDate: "2026-01-06",
-      status: "upcoming",
-      createdAt: "2026-01-01T00:00:00.000Z",
-      updatedAt: "2026-01-01T00:00:00.000Z",
-    });
-    await settleLessons(new Date("2026-12-31T12:00:00Z"), phone.db);
-    expect((await phone.db.lessons.get("m01-1"))?.status).toBe("upcoming");
-    expect((await phone.db.lessons.get("m01-test"))?.status).toBe("upcoming");
-    expect((await phone.db.lessons.get("own-1"))?.status).toBe("completed");
   });
 });
 

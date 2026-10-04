@@ -12,13 +12,14 @@ import {
   type Lesson,
   type ReviewEvent,
   type Snapshot,
+  type StoredModule,
   type Word,
 } from "../src/domain/types";
 import { idsOf, wordEvent, wordRef, wordState } from "./helpers/cards";
 
 /**
- * Эталон планировщика: результаты зафиксированы на снимке до перехода на выборочные запросы.
- * Новый доступ к данным обязан выдавать те же очереди, задания и варианты при том же источнике случайности.
+ * Эталон планировщика: очереди, задания и варианты при том же источнике случайности.
+ * Перезаписан при переходе на план по пройденным урокам; база и снимок обязаны выдавать одно и то же.
  */
 const FIXTURE = "tests/fixtures/plan-golden.json";
 const now = new Date("2026-09-15T09:00:00Z");
@@ -48,11 +49,11 @@ const word = (index: number, over: Partial<Word> = {}): Word => ({
   ...over,
 });
 type LessonSpec = Lesson & { wordIds: string[] };
-const lesson = (id: string, wordIds: string[], targetDate: string | null, over: Partial<Lesson> = {}): LessonSpec => ({
+const lesson = (id: string, wordIds: string[], over: Partial<Lesson> = {}): LessonSpec => ({
   id,
   title: id,
-  targetDate,
-  status: "upcoming",
+  targetDate: null,
+  status: "completed",
   wordIds,
   createdAt: iso,
   updatedAt: iso,
@@ -79,25 +80,38 @@ const event = (wordId: string, type: ExerciseType, correct: boolean, at: string)
     localDate: at.slice(0, 10),
     responseTimeMs: 1000,
   });
+const course = (newItemsPerDay: number): Course => ({
+  id: "a2",
+  title: "A2",
+  origin: "content",
+  subscribed: true,
+  schedule: defaultSchedule,
+  newItemsPerDay,
+  createdAt: iso,
+  updatedAt: iso,
+});
+const module = (id: string, number: number, lessonIds: string[], checkpointId?: string): StoredModule => ({
+  id,
+  courseId: "a2",
+  number,
+  title: id,
+  subtitle: "",
+  status: "published",
+  goal: "",
+  grammar: [],
+  sessions: 1,
+  lessonIds,
+  ...(checkpointId ? { checkpointId } : {}),
+  position: number,
+});
 const base = (over: Partial<Omit<Snapshot, "lessons">> & { lessons?: LessonSpec[] } = {}): Snapshot => ({
   words: [],
   states: [],
   events: [],
   sessions: [],
   settings: defaultSettings,
-  // Предел локального курса закреплён: эталон фиксирует поведение, а не значение по умолчанию.
-  courses: [
-    {
-      id: "my",
-      title: "Мои слова",
-      origin: "local",
-      subscribed: true,
-      schedule: defaultSchedule,
-      newItemsPerDay: 10,
-      createdAt: iso,
-      updatedAt: iso,
-    },
-  ],
+  // Предел курса закреплён: эталон фиксирует поведение, а не значение по умолчанию.
+  courses: [course(10)],
   ...over,
   lessons: (over.lessons ?? []).map(({ wordIds: _, ...rest }) => rest),
   links: (over.lessons ?? []).flatMap((l) =>
@@ -112,10 +126,10 @@ export const scenarios: Record<string, Snapshot> = {
     return base({
       words,
       lessons: [
-        lesson("l1", ids.slice(0, 20), "2026-09-18"),
-        lesson("l2", ids.slice(10, 30), "2026-09-20"),
-        lesson("l3", ids.slice(30, 35), null),
-        lesson("l4", ids.slice(35, 38), "2026-09-10", { status: "completed" }),
+        lesson("l1", ids.slice(0, 20)),
+        lesson("l2", ids.slice(10, 30), { status: "upcoming", targetDate: "2026-09-10" }),
+        lesson("l3", ids.slice(30, 35)),
+        lesson("l4", ids.slice(35, 38)),
       ],
       states: [
         learned("w20", "2026-09-15T08:00:00Z"),
@@ -144,18 +158,6 @@ export const scenarios: Record<string, Snapshot> = {
         event("w24", "spelling", true, "2026-09-10T09:00:00Z"),
         event("w24", "listening", false, "2026-09-11T09:00:00Z"),
       ],
-      courses: [
-        {
-          id: "my",
-          title: "Мои слова",
-          origin: "local",
-          subscribed: true,
-          schedule: defaultSchedule,
-          newItemsPerDay: 10,
-          createdAt: iso,
-          updatedAt: iso,
-        },
-      ],
       settings: { ...defaultSettings, sessionSize: 12 },
     });
   })(),
@@ -164,28 +166,17 @@ export const scenarios: Record<string, Snapshot> = {
     const ids = words.map((w) => w.id);
     return base({
       words,
-      lessons: [lesson("l1", ids, "2026-09-18")],
+      lessons: [lesson("l1", ids)],
       states: ids.slice(0, 10).map((id) => learned(id, "2026-09-16T09:00:00Z", State.Learning, iso)),
     });
   })(),
-  noDated: (() => {
+  smallLimit: (() => {
     const words = Array.from({ length: 12 }, (_, i) => word(i));
     const ids = words.map((w) => w.id);
     return base({
       words,
-      lessons: [lesson("l1", ids.slice(4, 8), null)],
-      courses: [
-        {
-          id: "my",
-          title: "Мои слова",
-          origin: "local",
-          subscribed: true,
-          schedule: defaultSchedule,
-          newItemsPerDay: 5,
-          createdAt: iso,
-          updatedAt: iso,
-        },
-      ],
+      lessons: [lesson("l1", ids.slice(4, 8))],
+      courses: [course(5)],
       settings: { ...defaultSettings, sessionSize: 6 },
     });
   })(),
@@ -194,27 +185,19 @@ export const scenarios: Record<string, Snapshot> = {
     states: [learned("w0", "2026-09-14T08:00:00Z")],
     settings: { ...defaultSettings, sessionSize: 4 },
   }),
-  twoCourses: (() => {
+  modules: (() => {
     const words = Array.from({ length: 40 }, (_, i) => word(i));
     const ids = words.map((w) => w.id);
-    const course = (id: string, perDay: number, weekdays: number[]): Course => ({
-      id,
-      title: id,
-      origin: "content",
-      subscribed: true,
-      schedule: { startDate: "2026-09-15", weekdays, lessonHour: 12 },
-      newItemsPerDay: perDay,
-      createdAt: iso,
-      updatedAt: iso,
-    });
     return base({
       words,
-      courses: [course("near", 6, [2, 5]), course("far", 3, [6])],
+      modules: [module("m02", 2, ["m02-1", "m02-2"]), module("m01", 1, ["m01-1"], "k1")],
       lessons: [
-        lesson("n1", ids.slice(0, 12), "2026-09-16", { courseId: "near" }),
-        lesson("n2", ids.slice(12, 20), null, { courseId: "near" }),
-        lesson("f1", ids.slice(20, 32), "2026-09-26", { courseId: "far" }),
+        lesson("m02-1", ids.slice(20, 26)),
+        lesson("m02-2", ids.slice(26, 40), { status: "upcoming" }),
+        lesson("k1", ids.slice(12, 20)),
+        lesson("m01-1", ids.slice(0, 12)),
       ],
+      courses: [course(30)],
       states: [learned("w0", "2026-09-14T08:00:00Z")],
       settings: { ...defaultSettings, sessionSize: 10 },
     });
@@ -235,28 +218,14 @@ const stripSession = (session: Awaited<ReturnType<typeof makeSession>>) => ({
 });
 const stripPlan = (plan: Awaited<ReturnType<typeof makePlan>>) => ({
   today: plan.today,
-  requiredPerDay: plan.requiredPerDay,
   budget: plan.budget,
   introducedToday: plan.introducedToday,
-  shortfall: plan.shortfall,
   newWords: idsOf(plan.newRefs),
   reviews: plan.reviews.map((r) => r.ref.id),
-  deadlines: plan.deadlines,
-  backlog: { wordIds: idsOf(plan.backlog.refs), lessons: plan.backlog.lessons },
-  courses: plan.courses.map(
-    ({ courseId, newItemsPerDay, budget, introducedToday, newRefs, requiredPerDay, shortfall }) => ({
-      courseId,
-      newWordsPerDay: newItemsPerDay,
-      budget,
-      introducedToday,
-      newWordIds: idsOf(newRefs),
-      requiredPerDay,
-      shortfall,
-    }),
-  ),
+  origins: Object.fromEntries([...plan.origins].map(([key, origin]) => [key, origin.lessonId])),
 });
 
-/** Результаты для одного источника; тот же набор проверок применяется к снимку и к базе. Эталон записан до типизированных ссылок, поэтому ссылки словарных сценариев сворачиваются в прежние идентификаторы слов. */
+/** Результаты для одного источника; тот же набор проверок применяется к снимку и к базе. Ссылки словарных сценариев сворачиваются в идентификаторы слов. */
 export async function recordFor(source: SessionSource, practiceIds: string[]) {
   return {
     plan: stripPlan(await makePlan(source, now)),

@@ -10,7 +10,6 @@ import {
   wordExerciseOptions,
   hasEasierStep,
   localDay,
-  daysBetween,
   distractorsFor,
   isCheckable,
   FAST_ANSWER_MS,
@@ -31,7 +30,6 @@ import { mulberry32 } from "./plan-golden.test";
 import {
   defaultSchedule,
   defaultSettings,
-  LOCAL_COURSE,
   type Course,
   type ExerciseType,
   type Phrase,
@@ -57,8 +55,8 @@ type LessonSpec = Lesson & { wordIds: string[] };
 const lesson: LessonSpec = {
   id: "l",
   title: "1.2",
-  targetDate: "2026-09-18",
-  status: "upcoming",
+  targetDate: null,
+  status: "completed",
   wordIds: words.map((w) => w.id),
   createdAt: now.toISOString(),
   updatedAt: now.toISOString(),
@@ -69,11 +67,11 @@ const snapshot = (spec: Spec): Snapshot => ({
   lessons: spec.lessons.map(({ wordIds: _, ...rest }) => rest),
   links: spec.lessons.flatMap((l) => l.wordIds.map((wordId, position) => ({ lessonId: l.id, wordId, position }))),
 });
-/** Предел локального курса задан явно: сценарии описывают поведение при пределе 10, а не значение по умолчанию. */
-const localCourse: Course = {
-  id: LOCAL_COURSE,
-  title: "Мои слова",
-  origin: "local",
+/** Предел курса задан явно: сценарии описывают поведение при пределе 10, а не значение по умолчанию. */
+const course: Course = {
+  id: "a2",
+  title: "A2",
+  origin: "content",
   subscribed: true,
   schedule: defaultSchedule,
   newItemsPerDay: 10,
@@ -83,7 +81,7 @@ const localCourse: Course = {
 const data: Spec = {
   words,
   lessons: [lesson],
-  courses: [localCourse],
+  courses: [course],
   events: [],
   states: [],
   sessions: [],
@@ -92,9 +90,8 @@ const data: Spec = {
 const makePlan = (spec: Spec, at: Date) => planOf(fromSnapshot(snapshot(spec)), at);
 const makeSession = (input: { data: Spec; now: Date; wordIds?: string[] }) =>
   sessionOf({ source: fromSnapshot(snapshot(input.data)), now: input.now, refs: input.wordIds?.map(wordRef) });
-it("allocates ten new words for thirty due on Friday", async () => {
+it("takes ten new words of thirty from a completed lesson", async () => {
   const plan = await makePlan(data, now);
-  expect(plan.requiredPerDay).toBe(10);
   expect(plan.newRefs).toHaveLength(10);
 });
 it("counts introduced words across sessions and avoids exceeding daily budget", async () => {
@@ -105,26 +102,8 @@ it("counts introduced words across sessions and avoids exceeding daily budget", 
     );
   expect((await makePlan({ ...data, states }, now)).newRefs).toHaveLength(0);
 });
-it("shares words across dates without double counting", async () => {
-  const plan = await makePlan({ ...data, lessons: [lesson, { ...lesson, id: "l2", targetDate: "2026-09-19" }] }, now);
-  expect(plan.requiredPerDay).toBe(10);
-});
-it("handles multiple deadlines by cumulative demand", async () => {
-  const plan = await makePlan(
-    {
-      ...data,
-      lessons: [
-        { ...lesson, wordIds: words.slice(0, 10).map((w) => w.id), targetDate: "2026-09-17" },
-        { ...lesson, id: "l2", wordIds: words.slice(10).map((w) => w.id), targetDate: "2026-09-18" },
-      ],
-    },
-    now,
-  );
-  expect(plan.requiredPerDay).toBe(10);
-});
-it("honors local calendar through DST and UTC midnight", () => {
+it("honors local calendar at UTC midnight", () => {
   expect(localDay(new Date("2026-09-15T22:30Z"), "Asia/Nicosia")).toBe("2026-09-16");
-  expect(daysBetween("2026-10-24", "2026-10-26")).toBe(2);
 });
 it("schedules a new word without losing FSRS fields", () => {
   const state = nextState(undefined, wordRef("w0"), Rating.Good, now);

@@ -4,12 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { localDay, type DailyPlan } from "../../domain/learning";
+import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
 import { coverColor, greekDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/spread";
-import { useActiveSession, useSettings } from "../../shared/store";
+import { useSettings } from "../../shared/store";
 import { Tick } from "../../shared/Tick";
 import { lessonDays, moduleViews, reviewedOn, type ModuleLessonView, type ModuleView } from "../../storage/course";
 import { dexieSource } from "../../storage/queries";
@@ -32,7 +33,7 @@ const WEEK_PLAN = 3;
  * «Сегодня» курса — страница тетради с двумя ритмами: повторение каждый день, урок 2–3 раза в неделю.
  * Главная кнопка одна: у повторения, пока оно ждёт, потом у урока. На широком окне справа — тетрадь модуля.
  */
-export function CourseToday({ plan, now }: { plan: DailyPlan; now: Date }) {
+export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: Date; unfinished: Session | null }) {
   const { settings } = useSettings();
   const spread = useSpread();
   const today = localDay(now, settings.timezone);
@@ -40,7 +41,6 @@ export function CourseToday({ plan, now }: { plan: DailyPlan; now: Date }) {
   const views = useLiveQuery(() => moduleViews(), []);
   const reviewed = useLiveQuery(() => reviewedOn(today), [today]);
   const week = useLiveQuery(() => lessonDays(monday, settings.timezone), [monday, settings.timezone]);
-  const unfinished = useActiveSession();
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,
@@ -52,8 +52,7 @@ export function CourseToday({ plan, now }: { plan: DailyPlan; now: Date }) {
   const next = nextStep(views ?? []);
   const due = plan.newRefs.length + plan.reviews.length;
   const reviewFirst = !!unfinished || due > 0;
-  if (!views || reviewed === undefined || !week || unfinished === undefined)
-    return <div aria-busy="true" aria-label="План дня загружается" />;
+  if (!views || reviewed === undefined || !week) return <div aria-busy="true" aria-label="План дня загружается" />;
 
   const page = (
     <section className={css.page}>
@@ -63,7 +62,14 @@ export function CourseToday({ plan, now }: { plan: DailyPlan; now: Date }) {
       <h1 className="sr-only" data-testid="today-title">
         Сегодня
       </h1>
-      <Review plan={plan} now={now} reviewed={reviewed ?? 0} last={last} primary={reviewFirst} />
+      <Review
+        plan={plan}
+        now={now}
+        unfinished={unfinished}
+        reviewed={reviewed ?? 0}
+        last={last}
+        primary={reviewFirst}
+      />
       <DayNotes plan={plan} />
       {finished ? (
         <p className={css.finished} data-testid="course-finished">
@@ -108,18 +114,19 @@ function nextStep(views: ModuleView[]): { view: ModuleView; lesson: ModuleLesson
 function Review({
   plan,
   now,
+  unfinished,
   reviewed,
   last,
   primary,
 }: {
   plan: DailyPlan;
   now: Date;
+  unfinished: Session | null;
   reviewed: number;
   last?: ModuleLessonView;
   primary: boolean;
 }) {
   const navigate = useNavigate();
-  const unfinished = useActiveSession();
   const { busy, problem, setProblem, run } = useAction("Не удалось начать повторение");
   const fresh = plan.newRefs.length;
   const reviews = plan.reviews.length;

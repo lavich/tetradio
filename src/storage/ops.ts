@@ -15,10 +15,7 @@ import {
 import type { TextAnswerStatus } from "../domain/text-answer";
 import { snapshotOf } from "../domain/refs";
 import { emptySkills } from "../domain/skills";
-import { preparedByCourse, scheduleCourses } from "../domain/schedule";
 import {
-  fillSettings,
-  type Course,
   type Lesson,
   type ReviewEvent,
   type Session,
@@ -97,9 +94,7 @@ export async function recordAnswer({
       if (existing) return { event: existing, created: false }; // повторное нажатие не создаёт второй ответ
       const state = await database.cardStates.get(item.unitKey);
       if ((state?.version ?? 0) !== item.expectedVersion) throw new ConflictError();
-      // Досрочный верный ответ — слабое свидетельство памяти: карточку недавно показывали. Ошибка достоверна всегда.
-      const movesSchedule = item.mode === "scheduled" || (item.mode === "preview" && !correct);
-      const updated = movesSchedule ? nextState(state, item.ref, rating, now) : undefined;
+      const updated = item.mode === "scheduled" ? nextState(state, item.ref, rating, now) : undefined;
       const event: ReviewEvent = {
         id: eventId,
         sessionId: session.id,
@@ -220,52 +215,12 @@ export const endSession = async (session: Session, database: AppDatabase = db) =
 };
 
 export type LessonPatch = Partial<Pick<Lesson, "targetDate" | "status">>;
-/** Частичная правка сырой записи: вычисленная по расписанию дата из снимка не попадает в базу. */
 export async function updateLesson(id: string, patch: LessonPatch, database: AppDatabase = db) {
   await database.transaction("rw", database.lessons, database.meta, async () => {
     await database.lessons.update(id, { ...patch, updatedAt: stamp(new Date()) });
     await markChanged(database);
   });
   announceChange();
-}
-/**
- * Урок, чей день по расписанию уже прошёл, становится проведённым, а дата — его собственной,
- * поэтому дальнейшие изменения расписания его не трогают. Повторный вызов ничего не пишет.
- * Уроки курса не трогаются: их завершение — только по выполненным заданиям.
- */
-export async function settleLessons(now: Date, database: AppDatabase = db): Promise<number> {
-  const tables = [
-    database.lessons,
-    database.courses,
-    database.settings,
-    database.packages,
-    database.modules,
-    database.meta,
-  ];
-  return database.transaction("rw", tables, async () => {
-    const settings = fillSettings(await database.settings.get("settings"));
-    const course = new Set([
-      ...(await database.packages.toArray()).filter((pack) => pack.module).map((pack) => pack.lessonId),
-      ...(await database.modules.toArray()).flatMap((module) => [
-        ...module.lessonIds,
-        ...(module.checkpointId ? [module.checkpointId] : []),
-      ]),
-    ]);
-    const stored = await database.lessons.toArray();
-    const raw = new Map(stored.map((lesson) => [lesson.id, lesson]));
-    const courses = await database.courses.toArray();
-    const prepared = preparedByCourse(courses, now, settings.timezone);
-    const passed = scheduleCourses(stored, courses).filter(
-      (lesson) =>
-        !course.has(lesson.id) &&
-        lesson.targetDate &&
-        lesson.targetDate <= prepared(lesson.courseId) &&
-        (raw.get(lesson.id)!.status !== "completed" || !raw.get(lesson.id)!.targetDate),
-    );
-    for (const lesson of passed)
-      await updateLesson(lesson.id, { targetDate: lesson.targetDate, status: "completed" }, database);
-    return passed.length;
-  });
 }
 export async function saveSettings(settings: Settings, database: AppDatabase = db) {
   await database.transaction("rw", database.settings, database.meta, async () => {
@@ -274,20 +229,14 @@ export async function saveSettings(settings: Settings, database: AppDatabase = d
   });
   announceChange();
 }
-/** Темп курса: расписание и дневной предел карточек. Сохранение расписания сразу закрепляет прошедшие уроки курса. */
-export async function saveCourseTempo(
-  courseId: string,
-  tempo: Partial<Pick<Course, "schedule" | "newItemsPerDay">>,
-  now: Date,
-  database: AppDatabase = db,
-): Promise<number> {
+export async function saveNewItemsPerDay(courseId: string, newItemsPerDay: number, database: AppDatabase = db) {
   await database.transaction("rw", database.courses, database.meta, async () => {
     const course = await database.courses.get(courseId);
     if (!course) throw new Error("Курс не найден");
-    await database.courses.put({ ...course, ...tempo, updatedAt: stamp(new Date()) });
+    await database.courses.put({ ...course, newItemsPerDay, updatedAt: stamp(new Date()) });
     await markChanged(database);
   });
-  return settleLessons(now, database);
+  announceChange();
 }
 
 /** Старые неотвеченные recall заменяются один раз, история остаётся неизменной. */

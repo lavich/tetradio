@@ -1,15 +1,12 @@
-import { LESSON_MATES_RADIUS, localDay, type CardFacts, type SessionSource } from "./learning";
+import { LESSON_MATES_RADIUS, localDay, programmeOrder, type CardFacts, type SessionSource } from "./learning";
 import { itemOfLink, unitKey, wordRef } from "./refs";
 import { byTime, emptyStats, foldStats, summarizeEvents } from "./skills";
-import { scheduleCourses } from "./schedule";
 import { cardLabel, type StatsSource } from "./stats";
 import {
-  defaultSchedule,
   DEFAULT_NEW_ITEMS_PER_DAY,
   fillSettings,
   LOCAL_COURSE,
   type CardKind,
-  type Course,
   type LearningRef,
   type LessonItem,
   type SessionCard,
@@ -22,20 +19,13 @@ import {
  */
 export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
   const settings = fillSettings(data.settings);
-  // Снимок без курсов — это один локальный курс со стандартным темпом: так выглядела база до разделения.
-  const courses: Course[] = data.courses ?? [
-    {
-      id: LOCAL_COURSE,
-      title: "Мои слова",
-      origin: "local",
-      subscribed: true,
-      schedule: defaultSchedule,
-      newItemsPerDay: DEFAULT_NEW_ITEMS_PER_DAY,
-      createdAt: "",
-      updatedAt: "",
-    },
-  ];
-  const courseOfLesson = new Map(data.lessons.map((lesson) => [lesson.id, lesson.courseId ?? LOCAL_COURSE]));
+  const modules = data.modules ?? [];
+  // Курс выбирается как в базе: курс модулей, иначе первый по id не локальный, иначе любой.
+  const courses = [...(data.courses ?? [])].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  const course =
+    (modules.length ? courses.find((c) => c.id === modules[0].courseId) : undefined) ??
+    courses.find((c) => c.id !== LOCAL_COURSE) ??
+    courses[0];
   const items: LessonItem[] = [...data.links.map(itemOfLink), ...(data.items ?? [])];
   const words = new Map(data.words.map((word) => [word.id, word]));
   const phrases = new Map((data.phrases ?? []).map((phrase) => [phrase.id, phrase]));
@@ -60,27 +50,21 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
   const total = (kind: CardKind) => (kind === "word" ? data.words.length : phrases.size);
   return {
     settings: async () => settings,
-    lessons: async () => scheduleCourses(data.lessons, courses),
-    courses: async () => courses,
+    newItemsPerDay: async () => course?.newItemsPerDay ?? DEFAULT_NEW_ITEMS_PER_DAY,
+    completedLessons: async () =>
+      programmeOrder(
+        data.lessons.filter((lesson) => lesson.status === "completed"),
+        modules,
+        (id) => data.lessons.findIndex((lesson) => lesson.id === id),
+      ),
+    itemsOf: async (lessonIds) => items.filter((item) => lessonIds.includes(item.lessonId)),
     lessonRefs: async (lessonId) =>
       items
         .filter((item) => item.lessonId === lessonId)
         .sort((a, b) => a.position - b.position || a.unitKey.localeCompare(b.unitKey))
         .map((item) => item.ref),
-    introducedTodayByCourse: async (today, timezone) => {
-      const counts = new Map<string, number>();
-      for (const state of data.states) {
-        if (localDay(new Date(state.introducedAt), timezone) !== today) continue;
-        const owners = new Set(
-          items
-            .filter((item) => item.unitKey === state.unitKey)
-            .map((item) => courseOfLesson.get(item.lessonId) ?? LOCAL_COURSE),
-        );
-        if (!owners.size) owners.add(LOCAL_COURSE);
-        for (const courseId of owners) counts.set(courseId, (counts.get(courseId) ?? 0) + 1);
-      }
-      return counts;
-    },
+    introducedToday: async (today, timezone) =>
+      data.states.filter((state) => localDay(new Date(state.introducedAt), timezone) === today).length,
     statesOf: async (refs) =>
       new Map(
         refs
@@ -90,14 +74,6 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
       ),
     liveKeys: async (refs) => new Set(refs.filter(isLive).map(unitKey)),
     dueStates: async (now) => data.states.filter((state) => new Date(state.card.due).getTime() <= now.getTime()),
-    lessonBoundKeys: async (refs) => {
-      const bound = new Set(items.map((item) => item.unitKey));
-      return new Set(refs.map(unitKey).filter((key) => bound.has(key)));
-    },
-    scanLiveWordIds: async (after, limit) => {
-      const start = after === null ? 0 : liveWordIds.indexOf(after) + 1;
-      return liveWordIds.slice(start, start + limit);
-    },
     factsOf: async (refs) =>
       new Map(
         refs.filter(isLive).map((ref) => {

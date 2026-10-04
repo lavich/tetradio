@@ -1,6 +1,4 @@
 import { expect, type Page } from "@playwright/test";
-import { addDays } from "../../src/domain/learning";
-import { isoWeekday } from "../../src/domain/schedule";
 
 /** Отказ хранилища как у WebKit после сна: чтение IndexedDB бросает `UnknownError` до следующего `indexedDB.open` (или навсегда). */
 export async function breakStorage(page: Page, permanent = false) {
@@ -142,47 +140,31 @@ export async function seedQueue(page: Page, plan: DuePlan[], databaseName = "tet
   await ready(page);
 }
 export const ready = (page: Page) => page.waitForSelector("[data-testid=today-title]");
-/**
- * Поставка не несёт дат занятий, поэтому сценарию, которому нужны проведённый и ближайший урок,
- * приходится задать расписание курса — ровно так, как это делает пользователь. Первое занятие
- * три дня назад: урок 1.1 закрепляется проведённым при перезагрузке, 1.2 становится ближайшим.
- * `startInDays` сдвигает первое занятие: скриншотам README нужно расписание без прошедших уроков.
- */
-export async function useSchedule(
-  page: Page,
-  courseId = "mechanics",
-  databaseName = "tetradio-mock-1",
-  startInDays = -3,
-) {
-  const today = new Date().toISOString().slice(0, 10);
-  const startDate = addDays(today, startInDays);
-  const weekdays = [isoWeekday(startDate), isoWeekday(addDays(today, 1))];
+export async function completeLessons(page: Page, ids: string[], databaseName = "tetradio-mock-1") {
   await page.evaluate(
-    async ([courseId, databaseName, startDate, weekdays]) => {
+    async ([ids, databaseName]) => {
       const database = await new Promise<IDBDatabase>((resolve, reject) => {
         const request = indexedDB.open(databaseName);
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
       });
-      const tx = database.transaction("courses", "readwrite");
-      const store = tx.objectStore("courses");
-      const current = await new Promise<Record<string, unknown>>((resolve, reject) => {
-        const request = store.get(courseId);
-        request.onsuccess = () => resolve(request.result as Record<string, unknown>);
-        request.onerror = () => reject(request.error);
-      });
-      store.put({ ...current, schedule: { startDate, weekdays }, updatedAt: new Date().toISOString() });
+      const tx = database.transaction("lessons", "readwrite");
+      const store = tx.objectStore("lessons");
+      for (const id of ids) {
+        const request = store.get(id);
+        request.onsuccess = () =>
+          store.put({ ...request.result, status: "completed", updatedAt: new Date().toISOString() });
+      }
       await new Promise<void>((resolve, reject) => {
         tx.oncomplete = () => resolve();
         tx.onerror = () => reject(tx.error);
       });
       database.close();
     },
-    [courseId, databaseName, startDate, weekdays] as const,
+    [ids, databaseName] as const,
   );
   await page.reload();
   await ready(page);
-  return { startDate, weekdays };
 }
 /** Отдельные уроки фикстуры ставятся тестовой точкой сборки с моком: экрана урока вне курса нет. */
 export async function installLessons(page: Page, ids: string[]) {
@@ -209,7 +191,7 @@ export async function installLessons(page: Page, ids: string[]) {
 
 /**
  * Смешанный урок для браузерных проверок: непубликуемая фикстура собирается на стороне Node и кладётся
- * прямо в IndexedDB как установленный пакет — так, как это сделала бы установка из каталога.
+ * прямо в IndexedDB как установленный и пройденный пакет — так, как это сделала бы установка из каталога.
  * Слова урока берутся из уже установленных пакетов; выбором `only` можно ограничить состав.
  */
 export async function seedMixedLesson(
@@ -218,7 +200,6 @@ export async function seedMixedLesson(
     lessonId?: string;
     title?: string;
     only?: string[];
-    targetDate?: string | null;
     databaseName?: string;
   } = {},
 ) {
@@ -236,7 +217,6 @@ export async function seedMixedLesson(
     schemaVersion: pack.schemaVersion,
     items,
     phrases: pack.phrases.filter((p) => items.some((i) => i.kind === "phrase" && i.id === p.id)),
-    targetDate: options.targetDate ?? null,
   };
   await page.evaluate(
     async ([payload, databaseName]) => {
@@ -251,8 +231,8 @@ export async function seedMixedLesson(
         id: payload.lessonId,
         courseId: payload.courseId,
         title: payload.title,
-        targetDate: payload.targetDate,
-        status: "upcoming",
+        targetDate: null,
+        status: "completed",
         createdAt: now,
         updatedAt: now,
       });

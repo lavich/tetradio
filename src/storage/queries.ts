@@ -1,7 +1,15 @@
 import Dexie from "dexie";
 import { State } from "ts-fsrs";
 import { db, isStandardWord, searchTokens, type AppDatabase, type StoredWord } from "./db";
-import { addDays, LESSON_MATES_RADIUS, localDay, type CardFacts, type SessionSource } from "../domain/learning";
+import {
+  addDays,
+  LESSON_MATES_RADIUS,
+  localDay,
+  programmeOrder,
+  type CardFacts,
+  type PlanLesson,
+  type SessionSource,
+} from "../domain/learning";
 import { isShippedCard, unitKey, wordKeyOf, wordRef } from "../domain/refs";
 import {
   byTime,
@@ -12,15 +20,14 @@ import {
   summarizeEvents,
   type DaySummary,
 } from "../domain/skills";
-import { scheduleCourses } from "../domain/schedule";
 import { cardLabel, lessonProgress, type LessonProgress, type StatsSource } from "../domain/stats";
 import {
   CARD_KINDS,
-  defaultSchedule,
   DEFAULT_NEW_ITEMS_PER_DAY,
   fillSettings,
   LOCAL_COURSE,
   type CardKind,
+  type Course,
   type LearningRef,
   type LearningState,
   type Lesson,
@@ -37,18 +44,32 @@ const span = (first: string) =>
   ] as const;
 
 export const loadSettings = async (database: AppDatabase = db) => fillSettings(await database.settings.get("settings"));
-/** Уроки с датами по расписанию: единственное место, где даты вычисляются для чтения. */
-export const loadLessons = async (database: AppDatabase = db) =>
-  scheduleCourses(await database.lessons.toArray(), await database.courses.toArray());
+export const loadLessons = (database: AppDatabase = db) => database.lessons.toArray();
+/** Курс один: тот, из которого модули программы, а без модулей — первый курс каталога. */
+export async function currentCourse(database: AppDatabase = db): Promise<Course | undefined> {
+  const module = await database.modules.toCollection().first();
+  if (module) return database.courses.get(module.courseId);
+  return (
+    (await database.courses.filter((course) => course.id !== LOCAL_COURSE).first()) ??
+    (await database.courses.toCollection().first())
+  );
+}
+export async function completedLessons(database: AppDatabase = db): Promise<PlanLesson[]> {
+  const done = await database.lessons.where("status").equals("completed").toArray();
+  if (!done.length) return [];
+  const [modules, entries] = await Promise.all([
+    database.modules.orderBy("number").toArray(),
+    database.catalog.bulkGet(done.map((lesson) => lesson.id)),
+  ]);
+  const catalog = new Map(done.map((lesson, index) => [lesson.id, entries[index]?.position]));
+  return programmeOrder(done, modules, (id) => catalog.get(id));
+}
 /** Связи урока в авторском порядке: по индексу, без чтения карточек. */
 export const lessonItems = (lessonId: string, database: AppDatabase = db): Promise<LessonItem[]> =>
   database.lessonItems
     .where("[lessonId+position]")
     .between(...span(lessonId))
     .toArray();
-/** Идентификаторы удалённых слов: нужны только скану словаря, остальные выборки работают с ключами карточек. */
-const deletedWordIds = async (database: AppDatabase = db) =>
-  new Set(await database.words.where("deletedAt").above("").primaryKeys());
 /** Ключи удалённых карточек всех видов: удалённых мало, множество дешевле точечных проверок. */
 export async function deletedKeys(database: AppDatabase = db): Promise<Set<string>> {
   const [words, phrases] = await Promise.all([
@@ -104,77 +125,21 @@ export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): 
 export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
   return {
     settings: () => loadSettings(database),
-    lessons: () => loadLessons(database),
-    modularCourseIds: async () => new Set((await database.modules.orderBy("courseId").uniqueKeys()).map(String)),
+    newItemsPerDay: async () => (await currentCourse(database))?.newItemsPerDay ?? DEFAULT_NEW_ITEMS_PER_DAY,
+    completedLessons: () => completedLessons(database),
+    itemsOf: (lessonIds) =>
+      lessonIds.length ? database.lessonItems.where("lessonId").anyOf(lessonIds).toArray() : Promise.resolve([]),
     lessonRefs: async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref),
-    courses: async () => {
-      const rows = await database.courses.toArray();
-      // База без курсов (старый профиль до первого запуска приложения) планируется как один локальный курс.
-      return rows.length
-        ? rows
-        : [
-            {
-              id: LOCAL_COURSE,
-              title: "Мои слова",
-              origin: "local" as const,
-              subscribed: true,
-              schedule: defaultSchedule,
-              newItemsPerDay: DEFAULT_NEW_ITEMS_PER_DAY,
-              createdAt: "",
-              updatedAt: "",
-            },
-          ];
-    },
-    introducedTodayByCourse: async (today, timezone) => {
-      const rows = await database.cardStates
-        .where("introducedAt")
-        .between(`${addDays(today, -1)}T00:00:00.000Z`, `${addDays(today, 2)}T00:00:00.000Z`)
-        .toArray();
-      const keys = rows
-        .filter((state) => localDay(new Date(state.introducedAt), timezone) === today)
-        .map((state) => state.unitKey);
-      const counts = new Map<string, number>();
-      if (!keys.length) return counts;
-      // Введённых за день немного — не больше суммы пределов, поэтому связи читаются точечно.
-      const links = await database.lessonItems.where("unitKey").anyOf(keys).toArray();
-      const lessons = new Map(
-        (await database.lessons.bulkGet([...new Set(links.map((link) => link.lessonId))]))
-          .filter(Boolean)
-          .map((lesson) => [lesson!.id, lesson!.courseId ?? LOCAL_COURSE]),
-      );
-      for (const key of keys) {
-        const owners = new Set(
-          links.filter((link) => link.unitKey === key).map((link) => lessons.get(link.lessonId) ?? LOCAL_COURSE),
-        );
-        if (!owners.size) owners.add(LOCAL_COURSE);
-        for (const courseId of owners) counts.set(courseId, (counts.get(courseId) ?? 0) + 1);
-      }
-      return counts;
-    },
+    introducedToday: async (today, timezone) =>
+      (
+        await database.cardStates
+          .where("introducedAt")
+          .between(`${addDays(today, -1)}T00:00:00.000Z`, `${addDays(today, 2)}T00:00:00.000Z`)
+          .toArray()
+      ).filter((state) => localDay(new Date(state.introducedAt), timezone) === today).length,
     statesOf: (refs) => statesOf(refs, database),
     liveKeys: (refs) => liveKeys(refs, database),
     dueStates: (now) => database.cardStates.where("card.due").belowOrEqual(now).toArray(),
-    lessonBoundKeys: async (refs) =>
-      new Set(
-        refs.length
-          ? (await database.lessonItems.where("unitKey").anyOf(refs.map(unitKey)).toArray()).map((link) => link.unitKey)
-          : [],
-      ),
-    scanLiveWordIds: async (after, limit) => {
-      const deleted = await deletedWordIds(database);
-      let cursor = after;
-      for (;;) {
-        const keys = await database.words
-          .where("id")
-          .above(cursor ?? Dexie.minKey)
-          .limit(limit)
-          .primaryKeys();
-        if (!keys.length) return [];
-        const live = keys.filter((id) => !deleted.has(id));
-        if (live.length) return live;
-        cursor = keys[keys.length - 1];
-      }
-    },
     factsOf: async (refs) => {
       const facts = new Map<string, CardFacts>();
       const groups = byKind(refs);

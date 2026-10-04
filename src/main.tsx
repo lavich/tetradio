@@ -15,7 +15,6 @@ import { initPlatform, telegramBridge } from "./platform/platform";
 import { installEarlyHandlers, reportError, setReportingEnabled } from "./reporting/reporting";
 import { bindReportingToSettings } from "./reporting/settings";
 import { db, ensureDefaults } from "./storage/db";
-import { settleLessons } from "./storage/ops";
 import { launchProfile, MOCK_USER, ownerMatches, type Profile } from "./storage/profile";
 import "./styles.css";
 
@@ -90,7 +89,6 @@ function start(profile: Profile) {
   );
   const database = opened
     .then(() => ensureDefaults())
-    .then(() => settleLessons(new Date()))
     .catch((error) => console.error("Не удалось открыть локальную базу", error));
   // Подписанные курсы догружаются следом за каталогом: новый урок появляется сам, медиа остаётся по запросу.
   refreshCatalog()

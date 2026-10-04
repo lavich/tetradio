@@ -18,7 +18,7 @@ import { State } from "ts-fsrs";
 import { defaultSettings, type LessonItem, type Snapshot, type Word } from "../src/domain/types";
 import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
 import { recordFor, scenarios } from "./plan-golden.test";
-import { content, installLessons, legacyRemove, wordCountOf } from "./helpers/content";
+import { completeLessons, content, installLessons, legacyRemove, wordCountOf } from "./helpers/content";
 
 let db: AppDatabase;
 beforeEach(async () => {
@@ -46,6 +46,7 @@ async function load(data: Snapshot) {
     await db.words.bulkAdd(data.words.map(indexWord));
     await db.lessons.bulkAdd(data.lessons);
     if (data.courses) await db.courses.bulkAdd(data.courses);
+    if (data.modules) await db.modules.bulkAdd(data.modules);
     await db.lessonItems.bulkAdd(data.links.map(itemOfLink));
     await db.cardStates.bulkAdd(data.states);
     await db.events.bulkAdd(data.events);
@@ -59,7 +60,7 @@ async function load(data: Snapshot) {
 
 describe("эквивалентность планирования на базе и на снимке", () => {
   for (const [name, data] of Object.entries(scenarios)) {
-    it(`сценарий ${name}: очередь, сроки, задания и варианты совпадают при том же источнике случайности`, async () => {
+    it(`сценарий ${name}: очередь, задания и варианты совпадают при том же источнике случайности`, async () => {
       const sorted = await load(data);
       const ids = data.words.slice(0, 3).map((w) => w.id);
       const [fromDb, fromMemory] = await Promise.all([
@@ -72,8 +73,7 @@ describe("эквивалентность планирования на базе 
   }
   it("слова неустановленного урока не существуют локально и не попадают в очередь", async () => {
     await installLessons(db, ["mech-1"]);
-    const plan = await dexieSource(db).lessons();
-    expect(plan.map((l) => l.id)).toEqual(["mech-1"]);
+    expect((await db.lessons.toArray()).map((l) => l.id)).toEqual(["mech-1"]);
     expect(await db.catalog.count()).toBe(content.catalog.lessons.length);
     expect(await db.words.count()).toBe(wordCountOf("mech-1"));
   });
@@ -218,6 +218,7 @@ describe("смешанный урок в выборках", () => {
   });
   it("план и сессия на базе совпадают со снимком для смешанного урока при том же источнике случайности", async () => {
     await installMixed(db);
+    await completeLessons(db, [MIXED_LESSON]);
     const data: Snapshot = {
       words: await db.words.toArray(),
       phrases: await db.phrases.toArray(),
@@ -236,7 +237,7 @@ describe("смешанный урок в выборках", () => {
       { kind: "word" as const, id: "w070" },
     ];
     const record = async (source: ReturnType<typeof dexieSource>) => ({
-      plan: (({ newRefs, unavailable, budget, deadlines }) => ({ newRefs, unavailable, budget, deadlines }))(
+      plan: (({ newRefs, unavailable, budget, origins }) => ({ newRefs, unavailable, budget, origins }))(
         await makePlan(source, now, { hasVoice: true }),
       ),
       session: (await makeSession({ source, now, random: mulberry32(5), hasVoice: true })).items.map((item) => ({
