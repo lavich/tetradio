@@ -92,3 +92,21 @@ export async function downloadLessonMedia(
   }
   return { fetched, failed };
 }
+
+/** Без уборки каждая переозвучка или замена картинки оставляла бы на устройстве прежнюю копию. */
+export async function pruneMedia(database: AppDatabase = db): Promise<number> {
+  return database.transaction("rw", [database.packages, database.assets, database.media], async () => {
+    const used = new Set<string>();
+    await database.packages.each((pack) => {
+      for (const item of pack.media) used.add(item.id);
+    });
+    const [assets, refs] = await Promise.all([
+      database.assets.toCollection().primaryKeys(),
+      database.media.toCollection().primaryKeys(),
+    ]);
+    const stale = assets.filter((id) => !used.has(id));
+    await database.assets.bulkDelete(stale);
+    await database.media.bulkDelete(refs.filter((id) => !used.has(id)));
+    return stale.length;
+  });
+}

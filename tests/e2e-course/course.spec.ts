@@ -28,6 +28,31 @@ async function voices(page: Page, mode: "none" | "instant") {
   }, mode);
 }
 
+/** Записи реплик не скачиваются (нет сети): аудирование звучит синтезом устройства. */
+const offlineRecordings = (page: Page) => page.route("**/content/media/line-*", (route) => route.abort());
+
+/** Подменный `<audio>`: запоминает адрес и скорость каждой реплики и «доигрывает» её через миг. */
+async function recordings(page: Page) {
+  await page.addInitScript(() => {
+    const played: { src: string; rate: number }[] = [];
+    (window as unknown as { __played: typeof played }).__played = played;
+    class FakeAudio extends EventTarget {
+      src = "";
+      playbackRate = 1;
+      defaultPlaybackRate = 1;
+      duration = 1;
+      load() {}
+      pause() {}
+      play() {
+        played.push({ src: this.src, rate: this.playbackRate });
+        setTimeout(() => this.dispatchEvent(new Event("ended")), 5);
+        return Promise.resolve();
+      }
+    }
+    Object.defineProperty(window, "Audio", { value: FakeAudio, configurable: true });
+  });
+}
+
 /** Демонстрационный курс: модуль 01 (урок + контрольная), модуль 02 — черновик. */
 async function start(page: Page) {
   await page.goto("/");
@@ -61,6 +86,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   page,
 }) => {
   await voices(page, "none");
+  await offlineRecordings(page);
   await start(page);
   await page.getByTestId("course-next").click();
   await expect(page.getByRole("heading", { name: "Знакомство и είμαι", level: 1 })).toBeVisible();
@@ -99,7 +125,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await expect(tf.getByRole("status")).toHaveText("2 из 2");
   expect(await tf.getByRole("status").evaluate((node) => getComputedStyle(node).color)).toBe(await colorOf("--ok"));
 
-  // Аудирование: текст закрыт до ответа; без греческого голоса предлагается открыть текст.
+  // Аудирование: текст закрыт до ответа; записи не скачать и греческого голоса нет — предлагается открыть текст.
   const listening = await turnTo(page, "Аудирование: Στο καφέ");
   await expect(listening.getByRole("list")).toHaveCount(0);
   await listening.getByRole("button", { name: "Слушать" }).click();
@@ -222,6 +248,7 @@ test("контрольная: итог по навыкам против поро
 
 test("аудирование синтезом: две прослушки, затем кнопка закрыта до ответа", async ({ page }) => {
   await voices(page, "instant");
+  await offlineRecordings(page);
   await start(page);
   await page.getByTestId("course-next").click();
   const listening = await turnTo(page, "Аудирование: Στο καφέ");
@@ -233,6 +260,32 @@ test("аудирование синтезом: две прослушки, зат
   await expect(play).toBeDisabled();
   await expect(listening.getByRole("button", { name: "Открыть текст" })).toBeVisible();
   await expect(listening.getByRole("list")).toHaveCount(0);
+});
+
+test("аудирование записями: реплики звучат файлами голосов, медленный режим замедляет файл", async ({ page }) => {
+  await voices(page, "none");
+  await recordings(page);
+  const files: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/content/media/line-")) files.push(new URL(request.url()).pathname);
+  });
+  await start(page);
+  await page.getByTestId("course-next").click();
+  const listening = await turnTo(page, "Аудирование: Στο καφέ");
+  const play = listening.getByRole("button", { name: "Слушать" });
+  await play.click();
+  await expect(listening).toContainText("Прослушано 1 из 2");
+  expect(files).toHaveLength(4);
+  expect(files[0]).toMatch(/^\/content\/media\/line-m01-1-cafe-1@[0-9a-f]{10}\.mp3$/);
+  const played = () => page.evaluate(() => (window as unknown as { __played: { rate: number }[] }).__played);
+  expect((await played()).map((entry) => entry.rate)).toEqual([1, 1, 1, 1]);
+  await listening.getByRole("button", { name: "Обычная скорость" }).click();
+  await play.click();
+  await expect(listening).toContainText("Прослушано 2 из 2");
+  expect((await played()).map((entry) => entry.rate)).toEqual([1, 1, 1, 1, 0.8, 0.8, 0.8, 0.8]);
+  // Повторное прослушивание берёт записи с устройства, а не из сети.
+  expect(files).toHaveLength(4);
+  await expect(listening).not.toContainText("нет греческого голоса");
 });
 
 test("новый урок открывается с первой страницы, а не с первого задания после теории", async ({ page }) => {

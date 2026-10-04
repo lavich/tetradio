@@ -81,6 +81,8 @@ export interface ReadingBlock {
 export interface TranscriptLine {
   speaker?: string;
   text: string;
+  /** Запись реплики: приходит в пакете отдельным полем `lineAudio`, в блок её кладёт разбор пакета. */
+  audioAssetId?: string;
 }
 export interface ListeningBlock {
   type: "listening";

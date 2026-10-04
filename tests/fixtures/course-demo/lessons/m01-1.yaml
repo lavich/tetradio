@@ -96,12 +96,16 @@ blocks:
     transcript:
       - speaker: Νίκος
         text: Γεια σου! Πώς σε λένε;
+        audio: m01-1/cafe-1.mp3
       - speaker: Μαρία
         text: Με λένε Μαρία. Εσένα;
+        audio: m01-1/cafe-2.mp3
       - speaker: Νίκος
         text: Νίκο. Από πού είσαι;
+        audio: m01-1/cafe-3.mp3
       - speaker: Μαρία
         text: Είμαι από την Ελλάδα.
+        audio: m01-1/cafe-4.mp3
   - type: exercise
     id: cafe-q
     about: cafe

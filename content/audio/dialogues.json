@@ -1,0 +1,82 @@
+{
+  "m01-2/party-1.mp3": {
+    "voice": "Charon",
+    "hash": "9fe826f9ff187781"
+  },
+  "m01-2/party-10.mp3": {
+    "voice": "Aoede",
+    "hash": "a33e99d1cebb4fec"
+  },
+  "m01-2/party-2.mp3": {
+    "voice": "Aoede",
+    "hash": "a7cd55a76c956274"
+  },
+  "m01-2/party-3.mp3": {
+    "voice": "Charon",
+    "hash": "63869c76d6e2d00c"
+  },
+  "m01-2/party-4.mp3": {
+    "voice": "Aoede",
+    "hash": "a6da03554d9bd403"
+  },
+  "m01-2/party-5.mp3": {
+    "voice": "Charon",
+    "hash": "cc93971b888aed64"
+  },
+  "m01-2/party-6.mp3": {
+    "voice": "Aoede",
+    "hash": "99528384ff9e4026"
+  },
+  "m01-2/party-7.mp3": {
+    "voice": "Charon",
+    "hash": "43bfa7c0fd83f92e"
+  },
+  "m01-2/party-8.mp3": {
+    "voice": "Aoede",
+    "hash": "f28d447a175e928c"
+  },
+  "m01-2/party-9.mp3": {
+    "voice": "Charon",
+    "hash": "2bacc5ed9fb7a911"
+  },
+  "m01-test/school-1.mp3": {
+    "voice": "Aoede",
+    "hash": "56ca40133beaa1cb"
+  },
+  "m01-test/school-10.mp3": {
+    "voice": "Algieba",
+    "hash": "1a01a421762d5dea"
+  },
+  "m01-test/school-2.mp3": {
+    "voice": "Algieba",
+    "hash": "87ca4d543c079654"
+  },
+  "m01-test/school-3.mp3": {
+    "voice": "Aoede",
+    "hash": "07104ee234b8c1af"
+  },
+  "m01-test/school-4.mp3": {
+    "voice": "Algieba",
+    "hash": "1acb2698e83f7f8e"
+  },
+  "m01-test/school-5.mp3": {
+    "voice": "Aoede",
+    "hash": "2ee7efa4b46113f7"
+  },
+  "m01-test/school-6.mp3": {
+    "voice": "Algieba",
+    "hash": "a4371212d38d2246"
+  },
+  "m01-test/school-7.mp3": {
+    "voice": "Aoede",
+    "hash": "abbc58f8fe74269a"
+  },
+  "m01-test/school-8.mp3": {
+    "voice": "Algieba",
+    "hash": "0b0d7f3dea567edb"
+  },
+  "m01-test/school-9.mp3": {
+    "voice": "Aoede",
+    "hash": "da7864a3a01bacc3"
+  }
+}

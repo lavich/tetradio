@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { ListeningBlock } from "../../../content/course";
 import { playDialogue, stopDialogue, type Rate } from "../../../shared/dialogue";
+import { useAssetSource } from "../../../shared/store";
 import { Marked, useFieldMarks } from "../WordTaps";
 import base from "../course.module.css";
 import css from "./blocks.module.css";
@@ -18,6 +19,7 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
   const [rate, setRate] = useState<Rate>("normal");
   const [problem, setProblem] = useState("");
   const [shown, setShown] = useState(false);
+  const source = useAssetSource();
   useEffect(() => () => stopDialogue(), []);
   const exhausted = plays >= block.plays;
   const play = async () => {
@@ -28,7 +30,7 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
     }
     setProblem("");
     setPlaying(true);
-    const result = await playDialogue(block.transcript, rate, setLine);
+    const result = await playDialogue(block.transcript, rate, setLine, source);
     setPlaying(false);
     if (result === "done") setPlays((count) => count + 1);
     if (result === "none")

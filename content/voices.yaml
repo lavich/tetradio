@@ -1,0 +1,119 @@
+# Голос персонажа во всём курсе: Google Cloud TTS, Chirp 3 HD (el-GR-Chirp3-HD-<голос>).
+# Самым частым персонажам голоса даны вручную и не повторяются, остальным — детерминированно из пула их пола
+# так, чтобы в одном диалоге не было двух одинаковых голосов. Число после # — реплик персонажа в курсе.
+# Сборка проверяет, что у каждого говорящего есть голос и что голоса в диалоге разные.
+# Озвучка: GOOGLE_TTS_KEY=… npm run voices -- <урок…> (docs/voices.md).
+source: Синтез речи Google Cloud TTS, голос Chirp 3 HD {voice}
+language: el-GR
+prefix: el-GR-Chirp3-HD-
+pools:
+  female:
+    - Aoede
+    - Callirrhoe
+    - Achernar
+    - Autonoe
+    - Despina
+    - Erinome
+    - Gacrux
+    - Kore
+    - Laomedeia
+    - Leda
+    - Sulafat
+    - Vindemiatrix
+    - Zephyr
+  male:
+    - Algenib
+    - Algieba
+    - Alnilam
+    - Charon
+    - Enceladus
+    - Fenrir
+    - Iapetus
+    - Puck
+    - Rasalgethi
+    - Sadachbia
+    - Sadaltager
+    - Schedar
+    - Umbriel
+    - Zubenelgenubi
+# Реплика без говорящего
+narrator: Kore
+characters:
+  Δέσποινα: { gender: female, voice: Kore } # 42
+  Μαρίνα: { gender: female, voice: Aoede } # 33
+  Πέτρος: { gender: male, voice: Iapetus } # 33
+  Γιώργος: { gender: male, voice: Algieba } # 31
+  Ελένη: { gender: female, voice: Callirrhoe } # 30
+  Στέλιος: { gender: male, voice: Puck } # 29
+  Μάριος: { gender: male, voice: Enceladus } # 27
+  Κατερίνα: { gender: female, voice: Leda } # 23
+  Κώστας: { gender: male, voice: Fenrir } # 17
+  Ευτυχία: { gender: female, voice: Despina } # 16
+  Λάμπρος: { gender: male, voice: Rasalgethi } # 16
+  Μιχάλης: { gender: male, voice: Algenib } # 16
+  Σωτήρης: { gender: male, voice: Schedar } # 16
+  Ιρίνα: { gender: female, voice: Autonoe } # 14
+  Σταύρος: { gender: male, voice: Umbriel } # 14
+  Φοίβος: { gender: male, voice: Sadachbia } # 14
+  Άρης: { gender: male, voice: Zubenelgenubi } # 13
+  Σάββας: { gender: male, voice: Alnilam } # 13
+  Ταμάρα: { gender: female, voice: Erinome } # 13
+  Υπάλληλος: { gender: male, voice: Sadaltager } # 12
+  Κυριάκος: { gender: male, voice: Schedar } # 11
+  Σοφία: { gender: female, voice: Laomedeia } # 11
+  Χρυσταλλένη: { gender: female, voice: Vindemiatrix } # 11
+  Άννα: { gender: female, voice: Zephyr } # 10
+  Ευαγγελία: { gender: female, voice: Gacrux } # 10
+  Νίκος: { gender: male, voice: Schedar } # 10
+  Ρένα: { gender: female, voice: Achernar } # 10
+  Αντρέας: { gender: male, voice: Charon } # 9
+  Ραφαήλ: { gender: male, voice: Puck } # 9
+  Χαραλαμπία: { gender: female, voice: Sulafat } # 9
+  Αντιγόνη: { gender: female, voice: Laomedeia } # 8
+  Ηλίας: { gender: male, voice: Schedar } # 8
+  Θεοπίστη: { gender: female, voice: Vindemiatrix } # 8
+  Σταυρούλα: { gender: female, voice: Despina } # 8
+  Στέλλα: { gender: female, voice: Zephyr } # 8
+  Βέρα: { gender: female, voice: Erinome } # 7
+  Ηλέκτρα: { gender: female, voice: Autonoe } # 7
+  Λευτέρης: { gender: male, voice: Algieba } # 7
+  Μαρία: { gender: female, voice: Kore } # 7
+  Ναταλία: { gender: female, voice: Kore } # 7
+  Ορέστης: { gender: male, voice: Sadaltager } # 7
+  Χρήστος: { gender: male, voice: Sadaltager } # 7
+  Χρύσα: { gender: female, voice: Gacrux } # 7
+  Αλεξάνδρα: { gender: female, voice: Kore } # 6
+  Άντρη: { gender: female, voice: Vindemiatrix } # 6
+  Δανάη: { gender: female, voice: Gacrux } # 6
+  Δάφνη: { gender: female, voice: Aoede } # 6
+  Δήμητρα: { gender: female, voice: Despina } # 6
+  Ιουλία: { gender: female, voice: Leda } # 6
+  Ισμήνη: { gender: female, voice: Vindemiatrix } # 6
+  Ιωάννα: { gender: female, voice: Erinome } # 6
+  Λένα: { gender: female, voice: Laomedeia } # 6
+  Λίνα: { gender: female, voice: Sulafat } # 6
+  Νατάσα: { gender: female, voice: Callirrhoe } # 6
+  Νεοκλής: { gender: male, voice: Sadaltager } # 6
+  Σβετλάνα: { gender: female, voice: Kore } # 6
+  Βαλεντίνα: { gender: female, voice: Aoede } # 5
+  Θανάσης: { gender: male, voice: Schedar } # 5
+  Ραφαέλα: { gender: female, voice: Sulafat } # 5
+  Ρούλα: { gender: female, voice: Gacrux } # 5
+  "Κυρία Ανδρέου": { gender: female, voice: Laomedeia } # 4
+  "Κύριος Φιλίππου": { gender: male, voice: Enceladus } # 4
+  Νεκταρία: { gender: female, voice: Gacrux } # 4
+  Στάθης: { gender: male, voice: Enceladus } # 4
+  Ανακοίνωση: { gender: female, voice: Kore } # 3
+  Ανδρέας: { gender: male, voice: Enceladus } # 3
+  Παντελής: { gender: male, voice: Charon } # 2
+  Ανθή: { gender: female, voice: Despina } # 1
+  Γιάννης: { gender: male, voice: Sadaltager } # 1
+  Ελπίδα: { gender: female, voice: Autonoe } # 1
+  Θεοδώρα: { gender: female, voice: Zephyr } # 1
+  Μάρκος: { gender: male, voice: Sadaltager } # 1
+  Μυρτώ: { gender: female, voice: Erinome } # 1
+  Ξένια: { gender: female, voice: Despina } # 1
+  Παναγιώτης: { gender: male, voice: Zubenelgenubi } # 1
+  Φώτης: { gender: male, voice: Sadaltager } # 1
+  Χρίστος: { gender: male, voice: Algieba } # 1
+  Χρυστάλλα: { gender: female, voice: Despina } # 1

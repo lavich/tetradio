@@ -11,7 +11,7 @@ import {
 import { LEGACY_FILE, type ArtReport } from "./art.ts";
 import { buildCards } from "./build/cards.ts";
 import { buildCourses } from "./build/courses.ts";
-import { buildLessons, checkCoverage } from "./build/lessons.ts";
+import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons.ts";
 import { markCourses, type MarksReport } from "./build/mark-courses.ts";
 import { buildMedia } from "./build/media.ts";
 import { packLessons, type BuiltFile } from "./build/output.ts";
@@ -32,6 +32,7 @@ export type {
 } from "./build/sources.ts";
 export type { BuiltFile } from "./build/output.ts";
 export type { MarksReport } from "./build/mark-courses.ts";
+export type { VoicingReport } from "./build/lessons.ts";
 
 export interface BuiltContent {
   catalog: Catalog;
@@ -42,6 +43,7 @@ export interface BuiltContent {
   sources: ContentRoot;
   art: ArtReport;
   marks: MarksReport;
+  voicing: VoicingReport;
 }
 
 /**
@@ -58,7 +60,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const { words, phrases } = buildCards(sources);
   const { legacy, art, media } = buildMedia(sources, words, phrases);
   const { courseOf, courses, modules, moduleOf, checkpoints, reviews } = buildCourses(sources);
-  const { used, lessonsForModule, drafts } = buildLessons({
+  const { used, lessonsForModule, drafts, voicing } = buildLessons({
     sources,
     words,
     phrases,
@@ -90,6 +92,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     sources,
     art,
     marks: marks.report,
+    voicing,
   };
 }
 
@@ -125,6 +128,14 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const sum = (key: "lesson" | "earlier") => counts.reduce((total, entry) => total + entry[key], 0);
   console.log(
     `Слова в тексте: ${sum("lesson")} слов урока и ${sum("earlier")} прошлых уроков в ${counts.filter((c) => c.lesson + c.earlier).length} уроках; спорных мест ${built.marks.ambiguous.length}, омографов вне поиска ${built.marks.skipped.length}`,
+  );
+  const { voiced, unvoiced, stale } = built.voicing;
+  const silent = [...unvoiced.values()].reduce((total, count) => total + count, 0);
+  console.log(
+    `Аудирование: с записью ${voiced} реплик` +
+      (silent
+        ? `; без записи ${silent} реплик в ${unvoiced.size} уроках${stale.length ? ` (устарело после правки ${stale.length})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- <урок>`
+        : ""),
   );
   const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);
   for (const entry of shown)

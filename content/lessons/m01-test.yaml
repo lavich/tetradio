@@ -87,24 +87,34 @@ blocks:
     transcript:
       - speaker: Βαλεντίνα
         text: Καλημέρα σας!
+        audio: m01-test/school-1.mp3
       - speaker: Γιώργος
         text: Καλημέρα! Πώς σας λένε;
+        audio: m01-test/school-2.mp3
       - speaker: Βαλεντίνα
         text: Με λένε Βαλεντίνα.
+        audio: m01-test/school-3.mp3
       - speaker: Γιώργος
         text: Από πού είστε;
+        audio: m01-test/school-4.mp3
       - speaker: Βαλεντίνα
         text: Είμαι από τη Ρωσία, από τη Μόσχα.
+        audio: m01-test/school-5.mp3
       - speaker: Γιώργος
         text: Και τώρα πού είστε; Στη Λάρνακα;
+        audio: m01-test/school-6.mp3
       - speaker: Βαλεντίνα
         text: Όχι, τώρα είμαι στη Λεμεσό.
+        audio: m01-test/school-7.mp3
       - speaker: Γιώργος
         text: Το τηλέφωνό σας;
+        audio: m01-test/school-8.mp3
       - speaker: Βαλεντίνα
         text: Εννέα, επτά, πέντε, δύο, μηδέν, οκτώ, τέσσερα, ένα.
+        audio: m01-test/school-9.mp3
       - speaker: Γιώργος
         text: Ευχαριστώ πολύ! Γεια σας!
+        audio: m01-test/school-10.mp3
   - type: exercise
     id: school-choice
     about: school

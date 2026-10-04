@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { stringify } from "yaml";
 import { buildContent } from "../content/build";
+import { lineHash } from "../content/build/voices";
 import { parseBlocks, publicationGaps } from "../src/content/course";
 import { ContentError, parseCatalog, parsePackage } from "../src/content/schema";
 
@@ -471,5 +472,106 @@ describe("клиентская проверка", () => {
     );
     expect(publicationGaps([{ id: "l", kind: "lesson", blocks }])).toEqual(["нет контрольной (урок с kind: test)"]);
     expect(publicationGaps([])).toEqual(["в модуле нет уроков"]);
+  });
+});
+
+describe("голоса аудирования", () => {
+  const voicesMap = (characters: Record<string, { gender: string; voice: string }>) => ({
+    source: "Синтез речи Google Cloud TTS, голос Chirp 3 HD {voice}",
+    language: "el-GR",
+    prefix: "el-GR-Chirp3-HD-",
+    pools: { female: ["Aoede", "Kore"], male: ["Charon", "Puck"] },
+    characters,
+  });
+  const cast = {
+    Άννα: { gender: "female", voice: "Aoede" },
+    Νίκος: { gender: "male", voice: "Charon" },
+  };
+  const json = (value: unknown) => new TextEncoder().encode(JSON.stringify(value));
+  const voiced = () =>
+    withLesson((blocks) =>
+      blocks.map((block) =>
+        block.type === "listening"
+          ? {
+              ...block,
+              transcript: [
+                { speaker: "Άννα", text: "Γεια σου! Πώς σε λένε;", audio: "m01-1/dialogue-1.mp3" },
+                { speaker: "Νίκος", text: "Με λένε Νίκο." },
+              ],
+            }
+          : block,
+      ),
+    );
+  const files = (manifest: Record<string, { voice: string; hash: string }>, characters = cast) => ({
+    ...voiced(),
+    "voices.yaml": voicesMap(characters),
+    "audio/m01-1/dialogue-1.mp3": new Uint8Array([7, 7, 7]),
+    "audio/dialogues.json": json(manifest),
+  });
+  const fresh = { "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Γεια σου! Πώς σε λένε;", "Aoede") } };
+
+  it("запись реплики — медиа пакета с версией в имени и источником голоса; в реплику её кладёт разбор пакета", () => {
+    const content = build(files(fresh));
+    const raw = JSON.parse(JSON.stringify(content.packages[0])) as Record<string, unknown>;
+    expect(raw.lineAudio).toEqual({ dialogue: ["line-m01-1-dialogue-1", null] });
+    const pack = parsePackage(raw);
+    const media = pack.media.find((item) => item.id === "line-m01-1-dialogue-1")!;
+    expect(media).toMatchObject({
+      kind: "audio",
+      mimeType: "audio/mpeg",
+      source: "Синтез речи Google Cloud TTS, голос Chirp 3 HD Aoede",
+    });
+    expect(media.url).toMatch(/^content\/media\/line-m01-1-dialogue-1@[0-9a-f]{10}\.mp3$/);
+    expect(content.files.some((file) => file.path === media.url)).toBe(true);
+    const listening = pack.blocks!.find((block) => block.type === "listening")!;
+    expect(listening.type === "listening" && listening.transcript.map((line) => line.audioAssetId)).toEqual([
+      "line-m01-1-dialogue-1",
+      undefined,
+    ]);
+    expect(content.voicing).toMatchObject({ voiced: 1, stale: [] });
+    expect([...content.voicing.unvoiced]).toEqual([["m01-1", 1]]);
+  });
+  it("запись, сделанная до правки текста или смены голоса, не публикуется: реплика звучит синтезом", () => {
+    const content = build(
+      files({ "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Старый текст", "Aoede") } }),
+    );
+    expect(content.packages[0].lineAudio).toBeUndefined();
+    expect(content.voicing.stale).toEqual(["m01-1/dialogue#1"]);
+    const recast = build(files(fresh, { ...cast, Άννα: { gender: "female", voice: "Kore" } }));
+    expect(recast.voicing.stale).toEqual(["m01-1/dialogue#1"]);
+  });
+  it("говорящий без голоса в карте отклоняет сборку", () => {
+    expect(failure(files(fresh, { Άννα: cast.Άννα } as typeof cast))).toMatch(/«Νίκος» нет голоса в voices\.yaml/);
+  });
+  it("два говорящих одного диалога с одним голосом отклоняют сборку", () => {
+    expect(failure(files(fresh, { ...cast, Νίκος: { gender: "female", voice: "Aoede" } }))).toMatch(
+      /у «Άννα» и «Νίκος» один голос Aoede/,
+    );
+  });
+  it("голос не из пула своего пола отклоняет сборку", () => {
+    expect(failure(files(fresh, { ...cast, Νίκος: { gender: "male", voice: "Kore" } }))).toMatch(
+      /голос Kore не из пула male/,
+    );
+  });
+  it("у записи реплики нужен источник: без него в карте голосов сборка отклонена", () => {
+    const noSource = { ...files(fresh), "voices.yaml": { ...voicesMap(cast), source: undefined } };
+    expect(failure(noSource)).toMatch(/voices\.yaml\.source: поле обязательно/);
+    const noVoice = { ...files(fresh), "voices.yaml": { ...voicesMap(cast), source: "Синтез речи" } };
+    expect(failure(noVoice)).toMatch(/имя голоса/);
+    const noMap = { ...files(fresh), "voices.yaml": undefined };
+    expect(failure(noMap)).toMatch(/карты голосов voices\.yaml/);
+  });
+  it("файла записи нет — сборка отклонена", () => {
+    expect(failure({ ...files(fresh), "audio/m01-1/dialogue-1.mp3": undefined })).toMatch(
+      /файла audio\/m01-1\/dialogue-1\.mp3 нет/,
+    );
+  });
+  it("пакет с записями реплик, не совпадающими с транскриптом или медиа, отклоняется", () => {
+    const raw = JSON.parse(JSON.stringify(build(files(fresh)).packages[0])) as Record<string, unknown>;
+    expect(() => parsePackage({ ...raw, lineAudio: { dialogue: ["line-m01-1-dialogue-1"] } })).toThrow(
+      /записей 1, а реплик 2/,
+    );
+    expect(() => parsePackage({ ...raw, lineAudio: { dialogue: ["нет-такого", null] } })).toThrow(/нет в пакете/);
+    expect(() => parsePackage({ ...raw, lineAudio: { text: [null] } })).toThrow(/аудирования с таким id нет/);
   });
 });
