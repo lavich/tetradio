@@ -365,7 +365,9 @@ export class SyncCoordinator {
       this.conflict("initial", [await localBranch(), ...remote]);
       return;
     }
-    if (!flags.dirty) {
+    // Версия облака без уже опубликованного здесь — расхождение, а не обновление: молча её применять нельзя.
+    const ahead = remote.filter((branch) => dominates(branch.meta!.clock, flags.clock));
+    if (!flags.dirty && ahead.length === remote.length) {
       if (remote.length === 1) {
         const [branch] = remote;
         const applied = await applySnapshot(
@@ -475,14 +477,32 @@ export class SyncCoordinator {
    * новая версия отмечает все известные ветви рассмотренными; ответы другой версии не объединяются.
    */
   async resolve(branchId: string): Promise<SyncStatus> {
+    // Выбор версии — тоже обмен: не параллельно с фоновым обменом и не в двух вкладках сразу.
+    while (this.running) await this.running;
+    this.running = (async () => {
+      const lock = await this.options.lock(() => this.resolveNow(branchId));
+      if (lock === "unsupported") await this.resolveNow(branchId);
+      else if (lock === "busy")
+        this.update({ reason: "Синхронизацией занята другая вкладка: выберите версию ещё раз чуть позже." });
+      return this.status;
+    })().finally(() => {
+      this.running = null;
+    });
+    return this.running;
+  }
+  private async resolveNow(branchId: string): Promise<void> {
     const conflict = this.status.conflict;
-    if (!conflict) return this.status;
+    if (!conflict) return;
     const chosen = conflict.branches.find((branch) => branch.id === branchId);
     if (!chosen) throw new Error("Версия не найдена");
     const { database } = this.options;
     const device = await this.deviceId();
     const now = this.options.now().toISOString();
-    const rejected = conflict.branches.filter((branch) => branch !== chosen);
+    // Локальная ветвь снята при обнаружении конфликта; ответы, данные после него, тоже должны попасть в копию.
+    const fresh = chosen.local ? null : await this.localSnapshot();
+    const rejected = conflict.branches
+      .filter((branch) => branch !== chosen)
+      .map((branch) => (branch.local && fresh ? { ...branch, snapshot: fresh } : branch));
     await database.syncVersions.bulkPut(
       rejected.map((branch): SyncVersionRow => ({
         id: branch.id,
@@ -525,7 +545,14 @@ export class SyncCoordinator {
     } catch (error) {
       this.fail(error);
     }
-    return this.status;
+  }
+  private localSnapshot() {
+    const { database } = this.options;
+    return database.transaction(
+      "r",
+      SNAPSHOT_TABLES.map((name) => database.table(name)),
+      () => buildSnapshot(database, this.options.now()),
+    );
   }
   listStored = () => this.options.database.syncVersions.orderBy("createdAt").reverse().toArray();
   async discardStored(id: string) {
