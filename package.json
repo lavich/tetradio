@@ -21,7 +21,6 @@
     "spec": "OPENSPEC_TELEMETRY=0 openspec validate --all --strict --no-interactive",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "spec:validate": "OPENSPEC_TELEMETRY=0 openspec validate --all --strict --no-interactive",
     "spec:status": "OPENSPEC_TELEMETRY=0 openspec status --all",
     "openspec": "openspec",
     "lexicon:check": "node scripts/check-lexicon.ts",
@@ -73,6 +72,6 @@
   },
   "description": "Greek A2 course and learning application Telegram Mini App",
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=22.18.0"
   }
 }

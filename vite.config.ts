@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
 import { copyFileSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { VitePWA } from "vite-plugin-pwa";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 
@@ -10,7 +11,7 @@ const base = process.env.BASE_PATH ?? "/";
 /** Версия и сборка попадают в метки отчётов о сбоях и в имя релиза; без CI сборка называется `dev`. */
 const appVersion = (JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as { version: string })
   .version;
-const appBuild = process.env.GITHUB_SHA?.slice(0, 7) ?? "dev";
+const appBuild = (process.env.BUILD_SHA ?? process.env.GITHUB_SHA)?.slice(0, 7) ?? "dev";
 /** Имя релиза для отчётов о сбоях — то же значение, что метки `app.version` и `app.build` в событии. */
 const release = `tetradio@${appVersion}+${appBuild}`;
 /**
@@ -33,13 +34,19 @@ const sentryUpload =
       ]
     : [];
 
-const spaFallback = (): Plugin => ({
-  name: "spa-404",
-  apply: "build",
-  closeBundle() {
-    copyFileSync("dist/index.html", "dist/404.html");
-  },
-});
+const spaFallback = (): Plugin => {
+  let outDir = "dist";
+  return {
+    name: "spa-404",
+    apply: "build",
+    configResolved(config) {
+      outDir = path.resolve(config.root, config.build.outDir);
+    },
+    closeBundle() {
+      copyFileSync(path.join(outDir, "index.html"), path.join(outDir, "404.html"));
+    },
+  };
+};
 
 /** HTTPS-туннель для Mini App бота разработки: разрешается только конкретный hostname из переменной окружения. */
 const tunnelHost = process.env.TUNNEL_HOST;

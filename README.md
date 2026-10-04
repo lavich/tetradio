@@ -37,7 +37,7 @@ npm run build
 
 ```sh
 npm ci
-npm run spec:validate
+npm run spec
 npm run spec:status
 npm run openspec -- list
 ```

@@ -1,14 +1,15 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
+  # Выкладка только после зелёного CI на main: прямой пуш в main иначе ушёл бы на сайт без проверок.
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -16,15 +17,20 @@ concurrency:
 
 jobs:
   build:
+    # Ветку `main` в workflow_run задаёт и pull request из форка, поэтому проверяется и событие.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
-      # Тесты уже прошли в pull request: main меняется только через PR с обязательными проверками.
       - run: npm ci
       # База берётся из настроек Pages: `/tetradio/` на github.io, `/` после подключения своего домена.
       - id: pages
@@ -36,6 +42,8 @@ jobs:
         env:
           # Production без мока Telegram: вне Telegram — только экран «Откройте в Telegram».
           VITE_TELEGRAM_MOCK: ""
+          # В workflow_run GITHUB_SHA — вершина main на момент запуска, а не собранный коммит.
+          BUILD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
           VITE_TELEGRAM_BOT: ${{ vars.VITE_TELEGRAM_BOT }}
           VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -49,6 +57,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

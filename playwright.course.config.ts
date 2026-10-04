@@ -10,6 +10,9 @@ export default defineConfig({
   // У каждого теста свой контекст браузера и своя база: тесты независимы и идут параллельно.
   fullyParallel: true,
   workers: process.env.CI ? 2 : "50%",
+  // Повтор в CI отделяет нестабильный тест (flaky) от сломанного.
+  retries: process.env.CI ? 1 : 0,
+  reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   // Runner CI медленнее локальной машины: при четырёх потоках тесты на тайминг падали ложно.
   expect: { timeout: process.env.CI ? 10000 : 5000 },
   use: {
@@ -17,6 +20,8 @@ export default defineConfig({
     browserName: "chromium",
     viewport: { width: 390, height: 844 },
     deviceScaleFactor: 2,
+    trace: "retain-on-failure",
+    screenshot: "only-on-failure",
   },
   webServer: {
     command: `CONTENT_ROOT=tests/fixtures/course-demo npm run content && npx tsc -b && VITE_TELEGRAM_MOCK=1 npx vite build --outDir dist-course && npx vite preview --outDir dist-course --host 0.0.0.0 --port ${port} --strictPort`,
