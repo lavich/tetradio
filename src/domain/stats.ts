@@ -1,5 +1,5 @@
 import { State } from "ts-fsrs";
-import { addDays, localDay, zonedStart } from "./learning";
+import { addDays, localDay, zonedStart } from "./time";
 import type { DaySummary } from "./skills";
 import type { CardKind, ExerciseType, LearningRef, LearningState, SessionCard, Settings } from "./types";
 

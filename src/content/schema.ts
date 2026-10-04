@@ -6,8 +6,8 @@ import type {
   ProvenanceOperation,
   Segment,
   SourceRecord,
-} from "../domain/types.ts";
-import { CARD_KINDS } from "../domain/types.ts";
+} from "../domain/card-fields.ts";
+import { CARD_KINDS } from "../domain/card-fields.ts";
 import { ContentError } from "./schema-errors.ts";
 import {
   parseBlocks,
