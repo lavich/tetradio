@@ -1,6 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo, useState } from "react";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { VocabularyList } from "./Vocabulary";
 import { TapHint, WordTaps } from "./WordTaps";
+import { LessonDownload } from "./LessonDownload";
 import { LessonSummary } from "./LessonSummary";
 import { blockLabel, numberBlocks, paginate, resumePage } from "./paginate";
 import { usePager } from "./usePager";
@@ -43,7 +44,7 @@ export function CourseLessonScreen() {
     spread,
   });
   if (lesson === undefined || progress === undefined) return <Screen back="Урок" />;
-  if (lesson === null) return <Navigate to={`/course/${moduleId}`} replace />;
+  if (lesson === null) return <LessonDownload lessonId={lessonId} moduleId={moduleId} />;
   const save = (blockId: string) => (patch: Parameters<typeof saveBlockProgress>[2]) =>
     saveBlockProgress(lessonId, blockId, patch);
   const tally = lessonTally(lesson.blocks, progress);
