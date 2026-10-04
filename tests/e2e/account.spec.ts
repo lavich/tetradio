@@ -83,7 +83,7 @@ test("смена аккаунта A → B на том же устройстве:
   await page.waitForURL("**/session");
   await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
   await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
-  await page.goto("/more");
+  await page.goto("/progress");
   await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
   expect(await count(page, dbOf(A), "cardStates")).toBeGreaterThan(0);
 
@@ -93,7 +93,7 @@ test("смена аккаунта A → B на том же устройстве:
   await expect(page.getByTestId("word-count")).toHaveText("0 слов");
   await page.goto("/");
   await expect(page.getByRole("button", { name: "Продолжить повторение" })).toHaveCount(0);
-  await page.goto("/more");
+  await page.goto("/progress");
   await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", /synced|idle/, { timeout: 15000 });
   // Перезагрузка без hash восстанавливает контекст вкладки — это B, а не A.
   expect(await page.evaluate(() => JSON.parse(sessionStorage.getItem("tetradio:launch")!).user.id)).toBe(B);
@@ -111,7 +111,7 @@ test("смена аккаунта A → B на том же устройстве:
   expect(await page.evaluate(() => sessionStorage.getItem("tetradio:launch"))).toBeNull();
   await page.goto(`/words${launchHash({ userId: A })}`); // другой путь: не переход по hash в том же документе
   await expect(page.getByRole("navigation")).toBeVisible();
-  await page.goto("/more");
+  await page.goto("/progress");
   await expect(page.getByTestId("storage-scope")).toContainText("Telegram: облачная синхронизация");
   expect(await count(page, dbOf(A), "cardStates")).toBeGreaterThan(0);
 });

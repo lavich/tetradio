@@ -205,7 +205,7 @@ describe("установка урока", () => {
     expect(fetcher.requests).toEqual(["content/catalog.json", entry("mech-2").url]);
     expect(await db.words.count()).toBe(wordCountOf("mech-2"));
     expect((await lessonItems("mech-2", db)).map((l) => l.ref.id)).toEqual(
-      packageOf("mech-2").links.map((l) => l.wordId),
+      packageOf("mech-2").items.map((item) => item.id),
     );
     expect(await db.lessons.get("mech-2")).toMatchObject({
       title: "Урок 1.2",
@@ -377,7 +377,6 @@ describe("обновление пакета", () => {
       lesson: { ...pack.lesson, title: "Другое название" },
       words: pack.words.slice(1),
       items: pack.items.slice(1).map((item, i) => ({ ...item, position: i })),
-      links: pack.links.slice(1).map((l, i) => ({ ...l, position: i })),
       media: pack.media.filter((item) => item.id !== pack.words[0].imageAssetId),
     };
     await installLesson("mech-2", db, await upgrade("mech-2", next));
@@ -399,7 +398,6 @@ describe("обновление пакета", () => {
       version: "trimmed",
       words: pack.words.slice(1),
       items: pack.items.slice(1).map((item, i) => ({ ...item, position: i })),
-      links: pack.links.slice(1).map((l, i) => ({ ...l, position: i })),
     };
     await installLesson("mech-2", db, await upgrade("mech-2", next));
     expect(await db.words.get(dropped)).toBeTruthy();
@@ -416,7 +414,6 @@ describe("обновление пакета", () => {
       version: "no-shared",
       words: pack.words.filter((word) => word.id !== shared),
       items: pack.items.filter((item) => item.id !== shared).map((item, i) => ({ ...item, position: i })),
-      links: pack.links.filter((link) => link.wordId !== shared).map((link, i) => ({ ...link, position: i })),
     };
     await installLesson("mech-2", db, await upgrade("mech-2", without));
     expect(await db.lessonItems.get(["mech-2", wordKeyOf(shared)])).toBeUndefined();

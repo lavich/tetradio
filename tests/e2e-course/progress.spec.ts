@@ -14,7 +14,7 @@ test("вкладка «Прогресс»: навыки против порог�
   await expect(page.getByTestId("pace")).toContainText("К K1");
   await expect(page.getByRole("heading", { name: "Эта неделя" })).toBeVisible();
   await page.getByRole("link", { name: "Настройки" }).click();
-  await expect(page).toHaveURL(/\/more\/settings$/);
+  await expect(page).toHaveURL(/\/progress\/settings$/);
   // Служебные экраны остаются под вкладкой «Прогресс».
   await expect(page.getByRole("navigation").getByRole("link", { name: "Прогресс" })).toHaveAttribute(
     "aria-current",
@@ -22,4 +22,6 @@ test("вкладка «Прогресс»: навыки против порог�
   );
   await page.goto("/more");
   await expect(page).toHaveURL(/\/progress$/);
+  await page.goto("/more/backup");
+  await expect(page).toHaveURL(/\/progress\/backup$/);
 });

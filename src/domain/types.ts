@@ -143,7 +143,7 @@ export interface InstalledPackage {
   phrases: PackagePhrase[];
   items: PackageItem[];
   media: PackageMedia[];
-  /** Урок курса (схема 4): вид, место в модуле и блоки. */
+  /** Урок курса: вид, место в модуле и блоки. */
   kind?: LessonKind;
   module?: { id: string; position: number };
   blocks?: LessonBlock[];
@@ -247,22 +247,3 @@ export const fillSettings = (settings: Partial<Settings> | undefined): Settings 
   ...defaultSettings,
   ...settings,
 });
-/**
- * Полный снимок данных: используется только в тестах как источник для планировщика.
- * Экраны приложения читают ограниченные выборки, а не снимок. Словарные связи `links` и смешанные `items`
- * складываются: так прежние сценарии остаются словарными без переписывания.
- */
-export interface Snapshot {
-  words: Word[];
-  phrases?: Phrase[];
-  lessons: Lesson[];
-  courses?: Course[];
-  /** Модули программы: задают порядок пройденных уроков; без них — порядок массива `lessons`. */
-  modules?: StoredModule[];
-  links: { lessonId: string; wordId: string; position: number }[];
-  items?: LessonItem[];
-  states: LearningState[];
-  events: ReviewEvent[];
-  sessions: Session[];
-  settings: Settings;
-}

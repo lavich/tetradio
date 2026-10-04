@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("переключатель отчётов включён по умолчанию, выключение переживает перезагрузку страницы", async ({ page }) => {
-  await page.goto("/more/settings");
+  await page.goto("/progress/settings");
   const toggle = page.getByRole("switch", { name: "Отправлять отчёты об ошибках" });
   await expect(toggle).toBeChecked();
   await toggle.uncheck();
@@ -23,7 +23,7 @@ test("переключатель отчётов включён по умолча
 });
 
 test("экран «Копия данных» описывает канал отчётов: куда, что, чего нет и где выключить", async ({ page }) => {
-  await page.goto("/more/backup");
+  await page.goto("/progress/backup");
   const boundaries = page.getByTestId("error-reports-boundaries");
   await expect(boundaries).toBeVisible();
   await expect(boundaries).toContainText("Sentry");

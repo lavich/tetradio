@@ -1,6 +1,6 @@
 # Формат курса (схема 4)
 
-Исходники курса лежат в `content/` и собираются `node content/build.ts` в неизменяемые пакеты `public/content/`. Модель и проверки — `src/content/course.ts` (общие для сборщика и клиента), сборка — `content/build.ts`, тесты — `tests/course-build.test.ts`.
+Исходники курса лежат в `content/` и собираются `node content/build.ts` в неизменяемые пакеты `public/content/`. Модель и проверки — `src/content/course.ts` (общие для сборщика и клиента), сборка — `content/build.ts`, тесты — `tests/course-build.test.ts`. Клиент принимает только схему 4: каталог и пакеты другой версии отклоняются как неподдерживаемые.
 
 ## Файлы
 

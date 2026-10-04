@@ -1,12 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  ContentError,
-  parseCatalog,
-  parsePackage,
-  SCHEMA_VERSION,
-  SUPPORTED_SCHEMAS,
-  type ContentPackage,
-} from "../src/content/schema";
+import { ContentError, parseCatalog, parsePackage, SCHEMA_VERSION, type ContentPackage } from "../src/content/schema";
 import { content } from "./helpers/content";
 
 const provenance = {
@@ -25,7 +18,7 @@ const phrase = {
 };
 const second = { ...phrase, id: "p-2", text: "Γράφω ένα γράμμα.", translation: "Я пишу письмо.", revision: "r2" };
 const mixed: Record<string, unknown> = {
-  schemaVersion: 3,
+  schemaVersion: 4,
   id: "mixed",
   courseId: "c",
   version: "v1",
@@ -41,11 +34,7 @@ const mixed: Record<string, unknown> = {
   media: content.packages[0].media.filter((item) => item.id === word.imageAssetId || item.id === word.audioAssetId),
 };
 
-describe("пакет схемы 3", () => {
-  it("текущая версия — 4, читаются версии 2–4", () => {
-    expect(SCHEMA_VERSION).toBe(4);
-    expect(SUPPORTED_SCHEMAS).toEqual([2, 3, 4]);
-  });
+describe("смешанный пакет", () => {
   it("смешанный пакет проходит проверку и сохраняет порядок карточек", () => {
     const pack = parsePackage(mixed);
     expect(pack.items.map((item) => [item.kind, item.id])).toEqual([
@@ -54,8 +43,6 @@ describe("пакет схемы 3", () => {
       ["phrase", "p-2"],
     ]);
     expect(pack.phrases[0]).toMatchObject({ text: "Καλημέρα.", translation: "Доброе утро." });
-    // словарные связи остаются для прежнего кода клиента и следуют позициям items
-    expect(pack.links).toEqual([{ wordId: word.id, position: 1 }]);
   });
   it("пакет без слов допустим при наличии других карточек", () => {
     const pack = parsePackage({
@@ -123,56 +110,23 @@ describe("пакет схемы 3", () => {
   });
 });
 
-describe("совместимость со схемой 2", () => {
-  const v2 = JSON.parse(
+describe("версия схемы", () => {
+  const current = JSON.parse(
     content.files.find((file) => file.path === content.catalog.lessons[0].url)!.body as string,
   ) as ContentPackage;
-  const legacy = () => {
-    const {
-      phrases: _p,
-      items,
-      ...rest
-    } = v2 as unknown as Record<string, unknown> & { items: { kind: string; id: string; position: number }[] };
-    return {
-      ...rest,
-      schemaVersion: 2,
-      links: items.filter((item) => item.kind === "word").map((item) => ({ wordId: item.id, position: item.position })),
-    };
-  };
-  it("словарный пакет схемы 2 читается как урок из слов в прежнем порядке", () => {
-    const pack = parsePackage(legacy());
-    expect(pack.schemaVersion).toBe(2);
-    expect(pack.items.map((item) => item.kind)).toEqual(pack.items.map(() => "word"));
-    expect(pack.items.map((item) => item.id)).toEqual(
-      v2.items.filter((item) => item.kind === "word").map((item) => item.id),
-    );
-    expect(pack.phrases).toEqual([]);
-  });
-  it("пакет схемы 2 не принимает смешанные поля молча", () => {
-    expect(() => parsePackage({ ...legacy(), phrases: [phrase] })).toThrow(/схемы 2/);
-  });
-  it("каталог схемы 2 читается с нулевым счётчиком фраз", () => {
-    const raw = JSON.parse(content.files.find((file) => file.path === "content/catalog.json")!.body as string);
-    const old = {
-      ...raw,
-      schemaVersion: 2,
-      lessons: raw.lessons.map(({ phraseCount: _a, cardCount: _b, ...entry }: Record<string, unknown>) => entry),
-    };
-    const catalog = parseCatalog(old);
-    expect(catalog.lessons[0]).toMatchObject({
-      phraseCount: 0,
-      cardCount: catalog.lessons[0].wordCount,
-    });
-  });
-  it("неизвестные версии отклоняются как неподдерживаемые", () => {
-    for (const version of [1, 5]) {
+  it("читается только схема 4", () => {
+    expect(SCHEMA_VERSION).toBe(4);
+    expect(parsePackage(current).schemaVersion).toBe(4);
+    for (const version of [1, 2, 3, 5]) {
       try {
-        parsePackage({ ...v2, schemaVersion: version });
+        parsePackage({ ...current, schemaVersion: version });
         expect.unreachable();
       } catch (error) {
         expect((error as ContentError).kind).toBe("unsupported");
       }
     }
+    const catalog = JSON.parse(content.files.find((file) => file.path === "content/catalog.json")!.body as string);
+    expect(() => parseCatalog({ ...catalog, schemaVersion: 3 })).toThrow(ContentError);
   });
 });
 

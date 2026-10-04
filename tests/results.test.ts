@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
 import { compositionText } from "../src/features/learning/ResultScreen";
-import { fromSnapshot } from "../src/domain/snapshot-source";
+import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { LEECH_LAPSES, lessonProgress, progress, SKILL_NAMES, SKILL_TYPES, SOLID_DAYS } from "../src/domain/stats";
 import { localDay } from "../src/domain/learning";
 import { foldStats, emptyStats } from "../src/domain/skills";
@@ -12,7 +12,6 @@ import {
   type LearningState,
   type Phrase,
   type ReviewEvent,
-  type Snapshot,
 } from "../src/domain/types";
 import { unitKey, wordRef } from "./helpers/cards";
 

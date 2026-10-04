@@ -28,6 +28,8 @@ npm run build
 - [PRD: цели и требования](docs/PRD.md)
 - [Программа курса](docs/curriculum.md)
 - [Формат экзамена A2](docs/exam-a2.md)
+- [Telegram Mini App: бот, разработка, проверки на устройствах](docs/telegram.md)
+- [Синхронизация прогресса](docs/sync.md)
 - [Базовые спецификации](openspec/specs/)
 - [Изменения: активные и архив](openspec/changes/)
 

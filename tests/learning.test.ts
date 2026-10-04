@@ -25,7 +25,7 @@ import {
   type OptionPools,
 } from "../src/domain/learning";
 import { emptySkills, type SkillSummary } from "../src/domain/skills";
-import { fromSnapshot } from "../src/domain/snapshot-source";
+import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { mulberry32 } from "./plan-golden.test";
 import {
   defaultSettings,
@@ -35,7 +35,6 @@ import {
   type SessionCard,
   type Word,
   type Lesson,
-  type Snapshot,
 } from "../src/domain/types";
 import { idsOf, wordEvent, wordKeyOf, wordRef, wordState } from "./helpers/cards";
 const now = new Date("2026-09-15T09:00:00Z");

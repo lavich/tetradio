@@ -98,7 +98,7 @@ export interface LessonSource {
   language?: string;
   words?: string[];
   items?: LessonItemSource[];
-  /** Урок курса (схема 4): вид и блоки; у аудирования `audio` — файл в audio/. */
+  /** Урок курса: вид и блоки; у аудирования `audio` — файл в audio/. */
   kind?: LessonKind;
   blocks?: unknown[];
 }
@@ -765,7 +765,6 @@ export function buildContent(root = defaultRoot()): BuiltContent {
       words: packWords,
       phrases: packPhrases,
       items,
-      links: items.filter((item) => item.kind === "word").map((item) => ({ wordId: item.id, position: item.position })),
       media: packMedia,
       ...(blocks.length ? { blocks } : {}),
     };
@@ -940,7 +939,9 @@ function markCourses(
 
 export const wordsOf = (content: BuiltContent, lessonId: string) => {
   const pack = content.packages.find((p) => p.id === lessonId);
-  return pack ? pack.links.map((link) => pack.words.find((word) => word.id === link.wordId)!) : [];
+  return pack
+    ? pack.items.filter((item) => item.kind === "word").map((item) => pack.words.find((word) => word.id === item.id)!)
+    : [];
 };
 // Путь строится без `new URL`: в тестах с jsdom глобальный URL разрешает относительный адрес от http, а не от файла.
 export const defaultRoot = () => dirname(fileURLToPath(import.meta.url));

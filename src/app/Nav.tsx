@@ -3,12 +3,11 @@ import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import nav from "./Nav.module.css";
 
-const LINKS: { to: string; label: string; Icon: typeof Home; also?: string }[] = [
+const LINKS: { to: string; label: string; Icon: typeof Home }[] = [
   { to: "/", label: "Сегодня", Icon: Home },
   { to: "/course", label: "Курс", Icon: BookOpen },
   { to: "/words", label: "Слова", Icon: Rows3 },
-  /** Настройки, копия и статистика открываются со страницы прогресса и остаются под этой вкладкой. */
-  { to: "/progress", label: "Прогресс", Icon: ChartNoAxesColumn, also: "/more" },
+  { to: "/progress", label: "Прогресс", Icon: ChartNoAxesColumn },
 ];
 export function Nav() {
   const ref = useRef<HTMLElement>(null);
@@ -32,10 +31,9 @@ export function Nav() {
   return (
     <nav ref={ref} className={nav.nav} aria-label="Основные разделы">
       <div className={nav.inner}>
-        {LINKS.map(({ to, label, Icon, also }) => {
+        {LINKS.map(({ to, label, Icon }) => {
           // NavLink ставит aria-current только своей активной ссылке, поэтому раздел-хозяин считаем сами.
-          const active =
-            (to === "/" ? pathname === "/" : pathname.startsWith(to)) || (!!also && pathname.startsWith(also));
+          const active = to === "/" ? pathname === "/" : pathname.startsWith(to);
           return (
             <Link key={to} to={to} className={nav.link} aria-current={active ? "page" : undefined}>
               <Icon size={22} strokeWidth={active ? 2.4 : 1.9} aria-hidden />

@@ -1,16 +1,56 @@
-import { LESSON_MATES_RADIUS, localDay, programmeOrder, type CardFacts, type SessionSource } from "./learning";
-import { itemOfLink, unitKey, wordRef } from "./refs";
-import { byTime, emptyStats, foldStats, summarizeEvents } from "./skills";
-import { cardLabel, type StatsSource } from "./stats";
+import {
+  LESSON_MATES_RADIUS,
+  localDay,
+  programmeOrder,
+  type CardFacts,
+  type SessionSource,
+} from "../../src/domain/learning";
+import { unitKey, wordKeyOf, wordRef } from "../../src/domain/refs";
+import { byTime, emptyStats, foldStats, summarizeEvents } from "../../src/domain/skills";
+import { cardLabel, type StatsSource } from "../../src/domain/stats";
 import {
   DEFAULT_NEW_ITEMS_PER_DAY,
   fillSettings,
   type CardKind,
+  type Course,
   type LearningRef,
+  type LearningState,
+  type Lesson,
   type LessonItem,
+  type Phrase,
+  type ReviewEvent,
+  type Session,
   type SessionCard,
-  type Snapshot,
-} from "./types";
+  type Settings,
+  type StoredModule,
+  type Word,
+} from "../../src/domain/types";
+
+/**
+ * Полный снимок данных — источник для планировщика в тестах. Словарные связи `links` и смешанные `items`
+ * складываются: так прежние сценарии остаются словарными без переписывания.
+ */
+export interface Snapshot {
+  words: Word[];
+  phrases?: Phrase[];
+  lessons: Lesson[];
+  courses?: Course[];
+  /** Модули программы: задают порядок пройденных уроков; без них — порядок массива `lessons`. */
+  modules?: StoredModule[];
+  links: { lessonId: string; wordId: string; position: number }[];
+  items?: LessonItem[];
+  states: LearningState[];
+  events: ReviewEvent[];
+  sessions: Session[];
+  settings: Settings;
+}
+
+export const itemOfLink = (link: Snapshot["links"][number]): LessonItem => ({
+  lessonId: link.lessonId,
+  unitKey: wordKeyOf(link.wordId),
+  ref: wordRef(link.wordId),
+  position: link.position,
+});
 
 /**
  * Источник из полного снимка в памяти. Нужен тестам: те же правила планирования проверяются

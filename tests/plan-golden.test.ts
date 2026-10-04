@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
 import { makePlan, makeSession, type SessionSource } from "../src/domain/learning";
-import { fromSnapshot } from "../src/domain/snapshot-source";
+import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import {
   defaultSettings,
   type Course,
@@ -10,7 +10,6 @@ import {
   type LearningState,
   type Lesson,
   type ReviewEvent,
-  type Snapshot,
   type StoredModule,
   type Word,
 } from "../src/domain/types";

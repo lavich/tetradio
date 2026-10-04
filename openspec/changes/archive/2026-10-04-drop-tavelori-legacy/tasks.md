@@ -24,7 +24,7 @@
 
 ## 4. Остатки и документация
 
-- [ ] 4.1 Пакеты контента — только схема 4.
-- [ ] 4.2 `snapshot-source` — в тестовые помощники.
-- [ ] 4.3 `/more/*` → `/progress/*` с переадресацией, `features/more` → `features/progress`.
-- [ ] 4.4 `docs/sync.md` по формату 4; исправить ссылку в `docs/account.md`; архивировать `lesson-word-taps`; обновить `release`.
+- [x] 4.1 Пакеты контента — только схема 4.
+- [x] 4.2 `snapshot-source` — в тестовые помощники.
+- [x] 4.3 `/more/*` → `/progress/*` с переадресацией, `features/more` → `features/progress`.
+- [x] 4.4 `docs/sync.md` по формату 4; исправить ссылку в `docs/account.md`; архивировать `lesson-word-taps`; обновить `release`.
