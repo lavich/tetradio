@@ -151,3 +151,14 @@ test("нет греческого голоса: подсказка с перев
   await expect(sheet).toContainText("из, от");
   await expect(sheet).toContainText("На устройстве нет греческого голоса — включите его в настройках речи.");
 });
+
+test("слова в таблице объяснения нажимаются так же, как в тексте", async ({ page }) => {
+  await voices(page, "instant");
+  await start(page, "m01-1");
+  const table = page.getByRole("region", { name: "Глагол είμαι — «быть»" }).getByRole("table");
+  const cell = table.getByRole("button", { name: "Произнести и перевести: είσαι", exact: true });
+  await expect(cell).toBeVisible();
+  await cell.click();
+  await expect.poll(() => spoken(page)).toContain("είμαι");
+  await expect(page.getByRole("dialog", { name: "είμαι" })).toContainText("быть");
+});

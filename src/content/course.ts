@@ -539,7 +539,12 @@ export function parseModule(input: unknown, path: string): CatalogModule {
 export function tapFields(block: LessonBlock): [field: string, text: string][] {
   switch (block.type) {
     case "explanation":
-      return [["body", block.body]];
+      return [
+        ["body", block.body],
+        ...(block.table?.rows ?? []).flatMap((row, r) =>
+          row.map((cell, c): [string, string] => [`table.${r}.${c}`, cell]),
+        ),
+      ];
     case "reading":
       return [["text", block.text]];
     case "listening":

@@ -80,7 +80,9 @@ export function Explanation({ block }: { block: ExplanationBlock }) {
             {block.table.rows.map((row, index) => (
               <tr key={index}>
                 {row.map((cell, at) => (
-                  <td key={at}>{cell}</td>
+                  <td key={at}>
+                    <Cell blockId={block.id} field={`table.${index}.${at}`} text={cell} />
+                  </td>
                 ))}
               </tr>
             ))}
@@ -89,6 +91,10 @@ export function Explanation({ block }: { block: ExplanationBlock }) {
       ) : null}
     </>
   );
+}
+
+function Cell({ blockId, field, text }: { blockId: string; field: string; text: string }) {
+  return <Marked text={text} marks={useFieldMarks(blockId, field)} />;
 }
 
 export function Reading({ block }: { block: ReadingBlock }) {
