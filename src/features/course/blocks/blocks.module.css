@@ -1,0 +1,192 @@
+.table {
+  margin-top: calc(var(--cell) / 2);
+  border-collapse: collapse;
+  font-family: var(--font-print);
+  font-size: 16px;
+  line-height: var(--cell);
+}
+.table th {
+  text-align: left;
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  padding-right: 20px;
+}
+.table td {
+  padding-right: 20px;
+}
+.table td:first-child {
+  font-weight: 600;
+}
+
+/* Задания: вопрос печатью, ответ — чернилами, проверка — красной ручкой. */
+.item {
+  position: relative;
+  margin-top: calc(var(--cell) / 2);
+}
+.item > .prompt {
+  padding-right: 32px;
+}
+.prompt {
+  font-family: var(--font-print);
+  font-size: 16px;
+  line-height: var(--cell);
+  margin: 0;
+}
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.option {
+  min-height: 40px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--input);
+  background: var(--card);
+  font-family: var(--font-print);
+  font-size: 16px;
+  cursor: pointer;
+}
+.option[aria-pressed="true"] {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--accent);
+}
+.option:disabled {
+  cursor: default;
+}
+.answerInput {
+  width: 100%;
+  min-height: 40px;
+  border: 0;
+  border-bottom: 1.5px solid var(--primary);
+  border-radius: 0;
+  background: transparent;
+  padding: 4px 0;
+  font-family: var(--font-print);
+  font-size: 19px;
+  color: var(--primary);
+}
+.answerInput:focus-visible {
+  outline: none;
+  border-bottom-width: 2.5px;
+}
+
+.reading {
+  font-family: var(--font-print);
+  font-size: 18px;
+  line-height: calc(var(--cell) * 1.25);
+  margin: calc(var(--cell) / 2) 0 0;
+}
+
+/* Аудирование: кнопка воспроизведения чернилами, счётчик прослушиваний на полях. */
+.player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: calc(var(--cell) / 2);
+}
+.play {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  background: var(--card);
+  cursor: pointer;
+}
+.play:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.transcript {
+  margin: calc(var(--cell) / 2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.transcript li {
+  font-family: var(--font-print);
+  font-size: 16px;
+  line-height: var(--cell);
+}
+.speaker {
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  margin-right: 6px;
+}
+.speaking {
+  color: var(--primary);
+}
+
+/* Письмо и речь: поле ответа чернилами по линейке, образец и критерии самопроверки. */
+.writing {
+  width: 100%;
+  min-height: calc(var(--cell) * 6);
+  border: 0;
+  border-radius: 0;
+  background: repeating-linear-gradient(
+    transparent 0,
+    transparent calc(var(--cell) - 1px),
+    color-mix(in srgb, var(--primary) 35%, transparent) calc(var(--cell) - 1px),
+    color-mix(in srgb, var(--primary) 35%, transparent) var(--cell)
+  );
+  padding: 0;
+  font-family: var(--font-print);
+  font-size: 17px;
+  line-height: var(--cell);
+  color: var(--primary);
+  resize: vertical;
+}
+.writing:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--primary) 40%, transparent);
+  outline-offset: 4px;
+}
+.model {
+  margin-top: calc(var(--cell) / 2);
+  padding-left: 12px;
+  border-left: 1px solid var(--grid);
+  font-family: var(--font-print);
+  font-size: 16px;
+  line-height: var(--cell);
+}
+.criteria {
+  margin: calc(var(--cell) / 2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.criteria label {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0;
+  font-size: 15px;
+  line-height: var(--cell);
+  color: var(--foreground);
+  cursor: pointer;
+}
+.criteria input {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  accent-color: var(--pen);
+}
+.selfCheck {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--pen);
+  margin: calc(var(--cell) / 2) 0 0;
+}
+.timer {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-print);
+  font-size: 22px;
+  color: var(--primary);
+}

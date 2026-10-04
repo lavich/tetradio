@@ -1,0 +1,35 @@
+/* Результат контрольной: по навыкам против порога 60 %. */
+.result {
+  margin-top: calc(var(--cell) * 1.5);
+  padding-top: calc(var(--cell) / 2);
+  border-top: 1.5px solid var(--pen);
+}
+.result p {
+  margin: 0;
+  line-height: var(--cell);
+}
+
+/* Нижний док урока: завершение — главное действие. */
+.dock {
+  margin-top: calc(var(--cell) * 2);
+}
+
+.pending {
+  list-style: none;
+  margin: calc(var(--cell) / 2) 0 0;
+  padding: 0;
+}
+.pending li {
+  margin-top: 4px;
+}
+.pending button {
+  font: inherit;
+  color: var(--primary);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

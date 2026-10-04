@@ -1,0 +1,179 @@
+.gloss {
+  text-decoration: underline dotted var(--muted-foreground);
+  text-underline-offset: 4px;
+}
+
+.tap {
+  border-radius: 3px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.tap:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+  border-radius: 3px;
+}
+.stroke {
+  /* Пока WordTaps.tsx не перекрасил штрих под тему — ровная линия чернилами. */
+  background-image: var(--tap-stroke, linear-gradient(var(--primary), var(--primary)));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 4px;
+  padding-bottom: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.tapOn {
+  background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+.tapHint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: var(--cell);
+  margin: 0 0 calc(var(--cell) / 2);
+  font-size: 13.5px;
+  line-height: var(--cell);
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+.hintWord {
+  color: var(--foreground);
+}
+.tapHintClose {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin: -4px -8px -4px 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .tapHintClose:hover {
+    background: var(--muted);
+  }
+}
+
+/* Над облачком листания (6), под уведомлениями. */
+.sheetTip {
+  position: fixed;
+  z-index: 7;
+  padding: 12px 14px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow:
+    0 12px 32px -10px var(--shadow),
+    0 2px 6px color-mix(in srgb, var(--shadow) 35%, transparent);
+  animation: tip-in 120ms ease-out;
+}
+.sheetTip::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--arrow) - 6px);
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  background: var(--popover);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transform: rotate(45deg);
+}
+.sheetTip[data-side="below"]::after {
+  bottom: auto;
+  top: -7px;
+  transform: rotate(225deg);
+}
+@keyframes tip-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+.sheetTip[data-side="below"] {
+  animation-name: tip-in-below;
+}
+@keyframes tip-in-below {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheetTip {
+    animation: none;
+  }
+}
+.tipFrom {
+  margin: 0 0 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--muted-foreground);
+}
+.tipHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.tipGreek {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 28px;
+  overflow-wrap: anywhere;
+}
+.tipIpa {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--muted-foreground);
+}
+.tipSpeak {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--primary);
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .tipSpeak:hover {
+    background: color-mix(in srgb, var(--primary) 6%, var(--card));
+  }
+}
+.tipRu {
+  margin: 6px 0 0;
+  font-family: var(--font-print);
+  font-size: 17px;
+  line-height: var(--cell);
+}
+.tipForms {
+  margin: 2px 0 0;
+  font-family: var(--font-print);
+  font-size: 13.5px;
+  line-height: 20px;
+  color: var(--muted-foreground);
+}
+.tipNote {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--muted-foreground);
+}

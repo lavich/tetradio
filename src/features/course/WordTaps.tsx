@@ -16,7 +16,7 @@ import { createPortal } from "react-dom";
 import type { BlockMarks, WordMark } from "../../content/schema";
 import { playText, type PlayResult } from "../../shared/audio";
 import type { TapCard } from "../../storage/course";
-import css from "./course.module.css";
+import css from "./word-taps.module.css";
 
 const HINT_KEY = "word-taps-hint";
 const hintSeen = () => {

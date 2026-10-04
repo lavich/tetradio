@@ -5,7 +5,7 @@ import type { LessonItem } from "../../domain/types";
 import { playText, playWord, type PlayResult } from "../../shared/audio";
 import { useAssetUrl } from "../../shared/store";
 import { livePhrases, liveWords } from "../../storage/queries";
-import css from "./course.module.css";
+import css from "./vocabulary.module.css";
 
 /** Картинка слова из библиотеки; пока файл не загружен — пустое место того же размера, чтобы строка не прыгала. */
 function Thumb({ assetId }: { assetId?: string }) {
