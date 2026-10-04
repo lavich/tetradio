@@ -1,34 +1,24 @@
 import type { Card, Grade } from "ts-fsrs";
 import type { PackageItem, PackageMarks, PackageMedia, PackageWord, PackagePhrase } from "../content/schema";
 import type { CatalogModule, CourseExam, LessonBlock, LessonKind } from "../content/course";
+import type { CardKind, Example, Segment } from "./card-fields.ts";
+
+// Значение загружает и Node при сборке контента, поэтому путь с расширением.
+export { CARD_KINDS } from "./card-fields.ts";
+export type {
+  CardKind,
+  Example,
+  Gloss,
+  Provenance,
+  ProvenanceOperation,
+  Segment,
+  SourceRecord,
+} from "./card-fields.ts";
 /**
  * Типы проверки. `listening` — узнавание написания на слух, `comprehension` — понимание значения на слух.
  * `recall` и `cloze` приложение больше не предлагает; в перечислении они нужны, чтобы читалась старая история.
  */
 export type ExerciseType = "recall" | "recognition" | "assembly" | "spelling" | "listening" | "comprehension" | "cloze";
-/**
- * Размеченный отрезок примера: `start` и `length` — в NFC-строке предложения, `russian` — перевод в этом контексте.
- * `wordId` — ссылка на карточку курса; у служебных слов её нет.
- */
-export interface Gloss {
-  start: number;
-  length: number;
-  russian: string;
-  wordId?: string;
-}
-export interface Example {
-  greek: string;
-  russian: string;
-  target: string;
-  source?: string;
-  glosses?: Gloss[];
-}
-export interface Segment {
-  text: string;
-  ipa: string;
-  explanation: string;
-  start: number;
-}
 /** `revision` — ревизия поставленного пакетом содержимого: по ней установка пропускает неизменные карточки. */
 export interface Word {
   id: string;
@@ -49,34 +39,10 @@ export interface Word {
   revision?: string;
 }
 
-/**
- * Виды планируемых карточек. Это набор поддерживаемых планировщиком карточек, а не закрытая
- * таксономия языкового знания. В отличие от `ExerciseType`, снятый вид отсюда уходит: перечисление
- * описывает то, что планировщик выдаёт сейчас, и лишний вид дал бы пустую группу на каждом экране.
- */
-export type CardKind = "word" | "phrase";
-export const CARD_KINDS: readonly CardKind[] = ["word", "phrase"];
 /** Ссылка на планируемую карточку: одинаковые ID разных видов — разные единицы повторения. */
 export interface LearningRef {
   kind: CardKind;
   id: string;
-}
-/** Происхождение подготовленного агентом материала; `request` обязателен для запрошенных преобразования и генерации. */
-export type ProvenanceOperation = "verbatim" | "requested-transform" | "requested-generation";
-export interface SourceRecord {
-  sourceLabel: string;
-  locator?: string;
-  excerpt?: string;
-  operation: ProvenanceOperation;
-  request?: string;
-}
-/**
- * Происхождение карточки. `parts` — происхождение отдельных полей (например, `translation`), когда оно
- * отличается от основного текста: скажем, перевод взят из другого места материала. Вложенность одного
- * уровня: у части своих частей нет.
- */
-export interface Provenance extends SourceRecord {
-  parts?: Record<string, SourceRecord>;
 }
 /** Готовая языковая единица: приветствие, выражение, вопрос или предложение. Имена полей языково-нейтральны. */
 export interface Phrase {
