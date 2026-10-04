@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode, type Ref } from "react";
+import { createContext, useContext, useState, type ReactNode, type Ref } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -190,20 +190,6 @@ export function DoneList({
       )}
     </section>
   );
-}
-
-const WIDE = "(min-width: 900px)";
-/** Две колонки от 900 px: там список сделанного не сворачивается. */
-export function useWide() {
-  const [wide, setWide] = useState(() => typeof matchMedia === "function" && matchMedia(WIDE).matches);
-  useEffect(() => {
-    if (typeof matchMedia !== "function") return;
-    const query = matchMedia(WIDE);
-    const change = () => setWide(query.matches);
-    query.addEventListener("change", change);
-    return () => query.removeEventListener("change", change);
-  }, []);
-  return wide;
 }
 
 /**

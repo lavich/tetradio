@@ -1,6 +1,6 @@
 import { SKILLS, type Skill } from "../content/course";
 import { testResult } from "../domain/course";
-import { addDays, localDay } from "../domain/learning";
+import { localDay, mondayOf } from "../domain/learning";
 import { coursePace, withCoverage, type Pace, type SkillReadiness } from "../domain/progress";
 import type { BlockProgress } from "../domain/types";
 import { lessonDays, moduleViews, type ModuleView } from "./course";
@@ -23,7 +23,7 @@ const lessonsOf = (view: ModuleView) => [
 
 export async function courseProgress(now: Date, timezone: string, database: AppDatabase = db): Promise<CourseProgress> {
   const today = localDay(now, timezone);
-  const monday = addDays(today, -((new Date(`${today}T12:00:00Z`).getUTCDay() + 6) % 7));
+  const monday = mondayOf(today);
   const views = await moduleViews(undefined, database);
   const ids = views.flatMap((view) => lessonsOf(view).map((lesson) => lesson.id));
   const [packs, lessons, rows] = await Promise.all([

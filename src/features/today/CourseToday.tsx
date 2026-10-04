@@ -3,31 +3,23 @@ import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { localDay, type DailyPlan } from "../../domain/learning";
+import { localDay, mondayOf, type DailyPlan } from "../../domain/learning";
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
 import { coverColor, greekDate } from "../../shared/notebook";
-import { useSpread } from "../../shared/spread";
+import { useSpread } from "../../shared/media";
+import nb from "../../shared/notebook.module.css";
 import { useSettings } from "../../shared/store";
 import { Tick } from "../../shared/Tick";
+import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import { lessonDays, moduleViews, reviewedOn, type ModuleLessonView, type ModuleView } from "../../storage/course";
 import { dexieSource } from "../../storage/queries";
 import { ExamLine } from "../course/ExamLine";
 import { startSession } from "../learning/session-actions";
 import { DayNotes } from "./DayNotes";
 import css from "./today.module.css";
-
-const shiftDay = (day: string, days: number) => {
-  const date = new Date(`${day}T12:00:00Z`);
-  date.setUTCDate(date.getUTCDate() + days);
-  return date.toISOString().slice(0, 10);
-};
-const mondayOf = (day: string) => shiftDay(day, -((new Date(`${day}T12:00:00Z`).getUTCDay() + 6) % 7));
-const WEEKDAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-/** Ориентир курса — 2–3 занятия в неделю; клеток недели не меньше трёх. */
-const WEEK_PLAN = 3;
 
 /**
  * «Сегодня» курса — страница тетради с двумя ритмами: повторение каждый день, урок 2–3 раза в неделю.
@@ -55,8 +47,8 @@ export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: D
   if (!views || reviewed === undefined || !week) return <div aria-busy="true" aria-label="План дня загружается" />;
 
   const page = (
-    <section className={css.page}>
-      <p className={css.date} lang="el">
+    <section className={cx(nb.page, css.page)}>
+      <p className={nb.date} lang="el">
         {greekDate(today)}
       </p>
       <h1 className="sr-only" data-testid="today-title">
@@ -92,7 +84,7 @@ export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: D
   );
   if (!spread || !next) return page;
   return (
-    <div className={css.spread}>
+    <div className={cx(nb.spread, nb.spine, css.spread)}>
       {page}
       <ModulePage view={next.view} current={next.lesson.id} week={week ?? []} monday={monday} today={today} />
     </div>
@@ -159,7 +151,7 @@ function Review({
           <div className="min-w-0">
             <h2 className={css.sheetTitle}>{unfinished ? "Повторение не закончено" : "Повторение"}</h2>
             {!unfinished && (
-              <p className={css.meta} data-testid="cards-today">
+              <p className={nb.meta} data-testid="cards-today">
                 {[
                   fresh && withCount(fresh, ["новая", "новые", "новых"]),
                   reviews && withCount(reviews, ["повторение", "повторения", "повторений"]),
@@ -185,15 +177,15 @@ function Review({
         <div className="min-w-0">
           <h2 className={cx(css.sheetTitle, !last && css.later)}>Повторение</h2>
           {reviewed ? (
-            <p className={css.meta} data-testid="day-done">
+            <p className={nb.meta} data-testid="day-done">
               {withCount(reviewed, ["карточка", "карточки", "карточек"])} сегодня
             </p>
           ) : last ? (
-            <p className={css.meta} data-testid="day-done">
+            <p className={nb.meta} data-testid="day-done">
               На сегодня карточек нет
             </p>
           ) : (
-            <p className={css.meta} data-testid="cards-later">
+            <p className={nb.meta} data-testid="cards-later">
               Карточки появятся после первого пройденного урока
             </p>
           )}
@@ -249,7 +241,7 @@ function LessonNext({
         {lesson.installed ? (
           <Cells done={lesson.tally.done} total={lesson.tally.total} />
         ) : (
-          <span className={css.meta}>урок скачается при открытии</span>
+          <span className={nb.meta}>урок скачается при открытии</span>
         )}
         {week !== undefined && (
           <span className={css.week}>
@@ -287,9 +279,9 @@ function ModulePage({
   const rows = [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : []), ...view.review];
   let lessonNumber = 0;
   return (
-    <section className={css.page} aria-label={`Модуль ${module.number}`}>
-      <p className={cx(css.date, css.left)}>Модуль {String(module.number).padStart(2, "0")}</p>
-      <h2 className={css.moduleTitle} lang="el">
+    <section className={cx(nb.page, css.page)} aria-label={`Модуль ${module.number}`}>
+      <p className={cx(nb.date, css.left)}>Модуль {String(module.number).padStart(2, "0")}</p>
+      <h2 className={nb.title} lang="el">
         {module.title}
       </h2>
       <ol className={css.toc}>
@@ -308,22 +300,13 @@ function ModulePage({
         ))}
       </ol>
       <div className={css.weekRow}>
-        <span className={css.meta}>эта неделя</span>
-        <span className={css.days}>
-          {WEEKDAYS.map((name, index) => {
-            const day = shiftDay(monday, index);
-            const done = week.includes(day);
-            return (
-              <i
-                key={name}
-                className={cx(css.day, done && css.dayDone, day === today && css.dayToday)}
-                aria-label={`${name}${done ? ": занятие" : ""}`}
-              >
-                {name}
-              </i>
-            );
-          })}
-        </span>
+        <span className={nb.meta}>эта неделя</span>
+        <WeekStrip
+          monday={monday}
+          today={today}
+          lessons={week}
+          label={(name, lesson) => `${name}${lesson ? ": занятие" : ""}`}
+        />
       </div>
     </section>
   );

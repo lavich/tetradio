@@ -12,7 +12,8 @@ import { stopAudio, useGreekVoice } from "../../shared/audio";
 import { useSettings } from "../../shared/store";
 import { db } from "../../storage/db";
 import { ExerciseView, type Answer } from "../learning/exercises";
-import { SessionShell, useWide } from "../learning/notebook";
+import { useWide } from "../../shared/media";
+import { SessionShell } from "../learning/notebook";
 import { EXERCISE_LABELS, isWordExercise, wordSources } from "./word-exercises";
 import ui from "../../shared/ui.module.css";
 

@@ -11,7 +11,8 @@ import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform
 import { db } from "../../storage/db";
 import { ConflictError, endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
 import { ExerciseView, Introduction, type Answer } from "./exercises";
-import { compositionLine, DoneList, doneRows, PageHead, SessionShell, useWide } from "./notebook";
+import { useWide } from "../../shared/media";
+import { compositionLine, DoneList, doneRows, PageHead, SessionShell } from "./notebook";
 import { useFold } from "./useFold";
 import ui from "../../shared/ui.module.css";
 import s from "./session.module.css";

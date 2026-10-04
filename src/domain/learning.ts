@@ -1,4 +1,4 @@
-export { addDays, formatDay, localDay, zonedStart } from "./time";
+export { addDays, formatDay, localDay, mondayOf, zonedStart } from "./time";
 export {
   isCheckable,
   makePlan,
