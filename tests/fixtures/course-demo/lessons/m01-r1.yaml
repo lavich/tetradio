@@ -15,3 +15,20 @@ blocks:
         prompt: Εμείς ___ φίλοι.
         options: [είμαστε, είναι]
         answer: είμαστε
+  - type: exercise
+    id: pairs
+    title: Кто и какая форма
+    instruction: Соедините местоимение с формой είμαι. Одна форма лишняя.
+    format: match
+    bank: [είμαι, είσαι, είναι, είμαστε]
+    items:
+      - id: m1
+        prompt: εγώ
+        answer: είμαι
+      - id: m2
+        prompt: εσύ
+        answer: είσαι
+      - id: m3
+        prompt: εμείς
+        answer: είμαστε
+        explanation: εμείς — мы.

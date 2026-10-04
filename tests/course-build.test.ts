@@ -268,6 +268,69 @@ describe("задания и ключи ответов", () => {
   });
 });
 
+describe("соединение (match)", () => {
+  const match = {
+    type: "exercise",
+    id: "phrases-match",
+    instruction: "Соедините русскую фразу с греческой. Одна лишняя.",
+    format: "match",
+    bank: ["Γεια σου!", "Με λένε Άννα.", "Τα λέμε!"],
+    items: [
+      { id: "m1", prompt: "Привет!", answer: "Γεια σου!" },
+      { id: "m2", prompt: "Меня зовут Анна.", answer: ["Με λένε Άννα."], explanation: "λένε — «называют»" },
+    ],
+  };
+  const withMatch = (patch: Record<string, unknown> = {}) => withLesson((b) => [...b, { ...match, ...patch }]);
+  const item = (patch: Record<string, unknown>) => ({ items: [{ ...match.items[0], ...patch }, match.items[1]] });
+
+  it("публикуется с банком, ключом из одного варианта и без вариантов у пунктов", () => {
+    const pack = parsePackage(JSON.parse(JSON.stringify(build(withMatch()).packages[0])));
+    expect(pack.blocks!.find((b) => b.id === "phrases-match")).toEqual({
+      type: "exercise",
+      id: "phrases-match",
+      instruction: match.instruction,
+      format: "match",
+      bank: match.bank,
+      items: [
+        { id: "m1", prompt: "Привет!", answer: ["Γεια σου!"] },
+        { id: "m2", prompt: "Меня зовут Анна.", answer: ["Με λένε Άννα."], explanation: "λένε — «называют»" },
+      ],
+    });
+  });
+  it("банк ровно из ответов — допустим", () => {
+    expect(() => build(withMatch({ bank: ["Γεια σου!", "Με λένε Άννα."] }))).not.toThrow();
+  });
+  it("вариантов в банке меньше, чем пунктов, — ошибка с путём к банку", () => {
+    const message = failure(
+      withMatch({
+        bank: ["Γεια σου!", "Με λένε Άννα."],
+        items: [...match.items, { id: "m3", prompt: "Привет!", answer: "Γεια σου!" }],
+      }),
+    );
+    expect(message).toContain("lessons/m01-1.yaml");
+    expect(message).toContain(".bank: вариантов меньше, чем пунктов");
+  });
+  it("без банка — ошибка", () => {
+    expect(failure(withMatch({ bank: undefined }))).toContain("у задания match нужен банк вариантов");
+  });
+  it("ответ не из банка или несколько ответов — ошибка", () => {
+    expect(failure(withMatch(item({ answer: "Καλημέρα!" })))).toContain(
+      "items[0].answer: ответ должен быть одним из вариантов банка",
+    );
+    expect(failure(withMatch(item({ answer: ["Γεια σου!", "Τα λέμε!"] })))).toContain(
+      "ответ должен быть одним из вариантов банка",
+    );
+  });
+  it("варианты у пункта, повтор в банке и повтор пункта — ошибки", () => {
+    expect(failure(withMatch(item({ options: match.bank })))).toContain("варианты бывают только у choice");
+    expect(failure(withMatch({ bank: [...match.bank, "Τα λέμε!"] }))).toContain("«Τα λέμε!» повторяется");
+    expect(failure(withMatch(item({ id: "m2" })))).toContain("«m2» повторяется");
+  });
+  it("пустое задание — ошибка", () => {
+    expect(failure(withMatch({ items: [] }))).toContain("в задании нет пунктов");
+  });
+});
+
 describe("контрольные точки", () => {
   const withPoint = (extra: Files = {}): Files => {
     const files = base();
