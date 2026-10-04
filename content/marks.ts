@@ -333,10 +333,12 @@ export function lessonMarks({ blocks, matcher, own, rank }: LessonMarksInput) {
         spans.sort((a, b) => a.start - b.start);
       } else spans = choose(found, order, report);
       if (!spans.length) continue;
+      // Таблица — справочник: в ней подчёркнуто каждое слово урока, правило первого вхождения — для текста.
+      const table = field.startsWith("table.");
       (out[block.id] ??= {})[field] = spans.map((span): WordMark => {
         const lesson = own.has(span.ref);
-        const first = lesson && !seen.has(span.ref);
-        seen.add(span.ref);
+        const first = lesson && (table || !seen.has(span.ref));
+        if (!table) seen.add(span.ref);
         return { ...span, kind: lesson ? "lesson" : "earlier", first };
       });
     }
