@@ -14,8 +14,6 @@ const NO_VOICE = `Object.defineProperty(window,'speechSynthesis',{configurable:t
  getVoices:()=>[],speak(){},cancel(){},addEventListener(){},removeEventListener(){},
 }});`;
 
-const tomorrow = () => new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-const today = () => new Date().toISOString().slice(0, 10);
 /** Тексты фикстуры: письменный ответ вводится целиком, из интерфейса до ответа он недоступен. */
 const TEXTS: Record<string, string> = {
   "Я пишу письмо.": "Γράφω ένα γράμμα.",
@@ -47,13 +45,13 @@ async function lastUnanswered(page: Page) {
   return open.length <= 1 && session.items.length > open.length;
 }
 
-/** Установленный урок 1.1 даёт слово фикстуры; смешанный урок получает ближайшую дату, поэтому его карточки идут первыми. */
+/** Установленный урок 1.1 даёт слово фикстуры; пройден только смешанный урок, поэтому новые карточки — его. */
 async function prepare(page: Page, limit: number, options: Parameters<typeof seedMixedLesson>[1] = {}) {
   await page.goto("/");
   await ready(page);
   await installLessons(page, ["mech-1"]);
   await setCourseLimit(page, "mechanics", limit);
-  return seedMixedLesson(page, { targetDate: tomorrow(), ...options });
+  return seedMixedLesson(page, options);
 }
 
 test("фразы смешанного урока — в словаре вместе со словами", async ({ page }) => {
@@ -286,7 +284,7 @@ test("внутри Telegram: возврат из свёрнутого клиен
   const TG_DB = "tetradio-tg-tetradio_local-1001";
   await onlyReviews(page);
   await setCourseLimit(page, "mechanics", 2, TG_DB);
-  await seedMixedLesson(page, { targetDate: today(), only: ["p-grafo", "p-xora"], databaseName: TG_DB });
+  await seedMixedLesson(page, { only: ["p-grafo", "p-xora"], databaseName: TG_DB });
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   // Знакомства проходим, дальше берём первое же задание: тип выбирает планировщик.

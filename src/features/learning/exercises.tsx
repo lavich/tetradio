@@ -51,8 +51,8 @@ function useRevealed(active: boolean, block: ScrollLogicalPosition = "start") {
   return ref;
 }
 
-export const lessonLabel = (item: Pick<SessionItem, "lessonTitle" | "lessonPast">) =>
-  item.lessonTitle ? `${item.lessonPast ? "Хвост урока" : "К уроку"} ${shortTitle(item.lessonTitle)}` : null;
+export const lessonLabel = (item: Pick<SessionItem, "lessonTitle">) =>
+  item.lessonTitle ? `Хвост урока ${shortTitle(item.lessonTitle)}` : null;
 /** Слово карточки; для других видов упражнения слов не создаются. */
 const wordOf = (card: SessionCard): Word => {
   if (card.kind !== "word") throw new Error("Упражнение для слова получило другую карточку");
@@ -269,7 +269,7 @@ export function Introduction({
   saving = false,
   autoSpeak = false,
 }: {
-  item: Pick<SessionItem, "card" | "lessonTitle" | "lessonPast">;
+  item: Pick<SessionItem, "card" | "lessonTitle">;
   onReady: () => void;
   saving?: boolean;
   autoSpeak?: boolean;

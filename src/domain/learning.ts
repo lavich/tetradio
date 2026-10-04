@@ -1,17 +1,16 @@
 import { createEmptyCard, fsrs, generatorParameters, Rating, State, type Card, type Grade } from "ts-fsrs";
+import type { CatalogModule } from "../content/course";
 import type { TextAnswerStatus } from "./text-answer";
-import { unitKey, wordRef } from "./refs";
+import { unitKey } from "./refs";
 import { emptySkills, summarizeEvents, type SkillSummary } from "./skills";
 import { splitWriting } from "./syllables";
 import {
-  fillSchedule,
-  LOCAL_COURSE,
   type CardKind,
-  type Course,
   type ExerciseType,
   type LearningRef,
   type LearningState,
   type Lesson,
+  type LessonItem,
   type Phrase,
   type ReviewEvent,
   type Session,
@@ -42,26 +41,8 @@ export function localDay(date: Date, timezone: string): string {
   const get = (type: string) => parts.find((p) => p.type === type)!.value;
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
-export function localHour(date: Date, timezone: string): number {
-  return Number(
-    new Intl.DateTimeFormat("en-GB", { timeZone: timezone, hour: "2-digit", hourCycle: "h23" }).format(date),
-  );
-}
-/** Разница календарных дней; переход летнего времени не сдвигает результат. */
-export function daysBetween(from: string, to: string): number {
-  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86400000);
-}
 export const addDays = (day: string, count: number) =>
   new Date(Date.parse(`${day}T00:00:00Z`) + count * 86400000).toISOString().slice(0, 10);
-/**
- * Последний день, занятия которого уже считаются прошедшими: подготовка кончается в час занятия курса,
- * а не в полночь. Час входит в систему только здесь и сразу превращается обратно в день, поэтому
- * остальное планирование остаётся сравнением дат.
- */
-export function preparedThrough(now: Date, timezone: string, lessonHour: number): string {
-  const today = localDay(now, timezone);
-  return localHour(now, timezone) >= lessonHour ? today : addDays(today, -1);
-}
 export const formatDay = (day: string) =>
   new Date(`${day}T12:00:00Z`).toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "UTC" });
 /** Момент начала календарного дня в зоне; переход летнего времени учитывается повторным расчётом смещения. */
@@ -87,59 +68,19 @@ export function zonedStart(day: string, timezone: string): Date {
   return new Date(guess.getTime() - offset(first));
 }
 
-export interface DeadlinePlan {
-  lessonId: string;
-  title: string;
-  targetDate: string;
-  daysLeft: number;
-  newLeft: number;
-  requiredPerDay: number;
-}
-/** Хвост прошедших занятий: карточки, до которых очередь не дошла, пока урок был впереди. */
-export interface Backlog {
-  refs: LearningRef[];
-  lessons: number;
-}
-/** Откуда взята новая карточка; у слова из скана словаря источника нет. */
 export interface WordOrigin {
   lessonId: string;
   title: string;
-  past: boolean;
 }
-/**
- * План одного курса: свой предел, своя очередь и свой срок — курсы не делят их между собой.
- * `unavailable` — новые карточки без доступного объективного упражнения: видны отдельно, квоту и темп не расходуют.
- */
-export interface CoursePlan {
-  courseId: string;
-  title: string;
-  newItemsPerDay: number;
-  budget: number;
-  introducedToday: number;
-  newRefs: LearningRef[];
-  requiredPerDay: number;
-  shortfall: boolean;
-  deadlines: DeadlinePlan[];
-  backlog: Backlog;
-  origins: Map<string, WordOrigin>;
-  unavailable: LearningRef[];
-  /** Карточки ближайшего занятия, которые уже вводили, а срок ещё не наступил: подготовка к уроку. */
-  preview: LearningRef[];
-}
+/** `unavailable` — новые карточки без доступного объективного упражнения: видны отдельно, предел не расходуют. */
 export interface DailyPlan {
   today: string;
-  requiredPerDay: number;
   budget: number;
   introducedToday: number;
   newRefs: LearningRef[];
   reviews: { ref: LearningRef; state: LearningState }[];
-  deadlines: DeadlinePlan[];
-  shortfall: boolean;
-  backlog: Backlog;
-  courses: CoursePlan[];
   origins: Map<string, WordOrigin>;
   unavailable: LearningRef[];
-  preview: LearningRef[];
 }
 
 /** Лёгкие признаки доступности проверки: для фразы — наличие перевода и файла аудио; слово проверяемо всегда. */
@@ -161,34 +102,53 @@ export const isCheckable = (facts: CardFacts, context: AvailabilityContext) =>
   !!facts.hasTranslation ||
   ((!!facts.hasAudio || context.hasVoice) && context.phrasePool >= 4);
 
+export interface PlanLesson {
+  id: string;
+  title: string;
+}
+type ProgrammeModule = Pick<CatalogModule, "number" | "lessonIds" | "checkpointId" | "reviewIds">;
 /**
- * Источник данных планировщика: ограниченные выборки вместо полного снимка.
- * Уроки приходят с датами по расписанию в порядке первичного ключа; списки карточек уроков — в порядке связей.
- * Все карты ключуются `unitKey`.
+ * Порядок программы: модуль по номеру, в нём уроки, контрольная и повторение.
+ * Уроки вне модулей идут после, по месту в каталоге, затем по id.
  */
+export function programmeOrder(
+  lessons: Lesson[],
+  modules: ProgrammeModule[],
+  position: (lessonId: string) => number | undefined,
+): PlanLesson[] {
+  const programme = new Map<string, number>();
+  for (const module of [...modules].sort((a, b) => a.number - b.number))
+    for (const id of [
+      ...module.lessonIds,
+      ...(module.checkpointId ? [module.checkpointId] : []),
+      ...(module.reviewIds ?? []),
+    ])
+      if (!programme.has(id)) programme.set(id, programme.size);
+  const rank = (id: string) => programme.get(id) ?? programme.size + (position(id) ?? Number.MAX_SAFE_INTEGER);
+  return [...lessons]
+    .sort((a, b) => rank(a.id) - rank(b.id) || a.id.localeCompare(b.id))
+    .map((lesson) => ({ id: lesson.id, title: lesson.title }));
+}
+/** Источник данных планировщика: ограниченные выборки вместо полного снимка. Все карты ключуются `unitKey`. */
 export interface PlanSource {
   settings(): Promise<Settings>;
-  lessons(): Promise<Lesson[]>;
-  courses(): Promise<Course[]>;
+  newItemsPerDay(): Promise<number>;
+  /** Пройденные уроки в порядке программы. */
+  completedLessons(): Promise<PlanLesson[]>;
+  /** Связи перечисленных уроков одной выборкой, в любом порядке. */
+  itemsOf(lessonIds: string[]): Promise<LessonItem[]>;
   lessonRefs(lessonId: string): Promise<LearningRef[]>;
-  /** Введённые сегодня карточки в разрезе курсов: карточка из двух курсов считается каждому. */
-  introducedTodayByCourse(today: string, timezone: string): Promise<Map<string, number>>;
+  introducedToday(today: string, timezone: string): Promise<number>;
   statesOf(refs: LearningRef[]): Promise<Map<string, LearningState>>;
   /** Ключи существующих и не удалённых карточек. */
   liveKeys(refs: LearningRef[]): Promise<Set<string>>;
   /** Удалённых карточек мало: их множество дешевле, чем проверять существование тысяч срочных повторений. */
   deletedKeys(): Promise<Set<string>>;
   dueStates(now: Date): Promise<LearningState[]>;
-  /** Слова вне уроков добираются сканом словаря: пользовательские наборы состоят только из слов. */
-  scanLiveWordIds(after: string | null, limit: number): Promise<string[]>;
-  /** Карточки, входящие хоть в один урок. */
-  lessonBoundKeys(refs: LearningRef[]): Promise<Set<string>>;
   /** Признаки доступности упражнения для перечисленных карточек; тексты при этом не нужны. */
   factsOf(refs: LearningRef[]): Promise<Map<string, CardFacts>>;
   /** Число живых фраз: достаточность пула вариантов для аудирования фраз. */
   phraseCount(): Promise<number>;
-  /** Курсы из модулей: их карточки приходят только из пройденных уроков, по порядку программы. */
-  modularCourseIds?(): Promise<Set<string>>;
 }
 export interface SessionSource extends PlanSource {
   /** Полное содержимое только выбранных карточек. */
@@ -204,7 +164,6 @@ export interface SessionSource extends PlanSource {
 export const OPTION_POOL = 48;
 /** Соседи по уроку — не дальше шести позиций в каждую сторону: близкие слова ограничены и в большом уроке. */
 export const LESSON_MATES_RADIUS = 6;
-const SCAN = 200;
 
 export interface PlanOptions {
   hasVoice?: boolean;
@@ -213,159 +172,45 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
   const settings = await source.settings();
   const timezone = settings.timezone;
   const today = localDay(now, timezone);
-  const [lessons, courses, introduced, phrasePool, modular] = await Promise.all([
-    source.lessons(),
-    source.courses(),
-    source.introducedTodayByCourse(today, timezone),
+  const [lessons, limit, introducedToday, phrasePool] = await Promise.all([
+    source.completedLessons(),
+    source.newItemsPerDay(),
+    source.introducedToday(today, timezone),
     source.phraseCount(),
-    source.modularCourseIds?.() ?? new Set<string>(),
   ]);
   const availability: AvailabilityContext = { hasVoice: !!options.hasVoice, phrasePool };
+  const budget = Math.max(0, limit - introducedToday);
 
-  const order = (a: Lesson, b: Lesson) =>
-    (a.targetDate ?? "").localeCompare(b.targetDate ?? "") ||
-    a.createdAt.localeCompare(b.createdAt) ||
-    a.id.localeCompare(b.id);
-  const grouped = new Map<string, Lesson[]>();
-  for (const lesson of lessons) {
-    const key = lesson.courseId ?? LOCAL_COURSE;
-    (grouped.get(key) ?? grouped.set(key, []).get(key)!).push(lesson);
+  const rank = new Map(lessons.map((lesson, index) => [lesson.id, index]));
+  const items = (await source.itemsOf(lessons.map((lesson) => lesson.id))).sort(
+    (a, b) =>
+      rank.get(a.lessonId)! - rank.get(b.lessonId)! || a.position - b.position || a.unitKey.localeCompare(b.unitKey),
+  );
+  const firstLesson = new Map<string, string>();
+  const refs: LearningRef[] = [];
+  for (const item of items) {
+    if (firstLesson.has(item.unitKey)) continue;
+    firstLesson.set(item.unitKey, item.lessonId);
+    refs.push(item.ref);
   }
-
-  const plans: CoursePlan[] = [];
-  for (const course of courses) {
-    const own = grouped.get(course.id) ?? [];
-    if (!own.length && course.id !== LOCAL_COURSE) continue;
-    const introducedToday = introduced.get(course.id) ?? 0;
-    const budget = Math.max(0, course.newItemsPerDay - introducedToday);
-    const prepared = preparedThrough(now, timezone, fillSchedule(course.schedule).lessonHour);
-    const past = own.filter((l) => l.status === "completed" || (l.targetDate && l.targetDate <= prepared)).sort(order);
-    const upcoming = own.filter((l) => l.targetDate && l.status !== "completed" && l.targetDate > prepared).sort(order);
-
-    const seen = new Set<string>();
-    const deadlines: DeadlinePlan[] = [];
-    const origins = new Map<string, WordOrigin>();
-    const unavailable: LearningRef[] = [];
-    /** Новые живые карточки списка без состояния; непроверяемые отделяются и в счёт квоты не идут. */
-    const fresh = async (refs: LearningRef[]) => {
-      const unseen = refs.filter((ref) => !seen.has(unitKey(ref)));
-      const [live, states] = await Promise.all([source.liveKeys(unseen), source.statesOf(unseen)]);
-      const candidates = unseen.filter((ref) => live.has(unitKey(ref)) && !states.has(unitKey(ref)));
-      const facts = await source.factsOf(candidates.filter((ref) => ref.kind === "phrase"));
-      return candidates.filter((ref) => {
-        if (ref.kind !== "phrase") return true;
-        const info = facts.get(unitKey(ref));
-        if (info && isCheckable(info, availability)) return true;
-        if (!seen.has(unitKey(ref))) {
-          seen.add(unitKey(ref));
-          unavailable.push(ref);
-        }
-        return false;
-      });
-    };
-    /** `into` — куда класть карточки; `null` значит «только посчитать для срока», карточка при этом занята и заново не всплывёт. */
-    const take = async (lesson: Lesson, into: LearningRef[] | null, isPast: boolean) => {
-      let added = 0;
-      for (const ref of await fresh(await source.lessonRefs(lesson.id))) {
-        const key = unitKey(ref);
-        if (seen.has(key)) continue;
-        seen.add(key);
-        added++;
-        if (!into) continue; // карточка дальнего занятия: в счёт срока входит, сегодня не показывается
-        into.push(ref);
-        origins.set(key, { lessonId: lesson.id, title: lesson.title, past: isPast });
-      }
-      return added;
-    };
-    // Очередь ведёт ближайшее занятие: его карточки идут раньше хвоста, а хвост в счёт срока не входит.
-    // Карточки дальних занятий считаются для их сроков, но ждут, пока их занятие само станет ближайшим.
-    const dated: LearningRef[] = [];
-    let counted = 0;
-    for (const [index, lesson] of upcoming.entries()) {
-      counted += await take(lesson, index === 0 ? dated : null, false);
-      const daysLeft = Math.max(1, daysBetween(today, lesson.targetDate!));
-      deadlines.push({
-        lessonId: lesson.id,
-        title: lesson.title,
-        targetDate: lesson.targetDate!,
-        daysLeft: daysBetween(today, lesson.targetDate!),
-        newLeft: counted,
-        requiredPerDay: Math.ceil(counted / daysLeft),
-      });
-    }
-    const overdue: LearningRef[] = [];
-    const overdueLessons = new Set<string>();
-    for (const lesson of past) if (await take(lesson, overdue, true)) overdueLessons.add(lesson.id);
-    const picked = [...dated, ...overdue];
-    // Курс из модулей не забегает вперёд: карточки непройденного урока ждут самого урока.
-    if (picked.length < budget && !modular.has(course.id)) {
-      for (const lesson of own) {
-        if (picked.length >= budget) break;
-        await take(lesson, picked, false);
-      }
-      // Слово вне уроков принадлежит только локальному курсу; карточка урока ведёт очередь его курса.
-      if (course.id === LOCAL_COURSE) {
-        let cursor: string | null = null;
-        while (picked.length < budget) {
-          const chunk = await source.scanLiveWordIds(cursor, SCAN);
-          if (!chunk.length) break;
-          const unseen = chunk.map(wordRef).filter((ref) => !seen.has(unitKey(ref)));
-          const [states, bound] = await Promise.all([source.statesOf(unseen), source.lessonBoundKeys(unseen)]);
-          for (const ref of unseen) {
-            const key = unitKey(ref);
-            if (!states.has(key) && !bound.has(key)) {
-              seen.add(key);
-              picked.push(ref);
-            }
-          }
-          cursor = chunk[chunk.length - 1];
-        }
-      }
-    }
-    // Подготовка к ближайшему занятию: карточка уже введена, а срок ещё не наступил — повторением она сегодня не станет.
-    const nearest = upcoming[0];
-    const preview: LearningRef[] = [];
-    if (nearest) {
-      const refs = await source.lessonRefs(nearest.id);
-      const [live, states] = await Promise.all([source.liveKeys(refs), source.statesOf(refs)]);
-      const ready = refs.flatMap((ref) => {
-        const state = states.get(unitKey(ref));
-        return live.has(unitKey(ref)) && state && new Date(state.card.due).getTime() > now.getTime() ? [state] : [];
-      });
-      ready.sort(
-        (a, b) =>
-          stateRank(a.card) - stateRank(b.card) ||
-          a.card.scheduled_days - b.card.scheduled_days ||
-          new Date(a.card.due).getTime() - new Date(b.card.due).getTime() ||
-          a.unitKey.localeCompare(b.unitKey),
-      );
-      preview.push(...ready.map((state) => state.ref));
-    }
-    const requiredPerDay = deadlines.reduce((max, d) => Math.max(max, d.requiredPerDay), 0);
-    plans.push({
-      courseId: course.id,
-      title: course.title,
-      newItemsPerDay: course.newItemsPerDay,
-      budget,
-      introducedToday,
-      newRefs: picked.slice(0, budget),
-      requiredPerDay,
-      shortfall: requiredPerDay > course.newItemsPerDay,
-      deadlines,
-      backlog: { refs: overdue, lessons: overdueLessons.size },
-      origins,
-      unavailable,
-      preview,
-    });
+  const [live, states] = await Promise.all([source.liveKeys(refs), source.statesOf(refs)]);
+  const candidates = refs.filter((ref) => live.has(unitKey(ref)) && !states.has(unitKey(ref)));
+  const facts = await source.factsOf(candidates.filter((ref) => ref.kind === "phrase"));
+  const fresh: LearningRef[] = [];
+  const unavailable: LearningRef[] = [];
+  for (const ref of candidates) {
+    const info = ref.kind === "phrase" ? facts.get(unitKey(ref)) : undefined;
+    if (ref.kind !== "phrase" || (info && isCheckable(info, availability))) fresh.push(ref);
+    else unavailable.push(ref);
   }
-
-  // Курсы идут по ближайшему сроку: карточки к завтрашнему занятию попадают в сессию раньше.
-  const soonest = (plan: CoursePlan) => plan.deadlines[0]?.targetDate ?? "￿";
-  plans.sort((a, b) => soonest(a).localeCompare(soonest(b)) || a.courseId.localeCompare(b.courseId));
-
-  const uniqueRefs = (refs: LearningRef[]) => [...new Map(refs.map((ref) => [unitKey(ref), ref])).values()];
-  const newRefs = uniqueRefs(plans.flatMap((plan) => plan.newRefs));
-  const backlogRefs = uniqueRefs(plans.flatMap((plan) => plan.backlog.refs));
+  const newRefs = fresh.slice(0, budget);
+  const titles = new Map(lessons.map((lesson) => [lesson.id, lesson.title]));
+  const origins = new Map(
+    newRefs.map((ref) => {
+      const lessonId = firstLesson.get(unitKey(ref))!;
+      return [unitKey(ref), { lessonId, title: titles.get(lessonId)! }];
+    }),
+  );
 
   const [due, deleted] = await Promise.all([source.dueStates(now), source.deletedKeys()]);
   const reviews = due
@@ -378,22 +223,7 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     )
     .map((s) => ({ ref: s.ref, state: s }));
 
-  return {
-    today,
-    requiredPerDay: plans.reduce((max, plan) => Math.max(max, plan.requiredPerDay), 0),
-    budget: plans.reduce((sum, plan) => sum + plan.budget, 0),
-    introducedToday: plans.reduce((sum, plan) => sum + plan.introducedToday, 0),
-    newRefs,
-    reviews,
-    deadlines: plans.flatMap((plan) => plan.deadlines).sort((a, b) => a.targetDate.localeCompare(b.targetDate)),
-    shortfall: plans.some((plan) => plan.shortfall),
-    backlog: { refs: backlogRefs, lessons: plans.reduce((sum, plan) => sum + plan.backlog.lessons, 0) },
-    courses: plans,
-    // Карточка из двух курсов подписывается уроком курса с ближайшим сроком.
-    origins: new Map(plans.flatMap((plan) => [...plan.origins]).reverse()),
-    unavailable: uniqueRefs(plans.flatMap((plan) => plan.unavailable)),
-    preview: uniqueRefs(plans.flatMap((plan) => plan.preview)),
-  };
+  return { today, budget, introducedToday, newRefs, reviews, origins, unavailable };
 }
 
 const ORDER: ExerciseType[] = ["recognition", "assembly", "spelling", "listening", "comprehension"];
@@ -646,7 +476,7 @@ export async function makeSession({
   const plan = await makePlan(source, now, { hasVoice });
   const settings = await source.settings();
   const size = Math.max(2, settings.sessionSize);
-  let chosen: { ref: LearningRef; isNew: boolean; preview?: boolean }[];
+  let chosen: { ref: LearningRef; isNew: boolean }[];
   if (refs) {
     const live = await source.liveKeys(refs);
     const kept = refs.filter((ref) => live.has(unitKey(ref)));
@@ -666,11 +496,7 @@ export async function makeSession({
         .slice(0, Math.max(0, size - newOnes.length - extraNew.length))
         .map((r) => ({ ref: r.ref, isNew: false })),
     ];
-    // Подготовка добирает то, что осталось: она не новый материал и дневную квоту не тратит.
-    const preview = plan.preview
-      .slice(0, Math.max(0, size - taken.length))
-      .map((ref) => ({ ref, isNew: false, preview: true }));
-    chosen = shuffle([...taken, ...preview], random).slice(0, size);
+    chosen = shuffle(taken, random).slice(0, size);
   }
   const wanted = chosen.map((entry) => entry.ref);
   const wordIds = wanted.filter((ref) => ref.kind === "word").map((ref) => ref.id);
@@ -703,9 +529,9 @@ export async function makeSession({
       card,
       ...exercise,
       isNew: entry.isNew,
-      mode: entry.preview ? "preview" : mode,
+      mode,
       expectedVersion: states.get(key)?.version ?? 0,
-      ...(origin ? { lessonTitle: origin.title, lessonPast: origin.past } : {}),
+      ...(origin ? { lessonTitle: origin.title } : {}),
     });
   }
   return {

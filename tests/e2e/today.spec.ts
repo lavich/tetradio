@@ -1,7 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { installLessons, ready } from "./helpers";
+import { completeLessons, installLessons, ready } from "./helpers";
 
-test("первый запуск: «Учить курс» на «Сегодня» сразу даёт карточки на сегодня", async ({ page }) => {
+test("первый запуск: «Учить курс» открывает «Сегодня» курса, карточки — после первого пройденного урока", async ({
+  page,
+}) => {
   await page.goto("/");
   await ready(page);
   await expect(page.getByTestId("today-title")).toHaveText("Начните с курса");
@@ -9,7 +11,10 @@ test("первый запуск: «Учить курс» на «Сегодня»
   // Пока уроков нет, начинать нечего: кнопки занятия нет, а не пустая очередь после нажатия.
   await expect(page.getByRole("button", { name: "Повторить карточки" })).toHaveCount(0);
   await page.getByRole("button", { name: "Учить курс" }).click();
-  await expect(page.getByTestId("cards-today")).toContainText(/новы[хе]|новая/, { timeout: 30000 });
+  await expect(page.getByTestId("cards-later")).toBeVisible({ timeout: 30000 });
+  await expect(page.getByRole("button", { name: "Повторить карточки" })).toHaveCount(0);
+  await completeLessons(page, ["mech-1"]);
+  await expect(page.getByTestId("cards-today")).toContainText(/новы[хе]|новая/);
   await expect(page.getByRole("button", { name: "Повторить карточки" })).toBeEnabled();
 });
 

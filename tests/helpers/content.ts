@@ -40,6 +40,15 @@ export async function installLessons(db: AppDatabase, ids: string[], fetcher = m
   for (const id of ids) await installLesson(id, db, fetcher);
   return fetcher;
 }
+export async function completeLessons(db: AppDatabase, ids: string[]) {
+  for (const id of ids) await db.lessons.update(id, { status: "completed" });
+}
+/** Установленные и пройденные уроки: их карточки план вводит как новые. */
+export async function installCompleted(db: AppDatabase, ids: string[], fetcher = memoryFetcher()) {
+  await installLessons(db, ids, fetcher);
+  await completeLessons(db, ids);
+  return fetcher;
+}
 export const packageOf = (id: string) => content.packages.find((pack) => pack.id === id)!;
 export const wordsOf = (id: string) => {
   const pack = packageOf(id);

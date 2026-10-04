@@ -16,7 +16,7 @@ import { makePlan } from "../domain/learning";
 import { progress } from "../domain/stats";
 import { defaultSettings, type Session } from "../domain/types";
 import { db } from "../storage/db";
-import { dexieSource, lessonViews, loadSettings } from "../storage/queries";
+import { dexieSource, loadSettings } from "../storage/queries";
 
 /**
  * Каждый экран подписывается только на свою выборку. Общего реактивного снимка базы больше нет:
@@ -26,7 +26,8 @@ export function useSettings() {
   const settings = useLiveQuery(() => loadSettings(), []);
   return { settings: settings ?? defaultSettings, ready: !!settings };
 }
-export const useLessons = (withProgress = false) => useLiveQuery(() => lessonViews(db, withProgress), [withProgress]);
+/** «Сегодня» нужно только знать, есть ли уроки: счётчик пакетов вместо чтения уроков. */
+export const useInstalledCount = () => useLiveQuery(() => db.packages.count(), []);
 /** `undefined` — ещё читается, `null` — урока нет локально. */
 export const useWord = (id: string | undefined) => useLiveQuery(() => (id ? db.words.get(id) : undefined), [id]);
 export const usePhrase = (id: string | undefined) =>

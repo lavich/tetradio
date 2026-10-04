@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
-import { saveCourseTempo, saveSettings, submitAnswer, updateLesson } from "../src/storage/ops";
+import { saveNewItemsPerDay, saveSettings, submitAnswer, updateLesson } from "../src/storage/ops";
 import { defaultSettings } from "../src/domain/types";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
@@ -11,7 +11,7 @@ import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport, disabledTransport, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
-import { installLessons, memoryFetcher, packageOf } from "./helpers/content";
+import { installCompleted, memoryFetcher, packageOf } from "./helpers/content";
 import { installLesson, refreshCatalog } from "../src/content/client";
 import type { Word } from "../src/domain/types";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
@@ -28,7 +28,7 @@ async function device(name: string, options: { lessons?: string[]; label?: strin
   const db = new AppDatabase(`tetradio-sync-${name}-${++counter}`);
   await db.delete();
   await db.open();
-  if (options.lessons) await installLessons(db, options.lessons);
+  if (options.lessons) await installCompleted(db, options.lessons);
   const sync = new SyncCoordinator({
     database: db,
     adapter: kvAdapter(cloud),
@@ -90,12 +90,7 @@ describe("перенос компактного прогресса между у
     const phone = await device("phone", { lessons: ["mech-1"] });
     const tablet = await device("tablet", { lessons: ["mech-1"] });
     await saveSettings({ ...defaultSettings, timezone: "Europe/Athens", sessionSize: 6 }, phone.db);
-    await saveCourseTempo(
-      "mechanics",
-      { newItemsPerDay: 7, schedule: { startDate: "2026-09-14", weekdays: [1, 3], lessonHour: 12 } },
-      new Date("2026-09-16T09:00:00Z"),
-      phone.db,
-    );
+    await saveNewItemsPerDay("mechanics", 7, phone.db);
     await updateLesson("mech-1", { targetDate: "2026-10-01" }, phone.db);
     const studied = await study(phone, [true, false, true, true, false]);
     await study(phone, [true, true, false]);
@@ -107,11 +102,7 @@ describe("перенос компактного прогресса между у
     expect(await statesOf(tablet)).toEqual(await statesOf(phone));
     expect(await skillsOf(tablet, studied)).toEqual(await skillsOf(phone, studied));
     expect(await tablet.db.settings.get("settings")).toMatchObject({ timezone: "Europe/Athens", sessionSize: 6 });
-    // Темп принадлежит курсу и переносится вместе с ним, иначе второе устройство считало бы дни иначе.
-    expect(await tablet.db.courses.get("mechanics")).toMatchObject({
-      newItemsPerDay: 7,
-      schedule: { startDate: "2026-09-14", weekdays: [1, 3], lessonHour: 12 },
-    });
+    expect(await tablet.db.courses.get("mechanics")).toMatchObject({ newItemsPerDay: 7 });
     expect((await tablet.db.lessons.get("mech-1"))?.targetDate).toBe("2026-10-01");
     const [planPhone, planTablet] = await Promise.all([plan(phone), plan(tablet)]);
     expect(planTablet).toEqual(planPhone);
@@ -483,7 +474,7 @@ describe("надёжность публикации и лимиты", () => {
     const db = new AppDatabase(`tetradio-sync-tabs-${++counter}`);
     await db.delete();
     await db.open();
-    await installLessons(db, ["mech-1"]);
+    await installCompleted(db, ["mech-1"]);
     const busy = new SyncCoordinator({
       database: db,
       adapter: kvAdapter(cloud),
@@ -512,7 +503,7 @@ describe("надёжность публикации и лимиты", () => {
     const db = new AppDatabase(`tetradio-sync-err-${++counter}`);
     await db.delete();
     await db.open();
-    await installLessons(db, ["mech-1"]);
+    await installCompleted(db, ["mech-1"]);
     const broken = memoryTransport({
       intercept: (op) => {
         if (op === "getKeys") throw Object.assign(new Error("CloudStorage timeout"), { kind: "transport" });

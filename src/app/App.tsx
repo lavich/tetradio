@@ -4,10 +4,6 @@ import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
 import { updateReady } from "../main";
 import { useBackHandler, useEnvironment } from "../platform/platform";
-import { useNow } from "../shared/clock";
-import { useSettings } from "../shared/store";
-import { settleLessons } from "../storage/ops";
-import { useSettleWatch } from "./settle-watch";
 import { loadScreen } from "./stale-build";
 // «Сегодня» открывается первым и в браузере, и в Mini App, поэтому грузится сразу: иначе первый кадр пустой.
 import { TodayScreen } from "../features/today/TodayScreen";
@@ -48,15 +44,11 @@ export function App() {
   const immersive = pathname.startsWith("/session") || /^\/words\/[^/]+\/exercise\//.test(pathname);
   // В уроке курса облачко снизу — листание страниц; выход из урока — «Назад».
   const lesson = /^\/course\/[^/]+\/[^/]+/.test(pathname);
-  const { settings } = useSettings();
   useEnvironment();
   useStartRoute();
   // Резервный возврат Telegram: на «Сегодня» кнопка скрыта, на остальных экранах без своего обработчика ведёт назад или на главный.
   const goBack = useGoBack();
   useBackHandler(pathname === "/" ? null : goBack, 0);
-  useSettleWatch(useNow(), settings.timezone, () => {
-    settleLessons(new Date()).catch((error) => console.error("Не удалось закрепить прошедшие уроки", error));
-  });
   useEffect(() => {
     // Обновление предлагаем между занятиями, чтобы не прервать ответ.
     const notice = () => {

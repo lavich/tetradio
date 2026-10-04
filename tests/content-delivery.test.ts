@@ -24,11 +24,14 @@ import {
 } from "../src/content/client";
 import { ContentError, type ContentPackage } from "../src/content/schema";
 import { revisionOf } from "../content/build";
-import { saveCourseTempo } from "../src/storage/ops";
-import { lessonItems } from "../src/storage/queries";
+import { saveNewItemsPerDay } from "../src/storage/ops";
+import { dexieSource, lessonItems } from "../src/storage/queries";
+import { makePlan } from "../src/domain/learning";
 import { indexWord } from "../src/storage/db";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
+import { LOCAL_COURSE } from "../src/domain/types";
 import {
+  completeLessons,
   content,
   installLessons,
   itemCountOf,
@@ -96,9 +99,8 @@ describe("курсы", () => {
   });
   it("новый курс получает предел новых карточек по умолчанию, а сохранённый предел обновление не трогает", async () => {
     await refreshCatalog(db, memoryFetcher());
-    // Окно подготовки к уроку — промежуток до предыдущего занятия: набор из 35 карточек за три дня требует двенадцати в день.
     expect((await db.courses.get("mechanics"))!.newItemsPerDay).toBe(12);
-    await saveCourseTempo("mechanics", { newItemsPerDay: 7 }, new Date("2026-09-19T09:00:00Z"), db);
+    await saveNewItemsPerDay("mechanics", 7, db);
     await refreshCatalog(db, memoryFetcher());
     expect((await db.courses.get("mechanics"))!.newItemsPerDay).toBe(7);
   });
@@ -421,6 +423,27 @@ describe("обновление пакета", () => {
     expect(await db.lessonItems.get(["mech-2", wordKeyOf("w-own")])).toBeTruthy(); // добавленное пользователем осталось
     expect(await lessonItems("mech-2", db)).toHaveLength(pack.items.length); // минус убранная автором, плюс своя
     expect(await db.lessons.get("mech-2")).toMatchObject({ title: "Мой урок", targetDate: "2026-10-01" });
+  });
+  it("слово, убранное автором из пройденного урока, не попадает в новые карточки", async () => {
+    await installLessons(db, ["mech-2"]);
+    await completeLessons(db, ["mech-2"]);
+    await db.courses.update("mechanics", { newItemsPerDay: 100 });
+    // Прежний курс «Мои слова» вводил слова без урока сканом словаря.
+    await db.courses.add({ ...(await db.courses.get("mechanics"))!, id: LOCAL_COURSE, origin: "local" });
+    const pack = packageOf("mech-2");
+    const dropped = pack.words[0].id;
+    const next: ContentPackage = {
+      ...pack,
+      version: "trimmed",
+      words: pack.words.slice(1),
+      items: pack.items.slice(1).map((item, i) => ({ ...item, position: i })),
+      links: pack.links.slice(1).map((l, i) => ({ ...l, position: i })),
+    };
+    await installLesson("mech-2", db, await upgrade("mech-2", next));
+    expect(await db.words.get(dropped)).toBeTruthy();
+    const plan = await makePlan(dexieSource(db), new Date("2026-09-19T09:00:00Z"));
+    expect(plan.newRefs).toHaveLength(pack.items.length - 1);
+    expect(plan.newRefs.map((ref) => ref.id)).not.toContain(dropped);
   });
   it("карточка, убранная автором из одного урока, остаётся в другом и возвращается вместе с новой версией", async () => {
     await installLessons(db, ["mech-2", "mech-3"]);

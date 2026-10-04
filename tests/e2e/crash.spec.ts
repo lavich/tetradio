@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { breakStorage, installLessons, ready } from "./helpers";
+import { breakStorage, completeLessons, installLessons, ready } from "./helpers";
 
 /** Тестовая сборка идёт без адреса приёма: ни один сценарий, включая сбои, не должен обращаться к сервису отчётов и грузить его чанк. */
 const external: string[] = [];
@@ -37,6 +37,7 @@ test("падение во время занятия: экран сбоя с пе
   await page.goto("/");
   await ready(page);
   await installLessons(page, ["mech-1", "mech-2", "mech-3", "mech-4"]);
+  await completeLessons(page, ["mech-2"]);
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   await expect(page.getByTestId("lesson-label")).toBeVisible();

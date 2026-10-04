@@ -27,11 +27,11 @@ describe("границы данных в сообщениях ошибок", () 
     const { dexieSource } = await import("../src/storage/queries");
     const { makeSession } = await import("../src/domain/learning");
     const { recordAnswer } = await import("../src/storage/ops");
-    const { installLessons } = await import("./helpers/content");
+    const { installCompleted } = await import("./helpers/content");
     const db = new AppDatabase("tetradio-error-message");
     await db.delete();
     await db.open();
-    await installLessons(db, ["mech-1"]);
+    await installCompleted(db, ["mech-1"]);
     const now = new Date("2026-09-16T09:00:00Z");
     const session = await makeSession({ source: dexieSource(db), now, random: () => 0.3 });
     await db.sessions.add(session);
@@ -113,11 +113,11 @@ describe("явные отчёты о критических отказах", () 
     const { SyncCoordinator } = await import("../src/sync/coordinator");
     const { kvAdapter } = await import("../src/sync/adapter");
     const { memoryTransport, SyncError } = await import("../src/sync/transport");
-    const { installLessons } = await import("./helpers/content");
+    const { installCompleted } = await import("./helpers/content");
     const db = new AppDatabase("tetradio-report-sync");
     await db.delete();
     await db.open();
-    await installLessons(db, ["mech-1"]);
+    await installCompleted(db, ["mech-1"]);
     const broken = memoryTransport({
       intercept: (op) => {
         if (op === "getKeys") throw new SyncError("transport", "CloudStorage timeout");

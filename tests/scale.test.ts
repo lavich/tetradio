@@ -18,7 +18,9 @@ import { itemOfLink, wordEvent, wordState } from "./helpers/cards";
 const WORDS = 100_000,
   STATES = 20_000,
   EVENTS = 60_000,
-  LESSONS = 200;
+  LESSONS = 200,
+  /** Пройденных уроков — как во всём курсе. */
+  COMPLETED = 60;
 const now = new Date("2026-09-15T09:00:00Z");
 const iso = now.toISOString();
 let db: AppDatabase;
@@ -98,8 +100,8 @@ beforeAll(async () => {
     Array.from({ length: LESSONS }, (_, i) => ({
       id: `lesson-${pad(i)}`,
       title: `Урок ${i}`,
-      targetDate: i < 3 ? `2026-09-${17 + i}` : null,
-      status: "upcoming" as const,
+      targetDate: null,
+      status: i < COMPLETED ? ("completed" as const) : ("upcoming" as const),
       createdAt: iso,
       updatedAt: iso,
     })),
@@ -125,8 +127,8 @@ beforeAll(async () => {
   await db.lessons.add({
     id: "lesson-mixed",
     title: "Смешанный",
-    targetDate: "2026-09-16",
-    status: "upcoming",
+    targetDate: null,
+    status: "completed",
     createdAt: iso,
     updatedAt: iso,
   });
@@ -142,10 +144,24 @@ beforeAll(async () => {
     })),
   );
   await db.settings.put({ ...defaultSettings, sessionSize: 20 });
+  // Смешанный урок — первый в программе: его карточки идут раньше уроков вне модулей.
+  await db.modules.add({
+    id: "m01",
+    courseId: "a2",
+    number: 1,
+    title: "M01",
+    subtitle: "",
+    status: "published",
+    goal: "",
+    grammar: [],
+    sessions: 1,
+    lessonIds: ["lesson-mixed"],
+    position: 0,
+  });
   await db.courses.put({
-    id: "my",
-    title: "Мои слова",
-    origin: "local",
+    id: "a2",
+    title: "A2",
+    origin: "content",
     subscribed: true,
     schedule: { startDate: null, weekdays: [], lessonHour: 12 },
     newItemsPerDay: 10,
@@ -167,9 +183,8 @@ describe("ограниченные выборки на большой базе",
     const plan = await makePlan(dexieSource(db), now);
     expect(plan.introducedToday).toBe(3);
     expect(plan.newRefs).toHaveLength(7);
-    expect(plan.newRefs.some((ref) => ref.kind !== "word")).toBe(true); // смешанный урок с ближайшим сроком идёт первым
+    expect(plan.newRefs.some((ref) => ref.kind !== "word")).toBe(true); // смешанный урок первого модуля идёт первым
     expect(plan.reviews.length).toBeGreaterThan(1000);
-    expect(plan.deadlines).toHaveLength(4);
     expect(reads.words).toBe(0);
     expect(reads.events).toBe(0);
     expect(reads.sessions).toBe(0);

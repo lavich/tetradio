@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { installLessons, ready, seedQueue, useSchedule } from "./helpers";
+import { completeLessons, installLessons, ready, seedQueue } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -31,7 +31,7 @@ test("исходные уроки, карточка слова и ручная �
 });
 
 test("занятие: знакомство, четыре упражнения, результат и продолжение после перезапуска", async ({ page }) => {
-  await useSchedule(page);
+  await completeLessons(page, ["mech-2"]);
   await seedQueue(page, [
     { wordId: "w038", tested: ["recall"] },
     { wordId: "w032", tested: ["recall", "recognition"] },

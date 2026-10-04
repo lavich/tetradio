@@ -106,7 +106,6 @@ export type SessionCard = { kind: "word"; word: Word } | { kind: "phrase"; phras
  */
 export type CardSnapshot =
   { greek: string; russian: string } | { text: string; translation?: string } | { template: string; answer: string };
-/** `dateSource` заполняется только в выборке: в базе дата либо своя (задана вручную), либо пустая (по расписанию). */
 /**
  * Локальный курс: он есть всегда, не обновляется из каталога и не исчезает вместе с ним. Создавать в нём
  * наборы и слова нельзя; он остаётся для плана, синхронизации и данных прежних версий с импортом.
@@ -224,6 +223,7 @@ export interface ReviewEvent {
   unitKey: string;
   snapshot: CardSnapshot;
   type: ExerciseType;
+  /** `preview` — досрочная подготовка к занятию прежних версий: остаётся в истории. */
   mode: "scheduled" | "practice" | "preview";
   rating: Grade;
   correct: boolean | null;
@@ -235,8 +235,8 @@ export interface ReviewEvent {
   after?: Card;
 }
 /** `skipped` — упражнение пропущено без оценки знания (например, аудио недоступно): события нет, позиция сдвигается. */
-/** `lessonTitle`/`lessonPast` — урок новой карточки для подписи на экране знакомства. */
-/** `mode` — `scheduled` очередное упражнение дня, `preview` досрочная подготовка к занятию, `practice` ручная тренировка и дополнительная попытка. */
+/** `lessonTitle` — урок новой карточки для подписи на экране знакомства. */
+/** `mode` — `scheduled` очередное упражнение дня, `practice` ручная тренировка и дополнительная попытка. */
 export interface SessionItem {
   id: string;
   ref: LearningRef;
@@ -245,13 +245,12 @@ export interface SessionItem {
   type: ExerciseType;
   options: string[];
   isNew: boolean;
-  mode: "scheduled" | "practice" | "preview";
+  mode: "scheduled" | "practice";
   expectedVersion: number;
   eventId?: string;
   retryOf?: string;
   skipped?: boolean;
   lessonTitle?: string;
-  lessonPast?: boolean;
 }
 export interface Session {
   id: string;
@@ -288,12 +287,7 @@ export const defaultSettings: Settings = {
   errorReports: true,
   autoSpeak: true,
 };
-/**
- * Предел новых карточек нового курса. Очередь ведёт только ближайшее занятие, поэтому окно подготовки
- * к уроку — промежуток между ним и предыдущим: набор из 35 карточек за три дня требует двенадцати в день.
- * Прежняя десятка не покрывала такой темп и упиралась в предупреждение о нехватке. Курс с уже сохранённым
- * пределом этого значения не видит: его меняет пользователь на экране курса.
- */
+/** Предел новых карточек нового курса; сохранённый предел курса это значение не меняет. */
 export const DEFAULT_NEW_ITEMS_PER_DAY = 12;
 /** Запись настроек старой версии или из старой копии читается без миграции. */
 export const fillSettings = (settings: Partial<Settings> | undefined): Settings => ({
@@ -322,6 +316,8 @@ export interface Snapshot {
   phrases?: Phrase[];
   lessons: Lesson[];
   courses?: Course[];
+  /** Модули программы: задают порядок пройденных уроков; без них — порядок массива `lessons`. */
+  modules?: StoredModule[];
   links: LessonWord[];
   items?: LessonItem[];
   states: LearningState[];

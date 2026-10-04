@@ -7,7 +7,7 @@ import { recordAnswer, skipItem } from "../src/storage/ops";
 import { makeSession } from "../src/domain/learning";
 import { exportFull, inspectBackup, restoreBackup, transferFile, TRANSFER_TEXT } from "../src/features/backup/backup";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
-import { installLessons } from "./helpers/content";
+import { installCompleted } from "./helpers/content";
 
 const now = new Date("2026-09-16T09:00:00Z");
 let db: AppDatabase;
@@ -15,7 +15,7 @@ beforeEach(async () => {
   await new AppDatabase("tetradio-tg-ui").delete();
   db = new AppDatabase("tetradio-tg-ui");
   await db.open();
-  await installLessons(db, ["mech-1"]);
+  await installCompleted(db, ["mech-1"]);
 });
 
 describe("жизненный цикл ответа", () => {
@@ -143,7 +143,7 @@ describe("передача файла копии", () => {
     const telegram = new AppDatabase("tetradio-tg-tetradio_local-77");
     await telegram.delete();
     await telegram.open();
-    await installLessons(telegram, ["mech-1"]);
+    await installCompleted(telegram, ["mech-1"]);
     await writeMeta(telegram, META.device, "device-a");
     await writeMeta(telegram, META.dirty, "1");
     const copy = await exportFull(telegram);

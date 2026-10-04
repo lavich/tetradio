@@ -8,18 +8,15 @@ import { Screen } from "../../app/Screen";
 import { useHapticsSetting } from "../../platform/haptics";
 import { usePlatform } from "../../platform/platform";
 import { useSettings } from "../../shared/store";
-import { db } from "../../storage/db";
-import { saveCourseTempo, saveSettings } from "../../storage/ops";
+import { currentCourse } from "../../storage/queries";
+import { saveNewItemsPerDay, saveSettings } from "../../storage/ops";
 import ui from "../../shared/ui.module.css";
 
 const ZONES = ["Asia/Nicosia", "Europe/Athens", "Europe/Moscow", "Europe/Berlin", "Europe/London", "UTC"];
 export function SettingsScreen() {
   const { settings, ready } = useSettings();
   // Курс один: дневной предел новых слов хранится в нём, а не в настройках.
-  const course = useLiveQuery(async () => {
-    const module = await db.modules.toCollection().first();
-    return (await (module ? db.courses.get(module.courseId) : db.courses.toCollection().first())) ?? null;
-  }, []);
+  const course = useLiveQuery(async () => (await currentCourse()) ?? null, []);
   const [daily, setDaily] = useState("10");
   const [size, setSize] = useState("20");
   const [zone, setZone] = useState("Asia/Nicosia");
@@ -57,8 +54,7 @@ export function SettingsScreen() {
     setProblem("");
     try {
       await saveSettings({ ...settings, sessionSize, timezone: zone });
-      if (course && course.newItemsPerDay !== newItemsPerDay)
-        await saveCourseTempo(course.id, { newItemsPerDay }, new Date());
+      if (course && course.newItemsPerDay !== newItemsPerDay) await saveNewItemsPerDay(course.id, newItemsPerDay);
     } catch {
       return setProblem("Не удалось сохранить. Проверьте место на устройстве и повторите.");
     }
