@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { scrollsSideways } from "./paginate";
 
 /**
@@ -18,6 +18,7 @@ export function usePager({
   spread: boolean;
 }) {
   const [params, setParams] = useSearchParams();
+  const { state } = useLocation();
   const [turn, setTurn] = useState<"next" | "prev" | null>(null);
   const touch = useRef<{ x: number; y: number } | null>(null);
   const step = spread ? 2 : 1;
@@ -29,13 +30,13 @@ export function usePager({
     setTurn(direction);
     // Листание не копит историю: «Назад» ведёт из урока к модулю, а не по страницам. Без номера в адресе
     // урок открывается на первой странице с невыполненным заданием.
-    setParams({ p: String(target + 1) }, { replace: true });
+    setParams({ p: String(target + 1) }, { replace: true, state });
     window.scrollTo({ top: 0 });
   };
   // Страница, на которой урок открылся, фиксируется в адресе: иначе выполненное задание перекидывало бы дальше.
   useEffect(() => {
-    if (!asked && ready) setParams({ p: String(current + 1) }, { replace: true });
-  }, [asked, ready, current, setParams]);
+    if (!asked && ready) setParams({ p: String(current + 1) }, { replace: true, state });
+  }, [asked, ready, current, setParams, state]);
   const next = () => go(first + step, "next");
   const prev = () => go(Math.max(0, first - step), "prev");
   useEffect(() => {

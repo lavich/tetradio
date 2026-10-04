@@ -25,18 +25,15 @@ export function WeekStrip({
   label: (name: string, lesson: boolean, review: boolean) => string;
 }) {
   return (
-    <div className={cx(css.days, small && css.small, className)}>
+    <div className={cx(css.days, small && css.small, className)} role="list" aria-label="Дни недели">
       {WEEKDAYS.map((name, index) => {
         const day = addDays(monday, index);
         const lesson = lessons.includes(day);
         const review = reviews.includes(day);
         return (
-          <span
-            key={name}
-            className={cx(css.day, lesson && css.lesson, day === today && css.today)}
-            aria-label={label(name, lesson, review)}
-          >
-            {name}
+          <span key={name} role="listitem" className={cx(css.day, lesson && css.lesson, day === today && css.today)}>
+            <span aria-hidden>{name}</span>
+            <span className="sr-only">{label(name, lesson, review)}</span>
             {review && <i className={css.review} aria-hidden />}
           </span>
         );

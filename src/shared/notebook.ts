@@ -12,5 +12,5 @@ export function greekDate(day: string) {
 }
 
 /** Цвета обложек: греческие школьные тетради яркие; цвет повторяется по номеру модуля. */
-const COVERS = ["#2f6d4f", "#b8452b", "#2c4f9e", "#b8871a", "#7b3f74", "#1f6f7a"];
+const COVERS = ["#2f6d4f", "#b8452b", "#2c4f9e", "#936c15", "#7b3f74", "#1f6f7a"];
 export const coverColor = (number: number) => COVERS[(number - 1) % COVERS.length];

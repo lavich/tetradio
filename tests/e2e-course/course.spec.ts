@@ -205,6 +205,12 @@ test("урок курса: задания с ключом, чтение, ауд�
   });
   expect(tick).toBe(ok);
 
+  // Неделя на «Прогрессе» сообщает диктору, что сегодня был урок, а не только заливает клетку.
+  await page.goto("/progress");
+  expect(await page.getByRole("list", { name: "Дни недели" }).ariaSnapshot()).toMatch(
+    /listitem: (Пн|Вт|Ср|Чт|Пт|Сб|Вс), урок/,
+  );
+
   // Пройденный урок отдаёт карточки в повторение; следующий шаг курса — контрольная модуля.
   await page.goto("/");
   await expect(page.getByTestId("cards-today")).toBeVisible();
@@ -244,6 +250,30 @@ test("контрольная: итог по навыкам против поро
   const result = await turnTo(page, "Итог контрольной");
   await expect(result).toContainText("Итог: 3 из 4 (75 %) — порог 60 % пройден");
   await expect(result).toContainText("чтение: 1 из 2 — не сдано");
+});
+
+test("урок, открытый с модуля: после завершения одно «Назад» ведёт с модуля на полку", async ({ page }) => {
+  await start(page);
+  await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
+  await page.getByRole("link", { name: /Модуль 1: Знакомство/ }).click();
+  await page
+    .getByRole("link", { name: /Контрольная/ })
+    .first()
+    .click();
+  const tf = await turnTo(page, "Верно или неверно?");
+  await tf.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "Σωστό" }).click();
+  await tf.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "Σωστό" }).click();
+  await tf.getByRole("button", { name: "Проверить" }).click();
+  const gaps = await turnTo(page, "Вставьте форму είμαι.");
+  await gaps.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "είμαστε" }).click();
+  await gaps.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "είναι" }).click();
+  await gaps.getByRole("button", { name: "Проверить" }).click();
+  await turnTo(page, "Итог контрольной");
+  await page.getByRole("button", { name: "Завершить урок" }).click();
+  await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole("heading", { name: "Полка", level: 1 })).toBeVisible();
+  await expect(page).toHaveURL(/\/course$/);
 });
 
 test("аудирование синтезом: две прослушки, затем кнопка закрыта до ответа", async ({ page }) => {
