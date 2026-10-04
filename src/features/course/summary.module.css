@@ -1,3 +1,16 @@
+/* Итог урока — последняя запись в тетради: отметка, счёт по заданиям, что ушло в повторение, куда дальше. */
+.stamp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.stampTick {
+  flex: none;
+  width: 30px;
+  height: 28px;
+  color: var(--ok);
+}
+
 /* Результат контрольной: по навыкам против порога 60 %. */
 .result {
   margin-top: calc(var(--cell) * 1.5);
@@ -9,9 +22,101 @@
   line-height: var(--cell);
 }
 
-/* Нижний док урока: завершение — главное действие. */
-.dock {
+.heading {
+  font-family: var(--font-print);
+  font-size: 18px;
+  line-height: var(--cell);
+  font-weight: 700;
+  margin: calc(var(--cell) * 1.5) 0 calc(var(--cell) / 2);
+}
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1.6em minmax(0, 1fr) auto;
+  column-gap: 8px;
+  align-items: baseline;
+  font-family: var(--font-print);
+  font-size: 15.5px;
+  line-height: var(--cell);
+}
+.number {
+  color: var(--muted-foreground);
+}
+.label {
+  min-width: 0;
+}
+.mark {
+  font-family: var(--font-ui);
+  font-size: 13.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.revisit {
+  grid-column: 2 / -1;
+  justify-self: start;
+  font-family: var(--font-print);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: var(--cell);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.ok {
+  color: var(--ok);
+}
+.almost {
+  color: var(--almost);
+}
+/* Красная ручка — только ошибки учащегося. */
+.bad {
+  color: var(--pen);
+}
+.soft {
+  color: var(--muted-foreground);
+}
+
+.cards {
+  margin-top: calc(var(--cell) * 1.5);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: var(--soft);
+}
+.review {
+  margin-top: var(--cell);
+}
+
+.next {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  max-width: 420px;
   margin-top: calc(var(--cell) * 2);
+}
+.nextButton {
+  justify-content: space-between;
+  text-align: left;
+}
+.nextText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+  white-space: normal;
+}
+.nextLabel {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 .pending {

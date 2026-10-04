@@ -132,7 +132,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await page.getByTestId("course-next").click();
   await expect(page.getByRole("heading", { name: "Знакомство и είμαι", level: 1 })).toBeVisible();
   await expect(page.getByTestId("page-count")).toContainText("заданий 0 из 5");
-  await expect(page.getByRole("button", { name: "Завершить урок" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Урок пройден" })).toHaveCount(0);
 
   // Выбор формы: одна ошибка показывает правильный ответ и пояснение красной ручкой.
   const forms = await turnTo(page, "Формы είμαι");
@@ -220,14 +220,17 @@ test("урок курса: задания с ключом, чтение, ауд�
     )
     .toBe(2); // письмо и речь
 
-  // Все задания выполнены — урок можно завершить; после перезагрузки открыта та же страница, прогресс на месте.
+  // Все задания выполнены — урок завершён сам; после перезагрузки открыта та же страница, прогресс на месте.
   await page.reload();
   await expect(section(page, "Речь")).toBeVisible();
   await expect(section(page, "Речь").getByRole("checkbox").first()).toBeChecked();
   await expect(page.getByTestId("page-count")).toContainText("заданий 5 из 5");
   await page.getByRole("button", { name: "К итогу" }).click();
+  await expect(page.getByRole("heading", { name: "Урок пройден" })).toBeVisible();
+  await expect(page.getByRole("list", { name: "Задания урока" }).getByRole("listitem")).toHaveCount(5);
+  await expect(page.getByRole("button", { name: /Следующий урок/ }).first()).toBeVisible();
   const lessonUrl = page.url();
-  await page.getByRole("button", { name: "Завершить урок" }).click();
+  await page.getByRole("button", { name: "К модулю" }).click();
   await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
   // Завершённый урок не остаётся в истории: «Назад» с модуля не открывает его снова.
   await page.goBack();
@@ -310,7 +313,7 @@ test("урок, открытый с модуля: после завершени�
   await gaps.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "είναι" }).click();
   await gaps.getByRole("button", { name: "Проверить" }).click();
   await turnTo(page, "Итог контрольной");
-  await page.getByRole("button", { name: "Завершить урок" }).click();
+  await page.getByRole("button", { name: "К модулю" }).click();
   await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
   await page.goBack();
   await expect(page.getByRole("heading", { name: "Полка", level: 1 })).toBeVisible();

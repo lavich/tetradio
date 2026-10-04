@@ -139,16 +139,17 @@ describe("прогресс курса в базе", () => {
     expect(await courseLesson("m02-1", db)).toBeNull();
   });
 
-  it("выполнение блока сохраняется и дополняется; урок нельзя завершить раньше заданий", async () => {
+  it("выполнение блока сохраняется и дополняется; урок завершается сам с последним заданием", async () => {
     await saveBlockProgress("m01-1", "about-me", { text: "Με λένε Ιβάν." }, db);
     await saveBlockProgress("m01-1", "about-me", { done: true, checks: [0, 1] }, db);
     const saved = (await blockProgressOf("m01-1", db)).get("about-me")!;
     expect(saved).toMatchObject({ key: "m01-1/about-me", done: true, text: "Με λένε Ιβάν.", checks: [0, 1] });
     await expect(completeLesson("m01-1", db)).rejects.toBeInstanceOf(LessonIncompleteError);
     expect((await db.lessons.get("m01-1"))!.completed).toBe(false);
-    for (const blockId of ["forms", "anna-tf", "cafe-q", "intro"])
-      await saveBlockProgress("m01-1", blockId, { done: true }, db);
-    await completeLesson("m01-1", db);
+    for (const blockId of ["forms", "anna-tf", "cafe-q"]) await saveBlockProgress("m01-1", blockId, { done: true }, db);
+    await saveBlockProgress("m01-1", "intro", { done: false, answers: { a: "x" } }, db);
+    expect((await db.lessons.get("m01-1"))!.completed).toBe(false);
+    await saveBlockProgress("m01-1", "intro", { done: true }, db);
     expect((await db.lessons.get("m01-1"))!.completed).toBe(true);
     expect((await db.meta.get("sync:dirty"))?.value).toBeTruthy();
   });
