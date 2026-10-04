@@ -22,7 +22,7 @@ test("данные не переходят между origin сами; пере�
   // Подписанный курс догружается фоном: копию снимаем с устоявшегося словаря и с ним же сверяем перенос.
   await expect(page.getByTestId("word-count")).toHaveText("56 слов · 7 фраз");
   const source = await page.getByTestId("word-count").innerText();
-  await page.goto("/more/backup");
+  await page.goto("/progress/backup");
   const [download] = await Promise.all([
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Сохранить полную копию" }).click(),
@@ -37,7 +37,7 @@ test("данные не переходят между origin сами; пере�
   await ready(moved);
   await moved.goto("/words");
   await expect(moved.getByTestId("word-count")).toHaveText("0 слов"); // новый origin пуст: редирект ничего бы не перенёс
-  await moved.goto("/more/backup");
+  await moved.goto("/progress/backup");
   await moved.locator("#backup").setInputFiles(file);
   await expect(moved.getByText(/Файл проверен/)).toBeVisible();
   await moved.getByRole("button", { name: "Заменить данные копией" }).click();

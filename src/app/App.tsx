@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
 import { updateReady } from "../main";
@@ -23,7 +23,7 @@ const SessionScreen = named("SessionScreen", () => import("../features/learning/
 const ResultScreen = named("ResultScreen", () => import("../features/learning/ResultScreen"));
 const ProgressScreen = named("ProgressScreen", () => import("../features/progress/ProgressScreen"));
 const StatsScreen = named("StatsScreen", () => import("../features/progress/StatsScreen"));
-const SettingsScreen = named("SettingsScreen", () => import("../features/more/SettingsScreen"));
+const SettingsScreen = named("SettingsScreen", () => import("../features/progress/SettingsScreen"));
 const BackupScreen = named("BackupScreen", () => import("../features/backup/BackupScreen"));
 // Уведомления и диалог конфликта не нужны первому кадру: грузятся следом, без чанка — просто не показываются.
 const optional = <P extends object>(load: () => Promise<React.ComponentType<P>>) =>
@@ -38,6 +38,13 @@ const optional = <P extends object>(load: () => Promise<React.ComponentType<P>>)
   );
 const Toaster = optional(() => import("@/components/ui/sonner").then((module) => module.Toaster));
 const SyncConflictDialog = optional(() => import("./TelegramNotices").then((module) => module.SyncConflictDialog));
+
+/** Прежние адреса раздела «Ещё» остаются в закладках и истории Telegram. */
+function MoreRedirect() {
+  const { "*": rest } = useParams();
+  const { search, hash } = useLocation();
+  return <Navigate to={`/progress${rest ? `/${rest}` : ""}${search}${hash}`} replace />;
+}
 
 export function App() {
   const { pathname } = useLocation();
@@ -83,10 +90,10 @@ export function App() {
           <Route path="/session" element={<SessionScreen />} />
           <Route path="/session/result/:id" element={<ResultScreen />} />
           <Route path="/progress" element={<ProgressScreen />} />
-          <Route path="/more" element={<Navigate to="/progress" replace />} />
-          <Route path="/more/stats" element={<StatsScreen />} />
-          <Route path="/more/settings" element={<SettingsScreen />} />
-          <Route path="/more/backup" element={<BackupScreen />} />
+          <Route path="/progress/stats" element={<StatsScreen />} />
+          <Route path="/progress/settings" element={<SettingsScreen />} />
+          <Route path="/progress/backup" element={<BackupScreen />} />
+          <Route path="/more/*" element={<MoreRedirect />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

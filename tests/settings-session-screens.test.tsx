@@ -5,7 +5,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { MemoryRouter } from "react-router-dom";
 import { SessionScreen } from "../src/features/learning/SessionScreen";
-import { SettingsScreen } from "../src/features/more/SettingsScreen";
+import { SettingsScreen } from "../src/features/progress/SettingsScreen";
 import { db } from "../src/storage/db";
 import { loadSettings } from "../src/storage/queries";
 

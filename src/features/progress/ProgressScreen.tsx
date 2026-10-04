@@ -47,13 +47,13 @@ export function ProgressScreen() {
     <>
       <ul className={css.links}>
         <li>
-          <Link to="/more/stats">Ответы и сроки повторений</Link>
+          <Link to="/progress/stats">Ответы и сроки повторений</Link>
         </li>
         <li>
-          <Link to="/more/settings">Настройки</Link>
+          <Link to="/progress/settings">Настройки</Link>
         </li>
         <li>
-          <Link to="/more/backup">Копия данных</Link>
+          <Link to="/progress/backup">Копия данных</Link>
         </li>
       </ul>
       <DeviceStatus />
