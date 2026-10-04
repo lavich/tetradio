@@ -185,9 +185,42 @@ export async function installLessons(page: Page, ids: string[]) {
         { timeout: 20000 },
       )
       .toBe(true);
+  // Курс докачивает остальные уроки фоном, а после установки уборка удаляет медиа, на которое не ссылается ни один
+  // пакет, — в том числе подложенное тестом. Тест продолжает, когда число пакетов перестало меняться.
+  let previous = -1;
+  await expect
+    .poll(
+      async () => {
+        const now = await installedCount(page);
+        const settled = now === previous;
+        previous = now;
+        return settled;
+      },
+      { timeout: 30000, intervals: [1500] },
+    )
+    .toBe(true);
   await page.goto("/");
   await ready(page);
 }
+const installedCount = (page: Page) =>
+  page.evaluate(async () => {
+    let total = 0;
+    for (const { name } of await indexedDB.databases()) {
+      if (!name?.startsWith("tetradio")) continue;
+      const database = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = indexedDB.open(name);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      if (database.objectStoreNames.contains("packages"))
+        total += await new Promise<number>((resolve) => {
+          const request = database.transaction("packages").objectStore("packages").count();
+          request.onsuccess = () => resolve(request.result);
+        });
+      database.close();
+    }
+    return total;
+  });
 
 /**
  * Смешанный урок для браузерных проверок: непубликуемая фикстура собирается на стороне Node и кладётся
