@@ -1,0 +1,118 @@
+/* Варианты: короткие — сеткой 2 × 2, длинные — строками α) β) γ) δ). Текст переносится, а не режется. */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.chip,
+.line {
+  font: inherit;
+  font-family: var(--font-print);
+  color: var(--card-foreground);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease-out,
+    background-color 160ms ease-out;
+}
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 1px solid var(--input);
+  border-radius: 12px;
+  background: var(--card);
+  font-size: 18px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+@media (hover: hover) {
+  .chip:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--soft);
+  }
+}
+.lines {
+  margin-top: 10px;
+  counter-reset: option;
+}
+.line {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) 28px;
+  align-items: start;
+  gap: 4px;
+  width: 100%;
+  padding: 11px 0;
+  border: 0;
+  border-bottom: 1.5px solid var(--input);
+  background: none;
+  font-size: 17px;
+  line-height: var(--cell);
+  overflow-wrap: anywhere;
+}
+.line:last-child {
+  border-bottom: 0;
+}
+/* Буква — из счётчика, а не из текста: подпись варианта остаётся самим вариантом. */
+.line::before {
+  counter-increment: option;
+  content: counter(option, lower-greek) ")";
+  font-size: 16px;
+  color: var(--muted-foreground);
+}
+@media (hover: hover) {
+  .line:hover:not(:disabled) span {
+    color: var(--primary);
+  }
+}
+.chip:disabled,
+.line:disabled {
+  cursor: default;
+}
+.optionTick {
+  flex: none;
+  width: 26px;
+  height: 24px;
+  margin-top: -2px;
+  color: var(--ok);
+}
+.chip.correct {
+  border-color: var(--ok);
+}
+.chip.wrong {
+  border-color: var(--pen);
+}
+.wrong > span:not(:global(.sr-only)) {
+  color: var(--pen);
+  text-decoration: line-through;
+  text-decoration-color: var(--pen);
+  text-decoration-thickness: 1.5px;
+}
+.okLine,
+.fixLine {
+  margin: 10px 0 0;
+  font-family: var(--font-print);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 22px;
+}
+.okLine {
+  color: var(--ok);
+}
+.fixLine {
+  color: var(--pen);
+}
+.fixLine > span {
+  font-style: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip,
+  .line {
+    transition: none;
+  }
+}

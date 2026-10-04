@@ -1,4 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode, type Ref } from "react";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Rating } from "ts-fsrs";
 import type { ReviewEvent, Session, SessionCard, SessionItem } from "../../domain/types";
@@ -202,4 +204,78 @@ export function useWide() {
     return () => query.removeEventListener("change", change);
   }, []);
   return wide;
+}
+
+/**
+ * Страница тетради с листом задания и облачком снизу: общая для занятия и упражнения со страницы слова.
+ * Без `sheetLabel` тело (загрузка, сообщение) стоит прямо на странице, без листа.
+ */
+export function SessionShell({
+  children,
+  head,
+  mainRef,
+  sheetRef,
+  sheetLabel,
+  number,
+  inline,
+  problem,
+  cloudLabel,
+  cloudMark,
+  closeLabel,
+  onClose,
+  nativeBack,
+  countLabel,
+  count,
+  note,
+}: {
+  children: ReactNode;
+  head?: ReactNode;
+  mainRef?: Ref<HTMLElement>;
+  sheetRef?: Ref<HTMLElement>;
+  sheetLabel?: string;
+  number?: number;
+  inline: boolean;
+  problem?: string;
+  cloudLabel: string;
+  /** Метка облачка для замера высоты в `useFold`. */
+  cloudMark?: boolean;
+  closeLabel: string;
+  onClose: () => void;
+  nativeBack: boolean;
+  countLabel?: string;
+  count: ReactNode;
+  note: ReactNode;
+}) {
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
+  return (
+    <main className={s.session} ref={mainRef}>
+      <div className={s.page}>
+        {head}
+        {sheetLabel ? (
+          <section ref={sheetRef} className={s.sheet} aria-label={sheetLabel}>
+            <PlaceProvider value={{ number, slot, inline }}>{children}</PlaceProvider>
+            {problem && (
+              <p className={s.problem} role="alert">
+                {problem}
+              </p>
+            )}
+          </section>
+        ) : (
+          children
+        )}
+      </div>
+      <div className={s.cloud} role="group" aria-label={cloudLabel} data-cloud={cloudMark || undefined}>
+        {!nativeBack && (
+          <Button variant="ghost" size="icon-lg" className={s.close} onClick={onClose} aria-label={closeLabel}>
+            <X />
+          </Button>
+        )}
+        <span className={s.count} aria-label={countLabel}>
+          <span>{count}</span>
+          <small>{note}</small>
+        </span>
+        <span ref={setSlot} className="contents" />
+      </div>
+    </main>
+  );
 }
