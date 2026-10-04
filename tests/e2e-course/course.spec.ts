@@ -70,8 +70,7 @@ async function turnTo(page: Page, name: string) {
   const forward = page
     .getByRole("navigation", { name: "Страницы урока" })
     .getByRole("button", { name: /Далее|К итогу/ });
-  // Пакет урока, открытого сразу после «Учить курс», может ещё скачиваться.
-  await expect(sheet).toHaveAttribute("aria-label", /^Страница/, { timeout: 30000 });
+  await expect(sheet).toHaveAttribute("aria-label", /^Страница/);
   for (let turns = 0; turns < 20 && !(await target.count()); turns++) {
     // Ждём смены страницы, а не счётчика: счётчик меняется и от сохранения выполненного задания.
     const before = await sheet.getAttribute("aria-label");
@@ -81,6 +80,48 @@ async function turnTo(page: Page, name: string) {
   await expect(target).toBeVisible();
   return target;
 }
+
+/** Переход внутри приложения, без перезагрузки: фоновая установка курса продолжается. */
+const openInApp = (page: Page, path: string) =>
+  page.evaluate((path) => {
+    history.pushState({}, "", path);
+    dispatchEvent(new PopStateEvent("popstate"));
+  }, path);
+/** Каждый пакет урока отвечает с задержкой: очередь курса из четырёх уроков идёт заметно дольше одного пакета. */
+const slowPackages = (page: Page, delay: number) =>
+  page.route("**/content/packages/**", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    await route.continue();
+  });
+
+test("урок, открытый сразу после «Учить курс», показывает первую страницу без ожидания очереди", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Учить курс" }).click();
+  await page.getByTestId("course-next").click();
+  await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 /);
+});
+
+test("урок из конца очереди скачивается сразу и до того показывает «Урок скачивается…»", async ({ page }) => {
+  await slowPackages(page, 1500);
+  await page.goto("/");
+  await page.getByRole("button", { name: "Учить курс" }).click();
+  await openInApp(page, "/course/m01/m01-r1");
+  await expect(page.getByRole("status")).toHaveText("Урок скачивается…");
+  // Очередь дошла бы до этого урока последним, через ~6 с; сам по себе он скачивается за 1,5 с.
+  await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 /, { timeout: 4000 });
+});
+
+test("сбой скачивания открытого урока показывает ошибку и повтор", async ({ page }) => {
+  await page.route("**/content/packages/m01-r1*", (route) => route.abort());
+  await page.goto("/");
+  await page.getByRole("button", { name: "Учить курс" }).click();
+  await expect(page.getByTestId("course-next")).toBeVisible();
+  await openInApp(page, "/course/m01/m01-r1");
+  await expect(page.getByRole("alert")).toBeVisible();
+  await page.unroute("**/content/packages/m01-r1*");
+  await page.getByRole("button", { name: "Повторить" }).click();
+  await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 /);
+});
 
 test("урок курса: задания с ключом, чтение, аудирование, письмо и речь — и только потом завершение", async ({
   page,

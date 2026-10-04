@@ -1,10 +1,11 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import {
   applyPackage,
   catalogPhase,
   contentUrl,
+  courseInstallOrder,
   coursePhase,
   downloadLessonMedia,
   ensureAsset,
@@ -118,6 +119,53 @@ describe("загрузка курса", () => {
     expect(result.installed).toBe(content.catalog.lessons.length);
     expect(await db.packages.count()).toBe(content.catalog.lessons.length);
     expect(media(fetcher)).toEqual([]);
+  });
+  /** Модули поверх уроков механик: модуль 1 — mech-3 и mech-4, модуль 2 — mech-1 и mech-2, не в порядке каталога. */
+  const withModules = () => {
+    const module = (number: number, lessonIds: string[]) => ({
+      id: `mod-${number}`,
+      courseId: "mechanics",
+      number,
+      title: `Модуль ${number}`,
+      subtitle: "Механики",
+      status: "published",
+      goal: "Проверить порядок",
+      grammar: [],
+      sessions: 1,
+      lessonIds,
+    });
+    const catalog = { ...content.catalog, modules: [module(2, ["mech-1", "mech-2"]), module(1, ["mech-3", "mech-4"])] };
+    return memoryFetcher(content, { "content/catalog.json": catalog });
+  };
+  it("курс ставится с модуля, на котором пользователь, затем остальные по программе", async () => {
+    const fetcher = withModules();
+    await refreshCatalog(db, fetcher);
+    expect(await courseInstallOrder("mechanics", db)).toEqual(["mech-3", "mech-4", "mech-1", "mech-2"]);
+    await installCourse("mechanics", db, fetcher);
+    expect(packs(fetcher).map((url) => url.match(/mech-\d/)![0])).toEqual(["mech-3", "mech-4", "mech-1", "mech-2"]);
+    await completeLessons(db, ["mech-3", "mech-4"]);
+    expect(await courseInstallOrder("mechanics", db)).toEqual(["mech-1", "mech-2", "mech-3", "mech-4"]);
+  });
+  it("открытый урок не ждёт очереди курса", async () => {
+    const source = withModules();
+    await refreshCatalog(db, source);
+    let release = () => {};
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    const fetcher = {
+      ...source,
+      json: async (url: string) => {
+        const body = await source.json(url);
+        if (url.includes("mech-3")) await gate;
+        return body;
+      },
+    };
+    const course = installCourse("mechanics", db, fetcher);
+    await vi.waitFor(() => expect(packs(fetcher)).toHaveLength(1));
+    await installLesson("mech-2", db, fetcher);
+    expect(await db.packages.toCollection().primaryKeys()).toEqual(["mech-2"]);
+    release();
+    await course;
+    expect(packs(fetcher).map((url) => url.match(/mech-\d/)![0])).toEqual(["mech-3", "mech-2", "mech-4", "mech-1"]);
   });
   it("начатый курс сам доустанавливает недостающее и подтягивает версию", async () => {
     const first = memoryFetcher();

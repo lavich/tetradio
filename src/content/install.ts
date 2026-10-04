@@ -1,4 +1,4 @@
-import { db, type AppDatabase } from "../storage/db";
+import { db, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
 import { reportError } from "../reporting/reporting";
 import { applyPackage, type InstallResult } from "./apply";
 import { fetcher, type ContentFetcher } from "./fetcher";
@@ -15,21 +15,51 @@ export interface CourseInstallResult {
 }
 
 /**
+ * Порядок установки курса: сперва модуль, на котором пользователь (первый с непройденным уроком), затем остальные
+ * в порядке программы, затем уроки вне модулей — по каталогу.
+ */
+export async function courseInstallOrder(courseId: string, database: AppDatabase = db): Promise<string[]> {
+  const [entries, modules] = await Promise.all([
+    database.catalog.where("courseId").equals(courseId).toArray(),
+    database.modules.where("courseId").equals(courseId).sortBy("number"),
+  ]);
+  const programme = modules.map((module) => [
+    ...module.lessonIds,
+    ...(module.checkpointId ? [module.checkpointId] : []),
+    ...(module.reviewIds ?? []),
+  ]);
+  const lessons = await database.lessons.bulkGet(programme.flat());
+  const completed = new Set(lessons.filter((lesson) => lesson?.completed).map((lesson) => lesson!.id));
+  const current = programme.findIndex((ids) => ids.some((id) => !completed.has(id)));
+  const ordered = current < 0 ? programme : [programme[current], ...programme.filter((_, index) => index !== current)];
+  const rank = new Map(ordered.flat().map((id, index) => [id, index]));
+  const position = (entry: StoredCatalogEntry) => entry.position ?? Number.MAX_SAFE_INTEGER;
+  return entries
+    .sort(
+      (a, b) =>
+        (rank.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (rank.get(b.id) ?? Number.MAX_SAFE_INTEGER) ||
+        position(a) - position(b),
+    )
+    .map((entry) => entry.id);
+}
+
+/**
  * Установка и обновление курса целиком. Уроки идут по одному: прерывание оставляет установленными
  * уже полученные, а ошибка не отменяет успешные — курс просто остаётся частично свежим.
+ * Открытый урок не ждёт очереди: `installLesson` ставит его сразу, параллельно с фоновой установкой.
  */
 export async function installCourse(
   courseId: string,
   database: AppDatabase = db,
   source: ContentFetcher = fetcher,
 ): Promise<CourseInstallResult> {
-  const entries = await database.catalog.where("courseId").equals(courseId).toArray();
+  const order = await courseInstallOrder(courseId, database);
   const result: CourseInstallResult = { installed: 0, updated: 0, failed: 0 };
   setPhase(courseKey(courseId), { phase: "loading" });
   let failure: ContentError | null = null;
-  for (const entry of entries) {
+  for (const id of order) {
     try {
-      const outcome = await installLesson(entry.id, database, source, false);
+      const outcome = await installLesson(id, database, source, false);
       if (outcome.status === "installed") result.installed++;
       if (outcome.status === "updated") result.updated++;
     } catch (error) {
