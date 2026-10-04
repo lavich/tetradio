@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useNavigate, useParams } from "react-router-dom";
-import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { buildWordExercise, wordExerciseOptions } from "../../domain/learning";
@@ -12,11 +11,10 @@ import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform
 import { stopAudio, useGreekVoice } from "../../shared/audio";
 import { useSettings } from "../../shared/store";
 import { db } from "../../storage/db";
-import { Assembly, Comprehension, Listening, Recognition, Spelling, type Answer } from "../learning/exercises";
-import { PlaceProvider, useWide } from "../learning/notebook";
+import { ExerciseView, type Answer } from "../learning/exercises";
+import { SessionShell, useWide } from "../learning/notebook";
 import { EXERCISE_LABELS, isWordExercise, wordSources } from "./word-exercises";
 import ui from "../../shared/ui.module.css";
-import s from "../learning/session.module.css";
 
 /**
  * Упражнение, выбранное пользователем на странице слова. Задание живёт только в памяти экрана:
@@ -80,32 +78,20 @@ export function WordExerciseScreen() {
     setAttempt((n) => n + 1);
   };
   const title = isWordExercise(type) ? EXERCISE_LABELS[type] : "Упражнение";
-  const [slot, setSlot] = useState<HTMLElement | null>(null);
   const wide = useWide();
   const shell = (body: React.ReactNode, sheet = true) => (
-    <main className={s.session}>
-      <div className={s.page}>
-        {sheet ? (
-          <section className={s.sheet} aria-label={title}>
-            <PlaceProvider value={{ slot, inline: wide }}>{body}</PlaceProvider>
-          </section>
-        ) : (
-          body
-        )}
-      </div>
-      <div className={s.cloud} role="group" aria-label={title}>
-        {!nativeBack && (
-          <Button variant="ghost" size="icon-lg" className={s.close} onClick={back} aria-label="К слову">
-            <X />
-          </Button>
-        )}
-        <span className={s.count}>
-          <span>{title}</span>
-          <small>Без учёта прогресса</small>
-        </span>
-        <span ref={setSlot} className="contents" />
-      </div>
-    </main>
+    <SessionShell
+      sheetLabel={sheet ? title : undefined}
+      inline={wide}
+      cloudLabel={title}
+      closeLabel="К слову"
+      onClose={back}
+      nativeBack={nativeBack}
+      count={title}
+      note="Без учёта прогресса"
+    >
+      {body}
+    </SessionShell>
   );
   const message = (text: string) =>
     shell(
@@ -124,19 +110,14 @@ export function WordExerciseScreen() {
   if (item === undefined) return shell(<Skeleton className="h-48 w-full" />, false);
   if (item === null) return message(`Это упражнение для слова недоступно. ${reason}`.trim());
 
-  const props = { item, onAnswer: answer, onNext: again, nextLabel: "Ещё раз" };
-  const autoSpeak = ready && settings.autoSpeak;
-  const view =
-    item.type === "recognition" ? (
-      <Recognition key={item.id} {...props} autoSpeak={autoSpeak} />
-    ) : item.type === "listening" ? (
-      <Listening key={item.id} {...props} onSkip={back} autoSpeak={autoSpeak} />
-    ) : item.type === "comprehension" ? (
-      <Comprehension key={item.id} {...props} onSkip={back} autoSpeak={autoSpeak} />
-    ) : item.type === "assembly" ? (
-      <Assembly key={item.id} {...props} autoSpeak={autoSpeak} />
-    ) : (
-      <Spelling key={item.id} {...props} autoSpeak={autoSpeak} />
-    );
-  return shell(view);
+  return shell(
+    <ExerciseView
+      item={item}
+      onAnswer={answer}
+      onNext={again}
+      onSkip={back}
+      nextLabel="Ещё раз"
+      autoSpeak={ready && settings.autoSpeak}
+    />,
+  );
 }

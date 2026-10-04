@@ -1,0 +1,72 @@
+/* Сборка: слоги ложатся в строку листа чернилами. */
+.assembled {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 4px 6px;
+  min-height: 52px;
+  margin: 14px 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--primary);
+}
+.placed {
+  padding: 0 1px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: 28px/1.15 var(--font-print);
+  color: var(--primary);
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .placed:hover:not(:disabled) {
+    text-decoration: line-through;
+    text-decoration-color: var(--pen);
+  }
+}
+.slotsHint {
+  font-size: 14px;
+  line-height: 32px;
+  color: var(--muted-foreground);
+}
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.tile {
+  display: grid;
+  place-items: center;
+  min-width: 52px;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--input);
+  border-radius: 12px;
+  background: var(--card);
+  font: 22px var(--font-print);
+  color: var(--card-foreground);
+  cursor: pointer;
+  transition: opacity 160ms ease-out;
+}
+@media (hover: hover) {
+  .tile:hover:not(:disabled) {
+    border-color: var(--primary);
+  }
+}
+.tile:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.syllables {
+  font-style: normal;
+  font-size: 18px;
+  line-height: var(--cell);
+  color: var(--card-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transition: none;
+  }
+}
