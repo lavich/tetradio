@@ -222,18 +222,17 @@ describe("обмен прогрессом курса между устройст
 });
 
 describe("доставка: событие изменения, тайм-аут, гонка выгрузки, смена аккаунта", () => {
-  it("выполнение блока сообщает об изменении, завершение урока — об окончании", async () => {
+  it("выполнение блока сообщает об изменении, последнее задание завершает урок — об окончании", async () => {
     const phone = await device("phone");
     const events: string[] = [];
     const off = syncEvents.on((event) => events.push(event));
     try {
       await saveBlockProgress("m01-1", "forms", { done: true }, phone.db);
       for (const blockId of TASKS.slice(1)) await saveBlockProgress("m01-1", blockId, { done: true }, phone.db);
+      expect((await phone.db.lessons.get("m01-1"))?.completed).toBe(true);
       const before = events.length;
-      await completeLesson("m01-1", phone.db);
-      expect(events.length).toBe(before + 1);
       await completeLesson("m01-1", phone.db); // уже завершён — не изменение
-      expect(events.length).toBe(before + 1);
+      expect(events.length).toBe(before);
     } finally {
       off();
     }

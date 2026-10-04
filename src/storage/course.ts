@@ -42,6 +42,7 @@ export async function saveBlockProgress(
     return row;
   });
   announceChange();
+  if (saved.done) await completeIfDone(lessonId, database);
   return saved;
 }
 
@@ -120,6 +121,17 @@ export async function completeLesson(lessonId: string, database: AppDatabase = d
     return true;
   });
   if (changed) announceChange("finished");
+}
+
+/** Урок отмечается пройденным сам, как только выполнено последнее задание. */
+export async function completeIfDone(lessonId: string, database: AppDatabase = db): Promise<boolean> {
+  try {
+    await completeLesson(lessonId, database);
+    return true;
+  } catch (error) {
+    if (error instanceof LessonIncompleteError) return false;
+    throw error;
+  }
 }
 
 export interface ModuleLessonView {

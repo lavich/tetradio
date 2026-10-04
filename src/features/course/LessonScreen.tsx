@@ -1,13 +1,18 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Screen } from "../../app/Screen";
 import type { LessonBlock } from "../../content/course";
-import { lessonTally } from "../../domain/course";
-import { blockProgressOf, completeLesson, courseLesson, saveBlockProgress } from "../../storage/course";
+import { lessonDone, lessonTally } from "../../domain/course";
+import {
+  blockProgressOf,
+  completeIfDone,
+  courseLesson,
+  nextCourseLesson,
+  saveBlockProgress,
+} from "../../storage/course";
 import { lessonItems } from "../../storage/queries";
 import { startSession } from "../learning/session-actions";
 import { Exercise, Explanation, Listening, Reading, Speaking, Writing } from "./blocks";
@@ -18,7 +23,7 @@ import nb from "../../shared/notebook.module.css";
 import { VocabularyList } from "./Vocabulary";
 import { TapHint, WordTaps } from "./WordTaps";
 import { LessonDownload } from "./LessonDownload";
-import { LessonSummary } from "./LessonSummary";
+import { LessonReview, LessonSummary } from "./LessonSummary";
 import { blockLabel, numberBlocks, paginate, resumePage } from "./paginate";
 import { usePager } from "./usePager";
 import base from "./course.module.css";
@@ -31,18 +36,34 @@ export function CourseLessonScreen() {
   const lesson = useLiveQuery(() => courseLesson(lessonId), [lessonId]);
   const progress = useLiveQuery(() => blockProgressOf(lessonId), [lessonId]);
   const items = useLiveQuery(() => lessonItems(lessonId), [lessonId]);
+  const finished = !!lesson?.lesson?.completed;
+  const courseId = lesson?.lesson?.courseId;
+  const next = useLiveQuery(() => (finished ? nextCourseLesson(courseId) : null), [finished, courseId, lessonId]);
   const [problem, setProblem] = useState("");
   const spread = useSpread();
   const numbering = useMemo(() => numberBlocks(lesson?.blocks ?? []), [lesson]);
   const pages = useMemo(() => paginate(lesson?.blocks ?? []), [lesson]);
   const total = pages.length + 1; // последняя страница — итог урока
   const resume = progress ? resumePage(pages, (block) => !!progress.get(block.id)?.done) : 0;
-  const { current, first, turn, go, next, prev, swipe } = usePager({
+  const {
+    current,
+    first,
+    turn,
+    go,
+    next: turnNext,
+    prev,
+    swipe,
+  } = usePager({
     total,
     opening: resume < 0 ? pages.length : resume,
     ready: !!progress && !!lesson,
     spread,
   });
+  // Задания выполнены раньше, чем урок стал завершаться сам, — отмечаем при открытии.
+  const pendingCompletion = !!lesson && !!progress && !finished && lessonDone(lesson.blocks, progress);
+  useEffect(() => {
+    if (pendingCompletion) void completeIfDone(lessonId);
+  }, [pendingCompletion, lessonId]);
   if (lesson === undefined || progress === undefined) return <Screen back="Урок" />;
   if (lesson === null) return <LessonDownload lessonId={lessonId} moduleId={moduleId} />;
   const save = (blockId: string) => (patch: Parameters<typeof saveBlockProgress>[2]) =>
@@ -58,16 +79,19 @@ export function CourseLessonScreen() {
     if (!created) return setProblem("В уроке нет доступных карточек.");
     void navigate("/session");
   };
-  const finish = async () => {
-    try {
-      await completeLesson(lessonId);
-      toast.success("Урок пройден");
-      // Открыт со страницы модуля — возвращаемся на неё же, иначе модуль окажется в истории дважды.
-      if ((location.state as { fromModule?: boolean } | null)?.fromModule) void navigate(-1);
-      else void navigate(`/course/${moduleId}`, { replace: true });
-    } catch (error) {
-      setProblem((error as Error).message);
-    }
+  const fromModule = !!(location.state as { fromModule?: boolean } | null)?.fromModule;
+  const toModule = () => {
+    // Открыт со страницы модуля — возвращаемся на неё же, иначе модуль окажется в истории дважды.
+    if (fromModule) void navigate(-1);
+    else void navigate(`/course/${moduleId}`, { replace: true });
+  };
+  const openNext = () => {
+    if (!next) return;
+    const same = next.module.id === moduleId;
+    void navigate(`/course/${next.module.id}/${next.lesson.id}`, {
+      replace: true,
+      state: same && fromModule ? location.state : null,
+    });
   };
 
   const renderBlock = (block: LessonBlock) => {
@@ -102,26 +126,36 @@ export function CourseLessonScreen() {
       </section>
     );
   };
+  // Итог на левой странице разворота — справа карточки урока, иначе страница пустует.
+  const review = spread && first === total - 1 && finished && !!items?.length;
   const renderPage = (index: number) => (
     <article key={index} className={css.page} aria-label={`Страница ${index + 1} из ${total}`}>
       {index === 0 ? <TapHint /> : null}
       {index < pages.length ? (
         pages[index].map(renderBlock)
-      ) : (
+      ) : index === pages.length ? (
         <LessonSummary
           lesson={lesson}
           progress={progress}
           pages={pages}
           numbering={numbering}
+          items={items ?? []}
+          next={next?.lesson}
+          withList={review}
           problem={problem}
-          finish={finish}
+          practice={() => void practiceWords()}
           go={go}
+          openNext={openNext}
+          toModule={toModule}
         />
+      ) : (
+        <LessonReview items={items ?? []} practice={() => void practiceWords()} />
       )}
     </article>
   );
-  const shown = spread ? [first, first + 1].filter((index) => index < total) : [current];
-  const last = shown[shown.length - 1];
+  const shown = spread ? [first, first + 1].filter((index) => index < total || (review && index === total)) : [current];
+  const last = Math.min(shown[shown.length - 1], total - 1);
+  const atEnd = last >= total - 1;
   return (
     <Screen back="" wide paper>
       <h1 className="sr-only">{lesson.title}</h1>
@@ -154,16 +188,23 @@ export function CourseLessonScreen() {
         </Button>
         <span className={css.pageCount} data-testid="page-count">
           <span>
-            {shown.length > 1 ? `стр. ${first + 1}–${last + 1}` : `стр. ${current + 1}`} из {total}
+            {last > first ? `стр. ${first + 1}–${last + 1}` : `стр. ${current + 1}`} из {total}
           </span>
           <span className={css.pageTasks}>
             заданий {tally.done} из {tally.total}
           </span>
         </span>
-        <Button size="md" className="h-full w-auto" onClick={next} disabled={last >= total - 1}>
-          {last + 1 >= total - 1 ? "К итогу" : "Далее"}
-          <ChevronRight data-icon="inline-end" />
-        </Button>
+        {atEnd && next ? (
+          <Button size="md" className="h-full w-auto" onClick={openNext}>
+            Следующий урок
+            <ChevronRight data-icon="inline-end" />
+          </Button>
+        ) : (
+          <Button size="md" className="h-full w-auto" onClick={turnNext} disabled={atEnd}>
+            {last + 1 >= total - 1 ? "К итогу" : "Далее"}
+            <ChevronRight data-icon="inline-end" />
+          </Button>
+        )}
       </nav>
     </Screen>
   );
