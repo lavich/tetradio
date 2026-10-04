@@ -40,7 +40,7 @@ export function ProgressScreen() {
       <h1 className={css.title}>Прогресс</h1>
     </>
   );
-  const ready = <Readiness readiness={data.readiness} />;
+  const ready = <Readiness readiness={data.readiness} done={data.pace.done} total={data.pace.total} />;
   const week = <Week week={data.week} />;
   const path = <Path data={data} />;
   const tail = (
@@ -86,15 +86,16 @@ export function ProgressScreen() {
   );
 }
 
-function Readiness({ readiness }: { readiness: SkillReadiness[] }) {
+function Readiness({ readiness, done, total }: { readiness: SkillReadiness[]; done: number; total: number }) {
   return (
     <section aria-labelledby="readiness">
       <h2 id="readiness" className={css.heading}>
         Готовность к A2
       </h2>
       <p className={css.note}>
-        Порог экзамена — 60 % в каждом навыке. Чтение и аудирование — по контрольным; письмо и речь — ваша самопроверка,
-        не оценка экзаменатора.
+        Порог экзамена — 60 % в каждом навыке. Результат умножен на пройденную часть курса: {done} из{" "}
+        {withCount(total, LESSONS)}. Чтение и аудирование — по контрольным; письмо и речь — ваша самопроверка, не оценка
+        экзаменатора.
       </p>
       <ul className={css.skills}>
         {(["reading", "listening", "writing", "speaking"] as const).map((skill) => {
@@ -127,9 +128,11 @@ function Readiness({ readiness }: { readiness: SkillReadiness[] }) {
                   ? skill === "reading" || skill === "listening"
                     ? "появится после первой контрольной"
                     : "появится после первого задания"
-                  : item.source === "test"
-                    ? item.basis
-                    : `самопроверка, ${withCount(Number(item.basis), ["задание", "задания", "заданий"])}`}
+                  : `${
+                      item.source === "test"
+                        ? item.basis
+                        : `самопроверка, ${withCount(Number(item.basis), ["задание", "задания", "заданий"])}`
+                    }: ${Math.round(item.result * 100)} %`}
                 {weak && " · ниже 60 %"}
               </span>
             </li>

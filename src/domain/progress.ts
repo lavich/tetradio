@@ -76,9 +76,17 @@ export function coursePace(modules: ModuleLoad[], today: string, completedDays: 
 
 export interface SkillReadiness {
   skill: Skill;
+  /** Результат, умноженный на долю пройденных уроков курса: высокий балл в начале курса ещё не готовность. */
   share: number;
+  /** Сам результат контрольной или самопроверки. */
+  result: number;
   /** Чтение и аудирование — по контрольным; письмо и речь — доля отмеченных критериев самопроверки. */
   source: "test" | "self";
   /** Название контрольной или число заданий самопроверки. */
   basis: string;
+}
+
+export function withCoverage(results: Omit<SkillReadiness, "share">[], done: number, total: number): SkillReadiness[] {
+  const coverage = total ? Math.min(1, done / total) : 0;
+  return results.map((item) => ({ ...item, share: item.result * coverage }));
 }
