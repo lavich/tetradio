@@ -96,6 +96,10 @@ test("занятие: знакомство, четыре упражнения, �
   expect(activeMs).toBeGreaterThan(1000);
   await page.getByRole("button", { name: "Готово" }).click();
   await ready(page);
+  // «Назад» после «Готово» не возвращает к итогу завершённого занятия.
+  await page.goBack();
+  await ready(page);
+  await expect(page.getByRole("heading", { name: "Занятие завершено" })).toHaveCount(0);
   await page.reload();
   await ready(page);
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();

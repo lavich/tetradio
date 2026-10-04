@@ -76,7 +76,7 @@ export function ResultScreen() {
 
   const repeat = async () => {
     const created = await startSession(now, { refs: readyAgain });
-    void navigate(created ? "/session" : "/");
+    void navigate(created ? "/session" : "/", { replace: true });
   };
   return (
     <main className={`${s.session} ${s.result}`}>
@@ -121,7 +121,7 @@ export function ResultScreen() {
           </span>
           <small>{session ? compositionLine(session.items) : ""}</small>
         </span>
-        <Button size="md" className={s.primary} onClick={() => navigate("/")}>
+        <Button size="md" className={s.primary} onClick={() => navigate("/", { replace: true })}>
           Готово
         </Button>
       </div>

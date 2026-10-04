@@ -29,15 +29,16 @@ export function SessionScreen() {
   const other = useActiveSession();
   const [sessionId, setSessionId] = useState<string | null>(null);
   // Сессию держим по id: последний ответ переводит её в done, но экран должен дорисовать обратную связь.
+  // `undefined` — ещё читается, `null` — активного занятия нет.
   const session = useLiveQuery(
-    () =>
-      sessionId
+    async () =>
+      (await (sessionId
         ? db.sessions.get(sessionId)
         : db.sessions
             .orderBy("id")
             .reverse()
             .filter((entry) => entry.status === "active")
-            .first(),
+            .first())) ?? null,
     [sessionId],
   );
   const events = useLiveQuery(
@@ -78,7 +79,7 @@ export function SessionScreen() {
   const haptic = useHaptics();
   const nativeBack = usePlatform().capabilities.back;
   // Нативный «Назад» Telegram выполняет тот же выход из занятия, что и крестик: принятые ответы уже сохранены.
-  const leaveRef = useRef<() => void>(() => navigate("/"));
+  const leaveRef = useRef<() => void>(() => navigate("/", { replace: true }));
   const [backHandler] = useState(() => () => leaveRef.current());
   useBackHandler(backHandler);
   const item = session && position >= 0 ? session.items[position] : undefined;
@@ -200,7 +201,7 @@ export function SessionScreen() {
   };
   const leave = async () => {
     await endSession({ ...session, activeTimeMs: activeMs() });
-    void navigate("/");
+    void navigate("/", { replace: true });
   };
   leaveRef.current = leave;
   const skip = async () => {

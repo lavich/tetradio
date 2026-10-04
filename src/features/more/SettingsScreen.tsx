@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -7,12 +8,18 @@ import { Screen } from "../../app/Screen";
 import { useHapticsSetting } from "../../platform/haptics";
 import { usePlatform } from "../../platform/platform";
 import { useSettings } from "../../shared/store";
-import { saveSettings } from "../../storage/ops";
+import { db } from "../../storage/db";
+import { saveCourseTempo, saveSettings } from "../../storage/ops";
 import ui from "../../shared/ui.module.css";
 
 const ZONES = ["Asia/Nicosia", "Europe/Athens", "Europe/Moscow", "Europe/Berlin", "Europe/London", "UTC"];
 export function SettingsScreen() {
-  const { settings } = useSettings();
+  const { settings, ready } = useSettings();
+  // Курс один: дневной предел новых слов хранится в нём, а не в настройках.
+  const course = useLiveQuery(async () => {
+    const module = await db.modules.toCollection().first();
+    return (await (module ? db.courses.get(module.courseId) : db.courses.toCollection().first())) ?? null;
+  }, []);
   const [daily, setDaily] = useState("10");
   const [size, setSize] = useState("20");
   const [zone, setZone] = useState("Asia/Nicosia");
@@ -24,19 +31,37 @@ export function SettingsScreen() {
   const [autoSpeak, setAutoSpeak] = useState(true);
   const platform = usePlatform();
   const [haptics, setHaptics] = useHapticsSetting();
+  // Форма заполняется из базы один раз: иначе любое сохранение переключателя стирало бы несохранённые правки.
+  const filled = useRef({ settings: false, course: false });
   useEffect(() => {
+    if (!ready || filled.current.settings) return;
+    filled.current.settings = true;
     setSize(String(settings.sessionSize));
     setZone(settings.timezone);
     setReports(settings.errorReports);
     setAutoSpeak(settings.autoSpeak);
-  }, [settings]);
+  }, [ready, settings]);
+  useEffect(() => {
+    if (!course || filled.current.course) return;
+    filled.current.course = true;
+    setDaily(String(course.newItemsPerDay));
+  }, [course]);
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
+    const newItemsPerDay = Number(daily);
+    if (!Number.isInteger(newItemsPerDay) || newItemsPerDay < 0 || newItemsPerDay > 100)
+      return setProblem("Дневной лимит — целое число от 0 до 100.");
     const sessionSize = Number(size);
     if (!Number.isInteger(sessionSize) || sessionSize < 2 || sessionSize > 100)
       return setProblem("Размер занятия — целое число от 2 до 100.");
     setProblem("");
-    await saveSettings({ ...settings, sessionSize, timezone: zone });
+    try {
+      await saveSettings({ ...settings, sessionSize, timezone: zone });
+      if (course && course.newItemsPerDay !== newItemsPerDay)
+        await saveCourseTempo(course.id, { newItemsPerDay }, new Date());
+    } catch {
+      return setProblem("Не удалось сохранить. Проверьте место на устройстве и повторите.");
+    }
     setSaved(true);
   };
   return (
@@ -51,6 +76,7 @@ export function SettingsScreen() {
               min={0}
               max={100}
               value={daily}
+              disabled={!course}
               aria-invalid={problem.includes("лимит") || undefined}
               onChange={(event) => {
                 setDaily(event.target.value);
