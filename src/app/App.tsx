@@ -11,9 +11,9 @@ import ui from "../shared/ui.module.css";
 
 const named = <K extends string>(key: K, load: () => Promise<Record<K, React.ComponentType>>) =>
   lazy(() => loadScreen(load).then((module) => ({ default: module[key] })));
-const CourseScreen = named("CourseScreen", () => import("../features/course/screens"));
-const ModuleScreen = named("ModuleScreen", () => import("../features/course/screens"));
-const CourseLessonScreen = named("CourseLessonScreen", () => import("../features/course/screens"));
+const CourseScreen = named("CourseScreen", () => import("../features/course/ShelfScreen"));
+const ModuleScreen = named("ModuleScreen", () => import("../features/course/ModuleScreen"));
+const CourseLessonScreen = named("CourseLessonScreen", () => import("../features/course/LessonScreen"));
 const WordsScreen = named("WordsScreen", () => import("../features/words/WordsScreen"));
 const WordScreen = named("WordScreen", () => import("../features/words/WordScreen"));
 const PhraseScreen = named("PhraseScreen", () => import("../features/words/WordScreen"));
