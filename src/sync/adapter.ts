@@ -34,6 +34,11 @@ export interface SyncAdapter {
   listGenerations(): Promise<string[]>;
   /** Удаляет части перечисленных версий; указатели других устройств не трогает. */
   removeGenerations(versionIds: string[]): Promise<void>;
+  /**
+   * Удаляет указатель другого устройства и части его версий не новее указателя, если указатель всё ещё тот же;
+   * `false` — устройство успело опубликовать другую версию, ничего не удалено.
+   */
+  removeDevice(meta: VersionMeta): Promise<boolean>;
   /** Сколько ключей займёт версия и сколько свободно с учётом собственного указателя. */
   room(partsNeeded: number, ownDevice: string): Promise<{ free: number; needed: number; keys: number }>;
 }
@@ -45,6 +50,11 @@ export const partKey = (versionId: string, index: number) => `${PART}${versionId
 export const parsePartKey = (key: string): { versionId: string; index: number } | null => {
   const match = /^v_(.+)_(\d+)$/.exec(key);
   return match ? { versionId: match[1], index: Number(match[2]) } : null;
+};
+/** Идентификатор версии — `устройство-счётчик`: счётчик устройства в её часах. */
+const parseVersionId = (id: string): { device: string; counter: number } | null => {
+  const match = /^(.+)-(\d+)$/.exec(id);
+  return match ? { device: match[1], counter: Number(match[2]) } : null;
 };
 /** FNV-1a 32 бита: достаточно для проверки целостности частей, криптостойкость не требуется. */
 export function checksum(text: string): string {
@@ -178,6 +188,21 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
         return !!part && wanted.has(part.versionId);
       });
       if (keys.length) await transport.removeItems(keys);
+    },
+    async removeDevice(meta) {
+      ensure();
+      const name = pointerKey(meta.device);
+      const current = (await transport.getItems([name]))[name];
+      if (current === undefined || parsePointer(current)?.id !== meta.id) return false;
+      const counter = meta.clock[meta.device] ?? 0;
+      const parts = (await transport.getKeys()).filter((key) => {
+        const version = parseVersionId(parsePartKey(key)?.versionId ?? "");
+        return !!version && version.device === meta.device && version.counter <= counter;
+      });
+      // Указатель первым: без него части не выглядят версией, даже если удаление частей оборвётся.
+      await transport.removeItems([name]);
+      if (parts.length) await transport.removeItems(parts);
+      return true;
     },
     async room(partsNeeded, ownDevice) {
       ensure();

@@ -13,7 +13,7 @@ import {
 import type { TextAnswerStatus } from "../domain/text-answer";
 import { snapshotOf } from "../domain/refs";
 import { type ReviewEvent, type Session, type SessionItem, type Settings, type Word } from "../domain/types";
-import { syncEvents } from "../sync/events";
+import { syncEvents, type SyncEvent } from "../sync/events";
 
 /**
  * Отметка «есть неопубликованные изменения» пишется в той же транзакции, что и само изменение.
@@ -24,7 +24,7 @@ let changes = 0;
 export const dirtyMark = () =>
   `${Date.now().toString(36)}-${(++changes).toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 export const markChanged = (database: AppDatabase) => database.meta.put({ key: DIRTY_KEY, value: dirtyMark() });
-export const announceChange = () => syncEvents.emit("changed");
+export const announceChange = (event: SyncEvent = "changed") => syncEvents.emit(event);
 const settled = (items: SessionItem[]) => items.filter((entry) => entry.eventId || entry.skipped).length;
 
 export class ConflictError extends Error {
@@ -130,11 +130,11 @@ export async function recordAnswer({
         status: answered >= items.length ? "done" : "active",
       });
       await markChanged(database);
-      return { event, created: true };
+      return { event, created: true, finished: answered >= items.length };
     },
   );
-  if (result.created) announceChange();
-  return result;
+  if (result.created) announceChange(result.finished ? "finished" : "answered");
+  return { event: result.event, created: result.created };
 }
 /**
  * Задание дополнительной попытки: ступень проще провалённой. Пул вариантов читается только на ошибке
@@ -184,7 +184,7 @@ export async function skipItem(
   activeTimeMs: number,
   database: AppDatabase = db,
 ): Promise<void> {
-  await database.transaction("rw", database.sessions, async () => {
+  const finished = await database.transaction("rw", database.sessions, async () => {
     const session = await database.sessions.get(sessionId);
     if (!session) throw new Error("Занятие недоступно");
     const items = session.items.map((entry) =>
@@ -198,10 +198,14 @@ export async function skipItem(
       activeTimeMs,
       status: answered >= items.length ? "done" : "active",
     });
+    return answered >= items.length;
   });
+  // Пропуск последнего задания завершает занятие: накопленные ответы уходят в облако.
+  if (finished) announceChange("finished");
 }
 export const endSession = async (session: Session, database: AppDatabase = db) => {
   await database.sessions.put({ ...session, status: session.index >= session.items.length ? "done" : "ended" });
+  announceChange("finished");
 };
 
 export async function saveSettings(settings: Settings, database: AppDatabase = db) {

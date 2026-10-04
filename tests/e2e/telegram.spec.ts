@@ -527,6 +527,15 @@ test.describe("аудио, копии и облако", () => {
     await page.waitForURL("**/session");
     await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
     await page.getByRole("button", { name: "Далее", exact: true }).click();
+    // Ответ занятия ждёт на устройстве; сворачивание отправляет его в облако, не дожидаясь конца занятия.
+    const published = async () =>
+      Object.entries(await tg(page).cloud())
+        .filter(([key]) => key.startsWith("p_"))
+        .map(([, value]) => JSON.parse(value).id as string);
+    const before = await published();
+    await tg(page).setHidden(true);
+    await expect.poll(published, { timeout: 15000 }).not.toEqual(before);
+    await tg(page).setHidden(false);
     await page.goto("/more");
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
     await expect(page.getByTestId("sync-status")).toContainText("Синхронизировано");

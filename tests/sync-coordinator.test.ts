@@ -434,6 +434,78 @@ describe("надёжность публикации и лимиты", () => {
     expect(after).toContain(`${tabletDevice}-1`);
     expect(after).toContain(`${phoneDevice}-3`); // чужое поколение не удалено планшетом
   });
+  it("указатель другого устройства, вошедший в принятую версию, удаляется с частями через 30 дней, не раньше", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
+    await study(phone, [true, true]);
+    await phone.sync.exchange();
+    await tablet.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    const phoneKeys = () =>
+      [...cloud.store.keys()].filter((key) => key === `p_${phoneDevice}` || key.startsWith(`v_${phoneDevice}-`));
+    await study(tablet, [true]);
+    expect((await tablet.sync.exchange()).phase).toBe("synced");
+    expect(phoneKeys()).toContain(`p_${phoneDevice}`); // моложе 30 дней
+    tick(31 * 24 * 60);
+    await study(tablet, [false]);
+    expect((await tablet.sync.exchange()).phase).toBe("synced");
+    expect(phoneKeys()).toEqual([]);
+    // Устройство возвращается: принимает общую версию и публикует дальше как обычно.
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    expect(await statesOf(phone)).toEqual(await statesOf(tablet));
+    await study(phone, [true]);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    expect((await tablet.sync.exchange()).phase).toBe("synced");
+    expect(await statesOf(tablet)).toEqual(await statesOf(phone));
+  });
+  it("старый указатель, не вошедший в принятую версию, не удаляется", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    const ghost = (await import("../src/sync/snapshot")).readSnapshot(phone.db, now());
+    let inject = true;
+    const original = cloud.setItem.bind(cloud);
+    cloud.setItem = async (key, value) => {
+      // Другое устройство публикует во время нашей выгрузки: уборка видит его, а принятая версия — нет.
+      if (inject && key === `p_${phoneDevice}`) {
+        inject = false;
+        await kvAdapter(cloud).publishVersion(
+          {
+            id: "ghost-1",
+            device: "ghost",
+            clock: { ghost: 1 },
+            createdAt: "2026-01-01T00:00:00.000Z",
+            format: SNAPSHOT_FORMAT,
+            resolves: [],
+          },
+          await ghost,
+        );
+      }
+      return original(key, value);
+    };
+    tick(31 * 24 * 60);
+    await study(phone, [false]);
+    await phone.sync.exchange();
+    expect(cloud.store.has("p_ghost")).toBe(true);
+    expect([...cloud.store.keys()].some((key) => key.startsWith("v_ghost-1_"))).toBe(true);
+  });
+  it("нехватка места: уборка вошедших в принятую версию указателей сразу, без учёта возраста, и повтор", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
+    await study(phone, [true, true]);
+    await phone.sync.exchange();
+    await tablet.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    cloud.limits.maxKeys = cloud.store.size + 1;
+    await study(tablet, [true]);
+    const status = await tablet.sync.exchange();
+    expect(status.phase).toBe("synced");
+    expect(cloud.store.has(`p_${phoneDevice}`)).toBe(false);
+    expect(cloud.store.has(`p_${await tablet.sync.deviceId()}`)).toBe(true);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    expect(await statesOf(phone)).toEqual(await statesOf(tablet));
+  });
   it("нехватка места останавливает облачную запись, сохраняет очередь и локальные данные", async () => {
     cloud = memoryTransport({ limits: { maxKeys: 1 } }); // одна часть плюс указатель уже не помещаются
     const phone = await device("phone", { lessons: ["mech-1", "mech-2", "mech-3", "mech-4"] });

@@ -279,7 +279,7 @@ describe("размер компактного снимка (задача 0.4)", 
     expect(course.length).toBeGreaterThanOrEqual(99);
     expect(snapshot.states).toHaveLength(2500);
     expect(snapshot.blocks).toHaveLength(blocks.length);
-    expect(snapshot.lessons.filter((item) => item.status === "completed")).toHaveLength(course.length);
+    expect(snapshot.lessons.filter((item) => item.completed)).toHaveLength(course.length);
     expect(encodeSnapshot(snapshot)).not.toContain("απάντηση");
     expect(keysNeeded).toBeLessThanOrEqual(CLOUD_LIMITS.maxKeys);
     expect(courseChars / blocks.length).toBeLessThan(50);

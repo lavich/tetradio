@@ -1,18 +1,17 @@
 import type { AppDatabase } from "../storage/db";
 import type { SyncAdapter } from "./adapter";
 import { dominates, mergeClocks, sameClock } from "./clock";
-import { syncEvents } from "./events";
+import { syncEvents, type SyncEvent } from "./events";
 import {
   applySnapshot,
   buildAndCommitMarked,
-  buildSnapshot,
   clearDirty,
   describeSnapshot,
   hasLocalProgress,
   META,
   parseClock,
   readMeta,
-  SNAPSHOT_TABLES,
+  readSnapshot,
   writeMeta,
   type SnapshotDescription,
 } from "./snapshot";
@@ -25,7 +24,7 @@ import {
   type SyncVersionRow,
   type VersionMeta,
 } from "./types";
-/** Читаемые форматы: текущий и словарный формат 1; более новый или неизвестный — отказ без записи. */
+/** Читаемые форматы: текущий и предыдущий; более новый или неизвестный — отказ без записи. */
 const readable = (format: number) => (SUPPORTED_SNAPSHOT_FORMATS as readonly number[]).includes(format);
 
 export type SyncPhase = "disabled" | "paused" | "idle" | "syncing" | "synced" | "error" | "conflict";
@@ -70,6 +69,9 @@ export interface CoordinatorOptions {
   recover?: (error: unknown) => Promise<boolean>;
   retryBaseMs?: number;
 }
+const FOREIGN_KEEP_MS = 30 * 24 * 60 * 60 * 1000;
+export const EXCHANGE_INTERVAL_MS = 2 * 60 * 1000;
+const CHANGE_DELAY_MS = 2000;
 /** Страховка от бесконечного повтора: сам предел попыток лечения задаёт тот, кто его подключает. */
 const MAX_RECOVERIES = 3;
 const INITIAL: SyncStatus = {
@@ -152,7 +154,7 @@ export class SyncCoordinator {
     };
   }
 
-  /** Обмен запускается при открытии, возврате, после изменений и восстановлении сети; параллельные вызовы объединяются. */
+  /** Параллельные вызовы объединяются; поводы обмена перечислены в `start`. */
   exchange(): Promise<SyncStatus> {
     if (this.running) {
       // Изменение во время обмена: ещё один заход сразу после текущего.
@@ -160,6 +162,7 @@ export class SyncCoordinator {
       return this.running;
     }
     this.again = false;
+    this.lastStart = this.options.now().getTime();
     this.running = this.run().finally(() => {
       this.running = null;
       if (this.again && this.status.phase !== "error" && this.status.phase !== "conflict") void this.exchange();
@@ -167,6 +170,7 @@ export class SyncCoordinator {
     return this.running;
   }
   private again = false;
+  private lastStart = -Infinity;
   /**
    * Обмен идёт вне дерева React, поэтому граница восстановления его не прикрывает: отказ хранилища после сна
    * WebView лечится здесь переоткрытием базы и повтором захода. Отчёт о сбое уходит, когда лечение не помогло.
@@ -278,11 +282,7 @@ export class SyncCoordinator {
             meta: pointer,
           });
         }
-        const snapshot = await database.transaction(
-          "r",
-          SNAPSHOT_TABLES.map((name) => database.table(name)),
-          () => buildSnapshot(database, this.options.now()),
-        );
+        const snapshot = await this.localSnapshot();
         this.conflict("restored", [
           {
             id: `local-${device}`,
@@ -307,7 +307,7 @@ export class SyncCoordinator {
           });
           return;
         }
-        await this.publish(device, flags.clock, [], [], null, mine);
+        await this.publish(device, flags.clock, [], [], null);
         if (depth < 1) await this.decide(writes, depth + 1); // поздняя конкурентная запись обнаруживается повторным чтением
         return;
       }
@@ -341,11 +341,7 @@ export class SyncCoordinator {
       }
     }
     const localBranch = async (): Promise<ConflictBranch> => {
-      const snapshot = await database.transaction(
-        "r",
-        SNAPSHOT_TABLES.map((name) => database.table(name)),
-        () => buildSnapshot(database, this.options.now()),
-      );
+      const snapshot = await this.localSnapshot();
       return {
         id: `local-${device}`,
         device,
@@ -376,7 +372,6 @@ export class SyncCoordinator {
           branch.id,
           branch.meta!.clock,
           this.options.now(),
-          branch.meta!.format,
           { ifClean: true },
         );
         // Локальное изменение появилось во время чтения облака: это уже расхождение, решаем заново.
@@ -412,7 +407,6 @@ export class SyncCoordinator {
     mergeWith: Clock[],
     resolves: string[],
     override: CompactSnapshot | null,
-    mine: VersionMeta | null,
   ) {
     const { adapter, database } = this.options;
     const clock = mergeClocks(base, ...mergeWith);
@@ -422,18 +416,22 @@ export class SyncCoordinator {
     const { snapshot, mark } = override
       ? { snapshot: override, mark: await readMeta(database, META.dirty) }
       : await buildAndCommitMarked(database, now, id);
-    await adapter.publishVersion(
-      {
-        id,
-        device,
-        clock,
-        createdAt: now.toISOString(),
-        format: SNAPSHOT_FORMAT,
-        resolves,
-        label: this.options.label || undefined,
-      },
-      snapshot,
-    );
+    const meta = {
+      id,
+      device,
+      clock,
+      createdAt: now.toISOString(),
+      format: SNAPSHOT_FORMAT,
+      resolves,
+      label: this.options.label || undefined,
+    };
+    try {
+      await adapter.publishVersion(meta, snapshot);
+    } catch (error) {
+      if (!(error instanceof SyncError && error.kind === "limit")) throw error;
+      await this.cleanup(device, clock, true);
+      await adapter.publishVersion(meta, snapshot);
+    }
     await database.transaction("rw", database.meta, async () => {
       await writeMeta(database, META.applied, id);
       await writeMeta(database, META.clock, JSON.stringify(clock));
@@ -441,26 +439,37 @@ export class SyncCoordinator {
       await writeMeta(database, META.restored, null);
     });
     await this.confirm();
-    await this.cleanup(device, id, mine);
-  }
-  /** Удаляются только собственные поколения, не нужные текущей версии и сохранённым альтернативам. Чужие ключи не трогаем. */
-  private async cleanup(device: string, currentId: string, _previous: VersionMeta | null) {
-    const { adapter, database } = this.options;
     try {
-      const protectedIds = new Set((await database.syncVersions.toArray()).map((row) => row.meta.id));
-      const own = (await adapter.listGenerations()).filter(
-        (id) => id.startsWith(`${device}-`) && id !== currentId && !protectedIds.has(id),
-      );
-      if (own.length) await adapter.removeGenerations(own);
-      this.update({ keys: { used: (await adapter.room(0, device)).keys, max: adapter.capabilities().maxKeys } });
+      await this.cleanup(device, clock, false);
     } catch (error) {
       console.warn("Очистка старых поколений отложена", error);
     }
   }
+  /**
+   * Уборка облака: свои поколения, кроме опубликованного и сохранённых альтернатив, и указатели других устройств,
+   * полностью вошедшие в `applied`, — старше 30 дней или любые при `force`. Их прогресс уже есть на этом устройстве.
+   */
+  private async cleanup(device: string, applied: Clock, force: boolean) {
+    const { adapter, database } = this.options;
+    const { pointers } = await adapter.listPointers();
+    const protectedIds = new Set((await database.syncVersions.toArray()).map((row) => row.meta.id));
+    for (const pointer of pointers) if (pointer.device === device) protectedIds.add(pointer.id);
+    const own = (await adapter.listGenerations()).filter((id) => id.startsWith(`${device}-`) && !protectedIds.has(id));
+    if (own.length) await adapter.removeGenerations(own);
+    const cutoff = this.options.now().getTime() - FOREIGN_KEEP_MS;
+    for (const pointer of pointers)
+      if (
+        pointer.device !== device &&
+        dominates(applied, pointer.clock) &&
+        (force || Date.parse(pointer.createdAt) < cutoff)
+      )
+        await adapter.removeDevice(pointer);
+    this.update({ keys: { used: (await adapter.room(0, device)).keys, max: adapter.capabilities().maxKeys } });
+  }
   private async installMissing(packages: string[]) {
     try {
       const { database } = this.options;
-      const installed = new Set((await database.packages.toArray()).map((pack) => pack.lessonId));
+      const installed = new Set((await database.packages.toCollection().primaryKeys()) as string[]);
       const missing = packages.filter((id) => !installed.has(id));
       if (missing.length) this.onMissingPackages?.(missing);
     } catch {
@@ -529,17 +538,10 @@ export class SyncCoordinator {
     try {
       const flags = await this.flags();
       if (chosen.local) {
-        await this.publish(device, flags.clock, clocks, resolves, null, null);
+        await this.publish(device, flags.clock, clocks, resolves, null);
       } else {
-        await applySnapshot(
-          database,
-          chosen.snapshot,
-          chosen.id,
-          chosen.meta!.clock,
-          this.options.now(),
-          chosen.meta!.format,
-        );
-        await this.publish(device, chosen.meta!.clock, clocks, resolves, chosen.snapshot, null);
+        await applySnapshot(database, chosen.snapshot, chosen.id, chosen.meta!.clock, this.options.now());
+        await this.publish(device, chosen.meta!.clock, clocks, resolves, chosen.snapshot);
         await this.installMissing(chosen.snapshot.packages);
       }
     } catch (error) {
@@ -547,12 +549,7 @@ export class SyncCoordinator {
     }
   }
   private localSnapshot() {
-    const { database } = this.options;
-    return database.transaction(
-      "r",
-      SNAPSHOT_TABLES.map((name) => database.table(name)),
-      () => buildSnapshot(database, this.options.now()),
-    );
+    return readSnapshot(this.options.database, this.options.now());
   }
   listStored = () => this.options.database.syncVersions.orderBy("createdAt").reverse().toArray();
   async discardStored(id: string) {
@@ -568,26 +565,54 @@ export class SyncCoordinator {
       : null;
   }
 
-  /** Автоматические поводы обмена; ручной повтор — `exchange()`. */
+  /**
+   * Автоматические поводы обмена: открытие и возврат, сеть, окончание занятия, сворачивание и, без занятия,
+   * прочие изменения — не чаще раза в `EXCHANGE_INTERVAL_MS`. Ответы занятия копятся на устройстве до его конца.
+   * Ручной повтор — `exchange()`.
+   */
   start() {
     this.stop();
-    const visible = () => {
-      if (document.visibilityState === "visible") void this.exchange();
-    };
-    const online = () => void this.exchange();
     let pending: (() => void) | null = null;
-    const changed = (event: string) => {
+    const cancel = () => {
       pending?.();
-      pending = this.options.schedule(() => void this.exchange(), event === "restored" ? 0 : 2000);
+      pending = null;
     };
-    document.addEventListener("visibilitychange", visible);
-    window.addEventListener("online", online);
+    const now = () => this.options.now().getTime();
+    const soon = () => {
+      if (pending) return;
+      const wait = Math.max(CHANGE_DELAY_MS, this.lastStart + EXCHANGE_INTERVAL_MS - now());
+      pending = this.options.schedule(() => {
+        pending = null;
+        void this.exchange();
+      }, wait);
+    };
+    const flush = () => {
+      cancel();
+      void this.exchange();
+    };
+    const hidden = async () => {
+      if (pending || (await readMeta(this.options.database, META.dirty))) flush();
+    };
+    const visibility = () => {
+      if (document.visibilityState === "visible") void this.exchange();
+      else void hidden();
+    };
+    const pagehide = () => void hidden();
+    const changed = (event: SyncEvent) => {
+      if (!this.status.dirty) this.update({ dirty: true });
+      if (event === "changed") soon();
+      else if (event !== "answered") flush();
+    };
+    document.addEventListener("visibilitychange", visibility);
+    window.addEventListener("pagehide", pagehide);
+    window.addEventListener("online", flush);
     const off = syncEvents.on(changed);
     this.stopHandlers = [
-      () => document.removeEventListener("visibilitychange", visible),
-      () => window.removeEventListener("online", online),
+      () => document.removeEventListener("visibilitychange", visibility),
+      () => window.removeEventListener("pagehide", pagehide),
+      () => window.removeEventListener("online", flush),
       off,
-      () => pending?.(),
+      cancel,
     ];
     void this.exchange();
   }

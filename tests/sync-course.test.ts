@@ -10,7 +10,7 @@ import { saveSettings, submitAnswer } from "../src/storage/ops";
 import { defaultSettings } from "../src/domain/types";
 import type { TelegramCloudStorage } from "../src/platform/telegram-types";
 import { kvAdapter } from "../src/sync/adapter";
-import { decodeSnapshot, encodeSnapshot } from "../src/sync/codec";
+import { decodeSnapshot, encodeSnapshot, SnapshotFormatError } from "../src/sync/codec";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { syncEvents } from "../src/sync/events";
 import {
@@ -115,39 +115,31 @@ beforeEach(() => {
   clockMs = Date.parse("2026-09-16T08:00:00Z");
 });
 
-describe("снимок формата 3: прогресс курса", () => {
+describe("снимок формата 4: прогресс курса", () => {
   it("несёт блоки, критерии, счёт и завершение урока, но не ответы и не текст письма", async () => {
     const phone = await device("phone");
     await finishLesson(phone);
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     expect(snapshot.format).toBe(SNAPSHOT_FORMAT);
-    expect(SNAPSHOT_FORMAT).toBe(3);
+    expect(SNAPSHOT_FORMAT).toBe(4);
     expect(snapshot.blocks.map((block) => block.blockId).sort()).toEqual([...TASKS].sort());
     expect(snapshot.blocks.find((block) => block.blockId === "cafe-q")).toMatchObject({
       done: true,
       score: { correct: 1, almost: 1, total: 2 },
     });
     expect(snapshot.blocks.find((block) => block.blockId === "about-me")).toMatchObject({ checks: [0, 2] });
-    expect(snapshot.lessons.find((lesson) => lesson.id === "m01-1")).toMatchObject({ status: "completed" });
+    expect(snapshot.lessons.find((lesson) => lesson.id === "m01-1")).toMatchObject({ completed: true });
     const wire = encodeSnapshot(snapshot);
     expect(decodeSnapshot(wire)).toEqual(snapshot);
     for (const secret of ["είμαι", "Σωστό", "Μαρια", "Με λένε"]) expect(wire).not.toContain(secret);
     expect(describeSnapshot(snapshot)).toMatchObject({ courseLessons: 1, blocks: 5 });
   });
-  it("снимок формата 2 читается без блоков и не стирает локальный прогресс курса", async () => {
+  it("снимок без блоков — повреждённый, а не «нет прогресса»", async () => {
     const phone = await device("phone");
     await finishLesson(phone);
-    const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
-    const wire = JSON.parse(encodeSnapshot(snapshot));
+    const wire = JSON.parse(encodeSnapshot(await buildAndCommit(phone.db, now(), "dev-1")));
     delete wire.b;
-    wire.f = 2;
-    const older = decodeSnapshot(JSON.stringify(wire));
-    expect(older.blocks).toEqual([]);
-    const before = await rows(phone);
-    expect(await applySnapshot(phone.db, older, "old-1", { other: 1 }, now(), 2)).toBe(true);
-    expect(await rows(phone)).toEqual(before);
-    // А формат 3 без блоков — повреждённый снимок, а не «нет прогресса».
-    expect(() => decodeSnapshot(JSON.stringify({ ...wire, f: 3 }))).toThrow();
+    expect(() => decodeSnapshot(JSON.stringify(wire))).toThrow(SnapshotFormatError);
   });
   it("ответы и текст остаются у той же попытки, уходят у более новой и вместе с блоком, которого нет в версии", async () => {
     const phone = await device("phone");
@@ -230,7 +222,7 @@ describe("обмен прогрессом курса между устройст
 });
 
 describe("доставка: событие изменения, тайм-аут, гонка выгрузки, смена аккаунта", () => {
-  it("выполнение блока и завершение урока сообщают об изменении — обмен планируется", async () => {
+  it("выполнение блока сообщает об изменении, завершение урока — об окончании", async () => {
     const phone = await device("phone");
     const events: string[] = [];
     const off = syncEvents.on((event) => events.push(event));
@@ -245,8 +237,7 @@ describe("доставка: событие изменения, тайм-аут, 
     } finally {
       off();
     }
-    expect(events.every((event) => event === "changed")).toBe(true);
-    expect(events.length).toBe(TASKS.length + 1);
+    expect(events).toEqual([...TASKS.map(() => "changed"), "finished"]);
   });
 
   it("зависший CloudStorage даёт повторяемую ошибку по тайм-ауту; повтор публикует ту же версию без удвоения", async () => {
@@ -348,7 +339,7 @@ describe("доставка: событие изменения, тайм-аут, 
     expect(await accountB.db.blockProgress.count()).toBe(0);
     const inB = await accountB.db.transaction("r", accountB.db.tables, () => buildSnapshot(accountB.db, now()));
     expect(inB.blocks).toEqual([]);
-    expect(inB.lessons.find((lesson) => lesson.id === "m01-1")?.status).toBe("upcoming");
+    expect(inB.lessons.find((lesson) => lesson.id === "m01-1")?.completed).toBe(false);
     expect(cloudA.store.size).toBe(0);
     offline = false;
     expect((await accountA.sync.exchange()).phase).toBe("synced");

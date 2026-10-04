@@ -119,7 +119,7 @@ export async function completeLesson(lessonId: string, database: AppDatabase = d
     await markChanged(database);
     return true;
   });
-  if (changed) announceChange();
+  if (changed) announceChange("finished");
 }
 
 export interface ModuleLessonView {
