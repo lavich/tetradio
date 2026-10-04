@@ -5,6 +5,7 @@ import { isTask, lessonDone, lessonTally, testResult } from "../../domain/course
 import type { BlockProgress } from "../../domain/types";
 import type { CourseLesson } from "../../storage/course";
 import { blockLabel } from "./paginate";
+import ui from "../../shared/ui.module.css";
 import base from "./course.module.css";
 import css from "./summary.module.css";
 
@@ -49,7 +50,11 @@ export function LessonSummary({
           <p className={base.meta}>Письмо и речь — самопроверка, в итог не входят.</p>
         </section>
       ) : null}
-      {problem ? <p className={base.pen}>{problem}</p> : null}
+      {problem ? (
+        <p className={ui.error} role="alert">
+          {problem}
+        </p>
+      ) : null}
       {finished ? (
         <p className={`${base.score} mt-8`}>Урок пройден</p>
       ) : complete ? (

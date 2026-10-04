@@ -13,6 +13,10 @@ test("вкладка «Прогресс»: навыки против порог�
   await expect(page.getByRole("img", { name: /пройдено уроков: 0 из/ })).toBeVisible();
   await expect(page.getByTestId("pace")).toContainText("К K1");
   await expect(page.getByRole("heading", { name: "Эта неделя" })).toBeVisible();
+  // Клетки недели — пункты списка с подписью для диктора.
+  const week = page.getByRole("list", { name: "Дни недели" });
+  await expect(week.getByRole("listitem")).toHaveCount(7);
+  expect(await week.ariaSnapshot()).toContain("listitem: Пн");
   await page.getByRole("link", { name: "Настройки" }).click();
   await expect(page).toHaveURL(/\/progress\/settings$/);
   // Служебные экраны остаются под вкладкой «Прогресс».

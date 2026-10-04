@@ -8,8 +8,11 @@ import { Tick } from "../../shared/Tick";
 import { useSpread } from "../../shared/media";
 import { CHECKPOINTS } from "./checkpoints";
 import { ModuleCover } from "./ModuleCover";
+import ui from "../../shared/ui.module.css";
 import base from "./course.module.css";
 import css from "./module-screen.module.css";
+
+const FROM_MODULE = { fromModule: true };
 
 export function ModuleScreen() {
   const { moduleId = "" } = useParams();
@@ -39,7 +42,7 @@ export function ModuleScreen() {
   const row = (lesson: ModuleView["lessons"][number], gutter: string, passed: string, kind?: string) => (
     <li key={lesson.id} className={lesson.id === next ? css.now : undefined}>
       {lesson.completed ? <Tick className={base.mark} label={passed} /> : <span className={base.gutter}>{gutter}</span>}
-      <Link className={css.lessonLink} to={`/course/${module.id}/${lesson.id}`}>
+      <Link className={css.lessonLink} to={`/course/${module.id}/${lesson.id}`} state={FROM_MODULE}>
         <span className={css.tocLine}>
           <h3 className={css.blockTitle}>{lesson.title}</h3>
           <span className={css.dots} aria-hidden="true" />
@@ -73,7 +76,7 @@ export function ModuleScreen() {
         <p className={base.print}>{module.goal}</p>
       </div>
       {draft ? (
-        <p className={`${base.pen} mt-6`}>Модуль готовится: уроки появятся, когда будут проверены.</p>
+        <p className={`${ui.note} mt-6`}>Модуль готовится: уроки появятся, когда будут проверены.</p>
       ) : (
         <ol className={css.lessons}>
           {view.lessons.map((lesson, index) =>
@@ -102,7 +105,11 @@ export function ModuleScreen() {
           <p className={`${base.print} ${base.soft}`}>{module.grammar.join(" · ")}</p>
         </div>
       ) : null}
-      {problem ? <p className={base.pen}>{problem}</p> : null}
+      {problem ? (
+        <p className={ui.error} role="alert">
+          {problem}
+        </p>
+      ) : null}
     </>
   );
   const cover = <ModuleCover view={view} open={spread} />;

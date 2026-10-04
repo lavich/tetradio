@@ -1,7 +1,7 @@
-/** Контрольные точки программы (docs/curriculum.md): после каких модулей стоят контрольная и пробники. */
-export const CHECKPOINTS: Record<number, string> = {
-  8: "Контрольная A1 · декабрь",
-  15: "Пробник M1 · февраль",
-  20: "Пробник M2 · март",
-  24: "Пробник M3 · апрель",
-};
+import { CHECKPOINTS as POINTS } from "../../domain/progress";
+import { dayMonth } from "../../shared/format";
+
+/** Подписи контрольных точек на полке: «Контрольная A1 · 13 декабря» — из календаря курса, как на экране прогресса. */
+export const CHECKPOINTS: Record<number, string> = Object.fromEntries(
+  POINTS.map((point) => [point.afterModule, `${point.title} · ${dayMonth(point.date)}`]),
+);

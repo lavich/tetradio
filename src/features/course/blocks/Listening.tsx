@@ -5,6 +5,7 @@ import type { ListeningBlock } from "../../../content/course";
 import { playDialogue, stopDialogue, type Rate } from "../../../shared/dialogue";
 import { useAssetSource } from "../../../shared/store";
 import { Marked, useFieldMarks } from "../WordTaps";
+import ui from "../../../shared/ui.module.css";
 import base from "../course.module.css";
 import css from "./blocks.module.css";
 
@@ -17,7 +18,7 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
   const [playing, setPlaying] = useState(false);
   const [line, setLine] = useState(-1);
   const [rate, setRate] = useState<Rate>("normal");
-  const [problem, setProblem] = useState("");
+  const [problem, setProblem] = useState<{ text: string; failure: boolean } | null>(null);
   const [shown, setShown] = useState(false);
   const source = useAssetSource();
   useEffect(() => () => stopDialogue(), []);
@@ -28,14 +29,17 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
       setPlaying(false);
       return;
     }
-    setProblem("");
+    setProblem(null);
     setPlaying(true);
     const result = await playDialogue(block.transcript, rate, setLine, source);
     setPlaying(false);
     if (result === "done") setPlays((count) => count + 1);
     if (result === "none")
-      setProblem("На устройстве нет греческого голоса. Включите его в настройках речи — или откройте текст.");
-    if (result === "error") setProblem("Воспроизведение прервалось. Попробуйте ещё раз.");
+      setProblem({
+        text: "На устройстве нет греческого голоса. Включите его в настройках речи — или откройте текст.",
+        failure: false,
+      });
+    if (result === "error") setProblem({ text: "Воспроизведение прервалось. Попробуйте ещё раз.", failure: true });
   };
   const transcript = revealed || shown;
   return (
@@ -69,7 +73,15 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
           {rate === "slow" ? "Медленно" : "Обычная скорость"}
         </Button>
       </div>
-      {problem ? <p className={base.pen}>{problem}</p> : null}
+      {problem?.failure ? (
+        <p className={ui.error} role="alert">
+          {problem.text}
+        </p>
+      ) : problem ? (
+        <p className={ui.note} role="status">
+          {problem.text}
+        </p>
+      ) : null}
       {transcript ? (
         <ol className={css.transcript} lang="el">
           {block.transcript.map((entry, index) => (

@@ -1,6 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import css from "./lesson.module.css";
 export function CourseLessonScreen() {
   const { moduleId = "", lessonId = "" } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const lesson = useLiveQuery(() => courseLesson(lessonId), [lessonId]);
   const progress = useLiveQuery(() => blockProgressOf(lessonId), [lessonId]);
   const items = useLiveQuery(() => lessonItems(lessonId), [lessonId]);
@@ -60,7 +61,9 @@ export function CourseLessonScreen() {
     try {
       await completeLesson(lessonId);
       toast.success("Урок пройден");
-      void navigate(`/course/${moduleId}`, { replace: true });
+      // Открыт со страницы модуля — возвращаемся на неё же, иначе модуль окажется в истории дважды.
+      if ((location.state as { fromModule?: boolean } | null)?.fromModule) void navigate(-1);
+      else void navigate(`/course/${moduleId}`, { replace: true });
     } catch (error) {
       setProblem((error as Error).message);
     }
