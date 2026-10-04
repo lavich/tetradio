@@ -1,6 +1,6 @@
 import { BookOpen, ChartNoAxesColumn, Home, Rows3 } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import nav from "./Nav.module.css";
 
 const LINKS: { to: string; label: string; Icon: typeof Home; also?: string }[] = [
@@ -33,17 +33,14 @@ export function Nav() {
     <nav ref={ref} className={nav.nav} aria-label="Основные разделы">
       <div className={nav.inner}>
         {LINKS.map(({ to, label, Icon, also }) => {
-          // Вкладка «Курс» активна и на прежнем списке уроков: для словарного курса это тот же раздел.
-          const alias = !!also && pathname.startsWith(also);
+          // NavLink ставит aria-current только своей активной ссылке, поэтому раздел-хозяин считаем сами.
+          const active =
+            (to === "/" ? pathname === "/" : pathname.startsWith(to)) || (!!also && pathname.startsWith(also));
           return (
-            <NavLink key={to} to={to} end={to === "/"} className={nav.link} aria-current={alias ? "page" : undefined}>
-              {({ isActive }) => (
-                <>
-                  <Icon size={22} strokeWidth={isActive || alias ? 2.4 : 1.9} aria-hidden />
-                  <span>{label}</span>
-                </>
-              )}
-            </NavLink>
+            <Link key={to} to={to} className={nav.link} aria-current={active ? "page" : undefined}>
+              <Icon size={22} strokeWidth={active ? 2.4 : 1.9} aria-hidden />
+              <span>{label}</span>
+            </Link>
           );
         })}
       </div>
