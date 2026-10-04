@@ -124,6 +124,25 @@ describe("разметка урока", () => {
       { start: 36, length: 5, ref: "w:eimai", kind: "earlier", first: false },
     ]);
   });
+  it("в таблице подчёркнуто каждое слово урока, даже если оно уже было в тексте", () => {
+    const [table] = blocks([
+      {
+        type: "explanation",
+        id: "t",
+        body: "Ο φίλος.",
+        table: {
+          rows: [
+            ["ο φίλος", "друг"],
+            ["είμαι", "быть"],
+          ],
+        },
+      },
+    ]);
+    const { blocks: marked } = lessonMarks({ blocks: [table], matcher, own, rank: (ref) => (own.has(ref) ? 0 : 1) });
+    expect(marked.t.body[0].first).toBe(true);
+    expect(marked.t["table.0.0"]).toEqual([{ start: 0, length: 7, ref: "w:filos", kind: "lesson", first: true }]);
+    expect(marked.t["table.1.0"]).toEqual([{ start: 0, length: 5, ref: "w:eimai", kind: "earlier", first: false }]);
+  });
   it("в заданиях разметки нет", () => {
     expect(marks.x).toBeUndefined();
   });
