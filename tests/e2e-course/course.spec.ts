@@ -45,7 +45,8 @@ async function turnTo(page: Page, name: string) {
   const forward = page
     .getByRole("navigation", { name: "Страницы урока" })
     .getByRole("button", { name: /Далее|К итогу/ });
-  await expect(sheet).toHaveAttribute("aria-label", /^Страница/);
+  // Пакет урока, открытого сразу после «Учить курс», может ещё скачиваться.
+  await expect(sheet).toHaveAttribute("aria-label", /^Страница/, { timeout: 30000 });
   for (let turns = 0; turns < 20 && !(await target.count()); turns++) {
     // Ждём смены страницы, а не счётчика: счётчик меняется и от сохранения выполненного задания.
     const before = await sheet.getAttribute("aria-label");
