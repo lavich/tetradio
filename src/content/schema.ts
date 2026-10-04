@@ -27,8 +27,9 @@ import {
  * Схема 4 — курс: модули в каталоге, урок из карточек (слова и фразы, упорядоченные типизированные связи)
  * и блоков (объяснение, задания с ключом, чтение, аудирование, письмо, речь), вид урока (урок или контрольная)
  * и формы слова. Урок может не содержать карточек, если у него есть блоки. Другие версии схемы не читаются.
- * Необязательное поле `marks` (слова в тексте урока) добавлено в схему 4 без смены версии: прежний читатель
- * собирает пакет по известным полям и его не видит.
+ * Необязательные поля `marks` (слова в тексте урока) и `lineAudio` (записи реплик аудирования) добавлены в схему 4
+ * без смены версии: прежний читатель собирает пакет по известным полям и их не видит. Поэтому запись реплики
+ * едет не в самой реплике — там лишнее поле прежний читатель отклонил бы.
  */
 export const SCHEMA_VERSION = 4;
 export type SchemaVersion = typeof SCHEMA_VERSION;
@@ -126,6 +127,8 @@ export interface ContentPackage {
   /** Блоки урока по порядку */
   blocks?: LessonBlock[];
   marks?: PackageMarks;
+  /** Записи реплик: блок аудирования → медиа каждой реплики по порядку, `null` — реплика без записи. */
+  lineAudio?: Record<string, (string | null)[]>;
 }
 
 export interface WordMark {
@@ -529,9 +532,30 @@ export function parsePackage(input: unknown): ContentPackage {
       throw new ContentError(
         `пакет.blocks: аудирование ${block.id} ссылается на медиа ${block.audioAssetId}, которого нет в пакете`,
       );
+  if (raw.lineAudio !== undefined) pack.lineAudio = parseLineAudio(raw.lineAudio, blocks, mediaIds);
   if (blocks.length) pack.blocks = blocks;
   if (raw.marks !== undefined) pack.marks = parseMarks(raw.marks, blocks, items);
   return pack;
+}
+
+function parseLineAudio(input: unknown, blocks: LessonBlock[], mediaIds: Set<string>) {
+  const result: Record<string, (string | null)[]> = {};
+  for (const [blockId, refs] of Object.entries(obj(input, "пакет.lineAudio"))) {
+    const path = `пакет.lineAudio.${blockId}`;
+    const block = blocks.find((candidate) => candidate.id === blockId);
+    if (block?.type !== "listening") throw new ContentError(`${path}: аудирования с таким id нет в уроке`);
+    const entries = list(refs, path);
+    if (entries.length !== block.transcript.length)
+      throw new ContentError(`${path}: записей ${entries.length}, а реплик ${block.transcript.length}`);
+    result[blockId] = entries.map((ref, i) => {
+      if (ref === null) return null;
+      const id = str(ref, `${path}[${i}]`);
+      if (!mediaIds.has(id)) throw new ContentError(`${path}[${i}]: медиа ${id} нет в пакете`);
+      block.transcript[i].audioAssetId = id;
+      return id;
+    });
+  }
+  return result;
 }
 
 export function decodeMarks(marks: PackageMarks, items: PackageItem[]): BlockMarks {

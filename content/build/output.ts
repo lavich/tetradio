@@ -22,7 +22,7 @@ export function packLessons(drafts: Map<string, ContentPackage>, marks: { packag
     if (marked) draft.marks = marked;
     const version = hash(canonical({ ...draft, version: undefined }));
     const pack = { ...draft, version };
-    if (marked) {
+    if (marked || pack.lineAudio) {
       try {
         parsePackage(JSON.parse(JSON.stringify(pack)));
       } catch (error) {

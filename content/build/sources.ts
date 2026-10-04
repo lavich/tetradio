@@ -1,8 +1,9 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { basename, extname, join } from "node:path";
+import { basename, extname, join, relative, sep } from "node:path";
 import { parse } from "yaml";
 import type { LessonKind } from "../../src/content/course.ts";
 import { fail } from "./common.ts";
+import { parseVoices, VOICES_FILE, type VoiceMap } from "./voices.ts";
 
 export interface WordSource {
   id?: string;
@@ -117,6 +118,8 @@ export interface ContentRoot {
   /** Картинки слов из готовой библиотеки: `pictures.yaml` (слово → файл в pictures/) и подпись источника. */
   pictures: { source: string; words: Map<string, string> };
   files: Map<string, Uint8Array>;
+  /** Голоса персонажей; без карты записи реплик не публикуются, а говорящие не проверяются. */
+  voices?: VoiceMap;
 }
 export function readSources(root: string): ContentRoot {
   const list = (dir: string) =>
@@ -156,8 +159,15 @@ export function readSources(root: string): ContentRoot {
   };
   for (const dir of ["art", "audio", "pictures"])
     if (existsSync(join(root, dir)))
-      for (const file of readdirSync(join(root, dir))) files.set(`${dir}/${file}`, readFileSync(join(root, dir, file)));
-  return { words, phrases, lessons, courses, modules, pictures, files };
+      for (const entry of readdirSync(join(root, dir), { recursive: true, withFileTypes: true }))
+        if (entry.isFile()) {
+          const path = relative(root, join(entry.parentPath, entry.name)).split(sep).join("/");
+          files.set(path, readFileSync(join(root, path)));
+        }
+  const voices = existsSync(join(root, VOICES_FILE))
+    ? parseVoices(readFileSync(join(root, VOICES_FILE), "utf8"))
+    : undefined;
+  return { words, phrases, lessons, courses, modules, pictures, files, ...(voices ? { voices } : {}) };
 }
 
 export function checkSourceScripts(sources: ContentRoot) {

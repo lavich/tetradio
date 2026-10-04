@@ -2,6 +2,7 @@ import { db, type AppDatabase } from "../storage/db";
 import { reportError } from "../reporting/reporting";
 import { applyPackage, type InstallResult } from "./apply";
 import { fetcher, type ContentFetcher } from "./fetcher";
+import { pruneMedia } from "./media";
 import { courseKey, setPhase } from "./phases";
 import { ContentError, parsePackage } from "./schema";
 
@@ -28,7 +29,7 @@ export async function installCourse(
   let failure: ContentError | null = null;
   for (const entry of entries) {
     try {
-      const outcome = await installLesson(entry.id, database, source);
+      const outcome = await installLesson(entry.id, database, source, false);
       if (outcome.status === "installed") result.installed++;
       if (outcome.status === "updated") result.updated++;
     } catch (error) {
@@ -36,15 +37,18 @@ export async function installCourse(
       failure = toContentError(error);
     }
   }
+  if (result.installed || result.updated) await pruneMedia(database).catch(() => undefined);
   if (failure) setPhase(courseKey(courseId), { phase: "error", message: failure.message, kind: failure.kind });
   else setPhase(courseKey(courseId), { phase: "idle" });
   return result;
 }
 
+/** `prune: false` — уборку медиа сделает установка курса один раз после всех уроков. */
 export function installLesson(
   lessonId: string,
   database: AppDatabase = db,
   source: ContentFetcher = fetcher,
+  prune = true,
 ): Promise<InstallResult> {
   const running = inflight.get(lessonId);
   if (running) return running;
@@ -62,6 +66,7 @@ export function installLesson(
       if (pack.id !== lessonId || pack.version !== entry.version)
         throw new ContentError("Пакет не соответствует записи каталога.");
       const result = await applyPackage(pack, database);
+      if (prune) await pruneMedia(database).catch(() => undefined);
       setPhase(lessonId, { phase: "idle" });
       return result;
     } catch (error) {

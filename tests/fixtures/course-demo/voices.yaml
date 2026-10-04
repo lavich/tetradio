@@ -1,0 +1,10 @@
+# Голоса персонажей демонстрационного курса; записи реплик — короткая тишина для e2e, не синтез.
+source: Синтез речи Google Cloud TTS, голос Chirp 3 HD {voice}
+language: el-GR
+prefix: el-GR-Chirp3-HD-
+pools:
+  female: [Aoede, Kore]
+  male: [Charon, Puck]
+characters:
+  Νίκος: { gender: male, voice: Charon }
+  Μαρία: { gender: female, voice: Aoede }

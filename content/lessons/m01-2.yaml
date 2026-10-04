@@ -329,24 +329,34 @@ blocks:
     transcript:
       - speaker: Αντρέας
         text: Καλησπέρα! Είμαι ο Αντρέας. Πώς σε λένε;
+        audio: m01-2/party-1.mp3
       - speaker: Μαρίνα
         text: Καλησπέρα! Με λένε Μαρίνα.
+        audio: m01-2/party-2.mp3
       - speaker: Αντρέας
         text: Χάρηκα πολύ, Μαρίνα.
+        audio: m01-2/party-3.mp3
       - speaker: Μαρίνα
         text: Επίσης! Από πού είσαι;
+        audio: m01-2/party-4.mp3
       - speaker: Αντρέας
         text: Είμαι από την Κύπρο, από τη Λευκωσία. Κι εσύ;
+        audio: m01-2/party-5.mp3
       - speaker: Μαρίνα
         text: Είμαι από τη Ρωσία, από τη Μόσχα. Αλλά τώρα είμαι στη Λεμεσό.
+        audio: m01-2/party-6.mp3
       - speaker: Αντρέας
         text: Ωραία! Και ποια είναι αυτή; Η φίλη σου;
+        audio: m01-2/party-7.mp3
       - speaker: Μαρίνα
         text: Ναι, η φίλη μου η Κατερίνα. Είναι από την Ελλάδα, από τη Θεσσαλονίκη.
+        audio: m01-2/party-8.mp3
       - speaker: Αντρέας
         text: Και το τηλέφωνό σου;
+        audio: m01-2/party-9.mp3
       - speaker: Μαρίνα
         text: Εννέα, εννέα, τέσσερα, επτά, δύο, μηδέν, έξι, πέντε.
+        audio: m01-2/party-10.mp3
   - type: exercise
     id: party-choice
     about: party

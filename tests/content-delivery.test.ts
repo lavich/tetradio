@@ -481,6 +481,22 @@ describe("медиа и готовность офлайн", () => {
     db.assets.hook("creating").unsubscribe(fail);
     expect(await db.assets.count()).toBe(0);
   });
+  it("после обновления пакета файлы, которые больше ни один пакет не упоминает, удаляются с устройства", async () => {
+    const fetcher = await installLessons(db, ["mech-2"]);
+    await downloadLessonMedia("mech-2", db, fetcher);
+    const [dropped, ...kept] = packageOf("mech-2").media;
+    const stray = { ...(await db.assets.get(kept[0].id))!, id: "line-старая-реплика" };
+    await db.assets.put(stray);
+    const next = { ...packageOf("mech-2"), version: `${packageOf("mech-2").version}-next`, media: kept };
+    next.words = next.words.map((word) =>
+      word.imageAssetId === dropped.id || word.audioAssetId === dropped.id
+        ? { ...word, imageAssetId: undefined, audioAssetId: undefined }
+        : word,
+    );
+    await installLesson("mech-2", db, await upgrade("mech-2", next));
+    expect((await db.assets.toCollection().primaryKeys()).sort()).toEqual(kept.map((item) => item.id).sort());
+    expect(await db.media.get(dropped.id)).toBeUndefined();
+  });
   it("новая версия в каталоге показывается как доступное обновление, а не применяется сама", async () => {
     await installLessons(db, ["mech-2"]);
     const next = bump(packageOf("mech-2"), (words) => {

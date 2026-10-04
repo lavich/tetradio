@@ -19,6 +19,14 @@ import type { ArtReport } from "../art.ts";
 import { fail, LANGUAGE, nfc, text } from "./common.ts";
 import { mediaFor, type BuiltMedia } from "./media.ts";
 import type { ContentRoot, LessonItemSource } from "./sources.ts";
+import {
+  checkDialogueVoices,
+  lineHash,
+  MANIFEST_FILE,
+  parseManifest,
+  VOICES_FILE,
+  type VoiceManifest,
+} from "./voices.ts";
 
 const KIND_LABEL: Record<CardKind, { one: string; dir: string }> = {
   word: { one: "слова", dir: "words" },
@@ -35,7 +43,69 @@ export interface LessonsInput {
   legacy: Set<string>;
   art: ArtReport;
 }
-export function buildLessons({ sources, words, phrases, courseOf, moduleOf, media, legacy, art }: LessonsInput) {
+export interface VoicingReport {
+  voiced: number;
+  /** Реплики опубликованных уроков без записи: звучат синтезом устройства. */
+  unvoiced: Map<string, number>;
+  /** Записи, сделанные до правки текста или смены голоса: не публикуются, пока реплику не переозвучат. */
+  stale: string[];
+}
+
+/** Запись публикуется, только если сделана для нынешнего текста и голоса, — иначе реплика звучит синтезом. */
+function lineAudio(
+  block: Record<string, unknown>,
+  lessonId: string,
+  where: string,
+  shipped: boolean,
+  { sources, media, legacy, art }: LessonsInput,
+  report: VoicingReport,
+  manifest: VoiceManifest,
+) {
+  const voices = sources.voices;
+  const lines = (block.transcript as unknown[]).map((line) =>
+    typeof line === "object" && line !== null && !Array.isArray(line) ? { ...(line as Record<string, unknown>) } : line,
+  );
+  const cast =
+    voices && lines.every((line) => typeof line === "object" && line !== null)
+      ? checkDialogueVoices(voices, lines as { speaker?: string }[], where)
+      : [];
+  const assets = lines.map((line, index): string | null => {
+    if (typeof line !== "object" || line === null) return null;
+    const entry = line as Record<string, unknown>;
+    const { audio } = entry;
+    delete entry.audio;
+    if (!shipped) return null;
+    const text = typeof entry.text === "string" ? entry.text : "";
+    if (audio === undefined) {
+      report.unvoiced.set(lessonId, (report.unvoiced.get(lessonId) ?? 0) + 1);
+      return null;
+    }
+    const at = `${where}.transcript[${index}]`;
+    if (typeof audio !== "string") fail(`${at}.audio: ожидалось имя файла в audio/`);
+    if (!voices) fail(`${at}.audio: запись реплики требует карты голосов ${VOICES_FILE} с источником`);
+    const voice = cast[index]!;
+    const done = manifest[audio as string];
+    if (!done || done.voice !== voice || done.hash !== lineHash(text, voice)) {
+      report.stale.push(`${lessonId}/${block.id as string}#${index + 1}`);
+      report.unvoiced.set(lessonId, (report.unvoiced.get(lessonId) ?? 0) + 1);
+      return null;
+    }
+    const assetId = `line-${lessonId}-${block.id as string}-${index + 1}`;
+    const source = voices!.source.replaceAll("{voice}", voice);
+    media.set(
+      assetId,
+      mediaFor(assetId, audio as string, "audio", sources.files, { alt: "", source }, at, legacy, art),
+    );
+    report.voiced++;
+    return assetId;
+  });
+  return { lines, assets };
+}
+
+export function buildLessons(input: LessonsInput) {
+  const { sources, words, phrases, courseOf, moduleOf, media, legacy, art } = input;
+  const report: VoicingReport = { voiced: 0, unvoiced: new Map(), stale: [] };
+  const manifest = parseManifest(sources.files.get(MANIFEST_FILE));
   const used = { word: new Set<string>(), phrase: new Set<string>() };
   const lessonsForModule = new Map<string, { id: string; kind: LessonKind; blocks: LessonBlock[] }>();
   const cards = { word: words, phrase: phrases } as const;
@@ -73,6 +143,7 @@ export function buildLessons({ sources, words, phrases, courseOf, moduleOf, medi
     if (new Set(items.map((item) => `${item.kind}/${item.id}`)).size !== items.length)
       fail(`${where}: карточка повторяется в списке`);
     const blockMedia: PackageMedia[] = [];
+    const lineRefs: Record<string, (string | null)[]> = {};
     let blocks: LessonBlock[] = [];
     if (src.blocks !== undefined) {
       if (!placement) fail(`${where}.blocks: блоки бывают только у уроков модуля программы`);
@@ -80,6 +151,13 @@ export function buildLessons({ sources, words, phrases, courseOf, moduleOf, medi
       const raw = src.blocks.map((block, index) => {
         if (typeof block !== "object" || block === null || Array.isArray(block)) return block;
         const { audio, ...rest } = block as Record<string, unknown>;
+        if (rest.type === "listening" && Array.isArray(rest.transcript)) {
+          const at = `${where}.blocks[${index}]`;
+          const { lines, assets } = lineAudio(rest, id, at, !placement?.draft, input, report, manifest);
+          rest.transcript = lines;
+          if (assets.some(Boolean)) lineRefs[rest.id as string] = assets;
+          for (const asset of assets) if (asset) blockMedia.push(media.get(asset)!.item);
+        }
         if (audio === undefined) return rest;
         if (rest.type !== "listening") fail(`${where}.blocks[${index}].audio: аудиофайл бывает только у аудирования`);
         if (typeof audio !== "string" || typeof rest.id !== "string")
@@ -139,10 +217,11 @@ export function buildLessons({ sources, words, phrases, courseOf, moduleOf, medi
       items,
       media: packMedia,
       ...(blocks.length ? { blocks } : {}),
+      ...(Object.keys(lineRefs).length ? { lineAudio: lineRefs } : {}),
     };
     drafts.set(id, draft);
   }
-  return { used, lessonsForModule, drafts };
+  return { used, lessonsForModule, drafts, voicing: report };
 }
 
 export interface CoverageInput {
