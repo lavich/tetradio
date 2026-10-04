@@ -10,7 +10,7 @@ import {
   shuffleTiles,
   spellingUnlocked,
 } from "../src/domain/learning";
-import { fromSnapshot } from "../src/domain/snapshot-source";
+import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { diffChars } from "../src/domain/spelling";
 import { checkAnswer } from "../src/domain/text-answer";
 import { progress } from "../src/domain/stats";
@@ -25,7 +25,6 @@ import {
   type LessonItem,
   type Phrase,
   type ReviewEvent,
-  type Snapshot,
   type StoredModule,
   type Word,
 } from "../src/domain/types";

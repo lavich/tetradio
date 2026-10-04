@@ -12,10 +12,10 @@ import {
 import { makePlan, makeSession } from "../src/domain/learning";
 import { installMixed, MIXED_LESSON, mixedPackage } from "./helpers/mixed";
 import { mulberry32 } from "./plan-golden.test";
-import { fromSnapshot } from "../src/domain/snapshot-source";
+import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { lessonProgress, progress, wordMaturity } from "../src/domain/stats";
 import { State } from "ts-fsrs";
-import { defaultSettings, type LessonItem, type Snapshot, type Word } from "../src/domain/types";
+import { defaultSettings, type LessonItem, type Word } from "../src/domain/types";
 import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
 import { recordFor, scenarios } from "./plan-golden.test";
 import { completeLessons, content, installLessons, wordCountOf } from "./helpers/content";

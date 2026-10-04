@@ -1,6 +1,7 @@
 import type { Card } from "ts-fsrs";
-import { itemOfLink, unitKey, wordKeyOf, wordRef } from "../../src/domain/refs";
-import type { LearningRef, LearningState, ReviewEvent, SessionItem, Snapshot } from "../../src/domain/types";
+import { unitKey, wordKeyOf, wordRef } from "../../src/domain/refs";
+import { itemOfLink, type Snapshot } from "./snapshot-source";
+import type { LearningRef, LearningState, ReviewEvent, SessionItem } from "../../src/domain/types";
 
 /** Помощники словарных тестов: прежние сценарии остаются про слова, а форма записей — типизированная. */
 export { itemOfLink, unitKey, wordKeyOf, wordRef };

@@ -1,14 +1,6 @@
 // Расширения `.ts` обязательны: этот модуль загружает и Node при сборке контента (`node content/build.ts`),
 // а его резолвер требует точный путь. В остальном коде приложения расширения не пишутся.
-import {
-  CARD_KINDS,
-  type CardKind,
-  type CardSnapshot,
-  type LearningRef,
-  type LessonItem,
-  type SessionCard,
-  type Snapshot,
-} from "./types.ts";
+import { CARD_KINDS, type CardKind, type CardSnapshot, type LearningRef, type SessionCard } from "./types.ts";
 
 export type { LearningRef } from "./types.ts";
 
@@ -51,14 +43,6 @@ export function parseUnitKey(key: string): LearningRef {
   if (!isCardKind(kind)) throw new Error(`Неизвестный вид карточки «${String(kind)}»`);
   return { kind, id };
 }
-
-/** Словарная связь тестового снимка — типизированная связь того же порядка. */
-export const itemOfLink = (link: Snapshot["links"][number]): LessonItem => ({
-  lessonId: link.lessonId,
-  unitKey: wordKeyOf(link.wordId),
-  ref: wordRef(link.wordId),
-  position: link.position,
-});
 
 /** Снимок карточки для события ответа. */
 export const snapshotOf = (card: SessionCard): CardSnapshot =>
