@@ -4,14 +4,12 @@ import type { LearningRef } from "../domain/types";
 
 /**
  * Версия облачного формата: другая версия не применяется и не перезаписывается старым клиентом.
- * Формат 3 — формат 2 плюс прогресс блоков уроков курса; формат 2 читается без блоков (локальные не трогаются).
- * Формат 2 — типизированные ссылки на карточки по видам; формат 1 читается как словарный. Коды снятых видов
- * и снятых типов проверки остаются занятыми: снимки старых клиентов их содержат.
+ * Формат 4 — формат 3 без полей расписания: урок передаёт только завершение, курс — дневной предел.
+ * Формат 3 читается: статус урока становится завершением, расписание и даты отбрасываются.
+ * Коды снятых видов и снятых типов проверки остаются занятыми: снимки старых клиентов их содержат.
  */
-export const SNAPSHOT_FORMAT = 3;
-export const BLOCKS_SNAPSHOT_FORMAT = 3;
-export const LEGACY_SNAPSHOT_FORMAT = 1;
-export const SUPPORTED_SNAPSHOT_FORMATS = [1, 2, 3] as const;
+export const SNAPSHOT_FORMAT = 4;
+export const SUPPORTED_SNAPSHOT_FORMATS = [3, 4] as const;
 /** Вектор счётчиков устройств: причинная база версии. */
 export type Clock = Record<string, number>;
 
@@ -25,8 +23,7 @@ export interface CompactState {
 }
 export interface CompactLesson {
   id: string;
-  targetDate: string | null;
-  status: "upcoming" | "completed";
+  completed: boolean;
   updatedAt: string;
 }
 export interface CompactSettings {
@@ -45,18 +42,9 @@ export interface CompactBlock {
   checks?: number[];
   updatedAt: string;
 }
-/** Расписание формата 3: приложение его больше не ведёт, но поле остаётся в снимке до смены формата. */
-export interface CompactSchedule {
-  startDate: string | null;
-  weekdays: number[];
-  lessonHour: number;
-}
-/** Дневной предел курса переносится между устройствами; подписка и расписание — поля формата 3 без значения. */
 export interface CompactCourse {
   id: string;
-  subscribed: boolean;
   newItemsPerDay: number;
-  schedule: CompactSchedule;
 }
 /**
  * Компактный снимок прогресса: состояния FSRS и навыков карточек, настройки, пройденные уроки, выполнение блоков

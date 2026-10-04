@@ -13,15 +13,11 @@ import {
 import { loadSettings } from "../storage/queries";
 import { blockKey } from "../storage/course";
 import type { BlockProgress } from "../domain/types";
-import { SyncError } from "./transport";
 import {
-  BLOCKS_SNAPSHOT_FORMAT,
-  LEGACY_SNAPSHOT_FORMAT,
   SNAPSHOT_FORMAT,
   type Clock,
   type CompactBlock,
   type CompactLesson,
-  type CompactSchedule,
   type CompactSnapshot,
   type CompactState,
   type SerializedCard,
@@ -86,18 +82,12 @@ async function presentKeys(database: AppDatabase, refs: LearningRef[]): Promise<
         keys.add(unitKey({ kind, id }));
   return keys;
 }
-/** Поля формата 3, которых в модели больше нет: снимок их несёт, а применение не читает. */
-const NO_SCHEDULE: CompactSchedule = { startDate: null, weekdays: [], lessonHour: 12 };
 const compactLesson = (lesson: Lesson): CompactLesson => ({
   id: lesson.id,
-  targetDate: null,
-  status: lesson.completed ? "completed" : "upcoming",
+  completed: lesson.completed,
   updatedAt: lesson.updatedAt,
 });
-const lessonPatch = (lesson: CompactLesson) => ({
-  completed: lesson.status === "completed",
-  updatedAt: lesson.updatedAt,
-});
+const lessonPatch = (lesson: CompactLesson) => ({ completed: lesson.completed, updatedAt: lesson.updatedAt });
 const compactBlock = (row: BlockProgress): CompactBlock => ({
   lessonId: row.lessonId,
   blockId: row.blockId,
@@ -137,14 +127,26 @@ async function applyBlocks(database: AppDatabase, blocks: CompactBlock[]) {
 const uniqueRefs = (refs: LearningRef[]) => [...new Map(refs.map((ref) => [unitKey(ref), ref])).values()];
 const byKey = (a: { ref: LearningRef }, b: { ref: LearningRef }) => unitKey(a.ref).localeCompare(unitKey(b.ref));
 
-/**
- * Компактный снимок из локальной базы: база предыдущего снимка плюс локальные события после её отсечки.
- * Вызывается внутри транзакции чтения-записи вместе с `commitBase`, чтобы отсечка совпала с прочитанным.
- */
-export async function buildSnapshot(database: AppDatabase, now: Date): Promise<CompactSnapshot> {
-  const base = await database.baseSummary.get("base");
+type Progress = Omit<CompactSnapshot, "skills" | "stats">;
+type Summary = Pick<CompactSnapshot, "skills" | "stats">;
+const PROGRESS_TABLES = [
+  "settings",
+  "courses",
+  "lessons",
+  "packages",
+  "blockProgress",
+  "cardStates",
+  "cardStash",
+  "meta",
+] as const;
+const SUMMARY_TABLES = ["cardSkills", "baseSummary", "events", "words", "phrases"] as const;
+/** Таблицы сборки снимка; транзакцию чтения по ним открывает вызывающий. */
+export const SNAPSHOT_TABLES = [...PROGRESS_TABLES, ...SUMMARY_TABLES] as const;
+const tables = (database: AppDatabase, names: readonly string[]) => names.map((name) => database.table(name));
+
+async function readProgress(database: AppDatabase, now: Date): Promise<Progress> {
   const settings = await loadSettings(database);
-  const packages = new Set((await database.packages.toArray()).map((pack) => pack.lessonId));
+  const packages = new Set((await database.packages.toCollection().primaryKeys()) as string[]);
   const lessons: CompactLesson[] = (await database.lessons.toArray())
     .filter((lesson) => packages.has(lesson.id))
     .map(compactLesson);
@@ -158,6 +160,22 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
   const known = new Set(rawStates.map((state) => state.unitKey));
   const states = rawStates.map(serializeState);
   for (const row of await database.cardStash.toArray()) if (!known.has(row.unitKey)) states.push(row.state);
+  return {
+    format: SNAPSHOT_FORMAT,
+    createdAt: now.toISOString(),
+    settings: { timezone: settings.timezone, sessionSize: settings.sessionSize },
+    courses: (await database.courses.toArray())
+      .map((course) => ({ id: course.id, newItemsPerDay: course.newItemsPerDay }))
+      .sort((a, b) => a.id.localeCompare(b.id)),
+    lessons,
+    packages: [...packages].sort(),
+    blocks,
+    states: states.sort(byKey),
+  };
+}
+/** Сводки навыков и статистики: база предыдущего снимка плюс локальные события после её отсечки. */
+async function readSummary(database: AppDatabase): Promise<Summary> {
+  const base = await database.baseSummary.get("base");
   const fresh: ReviewEvent[] = byTime(
     base ? await database.events.where("createdAt").above(base.asOf).toArray() : await database.events.toArray(),
   );
@@ -172,69 +190,45 @@ export async function buildSnapshot(database: AppDatabase, now: Date): Promise<C
         skills: foldSkill(skills.get(event.unitKey)?.skills ?? emptySkills(), event),
       });
   const stats = fresh.reduce((summary, event) => foldStats(summary, event, KEEP_DAYS), base?.stats ?? emptyStats());
-  return {
-    format: SNAPSHOT_FORMAT,
-    createdAt: now.toISOString(),
-    settings: { timezone: settings.timezone, sessionSize: settings.sessionSize },
-    courses: (await database.courses.toArray())
-      .map((course) => ({
-        id: course.id,
-        subscribed: true,
-        newItemsPerDay: course.newItemsPerDay,
-        schedule: NO_SCHEDULE,
-      }))
-      .sort((a, b) => a.id.localeCompare(b.id)),
-    lessons,
-    packages: [...packages].sort(),
-    blocks,
-    states: states.sort(byKey),
-    skills: [...skills.values()].sort(byKey),
-    stats: { ...stats, days: stats.days.slice(-KEEP_DAYS) },
-  };
+  return { skills: [...skills.values()].sort(byKey), stats: { ...stats, days: stats.days.slice(-KEEP_DAYS) } };
 }
+/** Компактный снимок из локальной базы; вызывается внутри транзакции чтения по `SNAPSHOT_TABLES`. */
+export async function buildSnapshot(database: AppDatabase, now: Date): Promise<CompactSnapshot> {
+  return { ...(await readProgress(database, now)), ...(await readSummary(database)) };
+}
+export const readSnapshot = (database: AppDatabase, now: Date) =>
+  database.transaction("r", tables(database, SNAPSHOT_TABLES), () => buildSnapshot(database, now));
 /** Новая база: отсечка — момент сборки, локальные события до неё считаются учтёнными в снимке. */
-export async function commitBase(database: AppDatabase, snapshot: CompactSnapshot, versionId: string, asOf: string) {
+export async function commitBase(database: AppDatabase, snapshot: Summary, versionId: string, asOf: string) {
   await database.cardSkills.clear();
   await database.cardSkills.bulkPut(
     snapshot.skills.map((entry) => ({ unitKey: unitKey(entry.ref), ref: entry.ref, skills: entry.skills })),
   );
   await database.baseSummary.put({ id: "base", asOf, versionId, stats: snapshot.stats });
 }
-export const SNAPSHOT_TABLES = [
-  "cardSkills",
-  "baseSummary",
-  "cardStates",
-  "words",
-  "phrases",
-  "events",
-  "settings",
-  "courses",
-  "lessons",
-  "packages",
-  "cardStash",
-  "blockProgress",
-  "meta",
-] as const;
-/** Сборка и фиксация базы одной транзакцией: ответ, записанный после, гарантированно попадёт в следующую версию. */
 export async function buildAndCommit(database: AppDatabase, now: Date, versionId: string): Promise<CompactSnapshot> {
   return (await buildAndCommitMarked(database, now, versionId)).snapshot;
 }
-/** То же плюс отметка изменений из той же транзакции — для `clearDirty` после публикации. */
+/**
+ * Прогресс читается без блокировки записи, затем сводки собираются и фиксируются одной транзакцией по своим таблицам:
+ * отсечка совпадает с прочитанными событиями. Отметка изменений читается первой — изменение между двумя транзакциями
+ * оставит её другой, и `clearDirty` после публикации не снимет флаг.
+ */
 export async function buildAndCommitMarked(
   database: AppDatabase,
   now: Date,
   versionId: string,
 ): Promise<{ snapshot: CompactSnapshot; mark: string | null }> {
-  return database.transaction(
-    "rw",
-    SNAPSHOT_TABLES.map((name) => database.table(name)),
-    async () => {
-      const mark = await readMeta(database, META.dirty);
-      const snapshot = await buildSnapshot(database, now);
-      await commitBase(database, snapshot, versionId, snapshot.createdAt);
-      return { snapshot, mark };
-    },
-  );
+  const { mark, progress } = await database.transaction("r", tables(database, PROGRESS_TABLES), async () => ({
+    mark: await readMeta(database, META.dirty),
+    progress: await readProgress(database, now),
+  }));
+  const summary = await database.transaction("rw", tables(database, SUMMARY_TABLES), async () => {
+    const summary = await readSummary(database);
+    await commitBase(database, summary, versionId, progress.createdAt);
+    return summary;
+  });
+  return { snapshot: { ...progress, ...summary }, mark };
 }
 export async function clearDirty(database: AppDatabase, mark: string | null): Promise<boolean> {
   const current = await readMeta(database, META.dirty);
@@ -244,10 +238,17 @@ export async function clearDirty(database: AppDatabase, mark: string | null): Pr
 }
 
 export type PendingLessons = Record<string, CompactLesson>;
+/** Отложенные до обновления записи хранят урок формата 3 — со статусом вместо завершения. */
 const parsePending = (raw: string | null): PendingLessons => {
   try {
-    const parsed = JSON.parse(raw ?? "{}");
-    return parsed && typeof parsed === "object" ? parsed : {};
+    const parsed = JSON.parse(raw ?? "{}") as Record<string, CompactLesson & { status?: string }>;
+    if (!parsed || typeof parsed !== "object") return {};
+    return Object.fromEntries(
+      Object.entries(parsed).map(([id, lesson]) => [
+        id,
+        { id: lesson.id, completed: lesson.completed ?? lesson.status === "completed", updatedAt: lesson.updatedAt },
+      ]),
+    );
   } catch {
     return {};
   }
@@ -255,26 +256,10 @@ const parsePending = (raw: string | null): PendingLessons => {
 export const readPending = async (database: AppDatabase): Promise<PendingLessons> =>
   parsePending(await readMeta(database, META.pendingLessons));
 
-/** Есть ли сохранённый прогресс фраз: состояния, события или сводки. Само наличие их контента не считается. */
-export async function hasMixedProgress(database: AppDatabase): Promise<boolean> {
-  const mixed = (ref: LearningRef) => ref.kind !== "word";
-  if (await database.cardStates.where("ref.kind").equals("phrase").count()) return true;
-  if ((await database.cardStash.toArray()).some((row) => mixed(row.ref))) return true;
-  if ((await database.cardSkills.toArray()).some((row) => mixed(row.ref))) return true;
-  const base = await database.baseSummary.get("base");
-  if (
-    base?.stats.answeredKeys.some((key) => !key.startsWith('["word"')) ||
-    base?.stats.days.some((day) => day.keys.some((key) => !key.startsWith('["word"')))
-  )
-    return true;
-  return !!(await database.events.filter((event) => mixed(event.ref)).first());
-}
-
 /**
- * Применение целой версии одной транзакцией: настройки, предел курса, завершение уроков, блоки курса (с формата 3),
+ * Применение целой версии одной транзакцией: настройки, предел курса, завершение уроков, блоки курса,
  * состояния FSRS карточек, база навыков и сводок. История ответов остаётся локальной. Состояния неизвестных карточек откладываются
- * до установки пакета, а не обнуляются и не попадают в план. Словарный снимок формата 1 не может представлять
- * фразы и пропуски: при уже сохранённом прогрессе новых видов он отклоняется до изменения данных.
+ * до установки пакета, а не обнуляются и не попадают в план.
  * `ifClean` — применять, только если локальных неопубликованных изменений нет; иначе `false` без записи.
  */
 export async function applySnapshot(
@@ -283,19 +268,16 @@ export async function applySnapshot(
   versionId: string,
   clock: Clock,
   now: Date,
-  sourceFormat: number = SNAPSHOT_FORMAT,
   { ifClean = false }: { ifClean?: boolean } = {},
 ): Promise<boolean> {
   return database.transaction(
     "rw",
-    SNAPSHOT_TABLES.map((name) => database.table(name)),
+    tables(
+      database,
+      SNAPSHOT_TABLES.filter((name) => name !== "events" && name !== "packages"),
+    ),
     async () => {
       if (ifClean && (await readMeta(database, META.dirty))) return false;
-      if (sourceFormat === LEGACY_SNAPSHOT_FORMAT && (await hasMixedProgress(database)))
-        throw new SyncError(
-          "format",
-          "Облачная версия словарного формата 1 не может заменить прогресс фраз и пропусков на этом устройстве. Обновите приложение на другом устройстве; локальные данные не изменены.",
-        );
       const current = await loadSettings(database);
       await database.settings.put(fillSettings({ ...current, ...snapshot.settings }));
       // Дневной предел курса переносится; курс, которого здесь ещё нет, заведёт каталог.
@@ -307,7 +289,7 @@ export async function applySnapshot(
         else pending[lesson.id] = lesson;
       }
       await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
-      if (sourceFormat >= BLOCKS_SNAPSHOT_FORMAT) await applyBlocks(database, snapshot.blocks);
+      await applyBlocks(database, snapshot.blocks);
       const incoming = new Set(snapshot.states.map((state) => unitKey(state.ref)));
       // Карточки, которых нет в выбранной версии, снова становятся новыми.
       const local = (await database.cardStates.toCollection().primaryKeys()) as string[];
@@ -366,7 +348,7 @@ export const describeSnapshot = (snapshot: CompactSnapshot): SnapshotDescription
   lessons: snapshot.lessons.length,
   courseLessons: (() => {
     const course = new Set(snapshot.blocks.map((block) => block.lessonId));
-    return snapshot.lessons.filter((lesson) => lesson.status === "completed" && course.has(lesson.id)).length;
+    return snapshot.lessons.filter((lesson) => lesson.completed && course.has(lesson.id)).length;
   })(),
   blocks: snapshot.blocks.filter((block) => block.done).length,
   lastDay: snapshot.stats.days.length ? snapshot.stats.days[snapshot.stats.days.length - 1].date : null,

@@ -1,12 +1,12 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
-import { applySnapshot, buildAndCommit, buildSnapshot, hasMixedProgress, META, readMeta } from "../src/sync/snapshot";
+import { applySnapshot, buildAndCommit, buildSnapshot, META, readMeta } from "../src/sync/snapshot";
 import { decodeSnapshot, encodeRef, encodeSnapshot, SnapshotFormatError } from "../src/sync/codec";
 import { kvAdapter, splitParts } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { CLOUD_LIMITS, memoryTransport, type MemoryTransport } from "../src/sync/transport";
-import { LEGACY_SNAPSHOT_FORMAT, SNAPSHOT_FORMAT, type CompactSnapshot } from "../src/sync/types";
+import { SNAPSHOT_FORMAT, type CompactSnapshot } from "../src/sync/types";
 import { dexieSource } from "../src/storage/queries";
 import type { SkillSummary } from "../src/domain/skills";
 import { makeSession } from "../src/domain/learning";
@@ -77,7 +77,7 @@ beforeEach(() => {
   clockMs = Date.parse("2026-09-16T08:00:00Z");
 });
 
-describe("компактный снимок формата 2", () => {
+describe("компактный снимок", () => {
   it("кодек обратим, числа FSRS не меняются, а тексты и ответы в снимок не попадают", async () => {
     const phone = await device("phone", { mixed: true });
     await study(phone, [W("w070"), P("p-grafo"), P("p-xora"), P("p-paidi")], [true, false, true, true]);
@@ -102,42 +102,65 @@ describe("компактный снимок формата 2", () => {
     for (const secret of ["Γράφω ένα γράμμα", "Я пишу письмо"]) expect(text, secret).not.toContain(secret);
     expect(text).toContain(encodeRef(P("p-grafo"))); // ссылка на карточку — вид и идентификатор
   });
-  it("формат 3 на проводе: урок — статусом без даты, расписание и даты чужого снимка не применяются", async () => {
+  it("формат 4 на проводе: курс — пределом, урок — завершением, без расписания и дат", async () => {
+    const phone = await device("format4", { mixed: true });
+    const courseId = (await phone.db.courses.toArray())[0].id;
+    const lessonId = (await phone.db.lessons.toArray())[0].id;
+    await phone.db.lessons.update(lessonId, { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
+    const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
+    const wire = JSON.parse(encodeSnapshot(snapshot));
+    expect(wire.f).toBe(4);
+    expect(wire.cs).toEqual([[courseId, (await phone.db.courses.get(courseId))!.newItemsPerDay]]);
+    expect(wire.l).toContainEqual([lessonId, 1, Date.parse("2026-09-16T07:00:00.000Z")]);
+    const decoded = decodeSnapshot(JSON.stringify(wire));
+    expect(decoded).toEqual(snapshot);
+    expect(decoded.lessons.find((lesson) => lesson.id === lessonId)).toEqual({
+      id: lessonId,
+      completed: true,
+      updatedAt: "2026-09-16T07:00:00.000Z",
+    });
+  });
+  it("снимок формата 3 читается: статус становится завершением, расписание и даты отбрасываются", async () => {
     const phone = await device("format3", { mixed: true });
     const courseId = (await phone.db.courses.toArray())[0].id;
     const lessonId = (await phone.db.lessons.toArray())[0].id;
     await phone.db.lessons.update(lessonId, { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
-    const decoded = decodeSnapshot(encodeSnapshot(await buildAndCommit(phone.db, now(), "dev-1")));
-    expect(decoded.courses.find((course) => course.id === courseId)).toMatchObject({
-      subscribed: true,
-      schedule: { startDate: null, weekdays: [], lessonHour: 12 },
-    });
-    expect(decoded.lessons.find((lesson) => lesson.id === lessonId)).toEqual({
-      id: lessonId,
-      targetDate: null,
-      status: "completed",
-      updatedAt: "2026-09-16T07:00:00.000Z",
-    });
-
-    const older = await device("format3-old", { mixed: true });
-    const foreign: CompactSnapshot = {
-      ...decoded,
-      courses: decoded.courses.map((course) => ({
-        ...course,
+    await study(phone, [W("w070"), P("p-grafo")], [true, false]);
+    const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
+    const wire = JSON.parse(encodeSnapshot(snapshot));
+    const format3 = {
+      ...wire,
+      f: 3,
+      cs: wire.cs.map(([id]: [string, number]) => ({
+        id,
+        subscribed: true,
         newItemsPerDay: 5,
         schedule: { startDate: "2026-09-14", weekdays: [1, 4], lessonHour: 9 },
       })),
-      lessons: decoded.lessons.map((lesson) => ({ ...lesson, targetDate: "2026-10-01" })),
+      l: wire.l.map(([id, completed, at]: [string, 0 | 1, number]) => [
+        id,
+        "2026-10-01",
+        completed ? "completed" : "upcoming",
+        at,
+      ]),
     };
-    await applySnapshot(older.db, foreign, "f3-1", { other: 1 }, now());
-    const course = (await older.db.courses.get(courseId))!;
-    expect(course.newItemsPerDay).toBe(5);
-    expect(Object.keys(course).sort()).toEqual(Object.keys((await phone.db.courses.get(courseId))!).sort());
-    expect(await older.db.lessons.get(lessonId)).toEqual({
+    const decoded = decodeSnapshot(JSON.stringify(format3));
+    expect(decoded).toEqual({
+      ...snapshot,
+      courses: snapshot.courses.map((course) => ({ ...course, newItemsPerDay: 5 })),
+    });
+    expect(Object.keys(decoded.courses[0]).sort()).toEqual(["id", "newItemsPerDay"]);
+    expect(Object.keys(decoded.lessons[0]).sort()).toEqual(["completed", "id", "updatedAt"]);
+
+    const tablet = await device("format3-reader", { mixed: true });
+    expect(await applySnapshot(tablet.db, decoded, "f3-1", { other: 1 }, now())).toBe(true);
+    expect((await tablet.db.courses.get(courseId))!.newItemsPerDay).toBe(5);
+    expect(await tablet.db.lessons.get(lessonId)).toEqual({
       ...(await phone.db.lessons.get(lessonId)),
       completed: true,
       updatedAt: "2026-09-16T07:00:00.000Z",
     });
+    expect(await statesOf(tablet)).toEqual(await statesOf(phone));
   });
   it("ссылка снятого вида из чужого снимка отбрасывается, а слова и фразы применяются", async () => {
     const phone = await device("phone", { mixed: true });
@@ -198,104 +221,11 @@ describe("компактный снимок формата 2", () => {
     expect(await statesOf(phone)).toEqual(before); // локальные ответы сохранены
     expect(await readMeta(phone.db, META.dirty)).toBeTruthy();
   });
-  it("словарный формат 1 читается как прогресс слов с теми же сроками и счётчиками", () => {
-    const due = Date.parse("2026-09-20T08:00:00Z"),
-      intro = Date.parse("2026-09-10T09:00:00Z");
-    const wire = JSON.stringify({
-      f: LEGACY_SNAPSHOT_FORMAT,
-      c: Date.parse("2026-09-16T08:00:00Z"),
-      s: { timezone: "Asia/Nicosia", sessionSize: 12 },
-      cs: [
-        {
-          id: "mechanics",
-          subscribed: true,
-          newWordsPerDay: 7,
-          schedule: { startDate: "2026-09-14", weekdays: [1, 4] },
-        },
-      ],
-      l: [["mech-1", null, "upcoming", Date.parse("2026-09-15T08:00:00Z")]],
-      p: ["mech-1"],
-      st: [["w038", due, 2.5, 5.25, 1, 3, 2, 0, 2, 0, 0, intro, 4]],
-      sk: [["w038", "r", 1, { r: ["101", Date.parse("2026-09-15T08:00:00Z")] }]],
-      x: { d: [["2026-09-15", 3, ["w038"]]], r: { r: "101" }, n: 3, w: ["w038"] },
-    });
-    const snapshot = decodeSnapshot(wire);
-    expect(snapshot.format).toBe(SNAPSHOT_FORMAT);
-    expect(snapshot.states).toHaveLength(1);
-    expect(snapshot.states[0]).toMatchObject({
-      ref: W("w038"),
-      version: 4,
-      introducedAt: new Date(intro).toISOString(),
-    });
-    expect(snapshot.states[0].card.due).toBe(new Date(due).toISOString());
-    expect(snapshot.states[0].card.stability).toBe(2.5);
-    expect(snapshot.skills[0].ref).toEqual(W("w038"));
-    expect(snapshot.stats.answeredKeys).toEqual([unitKey(W("w038"))]);
-    expect(snapshot.stats.days[0].keys).toEqual([unitKey(W("w038"))]);
-    expect(snapshot.courses[0]).toMatchObject({ id: "mechanics", newItemsPerDay: 7 }); // прежний предел слов стал пределом карточек
-    expect(() =>
-      decodeSnapshot(
-        JSON.stringify({
-          f: SNAPSHOT_FORMAT + 1,
-          st: [],
-          sk: [],
-          s: {},
-          x: { d: [], r: {}, n: 0, w: [] },
-          l: [],
-          p: [],
-        }),
-      ),
-    ).toThrow(SnapshotFormatError);
-  });
-  it("формат 1 применяется к профилю без прогресса новых видов и отклоняется при смешанном прогрессе", async () => {
-    const phone = await device("phone", { mixed: true });
-    const legacy: CompactSnapshot = {
-      format: SNAPSHOT_FORMAT,
-      createdAt: now().toISOString(),
-      settings: { timezone: "Asia/Nicosia", sessionSize: 20 },
-      courses: [],
-      lessons: [],
-      packages: [MIXED_LESSON],
-      blocks: [],
-      states: [
-        {
-          ref: W("w070"),
-          card: {
-            due: "2026-09-25T08:00:00.000Z",
-            stability: 3,
-            difficulty: 5,
-            elapsed_days: 1,
-            scheduled_days: 9,
-            reps: 2,
-            lapses: 0,
-            state: 2,
-            learning_steps: 0,
-          },
-          introducedAt: "2026-09-10T09:00:00.000Z",
-          version: 2,
-        },
-      ],
-      skills: [],
-      stats: { days: [], recentByType: {}, answers: 0, answeredKeys: [] },
-    };
-    // Наличие контента фраз не мешает: важен сохранённый прогресс.
-    expect(await hasMixedProgress(phone.db)).toBe(false);
-    await applySnapshot(phone.db, legacy, "legacy-1", { other: 1 }, now(), LEGACY_SNAPSHOT_FORMAT);
-    expect((await phone.db.cardStates.get(unitKey(W("w070"))))!.version).toBe(2);
-    // Появился прогресс фразы — словарный снимок больше не может заменить смешанную историю.
-    await study(phone, [P("p-grafo")], [true]);
-    expect(await hasMixedProgress(phone.db)).toBe(true);
-    const before = await statesOf(phone);
-    const events = await phone.db.events.count();
-    await expect(
-      applySnapshot(phone.db, legacy, "legacy-2", { other: 2 }, now(), LEGACY_SNAPSHOT_FORMAT),
-    ).rejects.toThrow(/формата 1|формат/i);
-    expect(await statesOf(phone)).toEqual(before);
-    expect(await phone.db.events.count()).toBe(events);
-    expect(await readMeta(phone.db, META.applied)).toBe("legacy-1"); // применение не отмечено
-    // Тот же снимок в формате 2 применяется и при смешанном прогрессе.
-    await applySnapshot(phone.db, legacy, "v2", { other: 3 }, now());
-    expect(await phone.db.cardStates.get(unitKey(P("p-grafo")))).toBeUndefined(); // версия не содержит фразы — она снова новая
+  it("форматы 1 и 2 и неизвестный формат не читаются", () => {
+    const body = { st: [], sk: [], s: {}, x: { d: [], r: {}, n: 0, w: [] }, cs: [], l: [], p: [], b: [] };
+    for (const f of [1, 2, SNAPSHOT_FORMAT + 1])
+      expect(() => decodeSnapshot(JSON.stringify({ f, ...body })), `формат ${f}`).toThrow(SnapshotFormatError);
+    expect(decodeSnapshot(JSON.stringify({ f: 3, ...body })).format).toBe(SNAPSHOT_FORMAT);
   });
 });
 
@@ -349,27 +279,30 @@ describe("обмен смешанным прогрессом между устр
     expect(await fresh.db.cardStash.count()).toBe(0);
     expect(await statesOf(fresh)).toEqual(await statesOf(phone));
   });
-  it("версия неподдерживаемого формата не применяется и не перезаписывается своим снимком", async () => {
-    // Тот же механизм отказа, которым клиент формата 1 отвергает формат 2: неизвестная версия не читается и не затирается.
-    const phone = await device("phone", { mixed: true });
-    const tablet = await device("tablet", { mixed: true });
-    await study(phone, [P("p-grafo")], [true]);
-    await phone.sync.exchange();
-    await tablet.sync.exchange();
-    const device1 = await phone.sync.deviceId();
-    const pointer = JSON.parse(cloud.store.get(`p_${device1}`)!);
-    cloud.store.set(
-      `p_${device1}`,
-      JSON.stringify({ ...pointer, id: `${device1}-9`, format: SNAPSHOT_FORMAT + 1, clock: { [device1]: 9 } }),
-    );
-    await study(tablet, [P("p-xora")], [false]);
-    const before = await statesOf(tablet);
-    const status = await tablet.sync.exchange();
-    expect(status.phase).toBe("error");
-    expect(status.error?.kind).toBe("format");
-    expect(status.error?.message).toMatch(/Обновите приложение/);
-    expect(await statesOf(tablet)).toEqual(before);
-    expect(cloud.store.has(`p_${await tablet.sync.deviceId()}`)).toBe(false);
-    expect(await readMeta(tablet.db, META.dirty)).toBeTruthy();
-  });
+  it.each([2, SNAPSHOT_FORMAT + 1])(
+    "версия формата %i не применяется и не перезаписывается своим снимком",
+    async (format) => {
+      // Тем же отказом приложение формата 3 встречает версию формата 4: «обновите приложение», данные на месте.
+      const phone = await device("phone", { mixed: true });
+      const tablet = await device("tablet", { mixed: true });
+      await study(phone, [P("p-grafo")], [true]);
+      await phone.sync.exchange();
+      await tablet.sync.exchange();
+      const device1 = await phone.sync.deviceId();
+      const pointer = JSON.parse(cloud.store.get(`p_${device1}`)!);
+      cloud.store.set(
+        `p_${device1}`,
+        JSON.stringify({ ...pointer, id: `${device1}-9`, format, clock: { [device1]: 9 } }),
+      );
+      await study(tablet, [P("p-xora")], [false]);
+      const before = await statesOf(tablet);
+      const status = await tablet.sync.exchange();
+      expect(status.phase).toBe("error");
+      expect(status.error?.kind).toBe("format");
+      expect(status.error?.message).toMatch(/Обновите приложение/);
+      expect(await statesOf(tablet)).toEqual(before);
+      expect(cloud.store.has(`p_${await tablet.sync.deviceId()}`)).toBe(false);
+      expect(await readMeta(tablet.db, META.dirty)).toBeTruthy();
+    },
+  );
 });

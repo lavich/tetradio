@@ -202,6 +202,23 @@ describe.each(variants)("контракт адаптера синхрониза�
     expect(keys).toContain(pointerKey("dev1"));
     expect(keys).toContain(pointerKey("dev2"));
   });
+  it("удаление другого устройства: указатель и его части не новее указателя, только если указатель не сменился", async () => {
+    const { transport, memory } = make();
+    const adapter = kvAdapter(transport);
+    const old = await adapter.publishVersion(meta("dev2-1", "dev2", { dev2: 1 }), snapshot(60));
+    await adapter.publishVersion(meta("dev3-1", "dev3", { dev3: 1 }), snapshot(60));
+    const fresh = await adapter.publishVersion(meta("dev2-2", "dev2", { dev2: 2 }), snapshot(60));
+    // Устройство успело опубликовать новую версию: старый указатель уже не тот — ничего не удаляется.
+    const keys = memory.store.size;
+    expect(await adapter.removeDevice(old)).toBe(false);
+    expect(memory.store.size).toBe(keys);
+    expect(await adapter.removeDevice(fresh)).toBe(true);
+    const left = [...memory.store.keys()];
+    expect(left).not.toContain(pointerKey("dev2"));
+    expect(left.filter((key) => parsePartKey(key)?.versionId.startsWith("dev2-"))).toHaveLength(0);
+    expect(left).toContain(pointerKey("dev3"));
+    expect(left.filter((key) => parsePartKey(key)?.versionId === "dev3-1").length).toBeGreaterThan(0);
+  });
 });
 
 it("отключённый транспорт веба отвечает явной ошибкой, а не фиктивным успехом", async () => {
