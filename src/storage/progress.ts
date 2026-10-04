@@ -1,7 +1,7 @@
 import { SKILLS, type Skill } from "../content/course";
 import { testResult } from "../domain/course";
 import { addDays, localDay } from "../domain/learning";
-import { coursePace, type Pace, type SkillReadiness } from "../domain/progress";
+import { coursePace, withCoverage, type Pace, type SkillReadiness } from "../domain/progress";
 import type { BlockProgress } from "../domain/types";
 import { lessonDays, moduleViews, type ModuleView } from "./course";
 import { db, type AppDatabase } from "./db";
@@ -39,7 +39,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
   }
 
   // Последний по программе результат контрольной по каждому навыку; письмо и речь — накопленная самопроверка.
-  const tests = new Map<Skill, SkillReadiness>();
+  const tests = new Map<Skill, Omit<SkillReadiness, "share">>();
   const self = new Map<Skill, { checked: number; criteria: number; tasks: number }>();
   ids.forEach((id, index) => {
     const pack = packs[index];
@@ -50,7 +50,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
       for (const result of testResult(blocks, marks).skills)
         tests.set(result.skill, {
           skill: result.skill,
-          share: result.share,
+          result: result.share,
           source: "test",
           basis: lessons[index]?.title ?? id,
         });
@@ -66,10 +66,10 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
       self.set(skill, entry);
     }
   });
-  const readiness = SKILLS.flatMap((skill): SkillReadiness[] => {
+  const results = SKILLS.flatMap((skill): Omit<SkillReadiness, "share">[] => {
     const own = self.get(skill);
     if (tests.has(skill)) return [tests.get(skill)!];
-    if (own?.criteria) return [{ skill, share: own.checked / own.criteria, source: "self", basis: String(own.tasks) }];
+    if (own?.criteria) return [{ skill, result: own.checked / own.criteria, source: "self", basis: String(own.tasks) }];
     return [];
   });
 
@@ -85,6 +85,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     today,
     completedDays,
   );
+  const readiness = withCoverage(results, pace.done, pace.total);
   const next = views.find((view) => lessonsOf(view).some((lesson) => !lesson.completed));
   const events = await database.events.where("localDate").between(monday, today, true, true).toArray();
   const scheduled = events.filter((event) => event.mode !== "practice");
