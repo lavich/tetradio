@@ -95,6 +95,8 @@ export interface Asset {
   mimeType: string;
   source: string;
   alt: string;
+  /** Адрес файла с версией: по нему видно, что пакет сменил файл под тем же id. */
+  url?: string;
 }
 /** Описание медиа из пакета без самого файла: по нему ресурс догружается при использовании. */
 export type MediaRef = PackageMedia;
