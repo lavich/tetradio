@@ -14,11 +14,17 @@ export function ensureAsset(
   if (running) return running;
   const task = (async () => {
     try {
-      const stored = await database.assets.get(id);
-      if (stored) return stored;
-      const ref = await database.media.get(id);
+      const [stored, ref] = await Promise.all([database.assets.get(id), database.media.get(id)]);
+      if (stored && (!ref || stored.url === ref.url)) return stored;
       if (!ref) return null;
-      const blob = await source.blob(ref.url);
+      let blob: Blob;
+      try {
+        blob = await source.blob(ref.url);
+      } catch (error) {
+        // Без сети остаётся прежняя версия файла: лучше старая картинка или запись, чем никакой.
+        if (stored) return stored;
+        throw error;
+      }
       if (blob.size !== ref.bytes) throw new ContentError(`Файл ${ref.url} повреждён: размер не совпадает.`);
       if (ref.mimeType === "image/svg+xml" && !(await blob.text()).includes("<svg"))
         throw new ContentError(`Файл ${ref.url} повреждён: это не SVG.`);
@@ -29,6 +35,7 @@ export function ensureAsset(
         mimeType: ref.mimeType,
         source: ref.source,
         alt: ref.alt,
+        url: ref.url,
       };
       await database.assets.put(asset);
       return asset;

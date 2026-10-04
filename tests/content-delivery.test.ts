@@ -440,6 +440,19 @@ describe("медиа и готовность офлайн", () => {
     expect(fetcher.requests.length).toBe(before + 1);
     expect(await ensureAsset("img-нет", db, fetcher)).toBeNull();
   });
+  it("новая версия файла под тем же id перекачивается; без сети остаётся прежняя", async () => {
+    const fetcher = await installLessons(db, ["mech-2"]);
+    const old = await ensureAsset("img-w034", db, fetcher);
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg"><circle r="1"/></svg>';
+    const ref = (await db.media.get("img-w034"))!;
+    await db.media.put({ ...ref, url: ref.url.replace(/\.svg$/, "-v2.svg"), bytes: new Blob([svg]).size });
+    const offline = { ...fetcher, blob: async () => Promise.reject(new Error("offline")) };
+    expect(await (await ensureAsset("img-w034", db, offline))!.blob.text()).toBe(await old!.blob.text());
+    const online = { ...fetcher, blob: async () => new Blob([svg]) };
+    const fresh = await ensureAsset("img-w034", db, online);
+    expect(await fresh!.blob.text()).toBe(svg);
+    expect((await db.assets.get("img-w034"))!.url).toMatch(/-v2\.svg$/);
+  });
   it("слова доступны локально, но урок не готов офлайн, пока обязательное медиа не скачано; повтор докачивает", async () => {
     const fetcher = await installLessons(db, ["mech-2"]);
     expect(await lessonReadiness("mech-2", db)).toMatchObject({
