@@ -48,11 +48,7 @@ export const useActiveSession = (): Session | undefined | null =>
 /** Счётчики экрана «Ещё»: только числа по индексам, без чтения самих карточек. */
 export const useCounts = () =>
   useLiveQuery(async () => {
-    const live = async (table: {
-      count(): Promise<number>;
-      where(index: string): { above(value: string): { count(): Promise<number> } };
-    }) => (await table.count()) - (await table.where("deletedAt").above("").count());
-    const [words, phrases, answers] = await Promise.all([live(db.words), live(db.phrases), db.events.count()]);
+    const [words, phrases, answers] = await Promise.all([db.words.count(), db.phrases.count(), db.events.count()]);
     return { words, cards: words + phrases, answers };
   }, []);
 
@@ -62,13 +58,6 @@ export const useCatalogPhase = () => useSyncExternalStore(subscribeCatalog, cata
 /** Урок каталога, из которого слово: `undefined` — ещё читается, `null` — слова в каталоге нет. */
 export const useWordLesson = (id: string | undefined) =>
   useLiveQuery(async () => (id ? firstLessonOf(await db.catalog.toArray(), id) : null), [id]);
-/** Слово в версии курса из установленных пакетов: делятся им, а не локальной правкой. */
-export const useShippedWord = (id: string | undefined) =>
-  useLiveQuery(
-    async () =>
-      id ? (await db.packages.toArray()).flatMap((pack) => pack.words).find((word) => word.id === id) : undefined,
-    [id],
-  );
 export const useCourses = () => useLiveQuery(() => db.courses.toArray(), []);
 export const useCoursePhase = (courseId: string | undefined) =>
   useSyncExternalStore(subscribeInstall, () => coursePhase(courseId ?? ""));

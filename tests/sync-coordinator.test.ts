@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
-import { saveNewItemsPerDay, saveSettings, submitAnswer, updateLesson } from "../src/storage/ops";
+import { saveNewItemsPerDay, saveSettings, submitAnswer } from "../src/storage/ops";
 import { defaultSettings } from "../src/domain/types";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
@@ -11,7 +11,7 @@ import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport, disabledTransport, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
-import { installCompleted, memoryFetcher, packageOf } from "./helpers/content";
+import { installCompleted, installLessons, memoryFetcher, packageOf } from "./helpers/content";
 import { installLesson, refreshCatalog } from "../src/content/client";
 import type { Word } from "../src/domain/types";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
@@ -86,12 +86,14 @@ beforeEach(() => {
 });
 
 describe("перенос компактного прогресса между устройствами одного аккаунта", () => {
-  it("второе устройство получает сроки FSRS, навыки, настройки, даты уроков, бюджет и статистику без двойного учёта", async () => {
+  it("второе устройство получает сроки FSRS, навыки, настройки, пройденные уроки, бюджет и статистику без двойного учёта", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
     const tablet = await device("tablet", { lessons: ["mech-1"] });
+    await installLessons(phone.db, ["mech-2"]);
+    await installLessons(tablet.db, ["mech-2"]);
     await saveSettings({ ...defaultSettings, timezone: "Europe/Athens", sessionSize: 6 }, phone.db);
     await saveNewItemsPerDay("mechanics", 7, phone.db);
-    await updateLesson("mech-1", { targetDate: "2026-10-01" }, phone.db);
+    await phone.db.lessons.update("mech-2", { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
     const studied = await study(phone, [true, false, true, true, false]);
     await study(phone, [true, true, false]);
     expect((await phone.sync.exchange()).phase).toBe("synced");
@@ -103,7 +105,10 @@ describe("перенос компактного прогресса между у
     expect(await skillsOf(tablet, studied)).toEqual(await skillsOf(phone, studied));
     expect(await tablet.db.settings.get("settings")).toMatchObject({ timezone: "Europe/Athens", sessionSize: 6 });
     expect(await tablet.db.courses.get("mechanics")).toMatchObject({ newItemsPerDay: 7 });
-    expect((await tablet.db.lessons.get("mech-1"))?.targetDate).toBe("2026-10-01");
+    expect(await tablet.db.lessons.get("mech-2")).toMatchObject({
+      completed: true,
+      updatedAt: "2026-09-16T07:00:00.000Z",
+    });
     const [planPhone, planTablet] = await Promise.all([plan(phone), plan(tablet)]);
     expect(planTablet).toEqual(planPhone);
     const [statsPhone, statsTablet] = await Promise.all([stats(phone), stats(tablet)]);

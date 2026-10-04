@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 import { State } from "ts-fsrs";
-import { db, isStandardWord, searchTokens, type AppDatabase, type StoredWord } from "./db";
+import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import {
   addDays,
   LESSON_MATES_RADIUS,
@@ -10,7 +10,7 @@ import {
   type PlanLesson,
   type SessionSource,
 } from "../domain/learning";
-import { isShippedCard, unitKey, wordKeyOf, wordRef } from "../domain/refs";
+import { unitKey, wordKeyOf, wordRef } from "../domain/refs";
 import {
   byTime,
   emptyStats,
@@ -25,7 +25,6 @@ import {
   CARD_KINDS,
   DEFAULT_NEW_ITEMS_PER_DAY,
   fillSettings,
-  LOCAL_COURSE,
   type CardKind,
   type Course,
   type LearningRef,
@@ -49,13 +48,11 @@ export const loadLessons = (database: AppDatabase = db) => database.lessons.toAr
 export async function currentCourse(database: AppDatabase = db): Promise<Course | undefined> {
   const module = await database.modules.toCollection().first();
   if (module) return database.courses.get(module.courseId);
-  return (
-    (await database.courses.filter((course) => course.id !== LOCAL_COURSE).first()) ??
-    (await database.courses.toCollection().first())
-  );
+  return database.courses.toCollection().first();
 }
+// Булево поле IndexedDB не индексирует, а уроков — десятки.
 export async function completedLessons(database: AppDatabase = db): Promise<PlanLesson[]> {
-  const done = await database.lessons.where("status").equals("completed").toArray();
+  const done = await database.lessons.filter((lesson) => lesson.completed).toArray();
   if (!done.length) return [];
   const [modules, entries] = await Promise.all([
     database.modules.orderBy("number").toArray(),
@@ -70,20 +67,12 @@ export const lessonItems = (lessonId: string, database: AppDatabase = db): Promi
     .where("[lessonId+position]")
     .between(...span(lessonId))
     .toArray();
-/** Ключи удалённых карточек всех видов: удалённых мало, множество дешевле точечных проверок. */
-export async function deletedKeys(database: AppDatabase = db): Promise<Set<string>> {
-  const [words, phrases] = await Promise.all([
-    database.words.where("deletedAt").above("").primaryKeys(),
-    database.phrases.where("deletedAt").above("").primaryKeys(),
-  ]);
-  return new Set([...words.map(wordKeyOf), ...phrases.map((id) => unitKey({ kind: "phrase", id }))]);
-}
 const byKind = (refs: LearningRef[]) => {
   const groups: Record<CardKind, string[]> = { word: [], phrase: [] };
   for (const ref of refs) groups[ref.kind]?.push(ref.id);
   return groups;
 };
-/** Ключи существующих не удалённых карточек: только ключи индексов, записи с текстами не читаются. */
+/** Ключи существующих карточек: только ключи индексов, записи с текстами не читаются. */
 export async function liveKeys(refs: LearningRef[], database: AppDatabase = db): Promise<Set<string>> {
   if (!refs.length) return new Set();
   const groups = byKind(refs);
@@ -91,12 +80,7 @@ export async function liveKeys(refs: LearningRef[], database: AppDatabase = db):
   const tables = { word: database.words, phrase: database.phrases } as const;
   for (const kind of CARD_KINDS) {
     if (!groups[kind].length) continue;
-    const [present, deleted] = await Promise.all([
-      tables[kind].where("id").anyOf(groups[kind]).primaryKeys(),
-      tables[kind].where("deletedAt").above("").primaryKeys(),
-    ]);
-    const gone = new Set(deleted);
-    for (const id of present) if (!gone.has(id)) live.add(unitKey({ kind, id }));
+    for (const id of await tables[kind].where("id").anyOf(groups[kind]).primaryKeys()) live.add(unitKey({ kind, id }));
   }
   return live;
 }
@@ -107,9 +91,9 @@ export const statesOf = async (refs: LearningRef[], database: AppDatabase = db) 
       .map((s) => [s.unitKey, s]),
   );
 export const liveWords = async (ids: string[], database: AppDatabase = db): Promise<StoredWord[]> =>
-  (await database.words.bulkGet(ids)).filter((w): w is StoredWord => !!w && !w.deletedAt);
+  (await database.words.bulkGet(ids)).filter((w): w is StoredWord => !!w);
 export const livePhrases = async (ids: string[], database: AppDatabase = db): Promise<Phrase[]> =>
-  (await database.phrases.bulkGet(ids)).filter((p): p is Phrase => !!p && !p.deletedAt);
+  (await database.phrases.bulkGet(ids)).filter((p): p is Phrase => !!p);
 /** Полное содержимое перечисленных карточек; читаются только они. */
 export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): Promise<Map<string, SessionCard>> {
   const groups = byKind(refs);
@@ -154,15 +138,13 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
           });
       return facts;
     },
-    phraseCount: async () =>
-      (await database.phrases.count()) - (await database.phrases.where("deletedAt").above("").count()),
+    phraseCount: () => database.phrases.count(),
     cardsOf: (refs) => cardsOf(refs, database),
     skillsOf: async (card) => {
       const key = unitKey(card.kind === "word" ? wordRef(card.word.id) : { kind: "phrase", id: card.phrase.id });
       const base = await database.baseSummary.get("base");
-      // Без базы или для пользовательской карточки сводка считается по всей локальной истории.
-      const standard = card.kind === "word" ? isStandardWord(card.word) : isShippedCard(card);
-      if (!base || !standard)
+      // Без базы сводка считается по всей локальной истории.
+      if (!base)
         return summarizeEvents(
           key,
           await database.events
@@ -197,7 +179,6 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       return [...(base?.stats.recentByType[type] ?? []), ...local].slice(-limit);
     },
     dueKeysBefore: (instant) => database.cardStates.where("card.due").below(instant).primaryKeys(),
-    deletedKeys: () => deletedKeys(database),
     cardCount: async () => (await database.words.count()) + (await database.phrases.count()),
     eachState: (visit) => database.cardStates.each(visit),
     labelsOf: async (refs) =>
@@ -236,13 +217,13 @@ export const eventsAfter = (database: AppDatabase, unitKey: string, asOf: string
  */
 export async function optionPool(want: number, database: AppDatabase = db): Promise<Word[]> {
   const total = await database.words.count();
-  if (total <= want) return (await database.words.toArray()).filter((word) => !word.deletedAt);
+  if (total <= want) return database.words.toArray();
   const chunk = Math.ceil(want / 4);
   const seen = new Map<string, Word>();
   for (let draw = 0; draw < 8 && seen.size < want; draw++) {
     const offset = Math.floor(Math.random() * Math.max(1, total - chunk));
     for (const word of await database.words.orderBy("id").offset(offset).limit(chunk).toArray())
-      if (!word.deletedAt) seen.set(word.id, word);
+      seen.set(word.id, word);
   }
   return [...seen.values()];
 }
@@ -276,7 +257,7 @@ export async function lessonMates(wordIds: string[], database: AppDatabase = db)
   });
   const all = [...new Set([...mateIds.values()].flatMap((ids) => [...ids]))];
   const live = new Map<string, Word>();
-  for (const word of await database.words.bulkGet(all)) if (word && !word.deletedAt) live.set(word.id, word);
+  for (const word of await database.words.bulkGet(all)) if (word) live.set(word.id, word);
   return new Map(
     wordIds.map((id) => [id, [...(mateIds.get(id) ?? [])].flatMap((mate) => live.get(mate) ?? [])] as const),
   );
@@ -284,13 +265,13 @@ export async function lessonMates(wordIds: string[], database: AppDatabase = db)
 /** Пул фраз для вариантов: те же правила, что у слов, — целиком для маленькой таблицы, порциями для большой. */
 export async function phrasePool(want: number, database: AppDatabase = db): Promise<Phrase[]> {
   const total = await database.phrases.count();
-  if (total <= want) return (await database.phrases.toArray()).filter((phrase) => !phrase.deletedAt);
+  if (total <= want) return database.phrases.toArray();
   const chunk = Math.ceil(want / 4);
   const seen = new Map<string, Phrase>();
   for (let draw = 0; draw < 8 && seen.size < want; draw++) {
     const offset = Math.floor(Math.random() * Math.max(1, total - chunk));
     for (const phrase of await database.phrases.orderBy("id").offset(offset).limit(chunk).toArray())
-      if (!phrase.deletedAt) seen.set(phrase.id, phrase);
+      seen.set(phrase.id, phrase);
   }
   return [...seen.values()];
 }

@@ -65,9 +65,9 @@ describe("блок «Упражнения» на экране слова", () =>
     expect(choice("Понимание на слух")).toBeNull();
     expect(text().split(NO_SOUND)).toHaveLength(3);
   });
-  it("удалённое слово не открывается, блока нет", async () => {
+  it("слова нет на устройстве — блока нет", async () => {
     await installLessons(db, ["mech-4"]);
-    await db.words.update("w093", { deletedAt: "2026-01-01T00:00:00.000Z" });
+    await db.words.delete("w093");
     await mount("/words/w093");
     await until(() => text().includes("Слово не найдено"), "экран слова");
     expect(host.querySelector("[data-testid=word-exercises]")).toBeNull();

@@ -114,7 +114,7 @@ test("повреждённый и чужой файл не меняют данн
     JSON.stringify({
       formatName: "dexie",
       formatVersion: 1,
-      data: { databaseName: "tetradio", databaseVersion: 9, tables: [], data: [] },
+      data: { databaseName: "tetradio", databaseVersion: 10, tables: [], data: [] },
     }),
   );
   await page.locator("#backup").setInputFiles(future);

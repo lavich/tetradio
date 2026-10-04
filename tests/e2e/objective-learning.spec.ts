@@ -39,7 +39,6 @@ async function installSession(page: Page, type: string, isNew = false, count = 1
           index: 0,
           status: "active",
           activeTimeMs: 0,
-          objectiveVersion: type === "recall" ? undefined : 1,
           introducedKeys: [],
         });
       };
@@ -194,16 +193,6 @@ test("знакомство идёт отдельным проходом и пе�
   // Оценка зависит от времени ответа, а тест проверяет не её: верный ответ не должен быть Again.
   expect(event).toMatchObject({ correct: true });
   expect(event.rating).toBeGreaterThan(1);
-});
-
-test("старое вспоминание заменяется объективным заданием при продолжении", async ({ page }) => {
-  await installSession(page, "recall");
-  await expect(page.getByTestId("prompt")).toHaveText("Что значит это слово?");
-  await expect(page.getByRole("button", { name: "Показать ответ" })).toHaveCount(0);
-  await expect(page.getByTestId("grade")).toHaveCount(0);
-  await page.getByRole("button", { name: "Не знаю", exact: true }).click();
-  await expect(page.getByTestId("feedback").or(page.locator('[data-answer="correct"]'))).toBeVisible();
-  expect((await stored(page)).events[0]).toMatchObject({ type: "recognition", correct: false });
 });
 
 test("неверный выбор зачёркнут красной ручкой, правильный — с зелёной галочкой, без отдельной карточки", async ({

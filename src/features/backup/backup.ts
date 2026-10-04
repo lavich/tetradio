@@ -1,32 +1,18 @@
 import Dexie from "dexie";
 import { exportDB, importInto } from "dexie-export-import";
-import {
-  AppDatabase,
-  db,
-  LEGACY_STORES,
-  LEGACY_TABLES,
-  migrateCards,
-  migrateDropCloze,
-  migrateCourses,
-  migrateCourseTempo,
-  migrateLegacy,
-  SCHEMA_VERSION,
-  SYNC_META_PREFIX,
-  TABLES,
-  TABLES_V2,
-  TABLES_V3,
-  TABLES_V5,
-  TABLES_V7,
-} from "../../storage/db";
+import { AppDatabase, db, migrateV9, SCHEMA_VERSION, SYNC_META_PREFIX, TABLES } from "../../storage/db";
 import { isAppDatabaseName } from "../../storage/profile";
 import { fillSettings, type LessonItem, type Settings } from "../../domain/types";
 import { syncEvents } from "../../sync/events";
 import { assertCloudUnchanged, type CloudGuard } from "./cloud-check";
 import { courseProblem, type CourseRows } from "./course-check";
 
-/** Версия формата копии совпадает с версией схемы; копии прежних версий читаются через ту же миграцию, что и база. */
+/** Версия формата копии совпадает с версией схемы; копия v8 читается через ту же миграцию, что и база. */
 export const APP_MARKER = `tetradio:${SCHEMA_VERSION}`;
-const KNOWN_MARKERS = Array.from({ length: SCHEMA_VERSION }, (_, index) => `tetradio:${index + 1}`);
+export const OLDEST_BACKUP = 8;
+const KNOWN_MARKERS = [`tetradio:${OLDEST_BACKUP}`, APP_MARKER];
+/** Пустые хранилища копий v8: в новой схеме их нет. */
+const V8_STORES = ["lessonWords", "states", "baseSkills", "syncStash", "clozes"];
 export interface BackupReport {
   databaseName: string;
   tables: { name: string; rows: number }[];
@@ -35,23 +21,13 @@ export interface BackupReport {
   legacy: boolean;
 }
 
-/** Обязательные таблицы копии по версии её схемы: старый файл не обязан знать новые таблицы. */
-export function requiredTables(version: number): readonly string[] {
-  if (version < 2) return LEGACY_TABLES;
-  if (version < 3) return TABLES_V2;
-  if (version < 4) return TABLES_V3;
-  if (version < 6) return TABLES_V5;
-  if (version < 8) return TABLES_V7;
-  return TABLES;
-}
-
-/** Каталог — кеш, альтернативные версии облака, пустые площадки старых хранилищ и служебные ключи синхронизации — не данные пользователя: в копию не входят. */
+/** Каталог — кеш, альтернативные версии облака и служебные ключи синхронизации — не данные пользователя: в копию не входят. */
 export async function exportFull(database: AppDatabase = db): Promise<Blob> {
   await database.meta.put({ key: "app", value: APP_MARKER });
   await database.meta.put({ key: "exportedAt", value: new Date().toISOString() });
   const blob = await exportDB(database, {
     prettyJson: false,
-    skipTables: ["catalog", "modules", "syncVersions", ...LEGACY_STORES],
+    skipTables: ["catalog", "modules", "syncVersions"],
     filter: (table, value) =>
       !(table === "meta" && String((value as { key?: string })?.key ?? "").startsWith(SYNC_META_PREFIX)),
   });
@@ -129,8 +105,7 @@ export const backupName = (now = new Date()) => `tetradio-backup-${now.toISOStri
 export async function exportWordsTsv(database: AppDatabase = db): Promise<Blob> {
   const rows: string[] = ["Греческий\tРусский\tIPA"];
   await database.words.orderBy("[sortKey+id]").each((word) => {
-    if (!word.deletedAt)
-      rows.push([word.greek, word.russian, word.ipa].map((cell) => cell.replace(/[\t\r\n]/g, " ")).join("\t"));
+    rows.push([word.greek, word.russian, word.ipa].map((cell) => cell.replace(/[\t\r\n]/g, " ")).join("\t"));
   });
   return new Blob([rows.join("\n")], { type: "text/tab-separated-values" });
 }
@@ -146,7 +121,7 @@ const courseRowsOf = (data: { tableName: string; rows?: unknown[] }[]): CourseRo
   blockProgress: tableRows(data, "blockProgress"),
 });
 
-/** Предпросмотр проверяет то же, что восстановление до замены, кроме связей карточек: им нужна миграция старых схем. */
+/** Предпросмотр проверяет то же, что восстановление до замены, кроме связей карточек: им нужна миграция копии v8. */
 export async function inspectBackup(
   file: Blob,
   database: AppDatabase = db,
@@ -168,9 +143,14 @@ export async function inspectBackup(
       ok: false,
       message: `Копия сделана более новой версией Τετράδιο (схема ${info.databaseVersion}). Обновите приложение.`,
     };
+  if (!(version >= OLDEST_BACKUP))
+    return {
+      ok: false,
+      message: `Копия сделана слишком старой версией (схема ${info.databaseVersion}): восстанавливаются копии начиная со схемы ${OLDEST_BACKUP}.`,
+    };
   const legacy = version < SCHEMA_VERSION;
   const names = info.tables.map((table: { name: string }) => table.name);
-  const missing = requiredTables(version).filter((table) => !names.includes(table));
+  const missing = TABLES.filter((table) => !names.includes(table));
   if (missing.length) return { ok: false, message: `В копии нет обязательных таблиц: ${missing.join(", ")}.` };
   const meta = (info.data ?? []).find((entry: { tableName: string }) => entry.tableName === "meta");
   const marker = (meta?.rows ?? []).find((row: { key: string }) => row.key === "app");
@@ -196,7 +176,7 @@ export async function inspectBackup(
 }
 
 /**
- * Копия сначала разворачивается в отдельной базе, мигрируется по тем же правилам, что и локальная схема,
+ * Копия сначала разворачивается в отдельной базе, копия v8 мигрируется по тем же правилам, что и локальная база,
  * и проверяется на целостность; только затем одной транзакцией заменяет данные. Копия только с прогрессом курса
  * (без карточек) допустима, пустая — нет; связь с отсутствующей карточкой или уроком отклоняет восстановление до замены.
  * `cloud` — отпечаток облака из предпросмотра: изменившееся с тех пор облако останавливает замену.
@@ -217,25 +197,20 @@ export async function restoreBackup(
       acceptVersionDiff: true,
       clearTablesBeforeImport: true,
       overwriteValues: true,
+      skipTables: V8_STORES,
     });
-    const all = [...TABLES, ...LEGACY_STORES, "syncVersions"].map((name) => staging.table(name));
-    await staging.transaction("rw", all, () => migrateLegacy(staging));
-    // Копия прежнего формата курсов не знает: восстановленный профиль получает их тем же переходом, что и миграция базы.
-    await staging.transaction("rw", all, async () => {
-      await migrateCourses(staging);
-      await migrateCourseTempo(staging);
-    });
-    // Словарные ключи старых копий переезжают в типизированные хранилища; для копии схемы 6 шаг ничего не делает.
-    await staging.transaction("rw", all, () => migrateCards(staging));
-    // Копия схемы ≤6 знает снятый вид карточек: он уходит тем же переходом, что и в локальном профиле.
-    await staging.transaction("rw", all, () => migrateDropCloze(staging));
+    if (check.report.legacy)
+      await staging.transaction(
+        "rw",
+        TABLES.map((name) => staging.table(name)),
+        () => migrateV9(staging),
+      );
     const payload = await Promise.all(TABLES.map(async (name) => [name, await staging.table(name).toArray()] as const));
     const rows = <T>(name: (typeof TABLES)[number]) => payload.find(([table]) => table === name)![1] as T[];
     const ids = (name: "words" | "phrases") => new Set(rows<{ id: string }>(name).map((row) => row.id));
     const cards = { word: ids("words"), phrase: ids("phrases") };
     const courseProgress =
-      rows("blockProgress").length > 0 ||
-      rows<{ status?: string }>("lessons").some((row) => row.status === "completed");
+      rows("blockProgress").length > 0 || rows<{ completed?: boolean }>("lessons").some((row) => row.completed);
     if (!cards.word.size && !cards.phrase.size && !courseProgress)
       throw new Error("В копии нет ни карточек, ни прогресса курса — восстанавливать нечего.");
     const course = await courseProblem(
@@ -257,11 +232,10 @@ export async function restoreBackup(
     await assertCloudUnchanged(options.cloud);
     await database.transaction(
       "rw",
-      [...TABLES, ...LEGACY_STORES].map((name) => database.table(name)),
+      TABLES.map((name) => database.table(name)),
       async () => {
         // Идентификатор устройства и очередь публикации принадлежат этой установке, а не копии.
         const own = await database.meta.where("key").startsWith(SYNC_META_PREFIX).toArray();
-        for (const name of LEGACY_STORES) await database.table(name).clear();
         for (const [name, items] of payload) {
           await database.table(name).clear();
           const rows =

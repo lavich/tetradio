@@ -28,7 +28,6 @@ import { emptySkills, type SkillSummary } from "../src/domain/skills";
 import { fromSnapshot } from "../src/domain/snapshot-source";
 import { mulberry32 } from "./plan-golden.test";
 import {
-  defaultSchedule,
   defaultSettings,
   type Course,
   type ExerciseType,
@@ -55,10 +54,8 @@ type LessonSpec = Lesson & { wordIds: string[] };
 const lesson: LessonSpec = {
   id: "l",
   title: "1.2",
-  targetDate: null,
-  status: "completed",
+  completed: true,
   wordIds: words.map((w) => w.id),
-  createdAt: now.toISOString(),
   updatedAt: now.toISOString(),
 };
 type Spec = Omit<Snapshot, "lessons" | "links"> & { lessons: LessonSpec[] };
@@ -71,11 +68,7 @@ const snapshot = (spec: Spec): Snapshot => ({
 const course: Course = {
   id: "a2",
   title: "A2",
-  origin: "content",
-  subscribed: true,
-  schedule: defaultSchedule,
   newItemsPerDay: 10,
-  createdAt: now.toISOString(),
   updatedAt: now.toISOString(),
 };
 const data: Spec = {
@@ -219,7 +212,6 @@ describe("упражнения для фраз", () => {
     id,
     text: `Φράση ${id}.`,
     translation: `Фраза ${id}.`,
-    provenance: { sourceLabel: "тест", operation: "verbatim" },
     createdAt: iso,
     updatedAt: iso,
     ...over,
@@ -274,7 +266,6 @@ describe("упражнения для фраз", () => {
       id: "p",
       text: "Γράφω ένα γράμμα.",
       translation: "Я пишу письмо.",
-      provenance: { sourceLabel: "тест", operation: "verbatim" },
       createdAt: iso,
       updatedAt: iso,
     };

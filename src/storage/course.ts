@@ -114,8 +114,8 @@ export async function completeLesson(lessonId: string, database: AppDatabase = d
   if (!lessonDone(view.blocks, progress)) throw new LessonIncompleteError("В уроке остались невыполненные задания");
   const changed = await database.transaction("rw", database.lessons, database.meta, async () => {
     const lesson = await database.lessons.get(lessonId);
-    if (!lesson || lesson.status === "completed") return false;
-    await database.lessons.put({ ...lesson, status: "completed", updatedAt: new Date().toISOString() });
+    if (!lesson || lesson.completed) return false;
+    await database.lessons.put({ ...lesson, completed: true, updatedAt: new Date().toISOString() });
     await markChanged(database);
     return true;
   });
@@ -174,7 +174,7 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
         title: lesson?.title ?? entry?.title ?? id,
         kind: pack?.kind ?? "lesson",
         installed: !!pack,
-        completed: lesson?.status === "completed",
+        completed: !!lesson?.completed,
         tally: lessonTally(pack?.blocks ?? [], byLesson.get(id) ?? new Map()),
       };
     };

@@ -102,31 +102,42 @@ describe("компактный снимок формата 2", () => {
     for (const secret of ["Γράφω ένα γράμμα", "Я пишу письмо"]) expect(text, secret).not.toContain(secret);
     expect(text).toContain(encodeRef(P("p-grafo"))); // ссылка на карточку — вид и идентификатор
   });
-  it("час занятия переживает круг, а снимок без часа применяется как полдень", async () => {
-    const phone = await device("hour", { mixed: true });
+  it("формат 3 на проводе: урок — статусом без даты, расписание и даты чужого снимка не применяются", async () => {
+    const phone = await device("format3", { mixed: true });
     const courseId = (await phone.db.courses.toArray())[0].id;
-    await phone.db.courses.update(courseId, {
-      schedule: { startDate: "2026-09-14", weekdays: [1, 4], lessonHour: 9 },
+    const lessonId = (await phone.db.lessons.toArray())[0].id;
+    await phone.db.lessons.update(lessonId, { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
+    const decoded = decodeSnapshot(encodeSnapshot(await buildAndCommit(phone.db, now(), "dev-1")));
+    expect(decoded.courses.find((course) => course.id === courseId)).toMatchObject({
+      subscribed: true,
+      schedule: { startDate: null, weekdays: [], lessonHour: 12 },
     });
-    const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
-    const decoded = decodeSnapshot(encodeSnapshot(snapshot));
-    expect(decoded.courses.find((course) => course.id === courseId)!.schedule).toEqual({
-      startDate: "2026-09-14",
-      weekdays: [1, 4],
-      lessonHour: 9,
+    expect(decoded.lessons.find((lesson) => lesson.id === lessonId)).toEqual({
+      id: lessonId,
+      targetDate: null,
+      status: "completed",
+      updatedAt: "2026-09-16T07:00:00.000Z",
     });
 
-    // Снимок прежнего клиента: у расписания часа занятия нет вовсе.
-    const older = await device("hour-old", { mixed: true });
-    const legacy = {
+    const older = await device("format3-old", { mixed: true });
+    const foreign: CompactSnapshot = {
       ...decoded,
       courses: decoded.courses.map((course) => ({
         ...course,
-        schedule: { startDate: course.schedule.startDate, weekdays: course.schedule.weekdays },
+        newItemsPerDay: 5,
+        schedule: { startDate: "2026-09-14", weekdays: [1, 4], lessonHour: 9 },
       })),
-    } as CompactSnapshot;
-    await applySnapshot(older.db, legacy, "hour-1", { other: 1 }, now());
-    expect((await older.db.courses.get(courseId))!.schedule.lessonHour).toBe(12);
+      lessons: decoded.lessons.map((lesson) => ({ ...lesson, targetDate: "2026-10-01" })),
+    };
+    await applySnapshot(older.db, foreign, "f3-1", { other: 1 }, now());
+    const course = (await older.db.courses.get(courseId))!;
+    expect(course.newItemsPerDay).toBe(5);
+    expect(Object.keys(course).sort()).toEqual(Object.keys((await phone.db.courses.get(courseId))!).sort());
+    expect(await older.db.lessons.get(lessonId)).toEqual({
+      ...(await phone.db.lessons.get(lessonId)),
+      completed: true,
+      updatedAt: "2026-09-16T07:00:00.000Z",
+    });
   });
   it("ссылка снятого вида из чужого снимка отбрасывается, а слова и фразы применяются", async () => {
     const phone = await device("phone", { mixed: true });

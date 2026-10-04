@@ -14,7 +14,7 @@ import type { TelegramWebApp } from "../src/platform/telegram-types";
 import { WordScreen } from "../src/features/words/WordScreen";
 import { refreshCatalog, resetCatalogPhase } from "../src/content/client";
 import { db, indexWord } from "../src/storage/db";
-import { content, installLessons, legacyEdit, memoryFetcher } from "./helpers/content";
+import { content, installLessons, memoryFetcher } from "./helpers/content";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -134,13 +134,13 @@ describe("кнопка «Поделиться» на экране слова", (
     await mount("w093");
     await until(() => !!button());
   });
-  it("нет у своего слова и у удалённого слова курса", async () => {
+  it("нет у слова не из каталога и у слова, которого нет на устройстве", async () => {
     await installLessons(db, ["mech-4"]);
     // Своё слово могло остаться в профиле прежней версии с импортом.
     await db.words.add(
       indexWord({ ...(await db.words.get("w093"))!, id: "own-1", revision: undefined, greek: "το δικό μου" }),
     );
-    await db.words.update("w093", { deletedAt: "2026-01-01T00:00:00.000Z" });
+    await db.words.delete("w093");
     await mount("own-1");
     await until(loaded);
     expect(button()).toBeNull();
@@ -148,17 +148,6 @@ describe("кнопка «Поделиться» на экране слова", (
     await mount("w093");
     await until(loaded);
     expect(button()).toBeNull();
-  });
-  it("отправляет слово в версии курса, без правки пользователя", async () => {
-    await installLessons(db, ["mech-4"]);
-    await legacyEdit(db, "w093", { russian: "мой дедуля" });
-    const shared: { text?: string }[] = [];
-    nav.share = async (data: { text?: string }) => void shared.push(data);
-    await mount("w093");
-    await until(() => !!button());
-    await act(async () => (button() as HTMLElement).click());
-    await until(() => shared.length === 1);
-    expect(shared[0].text).toBe("ο παππούς — дедушка");
   });
   it("появляется без перемонтажа, когда каталог с индексом слов записан", async () => {
     const old = {

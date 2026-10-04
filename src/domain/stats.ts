@@ -46,9 +46,7 @@ export interface StatsSource {
   /** Исходы последних ответов типа (старые → новые). */
   recentByType(type: ExerciseType, limit: number): Promise<boolean[]>;
   dueKeysBefore(instant: Date): Promise<string[]>;
-  /** Ключи удалённых карточек всех видов. */
-  deletedKeys(): Promise<Set<string>>;
-  /** Число карточек всех видов, включая удалённые. */
+  /** Число карточек всех видов. */
   cardCount(): Promise<number>;
   eachState(visit: (state: LearningState) => void): Promise<void>;
   /** Подписи перечисленных карточек; читается только для отобранного списка, а не для всех состояний. */
@@ -78,21 +76,18 @@ export async function progress(source: StatsSource, now: Date): Promise<Progress
     const correct = recent.filter(Boolean).length;
     skills.push({ type, attempts: recent.length, correct, rate: recent.length ? correct / recent.length : null });
   }
-  const deleted = await source.deletedKeys();
   // Срок сравниваем по календарной дате в зоне пользователя: «не позже дня» значит раньше начала следующего дня.
-  const dueBefore = async (date: string) =>
-    (await source.dueKeysBefore(zonedStart(addDays(date, 1), timezone))).filter((key) => !deleted.has(key)).length;
+  const dueBefore = async (date: string) => (await source.dueKeysBefore(zonedStart(addDays(date, 1), timezone))).length;
   const groups = { fresh: 0, learning: 0, review: 0, solid: 0 };
   let tracked = 0;
   const struggling: LearningState[] = [];
   await source.eachState((state) => {
-    if (deleted.has(state.unitKey)) return;
     tracked++;
     if (state.card.lapses >= LEECH_LAPSES) struggling.push(state);
     if (state.card.state === State.Learning || state.card.state === State.Relearning) groups.learning++;
     else if (state.card.state === State.Review) groups[state.card.scheduled_days >= SOLID_DAYS ? "solid" : "review"]++;
   });
-  groups.fresh = Math.max(0, (await source.cardCount()) - deleted.size - tracked);
+  groups.fresh = Math.max(0, (await source.cardCount()) - tracked);
   struggling.sort((a, b) => b.card.lapses - a.card.lapses || a.unitKey.localeCompare(b.unitKey));
   // Длина ограничивается до чтения подписей; состояние без карточки подписи не получит и в список не попадёт.
   const shown = struggling.slice(0, LEECH_LIMIT);

@@ -17,7 +17,7 @@ type Preview =
   { status: "loading" } | { status: "ready"; preview: PackagePreview } | { status: "error"; message: string };
 
 /**
- * Слово по ссылке. Установленное и не удалённое открывается обычным экраном; иначе карточка собирается
+ * Слово по ссылке. Установленное открывается обычным экраном; иначе карточка собирается
  * из пакета урока в памяти и показывается только для просмотра: ни урок, ни подписка, ни медиа в базу не попадают.
  */
 export function SharedWordScreen() {
@@ -51,7 +51,7 @@ export function SharedWordScreen() {
   const ready = preview.status === "ready" && preview.preview.entry.id === lessonId ? preview.preview : null;
   const source = useMemo(() => (ready ? packageAssetSource(ready.pack) : null), [ready?.pack]);
 
-  if (local && !local.deletedAt) return <Navigate to={`/words/${encodeURIComponent(id)}`} replace />;
+  if (local) return <Navigate to={`/words/${encodeURIComponent(id)}`} replace />;
   const loading = (
     <Screen back="Слово">
       <div className="flex flex-col gap-3 py-2" aria-busy="true" role="status" aria-label="Загрузка слова">

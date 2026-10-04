@@ -18,7 +18,7 @@ import { State } from "ts-fsrs";
 import { defaultSettings, type LessonItem, type Snapshot, type Word } from "../src/domain/types";
 import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
 import { recordFor, scenarios } from "./plan-golden.test";
-import { completeLessons, content, installLessons, legacyRemove, wordCountOf } from "./helpers/content";
+import { completeLessons, content, installLessons, wordCountOf } from "./helpers/content";
 
 let db: AppDatabase;
 beforeEach(async () => {
@@ -108,12 +108,12 @@ describe("прогресс урока", () => {
     expect(wordMaturity(card(90))).toBe(1); // сверх порога больше единицы не бывает
   });
   it("список уроков считает группы из одной выборки состояний по живым словам", async () => {
-    const words = Array.from({ length: 8 }, (_, i) => word(i, i === 6 ? { deletedAt: iso } : {}));
+    const words = Array.from({ length: 8 }, (_, i) => word(i));
     await load({
-      words,
+      words: words.filter((_, i) => i !== 6),
       lessons: [
-        { id: "l", title: "Урок 1.1", targetDate: null, status: "upcoming", createdAt: iso, updatedAt: iso },
-        { id: "empty", title: "Пустой", targetDate: null, status: "upcoming", createdAt: iso, updatedAt: iso },
+        { id: "l", title: "Урок 1.1", completed: false, updatedAt: iso },
+        { id: "empty", title: "Пустой", completed: false, updatedAt: iso },
       ],
       links: words.map((w, position) => ({ lessonId: "l", wordId: w.id, position })),
       states: [
@@ -150,7 +150,7 @@ describe("прогресс урока", () => {
     const [empty, lesson] = await lessonViews(db, true);
     expect(lesson.cardCount).toBe(7);
     expect(lesson.wordCount).toBe(7);
-    expect(lesson.progress).toMatchObject({ solid: 1, review: 2, fresh: 4 }); // удалённое слово с устойчивым состоянием не считается
+    expect(lesson.progress).toMatchObject({ solid: 1, review: 2, fresh: 4 }); // слово без записи с устойчивым состоянием не считается
     expect(lesson.progress!.mature).toBeCloseTo(1 + 5 / 21 + 1 / 21, 10);
     expect(empty.progress).toEqual({ solid: 0, review: 0, fresh: 0, mature: 0 });
   });
@@ -211,7 +211,7 @@ describe("смешанный урок в выборках", () => {
     ]);
     expect(detail.states.size).toBe(2);
     // Убранная фраза исчезает из состава, но не из базы.
-    await legacyRemove(db, MIXED_LESSON, { kind: "phrase", id: "p-silent" });
+    await db.lessonItems.delete([MIXED_LESSON, unitKey({ kind: "phrase", id: "p-silent" })]);
     expect((await lessonDetail(MIXED_LESSON, db))!.phrases).toHaveLength(5);
     expect(await db.phrases.get("p-silent")).toBeTruthy();
     expect(await lessonsOfCard({ kind: "phrase", id: "p-grafo" }, db)).toHaveLength(1);
@@ -276,11 +276,11 @@ describe("соседи по уроку", () => {
     at("second", { kind: "word", id: extra[1].id }, 2),
     at("second", { kind: "phrase", id: "p1" }, 3),
   ];
-  const words = [...big.map((w, i) => (i === 6 ? { ...w, deletedAt: iso } : w)), ...extra];
+  const words = [...big.filter((_, i) => i !== 6), ...extra];
   const expected = [0, 1, 2, 3, 5, 7, 9, 10].map((i) => big[i].id).concat(extra.map((w) => w.id));
   const ids = (list: Word[] | undefined) => new Set((list ?? []).map((w) => w.id));
 
-  it("окно в шесть позиций во всех уроках слова, без удалённых слов и фраз", async () => {
+  it("окно в шесть позиций во всех уроках слова, без отсутствующих слов и фраз", async () => {
     await db.words.bulkAdd(words.map(indexWord));
     await db.lessonItems.bulkAdd(items);
     const mates = await lessonMates([target.id, big[39].id, "missing"], db);

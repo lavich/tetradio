@@ -24,7 +24,6 @@ const phrase = (over: Partial<Phrase> = {}): Phrase => ({
   id: "p1",
   text: "Πώς σε λένε;",
   translation: "Как тебя зовут?",
-  provenance: { sourceLabel: "тест", operation: "verbatim" },
   createdAt: "",
   updatedAt: "",
   ...over,

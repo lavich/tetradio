@@ -88,7 +88,6 @@ async function seedSession(page: Page, { done, phrase }: { done: number; phrase:
         index: done,
         status: "active",
         activeTimeMs: 0,
-        objectiveVersion: 1,
         introducedKeys: [],
       });
       for (let index = 0; index < done; index++)

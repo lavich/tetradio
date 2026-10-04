@@ -3,26 +3,16 @@ import { lessonMates, optionPool, phrasePool } from "./queries";
 import {
   closeSources,
   easierExercise,
-  exerciseFor,
   gradeFor,
   hasEasierStep,
   localDay,
   nextState,
   NO_WORDS,
   OPTION_POOL,
-  spaceSingleIntroduction,
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
 import { snapshotOf } from "../domain/refs";
-import { emptySkills } from "../domain/skills";
-import {
-  type Lesson,
-  type ReviewEvent,
-  type Session,
-  type SessionItem,
-  type Settings,
-  type Word,
-} from "../domain/types";
+import { type ReviewEvent, type Session, type SessionItem, type Settings, type Word } from "../domain/types";
 import { syncEvents } from "../sync/events";
 
 /**
@@ -168,11 +158,11 @@ async function easierRetry(
 }
 /**
  * Живые слова занятия: в элементах лежат снимки на момент сборки, поэтому слова перечитываются по id,
- * а удалённые с тех пор отбрасываются.
+ * а убранные обновлением пакета с тех пор отбрасываются.
  */
 async function liveSessionWords(session: Session, database: AppDatabase): Promise<Word[]> {
   const ids = [...new Set(session.items.flatMap((item) => (item.card.kind === "word" ? [item.card.word.id] : [])))];
-  return (await database.words.bulkGet(ids)).flatMap((word) => (word && !word.deletedAt ? [word] : []));
+  return (await database.words.bulkGet(ids)).flatMap((word) => (word ? [word] : []));
 }
 /** Источники вариантов слова в занятии: соседи по урокам, живые слова занятия и пул словаря. */
 async function wordSourcesOf(wordId: string, session: Session, database: AppDatabase) {
@@ -214,14 +204,6 @@ export const endSession = async (session: Session, database: AppDatabase = db) =
   await database.sessions.put({ ...session, status: session.index >= session.items.length ? "done" : "ended" });
 };
 
-export type LessonPatch = Partial<Pick<Lesson, "targetDate" | "status">>;
-export async function updateLesson(id: string, patch: LessonPatch, database: AppDatabase = db) {
-  await database.transaction("rw", database.lessons, database.meta, async () => {
-    await database.lessons.update(id, { ...patch, updatedAt: stamp(new Date()) });
-    await markChanged(database);
-  });
-  announceChange();
-}
 export async function saveSettings(settings: Settings, database: AppDatabase = db) {
   await database.transaction("rw", database.settings, database.meta, async () => {
     await database.settings.put(settings);
@@ -237,44 +219,6 @@ export async function saveNewItemsPerDay(courseId: string, newItemsPerDay: numbe
     await markChanged(database);
   });
   announceChange();
-}
-
-/** Старые неотвеченные recall заменяются один раз, история остаётся неизменной. */
-export async function prepareObjectiveSession(id: string, database: AppDatabase = db): Promise<void> {
-  // Соседи по урокам читаются до транзакции: так её область не расширяется на связи уроков.
-  const before = await database.sessions.get(id);
-  if (!before || before.objectiveVersion === 1) return;
-  const wordIds = before.items.flatMap((item) => (item.card.kind === "word" ? [item.card.word.id] : []));
-  const [mates, sessionWords] = await Promise.all([lessonMates(wordIds, database), liveSessionWords(before, database)]);
-  await database.transaction("rw", database.sessions, database.words, database.phrases, async () => {
-    const session = await database.sessions.get(id);
-    if (!session || session.objectiveVersion === 1) return;
-    const pool = await optionPool(OPTION_POOL, database);
-    const phrases = session.items.some((item) => item.card.kind === "phrase")
-      ? await phrasePool(OPTION_POOL, database)
-      : [];
-    const poolsOf = (item: SessionItem) => ({
-      words: item.card.kind === "word" ? closeSources(item.card.word.id, mates, sessionWords, pool) : NO_WORDS,
-      phrases,
-    });
-    const items = session.items.map((item) =>
-      item.type === "recall" && !item.eventId
-        ? {
-            ...item,
-            ...(exerciseFor(item.card, poolsOf(item), emptySkills(), Math.random, false) ?? {
-              type: "spelling" as const,
-              options: [],
-            }),
-          }
-        : item,
-    );
-    await database.sessions.put({
-      ...session,
-      items: spaceSingleIntroduction(items),
-      objectiveVersion: 1,
-      introducedKeys: session.introducedKeys ?? [],
-    });
-  });
 }
 
 /** Просмотр не является ответом и не меняет расписание. Знакомство сохраняется по ключу карточки. */

@@ -109,8 +109,8 @@ export function BackupScreen() {
         </CardHeader>
         <CardContent>
           <p className={ui.note}>
-            Слова, наборы и их связи, скачанные картинки и аудио, версии установленных уроков и ваши правки, прогресс
-            FSRS, ответы, сессии и настройки. Этот файл переносит всё.
+            Карточки и уроки курса, скачанные картинки и аудио, версии установленных уроков, выполненные задания,
+            прогресс FSRS, ответы, сессии и настройки. Этот файл переносит всё.
           </p>
           {profile.kind === "telegram" && (
             <p className={ui.note} data-testid="sync-boundaries">
@@ -173,9 +173,7 @@ export function BackupScreen() {
               <p style={{ margin: "0 0 4px" }}>
                 Файл проверен: база «{report.databaseName}», {megabytes(report.bytes)}
                 {report.createdAt ? `, копия от ${new Date(report.createdAt).toLocaleString("ru-RU")}` : ""}.
-                {report.legacy
-                  ? " Копия старого формата: наборы будут преобразованы в связи без скачивания пакетов."
-                  : ""}
+                {report.legacy ? " Копия прежней версии: при восстановлении она будет обновлена до текущей." : ""}
               </p>
               <p className={ui.muted} style={{ margin: 0 }}>
                 {report.tables.map((table) => `${table.name}: ${table.rows}`).join(" · ")}

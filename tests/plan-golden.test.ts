@@ -4,7 +4,6 @@ import { createEmptyCard, State } from "ts-fsrs";
 import { makePlan, makeSession, type SessionSource } from "../src/domain/learning";
 import { fromSnapshot } from "../src/domain/snapshot-source";
 import {
-  defaultSchedule,
   defaultSettings,
   type Course,
   type ExerciseType,
@@ -52,10 +51,8 @@ type LessonSpec = Lesson & { wordIds: string[] };
 const lesson = (id: string, wordIds: string[], over: Partial<Lesson> = {}): LessonSpec => ({
   id,
   title: id,
-  targetDate: null,
-  status: "completed",
+  completed: true,
   wordIds,
-  createdAt: iso,
   updatedAt: iso,
   ...over,
 });
@@ -83,11 +80,7 @@ const event = (wordId: string, type: ExerciseType, correct: boolean, at: string)
 const course = (newItemsPerDay: number): Course => ({
   id: "a2",
   title: "A2",
-  origin: "content",
-  subscribed: true,
-  schedule: defaultSchedule,
   newItemsPerDay,
-  createdAt: iso,
   updatedAt: iso,
 });
 const module = (id: string, number: number, lessonIds: string[], checkpointId?: string): StoredModule => ({
@@ -121,13 +114,14 @@ const base = (over: Partial<Omit<Snapshot, "lessons">> & { lessons?: LessonSpec[
 
 export const scenarios: Record<string, Snapshot> = {
   mixed: (() => {
-    const words = Array.from({ length: 40 }, (_, i) => word(i, i === 5 || i === 7 ? { deletedAt: iso } : {}));
-    const ids = words.map((w) => w.id);
+    const all = Array.from({ length: 40 }, (_, i) => word(i));
+    const ids = all.map((w) => w.id);
     return base({
-      words,
+      // У w5 и w7 нет ни записи, ни состояния: связи урока на них остаются, план их пропускает.
+      words: all.filter((_, i) => i !== 5 && i !== 7),
       lessons: [
         lesson("l1", ids.slice(0, 20)),
-        lesson("l2", ids.slice(10, 30), { status: "upcoming", targetDate: "2026-09-10" }),
+        lesson("l2", ids.slice(10, 30), { completed: false }),
         lesson("l3", ids.slice(30, 35)),
         lesson("l4", ids.slice(35, 38)),
       ],
@@ -141,7 +135,6 @@ export const scenarios: Record<string, Snapshot> = {
         learned("w0", "2026-09-16T08:00:00Z", State.Learning, "2026-09-15T07:00:00Z"),
         learned("w1", "2026-09-16T08:00:00Z", State.Learning, "2026-09-15T07:30:00Z"),
         learned("w3", "2026-09-16T08:00:00Z"),
-        learned("w5", "2026-09-14T08:00:00Z"),
       ],
       events: [
         event("w20", "recognition", true, "2026-09-10T09:00:00Z"),
@@ -193,7 +186,7 @@ export const scenarios: Record<string, Snapshot> = {
       modules: [module("m02", 2, ["m02-1", "m02-2"]), module("m01", 1, ["m01-1"], "k1")],
       lessons: [
         lesson("m02-1", ids.slice(20, 26)),
-        lesson("m02-2", ids.slice(26, 40), { status: "upcoming" }),
+        lesson("m02-2", ids.slice(26, 40), { completed: false }),
         lesson("k1", ids.slice(12, 20)),
         lesson("m01-1", ids.slice(0, 12)),
       ],

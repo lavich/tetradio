@@ -77,14 +77,6 @@ describe("слово по ссылке", () => {
     expect(before.words).toBe(0);
   });
 
-  it("удалённое слово показывается просмотром и не восстанавливается", async () => {
-    await installLessons(db, ["mech-4"]);
-    await db.words.update("w093", { deletedAt: "2026-01-01T00:00:00.000Z" });
-    mount();
-    await until(() => text().includes("Слово из урока"), "карточка просмотра");
-    expect((await db.words.get("w093"))?.deletedAt).toBeTruthy();
-  });
-
   it("пока каталог грузится — загрузка, а после его ответа — карточка", async () => {
     mount();
     await until(busy, "загрузка");

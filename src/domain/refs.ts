@@ -6,8 +6,8 @@ import {
   type CardSnapshot,
   type LearningRef,
   type LessonItem,
-  type LessonWord,
   type SessionCard,
+  type Snapshot,
 } from "./types.ts";
 
 export type { LearningRef } from "./types.ts";
@@ -23,8 +23,6 @@ export const phraseRef = (id: string): LearningRef => ({ kind: "phrase", id });
 export const wordKeyOf = (id: string) => unitKey(wordRef(id));
 export const isCardKind = (value: unknown): value is CardKind =>
   typeof value === "string" && (CARD_KINDS as readonly string[]).includes(value);
-/** Ключ старой словарной записи: голый ID слова без сериализации. */
-export const isUnitKey = (value: string) => value.startsWith('["');
 
 /** Пара вида и идентификатора из ключа: сам вид не проверяется. */
 function splitUnitKey(key: string): [unknown, string] {
@@ -54,8 +52,8 @@ export function parseUnitKey(key: string): LearningRef {
   return { kind, id };
 }
 
-/** Словарная связь прежнего вида — типизированная связь того же порядка. */
-export const itemOfLink = (link: LessonWord): LessonItem => ({
+/** Словарная связь тестового снимка — типизированная связь того же порядка. */
+export const itemOfLink = (link: Snapshot["links"][number]): LessonItem => ({
   lessonId: link.lessonId,
   unitKey: wordKeyOf(link.wordId),
   ref: wordRef(link.wordId),
@@ -67,9 +65,6 @@ export const snapshotOf = (card: SessionCard): CardSnapshot =>
   card.kind === "word"
     ? { greek: card.word.greek, russian: card.word.russian }
     : { text: card.phrase.text, ...(card.phrase.translation ? { translation: card.phrase.translation } : {}) };
-/** Поставленная пакетом карточка имеет ревизию; у пользовательских слов её нет. */
-export const isShippedCard = (card: SessionCard) =>
-  (card.kind === "word" ? card.word : card.phrase).revision !== undefined;
 
 /** Дубликат фразы — тот же текст с тем же переводом; фраза без перевода не равна фразе с переводом. */
 export const phraseKey = (text: string, translation: string | undefined) =>
