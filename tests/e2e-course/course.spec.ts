@@ -159,8 +159,13 @@ test("урок курса: задания с ключом, чтение, ауд�
   await expect(section(page, "Речь").getByRole("checkbox").first()).toBeChecked();
   await expect(page.getByTestId("page-count")).toContainText("заданий 5 из 5");
   await page.getByRole("button", { name: "К итогу" }).click();
+  const lessonUrl = page.url();
   await page.getByRole("button", { name: "Завершить урок" }).click();
   await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
+  // Завершённый урок не остаётся в истории: «Назад» с модуля не открывает его снова.
+  await page.goBack();
+  await expect(page).not.toHaveURL(lessonUrl);
+  await page.goForward();
   await expect(page.getByRole("img", { name: "урок пройден" })).toBeVisible();
   // Выполненное отмечено зелёной галочкой, а не красной ручкой ошибок.
   const tick = await page.getByRole("img", { name: "урок пройден" }).evaluate((node) => getComputedStyle(node).color);

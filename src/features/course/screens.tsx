@@ -369,7 +369,7 @@ export function CourseLessonScreen() {
     try {
       await completeLesson(lessonId);
       toast.success("Урок пройден");
-      void navigate(`/course/${moduleId}`);
+      void navigate(`/course/${moduleId}`, { replace: true });
     } catch (error) {
       setProblem((error as Error).message);
     }

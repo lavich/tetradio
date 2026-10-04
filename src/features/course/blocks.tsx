@@ -18,6 +18,7 @@ import type { BlockProgress } from "../../domain/types";
 import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
 import type { BlockPatch } from "../../storage/course";
 import css from "./course.module.css";
+import ui from "../../shared/ui.module.css";
 import { Tick } from "../../shared/Tick";
 import { Marked, useFieldMarks } from "./WordTaps";
 
@@ -208,6 +209,33 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
 }
 
 const statusLabel: Record<ItemResult["status"], string> = { correct: "верно", almost: "почти", wrong: "неверно" };
+const SAVE_FAILED = "Не удалось сохранить. Проверьте место на устройстве и повторите.";
+
+function SaveProblem({ problem }: { problem: string }) {
+  return problem ? (
+    <p className={ui.error} role="alert">
+      {problem}
+    </p>
+  ) : null;
+}
+
+/** Сохранение блока с жалобой на сбой: `true`, если записалось. */
+function useSave(save: (patch: BlockPatch) => Promise<unknown>) {
+  const [problem, setProblem] = useState("");
+  const latest = useRef(save);
+  latest.current = save;
+  const [store] = useState(() => (patch: BlockPatch) => {
+    setProblem("");
+    return latest.current(patch).then(
+      () => true,
+      () => {
+        setProblem(SAVE_FAILED);
+        return false;
+      },
+    );
+  });
+  return { store, problem };
+}
 
 export function Exercise({
   block,
@@ -220,6 +248,7 @@ export function Exercise({
 }) {
   const [answers, setAnswers] = useState<Record<string, string>>(progress?.answers ?? {});
   const [checked, setChecked] = useState(!!progress?.done);
+  const { store, problem } = useSave(save);
   // Выполнено на другом устройстве: счёт пришёл синхронизацией, а введённые ответы остались там.
   const elsewhere = checked && !Object.keys(answers).length;
   const score = checked && !elsewhere ? scoreExercise(block, answers) : null;
@@ -230,19 +259,19 @@ export function Exercise({
   };
   const check = async () => {
     const result = scoreExercise(block, answers);
-    setChecked(true);
-    await save({
+    const saved = await store({
       done: true,
       answers,
       score: { correct: result.correct, almost: result.almost, total: result.total },
     });
+    if (saved) setChecked(true);
   };
   const retry = async () => {
     setChecked(false);
     setAnswers({});
     setOrder(mix());
     setBank(shuffle(block.bank ?? [], Math.random));
-    await save({ done: false, answers: {}, score: undefined });
+    await store({ done: false, answers: {}, score: undefined });
   };
   // Порядок вариантов в контенте часто совпадает с порядком пунктов — без перемешивания ответ угадывается.
   const mix = () =>
@@ -345,6 +374,7 @@ export function Exercise({
           </Button>
         )}
       </div>
+      <SaveProblem problem={problem} />
     </>
   );
 }
@@ -387,12 +417,35 @@ export function Writing({
   const [text, setText] = useState(progress?.text ?? "");
   const [checks, setChecks] = useState<number[]>(progress?.checks ?? []);
   const [review, setReview] = useState(!!progress?.done);
+  const { store, problem } = useSave(save);
+  const draft = useRef<string | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [flush] = useState(() => () => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+    if (draft.current === null) return;
+    void store({ text: draft.current });
+    draft.current = null;
+  });
+  // Мини-приложение закрывают без blur: черновик пишется по ходу набора и при уходе страницы в фон.
+  useEffect(() => {
+    const hide = () => {
+      if (document.visibilityState === "hidden") flush();
+    };
+    document.addEventListener("visibilitychange", hide);
+    window.addEventListener("pagehide", flush);
+    return () => {
+      document.removeEventListener("visibilitychange", hide);
+      window.removeEventListener("pagehide", flush);
+      flush();
+    };
+  }, [flush]);
   const count = wordCount(text);
   const toggle = (index: number) => {
     const next = checks.includes(index) ? checks.filter((value) => value !== index) : [...checks, index];
     setChecks(next);
     // В выполненном задании отметка сохраняется сразу: отдельная кнопка ничего видимого не меняла.
-    if (progress?.done) void save({ checks: next });
+    if (progress?.done) void store({ checks: next });
   };
   return (
     <>
@@ -410,8 +463,13 @@ export function Writing({
         autoCorrect="off"
         spellCheck={false}
         value={text}
-        onChange={(event) => setText(event.target.value)}
-        onBlur={() => void save({ text })}
+        onChange={(event) => {
+          setText(event.target.value);
+          draft.current = event.target.value;
+          if (timer.current) clearTimeout(timer.current);
+          timer.current = setTimeout(flush, 800);
+        }}
+        onBlur={flush}
       />
       {review ? (
         <>
@@ -420,7 +478,14 @@ export function Writing({
           <Criteria criteria={block.criteria} checks={checks} toggle={toggle} />
           {progress?.done ? null : (
             <div className={css.actions}>
-              <Button variant="soft" size="md" onClick={() => void save({ done: true, text, checks })}>
+              <Button
+                variant="soft"
+                size="md"
+                onClick={() => {
+                  draft.current = null;
+                  void store({ done: true, text, checks });
+                }}
+              >
                 Готово
               </Button>
             </div>
@@ -434,16 +499,20 @@ export function Writing({
             disabled={count < block.words.min}
             onClick={() => {
               setReview(true);
-              void save({ text });
+              draft.current = text;
+              flush();
             }}
           >
             Сравнить с образцом
           </Button>
         </div>
       )}
+      <SaveProblem problem={problem} />
     </>
   );
 }
+
+const silence = (audio: MediaStream) => audio.getTracks().forEach((track) => track.stop());
 
 const PART_LABEL: Record<SpeakingBlock["part"], string> = {
   interview: "Вопросы о себе",
@@ -464,41 +533,57 @@ export function Speaking({
   const [checks, setChecks] = useState<number[]>(progress?.checks ?? []);
   const [review, setReview] = useState(!!progress?.done);
   const [recording, setRecording] = useState<string | null>(null);
+  const { store, problem } = useSave(save);
   const recorder = useRef<MediaRecorder | null>(null);
+  const stream = useRef<MediaStream | null>(null);
+  const attempt = useRef(0);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(
     () => () => {
+      attempt.current++;
       if (timer.current) clearInterval(timer.current);
       recorder.current?.stop();
+      if (stream.current) silence(stream.current);
     },
     [],
   );
   useEffect(() => () => void (recording && URL.revokeObjectURL(recording)), [recording]);
   const stop = () => {
+    attempt.current++;
     if (timer.current) clearInterval(timer.current);
     timer.current = null;
     recorder.current?.stop();
+    recorder.current = null;
     setLeft(null);
     setReview(true);
   };
   const start = async () => {
+    const id = ++attempt.current;
     setLeft(block.seconds);
     timer.current = setInterval(() => setLeft((value) => (value === null ? null : value - 1)), 1000);
     // Запись необязательна: без микрофона остаётся таймер и самопроверка.
+    let audio: MediaStream | undefined;
     try {
-      const stream = await navigator.mediaDevices?.getUserMedia({ audio: true });
-      if (!stream) return;
+      audio = await navigator.mediaDevices?.getUserMedia({ audio: true });
+      if (!audio) return;
+      // Пока открыт запрос доступа, запись могли закончить или уйти с урока: микрофон сразу выключаем.
+      if (id !== attempt.current) return silence(audio);
+      const source = audio;
+      stream.current = source;
       const chunks: Blob[] = [];
-      const media = new MediaRecorder(stream);
+      const media = new MediaRecorder(source);
       media.ondataavailable = (event) => chunks.push(event.data);
       media.onstop = () => {
-        stream.getTracks().forEach((track) => track.stop());
+        silence(source);
+        if (stream.current === source) stream.current = null;
         setRecording(URL.createObjectURL(new Blob(chunks, { type: media.mimeType })));
       };
       media.start();
       recorder.current = media;
     } catch {
       recorder.current = null;
+      if (audio) silence(audio);
+      if (stream.current === audio) stream.current = null;
     }
   };
   // Время вышло — запись останавливается, открываются образец и самопроверка.
@@ -509,7 +594,7 @@ export function Speaking({
     const next = checks.includes(index) ? checks.filter((value) => value !== index) : [...checks, index];
     setChecks(next);
     // В выполненном задании отметка сохраняется сразу: отдельная кнопка ничего видимого не меняла.
-    if (progress?.done) void save({ checks: next });
+    if (progress?.done) void store({ checks: next });
   };
   return (
     <>
@@ -544,13 +629,14 @@ export function Speaking({
           <Criteria criteria={block.criteria} checks={checks} toggle={toggle} />
           {progress?.done ? null : (
             <div className={css.actions}>
-              <Button variant="soft" size="md" onClick={() => void save({ done: true, checks })}>
+              <Button variant="soft" size="md" onClick={() => void store({ done: true, checks })}>
                 Готово
               </Button>
             </div>
           )}
         </>
       ) : null}
+      <SaveProblem problem={problem} />
     </>
   );
 }
