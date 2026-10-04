@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 /**
  * Синтез речи подменяется, чтобы проверки не зависели от голосов машины: `none` — греческого голоса нет,
@@ -426,4 +426,74 @@ test("поля ответа и письма просят клавиатуру б
     await expect(field).toHaveAttribute("autocorrect", "off");
     await expect(field).toHaveAttribute("spellcheck", "false");
   }
+});
+
+test("соединение: банк у каждого пункта, счёт и отметки, после перезагрузки — те же, «Ещё раз» сбрасывает", async ({
+  page,
+}) => {
+  await start(page);
+  await page.goto("/course/m01/m01-r1");
+  const pairs = await turnTo(page, "Кто и какая форма");
+  const group = (n: number) => pairs.getByRole("group", { name: `Варианты ${n}` });
+  const check = pairs.getByRole("button", { name: "Проверить" });
+  const colorOf = (name: string) =>
+    page.evaluate((name) => {
+      const probe = document.createElement("span");
+      probe.style.color = `var(${name})`;
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }, name);
+  const color = (target: Locator) => target.evaluate((node) => getComputedStyle(node).color);
+
+  // У соединения банк — варианты каждого пункта, а не строка «Слова:», как у пропуска.
+  for (const n of [1, 2, 3])
+    expect((await group(n).getByRole("button").allInnerTexts()).sort()).toEqual(
+      ["είμαι", "είσαι", "είναι", "είμαστε"].sort(),
+    );
+  await expect(pairs).not.toContainText("Слова:");
+  await group(1).getByRole("button", { name: "είμαι" }).click();
+  await group(2).getByRole("button", { name: "είναι" }).click();
+  await expect(check).toBeDisabled();
+  await group(3).getByRole("button", { name: "είμαστε" }).click();
+  await expect(group(3).getByRole("button", { name: "είμαστε" })).toHaveAttribute("aria-pressed", "true");
+
+  await check.click();
+  const status = pairs.getByRole("status");
+  await expect(status).toHaveText("2 из 3");
+  expect(await color(status)).toBe(await colorOf("--almost"));
+  await expect(pairs.getByRole("img", { name: "верно" })).toHaveCount(2);
+  await expect(pairs.getByRole("img", { name: "почти" })).toHaveCount(0);
+  const pen = pairs.getByText("Верно: είσαι");
+  await expect(pen).toBeVisible();
+  expect(await color(pen)).toBe(await colorOf("--pen"));
+  await expect(pairs.getByText(/^Верно: /)).toHaveCount(1);
+  await expect(group(1).getByRole("button", { name: "είσαι" })).toBeDisabled();
+
+  await page.reload();
+  await expect(status).toHaveText("2 из 3");
+  await expect(group(2).getByRole("button", { name: "είναι" })).toHaveAttribute("aria-pressed", "true");
+  await expect(pairs.getByRole("img", { name: "верно" })).toHaveCount(2);
+  await expect(pen).toBeVisible();
+
+  await pairs.getByRole("button", { name: "Ещё раз" }).click();
+  await expect(status).toHaveCount(0);
+  await expect(pairs.getByRole("img")).toHaveCount(0);
+  await expect(pen).toHaveCount(0);
+  await expect(pairs.locator("[aria-pressed=true]")).toHaveCount(0);
+  await expect(check).toBeDisabled();
+  await page.reload();
+  await expect(check).toBeDisabled();
+  await expect(pairs.locator("[aria-pressed=true]")).toHaveCount(0);
+
+  await group(1).getByRole("button", { name: "είμαι" }).click();
+  await group(2).getByRole("button", { name: "είσαι" }).click();
+  await group(3).getByRole("button", { name: "είμαστε" }).click();
+  await check.click();
+  await expect(status).toHaveText("3 из 3");
+  expect(await color(status)).toBe(await colorOf("--ok"));
+  await expect(pairs.getByRole("img", { name: "верно" })).toHaveCount(3);
+  expect(await color(pairs.getByRole("img", { name: "верно" }).first())).toBe(await colorOf("--ok"));
+  await expect(pairs.getByText(/^Верно: /)).toHaveCount(0);
 });
