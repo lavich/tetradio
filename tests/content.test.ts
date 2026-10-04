@@ -48,7 +48,7 @@ describe("состав урока в пакете", () => {
   it.each(["mech-2", "mech-3"] as const)("%s: связи пакета повторяют объявленный состав по порядку", (lessonId) => {
     const declared = wordIdsOf(lessonId);
     expect(declared.length).toBeGreaterThan(0);
-    expect(packageOf(lessonId).links).toHaveLength(declared.length);
+    expect(wordsOf(content, lessonId)).toHaveLength(declared.length);
     expect(wordsOf(content, lessonId).map((word) => word.id)).toEqual(declared);
   });
   it("повторяющееся слово остаётся одной записью с общим идентификатором во всех пакетах", () => {
@@ -145,7 +145,7 @@ describe("каталог и пакеты", () => {
       const pack = parsePackage(JSON.parse(fileOf(entry.url).body as string));
       expect(pack.id).toBe(entry.id);
       expect(pack.version).toBe(entry.version);
-      expect(pack.links.map((l) => l.position)).toEqual(pack.links.map((_, i) => i));
+      expect(pack.items.map((item) => item.position)).toEqual(pack.items.map((_, i) => i));
       for (const item of pack.media) {
         expect(item.url).toBe(`content/media/${item.id}@${item.version}.svg`);
         expect(Buffer.from(fileOf(item.url).body).toString("utf8")).toMatch(/^<svg\s/);
@@ -216,7 +216,7 @@ describe("каталог и пакеты", () => {
       greek: "το δοκίμιο",
       russian: "очерк",
     });
-    expect(built.packages.find((p) => p.id === "mech-4")!.links.at(-1)!.wordId).toBe("το-δοκίμιο");
+    expect(wordsOf(built, "mech-4").at(-1)!.id).toBe("το-δοκίμιο");
   });
   it("повреждённый, неполный и несовместимый пакет отклоняются понятной ошибкой", () => {
     const pack = JSON.parse(fileOf(content.catalog.lessons[0].url).body as string);

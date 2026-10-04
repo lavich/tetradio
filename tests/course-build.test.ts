@@ -464,10 +464,6 @@ describe("клиентская проверка", () => {
     raw.modules[1].lessonIds = ["m01-1"];
     expect(() => parseCatalog(raw)).toThrow("уроки черновика не поставляются");
   });
-  it("пакет схемы 3 не может нести блоки", () => {
-    const pack = JSON.parse(JSON.stringify(build(base()).packages[0]));
-    expect(() => parsePackage({ ...pack, schemaVersion: 3 })).toThrow("появились в схеме 4");
-  });
   it("правило полноты считается по всем урокам модуля", () => {
     const blocks = parseBlocks(
       lesson.blocks.map((b) => (b.type === "listening" ? { ...b, audio: undefined } : b)),

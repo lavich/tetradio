@@ -23,19 +23,15 @@ import {
 /**
  * Контракт поставляемого контента. Каталог — только метаданные; пакет — урок целиком.
  * Пакеты неизменяемы: версия входит в URL, поэтому старые адреса продолжают работать.
- * Положение урока во времени — статус занятия и дата — контентом не поставляется: оно
- * принадлежит пользователю и живёт только в его базе. Версия 2 — это их удаление.
- * Версия 3 — смешанный урок: слова, фразы, задания с пропуском и упорядоченные типизированные связи.
- * Версия 4 — полноценный курс: модули в каталоге, урок из блоков (объяснение, задания с ключом, чтение,
- * аудирование, письмо, речь), вид урока (урок или контрольная) и формы слова. Урок схемы 4 может не содержать
- * карточек, если у него есть блоки.
- * Читатель принимает версии 2–4; словарный пакет версии 2 представляется уроком из слов.
+ * Положение урока во времени — статус занятия — контентом не поставляется: оно принадлежит пользователю.
+ * Схема 4 — курс: модули в каталоге, урок из карточек (слова и фразы, упорядоченные типизированные связи)
+ * и блоков (объяснение, задания с ключом, чтение, аудирование, письмо, речь), вид урока (урок или контрольная)
+ * и формы слова. Урок может не содержать карточек, если у него есть блоки. Другие версии схемы не читаются.
  * Необязательное поле `marks` (слова в тексте урока) добавлено в схему 4 без смены версии: прежний читатель
  * собирает пакет по известным полям и его не видит.
  */
 export const SCHEMA_VERSION = 4;
-export const SUPPORTED_SCHEMAS = [2, 3, 4] as const;
-export type SupportedSchema = (typeof SUPPORTED_SCHEMAS)[number];
+export type SchemaVersion = typeof SCHEMA_VERSION;
 
 export interface CatalogCourse {
   id: string;
@@ -43,9 +39,9 @@ export interface CatalogCourse {
   language: string;
   source?: string;
   lessonIds: string[];
-  /** Модули курса по порядку программы (схема 4). */
+  /** Модули курса по порядку программы */
   moduleIds?: string[];
-  /** Экзамен, к которому ведёт курс (схема 4). */
+  /** Экзамен, к которому ведёт курс */
   exam?: CourseExam;
 }
 export interface CatalogEntry {
@@ -64,11 +60,11 @@ export interface CatalogEntry {
   media: { count: number; bytes: number };
 }
 export interface Catalog {
-  schemaVersion: SupportedSchema;
+  schemaVersion: SchemaVersion;
   generatedAt: string;
   courses: CatalogCourse[];
   lessons: CatalogEntry[];
-  /** Модули программы, включая черновики (схема 4). */
+  /** Модули программы, включая черновики */
   modules?: CatalogModule[];
 }
 
@@ -98,11 +94,6 @@ export interface PackagePhrase {
   provenance: Provenance;
   revision: string;
 }
-/** Словарная связь прежнего формата; в схеме 3 выводится из `items` для кода, который ещё работает только со словами. */
-export interface PackageLink {
-  wordId: string;
-  position: number;
-}
 export interface PackageItem {
   kind: CardKind;
   id: string;
@@ -120,20 +111,19 @@ export interface PackageMedia {
   source: string;
 }
 export interface ContentPackage {
-  schemaVersion: SupportedSchema;
+  schemaVersion: SchemaVersion;
   id: string;
   courseId: string;
   version: string;
   language: string;
   lesson: { title: string; kind?: LessonKind };
-  /** Модуль программы и место урока в нём (схема 4). */
+  /** Модуль программы и место урока в нём */
   module?: { id: string; position: number };
   words: PackageWord[];
   phrases: PackagePhrase[];
   items: PackageItem[];
-  links: PackageLink[];
   media: PackageMedia[];
-  /** Блоки урока по порядку (схема 4). */
+  /** Блоки урока по порядку */
   blocks?: LessonBlock[];
   marks?: PackageMarks;
 }
@@ -206,14 +196,14 @@ const cardKind = (value: unknown, path: string): CardKind => {
   return value;
 };
 
-function checkSchemaVersion(raw: Record<string, unknown>, what: string): SupportedSchema {
+function checkSchemaVersion(raw: Record<string, unknown>, what: string): SchemaVersion {
   const version = raw.schemaVersion;
-  if (!(SUPPORTED_SCHEMAS as readonly unknown[]).includes(version))
+  if (version !== SCHEMA_VERSION)
     throw new ContentError(
       `${what} версии схемы ${String(version)} не поддерживается этой версией приложения`,
       "unsupported",
     );
-  return version as SupportedSchema;
+  return version;
 }
 
 export function parseCatalog(input: unknown): Catalog {
@@ -229,7 +219,6 @@ export function parseCatalog(input: unknown): Catalog {
       language: str(item.language, `${path}.language`),
       title: str(item.title, `${path}.title`),
     };
-    // Каталог схемы 2 знает только слова: счётчик фраз равен нулю, а число карточек — числу слов.
     // Счётчик снятого вида из прежних каталогов не читается: в число карточек он входит через `cardCount`.
     const wordCount = num(item.wordCount, `${path}.wordCount`);
     const phraseCount = num(item.phraseCount ?? 0, `${path}.phraseCount`);
@@ -270,7 +259,7 @@ export function parseCatalog(input: unknown): Catalog {
       list(value, `${path}.moduleIds`).map((id, i) => str(id, `${path}.moduleIds[${i}]`)),
     );
     if (moduleIds) course.moduleIds = moduleIds;
-    if (schemaVersion >= 4 && item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
+    if (item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
     return course;
   });
   unique(
@@ -283,7 +272,7 @@ export function parseCatalog(input: unknown): Catalog {
     courses,
     lessons,
   };
-  if (schemaVersion >= 4 && raw.modules !== undefined) {
+  if (raw.modules !== undefined) {
     const modules = list(raw.modules, "каталог.modules").map((entry, i) => parseModule(entry, `каталог.modules[${i}]`));
     unique(
       modules.map((module) => module.id),
@@ -448,45 +437,31 @@ export function parsePackage(input: unknown): ContentPackage {
     words.map((w) => w.id),
     "пакет.words",
   );
-  let phrases: PackagePhrase[] = [],
-    items: PackageItem[];
-  if (schemaVersion === 2) {
-    // Словарный пакет: смешанные поля в нём не читаются, чтобы новый контент не выдавал себя за старый.
-    for (const field of ["phrases", "items"])
-      if (raw[field] !== undefined) throw new ContentError(`пакет.${field}: поле не входит в пакет схемы 2`);
-    const known = new Set(words.map((w) => w.id));
-    items = list(raw.links, "пакет.links").map((entry, i): PackageItem => {
-      const link = obj(entry, `пакет.links[${i}]`);
-      const wordId = str(link.wordId, `пакет.links[${i}].wordId`);
-      if (!known.has(wordId))
-        throw new ContentError(`пакет.links[${i}]: связь указывает на слово ${wordId}, которого нет в пакете`);
-      return { kind: "word", id: wordId, position: num(link.position, `пакет.links[${i}].position`) };
-    });
-  } else {
-    phrases = list(raw.phrases ?? [], "пакет.phrases").map((entry, i) => validatePhrase(entry, `пакет.phrases[${i}]`));
-    unique(
-      phrases.map((p) => p.id),
-      "пакет.phrases",
-    );
-    // Поле снятого вида не читается: состав, который на него ссылается, отклоняет пакет по неизвестному виду.
-    const known = {
-      word: new Set(words.map((w) => w.id)),
-      phrase: new Set(phrases.map((p) => p.id)),
-    };
-    items = list(raw.items, "пакет.items").map((entry, i): PackageItem => {
-      const path = `пакет.items[${i}]`;
-      const item = obj(entry, path);
-      const kind = cardKind(item.kind, `${path}.kind`);
-      const id = str(item.id, `${path}.id`);
-      if (!known[kind].has(id))
-        throw new ContentError(`${path}: связь указывает на карточку ${kind}/${id}, которой нет в пакете`);
-      return { kind, id, position: num(item.position, `${path}.position`) };
-    });
-    // `related` — навигационная ссылка на материал каталога: связанное слово может жить в другом уроке, поэтому в пакете не требуется.
-    // Урок схемы 4 может состоять только из блоков (контрольная, чтение); без карточек и блоков он пуст.
-    const blocksPresent = schemaVersion >= 4 && Array.isArray(raw.blocks) && raw.blocks.length > 0;
-    if (!items.length && !blocksPresent) throw new ContentError("пакет.items: в уроке нет карточек");
-  }
+  const phrases = list(raw.phrases ?? [], "пакет.phrases").map((entry, i) =>
+    validatePhrase(entry, `пакет.phrases[${i}]`),
+  );
+  unique(
+    phrases.map((p) => p.id),
+    "пакет.phrases",
+  );
+  // Поле снятого вида не читается: состав, который на него ссылается, отклоняет пакет по неизвестному виду.
+  const known = {
+    word: new Set(words.map((w) => w.id)),
+    phrase: new Set(phrases.map((p) => p.id)),
+  };
+  let items = list(raw.items, "пакет.items").map((entry, i): PackageItem => {
+    const path = `пакет.items[${i}]`;
+    const item = obj(entry, path);
+    const kind = cardKind(item.kind, `${path}.kind`);
+    const id = str(item.id, `${path}.id`);
+    if (!known[kind].has(id))
+      throw new ContentError(`${path}: связь указывает на карточку ${kind}/${id}, которой нет в пакете`);
+    return { kind, id, position: num(item.position, `${path}.position`) };
+  });
+  // `related` — навигационная ссылка на материал каталога: связанное слово может жить в другом уроке, поэтому в пакете не требуется.
+  // Урок может состоять только из блоков (контрольная, чтение); без карточек и блоков он пуст.
+  const blocksPresent = Array.isArray(raw.blocks) && raw.blocks.length > 0;
+  if (!items.length && !blocksPresent) throw new ContentError("пакет.items: в уроке нет карточек");
   unique(
     items.map((item) => `${item.kind} ${item.id}`),
     "пакет.items",
@@ -537,29 +512,25 @@ export function parsePackage(input: unknown): ContentPackage {
     words,
     phrases,
     items,
-    links: items.filter((item) => item.kind === "word").map((item) => ({ wordId: item.id, position: item.position })),
     media,
   };
-  if (schemaVersion >= 4) {
-    if (lessonRaw.kind !== undefined) {
-      if (lessonRaw.kind !== "lesson" && lessonRaw.kind !== "test")
-        throw new ContentError("пакет.lesson.kind: ожидалось lesson или test");
-      pack.lesson.kind = lessonRaw.kind;
-    }
-    if (raw.module !== undefined) {
-      const module = obj(raw.module, "пакет.module");
-      pack.module = { id: str(module.id, "пакет.module.id"), position: num(module.position, "пакет.module.position") };
-    }
-    const blocks = parseBlocks(raw.blocks ?? [], "пакет.blocks");
-    for (const block of blocks)
-      if (block.type === "listening" && block.audioAssetId && !mediaIds.has(block.audioAssetId))
-        throw new ContentError(
-          `пакет.blocks: аудирование ${block.id} ссылается на медиа ${block.audioAssetId}, которого нет в пакете`,
-        );
-    if (blocks.length) pack.blocks = blocks;
-    if (raw.marks !== undefined) pack.marks = parseMarks(raw.marks, blocks, items);
-  } else if (raw.blocks !== undefined || raw.module !== undefined)
-    throw new ContentError(`пакет: блоки и модуль появились в схеме 4, а пакет объявлен схемой ${schemaVersion}`);
+  if (lessonRaw.kind !== undefined) {
+    if (lessonRaw.kind !== "lesson" && lessonRaw.kind !== "test")
+      throw new ContentError("пакет.lesson.kind: ожидалось lesson или test");
+    pack.lesson.kind = lessonRaw.kind;
+  }
+  if (raw.module !== undefined) {
+    const module = obj(raw.module, "пакет.module");
+    pack.module = { id: str(module.id, "пакет.module.id"), position: num(module.position, "пакет.module.position") };
+  }
+  const blocks = parseBlocks(raw.blocks ?? [], "пакет.blocks");
+  for (const block of blocks)
+    if (block.type === "listening" && block.audioAssetId && !mediaIds.has(block.audioAssetId))
+      throw new ContentError(
+        `пакет.blocks: аудирование ${block.id} ссылается на медиа ${block.audioAssetId}, которого нет в пакете`,
+      );
+  if (blocks.length) pack.blocks = blocks;
+  if (raw.marks !== undefined) pack.marks = parseMarks(raw.marks, blocks, items);
   return pack;
 }
 

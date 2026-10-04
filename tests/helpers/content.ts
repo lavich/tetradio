@@ -50,7 +50,9 @@ export async function installCompleted(db: AppDatabase, ids: string[], fetcher =
 export const packageOf = (id: string) => content.packages.find((pack) => pack.id === id)!;
 export const wordsOf = (id: string) => {
   const pack = packageOf(id);
-  return pack.links.map((link) => pack.words.find((word) => word.id === link.wordId)!);
+  return pack.items
+    .filter((item) => item.kind === "word")
+    .map((item) => pack.words.find((word) => word.id === item.id)!);
 };
 /** Сколько уникальных слов дают перечисленные уроки: одно слово в двух уроках считается один раз. */
 export const wordCountOf = (...ids: string[]) =>
