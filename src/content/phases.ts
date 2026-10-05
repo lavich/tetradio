@@ -19,6 +19,19 @@ export const setCatalogPhase = (next: CatalogPhase) => {
   catalogState = next;
   catalogListeners.forEach((fn) => fn());
 };
+let catalogRequest: Promise<unknown> | null = null;
+export const trackCatalog = (request: Promise<unknown>) => {
+  catalogRequest = request;
+  const clear = () => {
+    if (catalogRequest === request) catalogRequest = null;
+  };
+  request.then(clear, clear);
+};
+export const catalogSettled = (): Promise<void> =>
+  (catalogRequest ?? Promise.resolve()).then(
+    () => undefined,
+    () => undefined,
+  );
 /** Только для тестов: вернуть каталог в состояние до первой загрузки. */
 export const resetCatalogPhase = () => {
   catalogState = "loading";

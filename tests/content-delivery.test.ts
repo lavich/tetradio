@@ -282,6 +282,25 @@ describe("установка урока", () => {
     expect(await db.lessonItems.where("unitKey").equals(wordKeyOf("w034")).count()).toBe(2);
     expect(await db.words.count()).toBe(wordCountOf("mech-2", "mech-3"));
   });
+  it("урок, запрошенный до загрузки каталога, дожидается каталога и ставится", async () => {
+    const fetcher = memoryFetcher();
+    const json = fetcher.json.bind(fetcher);
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    fetcher.json = async (url: string) => {
+      if (url === "content/catalog.json") await gate;
+      return json(url);
+    };
+    const catalog = refreshCatalog(db, fetcher);
+    const install = installLesson("mech-1", db, fetcher);
+    release();
+    await catalog;
+    await expect(install).resolves.toMatchObject({ status: "installed" });
+  });
+  it("урок, которого нет в загруженном каталоге, отклоняется без ожидания", async () => {
+    await refreshCatalog(db, memoryFetcher());
+    await expect(installLesson("nope-1", db, memoryFetcher())).rejects.toThrow("Этого урока нет в каталоге.");
+  });
   it("одновременные запросы одного пакета объединяются, повторная установка ничего не дублирует", async () => {
     const fetcher = memoryFetcher();
     await refreshCatalog(db, fetcher);
