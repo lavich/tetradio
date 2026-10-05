@@ -29,7 +29,7 @@ const count = (page: Page, databaseName: string, store: string) =>
   );
 
 test.describe("production вне Telegram", () => {
-  test("страница предлагает открыть бота, IndexedDB не создаётся, прежняя браузерная база не читается", async ({
+  test("лендинг предлагает открыть бота, IndexedDB не создаётся, прежняя браузерная база не читается", async ({
     page,
   }) => {
     // Прежний браузерный профиль на этом устройстве: база `tetradio` со словом.
@@ -49,7 +49,8 @@ test.describe("production вне Telegram", () => {
     });
     await page.reload();
     const gate = page.getByTestId("open-in-telegram");
-    await expect(gate.getByRole("heading", { name: "Откройте в Telegram" })).toBeVisible();
+    await expect(gate.getByRole("heading", { level: 1 })).toContainText("до экзамена");
+    await expect(gate.getByRole("list", { name: "Модули курса" })).toBeVisible();
     await expect(gate).toContainText("Найдите бота курса в Telegram"); // сборка тестов без VITE_TELEGRAM_BOT: ссылки нет
     await expect(page.getByText("το σπίτι")).toHaveCount(0);
     await expect(page.getByRole("navigation")).toHaveCount(0);
