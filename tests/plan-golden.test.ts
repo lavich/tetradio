@@ -222,11 +222,25 @@ export async function recordGolden() {
   return out;
 }
 
+/** Запись эталона: короткие объекты и массивы — одной строкой, чтобы задание занимало строку, а не полтора десятка. */
+function compactJson(value: unknown, indent = ""): string {
+  const flat = JSON.stringify(value);
+  const primitives = Array.isArray(value) && value.every((item) => item === null || typeof item !== "object");
+  if (primitives || flat.length + indent.length <= 240 || value === null || typeof value !== "object") return flat;
+  const inner = `${indent}  `;
+  if (Array.isArray(value))
+    return `[\n${value.map((item) => inner + compactJson(item, inner)).join(",\n")}\n${indent}]`;
+  const entries = Object.entries(value).map(
+    ([key, item]) => `${inner}${JSON.stringify(key)}: ${compactJson(item, inner)}`,
+  );
+  return `{\n${entries.join(",\n")}\n${indent}}`;
+}
+
 describe("эталон планировщика", () => {
   it("совпадает с зафиксированными сценариями", async () => {
     const actual = await recordGolden();
     if (!existsSync(FIXTURE) || process.env.UPDATE_GOLDEN === "1") {
-      writeFileSync(FIXTURE, JSON.stringify(actual, null, 1));
+      writeFileSync(FIXTURE, `${compactJson(actual)}\n`);
       return;
     }
     expect(actual).toEqual(JSON.parse(readFileSync(FIXTURE, "utf8")));
