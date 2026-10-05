@@ -3,7 +3,7 @@ import { reportError } from "../reporting/reporting";
 import { applyPackage, type InstallResult } from "./apply";
 import { fetcher, type ContentFetcher } from "./fetcher";
 import { pruneMedia } from "./media";
-import { courseKey, setPhase } from "./phases";
+import { catalogSettled, courseKey, setPhase } from "./phases";
 import { ContentError, parsePackage } from "./schema";
 
 const inflight = new Map<string, Promise<InstallResult>>();
@@ -86,7 +86,12 @@ export function installLesson(
     setPhase(lessonId, { phase: "loading" });
     let version: string | undefined;
     try {
-      const entry = await database.catalog.get(lessonId);
+      let entry = await database.catalog.get(lessonId);
+      // Новое устройство: синхронизация просит уроки облачного прогресса, пока каталог ещё загружается.
+      if (!entry) {
+        await catalogSettled();
+        entry = await database.catalog.get(lessonId);
+      }
       if (!entry) throw new ContentError("Этого урока нет в каталоге.");
       version = entry.version;
       const installed = await database.packages.get(lessonId);

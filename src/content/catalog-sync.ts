@@ -3,10 +3,16 @@ import { readPending } from "../sync/snapshot";
 import { DEFAULT_NEW_ITEMS_PER_DAY, type Course } from "../domain/types";
 import { fetcher, type ContentFetcher } from "./fetcher";
 import { installCourse } from "./install";
-import { setCatalogPhase } from "./phases";
+import { setCatalogPhase, trackCatalog } from "./phases";
 import { parseCatalog, type Catalog } from "./schema";
 
-export async function refreshCatalog(database: AppDatabase = db, source: ContentFetcher = fetcher): Promise<Catalog> {
+export function refreshCatalog(database: AppDatabase = db, source: ContentFetcher = fetcher): Promise<Catalog> {
+  const request = loadCatalog(database, source);
+  trackCatalog(request);
+  return request;
+}
+
+async function loadCatalog(database: AppDatabase, source: ContentFetcher): Promise<Catalog> {
   setCatalogPhase("loading"); // повтор после сбоя снова ждёт; после первого успеха фаза не меняется
   try {
     const catalog = parseCatalog(await source.json("content/catalog.json"));
