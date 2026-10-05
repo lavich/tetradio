@@ -72,12 +72,16 @@ export default defineConfig({
         short_name: "Τετράδιο",
         description: "Курс новогреческого A0 → A2",
         lang: "ru",
-        theme_color: "#0d5eaf",
-        background_color: "#f7f7f5",
+        theme_color: "#eef1f7",
+        background_color: "#f9fafc",
         display: "standalone",
         start_url: base,
         scope: base,
-        icons: [{ src: `${base}icon.svg`, sizes: "any", type: "image/svg+xml", purpose: "any" }],
+        icons: [
+          { src: `${base}icon.svg`, sizes: "any", type: "image/svg+xml", purpose: "any" },
+          { src: `${base}icon-192.png`, sizes: "192x192", type: "image/png", purpose: "any" },
+          { src: `${base}icon-512.png`, sizes: "512x512", type: "image/png", purpose: "any" },
+        ],
       },
       workbox: {
         sourcemap: false,
@@ -85,7 +89,7 @@ export default defineConfig({
         skipWaiting: false,
         // Шрифты — только наборы символов курса (латиница, кириллица, греческий): Mini App должен открываться без сети.
         globPatterns: ["**/*.{js,css,html,svg,png,webp,json}", "**/*-{latin,cyrillic,greek}-wght-*.woff2"],
-        globIgnores: ["**/content/**"],
+        globIgnores: ["**/content/**", "og.png", "icon-512.png"],
         navigateFallbackDenylist: [/\/content\//],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         cleanupOutdatedCaches: true,
