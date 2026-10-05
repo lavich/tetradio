@@ -39,9 +39,15 @@ describe("проверка письменного ответа фразы", () =
     expect(checkTextAnswer("στο σπίτι", ["σπίτι"]).status).toBe("wrong");
     expect(checkTextAnswer("γράφεις", ["γράφω"]).status).toBe("wrong");
   });
-  it("пунктуация не удаляется автоматически", () => {
-    expect(checkTextAnswer("γράφω.", ["γράφω"]).status).toBe("wrong");
-    expect(checkTextAnswer("Γράφω ένα γράμμα", ["Γράφω ένα γράμμα."]).status).toBe("wrong");
+  it("знак в конце необязателен, пунктуация внутри фразы значима", () => {
+    expect(checkTextAnswer("γράφω.", ["γράφω"]).status).toBe("correct");
+    expect(checkTextAnswer("Γράφω ένα γράμμα", ["Γράφω ένα γράμμα."]).status).toBe("correct");
+    expect(checkTextAnswer("Τι κάνεις", ["Τι κάνεις;"]).status).toBe("correct");
+    expect(checkTextAnswer("Τι κάνεις?", ["Τι κάνεις;"]).status).toBe("correct");
+    expect(checkTextAnswer("Τα λέμε", ["Τα λέμε!"]).expected).toBe("Τα λέμε!");
+    expect(checkTextAnswer("Τι κανεις", ["Τι κάνεις;"]).status).toBe("almost");
+    expect(checkTextAnswer("Καλά ευχαριστώ", ["Καλά, ευχαριστώ."]).status).toBe("wrong");
+    expect(checkTextAnswer(".", ["γράφω"]).status).toBe("wrong");
   });
   it("пустой ввод и пустой список ответов — неверно без исключений", () => {
     expect(checkTextAnswer("", ["γράφω"]).status).toBe("wrong");
