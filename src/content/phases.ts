@@ -20,7 +20,6 @@ export const setCatalogPhase = (next: CatalogPhase) => {
   catalogListeners.forEach((fn) => fn());
 };
 let catalogRequest: Promise<unknown> | null = null;
-/** Идущая загрузка каталога: установка урока, которого ещё нет в кеше каталога, дожидается её, а не отказывает. */
 export const trackCatalog = (request: Promise<unknown>) => {
   catalogRequest = request;
   const clear = () => {
@@ -28,7 +27,6 @@ export const trackCatalog = (request: Promise<unknown>) => {
   };
   request.then(clear, clear);
 };
-/** Завершение идущей загрузки каталога, успешной или нет; без загрузки — сразу. */
 export const catalogSettled = (): Promise<void> =>
   (catalogRequest ?? Promise.resolve()).then(
     () => undefined,

@@ -283,7 +283,6 @@ describe("установка урока", () => {
     expect(await db.words.count()).toBe(wordCountOf("mech-2", "mech-3"));
   });
   it("урок, запрошенный до загрузки каталога, дожидается каталога и ставится", async () => {
-    // Так стартует новое устройство: синхронизация просит уроки из облачного прогресса, пока каталог ещё в пути.
     const fetcher = memoryFetcher();
     const json = fetcher.json.bind(fetcher);
     let release!: () => void;
