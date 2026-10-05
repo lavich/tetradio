@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import type { Phrase, Word } from "../../../domain/types";
 import { ExampleBox, ReadingNotes, SpeakButton, WordArt } from "../../words/WordCardView";
@@ -15,15 +16,23 @@ export function Primary({
   disabled,
   onClick,
   form,
+  focus,
 }: {
   children: React.ReactNode;
   disabled?: boolean;
   onClick?: () => void;
   form?: string;
+  focus?: boolean;
 }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    // Прокрутку к раскрытию ведёт useRevealed: фокус без preventScroll перебил бы её прыжком к облачку.
+    if (focus) ref.current?.focus({ preventScroll: true });
+  }, [focus]);
   return (
     <CloudAction>
       <Button
+        ref={ref}
         size="md"
         className={session.primary}
         type={form ? "submit" : "button"}

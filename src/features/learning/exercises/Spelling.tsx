@@ -109,7 +109,9 @@ export function Spelling({
             )}
           </Reveal>
         </div>
-        <Primary onClick={onNext}>{nextLabel}</Primary>
+        <Primary focus onClick={onNext}>
+          {nextLabel}
+        </Primary>
       </>
     );
   return (

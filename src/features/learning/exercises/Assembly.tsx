@@ -129,7 +129,9 @@ export function Assembly({
         </div>
       )}
       {result ? (
-        <Primary onClick={onNext}>{nextLabel}</Primary>
+        <Primary focus onClick={onNext}>
+          {nextLabel}
+        </Primary>
       ) : (
         <Primary disabled={!complete || saving} onClick={() => check()}>
           {saving ? "Сохраняем…" : "Проверить"}
