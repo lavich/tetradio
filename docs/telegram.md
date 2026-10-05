@@ -4,7 +4,7 @@
 
 ## Бот и адрес
 
-Выпуск — [@TetradioBot](https://t.me/TetradioBot), Main Mini App `https://lavich.github.io/tetradio/` (GitHub Pages, `.github/workflows/deploy.yml`). Имя бота сборка получает из `VITE_TELEGRAM_BOT`.
+Выпуск — [@TetradioBot](https://t.me/TetradioBot), Main Mini App `https://tetradio.app/` (GitHub Pages, `.github/workflows/deploy.yml`). Домен зарегистрирован в Cloudflare: записи `@` и `www` — CNAME на `lavich.github.io` без проксирования (иначе GitHub не выпустит сертификат), TXT `_github-pages-challenge-lavich` подтверждает домен за аккаунтом. Старый адрес `lavich.github.io/tetradio/` GitHub перенаправляет на домен. Имя бота сборка получает из `VITE_TELEGRAM_BOT`.
 
 Параметр адреса `?bot=<имя>` задаёт бота для локального профиля (`tetradio-tg-<бот>-<id>`): так бот разработки на том же устройстве не смешивает данные с основным. CloudStorage у разных ботов и так раздельный.
 
