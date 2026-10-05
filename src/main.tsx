@@ -11,6 +11,7 @@ import { LaunchGate, type LaunchStop } from "./app/LaunchGate";
 import { Recovery } from "./app/Recovery";
 import { installLesson, refreshCatalog, syncCourses } from "./content/client";
 import { forgetLaunch } from "./platform/launch";
+import { dropServiceWorker, wantsServiceWorker } from "./platform/service-worker";
 import { initPlatform, telegramBridge } from "./platform/platform";
 import { installEarlyHandlers, reportError, setReportingEnabled } from "./reporting/reporting";
 import { bindReportingToSettings } from "./reporting/settings";
@@ -24,8 +25,18 @@ installEarlyHandlers();
 if (MOCK_USER !== null) Object.assign(window, { __installLesson: installLesson });
 export const updateReady = { value: false, apply: () => {} };
 // WebView без service worker не должен обрушить запуск: регистрация обёрнута, обновления просто недоступны.
-try {
-  if ("serviceWorker" in navigator) {
+function setupServiceWorker(wanted: boolean) {
+  try {
+    if (!("serviceWorker" in navigator)) return;
+    if (!wanted) {
+      void dropServiceWorker({
+        container: navigator.serviceWorker,
+        caches: typeof caches === "undefined" ? undefined : caches,
+        session: sessionStorage,
+        reload: () => location.reload(),
+      }).catch((error) => console.warn("Service worker не снят", error));
+      return;
+    }
     const update = registerSW({
       onNeedRefresh() {
         updateReady.value = true;
@@ -37,9 +48,9 @@ try {
       },
     });
     updateReady.apply = () => update(true);
+  } catch (error) {
+    console.warn("Service worker недоступен", error);
   }
-} catch (error) {
-  console.warn("Service worker недоступен", error);
 }
 
 const root = createRoot(document.getElementById("root")!);
@@ -54,6 +65,7 @@ const stop = (reason: LaunchStop) => {
   );
 };
 const launch = launchProfile();
+setupServiceWorker(wantsServiceWorker(launch));
 if (launch.kind === "blocked") {
   stop(launch.reason);
   // Внутри Telegram bridge всё равно нужен: тема клиента и снятие экрана загрузки (`ready`).

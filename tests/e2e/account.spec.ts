@@ -57,6 +57,26 @@ test.describe("production вне Telegram", () => {
     expect(await databases(page)).toEqual(["tetradio"]);
     expect(await count(page, "tetradio", "words")).toBe(1);
   });
+  test("вне Telegram service worker не ставится, а поставленный прежней версией снимается", async ({ page }) => {
+    const registrations = () => page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length);
+    await page.goto("/web/");
+    await expect(page.getByTestId("open-in-telegram")).toBeVisible();
+    expect(await registrations()).toBe(0);
+    await page.evaluate(async () => {
+      await navigator.serviceWorker.register("/web/sw.js", { scope: "/web/" });
+      await navigator.serviceWorker.ready;
+    });
+    expect(await registrations()).toBe(1);
+    await page.reload();
+    // Страница из кэша снимает service worker и один раз перезагружается сама.
+    await page.waitForFunction(
+      async () =>
+        !navigator.serviceWorker.controller &&
+        !(await navigator.serviceWorker.getRegistrations()).length &&
+        !(await caches.keys()).some((key) => key.startsWith("workbox-")),
+    );
+    await expect(page.getByTestId("open-in-telegram")).toBeVisible();
+  });
   test("Telegram без пользователя: ошибка запуска, база не открывается, облако не трогается", async ({ page }) => {
     await page.addInitScript(bridgeScript({}));
     await page.addInitScript(`window.Telegram.WebApp.initDataUnsafe={}`);
