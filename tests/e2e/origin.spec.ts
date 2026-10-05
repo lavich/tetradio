@@ -15,14 +15,14 @@ test("данные не переходят между origin сами; пере�
   const port = new URL(baseURL!).port;
   const old = await browser.newContext({ baseURL: `http://localhost:${port}` });
   const page = await old.newPage();
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
-  await page.goto("/words");
+  await page.goto("/app/words");
   // Подписанный курс догружается фоном: копию снимаем с устоявшегося словаря и с ним же сверяем перенос.
   await expect(page.getByTestId("word-count")).toHaveText("56 слов · 7 фраз");
   const source = await page.getByTestId("word-count").innerText();
-  await page.goto("/progress/backup");
+  await page.goto("/app/progress/backup");
   const [download] = await Promise.all([
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Сохранить полную копию" }).click(),
@@ -33,11 +33,11 @@ test("данные не переходят между origin сами; пере�
 
   const fresh = await browser.newContext({ baseURL: `http://127.0.0.1:${port}` });
   const moved = await fresh.newPage();
-  await moved.goto("/");
+  await moved.goto("/app/");
   await ready(moved);
-  await moved.goto("/words");
+  await moved.goto("/app/words");
   await expect(moved.getByTestId("word-count")).toHaveText("0 слов"); // новый origin пуст: редирект ничего бы не перенёс
-  await moved.goto("/progress/backup");
+  await moved.goto("/app/progress/backup");
   await moved.locator("#backup").setInputFiles(file);
   await expect(moved.getByText(/Файл проверен/)).toBeVisible();
   await moved.getByRole("button", { name: "Заменить данные копией" }).click();
@@ -46,7 +46,7 @@ test("данные не переходят между origin сами; пере�
     moved.getByRole("button", { name: "Заменить", exact: true }).click(),
   ]);
   await expect(moved.getByText("Данные восстановлены полностью.")).toBeVisible();
-  await moved.goto("/words");
+  await moved.goto("/app/words");
   await expect(moved.getByTestId("word-count")).toHaveText(source);
   await fresh.close();
 });

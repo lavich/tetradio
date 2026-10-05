@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { completeLessons, installLessons, ready, seedQueue } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-1", "mech-2", "mech-3", "mech-4"]);
 });
@@ -65,7 +65,7 @@ test("занятие: знакомство, четыре упражнения, �
       } else throw new Error(`Неожиданное задание: ${prompt}`);
       await expect(page.getByTestId("feedback").or(page.locator('[data-answer="correct"]'))).toBeVisible();
       if (++completed === 3) {
-        await page.goto("/");
+        await page.goto("/app/");
         await ready(page);
         await page.getByRole("button", { name: "Продолжить повторение" }).click();
         await page.waitForURL("**/session");

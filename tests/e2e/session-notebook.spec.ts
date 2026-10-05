@@ -115,14 +115,14 @@ async function seedSession(page: Page, { done, phrase }: { done: number; phrase:
     },
     { done, phrase, PHRASE, LONG },
   );
-  await page.goto("/session");
+  await page.goto("/app/session");
   await page.getByTestId("prompt").waitFor();
 }
 
 test.beforeEach(async ({ page }) => {
   // Дата на странице — по-гречески от сегодняшнего дня: фиксируем день, иначе проверка верна только в этот четверг.
   await page.clock.setFixedTime(new Date("2026-10-01T09:00:00"));
-  await page.goto("/");
+  await page.goto("/app/");
   await installLessons(page, ["mech-1"]);
 });
 

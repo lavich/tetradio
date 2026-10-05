@@ -50,7 +50,7 @@ async function installSession(page: Page, type: string, isNew = false, count = 1
     },
     { type, isNew, count },
   );
-  await page.goto("/session");
+  await page.goto("/app/session");
   await page.getByTestId("prompt").first().waitFor();
 }
 
@@ -72,7 +72,7 @@ async function stored(page: Page) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
 });

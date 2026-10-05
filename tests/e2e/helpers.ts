@@ -168,7 +168,7 @@ export async function completeLessons(page: Page, ids: string[], databaseName = 
 }
 /** Отдельные уроки фикстуры ставятся тестовой точкой сборки с моком: экрана урока вне курса нет. */
 export async function installLessons(page: Page, ids: string[]) {
-  if (!page.url().startsWith("http")) await page.goto("/");
+  if (!page.url().startsWith("http")) await page.goto("/app/");
   await page.waitForFunction(() => "__installLesson" in window);
   for (const id of ids)
     await expect
@@ -199,7 +199,7 @@ export async function installLessons(page: Page, ids: string[]) {
       { timeout: 30000, intervals: [1500] },
     )
     .toBe(true);
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
 }
 const installedCount = (page: Page) =>

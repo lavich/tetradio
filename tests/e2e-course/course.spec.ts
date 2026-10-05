@@ -55,7 +55,7 @@ async function recordings(page: Page) {
 
 /** Демонстрационный курс: модуль 01 (урок + контрольная), модуль 02 — черновик. */
 async function start(page: Page) {
-  await page.goto("/");
+  await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
   // «Сегодня» курса: без расписания уроков; карточки ждут первого пройденного урока.
@@ -95,7 +95,7 @@ const slowPackages = (page: Page, delay: number) =>
   });
 
 test("урок, открытый сразу после «Учить курс», показывает первую страницу без ожидания очереди", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await page.getByTestId("course-next").click();
   await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 /);
@@ -103,9 +103,9 @@ test("урок, открытый сразу после «Учить курс», 
 
 test("урок из конца очереди скачивается сразу и до того показывает «Урок скачивается…»", async ({ page }) => {
   await slowPackages(page, 1500);
-  await page.goto("/");
+  await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
-  await openInApp(page, "/course/m01/m01-r1");
+  await openInApp(page, "/app/course/m01/m01-r1");
   await expect(page.getByRole("status")).toHaveText("Урок скачивается…");
   // Очередь дошла бы до этого урока последним, через ~6 с; сам по себе он скачивается за 1,5 с.
   await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 /, { timeout: 4000 });
@@ -113,10 +113,10 @@ test("урок из конца очереди скачивается сразу 
 
 test("сбой скачивания открытого урока показывает ошибку и повтор", async ({ page }) => {
   await page.route("**/content/packages/m01-r1*", (route) => route.abort());
-  await page.goto("/");
+  await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
-  await openInApp(page, "/course/m01/m01-r1");
+  await openInApp(page, "/app/course/m01/m01-r1");
   await expect(page.getByRole("alert")).toBeVisible();
   await page.unroute("**/content/packages/m01-r1*");
   await page.getByRole("button", { name: "Повторить" }).click();
@@ -250,13 +250,13 @@ test("урок курса: задания с ключом, чтение, ауд�
   expect(tick).toBe(ok);
 
   // Неделя на «Прогрессе» сообщает диктору, что сегодня был урок, а не только заливает клетку.
-  await page.goto("/progress");
+  await page.goto("/app/progress");
   expect(await page.getByRole("list", { name: "Дни недели" }).ariaSnapshot()).toMatch(
     /listitem: (Пн|Вт|Ср|Чт|Пт|Сб|Вс), урок/,
   );
 
   // Пройденный урок отдаёт карточки в повторение; следующий шаг курса — контрольная модуля.
-  await page.goto("/");
+  await page.goto("/app/");
   await expect(page.getByTestId("cards-today")).toBeVisible();
   await expect(page.getByRole("button", { name: "Повторить карточки" })).toBeVisible();
   await expect(page.getByTestId("course-next")).toContainText("Контрольная");
@@ -282,7 +282,7 @@ test("полка: опубликованный модуль и черновик;
 
 test("контрольная: итог по навыкам против порога 60 %", async ({ page }) => {
   await start(page);
-  await page.goto("/course/m01/m01-test");
+  await page.goto("/app/course/m01/m01-test");
   const tf = await turnTo(page, "Верно или неверно?");
   await tf.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "Σωστό" }).click();
   await tf.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "Σωστό" }).click();
@@ -364,10 +364,10 @@ test("аудирование записями: реплики звучат фа�
 
 test("новый урок открывается с первой страницы, а не с первого задания после теории", async ({ page }) => {
   await start(page);
-  await page.goto("/course/m01/m01-1");
+  await page.goto("/app/course/m01/m01-1");
   await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 из/);
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/course/m01/m01-1");
+  await page.goto("/app/course/m01/m01-1");
   await expect(page.getByTestId("page-count")).toContainText("стр. 1–2 из");
 });
 
@@ -385,7 +385,7 @@ test("«Сегодня» на широком экране — разворот: 
 test("разворот: на широком экране две страницы рядом, стрелки листают разворот", async ({ page }) => {
   await start(page);
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/course/m01/m01-1?p=1");
+  await page.goto("/app/course/m01/m01-1?p=1");
   await expect(page.getByRole("article")).toHaveCount(2);
   await expect(page.getByTestId("page-count")).toContainText("стр. 1–2 из");
   await page.keyboard.press("ArrowRight");
@@ -396,7 +396,7 @@ test("разворот: на широком экране две страницы
 
 test("листание не расширяет страницу: нижнее меню не дёргается ни вперёд, ни назад", async ({ page }) => {
   await start(page);
-  await page.goto("/course/m01/m01-1?p=1");
+  await page.goto("/app/course/m01/m01-1?p=1");
   await expect(page.getByTestId("page-count")).toBeVisible();
   // Ширина документа по кадрам анимации перелистывания.
   const widest = () =>
@@ -425,7 +425,7 @@ test("листание не расширяет страницу: нижнее м
 test("слова урока: нажатие произносит слово или фразу, а не открывает карточку", async ({ page }) => {
   await voices(page, "instant");
   await start(page);
-  await page.goto("/course/m01/m01-1?p=1");
+  await page.goto("/app/course/m01/m01-1?p=1");
   const words = await turnTo(page, "Слова урока");
   const first = words.getByRole("button", { name: /^Произнести: / }).first();
   const label = (await first.getAttribute("aria-label"))!.replace("Произнести: ", "");
@@ -446,7 +446,7 @@ test("снизу одно облачко: в разделах — меню, в �
   expect(box.width).toBeLessThan(400);
   expect(Math.abs(box.x + box.width / 2 - 590)).toBeLessThan(2);
   expect(box.y + box.height).toBeLessThan(820);
-  await page.goto("/course/m01/m01-1?p=1");
+  await page.goto("/app/course/m01/m01-1?p=1");
   await expect(page.getByRole("navigation", { name: "Страницы урока" })).toBeVisible();
   await expect(menu).toHaveCount(0);
 });
@@ -454,7 +454,7 @@ test("снизу одно облачко: в разделах — меню, в �
 test("выбор варианта произносит предложение с этим вариантом", async ({ page }) => {
   await voices(page, "instant");
   await start(page);
-  await page.goto("/course/m01/m01-1?p=1");
+  await page.goto("/app/course/m01/m01-1?p=1");
   const forms = await turnTo(page, "Формы είμαι");
   await forms.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "είμαι" }).click();
   await expect
@@ -464,7 +464,7 @@ test("выбор варианта произносит предложение с
 
 test("поля ответа и письма просят клавиатуру без автозамены и подсказок", async ({ page }) => {
   await start(page);
-  await page.goto("/course/m01/m01-1?p=1");
+  await page.goto("/app/course/m01/m01-1?p=1");
   for (const name of ["Ответьте по-гречески.", "Письмо"]) {
     const field = (await turnTo(page, name)).locator("input:not([type=checkbox]), textarea").first();
     await expect(field).toHaveAttribute("autocorrect", "off");
@@ -476,7 +476,7 @@ test("соединение: банк у каждого пункта, счёт и
   page,
 }) => {
   await start(page);
-  await page.goto("/course/m01/m01-r1");
+  await page.goto("/app/course/m01/m01-r1");
   const pairs = await turnTo(page, "Кто и какая форма");
   const group = (n: number) => pairs.getByRole("group", { name: `Варианты ${n}` });
   const check = pairs.getByRole("button", { name: "Проверить" });

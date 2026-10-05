@@ -47,7 +47,7 @@ async function lastUnanswered(page: Page) {
 
 /** Установленный урок 1.1 даёт слово фикстуры; пройден только смешанный урок, поэтому новые карточки — его. */
 async function prepare(page: Page, limit: number, options: Parameters<typeof seedMixedLesson>[1] = {}) {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-1"]);
   await setCourseLimit(page, "mechanics", limit);
@@ -72,7 +72,7 @@ test("при системном голосе фраза без перевода 
   await page.addInitScript(GREEK_VOICE);
   await prepare(page, 4);
   // Фраза без перевода: с голосом её тренировка начинается знакомством, затем идёт проверка.
-  await page.goto("/words/phrase/p-silent");
+  await page.goto("/app/words/phrase/p-silent");
   await page.getByRole("button", { name: "Потренировать фразу" }).click();
   await page.waitForURL("**/session");
   for (let step = 0; step < 10; step++) {
@@ -148,7 +148,7 @@ test("занятие: знакомство с фразой, «Не знаю» с
       restarted = true;
       const answered = (await readTable(page, "events")).length;
       await context.setOffline(true);
-      await page.goto("/");
+      await page.goto("/app/");
       await ready(page);
       await page.getByRole("button", { name: "Продолжить повторение" }).click();
       await page.waitForURL("**/session");
@@ -226,7 +226,7 @@ test("полная копия переносит смешанный урок с 
   const events = (await readTable(page, "events")).length;
   const states = (await readTable(page, "cardStates")).length;
   expect(events).toBeGreaterThan(0);
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await page.getByRole("link", { name: /Копия данных/ }).click();
@@ -252,7 +252,7 @@ test("полная копия переносит смешанный урок с 
   const clean = await browser.newContext();
   const fresh = await clean.newPage();
   await fresh.addInitScript(NO_VOICE);
-  await fresh.goto("/");
+  await fresh.goto("/app/");
   await ready(fresh);
   await fresh.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await fresh.getByRole("link", { name: /Копия данных/ }).click();
@@ -264,11 +264,11 @@ test("полная копия переносит смешанный урок с 
     fresh.getByRole("button", { name: "Заменить", exact: true }).click(),
   ]);
   await expect(fresh.getByText("Данные восстановлены полностью.")).toBeVisible();
-  await fresh.goto("/words");
+  await fresh.goto("/app/words");
   await expect(fresh.getByRole("region", { name: "Смешанный урок" })).toContainText("Η οικογένειά μου");
   expect((await readTable(fresh, "events")).length).toBe(events);
   expect((await readTable(fresh, "cardStates")).length).toBe(states);
-  await fresh.goto("/");
+  await fresh.goto("/app/");
   await ready(fresh);
   await expect(fresh.getByRole("button", { name: "Продолжить повторение" })).toBeVisible(); // занятие продолжается на втором профиле
   await clean.close();

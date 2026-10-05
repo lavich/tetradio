@@ -77,11 +77,26 @@ test.describe("production вне Telegram", () => {
     );
     await expect(page.getByTestId("open-in-telegram")).toBeVisible();
   });
+  test("главная внутри Telegram открывает приложение с теми же параметрами; приложение вне Telegram — лендинг", async ({
+    page,
+  }) => {
+    const { launchHash } = await import("./telegram");
+    const hash = launchHash({});
+    await page.goto(`/web/?bot=tetradio_dev${hash}`);
+    await page.waitForURL((url) => url.pathname === "/web/app/");
+    expect(new URL(page.url()).search).toBe("?bot=tetradio_dev");
+    expect(new URL(page.url()).hash).toBe(hash);
+    // Запуск Telegram запоминается во вкладке, поэтому обычный браузер — новая вкладка.
+    const browserTab = await page.context().newPage();
+    await browserTab.goto("/web/app/words");
+    await browserTab.waitForURL((url) => url.pathname === "/web/");
+    await expect(browserTab.getByTestId("open-in-telegram")).toBeVisible();
+  });
   test("Telegram без пользователя: ошибка запуска, база не открывается, облако не трогается", async ({ page }) => {
     await page.addInitScript(bridgeScript({}));
     await page.addInitScript(`window.Telegram.WebApp.initDataUnsafe={}`);
     const hash = `#tgWebAppData=${encodeURIComponent("auth_date=1&hash=e2e")}&tgWebAppVersion=8.0&tgWebAppPlatform=ios`;
-    for (const path of ["/web/", "/"]) {
+    for (const path of ["/web/", "/app/"]) {
       // Мок не подменяет Telegram-запуск без пользователя.
       await page.goto(`${path}${hash}`);
       await expect(page.getByTestId("launch-error")).toContainText("Telegram не передал сведения о пользователе");
@@ -104,17 +119,17 @@ test("смена аккаунта A → B на том же устройстве:
   await page.waitForURL("**/session");
   await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
   await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
-  await page.goto("/progress");
+  await page.goto("/app/progress");
   await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
   expect(await count(page, dbOf(A), "cardStates")).toBeGreaterThan(0);
 
   // Та же вкладка и то же хранилище (sessionStorage с контекстом A, базы A): Telegram открывает Mini App под B.
   await openTelegram(page, { userId: B });
-  await page.goto("/words");
+  await page.goto("/app/words");
   await expect(page.getByTestId("word-count")).toHaveText("0 слов");
-  await page.goto("/");
+  await page.goto("/app/");
   await expect(page.getByRole("button", { name: "Продолжить повторение" })).toHaveCount(0);
-  await page.goto("/progress");
+  await page.goto("/app/progress");
   await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", /synced|idle/, { timeout: 15000 });
   // Перезагрузка без hash восстанавливает контекст вкладки — это B, а не A.
   expect(await page.evaluate(() => JSON.parse(sessionStorage.getItem("tetradio:launch")!).user.id)).toBe(B);
@@ -127,12 +142,12 @@ test("смена аккаунта A → B на том же устройстве:
 
   // Контекст вкладки от B, а bridge сообщает A: запуск останавливается.
   await page.addInitScript(bridgeScript({ userId: A }));
-  await page.goto("/");
+  await page.goto("/app/");
   await expect(page.getByTestId("launch-error")).toContainText("не совпали с этим запуском");
   expect(await page.evaluate(() => sessionStorage.getItem("tetradio:launch"))).toBeNull();
-  await page.goto(`/words${launchHash({ userId: A })}`); // другой путь: не переход по hash в том же документе
+  await page.goto(`/app/words${launchHash({ userId: A })}`); // другой путь: не переход по hash в том же документе
   await expect(page.getByRole("navigation")).toBeVisible();
-  await page.goto("/progress");
+  await page.goto("/app/progress");
   await expect(page.getByTestId("storage-scope")).toContainText("Telegram: облачная синхронизация");
   expect(await count(page, dbOf(A), "cardStates")).toBeGreaterThan(0);
 });

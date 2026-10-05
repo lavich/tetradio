@@ -2,14 +2,14 @@ import { expect, test } from "@playwright/test";
 import { installLessons, ready } from "./helpers";
 
 test("работает без сети после закрытия страницы для скачанного урока", async ({ context, page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
   // Картинка слова скачивается при просмотре карточки и дальше читается из базы.
-  await page.goto("/words");
+  await page.goto("/app/words");
   await page.getByRole("link", { name: /ο φίλος/ }).click();
   await expect(page.getByTestId("word-art")).toBeVisible();
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));
   await page.reload();
@@ -41,7 +41,7 @@ test("работает без сети после закрытия страни�
 
   await context.setOffline(true);
   const offlinePage = await context.newPage();
-  await offlinePage.goto("/");
+  await offlinePage.goto("/app/");
   await expect(offlinePage.getByTestId("today-title")).toBeVisible();
   await offlinePage.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await offlinePage.getByRole("searchbox").fill("φίλος");

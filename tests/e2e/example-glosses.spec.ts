@@ -3,10 +3,10 @@ import { installLessons, ready } from "./helpers";
 
 /** Разметка слов примера: пример слова урока 1.4, ссылка ведёт на «ο άντρας» из урока 1.3. Случай «карточки нет» — в компонентном тесте. */
 test("слово примера показывает перевод и открывает установленную карточку", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-3", "mech-4"]);
-  await page.goto("/words/w096");
+  await page.goto("/app/words/w096");
   const example = page.getByTestId("entry-sheet");
   const line = page.getByTestId("example-gloss");
   await expect(line).toBeEmpty();
