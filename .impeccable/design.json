@@ -418,6 +418,11 @@
         "role": "neutral",
         "displayName": "Тень под лампой",
         "canonical": "rgba(0, 0, 0, 0.6)"
+      },
+      "shelf": {
+        "role": "neutral",
+        "displayName": "Доска полки",
+        "canonical": "#c9b79a"
       }
     },
     "typographyMeta": {
@@ -657,6 +662,14 @@
       "description": "Строка словарика: слово печатью, формы и перевод мельче, звук справа.",
       "html": "<button class=\"ds-vocab\"><span class=\"ds-vocab-text\"><span class=\"ds-vocab-greek\" lang=\"el\">το νερό</span><span class=\"ds-vocab-forms\" lang=\"el\">τα νερά</span><span class=\"ds-vocab-ru\">вода</span></span><svg class=\"ds-vocab-sound\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M11 5 6 9H2v6h4l5 4V5z\"/><path d=\"M15.5 8.5a5 5 0 0 1 0 7\"/></svg></button>",
       "css": ".ds-vocab { display: flex; gap: 12px; align-items: center; width: 100%; padding: 6px 8px; border: 0; border-radius: 10px; background: none; color: var(--foreground); text-align: left; cursor: pointer; } .ds-vocab:hover { background: color-mix(in srgb, var(--primary) 6%, transparent); } .ds-vocab:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-vocab-text { flex: 1; display: grid; } .ds-vocab-greek { font: 600 17px/24px var(--font-print); } .ds-vocab-forms { font: 13.5px/20px var(--font-print); color: var(--muted-foreground); } .ds-vocab-ru { font: 13.5px/20px var(--font-ui); } .ds-vocab-sound { width: 18px; height: 18px; color: var(--muted-foreground); }"
+    },
+    {
+      "name": "Shelf Book",
+      "kind": "custom",
+      "refersTo": "shelf-book",
+      "description": "Обложка на полке лендинга: номер, название по-гречески и по-русски; первая выдвинута и обведена чернилами.",
+      "html": "<div class=\"ds-shelf\"><div class=\"ds-book ds-book-out\" style=\"background:#2f6d4f\"><b>01</b><span><span lang=\"el\">Γνωριμία</span><small>Знакомство</small></span></div><div class=\"ds-book\" style=\"background:#b8452b\"><b>02</b><span><span lang=\"el\">Χώρες και γλώσσες</span><small>Страны и языки</small></span></div></div>",
+      "css": ".ds-shelf { display: flex; gap: 14px; align-items: end; padding: 36px 12px 14px; border-bottom: 10px solid #c9b79a; } .ds-book { flex: 0 0 148px; aspect-ratio: 3 / 4; border-radius: 3px 8px 8px 3px; color: #fff; padding: 14px 14px 12px 18px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 6px 10px -6px rgba(0,0,0,.35), inset 5px 0 0 rgb(0 0 0 / .18); } .ds-book b { font: 700 36px/1 var(--font-print); } .ds-book > span { display: grid; gap: 2px; min-height: 62px; padding-top: 8px; border-top: 1px solid rgb(255 255 255 / .3); } .ds-book > span span { font: 600 15px/18px var(--font-print); } .ds-book small { font: 12px/16px var(--font-ui); color: rgb(255 255 255 / .85); } .ds-book-out { transform: translateY(-28px); outline: 3px solid var(--primary); outline-offset: 3px; }"
     }
   ],
   "narrative": {
