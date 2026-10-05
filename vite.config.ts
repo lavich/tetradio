@@ -6,9 +6,9 @@ import { copyFileSync, existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { VitePWA } from "vite-plugin-pwa";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { botName } from "./src/platform/bot-name";
-import { renderLanding } from "./src/landing/render";
-import { loadLandingData } from "./src/landing/sample";
+import { botName } from "./src/platform/bot-name.ts";
+import { renderLanding } from "./src/landing/render.ts";
+import { loadLandingData } from "./src/landing/sample.ts";
 
 const base = process.env.BASE_PATH ?? "/";
 /** Версия и сборка попадают в метки отчётов о сбоях и в имя релиза; без CI сборка называется `dev`. */

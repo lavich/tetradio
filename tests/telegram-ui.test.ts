@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
 import "./helpers/self";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { recordAnswer, skipItem } from "../src/storage/ops";
@@ -17,6 +17,7 @@ beforeEach(async () => {
   await db.open();
   await installCompleted(db, ["mech-1"]);
 });
+afterEach(() => db.close());
 
 describe("жизненный цикл ответа", () => {
   it("повторная запись того же ответа сообщает created:false — отклик и синхронизация не повторяются", async () => {

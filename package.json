@@ -75,5 +75,8 @@
   "description": "Greek A2 course and learning application Telegram Mini App",
   "engines": {
     "node": ">=22.18.0"
+  },
+  "allowScripts": {
+    "@sentry/cli": false
   }
 }

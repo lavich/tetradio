@@ -234,7 +234,13 @@ describe("платформенный адаптер Telegram", () => {
         selectionChanged() {},
       },
     } as never);
-    expect(() => telegramAdapter(broken.app).haptic("success")).not.toThrow();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      expect(() => telegramAdapter(broken.app).haptic("success")).not.toThrow();
+      expect(warn).toHaveBeenCalledWith("Telegram API отклонил вызов", expect.any(Error));
+    } finally {
+      warn.mockRestore();
+    }
   });
   it("тема и размеры: viewport реагирует только на устойчивые изменения, недоступные отступы дают нули", () => {
     const { app, fire } = fakeApp();
@@ -276,7 +282,10 @@ describe("платформенный адаптер Telegram", () => {
       if (event === "activated" || event === "deactivated") throw new Error("Unknown event");
       legacy.handlers.set(event, (legacy.handlers.get(event) ?? new Set()).add(handler));
     };
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const old = telegramAdapter(legacy.app);
+    expect(warn).toHaveBeenCalledWith("Telegram API отклонил вызов", expect.any(Error));
+    warn.mockRestore();
     expect(old.active()).toBe(true);
     expect(legacy.handlers.get("themeChanged")?.size).toBe(1);
     expect(webAdapter().active()).toBe(true);

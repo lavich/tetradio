@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import {
   applyPackage,
@@ -46,6 +46,7 @@ beforeEach(async () => {
   db = new AppDatabase("tetradio-content");
   await db.open();
 });
+afterEach(() => db.close());
 const entry = (id: string) => content.catalog.lessons.find((l) => l.id === id)!;
 /** Новая версия пакета: изменённые слова получают новую ревизию, как это сделал бы генератор. */
 function bump(pack: ContentPackage, change: (words: ContentPackage["words"]) => void): ContentPackage {
