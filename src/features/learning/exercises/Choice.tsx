@@ -126,7 +126,7 @@ export function Choice({
         </QuietActions>
       )}
       {answered && after}
-      <Primary disabled={!answered} onClick={onNext}>
+      <Primary disabled={!answered} focus={answered} onClick={onNext}>
         {nextLabel}
       </Primary>
     </>

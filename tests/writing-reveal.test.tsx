@@ -370,3 +370,23 @@ describe("озвучка раскрытия после письменного о
     expect(spoken).toEqual(["το σπίτι", "η πόρτα"]);
   });
 });
+
+describe("клавиатура после письменного ответа", () => {
+  it("после проверки написания фокус на «Далее»", async () => {
+    const host = await showSpelling(wordItem());
+    await type(host, "το σπίτι");
+    expect(document.activeElement).toBe(button(host, "Далее"));
+  });
+
+  it("после «Не знаю» в написании фокус на «Далее»", async () => {
+    const host = await showSpelling(wordItem());
+    await press(button(host, "Не знаю"));
+    expect(document.activeElement).toBe(button(host, "Далее"));
+  });
+
+  it("после проверки сборки фокус на «Далее»", async () => {
+    const host = await showAssembly(assemblyItem());
+    await assemble(host);
+    expect(document.activeElement).toBe(button(host, "Далее"));
+  });
+});
