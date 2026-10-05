@@ -307,8 +307,6 @@ describe("обновление копии v8", () => {
           },
         ],
         "plan": {
-          "budget": 2,
-          "introducedToday": 1,
           "newRefs": [
             {
               "id": "eimai",

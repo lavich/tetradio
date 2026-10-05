@@ -28,7 +28,6 @@ import { emptySkills, type SkillSummary } from "../src/domain/skills";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { mulberry32 } from "./plan-golden.test";
 import {
-  defaultSettings,
   type Course,
   type ExerciseType,
   type Phrase,
@@ -63,13 +62,7 @@ const snapshot = (spec: Spec): Snapshot => ({
   lessons: spec.lessons.map(({ wordIds: _, ...rest }) => rest),
   links: spec.lessons.flatMap((l) => l.wordIds.map((wordId, position) => ({ lessonId: l.id, wordId, position }))),
 });
-/** Предел курса задан явно: сценарии описывают поведение при пределе 10, а не значение по умолчанию. */
-const course: Course = {
-  id: "a2",
-  title: "A2",
-  newItemsPerDay: 10,
-  updatedAt: now.toISOString(),
-};
+const course: Course = { id: "a2", title: "A2", updatedAt: now.toISOString() };
 const data: Spec = {
   words,
   lessons: [lesson],
@@ -77,22 +70,21 @@ const data: Spec = {
   events: [],
   states: [],
   sessions: [],
-  settings: defaultSettings,
 };
 const makePlan = (spec: Spec, at: Date) => planOf(fromSnapshot(snapshot(spec)), at);
 const makeSession = (input: { data: Spec; now: Date; wordIds?: string[] }) =>
   sessionOf({ source: fromSnapshot(snapshot(input.data)), now: input.now, refs: input.wordIds?.map(wordRef) });
-it("takes ten new words of thirty from a completed lesson", async () => {
+it("takes all thirty new words of a completed lesson: no daily limit", async () => {
   const plan = await makePlan(data, now);
-  expect(plan.newRefs).toHaveLength(10);
+  expect(plan.newRefs).toHaveLength(30);
 });
-it("counts introduced words across sessions and avoids exceeding daily budget", async () => {
+it("words introduced earlier today are no longer new", async () => {
   const states = words
     .slice(0, 10)
     .map((w) =>
       wordState(w.id, { card: createEmptyCard(new Date("2026-09-16")), introducedAt: now.toISOString(), version: 1 }),
     );
-  expect((await makePlan({ ...data, states }, now)).newRefs).toHaveLength(0);
+  expect((await makePlan({ ...data, states }, now)).newRefs).toHaveLength(20);
 });
 it("honors local calendar at UTC midnight", () => {
   expect(localDay(new Date("2026-09-15T22:30Z"), "Asia/Nicosia")).toBe("2026-09-16");

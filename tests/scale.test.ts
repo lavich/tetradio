@@ -8,7 +8,7 @@ import { progress } from "../src/domain/stats";
 import { parseCatalog, SCHEMA_VERSION, type CatalogEntry } from "../src/content/schema";
 import { refreshCatalog } from "../src/content/client";
 import { submitAnswer } from "../src/storage/ops";
-import { defaultSettings, type LearningState, type ReviewEvent, type Word } from "../src/domain/types";
+import { type LearningState, type ReviewEvent, type Word } from "../src/domain/types";
 import { itemOfLink, wordEvent, wordState } from "./helpers/cards";
 
 /**
@@ -136,7 +136,6 @@ beforeAll(async () => {
       position,
     })),
   );
-  await db.settings.put({ ...defaultSettings, sessionSize: 20 });
   // Смешанный урок — первый в программе: его карточки идут раньше уроков вне модулей.
   await db.modules.add({
     id: "m01",
@@ -154,7 +153,6 @@ beforeAll(async () => {
   await db.courses.put({
     id: "a2",
     title: "A2",
-    newItemsPerDay: 10,
     updatedAt: iso,
   });
 }, 180_000);
@@ -170,8 +168,10 @@ describe("ограниченные выборки на большой базе",
   it("план дня не читает таблицы слов, событий и сессий, а состояния — только по индексам и ключам; тексты новых видов — только признаки кандидатов", async () => {
     track();
     const plan = await makePlan(dexieSource(db), now);
-    expect(plan.introducedToday).toBe(3);
-    expect(plan.newRefs).toHaveLength(7);
+    // Без дневного предела новые — все невведённые карточки пройденных уроков, каждая один раз.
+    const fresh = plan.newRefs.map((ref) => JSON.stringify([ref.kind, ref.id]));
+    expect(fresh.length).toBeGreaterThan(1000);
+    expect(new Set(fresh).size).toBe(fresh.length);
     expect(plan.newRefs.some((ref) => ref.kind !== "word")).toBe(true); // смешанный урок первого модуля идёт первым
     expect(plan.reviews.length).toBeGreaterThan(1000);
     expect(reads.words).toBe(0);

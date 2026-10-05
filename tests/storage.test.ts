@@ -4,7 +4,7 @@ import { createEmptyCard, Rating, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { wordRef } from "./helpers/cards";
-import { ConflictError, markIntroduced, saveNewItemsPerDay, submitAnswer } from "../src/storage/ops";
+import { ConflictError, markIntroduced, submitAnswer } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { type Word } from "../src/domain/types";
 import { completeLessons, installLessons, wordsOf } from "./helpers/content";
@@ -231,12 +231,6 @@ describe("план курса на базе", () => {
     );
     expect(plan.newRefs.length).toBeGreaterThan(0);
     expect(plan.newRefs.every((ref) => own.has(unitKey(ref)))).toBe(true);
-  });
-  it("предел новых — из записи курса, сохранение меняет только его", async () => {
-    await ensureSeed(db);
-    await saveNewItemsPerDay("mechanics", 3, db);
-    expect((await makePlan(source(), now)).newRefs).toHaveLength(3);
-    expect(await db.courses.get("mechanics")).toMatchObject({ newItemsPerDay: 3 });
   });
 });
 

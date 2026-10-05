@@ -23,7 +23,6 @@ import {
 } from "../src/content/client";
 import { ContentError, type ContentPackage } from "../src/content/schema";
 import { revisionOf } from "../content/build";
-import { saveNewItemsPerDay } from "../src/storage/ops";
 import { dexieSource, lessonItems } from "../src/storage/queries";
 import { makePlan } from "../src/domain/learning";
 import { indexWord } from "../src/storage/db";
@@ -91,14 +90,7 @@ describe("курсы", () => {
     await db.courses.clear();
     await refreshCatalog(db, memoryFetcher());
     expect((await db.lessons.get("mech-1"))!.courseId).toBe("mechanics");
-    expect(await db.courses.get("mechanics")).toMatchObject({ title: "Механики", newItemsPerDay: 12 });
-  });
-  it("новый курс получает предел новых карточек по умолчанию, а сохранённый предел обновление не трогает", async () => {
-    await refreshCatalog(db, memoryFetcher());
-    expect((await db.courses.get("mechanics"))!.newItemsPerDay).toBe(12);
-    await saveNewItemsPerDay("mechanics", 7, db);
-    await refreshCatalog(db, memoryFetcher());
-    expect((await db.courses.get("mechanics"))!.newItemsPerDay).toBe(7);
+    expect(await db.courses.get("mechanics")).toMatchObject({ title: "Механики" });
   });
   it("повторное обновление неизменного каталога курс не переписывает", async () => {
     await refreshCatalog(db, memoryFetcher());
@@ -457,7 +449,6 @@ describe("обновление пакета", () => {
   it("слово, убранное автором из пройденного урока, не попадает в новые карточки", async () => {
     await installLessons(db, ["mech-2"]);
     await completeLessons(db, ["mech-2"]);
-    await db.courses.update("mechanics", { newItemsPerDay: 100 });
     const pack = packageOf("mech-2");
     const dropped = pack.words[0].id;
     const next: ContentPackage = {

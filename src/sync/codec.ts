@@ -5,7 +5,6 @@ import {
   SNAPSHOT_FORMAT,
   SUPPORTED_SNAPSHOT_FORMATS,
   type CompactBlock,
-  type CompactCourse,
   type CompactLesson,
   type CompactSnapshot,
   type CompactState,
@@ -82,9 +81,7 @@ type WireState = [
 ];
 type WireSkill = [string, string, number, Record<string, [string, number]>];
 type WireDay = [string, number, string[]];
-type WireCourse = [string, number];
 type WireLesson = [string, 0 | 1, number];
-type Format3Course = { id: string; newItemsPerDay: number };
 type Format3Lesson = [string, string | null, "upcoming" | "completed", number];
 type WireBlock =
   | [string, 0 | 1, number]
@@ -94,8 +91,12 @@ type WireLessonBlocks = [string, WireBlock[]];
 interface Wire {
   f: number;
   c: number;
-  s: CompactSnapshot["settings"];
-  cs: WireCourse[] | Format3Course[];
+  /**
+   * Настройки и курсы прежних версий (часовой пояс, размер занятия, дневной предел) сняты. Поля остаются пустыми:
+   * версии, ещё закэшированные у пользователей, проверяют их наличие и применяют содержимое поверх своего.
+   */
+  s: Record<string, never>;
+  cs: [];
   l: WireLesson[] | Format3Lesson[];
   p: string[];
   b: WireLessonBlocks[];
@@ -239,8 +240,8 @@ export function encodeSnapshot(snapshot: CompactSnapshot): string {
   const wire: Wire = {
     f: snapshot.format,
     c: ms(snapshot.createdAt),
-    s: snapshot.settings,
-    cs: snapshot.courses.map((course): WireCourse => [course.id, course.newItemsPerDay]),
+    s: {},
+    cs: [],
     l: snapshot.lessons.map((lesson): WireLesson => [lesson.id, lesson.completed ? 1 : 0, ms(lesson.updatedAt)]),
     p: snapshot.packages,
     b: encodeBlocks(snapshot.blocks),
@@ -251,10 +252,6 @@ export function encodeSnapshot(snapshot: CompactSnapshot): string {
   return JSON.stringify(wire);
 }
 export class SnapshotFormatError extends Error {}
-const decodeCourses = (wire: Wire): CompactCourse[] =>
-  wire.f === 3
-    ? (wire.cs as Format3Course[]).map(({ id, newItemsPerDay }) => ({ id, newItemsPerDay }))
-    : (wire.cs as WireCourse[]).map(([id, newItemsPerDay]) => ({ id, newItemsPerDay }));
 const decodeLessons = (wire: Wire): CompactLesson[] =>
   wire.f === 3
     ? (wire.l as Format3Lesson[]).map(([id, , status, at]) => ({
@@ -281,8 +278,6 @@ export function decodeSnapshot(text: string): CompactSnapshot {
   return {
     format: SNAPSHOT_FORMAT,
     createdAt: iso(wire.c ?? 0),
-    settings: wire.s,
-    courses: decodeCourses(wire),
     lessons: decodeLessons(wire),
     packages: wire.p,
     blocks: decodeBlocks(wire.b),

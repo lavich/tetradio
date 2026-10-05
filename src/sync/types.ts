@@ -26,10 +26,6 @@ export interface CompactLesson {
   completed: boolean;
   updatedAt: string;
 }
-export interface CompactSettings {
-  timezone: string;
-  sessionSize: number;
-}
 /**
  * Выполнение блока курса без введённых ответов и текста: они остаются на устройстве.
  * Завершение урока курса передаётся в `lessons[]`.
@@ -42,20 +38,14 @@ export interface CompactBlock {
   checks?: number[];
   updatedAt: string;
 }
-export interface CompactCourse {
-  id: string;
-  newItemsPerDay: number;
-}
 /**
- * Компактный снимок прогресса: состояния FSRS и навыков карточек, настройки, пройденные уроки, выполнение блоков
+ * Компактный снимок прогресса: состояния FSRS и навыков карточек, пройденные уроки, выполнение блоков
  * курса, требуемые пакеты и сводки статистики. Полная история, сессии, тексты карточек, введённые ответы и медиа
  * в снимок не входят.
  */
 export interface CompactSnapshot {
   format: typeof SNAPSHOT_FORMAT;
   createdAt: string;
-  settings: CompactSettings;
-  courses: CompactCourse[];
   lessons: CompactLesson[];
   packages: string[];
   /** Включает блоки ещё не установленных уроков. */

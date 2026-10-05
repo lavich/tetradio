@@ -186,21 +186,26 @@ export async function installLessons(page: Page, ids: string[]) {
       )
       .toBe(true);
   // Курс докачивает остальные уроки фоном, а после установки уборка удаляет медиа, на которое не ссылается ни один
-  // пакет, — в том числе подложенное тестом. Тест продолжает, когда число пакетов перестало меняться.
+  // пакет, — в том числе подложенное тестом. Тест продолжает, когда число пакетов перестало меняться, и ещё раз после
+  // перезагрузки: новый запуск снова сверяет курс с каталогом.
+  await settled(page);
+  await page.goto("/app/");
+  await ready(page);
+  await settled(page);
+}
+async function settled(page: Page) {
   let previous = -1;
   await expect
     .poll(
       async () => {
         const now = await installedCount(page);
-        const settled = now === previous;
+        const still = now === previous;
         previous = now;
-        return settled;
+        return still;
       },
       { timeout: 30000, intervals: [1500] },
     )
     .toBe(true);
-  await page.goto("/app/");
-  await ready(page);
 }
 const installedCount = (page: Page) =>
   page.evaluate(async () => {
@@ -299,36 +304,6 @@ export async function seedMixedLesson(
   await ready(page);
   return payload;
 }
-/** Дневной предел курса: чтобы в занятие попали именно новые карточки смешанного урока. */
-export async function setCourseLimit(
-  page: Page,
-  courseId: string,
-  newItemsPerDay: number,
-  databaseName = "tetradio-mock-1",
-) {
-  await page.evaluate(
-    async ([courseId, newItemsPerDay, databaseName]) => {
-      const database = await new Promise<IDBDatabase>((resolve, reject) => {
-        const request = indexedDB.open(databaseName);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
-      const tx = database.transaction("courses", "readwrite");
-      const store = tx.objectStore("courses");
-      const current = await new Promise<Record<string, unknown>>((resolve) => {
-        const request = store.get(courseId);
-        request.onsuccess = () => resolve(request.result as Record<string, unknown>);
-      });
-      store.put({ ...current, newItemsPerDay, updatedAt: new Date().toISOString() });
-      await new Promise<void>((resolve, reject) => {
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-      });
-      database.close();
-    },
-    [courseId, newItemsPerDay, databaseName] as const,
-  );
-}
 /** Чтение таблицы IndexedDB целиком: только для проверок в тестах. */
 /**
  * Греческий системный голос для проверок озвучки: доступность не должна зависеть от набора голосов машины.
@@ -359,8 +334,6 @@ export const setSettings = (page: Page, patch: Record<string, unknown>) =>
     await new Promise<void>((resolve, reject) => {
       const request = store.put({
         id: "settings",
-        timezone: "Asia/Nicosia",
-        sessionSize: 20,
         errorReports: true,
         autoSpeak: true,
         ...current,

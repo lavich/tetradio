@@ -2,8 +2,7 @@ import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
-import { saveNewItemsPerDay, saveSettings, submitAnswer } from "../src/storage/ops";
-import { defaultSettings } from "../src/domain/types";
+import { submitAnswer } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { kvAdapter } from "../src/sync/adapter";
@@ -86,13 +85,11 @@ beforeEach(() => {
 });
 
 describe("перенос компактного прогресса между устройствами одного аккаунта", () => {
-  it("второе устройство получает сроки FSRS, навыки, настройки, пройденные уроки, бюджет и статистику без двойного учёта", async () => {
+  it("второе устройство получает сроки FSRS, навыки, пройденные уроки и статистику без двойного учёта", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
     const tablet = await device("tablet", { lessons: ["mech-1"] });
     await installLessons(phone.db, ["mech-2"]);
     await installLessons(tablet.db, ["mech-2"]);
-    await saveSettings({ ...defaultSettings, timezone: "Europe/Athens", sessionSize: 6 }, phone.db);
-    await saveNewItemsPerDay("mechanics", 7, phone.db);
     await phone.db.lessons.update("mech-2", { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
     const studied = await study(phone, [true, false, true, true, false]);
     await study(phone, [true, true, false]);
@@ -103,8 +100,6 @@ describe("перенос компактного прогресса между у
     expect(status.lastConfirmedAt).toBe(now().toISOString());
     expect(await statesOf(tablet)).toEqual(await statesOf(phone));
     expect(await skillsOf(tablet, studied)).toEqual(await skillsOf(phone, studied));
-    expect(await tablet.db.settings.get("settings")).toMatchObject({ timezone: "Europe/Athens", sessionSize: 6 });
-    expect(await tablet.db.courses.get("mechanics")).toMatchObject({ newItemsPerDay: 7 });
     expect(await tablet.db.lessons.get("mech-2")).toMatchObject({
       completed: true,
       updatedAt: "2026-09-16T07:00:00.000Z",

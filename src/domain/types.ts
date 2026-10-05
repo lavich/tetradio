@@ -68,7 +68,6 @@ export type CardSnapshot =
 export interface Course {
   id: string;
   title: string;
-  newItemsPerDay: number;
   /** Экзамен курса из каталога: общая дата и подтверждена ли местная. */
   exam?: CourseExam;
   updatedAt: string;
@@ -196,22 +195,17 @@ export interface Session {
 /** `errorReports` — отправка отчётов о сбоях во внешний сервис; включена по умолчанию, в компактный снимок синхронизации не входит. */
 export interface Settings {
   id: "settings";
-  timezone: string;
-  sessionSize: number;
   errorReports: boolean;
   autoSpeak: boolean;
 }
 export const defaultSettings: Settings = {
   id: "settings",
-  timezone: "Asia/Nicosia",
-  sessionSize: 20,
   errorReports: true,
   autoSpeak: true,
 };
-/** Предел новых карточек нового курса; сохранённый предел курса это значение не меняет. */
-export const DEFAULT_NEW_ITEMS_PER_DAY = 12;
-/** Запись настроек старой версии или из старой копии читается без миграции. */
+/** Запись настроек старой версии или из старой копии читается без миграции; снятые поля отбрасываются. */
 export const fillSettings = (settings: Partial<Settings> | undefined): Settings => ({
-  ...defaultSettings,
-  ...settings,
+  id: "settings",
+  errorReports: settings?.errorReports ?? defaultSettings.errorReports,
+  autoSpeak: settings?.autoSpeak ?? defaultSettings.autoSpeak,
 });

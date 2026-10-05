@@ -2,15 +2,7 @@ import type { Card } from "ts-fsrs";
 import type { AppDatabase } from "../storage/db";
 import { byTime, emptySkills, emptyStats, foldSkill, foldStats, type SkillSummary } from "../domain/skills";
 import { unitKey } from "../domain/refs";
-import {
-  fillSettings,
-  type CardKind,
-  type Lesson,
-  type LearningRef,
-  type LearningState,
-  type ReviewEvent,
-} from "../domain/types";
-import { loadSettings } from "../storage/queries";
+import { type CardKind, type Lesson, type LearningRef, type LearningState, type ReviewEvent } from "../domain/types";
 import { blockKey } from "../storage/course";
 import type { BlockProgress } from "../domain/types";
 import {
@@ -129,23 +121,13 @@ const byKey = (a: { ref: LearningRef }, b: { ref: LearningRef }) => unitKey(a.re
 
 type Progress = Omit<CompactSnapshot, "skills" | "stats">;
 type Summary = Pick<CompactSnapshot, "skills" | "stats">;
-const PROGRESS_TABLES = [
-  "settings",
-  "courses",
-  "lessons",
-  "packages",
-  "blockProgress",
-  "cardStates",
-  "cardStash",
-  "meta",
-] as const;
+const PROGRESS_TABLES = ["lessons", "packages", "blockProgress", "cardStates", "cardStash", "meta"] as const;
 const SUMMARY_TABLES = ["cardSkills", "baseSummary", "events", "words", "phrases"] as const;
 /** Таблицы сборки снимка; транзакцию чтения по ним открывает вызывающий. */
 export const SNAPSHOT_TABLES = [...PROGRESS_TABLES, ...SUMMARY_TABLES] as const;
 const tables = (database: AppDatabase, names: readonly string[]) => names.map((name) => database.table(name));
 
 async function readProgress(database: AppDatabase, now: Date): Promise<Progress> {
-  const settings = await loadSettings(database);
   const packages = new Set((await database.packages.toCollection().primaryKeys()) as string[]);
   const lessons: CompactLesson[] = (await database.lessons.toArray())
     .filter((lesson) => packages.has(lesson.id))
@@ -163,10 +145,6 @@ async function readProgress(database: AppDatabase, now: Date): Promise<Progress>
   return {
     format: SNAPSHOT_FORMAT,
     createdAt: now.toISOString(),
-    settings: { timezone: settings.timezone, sessionSize: settings.sessionSize },
-    courses: (await database.courses.toArray())
-      .map((course) => ({ id: course.id, newItemsPerDay: course.newItemsPerDay }))
-      .sort((a, b) => a.id.localeCompare(b.id)),
     lessons,
     packages: [...packages].sort(),
     blocks,
@@ -278,11 +256,6 @@ export async function applySnapshot(
     ),
     async () => {
       if (ifClean && (await readMeta(database, META.dirty))) return false;
-      const current = await loadSettings(database);
-      await database.settings.put(fillSettings({ ...current, ...snapshot.settings }));
-      // Дневной предел курса переносится; курс, которого здесь ещё нет, заведёт каталог.
-      for (const incoming of snapshot.courses)
-        await database.courses.update(incoming.id, { newItemsPerDay: incoming.newItemsPerDay });
       const pending: PendingLessons = {};
       for (const lesson of snapshot.lessons) {
         if (await database.lessons.get(lesson.id)) await database.lessons.update(lesson.id, lessonPatch(lesson));

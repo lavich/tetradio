@@ -1,3 +1,5 @@
+/** Часовой пояс устройства: по нему считаются день, сроки и неделя. */
+export const deviceTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 /** Календарный день в выбранной зоне, без деления миллисекунд на сутки. */
 export function localDay(date: Date, timezone: string): string {
   const parts = new Intl.DateTimeFormat("en-CA", {

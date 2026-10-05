@@ -15,7 +15,7 @@ import { mulberry32 } from "./plan-golden.test";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { lessonProgress, progress, wordMaturity } from "../src/domain/stats";
 import { State } from "ts-fsrs";
-import { defaultSettings, type LessonItem, type Word } from "../src/domain/types";
+import { type LessonItem, type Word } from "../src/domain/types";
 import { itemOfLink, unitKey, wordKeyOf, wordState } from "./helpers/cards";
 import { recordFor, scenarios } from "./plan-golden.test";
 import { completeLessons, content, installLessons, wordCountOf } from "./helpers/content";
@@ -51,7 +51,6 @@ async function load(data: Snapshot) {
     await db.cardStates.bulkAdd(data.states);
     await db.events.bulkAdd(data.events);
     await db.sessions.bulkAdd(data.sessions);
-    await db.settings.put(data.settings);
   });
   const byId = <T extends { id: string }>(items: T[]) =>
     [...items].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
@@ -140,7 +139,6 @@ describe("прогресс урока", () => {
       ],
       events: [],
       sessions: [],
-      settings: defaultSettings,
     });
     const plain = await lessonViews(db);
     expect(plain.map((view) => [view.cardCount, view.progress])).toEqual([
@@ -168,7 +166,7 @@ describe("локальный поиск", () => {
     const words = Array.from({ length: 120 }, (_, i) =>
       word(i, { greek: `το κοινό${i}`, russian: i % 2 ? `общее слово${i}` : `другое${i}` }),
     );
-    await load({ words, lessons: [], links: [], states: [], events: [], sessions: [], settings: defaultSettings });
+    await load({ words, lessons: [], links: [], states: [], events: [], sessions: [] });
     const ids = await searchWordIds("κοιν общ", db);
     expect(ids).toHaveLength(60);
   });
@@ -229,7 +227,6 @@ describe("смешанный урок в выборках", () => {
       states: [],
       events: [],
       sessions: [],
-      settings: (await db.settings.get("settings")) ?? defaultSettings,
     };
     const refs = [
       { kind: "phrase" as const, id: "p-xora" },
@@ -237,7 +234,7 @@ describe("смешанный урок в выборках", () => {
       { kind: "word" as const, id: "w070" },
     ];
     const record = async (source: ReturnType<typeof dexieSource>) => ({
-      plan: (({ newRefs, unavailable, budget, origins }) => ({ newRefs, unavailable, budget, origins }))(
+      plan: (({ newRefs, unavailable, origins }) => ({ newRefs, unavailable, origins }))(
         await makePlan(source, now, { hasVoice: true }),
       ),
       session: (await makeSession({ source, now, random: mulberry32(5), hasVoice: true })).items.map((item) => ({
@@ -299,7 +296,6 @@ describe("соседи по уроку", () => {
       states: [],
       events: [],
       sessions: [],
-      settings: defaultSettings,
     };
     const all = words.map((w) => w.id);
     const [fromDb, fromMemory] = await Promise.all([

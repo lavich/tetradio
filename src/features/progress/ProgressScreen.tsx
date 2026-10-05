@@ -10,7 +10,7 @@ import { dayMonth, withCount } from "../../shared/format";
 import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
-import { useSettings } from "../../shared/store";
+import { deviceTimezone } from "../../domain/time";
 import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import { courseProgress, type CourseProgress } from "../../storage/progress";
 import { ExamLine } from "../course/ExamLine";
@@ -22,9 +22,8 @@ const LESSONS: [string, string, string] = ["урок", "урока", "уроко
 
 export function ProgressScreen() {
   const now = useNow();
-  const { settings } = useSettings();
   const spread = useSpread();
-  const data = useLiveQuery(() => courseProgress(now, settings.timezone), [now.toDateString(), settings.timezone]);
+  const data = useLiveQuery(() => courseProgress(now, deviceTimezone()), [now.toDateString(), deviceTimezone()]);
   if (!data) return <Screen wide paper />;
   const courseId = data.views[0]?.module.courseId;
   const head = (

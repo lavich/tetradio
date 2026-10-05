@@ -1,1164 +1,313 @@
 {
- "mixed": {
-  "plan": {
-   "today": "2026-09-15",
-   "budget": 8,
-   "introducedToday": 2,
-   "newWords": [
-    "w2",
-    "w4",
-    "w6",
-    "w8",
-    "w9",
-    "w10",
-    "w11",
-    "w12"
-   ],
-   "reviews": [
-    "w22",
-    "w23",
-    "w21",
-    "w24",
-    "w20"
-   ],
-   "origins": {
-    "[\"word\",\"w2\"]": "l1",
-    "[\"word\",\"w4\"]": "l1",
-    "[\"word\",\"w6\"]": "l1",
-    "[\"word\",\"w8\"]": "l1",
-    "[\"word\",\"w9\"]": "l1",
-    "[\"word\",\"w10\"]": "l1",
-    "[\"word\",\"w11\"]": "l1",
-    "[\"word\",\"w12\"]": "l1"
-   }
-  },
-  "scheduled": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w22",
-     "type": "assembly",
-     "options": [
-      "λέ",
-      "ξη22",
-      "το"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
+  "mixed": {
+    "plan": {
+      "today": "2026-09-15",
+      "newWords": ["w2","w4","w6","w8","w9","w10","w11","w12","w13","w14","w15","w16","w17","w18","w19","w30","w31","w32","w33","w34","w35","w36","w37"],
+      "reviews": ["w22","w23","w21","w24","w20"],
+      "origins": {
+        "[\"word\",\"w2\"]": "l1",
+        "[\"word\",\"w4\"]": "l1",
+        "[\"word\",\"w6\"]": "l1",
+        "[\"word\",\"w8\"]": "l1",
+        "[\"word\",\"w9\"]": "l1",
+        "[\"word\",\"w10\"]": "l1",
+        "[\"word\",\"w11\"]": "l1",
+        "[\"word\",\"w12\"]": "l1",
+        "[\"word\",\"w13\"]": "l1",
+        "[\"word\",\"w14\"]": "l1",
+        "[\"word\",\"w15\"]": "l1",
+        "[\"word\",\"w16\"]": "l1",
+        "[\"word\",\"w17\"]": "l1",
+        "[\"word\",\"w18\"]": "l1",
+        "[\"word\",\"w19\"]": "l1",
+        "[\"word\",\"w30\"]": "l3",
+        "[\"word\",\"w31\"]": "l3",
+        "[\"word\",\"w32\"]": "l3",
+        "[\"word\",\"w33\"]": "l3",
+        "[\"word\",\"w34\"]": "l3",
+        "[\"word\",\"w35\"]": "l4",
+        "[\"word\",\"w36\"]": "l4",
+        "[\"word\",\"w37\"]": "l4"
+      }
     },
-    {
-     "id": "S-1",
-     "wordId": "w24",
-     "type": "recognition",
-     "options": [
-      "слово4",
-      "слово11",
-      "слово24",
-      "слово12"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
+    "scheduled": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w14","type":"recognition","options":["слово20","слово3","слово14","слово11"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-1","wordId":"w20","type":"spelling","options":[],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-2","wordId":"w12","type":"recognition","options":["слово10","слово21","слово12","слово35"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-3","wordId":"w9","type":"recognition","options":["слово22","слово34","слово9","слово15"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-4","wordId":"w10","type":"recognition","options":["слово38","слово10","слово20","слово11"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-5","wordId":"w15","type":"recognition","options":["слово15","слово16","слово13","слово27"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-6","wordId":"w17","type":"recognition","options":["слово17","слово12","слово33","слово15"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-7","wordId":"w23","type":"recognition","options":["слово16","слово14","слово34","слово23"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-8","wordId":"w24","type":"recognition","options":["слово36","слово28","слово24","слово12"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-9","wordId":"w6","type":"recognition","options":["слово14","слово6","слово27","слово15"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-10","wordId":"w22","type":"assembly","options":["ξη22","λέ","το"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-11","wordId":"w18","type":"recognition","options":["слово17","слово18","слово29","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-12","wordId":"w8","type":"recognition","options":["слово19","слово8","слово36","слово4"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-13","wordId":"w19","type":"recognition","options":["слово39","слово18","слово22","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-14","wordId":"w11","type":"recognition","options":["слово12","слово11","слово0","слово21"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-15","wordId":"w13","type":"recognition","options":["слово16","слово13","слово1","слово23"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-16","wordId":"w16","type":"recognition","options":["слово15","слово16","слово9","слово27"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-17","wordId":"w21","type":"recognition","options":["слово20","слово11","слово38","слово21"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-18","wordId":"w4","type":"recognition","options":["слово10","слово28","слово4","слово6"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-19","wordId":"w2","type":"recognition","options":["слово39","слово0","слово24","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0}
+      ]
     },
-    {
-     "id": "S-2",
-     "wordId": "w8",
-     "type": "recognition",
-     "options": [
-      "слово8",
-      "слово10",
-      "слово33",
-      "слово4"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
+    "spoken": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w14","type":"recognition","options":["слово20","слово3","слово14","слово11"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-1","wordId":"w20","type":"spelling","options":[],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-2","wordId":"w12","type":"recognition","options":["слово10","слово21","слово12","слово35"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-3","wordId":"w9","type":"recognition","options":["слово22","слово34","слово9","слово15"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-4","wordId":"w10","type":"recognition","options":["слово38","слово10","слово20","слово11"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-5","wordId":"w15","type":"recognition","options":["слово15","слово16","слово13","слово27"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-6","wordId":"w17","type":"recognition","options":["слово17","слово12","слово33","слово15"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-7","wordId":"w23","type":"recognition","options":["слово16","слово14","слово34","слово23"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-8","wordId":"w24","type":"comprehension","options":["слово36","слово28","слово24","слово12"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-9","wordId":"w6","type":"recognition","options":["слово14","слово6","слово27","слово15"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-10","wordId":"w22","type":"assembly","options":["ξη22","λέ","το"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-11","wordId":"w18","type":"recognition","options":["слово17","слово18","слово29","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-12","wordId":"w8","type":"recognition","options":["слово19","слово8","слово36","слово4"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-13","wordId":"w19","type":"recognition","options":["слово39","слово18","слово22","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-14","wordId":"w11","type":"recognition","options":["слово12","слово11","слово0","слово21"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-15","wordId":"w13","type":"recognition","options":["слово16","слово13","слово1","слово23"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-16","wordId":"w16","type":"recognition","options":["слово15","слово16","слово9","слово27"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-17","wordId":"w21","type":"listening","options":["το λέξη4","το λέξη18","το λέξη36","το λέξη21"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-18","wordId":"w4","type":"recognition","options":["слово10","слово28","слово4","слово6"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-19","wordId":"w2","type":"recognition","options":["слово39","слово0","слово24","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0}
+      ]
     },
-    {
-     "id": "S-3",
-     "wordId": "w10",
-     "type": "recognition",
-     "options": [
-      "слово15",
-      "слово10",
-      "слово34",
-      "слово23"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-4",
-     "wordId": "w4",
-     "type": "recognition",
-     "options": [
-      "слово4",
-      "слово1",
-      "слово0",
-      "слово13"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-5",
-     "wordId": "w23",
-     "type": "recognition",
-     "options": [
-      "слово30",
-      "слово2",
-      "слово23",
-      "слово9"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-6",
-     "wordId": "w6",
-     "type": "recognition",
-     "options": [
-      "слово24",
-      "слово10",
-      "слово26",
-      "слово6"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-7",
-     "wordId": "w9",
-     "type": "recognition",
-     "options": [
-      "слово11",
-      "слово35",
-      "слово9",
-      "слово21"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-8",
-     "wordId": "w11",
-     "type": "recognition",
-     "options": [
-      "слово11",
-      "слово38",
-      "слово9",
-      "слово20"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-9",
-     "wordId": "w21",
-     "type": "recognition",
-     "options": [
-      "слово22",
-      "слово1",
-      "слово15",
-      "слово21"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-10",
-     "wordId": "w20",
-     "type": "spelling",
-     "options": [],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-11",
-     "wordId": "w2",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово0",
-      "слово10",
-      "слово25"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
+    "practice": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w0","type":"recognition","options":["слово0","слово36","слово1","слово4"],"isNew":false,"mode":"practice","expectedVersion":1},
+        {"id":"S-1","wordId":"w1","type":"recognition","options":["слово1","слово0","слово3","слово33"],"isNew":false,"mode":"practice","expectedVersion":1},
+        {"id":"S-2","wordId":"w2","type":"recognition","options":["слово0","слово36","слово6","слово2"],"isNew":true,"mode":"practice","expectedVersion":0}
+      ]
     }
-   ]
   },
-  "spoken": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w22",
-     "type": "assembly",
-     "options": [
-      "λέ",
-      "ξη22",
-      "το"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
+  "secondSessionSameDay": {
+    "plan": {
+      "today": "2026-09-15",
+      "newWords": ["w10","w11","w12","w13","w14","w15","w16","w17","w18","w19","w20","w21","w22","w23","w24","w25","w26","w27","w28","w29"],
+      "reviews": [],
+      "origins": {
+        "[\"word\",\"w10\"]": "l1",
+        "[\"word\",\"w11\"]": "l1",
+        "[\"word\",\"w12\"]": "l1",
+        "[\"word\",\"w13\"]": "l1",
+        "[\"word\",\"w14\"]": "l1",
+        "[\"word\",\"w15\"]": "l1",
+        "[\"word\",\"w16\"]": "l1",
+        "[\"word\",\"w17\"]": "l1",
+        "[\"word\",\"w18\"]": "l1",
+        "[\"word\",\"w19\"]": "l1",
+        "[\"word\",\"w20\"]": "l1",
+        "[\"word\",\"w21\"]": "l1",
+        "[\"word\",\"w22\"]": "l1",
+        "[\"word\",\"w23\"]": "l1",
+        "[\"word\",\"w24\"]": "l1",
+        "[\"word\",\"w25\"]": "l1",
+        "[\"word\",\"w26\"]": "l1",
+        "[\"word\",\"w27\"]": "l1",
+        "[\"word\",\"w28\"]": "l1",
+        "[\"word\",\"w29\"]": "l1"
+      }
     },
-    {
-     "id": "S-1",
-     "wordId": "w24",
-     "type": "comprehension",
-     "options": [
-      "слово4",
-      "слово11",
-      "слово24",
-      "слово12"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
+    "scheduled": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w19","type":"recognition","options":["слово19","слово11","слово21","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-1","wordId":"w29","type":"recognition","options":["слово27","слово20","слово29","слово0"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-2","wordId":"w17","type":"recognition","options":["слово25","слово28","слово17","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-3","wordId":"w14","type":"recognition","options":["слово15","слово14","слово10","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-4","wordId":"w15","type":"recognition","options":["слово26","слово15","слово12","слово4"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-5","wordId":"w20","type":"recognition","options":["слово17","слово14","слово20","слово8"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-6","wordId":"w22","type":"recognition","options":["слово22","слово10","слово29","слово0"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-7","wordId":"w26","type":"recognition","options":["слово1","слово22","слово26","слово23"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-8","wordId":"w28","type":"recognition","options":["слово28","слово12","слово5","слово20"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-9","wordId":"w12","type":"recognition","options":["слово28","слово19","слово5","слово12"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-10","wordId":"w25","type":"recognition","options":["слово2","слово11","слово21","слово25"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-11","wordId":"w23","type":"recognition","options":["слово23","слово29","слово9","слово13"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-12","wordId":"w13","type":"recognition","options":["слово29","слово0","слово13","слово25"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-13","wordId":"w24","type":"recognition","options":["слово23","слово21","слово0","слово24"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-14","wordId":"w16","type":"recognition","options":["слово16","слово28","слово20","слово8"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-15","wordId":"w18","type":"recognition","options":["слово0","слово29","слово16","слово18"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-16","wordId":"w21","type":"recognition","options":["слово0","слово21","слово28","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-17","wordId":"w27","type":"recognition","options":["слово12","слово27","слово3","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-18","wordId":"w11","type":"recognition","options":["слово10","слово1","слово16","слово11"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-19","wordId":"w10","type":"recognition","options":["слово0","слово10","слово27","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0}
+      ]
     },
-    {
-     "id": "S-2",
-     "wordId": "w8",
-     "type": "recognition",
-     "options": [
-      "слово8",
-      "слово10",
-      "слово33",
-      "слово4"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
+    "spoken": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w19","type":"recognition","options":["слово19","слово11","слово21","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-1","wordId":"w29","type":"recognition","options":["слово27","слово20","слово29","слово0"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-2","wordId":"w17","type":"recognition","options":["слово25","слово28","слово17","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-3","wordId":"w14","type":"recognition","options":["слово15","слово14","слово10","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-4","wordId":"w15","type":"recognition","options":["слово26","слово15","слово12","слово4"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-5","wordId":"w20","type":"recognition","options":["слово17","слово14","слово20","слово8"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-6","wordId":"w22","type":"recognition","options":["слово22","слово10","слово29","слово0"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-7","wordId":"w26","type":"recognition","options":["слово1","слово22","слово26","слово23"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-8","wordId":"w28","type":"recognition","options":["слово28","слово12","слово5","слово20"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-9","wordId":"w12","type":"recognition","options":["слово28","слово19","слово5","слово12"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-10","wordId":"w25","type":"recognition","options":["слово2","слово11","слово21","слово25"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-11","wordId":"w23","type":"recognition","options":["слово23","слово29","слово9","слово13"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-12","wordId":"w13","type":"recognition","options":["слово29","слово0","слово13","слово25"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-13","wordId":"w24","type":"recognition","options":["слово23","слово21","слово0","слово24"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-14","wordId":"w16","type":"recognition","options":["слово16","слово28","слово20","слово8"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-15","wordId":"w18","type":"recognition","options":["слово0","слово29","слово16","слово18"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-16","wordId":"w21","type":"recognition","options":["слово0","слово21","слово28","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-17","wordId":"w27","type":"recognition","options":["слово12","слово27","слово3","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-18","wordId":"w11","type":"recognition","options":["слово10","слово1","слово16","слово11"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-19","wordId":"w10","type":"recognition","options":["слово0","слово10","слово27","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0}
+      ]
     },
-    {
-     "id": "S-3",
-     "wordId": "w10",
-     "type": "recognition",
-     "options": [
-      "слово15",
-      "слово10",
-      "слово34",
-      "слово23"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-4",
-     "wordId": "w4",
-     "type": "recognition",
-     "options": [
-      "слово4",
-      "слово1",
-      "слово0",
-      "слово13"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-5",
-     "wordId": "w23",
-     "type": "recognition",
-     "options": [
-      "слово30",
-      "слово2",
-      "слово23",
-      "слово9"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-6",
-     "wordId": "w6",
-     "type": "recognition",
-     "options": [
-      "слово24",
-      "слово10",
-      "слово26",
-      "слово6"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-7",
-     "wordId": "w9",
-     "type": "recognition",
-     "options": [
-      "слово11",
-      "слово35",
-      "слово9",
-      "слово21"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-8",
-     "wordId": "w11",
-     "type": "recognition",
-     "options": [
-      "слово11",
-      "слово38",
-      "слово9",
-      "слово20"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-9",
-     "wordId": "w21",
-     "type": "listening",
-     "options": [
-      "το λέξη1",
-      "το λέξη21",
-      "το λέξη20",
-      "το λέξη27"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-10",
-     "wordId": "w20",
-     "type": "spelling",
-     "options": [],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-11",
-     "wordId": "w2",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово0",
-      "слово10",
-      "слово25"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
+    "practice": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w0","type":"recognition","options":["слово2","слово0","слово7","слово1"],"isNew":false,"mode":"practice","expectedVersion":1},
+        {"id":"S-1","wordId":"w1","type":"recognition","options":["слово6","слово1","слово16","слово5"],"isNew":false,"mode":"practice","expectedVersion":1},
+        {"id":"S-2","wordId":"w2","type":"recognition","options":["слово2","слово3","слово26","слово7"],"isNew":false,"mode":"practice","expectedVersion":1}
+      ]
     }
-   ]
   },
-  "practice": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w0",
-     "type": "recognition",
-     "options": [
-      "слово0",
-      "слово36",
-      "слово1",
-      "слово4"
-     ],
-     "isNew": false,
-     "mode": "practice",
-     "expectedVersion": 1
+  "smallLesson": {
+    "plan": {"today":"2026-09-15","newWords":["w4","w5","w6","w7"],"reviews":[],"origins":{"[\"word\",\"w4\"]":"l1","[\"word\",\"w5\"]":"l1","[\"word\",\"w6\"]":"l1","[\"word\",\"w7\"]":"l1"}},
+    "scheduled": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w6","type":"recognition","options":["слово7","слово2","слово6","слово4"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-1","wordId":"w5","type":"recognition","options":["слово7","слово6","слово0","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-2","wordId":"w7","type":"recognition","options":["слово7","слово6","слово5","слово10"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-3","wordId":"w4","type":"recognition","options":["слово4","слово5","слово6","слово0"],"isNew":true,"mode":"scheduled","expectedVersion":0}
+      ]
     },
-    {
-     "id": "S-1",
-     "wordId": "w1",
-     "type": "recognition",
-     "options": [
-      "слово1",
-      "слово0",
-      "слово3",
-      "слово33"
-     ],
-     "isNew": false,
-     "mode": "practice",
-     "expectedVersion": 1
+    "spoken": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w6","type":"recognition","options":["слово7","слово2","слово6","слово4"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-1","wordId":"w5","type":"recognition","options":["слово7","слово6","слово0","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-2","wordId":"w7","type":"recognition","options":["слово7","слово6","слово5","слово10"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-3","wordId":"w4","type":"recognition","options":["слово4","слово5","слово6","слово0"],"isNew":true,"mode":"scheduled","expectedVersion":0}
+      ]
     },
-    {
-     "id": "S-2",
-     "wordId": "w2",
-     "type": "recognition",
-     "options": [
-      "слово0",
-      "слово36",
-      "слово6",
-      "слово2"
-     ],
-     "isNew": true,
-     "mode": "practice",
-     "expectedVersion": 0
+    "practice": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w0","type":"recognition","options":["слово9","слово0","слово2","слово1"],"isNew":true,"mode":"practice","expectedVersion":0},
+        {"id":"S-1","wordId":"w1","type":"recognition","options":["слово2","слово8","слово1","слово0"],"isNew":true,"mode":"practice","expectedVersion":0},
+        {"id":"S-2","wordId":"w2","type":"recognition","options":["слово1","слово2","слово0","слово10"],"isNew":true,"mode":"practice","expectedVersion":0}
+      ]
     }
-   ]
+  },
+  "smallDict": {
+    "plan": {"today":"2026-09-15","newWords":[],"reviews":["w0"],"origins":{}},
+    "scheduled": {"planDate":"2026-09-15","items":[{"id":"S-0","wordId":"w0","type":"assembly","options":["ξη0","λέ","το"],"isNew":false,"mode":"scheduled","expectedVersion":1}]},
+    "spoken": {"planDate":"2026-09-15","items":[{"id":"S-0","wordId":"w0","type":"assembly","options":["ξη0","λέ","το"],"isNew":false,"mode":"scheduled","expectedVersion":1}]},
+    "practice": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w0","type":"assembly","options":["το","ξη0","λέ"],"isNew":false,"mode":"practice","expectedVersion":1},
+        {"id":"S-1","wordId":"w1","type":"assembly","options":["το","ξη1","λέ"],"isNew":true,"mode":"practice","expectedVersion":0},
+        {"id":"S-2","wordId":"w2","type":"assembly","options":["ξη2","το","λέ"],"isNew":true,"mode":"practice","expectedVersion":0}
+      ]
+    }
+  },
+  "modules": {
+    "plan": {
+      "today": "2026-09-15",
+      "newWords": ["w1","w2","w3","w4","w5","w6","w7","w8","w9","w10","w11","w12","w13","w14","w15","w16","w17","w18","w19","w20","w21","w22","w23","w24","w25"],
+      "reviews": ["w0"],
+      "origins": {
+        "[\"word\",\"w1\"]": "m01-1",
+        "[\"word\",\"w2\"]": "m01-1",
+        "[\"word\",\"w3\"]": "m01-1",
+        "[\"word\",\"w4\"]": "m01-1",
+        "[\"word\",\"w5\"]": "m01-1",
+        "[\"word\",\"w6\"]": "m01-1",
+        "[\"word\",\"w7\"]": "m01-1",
+        "[\"word\",\"w8\"]": "m01-1",
+        "[\"word\",\"w9\"]": "m01-1",
+        "[\"word\",\"w10\"]": "m01-1",
+        "[\"word\",\"w11\"]": "m01-1",
+        "[\"word\",\"w12\"]": "k1",
+        "[\"word\",\"w13\"]": "k1",
+        "[\"word\",\"w14\"]": "k1",
+        "[\"word\",\"w15\"]": "k1",
+        "[\"word\",\"w16\"]": "k1",
+        "[\"word\",\"w17\"]": "k1",
+        "[\"word\",\"w18\"]": "k1",
+        "[\"word\",\"w19\"]": "k1",
+        "[\"word\",\"w20\"]": "m02-1",
+        "[\"word\",\"w21\"]": "m02-1",
+        "[\"word\",\"w22\"]": "m02-1",
+        "[\"word\",\"w23\"]": "m02-1",
+        "[\"word\",\"w24\"]": "m02-1",
+        "[\"word\",\"w25\"]": "m02-1"
+      }
+    },
+    "scheduled": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w10","type":"recognition","options":["слово35","слово10","слово1","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-1","wordId":"w0","type":"recognition","options":["слово1","слово16","слово22","слово0"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-2","wordId":"w8","type":"recognition","options":["слово20","слово8","слово10","слово9"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-3","wordId":"w5","type":"recognition","options":["слово4","слово0","слово27","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-4","wordId":"w6","type":"recognition","options":["слово4","слово18","слово39","слово6"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-5","wordId":"w11","type":"recognition","options":["слово11","слово35","слово17","слово16"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-6","wordId":"w13","type":"recognition","options":["слово10","слово19","слово13","слово20"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-7","wordId":"w17","type":"recognition","options":["слово35","слово16","слово9","слово17"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-8","wordId":"w19","type":"recognition","options":["слово19","слово17","слово12","слово22"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-9","wordId":"w3","type":"recognition","options":["слово3","слово26","слово17","слово6"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-10","wordId":"w16","type":"recognition","options":["слово16","слово7","слово12","слово28"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-11","wordId":"w14","type":"recognition","options":["слово2","слово37","слово14","слово3"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-12","wordId":"w4","type":"recognition","options":["слово17","слово21","слово8","слово4"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-13","wordId":"w15","type":"recognition","options":["слово15","слово7","слово0","слово20"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-14","wordId":"w7","type":"recognition","options":["слово7","слово13","слово36","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-15","wordId":"w9","type":"recognition","options":["слово14","слово33","слово12","слово9"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-16","wordId":"w12","type":"recognition","options":["слово12","слово30","слово3","слово13"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-17","wordId":"w18","type":"recognition","options":["слово8","слово29","слово18","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-18","wordId":"w2","type":"recognition","options":["слово9","слово29","слово14","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-19","wordId":"w1","type":"recognition","options":["слово18","слово1","слово22","слово13"],"isNew":true,"mode":"scheduled","expectedVersion":0}
+      ]
+    },
+    "spoken": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w10","type":"recognition","options":["слово35","слово10","слово1","слово19"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-1","wordId":"w0","type":"recognition","options":["слово1","слово16","слово22","слово0"],"isNew":false,"mode":"scheduled","expectedVersion":1},
+        {"id":"S-2","wordId":"w8","type":"recognition","options":["слово20","слово8","слово10","слово9"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-3","wordId":"w5","type":"recognition","options":["слово4","слово0","слово27","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-4","wordId":"w6","type":"recognition","options":["слово4","слово18","слово39","слово6"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-5","wordId":"w11","type":"recognition","options":["слово11","слово35","слово17","слово16"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-6","wordId":"w13","type":"recognition","options":["слово10","слово19","слово13","слово20"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-7","wordId":"w17","type":"recognition","options":["слово35","слово16","слово9","слово17"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-8","wordId":"w19","type":"recognition","options":["слово19","слово17","слово12","слово22"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-9","wordId":"w3","type":"recognition","options":["слово3","слово26","слово17","слово6"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-10","wordId":"w16","type":"recognition","options":["слово16","слово7","слово12","слово28"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-11","wordId":"w14","type":"recognition","options":["слово2","слово37","слово14","слово3"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-12","wordId":"w4","type":"recognition","options":["слово17","слово21","слово8","слово4"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-13","wordId":"w15","type":"recognition","options":["слово15","слово7","слово0","слово20"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-14","wordId":"w7","type":"recognition","options":["слово7","слово13","слово36","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-15","wordId":"w9","type":"recognition","options":["слово14","слово33","слово12","слово9"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-16","wordId":"w12","type":"recognition","options":["слово12","слово30","слово3","слово13"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-17","wordId":"w18","type":"recognition","options":["слово8","слово29","слово18","слово5"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-18","wordId":"w2","type":"recognition","options":["слово9","слово29","слово14","слово2"],"isNew":true,"mode":"scheduled","expectedVersion":0},
+        {"id":"S-19","wordId":"w1","type":"recognition","options":["слово18","слово1","слово22","слово13"],"isNew":true,"mode":"scheduled","expectedVersion":0}
+      ]
+    },
+    "practice": {
+      "planDate": "2026-09-15",
+      "items": [
+        {"id":"S-0","wordId":"w0","type":"recognition","options":["слово0","слово29","слово1","слово2"],"isNew":false,"mode":"practice","expectedVersion":1},
+        {"id":"S-1","wordId":"w1","type":"recognition","options":["слово0","слово5","слово8","слово1"],"isNew":true,"mode":"practice","expectedVersion":0},
+        {"id":"S-2","wordId":"w2","type":"recognition","options":["слово6","слово2","слово0","слово14"],"isNew":true,"mode":"practice","expectedVersion":0}
+      ]
+    }
   }
- },
- "budgetExhausted": {
-  "plan": {
-   "today": "2026-09-15",
-   "budget": 0,
-   "introducedToday": 10,
-   "newWords": [],
-   "reviews": [],
-   "origins": {}
-  },
-  "scheduled": {
-   "planDate": "2026-09-15",
-   "items": []
-  },
-  "spoken": {
-   "planDate": "2026-09-15",
-   "items": []
-  },
-  "practice": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w0",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово0",
-      "слово7",
-      "слово1"
-     ],
-     "isNew": false,
-     "mode": "practice",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-1",
-     "wordId": "w1",
-     "type": "recognition",
-     "options": [
-      "слово6",
-      "слово1",
-      "слово16",
-      "слово5"
-     ],
-     "isNew": false,
-     "mode": "practice",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-2",
-     "wordId": "w2",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово3",
-      "слово26",
-      "слово7"
-     ],
-     "isNew": false,
-     "mode": "practice",
-     "expectedVersion": 1
-    }
-   ]
-  }
- },
- "smallLimit": {
-  "plan": {
-   "today": "2026-09-15",
-   "budget": 5,
-   "introducedToday": 0,
-   "newWords": [
-    "w4",
-    "w5",
-    "w6",
-    "w7"
-   ],
-   "reviews": [],
-   "origins": {
-    "[\"word\",\"w4\"]": "l1",
-    "[\"word\",\"w5\"]": "l1",
-    "[\"word\",\"w6\"]": "l1",
-    "[\"word\",\"w7\"]": "l1"
-   }
-  },
-  "scheduled": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w6",
-     "type": "recognition",
-     "options": [
-      "слово7",
-      "слово2",
-      "слово6",
-      "слово4"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-1",
-     "wordId": "w5",
-     "type": "recognition",
-     "options": [
-      "слово7",
-      "слово6",
-      "слово0",
-      "слово5"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-2",
-     "wordId": "w7",
-     "type": "recognition",
-     "options": [
-      "слово7",
-      "слово6",
-      "слово5",
-      "слово10"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-3",
-     "wordId": "w4",
-     "type": "recognition",
-     "options": [
-      "слово4",
-      "слово5",
-      "слово6",
-      "слово0"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    }
-   ]
-  },
-  "spoken": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w6",
-     "type": "recognition",
-     "options": [
-      "слово7",
-      "слово2",
-      "слово6",
-      "слово4"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-1",
-     "wordId": "w5",
-     "type": "recognition",
-     "options": [
-      "слово7",
-      "слово6",
-      "слово0",
-      "слово5"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-2",
-     "wordId": "w7",
-     "type": "recognition",
-     "options": [
-      "слово7",
-      "слово6",
-      "слово5",
-      "слово10"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-3",
-     "wordId": "w4",
-     "type": "recognition",
-     "options": [
-      "слово4",
-      "слово5",
-      "слово6",
-      "слово0"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    }
-   ]
-  },
-  "practice": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w0",
-     "type": "recognition",
-     "options": [
-      "слово9",
-      "слово0",
-      "слово2",
-      "слово1"
-     ],
-     "isNew": true,
-     "mode": "practice",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-1",
-     "wordId": "w1",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово8",
-      "слово1",
-      "слово0"
-     ],
-     "isNew": true,
-     "mode": "practice",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-2",
-     "wordId": "w2",
-     "type": "recognition",
-     "options": [
-      "слово1",
-      "слово2",
-      "слово0",
-      "слово10"
-     ],
-     "isNew": true,
-     "mode": "practice",
-     "expectedVersion": 0
-    }
-   ]
-  }
- },
- "smallDict": {
-  "plan": {
-   "today": "2026-09-15",
-   "budget": 10,
-   "introducedToday": 0,
-   "newWords": [],
-   "reviews": [
-    "w0"
-   ],
-   "origins": {}
-  },
-  "scheduled": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w0",
-     "type": "assembly",
-     "options": [
-      "ξη0",
-      "λέ",
-      "το"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    }
-   ]
-  },
-  "spoken": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w0",
-     "type": "assembly",
-     "options": [
-      "ξη0",
-      "λέ",
-      "το"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    }
-   ]
-  },
-  "practice": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w0",
-     "type": "assembly",
-     "options": [
-      "το",
-      "ξη0",
-      "λέ"
-     ],
-     "isNew": false,
-     "mode": "practice",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-1",
-     "wordId": "w1",
-     "type": "assembly",
-     "options": [
-      "το",
-      "ξη1",
-      "λέ"
-     ],
-     "isNew": true,
-     "mode": "practice",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-2",
-     "wordId": "w2",
-     "type": "assembly",
-     "options": [
-      "ξη2",
-      "το",
-      "λέ"
-     ],
-     "isNew": true,
-     "mode": "practice",
-     "expectedVersion": 0
-    }
-   ]
-  }
- },
- "modules": {
-  "plan": {
-   "today": "2026-09-15",
-   "budget": 30,
-   "introducedToday": 0,
-   "newWords": [
-    "w1",
-    "w2",
-    "w3",
-    "w4",
-    "w5",
-    "w6",
-    "w7",
-    "w8",
-    "w9",
-    "w10",
-    "w11",
-    "w12",
-    "w13",
-    "w14",
-    "w15",
-    "w16",
-    "w17",
-    "w18",
-    "w19",
-    "w20",
-    "w21",
-    "w22",
-    "w23",
-    "w24",
-    "w25"
-   ],
-   "reviews": [
-    "w0"
-   ],
-   "origins": {
-    "[\"word\",\"w1\"]": "m01-1",
-    "[\"word\",\"w2\"]": "m01-1",
-    "[\"word\",\"w3\"]": "m01-1",
-    "[\"word\",\"w4\"]": "m01-1",
-    "[\"word\",\"w5\"]": "m01-1",
-    "[\"word\",\"w6\"]": "m01-1",
-    "[\"word\",\"w7\"]": "m01-1",
-    "[\"word\",\"w8\"]": "m01-1",
-    "[\"word\",\"w9\"]": "m01-1",
-    "[\"word\",\"w10\"]": "m01-1",
-    "[\"word\",\"w11\"]": "m01-1",
-    "[\"word\",\"w12\"]": "k1",
-    "[\"word\",\"w13\"]": "k1",
-    "[\"word\",\"w14\"]": "k1",
-    "[\"word\",\"w15\"]": "k1",
-    "[\"word\",\"w16\"]": "k1",
-    "[\"word\",\"w17\"]": "k1",
-    "[\"word\",\"w18\"]": "k1",
-    "[\"word\",\"w19\"]": "k1",
-    "[\"word\",\"w20\"]": "m02-1",
-    "[\"word\",\"w21\"]": "m02-1",
-    "[\"word\",\"w22\"]": "m02-1",
-    "[\"word\",\"w23\"]": "m02-1",
-    "[\"word\",\"w24\"]": "m02-1",
-    "[\"word\",\"w25\"]": "m02-1"
-   }
-  },
-  "scheduled": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w7",
-     "type": "recognition",
-     "options": [
-      "слово7",
-      "слово11",
-      "слово5",
-      "слово14"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-1",
-     "wordId": "w6",
-     "type": "recognition",
-     "options": [
-      "слово8",
-      "слово2",
-      "слово6",
-      "слово15"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-2",
-     "wordId": "w9",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово4",
-      "слово9",
-      "слово31"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-3",
-     "wordId": "w2",
-     "type": "recognition",
-     "options": [
-      "слово8",
-      "слово2",
-      "слово4",
-      "слово23"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-4",
-     "wordId": "w3",
-     "type": "recognition",
-     "options": [
-      "слово3",
-      "слово5",
-      "слово8",
-      "слово25"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-5",
-     "wordId": "w4",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово4",
-      "слово24",
-      "слово3"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-6",
-     "wordId": "w5",
-     "type": "recognition",
-     "options": [
-      "слово5",
-      "слово3",
-      "слово17",
-      "слово8"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-7",
-     "wordId": "w8",
-     "type": "recognition",
-     "options": [
-      "слово29",
-      "слово9",
-      "слово1",
-      "слово8"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-8",
-     "wordId": "w0",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово39",
-      "слово5",
-      "слово0"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-9",
-     "wordId": "w1",
-     "type": "recognition",
-     "options": [
-      "слово4",
-      "слово10",
-      "слово1",
-      "слово5"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    }
-   ]
-  },
-  "spoken": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w7",
-     "type": "recognition",
-     "options": [
-      "слово7",
-      "слово11",
-      "слово5",
-      "слово14"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-1",
-     "wordId": "w6",
-     "type": "recognition",
-     "options": [
-      "слово8",
-      "слово2",
-      "слово6",
-      "слово15"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-2",
-     "wordId": "w9",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово4",
-      "слово9",
-      "слово31"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-3",
-     "wordId": "w2",
-     "type": "recognition",
-     "options": [
-      "слово8",
-      "слово2",
-      "слово4",
-      "слово23"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-4",
-     "wordId": "w3",
-     "type": "recognition",
-     "options": [
-      "слово3",
-      "слово5",
-      "слово8",
-      "слово25"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-5",
-     "wordId": "w4",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово4",
-      "слово24",
-      "слово3"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-6",
-     "wordId": "w5",
-     "type": "recognition",
-     "options": [
-      "слово5",
-      "слово3",
-      "слово17",
-      "слово8"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-7",
-     "wordId": "w8",
-     "type": "recognition",
-     "options": [
-      "слово29",
-      "слово9",
-      "слово1",
-      "слово8"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-8",
-     "wordId": "w0",
-     "type": "recognition",
-     "options": [
-      "слово2",
-      "слово39",
-      "слово5",
-      "слово0"
-     ],
-     "isNew": false,
-     "mode": "scheduled",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-9",
-     "wordId": "w1",
-     "type": "recognition",
-     "options": [
-      "слово4",
-      "слово10",
-      "слово1",
-      "слово5"
-     ],
-     "isNew": true,
-     "mode": "scheduled",
-     "expectedVersion": 0
-    }
-   ]
-  },
-  "practice": {
-   "planDate": "2026-09-15",
-   "items": [
-    {
-     "id": "S-0",
-     "wordId": "w0",
-     "type": "recognition",
-     "options": [
-      "слово0",
-      "слово29",
-      "слово1",
-      "слово2"
-     ],
-     "isNew": false,
-     "mode": "practice",
-     "expectedVersion": 1
-    },
-    {
-     "id": "S-1",
-     "wordId": "w1",
-     "type": "recognition",
-     "options": [
-      "слово0",
-      "слово5",
-      "слово8",
-      "слово1"
-     ],
-     "isNew": true,
-     "mode": "practice",
-     "expectedVersion": 0
-    },
-    {
-     "id": "S-2",
-     "wordId": "w2",
-     "type": "recognition",
-     "options": [
-      "слово6",
-      "слово2",
-      "слово0",
-      "слово14"
-     ],
-     "isNew": true,
-     "mode": "practice",
-     "expectedVersion": 0
-    }
-   ]
-  }
- }
 }

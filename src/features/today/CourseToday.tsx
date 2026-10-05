@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { localDay, mondayOf, type DailyPlan } from "../../domain/learning";
+import { deviceTimezone, localDay, mondayOf, type DailyPlan } from "../../domain/learning";
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
@@ -11,7 +11,6 @@ import { lessonIn, withCount } from "../../shared/format";
 import { coverColor, greekDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
-import { useSettings } from "../../shared/store";
 import { Tick } from "../../shared/Tick";
 import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import { lessonDays, moduleViews, reviewedOn, type ModuleLessonView, type ModuleView } from "../../storage/course";
@@ -26,13 +25,12 @@ import css from "./today.module.css";
  * Главная кнопка одна: у повторения, пока оно ждёт, потом у урока. На широком окне справа — тетрадь модуля.
  */
 export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: Date; unfinished: Session | null }) {
-  const { settings } = useSettings();
   const spread = useSpread();
-  const today = localDay(now, settings.timezone);
+  const today = localDay(now, deviceTimezone());
   const monday = mondayOf(today);
   const views = useLiveQuery(() => moduleViews(), []);
   const reviewed = useLiveQuery(() => reviewedOn(today), [today]);
-  const week = useLiveQuery(() => lessonDays(monday, settings.timezone), [monday, settings.timezone]);
+  const week = useLiveQuery(() => lessonDays(monday, deviceTimezone()), [monday, deviceTimezone()]);
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,

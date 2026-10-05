@@ -2,8 +2,8 @@ import { expect, test, type Page } from "@playwright/test";
 import { readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { GREEK_VOICE, installLessons, ready, readTable, seedMixedLesson, setCourseLimit } from "./helpers";
-import { onlyReviews, openTelegram, tg } from "./telegram";
+import { GREEK_VOICE, installLessons, ready, readTable, seedMixedLesson } from "./helpers";
+import { openTelegram, tg } from "./telegram";
 
 /**
  * Смешанный урок из непубликуемой фикстуры: слова и фразы в одном занятии.
@@ -46,18 +46,17 @@ async function lastUnanswered(page: Page) {
 }
 
 /** Установленный урок 1.1 даёт слово фикстуры; пройден только смешанный урок, поэтому новые карточки — его. */
-async function prepare(page: Page, limit: number, options: Parameters<typeof seedMixedLesson>[1] = {}) {
+async function prepare(page: Page, options: Parameters<typeof seedMixedLesson>[1] = {}) {
   await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-1"]);
-  await setCourseLimit(page, "mechanics", limit);
   return seedMixedLesson(page, options);
 }
 
 test("фразы смешанного урока — в словаре вместе со словами", async ({ page }) => {
   test.setTimeout(120000);
   await page.addInitScript(NO_VOICE);
-  await prepare(page, 4);
+  await prepare(page);
   // Словарь показывает и слова, и фразы урока.
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await page.getByRole("searchbox").fill("Γράφω ένα");
@@ -70,7 +69,7 @@ test("фразы смешанного урока — в словаре вмес�
 test("при системном голосе фраза без перевода проверяема аудированием", async ({ page }) => {
   test.setTimeout(150000);
   await page.addInitScript(GREEK_VOICE);
-  await prepare(page, 4);
+  await prepare(page);
   // Фраза без перевода: с голосом её тренировка начинается знакомством, затем идёт проверка.
   await page.goto("/app/words/phrase/p-silent");
   await page.getByRole("button", { name: "Потренировать фразу" }).click();
@@ -88,7 +87,7 @@ test("занятие: знакомство с фразой, «Не знаю» с
 }) => {
   test.setTimeout(180000);
   await page.addInitScript(NO_VOICE);
-  await prepare(page, 4);
+  await prepare(page);
   await page.setViewportSize({ width: 360, height: 560 }); // узкая ширина с местом под экранную клавиатуру; остальные сценарии идут на 390 из конфигурации
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));
   await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 20000 });
@@ -190,7 +189,7 @@ test("полная копия переносит смешанный урок с 
   const source = await browser.newContext();
   const page = await source.newPage();
   await page.addInitScript(NO_VOICE);
-  await prepare(page, 3);
+  await prepare(page);
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   for (let step = 0; step < 20; step++) {
@@ -282,8 +281,6 @@ test("внутри Telegram: возврат из свёрнутого клиен
   await openTelegram(page, { noCloud: true });
   await installLessons(page, ["mech-1"]);
   const TG_DB = "tetradio-tg-tetradio_local-1001";
-  await onlyReviews(page);
-  await setCourseLimit(page, "mechanics", 2, TG_DB);
   await seedMixedLesson(page, { only: ["p-grafo", "p-xora"], databaseName: TG_DB });
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");

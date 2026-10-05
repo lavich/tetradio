@@ -2,7 +2,7 @@ import { State, type Card } from "ts-fsrs";
 import type { CatalogModule } from "../content/course";
 import { unitKey } from "./refs";
 import { localDay } from "./time";
-import type { CardKind, LearningRef, LearningState, Lesson, LessonItem, Settings } from "./types";
+import type { CardKind, LearningRef, LearningState, Lesson, LessonItem } from "./types";
 
 /** Зрелость состояния для очередей: сперва то, что переучивается, потом разучиваемое, потом повторяемое. */
 const stateRank = (card: Card) => (card.state === State.Relearning ? 0 : card.state === State.Learning ? 1 : 2);
@@ -11,11 +11,9 @@ export interface WordOrigin {
   lessonId: string;
   title: string;
 }
-/** `unavailable` — новые карточки без доступного объективного упражнения: видны отдельно, предел не расходуют. */
+/** `unavailable` — новые карточки без доступного объективного упражнения: видны отдельно. */
 export interface DailyPlan {
   today: string;
-  budget: number;
-  introducedToday: number;
   newRefs: LearningRef[];
   reviews: { ref: LearningRef; state: LearningState }[];
   origins: Map<string, WordOrigin>;
@@ -70,14 +68,13 @@ export function programmeOrder(
 }
 /** Источник данных планировщика: ограниченные выборки вместо полного снимка. Все карты ключуются `unitKey`. */
 export interface PlanSource {
-  settings(): Promise<Settings>;
-  newItemsPerDay(): Promise<number>;
+  /** Часовой пояс, по которому считается «сегодня». */
+  timezone(): string;
   /** Пройденные уроки в порядке программы. */
   completedLessons(): Promise<PlanLesson[]>;
   /** Связи перечисленных уроков одной выборкой, в любом порядке. */
   itemsOf(lessonIds: string[]): Promise<LessonItem[]>;
   lessonRefs(lessonId: string): Promise<LearningRef[]>;
-  introducedToday(today: string, timezone: string): Promise<number>;
   statesOf(refs: LearningRef[]): Promise<Map<string, LearningState>>;
   /** Ключи существующих карточек. */
   liveKeys(refs: LearningRef[]): Promise<Set<string>>;
@@ -92,17 +89,9 @@ export interface PlanOptions {
   hasVoice?: boolean;
 }
 export async function makePlan(source: PlanSource, now: Date, options: PlanOptions = {}): Promise<DailyPlan> {
-  const settings = await source.settings();
-  const timezone = settings.timezone;
-  const today = localDay(now, timezone);
-  const [lessons, limit, introducedToday, phrasePool] = await Promise.all([
-    source.completedLessons(),
-    source.newItemsPerDay(),
-    source.introducedToday(today, timezone),
-    source.phraseCount(),
-  ]);
+  const today = localDay(now, source.timezone());
+  const [lessons, phrasePool] = await Promise.all([source.completedLessons(), source.phraseCount()]);
   const availability: AvailabilityContext = { hasVoice: !!options.hasVoice, phrasePool };
-  const budget = Math.max(0, limit - introducedToday);
 
   const rank = new Map(lessons.map((lesson, index) => [lesson.id, index]));
   const items = (await source.itemsOf(lessons.map((lesson) => lesson.id))).sort(
@@ -126,7 +115,7 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     if (ref.kind !== "phrase" || (info && isCheckable(info, availability))) fresh.push(ref);
     else unavailable.push(ref);
   }
-  const newRefs = fresh.slice(0, budget);
+  const newRefs = fresh;
   const titles = new Map(lessons.map((lesson) => [lesson.id, lesson.title]));
   const origins = new Map(
     newRefs.map((ref) => {
@@ -144,5 +133,5 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     )
     .map((s) => ({ ref: s.ref, state: s }));
 
-  return { today, budget, introducedToday, newRefs, reviews, origins, unavailable };
+  return { today, newRefs, reviews, origins, unavailable };
 }

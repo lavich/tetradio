@@ -2,15 +2,14 @@ import Dexie from "dexie";
 import { State } from "ts-fsrs";
 import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import {
-  addDays,
   LESSON_MATES_RADIUS,
-  localDay,
   programmeOrder,
   type CardFacts,
   type PlanLesson,
   type SessionSource,
 } from "../domain/learning";
 import { unitKey, wordKeyOf, wordRef } from "../domain/refs";
+import { deviceTimezone } from "../domain/time";
 import {
   byTime,
   emptyStats,
@@ -23,7 +22,6 @@ import {
 import { cardLabel, lessonProgress, type LessonProgress, type StatsSource } from "../domain/stats";
 import {
   CARD_KINDS,
-  DEFAULT_NEW_ITEMS_PER_DAY,
   fillSettings,
   type CardKind,
   type Course,
@@ -108,19 +106,11 @@ export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): 
 
 export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
   return {
-    settings: () => loadSettings(database),
-    newItemsPerDay: async () => (await currentCourse(database))?.newItemsPerDay ?? DEFAULT_NEW_ITEMS_PER_DAY,
+    timezone: deviceTimezone,
     completedLessons: () => completedLessons(database),
     itemsOf: (lessonIds) =>
       lessonIds.length ? database.lessonItems.where("lessonId").anyOf(lessonIds).toArray() : Promise.resolve([]),
     lessonRefs: async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref),
-    introducedToday: async (today, timezone) =>
-      (
-        await database.cardStates
-          .where("introducedAt")
-          .between(`${addDays(today, -1)}T00:00:00.000Z`, `${addDays(today, 2)}T00:00:00.000Z`)
-          .toArray()
-      ).filter((state) => localDay(new Date(state.introducedAt), timezone) === today).length,
     statesOf: (refs) => statesOf(refs, database),
     liveKeys: (refs) => liveKeys(refs, database),
     dueStates: (now) => database.cardStates.where("card.due").belowOrEqual(now).toArray(),

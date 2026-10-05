@@ -3,14 +3,11 @@ import { checksum, kvAdapter, parsePartKey, partKey, pointerKey, splitParts } fr
 import { encodeSnapshot } from "../src/sync/codec";
 import { cloudStorageTransport, disabledTransport, memoryTransport, SyncError } from "../src/sync/transport";
 import { SNAPSHOT_FORMAT, type CompactSnapshot, type VersionMeta } from "../src/sync/types";
-import { defaultSettings } from "../src/domain/types";
 import type { TelegramCloudStorage } from "../src/platform/telegram-types";
 
 const snapshot = (size = 0): CompactSnapshot => ({
   format: SNAPSHOT_FORMAT,
   createdAt: "2026-09-16T10:00:00.000Z",
-  settings: { timezone: defaultSettings.timezone, sessionSize: 20 },
-  courses: [],
   lessons: [],
   packages: ["mech-1"],
   blocks: [],
