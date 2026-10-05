@@ -20,7 +20,7 @@ npm run build
 
 Переменные окружения (все необязательны локально): `VITE_TELEGRAM_BOT` — имя бота Mini App (без неё — заглушка `tetradio_local`, не совпадающая с реальным ботом); `VITE_SENTRY_DSN` и `SENTRY_*` — отчёты о сбоях, без них выключены; `BASE_PATH` — базовый путь при размещении; `VITE_TELEGRAM_MOCK=<id>` — мок Telegram для разработки и e2e (только явным флагом, в деплое не задаётся). Владелец данных и изоляция аккаунтов — [docs/account.md](docs/account.md).
 
-Деплой — `.github/workflows/deploy.yml`: каждый push в `main` публикует сборку на GitHub Pages (`https://lavich.github.io/tetradio/`). База берётся из настроек Pages; имя бота (`VITE_TELEGRAM_BOT=TetradioBot`) и адрес приёма отчётов (`VITE_SENTRY_DSN`) — переменные репозитория, реквизиты загрузки карт кода — секреты `SENTRY_*`.
+Деплой — `.github/workflows/deploy.yml`: каждый push в `main` публикует сборку на GitHub Pages (`https://tetradio.app/`, домен в Cloudflare). База берётся из настроек Pages; имя бота (`VITE_TELEGRAM_BOT=TetradioBot`) и адрес приёма отчётов (`VITE_SENTRY_DSN`) — переменные репозитория, реквизиты загрузки карт кода — секреты `SENTRY_*`.
 
 ## Документация
 
