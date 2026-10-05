@@ -24,7 +24,7 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: `CONTENT_ROOT=tests/fixtures/course-demo npm run content && npx tsc -b && VITE_TELEGRAM_MOCK=1 npx vite build --outDir dist-course && npx vite preview --outDir dist-course --host 0.0.0.0 --port ${port} --strictPort`,
+    command: `CONTENT_ROOT=tests/fixtures/course-demo npm run content && npx tsc -b && VITE_TELEGRAM_MOCK=1 npx vite build --outDir dist-course && BASE_PATH=/web/ npx vite build --outDir dist-course/web && npx vite preview --outDir dist-course --host 0.0.0.0 --port ${port} --strictPort`,
     url: `http://localhost:${port}`,
     reuseExistingServer: false,
     timeout: 120000,
