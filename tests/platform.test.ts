@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { takeConsole } from "./setup/console";
 import { parseLaunch, launchContext, resetLaunchContext, startRoute } from "../src/platform/launch";
 import { telegramAdapter, webAdapter } from "../src/platform/adapter";
 import { loadTelegramBridge, resetBridge } from "../src/platform/bridge";
@@ -235,6 +236,7 @@ describe("платформенный адаптер Telegram", () => {
       },
     } as never);
     expect(() => telegramAdapter(broken.app).haptic("success")).not.toThrow();
+    expect(takeConsole("warn")).toEqual([["Telegram API отклонил вызов", expect.any(Error)]]);
   });
   it("тема и размеры: viewport реагирует только на устойчивые изменения, недоступные отступы дают нули", () => {
     const { app, fire } = fakeApp();
@@ -277,6 +279,7 @@ describe("платформенный адаптер Telegram", () => {
       legacy.handlers.set(event, (legacy.handlers.get(event) ?? new Set()).add(handler));
     };
     const old = telegramAdapter(legacy.app);
+    expect(takeConsole("warn")).toContainEqual(["Telegram API отклонил вызов", expect.any(Error)]);
     expect(old.active()).toBe(true);
     expect(legacy.handlers.get("themeChanged")?.size).toBe(1);
     expect(webAdapter().active()).toBe(true);

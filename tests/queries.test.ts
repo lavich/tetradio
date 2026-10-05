@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import {
   dexieSource,
@@ -26,6 +26,7 @@ beforeEach(async () => {
   db = new AppDatabase("tetradio-queries");
   await db.open();
 });
+afterEach(() => db.close());
 const now = new Date("2026-09-15T09:00:00Z");
 const iso = now.toISOString();
 const word = (index: number, over: Partial<Word> = {}): Word => ({

@@ -1,5 +1,5 @@
-import type { CatalogModule, CourseExam, ExerciseBlock, ExerciseItem } from "../content/course";
-import { parseCatalog, parsePackage } from "../content/schema";
+import type { CatalogModule, CourseExam, ExerciseBlock, ExerciseItem } from "../content/course.ts";
+import { parseCatalog, parsePackage } from "../content/schema.ts";
 
 export const SAMPLE_LESSON = "m01-1";
 const PICKS: readonly [block: string, item: string][] = [

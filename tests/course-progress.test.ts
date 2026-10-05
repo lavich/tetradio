@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { buildContent } from "../content/build";
 import type { ExerciseBlock, LessonBlock } from "../src/content/course";
 import { checkItem, lessonDone, scoreExercise, testResult, wordCount } from "../src/domain/course";
@@ -120,6 +120,7 @@ describe("прогресс курса в базе", () => {
     db = new AppDatabase("tetradio-course");
     await installLessons(db, ["m01-1", "m01-test", "m01-k1", "m01-r1"], memoryFetcher(demo));
   });
+  afterEach(() => db.close());
 
   it("каталог приносит модули, в том числе черновик без уроков; пакет — блоки урока", async () => {
     const views = await moduleViews("greek-a2", db);

@@ -1,5 +1,5 @@
-import { coverColor } from "../shared/notebook";
-import type { LandingData, SampleTask } from "./sample";
+import { coverColor } from "../shared/notebook.ts";
+import type { LandingData, SampleTask } from "./sample.ts";
 
 const SHELF_SIZE = 24;
 

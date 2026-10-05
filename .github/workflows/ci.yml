@@ -15,31 +15,49 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checks:
-    name: checks
+  # Задачи независимы и идут параллельно: каждая сама ставит зависимости. Браузер нужен только e2e.
+  static:
+    name: static
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    # Браузер и системные пакеты уже в образе: установка через apt на runner занимала от 15 с до 6 мин.
-    container: mcr.microsoft.com/playwright:v1.63.0-noble
-    env:
-      PLAYWRIGHT_IMAGE_VERSION: 1.63.0
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
-      # Node из образа не используется: версия та же, что в deploy.yml.
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - name: Playwright version matches the container image
-        run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
-
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm test
+      - run: npm run check:config
       - run: npm run spec
       - run: npm run lexicon:check
+
+  unit:
+    name: unit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
       # Предел стартового графа мерится на бандле deploy: те же база, имя бота, адрес приёма и debug ID отчётов о сбоях.
       - run: npm run build
         env:
@@ -52,15 +70,72 @@ jobs:
         env:
           BASE_PATH: /tetradio/
 
-      - run: npm run test:e2e
-      - run: npm run test:e2e:course
-
+  e2e:
+    name: e2e ${{ matrix.shard }}/2
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Браузер и системные пакеты уже в образе: установка через apt на runner занимала от 15 с до 6 мин.
+    container: mcr.microsoft.com/playwright:v1.63.0-noble
+    env:
+      PLAYWRIGHT_IMAGE_VERSION: 1.63.0
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    steps:
+      - uses: actions/checkout@v7
+      # Node из образа не используется: версия та же, что в deploy.yml.
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Playwright version matches the container image
+        run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
+      - run: npm run test:e2e -- --shard=${{ matrix.shard }}/2
       - if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report
+          name: playwright-report-e2e-${{ matrix.shard }}
           path: |
             playwright-report
             test-results
           retention-days: 7
           if-no-files-found: ignore
+
+  e2e-course:
+    name: e2e-course
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container: mcr.microsoft.com/playwright:v1.63.0-noble
+    env:
+      PLAYWRIGHT_IMAGE_VERSION: 1.63.0
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Playwright version matches the container image
+        run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
+      - run: npm run test:e2e:course
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-course
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # Защита main требует проверку `checks`: итоговая задача проходит, только когда прошли все остальные.
+  checks:
+    name: checks
+    if: always()
+    needs: [static, unit, build, e2e, e2e-course]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All jobs passed
+        run: test "${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && !contains(needs.*.result, 'skipped') }}" = true

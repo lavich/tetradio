@@ -29,7 +29,8 @@
     "pictures:sync": "node scripts/pictures-sync.ts",
     "lexicon:sync": "node scripts/lexicon-sync.ts",
     "voices": "node scripts/voice-dialogues.ts",
-    "social-images": "node scripts/social-images.ts"
+    "social-images": "node scripts/social-images.ts",
+    "check:config": "node scripts/check-config.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -75,5 +76,8 @@
   "description": "Greek A2 course and learning application Telegram Mini App",
   "engines": {
     "node": ">=22.18.0"
+  },
+  "allowScripts": {
+    "@sentry/cli": false
   }
 }

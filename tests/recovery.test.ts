@@ -1,5 +1,6 @@
 import "fake-indexeddb/auto";
 import { describe, expect, it } from "vitest";
+import { takeConsole } from "./setup/console";
 import Dexie from "dexie";
 import { AppDatabase } from "../src/storage/db";
 import { isStorageError, reopenDatabase, storageHealer } from "../src/storage/recovery";
@@ -70,5 +71,6 @@ describe("восстановление после сбоя хранилища", 
   it("не считает лечением неудачное переоткрытие", async () => {
     const heal = storageHealer({ reopen: () => Promise.reject(new Error("нет места")) });
     expect(await heal(new DOMException("", "UnknownError"))).toBe(false);
+    expect(takeConsole("warn")).toEqual([["Не удалось переоткрыть локальную базу", expect.any(Error)]]);
   });
 });

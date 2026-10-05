@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createEmptyCard, Rating, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
@@ -22,6 +22,7 @@ beforeEach(async () => {
   db = new AppDatabase("tetradio-test");
   await db.open();
 });
+afterEach(() => db.close());
 const ALL = ["mech-1", "mech-2", "mech-3", "mech-4"];
 /** Слова установленных уроков: каталог шире, чем набор, который тесты разворачивают в базе. */
 const seedWords = [...new Map(ALL.flatMap((id) => wordsOf(id)).map((word) => [word.id, word])).values()];
