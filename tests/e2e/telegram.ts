@@ -113,7 +113,7 @@ export const launchHash = (options: TelegramEmulation = {}) => {
   }).toString();
   return `#tgWebAppData=${encodeURIComponent(data)}&tgWebAppVersion=${options.version ?? "8.0"}&tgWebAppPlatform=${options.platform ?? "ios"}`;
 };
-export async function openTelegram(page: Page, options: TelegramEmulation = {}, path = "/") {
+export async function openTelegram(page: Page, options: TelegramEmulation = {}, path = "/app/") {
   await page.addInitScript(bridgeScript(options));
   await page.goto(`${path}${options.bot ? `?bot=${options.bot}` : ""}${launchHash(options)}`);
   await page.waitForSelector("[data-testid=today-title]");
@@ -196,6 +196,6 @@ export async function onlyReviews(page: Page) {
       database.close();
     }
   });
-  await page.goto("/");
+  await page.goto("/app/");
   await page.waitForSelector("[data-testid=today-title]");
 }

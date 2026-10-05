@@ -34,9 +34,9 @@ async function spell(page: Page, value: string) {
 
 test.describe("упражнение по выбору на странице слова", () => {
   test("написание: «Почти», «Ещё раз», верный ответ, возврат к слову — и ничего не записано", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/app/");
     await installLessons(page, ["mech-4"]);
-    await page.goto("/words/w093");
+    await page.goto("/app/words/w093");
     const before = await trace(page, "tetradio-mock-1");
     await page.getByRole("button", { name: "Написание: потренировать" }).click();
     await expect(page).toHaveURL(/\/words\/w093\/exercise\/spelling$/);
@@ -55,7 +55,7 @@ test.describe("упражнение по выбору на странице сл
   test("в Telegram «Назад» ведёт на экран слова", async ({ page }) => {
     await openTelegram(page, { noCloud: true });
     await installLessons(page, ["mech-4"]);
-    await page.goto("/words/w093");
+    await page.goto("/app/words/w093");
     const before = await trace(page, "tetradio-tg-tetradio_local-1001");
     await page.getByRole("button", { name: "Написание: потренировать" }).click();
     await spell(page, "ο παππούς");

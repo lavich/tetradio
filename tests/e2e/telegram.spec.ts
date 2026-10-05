@@ -11,7 +11,7 @@ test.describe("запуск внутри Telegram", () => {
   test("экран «Сегодня», ready/expand, компактная шапка, первый запуск без окон", async ({ page }) => {
     await page.addInitScript(`window.__tgReady=false`);
     await page.addInitScript((await import("./telegram")).bridgeScript({}));
-    await page.goto(`/${(await import("./telegram")).launchHash({})}`);
+    await page.goto(`/app/${(await import("./telegram")).launchHash({})}`);
     await expect(page.getByTestId("today-title")).toBeVisible();
     await expect(page.getByRole("alertdialog")).toHaveCount(0);
     const calls = await tg(page).calls();
@@ -26,7 +26,7 @@ test.describe("запуск внутри Telegram", () => {
     page,
   }) => {
     await page.route("https://telegram.org/**", (route) => route.abort());
-    await page.goto("/");
+    await page.goto("/app/");
     await expect(page.getByTestId("today-title")).toBeVisible();
     expect(await page.locator("html").getAttribute("data-platform")).toBe("web");
     await expect(page.getByRole("alertdialog")).toHaveCount(0);
@@ -40,7 +40,7 @@ test.describe("запуск внутри Telegram", () => {
   test("ошибка загрузки bridge при запуске из Telegram оставляет обычный интерфейс", async ({ page }) => {
     await page.route("https://telegram.org/**", (route) => route.abort());
     const { launchHash } = await import("./telegram");
-    await page.goto(`/${launchHash({})}`);
+    await page.goto(`/app/${launchHash({})}`);
     await expect(page.getByTestId("today-title")).toBeVisible();
     await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
     await expect(page.getByRole("button", { name: "Назад" })).toHaveCount(0);
@@ -65,10 +65,10 @@ test.describe("навигация, тема и размеры", () => {
     await bridge.back();
     await expect(page).toHaveURL(/\/words$/);
     await bridge.back();
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/app\/$/);
     await expect.poll(() => bridge.backVisible()).toBe(false);
     // Без внутренней истории возврат ведёт на «Сегодня».
-    await page.goto("/progress/stats");
+    await page.goto("/app/progress/stats");
     await expect(page.getByRole("heading", { name: "Статистика" })).toBeVisible();
     await bridge.back();
     await expect(page.getByTestId("today-title")).toBeVisible();
@@ -89,7 +89,7 @@ test.describe("навигация, тема и размеры", () => {
     const calls = await bridge.calls();
     expect(calls.filter((call) => call.startsWith("haptic:"))).toHaveLength(1);
     // Закрытие Mini App после ответа: перезагрузка возвращает в сохранённое занятие, ответ учтён один раз.
-    await page.goto("/");
+    await page.goto("/app/");
     await page.getByRole("button", { name: "Продолжить повторение" }).click();
     await expect(page.getByTestId("prompt").first()).toBeVisible();
     await expect(page.getByRole("button", { name: "Далее", exact: true, disabled: false })).toHaveCount(0); // продолжаем со следующего упражнения
@@ -176,7 +176,7 @@ test.describe("навигация, тема и размеры", () => {
   });
   test("во весь экран заголовок экрана стоит в полосе кнопок клиента, а не строкой под ними", async ({ page }) => {
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 47, contentTop: 46 });
-    await page.goto("/progress/settings");
+    await page.goto("/app/progress/settings");
     const title = await page.getByRole("banner").getByRole("heading", { level: 1 }).boundingBox();
     expect(title!.y).toBeGreaterThanOrEqual(47);
     expect(title!.y + title!.height).toBeLessThanOrEqual(47 + 46);
@@ -188,7 +188,7 @@ test.describe("навигация, тема и размеры", () => {
   }) => {
     await page.setViewportSize({ width: 1000, height: 700 });
     await openTelegram(page, { noCloud: true, fullscreen: true, safeTop: 0, contentTop: 46 });
-    await page.goto("/progress/settings");
+    await page.goto("/app/progress/settings");
     const banner = await page.getByRole("banner").boundingBox();
     expect(banner!.width).toBe(1000);
     const title = page.getByRole("banner").getByRole("heading", { level: 1 });
@@ -465,9 +465,9 @@ test.describe("аудио, копии и облако", () => {
     // Файл из Telegram-профиля восстанавливается в чистом профиле (здесь — мок сборки тестов) обычным способом.
     const clean = await browser.newContext();
     const web = await clean.newPage();
-    await web.goto("/");
+    await web.goto("/app/");
     await web.waitForSelector("[data-testid=today-title]");
-    await web.goto("/progress/backup");
+    await web.goto("/app/progress/backup");
     await web.locator("#backup").setInputFiles(path!);
     await expect(web.getByText(/Файл проверен: база «tetradio-tg-tetradio_local-1001»/)).toBeVisible();
     await web.getByRole("button", { name: "Заменить данные копией" }).click();
@@ -476,7 +476,7 @@ test.describe("аудио, копии и облако", () => {
       web.getByRole("button", { name: "Заменить", exact: true }).click(),
     ]);
     await expect(web.getByText("Данные восстановлены полностью.")).toBeVisible();
-    await web.goto("/words");
+    await web.goto("/app/words");
     await expect(web.getByTestId("word-count")).toHaveText(source);
     await clean.close();
   });
@@ -484,7 +484,7 @@ test.describe("аудио, копии и облако", () => {
     await openTelegram(page);
     await installLessons(page, ["mech-1"]);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
-    await page.goto("/progress");
+    await page.goto("/app/progress");
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
     const cloud = await tg(page).cloud();
     // Планшет со своим прогрессом подключается к уже заполненному облаку.
@@ -536,7 +536,7 @@ test.describe("аудио, копии и облако", () => {
     await tg(page).setHidden(true);
     await expect.poll(published, { timeout: 15000 }).not.toEqual(before);
     await tg(page).setHidden(false);
-    await page.goto("/progress");
+    await page.goto("/app/progress");
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
     await expect(page.getByTestId("sync-status")).toContainText("Синхронизировано");
     const cloud = await tg(page).cloud();
@@ -546,7 +546,7 @@ test.describe("аудио, копии и облако", () => {
     const second = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const tablet = await second.newPage();
     await openTelegram(tablet, { cloud, platform: "android" });
-    await tablet.goto("/progress");
+    await tablet.goto("/app/progress");
     await expect(tablet.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
     await expect
       .poll(
@@ -565,16 +565,16 @@ test.describe("аудио, копии и облако", () => {
       )
       .toBe(2);
     // Пакет догружен из каталога: слова урока на планшете уже в словаре.
-    await tablet.goto("/words");
+    await tablet.goto("/app/words");
     await expect(tablet.getByRole("link", { name: /δουλεύω/ })).toBeVisible();
     await second.close();
     // Другой аккаунт на том же устройстве: пустой профиль, чужие данные не показываются и не уходят в его облако.
     const third = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const other = await third.newPage();
     await openTelegram(other, { userId: 2002 });
-    await other.goto("/words");
+    await other.goto("/app/words");
     await expect(other.getByTestId("word-count")).toHaveText("0 слов");
-    await other.goto("/progress");
+    await other.goto("/app/progress");
     await expect(other.getByTestId("sync-status")).toHaveAttribute("data-phase", /synced|idle/, { timeout: 15000 });
     const otherCloud = await tg(other).cloud();
     expect(Object.keys(otherCloud)).toHaveLength(0);
@@ -585,10 +585,10 @@ test.describe("аудио, копии и облако", () => {
   }) => {
     await openTelegram(page, { noCloud: true, version: "6.0" });
     await installLessons(page, ["mech-1"]);
-    await page.goto("/progress");
+    await page.goto("/app/progress");
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "disabled");
     await expect(page.getByTestId("sync-status")).not.toContainText("Синхронизировано");
-    await page.goto("/progress/settings");
+    await page.goto("/app/progress/settings");
     await expect(page.getByRole("button", { name: "Назад" })).toBeVisible(); // BackButton требует 6.1 — внутренняя остаётся
   });
 });
@@ -598,7 +598,7 @@ test.describe("ссылка на слово через бота", () => {
   const launch = async (
     page: import("@playwright/test").Page,
     options: import("./telegram").TelegramEmulation,
-    path = "/",
+    path = "/app/",
   ) => {
     const { launchHash } = await import("./telegram");
     await page.goto(`${path}?bot=tetradio_dev${launchHash(options)}`);
@@ -614,7 +614,7 @@ test.describe("ссылка на слово через бота", () => {
     await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
     // После установки урока у слова курса появляется кнопка.
     await installLessons(page, ["mech-4"]);
-    await page.goto("/words/w093");
+    await page.goto("/app/words/w093");
     await page.reload();
     await page.getByRole("button", { name: "Поделиться словом" }).click();
     const link = (await tg(page).calls()).find((call) => call.startsWith("link:"))!;
@@ -638,7 +638,7 @@ test.describe("ссылка на слово через бота", () => {
     await page.reload();
     await expect(page.getByRole("heading", { name: "Словарь", level: 1 })).toBeVisible();
     await expect(page).toHaveURL(/\/words$/);
-    await launch(page, { startParam: "w_w041", queryId: "Q2" }, "/progress");
+    await launch(page, { startParam: "w_w041", queryId: "Q2" }, "/app/progress");
     await expect(page).toHaveURL(/\/share\/word\/w041$/);
     await expect(page.getByText("η χώρα", { exact: true }).first()).toBeVisible();
   });

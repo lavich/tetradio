@@ -47,12 +47,12 @@ async function turnTo(page: Page, name: string) {
 }
 
 async function start(page: Page, lesson: string) {
-  await page.goto("/");
+  await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
-  await page.goto("/course/m01");
+  await page.goto("/app/course/m01");
   await expect(page.getByText("скачивается…")).toHaveCount(0);
-  await page.goto(`/course/m01/${lesson}?p=1`);
+  await page.goto(`/app/course/m01/${lesson}?p=1`);
 }
 
 test("слово урока в объяснении: звучит карточка, подсказка с переводом; штрих — только у первого вхождения", async ({

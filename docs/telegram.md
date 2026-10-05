@@ -4,9 +4,11 @@
 
 ## Бот и адрес
 
-Выпуск — [@TetradioBot](https://t.me/TetradioBot), Main Mini App `https://tetradio.app/` (GitHub Pages, `.github/workflows/deploy.yml`). Домен зарегистрирован в Cloudflare: записи `@` и `www` — CNAME на `lavich.github.io` без проксирования (иначе GitHub не выпустит сертификат), TXT `_github-pages-challenge-lavich` подтверждает домен за аккаунтом. Старый адрес `lavich.github.io/tetradio/` GitHub перенаправляет на домен. Имя бота сборка получает из `VITE_TELEGRAM_BOT`.
+Выпуск — [@TetradioBot](https://t.me/TetradioBot), Main Mini App `https://tetradio.app/app/`, лендинг — `https://tetradio.app/` (GitHub Pages, `.github/workflows/deploy.yml`). Домен зарегистрирован в Cloudflare: записи `@` и `www` — CNAME на `lavich.github.io` без проксирования (иначе GitHub не выпустит сертификат), TXT `_github-pages-challenge-lavich` подтверждает домен за аккаунтом. Старый адрес `lavich.github.io/tetradio/` GitHub перенаправляет на домен. Имя бота сборка получает из `VITE_TELEGRAM_BOT`.
 
 Параметр адреса `?bot=<имя>` задаёт бота для локального профиля (`tetradio-tg-<бот>-<id>`): так бот разработки на том же устройстве не смешивает данные с основным. CloudStorage у разных ботов и так раздельный.
+
+Лендинг и приложение — две страницы одной сборки (`index.html` и `app/index.html`). Главная, открытая внутри Telegram (старый адрес Mini App), сразу переходит в `app/` с теми же параметрами запуска; `app/` в обычном браузере уходит на лендинг. Service worker и манифест PWA — только в области `app/`; регистрацию на весь сайт, оставшуюся от прежних версий, снимают и лендинг, и приложение. Глубокие адреса `app/...` на GitHub Pages открывает `404.html` — копия `app/index.html`.
 
 Настройка в BotFather: `/mybots` → бот → **Bot Settings** → **Configure Mini App** → включить Main Mini App и указать адрес. Проверить запуск из профиля бота (**Open**) и по ссылке `https://t.me/<бот>?startapp` — открывается «Сегодня».
 

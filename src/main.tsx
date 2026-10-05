@@ -28,15 +28,12 @@ export const updateReady = { value: false, apply: () => {} };
 function setupServiceWorker(wanted: boolean) {
   try {
     if (!("serviceWorker" in navigator)) return;
-    if (!wanted) {
-      void dropServiceWorker({
-        container: navigator.serviceWorker,
-        caches: typeof caches === "undefined" ? undefined : caches,
-        session: sessionStorage,
-        reload: () => location.reload(),
-      }).catch((error) => console.warn("Service worker не снят", error));
-      return;
-    }
+    void dropServiceWorker({
+      scope: new URL(import.meta.env.BASE_URL, location.origin).href,
+      container: navigator.serviceWorker,
+      caches: typeof caches === "undefined" ? undefined : caches,
+    }).catch((error) => console.warn("Service worker не снят", error));
+    if (!wanted) return;
     const update = registerSW({
       onNeedRefresh() {
         updateReady.value = true;
@@ -55,7 +52,7 @@ function setupServiceWorker(wanted: boolean) {
 
 const root = createRoot(document.getElementById("root")!);
 let stopped = false;
-const stop = (reason: LaunchStop) => {
+const stop = (reason: Exclude<LaunchStop, "outside-telegram">) => {
   stopped = true;
   db.close({ disableAutoOpen: true });
   root.render(
@@ -67,9 +64,12 @@ const stop = (reason: LaunchStop) => {
 const launch = launchProfile();
 setupServiceWorker(wantsServiceWorker(launch));
 if (launch.kind === "blocked") {
-  stop(launch.reason);
-  // Внутри Telegram bridge всё равно нужен: тема клиента и снятие экрана загрузки (`ready`).
-  void initPlatform();
+  if (launch.reason === "outside-telegram") location.replace(import.meta.env.BASE_URL);
+  else {
+    stop(launch.reason);
+    // Внутри Telegram bridge всё равно нужен: тема клиента и снятие экрана загрузки (`ready`).
+    void initPlatform();
+  }
 } else start(launch);
 
 function start(profile: Profile) {
@@ -125,7 +125,7 @@ function start(profile: Profile) {
     .catch((error) => console.warn("Синхронизация не подключена", error));
   root.render(
     <StrictMode>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <BrowserRouter basename={`${import.meta.env.BASE_URL}app`}>
         <Recovery>
           <App />
         </Recovery>

@@ -30,7 +30,7 @@ const stored = (page: import("@playwright/test").Page) =>
 
 test.describe("ссылка на слово", () => {
   test("на чистой базе показывает карточку из пакета и ничего не сохраняет", async ({ page }) => {
-    await page.goto("/share/word/w093");
+    await page.goto("/app/share/word/w093");
     await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("дедушка", { exact: true })).toBeVisible();
     await expect(page.getByTestId("word-art")).toBeVisible();
@@ -49,7 +49,7 @@ test.describe("ссылка на слово", () => {
     });
   });
   test("неизвестное слово — «Слово не найдено»", async ({ page }) => {
-    await page.goto("/share/word/w99-99");
+    await page.goto("/app/share/word/w99-99");
     await expect(page.getByText("Слово не найдено")).toBeVisible();
   });
 });

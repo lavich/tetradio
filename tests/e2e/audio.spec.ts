@@ -15,7 +15,7 @@ const stubVoice = `
 
 test("слово и пример употребления озвучиваются системным греческим голосом", async ({ page }) => {
   await page.addInitScript(stubVoice);
-  await page.goto("/");
+  await page.goto("/app/");
   await page.waitForSelector("[data-testid=today-title]");
   await installLessons(page, ["mech-2"]);
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
@@ -36,10 +36,10 @@ test("без греческого голоса озвучка предложен
   await page.addInitScript(`Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{
   getVoices:()=>[],speak(){},cancel(){},addEventListener(){},removeEventListener(){},
  }});`);
-  await page.goto("/");
+  await page.goto("/app/");
   await page.waitForSelector("[data-testid=today-title]");
   await installLessons(page, ["mech-2"]);
-  await page.goto("/words");
+  await page.goto("/app/words");
   await page.getByRole("searchbox").fill("φίλος");
   await page.getByRole("link", { name: /ο φίλος/ }).click();
   await expect(page.getByRole("button", { name: /Озвучка предложения недоступна/ })).toBeDisabled();

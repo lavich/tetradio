@@ -1,14 +1,14 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await page.getByTestId("course-next").click();
   await expect(page.getByRole("article").first()).toBeVisible();
 });
 
 test("словарь: слова и фразы урока по группам, фильтр, лист слова ведёт в урок курса", async ({ page }) => {
-  await page.goto("/words");
+  await page.goto("/app/words");
   const lesson = page.getByTestId("dictionary-lesson").first();
   await expect(lesson.getByRole("heading", { name: /1\.1.*Знакомство и είμαι/ })).toBeVisible();
   await expect(lesson.getByRole("link", { name: /είμαι/ })).toBeVisible();
@@ -32,7 +32,7 @@ test("словарь: слова и фразы урока по группам, �
 
 test("широкое окно: словарь и открытое слово разворотом", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/words");
+  await page.goto("/app/words");
   await page.getByRole("link", { name: /Πώς σε λένε;/ }).click();
   await expect(page).toHaveURL(/\/words\/phrase\//);
   const row = page.getByRole("link", { name: /Πώς σε λένε;/ });

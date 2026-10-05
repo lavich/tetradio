@@ -29,7 +29,7 @@ async function withoutLastLesson(page: Page) {
 
 test("«Учить курс» ставит все уроки курса, а новый урок подхватывается при следующем запуске", async ({ page }) => {
   const catalog = await withoutLastLesson(page);
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByRole("button", { name: "Учить курс" })).toHaveCount(0); // курс подписан
@@ -50,7 +50,7 @@ test("«Учить курс» ставит все уроки курса, а но
 
   // Урок опубликован: подписанный курс доустанавливает его сам, без нажатий.
   await page.unroute("**/content/catalog.json");
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await expect.poll(installed, { timeout: 20000 }).toEqual(catalog.published);
 });

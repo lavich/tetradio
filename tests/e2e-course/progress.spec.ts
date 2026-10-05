@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("вкладка «Прогресс»: навыки против порога, путь по курсу, неделя и служебные экраны", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
@@ -24,8 +24,8 @@ test("вкладка «Прогресс»: навыки против порог�
     "aria-current",
     "page",
   );
-  await page.goto("/more");
+  await page.goto("/app/more");
   await expect(page).toHaveURL(/\/progress$/);
-  await page.goto("/more/backup");
+  await page.goto("/app/more/backup");
   await expect(page).toHaveURL(/\/progress\/backup$/);
 });

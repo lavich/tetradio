@@ -4,7 +4,7 @@ import { completeLessons, installLessons, ready } from "./helpers";
 test("первый запуск: «Учить курс» открывает «Сегодня» курса, карточки — после первого пройденного урока", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await expect(page.getByTestId("today-title")).toHaveText("Начните с курса");
   await expect(page.getByTestId("first-course")).toContainText("Механики");
@@ -19,7 +19,7 @@ test("первый запуск: «Учить курс» открывает «С
 });
 
 test("фокус с клавиатуры не прячется под нижней навигацией", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-1"]);
   // Длинный словарь: строки уходят ниже навигации, и Tab доходит до них.

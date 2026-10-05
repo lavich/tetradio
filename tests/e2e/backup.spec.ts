@@ -7,7 +7,7 @@ import { installLessons, ready } from "./helpers";
 test("полная копия переносит слова, уроки и медиа в чистый профиль", async ({ browser }) => {
   const source = await browser.newContext();
   const page = await source.newPage();
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
   // Картинку слова скачивает просмотр карточки.
@@ -57,7 +57,7 @@ test("полная копия переносит слова, уроки и ме�
 
   const clean = await browser.newContext();
   const fresh = await clean.newPage();
-  await fresh.goto("/");
+  await fresh.goto("/app/");
   await ready(fresh);
   await fresh.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await fresh.getByRole("link", { name: /Копия данных/ }).click();
@@ -75,13 +75,13 @@ test("полная копия переносит слова, уроки и ме�
   await fresh.getByRole("searchbox").fill("φίλος");
   await fresh.getByRole("link", { name: /ο φίλος/ }).click();
   await expect(fresh.getByTestId("word-art")).toBeVisible();
-  await fresh.goto("/words");
+  await fresh.goto("/app/words");
   await expect(fresh.getByRole("link", { name: /ο φίλος/ })).toBeVisible(); // уроки и слова на месте
   await clean.close();
 });
 
 test("повреждённый и чужой файл не меняют данные", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();

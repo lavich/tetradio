@@ -118,7 +118,7 @@ const updateWord = (page: import("@playwright/test").Page, greek: string, russia
   );
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await page.waitForSelector("[data-testid=today-title]");
   await installLessons(page, ["mech-2"]);
   await dueWithHistory(page, "w034", ["recall", "recognition"]);

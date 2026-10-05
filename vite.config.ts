@@ -43,7 +43,27 @@ const spaFallback = (): Plugin => {
       outDir = path.resolve(config.root, config.build.outDir);
     },
     closeBundle() {
-      copyFileSync(path.join(outDir, "index.html"), path.join(outDir, "404.html"));
+      copyFileSync(path.join(outDir, "app/index.html"), path.join(outDir, "404.html"));
+    },
+  };
+};
+
+/** Глубокие адреса Mini App в dev и preview открывают приложение, как `404.html` на GitHub Pages; e2e держит рядом сборку в `/web/`. */
+const appFallback = (): Plugin => {
+  const rewrite = (req: { url?: string }, _res: unknown, next: () => void) => {
+    const url = req.url ?? "";
+    const pathname = url.split(/[?#]/)[0]!;
+    const page = /^(.*\/)app\/[^.]*$/.exec(pathname);
+    if (page) req.url = `${page[1]}app/index.html${url.slice(pathname.length)}`;
+    next();
+  };
+  return {
+    name: "app-fallback",
+    configureServer(server) {
+      server.middlewares.use(rewrite);
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(rewrite);
     },
   };
 };
@@ -57,15 +77,26 @@ export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(appVersion), __APP_BUILD__: JSON.stringify(appBuild) },
   // Карты кода нужны только для загрузки в сервис: без реквизитов их нет и в dist, с реквизитами плагин удаляет их после загрузки.
   // Service worker собирается позже этого удаления, поэтому его карты выключены отдельно (`workbox.sourcemap:false`).
-  build: { sourcemap: sentryUpload.length ? "hidden" : false },
+  build: {
+    sourcemap: sentryUpload.length ? "hidden" : false,
+    // Лендинг на главной и Mini App в `app/` — отдельные страницы: лендинг не грузит код приложения.
+    rollupOptions: {
+      input: {
+        landing: fileURLToPath(new URL("./index.html", import.meta.url)),
+        app: fileURLToPath(new URL("./app/index.html", import.meta.url)),
+      },
+    },
+  },
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   plugins: [
     react(),
     tailwindcss(),
     spaFallback(),
+    appFallback(),
     ...sentryUpload,
     VitePWA({
       registerType: "prompt",
+      scope: `${base}app/`,
       includeAssets: ["icon.svg"],
       manifest: {
         name: "Τετράδιο — курс греческого A2",
@@ -75,8 +106,8 @@ export default defineConfig({
         theme_color: "#eef1f7",
         background_color: "#f9fafc",
         display: "standalone",
-        start_url: base,
-        scope: base,
+        start_url: `${base}app/`,
+        scope: `${base}app/`,
         icons: [
           { src: `${base}icon.svg`, sizes: "any", type: "image/svg+xml", purpose: "any" },
           { src: `${base}icon-192.png`, sizes: "192x192", type: "image/png", purpose: "any" },
@@ -90,6 +121,7 @@ export default defineConfig({
         // Шрифты — только наборы символов курса (латиница, кириллица, греческий): Mini App должен открываться без сети.
         globPatterns: ["**/*.{js,css,html,svg,png,webp,json}", "**/*-{latin,cyrillic,greek}-wght-*.woff2"],
         globIgnores: ["**/content/**", "og.png", "icon-512.png"],
+        navigateFallback: "app/index.html",
         navigateFallbackDenylist: [/\/content\//],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         cleanupOutdatedCaches: true,

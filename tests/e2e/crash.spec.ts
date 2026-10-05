@@ -22,7 +22,7 @@ test("база не открывается при запуске: вместо �
       throw new DOMException("The user denied permission to access the database.", "SecurityError");
     };
   });
-  await page.goto("/");
+  await page.goto("/app/");
   const screen = page.getByTestId("storage-failed");
   await expect(screen).toBeVisible({ timeout: 15000 });
   await expect(screen).toContainText("Не удалось открыть данные");
@@ -34,7 +34,7 @@ test("база не открывается при запуске: вместо �
 test("падение во время занятия: экран сбоя с перезапуском, после перезапуска «Сегодня» предлагает продолжить занятие", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-1", "mech-2", "mech-3", "mech-4"]);
   await completeLessons(page, ["mech-2"]);
@@ -53,7 +53,7 @@ test("падение во время занятия: экран сбоя с пе
   await crash.getByRole("button", { name: "Перезапустить" }).click();
   await page.waitForLoadState("domcontentloaded");
   // Граница ошибок в базу не писала: занятие осталось активным, и «Сегодня» предлагает продолжить его.
-  await page.goto("/");
+  await page.goto("/app/");
   await ready(page);
   await expect(page.getByRole("button", { name: "Продолжить повторение" })).toBeVisible();
 });
