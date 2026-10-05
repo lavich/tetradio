@@ -2,10 +2,13 @@ import { defineConfig, type Plugin } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
-import { copyFileSync, readFileSync } from "node:fs";
+import { copyFileSync, existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { VitePWA } from "vite-plugin-pwa";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { botName } from "./src/platform/bot-name";
+import { renderLanding } from "./src/landing/render";
+import { loadLandingData } from "./src/landing/sample";
 
 const base = process.env.BASE_PATH ?? "/";
 /** Версия и сборка попадают в метки отчётов о сбоях и в имя релиза; без CI сборка называется `dev`. */
@@ -44,6 +47,37 @@ const spaFallback = (): Plugin => {
     },
     closeBundle() {
       copyFileSync(path.join(outDir, "app/index.html"), path.join(outDir, "404.html"));
+    },
+  };
+};
+
+/**
+ * Лендинг — статичная страница: разметка собирается из контента при сборке и в dev, в браузер идёт только скрипт
+ * интерактивности без React. Запуск из Telegram по старому адресу уходит в `app/` до первого кадра.
+ */
+const landingPage = (): Plugin => {
+  let root = process.cwd();
+  let env: Record<string, string> = {};
+  return {
+    name: "landing-page",
+    configResolved(config) {
+      root = config.root;
+      env = config.env as Record<string, string>;
+    },
+    transformIndexHtml: {
+      order: "pre",
+      handler(html, ctx) {
+        if (path.resolve(ctx.filename) !== path.join(root, "index.html")) return html;
+        const read = (url: string) => {
+          const file = path.join(root, "public", url);
+          return existsSync(file) ? readFileSync(file, "utf8") : null;
+        };
+        const mock = /^[1-9]\d{0,15}$/.test(env.VITE_TELEGRAM_MOCK ?? "");
+        const redirect = `<script>(function(){var h=location.hash;if(${mock}||/[#&]tgWebApp(Data|Platform)=/.test(h)){document.documentElement.style.visibility="hidden";location.replace(${JSON.stringify(base)}+"app/"+location.search+h)}})()</script>`;
+        return html
+          .replace("<head>", `<head>\n    ${redirect}`)
+          .replace('<div id="root"></div>', renderLanding(loadLandingData(read), botName(env.VITE_TELEGRAM_BOT)));
+      },
     },
   };
 };
@@ -91,6 +125,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    landingPage(),
     spaFallback(),
     appFallback(),
     ...sentryUpload,

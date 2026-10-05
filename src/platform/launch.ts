@@ -1,3 +1,4 @@
+import { botName } from "./bot-name";
 /**
  * Контекст запуска определяется синхронно по параметрам URL, которые Telegram добавляет к адресу Mini App:
  * `#tgWebAppData=…&tgWebAppPlatform=…&tgWebAppVersion=…`. Один глобальный объект `Telegram.WebApp`
@@ -24,11 +25,6 @@ export interface LaunchContext {
    * у нового запуска — новый. Telegram передаёт его не всегда; без него и вне Telegram — `null`.
    */
   launchId: string | null;
-}
-const BOT_NAME = /^[A-Za-z][A-Za-z0-9_]{3,31}$/;
-function botName(raw: unknown): string | null {
-  const bot = typeof raw === "string" ? raw.replace(/^@/, "") : "";
-  return BOT_NAME.test(bot) ? bot : null;
 }
 /** Бот задаётся при сборке (`VITE_TELEGRAM_BOT`); без него — заглушка без суффикса «bot», она не совпадёт с реальным ботом. */
 export const DEFAULT_BOT: string = import.meta.env.VITE_TELEGRAM_BOT || "tetradio_local";
@@ -89,7 +85,7 @@ const readStored = (): LaunchContext | null => {
     const raw = sessionStorage.getItem(STORAGE_KEY);
     const parsed = raw ? (JSON.parse(raw) as Partial<LaunchContext>) : null;
     if (parsed?.kind !== "telegram" && parsed?.kind !== "web") return null;
-    const bot = typeof parsed.bot === "string" && BOT_NAME.test(parsed.bot) ? parsed.bot : DEFAULT_BOT;
+    const bot = botName(parsed.bot) ?? DEFAULT_BOT;
     if (parsed.kind === "web") return webContext(bot);
     return {
       kind: "telegram",
