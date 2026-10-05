@@ -105,7 +105,7 @@ test("урок из конца очереди скачивается сразу 
   await slowPackages(page, 1500);
   await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
-  await openInApp(page, "/course/m01/m01-r1");
+  await openInApp(page, "/app/course/m01/m01-r1");
   await expect(page.getByRole("status")).toHaveText("Урок скачивается…");
   // Очередь дошла бы до этого урока последним, через ~6 с; сам по себе он скачивается за 1,5 с.
   await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 /, { timeout: 4000 });
@@ -116,7 +116,7 @@ test("сбой скачивания открытого урока показыв
   await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
-  await openInApp(page, "/course/m01/m01-r1");
+  await openInApp(page, "/app/course/m01/m01-r1");
   await expect(page.getByRole("alert")).toBeVisible();
   await page.unroute("**/content/packages/m01-r1*");
   await page.getByRole("button", { name: "Повторить" }).click();
