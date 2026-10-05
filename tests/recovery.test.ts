@@ -1,5 +1,6 @@
 import "fake-indexeddb/auto";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
+import { takeConsole } from "./setup/console";
 import Dexie from "dexie";
 import { AppDatabase } from "../src/storage/db";
 import { isStorageError, reopenDatabase, storageHealer } from "../src/storage/recovery";
@@ -69,12 +70,7 @@ describe("восстановление после сбоя хранилища", 
   });
   it("не считает лечением неудачное переоткрытие", async () => {
     const heal = storageHealer({ reopen: () => Promise.reject(new Error("нет места")) });
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    try {
-      expect(await heal(new DOMException("", "UnknownError"))).toBe(false);
-      expect(warn).toHaveBeenCalledWith("Не удалось переоткрыть локальную базу", expect.any(Error));
-    } finally {
-      warn.mockRestore();
-    }
+    expect(await heal(new DOMException("", "UnknownError"))).toBe(false);
+    expect(takeConsole("warn")).toEqual([["Не удалось переоткрыть локальную базу", expect.any(Error)]]);
   });
 });

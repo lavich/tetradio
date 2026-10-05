@@ -1,5 +1,6 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+import { takeConsole } from "./setup/console";
 import { AppDatabase } from "../src/storage/db";
 import { reopenDatabase, storageHealer } from "../src/storage/recovery";
 import { kvAdapter } from "../src/sync/adapter";
@@ -63,15 +64,10 @@ describe("отказ хранилища в синхронизации", () => {
     const database = await asleep("failed");
     const heal = storageHealer({ reopen: () => Promise.reject(new Error("нет места")) });
     const { sync, failures } = coordinator(database, heal);
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    try {
-      const status = await sync.exchange();
-      expect(status.phase).toBe("error");
-      expect(failures).toEqual(["unknown"]);
-      expect(warn).toHaveBeenCalledWith("Не удалось переоткрыть локальную базу", expect.any(Error));
-    } finally {
-      warn.mockRestore();
-    }
+    const status = await sync.exchange();
+    expect(status.phase).toBe("error");
+    expect(failures).toEqual(["unknown"]);
+    expect(takeConsole("warn")).toContainEqual(["Не удалось переоткрыть локальную базу", expect.any(Error)]);
     database.close();
   });
 });
