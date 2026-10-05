@@ -1,16 +1,8 @@
-import {
-  LESSON_MATES_RADIUS,
-  localDay,
-  programmeOrder,
-  type CardFacts,
-  type SessionSource,
-} from "../../src/domain/learning";
+import { LESSON_MATES_RADIUS, programmeOrder, type CardFacts, type SessionSource } from "../../src/domain/learning";
 import { unitKey, wordKeyOf, wordRef } from "../../src/domain/refs";
 import { byTime, emptyStats, foldStats, summarizeEvents } from "../../src/domain/skills";
 import { cardLabel, type StatsSource } from "../../src/domain/stats";
 import {
-  DEFAULT_NEW_ITEMS_PER_DAY,
-  fillSettings,
   type CardKind,
   type Course,
   type LearningRef,
@@ -21,7 +13,6 @@ import {
   type ReviewEvent,
   type Session,
   type SessionCard,
-  type Settings,
   type StoredModule,
   type Word,
 } from "../../src/domain/types";
@@ -42,7 +33,8 @@ export interface Snapshot {
   states: LearningState[];
   events: ReviewEvent[];
   sessions: Session[];
-  settings: Settings;
+  /** Часовой пояс планировщика; без него — Asia/Nicosia. */
+  timezone?: string;
 }
 
 export const itemOfLink = (link: Snapshot["links"][number]): LessonItem => ({
@@ -57,11 +49,7 @@ export const itemOfLink = (link: Snapshot["links"][number]): LessonItem => ({
  * на снимке и на базе, поэтому новая выборка обязана давать тот же результат, что и старый снимок.
  */
 export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
-  const settings = fillSettings(data.settings);
   const modules = data.modules ?? [];
-  // Курс выбирается как в базе: курс модулей, иначе первый по id.
-  const courses = [...(data.courses ?? [])].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
-  const course = (modules.length ? courses.find((c) => c.id === modules[0].courseId) : undefined) ?? courses[0];
   const items: LessonItem[] = [...data.links.map(itemOfLink), ...(data.items ?? [])];
   const words = new Map(data.words.map((word) => [word.id, word]));
   const phrases = new Map((data.phrases ?? []).map((phrase) => [phrase.id, phrase]));
@@ -78,8 +66,7 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
   };
   const total = (kind: CardKind) => (kind === "word" ? data.words.length : phrases.size);
   return {
-    settings: async () => settings,
-    newItemsPerDay: async () => course?.newItemsPerDay ?? DEFAULT_NEW_ITEMS_PER_DAY,
+    timezone: () => data.timezone ?? "Asia/Nicosia",
     completedLessons: async () =>
       programmeOrder(
         data.lessons.filter((lesson) => lesson.completed),
@@ -92,8 +79,6 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
         .filter((item) => item.lessonId === lessonId)
         .sort((a, b) => a.position - b.position || a.unitKey.localeCompare(b.unitKey))
         .map((item) => item.ref),
-    introducedToday: async (today, timezone) =>
-      data.states.filter((state) => localDay(new Date(state.introducedAt), timezone) === today).length,
     statesOf: async (refs) =>
       new Map(
         refs

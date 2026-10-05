@@ -208,23 +208,10 @@ export const endSession = async (session: Session, database: AppDatabase = db) =
   announceChange("finished");
 };
 
+/** Настройки остаются на устройстве: в облачный снимок они не входят, поэтому синхронизацию не запускают. */
 export async function saveSettings(settings: Settings, database: AppDatabase = db) {
-  await database.transaction("rw", database.settings, database.meta, async () => {
-    await database.settings.put(settings);
-    await markChanged(database);
-  });
-  announceChange();
+  await database.settings.put(settings);
 }
-export async function saveNewItemsPerDay(courseId: string, newItemsPerDay: number, database: AppDatabase = db) {
-  await database.transaction("rw", database.courses, database.meta, async () => {
-    const course = await database.courses.get(courseId);
-    if (!course) throw new Error("Курс не найден");
-    await database.courses.put({ ...course, newItemsPerDay, updatedAt: stamp(new Date()) });
-    await markChanged(database);
-  });
-  announceChange();
-}
-
 /** Просмотр не является ответом и не меняет расписание. Знакомство сохраняется по ключу карточки. */
 export async function markIntroduced(
   id: string,

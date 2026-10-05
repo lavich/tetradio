@@ -102,15 +102,15 @@ describe("компактный снимок", () => {
     for (const secret of ["Γράφω ένα γράμμα", "Я пишу письмо"]) expect(text, secret).not.toContain(secret);
     expect(text).toContain(encodeRef(P("p-grafo"))); // ссылка на карточку — вид и идентификатор
   });
-  it("формат 4 на проводе: курс — пределом, урок — завершением, без расписания и дат", async () => {
+  it("формат 4 на проводе: урок — завершением, без расписания и дат; снятые настройки и курсы — пустыми полями для прежних версий", async () => {
     const phone = await device("format4", { mixed: true });
-    const courseId = (await phone.db.courses.toArray())[0].id;
     const lessonId = (await phone.db.lessons.toArray())[0].id;
     await phone.db.lessons.update(lessonId, { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     const wire = JSON.parse(encodeSnapshot(snapshot));
     expect(wire.f).toBe(4);
-    expect(wire.cs).toEqual([[courseId, (await phone.db.courses.get(courseId))!.newItemsPerDay]]);
+    expect(wire.s).toEqual({});
+    expect(wire.cs).toEqual([]);
     expect(wire.l).toContainEqual([lessonId, 1, Date.parse("2026-09-16T07:00:00.000Z")]);
     const decoded = decodeSnapshot(JSON.stringify(wire));
     expect(decoded).toEqual(snapshot);
@@ -122,7 +122,6 @@ describe("компактный снимок", () => {
   });
   it("снимок формата 3 читается: статус становится завершением, расписание и даты отбрасываются", async () => {
     const phone = await device("format3", { mixed: true });
-    const courseId = (await phone.db.courses.toArray())[0].id;
     const lessonId = (await phone.db.lessons.toArray())[0].id;
     await phone.db.lessons.update(lessonId, { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
     await study(phone, [W("w070"), P("p-grafo")], [true, false]);
@@ -145,16 +144,11 @@ describe("компактный снимок", () => {
       ]),
     };
     const decoded = decodeSnapshot(JSON.stringify(format3));
-    expect(decoded).toEqual({
-      ...snapshot,
-      courses: snapshot.courses.map((course) => ({ ...course, newItemsPerDay: 5 })),
-    });
-    expect(Object.keys(decoded.courses[0]).sort()).toEqual(["id", "newItemsPerDay"]);
+    expect(decoded).toEqual(snapshot); // дневной предел и расписание курса прежних версий отбрасываются
     expect(Object.keys(decoded.lessons[0]).sort()).toEqual(["completed", "id", "updatedAt"]);
 
     const tablet = await device("format3-reader", { mixed: true });
     expect(await applySnapshot(tablet.db, decoded, "f3-1", { other: 1 }, now())).toBe(true);
-    expect((await tablet.db.courses.get(courseId))!.newItemsPerDay).toBe(5);
     expect(await tablet.db.lessons.get(lessonId)).toEqual({
       ...(await phone.db.lessons.get(lessonId)),
       completed: true,

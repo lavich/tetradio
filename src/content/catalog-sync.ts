@@ -1,6 +1,6 @@
 import { db, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
 import { readPending } from "../sync/snapshot";
-import { DEFAULT_NEW_ITEMS_PER_DAY, type Course } from "../domain/types";
+import type { Course } from "../domain/types";
 import { fetcher, type ContentFetcher } from "./fetcher";
 import { installCourse } from "./install";
 import { setCatalogPhase, trackCatalog } from "./phases";
@@ -60,7 +60,6 @@ async function adoptCourses(catalog: Catalog, database: AppDatabase) {
     const next: Course = {
       id: item.id,
       title: item.title,
-      newItemsPerDay: stored?.newItemsPerDay ?? DEFAULT_NEW_ITEMS_PER_DAY,
       updatedAt: stored?.updatedAt ?? now,
     };
     if (item.exam) next.exam = item.exam;

@@ -33,7 +33,6 @@ describe("полная копия", () => {
   });
   it("новая копия содержит связи, медиа и метаданные пакетов, но не каталог; восстановление воспроизводит данные", async () => {
     await installLessons(db, ["mech-2"]);
-    await db.courses.update("mechanics", { newItemsPerDay: 7 });
     const blob = await exportFull(db);
     const parsed = JSON.parse(await blob.text());
     const names = parsed.data.tables.map((t: { name: string }) => t.name);
@@ -52,7 +51,6 @@ describe("полная копия", () => {
     expect(await fresh.lessonItems.count()).toBe(itemCountOf("mech-2"));
     expect((await fresh.packages.get("mech-2"))!.version).toBe(packageOf("mech-2").version);
     expect(await fresh.catalog.count()).toBe(0);
-    expect((await fresh.courses.get("mechanics"))!.newItemsPerDay).toBe(7);
     fresh.close();
     await fresh.delete();
   });

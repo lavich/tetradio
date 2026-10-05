@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { breakStorage, installLessons, seedQueue } from "./helpers";
-import { DARK, LIGHT, onlyReviews, openTelegram, tg } from "./telegram";
+import { DARK, LIGHT, openTelegram, tg } from "./telegram";
 
 /** База Telegram-профиля тестового пользователя: отдельная от базы мока `tetradio-mock-1`. */
 const TG_DB = "tetradio-tg-tetradio_local-1001";
@@ -73,7 +73,6 @@ test.describe("навигация, тема и размеры", () => {
     await bridge.back();
     await expect(page.getByTestId("today-title")).toBeVisible();
     // Из занятия: принятый ответ сохранён, выход через BackButton, продолжение после перезагрузки.
-    await onlyReviews(page);
     await seedQueue(
       page,
       [
@@ -126,7 +125,6 @@ test.describe("навигация, тема и размеры", () => {
     const text = await page.evaluate(() => getComputedStyle(document.body).color);
     expect(text).toBe("rgb(238, 238, 238)");
     expect((await color("--muted-foreground")).length).toBeGreaterThan(0);
-    await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
     await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
@@ -162,7 +160,6 @@ test.describe("навигация, тема и размеры", () => {
     await expect(page.getByTestId("launch-mode")).toContainText("режим: во весь экран"); // обновляется без перезагрузки
     // Занятие во весь экран: страница начинается под кнопками клиента, крестика нет — закрывает нативный «Назад».
     await installLessons(page, ["mech-1"]);
-    await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
     await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
@@ -256,7 +253,6 @@ test.describe("навигация, тема и размеры", () => {
     await page.setViewportSize({ width: 360, height: 740 });
     await openTelegram(page, { stableHeight: 740, platform: "android", noCloud: true });
     await installLessons(page, ["mech-1"]);
-    await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall", "recognition", "assembly", "assembly"] }], TG_DB);
     await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
@@ -296,7 +292,6 @@ test.describe("навигация, тема и размеры", () => {
   }) => {
     await openTelegram(page, { noCloud: true, scheme: "light" });
     await installLessons(page, ["mech-1"]);
-    await onlyReviews(page);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
     await page.getByRole("button", { name: "Повторить карточки" }).click();
     await page.waitForURL("**/session");
@@ -393,7 +388,6 @@ test.describe("аудио, копии и облако", () => {
   test("отказ воспроизведения: повтор или продолжение без аудирования, без события и штрафа", async ({ page }) => {
     await openTelegram(page, { failAudio: true, noCloud: true });
     await installLessons(page, ["mech-1"]);
-    await onlyReviews(page);
     await seedQueue(
       page,
       [{ wordId: "w038", tested: ["recall", "recognition", "assembly", "assembly", "spelling"], audio: true }],
@@ -514,7 +508,6 @@ test.describe("аудио, копии и облако", () => {
   }) => {
     await openTelegram(page);
     await installLessons(page, ["mech-1"]);
-    await onlyReviews(page);
     await seedQueue(
       page,
       [

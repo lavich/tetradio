@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
-import { formatDay, localDay } from "../../domain/learning";
+import { deviceTimezone, formatDay, localDay } from "../../domain/learning";
 import type { CardKind, LearningRef, ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
 import { CARDS, minutes, PHRASES, plural, withCount, WORDS } from "../../shared/format";
-import { useSettings } from "../../shared/store";
 import { statesOf } from "../../storage/queries";
 import { db } from "../../storage/db";
 import { startSession } from "./session-actions";
@@ -32,7 +31,6 @@ export function ResultScreen() {
   const { id } = useParams();
   const navigate = useNavigate();
   const now = useNow();
-  const { settings } = useSettings();
   const session = useLiveQuery(() => (id ? db.sessions.get(id) : undefined), [id]);
   const result = useLiveQuery(async () => {
     const events = id ? await db.events.where("sessionId").equals(id).toArray() : [];
@@ -64,12 +62,12 @@ export function ResultScreen() {
   for (const ref of mistakeRefs) {
     const state = result?.states.get(keyOf(ref));
     if (!state || readyAgain.includes(ref)) continue;
-    const day = localDay(new Date(state.card.due), settings.timezone);
+    const day = localDay(new Date(state.card.due), deviceTimezone());
     const event = mistakes.find((entry) => entry.unitKey === keyOf(ref) || entry.ref.id === ref.id);
     returns.set(day, [...(returns.get(day) ?? []), event ? greekOf(event) : ""].filter(Boolean));
   }
-  const today = localDay(now, settings.timezone);
-  const tomorrow = localDay(new Date(now.getTime() + 86_400_000), settings.timezone);
+  const today = localDay(now, deviceTimezone());
+  const tomorrow = localDay(new Date(now.getTime() + 86_400_000), deviceTimezone());
   const dayName = (day: string) => (day === today ? "сегодня" : day === tomorrow ? "завтра" : formatDay(day));
   const rows = session ? doneRows(session, new Map(events.map((event) => [event.id, event]))) : [];
   const almost = events.filter((event) => markOf(event) === "almost").length;

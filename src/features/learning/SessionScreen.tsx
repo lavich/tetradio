@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAction } from "../../shared/action";
 import { stopAudio } from "../../shared/audio";
 import { useActiveSession, useSettings } from "../../shared/store";
+import { deviceTimezone } from "../../domain/time";
 import { Skeleton } from "@/components/ui/skeleton";
 import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
@@ -155,7 +156,7 @@ export function SessionScreen() {
         status,
         responseTimeMs: Date.now() - shown.current,
         activeTimeMs: activeMs(),
-        timezone: settings.timezone,
+        timezone: deviceTimezone(),
       });
       // Отклик — один раз после успешного локального сохранения нового ответа; повтор, ошибка записи и пропуск его не дают.
       if (created && hapticsEnabled()) haptic(status === "almost" ? "warning" : correct ? "success" : "error");

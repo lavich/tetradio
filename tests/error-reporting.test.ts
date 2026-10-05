@@ -7,8 +7,8 @@ import { loadSettings } from "../src/storage/queries";
 describe("настройка отчётов об ошибках", () => {
   it("запись без поля читается как включённая, по умолчанию отчёты включены", () => {
     expect(defaultSettings.errorReports).toBe(true);
-    const legacy = { id: "settings", timezone: "Asia/Nicosia", sessionSize: 20 } as Settings;
-    expect(fillSettings(legacy).errorReports).toBe(true);
+    const legacy = { id: "settings", timezone: "Asia/Nicosia", sessionSize: 20 } as unknown as Settings;
+    expect(fillSettings(legacy)).toEqual({ id: "settings", errorReports: true, autoSpeak: true }); // снятые поля отбрасываются
     expect(fillSettings(undefined).errorReports).toBe(true);
   });
   it("сохранённое выключение переживает перечитывание из базы", async () => {

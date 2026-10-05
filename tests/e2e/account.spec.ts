@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { installLessons, seedQueue } from "./helpers";
-import { bridgeScript, launchHash, onlyReviews, openTelegram, tg } from "./telegram";
+import { bridgeScript, launchHash, openTelegram, tg } from "./telegram";
 
 /**
  * Владелец данных и изоляция аккаунтов. `/web/` — та же сборка без мока Telegram, как на GitHub Pages
@@ -113,7 +113,6 @@ test("смена аккаунта A → B на том же устройстве:
 }) => {
   await openTelegram(page, { userId: A });
   await installLessons(page, ["mech-1"]);
-  await onlyReviews(page);
   await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], dbOf(A));
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");

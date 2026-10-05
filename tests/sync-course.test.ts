@@ -6,8 +6,7 @@ import { makeSession } from "../src/domain/learning";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { blockProgressOf, completeLesson, saveBlockProgress } from "../src/storage/course";
-import { saveSettings, submitAnswer } from "../src/storage/ops";
-import { defaultSettings } from "../src/domain/types";
+import { submitAnswer } from "../src/storage/ops";
 import type { TelegramCloudStorage } from "../src/platform/telegram-types";
 import { kvAdapter } from "../src/sync/adapter";
 import { decodeSnapshot, encodeSnapshot, SnapshotFormatError } from "../src/sync/codec";
@@ -25,6 +24,7 @@ import {
 import { cloudStorageTransport, memoryTransport, type MemoryTransport } from "../src/sync/transport";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
 import { installLessons, memoryFetcher } from "./helpers/content";
+import { localChange } from "./helpers/changes";
 
 const demo = buildContent("tests/fixtures/course-demo");
 const fetcher = () => memoryFetcher(demo);
@@ -183,10 +183,9 @@ describe("обмен прогрессом курса между устройст
     expect((await desktop.db.blockProgress.toArray()).every((row) => !row.answers && !row.text)).toBe(true);
     expect((await blockProgressOf("m01-1", phone.db)).get("forms")?.answers).toEqual({ q1: "είμαι", q2: "είσαι" });
     // Обратно: B ничего не менял — A применяет ту же версию, его ответы не стираются.
-    await saveSettings({ ...defaultSettings, sessionSize: 7 }, desktop.db);
+    await localChange(desktop.db);
     expect((await desktop.sync.exchange()).phase).toBe("synced");
     expect((await phone.sync.exchange()).phase).toBe("synced");
-    expect((await phone.db.settings.get("settings"))?.sessionSize).toBe(7);
     expect((await blockProgressOf("m01-1", phone.db)).get("forms")?.answers).toEqual({ q1: "είμαι", q2: "είσαι" });
   });
   it("прогресс неустановленного урока ждёт установки и не теряется при публикации с этого устройства", async () => {
@@ -198,7 +197,7 @@ describe("обмен прогрессом курса между устройст
     expect(Object.keys(await readPending(fresh.db))).toContain("m01-1");
     expect((await fresh.db.blockProgress.count()) > 0).toBe(true);
     // Своя публикация с устройства без урока сохраняет его завершение и блоки для третьего устройства.
-    await saveSettings({ ...defaultSettings, sessionSize: 9 }, fresh.db);
+    await localChange(fresh.db);
     expect((await fresh.sync.exchange()).phase).toBe("synced");
     const third = await device("third");
     expect((await third.sync.exchange()).phase).toBe("synced");
@@ -211,7 +210,7 @@ describe("обмен прогрессом курса между устройст
   it("первое подключение устройства с прогрессом курса к непустому облаку требует выбора, а не стирает его", async () => {
     const phone = await device("phone");
     const desktop = await device("desktop");
-    await saveSettings({ ...defaultSettings, sessionSize: 5 }, phone.db);
+    await localChange(phone.db);
     await phone.sync.exchange();
     await saveBlockProgress("m01-1", "forms", { done: true, score: { correct: 2, almost: 0, total: 2 } }, desktop.db);
     const status = await desktop.sync.exchange();
@@ -329,7 +328,7 @@ describe("доставка: событие изменения, тайм-аут, 
     accountA.sync.stop();
     expect(scheduled.every((entry) => entry.cancelled)).toBe(true);
     const accountB = await device("account-b", { transport: cloudB });
-    await saveSettings({ ...defaultSettings, sessionSize: 4 }, accountB.db);
+    await localChange(accountB.db);
     expect((await accountB.sync.exchange()).phase).toBe("synced");
     const published = [...cloudB.store.entries()];
     expect(pointers(cloudB.store)).toHaveLength(1);

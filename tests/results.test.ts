@@ -6,7 +6,6 @@ import { LEECH_LAPSES, lessonProgress, progress, SKILL_NAMES, SKILL_TYPES, SOLID
 import { localDay } from "../src/domain/learning";
 import { foldStats, emptyStats } from "../src/domain/skills";
 import {
-  defaultSettings,
   type CardKind,
   type LearningRef,
   type LearningState,
@@ -57,7 +56,6 @@ const base = (over: Partial<Snapshot>): Snapshot => ({
   states: [],
   events: [],
   sessions: [],
-  settings: defaultSettings,
   ...over,
 });
 

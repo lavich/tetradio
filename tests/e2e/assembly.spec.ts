@@ -10,15 +10,8 @@ const dueWithHistory = (page: import("@playwright/test").Page, wordId: string, t
         request.onsuccess = () => resolve(request.result);
       });
       const due = new Date(Date.now() - 2 * 86400000);
-      const tx = db.transaction(["cardStates", "events", "settings", "courses"], "readwrite");
+      const tx = db.transaction(["cardStates", "events"], "readwrite");
       const key = JSON.stringify(["word", wordId]);
-      tx.objectStore("settings").put({ id: "settings", timezone: "Asia/Nicosia", sessionSize: 20 });
-      // Новых слов в занятии нет: предел принадлежит курсу, поэтому обнуляется у каждого.
-      const courses = tx.objectStore("courses");
-      const all = courses.getAll();
-      all.onsuccess = () => {
-        for (const course of all.result as { newItemsPerDay: number }[]) courses.put({ ...course, newItemsPerDay: 0 });
-      };
       tx.objectStore("cardStates").put({
         unitKey: key,
         ref: { kind: "word", id: wordId },

@@ -4,7 +4,6 @@ import { createEmptyCard, State } from "ts-fsrs";
 import { makePlan, makeSession, type SessionSource } from "../src/domain/learning";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import {
-  defaultSettings,
   type Course,
   type ExerciseType,
   type LearningState,
@@ -17,7 +16,7 @@ import { idsOf, wordEvent, wordRef, wordState } from "./helpers/cards";
 
 /**
  * Эталон планировщика: очереди, задания и варианты при том же источнике случайности.
- * Перезаписан при переходе на план по пройденным урокам; база и снимок обязаны выдавать одно и то же.
+ * Перезаписан при снятии дневного предела и настраиваемого размера занятия; база и снимок обязаны выдавать одно и то же.
  */
 const FIXTURE = "tests/fixtures/plan-golden.json";
 const now = new Date("2026-09-15T09:00:00Z");
@@ -76,12 +75,7 @@ const event = (wordId: string, type: ExerciseType, correct: boolean, at: string)
     localDate: at.slice(0, 10),
     responseTimeMs: 1000,
   });
-const course = (newItemsPerDay: number): Course => ({
-  id: "a2",
-  title: "A2",
-  newItemsPerDay,
-  updatedAt: iso,
-});
+const course = (): Course => ({ id: "a2", title: "A2", updatedAt: iso });
 const module = (id: string, number: number, lessonIds: string[], checkpointId?: string): StoredModule => ({
   id,
   courseId: "a2",
@@ -101,9 +95,7 @@ const base = (over: Partial<Omit<Snapshot, "lessons">> & { lessons?: LessonSpec[
   states: [],
   events: [],
   sessions: [],
-  settings: defaultSettings,
-  // Предел курса закреплён: эталон фиксирует поведение, а не значение по умолчанию.
-  courses: [course(10)],
+  courses: [course()],
   ...over,
   lessons: (over.lessons ?? []).map(({ wordIds: _, ...rest }) => rest),
   links: (over.lessons ?? []).flatMap((l) =>
@@ -150,10 +142,9 @@ export const scenarios: Record<string, Snapshot> = {
         event("w24", "spelling", true, "2026-09-10T09:00:00Z"),
         event("w24", "listening", false, "2026-09-11T09:00:00Z"),
       ],
-      settings: { ...defaultSettings, sessionSize: 12 },
     });
   })(),
-  budgetExhausted: (() => {
+  secondSessionSameDay: (() => {
     const words = Array.from({ length: 30 }, (_, i) => word(i));
     const ids = words.map((w) => w.id);
     return base({
@@ -162,20 +153,17 @@ export const scenarios: Record<string, Snapshot> = {
       states: ids.slice(0, 10).map((id) => learned(id, "2026-09-16T09:00:00Z", State.Learning, iso)),
     });
   })(),
-  smallLimit: (() => {
+  smallLesson: (() => {
     const words = Array.from({ length: 12 }, (_, i) => word(i));
     const ids = words.map((w) => w.id);
     return base({
       words,
       lessons: [lesson("l1", ids.slice(4, 8))],
-      courses: [course(5)],
-      settings: { ...defaultSettings, sessionSize: 6 },
     });
   })(),
   smallDict: base({
     words: [word(0), word(1), word(2)],
     states: [learned("w0", "2026-09-14T08:00:00Z")],
-    settings: { ...defaultSettings, sessionSize: 4 },
   }),
   modules: (() => {
     const words = Array.from({ length: 40 }, (_, i) => word(i));
@@ -189,9 +177,7 @@ export const scenarios: Record<string, Snapshot> = {
         lesson("k1", ids.slice(12, 20)),
         lesson("m01-1", ids.slice(0, 12)),
       ],
-      courses: [course(30)],
       states: [learned("w0", "2026-09-14T08:00:00Z")],
-      settings: { ...defaultSettings, sessionSize: 10 },
     });
   })(),
 };
@@ -210,8 +196,6 @@ const stripSession = (session: Awaited<ReturnType<typeof makeSession>>) => ({
 });
 const stripPlan = (plan: Awaited<ReturnType<typeof makePlan>>) => ({
   today: plan.today,
-  budget: plan.budget,
-  introducedToday: plan.introducedToday,
   newWords: idsOf(plan.newRefs),
   reviews: plan.reviews.map((r) => r.ref.id),
   origins: Object.fromEntries([...plan.origins].map(([key, origin]) => [key, origin.lessonId])),

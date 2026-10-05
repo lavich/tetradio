@@ -17,6 +17,8 @@ export interface SessionSource extends PlanSource {
   phrasePool(want: number): Promise<Phrase[]>;
 }
 export const OPTION_POOL = 48;
+/** Заданий в одном занятии: остальное ждёт следующего, сделанное засчитывается сразу. */
+export const SESSION_SIZE = 20;
 /** Соседи по уроку — не дальше шести позиций в каждую сторону: близкие слова ограничены и в большом уроке. */
 export const LESSON_MATES_RADIUS = 6;
 
@@ -37,8 +39,7 @@ export async function makeSession({
   hasVoice = false,
 }: SessionInput): Promise<Session> {
   const plan = await makePlan(source, now, { hasVoice });
-  const settings = await source.settings();
-  const size = Math.max(2, settings.sessionSize);
+  const size = SESSION_SIZE;
   let chosen: { ref: LearningRef; isNew: boolean }[];
   if (refs) {
     const live = await source.liveKeys(refs);
@@ -46,7 +47,7 @@ export async function makeSession({
     const states = await source.statesOf(kept);
     chosen = kept.map((ref) => ({ ref, isNew: !states.has(unitKey(ref)) }));
   } else {
-    const reserve = Math.min(plan.budget, Math.ceil(size / 2));
+    const reserve = Math.ceil(size / 2);
     const newOnes = plan.newRefs.slice(0, reserve);
     const reviews = plan.reviews.slice(0, Math.max(size - newOnes.length, plan.reviews.length ? 1 : 0));
     const extraNew = plan.newRefs.slice(

@@ -14,9 +14,8 @@ import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { diffChars } from "../src/domain/spelling";
 import { checkAnswer } from "../src/domain/text-answer";
 import { progress } from "../src/domain/stats";
+import { SESSION_SIZE } from "../src/domain/session";
 import {
-  defaultSettings,
-  DEFAULT_NEW_ITEMS_PER_DAY,
   type Course,
   type ExerciseType,
   type LearningRef,
@@ -55,24 +54,19 @@ const lesson = (id: string, wordIds: string[], over: Partial<Lesson> = {}): Less
   updatedAt: iso,
   ...over,
 });
-const course = (id: string, newItemsPerDay: number, over: Partial<Course> = {}): Course => ({
+const course = (id: string, over: Partial<Course> = {}): Course => ({
   id,
   title: id,
-  newItemsPerDay,
   updatedAt: iso,
   ...over,
 });
-/**
- * Снимок для тестов: состав уроков задаётся массивами и раскладывается в связи с порядком.
- * Предел курса задан явно: сценарии описывают поведение при пределе 10, а не значение по умолчанию.
- */
+/** Снимок для тестов: состав уроков задаётся массивами и раскладывается в связи с порядком. */
 const base = (over: Partial<Omit<Snapshot, "lessons">> & { lessons?: LessonSpec[] } = {}): Snapshot => ({
   words: [],
   states: [],
   events: [],
   sessions: [],
-  settings: defaultSettings,
-  courses: [course("a2", 10)],
+  courses: [course("a2")],
   ...over,
   lessons: (over.lessons ?? []).map(({ wordIds: _, ...rest }) => rest),
   links: (over.lessons ?? []).flatMap((l) =>
@@ -120,7 +114,6 @@ describe("новые карточки — из пройденных уроков
     });
     const plan = await planOf(data);
     expect(idsOf(plan.newRefs)).toEqual(ids(0, 2));
-    expect(plan.budget).toBe(10);
   });
   it("слово, убранное из урока обновлением, в новые не попадает", async () => {
     // Слово осталось в словаре без связи с уроком и без состояния.
@@ -147,7 +140,7 @@ describe("новые карточки — из пройденных уроков
         lesson("m01-1", ids(0, 2)),
       ],
     });
-    expect(idsOf((await planOf(data)).newRefs)).toEqual(ids(0, 10));
+    expect(idsOf((await planOf(data)).newRefs)).toEqual(ids(0, 12));
   });
   it("уроки вне модулей идут после модулей, в порядке каталога", async () => {
     const data = base({
@@ -157,22 +150,10 @@ describe("новые карточки — из пройденных уроков
     });
     expect(idsOf((await planOf(data)).newRefs)).toEqual([...ids(0, 2), ...ids(4, 6), ...ids(2, 4)]);
   });
-  it("предел — новых карточек курса в день минус введённые сегодня", async () => {
+  it("дневного предела нет: все невведённые карточки пройденных уроков — новые сразу", async () => {
     const introduced = ids(0, 4).map((id) => ({ ...learned(id, "2026-09-16T09:00:00Z"), introducedAt: iso }));
-    const data = base({
-      words: pool,
-      courses: [course("a2", 7)],
-      lessons: [lesson("l1", ids(0, 30))],
-      states: introduced,
-    });
-    const plan = await planOf(data);
-    expect(plan.introducedToday).toBe(4);
-    expect(plan.budget).toBe(3);
-    expect(idsOf(plan.newRefs)).toEqual(ids(4, 7));
-  });
-  it("без записи курса действует предел по умолчанию", async () => {
-    const plan = await planOf(base({ words: pool, courses: [], lessons: [lesson("l1", ids(0, 30))] }));
-    expect(plan.newRefs).toHaveLength(DEFAULT_NEW_ITEMS_PER_DAY);
+    const data = base({ words: pool, lessons: [lesson("l1", ids(0, 30))], states: introduced });
+    expect(idsOf((await planOf(data)).newRefs)).toEqual(ids(4, 30));
   });
   it("карточка двух пройденных уроков вводится один раз и подписана первым по программе", async () => {
     const data = base({ words: pool, lessons: [lesson("l1", ids(0, 3)), lesson("l2", [...ids(1, 3), ...ids(3, 5)])] });
@@ -213,13 +194,13 @@ describe("дневной бюджет и состав занятия", () => {
     expect(session.items.filter((item) => item.isNew)).toHaveLength(10);
     expect(session.items.filter((item) => !item.isNew)).toHaveLength(10);
   });
-  it("вторая сессия в тот же день не выдаёт новых слов сверх лимита", async () => {
+  it("вторая сессия в тот же день продолжает вводить новые слова урока, не больше размера занятия", async () => {
     const introduced = ids.slice(0, 10).map((id) => ({ ...learned(id, "2026-09-16T09:00:00Z"), introducedAt: iso }));
     const data = base({ words: pool, lessons: [lesson("l1", ids)], states: introduced });
-    const plan = await planOf(data);
-    expect(plan.introducedToday).toBe(10);
-    expect(plan.budget).toBe(0);
-    expect((await sessionOf({ data, now, random: () => 0.5 })).items.every((item) => !item.isNew)).toBe(true);
+    expect(idsOf((await planOf(data)).newRefs)).toEqual(ids.slice(10));
+    const session = await sessionOf({ data, now, random: () => 0.5 });
+    expect(session.items.length).toBeLessThanOrEqual(SESSION_SIZE);
+    expect(session.items.some((item) => item.isNew)).toBe(true);
   });
   it("сначала relearning, затем просроченные, затем сегодняшние", async () => {
     const states = [
@@ -499,7 +480,7 @@ describe("дневной план со смешанными карточками
   /** Второй набор фраз: раньше эти места в сценариях занимали карточки снятого вида. */
   const extra = ["q1", "q2", "q3", "q4"].map((id) => phrase(id));
   const all = [...phrases, ...extra];
-  it("смешанная квота: предел 5, введены 2 слова, дальше по порядку урока 5 фраз → 3 фразы", async () => {
+  it("введённые слова новыми не считаются, дальше по порядку урока идут все фразы", async () => {
     const introduced = ids(0, 2).map((id) =>
       stateOf(W(id), "2026-09-16T09:00:00Z", { introducedAt: "2026-09-15T08:00:00Z" }),
     );
@@ -507,15 +488,11 @@ describe("дневной план со смешанными карточками
     const data = base({
       words: pool,
       phrases: all,
-      courses: [course("a2", 5)],
       lessons: [lesson("l1", [])],
       items: items("l1", refs),
       states: introduced,
     });
-    const plan = await planOf(data);
-    expect(plan.introducedToday).toBe(2);
-    expect(plan.budget).toBe(3);
-    expect(plan.newRefs).toEqual([P("p1"), P("p2"), P("q1")]);
+    expect((await planOf(data)).newRefs).toEqual([P("p1"), P("p2"), P("q1"), P("q2"), P("q3")]);
   });
   it("карточки любого вида идут по порядку уроков программы", async () => {
     const data = base({
@@ -544,7 +521,7 @@ describe("дневной план со смешанными карточками
     expect(plan.newRefs).toEqual([P("x")]); // слово уже введено, фраза с тем же ID — новая
     expect(new Set(twin.map(unitKey)).size).toBe(2);
   });
-  it("фраза без перевода и голоса не расходует квоту, но остаётся видимой отдельно; с голосом и пулом она проверяема", async () => {
+  it("фраза без перевода и голоса в новые не попадает, но остаётся видимой отдельно; с голосом и пулом она проверяема", async () => {
     const silent = phrase("p-silent", { translation: undefined });
     const data = base({
       words: [],
@@ -555,7 +532,7 @@ describe("дневной план со смешанными карточками
     const plan = await planOf(data);
     expect(plan.newRefs).toEqual([P("p1"), P("q1")]);
     expect(plan.unavailable).toEqual([P("p-silent")]);
-    // Системный голос и четыре различных фразы делают аудирование доступным: фраза входит в квоту.
+    // Системный голос и четыре различных фразы делают аудирование доступным: фраза становится новой.
     const spoken = await makePlan(fromSnapshot(data), now, { hasVoice: true });
     expect(spoken.newRefs).toEqual([P("p-silent"), P("p1"), P("q1")]);
     expect(spoken.unavailable).toEqual([]);

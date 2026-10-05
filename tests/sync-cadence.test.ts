@@ -2,15 +2,16 @@
 import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { makeSession } from "../src/domain/learning";
-import { defaultSettings, type Session } from "../src/domain/types";
+import { type Session } from "../src/domain/types";
 import { AppDatabase } from "../src/storage/db";
-import { endSession, saveSettings, skipItem, submitAnswer } from "../src/storage/ops";
+import { endSession, skipItem, submitAnswer } from "../src/storage/ops";
 import { dexieSource } from "../src/storage/queries";
 import { kvAdapter } from "../src/sync/adapter";
 import { EXCHANGE_INTERVAL_MS, SyncCoordinator } from "../src/sync/coordinator";
 import { META, readMeta } from "../src/sync/snapshot";
 import { memoryTransport } from "../src/sync/transport";
 import { installCompleted } from "./helpers/content";
+import { localChange } from "./helpers/changes";
 
 let clockMs = Date.parse("2026-09-16T08:00:00Z");
 const now = () => new Date(clockMs);
@@ -130,8 +131,8 @@ describe("частота публикации", () => {
     const { db, sync, exchange } = await setup();
     stop = () => sync.stop();
     clockMs += 30_000;
-    await saveSettings({ ...defaultSettings, sessionSize: 7 }, db);
-    await saveSettings({ ...defaultSettings, sessionSize: 8 }, db);
+    await localChange(db);
+    await localChange(db);
     expect(exchange).not.toHaveBeenCalled();
     expect(live()).toHaveLength(1);
     expect(live()[0].delay).toBe(EXCHANGE_INTERVAL_MS - 30_000);
@@ -142,7 +143,7 @@ describe("частота публикации", () => {
     // После долгого затишья изменение уходит почти сразу.
     clockMs += 10 * 60_000;
     await vi.waitFor(() => expect(sync.getStatus().phase).toBe("synced"));
-    await saveSettings({ ...defaultSettings, sessionSize: 9 }, db);
+    await localChange(db);
     expect(live().at(-1)!.delay).toBeLessThan(5000);
   });
 });

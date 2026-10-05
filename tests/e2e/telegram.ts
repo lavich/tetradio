@@ -170,32 +170,3 @@ export const tg = (page: Page) => ({
       [scheme, params] as const,
     ),
 });
-
-/** Дневной лимит новых слов = 0: занятие состоит только из повторений, без экрана знакомства. */
-/** Только повторения: предел новых слов принадлежит курсу, поэтому обнуляется у каждого курса профиля. */
-export async function onlyReviews(page: Page) {
-  await page.evaluate(async () => {
-    for (const info of await indexedDB.databases()) {
-      if (!info.name?.startsWith("tetradio")) continue;
-      const database = await new Promise<IDBDatabase>((resolve) => {
-        const request = indexedDB.open(info.name!);
-        request.onsuccess = () => resolve(request.result);
-      });
-      if (database.objectStoreNames.contains("courses")) {
-        const tx = database.transaction("courses", "readwrite");
-        const store = tx.objectStore("courses");
-        const all = store.getAll();
-        all.onsuccess = () => {
-          for (const course of all.result as { newItemsPerDay: number }[]) store.put({ ...course, newItemsPerDay: 0 });
-        };
-        await new Promise<void>((resolve, reject) => {
-          tx.oncomplete = () => resolve();
-          tx.onerror = () => reject(tx.error);
-        });
-      }
-      database.close();
-    }
-  });
-  await page.goto("/app/");
-  await page.waitForSelector("[data-testid=today-title]");
-}

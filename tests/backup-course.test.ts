@@ -7,13 +7,12 @@ import { exportFull, inspectBackup, restoreBackup } from "../src/features/backup
 import { CloudChangedError, cloudPrint } from "../src/features/backup/cloud-check";
 import { AppDatabase } from "../src/storage/db";
 import { blockProgressOf, completeLesson, saveBlockProgress } from "../src/storage/course";
-import { saveSettings } from "../src/storage/ops";
-import { defaultSettings } from "../src/domain/types";
 import { kvAdapter } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { disabledTransport, memoryTransport, type MemoryTransport } from "../src/sync/transport";
 import { installLessons, memoryFetcher } from "./helpers/content";
+import { localChange } from "./helpers/changes";
 
 const demo = buildContent("tests/fixtures/course-demo");
 const fetcher = () => memoryFetcher(demo);
@@ -214,7 +213,7 @@ describe("конкурентное изменение облака после п
   it("изменение на другом устройстве останавливает замену и ничего не меняет", async () => {
     const { file, desktop, other, guard } = await scene();
     clockMs += 60000;
-    await saveSettings({ ...defaultSettings, sessionSize: 7 }, desktop);
+    await localChange(desktop);
     expect((await other.exchange()).phase).toBe("synced");
     const before = await state(target);
     const restored = await readMeta(target, META.restored);
@@ -234,7 +233,7 @@ describe("конкурентное изменение облака после п
     const guard = { seen: await cloudPrint(mine.adapter, target), read: () => cloudPrint(mine.adapter, target) };
     expect(guard.seen).toBe("[]");
     clockMs += 60000;
-    await saveSettings({ ...defaultSettings, sessionSize: 5 }, target);
+    await localChange(target);
     expect((await mine.exchange()).phase).toBe("synced");
     await restoreBackup(file, target, { cloud: guard });
     expect((await target.lessons.get("m01-1"))?.completed).toBe(true);

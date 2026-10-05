@@ -1,7 +1,7 @@
 import { State } from "ts-fsrs";
 import { addDays, localDay, zonedStart } from "./time";
 import type { DaySummary } from "./skills";
-import type { CardKind, ExerciseType, LearningRef, LearningState, SessionCard, Settings } from "./types";
+import type { CardKind, ExerciseType, LearningRef, LearningState, SessionCard } from "./types";
 
 export interface DayStat {
   date: string;
@@ -40,7 +40,8 @@ export interface Progress {
 }
 
 export interface StatsSource {
-  settings(): Promise<Settings>;
+  /** Часовой пояс, по которому считаются дни. */
+  timezone(): string;
   /** Дни периода с числом ответов и ключами карточек; источник сам сводит базу и локальные события. */
   daysBetween(fromDay: string, toDay: string): Promise<DaySummary[]>;
   /** Исходы последних ответов типа (старые → новые). */
@@ -62,7 +63,7 @@ export interface StatsSource {
 export const SKILL_TYPES: ExerciseType[] = ["recognition", "assembly", "spelling", "listening", "comprehension"];
 /** Статистика считается по записанным событиям, а не по показам экрана. */
 export async function progress(source: StatsSource, now: Date): Promise<Progress> {
-  const { timezone } = await source.settings();
+  const timezone = source.timezone();
   const today = localDay(now, timezone);
   const period = await source.daysBetween(addDays(today, -6), today);
   const days: DayStat[] = Array.from({ length: 7 }, (_, index) => {
