@@ -3,7 +3,7 @@ import { Screen } from "../../app/Screen";
 import { useHapticsSetting } from "../../platform/haptics";
 import { usePlatform } from "../../platform/platform";
 import { useSettings } from "../../shared/store";
-import { saveSettings } from "../../storage/ops";
+import { updateSettings } from "../../storage/ops";
 
 export function SettingsScreen() {
   const { settings, ready } = useSettings();
@@ -13,13 +13,12 @@ export function SettingsScreen() {
   const [autoSpeak, setAutoSpeak] = useState(true);
   const platform = usePlatform();
   const [haptics, setHaptics] = useHapticsSetting();
-  // Значения из базы подставляются один раз: иначе ответ живого запроса перебивал бы только что нажатый переключатель.
-  const filled = useRef(false);
+  // Значение из базы подставляется, пока переключатель не трогали: иначе чтение базы перебило бы раннее нажатие.
+  const touched = useRef(new Set<"reports" | "autoSpeak">());
   useEffect(() => {
-    if (!ready || filled.current) return;
-    filled.current = true;
-    setReports(settings.errorReports);
-    setAutoSpeak(settings.autoSpeak);
+    if (!ready) return;
+    if (!touched.current.has("reports")) setReports(settings.errorReports);
+    if (!touched.current.has("autoSpeak")) setAutoSpeak(settings.autoSpeak);
   }, [ready, settings]);
   return (
     <Screen back="Настройки">
@@ -44,8 +43,9 @@ export function SettingsScreen() {
             checked={autoSpeak}
             onChange={(event) => {
               const enabled = event.target.checked;
+              touched.current.add("autoSpeak");
               setAutoSpeak(enabled);
-              void saveSettings({ ...settings, autoSpeak: enabled });
+              void updateSettings({ autoSpeak: enabled });
             }}
             style={{ width: 22, height: 22, minHeight: 0 }}
           />
@@ -72,9 +72,10 @@ export function SettingsScreen() {
             checked={reports}
             onChange={(event) => {
               const enabled = event.target.checked;
+              touched.current.add("reports");
               setReports(enabled);
               setReportsStatus("");
-              saveSettings({ ...settings, errorReports: enabled }).then(
+              updateSettings({ errorReports: enabled }).then(
                 () => setReportsStatus(enabled ? "Отчёты включены." : "Отчёты выключены, накопленная очередь удалена."),
                 () => setReportsStatus("Не удалось сохранить настройку."),
               );

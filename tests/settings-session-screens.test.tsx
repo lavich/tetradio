@@ -42,15 +42,14 @@ async function until(check: () => boolean, what: string) {
 }
 
 describe("настройки", () => {
-  it("переключатель озвучки сохраняется сразу", async () => {
+  it("нажатие до загрузки настроек сохраняется и не затирает остальные настройки", async () => {
+    await db.settings.put({ id: "settings", errorReports: false, autoSpeak: true });
     mount(<SettingsScreen />);
-    await until(() => !!host.querySelector('[aria-label="Озвучивать автоматически"]'), "переключатель");
     const speak = host.querySelector<HTMLInputElement>('[aria-label="Озвучивать автоматически"]')!;
-    const before = (await loadSettings()).autoSpeak;
-    await act(async () => speak.click());
-    await until(() => speak.checked !== before, "переключатель нажат");
-    await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
-    expect((await loadSettings()).autoSpeak).toBe(!before);
+    await act(async () => speak.click()); // сразу, не дожидаясь чтения базы
+    await act(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    expect(speak.checked).toBe(false);
+    expect(await loadSettings()).toMatchObject({ autoSpeak: false, errorReports: false });
   });
 });
 
