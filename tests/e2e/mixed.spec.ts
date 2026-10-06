@@ -228,7 +228,7 @@ test("полная копия переносит смешанный урок с 
   await page.goto("/app/");
   await ready(page);
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
-  await page.getByRole("link", { name: /Копия данных/ }).click();
+  await page.getByRole("link", { name: "Настройки и данные" }).click();
   const download = await Promise.all([
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Сохранить полную копию" }).click(),
@@ -254,7 +254,7 @@ test("полная копия переносит смешанный урок с 
   await fresh.goto("/app/");
   await ready(fresh);
   await fresh.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
-  await fresh.getByRole("link", { name: /Копия данных/ }).click();
+  await fresh.getByRole("link", { name: "Настройки и данные" }).click();
   await fresh.locator("#backup").setInputFiles(file);
   await expect(fresh.getByText(/Файл проверен/)).toBeVisible();
   await fresh.getByRole("button", { name: "Заменить данные копией" }).click();

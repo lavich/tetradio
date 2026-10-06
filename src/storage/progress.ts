@@ -1,7 +1,7 @@
 import { SKILLS, type Skill } from "../content/course";
 import { testResult } from "../domain/course";
 import { localDay, mondayOf } from "../domain/learning";
-import { coursePace, withCoverage, type Pace, type SkillReadiness } from "../domain/progress";
+import { coursePace, type Pace, type SkillReadiness } from "../domain/progress";
 import type { BlockProgress } from "../domain/types";
 import { lessonDays, moduleViews, type ModuleView } from "./course";
 import { db, type AppDatabase } from "./db";
@@ -39,7 +39,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
   }
 
   // Последний по программе результат контрольной по каждому навыку; письмо и речь — накопленная самопроверка.
-  const tests = new Map<Skill, Omit<SkillReadiness, "share">>();
+  const tests = new Map<Skill, SkillReadiness>();
   const self = new Map<Skill, { checked: number; criteria: number; tasks: number }>();
   ids.forEach((id, index) => {
     const pack = packs[index];
@@ -66,7 +66,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
       self.set(skill, entry);
     }
   });
-  const results = SKILLS.flatMap((skill): Omit<SkillReadiness, "share">[] => {
+  const readiness = SKILLS.flatMap((skill): SkillReadiness[] => {
     const own = self.get(skill);
     if (tests.has(skill)) return [tests.get(skill)!];
     if (own?.criteria) return [{ skill, result: own.checked / own.criteria, source: "self", basis: String(own.tasks) }];
@@ -85,7 +85,6 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     today,
     completedDays,
   );
-  const readiness = withCoverage(results, pace.done, pace.total);
   const next = views.find((view) => lessonsOf(view).some((lesson) => !lesson.completed));
   const events = await database.events.where("localDate").between(monday, today, true, true).toArray();
   const scheduled = events.filter((event) => event.mode !== "practice");

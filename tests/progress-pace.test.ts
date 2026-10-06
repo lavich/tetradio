@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { coursePace, withCoverage, type ModuleLoad } from "../src/domain/progress";
+import { coursePace, type ModuleLoad } from "../src/domain/progress";
 
 /** 24 модуля по 4 урока, K1 после 8-го: к 13 декабря — 32 урока. */
 const modules = (done: number): ModuleLoad[] =>
@@ -41,25 +41,12 @@ describe("темп курса против календаря", () => {
     ]);
     expect(pace.recentPerWeek).toBe(1); // 6 октября — раньше 28 дней
   });
-});
-
-describe("готовность к A2", () => {
-  it("высокий результат в начале курса — малая доля готовности", () => {
-    const [reading, speaking] = withCoverage(
-      [
-        { skill: "reading", result: 1, source: "test", basis: "Контрольная модуля 01" },
-        { skill: "speaking", result: 0.89, source: "self", basis: "2" },
-      ],
-      4,
-      99,
-    );
-    expect(reading.share).toBeCloseTo(4 / 99);
-    expect(reading.result).toBe(1);
-    expect(speaking.share).toBeCloseTo((0.89 * 4) / 99);
+  it("темп считается с первого пройденного урока, а не всегда за четыре недели", () => {
+    const pace = coursePace(modules(6), "2026-10-18", ["2026-10-05", "2026-10-08", "2026-10-11", "2026-10-15"]);
+    expect(pace.recentPerWeek).toBe(2); // 4 урока за 14 дней
   });
-  it("к концу курса готовность равна результату; пустой курс — ноль", () => {
-    const item = { skill: "listening", result: 0.7, source: "test", basis: "Пробник M3" } as const;
-    expect(withCoverage([item], 99, 99)[0].share).toBeCloseTo(0.7);
-    expect(withCoverage([item], 0, 0)[0].share).toBe(0);
+  it("меньше недели истории — темпа нет", () => {
+    expect(coursePace(modules(3), "2026-10-07", ["2026-10-05", "2026-10-06", "2026-10-07"]).recentPerWeek).toBeNull();
+    expect(coursePace(modules(0), "2026-10-07", []).recentPerWeek).toBeNull();
   });
 });

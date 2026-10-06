@@ -1,9 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Screen } from "../../app/Screen";
+import { BackupSection, REPORT_BOUNDARIES } from "../backup/BackupSection";
 import { useHapticsSetting } from "../../platform/haptics";
-import { usePlatform } from "../../platform/platform";
-import { useSettings } from "../../shared/store";
+import { launchContext } from "../../platform/launch";
+import { useLaunchMode, usePlatform } from "../../platform/platform";
+import { CARDS, withCount, WORDS } from "../../shared/format";
+import { megabytes, useOfflineStatus } from "../../shared/offline";
+import { useCounts, useSettings } from "../../shared/store";
+import { currentProfile } from "../../storage/profile";
 import { updateSettings } from "../../storage/ops";
+import { useSyncStatus } from "../../sync";
+import { SyncLine } from "./SyncLine";
+import css from "./settings.module.css";
 
 export function SettingsScreen() {
   const { settings, ready } = useSettings();
@@ -21,101 +29,176 @@ export function SettingsScreen() {
     if (!touched.current.has("autoSpeak")) setAutoSpeak(settings.autoSpeak);
   }, [ready, settings]);
   return (
-    <Screen back="Настройки">
-      <section data-testid="auto-speak-settings">
-        <h2>Озвучка</h2>
-        <label
-          className="flex items-center justify-between gap-3"
-          style={{ color: "inherit", fontSize: 16, margin: 0 }}
-        >
-          <span>
-            Озвучивать автоматически
-            <br />
-            <span className="text-sm text-muted-foreground">
-              Карточка знакомства и задание «Что прозвучало?» звучат сами при открытии. Выключите, если занимаетесь там,
-              где нужна тишина: кнопка озвучки работает в любом случае.
-            </span>
-          </span>
-          <input
-            type="checkbox"
-            role="switch"
-            aria-label="Озвучивать автоматически"
-            checked={autoSpeak}
-            onChange={(event) => {
-              const enabled = event.target.checked;
-              touched.current.add("autoSpeak");
-              setAutoSpeak(enabled);
-              void updateSettings({ autoSpeak: enabled });
-            }}
-            style={{ width: 22, height: 22, minHeight: 0 }}
+    <Screen back="Настройки и данные" paper>
+      <section aria-labelledby="lessons" className={css.section}>
+        <h2 id="lessons" className={css.heading}>
+          Занятия
+        </h2>
+        <Toggle
+          testId="auto-speak-settings"
+          label="Озвучивать автоматически"
+          note="Карточка знакомства и «Что прозвучало?» звучат сами при открытии. Кнопка озвучки работает всегда."
+          checked={autoSpeak}
+          onChange={(enabled) => {
+            touched.current.add("autoSpeak");
+            setAutoSpeak(enabled);
+            void updateSettings({ autoSpeak: enabled });
+          }}
+        />
+        {platform.kind === "telegram" && (
+          <Toggle
+            testId="telegram-settings"
+            label="Тактильный отклик результата"
+            note={`Лёгкая вибрация после ответа, только на этом устройстве.${
+              platform.capabilities.haptics ? "" : " В этом клиенте недоступна."
+            }`}
+            checked={haptics && platform.capabilities.haptics}
+            disabled={!platform.capabilities.haptics}
+            onChange={setHaptics}
           />
-        </label>
+        )}
       </section>
-      <section className="mt-6" data-testid="error-reports-settings">
-        <h2>Отчёты об ошибках</h2>
-        <label
-          className="flex items-center justify-between gap-3"
-          style={{ color: "inherit", fontSize: 16, margin: 0 }}
-        >
-          <span>
-            Отправлять отчёты об ошибках
-            <br />
-            <span className="text-sm text-muted-foreground">
-              При сбое приложение отправляет тип ошибки, стек и версию — без слов, ответов и данных Telegram. Что именно
-              уходит, описано на экране «Копия данных». Действует сразу.
-            </span>
-          </span>
-          <input
-            type="checkbox"
-            role="switch"
-            aria-label="Отправлять отчёты об ошибках"
-            checked={reports}
-            onChange={(event) => {
-              const enabled = event.target.checked;
-              touched.current.add("reports");
-              setReports(enabled);
-              setReportsStatus("");
-              updateSettings({ errorReports: enabled }).then(
-                () => setReportsStatus(enabled ? "Отчёты включены." : "Отчёты выключены, накопленная очередь удалена."),
-                () => setReportsStatus("Не удалось сохранить настройку."),
-              );
-            }}
-            style={{ width: 22, height: 22, minHeight: 0 }}
-          />
-        </label>
+
+      <Saving />
+      <BackupSection />
+
+      <section aria-labelledby="reports" className={css.section}>
+        <h2 id="reports" className={css.heading}>
+          Отчёты об ошибках
+        </h2>
+        <Toggle
+          testId="error-reports-settings"
+          label="Отправлять отчёты об ошибках"
+          note="При сбое уходят тип ошибки и версия приложения, без слов, ответов и данных Telegram."
+          checked={reports}
+          onChange={(enabled) => {
+            touched.current.add("reports");
+            setReports(enabled);
+            setReportsStatus("");
+            updateSettings({ errorReports: enabled }).then(
+              () => setReportsStatus(enabled ? "Отчёты включены." : "Отчёты выключены, накопленная очередь удалена."),
+              () => setReportsStatus("Не удалось сохранить настройку."),
+            );
+          }}
+        />
         {reportsStatus && (
-          <p className="mt-2 text-sm text-(--ok)" role="status" data-testid="error-reports-status">
+          <p className={css.ok} role="status" data-testid="error-reports-status">
             {reportsStatus}
           </p>
         )}
+        <details className={css.details}>
+          <summary>Что именно отправляется</summary>
+          <p className={css.note} data-testid="error-reports-boundaries">
+            {REPORT_BOUNDARIES}
+          </p>
+        </details>
       </section>
-      {platform.kind === "telegram" && (
-        <section className="mt-6" data-testid="telegram-settings">
-          <h2>Telegram</h2>
-          <label
-            className="flex items-center justify-between gap-3"
-            style={{ color: "inherit", fontSize: 16, margin: 0 }}
-          >
-            <span>
-              Тактильный отклик результата
-              <br />
-              <span className="text-sm text-muted-foreground">
-                Лёгкая вибрация после сохранённого ответа: успех, почти правильно, ошибка. Настройка хранится на этом
-                устройстве.{platform.capabilities.haptics ? "" : " В этом клиенте отклик недоступен."}
-              </span>
-            </span>
-            <input
-              type="checkbox"
-              role="switch"
-              aria-label="Тактильный отклик результата"
-              checked={haptics && platform.capabilities.haptics}
-              disabled={!platform.capabilities.haptics}
-              onChange={(event) => setHaptics(event.target.checked)}
-              style={{ width: 22, height: 22, minHeight: 0 }}
-            />
-          </label>
-        </section>
-      )}
+
+      <About />
     </Screen>
+  );
+}
+
+function Toggle({
+  testId,
+  label,
+  note,
+  checked,
+  disabled,
+  onChange,
+}: {
+  testId: string;
+  label: string;
+  note: ReactNode;
+  checked: boolean;
+  disabled?: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label className={css.toggle} data-testid={testId}>
+      <span className={css.toggleText}>
+        <span className={css.toggleLabel}>{label}</span>
+        <span className={css.note}>{note}</span>
+      </span>
+      <input
+        type="checkbox"
+        role="switch"
+        className={css.switch}
+        aria-label={label}
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.checked)}
+      />
+    </label>
+  );
+}
+
+function Saving() {
+  const profile = currentProfile();
+  const status = useSyncStatus();
+  const telegram = profile.kind === "telegram";
+  return (
+    <section aria-labelledby="saving" className={css.section}>
+      <h2 id="saving" className={css.heading}>
+        Сохранение
+      </h2>
+      <div data-testid="storage-scope">
+        <p className={css.toggleLabel}>{profile.label}</p>
+        <p className={css.note} data-testid="sync-boundaries">
+          {telegram
+            ? "Между вашими устройствами в этом боте синхронизируются пройденные уроки и задания, повторения карточек и настройки. История ответов и незаконченное занятие переносятся только полной копией. Другие аккаунты Telegram на этом устройстве — отдельные профили."
+            : `Сборка разработки вне Telegram: тестовый пользователь ${profile.userId}, данные только в этом браузере, облачной синхронизации нет.`}
+        </p>
+      </div>
+      {telegram && <SyncLine />}
+      {status.keys && status.keys.used > status.keys.max * 0.8 && (
+        <p className={css.note}>Облако заполнено на {Math.round((status.keys.used / status.keys.max) * 100)} %.</p>
+      )}
+    </section>
+  );
+}
+
+function About() {
+  const offline = useOfflineStatus();
+  const counts = useCounts();
+  const profile = currentProfile();
+  const telegram = profile.kind === "telegram";
+  const platform = usePlatform();
+  const launch = launchContext();
+  const mode = useLaunchMode();
+  const MODES = { compact: "компактный", fullsize: "полноразмерный", fullscreen: "во весь экран" };
+  return (
+    <details className={css.about}>
+      <summary>Об устройстве и приложении</summary>
+      <p className={css.note}>
+        {offline.checking
+          ? "Проверяем офлайн-режим…"
+          : offline.ready
+            ? telegram
+              ? "Открытое приложение работает со скачанными уроками без сети. Запуск без сети зависит от клиента Telegram."
+              : "Приложение и скачанные уроки открываются без сети."
+            : offline.unsupported
+              ? "Офлайн-кеш недоступен в этом клиенте."
+              : "Офлайн-пакет ещё загружается."}
+        {offline.quota > 0 && ` Занято ${megabytes(offline.usage)} из ${megabytes(offline.quota)}.`}
+        {offline.persisted ? "" : " Клиент может очистить данные — сохраняйте полную копию."}
+      </p>
+      {offline.problem && <p className={css.error}>{offline.problem}</p>}
+      <p className={css.note}>
+        На устройстве:{" "}
+        {counts && counts.cards > counts.words ? withCount(counts.cards, CARDS) : withCount(counts?.words ?? 0, WORDS)}{" "}
+        и {withCount(counts?.answers ?? 0, ["ответ", "ответа", "ответов"])}.
+      </p>
+      {telegram && (
+        <p className={css.note} data-testid="launch-mode">
+          Telegram {launch.platform ?? "?"} {launch.version ?? ""} · режим:{" "}
+          {mode ? MODES[mode] : platform.kind === "telegram" ? "неизвестен" : "интеграция не загружена"}
+        </p>
+      )}
+      <p className={css.note} data-testid="credits">
+        Картинки слов — Microsoft Fluent Emoji (лицензия MIT, © Microsoft Corporation). Голоса диалогов — Google Cloud
+        Text-to-Speech, остальная озвучка — синтез речи устройства.
+      </p>
+    </details>
   );
 }

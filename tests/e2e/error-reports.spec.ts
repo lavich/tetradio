@@ -22,8 +22,10 @@ test("переключатель отчётов включён по умолча
   await expect(page.getByRole("switch", { name: "Отправлять отчёты об ошибках" })).toBeChecked();
 });
 
-test("экран «Копия данных» описывает канал отчётов: куда, что, чего нет и где выключить", async ({ page }) => {
+test("«Настройки и данные» описывают канал отчётов: куда, что, чего нет и где выключить", async ({ page }) => {
   await page.goto("/app/progress/backup");
+  await expect(page).toHaveURL(/\/progress\/settings$/);
+  await page.getByText("Что именно отправляется").click();
   const boundaries = page.getByTestId("error-reports-boundaries");
   await expect(boundaries).toBeVisible();
   await expect(boundaries).toContainText("Sentry");

@@ -103,9 +103,7 @@ test("занятие: знакомство, четыре упражнения, �
   await page.reload();
   await ready(page);
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
-  await page.getByRole("link", { name: "Ответы и сроки повторений" }).click();
-  const recorded = await page.getByText(/Всего записано/).innerText();
-  expect(recorded).not.toContain("Всего записано 0");
+  await expect(page.getByTestId("cards-line")).toContainText(/Учу [1-9]/);
   // Слова занятия в словаре уже «учу», а не «не начато».
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await page.getByRole("button", { name: /^учу/ }).click();

@@ -8,7 +8,7 @@ test("копия: изменение облака на другом устрой
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
-  await page.getByRole("link", { name: /Копия данных/ }).click();
+  await page.getByRole("link", { name: "Настройки и данные" }).click();
   const [download] = await Promise.all([
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Сохранить полную копию" }).click(),
@@ -31,7 +31,7 @@ test("копия: изменение облака на другом устрой
     "Данные аккаунта изменились на другом устройстве — откройте предпросмотр заново.",
   );
   await expect(page.getByText("Данные восстановлены полностью.")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Заменить данные копией" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Заменить данные копией" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "Открыть предпросмотр заново" }).click();
   await expect(page.getByText(/Файл проверен/)).toBeVisible();

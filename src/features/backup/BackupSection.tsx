@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -11,10 +11,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Screen } from "../../app/Screen";
 
 /** Единственный канал, по которому что-то покидает устройство помимо синхронизации: описывается так же явно. */
 export const REPORT_BOUNDARIES =
@@ -23,6 +19,7 @@ import { useAction } from "../../shared/action";
 import { megabytes } from "../../shared/offline";
 import { db } from "../../storage/db";
 import { currentProfile } from "../../storage/profile";
+import css from "../progress/settings.module.css";
 import { sync } from "../../sync";
 import type { SyncVersionRow } from "../../sync/types";
 import {
@@ -41,7 +38,9 @@ import ui from "../../shared/ui.module.css";
 
 const handedOver = (outcome: TransferOutcome) => outcome === "shared" || outcome === "downloaded";
 
-export function BackupScreen() {
+/** Копия и восстановление — раздел экрана «Настройки и данные». */
+export function BackupSection() {
+  const input = useRef<HTMLInputElement>(null);
   const profile = currentProfile();
   const [file, setFile] = useState<File | null>(null);
   const [report, setReport] = useState<BackupReport | null>(null);
@@ -102,103 +101,54 @@ export function BackupScreen() {
     );
   };
   return (
-    <Screen back="Копия данных">
-      <Card className="mb-3">
-        <CardHeader>
-          <CardTitle>Полная копия</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className={ui.note}>
-            Карточки и уроки курса, скачанные картинки и аудио, версии установленных уроков, выполненные задания,
-            прогресс FSRS, ответы, сессии и настройки. Этот файл переносит всё.
+    <section aria-labelledby="copy" className={css.section}>
+      <h2 id="copy" className={css.heading}>
+        Копия
+      </h2>
+      <p className={css.note}>Файл со всеми данными: уроки, ответы, повторения и настройки.</p>
+      <div className={css.actions}>
+        <Button
+          size="md"
+          onClick={() =>
+            run(async () => {
+              await send(await exportFull(), backupName());
+            })
+          }
+          disabled={busy}
+        >
+          Сохранить полную копию
+        </Button>
+        <Button variant="soft" size="md" onClick={() => input.current?.click()} disabled={busy}>
+          Восстановить из копии…
+        </Button>
+        <input
+          ref={input}
+          id="backup"
+          type="file"
+          accept="application/json,.json"
+          className="sr-only"
+          tabIndex={-1}
+          aria-label="Файл полной копии"
+          onChange={(event) => pick(event.target.files?.[0])}
+        />
+      </div>
+      {transfer && (
+        <p className={css.note} role="status" data-testid="transfer-status">
+          {transfer}
+        </p>
+      )}
+      {report && (
+        <div className={css.report}>
+          <p>
+            Файл проверен: база «{report.databaseName}», {megabytes(report.bytes)}
+            {report.createdAt ? `, копия от ${new Date(report.createdAt).toLocaleString("ru-RU")}` : ""}.
+            {report.legacy ? " Копия прежней версии: при восстановлении она будет обновлена до текущей." : ""}
           </p>
-          {profile.kind === "telegram" && (
-            <p className={ui.note} data-testid="sync-boundaries">
-              Внутри Telegram между устройствами одного аккаунта синхронизируется прогресс: интервалы повторений и
-              навыки карточек, пройденные уроки и задания, настройки и сводная статистика. Полная история ответов,
-              тексты ответов и незаконченное занятие остаются на устройстве и переносятся только полной копией. Другие
-              аккаунты Telegram на этом устройстве — отдельные профили, их данные сюда не попадают.
-            </p>
-          )}
-          <p className={ui.note} data-testid="error-reports-boundaries">
-            {REPORT_BOUNDARIES}
-          </p>
-          <Button
-            size="xl"
-            onClick={() =>
-              run(async () => {
-                await send(await exportFull(), backupName());
-              })
-            }
-            disabled={busy}
-          >
-            Сохранить полную копию
-          </Button>
-          {transfer && (
-            <p className={ui.small} role="status" data-testid="transfer-status">
-              {transfer}
-            </p>
-          )}
-        </CardContent>
-      </Card>
-      <Card className="mb-3">
-        <CardHeader>
-          <CardTitle>Только слова (TSV)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className={ui.note}>
-            Греческий, перевод и IPA для переноса в другие приложения. Прогресс обучения в этот файл не входит.
-          </p>
-          <Button variant="soft" size="xl" onClick={async () => send(await exportWordsTsv(), "tetradio-words.tsv")}>
-            Сохранить TSV
-          </Button>
-        </CardContent>
-      </Card>
-      <Card className="mb-3">
-        <CardHeader>
-          <CardTitle>Восстановление</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Field>
-            <FieldLabel htmlFor="backup">Файл полной копии</FieldLabel>
-            <Input
-              id="backup"
-              type="file"
-              accept="application/json,.json"
-              onChange={(event) => pick(event.target.files?.[0])}
-            />
-          </Field>
-          {report && (
-            <div className={ui.small} style={{ marginTop: 10 }}>
-              <p style={{ margin: "0 0 4px" }}>
-                Файл проверен: база «{report.databaseName}», {megabytes(report.bytes)}
-                {report.createdAt ? `, копия от ${new Date(report.createdAt).toLocaleString("ru-RU")}` : ""}.
-                {report.legacy ? " Копия прежней версии: при восстановлении она будет обновлена до текущей." : ""}
-              </p>
-              <p className={ui.muted} style={{ margin: 0 }}>
-                {report.tables.map((table) => `${table.name}: ${table.rows}`).join(" · ")}
-              </p>
-            </div>
-          )}
-          {problem && (
-            <p className={ui.error} role="alert">
-              {problem}
-            </p>
-          )}
-          {stale && file && (
-            <Button variant="soft" size="xl" className="mt-3" disabled={busy} onClick={() => pick(file)}>
-              Открыть предпросмотр заново
-            </Button>
-          )}
-          {status && (
-            <p className={ui.small} role="status" style={{ color: "var(--ok)" }}>
-              {status}
-            </p>
-          )}
+          <p className={css.note}>{report.tables.map((table) => `${table.name}: ${table.rows}`).join(" · ")}</p>
           <AlertDialog open={confirming} onOpenChange={setConfirming}>
             <AlertDialogTrigger
               render={
-                <Button variant="destructive" size="xl" className="mt-3" disabled={!report || busy}>
+                <Button variant="destructive" size="md" disabled={busy}>
                   Заменить данные копией
                 </Button>
               }
@@ -227,54 +177,68 @@ export function BackupScreen() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <p className={ui.note}>Перед заменой Τετράδιο передаст текущие данные отдельным файлом.</p>
-        </CardContent>
-      </Card>
-      {stored.length > 0 && (
-        <Card className="mb-3" data-testid="stored-versions">
-          <CardHeader>
-            <CardTitle>Отложенные версии облака</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className={ui.note}>
-              Версии, отвергнутые при выборе в конфликте. Хранятся на устройстве до удаления вручную; сначала можно
-              сохранить файл.
-            </p>
-            <div className={ui.stack}>
-              {stored.map((row) => (
-                <div key={row.id} className="rounded-[14px] border border-border p-3">
-                  <p className="m-0 text-sm">
-                    {row.note ?? row.role} · {new Date(row.createdAt).toLocaleString("ru-RU")} ·{" "}
-                    {row.snapshot.states.length} слов, {row.snapshot.stats.answers} ответов
-                  </p>
-                  <div className="mt-2 flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="soft"
-                      onClick={async () => {
-                        const blob = await sync.exportStored(row.id);
-                        if (blob) await send(blob, `tetradio-version-${row.id}.json`);
-                      }}
-                    >
-                      Сохранить файл
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="quiet"
-                      onClick={async () => {
-                        await sync.discardStored(row.id);
-                        await refreshStored();
-                      }}
-                    >
-                      Удалить
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        </div>
       )}
-    </Screen>
+      {problem && (
+        <p className={ui.error} role="alert">
+          {problem}
+        </p>
+      )}
+      {stale && file && (
+        <Button variant="soft" size="md" className="mt-3" disabled={busy} onClick={() => pick(file)}>
+          Открыть предпросмотр заново
+        </Button>
+      )}
+      {status && (
+        <p className={css.note} role="status" style={{ color: "var(--ok)" }}>
+          {status}
+        </p>
+      )}
+      {stored.length > 0 && (
+        <div className={css.stored} data-testid="stored-versions">
+          <h3 className={css.subheading}>Отложенные версии облака</h3>
+          <p className={css.note}>
+            Версии, отвергнутые при выборе в конфликте. Хранятся на этом устройстве до удаления.
+          </p>
+          {stored.map((row) => (
+            <div key={row.id} className={css.storedRow}>
+              <p>
+                {row.note ?? row.role} · {new Date(row.createdAt).toLocaleString("ru-RU")} ·{" "}
+                {row.snapshot.states.length} слов, {row.snapshot.stats.answers} ответов
+              </p>
+              <div className={css.actions}>
+                <Button
+                  size="sm"
+                  variant="soft"
+                  onClick={async () => {
+                    const blob = await sync.exportStored(row.id);
+                    if (blob) await send(blob, `tetradio-version-${row.id}.json`);
+                  }}
+                >
+                  Сохранить файл
+                </Button>
+                <Button
+                  size="sm"
+                  variant="quiet"
+                  onClick={async () => {
+                    await sync.discardStored(row.id);
+                    await refreshStored();
+                  }}
+                >
+                  Удалить
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <button
+        type="button"
+        className={css.link}
+        onClick={async () => send(await exportWordsTsv(), "tetradio-words.tsv")}
+      >
+        Слова курса в TSV — для других приложений
+      </button>
+    </section>
   );
 }

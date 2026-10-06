@@ -17,7 +17,7 @@ test("полная копия переносит слова, уроки и ме�
   await expect(page.getByTestId("word-art")).toBeVisible();
 
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
-  await page.getByRole("link", { name: /Копия данных/ }).click();
+  await page.getByRole("link", { name: "Настройки и данные" }).click();
   const download = await Promise.all([
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Сохранить полную копию" }).click(),
@@ -60,7 +60,7 @@ test("полная копия переносит слова, уроки и ме�
   await fresh.goto("/app/");
   await ready(fresh);
   await fresh.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
-  await fresh.getByRole("link", { name: /Копия данных/ }).click();
+  await fresh.getByRole("link", { name: "Настройки и данные" }).click();
   await fresh.locator("#backup").setInputFiles(file);
   await expect(fresh.getByText(/Файл проверен/)).toBeVisible();
   await fresh.getByRole("button", { name: "Заменить данные копией" }).click();
@@ -89,12 +89,12 @@ test("повреждённый и чужой файл не меняют данн
   await expect(page.getByTestId("word-count")).toHaveText("56 слов · 7 фраз");
   const before = await page.getByTestId("word-count").innerText();
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
-  await page.getByRole("link", { name: /Копия данных/ }).click();
+  await page.getByRole("link", { name: "Настройки и данные" }).click();
   const broken = join(tmpdir(), "tetradio-broken.json");
   writeFileSync(broken, "{не json");
   await page.locator("#backup").setInputFiles(broken);
   await expect(page.getByText(/не читается как копия/)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Заменить данные копией" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Заменить данные копией" })).toHaveCount(0);
 
   const alien = join(tmpdir(), "tetradio-alien.json");
   writeFileSync(
@@ -119,7 +119,7 @@ test("повреждённый и чужой файл не меняют данн
   );
   await page.locator("#backup").setInputFiles(future);
   await expect(page.getByText(/более новой версией/)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Заменить данные копией" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Заменить данные копией" })).toHaveCount(0);
 
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await expect(page.getByTestId("word-count")).toHaveText(before); // словарь не изменился
