@@ -28,7 +28,7 @@ export function ProgressScreen() {
   const data = useLiveQuery(() => courseProgress(now, deviceTimezone()), [now.toDateString(), deviceTimezone()]);
   const words = useLiveQuery(() => dictionary(), []);
   const stats = useStats(now);
-  if (!data) return <Screen wide paper />;
+  if (!data) return <Screen wide />;
   const head = <h1 className={nb.title}>Прогресс</h1>;
   const path = <Path data={data} />;
   const ready = <Skills skills={data.skills} complete={data.complete} />;
@@ -47,7 +47,7 @@ export function ProgressScreen() {
     </>
   );
   return (
-    <Screen wide paper>
+    <Screen wide>
       {spread ? (
         <div className={cx(nb.spread, nb.spine)}>
           <div className={cx(nb.page, css.page)}>
