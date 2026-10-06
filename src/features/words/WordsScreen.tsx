@@ -32,7 +32,7 @@ export function WordsScreen() {
   return (
     <Screen wide={spread}>
       {spread ? (
-        <div className={cx(nb.spread, nb.spine, css.spread)}>
+        <div className={cx(nb.spread, css.spread)}>
           <Dictionary lessons={lessons} />
           <div className={cx(nb.page, css.page)}>
             <p className={css.pick}>Выберите слово — оно откроется на этой странице.</p>
