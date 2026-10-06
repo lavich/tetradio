@@ -1,0 +1,166 @@
+/* «Настройки и данные» — страница тетради: разделы заголовками по клетке, без карточек. */
+.section {
+  margin-top: calc(var(--cell) * 1.5);
+}
+.section:first-child {
+  margin-top: 0;
+}
+.heading {
+  margin: 0 0 8px;
+  font-family: var(--font-print);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: var(--cell);
+}
+.subheading {
+  margin: 0 0 4px;
+  font-family: var(--font-print);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: var(--cell);
+}
+.note {
+  display: block;
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 20px;
+  color: var(--muted-foreground);
+}
+.ok {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: var(--ok);
+}
+.error {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: var(--destructive);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.toggleText {
+  display: grid;
+  gap: 2px;
+}
+.toggleLabel {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 16px;
+  line-height: var(--cell);
+  color: var(--foreground);
+}
+/* Переключатель в цветах тетради: системный чекбокс выпадал из палитры. */
+.switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 26px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--input);
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 0 1px 2px var(--shadow);
+  transition: transform 150ms ease;
+}
+.switch:checked {
+  background: var(--primary);
+}
+.switch:checked::after {
+  transform: translateX(18px);
+}
+.switch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.switch:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .switch,
+  .switch::after {
+    transition: none;
+  }
+}
+
+.report {
+  margin-top: 12px;
+  padding: 12px 0;
+  border-top: 1px dashed var(--border);
+}
+.report p {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+.stored {
+  margin-top: var(--cell);
+}
+.storedRow {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.storedRow p {
+  margin: 0;
+  font-size: 14px;
+}
+.link {
+  margin-top: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.details {
+  margin-top: 8px;
+}
+.details summary,
+.about summary {
+  font-size: 13.5px;
+  color: var(--primary);
+  cursor: pointer;
+}
+.details .note {
+  margin-top: 6px;
+}
+.about {
+  display: grid;
+  gap: 8px;
+  margin-top: calc(var(--cell) * 2);
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.about[open] summary {
+  margin-bottom: 4px;
+}

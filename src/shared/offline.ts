@@ -78,7 +78,8 @@ export function useOfflineStatus(): OfflineStatus {
   }, []);
   return status;
 }
-export const megabytes = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} МБ`;
+export const megabytes = (bytes: number) =>
+  `${(bytes / 1024 / 1024).toLocaleString("ru-RU", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} МБ`;
 /** Размер пакета: килобайты до мегабайта, чтобы маленький урок не показывался как «0.0 МБ». */
 export const fileSize = (bytes: number) =>
   bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} КБ` : megabytes(bytes);

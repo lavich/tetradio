@@ -22,9 +22,7 @@ const WordExerciseScreen = named("WordExerciseScreen", () => import("../features
 const SessionScreen = named("SessionScreen", () => import("../features/learning/SessionScreen"));
 const ResultScreen = named("ResultScreen", () => import("../features/learning/ResultScreen"));
 const ProgressScreen = named("ProgressScreen", () => import("../features/progress/ProgressScreen"));
-const StatsScreen = named("StatsScreen", () => import("../features/progress/StatsScreen"));
 const SettingsScreen = named("SettingsScreen", () => import("../features/progress/SettingsScreen"));
-const BackupScreen = named("BackupScreen", () => import("../features/backup/BackupScreen"));
 // Уведомления и диалог конфликта не нужны первому кадру: грузятся следом, без чанка — просто не показываются.
 const optional = <P extends object>(load: () => Promise<React.ComponentType<P>>) =>
   lazy(() =>
@@ -90,9 +88,9 @@ export function App() {
           <Route path="/session" element={<SessionScreen />} />
           <Route path="/session/result/:id" element={<ResultScreen />} />
           <Route path="/progress" element={<ProgressScreen />} />
-          <Route path="/progress/stats" element={<StatsScreen />} />
+          <Route path="/progress/stats" element={<Navigate to="/progress" replace />} />
           <Route path="/progress/settings" element={<SettingsScreen />} />
-          <Route path="/progress/backup" element={<BackupScreen />} />
+          <Route path="/progress/backup" element={<Navigate to="/progress/settings" replace />} />
           <Route path="/more/*" element={<MoreRedirect />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

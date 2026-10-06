@@ -27,8 +27,8 @@ export interface Pace {
   /** Отставание в неделях по темпу текущего отрезка календаря; 0 — по плану или впереди. */
   lagWeeks: number;
   next: { checkpoint: Checkpoint; remaining: number; perWeek: number } | null;
-  /** Уроков в неделю за последние четыре недели. */
-  recentPerWeek: number;
+  /** Уроков в неделю за последние четыре недели или с первого пройденного урока; меньше недели истории — `null`. */
+  recentPerWeek: number | null;
 }
 
 /**
@@ -57,7 +57,9 @@ export function coursePace(modules: ModuleLoad[], today: string, completedDays: 
   const lag = Math.max(0, planned - done);
   const point = CHECKPOINTS.find((item) => today <= item.date && done < upTo(item.afterModule));
   const weeksLeft = point ? Math.max(days(today, point.date) / 7, 1 / 7) : 0;
-  const recent = completedDays.filter((day) => days(day, today) < 28 && day <= today).length;
+  const first = completedDays.reduce<string | null>((min, day) => (min === null || day < min ? day : min), null);
+  const span = first ? Math.min(28, days(first, today) + 1) : 0;
+  const recent = completedDays.filter((day) => days(day, today) < span && day <= today).length;
   return {
     done,
     total,
@@ -70,23 +72,16 @@ export function coursePace(modules: ModuleLoad[], today: string, completedDays: 
           perWeek: Math.round(((upTo(point.afterModule) - done) / weeksLeft) * 10) / 10,
         }
       : null,
-    recentPerWeek: Math.round((recent / 4) * 10) / 10,
+    recentPerWeek: span >= 7 ? Math.round(((recent * 7) / span) * 10) / 10 : null,
   };
 }
 
 export interface SkillReadiness {
   skill: Skill;
-  /** Результат, умноженный на долю пройденных уроков курса: высокий балл в начале курса ещё не готовность. */
-  share: number;
-  /** Сам результат контрольной или самопроверки. */
+  /** Результат последней контрольной по навыку или доля отмеченных критериев самопроверки. */
   result: number;
-  /** Чтение и аудирование — по контрольным; письмо и речь — доля отмеченных критериев самопроверки. */
+  /** Чтение и аудирование — по контрольным; письмо и речь — самопроверка. */
   source: "test" | "self";
   /** Название контрольной или число заданий самопроверки. */
   basis: string;
-}
-
-export function withCoverage(results: Omit<SkillReadiness, "share">[], done: number, total: number): SkillReadiness[] {
-  const coverage = total ? Math.min(1, done / total) : 0;
-  return results.map((item) => ({ ...item, share: item.result * coverage }));
 }

@@ -4,6 +4,7 @@ import { Screen } from "../../app/Screen";
 import { SKILL_LABEL } from "../../content/course";
 import { PASS_SHARE } from "../../domain/course";
 import { CHECKPOINTS, type SkillReadiness } from "../../domain/progress";
+import { SOLID_DAYS, type Leech } from "../../domain/stats";
 import { useNow } from "../../shared/clock";
 import { cx } from "../../shared/cx";
 import { dayMonth, withCount } from "../../shared/format";
@@ -11,10 +12,11 @@ import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { deviceTimezone } from "../../domain/time";
-import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import { courseProgress, type CourseProgress } from "../../storage/progress";
-import { ExamLine } from "../course/ExamLine";
-import { DeviceStatus } from "./DeviceStatus";
+import { useStats } from "../../shared/store";
+import { dictionary, type DictionaryLesson } from "../../storage/dictionary";
+import { entryPath } from "../words/WordsScreen";
+import { SyncLine } from "./SyncLine";
 import css from "./progress.module.css";
 
 const number = (value: number) => value.toLocaleString("ru-RU", { maximumFractionDigits: 1 });
@@ -24,35 +26,24 @@ export function ProgressScreen() {
   const now = useNow();
   const spread = useSpread();
   const data = useLiveQuery(() => courseProgress(now, deviceTimezone()), [now.toDateString(), deviceTimezone()]);
+  const words = useLiveQuery(() => dictionary(), []);
+  const stats = useStats(now);
   if (!data) return <Screen wide paper />;
-  const courseId = data.views[0]?.module.courseId;
-  const head = (
-    <>
-      {courseId && (
-        <div className={css.exam}>
-          <ExamLine courseId={courseId} />
-        </div>
-      )}
-      <h1 className={nb.title}>Прогресс</h1>
-    </>
-  );
-  const ready = <Readiness readiness={data.readiness} done={data.pace.done} total={data.pace.total} />;
-  const week = <Week week={data.week} />;
+  const head = <h1 className={nb.title}>Прогресс</h1>;
   const path = <Path data={data} />;
+  const ready = <Readiness readiness={data.readiness} />;
+  const cards = <Cards words={words} leeches={stats?.leeches ?? []} started={data.pace.done > 0} />;
   const tail = (
     <>
-      <ul className={css.links}>
-        <li>
-          <Link to="/progress/stats">Ответы и сроки повторений</Link>
-        </li>
-        <li>
-          <Link to="/progress/settings">Настройки</Link>
-        </li>
-        <li>
-          <Link to="/progress/backup">Копия данных</Link>
-        </li>
-      </ul>
-      <DeviceStatus />
+      <p className={css.weekLine} data-testid="week">
+        {weekLine(data.week)}
+      </p>
+      <div className={css.foot}>
+        <SyncLine />
+        <Link className={css.more} to="/progress/settings">
+          Настройки и данные
+        </Link>
+      </div>
     </>
   );
   return (
@@ -61,20 +52,20 @@ export function ProgressScreen() {
         <div className={cx(nb.spread, nb.spine)}>
           <div className={cx(nb.page, css.page)}>
             {head}
+            {path}
             {ready}
-            {week}
           </div>
           <div className={cx(nb.page, css.page)}>
-            {path}
+            {cards}
             {tail}
           </div>
         </div>
       ) : (
         <div className={css.page}>
           {head}
-          {ready}
           {path}
-          {week}
+          {ready}
+          {cards}
           {tail}
         </div>
       )}
@@ -82,22 +73,30 @@ export function ProgressScreen() {
   );
 }
 
-function Readiness({ readiness, done, total }: { readiness: SkillReadiness[]; done: number; total: number }) {
+const weekLine = ({ lessonDays, reviewDays }: CourseProgress["week"]) => {
+  if (!lessonDays.length && !reviewDays.length) return "На этой неделе занятий ещё не было.";
+  const parts = [
+    lessonDays.length ? withCount(lessonDays.length, ["занятие", "занятия", "занятий"]) + " курса" : "",
+    reviewDays.length ? `повторение ${withCount(reviewDays.length, ["день", "дня", "дней"])}` : "",
+  ].filter(Boolean);
+  return `На этой неделе: ${parts.join(", ")}.`;
+};
+
+function Readiness({ readiness }: { readiness: SkillReadiness[] }) {
   return (
     <section aria-labelledby="readiness">
       <h2 id="readiness" className={css.heading}>
         Готовность к A2
       </h2>
       <p className={css.note}>
-        Порог экзамена — 60 % в каждом навыке. Результат умножен на пройденную часть курса: {done} из{" "}
-        {withCount(total, LESSONS)}. Чтение и аудирование — по контрольным; письмо и речь — ваша самопроверка, не оценка
-        экзаменатора.
+        Порог экзамена — 60 % в каждом навыке. Чтение и аудирование — по последней контрольной, письмо и речь — ваша
+        самопроверка.
       </p>
       <ul className={css.skills}>
         {(["reading", "listening", "writing", "speaking"] as const).map((skill) => {
           const item = readiness.find((entry) => entry.skill === skill);
-          const percent = item ? Math.round(item.share * 100) : null;
-          const weak = item !== undefined && item.share < PASS_SHARE;
+          const percent = item ? Math.round(item.result * 100) : null;
+          const weak = item !== undefined && item.result < PASS_SHARE;
           const label = SKILL_LABEL[skill];
           return (
             <li key={skill} className={cx(weak && css.weak)} data-testid={`skill-${skill}`}>
@@ -118,30 +117,79 @@ function Readiness({ readiness, done, total }: { readiness: SkillReadiness[]; do
                 ))}
                 <b className={css.threshold} />
               </span>
-              <span className={css.percent}>{percent === null ? "—" : `${percent}%`}</span>
-              <span className={css.basis}>
-                {!item
-                  ? skill === "reading" || skill === "listening"
-                    ? "появится после первой контрольной"
-                    : "появится после первого задания"
-                  : `${
-                      item.source === "test"
-                        ? item.basis
-                        : `самопроверка, ${withCount(Number(item.basis), ["задание", "задания", "заданий"])}`
-                    }: ${Math.round(item.result * 100)} %`}
-                {weak && " · ниже 60 %"}
-              </span>
+              <span className={css.percent}>{percent === null ? "—" : `${percent} %`}</span>
+              {item ? (
+                <span className={css.basis}>
+                  {item.source === "test"
+                    ? item.basis
+                    : `самопроверка, ${withCount(Number(item.basis), ["задание", "задания", "заданий"])}`}
+                  {weak && " · ниже 60 %"}
+                </span>
+              ) : null}
             </li>
           );
         })}
       </ul>
+      {readiness.length < 4 ? (
+        <p className={css.note}>
+          {readiness.some((item) => item.source === "test")
+            ? "Пустые шкалы заполнятся после заданий письма и речи."
+            : "Чтение и аудирование появятся после первой контрольной, письмо и речь — после первых заданий."}
+        </p>
+      ) : null}
+    </section>
+  );
+}
+
+function Cards({
+  words,
+  leeches,
+  started,
+}: {
+  words: DictionaryLesson[] | undefined;
+  leeches: Leech[];
+  started: boolean;
+}) {
+  const entries = words?.flatMap((lesson) => lesson.entries) ?? [];
+  const learning = entries.filter((entry) => entry.mark === "learning").length;
+  const solid = entries.filter((entry) => entry.mark === "solid").length;
+  return (
+    <section aria-labelledby="cards">
+      <h2 id="cards" className={css.heading}>
+        Слова и фразы
+      </h2>
+      <p className={css.plan} data-testid="cards-line">
+        {learning || solid ? (
+          <>
+            Учу <b>{learning}</b>, закреплено <b>{solid}</b> — с интервалом повторения от {SOLID_DAYS} дня.{" "}
+          </>
+        ) : started ? (
+          "Карточки пройденных уроков приходят в «Повторить» по дневному пределу. "
+        ) : (
+          "Карточки появятся после первого пройденного урока. "
+        )}
+        <Link to="/words">Словарь</Link>
+      </p>
+      {leeches.length ? (
+        <p className={css.plan} data-testid="leeches">
+          Не даются:{" "}
+          {leeches.slice(0, 6).map((leech, index) => (
+            <span key={leech.unitKey}>
+              {index ? ", " : ""}
+              <Link to={entryPath(leech)} lang="el">
+                {leech.label}
+              </Link>
+            </span>
+          ))}
+          {leeches.length > 6 ? ` и ещё ${leeches.length - 6}` : ""}
+        </p>
+      ) : null}
     </section>
   );
 }
 
 function Path({ data }: { data: CourseProgress }) {
   const { pace, views, current } = data;
-  const next = pace.next;
   return (
     <section aria-labelledby="path">
       <h2 id="path" className={css.heading}>
@@ -165,49 +213,43 @@ function Path({ data }: { data: CourseProgress }) {
           );
         })}
       </div>
-      <p className={css.plan} data-testid="pace">
-        {next ? (
-          <>
-            К {next.checkpoint.label} ({dayMonth(next.checkpoint.date)}) — модуль{" "}
-            {String(next.checkpoint.afterModule).padStart(2, "0")}, ещё {withCount(next.remaining, LESSONS)}. Нужно{" "}
-            <b>{number(next.perWeek)} в неделю</b>; за последние четыре недели — {number(pace.recentPerWeek)}.{" "}
-          </>
-        ) : (
-          <>Все уроки до последней контрольной точки пройдены. </>
-        )}
-        {pace.lagWeeks ? (
-          <span className={css.lag}>
-            Отставание от календаря курса — {withCount(pace.lagWeeks, ["неделя", "недели", "недель"])}.
-          </span>
-        ) : (
-          <span>Идёте по календарю курса.</span>
-        )}
-      </p>
+      <Pace pace={pace} />
     </section>
   );
 }
 
-function Week({ week }: { week: CourseProgress["week"] }) {
-  const lessons = week.lessonDays.length;
-  const reviews = week.reviewDays.length;
+function Pace({ pace }: { pace: CourseProgress["pace"] }) {
+  const ahead = pace.done - pace.planned;
+  const next = pace.next;
+  const slow = next && pace.recentPerWeek !== null && pace.recentPerWeek < next.perWeek;
   return (
-    <section aria-labelledby="week">
-      <h2 id="week" className={css.heading}>
-        Эта неделя
-      </h2>
-      <WeekStrip
-        monday={week.monday}
-        today={week.today}
-        lessons={week.lessonDays}
-        reviews={week.reviewDays}
-        small
-        className={css.days}
-        label={(name, lesson, review) => [name, lesson && "урок", review && "повторение"].filter(Boolean).join(", ")}
-      />
+    <div data-testid="pace">
       <p className={css.plan}>
-        {withCount(lessons, ["занятие", "занятия", "занятий"])} из {WEEK_PLAN} · повторение{" "}
-        {withCount(reviews, ["день", "дня", "дней"])} · {withCount(week.cards, ["карточка", "карточки", "карточек"])}
+        Пройдено <b>{pace.done}</b> из {withCount(pace.total, LESSONS)}.{" "}
+        {pace.lagWeeks ? (
+          <span className={css.lag}>
+            Отставание от календаря — {withCount(-ahead, LESSONS)}, около{" "}
+            {withCount(pace.lagWeeks, ["недели", "недель", "недель"])}.
+          </span>
+        ) : ahead > 0 ? (
+          `Впереди календаря на ${withCount(ahead, LESSONS)}.`
+        ) : (
+          "Точно по календарю."
+        )}
       </p>
-    </section>
+      <p className={css.plan}>
+        {next ? (
+          <>
+            До {next.checkpoint.label} ({next.checkpoint.title}, {dayMonth(next.checkpoint.date)}) — ещё{" "}
+            {withCount(next.remaining, LESSONS)}, нужно <b>{number(next.perWeek)} в неделю</b>.
+            {pace.recentPerWeek !== null && (
+              <span className={cx(slow && css.lag)}> Ваш темп — {number(pace.recentPerWeek)} в неделю.</span>
+            )}
+          </>
+        ) : (
+          "Все уроки до последней контрольной точки пройдены."
+        )}
+      </p>
+    </div>
   );
 }

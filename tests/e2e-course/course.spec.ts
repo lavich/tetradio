@@ -249,11 +249,8 @@ test("урок курса: задания с ключом, чтение, ауд�
   });
   expect(tick).toBe(ok);
 
-  // Неделя на «Прогрессе» сообщает диктору, что сегодня был урок, а не только заливает клетку.
   await page.goto("/app/progress");
-  expect(await page.getByRole("list", { name: "Дни недели" }).ariaSnapshot()).toMatch(
-    /listitem: (Пн|Вт|Ср|Чт|Пт|Сб|Вс), урок/,
-  );
+  await expect(page.getByTestId("week")).toHaveText("На этой неделе: 1 занятие курса.");
 
   // Пройденный урок отдаёт карточки в повторение; следующий шаг курса — контрольная модуля.
   await page.goto("/app/");

@@ -146,7 +146,7 @@ test("смена аккаунта A → B на том же устройстве:
   expect(await page.evaluate(() => sessionStorage.getItem("tetradio:launch"))).toBeNull();
   await page.goto(`/app/words${launchHash({ userId: A })}`); // другой путь: не переход по hash в том же документе
   await expect(page.getByRole("navigation")).toBeVisible();
-  await page.goto("/app/progress");
+  await page.goto("/app/progress/settings");
   await expect(page.getByTestId("storage-scope")).toContainText("Telegram: облачная синхронизация");
   expect(await count(page, dbOf(A), "cardStates")).toBeGreaterThan(0);
 });
