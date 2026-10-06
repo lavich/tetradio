@@ -49,7 +49,7 @@ export function ProgressScreen() {
   return (
     <Screen wide>
       {spread ? (
-        <div className={cx(nb.spread, nb.spine)}>
+        <div className={nb.spread}>
           <div className={cx(nb.page, css.page)}>
             {head}
             {path}

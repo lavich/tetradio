@@ -82,7 +82,7 @@ export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: D
   );
   if (!spread || !next) return page;
   return (
-    <div className={cx(nb.spread, nb.spine, css.spread)}>
+    <div className={cx(nb.spread, css.spread)}>
       {page}
       <ModulePage view={next.view} current={next.lesson.id} week={week ?? []} monday={monday} today={today} />
     </div>
