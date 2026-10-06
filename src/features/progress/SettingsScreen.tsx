@@ -29,7 +29,7 @@ export function SettingsScreen() {
     if (!touched.current.has("autoSpeak")) setAutoSpeak(settings.autoSpeak);
   }, [ready, settings]);
   return (
-    <Screen back="Настройки и данные" paper>
+    <Screen back="Настройки и данные">
       <section aria-labelledby="lessons" className={css.section}>
         <h2 id="lessons" className={css.heading}>
           Занятия

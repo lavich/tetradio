@@ -28,9 +28,9 @@ export const entryPath = (entry: Pick<DictionaryEntry, "ref">) =>
 export function WordsScreen() {
   const spread = useSpread();
   const lessons = useLiveQuery(() => dictionary(), []);
-  if (!lessons) return <Screen paper />;
+  if (!lessons) return <Screen />;
   return (
-    <Screen wide={spread} paper>
+    <Screen wide={spread}>
       {spread ? (
         <div className={cx(nb.spread, nb.spine, css.spread)}>
           <Dictionary lessons={lessons} />

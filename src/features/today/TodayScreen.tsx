@@ -12,7 +12,7 @@ export function TodayScreen() {
   // План читается из локальной базы за доли секунды: пустая клетка без заголовка и заглушек, чтобы ничего не мелькало.
   if (!plan || installed === undefined || unfinished === undefined)
     return (
-      <Screen wide paper>
+      <Screen wide>
         <div aria-busy="true" aria-label="План дня загружается" />
       </Screen>
     );
@@ -24,7 +24,7 @@ export function TodayScreen() {
       </Screen>
     );
   return (
-    <Screen wide paper>
+    <Screen wide>
       <CourseToday plan={plan} now={now} unfinished={unfinished} />
     </Screen>
   );
