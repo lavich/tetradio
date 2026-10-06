@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("вкладка «Прогресс»: навыки против порога, путь и темп, неделя, слова и «Настройки и данные»", async ({
-  page,
-}) => {
+test("вкладка «Прогресс»: навыки по курсу, путь и темп, неделя, слова и «Настройки и данные»", async ({ page }) => {
   await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
@@ -10,8 +8,8 @@ test("вкладка «Прогресс»: навыки против порог�
   await expect(page).toHaveURL(/\/progress$/);
   await expect(page.getByRole("heading", { name: "Прогресс", level: 1 })).toBeVisible();
   for (const skill of ["reading", "listening", "writing", "speaking"])
-    await expect(page.getByTestId(`skill-${skill}`).getByRole("img", { name: "нет данных" })).toBeVisible();
-  await expect(page.getByText("Чтение и аудирование появятся после первой контрольной")).toBeVisible();
+    await expect(page.getByTestId(`skill-${skill}`).getByRole("img", { name: "0 % курса" })).toBeVisible();
+  await expect(page.getByTestId("skill-reading")).toContainText("ещё не начато");
   await expect(page.getByRole("img", { name: /пройдено уроков: 0 из/ })).toBeVisible();
   await expect(page.getByTestId("pace")).toContainText("До K1 (Контрольная A1");
   await expect(page.getByTestId("pace")).not.toContainText("Ваш темп"); // меньше недели истории

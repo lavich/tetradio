@@ -1,4 +1,5 @@
-import type { Skill } from "../content/course";
+import { SKILLS, skillOf, type LessonBlock, type Skill } from "../content/course";
+import type { BlockProgress } from "./types";
 
 /** Календарь курса из docs/curriculum.md: старт и контрольные точки после модулей; отставание считается от него. */
 export const COURSE_START = "2026-10-05";
@@ -76,12 +77,56 @@ export function coursePace(modules: ModuleLoad[], today: string, completedDays: 
   };
 }
 
-export interface SkillReadiness {
+export interface SkillProgress {
   skill: Skill;
-  /** Результат последней контрольной по навыку или доля отмеченных критериев самопроверки. */
-  result: number;
-  /** Чтение и аудирование — по контрольным; письмо и речь — самопроверка. */
-  source: "test" | "self";
-  /** Название контрольной или число заданий самопроверки. */
-  basis: string;
+  /** Верно выполненное по навыку во всём курсе: пункты заданий или отмеченные критерии самопроверки. */
+  earned: number;
+  /** Всё по навыку во всём курсе (по скачанным урокам). */
+  total: number;
+  /** Сколько из `total` уже выполнено, верно или нет. */
+  attempted: number;
+  /** Письмо и речь — самопроверка учащегося. */
+  source: "task" | "self";
+}
+
+/**
+ * Прогресс навыка по всему курсу: верное из всего, что курс даёт по навыку. Чтение и аудирование — пункты заданий
+ * к текстам (уроки и контрольные), «почти» засчитывается; письмо и речь — критерии самопроверки.
+ */
+export function skillProgress(lessons: { blocks: LessonBlock[]; progress: Map<string, BlockProgress> }[]) {
+  const sums = new Map<Skill, SkillProgress>(
+    SKILLS.map((skill) => [
+      skill,
+      {
+        skill,
+        earned: 0,
+        total: 0,
+        attempted: 0,
+        source: skill === "writing" || skill === "speaking" ? "self" : "task",
+      },
+    ]),
+  );
+  for (const { blocks, progress } of lessons)
+    for (const block of blocks) {
+      const mark = progress.get(block.id);
+      if (block.type === "writing" || block.type === "speaking") {
+        const entry = sums.get(block.type)!;
+        entry.total += block.criteria.length;
+        if (mark?.done) {
+          entry.attempted += block.criteria.length;
+          entry.earned += mark.checks?.length ?? 0;
+        }
+        continue;
+      }
+      if (block.type !== "exercise") continue;
+      const skill = skillOf(block, blocks);
+      if (!skill) continue;
+      const entry = sums.get(skill)!;
+      entry.total += block.items.length;
+      if (mark?.done) {
+        entry.attempted += block.items.length;
+        entry.earned += mark.score ? mark.score.correct + mark.score.almost : 0;
+      }
+    }
+  return [...sums.values()];
 }

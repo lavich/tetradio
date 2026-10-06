@@ -63,6 +63,7 @@ describe("обновление копии v8", () => {
     expect(await views(db)).toMatchInlineSnapshot(`
       {
         "course": {
+          "complete": true,
           "current": 1,
           "pace": {
             "done": 2,
@@ -81,24 +82,34 @@ describe("обновление копии v8", () => {
             "recentPerWeek": 1,
             "total": 7,
           },
-          "readiness": [
+          "skills": [
             {
-              "basis": "Контрольная модуля 01",
-              "result": 1,
+              "attempted": 4,
+              "earned": 2,
               "skill": "reading",
-              "source": "test",
+              "source": "task",
+              "total": 4,
             },
             {
-              "basis": "1",
-              "result": 0.25,
+              "attempted": 2,
+              "earned": 0,
+              "skill": "listening",
+              "source": "task",
+              "total": 2,
+            },
+            {
+              "attempted": 4,
+              "earned": 1,
               "skill": "writing",
               "source": "self",
+              "total": 4,
             },
             {
-              "basis": "1",
-              "result": 0.3333333333333333,
+              "attempted": 3,
+              "earned": 1,
               "skill": "speaking",
               "source": "self",
+              "total": 3,
             },
           ],
           "views": [

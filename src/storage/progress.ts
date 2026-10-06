@@ -1,7 +1,5 @@
-import { SKILLS, type Skill } from "../content/course";
-import { testResult } from "../domain/course";
 import { localDay, mondayOf } from "../domain/learning";
-import { coursePace, type Pace, type SkillReadiness } from "../domain/progress";
+import { coursePace, skillProgress, type Pace, type SkillProgress } from "../domain/progress";
 import type { BlockProgress } from "../domain/types";
 import { lessonDays, moduleViews, type ModuleView } from "./course";
 import { db, type AppDatabase } from "./db";
@@ -11,7 +9,9 @@ export interface CourseProgress {
   /** Номер модуля следующего урока; после последнего — номер последнего модуля. */
   current: number;
   pace: Pace;
-  readiness: SkillReadiness[];
+  skills: SkillProgress[];
+  /** Скачаны все уроки курса: иначе доли навыков считаются по скачанным. */
+  complete: boolean;
   week: { today: string; monday: string; lessonDays: string[]; reviewDays: string[]; cards: number };
 }
 
@@ -38,40 +38,14 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     progress.set(row.lessonId, map);
   }
 
-  // Последний по программе результат контрольной по каждому навыку; письмо и речь — накопленная самопроверка.
-  const tests = new Map<Skill, SkillReadiness>();
-  const self = new Map<Skill, { checked: number; criteria: number; tasks: number }>();
-  ids.forEach((id, index) => {
-    const pack = packs[index];
-    const blocks = pack?.blocks ?? [];
-    if (!pack) return;
-    const marks = progress.get(id) ?? new Map<string, BlockProgress>();
-    if (pack.kind === "test" && lessons[index]?.completed)
-      for (const result of testResult(blocks, marks).skills)
-        tests.set(result.skill, {
-          skill: result.skill,
-          result: result.share,
-          source: "test",
-          basis: lessons[index]?.title ?? id,
-        });
-    for (const block of blocks) {
-      if (block.type !== "writing" && block.type !== "speaking") continue;
-      const mark = marks.get(block.id);
-      if (!mark?.done) continue;
-      const skill: Skill = block.type;
-      const entry = self.get(skill) ?? { checked: 0, criteria: 0, tasks: 0 };
-      entry.checked += mark.checks?.length ?? 0;
-      entry.criteria += block.criteria.length;
-      entry.tasks++;
-      self.set(skill, entry);
-    }
-  });
-  const readiness = SKILLS.flatMap((skill): SkillReadiness[] => {
-    const own = self.get(skill);
-    if (tests.has(skill)) return [tests.get(skill)!];
-    if (own?.criteria) return [{ skill, result: own.checked / own.criteria, source: "self", basis: String(own.tasks) }];
-    return [];
-  });
+  const skills = skillProgress(
+    ids.flatMap((id, index) => {
+      const blocks = packs[index]?.blocks;
+      return blocks ? [{ blocks, progress: progress.get(id) ?? new Map<string, BlockProgress>() }] : [];
+    }),
+  );
+  // Курс докачивается фоном: пока скачано не всё, доля считается по скачанным урокам.
+  const installed = packs.filter((pack) => pack?.blocks).length;
 
   const completedDays = lessons
     .filter((lesson) => lesson?.completed)
@@ -92,7 +66,8 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     views,
     current: next?.module.number ?? views.at(-1)?.module.number ?? 1,
     pace,
-    readiness,
+    skills,
+    complete: installed === ids.length,
     week: {
       today,
       monday,
