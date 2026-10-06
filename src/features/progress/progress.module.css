@@ -43,7 +43,6 @@
   font-size: 12px;
   color: var(--muted-foreground);
 }
-.weak .percent,
 .weak .basis {
   color: var(--almost-fg);
 }
@@ -54,23 +53,20 @@
   gap: 2px;
   height: 16px;
 }
+/* Клетка заполняется частично: доля курса растёт понемногу, и 4 % не должны выглядеть нулём. */
 .bar i {
+  position: relative;
+  overflow: hidden;
   border: 1.5px solid var(--input);
   border-radius: 3px;
 }
-.bar .filled {
-  background: var(--primary);
-  border-color: var(--primary);
-}
-.bar .filled.self {
-  background: repeating-linear-gradient(135deg, var(--primary) 0 3px, transparent 3px 6px);
-}
-.threshold {
+.bar i > span {
   position: absolute;
-  left: calc(60% - 1px);
-  top: -5px;
-  bottom: -5px;
-  border-left: 1.5px dashed var(--foreground);
+  inset: 0 auto 0 0;
+  background: var(--primary);
+}
+.bar i > span.self {
+  background: repeating-linear-gradient(135deg, var(--primary) 0 3px, transparent 3px 6px);
 }
 .module {
   margin: 4px 0 8px;

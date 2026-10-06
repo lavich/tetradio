@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { coursePace, type ModuleLoad } from "../src/domain/progress";
+import type { LessonBlock } from "../src/content/course";
+import { coursePace, skillProgress, type ModuleLoad } from "../src/domain/progress";
+import type { BlockProgress } from "../src/domain/types";
 
 /** 24 модуля по 4 урока, K1 после 8-го: к 13 декабря — 32 урока. */
 const modules = (done: number): ModuleLoad[] =>
@@ -48,5 +50,43 @@ describe("темп курса против календаря", () => {
   it("меньше недели истории — темпа нет", () => {
     expect(coursePace(modules(3), "2026-10-07", ["2026-10-05", "2026-10-06", "2026-10-07"]).recentPerWeek).toBeNull();
     expect(coursePace(modules(0), "2026-10-07", []).recentPerWeek).toBeNull();
+  });
+});
+
+describe("навыки по всему курсу", () => {
+  const blocks: LessonBlock[] = [
+    { type: "reading", id: "text", title: "Текст", body: "" } as unknown as LessonBlock,
+    {
+      type: "exercise",
+      id: "about-text",
+      about: "text",
+      format: "choice",
+      items: [{}, {}, {}, {}],
+    } as unknown as LessonBlock,
+    { type: "exercise", id: "grammar", format: "choice", items: [{}, {}] } as unknown as LessonBlock,
+    { type: "writing", id: "letter", criteria: ["a", "b", "c", "d"] } as unknown as LessonBlock,
+  ];
+  const mark = (patch: Partial<BlockProgress>) => ({ done: true, ...patch }) as BlockProgress;
+  it("доля — верное из всего курса, качество — верное из выполненного", () => {
+    const skills = skillProgress([
+      {
+        blocks,
+        progress: new Map([
+          ["about-text", mark({ score: { correct: 2, almost: 1, total: 4 } })],
+          ["letter", mark({ checks: [0, 1, 2] })],
+        ]),
+      },
+      { blocks, progress: new Map() },
+    ]);
+    const reading = skills.find((item) => item.skill === "reading")!;
+    expect(reading).toMatchObject({ earned: 3, attempted: 4, total: 8, source: "task" });
+    expect(skills.find((item) => item.skill === "writing")).toMatchObject({
+      earned: 3,
+      attempted: 4,
+      total: 8,
+      source: "self",
+    });
+    // Задание без текста (грамматика) в навыки не входит.
+    expect(skills.find((item) => item.skill === "listening")).toMatchObject({ earned: 0, total: 0 });
   });
 });

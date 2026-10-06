@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { SKILL_LABEL } from "../../content/course";
 import { PASS_SHARE } from "../../domain/course";
-import { CHECKPOINTS, type SkillReadiness } from "../../domain/progress";
+import { CHECKPOINTS, type SkillProgress } from "../../domain/progress";
 import { SOLID_DAYS, type Leech } from "../../domain/stats";
 import { useNow } from "../../shared/clock";
 import { cx } from "../../shared/cx";
@@ -31,7 +31,7 @@ export function ProgressScreen() {
   if (!data) return <Screen wide paper />;
   const head = <h1 className={nb.title}>Прогресс</h1>;
   const path = <Path data={data} />;
-  const ready = <Readiness readiness={data.readiness} />;
+  const ready = <Skills skills={data.skills} complete={data.complete} />;
   const cards = <Cards words={words} leeches={stats?.leeches ?? []} started={data.pace.done > 0} />;
   const tail = (
     <>
@@ -82,61 +82,47 @@ const weekLine = ({ lessonDays, reviewDays }: CourseProgress["week"]) => {
   return `На этой неделе: ${parts.join(", ")}.`;
 };
 
-function Readiness({ readiness }: { readiness: SkillReadiness[] }) {
+function Skills({ skills, complete }: { skills: SkillProgress[]; complete: boolean }) {
   return (
-    <section aria-labelledby="readiness">
-      <h2 id="readiness" className={css.heading}>
-        Готовность к A2
+    <section aria-labelledby="skills">
+      <h2 id="skills" className={css.heading}>
+        Навыки по курсу
       </h2>
       <p className={css.note}>
-        Порог экзамена — 60 % в каждом навыке. Чтение и аудирование — по последней контрольной, письмо и речь — ваша
-        самопроверка.
+        Доля всего курса по навыку, выполненная верно. Письмо и речь — по вашей самопроверке.
+        {complete ? "" : " Курс ещё скачивается: доли считаются по скачанным урокам."}
       </p>
       <ul className={css.skills}>
         {(["reading", "listening", "writing", "speaking"] as const).map((skill) => {
-          const item = readiness.find((entry) => entry.skill === skill);
-          const percent = item ? Math.round(item.result * 100) : null;
-          const weak = item !== undefined && item.result < PASS_SHARE;
+          const item = skills.find((entry) => entry.skill === skill);
+          const share = item?.total ? item.earned / item.total : 0;
+          const percent = Math.round(share * 100);
+          const quality = item?.attempted ? item.earned / item.attempted : null;
+          const weak = quality !== null && quality < PASS_SHARE;
           const label = SKILL_LABEL[skill];
           return (
             <li key={skill} className={cx(weak && css.weak)} data-testid={`skill-${skill}`}>
               <span className={css.skill}>{label.charAt(0).toUpperCase() + label.slice(1)}</span>
-              <span
-                className={css.bar}
-                role="img"
-                aria-label={percent === null ? "нет данных" : `${percent} % при пороге 60 %`}
-              >
+              <span className={css.bar} role="img" aria-label={`${percent} % курса`}>
                 {Array.from({ length: 10 }, (_, index) => (
-                  <i
-                    key={index}
-                    className={cx(
-                      percent !== null && index < Math.round(percent / 10) && css.filled,
-                      item?.source === "self" && css.self,
-                    )}
-                  />
+                  <i key={index}>
+                    <span
+                      className={cx(item?.source === "self" && css.self)}
+                      style={{ width: `${Math.min(1, Math.max(0, share * 10 - index)) * 100}%` }}
+                    />
+                  </i>
                 ))}
-                <b className={css.threshold} />
               </span>
-              <span className={css.percent}>{percent === null ? "—" : `${percent} %`}</span>
-              {item ? (
-                <span className={css.basis}>
-                  {item.source === "test"
-                    ? item.basis
-                    : `самопроверка, ${withCount(Number(item.basis), ["задание", "задания", "заданий"])}`}
-                  {weak && " · ниже 60 %"}
-                </span>
-              ) : null}
+              <span className={css.percent}>{percent} %</span>
+              <span className={css.basis}>
+                {quality === null
+                  ? "ещё не начато"
+                  : `${item?.source === "self" ? "самопроверка" : "из пройденного верно"} ${Math.round(quality * 100)} %`}
+              </span>
             </li>
           );
         })}
       </ul>
-      {readiness.length < 4 ? (
-        <p className={css.note}>
-          {readiness.some((item) => item.source === "test")
-            ? "Пустые шкалы заполнятся после заданий письма и речи."
-            : "Чтение и аудирование появятся после первой контрольной, письмо и речь — после первых заданий."}
-        </p>
-      ) : null}
     </section>
   );
 }
