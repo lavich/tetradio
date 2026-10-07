@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { completeLessons, installLessons, ready } from "./helpers";
 
-test("первый запуск: «Учить курс» открывает «Сегодня» курса, карточки — после первого пройденного урока", async ({
+test("первый запуск: «Учить курс» открывает «Сегодня» курса, карточки — после первого выполненного задания", async ({
   page,
 }) => {
   await page.goto("/app/");

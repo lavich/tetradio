@@ -48,9 +48,15 @@ export async function currentCourse(database: AppDatabase = db): Promise<Course 
   if (module) return database.courses.get(module.courseId);
   return database.courses.toCollection().first();
 }
-// Булево поле IndexedDB не индексирует, а уроков — десятки.
-export async function completedLessons(database: AppDatabase = db): Promise<PlanLesson[]> {
-  const done = await database.lessons.filter((lesson) => lesson.completed).toArray();
+/** Уроки — источник новых карточек: пройденные и начатые, где выполнено хотя бы одно задание. */
+export async function studiedLessons(database: AppDatabase = db): Promise<PlanLesson[]> {
+  // Булево поле IndexedDB не индексирует, а уроков — десятки.
+  const [lessons, rows] = await Promise.all([
+    database.lessons.toArray(),
+    database.blockProgress.filter((row) => row.done).toArray(),
+  ]);
+  const started = new Set(rows.map((row) => row.lessonId));
+  const done = lessons.filter((lesson) => lesson.completed || started.has(lesson.id));
   if (!done.length) return [];
   const [modules, entries] = await Promise.all([
     database.modules.orderBy("number").toArray(),
@@ -107,7 +113,7 @@ export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): 
 export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
   return {
     timezone: deviceTimezone,
-    completedLessons: () => completedLessons(database),
+    studiedLessons: () => studiedLessons(database),
     itemsOf: (lessonIds) =>
       lessonIds.length ? database.lessonItems.where("lessonId").anyOf(lessonIds).toArray() : Promise.resolve([]),
     lessonRefs: async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref),

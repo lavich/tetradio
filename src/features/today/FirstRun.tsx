@@ -10,7 +10,7 @@ import ui from "../../shared/ui.module.css";
 
 /**
  * Первый запуск: на устройстве нет ни одного урока. Первый шаг — курс целиком: после загрузки «Сегодня»
- * ведёт к первому уроку, а карточки приходят из пройденных уроков.
+ * ведёт к первому уроку, а карточки приходят из начатых уроков.
  */
 export function FirstRun({ courses, entries }: { courses: Course[]; entries: StoredCatalogEntry[] }) {
   const course = courses.find((item) => entries.some((entry) => entry.courseId === item.id));

@@ -100,10 +100,26 @@ const module = (id: string, number: number, over: Partial<StoredModule> = {}): S
   ...over,
 });
 
-describe("новые карточки — из пройденных уроков курса", () => {
+describe("новые карточки — из пройденных и начатых уроков курса", () => {
   const pool = words(60);
   const ids = (from: number, to: number) => pool.slice(from, to).map((w) => w.id);
-  it("карточки непройденного урока не вводятся", async () => {
+  it("урок с выполненным заданием даёт новые карточки в порядке программы, неначатый — нет", async () => {
+    const data = base({
+      words: pool,
+      lessons: [
+        lesson("done", ids(0, 2), { courseId: "a2" }),
+        lesson("started", ids(2, 5), { courseId: "a2", completed: false }),
+        lesson("next", ids(20, 40), { courseId: "a2", completed: false }),
+      ],
+      blockProgress: [
+        { lessonId: "started", done: true },
+        { lessonId: "next", done: false },
+      ],
+    });
+    const plan = await planOf(data);
+    expect(idsOf(plan.newRefs)).toEqual(ids(0, 5));
+  });
+  it("карточки неначатого урока не вводятся", async () => {
     const data = base({
       words: pool,
       lessons: [
