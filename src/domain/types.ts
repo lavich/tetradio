@@ -64,7 +64,7 @@ export type SessionCard = { kind: "word"; word: Word } | { kind: "phrase"; phras
  */
 export type CardSnapshot =
   { greek: string; russian: string } | { text: string; translation?: string } | { template: string; answer: string };
-/** Курс: название и экзамен приходят из каталога, `newItemsPerDay` — дневной предел новых карточек пользователя. */
+/** Курс: название и экзамен приходят из каталога. */
 export interface Course {
   id: string;
   title: string;

@@ -139,7 +139,7 @@ export const TABLES = [
 export const SYNC_META_PREFIX = "sync:";
 
 type Row = Record<string, unknown>;
-const COURSE_FIELDS = ["id", "title", "newItemsPerDay", "exam", "updatedAt"];
+const COURSE_FIELDS = ["id", "title", "exam", "updatedAt"];
 const keep = (row: Row, fields: string[]) => {
   for (const key of Object.keys(row)) if (!fields.includes(key)) delete row[key];
 };
