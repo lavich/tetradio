@@ -12,7 +12,6 @@ import { stopAudio, useGreekVoice } from "../../shared/audio";
 import { useSettings } from "../../shared/store";
 import { db } from "../../storage/db";
 import { ExerciseView, type Answer } from "../learning/exercises";
-import { useWide } from "../../shared/media";
 import { SessionShell } from "../learning/notebook";
 import { EXERCISE_LABELS, isWordExercise, wordSources } from "./word-exercises";
 import ui from "../../shared/ui.module.css";
@@ -79,11 +78,9 @@ export function WordExerciseScreen() {
     setAttempt((n) => n + 1);
   };
   const title = isWordExercise(type) ? EXERCISE_LABELS[type] : "Упражнение";
-  const wide = useWide();
   const shell = (body: React.ReactNode, sheet = true) => (
     <SessionShell
       sheetLabel={sheet ? title : undefined}
-      inline={wide}
       cloudLabel={title}
       closeLabel="К слову"
       onClose={back}

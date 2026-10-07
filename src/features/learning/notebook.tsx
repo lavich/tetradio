@@ -12,20 +12,18 @@ import s from "./session.module.css";
 
 /**
  * Место листа в занятии: номер текущего задания и ячейка облачка, куда упражнение кладёт своё действие.
- * Без поставщика (отдельный рендер упражнения в тестах) или с `inline` действие остаётся прямо под листом.
+ * Без поставщика (отдельный рендер упражнения в тестах) действие остаётся прямо под листом.
  */
 interface Place {
   number?: number;
   slot: HTMLElement | null;
-  /** На широком экране облачко далеко от листа: «Проверить» ставим в карточку, рядом с ответом. */
-  inline?: boolean;
 }
 const PlaceContext = createContext<Place | undefined>(undefined);
 export const PlaceProvider = PlaceContext.Provider;
 
 export function CloudAction({ children }: { children: ReactNode }) {
   const place = useContext(PlaceContext);
-  if (!place || place.inline) return <div className={s.inlineAction}>{children}</div>;
+  if (!place) return <div className={s.inlineAction}>{children}</div>;
   return place.slot ? createPortal(children, place.slot) : null;
 }
 
@@ -203,7 +201,6 @@ export function SessionShell({
   sheetRef,
   sheetLabel,
   number,
-  inline,
   problem,
   cloudLabel,
   cloudMark,
@@ -220,7 +217,6 @@ export function SessionShell({
   sheetRef?: Ref<HTMLElement>;
   sheetLabel?: string;
   number?: number;
-  inline: boolean;
   problem?: string;
   cloudLabel: string;
   /** Метка облачка для замера высоты в `useFold`. */
@@ -239,7 +235,7 @@ export function SessionShell({
         {head}
         {sheetLabel ? (
           <section ref={sheetRef} className={s.sheet} aria-label={sheetLabel}>
-            <PlaceProvider value={{ number, slot, inline }}>{children}</PlaceProvider>
+            <PlaceProvider value={{ number, slot }}>{children}</PlaceProvider>
             {problem && (
               <p className={s.problem} role="alert">
                 {problem}

@@ -225,7 +225,6 @@ export function SessionScreen() {
       sheetRef={sheet}
       sheetLabel={introduction ? "Знакомство" : "Задание"}
       number={introduction ? undefined : rows.length + 1}
-      inline={wide}
       problem={problem}
       cloudLabel="Занятие"
       cloudMark
