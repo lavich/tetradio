@@ -179,9 +179,9 @@ test("от 900 px: слева страница со списком, справа
   await expect(page.getByRole("button", { name: /^Сделано \d+/ })).toHaveCount(0); // на широком не сворачивается
   await page.getByTestId("option").first().click();
   await expect(
-    page.getByRole("region", { name: "Задание" }).getByRole("button", { name: "Далее", exact: true }),
+    page.getByRole("group", { name: "Занятие" }).getByRole("button", { name: "Далее", exact: true }),
   ).toBeVisible();
-  await expect(page.getByRole("group", { name: "Занятие" }).getByRole("button", { name: "Далее" })).toHaveCount(0);
+  await expect(page.getByRole("region", { name: "Задание" }).getByRole("button", { name: "Далее" })).toHaveCount(0);
 });
 
 test("телефон: главное действие — в облачке, под пальцем", async ({ page }) => {
