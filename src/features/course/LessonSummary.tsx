@@ -119,7 +119,7 @@ export function LessonSummary({
       {items.length && !withList ? (
         <section className={css.cards} aria-label="Карточки урока">
           <p className={base.print}>{cards} урока — в повторении</p>
-          <p className={base.meta}>Новые карточки приходят в «Повторить» по дневному пределу</p>
+          <p className={base.meta}>Новые карточки — в «Повторить» на экране «Сегодня»</p>
           <Button variant="soft" size="md" className="mt-2" onClick={practice}>
             Тренировать сейчас
           </Button>
@@ -194,7 +194,7 @@ export function LessonReview({ items, practice }: { items: LessonItem[]; practic
   return (
     <>
       <h2 className={base.title}>В повторении</h2>
-      <p className={base.date}>Новые карточки приходят в «Повторить» по дневному пределу</p>
+      <p className={base.date}>Новые карточки — в «Повторить» на экране «Сегодня»</p>
       <div className={css.review}>
         <VocabularyList items={items} />
       </div>

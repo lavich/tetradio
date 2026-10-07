@@ -215,6 +215,22 @@ describe("смешанный урок в выборках", () => {
     expect(await db.phrases.get("p-silent")).toBeTruthy();
     expect(await lessonsOfCard({ kind: "phrase", id: "p-grafo" }, db)).toHaveLength(1);
   });
+  it("начатый урок даёт новые карточки: одного выполненного задания достаточно, урок без заданий — нет", async () => {
+    await installMixed(db);
+    expect((await makePlan(dexieSource(db), now, { hasVoice: true })).newRefs).toHaveLength(0);
+    await db.blockProgress.put({
+      key: `${MIXED_LESSON}/any`,
+      lessonId: MIXED_LESSON,
+      blockId: "any",
+      done: false,
+      updatedAt: now.toISOString(),
+    });
+    expect((await makePlan(dexieSource(db), now, { hasVoice: true })).newRefs).toHaveLength(0);
+    await db.blockProgress.update(`${MIXED_LESSON}/any`, { done: true });
+    const plan = await makePlan(dexieSource(db), now, { hasVoice: true });
+    expect(plan.newRefs.length).toBeGreaterThan(0);
+    expect(new Set([...plan.origins.values()].map((origin) => origin.lessonId))).toEqual(new Set([MIXED_LESSON]));
+  });
   it("план и сессия на базе совпадают со снимком для смешанного урока при том же источнике случайности", async () => {
     await installMixed(db);
     await completeLessons(db, [MIXED_LESSON]);

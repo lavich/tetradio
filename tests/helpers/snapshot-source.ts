@@ -26,6 +26,8 @@ export interface Snapshot {
   phrases?: Phrase[];
   lessons: Lesson[];
   courses?: Course[];
+  /** Выполненные задания уроков: урок с ними — начатый и тоже даёт новые карточки. */
+  blockProgress?: { lessonId: string; done: boolean }[];
   /** Модули программы: задают порядок пройденных уроков; без них — порядок массива `lessons`. */
   modules?: StoredModule[];
   links: { lessonId: string; wordId: string; position: number }[];
@@ -67,9 +69,12 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
   const total = (kind: CardKind) => (kind === "word" ? data.words.length : phrases.size);
   return {
     timezone: () => data.timezone ?? "Asia/Nicosia",
-    completedLessons: async () =>
+    studiedLessons: async () =>
       programmeOrder(
-        data.lessons.filter((lesson) => lesson.completed),
+        data.lessons.filter(
+          (lesson) =>
+            lesson.completed || (data.blockProgress ?? []).some((row) => row.lessonId === lesson.id && row.done),
+        ),
         modules,
         (id) => data.lessons.findIndex((lesson) => lesson.id === id),
       ),

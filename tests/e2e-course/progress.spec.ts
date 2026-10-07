@@ -14,7 +14,9 @@ test("вкладка «Прогресс»: навыки по курсу, пут�
   await expect(page.getByTestId("pace")).toContainText("До K1 (Контрольная A1");
   await expect(page.getByTestId("pace")).not.toContainText("Ваш темп"); // меньше недели истории
   await expect(page.getByTestId("week")).toHaveText("На этой неделе занятий ещё не было.");
-  await expect(page.getByTestId("cards-line")).toContainText("Карточки появятся после первого пройденного урока");
+  await expect(page.getByTestId("cards-line")).toContainText(
+    "Карточки появятся после первого выполненного задания урока",
+  );
   await page.getByRole("link", { name: "Настройки и данные" }).click();
   await expect(page).toHaveURL(/\/progress\/settings$/);
   await expect(page.getByRole("heading", { name: "Копия", exact: true })).toBeVisible();

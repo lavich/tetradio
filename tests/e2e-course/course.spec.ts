@@ -58,7 +58,7 @@ async function start(page: Page) {
   await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
-  // «Сегодня» курса: без расписания уроков; карточки ждут первого пройденного урока.
+  // «Сегодня» курса: без расписания уроков; карточки ждут первого выполненного задания.
   await expect(page.getByTestId("cards-later")).toBeVisible();
   await expect(page.getByText("Занятие не назначено")).toHaveCount(0);
 }

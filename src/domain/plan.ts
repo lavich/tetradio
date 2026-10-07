@@ -70,8 +70,8 @@ export function programmeOrder(
 export interface PlanSource {
   /** Часовой пояс, по которому считается «сегодня». */
   timezone(): string;
-  /** Пройденные уроки в порядке программы. */
-  completedLessons(): Promise<PlanLesson[]>;
+  /** Пройденные и начатые уроки в порядке программы. */
+  studiedLessons(): Promise<PlanLesson[]>;
   /** Связи перечисленных уроков одной выборкой, в любом порядке. */
   itemsOf(lessonIds: string[]): Promise<LessonItem[]>;
   lessonRefs(lessonId: string): Promise<LearningRef[]>;
@@ -90,7 +90,7 @@ export interface PlanOptions {
 }
 export async function makePlan(source: PlanSource, now: Date, options: PlanOptions = {}): Promise<DailyPlan> {
   const today = localDay(now, source.timezone());
-  const [lessons, phrasePool] = await Promise.all([source.completedLessons(), source.phraseCount()]);
+  const [lessons, phrasePool] = await Promise.all([source.studiedLessons(), source.phraseCount()]);
   const availability: AvailabilityContext = { hasVoice: !!options.hasVoice, phrasePool };
 
   const rank = new Map(lessons.map((lesson, index) => [lesson.id, index]));
