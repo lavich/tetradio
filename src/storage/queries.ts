@@ -1,5 +1,6 @@
 import Dexie from "dexie";
 import { State } from "ts-fsrs";
+import { languageOfText } from "../domain/language";
 import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import {
   LESSON_MATES_RADIUS,
@@ -131,6 +132,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
             kind: "phrase",
             hasTranslation: !!phrase.translation,
             hasAudio: !!phrase.audioAssetId,
+            language: languageOfText(phrase.text).code,
           });
       return facts;
     },

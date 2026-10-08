@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Volume2 } from "lucide-react";
 import { languageOfText } from "../../../domain/language";
 import { playText, useTextAudioKind } from "../../../shared/audio";
-import { voiceName } from "../../../shared/language";
 import { QUIET_SPEAK } from "../../words/WordCardView";
 import ui from "../../../shared/ui.module.css";
 import wordCss from "../../../shared/word.module.css";
@@ -40,7 +39,7 @@ export function SpeakText({
         <Volume2 aria-hidden />
       </Button>
       {(kind === "none" || failed === "none") && (
-        <span className={ui.note}>Озвучка недоступна: нет файла и {voiceName(profile)}</span>
+        <span className={ui.note}>Озвучка недоступна: нет файла и {profile.voiceName}</span>
       )}
       {failed === "error" && (
         <span className={ui.note} role="status">

@@ -28,7 +28,7 @@ const strings = (value: unknown, where: string): string[] => {
   return value as string[];
 };
 
-export function parseVoices(body: string, file: string): VoiceMap {
+export function parseVoices(body: string, file: string, code?: string): VoiceMap {
   const raw = parse(body) as Record<string, unknown> | null;
   if (!raw || typeof raw !== "object") fail(`${file}: ожидалась карта`);
   const at = (field: string) => `${file}.${field}`;
@@ -48,6 +48,9 @@ export function parseVoices(body: string, file: string): VoiceMap {
     pools: { female: strings(pools?.female, at("pools.female")), male: strings(pools?.male, at("pools.male")) },
     characters: new Map(),
   };
+  if (code && map.language !== code && !map.language.startsWith(`${code}-`))
+    fail(`${at("language")}: ${map.language} — не язык файла (${code})`);
+  if (!map.prefix.startsWith(map.language)) fail(`${at("prefix")}: голоса ${map.prefix} не языка ${map.language}`);
   const all = new Set([...map.pools.female, ...map.pools.male]);
   if (raw!.narrator !== undefined) {
     map.narrator = str("narrator");

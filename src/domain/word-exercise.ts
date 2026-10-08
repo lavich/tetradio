@@ -29,9 +29,10 @@ export const NO_SYLLABLES = "Сборка из слогов — только д�
  * Варианты подбираются в этом порядке: от него зависит поток `random` и воспроизводимость занятия.
  */
 function wordFacts(word: Word, sources: WordSources, random: () => number, hasVoice: boolean) {
+  const assembles = languageOfText(word.greek).syllables;
   return {
-    assembles: languageOfText(word.greek).syllables,
-    syllables: languageOfText(word.greek).syllables ? splitWriting(word.greek).syllables.length : 0,
+    assembles,
+    syllables: assembles ? splitWriting(word.greek).syllables.length : 0,
     recognition: optionsFor(word, sources, "recognition", random),
     listening: optionsFor(word, sources, "listening", random),
     sounds: !!word.audioAssetId || hasVoice,

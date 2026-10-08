@@ -1,16 +1,14 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { createContext, useContext } from "react";
-import { DEFAULT_LANGUAGE, isLanguage, PROFILES, type Language, type LanguageProfile } from "../domain/language";
+import { DEFAULT_LANGUAGE, isLanguage, PROFILES, type LanguageProfile } from "../domain/language";
 import { db } from "../storage/db";
 
 const fallback = PROFILES[DEFAULT_LANGUAGE];
 export const courseProfile = (language: string | undefined): LanguageProfile =>
   isLanguage(language) ? PROFILES[language] : fallback;
 
-const VOICE: Record<Language, string> = { el: "греческого голоса", en: "английского голоса" };
-export const voiceName = (profile: LanguageProfile) => VOICE[profile.code];
 export const noVoice = (profile: LanguageProfile) =>
-  `На устройстве нет ${voiceName(profile)} — включите его в настройках речи.`;
+  `На устройстве нет ${profile.voiceName} — включите его в настройках речи.`;
 
 /** Язык курса на экранах урока и модуля; вне курса — язык по умолчанию. */
 export const ProfileContext = createContext<LanguageProfile>(fallback);

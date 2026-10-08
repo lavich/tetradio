@@ -161,6 +161,18 @@ describe("английский курс", () => {
     const files = { ...base(), "courses/english-b2.yaml": { title: "Французский", language: "fr", modules: ["e01"] } };
     expect(failure(files)).toMatch(/courses\/english-b2\.yaml\.language: нет профиля языка «fr»/);
   });
+  it("карта голосов другого языка в voices/en.yaml отклоняется", () => {
+    const voices = {
+      source: "Google Cloud TTS, голос {voice}",
+      language: "el-GR",
+      prefix: "el-GR-Chirp3-HD-",
+      pools: { female: ["Aoede"], male: ["Charon"] },
+      characters: { Anna: { gender: "female", voice: "Aoede" } },
+    };
+    expect(failure({ ...base(), "voices/en.yaml": voices })).toContain(
+      "voices/en.yaml.language: el-GR — не язык файла (en)",
+    );
+  });
 });
 
 describe("английские окончания", () => {

@@ -1,5 +1,6 @@
 import { State, type Card } from "ts-fsrs";
 import type { CatalogModule } from "../content/course";
+import { DEFAULT_LANGUAGE, voiceFor, type Language, type Voices } from "./language";
 import { unitKey } from "./refs";
 import { localDay } from "./time";
 import type { CardKind, LearningRef, LearningState, Lesson, LessonItem } from "./types";
@@ -25,9 +26,10 @@ export interface CardFacts {
   kind: CardKind;
   hasTranslation?: boolean;
   hasAudio?: boolean;
+  language?: Language;
 }
 export interface AvailabilityContext {
-  hasVoice: boolean;
+  hasVoice: Voices;
   phrasePool: number;
 }
 /**
@@ -37,7 +39,7 @@ export interface AvailabilityContext {
 export const isCheckable = (facts: CardFacts, context: AvailabilityContext) =>
   facts.kind !== "phrase" ||
   !!facts.hasTranslation ||
-  ((!!facts.hasAudio || context.hasVoice) && context.phrasePool >= 4);
+  ((!!facts.hasAudio || voiceFor(context.hasVoice, facts.language ?? DEFAULT_LANGUAGE)) && context.phrasePool >= 4);
 
 export interface PlanLesson {
   id: string;
@@ -86,12 +88,12 @@ export interface PlanSource {
 }
 
 export interface PlanOptions {
-  hasVoice?: boolean;
+  hasVoice?: Voices;
 }
 export async function makePlan(source: PlanSource, now: Date, options: PlanOptions = {}): Promise<DailyPlan> {
   const today = localDay(now, source.timezone());
   const [lessons, phrasePool] = await Promise.all([source.studiedLessons(), source.phraseCount()]);
-  const availability: AvailabilityContext = { hasVoice: !!options.hasVoice, phrasePool };
+  const availability: AvailabilityContext = { hasVoice: options.hasVoice ?? false, phrasePool };
 
   const rank = new Map(lessons.map((lesson, index) => [lesson.id, index]));
   const items = (await source.itemsOf(lessons.map((lesson) => lesson.id))).sort(

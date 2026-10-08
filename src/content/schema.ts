@@ -248,6 +248,7 @@ export function parseCatalog(input: unknown): Catalog {
     lessons.map((l) => l.id),
     "каталог.lessons",
   );
+  const calendars = new Map<CatalogCourse, unknown>();
   const courses = list(raw.courses ?? [], "каталог.courses").map((entry, index): CatalogCourse => {
     const path = `каталог.courses[${index}]`;
     const item = obj(entry, path);
@@ -266,7 +267,7 @@ export function parseCatalog(input: unknown): Catalog {
     );
     if (moduleIds) course.moduleIds = moduleIds;
     if (item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
-    if (item.calendar !== undefined) course.calendar = parseCalendar(item.calendar, `${path}.calendar`);
+    if (item.calendar !== undefined) calendars.set(course, item.calendar);
     return course;
   });
   unique(
@@ -292,10 +293,11 @@ export function parseCatalog(input: unknown): Catalog {
           throw new ContentError(`каталог.modules: урока ${lessonId} модуля ${module.id} нет в каталоге`);
     catalog.modules = modules;
   }
+  // Календарь разбирается после модулей: точка ссылается на номер модуля своего курса.
   courses.forEach((course, index) => {
-    if (!course.calendar) return;
-    const numbers = (catalog.modules ?? []).filter((module) => module.courseId === course.id).map((m) => m.number);
-    parseCalendar(course.calendar, `каталог.courses[${index}].calendar`, numbers);
+    if (!calendars.has(course)) return;
+    const numbers = catalog.modules?.filter((module) => module.courseId === course.id).map((m) => m.number);
+    course.calendar = parseCalendar(calendars.get(course), `каталог.courses[${index}].calendar`, numbers);
   });
   return catalog;
 }

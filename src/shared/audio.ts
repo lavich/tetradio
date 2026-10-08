@@ -107,7 +107,7 @@ function speakOnce(text: string, voice: SpeechSynthesisVoice, rate: number, lang
     try {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.voice = voice;
-      utterance.lang = lang;
+      utterance.lang = voice.lang || lang;
       utterance.rate = rate;
       utterance.onstart = () => finish(true);
       utterance.onerror = () => finish(false);

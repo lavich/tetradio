@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { checkItem, spokenChoice } from "../src/domain/course";
 import type { ExerciseBlock, ExerciseItem } from "../src/content/course";
 import { languageOfText, PROFILES, profileOf } from "../src/domain/language";
+import { isCheckable } from "../src/domain/plan";
 import { checkAnswer, checkTextAnswer } from "../src/domain/text-answer";
 import { assemblyExercise, wordExerciseOptions, NO_SYLLABLES } from "../src/domain/word-exercise";
 import type { Word } from "../src/domain/types";
@@ -51,6 +52,13 @@ describe("профиль английского языка", () => {
       available: false,
       reason: NO_SYLLABLES,
     });
+  });
+
+  it("фраза без перевода и записи доступна, только если есть голос её языка", () => {
+    const onlyEnglish = (language: string) => language === "en";
+    const silent = { kind: "phrase" as const, hasTranslation: false, hasAudio: false };
+    expect(isCheckable({ ...silent, language: "el" }, { hasVoice: onlyEnglish, phrasePool: 4 })).toBe(false);
+    expect(isCheckable({ ...silent, language: "en" }, { hasVoice: onlyEnglish, phrasePool: 4 })).toBe(true);
   });
 
   it("язык по письменности и по коду", () => {

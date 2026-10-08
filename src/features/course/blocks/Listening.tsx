@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { ListeningBlock } from "../../../content/course";
 import { playDialogue, stopDialogue, type Rate } from "../../../shared/dialogue";
-import { useProfile, voiceName } from "../../../shared/language";
+import { useProfile } from "../../../shared/language";
 import { useAssetSource } from "../../../shared/store";
 import { Marked, useFieldMarks } from "../WordTaps";
 import ui from "../../../shared/ui.module.css";
@@ -38,7 +38,7 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
     if (result === "done") setPlays((count) => count + 1);
     if (result === "none")
       setProblem({
-        text: `На устройстве нет ${voiceName(profile)}. Включите его в настройках речи — или откройте текст.`,
+        text: `На устройстве нет ${profile.voiceName}. Включите его в настройках речи — или откройте текст.`,
         failure: false,
       });
     if (result === "error") setProblem({ text: "Воспроизведение прервалось. Попробуйте ещё раз.", failure: true });

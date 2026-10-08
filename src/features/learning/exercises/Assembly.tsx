@@ -37,6 +37,7 @@ export function Assembly({
   }, [item.id]);
   const revealed = useRevealed(!!result);
   const word = wordOf(item.card);
+  const lang = languageOfText(word.greek).code;
   useRevealSpeech(item.card, item.id, !!result, autoSpeak);
   const pool = assemblyOptions(word.greek, item.options);
   const complete = placed.length === pool.length;
@@ -65,12 +66,7 @@ export function Assembly({
             meaning={word.russian}
             art={<WordArt word={word} className={exercise.pic} />}
           />
-          <div
-            className={s.assembled}
-            aria-label="Собранное слово"
-            data-testid="assembled"
-            lang={languageOfText(word.greek).code}
-          >
+          <div className={s.assembled} aria-label="Собранное слово" data-testid="assembled" lang={lang}>
             {placed.length === 0 ? (
               <span className={s.slotsHint}>Нажимай слоги по порядку</span>
             ) : (
@@ -88,7 +84,7 @@ export function Assembly({
               ))
             )}
           </div>
-          <div className={s.tiles} lang={languageOfText(word.greek).code}>
+          <div className={s.tiles} lang={lang}>
             {pool.map((tile, index) => (
               <button
                 key={`${tile}-${index}`}
@@ -113,7 +109,7 @@ export function Assembly({
         <div ref={revealed}>
           <Instruction prompt="Собери слово" />
           {!result.skipped && result.answer && (
-            <p className={exercise.written} lang={languageOfText(word.greek).code}>
+            <p className={exercise.written} lang={lang}>
               <span>{result.answer}</span>
               {result.status !== "wrong" && (
                 <Tick
@@ -125,7 +121,7 @@ export function Assembly({
           )}
           <Verdict status={result.status}>
             <p>{result.message}</p>
-            <p className={s.syllables} lang={languageOfText(word.greek).code}>
+            <p className={s.syllables} lang={lang}>
               {formatSyllables(word.greek)}
             </p>
           </Verdict>

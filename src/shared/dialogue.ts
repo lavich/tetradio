@@ -106,7 +106,7 @@ function say(text: string, voice: SpeechSynthesisVoice, rate: number, pitch: num
     };
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = voice;
-    utterance.lang = lang;
+    utterance.lang = voice.lang || lang;
     utterance.rate = rate;
     utterance.pitch = pitch;
     // Конец реплики может не прийти (WebView на iOS); страховка — длительность по длине текста с запасом.

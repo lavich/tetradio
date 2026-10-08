@@ -1,4 +1,4 @@
-import { anyVoice, languageOfText, voiceFor, type Voices } from "./language";
+import { languageOfText, voiceFor, type Voices } from "./language";
 import { emptySkills, type SkillSummary } from "./skills";
 import { exerciseFor } from "./card-exercise";
 import { closeSources, NO_WORDS, shuffle } from "./options";
@@ -39,7 +39,7 @@ export async function makeSession({
   refs,
   hasVoice = false,
 }: SessionInput): Promise<Session> {
-  const plan = await makePlan(source, now, { hasVoice: anyVoice(hasVoice) });
+  const plan = await makePlan(source, now, { hasVoice });
   const size = SESSION_SIZE;
   let chosen: { ref: LearningRef; isNew: boolean }[];
   if (refs) {

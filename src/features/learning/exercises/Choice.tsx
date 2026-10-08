@@ -5,17 +5,14 @@ import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./choice.module.css";
 import { useRevealed } from "./hooks";
+import type { LanguageProfile } from "../../../domain/language";
 import { cardProfile, type ExerciseProps } from "./model";
 import { Primary, QuietActions, QuietButton } from "./parts";
 
 /** Короткие варианты — сеткой 2 × 2, иначе строками α) β) γ) δ). Порог — то, что помещается в половину узкого листа. */
 const SHORT_OPTION = 12;
-const LETTERS: Record<string, string[]> = {
-  "lower-greek": ["α", "β", "γ", "δ", "ε", "ζ"],
-  "lower-latin": ["a", "b", "c", "d", "e", "f"],
-};
-/** Буква варианта в строке «Верно: β) …» — та же, что рисует счётчик `letters` профиля. */
-export const optionLetter = (index: number, letters: string) => LETTERS[letters]?.[index] ?? String(index + 1);
+export const optionLetter = (index: number, profile: LanguageProfile) =>
+  profile.letters.chars[index] ?? String(index + 1);
 export const optionsFit = (options: string[]) =>
   options.length <= 4 && options.every((option) => [...option].length <= SHORT_OPTION);
 
@@ -75,7 +72,7 @@ export function Choice({
       <div
         className={grid ? s.grid : s.lines}
         lang={greekOptions ? profile.code : undefined}
-        style={{ ["--letters" as string]: profile.letters }}
+        style={{ ["--letters" as string]: profile.letters.style }}
       >
         {options.map((option) => {
           const mark = answered
@@ -115,7 +112,7 @@ export function Choice({
             <>
               Верно:{" "}
               <span lang={greekOptions ? profile.code : undefined}>
-                {grid || right < 0 ? "" : `${optionLetter(right, profile.letters)}) `}
+                {grid || right < 0 ? "" : `${optionLetter(right, profile)}) `}
                 {correct}
               </span>
             </>

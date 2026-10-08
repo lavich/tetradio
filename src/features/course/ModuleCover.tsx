@@ -13,7 +13,8 @@ export function ModuleCover({ view, open }: { view: ModuleView; open: boolean })
   const { module } = view;
   const draft = module.status === "draft";
   const name = launchContext().user?.firstName;
-  const { code } = useCourseProfile(module.courseId);
+  const profile = useCourseProfile(module.courseId);
+  const { code } = profile;
   const crib = module.crib ? (
     <>
       <table className={css.cribTable} lang={code}>
@@ -46,7 +47,7 @@ export function ModuleCover({ view, open }: { view: ModuleView; open: boolean })
       <p className={css.coverNum}>{String(module.number).padStart(2, "0")}</p>
       <dl className={css.sticker}>
         <div>
-          <dt lang="el">ΜΑΘΗΜΑ</dt>
+          <dt lang={code}>{profile.cover.lesson}</dt>
           <dd>
             <h1 className={css.stickerTitle} lang={code}>
               {module.title}
@@ -55,7 +56,7 @@ export function ModuleCover({ view, open }: { view: ModuleView; open: boolean })
           </dd>
         </div>
         <div>
-          <dt lang="el">ΟΝΟΜΑ</dt>
+          <dt lang={code}>{profile.cover.name}</dt>
           <dd className={css.stickerInk}>{name}</dd>
         </div>
       </dl>

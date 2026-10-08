@@ -182,7 +182,7 @@ export function readSources(root: string): ContentRoot {
   const voices = new Map<Language, VoiceMap>();
   for (const file of list("voices")) {
     const language = languageOf(basename(file, extname(file)), `voices/${file}`);
-    voices.set(language, parseVoices(readFileSync(join(root, "voices", file), "utf8"), voicesFile(language)));
+    voices.set(language, parseVoices(readFileSync(join(root, "voices", file), "utf8"), voicesFile(language), language));
   }
   return { words, phrases, lessons, courses, modules, pictures, files, voices };
 }

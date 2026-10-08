@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { PROFILES } from "../src/domain/language";
 import { optionLetter } from "../src/features/learning/exercises/Choice";
-import { courseProfile, noVoice, voiceName } from "../src/shared/language";
+import { courseProfile, noVoice } from "../src/shared/language";
 import { pageDate } from "../src/shared/notebook";
 import { voicesOf } from "../src/shared/voices";
 
@@ -25,14 +25,14 @@ describe("язык курса в интерфейсе", () => {
   });
 
   it("буквы вариантов — из профиля: α β γ у греческого, a b c у английского", () => {
-    expect([0, 1, 2].map((index) => optionLetter(index, PROFILES.el.letters))).toEqual(["α", "β", "γ"]);
-    expect([0, 1, 2].map((index) => optionLetter(index, PROFILES.en.letters))).toEqual(["a", "b", "c"]);
-    expect(optionLetter(6, PROFILES.en.letters)).toBe("7");
+    expect([0, 1, 2].map((index) => optionLetter(index, PROFILES.el))).toEqual(["α", "β", "γ"]);
+    expect([0, 1, 2].map((index) => optionLetter(index, PROFILES.en))).toEqual(["a", "b", "c"]);
+    expect(optionLetter(6, PROFILES.en)).toBe("7");
   });
 
   it("сообщение об отсутствии голоса называет язык; греческое — прежнее", () => {
     expect(noVoice(PROFILES.el)).toBe("На устройстве нет греческого голоса — включите его в настройках речи.");
-    expect(voiceName(PROFILES.en)).toBe("английского голоса");
+    expect(PROFILES.en.voiceName).toBe("английского голоса");
   });
 
   it("неизвестный язык курса из каталога — профиль по умолчанию", () => {

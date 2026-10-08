@@ -7,7 +7,6 @@ import type { Example, Word } from "../../domain/types";
 import { languageOfText } from "../../domain/language";
 import { coreWord, stressNote, stressPosition } from "../../domain/phonetics";
 import { playWord, speakPhrase, useAudioKind, useVoice } from "../../shared/audio";
-import { voiceName } from "../../shared/language";
 import { useAssetSource, useAssetUrl, useWord } from "../../shared/store";
 import ui from "../../shared/ui.module.css";
 import wordCss from "../../shared/word.module.css";
@@ -68,7 +67,7 @@ export function SpeakButton({
         <Volume2 aria-hidden />
       </Button>
       {(kind === "none" || failed === "none") && (
-        <span className={ui.note}>Озвучка недоступна: нет файла и {voiceName(languageOfText(word.greek))}</span>
+        <span className={ui.note}>Озвучка недоступна: нет файла и {languageOfText(word.greek).voiceName}</span>
       )}
       {failed === "error" && (
         <span className={ui.note} role="status">
@@ -268,7 +267,7 @@ export function ExampleBox({
           size="icon-lg"
           className="-mt-1 shrink-0 text-primary hover:bg-primary/10"
           disabled={!voice}
-          aria-label={voice ? "Послушать предложение" : `Озвучка предложения недоступна: нет ${voiceName(profile)}`}
+          aria-label={voice ? "Послушать предложение" : `Озвучка предложения недоступна: нет ${profile.voiceName}`}
           onClick={() => speakPhrase(example.greek, profile)}
         >
           <Volume2 />
