@@ -26,8 +26,9 @@ export const fail: (message: string) => never = (message) => {
 };
 export const languageOf = (value: unknown, where: string): Language => {
   if (value === undefined || value === null) return LANGUAGE;
-  if (!isLanguage(value)) fail(`${where}: нет профиля языка «${String(value)}»`);
-  return value as Language;
+  if (!isLanguage(value))
+    fail(`${where}: нет профиля языка «${typeof value === "string" ? value : JSON.stringify(value)}»`);
+  return value;
 };
 export const text = (value: unknown, where: string, required = true): string | undefined => {
   if (value === undefined || value === null) {
