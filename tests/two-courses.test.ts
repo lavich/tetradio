@@ -1,19 +1,22 @@
 import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createEmptyCard } from "ts-fsrs";
+import { PROFILES } from "../src/domain/language";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { unitKey, wordKeyOf, wordRef } from "../src/domain/refs";
 import type { Course, Lesson, LessonItem, Phrase, ReviewEvent, Session, StoredModule, Word } from "../src/domain/types";
 import { AppDatabase, indexWord, type StoredCatalogEntry } from "../src/storage/db";
 import {
   activeSession,
+  cardCourses,
   cardLanguages,
-  courseOfCards,
   courses,
   coursesOrder,
   currentCourse,
   primaryCourse,
+  profileOfCourse,
   rememberCourses,
+  sessionCourse,
   setCurrentCourse,
   setPrimaryCourse,
 } from "../src/storage/courses";
@@ -107,12 +110,9 @@ const entry = (id: string, courseId: string, language: string, position: number)
 // Английский стоит в каталоге раньше греческого: порядок курсов — порядок установки, а не каталога.
 const catalog = [entry("e1", ENGLISH, "en", 0), entry("g1", GREEK, "el", 1), entry("g2", GREEK, "el", 2)];
 const courseRows: Course[] = [
-  { id: GREEK, title: "Греческий A2", calendar: GREEK_CALENDAR, exam: examOf(0.6), updatedAt: iso },
-  { id: ENGLISH, title: "Английский", calendar: ENGLISH_CALENDAR, exam: examOf(0.7), updatedAt: iso },
+  { id: GREEK, title: "Греческий A2", calendar: GREEK_CALENDAR, passShare: 0.6, updatedAt: iso },
+  { id: ENGLISH, title: "Английский", calendar: ENGLISH_CALENDAR, passShare: 0.7, updatedAt: iso },
 ];
-function examOf(passShare: number) {
-  return { title: "exam", date: "2027-05-01", source: "", checkedAt: "2026-10-01", localConfirmed: true, passShare };
-}
 const due = (key: string, ref: LessonItem["ref"]) => ({
   unitKey: key,
   ref,
@@ -208,14 +208,33 @@ describe("порядок курсов", () => {
     await setCurrentCourse("gone", db);
     expect(await currentCourse(db)).toBe(GREEK);
   });
+  it("выбранный, но не установленный курс не выбран: переключатель и экран показывают один курс", async () => {
+    await db.lessons.where("courseId").equals(ENGLISH).delete();
+    await setCurrentCourse(ENGLISH, db);
+    expect(await currentCourse(db)).toBe(GREEK);
+  });
+  it("курса нет ни в каталоге, ни на устройстве — его нет в списке", async () => {
+    await db.courses.put({ id: "english-b2", title: "Английский B2", updatedAt: iso });
+    expect((await courses(db)).map((course) => course.id)).toEqual([GREEK, ENGLISH]);
+  });
+  it("неизвестный язык курса из каталога — профиль по умолчанию", async () => {
+    expect(await profileOfCourse(ENGLISH, db)).toBe(PROFILES.en);
+    await db.catalog.where("courseId").equals(ENGLISH).modify({ language: "fr" });
+    expect(await profileOfCourse(ENGLISH, db)).toBe(PROFILES.el);
+  });
 });
 
 describe("курс и язык карточки", () => {
-  it("по урокам, в которых стоит карточка; карточка вне уроков — у основного курса", async () => {
-    const owners = await courseOfCards([wordKeyOf("w0"), wordKeyOf("e3"), wordKeyOf("nowhere")], db);
-    expect(Object.fromEntries(owners)).toEqual({ [wordKeyOf("w0")]: GREEK, [wordKeyOf("e3")]: ENGLISH });
-    const languages = await cardLanguages([wordRef("w0"), { kind: "phrase", id: "ep1" }, wordRef("nowhere")], db);
-    expect([...languages.values()]).toEqual(["el", "en", "el"]);
+  it("по урокам, в которых стоит карточка; карточка вне уроков — у курса, установленного первым", async () => {
+    const keys = [wordKeyOf("w0"), wordKeyOf("e3"), wordKeyOf("nowhere")];
+    const owners = { [wordKeyOf("w0")]: GREEK, [wordKeyOf("e3")]: ENGLISH, [wordKeyOf("nowhere")]: GREEK };
+    expect(Object.fromEntries(await cardCourses(keys, db))).toEqual(owners);
+    const refs = [wordRef("w0"), { kind: "phrase" as const, id: "ep1" }, wordRef("nowhere")];
+    expect([...(await cardLanguages(refs, db)).values()]).toEqual(["el", "en", "el"]);
+    // Смена основного курса не переносит карточку вне уроков в другой язык.
+    await setPrimaryCourse(ENGLISH, db);
+    expect(Object.fromEntries(await cardCourses(keys, db))).toEqual(owners);
+    expect([...(await cardLanguages(refs, db)).values()]).toEqual(["el", "en", "el"]);
   });
 });
 
@@ -285,7 +304,7 @@ describe("план и занятие по курсу", () => {
       expect(fromMemory.reviews.map((review) => review.ref)).toEqual(fromDb.reviews.map((review) => review.ref));
     }
   });
-  it("прежнее занятие без курса — занятие основного курса", async () => {
+  it("прежнее занятие без курса — занятие курса, установленного первым, и после смены основного", async () => {
     const old: Session = {
       ...(await makeSession({ source: dexieSource(db), now, courseId: GREEK, random: () => 0.3 })),
       id: "s-old",
@@ -298,8 +317,11 @@ describe("план и занятие по курсу", () => {
     await db.sessions.add({ ...english, createdAt: new Date(now.getTime() + 1000).toISOString() });
     expect((await activeSession(ENGLISH, db))?.id).toBe(english.id);
     expect((await activeSession(GREEK, db))?.id).toBe("s-old");
+    await setPrimaryCourse(ENGLISH, db);
+    expect((await activeSession(GREEK, db))?.id).toBe("s-old");
+    expect(await sessionCourse(old, db)).toBe(GREEK);
   });
-  it("дополнительная попытка прежнего занятия берёт варианты из слов основного курса", async () => {
+  it("дополнительная попытка прежнего занятия берёт варианты из слов его курса", async () => {
     const made = await makeSession({ source: dexieSource(db), now, courseId: GREEK, random: () => 0.3 });
     delete made.courseId;
     // Понимание на слух проще узнавания: ошибка в нём читает пул вариантов для дополнительной попытки.
@@ -310,6 +332,7 @@ describe("план и занятие по курсу", () => {
       ),
     };
     await db.sessions.add(session);
+    await setPrimaryCourse(ENGLISH, db);
     const item = session.items.find((entry) => entry.card.kind === "word")!;
     await recordAnswer({
       session,

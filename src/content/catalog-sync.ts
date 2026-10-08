@@ -55,7 +55,7 @@ async function adoptCourses(catalog: Catalog, database: AppDatabase) {
   const courseOf = new Map(catalog.lessons.map((entry) => [entry.id, entry.courseId]));
   for (const lesson of await database.lessons.toArray()) {
     const courseId = courseOf.get(lesson.id);
-    if (courseId && !lesson.courseId) await database.lessons.put({ ...lesson, courseId });
+    if (courseId && lesson.courseId !== courseId) await database.lessons.put({ ...lesson, courseId });
   }
   for (const item of catalog.courses) {
     const stored = await database.courses.get(item.id);

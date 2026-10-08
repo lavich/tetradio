@@ -36,7 +36,7 @@ export function CourseScreen() {
       <Screen>
         <CourseSwitch />
         <h1>Полка</h1>
-        <CourseStart />
+        <CourseStart courseId={courseId} />
       </Screen>
     );
   const filled = views.filter((view) => view.completed).length;

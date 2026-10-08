@@ -41,15 +41,16 @@ export function CourseLessonScreen() {
   const progress = useLiveQuery(() => blockProgressOf(lessonId), [lessonId]);
   const items = useLiveQuery(() => lessonItems(lessonId), [lessonId]);
   const finished = !!lesson?.lesson?.completed;
-  const courseId = lesson?.lesson?.courseId;
   const lessonCourse = useLiveQuery(async () => (await lessonCourses([lessonId])).get(lessonId), [lessonId]);
   useFollowCourse(lessonCourse);
-  const next = useLiveQuery(() => (finished ? nextCourseLesson(courseId) : null), [finished, courseId, lessonId]);
-  const moduleOf = lesson?.moduleId;
-  const passShare = useLiveQuery(async () => {
-    const module = moduleOf ? await db.modules.get(moduleOf) : undefined;
-    return module ? (await db.courses.get(module.courseId))?.passShare : undefined;
-  }, [moduleOf]);
+  const next = useLiveQuery(
+    () => (finished && lessonCourse ? nextCourseLesson(lessonCourse) : null),
+    [finished, lessonCourse, lessonId],
+  );
+  const passShare = useLiveQuery(
+    async () => (lessonCourse ? (await db.courses.get(lessonCourse))?.passShare : undefined),
+    [lessonCourse],
+  );
   const [problem, setProblem] = useState("");
   const profile = useLessonProfile(lessonId);
   const spread = useSpread();
@@ -85,13 +86,12 @@ export function CourseLessonScreen() {
     lesson.blocks.some((block) => block.type === "exercise" && block.about === target && progress.get(block.id)?.done);
   const practiceWords = async () => {
     setProblem("");
-    const created = items?.length
-      ? await startSession(new Date(), {
-          refs: items.map((item) => item.ref),
-          mode: "practice",
-          courseId: lessonCourse,
-        })
-      : null;
+    // Курс урока может ещё читаться: без него в варианты попали бы слова всех курсов.
+    const courseId = lessonCourse ?? (await lessonCourses([lessonId])).get(lessonId);
+    const created =
+      items?.length && courseId
+        ? await startSession(new Date(), { refs: items.map((item) => item.ref), mode: "practice", courseId })
+        : null;
     if (!created) return setProblem("В уроке нет доступных карточек.");
     void navigate(await sessionPath(created.courseId));
   };

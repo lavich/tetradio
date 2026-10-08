@@ -5,7 +5,7 @@ import { unitKey } from "../domain/refs";
 import type { LearningRef, Session } from "../domain/types";
 import {
   activeSession,
-  courseOfCards,
+  courseOfCard,
   courses,
   currentCourse,
   primaryCourse,
@@ -18,8 +18,6 @@ import {
 /** Установленные курсы по порядку: основной первый. `undefined` — ещё читается. */
 export const useCourses = (): CourseEntry[] | undefined =>
   useLiveQuery(async () => (await courses()).filter((course) => course.installed), []);
-/** Все курсы каталога по порядку, с признаком установки. */
-export const useAllCourses = (): CourseEntry[] | undefined => useLiveQuery(() => courses(), []);
 
 /** Основной курс: `null` — курсов в каталоге нет, `undefined` — ещё читается. */
 export const usePrimaryCourse = (): string | null | undefined =>
@@ -44,13 +42,10 @@ export function useFollowCourse(courseId: string | undefined) {
   }, [courseId]);
 }
 
-/** Курс карточки; карточка вне уроков — у основного курса. `null` — курсов нет, `undefined` — ещё читается. */
+/** Курс карточки. `null` — курсов нет, `undefined` — ещё читается. */
 export function useCardCourse(ref: LearningRef | undefined): string | null | undefined {
   const key = ref && unitKey(ref);
-  return useLiveQuery(
-    async () => (key ? ((await courseOfCards([key])).get(key) ?? (await primaryCourse()) ?? null) : undefined),
-    [key],
-  );
+  return useLiveQuery(async () => (key ? ((await courseOfCard(key)) ?? null) : undefined), [key]);
 }
 
 /** Язык карточки — язык её курса; `undefined` — ещё читается. */
@@ -58,7 +53,7 @@ export function useCardProfile(ref: LearningRef | undefined): LanguageProfile | 
   const key = ref && unitKey(ref);
   return useLiveQuery(async () => {
     if (!key) return undefined;
-    const courseId = (await courseOfCards([key])).get(key) ?? (await primaryCourse());
+    const courseId = await courseOfCard(key);
     return courseId ? profileOfCourse(courseId) : PROFILES[DEFAULT_LANGUAGE];
   }, [key]);
 }

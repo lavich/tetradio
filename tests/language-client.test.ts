@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { PROFILES } from "../src/domain/language";
 import { optionLetter } from "../src/features/learning/exercises/Choice";
-import { courseProfile, noVoice } from "../src/shared/language";
+import { noVoice } from "../src/shared/language";
 import { pageDate } from "../src/shared/notebook";
 import { voicesOf } from "../src/shared/voices";
 
@@ -33,11 +33,5 @@ describe("язык курса в интерфейсе", () => {
   it("сообщение об отсутствии голоса называет язык; греческое — прежнее", () => {
     expect(noVoice(PROFILES.el)).toBe("На устройстве нет греческого голоса — включите его в настройках речи.");
     expect(PROFILES.en.voiceName).toBe("английского голоса");
-  });
-
-  it("неизвестный язык курса из каталога — профиль по умолчанию", () => {
-    expect(courseProfile("en")).toBe(PROFILES.en);
-    expect(courseProfile(undefined)).toBe(PROFILES.el);
-    expect(courseProfile("fr")).toBe(PROFILES.el);
   });
 });

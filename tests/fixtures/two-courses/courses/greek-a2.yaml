@@ -8,7 +8,7 @@ exam:
   source: https://www.greek-language.gr/certification/node/15.html
   checkedAt: 2026-09-30
   localConfirmed: false
-  passShare: 0.6
+passShare: 0.6
 calendar:
   start: 2026-10-05
   checkpoints:

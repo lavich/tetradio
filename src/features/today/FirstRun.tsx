@@ -69,9 +69,10 @@ function CourseOffer({ course, entries }: { course: Course; entries: StoredCatal
   );
 }
 
-/** Начало курса там, где каталог есть, а уроков на устройстве ещё нет: на полке и на «Сегодня». */
-export function CourseStart() {
+/** Начало курса там, где каталог есть, а уроков на устройстве ещё нет: на полке — выбранного курса, на «Сегодня» — любого. */
+export function CourseStart({ courseId }: { courseId?: string }) {
   const courses = useCourses();
   const catalog = useCatalog();
-  return <FirstRun courses={courses ?? []} entries={catalog?.entries ?? []} />;
+  const offered = (courses ?? []).filter((course) => !courseId || course.id === courseId);
+  return <FirstRun courses={offered} entries={catalog?.entries ?? []} />;
 }
