@@ -1,20 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLiveQuery } from "dexie-react-hooks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAction } from "../../shared/action";
 import { stopAudio } from "../../shared/audio";
-import { useActiveSession, useSettings } from "../../shared/store";
+import { useSettings } from "../../shared/store";
+import { ProfileContext } from "../../shared/language";
+import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { deviceTimezone } from "../../domain/time";
 import { Skeleton } from "@/components/ui/skeleton";
 import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
+import { activeSession, primaryCourse, profileOfCourse, sessionCourse } from "../../storage/courses";
 import { db } from "../../storage/db";
 import { ConflictError, endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
 import { ExerciseView, Introduction, type Answer } from "./exercises";
-import { cardProfile } from "./exercises/model";
 import { useWide } from "../../shared/media";
 import { compositionLine, DoneList, doneRows, PageHead, SessionShell } from "./notebook";
+import { sessionPath } from "./session-actions";
 import { useFold } from "./useFold";
 import ui from "../../shared/ui.module.css";
 import s from "./session.module.css";
@@ -22,21 +25,20 @@ import s from "./session.module.css";
 export function SessionScreen() {
   const navigate = useNavigate();
   const { settings, ready: settingsReady } = useSettings();
-  const other = useActiveSession();
+  const course = useSearchParams()[0].get("course");
+  const other = useLiveQuery(() => activeSession(), []);
   const [sessionId, setSessionId] = useState<string | null>(null);
   // Сессию держим по id: последний ответ переводит её в done, но экран должен дорисовать обратную связь.
   // `undefined` — ещё читается, `null` — активного занятия нет.
-  const session = useLiveQuery(
-    async () =>
-      (await (sessionId
-        ? db.sessions.get(sessionId)
-        : db.sessions
-            .orderBy("id")
-            .reverse()
-            .filter((entry) => entry.status === "active")
-            .first())) ?? null,
-    [sessionId],
-  );
+  // Язык курса читается вместе с занятием: первая озвучка не должна прозвучать голосом другого языка.
+  const loaded = useLiveQuery(async () => {
+    const found = sessionId ? await db.sessions.get(sessionId) : await activeSession(course ?? (await primaryCourse()));
+    if (!found) return { session: null, profile: undefined };
+    const courseId = await sessionCourse(found);
+    return { session: found, profile: courseId ? await profileOfCourse(courseId) : PROFILES[DEFAULT_LANGUAGE] };
+  }, [sessionId, course]);
+  const session = loaded?.session;
+  const profile = loaded?.profile;
   const events = useLiveQuery(
     async () =>
       new Map(
@@ -121,7 +123,7 @@ export function SessionScreen() {
   }, [session?.id, position]);
 
   const loading = session === undefined;
-  if (loading || !session || !item) {
+  if (loading || !session || !item || !profile) {
     return (
       <main className={s.session}>
         {loading ? (
@@ -133,7 +135,7 @@ export function SessionScreen() {
         ) : (
           <div className="flex flex-col gap-3 py-6">
             <p className={ui.muted}>Активного занятия нет.</p>
-            <Button size="xl" onClick={() => navigate(other ? "/session" : "/")}>
+            <Button size="xl" onClick={async () => navigate(other ? await sessionPath(other.courseId) : "/")}>
               На главную
             </Button>
           </div>
@@ -215,32 +217,34 @@ export function SessionScreen() {
 
   const rows = doneRows({ items: session.items.slice(0, position) }, events ?? new Map());
   return (
-    <SessionShell
-      mainRef={scroller}
-      head={
-        <>
-          <PageHead day={session.planDate} profile={session.items[0] && cardProfile(session.items[0].card)} />
-          <DoneList rows={rows} folded={folded} onToggle={() => setOpened(!!folded)} />
-        </>
-      }
-      sheetRef={sheet}
-      sheetLabel={introduction ? "Знакомство" : "Задание"}
-      number={introduction ? undefined : rows.length + 1}
-      problem={problem}
-      cloudLabel="Занятие"
-      cloudMark
-      closeLabel="Закрыть занятие"
-      onClose={leave}
-      nativeBack={nativeBack}
-      countLabel={`${introduction ? "Знакомство" : "Упражнение"} ${step + 1} из ${total}`}
-      count={
-        <>
-          {step + 1} из {total}
-        </>
-      }
-      note={introduction ? "знакомство с новым" : compositionLine(session.items)}
-    >
-      {view}
-    </SessionShell>
+    <ProfileContext value={profile}>
+      <SessionShell
+        mainRef={scroller}
+        head={
+          <>
+            <PageHead day={session.planDate} />
+            <DoneList rows={rows} folded={folded} onToggle={() => setOpened(!!folded)} />
+          </>
+        }
+        sheetRef={sheet}
+        sheetLabel={introduction ? "Знакомство" : "Задание"}
+        number={introduction ? undefined : rows.length + 1}
+        problem={problem}
+        cloudLabel="Занятие"
+        cloudMark
+        closeLabel="Закрыть занятие"
+        onClose={leave}
+        nativeBack={nativeBack}
+        countLabel={`${introduction ? "Знакомство" : "Упражнение"} ${step + 1} из ${total}`}
+        count={
+          <>
+            {step + 1} из {total}
+          </>
+        }
+        note={introduction ? "знакомство с новым" : compositionLine(session.items)}
+      >
+        {view}
+      </SessionShell>
+    </ProfileContext>
   );
 }

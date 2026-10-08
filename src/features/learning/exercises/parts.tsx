@@ -1,10 +1,10 @@
-import { languageOfText } from "../../../domain/language";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import type { Phrase, Word } from "../../../domain/types";
 import { ExampleBox, ReadingNotes, SpeakButton, WordArt } from "../../words/WordCardView";
 import ui from "../../../shared/ui.module.css";
 import { cx } from "../../../shared/cx";
+import { useProfile } from "../../../shared/language";
 import { CloudAction, Instruction } from "../notebook";
 import session from "../session.module.css";
 import s from "./exercise.module.css";
@@ -79,14 +79,11 @@ export function GreekHead({
   phrase?: boolean;
   speak?: React.ReactNode;
 }) {
+  const { code } = useProfile();
   return (
     <div className={s.greekRow}>
       <div className="min-w-0">
-        <p
-          className={phrase ? s.phrase : s.word}
-          lang={languageOfText(text).code}
-          data-testid={phrase ? "phrase-text" : undefined}
-        >
+        <p className={phrase ? s.phrase : s.word} lang={code} data-testid={phrase ? "phrase-text" : undefined}>
           {text}
         </p>
         {ipa && <p className={s.ipa}>{ipa}</p>}
@@ -101,10 +98,11 @@ export function GreekHead({
  * `speak` добавляет кнопку озвучки: в раскрытии после аудирования она лишняя — повтор уже есть в задании.
  */
 export function WordReveal({ word, speak, large }: { word: Word; speak?: boolean; large?: boolean }) {
+  const { code } = useProfile();
   return (
     <>
       <div className={s.greekRow}>
-        <p className={large ? s.word : s.wordSmall} lang={languageOfText(word.greek).code}>
+        <p className={large ? s.word : s.wordSmall} lang={code}>
           {word.greek}
         </p>
         {speak && <SpeakButton word={word} quiet />}

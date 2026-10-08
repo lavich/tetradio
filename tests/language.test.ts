@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { checkItem, spokenChoice } from "../src/domain/course";
 import type { ExerciseBlock, ExerciseItem } from "../src/content/course";
-import { languageOfText, PROFILES, profileOf } from "../src/domain/language";
+import { PROFILES, profileOf } from "../src/domain/language";
 import { isCheckable } from "../src/domain/plan";
 import { checkAnswer, checkTextAnswer } from "../src/domain/text-answer";
 import { assemblyExercise, wordExerciseOptions, NO_SYLLABLES } from "../src/domain/word-exercise";
@@ -47,8 +47,8 @@ describe("профиль английского языка", () => {
 
   it("сборки из слогов нет", () => {
     const word: Word = { id: "w1", greek: "beautiful", russian: "красивый" } as Word;
-    expect(assemblyExercise(word, Math.random)).toBeNull();
-    expect(wordExerciseOptions(word, { close: [], pool: [] }, true).assembly).toEqual({
+    expect(assemblyExercise(word, Math.random, en)).toBeNull();
+    expect(wordExerciseOptions(word, { close: [], pool: [] }, true, en).assembly).toEqual({
       available: false,
       reason: NO_SYLLABLES,
     });
@@ -61,9 +61,7 @@ describe("профиль английского языка", () => {
     expect(isCheckable({ ...silent, language: "en" }, { hasVoice: onlyEnglish, phrasePool: 4 })).toBe(true);
   });
 
-  it("язык по письменности и по коду", () => {
-    expect(languageOfText("the house").code).toBe("en");
-    expect(languageOfText("το σπίτι").code).toBe("el");
+  it("язык по коду", () => {
     expect(profileOf(undefined).code).toBe("el");
     expect(() => profileOf("fr")).toThrow("Нет профиля языка «fr»");
   });

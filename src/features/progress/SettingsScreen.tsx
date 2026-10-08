@@ -4,6 +4,8 @@ import { BackupSection, REPORT_BOUNDARIES } from "../backup/BackupSection";
 import { useHapticsSetting } from "../../platform/haptics";
 import { launchContext } from "../../platform/launch";
 import { useLaunchMode, usePlatform } from "../../platform/platform";
+import { setPrimaryCourse, useCourses, usePrimaryCourse } from "../../shared/courses";
+import { Segmented } from "../../shared/CourseSwitch";
 import { CARDS, withCount, WORDS } from "../../shared/format";
 import { megabytes, useOfflineStatus } from "../../shared/offline";
 import { useCounts, useSettings } from "../../shared/store";
@@ -34,6 +36,7 @@ export function SettingsScreen() {
         <h2 id="lessons" className={css.heading}>
           Занятия
         </h2>
+        <PrimaryCourse />
         <Toggle
           testId="auto-speak-settings"
           label="Озвучивать автоматически"
@@ -96,6 +99,28 @@ export function SettingsScreen() {
 
       <About />
     </Screen>
+  );
+}
+
+/** Основной курс — первым и целиком на «Сегодня»; остальные — строкой под ним. Один курс — выбирать нечего. */
+function PrimaryCourse() {
+  const courses = useCourses();
+  const primary = usePrimaryCourse();
+  if (!courses || courses.length < 2) return null;
+  return (
+    <div className={css.choice} data-testid="primary-course">
+      <span className={css.toggleText}>
+        <span className={css.toggleLabel}>Основной курс</span>
+        <span className={css.note}>Он первым и целиком на «Сегодня», остальные — строкой ниже.</span>
+      </span>
+      <Segmented
+        label="Основной курс"
+        testId="primary-course-choice"
+        options={courses}
+        value={primary}
+        onChange={(id) => void setPrimaryCourse(id)}
+      />
+    </div>
   );
 }
 

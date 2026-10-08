@@ -1,5 +1,5 @@
 import { db, type AppDatabase } from "./db";
-import { sessionCourse } from "./courses";
+import { profileOfCourse, sessionCourse } from "./courses";
 import { lessonMates, optionPool, phrasePool } from "./queries";
 import {
   closeSources,
@@ -155,14 +155,16 @@ async function easierRetry(
 ): Promise<Pick<SessionItem, "type" | "options"> | null> {
   if (!hasEasierStep(item.type)) return null;
   const card = item.card;
+  const courseId = await sessionCourse(session, database);
   const pools =
     card.kind === "word"
       ? {
           words: await wordSourcesOf(card.word.id, session, database),
           phrases: [],
         }
-      : { words: NO_WORDS, phrases: await phrasePool(OPTION_POOL, await sessionCourse(session, database), database) };
-  return easierExercise(card, item.type, pools);
+      : { words: NO_WORDS, phrases: await phrasePool(OPTION_POOL, courseId, database) };
+  const profile = courseId ? await profileOfCourse(courseId, database) : undefined;
+  return easierExercise(card, item.type, pools, Math.random, profile);
 }
 /**
  * Живые слова занятия: в элементах лежат снимки на момент сборки, поэтому слова перечитываются по id,

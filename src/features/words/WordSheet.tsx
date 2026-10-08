@@ -3,18 +3,18 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Share2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { languageOfText } from "../../domain/language";
 import { WORD_EXERCISES } from "../../domain/learning";
 import type { LearningRef, Phrase, Word } from "../../domain/types";
 import { shareWord } from "../../platform/share";
 import { useNow } from "../../shared/clock";
+import { useProfile } from "../../shared/language";
 import { usePhrase, useWordLesson } from "../../shared/store";
 import { db } from "../../storage/db";
 import { Tick } from "../../shared/Tick";
 import type { DictionaryLesson } from "../../storage/dictionary";
 import { dexieSource } from "../../storage/queries";
 import { SpeakText } from "../learning/exercises";
-import { startSession } from "../learning/session-actions";
+import { sessionPath, startSession } from "../learning/session-actions";
 import { ExampleBox, ReadingNotes, SpeakButton, WordArt } from "./WordCardView";
 import { EXERCISE_LABELS, exercisePath, useWordExercises } from "./word-exercises";
 import css from "./dictionary.module.css";
@@ -23,11 +23,14 @@ export function EntrySheet({
   kind,
   id,
   lessons,
+  courseId,
 }: {
   kind: "word" | "phrase";
   id: string;
   lessons: DictionaryLesson[];
+  courseId?: string;
 }) {
+  const { code } = useProfile();
   const word = useLiveQuery(async () => (kind === "word" ? ((await db.words.get(id)) ?? null) : undefined), [kind, id]);
   const phrase = usePhrase(kind === "phrase" ? id : undefined);
   const lesson = lessons.find((item) => item.entries.some((entry) => entry.ref.kind === kind && entry.ref.id === id));
@@ -39,17 +42,17 @@ export function EntrySheet({
       {lesson?.moduleId && (
         <Link className={css.from} to={`/course/${lesson.moduleId}/${lesson.id}`}>
           {lesson.number ? `Урок ${lesson.number} · ` : ""}
-          <span lang={languageOfText(lesson.title).code}>{lesson.title}</span> →
+          <span lang={code}>{lesson.title}</span> →
         </Link>
       )}
-      {word ? <WordBody word={word} /> : <PhraseBody phrase={phrase!} />}
+      {word ? <WordBody word={word} courseId={courseId} /> : <PhraseBody phrase={phrase!} courseId={courseId} />}
     </article>
   );
 }
 
-function WordBody({ word }: { word: Word }) {
+function WordBody({ word, courseId }: { word: Word; courseId?: string }) {
   const shipped = useWordLesson(word.id);
-  const { code } = languageOfText(word.greek);
+  const { code } = useProfile();
   return (
     <>
       <div className={css.head}>
@@ -73,7 +76,7 @@ function WordBody({ word }: { word: Word }) {
         <ExampleBox key={index} example={example} linkFrom={word.id} bare />
       ))}
       <Skills word={word} />
-      <Practice ref_={{ kind: "word", id: word.id }} label="Потренировать слово" />
+      <Practice ref_={{ kind: "word", id: word.id }} courseId={courseId} label="Потренировать слово" />
       {shipped && (
         <button type="button" className={css.quiet} aria-label="Поделиться словом" onClick={() => void shareWord(word)}>
           <Share2 aria-hidden size={16} /> Поделиться словом
@@ -83,11 +86,12 @@ function WordBody({ word }: { word: Word }) {
   );
 }
 
-function PhraseBody({ phrase }: { phrase: Phrase }) {
+function PhraseBody({ phrase, courseId }: { phrase: Phrase; courseId?: string }) {
+  const { code } = useProfile();
   return (
     <>
       <div className={css.head}>
-        <p className={`${css.big} ${css.bigPhrase} min-w-0 flex-1`} lang={languageOfText(phrase.text).code}>
+        <p className={`${css.big} ${css.bigPhrase} min-w-0 flex-1`} lang={code}>
           {phrase.text}
         </p>
         <SpeakText text={phrase.text} audioAssetId={phrase.audioAssetId} label="Послушать фразу" />
@@ -96,7 +100,7 @@ function PhraseBody({ phrase }: { phrase: Phrase }) {
       {(phrase.usage || phrase.note) && (
         <p className={css.forms}>{[phrase.usage, phrase.note].filter(Boolean).join(" · ")}</p>
       )}
-      <Practice ref_={{ kind: "phrase", id: phrase.id }} label="Потренировать фразу" />
+      <Practice ref_={{ kind: "phrase", id: phrase.id }} courseId={courseId} label="Потренировать фразу" />
     </>
   );
 }
@@ -150,14 +154,14 @@ function Skills({ word }: { word: Word }) {
   );
 }
 
-function Practice({ ref_, label }: { ref_: LearningRef; label: string }) {
+function Practice({ ref_, courseId, label }: { ref_: LearningRef; courseId?: string; label: string }) {
   const now = useNow();
   const navigate = useNavigate();
   const [problem, setProblem] = useState("");
   const practice = async () => {
-    const session = await startSession(now, { refs: [ref_], mode: "practice" });
+    const session = await startSession(now, { refs: [ref_], mode: "practice", courseId });
     if (!session) return setProblem("Не удалось собрать тренировку.");
-    void navigate("/session");
+    void navigate(await sessionPath(session.courseId));
   };
   return (
     <>

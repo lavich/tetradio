@@ -2,16 +2,18 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { SKILL_LABEL } from "../../content/course";
-import { languageOfText } from "../../domain/language";
 import type { SkillProgress } from "../../domain/progress";
 import { SOLID_DAYS, type Leech } from "../../domain/stats";
 import { useNow } from "../../shared/clock";
+import { CourseSwitch } from "../../shared/CourseSwitch";
 import { cx } from "../../shared/cx";
+import { useCourseProfile } from "../../shared/language";
 import { dayMonth, withCount } from "../../shared/format";
 import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { deviceTimezone } from "../../domain/time";
+import { cardsInCourse, currentCourse } from "../../storage/courses";
 import { courseProgress, type CourseProgress } from "../../storage/progress";
 import { useStats } from "../../shared/store";
 import { dictionary, type DictionaryLesson } from "../../storage/dictionary";
@@ -25,14 +27,34 @@ const LESSONS: [string, string, string] = ["урок", "урока", "уроко
 export function ProgressScreen() {
   const now = useNow();
   const spread = useSpread();
-  const data = useLiveQuery(() => courseProgress(now, deviceTimezone()), [now.toDateString(), deviceTimezone()]);
-  const words = useLiveQuery(() => dictionary(), []);
+  const course = useLiveQuery(async () => (await currentCourse()) ?? null, []);
+  const courseId = course ?? undefined;
+  const data = useLiveQuery(
+    () => (course === undefined ? undefined : courseProgress(now, deviceTimezone(), courseId)),
+    [now.toDateString(), deviceTimezone(), course],
+  );
+  const words = useLiveQuery(() => (course === undefined ? undefined : dictionary(courseId)), [course]);
   const stats = useStats(now);
+  const leeches = useLiveQuery(async () => {
+    const all = stats?.leeches ?? [];
+    if (!courseId) return all;
+    const own = await cardsInCourse(
+      all.map((leech) => leech.unitKey),
+      courseId,
+    );
+    return all.filter((leech) => own.has(leech.unitKey));
+  }, [stats, courseId]);
+  const profile = useCourseProfile(courseId);
   if (!data) return <Screen wide />;
-  const head = <h1 className={nb.title}>Прогресс</h1>;
+  const head = (
+    <>
+      <CourseSwitch />
+      <h1 className={nb.title}>Прогресс</h1>
+    </>
+  );
   const path = <Path data={data} />;
   const ready = <Skills skills={data.skills} complete={data.complete} passShare={data.passShare} />;
-  const cards = <Cards words={words} leeches={stats?.leeches ?? []} started={data.pace.done > 0} />;
+  const cards = <Cards words={words} leeches={leeches ?? []} lang={profile.code} started={data.pace.done > 0} />;
   const tail = (
     <>
       <p className={css.weekLine} data-testid="week">
@@ -138,10 +160,12 @@ function Skills({
 function Cards({
   words,
   leeches,
+  lang,
   started,
 }: {
   words: DictionaryLesson[] | undefined;
   leeches: Leech[];
+  lang: string;
   started: boolean;
 }) {
   const entries = words?.flatMap((lesson) => lesson.entries) ?? [];
@@ -170,7 +194,7 @@ function Cards({
           {leeches.slice(0, 6).map((leech, index) => (
             <span key={leech.unitKey}>
               {index ? ", " : ""}
-              <Link to={entryPath(leech)} lang={languageOfText(leech.label).code}>
+              <Link to={entryPath(leech)} lang={lang}>
                 {leech.label}
               </Link>
             </span>

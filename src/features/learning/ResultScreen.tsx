@@ -1,16 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
-import { languageOfText } from "../../domain/language";
+import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { deviceTimezone, formatDay, localDay } from "../../domain/learning";
 import type { CardKind, LearningRef, ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
 import { CARDS, minutes, PHRASES, plural, withCount, WORDS } from "../../shared/format";
 import { statesOf } from "../../storage/queries";
+import { profileOfCourse, sessionCourse } from "../../storage/courses";
 import { db } from "../../storage/db";
-import { startSession } from "./session-actions";
+import { ProfileContext } from "../../shared/language";
+import { sessionPath, startSession } from "./session-actions";
 import { compositionLine, DoneList, doneRows, markOf, PageHead } from "./notebook";
-import { cardProfile } from "./exercises/model";
 import s from "./session.module.css";
 
 /** Состав уникальных карточек по видам: «2 слова · 1 фраза», только непустые группы. */
@@ -34,6 +35,11 @@ export function ResultScreen() {
   const navigate = useNavigate();
   const now = useNow();
   const session = useLiveQuery(() => (id ? db.sessions.get(id) : undefined), [id]);
+  const profile =
+    useLiveQuery(async () => {
+      const courseId = session && (await sessionCourse(session));
+      return courseId ? profileOfCourse(courseId) : undefined;
+    }, [session?.id]) ?? PROFILES[DEFAULT_LANGUAGE];
   const result = useLiveQuery(async () => {
     const events = id ? await db.events.where("sessionId").equals(id).toArray() : [];
     const mistakes = events.filter(
@@ -75,56 +81,59 @@ export function ResultScreen() {
   const almost = events.filter((event) => markOf(event) === "almost").length;
 
   const repeat = async () => {
-    const created = await startSession(now, { refs: readyAgain });
-    void navigate(created ? "/session" : "/", { replace: true });
+    const courseId = session ? await sessionCourse(session) : undefined;
+    const created = await startSession(now, { refs: readyAgain, courseId });
+    void navigate(created ? await sessionPath(created.courseId) : "/", { replace: true });
   };
   return (
-    <main className={`${s.session} ${s.result}`}>
-      <div className={s.page}>
-        <PageHead day={session?.planDate ?? today} profile={session?.items[0] && cardProfile(session.items[0].card)} />
-        <DoneList rows={rows} />
-        <section className={s.summary} aria-labelledby="result-title">
-          <h2 id="result-title" className={s.summaryTitle}>
-            Занятие завершено
-          </h2>
-          <p className={s.summaryLine} data-testid="composition">
-            {withCount(unique.size, mixed ? CARDS : WORDS)}
-            {mixed && ` (${compositionText(byKind)})`} · {clean} сразу, {unique.size - clean} с исправлением.
-          </p>
-          {[...returns].map(([day, names]) => (
-            <p key={day} className={s.summaryNote}>
-              {plural(names.length, ["Ошибка вернётся", "Ошибки вернутся", "Ошибки вернутся"])} {dayName(day)}:{" "}
-              <b lang={languageOfText(names[0] ?? "").code}>{names.join(", ")}</b>.
+    <ProfileContext value={profile}>
+      <main className={`${s.session} ${s.result}`}>
+        <div className={s.page}>
+          <PageHead day={session?.planDate ?? today} />
+          <DoneList rows={rows} />
+          <section className={s.summary} aria-labelledby="result-title">
+            <h2 id="result-title" className={s.summaryTitle}>
+              Занятие завершено
+            </h2>
+            <p className={s.summaryLine} data-testid="composition">
+              {withCount(unique.size, mixed ? CARDS : WORDS)}
+              {mixed && ` (${compositionText(byKind)})`} · {clean} сразу, {unique.size - clean} с исправлением.
             </p>
-          ))}
-          <p className={s.summaryNote}>
-            Упражнений: {events.length}, ошибок: {mistakes.length}
-            {almost ? `, из них «почти»: ${almost}` : ""}.{" "}
-            {objective.length
-              ? `Объективная точность (выбор, сборка, аудирование, написание, пропуск): ${Math.round((objective.filter((event) => event.correct).length / objective.length) * 100)}% из ${withCount(objective.length, ["ответа", "ответов", "ответов"])}.`
-              : "Объективных проверок в этом занятии не было — только самооценка. Точность: нет данных."}
-          </p>
-          <p className={s.summaryNote}>Активное время: {minutes(session?.activeTimeMs ?? 0)}</p>
-          {readyAgain.length > 0 && (
-            <div className={s.summaryActions}>
-              <Button variant="soft" size="xl" onClick={repeat}>
-                Повторить ошибки ({readyAgain.length})
-              </Button>
-            </div>
-          )}
-        </section>
-      </div>
-      <div className={s.cloud} role="group" aria-label="Итог занятия" data-cloud>
-        <span className={s.count}>
-          <span>
-            {rows.length} из {session?.items.length ?? rows.length}
+            {[...returns].map(([day, names]) => (
+              <p key={day} className={s.summaryNote}>
+                {plural(names.length, ["Ошибка вернётся", "Ошибки вернутся", "Ошибки вернутся"])} {dayName(day)}:{" "}
+                <b lang={profile.code}>{names.join(", ")}</b>.
+              </p>
+            ))}
+            <p className={s.summaryNote}>
+              Упражнений: {events.length}, ошибок: {mistakes.length}
+              {almost ? `, из них «почти»: ${almost}` : ""}.{" "}
+              {objective.length
+                ? `Объективная точность (выбор, сборка, аудирование, написание, пропуск): ${Math.round((objective.filter((event) => event.correct).length / objective.length) * 100)}% из ${withCount(objective.length, ["ответа", "ответов", "ответов"])}.`
+                : "Объективных проверок в этом занятии не было — только самооценка. Точность: нет данных."}
+            </p>
+            <p className={s.summaryNote}>Активное время: {minutes(session?.activeTimeMs ?? 0)}</p>
+            {readyAgain.length > 0 && (
+              <div className={s.summaryActions}>
+                <Button variant="soft" size="xl" onClick={repeat}>
+                  Повторить ошибки ({readyAgain.length})
+                </Button>
+              </div>
+            )}
+          </section>
+        </div>
+        <div className={s.cloud} role="group" aria-label="Итог занятия" data-cloud>
+          <span className={s.count}>
+            <span>
+              {rows.length} из {session?.items.length ?? rows.length}
+            </span>
+            <small>{session ? compositionLine(session.items) : ""}</small>
           </span>
-          <small>{session ? compositionLine(session.items) : ""}</small>
-        </span>
-        <Button size="md" className={s.primary} onClick={() => navigate("/", { replace: true })}>
-          Готово
-        </Button>
-      </div>
-    </main>
+          <Button size="md" className={s.primary} onClick={() => navigate("/", { replace: true })}>
+            Готово
+          </Button>
+        </div>
+      </main>
+    </ProfileContext>
   );
 }

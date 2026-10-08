@@ -14,7 +14,6 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import type { BlockMarks, WordMark } from "../../content/schema";
-import { languageOfText } from "../../domain/language";
 import { playText, type PlayResult } from "../../shared/audio";
 import { noVoice, useProfile } from "../../shared/language";
 import type { TapCard } from "../../storage/course";
@@ -230,7 +229,7 @@ const GAP = 10;
 const EDGE = 8;
 function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
   const { card, anchor, keyboard, point, played } = open;
-  const profile = languageOfText(card.greek);
+  const profile = useProfile();
   const sheet = useRef<HTMLDivElement>(null);
   const speak = useRef<HTMLButtonElement>(null);
   const titleId = useId();

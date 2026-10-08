@@ -1,4 +1,4 @@
-import { languageOfText } from "../../../domain/language";
+import { useProfile } from "../../../shared/language";
 import { ExampleBox, SpeakButton } from "../../words/WordCardView";
 import s from "./exercise.module.css";
 import { Choice } from "./Choice";
@@ -9,6 +9,7 @@ import { SpeakText } from "./SpeakText";
 
 export function Recognition(props: ExerciseProps & { autoSpeak?: boolean }) {
   const { card } = props.item;
+  const { code } = useProfile();
   // Узнавание проверяет значение, а звучит показанное написание: подсказки нет, поэтому карточка озвучивается сама.
   useAutoSpeak(card, !!props.autoSpeak);
   if (card.kind === "phrase") {
@@ -20,7 +21,7 @@ export function Recognition(props: ExerciseProps & { autoSpeak?: boolean }) {
         correct={phrase.translation ?? ""}
         options={props.item.options}
         head={
-          <p className={s.phrase} lang={languageOfText(phrase.text).code}>
+          <p className={s.phrase} lang={code}>
             {phrase.text}
           </p>
         }

@@ -19,6 +19,7 @@
   "ignorePatterns": [
     "dist",
     "dist-course",
+    "dist-courses",
     "public/content",
     "docs/art-sheet.html",
     ".vitest",

@@ -13,9 +13,11 @@ import {
   nextCourseLesson,
   saveBlockProgress,
 } from "../../storage/course";
+import { lessonCourses } from "../../storage/courses";
 import { db } from "../../storage/db";
+import { useFollowCourse } from "../../shared/courses";
 import { lessonItems } from "../../storage/queries";
-import { startSession } from "../learning/session-actions";
+import { sessionPath, startSession } from "../learning/session-actions";
 import { Exercise, Explanation, Listening, Reading, Speaking, Writing } from "./blocks";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
@@ -40,6 +42,8 @@ export function CourseLessonScreen() {
   const items = useLiveQuery(() => lessonItems(lessonId), [lessonId]);
   const finished = !!lesson?.lesson?.completed;
   const courseId = lesson?.lesson?.courseId;
+  const lessonCourse = useLiveQuery(async () => (await lessonCourses([lessonId])).get(lessonId), [lessonId]);
+  useFollowCourse(lessonCourse);
   const next = useLiveQuery(() => (finished ? nextCourseLesson(courseId) : null), [finished, courseId, lessonId]);
   const moduleOf = lesson?.moduleId;
   const passShare = useLiveQuery(async () => {
@@ -82,10 +86,14 @@ export function CourseLessonScreen() {
   const practiceWords = async () => {
     setProblem("");
     const created = items?.length
-      ? await startSession(new Date(), { refs: items.map((item) => item.ref), mode: "practice" })
+      ? await startSession(new Date(), {
+          refs: items.map((item) => item.ref),
+          mode: "practice",
+          courseId: lessonCourse,
+        })
       : null;
     if (!created) return setProblem("В уроке нет доступных карточек.");
-    void navigate("/session");
+    void navigate(await sessionPath(created.courseId));
   };
   const fromModule = !!(location.state as { fromModule?: boolean } | null)?.fromModule;
   const toModule = () => {

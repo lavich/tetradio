@@ -1,9 +1,11 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
-import { languageOfText } from "../../domain/language";
 import { moduleViews, type ModuleView } from "../../storage/course";
+import { currentCourse } from "../../storage/courses";
 import { db } from "../../storage/db";
+import { CourseSwitch } from "../../shared/CourseSwitch";
+import { useCourseProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
 import { coverColor } from "../../shared/notebook";
 import { CourseStart } from "../today/FirstRun";
@@ -20,13 +22,19 @@ function coverLabel(view: ModuleView) {
 }
 
 export function CourseScreen() {
-  const views = useLiveQuery(() => moduleViews(), []);
-  const courseId = views?.[0]?.module.courseId;
+  const data = useLiveQuery(async () => {
+    const courseId = await currentCourse();
+    return { courseId, views: await moduleViews(courseId) };
+  }, []);
+  const courseId = data?.courseId;
   const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
-  if (views === undefined) return <Screen />;
+  const profile = useCourseProfile(courseId);
+  if (data === undefined) return <Screen />;
+  const { views } = data;
   if (!views.length)
     return (
       <Screen>
+        <CourseSwitch />
         <h1>Полка</h1>
         <CourseStart />
       </Screen>
@@ -36,6 +44,7 @@ export function CourseScreen() {
   const labels = checkpointLabels(course?.calendar);
   return (
     <Screen>
+      <CourseSwitch />
       <div className="flex items-baseline justify-between gap-3">
         <h1>Полка</h1>
         <span className={base.meta}>
@@ -58,7 +67,7 @@ export function CourseScreen() {
               >
                 {view.completed ? <Tick className={css.coverStamp} label="заполнена" /> : null}
                 <span className={css.coverNumber}>{String(module.number).padStart(2, "0")}</span>
-                <span className={css.coverTitle} lang={languageOfText(module.title).code}>
+                <span className={css.coverTitle} lang={profile.code}>
                   {module.title}
                 </span>
                 <span className={css.coverLabel}>{coverLabel(view)}</span>

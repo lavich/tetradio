@@ -1,0 +1,9 @@
+number: 1
+title: Work
+subtitle: Работа
+status: published
+goal: Рассказать, как добираешься на работу
+sessions: 2
+lessons:
+  - e01-1
+  - e01-test

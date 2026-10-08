@@ -1,5 +1,6 @@
 import { optionsFor, phraseOptionsFor, type ExercisePools, type OptionPools } from "./options";
 import { availableTypes, chooseTypeFor, type SkillContext } from "./exercise-choice";
+import { PROFILES, type LanguageProfile } from "./language";
 import { emptySkills, type SkillSummary } from "./skills";
 import type { ExerciseType, Phrase, SessionCard, SessionItem } from "./types";
 import { assemblyExercise, objectiveExercise } from "./word-exercise";
@@ -25,16 +26,17 @@ export function easierExercise(
   type: ExerciseType,
   pools: OptionPools,
   random: () => number = Math.random,
+  profile: LanguageProfile = PROFILES.el,
 ): Pick<SessionItem, "type" | "options"> | null {
   for (const step of EASIER[type] ?? []) {
     if (step === "assembly") {
-      const exercise = card.kind === "word" ? assemblyExercise(card.word, random) : null;
+      const exercise = card.kind === "word" ? assemblyExercise(card.word, random, profile) : null;
       if (exercise) return exercise;
       continue;
     }
     const options =
       card.kind === "word"
-        ? optionsFor(card.word, pools.words, "recognition", random)
+        ? optionsFor(card.word, pools.words, "recognition", random, profile)
         : phraseOptionsFor(card.phrase, pools.phrases, "recognition", random);
     if (options.length === 4) return { type: "recognition", options };
   }
@@ -47,8 +49,9 @@ export function exerciseFor(
   skills: SkillSummary,
   random: () => number,
   hasVoice: boolean,
+  profile: LanguageProfile = PROFILES.el,
 ): Pick<SessionItem, "type" | "options"> | null {
-  if (card.kind === "word") return objectiveExercise(card.word, pools.words, skills, random, hasVoice);
+  if (card.kind === "word") return objectiveExercise(card.word, pools.words, skills, random, hasVoice, profile);
   return phraseExercise(card.phrase, pools.phrases, skills, random, hasVoice);
 }
 

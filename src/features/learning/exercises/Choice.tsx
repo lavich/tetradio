@@ -6,7 +6,8 @@ import exercise from "./exercise.module.css";
 import s from "./choice.module.css";
 import { useRevealed } from "./hooks";
 import type { LanguageProfile } from "../../../domain/language";
-import { cardProfile, type ExerciseProps } from "./model";
+import { useProfile } from "../../../shared/language";
+import { type ExerciseProps } from "./model";
 import { Primary, QuietActions, QuietButton } from "./parts";
 
 /** Короткие варианты — сеткой 2 × 2, иначе строками α) β) γ) δ). Порог — то, что помещается в половину узкого листа. */
@@ -58,7 +59,7 @@ export function Choice({
   // Выбор раскрывается строкой под вариантами: подводим её, не уводя варианты из вида.
   const revealed = useRevealed(answered, "nearest");
   const grid = optionsFit(options);
-  const profile = cardProfile(item.card);
+  const profile = useProfile();
   const right = options.indexOf(correct);
   return (
     <>

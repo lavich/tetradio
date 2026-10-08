@@ -1,13 +1,17 @@
 import { chooseTypeFor, type SkillContext } from "./exercise-choice";
 import { optionsFor, shuffleTiles, type WordSources } from "./options";
 import { emptySkills, type SkillSummary } from "./skills";
-import { languageOfText } from "./language";
+import { PROFILES, type LanguageProfile } from "./language";
 import { splitWriting } from "./syllables";
 import type { SessionItem, Word } from "./types";
 
 /** Сборка слова: `null` — слогов меньше двух или язык без слогов. Артикль ложится в пул обычной плиткой и ставится наравне со слогами. */
-export function assemblyExercise(word: Word, random: () => number): Pick<SessionItem, "type" | "options"> | null {
-  if (!languageOfText(word.greek).syllables) return null;
+export function assemblyExercise(
+  word: Word,
+  random: () => number,
+  profile: LanguageProfile = PROFILES.el,
+): Pick<SessionItem, "type" | "options"> | null {
+  if (!profile.syllables) return null;
   const writing = splitWriting(word.greek);
   const parts = writing.syllables;
   if (parts.length < 2) return null;
@@ -28,13 +32,19 @@ export const NO_SYLLABLES = "Сборка из слогов — только д�
  * Данные слова для упражнений: варианты узнавания и аудирования, число слогов, есть ли звук.
  * Варианты подбираются в этом порядке: от него зависит поток `random` и воспроизводимость занятия.
  */
-function wordFacts(word: Word, sources: WordSources, random: () => number, hasVoice: boolean) {
-  const assembles = languageOfText(word.greek).syllables;
+function wordFacts(
+  word: Word,
+  sources: WordSources,
+  random: () => number,
+  hasVoice: boolean,
+  profile: LanguageProfile,
+) {
+  const assembles = profile.syllables;
   return {
     assembles,
     syllables: assembles ? splitWriting(word.greek).syllables.length : 0,
-    recognition: optionsFor(word, sources, "recognition", random),
-    listening: optionsFor(word, sources, "listening", random),
+    recognition: optionsFor(word, sources, "recognition", random, profile),
+    listening: optionsFor(word, sources, "listening", random, profile),
     sounds: !!word.audioAssetId || hasVoice,
   };
 }
@@ -63,8 +73,9 @@ export function wordExerciseOptions(
   word: Word,
   sources: WordSources,
   hasVoice: boolean,
+  profile: LanguageProfile = PROFILES.el,
 ): Record<WordExerciseType, ExerciseAvailability> {
-  return availabilityOf(wordFacts(word, sources, Math.random, hasVoice));
+  return availabilityOf(wordFacts(word, sources, Math.random, hasVoice, profile));
 }
 /** Упражнение выбранного вида без учёта навыков; `null` — вид слову недоступен. */
 export function buildWordExercise(
@@ -73,10 +84,11 @@ export function buildWordExercise(
   sources: WordSources,
   random: () => number = Math.random,
   hasVoice = false,
+  profile: LanguageProfile = PROFILES.el,
 ): Pick<SessionItem, "type" | "options"> | null {
-  const facts = wordFacts(word, sources, random, hasVoice);
+  const facts = wordFacts(word, sources, random, hasVoice, profile);
   if (!availabilityOf(facts)[type].available) return null;
-  if (type === "assembly") return assemblyExercise(word, random);
+  if (type === "assembly") return assemblyExercise(word, random, profile);
   return {
     type,
     options: type === "listening" ? facts.listening : type === "spelling" ? [] : facts.recognition,
@@ -90,11 +102,12 @@ export function objectiveExercise(
   skills: SkillSummary = emptySkills(),
   random: () => number = Math.random,
   hasVoice = false,
+  profile: LanguageProfile = PROFILES.el,
 ): Pick<SessionItem, "type" | "options"> {
-  const facts = wordFacts(word, sources, random, hasVoice);
+  const facts = wordFacts(word, sources, random, hasVoice, profile);
   const type = chooseTypeFor(skills, contextOf(facts));
   if (type === "assembly") {
-    const exercise = assemblyExercise(word, random);
+    const exercise = assemblyExercise(word, random, profile);
     if (exercise) return exercise;
   }
   return {

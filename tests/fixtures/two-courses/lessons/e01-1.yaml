@@ -1,0 +1,54 @@
+title: Дорога на работу
+kind: lesson
+items:
+  - { kind: word, id: e0001 }
+  - { kind: word, id: e0002 }
+  - { kind: word, id: e0003 }
+  - { kind: word, id: e0004 }
+  - { kind: word, id: e0005 }
+blocks:
+  - { type: vocabulary, id: words }
+  - type: reading
+    id: text
+    title: Anna
+    text: Anna goes to work by bus. She reads a book on the bus. At work she drinks coffee and writes letters.
+  - type: exercise
+    id: text-tf
+    about: text
+    instruction: Верно или неверно?
+    format: choice
+    items:
+      - { id: q1, prompt: Anna goes to work by car., options: ["True", "False"], answer: "False" }
+  - type: exercise
+    id: text-q
+    about: text
+    instruction: Ответьте одним словом
+    format: text
+    items:
+      - { id: q1, prompt: What does Anna drink at work?, answer: coffee }
+  - type: listening
+    id: dialogue
+    title: At the office
+    transcript:
+      - { speaker: Anna, text: Do you go to work by bus? }
+      - { speaker: Tom, text: "No, I go by train." }
+  - type: exercise
+    id: dialogue-q
+    about: dialogue
+    instruction: Ответьте
+    format: text
+    items:
+      - { id: q1, prompt: How does Tom go to work?, answer: by train }
+  - type: writing
+    id: about-me
+    register: friendly
+    prompt: Напишите 3 предложения о дороге на работу.
+    words: { min: 10, max: 30 }
+    model: I go to work by bus. I read on the way.
+    criteria: [Транспорт, Время]
+  - type: speaking
+    id: intro
+    part: interview
+    prompt: "Ответьте: How do you go to work?"
+    seconds: 30
+    criteria: [Полный ответ]

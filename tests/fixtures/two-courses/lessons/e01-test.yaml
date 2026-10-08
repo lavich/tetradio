@@ -1,0 +1,12 @@
+title: Контрольная
+kind: test
+items: []
+blocks:
+  - type: exercise
+    id: gaps
+    graded: true
+    instruction: Вставьте слово
+    format: gap
+    bank: [go, goes, went]
+    items:
+      - { id: g1, prompt: Yesterday I ___ home., answer: went }

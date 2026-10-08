@@ -1,4 +1,4 @@
-import { DEFAULT_LANGUAGE, voiceFor, type Language, type Voices } from "./language";
+import { DEFAULT_LANGUAGE, PROFILES, voiceFor, type Language, type Voices } from "./language";
 import { emptySkills, type SkillSummary } from "./skills";
 import { exerciseFor } from "./card-exercise";
 import { closeSources, NO_WORDS, shuffle } from "./options";
@@ -92,7 +92,14 @@ export async function makeSession({
     const skills = entry.isNew ? emptySkills() : await source.skillsOf(card);
     const words = card.kind === "word" ? closeSources(card.word.id, mates, sessionWords, pool) : NO_WORDS;
     const language = languages.get(key) ?? DEFAULT_LANGUAGE;
-    const exercise = exerciseFor(card, { words, phrases }, skills, random, voiceFor(hasVoice, language));
+    const exercise = exerciseFor(
+      card,
+      { words, phrases },
+      skills,
+      random,
+      voiceFor(hasVoice, language),
+      PROFILES[language],
+    );
     if (!exercise) continue; // объективного упражнения нет: карточка остаётся для просмотра
     const origin = entry.isNew ? plan.origins.get(key) : undefined;
     items.push({

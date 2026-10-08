@@ -1,4 +1,3 @@
-import Dexie from "dexie";
 import { useLiveQuery } from "dexie-react-hooks";
 import { createContext, useContext, useEffect, useState, useSyncExternalStore } from "react";
 import {
@@ -14,7 +13,7 @@ import {
 import type { ContentPackage } from "../content/schema";
 import { makePlan } from "../domain/learning";
 import { progress } from "../domain/stats";
-import { defaultSettings, type Session } from "../domain/types";
+import { defaultSettings } from "../domain/types";
 import { db } from "../storage/db";
 import { dexieSource, loadSettings } from "../storage/queries";
 
@@ -32,19 +31,13 @@ export const useInstalledCount = () => useLiveQuery(() => db.packages.count(), [
 export const useWord = (id: string | undefined) => useLiveQuery(() => (id ? db.words.get(id) : undefined), [id]);
 export const usePhrase = (id: string | undefined) =>
   useLiveQuery(async () => (id ? ((await db.phrases.get(id)) ?? null) : undefined), [id]);
-export const usePlan = (now: Date) => useLiveQuery(() => makePlan(dexieSource(), now), [now.getTime()]);
-export const useStats = (now: Date) => useLiveQuery(() => progress(dexieSource(), now), [now.getTime()]);
-export const useActiveSession = (): Session | undefined | null =>
+/** План курса; `null` — по всем курсам (курсов в каталоге нет), `undefined` — курс ещё читается. */
+export const usePlan = (now: Date, courseId: string | null | undefined) =>
   useLiveQuery(
-    () =>
-      db.sessions
-        .where("[status+createdAt]")
-        .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
-        .reverse()
-        .first()
-        .then((session) => session ?? null),
-    [],
+    () => (courseId === undefined ? undefined : makePlan(dexieSource(), now, { courseId: courseId ?? undefined })),
+    [now.getTime(), courseId],
   );
+export const useStats = (now: Date) => useLiveQuery(() => progress(dexieSource(), now), [now.getTime()]);
 /** Счётчики экрана «Ещё»: только числа по индексам, без чтения самих карточек. */
 export const useCounts = () =>
   useLiveQuery(async () => {
