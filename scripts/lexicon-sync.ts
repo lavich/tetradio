@@ -1,4 +1,4 @@
-// Лексикон по проверенным карточкам: после языковой проверки главный источник — content/words и content/phrases.
+// Лексикон по проверенным карточкам: после языковой проверки главный источник — content/words/greek-a2 и content/phrases/greek-a2.
 // Для каждой строки docs/course/lexicon/NN.tsv с карточкой в content/ переносит перевод, формы и заметку из карточки.
 // Строки без карточки (модули, которых ещё нет в курсе) не трогаются. Запуск: node scripts/lexicon-sync.ts
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -12,9 +12,9 @@ interface Card {
   note?: string;
 }
 const cards = new Map<string, Card>();
-for (const dir of ["words", "phrases"])
-  for (const file of readdirSync(`content/${dir}`)) {
-    const card = parse(readFileSync(`content/${dir}/${file}`, "utf8")) as Card;
+for (const dir of ["content/words/greek-a2", "content/phrases/greek-a2"])
+  for (const file of readdirSync(dir)) {
+    const card = parse(readFileSync(`${dir}/${file}`, "utf8")) as Card;
     cards.set(card.id, card);
   }
 let changed = 0;

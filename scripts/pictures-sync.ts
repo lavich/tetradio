@@ -1,4 +1,4 @@
-// Картинки слов из Microsoft Fluent Emoji (Flat, MIT) для карточек, которые уже есть в content/words.
+// Картинки слов из Microsoft Fluent Emoji (Flat, MIT) для карточек, которые уже есть в content/words/greek-a2.
 // Источник соответствий — docs/course/pictures-map.tsv (id → путь в библиотеке). Скачивает недостающие SVG в
 // content/pictures/, пишет content/pictures.yaml и удаляет файлы, которые больше не нужны. Нужна сеть — это шаг
 // подготовки контента, не сборки. Запуск: node scripts/pictures-sync.ts
@@ -15,9 +15,8 @@ const SOURCE = "Microsoft Fluent Emoji (Flat), лицензия MIT — github.c
 const dir = "content/pictures";
 mkdirSync(dir, { recursive: true });
 
-const present = new Set(
-  readdirSync("content/words").map((file) => String(parse(readFileSync(join("content/words", file), "utf8")).id)),
-);
+const WORDS = "content/words/greek-a2";
+const present = new Set(readdirSync(WORDS).map((file) => String(parse(readFileSync(join(WORDS, file), "utf8")).id)));
 const rows = readFileSync("docs/course/pictures-map.tsv", "utf8")
   .trim()
   .split("\n")

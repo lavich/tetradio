@@ -161,17 +161,17 @@ describe("каталог и пакеты", () => {
     expect([...content.sources.lessons.keys()]).toEqual(content.packages.map((p) => p.id));
   });
   it("публикация отклоняет дубликаты слов, битые ссылки уроков, сирот и подписи в картинках", () => {
-    const house = readFileSync("tests/fixtures/mechanics/words/ο-φίλος.yaml", "utf8");
+    const house = readFileSync("tests/fixtures/mechanics/words/mechanics/ο-φίλος.yaml", "utf8");
     expect(() =>
       brokenCopy((root) => {
-        writeFileSync(join(root, "words", "дубль.yaml"), house.replace("id: w034", "id: w99-01"));
+        writeFileSync(join(root, "words", "mechanics", "дубль.yaml"), house.replace("id: w034", "id: w99-01"));
         writeFileSync(
           join(root, "lessons", "mech-2.yaml"),
           readFileSync("tests/fixtures/mechanics/lessons/mech-2.yaml", "utf8").replace("- w034", "- w99-01"),
         );
       }),
     ).toThrow(/повторяет слово «ο φίλος — друг»/);
-    expect(() => brokenCopy((root) => writeFileSync(join(root, "words", "дубль.yaml"), house))).toThrow(
+    expect(() => brokenCopy((root) => writeFileSync(join(root, "words", "mechanics", "дубль.yaml"), house))).toThrow(
       /идентификатор «w034» уже занят/,
     );
     expect(() =>
@@ -183,7 +183,9 @@ describe("каталог и пакеты", () => {
       ),
     ).toThrow(/слова w999 нет/);
     expect(() =>
-      brokenCopy((root) => writeFileSync(join(root, "words", "το-τεστ.yaml"), "greek: το τεστ\nrussian: тест\n")),
+      brokenCopy((root) =>
+        writeFileSync(join(root, "words", "mechanics", "το-τεστ.yaml"), "greek: το τεστ\nrussian: тест\n"),
+      ),
     ).toThrow(/не входит ни в один урок/);
     expect(() =>
       brokenCopy((root) =>
@@ -195,18 +197,24 @@ describe("каталог и пакеты", () => {
     ).toThrow(/выдаёт ответ/);
     expect(() =>
       brokenCopy((root) =>
-        writeFileSync(join(root, "words", "ο-φίλος.yaml"), house.replace("image: ο-φίλος.svg", "image: нет.svg")),
+        writeFileSync(
+          join(root, "words", "mechanics", "ο-φίλος.yaml"),
+          house.replace("image: ο-φίλος.svg", "image: нет.svg"),
+        ),
       ),
     ).toThrow(/файла art\/нет.svg нет/);
     expect(() =>
       brokenCopy((root) =>
-        writeFileSync(join(root, "words", "ο-φίλος.yaml"), house.replace('target: "φίλος"', 'target: "φιλαράκος"')),
+        writeFileSync(
+          join(root, "words", "mechanics", "ο-φίλος.yaml"),
+          house.replace('target: "φίλος"', 'target: "φιλαράκος"'),
+        ),
       ),
     ).toThrow(/не встречается в предложении/);
   });
   it("новое слово без поля id получает идентификатор из имени файла", () => {
     const built = brokenCopy((root) => {
-      writeFileSync(join(root, "words", "το-δοκίμιο.yaml"), "greek: το δοκίμιο\nrussian: очерк\n");
+      writeFileSync(join(root, "words", "mechanics", "το-δοκίμιο.yaml"), "greek: το δοκίμιο\nrussian: очерк\n");
       writeFileSync(
         join(root, "lessons", "mech-4.yaml"),
         readFileSync("tests/fixtures/mechanics/lessons/mech-4.yaml", "utf8") + "  - το-δοκίμιο\n",
@@ -258,7 +266,7 @@ describe("индекс слов в каталоге", () => {
 });
 
 describe("фонетика и разбор чтения", () => {
-  const house = readFileSync("tests/fixtures/mechanics/words/ο-φίλος.yaml", "utf8");
+  const house = readFileSync("tests/fixtures/mechanics/words/mechanics/ο-φίλος.yaml", "utf8");
   it("ударный слог распознаётся по написанию, односложное слово знака не требует", () => {
     expect(stressNote("το σπίτι")).toBe("Ударение на первый слог");
     expect(stressNote("μεγάλος")).toBe("Ударение на второй слог");
@@ -280,12 +288,12 @@ describe("фонетика и разбор чтения", () => {
   });
   it("публикация отклоняет IPA без косых черт, проверенное слово без IPA и сочетание не из слова", () => {
     const rewrite = (next: string) => () =>
-      brokenCopy((root) => writeFileSync(join(root, "words", "ο-φίλος.yaml"), next));
+      brokenCopy((root) => writeFileSync(join(root, "words", "mechanics", "ο-φίλος.yaml"), next));
     expect(rewrite(house.replace("ipa: /o ˈfilos/", "ipa: o ˈfilos"))).toThrow(
-      /words\/ο-φίλος.yaml.ipa: транскрипция записывается между косыми чертами/,
+      /words\/mechanics\/ο-φίλος.yaml.ipa: транскрипция записывается между косыми чертами/,
     );
     expect(rewrite(house.replace("ipa: /o ˈfilos/\n", ""))).toThrow(
-      /words\/ο-φίλος.yaml: проверенное слово должно иметь IPA/,
+      /words\/mechanics\/ο-φίλος.yaml: проверенное слово должно иметь IPA/,
     );
     expect(
       rewrite(`${house.trimEnd()}\nreading:\n  - { text: "ου", ipa: "u", explanation: "ου читается как у" }\n`),
@@ -303,7 +311,7 @@ describe("фонетика и разбор чтения", () => {
 describe("иллюстрации подчиняются стандарту", () => {
   const legacyText = readFileSync("tests/fixtures/mechanics/art/legacy.txt", "utf8");
   const legacy = parseLegacy(legacyText);
-  const house = readFileSync("tests/fixtures/mechanics/words/ο-φίλος.yaml", "utf8");
+  const house = readFileSync("tests/fixtures/mechanics/words/mechanics/ο-φίλος.yaml", "utf8");
   const svg = (inner: string, attrs = 'viewBox="0 0 320 220"') =>
     `<svg xmlns="http://www.w3.org/2000/svg" ${attrs}><rect width="320" height="220" fill="#e7eefb"/>${inner}</svg>`;
   /** Копия, в которой ο-φίλος.svg перерисован заново и больше не числится унаследованным. */
@@ -401,7 +409,7 @@ describe("иллюстрации подчиняются стандарту", () 
       brokenCopy((root) => {
         writeFileSync(join(root, "art", "το-δοκίμιο.svg"), svg('<circle r="9" fill="#123456"/>'));
         writeFileSync(
-          join(root, "words", "το-δοκίμιο.yaml"),
+          join(root, "words", "mechanics", "το-δοκίμιο.yaml"),
           "greek: το δοκίμιο\nrussian: очерк\nimage: το-δοκίμιο.svg\n",
         );
         writeFileSync(
@@ -416,9 +424,9 @@ describe("иллюстрации подчиняются стандарту", () 
 
 /** Разметка слов примера (add-example-word-glosses): отрезки находятся сборкой, ссылки проверяются по каталогу. */
 describe("разметка слов примера", () => {
-  const house = readFileSync("tests/fixtures/mechanics/words/ο-φίλος.yaml", "utf8");
+  const house = readFileSync("tests/fixtures/mechanics/words/mechanics/ο-φίλος.yaml", "utf8");
   const withWords = (words: string) => (root: string) =>
-    writeFileSync(join(root, "words", "ο-φίλος.yaml"), `${house.trimEnd()}\n    words:\n${words}`);
+    writeFileSync(join(root, "words", "mechanics", "ο-φίλος.yaml"), `${house.trimEnd()}\n    words:\n${words}`);
   const pilot = [
     '      - { text: "Ο", russian: "артикль м. р." }',
     '      - { text: "φίλος", russian: "друг", word: w034 }',
@@ -448,7 +456,7 @@ describe("разметка слов примера", () => {
   it("повтор слова размечает следующее вхождение", () => {
     const built = brokenCopy((root) =>
       writeFileSync(
-        join(root, "words", "ο-φίλος.yaml"),
+        join(root, "words", "mechanics", "ο-φίλος.yaml"),
         house.replace("Ο φίλος μας είναι παντρεμένος.", "Ο φίλος και ο φίλος.") +
           '    words:\n      - { text: "φίλος", russian: "друг" }\n      - { text: "φίλος", russian: "друг" }\n',
       ),
@@ -457,7 +465,7 @@ describe("разметка слов примера", () => {
   });
   it("сборка отклоняет отсутствующий отрезок, обратный порядок, пустой перевод и неизвестную ссылку", () => {
     expect(() => brokenCopy(withWords('      - { text: "φίλοι", russian: "друзья" }'))).toThrow(
-      /words\/ο-φίλος.yaml.examples\[0\].words\[0\]: отрезок «φίλοι» не найден/,
+      /words\/mechanics\/ο-φίλος.yaml.examples\[0\].words\[0\]: отрезок «φίλοι» не найден/,
     );
     expect(() =>
       brokenCopy(withWords('      - { text: "μας", russian: "наш" }\n      - { text: "φίλος", russian: "друг" }')),

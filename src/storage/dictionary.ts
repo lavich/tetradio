@@ -1,5 +1,6 @@
 import type { LearningRef, Phrase } from "../domain/types";
 import { moduleViews } from "./course";
+import { courseLessonIds, primaryCourse } from "./courses";
 import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import { lessonItems, livePhrases, liveWords, stateGroup, statesOf } from "./queries";
 
@@ -26,11 +27,13 @@ export interface DictionaryLesson {
 }
 
 /**
- * Словарь курса: слова и фразы скачанных уроков в порядке программы. Карточка стоит в уроке, где введена
- * впервые; повтор в следующих уроках её не дублирует. «Учу» — и изучение, и повторение до закрепления.
+ * Словарь курса (без курса — основного): слова и фразы скачанных уроков в порядке программы. Карточка стоит
+ * в уроке, где введена впервые; повтор в следующих уроках её не дублирует. «Учу» — и изучение, и повторение
+ * до закрепления.
  */
-export async function dictionary(database: AppDatabase = db): Promise<DictionaryLesson[]> {
-  const lessons = (await moduleViews(undefined, database)).flatMap((view) => [
+export async function dictionary(courseId?: string, database: AppDatabase = db): Promise<DictionaryLesson[]> {
+  courseId ??= await primaryCourse(database);
+  const lessons = (await moduleViews(courseId, database)).flatMap((view) => [
     ...view.lessons.map((lesson, index) => ({ view, lesson, number: `${view.module.number}.${index + 1}` })),
     ...[...(view.checkpoint ? [view.checkpoint] : []), ...view.review].map((lesson) => ({
       view,
@@ -40,8 +43,9 @@ export async function dictionary(database: AppDatabase = db): Promise<Dictionary
   ]);
   const inCourse = new Set(lessons.map(({ lesson }) => lesson.id));
   // Уроки вне модулей остаются в старых профилях: их слова — в конце словаря, без модуля и без ссылки на урок.
+  const own = courseId ? new Set(await courseLessonIds(courseId, database)) : undefined;
   const loose = (await database.lessons.toArray())
-    .filter((lesson) => !inCourse.has(lesson.id))
+    .filter((lesson) => !inCourse.has(lesson.id) && (!own || own.has(lesson.id)))
     .map((lesson) => ({
       view: { module: { id: "", number: 0, title: "" } },
       lesson: { id: lesson.id, title: lesson.title, installed: true },

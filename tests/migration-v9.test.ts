@@ -36,11 +36,11 @@ async function views(database: AppDatabase) {
       reviews: plan.reviews.map((review) => review.state.unitKey),
       origins: [...plan.origins],
     },
-    dictionary: (await dictionary(database)).map((lesson) => ({
+    dictionary: (await dictionary(undefined, database)).map((lesson) => ({
       ...lesson,
       entries: lesson.entries.map(({ key, greek, russian, mark }) => ({ key, greek, russian, mark })),
     })),
-    course: await courseProgress(V8_NOW, "Asia/Nicosia", database),
+    course: await courseProgress(V8_NOW, "Asia/Nicosia", undefined, database),
     stats: await progress(dexieSource(database), V8_NOW),
   };
 }

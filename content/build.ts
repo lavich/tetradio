@@ -15,7 +15,7 @@ import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons
 import { markCourses, type MarksReport } from "./build/mark-courses.ts";
 import { buildMedia } from "./build/media.ts";
 import { packLessons, type BuiltFile } from "./build/output.ts";
-import { cardLanguagesOf, checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
+import { checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
 
 export { LANGUAGE } from "./build/common.ts";
 export { audioAssetId, imageAssetId, phraseRevisionOf, revisionOf } from "./build/cards.ts";
@@ -47,8 +47,8 @@ export interface BuiltContent {
 }
 
 /**
- * Публикация контента. Исходники — YAML: одно слово — один файл в `words/` с греческим именем, фраза — файл
- * в `phrases/`, урок — упорядоченный список карточек в `lessons/`
+ * Публикация контента. Исходники — YAML: одно слово — один файл в `words/<курс>/`, фраза — файл
+ * в `phrases/<курс>/`, урок — упорядоченный список карточек в `lessons/`
  * (`words` для словарного урока либо `items` из пар `{kind, id}` для смешанного), иллюстрации и аудио —
  * отдельные файлы в `art/` и `audio/`. Идентификатор карточки — поле `id` (короткий `w001`/`p001` из лексикона),
  * а без него — имя файла: прогресс пользователя не зависит от переименования файлов.
@@ -56,12 +56,11 @@ export interface BuiltContent {
  */
 export function buildContent(root = defaultRoot()): BuiltContent {
   const sources = readSources(root);
-  // Письменность проверяется по языку курса, поэтому курсы разбираются до карточек.
-  const { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages } =
+  // Письменность карточки проверяется по языку курса её папки, поэтому курсы разбираются до карточек.
+  const { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages, courseLanguages } =
     buildCourses(sources);
-  const cardLanguages = cardLanguagesOf(sources, languages);
-  checkSourceScripts(sources, cardLanguages, languages, moduleLanguages);
-  const { words, phrases } = buildCards(sources, cardLanguages);
+  checkSourceScripts(sources, courseLanguages, languages, moduleLanguages);
+  const { words, phrases } = buildCards(sources, courseLanguages);
   const { legacy, art, media } = buildMedia(sources, words, phrases);
   const { used, lessonsForModule, drafts, voicing } = buildLessons({
     sources,

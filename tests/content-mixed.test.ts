@@ -9,7 +9,7 @@ import { buildMixed, type MixedFiles } from "./helpers/mixed";
  */
 const provenance = {
   sourceLabel: "Существующий пример проекта, иллюстрация формата",
-  locator: "tests/fixtures/mechanics/words/γράφω.yaml, examples[0]",
+  locator: "tests/fixtures/mechanics/words/mechanics/γράφω.yaml, examples[0]",
   excerpt: "Γράφω ένα γράμμα.",
   operation: "verbatim",
 };
@@ -23,7 +23,7 @@ const second = {
   translation: "Кипр — маленькая страна.",
   provenance: {
     ...provenance,
-    locator: "tests/fixtures/mechanics/words/η-χώρα.yaml, examples[0]",
+    locator: "tests/fixtures/mechanics/words/mechanics/η-χώρα.yaml, examples[0]",
     excerpt: "Η Κύπρος είναι μια μικρή χώρα.",
   },
 };
@@ -110,14 +110,14 @@ describe("сборка смешанного урока", () => {
   });
   it("отклоняет дубликаты и сирот", () => {
     expect(() => mixed({ phrases: { "p-grafo": phrase, "p-twin": phrase } })).toThrow(
-      /phrases\/p-twin.yaml повторяет фразу/,
+      /phrases\/mechanics\/p-twin.yaml повторяет фразу/,
     );
     expect(() =>
       mixed({
         phrases: { "p-grafo": phrase, "p-orphan": second },
         lesson: { title: "x", items: [{ kind: "phrase", id: "p-grafo" }] },
       }),
-    ).toThrow(/phrases\/p-orphan.yaml не входит ни в один урок/);
+    ).toThrow(/phrases\/mechanics\/p-orphan.yaml не входит ни в один урок/);
     const two = pack(mixed({ phrases: { "p-grafo": phrase, "p-other": second } }));
     expect(two.phrases.map((p) => p.id).sort()).toEqual(["p-grafo", "p-other"]);
   });

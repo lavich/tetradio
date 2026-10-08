@@ -125,9 +125,11 @@ const idOf = (doc: { id?: unknown }, file: string) => {
 };
 
 export type Sourced<T> = T & { file: string };
+/** Карточка принадлежит курсу своей папки; `file` — путь от `words/` или `phrases/` вместе с папкой курса. */
+export type CourseCard<T> = Sourced<T> & { course: string };
 export interface ContentRoot {
-  words: Map<string, Sourced<WordSource>>;
-  phrases: Map<string, Sourced<PhraseSource>>;
+  words: Map<string, CourseCard<WordSource>>;
+  phrases: Map<string, CourseCard<PhraseSource>>;
   lessons: Map<string, LessonSource>;
   courses: Map<string, Sourced<CourseSource>>;
   modules: Map<string, Sourced<ModuleSource>>;
@@ -138,8 +140,8 @@ export interface ContentRoot {
   voices: Map<Language, VoiceMap>;
 }
 export function readSources(root: string): ContentRoot {
-  const list = (dir: string) =>
-    (existsSync(join(root, dir)) ? readdirSync(join(root, dir)) : []).filter((file) => /\.ya?ml$/.test(file)).sort();
+  const isYaml = (file: string) => /\.ya?ml$/.test(file);
+  const list = (dir: string) => (existsSync(join(root, dir)) ? readdirSync(join(root, dir)) : []).filter(isYaml).sort();
   const load = <T>(dir: string, file: string) => parse(readFileSync(join(root, dir, file), "utf8")) as T;
   const byId = <T extends { id?: unknown }>(dir: string) => {
     const map = new Map<string, Sourced<T>>();
@@ -152,10 +154,36 @@ export function readSources(root: string): ContentRoot {
     }
     return map;
   };
-  const words = byId<WordSource>("words"),
-    phrases = byId<PhraseSource>("phrases"),
-    courses = byId<CourseSource>("courses"),
+  const courses = byId<CourseSource>("courses"),
     modules = byId<ModuleSource>("modules");
+  // Идентификатор уникален во всём контенте: прогресс в базе хранится по нему без курса.
+  const cards = <T extends { id?: unknown }>(dir: string) => {
+    const map = new Map<string, CourseCard<T>>();
+    if (!existsSync(join(root, dir))) return map;
+    const entries = readdirSync(join(root, dir), { withFileTypes: true }).sort((a, b) =>
+      a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+    );
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        if (isYaml(entry.name))
+          fail(`${dir}/${entry.name}: карточка вне курса — файл лежит в папке курса ${dir}/<курс>/`);
+        continue;
+      }
+      const course = entry.name;
+      if (!courses.has(course)) fail(`${dir}/${course}/: курса ${course} нет в courses/`);
+      for (const name of list(join(dir, course))) {
+        const file = `${course}/${name}`;
+        const doc = load<T>(dir, file);
+        const id = idOf(doc, `${dir}/${file}`);
+        const twin = map.get(id);
+        if (twin) fail(`${dir}/${file}: идентификатор «${id}» уже занят файлом ${dir}/${twin.file}`);
+        map.set(id, { ...doc, file, course });
+      }
+    }
+    return map;
+  };
+  const words = cards<WordSource>("words"),
+    phrases = cards<PhraseSource>("phrases");
   const lessons = new Map(
     list("lessons").map((file) => [basename(file, extname(file)), load<LessonSource>("lessons", file)]),
   );
@@ -188,44 +216,15 @@ export function readSources(root: string): ContentRoot {
   return { words, phrases, lessons, courses, modules, pictures, files, voices };
 }
 
-export interface CardLanguages {
-  word: Map<string, Set<Language>>;
-  phrase: Map<string, Set<Language>>;
-}
-/** Карточки — общий набор: язык карточки — языки курсов, в уроках которых она стоит; без урока — язык по умолчанию. */
-export function cardLanguagesOf(sources: ContentRoot, lessons: Map<string, Language>): CardLanguages {
-  const of: CardLanguages = { word: new Map(), phrase: new Map() };
-  for (const [lessonId, src] of sources.lessons) {
-    const language = lessons.get(lessonId) ?? LANGUAGE;
-    const refs: unknown[] = Array.isArray(src.items)
-      ? src.items
-      : Array.isArray(src.words)
-        ? src.words.map((id) => ({ kind: "word", id }))
-        : [];
-    for (const ref of refs) {
-      const { kind, id } = (ref ?? {}) as { kind?: unknown; id?: unknown };
-      if ((kind !== "word" && kind !== "phrase") || typeof id !== "string") continue;
-      const set = of[kind].get(id) ?? new Set<Language>();
-      set.add(language);
-      of[kind].set(id, set);
-    }
-  }
-  return of;
-}
-export const languagesOf = (map: Map<string, Set<Language>>, id: string): Language[] => [
-  ...(map.get(id) ?? [LANGUAGE]),
-];
-
 export function checkSourceScripts(
   sources: ContentRoot,
-  cards: CardLanguages,
+  courses: Map<string, Language>,
   lessons: Map<string, Language>,
   modules: Map<string, Language>,
 ) {
-  for (const [id, src] of sources.words)
-    for (const language of languagesOf(cards.word, id)) checkScripts(src, `words/${src.file}`, language);
-  for (const [id, src] of sources.phrases)
-    for (const language of languagesOf(cards.phrase, id)) checkScripts(src, `phrases/${src.file}`, language);
+  for (const src of sources.words.values()) checkScripts(src, `words/${src.file}`, courses.get(src.course) ?? LANGUAGE);
+  for (const src of sources.phrases.values())
+    checkScripts(src, `phrases/${src.file}`, courses.get(src.course) ?? LANGUAGE);
   for (const [id, src] of sources.modules) checkScripts(src, `modules/${src.file}`, modules.get(id) ?? LANGUAGE);
   for (const [id, src] of sources.lessons) checkScripts(src, `lessons/${id}.yaml`, lessons.get(id) ?? LANGUAGE);
 }

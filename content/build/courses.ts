@@ -17,8 +17,9 @@ export function buildCourses(sources: ContentRoot) {
   const reviews = new Map<string, string>();
   const languages = new Map<string, Language>();
   const moduleLanguages = new Map<string, Language>();
+  const courseLanguages = new Map<string, Language>();
   // Курс учат целиком, поэтому смешанные языки внутри него — ошибка, а не особенность набора.
-  const courseLanguage = (where: string, src: CourseSource, lessonIds: string[]) => {
+  const courseLanguage = (courseId: string, where: string, src: CourseSource, lessonIds: string[]) => {
     const own = src.language === undefined ? undefined : languageOf(src.language, `${where}.language`);
     const found = new Set(
       lessonIds.map((lessonId) => {
@@ -30,6 +31,7 @@ export function buildCourses(sources: ContentRoot) {
     if (found.size > 1) fail(`${where}: уроки курса на разных языках — ${[...found].sort().join(", ")}`);
     const language = [...found][0] ?? LANGUAGE;
     for (const lessonId of lessonIds) languages.set(lessonId, language);
+    courseLanguages.set(courseId, language);
     return language;
   };
   for (const [courseId, src] of sources.courses) {
@@ -110,7 +112,7 @@ export function buildCourses(sources: ContentRoot) {
         moduleIds.push(moduleId);
       }
       const ownLessonIds = [...courseOf].filter(([, owner]) => owner === courseId).map(([lessonId]) => lessonId);
-      const language = courseLanguage(where, src, ownLessonIds);
+      const language = courseLanguage(courseId, where, src, ownLessonIds);
       for (const moduleId of moduleIds) moduleLanguages.set(moduleId, language);
       courses.push({
         id: courseId,
@@ -138,12 +140,12 @@ export function buildCourses(sources: ContentRoot) {
     const course: CatalogCourse = {
       id: courseId,
       title,
-      language: courseLanguage(where, src, src.lessons!),
+      language: courseLanguage(courseId, where, src, src.lessons!),
       lessonIds: [...src.lessons!],
     };
     const source = text(src.source, `${where}.source`, false);
     if (source) course.source = source;
     courses.push(course);
   }
-  return { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages };
+  return { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages, courseLanguages };
 }

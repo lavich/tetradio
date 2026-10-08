@@ -92,9 +92,9 @@ const base = (): Files => ({
       },
     ],
   },
-  "words/go.yaml": { greek: "to go", russian: "идти, ехать", forms: "went, gone" },
-  "words/study.yaml": { greek: "study", russian: "учиться" },
-  "words/stop.yaml": { greek: "stop", russian: "прекращать" },
+  "words/english-b2/go.yaml": { greek: "to go", russian: "идти, ехать", forms: "went, gone" },
+  "words/english-b2/study.yaml": { greek: "study", russian: "учиться" },
+  "words/english-b2/stop.yaml": { greek: "stop", russian: "прекращать" },
 });
 
 const roots: string[] = [];
@@ -148,12 +148,12 @@ describe("английский курс", () => {
     ]);
   });
   it("слово без латинских букв отклоняет сборку", () => {
-    expect(failure({ ...base(), "words/stop.yaml": { greek: "στοπ", russian: "прекращать" } })).toMatch(
-      /words\/stop\.yaml: нет букв языка курса \(en\)/,
+    expect(failure({ ...base(), "words/english-b2/stop.yaml": { greek: "στοπ", russian: "прекращать" } })).toMatch(
+      /words\/english-b2\/stop\.yaml: нет букв языка курса \(en\)/,
     );
   });
   it("латинская и греческая буква в одном слове — ошибка раскладки", () => {
-    expect(failure({ ...base(), "words/stop.yaml": { greek: "stοp", russian: "прекращать" } })).toContain(
+    expect(failure({ ...base(), "words/english-b2/stop.yaml": { greek: "stοp", russian: "прекращать" } })).toContain(
       "смешаны алфавиты",
     );
   });
@@ -172,6 +172,77 @@ describe("английский курс", () => {
     expect(failure({ ...base(), "voices/en.yaml": voices })).toContain(
       "voices/en.yaml.language: el-GR — не язык файла (en)",
     );
+  });
+});
+
+/** Рядом с английским — словарный греческий курс из одного урока: у каждого курса свои карточки. */
+const withGreek = (lesson: Record<string, unknown> = { title: "Привет", items: [{ kind: "word", id: "geia" }] }) => ({
+  ...base(),
+  "courses/greek-a2.yaml": { title: "Греческий A2", lessons: ["g1"] },
+  "lessons/g1.yaml": lesson,
+  "words/greek-a2/geia.yaml": { greek: "γεια", russian: "привет" },
+  "phrases/greek-a2/ti-kaneis.yaml": {
+    text: "Τι κάνεις;",
+    translation: "Как дела?",
+    provenance: { sourceLabel: "Пример теста", operation: "requested-generation", request: "фраза для теста" },
+  },
+});
+
+describe("карточки по курсам", () => {
+  it("два курса собираются вместе, и пакет каждого несёт только свои карточки", () => {
+    const content = build(
+      withGreek({
+        title: "Привет",
+        items: [
+          { kind: "word", id: "geia" },
+          { kind: "phrase", id: "ti-kaneis" },
+        ],
+      }),
+    );
+    const catalog = parseCatalog(
+      JSON.parse(content.files.find((f) => f.path === "content/catalog.json")!.body as string),
+    );
+    expect(catalog.courses.map((course) => [course.id, course.language])).toEqual([
+      ["english-b2", "en"],
+      ["greek-a2", "el"],
+    ]);
+    const cards = (id: string) => {
+      const pack = content.packages.find((p) => p.id === id)!;
+      return [...pack.words, ...pack.phrases].map((card) => card.id).sort();
+    };
+    expect(cards("e01-1")).toEqual(["go", "stop", "study"]);
+    expect(cards("g1")).toEqual(["geia", "ti-kaneis"]);
+  });
+  it("файл прямо в words/ или phrases/ — карточка вне курса", () => {
+    expect(failure({ ...base(), "words/loose.yaml": { greek: "loose", russian: "свободный" } })).toContain(
+      "words/loose.yaml: карточка вне курса",
+    );
+    expect(failure({ ...withGreek(), "phrases/hello.yaml": { text: "Hello", provenance: {} } })).toContain(
+      "phrases/hello.yaml: карточка вне курса",
+    );
+  });
+  it("папка карточек называется курсом из courses/", () => {
+    expect(failure({ ...base(), "words/english-c1/run.yaml": { greek: "run", russian: "бежать" } })).toContain(
+      "курса english-c1 нет в courses/",
+    );
+  });
+  it("повтор идентификатора в двух курсах называет оба файла", () => {
+    const message = failure({ ...withGreek(), "words/greek-a2/go.yaml": { greek: "πάω", russian: "идти" } });
+    expect(message).toContain("words/greek-a2/go.yaml");
+    expect(message).toContain("words/english-b2/go.yaml");
+    expect(message).toContain("«go»");
+  });
+  it("урок со словом другого курса отклоняется с карточкой и обоими курсами", () => {
+    const items = withGreek({
+      title: "Привет",
+      items: [
+        { kind: "word", id: "geia" },
+        { kind: "word", id: "study" },
+      ],
+    });
+    expect(failure(items)).toContain("карточка study из курса english-b2 в уроке курса greek-a2");
+    const list = withGreek({ title: "Привет", words: ["geia", "go"] });
+    expect(failure(list)).toContain("lessons/g1.yaml.words[1]: карточка go из курса english-b2 в уроке курса greek-a2");
   });
 });
 

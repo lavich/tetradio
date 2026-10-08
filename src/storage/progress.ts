@@ -3,6 +3,7 @@ import { localDay, mondayOf } from "../domain/learning";
 import { coursePace, skillProgress, type Pace, type SkillProgress } from "../domain/progress";
 import type { BlockProgress } from "../domain/types";
 import { lessonDays, moduleViews, type ModuleView } from "./course";
+import { cardsInCourse, primaryCourse } from "./courses";
 import { db, type AppDatabase } from "./db";
 
 export interface CourseProgress {
@@ -24,11 +25,18 @@ const lessonsOf = (view: ModuleView) => [
   ...view.review,
 ];
 
-export async function courseProgress(now: Date, timezone: string, database: AppDatabase = db): Promise<CourseProgress> {
+/** Прогресс курса: календарь, порог и неделя — этого курса; без курса — основного. */
+export async function courseProgress(
+  now: Date,
+  timezone: string,
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<CourseProgress> {
   const today = localDay(now, timezone);
   const monday = mondayOf(today);
-  const views = await moduleViews(undefined, database);
-  const course = views.length ? await database.courses.get(views[0].module.courseId) : undefined;
+  courseId ??= await primaryCourse(database);
+  const views = await moduleViews(courseId, database);
+  const course = courseId ? await database.courses.get(courseId) : undefined;
   const ids = views.flatMap((view) => lessonsOf(view).map((lesson) => lesson.id));
   const [packs, lessons, rows] = await Promise.all([
     database.packages.bulkGet(ids),
@@ -66,7 +74,11 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
   );
   const next = views.find((view) => lessonsOf(view).some((lesson) => !lesson.completed));
   const events = await database.events.where("localDate").between(monday, today, true, true).toArray();
-  const scheduled = events.filter((event) => event.mode !== "practice");
+  const planned = events.filter((event) => event.mode !== "practice");
+  const own = courseId
+    ? await cardsInCourse([...new Set(planned.map((event) => event.unitKey))], courseId, database)
+    : undefined;
+  const scheduled = own ? planned.filter((event) => own.has(event.unitKey)) : planned;
   return {
     views,
     current: next?.module.number ?? views.at(-1)?.module.number ?? 1,
@@ -78,7 +90,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     week: {
       today,
       monday,
-      lessonDays: await lessonDays(monday, timezone, database),
+      lessonDays: await lessonDays(monday, timezone, courseId, database),
       reviewDays: [...new Set(scheduled.map((event) => event.localDate))],
       cards: new Set(scheduled.map((event) => event.unitKey)).size,
     },

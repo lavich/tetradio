@@ -1,4 +1,5 @@
 import { db, type AppDatabase } from "./db";
+import { sessionCourse } from "./courses";
 import { lessonMates, optionPool, phrasePool } from "./queries";
 import {
   closeSources,
@@ -160,7 +161,7 @@ async function easierRetry(
           words: await wordSourcesOf(card.word.id, session, database),
           phrases: [],
         }
-      : { words: NO_WORDS, phrases: await phrasePool(OPTION_POOL, database) };
+      : { words: NO_WORDS, phrases: await phrasePool(OPTION_POOL, await sessionCourse(session, database), database) };
   return easierExercise(card, item.type, pools);
 }
 /**
@@ -171,12 +172,12 @@ async function liveSessionWords(session: Session, database: AppDatabase): Promis
   const ids = [...new Set(session.items.flatMap((item) => (item.card.kind === "word" ? [item.card.word.id] : [])))];
   return (await database.words.bulkGet(ids)).flatMap((word) => (word ? [word] : []));
 }
-/** Источники вариантов слова в занятии: соседи по урокам, живые слова занятия и пул словаря. */
+/** Источники вариантов слова в занятии: соседи по урокам, живые слова занятия и пул словаря курса занятия. */
 async function wordSourcesOf(wordId: string, session: Session, database: AppDatabase) {
   const [mates, sessionWords, pool] = await Promise.all([
     lessonMates([wordId], database),
     liveSessionWords(session, database),
-    optionPool(OPTION_POOL, database),
+    sessionCourse(session, database).then((courseId) => optionPool(OPTION_POOL, courseId, database)),
   ]);
   return closeSources(wordId, mates, sessionWords, pool);
 }

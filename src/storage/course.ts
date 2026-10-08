@@ -7,6 +7,7 @@ import { cardRef, decodeMarks, type BlockMarks } from "../content/schema";
 import { lessonDone, lessonTally, type LessonTally } from "../domain/course";
 import { localDay } from "../domain/learning";
 import type { BlockProgress, Lesson, StoredModule } from "../domain/types";
+import { cardsInCourse, lessonCourses, primaryCourse } from "./courses";
 import { db, type AppDatabase } from "./db";
 import { announceChange, markChanged } from "./ops";
 
@@ -151,8 +152,9 @@ export interface ModuleView {
   /** Все уроки модуля завершены. */
   completed: boolean;
 }
-/** Модули курса по номеру программы с состоянием уроков; черновики — без уроков. */
+/** Модули курса по номеру программы с состоянием уроков; черновики — без уроков. Без курса — основной курс. */
 export async function moduleViews(courseId?: string, database: AppDatabase = db): Promise<ModuleView[]> {
+  courseId ??= await primaryCourse(database);
   const modules: StoredModule[] = courseId
     ? await database.modules.where("courseId").equals(courseId).toArray()
     : await database.modules.toArray();
@@ -220,15 +222,28 @@ export async function nextCourseLesson(
   return null;
 }
 
-/** Дни с выполненными заданиями уроков с `from` включительно — занятия курса на этой неделе. */
-export async function lessonDays(from: string, timezone: string, database: AppDatabase = db): Promise<string[]> {
-  const rows = await database.blockProgress.filter((row) => row.done).toArray();
+/** Дни с выполненными заданиями уроков с `from` включительно — занятия курса на этой неделе; без курса — всех. */
+export async function lessonDays(
+  from: string,
+  timezone: string,
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<string[]> {
+  let rows = await database.blockProgress.filter((row) => row.done).toArray();
+  if (courseId) {
+    const owners = await lessonCourses(
+      rows.map((row) => row.lessonId),
+      database,
+    );
+    rows = rows.filter((row) => owners.get(row.lessonId) === courseId);
+  }
   const days = new Set(rows.map((row) => localDay(new Date(row.updatedAt), timezone)).filter((day) => day >= from));
   return [...days].sort();
 }
 
-/** Сколько карточек повторено в этот день по плану; тренировка не в счёт. */
-export async function reviewedOn(day: string, database: AppDatabase = db): Promise<number> {
+/** Сколько карточек повторено в этот день по плану; тренировка не в счёт. С курсом — только карточки курса. */
+export async function reviewedOn(day: string, courseId?: string, database: AppDatabase = db): Promise<number> {
   const events = await database.events.where("localDate").equals(day).toArray();
-  return new Set(events.filter((event) => event.mode !== "practice").map((event) => event.unitKey)).size;
+  const keys = [...new Set(events.filter((event) => event.mode !== "practice").map((event) => event.unitKey))];
+  return courseId ? (await cardsInCourse(keys, courseId, database)).size : keys.length;
 }

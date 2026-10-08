@@ -121,8 +121,8 @@ const base = (): Files => ({
     items: [{ kind: "word", id: "xora" }],
     blocks: [{ ...listening, audio: "not-recorded-yet.mp3", source: undefined }],
   },
-  "words/geia.yaml": { greek: "γεια", russian: "привет", forms: "—" },
-  "words/xora.yaml": { greek: "η χώρα", russian: "страна", forms: "мн. οι χώρες" },
+  "words/greek-a2/geia.yaml": { greek: "γεια", russian: "привет", forms: "—" },
+  "words/greek-a2/xora.yaml": { greek: "η χώρα", russian: "страна", forms: "мн. οι χώρες" },
   "audio/m01-dialogue.mp3": new Uint8Array([1, 2, 3]),
 });
 
@@ -542,7 +542,7 @@ describe("стабильность идентификаторов", () => {
       failure({
         "courses/vocab.yaml": { title: "Слова", lessons: ["l1"] },
         "lessons/l1.yaml": { title: "Урок", items: [{ kind: "word", id: "geia" }], blocks: [] },
-        "words/geia.yaml": { greek: "γεια", russian: "привет" },
+        "words/vocab/geia.yaml": { greek: "γεια", russian: "привет" },
       }),
     ).toContain("блоки бывают только у уроков модуля программы");
   });

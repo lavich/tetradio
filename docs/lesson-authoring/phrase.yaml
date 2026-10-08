@@ -1,4 +1,4 @@
-# Шаблон фразы: content/phrases/<id>.yaml
+# Шаблон фразы: content/phrases/<курс>/<id>.yaml
 # Поля языково-нейтральные: text — на изучаемом языке, translation — перевод.
 id: p-example
 text: Το δείγμα είναι απλό.
