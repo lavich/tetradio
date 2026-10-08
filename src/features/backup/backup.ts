@@ -6,6 +6,7 @@ import { fillSettings, type LessonItem, type Settings } from "../../domain/types
 import { syncEvents } from "../../sync/events";
 import { assertCloudUnchanged, type CloudGuard } from "./cloud-check";
 import { courseProblem, type CourseRows } from "./course-check";
+import { launchContext } from "../../platform/launch";
 
 /** Версия формата копии совпадает с версией схемы; копия v8 читается через ту же миграцию, что и база. */
 export const APP_MARKER = `tetradio:${SCHEMA_VERSION}`;
@@ -47,12 +48,19 @@ export function download(blob: Blob, name: string) {
  */
 export type TransferOutcome = "shared" | "downloaded" | "cancelled" | "failed" | "unsupported";
 export interface TransferPorts {
+  preferShare?: boolean;
   canShare?: (data: ShareData) => boolean;
   share?: (data: ShareData) => Promise<void>;
   download?: (blob: Blob, name: string) => void;
   downloadSupported?: boolean;
 }
+// Десктопное меню «Поделиться» (macOS) не умеет сохранять файл, поэтому share только в мобильном Telegram.
+const mobileTelegram = () => {
+  const launch = launchContext();
+  return launch.kind === "telegram" && (launch.platform === "ios" || launch.platform === "android");
+};
 const defaultPorts = (): TransferPorts => ({
+  preferShare: mobileTelegram(),
   canShare:
     typeof navigator !== "undefined" && typeof navigator.canShare === "function"
       ? (data) => navigator.canShare(data)
@@ -65,7 +73,7 @@ const defaultPorts = (): TransferPorts => ({
   downloadSupported: typeof document !== "undefined" && "download" in document.createElement("a"),
 });
 /**
- * Файловый share предпочтителен в WebView, где ссылка на Blob может не сработать; иначе обычное скачивание.
+ * Файловый share предпочтителен в мобильном WebView, где ссылка на Blob может не сработать; иначе обычное скачивание.
  * Отмена диалога отличается от ошибки и не считается сохранением.
  */
 export async function transferFile(
@@ -74,7 +82,7 @@ export async function transferFile(
   ports: TransferPorts = defaultPorts(),
 ): Promise<TransferOutcome> {
   const file = new File([blob], name, { type: blob.type || "application/json" });
-  if (ports.share && ports.canShare?.({ files: [file] })) {
+  if (ports.preferShare && ports.share && ports.canShare?.({ files: [file] })) {
     try {
       await ports.share({ files: [file], title: name });
       return "shared";
