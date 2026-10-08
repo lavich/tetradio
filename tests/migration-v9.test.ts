@@ -472,7 +472,7 @@ describe("обновление копии v8", () => {
     expect(await db.courses.toArray()).toEqual([
       {
         id: "greek-a2",
-        title: "Греческий A2 (пример)",
+        title: "Греческий (пример)",
         exam: expect.objectContaining({ date: "2027-05-11" }),
         updatedAt: "2026-09-10T08:00:00.000Z",
       },

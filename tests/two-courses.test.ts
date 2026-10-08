@@ -26,7 +26,7 @@ import { GREEK_CALENDAR } from "./helpers/calendar";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 
 const GREEK = "greek-a2";
-const ENGLISH = "english-b2";
+const ENGLISH = "english";
 const now = new Date("2026-10-08T09:00:00Z");
 const iso = now.toISOString();
 const ENGLISH_CALENDAR = { start: "2026-11-02", checkpoints: [] };
@@ -108,7 +108,7 @@ const entry = (id: string, courseId: string, language: string, position: number)
 const catalog = [entry("e1", ENGLISH, "en", 0), entry("g1", GREEK, "el", 1), entry("g2", GREEK, "el", 2)];
 const courseRows: Course[] = [
   { id: GREEK, title: "Греческий A2", calendar: GREEK_CALENDAR, exam: examOf(0.6), updatedAt: iso },
-  { id: ENGLISH, title: "Английский B2", calendar: ENGLISH_CALENDAR, exam: examOf(0.7), updatedAt: iso },
+  { id: ENGLISH, title: "Английский", calendar: ENGLISH_CALENDAR, exam: examOf(0.7), updatedAt: iso },
 ];
 function examOf(passShare: number) {
   return { title: "exam", date: "2027-05-01", source: "", checkedAt: "2026-10-01", localConfirmed: true, passShare };
