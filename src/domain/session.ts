@@ -1,3 +1,4 @@
+import { anyVoice, languageOfText, voiceFor, type Voices } from "./language";
 import { emptySkills, type SkillSummary } from "./skills";
 import { exerciseFor } from "./card-exercise";
 import { closeSources, NO_WORDS, shuffle } from "./options";
@@ -28,7 +29,7 @@ export interface SessionInput {
   random?: () => number;
   mode?: "scheduled" | "practice";
   refs?: LearningRef[];
-  hasVoice?: boolean;
+  hasVoice?: Voices;
 }
 export async function makeSession({
   source,
@@ -38,7 +39,7 @@ export async function makeSession({
   refs,
   hasVoice = false,
 }: SessionInput): Promise<Session> {
-  const plan = await makePlan(source, now, { hasVoice });
+  const plan = await makePlan(source, now, { hasVoice: anyVoice(hasVoice) });
   const size = SESSION_SIZE;
   let chosen: { ref: LearningRef; isNew: boolean }[];
   if (refs) {
@@ -83,7 +84,8 @@ export async function makeSession({
     if (!card) continue;
     const skills = entry.isNew ? emptySkills() : await source.skillsOf(card);
     const words = card.kind === "word" ? closeSources(card.word.id, mates, sessionWords, pool) : NO_WORDS;
-    const exercise = exerciseFor(card, { words, phrases }, skills, random, hasVoice);
+    const language = languageOfText(card.kind === "word" ? card.word.greek : card.phrase.text).code;
+    const exercise = exerciseFor(card, { words, phrases }, skills, random, voiceFor(hasVoice, language));
     if (!exercise) continue; // объективного упражнения нет: карточка остаётся для просмотра
     const origin = entry.isNew ? plan.origins.get(key) : undefined;
     items.push({

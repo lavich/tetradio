@@ -1,11 +1,13 @@
 import { chooseTypeFor, type SkillContext } from "./exercise-choice";
 import { optionsFor, shuffleTiles, type WordSources } from "./options";
 import { emptySkills, type SkillSummary } from "./skills";
+import { languageOfText } from "./language";
 import { splitWriting } from "./syllables";
 import type { SessionItem, Word } from "./types";
 
-/** Сборка слова: `null` — слогов меньше двух. Артикль ложится в пул обычной плиткой и ставится наравне со слогами. */
+/** Сборка слова: `null` — слогов меньше двух или язык без слогов. Артикль ложится в пул обычной плиткой и ставится наравне со слогами. */
 export function assemblyExercise(word: Word, random: () => number): Pick<SessionItem, "type" | "options"> | null {
+  if (!languageOfText(word.greek).syllables) return null;
   const writing = splitWriting(word.greek);
   const parts = writing.syllables;
   if (parts.length < 2) return null;
@@ -17,9 +19,10 @@ export function assemblyExercise(word: Word, random: () => number): Pick<Session
 export const WORD_EXERCISES = ["recognition", "assembly", "spelling", "listening", "comprehension"] as const;
 export type WordExerciseType = (typeof WORD_EXERCISES)[number];
 export type ExerciseAvailability = { available: true } | { available: false; reason: string };
-export const NO_SOUND = "Нужен звук: у слова нет файла, а на устройстве нет греческого голоса";
+export const NO_SOUND = "Нужен звук: у слова нет файла, а на устройстве нет голоса этого языка";
 export const FEW_OPTIONS = "Для вариантов не хватает слов в словаре";
 export const ONE_SYLLABLE = "В слове один слог — собирать нечего";
+export const NO_SYLLABLES = "Сборка из слогов — только для греческих слов";
 
 /**
  * Данные слова для упражнений: варианты узнавания и аудирования, число слогов, есть ли звук.
@@ -27,7 +30,8 @@ export const ONE_SYLLABLE = "В слове один слог — собират�
  */
 function wordFacts(word: Word, sources: WordSources, random: () => number, hasVoice: boolean) {
   return {
-    syllables: splitWriting(word.greek).syllables.length,
+    assembles: languageOfText(word.greek).syllables,
+    syllables: languageOfText(word.greek).syllables ? splitWriting(word.greek).syllables.length : 0,
     recognition: optionsFor(word, sources, "recognition", random),
     listening: optionsFor(word, sources, "listening", random),
     sounds: !!word.audioAssetId || hasVoice,
@@ -47,7 +51,7 @@ function availabilityOf(facts: WordFacts): Record<WordExerciseType, ExerciseAvai
     ok ? { available: true } : { available: false, reason };
   return {
     recognition: when(context.hasOptions, FEW_OPTIONS),
-    assembly: when(context.canAssemble, ONE_SYLLABLE),
+    assembly: when(context.canAssemble, facts.assembles ? ONE_SYLLABLE : NO_SYLLABLES),
     spelling: { available: true },
     listening: facts.sounds ? when(context.hasAudio, FEW_OPTIONS) : when(false, NO_SOUND),
     comprehension: facts.sounds ? when(context.canComprehend, FEW_OPTIONS) : when(false, NO_SOUND),

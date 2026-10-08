@@ -12,6 +12,7 @@ import {
   type Skill,
 } from "../content/course";
 import type { BlockProgress } from "./types";
+import { PROFILES, type LanguageProfile } from "./language";
 import { checkTextAnswer, type TextAnswerStatus } from "./text-answer";
 
 export interface ItemResult {
@@ -20,11 +21,11 @@ export interface ItemResult {
   expected: string;
 }
 
-/** Конечная пунктуация предложения (точка, «;» — греческий вопросительный знак, «!», многоточие) ответ не меняет. */
-const bare = (value: string) =>
+/** Конечная пунктуация предложения (в греческом и «;» — вопросительный знак) ответ не меняет. */
+const bare = (value: string, profile: LanguageProfile) =>
   value
     .trim()
-    .replace(/[.!;\u037e?…]+$/u, "")
+    .replace(profile.ending, "")
     .trim()
     // Числа и телефоны: пробелы и дефисы между цифрами не важны (96 31 58 02 = 96-31-58-02 = 96315802).
     .replace(/(\d)[\s-]+(?=\d)/g, "$1")
@@ -33,11 +34,17 @@ const bare = (value: string) =>
     // Ведущий ноль числа: 09:30 = 9:30, 06.04 = 6.04. После точки ноль значим (10.05 ≠ 10.5).
     .replace(/(^|[^\d.])0+(?=\d)/g, "$1");
 
-export function checkItem(block: ExerciseBlock, item: ExerciseItem, given: string): ItemResult {
+export function checkItem(
+  block: ExerciseBlock,
+  item: ExerciseItem,
+  given: string,
+  profile: LanguageProfile = PROFILES.el,
+): ItemResult {
   if (block.format === "text") {
-    const result = checkTextAnswer(bare(given), item.answer.map(bare));
+    const strip = (value: string) => bare(value, profile);
+    const result = checkTextAnswer(strip(given), item.answer.map(strip), profile);
     // Показываем ответ из ключа как есть, с его пунктуацией.
-    const expected = item.answer.find((answer) => bare(answer) === result.expected) ?? result.expected;
+    const expected = item.answer.find((answer) => strip(answer) === result.expected) ?? result.expected;
     return { status: result.status, expected };
   }
   const expected = item.answer[0];
@@ -51,12 +58,16 @@ export interface ExerciseScore {
   results: Record<string, ItemResult>;
 }
 /** Неотвеченный пункт считается неверным: задание проверяют целиком, как на экзамене. */
-export function scoreExercise(block: ExerciseBlock, answers: Record<string, string>): ExerciseScore {
+export function scoreExercise(
+  block: ExerciseBlock,
+  answers: Record<string, string>,
+  profile: LanguageProfile = PROFILES.el,
+): ExerciseScore {
   const results: Record<string, ItemResult> = {};
   let correct = 0,
     almost = 0;
   for (const item of block.items) {
-    const result = checkItem(block, item, answers[item.id] ?? "");
+    const result = checkItem(block, item, answers[item.id] ?? "", profile);
     results[item.id] = result;
     if (result.status === "correct") correct++;
     if (result.status === "almost") almost++;
@@ -125,14 +136,13 @@ export function testResult(blocks: LessonBlock[], progress: Map<string, BlockPro
 /** Число слов письменного ответа — по пробелам, как считает экзаменатор; пунктуация не слово. */
 export const wordCount = (text: string) => text.split(/\s+/).filter((token) => /[\p{L}\p{N}]/u.test(token)).length;
 
-const GREEK = /[\u0370-\u03ff\u1f00-\u1fff]/u;
 const CYRILLIC = /[а-яё]/iu;
 /**
  * Что произнести при выборе варианта: предложение с подставленным вариантом — форма слышна в контексте.
  * Русские пояснения в скобках не читаются; если русский остаётся, звучит только сам вариант.
  */
-export function spokenChoice(prompt: string, option: string): string | null {
-  const word = GREEK.test(option) && !CYRILLIC.test(option) ? option : null;
+export function spokenChoice(prompt: string, option: string, profile: LanguageProfile = PROFILES.el): string | null {
+  const word = profile.script.test(option) && !CYRILLIC.test(option) ? option : null;
   if (!/_{2,}/.test(prompt)) return word;
   if (!word) return null;
   const sentence = prompt
