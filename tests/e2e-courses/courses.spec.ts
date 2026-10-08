@@ -125,6 +125,8 @@ test("основным становится английский — «Сего�
   await expect(choice.getByRole("radio", { name: "Греческий" })).toHaveAttribute("aria-checked", "true");
   await choice.getByRole("radio", { name: "Английский" }).click();
   await expect(choice.getByRole("radio", { name: "Английский" })).toHaveAttribute("aria-checked", "true");
+  // Варианты остаются на местах: выбор не переставляет курсы.
+  await expect(choice.getByRole("radio")).toHaveText(["Греческий", "Английский"]);
 
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Дорога на работу");

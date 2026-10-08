@@ -180,12 +180,16 @@ const greekIds = new Set([...greekWords, ...greekPhrases].map((card) => card.id)
 const englishIds = new Set([...englishWords, ...englishPhrases].map((card) => card.id));
 
 describe("порядок курсов", () => {
-  it("основной — установленный первым, а не первый в каталоге; смена основного запоминается", async () => {
+  it("основной — установленный первым, а не первый в каталоге; смена основного запоминается и не меняет порядок", async () => {
     expect(await coursesOrder(db)).toEqual([GREEK, ENGLISH]);
     expect(await primaryCourse(db)).toBe(GREEK);
     await setPrimaryCourse(ENGLISH, db);
-    expect(await coursesOrder(db)).toEqual([ENGLISH, GREEK]);
+    expect(await coursesOrder(db)).toEqual([GREEK, ENGLISH]);
     expect(await primaryCourse(db)).toBe(ENGLISH);
+    expect(await currentCourse(db)).toBe(ENGLISH);
+    // Основным не становится курс, которого нет на устройстве.
+    await db.lessons.where("courseId").equals(ENGLISH).delete();
+    expect(await primaryCourse(db)).toBe(GREEK);
   });
   it("без сохранённого порядка установленный курс идёт раньше неустановленного", async () => {
     await new AppDatabase("tetradio-two-courses-greek").delete();

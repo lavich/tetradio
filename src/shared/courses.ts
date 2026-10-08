@@ -15,7 +15,7 @@ import {
   type CourseEntry,
 } from "../storage/courses";
 
-/** Установленные курсы по порядку: основной первый. `undefined` — ещё читается. */
+/** Установленные курсы по порядку установки. `undefined` — ещё читается. */
 export const useCourses = (): CourseEntry[] | undefined =>
   useLiveQuery(async () => (await courses()).filter((course) => course.installed), []);
 

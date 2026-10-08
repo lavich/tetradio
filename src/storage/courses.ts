@@ -11,6 +11,7 @@ import { db, type AppDatabase } from "./db";
 export const COURSES_ORDER_KEY = "coursesOrder";
 export const CURRENT_COURSE_KEY = "currentCourse";
 export const HOME_COURSE_KEY = "homeCourse";
+export const PRIMARY_COURSE_KEY = "primaryCourse";
 
 export interface CourseEntry {
   id: string;
@@ -40,9 +41,8 @@ const readOrder = async (database: AppDatabase): Promise<string[]> => {
 };
 
 /**
- * Курсы по порядку: сохранённый порядок, затем установленные, затем остальные — по месту в каталоге.
- * Греческий установлен первым, поэтому по умолчанию он и основной. Курс, которого нет ни в каталоге, ни на устройстве, не
- * показывается.
+ * Курсы по порядку установки, затем остальные — по месту в каталоге. Порядок не зависит от основного курса: переключатели
+ * не переставляют варианты после выбора. Курс, которого нет ни в каталоге, ни на устройстве, не показывается.
  */
 export async function courses(database: AppDatabase = db): Promise<CourseEntry[]> {
   const [rows, entries, installedIds, stored] = await Promise.all([
@@ -99,18 +99,14 @@ export async function rememberCourses(database: AppDatabase = db): Promise<void>
 }
 export const coursesOrder = async (database: AppDatabase = db) => (await courses(database)).map((course) => course.id);
 
-/** Основной курс — первый установленный по порядку; пока ничего не установлено — первый курс каталога. */
+/** Основной курс — выбранный в настройках, если он установлен, иначе установленный первым; без уроков — первый в каталоге. */
 export async function primaryCourse(database: AppDatabase = db): Promise<string | undefined> {
-  const list = await courses(database);
-  return (list.find((course) => course.installed) ?? list[0])?.id;
+  const [list, chosen] = await Promise.all([courses(database), database.meta.get(PRIMARY_COURSE_KEY)]);
+  const installed = list.filter((course) => course.installed);
+  return (installed.find((course) => course.id === chosen?.value) ?? installed[0] ?? list[0])?.id;
 }
-export async function setPrimaryCourse(courseId: string, database: AppDatabase = db): Promise<void> {
-  const order = await coursesOrder(database);
-  await database.meta.put({
-    key: COURSES_ORDER_KEY,
-    value: JSON.stringify([courseId, ...order.filter((id) => id !== courseId)]),
-  });
-}
+export const setPrimaryCourse = (courseId: string, database: AppDatabase = db) =>
+  database.meta.put({ key: PRIMARY_COURSE_KEY, value: courseId }).then(() => undefined);
 
 /**
  * Данные без курса — занятия и уроки прежней версии, карточки, снятые обновлением с уроков, — у домашнего курса:
@@ -128,7 +124,7 @@ export async function currentCourse(database: AppDatabase = db): Promise<string 
   const [chosen, list] = await Promise.all([database.meta.get(CURRENT_COURSE_KEY), courses(database)]);
   const installed = list.filter((course) => course.installed);
   const pool = installed.length ? installed : list;
-  return (pool.find((course) => course.id === chosen?.value) ?? pool[0])?.id;
+  return pool.find((course) => course.id === chosen?.value)?.id ?? primaryCourse(database);
 }
 export const setCurrentCourse = (courseId: string, database: AppDatabase = db) =>
   database.meta.put({ key: CURRENT_COURSE_KEY, value: courseId }).then(() => undefined);
