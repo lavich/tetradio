@@ -86,10 +86,9 @@ describe("жизненный цикл ответа", () => {
 
 describe("передача файла копии", () => {
   const blob = new Blob(["{}"], { type: "application/json" });
-  it("файловый share предпочтителен в мобильном Telegram; отмена отличается от ошибки и не считается сохранением", async () => {
+  it("файловый share предпочтителен; отмена отличается от ошибки и не считается сохранением", async () => {
     expect(
       await transferFile(blob, "a.json", {
-        preferShare: true,
         canShare: () => true,
         share: async () => undefined,
         download: () => undefined,
@@ -98,7 +97,6 @@ describe("передача файла копии", () => {
     ).toBe("shared");
     expect(
       await transferFile(blob, "a.json", {
-        preferShare: true,
         canShare: () => true,
         share: async () => {
           throw Object.assign(new Error("cancel"), { name: "AbortError" });
@@ -110,7 +108,6 @@ describe("передача файла копии", () => {
     const downloads: string[] = [];
     expect(
       await transferFile(blob, "a.json", {
-        preferShare: true,
         canShare: () => true,
         share: async () => {
           throw new Error("fail");
@@ -131,22 +128,9 @@ describe("передача файла копии", () => {
         downloadSupported: true,
       }),
     ).toBe("downloaded");
-    let shared = false;
-    expect(
-      await transferFile(blob, "a.json", {
-        canShare: () => true,
-        share: async () => {
-          shared = true;
-        },
-        download: () => undefined,
-        downloadSupported: true,
-      }),
-    ).toBe("downloaded");
-    expect(shared).toBe(false);
     expect(await transferFile(blob, "a.json", { downloadSupported: false })).toBe("unsupported");
     expect(
       await transferFile(blob, "a.json", {
-        preferShare: true,
         canShare: () => true,
         share: async () => {
           throw new Error("fail");
