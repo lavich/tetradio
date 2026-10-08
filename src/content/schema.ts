@@ -14,6 +14,7 @@ import {
   parseCalendar,
   parseExam,
   parseModule,
+  parsePassShare,
   type CatalogModule,
   type CourseCalendar,
   type CourseExam,
@@ -46,6 +47,8 @@ export interface CatalogCourse {
   moduleIds?: string[];
   /** Экзамен, к которому ведёт курс */
   exam?: CourseExam;
+  /** Порог сдачи навыка */
+  passShare?: number;
   calendar?: CourseCalendar;
 }
 export interface CatalogEntry {
@@ -267,6 +270,7 @@ export function parseCatalog(input: unknown): Catalog {
     );
     if (moduleIds) course.moduleIds = moduleIds;
     if (item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
+    if (item.passShare !== undefined) course.passShare = parsePassShare(item.passShare, `${path}.passShare`);
     if (item.calendar !== undefined) calendars.set(course, item.calendar);
     return course;
   });

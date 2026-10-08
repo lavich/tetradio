@@ -25,7 +25,8 @@ export interface LanguageProfile {
   names: { in: string; by: string; title: string };
   /** Подписи наклейки на обложке модуля. */
   cover: { lesson: string; name: string };
-  almost: { message: string; article: string };
+  /** «Почти»: подсказка после ответа, что проверить в упражнении и пометка в итоге урока. */
+  almost: { message: string; article: string; check: string; mark: string };
   /** Ответ после регистра и пробелов — к виду для сравнения. */
   canonical: (text: string) => string;
   /** Ответ не совпал, но засчитывается как «почти». */
@@ -84,7 +85,12 @@ const el: LanguageProfile = {
   date: { locale: "el-GR", upper: true },
   names: { in: "по-гречески", by: "по греческому", title: "Греческий" },
   cover: { lesson: "ΜΑΘΗΜΑ", name: "ΟΝΟΜΑ" },
-  almost: { message: "Почти! Проверь ударение.", article: "Почти! Проверь артикль и ударение." },
+  almost: {
+    message: "Почти! Проверь ударение.",
+    article: "Почти! Проверь артикль и ударение.",
+    check: "ударение",
+    mark: "без ударения",
+  },
   canonical: (text) => text.replace(GREEK_ENDING, ""),
   isAlmost: (given, accepted) => stripAccent(given) === stripAccent(accepted),
 };
@@ -102,7 +108,12 @@ const en: LanguageProfile = {
   date: { locale: "en-GB", upper: false },
   names: { in: "по-английски", by: "по английскому", title: "Английский" },
   cover: { lesson: "LESSON", name: "NAME" },
-  almost: { message: "Почти! Проверь написание.", article: "Почти! Проверь артикль." },
+  almost: {
+    message: "Почти! Проверь написание.",
+    article: "Почти! Проверь артикль.",
+    check: "написание",
+    mark: "с опечаткой",
+  },
   canonical: (text) => expand(text.replace(ENGLISH_ENDING, "")),
   isAlmost: typo,
 };

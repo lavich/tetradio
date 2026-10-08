@@ -32,7 +32,7 @@ exam:
   checkedAt: 2026-09-30
   localConfirmed: false
   note: Общая дата ΚΕΓ; даты и центр на Кипре объявляются отдельно
-  passShare: 0.6
+passShare: 0.6
 calendar:
   start: 2026-10-05
   checkpoints:

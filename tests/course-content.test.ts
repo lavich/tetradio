@@ -47,7 +47,8 @@ describe("курс в продукте", () => {
   });
   it("календарь и порог навыка — данные курса, прежние значения", () => {
     expect(catalog.courses[0].calendar).toEqual(GREEK_CALENDAR);
-    expect(catalog.courses[0].exam!.passShare).toBe(0.6);
+    expect(catalog.courses[0].passShare).toBe(0.6);
+    expect(catalog.courses[0].exam).not.toHaveProperty("passShare");
   });
   it("контента Tavelori в продукте нет", () => {
     expect(content.words.some((word) => /^w\d{2}-\d{2}$/.test(word.id))).toBe(false);

@@ -165,7 +165,7 @@ function TaskRow({
   number: number | undefined;
   go: (target: number, direction: "next" | "prev") => void;
 }) {
-  const { syllables } = useProfile();
+  const { almost } = useProfile();
   const { block, page, progress } = row;
   const criteria = block.type === "writing" || block.type === "speaking" ? block.criteria.length : 0;
   let mark: { text: string; tone: "ok" | "almost" | "bad" | "soft" };
@@ -188,9 +188,7 @@ function TaskRow({
       {revisit ? (
         <button type="button" className={cx(css.revisit, css[mark.tone])} onClick={() => go(page, "prev")}>
           {block.type === "exercise" && progress?.score?.almost && mark.tone === "almost"
-            ? syllables
-              ? "без ударения — посмотреть"
-              : "с опечаткой — посмотреть"
+            ? `${almost.mark} — посмотреть`
             : "посмотреть"}{" "}
           · стр. {page + 1}
         </button>

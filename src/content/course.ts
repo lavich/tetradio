@@ -141,14 +141,12 @@ export interface CourseExam {
   checkedAt: string;
   localConfirmed: boolean;
   note?: string;
-  /** Порог сдачи навыка: доля верного, например 0.6. */
-  passShare?: number;
 }
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 export function parseExam(input: unknown, path: string): CourseExam {
   const raw = obj(input, path);
   for (const key of Object.keys(raw))
-    if (!["title", "date", "source", "checkedAt", "localConfirmed", "note", "passShare"].includes(key))
+    if (!["title", "date", "source", "checkedAt", "localConfirmed", "note"].includes(key))
       throw new ContentError(`${path}: лишнее поле «${key}»`);
   const date = str(raw.date, `${path}.date`);
   const checkedAt = str(raw.checkedAt, `${path}.checkedAt`);
@@ -163,13 +161,14 @@ export function parseExam(input: unknown, path: string): CourseExam {
   };
   const note = optStr(raw.note, `${path}.note`);
   if (note) exam.note = note;
-  if (raw.passShare !== undefined) {
-    const share = raw.passShare;
-    if (typeof share !== "number" || !(share > 0 && share <= 1))
-      throw new ContentError(`${path}.passShare: ожидалась доля больше 0 и не больше 1`);
-    exam.passShare = share;
-  }
   return exam;
+}
+
+/** Порог сдачи навыка — доля верного, например 0.6. Поле курса, а не экзамена: старый клиент строго разбирает `exam`. */
+export function parsePassShare(input: unknown, path: string): number {
+  if (typeof input !== "number" || !(input > 0 && input <= 1))
+    throw new ContentError(`${path}: ожидалась доля больше 0 и не больше 1`);
+  return input;
 }
 
 export interface Checkpoint {

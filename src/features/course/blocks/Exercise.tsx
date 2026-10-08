@@ -123,9 +123,7 @@ export function Exercise({
             {result ? (
               result.status === "correct" ? null : (
                 <p className={result.status === "almost" ? `${base.pen} ${base.almost}` : base.pen}>
-                  {result.status === "almost"
-                    ? `Почти — проверьте ${profile.syllables ? "ударение" : "написание"}: `
-                    : "Верно: "}
+                  {result.status === "almost" ? `Почти — проверьте ${profile.almost.check}: ` : "Верно: "}
                   <span lang={profile.code}>{result.expected}</span>
                   {item.explanation ? ` — ${item.explanation}` : ""}
                 </p>

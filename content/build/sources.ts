@@ -58,6 +58,7 @@ export interface CourseSource {
   lessons?: string[];
   modules?: string[];
   exam?: unknown;
+  passShare?: unknown;
   calendar?: unknown;
 }
 /** Модуль программы: `modules/NN.yaml`; уроки черновика собираются для проверки, но не поставляются. */

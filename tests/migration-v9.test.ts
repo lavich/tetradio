@@ -26,9 +26,9 @@ afterEach(async () => {
 });
 
 async function views(database: AppDatabase) {
-  // Календаря в копии v8 нет: его приносит каталог при первом запуске после обновления.
+  // Календаря и порога в копии v8 нет: их приносит каталог при первом запуске после обновления.
   const course = v8Catalog.courses[0];
-  await database.courses.update(course.id, { calendar: course.calendar });
+  await database.courses.update(course.id, { calendar: course.calendar, passShare: course.passShare });
   const plan = await makePlan(dexieSource(database), V8_NOW);
   return {
     plan: {

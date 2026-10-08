@@ -72,7 +72,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     current: next?.module.number ?? views.at(-1)?.module.number ?? 1,
     pace,
     calendar: course?.calendar,
-    passShare: course?.exam?.passShare,
+    passShare: course?.passShare,
     skills,
     complete: installed === ids.length,
     week: {

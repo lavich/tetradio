@@ -464,28 +464,22 @@ describe("календарь курса", () => {
     start: "2026-10-05",
     checkpoints: [{ label: "K1", title: "Контрольная A1", afterModule: 2, date: "2026-12-13" }],
   };
-  const withCalendar = (value: unknown, exam?: unknown): Files => {
+  const withCalendar = (value: unknown, passShare?: unknown): Files => {
     const files = base();
     files["courses/greek-a2.yaml"] = {
       ...(files["courses/greek-a2.yaml"] as Record<string, unknown>),
       calendar: value,
-      ...(exam ? { exam } : {}),
+      ...(passShare !== undefined ? { passShare } : {}),
     };
     return files;
   };
   const catalogOf = (files: Files) =>
     parseCatalog(JSON.parse(build(files).files.find((f) => f.path === "content/catalog.json")!.body as string));
-  const exam = {
-    title: "Экзамен",
-    date: "2027-05-11",
-    source: "https://example.org",
-    checkedAt: "2026-09-30",
-    localConfirmed: false,
-  };
   it("начало, точки и порог навыка едут в каталоге", () => {
-    const course = catalogOf(withCalendar(calendar, { ...exam, passShare: 0.6 })).courses[0];
+    const course = catalogOf(withCalendar(calendar, 0.6)).courses[0];
     expect(course.calendar).toEqual(calendar);
-    expect(course.exam!.passShare).toBe(0.6);
+    expect(course.passShare).toBe(0.6);
+    expect(failure(withCalendar(calendar, 60))).toContain("passShare: ожидалась доля");
     expect(catalogOf(base()).courses[0].calendar).toBeUndefined();
   });
   it("дата, модуль точки и лишние поля проверяются", () => {
@@ -507,7 +501,6 @@ describe("календарь курса", () => {
     expect(failure(withCalendar({ ...calendar, checkpoints: [{ ...point, module: 2 }] }))).toContain(
       "лишнее поле «module»",
     );
-    expect(failure(withCalendar(calendar, { ...exam, passShare: 60 }))).toContain("passShare: ожидалась доля");
   });
 });
 

@@ -70,6 +70,7 @@ export interface Course {
   title: string;
   /** Экзамен курса из каталога: общая дата и подтверждена ли местная. */
   exam?: CourseExam;
+  passShare?: number;
   calendar?: CourseCalendar;
   updatedAt: string;
 }

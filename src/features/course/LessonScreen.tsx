@@ -44,7 +44,7 @@ export function CourseLessonScreen() {
   const moduleOf = lesson?.moduleId;
   const passShare = useLiveQuery(async () => {
     const module = moduleOf ? await db.modules.get(moduleOf) : undefined;
-    return module ? (await db.courses.get(module.courseId))?.exam?.passShare : undefined;
+    return module ? (await db.courses.get(module.courseId))?.passShare : undefined;
   }, [moduleOf]);
   const [problem, setProblem] = useState("");
   const profile = useLessonProfile(lessonId);
