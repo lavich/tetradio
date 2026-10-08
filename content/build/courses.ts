@@ -1,5 +1,5 @@
 import { ContentError, type CatalogCourse } from "../../src/content/schema.ts";
-import { parseExam, parseModule, type CatalogModule } from "../../src/content/course.ts";
+import { parseCalendar, parseExam, parseModule, type CatalogModule } from "../../src/content/course.ts";
 import type { Language } from "../../src/domain/language.ts";
 import { fail, LANGUAGE, languageOf, nfc, text } from "./common.ts";
 import type { ContentRoot, CourseSource } from "./sources.ts";
@@ -120,10 +120,14 @@ export function buildCourses(sources: ContentRoot) {
         moduleIds,
         ...(src.source ? { source: src.source } : {}),
         ...(src.exam !== undefined ? { exam: parseExam(nfc(src.exam), `${where}.exam`) } : {}),
+        ...(src.calendar !== undefined
+          ? { calendar: parseCalendar(nfc(src.calendar), `${where}.calendar`, [...numbers.keys()]) }
+          : {}),
       });
       continue;
     }
     if (!Array.isArray(src.lessons) || !src.lessons.length) fail(`${where}: нужен непустой список lessons`);
+    if (src.calendar !== undefined) fail(`${where}.calendar: календарь бывает только у курса из модулей`);
     for (const lessonId of src.lessons) {
       if (!sources.lessons.has(lessonId)) fail(`${where}: урока ${lessonId} нет в lessons/`);
       const twin = courseOf.get(lessonId);

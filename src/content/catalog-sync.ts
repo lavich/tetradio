@@ -63,7 +63,13 @@ async function adoptCourses(catalog: Catalog, database: AppDatabase) {
       updatedAt: stored?.updatedAt ?? now,
     };
     if (item.exam) next.exam = item.exam;
-    if (!stored || stored.title !== next.title || JSON.stringify(stored.exam) !== JSON.stringify(next.exam))
+    if (item.calendar) next.calendar = item.calendar;
+    if (
+      !stored ||
+      stored.title !== next.title ||
+      JSON.stringify(stored.exam) !== JSON.stringify(next.exam) ||
+      JSON.stringify(stored.calendar) !== JSON.stringify(next.calendar)
+    )
       await database.courses.put({ ...next, updatedAt: now });
   }
 }

@@ -10,7 +10,7 @@ import { dictionary } from "../src/storage/dictionary";
 import { courseProgress } from "../src/storage/progress";
 import { makePlan } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
-import { seedV8, V8_NOW, V8_STORES } from "./helpers/v8";
+import { seedV8, v8Catalog, V8_NOW, V8_STORES } from "./helpers/v8";
 
 const NAME = "tetradio-v8-copy";
 let db: AppDatabase;
@@ -26,6 +26,9 @@ afterEach(async () => {
 });
 
 async function views(database: AppDatabase) {
+  // Календаря в копии v8 нет: его приносит каталог при первом запуске после обновления.
+  const course = v8Catalog.courses[0];
+  await database.courses.update(course.id, { calendar: course.calendar });
   const plan = await makePlan(dexieSource(database), V8_NOW);
   return {
     plan: {
@@ -63,6 +66,17 @@ describe("обновление копии v8", () => {
     expect(await views(db)).toMatchInlineSnapshot(`
       {
         "course": {
+          "calendar": {
+            "checkpoints": [
+              {
+                "afterModule": 2,
+                "date": "2026-12-13",
+                "label": "K1",
+                "title": "Контрольная A1",
+              },
+            ],
+            "start": "2026-10-05",
+          },
           "complete": true,
           "current": 1,
           "pace": {
@@ -70,7 +84,7 @@ describe("обновление копии v8", () => {
             "lagWeeks": 0,
             "next": {
               "checkpoint": {
-                "afterModule": 8,
+                "afterModule": 2,
                 "date": "2026-12-13",
                 "label": "K1",
                 "title": "Контрольная A1",
@@ -82,6 +96,7 @@ describe("обновление копии v8", () => {
             "recentPerWeek": 1,
             "total": 7,
           },
+          "passShare": 0.6,
           "skills": [
             {
               "attempted": 4,

@@ -141,12 +141,14 @@ export interface CourseExam {
   checkedAt: string;
   localConfirmed: boolean;
   note?: string;
+  /** Порог сдачи навыка: доля верного, например 0.6. */
+  passShare?: number;
 }
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 export function parseExam(input: unknown, path: string): CourseExam {
   const raw = obj(input, path);
   for (const key of Object.keys(raw))
-    if (!["title", "date", "source", "checkedAt", "localConfirmed", "note"].includes(key))
+    if (!["title", "date", "source", "checkedAt", "localConfirmed", "note", "passShare"].includes(key))
       throw new ContentError(`${path}: лишнее поле «${key}»`);
   const date = str(raw.date, `${path}.date`);
   const checkedAt = str(raw.checkedAt, `${path}.checkedAt`);
@@ -161,7 +163,54 @@ export function parseExam(input: unknown, path: string): CourseExam {
   };
   const note = optStr(raw.note, `${path}.note`);
   if (note) exam.note = note;
+  if (raw.passShare !== undefined) {
+    const share = raw.passShare;
+    if (typeof share !== "number" || !(share > 0 && share <= 1))
+      throw new ContentError(`${path}.passShare: ожидалась доля больше 0 и не больше 1`);
+    exam.passShare = share;
+  }
   return exam;
+}
+
+export interface Checkpoint {
+  label: string;
+  title: string;
+  afterModule: number;
+  date: string;
+}
+/** Календарь курса: начало и контрольные точки по датам; по нему считается темп. */
+export interface CourseCalendar {
+  start: string;
+  checkpoints: Checkpoint[];
+}
+/** `modules` — номера модулей курса; без них номер модуля у точки не проверяется. */
+export function parseCalendar(input: unknown, path: string, modules?: number[]): CourseCalendar {
+  const raw = obj(input, path);
+  for (const key of Object.keys(raw))
+    if (!["start", "checkpoints"].includes(key)) throw new ContentError(`${path}: лишнее поле «${key}»`);
+  const start = str(raw.start, `${path}.start`);
+  if (!DATE.test(start)) throw new ContentError(`${path}.start: дата в формате ГГГГ-ММ-ДД`);
+  let previous = start;
+  const checkpoints = list(raw.checkpoints, `${path}.checkpoints`).map((entry, i): Checkpoint => {
+    const at = `${path}.checkpoints[${i}]`;
+    const point = obj(entry, at);
+    for (const key of Object.keys(point))
+      if (!["label", "title", "afterModule", "date"].includes(key))
+        throw new ContentError(`${at}: лишнее поле «${key}»`);
+    const date = str(point.date, `${at}.date`);
+    if (!DATE.test(date)) throw new ContentError(`${at}.date: дата в формате ГГГГ-ММ-ДД`);
+    if (date <= previous) throw new ContentError(`${at}.date: точки идут по датам после начала курса`);
+    previous = date;
+    const afterModule = int(point.afterModule, `${at}.afterModule`, 1);
+    if (modules && !modules.includes(afterModule))
+      throw new ContentError(`${at}.afterModule: модуля ${afterModule} нет в курсе`);
+    return { label: str(point.label, `${at}.label`), title: str(point.title, `${at}.title`), afterModule, date };
+  });
+  if (!checkpoints.length) throw new ContentError(`${path}.checkpoints: нужен непустой список`);
+  const labels = checkpoints.map((point) => point.label);
+  const twin = labels.find((label, i) => labels.indexOf(label) !== i);
+  if (twin) throw new ContentError(`${path}.checkpoints: метка «${twin}» повторяется`);
+  return { start, checkpoints };
 }
 
 export interface CatalogModule {

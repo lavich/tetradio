@@ -2,9 +2,8 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { SKILL_LABEL } from "../../content/course";
-import { PASS_SHARE } from "../../domain/course";
 import { languageOfText } from "../../domain/language";
-import { CHECKPOINTS, type SkillProgress } from "../../domain/progress";
+import type { SkillProgress } from "../../domain/progress";
 import { SOLID_DAYS, type Leech } from "../../domain/stats";
 import { useNow } from "../../shared/clock";
 import { cx } from "../../shared/cx";
@@ -32,7 +31,7 @@ export function ProgressScreen() {
   if (!data) return <Screen wide />;
   const head = <h1 className={nb.title}>Прогресс</h1>;
   const path = <Path data={data} />;
-  const ready = <Skills skills={data.skills} complete={data.complete} />;
+  const ready = <Skills skills={data.skills} complete={data.complete} passShare={data.passShare} />;
   const cards = <Cards words={words} leeches={stats?.leeches ?? []} started={data.pace.done > 0} />;
   const tail = (
     <>
@@ -83,7 +82,15 @@ const weekLine = ({ lessonDays, reviewDays }: CourseProgress["week"]) => {
   return `На этой неделе: ${parts.join(", ")}.`;
 };
 
-function Skills({ skills, complete }: { skills: SkillProgress[]; complete: boolean }) {
+function Skills({
+  skills,
+  complete,
+  passShare,
+}: {
+  skills: SkillProgress[];
+  complete: boolean;
+  passShare: number | undefined;
+}) {
   return (
     <section aria-labelledby="skills">
       <h2 id="skills" className={css.heading}>
@@ -99,7 +106,7 @@ function Skills({ skills, complete }: { skills: SkillProgress[]; complete: boole
           const share = item?.total ? item.earned / item.total : 0;
           const percent = Math.round(share * 100);
           const quality = item?.attempted ? item.earned / item.attempted : null;
-          const weak = quality !== null && quality < PASS_SHARE;
+          const weak = quality !== null && passShare !== undefined && quality < passShare;
           const label = SKILL_LABEL[skill];
           return (
             <li key={skill} className={cx(weak && css.weak)} data-testid={`skill-${skill}`}>
@@ -176,7 +183,7 @@ function Cards({
 }
 
 function Path({ data }: { data: CourseProgress }) {
-  const { pace, views, current } = data;
+  const { pace, views, current, calendar } = data;
   return (
     <section aria-labelledby="path">
       <h2 id="path" className={css.heading}>
@@ -187,7 +194,7 @@ function Path({ data }: { data: CourseProgress }) {
       </p>
       <div className={css.spines} role="img" aria-label={`пройдено уроков: ${pace.done} из ${pace.total}`}>
         {views.map((view) => {
-          const point = CHECKPOINTS.find((item) => item.afterModule === view.module.number);
+          const point = calendar?.checkpoints.find((item) => item.afterModule === view.module.number);
           const done = view.completed && (!view.checkpoint || view.checkpoint.completed);
           return (
             <span key={view.module.id} className={css.spineSlot}>
@@ -200,15 +207,24 @@ function Path({ data }: { data: CourseProgress }) {
           );
         })}
       </div>
-      <Pace pace={pace} />
+      <Pace pace={pace} planned={!!calendar} />
     </section>
   );
 }
 
-function Pace({ pace }: { pace: CourseProgress["pace"] }) {
+function Pace({ pace, planned }: { pace: CourseProgress["pace"]; planned: boolean }) {
   const ahead = pace.done - pace.planned;
   const next = pace.next;
   const slow = next && pace.recentPerWeek !== null && pace.recentPerWeek < next.perWeek;
+  if (!planned)
+    return (
+      <div data-testid="pace">
+        <p className={css.plan}>
+          Пройдено <b>{pace.done}</b> из {withCount(pace.total, LESSONS)}.
+          {pace.recentPerWeek !== null && ` Ваш темп — ${number(pace.recentPerWeek)} в неделю.`}
+        </p>
+      </div>
+    );
   return (
     <div data-testid="pace">
       <p className={css.plan}>

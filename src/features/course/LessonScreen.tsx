@@ -13,6 +13,7 @@ import {
   nextCourseLesson,
   saveBlockProgress,
 } from "../../storage/course";
+import { db } from "../../storage/db";
 import { lessonItems } from "../../storage/queries";
 import { startSession } from "../learning/session-actions";
 import { Exercise, Explanation, Listening, Reading, Speaking, Writing } from "./blocks";
@@ -40,6 +41,11 @@ export function CourseLessonScreen() {
   const finished = !!lesson?.lesson?.completed;
   const courseId = lesson?.lesson?.courseId;
   const next = useLiveQuery(() => (finished ? nextCourseLesson(courseId) : null), [finished, courseId, lessonId]);
+  const moduleOf = lesson?.moduleId;
+  const passShare = useLiveQuery(async () => {
+    const module = moduleOf ? await db.modules.get(moduleOf) : undefined;
+    return module ? (await db.courses.get(module.courseId))?.exam?.passShare : undefined;
+  }, [moduleOf]);
   const [problem, setProblem] = useState("");
   const profile = useLessonProfile(lessonId);
   const spread = useSpread();
@@ -139,6 +145,7 @@ export function CourseLessonScreen() {
         <LessonSummary
           lesson={lesson}
           progress={progress}
+          passShare={passShare}
           pages={pages}
           numbering={numbering}
           items={items ?? []}

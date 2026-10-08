@@ -459,6 +459,58 @@ describe("шпаргалка модуля", () => {
   });
 });
 
+describe("календарь курса", () => {
+  const calendar = {
+    start: "2026-10-05",
+    checkpoints: [{ label: "K1", title: "Контрольная A1", afterModule: 2, date: "2026-12-13" }],
+  };
+  const withCalendar = (value: unknown, exam?: unknown): Files => {
+    const files = base();
+    files["courses/greek-a2.yaml"] = {
+      ...(files["courses/greek-a2.yaml"] as Record<string, unknown>),
+      calendar: value,
+      ...(exam ? { exam } : {}),
+    };
+    return files;
+  };
+  const catalogOf = (files: Files) =>
+    parseCatalog(JSON.parse(build(files).files.find((f) => f.path === "content/catalog.json")!.body as string));
+  const exam = {
+    title: "Экзамен",
+    date: "2027-05-11",
+    source: "https://example.org",
+    checkedAt: "2026-09-30",
+    localConfirmed: false,
+  };
+  it("начало, точки и порог навыка едут в каталоге", () => {
+    const course = catalogOf(withCalendar(calendar, { ...exam, passShare: 0.6 })).courses[0];
+    expect(course.calendar).toEqual(calendar);
+    expect(course.exam!.passShare).toBe(0.6);
+    expect(catalogOf(base()).courses[0].calendar).toBeUndefined();
+  });
+  it("дата, модуль точки и лишние поля проверяются", () => {
+    const point = calendar.checkpoints[0];
+    expect(failure(withCalendar({ ...calendar, start: "5 октября" }))).toContain("calendar.start: дата в формате");
+    expect(failure(withCalendar({ ...calendar, checkpoints: [{ ...point, date: "2026-13" }] }))).toContain(
+      "checkpoints[0].date: дата в формате",
+    );
+    expect(failure(withCalendar({ ...calendar, checkpoints: [{ ...point, afterModule: 8 }] }))).toContain(
+      "afterModule: модуля 8 нет в курсе",
+    );
+    expect(failure(withCalendar({ ...calendar, checkpoints: [point, { ...point, date: "2027-01-10" }] }))).toContain(
+      "метка «K1» повторяется",
+    );
+    expect(
+      failure(withCalendar({ ...calendar, checkpoints: [point, { ...point, label: "M1", date: "2026-11-01" }] })),
+    ).toContain("точки идут по датам");
+    expect(failure(withCalendar({ ...calendar, end: "2027-05-02" }))).toContain("calendar: лишнее поле «end»");
+    expect(failure(withCalendar({ ...calendar, checkpoints: [{ ...point, module: 2 }] }))).toContain(
+      "лишнее поле «module»",
+    );
+    expect(failure(withCalendar(calendar, { ...exam, passShare: 60 }))).toContain("passShare: ожидалась доля");
+  });
+});
+
 describe("лишние поля", () => {
   it("хвост реплики, отрезанный запятой в YAML, — ошибка сборки, а не потерянный текст", () => {
     const split = withLesson((b) =>

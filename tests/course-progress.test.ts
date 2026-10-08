@@ -106,10 +106,21 @@ describe("завершённость урока и итог контрольно
         { blockId: "card-tf", score: { correct: 1, almost: 0, total: 2 } },
         { blockId: "gaps", score: { correct: 1, almost: 1, total: 2 } },
       ]),
+      0.6,
     );
     expect(result).toMatchObject({ correct: 3, total: 4, share: 0.75, passed: true });
     // Пропуски без текста — вне навыков; чтение: 1 из 2 = 50 % — не сдано.
     expect(result.skills).toEqual([{ skill: "reading", correct: 1, total: 2, share: 0.5, passed: false }]);
+  });
+  it("без порога в экзамене курса итог контрольной не говорит о сдаче", () => {
+    const exam = demo.packages.find((p) => p.id === "m01-test")!.blocks!;
+    const result = testResult(
+      exam,
+      progress([{ blockId: "card-tf", score: { correct: 1, almost: 0, total: 2 } }]),
+      undefined,
+    );
+    expect(result).toMatchObject({ correct: 1, total: 4, share: 0.25, passed: undefined });
+    expect(result.skills).toEqual([{ skill: "reading", correct: 1, total: 2, share: 0.5, passed: undefined }]);
   });
 });
 

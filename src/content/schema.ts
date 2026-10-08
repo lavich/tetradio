@@ -11,9 +11,11 @@ import { CARD_KINDS } from "../domain/card-fields.ts";
 import { ContentError } from "./schema-errors.ts";
 import {
   parseBlocks,
+  parseCalendar,
   parseExam,
   parseModule,
   type CatalogModule,
+  type CourseCalendar,
   type CourseExam,
   type LessonBlock,
   type LessonKind,
@@ -44,6 +46,7 @@ export interface CatalogCourse {
   moduleIds?: string[];
   /** Экзамен, к которому ведёт курс */
   exam?: CourseExam;
+  calendar?: CourseCalendar;
 }
 export interface CatalogEntry {
   id: string;
@@ -263,6 +266,7 @@ export function parseCatalog(input: unknown): Catalog {
     );
     if (moduleIds) course.moduleIds = moduleIds;
     if (item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
+    if (item.calendar !== undefined) course.calendar = parseCalendar(item.calendar, `${path}.calendar`);
     return course;
   });
   unique(
@@ -288,6 +292,11 @@ export function parseCatalog(input: unknown): Catalog {
           throw new ContentError(`каталог.modules: урока ${lessonId} модуля ${module.id} нет в каталоге`);
     catalog.modules = modules;
   }
+  courses.forEach((course, index) => {
+    if (!course.calendar) return;
+    const numbers = (catalog.modules ?? []).filter((module) => module.courseId === course.id).map((m) => m.number);
+    parseCalendar(course.calendar, `каталог.courses[${index}].calendar`, numbers);
+  });
   return catalog;
 }
 

@@ -4,9 +4,10 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { installLesson } from "../../content/client";
 import { moduleViews, type ModuleView } from "../../storage/course";
+import { db } from "../../storage/db";
 import { Tick } from "../../shared/Tick";
 import { useSpread } from "../../shared/media";
-import { CHECKPOINTS } from "./checkpoints";
+import { checkpointLabels } from "./checkpoints";
 import { ModuleCover } from "./ModuleCover";
 import ui from "../../shared/ui.module.css";
 import base from "./course.module.css";
@@ -20,6 +21,8 @@ export function ModuleScreen() {
     async () => (await moduleViews()).find((item) => item.module.id === moduleId) ?? null,
     [moduleId],
   );
+  const courseId = view?.module.courseId;
+  const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
   const spread = useSpread();
   const [problem, setProblem] = useState("");
   // Уроки опубликованного модуля скачиваются при открытии: без пакета урок не пройти.
@@ -90,7 +93,7 @@ export function ModuleScreen() {
             view.checkpoint,
             "точка",
             "контрольная точка пройдена",
-            CHECKPOINTS[module.number] ?? "контрольная точка",
+            checkpointLabels(course?.calendar)[module.number] ?? "контрольная точка",
           )}
         </ol>
       ) : null}

@@ -24,6 +24,7 @@ interface Row {
 export function LessonSummary({
   lesson,
   progress,
+  passShare,
   pages,
   numbering,
   items,
@@ -37,6 +38,8 @@ export function LessonSummary({
 }: {
   lesson: CourseLesson;
   progress: Map<string, BlockProgress>;
+  /** Порог навыка из экзамена курса; без него итог контрольной — без «сдано». */
+  passShare: number | undefined;
   pages: LessonBlock[][];
   numbering: Map<string, number>;
   items: LessonItem[];
@@ -52,7 +55,7 @@ export function LessonSummary({
   const complete = lessonDone(lesson.blocks, progress);
   const tally = lessonTally(lesson.blocks, progress);
   const finished = !!lesson.lesson?.completed;
-  const result = lesson.kind === "test" ? testResult(lesson.blocks, progress) : null;
+  const result = lesson.kind === "test" ? testResult(lesson.blocks, progress, passShare) : null;
   const rows: Row[] = pages.flatMap((page, index) =>
     page.filter(isTask).map((block) => ({ block, page: index, progress: progress.get(block.id) })),
   );
@@ -97,13 +100,16 @@ export function LessonSummary({
 
       {result ? (
         <section className={css.result} aria-label="Итог контрольной">
-          <p className={result.passed ? base.score : `${base.score} ${base.failed}`}>
-            Итог: {result.correct} из {result.total} ({Math.round(result.share * 100)} %) —{" "}
-            {result.passed ? "порог 60 % пройден" : "ниже порога 60 %"}
+          <p className={result.passed === false ? `${base.score} ${base.failed}` : base.score}>
+            Итог: {result.correct} из {result.total} ({Math.round(result.share * 100)} %)
+            {passShare === undefined
+              ? ""
+              : ` — ${result.passed ? "порог" : "ниже порога"} ${Math.round(passShare * 100)} %${result.passed ? " пройден" : ""}`}
           </p>
           {result.skills.map((skill) => (
             <p key={skill.skill} className={base.print}>
-              {SKILL_LABEL[skill.skill]}: {skill.correct} из {skill.total} — {skill.passed ? "сдано" : "не сдано"}
+              {SKILL_LABEL[skill.skill]}: {skill.correct} из {skill.total}
+              {skill.passed === undefined ? "" : ` — ${skill.passed ? "сдано" : "не сдано"}`}
             </p>
           ))}
           <p className={base.meta}>Письмо и речь — самопроверка, в итог не входят.</p>

@@ -93,21 +93,21 @@ export const lessonTally = (blocks: LessonBlock[], progress: Map<string, BlockPr
   return { done: tasks.filter((block) => progress.get(block.id)?.done).length, total: tasks.length };
 };
 
-/** Порог сдачи навыка на экзамене ΚΕΓ A2 — 60 % в каждом навыке. */
-export const PASS_SHARE = 0.6;
 export interface SkillResult {
   skill: Skill;
   correct: number;
   total: number;
   share: number;
-  passed: boolean;
+  /** Без порога в экзамене курса — `undefined`. */
+  passed: boolean | undefined;
 }
 /**
  * Итог контрольной по навыкам: оцениваются только задания `graded`, «почти» засчитывается как верный ответ
  * (на экзамене A2 орфографии уделяют немного внимания). Задания без навыка (грамматика, лексика) входят в общий
  * итог, но не в навыки. Письмо и речь — самопроверка и в итог не входят.
  */
-export function testResult(blocks: LessonBlock[], progress: Map<string, BlockProgress>) {
+export function testResult(blocks: LessonBlock[], progress: Map<string, BlockProgress>, passShare: number | undefined) {
+  const passed = (share: number) => (passShare === undefined ? undefined : share >= passShare);
   const bySkill = new Map<Skill, { correct: number; total: number }>();
   let correct = 0,
     total = 0;
@@ -127,10 +127,10 @@ export function testResult(blocks: LessonBlock[], progress: Map<string, BlockPro
   const skills: SkillResult[] = SKILLS.filter((skill) => bySkill.has(skill)).map((skill) => {
     const entry = bySkill.get(skill)!;
     const share = entry.total ? entry.correct / entry.total : 0;
-    return { skill, ...entry, share, passed: share >= PASS_SHARE };
+    return { skill, ...entry, share, passed: passed(share) };
   });
   const share = total ? correct / total : 0;
-  return { correct, total, share, passed: share >= PASS_SHARE, skills };
+  return { correct, total, share, passed: passed(share), skills };
 }
 
 /** Число слов письменного ответа — по пробелам, как считает экзаменатор; пунктуация не слово. */

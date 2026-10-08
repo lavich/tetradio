@@ -1,6 +1,6 @@
 import type { Card, Grade } from "ts-fsrs";
 import type { PackageItem, PackageMarks, PackageMedia, PackageWord, PackagePhrase } from "../content/schema";
-import type { CatalogModule, CourseExam, LessonBlock, LessonKind } from "../content/course";
+import type { CatalogModule, CourseCalendar, CourseExam, LessonBlock, LessonKind } from "../content/course";
 import type { CardKind, Example, Segment } from "./card-fields.ts";
 
 // Значение загружает и Node при сборке контента, поэтому путь с расширением.
@@ -64,12 +64,13 @@ export type SessionCard = { kind: "word"; word: Word } | { kind: "phrase"; phras
  */
 export type CardSnapshot =
   { greek: string; russian: string } | { text: string; translation?: string } | { template: string; answer: string };
-/** Курс: название и экзамен приходят из каталога. */
+/** Курс: название, экзамен и календарь приходят из каталога. */
 export interface Course {
   id: string;
   title: string;
   /** Экзамен курса из каталога: общая дата и подтверждена ли местная. */
   exam?: CourseExam;
+  calendar?: CourseCalendar;
   updatedAt: string;
 }
 /** Урок меняется только завершением, поэтому `updatedAt` пройденного урока — момент, когда он пройден. */
