@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { ensureAsset } from "../content/client";
+import { languageOfText, PROFILES, type Language, type LanguageProfile } from "../domain/language";
 import type { Word } from "../domain/types";
 import { dbAssetSource, releaseAssetUrl, type AssetSource } from "./store";
+import { voicesOf } from "./voices";
 
 export type AudioKind = "file" | "voice" | "none";
 /** Итог воспроизведения: `error` — файл или голос есть, но проигрывание отклонено; это не ошибка знания слова. */
 export type PlayResult = AudioKind | "error";
-let cachedVoice: SpeechSynthesisVoice | null | undefined;
+const cachedVoices = new Map<Language, SpeechSynthesisVoice | null>();
 let current: HTMLAudioElement | null = null;
 // Список голосов приходит асинхронно, поэтому сбрасываем кеш, когда браузер его обновил.
 if (typeof speechSynthesis !== "undefined") {
   speechSynthesis.getVoices();
-  speechSynthesis.addEventListener("voiceschanged", () => {
-    cachedVoice = undefined;
-  });
+  speechSynthesis.addEventListener("voiceschanged", () => cachedVoices.clear());
 }
 // Скрытие приложения (в том числе сворачивание Telegram) останавливает звук.
 if (typeof document !== "undefined")
@@ -21,9 +21,16 @@ if (typeof document !== "undefined")
     if (document.hidden) stopAudio();
   });
 
-function greekVoice(): SpeechSynthesisVoice | null {
+const pick = (voices: SpeechSynthesisVoice[], profile: LanguageProfile) => {
+  const voice = voicesOf(voices, profile)[0] ?? null;
+  cachedVoices.set(profile.code, voice);
+  return voice;
+};
+
+function voiceOf(profile: LanguageProfile): SpeechSynthesisVoice | null {
   if (typeof speechSynthesis === "undefined") return null;
-  if (cachedVoice !== undefined) return cachedVoice;
+  const cached = cachedVoices.get(profile.code);
+  if (cached !== undefined) return cached;
   let voices: SpeechSynthesisVoice[] = [];
   try {
     voices = speechSynthesis.getVoices();
@@ -31,10 +38,9 @@ function greekVoice(): SpeechSynthesisVoice | null {
     return null;
   }
   if (!voices.length) return null;
-  cachedVoice = voices.find((voice) => voice.lang?.toLowerCase().startsWith("el")) ?? null;
-  return cachedVoice;
+  return pick(voices, profile);
 }
-export const hasGreekVoice = () => !!greekVoice();
+export const hasVoiceFor = (language: Language) => !!voiceOf(PROFILES[language]);
 
 /** Сколько ждём начала речи, прежде чем считать реплику потерянной: синтезатор начинает за десятки миллисекунд. */
 const START_TIMEOUT = 300;
@@ -68,7 +74,7 @@ function voicesReady(): Promise<SpeechSynthesisVoice[]> {
       resolve(list);
     };
     const update = () => {
-      cachedVoice = undefined;
+      cachedVoices.clear();
       const list = read();
       if (list.length) finish(list);
     };
@@ -76,20 +82,19 @@ function voicesReady(): Promise<SpeechSynthesisVoice[]> {
     setTimeout(() => finish(read()), VOICES_TIMEOUT);
   });
 }
-/** Греческий голос с ожиданием списка: до загрузки голосов отказывать рано. */
-async function greekVoiceReady(): Promise<SpeechSynthesisVoice | null> {
-  const direct = greekVoice();
+/** Голос языка с ожиданием списка: до загрузки голосов отказывать рано. */
+async function voiceReady(profile: LanguageProfile): Promise<SpeechSynthesisVoice | null> {
+  const direct = voiceOf(profile);
   if (direct) return direct;
   const voices = await voicesReady();
   if (!voices.length) return null;
-  cachedVoice = voices.find((voice) => voice.lang?.toLowerCase().startsWith("el")) ?? null;
-  return cachedVoice;
+  return pick(voices, profile);
 }
 /**
  * Одна попытка озвучки. Успех — событие начала речи, а не факт вызова: синтезатор принимает реплику
  * и может её потерять, не сообщив об этом ни ошибкой, ни событием.
  */
-function speakOnce(text: string, voice: SpeechSynthesisVoice, rate: number): Promise<boolean> {
+function speakOnce(text: string, voice: SpeechSynthesisVoice, rate: number, lang: string): Promise<boolean> {
   return new Promise((resolve) => {
     let done = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -102,7 +107,7 @@ function speakOnce(text: string, voice: SpeechSynthesisVoice, rate: number): Pro
     try {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.voice = voice;
-      utterance.lang = voice.lang || "el-GR";
+      utterance.lang = lang;
       utterance.rate = rate;
       utterance.onstart = () => finish(true);
       utterance.onerror = () => finish(false);
@@ -114,23 +119,23 @@ function speakOnce(text: string, voice: SpeechSynthesisVoice, rate: number): Pro
   });
 }
 /** Озвучка голосом с одной повторной попыткой: молчание после повтора — честный отказ, а не мнимый успех. */
-async function speakVoice(text: string, rate: number, stopped: boolean): Promise<PlayResult> {
-  const voice = await greekVoiceReady();
+async function speakVoice(text: string, rate: number, stopped: boolean, profile: LanguageProfile): Promise<PlayResult> {
+  const voice = await voiceReady(profile);
   if (!voice) return "none";
   if (stopped) await wait(RESTART_DELAY); // отменённой реплике нужен такт, иначе синтезатор съест новую
-  if (await speakOnce(text, voice, rate)) return "voice";
+  if (await speakOnce(text, voice, rate, profile.voice)) return "voice";
   cancelSpeech();
   await wait(RESTART_DELAY);
-  return (await speakOnce(text, voice, rate)) ? "voice" : "error";
+  return (await speakOnce(text, voice, rate, profile.voice)) ? "voice" : "error";
 }
 /** Предложения читает системный голос: записанных файлов для примеров нет. */
-export function speakPhrase(text: string): Promise<PlayResult> {
-  return speakVoice(text, 0.85, stopAudio());
+export function speakPhrase(text: string, profile = languageOfText(text)): Promise<PlayResult> {
+  return speakVoice(text, 0.85, stopAudio(), profile);
 }
 export function audioKind(word: Word | undefined): AudioKind {
   if (!word) return "none";
   if (word.audioAssetId) return "file";
-  return greekVoice() ? "voice" : "none";
+  return voiceOf(languageOfText(word.greek)) ? "voice" : "none";
 }
 /** Занят ли синтезатор: холостая отмена ломает следующую реплику, поэтому отменяем только говорящего. */
 const speaking = () => typeof speechSynthesis !== "undefined" && (speechSynthesis.speaking || speechSynthesis.pending);
@@ -161,6 +166,7 @@ export function stopAudio(): boolean {
  * Файл, который не проигрался, не подменяется голосом молча — иначе пользователь услышит другое произношение.
  */
 export async function playWord(word: Word, source: AssetSource = dbAssetSource): Promise<PlayResult> {
+  const profile = languageOfText(word.greek);
   const stopped = stopAudio();
   if (word.audioAssetId) {
     const url = await source.url(word.audioAssetId).catch(() => null);
@@ -178,23 +184,24 @@ export async function playWord(word: Word, source: AssetSource = dbAssetSource):
         return "error";
       }
     }
-    if (!(await greekVoiceReady())) return "error"; // файл обещан, но недоступен, а голоса нет
+    if (!(await voiceReady(profile))) return "error"; // файл обещан, но недоступен, а голоса нет
   }
-  return speakVoice(word.greek, 0.9, stopped);
+  return speakVoice(word.greek, 0.9, stopped, profile);
 }
 /** Голос появляется асинхронно, поэтому доступность пересчитывается после загрузки списка. */
-export function useGreekVoice(): boolean {
-  const [available, setAvailable] = useState(hasGreekVoice);
+export function useVoice(profile: LanguageProfile): boolean {
+  const language = profile.code;
+  const [available, setAvailable] = useState(() => hasVoiceFor(language));
   useEffect(() => {
-    setAvailable(hasGreekVoice());
+    setAvailable(hasVoiceFor(language));
     if (typeof speechSynthesis === "undefined") return;
     const update = () => {
-      cachedVoice = undefined;
-      setAvailable(hasGreekVoice());
+      cachedVoices.clear();
+      setAvailable(hasVoiceFor(language));
     };
     speechSynthesis.addEventListener("voiceschanged", update);
     return () => speechSynthesis.removeEventListener("voiceschanged", update);
-  }, []);
+  }, [language]);
   return available;
 }
 
@@ -205,7 +212,7 @@ export function useAudioKind(word: Word | undefined): AudioKind {
     setKind(audioKind(word));
     if (typeof speechSynthesis === "undefined") return;
     const update = () => {
-      cachedVoice = undefined;
+      cachedVoices.clear();
       setKind(audioKind(word));
     };
     speechSynthesis.addEventListener("voiceschanged", update);
@@ -215,7 +222,11 @@ export function useAudioKind(word: Word | undefined): AudioKind {
 }
 
 /** Файл, если он обещан записью, иначе системный голос: общий путь для слова, фразы и полного предложения пропуска. */
-export async function playText(text: string, audioAssetId?: string): Promise<PlayResult> {
+export async function playText(
+  text: string,
+  audioAssetId?: string,
+  profile = languageOfText(text),
+): Promise<PlayResult> {
   const stopped = stopAudio();
   if (audioAssetId) {
     const asset = await ensureAsset(audioAssetId).catch(() => null);
@@ -234,24 +245,24 @@ export async function playText(text: string, audioAssetId?: string): Promise<Pla
         return "error";
       }
     }
-    if (!(await greekVoiceReady())) return "error";
+    if (!(await voiceReady(profile))) return "error";
   }
-  return speakVoice(text, 0.85, stopped);
+  return speakVoice(text, 0.85, stopped, profile);
 }
-export const textAudioKind = (audioAssetId: string | undefined): AudioKind =>
-  audioAssetId ? "file" : greekVoice() ? "voice" : "none";
+export const textAudioKind = (audioAssetId: string | undefined, profile: LanguageProfile): AudioKind =>
+  audioAssetId ? "file" : voiceOf(profile) ? "voice" : "none";
 /** Доступность озвучки текста; голос появляется асинхронно. */
-export function useTextAudioKind(audioAssetId: string | undefined): AudioKind {
-  const [kind, setKind] = useState<AudioKind>(() => textAudioKind(audioAssetId));
+export function useTextAudioKind(audioAssetId: string | undefined, profile: LanguageProfile): AudioKind {
+  const [kind, setKind] = useState<AudioKind>(() => textAudioKind(audioAssetId, profile));
   useEffect(() => {
-    setKind(textAudioKind(audioAssetId));
+    setKind(textAudioKind(audioAssetId, profile));
     if (typeof speechSynthesis === "undefined") return;
     const update = () => {
-      cachedVoice = undefined;
-      setKind(textAudioKind(audioAssetId));
+      cachedVoices.clear();
+      setKind(textAudioKind(audioAssetId, profile));
     };
     speechSynthesis.addEventListener("voiceschanged", update);
     return () => speechSynthesis.removeEventListener("voiceschanged", update);
-  }, [audioAssetId]);
+  }, [audioAssetId, profile]);
   return kind;
 }

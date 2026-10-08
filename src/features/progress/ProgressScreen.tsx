@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { SKILL_LABEL } from "../../content/course";
 import { PASS_SHARE } from "../../domain/course";
+import { languageOfText } from "../../domain/language";
 import { CHECKPOINTS, type SkillProgress } from "../../domain/progress";
 import { SOLID_DAYS, type Leech } from "../../domain/stats";
 import { useNow } from "../../shared/clock";
@@ -162,7 +163,7 @@ function Cards({
           {leeches.slice(0, 6).map((leech, index) => (
             <span key={leech.unitKey}>
               {index ? ", " : ""}
-              <Link to={entryPath(leech)} lang="el">
+              <Link to={entryPath(leech)} lang={languageOfText(leech.label).code}>
                 {leech.label}
               </Link>
             </span>

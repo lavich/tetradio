@@ -5,6 +5,7 @@ import { SKILL_LABEL } from "../../content/course";
 import { isTask, lessonDone, lessonTally, testResult } from "../../domain/course";
 import type { BlockProgress, LessonItem } from "../../domain/types";
 import type { CourseLesson, ModuleLessonView } from "../../storage/course";
+import { useProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
 import { PHRASES, WORDS, withCount } from "../../shared/format";
@@ -158,6 +159,7 @@ function TaskRow({
   number: number | undefined;
   go: (target: number, direction: "next" | "prev") => void;
 }) {
+  const { syllables } = useProfile();
   const { block, page, progress } = row;
   const criteria = block.type === "writing" || block.type === "speaking" ? block.criteria.length : 0;
   let mark: { text: string; tone: "ok" | "almost" | "bad" | "soft" };
@@ -180,7 +182,9 @@ function TaskRow({
       {revisit ? (
         <button type="button" className={cx(css.revisit, css[mark.tone])} onClick={() => go(page, "prev")}>
           {block.type === "exercise" && progress?.score?.almost && mark.tone === "almost"
-            ? "без ударения — посмотреть"
+            ? syllables
+              ? "без ударения — посмотреть"
+              : "с опечаткой — посмотреть"
             : "посмотреть"}{" "}
           · стр. {page + 1}
         </button>

@@ -1,3 +1,4 @@
+import { languageOfText } from "../../../domain/language";
 import { ExampleBox, SpeakButton } from "../../words/WordCardView";
 import s from "./exercise.module.css";
 import { Choice } from "./Choice";
@@ -19,7 +20,7 @@ export function Recognition(props: ExerciseProps & { autoSpeak?: boolean }) {
         correct={phrase.translation ?? ""}
         options={props.item.options}
         head={
-          <p className={s.phrase} lang="el">
+          <p className={s.phrase} lang={languageOfText(phrase.text).code}>
             {phrase.text}
           </p>
         }

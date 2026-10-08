@@ -5,6 +5,7 @@ import { scoreExercise, spokenChoice, type ItemResult } from "../../../domain/co
 import { shuffle } from "../../../domain/learning";
 import type { BlockProgress } from "../../../domain/types";
 import { speakPhrase } from "../../../shared/audio";
+import { useProfile } from "../../../shared/language";
 import { Tick } from "../../../shared/Tick";
 import type { BlockPatch } from "../../../storage/course";
 import { SaveProblem, useSave } from "./save";
@@ -22,19 +23,20 @@ export function Exercise({
   progress: BlockProgress | undefined;
   save: (patch: BlockPatch) => Promise<unknown>;
 }) {
+  const profile = useProfile();
   const [answers, setAnswers] = useState<Record<string, string>>(progress?.answers ?? {});
   const [checked, setChecked] = useState(!!progress?.done);
   const { store, problem } = useSave(save);
   // Выполнено на другом устройстве: счёт пришёл синхронизацией, а введённые ответы остались там.
   const elsewhere = checked && !Object.keys(answers).length;
-  const score = checked && !elsewhere ? scoreExercise(block, answers) : null;
+  const score = checked && !elsewhere ? scoreExercise(block, answers, profile) : null;
   const total = score ?? (elsewhere ? progress?.score : undefined);
   const choose = (itemId: string, value: string) => {
     if (checked) return;
     setAnswers((prev) => ({ ...prev, [itemId]: value }));
   };
   const check = async () => {
-    const result = scoreExercise(block, answers);
+    const result = scoreExercise(block, answers, profile);
     const saved = await store({
       done: true,
       answers,
@@ -65,7 +67,7 @@ export function Exercise({
       {block.title ? <h3 className={base.blockTitle}>{block.title}</h3> : null}
       <p className={base.instruction}>{block.instruction}</p>
       {block.bank && block.format === "gap" ? (
-        <p className={`${css.prompt} ${base.soft}`} lang="el">
+        <p className={`${css.prompt} ${base.soft}`} lang={profile.code}>
           Слова: {bank.join(" · ")}
         </p>
       ) : null}
@@ -80,14 +82,14 @@ export function Exercise({
                 label={statusLabel[result.status]}
               />
             ) : null}
-            <p className={css.prompt} lang="el">
+            <p className={css.prompt} lang={profile.code}>
               <span className={base.soft}>{index + 1}. </span>
               {item.prompt}
             </p>
             {block.format === "text" ? (
               <input
                 className={css.answerInput}
-                lang="el"
+                lang={profile.code}
                 autoComplete="off"
                 autoCapitalize="off"
                 autoCorrect="off"
@@ -104,13 +106,13 @@ export function Exercise({
                     key={option}
                     type="button"
                     className={css.option}
-                    lang="el"
+                    lang={profile.code}
                     aria-pressed={given === option}
                     disabled={checked}
                     onClick={() => {
                       choose(item.id, option);
-                      const text = spokenChoice(item.prompt, option);
-                      if (text) void speakPhrase(text);
+                      const text = spokenChoice(item.prompt, option, profile);
+                      if (text) void speakPhrase(text, profile);
                     }}
                   >
                     {option}
@@ -121,8 +123,10 @@ export function Exercise({
             {result ? (
               result.status === "correct" ? null : (
                 <p className={result.status === "almost" ? `${base.pen} ${base.almost}` : base.pen}>
-                  {result.status === "almost" ? "Почти — проверьте ударение: " : "Верно: "}
-                  <span lang="el">{result.expected}</span>
+                  {result.status === "almost"
+                    ? `Почти — проверьте ${profile.syllables ? "ударение" : "написание"}: `
+                    : "Верно: "}
+                  <span lang={profile.code}>{result.expected}</span>
                   {item.explanation ? ` — ${item.explanation}` : ""}
                 </p>
               )

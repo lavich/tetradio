@@ -8,7 +8,8 @@ import { unitKey, wordRef } from "../../domain/refs";
 import type { SessionItem } from "../../domain/types";
 import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
-import { stopAudio, useGreekVoice } from "../../shared/audio";
+import { languageOfText } from "../../domain/language";
+import { stopAudio, useVoice } from "../../shared/audio";
 import { useSettings } from "../../shared/store";
 import { db } from "../../storage/db";
 import { ExerciseView, type Answer } from "../learning/exercises";
@@ -25,7 +26,7 @@ export function WordExerciseScreen() {
   const { id = "", type } = useParams();
   const navigate = useNavigate();
   const word = useLiveQuery(async () => (await db.words.get(id)) ?? null, [id]);
-  const voice = useGreekVoice();
+  const voice = useVoice(languageOfText(word?.greek ?? ""));
   const { settings, ready } = useSettings();
   const haptic = useHaptics();
   const nativeBack = usePlatform().capabilities.back;

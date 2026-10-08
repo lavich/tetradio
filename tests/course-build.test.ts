@@ -567,7 +567,7 @@ describe("голоса аудирования", () => {
     );
   const files = (manifest: Record<string, { voice: string; hash: string }>, characters = cast) => ({
     ...voiced(),
-    "voices.yaml": voicesMap(characters),
+    "voices/el.yaml": voicesMap(characters),
     "audio/m01-1/dialogue-1.mp3": new Uint8Array([7, 7, 7]),
     "audio/dialogues.json": json(manifest),
   });
@@ -604,7 +604,7 @@ describe("голоса аудирования", () => {
     expect(recast.voicing.stale).toEqual(["m01-1/dialogue#1"]);
   });
   it("говорящий без голоса в карте отклоняет сборку", () => {
-    expect(failure(files(fresh, { Άννα: cast.Άννα } as typeof cast))).toMatch(/«Νίκος» нет голоса в voices\.yaml/);
+    expect(failure(files(fresh, { Άννα: cast.Άννα } as typeof cast))).toMatch(/«Νίκος» нет голоса в voices\/el\.yaml/);
   });
   it("два говорящих одного диалога с одним голосом отклоняют сборку", () => {
     expect(failure(files(fresh, { ...cast, Νίκος: { gender: "female", voice: "Aoede" } }))).toMatch(
@@ -617,12 +617,12 @@ describe("голоса аудирования", () => {
     );
   });
   it("у записи реплики нужен источник: без него в карте голосов сборка отклонена", () => {
-    const noSource = { ...files(fresh), "voices.yaml": { ...voicesMap(cast), source: undefined } };
-    expect(failure(noSource)).toMatch(/voices\.yaml\.source: поле обязательно/);
-    const noVoice = { ...files(fresh), "voices.yaml": { ...voicesMap(cast), source: "Синтез речи" } };
+    const noSource = { ...files(fresh), "voices/el.yaml": { ...voicesMap(cast), source: undefined } };
+    expect(failure(noSource)).toMatch(/voices\/el\.yaml\.source: поле обязательно/);
+    const noVoice = { ...files(fresh), "voices/el.yaml": { ...voicesMap(cast), source: "Синтез речи" } };
     expect(failure(noVoice)).toMatch(/имя голоса/);
-    const noMap = { ...files(fresh), "voices.yaml": undefined };
-    expect(failure(noMap)).toMatch(/карты голосов voices\.yaml/);
+    const noMap = { ...files(fresh), "voices/el.yaml": undefined };
+    expect(failure(noMap)).toMatch(/карты голосов voices\/el\.yaml/);
   });
   it("файла записи нет — сборка отклонена", () => {
     expect(failure({ ...files(fresh), "audio/m01-1/dialogue-1.mp3": undefined })).toMatch(

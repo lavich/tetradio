@@ -3,6 +3,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Share2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { languageOfText } from "../../domain/language";
 import { WORD_EXERCISES } from "../../domain/learning";
 import type { LearningRef, Phrase, Word } from "../../domain/types";
 import { shareWord } from "../../platform/share";
@@ -38,7 +39,7 @@ export function EntrySheet({
       {lesson?.moduleId && (
         <Link className={css.from} to={`/course/${lesson.moduleId}/${lesson.id}`}>
           {lesson.number ? `Урок ${lesson.number} · ` : ""}
-          <span lang="el">{lesson.title}</span> →
+          <span lang={languageOfText(lesson.title).code}>{lesson.title}</span> →
         </Link>
       )}
       {word ? <WordBody word={word} /> : <PhraseBody phrase={phrase!} />}
@@ -48,11 +49,12 @@ export function EntrySheet({
 
 function WordBody({ word }: { word: Word }) {
   const shipped = useWordLesson(word.id);
+  const { code } = languageOfText(word.greek);
   return (
     <>
       <div className={css.head}>
         <div className="min-w-0 flex-1">
-          <p className={css.big} lang="el">
+          <p className={css.big} lang={code}>
             {word.greek}
           </p>
           {word.ipa && <p className={css.ipa}>{word.ipa}</p>}
@@ -62,7 +64,7 @@ function WordBody({ word }: { word: Word }) {
       </div>
       <p className={css.meaning}>{word.russian}</p>
       {word.forms && (
-        <p className={css.forms} lang="el">
+        <p className={css.forms} lang={code}>
           {word.forms}
         </p>
       )}
@@ -85,7 +87,7 @@ function PhraseBody({ phrase }: { phrase: Phrase }) {
   return (
     <>
       <div className={css.head}>
-        <p className={`${css.big} ${css.bigPhrase} min-w-0 flex-1`} lang="el">
+        <p className={`${css.big} ${css.bigPhrase} min-w-0 flex-1`} lang={languageOfText(phrase.text).code}>
           {phrase.text}
         </p>
         <SpeakText text={phrase.text} audioAssetId={phrase.audioAssetId} label="Послушать фразу" />

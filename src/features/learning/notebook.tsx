@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Rating } from "ts-fsrs";
+import { languageOfText, PROFILES, type LanguageProfile } from "../../domain/language";
 import type { ReviewEvent, Session, SessionCard, SessionItem } from "../../domain/types";
 import { plural } from "../../shared/format";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
-import { greekDate } from "../../shared/notebook";
+import { pageDate } from "../../shared/notebook";
 import s from "./session.module.css";
 
 /**
@@ -39,11 +40,11 @@ export function Instruction({ prompt, children }: { prompt: string; children?: R
   );
 }
 
-export function PageHead({ day }: { day: string }) {
+export function PageHead({ day, profile = PROFILES.el }: { day: string; profile?: LanguageProfile }) {
   return (
     <header className={s.head}>
-      <p className={s.date} lang="el">
-        {greekDate(day)}
+      <p className={s.date} lang={profile.code}>
+        {pageDate(day, profile)}
       </p>
       <h1 className={s.title}>Повторение</h1>
     </header>
@@ -119,7 +120,7 @@ const MARK_LABEL: Record<Mark, string> = {
 };
 
 function Answer({ row }: { row: DoneRow }) {
-  const lang = row.expectedGreek ? "el" : undefined;
+  const lang = row.expectedGreek ? languageOfText(row.expected).code : undefined;
   const expected = (
     <em className={s.ink} lang={lang}>
       {row.expected || "—"}
@@ -175,7 +176,12 @@ export function DoneList({
             <li key={row.id} className={cx(s.doneRow, row.mark === "skipped" && s.skipped)}>
               <span className={s.doneNumber}>{index + 1}.</span>
               <span className={s.doneText}>
-                {row.promptGreek ? <b lang="el">{row.prompt}</b> : <span>{row.prompt}</span>} — <Answer row={row} />
+                {row.promptGreek ? (
+                  <b lang={languageOfText(row.prompt).code}>{row.prompt}</b>
+                ) : (
+                  <span>{row.prompt}</span>
+                )}{" "}
+                — <Answer row={row} />
               </span>
               {row.mark === "correct" || row.mark === "almost" ? (
                 <Tick className={cx(s.doneMark, row.mark === "almost" && s.almost)} label={MARK_LABEL[row.mark]} />

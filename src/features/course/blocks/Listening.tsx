@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { ListeningBlock } from "../../../content/course";
 import { playDialogue, stopDialogue, type Rate } from "../../../shared/dialogue";
+import { useProfile, voiceName } from "../../../shared/language";
 import { useAssetSource } from "../../../shared/store";
 import { Marked, useFieldMarks } from "../WordTaps";
 import ui from "../../../shared/ui.module.css";
@@ -21,6 +22,7 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
   const [problem, setProblem] = useState<{ text: string; failure: boolean } | null>(null);
   const [shown, setShown] = useState(false);
   const source = useAssetSource();
+  const profile = useProfile();
   useEffect(() => () => stopDialogue(), []);
   const exhausted = plays >= block.plays;
   const play = async () => {
@@ -31,12 +33,12 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
     }
     setProblem(null);
     setPlaying(true);
-    const result = await playDialogue(block.transcript, rate, setLine, source);
+    const result = await playDialogue(block.transcript, rate, setLine, source, profile);
     setPlaying(false);
     if (result === "done") setPlays((count) => count + 1);
     if (result === "none")
       setProblem({
-        text: "На устройстве нет греческого голоса. Включите его в настройках речи — или откройте текст.",
+        text: `На устройстве нет ${voiceName(profile)}. Включите его в настройках речи — или откройте текст.`,
         failure: false,
       });
     if (result === "error") setProblem({ text: "Воспроизведение прервалось. Попробуйте ещё раз.", failure: true });
@@ -44,7 +46,7 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
   const transcript = revealed || shown;
   return (
     <>
-      <h3 className={`${base.blockTitle} ${base.greek}`} lang="el">
+      <h3 className={`${base.blockTitle} ${base.greek}`} lang={profile.code}>
         {block.title}
       </h3>
       <p className={base.instruction}>
@@ -83,7 +85,7 @@ export function Listening({ block, revealed }: { block: ListeningBlock; revealed
         </p>
       ) : null}
       {transcript ? (
-        <ol className={css.transcript} lang="el">
+        <ol className={css.transcript} lang={profile.code}>
           {block.transcript.map((entry, index) => (
             <li key={index} className={index === line ? css.speaking : undefined}>
               {entry.speaker ? <span className={css.speaker}>{entry.speaker}</span> : null}

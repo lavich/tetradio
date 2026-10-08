@@ -1,6 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
+import { languageOfText } from "../../domain/language";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { Tick } from "../../shared/Tick";
 import { coverColor } from "../../shared/notebook";
@@ -53,7 +54,7 @@ export function CourseScreen() {
               >
                 {view.completed ? <Tick className={css.coverStamp} label="заполнена" /> : null}
                 <span className={css.coverNumber}>{String(module.number).padStart(2, "0")}</span>
-                <span className={css.coverTitle} lang="el">
+                <span className={css.coverTitle} lang={languageOfText(module.title).code}>
                   {module.title}
                 </span>
                 <span className={css.coverLabel}>{coverLabel(view)}</span>

@@ -60,7 +60,7 @@
 /* Буква — из счётчика, а не из текста: подпись варианта остаётся самим вариантом. */
 .line::before {
   counter-increment: option;
-  content: counter(option, lower-greek) ")";
+  content: counter(option, var(--letters, lower-greek)) ")";
   font-size: 16px;
   color: var(--muted-foreground);
 }

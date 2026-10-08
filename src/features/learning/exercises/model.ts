@@ -1,3 +1,4 @@
+import { languageOfText } from "../../../domain/language";
 import type { SessionCard, SessionItem, Word } from "../../../domain/types";
 
 export interface Answer {
@@ -21,3 +22,5 @@ export const wordOf = (card: SessionCard): Word => {
   if (card.kind !== "word") throw new Error("Упражнение для слова получило другую карточку");
   return card.word;
 };
+export const cardProfile = (card: SessionCard) =>
+  languageOfText(card.kind === "word" ? card.word.greek : card.phrase.text);

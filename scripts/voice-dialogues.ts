@@ -1,18 +1,21 @@
-// Озвучка аудирования: для каждой реплики синтезирует MP3 голосом персонажа из content/voices.yaml
+// Озвучка аудирования: для каждой реплики синтезирует MP3 голосом персонажа из content/voices/<язык курса>.yaml
 // (Google Cloud TTS) в content/audio/<урок>/<блок>-<n>.mp3 и пишет `audio:` в реплику урока.
 // Переозвучиваются только реплики без файла или с изменившимся текстом либо голосом (content/audio/dialogues.json).
 // Запуск: GOOGLE_TTS_KEY=… npm run voices -- m02-1 m02-2; без уроков — весь курс; --check — только отчёт, без ключа.
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { isMap, isScalar, isSeq, parseDocument, type Node, type YAMLMap } from "yaml";
+import { LANGUAGE } from "../content/build/common.ts";
+import { buildCourses } from "../content/build/courses.ts";
+import { readSources } from "../content/build/sources.ts";
 import {
   lineFile,
   lineHash,
   MANIFEST_FILE,
-  parseVoices,
   voiceOf,
-  VOICES_FILE,
+  voicesFile,
   type VoiceManifest,
+  type VoiceMap,
 } from "../content/build/voices.ts";
 
 // `CONTENT_ROOT` — другой набор исходников (фикстура e2e).
@@ -27,11 +30,19 @@ const lessons = readdirSync(join(ROOT, "lessons"))
 for (const id of wanted) if (!lessons.includes(id)) throw new Error(`Урока ${id} нет в content/lessons`);
 const key = process.env.GOOGLE_TTS_KEY;
 
-const voices = parseVoices(readFileSync(join(ROOT, VOICES_FILE), "utf8"));
+const sources = readSources(ROOT);
+const { languages } = buildCourses(sources);
+const voicesOf = (lessonId: string) => {
+  const language = languages.get(lessonId) ?? LANGUAGE;
+  return sources.voices.get(language) ?? fail(`${lessonId}: нет карты голосов ${voicesFile(language)} для языка курса`);
+};
+function fail(message: string): never {
+  throw new Error(message);
+}
 const manifestPath = join(ROOT, MANIFEST_FILE);
 const manifest: VoiceManifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, "utf8")) : {};
 
-async function synthesize(text: string, voice: string): Promise<Buffer> {
+async function synthesize(text: string, voice: string, voices: VoiceMap): Promise<Buffer> {
   if (!key) throw new Error("Нужен ключ: GOOGLE_TTS_KEY=… npm run voices -- <урок>; без ключа — --check");
   const response = await fetch("https://texttospeech.googleapis.com/v1/text:synthesize", {
     method: "POST",
@@ -69,8 +80,9 @@ for (const lessonId of wanted.length ? wanted : lessons) {
       const line = node as YAMLMap<unknown, unknown>;
       const speaker = line.get("speaker") as string | undefined;
       const text = String(line.get("text")).normalize("NFC");
+      const voices = voicesOf(lessonId);
       const voice = voiceOf(voices, speaker);
-      if (!voice) throw new Error(`${lessonId}/${blockId}: у «${speaker ?? "диктора"}» нет голоса в ${VOICES_FILE}`);
+      if (!voice) throw new Error(`${lessonId}/${blockId}: у «${speaker ?? "диктора"}» нет голоса в ${voices.file}`);
       const file = lineFile(lessonId, blockId, index);
       const target = join(ROOT, "audio", file);
       const hash = lineHash(text, voice);
@@ -78,7 +90,7 @@ for (const lessonId of wanted.length ? wanted : lessons) {
       if (!existsSync(target) || manifest[file]?.hash !== hash || manifest[file]?.voice !== voice) {
         pending.push(`${lessonId}/${blockId}#${index + 1} ${speaker ?? "диктор"} (${voice})`);
         if (!check) {
-          const audio = await synthesize(text, voice);
+          const audio = await synthesize(text, voice, voices);
           mkdirSync(dirname(target), { recursive: true });
           writeFileSync(target, audio);
           manifest[file] = { voice, hash };

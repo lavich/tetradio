@@ -3,12 +3,14 @@ import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
+import { languageOfText } from "../../domain/language";
 import { deviceTimezone, localDay, mondayOf, type DailyPlan } from "../../domain/learning";
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
-import { coverColor, greekDate } from "../../shared/notebook";
+import { useCourseProfile } from "../../shared/language";
+import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
@@ -31,6 +33,7 @@ export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: D
   const views = useLiveQuery(() => moduleViews(), []);
   const reviewed = useLiveQuery(() => reviewedOn(today), [today]);
   const week = useLiveQuery(() => lessonDays(monday, deviceTimezone()), [monday, deviceTimezone()]);
+  const profile = useCourseProfile(views?.[0]?.module.courseId);
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,
@@ -46,8 +49,8 @@ export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: D
 
   const page = (
     <section className={cx(nb.page, css.page)}>
-      <p className={nb.date} lang="el">
-        {greekDate(today)}
+      <p className={nb.date} lang={profile.code}>
+        {pageDate(today, profile)}
       </p>
       <h1 className="sr-only" data-testid="today-title">
         Сегодня
@@ -227,7 +230,7 @@ function LessonNext({
     <Link to={`/course/${module.id}/${lesson.id}`} className={css.lesson} data-testid="course-next">
       <span className={css.cover} style={{ background: coverColor(module.number) }} aria-hidden="true">
         <b>{String(module.number).padStart(2, "0")}</b>
-        <em lang="el">{module.title}</em>
+        <em lang={languageOfText(module.title).code}>{module.title}</em>
         <i className={css.ribbon} />
       </span>
       <span className={css.lessonBody}>
@@ -279,7 +282,7 @@ function ModulePage({
   return (
     <section className={cx(nb.page, css.page)} aria-label={`Модуль ${module.number}`}>
       <p className={cx(nb.date, css.left)}>Модуль {String(module.number).padStart(2, "0")}</p>
-      <h2 className={nb.title} lang="el">
+      <h2 className={nb.title} lang={languageOfText(module.title).code}>
         {module.title}
       </h2>
       <ol className={css.toc}>

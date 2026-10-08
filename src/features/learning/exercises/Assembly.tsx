@@ -1,3 +1,4 @@
+import { languageOfText } from "../../../domain/language";
 import { useEffect, useState } from "react";
 import { assemblyOptions, assemblySkipMessage, checkAssembly, formatSyllables } from "../../../domain/syllables";
 import { WordArt } from "../../words/WordCardView";
@@ -64,7 +65,12 @@ export function Assembly({
             meaning={word.russian}
             art={<WordArt word={word} className={exercise.pic} />}
           />
-          <div className={s.assembled} aria-label="Собранное слово" data-testid="assembled" lang="el">
+          <div
+            className={s.assembled}
+            aria-label="Собранное слово"
+            data-testid="assembled"
+            lang={languageOfText(word.greek).code}
+          >
             {placed.length === 0 ? (
               <span className={s.slotsHint}>Нажимай слоги по порядку</span>
             ) : (
@@ -82,7 +88,7 @@ export function Assembly({
               ))
             )}
           </div>
-          <div className={s.tiles} lang="el">
+          <div className={s.tiles} lang={languageOfText(word.greek).code}>
             {pool.map((tile, index) => (
               <button
                 key={`${tile}-${index}`}
@@ -107,7 +113,7 @@ export function Assembly({
         <div ref={revealed}>
           <Instruction prompt="Собери слово" />
           {!result.skipped && result.answer && (
-            <p className={exercise.written} lang="el">
+            <p className={exercise.written} lang={languageOfText(word.greek).code}>
               <span>{result.answer}</span>
               {result.status !== "wrong" && (
                 <Tick
@@ -119,7 +125,7 @@ export function Assembly({
           )}
           <Verdict status={result.status}>
             <p>{result.message}</p>
-            <p className={s.syllables} lang="el">
+            <p className={s.syllables} lang={languageOfText(word.greek).code}>
               {formatSyllables(word.greek)}
             </p>
           </Verdict>

@@ -1,14 +1,18 @@
-const capital = (text: string) => text.charAt(0).toLocaleUpperCase("el") + text.slice(1);
-/** «Πέμπτη, 1 Οκτωβρίου»: день плана занятия, а не момент открытия экрана. */
-export function greekDate(day: string) {
-  const parts = new Intl.DateTimeFormat("el-GR", {
+import { PROFILES, type LanguageProfile } from "../domain/language.ts";
+
+/** «Πέμπτη, 1 Οκτωβρίου» или «Thursday, 1 October»: день плана занятия, а не момент открытия экрана. */
+export function pageDate(day: string, profile: LanguageProfile = PROFILES.el) {
+  const { locale, upper } = profile.date;
+  const parts = new Intl.DateTimeFormat(locale, {
     weekday: "long",
     day: "numeric",
     month: "long",
     timeZone: "UTC",
   }).formatToParts(new Date(`${day}T12:00:00Z`));
   const get = (type: string) => parts.find((part) => part.type === type)?.value ?? "";
-  return `${capital(get("weekday"))}, ${get("day")} ${get("month")}`;
+  const weekday = get("weekday");
+  const head = upper ? weekday.charAt(0).toLocaleUpperCase(profile.code) + weekday.slice(1) : weekday;
+  return `${head}, ${get("day")} ${get("month")}`;
 }
 
 /** Цвета обложек: греческие школьные тетради яркие; цвет повторяется по номеру модуля. */
