@@ -1,5 +1,5 @@
 import { rememberCourses } from "../storage/courses";
-import { db, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
+import { db, distinctKeys, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
 import { readPending } from "../sync/snapshot";
 import type { Course } from "../domain/types";
 import { fetcher, type ContentFetcher } from "./fetcher";
@@ -86,7 +86,7 @@ export async function syncCourses(database: AppDatabase = db, source: ContentFet
   const pending = (await database.catalog.bulkGet(Object.keys(await readPending(database)))).map(
     (entry) => entry?.courseId,
   );
-  const started = new Set([...(await database.lessons.orderBy("courseId").uniqueKeys()).map(String), ...pending]);
+  const started = new Set([...(await distinctKeys(database.lessons, "courseId")).map(String), ...pending]);
   for (const id of await database.courses.toCollection().primaryKeys())
     if (started.has(id)) await installCourse(id, database, source);
 }
