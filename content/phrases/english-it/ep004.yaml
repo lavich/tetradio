@@ -1,0 +1,7 @@
+id: ep004
+text: "I'm responsible for the release process."
+translation: Я отвечаю за процесс релизов.
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

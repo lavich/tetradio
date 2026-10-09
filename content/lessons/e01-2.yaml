@@ -1,0 +1,308 @@
+title: Профиль и самопрезентация кандидата
+kind: lesson
+items:
+  - { kind: word, id: ew019 }
+  - { kind: word, id: ew020 }
+  - { kind: word, id: ew021 }
+  - { kind: word, id: ew022 }
+  - { kind: word, id: ew023 }
+  - { kind: word, id: ew024 }
+  - { kind: word, id: ew025 }
+  - { kind: word, id: ew026 }
+  - { kind: word, id: ew027 }
+  - { kind: word, id: ew028 }
+  - { kind: word, id: ew029 }
+  - { kind: word, id: ew030 }
+  - { kind: word, id: ew031 }
+  - { kind: word, id: ew032 }
+  - { kind: word, id: ew033 }
+  - { kind: word, id: ew034 }
+  - { kind: word, id: ew035 }
+  - { kind: phrase, id: ep009 }
+  - { kind: phrase, id: ep010 }
+  - { kind: phrase, id: ep011 }
+  - { kind: phrase, id: ep012 }
+  - { kind: phrase, id: ep013 }
+  - { kind: phrase, id: ep014 }
+  - { kind: phrase, id: ep015 }
+  - { kind: phrase, id: ep016 }
+blocks:
+  - type: explanation
+    id: profile-words
+    title: Как говорят об опыте и сильных сторонах
+    body: |-
+      В профилях и самопрезентациях повторяется один и тот же набор слов. Их стоит знать в лицо — и в речи интервьюера, и в вакансии.
+
+      **Уровень и опыт.** **A seasoned engineer** — опытный, бывалый (вежливее и сильнее, чем experienced). **Proficient in** Python — хорошо владеет; после proficient — предлог **in**. **Expertise in** distributed systems — глубокие знания; expertise неисчисляемое: не «an expertise» и не «expertises». **A track record of** delivering on time — подтверждённые результаты.
+
+      **Чем увлечены.** **I'm passionate about** developer experience — после about существительное или -ing: passionate about **building** tools. Звучит уверенно, но не стоит повторять это в каждом ответе.
+
+      **Что за системы.** **Scalable** — выдерживает рост нагрузки, **robust** — не падает от ошибок, **end-to-end** — целиком, от начала до конца, **in-house** — сделанное внутри компании: an in-house CI tool.
+
+      **Что вы делаете для команды и карьеры.** **Contribute to** — вносить вклад, **mentor** juniors — наставлять, **drive** a migration — вести инициативу, **pursue** a career in data — строить карьеру в чём-то, **a transition** to backend — переход.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - proficient in
+          - I'm proficient in TypeScript and Go.
+        - - expertise in
+          - She has deep expertise in payments.
+        - - passionate about + -ing
+          - I'm passionate about improving developer experience.
+        - - a track record of + -ing
+          - He has a track record of shipping on time.
+        - - drive + существительное
+          - I drove the migration to Kubernetes.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - seasoned
+      - proficient
+      - expertise
+      - a track record
+      - scalable
+      - robust
+      - onboarding
+      - a domain
+      - in-house
+      - pursue
+    items:
+      - { id: m1, prompt: "опытный, бывалый", answer: seasoned }
+      - { id: m2, prompt: глубокие знания, answer: expertise }
+      - { id: m3, prompt: подтверждённые результаты, answer: a track record }
+      - { id: m4, prompt: масштабируемый, answer: scalable }
+      - { id: m5, prompt: "надёжный, устойчивый", answer: robust }
+      - { id: m6, prompt: ввод новичков в работу, answer: onboarding }
+      - { id: m7, prompt: предметная область, answer: a domain }
+      - { id: m8, prompt: "собственный, внутренний", answer: in-house }
+  - type: exercise
+    id: prep-choice
+    title: Предлог и форма
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I'm proficient ___ Python and SQL.
+        options: [in, at, with]
+        answer: in
+      - id: q2
+        prompt: She has a lot of ___ in machine learning.
+        options: [expertise, expertises, an expertise]
+        answer: expertise
+        explanation: Expertise — неисчисляемое, без a и без -s.
+      - id: q3
+        prompt: I'm passionate about ___ tools for other developers.
+        options: [building, build, to build]
+        answer: building
+        explanation: После предлога about — -ing.
+      - id: q4
+        prompt: I'd like to ___ a career in data engineering.
+        options: [pursue, drive, migrate]
+        answer: pursue
+      - id: q5
+        prompt: Last year I ___ the migration to the new payment provider.
+        options: [drove, droved, drived]
+        answer: drove
+        explanation: "Drive — неправильный глагол: drive — drove — driven."
+      - id: q6
+        prompt: I ___ in frontend development.
+        options: [specialise, specialist, special]
+        answer: specialise
+        explanation: Specialise — глагол «специализироваться» (амер. specialize); specialist — существительное.
+  - type: explanation
+    id: profile-how
+    title: Профиль в LinkedIn
+    body: |-
+      Сейчас текст — раздел **About** из профиля разработчицы в LinkedIn. Рекрутеры читают его до звонка, а интервьюеры — перед собеседованием, и часто начинают разговор с вопросов по нему.
+
+      Читайте дважды: сначала целиком — кто она и чего ищет, потом с утверждениями. Обратите внимание на времена: present simple — кем она работает и что умеет, present continuous — над чем работает сейчас. Незнакомые слова переведены под текстом.
+  - type: reading
+    id: profile
+    title: "About: Priya Sharma"
+    text: |-
+      I'm a backend engineer with seven years of experience in fintech. I specialise in payment systems and I'm proficient in Java, Kotlin and PostgreSQL.
+
+      At my current company, a mid-size payments startup in Berlin, I'm responsible for the core transaction service. My role involves designing APIs, reviewing code and mentoring two junior developers. I work closely with the product and risk teams, so I spend a lot of time translating business rules into code.
+
+      Right now I'm driving the migration of our legacy billing system to a new event-driven platform. It's a big project: we're moving millions of transactions without downtime.
+
+      I'm passionate about clean, robust code and good onboarding — I believe a new developer should ship something in their first week.
+
+      I'm currently looking for a senior role in a product company where I can take end-to-end ownership of a domain.
+    glosses:
+      - { text: mid-size, russian: средний по размеру }
+      - { text: risk teams, russian: команды риск-менеджмента }
+      - { text: business rules, russian: бизнес-правила }
+      - { text: event-driven, russian: событийно-ориентированный }
+      - { text: downtime, russian: простой (когда система недоступна) }
+      - { text: ship, russian: "выпустить, выкатить" }
+  - type: exercise
+    id: profile-tf
+    about: profile
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Priya works for a large bank.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: A mid-size payments startup in Berlin — средний стартап, а не банк.
+      - id: q2
+        prompt: She mentors other developers.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: Mentoring two junior developers.
+      - id: q3
+        prompt: The billing migration is already finished.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Right now I'm driving the migration — continuous, работа идёт сейчас.
+      - id: q4
+        prompt: The new platform must work without downtime during the migration.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: Priya thinks onboarding is not very important.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: I'm passionate about … good onboarding.
+      - id: q6
+        prompt: She wants to move into management.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Она ищет senior role и ownership of a domain — инженерную роль, а не менеджмент.
+  - type: exercise
+    id: profile-tense
+    about: profile
+    title: Времена в профиле
+    instruction: Почему в тексте выбрано это время? Выберите объяснение.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«I specialise in payment systems»"
+        options:
+          - постоянная специализация — present simple
+          - временный проект — present continuous
+        answer: постоянная специализация — present simple
+      - id: q2
+        prompt: "«Right now I'm driving the migration»"
+        options:
+          - постоянная обязанность — present simple
+          - текущий проект — present continuous
+        answer: текущий проект — present continuous
+      - id: q3
+        prompt: "«I believe a new developer should ship something in their first week»"
+        options:
+          - believe — глагол состояния, только simple
+          - убеждение временное — поэтому simple
+        answer: believe — глагол состояния, только simple
+      - id: q4
+        prompt: "«I'm currently looking for a senior role»"
+        options:
+          - поиск работы — временная ситуация, continuous
+          - поиск работы — привычка, simple
+        answer: поиск работы — временная ситуация, continuous
+  - type: explanation
+    id: listening-how
+    title: Начало собеседования
+    body: |-
+      Почти любое собеседование начинается одинаково: интервьюер представляется, коротко рассказывает о встрече и просит **Tell me a bit about yourself** или **Can you walk me through your background?**
+
+      Послушайте начало собеседования Сары и Дэниела. Сначала послушайте целиком, не останавливая, потом ответьте на вопросы и при втором прослушивании проверьте ответы. Транскрипт откроется после ответа. Не пытайтесь понять каждое слово: сначала — кто он, где работает, над чем работает сейчас и чего хочет.
+  - type: listening
+    id: interview
+    title: First interview
+    plays: 2
+    transcript:
+      - { speaker: Sarah, text: "Hi Daniel, thanks for joining. I'm Sarah, I lead the platform team here. We have about forty-five minutes today." }
+      - { speaker: Daniel, text: "Hi Sarah, nice to meet you. Thanks for having me." }
+      - { speaker: Sarah, text: "So, to start, could you tell me a bit about yourself?" }
+      - { speaker: Daniel, text: "Sure. I'm a backend developer with five years of experience. I work at a logistics company in Warsaw, and I'm responsible for the routing service." }
+      - { speaker: Sarah, text: "What does the routing service do?" }
+      - { speaker: Daniel, text: "It calculates delivery routes for our drivers. My role involves designing the APIs, handling incidents, and working closely with the data team." }
+      - { speaker: Sarah, text: "And what are you working on at the moment?" }
+      - { speaker: Daniel, text: "These days I'm focusing on performance. We're migrating the service from Python to Go, because it needs to be more scalable." }
+      - { speaker: Sarah, text: "Interesting. And why are you looking for a new role?" }
+      - { speaker: Daniel, text: "I enjoy my job, but I'm looking for a new challenge. I'm passionate about developer tools, and your platform team builds exactly that." }
+      - { speaker: Sarah, text: "Great, that's a good start. Let's talk about the migration in more detail." }
+  - type: exercise
+    id: interview-q
+    about: interview
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is Sarah's job?
+        options:
+          - She leads the platform team.
+          - She is a recruiter.
+          - She works on the data team.
+        answer: She leads the platform team.
+      - id: q2
+        prompt: Where does Daniel work?
+        options:
+          - at a logistics company
+          - at a bank
+          - at a delivery startup in Berlin
+        answer: at a logistics company
+      - id: q3
+        prompt: What is Daniel responsible for?
+        options:
+          - the routing service
+          - the data platform
+          - the drivers' mobile app
+        answer: the routing service
+      - id: q4
+        prompt: What is Daniel's team doing now?
+        options:
+          - moving the service to Go
+          - hiring new developers
+          - building a mobile app
+        answer: moving the service to Go
+        explanation: We're migrating the service from Python to Go.
+      - id: q5
+        prompt: Why are they changing the language?
+        options:
+          - The service must be more scalable.
+          - Python is too expensive.
+          - The data team asked for it.
+        answer: The service must be more scalable.
+      - id: q6
+        prompt: Why is Daniel interested in Sarah's team?
+        options:
+          - It builds developer tools.
+          - It works remotely.
+          - It uses Python.
+        answer: It builds developer tools.
+  - type: exercise
+    id: interview-phrases
+    about: interview
+    title: Фразы из диалога
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - joining
+      - yourself
+      - involves
+      - focusing
+      - challenge
+      - detail
+      - track
+      - versatile
+    items:
+      - { id: g1, prompt: "Hi Daniel, thanks for ___.", answer: joining }
+      - { id: g2, prompt: "Could you tell me a bit about ___?", answer: yourself }
+      - { id: g3, prompt: My role ___ designing the APIs., answer: involves }
+      - { id: g4, prompt: "These days I'm ___ on performance.", answer: focusing }
+      - { id: g5, prompt: "I'm looking for a new ___.", answer: challenge }
+      - { id: g6, prompt: "Let's talk about the migration in more ___.", answer: detail }

@@ -1,0 +1,7 @@
+id: ep024
+text: "Does that answer your question?"
+translation: "Это отвечает на ваш вопрос?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

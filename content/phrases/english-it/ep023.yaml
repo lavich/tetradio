@@ -1,0 +1,7 @@
+id: ep023
+text: "To sum up, I'm a backend engineer who likes hard problems."
+translation: "Подводя итог: я бэкенд-инженер, который любит сложные задачи."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

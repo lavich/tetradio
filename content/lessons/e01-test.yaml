@@ -1,0 +1,153 @@
+title: Контрольная модуля e01
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, времена, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в каждом вопросе три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: bio
+    title: Speaker bio
+    text: |-
+      Tom Fischer is a seasoned frontend engineer with nine years of experience. He specialises in web performance and he's proficient in TypeScript and React.
+
+      Tom works at a travel company in Munich, where he's in charge of the booking website. He works closely with designers and the mobile team. This year he's leading the transition from a legacy JavaScript codebase to TypeScript, and he's also mentoring three new developers.
+
+      Tom is passionate about accessibility. He believes every product should work for everyone, including people who use screen readers. Outside of work, he runs marathons.
+    glosses:
+      - { text: travel company, russian: туристическая компания }
+      - { text: accessibility, russian: доступность (для людей с инвалидностью) }
+      - { text: screen readers, russian: экранные дикторы }
+  - type: exercise
+    id: bio-tf
+    about: bio
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - { id: q1, prompt: Tom has a lot of experience., options: ["True", "False"], answer: "True" }
+      - id: q2
+        prompt: Tom manages the mobile team.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: He works closely with the mobile team — работает вместе с ней, а руководит сайтом бронирования.
+      - id: q3
+        prompt: The move to TypeScript is happening this year.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: This year he's leading the transition — continuous, идёт сейчас.
+      - { id: q4, prompt: Tom helps new developers., options: ["True", "False"], answer: "True" }
+      - id: q5
+        prompt: Accessibility is not important to Tom.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Tom is passionate about accessibility.
+  - type: listening
+    id: call
+    title: A quick intro
+    plays: 2
+    transcript:
+      - { speaker: Mark, text: "Thanks for taking the time, Elena. Let's start with a quick intro. Could you tell me about yourself?" }
+      - { speaker: Elena, text: "Of course. I'm a data engineer. I've been in the industry for six years, mostly in e-commerce." }
+      - { speaker: Mark, text: "And what do you do in your current role?" }
+      - { speaker: Elena, text: "I'm responsible for our data pipelines. My role involves building them, monitoring them, and helping analysts with their queries." }
+      - { speaker: Mark, text: "What are you working on right now?" }
+      - { speaker: Elena, text: "Right now we're migrating everything to the cloud. It's a big project, and I'm driving it together with one other engineer." }
+      - { speaker: Mark, text: "Sounds busy! So why are you looking for a new job?" }
+      - { speaker: Elena, text: "I'd like to work closer to the product. In a nutshell, I want my data to change real decisions. That's why I'm interested in this role." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is Elena's job?
+        options: [a data engineer, a data analyst, a backend developer]
+        answer: a data engineer
+      - id: q2
+        prompt: How long has she worked in the industry?
+        options: [six years, two years, nine years]
+        answer: six years
+      - id: q3
+        prompt: What is she responsible for?
+        options: [data pipelines, the company website, the analytics team]
+        answer: data pipelines
+      - id: q4
+        prompt: What is her team doing right now?
+        options: [moving to the cloud, hiring analysts, building a mobile app]
+        answer: moving to the cloud
+      - id: q5
+        prompt: Why does she want a new job?
+        options:
+          - She wants to work closer to the product.
+          - She wants a higher salary.
+          - She doesn't like the cloud.
+        answer: She wants to work closer to the product.
+  - type: exercise
+    id: tenses
+    graded: true
+    title: Времена
+    instruction: Выберите правильную форму.
+    format: choice
+    items:
+      - { id: q1, prompt: I ___ as a QA engineer at a gaming studio., options: [work, "'m working"], answer: work }
+      - { id: q2, prompt: This sprint we ___ the login flow., options: [redesign, "'re redesigning"], answer: "'re redesigning" }
+      - id: q3
+        prompt: I ___ Docker and Terraform well.
+        options: [know, "'m knowing"]
+        answer: know
+        explanation: Know — глагол состояния.
+      - { id: q4, prompt: Our team usually ___ on Tuesdays., options: [releases, is releasing], answer: releases }
+      - id: q5
+        prompt: — What ___ at the moment? — A new reporting service.
+        options: [do you work on, are you working on]
+        answer: are you working on
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [responsible, involves, proficient, ownership, scalable, legacy, nutshell, stakeholders]
+    items:
+      - { id: g1, prompt: I'm ___ for the deployment pipeline., answer: responsible }
+      - { id: g2, prompt: My role ___ reviewing code and mentoring juniors., answer: involves }
+      - { id: g3, prompt: She's ___ in Rust and C++., answer: proficient }
+      - { id: g4, prompt: We need a ___ system — the number of users doubles every year., answer: scalable }
+      - { id: g5, prompt: Nobody wants to touch the old ___ code., answer: legacy }
+      - { id: g6, prompt: "In a ___, I build backend systems.", answer: nutshell }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Я тесно работаю с продуктовой командой.
+        answer:
+          - I work closely with the product team.
+          - I closely work with the product team.
+      - id: q2
+        prompt: Сейчас я сосредоточен на производительности.
+        answer:
+          - These days I'm focusing on performance.
+          - Right now I'm focusing on performance.
+          - At the moment I'm focusing on performance.
+          - I'm focusing on performance now.
+          - I'm currently focusing on performance.
+      - id: q3
+        prompt: Поэтому меня интересует эта позиция.
+        answer:
+          - That's why I'm interested in this role.
+          - That's why I'm interested in this position.
+          - That is why I am interested in this role.
+          - That is why I am interested in this position.

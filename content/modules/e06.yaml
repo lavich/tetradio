@@ -1,0 +1,8 @@
+number: 6
+title: How it works
+subtitle: Как устроен мой проект
+status: draft
+goal: объяснить устройство своего проекта и путь запроса по системе
+grammar:
+  - passive (present, past), связки последовательности
+sessions: 3

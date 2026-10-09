@@ -1,0 +1,43 @@
+# Голоса персонажей английского курса (язык en): Google Cloud TTS, Chirp 3 HD (en-GB-Chirp3-HD-<голос>).
+# Сборка проверяет, что у каждого говорящего есть голос и что голоса в диалоге разные.
+# Озвучка: GOOGLE_TTS_KEY=… npm run voices -- <урок…> (docs/voices.md).
+source: Синтез речи Google Cloud TTS, голос Chirp 3 HD {voice}
+language: en-GB
+prefix: en-GB-Chirp3-HD-
+pools:
+  female:
+    - Aoede
+    - Callirrhoe
+    - Achernar
+    - Autonoe
+    - Despina
+    - Erinome
+    - Gacrux
+    - Kore
+    - Laomedeia
+    - Leda
+    - Sulafat
+    - Vindemiatrix
+    - Zephyr
+  male:
+    - Algenib
+    - Algieba
+    - Alnilam
+    - Charon
+    - Enceladus
+    - Fenrir
+    - Iapetus
+    - Puck
+    - Rasalgethi
+    - Sadachbia
+    - Sadaltager
+    - Schedar
+    - Umbriel
+    - Zubenelgenubi
+# Реплика без говорящего
+narrator: Kore
+characters:
+  Sarah: { gender: female, voice: Aoede }
+  Daniel: { gender: male, voice: Charon }
+  Mark: { gender: male, voice: Iapetus }
+  Elena: { gender: female, voice: Despina }

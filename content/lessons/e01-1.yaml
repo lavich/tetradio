@@ -1,0 +1,288 @@
+title: Present simple и continuous — о себе и работе
+kind: lesson
+items:
+  - { kind: word, id: ew001 }
+  - { kind: word, id: ew002 }
+  - { kind: word, id: ew003 }
+  - { kind: word, id: ew004 }
+  - { kind: word, id: ew005 }
+  - { kind: word, id: ew006 }
+  - { kind: word, id: ew007 }
+  - { kind: word, id: ew008 }
+  - { kind: word, id: ew009 }
+  - { kind: word, id: ew010 }
+  - { kind: word, id: ew011 }
+  - { kind: word, id: ew012 }
+  - { kind: word, id: ew013 }
+  - { kind: word, id: ew014 }
+  - { kind: word, id: ew015 }
+  - { kind: word, id: ew016 }
+  - { kind: word, id: ew017 }
+  - { kind: word, id: ew018 }
+  - { kind: phrase, id: ep001 }
+  - { kind: phrase, id: ep002 }
+  - { kind: phrase, id: ep003 }
+  - { kind: phrase, id: ep004 }
+  - { kind: phrase, id: ep005 }
+  - { kind: phrase, id: ep006 }
+  - { kind: phrase, id: ep007 }
+  - { kind: phrase, id: ep008 }
+blocks:
+  - type: explanation
+    id: tenses
+    title: Present simple и present continuous
+    body: |-
+      Почти любой рассказ о себе на собеседовании держится на двух временах. **Present simple** — то, что верно всегда или обычно: кто вы, чем занимаетесь, как устроена работа. **I work** as a backend developer. Our team **releases** every two weeks. **I spend** most of my time on backend tasks.
+
+      **Present continuous** (am / is / are + -ing) — то, что идёт сейчас или в этот период, временно: текущий проект, задача квартала, переход. **I'm currently working on** a payment service. **We're migrating** our monolith to microservices. **These days I'm focusing on** performance.
+
+      Проверка простая: если можно добавить usually, always, every sprint — simple; если now, currently, at the moment, this quarter, these days — continuous. Сравните: **I work** at a bank (это моя работа) — **I'm working** on a new mobile app (этот проект сейчас, потом будет другой).
+
+      Частая ошибка русскоговорящих — continuous для постоянного: «I'm working as a developer for five years» — так не говорят. Про постоянное — simple: **I work as a developer**; про «уже пять лет» — present perfect, это модуль e02.
+    table:
+      columns:
+        - present simple — всегда, обычно
+        - present continuous — сейчас, временно
+      rows:
+        - - I work as a QA engineer.
+          - I'm working on a new test framework.
+        - - We deploy every day.
+          - We're moving to Kubernetes this quarter.
+        - - She leads the platform team.
+          - She's hiring two engineers at the moment.
+        - - What do you do?
+          - What are you working on?
+  - type: explanation
+    id: stative
+    title: Глаголы состояния
+    body: |-
+      Некоторые глаголы описывают не действие, а состояние: знания, мнение, чувства, принадлежность. Они почти не бывают в continuous, даже когда речь о «сейчас»: **I know** Kubernetes well (не «I'm knowing»), **I prefer** Go to Java, **I need** more ownership, **This role requires** strong SQL.
+
+      Главные на собеседовании: **know, understand, believe, think** (в значении «считать»), **prefer, like, want, need, mean, require, belong, seem**.
+
+      **Think** и **have** бывают в обоих временах, но с разным смыслом: **I think** microservices are overkill here — «я считаю»; **I'm thinking** about a move to data engineering — «обдумываю». **I have** five years of experience — «у меня есть»; **We're having** a planning meeting — «у нас идёт».
+    table:
+      columns:
+        - правильно
+        - ошибка
+      rows:
+        - - I know React well.
+          - I'm knowing React well.
+        - - I prefer remote work.
+          - I'm preferring remote work.
+        - - This project requires a lot of SQL.
+          - This project is requiring a lot of SQL.
+        - - I think it's a good idea.
+          - I'm thinking it's a good idea.
+  - type: explanation
+    id: roles
+    title: Как сказать, чем вы занимаетесь
+    body: |-
+      «Я отвечаю за…» по-английски — несколько оборотов разной силы. **I'm responsible for** the release process — обычная зона ответственности. **I'm in charge of** the mobile team — вы главный, руководите. **I'm accountable for** uptime — отвечаете за результат и отчитываетесь о нём. **I oversee** three projects — курируете, следите со стороны.
+
+      После **for** и **of** — существительное или глагол с **-ing**: responsible for **testing**, in charge of **hiring**. Так же после **involve**: My role **involves designing** APIs and **reviewing** code — «моя работа включает…». Это частая ошибка: не «involves to design».
+
+      Что вы делаете руками — простые точные глаголы: **implement** a feature, **maintain** a legacy codebase, **deploy** to production, **handle** incidents, **streamline** the CI pipeline, **prioritise** the backlog. С кем — **collaborate with** / **work closely with** stakeholders, a cross-functional team.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - be responsible for + -ing
+          - I'm responsible for reviewing pull requests.
+        - - be in charge of
+          - I'm in charge of the on-call rotation.
+        - - my role involves + -ing
+          - My role involves mentoring junior developers.
+        - - work closely with
+          - I work closely with the design team.
+        - - take ownership of
+          - I take ownership of features end to end.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: tense-choice
+    title: Simple или continuous
+    instruction: Выберите правильную форму.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ as a backend developer at a fintech company.
+        options: [work, "'m working"]
+        answer: work
+        explanation: Это ваша работа вообще, а не временный проект, — present simple.
+      - id: q2
+        prompt: At the moment we ___ our database to PostgreSQL.
+        options: [migrate, "'re migrating"]
+        answer: "'re migrating"
+        explanation: "At the moment — процесс идёт сейчас: present continuous."
+      - id: q3
+        prompt: Our team usually ___ on Fridays.
+        options: [deploys, is deploying]
+        answer: deploys
+        explanation: "Usually — регулярное действие: present simple, he/she/it + -s."
+      - id: q4
+        prompt: — What ___ these days? — A new search feature.
+        options: [do you work on, are you working on]
+        answer: are you working on
+        explanation: These days — текущий период, поэтому continuous.
+      - id: q5
+        prompt: She ___ the platform team. She's been the lead for two years.
+        options: [leads, is leading]
+        answer: leads
+        explanation: Это её постоянная роль — present simple.
+      - id: q6
+        prompt: This quarter I ___ on performance.
+        options: [focus, "'m focusing"]
+        answer: "'m focusing"
+        explanation: "This quarter — временный период: present continuous."
+      - id: q7
+        prompt: — What ___? — I'm a QA engineer.
+        options: [do you do, are you doing]
+        answer: do you do
+        explanation: "What do you do? — «Кем вы работаете?». What are you doing? — «Что ты сейчас делаешь?»."
+  - type: exercise
+    id: stative-choice
+    title: Глаголы состояния
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ Kubernetes quite well.
+        options: [know, "'m knowing"]
+        answer: know
+        explanation: Know — глагол состояния, в continuous не бывает.
+      - id: q2
+        prompt: This role ___ strong SQL skills.
+        options: [requires, is requiring]
+        answer: requires
+      - id: q3
+        prompt: I ___ that microservices are too complex for a small team.
+        options: [think, "'m thinking"]
+        answer: think
+        explanation: "Think в значении «считаю» — только simple. I'm thinking about… — «обдумываю»."
+      - id: q4
+        prompt: I ___ about moving into data engineering.
+        options: [think, "'m thinking"]
+        answer: "'m thinking"
+        explanation: Здесь think — «обдумываю», это процесс, поэтому continuous возможен.
+      - id: q5
+        prompt: We ___ a retro right now — can I call you back?
+        options: [have, "'re having"]
+        answer: "'re having"
+        explanation: "Have в значении «проводить, участвовать» — действие, может быть в continuous."
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - oversee
+      - maintain
+      - deploy
+      - implement
+      - a stakeholder
+      - streamline
+      - legacy
+      - a codebase
+      - versatile
+      - hands-on
+    items:
+      - { id: m1, prompt: курировать, answer: oversee }
+      - { id: m2, prompt: "поддерживать, сопровождать (код)", answer: maintain }
+      - { id: m3, prompt: "развёртывать, выкатывать", answer: deploy }
+      - { id: m4, prompt: "реализовывать, внедрять", answer: implement }
+      - { id: m5, prompt: заинтересованная сторона, answer: a stakeholder }
+      - { id: m6, prompt: "упрощать, оптимизировать процесс", answer: streamline }
+      - { id: m7, prompt: устаревший, answer: legacy }
+      - { id: m8, prompt: кодовая база, answer: a codebase }
+  - type: exercise
+    id: role-gap
+    title: Моя роль
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - responsible
+      - charge
+      - involves
+      - closely
+      - ownership
+      - cross-functional
+      - handle
+      - prioritise
+      - accountable
+      - collaborate
+    items:
+      - id: g1
+        prompt: I'm ___ for reviewing pull requests in our team.
+        answer: responsible
+      - id: g2
+        prompt: Since March I've been in ___ of the mobile team.
+        answer: charge
+      - id: g3
+        prompt: My role ___ designing APIs and writing documentation.
+        answer: involves
+        explanation: После involves — глагол с -ing.
+      - id: g4
+        prompt: I work ___ with designers and product managers.
+        answer: closely
+      - id: g5
+        prompt: We're a ___ team — backend, frontend, QA and a designer.
+        answer: cross-functional
+      - id: g6
+        prompt: I usually ___ production incidents when I'm on call.
+        answer: handle
+      - id: g7
+        prompt: I like to take ___ of a feature from the idea to the release.
+        answer: ownership
+      - id: g8
+        prompt: When everything is urgent, I ___ tasks with the product owner.
+        answer: prioritise
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'm, we're) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Я бэкенд-разработчик.
+        answer:
+          - I'm a backend developer.
+          - I am a backend developer.
+          - I'm a back-end developer.
+      - id: q2
+        prompt: Сейчас я работаю над платёжным сервисом.
+        answer:
+          - I'm currently working on a payment service.
+          - I'm working on a payment service now.
+          - Right now I'm working on a payment service.
+          - At the moment I'm working on a payment service.
+          - I'm working on a payment service at the moment.
+      - id: q3
+        prompt: Я отвечаю за процесс релизов.
+        answer:
+          - I'm responsible for the release process.
+          - I am responsible for the release process.
+          - I'm in charge of the release process.
+      - id: q4
+        prompt: Я тесно работаю с продуктовой командой.
+        answer:
+          - I work closely with the product team.
+          - I closely work with the product team.
+      - id: q5
+        prompt: Мы переводим монолит на микросервисы.
+        answer:
+          - We're migrating our monolith to microservices.
+          - We're migrating the monolith to microservices.
+          - We are migrating our monolith to microservices.
+          - We are migrating the monolith to microservices.
+          - We're moving our monolith to microservices.
+          - We're moving the monolith to microservices.
+      - id: q6
+        prompt: Я хорошо знаю Kubernetes.
+        answer:
+          - I know Kubernetes well.
+          - I know Kubernetes very well.
+          - I know Kubernetes quite well.
+        explanation: Know — глагол состояния, только present simple.

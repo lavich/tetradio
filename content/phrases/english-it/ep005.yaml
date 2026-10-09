@@ -1,0 +1,7 @@
+id: ep005
+text: I work closely with the product team.
+translation: Я тесно работаю с продуктовой командой.
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

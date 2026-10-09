@@ -1,0 +1,7 @@
+id: ep019
+text: "Right now, I'm leading a small team."
+translation: Сейчас я руковожу небольшой командой.
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md
