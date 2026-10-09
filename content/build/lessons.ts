@@ -88,7 +88,7 @@ function lineAudio(
     if (!voices) fail(`${at}.audio: запись реплики требует карты голосов ${voicesFile(language)} с источником`);
     const voice = cast[index]!;
     const done = manifest[audio as string];
-    if (!done || done.voice !== voice || done.hash !== lineHash(text, voice)) {
+    if (!done || done.voice !== voice || done.hash !== lineHash(text, voice, voices!.language)) {
       report.stale.push(`${lessonId}/${block.id as string}#${index + 1}`);
       report.unvoiced.set(lessonId, (report.unvoiced.get(lessonId) ?? 0) + 1);
       return null;

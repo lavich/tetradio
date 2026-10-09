@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { stringify } from "yaml";
 import { buildContent } from "../content/build";
-import { lineHash } from "../content/build/voices";
+import { lineHash, spokenText } from "../content/build/voices";
 import { parseBlocks, publicationGaps } from "../src/content/course";
 import { ContentError, parseCatalog, parsePackage } from "../src/content/schema";
 
@@ -616,7 +616,9 @@ describe("голоса аудирования", () => {
     "audio/m01-1/dialogue-1.mp3": new Uint8Array([7, 7, 7]),
     "audio/dialogues.json": json(manifest),
   });
-  const fresh = { "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Γεια σου! Πώς σε λένε;", "Aoede") } };
+  const fresh = {
+    "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Γεια σου! Πώς σε λένε;", "Aoede", "el-GR") },
+  };
 
   it("запись реплики — медиа пакета с версией в имени и источником голоса; в реплику её кладёт разбор пакета", () => {
     const content = build(files(fresh));
@@ -639,9 +641,15 @@ describe("голоса аудирования", () => {
     expect(content.voicing).toMatchObject({ voiced: 1, stale: [] });
     expect([...content.voicing.unvoiced]).toEqual([["m01-1", 1]]);
   });
+  it("греческая «;» уходит в синтез вопросительным знаком, текст урока не меняется", () => {
+    expect(spokenText("Πού είσαι; Καλά.", "el-GR")).toBe("Πού είσαι? Καλά.");
+    expect(spokenText("Πού είσαι\u037e", "el-GR")).toBe("Πού είσαι?");
+    expect(spokenText("Wait; then go.", "en-US")).toBe("Wait; then go.");
+    expect(lineHash("Είσαι καλά;", "Aoede", "el-GR")).toBe(lineHash("Είσαι καλά?", "Aoede", "el-GR"));
+  });
   it("запись, сделанная до правки текста или смены голоса, не публикуется: реплика звучит синтезом", () => {
     const content = build(
-      files({ "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Старый текст", "Aoede") } }),
+      files({ "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Старый текст", "Aoede", "el-GR") } }),
     );
     expect(content.packages[0].lineAudio).toBeUndefined();
     expect(content.voicing.stale).toEqual(["m01-1/dialogue#1"]);
