@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from "react";
+import { languageOfText } from "../../../domain/language";
 import { checkAnswer, checkTextAnswer } from "../../../domain/text-answer";
 import { diffChars } from "../../../domain/spelling";
 import { maskWriting } from "../../../domain/syllables";
@@ -16,7 +17,7 @@ import { PhraseReveal, Primary, QuietActions, QuietButton, Reveal, TaskHead, Ver
 /** Ответ на строке листа после проверки: совпавшее чернилами, лишнее зачёркнуто ручкой, нужное — ручкой сверху. */
 function Corrected({ value, expected }: { value: string; expected: string }) {
   return (
-    <p className={exercise.written} data-testid="chars" lang="el">
+    <p className={exercise.written} data-testid="chars" lang={languageOfText(expected).code}>
       <span>
         {diffChars(value, expected).map((part, index) =>
           part.type === "same" ? (
@@ -62,6 +63,8 @@ export function Spelling({
   const revealed = useRevealed(!!result);
   const { card } = item;
   const expected = card.kind === "phrase" ? card.phrase.text : wordOf(card).greek;
+  const profile = languageOfText(expected);
+  const write = `Напиши ${profile.names.in}`;
   const mask = maskWriting(expected, { lead: true });
   const prompt = card.kind === "phrase" ? (card.phrase.translation ?? "") : wordOf(card).russian;
   useRevealSpeech(card, item.id, !!result, autoSpeak);
@@ -75,7 +78,10 @@ export function Spelling({
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!value.trim() || result || saving) return;
-    const checked = card.kind === "phrase" ? checkTextAnswer(value, [card.phrase.text]) : checkAnswer(value, expected);
+    const checked =
+      card.kind === "phrase"
+        ? checkTextAnswer(value, [card.phrase.text], profile)
+        : checkAnswer(value, expected, profile);
     setSaving(true);
     const saved = await onAnswer({ correct: checked.status === "correct", text: value, status: checked.status });
     setSaving(false);
@@ -85,10 +91,10 @@ export function Spelling({
     return (
       <>
         <div ref={revealed}>
-          <Instruction prompt="Напиши по-гречески" />
+          <Instruction prompt={write} />
           {!result.skipped &&
             (result.status === "correct" ? (
-              <p className={exercise.written} lang="el">
+              <p className={exercise.written} lang={profile.code}>
                 <span>{value}</span>
                 <Tick className={exercise.writtenTick} label="верно" />
               </p>
@@ -117,7 +123,7 @@ export function Spelling({
   return (
     <form id={formId} onSubmit={submit}>
       <TaskHead
-        prompt="Напиши по-гречески"
+        prompt={write}
         meaning={prompt}
         art={card.kind === "word" ? <WordArt word={card.word} className={exercise.pic} /> : undefined}
       />
@@ -133,8 +139,8 @@ export function Spelling({
           autoCorrect="off"
           autoComplete="off"
           spellCheck={false}
-          aria-label="Твой ответ по-гречески"
-          lang="el"
+          aria-label={`Твой ответ ${profile.names.in}`}
+          lang={profile.code}
         />
       </div>
       <QuietActions>

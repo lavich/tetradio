@@ -3,6 +3,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Search } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Screen } from "../../app/Screen";
+import { languageOfText } from "../../domain/language";
 import { cx } from "../../shared/cx";
 import { withCount, WORDS } from "../../shared/format";
 import { useSpread } from "../../shared/media";
@@ -71,6 +72,8 @@ function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof d
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const all = lessons.flatMap((lesson) => lesson.entries);
+  // Словарь общий для курсов: подпись поиска — по языку первой карточки.
+  const { names } = languageOfText(all[0]?.greek ?? "");
   const count = (key: Filter) => (key === "all" ? all.length : all.filter((entry) => entry.mark === key).length);
   const shown = lessons
     .map((lesson) => ({
@@ -97,7 +100,7 @@ function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof d
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Найти слово или фразу"
-          aria-label="Поиск по греческому или русскому"
+          aria-label={`Поиск ${names.by} или русскому`}
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}
@@ -125,7 +128,8 @@ function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof d
             <section key={lesson.id} aria-label={lesson.title} data-testid="dictionary-lesson">
               {newModule && lesson.moduleId && (
                 <p className={css.module}>
-                  Модуль {String(lesson.moduleNumber).padStart(2, "0")} · <span lang="el">{lesson.moduleTitle}</span>
+                  Модуль {String(lesson.moduleNumber).padStart(2, "0")} ·{" "}
+                  <span lang={languageOfText(lesson.moduleTitle ?? "").code}>{lesson.moduleTitle}</span>
                 </p>
               )}
               <h2 className={css.lesson}>
@@ -143,7 +147,10 @@ function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof d
                       className={css.row}
                       aria-current={current === `${entry.ref.kind}:${entry.ref.id}` ? "page" : undefined}
                     >
-                      <span className={cx(css.greek, entry.phrase && css.phrase)} lang="el">
+                      <span
+                        className={cx(css.greek, entry.phrase && css.phrase)}
+                        lang={languageOfText(entry.greek).code}
+                      >
                         {entry.greek}
                       </span>
                       <span className={css.russian}>{entry.russian}</span>

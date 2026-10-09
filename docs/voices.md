@@ -14,8 +14,9 @@
 
 ## Карта голосов
 
-[`content/voices.yaml`](../content/voices.yaml): у каждого персонажа пол и голос; `source` — подпись записи
-(`{voice}` — имя голоса), `narrator` — голос реплики без говорящего.
+[`content/voices/el.yaml`](../content/voices/el.yaml) — карта греческого курса; у каждого языка своя,
+`content/voices/<язык>.yaml`, сборка и озвучка берут её по языку курса урока. У каждого персонажа пол и голос;
+`source` — подпись записи (`{voice}` — имя голоса), `narrator` — голос реплики без говорящего.
 
 - Пулы: женские — Aoede, Callirrhoe, Achernar, Autonoe, Despina, Erinome, Gacrux, Kore, Laomedeia, Leda, Sulafat,
   Vindemiatrix, Zephyr; мужские — Algenib, Algieba, Alnilam, Charon, Enceladus, Fenrir, Iapetus, Puck, Rasalgethi,

@@ -14,7 +14,9 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import type { BlockMarks, WordMark } from "../../content/schema";
+import { languageOfText } from "../../domain/language";
 import { playText, type PlayResult } from "../../shared/audio";
+import { noVoice, useProfile } from "../../shared/language";
 import type { TapCard } from "../../storage/course";
 import css from "./word-taps.module.css";
 
@@ -120,12 +122,13 @@ function useInkStroke() {
 
 function TapWord({ card, stroke, gloss, text }: { card: TapCard; stroke?: boolean; gloss?: boolean; text: string }) {
   const taps = useTaps()!;
+  const profile = useProfile();
   const ref = useRef<HTMLSpanElement>(null);
   const active = taps.open?.anchor === ref.current && !!ref.current;
   const activate = (keyboard: boolean, point?: { x: number; y: number }) => {
     if (active) return taps.close();
     // Звучит карточка, а не форма из текста: то же произношение, что в словах урока и в подсказке.
-    const played = playText(card.greek, card.audioAssetId);
+    const played = playText(card.greek, card.audioAssetId, profile);
     taps.show({ card, anchor: ref.current!, keyboard, point, played });
   };
   return (
@@ -133,7 +136,7 @@ function TapWord({ card, stroke, gloss, text }: { card: TapCard; stroke?: boolea
       ref={ref}
       role="button"
       tabIndex={0}
-      lang="el"
+      lang={profile.code}
       aria-label={`Произнести и перевести: ${text}`}
       aria-haspopup="dialog"
       aria-expanded={active}
@@ -225,9 +228,9 @@ export function TapHint() {
 
 const GAP = 10;
 const EDGE = 8;
-const NO_VOICE = "На устройстве нет греческого голоса — включите его в настройках речи.";
 function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
   const { card, anchor, keyboard, point, played } = open;
+  const profile = languageOfText(card.greek);
   const sheet = useRef<HTMLDivElement>(null);
   const speak = useRef<HTMLButtonElement>(null);
   const titleId = useId();
@@ -303,9 +306,9 @@ function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
 
   const again = () => {
     setResult(undefined);
-    void playText(card.greek, card.audioAssetId).then(setResult);
+    void playText(card.greek, card.audioAssetId, profile).then(setResult);
   };
-  const forms = card.forms && /\p{Script=Greek}/u.test(card.forms) ? card.forms : undefined;
+  const forms = card.forms && profile.script.test(card.forms) ? card.forms : undefined;
   return createPortal(
     <div
       ref={sheet}
@@ -327,7 +330,7 @@ function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
       {card.lesson ? <p className={css.tipFrom}>Из урока {card.lesson}</p> : null}
       <div className={css.tipHead}>
         <div className="min-w-0">
-          <p id={titleId} className={css.tipGreek} lang="el">
+          <p id={titleId} className={css.tipGreek} lang={profile.code}>
             {card.greek}
           </p>
           {card.ipa ? <p className={css.tipIpa}>{card.ipa}</p> : null}
@@ -338,11 +341,11 @@ function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
       </div>
       {card.russian ? <p className={css.tipRu}>{card.russian}</p> : null}
       {forms ? (
-        <p className={css.tipForms} lang="el">
+        <p className={css.tipForms} lang={profile.code}>
           {forms}
         </p>
       ) : null}
-      {result === "none" ? <p className={css.tipNote}>{NO_VOICE}</p> : null}
+      {result === "none" ? <p className={css.tipNote}>{noVoice(profile)}</p> : null}
       {result === "error" ? <p className={css.tipNote}>Не удалось воспроизвести произношение.</p> : null}
     </div>,
     document.body,

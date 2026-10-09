@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { buildContent } from "../content/build";
 import { parseCatalog, parsePackage } from "../src/content/schema";
+import { GREEK_CALENDAR } from "./helpers/calendar";
 
 /** Настоящий курс из content/: собирается, модули по программе, опубликованы только проверенные. */
 const content = buildContent("content");
@@ -43,6 +44,11 @@ describe("курс в продукте", () => {
   it("экзамен: общая дата с источником, местная дата не подтверждена", () => {
     expect(catalog.courses[0].exam).toMatchObject({ date: "2027-05-11", localConfirmed: false });
     expect(catalog.courses[0].exam!.source).toMatch(/^https:\/\/www\.greek-language\.gr\//);
+  });
+  it("календарь и порог навыка — данные курса, прежние значения", () => {
+    expect(catalog.courses[0].calendar).toEqual(GREEK_CALENDAR);
+    expect(catalog.courses[0].passShare).toBe(0.6);
+    expect(catalog.courses[0].exam).not.toHaveProperty("passShare");
   });
   it("контента Tavelori в продукте нет", () => {
     expect(content.words.some((word) => /^w\d{2}-\d{2}$/.test(word.id))).toBe(false);

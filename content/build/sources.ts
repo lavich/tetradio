@@ -2,8 +2,9 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, extname, join, relative, sep } from "node:path";
 import { parse } from "yaml";
 import type { LessonKind } from "../../src/content/course.ts";
-import { fail } from "./common.ts";
-import { parseVoices, VOICES_FILE, type VoiceMap } from "./voices.ts";
+import { LANGUAGES, PROFILES, type Language, type LanguageProfile } from "../../src/domain/language.ts";
+import { fail, LANGUAGE, languageOf } from "./common.ts";
+import { parseVoices, voicesFile, type VoiceMap } from "./voices.ts";
 
 export interface WordSource {
   id?: string;
@@ -50,11 +51,15 @@ export interface LessonSource {
 export interface CourseSource {
   id?: string;
   title: string;
+  /** Изучаемый язык, по умолчанию греческий. */
+  language?: string;
   source?: string;
   /** Словарный курс перечисляет уроки; курс программы — модули, уроки берутся из них. */
   lessons?: string[];
   modules?: string[];
   exam?: unknown;
+  passShare?: unknown;
+  calendar?: unknown;
 }
 /** Модуль программы: `modules/NN.yaml`; уроки черновика собираются для проверки, но не поставляются. */
 export interface ModuleSource {
@@ -76,13 +81,24 @@ export interface ModuleSource {
 
 /**
  * Слово из букв двух алфавитов — почти всегда опечатка раскладки: греческая «α» в русском «аор.», латинская «o»
- * в греческом слове. Глазами её не видно, а проверка ответа и синтез речи на ней ломаются. IPA не проверяется:
- * в транскрипции законно стоят θ, β, χ.
+ * в греческом слове. Глазами её не видно, а проверка ответа и синтез речи на ней ломаются. Проверяется письменность
+ * курса вместе с кириллицей или с любой другой письменностью. IPA не проверяется: в транскрипции законно стоят θ, β, χ.
  */
-const MIXED = [/(?=\S*\p{Script=Greek})(?=\S*\p{Script=Cyrillic})\S+/u, /(?=\S*\p{Script=Greek})(?=\S*[A-Za-z])\S+/u];
-function checkScripts(value: unknown, where: string): void {
+const mixedPatterns = (profile: LanguageProfile) => {
+  const own = profile.script.source;
+  const other = `(?!${own})(?!\\p{Script=Cyrillic})(?!\\p{Script=Common})(?!\\p{Script=Inherited})\\p{L}`;
+  return [
+    new RegExp(`(?=\\S*${own})(?=\\S*\\p{Script=Cyrillic})\\S+`, "u"),
+    new RegExp(`(?=\\S*${own})(?=\\S*${other})\\S+`, "u"),
+  ];
+};
+const MIXED = Object.fromEntries(LANGUAGES.map((code) => [code, mixedPatterns(PROFILES[code])])) as Record<
+  Language,
+  RegExp[]
+>;
+function checkScripts(value: unknown, where: string, language: Language): void {
   if (typeof value === "string") {
-    for (const pattern of MIXED) {
+    for (const pattern of MIXED[language]) {
       const hit = value.match(pattern);
       // Исключения: подсказки произношения в квадратных скобках ([аθи́на] — θ вместо звука, которого нет в русском),
       // имена файлов, ссылки и уровни вроде Α2.
@@ -96,10 +112,10 @@ function checkScripts(value: unknown, where: string): void {
       )
         fail(`${where}: в слове «${hit[0]}» смешаны алфавиты — проверьте раскладку`);
     }
-  } else if (Array.isArray(value)) value.forEach((item, index) => checkScripts(item, `${where}[${index}]`));
+  } else if (Array.isArray(value)) value.forEach((item, index) => checkScripts(item, `${where}[${index}]`, language));
   else if (value && typeof value === "object")
     for (const [key, item] of Object.entries(value))
-      if (key !== "ipa" && key !== "file") checkScripts(item, `${where}.${key}`);
+      if (key !== "ipa" && key !== "file") checkScripts(item, `${where}.${key}`, language);
 }
 const idOf = (doc: { id?: unknown }, file: string) => {
   // id приходит из YAML нетипизированным: карта или список молча стали бы идентификатором «[object Object]».
@@ -118,8 +134,8 @@ export interface ContentRoot {
   /** Картинки слов из готовой библиотеки: `pictures.yaml` (слово → файл в pictures/) и подпись источника. */
   pictures: { source: string; words: Map<string, string> };
   files: Map<string, Uint8Array>;
-  /** Голоса персонажей; без карты записи реплик не публикуются, а говорящие не проверяются. */
-  voices?: VoiceMap;
+  /** Голоса персонажей по языку курса; без карты записи реплик не публикуются, а говорящие не проверяются. */
+  voices: Map<Language, VoiceMap>;
 }
 export function readSources(root: string): ContentRoot {
   const list = (dir: string) =>
@@ -164,18 +180,52 @@ export function readSources(root: string): ContentRoot {
           const path = relative(root, join(entry.parentPath, entry.name)).split(sep).join("/");
           files.set(path, readFileSync(join(root, path)));
         }
-  const voices = existsSync(join(root, VOICES_FILE))
-    ? parseVoices(readFileSync(join(root, VOICES_FILE), "utf8"))
-    : undefined;
-  return { words, phrases, lessons, courses, modules, pictures, files, ...(voices ? { voices } : {}) };
+  const voices = new Map<Language, VoiceMap>();
+  for (const file of list("voices")) {
+    const language = languageOf(basename(file, extname(file)), `voices/${file}`);
+    voices.set(language, parseVoices(readFileSync(join(root, "voices", file), "utf8"), voicesFile(language), language));
+  }
+  return { words, phrases, lessons, courses, modules, pictures, files, voices };
 }
 
-export function checkSourceScripts(sources: ContentRoot) {
-  for (const [dir, map] of [
-    ["words", sources.words],
-    ["phrases", sources.phrases],
-    ["modules", sources.modules],
-  ] as const)
-    for (const [, src] of map as Map<string, { file: string }>) checkScripts(src, `${dir}/${src.file}`);
-  for (const [id, src] of sources.lessons) checkScripts(src, `lessons/${id}.yaml`);
+export interface CardLanguages {
+  word: Map<string, Set<Language>>;
+  phrase: Map<string, Set<Language>>;
+}
+/** Карточки — общий набор: язык карточки — языки курсов, в уроках которых она стоит; без урока — язык по умолчанию. */
+export function cardLanguagesOf(sources: ContentRoot, lessons: Map<string, Language>): CardLanguages {
+  const of: CardLanguages = { word: new Map(), phrase: new Map() };
+  for (const [lessonId, src] of sources.lessons) {
+    const language = lessons.get(lessonId) ?? LANGUAGE;
+    const refs: unknown[] = Array.isArray(src.items)
+      ? src.items
+      : Array.isArray(src.words)
+        ? src.words.map((id) => ({ kind: "word", id }))
+        : [];
+    for (const ref of refs) {
+      const { kind, id } = (ref ?? {}) as { kind?: unknown; id?: unknown };
+      if ((kind !== "word" && kind !== "phrase") || typeof id !== "string") continue;
+      const set = of[kind].get(id) ?? new Set<Language>();
+      set.add(language);
+      of[kind].set(id, set);
+    }
+  }
+  return of;
+}
+export const languagesOf = (map: Map<string, Set<Language>>, id: string): Language[] => [
+  ...(map.get(id) ?? [LANGUAGE]),
+];
+
+export function checkSourceScripts(
+  sources: ContentRoot,
+  cards: CardLanguages,
+  lessons: Map<string, Language>,
+  modules: Map<string, Language>,
+) {
+  for (const [id, src] of sources.words)
+    for (const language of languagesOf(cards.word, id)) checkScripts(src, `words/${src.file}`, language);
+  for (const [id, src] of sources.phrases)
+    for (const language of languagesOf(cards.phrase, id)) checkScripts(src, `phrases/${src.file}`, language);
+  for (const [id, src] of sources.modules) checkScripts(src, `modules/${src.file}`, modules.get(id) ?? LANGUAGE);
+  for (const [id, src] of sources.lessons) checkScripts(src, `lessons/${id}.yaml`, lessons.get(id) ?? LANGUAGE);
 }

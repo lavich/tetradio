@@ -2,6 +2,7 @@ import Dexie from "dexie";
 import { exportDB, importInto } from "dexie-export-import";
 import { AppDatabase, db, migrateV9, SCHEMA_VERSION, SYNC_META_PREFIX, TABLES } from "../../storage/db";
 import { isAppDatabaseName } from "../../storage/profile";
+import { languageOfText } from "../../domain/language";
 import { fillSettings, type LessonItem, type Settings } from "../../domain/types";
 import { syncEvents } from "../../sync/events";
 import { assertCloudUnchanged, type CloudGuard } from "./cloud-check";
@@ -103,11 +104,15 @@ export const backupName = (now = new Date()) => `tetradio-backup-${now.toISOStri
 
 /** TSV — только слова: фразы и пропуски в него не входят, и полной копией он не является. */
 export async function exportWordsTsv(database: AppDatabase = db): Promise<Blob> {
-  const rows: string[] = ["Греческий\tРусский\tIPA"];
+  const rows: string[] = [];
+  let first = "";
   await database.words.orderBy("[sortKey+id]").each((word) => {
+    first ||= word.greek;
     rows.push([word.greek, word.russian, word.ipa].map((cell) => cell.replace(/[\t\r\n]/g, " ")).join("\t"));
   });
-  return new Blob([rows.join("\n")], { type: "text/tab-separated-values" });
+  // Шапка — по языку первого слова: одна на файл, даже если курсов несколько.
+  const head = `${languageOfText(first).names.title}\tРусский\tIPA`;
+  return new Blob([[head, ...rows].join("\n")], { type: "text/tab-separated-values" });
 }
 
 const tableRows = (data: { tableName: string; rows?: unknown[] }[], name: string): unknown[] => {

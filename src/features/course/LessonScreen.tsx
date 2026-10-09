@@ -13,11 +13,13 @@ import {
   nextCourseLesson,
   saveBlockProgress,
 } from "../../storage/course";
+import { db } from "../../storage/db";
 import { lessonItems } from "../../storage/queries";
 import { startSession } from "../learning/session-actions";
 import { Exercise, Explanation, Listening, Reading, Speaking, Writing } from "./blocks";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
+import { ProfileContext, useLessonProfile } from "../../shared/language";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { VocabularyList } from "./Vocabulary";
@@ -39,7 +41,13 @@ export function CourseLessonScreen() {
   const finished = !!lesson?.lesson?.completed;
   const courseId = lesson?.lesson?.courseId;
   const next = useLiveQuery(() => (finished ? nextCourseLesson(courseId) : null), [finished, courseId, lessonId]);
+  const moduleOf = lesson?.moduleId;
+  const passShare = useLiveQuery(async () => {
+    const module = moduleOf ? await db.modules.get(moduleOf) : undefined;
+    return module ? (await db.courses.get(module.courseId))?.passShare : undefined;
+  }, [moduleOf]);
   const [problem, setProblem] = useState("");
+  const profile = useLessonProfile(lessonId);
   const spread = useSpread();
   const numbering = useMemo(() => numberBlocks(lesson?.blocks ?? []), [lesson]);
   const pages = useMemo(() => paginate(lesson?.blocks ?? []), [lesson]);
@@ -137,6 +145,7 @@ export function CourseLessonScreen() {
         <LessonSummary
           lesson={lesson}
           progress={progress}
+          passShare={passShare}
           pages={pages}
           numbering={numbering}
           items={items ?? []}
@@ -157,55 +166,57 @@ export function CourseLessonScreen() {
   const last = Math.min(shown[shown.length - 1], total - 1);
   const atEnd = last >= total - 1;
   return (
-    <Screen back="" wide paper>
-      <h1 className="sr-only">{lesson.title}</h1>
-      <WordTaps marks={lesson.marks} cards={lesson.cards} page={first}>
-        <div className={cx(css.frame, spread && nb.spine)}>
-          <div
-            key={first}
-            className={cx(
-              css.sheet,
-              spread && nb.spread,
-              spread && css.spread,
-              turn === "next" ? css.turnNext : turn === "prev" && css.turnPrev,
-            )}
-            {...swipe}
-          >
-            {shown.map(renderPage)}
+    <ProfileContext value={profile}>
+      <Screen back="" wide paper>
+        <h1 className="sr-only">{lesson.title}</h1>
+        <WordTaps marks={lesson.marks} cards={lesson.cards} page={first}>
+          <div className={cx(css.frame, spread && nb.spine)}>
+            <div
+              key={first}
+              className={cx(
+                css.sheet,
+                spread && nb.spread,
+                spread && css.spread,
+                turn === "next" ? css.turnNext : turn === "prev" && css.turnPrev,
+              )}
+              {...swipe}
+            >
+              {shown.map(renderPage)}
+            </div>
           </div>
-        </div>
-      </WordTaps>
-      <nav className={css.pager} aria-label="Страницы урока">
-        <Button
-          variant="ghost"
-          size="md"
-          className="h-full w-auto text-primary"
-          onClick={prev}
-          disabled={first === 0}
-          aria-label="Предыдущая страница"
-        >
-          <ChevronLeft />
-        </Button>
-        <span className={css.pageCount} data-testid="page-count">
-          <span>
-            {last > first ? `стр. ${first + 1}–${last + 1}` : `стр. ${current + 1}`} из {total}
-          </span>
-          <span className={css.pageTasks}>
-            заданий {tally.done} из {tally.total}
-          </span>
-        </span>
-        {atEnd && next ? (
-          <Button size="md" className="h-full w-auto" onClick={openNext}>
-            Следующий урок
-            <ChevronRight data-icon="inline-end" />
+        </WordTaps>
+        <nav className={css.pager} aria-label="Страницы урока">
+          <Button
+            variant="ghost"
+            size="md"
+            className="h-full w-auto text-primary"
+            onClick={prev}
+            disabled={first === 0}
+            aria-label="Предыдущая страница"
+          >
+            <ChevronLeft />
           </Button>
-        ) : (
-          <Button size="md" className="h-full w-auto" onClick={turnNext} disabled={atEnd}>
-            {last + 1 >= total - 1 ? "К итогу" : "Далее"}
-            <ChevronRight data-icon="inline-end" />
-          </Button>
-        )}
-      </nav>
-    </Screen>
+          <span className={css.pageCount} data-testid="page-count">
+            <span>
+              {last > first ? `стр. ${first + 1}–${last + 1}` : `стр. ${current + 1}`} из {total}
+            </span>
+            <span className={css.pageTasks}>
+              заданий {tally.done} из {tally.total}
+            </span>
+          </span>
+          {atEnd && next ? (
+            <Button size="md" className="h-full w-auto" onClick={openNext}>
+              Следующий урок
+              <ChevronRight data-icon="inline-end" />
+            </Button>
+          ) : (
+            <Button size="md" className="h-full w-auto" onClick={turnNext} disabled={atEnd}>
+              {last + 1 >= total - 1 ? "К итогу" : "Далее"}
+              <ChevronRight data-icon="inline-end" />
+            </Button>
+          )}
+        </nav>
+      </Screen>
+    </ProfileContext>
   );
 }

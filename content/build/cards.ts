@@ -8,8 +8,16 @@ import {
   type PackageWord,
 } from "../../src/content/schema.ts";
 import type { Example, Gloss, Segment } from "../../src/domain/types.ts";
+import { PROFILES, type Language } from "../../src/domain/language.ts";
 import { canonical, fail, hash, nfc, pick, text } from "./common.ts";
-import type { ContentRoot, PhraseSource, Sourced, WordSource } from "./sources.ts";
+import {
+  languagesOf,
+  type CardLanguages,
+  type ContentRoot,
+  type PhraseSource,
+  type Sourced,
+  type WordSource,
+} from "./sources.ts";
 
 export const imageAssetId = (wordId: string) => `img-${wordId}`;
 export const audioAssetId = (wordId: string) => `snd-${wordId}`;
@@ -52,12 +60,13 @@ function glossesOf(words: unknown, greek: string, where: string): Gloss[] {
   });
 }
 
-function describe(id: string, src: Sourced<WordSource>, picture = false): PackageWord {
+function describe(id: string, src: Sourced<WordSource>, languages: Language[], picture = false): PackageWord {
   const where = `words/${src.file}`;
   checkId(id, where);
   const greek = text(src.greek, `${where}.greek`)!,
     russian = text(src.russian, `${where}.russian`)!;
-  if (!/[Ͱ-Ͽἀ-῿]/u.test(greek)) fail(`${where}: в греческом написании нет греческих букв`);
+  for (const language of languages)
+    if (!PROFILES[language].script.test(greek)) fail(`${where}: нет букв языка курса (${language})`);
   const segments = (src.reading ?? []).map((note, index): Segment => {
     const path = `${where}.reading[${index}]`;
     const segment = {
@@ -128,7 +137,7 @@ function describePhrase(id: string, src: Sourced<PhraseSource>): PackagePhrase {
  * Два файла с одинаковой парой «написание + перевод» — ошибка публикации, а не тихий дубликат.
  * Для фраз дубликат — тот же текст и перевод.
  */
-export function buildCards(sources: ContentRoot) {
+export function buildCards(sources: ContentRoot, languages: CardLanguages) {
   const words = new Map<string, PackageWord>();
   const byKey = new Map<string, string>();
   for (const [picturedId] of sources.pictures.words)
@@ -136,7 +145,7 @@ export function buildCards(sources: ContentRoot) {
   for (const [id, src] of sources.words) {
     if (src.image && sources.pictures.words.has(id))
       fail(`words/${src.file}: у слова своя иллюстрация и картинка из pictures.yaml — оставьте одну`);
-    const word = describe(id, src, sources.pictures.words.has(id));
+    const word = describe(id, src, languagesOf(languages.word, id), sources.pictures.words.has(id));
     const key = wordKey(word.greek, word.russian);
     const twin = byKey.get(key);
     if (twin)

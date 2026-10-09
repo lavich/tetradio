@@ -1,11 +1,13 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
+import { languageOfText } from "../../domain/language";
 import { moduleViews, type ModuleView } from "../../storage/course";
+import { db } from "../../storage/db";
 import { Tick } from "../../shared/Tick";
 import { coverColor } from "../../shared/notebook";
 import { CourseStart } from "../today/FirstRun";
-import { CHECKPOINTS } from "./checkpoints";
+import { checkpointLabels } from "./checkpoints";
 import { ExamLine } from "./ExamLine";
 import base from "./course.module.css";
 import css from "./shelf.module.css";
@@ -19,6 +21,8 @@ function coverLabel(view: ModuleView) {
 
 export function CourseScreen() {
   const views = useLiveQuery(() => moduleViews(), []);
+  const courseId = views?.[0]?.module.courseId;
+  const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
   if (views === undefined) return <Screen />;
   if (!views.length)
     return (
@@ -29,6 +33,7 @@ export function CourseScreen() {
     );
   const filled = views.filter((view) => view.completed).length;
   const current = views.find((view) => view.module.status === "published" && !view.completed)?.module.id;
+  const labels = checkpointLabels(course?.calendar);
   return (
     <Screen>
       <div className="flex items-baseline justify-between gap-3">
@@ -44,7 +49,7 @@ export function CourseScreen() {
           const draft = module.status === "draft";
           const classes = [css.cover, draft ? css.draft : "", module.id === current ? css.current : ""].join(" ");
           return (
-            <FragmentWithCheckpoint key={module.id} view={view}>
+            <FragmentWithCheckpoint key={module.id} view={view} labels={labels}>
               <Link
                 to={`/course/${module.id}`}
                 className={classes}
@@ -53,7 +58,7 @@ export function CourseScreen() {
               >
                 {view.completed ? <Tick className={css.coverStamp} label="заполнена" /> : null}
                 <span className={css.coverNumber}>{String(module.number).padStart(2, "0")}</span>
-                <span className={css.coverTitle} lang="el">
+                <span className={css.coverTitle} lang={languageOfText(module.title).code}>
                   {module.title}
                 </span>
                 <span className={css.coverLabel}>{coverLabel(view)}</span>
@@ -66,9 +71,17 @@ export function CourseScreen() {
   );
 }
 /** Метка контрольной точки после модуля; когда точка опубликована — ссылка на неё, после прохождения — с галочкой. */
-function FragmentWithCheckpoint({ view, children }: { view: ModuleView; children: React.ReactNode }) {
+function FragmentWithCheckpoint({
+  view,
+  labels,
+  children,
+}: {
+  view: ModuleView;
+  labels: Record<number, string>;
+  children: React.ReactNode;
+}) {
   const point = view.checkpoint;
-  const label = CHECKPOINTS[view.module.number] ?? point?.title;
+  const label = labels[view.module.number] ?? point?.title;
   return (
     <>
       {children}

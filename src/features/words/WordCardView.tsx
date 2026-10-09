@@ -4,8 +4,9 @@ import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Example, Word } from "../../domain/types";
+import { languageOfText } from "../../domain/language";
 import { coreWord, stressNote, stressPosition } from "../../domain/phonetics";
-import { playWord, speakPhrase, useAudioKind, useGreekVoice } from "../../shared/audio";
+import { playWord, speakPhrase, useAudioKind, useVoice } from "../../shared/audio";
 import { useAssetSource, useAssetUrl, useWord } from "../../shared/store";
 import ui from "../../shared/ui.module.css";
 import wordCss from "../../shared/word.module.css";
@@ -66,7 +67,7 @@ export function SpeakButton({
         <Volume2 aria-hidden />
       </Button>
       {(kind === "none" || failed === "none") && (
-        <span className={ui.note}>Озвучка недоступна: нет файла и греческого голоса</span>
+        <span className={ui.note}>Озвучка недоступна: нет файла и {languageOfText(word.greek).voiceName}</span>
       )}
       {failed === "error" && (
         <span className={ui.note} role="status">
@@ -112,7 +113,7 @@ export function ReadingNotes({ word, bare }: { word: Word; bare?: boolean }) {
     cursor = segment.start + segment.text.length;
   });
   if (cursor < word.greek.length) parts.push({ text: word.greek.slice(cursor), index: null });
-  const note = stressNote(word.greek);
+  const note = languageOfText(word.greek).syllables ? stressNote(word.greek) : null;
   const core = coreWord(word.greek);
   const accent = stressPosition(word.greek);
   const active = open === null ? null : segments[open];
@@ -190,7 +191,8 @@ export function ExampleBox({
   bare?: boolean;
 }) {
   const at = example.target ? example.greek.indexOf(example.target) : -1;
-  const voice = useGreekVoice();
+  const profile = languageOfText(example.greek);
+  const voice = useVoice(profile);
   const [open, setOpen] = useState<number | null>(null);
   const glosses = example.glosses ?? [];
   const active = open === null ? undefined : glosses[open];
@@ -265,8 +267,8 @@ export function ExampleBox({
           size="icon-lg"
           className="-mt-1 shrink-0 text-primary hover:bg-primary/10"
           disabled={!voice}
-          aria-label={voice ? "Послушать предложение" : "Озвучка предложения недоступна: нет греческого голоса"}
-          onClick={() => speakPhrase(example.greek)}
+          aria-label={voice ? "Послушать предложение" : `Озвучка предложения недоступна: нет ${profile.voiceName}`}
+          onClick={() => speakPhrase(example.greek, profile)}
         >
           <Volume2 />
         </Button>

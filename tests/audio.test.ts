@@ -237,3 +237,29 @@ describe("звук из источника просмотра", () => {
     delete (globalThis as { Audio?: unknown }).Audio;
   });
 });
+
+describe("голос по языку текста", () => {
+  it("английский текст звучит английским голосом с языком профиля", async () => {
+    const { synth, state } = fakeSynth({
+      voices: [
+        { lang: "el-GR", name: "Ελληνικά" },
+        { lang: "en-US", name: "American" },
+        { lang: "en-GB", name: "British" },
+      ],
+    });
+    const { playText } = await load(synth);
+    const result = playText("Good morning!");
+    await vi.advanceTimersByTimeAsync(50);
+    expect(await result).toBe("voice");
+    expect((state.spoken[0].voice as { name: string }).name).toBe("British");
+    expect(state.spoken[0].lang).toBe("en-GB");
+  });
+
+  it("доступность голоса считается для каждого языка отдельно", async () => {
+    const { synth } = fakeSynth({ voices: [{ lang: "el-GR", name: "Ελληνικά" }] });
+    const { hasVoiceFor, playText } = await load(synth);
+    expect(hasVoiceFor("el")).toBe(true);
+    expect(hasVoiceFor("en")).toBe(false);
+    expect(await playText("Hello")).toBe("none");
+  });
+});

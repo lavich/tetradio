@@ -9,6 +9,7 @@ import {
 } from "../../src/content/schema.ts";
 import type { CatalogModule } from "../../src/content/course.ts";
 import type { CardKind } from "../../src/domain/types.ts";
+import { profileOf } from "../../src/domain/language.ts";
 import { buildMatcher, encodeMarks, lessonMarks, type Ambiguity } from "../marks.ts";
 
 export interface MarksReport {
@@ -47,6 +48,7 @@ export function markCourses(
         const card = describeCard(kind, id);
         return { ref, text: card.text, forms: card.forms, phrase: kind === "phrase" };
       }),
+      profileOf(course.language),
     );
     report.skipped.push(...matcher.skipped);
     const introduced = new Map<string, { at: number; label: string }>();

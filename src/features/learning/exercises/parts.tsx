@@ -1,3 +1,4 @@
+import { languageOfText } from "../../../domain/language";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import type { Phrase, Word } from "../../../domain/types";
@@ -81,7 +82,11 @@ export function GreekHead({
   return (
     <div className={s.greekRow}>
       <div className="min-w-0">
-        <p className={phrase ? s.phrase : s.word} lang="el" data-testid={phrase ? "phrase-text" : undefined}>
+        <p
+          className={phrase ? s.phrase : s.word}
+          lang={languageOfText(text).code}
+          data-testid={phrase ? "phrase-text" : undefined}
+        >
           {text}
         </p>
         {ipa && <p className={s.ipa}>{ipa}</p>}
@@ -99,7 +104,7 @@ export function WordReveal({ word, speak, large }: { word: Word; speak?: boolean
   return (
     <>
       <div className={s.greekRow}>
-        <p className={large ? s.word : s.wordSmall} lang="el">
+        <p className={large ? s.word : s.wordSmall} lang={languageOfText(word.greek).code}>
           {word.greek}
         </p>
         {speak && <SpeakButton word={word} quiet />}

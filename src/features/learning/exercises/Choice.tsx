@@ -5,12 +5,14 @@ import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./choice.module.css";
 import { useRevealed } from "./hooks";
-import type { ExerciseProps } from "./model";
+import type { LanguageProfile } from "../../../domain/language";
+import { cardProfile, type ExerciseProps } from "./model";
 import { Primary, QuietActions, QuietButton } from "./parts";
 
 /** Короткие варианты — сеткой 2 × 2, иначе строками α) β) γ) δ). Порог — то, что помещается в половину узкого листа. */
 const SHORT_OPTION = 12;
-const LETTERS = ["α", "β", "γ", "δ", "ε", "ζ"];
+export const optionLetter = (index: number, profile: LanguageProfile) =>
+  profile.letters.chars[index] ?? String(index + 1);
 export const optionsFit = (options: string[]) =>
   options.length <= 4 && options.every((option) => [...option].length <= SHORT_OPTION);
 
@@ -56,7 +58,7 @@ export function Choice({
   // Выбор раскрывается строкой под вариантами: подводим её, не уводя варианты из вида.
   const revealed = useRevealed(answered, "nearest");
   const grid = optionsFit(options);
-  const letter = (index: number) => LETTERS[index] ?? String(index + 1);
+  const profile = cardProfile(item.card);
   const right = options.indexOf(correct);
   return (
     <>
@@ -67,7 +69,11 @@ export function Choice({
         </div>
         {aside}
       </div>
-      <div className={grid ? s.grid : s.lines} lang={greekOptions ? "el" : undefined}>
+      <div
+        className={grid ? s.grid : s.lines}
+        lang={greekOptions ? profile.code : undefined}
+        style={{ ["--letters" as string]: profile.letters.style }}
+      >
         {options.map((option) => {
           const mark = answered
             ? option === correct
@@ -105,8 +111,8 @@ export function Choice({
           ) : (
             <>
               Верно:{" "}
-              <span lang={greekOptions ? "el" : undefined}>
-                {grid || right < 0 ? "" : `${letter(right)}) `}
+              <span lang={greekOptions ? profile.code : undefined}>
+                {grid || right < 0 ? "" : `${optionLetter(right, profile)}) `}
                 {correct}
               </span>
             </>

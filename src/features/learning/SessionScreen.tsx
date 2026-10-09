@@ -12,6 +12,7 @@ import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform
 import { db } from "../../storage/db";
 import { ConflictError, endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
 import { ExerciseView, Introduction, type Answer } from "./exercises";
+import { cardProfile } from "./exercises/model";
 import { useWide } from "../../shared/media";
 import { compositionLine, DoneList, doneRows, PageHead, SessionShell } from "./notebook";
 import { useFold } from "./useFold";
@@ -218,7 +219,7 @@ export function SessionScreen() {
       mainRef={scroller}
       head={
         <>
-          <PageHead day={session.planDate} />
+          <PageHead day={session.planDate} profile={session.items[0] && cardProfile(session.items[0].card)} />
           <DoneList rows={rows} folded={folded} onToggle={() => setOpened(!!folded)} />
         </>
       }

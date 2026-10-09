@@ -459,6 +459,51 @@ describe("шпаргалка модуля", () => {
   });
 });
 
+describe("календарь курса", () => {
+  const calendar = {
+    start: "2026-10-05",
+    checkpoints: [{ label: "K1", title: "Контрольная A1", afterModule: 2, date: "2026-12-13" }],
+  };
+  const withCalendar = (value: unknown, passShare?: unknown): Files => {
+    const files = base();
+    files["courses/greek-a2.yaml"] = {
+      ...(files["courses/greek-a2.yaml"] as Record<string, unknown>),
+      calendar: value,
+      ...(passShare !== undefined ? { passShare } : {}),
+    };
+    return files;
+  };
+  const catalogOf = (files: Files) =>
+    parseCatalog(JSON.parse(build(files).files.find((f) => f.path === "content/catalog.json")!.body as string));
+  it("начало, точки и порог навыка едут в каталоге", () => {
+    const course = catalogOf(withCalendar(calendar, 0.6)).courses[0];
+    expect(course.calendar).toEqual(calendar);
+    expect(course.passShare).toBe(0.6);
+    expect(failure(withCalendar(calendar, 60))).toContain("passShare: ожидалась доля");
+    expect(catalogOf(base()).courses[0].calendar).toBeUndefined();
+  });
+  it("дата, модуль точки и лишние поля проверяются", () => {
+    const point = calendar.checkpoints[0];
+    expect(failure(withCalendar({ ...calendar, start: "5 октября" }))).toContain("calendar.start: дата в формате");
+    expect(failure(withCalendar({ ...calendar, checkpoints: [{ ...point, date: "2026-13" }] }))).toContain(
+      "checkpoints[0].date: дата в формате",
+    );
+    expect(failure(withCalendar({ ...calendar, checkpoints: [{ ...point, afterModule: 8 }] }))).toContain(
+      "afterModule: модуля 8 нет в курсе",
+    );
+    expect(failure(withCalendar({ ...calendar, checkpoints: [point, { ...point, date: "2027-01-10" }] }))).toContain(
+      "метка «K1» повторяется",
+    );
+    expect(
+      failure(withCalendar({ ...calendar, checkpoints: [point, { ...point, label: "M1", date: "2026-11-01" }] })),
+    ).toContain("точки идут по датам");
+    expect(failure(withCalendar({ ...calendar, end: "2027-05-02" }))).toContain("calendar: лишнее поле «end»");
+    expect(failure(withCalendar({ ...calendar, checkpoints: [{ ...point, module: 2 }] }))).toContain(
+      "лишнее поле «module»",
+    );
+  });
+});
+
 describe("лишние поля", () => {
   it("хвост реплики, отрезанный запятой в YAML, — ошибка сборки, а не потерянный текст", () => {
     const split = withLesson((b) =>
@@ -567,7 +612,7 @@ describe("голоса аудирования", () => {
     );
   const files = (manifest: Record<string, { voice: string; hash: string }>, characters = cast) => ({
     ...voiced(),
-    "voices.yaml": voicesMap(characters),
+    "voices/el.yaml": voicesMap(characters),
     "audio/m01-1/dialogue-1.mp3": new Uint8Array([7, 7, 7]),
     "audio/dialogues.json": json(manifest),
   });
@@ -604,7 +649,7 @@ describe("голоса аудирования", () => {
     expect(recast.voicing.stale).toEqual(["m01-1/dialogue#1"]);
   });
   it("говорящий без голоса в карте отклоняет сборку", () => {
-    expect(failure(files(fresh, { Άννα: cast.Άννα } as typeof cast))).toMatch(/«Νίκος» нет голоса в voices\.yaml/);
+    expect(failure(files(fresh, { Άννα: cast.Άννα } as typeof cast))).toMatch(/«Νίκος» нет голоса в voices\/el\.yaml/);
   });
   it("два говорящих одного диалога с одним голосом отклоняют сборку", () => {
     expect(failure(files(fresh, { ...cast, Νίκος: { gender: "female", voice: "Aoede" } }))).toMatch(
@@ -617,12 +662,12 @@ describe("голоса аудирования", () => {
     );
   });
   it("у записи реплики нужен источник: без него в карте голосов сборка отклонена", () => {
-    const noSource = { ...files(fresh), "voices.yaml": { ...voicesMap(cast), source: undefined } };
-    expect(failure(noSource)).toMatch(/voices\.yaml\.source: поле обязательно/);
-    const noVoice = { ...files(fresh), "voices.yaml": { ...voicesMap(cast), source: "Синтез речи" } };
+    const noSource = { ...files(fresh), "voices/el.yaml": { ...voicesMap(cast), source: undefined } };
+    expect(failure(noSource)).toMatch(/voices\/el\.yaml\.source: поле обязательно/);
+    const noVoice = { ...files(fresh), "voices/el.yaml": { ...voicesMap(cast), source: "Синтез речи" } };
     expect(failure(noVoice)).toMatch(/имя голоса/);
-    const noMap = { ...files(fresh), "voices.yaml": undefined };
-    expect(failure(noMap)).toMatch(/карты голосов voices\.yaml/);
+    const noMap = { ...files(fresh), "voices/el.yaml": undefined };
+    expect(failure(noMap)).toMatch(/карты голосов voices\/el\.yaml/);
   });
   it("файла записи нет — сборка отклонена", () => {
     expect(failure({ ...files(fresh), "audio/m01-1/dialogue-1.mp3": undefined })).toMatch(

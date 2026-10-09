@@ -1,4 +1,5 @@
 import { launchContext } from "../../platform/launch";
+import { useCourseProfile } from "../../shared/language";
 import { coverColor } from "../../shared/notebook";
 import type { ModuleView } from "../../storage/course";
 import { pairs } from "./paginate";
@@ -12,9 +13,11 @@ export function ModuleCover({ view, open }: { view: ModuleView; open: boolean })
   const { module } = view;
   const draft = module.status === "draft";
   const name = launchContext().user?.firstName;
+  const profile = useCourseProfile(module.courseId);
+  const { code } = profile;
   const crib = module.crib ? (
     <>
-      <table className={css.cribTable} lang="el">
+      <table className={css.cribTable} lang={code}>
         <tbody>
           {pairs(module.crib.rows).map((line, i) => (
             <tr key={i}>
@@ -32,7 +35,7 @@ export function ModuleCover({ view, open }: { view: ModuleView; open: boolean })
   ) : null;
   const heading = (
     <>
-      на обороте обложки <i lang="el">{module.crib?.title}</i>
+      на обороте обложки <i lang={code}>{module.crib?.title}</i>
     </>
   );
   return (
@@ -44,16 +47,16 @@ export function ModuleCover({ view, open }: { view: ModuleView; open: boolean })
       <p className={css.coverNum}>{String(module.number).padStart(2, "0")}</p>
       <dl className={css.sticker}>
         <div>
-          <dt lang="el">ΜΑΘΗΜΑ</dt>
+          <dt lang={code}>{profile.cover.lesson}</dt>
           <dd>
-            <h1 className={css.stickerTitle} lang="el">
+            <h1 className={css.stickerTitle} lang={code}>
               {module.title}
             </h1>
             <span className={css.stickerSub}>{module.subtitle}</span>
           </dd>
         </div>
         <div>
-          <dt lang="el">ΟΝΟΜΑ</dt>
+          <dt lang={code}>{profile.cover.name}</dt>
           <dd className={css.stickerInk}>{name}</dd>
         </div>
       </dl>

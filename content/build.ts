@@ -15,7 +15,7 @@ import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons
 import { markCourses, type MarksReport } from "./build/mark-courses.ts";
 import { buildMedia } from "./build/media.ts";
 import { packLessons, type BuiltFile } from "./build/output.ts";
-import { checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
+import { cardLanguagesOf, checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
 
 export { LANGUAGE } from "./build/common.ts";
 export { audioAssetId, imageAssetId, phraseRevisionOf, revisionOf } from "./build/cards.ts";
@@ -56,15 +56,19 @@ export interface BuiltContent {
  */
 export function buildContent(root = defaultRoot()): BuiltContent {
   const sources = readSources(root);
-  checkSourceScripts(sources);
-  const { words, phrases } = buildCards(sources);
+  // Письменность проверяется по языку курса, поэтому курсы разбираются до карточек.
+  const { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages } =
+    buildCourses(sources);
+  const cardLanguages = cardLanguagesOf(sources, languages);
+  checkSourceScripts(sources, cardLanguages, languages, moduleLanguages);
+  const { words, phrases } = buildCards(sources, cardLanguages);
   const { legacy, art, media } = buildMedia(sources, words, phrases);
-  const { courseOf, courses, modules, moduleOf, checkpoints, reviews } = buildCourses(sources);
   const { used, lessonsForModule, drafts, voicing } = buildLessons({
     sources,
     words,
     phrases,
     courseOf,
+    languages,
     moduleOf,
     media,
     legacy,

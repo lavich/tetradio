@@ -1,6 +1,7 @@
 /** Окончания выводятся только с тем же ударением и основой от трёх букв: лучше не найти форму, чем привязать чужое слово. */
 import { glossSpans, tapFields, type LessonBlock } from "../src/content/course.ts";
 import type { BlockMarks, MarkCard, PackageMarks, WordMark } from "../src/content/schema.ts";
+import { PROFILES, type Language, type LanguageProfile } from "../src/domain/language.ts";
 
 export interface MatchCard {
   ref: string;
@@ -129,18 +130,157 @@ export function formPieces(forms: string): string[] {
     .filter((piece) => [...piece].some(isGreekLetter));
 }
 
+/** Что в подсветке зависит от языка: слова текста, служебные слова и формы карточки. */
+interface Morphology {
+  tokenize: (text: string) => Token[];
+  /** Служебные слова перед словом карточки: «ο φίλος» ищется и как «φίλος», «to go» — как «go». */
+  leading: Set<string>;
+  /** Однословная карточка из этих слов не ищется. */
+  unsearched: Set<string>;
+  homographs: Set<string>;
+  /** Формы из `forms` карточки уходят в `base`; возвращаются выведенные окончаниями. */
+  forms: (card: MatchCard, text: string, tokens: Token[], base: (surface: string) => void) => string[];
+}
+
+function greekForms(card: MatchCard, text: string, tokens: Token[], base: (surface: string) => void): string[] {
+  const pieces = card.forms ? formPieces(card.forms.normalize("NFC")) : [];
+  for (const piece of pieces) base(piece);
+  // Окончания выводятся только у однословного слова: у сочетаний «ο κυκλικός κόμβος» — лишь формы из карточки.
+  const article = tokens.length === 2 && ARTICLES.has(tokens[0].norm) ? tokens[0].norm : null;
+  const core = article ? text.slice(tokens[1].start) : tokens.length === 1 ? text : null;
+  if (!core) return [];
+  const word = core.toLowerCase();
+  const gender = article === "ο" ? "m" : article === "η" ? "f" : article === "το" ? "n" : null;
+  const labelled = /\p{Script=Cyrillic}/u.test(card.forms ?? "");
+  const adjective =
+    !article && !labelled && pieces.length === 3 && pieces.every((piece) => tokenize(piece).length === 1);
+  // Глагол — по пометам форм или по окончанию -ω/-ομαι; у наречий на -ω (έξω, πάνω) выведенные «формы» не слова и не встретятся.
+  const verb =
+    !article && (IRREGULAR[word] || /(?:аор|буд|прош)\./u.test(card.forms ?? "") || /(?:ω|ώ|ομαι)$/.test(word));
+  const derived: string[] = [];
+  if (gender) derived.push(...inflect(word, gender));
+  if (adjective) {
+    const [m, f, n] = pieces.map((piece) => piece.toLowerCase());
+    derived.push(...inflect(m, "m", true), ...inflect(f, "f", true), ...inflect(n, "n", true));
+  }
+  if (verb) {
+    derived.push(...conjugate(word));
+    for (const piece of formPieces(card.forms ?? "")) {
+      const form = piece.toLowerCase();
+      if (tokenize(form).length !== 1) continue;
+      // Аорист: единственное число и 3-е множественного сохраняют ударение основы (έγραψα → έγραψες, έγραψαν).
+      if (form.endsWith("α")) {
+        const stem = form.slice(0, -1);
+        if (letters(stem) >= 3) derived.push(stem + "ες", stem + "ε", stem + "αν");
+      }
+      if (/[ωώ]$/.test(form) && form !== word) {
+        derived.push(...conjugate(form));
+        if (form.endsWith("ω") && letters(form.slice(0, -1)) >= 3 && stressOnLastStemSyllable(form.slice(0, -1)))
+          derived.push(form.slice(0, -1) + "αμε", form.slice(0, -1) + "ατε");
+      }
+    }
+  }
+  return derived;
+}
+
+const isLatinLetter = (char: string) => /\p{M}/u.test(char) || (/\p{L}/u.test(char) && /\p{Script=Latin}/u.test(char));
+const englishNorm = (value: string) => value.normalize("NFC").toLowerCase().replace(/’/g, "'");
+/** Апостроф и дефис внутри слова — часть слова: don't, well-known. */
+function englishTokenize(text: string): Token[] {
+  const tokens: Token[] = [];
+  let at = 0;
+  while (at < text.length) {
+    if (!isLetter(text[at])) {
+      at++;
+      continue;
+    }
+    const start = at;
+    let latin = true;
+    while (at < text.length) {
+      if (isLetter(text[at])) {
+        if (!isLatinLetter(text[at])) latin = false;
+        at++;
+      } else if (/['’-]/.test(text[at]) && at + 1 < text.length && isLetter(text[at + 1])) at++;
+      else break;
+    }
+    if (latin) tokens.push({ start, end: at, norm: englishNorm(text.slice(start, at)) });
+  }
+  return tokens;
+}
+const ENGLISH_LEADING = new Set(["a", "an", "the", "to"]);
+const ENGLISH_ARTICLES = new Set(["a", "an", "the"]);
+
+/** Правильные окончания; несуществующие «формы» вроде goed в тексте не встретятся. */
+export function englishInflections(word: string): string[] {
+  if (!/^[a-z]{2,}$/.test(word)) return [];
+  const out: string[] = [];
+  const stem = word.slice(0, -1);
+  const consonantY = /[^aeiou]y$/.test(word);
+  // Ударение неизвестно, поэтому удвоенная согласная (stopped) выводится вместе с простой (visited).
+  const doubled = /(?:^|[^aeiou])[aeiou][b-df-hj-np-tvz]$/.test(word) ? word + word.at(-1) : null;
+  if (consonantY) out.push(stem + "ies");
+  else if (/(?:s|x|z|ch|sh)$/.test(word)) out.push(word + "es");
+  else out.push(word + "s", ...(word.endsWith("o") ? [word + "es"] : []));
+  if (word.endsWith("e")) out.push(word + "d");
+  else if (consonantY) out.push(stem + "ied");
+  else out.push(word + "ed", ...(doubled ? [doubled + "ed"] : []));
+  if (word.endsWith("ie")) out.push(word.slice(0, -2) + "ying");
+  else if (/[^aeoy]e$/.test(word)) out.push(stem + "ing");
+  else out.push(word + "ing", ...(doubled ? [doubled + "ing"] : []));
+  return out;
+}
+/** Формы карточки: «went, gone» или «прош. went; прич. gone» — пометы до формы отбрасываются. */
+export function englishFormPieces(forms: string): string[] {
+  return forms
+    .split(/[;,/]/)
+    .map((piece) =>
+      piece
+        .trim()
+        .replace(/^[^:]*:/u, "")
+        .replace(/^(?:[\p{Script=Cyrillic}.\s]+)/u, "")
+        .trim(),
+    )
+    .filter((piece) => [...piece].some(isLatinLetter));
+}
+function englishForms(card: MatchCard, text: string, tokens: Token[], base: (surface: string) => void): string[] {
+  for (const piece of card.forms ? englishFormPieces(card.forms.normalize("NFC")) : []) base(piece);
+  const core =
+    tokens.length === 2 && ENGLISH_LEADING.has(tokens[0].norm) ? tokens[1] : tokens.length === 1 ? tokens[0] : null;
+  return core ? englishInflections(core.norm) : [];
+}
+
+const MORPHOLOGY: Record<Language, Morphology> = {
+  el: {
+    tokenize,
+    leading: ARTICLES,
+    unsearched: new Set([...HOMOGRAPHS, ...ARTICLES]),
+    homographs: HOMOGRAPHS,
+    forms: greekForms,
+  },
+  en: {
+    tokenize: englishTokenize,
+    leading: ENGLISH_LEADING,
+    unsearched: ENGLISH_ARTICLES,
+    homographs: new Set(),
+    forms: englishForms,
+  },
+};
+
 export interface Matcher {
   patterns: Map<string, Pattern[]>;
   skipped: string[];
+  tokenize: (text: string) => Token[];
 }
-export function buildMatcher(cards: MatchCard[]): Matcher {
+export function buildMatcher(cards: MatchCard[], profile: LanguageProfile = PROFILES.el): Matcher {
+  const morphology = MORPHOLOGY[profile.code];
+  const { tokenize } = morphology;
   const patterns = new Map<string, Pattern[]>();
   const skipped: string[] = [];
   const seen = new Set<string>();
   const add = (surface: string, ref: string, tier: Tier) => {
     const tokens = tokenize(surface);
     if (!tokens.length) return;
-    if (tokens.length === 1 && (HOMOGRAPHS.has(tokens[0].norm) || ARTICLES.has(tokens[0].norm))) return;
+    if (tokens.length === 1 && morphology.unsearched.has(tokens[0].norm)) return;
     const pattern: Pattern = { tokens: tokens.map((t) => t.norm), gaps: gapsOf(surface, tokens), ref, tier };
     const key = `${ref}|${pattern.tokens.join(" ")}|${pattern.gaps.join("|")}`;
     if (seen.has(key)) return;
@@ -152,57 +292,21 @@ export function buildMatcher(cards: MatchCard[]): Matcher {
   const withArticle = (surface: string, ref: string, tier: Tier) => {
     add(surface, ref, tier);
     const tokens = tokenize(surface);
-    if (tokens.length > 1 && ARTICLES.has(tokens[0].norm)) add(surface.slice(tokens[1].start), ref, tier);
+    if (tokens.length > 1 && morphology.leading.has(tokens[0].norm)) add(surface.slice(tokens[1].start), ref, tier);
   };
   for (const card of cards) {
     const text = card.text.normalize("NFC").trim();
     const tokens = tokenize(text);
-    if (tokens.length === 1 && HOMOGRAPHS.has(tokens[0].norm)) skipped.push(`${card.ref} «${text}»`);
+    if (tokens.length === 1 && morphology.homographs.has(tokens[0].norm)) skipped.push(`${card.ref} «${text}»`);
     if (card.phrase) {
       add(text, card.ref, 0);
       continue;
     }
     withArticle(text, card.ref, 0);
-    const pieces = card.forms ? formPieces(card.forms.normalize("NFC")) : [];
-    for (const piece of pieces) withArticle(piece, card.ref, 0);
-    // Окончания выводятся только у однословного слова: у сочетаний «ο κυκλικός κόμβος» — лишь формы из карточки.
-    const article = tokens.length === 2 && ARTICLES.has(tokens[0].norm) ? tokens[0].norm : null;
-    const core = article ? text.slice(tokens[1].start) : tokens.length === 1 ? text : null;
-    if (!core) continue;
-    const word = core.toLowerCase();
-    const gender = article === "ο" ? "m" : article === "η" ? "f" : article === "το" ? "n" : null;
-    const labelled = /\p{Script=Cyrillic}/u.test(card.forms ?? "");
-    const adjective =
-      !article && !labelled && pieces.length === 3 && pieces.every((piece) => tokenize(piece).length === 1);
-    // Глагол — по пометам форм или по окончанию -ω/-ομαι; у наречий на -ω (έξω, πάνω) выведенные «формы» не слова и не встретятся.
-    const verb =
-      !article && (IRREGULAR[word] || /(?:аор|буд|прош)\./u.test(card.forms ?? "") || /(?:ω|ώ|ομαι)$/.test(word));
-    const derived: string[] = [];
-    if (gender) derived.push(...inflect(word, gender));
-    if (adjective) {
-      const [m, f, n] = pieces.map((piece) => piece.toLowerCase());
-      derived.push(...inflect(m, "m", true), ...inflect(f, "f", true), ...inflect(n, "n", true));
-    }
-    if (verb) {
-      derived.push(...conjugate(word));
-      for (const piece of formPieces(card.forms ?? "")) {
-        const form = piece.toLowerCase();
-        if (tokenize(form).length !== 1) continue;
-        // Аорист: единственное число и 3-е множественного сохраняют ударение основы (έγραψα → έγραψες, έγραψαν).
-        if (form.endsWith("α")) {
-          const stem = form.slice(0, -1);
-          if (letters(stem) >= 3) derived.push(stem + "ες", stem + "ε", stem + "αν");
-        }
-        if (/[ωώ]$/.test(form) && form !== word) {
-          derived.push(...conjugate(form));
-          if (form.endsWith("ω") && letters(form.slice(0, -1)) >= 3 && stressOnLastStemSyllable(form.slice(0, -1)))
-            derived.push(form.slice(0, -1) + "αμε", form.slice(0, -1) + "ατε");
-        }
-      }
-    }
+    const derived = morphology.forms(card, text, tokens, (piece) => withArticle(piece, card.ref, 0));
     for (const form of derived) add(form, card.ref, 1);
   }
-  return { patterns, skipped };
+  return { patterns, skipped, tokenize };
 }
 
 export interface Span {
@@ -216,7 +320,7 @@ export interface Candidate extends Span {
 }
 
 export function candidates(text: string, matcher: Matcher): Candidate[] {
-  const tokens = tokenize(text);
+  const tokens = matcher.tokenize(text);
   const found: Candidate[] = [];
   tokens.forEach((token, i) => {
     for (const pattern of matcher.patterns.get(token.norm) ?? []) {

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
+import { languageOfText } from "../../domain/language";
 import { deviceTimezone, formatDay, localDay } from "../../domain/learning";
 import type { CardKind, LearningRef, ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
@@ -9,6 +10,7 @@ import { statesOf } from "../../storage/queries";
 import { db } from "../../storage/db";
 import { startSession } from "./session-actions";
 import { compositionLine, DoneList, doneRows, markOf, PageHead } from "./notebook";
+import { cardProfile } from "./exercises/model";
 import s from "./session.module.css";
 
 /** Состав уникальных карточек по видам: «2 слова · 1 фраза», только непустые группы. */
@@ -79,7 +81,7 @@ export function ResultScreen() {
   return (
     <main className={`${s.session} ${s.result}`}>
       <div className={s.page}>
-        <PageHead day={session?.planDate ?? today} />
+        <PageHead day={session?.planDate ?? today} profile={session?.items[0] && cardProfile(session.items[0].card)} />
         <DoneList rows={rows} />
         <section className={s.summary} aria-labelledby="result-title">
           <h2 id="result-title" className={s.summaryTitle}>
@@ -92,7 +94,7 @@ export function ResultScreen() {
           {[...returns].map(([day, names]) => (
             <p key={day} className={s.summaryNote}>
               {plural(names.length, ["Ошибка вернётся", "Ошибки вернутся", "Ошибки вернутся"])} {dayName(day)}:{" "}
-              <b lang="el">{names.join(", ")}</b>.
+              <b lang={languageOfText(names[0] ?? "").code}>{names.join(", ")}</b>.
             </p>
           ))}
           <p className={s.summaryNote}>

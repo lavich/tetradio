@@ -1,15 +1,5 @@
-import { SKILLS, skillOf, type LessonBlock, type Skill } from "../content/course";
+import { SKILLS, skillOf, type Checkpoint, type CourseCalendar, type LessonBlock, type Skill } from "../content/course";
 import type { BlockProgress } from "./types";
-
-/** Календарь курса из docs/curriculum.md: старт и контрольные точки после модулей; отставание считается от него. */
-export const COURSE_START = "2026-10-05";
-export const CHECKPOINTS = [
-  { label: "K1", title: "Контрольная A1", afterModule: 8, date: "2026-12-13" },
-  { label: "M1", title: "Пробник M1", afterModule: 15, date: "2027-02-13" },
-  { label: "M2", title: "Пробник M2", afterModule: 20, date: "2027-03-29" },
-  { label: "M3", title: "Пробник M3", afterModule: 24, date: "2027-05-02" },
-] as const;
-export type Checkpoint = (typeof CHECKPOINTS)[number];
 
 const DAY = 86400000;
 const days = (from: string, to: string) => (Date.parse(`${to}T12:00:00Z`) - Date.parse(`${from}T12:00:00Z`)) / DAY;
@@ -35,16 +25,23 @@ export interface Pace {
 /**
  * Темп против календаря курса: между контрольными точками план растёт равномерно, к дате точки должны быть
  * пройдены все уроки модулей до неё. Единица — урок, а не занятие: занятие курса — один урок модуля.
+ * Без календаря плана нет: план равен пройденному, ближайшей точки нет.
  */
-export function coursePace(modules: ModuleLoad[], today: string, completedDays: string[]): Pace {
+export function coursePace(
+  modules: ModuleLoad[],
+  today: string,
+  completedDays: string[],
+  calendar: CourseCalendar | undefined,
+): Pace {
   const total = modules.reduce((sum, module) => sum + module.lessons, 0);
   const done = modules.reduce((sum, module) => sum + module.done, 0);
   const upTo = (number: number) =>
     modules.filter((module) => module.number <= number).reduce((sum, module) => sum + module.lessons, 0);
-  let from = { date: COURSE_START, lessons: 0 };
-  let planned = total;
+  const checkpoints = calendar?.checkpoints ?? [];
+  let from = { date: calendar?.start ?? today, lessons: 0 };
+  let planned = calendar ? total : done;
   let rate = 0;
-  for (const point of CHECKPOINTS) {
+  for (const point of checkpoints) {
     const to = { date: point.date, lessons: upTo(point.afterModule) };
     const span = days(from.date, to.date);
     rate = span > 0 ? ((to.lessons - from.lessons) / span) * 7 : 0;
@@ -56,7 +53,7 @@ export function coursePace(modules: ModuleLoad[], today: string, completedDays: 
     from = to;
   }
   const lag = Math.max(0, planned - done);
-  const point = CHECKPOINTS.find((item) => today <= item.date && done < upTo(item.afterModule));
+  const point = checkpoints.find((item) => today <= item.date && done < upTo(item.afterModule));
   const weeksLeft = point ? Math.max(days(today, point.date) / 7, 1 / 7) : 0;
   const first = completedDays.reduce<string | null>((min, day) => (min === null || day < min ? day : min), null);
   const span = first ? Math.min(28, days(first, today) + 1) : 0;

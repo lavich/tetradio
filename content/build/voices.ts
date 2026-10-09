@@ -1,11 +1,13 @@
 import { parse } from "yaml";
 import { fail, hash } from "./common.ts";
 
-export const VOICES_FILE = "voices.yaml";
+/** Карта голосов своя у каждого языка: голоса синтеза у языков разные. */
+export const voicesFile = (language: string) => `voices/${language}.yaml`;
 export const MANIFEST_FILE = "audio/dialogues.json";
 export type Gender = "female" | "male";
 
 export interface VoiceMap {
+  file: string;
   /** Источник записи реплики; `{voice}` заменяется именем голоса. */
   source: string;
   language: string;
@@ -26,10 +28,10 @@ const strings = (value: unknown, where: string): string[] => {
   return value as string[];
 };
 
-export function parseVoices(body: string): VoiceMap {
+export function parseVoices(body: string, file: string, code?: string): VoiceMap {
   const raw = parse(body) as Record<string, unknown> | null;
-  if (!raw || typeof raw !== "object") fail(`${VOICES_FILE}: ожидалась карта`);
-  const at = (field: string) => `${VOICES_FILE}.${field}`;
+  if (!raw || typeof raw !== "object") fail(`${file}: ожидалась карта`);
+  const at = (field: string) => `${file}.${field}`;
   const str = (field: string) => {
     const value = raw![field];
     if (typeof value !== "string" || !value.trim()) fail(`${at(field)}: поле обязательно`);
@@ -39,12 +41,16 @@ export function parseVoices(body: string): VoiceMap {
   if (!source.includes("{voice}")) fail(`${at("source")}: в источнике нужно имя голоса — {voice}`);
   const pools = raw!.pools as Record<string, unknown> | undefined;
   const map: VoiceMap = {
+    file,
     source,
     language: str("language"),
     prefix: str("prefix"),
     pools: { female: strings(pools?.female, at("pools.female")), male: strings(pools?.male, at("pools.male")) },
     characters: new Map(),
   };
+  if (code && map.language !== code && !map.language.startsWith(`${code}-`))
+    fail(`${at("language")}: ${map.language} — не язык файла (${code})`);
+  if (!map.prefix.startsWith(map.language)) fail(`${at("prefix")}: голоса ${map.prefix} не языка ${map.language}`);
   const all = new Set([...map.pools.female, ...map.pools.male]);
   if (raw!.narrator !== undefined) {
     map.narrator = str("narrator");
@@ -80,8 +86,8 @@ export function checkDialogueVoices(
     if (!voice)
       fail(
         line.speaker === undefined
-          ? `${where}.transcript[${index}]: у реплики без говорящего нужен голос диктора — narrator в ${VOICES_FILE}`
-          : `${where}.transcript[${index}]: у персонажа «${line.speaker}» нет голоса в ${VOICES_FILE}`,
+          ? `${where}.transcript[${index}]: у реплики без говорящего нужен голос диктора — narrator в ${map.file}`
+          : `${where}.transcript[${index}]: у персонажа «${line.speaker}» нет голоса в ${map.file}`,
       );
     const other = owner.get(voice!);
     if (other !== undefined && other !== who)

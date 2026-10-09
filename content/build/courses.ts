@@ -1,7 +1,8 @@
 import { ContentError, type CatalogCourse } from "../../src/content/schema.ts";
-import { parseExam, parseModule, type CatalogModule } from "../../src/content/course.ts";
-import { fail, LANGUAGE, nfc, text } from "./common.ts";
-import type { ContentRoot } from "./sources.ts";
+import { parseCalendar, parseExam, parseModule, parsePassShare, type CatalogModule } from "../../src/content/course.ts";
+import type { Language } from "../../src/domain/language.ts";
+import { fail, LANGUAGE, languageOf, nfc, text } from "./common.ts";
+import type { ContentRoot, CourseSource } from "./sources.ts";
 
 export function buildCourses(sources: ContentRoot) {
   /** Урок принадлежит ровно одному курсу: без курса он потеряется в каталоге, в двух — попадёт в занятие дважды. */
@@ -14,6 +15,23 @@ export function buildCourses(sources: ContentRoot) {
   /** Урок контрольной точки → файл модуля: точка обязана быть контрольной с оцениваемыми заданиями. */
   const checkpoints = new Map<string, string>();
   const reviews = new Map<string, string>();
+  const languages = new Map<string, Language>();
+  const moduleLanguages = new Map<string, Language>();
+  // Курс учат целиком, поэтому смешанные языки внутри него — ошибка, а не особенность набора.
+  const courseLanguage = (where: string, src: CourseSource, lessonIds: string[]) => {
+    const own = src.language === undefined ? undefined : languageOf(src.language, `${where}.language`);
+    const found = new Set(
+      lessonIds.map((lessonId) => {
+        const language = sources.lessons.get(lessonId)!.language;
+        return language === undefined ? (own ?? LANGUAGE) : languageOf(language, `lessons/${lessonId}.yaml.language`);
+      }),
+    );
+    if (own) found.add(own);
+    if (found.size > 1) fail(`${where}: уроки курса на разных языках — ${[...found].sort().join(", ")}`);
+    const language = [...found][0] ?? LANGUAGE;
+    for (const lessonId of lessonIds) languages.set(lessonId, language);
+    return language;
+  };
   for (const [courseId, src] of sources.courses) {
     const where = `courses/${src.file}`;
     const title = text(src.title, `${where}.title`)!;
@@ -91,36 +109,41 @@ export function buildCourses(sources: ContentRoot) {
         modules.push(module);
         moduleIds.push(moduleId);
       }
+      const ownLessonIds = [...courseOf].filter(([, owner]) => owner === courseId).map(([lessonId]) => lessonId);
+      const language = courseLanguage(where, src, ownLessonIds);
+      for (const moduleId of moduleIds) moduleLanguages.set(moduleId, language);
       courses.push({
         id: courseId,
         title,
-        language: LANGUAGE,
+        language,
         lessonIds,
         moduleIds,
         ...(src.source ? { source: src.source } : {}),
         ...(src.exam !== undefined ? { exam: parseExam(nfc(src.exam), `${where}.exam`) } : {}),
+        ...(src.passShare !== undefined ? { passShare: parsePassShare(src.passShare, `${where}.passShare`) } : {}),
+        ...(src.calendar !== undefined
+          ? { calendar: parseCalendar(nfc(src.calendar), `${where}.calendar`, [...numbers.keys()]) }
+          : {}),
       });
       continue;
     }
     if (!Array.isArray(src.lessons) || !src.lessons.length) fail(`${where}: нужен непустой список lessons`);
+    if (src.calendar !== undefined) fail(`${where}.calendar: календарь бывает только у курса из модулей`);
     for (const lessonId of src.lessons) {
       if (!sources.lessons.has(lessonId)) fail(`${where}: урока ${lessonId} нет в lessons/`);
       const twin = courseOf.get(lessonId);
       if (twin) fail(`${where}: урок ${lessonId} уже входит в курс ${twin}`);
       courseOf.set(lessonId, courseId);
     }
-    // Курс учат целиком, поэтому смешанные языки внутри него — ошибка, а не особенность набора.
-    const languages = new Set(src.lessons!.map((lessonId) => sources.lessons.get(lessonId)!.language ?? LANGUAGE));
-    if (languages.size > 1) fail(`${where}: уроки курса на разных языках — ${[...languages].sort().join(", ")}`);
     const course: CatalogCourse = {
       id: courseId,
       title,
-      language: [...languages][0] ?? LANGUAGE,
+      language: courseLanguage(where, src, src.lessons!),
       lessonIds: [...src.lessons!],
     };
     const source = text(src.source, `${where}.source`, false);
     if (source) course.source = source;
     courses.push(course);
   }
-  return { courseOf, courses, modules, moduleOf, checkpoints, reviews };
+  return { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages };
 }

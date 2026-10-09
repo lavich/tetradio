@@ -4,6 +4,8 @@
  * при одном голосе их различает высота тона. Остановка отменяет весь диалог, а не только текущую реплику.
  */
 import type { TranscriptLine } from "../content/course";
+import { PROFILES, type LanguageProfile } from "../domain/language";
+import { voicesOf } from "./voices";
 import { releaseAssetUrl, type AssetSource } from "./store";
 
 export type DialogueResult = "done" | "stopped" | "none" | "error";
@@ -64,9 +66,9 @@ function playFile(audio: HTMLAudioElement, url: string, rate: number): Promise<b
 }
 const available = () => typeof speechSynthesis !== "undefined" && typeof SpeechSynthesisUtterance !== "undefined";
 
-function greekVoices(): Promise<SpeechSynthesisVoice[]> {
+function languageVoices(profile: LanguageProfile): Promise<SpeechSynthesisVoice[]> {
   if (!available()) return Promise.resolve([]);
-  const read = () => speechSynthesis.getVoices().filter((voice) => voice.lang?.toLowerCase().startsWith("el"));
+  const read = () => voicesOf(speechSynthesis.getVoices(), profile);
   const first = read();
   if (first.length) return Promise.resolve(first);
   return new Promise((resolve) => {
@@ -92,7 +94,7 @@ export function castOf(lines: TranscriptLine[], voiceCount: number) {
 
 /** Синтезатор, который принял реплику, но не начал говорить, считается сбоем: иначе проигрыватель висит молча. */
 const START_TIMEOUT = 1500;
-function say(text: string, voice: SpeechSynthesisVoice, rate: number, pitch: number): Promise<boolean> {
+function say(text: string, voice: SpeechSynthesisVoice, rate: number, pitch: number, lang: string): Promise<boolean> {
   return new Promise((resolve) => {
     let settled = false;
     const finish = (ok: boolean) => {
@@ -104,7 +106,7 @@ function say(text: string, voice: SpeechSynthesisVoice, rate: number, pitch: num
     };
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = voice;
-    utterance.lang = voice.lang || "el-GR";
+    utterance.lang = voice.lang || lang;
     utterance.rate = rate;
     utterance.pitch = pitch;
     // Конец реплики может не прийти (WebView на iOS); страховка — длительность по длине текста с запасом.
@@ -132,6 +134,7 @@ export async function playDialogue(
   rate: Rate = "normal",
   onLine?: (index: number) => void,
   source?: AssetSource,
+  profile: LanguageProfile = PROFILES.el,
 ): Promise<DialogueResult> {
   const mine = ++run;
   for (const stop of stops) stop();
@@ -153,11 +156,11 @@ export async function playDialogue(
       let ok = false;
       if (mine === run && url && audio) ok = await playFile(audio, url, FILE_RATES[rate]);
       else if (mine === run) {
-        voices ??= await greekVoices();
+        voices ??= await languageVoices(profile);
         if (!voices.length) return "none";
         cast ??= castOf(lines, voices.length);
         const role = cast.get(line.speaker ?? "")!;
-        ok = await say(line.text, voices[role.voice], RATES[rate], role.pitch);
+        ok = await say(line.text, voices[role.voice], RATES[rate], role.pitch, profile.voice);
       }
       if (url) releaseAssetUrl(url);
       if (mine !== run) return "stopped";

@@ -8,3 +8,8 @@ exam:
   source: https://www.greek-language.gr/certification/node/15.html
   checkedAt: 2026-09-30
   localConfirmed: false
+passShare: 0.6
+calendar:
+  start: 2026-10-05
+  checkpoints:
+    - { label: K1, title: Контрольная A1, afterModule: 2, date: 2026-12-13 }

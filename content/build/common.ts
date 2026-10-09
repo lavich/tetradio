@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
 import { ContentError } from "../../src/content/schema.ts";
+import { isLanguage, type Language } from "../../src/domain/language.ts";
 
-export const LANGUAGE = "el";
+/** Язык курса и урока без поля `language`. */
+export const LANGUAGE: Language = "el";
 
 export const hash = (value: string | Uint8Array, length = 12) =>
   createHash("sha256").update(value).digest("hex").slice(0, length);
@@ -21,6 +23,12 @@ export const pick = <T extends object>(value: T, fields: readonly (keyof T)[]) =
 
 export const fail: (message: string) => never = (message) => {
   throw new ContentError(message);
+};
+export const languageOf = (value: unknown, where: string): Language => {
+  if (value === undefined || value === null) return LANGUAGE;
+  if (!isLanguage(value))
+    fail(`${where}: нет профиля языка «${typeof value === "string" ? value : JSON.stringify(value)}»`);
+  return value;
 };
 export const text = (value: unknown, where: string, required = true): string | undefined => {
   if (value === undefined || value === null) {

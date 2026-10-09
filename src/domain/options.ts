@@ -1,4 +1,4 @@
-import { splitWriting } from "./syllables";
+import { languageOfText } from "./language";
 import type { ExerciseType, Phrase, Word } from "./types";
 
 export const shuffle = <T>(items: T[], random: () => number) => {
@@ -29,7 +29,10 @@ export interface WordSources {
 /** Больше двух близких вариантов из трёх — и ответ находится по памяти о прошлых карточках занятия. */
 export const CLOSE_OPTIONS = 2;
 const normAnswer = (value: string) => value.normalize("NFC").trim().replace(/\s+/g, " ").toLocaleLowerCase("el");
-const hasArticle = (word: Word) => !!splitWriting(word.greek).article;
+const hasArticle = (word: Word) => {
+  const { article } = languageOfText(word.greek);
+  return article ? article.test(normAnswer(word.greek)) : false;
+};
 /**
  * Три различных неверных ответа или `[]`, если их меньше трёх. Форма (есть ли артикль) важнее потолка
  * близких слов, потолок важнее источника: близкие той же формы до потолка → словарь той же формы →

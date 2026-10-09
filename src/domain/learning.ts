@@ -49,6 +49,7 @@ export {
   NO_SOUND,
   objectiveExercise,
   ONE_SYLLABLE,
+  NO_SYLLABLES,
   WORD_EXERCISES,
   wordExerciseOptions,
   type ExerciseAvailability,

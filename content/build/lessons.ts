@@ -19,12 +19,13 @@ import type { ArtReport } from "../art.ts";
 import { fail, LANGUAGE, nfc, text } from "./common.ts";
 import { mediaFor, type BuiltMedia } from "./media.ts";
 import type { ContentRoot, LessonItemSource } from "./sources.ts";
+import type { Language } from "../../src/domain/language.ts";
 import {
   checkDialogueVoices,
   lineHash,
   MANIFEST_FILE,
   parseManifest,
-  VOICES_FILE,
+  voicesFile,
   type VoiceManifest,
 } from "./voices.ts";
 
@@ -38,6 +39,7 @@ export interface LessonsInput {
   words: Map<string, PackageWord>;
   phrases: Map<string, PackagePhrase>;
   courseOf: Map<string, string>;
+  languages: Map<string, Language>;
   moduleOf: Map<string, { id: string; position: number; draft: boolean }>;
   media: BuiltMedia;
   legacy: Set<string>;
@@ -57,11 +59,12 @@ function lineAudio(
   lessonId: string,
   where: string,
   shipped: boolean,
-  { sources, media, legacy, art }: LessonsInput,
+  { sources, media, legacy, art, languages }: LessonsInput,
   report: VoicingReport,
   manifest: VoiceManifest,
 ) {
-  const voices = sources.voices;
+  const language = languages.get(lessonId) ?? LANGUAGE;
+  const voices = sources.voices.get(language);
   const lines = (block.transcript as unknown[]).map((line) =>
     typeof line === "object" && line !== null && !Array.isArray(line) ? { ...(line as Record<string, unknown>) } : line,
   );
@@ -82,7 +85,7 @@ function lineAudio(
     }
     const at = `${where}.transcript[${index}]`;
     if (typeof audio !== "string") fail(`${at}.audio: ожидалось имя файла в audio/`);
-    if (!voices) fail(`${at}.audio: запись реплики требует карты голосов ${VOICES_FILE} с источником`);
+    if (!voices) fail(`${at}.audio: запись реплики требует карты голосов ${voicesFile(language)} с источником`);
     const voice = cast[index]!;
     const done = manifest[audio as string];
     if (!done || done.voice !== voice || done.hash !== lineHash(text, voice)) {
@@ -103,7 +106,7 @@ function lineAudio(
 }
 
 export function buildLessons(input: LessonsInput) {
-  const { sources, words, phrases, courseOf, moduleOf, media, legacy, art } = input;
+  const { sources, words, phrases, courseOf, languages, moduleOf, media, legacy, art } = input;
   const report: VoicingReport = { voiced: 0, unvoiced: new Map(), stale: [] };
   const manifest = parseManifest(sources.files.get(MANIFEST_FILE));
   const used = { word: new Set<string>(), phrase: new Set<string>() };
@@ -209,7 +212,7 @@ export function buildLessons(input: LessonsInput) {
       id,
       courseId,
       version: "",
-      language: src.language ?? LANGUAGE,
+      language: languages.get(id) ?? LANGUAGE,
       lesson: placement ? { title, kind: src.kind ?? "lesson" } : { title },
       ...(placement ? { module: { id: placement.id, position: placement.position } } : {}),
       words: packWords,

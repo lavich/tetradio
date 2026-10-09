@@ -1,3 +1,4 @@
+import type { CourseCalendar } from "../content/course";
 import { localDay, mondayOf } from "../domain/learning";
 import { coursePace, skillProgress, type Pace, type SkillProgress } from "../domain/progress";
 import type { BlockProgress } from "../domain/types";
@@ -9,6 +10,8 @@ export interface CourseProgress {
   /** Номер модуля следующего урока; после последнего — номер последнего модуля. */
   current: number;
   pace: Pace;
+  calendar: CourseCalendar | undefined;
+  passShare: number | undefined;
   skills: SkillProgress[];
   /** Скачаны все уроки курса: иначе доли навыков считаются по скачанным. */
   complete: boolean;
@@ -25,6 +28,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
   const today = localDay(now, timezone);
   const monday = mondayOf(today);
   const views = await moduleViews(undefined, database);
+  const course = views.length ? await database.courses.get(views[0].module.courseId) : undefined;
   const ids = views.flatMap((view) => lessonsOf(view).map((lesson) => lesson.id));
   const [packs, lessons, rows] = await Promise.all([
     database.packages.bulkGet(ids),
@@ -58,6 +62,7 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     })),
     today,
     completedDays,
+    course?.calendar,
   );
   const next = views.find((view) => lessonsOf(view).some((lesson) => !lesson.completed));
   const events = await database.events.where("localDate").between(monday, today, true, true).toArray();
@@ -66,6 +71,8 @@ export async function courseProgress(now: Date, timezone: string, database: AppD
     views,
     current: next?.module.number ?? views.at(-1)?.module.number ?? 1,
     pace,
+    calendar: course?.calendar,
+    passShare: course?.passShare,
     skills,
     complete: installed === ids.length,
     week: {

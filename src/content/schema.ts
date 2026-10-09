@@ -11,9 +11,12 @@ import { CARD_KINDS } from "../domain/card-fields.ts";
 import { ContentError } from "./schema-errors.ts";
 import {
   parseBlocks,
+  parseCalendar,
   parseExam,
   parseModule,
+  parsePassShare,
   type CatalogModule,
+  type CourseCalendar,
   type CourseExam,
   type LessonBlock,
   type LessonKind,
@@ -44,6 +47,9 @@ export interface CatalogCourse {
   moduleIds?: string[];
   /** Экзамен, к которому ведёт курс */
   exam?: CourseExam;
+  /** Порог сдачи навыка */
+  passShare?: number;
+  calendar?: CourseCalendar;
 }
 export interface CatalogEntry {
   id: string;
@@ -245,6 +251,7 @@ export function parseCatalog(input: unknown): Catalog {
     lessons.map((l) => l.id),
     "каталог.lessons",
   );
+  const calendars = new Map<CatalogCourse, unknown>();
   const courses = list(raw.courses ?? [], "каталог.courses").map((entry, index): CatalogCourse => {
     const path = `каталог.courses[${index}]`;
     const item = obj(entry, path);
@@ -263,6 +270,8 @@ export function parseCatalog(input: unknown): Catalog {
     );
     if (moduleIds) course.moduleIds = moduleIds;
     if (item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
+    if (item.passShare !== undefined) course.passShare = parsePassShare(item.passShare, `${path}.passShare`);
+    if (item.calendar !== undefined) calendars.set(course, item.calendar);
     return course;
   });
   unique(
@@ -288,6 +297,12 @@ export function parseCatalog(input: unknown): Catalog {
           throw new ContentError(`каталог.modules: урока ${lessonId} модуля ${module.id} нет в каталоге`);
     catalog.modules = modules;
   }
+  // Календарь разбирается после модулей: точка ссылается на номер модуля своего курса.
+  courses.forEach((course, index) => {
+    if (!calendars.has(course)) return;
+    const numbers = catalog.modules?.filter((module) => module.courseId === course.id).map((m) => m.number);
+    course.calendar = parseCalendar(calendars.get(course), `каталог.courses[${index}].calendar`, numbers);
+  });
   return catalog;
 }
 

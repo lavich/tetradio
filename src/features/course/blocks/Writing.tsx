@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { WritingBlock } from "../../../content/course";
 import { wordCount } from "../../../domain/course";
 import type { BlockProgress } from "../../../domain/types";
+import { useProfile } from "../../../shared/language";
 import type { BlockPatch } from "../../../storage/course";
 import { Criteria } from "./Criteria";
 import { Model } from "./Model";
@@ -23,6 +24,7 @@ export function Writing({
   const [checks, setChecks] = useState<number[]>(progress?.checks ?? []);
   const [review, setReview] = useState(!!progress?.done);
   const { store, problem } = useSave(save);
+  const { code } = useProfile();
   const draft = useRef<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [flush] = useState(() => () => {
@@ -61,7 +63,7 @@ export function Writing({
       </p>
       <textarea
         className={css.writing}
-        lang="el"
+        lang={code}
         aria-label="Ваш текст"
         autoComplete="off"
         autoCapitalize="sentences"

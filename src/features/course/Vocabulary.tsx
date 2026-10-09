@@ -2,7 +2,9 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Volume2 } from "lucide-react";
 import { toast } from "sonner";
 import type { LessonItem } from "../../domain/types";
+import { languageOfText } from "../../domain/language";
 import { playText, playWord, type PlayResult } from "../../shared/audio";
+import { noVoice } from "../../shared/language";
 import { useAssetUrl } from "../../shared/store";
 import { livePhrases, liveWords } from "../../storage/queries";
 import css from "./vocabulary.module.css";
@@ -18,8 +20,8 @@ function Thumb({ assetId }: { assetId?: string }) {
   );
 }
 
-const heard = (result: PlayResult) => {
-  if (result === "none") toast("На устройстве нет греческого голоса — включите его в настройках речи.");
+const heard = (text: string) => (result: PlayResult) => {
+  if (result === "none") toast(noVoice(languageOfText(text)));
   if (result === "error") toast("Не удалось воспроизвести произношение.");
 };
 
@@ -43,15 +45,15 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                 type="button"
                 className={css.vocabRow}
                 aria-label={`Произнести: ${word.greek}`}
-                onClick={() => void playWord(word).then(heard)}
+                onClick={() => void playWord(word).then(heard(word.greek))}
               >
                 <Thumb assetId={word.imageAssetId} />
                 <span className={css.vocabText}>
-                  <span className={css.vocabGreek} lang="el">
+                  <span className={css.vocabGreek} lang={languageOfText(word.greek).code}>
                     {word.greek}
                   </span>
                   {word.forms ? (
-                    <span className={css.vocabForms} lang="el">
+                    <span className={css.vocabForms} lang={languageOfText(word.greek).code}>
                       {word.forms}
                     </span>
                   ) : null}
@@ -71,10 +73,10 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                 type="button"
                 className={css.vocabRow}
                 aria-label={`Произнести: ${phrase.text}`}
-                onClick={() => void playText(phrase.text, phrase.audioAssetId).then(heard)}
+                onClick={() => void playText(phrase.text, phrase.audioAssetId).then(heard(phrase.text))}
               >
                 <span className={css.vocabText}>
-                  <span className={css.vocabGreek} lang="el">
+                  <span className={css.vocabGreek} lang={languageOfText(phrase.text).code}>
                     {phrase.text}
                   </span>
                   {phrase.translation ? <span className={css.vocabRu}>{phrase.translation}</span> : null}
