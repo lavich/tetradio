@@ -1,0 +1,7 @@
+id: ep012
+text: "I've been in the industry for eight years."
+translation: Я работаю в отрасли восемь лет.
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md
