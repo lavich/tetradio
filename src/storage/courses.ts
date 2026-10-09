@@ -6,7 +6,7 @@ import Dexie from "dexie";
 import { DEFAULT_LANGUAGE, isLanguage, profileOf, type Language, type LanguageProfile } from "../domain/language";
 import { unitKey } from "../domain/refs";
 import type { CardKind, LearningRef, Session } from "../domain/types";
-import { db, type AppDatabase } from "./db";
+import { db, distinctKeys, type AppDatabase } from "./db";
 
 export const COURSES_ORDER_KEY = "coursesOrder";
 export const CURRENT_COURSE_KEY = "currentCourse";
@@ -48,7 +48,7 @@ export async function courses(database: AppDatabase = db): Promise<CourseEntry[]
   const [rows, entries, installedIds, stored] = await Promise.all([
     database.courses.toArray(),
     database.catalog.toArray(),
-    database.lessons.orderBy("courseId").uniqueKeys(),
+    distinctKeys(database.lessons, "courseId"),
     readOrder(database),
   ]);
   const installed = new Set(installedIds.map(String));

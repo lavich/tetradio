@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 import { State } from "ts-fsrs";
-import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
+import { db, distinctKeys, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import { cardLanguages, cardsInCourse, courseCardIds, courseLessonIds } from "./courses";
 import {
   LESSON_MATES_RADIUS,
@@ -222,7 +222,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       if (!base)
         return {
           answers: await database.events.count(),
-          ...count((await database.events.orderBy("unitKey").uniqueKeys()) as string[]),
+          ...count((await distinctKeys(database.events, "unitKey")) as string[]),
         };
       const fresh = await database.events.where("createdAt").above(base.asOf).toArray();
       const known = new Set(base.stats.answeredKeys);

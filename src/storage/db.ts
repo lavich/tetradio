@@ -1,4 +1,4 @@
-import Dexie, { type Table, type Transaction } from "dexie";
+import Dexie, { type IndexableType, type Table, type Transaction } from "dexie";
 import type { CatalogEntry } from "../content/schema";
 import { normalize, unitKey, wordKey } from "../domain/refs";
 import {
@@ -115,6 +115,11 @@ const launch = launchProfile();
 export const db = new AppDatabase(launch.kind === "blocked" ? "tetradio-unopened" : launch.databaseName);
 if (launch.kind === "blocked") db.close({ disableAutoOpen: true });
 export const SCHEMA_VERSION = 9;
+
+/** WebKit (Telegram на macOS) отклоняет курсор по индексу пустой таблицы с UnknownError «Unable to open cursor». */
+export async function distinctKeys<T>(table: Table<T>, index: string): Promise<IndexableType[]> {
+  return (await table.count()) ? table.orderBy(index).uniqueKeys() : [];
+}
 /** Таблицы пользовательских данных: входят в полную копию. Каталог — кеш, а не данные пользователя; альтернативные версии облака — тоже. */
 export const TABLES = [
   "words",
