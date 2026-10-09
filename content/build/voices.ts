@@ -19,7 +19,13 @@ export interface VoiceMap {
 /** Что озвучено: файл реплики → голос и хэш (текст + голос) на момент синтеза. */
 export type VoiceManifest = Record<string, { voice: string; hash: string }>;
 
-export const lineHash = (text: string, voice: string) => hash(`${text.normalize("NFC")}\n${voice}`, 16);
+/** Текст для синтеза: греческий вопросительный знак — та же «;», и синтез читает её как паузу, а не вопрос. */
+export const spokenText = (text: string, language: string) => {
+  const nfc = text.normalize("NFC");
+  return language === "el" || language.startsWith("el-") ? nfc.replaceAll(";", "?") : nfc;
+};
+export const lineHash = (text: string, voice: string, language: string) =>
+  hash(`${spokenText(text, language)}\n${voice}`, 16);
 export const lineFile = (lessonId: string, blockId: string, index: number) => `${lessonId}/${blockId}-${index + 1}.mp3`;
 
 const strings = (value: unknown, where: string): string[] => {

@@ -11,6 +11,7 @@ import { readSources } from "../content/build/sources.ts";
 import {
   lineFile,
   lineHash,
+  spokenText,
   MANIFEST_FILE,
   voiceOf,
   voicesFile,
@@ -85,12 +86,12 @@ for (const lessonId of wanted.length ? wanted : lessons) {
       if (!voice) throw new Error(`${lessonId}/${blockId}: у «${speaker ?? "диктора"}» нет голоса в ${voices.file}`);
       const file = lineFile(lessonId, blockId, index);
       const target = join(ROOT, "audio", file);
-      const hash = lineHash(text, voice);
+      const hash = lineHash(text, voice, voices.language);
       stats.lines++;
       if (!existsSync(target) || manifest[file]?.hash !== hash || manifest[file]?.voice !== voice) {
         pending.push(`${lessonId}/${blockId}#${index + 1} ${speaker ?? "диктор"} (${voice})`);
         if (!check) {
-          const audio = await synthesize(text, voice, voices);
+          const audio = await synthesize(spokenText(text, voices.language), voice, voices);
           mkdirSync(dirname(target), { recursive: true });
           writeFileSync(target, audio);
           manifest[file] = { voice, hash };
