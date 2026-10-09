@@ -3,13 +3,12 @@ import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { languageOfText } from "../../domain/language";
 import { deviceTimezone, localDay, mondayOf, type DailyPlan } from "../../domain/learning";
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
-import { useCourseProfile } from "../../shared/language";
+import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
 import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
@@ -18,7 +17,7 @@ import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import { lessonDays, moduleViews, reviewedOn, type ModuleLessonView, type ModuleView } from "../../storage/course";
 import { dexieSource } from "../../storage/queries";
 import { ExamLine } from "../course/ExamLine";
-import { startSession } from "../learning/session-actions";
+import { sessionPath, startSession } from "../learning/session-actions";
 import { DayNotes } from "./DayNotes";
 import css from "./today.module.css";
 
@@ -26,14 +25,26 @@ import css from "./today.module.css";
  * «Сегодня» курса — страница тетради с двумя ритмами: повторение каждый день, урок 2–3 раза в неделю.
  * Главная кнопка одна: у повторения, пока оно ждёт, потом у урока. На широком окне справа — тетрадь модуля.
  */
-export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: Date; unfinished: Session | null }) {
+export function CourseToday({
+  courseId,
+  plan,
+  now,
+  unfinished,
+  more,
+}: {
+  courseId: string | undefined;
+  plan: DailyPlan;
+  now: Date;
+  unfinished: Session | null;
+  more?: React.ReactNode;
+}) {
   const spread = useSpread();
   const today = localDay(now, deviceTimezone());
   const monday = mondayOf(today);
-  const views = useLiveQuery(() => moduleViews(), []);
-  const reviewed = useLiveQuery(() => reviewedOn(today), [today]);
-  const week = useLiveQuery(() => lessonDays(monday, deviceTimezone()), [monday, deviceTimezone()]);
-  const profile = useCourseProfile(views?.[0]?.module.courseId);
+  const views = useLiveQuery(() => moduleViews(courseId), [courseId]);
+  const reviewed = useLiveQuery(() => reviewedOn(today, courseId), [today, courseId]);
+  const week = useLiveQuery(() => lessonDays(monday, deviceTimezone(), courseId), [monday, deviceTimezone(), courseId]);
+  const profile = useCourseProfile(courseId);
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,
@@ -56,6 +67,7 @@ export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: D
         Сегодня
       </h1>
       <Review
+        courseId={courseId}
         plan={plan}
         now={now}
         unfinished={unfinished}
@@ -81,18 +93,24 @@ export function CourseToday({ plan, now, unfinished }: { plan: DailyPlan; now: D
           <ExamLine courseId={views[0].module.courseId} />
         </div>
       )}
+      {more}
     </section>
   );
-  if (!spread || !next) return page;
   return (
-    <div className={cx(nb.spread, css.spread)}>
-      {page}
-      <ModulePage view={next.view} current={next.lesson.id} week={week ?? []} monday={monday} today={today} />
-    </div>
+    <ProfileContext value={profile}>
+      {!spread || !next ? (
+        page
+      ) : (
+        <div className={cx(nb.spread, css.spread)}>
+          {page}
+          <ModulePage view={next.view} current={next.lesson.id} week={week ?? []} monday={monday} today={today} />
+        </div>
+      )}
+    </ProfileContext>
   );
 }
 
-function nextStep(views: ModuleView[]): { view: ModuleView; lesson: ModuleLessonView } | null {
+export function nextStep(views: ModuleView[]): { view: ModuleView; lesson: ModuleLessonView } | null {
   for (const view of views) {
     if (view.module.status !== "published") continue;
     const lesson =
@@ -105,6 +123,7 @@ function nextStep(views: ModuleView[]): { view: ModuleView; lesson: ModuleLesson
 }
 
 function Review({
+  courseId,
   plan,
   now,
   unfinished,
@@ -112,6 +131,7 @@ function Review({
   last,
   primary,
 }: {
+  courseId: string | undefined;
   plan: DailyPlan;
   now: Date;
   unfinished: Session | null;
@@ -125,18 +145,18 @@ function Review({
   const reviews = plan.reviews.length;
   const review = () =>
     run(async () => {
-      if (unfinished) return navigate("/session");
-      if (!(await startSession(now))) return setProblem("На сегодня карточек нет.");
-      void navigate("/session");
+      if (unfinished) return navigate(await sessionPath(courseId));
+      if (!(await startSession(now, { courseId }))) return setProblem("На сегодня карточек нет.");
+      void navigate(await sessionPath(courseId));
     });
   // Тренировка не сдвигает интервалы: навык фиксируется, расписание повторений остаётся прежним.
   const practice = () =>
     run(async () => {
       if (!last) return;
       const refs = await dexieSource().lessonRefs(last.id);
-      const session = refs.length ? await startSession(now, { refs, mode: "practice" }) : null;
+      const session = refs.length ? await startSession(now, { refs, mode: "practice", courseId }) : null;
       if (!session) return setProblem("В уроке нет карточек для тренировки.");
-      void navigate("/session");
+      void navigate(await sessionPath(courseId));
     });
   const error = problem && (
     <p className={css.problem} role="alert">
@@ -224,13 +244,14 @@ function LessonNext({
   week?: number;
 }) {
   const { module } = view;
+  const { code } = useProfile();
   const started = lesson.tally.done > 0;
   const test = lesson.kind === "test" && !/контрольн/i.test(lesson.title);
   return (
     <Link to={`/course/${module.id}/${lesson.id}`} className={css.lesson} data-testid="course-next">
       <span className={css.cover} style={{ background: coverColor(module.number) }} aria-hidden="true">
         <b>{String(module.number).padStart(2, "0")}</b>
-        <em lang={languageOfText(module.title).code}>{module.title}</em>
+        <em lang={code}>{module.title}</em>
         <i className={css.ribbon} />
       </span>
       <span className={css.lessonBody}>
@@ -277,12 +298,13 @@ function ModulePage({
   today: string;
 }) {
   const { module } = view;
+  const { code } = useProfile();
   const rows = [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : []), ...view.review];
   let lessonNumber = 0;
   return (
     <section className={cx(nb.page, css.page)} aria-label={`Модуль ${module.number}`}>
       <p className={cx(nb.date, css.left)}>Модуль {String(module.number).padStart(2, "0")}</p>
-      <h2 className={nb.title} lang={languageOfText(module.title).code}>
+      <h2 className={nb.title} lang={code}>
         {module.title}
       </h2>
       <ol className={css.toc}>

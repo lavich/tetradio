@@ -93,6 +93,12 @@ describe("курсы", () => {
     expect((await db.lessons.get("mech-1"))!.courseId).toBe("mechanics");
     expect(await db.courses.get("mechanics")).toMatchObject({ title: "Механики" });
   });
+  it("урок, чей курс в каталоге сменился, переходит к курсу каталога", async () => {
+    await installLessons(db, ["mech-1"]);
+    await db.lessons.update("mech-1", { courseId: "mechanics-old" });
+    await refreshCatalog(db, memoryFetcher());
+    expect((await db.lessons.get("mech-1"))!.courseId).toBe("mechanics");
+  });
   it("повторное обновление неизменного каталога курс не переписывает", async () => {
     await refreshCatalog(db, memoryFetcher());
     const first = await db.courses.get("mechanics");

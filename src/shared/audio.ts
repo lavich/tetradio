@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ensureAsset } from "../content/client";
-import { languageOfText, PROFILES, type Language, type LanguageProfile } from "../domain/language";
+import { PROFILES, type Language, type LanguageProfile } from "../domain/language";
 import type { Word } from "../domain/types";
 import { dbAssetSource, releaseAssetUrl, type AssetSource } from "./store";
 import { voicesOf } from "./voices";
@@ -129,13 +129,13 @@ async function speakVoice(text: string, rate: number, stopped: boolean, profile:
   return (await speakOnce(text, voice, rate, profile.voice)) ? "voice" : "error";
 }
 /** Предложения читает системный голос: записанных файлов для примеров нет. */
-export function speakPhrase(text: string, profile = languageOfText(text)): Promise<PlayResult> {
+export function speakPhrase(text: string, profile: LanguageProfile): Promise<PlayResult> {
   return speakVoice(text, 0.85, stopAudio(), profile);
 }
-export function audioKind(word: Word | undefined): AudioKind {
+export function audioKind(word: Word | undefined, profile: LanguageProfile): AudioKind {
   if (!word) return "none";
   if (word.audioAssetId) return "file";
-  return voiceOf(languageOfText(word.greek)) ? "voice" : "none";
+  return voiceOf(profile) ? "voice" : "none";
 }
 /** Занят ли синтезатор: холостая отмена ломает следующую реплику, поэтому отменяем только говорящего. */
 const speaking = () => typeof speechSynthesis !== "undefined" && (speechSynthesis.speaking || speechSynthesis.pending);
@@ -165,8 +165,11 @@ export function stopAudio(): boolean {
  * Отказ воспроизведения не подавляется: экран получает `error` и предлагает повтор или продолжение без аудирования.
  * Файл, который не проигрался, не подменяется голосом молча — иначе пользователь услышит другое произношение.
  */
-export async function playWord(word: Word, source: AssetSource = dbAssetSource): Promise<PlayResult> {
-  const profile = languageOfText(word.greek);
+export async function playWord(
+  word: Word,
+  profile: LanguageProfile,
+  source: AssetSource = dbAssetSource,
+): Promise<PlayResult> {
   const stopped = stopAudio();
   if (word.audioAssetId) {
     const url = await source.url(word.audioAssetId).catch(() => null);
@@ -206,26 +209,26 @@ export function useVoice(profile: LanguageProfile): boolean {
 }
 
 /** Голоса появляются асинхронно, поэтому доступность пересчитывается после загрузки. */
-export function useAudioKind(word: Word | undefined): AudioKind {
-  const [kind, setKind] = useState<AudioKind>(() => audioKind(word));
+export function useAudioKind(word: Word | undefined, profile: LanguageProfile): AudioKind {
+  const [kind, setKind] = useState<AudioKind>(() => audioKind(word, profile));
   useEffect(() => {
-    setKind(audioKind(word));
+    setKind(audioKind(word, profile));
     if (typeof speechSynthesis === "undefined") return;
     const update = () => {
       cachedVoices.clear();
-      setKind(audioKind(word));
+      setKind(audioKind(word, profile));
     };
     speechSynthesis.addEventListener("voiceschanged", update);
     return () => speechSynthesis.removeEventListener("voiceschanged", update);
-  }, [word?.id, word?.audioAssetId]);
+  }, [word?.id, word?.audioAssetId, profile]);
   return kind;
 }
 
 /** Файл, если он обещан записью, иначе системный голос: общий путь для слова, фразы и полного предложения пропуска. */
 export async function playText(
   text: string,
-  audioAssetId?: string,
-  profile = languageOfText(text),
+  audioAssetId: string | undefined,
+  profile: LanguageProfile,
 ): Promise<PlayResult> {
   const stopped = stopAudio();
   if (audioAssetId) {

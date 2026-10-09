@@ -10,6 +10,7 @@ import { previewPackage, refreshCatalog, wordFromPackage, type PackagePreview } 
 import { shortTitle } from "../../shared/format";
 import { AssetSourceContext, packageAssetSource, useCatalogPhase, useWordLesson } from "../../shared/store";
 import { db } from "../../storage/db";
+import { ProfileContext, useLessonProfile } from "../../shared/language";
 import { ExampleBox, ReadingNotes, WordSummary } from "./WordCardView";
 import ui from "../../shared/ui.module.css";
 
@@ -30,6 +31,7 @@ export function SharedWordScreen() {
   const [attempt, setAttempt] = useState(0);
   const lessonId = lesson?.id,
     version = lesson?.version;
+  const profile = useLessonProfile(lessonId);
 
   useEffect(() => {
     if (!lessonId) return;
@@ -101,16 +103,18 @@ export function SharedWordScreen() {
   const word = wordFromPackage(card, "");
   return (
     <AssetSourceContext.Provider value={source}>
-      <Screen back="Слово">
-        <WordSummary word={word} />
-        <ReadingNotes word={word} />
-        {word.examples.map((example, index) => (
-          <ExampleBox key={index} example={example} />
-        ))}
-        <p className={ui.note} data-testid="shared-lesson">
-          Слово из урока {shortTitle(ready.entry.title)}
-        </p>
-      </Screen>
+      <ProfileContext value={profile}>
+        <Screen back="Слово">
+          <WordSummary word={word} />
+          <ReadingNotes word={word} />
+          {word.examples.map((example, index) => (
+            <ExampleBox key={index} example={example} />
+          ))}
+          <p className={ui.note} data-testid="shared-lesson">
+            Слово из урока {shortTitle(ready.entry.title)}
+          </p>
+        </Screen>
+      </ProfileContext>
     </AssetSourceContext.Provider>
   );
 }

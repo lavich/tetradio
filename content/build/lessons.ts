@@ -140,6 +140,8 @@ export function buildLessons(input: LessonsInput) {
         fail(`${path}: неизвестный вид карточки «${String(ref.kind)}»`);
       const kind = ref.kind as CardKind;
       if (!cards[kind].has(ref.id)) fail(`${path}: ${KIND_LABEL[kind].one} ${ref.id} нет в ${KIND_LABEL[kind].dir}/`);
+      const owner = (kind === "word" ? sources.words : sources.phrases).get(ref.id)!.course;
+      if (owner !== courseId) fail(`${path}: карточка ${ref.id} из курса ${owner} в уроке курса ${courseId}`);
       used[kind].add(ref.id);
       return { kind, id: ref.id, position };
     });

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { PROFILES } from "../src/domain/language";
 import type { Word } from "../src/domain/types";
 
 /**
@@ -106,7 +107,7 @@ describe("озвучка системным голосом", () => {
   it("успех подтверждается началом речи, а не фактом вызова", async () => {
     const { synth, state } = fakeSynth();
     const { playWord } = await load(synth);
-    const result = playWord(word());
+    const result = playWord(word(), PROFILES.el);
     await vi.advanceTimersByTimeAsync(50);
     expect(await result).toBe("voice");
     expect(state.spoken).toHaveLength(1);
@@ -116,7 +117,7 @@ describe("озвучка системным голосом", () => {
   it("потерянная реплика повторяется один раз и звучит", async () => {
     const { synth, state } = fakeSynth({ script: ["drop", "ok"] });
     const { playWord } = await load(synth);
-    const result = playWord(word());
+    const result = playWord(word(), PROFILES.el);
     await vi.advanceTimersByTimeAsync(1000);
     expect(await result).toBe("voice");
     expect(state.spoken).toHaveLength(2);
@@ -126,7 +127,7 @@ describe("озвучка системным голосом", () => {
   it("молчание дважды — честный отказ, а не мнимый успех", async () => {
     const { synth, state } = fakeSynth({ script: ["drop", "drop"] });
     const { playWord } = await load(synth);
-    const result = playWord(word());
+    const result = playWord(word(), PROFILES.el);
     await vi.advanceTimersByTimeAsync(1000);
     expect(await result).toBe("error");
     expect(state.spoken).toHaveLength(2); // повтор был ровно один
@@ -135,7 +136,7 @@ describe("озвучка системным голосом", () => {
   it("ошибка синтезатора тоже даёт повтор", async () => {
     const { synth, state } = fakeSynth({ script: ["error", "ok"] });
     const { playText } = await load(synth);
-    const result = playText("Γεια σου!");
+    const result = playText("Γεια σου!", undefined, PROFILES.el);
     await vi.advanceTimersByTimeAsync(1000);
     expect(await result).toBe("voice");
     expect(state.spoken).toHaveLength(2);
@@ -144,11 +145,11 @@ describe("озвучка системным голосом", () => {
   it("отмена прошлой реплики не съедает новую", async () => {
     const { synth, state } = fakeSynth();
     const { playWord } = await load(synth);
-    const first = playWord(word());
+    const first = playWord(word(), PROFILES.el);
     await vi.advanceTimersByTimeAsync(50);
     expect(await first).toBe("voice");
     expect(state.speaking).toBe(true);
-    const second = playWord(word({ greek: "η θάλασσα" }));
+    const second = playWord(word({ greek: "η θάλασσα" }), PROFILES.el);
     await vi.advanceTimersByTimeAsync(1000);
     expect(await second).toBe("voice");
     expect(state.cancels).toBe(1); // занятый синтезатор остановлен ровно раз
@@ -158,7 +159,7 @@ describe("озвучка системным голосом", () => {
   it("пустой список голосов не приговор: ждём загрузки", async () => {
     const { synth, state, fire } = fakeSynth({ voices: [] });
     const { playWord } = await load(synth);
-    const result = playWord(word());
+    const result = playWord(word(), PROFILES.el);
     await vi.advanceTimersByTimeAsync(100);
     state.voices = [{ lang: "el-GR", name: "Greek test" }];
     fire("voiceschanged");
@@ -169,7 +170,7 @@ describe("озвучка системным голосом", () => {
   it("голоса так и не пришли — озвучки нет", async () => {
     const { synth, state } = fakeSynth({ voices: [] });
     const { playWord } = await load(synth);
-    const result = playWord(word());
+    const result = playWord(word(), PROFILES.el);
     await vi.advanceTimersByTimeAsync(2000);
     expect(await result).toBe("none");
     expect(state.spoken).toHaveLength(0);
@@ -183,7 +184,7 @@ describe("озвучка системным голосом", () => {
       ],
     });
     const { playWord } = await load(synth);
-    const result = playWord(word());
+    const result = playWord(word(), PROFILES.el);
     await vi.advanceTimersByTimeAsync(50);
     expect(await result).toBe("voice");
     expect((state.spoken[0].voice as { lang: string }).lang).toBe("el-GR");
@@ -228,7 +229,7 @@ describe("звук из источника просмотра", () => {
     const { packageAssetSource } = await import("../src/shared/store");
     const media = { id: "snd-w1", kind: "audio", url: "content/media/snd-w1@abc.mp3" };
     const pack = { media: [media] } as unknown as Parameters<typeof packageAssetSource>[0];
-    const result = await playWord(word({ audioAssetId: "snd-w1" }), packageAssetSource(pack));
+    const result = await playWord(word({ audioAssetId: "snd-w1" }), PROFILES.el, packageAssetSource(pack));
     expect(result).toBe("file");
     expect(played).toEqual(["/content/media/snd-w1@abc.mp3"]);
     expect(ensureAsset).not.toHaveBeenCalled();
@@ -248,7 +249,7 @@ describe("голос по языку текста", () => {
       ],
     });
     const { playText } = await load(synth);
-    const result = playText("Good morning!");
+    const result = playText("Good morning!", undefined, PROFILES.en);
     await vi.advanceTimersByTimeAsync(50);
     expect(await result).toBe("voice");
     expect((state.spoken[0].voice as { name: string }).name).toBe("British");
@@ -260,6 +261,6 @@ describe("голос по языку текста", () => {
     const { hasVoiceFor, playText } = await load(synth);
     expect(hasVoiceFor("el")).toBe(true);
     expect(hasVoiceFor("en")).toBe(false);
-    expect(await playText("Hello")).toBe("none");
+    expect(await playText("Hello", undefined, PROFILES.en)).toBe("none");
   });
 });

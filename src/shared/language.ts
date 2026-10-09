@@ -1,11 +1,9 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { createContext, useContext } from "react";
-import { DEFAULT_LANGUAGE, isLanguage, PROFILES, type LanguageProfile } from "../domain/language";
-import { db } from "../storage/db";
+import { DEFAULT_LANGUAGE, PROFILES, type LanguageProfile } from "../domain/language";
+import { lessonCourses, profileOfCourse } from "../storage/courses";
 
 const fallback = PROFILES[DEFAULT_LANGUAGE];
-export const courseProfile = (language: string | undefined): LanguageProfile =>
-  isLanguage(language) ? PROFILES[language] : fallback;
 
 export const noVoice = (profile: LanguageProfile) =>
   `На устройстве нет ${profile.voiceName} — включите его в настройках речи.`;
@@ -14,15 +12,10 @@ export const noVoice = (profile: LanguageProfile) =>
 export const ProfileContext = createContext<LanguageProfile>(fallback);
 export const useProfile = () => useContext(ProfileContext);
 
-// Курс в базе язык не хранит: он есть у записей каталога его уроков.
 export const useCourseProfile = (courseId: string | undefined): LanguageProfile =>
-  useLiveQuery(
-    async () =>
-      courseId ? courseProfile((await db.catalog.where("courseId").equals(courseId).first())?.language) : fallback,
-    [courseId],
-  ) ?? fallback;
+  useLiveQuery(async () => (courseId ? profileOfCourse(courseId) : fallback), [courseId]) ?? fallback;
 export const useLessonProfile = (lessonId: string | undefined): LanguageProfile =>
-  useLiveQuery(
-    async () => (lessonId ? courseProfile((await db.catalog.get(lessonId))?.language) : fallback),
-    [lessonId],
-  ) ?? fallback;
+  useLiveQuery(async () => {
+    const courseId = lessonId && (await lessonCourses([lessonId])).get(lessonId);
+    return courseId ? profileOfCourse(courseId) : fallback;
+  }, [lessonId]) ?? fallback;

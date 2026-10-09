@@ -126,13 +126,6 @@ export const profileOf = (language: string | undefined): LanguageProfile => {
   return PROFILES[code];
 };
 
-/**
- * Язык карточки по её письменности: карточки пока не знают свой курс. Хватает, пока у курсов разные
- * письменности; два курса на одной письменности потребуют курс у карточки.
- */
-export const languageOfText = (text: string): LanguageProfile =>
-  LANGUAGES.map((code) => PROFILES[code]).find((profile) => profile.script.test(text)) ?? PROFILES[DEFAULT_LANGUAGE];
-
 /** Голос устройства: один на все языки (тесты, сервер) или по языку. */
 export type Voices = boolean | ((language: Language) => boolean);
 export const voiceFor = (voices: Voices, language: Language) =>

@@ -13,10 +13,8 @@ import ui from "../../shared/ui.module.css";
  * ведёт к первому уроку, а карточки приходят из начатых уроков.
  */
 export function FirstRun({ courses, entries }: { courses: Course[]; entries: StoredCatalogEntry[] }) {
-  const course = courses.find((item) => entries.some((entry) => entry.courseId === item.id));
-  const phase = useCoursePhase(course?.id);
-
-  if (!course)
+  const offered = courses.filter((item) => entries.some((entry) => entry.courseId === item.id));
+  if (!offered.length)
     return (
       <Card className="mb-3 bg-soft ring-0">
         <CardHeader>
@@ -25,13 +23,23 @@ export function FirstRun({ courses, entries }: { courses: Course[]; entries: Sto
         </CardHeader>
       </Card>
     );
+  return (
+    <>
+      {offered.map((course) => (
+        <CourseOffer key={course.id} course={course} entries={entries} />
+      ))}
+    </>
+  );
+}
 
+function CourseOffer({ course, entries }: { course: Course; entries: StoredCatalogEntry[] }) {
+  const phase = useCoursePhase(course.id);
   const own = entries.filter((entry) => entry.courseId === course.id);
   const cards = own.reduce((sum, entry) => sum + entry.cardCount, 0);
   const loading = phase.phase === "loading";
   const learn = () => void installCourse(course.id).catch(() => undefined);
   return (
-    <>
+    <section className="mb-6">
       <Card className="mb-3 bg-soft ring-0" data-testid="first-course">
         <CardHeader>
           <CardTitle className="text-2xl font-bold [overflow-wrap:anywhere]">{course.title}</CardTitle>
@@ -40,7 +48,7 @@ export function FirstRun({ courses, entries }: { courses: Course[]; entries: Sto
           </CardDescription>
         </CardHeader>
       </Card>
-      <Button size="xl" onClick={learn} disabled={loading}>
+      <Button size="xl" onClick={learn} disabled={loading} aria-label={`Учить курс «${course.title}»`}>
         <GraduationCap data-icon="inline-start" />
         {loading ? "Загружаем курс…" : "Учить курс"}
       </Button>
@@ -57,13 +65,14 @@ export function FirstRun({ courses, entries }: { courses: Course[]; entries: Sto
       ) : (
         <p className={ui.hint}>Уроки загрузятся на устройство и будут доступны без сети.</p>
       )}
-    </>
+    </section>
   );
 }
 
-/** Начало курса там, где каталог есть, а уроков на устройстве ещё нет: на полке и на «Сегодня». */
-export function CourseStart() {
+/** Начало курса там, где каталог есть, а уроков на устройстве ещё нет: на полке — выбранного курса, на «Сегодня» — любого. */
+export function CourseStart({ courseId }: { courseId?: string }) {
   const courses = useCourses();
   const catalog = useCatalog();
-  return <FirstRun courses={courses ?? []} entries={catalog?.entries ?? []} />;
+  const offered = (courses ?? []).filter((course) => !courseId || course.id === courseId);
+  return <FirstRun courses={offered} entries={catalog?.entries ?? []} />;
 }

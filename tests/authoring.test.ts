@@ -11,10 +11,10 @@ const DOC = "docs/lesson-authoring.md",
   TEMPLATES = "docs/lesson-authoring",
   SKILL = ".agents/skills/prepare-lesson/SKILL.md";
 /** Примеры употребления всех слов фикстуры механик: материал, из которого готовится непубликуемая фикстура. */
-const projectExamples = readdirSync("tests/fixtures/mechanics/words").flatMap((file) =>
+const projectExamples = readdirSync("tests/fixtures/mechanics/words/mechanics").flatMap((file) =>
   (
     (
-      parse(readFileSync(join("tests/fixtures/mechanics/words", file), "utf8")) as {
+      parse(readFileSync(join("tests/fixtures/mechanics/words/mechanics", file), "utf8")) as {
         examples?: { greek: string; russian: string }[];
       }
     ).examples ?? []
@@ -28,11 +28,11 @@ describe("шаблоны инструкции", () => {
     // Копируется весь контент: шаблон проверяется рядом с настоящим каталогом, каким бы он ни стал.
     for (const entry of readdirSync("tests/fixtures/mechanics"))
       cpSync(join("tests/fixtures/mechanics", entry), join(root, entry), { recursive: true });
-    mkdirSync(join(root, "phrases"), { recursive: true });
+    mkdirSync(join(root, "phrases", "mechanics"), { recursive: true });
     const copy = (from: string, to: string) =>
       writeFileSync(join(root, to), readFileSync(join(TEMPLATES, from), "utf8"));
-    copy("word.yaml", "words/w-example.yaml");
-    copy("phrase.yaml", "phrases/p-example.yaml");
+    copy("word.yaml", "words/mechanics/w-example.yaml");
+    copy("phrase.yaml", "phrases/mechanics/p-example.yaml");
     copy("lesson.yaml", "lessons/lesson-example.yaml");
     writeFileSync(
       join(root, "courses/mechanics.yaml"),

@@ -120,6 +120,7 @@ jobs:
       - name: Playwright version matches the container image
         run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
       - run: npm run test:e2e:course
+      - run: npm run test:e2e:courses
       - if: failure()
         uses: actions/upload-artifact@v7
         with:

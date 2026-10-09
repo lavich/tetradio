@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Rating } from "ts-fsrs";
-import { languageOfText, PROFILES, type LanguageProfile } from "../../domain/language";
 import type { ReviewEvent, Session, SessionCard, SessionItem } from "../../domain/types";
 import { plural } from "../../shared/format";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
+import { useProfile } from "../../shared/language";
 import { pageDate } from "../../shared/notebook";
 import s from "./session.module.css";
 
@@ -40,7 +40,8 @@ export function Instruction({ prompt, children }: { prompt: string; children?: R
   );
 }
 
-export function PageHead({ day, profile = PROFILES.el }: { day: string; profile?: LanguageProfile }) {
+export function PageHead({ day }: { day: string }) {
+  const profile = useProfile();
   return (
     <header className={s.head}>
       <p className={s.date} lang={profile.code}>
@@ -120,7 +121,8 @@ const MARK_LABEL: Record<Mark, string> = {
 };
 
 function Answer({ row }: { row: DoneRow }) {
-  const lang = row.expectedGreek ? languageOfText(row.expected).code : undefined;
+  const { code } = useProfile();
+  const lang = row.expectedGreek ? code : undefined;
   const expected = (
     <em className={s.ink} lang={lang}>
       {row.expected || "—"}
@@ -161,6 +163,7 @@ export function DoneList({
   folded?: boolean;
   onToggle?: () => void;
 }) {
+  const { code } = useProfile();
   if (!rows.length) return null;
   const toggle = onToggle && folded !== undefined && (
     <button type="button" className={s.fold} aria-expanded={!folded} onClick={onToggle}>
@@ -176,12 +179,7 @@ export function DoneList({
             <li key={row.id} className={cx(s.doneRow, row.mark === "skipped" && s.skipped)}>
               <span className={s.doneNumber}>{index + 1}.</span>
               <span className={s.doneText}>
-                {row.promptGreek ? (
-                  <b lang={languageOfText(row.prompt).code}>{row.prompt}</b>
-                ) : (
-                  <span>{row.prompt}</span>
-                )}{" "}
-                — <Answer row={row} />
+                {row.promptGreek ? <b lang={code}>{row.prompt}</b> : <span>{row.prompt}</span>} — <Answer row={row} />
               </span>
               {row.mark === "correct" || row.mark === "almost" ? (
                 <Tick className={cx(s.doneMark, row.mark === "almost" && s.almost)} label={MARK_LABEL[row.mark]} />

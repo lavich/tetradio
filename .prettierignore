@@ -34,6 +34,7 @@ package-lock.json
 docs/audit
 docs/design
 dist-course
+dist-courses
 
 # Рабочие копии агентов
 .claude

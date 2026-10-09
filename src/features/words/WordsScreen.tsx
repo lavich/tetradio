@@ -3,12 +3,15 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Search } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Screen } from "../../app/Screen";
-import { languageOfText } from "../../domain/language";
+import { CourseSwitch } from "../../shared/CourseSwitch";
+import { useCardCourse, useFollowCourse } from "../../shared/courses";
 import { cx } from "../../shared/cx";
 import { withCount, WORDS } from "../../shared/format";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
+import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
+import { currentCourse } from "../../storage/courses";
 import { dictionary, matchesQuery, type CardMark, type DictionaryEntry } from "../../storage/dictionary";
 import { EntrySheet } from "./WordSheet";
 import css from "./dictionary.module.css";
@@ -28,52 +31,73 @@ export const entryPath = (entry: Pick<DictionaryEntry, "ref">) =>
 
 export function WordsScreen() {
   const spread = useSpread();
-  const lessons = useLiveQuery(() => dictionary(), []);
-  if (!lessons) return <Screen />;
+  const data = useLiveQuery(async () => {
+    const courseId = await currentCourse();
+    return { courseId, lessons: await dictionary(courseId) };
+  }, []);
+  const profile = useCourseProfile(data?.courseId);
+  if (!data) return <Screen />;
+  const list = <Dictionary lessons={data.lessons} switcher />;
   return (
-    <Screen wide={spread}>
-      {spread ? (
-        <div className={cx(nb.spread, css.spread)}>
-          <Dictionary lessons={lessons} />
-          <div className={cx(nb.page, css.page)}>
-            <p className={css.pick}>Выберите слово — оно откроется на этой странице.</p>
+    <ProfileContext value={profile}>
+      <Screen wide={spread}>
+        {spread ? (
+          <div className={cx(nb.spread, css.spread)}>
+            {list}
+            <div className={cx(nb.page, css.page)}>
+              <p className={css.pick}>Выберите слово — оно откроется на этой странице.</p>
+            </div>
           </div>
-        </div>
-      ) : (
-        <Dictionary lessons={lessons} />
-      )}
-    </Screen>
+        ) : (
+          list
+        )}
+      </Screen>
+    </ProfileContext>
   );
 }
 
 export function EntryScreen({ kind }: { kind: "word" | "phrase" }) {
   const { id = "" } = useParams();
   const spread = useSpread();
-  const lessons = useLiveQuery(() => dictionary(), []);
+  const course = useCardCourse({ kind, id });
+  useFollowCourse(course ?? undefined);
+  const lessons = useLiveQuery(() => (course === undefined ? undefined : dictionary(course ?? undefined)), [course]);
+  const profile = useCourseProfile(course ?? undefined);
   if (!lessons) return <Screen back="" paper />;
-  const sheet = <EntrySheet kind={kind} id={id} lessons={lessons} />;
+  const sheet = <EntrySheet kind={kind} id={id} lessons={lessons} courseId={course ?? undefined} />;
   if (!spread)
     return (
-      <Screen back="" paper>
-        {sheet}
-      </Screen>
+      <ProfileContext value={profile}>
+        <Screen back="" paper>
+          {sheet}
+        </Screen>
+      </ProfileContext>
     );
   return (
-    <Screen wide paper>
-      <div className={cx(nb.spread, nb.spine, css.spread)}>
-        <Dictionary lessons={lessons} current={`${kind}:${id}`} />
-        <div className={cx(nb.page, css.page)}>{sheet}</div>
-      </div>
-    </Screen>
+    <ProfileContext value={profile}>
+      <Screen wide paper>
+        <div className={cx(nb.spread, nb.spine, css.spread)}>
+          <Dictionary lessons={lessons} current={`${kind}:${id}`} />
+          <div className={cx(nb.page, css.page)}>{sheet}</div>
+        </div>
+      </Screen>
+    </ProfileContext>
   );
 }
 
-function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof dictionary>>; current?: string }) {
+function Dictionary({
+  lessons,
+  current,
+  switcher,
+}: {
+  lessons: Awaited<ReturnType<typeof dictionary>>;
+  current?: string;
+  switcher?: boolean;
+}) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
+  const { names, code } = useProfile();
   const all = lessons.flatMap((lesson) => lesson.entries);
-  // Словарь общий для курсов: подпись поиска — по языку первой карточки.
-  const { names } = languageOfText(all[0]?.greek ?? "");
   const count = (key: Filter) => (key === "all" ? all.length : all.filter((entry) => entry.mark === key).length);
   const shown = lessons
     .map((lesson) => ({
@@ -87,6 +111,7 @@ function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof d
   const phrases = found.filter((entry) => entry.phrase).length;
   return (
     <section className={cx(nb.page, css.page)} aria-label="Словарь">
+      {switcher && <CourseSwitch />}
       <h1 className={nb.title}>Словарь</h1>
       <p className={nb.meta} data-testid="word-count">
         {[withCount(found.length - phrases, WORDS), phrases && withCount(phrases, ["фраза", "фразы", "фраз"])]
@@ -128,8 +153,7 @@ function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof d
             <section key={lesson.id} aria-label={lesson.title} data-testid="dictionary-lesson">
               {newModule && lesson.moduleId && (
                 <p className={css.module}>
-                  Модуль {String(lesson.moduleNumber).padStart(2, "0")} ·{" "}
-                  <span lang={languageOfText(lesson.moduleTitle ?? "").code}>{lesson.moduleTitle}</span>
+                  Модуль {String(lesson.moduleNumber).padStart(2, "0")} · <span lang={code}>{lesson.moduleTitle}</span>
                 </p>
               )}
               <h2 className={css.lesson}>
@@ -147,10 +171,7 @@ function Dictionary({ lessons, current }: { lessons: Awaited<ReturnType<typeof d
                       className={css.row}
                       aria-current={current === `${entry.ref.kind}:${entry.ref.id}` ? "page" : undefined}
                     >
-                      <span
-                        className={cx(css.greek, entry.phrase && css.phrase)}
-                        lang={languageOfText(entry.greek).code}
-                      >
+                      <span className={cx(css.greek, entry.phrase && css.phrase)} lang={code}>
                         {entry.greek}
                       </span>
                       <span className={css.russian}>{entry.russian}</span>

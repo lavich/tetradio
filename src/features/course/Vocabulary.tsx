@@ -2,9 +2,9 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Volume2 } from "lucide-react";
 import { toast } from "sonner";
 import type { LessonItem } from "../../domain/types";
-import { languageOfText } from "../../domain/language";
+import type { LanguageProfile } from "../../domain/language";
 import { playText, playWord, type PlayResult } from "../../shared/audio";
-import { noVoice } from "../../shared/language";
+import { noVoice, useProfile } from "../../shared/language";
 import { useAssetUrl } from "../../shared/store";
 import { livePhrases, liveWords } from "../../storage/queries";
 import css from "./vocabulary.module.css";
@@ -20,8 +20,8 @@ function Thumb({ assetId }: { assetId?: string }) {
   );
 }
 
-const heard = (text: string) => (result: PlayResult) => {
-  if (result === "none") toast(noVoice(languageOfText(text)));
+const heard = (profile: LanguageProfile) => (result: PlayResult) => {
+  if (result === "none") toast(noVoice(profile));
   if (result === "error") toast("Не удалось воспроизвести произношение.");
 };
 
@@ -29,6 +29,7 @@ const heard = (text: string) => (result: PlayResult) => {
 export function VocabularyList({ items }: { items: LessonItem[] }) {
   const wordIds = items.filter((item) => item.ref.kind === "word").map((item) => item.ref.id);
   const phraseIds = items.filter((item) => item.ref.kind === "phrase").map((item) => item.ref.id);
+  const profile = useProfile();
   const words = useLiveQuery(() => liveWords(wordIds), [wordIds.join()]);
   const phrases = useLiveQuery(() => livePhrases(phraseIds), [phraseIds.join()]);
   if (!words || !phrases) return null;
@@ -45,15 +46,15 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                 type="button"
                 className={css.vocabRow}
                 aria-label={`Произнести: ${word.greek}`}
-                onClick={() => void playWord(word).then(heard(word.greek))}
+                onClick={() => void playWord(word, profile).then(heard(profile))}
               >
                 <Thumb assetId={word.imageAssetId} />
                 <span className={css.vocabText}>
-                  <span className={css.vocabGreek} lang={languageOfText(word.greek).code}>
+                  <span className={css.vocabGreek} lang={profile.code}>
                     {word.greek}
                   </span>
                   {word.forms ? (
-                    <span className={css.vocabForms} lang={languageOfText(word.greek).code}>
+                    <span className={css.vocabForms} lang={profile.code}>
                       {word.forms}
                     </span>
                   ) : null}
@@ -73,10 +74,10 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                 type="button"
                 className={css.vocabRow}
                 aria-label={`Произнести: ${phrase.text}`}
-                onClick={() => void playText(phrase.text, phrase.audioAssetId).then(heard(phrase.text))}
+                onClick={() => void playText(phrase.text, phrase.audioAssetId, profile).then(heard(profile))}
               >
                 <span className={css.vocabText}>
-                  <span className={css.vocabGreek} lang={languageOfText(phrase.text).code}>
+                  <span className={css.vocabGreek} lang={profile.code}>
                     {phrase.text}
                   </span>
                   {phrase.translation ? <span className={css.vocabRu}>{phrase.translation}</span> : null}

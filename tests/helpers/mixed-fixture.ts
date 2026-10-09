@@ -10,7 +10,7 @@ import { buildContent, type BuiltContent } from "../../content/build";
  * Курс `mechanics` получает дополнительный урок `lesson-mixed`; прежние уроки собираются без изменений.
  */
 const FIXTURE = "tests/fixtures/mechanics";
-const WORDS = `${FIXTURE}/words`;
+const WORDS = `${FIXTURE}/words/mechanics`;
 const SOURCE = "Существующий пример проекта, иллюстрация формата";
 const verbatim = (locator: string, excerpt: string) => ({
   sourceLabel: SOURCE,
@@ -85,8 +85,9 @@ export function buildMixed({ phrases = MIXED_PHRASES, lesson, mutate }: MixedFil
   const root = mkdtempSync(join(tmpdir(), "tetradio-mixed-"));
   for (const entry of ["words", "lessons", "art", "courses", "phrases", "audio", "pictures", "pictures.yaml"])
     if (existsSync(join(FIXTURE, entry))) cpSync(join(FIXTURE, entry), join(root, entry), { recursive: true });
-  mkdirSync(join(root, "phrases"), { recursive: true });
-  for (const [id, doc] of Object.entries(phrases)) writeFileSync(join(root, "phrases", `${id}.yaml`), stringify(doc));
+  mkdirSync(join(root, "phrases", "mechanics"), { recursive: true });
+  for (const [id, doc] of Object.entries(phrases))
+    writeFileSync(join(root, "phrases", "mechanics", `${id}.yaml`), stringify(doc));
   const items = lesson
     ? undefined
     : [...Object.keys(phrases).map((id) => ({ kind: "phrase", id })), { kind: "word", id: "w070" }];

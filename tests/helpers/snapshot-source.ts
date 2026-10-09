@@ -1,5 +1,6 @@
 import { LESSON_MATES_RADIUS, programmeOrder, type CardFacts, type SessionSource } from "../../src/domain/learning";
 import { unitKey, wordKeyOf, wordRef } from "../../src/domain/refs";
+import { DEFAULT_LANGUAGE, type Language } from "../../src/domain/language";
 import { byTime, emptyStats, foldStats, summarizeEvents } from "../../src/domain/skills";
 import { cardLabel, type StatsSource } from "../../src/domain/stats";
 import {
@@ -37,6 +38,8 @@ export interface Snapshot {
   sessions: Session[];
   /** Часовой пояс планировщика; без него — Asia/Nicosia. */
   timezone?: string;
+  /** Язык курса по id; без записи — язык по умолчанию. */
+  languages?: Record<string, Language>;
 }
 
 export const itemOfLink = (link: Snapshot["links"][number]): LessonItem => ({
@@ -67,15 +70,36 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
       : { kind: "phrase", phrase: phrases.get(ref.id)! };
   };
   const total = (kind: CardKind) => (kind === "word" ? data.words.length : phrases.size);
+  // Урок без курса и карточка вне уроков — у основного курса, первого в снимке.
+  const primary = data.courses?.[0]?.id;
+  const lessonCourse = new Map(data.lessons.map((lesson) => [lesson.id, lesson.courseId ?? primary]));
+  const cardCourse = (key: string) => {
+    const item = items.find((entry) => entry.unitKey === key);
+    return item ? lessonCourse.get(item.lessonId) : primary;
+  };
+  const inCourse = (courseId: string | undefined) => (key: string) => !courseId || cardCourse(key) === courseId;
+  const courseIds = (kind: CardKind, courseId: string) =>
+    [
+      ...new Set(
+        items
+          .filter((item) => item.ref.kind === kind && lessonCourse.get(item.lessonId) === courseId)
+          .map((item) => item.ref.id),
+      ),
+    ].sort();
+  const languageOf = (key: string) => {
+    const course = cardCourse(key);
+    return course ? data.languages?.[course] : undefined;
+  };
   return {
     timezone: () => data.timezone ?? "Asia/Nicosia",
-    studiedLessons: async () =>
+    studiedLessons: async (courseId) =>
       programmeOrder(
         data.lessons.filter(
           (lesson) =>
-            lesson.completed || (data.blockProgress ?? []).some((row) => row.lessonId === lesson.id && row.done),
+            (!courseId || lessonCourse.get(lesson.id) === courseId) &&
+            (lesson.completed || (data.blockProgress ?? []).some((row) => row.lessonId === lesson.id && row.done)),
         ),
-        modules,
+        courseId ? modules.filter((module) => module.courseId === courseId) : modules,
         (id) => data.lessons.findIndex((lesson) => lesson.id === id),
       ),
     itemsOf: async (lessonIds) => items.filter((item) => lessonIds.includes(item.lessonId)),
@@ -92,7 +116,10 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
           .map((key) => [key, states.get(key)!]),
       ),
     liveKeys: async (refs) => new Set(refs.filter(isLive).map(unitKey)),
-    dueStates: async (now) => data.states.filter((state) => new Date(state.card.due).getTime() <= now.getTime()),
+    dueStates: async (now, courseId) =>
+      data.states.filter(
+        (state) => new Date(state.card.due).getTime() <= now.getTime() && inCourse(courseId)(state.unitKey),
+      ),
     factsOf: async (refs) =>
       new Map(
         refs.filter(isLive).map((ref) => {
@@ -101,11 +128,16 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
             const phrase = phrases.get(ref.id)!;
             facts.hasTranslation = !!phrase.translation;
             facts.hasAudio = !!phrase.audioAssetId;
+            const language = languageOf(unitKey(ref));
+            if (language) facts.language = language;
           }
           return [unitKey(ref), facts];
         }),
       ),
-    phraseCount: async () => livePhrases.length,
+    phraseCount: async (courseId) =>
+      courseId ? courseIds("phrase", courseId).filter((id) => phrases.has(id)).length : livePhrases.length,
+    languagesOf: async (refs) =>
+      new Map(refs.map((ref) => [unitKey(ref), languageOf(unitKey(ref)) ?? DEFAULT_LANGUAGE] as const)),
     cardsOf: async (refs) =>
       new Map(
         refs
@@ -117,7 +149,8 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
         unitKey(card.kind === "word" ? wordRef(card.word.id) : { kind: "phrase", id: card.phrase.id }),
         data.events,
       ),
-    optionPool: async () => [...words.values()],
+    optionPool: async (_want, courseId) =>
+      courseId ? courseIds("word", courseId).flatMap((id) => words.get(id) ?? []) : [...words.values()],
     lessonMatesOf: async (wordIds) =>
       new Map(
         wordIds.map((id) => {
@@ -135,7 +168,8 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
           return [id, [...mates].flatMap((mate) => (isLive(wordRef(mate)) ? [words.get(mate)!] : []))] as const;
         }),
       ),
-    phrasePool: async () => livePhrases,
+    phrasePool: async (_want, courseId) =>
+      courseId ? courseIds("phrase", courseId).flatMap((id) => phrases.get(id) ?? []) : livePhrases,
     daysBetween: async (from, to) =>
       byTime(data.events.filter((event) => event.localDate >= from && event.localDate <= to)).reduce(
         (summary, event) => foldStats(summary, event, Infinity),

@@ -193,6 +193,8 @@ export interface Session {
   status: "active" | "done" | "ended";
   activeTimeMs: number;
   introducedKeys?: string[];
+  /** Курс занятия; у занятий прежних версий его нет — это занятия основного курса. */
+  courseId?: string;
 }
 /** `errorReports` — отправка отчётов о сбоях во внешний сервис; включена по умолчанию, в компактный снимок синхронизации не входит. */
 export interface Settings {

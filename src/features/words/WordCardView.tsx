@@ -4,13 +4,13 @@ import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Example, Word } from "../../domain/types";
-import { languageOfText } from "../../domain/language";
 import { coreWord, stressNote, stressPosition } from "../../domain/phonetics";
 import { playWord, speakPhrase, useAudioKind, useVoice } from "../../shared/audio";
 import { useAssetSource, useAssetUrl, useWord } from "../../shared/store";
 import ui from "../../shared/ui.module.css";
 import wordCss from "../../shared/word.module.css";
 import { cx } from "../../shared/cx";
+import { useProfile } from "../../shared/language";
 
 export const QUIET_SPEAK =
   "size-11 rounded-full bg-card text-primary hover:bg-soft hover:text-primary [&_svg:not([class*='size-'])]:size-5";
@@ -47,7 +47,8 @@ export function SpeakButton({
   label?: string;
   quiet?: boolean;
 }) {
-  const kind = useAudioKind(word);
+  const profile = useProfile();
+  const kind = useAudioKind(word, profile);
   const source = useAssetSource();
   const [failed, setFailed] = useState<"none" | "error" | null>(null);
   // Кнопка стоит в строке справа от слова: подпись держим под кнопкой узкой колонкой,
@@ -61,13 +62,15 @@ export function SpeakButton({
         disabled={kind === "none"}
         aria-label={kind === "none" ? "Озвучка недоступна" : label}
         onClick={() =>
-          playWord(word, source).then((result) => setFailed(result === "none" || result === "error" ? result : null))
+          playWord(word, profile, source).then((result) =>
+            setFailed(result === "none" || result === "error" ? result : null),
+          )
         }
       >
         <Volume2 aria-hidden />
       </Button>
       {(kind === "none" || failed === "none") && (
-        <span className={ui.note}>Озвучка недоступна: нет файла и {languageOfText(word.greek).voiceName}</span>
+        <span className={ui.note}>Озвучка недоступна: нет файла и {profile.voiceName}</span>
       )}
       {failed === "error" && (
         <span className={ui.note} role="status">
@@ -103,6 +106,7 @@ export function WordSummary({ word }: { word: Word }) {
 
 export function ReadingNotes({ word, bare }: { word: Word; bare?: boolean }) {
   const [open, setOpen] = useState<number | null>(null);
+  const { syllables } = useProfile();
   const segments = [...word.segments].filter((s) => s.start >= 0).sort((a, b) => a.start - b.start);
   const parts: { text: string; index: number | null }[] = [];
   let cursor = 0;
@@ -113,7 +117,7 @@ export function ReadingNotes({ word, bare }: { word: Word; bare?: boolean }) {
     cursor = segment.start + segment.text.length;
   });
   if (cursor < word.greek.length) parts.push({ text: word.greek.slice(cursor), index: null });
-  const note = languageOfText(word.greek).syllables ? stressNote(word.greek) : null;
+  const note = syllables ? stressNote(word.greek) : null;
   const core = coreWord(word.greek);
   const accent = stressPosition(word.greek);
   const active = open === null ? null : segments[open];
@@ -191,7 +195,7 @@ export function ExampleBox({
   bare?: boolean;
 }) {
   const at = example.target ? example.greek.indexOf(example.target) : -1;
-  const profile = languageOfText(example.greek);
+  const profile = useProfile();
   const voice = useVoice(profile);
   const [open, setOpen] = useState<number | null>(null);
   const glosses = example.glosses ?? [];

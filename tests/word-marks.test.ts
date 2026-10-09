@@ -222,8 +222,8 @@ const course = (): Files => ({
       { type: "speaking", id: "s", part: "interview", prompt: "—", seconds: 10, criteria: ["—"] },
     ],
   },
-  "words/eimai.yaml": { greek: "είμαι", russian: "быть", ipa: "/ˈime/", forms: "прош. ήμουν; буд. θα είμαι" },
-  "words/filos.yaml": { greek: "ο φίλος", russian: "друг", forms: "мн. οι φίλοι" },
+  "words/c/eimai.yaml": { greek: "είμαι", russian: "быть", ipa: "/ˈime/", forms: "прош. ήμουν; буд. θα είμαι" },
+  "words/c/filos.yaml": { greek: "ο φίλος", russian: "друг", forms: "мн. οι φίλοι" },
 });
 
 describe("разметка в пакете", () => {

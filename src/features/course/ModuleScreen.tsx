@@ -5,6 +5,7 @@ import { Screen } from "../../app/Screen";
 import { installLesson } from "../../content/client";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { db } from "../../storage/db";
+import { useFollowCourse } from "../../shared/courses";
 import { Tick } from "../../shared/Tick";
 import { useSpread } from "../../shared/media";
 import { checkpointLabels } from "./checkpoints";
@@ -17,11 +18,12 @@ const FROM_MODULE = { fromModule: true };
 
 export function ModuleScreen() {
   const { moduleId = "" } = useParams();
-  const view = useLiveQuery(
-    async () => (await moduleViews()).find((item) => item.module.id === moduleId) ?? null,
-    [moduleId],
-  );
+  const view = useLiveQuery(async () => {
+    const own = await db.modules.get(moduleId);
+    return (await moduleViews(own?.courseId)).find((item) => item.module.id === moduleId) ?? null;
+  }, [moduleId]);
   const courseId = view?.module.courseId;
+  useFollowCourse(courseId);
   const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
   const spread = useSpread();
   const [problem, setProblem] = useState("");

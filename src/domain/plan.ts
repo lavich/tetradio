@@ -72,27 +72,31 @@ export function programmeOrder(
 export interface PlanSource {
   /** Часовой пояс, по которому считается «сегодня». */
   timezone(): string;
-  /** Пройденные и начатые уроки в порядке программы. */
-  studiedLessons(): Promise<PlanLesson[]>;
+  /** Пройденные и начатые уроки курса в порядке его программы; без курса — всех курсов. */
+  studiedLessons(courseId?: string): Promise<PlanLesson[]>;
   /** Связи перечисленных уроков одной выборкой, в любом порядке. */
   itemsOf(lessonIds: string[]): Promise<LessonItem[]>;
   lessonRefs(lessonId: string): Promise<LearningRef[]>;
   statesOf(refs: LearningRef[]): Promise<Map<string, LearningState>>;
   /** Ключи существующих карточек. */
   liveKeys(refs: LearningRef[]): Promise<Set<string>>;
-  dueStates(now: Date): Promise<LearningState[]>;
+  /** Состояния к повторению на момент `now`; с курсом — только карточки этого курса. */
+  dueStates(now: Date, courseId?: string): Promise<LearningState[]>;
   /** Признаки доступности упражнения для перечисленных карточек; тексты при этом не нужны. */
   factsOf(refs: LearningRef[]): Promise<Map<string, CardFacts>>;
-  /** Число живых фраз: достаточность пула вариантов для аудирования фраз. */
-  phraseCount(): Promise<number>;
+  /** Число живых фраз курса: достаточность пула вариантов для аудирования фраз. */
+  phraseCount(courseId?: string): Promise<number>;
 }
 
 export interface PlanOptions {
   hasVoice?: Voices;
+  /** План курса: без него — по всем курсам сразу. */
+  courseId?: string;
 }
 export async function makePlan(source: PlanSource, now: Date, options: PlanOptions = {}): Promise<DailyPlan> {
   const today = localDay(now, source.timezone());
-  const [lessons, phrasePool] = await Promise.all([source.studiedLessons(), source.phraseCount()]);
+  const { courseId } = options;
+  const [lessons, phrasePool] = await Promise.all([source.studiedLessons(courseId), source.phraseCount(courseId)]);
   const availability: AvailabilityContext = { hasVoice: options.hasVoice ?? false, phrasePool };
 
   const rank = new Map(lessons.map((lesson, index) => [lesson.id, index]));
@@ -126,7 +130,7 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     }),
   );
 
-  const reviews = (await source.dueStates(now))
+  const reviews = (await source.dueStates(now, courseId))
     .sort(
       (a, b) =>
         stateRank(a.card) - stateRank(b.card) ||

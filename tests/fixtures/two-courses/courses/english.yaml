@@ -1,0 +1,8 @@
+title: Английский
+language: en
+modules:
+  - e01
+calendar:
+  start: 2026-10-05
+  checkpoints:
+    - { label: A2, title: Ступень A2, afterModule: 1, date: 2026-12-20 }

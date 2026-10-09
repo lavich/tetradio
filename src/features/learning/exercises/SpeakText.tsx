@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Volume2 } from "lucide-react";
-import { languageOfText } from "../../../domain/language";
 import { playText, useTextAudioKind } from "../../../shared/audio";
+import { useProfile } from "../../../shared/language";
 import { QUIET_SPEAK } from "../../words/WordCardView";
 import ui from "../../../shared/ui.module.css";
 import wordCss from "../../../shared/word.module.css";
@@ -19,7 +19,7 @@ export function SpeakText({
   label: string;
   quiet?: boolean;
 }) {
-  const profile = languageOfText(text);
+  const profile = useProfile();
   const kind = useTextAudioKind(audioAssetId, profile);
   const [failed, setFailed] = useState<"none" | "error" | null>(null);
   return (

@@ -1,9 +1,9 @@
-import { languageOfText } from "../../../domain/language";
 import { useEffect, useState } from "react";
 import { assemblyOptions, assemblySkipMessage, checkAssembly, formatSyllables } from "../../../domain/syllables";
 import { WordArt } from "../../words/WordCardView";
 import { Tick } from "../../../shared/Tick";
 import { cx } from "../../../shared/cx";
+import { useProfile } from "../../../shared/language";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./assembly.module.css";
@@ -37,7 +37,7 @@ export function Assembly({
   }, [item.id]);
   const revealed = useRevealed(!!result);
   const word = wordOf(item.card);
-  const lang = languageOfText(word.greek).code;
+  const lang = useProfile().code;
   useRevealSpeech(item.card, item.id, !!result, autoSpeak);
   const pool = assemblyOptions(word.greek, item.options);
   const complete = placed.length === pool.length;

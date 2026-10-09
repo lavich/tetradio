@@ -1,4 +1,4 @@
-import { languageOfText } from "./language";
+import { PROFILES, type LanguageProfile } from "./language";
 import type { ExerciseType, Phrase, Word } from "./types";
 
 export const shuffle = <T>(items: T[], random: () => number) => {
@@ -29,19 +29,23 @@ export interface WordSources {
 /** Больше двух близких вариантов из трёх — и ответ находится по памяти о прошлых карточках занятия. */
 export const CLOSE_OPTIONS = 2;
 const normAnswer = (value: string) => value.normalize("NFC").trim().replace(/\s+/g, " ").toLocaleLowerCase("el");
-const hasArticle = (word: Word) => {
-  const { article } = languageOfText(word.greek);
-  return article ? article.test(normAnswer(word.greek)) : false;
-};
+const hasArticle = (word: Word, { article }: LanguageProfile) =>
+  article ? article.test(normAnswer(word.greek)) : false;
 /**
  * Три различных неверных ответа или `[]`, если их меньше трёх. Форма (есть ли артикль) важнее потолка
  * близких слов, потолок важнее источника: близкие той же формы до потолка → словарь той же формы →
  * близкие той же формы сверх потолка → то же для другой формы. Внутри группы порядок случайный.
  */
-export function distractorsFor(word: Word, sources: WordSources, type: ExerciseType, random: () => number): string[] {
+export function distractorsFor(
+  word: Word,
+  sources: WordSources,
+  type: ExerciseType,
+  random: () => number,
+  profile: LanguageProfile = PROFILES.el,
+): string[] {
   const key = (w: Word) => (type === "recognition" ? w.russian : w.greek);
   const own = normAnswer(key(word));
-  const form = hasArticle(word);
+  const form = hasArticle(word, profile);
   const closeIds = new Set(sources.close.map((w) => w.id));
   // Ранг: 0 — близкие той же формы, 1 — словарь той же формы, 2 и 3 — то же другой формы.
   // Совпадающий ответ входит во все свои группы и берётся той, до которой очередь дошла раньше:
@@ -51,7 +55,7 @@ export function distractorsFor(word: Word, sources: WordSources, type: ExerciseT
     const value = key(w);
     const norm = value && normAnswer(value);
     if (w.id === word.id || !norm || norm === own) return;
-    const rank = (hasArticle(w) === form ? 0 : 2) + (close ? 0 : 1);
+    const rank = (hasArticle(w, profile) === form ? 0 : 2) + (close ? 0 : 1);
     const slots = groups.get(norm) ?? [];
     slots[rank] ??= value;
     groups.set(norm, slots);
@@ -82,8 +86,14 @@ export function distractorsFor(word: Word, sources: WordSources, type: ExerciseT
   return [...picked.values()];
 }
 /** Четыре варианта слова в случайном порядке: свой ответ и три неверных; `[]` — неверных меньше трёх. */
-export function optionsFor(word: Word, sources: WordSources, type: ExerciseType, random: () => number): string[] {
-  const wrong = distractorsFor(word, sources, type, random);
+export function optionsFor(
+  word: Word,
+  sources: WordSources,
+  type: ExerciseType,
+  random: () => number,
+  profile: LanguageProfile = PROFILES.el,
+): string[] {
+  const wrong = distractorsFor(word, sources, type, random, profile);
   return wrong.length ? shuffle([type === "recognition" ? word.russian : word.greek, ...wrong], random) : [];
 }
 /** Четыре различных варианта: свой ответ и три чужих; совпадающие нормализованные ответы не считаются разными. */

@@ -1,3 +1,4 @@
+import { rememberCourses } from "../storage/courses";
 import { db, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
 import { readPending } from "../sync/snapshot";
 import type { Course } from "../domain/types";
@@ -24,6 +25,7 @@ async function loadCatalog(database: AppDatabase, source: ContentFetcher): Promi
       await database.modules.clear();
       await database.modules.bulkAdd((catalog.modules ?? []).map((module, position) => ({ ...module, position })));
       await adoptCourses(catalog, database);
+      await rememberCourses(database);
       await database.meta.put({ key: "catalogUpdatedAt", value: new Date().toISOString() });
     });
     setCatalogPhase("ready");
@@ -53,7 +55,7 @@ async function adoptCourses(catalog: Catalog, database: AppDatabase) {
   const courseOf = new Map(catalog.lessons.map((entry) => [entry.id, entry.courseId]));
   for (const lesson of await database.lessons.toArray()) {
     const courseId = courseOf.get(lesson.id);
-    if (courseId && !lesson.courseId) await database.lessons.put({ ...lesson, courseId });
+    if (courseId && lesson.courseId !== courseId) await database.lessons.put({ ...lesson, courseId });
   }
   for (const item of catalog.courses) {
     const stored = await database.courses.get(item.id);

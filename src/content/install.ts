@@ -1,3 +1,4 @@
+import { rememberCourses } from "../storage/courses";
 import { db, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
 import { reportError } from "../reporting/reporting";
 import { applyPackage, type InstallResult } from "./apply";
@@ -101,6 +102,8 @@ export function installLesson(
       if (pack.id !== lessonId || pack.version !== entry.version)
         throw new ContentError("Пакет не соответствует записи каталога.");
       const result = await applyPackage(pack, database);
+      // Порядок курсов — порядок установки: курс запоминается первым уроком, не дожидаясь следующего каталога.
+      if (result.status === "installed") await rememberCourses(database);
       if (prune) await pruneMedia(database).catch(() => undefined);
       setPhase(lessonId, { phase: "idle" });
       return result;

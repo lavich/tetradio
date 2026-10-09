@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { SessionCard } from "../../../domain/types";
 import { playText, playWord } from "../../../shared/audio";
+import { useProfile } from "../../../shared/language";
 
 /** Раскрытый ответ подводим к верху области прокрутки: иначе он остаётся под облачком. */
 export function useRevealed(active: boolean, block: ScrollLogicalPosition = "start") {
@@ -19,11 +20,12 @@ export function useRevealed(active: boolean, block: ScrollLogicalPosition = "sta
  */
 export function useAutoSpeak(card: SessionCard, enabled: boolean) {
   const played = useRef(false);
+  const profile = useProfile();
   useEffect(() => {
     if (!enabled || played.current) return;
     played.current = true;
-    if (card.kind === "word") void playWord(card.word);
-    else void playText(card.phrase.text, card.phrase.audioAssetId);
+    if (card.kind === "word") void playWord(card.word, profile);
+    else void playText(card.phrase.text, card.phrase.audioAssetId, profile);
   }, [card, enabled]);
 }
 
@@ -35,10 +37,11 @@ export function useAutoSpeak(card: SessionCard, enabled: boolean) {
  */
 export function useRevealSpeech(card: SessionCard, itemId: string, answered: boolean, enabled: boolean) {
   const spoken = useRef<string | null>(null);
+  const profile = useProfile();
   useEffect(() => {
     if (!answered || !enabled || spoken.current === itemId) return;
     spoken.current = itemId;
-    if (card.kind === "word") void playWord(card.word);
-    else if (card.kind === "phrase") void playText(card.phrase.text, card.phrase.audioAssetId);
+    if (card.kind === "word") void playWord(card.word, profile);
+    else if (card.kind === "phrase") void playText(card.phrase.text, card.phrase.audioAssetId, profile);
   }, [answered, enabled]);
 }

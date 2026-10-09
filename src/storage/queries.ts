@@ -1,7 +1,7 @@
 import Dexie from "dexie";
 import { State } from "ts-fsrs";
-import { languageOfText } from "../domain/language";
 import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
+import { cardLanguages, cardsInCourse, courseCardIds, courseLessonIds } from "./courses";
 import {
   LESSON_MATES_RADIUS,
   programmeOrder,
@@ -25,7 +25,6 @@ import {
   CARD_KINDS,
   fillSettings,
   type CardKind,
-  type Course,
   type LearningRef,
   type LearningState,
   type Lesson,
@@ -43,24 +42,26 @@ const span = (first: string) =>
 
 export const loadSettings = async (database: AppDatabase = db) => fillSettings(await database.settings.get("settings"));
 export const loadLessons = (database: AppDatabase = db) => database.lessons.toArray();
-/** Курс один: тот, из которого модули программы, а без модулей — первый курс каталога. */
-export async function currentCourse(database: AppDatabase = db): Promise<Course | undefined> {
-  const module = await database.modules.toCollection().first();
-  if (module) return database.courses.get(module.courseId);
-  return database.courses.toCollection().first();
-}
-/** Уроки — источник новых карточек: пройденные и начатые, где выполнено хотя бы одно задание. */
-export async function studiedLessons(database: AppDatabase = db): Promise<PlanLesson[]> {
+/**
+ * Уроки — источник новых карточек: пройденные и начатые, где выполнено хотя бы одно задание. С курсом — уроки
+ * этого курса в порядке его программы; без курса — всех курсов.
+ */
+export async function studiedLessons(courseId?: string, database: AppDatabase = db): Promise<PlanLesson[]> {
   // Булево поле IndexedDB не индексирует, а уроков — десятки.
-  const [lessons, rows] = await Promise.all([
+  const [all, rows, own] = await Promise.all([
     database.lessons.toArray(),
     database.blockProgress.filter((row) => row.done).toArray(),
+    courseId ? courseLessonIds(courseId, database) : undefined,
   ]);
+  const mine = own && new Set(own);
+  const lessons = mine ? all.filter((lesson) => mine.has(lesson.id)) : all;
   const started = new Set(rows.map((row) => row.lessonId));
   const done = lessons.filter((lesson) => lesson.completed || started.has(lesson.id));
   if (!done.length) return [];
   const [modules, entries] = await Promise.all([
-    database.modules.orderBy("number").toArray(),
+    courseId
+      ? database.modules.where("courseId").equals(courseId).toArray()
+      : database.modules.orderBy("number").toArray(),
     database.catalog.bulkGet(done.map((lesson) => lesson.id)),
   ]);
   const catalog = new Map(done.map((lesson, index) => [lesson.id, entries[index]?.position]));
@@ -114,29 +115,55 @@ export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): 
 export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
   return {
     timezone: deviceTimezone,
-    studiedLessons: () => studiedLessons(database),
+    studiedLessons: (courseId) => studiedLessons(courseId, database),
     itemsOf: (lessonIds) =>
       lessonIds.length ? database.lessonItems.where("lessonId").anyOf(lessonIds).toArray() : Promise.resolve([]),
     lessonRefs: async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref),
     statesOf: (refs) => statesOf(refs, database),
     liveKeys: (refs) => liveKeys(refs, database),
-    dueStates: (now) => database.cardStates.where("card.due").belowOrEqual(now).toArray(),
+    dueStates: async (now, courseId) => {
+      const due = await database.cardStates.where("card.due").belowOrEqual(now).toArray();
+      if (!courseId) return due;
+      const own = await cardsInCourse(
+        due.map((state) => state.unitKey),
+        courseId,
+        database,
+      );
+      return due.filter((state) => own.has(state.unitKey));
+    },
     factsOf: async (refs) => {
       const facts = new Map<string, CardFacts>();
       const groups = byKind(refs);
       for (const id of groups.word) facts.set(wordKeyOf(id), { kind: "word" });
       // Признаки фразы лежат в её записи; читаются только записи кандидатов, а не таблица целиком.
-      if (groups.phrase.length)
-        for (const phrase of await livePhrases(groups.phrase, database))
-          facts.set(unitKey({ kind: "phrase", id: phrase.id }), {
+      if (groups.phrase.length) {
+        const phrases = await livePhrases(groups.phrase, database);
+        const languages = await cardLanguages(
+          phrases.map((phrase) => ({ kind: "phrase", id: phrase.id })),
+          database,
+        );
+        for (const phrase of phrases) {
+          const key = unitKey({ kind: "phrase", id: phrase.id });
+          facts.set(key, {
             kind: "phrase",
             hasTranslation: !!phrase.translation,
             hasAudio: !!phrase.audioAssetId,
-            language: languageOfText(phrase.text).code,
+            language: languages.get(key),
           });
+        }
+      }
       return facts;
     },
-    phraseCount: () => database.phrases.count(),
+    phraseCount: async (courseId) =>
+      courseId
+        ? (
+            await database.phrases
+              .where("id")
+              .anyOf(await courseCardIds(courseId, "phrase", database))
+              .primaryKeys()
+          ).length
+        : database.phrases.count(),
+    languagesOf: (refs) => cardLanguages(refs, database),
     cardsOf: (refs) => cardsOf(refs, database),
     skillsOf: async (card) => {
       const key = unitKey(card.kind === "word" ? wordRef(card.word.id) : { kind: "phrase", id: card.phrase.id });
@@ -153,9 +180,9 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       const row = await database.cardSkills.get(key);
       return summarizeEvents(key, await eventsAfter(database, key, base.asOf), row?.skills ?? emptySkills());
     },
-    optionPool: (want) => optionPool(want, database),
+    optionPool: (want, courseId) => optionPool(want, courseId, database),
     lessonMatesOf: (wordIds) => lessonMates(wordIds, database),
-    phrasePool: (want) => phrasePool(want, database),
+    phrasePool: (want, courseId) => phrasePool(want, courseId, database),
     daysBetween: async (from, to) => {
       const base = await database.baseSummary.get("base");
       const local = await database.events.where("localDate").between(from, to, true, true).toArray();
@@ -209,11 +236,23 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
 export const eventsAfter = (database: AppDatabase, unitKey: string, asOf: string) =>
   database.events.where("[unitKey+createdAt]").between([unitKey, asOf], [unitKey, Dexie.maxKey], false, true).toArray();
 
+/** Случайные `want` идентификаторов курса; все, если их не больше `want`, — по порядку. */
+const sample = (ids: string[], want: number) => {
+  if (ids.length <= want) return ids;
+  const copy = [...ids];
+  for (let i = 0; i < want; i++) {
+    const j = i + Math.floor(Math.random() * (copy.length - i));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, want).sort();
+};
 /**
  * Пул вариантов ответа. Маленький словарь берётся целиком в порядке идентификаторов, поэтому совпадает
- * с полным снимком; большой — несколькими случайными порциями без чтения всей таблицы.
+ * с полным снимком; большой — несколькими случайными порциями без чтения всей таблицы. С курсом — слова уроков
+ * этого курса: варианты не приходят из другого языка.
  */
-export async function optionPool(want: number, database: AppDatabase = db): Promise<Word[]> {
+export async function optionPool(want: number, courseId?: string, database: AppDatabase = db): Promise<Word[]> {
+  if (courseId) return liveWords(sample(await courseCardIds(courseId, "word", database), want), database);
   const total = await database.words.count();
   if (total <= want) return database.words.toArray();
   const chunk = Math.ceil(want / 4);
@@ -261,7 +300,8 @@ export async function lessonMates(wordIds: string[], database: AppDatabase = db)
   );
 }
 /** Пул фраз для вариантов: те же правила, что у слов, — целиком для маленькой таблицы, порциями для большой. */
-export async function phrasePool(want: number, database: AppDatabase = db): Promise<Phrase[]> {
+export async function phrasePool(want: number, courseId?: string, database: AppDatabase = db): Promise<Phrase[]> {
+  if (courseId) return livePhrases(sample(await courseCardIds(courseId, "phrase", database), want), database);
   const total = await database.phrases.count();
   if (total <= want) return database.phrases.toArray();
   const chunk = Math.ceil(want / 4);

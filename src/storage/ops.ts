@@ -1,4 +1,5 @@
 import { db, type AppDatabase } from "./db";
+import { profileOfCourse, sessionCourse } from "./courses";
 import { lessonMates, optionPool, phrasePool } from "./queries";
 import {
   closeSources,
@@ -154,14 +155,16 @@ async function easierRetry(
 ): Promise<Pick<SessionItem, "type" | "options"> | null> {
   if (!hasEasierStep(item.type)) return null;
   const card = item.card;
+  const courseId = await sessionCourse(session, database);
   const pools =
     card.kind === "word"
       ? {
           words: await wordSourcesOf(card.word.id, session, database),
           phrases: [],
         }
-      : { words: NO_WORDS, phrases: await phrasePool(OPTION_POOL, database) };
-  return easierExercise(card, item.type, pools);
+      : { words: NO_WORDS, phrases: await phrasePool(OPTION_POOL, courseId, database) };
+  const profile = courseId ? await profileOfCourse(courseId, database) : undefined;
+  return easierExercise(card, item.type, pools, Math.random, profile);
 }
 /**
  * Живые слова занятия: в элементах лежат снимки на момент сборки, поэтому слова перечитываются по id,
@@ -171,12 +174,12 @@ async function liveSessionWords(session: Session, database: AppDatabase): Promis
   const ids = [...new Set(session.items.flatMap((item) => (item.card.kind === "word" ? [item.card.word.id] : [])))];
   return (await database.words.bulkGet(ids)).flatMap((word) => (word ? [word] : []));
 }
-/** Источники вариантов слова в занятии: соседи по урокам, живые слова занятия и пул словаря. */
+/** Источники вариантов слова в занятии: соседи по урокам, живые слова занятия и пул словаря курса занятия. */
 async function wordSourcesOf(wordId: string, session: Session, database: AppDatabase) {
   const [mates, sessionWords, pool] = await Promise.all([
     lessonMates([wordId], database),
     liveSessionWords(session, database),
-    optionPool(OPTION_POOL, database),
+    sessionCourse(session, database).then((courseId) => optionPool(OPTION_POOL, courseId, database)),
   ]);
   return closeSources(wordId, mates, sessionWords, pool);
 }

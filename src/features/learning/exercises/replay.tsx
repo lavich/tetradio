@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Volume2 } from "lucide-react";
-import { languageOfText } from "../../../domain/language";
 import type { SessionCard } from "../../../domain/types";
 import { playText, playWord, useAudioKind, useTextAudioKind } from "../../../shared/audio";
+import { useProfile } from "../../../shared/language";
 import s from "./replay.module.css";
 
 interface Replay {
@@ -21,12 +21,13 @@ export function useReplay(card: SessionCard, itemId: string, autoSpeak: boolean 
   const phrase = card.kind === "phrase" ? card.phrase : null;
   const audioAssetId = word ? word.audioAssetId : phrase?.audioAssetId;
   const text = word ? word.greek : (phrase?.text ?? "");
-  const wordKind = useAudioKind(word ?? undefined);
-  const textKind = useTextAudioKind(audioAssetId, languageOfText(text));
+  const profile = useProfile();
+  const wordKind = useAudioKind(word ?? undefined, profile);
+  const textKind = useTextAudioKind(audioAssetId, profile);
   const played = useRef(false);
   const [failed, setFailed] = useState(false);
   const play = () =>
-    (word ? playWord(word) : playText(text, audioAssetId)).then((result) =>
+    (word ? playWord(word, profile) : playText(text, audioAssetId, profile)).then((result) =>
       setFailed(result === "error" || result === "none"),
     );
   useEffect(() => {

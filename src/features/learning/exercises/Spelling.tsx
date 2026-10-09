@@ -1,11 +1,11 @@
 import { useEffect, useId, useState } from "react";
-import { languageOfText } from "../../../domain/language";
 import { checkAnswer, checkTextAnswer } from "../../../domain/text-answer";
 import { diffChars } from "../../../domain/spelling";
 import { maskWriting } from "../../../domain/syllables";
 import { WordArt } from "../../words/WordCardView";
 import { Tick } from "../../../shared/Tick";
 import { cx } from "../../../shared/cx";
+import { useProfile } from "../../../shared/language";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./spelling.module.css";
@@ -16,8 +16,9 @@ import { PhraseReveal, Primary, QuietActions, QuietButton, Reveal, TaskHead, Ver
 
 /** Ответ на строке листа после проверки: совпавшее чернилами, лишнее зачёркнуто ручкой, нужное — ручкой сверху. */
 function Corrected({ value, expected }: { value: string; expected: string }) {
+  const { code } = useProfile();
   return (
-    <p className={exercise.written} data-testid="chars" lang={languageOfText(expected).code}>
+    <p className={exercise.written} data-testid="chars" lang={code}>
       <span>
         {diffChars(value, expected).map((part, index) =>
           part.type === "same" ? (
@@ -63,7 +64,7 @@ export function Spelling({
   const revealed = useRevealed(!!result);
   const { card } = item;
   const expected = card.kind === "phrase" ? card.phrase.text : wordOf(card).greek;
-  const profile = languageOfText(expected);
+  const profile = useProfile();
   const write = `Напиши ${profile.names.in}`;
   const mask = maskWriting(expected, { lead: true });
   const prompt = card.kind === "phrase" ? (card.phrase.translation ?? "") : wordOf(card).russian;

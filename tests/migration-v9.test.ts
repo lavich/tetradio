@@ -36,11 +36,11 @@ async function views(database: AppDatabase) {
       reviews: plan.reviews.map((review) => review.state.unitKey),
       origins: [...plan.origins],
     },
-    dictionary: (await dictionary(database)).map((lesson) => ({
+    dictionary: (await dictionary(undefined, database)).map((lesson) => ({
       ...lesson,
       entries: lesson.entries.map(({ key, greek, russian, mark }) => ({ key, greek, russian, mark })),
     })),
-    course: await courseProgress(V8_NOW, "Asia/Nicosia", database),
+    course: await courseProgress(V8_NOW, "Asia/Nicosia", undefined, database),
     stats: await progress(dexieSource(database), V8_NOW),
   };
 }
@@ -472,7 +472,7 @@ describe("обновление копии v8", () => {
     expect(await db.courses.toArray()).toEqual([
       {
         id: "greek-a2",
-        title: "Греческий A2 (пример)",
+        title: "Греческий (пример)",
         exam: expect.objectContaining({ date: "2027-05-11" }),
         updatedAt: "2026-09-10T08:00:00.000Z",
       },

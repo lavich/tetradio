@@ -4,12 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { buildWordExercise, wordExerciseOptions } from "../../domain/learning";
+import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { unitKey, wordRef } from "../../domain/refs";
 import type { SessionItem } from "../../domain/types";
 import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
-import { languageOfText } from "../../domain/language";
 import { stopAudio, useVoice } from "../../shared/audio";
+import { useCardProfile } from "../../shared/courses";
+import { ProfileContext } from "../../shared/language";
 import { useSettings } from "../../shared/store";
 import { db } from "../../storage/db";
 import { ExerciseView, type Answer } from "../learning/exercises";
@@ -26,7 +28,8 @@ export function WordExerciseScreen() {
   const { id = "", type } = useParams();
   const navigate = useNavigate();
   const word = useLiveQuery(async () => (await db.words.get(id)) ?? null, [id]);
-  const voice = useVoice(languageOfText(word?.greek ?? ""));
+  const profile = useCardProfile(wordRef(id));
+  const voice = useVoice(profile ?? PROFILES[DEFAULT_LANGUAGE]);
   const { settings, ready } = useSettings();
   const haptic = useHaptics();
   const nativeBack = usePlatform().capabilities.back;
@@ -42,13 +45,13 @@ export function WordExerciseScreen() {
   useBackHandler(back);
 
   useEffect(() => {
-    if (!live || !isWordExercise(type)) return;
+    if (!live || !profile || !isWordExercise(type)) return;
     let alive = true;
     void wordSources(live.id).then((sources) => {
       if (!alive) return;
-      const exercise = buildWordExercise(live, type, sources, Math.random, voice);
+      const exercise = buildWordExercise(live, type, sources, Math.random, voice, profile);
       if (!exercise) {
-        const status = wordExerciseOptions(live, sources, voice)[type];
+        const status = wordExerciseOptions(live, sources, voice, profile)[type];
         setReason(status.available ? "" : status.reason);
         return setItem(null);
       }
@@ -67,7 +70,7 @@ export function WordExerciseScreen() {
       alive = false;
     };
     // Задание собирается один раз на попытку: правка слова или загрузка голоса не должны подменять его посреди ответа.
-  }, [live?.id, type, attempt, item === null ? voice : undefined]);
+  }, [live?.id, type, attempt, profile, item === null ? voice : undefined]);
   useEffect(() => () => void stopAudio(), []);
 
   const answer = async ({ correct, status }: Answer) => {
@@ -80,17 +83,19 @@ export function WordExerciseScreen() {
   };
   const title = isWordExercise(type) ? EXERCISE_LABELS[type] : "Упражнение";
   const shell = (body: React.ReactNode, sheet = true) => (
-    <SessionShell
-      sheetLabel={sheet ? title : undefined}
-      cloudLabel={title}
-      closeLabel="К слову"
-      onClose={back}
-      nativeBack={nativeBack}
-      count={title}
-      note="Без учёта прогресса"
-    >
-      {body}
-    </SessionShell>
+    <ProfileContext value={profile ?? PROFILES[DEFAULT_LANGUAGE]}>
+      <SessionShell
+        sheetLabel={sheet ? title : undefined}
+        cloudLabel={title}
+        closeLabel="К слову"
+        onClose={back}
+        nativeBack={nativeBack}
+        count={title}
+        note="Без учёта прогресса"
+      >
+        {body}
+      </SessionShell>
+    </ProfileContext>
   );
   const message = (text: string) =>
     shell(
