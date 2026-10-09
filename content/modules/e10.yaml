@@ -1,0 +1,8 @@
+number: 10
+title: Tell me about a failure
+subtitle: Ошибки и выводы
+status: draft
+goal: рассказать о своей ошибке и о том, что из неё вынес
+grammar:
+  - conditional 3, should have / could have, wish
+sessions: 3
