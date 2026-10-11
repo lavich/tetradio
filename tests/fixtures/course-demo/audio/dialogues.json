@@ -14,5 +14,61 @@
   "m01-1/cafe-4.mp3": {
     "voice": "Aoede",
     "hash": "1d9b32d19a16aa75"
+  },
+  "readings/r-m01-anna/1.mp3": {
+    "voice": "Kore",
+    "hash": "eeb03478ba442137"
+  },
+  "readings/r-m01-anna/10.mp3": {
+    "voice": "Charon",
+    "hash": "316b870efef34def"
+  },
+  "readings/r-m01-anna/2.mp3": {
+    "voice": "Kore",
+    "hash": "7a3a6033345f57c8"
+  },
+  "readings/r-m01-anna/3.mp3": {
+    "voice": "Kore",
+    "hash": "875463ad7773840a"
+  },
+  "readings/r-m01-anna/4.mp3": {
+    "voice": "Kore",
+    "hash": "ca0794ee88c74928"
+  },
+  "readings/r-m01-anna/5.mp3": {
+    "voice": "Kore",
+    "hash": "7c870896f9dd2c4d"
+  },
+  "readings/r-m01-anna/6.mp3": {
+    "voice": "Charon",
+    "hash": "46d8a6a445daa43f"
+  },
+  "readings/r-m01-anna/7.mp3": {
+    "voice": "Charon",
+    "hash": "fb842f3f2cbb832f"
+  },
+  "readings/r-m01-anna/8.mp3": {
+    "voice": "Kore",
+    "hash": "e485c736ccd41ca4"
+  },
+  "readings/r-m01-anna/9.mp3": {
+    "voice": "Kore",
+    "hash": "9dd096f07e4c4deb"
+  },
+  "readings/r-m01-lemesos/1.mp3": {
+    "voice": "Kore",
+    "hash": "7a3a6033345f57c8"
+  },
+  "readings/r-m01-lemesos/2.mp3": {
+    "voice": "Kore",
+    "hash": "6529b9b68293eb02"
+  },
+  "readings/r-m01-lemesos/3.mp3": {
+    "voice": "Kore",
+    "hash": "7c870896f9dd2c4d"
+  },
+  "readings/r-m01-lemesos/4.mp3": {
+    "voice": "Kore",
+    "hash": "98c61a22fd2c32dd"
   }
 }

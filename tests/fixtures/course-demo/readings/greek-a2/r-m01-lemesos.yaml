@@ -7,6 +7,7 @@ text: |-
   Μένω στη Λεμεσό. Η Λεμεσός είναι στην Κύπρο. Γεια σας!
 glosses: []
 names: [Άννα, Ρωσία, Λεμεσός, Κύπρο]
+narrator: Άννα
 provenance:
   operation: requested-generation
   request: Пример текста демо-курса из слов модуля 01

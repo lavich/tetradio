@@ -27,7 +27,9 @@ interface Pilot {
   glosses?: Record<string, string>;
   expected: { strict?: number; known?: number; glosses?: number; names?: number; passes?: boolean; unknown?: string[] };
 }
-const pilots = parse(readFileSync("openspec/changes/reading-shelf/pilot-texts.yaml", "utf8")) as Pilot[];
+const pilots = parse(
+  readFileSync("openspec/changes/archive/2026-10-11-reading-shelf/pilot-texts.yaml", "utf8"),
+) as Pilot[];
 const measure = (pilot: Pilot) =>
   coverage({
     text: pilot.text,

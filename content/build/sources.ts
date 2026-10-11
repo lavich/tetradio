@@ -70,6 +70,10 @@ export interface ReadingSource {
   text: string;
   glosses?: { text: string; russian: string }[];
   names?: string[];
+  /** Говорящий каждой строки диалога («—») по порядку; пустое имя — реплика без говорящего. */
+  speakers?: string[];
+  /** Герой, от лица которого рассказан текст: его голосом звучит повествование. */
+  narrator?: string;
   provenance: { operation?: string; request?: string; review?: string };
 }
 /** Модуль программы: `modules/NN.yaml`; уроки черновика собираются для проверки, но не поставляются. */

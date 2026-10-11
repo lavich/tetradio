@@ -10,6 +10,7 @@ import { sentencesOf } from "../../domain/sentences";
 import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
 import { readDay, WORDS, withCount } from "../../shared/format";
 import { noVoice, ProfileContext, useLessonProfile, useProfile } from "../../shared/language";
+import { useAssetSource } from "../../shared/store";
 import { Tick } from "../../shared/Tick";
 import { markRead, readingPage } from "../../storage/readings";
 import { Marked, TapHint, useFieldMarks, WordTaps } from "./WordTaps";
@@ -33,9 +34,10 @@ function Text({ reading }: { reading: PackageReading }) {
   );
 }
 
-/** Весь текст синтезом по предложениям: длинное высказывание синтез может оборвать без ошибки. */
-function Aloud({ text }: { text: string }) {
+/** По предложениям: длинное высказывание синтез может оборвать без ошибки. */
+function Aloud({ reading }: { reading: PackageReading }) {
   const profile = useProfile();
+  const source = useAssetSource();
   const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState<Rate>("normal");
   const [problem, setProblem] = useState<{ text: string; failure: boolean } | null>(null);
@@ -50,14 +52,18 @@ function Aloud({ text }: { text: string }) {
       return;
     }
     const mine = ++run.current;
+    const sentences = sentencesOf(reading.text);
+    // Пакет, поставленный до смены деления на предложения, не должен звучать чужими записями со сдвигом.
+    const audio = reading.audio?.length === sentences.length ? reading.audio : undefined;
     setProblem(null);
     setPlaying(true);
     const result = await playDialogue(
-      sentencesOf(text).map((sentence) => ({ text: sentence })),
+      sentences.map((sentence, index) => ({ text: sentence, audioAssetId: audio?.[index] ?? undefined })),
       rate,
       undefined,
-      undefined,
+      source,
       profile,
+      true,
     );
     if (mine !== run.current) return;
     setPlaying(false);
@@ -137,7 +143,7 @@ export function ReadingScreen() {
           {open ? (
             <>
               <TapHint />
-              <Aloud text={reading.text} />
+              <Aloud reading={reading} />
               <WordTaps marks={page.marks} cards={page.cards} page={0}>
                 <Text reading={reading} />
               </WordTaps>

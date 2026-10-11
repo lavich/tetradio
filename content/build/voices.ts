@@ -17,6 +17,8 @@ export interface VoiceMap {
   prefix: string;
   pools: Record<Gender, string[]>;
   narrator?: string;
+  /** Чтец повествования текстов для чтения, если текст рассказан не от лица героя. */
+  reader?: string;
   characters: Map<string, { gender: Gender; voice: string }>;
 }
 /** Что озвучено: файл реплики → голос и хэш (текст + голос) на момент синтеза. */
@@ -61,6 +63,10 @@ export function parseVoices(body: string, file: string, code?: string): VoiceMap
     map.narrator = str("narrator");
     if (!all.has(map.narrator)) fail(`${at("narrator")}: голоса ${map.narrator} нет в pools`);
   }
+  if (raw!.reader !== undefined) {
+    map.reader = str("reader");
+    if (!all.has(map.reader)) fail(`${at("reader")}: голоса ${map.reader} нет в pools`);
+  }
   const characters = raw!.characters;
   if (!characters || typeof characters !== "object" || Array.isArray(characters))
     fail(`${at("characters")}: ожидалась карта «персонаж: { gender, voice }»`);
@@ -101,6 +107,40 @@ export function checkDialogueVoices(
     return voice;
   });
 }
+
+/**
+ * Голоса текста для чтения: повествование — рассказчика (герой `narrator` или чтец `reader` карты), строка диалога —
+ * своего говорящего, пустое имя — рассказчика. Разные говорящие, включая рассказчика, звучат разными голосами.
+ */
+export function readingCast(
+  map: VoiceMap,
+  narrator: string | undefined,
+  speakers: string[],
+  where: string,
+): { narration: string; lines: string[] } {
+  const character = (name: string) => map.characters.get(name.normalize("NFC"))?.voice;
+  const narration = narrator ? character(narrator) : map.reader;
+  if (!narration)
+    fail(
+      narrator
+        ? `${where}: у рассказчика «${narrator}» нет голоса в ${map.file}`
+        : `${where}: нужен голос чтеца — reader в ${map.file} — или рассказчик narrator у текста`,
+    );
+  const reader = narrator ?? "чтец";
+  const owner = new Map<string, string>([[narration!, reader]]);
+  const lines = speakers.map((speaker, index) => {
+    if (!speaker) return narration!;
+    const voice = character(speaker);
+    if (!voice) fail(`${where}: speakers[${index}]: у персонажа «${speaker}» нет голоса в ${map.file}`);
+    const other = owner.get(voice!);
+    if (other !== undefined && other !== speaker)
+      fail(`${where}: у «${other}» и «${speaker}» один голос ${voice} — в тексте голоса должны различаться`);
+    owner.set(voice!, speaker);
+    return voice!;
+  });
+  return { narration: narration!, lines };
+}
+export const readingFile = (readingId: string, index: number) => `readings/${readingId}/${index + 1}.mp3`;
 
 export function parseManifest(body: Uint8Array | undefined): VoiceManifest {
   if (!body) return {};
