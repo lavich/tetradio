@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ensureAsset } from "../content/client";
-import { PROFILES, type Language, type LanguageProfile } from "../domain/language";
+import { PROFILES, spokenText, type Language, type LanguageProfile } from "../domain/language";
 import type { Word } from "../domain/types";
 import { dbAssetSource, releaseAssetUrl, type AssetSource } from "./store";
 import { voicesOf } from "./voices";
@@ -105,7 +105,7 @@ function speakOnce(text: string, voice: SpeechSynthesisVoice, rate: number, lang
       resolve(started);
     };
     try {
-      const utterance = new SpeechSynthesisUtterance(text);
+      const utterance = new SpeechSynthesisUtterance(spokenText(text, lang));
       utterance.voice = voice;
       utterance.lang = voice.lang || lang;
       utterance.rate = rate;

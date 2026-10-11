@@ -118,6 +118,12 @@ const en: LanguageProfile = {
   isAlmost: typo,
 };
 
+/** Текст для синтеза: греческий вопросительный знак — та же «;», и синтез читает её как паузу, а не вопрос. */
+export const spokenText = (text: string, language: string) => {
+  const nfc = text.normalize("NFC");
+  return language === "el" || language.startsWith("el-") ? nfc.replaceAll(";", "?") : nfc;
+};
+
 export const PROFILES: Record<Language, LanguageProfile> = { el, en };
 export const DEFAULT_LANGUAGE: Language = "el";
 export const profileOf = (language: string | undefined): LanguageProfile => {

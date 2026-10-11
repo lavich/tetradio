@@ -140,7 +140,7 @@ test("в заданиях слов-кнопок нет; транскрипт р�
   const phrase = listening.getByRole("button", { name: "Произнести и перевести: Πώς σε λένε", exact: true });
   await phrase.click();
   await expect(page.getByRole("dialog", { name: "Πώς σε λένε;" })).toContainText("Как тебя зовут?");
-  await expect.poll(() => spoken(page)).toContain("Πώς σε λένε;");
+  await expect.poll(() => spoken(page)).toContain("Πώς σε λένε?"); // в синтез вопрос уходит с «?»
 });
 
 test("нет греческого голоса: подсказка с переводом и строкой о голосе", async ({ page }) => {
