@@ -35,7 +35,7 @@ export type {
  * `recall` и `cloze` приложение больше не предлагает; в перечислении они нужны, чтобы читалась старая история.
  */
 export type ExerciseType =
-  "recall" | "recognition" | "assembly" | "spelling" | "listening" | "comprehension" | "cloze" | "item";
+  "recall" | "recognition" | "assembly" | "spelling" | "listening" | "comprehension" | "cloze" | "item" | "wordGap";
 /** `revision` — ревизия поставленного пакетом содержимого: по ней установка пропускает неизменные карточки. */
 export interface Word {
   id: string;
@@ -228,6 +228,8 @@ export interface SessionItem {
   expectedVersion: number;
   eventId?: string;
   retryOf?: string;
+  /** Номер слова фразы, которое спрашивает попытка `wordGap`. */
+  gap?: number;
   skipped?: boolean;
   lessonTitle?: string;
 }

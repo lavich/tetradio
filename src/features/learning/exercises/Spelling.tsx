@@ -15,7 +15,7 @@ import { wordOf, type ExerciseProps, type Status } from "./model";
 import { PhraseReveal, Primary, QuietActions, QuietButton, Reveal, TaskHead, Verdict, WordReveal } from "./parts";
 
 /** Ответ на строке листа после проверки: совпавшее чернилами, лишнее зачёркнуто ручкой, нужное — ручкой сверху. */
-function Corrected({ value, expected }: { value: string; expected: string }) {
+export function Corrected({ value, expected }: { value: string; expected: string }) {
   const { code } = useProfile();
   return (
     <p className={exercise.written} data-testid="chars" lang={code}>

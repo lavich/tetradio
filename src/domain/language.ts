@@ -31,6 +31,8 @@ export interface LanguageProfile {
   canonical: (text: string) => string;
   /** Ответ не совпал, но засчитывается как «почти». */
   isAlmost: (given: string, accepted: string) => boolean;
+  /** Слова отрицания: потерянное или лишнее отрицание меняет смысл фразы, это не ошибка в одном слове. */
+  negations: readonly string[];
 }
 
 /** Снимается только знак ударения (U+0301); диерезис (U+0308) сохраняется. */
@@ -93,6 +95,7 @@ const el: LanguageProfile = {
   },
   canonical: (text) => text.replace(GREEK_ENDING, ""),
   isAlmost: (given, accepted) => stripAccent(given) === stripAccent(accepted),
+  negations: ["δεν", "δε", "μην", "μη", "όχι"],
 };
 
 const ENGLISH_ENDING = /\s*[.!?…]+$/u;
@@ -116,6 +119,7 @@ const en: LanguageProfile = {
   },
   canonical: (text) => expand(text.replace(ENGLISH_ENDING, "")),
   isAlmost: typo,
+  negations: ["not", "no", "never"],
 };
 
 /** Текст для синтеза: греческий вопросительный знак — та же «;», и синтез читает её как паузу, а не вопрос. */

@@ -150,4 +150,5 @@ export const SKILL_NAMES: Record<ExerciseType, string> = {
   comprehension: "Понимание на слух",
   cloze: "Заполнение пропуска",
   item: "Задание урока",
+  wordGap: "Слово во фразе",
 };
