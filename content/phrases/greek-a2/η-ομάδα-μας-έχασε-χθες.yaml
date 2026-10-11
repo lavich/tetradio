@@ -1,5 +1,6 @@
 id: p264
 text: Η ομάδα μας έχασε χθες.
+audio: phrases/p264.mp3
 translation: Наша команда вчера проиграла.
 provenance:
   sourceLabel: Лексикон курса, модуль 20 (docs/course/lexicon/20.tsv)

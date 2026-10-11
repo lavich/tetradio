@@ -691,3 +691,61 @@ describe("голоса аудирования", () => {
     expect(() => parsePackage({ ...raw, lineAudio: { text: [null] } })).toThrow(/аудирования с таким id нет/);
   });
 });
+
+describe("записи слов и фраз", () => {
+  const voicesMap = {
+    source: "Синтез речи Google Cloud TTS, голос Chirp 3 HD {voice}",
+    language: "el-GR",
+    prefix: "el-GR-Chirp3-HD-",
+    pools: { female: ["Aoede", "Kore"], male: ["Charon", "Puck"] },
+    narrator: "Kore",
+    characters: { Άννα: { gender: "female", voice: "Aoede" }, Νίκος: { gender: "male", voice: "Charon" } },
+  };
+  const json = (value: unknown) => new TextEncoder().encode(JSON.stringify(value));
+  const phrase = {
+    id: "p1",
+    text: "Μιλάτε αγγλικά;",
+    translation: "Вы говорите по-английски?",
+    provenance: { sourceLabel: "Лексикон курса", operation: "requested-generation", request: "тест" },
+  };
+  const files = (manifest: Record<string, { voice: string; hash: string }>, voices: unknown = voicesMap) => ({
+    ...base(),
+    "lessons/m01-1.yaml": { ...lesson, items: [...lesson.items, { kind: "phrase", id: "p1" }] },
+    "words/greek-a2/geia.yaml": { greek: "γεια", russian: "привет", forms: "—", audio: "words/geia.mp3" },
+    "phrases/greek-a2/p1.yaml": { ...phrase, audio: "phrases/p1.mp3" },
+    "voices/el.yaml": voices,
+    "audio/words/geia.mp3": new Uint8Array([1]),
+    "audio/phrases/p1.mp3": new Uint8Array([2]),
+    "audio/dialogues.json": json(manifest),
+  });
+  const fresh = {
+    "words/geia.mp3": { voice: "Kore", hash: lineHash("γεια", "Kore", "el-GR") },
+    "phrases/p1.mp3": { voice: "Kore", hash: lineHash("Μιλάτε αγγλικά;", "Kore", "el-GR") },
+  };
+
+  it("запись читает диктор: карточка получает медиа с подписью его голоса", () => {
+    const content = build(files(fresh));
+    const pack = parsePackage(JSON.parse(JSON.stringify(content.packages[0])));
+    expect(pack.words.find((word) => word.id === "geia")!.audioAssetId).toBe("snd-geia");
+    expect(pack.phrases.find((item) => item.id === "p1")!.audioAssetId).toBe("snd-p1");
+    for (const id of ["snd-geia", "snd-p1"])
+      expect(pack.media.find((item) => item.id === id)).toMatchObject({
+        kind: "audio",
+        source: "Синтез речи Google Cloud TTS, голос Chirp 3 HD Kore",
+      });
+    expect(content.cardVoicing).toMatchObject({ voiced: 2, stale: [] });
+  });
+  it("запись до правки текста или смены диктора не публикуется: карточка звучит синтезом", () => {
+    const edited = build(
+      files({ ...fresh, "phrases/p1.mp3": { voice: "Kore", hash: lineHash("Старый текст", "Kore", "el-GR") } }),
+    );
+    expect(edited.packages[0].phrases.find((item) => item.id === "p1")).not.toHaveProperty("audioAssetId");
+    expect(edited.packages[0].media.some((item) => item.id === "snd-p1")).toBe(false);
+    expect(edited.cardVoicing).toMatchObject({ voiced: 1, stale: ["phrases/greek-a2/p1.yaml"] });
+    const recast = build(files(fresh, { ...voicesMap, narrator: "Aoede" }));
+    expect(recast.cardVoicing.stale).toEqual(["words/greek-a2/geia.yaml", "phrases/greek-a2/p1.yaml"]);
+  });
+  it("без диктора в карте голосов запись карточки отклоняет сборку", () => {
+    expect(failure(files(fresh, { ...voicesMap, narrator: undefined }))).toMatch(/narrator в voices\/el\.yaml/);
+  });
+});

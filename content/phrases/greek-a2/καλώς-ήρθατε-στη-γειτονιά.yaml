@@ -1,5 +1,6 @@
 id: p315
 text: Καλώς ήρθατε στη γειτονιά!
+audio: phrases/p315.mp3
 translation: Добро пожаловать в наш район!
 provenance:
   sourceLabel: Лексикон курса, модуль 24 (docs/course/lexicon/24.tsv)

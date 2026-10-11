@@ -1,5 +1,6 @@
 id: p240
 text: Μην πίνεις αλκοόλ με την αντιβίωση.
+audio: phrases/p240.mp3
 translation: Не пей алкоголь, пока принимаешь антибиотик.
 provenance:
   sourceLabel: Лексикон курса, модуль 18 (docs/course/lexicon/18.tsv)

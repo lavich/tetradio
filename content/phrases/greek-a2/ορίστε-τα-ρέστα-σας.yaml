@@ -1,5 +1,6 @@
 id: p133
 text: Ορίστε τα ρέστα σας.
+audio: phrases/p133.mp3
 translation: Вот ваша сдача.
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

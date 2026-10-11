@@ -1,5 +1,6 @@
 id: p045
 text: Τι ημερομηνία είναι σήμερα;
+audio: phrases/p045.mp3
 translation: Какое сегодня число?
 provenance:
   sourceLabel: Лексикон курса, модуль 04 (docs/course/lexicon/04.tsv)

@@ -1,5 +1,6 @@
 id: p092
 text: Μου αρέσει ο καφές.
+audio: phrases/p092.mp3
 translation: Я люблю кофе.
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

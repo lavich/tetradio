@@ -1,5 +1,6 @@
 id: p219
 text: Πού σε πονάει;
+audio: phrases/p219.mp3
 translation: Где у тебя болит?
 provenance:
   sourceLabel: Лексикон курса, модуль 17 (docs/course/lexicon/17.tsv)

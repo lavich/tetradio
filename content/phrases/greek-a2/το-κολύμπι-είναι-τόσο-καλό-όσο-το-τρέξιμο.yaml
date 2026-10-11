@@ -1,5 +1,6 @@
 id: p270
 text: Το κολύμπι είναι τόσο καλό όσο το τρέξιμο.
+audio: phrases/p270.mp3
 translation: Плавание так же хорошо, как бег.
 provenance:
   sourceLabel: Лексикон курса, модуль 20 (docs/course/lexicon/20.tsv)

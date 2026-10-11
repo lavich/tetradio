@@ -1,5 +1,6 @@
 id: p197
 text: Πόσα χρόνια εμπειρία έχετε;
+audio: phrases/p197.mp3
 translation: Сколько лет у вас опыта?
 provenance:
   sourceLabel: Лексикон курса, модуль 15 (docs/course/lexicon/15.tsv)

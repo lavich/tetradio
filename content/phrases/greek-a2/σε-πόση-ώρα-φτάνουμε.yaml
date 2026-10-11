@@ -1,5 +1,6 @@
 id: p170
 text: Σε πόση ώρα φτάνουμε;
+audio: phrases/p170.mp3
 translation: Через сколько мы приедем?
 provenance:
   sourceLabel: Лексикон курса, модуль 13 (docs/course/lexicon/13.tsv)

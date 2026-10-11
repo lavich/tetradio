@@ -1,5 +1,6 @@
 id: p212
 text: Πόσο κοστίζουν τα δίδακτρα;
+audio: phrases/p212.mp3
 translation: Сколько стоит обучение?
 provenance:
   sourceLabel: Лексикон курса, модуль 16 (docs/course/lexicon/16.tsv)

@@ -1,5 +1,6 @@
 id: p169
 text: Πόση ώρα κάνει το λεωφορείο από τη Λευκωσία μέχρι τη Λεμεσό;
+audio: phrases/p169.mp3
 translation: Сколько едет автобус от Никосии до Лимасола?
 provenance:
   sourceLabel: Лексикон курса, модуль 13 (docs/course/lexicon/13.tsv)

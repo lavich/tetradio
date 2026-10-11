@@ -1,5 +1,6 @@
 id: p131
 text: Πληρώνετε με κάρτα ή μετρητά;
+audio: phrases/p131.mp3
 translation: Вы платите картой или наличными?
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

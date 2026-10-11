@@ -1,5 +1,6 @@
 id: p257
 text: Ο καιρός θα αλλάξει.
+audio: phrases/p257.mp3
 translation: Погода изменится.
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)

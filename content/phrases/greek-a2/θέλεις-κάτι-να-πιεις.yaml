@@ -1,5 +1,6 @@
 id: p099
 text: Θέλεις κάτι να πιεις;
+audio: phrases/p099.mp3
 translation: Хочешь что-нибудь выпить?
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

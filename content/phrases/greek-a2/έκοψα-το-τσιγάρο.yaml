@@ -1,5 +1,6 @@
 id: p227
 text: Έκοψα το τσιγάρο.
+audio: phrases/p227.mp3
 translation: Я бросил курить.
 provenance:
   sourceLabel: Лексикон курса, модуль 17 (docs/course/lexicon/17.tsv)

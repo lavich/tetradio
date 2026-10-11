@@ -1,5 +1,6 @@
 id: p007
 text: Με λένε Άννα.
+audio: phrases/p007.mp3
 translation: Меня зовут Анна.
 provenance:
   sourceLabel: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)

@@ -1,5 +1,6 @@
 id: p173
 text: Το λεωφορείο έχει καθυστέρηση.
+audio: phrases/p173.mp3
 translation: Автобус задерживается.
 provenance:
   sourceLabel: Лексикон курса, модуль 13 (docs/course/lexicon/13.tsv)

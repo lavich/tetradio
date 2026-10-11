@@ -1,5 +1,6 @@
 id: p123
 text: Μισό κιλό φράουλες, παρακαλώ.
+audio: phrases/p123.mp3
 translation: Полкило клубники, пожалуйста.
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

@@ -1,5 +1,6 @@
 id: p073
 text: Ψάχνω ένα διαμέρισμα με δύο δωμάτια.
+audio: phrases/p073.mp3
 translation: Я ищу квартиру с двумя комнатами.
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

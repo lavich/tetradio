@@ -1,5 +1,6 @@
 id: p269
 text: Είναι ο καλύτερος παίκτης της ομάδας.
+audio: phrases/p269.mp3
 translation: Он лучший игрок команды.
 provenance:
   sourceLabel: Лексикон курса, модуль 20 (docs/course/lexicon/20.tsv)

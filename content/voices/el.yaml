@@ -36,7 +36,7 @@ pools:
     - Schedar
     - Umbriel
     - Zubenelgenubi
-# Реплика без говорящего
+# Реплика без говорящего, слова и фразы
 narrator: Kore
 characters:
   Δέσποινα: { gender: female, voice: Kore } # 42

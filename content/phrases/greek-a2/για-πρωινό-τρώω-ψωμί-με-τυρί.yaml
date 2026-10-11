@@ -1,5 +1,6 @@
 id: p098
 text: Για πρωινό τρώω ψωμί με τυρί.
+audio: phrases/p098.mp3
 translation: На завтрак я ем хлеб с сыром.
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

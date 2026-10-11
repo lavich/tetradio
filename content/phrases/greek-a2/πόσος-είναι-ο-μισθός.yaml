@@ -1,5 +1,6 @@
 id: p199
 text: Πόσος είναι ο μισθός;
+audio: phrases/p199.mp3
 translation: Какая зарплата?
 provenance:
   sourceLabel: Лексикон курса, модуль 15 (docs/course/lexicon/15.tsv)

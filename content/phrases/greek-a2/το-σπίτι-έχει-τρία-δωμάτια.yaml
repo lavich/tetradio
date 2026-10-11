@@ -1,5 +1,6 @@
 id: p068
 text: Το σπίτι έχει τρία δωμάτια.
+audio: phrases/p068.mp3
 translation: В доме три комнаты.
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

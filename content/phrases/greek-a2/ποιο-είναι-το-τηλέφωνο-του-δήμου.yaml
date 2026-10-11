@@ -1,5 +1,6 @@
 id: p327
 text: Ποιο είναι το τηλέφωνο του δήμου;
+audio: phrases/p327.mp3
 translation: Какой телефон у муниципалитета?
 provenance:
   sourceLabel: Лексикон курса, модуль 24 (docs/course/lexicon/24.tsv)

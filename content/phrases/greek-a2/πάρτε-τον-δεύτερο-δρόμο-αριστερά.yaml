@@ -1,5 +1,6 @@
 id: p154
 text: Πάρτε τον δεύτερο δρόμο αριστερά.
+audio: phrases/p154.mp3
 translation: Сверните на вторую улицу налево.
 provenance:
   sourceLabel: Лексикон курса, модуль 12 (docs/course/lexicon/12.tsv)

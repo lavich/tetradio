@@ -1,5 +1,6 @@
 id: p256
 text: Ποια είναι η αγαπημένη σου εποχή;
+audio: phrases/p256.mp3
 translation: Какое твоё любимое время года?
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)

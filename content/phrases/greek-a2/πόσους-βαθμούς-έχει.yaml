@@ -1,5 +1,6 @@
 id: p249
 text: Πόσους βαθμούς έχει;
+audio: phrases/p249.mp3
 translation: Сколько градусов?
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)

@@ -1,5 +1,6 @@
 id: p180
 text: Το πρωινό περιλαμβάνεται στην τιμή;
+audio: phrases/p180.mp3
 translation: Завтрак включён в стоимость?
 provenance:
   sourceLabel: Лексикон курса, модуль 14 (docs/course/lexicon/14.tsv)

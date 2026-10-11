@@ -1,5 +1,6 @@
 id: p148
 text: Συγγνώμη, πού είναι η τράπεζα;
+audio: phrases/p148.mp3
 translation: Извините, где банк?
 provenance:
   sourceLabel: Лексикон курса, модуль 12 (docs/course/lexicon/12.tsv)

@@ -1,5 +1,6 @@
 id: p121
 text: Πόσο κάνουν τα σταφύλια;
+audio: phrases/p121.mp3
 translation: Сколько стоит виноград?
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

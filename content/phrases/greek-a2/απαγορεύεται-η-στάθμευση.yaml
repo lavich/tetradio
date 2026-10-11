@@ -1,5 +1,6 @@
 id: p325
 text: Απαγορεύεται η στάθμευση.
+audio: phrases/p325.mp3
 translation: Стоянка запрещена.
 provenance:
   sourceLabel: Лексикон курса, модуль 24 (docs/course/lexicon/24.tsv)

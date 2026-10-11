@@ -25,6 +25,7 @@ export type VoiceManifest = Record<string, { voice: string; hash: string }>;
 export const lineHash = (text: string, voice: string, language: string) =>
   hash(`${spokenText(text, language)}\n${voice}`, 16);
 export const lineFile = (lessonId: string, blockId: string, index: number) => `${lessonId}/${blockId}-${index + 1}.mp3`;
+export const cardFile = (dir: "words" | "phrases", id: string) => `${dir}/${id}.mp3`;
 
 const strings = (value: unknown, where: string): string[] => {
   if (!Array.isArray(value) || !value.length || value.some((item) => typeof item !== "string"))

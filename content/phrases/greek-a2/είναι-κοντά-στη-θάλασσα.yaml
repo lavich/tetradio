@@ -1,5 +1,6 @@
 id: p077
 text: Είναι κοντά στη θάλασσα.
+audio: phrases/p077.mp3
 translation: Это недалеко от моря.
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

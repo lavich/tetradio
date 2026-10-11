@@ -1,5 +1,6 @@
 id: p247
 text: Έχει ήλιο.
+audio: phrases/p247.mp3
 translation: Солнечно.
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)

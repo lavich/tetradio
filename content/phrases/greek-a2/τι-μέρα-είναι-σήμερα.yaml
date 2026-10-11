@@ -1,5 +1,6 @@
 id: p044
 text: Τι μέρα είναι σήμερα;
+audio: phrases/p044.mp3
 translation: Какой сегодня день недели?
 provenance:
   sourceLabel: Лексикон курса, модуль 04 (docs/course/lexicon/04.tsv)

@@ -1,5 +1,6 @@
 id: p060
 text: Το βράδυ βλέπω τηλεόραση.
+audio: phrases/p060.mp3
 translation: Вечером я смотрю телевизор.
 provenance:
   sourceLabel: Лексикон курса, модуль 05 (docs/course/lexicon/05.tsv)

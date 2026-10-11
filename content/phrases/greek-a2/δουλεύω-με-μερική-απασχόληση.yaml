@@ -1,5 +1,6 @@
 id: p192
 text: Δουλεύω με μερική απασχόληση.
+audio: phrases/p192.mp3
 translation: Я работаю неполный день.
 provenance:
   sourceLabel: Лексикон курса, модуль 15 (docs/course/lexicon/15.tsv)
