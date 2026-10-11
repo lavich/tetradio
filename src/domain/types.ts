@@ -44,6 +44,15 @@ export interface LearningRef {
   kind: CardKind;
   id: string;
 }
+/**
+ * Ссылка на карточку вида, которого эта версия не знает: пришла в снимке более новой версии.
+ * Её состояние и навыки хранятся и публикуются без изменений, пока приложение не узнает вид.
+ */
+export interface ForeignRef {
+  code: string;
+  id: string;
+}
+export type StoredRef = LearningRef | ForeignRef;
 /** Готовая языковая единица: приветствие, выражение, вопрос или предложение. Имена полей языково-нейтральны. */
 export interface Phrase {
   id: string;

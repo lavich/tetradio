@@ -1,10 +1,7 @@
 export { addDays, deviceTimezone, formatDay, localDay, mondayOf, zonedStart } from "./time";
 export {
-  isCheckable,
   makePlan,
   programmeOrder,
-  type AvailabilityContext,
-  type CardFacts,
   type DailyPlan,
   type PlanLesson,
   type PlanOptions,
@@ -42,7 +39,9 @@ export {
   type OptionPools,
   type WordSources,
 } from "./options";
-export { easierExercise, exerciseFor, hasEasierStep, phraseExercise } from "./card-exercise";
+export { easierExercise, exerciseFor, hasEasierStep } from "./card-exercise";
+export { phraseExercise } from "./phrase-exercise";
+export { isCheckable, type AvailabilityContext, type CardFacts } from "./kinds";
 export {
   buildWordExercise,
   FEW_OPTIONS,

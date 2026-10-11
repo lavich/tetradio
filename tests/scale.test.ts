@@ -20,7 +20,8 @@ const WORDS = 100_000,
   EVENTS = 60_000,
   LESSONS = 200,
   /** Пройденных уроков — как во всём курсе. */
-  COMPLETED = 60;
+  COMPLETED = 60,
+  DUE_PHRASES = 100;
 const now = new Date("2026-09-15T09:00:00Z");
 const iso = now.toISOString();
 let db: AppDatabase;
@@ -119,6 +120,16 @@ beforeAll(async () => {
       updatedAt: at,
     })),
   );
+  // Фразы со сроком: план читает их признаки, а не таблицу фраз целиком.
+  await db.cardStates.bulkAdd(
+    Array.from({ length: DUE_PHRASES }, (_, i) => ({
+      unitKey: JSON.stringify(["phrase", `p${pad(100 + i)}`]),
+      ref: { kind: "phrase" as const, id: `p${pad(100 + i)}` },
+      card: { ...createEmptyCard(new Date("2026-09-01")), due: new Date("2026-09-14T08:00:00Z"), state: State.Review },
+      introducedAt: "2026-09-01T09:00:00Z",
+      version: 1,
+    })),
+  );
   await db.lessons.add({
     id: "lesson-mixed",
     title: "Смешанный",
@@ -178,14 +189,14 @@ describe("ограниченные выборки на большой базе",
     expect(reads.events).toBe(0);
     expect(reads.sessions).toBe(0);
     expect(reads.cardStates).toBeLessThan(STATES);
-    expect(reads.phrases).toBeLessThanOrEqual(24); // только фразы-кандидаты урока, не таблица целиком
+    expect(reads.phrases).toBeLessThanOrEqual(24 + DUE_PHRASES); // кандидаты урока и фразы со сроком, не таблица целиком
   }, 60_000);
   it("сессия загружает полные карточки только для своих карточек и пула вариантов, историю — только своих карточек", async () => {
     track();
     const session = await makeSession({ source: dexieSource(db), now, random: () => 0.37 });
     expect(session.items).toHaveLength(20);
     expect(reads.words).toBeLessThanOrEqual(20 + 48 * 2);
-    expect(reads.phrases).toBeLessThanOrEqual(20 + 48 * 2 + 24); // выбранные фразы, пул вариантов и признаки кандидатов
+    expect(reads.phrases).toBeLessThanOrEqual(20 + 48 * 2 + 24 + DUE_PHRASES); // выбранные фразы, пул вариантов и признаки
     const reviewed = session.items.filter((item) => !item.isNew).length;
     expect(reads.events).toBeLessThanOrEqual(reviewed * Math.ceil(EVENTS / STATES) + reviewed);
     expect(reads.sessions).toBe(0);

@@ -1,8 +1,17 @@
 import type { Card } from "ts-fsrs";
 import type { AppDatabase } from "../storage/db";
 import { byTime, emptySkills, emptyStats, foldSkill, foldStats, type SkillSummary } from "../domain/skills";
-import { unitKey } from "../domain/refs";
-import { type CardKind, type Lesson, type LearningRef, type LearningState, type ReviewEvent } from "../domain/types";
+import { KINDS } from "../domain/kinds";
+import { isForeign, storedKey, unitKey } from "../domain/refs";
+import {
+  CARD_KINDS,
+  type Lesson,
+  type LearningRef,
+  type LearningState,
+  type ReviewEvent,
+  type StoredRef,
+} from "../domain/types";
+import { STORED_KINDS } from "../storage/kinds";
 import { blockKey } from "../storage/course";
 import type { BlockProgress } from "../domain/types";
 import {
@@ -43,7 +52,9 @@ const serializeState = (state: LearningState): CompactState => ({
   introducedAt: state.introducedAt,
   version: state.version,
 });
-const reviveState = (state: CompactState): LearningState => ({
+const isKnown = (state: CompactState): state is CompactState & { ref: LearningRef } => !isForeign(state.ref);
+/** Состояние карточки известного вида; незнакомые остаются в `cardStash`. */
+const reviveState = (state: CompactState & { ref: LearningRef }): LearningState => ({
   unitKey: unitKey(state.ref),
   ref: state.ref,
   card: reviveCard(state.card),
@@ -63,15 +74,14 @@ export const parseClock = (raw: string | null): Clock => {
   }
 };
 
-/** Ключи перечисленных карточек, которые есть на устройстве; ключи снятых видов сюда не попадают. */
-async function presentKeys(database: AppDatabase, refs: LearningRef[]): Promise<Set<string>> {
-  const ids: Record<CardKind, string[]> = { word: [], phrase: [] };
-  for (const ref of refs) ids[ref.kind]?.push(ref.id);
+/** Ключи перечисленных карточек, которые есть на устройстве; ключи снятых и незнакомых видов сюда не попадают. */
+async function presentKeys(database: AppDatabase, refs: StoredRef[]): Promise<Set<string>> {
   const keys = new Set<string>();
-  for (const kind of ["word", "phrase"] as const)
-    if (ids[kind].length)
-      for (const id of await database[kind === "word" ? "words" : "phrases"].where("id").anyOf(ids[kind]).primaryKeys())
-        keys.add(unitKey({ kind, id }));
+  for (const kind of CARD_KINDS) {
+    const ids = refs.flatMap((ref) => (!isForeign(ref) && ref.kind === kind ? [ref.id] : []));
+    if (ids.length)
+      for (const id of await STORED_KINDS[kind].presentIds(ids, database)) keys.add(unitKey({ kind, id }));
+  }
   return keys;
 }
 const compactLesson = (lesson: Lesson): CompactLesson => ({
@@ -117,7 +127,7 @@ async function applyBlocks(database: AppDatabase, blocks: CompactBlock[]) {
   await database.blockProgress.bulkPut(rows);
 }
 const uniqueRefs = (refs: LearningRef[]) => [...new Map(refs.map((ref) => [unitKey(ref), ref])).values()];
-const byKey = (a: { ref: LearningRef }, b: { ref: LearningRef }) => unitKey(a.ref).localeCompare(unitKey(b.ref));
+const byKey = (a: { ref: StoredRef }, b: { ref: StoredRef }) => storedKey(a.ref).localeCompare(storedKey(b.ref));
 
 type Progress = Omit<CompactSnapshot, "skills" | "stats">;
 type Summary = Pick<CompactSnapshot, "skills" | "stats">;
@@ -157,7 +167,7 @@ async function readSummary(database: AppDatabase): Promise<Summary> {
   const fresh: ReviewEvent[] = byTime(
     base ? await database.events.where("createdAt").above(base.asOf).toArray() : await database.events.toArray(),
   );
-  const skills = new Map<string, { ref: LearningRef; skills: SkillSummary }>(
+  const skills = new Map<string, { ref: StoredRef; skills: SkillSummary }>(
     (await database.cardSkills.toArray()).map((row) => [row.unitKey, { ref: row.ref, skills: row.skills }]),
   );
   const eventKeys = await presentKeys(database, uniqueRefs(fresh.map((event) => event.ref)));
@@ -180,7 +190,7 @@ export const readSnapshot = (database: AppDatabase, now: Date) =>
 export async function commitBase(database: AppDatabase, snapshot: Summary, versionId: string, asOf: string) {
   await database.cardSkills.clear();
   await database.cardSkills.bulkPut(
-    snapshot.skills.map((entry) => ({ unitKey: unitKey(entry.ref), ref: entry.ref, skills: entry.skills })),
+    snapshot.skills.map((entry) => ({ unitKey: storedKey(entry.ref), ref: entry.ref, skills: entry.skills })),
   );
   await database.baseSummary.put({ id: "base", asOf, versionId, stats: snapshot.stats });
 }
@@ -263,7 +273,7 @@ export async function applySnapshot(
       }
       await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
       await applyBlocks(database, snapshot.blocks);
-      const incoming = new Set(snapshot.states.map((state) => unitKey(state.ref)));
+      const incoming = new Set(snapshot.states.map((state) => storedKey(state.ref)));
       // Карточки, которых нет в выбранной версии, снова становятся новыми.
       const local = (await database.cardStates.toCollection().primaryKeys()) as string[];
       await database.cardStates.bulkDelete(local.filter((key) => !incoming.has(key)));
@@ -273,8 +283,8 @@ export async function applySnapshot(
       );
       await database.cardStash.clear();
       for (const state of snapshot.states) {
-        const key = unitKey(state.ref);
-        if (known.has(key)) await database.cardStates.put(reviveState(state));
+        const key = storedKey(state.ref);
+        if (known.has(key) && isKnown(state)) await database.cardStates.put(reviveState(state));
         else await database.cardStash.put({ unitKey: key, ref: state.ref, state });
       }
       await commitBase(database, snapshot, versionId, now.toISOString());
@@ -291,11 +301,13 @@ export async function applySnapshot(
  * Вызывается внутри транзакции установки пакета.
  */
 export async function adoptStash(database: AppDatabase, lessonId: string, refs: LearningRef[]): Promise<void> {
-  const rows = (await database.cardStash.bulkGet(refs.map(unitKey))).filter(
-    (row): row is NonNullable<typeof row> => !!row,
-  );
-  for (const row of rows) {
-    if (!(await database.cardStates.get(row.unitKey))) await database.cardStates.put(reviveState(row.state));
+  for (const ref of refs) {
+    // Пакет мог встать раньше переноса узнанного вида: тогда состояние ещё лежит под ключом незнакомого.
+    const keys = [unitKey(ref), storedKey({ code: KINDS[ref.kind].code, id: ref.id })];
+    const row = (await database.cardStash.bulkGet(keys)).find((found) => !!found);
+    if (!row) continue;
+    const key = unitKey(ref);
+    if (!(await database.cardStates.get(key))) await database.cardStates.put(reviveState({ ...row.state, ref }));
     await database.cardStash.delete(row.unitKey);
   }
   const pending = await readPending(database);

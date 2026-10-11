@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { deviceTimezone, formatDay, localDay } from "../../domain/learning";
-import type { CardKind, LearningRef, ReviewEvent } from "../../domain/types";
+import { CARD_KINDS, type CardKind, type LearningRef, type ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
 import { CARDS, minutes, PHRASES, plural, withCount, WORDS } from "../../shared/format";
 import { statesOf } from "../../storage/queries";
@@ -14,17 +14,18 @@ import { sessionPath, startSession } from "./session-actions";
 import { compositionLine, DoneList, doneRows, markOf, PageHead } from "./notebook";
 import s from "./session.module.css";
 
+const KIND_FORMS: Record<CardKind, [string, string, string]> = { word: WORDS, phrase: PHRASES };
 /** Состав уникальных карточек по видам: «2 слова · 1 фраза», только непустые группы. */
 export const compositionText = (byKind: Record<CardKind, number>) =>
-  (
-    [
-      ["word", WORDS],
-      ["phrase", PHRASES],
-    ] as const
-  )
-    .filter(([kind]) => byKind[kind])
-    .map(([kind, forms]) => withCount(byKind[kind], forms))
+  CARD_KINDS.filter((kind) => byKind[kind])
+    .map((kind) => withCount(byKind[kind], KIND_FORMS[kind]))
     .join(" · ");
+/** Число карточек занятия: один вид называется своим словом, несколько — «карточки» с составом. */
+export function countText(byKind: Record<CardKind, number>, total: number) {
+  const present = CARD_KINDS.filter((kind) => byKind[kind]);
+  if (present.length === 1) return withCount(total, KIND_FORMS[present[0]]);
+  return present.length ? `${withCount(total, CARDS)} (${compositionText(byKind)})` : withCount(total, CARDS);
+}
 
 const greekOf = (event: ReviewEvent) =>
   "greek" in event.snapshot ? event.snapshot.greek : "text" in event.snapshot ? event.snapshot.text : "";
@@ -53,10 +54,9 @@ export function ResultScreen() {
     mistakeRefs = result?.mistakeRefs ?? [];
   // Повторная попытка той же карточки не увеличивает число уникальных карточек.
   const unique = new Map(events.map((event) => [event.unitKey, event.ref]));
-  const byKind: Record<CardKind, number> = { word: 0, phrase: 0 };
+  const byKind = Object.fromEntries(CARD_KINDS.map((kind) => [kind, 0])) as Record<CardKind, number>;
   // Снятый вид разряда в разбивке не занимает: его ответы остаются в общем числе и в точности.
   for (const ref of unique.values()) if (ref.kind in byKind) byKind[ref.kind]++;
-  const mixed = byKind.phrase > 0;
   const objective = events.filter((event) => event.correct !== null);
   // «Сразу» — карточка без единой ошибки в занятии; остальные прошли с исправлением.
   const corrected = new Set(mistakes.map((event) => event.unitKey));
@@ -96,8 +96,7 @@ export function ResultScreen() {
               Занятие завершено
             </h2>
             <p className={s.summaryLine} data-testid="composition">
-              {withCount(unique.size, mixed ? CARDS : WORDS)}
-              {mixed && ` (${compositionText(byKind)})`} · {clean} сразу, {unique.size - clean} с исправлением.
+              {countText(byKind, unique.size)} · {clean} сразу, {unique.size - clean} с исправлением.
             </p>
             {[...returns].map(([day, names]) => (
               <p key={day} className={s.summaryNote}>

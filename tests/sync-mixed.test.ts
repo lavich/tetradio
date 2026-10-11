@@ -15,7 +15,9 @@ import { submitAnswer } from "../src/storage/ops";
 import { unitKey } from "./helpers/cards";
 import { memoryFetcher } from "./helpers/content";
 import { installMixed, MIXED_LESSON, mixedContent } from "./helpers/mixed";
-import type { LearningRef } from "../src/domain/types";
+import type { LearningRef, StoredRef } from "../src/domain/types";
+
+const kindOf = (ref: StoredRef) => ("kind" in ref ? ref.kind : ref.code);
 
 let cloud: MemoryTransport;
 let clockMs = Date.parse("2026-09-16T08:00:00Z");
@@ -96,19 +98,19 @@ describe("компактный снимок", () => {
     ).toBe(true);
     expect(decoded.stats).toEqual(snapshot.stats);
     // Виды карточек входят в идентичность прогресса.
-    expect(new Set(snapshot.states.map((state) => state.ref.kind))).toEqual(new Set(["word", "phrase"]));
-    expect(snapshot.skills.map((entry) => entry.ref.kind)).toContain("phrase");
+    expect(new Set(snapshot.states.map((state) => kindOf(state.ref)))).toEqual(new Set(["word", "phrase"]));
+    expect(snapshot.skills.map((entry) => kindOf(entry.ref))).toContain("phrase");
     // Ни текстов карточек, ни ответов.
     for (const secret of ["Γράφω ένα γράμμα", "Я пишу письмо"]) expect(text, secret).not.toContain(secret);
     expect(text).toContain(encodeRef(P("p-grafo"))); // ссылка на карточку — вид и идентификатор
   });
-  it("формат 4 на проводе: урок — завершением, без расписания и дат; снятые настройки и курсы — пустыми полями для прежних версий", async () => {
+  it("формат 5 на проводе: урок — завершением, без расписания и дат; снятые настройки и курсы — пустыми полями для прежних версий", async () => {
     const phone = await device("format4", { mixed: true });
     const lessonId = (await phone.db.lessons.toArray())[0].id;
     await phone.db.lessons.update(lessonId, { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     const wire = JSON.parse(encodeSnapshot(snapshot));
-    expect(wire.f).toBe(4);
+    expect(wire.f).toBe(5);
     expect(wire.s).toEqual({});
     expect(wire.cs).toEqual([]);
     expect(wire.l).toContainEqual([lessonId, 1, Date.parse("2026-09-16T07:00:00.000Z")]);
@@ -161,7 +163,8 @@ describe("компактный снимок", () => {
     await study(phone, [W("w070"), P("p-grafo")], [true, true]);
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     const wire = JSON.parse(encodeSnapshot(snapshot));
-    // Снимок старого клиента: те же записи плюс прогресс карточки снятого вида под своим кодом `c`.
+    // Снимок старого клиента формата 4: те же записи плюс прогресс карточки снятого вида под своим кодом `c`.
+    wire.f = 4;
     const dropped = "cc-grafo";
     wire.st = [...wire.st, [dropped, ...wire.st[0].slice(1)]];
     wire.sk = [...wire.sk, [dropped, ...wire.sk[0].slice(1)]];
@@ -263,7 +266,7 @@ describe("обмен смешанным прогрессом между устр
     expect((await fresh.sync.exchange()).phase).toBe("synced");
     expect(await fresh.db.cardStates.count()).toBe(0);
     expect(await fresh.db.cardStash.count()).toBe(2);
-    expect((await fresh.db.cardStash.toArray()).map((row) => row.ref.kind).sort()).toEqual(["phrase", "phrase"]);
+    expect((await fresh.db.cardStash.toArray()).map((row) => kindOf(row.ref)).sort()).toEqual(["phrase", "phrase"]);
     expect(missing[0]).toContain(MIXED_LESSON);
     expect(await dexieSource(fresh.db).dueStates(now())).toHaveLength(0); // отложенное не попадает в очередь
     // Пакет установлен — отложенный прогресс становится обычным состоянием с теми же сроками.

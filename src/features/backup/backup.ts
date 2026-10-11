@@ -5,6 +5,7 @@ import { isAppDatabaseName } from "../../storage/profile";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { wordRef } from "../../domain/refs";
 import { cardLanguages } from "../../storage/courses";
+import { adoptKnownForeign } from "../../storage/foreign";
 import { fillSettings, type LessonItem, type Settings } from "../../domain/types";
 import { syncEvents } from "../../sync/events";
 import { assertCloudUnchanged, type CloudGuard } from "./cloud-check";
@@ -259,6 +260,8 @@ export async function restoreBackup(
         await database.meta.put({ key: `${SYNC_META_PREFIX}restored`, value: new Date().toISOString() });
       },
     );
+    // Копия могла прийти с устройства, где вид её карточек был незнакомым.
+    await adoptKnownForeign(database);
     syncEvents.emit("restored");
   } finally {
     staging.close();

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
-import { compositionText } from "../src/features/learning/ResultScreen";
+import { compositionText, countText } from "../src/features/learning/ResultScreen";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { LEECH_LAPSES, lessonProgress, progress, SKILL_NAMES, SKILL_TYPES, SOLID_DAYS } from "../src/domain/stats";
 import { localDay } from "../src/domain/learning";
@@ -73,6 +73,11 @@ describe("результат смешанного занятия", () => {
     expect(compositionText(byKind)).toBe("2 слова · 1 фраза");
     expect(compositionText({ word: 3, phrase: 0 })).toBe("3 слова");
     expect(compositionText({ word: 0, phrase: 2 })).toBe("2 фразы");
+  });
+  it("один вид называется своим словом, несколько — карточками с составом", () => {
+    expect(countText({ word: 0, phrase: 2 }, 2)).toBe("2 фразы");
+    expect(countText({ word: 3, phrase: 0 }, 3)).toBe("3 слова");
+    expect(countText({ word: 2, phrase: 1 }, 3)).toBe("3 карточки (2 слова · 1 фраза)");
   });
   it("карточка снятого вида не занимает разряд в разбивке, но её ответы остаются в общем числе", () => {
     const events = [

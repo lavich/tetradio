@@ -10,9 +10,12 @@ export interface TypeSkill {
   recent: boolean[];
   lastAt: string;
 }
+/** Тип проверки, которого эта версия не знает: код из снимка более новой версии, хранится и публикуется как есть. */
+export type ForeignType = `~${string}`;
+export type StoredType = ExerciseType | ForeignType;
 export interface SkillSummary {
-  types: Partial<Record<ExerciseType, TypeSkill>>;
-  lastTypes: ExerciseType[];
+  types: Partial<Record<StoredType, TypeSkill>>;
+  lastTypes: StoredType[];
   cleanAssemblies: number;
 }
 export const RECENT = 10;
@@ -58,7 +61,7 @@ export interface DaySummary {
 }
 export interface StatsSummary {
   days: DaySummary[];
-  recentByType: Partial<Record<ExerciseType, boolean[]>>;
+  recentByType: Partial<Record<StoredType, boolean[]>>;
   answers: number;
   answeredKeys: string[];
 }
