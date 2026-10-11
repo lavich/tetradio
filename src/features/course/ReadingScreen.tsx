@@ -1,12 +1,12 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { Pause, Play } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Screen } from "../../app/Screen";
 import { glossSpans } from "../../content/course";
 import type { PackageReading } from "../../content/schema";
-import { sentencesOf } from "../../domain/sentences";
+import { sentenceRanges, sentencesOf } from "../../domain/sentences";
 import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
 import { readDay, WORDS, withCount } from "../../shared/format";
 import { noVoice, ProfileContext, useLessonProfile, useProfile } from "../../shared/language";
@@ -18,7 +18,7 @@ import ui from "../../shared/ui.module.css";
 import base from "./course.module.css";
 import blocks from "./blocks/blocks.module.css";
 
-function Text({ reading }: { reading: PackageReading }) {
+function Text({ reading, line }: { reading: PackageReading; line: number }) {
   const marks = useFieldMarks(reading.id, "text");
   const { code } = useProfile();
   const glosses = glossSpans(reading.text, reading.glosses).map(({ start, length, gloss }) => ({
@@ -29,13 +29,23 @@ function Text({ reading }: { reading: PackageReading }) {
   }));
   return (
     <p className={`${blocks.reading} whitespace-pre-line`} lang={code}>
-      <Marked text={reading.text} marks={marks} glosses={glosses} />
+      {sentenceRanges(reading.text).map(({ start, end }, index, ranges) => (
+        <Fragment key={start}>
+          {reading.text.slice(index ? ranges[index - 1].end : 0, start)}
+          <span
+            className={index === line ? blocks.speaking : undefined}
+            data-testid={index === line ? "speaking" : undefined}
+          >
+            <Marked text={reading.text} marks={marks} glosses={glosses} from={start} to={end} />
+          </span>
+        </Fragment>
+      ))}
     </p>
   );
 }
 
 /** По предложениям: длинное высказывание синтез может оборвать без ошибки. */
-function Aloud({ reading }: { reading: PackageReading }) {
+function Aloud({ reading, onLine }: { reading: PackageReading; onLine: (index: number) => void }) {
   const profile = useProfile();
   const source = useAssetSource();
   const [playing, setPlaying] = useState(false);
@@ -49,6 +59,7 @@ function Aloud({ reading }: { reading: PackageReading }) {
       run.current++;
       stopDialogue();
       setPlaying(false);
+      onLine(-1);
       return;
     }
     const mine = ++run.current;
@@ -60,13 +71,14 @@ function Aloud({ reading }: { reading: PackageReading }) {
     const result = await playDialogue(
       sentences.map((sentence, index) => ({ text: sentence, audioAssetId: audio?.[index] ?? undefined })),
       rate,
-      undefined,
+      (index) => mine === run.current && onLine(index),
       source,
       profile,
       true,
     );
     if (mine !== run.current) return;
     setPlaying(false);
+    onLine(-1);
     if (result === "none") setProblem({ text: noVoice(profile), failure: false });
     if (result === "error") setProblem({ text: "Воспроизведение прервалось. Попробуйте ещё раз.", failure: true });
   };
@@ -104,6 +116,8 @@ export function ReadingScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const page = useLiveQuery(async () => (await readingPage(readingId)) ?? null, [readingId]);
+  const [line, setLine] = useState(-1);
+  useEffect(() => setLine(-1), [readingId]);
   const profile = useLessonProfile(page?.after.id);
   const fromModule = !!(location.state as { fromModule?: boolean } | null)?.fromModule;
   const toModule = () => {
@@ -143,9 +157,9 @@ export function ReadingScreen() {
           {open ? (
             <>
               <TapHint />
-              <Aloud reading={reading} />
+              <Aloud reading={reading} onLine={setLine} />
               <WordTaps marks={page.marks} cards={page.cards} page={0}>
-                <Text reading={reading} />
+                <Text reading={reading} line={line} />
               </WordTaps>
               {readAt ? (
                 <>
