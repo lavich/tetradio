@@ -1,5 +1,6 @@
 id: p200
 text: Πότε μπορείτε να ξεκινήσετε;
+audio: phrases/p200.mp3
 translation: Когда вы можете приступить к работе?
 provenance:
   sourceLabel: Лексикон курса, модуль 15 (docs/course/lexicon/15.tsv)

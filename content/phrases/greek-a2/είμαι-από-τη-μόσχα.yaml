@@ -1,5 +1,6 @@
 id: p009
 text: Είμαι από τη Μόσχα.
+audio: phrases/p009.mp3
 translation: Я из Москвы.
 provenance:
   sourceLabel: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)

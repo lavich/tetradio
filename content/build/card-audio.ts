@@ -1,0 +1,38 @@
+import type { Language } from "../../src/domain/language.ts";
+import { audioAssetId } from "./cards.ts";
+import { fail, LANGUAGE } from "./common.ts";
+import type { ContentRoot } from "./sources.ts";
+import { lineHash, MANIFEST_FILE, parseManifest, voicesFile } from "./voices.ts";
+
+export interface CardVoicing {
+  voiced: number;
+  /** Записи, сделанные до правки текста или смены диктора: не публикуются, карточка звучит синтезом устройства. */
+  stale: string[];
+  /** Подпись записи по id медиа: голос диктора. */
+  sources: Map<string, string>;
+}
+
+/** Слова и фразы читает диктор карты голосов; устаревшая запись снимается с карточки до сборки карточек. */
+export function checkCardAudio(sources: ContentRoot, courseLanguages: Map<string, Language>): CardVoicing {
+  const manifest = parseManifest(sources.files.get(MANIFEST_FILE));
+  const voicing: CardVoicing = { voiced: 0, stale: [], sources: new Map() };
+  const check = (where: string, id: string, src: { audio?: string; course: string }, text: unknown) => {
+    if (src.audio === undefined) return;
+    if (typeof src.audio !== "string") fail(`${where}.audio: ожидалось имя файла в audio/`);
+    const language = courseLanguages.get(src.course) ?? LANGUAGE;
+    const voices =
+      sources.voices.get(language) ?? fail(`${where}.audio: запись требует карты голосов ${voicesFile(language)}`);
+    const voice = voices.narrator ?? fail(`${where}.audio: запись читает диктор — narrator в ${voices.file}`);
+    const done = manifest[src.audio];
+    if (!done || done.voice !== voice || done.hash !== lineHash(String(text), voice, voices.language)) {
+      voicing.stale.push(where);
+      delete src.audio;
+      return;
+    }
+    voicing.sources.set(audioAssetId(id), voices.source.replaceAll("{voice}", voice));
+    voicing.voiced++;
+  };
+  for (const [id, src] of sources.words) check(`words/${src.file}`, id, src, src.greek);
+  for (const [id, src] of sources.phrases) check(`phrases/${src.file}`, id, src, src.text);
+  return voicing;
+}

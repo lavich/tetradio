@@ -1,5 +1,6 @@
 id: p166
 text: Από πού φεύγει το λεωφορείο για τη Λάρνακα;
+audio: phrases/p166.mp3
 translation: Откуда отправляется автобус в Ларнаку?
 provenance:
   sourceLabel: Лексикон курса, модуль 13 (docs/course/lexicon/13.tsv)

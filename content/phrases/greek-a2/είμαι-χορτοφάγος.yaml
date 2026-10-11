@@ -1,5 +1,6 @@
 id: p102
 text: Είμαι χορτοφάγος.
+audio: phrases/p102.mp3
 translation: Я вегетарианец (вегетарианка).
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

@@ -1,5 +1,6 @@
 id: p018
 text: Τι γλώσσες μιλάς;
+audio: phrases/p018.mp3
 translation: На каких языках ты говоришь?
 provenance:
   sourceLabel: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)

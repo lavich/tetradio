@@ -1,5 +1,6 @@
 id: p140
 text: Το έχετε σε πιο μεγάλο νούμερο;
+audio: phrases/p140.mp3
 translation: Есть на размер больше?
 provenance:
   sourceLabel: Лексикон курса, модуль 11 (docs/course/lexicon/11.tsv)

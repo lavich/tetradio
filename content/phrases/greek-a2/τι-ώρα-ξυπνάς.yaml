@@ -1,5 +1,6 @@
 id: p054
 text: Τι ώρα ξυπνάς;
+audio: phrases/p054.mp3
 translation: Во сколько ты просыпаешься?
 provenance:
   sourceLabel: Лексикон курса, модуль 05 (docs/course/lexicon/05.tsv)

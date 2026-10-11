@@ -1,5 +1,6 @@
 id: p206
 text: Πέρασα τις εξετάσεις!
+audio: phrases/p206.mp3
 translation: Я сдал(а) экзамены!
 provenance:
   sourceLabel: Лексикон курса, модуль 16 (docs/course/lexicon/16.tsv)

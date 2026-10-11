@@ -1,5 +1,6 @@
 id: p255
 text: Αν κάνει καλό καιρό, θα πάμε εκδρομή.
+audio: phrases/p255.mp3
 translation: Если будет хорошая погода, поедем за город.
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)

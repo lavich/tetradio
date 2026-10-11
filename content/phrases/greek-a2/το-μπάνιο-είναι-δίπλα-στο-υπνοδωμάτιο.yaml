@@ -1,5 +1,6 @@
 id: p072
 text: Το μπάνιο είναι δίπλα στο υπνοδωμάτιο.
+audio: phrases/p072.mp3
 translation: Ванная рядом со спальней.
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

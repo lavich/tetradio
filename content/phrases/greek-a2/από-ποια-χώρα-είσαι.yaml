@@ -1,5 +1,6 @@
 id: p017
 text: Από ποια χώρα είσαι;
+audio: phrases/p017.mp3
 translation: Из какой ты страны?
 provenance:
   sourceLabel: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)

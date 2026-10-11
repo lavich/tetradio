@@ -1,5 +1,6 @@
 id: p038
 text: Αυτός είναι ο άντρας μου.
+audio: phrases/p038.mp3
 translation: Это мой муж.
 provenance:
   sourceLabel: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)

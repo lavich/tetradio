@@ -1,5 +1,6 @@
 id: p218
 text: Με πονάει το κεφάλι μου.
+audio: phrases/p218.mp3
 translation: У меня болит голова.
 provenance:
   sourceLabel: Лексикон курса, модуль 17 (docs/course/lexicon/17.tsv)

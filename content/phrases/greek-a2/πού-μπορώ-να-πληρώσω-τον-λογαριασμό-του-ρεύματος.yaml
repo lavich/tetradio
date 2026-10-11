@@ -1,5 +1,6 @@
 id: p310
 text: Πού μπορώ να πληρώσω τον λογαριασμό του ρεύματος;
+audio: phrases/p310.mp3
 translation: Где можно оплатить счёт за электричество?
 provenance:
   sourceLabel: Лексикон курса, модуль 23 (docs/course/lexicon/23.tsv)

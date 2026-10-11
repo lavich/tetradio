@@ -1,5 +1,6 @@
 id: p040
 text: Τι ώρα είναι;
+audio: phrases/p040.mp3
 translation: Который час?
 provenance:
   sourceLabel: Лексикон курса, модуль 04 (docs/course/lexicon/04.tsv)

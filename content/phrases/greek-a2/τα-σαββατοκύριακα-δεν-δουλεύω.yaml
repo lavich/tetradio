@@ -1,5 +1,6 @@
 id: p064
 text: Τα σαββατοκύριακα δεν δουλεύω.
+audio: phrases/p064.mp3
 translation: По выходным я не работаю.
 provenance:
   sourceLabel: Лексикон курса, модуль 05 (docs/course/lexicon/05.tsv)

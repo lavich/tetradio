@@ -1,5 +1,6 @@
 id: p168
 text: Αυτό το λεωφορείο πάει στο κέντρο;
+audio: phrases/p168.mp3
 translation: Этот автобус идёт в центр?
 provenance:
   sourceLabel: Лексикон курса, модуль 13 (docs/course/lexicon/13.tsv)

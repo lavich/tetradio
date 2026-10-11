@@ -1,5 +1,6 @@
 id: p130
 text: Θέλετε σακούλα;
+audio: phrases/p130.mp3
 translation: Вам нужен пакет?
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

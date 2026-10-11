@@ -1,5 +1,6 @@
 id: p320
 text: Έχουμε διακοπή ρεύματος.
+audio: phrases/p320.mp3
 translation: У нас отключили электричество.
 provenance:
   sourceLabel: Лексикон курса, модуль 24 (docs/course/lexicon/24.tsv)

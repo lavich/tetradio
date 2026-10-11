@@ -1,5 +1,6 @@
 id: p015
 text: Πού μένεις;
+audio: phrases/p015.mp3
 translation: Где ты живёшь?
 provenance:
   sourceLabel: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)

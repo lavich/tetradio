@@ -1,5 +1,6 @@
 id: p171
 text: Ανεβαίνουμε στο λεωφορείο από την μπροστινή πόρτα.
+audio: phrases/p171.mp3
 translation: Садимся в автобус через переднюю дверь.
 provenance:
   sourceLabel: Лексикон курса, модуль 13 (docs/course/lexicon/13.tsv)

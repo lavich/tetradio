@@ -1,5 +1,6 @@
 id: p321
 text: Έχω ένα πρόβλημα με το νερό.
+audio: phrases/p321.mp3
 translation: У меня проблема с водой.
 provenance:
   sourceLabel: Лексикон курса, модуль 24 (docs/course/lexicon/24.tsv)

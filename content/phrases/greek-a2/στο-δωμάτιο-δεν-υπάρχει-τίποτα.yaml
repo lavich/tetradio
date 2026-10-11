@@ -1,5 +1,6 @@
 id: p070
 text: Στο δωμάτιο δεν υπάρχει τίποτα.
+audio: phrases/p070.mp3
 translation: В комнате ничего нет.
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

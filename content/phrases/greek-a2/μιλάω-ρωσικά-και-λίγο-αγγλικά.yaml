@@ -1,5 +1,6 @@
 id: p019
 text: Μιλάω ρωσικά και λίγο αγγλικά.
+audio: phrases/p019.mp3
 translation: Я говорю по-русски и немного по-английски.
 provenance:
   sourceLabel: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)

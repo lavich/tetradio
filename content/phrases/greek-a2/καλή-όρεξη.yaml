@@ -1,5 +1,6 @@
 id: p104
 text: Καλή όρεξη!
+audio: phrases/p104.mp3
 translation: Приятного аппетита!
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

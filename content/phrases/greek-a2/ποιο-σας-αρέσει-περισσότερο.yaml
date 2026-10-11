@@ -1,5 +1,6 @@
 id: p142
 text: Ποιο σας αρέσει περισσότερο;
+audio: phrases/p142.mp3
 translation: Какой вам больше нравится?
 provenance:
   sourceLabel: Лексикон курса, модуль 11 (docs/course/lexicon/11.tsv)

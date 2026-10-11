@@ -1,5 +1,6 @@
 id: p231
 text: Τι ώρα είναι ελεύθερος ο γιατρός;
+audio: phrases/p231.mp3
 translation: В какое время врач свободен?
 provenance:
   sourceLabel: Лексикон курса, модуль 18 (docs/course/lexicon/18.tsv)

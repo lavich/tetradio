@@ -9,6 +9,7 @@ import {
   type PackageWord,
 } from "../src/content/schema.ts";
 import { LEGACY_FILE, type ArtReport } from "./art.ts";
+import { checkCardAudio, type CardVoicing } from "./build/card-audio.ts";
 import { buildCards } from "./build/cards.ts";
 import { buildCourses } from "./build/courses.ts";
 import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons.ts";
@@ -33,6 +34,7 @@ export type {
 export type { BuiltFile } from "./build/output.ts";
 export type { MarksReport } from "./build/mark-courses.ts";
 export type { VoicingReport } from "./build/lessons.ts";
+export type { CardVoicing } from "./build/card-audio.ts";
 
 export interface BuiltContent {
   catalog: Catalog;
@@ -44,6 +46,7 @@ export interface BuiltContent {
   art: ArtReport;
   marks: MarksReport;
   voicing: VoicingReport;
+  cardVoicing: CardVoicing;
 }
 
 /**
@@ -60,8 +63,9 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages, courseLanguages } =
     buildCourses(sources);
   checkSourceScripts(sources, courseLanguages, languages, moduleLanguages);
+  const cardVoicing = checkCardAudio(sources, courseLanguages);
   const { words, phrases } = buildCards(sources, courseLanguages);
-  const { legacy, art, media } = buildMedia(sources, words, phrases);
+  const { legacy, art, media } = buildMedia(sources, words, phrases, cardVoicing.sources);
   const { used, lessonsForModule, drafts, voicing } = buildLessons({
     sources,
     words,
@@ -96,6 +100,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     art,
     marks: marks.report,
     voicing,
+    cardVoicing,
   };
 }
 
@@ -138,6 +143,14 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     `Аудирование: с записью ${voiced} реплик` +
       (silent
         ? `; без записи ${silent} реплик в ${unvoiced.size} уроках${stale.length ? ` (устарело после правки ${stale.length})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- <урок>`
+        : ""),
+  );
+  const cards = built.cardVoicing;
+  const silentCards = built.words.length + built.phrases.length - cards.voiced;
+  console.log(
+    `Слова и фразы: с записью ${cards.voiced}` +
+      (silentCards
+        ? `; без записи ${silentCards}${cards.stale.length ? ` (устарело после правки ${cards.stale.length})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- words phrases`
         : ""),
   );
   const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);

@@ -1,5 +1,6 @@
 id: p094
 text: Δεν μου αρέσει το ψάρι.
+audio: phrases/p094.mp3
 translation: Я не люблю рыбу.
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

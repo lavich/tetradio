@@ -1,5 +1,6 @@
 id: p150
 text: Είναι μακριά από εδώ;
+audio: phrases/p150.mp3
 translation: Это далеко отсюда?
 provenance:
   sourceLabel: Лексикон курса, модуль 12 (docs/course/lexicon/12.tsv)

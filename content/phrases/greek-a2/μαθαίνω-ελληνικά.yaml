@@ -1,5 +1,6 @@
 id: p021
 text: Μαθαίνω ελληνικά.
+audio: phrases/p021.mp3
 translation: Я учу греческий.
 provenance:
   sourceLabel: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)

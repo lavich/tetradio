@@ -1,5 +1,6 @@
 id: p244
 text: Τι καιρό κάνει σήμερα;
+audio: phrases/p244.mp3
 translation: Какая сегодня погода?
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)

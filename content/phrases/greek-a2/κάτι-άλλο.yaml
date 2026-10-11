@@ -1,5 +1,6 @@
 id: p125
 text: Κάτι άλλο;
+audio: phrases/p125.mp3
 translation: Что-нибудь ещё?
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

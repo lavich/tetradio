@@ -1,5 +1,6 @@
 id: p220
 text: Έχω πονόλαιμο.
+audio: phrases/p220.mp3
 translation: У меня болит горло.
 provenance:
   sourceLabel: Лексикон курса, модуль 17 (docs/course/lexicon/17.tsv)

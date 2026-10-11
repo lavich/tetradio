@@ -1,5 +1,6 @@
 id: p028
 text: Έχεις αδέλφια;
+audio: phrases/p028.mp3
 translation: У тебя есть братья или сёстры?
 provenance:
   sourceLabel: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)

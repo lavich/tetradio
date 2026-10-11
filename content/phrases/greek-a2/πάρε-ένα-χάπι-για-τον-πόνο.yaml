@@ -1,5 +1,6 @@
 id: p238
 text: Πάρε ένα χάπι για τον πόνο.
+audio: phrases/p238.mp3
 translation: Выпей таблетку от боли.
 provenance:
   sourceLabel: Лексикон курса, модуль 18 (docs/course/lexicon/18.tsv)

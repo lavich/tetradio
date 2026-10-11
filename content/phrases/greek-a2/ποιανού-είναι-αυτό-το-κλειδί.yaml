@@ -1,5 +1,6 @@
 id: p081
 text: Ποιανού είναι αυτό το κλειδί;
+audio: phrases/p081.mp3
 translation: Чей это ключ?
 provenance:
   sourceLabel: Лексикон курса, модуль 07 (docs/course/lexicon/07.tsv)

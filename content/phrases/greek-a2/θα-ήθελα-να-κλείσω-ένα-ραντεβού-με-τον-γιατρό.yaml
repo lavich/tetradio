@@ -1,5 +1,6 @@
 id: p230
 text: Θα ήθελα να κλείσω ένα ραντεβού με τον γιατρό.
+audio: phrases/p230.mp3
 translation: Я хотел бы записаться к врачу.
 provenance:
   sourceLabel: Лексикон курса, модуль 18 (docs/course/lexicon/18.tsv)

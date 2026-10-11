@@ -1,5 +1,6 @@
 id: p296
 text: Πότε γιορτάζεις;
+audio: phrases/p296.mp3
 translation: Когда у тебя именины?
 provenance:
   sourceLabel: Лексикон курса, модуль 22 (docs/course/lexicon/22.tsv)

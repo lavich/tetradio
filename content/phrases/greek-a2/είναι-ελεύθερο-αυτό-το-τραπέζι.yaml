@@ -1,5 +1,6 @@
 id: p110
 text: Είναι ελεύθερο αυτό το τραπέζι;
+audio: phrases/p110.mp3
 translation: Этот столик свободен?
 provenance:
   sourceLabel: Лексикон курса, модуль 09 (docs/course/lexicon/09.tsv)

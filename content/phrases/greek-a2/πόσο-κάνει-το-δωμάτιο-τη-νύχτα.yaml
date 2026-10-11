@@ -1,5 +1,6 @@
 id: p179
 text: Πόσο κάνει το δωμάτιο τη νύχτα;
+audio: phrases/p179.mp3
 translation: Сколько стоит номер за ночь?
 provenance:
   sourceLabel: Лексикон курса, модуль 14 (docs/course/lexicon/14.tsv)

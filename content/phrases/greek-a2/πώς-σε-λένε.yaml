@@ -1,5 +1,6 @@
 id: p005
 text: Πώς σε λένε;
+audio: phrases/p005.mp3
 translation: Как тебя зовут?
 provenance:
   sourceLabel: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)

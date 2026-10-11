@@ -1,5 +1,6 @@
 id: p101
 text: Είναι πολύ νόστιμο!
+audio: phrases/p101.mp3
 translation: Очень вкусно!
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

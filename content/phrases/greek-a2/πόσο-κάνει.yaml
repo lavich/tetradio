@@ -1,5 +1,6 @@
 id: p047
 text: Πόσο κάνει;
+audio: phrases/p047.mp3
 translation: Сколько стоит?
 provenance:
   sourceLabel: Лексикон курса, модуль 04 (docs/course/lexicon/04.tsv)

@@ -1,5 +1,6 @@
 id: p037
 text: Αυτή είναι η οικογένειά μου.
+audio: phrases/p037.mp3
 translation: Это моя семья.
 provenance:
   sourceLabel: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)

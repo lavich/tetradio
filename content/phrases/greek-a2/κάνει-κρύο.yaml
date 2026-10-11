@@ -1,5 +1,6 @@
 id: p246
 text: Κάνει κρύο.
+audio: phrases/p246.mp3
 translation: Холодно.
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)
