@@ -114,6 +114,15 @@ describe("озвучка системным голосом", () => {
     expect(state.cancels).toBe(0); // синтезатор свободен — отменять нечего
   });
 
+  it("греческий вопрос уходит в синтез с «?», иначе он звучит утвердительно", async () => {
+    const { synth, state } = fakeSynth();
+    const { speakPhrase } = await load(synth);
+    const result = speakPhrase("Μιλάτε αγγλικά;", PROFILES.el);
+    await vi.advanceTimersByTimeAsync(50);
+    expect(await result).toBe("voice");
+    expect(state.spoken.map((item) => item.text)).toEqual(["Μιλάτε αγγλικά?"]);
+  });
+
   it("потерянная реплика повторяется один раз и звучит", async () => {
     const { synth, state } = fakeSynth({ script: ["drop", "ok"] });
     const { playWord } = await load(synth);

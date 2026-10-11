@@ -140,6 +140,13 @@ describe("аудирование записями реплик", () => {
     expect(audio.played).toHaveLength(0);
     expect(spoken.map((utterance) => utterance.rate)).toEqual([0.75, 0.75, 0.75]);
   });
+  it("вопрос без записи звучит синтезом с «?»", async () => {
+    fakeAudio();
+    const spoken = fakeSynth();
+    const { playDialogue } = await import("../src/shared/dialogue");
+    await playDialogue([{ speaker: "Αντρέας", text: "Μιλάτε αγγλικά;" }], "normal", undefined, source());
+    expect(spoken.map((utterance) => utterance.text)).toEqual(["Μιλάτε αγγλικά?"]);
+  });
   it("отказ воспроизведения файла — ошибка, а не молчаливая подмена голосом", async () => {
     fakeAudio({ refuse: true });
     const spoken = fakeSynth();

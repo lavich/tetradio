@@ -4,7 +4,7 @@
  * при одном голосе их различает высота тона. Остановка отменяет весь диалог, а не только текущую реплику.
  */
 import type { TranscriptLine } from "../content/course";
-import { PROFILES, type LanguageProfile } from "../domain/language";
+import { PROFILES, spokenText, type LanguageProfile } from "../domain/language";
 import { voicesOf } from "./voices";
 import { releaseAssetUrl, type AssetSource } from "./store";
 
@@ -104,7 +104,7 @@ function say(text: string, voice: SpeechSynthesisVoice, rate: number, pitch: num
       clearTimeout(endTimer);
       resolve(ok);
     };
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(spokenText(text, lang));
     utterance.voice = voice;
     utterance.lang = voice.lang || lang;
     utterance.rate = rate;
