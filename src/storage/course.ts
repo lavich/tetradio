@@ -3,7 +3,7 @@
  * Прогресс блоков — данные пользователя (входят в копию); модули — кеш каталога.
  */
 import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
-import { cardRef, decodeMarks, type BlockMarks } from "../content/schema";
+import { cardRef, decodeMarks, READING_PREFIX, type BlockMarks } from "../content/schema";
 import { lessonDone, lessonTally, type LessonTally } from "../domain/course";
 import { localDay, nextState } from "../domain/learning";
 import { unitKey } from "../domain/refs";
@@ -259,7 +259,10 @@ export async function lessonDays(
   courseId?: string,
   database: AppDatabase = db,
 ): Promise<string[]> {
-  let rows = await database.blockProgress.filter((row) => row.done).toArray();
+  // Чтение днём занятий не считается: отметка «прочитано» — строка блока текста.
+  let rows = await database.blockProgress
+    .filter((row) => row.done && !row.lessonId.startsWith(READING_PREFIX))
+    .toArray();
   if (courseId) {
     const owners = await lessonCourses(
       rows.map((row) => row.lessonId),

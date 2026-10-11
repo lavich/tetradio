@@ -4,10 +4,14 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { installLesson } from "../../content/client";
 import { moduleViews, type ModuleView } from "../../storage/course";
+import { moduleReadings } from "../../storage/readings";
+import { readDay, WORDS, withCount } from "../../shared/format";
 import { db } from "../../storage/db";
 import { useFollowCourse } from "../../shared/courses";
 import { Tick } from "../../shared/Tick";
 import { useSpread } from "../../shared/media";
+import { useCourseProfile } from "../../shared/language";
+
 import { checkpointLabels } from "./checkpoints";
 import { ModuleCover } from "./ModuleCover";
 import ui from "../../shared/ui.module.css";
@@ -26,6 +30,8 @@ export function ModuleScreen() {
   useFollowCourse(courseId);
   const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
   const spread = useSpread();
+  const readings = useLiveQuery(() => moduleReadings(moduleId), [moduleId]) ?? [];
+  const profile = useCourseProfile(view?.module.courseId);
   const [problem, setProblem] = useState("");
   // Уроки опубликованного модуля скачиваются при открытии: без пакета урок не пройти.
   useEffect(() => {
@@ -102,6 +108,44 @@ export function ModuleScreen() {
       {view.review.length ? (
         <ol className={css.lessons} aria-label="После пробника">
           {view.review.map((lesson, index) => row(lesson, `+${index + 1}`, "занятие пройдено", "после пробника"))}
+        </ol>
+      ) : null}
+      {readings.length ? (
+        <ol className={`${css.lessons} ${css.tocBreak}`} aria-label="Чтение">
+          {readings.map(({ reading, open, readAt, after }) => {
+            const title = (
+              <span className={css.tocLine}>
+                <h3 className={css.blockTitle} lang={profile.code}>
+                  {reading.title}
+                </h3>
+                <span className={css.dots} aria-hidden="true" />
+                <span className={css.tocCount}>{withCount(reading.words, WORDS)}</span>
+              </span>
+            );
+            const meta = readAt ? (
+              `прочитано ${readDay(readAt)}`
+            ) : open ? null : (
+              <>
+                откроется после урока «<span lang={profile.code}>{after.title}</span>»
+              </>
+            );
+            return (
+              <li key={reading.id}>
+                {readAt ? <Tick className={base.mark} label="прочитано" /> : <span className={base.gutter}>текст</span>}
+                {open ? (
+                  <Link className={css.lessonLink} to={`/course/${module.id}/read/${reading.id}`} state={FROM_MODULE}>
+                    {title}
+                    {meta ? <span className={css.meta}>{meta}</span> : null}
+                  </Link>
+                ) : (
+                  <div className={css.lessonLink}>
+                    {title}
+                    <span className={css.meta}>{meta}</span>
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ol>
       ) : null}
       {module.grammar.length ? (

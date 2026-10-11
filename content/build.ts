@@ -14,6 +14,7 @@ import { buildCards } from "./build/cards.ts";
 import { buildCourses } from "./build/courses.ts";
 import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons.ts";
 import { markCourses, type MarksReport } from "./build/mark-courses.ts";
+import { buildReadings, type ReadingReport } from "./build/readings.ts";
 import { buildMedia } from "./build/media.ts";
 import { packLessons, type BuiltFile } from "./build/output.ts";
 import { checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
@@ -47,6 +48,7 @@ export interface BuiltContent {
   marks: MarksReport;
   voicing: VoicingReport;
   cardVoicing: CardVoicing;
+  readings: ReadingReport[];
 }
 
 /**
@@ -79,7 +81,8 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   });
   // Слова прошлых уроков известны только после разбора всех уроков, поэтому версии считаются после разметки.
   const marks = markCourses(courses, modules, moduleOf, drafts, words, phrases);
-  const { packages, entries, files } = packLessons(drafts, marks);
+  const readings = buildReadings({ sources, courses, modules, moduleOf, drafts, words, phrases });
+  const { packages, entries, files } = packLessons(drafts, marks, readings.byLesson);
   checkCoverage({ sources, words, phrases, used, checkpoints, reviews, lessonsForModule, modules });
   for (const { item, body } of media.values()) files.push({ path: item.url, body, mimeType: item.mimeType });
   const catalog: Catalog = {
@@ -101,6 +104,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     marks: marks.report,
     voicing,
     cardVoicing,
+    readings: readings.report,
   };
 }
 
@@ -153,6 +157,12 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
         ? `; без записи ${silentCards}${cards.stale.length ? ` (устарело после правки ${cards.stale.length})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- words phrases`
         : ""),
   );
+  for (const reading of built.readings)
+    console.log(
+      `Чтение ${reading.id} (после ${reading.after}): ${reading.words} слов, знакомо ${reading.known} %, глоссы ${reading.glosses} %, имена ${reading.names} %` +
+        (reading.warnings.length ? ` — ${reading.warnings.join("; ")}` : "") +
+        (reading.unknown.length ? `; не нашлись: ${[...new Set(reading.unknown)].join(", ")}` : ""),
+    );
   const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);
   for (const entry of shown)
     console.log(`  ${entry.lessonId} ${entry.block}.${entry.field}: «${entry.text}» → ${entry.refs.join(" или ")}`);

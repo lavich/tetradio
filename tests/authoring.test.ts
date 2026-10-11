@@ -66,9 +66,26 @@ describe("шаблоны инструкции", () => {
       rmSync(root, { recursive: true, force: true });
     }
   });
+  it("текст для чтения из docs/ проходит тот же валидатор на курсе из модулей", () => {
+    const root = mkdtempSync(join(tmpdir(), "tetradio-doc-reading-"));
+    cpSync("tests/fixtures/course-demo", root, { recursive: true });
+    rmSync(join(root, "readings"), { recursive: true, force: true });
+    mkdirSync(join(root, "readings", "greek-a2"), { recursive: true });
+    writeFileSync(
+      join(root, "readings/greek-a2/r-example.yaml"),
+      readFileSync(join(TEMPLATES, "reading.yaml"), "utf8"),
+    );
+    try {
+      const pack = buildContent(root).packages.find((item) => item.id === "m01-1")!;
+      expect(pack.readings?.map((reading) => [reading.id, reading.review])).toEqual([["r-example", "none"]]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
   it("инструкция ссылается на все шаблоны и на навык, навык — на инструкцию", () => {
     const doc = readFileSync(DOC, "utf8");
-    for (const name of ["word", "phrase", "lesson"]) expect(doc, name).toContain(`lesson-authoring/${name}.yaml`);
+    for (const name of ["word", "phrase", "lesson", "reading"])
+      expect(doc, name).toContain(`lesson-authoring/${name}.yaml`);
     expect(doc).toContain("prepare-lesson/SKILL.md");
     // Границы, которые инструкция обязана называть явно.
     for (const rule of [

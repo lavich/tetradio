@@ -4,6 +4,7 @@ import {
   type CatalogEntry,
   type ContentPackage,
   type PackageMarks,
+  type PackageReading,
 } from "../../src/content/schema.ts";
 import { canonical, hash } from "./common.ts";
 
@@ -13,16 +14,22 @@ export interface BuiltFile {
   mimeType: string;
 }
 
-export function packLessons(drafts: Map<string, ContentPackage>, marks: { packages: Map<string, PackageMarks> }) {
+export function packLessons(
+  drafts: Map<string, ContentPackage>,
+  marks: { packages: Map<string, PackageMarks> },
+  readings: Map<string, PackageReading[]> = new Map(),
+) {
   const packages: ContentPackage[] = [];
   const entries: CatalogEntry[] = [];
   const files: BuiltFile[] = [];
   for (const [id, draft] of drafts) {
     const marked = marks.packages.get(id);
     if (marked) draft.marks = marked;
+    const texts = readings.get(id);
+    if (texts) draft.readings = texts;
     const version = hash(canonical({ ...draft, version: undefined }));
     const pack = { ...draft, version };
-    if (marked || pack.lineAudio) {
+    if (marked || pack.lineAudio || texts) {
       try {
         parsePackage(JSON.parse(JSON.stringify(pack)));
       } catch (error) {
@@ -47,6 +54,7 @@ export function packLessons(drafts: Map<string, ContentPackage>, marks: { packag
       url,
       bytes: Buffer.byteLength(body),
       media: { count: packMedia.length, bytes: packMedia.reduce((sum, item) => sum + item.bytes, 0) },
+      ...(pack.readings?.length ? { readings: pack.readings.length } : {}),
     });
   }
   return { packages, entries, files };

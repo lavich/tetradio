@@ -1,0 +1,15 @@
+id: r-m01-anna
+title: Η Άννα
+after: m01-1
+series: anna
+text: |-
+  Γεια! Καλημέρα! Είμαι η Άννα. Είμαι από τη Ρωσία. Μένω στη Λεμεσό.
+  — Γεια σου! Πώς σε λένε;
+  — Είμαι η Άννα. Είσαι από την Κύπρο;
+  — Είμαι από την Κύπρο.
+glosses: []
+names: [Άννα, Ρωσία, Κύπρο]
+provenance:
+  operation: requested-generation
+  request: Пример текста демо-курса из слов урока m01-1
+  review: none

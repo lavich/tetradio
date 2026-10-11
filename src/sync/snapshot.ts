@@ -1,4 +1,5 @@
 import type { Card } from "ts-fsrs";
+import { READING_PREFIX } from "../content/schema";
 import type { AppDatabase } from "../storage/db";
 import { byTime, emptySkills, emptyStats, foldSkill, foldStats, type SkillSummary } from "../domain/skills";
 import { KINDS } from "../domain/kinds";
@@ -337,7 +338,8 @@ export const describeSnapshot = (snapshot: CompactSnapshot): SnapshotDescription
     const course = new Set(snapshot.blocks.map((block) => block.lessonId));
     return snapshot.lessons.filter((lesson) => lesson.completed && course.has(lesson.id)).length;
   })(),
-  blocks: snapshot.blocks.filter((block) => block.done).length,
+  // Отметки «прочитано» — не выполненные задания.
+  blocks: snapshot.blocks.filter((block) => block.done && !block.lessonId.startsWith(READING_PREFIX)).length,
   lastDay: snapshot.stats.days.length ? snapshot.stats.days[snapshot.stats.days.length - 1].date : null,
 });
 /** Есть ли локальный прогресс, который нельзя молча заменить облаком при первом подключении. */

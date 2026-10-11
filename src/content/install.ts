@@ -96,7 +96,12 @@ export function installLesson(
       if (!entry) throw new ContentError("Этого урока нет в каталоге.");
       version = entry.version;
       const installed = await database.packages.get(lessonId);
-      if (installed && installed.version === entry.version)
+      // Сборка без поддержки текстов ставила пакет без них: та же версия с текстами в каталоге ставится заново.
+      if (
+        installed &&
+        installed.version === entry.version &&
+        (installed.readings?.length ?? 0) >= (entry.readings ?? 0)
+      )
         return { status: "current", added: 0, changed: 0 } as InstallResult;
       const pack = parsePackage(await source.json(entry.url));
       if (pack.id !== lessonId || pack.version !== entry.version)
