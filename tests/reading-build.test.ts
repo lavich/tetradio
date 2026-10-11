@@ -65,6 +65,13 @@ describe("сборка текстов для чтения", () => {
     expect(changed.packages.find((p) => p.id === "m01-test")!.readings![0].audio).toBeUndefined();
   });
 
+  it("отчёт называет опубликованные модули, где текстов меньше двух", () => {
+    expect(buildContent(DEMO).sparseReadings).toEqual([]);
+    const root = demoWith({});
+    rmSync(join(root, "readings/greek-a2/r-m01-lemesos.yaml"));
+    expect(buildContent(root).sparseReadings).toEqual(["m01"]);
+  });
+
   it("записи с другим числом предложений или без медиа пакета при разборе отбрасываются", () => {
     const pack = JSON.parse(JSON.stringify(buildContent(DEMO).packages.find((p) => p.id === "m01-1")!));
     expect(parsePackage(pack).readings![0].audio).toHaveLength(10);
