@@ -14,6 +14,8 @@ import {
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
 import { snapshotOf } from "../domain/kinds";
+import { PROFILES } from "../domain/language";
+import { gapOf } from "../domain/word-gap";
 import { retryItemId } from "../domain/skills";
 import {
   fillSettings,
@@ -81,7 +83,9 @@ export async function recordAnswer({
   // «Почти» приходит только из проверок с вводом текста; у заданий с выбором исход задаёт сам `correct`.
   const outcome = status ?? (correct ? "correct" : "wrong");
   // Ступень проще считается до транзакции: иначе запись пришлось бы расширить на таблицы слов и фраз.
-  const easier = correct ? null : await easierRetry(item, session, database);
+  const easier = correct
+    ? null
+    : ((await gapRetry(item, answer, session, database)) ?? (await easierRetry(item, session, database)));
   const eventId = `e-${item.id}`;
   const result = await database.transaction(
     "rw",
@@ -146,6 +150,19 @@ export async function recordAnswer({
   );
   if (result.created) announceChange(result.finished ? "finished" : "answered");
   return { event: result.event, created: result.created };
+}
+/** Ошибка в одном слове длинной фразы: попытка спрашивает это слово в пропуске, а не всю фразу заново. */
+async function gapRetry(
+  item: SessionItem,
+  answer: string,
+  session: Session,
+  database: AppDatabase,
+): Promise<Pick<SessionItem, "type" | "options" | "gap"> | null> {
+  if (item.type !== "spelling" || item.card.kind !== "phrase") return null;
+  const courseId = await sessionCourse(session, database);
+  const profile = courseId ? await profileOfCourse(courseId, database) : PROFILES.el;
+  const gap = gapOf(answer, item.card.phrase.text, profile);
+  return gap === null ? null : { type: "wordGap", options: [], gap };
 }
 /**
  * Задание дополнительной попытки: ступень проще провалённой. Пул вариантов читается только на ошибке
