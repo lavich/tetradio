@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { sentencesOf } from "../src/domain/sentences";
+import { sentenceRanges, sentencesOf } from "../src/domain/sentences";
 
 describe("текст по предложениям", () => {
   it("делит по концу предложения и строкам, греческий «;» — вопрос", () => {
@@ -19,5 +19,10 @@ describe("текст по предложениям", () => {
   });
   it("строки без букв не озвучиваются", () => {
     expect(sentencesOf("Γεια.\n—\n…")).toEqual(["Γεια."]);
+  });
+  it("позиции предложений указывают на сами предложения в тексте", () => {
+    const text = "  Γεια! Είμαι η Άννα.\n\n— Πώς σε λένε;\n—\n";
+    expect(sentenceRanges(text).map(({ start, end }) => text.slice(start, end))).toEqual(sentencesOf(text));
+    expect(sentenceRanges(text)[0]).toEqual({ start: 2, end: 7 });
   });
 });

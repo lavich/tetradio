@@ -27,8 +27,9 @@ async function voice(page: Page) {
   });
 }
 /** Подменный `<audio>`: запоминает адрес и скорость каждой записи и «доигрывает» её через миг. */
-async function recordings(page: Page) {
-  await page.addInitScript(() => {
+/** `hold` — запись не кончается, пока тест не вызовет `__next()`: видно, какое предложение звучит. */
+async function recordings(page: Page, hold = false) {
+  await page.addInitScript((hold) => {
     const played: { src: string; rate: number }[] = [];
     (window as unknown as { __played: typeof played }).__played = played;
     class FakeAudio extends EventTarget {
@@ -40,12 +41,14 @@ async function recordings(page: Page) {
       pause() {}
       play() {
         played.push({ src: this.src, rate: this.playbackRate });
-        setTimeout(() => this.dispatchEvent(new Event("ended")), 5);
+        const end = () => this.dispatchEvent(new Event("ended"));
+        if (hold) (window as unknown as { __next: () => void }).__next = end;
+        else setTimeout(end, 5);
         return Promise.resolve();
       }
     }
     Object.defineProperty(window, "Audio", { value: FakeAudio, configurable: true });
-  });
+  }, hold);
 }
 const played = (page: Page) =>
   page.evaluate(() => (window as unknown as { __played: { src: string; rate: number }[] }).__played.splice(0));
@@ -145,4 +148,24 @@ test("предложение без записи звучит синтезом, 
     .poll(() => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken))
     .toEqual(["Γεια σας!"]);
   expect((await played(page)).map((file) => file.rate)).toEqual([1, 1, 1, 1]);
+});
+
+test("звучащее предложение подсвечено в тексте; после остановки подсветки нет", async ({ page }) => {
+  await voice(page);
+  await recordings(page, true);
+  await page.goto("/app/");
+  await page.getByRole("button", { name: "Учить курс" }).click();
+  await expect(page.getByTestId("course-next")).toBeVisible();
+  await complete(page, "m01-1");
+  await page.goto("/app/course/m01/read/r-m01-anna");
+  await expect(page.getByTestId("speaking")).toHaveCount(0);
+  await page.getByRole("button", { name: "Слушать" }).click();
+  await expect(page.getByTestId("speaking")).toHaveText("Γεια!");
+  await expect
+    .poll(() => page.evaluate(() => typeof (window as unknown as { __next?: unknown }).__next))
+    .toBe("function");
+  await page.evaluate(() => (window as unknown as { __next: () => void }).__next());
+  await expect(page.getByTestId("speaking")).toHaveText("Καλημέρα!");
+  await page.getByRole("button", { name: "Остановить" }).click();
+  await expect(page.getByTestId("speaking")).toHaveCount(0);
 });
