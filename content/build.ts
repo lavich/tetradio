@@ -49,6 +49,8 @@ export interface BuiltContent {
   voicing: VoicingReport;
   cardVoicing: CardVoicing;
   readings: ReadingReport[];
+  /** Опубликованные модули курса с полкой, где текстов для чтения меньше двух. */
+  sparseReadings: string[];
 }
 
 /**
@@ -105,6 +107,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     voicing,
     cardVoicing,
     readings: readings.report,
+    sparseReadings: readings.sparse,
   };
 }
 
@@ -161,8 +164,11 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     console.log(
       `Чтение ${reading.id} (после ${reading.after}): ${reading.words} слов, знакомо ${reading.known} %, глоссы ${reading.glosses} %, имена ${reading.names} %` +
         (reading.warnings.length ? ` — ${reading.warnings.join("; ")}` : "") +
-        (reading.unknown.length ? `; не нашлись: ${[...new Set(reading.unknown)].join(", ")}` : ""),
+        (reading.unknown.length ? `; не нашлись: ${[...new Set(reading.unknown)].join(", ")}` : "") +
+        (reading.unvoiced ? `; без записи ${reading.unvoiced} предложений — озвучка: npm run voices -- readings` : ""),
     );
+  if (built.sparseReadings.length)
+    console.log(`Чтение: меньше двух текстов в модулях ${built.sparseReadings.join(", ")}`);
   const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);
   for (const entry of shown)
     console.log(`  ${entry.lessonId} ${entry.block}.${entry.field}: «${entry.text}» → ${entry.refs.join(" или ")}`);

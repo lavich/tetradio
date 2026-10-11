@@ -178,6 +178,7 @@ export function buildReadings({
     if (id.startsWith(READING_PREFIX)) fail(`lessons/${id}.yaml: префикс ${READING_PREFIX} занят текстами для чтения`);
   const byLesson = new Map<string, PackageReading[]>();
   const report: ReadingReport[] = [];
+  const shelved = new Set<string>();
   const numberOf = new Map(modules.map((module) => [module.id, module.number]));
   const describe = cardDescriber(words, phrases);
   for (const [id, src] of sources.readings) {
@@ -190,6 +191,7 @@ export function buildReadings({
     const review = src.provenance?.review ?? "none";
     if (!REVIEWS.includes(review as ReadingReview)) fail(`${where}: provenance.review — ${REVIEWS.join(", ")}`);
     const course = courses.find((entry) => entry.id === src.course)!;
+    shelved.add(course.id);
     // Полка живёт в модуле, а служебные слова и приставки подсчёта — греческие.
     if (!course.moduleIds) fail(`${where}: тексты для чтения бывают только у курса из модулей`);
     if (course.language !== "el") fail(`${where}: тексты для чтения пока только для греческого курса`);
@@ -361,5 +363,14 @@ export function buildReadings({
     });
   }
   for (const list of byLesson.values()) list.sort((a, b) => a.id.localeCompare(b.id));
-  return { byLesson, report, mediaOf };
+  const perModule = new Map<string, number>();
+  for (const { after } of report) {
+    const module = moduleOf.get(after)?.id;
+    if (module) perModule.set(module, (perModule.get(module) ?? 0) + 1);
+  }
+  const sparse = modules
+    .filter((module) => module.status === "published" && shelved.has(module.courseId))
+    .filter((module) => (perModule.get(module.id) ?? 0) < 2)
+    .map((module) => module.id);
+  return { byLesson, report, mediaOf, sparse };
 }
