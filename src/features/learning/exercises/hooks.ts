@@ -25,7 +25,7 @@ export function useAutoSpeak(card: SessionCard, enabled: boolean) {
     if (!enabled || played.current) return;
     played.current = true;
     if (card.kind === "word") void playWord(card.word, profile);
-    else void playText(card.phrase.text, card.phrase.audioAssetId, profile);
+    else if (card.kind === "phrase") void playText(card.phrase.text, card.phrase.audioAssetId, profile);
   }, [card, enabled]);
 }
 

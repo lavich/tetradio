@@ -7,7 +7,7 @@ import {
   type PackagePhrase,
   type PackageWord,
 } from "../../src/content/schema.ts";
-import { CARD_KINDS, type CardKind } from "../../src/domain/types.ts";
+import { LESSON_CARD_KINDS, type LessonCardKind } from "../../src/domain/types.ts";
 import {
   parseBlocks,
   publicationGaps,
@@ -29,7 +29,7 @@ import {
   type VoiceManifest,
 } from "./voices.ts";
 
-const KIND_LABEL: Record<CardKind, { one: string; dir: string }> = {
+const KIND_LABEL: Record<LessonCardKind, { one: string; dir: string }> = {
   word: { one: "слова", dir: "words" },
   phrase: { one: "фразы", dir: "phrases" },
 };
@@ -136,9 +136,9 @@ export function buildLessons(input: LessonsInput) {
       const path = `${where}.${src.items !== undefined ? `items[${position}]` : `words[${position}]`}`;
       if (typeof ref !== "object" || ref === null || typeof ref.id !== "string")
         fail(`${path}: ожидалась пара {kind, id}`);
-      if (!(CARD_KINDS as readonly string[]).includes(ref.kind))
+      if (!(LESSON_CARD_KINDS as readonly string[]).includes(ref.kind))
         fail(`${path}: неизвестный вид карточки «${String(ref.kind)}»`);
-      const kind = ref.kind as CardKind;
+      const kind = ref.kind as LessonCardKind;
       if (!cards[kind].has(ref.id)) fail(`${path}: ${KIND_LABEL[kind].one} ${ref.id} нет в ${KIND_LABEL[kind].dir}/`);
       const owner = (kind === "word" ? sources.words : sources.phrases).get(ref.id)!.course;
       if (owner !== courseId) fail(`${path}: карточка ${ref.id} из курса ${owner} в уроке курса ${courseId}`);

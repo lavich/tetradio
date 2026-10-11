@@ -35,8 +35,8 @@ const bare = (value: string, profile: LanguageProfile) =>
     .replace(/(^|[^\d.])0+(?=\d)/g, "$1");
 
 export function checkItem(
-  block: ExerciseBlock,
-  item: ExerciseItem,
+  block: Pick<ExerciseBlock, "format">,
+  item: Pick<ExerciseItem, "answer">,
   given: string,
   profile: LanguageProfile = PROFILES.el,
 ): ItemResult {
@@ -74,6 +74,17 @@ export function scoreExercise(
   }
   return { correct, almost, total: block.items.length, results };
 }
+
+/**
+ * Пункты, из которых рождаются карточки ошибок: неверный непустой ответ в задании, которое понятно без текста.
+ * «Почти» карточку не даёт; оценивается ли пункт в контрольной, не важно.
+ */
+export const mistakesOf = (block: ExerciseBlock, answers: Record<string, string>, score: ExerciseScore) =>
+  block.about
+    ? []
+    : block.items
+        .filter((item) => score.results[item.id]?.status === "wrong" && !!answers[item.id]?.trim())
+        .map((item) => item.id);
 
 /** Блоки, которые нужно выполнить, чтобы урок считался пройденным: задания, письмо и речь. Чтение и объяснение — через свои задания. */
 export const isTask = (block: LessonBlock) =>

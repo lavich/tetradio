@@ -93,7 +93,8 @@ export function doneRows(session: Pick<Session, "items">, events: Map<string, Re
     if (!event && !item.skipped) return [];
     const { greek, meaning } = cardSides(item.card);
     // В аудировании и письме дан перевод или звук, а ответ — греческий; в узнавании наоборот.
-    const towardGreek = item.type === "listening" || item.type === "assembly" || item.type === "spelling";
+    const towardGreek =
+      item.type === "listening" || item.type === "assembly" || item.type === "spelling" || item.type === "item";
     return [
       {
         id: item.id,

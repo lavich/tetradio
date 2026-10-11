@@ -1,5 +1,5 @@
 import type {
-  CardKind,
+  LessonCardKind,
   Example,
   Gloss,
   Provenance,
@@ -7,7 +7,7 @@ import type {
   Segment,
   SourceRecord,
 } from "../domain/card-fields.ts";
-import { CARD_KINDS } from "../domain/card-fields.ts";
+import { LESSON_CARD_KINDS } from "../domain/card-fields.ts";
 import { ContentError } from "./schema-errors.ts";
 import {
   parseBlocks,
@@ -102,7 +102,7 @@ export interface PackagePhrase {
   revision: string;
 }
 export interface PackageItem {
-  kind: CardKind;
+  kind: LessonCardKind;
   id: string;
   position: number;
 }
@@ -160,7 +160,7 @@ export interface PackageMarks {
   blocks: Record<string, Record<string, [number, number, number, 0 | 1][]>>;
 }
 export type BlockMarks = Record<string, Record<string, WordMark[]>>;
-export const cardRef = (kind: CardKind, id: string) => `${kind === "word" ? "w" : "p"}:${id}`;
+export const cardRef = (kind: LessonCardKind, id: string) => `${kind === "word" ? "w" : "p"}:${id}`;
 
 export { ContentError, type ContentErrorKind } from "./schema-errors.ts";
 
@@ -198,9 +198,9 @@ const relativeUrl = (value: unknown, path: string): string => {
 const unique = (ids: string[], path: string) => {
   if (new Set(ids).size !== ids.length) throw new ContentError(`${path}: идентификаторы повторяются`);
 };
-const isCardKind = (value: unknown): value is CardKind =>
-  typeof value === "string" && (CARD_KINDS as readonly string[]).includes(value);
-const cardKind = (value: unknown, path: string): CardKind => {
+const isCardKind = (value: unknown): value is LessonCardKind =>
+  typeof value === "string" && (LESSON_CARD_KINDS as readonly string[]).includes(value);
+const cardKind = (value: unknown, path: string): LessonCardKind => {
   if (!isCardKind(value)) throw new ContentError(`${path}: неизвестный вид карточки «${String(value)}»`);
   return value;
 };

@@ -1,6 +1,7 @@
 import type { SessionItem } from "../../../domain/types";
 import { Assembly } from "./Assembly";
 import { Comprehension } from "./Comprehension";
+import { LessonTask } from "./LessonTask";
 import { Listening } from "./Listening";
 import type { Answer } from "./model";
 import { Recognition } from "./Recognition";
@@ -32,6 +33,8 @@ export function ExerciseView({
     <Comprehension key={item.id} {...props} onSkip={onSkip} />
   ) : item.type === "assembly" ? (
     <Assembly key={item.id} {...props} />
+  ) : item.type === "item" ? (
+    <LessonTask key={item.id} {...props} />
   ) : (
     <Spelling key={item.id} {...props} />
   );

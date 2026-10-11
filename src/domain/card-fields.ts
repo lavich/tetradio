@@ -28,8 +28,11 @@ export interface Segment {
  * таксономия языкового знания. В отличие от `ExerciseType`, снятый вид отсюда уходит: перечисление
  * описывает то, что планировщик выдаёт сейчас, и лишний вид дал бы пустую группу на каждом экране.
  */
-export type CardKind = "word" | "phrase";
-export const CARD_KINDS: readonly CardKind[] = ["word", "phrase"];
+export type CardKind = LessonCardKind | "mistake";
+export const CARD_KINDS: readonly CardKind[] = ["word", "phrase", "mistake"];
+/** Виды карточек, которые поставляет контент урока; ошибки урока рождаются из ответов учащегося. */
+export type LessonCardKind = "word" | "phrase";
+export const LESSON_CARD_KINDS: readonly LessonCardKind[] = ["word", "phrase"];
 /** Происхождение подготовленного агентом материала; `request` обязателен для запрошенных преобразования и генерации. */
 export type ProvenanceOperation = "verbatim" | "requested-transform" | "requested-generation";
 export interface SourceRecord {

@@ -448,6 +448,7 @@ describe("обновление копии v8", () => {
           "totals": {
             "answers": 6,
             "byKind": {
+              "mistake": 0,
               "phrase": 0,
               "word": 3,
             },

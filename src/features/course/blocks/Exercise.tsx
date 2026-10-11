@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { ExerciseBlock } from "../../../content/course";
-import { scoreExercise, spokenChoice, type ItemResult } from "../../../domain/course";
+import { mistakesOf, scoreExercise, spokenChoice, type ItemResult } from "../../../domain/course";
 import { shuffle } from "../../../domain/learning";
 import type { BlockProgress } from "../../../domain/types";
 import { speakPhrase } from "../../../shared/audio";
@@ -41,6 +41,7 @@ export function Exercise({
       done: true,
       answers,
       score: { correct: result.correct, almost: result.almost, total: result.total },
+      mistakes: mistakesOf(block, answers, result),
     });
     if (saved) setChecked(true);
   };

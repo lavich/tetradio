@@ -3,7 +3,7 @@ import { unitKey, wordKeyOf, wordRef } from "../../src/domain/refs";
 import { DEFAULT_LANGUAGE, type Language } from "../../src/domain/language";
 import { byTime, emptyStats, foldStats, summarizeEvents } from "../../src/domain/skills";
 import { type StatsSource } from "../../src/domain/stats";
-import { cardLabel } from "../../src/domain/kinds";
+import { cardKey, cardLabel } from "../../src/domain/kinds";
 import {
   type CardKind,
   type Course,
@@ -145,11 +145,7 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
           .map((ref) => [unitKey(ref), cardOf(ref)] as const)
           .filter((entry): entry is [string, SessionCard] => !!entry[1]),
       ),
-    skillsOf: async (card) =>
-      summarizeEvents(
-        unitKey(card.kind === "word" ? wordRef(card.word.id) : { kind: "phrase", id: card.phrase.id }),
-        data.events,
-      ),
+    skillsOf: async (card) => summarizeEvents(cardKey(card), data.events),
     optionPool: async (_want, courseId) =>
       courseId ? courseIds("word", courseId).flatMap((id) => words.get(id) ?? []) : [...words.values()],
     lessonMatesOf: async (wordIds) =>
@@ -197,7 +193,7 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
       ),
     totals: async () => {
       const keys = new Set(data.events.map((event) => event.unitKey));
-      const byKind: Record<CardKind, number> = { word: 0, phrase: 0 };
+      const byKind: Record<CardKind, number> = { word: 0, phrase: 0, mistake: 0 };
       // Ключи снятых видов остаются в старых событиях: своего разряда у них нет.
       for (const event of data.events)
         if (keys.delete(event.unitKey) && event.ref.kind in byKind) byKind[event.ref.kind]++;

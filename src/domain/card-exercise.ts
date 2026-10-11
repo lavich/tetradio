@@ -37,7 +37,9 @@ export function easierExercise(
     const options =
       card.kind === "word"
         ? optionsFor(card.word, pools.words, "recognition", random, profile)
-        : phraseOptionsFor(card.phrase, pools.phrases, "recognition", random);
+        : card.kind === "phrase"
+          ? phraseOptionsFor(card.phrase, pools.phrases, "recognition", random)
+          : [];
     if (options.length === 4) return { type: "recognition", options };
   }
   return null;
