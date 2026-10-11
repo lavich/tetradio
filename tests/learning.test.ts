@@ -98,19 +98,26 @@ it("schedules a new word without losing FSRS fields", () => {
 it("chooses recognition for an untested word", () => expect(chooseType(wordKeyOf("w0"), [], {})).toBe("recognition"));
 
 describe("оценка объективного ответа", () => {
-  it("«Почти» получает Hard, а не Again", () => expect(gradeFor("almost", "spelling", 9000)).toBe(Rating.Hard));
+  it("«Почти» получает Hard, а не Again", () =>
+    expect(gradeFor("almost", "spelling", 9000, State.Review)).toBe(Rating.Hard));
   it("неверный ответ и «Не знаю» получают Again", () => {
-    expect(gradeFor("wrong", "recognition", 900)).toBe(Rating.Again);
-    expect(gradeFor("wrong", "spelling", 900)).toBe(Rating.Again);
+    expect(gradeFor("wrong", "recognition", 900, State.Review)).toBe(Rating.Again);
+    expect(gradeFor("wrong", "spelling", 900, State.Review)).toBe(Rating.Again);
   });
-  it("быстрый верный выбор получает Easy", () => {
-    for (const type of FAST_TYPES) expect(gradeFor("correct", type, FAST_ANSWER_MS - 1)).toBe(Rating.Easy);
+  it("быстрый верный выбор в повторении получает Easy", () => {
+    for (const type of FAST_TYPES)
+      expect(gradeFor("correct", type, FAST_ANSWER_MS - 1, State.Review)).toBe(Rating.Easy);
+  });
+  it("быстрый верный выбор до повторения получает Good", () => {
+    for (const state of [State.New, State.Learning, State.Relearning])
+      for (const type of FAST_TYPES) expect(gradeFor("correct", type, 1, state)).toBe(Rating.Good);
   });
   it("неспешный верный выбор получает Good", () => {
-    for (const type of FAST_TYPES) expect(gradeFor("correct", type, FAST_ANSWER_MS)).toBe(Rating.Good);
+    for (const type of FAST_TYPES) expect(gradeFor("correct", type, FAST_ANSWER_MS, State.Review)).toBe(Rating.Good);
   });
   it("у заданий без вариантов время не читается", () => {
-    for (const type of ["assembly", "spelling"] as const) expect(gradeFor("correct", type, 1)).toBe(Rating.Good);
+    for (const type of ["assembly", "spelling"] as const)
+      expect(gradeFor("correct", type, 1, State.Review)).toBe(Rating.Good);
   });
 });
 

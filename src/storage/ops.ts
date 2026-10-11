@@ -1,3 +1,4 @@
+import { State } from "ts-fsrs";
 import { db, type AppDatabase } from "./db";
 import { profileOfCourse, sessionCourse } from "./courses";
 import { lessonMates, optionPool, phrasePool } from "./queries";
@@ -13,6 +14,7 @@ import {
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
 import { snapshotOf } from "../domain/kinds";
+import { retryItemId } from "../domain/skills";
 import {
   fillSettings,
   type ReviewEvent,
@@ -77,7 +79,7 @@ export async function recordAnswer({
 }: AnswerInput): Promise<{ event: ReviewEvent; created: boolean }> {
   if (typeof correct !== "boolean" || item.type === "recall") throw new Error("Нужен ответ на объективное задание");
   // «Почти» приходит только из проверок с вводом текста; у заданий с выбором исход задаёт сам `correct`.
-  const rating = gradeFor(status ?? (correct ? "correct" : "wrong"), item.type, responseTimeMs);
+  const outcome = status ?? (correct ? "correct" : "wrong");
   // Ступень проще считается до транзакции: иначе запись пришлось бы расширить на таблицы слов и фраз.
   const easier = correct ? null : await easierRetry(item, session, database);
   const eventId = `e-${item.id}`;
@@ -92,6 +94,7 @@ export async function recordAnswer({
       if (existing) return { event: existing, created: false }; // повторное нажатие не создаёт второй ответ
       const state = await database.cardStates.get(item.unitKey);
       if ((state?.version ?? 0) !== item.expectedVersion) throw new ConflictError();
+      const rating = gradeFor(outcome, item.type, responseTimeMs, state?.card.state ?? State.New);
       const updated = item.mode === "scheduled" ? nextState(state, item.ref, rating, now) : undefined;
       const event: ReviewEvent = {
         id: eventId,
@@ -121,7 +124,7 @@ export async function recordAnswer({
         items.splice(Math.min(position + 3, items.length), 0, {
           ...item,
           ...easier,
-          id: `${item.id}-retry`,
+          id: retryItemId(item.id),
           isNew: false,
           mode: "practice",
           expectedVersion: updated?.version ?? state?.version ?? 0,

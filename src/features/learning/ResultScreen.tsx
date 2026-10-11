@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
-import { deviceTimezone, formatDay, localDay } from "../../domain/learning";
+import { deviceTimezone, formatDay, isDue, localDay, reviewCutoff } from "../../domain/learning";
 import { CARD_KINDS, type CardKind, type LearningRef, type ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
 import { CARDS, minutes, PHRASES, plural, withCount, WORDS } from "../../shared/format";
@@ -61,9 +61,10 @@ export function ResultScreen() {
   // «Сразу» — карточка без единой ошибки в занятии; остальные прошли с исправлением.
   const corrected = new Set(mistakes.map((event) => event.unitKey));
   const clean = [...unique.keys()].filter((key) => !corrected.has(key)).length;
+  const cutoff = reviewCutoff(now, deviceTimezone());
   const readyAgain: LearningRef[] = mistakeRefs.filter((ref) => {
     const state = result?.states.get(keyOf(ref));
-    return state && new Date(state.card.due).getTime() <= now.getTime();
+    return state && isDue(state.card, now, cutoff);
   });
   // Когда вернутся ошибки — по сроку каждой карточки, сгруппировано по дням: общий срок не выдумываем.
   const returns = new Map<string, string[]>();

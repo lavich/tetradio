@@ -3,8 +3,22 @@ import type { CatalogModule } from "../content/course";
 import { isCheckable, KINDS, needsFacts, type AvailabilityContext, type CardFacts } from "./kinds";
 import type { Voices } from "./language";
 import { unitKey } from "./refs";
-import { localDay } from "./time";
+import { addDays, localDay, zonedStart } from "./time";
 import type { LearningRef, LearningState, Lesson, LessonItem } from "./types";
+
+/** Час смены дня повторений: ответ поздно вечером и занятие после полуночи — один день, как в Anki. */
+export const DAY_STARTS_AT = 4;
+/** Ближайшая смена дня повторений после `now`: срок до неё — сегодняшний. */
+export function reviewCutoff(now: Date, timezone: string): Date {
+  const today = localDay(now, timezone);
+  const start = zonedStart(today, timezone, DAY_STARTS_AT);
+  return start > now ? start : zonedStart(addDays(today, 1), timezone, DAY_STARTS_AT);
+}
+/** Повторение в днях ждёт своего дня, а короткий шаг изучения — точного момента, иначе 10 минут сжались бы в ноль. */
+export function isDue(card: Pick<Card, "state" | "due">, now: Date, cutoff: Date): boolean {
+  const due = new Date(card.due).getTime();
+  return card.state === State.Review ? due < cutoff.getTime() : due <= now.getTime();
+}
 
 /** Зрелость состояния для очередей: сперва то, что переучивается, потом разучиваемое, потом повторяемое. */
 const stateRank = (card: Card) => (card.state === State.Relearning ? 0 : card.state === State.Learning ? 1 : 2);
@@ -64,8 +78,8 @@ export interface PlanSource {
   statesOf(refs: LearningRef[]): Promise<Map<string, LearningState>>;
   /** Ключи существующих карточек. */
   liveKeys(refs: LearningRef[]): Promise<Set<string>>;
-  /** Состояния к повторению на момент `now`; с курсом — только карточки этого курса. */
-  dueStates(now: Date, courseId?: string): Promise<LearningState[]>;
+  /** Состояния со сроком не позже `until`; с курсом — только карточки этого курса. */
+  dueStates(until: Date, courseId?: string): Promise<LearningState[]>;
   /** Признаки доступности упражнения для перечисленных карточек; тексты при этом не нужны. */
   factsOf(refs: LearningRef[]): Promise<Map<string, CardFacts>>;
   /** Число живых фраз курса: достаточность пула вариантов для аудирования фраз. */
@@ -97,7 +111,10 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
   }
   const [live, states] = await Promise.all([source.liveKeys(refs), source.statesOf(refs)]);
   const candidates = refs.filter((ref) => live.has(unitKey(ref)) && !states.has(unitKey(ref)));
-  const due = await source.dueStates(now, courseId);
+  const cutoff = reviewCutoff(now, source.timezone());
+  const due = (await source.dueStates(new Date(cutoff.getTime() - 1), courseId)).filter((state) =>
+    isDue(state.card, now, cutoff),
+  );
   const dueRefs = due.map((state) => state.ref);
   // Слова и фразы с базы не удаляются, а слово проверяемо всегда: на большой базе план не читает их записи.
   const [dueLive, facts] = await Promise.all([

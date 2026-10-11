@@ -1,6 +1,9 @@
 export { addDays, deviceTimezone, formatDay, localDay, mondayOf, zonedStart } from "./time";
 export {
+  DAY_STARTS_AT,
+  isDue,
   makePlan,
+  reviewCutoff,
   programmeOrder,
   type DailyPlan,
   type PlanLesson,

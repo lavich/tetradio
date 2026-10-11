@@ -90,16 +90,33 @@ describe("запись ответа", () => {
     const stored = (await db.sessions.get(session.id))!;
     expect(stored.items.some((entry) => entry.retryOf === item.id)).toBe(true);
   });
-  it("быстрый верный выбор получает Easy, неспешный — Good", async () => {
+  it("быстрый верный выбор в повторении получает Easy, неспешный — Good", async () => {
     const { session } = await prepare();
-    const fast = await answer(session, { ...session.items[0], type: "recognition" }, { responseTimeMs: 1200 });
-    const slow = await answer(session, { ...session.items[1], type: "recognition" }, { responseTimeMs: 9000 });
+    const fast = await answer(
+      session,
+      { ...(await asMature(session.items[0])), type: "recognition" },
+      { responseTimeMs: 1200 },
+    );
+    const slow = await answer(
+      session,
+      { ...(await asMature(session.items[1])), type: "recognition" },
+      { responseTimeMs: 9000 },
+    );
     expect(fast.rating).toBe(Rating.Easy);
     expect(slow.rating).toBe(Rating.Good);
   });
+  it("быстрый выбор новой карточки получает Good и не уводит её на дни вперёд", async () => {
+    const { session } = await prepare();
+    const item = { ...session.items[0], type: "recognition" as const };
+    const event = await answer(session, item, { responseTimeMs: 1200 });
+    expect(event.rating).toBe(Rating.Good);
+    const state = await db.cardStates.get(item.unitKey);
+    expect(state!.card.state).toBe(State.Learning);
+  });
   it("быстрое написание остаётся Good", async () => {
     const { session } = await prepare();
-    const event = await answer(session, { ...session.items[0], type: "spelling" }, { responseTimeMs: 900 });
+    const item = await asMature(session.items[0]);
+    const event = await answer(session, { ...item, type: "spelling" }, { responseTimeMs: 900 });
     expect(event.rating).toBe(Rating.Good);
   });
   it("провал дополнительной попытки расписание не двигает", async () => {
@@ -187,7 +204,7 @@ describe("запись ответа", () => {
     expect(stored.items).toHaveLength(2);
     const state = await db.cardStates.get(session.items[0].unitKey);
     const event = await answer(stored, stored.items[1]);
-    expect(event.rating).toBe(Rating.Easy); // быстрое верное узнавание; на расписание это всё равно не влияет
+    expect(event.rating).toBe(Rating.Good); // карточка после ошибки в изучении: Easy только в повторении
     expect((await db.sessions.get(session.id))!.status).toBe("done");
     expect(await db.cardStates.get(session.items[0].unitKey)).toEqual(state);
   });
@@ -205,7 +222,7 @@ describe("запись ответа", () => {
     await answer(session, session.items[0], { correct: false });
     expect(await db.events.count()).toBe(1);
   });
-  it("practice не сдвигает интервалы, но сохраняет результат навыка", async () => {
+  it("practice не сдвигает интервалы, но ответ остаётся в истории", async () => {
     await prepare();
     const practice = await makeSession({
       source: source(),
