@@ -4903,6 +4903,1758 @@
     "voice": "Erinome",
     "hash": "0ad4142d7ea3e1c8"
   },
+  "readings/r-m04-evdomada/1.mp3": {
+    "voice": "Zephyr",
+    "hash": "388c91aa1b3561d4"
+  },
+  "readings/r-m04-evdomada/10.mp3": {
+    "voice": "Zephyr",
+    "hash": "3d011a68c965f0fd"
+  },
+  "readings/r-m04-evdomada/11.mp3": {
+    "voice": "Zephyr",
+    "hash": "20edd3748b362a97"
+  },
+  "readings/r-m04-evdomada/12.mp3": {
+    "voice": "Erinome",
+    "hash": "3aaaa064c02a509d"
+  },
+  "readings/r-m04-evdomada/13.mp3": {
+    "voice": "Erinome",
+    "hash": "06d1a2c9877a7bca"
+  },
+  "readings/r-m04-evdomada/14.mp3": {
+    "voice": "Zephyr",
+    "hash": "a2686fb655253d37"
+  },
+  "readings/r-m04-evdomada/15.mp3": {
+    "voice": "Zephyr",
+    "hash": "bf0ebe09d6d72d2c"
+  },
+  "readings/r-m04-evdomada/16.mp3": {
+    "voice": "Zephyr",
+    "hash": "ac27330f4bc32f68"
+  },
+  "readings/r-m04-evdomada/17.mp3": {
+    "voice": "Sadachbia",
+    "hash": "575d0e1431fccc37"
+  },
+  "readings/r-m04-evdomada/18.mp3": {
+    "voice": "Sadachbia",
+    "hash": "510f7b6bf70e4cad"
+  },
+  "readings/r-m04-evdomada/19.mp3": {
+    "voice": "Zephyr",
+    "hash": "a2686fb655253d37"
+  },
+  "readings/r-m04-evdomada/2.mp3": {
+    "voice": "Zephyr",
+    "hash": "87f737b68d2e8cff"
+  },
+  "readings/r-m04-evdomada/20.mp3": {
+    "voice": "Zephyr",
+    "hash": "dd2ed84855f2fb0f"
+  },
+  "readings/r-m04-evdomada/21.mp3": {
+    "voice": "Zephyr",
+    "hash": "87cd0cac9d069e8b"
+  },
+  "readings/r-m04-evdomada/22.mp3": {
+    "voice": "Zephyr",
+    "hash": "815e218ab99df780"
+  },
+  "readings/r-m04-evdomada/23.mp3": {
+    "voice": "Erinome",
+    "hash": "1e13cf7822525eec"
+  },
+  "readings/r-m04-evdomada/24.mp3": {
+    "voice": "Leda",
+    "hash": "8c95f404499851f6"
+  },
+  "readings/r-m04-evdomada/25.mp3": {
+    "voice": "Erinome",
+    "hash": "11c0342b5628417a"
+  },
+  "readings/r-m04-evdomada/26.mp3": {
+    "voice": "Zephyr",
+    "hash": "1450408d3d7aadc2"
+  },
+  "readings/r-m04-evdomada/27.mp3": {
+    "voice": "Leda",
+    "hash": "c6a9eb04455ddca2"
+  },
+  "readings/r-m04-evdomada/28.mp3": {
+    "voice": "Zephyr",
+    "hash": "7b5418282e3d1356"
+  },
+  "readings/r-m04-evdomada/29.mp3": {
+    "voice": "Leda",
+    "hash": "e216e7d3c86f534d"
+  },
+  "readings/r-m04-evdomada/3.mp3": {
+    "voice": "Zephyr",
+    "hash": "13fca19fa6d3a70e"
+  },
+  "readings/r-m04-evdomada/30.mp3": {
+    "voice": "Zephyr",
+    "hash": "3a5bb133578e4e64"
+  },
+  "readings/r-m04-evdomada/31.mp3": {
+    "voice": "Zephyr",
+    "hash": "2a19b3c8968afc5d"
+  },
+  "readings/r-m04-evdomada/32.mp3": {
+    "voice": "Zephyr",
+    "hash": "36eaf4be141ea203"
+  },
+  "readings/r-m04-evdomada/4.mp3": {
+    "voice": "Zephyr",
+    "hash": "5d71ae5aac0f07eb"
+  },
+  "readings/r-m04-evdomada/5.mp3": {
+    "voice": "Zephyr",
+    "hash": "69e3efd278aab512"
+  },
+  "readings/r-m04-evdomada/6.mp3": {
+    "voice": "Zephyr",
+    "hash": "f414b004b06eef77"
+  },
+  "readings/r-m04-evdomada/7.mp3": {
+    "voice": "Zephyr",
+    "hash": "3e367ca7665bf704"
+  },
+  "readings/r-m04-evdomada/8.mp3": {
+    "voice": "Zephyr",
+    "hash": "a5fce7f976d324f8"
+  },
+  "readings/r-m04-evdomada/9.mp3": {
+    "voice": "Zephyr",
+    "hash": "9089f6b84ff080d0"
+  },
+  "readings/r-m04-parti/1.mp3": {
+    "voice": "Gacrux",
+    "hash": "318c14e2fc74d4ac"
+  },
+  "readings/r-m04-parti/10.mp3": {
+    "voice": "Zephyr",
+    "hash": "54fd057c5ce04351"
+  },
+  "readings/r-m04-parti/11.mp3": {
+    "voice": "Zephyr",
+    "hash": "ac1a811b44dae098"
+  },
+  "readings/r-m04-parti/12.mp3": {
+    "voice": "Kore",
+    "hash": "8a25675ad0f6c43c"
+  },
+  "readings/r-m04-parti/13.mp3": {
+    "voice": "Kore",
+    "hash": "b74259f94786c82e"
+  },
+  "readings/r-m04-parti/14.mp3": {
+    "voice": "Zephyr",
+    "hash": "4373913ead47e41a"
+  },
+  "readings/r-m04-parti/15.mp3": {
+    "voice": "Zephyr",
+    "hash": "8cc618b6993f978f"
+  },
+  "readings/r-m04-parti/16.mp3": {
+    "voice": "Kore",
+    "hash": "db4f2d8ff509dfd5"
+  },
+  "readings/r-m04-parti/17.mp3": {
+    "voice": "Gacrux",
+    "hash": "9812bed86433b3be"
+  },
+  "readings/r-m04-parti/18.mp3": {
+    "voice": "Schedar",
+    "hash": "4fc2a8fa3b02059d"
+  },
+  "readings/r-m04-parti/19.mp3": {
+    "voice": "Kore",
+    "hash": "c6fc5bd11163593c"
+  },
+  "readings/r-m04-parti/2.mp3": {
+    "voice": "Gacrux",
+    "hash": "20f524503b012d8c"
+  },
+  "readings/r-m04-parti/20.mp3": {
+    "voice": "Kore",
+    "hash": "bc8c86b407847c15"
+  },
+  "readings/r-m04-parti/21.mp3": {
+    "voice": "Kore",
+    "hash": "4e6c1cd20b4ddd54"
+  },
+  "readings/r-m04-parti/22.mp3": {
+    "voice": "Kore",
+    "hash": "40c7feb0a0d07495"
+  },
+  "readings/r-m04-parti/23.mp3": {
+    "voice": "Zephyr",
+    "hash": "06f3cfe07feaeb92"
+  },
+  "readings/r-m04-parti/24.mp3": {
+    "voice": "Zephyr",
+    "hash": "65e099195c8d29f0"
+  },
+  "readings/r-m04-parti/25.mp3": {
+    "voice": "Kore",
+    "hash": "c35ec7bb4e29d5e4"
+  },
+  "readings/r-m04-parti/26.mp3": {
+    "voice": "Kore",
+    "hash": "cd4ec6dd867cb2f1"
+  },
+  "readings/r-m04-parti/27.mp3": {
+    "voice": "Zephyr",
+    "hash": "311ae4c3e4319b91"
+  },
+  "readings/r-m04-parti/28.mp3": {
+    "voice": "Kore",
+    "hash": "695243192d404ef8"
+  },
+  "readings/r-m04-parti/29.mp3": {
+    "voice": "Zephyr",
+    "hash": "21333db78ec47a44"
+  },
+  "readings/r-m04-parti/3.mp3": {
+    "voice": "Kore",
+    "hash": "4a48dcac77e63938"
+  },
+  "readings/r-m04-parti/30.mp3": {
+    "voice": "Zephyr",
+    "hash": "81721169f7313926"
+  },
+  "readings/r-m04-parti/31.mp3": {
+    "voice": "Kore",
+    "hash": "1982fa6d7133e7bc"
+  },
+  "readings/r-m04-parti/32.mp3": {
+    "voice": "Kore",
+    "hash": "45909c8c9ea9ca18"
+  },
+  "readings/r-m04-parti/33.mp3": {
+    "voice": "Gacrux",
+    "hash": "0aef9e4b8386e04e"
+  },
+  "readings/r-m04-parti/4.mp3": {
+    "voice": "Kore",
+    "hash": "9aa57c0acabfc3e4"
+  },
+  "readings/r-m04-parti/5.mp3": {
+    "voice": "Zephyr",
+    "hash": "e9a35e85d940fac4"
+  },
+  "readings/r-m04-parti/6.mp3": {
+    "voice": "Zephyr",
+    "hash": "f54fb2034a10385e"
+  },
+  "readings/r-m04-parti/7.mp3": {
+    "voice": "Kore",
+    "hash": "cef721a0dec71d60"
+  },
+  "readings/r-m04-parti/8.mp3": {
+    "voice": "Kore",
+    "hash": "35fb7df8b74ad224"
+  },
+  "readings/r-m04-parti/9.mp3": {
+    "voice": "Zephyr",
+    "hash": "363da347f4d35f0c"
+  },
+  "readings/r-m05-deftera/1.mp3": {
+    "voice": "Zephyr",
+    "hash": "d2596ff131a22530"
+  },
+  "readings/r-m05-deftera/10.mp3": {
+    "voice": "Zephyr",
+    "hash": "5c14e405a8760ee6"
+  },
+  "readings/r-m05-deftera/11.mp3": {
+    "voice": "Zephyr",
+    "hash": "8af688d16c256502"
+  },
+  "readings/r-m05-deftera/12.mp3": {
+    "voice": "Zephyr",
+    "hash": "0ac1255af8c763b6"
+  },
+  "readings/r-m05-deftera/13.mp3": {
+    "voice": "Zephyr",
+    "hash": "f91a7bd58fad1e44"
+  },
+  "readings/r-m05-deftera/14.mp3": {
+    "voice": "Zephyr",
+    "hash": "e035a28eb4beafce"
+  },
+  "readings/r-m05-deftera/15.mp3": {
+    "voice": "Sadachbia",
+    "hash": "cb1f4e745fddb118"
+  },
+  "readings/r-m05-deftera/16.mp3": {
+    "voice": "Sadachbia",
+    "hash": "6cb00ffac98a6823"
+  },
+  "readings/r-m05-deftera/17.mp3": {
+    "voice": "Zephyr",
+    "hash": "815e218ab99df780"
+  },
+  "readings/r-m05-deftera/18.mp3": {
+    "voice": "Erinome",
+    "hash": "cacd5728ff3753ba"
+  },
+  "readings/r-m05-deftera/19.mp3": {
+    "voice": "Erinome",
+    "hash": "7e758fffbffcced7"
+  },
+  "readings/r-m05-deftera/2.mp3": {
+    "voice": "Zephyr",
+    "hash": "bfc1bd1f3cf8f7e4"
+  },
+  "readings/r-m05-deftera/20.mp3": {
+    "voice": "Erinome",
+    "hash": "f0426f8409639439"
+  },
+  "readings/r-m05-deftera/21.mp3": {
+    "voice": "Sadachbia",
+    "hash": "8bff7c9295f50659"
+  },
+  "readings/r-m05-deftera/22.mp3": {
+    "voice": "Erinome",
+    "hash": "ad48b6c84df4c603"
+  },
+  "readings/r-m05-deftera/23.mp3": {
+    "voice": "Erinome",
+    "hash": "705cdb18216236ec"
+  },
+  "readings/r-m05-deftera/24.mp3": {
+    "voice": "Leda",
+    "hash": "fe7130bb35a8390c"
+  },
+  "readings/r-m05-deftera/25.mp3": {
+    "voice": "Leda",
+    "hash": "997df5c3d09bdf50"
+  },
+  "readings/r-m05-deftera/26.mp3": {
+    "voice": "Leda",
+    "hash": "d40f556f3b18824c"
+  },
+  "readings/r-m05-deftera/27.mp3": {
+    "voice": "Erinome",
+    "hash": "11c0342b5628417a"
+  },
+  "readings/r-m05-deftera/28.mp3": {
+    "voice": "Erinome",
+    "hash": "8c19a3ecd44b9322"
+  },
+  "readings/r-m05-deftera/29.mp3": {
+    "voice": "Zephyr",
+    "hash": "a2686fb655253d37"
+  },
+  "readings/r-m05-deftera/3.mp3": {
+    "voice": "Zephyr",
+    "hash": "6473ccfddc677dd6"
+  },
+  "readings/r-m05-deftera/30.mp3": {
+    "voice": "Zephyr",
+    "hash": "43ba4870f3ec4bad"
+  },
+  "readings/r-m05-deftera/31.mp3": {
+    "voice": "Zephyr",
+    "hash": "096633eaabc8cb07"
+  },
+  "readings/r-m05-deftera/32.mp3": {
+    "voice": "Erinome",
+    "hash": "62a928a6c1b54aa5"
+  },
+  "readings/r-m05-deftera/33.mp3": {
+    "voice": "Erinome",
+    "hash": "445cd2b985c6a5e3"
+  },
+  "readings/r-m05-deftera/34.mp3": {
+    "voice": "Zephyr",
+    "hash": "72423586b6054301"
+  },
+  "readings/r-m05-deftera/35.mp3": {
+    "voice": "Zephyr",
+    "hash": "dd1743379d084a4a"
+  },
+  "readings/r-m05-deftera/36.mp3": {
+    "voice": "Zephyr",
+    "hash": "c037284cdb56bb72"
+  },
+  "readings/r-m05-deftera/37.mp3": {
+    "voice": "Zephyr",
+    "hash": "d1177eb7b7ad96aa"
+  },
+  "readings/r-m05-deftera/38.mp3": {
+    "voice": "Zephyr",
+    "hash": "4c271d8e00dcc6a8"
+  },
+  "readings/r-m05-deftera/39.mp3": {
+    "voice": "Zephyr",
+    "hash": "7c31bf38dea2d0f6"
+  },
+  "readings/r-m05-deftera/4.mp3": {
+    "voice": "Zephyr",
+    "hash": "b3e2470df4a2cc04"
+  },
+  "readings/r-m05-deftera/40.mp3": {
+    "voice": "Zephyr",
+    "hash": "61088d548ab9ccae"
+  },
+  "readings/r-m05-deftera/41.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "dc4561972fefd112"
+  },
+  "readings/r-m05-deftera/42.mp3": {
+    "voice": "Zephyr",
+    "hash": "65daacadd475202e"
+  },
+  "readings/r-m05-deftera/43.mp3": {
+    "voice": "Zephyr",
+    "hash": "b8b99586974f5bde"
+  },
+  "readings/r-m05-deftera/5.mp3": {
+    "voice": "Zephyr",
+    "hash": "be60ad854f2c97bc"
+  },
+  "readings/r-m05-deftera/6.mp3": {
+    "voice": "Zephyr",
+    "hash": "fb37423eefb41174"
+  },
+  "readings/r-m05-deftera/7.mp3": {
+    "voice": "Zephyr",
+    "hash": "26496f836db6acd4"
+  },
+  "readings/r-m05-deftera/8.mp3": {
+    "voice": "Zephyr",
+    "hash": "845734d57aeeb666"
+  },
+  "readings/r-m05-deftera/9.mp3": {
+    "voice": "Zephyr",
+    "hash": "e2edbe795c108a6d"
+  },
+  "readings/r-m05-mera/1.mp3": {
+    "voice": "Gacrux",
+    "hash": "4918c39bc7f97808"
+  },
+  "readings/r-m05-mera/10.mp3": {
+    "voice": "Kore",
+    "hash": "26a482bca8435024"
+  },
+  "readings/r-m05-mera/11.mp3": {
+    "voice": "Zephyr",
+    "hash": "7d69d6389f0e1791"
+  },
+  "readings/r-m05-mera/12.mp3": {
+    "voice": "Zephyr",
+    "hash": "968b93cb14b63940"
+  },
+  "readings/r-m05-mera/13.mp3": {
+    "voice": "Zephyr",
+    "hash": "ec5cc2713250466a"
+  },
+  "readings/r-m05-mera/14.mp3": {
+    "voice": "Zephyr",
+    "hash": "48f1ad0c65e092f0"
+  },
+  "readings/r-m05-mera/15.mp3": {
+    "voice": "Zephyr",
+    "hash": "bd05a9790fea09b9"
+  },
+  "readings/r-m05-mera/16.mp3": {
+    "voice": "Kore",
+    "hash": "e1cecb72429ea012"
+  },
+  "readings/r-m05-mera/17.mp3": {
+    "voice": "Kore",
+    "hash": "0c04bfb931f39c40"
+  },
+  "readings/r-m05-mera/18.mp3": {
+    "voice": "Zephyr",
+    "hash": "8f666c6fe4e93134"
+  },
+  "readings/r-m05-mera/19.mp3": {
+    "voice": "Kore",
+    "hash": "b57c6a6dab2b2dbf"
+  },
+  "readings/r-m05-mera/2.mp3": {
+    "voice": "Gacrux",
+    "hash": "bc48db42e2a7f9dd"
+  },
+  "readings/r-m05-mera/20.mp3": {
+    "voice": "Kore",
+    "hash": "b3d32ed09d397d13"
+  },
+  "readings/r-m05-mera/21.mp3": {
+    "voice": "Zephyr",
+    "hash": "f518facf0b475bda"
+  },
+  "readings/r-m05-mera/22.mp3": {
+    "voice": "Zephyr",
+    "hash": "1b15bade32119ed7"
+  },
+  "readings/r-m05-mera/23.mp3": {
+    "voice": "Kore",
+    "hash": "05fea1c140f4be7d"
+  },
+  "readings/r-m05-mera/24.mp3": {
+    "voice": "Kore",
+    "hash": "bde5b8d487436e8e"
+  },
+  "readings/r-m05-mera/25.mp3": {
+    "voice": "Zephyr",
+    "hash": "f12755bd635c0be4"
+  },
+  "readings/r-m05-mera/26.mp3": {
+    "voice": "Zephyr",
+    "hash": "1bf880eaca9d93e5"
+  },
+  "readings/r-m05-mera/27.mp3": {
+    "voice": "Zephyr",
+    "hash": "de1aa7fdd1ed9484"
+  },
+  "readings/r-m05-mera/28.mp3": {
+    "voice": "Zephyr",
+    "hash": "00e474e32075685b"
+  },
+  "readings/r-m05-mera/29.mp3": {
+    "voice": "Zephyr",
+    "hash": "9056d306ce0dd11a"
+  },
+  "readings/r-m05-mera/3.mp3": {
+    "voice": "Gacrux",
+    "hash": "317f2e072f663fba"
+  },
+  "readings/r-m05-mera/30.mp3": {
+    "voice": "Kore",
+    "hash": "4db965e30095496d"
+  },
+  "readings/r-m05-mera/31.mp3": {
+    "voice": "Kore",
+    "hash": "aaf07a2aa9de8edc"
+  },
+  "readings/r-m05-mera/32.mp3": {
+    "voice": "Kore",
+    "hash": "06fbe2729ee57c1b"
+  },
+  "readings/r-m05-mera/33.mp3": {
+    "voice": "Zephyr",
+    "hash": "7f3af78d19005ccb"
+  },
+  "readings/r-m05-mera/34.mp3": {
+    "voice": "Zephyr",
+    "hash": "df736f6caa96bc09"
+  },
+  "readings/r-m05-mera/35.mp3": {
+    "voice": "Kore",
+    "hash": "75ac27eae0b19d8a"
+  },
+  "readings/r-m05-mera/36.mp3": {
+    "voice": "Kore",
+    "hash": "bde5b8d487436e8e"
+  },
+  "readings/r-m05-mera/37.mp3": {
+    "voice": "Zephyr",
+    "hash": "848c5c9c7a730613"
+  },
+  "readings/r-m05-mera/38.mp3": {
+    "voice": "Zephyr",
+    "hash": "2b09428310aa73b2"
+  },
+  "readings/r-m05-mera/39.mp3": {
+    "voice": "Kore",
+    "hash": "86c3e96b1362e489"
+  },
+  "readings/r-m05-mera/4.mp3": {
+    "voice": "Gacrux",
+    "hash": "779154bb11e9219e"
+  },
+  "readings/r-m05-mera/40.mp3": {
+    "voice": "Kore",
+    "hash": "d86dcebf43f771b9"
+  },
+  "readings/r-m05-mera/41.mp3": {
+    "voice": "Zephyr",
+    "hash": "401aabdec82a6511"
+  },
+  "readings/r-m05-mera/42.mp3": {
+    "voice": "Zephyr",
+    "hash": "d68ddd18490591fe"
+  },
+  "readings/r-m05-mera/43.mp3": {
+    "voice": "Gacrux",
+    "hash": "779154bb11e9219e"
+  },
+  "readings/r-m05-mera/44.mp3": {
+    "voice": "Kore",
+    "hash": "5e0843714ae23833"
+  },
+  "readings/r-m05-mera/45.mp3": {
+    "voice": "Kore",
+    "hash": "3f78d41547222235"
+  },
+  "readings/r-m05-mera/46.mp3": {
+    "voice": "Zephyr",
+    "hash": "2d21b1e288e4adf1"
+  },
+  "readings/r-m05-mera/47.mp3": {
+    "voice": "Zephyr",
+    "hash": "f2a38d9bf43704e6"
+  },
+  "readings/r-m05-mera/5.mp3": {
+    "voice": "Kore",
+    "hash": "f582b0c07f26732d"
+  },
+  "readings/r-m05-mera/6.mp3": {
+    "voice": "Kore",
+    "hash": "9ce33e8ac617386c"
+  },
+  "readings/r-m05-mera/7.mp3": {
+    "voice": "Zephyr",
+    "hash": "51ad52006836b4db"
+  },
+  "readings/r-m05-mera/8.mp3": {
+    "voice": "Zephyr",
+    "hash": "9111886d8afc64c5"
+  },
+  "readings/r-m05-mera/9.mp3": {
+    "voice": "Zephyr",
+    "hash": "52ea58ab384685ae"
+  },
+  "readings/r-m06-diamerisma/1.mp3": {
+    "voice": "Gacrux",
+    "hash": "2c0620c070c05404"
+  },
+  "readings/r-m06-diamerisma/10.mp3": {
+    "voice": "Sadaltager",
+    "hash": "7dabb151bb10a8f2"
+  },
+  "readings/r-m06-diamerisma/11.mp3": {
+    "voice": "Sadachbia",
+    "hash": "6a36f4710c0542c1"
+  },
+  "readings/r-m06-diamerisma/12.mp3": {
+    "voice": "Sadachbia",
+    "hash": "fff12f408ce8fadd"
+  },
+  "readings/r-m06-diamerisma/13.mp3": {
+    "voice": "Sadachbia",
+    "hash": "b942c5492bdf4eb0"
+  },
+  "readings/r-m06-diamerisma/14.mp3": {
+    "voice": "Sadaltager",
+    "hash": "56536d11d15e3927"
+  },
+  "readings/r-m06-diamerisma/15.mp3": {
+    "voice": "Sadaltager",
+    "hash": "81cc3526693a12f1"
+  },
+  "readings/r-m06-diamerisma/16.mp3": {
+    "voice": "Sadachbia",
+    "hash": "f183195435cfaf92"
+  },
+  "readings/r-m06-diamerisma/17.mp3": {
+    "voice": "Sadaltager",
+    "hash": "4aedd42caab54aea"
+  },
+  "readings/r-m06-diamerisma/18.mp3": {
+    "voice": "Sadaltager",
+    "hash": "d9f42e6cf33ce75c"
+  },
+  "readings/r-m06-diamerisma/19.mp3": {
+    "voice": "Gacrux",
+    "hash": "d87038335136a71b"
+  },
+  "readings/r-m06-diamerisma/2.mp3": {
+    "voice": "Gacrux",
+    "hash": "82a728c0b314c63a"
+  },
+  "readings/r-m06-diamerisma/20.mp3": {
+    "voice": "Gacrux",
+    "hash": "74e840b3081107bc"
+  },
+  "readings/r-m06-diamerisma/21.mp3": {
+    "voice": "Sadachbia",
+    "hash": "144a36dc63f99eb6"
+  },
+  "readings/r-m06-diamerisma/22.mp3": {
+    "voice": "Zephyr",
+    "hash": "353c0d49bd20efe7"
+  },
+  "readings/r-m06-diamerisma/23.mp3": {
+    "voice": "Gacrux",
+    "hash": "de8019dc2f82787a"
+  },
+  "readings/r-m06-diamerisma/24.mp3": {
+    "voice": "Gacrux",
+    "hash": "fb6020300686697f"
+  },
+  "readings/r-m06-diamerisma/25.mp3": {
+    "voice": "Zephyr",
+    "hash": "7c371394ff4e248c"
+  },
+  "readings/r-m06-diamerisma/26.mp3": {
+    "voice": "Sadaltager",
+    "hash": "2b9ad75d5e5154c3"
+  },
+  "readings/r-m06-diamerisma/27.mp3": {
+    "voice": "Sadaltager",
+    "hash": "803fcc4d6cb0b98e"
+  },
+  "readings/r-m06-diamerisma/28.mp3": {
+    "voice": "Sadachbia",
+    "hash": "0057d6345c9faf4b"
+  },
+  "readings/r-m06-diamerisma/29.mp3": {
+    "voice": "Sadachbia",
+    "hash": "d9d6bf2e51c7bdb3"
+  },
+  "readings/r-m06-diamerisma/3.mp3": {
+    "voice": "Gacrux",
+    "hash": "4ba96f9ecd1b2d97"
+  },
+  "readings/r-m06-diamerisma/30.mp3": {
+    "voice": "Sadachbia",
+    "hash": "171a26888c4cf214"
+  },
+  "readings/r-m06-diamerisma/31.mp3": {
+    "voice": "Sadaltager",
+    "hash": "2983039136c9ae31"
+  },
+  "readings/r-m06-diamerisma/32.mp3": {
+    "voice": "Sadachbia",
+    "hash": "f069d8f465662e44"
+  },
+  "readings/r-m06-diamerisma/33.mp3": {
+    "voice": "Sadaltager",
+    "hash": "f93ab3c9fac74e75"
+  },
+  "readings/r-m06-diamerisma/34.mp3": {
+    "voice": "Gacrux",
+    "hash": "cb2bd541bd128082"
+  },
+  "readings/r-m06-diamerisma/35.mp3": {
+    "voice": "Sadachbia",
+    "hash": "2848a156edcc6797"
+  },
+  "readings/r-m06-diamerisma/36.mp3": {
+    "voice": "Zephyr",
+    "hash": "f75794fe431911b7"
+  },
+  "readings/r-m06-diamerisma/37.mp3": {
+    "voice": "Zephyr",
+    "hash": "c437a1776f6dae93"
+  },
+  "readings/r-m06-diamerisma/38.mp3": {
+    "voice": "Sadachbia",
+    "hash": "7b930f4b70d65729"
+  },
+  "readings/r-m06-diamerisma/39.mp3": {
+    "voice": "Gacrux",
+    "hash": "1075c836f477f36f"
+  },
+  "readings/r-m06-diamerisma/4.mp3": {
+    "voice": "Gacrux",
+    "hash": "80a4d9abc7a9f2eb"
+  },
+  "readings/r-m06-diamerisma/40.mp3": {
+    "voice": "Sadachbia",
+    "hash": "b23bbc8de3c9e236"
+  },
+  "readings/r-m06-diamerisma/41.mp3": {
+    "voice": "Sadaltager",
+    "hash": "ef0cbb67bf8e127f"
+  },
+  "readings/r-m06-diamerisma/42.mp3": {
+    "voice": "Gacrux",
+    "hash": "6376d74f6f1b8f03"
+  },
+  "readings/r-m06-diamerisma/43.mp3": {
+    "voice": "Gacrux",
+    "hash": "5362e23eff0efe64"
+  },
+  "readings/r-m06-diamerisma/44.mp3": {
+    "voice": "Sadachbia",
+    "hash": "333fe64026901746"
+  },
+  "readings/r-m06-diamerisma/45.mp3": {
+    "voice": "Sadachbia",
+    "hash": "74689eef8be2388a"
+  },
+  "readings/r-m06-diamerisma/5.mp3": {
+    "voice": "Gacrux",
+    "hash": "1492e2a407b70d89"
+  },
+  "readings/r-m06-diamerisma/6.mp3": {
+    "voice": "Gacrux",
+    "hash": "fd79b05e2f14e730"
+  },
+  "readings/r-m06-diamerisma/7.mp3": {
+    "voice": "Gacrux",
+    "hash": "cc48e22e57ec9d62"
+  },
+  "readings/r-m06-diamerisma/8.mp3": {
+    "voice": "Gacrux",
+    "hash": "1d1d2b4f7632193f"
+  },
+  "readings/r-m06-diamerisma/9.mp3": {
+    "voice": "Sadaltager",
+    "hash": "cd43213251a60c38"
+  },
+  "readings/r-m06-spiti/1.mp3": {
+    "voice": "Zephyr",
+    "hash": "5eed4cdd04bda243"
+  },
+  "readings/r-m06-spiti/10.mp3": {
+    "voice": "Zephyr",
+    "hash": "9fef3503e689f37f"
+  },
+  "readings/r-m06-spiti/11.mp3": {
+    "voice": "Zephyr",
+    "hash": "63647c82543ebf63"
+  },
+  "readings/r-m06-spiti/12.mp3": {
+    "voice": "Zephyr",
+    "hash": "ac1b6f9d7b23d99a"
+  },
+  "readings/r-m06-spiti/13.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "23d9508ccc310734"
+  },
+  "readings/r-m06-spiti/14.mp3": {
+    "voice": "Zephyr",
+    "hash": "a2686fb655253d37"
+  },
+  "readings/r-m06-spiti/15.mp3": {
+    "voice": "Zephyr",
+    "hash": "3fd288dcdfd4808d"
+  },
+  "readings/r-m06-spiti/16.mp3": {
+    "voice": "Zephyr",
+    "hash": "23b69b3057ec329f"
+  },
+  "readings/r-m06-spiti/17.mp3": {
+    "voice": "Zephyr",
+    "hash": "f4199dca3e403fa1"
+  },
+  "readings/r-m06-spiti/18.mp3": {
+    "voice": "Zephyr",
+    "hash": "709c7304623c6b3d"
+  },
+  "readings/r-m06-spiti/19.mp3": {
+    "voice": "Zephyr",
+    "hash": "8aacfe76c37707d9"
+  },
+  "readings/r-m06-spiti/2.mp3": {
+    "voice": "Zephyr",
+    "hash": "ccf6d63cbaeedc5d"
+  },
+  "readings/r-m06-spiti/20.mp3": {
+    "voice": "Kore",
+    "hash": "4a48dcac77e63938"
+  },
+  "readings/r-m06-spiti/21.mp3": {
+    "voice": "Kore",
+    "hash": "73a5b103da0eeb4f"
+  },
+  "readings/r-m06-spiti/22.mp3": {
+    "voice": "Zephyr",
+    "hash": "519c49eafbf84669"
+  },
+  "readings/r-m06-spiti/23.mp3": {
+    "voice": "Zephyr",
+    "hash": "100ec69fcd5d290a"
+  },
+  "readings/r-m06-spiti/24.mp3": {
+    "voice": "Zephyr",
+    "hash": "3f7a2e48fd27955e"
+  },
+  "readings/r-m06-spiti/25.mp3": {
+    "voice": "Kore",
+    "hash": "7d665578ff32c158"
+  },
+  "readings/r-m06-spiti/26.mp3": {
+    "voice": "Kore",
+    "hash": "b9bbcd9ebc93035a"
+  },
+  "readings/r-m06-spiti/27.mp3": {
+    "voice": "Zephyr",
+    "hash": "3598f28a7adac261"
+  },
+  "readings/r-m06-spiti/28.mp3": {
+    "voice": "Zephyr",
+    "hash": "b8819fb748f5807e"
+  },
+  "readings/r-m06-spiti/29.mp3": {
+    "voice": "Kore",
+    "hash": "788bba97396c91c3"
+  },
+  "readings/r-m06-spiti/3.mp3": {
+    "voice": "Zephyr",
+    "hash": "e8269d2dd84e9439"
+  },
+  "readings/r-m06-spiti/30.mp3": {
+    "voice": "Kore",
+    "hash": "b1bcab80a39e5b63"
+  },
+  "readings/r-m06-spiti/31.mp3": {
+    "voice": "Zephyr",
+    "hash": "cf14080f7f983802"
+  },
+  "readings/r-m06-spiti/32.mp3": {
+    "voice": "Zephyr",
+    "hash": "6ef657e6d8b05f28"
+  },
+  "readings/r-m06-spiti/33.mp3": {
+    "voice": "Zephyr",
+    "hash": "4c349af08dffe06e"
+  },
+  "readings/r-m06-spiti/34.mp3": {
+    "voice": "Zephyr",
+    "hash": "2c570d0fd0ea87d4"
+  },
+  "readings/r-m06-spiti/35.mp3": {
+    "voice": "Zephyr",
+    "hash": "2e5aafb5b104cb95"
+  },
+  "readings/r-m06-spiti/36.mp3": {
+    "voice": "Zephyr",
+    "hash": "967b2004cab4bc3c"
+  },
+  "readings/r-m06-spiti/4.mp3": {
+    "voice": "Zephyr",
+    "hash": "5fa72e4fd3e20486"
+  },
+  "readings/r-m06-spiti/5.mp3": {
+    "voice": "Zephyr",
+    "hash": "2a5fc4cd921399c2"
+  },
+  "readings/r-m06-spiti/6.mp3": {
+    "voice": "Zephyr",
+    "hash": "a9f0adff6b7e5058"
+  },
+  "readings/r-m06-spiti/7.mp3": {
+    "voice": "Zephyr",
+    "hash": "5f63b537ccd7c8cc"
+  },
+  "readings/r-m06-spiti/8.mp3": {
+    "voice": "Zephyr",
+    "hash": "0709885d0b1f5e2c"
+  },
+  "readings/r-m06-spiti/9.mp3": {
+    "voice": "Zephyr",
+    "hash": "5d807394fed59fbe"
+  },
+  "readings/r-m07-kanapes/1.mp3": {
+    "voice": "Zephyr",
+    "hash": "422e85ab4795ad18"
+  },
+  "readings/r-m07-kanapes/10.mp3": {
+    "voice": "Zephyr",
+    "hash": "e112c86f51c942b5"
+  },
+  "readings/r-m07-kanapes/11.mp3": {
+    "voice": "Zephyr",
+    "hash": "a2686fb655253d37"
+  },
+  "readings/r-m07-kanapes/12.mp3": {
+    "voice": "Zephyr",
+    "hash": "c16173bbc1c5d3a8"
+  },
+  "readings/r-m07-kanapes/13.mp3": {
+    "voice": "Zephyr",
+    "hash": "ac1b6f9d7b23d99a"
+  },
+  "readings/r-m07-kanapes/14.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "4e71eb83a6aebd95"
+  },
+  "readings/r-m07-kanapes/15.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "5d4b761bdb2ea37c"
+  },
+  "readings/r-m07-kanapes/16.mp3": {
+    "voice": "Zephyr",
+    "hash": "b16b5b58fff5a4e6"
+  },
+  "readings/r-m07-kanapes/17.mp3": {
+    "voice": "Zephyr",
+    "hash": "77f14620c0428ed2"
+  },
+  "readings/r-m07-kanapes/18.mp3": {
+    "voice": "Zephyr",
+    "hash": "51b93d165bce1c59"
+  },
+  "readings/r-m07-kanapes/19.mp3": {
+    "voice": "Kore",
+    "hash": "aee5de3c02fa1c0e"
+  },
+  "readings/r-m07-kanapes/2.mp3": {
+    "voice": "Zephyr",
+    "hash": "29bf47b7c5a2c88b"
+  },
+  "readings/r-m07-kanapes/20.mp3": {
+    "voice": "Zephyr",
+    "hash": "68d50e0db5e859d0"
+  },
+  "readings/r-m07-kanapes/21.mp3": {
+    "voice": "Kore",
+    "hash": "59fc41425f32e3d7"
+  },
+  "readings/r-m07-kanapes/22.mp3": {
+    "voice": "Kore",
+    "hash": "a7550f00198778a5"
+  },
+  "readings/r-m07-kanapes/23.mp3": {
+    "voice": "Kore",
+    "hash": "3d21ce77db9d9794"
+  },
+  "readings/r-m07-kanapes/24.mp3": {
+    "voice": "Zephyr",
+    "hash": "1a9854c5b0261f33"
+  },
+  "readings/r-m07-kanapes/25.mp3": {
+    "voice": "Zephyr",
+    "hash": "d93ebd5a3ac45cc6"
+  },
+  "readings/r-m07-kanapes/26.mp3": {
+    "voice": "Kore",
+    "hash": "3b0932458d9f31e5"
+  },
+  "readings/r-m07-kanapes/27.mp3": {
+    "voice": "Kore",
+    "hash": "bf0bef0c6cc97a92"
+  },
+  "readings/r-m07-kanapes/28.mp3": {
+    "voice": "Kore",
+    "hash": "18d2273c18463b20"
+  },
+  "readings/r-m07-kanapes/29.mp3": {
+    "voice": "Zephyr",
+    "hash": "62f465e9a616684c"
+  },
+  "readings/r-m07-kanapes/3.mp3": {
+    "voice": "Zephyr",
+    "hash": "b97848bd5f5cd2cb"
+  },
+  "readings/r-m07-kanapes/30.mp3": {
+    "voice": "Kore",
+    "hash": "57dbe3819dbb85d9"
+  },
+  "readings/r-m07-kanapes/31.mp3": {
+    "voice": "Kore",
+    "hash": "46b866a40e5a5bcd"
+  },
+  "readings/r-m07-kanapes/32.mp3": {
+    "voice": "Zephyr",
+    "hash": "fe0009e7baaafb72"
+  },
+  "readings/r-m07-kanapes/33.mp3": {
+    "voice": "Zephyr",
+    "hash": "0659112e0d6b4eb9"
+  },
+  "readings/r-m07-kanapes/34.mp3": {
+    "voice": "Zephyr",
+    "hash": "f1654423b8b6032d"
+  },
+  "readings/r-m07-kanapes/35.mp3": {
+    "voice": "Zephyr",
+    "hash": "d0ab5cf799fb77cb"
+  },
+  "readings/r-m07-kanapes/36.mp3": {
+    "voice": "Zephyr",
+    "hash": "7efb35e16be65893"
+  },
+  "readings/r-m07-kanapes/37.mp3": {
+    "voice": "Zephyr",
+    "hash": "c2c0145d8d2fe162"
+  },
+  "readings/r-m07-kanapes/38.mp3": {
+    "voice": "Zephyr",
+    "hash": "7aaf8b7d729117f9"
+  },
+  "readings/r-m07-kanapes/39.mp3": {
+    "voice": "Zephyr",
+    "hash": "76693b53819eb3dc"
+  },
+  "readings/r-m07-kanapes/4.mp3": {
+    "voice": "Zephyr",
+    "hash": "639e8f8ebcdcde96"
+  },
+  "readings/r-m07-kanapes/40.mp3": {
+    "voice": "Zephyr",
+    "hash": "09d60482a7592f40"
+  },
+  "readings/r-m07-kanapes/41.mp3": {
+    "voice": "Zephyr",
+    "hash": "04b7c52faabdc077"
+  },
+  "readings/r-m07-kanapes/42.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "e408812355a18edb"
+  },
+  "readings/r-m07-kanapes/43.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "e7c0c58cf2370b9b"
+  },
+  "readings/r-m07-kanapes/44.mp3": {
+    "voice": "Zephyr",
+    "hash": "a2686fb655253d37"
+  },
+  "readings/r-m07-kanapes/45.mp3": {
+    "voice": "Zephyr",
+    "hash": "a5106966f5bc5fe5"
+  },
+  "readings/r-m07-kanapes/46.mp3": {
+    "voice": "Zephyr",
+    "hash": "abf1114cf92eff27"
+  },
+  "readings/r-m07-kanapes/47.mp3": {
+    "voice": "Zephyr",
+    "hash": "f3be6c0b6bac6f92"
+  },
+  "readings/r-m07-kanapes/5.mp3": {
+    "voice": "Zephyr",
+    "hash": "249c65d63c6511e5"
+  },
+  "readings/r-m07-kanapes/6.mp3": {
+    "voice": "Zephyr",
+    "hash": "0d98a716af1aa864"
+  },
+  "readings/r-m07-kanapes/7.mp3": {
+    "voice": "Zephyr",
+    "hash": "09a0cebf1ba446e1"
+  },
+  "readings/r-m07-kanapes/8.mp3": {
+    "voice": "Zephyr",
+    "hash": "9b6f0f2df7943430"
+  },
+  "readings/r-m07-kanapes/9.mp3": {
+    "voice": "Zephyr",
+    "hash": "38be7b28c0cf96dc"
+  },
+  "readings/r-m07-kleidia/1.mp3": {
+    "voice": "Gacrux",
+    "hash": "33c7861fa5cac5b8"
+  },
+  "readings/r-m07-kleidia/10.mp3": {
+    "voice": "Kore",
+    "hash": "42a0024eb0872a3a"
+  },
+  "readings/r-m07-kleidia/11.mp3": {
+    "voice": "Schedar",
+    "hash": "4708f9b2487d153d"
+  },
+  "readings/r-m07-kleidia/12.mp3": {
+    "voice": "Kore",
+    "hash": "cd6090a7b976dd11"
+  },
+  "readings/r-m07-kleidia/13.mp3": {
+    "voice": "Gacrux",
+    "hash": "b62422a829a828b2"
+  },
+  "readings/r-m07-kleidia/14.mp3": {
+    "voice": "Gacrux",
+    "hash": "ec5f67b99298fbb2"
+  },
+  "readings/r-m07-kleidia/15.mp3": {
+    "voice": "Algieba",
+    "hash": "3cb151f53ecdd5ac"
+  },
+  "readings/r-m07-kleidia/16.mp3": {
+    "voice": "Gacrux",
+    "hash": "779154bb11e9219e"
+  },
+  "readings/r-m07-kleidia/17.mp3": {
+    "voice": "Kore",
+    "hash": "6253ccf659ce18f8"
+  },
+  "readings/r-m07-kleidia/18.mp3": {
+    "voice": "Kore",
+    "hash": "d958ee6eebe34360"
+  },
+  "readings/r-m07-kleidia/19.mp3": {
+    "voice": "Gacrux",
+    "hash": "d842684264dddf13"
+  },
+  "readings/r-m07-kleidia/2.mp3": {
+    "voice": "Gacrux",
+    "hash": "f469b9d16f0447bd"
+  },
+  "readings/r-m07-kleidia/20.mp3": {
+    "voice": "Schedar",
+    "hash": "fbf161f3ef037b0a"
+  },
+  "readings/r-m07-kleidia/21.mp3": {
+    "voice": "Schedar",
+    "hash": "9830043e8db0ff6e"
+  },
+  "readings/r-m07-kleidia/22.mp3": {
+    "voice": "Gacrux",
+    "hash": "b3a37e42da0237f2"
+  },
+  "readings/r-m07-kleidia/23.mp3": {
+    "voice": "Iapetus",
+    "hash": "93323580771d3ba0"
+  },
+  "readings/r-m07-kleidia/24.mp3": {
+    "voice": "Iapetus",
+    "hash": "38f5beee05c86491"
+  },
+  "readings/r-m07-kleidia/25.mp3": {
+    "voice": "Gacrux",
+    "hash": "779154bb11e9219e"
+  },
+  "readings/r-m07-kleidia/26.mp3": {
+    "voice": "Kore",
+    "hash": "49893663d7a01eec"
+  },
+  "readings/r-m07-kleidia/27.mp3": {
+    "voice": "Kore",
+    "hash": "e2475c86abf02716"
+  },
+  "readings/r-m07-kleidia/28.mp3": {
+    "voice": "Iapetus",
+    "hash": "17da258b7097030d"
+  },
+  "readings/r-m07-kleidia/29.mp3": {
+    "voice": "Iapetus",
+    "hash": "0fb4d1879dd795df"
+  },
+  "readings/r-m07-kleidia/3.mp3": {
+    "voice": "Gacrux",
+    "hash": "505c32070d3b1ccb"
+  },
+  "readings/r-m07-kleidia/30.mp3": {
+    "voice": "Kore",
+    "hash": "a0c36561a2049e0d"
+  },
+  "readings/r-m07-kleidia/31.mp3": {
+    "voice": "Gacrux",
+    "hash": "665392812e171ade"
+  },
+  "readings/r-m07-kleidia/32.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "2278a9b3c0da3bc2"
+  },
+  "readings/r-m07-kleidia/33.mp3": {
+    "voice": "Gacrux",
+    "hash": "d842684264dddf13"
+  },
+  "readings/r-m07-kleidia/34.mp3": {
+    "voice": "Schedar",
+    "hash": "1f38d392d65b77d6"
+  },
+  "readings/r-m07-kleidia/35.mp3": {
+    "voice": "Schedar",
+    "hash": "18df9499a0f9eb8e"
+  },
+  "readings/r-m07-kleidia/36.mp3": {
+    "voice": "Gacrux",
+    "hash": "0b3fce1a7180c7c0"
+  },
+  "readings/r-m07-kleidia/37.mp3": {
+    "voice": "Gacrux",
+    "hash": "7fa5f6c7619b473e"
+  },
+  "readings/r-m07-kleidia/38.mp3": {
+    "voice": "Gacrux",
+    "hash": "7c056913c78fb877"
+  },
+  "readings/r-m07-kleidia/39.mp3": {
+    "voice": "Gacrux",
+    "hash": "1e6c2fc74b16da17"
+  },
+  "readings/r-m07-kleidia/4.mp3": {
+    "voice": "Gacrux",
+    "hash": "779154bb11e9219e"
+  },
+  "readings/r-m07-kleidia/40.mp3": {
+    "voice": "Schedar",
+    "hash": "1e6e452c2493e0db"
+  },
+  "readings/r-m07-kleidia/41.mp3": {
+    "voice": "Schedar",
+    "hash": "478ecde917ea5f30"
+  },
+  "readings/r-m07-kleidia/42.mp3": {
+    "voice": "Kore",
+    "hash": "a43a288a25ce0816"
+  },
+  "readings/r-m07-kleidia/43.mp3": {
+    "voice": "Kore",
+    "hash": "1f966cf80ef98365"
+  },
+  "readings/r-m07-kleidia/44.mp3": {
+    "voice": "Gacrux",
+    "hash": "3e50ad43c44da791"
+  },
+  "readings/r-m07-kleidia/45.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "d6d925b0af7b758c"
+  },
+  "readings/r-m07-kleidia/46.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "5a7df7fb5e6e57fe"
+  },
+  "readings/r-m07-kleidia/47.mp3": {
+    "voice": "Gacrux",
+    "hash": "779154bb11e9219e"
+  },
+  "readings/r-m07-kleidia/48.mp3": {
+    "voice": "Kore",
+    "hash": "31687996563c57f5"
+  },
+  "readings/r-m07-kleidia/49.mp3": {
+    "voice": "Kore",
+    "hash": "3d8a36a8cebaf634"
+  },
+  "readings/r-m07-kleidia/5.mp3": {
+    "voice": "Kore",
+    "hash": "7c9002010029400c"
+  },
+  "readings/r-m07-kleidia/50.mp3": {
+    "voice": "Kore",
+    "hash": "bb7e2ee540bfd448"
+  },
+  "readings/r-m07-kleidia/51.mp3": {
+    "voice": "Gacrux",
+    "hash": "dd2bcdfcc09af380"
+  },
+  "readings/r-m07-kleidia/52.mp3": {
+    "voice": "Gacrux",
+    "hash": "6a96187f8547b08f"
+  },
+  "readings/r-m07-kleidia/53.mp3": {
+    "voice": "Gacrux",
+    "hash": "7a8ec9cc1be02c5c"
+  },
+  "readings/r-m07-kleidia/54.mp3": {
+    "voice": "Gacrux",
+    "hash": "94ae64f359530b11"
+  },
+  "readings/r-m07-kleidia/6.mp3": {
+    "voice": "Kore",
+    "hash": "c4ff56be801c24cb"
+  },
+  "readings/r-m07-kleidia/7.mp3": {
+    "voice": "Gacrux",
+    "hash": "d842684264dddf13"
+  },
+  "readings/r-m07-kleidia/8.mp3": {
+    "voice": "Schedar",
+    "hash": "ce435a8b02f486fc"
+  },
+  "readings/r-m07-kleidia/9.mp3": {
+    "voice": "Schedar",
+    "hash": "e6af4cb55f2c912d"
+  },
+  "readings/r-m08-kyriaki/1.mp3": {
+    "voice": "Zephyr",
+    "hash": "01f9b5769300cc1f"
+  },
+  "readings/r-m08-kyriaki/10.mp3": {
+    "voice": "Zephyr",
+    "hash": "407e36a4239210f8"
+  },
+  "readings/r-m08-kyriaki/11.mp3": {
+    "voice": "Zephyr",
+    "hash": "fc5cece4680d45c5"
+  },
+  "readings/r-m08-kyriaki/12.mp3": {
+    "voice": "Zephyr",
+    "hash": "ecafa95fed4f380a"
+  },
+  "readings/r-m08-kyriaki/13.mp3": {
+    "voice": "Zephyr",
+    "hash": "baa35dee39c072fb"
+  },
+  "readings/r-m08-kyriaki/14.mp3": {
+    "voice": "Zephyr",
+    "hash": "08de57875015ce1e"
+  },
+  "readings/r-m08-kyriaki/15.mp3": {
+    "voice": "Zephyr",
+    "hash": "786aca638b4c8d06"
+  },
+  "readings/r-m08-kyriaki/16.mp3": {
+    "voice": "Zephyr",
+    "hash": "3a94f2a829cc3f9e"
+  },
+  "readings/r-m08-kyriaki/17.mp3": {
+    "voice": "Zephyr",
+    "hash": "3f7a2e48fd27955e"
+  },
+  "readings/r-m08-kyriaki/18.mp3": {
+    "voice": "Kore",
+    "hash": "7b914f64d1fc57bf"
+  },
+  "readings/r-m08-kyriaki/19.mp3": {
+    "voice": "Kore",
+    "hash": "c06675b09a7222bc"
+  },
+  "readings/r-m08-kyriaki/2.mp3": {
+    "voice": "Zephyr",
+    "hash": "018b9375005ed134"
+  },
+  "readings/r-m08-kyriaki/20.mp3": {
+    "voice": "Zephyr",
+    "hash": "a2686fb655253d37"
+  },
+  "readings/r-m08-kyriaki/21.mp3": {
+    "voice": "Zephyr",
+    "hash": "358c208045078712"
+  },
+  "readings/r-m08-kyriaki/22.mp3": {
+    "voice": "Zephyr",
+    "hash": "3389b0417fb99144"
+  },
+  "readings/r-m08-kyriaki/23.mp3": {
+    "voice": "Zephyr",
+    "hash": "8280e1a14bda46ec"
+  },
+  "readings/r-m08-kyriaki/24.mp3": {
+    "voice": "Iapetus",
+    "hash": "537e6078a825273d"
+  },
+  "readings/r-m08-kyriaki/25.mp3": {
+    "voice": "Zephyr",
+    "hash": "55fc74edd199cb6a"
+  },
+  "readings/r-m08-kyriaki/26.mp3": {
+    "voice": "Zephyr",
+    "hash": "6cce05409bff1b4f"
+  },
+  "readings/r-m08-kyriaki/27.mp3": {
+    "voice": "Zephyr",
+    "hash": "b200b2d52e7e6393"
+  },
+  "readings/r-m08-kyriaki/28.mp3": {
+    "voice": "Algieba",
+    "hash": "7ff94eef7083717d"
+  },
+  "readings/r-m08-kyriaki/29.mp3": {
+    "voice": "Zephyr",
+    "hash": "47cceb45eca7e384"
+  },
+  "readings/r-m08-kyriaki/3.mp3": {
+    "voice": "Zephyr",
+    "hash": "133fae714961bd76"
+  },
+  "readings/r-m08-kyriaki/30.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "82f7c2ed320708dc"
+  },
+  "readings/r-m08-kyriaki/31.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "e3ef539d8d372b96"
+  },
+  "readings/r-m08-kyriaki/32.mp3": {
+    "voice": "Zephyr",
+    "hash": "67930211d877ab3c"
+  },
+  "readings/r-m08-kyriaki/33.mp3": {
+    "voice": "Zephyr",
+    "hash": "87c001302e523c8a"
+  },
+  "readings/r-m08-kyriaki/34.mp3": {
+    "voice": "Zephyr",
+    "hash": "57570f5537f95ff7"
+  },
+  "readings/r-m08-kyriaki/35.mp3": {
+    "voice": "Zephyr",
+    "hash": "a5d01ab2959326d3"
+  },
+  "readings/r-m08-kyriaki/36.mp3": {
+    "voice": "Schedar",
+    "hash": "d1e89215f94f627c"
+  },
+  "readings/r-m08-kyriaki/37.mp3": {
+    "voice": "Zephyr",
+    "hash": "af010eb0d3cb8156"
+  },
+  "readings/r-m08-kyriaki/38.mp3": {
+    "voice": "Zephyr",
+    "hash": "0b8771c6f49e3af2"
+  },
+  "readings/r-m08-kyriaki/39.mp3": {
+    "voice": "Zephyr",
+    "hash": "a2686fb655253d37"
+  },
+  "readings/r-m08-kyriaki/4.mp3": {
+    "voice": "Zephyr",
+    "hash": "2b36e72a3a9dfb6c"
+  },
+  "readings/r-m08-kyriaki/40.mp3": {
+    "voice": "Zephyr",
+    "hash": "9f9ce3dc2b6d6a62"
+  },
+  "readings/r-m08-kyriaki/41.mp3": {
+    "voice": "Zephyr",
+    "hash": "38a88b816f5b1f68"
+  },
+  "readings/r-m08-kyriaki/42.mp3": {
+    "voice": "Zephyr",
+    "hash": "a5d01ab2959326d3"
+  },
+  "readings/r-m08-kyriaki/43.mp3": {
+    "voice": "Schedar",
+    "hash": "4bb2356cdf208fed"
+  },
+  "readings/r-m08-kyriaki/44.mp3": {
+    "voice": "Zephyr",
+    "hash": "ac1b6f9d7b23d99a"
+  },
+  "readings/r-m08-kyriaki/45.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "638eccd890c62063"
+  },
+  "readings/r-m08-kyriaki/46.mp3": {
+    "voice": "Zephyr",
+    "hash": "101afb71324a77b5"
+  },
+  "readings/r-m08-kyriaki/47.mp3": {
+    "voice": "Zephyr",
+    "hash": "56b927cf80ad73f1"
+  },
+  "readings/r-m08-kyriaki/48.mp3": {
+    "voice": "Zephyr",
+    "hash": "3f7a2e48fd27955e"
+  },
+  "readings/r-m08-kyriaki/49.mp3": {
+    "voice": "Kore",
+    "hash": "6cfc941c355c6008"
+  },
+  "readings/r-m08-kyriaki/5.mp3": {
+    "voice": "Zephyr",
+    "hash": "29d65b276cb2b022"
+  },
+  "readings/r-m08-kyriaki/50.mp3": {
+    "voice": "Kore",
+    "hash": "e1a76fd1bb17ea97"
+  },
+  "readings/r-m08-kyriaki/6.mp3": {
+    "voice": "Zephyr",
+    "hash": "582dee9f2f409cee"
+  },
+  "readings/r-m08-kyriaki/7.mp3": {
+    "voice": "Zephyr",
+    "hash": "f12d8db3dc6c3841"
+  },
+  "readings/r-m08-kyriaki/8.mp3": {
+    "voice": "Zephyr",
+    "hash": "05d90640e6b3965f"
+  },
+  "readings/r-m08-kyriaki/9.mp3": {
+    "voice": "Zephyr",
+    "hash": "b3bded174de1f246"
+  },
+  "readings/r-m08-taverna/1.mp3": {
+    "voice": "Gacrux",
+    "hash": "e952e3effbf3075e"
+  },
+  "readings/r-m08-taverna/10.mp3": {
+    "voice": "Gacrux",
+    "hash": "4e0cc4514be044ec"
+  },
+  "readings/r-m08-taverna/11.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "e47a1a88f9c45c55"
+  },
+  "readings/r-m08-taverna/12.mp3": {
+    "voice": "Schedar",
+    "hash": "36c4fbe9b61b241e"
+  },
+  "readings/r-m08-taverna/13.mp3": {
+    "voice": "Schedar",
+    "hash": "eaeb1572c7135ddb"
+  },
+  "readings/r-m08-taverna/14.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "ab51286fafb740b7"
+  },
+  "readings/r-m08-taverna/15.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "253508120add82b2"
+  },
+  "readings/r-m08-taverna/16.mp3": {
+    "voice": "Gacrux",
+    "hash": "fb6020300686697f"
+  },
+  "readings/r-m08-taverna/17.mp3": {
+    "voice": "Zephyr",
+    "hash": "d740405da6285987"
+  },
+  "readings/r-m08-taverna/18.mp3": {
+    "voice": "Zephyr",
+    "hash": "c4150cceae2ce30b"
+  },
+  "readings/r-m08-taverna/19.mp3": {
+    "voice": "Zephyr",
+    "hash": "14022dc84aee8add"
+  },
+  "readings/r-m08-taverna/2.mp3": {
+    "voice": "Gacrux",
+    "hash": "a03f610cefe7aa71"
+  },
+  "readings/r-m08-taverna/20.mp3": {
+    "voice": "Kore",
+    "hash": "eee9dbc504bfa18a"
+  },
+  "readings/r-m08-taverna/21.mp3": {
+    "voice": "Kore",
+    "hash": "78b4a04c5779ba40"
+  },
+  "readings/r-m08-taverna/22.mp3": {
+    "voice": "Kore",
+    "hash": "b1c82e015e3bb83b"
+  },
+  "readings/r-m08-taverna/23.mp3": {
+    "voice": "Gacrux",
+    "hash": "d842684264dddf13"
+  },
+  "readings/r-m08-taverna/24.mp3": {
+    "voice": "Schedar",
+    "hash": "0607661143696b97"
+  },
+  "readings/r-m08-taverna/25.mp3": {
+    "voice": "Gacrux",
+    "hash": "fb6020300686697f"
+  },
+  "readings/r-m08-taverna/26.mp3": {
+    "voice": "Zephyr",
+    "hash": "940480a5c12ca9fe"
+  },
+  "readings/r-m08-taverna/27.mp3": {
+    "voice": "Schedar",
+    "hash": "df279c1d0ebd3d33"
+  },
+  "readings/r-m08-taverna/28.mp3": {
+    "voice": "Schedar",
+    "hash": "f513e366f0594dc3"
+  },
+  "readings/r-m08-taverna/29.mp3": {
+    "voice": "Gacrux",
+    "hash": "275bb08f28e80c14"
+  },
+  "readings/r-m08-taverna/3.mp3": {
+    "voice": "Gacrux",
+    "hash": "6fe6a3a34b712ef7"
+  },
+  "readings/r-m08-taverna/30.mp3": {
+    "voice": "Gacrux",
+    "hash": "d842684264dddf13"
+  },
+  "readings/r-m08-taverna/31.mp3": {
+    "voice": "Schedar",
+    "hash": "92e544e70498e977"
+  },
+  "readings/r-m08-taverna/32.mp3": {
+    "voice": "Schedar",
+    "hash": "74fd749082625a45"
+  },
+  "readings/r-m08-taverna/33.mp3": {
+    "voice": "Gacrux",
+    "hash": "4e0cc4514be044ec"
+  },
+  "readings/r-m08-taverna/34.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "c20e6b8783c8ea3c"
+  },
+  "readings/r-m08-taverna/35.mp3": {
+    "voice": "Gacrux",
+    "hash": "779154bb11e9219e"
+  },
+  "readings/r-m08-taverna/36.mp3": {
+    "voice": "Kore",
+    "hash": "4e31e6d68e047e58"
+  },
+  "readings/r-m08-taverna/37.mp3": {
+    "voice": "Gacrux",
+    "hash": "fb6020300686697f"
+  },
+  "readings/r-m08-taverna/38.mp3": {
+    "voice": "Zephyr",
+    "hash": "a223992e98fa7503"
+  },
+  "readings/r-m08-taverna/39.mp3": {
+    "voice": "Zephyr",
+    "hash": "19e2b160932cbaa8"
+  },
+  "readings/r-m08-taverna/4.mp3": {
+    "voice": "Gacrux",
+    "hash": "779154bb11e9219e"
+  },
+  "readings/r-m08-taverna/40.mp3": {
+    "voice": "Gacrux",
+    "hash": "5672537d32505ad9"
+  },
+  "readings/r-m08-taverna/41.mp3": {
+    "voice": "Gacrux",
+    "hash": "97c7a995c4d18f33"
+  },
+  "readings/r-m08-taverna/42.mp3": {
+    "voice": "Gacrux",
+    "hash": "4e0cc4514be044ec"
+  },
+  "readings/r-m08-taverna/43.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "c5cd9ff13f375caf"
+  },
+  "readings/r-m08-taverna/44.mp3": {
+    "voice": "Rasalgethi",
+    "hash": "c7312c26c2d0d7a5"
+  },
+  "readings/r-m08-taverna/45.mp3": {
+    "voice": "Gacrux",
+    "hash": "fb6020300686697f"
+  },
+  "readings/r-m08-taverna/46.mp3": {
+    "voice": "Zephyr",
+    "hash": "a3c2fa8180b96d77"
+  },
+  "readings/r-m08-taverna/47.mp3": {
+    "voice": "Zephyr",
+    "hash": "43b57e08006120ef"
+  },
+  "readings/r-m08-taverna/48.mp3": {
+    "voice": "Gacrux",
+    "hash": "b19199e0afaf61aa"
+  },
+  "readings/r-m08-taverna/49.mp3": {
+    "voice": "Gacrux",
+    "hash": "83b814c0d2b8eade"
+  },
+  "readings/r-m08-taverna/5.mp3": {
+    "voice": "Kore",
+    "hash": "b7e4f31a4e482fc9"
+  },
+  "readings/r-m08-taverna/50.mp3": {
+    "voice": "Gacrux",
+    "hash": "9522d43f811d85a9"
+  },
+  "readings/r-m08-taverna/51.mp3": {
+    "voice": "Gacrux",
+    "hash": "bff83754c6eceaf3"
+  },
+  "readings/r-m08-taverna/6.mp3": {
+    "voice": "Kore",
+    "hash": "f3725be4a3a55a21"
+  },
+  "readings/r-m08-taverna/7.mp3": {
+    "voice": "Gacrux",
+    "hash": "d842684264dddf13"
+  },
+  "readings/r-m08-taverna/8.mp3": {
+    "voice": "Schedar",
+    "hash": "950d835b5896c90d"
+  },
+  "readings/r-m08-taverna/9.mp3": {
+    "voice": "Schedar",
+    "hash": "0ae7042012e453d6"
+  },
   "words/w001.mp3": {
     "voice": "Kore",
     "hash": "738e6d0600ea4e65"
