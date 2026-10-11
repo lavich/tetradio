@@ -1,3 +1,4 @@
+import { deviceTimezone, localDay } from "../domain/time";
 const DATIVE: Record<string, string> = {
   понедельник: "понедельнику",
   вторник: "вторнику",
@@ -23,6 +24,8 @@ export const weekday = (value: string) => day(value).toLocaleDateString("ru-RU",
 export const dativeWeekday = (value: string) => DATIVE[weekday(value)] ?? weekday(value);
 export const dayMonth = (value: string) =>
   day(value).toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "UTC" });
+/** Дата отметки в зоне устройства: «12 октября». */
+export const readDay = (iso: string) => dayMonth(localDay(new Date(iso), deviceTimezone()));
 export const shortTitle = (title: string) => title.replace(/^Урок\s+/i, "");
 /** Название урока внутри фразы: «Урок 1.4» склоняется («урока 1.4»), свой набор идёт в кавычках. */
 export const lessonIn = (title: string, form: "урок" | "урока" | "уроку") =>

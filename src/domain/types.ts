@@ -1,5 +1,12 @@
 import type { Card, Grade } from "ts-fsrs";
-import type { PackageItem, PackageMarks, PackageMedia, PackageWord, PackagePhrase } from "../content/schema";
+import type {
+  PackageItem,
+  PackageMarks,
+  PackageMedia,
+  PackagePhrase,
+  PackageReading,
+  PackageWord,
+} from "../content/schema";
 import type {
   CatalogModule,
   CourseCalendar,
@@ -155,6 +162,8 @@ export interface InstalledPackage {
   module?: { id: string; position: number };
   blocks?: LessonBlock[];
   marks?: PackageMarks;
+  /** Тексты для беглого чтения, которые открывает этот урок. */
+  readings?: PackageReading[];
 }
 /** Модуль программы из каталога; `position` — порядок в каталоге. */
 export type StoredModule = CatalogModule & { position: number };

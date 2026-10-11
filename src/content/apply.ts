@@ -85,7 +85,12 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
       // Курс дописывается и на неизменной версии: у базы, пережившей переход на курсы, его ещё нет.
       const known = await database.lessons.get(pack.id);
       if (known && !known.courseId && pack.courseId) await database.lessons.put({ ...known, courseId: pack.courseId });
-      if (installed && installed.version === pack.version) return { status: "current", added: 0, changed: 0 };
+      if (
+        installed &&
+        installed.version === pack.version &&
+        (installed.readings?.length ?? 0) >= (pack.readings?.length ?? 0)
+      )
+        return { status: "current", added: 0, changed: 0 };
       const result: InstallResult = { status: installed ? "updated" : "installed", added: 0, changed: 0 };
       if (!known)
         await database.lessons.add({
@@ -128,6 +133,7 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
       if (pack.module) record.module = pack.module;
       if (pack.blocks) record.blocks = pack.blocks;
       if (pack.marks) record.marks = pack.marks;
+      if (pack.readings) record.readings = pack.readings;
       await database.packages.put(record);
       // Полученный из облака прогресс карточек этого пакета ждал установки: теперь он становится обычным состоянием.
       await adoptStash(

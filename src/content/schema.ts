@@ -18,8 +18,10 @@ import {
   type CatalogModule,
   type CourseCalendar,
   type CourseExam,
+  type Gloss as TextGloss,
   type LessonBlock,
   type LessonKind,
+  type ReadingBlock,
   tapFields,
 } from "./course.ts";
 
@@ -65,6 +67,8 @@ export interface CatalogEntry {
   url: string;
   bytes: number;
   media: { count: number; bytes: number };
+  /** Тексты для чтения в пакете: по ним пакет, поставленный сборкой без текстов, ставится заново. */
+  readings?: number;
 }
 export interface Catalog {
   schemaVersion: SchemaVersion;
@@ -135,7 +139,35 @@ export interface ContentPackage {
   marks?: PackageMarks;
   /** Записи реплик: блок аудирования → медиа каждой реплики по порядку, `null` — реплика без записи. */
   lineAudio?: Record<string, (string | null)[]>;
+  /** Тексты для беглого чтения, которые открывает этот урок. */
+  readings?: PackageReading[];
 }
+
+/** Статус вычитки текста: пометка «сгенерированный» снимается только вычиткой носителя. */
+export type ReadingReview = "none" | "author" | "native";
+/**
+ * Текст для беглого чтения. Едет в пакете открывающего урока необязательным полем: прежний читатель его не видит.
+ * Разметка слов — своя, по блоку `readingBlock(текст)`: в общей разметке пакета блока с таким id нет.
+ */
+export interface PackageReading {
+  id: string;
+  title: string;
+  series?: string;
+  text: string;
+  glosses: TextGloss[];
+  review: ReadingReview;
+  words: number;
+  marks?: PackageMarks;
+}
+export const readingBlock = (reading: Pick<PackageReading, "id" | "title" | "text" | "glosses">): ReadingBlock => ({
+  type: "reading",
+  id: reading.id,
+  title: reading.title,
+  text: reading.text,
+  glosses: reading.glosses,
+});
+/** Префикс идентификаторов текстов: у уроков его нет, поэтому отметка «прочитано» не совпадёт с блоком урока. */
+export const READING_PREFIX = "r-";
 
 export interface WordMark {
   start: number;
@@ -241,6 +273,7 @@ export function parseCatalog(input: unknown): Catalog {
       bytes: num(item.bytes, `${path}.bytes`),
       media: { count: num(media.count, `${path}.media.count`), bytes: num(media.bytes, `${path}.media.bytes`) },
     };
+    if (item.readings !== undefined) lesson.readings = num(item.readings, `${path}.readings`);
     const wordIds = opt(item.wordIds, (value) =>
       list(value, `${path}.wordIds`).map((id, i) => str(id, `${path}.wordIds[${i}]`)),
     );
@@ -550,7 +583,45 @@ export function parsePackage(input: unknown): ContentPackage {
   if (raw.lineAudio !== undefined) pack.lineAudio = parseLineAudio(raw.lineAudio, blocks, mediaIds);
   if (blocks.length) pack.blocks = blocks;
   if (raw.marks !== undefined) pack.marks = parseMarks(raw.marks, blocks, items);
+  if (raw.readings !== undefined) pack.readings = parseReadings(raw.readings);
   return pack;
+}
+
+const REVIEWS: readonly ReadingReview[] = ["none", "author", "native"];
+function parseReadings(input: unknown): PackageReading[] {
+  const readings = list(input, "пакет.readings").map((entry, i): PackageReading => {
+    const path = `пакет.readings[${i}]`;
+    const raw = obj(entry, path);
+    const id = str(raw.id, `${path}.id`);
+    if (!id.startsWith(READING_PREFIX))
+      throw new ContentError(`${path}.id: идентификатор текста начинается с ${READING_PREFIX}`);
+    const review = raw.review;
+    if (!REVIEWS.includes(review as ReadingReview))
+      throw new ContentError(`${path}.review: ожидалось ${REVIEWS.join(", ")}`);
+    const reading: PackageReading = {
+      id,
+      title: str(raw.title, `${path}.title`),
+      text: str(raw.text, `${path}.text`),
+      glosses: list(raw.glosses ?? [], `${path}.glosses`).map((gloss, g) => {
+        const item = obj(gloss, `${path}.glosses[${g}]`);
+        return {
+          text: str(item.text, `${path}.glosses[${g}].text`),
+          russian: str(item.russian, `${path}.glosses[${g}].russian`),
+        };
+      }),
+      review: review as ReadingReview,
+      words: num(raw.words, `${path}.words`),
+    };
+    const series = opt(raw.series, (value) => str(value, `${path}.series`));
+    if (series) reading.series = series;
+    if (raw.marks !== undefined) reading.marks = parseMarks(raw.marks, [readingBlock(reading)], []);
+    return reading;
+  });
+  unique(
+    readings.map((reading) => reading.id),
+    "пакет.readings",
+  );
+  return readings;
 }
 
 function parseLineAudio(input: unknown, blocks: LessonBlock[], mediaIds: Set<string>) {

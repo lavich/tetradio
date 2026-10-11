@@ -1,3 +1,4 @@
+import { READING_PREFIX } from "../../content/schema";
 import type { AppDatabase } from "../../storage/db";
 import { blockKey } from "../../storage/course";
 
@@ -78,7 +79,10 @@ export async function courseProblem(rows: CourseRows, database: AppDatabase): Pr
     (lesson): lesson is Row =>
       record(lesson) && contentCourses.has(String(lesson.courseId)) && !packaged.has(String(lesson.id)),
   );
-  const orphanBlocks = (rows.blockProgress as Row[]).filter((row) => !inFile.has(String(row.lessonId)));
+  // Отметка «прочитано» — строка блока текста для чтения: урока под ней нет.
+  const orphanBlocks = (rows.blockProgress as Row[]).filter(
+    (row) => !inFile.has(String(row.lessonId)) && !String(row.lessonId).startsWith(READING_PREFIX),
+  );
   if (!contentLessons.length && !orphanBlocks.length) return null;
   const installed = await installedCourse(database);
   // Без каталога строку урока проверить не с чем: она пришла с пакетом, который могли удалить.
