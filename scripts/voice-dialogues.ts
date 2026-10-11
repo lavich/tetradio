@@ -66,6 +66,21 @@ async function synthesize(text: string, voice: string, voices: VoiceMap): Promis
   return Buffer.from(body.audioContent, "base64");
 }
 
+// Chirp 3 HD на коротком слове иногда отдаёт тишину или обрывок ~0,3 с; самое короткое живое слово — 0,5 с.
+const MIN_BYTES = 1800;
+const ATTEMPTS = 12;
+
+async function synthesizeWhole(text: string, voice: string, voices: VoiceMap): Promise<Buffer> {
+  // Одна и та же форма у некоторых слов («και», «μου») срывается раз за разом; другая запись того же слова проходит.
+  const forms = [text, text.charAt(0).toLocaleUpperCase(voices.language) + text.slice(1), `«${text}»`];
+  for (let attempt = 1; ; attempt++) {
+    const audio = await synthesize(forms[(attempt - 1) % forms.length], voice, voices);
+    if (audio.byteLength >= MIN_BYTES) return audio;
+    if (attempt === ATTEMPTS)
+      throw new Error(`Синтез «${text}» (${voice}): ${ATTEMPTS} раз подряд пустая или обрезанная запись`);
+  }
+}
+
 const stats = { lines: 0, synthesized: 0, characters: 0, bytes: 0, references: 0 };
 const pending: string[] = [];
 
@@ -77,7 +92,7 @@ async function voice(file: string, text: string, name: string, voices: VoiceMap,
   if (existsSync(target) && manifest[file]?.hash === hash && manifest[file]?.voice === name) return;
   pending.push(`${label} (${name})`);
   if (check) return;
-  const audio = await synthesize(spokenText(text, voices.language), name, voices);
+  const audio = await synthesizeWhole(spokenText(text, voices.language), name, voices);
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, audio);
   manifest[file] = { voice: name, hash };
