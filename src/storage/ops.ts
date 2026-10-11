@@ -12,7 +12,7 @@ import {
   OPTION_POOL,
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
-import { snapshotOf } from "../domain/refs";
+import { snapshotOf } from "../domain/kinds";
 import {
   fillSettings,
   type ReviewEvent,

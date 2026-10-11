@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Rating } from "ts-fsrs";
-import type { ReviewEvent, Session, SessionCard, SessionItem } from "../../domain/types";
+import { cardSides } from "../../domain/kinds";
+import type { ReviewEvent, Session, SessionItem } from "../../domain/types";
 import { plural } from "../../shared/format";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
@@ -81,11 +82,6 @@ export interface DoneRow {
   mark: Mark;
 }
 
-const sides = (card: SessionCard) =>
-  card.kind === "word"
-    ? { greek: card.word.greek, meaning: card.word.russian }
-    : { greek: card.phrase.text, meaning: card.phrase.translation ?? "" };
-
 /** «Почти» хранится оценкой Hard при `correct: false`: так её записывает `gradeFor`. */
 export const markOf = (event: Pick<ReviewEvent, "correct" | "rating">): Mark =>
   event.correct ? "correct" : event.rating === Rating.Hard ? "almost" : "wrong";
@@ -95,7 +91,7 @@ export function doneRows(session: Pick<Session, "items">, events: Map<string, Re
   return session.items.flatMap((item): DoneRow[] => {
     const event = item.eventId ? events.get(item.eventId) : undefined;
     if (!event && !item.skipped) return [];
-    const { greek, meaning } = sides(item.card);
+    const { greek, meaning } = cardSides(item.card);
     // В аудировании и письме дан перевод или звук, а ответ — греческий; в узнавании наоборот.
     const towardGreek = item.type === "listening" || item.type === "assembly" || item.type === "spelling";
     return [

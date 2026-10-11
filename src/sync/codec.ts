@@ -1,6 +1,8 @@
-import type { SkillSummary, StatsSummary, TypeSkill } from "../domain/skills";
-import { tryParseUnitKey, unitKey } from "../domain/refs";
-import type { CardKind, ExerciseType, LearningRef } from "../domain/types";
+import type { SkillSummary, StatsSummary, StoredType, TypeSkill } from "../domain/skills";
+import { KINDS, kindOfCode } from "../domain/kinds";
+import { FOREIGN_TYPE, TYPE_CODE, typeOfCode } from "../domain/type-codes";
+import { isForeign, parseStoredKey, storedKey } from "../domain/refs";
+import type { ExerciseType, StoredRef } from "../domain/types";
 import {
   SNAPSHOT_FORMAT,
   SUPPORTED_SNAPSHOT_FORMATS,
@@ -17,51 +19,45 @@ import {
  * Ссылка на карточку — символ вида и идентификатор. `b` — блоки курса, сгруппированные по уроку:
  * `[урок, [[блок, выполнен 0|1, мс, счёт|0, критерии?]…]]`. Формат 4: курс — `[id, предел]`, урок — `[id, пройден 0|1, мс]`;
  * формат 3 нёс курс объектом с расписанием и урок — `[id, дата, статус, мс]`.
+ * С формата 5 незнакомые коды вида и типа проверки читаются как непрозрачные и записываются обратно теми же;
+ * в форматах 3–4 они отбрасываются, как раньше.
  */
-const TYPE_CODE: Record<ExerciseType, string> = {
-  recall: "c",
-  recognition: "r",
-  assembly: "a",
-  spelling: "s",
-  listening: "l",
-  comprehension: "m",
-  cloze: "z",
-};
-const CODE_TYPE = Object.fromEntries(Object.entries(TYPE_CODE).map(([type, code]) => [code, type])) as Record<
-  string,
-  ExerciseType
->;
-/**
- * Коды видов карточек. Код `c` принадлежал снятому виду и SHALL NOT переиспользоваться:
- * снимки старых клиентов продолжают его содержать, а ссылку с неизвестным кодом читатель пропускает.
- */
-const KIND_CODE: Record<CardKind, string> = { word: "w", phrase: "p" };
-const CODE_KIND = Object.fromEntries(Object.entries(KIND_CODE).map(([kind, code]) => [code, kind])) as Record<
-  string,
-  CardKind
->;
+const encodeType = (type: StoredType) =>
+  type.startsWith(FOREIGN_TYPE) ? type.slice(FOREIGN_TYPE.length) : TYPE_CODE[type as ExerciseType];
+/** `null` — незнакомый код в формате, который его не сохраняет. */
+const decodeType = (code: string, format: number): StoredType | null =>
+  typeOfCode(code) ?? (format >= 5 ? `${FOREIGN_TYPE}${code}` : null);
+/** Коды снятых видов: их карточек нет и не будет, такие ссылки отбрасываются в любом формате. */
+const RETIRED_KINDS = new Set(["c"]);
 const ms = (iso: string | undefined) => (iso ? Date.parse(iso) : 0);
 const iso = (value: number) => new Date(value).toISOString();
 const bits = (recent: boolean[]) => recent.map((flag) => (flag ? "1" : "0")).join("");
 const unbits = (text: string) => [...text].map((char) => char === "1");
-export const encodeRef = (ref: LearningRef) => `${KIND_CODE[ref.kind]}${ref.id}`;
 /**
- * `null` — ссылка на карточку снятого вида из снимка старого клиента: её прогресс отбрасывается молча,
- * иначе одна незнакомая ссылка отменила бы синхронизацию слов и фраз. Пустая ссылка — повреждённый снимок.
+ * Коды видов — из перечня видов. Код `c` принадлежал снятому виду и SHALL NOT переиспользоваться:
+ * снимки старых клиентов продолжают его содержать.
  */
-export function decodeRef(wire: string): LearningRef | null {
+export const encodeRef = (ref: StoredRef) => `${isForeign(ref) ? ref.code : KINDS[ref.kind].code}${ref.id}`;
+/**
+ * Ссылка незнакомого вида с формата 5 — непрозрачная `ForeignRef`. В форматах 3–4 это ссылка снятого вида
+ * из снимка старого клиента: `null`, её прогресс отбрасывается молча. Пустая ссылка — повреждённый снимок.
+ */
+export function decodeRef(wire: string, format: number = SNAPSHOT_FORMAT): StoredRef | null {
   if (wire.length < 2) throw new SnapshotFormatError(`Некорректная ссылка на карточку: ${wire}`);
-  const kind = CODE_KIND[wire[0]];
-  return kind ? { kind, id: wire.slice(1) } : null;
+  const code = wire[0];
+  const id = wire.slice(1);
+  const kind = kindOfCode(code);
+  if (kind) return { kind, id };
+  return format >= 5 && !RETIRED_KINDS.has(code) ? { code, id } : null;
 }
 /** `null` — ключ снятого вида: кода для него нет, а срывать из-за одного такого ключа публикацию нельзя. */
 const encodeKey = (key: string): string | null => {
-  const ref = tryParseUnitKey(key);
+  const ref = parseStoredKey(key);
   return ref && encodeRef(ref);
 };
-const decodeKey = (wire: string) => {
-  const ref = decodeRef(wire);
-  return ref && unitKey(ref);
+const decodeKey = (wire: string, format: number) => {
+  const ref = decodeRef(wire, format);
+  return ref && storedKey(ref);
 };
 
 type WireState = [
@@ -122,7 +118,7 @@ const encodeState = (state: CompactState): WireState => {
     state.version,
   ];
 };
-const decodeState = (wire: WireState): CompactState | null => {
+const decodeState = (wire: WireState, format: number): CompactState | null => {
   const [
     raw,
     due,
@@ -150,33 +146,33 @@ const decodeState = (wire: WireState): CompactState | null => {
     learning_steps,
     ...(last ? { last_review: iso(last) } : {}),
   };
-  const target = decodeRef(raw);
+  const target = decodeRef(raw, format);
   return target && { ref: target, card, introducedAt: iso(intro), version };
 };
-const encodeSkill = (ref: LearningRef, skills: SkillSummary): WireSkill => [
+const encodeSkill = (ref: StoredRef, skills: SkillSummary): WireSkill => [
   encodeRef(ref),
-  skills.lastTypes.map((type) => TYPE_CODE[type]).join(""),
+  skills.lastTypes.map(encodeType).join(""),
   skills.cleanAssemblies,
   Object.fromEntries(
     Object.entries(skills.types)
-      .filter((entry): entry is [string, TypeSkill] => !!entry[1])
-      .map(([type, skill]) => [TYPE_CODE[type as ExerciseType], [bits(skill.recent), ms(skill.lastAt)]]),
+      .filter((entry): entry is [StoredType, TypeSkill] => !!entry[1])
+      .map(([type, skill]) => [encodeType(type), [bits(skill.recent), ms(skill.lastAt)]]),
   ),
 ];
-const decodeSkill = (wire: WireSkill): { ref: LearningRef; skills: SkillSummary } | null => {
+const decodeSkill = (wire: WireSkill, format: number): { ref: StoredRef; skills: SkillSummary } | null => {
   const [raw, last, cleanAssemblies, types] = wire;
-  const target = decodeRef(raw);
+  const target = decodeRef(raw, format);
   return (
     target && {
       ref: target,
       skills: {
-        lastTypes: [...last].map((code) => CODE_TYPE[code]).filter(Boolean),
+        lastTypes: [...last].map((code) => decodeType(code, format)).filter(alive),
         cleanAssemblies,
         types: Object.fromEntries(
-          Object.entries(types).map(([code, [recent, at]]) => [
-            CODE_TYPE[code],
-            { recent: unbits(recent), lastAt: iso(at) },
-          ]),
+          Object.entries(types).flatMap(([code, [recent, at]]) => {
+            const type = decodeType(code, format);
+            return type ? [[type, { recent: unbits(recent), lastAt: iso(at) }]] : [];
+          }),
         ),
       },
     }
@@ -186,17 +182,26 @@ const encodeStats = (stats: StatsSummary): Wire["x"] => ({
   d: stats.days.map((day) => [day.date, day.answers, day.keys.map(encodeKey).filter(alive)]),
   r: Object.fromEntries(
     Object.entries(stats.recentByType)
-      .filter((entry): entry is [string, boolean[]] => !!entry[1])
-      .map(([type, recent]) => [TYPE_CODE[type as ExerciseType], bits(recent)]),
+      .filter((entry): entry is [StoredType, boolean[]] => !!entry[1])
+      .map(([type, recent]) => [encodeType(type), bits(recent)]),
   ),
   n: stats.answers,
   w: stats.answeredKeys.map(encodeKey).filter(alive),
 });
-const decodeStats = (wire: Wire["x"]): StatsSummary => ({
-  days: wire.d.map(([date, answers, keys]) => ({ date, answers, keys: keys.map(decodeKey).filter(alive) })),
-  recentByType: Object.fromEntries(Object.entries(wire.r).map(([code, recent]) => [CODE_TYPE[code], unbits(recent)])),
+const decodeStats = (wire: Wire["x"], format: number): StatsSummary => ({
+  days: wire.d.map(([date, answers, keys]) => ({
+    date,
+    answers,
+    keys: keys.map((key) => decodeKey(key, format)).filter(alive),
+  })),
+  recentByType: Object.fromEntries(
+    Object.entries(wire.r).flatMap(([code, recent]) => {
+      const type = decodeType(code, format);
+      return type ? [[type, unbits(recent)]] : [];
+    }),
+  ),
   answers: wire.n,
-  answeredKeys: wire.w.map(decodeKey).filter(alive),
+  answeredKeys: wire.w.map((key) => decodeKey(key, format)).filter(alive),
 });
 const encodeBlocks = (blocks: CompactBlock[]): WireLessonBlocks[] => {
   const byLesson = new Map<string, WireBlock[]>();
@@ -233,7 +238,7 @@ const decodeBlocks = (wire: unknown): CompactBlock[] => {
     });
   });
 };
-/** Ключи и состояния снятых видов выпадают из снимка: карточки под ними нет и не будет. */
+/** Ключи и состояния, которые формат снимка не сохраняет, выпадают из него. */
 const alive = <T>(value: T | null): value is T => value !== null;
 
 export function encodeSnapshot(snapshot: CompactSnapshot): string {
@@ -281,8 +286,8 @@ export function decodeSnapshot(text: string): CompactSnapshot {
     lessons: decodeLessons(wire),
     packages: wire.p,
     blocks: decodeBlocks(wire.b),
-    states: wire.st.map(decodeState).filter(alive),
-    skills: wire.sk.map(decodeSkill).filter(alive),
-    stats: decodeStats(wire.x),
+    states: wire.st.map((state) => decodeState(state, wire.f)).filter(alive),
+    skills: wire.sk.map((skill) => decodeSkill(skill, wire.f)).filter(alive),
+    stats: decodeStats(wire.x, wire.f),
   };
 }

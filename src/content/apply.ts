@@ -1,7 +1,8 @@
 import { db, indexWord, type AppDatabase } from "../storage/db";
 import { adoptStash } from "../sync/snapshot";
-import { unitKey, wordRef } from "../domain/refs";
-import type { InstalledPackage, LearningRef, Phrase, Word } from "../domain/types";
+import { unitKey } from "../domain/refs";
+import { CARD_KINDS, type InstalledPackage, type LearningRef, type Phrase, type Word } from "../domain/types";
+import { STORED_KINDS } from "../storage/kinds";
 import { SHIPPED_FIELDS, type ContentPackage, type PackagePhrase, type PackageWord, type ShippedField } from "./schema";
 
 export interface InstallResult {
@@ -129,10 +130,11 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
       if (pack.marks) record.marks = pack.marks;
       await database.packages.put(record);
       // Полученный из облака прогресс карточек этого пакета ждал установки: теперь он становится обычным состоянием.
-      await adoptStash(database, pack.id, [
-        ...pack.words.map((word) => wordRef(word.id)),
-        ...pack.phrases.map((p) => ({ kind: "phrase" as const, id: p.id })),
-      ]);
+      await adoptStash(
+        database,
+        pack.id,
+        CARD_KINDS.flatMap((kind) => STORED_KINDS[kind].packageIds(pack).map((id) => ({ kind, id }))),
+      );
       return result;
     },
   );

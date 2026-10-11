@@ -2,6 +2,8 @@ import Dexie from "dexie";
 import { State } from "ts-fsrs";
 import { db, distinctKeys, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import { cardLanguages, cardsInCourse, courseCardIds, courseLessonIds } from "./courses";
+import { STORED_KINDS } from "./kinds";
+import { cardKey, cardLabel } from "../domain/kinds";
 import {
   LESSON_MATES_RADIUS,
   programmeOrder,
@@ -9,7 +11,7 @@ import {
   type PlanLesson,
   type SessionSource,
 } from "../domain/learning";
-import { unitKey, wordKeyOf, wordRef } from "../domain/refs";
+import { tryParseUnitKey, unitKey, wordKeyOf } from "../domain/refs";
 import { deviceTimezone } from "../domain/time";
 import {
   byTime,
@@ -20,7 +22,7 @@ import {
   summarizeEvents,
   type DaySummary,
 } from "../domain/skills";
-import { cardLabel, lessonProgress, type LessonProgress, type StatsSource } from "../domain/stats";
+import { lessonProgress, type LessonProgress, type StatsSource } from "../domain/stats";
 import {
   CARD_KINDS,
   fillSettings,
@@ -74,7 +76,7 @@ export const lessonItems = (lessonId: string, database: AppDatabase = db): Promi
     .between(...span(lessonId))
     .toArray();
 const byKind = (refs: LearningRef[]) => {
-  const groups: Record<CardKind, string[]> = { word: [], phrase: [] };
+  const groups = Object.fromEntries(CARD_KINDS.map((kind) => [kind, [] as string[]])) as Record<CardKind, string[]>;
   for (const ref of refs) groups[ref.kind]?.push(ref.id);
   return groups;
 };
@@ -83,10 +85,9 @@ export async function liveKeys(refs: LearningRef[], database: AppDatabase = db):
   if (!refs.length) return new Set();
   const groups = byKind(refs);
   const live = new Set<string>();
-  const tables = { word: database.words, phrase: database.phrases } as const;
   for (const kind of CARD_KINDS) {
     if (!groups[kind].length) continue;
-    for (const id of await tables[kind].where("id").anyOf(groups[kind]).primaryKeys()) live.add(unitKey({ kind, id }));
+    for (const id of await STORED_KINDS[kind].presentIds(groups[kind], database)) live.add(unitKey({ kind, id }));
   }
   return live;
 }
@@ -104,11 +105,9 @@ export const livePhrases = async (ids: string[], database: AppDatabase = db): Pr
 export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): Promise<Map<string, SessionCard>> {
   const groups = byKind(refs);
   const cards = new Map<string, SessionCard>();
-  if (groups.word.length)
-    for (const word of await liveWords(groups.word, database)) cards.set(wordKeyOf(word.id), { kind: "word", word });
-  if (groups.phrase.length)
-    for (const phrase of await livePhrases(groups.phrase, database))
-      cards.set(unitKey({ kind: "phrase", id: phrase.id }), { kind: "phrase", phrase });
+  for (const kind of CARD_KINDS)
+    if (groups[kind].length)
+      for (const card of await STORED_KINDS[kind].contents(groups[kind], database)) cards.set(cardKey(card), card);
   return cards;
 }
 
@@ -134,24 +133,14 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
     factsOf: async (refs) => {
       const facts = new Map<string, CardFacts>();
       const groups = byKind(refs);
-      for (const id of groups.word) facts.set(wordKeyOf(id), { kind: "word" });
-      // Признаки фразы лежат в её записи; читаются только записи кандидатов, а не таблица целиком.
-      if (groups.phrase.length) {
-        const phrases = await livePhrases(groups.phrase, database);
-        const languages = await cardLanguages(
-          phrases.map((phrase) => ({ kind: "phrase", id: phrase.id })),
-          database,
-        );
-        for (const phrase of phrases) {
-          const key = unitKey({ kind: "phrase", id: phrase.id });
-          facts.set(key, {
-            kind: "phrase",
-            hasTranslation: !!phrase.translation,
-            hasAudio: !!phrase.audioAssetId,
-            language: languages.get(key),
-          });
-        }
-      }
+      for (const kind of CARD_KINDS)
+        if (groups[kind].length)
+          for (const [id, info] of await STORED_KINDS[kind].facts(groups[kind], database))
+            facts.set(unitKey({ kind, id }), info);
+      // Голос проверки зависит от языка курса карточки.
+      const known = refs.filter((ref) => facts.has(unitKey(ref)));
+      const languages = known.length ? await cardLanguages(known, database) : new Map();
+      for (const [key, language] of languages) facts.set(key, { ...facts.get(key)!, language });
       return facts;
     },
     phraseCount: async (courseId) =>
@@ -166,7 +155,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
     languagesOf: (refs) => cardLanguages(refs, database),
     cardsOf: (refs) => cardsOf(refs, database),
     skillsOf: async (card) => {
-      const key = unitKey(card.kind === "word" ? wordRef(card.word.id) : { kind: "phrase", id: card.phrase.id });
+      const key = cardKey(card);
       const base = await database.baseSummary.get("base");
       // Без базы сводка считается по всей локальной истории.
       if (!base)
@@ -204,20 +193,27 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       return [...(base?.stats.recentByType[type] ?? []), ...local].slice(-limit);
     },
     dueKeysBefore: (instant) => database.cardStates.where("card.due").below(instant).primaryKeys(),
-    cardCount: async () => (await database.words.count()) + (await database.phrases.count()),
+    cardCount: async () => {
+      let total = 0;
+      for (const kind of CARD_KINDS) total += await STORED_KINDS[kind].count(database);
+      return total;
+    },
     eachState: (visit) => database.cardStates.each(visit),
     labelsOf: async (refs) =>
       new Map([...(await cardsOf(refs, database))].map(([key, card]) => [key, cardLabel(card)])),
     totals: async () => {
       const base = await database.baseSummary.get("base");
       const count = (keys: Iterable<string>) => {
-        const byKind: Record<CardKind, number> = { word: 0, phrase: 0 };
-        // Ключи снятых видов остаются в старых событиях: своего разряда у них нет, в число карточек они не идут.
+        const byKind = Object.fromEntries(CARD_KINDS.map((kind) => [kind, 0])) as Record<CardKind, number>;
+        let cards = 0;
+        // Ключи снятых и незнакомых видов своего разряда не имеют и в число карточек не идут.
         for (const key of keys) {
-          const kind = (JSON.parse(key) as [CardKind, string])[0];
-          if (kind in byKind) byKind[kind]++;
+          const ref = tryParseUnitKey(key);
+          if (!ref) continue;
+          byKind[ref.kind]++;
+          cards++;
         }
-        return { cards: byKind.word + byKind.phrase, byKind };
+        return { cards, byKind };
       };
       if (!base)
         return {

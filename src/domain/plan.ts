@@ -1,9 +1,10 @@
 import { State, type Card } from "ts-fsrs";
 import type { CatalogModule } from "../content/course";
-import { DEFAULT_LANGUAGE, voiceFor, type Language, type Voices } from "./language";
+import { isCheckable, KINDS, needsFacts, type AvailabilityContext, type CardFacts } from "./kinds";
+import type { Voices } from "./language";
 import { unitKey } from "./refs";
 import { localDay } from "./time";
-import type { CardKind, LearningRef, LearningState, Lesson, LessonItem } from "./types";
+import type { LearningRef, LearningState, Lesson, LessonItem } from "./types";
 
 /** Зрелость состояния для очередей: сперва то, что переучивается, потом разучиваемое, потом повторяемое. */
 const stateRank = (card: Card) => (card.state === State.Relearning ? 0 : card.state === State.Learning ? 1 : 2);
@@ -12,7 +13,10 @@ export interface WordOrigin {
   lessonId: string;
   title: string;
 }
-/** `unavailable` — новые карточки без доступного объективного упражнения: видны отдельно. */
+/**
+ * `unavailable` — карточки без доступного объективного упражнения, новые и со сроком: видны отдельно.
+ * Карточка со сроком, содержимого которой на устройстве нет, в план не входит вовсе; её состояние остаётся.
+ */
 export interface DailyPlan {
   today: string;
   newRefs: LearningRef[];
@@ -20,26 +24,6 @@ export interface DailyPlan {
   origins: Map<string, WordOrigin>;
   unavailable: LearningRef[];
 }
-
-/** Лёгкие признаки доступности проверки: для фразы — наличие перевода и файла аудио; слово проверяемо всегда. */
-export interface CardFacts {
-  kind: CardKind;
-  hasTranslation?: boolean;
-  hasAudio?: boolean;
-  language?: Language;
-}
-export interface AvailabilityContext {
-  hasVoice: Voices;
-  phrasePool: number;
-}
-/**
- * Есть ли у карточки объективное упражнение. Фраза без перевода проверяется только аудированием,
- * для которого нужны голос или файл и четыре различных фразы в пуле. Агент не дописывает перевод для обхода.
- */
-export const isCheckable = (facts: CardFacts, context: AvailabilityContext) =>
-  facts.kind !== "phrase" ||
-  !!facts.hasTranslation ||
-  ((!!facts.hasAudio || voiceFor(context.hasVoice, facts.language ?? DEFAULT_LANGUAGE)) && context.phrasePool >= 4);
 
 export interface PlanLesson {
   id: string;
@@ -113,15 +97,21 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
   }
   const [live, states] = await Promise.all([source.liveKeys(refs), source.statesOf(refs)]);
   const candidates = refs.filter((ref) => live.has(unitKey(ref)) && !states.has(unitKey(ref)));
-  const facts = await source.factsOf(candidates.filter((ref) => ref.kind === "phrase"));
-  const fresh: LearningRef[] = [];
+  const due = await source.dueStates(now, courseId);
+  const dueRefs = due.map((state) => state.ref);
+  // Слова и фразы с базы не удаляются, а слово проверяемо всегда: на большой базе план не читает их записи.
+  const [dueLive, facts] = await Promise.all([
+    source.liveKeys(dueRefs.filter((ref) => KINDS[ref.kind].vanishes)),
+    source.factsOf([...candidates, ...dueRefs].filter(needsFacts)),
+  ]);
+  const checkable = (ref: LearningRef) => {
+    if (!needsFacts(ref)) return true;
+    const info = facts.get(unitKey(ref));
+    return !!info && isCheckable(info, availability);
+  };
+  const newRefs: LearningRef[] = [];
   const unavailable: LearningRef[] = [];
-  for (const ref of candidates) {
-    const info = ref.kind === "phrase" ? facts.get(unitKey(ref)) : undefined;
-    if (ref.kind !== "phrase" || (info && isCheckable(info, availability))) fresh.push(ref);
-    else unavailable.push(ref);
-  }
-  const newRefs = fresh;
+  for (const ref of candidates) (checkable(ref) ? newRefs : unavailable).push(ref);
   const titles = new Map(lessons.map((lesson) => [lesson.id, lesson.title]));
   const origins = new Map(
     newRefs.map((ref) => {
@@ -130,7 +120,10 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     }),
   );
 
-  const reviews = (await source.dueStates(now, courseId))
+  const askable = due.filter((state) => !KINDS[state.ref.kind].vanishes || dueLive.has(state.unitKey));
+  for (const state of askable) if (!checkable(state.ref)) unavailable.push(state.ref);
+  const reviews = askable
+    .filter((state) => checkable(state.ref))
     .sort(
       (a, b) =>
         stateRank(a.card) - stateRank(b.card) ||

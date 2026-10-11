@@ -115,13 +115,13 @@ beforeEach(() => {
   clockMs = Date.parse("2026-09-16T08:00:00Z");
 });
 
-describe("снимок формата 4: прогресс курса", () => {
+describe("снимок формата 5: прогресс курса", () => {
   it("несёт блоки, критерии, счёт и завершение урока, но не ответы и не текст письма", async () => {
     const phone = await device("phone");
     await finishLesson(phone);
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     expect(snapshot.format).toBe(SNAPSHOT_FORMAT);
-    expect(SNAPSHOT_FORMAT).toBe(4);
+    expect(SNAPSHOT_FORMAT).toBe(5);
     expect(snapshot.blocks.map((block) => block.blockId).sort()).toEqual([...TASKS].sort());
     expect(snapshot.blocks.find((block) => block.blockId === "cafe-q")).toMatchObject({
       done: true,

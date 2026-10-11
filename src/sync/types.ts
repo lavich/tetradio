@@ -1,22 +1,24 @@
 import type { SkillSummary, StatsSummary } from "../domain/skills";
 import type { Card } from "ts-fsrs";
-import type { LearningRef } from "../domain/types";
+import type { StoredRef } from "../domain/types";
 
 /**
  * Версия облачного формата: другая версия не применяется и не перезаписывается старым клиентом.
+ * Формат 5 — формат 4, в котором карточки незнакомого вида и ответы незнакомого типа проверки не отбрасываются,
+ * а хранятся и публикуются дальше без изменений: новый вид карточек после него добавляется без нового формата.
  * Формат 4 — формат 3 без полей расписания: урок передаёт только завершение, курс — дневной предел.
  * Формат 3 читается: статус урока становится завершением, расписание и даты отбрасываются.
  * Коды снятых видов и снятых типов проверки остаются занятыми: снимки старых клиентов их содержат.
  */
-export const SNAPSHOT_FORMAT = 4;
-export const SUPPORTED_SNAPSHOT_FORMATS = [3, 4] as const;
+export const SNAPSHOT_FORMAT = 5;
+export const SUPPORTED_SNAPSHOT_FORMATS = [3, 4, 5] as const;
 /** Вектор счётчиков устройств: причинная база версии. */
 export type Clock = Record<string, number>;
 
 /** Карточка FSRS в JSON: даты — строки ISO, при применении оживляются в Date для индексов. */
 export type SerializedCard = Omit<Card, "due" | "last_review"> & { due: string; last_review?: string };
 export interface CompactState {
-  ref: LearningRef;
+  ref: StoredRef;
   card: SerializedCard;
   introducedAt: string;
   version: number;
@@ -51,7 +53,7 @@ export interface CompactSnapshot {
   /** Включает блоки ещё не установленных уроков. */
   blocks: CompactBlock[];
   states: CompactState[];
-  skills: { ref: LearningRef; skills: SkillSummary }[];
+  skills: { ref: StoredRef; skills: SkillSummary }[];
   stats: StatsSummary;
 }
 
@@ -84,7 +86,7 @@ export interface SyncVersionRow {
 /** База навыков карточки из последнего применённого или опубликованного снимка. */
 export interface BaseSkillRow {
   unitKey: string;
-  ref: LearningRef;
+  ref: StoredRef;
   skills: SkillSummary;
 }
 /** Сводка статистики базы и момент отсечки: локальные события после него складываются поверх. */
@@ -94,9 +96,12 @@ export interface BaseSummaryRow {
   versionId: string;
   stats: StatsSummary;
 }
-/** Состояния карточек, пакет которых ещё не загружен: не теряются и не попадают в план до установки. */
+/**
+ * Состояния карточек без содержимого на устройстве: пакет ещё не загружен или вид карточки этой версии незнаком.
+ * Не теряются, не попадают в план и входят в публикации.
+ */
 export interface StashRow {
   unitKey: string;
-  ref: LearningRef;
+  ref: StoredRef;
   state: CompactState;
 }

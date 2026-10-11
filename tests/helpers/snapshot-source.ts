@@ -2,7 +2,8 @@ import { LESSON_MATES_RADIUS, programmeOrder, type CardFacts, type SessionSource
 import { unitKey, wordKeyOf, wordRef } from "../../src/domain/refs";
 import { DEFAULT_LANGUAGE, type Language } from "../../src/domain/language";
 import { byTime, emptyStats, foldStats, summarizeEvents } from "../../src/domain/skills";
-import { cardLabel, type StatsSource } from "../../src/domain/stats";
+import { type StatsSource } from "../../src/domain/stats";
+import { cardLabel } from "../../src/domain/kinds";
 import {
   type CardKind,
   type Course,
