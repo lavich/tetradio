@@ -9,6 +9,7 @@ import type {
 } from "../domain/card-fields.ts";
 import { LESSON_CARD_KINDS } from "../domain/card-fields.ts";
 import { ContentError } from "./schema-errors.ts";
+import { sentencesOf } from "../domain/sentences.ts";
 import {
   parseBlocks,
   parseCalendar,
@@ -69,6 +70,8 @@ export interface CatalogEntry {
   media: { count: number; bytes: number };
   /** Тексты для чтения в пакете: по ним пакет, поставленный сборкой без текстов, ставится заново. */
   readings?: number;
+  /** Записи предложений текстов: пакет, поставленный сборкой без записей, ставится заново. */
+  readingAudio?: number;
 }
 export interface Catalog {
   schemaVersion: SchemaVersion;
@@ -158,7 +161,12 @@ export interface PackageReading {
   review: ReadingReview;
   words: number;
   marks?: PackageMarks;
+  /** Запись каждого предложения (`sentencesOf(text)`) — id медиа пакета или `null`: без записи звучит синтез. */
+  audio?: (string | null)[];
 }
+/** Записи предложений в текстах пакета: меньше, чем в каталоге, — пакет ставился сборкой без записей. */
+export const voicedOf = (readings: Pick<PackageReading, "audio">[] | undefined) =>
+  (readings ?? []).reduce((sum, reading) => sum + (reading.audio ?? []).filter(Boolean).length, 0);
 export const readingBlock = (reading: Pick<PackageReading, "id" | "title" | "text" | "glosses">): ReadingBlock => ({
   type: "reading",
   id: reading.id,
@@ -274,6 +282,7 @@ export function parseCatalog(input: unknown): Catalog {
       media: { count: num(media.count, `${path}.media.count`), bytes: num(media.bytes, `${path}.media.bytes`) },
     };
     if (item.readings !== undefined) lesson.readings = num(item.readings, `${path}.readings`);
+    if (item.readingAudio !== undefined) lesson.readingAudio = num(item.readingAudio, `${path}.readingAudio`);
     const wordIds = opt(item.wordIds, (value) =>
       list(value, `${path}.wordIds`).map((id, i) => str(id, `${path}.wordIds[${i}]`)),
     );
@@ -583,12 +592,12 @@ export function parsePackage(input: unknown): ContentPackage {
   if (raw.lineAudio !== undefined) pack.lineAudio = parseLineAudio(raw.lineAudio, blocks, mediaIds);
   if (blocks.length) pack.blocks = blocks;
   if (raw.marks !== undefined) pack.marks = parseMarks(raw.marks, blocks, items);
-  if (raw.readings !== undefined) pack.readings = parseReadings(raw.readings);
+  if (raw.readings !== undefined) pack.readings = parseReadings(raw.readings, mediaIds);
   return pack;
 }
 
 const REVIEWS: readonly ReadingReview[] = ["none", "author", "native"];
-function parseReadings(input: unknown): PackageReading[] {
+function parseReadings(input: unknown, mediaIds: Set<string>): PackageReading[] {
   const readings = list(input, "пакет.readings").map((entry, i): PackageReading => {
     const path = `пакет.readings[${i}]`;
     const raw = obj(entry, path);
@@ -615,6 +624,14 @@ function parseReadings(input: unknown): PackageReading[] {
     const series = opt(raw.series, (value) => str(value, `${path}.series`));
     if (series) reading.series = series;
     if (raw.marks !== undefined) reading.marks = parseMarks(raw.marks, [readingBlock(reading)], []);
+    // Записи сопоставлены предложениям по номеру: при расхождении текст звучит синтезом, а не чужими записями.
+    if (Array.isArray(raw.audio)) {
+      const audio = raw.audio as unknown[];
+      const fits =
+        audio.length === sentencesOf(reading.text).length &&
+        audio.every((id) => id === null || (typeof id === "string" && mediaIds.has(id)));
+      if (fits) reading.audio = audio as (string | null)[];
+    }
     return reading;
   });
   unique(

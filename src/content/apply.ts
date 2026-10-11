@@ -3,7 +3,14 @@ import { adoptStash } from "../sync/snapshot";
 import { unitKey } from "../domain/refs";
 import { CARD_KINDS, type InstalledPackage, type LearningRef, type Phrase, type Word } from "../domain/types";
 import { STORED_KINDS } from "../storage/kinds";
-import { SHIPPED_FIELDS, type ContentPackage, type PackagePhrase, type PackageWord, type ShippedField } from "./schema";
+import {
+  SHIPPED_FIELDS,
+  voicedOf,
+  type ContentPackage,
+  type PackagePhrase,
+  type PackageWord,
+  type ShippedField,
+} from "./schema";
 
 export interface InstallResult {
   status: "installed" | "updated" | "current";
@@ -88,7 +95,8 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
       if (
         installed &&
         installed.version === pack.version &&
-        (installed.readings?.length ?? 0) >= (pack.readings?.length ?? 0)
+        (installed.readings?.length ?? 0) >= (pack.readings?.length ?? 0) &&
+        voicedOf(installed.readings) >= voicedOf(pack.readings)
       )
         return { status: "current", added: 0, changed: 0 };
       const result: InstallResult = { status: installed ? "updated" : "installed", added: 0, changed: 0 };

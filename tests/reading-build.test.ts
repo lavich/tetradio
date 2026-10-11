@@ -1,4 +1,4 @@
-import { cpSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -44,6 +44,52 @@ describe("сборка текстов для чтения", () => {
     expect(parsePackage(JSON.parse(JSON.stringify(plain))).readings).toBeUndefined();
   });
 
+  it("свежие записи предложений едут в пакете, устаревшая и отсутствующая — нет", () => {
+    const built = buildContent(DEMO);
+    const anna = built.packages.find((p) => p.id === "m01-1")!;
+    expect(anna.readings![0].audio).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => `reading-r-m01-anna-${n}`));
+    expect(anna.media?.map((item) => item.id)).toContain("reading-r-m01-anna-6");
+    const lemesos = built.packages.find((p) => p.id === "m01-test")!.readings![0];
+    expect(lemesos.audio).toEqual([...[1, 2, 3, 4].map((n) => `reading-r-m01-lemesos-${n}`), null]);
+    expect(built.readings.find((r) => r.id === "r-m01-lemesos")).toMatchObject({ unvoiced: 1 });
+    expect(built.catalog.lessons.find((entry) => entry.id === "m01-1")).toMatchObject({ readingAudio: 10 });
+
+    const changed = buildContent(
+      demoWith({
+        "readings/greek-a2/r-m01-lemesos.yaml": readFileSync(
+          `${DEMO}/readings/greek-a2/r-m01-lemesos.yaml`,
+          "utf8",
+        ).replace("narrator: Άννα\n", ""),
+      }),
+    );
+    expect(changed.packages.find((p) => p.id === "m01-test")!.readings![0].audio).toBeUndefined();
+  });
+
+  it("записи с другим числом предложений или без медиа пакета при разборе отбрасываются", () => {
+    const pack = JSON.parse(JSON.stringify(buildContent(DEMO).packages.find((p) => p.id === "m01-1")!));
+    expect(parsePackage(pack).readings![0].audio).toHaveLength(10);
+    pack.readings[0].audio = pack.readings[0].audio.slice(1);
+    expect(parsePackage(pack).readings![0].audio).toBeUndefined();
+    pack.readings[0].audio = [...pack.readings[0].audio, "reading-unknown"];
+    expect(parsePackage(pack).readings![0].audio).toBeUndefined();
+  });
+
+  it("реплики без имён говорящих и неизвестный рассказчик отклоняются", () => {
+    const anna = readFileSync(`${DEMO}/readings/greek-a2/r-m01-anna.yaml`, "utf8");
+    expect(() =>
+      buildContent(
+        demoWith({
+          "readings/greek-a2/r-m01-anna.yaml": anna.replace("speakers: [Νίκος, Άννα, Νίκος]", "speakers: [Νίκος]"),
+        }),
+      ),
+    ).toThrow(/строк диалога 3, а имён в speakers 1/);
+    expect(() =>
+      buildContent(
+        demoWith({ "readings/greek-a2/r-m01-anna.yaml": anna.replace("narrator: Άννα", "narrator: Κώστας") }),
+      ),
+    ).toThrow(/рассказчика «Κώστας» нет голоса/);
+  });
+
   it("трудный текст отклоняется с долей и ненайденными словами", () => {
     const root = demoWith({
       "readings/greek-a2/r-m01-anna.yaml": reading(
@@ -71,6 +117,11 @@ describe("сборка текстов для чтения", () => {
         demoWith({ "readings/greek-a2/r-m01-anna.yaml": reading("id: m01-anna\nafter: m01-1\ntext: Γεια!") }),
       ),
     ).toThrow(/начинается с r-/);
+    expect(() =>
+      buildContent(
+        demoWith({ "readings/greek-a2/r-m01-anna.yaml": reading("id: r-m01-anna\nafter: m01-1\ntext: Γεια... Γεια!") }),
+      ),
+    ).toThrow(/многоточие/);
   });
 
   it("глосса не из текста и имена не списком отклоняются; много глосс — предупреждение", () => {
@@ -122,6 +173,9 @@ describe("сборка текстов для чтения", () => {
         drafts,
         words: new Map(built.words.map((word) => [word.id, word])),
         phrases: new Map(built.phrases.map((phrase) => [phrase.id, phrase])),
+        media: new Map(),
+        legacy: new Set(),
+        art: built.art,
       }),
     ).toThrow(/префикс r- занят/);
   });

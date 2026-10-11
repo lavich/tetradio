@@ -1,13 +1,15 @@
-// Озвучка: реплики аудирования голосом персонажа из content/voices/<язык курса>.yaml, слова и фразы — голосом диктора
-// (Google Cloud TTS). Файлы — content/audio/<урок>/<блок>-<n>.mp3, audio/words/<id>.mp3, audio/phrases/<id>.mp3;
-// `audio:` пишется в реплику урока или в файл карточки. Переозвучиваются только записи без файла или с изменившимся
+// Озвучка: реплики аудирования голосом персонажа из content/voices/<язык курса>.yaml, слова и фразы — голосом диктора,
+// тексты для чтения — по предложениям голосами рассказчика и героев (Google Cloud TTS). Файлы —
+// content/audio/<урок>/<блок>-<n>.mp3, audio/words/<id>.mp3, audio/phrases/<id>.mp3, audio/readings/<текст>/<n>.mp3;
+// `audio:` пишется в реплику урока или в файл карточки, записи текстов находит сборка по манифесту. Переозвучиваются только записи без файла или с изменившимся
 // текстом либо голосом (content/audio/dialogues.json).
-// Запуск: GOOGLE_TTS_KEY=… npm run voices -- m02-1 words phrases; без аргументов — всё; --check — только отчёт, без ключа.
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+// Запуск: GOOGLE_TTS_KEY=… npm run voices -- m02-1 words phrases readings; без аргументов — всё; --check — только отчёт, без ключа.
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { isMap, isScalar, isSeq, parseDocument, type Node, type YAMLMap } from "yaml";
 import { LANGUAGE } from "../content/build/common.ts";
 import { buildCourses } from "../content/build/courses.ts";
+import { planReadingVoices } from "../content/build/readings.ts";
 import { readSources } from "../content/build/sources.ts";
 import {
   cardFile,
@@ -32,8 +34,8 @@ const lessons = readdirSync(join(ROOT, "lessons"))
   .sort();
 const CARDS = ["words", "phrases"] as const;
 for (const id of wanted)
-  if (!lessons.includes(id) && !(CARDS as readonly string[]).includes(id))
-    throw new Error(`Урока ${id} нет в content/lessons; слова и фразы — words и phrases`);
+  if (!lessons.includes(id) && !(CARDS as readonly string[]).includes(id) && id !== "readings")
+    throw new Error(`Урока ${id} нет в content/lessons; слова и фразы — words и phrases, тексты — readings`);
 const key = process.env.GOOGLE_TTS_KEY;
 
 const sources = readSources(ROOT);
@@ -83,6 +85,7 @@ async function synthesizeWhole(text: string, voice: string, voices: VoiceMap): P
 
 const stats = { lines: 0, synthesized: 0, characters: 0, bytes: 0, references: 0 };
 const pending: string[] = [];
+const stale: string[] = [];
 
 /** Синтезирует запись, если файла нет или он сделан для другого текста либо голоса. */
 async function voice(file: string, text: string, name: string, voices: VoiceMap, label: string) {
@@ -90,6 +93,12 @@ async function voice(file: string, text: string, name: string, voices: VoiceMap,
   const hash = lineHash(text, name, voices.language);
   stats.lines++;
   if (existsSync(target) && manifest[file]?.hash === hash && manifest[file]?.voice === name) return;
+  await record(file, text, name, voices, label);
+}
+
+async function record(file: string, text: string, name: string, voices: VoiceMap, label: string) {
+  const target = join(ROOT, "audio", file);
+  const hash = lineHash(text, name, voices.language);
   pending.push(`${label} (${name})`);
   if (check) return;
   const audio = await synthesizeWhole(spokenText(text, voices.language), name, voices);
@@ -100,6 +109,10 @@ async function voice(file: string, text: string, name: string, voices: VoiceMap,
   stats.characters += text.length;
   stats.bytes += audio.byteLength;
   // Манифест пишется после каждой записи: прерванный запуск не синтезирует готовое заново.
+  saveManifest();
+}
+
+function saveManifest() {
   writeFileSync(manifestPath, JSON.stringify(sortKeys(manifest), null, 2) + "\n");
 }
 
@@ -158,6 +171,36 @@ for (const dir of CARDS) {
   }
 }
 
+if (!wanted.length || wanted.includes("readings")) {
+  const dir = join(ROOT, "audio", "readings");
+  const existing = existsSync(dir)
+    ? readdirSync(dir, { recursive: true, encoding: "utf8" })
+        .filter((file) => file.endsWith(".mp3"))
+        .map((file) => relative(join(ROOT, "audio"), join(dir, file)).split("\\").join("/"))
+    : [];
+  const plan = planReadingVoices(
+    sources.readings,
+    (src) => sources.voices.get(courseLanguages.get(src.course) ?? LANGUAGE),
+    manifest,
+    existing,
+  );
+  stats.lines += plan.sentences.length;
+  for (const sentence of plan.pending)
+    await record(sentence.file, sentence.text, sentence.voice, sentence.voices, sentence.label);
+  for (const file of plan.stale) {
+    stale.push(file);
+    if (check) continue;
+    rmSync(join(ROOT, "audio", file), { force: true });
+    delete manifest[file];
+  }
+  if (!check && plan.stale.length) {
+    saveManifest();
+    for (const reading of existsSync(dir) ? readdirSync(dir, { withFileTypes: true }) : [])
+      if (reading.isDirectory() && !readdirSync(join(dir, reading.name)).length)
+        rmSync(join(dir, reading.name), { recursive: true });
+  }
+}
+
 /** Ссылка на файл: замена значения `audio` либо новая строка после поля текста с тем же отступом. */
 function reference(source: string, line: YAMLMap<unknown, unknown>, textKey: string, file: string) {
   const existing = line.items.find((pair) => isScalar(pair.key) && pair.key.value === "audio");
@@ -189,8 +232,9 @@ function sortKeys(value: VoiceManifest): VoiceManifest {
 
 if (check) {
   for (const entry of pending) console.log(`  нет записи или устарела: ${entry}`);
-  console.log(`Записей ${stats.lines}, озвучить ${pending.length}`);
+  for (const file of stale) console.log(`  лишняя запись: ${file}`);
+  console.log(`Записей ${stats.lines}, озвучить ${pending.length}, удалить ${stale.length}`);
 } else
   console.log(
-    `Записей ${stats.lines}: синтезировано ${stats.synthesized} (${stats.characters} символов, ${(stats.bytes / 1024).toFixed(0)} КБ), ссылок записано ${stats.references}`,
+    `Записей ${stats.lines}: синтезировано ${stats.synthesized} (${stats.characters} символов, ${(stats.bytes / 1024).toFixed(0)} КБ), ссылок записано ${stats.references}, удалено ${stale.length}`,
   );

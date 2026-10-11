@@ -76,6 +76,17 @@ describe("тексты для чтения на устройстве", () => {
     expect(await moduleReadings("m01", db)).toHaveLength(2);
   });
 
+  it("пакет, поставленный сборкой без записей текстов, ставится заново", async () => {
+    const stale = (await db.packages.get("m01-1"))!;
+    await db.packages.put({
+      ...stale,
+      readings: stale.readings!.map(({ audio: _audio, ...reading }) => reading),
+    });
+    expect((await installLesson("m01-1", db, memoryFetcher(demo))).status).not.toBe("current");
+    expect((await db.packages.get("m01-1"))!.readings![0].audio).toHaveLength(10);
+    expect((await installLesson("m01-1", db, memoryFetcher(demo))).status).toBe("current");
+  });
+
   it("отметка не делает урок начатым, не считается заданием и учебным днём", async () => {
     await markRead("r-m01-anna", true, db);
     expect(await studiedLessons(course, db)).toEqual([]);

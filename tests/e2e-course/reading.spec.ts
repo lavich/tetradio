@@ -26,6 +26,31 @@ async function voice(page: Page) {
     Object.defineProperty(window, "SpeechSynthesisUtterance", { value: Utterance, configurable: true });
   });
 }
+/** Подменный `<audio>`: запоминает адрес и скорость каждой записи и «доигрывает» её через миг. */
+async function recordings(page: Page) {
+  await page.addInitScript(() => {
+    const played: { src: string; rate: number }[] = [];
+    (window as unknown as { __played: typeof played }).__played = played;
+    class FakeAudio extends EventTarget {
+      src = "";
+      playbackRate = 1;
+      defaultPlaybackRate = 1;
+      duration = 1;
+      load() {}
+      pause() {}
+      play() {
+        played.push({ src: this.src, rate: this.playbackRate });
+        setTimeout(() => this.dispatchEvent(new Event("ended")), 5);
+        return Promise.resolve();
+      }
+    }
+    Object.defineProperty(window, "Audio", { value: FakeAudio, configurable: true });
+  });
+}
+const played = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __played: { src: string; rate: number }[] }).__played.splice(0));
+const spoken = (page: Page) =>
+  page.evaluate(() => ((window as unknown as { __spoken?: string[] }).__spoken ?? []).splice(0));
 /** Урок пройден без прохождения всех заданий: проверяется полка, а не урок. */
 const complete = (page: Page, lessonId: string) =>
   page.evaluate(async (lessonId) => {
@@ -43,8 +68,11 @@ const complete = (page: Page, lessonId: string) =>
     db.close();
   }, lessonId);
 
-test("полка «Чтение»: текст открывается после урока, звучит по предложениям, отметку можно снять", async ({ page }) => {
+test("полка «Чтение»: текст открывается после урока, звучит записями предложений, отметку можно снять", async ({
+  page,
+}) => {
   await voice(page);
+  await recordings(page);
   await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
   await expect(page.getByTestId("course-next")).toBeVisible();
@@ -65,22 +93,18 @@ test("полка «Чтение»: текст открывается после 
 
   await expect(page.getByRole("heading", { name: "Η Άννα", level: 1 })).toBeVisible();
   await expect(page.getByText("28 слов · Сгенерированный текст, носитель не вычитывал")).toBeVisible();
-  // Весь текст звучит предложение за предложением; греческий «;» синтез произносит вопросом.
+  // Каждое предложение звучит своей записью: в обычном темпе, затем медленнее; синтез не нужен.
   await page.getByRole("button", { name: "Слушать" }).click();
-  await expect
-    .poll(() => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken ?? []))
-    .toEqual([
-      "Γεια!",
-      "Καλημέρα!",
-      "Είμαι η Άννα.",
-      "Είμαι από τη Ρωσία.",
-      "Μένω στη Λεμεσό.",
-      "— Γεια σου!",
-      "Πώς σε λένε?",
-      "— Είμαι η Άννα.",
-      "Είσαι από την Κύπρο?",
-      "— Είμαι από την Κύπρο.",
-    ]);
+  let files: { src: string; rate: number }[] = [];
+  await expect.poll(async () => (files = files.concat(await played(page))).length).toBe(10);
+  expect(files.every((file) => file.rate === 1)).toBe(true);
+  await expect(page.getByRole("button", { name: "Слушать" })).toBeVisible();
+  await page.getByRole("button", { name: "Обычная скорость" }).click();
+  await page.getByRole("button", { name: "Слушать" }).click();
+  files = [];
+  await expect.poll(async () => (files = files.concat(await played(page))).length).toBe(10);
+  expect(files.every((file) => file.rate === 0.8)).toBe(true);
+  expect(await spoken(page)).toEqual([]);
   // Слово с подсказкой доступно с клавиатуры и называется для экранной читалки.
   const word = page.getByRole("button", { name: /^Произнести и перевести: Καλημέρα/ });
   await word.focus();
@@ -102,4 +126,23 @@ test("полка «Чтение»: текст открывается после 
   await page.goto("/app/");
   await expect(page.getByRole("heading", { name: "Сегодня" })).toBeAttached();
   await expect(page.getByTestId("reading-next")).toHaveCount(0);
+});
+
+test("предложение без записи звучит синтезом, остальные — файлами", async ({ page }) => {
+  await voice(page);
+  await recordings(page);
+  await page.goto("/app/");
+  await page.getByRole("button", { name: "Учить курс" }).click();
+  await expect(page.getByTestId("course-next")).toBeVisible();
+  // Контрольная скачивается после урока: отметка ставится, когда её пакет уже на устройстве.
+  await page.goto("/app/course/m01");
+  await expect(page.getByRole("list", { name: "Чтение" }).getByRole("listitem")).toHaveCount(2);
+  await complete(page, "m01-test");
+  await page.goto("/app/course/m01/read/r-m01-lemesos");
+  await expect(page.getByRole("heading", { name: "Η Άννα στη Λεμεσό", level: 1 })).toBeVisible();
+  await page.getByRole("button", { name: "Слушать" }).click();
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken))
+    .toEqual(["Γεια σας!"]);
+  expect((await played(page)).map((file) => file.rate)).toEqual([1, 1, 1, 1]);
 });

@@ -9,6 +9,8 @@ text: |-
   — Είμαι από την Κύπρο.
 glosses: []
 names: [Άννα, Ρωσία, Κύπρο]
+narrator: Άννα
+speakers: [Νίκος, Άννα, Νίκος]
 provenance:
   operation: requested-generation
   request: Пример текста демо-курса из слов урока m01-1
