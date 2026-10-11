@@ -1,6 +1,7 @@
 import { DEFAULT_LANGUAGE, PROFILES, voiceFor, type Language, type Voices } from "./language";
 import { emptySkills, type SkillSummary } from "./skills";
 import { exerciseFor } from "./card-exercise";
+import { KINDS } from "./kinds";
 import { closeSources, NO_WORDS, shuffle } from "./options";
 import { makePlan, type PlanSource } from "./plan";
 import { unitKey } from "./refs";
@@ -56,7 +57,7 @@ export async function makeSession({
   } else {
     const reserve = Math.ceil(size / 2);
     const newOnes = plan.newRefs.slice(0, reserve);
-    const reviews = plan.reviews.slice(0, Math.max(size - newOnes.length, plan.reviews.length ? 1 : 0));
+    const reviews = shareReviews(plan.reviews, Math.max(size - newOnes.length, plan.reviews.length ? 1 : 0));
     const extraNew = plan.newRefs.slice(
       newOnes.length,
       Math.min(plan.newRefs.length, newOnes.length + Math.max(0, size - newOnes.length - reviews.length)),
@@ -125,6 +126,30 @@ export async function makeSession({
     introducedKeys: [],
     ...(courseId ? { courseId } : {}),
   };
+}
+
+/**
+ * Места повторений: вид с долей (`reviewShare`) занимает не больше неё, пока есть повторения других видов;
+ * без них свободные места снова отдаются ему. Отложенные карточки вида идут в конец: занятие всё равно перемешивается.
+ */
+export function shareReviews<T extends { ref: LearningRef }>(reviews: T[], slots: number): T[] {
+  const caps = new Map<string, number>();
+  const taken: T[] = [];
+  const deferred: T[] = [];
+  for (const review of reviews) {
+    if (taken.length >= slots) break;
+    const share = KINDS[review.ref.kind].reviewShare;
+    if (share === undefined) {
+      taken.push(review);
+      continue;
+    }
+    const used = caps.get(review.ref.kind) ?? 0;
+    if (used < Math.floor(slots * share)) {
+      caps.set(review.ref.kind, used + 1);
+      taken.push(review);
+    } else deferred.push(review);
+  }
+  return [...taken, ...deferred].slice(0, slots);
 }
 
 export function spaceSingleIntroduction(items: SessionItem[]): SessionItem[] {

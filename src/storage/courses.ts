@@ -8,6 +8,9 @@ import { tryParseUnitKey, unitKey } from "../domain/refs";
 import { CARD_KINDS, type CardKind, type LearningRef, type Session } from "../domain/types";
 import { db, distinctKeys, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
+import { lessonCourses } from "./lesson-courses";
+
+export { lessonCourses };
 
 export const COURSES_ORDER_KEY = "coursesOrder";
 export const CURRENT_COURSE_KEY = "currentCourse";
@@ -129,18 +132,6 @@ export async function currentCourse(database: AppDatabase = db): Promise<string 
 }
 export const setCurrentCourse = (courseId: string, database: AppDatabase = db) =>
   database.meta.put({ key: CURRENT_COURSE_KEY, value: courseId }).then(() => undefined);
-
-/** Курс урока: из записи урока, для неустановленного или старого урока — из каталога. */
-export async function lessonCourses(lessonIds: string[], database: AppDatabase = db): Promise<Map<string, string>> {
-  const ids = [...new Set(lessonIds)];
-  const [lessons, entries] = await Promise.all([database.lessons.bulkGet(ids), database.catalog.bulkGet(ids)]);
-  const result = new Map<string, string>();
-  ids.forEach((id, index) => {
-    const course = lessons[index]?.courseId ?? entries[index]?.courseId;
-    if (course) result.set(id, course);
-  });
-  return result;
-}
 
 /** Курс карточки — курс урока, в котором она стоит: сборка не пускает карточку в уроки двух курсов. */
 export async function courseOfCards(unitKeys: string[], database: AppDatabase = db): Promise<Map<string, string>> {

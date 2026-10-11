@@ -1,12 +1,20 @@
 import type { Card, Grade } from "ts-fsrs";
 import type { PackageItem, PackageMarks, PackageMedia, PackageWord, PackagePhrase } from "../content/schema";
-import type { CatalogModule, CourseCalendar, CourseExam, LessonBlock, LessonKind } from "../content/course";
+import type {
+  CatalogModule,
+  CourseCalendar,
+  CourseExam,
+  ExerciseFormat,
+  LessonBlock,
+  LessonKind,
+} from "../content/course";
 import type { CardKind, Example, Segment } from "./card-fields.ts";
 
 // Значение загружает и Node при сборке контента, поэтому путь с расширением.
-export { CARD_KINDS } from "./card-fields.ts";
+export { CARD_KINDS, LESSON_CARD_KINDS } from "./card-fields.ts";
 export type {
   CardKind,
+  LessonCardKind,
   Example,
   Gloss,
   Provenance,
@@ -15,10 +23,12 @@ export type {
   SourceRecord,
 } from "./card-fields.ts";
 /**
- * Типы проверки. `listening` — узнавание написания на слух, `comprehension` — понимание значения на слух.
+ * Типы проверки. `listening` — узнавание написания на слух, `comprehension` — понимание значения на слух,
+ * `item` — пункт задания урока в формате урока.
  * `recall` и `cloze` приложение больше не предлагает; в перечислении они нужны, чтобы читалась старая история.
  */
-export type ExerciseType = "recall" | "recognition" | "assembly" | "spelling" | "listening" | "comprehension" | "cloze";
+export type ExerciseType =
+  "recall" | "recognition" | "assembly" | "spelling" | "listening" | "comprehension" | "cloze" | "item";
 /** `revision` — ревизия поставленного пакетом содержимого: по ней установка пропускает неизменные карточки. */
 export interface Word {
   id: string;
@@ -65,14 +75,33 @@ export interface Phrase {
   updatedAt: string;
   revision?: string;
 }
+/**
+ * Пункт задания урока, на который учащийся ответил неверно. Содержимое — из установленного пакета урока;
+ * `options` — варианты пункта у выбора или банк задания у пропуска и соединения.
+ */
+export interface MistakeItem {
+  /** `урок/блок/пункт` — постоянные ключи контента. */
+  id: string;
+  lessonId: string;
+  format: ExerciseFormat;
+  instruction: string;
+  prompt: string;
+  options?: string[];
+  answer: string[];
+  explanation?: string;
+}
 /** Содержимое карточки в сессии: снимок на момент создания занятия, обновление пакета его не меняет. */
-export type SessionCard = { kind: "word"; word: Word } | { kind: "phrase"; phrase: Phrase };
+export type SessionCard =
+  { kind: "word"; word: Word } | { kind: "phrase"; phrase: Phrase } | { kind: "mistake"; mistake: MistakeItem };
 /**
  * Снимок содержимого в событии ответа: у слова — прежняя форма, у фразы — текст и перевод, из снимка
  * сессии, а не из позднейшей версии пакета. Третий вариант читает снимки снятого вида из старой истории.
  */
 export type CardSnapshot =
-  { greek: string; russian: string } | { text: string; translation?: string } | { template: string; answer: string };
+  | { greek: string; russian: string }
+  | { text: string; translation?: string }
+  | { template: string; answer: string }
+  | { prompt: string; answer: string };
 /** Курс: название, экзамен и календарь приходят из каталога. */
 export interface Course {
   id: string;

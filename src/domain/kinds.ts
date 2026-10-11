@@ -1,5 +1,6 @@
 import type { ExercisePools } from "./options";
 import { DEFAULT_LANGUAGE, voiceFor, type Language, type LanguageProfile, type Voices } from "./language";
+import { itemExercise } from "./item-exercise";
 import { phraseExercise } from "./phrase-exercise";
 import type { SkillSummary } from "./skills";
 import { unitKey } from "./refs";
@@ -43,6 +44,8 @@ export interface KindSpec<K extends CardKind = CardKind> {
   checkable?(facts: CardFacts, context: AvailabilityContext): boolean;
   /** Содержимое может исчезнуть, пока у карточки есть состояние: такую карточку со сроком план проверяет на наличие. */
   vanishes?: boolean;
+  /** Доля мест повторений занятия, которую вид может занять, пока есть повторения других видов. */
+  reviewShare?: number;
 }
 
 const word: KindSpec<"word"> = {
@@ -71,7 +74,19 @@ const phrase: KindSpec<"phrase"> = {
     ((!!facts.hasAudio || voiceFor(context.hasVoice, facts.language ?? DEFAULT_LANGUAGE)) && context.phrasePool >= 4),
 };
 
-const SPECS: { [K in CardKind]: KindSpec<K> } = { word, phrase };
+/** Ошибка урока: пункт задания из пакета; убранный обновлением пункт спросить нельзя. */
+const mistake: KindSpec<"mistake"> = {
+  code: "e",
+  id: (card) => card.mistake.id,
+  label: (card) => card.mistake.prompt,
+  snapshot: (card) => ({ prompt: card.mistake.prompt, answer: card.mistake.answer[0] }),
+  sides: (card) => ({ greek: card.mistake.answer[0], meaning: card.mistake.prompt }),
+  exercise: (card, _pools, _skills, random) => itemExercise(card.mistake, random),
+  vanishes: true,
+  reviewShare: 0.5,
+};
+
+const SPECS: { [K in CardKind]: KindSpec<K> } = { word, phrase, mistake };
 /** Описание вида по виду карточки: сужение `card.kind` до записи TypeScript здесь не выводит. */
 export const KINDS = SPECS as unknown as Record<CardKind, KindSpec<CardKind>>;
 const BY_CODE = new Map(Object.entries(SPECS).map(([kind, spec]) => [spec.code, kind as CardKind]));

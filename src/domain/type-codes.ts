@@ -10,6 +10,7 @@ export const TYPE_CODE: Record<ExerciseType, string> = {
   listening: "l",
   comprehension: "m",
   cloze: "z",
+  item: "i",
 };
 const CODE_TYPE = new Map(Object.entries(TYPE_CODE).map(([type, code]) => [code, type as ExerciseType]));
 export const typeOfCode = (code: string): ExerciseType | undefined => CODE_TYPE.get(code);

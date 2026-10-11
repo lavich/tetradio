@@ -3,7 +3,7 @@ import { State } from "ts-fsrs";
 import { db, distinctKeys, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import { cardLanguages, cardsInCourse, courseCardIds, courseLessonIds } from "./courses";
 import { STORED_KINDS } from "./kinds";
-import { cardKey, cardLabel } from "../domain/kinds";
+import { cardKey, cardLabel, KINDS } from "../domain/kinds";
 import {
   LESSON_MATES_RADIUS,
   programmeOrder,
@@ -111,6 +111,34 @@ export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): 
   return cards;
 }
 
+/** Состояния карточек исчезающих видов без содержимого: план их не спрашивает, поэтому и счётчики их не видят. */
+async function vanishedKeys(database: AppDatabase): Promise<Set<string>> {
+  const gone = new Set<string>();
+  for (const kind of CARD_KINDS.filter((kind) => KINDS[kind].vanishes)) {
+    const states = await database.cardStates.where("ref.kind").equals(kind).toArray();
+    const present = new Set(
+      await STORED_KINDS[kind].presentIds(
+        states.map((state) => state.ref.id),
+        database,
+      ),
+    );
+    for (const state of states) if (!present.has(state.ref.id)) gone.add(state.unitKey);
+  }
+  return gone;
+}
+/** Карточки ошибок уроков курса, которые можно спросить: убранный обновлением пункт не считается. */
+export async function mistakeCount(courseId?: string, database: AppDatabase = db): Promise<number> {
+  const states = await database.cardStates.where("ref.kind").equals("mistake").toArray();
+  const live = new Set(
+    await STORED_KINDS.mistake.presentIds(
+      states.map((state) => state.ref.id),
+      database,
+    ),
+  );
+  const keys = states.filter((state) => live.has(state.ref.id)).map((state) => state.unitKey);
+  return courseId ? (await cardsInCourse(keys, courseId, database)).size : keys.length;
+}
+
 export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
   return {
     timezone: deviceTimezone,
@@ -192,13 +220,22 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       const local = (await range.reverse().limit(limit).toArray()).reverse().map(succeeded);
       return [...(base?.stats.recentByType[type] ?? []), ...local].slice(-limit);
     },
-    dueKeysBefore: (instant) => database.cardStates.where("card.due").below(instant).primaryKeys(),
+    dueKeysBefore: async (instant) => {
+      const gone = await vanishedKeys(database);
+      const keys = (await database.cardStates.where("card.due").below(instant).primaryKeys()) as string[];
+      return keys.filter((key) => !gone.has(key));
+    },
     cardCount: async () => {
       let total = 0;
       for (const kind of CARD_KINDS) total += await STORED_KINDS[kind].count(database);
-      return total;
+      return total - (await vanishedKeys(database)).size;
     },
-    eachState: (visit) => database.cardStates.each(visit),
+    eachState: async (visit) => {
+      const gone = await vanishedKeys(database);
+      await database.cardStates.each((state) => {
+        if (!gone.has(state.unitKey)) visit(state);
+      });
+    },
     labelsOf: async (refs) =>
       new Map([...(await cardsOf(refs, database))].map(([key, card]) => [key, cardLabel(card)])),
     totals: async () => {

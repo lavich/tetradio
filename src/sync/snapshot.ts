@@ -11,7 +11,7 @@ import {
   type ReviewEvent,
   type StoredRef,
 } from "../domain/types";
-import { STORED_KINDS } from "../storage/kinds";
+import { CONTENT_TABLES, STORED_KINDS } from "../storage/kinds";
 import { blockKey } from "../storage/course";
 import type { BlockProgress } from "../domain/types";
 import {
@@ -132,9 +132,10 @@ const byKey = (a: { ref: StoredRef }, b: { ref: StoredRef }) => storedKey(a.ref)
 type Progress = Omit<CompactSnapshot, "skills" | "stats">;
 type Summary = Pick<CompactSnapshot, "skills" | "stats">;
 const PROGRESS_TABLES = ["lessons", "packages", "blockProgress", "cardStates", "cardStash", "meta"] as const;
-const SUMMARY_TABLES = ["cardSkills", "baseSummary", "events", "words", "phrases"] as const;
+// Наличие карточки в сводке проверяется по таблицам содержимого всех видов.
+const SUMMARY_TABLES = ["cardSkills", "baseSummary", "events", ...CONTENT_TABLES];
 /** Таблицы сборки снимка; транзакцию чтения по ним открывает вызывающий. */
-export const SNAPSHOT_TABLES = [...PROGRESS_TABLES, ...SUMMARY_TABLES] as const;
+export const SNAPSHOT_TABLES = [...new Set([...PROGRESS_TABLES, ...SUMMARY_TABLES])];
 const tables = (database: AppDatabase, names: readonly string[]) => names.map((name) => database.table(name));
 
 async function readProgress(database: AppDatabase, now: Date): Promise<Progress> {
@@ -262,7 +263,7 @@ export async function applySnapshot(
     "rw",
     tables(
       database,
-      SNAPSHOT_TABLES.filter((name) => name !== "events" && name !== "packages"),
+      SNAPSHOT_TABLES.filter((name) => name !== "events"),
     ),
     async () => {
       if (ifClean && (await readMeta(database, META.dirty))) return false;
@@ -328,7 +329,8 @@ export interface SnapshotDescription {
   blocks: number;
 }
 export const describeSnapshot = (snapshot: CompactSnapshot): SnapshotDescription => ({
-  cards: snapshot.states.length,
+  // В выборе версии «карточки» — слова и фразы; ошибки уроков рождаются из заданий и сюда не входят.
+  cards: snapshot.states.filter((state) => isForeign(state.ref) || state.ref.kind !== "mistake").length,
   answers: snapshot.stats.answers,
   lessons: snapshot.lessons.length,
   courseLessons: (() => {

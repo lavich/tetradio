@@ -45,7 +45,7 @@ const event = (
 /** Уникальные карточки сессии по видам — то же правило, что на экране результата. */
 function uniqueByKind(events: ReviewEvent[]) {
   const unique = new Map(events.map((e) => [e.unitKey, e.ref]));
-  const byKind: Record<CardKind, number> = { word: 0, phrase: 0 };
+  const byKind: Record<CardKind, number> = { word: 0, phrase: 0, mistake: 0 };
   for (const r of unique.values()) if (r.kind in byKind) byKind[r.kind]++;
   return { byKind, total: unique.size };
 }
@@ -71,13 +71,13 @@ describe("результат смешанного занятия", () => {
     expect(events).toHaveLength(4);
     expect(total).toBe(3);
     expect(compositionText(byKind)).toBe("2 слова · 1 фраза");
-    expect(compositionText({ word: 3, phrase: 0 })).toBe("3 слова");
-    expect(compositionText({ word: 0, phrase: 2 })).toBe("2 фразы");
+    expect(compositionText({ word: 3, phrase: 0, mistake: 0 })).toBe("3 слова");
+    expect(compositionText({ word: 0, phrase: 2, mistake: 0 })).toBe("2 фразы");
   });
   it("один вид называется своим словом, несколько — карточками с составом", () => {
-    expect(countText({ word: 0, phrase: 2 }, 2)).toBe("2 фразы");
-    expect(countText({ word: 3, phrase: 0 }, 3)).toBe("3 слова");
-    expect(countText({ word: 2, phrase: 1 }, 3)).toBe("3 карточки (2 слова · 1 фраза)");
+    expect(countText({ word: 0, phrase: 2, mistake: 0 }, 2)).toBe("2 фразы");
+    expect(countText({ word: 3, phrase: 0, mistake: 0 }, 3)).toBe("3 слова");
+    expect(countText({ word: 2, phrase: 1, mistake: 0 }, 3)).toBe("3 карточки (2 слова · 1 фраза)");
   });
   it("карточка снятого вида не занимает разряд в разбивке, но её ответы остаются в общем числе", () => {
     const events = [
@@ -87,13 +87,13 @@ describe("результат смешанного занятия", () => {
     const { byKind, total } = uniqueByKind(events);
     expect(events).toHaveLength(2);
     expect(total).toBe(2);
-    expect(byKind).toEqual({ word: 1, phrase: 0 });
+    expect(byKind).toEqual({ word: 1, phrase: 0, mistake: 0 });
     expect(compositionText(byKind)).toBe("1 слово");
   });
   it("историческая самооценка не создаёт объективных попыток, а без наблюдений навык «ещё не проверяли»", async () => {
     const data = base({ events: [event(wordRef("w1"), "recall", null, "2026-09-14T09:00:00Z", { rating: 3 })] });
     const stats = await progress(fromSnapshot(data), now);
-    expect(stats.totals).toEqual({ answers: 1, cards: 1, byKind: { word: 1, phrase: 0 } });
+    expect(stats.totals).toEqual({ answers: 1, cards: 1, byKind: { word: 1, phrase: 0, mistake: 0 } });
     expect(stats.skills.find((skill) => skill.type === "listening")).toEqual({
       type: "listening",
       attempts: 0,

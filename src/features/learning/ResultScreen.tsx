@@ -14,7 +14,11 @@ import { sessionPath, startSession } from "./session-actions";
 import { compositionLine, DoneList, doneRows, markOf, PageHead } from "./notebook";
 import s from "./session.module.css";
 
-const KIND_FORMS: Record<CardKind, [string, string, string]> = { word: WORDS, phrase: PHRASES };
+const KIND_FORMS: Record<CardKind, [string, string, string]> = {
+  word: WORDS,
+  phrase: PHRASES,
+  mistake: ["задание урока", "задания урока", "заданий урока"],
+};
 /** Состав уникальных карточек по видам: «2 слова · 1 фраза», только непустые группы. */
 export const compositionText = (byKind: Record<CardKind, number>) =>
   CARD_KINDS.filter((kind) => byKind[kind])
@@ -27,8 +31,15 @@ export function countText(byKind: Record<CardKind, number>, total: number) {
   return present.length ? `${withCount(total, CARDS)} (${compositionText(byKind)})` : withCount(total, CARDS);
 }
 
-const greekOf = (event: ReviewEvent) =>
-  "greek" in event.snapshot ? event.snapshot.greek : "text" in event.snapshot ? event.snapshot.text : "";
+/** Подпись карточки из снимка ответа: у задания урока — его вопрос. */
+export const snapshotLabel = ({ snapshot }: Pick<ReviewEvent, "snapshot">) =>
+  "greek" in snapshot
+    ? snapshot.greek
+    : "text" in snapshot
+      ? snapshot.text
+      : "prompt" in snapshot
+        ? snapshot.prompt
+        : "";
 const keyOf = (ref: LearningRef) => JSON.stringify([ref.kind, ref.id]);
 
 export function ResultScreen() {
@@ -73,7 +84,8 @@ export function ResultScreen() {
     if (!state || readyAgain.includes(ref)) continue;
     const day = localDay(new Date(state.card.due), deviceTimezone());
     const event = mistakes.find((entry) => entry.unitKey === keyOf(ref) || entry.ref.id === ref.id);
-    returns.set(day, [...(returns.get(day) ?? []), event ? greekOf(event) : ""].filter(Boolean));
+    const label = event ? snapshotLabel(event) : "";
+    if (label) returns.set(day, [...(returns.get(day) ?? []), label]);
   }
   const today = localDay(now, deviceTimezone());
   const tomorrow = localDay(new Date(now.getTime() + 86_400_000), deviceTimezone());
@@ -109,7 +121,7 @@ export function ResultScreen() {
               Упражнений: {events.length}, ошибок: {mistakes.length}
               {almost ? `, из них «почти»: ${almost}` : ""}.{" "}
               {objective.length
-                ? `Объективная точность (выбор, сборка, аудирование, написание, пропуск): ${Math.round((objective.filter((event) => event.correct).length / objective.length) * 100)}% из ${withCount(objective.length, ["ответа", "ответов", "ответов"])}.`
+                ? `Объективная точность (выбор, сборка, аудирование, написание, задания уроков): ${Math.round((objective.filter((event) => event.correct).length / objective.length) * 100)}% из ${withCount(objective.length, ["ответа", "ответов", "ответов"])}.`
                 : "Объективных проверок в этом занятии не было — только самооценка. Точность: нет данных."}
             </p>
             <p className={s.summaryNote}>Активное время: {minutes(session?.activeTimeMs ?? 0)}</p>
