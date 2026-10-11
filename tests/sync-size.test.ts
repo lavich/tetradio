@@ -197,6 +197,7 @@ describe("размер компактного снимка (задача 0.4)", 
         for (let index = 0; index < 10; index++)
           summary = foldSkill(summary, {
             type,
+            itemId: `i-${tick}`,
             rating: index % 3 ? 3 : 1,
             correct: index % 3 !== 0,
             createdAt: new Date(now.getTime() - 10 ** 8 + tick++ * 1000).toISOString(),

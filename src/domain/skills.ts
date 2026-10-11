@@ -23,11 +23,17 @@ export const emptySkills = (): SkillSummary => ({ types: {}, lastTypes: [], clea
 export const succeeded = (event: Pick<ReviewEvent, "correct" | "rating">) =>
   event.correct === null ? event.rating > 1 : event.correct;
 
+/** Дополнительная попытка после ошибки: её id выводится из id проваленного задания. */
+export const retryItemId = (itemId: string) => `${itemId}-retry`;
+const isRetry = (itemId: string) => itemId.endsWith("-retry");
+
 /** Один ответ меняет сводку так же, как его добавление в историю: это проверяется эквивалентностью с событиями. */
 export function foldSkill(
   summary: SkillSummary,
-  event: Pick<ReviewEvent, "type" | "correct" | "rating" | "createdAt">,
+  event: Pick<ReviewEvent, "type" | "correct" | "rating" | "createdAt" | "itemId">,
 ): SkillSummary {
+  // Попытка идёт ступенью проще вскоре после показанного ответа: её успех не говорит о навыке.
+  if (isRetry(event.itemId)) return summary;
   const previous = summary.types[event.type];
   const recent = [...(previous?.recent ?? []), succeeded(event)].slice(-RECENT);
   const cleanAssemblies =

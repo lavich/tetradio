@@ -120,8 +120,8 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
     lessonRefs: async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref),
     statesOf: (refs) => statesOf(refs, database),
     liveKeys: (refs) => liveKeys(refs, database),
-    dueStates: async (now, courseId) => {
-      const due = await database.cardStates.where("card.due").belowOrEqual(now).toArray();
+    dueStates: async (until, courseId) => {
+      const due = await database.cardStates.where("card.due").belowOrEqual(until).toArray();
       if (!courseId) return due;
       const own = await cardsInCourse(
         due.map((state) => state.unitKey),
