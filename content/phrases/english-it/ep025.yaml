@@ -1,0 +1,7 @@
+id: ep025
+text: "I'd be happy to go into more detail."
+translation: С удовольствием расскажу подробнее.
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

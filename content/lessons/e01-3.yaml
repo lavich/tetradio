@@ -1,0 +1,240 @@
+title: Tell me about yourself — письмо и речь
+kind: lesson
+items:
+  - { kind: phrase, id: ep017 }
+  - { kind: phrase, id: ep018 }
+  - { kind: phrase, id: ep019 }
+  - { kind: phrase, id: ep020 }
+  - { kind: phrase, id: ep021 }
+  - { kind: phrase, id: ep022 }
+  - { kind: phrase, id: ep023 }
+  - { kind: phrase, id: ep024 }
+  - { kind: phrase, id: ep025 }
+blocks:
+  - type: explanation
+    id: formula
+    title: "Схема ответа: настоящее — прошлое — будущее"
+    body: |-
+      **Tell me about yourself** — первый вопрос почти любого собеседования. Это не просьба пересказать резюме и не разговор о личной жизни: интервьюер хочет за минуту понять, кто вы как специалист и почему вы здесь. Хороший ответ длится **60–90 секунд** и идёт по простой схеме.
+
+      **1. Настоящее** — кто вы и чем заняты сейчас (present simple и continuous): **I'm a backend developer with five years of experience. Right now, I'm leading a small team at…**
+
+      **2. Прошлое** — один-два шага, которые привели вас сюда, и одно достижение: **Before that, I worked at a bank, where I…** Прошедшее время подробно — в модуле e02; пока хватит простых форм worked, built, moved.
+
+      **3. Будущее** — чего вы ищете и почему эта компания: **I'm looking for a new challenge… That's why I'm interested in this role.**
+
+      Начать можно связкой **Let me tell you a bit about myself** или **Sure.** — и сразу к делу. Закончить — коротким итогом **To sum up, …** или вопросом **Does that answer your question?** Если интервьюер захочет подробностей, скажите **I'd be happy to go into more detail.** Хобби — одной фразой в конце (**Outside of work, I…**) и только если оно что-то говорит о вас.
+    table:
+      columns:
+        - часть
+        - время
+        - пример
+      rows:
+        - - настоящее
+          - present simple / continuous
+          - I'm a QA engineer. Right now, I'm building our test automation.
+        - - прошлое
+          - past simple
+          - Before that, I worked at an agency, where I tested mobile apps.
+        - - будущее
+          - present continuous, would like
+          - I'm looking for a role where I can work on a product. That's why I'm interested in this position.
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: parts
+    title: Какая часть ответа
+    instruction: К какой части схемы относится фраза?
+    format: choice
+    items:
+      - id: q1
+        prompt: "«Right now, I'm leading a team of four.»"
+        options: [настоящее, прошлое, будущее]
+        answer: настоящее
+      - id: q2
+        prompt: "«Before that, I worked at a small agency.»"
+        options: [настоящее, прошлое, будущее]
+        answer: прошлое
+      - id: q3
+        prompt: "«That's why I'm interested in this role.»"
+        options: [настоящее, прошлое, будущее]
+        answer: будущее
+      - id: q4
+        prompt: "«I'm a frontend developer with six years of experience.»"
+        options: [настоящее, прошлое, будущее]
+        answer: настоящее
+      - id: q5
+        prompt: "«I'm looking for a product company where I can grow.»"
+        options: [настоящее, прошлое, будущее]
+        answer: будущее
+        explanation: Здесь present continuous говорит о цели — это часть «будущее».
+  - type: exercise
+    id: good-answer
+    title: Что лучше сказать
+    instruction: Выберите лучший вариант для собеседования.
+    format: choice
+    items:
+      - id: q1
+        prompt: Как начать ответ на «Tell me about yourself»?
+        options:
+          - Sure. I'm a backend developer with five years of experience.
+          - Well, I was born in Kazan in 1992.
+          - It's all in my CV.
+        answer: Sure. I'm a backend developer with five years of experience.
+        explanation: Начинайте с профессии и опыта, а не с биографии; ссылка на резюме звучит грубо.
+      - id: q2
+        prompt: Сколько должен длиться ответ?
+        options:
+          - около минуты, до полутора
+          - пять минут — чем подробнее, тем лучше
+          - десять секунд
+        answer: около минуты, до полутора
+      - id: q3
+        prompt: Как предложить подробности, не затягивая ответ?
+        options:
+          - I'd be happy to go into more detail.
+          - I can talk about it for hours.
+          - Do you want more?
+        answer: I'd be happy to go into more detail.
+      - id: q4
+        prompt: Как связать опыт с позицией?
+        options:
+          - That's why I'm interested in this role.
+          - So I need a job.
+          - Anyway, that's me.
+        answer: That's why I'm interested in this role.
+  - type: explanation
+    id: writing-how
+    title: Раздел About для профиля
+    body: |-
+      Сегодня письменная задача — раздел **About** для вашего профиля в LinkedIn или для резюме, 60–90 слов. Это та же схема, что и в устном ответе, только короче и аккуратнее: рекрутер читает его за двадцать секунд.
+
+      Пишите от первого лица (**I'm…**, не Andrei is…), без приветствия. 1) Кто вы и сколько опыта. 2) Специализация и стек — **I specialise in…, I'm proficient in…** 3) Что делаете сейчас — present continuous. 4) Что для вас важно — **I'm passionate about…** 5) Что ищете — **I'm currently looking for…**
+
+      Проверьте себя: present simple для постоянного, continuous для текущего проекта и поиска; глаголы состояния (know, believe, prefer) — без -ing; после about, for, in — существительное или -ing.
+  - type: exercise
+    id: sentences
+    title: Предложения для профиля
+    instruction: Переведите на английский. Сокращения можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Я специализируюсь на фронтенд-разработке.
+        answer:
+          - I specialise in frontend development.
+          - I specialize in frontend development.
+          - I specialise in front-end development.
+          - I specialize in front-end development.
+      - id: q2
+        prompt: Я хорошо владею Python и Go.
+        answer:
+          - I'm proficient in Python and Go.
+          - I am proficient in Python and Go.
+      - id: q3
+        prompt: Сейчас я ищу новую интересную задачу.
+        answer:
+          - I'm looking for a new challenge.
+          - I'm currently looking for a new challenge.
+          - Right now I'm looking for a new challenge.
+          - I am looking for a new challenge.
+      - id: q4
+        prompt: Мне нравится решать сложные задачи.
+        answer:
+          - I enjoy solving complex problems.
+          - I like solving complex problems.
+          - I enjoy solving difficult problems.
+          - I like solving difficult problems.
+        explanation: После enjoy — только -ing; после like можно и -ing, и to.
+      - id: q5
+        prompt: До этого я работал в банке.
+        answer:
+          - Before that, I worked at a bank.
+          - Before that I worked at a bank.
+          - Before that, I worked in a bank.
+          - Before that I worked in a bank.
+      - id: q6
+        prompt: Поэтому меня интересует эта позиция.
+        answer:
+          - That's why I'm interested in this role.
+          - That's why I'm interested in this position.
+          - That is why I am interested in this role.
+          - That is why I am interested in this position.
+  - type: writing
+    id: about
+    register: formal
+    prompt: "Напишите раздел About для своего профиля в LinkedIn (60–90 слов): кто вы и сколько у вас опыта, специализация и стек, над чем работаете сейчас, что для вас важно в работе и какую роль вы ищете."
+    words: { min: 60, max: 90 }
+    model: I'm a backend developer with five years of experience in e-commerce. I specialise in high-load services and I'm proficient in Go, PostgreSQL and Kafka. Right now, I'm working on the checkout platform of an online marketplace, and I'm driving the migration of our legacy order system to an event-driven architecture. I'm passionate about clean, robust code and good onboarding for new developers. I'm currently looking for a senior backend role in a product company where I can take end-to-end ownership of a domain.
+    criteria:
+      - 60–90 слов, от первого лица, без приветствия и подписи
+      - "Есть все пять частей: кто вы и опыт, специализация и стек, текущая работа, что важно, какую роль ищете"
+      - Present simple — для постоянного (I work, I specialise), present continuous — для текущего проекта и поиска (I'm working on, I'm looking for)
+      - Глаголы состояния без -ing (know, believe, prefer)
+      - "После предлогов — существительное или -ing: proficient in Go, passionate about building"
+      - Хотя бы три слова или оборота модуля (responsible for, proficient in, expertise, ownership, scalable…)
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответ
+    body: |-
+      Теперь — главное задание модуля и первая запись в ваш **банк ответов**. Ответ на Tell me about yourself вы будете повторять на каждом собеседовании, поэтому стоит отшлифовать его сейчас.
+
+      1) Набросайте три части схемы ключевыми словами, не полным текстом: заученный текст звучит как чтение. 2) Запишите ответ, уложитесь в 60–90 секунд. 3) Переслушайте и сверьте с образцом и критериями. 4) Запишите ещё раз — вторая попытка почти всегда заметно лучше.
+
+      Если застряли — не молчите, а используйте связку: **Let me think… / What I mean is…** Ошибка во времени, исправленная на ходу, — нормально; долгая пауза звучит хуже.
+  - type: speaking
+    id: tell-me
+    part: monologue
+    prompt: "Интервьюер: «So, to start, could you tell me a bit about yourself?» Ответьте по схеме настоящее — прошлое — будущее за 60–90 секунд. Расскажите о своей настоящей работе: кто вы, над чем работаете сейчас, один предыдущий шаг и какую роль ищете."
+    seconds: 90
+    model: "Sure. I'm a backend developer with five years of experience. Right now, I work at a logistics company, where I'm responsible for the routing service. My role involves designing APIs, handling incidents and working closely with the data team. These days I'm focusing on performance — we're migrating the service from Python to Go. Before that, I worked at a small agency, where I built online shops for different clients. That's where I got a lot of hands-on experience. Now I'm looking for a new challenge. I'm passionate about developer tools, and that's why I'm interested in this role. Does that answer your question?"
+    criteria:
+      - "Три части по порядку: настоящее — прошлое — будущее"
+      - 60–90 секунд, без долгих пауз; связки Right now, Before that, That's why
+      - Present simple о постоянном и present continuous о текущем проекте — без перепутанных форм
+      - "Конкретика: роль, стек или продукт, одна задача или достижение"
+      - "Ответ связан с позицией: почему вам интересна эта роль"
+      - Нет пересказа биографии и личной жизни; хобби — не больше одной фразы
+  - type: speaking
+    id: now
+    part: interview
+    prompt: "Интервьюер задаёт уточняющий вопрос: «And what are you working on at the moment?» Ответьте за 30–45 секунд: проект, ваша роль в нём и что сейчас самое интересное или сложное."
+    seconds: 45
+    model: "At the moment I'm working on our new pricing service. I'm responsible for the API and the integration with the billing system. The most interesting part is performance — the service handles thousands of requests per second, so we're redesigning the caching layer. I'd be happy to go into more detail if you like."
+    criteria:
+      - Present continuous для текущей работы (I'm working on, we're redesigning)
+      - "Названа ваша роль: I'm responsible for… / My role involves…"
+      - Есть одна конкретная деталь — нагрузка, технология, проблема
+      - Ответ закончен связкой, а не оборван (I'd be happy to go into more detail.)
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ a lot of time on code reviews.
+        options: [spend, "'m spending", spending]
+        answer: spend
+        explanation: Постоянная часть работы — present simple.
+      - id: q2
+        prompt: My role involves ___ incidents.
+        options: [handling, to handle, handle]
+        answer: handling
+      - id: q3
+        prompt: I'm proficient ___ Kotlin.
+        options: [in, at, on]
+        answer: in
+      - id: q4
+        prompt: We ___ to a new CI system this month.
+        options: [move, "'re moving", moves]
+        answer: "'re moving"
+      - id: q5
+        prompt: I ___ that good onboarding saves a lot of time.
+        options: [believe, "'m believing", believing]
+        answer: believe
+        explanation: Believe — глагол состояния.
+      - id: q6
+        prompt: She's in ___ of the payments team.
+        options: [charge, responsible, ownership]
+        answer: charge

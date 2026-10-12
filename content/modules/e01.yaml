@@ -1,0 +1,21 @@
+number: 1
+title: Tell me about yourself
+subtitle: Рассказ о себе
+status: published
+goal: рассказать о себе за минуту — роль, стек, чем занимаешься сейчас
+grammar:
+  - present simple и present continuous, глаголы состояния
+sessions: 3
+crib:
+  title: simple и continuous
+  rows:
+    - [обычно, I work]
+    - [сейчас, I'm working]
+    - [он обычно, he works]
+    - [он сейчас, he's working]
+  note: know, need, prefer, believe — без -ing
+lessons:
+  - e01-1
+  - e01-2
+  - e01-3
+  - e01-test

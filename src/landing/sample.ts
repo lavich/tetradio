@@ -44,11 +44,11 @@ export function loadLandingData(read: (url: string) => string | null): LandingDa
   const raw = read("content/catalog.json");
   if (!raw) return { modules: [], exam: null, tasks: [] };
   const catalog = parseCatalog(JSON.parse(raw));
-  const course = catalog.courses[0];
+  const entry = catalog.lessons.find((lesson) => lesson.id === SAMPLE_LESSON) ?? catalog.lessons[0];
+  const course = catalog.courses.find((candidate) => candidate.id === entry?.courseId) ?? catalog.courses[0];
   const modules = (catalog.modules ?? [])
     .filter((module) => !course || module.courseId === course.id)
     .sort((a, b) => a.number - b.number);
-  const entry = catalog.lessons.find((lesson) => lesson.id === SAMPLE_LESSON) ?? catalog.lessons[0];
   const pack = entry && read(entry.url);
   return {
     modules,

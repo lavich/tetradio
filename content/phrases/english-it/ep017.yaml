@@ -1,0 +1,7 @@
+id: ep017
+text: Let me tell you a bit about myself.
+translation: Позвольте немного рассказать о себе.
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep008
+text: "These days I'm focusing on performance."
+translation: Сейчас я сосредоточен на производительности.
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

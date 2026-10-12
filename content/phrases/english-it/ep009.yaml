@@ -1,0 +1,7 @@
+id: ep009
+text: I specialise in frontend development.
+translation: "Я специализируюсь на фронтенд-разработке."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

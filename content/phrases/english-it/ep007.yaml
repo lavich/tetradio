@@ -1,0 +1,7 @@
+id: ep007
+text: I spend most of my time on backend tasks.
+translation: "Бо́льшую часть времени я занимаюсь бэкенд-задачами."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

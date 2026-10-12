@@ -1,0 +1,7 @@
+id: ep014
+text: I enjoy solving complex problems.
+translation: Мне нравится решать сложные задачи.
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

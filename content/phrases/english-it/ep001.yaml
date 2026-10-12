@@ -1,0 +1,7 @@
+id: ep001
+text: "I'm a backend developer with five years of experience."
+translation: "Я бэкенд-разработчик с пятилетним опытом."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
+  operation: requested-generation
+  request: Фразы модуля e01 по программе docs/curriculum-english-it.md

@@ -1,0 +1,8 @@
+number: 5
+title: Could you say that again?
+subtitle: Понять вопрос и переспросить
+status: draft
+goal: понять вопрос интервьюера, переспросить и уточнить, выиграть время на ответ
+grammar:
+  - вопросы, косвенные вопросы
+sessions: 3
