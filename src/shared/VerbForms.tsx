@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import type { Paradigm } from "../domain/types";
+import type { Paradigm, Word } from "../domain/types";
 import { ENDINGS, endingsOf, principalParts, splitEnding } from "../domain/verb-forms";
 import { playText, type PlayResult } from "./audio";
 import { noVoice, useProfile } from "./language";
@@ -112,5 +112,31 @@ export function ParadigmTable({ paradigm, onSay }: { paradigm: Paradigm; onSay: 
         </table>
       </div>
     </details>
+  );
+}
+
+/** Ряд форм и таблица слова с одной строкой «нет голоса» на оба; `verbsOnly` — без строки форм не-глагола. */
+export function WordForms({
+  word,
+  className,
+  verbsOnly = false,
+}: {
+  word: Pick<Word, "greek" | "forms" | "paradigm">;
+  className?: string;
+  verbsOnly?: boolean;
+}) {
+  const { say, note } = useSay();
+  if (verbsOnly && !word.paradigm && !principalParts(word.greek, word.forms)) return null;
+  if (!word.forms && !word.paradigm) return null;
+  return (
+    <>
+      {word.forms && (
+        <div className={className}>
+          <VerbForms headword={word.greek} forms={word.forms} onSay={say} />
+        </div>
+      )}
+      {word.paradigm && <ParadigmTable paradigm={word.paradigm} onSay={say} />}
+      {note}
+    </>
   );
 }

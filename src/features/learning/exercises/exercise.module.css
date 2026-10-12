@@ -170,3 +170,11 @@
 .writtenTick.almost {
   color: var(--almost);
 }
+.forms {
+  margin: 8px 0 0;
+  font-family: var(--font-print);
+  font-style: italic;
+  font-size: 15px;
+  line-height: var(--cell);
+  color: var(--muted-foreground);
+}

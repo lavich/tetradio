@@ -13,6 +13,7 @@ import { db } from "../../storage/db";
 import { ProfileContext, useLessonProfile } from "../../shared/language";
 import { ExampleBox, ReadingNotes, WordSummary } from "./WordCardView";
 import ui from "../../shared/ui.module.css";
+import { WordForms } from "../../shared/VerbForms";
 
 type Preview =
   { status: "loading" } | { status: "ready"; preview: PackagePreview } | { status: "error"; message: string };
@@ -106,6 +107,7 @@ export function SharedWordScreen() {
       <ProfileContext value={profile}>
         <Screen back="Слово">
           <WordSummary word={word} />
+          <WordForms word={word} className={ui.note} />
           <ReadingNotes word={word} />
           {word.examples.map((example, index) => (
             <ExampleBox key={index} example={example} />
