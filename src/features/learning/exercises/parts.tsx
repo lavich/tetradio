@@ -11,7 +11,10 @@ import s from "./exercise.module.css";
 import type { Status } from "./model";
 import { SpeakText } from "./SpeakText";
 
-/** Основное действие листа — в облачке занятия; `disabled` держит место, пока ответа нет. */
+/**
+ * Основное действие листа — в облачке занятия; `disabled` держит место, пока ответа нет.
+ * Автоповтор Enter, отправившего ответ, нажал бы и «Далее», пролистав итог.
+ */
 export function Primary({
   children,
   disabled,
@@ -40,6 +43,9 @@ export function Primary({
         form={form}
         disabled={disabled}
         onClick={onClick}
+        onKeyDown={(event) => {
+          if (event.repeat) event.preventDefault();
+        }}
       >
         {children}
       </Button>

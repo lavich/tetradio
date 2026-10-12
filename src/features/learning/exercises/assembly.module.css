@@ -36,6 +36,7 @@
   margin-top: 12px;
 }
 .tile {
+  position: relative;
   display: grid;
   place-items: center;
   min-width: 52px;
@@ -57,6 +58,22 @@
 .tile:disabled {
   opacity: 0.35;
   cursor: default;
+}
+@media (pointer: fine) {
+  .tile[data-key]::after {
+    content: attr(data-key);
+    content: attr(data-key) / "";
+    position: absolute;
+    top: 3px;
+    right: 6px;
+    font: 11px/1 var(--font-ui);
+    color: var(--muted-foreground);
+  }
+}
+.tiles:focus-visible {
+  outline: 1.5px dashed var(--primary);
+  outline-offset: 4px;
+  border-radius: 12px;
 }
 .syllables {
   font-style: normal;
