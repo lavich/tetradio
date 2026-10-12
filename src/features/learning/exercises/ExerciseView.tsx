@@ -1,10 +1,12 @@
 import type { SessionItem } from "../../../domain/types";
 import { Assembly } from "./Assembly";
 import { Comprehension } from "./Comprehension";
+import { LessonTask } from "./LessonTask";
 import { Listening } from "./Listening";
 import type { Answer } from "./model";
 import { Recognition } from "./Recognition";
 import { Spelling } from "./Spelling";
+import { WordGap } from "./WordGap";
 
 /** Упражнение по типу задания; пропуск без оценки есть только у аудиоупражнений. */
 export function ExerciseView({
@@ -32,6 +34,10 @@ export function ExerciseView({
     <Comprehension key={item.id} {...props} onSkip={onSkip} />
   ) : item.type === "assembly" ? (
     <Assembly key={item.id} {...props} />
+  ) : item.type === "wordGap" ? (
+    <WordGap key={item.id} {...props} />
+  ) : item.type === "item" ? (
+    <LessonTask key={item.id} {...props} />
   ) : (
     <Spelling key={item.id} {...props} />
   );

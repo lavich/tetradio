@@ -28,6 +28,7 @@ export function LessonSummary({
   pages,
   numbering,
   items,
+  mistakes,
   next,
   withList,
   problem,
@@ -43,6 +44,8 @@ export function LessonSummary({
   pages: LessonBlock[][];
   numbering: Map<string, number>;
   items: LessonItem[];
+  /** Пункты заданий урока, ушедшие в повторение карточками ошибок. */
+  mistakes: number;
   next: ModuleLessonView | null | undefined;
   /** Карточки урока — на соседней странице разворота. */
   withList: boolean;
@@ -122,6 +125,12 @@ export function LessonSummary({
           <TaskRow key={row.block.id} row={row} number={numbering.get(row.block.id)} go={go} />
         ))}
       </ul>
+
+      {mistakes ? (
+        <p className={base.print} data-testid="lesson-mistakes">
+          Ошибки урока в повторении: {mistakes}
+        </p>
+      ) : null}
 
       {items.length && !withList ? (
         <section className={css.cards} aria-label="Карточки урока">

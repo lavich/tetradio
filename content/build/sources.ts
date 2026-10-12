@@ -61,6 +61,21 @@ export interface CourseSource {
   passShare?: unknown;
   calendar?: unknown;
 }
+/** Текст для беглого чтения: `readings/<курс>/<id>.yaml`; открывается после урока `after`. */
+export interface ReadingSource {
+  id?: string;
+  title: string;
+  after: string;
+  series?: string;
+  text: string;
+  glosses?: { text: string; russian: string }[];
+  names?: string[];
+  /** Говорящий каждой строки диалога («—») по порядку; пустое имя — реплика без говорящего. */
+  speakers?: string[];
+  /** Герой, от лица которого рассказан текст: его голосом звучит повествование. */
+  narrator?: string;
+  provenance: { operation?: string; request?: string; review?: string };
+}
 /** Модуль программы: `modules/NN.yaml`; уроки черновика собираются для проверки, но не поставляются. */
 export interface ModuleSource {
   id?: string;
@@ -131,6 +146,7 @@ export interface ContentRoot {
   words: Map<string, CourseCard<WordSource>>;
   phrases: Map<string, CourseCard<PhraseSource>>;
   lessons: Map<string, LessonSource>;
+  readings: Map<string, CourseCard<ReadingSource>>;
   courses: Map<string, Sourced<CourseSource>>;
   modules: Map<string, Sourced<ModuleSource>>;
   /** Картинки слов из готовой библиотеки: `pictures.yaml` (слово → файл в pictures/) и подпись источника. */
@@ -183,7 +199,8 @@ export function readSources(root: string): ContentRoot {
     return map;
   };
   const words = cards<WordSource>("words"),
-    phrases = cards<PhraseSource>("phrases");
+    phrases = cards<PhraseSource>("phrases"),
+    readings = cards<ReadingSource>("readings");
   const lessons = new Map(
     list("lessons").map((file) => [basename(file, extname(file)), load<LessonSource>("lessons", file)]),
   );
@@ -213,7 +230,7 @@ export function readSources(root: string): ContentRoot {
     const language = languageOf(basename(file, extname(file)), `voices/${file}`);
     voices.set(language, parseVoices(readFileSync(join(root, "voices", file), "utf8"), voicesFile(language), language));
   }
-  return { words, phrases, lessons, courses, modules, pictures, files, voices };
+  return { words, phrases, lessons, readings, courses, modules, pictures, files, voices };
 }
 
 export function checkSourceScripts(

@@ -5,7 +5,8 @@ import { isAppDatabaseName } from "../../storage/profile";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { wordRef } from "../../domain/refs";
 import { cardLanguages } from "../../storage/courses";
-import { fillSettings, type LessonItem, type Settings } from "../../domain/types";
+import { adoptKnownForeign } from "../../storage/foreign";
+import { fillSettings, type CardKind, type LessonItem, type Settings } from "../../domain/types";
 import { syncEvents } from "../../sync/events";
 import { assertCloudUnchanged, type CloudGuard } from "./cloud-check";
 import { courseProblem, type CourseRows } from "./course-check";
@@ -216,10 +217,10 @@ export async function restoreBackup(
     const payload = await Promise.all(TABLES.map(async (name) => [name, await staging.table(name).toArray()] as const));
     const rows = <T>(name: (typeof TABLES)[number]) => payload.find(([table]) => table === name)![1] as T[];
     const ids = (name: "words" | "phrases") => new Set(rows<{ id: string }>(name).map((row) => row.id));
-    const cards = { word: ids("words"), phrase: ids("phrases") };
+    const cards: Partial<Record<CardKind, Set<string>>> = { word: ids("words"), phrase: ids("phrases") };
     const courseProgress =
       rows("blockProgress").length > 0 || rows<{ completed?: boolean }>("lessons").some((row) => row.completed);
-    if (!cards.word.size && !cards.phrase.size && !courseProgress)
+    if (!cards.word!.size && !cards.phrase!.size && !courseProgress)
       throw new Error("В копии нет ни карточек, ни прогресса курса — восстанавливать нечего.");
     const course = await courseProblem(
       {
@@ -259,6 +260,8 @@ export async function restoreBackup(
         await database.meta.put({ key: `${SYNC_META_PREFIX}restored`, value: new Date().toISOString() });
       },
     );
+    // Копия могла прийти с устройства, где вид её карточек был незнакомым.
+    await adoptKnownForeign(database);
     syncEvents.emit("restored");
   } finally {
     staging.close();

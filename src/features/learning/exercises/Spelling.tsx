@@ -10,12 +10,12 @@ import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./spelling.module.css";
 import { AnswerMask } from "./AnswerMask";
-import { useRevealed, useRevealSpeech } from "./hooks";
+import { focusWithKeyboard, useRevealed, useRevealSpeech } from "./hooks";
 import { wordOf, type ExerciseProps, type Status } from "./model";
 import { PhraseReveal, Primary, QuietActions, QuietButton, Reveal, TaskHead, Verdict, WordReveal } from "./parts";
 
 /** Ответ на строке листа после проверки: совпавшее чернилами, лишнее зачёркнуто ручкой, нужное — ручкой сверху. */
-function Corrected({ value, expected }: { value: string; expected: string }) {
+export function Corrected({ value, expected }: { value: string; expected: string }) {
   const { code } = useProfile();
   return (
     <p className={exercise.written} data-testid="chars" lang={code}>
@@ -131,6 +131,7 @@ export function Spelling({
       <div className={cx(s.field, card.kind === "phrase" && s.fieldPhrase)}>
         <AnswerMask mask={mask} value={value} />
         <input
+          ref={focusWithKeyboard}
           className={cx(s.answer, mask && s.masked)}
           type="text"
           value={value}

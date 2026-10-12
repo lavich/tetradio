@@ -1,5 +1,6 @@
 id: p026
 text: Τι σημαίνει αυτό;
+audio: phrases/p026.mp3
 translation: Что это значит?
 provenance:
   sourceLabel: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)

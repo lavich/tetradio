@@ -1,5 +1,6 @@
 id: p006
 text: Πώς σας λένε;
+audio: phrases/p006.mp3
 translation: Как вас зовут?
 provenance:
   sourceLabel: Лексикон курса, модуль 01 (docs/course/lexicon/01.tsv)

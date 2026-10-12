@@ -1,6 +1,6 @@
 // Расширения `.ts` обязательны: этот модуль загружает и Node при сборке контента (`node content/build.ts`),
 // а его резолвер требует точный путь. В остальном коде приложения расширения не пишутся.
-import { CARD_KINDS, type CardKind, type CardSnapshot, type LearningRef, type SessionCard } from "./types.ts";
+import { CARD_KINDS, type CardKind, type ForeignRef, type LearningRef, type StoredRef } from "./types.ts";
 
 export type { LearningRef } from "./types.ts";
 
@@ -44,11 +44,17 @@ export function parseUnitKey(key: string): LearningRef {
   return { kind, id };
 }
 
-/** Снимок карточки для события ответа. */
-export const snapshotOf = (card: SessionCard): CardSnapshot =>
-  card.kind === "word"
-    ? { greek: card.word.greek, russian: card.word.russian }
-    : { text: card.phrase.text, ...(card.phrase.translation ? { translation: card.phrase.translation } : {}) };
+/** Вид незнакомой карточки в ключе — код с этим префиксом: он не совпадает ни с одним видом. */
+const FOREIGN = "~";
+export const isForeign = (ref: StoredRef): ref is ForeignRef => "code" in ref;
+export const storedKey = (ref: StoredRef): string =>
+  isForeign(ref) ? JSON.stringify([`${FOREIGN}${ref.code}`, ref.id]) : unitKey(ref);
+/** Ссылка из ключа известного или незнакомого вида; `null` — ключ снятого вида. */
+export function parseStoredKey(key: string): StoredRef | null {
+  const [kind, id] = splitUnitKey(key);
+  if (isCardKind(kind)) return { kind, id };
+  return typeof kind === "string" && kind.startsWith(FOREIGN) ? { code: kind.slice(FOREIGN.length), id } : null;
+}
 
 /** Дубликат фразы — тот же текст с тем же переводом; фраза без перевода не равна фразе с переводом. */
 export const phraseKey = (text: string, translation: string | undefined) =>

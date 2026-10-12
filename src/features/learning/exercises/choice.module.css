@@ -1,4 +1,4 @@
-/* Варианты: короткие — сеткой 2 × 2, длинные — строками α) β) γ) δ). Текст переносится, а не режется. */
+/* Варианты: короткие — сеткой 2 × 2, длинные — строками 1) 2) 3) 4). Текст переносится, а не режется. */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -14,9 +14,11 @@
   cursor: pointer;
   transition:
     border-color 160ms ease-out,
-    background-color 160ms ease-out;
+    background-color 160ms ease-out,
+    box-shadow 160ms ease-out;
 }
 .chip {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -57,10 +59,10 @@
 .line:last-child {
   border-bottom: 0;
 }
-/* Буква — из счётчика, а не из текста: подпись варианта остаётся самим вариантом. */
+/* Номер — из счётчика, а не из текста: подпись варианта остаётся самим вариантом. */
 .line::before {
   counter-increment: option;
-  content: counter(option, var(--letters, lower-greek)) ")";
+  content: counter(option) ")";
   font-size: 16px;
   color: var(--muted-foreground);
 }
@@ -72,6 +74,44 @@
 .chip:disabled,
 .line:disabled {
   cursor: default;
+}
+/* У строк номер стоит перед вариантом всегда; у сетки — только там, где его можно нажать цифрой. */
+@media (pointer: fine) {
+  /*
+   * Фокус при открытии задания ставится скриптом, и после клика мышью :focus-visible его не показал бы.
+   * Фокус — усиленное наведение, а не рамка: синяя рамка на варианте читалась бы как уже выбранный ответ.
+   */
+  .chip:focus:not(:disabled) {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: inset 0 0 0 1px var(--primary);
+    background: var(--soft);
+  }
+  .line:focus:not(:disabled) {
+    outline: none;
+    border-bottom-color: transparent;
+    border-radius: 8px;
+    background: var(--soft);
+    box-shadow: 0 0 0 6px var(--soft);
+  }
+  .line:focus:not(:disabled)::before,
+  .line:focus:not(:disabled) span {
+    color: var(--primary);
+  }
+  .chip[data-key]::after {
+    content: attr(data-key);
+    /* Номер не входит в имя кнопки для читалки; строка выше — для WebKit без альтернативного текста у content. */
+    content: attr(data-key) / "";
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    font: 11px/1 var(--font-ui);
+    color: var(--muted-foreground);
+  }
+}
+.grid:focus,
+.lines:focus {
+  outline: none;
 }
 .optionTick {
   flex: none;

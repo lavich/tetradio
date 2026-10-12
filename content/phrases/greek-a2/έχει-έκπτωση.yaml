@@ -1,5 +1,6 @@
 id: p127
 text: Έχει έκπτωση;
+audio: phrases/p127.mp3
 translation: Есть скидка?
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

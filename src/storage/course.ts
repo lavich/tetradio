@@ -3,12 +3,15 @@
  * Прогресс блоков — данные пользователя (входят в копию); модули — кеш каталога.
  */
 import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
-import { cardRef, decodeMarks, type BlockMarks } from "../content/schema";
+import { cardRef, decodeMarks, READING_PREFIX, type BlockMarks } from "../content/schema";
 import { lessonDone, lessonTally, type LessonTally } from "../domain/course";
-import { localDay } from "../domain/learning";
+import { localDay, nextState } from "../domain/learning";
+import { unitKey } from "../domain/refs";
+import { Rating } from "ts-fsrs";
 import type { BlockProgress, Lesson, StoredModule } from "../domain/types";
 import { cardsInCourse, lessonCourses, primaryCourse } from "./courses";
 import { db, type AppDatabase } from "./db";
+import { STORED_KINDS } from "./kinds";
 import { announceChange, markChanged } from "./ops";
 
 export const blockKey = (lessonId: string, blockId: string) => `${lessonId}/${blockId}`;
@@ -18,33 +21,60 @@ export async function blockProgressOf(lessonId: string, database: AppDatabase = 
   return new Map(rows.map((row) => [row.blockId, row]));
 }
 
-export type BlockPatch = Partial<Omit<BlockProgress, "key" | "lessonId" | "blockId" | "updatedAt">>;
-/** Сохраняет выполнение блока поверх прежнего: повторная проверка задания заменяет ответы и счёт. */
+export type BlockPatch = Partial<Omit<BlockProgress, "key" | "lessonId" | "blockId" | "updatedAt">> & {
+  /** Неверные пункты задания: из них рождаются карточки ошибок; в запись блока не идут. */
+  mistakes?: string[];
+};
+/**
+ * Сохраняет выполнение блока поверх прежнего: повторная проверка задания заменяет ответы и счёт.
+ * Неверный пункт без карточки получает состояние «снова» — так он приходит в ближайшее повторение.
+ * События ответа нет: урок — не занятие, и «Сегодня» не должно счесть его повторением.
+ */
 export async function saveBlockProgress(
   lessonId: string,
   blockId: string,
-  patch: BlockPatch,
+  { mistakes = [], ...patch }: BlockPatch,
   database: AppDatabase = db,
+  now = new Date(),
 ): Promise<BlockProgress> {
-  const saved = await database.transaction("rw", database.blockProgress, database.meta, async () => {
-    const key = blockKey(lessonId, blockId);
-    const previous = await database.blockProgress.get(key);
-    const row: BlockProgress = {
-      done: false,
-      ...previous,
-      ...patch,
-      key,
-      lessonId,
-      blockId,
-      updatedAt: new Date().toISOString(),
-    };
-    await database.blockProgress.put(row);
-    await markChanged(database);
-    return row;
-  });
+  const saved = await database.transaction(
+    "rw",
+    database.blockProgress,
+    database.meta,
+    database.cardStates,
+    async () => {
+      for (const itemId of mistakes) {
+        const ref = { kind: "mistake" as const, id: `${lessonId}/${blockId}/${itemId}` };
+        if (!(await database.cardStates.get(unitKey(ref))))
+          await database.cardStates.put(nextState(undefined, ref, Rating.Again, now));
+      }
+      const key = blockKey(lessonId, blockId);
+      const previous = await database.blockProgress.get(key);
+      const row: BlockProgress = {
+        done: false,
+        ...previous,
+        ...patch,
+        key,
+        lessonId,
+        blockId,
+        updatedAt: now.toISOString(),
+      };
+      await database.blockProgress.put(row);
+      await markChanged(database);
+      return row;
+    },
+  );
   announceChange();
   if (saved.done) await completeIfDone(lessonId, database);
   return saved;
+}
+
+/** Карточки ошибок урока по состояниям — одинаковы на всех устройствах; убранный обновлением пункт не считается. */
+export async function lessonMistakes(lessonId: string, database: AppDatabase = db): Promise<number> {
+  const ids = (await database.cardStates.where("ref.kind").equals("mistake").toArray())
+    .map((state) => state.ref.id)
+    .filter((id) => id.startsWith(`${lessonId}/`));
+  return (await STORED_KINDS.mistake.presentIds(ids, database)).length;
 }
 
 export interface CourseLesson {
@@ -229,7 +259,10 @@ export async function lessonDays(
   courseId?: string,
   database: AppDatabase = db,
 ): Promise<string[]> {
-  let rows = await database.blockProgress.filter((row) => row.done).toArray();
+  // Чтение днём занятий не считается: отметка «прочитано» — строка блока текста.
+  let rows = await database.blockProgress
+    .filter((row) => row.done && !row.lessonId.startsWith(READING_PREFIX))
+    .toArray();
   if (courseId) {
     const owners = await lessonCourses(
       rows.map((row) => row.lessonId),

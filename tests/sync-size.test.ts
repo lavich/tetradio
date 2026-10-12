@@ -124,7 +124,7 @@ describe("размер компактного снимка (задача 0.4)", 
     expect(capacity).toBeGreaterThan(3000);
   }, 60_000); // три базы по тысячам событий: на CI-раннере дольше стандартных 5 секунд
 
-  it("бюджет курса: 2 500 карточек, худшая история и все уроки курса со всеми блоками — не больше 1 024 ключей", async () => {
+  it("бюджет курса: 2 500 карточек, 1 000 ошибок уроков, худшая история и все уроки курса со всеми блоками — не больше 1 024 ключей", async () => {
     const db = new AppDatabase("tetradio-size-course");
     await db.delete();
     await db.open();
@@ -169,8 +169,19 @@ describe("размер компактного снимка (задача 0.4)", 
           revision: "r1",
         })),
     );
+    // Ошибки уроков с идентификаторами настоящих пунктов курса: они в разы длиннее `w0001`.
+    const mistakes: LearningRef[] = buildContent("content")
+      .packages.flatMap((pack) =>
+        (pack.blocks ?? []).flatMap((block) =>
+          block.type === "exercise" && !block.about
+            ? block.items.map((item) => `${pack.id}/${block.id}/${item.id}`)
+            : [],
+        ),
+      )
+      .slice(0, 1000)
+      .map((id) => ({ kind: "mistake" as const, id }));
     await db.cardStates.bulkPut(
-      refs.map((ref, index): LearningState => ({
+      [...refs, ...mistakes].map((ref, index): LearningState => ({
         unitKey: unitKey(ref),
         ref,
         version: 50,
@@ -191,12 +202,13 @@ describe("размер компактного снимка (задача 0.4)", 
     // Худшая история, как выше: по 10 ответов каждого типа у каждой карточки.
     const types: ExerciseType[] = ["recall", "recognition", "assembly", "spelling", "listening"];
     let tick = 0;
-    const skills = refs.map((ref) => {
+    const skills = [...refs, ...mistakes].map((ref) => {
       let summary: SkillSummary = emptySkills();
-      for (const type of types)
+      for (const type of ref.kind === "mistake" ? (["item"] as const) : types)
         for (let index = 0; index < 10; index++)
           summary = foldSkill(summary, {
             type,
+            itemId: `i-${tick}`,
             rating: index % 3 ? 3 : 1,
             correct: index % 3 !== 0,
             createdAt: new Date(now.getTime() - 10 ** 8 + tick++ * 1000).toISOString(),
@@ -271,13 +283,13 @@ describe("размер компактного снимка (задача 0.4)", 
     const keysNeeded = keysFor(parts);
     const courseChars = JSON.stringify(JSON.parse(encodeSnapshot(snapshot)).b).length;
     console.log(
-      `курс: ${refs.length} карточек, ${course.length} уроков, ${blocks.length} блоков → ${chars} символов ` +
+      `курс: ${refs.length} карточек и ${mistakes.length} ошибок, ${course.length} уроков, ${blocks.length} блоков → ${chars} символов ` +
         `(блоки курса ${courseChars}), ${parts} частей, ${keysNeeded} ключей с резервом из ${CLOUD_LIMITS.maxKeys} ` +
         `(запас ${CLOUD_LIMITS.maxKeys - keysNeeded})`,
     );
     // Весь курс, а не фиксированное число: новые уроки входят в бюджет сами.
     expect(course.length).toBeGreaterThanOrEqual(99);
-    expect(snapshot.states).toHaveLength(2500);
+    expect(snapshot.states).toHaveLength(3500);
     expect(snapshot.blocks).toHaveLength(blocks.length);
     expect(snapshot.lessons.filter((item) => item.completed)).toHaveLength(course.length);
     expect(encodeSnapshot(snapshot)).not.toContain("απάντηση");

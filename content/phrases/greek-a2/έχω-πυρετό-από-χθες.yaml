@@ -1,5 +1,6 @@
 id: p233
 text: Έχω πυρετό από χθες.
+audio: phrases/p233.mp3
 translation: У меня температура со вчерашнего дня.
 provenance:
   sourceLabel: Лексикон курса, модуль 18 (docs/course/lexicon/18.tsv)

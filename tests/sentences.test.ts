@@ -1,0 +1,28 @@
+import { describe, expect, it } from "vitest";
+import { sentenceRanges, sentencesOf } from "../src/domain/sentences";
+
+describe("текст по предложениям", () => {
+  it("делит по концу предложения и строкам, греческий «;» — вопрос", () => {
+    expect(sentencesOf("Γεια! Είμαι η Άννα.\n— Πώς σε λένε; — Με λένε Νίκο.")).toEqual([
+      "Γεια!",
+      "Είμαι η Άννα.",
+      "— Πώς σε λένε;",
+      "— Με λένε Νίκο.",
+    ]);
+  });
+  it("кавычки остаются у своего предложения, многоточие — не граница, хвост без точки не теряется", () => {
+    expect(sentencesOf("Λέει: «Καλά!» Και μετά… τίποτα")).toEqual(["Λέει: «Καλά!»", "Και μετά… τίποτα"]);
+    expect(sentencesOf("— Πόσων… χρονών… είναι… τα παιδιά σου;")).toEqual(["— Πόσων… χρονών… είναι… τα παιδιά σου;"]);
+  });
+  it("точка внутри числа не делит предложение", () => {
+    expect(sentencesOf("Είναι 7.50 ευρώ. Ευχαριστώ!")).toEqual(["Είναι 7.50 ευρώ.", "Ευχαριστώ!"]);
+  });
+  it("строки без букв не озвучиваются", () => {
+    expect(sentencesOf("Γεια.\n—\n…")).toEqual(["Γεια."]);
+  });
+  it("позиции предложений указывают на сами предложения в тексте", () => {
+    const text = "  Γεια! Είμαι η Άννα.\n\n— Πώς σε λένε;\n—\n";
+    expect(sentenceRanges(text).map(({ start, end }) => text.slice(start, end))).toEqual(sentencesOf(text));
+    expect(sentenceRanges(text)[0]).toEqual({ start: 2, end: 7 });
+  });
+});

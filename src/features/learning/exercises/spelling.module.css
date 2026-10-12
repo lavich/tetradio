@@ -18,10 +18,13 @@
   display: grid;
   margin-top: 12px;
   border-bottom: 1.5px solid var(--input);
-  transition: border-color 160ms ease-out;
+  transition:
+    border-color 160ms ease-out,
+    box-shadow 160ms ease-out;
 }
 .field:focus-within {
   border-bottom-color: var(--primary);
+  box-shadow: 0 1px 0 var(--primary);
 }
 .answer {
   width: 100%;

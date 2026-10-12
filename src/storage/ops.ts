@@ -1,3 +1,4 @@
+import { State } from "ts-fsrs";
 import { db, type AppDatabase } from "./db";
 import { profileOfCourse, sessionCourse } from "./courses";
 import { lessonMates, optionPool, phrasePool } from "./queries";
@@ -12,7 +13,10 @@ import {
   OPTION_POOL,
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
-import { snapshotOf } from "../domain/refs";
+import { snapshotOf } from "../domain/kinds";
+import { PROFILES } from "../domain/language";
+import { gapOf } from "../domain/word-gap";
+import { retryItemId } from "../domain/skills";
 import {
   fillSettings,
   type ReviewEvent,
@@ -77,9 +81,11 @@ export async function recordAnswer({
 }: AnswerInput): Promise<{ event: ReviewEvent; created: boolean }> {
   if (typeof correct !== "boolean" || item.type === "recall") throw new Error("Нужен ответ на объективное задание");
   // «Почти» приходит только из проверок с вводом текста; у заданий с выбором исход задаёт сам `correct`.
-  const rating = gradeFor(status ?? (correct ? "correct" : "wrong"), item.type, responseTimeMs);
+  const outcome = status ?? (correct ? "correct" : "wrong");
   // Ступень проще считается до транзакции: иначе запись пришлось бы расширить на таблицы слов и фраз.
-  const easier = correct ? null : await easierRetry(item, session, database);
+  const easier = correct
+    ? null
+    : ((await gapRetry(item, answer, session, database)) ?? (await easierRetry(item, session, database)));
   const eventId = `e-${item.id}`;
   const result = await database.transaction(
     "rw",
@@ -92,6 +98,7 @@ export async function recordAnswer({
       if (existing) return { event: existing, created: false }; // повторное нажатие не создаёт второй ответ
       const state = await database.cardStates.get(item.unitKey);
       if ((state?.version ?? 0) !== item.expectedVersion) throw new ConflictError();
+      const rating = gradeFor(outcome, item.type, responseTimeMs, state?.card.state ?? State.New);
       const updated = item.mode === "scheduled" ? nextState(state, item.ref, rating, now) : undefined;
       const event: ReviewEvent = {
         id: eventId,
@@ -116,12 +123,14 @@ export async function recordAnswer({
       // Позиция сессии = сколько упражнений уже отвечено; экран сам решает, когда листать дальше.
       const stored = (await database.sessions.get(session.id)) ?? session;
       const items = stored.items.map((entry) => (entry.id === item.id ? { ...entry, eventId } : entry));
-      if (!correct && !items.some((entry) => entry.retryOf && entry.unitKey === item.unitKey)) {
+      // Пункт урока повторился бы тем же заданием через три карточки после показанного ответа: его вернёт расписание.
+      const retries = item.ref.kind !== "mistake";
+      if (!correct && retries && !items.some((entry) => entry.retryOf && entry.unitKey === item.unitKey)) {
         const position = items.findIndex((entry) => entry.id === item.id);
         items.splice(Math.min(position + 3, items.length), 0, {
           ...item,
           ...easier,
-          id: `${item.id}-retry`,
+          id: retryItemId(item.id),
           isNew: false,
           mode: "practice",
           expectedVersion: updated?.version ?? state?.version ?? 0,
@@ -143,6 +152,19 @@ export async function recordAnswer({
   );
   if (result.created) announceChange(result.finished ? "finished" : "answered");
   return { event: result.event, created: result.created };
+}
+/** Ошибка в одном слове длинной фразы: попытка спрашивает это слово в пропуске, а не всю фразу заново. */
+async function gapRetry(
+  item: SessionItem,
+  answer: string,
+  session: Session,
+  database: AppDatabase,
+): Promise<Pick<SessionItem, "type" | "options" | "gap"> | null> {
+  if (item.type !== "spelling" || item.card.kind !== "phrase") return null;
+  const courseId = await sessionCourse(session, database);
+  const profile = courseId ? await profileOfCourse(courseId, database) : PROFILES.el;
+  const gap = gapOf(answer, item.card.phrase.text, profile);
+  return gap === null ? null : { type: "wordGap", options: [], gap };
 }
 /**
  * Задание дополнительной попытки: ступень проще провалённой. Пул вариантов читается только на ошибке

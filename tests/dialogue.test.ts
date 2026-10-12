@@ -140,6 +140,13 @@ describe("аудирование записями реплик", () => {
     expect(audio.played).toHaveLength(0);
     expect(spoken.map((utterance) => utterance.rate)).toEqual([0.75, 0.75, 0.75]);
   });
+  it("вопрос без записи звучит синтезом с «?»", async () => {
+    fakeAudio();
+    const spoken = fakeSynth();
+    const { playDialogue } = await import("../src/shared/dialogue");
+    await playDialogue([{ speaker: "Αντρέας", text: "Μιλάτε αγγλικά;" }], "normal", undefined, source());
+    expect(spoken.map((utterance) => utterance.text)).toEqual(["Μιλάτε αγγλικά?"]);
+  });
   it("отказ воспроизведения файла — ошибка, а не молчаливая подмена голосом", async () => {
     fakeAudio({ refuse: true });
     const spoken = fakeSynth();
@@ -154,5 +161,35 @@ describe("аудирование записями реплик", () => {
     const playing = playDialogue(lines, "normal", (index) => index === 1 && stopDialogue(), source());
     expect(await playing).toBe("stopped");
     expect(audio.played.map((entry) => entry.src)).toEqual(["/media/line-1.mp3"]);
+  });
+});
+
+describe("чтение текста вслух: откат по строке", () => {
+  it("несыгравшая запись заменяется синтезом, текст доходит до конца", async () => {
+    fakeAudio({ refuse: true });
+    const spoken = fakeSynth();
+    const { playDialogue } = await import("../src/shared/dialogue");
+    expect(await playDialogue(lines, "normal", undefined, source(), undefined, true)).toBe("done");
+    expect(spoken.map((utterance) => utterance.text)).toEqual(["Καλησπέρα!", "Γεια σου!", "Χάρηκα."]);
+  });
+  it("без голосов на устройстве строка без записи пропускается, остальные звучат файлами", async () => {
+    const audio = fakeAudio();
+    fakeSynth();
+    (globalThis as { speechSynthesis: { getVoices: () => unknown[] } }).speechSynthesis.getVoices = () => [];
+    const { playDialogue } = await import("../src/shared/dialogue");
+    expect(await playDialogue(lines, "slow", undefined, source(["line-2"]), undefined, true)).toBe("done");
+    expect(audio.played).toEqual([
+      { src: "/media/line-1.mp3", rate: 0.8 },
+      { src: "/media/line-3.mp3", rate: 0.8 },
+    ]);
+  });
+  it("не прозвучало ничего — «none»", async () => {
+    fakeAudio();
+    fakeSynth();
+    (globalThis as { speechSynthesis: { getVoices: () => unknown[] } }).speechSynthesis.getVoices = () => [];
+    const { playDialogue } = await import("../src/shared/dialogue");
+    expect(
+      await playDialogue(lines, "normal", undefined, source(["line-1", "line-2", "line-3"]), undefined, true),
+    ).toBe("none");
   });
 });

@@ -1,5 +1,6 @@
 id: p071
 text: Πού είναι η κουζίνα;
+audio: phrases/p071.mp3
 translation: Где кухня?
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

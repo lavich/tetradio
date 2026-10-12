@@ -17,8 +17,6 @@ export interface LanguageProfile {
   article: RegExp | null;
   /** Слоги и ударение: сборка из слогов и строка ударения на карточке. */
   syllables: boolean;
-  /** Буквы вариантов ответа: стиль счётчика и те же буквы для текста «Верно: β) …». */
-  letters: { style: string; chars: readonly string[] };
   /** Дата на странице тетради. */
   date: { locale: string; upper: boolean };
   /** Подписи в интерфейсе: «Напиши по-гречески», «Поиск по греческому». */
@@ -31,6 +29,8 @@ export interface LanguageProfile {
   canonical: (text: string) => string;
   /** Ответ не совпал, но засчитывается как «почти». */
   isAlmost: (given: string, accepted: string) => boolean;
+  /** Слова отрицания: потерянное или лишнее отрицание меняет смысл фразы, это не ошибка в одном слове. */
+  negations: readonly string[];
 }
 
 /** Снимается только знак ударения (U+0301); диерезис (U+0308) сохраняется. */
@@ -81,7 +81,6 @@ const el: LanguageProfile = {
   ending: GREEK_ENDING,
   article: /^(ο|η|το|οι|τα|τον|την|τους|τις)\s+/u,
   syllables: true,
-  letters: { style: "lower-greek", chars: ["α", "β", "γ", "δ", "ε", "ζ"] },
   date: { locale: "el-GR", upper: true },
   names: { in: "по-гречески", by: "по греческому", title: "Греческий" },
   cover: { lesson: "ΜΑΘΗΜΑ", name: "ΟΝΟΜΑ" },
@@ -93,6 +92,7 @@ const el: LanguageProfile = {
   },
   canonical: (text) => text.replace(GREEK_ENDING, ""),
   isAlmost: (given, accepted) => stripAccent(given) === stripAccent(accepted),
+  negations: ["δεν", "δε", "μην", "μη", "όχι"],
 };
 
 const ENGLISH_ENDING = /\s*[.!?…]+$/u;
@@ -104,7 +104,6 @@ const en: LanguageProfile = {
   ending: ENGLISH_ENDING,
   article: /^(a|an|the)\s+/u,
   syllables: false,
-  letters: { style: "lower-latin", chars: ["a", "b", "c", "d", "e", "f"] },
   date: { locale: "en-GB", upper: false },
   names: { in: "по-английски", by: "по английскому", title: "Английский" },
   cover: { lesson: "LESSON", name: "NAME" },
@@ -116,6 +115,13 @@ const en: LanguageProfile = {
   },
   canonical: (text) => expand(text.replace(ENGLISH_ENDING, "")),
   isAlmost: typo,
+  negations: ["not", "no", "never"],
+};
+
+/** Текст для синтеза: греческий вопросительный знак — та же «;», и синтез читает её как паузу, а не вопрос. */
+export const spokenText = (text: string, language: string) => {
+  const nfc = text.normalize("NFC");
+  return language === "el" || language.startsWith("el-") ? nfc.replaceAll(";", "?") : nfc;
 };
 
 export const PROFILES: Record<Language, LanguageProfile> = { el, en };

@@ -1,5 +1,6 @@
 id: p063
 text: Δεν ξυπνάω ποτέ νωρίς.
+audio: phrases/p063.mp3
 translation: Я никогда не просыпаюсь рано.
 provenance:
   sourceLabel: Лексикон курса, модуль 05 (docs/course/lexicon/05.tsv)

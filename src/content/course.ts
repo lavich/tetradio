@@ -52,6 +52,8 @@ export interface ExerciseItem {
   answer: string[];
   /** Пояснение, которое показывается после ответа: почему так, где типичная ошибка. */
   explanation?: string;
+  /** Запись верного ответа: приходит в пакете отдельным полем `itemAudio`, в пункт её кладёт разбор пакета. */
+  audioAssetId?: string;
 }
 export interface ExerciseBlock {
   type: "exercise";

@@ -1,5 +1,6 @@
 id: p145
 text: Μπορώ να το επιστρέψω;
+audio: phrases/p145.mp3
 translation: Можно это вернуть?
 provenance:
   sourceLabel: Лексикон курса, модуль 11 (docs/course/lexicon/11.tsv)

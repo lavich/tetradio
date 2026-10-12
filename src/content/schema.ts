@@ -1,5 +1,5 @@
 import type {
-  CardKind,
+  LessonCardKind,
   Example,
   Gloss,
   Provenance,
@@ -7,8 +7,9 @@ import type {
   Segment,
   SourceRecord,
 } from "../domain/card-fields.ts";
-import { CARD_KINDS } from "../domain/card-fields.ts";
+import { LESSON_CARD_KINDS } from "../domain/card-fields.ts";
 import { ContentError } from "./schema-errors.ts";
+import { sentencesOf } from "../domain/sentences.ts";
 import {
   parseBlocks,
   parseCalendar,
@@ -18,8 +19,10 @@ import {
   type CatalogModule,
   type CourseCalendar,
   type CourseExam,
+  type Gloss as TextGloss,
   type LessonBlock,
   type LessonKind,
+  type ReadingBlock,
   tapFields,
 } from "./course.ts";
 
@@ -30,9 +33,9 @@ import {
  * Схема 4 — курс: модули в каталоге, урок из карточек (слова и фразы, упорядоченные типизированные связи)
  * и блоков (объяснение, задания с ключом, чтение, аудирование, письмо, речь), вид урока (урок или контрольная)
  * и формы слова. Урок может не содержать карточек, если у него есть блоки. Другие версии схемы не читаются.
- * Необязательные поля `marks` (слова в тексте урока) и `lineAudio` (записи реплик аудирования) добавлены в схему 4
- * без смены версии: прежний читатель собирает пакет по известным полям и их не видит. Поэтому запись реплики
- * едет не в самой реплике — там лишнее поле прежний читатель отклонил бы.
+ * Необязательные поля `marks` (слова в тексте урока), `lineAudio` (записи реплик аудирования) и `itemAudio`
+ * (записи ответов заданий) добавлены в схему 4 без смены версии: прежний читатель собирает пакет по известным полям
+ * и их не видит. Поэтому запись едет не в самой реплике или пункте — там лишнее поле прежний читатель отклонил бы.
  */
 export const SCHEMA_VERSION = 4;
 export type SchemaVersion = typeof SCHEMA_VERSION;
@@ -65,6 +68,10 @@ export interface CatalogEntry {
   url: string;
   bytes: number;
   media: { count: number; bytes: number };
+  /** Тексты для чтения в пакете: по ним пакет, поставленный сборкой без текстов, ставится заново. */
+  readings?: number;
+  /** Записи предложений текстов: пакет, поставленный сборкой без записей, ставится заново. */
+  readingAudio?: number;
 }
 export interface Catalog {
   schemaVersion: SchemaVersion;
@@ -102,7 +109,7 @@ export interface PackagePhrase {
   revision: string;
 }
 export interface PackageItem {
-  kind: CardKind;
+  kind: LessonCardKind;
   id: string;
   position: number;
 }
@@ -135,7 +142,42 @@ export interface ContentPackage {
   marks?: PackageMarks;
   /** Записи реплик: блок аудирования → медиа каждой реплики по порядку, `null` — реплика без записи. */
   lineAudio?: Record<string, (string | null)[]>;
+  /** Записи верных ответов: блок задания → пункт → медиа. */
+  itemAudio?: Record<string, Record<string, string>>;
+  /** Тексты для беглого чтения, которые открывает этот урок. */
+  readings?: PackageReading[];
 }
+
+/** Статус вычитки текста: пометка «сгенерированный» снимается только вычиткой носителя. */
+export type ReadingReview = "none" | "author" | "native";
+/**
+ * Текст для беглого чтения. Едет в пакете открывающего урока необязательным полем: прежний читатель его не видит.
+ * Разметка слов — своя, по блоку `readingBlock(текст)`: в общей разметке пакета блока с таким id нет.
+ */
+export interface PackageReading {
+  id: string;
+  title: string;
+  series?: string;
+  text: string;
+  glosses: TextGloss[];
+  review: ReadingReview;
+  words: number;
+  marks?: PackageMarks;
+  /** Запись каждого предложения (`sentencesOf(text)`) — id медиа пакета или `null`: без записи звучит синтез. */
+  audio?: (string | null)[];
+}
+/** Записи предложений в текстах пакета: меньше, чем в каталоге, — пакет ставился сборкой без записей. */
+export const voicedOf = (readings: Pick<PackageReading, "audio">[] | undefined) =>
+  (readings ?? []).reduce((sum, reading) => sum + (reading.audio ?? []).filter(Boolean).length, 0);
+export const readingBlock = (reading: Pick<PackageReading, "id" | "title" | "text" | "glosses">): ReadingBlock => ({
+  type: "reading",
+  id: reading.id,
+  title: reading.title,
+  text: reading.text,
+  glosses: reading.glosses,
+});
+/** Префикс идентификаторов текстов: у уроков его нет, поэтому отметка «прочитано» не совпадёт с блоком урока. */
+export const READING_PREFIX = "r-";
 
 export interface WordMark {
   start: number;
@@ -160,7 +202,7 @@ export interface PackageMarks {
   blocks: Record<string, Record<string, [number, number, number, 0 | 1][]>>;
 }
 export type BlockMarks = Record<string, Record<string, WordMark[]>>;
-export const cardRef = (kind: CardKind, id: string) => `${kind === "word" ? "w" : "p"}:${id}`;
+export const cardRef = (kind: LessonCardKind, id: string) => `${kind === "word" ? "w" : "p"}:${id}`;
 
 export { ContentError, type ContentErrorKind } from "./schema-errors.ts";
 
@@ -198,9 +240,9 @@ const relativeUrl = (value: unknown, path: string): string => {
 const unique = (ids: string[], path: string) => {
   if (new Set(ids).size !== ids.length) throw new ContentError(`${path}: идентификаторы повторяются`);
 };
-const isCardKind = (value: unknown): value is CardKind =>
-  typeof value === "string" && (CARD_KINDS as readonly string[]).includes(value);
-const cardKind = (value: unknown, path: string): CardKind => {
+const isCardKind = (value: unknown): value is LessonCardKind =>
+  typeof value === "string" && (LESSON_CARD_KINDS as readonly string[]).includes(value);
+const cardKind = (value: unknown, path: string): LessonCardKind => {
   if (!isCardKind(value)) throw new ContentError(`${path}: неизвестный вид карточки «${String(value)}»`);
   return value;
 };
@@ -241,6 +283,8 @@ export function parseCatalog(input: unknown): Catalog {
       bytes: num(item.bytes, `${path}.bytes`),
       media: { count: num(media.count, `${path}.media.count`), bytes: num(media.bytes, `${path}.media.bytes`) },
     };
+    if (item.readings !== undefined) lesson.readings = num(item.readings, `${path}.readings`);
+    if (item.readingAudio !== undefined) lesson.readingAudio = num(item.readingAudio, `${path}.readingAudio`);
     const wordIds = opt(item.wordIds, (value) =>
       list(value, `${path}.wordIds`).map((id, i) => str(id, `${path}.wordIds[${i}]`)),
     );
@@ -548,9 +592,56 @@ export function parsePackage(input: unknown): ContentPackage {
         `пакет.blocks: аудирование ${block.id} ссылается на медиа ${block.audioAssetId}, которого нет в пакете`,
       );
   if (raw.lineAudio !== undefined) pack.lineAudio = parseLineAudio(raw.lineAudio, blocks, mediaIds);
+  if (raw.itemAudio !== undefined) pack.itemAudio = parseItemAudio(raw.itemAudio, blocks, mediaIds);
   if (blocks.length) pack.blocks = blocks;
   if (raw.marks !== undefined) pack.marks = parseMarks(raw.marks, blocks, items);
+  if (raw.readings !== undefined) pack.readings = parseReadings(raw.readings, mediaIds);
   return pack;
+}
+
+const REVIEWS: readonly ReadingReview[] = ["none", "author", "native"];
+function parseReadings(input: unknown, mediaIds: Set<string>): PackageReading[] {
+  const readings = list(input, "пакет.readings").map((entry, i): PackageReading => {
+    const path = `пакет.readings[${i}]`;
+    const raw = obj(entry, path);
+    const id = str(raw.id, `${path}.id`);
+    if (!id.startsWith(READING_PREFIX))
+      throw new ContentError(`${path}.id: идентификатор текста начинается с ${READING_PREFIX}`);
+    const review = raw.review;
+    if (!REVIEWS.includes(review as ReadingReview))
+      throw new ContentError(`${path}.review: ожидалось ${REVIEWS.join(", ")}`);
+    const reading: PackageReading = {
+      id,
+      title: str(raw.title, `${path}.title`),
+      text: str(raw.text, `${path}.text`),
+      glosses: list(raw.glosses ?? [], `${path}.glosses`).map((gloss, g) => {
+        const item = obj(gloss, `${path}.glosses[${g}]`);
+        return {
+          text: str(item.text, `${path}.glosses[${g}].text`),
+          russian: str(item.russian, `${path}.glosses[${g}].russian`),
+        };
+      }),
+      review: review as ReadingReview,
+      words: num(raw.words, `${path}.words`),
+    };
+    const series = opt(raw.series, (value) => str(value, `${path}.series`));
+    if (series) reading.series = series;
+    if (raw.marks !== undefined) reading.marks = parseMarks(raw.marks, [readingBlock(reading)], []);
+    // Записи сопоставлены предложениям по номеру: при расхождении текст звучит синтезом, а не чужими записями.
+    if (Array.isArray(raw.audio)) {
+      const audio = raw.audio as unknown[];
+      const fits =
+        audio.length === sentencesOf(reading.text).length &&
+        audio.every((id) => id === null || (typeof id === "string" && mediaIds.has(id)));
+      if (fits) reading.audio = audio as (string | null)[];
+    }
+    return reading;
+  });
+  unique(
+    readings.map((reading) => reading.id),
+    "пакет.readings",
+  );
+  return readings;
 }
 
 function parseLineAudio(input: unknown, blocks: LessonBlock[], mediaIds: Set<string>) {
@@ -569,6 +660,25 @@ function parseLineAudio(input: unknown, blocks: LessonBlock[], mediaIds: Set<str
       block.transcript[i].audioAssetId = id;
       return id;
     });
+  }
+  return result;
+}
+
+function parseItemAudio(input: unknown, blocks: LessonBlock[], mediaIds: Set<string>) {
+  const result: Record<string, Record<string, string>> = {};
+  for (const [blockId, refs] of Object.entries(obj(input, "пакет.itemAudio"))) {
+    const path = `пакет.itemAudio.${blockId}`;
+    const block = blocks.find((candidate) => candidate.id === blockId);
+    if (block?.type !== "exercise") throw new ContentError(`${path}: задания с таким id нет в уроке`);
+    result[blockId] = {};
+    for (const [itemId, ref] of Object.entries(obj(refs, path))) {
+      const item = block.items.find((candidate) => candidate.id === itemId);
+      if (!item) throw new ContentError(`${path}.${itemId}: пункта с таким id нет в задании`);
+      const id = str(ref, `${path}.${itemId}`);
+      if (!mediaIds.has(id)) throw new ContentError(`${path}.${itemId}: медиа ${id} нет в пакете`);
+      item.audioAssetId = id;
+      result[blockId][itemId] = id;
+    }
   }
   return result;
 }

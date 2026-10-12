@@ -1,5 +1,6 @@
 id: p065
 text: Δεν έχω χρόνο.
+audio: phrases/p065.mp3
 translation: У меня нет времени.
 provenance:
   sourceLabel: Лексикон курса, модуль 05 (docs/course/lexicon/05.tsv)

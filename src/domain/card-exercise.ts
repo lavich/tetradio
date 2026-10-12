@@ -1,9 +1,9 @@
 import { optionsFor, phraseOptionsFor, type ExercisePools, type OptionPools } from "./options";
-import { availableTypes, chooseTypeFor, type SkillContext } from "./exercise-choice";
+import { KINDS } from "./kinds";
 import { PROFILES, type LanguageProfile } from "./language";
-import { emptySkills, type SkillSummary } from "./skills";
-import type { ExerciseType, Phrase, SessionCard, SessionItem } from "./types";
-import { assemblyExercise, objectiveExercise } from "./word-exercise";
+import type { SkillSummary } from "./skills";
+import type { ExerciseType, SessionCard, SessionItem } from "./types";
+import { assemblyExercise } from "./word-exercise";
 
 /**
  * Ступени вниз после ошибки: попытка сразу после показанного ответа должна быть поддержанной,
@@ -37,12 +37,14 @@ export function easierExercise(
     const options =
       card.kind === "word"
         ? optionsFor(card.word, pools.words, "recognition", random, profile)
-        : phraseOptionsFor(card.phrase, pools.phrases, "recognition", random);
+        : card.kind === "phrase"
+          ? phraseOptionsFor(card.phrase, pools.phrases, "recognition", random)
+          : [];
     if (options.length === 4) return { type: "recognition", options };
   }
   return null;
 }
-/** Упражнение для карточки любого вида; `null` — фразу нечем объективно проверить. */
+/** Упражнение для карточки любого вида; `null` — карточку нечем объективно проверить. */
 export function exerciseFor(
   card: SessionCard,
   pools: ExercisePools,
@@ -51,37 +53,5 @@ export function exerciseFor(
   hasVoice: boolean,
   profile: LanguageProfile = PROFILES.el,
 ): Pick<SessionItem, "type" | "options"> | null {
-  if (card.kind === "word") return objectiveExercise(card.word, pools.words, skills, random, hasVoice, profile);
-  return phraseExercise(card.phrase, pools.phrases, skills, random, hasVoice);
-}
-
-/**
- * Фраза: узнавание и написание при переводе, аудирование при голосе или файле и четырёх различных фразах.
- * Слоговой сборки и её условий нет; при недостатке вариантов — написание. Без единого доступного упражнения — `null`.
- */
-export function phraseExercise(
-  phrase: Phrase,
-  pool: Phrase[],
-  skills: SkillSummary = emptySkills(),
-  random: () => number = Math.random,
-  hasVoice = false,
-): Pick<SessionItem, "type" | "options"> | null {
-  const recognition = phraseOptionsFor(phrase, pool, "recognition", random);
-  const listening = phraseOptionsFor(phrase, pool, "listening", random);
-  const sounds = !!phrase.audioAssetId || hasVoice;
-  const canListen = sounds && listening.length === 4;
-  const context: SkillContext = {
-    hasAudio: canListen,
-    canListen,
-    hasOptions: recognition.length === 4,
-    canAssemble: false,
-    canSpell: !!phrase.translation,
-    canComprehend: sounds && recognition.length === 4,
-  };
-  if (!availableTypes(skills, context).length) return null;
-  const type = chooseTypeFor(skills, context);
-  return {
-    type,
-    options: type === "recognition" || type === "comprehension" ? recognition : type === "listening" ? listening : [],
-  };
+  return KINDS[card.kind].exercise(card, pools, skills, random, hasVoice, profile);
 }

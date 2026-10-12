@@ -5,7 +5,7 @@ import { applyPackage, type InstallResult } from "./apply";
 import { fetcher, type ContentFetcher } from "./fetcher";
 import { pruneMedia } from "./media";
 import { catalogSettled, courseKey, setPhase } from "./phases";
-import { ContentError, parsePackage } from "./schema";
+import { voicedOf, ContentError, parsePackage } from "./schema";
 
 const inflight = new Map<string, Promise<InstallResult>>();
 
@@ -96,7 +96,13 @@ export function installLesson(
       if (!entry) throw new ContentError("Этого урока нет в каталоге.");
       version = entry.version;
       const installed = await database.packages.get(lessonId);
-      if (installed && installed.version === entry.version)
+      // Сборка без поддержки текстов ставила пакет без них: та же версия с текстами в каталоге ставится заново.
+      if (
+        installed &&
+        installed.version === entry.version &&
+        (installed.readings?.length ?? 0) >= (entry.readings ?? 0) &&
+        voicedOf(installed.readings) >= (entry.readingAudio ?? 0)
+      )
         return { status: "current", added: 0, changed: 0 } as InstallResult;
       const pack = parsePackage(await source.json(entry.url));
       if (pack.id !== lessonId || pack.version !== entry.version)

@@ -1,9 +1,24 @@
 import { State, type Card } from "ts-fsrs";
 import type { CatalogModule } from "../content/course";
-import { DEFAULT_LANGUAGE, voiceFor, type Language, type Voices } from "./language";
+import { isCheckable, KINDS, needsFacts, type AvailabilityContext, type CardFacts } from "./kinds";
+import type { Voices } from "./language";
 import { unitKey } from "./refs";
-import { localDay } from "./time";
-import type { CardKind, LearningRef, LearningState, Lesson, LessonItem } from "./types";
+import { addDays, localDay, zonedStart } from "./time";
+import type { LearningRef, LearningState, Lesson, LessonItem } from "./types";
+
+/** Час смены дня повторений: ответ поздно вечером и занятие после полуночи — один день, как в Anki. */
+export const DAY_STARTS_AT = 4;
+/** Ближайшая смена дня повторений после `now`: срок до неё — сегодняшний. */
+export function reviewCutoff(now: Date, timezone: string): Date {
+  const today = localDay(now, timezone);
+  const start = zonedStart(today, timezone, DAY_STARTS_AT);
+  return start > now ? start : zonedStart(addDays(today, 1), timezone, DAY_STARTS_AT);
+}
+/** Повторение в днях ждёт своего дня, а короткий шаг изучения — точного момента, иначе 10 минут сжались бы в ноль. */
+export function isDue(card: Pick<Card, "state" | "due">, now: Date, cutoff: Date): boolean {
+  const due = new Date(card.due).getTime();
+  return card.state === State.Review ? due < cutoff.getTime() : due <= now.getTime();
+}
 
 /** Зрелость состояния для очередей: сперва то, что переучивается, потом разучиваемое, потом повторяемое. */
 const stateRank = (card: Card) => (card.state === State.Relearning ? 0 : card.state === State.Learning ? 1 : 2);
@@ -12,7 +27,10 @@ export interface WordOrigin {
   lessonId: string;
   title: string;
 }
-/** `unavailable` — новые карточки без доступного объективного упражнения: видны отдельно. */
+/**
+ * `unavailable` — карточки без доступного объективного упражнения, новые и со сроком: видны отдельно.
+ * Карточка со сроком, содержимого которой на устройстве нет, в план не входит вовсе; её состояние остаётся.
+ */
 export interface DailyPlan {
   today: string;
   newRefs: LearningRef[];
@@ -20,26 +38,6 @@ export interface DailyPlan {
   origins: Map<string, WordOrigin>;
   unavailable: LearningRef[];
 }
-
-/** Лёгкие признаки доступности проверки: для фразы — наличие перевода и файла аудио; слово проверяемо всегда. */
-export interface CardFacts {
-  kind: CardKind;
-  hasTranslation?: boolean;
-  hasAudio?: boolean;
-  language?: Language;
-}
-export interface AvailabilityContext {
-  hasVoice: Voices;
-  phrasePool: number;
-}
-/**
- * Есть ли у карточки объективное упражнение. Фраза без перевода проверяется только аудированием,
- * для которого нужны голос или файл и четыре различных фразы в пуле. Агент не дописывает перевод для обхода.
- */
-export const isCheckable = (facts: CardFacts, context: AvailabilityContext) =>
-  facts.kind !== "phrase" ||
-  !!facts.hasTranslation ||
-  ((!!facts.hasAudio || voiceFor(context.hasVoice, facts.language ?? DEFAULT_LANGUAGE)) && context.phrasePool >= 4);
 
 export interface PlanLesson {
   id: string;
@@ -80,8 +78,8 @@ export interface PlanSource {
   statesOf(refs: LearningRef[]): Promise<Map<string, LearningState>>;
   /** Ключи существующих карточек. */
   liveKeys(refs: LearningRef[]): Promise<Set<string>>;
-  /** Состояния к повторению на момент `now`; с курсом — только карточки этого курса. */
-  dueStates(now: Date, courseId?: string): Promise<LearningState[]>;
+  /** Состояния со сроком не позже `until`; с курсом — только карточки этого курса. */
+  dueStates(until: Date, courseId?: string): Promise<LearningState[]>;
   /** Признаки доступности упражнения для перечисленных карточек; тексты при этом не нужны. */
   factsOf(refs: LearningRef[]): Promise<Map<string, CardFacts>>;
   /** Число живых фраз курса: достаточность пула вариантов для аудирования фраз. */
@@ -113,15 +111,24 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
   }
   const [live, states] = await Promise.all([source.liveKeys(refs), source.statesOf(refs)]);
   const candidates = refs.filter((ref) => live.has(unitKey(ref)) && !states.has(unitKey(ref)));
-  const facts = await source.factsOf(candidates.filter((ref) => ref.kind === "phrase"));
-  const fresh: LearningRef[] = [];
+  const cutoff = reviewCutoff(now, source.timezone());
+  const due = (await source.dueStates(new Date(cutoff.getTime() - 1), courseId)).filter((state) =>
+    isDue(state.card, now, cutoff),
+  );
+  const dueRefs = due.map((state) => state.ref);
+  // Слова и фразы с базы не удаляются, а слово проверяемо всегда: на большой базе план не читает их записи.
+  const [dueLive, facts] = await Promise.all([
+    source.liveKeys(dueRefs.filter((ref) => KINDS[ref.kind].vanishes)),
+    source.factsOf([...candidates, ...dueRefs].filter(needsFacts)),
+  ]);
+  const checkable = (ref: LearningRef) => {
+    if (!needsFacts(ref)) return true;
+    const info = facts.get(unitKey(ref));
+    return !!info && isCheckable(info, availability);
+  };
+  const newRefs: LearningRef[] = [];
   const unavailable: LearningRef[] = [];
-  for (const ref of candidates) {
-    const info = ref.kind === "phrase" ? facts.get(unitKey(ref)) : undefined;
-    if (ref.kind !== "phrase" || (info && isCheckable(info, availability))) fresh.push(ref);
-    else unavailable.push(ref);
-  }
-  const newRefs = fresh;
+  for (const ref of candidates) (checkable(ref) ? newRefs : unavailable).push(ref);
   const titles = new Map(lessons.map((lesson) => [lesson.id, lesson.title]));
   const origins = new Map(
     newRefs.map((ref) => {
@@ -130,7 +137,10 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     }),
   );
 
-  const reviews = (await source.dueStates(now, courseId))
+  const askable = due.filter((state) => !KINDS[state.ref.kind].vanishes || dueLive.has(state.unitKey));
+  for (const state of askable) if (!checkable(state.ref)) unavailable.push(state.ref);
+  const reviews = askable
+    .filter((state) => checkable(state.ref))
     .sort(
       (a, b) =>
         stateRank(a.card) - stateRank(b.card) ||

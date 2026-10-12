@@ -7,6 +7,7 @@ import { Screen } from "../../app/Screen";
 import type { LessonBlock } from "../../content/course";
 import { lessonDone, lessonTally } from "../../domain/course";
 import {
+  lessonMistakes,
   blockProgressOf,
   completeIfDone,
   courseLesson,
@@ -40,6 +41,7 @@ export function CourseLessonScreen() {
   const lesson = useLiveQuery(() => courseLesson(lessonId), [lessonId]);
   const progress = useLiveQuery(() => blockProgressOf(lessonId), [lessonId]);
   const items = useLiveQuery(() => lessonItems(lessonId), [lessonId]);
+  const mistakes = useLiveQuery(() => lessonMistakes(lessonId), [lessonId]) ?? 0;
   const finished = !!lesson?.lesson?.completed;
   const lessonCourse = useLiveQuery(async () => (await lessonCourses([lessonId])).get(lessonId), [lessonId]);
   useFollowCourse(lessonCourse);
@@ -157,6 +159,7 @@ export function CourseLessonScreen() {
           pages={pages}
           numbering={numbering}
           items={items ?? []}
+          mistakes={mistakes}
           next={next?.lesson}
           withList={review}
           problem={problem}

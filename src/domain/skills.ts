@@ -10,9 +10,12 @@ export interface TypeSkill {
   recent: boolean[];
   lastAt: string;
 }
+/** Тип проверки, которого эта версия не знает: код из снимка более новой версии, хранится и публикуется как есть. */
+export type ForeignType = `~${string}`;
+export type StoredType = ExerciseType | ForeignType;
 export interface SkillSummary {
-  types: Partial<Record<ExerciseType, TypeSkill>>;
-  lastTypes: ExerciseType[];
+  types: Partial<Record<StoredType, TypeSkill>>;
+  lastTypes: StoredType[];
   cleanAssemblies: number;
 }
 export const RECENT = 10;
@@ -20,11 +23,17 @@ export const emptySkills = (): SkillSummary => ({ types: {}, lastTypes: [], clea
 export const succeeded = (event: Pick<ReviewEvent, "correct" | "rating">) =>
   event.correct === null ? event.rating > 1 : event.correct;
 
+/** Дополнительная попытка после ошибки: её id выводится из id проваленного задания. */
+export const retryItemId = (itemId: string) => `${itemId}-retry`;
+const isRetry = (itemId: string) => itemId.endsWith("-retry");
+
 /** Один ответ меняет сводку так же, как его добавление в историю: это проверяется эквивалентностью с событиями. */
 export function foldSkill(
   summary: SkillSummary,
-  event: Pick<ReviewEvent, "type" | "correct" | "rating" | "createdAt">,
+  event: Pick<ReviewEvent, "type" | "correct" | "rating" | "createdAt" | "itemId">,
 ): SkillSummary {
+  // Попытка идёт ступенью проще вскоре после показанного ответа: её успех не говорит о навыке.
+  if (isRetry(event.itemId)) return summary;
   const previous = summary.types[event.type];
   const recent = [...(previous?.recent ?? []), succeeded(event)].slice(-RECENT);
   const cleanAssemblies =
@@ -58,7 +67,7 @@ export interface DaySummary {
 }
 export interface StatsSummary {
   days: DaySummary[];
-  recentByType: Partial<Record<ExerciseType, boolean[]>>;
+  recentByType: Partial<Record<StoredType, boolean[]>>;
   answers: number;
   answeredKeys: string[];
 }

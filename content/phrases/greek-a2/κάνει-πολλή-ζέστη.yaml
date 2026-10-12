@@ -1,5 +1,6 @@
 id: p245
 text: Κάνει πολλή ζέστη.
+audio: phrases/p245.mp3
 translation: Очень жарко.
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)

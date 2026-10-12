@@ -17,6 +17,7 @@ import { cardsInCourse, currentCourse } from "../../storage/courses";
 import { courseProgress, type CourseProgress } from "../../storage/progress";
 import { useStats } from "../../shared/store";
 import { dictionary, type DictionaryLesson } from "../../storage/dictionary";
+import { mistakeCount } from "../../storage/queries";
 import { entryPath } from "../words/WordsScreen";
 import { SyncLine } from "./SyncLine";
 import css from "./progress.module.css";
@@ -35,8 +36,10 @@ export function ProgressScreen() {
   );
   const words = useLiveQuery(() => (course === undefined ? undefined : dictionary(courseId)), [course]);
   const stats = useStats(now);
+  const mistakes = useLiveQuery(() => (course === undefined ? undefined : mistakeCount(courseId)), [course]);
   const leeches = useLiveQuery(async () => {
-    const all = stats?.leeches ?? [];
+    // Список ведёт на страницы слов и фраз; у задания урока такой страницы нет.
+    const all = (stats?.leeches ?? []).filter((leech) => leech.ref.kind !== "mistake");
     if (!courseId) return all;
     const own = await cardsInCourse(
       all.map((leech) => leech.unitKey),
@@ -54,7 +57,15 @@ export function ProgressScreen() {
   );
   const path = <Path data={data} />;
   const ready = <Skills skills={data.skills} complete={data.complete} passShare={data.passShare} />;
-  const cards = <Cards words={words} leeches={leeches ?? []} lang={profile.code} started={data.pace.done > 0} />;
+  const cards = (
+    <Cards
+      words={words}
+      leeches={leeches ?? []}
+      mistakes={mistakes ?? 0}
+      lang={profile.code}
+      started={data.pace.done > 0}
+    />
+  );
   const tail = (
     <>
       <p className={css.weekLine} data-testid="week">
@@ -160,11 +171,13 @@ function Skills({
 function Cards({
   words,
   leeches,
+  mistakes,
   lang,
   started,
 }: {
   words: DictionaryLesson[] | undefined;
   leeches: Leech[];
+  mistakes: number;
   lang: string;
   started: boolean;
 }) {
@@ -188,6 +201,11 @@ function Cards({
         )}
         <Link to="/words">Словарь</Link>
       </p>
+      {mistakes ? (
+        <p className={css.plan} data-testid="mistakes-line">
+          Ошибки уроков в повторении: <b>{mistakes}</b>.
+        </p>
+      ) : null}
       {leeches.length ? (
         <p className={css.plan} data-testid="leeches">
           Не даются:{" "}

@@ -1,5 +1,6 @@
 id: p134
 text: Πάω στον φούρνο για ψωμί.
+audio: phrases/p134.mp3
 translation: Я иду в пекарню за хлебом.
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

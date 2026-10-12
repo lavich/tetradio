@@ -15,4 +15,7 @@ public/content/
 .playwright-mcp/
 dist-course/
 dist-courses/
-.claude/
+# Локальные данные Claude Code; навыки проекта — в репозитории.
+!.claude/
+.claude/*
+!.claude/skills/

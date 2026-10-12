@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { SessionCard } from "../../../domain/types";
 import { playText, playWord } from "../../../shared/audio";
 import { useProfile } from "../../../shared/language";
@@ -25,7 +25,7 @@ export function useAutoSpeak(card: SessionCard, enabled: boolean) {
     if (!enabled || played.current) return;
     played.current = true;
     if (card.kind === "word") void playWord(card.word, profile);
-    else void playText(card.phrase.text, card.phrase.audioAssetId, profile);
+    else if (card.kind === "phrase") void playText(card.phrase.text, card.phrase.audioAssetId, profile);
   }, [card, enabled]);
 }
 
@@ -44,4 +44,74 @@ export function useRevealSpeech(card: SessionCard, itemId: string, answered: boo
     if (card.kind === "word") void playWord(card.word, profile);
     else if (card.kind === "phrase") void playText(card.phrase.text, card.phrase.audioAssetId, profile);
   }, [answered, enabled]);
+}
+
+/** На телефоне фокус поднял бы экранную клавиатуру поверх задания. */
+export function focusWithKeyboard(element: HTMLElement | null) {
+  if (element && typeof matchMedia === "function" && matchMedia("(pointer: fine)").matches)
+    element.focus({ preventScroll: true });
+}
+
+export const digitIndex = (key: string) => (/^[1-9]$/.test(key) ? Number(key) - 1 : -1);
+
+const ARROWS: Record<string, [across: number, down: number]> = {
+  ArrowRight: [1, 0],
+  ArrowLeft: [-1, 0],
+  ArrowDown: [0, 1],
+  ArrowUp: [0, -1],
+};
+function moveFocus(group: HTMLElement, [across, down]: [number, number], columns: number) {
+  const buttons = [...group.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")];
+  if (!buttons.length) return;
+  const current = buttons.indexOf(document.activeElement as HTMLButtonElement);
+  const step = across + down * columns;
+  const next =
+    current < 0
+      ? step > 0
+        ? 0
+        : buttons.length - 1
+      : down
+        ? current + step
+        : (current + step + buttons.length) % buttons.length;
+  buttons[next]?.focus();
+}
+
+/**
+ * Клавиши группы кнопок: стрелки, а `onKey` — цифры и прочее; Enter и пробел кнопки нажимают сами.
+ * Слушаем документ, потому что после «Далее» фокус уходит с исчезнувшей кнопки на страницу. Фокус при открытии —
+ * на первой кнопке; автоповтор Enter, нажавшего «Далее», гасится, иначе он сразу выбрал бы её.
+ */
+export function useTaskKeys({
+  active,
+  columns = 1,
+  onKey,
+}: {
+  active: boolean;
+  columns?: number;
+  onKey: (event: KeyboardEvent) => boolean;
+}) {
+  const group = useRef<HTMLElement | null>(null);
+  const latest = useRef(onKey);
+  latest.current = onKey;
+  useEffect(() => {
+    if (!active) return;
+    const listener = (event: KeyboardEvent) => {
+      const { target } = event;
+      if (event.altKey || event.ctrlKey || event.metaKey || !group.current) return;
+      if (target !== document.body && !(target instanceof Node && group.current.contains(target))) return;
+      const arrow = ARROWS[event.key];
+      if (arrow) {
+        event.preventDefault();
+        moveFocus(group.current, arrow, columns);
+      } else if (event.repeat) {
+        if (event.key === "Enter" || event.key === " ") event.preventDefault();
+      } else if (latest.current(event)) event.preventDefault();
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
+  }, [active, columns]);
+  return useCallback((element: HTMLElement | null) => {
+    group.current = element;
+    focusWithKeyboard(element?.querySelector<HTMLElement>("button:not(:disabled)") ?? element);
+  }, []);
 }

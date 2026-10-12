@@ -64,7 +64,12 @@ export function mediaFor(
   };
 }
 
-export function buildMedia(sources: ContentRoot, words: Map<string, PackageWord>, phrases: Map<string, PackagePhrase>) {
+export function buildMedia(
+  sources: ContentRoot,
+  words: Map<string, PackageWord>,
+  phrases: Map<string, PackagePhrase>,
+  voiced: Map<string, string>,
+) {
   /** Список унаследованных картинок только сокращается: имя без файла — мусор, а не исключение. */
   const legacy = readLegacy(sources.files);
   const art: ArtReport = { files: 0, legacy: 0 };
@@ -102,7 +107,7 @@ export function buildMedia(sources: ContentRoot, words: Map<string, PackageWord>
           src.audio,
           "audio",
           sources.files,
-          { alt: "", source: word.source ?? "" },
+          { alt: "", source: voiced.get(word.audioAssetId!)! },
           `words/${src.file}`,
           legacy,
           art,
@@ -118,7 +123,7 @@ export function buildMedia(sources: ContentRoot, words: Map<string, PackageWord>
           src.audio,
           "audio",
           sources.files,
-          { alt: "", source: phrases.get(id)!.provenance.sourceLabel },
+          { alt: "", source: voiced.get(audioAssetId(id))! },
           `phrases/${src.file}`,
           legacy,
           art,

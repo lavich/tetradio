@@ -1,5 +1,6 @@
 id: p020
 text: Μιλάτε αγγλικά;
+audio: phrases/p020.mp3
 translation: Вы говорите по-английски?
 provenance:
   sourceLabel: Лексикон курса, модуль 02 (docs/course/lexicon/02.tsv)

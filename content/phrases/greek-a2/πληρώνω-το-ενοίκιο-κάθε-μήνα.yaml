@@ -1,5 +1,6 @@
 id: p075
 text: Πληρώνω το ενοίκιο κάθε μήνα.
+audio: phrases/p075.mp3
 translation: Я плачу аренду каждый месяц.
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

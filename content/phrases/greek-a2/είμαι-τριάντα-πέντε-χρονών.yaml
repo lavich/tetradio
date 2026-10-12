@@ -1,5 +1,6 @@
 id: p031
 text: Είμαι τριάντα πέντε χρονών.
+audio: phrases/p031.mp3
 translation: Мне тридцать пять лет.
 provenance:
   sourceLabel: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)

@@ -35,8 +35,8 @@ const bare = (value: string, profile: LanguageProfile) =>
     .replace(/(^|[^\d.])0+(?=\d)/g, "$1");
 
 export function checkItem(
-  block: ExerciseBlock,
-  item: ExerciseItem,
+  block: Pick<ExerciseBlock, "format">,
+  item: Pick<ExerciseItem, "answer">,
   given: string,
   profile: LanguageProfile = PROFILES.el,
 ): ItemResult {
@@ -74,6 +74,17 @@ export function scoreExercise(
   }
   return { correct, almost, total: block.items.length, results };
 }
+
+/**
+ * Пункты, из которых рождаются карточки ошибок: неверный непустой ответ в задании, которое понятно без текста.
+ * «Почти» карточку не даёт; оценивается ли пункт в контрольной, не важно.
+ */
+export const mistakesOf = (block: ExerciseBlock, answers: Record<string, string>, score: ExerciseScore) =>
+  block.about
+    ? []
+    : block.items
+        .filter((item) => score.results[item.id]?.status === "wrong" && !!answers[item.id]?.trim())
+        .map((item) => item.id);
 
 /** Блоки, которые нужно выполнить, чтобы урок считался пройденным: задания, письмо и речь. Чтение и объяснение — через свои задания. */
 export const isTask = (block: LessonBlock) =>
@@ -135,19 +146,3 @@ export function testResult(blocks: LessonBlock[], progress: Map<string, BlockPro
 
 /** Число слов письменного ответа — по пробелам, как считает экзаменатор; пунктуация не слово. */
 export const wordCount = (text: string) => text.split(/\s+/).filter((token) => /[\p{L}\p{N}]/u.test(token)).length;
-
-const CYRILLIC = /[а-яё]/iu;
-/**
- * Что произнести при выборе варианта: предложение с подставленным вариантом — форма слышна в контексте.
- * Русские пояснения в скобках не читаются; если русский остаётся, звучит только сам вариант.
- */
-export function spokenChoice(prompt: string, option: string, profile: LanguageProfile = PROFILES.el): string | null {
-  const word = profile.script.test(option) && !CYRILLIC.test(option) ? option : null;
-  if (!/_{2,}/.test(prompt)) return word;
-  if (!word) return null;
-  const sentence = prompt
-    .replace(/_{2,}/, option)
-    .replace(/\s*\([^)]*\)/g, "")
-    .trim();
-  return CYRILLIC.test(sentence) ? word : sentence;
-}

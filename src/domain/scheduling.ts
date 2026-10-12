@@ -1,4 +1,4 @@
-import { createEmptyCard, fsrs, generatorParameters, Rating, type Card, type Grade } from "ts-fsrs";
+import { createEmptyCard, fsrs, generatorParameters, Rating, State, type Card, type Grade } from "ts-fsrs";
 import type { TextAnswerStatus } from "./text-answer";
 import { unitKey } from "./refs";
 import type { ExerciseType, LearningRef, LearningState } from "./types";
@@ -25,11 +25,14 @@ export const FAST_ANSWER_MS = 3500;
  * Оценка объективного ответа. `status` отвечает на вопрос «насколько подвинуть срок», а поле `correct`
  * события — на вопрос «что показать и чему учить дальше»: «Почти» остаётся ошибкой навыка и поводом
  * для дополнительной попытки, но полного сброса интервала не заслуживает.
+ * `Easy` — только в Review: до него быстрый выбор говорит о свежем знакомстве, а Easy новой карточки дал бы 8 дней.
  */
-export function gradeFor(status: TextAnswerStatus, type: ExerciseType, responseTimeMs: number): Grade {
+export function gradeFor(status: TextAnswerStatus, type: ExerciseType, responseTimeMs: number, state: State): Grade {
   if (status === "almost") return Rating.Hard;
   if (status !== "correct") return Rating.Again;
-  return FAST_TYPES.includes(type) && responseTimeMs < FAST_ANSWER_MS ? Rating.Easy : Rating.Good;
+  return state === State.Review && FAST_TYPES.includes(type) && responseTimeMs < FAST_ANSWER_MS
+    ? Rating.Easy
+    : Rating.Good;
 }
 
 /** Practice сюда не попадает: ручная тренировка не должна двигать интервалы. */

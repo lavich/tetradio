@@ -1,5 +1,6 @@
 id: p096
 text: Τι σου αρέσει να τρως;
+audio: phrases/p096.mp3
 translation: Что ты любишь есть?
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

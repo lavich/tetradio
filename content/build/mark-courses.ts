@@ -8,7 +8,7 @@ import {
   type PackageWord,
 } from "../../src/content/schema.ts";
 import type { CatalogModule } from "../../src/content/course.ts";
-import type { CardKind } from "../../src/domain/types.ts";
+import type { LessonCardKind } from "../../src/domain/types.ts";
 import { profileOf } from "../../src/domain/language.ts";
 import { buildMatcher, encodeMarks, lessonMarks, type Ambiguity } from "../marks.ts";
 
@@ -17,6 +17,16 @@ export interface MarksReport {
   ambiguous: (Ambiguity & { lessonId: string })[];
   skipped: string[];
 }
+/** Текст карточки для разметки и подсказки: у слова — написание и формы, у фразы — текст. */
+export const cardDescriber =
+  (words: Map<string, PackageWord>, phrases: Map<string, PackagePhrase>) => (kind: LessonCardKind, id: string) => {
+    if (kind === "word") {
+      const word = words.get(id)!;
+      return { text: word.greek, russian: word.russian, ipa: word.ipa, forms: word.forms };
+    }
+    const phrase = phrases.get(id)!;
+    return { text: phrase.text, russian: phrase.translation ?? "", ipa: "", forms: undefined };
+  };
 /** «Прошлые» — по порядку программы, а не по прогрессу учащегося: набор не зависит от устройства. */
 export function markCourses(
   courses: CatalogCourse[],
@@ -29,18 +39,11 @@ export function markCourses(
   const packages = new Map<string, PackageMarks>();
   const report: MarksReport = { lessons: new Map(), ambiguous: [], skipped: [] };
   const numberOf = new Map(modules.map((module) => [module.id, module.number]));
-  const describeCard = (kind: CardKind, id: string) => {
-    if (kind === "word") {
-      const word = words.get(id)!;
-      return { text: word.greek, russian: word.russian, ipa: word.ipa, forms: word.forms };
-    }
-    const phrase = phrases.get(id)!;
-    return { text: phrase.text, russian: phrase.translation ?? "", ipa: "", forms: undefined };
-  };
+  const describeCard = cardDescriber(words, phrases);
   for (const course of courses) {
     if (!course.moduleIds) continue;
     const lessons = course.lessonIds.map((id) => drafts.get(id)).filter((pack) => pack !== undefined);
-    const cards = new Map<string, { kind: CardKind; id: string }>();
+    const cards = new Map<string, { kind: LessonCardKind; id: string }>();
     for (const pack of lessons)
       for (const item of pack.items) cards.set(cardRef(item.kind, item.id), { kind: item.kind, id: item.id });
     const matcher = buildMatcher(

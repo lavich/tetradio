@@ -1,5 +1,6 @@
 id: p162
 text: Δεν είμαι από εδώ.
+audio: phrases/p162.mp3
 translation: Я не местный.
 provenance:
   sourceLabel: Лексикон курса, модуль 12 (docs/course/lexicon/12.tsv)

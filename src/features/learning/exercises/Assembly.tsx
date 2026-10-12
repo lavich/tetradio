@@ -7,9 +7,20 @@ import { useProfile } from "../../../shared/language";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./assembly.module.css";
-import { useRevealed, useRevealSpeech } from "./hooks";
+import { digitIndex, useRevealed, useRevealSpeech, useTaskKeys } from "./hooks";
 import { wordOf, type ExerciseProps, type Status } from "./model";
 import { Primary, QuietActions, QuietButton, Reveal, TaskHead, Verdict, WordReveal } from "./parts";
+
+/** Поставленный слог отключается, и браузер снимает с него фокус — стрелки перестали бы работать. */
+function keepFocusAfter(tile: HTMLButtonElement) {
+  requestAnimationFrame(() => {
+    const group = tile.parentElement;
+    if (!group || (group.contains(document.activeElement) && document.activeElement !== tile)) return;
+    const free = [...group.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")];
+    const next = free.find((button) => tile.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING);
+    (next ?? free[0] ?? group).focus();
+  });
+}
 
 /**
  * Ступень перед свободным написанием: слово собирается из перемешанных слогов в строку листа. Только для слов.
@@ -57,6 +68,27 @@ export function Assembly({
     setSaving(false);
     if (saved) setResult(skip ? { status: "wrong", message: assemblySkipMessage(word.greek), skipped: true } : checked);
   };
+  const group = useTaskKeys({
+    active: !result && !saving,
+    onKey: (event) => {
+      if (event.key === "Backspace") {
+        if (!placed.length) return false;
+        setPlaced(placed.slice(0, -1));
+        return true;
+      }
+      if (event.key === "Enter") {
+        if (event.target instanceof HTMLButtonElement) return false;
+        void check();
+        return true;
+      }
+      const index = digitIndex(event.key);
+      if (index < 0 || index >= pool.length || placed.includes(index)) return false;
+      const focused = document.activeElement;
+      if (focused instanceof HTMLButtonElement && focused.dataset.key === String(index + 1)) keepFocusAfter(focused);
+      setPlaced([...placed, index]);
+      return true;
+    },
+  });
   return (
     <>
       {!result && (
@@ -74,6 +106,7 @@ export function Assembly({
                 <button
                   key={`${index}-${position}`}
                   type="button"
+                  tabIndex={0}
                   data-testid="placed"
                   disabled={saving}
                   className={s.placed}
@@ -84,15 +117,27 @@ export function Assembly({
               ))
             )}
           </div>
-          <div className={s.tiles} lang={lang}>
+          <div
+            ref={group}
+            tabIndex={-1}
+            role="group"
+            aria-label={`Слоги слова «${word.russian}»`}
+            className={s.tiles}
+            lang={lang}
+          >
             {pool.map((tile, index) => (
               <button
                 key={`${tile}-${index}`}
                 type="button"
+                tabIndex={0}
                 data-testid="tile"
+                data-key={index < 9 ? index + 1 : undefined}
                 disabled={placed.includes(index) || saving}
                 className={s.tile}
-                onClick={() => setPlaced([...placed, index])}
+                onClick={(event) => {
+                  if (event.currentTarget === document.activeElement) keepFocusAfter(event.currentTarget);
+                  setPlaced([...placed, index]);
+                }}
               >
                 {tile}
               </button>

@@ -1,5 +1,6 @@
 id: p128
 text: Είναι σε προσφορά.
+audio: phrases/p128.mp3
 translation: Это по акции.
 provenance:
   sourceLabel: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

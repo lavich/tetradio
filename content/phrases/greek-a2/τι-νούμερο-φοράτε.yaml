@@ -1,5 +1,6 @@
 id: p135
 text: Τι νούμερο φοράτε;
+audio: phrases/p135.mp3
 translation: Какой у вас размер?
 provenance:
   sourceLabel: Лексикон курса, модуль 11 (docs/course/lexicon/11.tsv)

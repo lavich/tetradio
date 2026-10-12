@@ -1,7 +1,7 @@
 import { State } from "ts-fsrs";
 import { addDays, localDay, zonedStart } from "./time";
 import type { DaySummary } from "./skills";
-import type { CardKind, ExerciseType, LearningRef, LearningState, SessionCard } from "./types";
+import type { CardKind, ExerciseType, LearningRef, LearningState } from "./types";
 
 export interface DayStat {
   date: string;
@@ -27,8 +27,6 @@ export interface Leech {
   lapses: number;
   label: string;
 }
-/** Короткая подпись карточки для списков: у слова — написание, у фразы — текст, у пропуска — пропущенная форма. */
-export const cardLabel = (card: SessionCard): string => (card.kind === "word" ? card.word.greek : card.phrase.text);
 /** `totals.cards` — уникальные карточки любого вида с ответами; фразы и пропуски не выдаются за слова. */
 export interface Progress {
   days: DayStat[];
@@ -151,4 +149,6 @@ export const SKILL_NAMES: Record<ExerciseType, string> = {
   listening: "Аудирование",
   comprehension: "Понимание на слух",
   cloze: "Заполнение пропуска",
+  item: "Задание урока",
+  wordGap: "Слово во фразе",
 };

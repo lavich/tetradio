@@ -36,9 +36,18 @@ pools:
     - Schedar
     - Umbriel
     - Zubenelgenubi
-# Реплика без говорящего
+# Реплика без говорящего, слова и фразы
 narrator: Kore
+# Повествование текстов для чтения, рассказанных не от лица героя
+reader: Gacrux
 characters:
+  # Герои серии текстов для чтения «Анна»
+  Χριστίνα: { gender: female, voice: Erinome }
+  Τζον: { gender: male, voice: Sadachbia }
+  Όλγα: { gender: female, voice: Leda }
+  Αντρέι: { gender: male, voice: Rasalgethi }
+  Μάξιμ: { gender: male, voice: Puck }
+  Σόνια: { gender: female, voice: Laomedeia }
   Δέσποινα: { gender: female, voice: Kore } # 42
   Μαρίνα: { gender: female, voice: Aoede } # 33
   Πέτρος: { gender: male, voice: Iapetus } # 33

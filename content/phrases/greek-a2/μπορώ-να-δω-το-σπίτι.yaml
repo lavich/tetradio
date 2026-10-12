@@ -1,5 +1,6 @@
 id: p078
 text: Μπορώ να δω το σπίτι;
+audio: phrases/p078.mp3
 translation: Можно посмотреть дом?
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

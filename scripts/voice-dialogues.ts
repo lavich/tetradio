@@ -1,14 +1,21 @@
-// Озвучка аудирования: для каждой реплики синтезирует MP3 голосом персонажа из content/voices/<язык курса>.yaml
-// (Google Cloud TTS) в content/audio/<урок>/<блок>-<n>.mp3 и пишет `audio:` в реплику урока.
-// Переозвучиваются только реплики без файла или с изменившимся текстом либо голосом (content/audio/dialogues.json).
-// Запуск: GOOGLE_TTS_KEY=… npm run voices -- m02-1 m02-2; без уроков — весь курс; --check — только отчёт, без ключа.
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+// Озвучка: реплики аудирования голосом персонажа из content/voices/<язык курса>.yaml, слова и фразы — голосом диктора,
+// тексты для чтения — по предложениям голосами рассказчика и героев, верные ответы перевода и пропуска — голосом диктора
+// (Google Cloud TTS). Файлы — content/audio/<урок>/<блок>-<n>.mp3, audio/words/<id>.mp3, audio/phrases/<id>.mp3,
+// audio/readings/<текст>/<n>.mp3, audio/answers/<урок>/<блок>-<пункт>.mp3; `audio:` пишется в реплику урока или
+// в файл карточки, записи текстов и ответов находит сборка по манифесту. Переозвучиваются только записи без файла
+// или с изменившимся текстом либо голосом (content/audio/dialogues.json).
+// Запуск: GOOGLE_TTS_KEY=… npm run voices -- m02-1 words phrases readings answers; без аргументов — всё; --check — только отчёт, без ключа.
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { isMap, isScalar, isSeq, parseDocument, type Node, type YAMLMap } from "yaml";
 import { LANGUAGE } from "../content/build/common.ts";
 import { buildCourses } from "../content/build/courses.ts";
+import { planAnswerVoices } from "../content/build/answers.ts";
+import { planReadingVoices } from "../content/build/readings.ts";
+import { profileOf } from "../src/domain/language.ts";
 import { readSources } from "../content/build/sources.ts";
 import {
+  cardFile,
   lineFile,
   lineHash,
   spokenText,
@@ -28,11 +35,17 @@ const lessons = readdirSync(join(ROOT, "lessons"))
   .filter((file) => file.endsWith(".yaml"))
   .map((file) => file.slice(0, -".yaml".length))
   .sort();
-for (const id of wanted) if (!lessons.includes(id)) throw new Error(`Урока ${id} нет в content/lessons`);
+const CARDS = ["words", "phrases"] as const;
+const GROUPS = ["readings", "answers"];
+for (const id of wanted)
+  if (!lessons.includes(id) && !(CARDS as readonly string[]).includes(id) && !GROUPS.includes(id))
+    throw new Error(
+      `Урока ${id} нет в content/lessons; слова и фразы — words и phrases, тексты — readings, ответы — answers`,
+    );
 const key = process.env.GOOGLE_TTS_KEY;
 
 const sources = readSources(ROOT);
-const { languages } = buildCourses(sources);
+const { languages, courseLanguages } = buildCourses(sources);
 const voicesOf = (lessonId: string) => {
   const language = languages.get(lessonId) ?? LANGUAGE;
   return sources.voices.get(language) ?? fail(`${lessonId}: нет карты голосов ${voicesFile(language)} для языка курса`);
@@ -61,9 +74,55 @@ async function synthesize(text: string, voice: string, voices: VoiceMap): Promis
   return Buffer.from(body.audioContent, "base64");
 }
 
+// Chirp 3 HD на коротком слове иногда отдаёт тишину или обрывок ~0,3 с; самое короткое живое слово — 0,5 с.
+const MIN_BYTES = 1800;
+const ATTEMPTS = 12;
+
+async function synthesizeWhole(text: string, voice: string, voices: VoiceMap): Promise<Buffer> {
+  // Одна и та же форма у некоторых слов («και», «μου») срывается раз за разом; другая запись того же слова проходит.
+  const forms = [text, text.charAt(0).toLocaleUpperCase(voices.language) + text.slice(1), `«${text}»`];
+  for (let attempt = 1; ; attempt++) {
+    const audio = await synthesize(forms[(attempt - 1) % forms.length], voice, voices);
+    if (audio.byteLength >= MIN_BYTES) return audio;
+    if (attempt === ATTEMPTS)
+      throw new Error(`Синтез «${text}» (${voice}): ${ATTEMPTS} раз подряд пустая или обрезанная запись`);
+  }
+}
+
 const stats = { lines: 0, synthesized: 0, characters: 0, bytes: 0, references: 0 };
 const pending: string[] = [];
-for (const lessonId of wanted.length ? wanted : lessons) {
+const stale: string[] = [];
+
+/** Синтезирует запись, если файла нет или он сделан для другого текста либо голоса. */
+async function voice(file: string, text: string, name: string, voices: VoiceMap, label: string) {
+  const target = join(ROOT, "audio", file);
+  const hash = lineHash(text, name, voices.language);
+  stats.lines++;
+  if (existsSync(target) && manifest[file]?.hash === hash && manifest[file]?.voice === name) return;
+  await record(file, text, name, voices, label);
+}
+
+async function record(file: string, text: string, name: string, voices: VoiceMap, label: string) {
+  const target = join(ROOT, "audio", file);
+  const hash = lineHash(text, name, voices.language);
+  pending.push(`${label} (${name})`);
+  if (check) return;
+  const audio = await synthesizeWhole(spokenText(text, voices.language), name, voices);
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(target, audio);
+  manifest[file] = { voice: name, hash };
+  stats.synthesized++;
+  stats.characters += text.length;
+  stats.bytes += audio.byteLength;
+  // Манифест пишется после каждой записи: прерванный запуск не синтезирует готовое заново.
+  saveManifest();
+}
+
+function saveManifest() {
+  writeFileSync(manifestPath, JSON.stringify(sortKeys(manifest), null, 2) + "\n");
+}
+
+for (const lessonId of wanted.length ? wanted.filter((id) => lessons.includes(id)) : lessons) {
   const path = join(ROOT, "lessons", `${lessonId}.yaml`);
   const source = readFileSync(path, "utf8");
   const doc = parseDocument(source);
@@ -82,28 +141,12 @@ for (const lessonId of wanted.length ? wanted : lessons) {
       const speaker = line.get("speaker") as string | undefined;
       const text = String(line.get("text")).normalize("NFC");
       const voices = voicesOf(lessonId);
-      const voice = voiceOf(voices, speaker);
-      if (!voice) throw new Error(`${lessonId}/${blockId}: у «${speaker ?? "диктора"}» нет голоса в ${voices.file}`);
+      const name = voiceOf(voices, speaker);
+      if (!name) throw new Error(`${lessonId}/${blockId}: у «${speaker ?? "диктора"}» нет голоса в ${voices.file}`);
       const file = lineFile(lessonId, blockId, index);
-      const target = join(ROOT, "audio", file);
-      const hash = lineHash(text, voice, voices.language);
-      stats.lines++;
-      if (!existsSync(target) || manifest[file]?.hash !== hash || manifest[file]?.voice !== voice) {
-        pending.push(`${lessonId}/${blockId}#${index + 1} ${speaker ?? "диктор"} (${voice})`);
-        if (!check) {
-          const audio = await synthesize(spokenText(text, voices.language), voice, voices);
-          mkdirSync(dirname(target), { recursive: true });
-          writeFileSync(target, audio);
-          manifest[file] = { voice, hash };
-          stats.synthesized++;
-          stats.characters += text.length;
-          stats.bytes += audio.byteLength;
-          // Манифест пишется после каждой реплики: прерванный запуск не синтезирует готовое заново.
-          writeFileSync(manifestPath, JSON.stringify(sortKeys(manifest), null, 2) + "\n");
-        }
-      }
+      await voice(file, text, name, voices, `${lessonId}/${blockId}#${index + 1} ${speaker ?? "диктор"}`);
       if (check || line.get("audio") === file) continue;
-      edits.push(reference(source, line, file));
+      edits.push(reference(source, line, "text", file));
       stats.references++;
     }
   }
@@ -114,15 +157,91 @@ for (const lessonId of wanted.length ? wanted : lessons) {
   writeFileSync(path, next);
 }
 
-/** Ссылка на файл в реплике: замена значения `audio` либо новая строка после `text` с тем же отступом. */
-function reference(source: string, line: YAMLMap<unknown, unknown>, file: string) {
+for (const dir of CARDS) {
+  if (wanted.length && !wanted.includes(dir)) continue;
+  for (const [id, src] of dir === "words" ? sources.words : sources.phrases) {
+    const textKey = dir === "words" ? "greek" : "text";
+    const language = courseLanguages.get(src.course) ?? LANGUAGE;
+    const voices =
+      sources.voices.get(language) ?? fail(`${dir}/${src.file}: нет карты голосов ${voicesFile(language)}`);
+    const name = voices.narrator ?? fail(`${voices.file}: нет диктора — narrator`);
+    const file = cardFile(dir, id);
+    const text = String("greek" in src ? src.greek : src.text).normalize("NFC");
+    await voice(file, text, name, voices, `${dir}/${src.file}`);
+    if (check || src.audio === file) continue;
+    const path = join(ROOT, dir, src.file);
+    const source = readFileSync(path, "utf8");
+    const edit = reference(source, parseDocument(source).contents as YAMLMap<unknown, unknown>, textKey, file);
+    writeFileSync(path, source.slice(0, edit.at) + edit.insert + source.slice(edit.end));
+    stats.references++;
+  }
+}
+
+async function voiceGroup(
+  group: string,
+  plan: (existing: string[]) => {
+    pending: { file: string; text: string; voice: string; voices: VoiceMap; label: string }[];
+    stale: string[];
+    total: number;
+  },
+) {
+  const dir = join(ROOT, "audio", group);
+  const existing = existsSync(dir)
+    ? readdirSync(dir, { recursive: true, encoding: "utf8" })
+        .filter((file) => file.endsWith(".mp3"))
+        .map((file) => relative(join(ROOT, "audio"), join(dir, file)).split("\\").join("/"))
+    : [];
+  const { pending: due, stale: extra, total } = plan(existing);
+  stats.lines += total;
+  for (const entry of due) await record(entry.file, entry.text, entry.voice, entry.voices, entry.label);
+  for (const file of extra) {
+    stale.push(file);
+    if (check) continue;
+    rmSync(join(ROOT, "audio", file), { force: true });
+    delete manifest[file];
+  }
+  if (!check && extra.length) {
+    saveManifest();
+    for (const entry of existsSync(dir) ? readdirSync(dir, { withFileTypes: true }) : [])
+      if (entry.isDirectory() && !readdirSync(join(dir, entry.name)).length)
+        rmSync(join(dir, entry.name), { recursive: true });
+  }
+}
+
+if (!wanted.length || wanted.includes("readings"))
+  await voiceGroup("readings", (existing) => {
+    const plan = planReadingVoices(
+      sources.readings,
+      (src) => sources.voices.get(courseLanguages.get(src.course) ?? LANGUAGE),
+      manifest,
+      existing,
+    );
+    return { ...plan, total: plan.sentences.length };
+  });
+
+if (!wanted.length || wanted.includes("answers"))
+  await voiceGroup("answers", (existing) => {
+    const plan = planAnswerVoices(
+      [...sources.lessons].map(([id, src]) => [id, src.blocks]),
+      (lessonId) => {
+        const language = languages.get(lessonId) ?? LANGUAGE;
+        return { voices: sources.voices.get(language), profile: profileOf(language) };
+      },
+      manifest,
+      existing,
+    );
+    return { ...plan, total: plan.answers.length };
+  });
+
+/** Ссылка на файл: замена значения `audio` либо новая строка после поля текста с тем же отступом. */
+function reference(source: string, line: YAMLMap<unknown, unknown>, textKey: string, file: string) {
   const existing = line.items.find((pair) => isScalar(pair.key) && pair.key.value === "audio");
   const value = existing?.value as Node | undefined;
   if (value?.range) return { at: value.range[0], end: value.range[1], insert: file };
-  const textPair = line.items.find((pair) => isScalar(pair.key) && pair.key.value === "text");
+  const textPair = line.items.find((pair) => isScalar(pair.key) && pair.key.value === textKey);
   const keyNode = textPair?.key as Node | undefined;
   const textNode = textPair?.value as Node | undefined;
-  if (!keyNode?.range || !textNode?.range) throw new Error(`Реплика без text: ${file}`);
+  if (!keyNode?.range || !textNode?.range) throw new Error(`Нет поля ${textKey}: ${file}`);
   if (line.flow) {
     let at = source.lastIndexOf("}", line.range![1]);
     while (source[at - 1] === " ") at--;
@@ -145,8 +264,9 @@ function sortKeys(value: VoiceManifest): VoiceManifest {
 
 if (check) {
   for (const entry of pending) console.log(`  нет записи или устарела: ${entry}`);
-  console.log(`Реплик ${stats.lines}, озвучить ${pending.length}`);
+  for (const file of stale) console.log(`  лишняя запись: ${file}`);
+  console.log(`Записей ${stats.lines}, озвучить ${pending.length}, удалить ${stale.length}`);
 } else
   console.log(
-    `Реплик ${stats.lines}: синтезировано ${stats.synthesized} (${stats.characters} символов, ${(stats.bytes / 1024).toFixed(0)} КБ), ссылок записано ${stats.references}`,
+    `Записей ${stats.lines}: синтезировано ${stats.synthesized} (${stats.characters} символов, ${(stats.bytes / 1024).toFixed(0)} КБ), ссылок записано ${stats.references}, удалено ${stale.length}`,
   );

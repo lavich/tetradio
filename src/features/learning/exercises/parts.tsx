@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { Phrase, Word } from "../../../domain/types";
 import { ExampleBox, ReadingNotes, SpeakButton, WordArt } from "../../words/WordCardView";
 import ui from "../../../shared/ui.module.css";
+import { playText } from "../../../shared/audio";
 import { cx } from "../../../shared/cx";
 import { useProfile } from "../../../shared/language";
 import { CloudAction, Instruction } from "../notebook";
@@ -11,7 +12,10 @@ import s from "./exercise.module.css";
 import type { Status } from "./model";
 import { SpeakText } from "./SpeakText";
 
-/** Основное действие листа — в облачке занятия; `disabled` держит место, пока ответа нет. */
+/**
+ * Основное действие листа — в облачке занятия; `disabled` держит место, пока ответа нет.
+ * Автоповтор Enter, отправившего ответ, нажал бы и «Далее», пролистав итог.
+ */
 export function Primary({
   children,
   disabled,
@@ -40,6 +44,9 @@ export function Primary({
         form={form}
         disabled={disabled}
         onClick={onClick}
+        onKeyDown={(event) => {
+          if (event.repeat) event.preventDefault();
+        }}
       >
         {children}
       </Button>
@@ -47,7 +54,10 @@ export function Primary({
   );
 }
 
-/** Тихие действия под заданием: «Не знаю» и отказ от аудио — текстом, без кнопок-плашек. */
+/**
+ * Тихие действия под заданием: «Не знаю» и отказ от аудио — текстом, без кнопок-плашек.
+ * Явный `tabIndex` — для WebKit (Safari, Telegram macOS): кнопку без него Tab по умолчанию пропускает.
+ */
 export function QuietActions({ children }: { children: React.ReactNode }) {
   return <div className={s.quietActions}>{children}</div>;
 }
@@ -61,7 +71,7 @@ export function QuietButton({
   disabled?: boolean;
 }) {
   return (
-    <button type="button" className={s.quietButton} disabled={disabled} onClick={onClick}>
+    <button type="button" tabIndex={0} className={s.quietButton} disabled={disabled} onClick={onClick}>
       {children}
     </button>
   );
@@ -142,6 +152,33 @@ export function PhraseReveal({ phrase, speak }: { phrase: Phrase; speak?: boolea
       {phrase.usage && <p className={s.hint}>{phrase.usage}</p>}
       {phrase.note && <p className={s.hint}>{phrase.note}</p>}
     </>
+  );
+}
+/** Раскрытие монтируется вместе с итогом, поэтому автоозвучка — при монтировании; флаг не даёт строгому режиму озвучить дважды. */
+export function AnswerReveal({
+  text,
+  audioAssetId,
+  autoSpeak,
+}: {
+  text: string;
+  audioAssetId?: string;
+  autoSpeak?: boolean;
+}) {
+  const profile = useProfile();
+  const played = useRef(false);
+  useEffect(() => {
+    if (!autoSpeak || played.current) return;
+    played.current = true;
+    void playText(text, audioAssetId, profile);
+  }, []);
+  return (
+    <Reveal>
+      <GreekHead
+        text={text}
+        phrase
+        speak={<SpeakText text={text} audioAssetId={audioAssetId} label="Послушать ответ" quiet />}
+      />
+    </Reveal>
   );
 }
 /** Раскрытие после ответа отделено от задания линейкой: это уже справка, а не вопрос. */

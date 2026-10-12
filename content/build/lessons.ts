@@ -7,7 +7,7 @@ import {
   type PackagePhrase,
   type PackageWord,
 } from "../../src/content/schema.ts";
-import { CARD_KINDS, type CardKind } from "../../src/domain/types.ts";
+import { LESSON_CARD_KINDS, type LessonCardKind } from "../../src/domain/types.ts";
 import {
   parseBlocks,
   publicationGaps,
@@ -19,7 +19,8 @@ import type { ArtReport } from "../art.ts";
 import { fail, LANGUAGE, nfc, text } from "./common.ts";
 import { mediaFor, type BuiltMedia } from "./media.ts";
 import type { ContentRoot, LessonItemSource } from "./sources.ts";
-import type { Language } from "../../src/domain/language.ts";
+import { profileOf, type Language } from "../../src/domain/language.ts";
+import { answerFresh, answerVoicing } from "./answers.ts";
 import {
   checkDialogueVoices,
   lineHash,
@@ -29,7 +30,7 @@ import {
   type VoiceManifest,
 } from "./voices.ts";
 
-const KIND_LABEL: Record<CardKind, { one: string; dir: string }> = {
+const KIND_LABEL: Record<LessonCardKind, { one: string; dir: string }> = {
   word: { one: "слова", dir: "words" },
   phrase: { one: "фразы", dir: "phrases" },
 };
@@ -51,6 +52,8 @@ export interface VoicingReport {
   unvoiced: Map<string, number>;
   /** Записи, сделанные до правки текста или смены голоса: не публикуются, пока реплику не переозвучат. */
   stale: string[];
+  /** Ответы перевода и пропуска: без свежей записи звучат синтезом устройства. */
+  answers: { voiced: number; unvoiced: number; stale: number };
 }
 
 /** Запись публикуется, только если сделана для нынешнего текста и голоса, — иначе реплика звучит синтезом. */
@@ -107,7 +110,12 @@ function lineAudio(
 
 export function buildLessons(input: LessonsInput) {
   const { sources, words, phrases, courseOf, languages, moduleOf, media, legacy, art } = input;
-  const report: VoicingReport = { voiced: 0, unvoiced: new Map(), stale: [] };
+  const report: VoicingReport = {
+    voiced: 0,
+    unvoiced: new Map(),
+    stale: [],
+    answers: { voiced: 0, unvoiced: 0, stale: 0 },
+  };
   const manifest = parseManifest(sources.files.get(MANIFEST_FILE));
   const used = { word: new Set<string>(), phrase: new Set<string>() };
   const lessonsForModule = new Map<string, { id: string; kind: LessonKind; blocks: LessonBlock[] }>();
@@ -136,9 +144,9 @@ export function buildLessons(input: LessonsInput) {
       const path = `${where}.${src.items !== undefined ? `items[${position}]` : `words[${position}]`}`;
       if (typeof ref !== "object" || ref === null || typeof ref.id !== "string")
         fail(`${path}: ожидалась пара {kind, id}`);
-      if (!(CARD_KINDS as readonly string[]).includes(ref.kind))
+      if (!(LESSON_CARD_KINDS as readonly string[]).includes(ref.kind))
         fail(`${path}: неизвестный вид карточки «${String(ref.kind)}»`);
-      const kind = ref.kind as CardKind;
+      const kind = ref.kind as LessonCardKind;
       if (!cards[kind].has(ref.id)) fail(`${path}: ${KIND_LABEL[kind].one} ${ref.id} нет в ${KIND_LABEL[kind].dir}/`);
       const owner = (kind === "word" ? sources.words : sources.phrases).get(ref.id)!.course;
       if (owner !== courseId) fail(`${path}: карточка ${ref.id} из курса ${owner} в уроке курса ${courseId}`);
@@ -198,6 +206,31 @@ export function buildLessons(input: LessonsInput) {
     lessonsForModule.set(id, { id, kind: src.kind ?? "lesson", blocks });
     // Уроки черновика проверены, но не поставляются: карточки считаются использованными, чтобы автор мог готовить модуль.
     if (placement?.draft) continue;
+    const itemRefs: Record<string, Record<string, string>> = {};
+    const language = languages.get(id) ?? LANGUAGE;
+    const voices = sources.voices.get(language);
+    for (const answer of answerVoicing(id, src.blocks, profileOf(language))) {
+      if (!voices?.narrator || !answerFresh(manifest, answer, voices)) {
+        report.answers.unvoiced++;
+        if (manifest[answer.file]) report.answers.stale++;
+        continue;
+      }
+      const assetId = `answer-${id}-${answer.blockId}-${answer.itemId}`;
+      const built = mediaFor(
+        assetId,
+        answer.file,
+        "audio",
+        sources.files,
+        { alt: "", source: voices.source.replaceAll("{voice}", voices.narrator) },
+        `${where}: ${answer.file} — npm run voices -- answers`,
+        legacy,
+        art,
+      );
+      media.set(assetId, built);
+      blockMedia.push(built.item);
+      (itemRefs[answer.blockId] ??= {})[answer.itemId] = assetId;
+      report.answers.voiced++;
+    }
     const packWords = items.filter((item) => item.kind === "word").map((item) => words.get(item.id)!);
     const packPhrases = items.filter((item) => item.kind === "phrase").map((item) => phrases.get(item.id)!);
     const packMedia = [
@@ -223,6 +256,7 @@ export function buildLessons(input: LessonsInput) {
       media: packMedia,
       ...(blocks.length ? { blocks } : {}),
       ...(Object.keys(lineRefs).length ? { lineAudio: lineRefs } : {}),
+      ...(Object.keys(itemRefs).length ? { itemAudio: itemRefs } : {}),
     };
     drafts.set(id, draft);
   }

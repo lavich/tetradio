@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { checkItem, spokenChoice } from "../src/domain/course";
+import { checkItem } from "../src/domain/course";
+import { spokenChoice } from "../src/domain/spoken";
 import type { ExerciseBlock, ExerciseItem } from "../src/content/course";
 import { PROFILES, profileOf } from "../src/domain/language";
-import { isCheckable } from "../src/domain/plan";
+import { isCheckable } from "../src/domain/kinds";
 import { checkAnswer, checkTextAnswer } from "../src/domain/text-answer";
 import { assemblyExercise, wordExerciseOptions, NO_SYLLABLES } from "../src/domain/word-exercise";
 import type { Word } from "../src/domain/types";

@@ -7,7 +7,7 @@ import { deviceTimezone, localDay, mondayOf, type DailyPlan } from "../../domain
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
-import { lessonIn, withCount } from "../../shared/format";
+import { lessonIn, withCount, WORDS } from "../../shared/format";
 import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
 import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
@@ -16,6 +16,7 @@ import { Tick } from "../../shared/Tick";
 import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import { lessonDays, moduleViews, reviewedOn, type ModuleLessonView, type ModuleView } from "../../storage/course";
 import { dexieSource } from "../../storage/queries";
+import { nextReading } from "../../storage/readings";
 import { ExamLine } from "../course/ExamLine";
 import { sessionPath, startSession } from "../learning/session-actions";
 import { DayNotes } from "./DayNotes";
@@ -45,6 +46,7 @@ export function CourseToday({
   const reviewed = useLiveQuery(() => reviewedOn(today, courseId), [today, courseId]);
   const week = useLiveQuery(() => lessonDays(monday, deviceTimezone(), courseId), [monday, deviceTimezone(), courseId]);
   const profile = useCourseProfile(courseId);
+  const reading = useLiveQuery(async () => (courseId ? ((await nextReading(courseId)) ?? null) : null), [courseId]);
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,
@@ -75,6 +77,14 @@ export function CourseToday({
         last={last}
         primary={reviewFirst}
       />
+      {reading ? (
+        <p className={nb.meta} data-testid="reading-next">
+          <Link to={`/course/${reading.moduleId}/read/${reading.reading.id}`}>
+            Почитать: <span lang={profile.code}>{reading.reading.title}</span>,{" "}
+            {withCount(reading.reading.words, WORDS)}
+          </Link>
+        </p>
+      ) : null}
       <DayNotes plan={plan} />
       {finished ? (
         <p className={css.finished} data-testid="course-finished">

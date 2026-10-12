@@ -1,5 +1,6 @@
 id: p160
 text: Μπορείτε να μου το δείξετε στον χάρτη;
+audio: phrases/p160.mp3
 translation: Можете показать мне это на карте?
 provenance:
   sourceLabel: Лексикон курса, модуль 12 (docs/course/lexicon/12.tsv)

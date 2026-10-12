@@ -1,5 +1,6 @@
 id: p236
 text: Χρειάζεται συνταγή γι' αυτό το φάρμακο;
+audio: phrases/p236.mp3
 translation: На это лекарство нужен рецепт?
 provenance:
   sourceLabel: Лексикон курса, модуль 18 (docs/course/lexicon/18.tsv)

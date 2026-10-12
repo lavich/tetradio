@@ -7,6 +7,7 @@ import {
   makeSession,
   nextState,
   optionsFor,
+  reviewCutoff,
   shuffleTiles,
   spellingUnlocked,
 } from "../src/domain/learning";
@@ -390,6 +391,67 @@ describe("выбор упражнения", () => {
     ];
     expect(chooseType(W0, history, { hasAudio: true })).not.toBe("spelling");
   });
+  const retry = (base: ReviewEvent): ReviewEvent => ({ ...base, itemId: `${base.itemId}-retry`, mode: "practice" });
+  it("дополнительная попытка не меняет выбор упражнения", () => {
+    const history = [
+      event("recognition", false, "2026-09-10T09:00:00Z"),
+      event("spelling", true, "2026-09-11T09:00:00Z"),
+      retry(event("recognition", true, "2026-09-12T09:00:00Z")),
+      retry(event("recognition", true, "2026-09-12T09:01:00Z")),
+    ];
+    expect(chooseType(W0, history, { canAssemble: false })).toBe("recognition");
+  });
+  it("сборка в дополнительной попытке не открывает написание", () => {
+    const history = [
+      event("spelling", false, "2026-09-10T09:00:00Z"),
+      retry(event("assembly", true, "2026-09-10T09:01:00Z")),
+    ];
+    expect(spellingUnlocked(W0, history)).toBe(false);
+    expect(spellingUnlocked(W0, [...history, event("assembly", true, "2026-09-12T09:00:00Z")])).toBe(true);
+  });
+  it("ручная тренировка чередует упражнения", () => {
+    const practice = { ...event("recognition", true, "2026-09-12T09:00:00Z"), mode: "practice" as const };
+    expect(chooseType(W0, [practice], { canAssemble: false })).not.toBe("recognition");
+  });
+});
+
+describe("срок повторения по дню", () => {
+  // `now` — 12:00 в Никосии; день повторений там кончается в 04:00 следующего дня, 01:00 UTC.
+  it("повторение со сроком до 04:00 завтра уже в плане, позже — нет", async () => {
+    const pool = words(3);
+    const states = [
+      learned(pool[0].id, "2026-09-15T20:30:00Z"),
+      learned(pool[1].id, "2026-09-16T00:30:00Z"),
+      learned(pool[2].id, "2026-09-16T01:30:00Z"),
+    ];
+    const plan = await makePlan(fromSnapshot(base({ words: pool, states })), now);
+    expect(plan.reviews.map((review) => review.ref.id).sort()).toEqual([pool[0].id, pool[1].id]);
+  });
+  it("после полуночи день повторений ещё прежний", async () => {
+    const pool = words(1);
+    const states = [learned(pool[0].id, "2026-09-16T20:50:00Z")];
+    const source = fromSnapshot(base({ words: pool, states }));
+    expect((await makePlan(source, new Date("2026-09-15T21:05:00Z"))).reviews).toHaveLength(0);
+    expect((await makePlan(source, new Date("2026-09-16T01:01:00Z"))).reviews).toHaveLength(1);
+  });
+  it("короткий шаг изучения ждёт своего момента", async () => {
+    const pool = words(3);
+    const states = [
+      learned(pool[0].id, "2026-09-15T09:10:00Z", State.Learning),
+      learned(pool[1].id, "2026-09-15T09:10:00Z", State.Relearning),
+      learned(pool[2].id, "2026-09-15T08:59:00Z", State.Relearning),
+    ];
+    const plan = await makePlan(fromSnapshot(base({ words: pool, states })), now);
+    expect(plan.reviews.map((review) => review.ref.id)).toEqual([pool[2].id]);
+  });
+  it.each([
+    ["2026-09-15T09:00:00Z", "Asia/Nicosia", "2026-09-16T01:00:00.000Z"],
+    ["2026-09-16T00:30:00Z", "Asia/Nicosia", "2026-09-16T01:00:00.000Z"],
+    ["2026-03-28T12:00:00Z", "Europe/Athens", "2026-03-29T01:00:00.000Z"],
+    ["2026-10-24T12:00:00Z", "Europe/Athens", "2026-10-25T02:00:00.000Z"],
+  ])("смена дня — 04:00 по местному времени: %s %s", (at, timezone, cutoff) =>
+    expect(reviewCutoff(new Date(at), timezone).toISOString()).toBe(cutoff),
+  );
 });
 
 describe("проверка написания", () => {

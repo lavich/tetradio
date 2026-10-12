@@ -1,5 +1,6 @@
 id: p076
 text: Πόσο είναι το ενοίκιο;
+audio: phrases/p076.mp3
 translation: Сколько стоит аренда?
 provenance:
   sourceLabel: Лексикон курса, модуль 06 (docs/course/lexicon/06.tsv)

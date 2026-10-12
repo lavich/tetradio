@@ -1,5 +1,6 @@
 id: p251
 text: Αύριο θα βρέξει.
+audio: phrases/p251.mp3
 translation: Завтра будет дождь.
 provenance:
   sourceLabel: Лексикон курса, модуль 19 (docs/course/lexicon/19.tsv)

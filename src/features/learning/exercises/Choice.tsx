@@ -4,16 +4,13 @@ import { cx } from "../../../shared/cx";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./choice.module.css";
-import { useRevealed } from "./hooks";
-import type { LanguageProfile } from "../../../domain/language";
+import { digitIndex, useRevealed, useTaskKeys } from "./hooks";
 import { useProfile } from "../../../shared/language";
 import { type ExerciseProps } from "./model";
 import { Primary, QuietActions, QuietButton } from "./parts";
 
-/** Короткие варианты — сеткой 2 × 2, иначе строками α) β) γ) δ). Порог — то, что помещается в половину узкого листа. */
+/** Короткие варианты — сеткой 2 × 2, иначе строками 1) 2) 3) 4). Порог — то, что помещается в половину узкого листа. */
 const SHORT_OPTION = 12;
-export const optionLetter = (index: number, profile: LanguageProfile) =>
-  profile.letters.chars[index] ?? String(index + 1);
 export const optionsFit = (options: string[]) =>
   options.length <= 4 && options.every((option) => [...option].length <= SHORT_OPTION);
 
@@ -61,6 +58,16 @@ export function Choice({
   const grid = optionsFit(options);
   const profile = useProfile();
   const right = options.indexOf(correct);
+  const group = useTaskKeys({
+    active: !answered && !saving,
+    columns: grid ? 2 : 1,
+    onKey: (event) => {
+      const option = options[digitIndex(event.key)];
+      if (option === undefined) return false;
+      void choose(option);
+      return true;
+    },
+  });
   return (
     <>
       <div className={exercise.cardRow}>
@@ -71,11 +78,14 @@ export function Choice({
         {aside}
       </div>
       <div
+        ref={group}
+        tabIndex={-1}
+        role="group"
+        aria-label={prompt}
         className={grid ? s.grid : s.lines}
         lang={greekOptions ? profile.code : undefined}
-        style={{ ["--letters" as string]: profile.letters.style }}
       >
-        {options.map((option) => {
+        {options.map((option, index) => {
           const mark = answered
             ? option === correct
               ? "correct"
@@ -87,8 +97,10 @@ export function Choice({
             <button
               key={option}
               type="button"
+              tabIndex={0}
               data-testid="option"
               data-answer={mark}
+              data-key={answered ? undefined : index + 1}
               disabled={answered || saving}
               className={cx(grid ? s.chip : s.line, mark && s[mark])}
               onClick={() => choose(option)}
@@ -113,7 +125,7 @@ export function Choice({
             <>
               Верно:{" "}
               <span lang={greekOptions ? profile.code : undefined}>
-                {grid || right < 0 ? "" : `${optionLetter(right, profile)}) `}
+                {grid || right < 0 ? "" : `${right + 1}) `}
                 {correct}
               </span>
             </>

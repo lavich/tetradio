@@ -4,7 +4,7 @@
  * при одном голосе их различает высота тона. Остановка отменяет весь диалог, а не только текущую реплику.
  */
 import type { TranscriptLine } from "../content/course";
-import { PROFILES, type LanguageProfile } from "../domain/language";
+import { PROFILES, spokenText, type LanguageProfile } from "../domain/language";
 import { voicesOf } from "./voices";
 import { releaseAssetUrl, type AssetSource } from "./store";
 
@@ -104,7 +104,7 @@ function say(text: string, voice: SpeechSynthesisVoice, rate: number, pitch: num
       clearTimeout(endTimer);
       resolve(ok);
     };
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(spokenText(text, lang));
     utterance.voice = voice;
     utterance.lang = voice.lang || lang;
     utterance.rate = rate;
@@ -128,6 +128,8 @@ function say(text: string, voice: SpeechSynthesisVoice, rate: number, pitch: num
 /**
  * Проигрывает диалог целиком; `onLine` сообщает номер звучащей реплики (для подсветки после ответа).
  * `source` отдаёт адрес записи реплики; пока звучит реплика, запись следующей уже скачивается.
+ * `lenient` — для текстов: несыгравшая запись заменяется синтезом, строка без голоса пропускается,
+ * «none» — только если не прозвучало ничего.
  */
 export async function playDialogue(
   lines: TranscriptLine[],
@@ -135,6 +137,7 @@ export async function playDialogue(
   onLine?: (index: number) => void,
   source?: AssetSource,
   profile: LanguageProfile = PROFILES.el,
+  lenient = false,
 ): Promise<DialogueResult> {
   const mine = ++run;
   for (const stop of stops) stop();
@@ -147,6 +150,7 @@ export async function playDialogue(
   let voices: SpeechSynthesisVoice[] | null = null;
   let cast: ReturnType<typeof castOf> | null = null;
   let next = fileOf(0);
+  let sounded = 0;
   try {
     for (const [index, line] of lines.entries()) {
       if (mine !== run) return "stopped";
@@ -154,17 +158,23 @@ export async function playDialogue(
       const url = await next;
       next = index + 1 < lines.length ? fileOf(index + 1) : Promise.resolve(null);
       let ok = false;
+      let skipped = false;
       if (mine === run && url && audio) ok = await playFile(audio, url, FILE_RATES[rate]);
-      else if (mine === run) {
+      if (mine === run && !ok && (!url || !audio || lenient)) {
         voices ??= await languageVoices(profile);
-        if (!voices.length) return "none";
-        cast ??= castOf(lines, voices.length);
-        const role = cast.get(line.speaker ?? "")!;
-        ok = await say(line.text, voices[role.voice], RATES[rate], role.pitch, profile.voice);
+        if (mine !== run) return "stopped";
+        if (voices.length) {
+          cast ??= castOf(lines, voices.length);
+          const role = cast.get(line.speaker ?? "")!;
+          ok = await say(line.text, voices[role.voice], RATES[rate], role.pitch, profile.voice);
+        } else if (lenient) skipped = true;
+        else return "none";
       }
       if (url) releaseAssetUrl(url);
       if (mine !== run) return "stopped";
+      if (skipped) continue;
       if (!ok) return "error";
+      sounded++;
       // Короткая пауза между репликами, как в записи экзамена.
       await new Promise((resolve) => setTimeout(resolve, 350));
     }
@@ -173,7 +183,7 @@ export async function playDialogue(
     void next.then((url) => url && releaseAssetUrl(url));
   }
   onLine?.(-1);
-  return "done";
+  return lenient && !sounded ? "none" : "done";
 }
 
 export function stopDialogue() {

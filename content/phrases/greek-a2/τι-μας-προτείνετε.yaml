@@ -1,5 +1,6 @@
 id: p111
 text: Τι μας προτείνετε;
+audio: phrases/p111.mp3
 translation: Что вы нам посоветуете?
 provenance:
   sourceLabel: Лексикон курса, модуль 09 (docs/course/lexicon/09.tsv)

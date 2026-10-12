@@ -18,6 +18,11 @@
   color: var(--primary);
   cursor: pointer;
 }
+.placed:focus-visible {
+  outline: none;
+  background: var(--soft);
+  box-shadow: 0 0 0 4px var(--soft);
+}
 @media (hover: hover) {
   .placed:hover:not(:disabled) {
     text-decoration: line-through;
@@ -36,6 +41,7 @@
   margin-top: 12px;
 }
 .tile {
+  position: relative;
   display: grid;
   place-items: center;
   min-width: 52px;
@@ -57,6 +63,26 @@
 .tile:disabled {
   opacity: 0.35;
   cursor: default;
+}
+@media (pointer: fine) {
+  .tile:focus:not(:disabled) {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: inset 0 0 0 1px var(--primary);
+    background: var(--soft);
+  }
+  .tile[data-key]::after {
+    content: attr(data-key);
+    content: attr(data-key) / "";
+    position: absolute;
+    top: 3px;
+    right: 6px;
+    font: 11px/1 var(--font-ui);
+    color: var(--muted-foreground);
+  }
+}
+.tiles:focus {
+  outline: none;
 }
 .syllables {
   font-style: normal;

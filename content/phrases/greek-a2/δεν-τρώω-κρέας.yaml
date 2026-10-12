@@ -1,5 +1,6 @@
 id: p103
 text: Δεν τρώω κρέας.
+audio: phrases/p103.mp3
 translation: Я не ем мясо.
 provenance:
   sourceLabel: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)

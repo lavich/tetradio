@@ -9,10 +9,12 @@ import {
   type PackageWord,
 } from "../src/content/schema.ts";
 import { LEGACY_FILE, type ArtReport } from "./art.ts";
+import { checkCardAudio, type CardVoicing } from "./build/card-audio.ts";
 import { buildCards } from "./build/cards.ts";
 import { buildCourses } from "./build/courses.ts";
 import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons.ts";
 import { markCourses, type MarksReport } from "./build/mark-courses.ts";
+import { buildReadings, type ReadingReport } from "./build/readings.ts";
 import { buildMedia } from "./build/media.ts";
 import { packLessons, type BuiltFile } from "./build/output.ts";
 import { checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
@@ -33,6 +35,7 @@ export type {
 export type { BuiltFile } from "./build/output.ts";
 export type { MarksReport } from "./build/mark-courses.ts";
 export type { VoicingReport } from "./build/lessons.ts";
+export type { CardVoicing } from "./build/card-audio.ts";
 
 export interface BuiltContent {
   catalog: Catalog;
@@ -44,6 +47,10 @@ export interface BuiltContent {
   art: ArtReport;
   marks: MarksReport;
   voicing: VoicingReport;
+  cardVoicing: CardVoicing;
+  readings: ReadingReport[];
+  /** Опубликованные модули курса с полкой, где текстов для чтения меньше двух. */
+  sparseReadings: string[];
 }
 
 /**
@@ -60,8 +67,9 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages, courseLanguages } =
     buildCourses(sources);
   checkSourceScripts(sources, courseLanguages, languages, moduleLanguages);
+  const cardVoicing = checkCardAudio(sources, courseLanguages);
   const { words, phrases } = buildCards(sources, courseLanguages);
-  const { legacy, art, media } = buildMedia(sources, words, phrases);
+  const { legacy, art, media } = buildMedia(sources, words, phrases, cardVoicing.sources);
   const { used, lessonsForModule, drafts, voicing } = buildLessons({
     sources,
     words,
@@ -75,7 +83,8 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   });
   // Слова прошлых уроков известны только после разбора всех уроков, поэтому версии считаются после разметки.
   const marks = markCourses(courses, modules, moduleOf, drafts, words, phrases);
-  const { packages, entries, files } = packLessons(drafts, marks);
+  const readings = buildReadings({ sources, courses, modules, moduleOf, drafts, words, phrases, media, legacy, art });
+  const { packages, entries, files } = packLessons(drafts, marks, readings.byLesson, readings.mediaOf);
   checkCoverage({ sources, words, phrases, used, checkpoints, reviews, lessonsForModule, modules });
   for (const { item, body } of media.values()) files.push({ path: item.url, body, mimeType: item.mimeType });
   const catalog: Catalog = {
@@ -96,6 +105,9 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     art,
     marks: marks.report,
     voicing,
+    cardVoicing,
+    readings: readings.report,
+    sparseReadings: readings.sparse,
   };
 }
 
@@ -140,6 +152,30 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
         ? `; без записи ${silent} реплик в ${unvoiced.size} уроках${stale.length ? ` (устарело после правки ${stale.length})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- <урок>`
         : ""),
   );
+  const answers = built.voicing.answers;
+  console.log(
+    `Ответы перевода и пропуска: с записью ${answers.voiced}` +
+      (answers.unvoiced
+        ? `; без записи ${answers.unvoiced}${answers.stale ? ` (устарело после правки ${answers.stale})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- answers`
+        : ""),
+  );
+  const cards = built.cardVoicing;
+  const silentCards = built.words.length + built.phrases.length - cards.voiced;
+  console.log(
+    `Слова и фразы: с записью ${cards.voiced}` +
+      (silentCards
+        ? `; без записи ${silentCards}${cards.stale.length ? ` (устарело после правки ${cards.stale.length})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- words phrases`
+        : ""),
+  );
+  for (const reading of built.readings)
+    console.log(
+      `Чтение ${reading.id} (после ${reading.after}): ${reading.words} слов, знакомо ${reading.known} %, глоссы ${reading.glosses} %, имена ${reading.names} %` +
+        (reading.warnings.length ? ` — ${reading.warnings.join("; ")}` : "") +
+        (reading.unknown.length ? `; не нашлись: ${[...new Set(reading.unknown)].join(", ")}` : "") +
+        (reading.unvoiced ? `; без записи ${reading.unvoiced} предложений — озвучка: npm run voices -- readings` : ""),
+    );
+  if (built.sparseReadings.length)
+    console.log(`Чтение: меньше двух текстов в модулях ${built.sparseReadings.join(", ")}`);
   const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);
   for (const entry of shown)
     console.log(`  ${entry.lessonId} ${entry.block}.${entry.field}: «${entry.text}» → ${entry.refs.join(" или ")}`);

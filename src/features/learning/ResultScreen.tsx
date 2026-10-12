@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
-import { deviceTimezone, formatDay, localDay } from "../../domain/learning";
-import type { CardKind, LearningRef, ReviewEvent } from "../../domain/types";
+import { deviceTimezone, formatDay, isDue, localDay, reviewCutoff } from "../../domain/learning";
+import { CARD_KINDS, type CardKind, type LearningRef, type ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
 import { CARDS, minutes, PHRASES, plural, withCount, WORDS } from "../../shared/format";
 import { statesOf } from "../../storage/queries";
@@ -14,20 +14,32 @@ import { sessionPath, startSession } from "./session-actions";
 import { compositionLine, DoneList, doneRows, markOf, PageHead } from "./notebook";
 import s from "./session.module.css";
 
+const KIND_FORMS: Record<CardKind, [string, string, string]> = {
+  word: WORDS,
+  phrase: PHRASES,
+  mistake: ["задание урока", "задания урока", "заданий урока"],
+};
 /** Состав уникальных карточек по видам: «2 слова · 1 фраза», только непустые группы. */
 export const compositionText = (byKind: Record<CardKind, number>) =>
-  (
-    [
-      ["word", WORDS],
-      ["phrase", PHRASES],
-    ] as const
-  )
-    .filter(([kind]) => byKind[kind])
-    .map(([kind, forms]) => withCount(byKind[kind], forms))
+  CARD_KINDS.filter((kind) => byKind[kind])
+    .map((kind) => withCount(byKind[kind], KIND_FORMS[kind]))
     .join(" · ");
+/** Число карточек занятия: один вид называется своим словом, несколько — «карточки» с составом. */
+export function countText(byKind: Record<CardKind, number>, total: number) {
+  const present = CARD_KINDS.filter((kind) => byKind[kind]);
+  if (present.length === 1) return withCount(total, KIND_FORMS[present[0]]);
+  return present.length ? `${withCount(total, CARDS)} (${compositionText(byKind)})` : withCount(total, CARDS);
+}
 
-const greekOf = (event: ReviewEvent) =>
-  "greek" in event.snapshot ? event.snapshot.greek : "text" in event.snapshot ? event.snapshot.text : "";
+/** Подпись карточки из снимка ответа: у задания урока — его вопрос. */
+export const snapshotLabel = ({ snapshot }: Pick<ReviewEvent, "snapshot">) =>
+  "greek" in snapshot
+    ? snapshot.greek
+    : "text" in snapshot
+      ? snapshot.text
+      : "prompt" in snapshot
+        ? snapshot.prompt
+        : "";
 const keyOf = (ref: LearningRef) => JSON.stringify([ref.kind, ref.id]);
 
 export function ResultScreen() {
@@ -53,17 +65,17 @@ export function ResultScreen() {
     mistakeRefs = result?.mistakeRefs ?? [];
   // Повторная попытка той же карточки не увеличивает число уникальных карточек.
   const unique = new Map(events.map((event) => [event.unitKey, event.ref]));
-  const byKind: Record<CardKind, number> = { word: 0, phrase: 0 };
+  const byKind = Object.fromEntries(CARD_KINDS.map((kind) => [kind, 0])) as Record<CardKind, number>;
   // Снятый вид разряда в разбивке не занимает: его ответы остаются в общем числе и в точности.
   for (const ref of unique.values()) if (ref.kind in byKind) byKind[ref.kind]++;
-  const mixed = byKind.phrase > 0;
   const objective = events.filter((event) => event.correct !== null);
   // «Сразу» — карточка без единой ошибки в занятии; остальные прошли с исправлением.
   const corrected = new Set(mistakes.map((event) => event.unitKey));
   const clean = [...unique.keys()].filter((key) => !corrected.has(key)).length;
+  const cutoff = reviewCutoff(now, deviceTimezone());
   const readyAgain: LearningRef[] = mistakeRefs.filter((ref) => {
     const state = result?.states.get(keyOf(ref));
-    return state && new Date(state.card.due).getTime() <= now.getTime();
+    return state && isDue(state.card, now, cutoff);
   });
   // Когда вернутся ошибки — по сроку каждой карточки, сгруппировано по дням: общий срок не выдумываем.
   const returns = new Map<string, string[]>();
@@ -72,7 +84,8 @@ export function ResultScreen() {
     if (!state || readyAgain.includes(ref)) continue;
     const day = localDay(new Date(state.card.due), deviceTimezone());
     const event = mistakes.find((entry) => entry.unitKey === keyOf(ref) || entry.ref.id === ref.id);
-    returns.set(day, [...(returns.get(day) ?? []), event ? greekOf(event) : ""].filter(Boolean));
+    const label = event ? snapshotLabel(event) : "";
+    if (label) returns.set(day, [...(returns.get(day) ?? []), label]);
   }
   const today = localDay(now, deviceTimezone());
   const tomorrow = localDay(new Date(now.getTime() + 86_400_000), deviceTimezone());
@@ -96,8 +109,7 @@ export function ResultScreen() {
               Занятие завершено
             </h2>
             <p className={s.summaryLine} data-testid="composition">
-              {withCount(unique.size, mixed ? CARDS : WORDS)}
-              {mixed && ` (${compositionText(byKind)})`} · {clean} сразу, {unique.size - clean} с исправлением.
+              {countText(byKind, unique.size)} · {clean} сразу, {unique.size - clean} с исправлением.
             </p>
             {[...returns].map(([day, names]) => (
               <p key={day} className={s.summaryNote}>
@@ -109,7 +121,7 @@ export function ResultScreen() {
               Упражнений: {events.length}, ошибок: {mistakes.length}
               {almost ? `, из них «почти»: ${almost}` : ""}.{" "}
               {objective.length
-                ? `Объективная точность (выбор, сборка, аудирование, написание, пропуск): ${Math.round((objective.filter((event) => event.correct).length / objective.length) * 100)}% из ${withCount(objective.length, ["ответа", "ответов", "ответов"])}.`
+                ? `Объективная точность (выбор, сборка, аудирование, написание, задания уроков): ${Math.round((objective.filter((event) => event.correct).length / objective.length) * 100)}% из ${withCount(objective.length, ["ответа", "ответов", "ответов"])}.`
                 : "Объективных проверок в этом занятии не было — только самооценка. Точность: нет данных."}
             </p>
             <p className={s.summaryNote}>Активное время: {minutes(session?.activeTimeMs ?? 0)}</p>

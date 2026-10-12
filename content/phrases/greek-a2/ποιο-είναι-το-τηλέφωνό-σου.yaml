@@ -1,5 +1,6 @@
 id: p049
 text: Ποιο είναι το τηλέφωνό σου;
+audio: phrases/p049.mp3
 translation: Какой у тебя номер телефона?
 provenance:
   sourceLabel: Лексикон курса, модуль 04 (docs/course/lexicon/04.tsv)
