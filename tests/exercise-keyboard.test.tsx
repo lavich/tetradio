@@ -109,9 +109,18 @@ describe("выбор варианта с клавиатуры", () => {
     await press("3");
     expect(answers).toEqual([{ correct: false, text: "дом" }]);
   });
-  it("после открытия фокус на группе вариантов, а не на варианте", async () => {
+  it("после открытия фокус на первом варианте", async () => {
     await render(choice());
-    expect(document.activeElement?.getAttribute("role")).toBe("group");
+    expect(focused()).toBe("вода");
+  });
+  it("автоповтор Enter, нажавшего «Далее», не выбирает вариант в фокусе", async () => {
+    await render(choice());
+    expect((await press("Enter", { repeat: true })).defaultPrevented).toBe(true);
+  });
+  it("Tab доходит до вариантов и «Не знаю» и в WebKit", async () => {
+    await render(choice());
+    const reachable = [...host.querySelectorAll("[data-testid=option]"), buttons("Не знаю")];
+    expect(reachable.every((button) => button.getAttribute("tabindex") === "0")).toBe(true);
   });
   it("на сенсорном экране группа фокус не получает", async () => {
     pointer(false);
@@ -120,7 +129,6 @@ describe("выбор варианта с клавиатуры", () => {
   });
   it("в сетке из трёх вариантов стрелка вниз со второго остаётся на месте", async () => {
     await render(choice(["вода", "хлеб", "дом"]));
-    await press("ArrowRight");
     await press("ArrowRight");
     await press("ArrowDown");
     expect(focused()).toBe("хлеб");
@@ -137,10 +145,8 @@ describe("выбор варианта с клавиатуры", () => {
     expect(focused()).toBe("Далее");
     expect((await press("Enter", { repeat: true })).defaultPrevented).toBe(true);
   });
-  it("стрелки ходят по сетке вариантов по кругу, первая — от группы к первому варианту", async () => {
+  it("стрелки ходят по сетке вариантов по кругу", async () => {
     await render(choice());
-    await press("ArrowDown");
-    expect(focused()).toBe("вода");
     await press("ArrowDown");
     expect(focused()).toBe("дом");
     await press("ArrowRight");
@@ -170,12 +176,12 @@ describe("сборка слова с клавиатуры", () => {
     await press("2");
     await press("1");
     expect(assembled()).toBe("νερό");
+    await frame();
     await press("Enter");
     expect(answers).toMatchObject([{ correct: true }]);
   });
   it("поставленный стрелкой и нажатием слог передаёт фокус следующему свободному", async () => {
     await render(assembly());
-    await press("ArrowRight");
     expect(focused()).toBe("ρό");
     await act(async () => (document.activeElement as HTMLButtonElement).click());
     await frame();
@@ -183,13 +189,11 @@ describe("сборка слова с клавиатуры", () => {
   });
   it("Enter на слоге ставит слог, а не проверяет ответ", async () => {
     await render(assembly());
-    await press("ArrowRight");
     await press("Enter");
     expect(answers).toEqual([]);
   });
   it("цифра, поставившая слог в фокусе, передаёт фокус следующему свободному", async () => {
     await render(assembly());
-    await press("ArrowRight");
     await press("1");
     await frame();
     expect(focused()).toBe("νε");

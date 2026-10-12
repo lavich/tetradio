@@ -79,7 +79,7 @@ function moveFocus(group: HTMLElement, [across, down]: [number, number], columns
 /**
  * Клавиши группы кнопок: стрелки, а `onKey` — цифры и прочее; Enter и пробел кнопки нажимают сами.
  * Слушаем документ, потому что после «Далее» фокус уходит с исчезнувшей кнопки на страницу. Фокус при открытии —
- * на группе, а не на первой кнопке: удержанный Enter иначе сразу выбрал бы вариант.
+ * на первой кнопке; автоповтор Enter, нажавшего «Далее», гасится, иначе он сразу выбрал бы её.
  */
 export function useTaskKeys({
   active,
@@ -103,13 +103,15 @@ export function useTaskKeys({
       if (arrow) {
         event.preventDefault();
         moveFocus(group.current, arrow, columns);
-      } else if (!event.repeat && latest.current(event)) event.preventDefault();
+      } else if (event.repeat) {
+        if (event.key === "Enter" || event.key === " ") event.preventDefault();
+      } else if (latest.current(event)) event.preventDefault();
     };
     document.addEventListener("keydown", listener);
     return () => document.removeEventListener("keydown", listener);
   }, [active, columns]);
   return useCallback((element: HTMLElement | null) => {
     group.current = element;
-    focusWithKeyboard(element);
+    focusWithKeyboard(element?.querySelector<HTMLElement>("button:not(:disabled)") ?? element);
   }, []);
 }
