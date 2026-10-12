@@ -28,4 +28,4 @@
 ## 4. Проверка целиком
 
 - [x] 4.1 `npm run typecheck && npm run lint && npm run format:check && npm test && npm run test:e2e && npm run test:e2e:course && npm run build`
-- [ ] 4.2 Проверка на устройстве: ошибка в уроке на телефоне приходит в повторение в Telegram Desktop после синхронизации
+- [x] 4.2 Проверка на устройстве: ошибка в уроке на телефоне приходит в повторение в Telegram Desktop после синхронизации
