@@ -1,6 +1,7 @@
 import {
   ContentError,
   parsePackage,
+  paradigmsOf,
   voicedOf,
   type CatalogEntry,
   type ContentPackage,
@@ -64,6 +65,7 @@ export function packLessons(
       media: { count: packMedia.length, bytes: packMedia.reduce((sum, item) => sum + item.bytes, 0) },
       ...(pack.readings?.length ? { readings: pack.readings.length } : {}),
       ...(voicedOf(pack.readings) ? { readingAudio: voicedOf(pack.readings) } : {}),
+      ...(paradigmsOf(pack.words) ? { paradigms: paradigmsOf(pack.words) } : {}),
     });
   }
   return { packages, entries, files };

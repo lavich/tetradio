@@ -176,6 +176,11 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     );
   if (built.sparseReadings.length)
     console.log(`Чтение: меньше двух текстов в модулях ${built.sparseReadings.join(", ")}`);
+  const tables = built.words.filter((word) => word.paradigm);
+  console.log(`Спряжение: таблицы у ${tables.length} глаголов — весь список: PARADIGM_REPORT=1 node content/build.ts`);
+  if (process.env.PARADIGM_REPORT)
+    for (const word of tables)
+      console.log(`  ${word.greek}: ${word.paradigm!.present.join(" ")} | ${word.paradigm!.past.join(" ")}`);
   const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);
   for (const entry of shown)
     console.log(`  ${entry.lessonId} ${entry.block}.${entry.field}: «${entry.text}» → ${entry.refs.join(" или ")}`);

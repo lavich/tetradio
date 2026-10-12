@@ -7,9 +7,10 @@ import {
   type PackagePhrase,
   type PackageWord,
 } from "../../src/content/schema.ts";
-import type { Example, Gloss, Segment } from "../../src/domain/types.ts";
+import type { Example, Gloss, Paradigm, Segment } from "../../src/domain/types.ts";
 import { PROFILES, type Language } from "../../src/domain/language.ts";
 import { canonical, fail, hash, LANGUAGE, nfc, pick, text } from "./common.ts";
+import { conjugate, hasParadigm, principal } from "./paradigm.ts";
 import type { ContentRoot, PhraseSource, Sourced, WordSource } from "./sources.ts";
 
 export const imageAssetId = (wordId: string) => `img-${wordId}`;
@@ -51,6 +52,42 @@ function glossesOf(words: unknown, greek: string, where: string): Gloss[] {
     if (wordId) gloss.wordId = wordId;
     return gloss;
   });
+}
+
+function paradigmOf(
+  src: WordSource,
+  word: string,
+  forms: string | undefined,
+  language: Language,
+  where: string,
+): Paradigm | undefined {
+  if (src.paradigm !== undefined) {
+    if (language !== "el") fail(`${where}.paradigm: таблица спряжения — только у греческого глагола`);
+    if (typeof src.paradigm !== "object" || src.paradigm === null)
+      fail(`${where}.paradigm: ожидалось { present, past }`);
+    if (!hasParadigm(word, forms))
+      fail(`${where}.paradigm: таблица — только у глагола с лицами и формами «аор.» или «прош.»`);
+    const table = src.paradigm as { present?: unknown; past?: unknown };
+    const persons = (value: unknown, field: string) => {
+      if (!Array.isArray(value) || value.length !== 6)
+        fail(`${where}.paradigm.${field}: нужны шесть форм — я, ты, он, мы, вы, они`);
+      return (value as unknown[]).map((form, index) => {
+        const text_ = text(form, `${where}.paradigm.${field}[${index}]`)!;
+        if (!PROFILES[language].script.test(text_)) fail(`${where}.paradigm.${field}[${index}]: нет букв языка курса`);
+        return text_;
+      });
+    };
+    const explicit = { present: persons(table.present, "present"), past: persons(table.past, "past") };
+    if (explicit.present[0] !== word) fail(`${where}.paradigm.present[0]: первая форма — заглавная «${word}»`);
+    const first = principal(forms!).past;
+    if (first && explicit.past[0] !== first) fail(`${where}.paradigm.past[0]: первая форма — «${first}» из forms`);
+    return explicit;
+  }
+  if (language !== "el" || !hasParadigm(word, forms)) return undefined;
+  const built = conjugate(word, forms!);
+  if (!built)
+    fail(`${where}: спряжение «${word}» не выводится правилами — задайте paradigm: { present, past } в карточке`);
+  return built;
 }
 
 function describe(id: string, src: Sourced<WordSource>, language: Language, picture = false): PackageWord {
@@ -99,6 +136,8 @@ function describe(id: string, src: Sourced<WordSource>, language: Language, pict
   if (note) draft.note = note;
   const forms = text(src.forms, `${where}.forms`, false);
   if (forms) draft.forms = forms;
+  const paradigm = paradigmOf(src, greek, forms, language, where);
+  if (paradigm) draft.paradigm = paradigm;
   if (source) draft.source = source;
   if (src.image || picture) draft.imageAssetId = imageAssetId(id);
   if (src.audio) draft.audioAssetId = audioAssetId(id);

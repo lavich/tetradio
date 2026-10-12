@@ -16,6 +16,7 @@ import { createPortal } from "react-dom";
 import type { BlockMarks, WordMark } from "../../content/schema";
 import { playText, type PlayResult } from "../../shared/audio";
 import { noVoice, useProfile } from "../../shared/language";
+import { VerbForms } from "../../shared/VerbForms";
 import type { TapCard } from "../../storage/course";
 import css from "./word-taps.module.css";
 
@@ -340,9 +341,16 @@ function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
       </div>
       {card.russian ? <p className={css.tipRu}>{card.russian}</p> : null}
       {forms ? (
-        <p className={css.tipForms} lang={profile.code}>
-          {forms}
-        </p>
+        <div className={css.tipForms}>
+          <VerbForms
+            headword={card.greek}
+            forms={forms}
+            onSay={(form) => {
+              setResult(undefined);
+              void playText(form, undefined, profile).then(setResult);
+            }}
+          />
+        </div>
       ) : null}
       {result === "none" ? <p className={css.tipNote}>{noVoice(profile)}</p> : null}
       {result === "error" ? <p className={css.tipNote}>Не удалось воспроизвести произношение.</p> : null}

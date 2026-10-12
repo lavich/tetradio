@@ -1,0 +1,79 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 10px;
+}
+.part {
+  display: inline-flex;
+  flex-direction: column;
+}
+.form {
+  white-space: nowrap;
+}
+.label {
+  font: 12px var(--font-sans);
+  font-style: normal;
+  line-height: 14px;
+  color: var(--muted-foreground);
+}
+.arrow {
+  color: var(--muted-foreground);
+}
+.ending {
+  color: var(--foreground);
+  font-weight: 700;
+}
+.details {
+  margin-top: 4px;
+}
+.summary {
+  cursor: pointer;
+  width: fit-content;
+  font: 600 13.5px var(--font-sans);
+  line-height: var(--cell);
+  color: var(--primary);
+}
+.scroll {
+  overflow-x: auto;
+}
+.table {
+  border-collapse: collapse;
+  font-family: var(--font-print);
+  font-size: 17px;
+  line-height: var(--cell);
+}
+.table th {
+  text-align: left;
+  font: 13px var(--font-sans);
+  color: var(--muted-foreground);
+  padding-right: 12px;
+}
+.table td {
+  padding-right: 16px;
+}
+.table td:last-child {
+  padding-right: 0;
+}
+.say {
+  padding: 8px 0;
+  margin: -8px 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline dotted var(--muted-foreground);
+  text-underline-offset: 4px;
+}
+.say:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.note {
+  margin: 4px 0 0;
+  font: 13px var(--font-sans);
+  color: var(--muted-foreground);
+}

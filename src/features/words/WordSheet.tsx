@@ -11,6 +11,7 @@ import { useProfile } from "../../shared/language";
 import { usePhrase, useWordLesson } from "../../shared/store";
 import { db } from "../../storage/db";
 import { Tick } from "../../shared/Tick";
+import { ParadigmTable, useSay, VerbForms } from "../../shared/VerbForms";
 import type { DictionaryLesson } from "../../storage/dictionary";
 import { dexieSource } from "../../storage/queries";
 import { SpeakText } from "../learning/exercises";
@@ -52,6 +53,7 @@ export function EntrySheet({
 
 function WordBody({ word, courseId }: { word: Word; courseId?: string }) {
   const shipped = useWordLesson(word.id);
+  const { say, note: sayNote } = useSay();
   const { code } = useProfile();
   return (
     <>
@@ -67,10 +69,12 @@ function WordBody({ word, courseId }: { word: Word; courseId?: string }) {
       </div>
       <p className={css.meaning}>{word.russian}</p>
       {word.forms && (
-        <p className={css.forms} lang={code}>
-          {word.forms}
-        </p>
+        <div className={css.forms}>
+          <VerbForms headword={word.greek} forms={word.forms} onSay={say} />
+        </div>
       )}
+      {word.paradigm && <ParadigmTable paradigm={word.paradigm} onSay={say} />}
+      {sayNote}
       <ReadingNotes word={word} bare />
       {word.examples.map((example, index) => (
         <ExampleBox key={index} example={example} linkFrom={word.id} bare />

@@ -222,7 +222,16 @@ const course = (): Files => ({
       { type: "speaking", id: "s", part: "interview", prompt: "—", seconds: 10, criteria: ["—"] },
     ],
   },
-  "words/c/eimai.yaml": { greek: "είμαι", russian: "быть", ipa: "/ˈime/", forms: "прош. ήμουν; буд. θα είμαι" },
+  "words/c/eimai.yaml": {
+    greek: "είμαι",
+    russian: "быть",
+    ipa: "/ˈime/",
+    forms: "прош. ήμουν; буд. θα είμαι",
+    paradigm: {
+      present: ["είμαι", "είσαι", "είναι", "είμαστε", "είστε", "είναι"],
+      past: ["ήμουν", "ήσουν", "ήταν", "ήμασταν", "ήσασταν", "ήταν"],
+    },
+  },
   "words/c/filos.yaml": { greek: "ο φίλος", russian: "друг", forms: "мн. οι φίλοι" },
 });
 

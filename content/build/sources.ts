@@ -13,6 +13,7 @@ export interface WordSource {
   ipa?: string;
   note?: string;
   forms?: string;
+  paradigm?: { present: string[]; past: string[] };
   verified?: boolean;
   source?: string;
   image?: string;

@@ -16,6 +16,11 @@ export interface Example {
   source?: string;
   glosses?: Gloss[];
 }
+/** Спряжение глагола по лицам «я, ты, он, мы, вы, они»: настоящее и прошедшее. */
+export interface Paradigm {
+  present: string[];
+  past: string[];
+}
 export interface Segment {
   text: string;
   ipa: string;
