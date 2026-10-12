@@ -4,7 +4,7 @@ import { cx } from "../../../shared/cx";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./choice.module.css";
-import { arrowFocus, digitIndex, focusWithKeyboard, useRevealed, useTaskKeys } from "./hooks";
+import { digitIndex, useRevealed, useTaskKeys } from "./hooks";
 import type { LanguageProfile } from "../../../domain/language";
 import { useProfile } from "../../../shared/language";
 import { type ExerciseProps } from "./model";
@@ -61,11 +61,15 @@ export function Choice({
   const grid = optionsFit(options);
   const profile = useProfile();
   const right = options.indexOf(correct);
-  useTaskKeys(!answered && !saving, (event) => {
-    const option = options[digitIndex(event.key)];
-    if (option === undefined) return false;
-    void choose(option);
-    return true;
+  const group = useTaskKeys({
+    active: !answered && !saving,
+    columns: grid ? 2 : 1,
+    onKey: (event) => {
+      const option = options[digitIndex(event.key)];
+      if (option === undefined) return false;
+      void choose(option);
+      return true;
+    },
   });
   return (
     <>
@@ -77,11 +81,10 @@ export function Choice({
         {aside}
       </div>
       <div
-        ref={focusWithKeyboard}
+        ref={group}
         tabIndex={-1}
         role="group"
-        aria-label="Варианты ответа"
-        onKeyDown={arrowFocus(grid ? 2 : 1)}
+        aria-label={prompt}
         className={grid ? s.grid : s.lines}
         lang={greekOptions ? profile.code : undefined}
         style={{ ["--letters" as string]: profile.letters.style }}
@@ -100,7 +103,7 @@ export function Choice({
               type="button"
               data-testid="option"
               data-answer={mark}
-              data-key={index + 1}
+              data-key={answered ? undefined : index + 1}
               disabled={answered || saving}
               className={cx(grid ? s.chip : s.line, mark && s[mark])}
               onClick={() => choose(option)}

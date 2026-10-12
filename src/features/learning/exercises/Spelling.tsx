@@ -10,7 +10,7 @@ import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./spelling.module.css";
 import { AnswerMask } from "./AnswerMask";
-import { useRevealed, useRevealSpeech, focusWithKeyboard } from "./hooks";
+import { focusWithKeyboard, useRevealed, useRevealSpeech } from "./hooks";
 import { wordOf, type ExerciseProps, type Status } from "./model";
 import { PhraseReveal, Primary, QuietActions, QuietButton, Reveal, TaskHead, Verdict, WordReveal } from "./parts";
 

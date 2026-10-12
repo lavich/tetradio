@@ -7,7 +7,7 @@ import { useProfile } from "../../../shared/language";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./assembly.module.css";
-import { arrowFocus, digitIndex, focusWithKeyboard, useRevealed, useRevealSpeech, useTaskKeys } from "./hooks";
+import { digitIndex, useRevealed, useRevealSpeech, useTaskKeys } from "./hooks";
 import { wordOf, type ExerciseProps, type Status } from "./model";
 import { Primary, QuietActions, QuietButton, Reveal, TaskHead, Verdict, WordReveal } from "./parts";
 
@@ -68,19 +68,26 @@ export function Assembly({
     setSaving(false);
     if (saved) setResult(skip ? { status: "wrong", message: assemblySkipMessage(word.greek), skipped: true } : checked);
   };
-  useTaskKeys(!result && !saving, (event) => {
-    if (event.key === "Backspace") {
-      setPlaced(placed.slice(0, -1));
+  const group = useTaskKeys({
+    active: !result && !saving,
+    onKey: (event) => {
+      if (event.key === "Backspace") {
+        if (!placed.length) return false;
+        setPlaced(placed.slice(0, -1));
+        return true;
+      }
+      if (event.key === "Enter") {
+        if (event.target instanceof HTMLButtonElement) return false;
+        void check();
+        return true;
+      }
+      const index = digitIndex(event.key);
+      if (index < 0 || index >= pool.length || placed.includes(index)) return false;
+      const focused = document.activeElement;
+      if (focused instanceof HTMLButtonElement && focused.dataset.key === String(index + 1)) keepFocusAfter(focused);
+      setPlaced([...placed, index]);
       return true;
-    }
-    if (event.key === "Enter" && !(event.target instanceof HTMLButtonElement)) {
-      void check();
-      return true;
-    }
-    const index = digitIndex(event.key);
-    if (index < 0 || index >= pool.length || placed.includes(index)) return false;
-    setPlaced([...placed, index]);
-    return true;
+    },
   });
   return (
     <>
@@ -110,11 +117,10 @@ export function Assembly({
             )}
           </div>
           <div
-            ref={focusWithKeyboard}
+            ref={group}
             tabIndex={-1}
             role="group"
-            aria-label="Слоги"
-            onKeyDown={arrowFocus()}
+            aria-label={`Слоги слова «${word.russian}»`}
             className={s.tiles}
             lang={lang}
           >

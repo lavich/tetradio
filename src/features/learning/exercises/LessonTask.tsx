@@ -7,7 +7,7 @@ import exercise from "./exercise.module.css";
 import s from "./spelling.module.css";
 import { Choice } from "./Choice";
 import type { ExerciseProps, Status } from "./model";
-import { useRevealed, focusWithKeyboard } from "./hooks";
+import { focusWithKeyboard, useRevealed } from "./hooks";
 import { Primary, QuietActions, QuietButton, TaskHead, Verdict } from "./parts";
 
 const taskOf = (props: ExerciseProps): MistakeItem => {

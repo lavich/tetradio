@@ -8,7 +8,7 @@ import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./spelling.module.css";
 import { AnswerMask } from "./AnswerMask";
-import { useRevealed, focusWithKeyboard } from "./hooks";
+import { focusWithKeyboard, useRevealed } from "./hooks";
 import type { ExerciseProps, Status } from "./model";
 import { Primary, QuietActions, QuietButton, Verdict } from "./parts";
 import { Corrected } from "./Spelling";

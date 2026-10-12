@@ -76,21 +76,22 @@
 }
 /* У сетки нет букв вариантов, как у строк, — номер для цифры нужен только ей. */
 @media (pointer: fine) {
-  .chip::after {
+  .chip[data-key]::after {
     content: attr(data-key);
+    /* Номер не входит в имя кнопки для читалки; строка выше — для WebKit без альтернативного текста у content. */
+    content: attr(data-key) / "";
     position: absolute;
     top: 4px;
     right: 7px;
     font: 11px/1 var(--font-ui);
     color: var(--muted-foreground);
   }
-  .chip[data-answer]::after {
-    content: none;
-  }
 }
-.grid:focus,
-.lines:focus {
-  outline: none;
+.grid:focus-visible,
+.lines:focus-visible {
+  outline: 1.5px dashed var(--primary);
+  outline-offset: 4px;
+  border-radius: 12px;
 }
 .optionTick {
   flex: none;
