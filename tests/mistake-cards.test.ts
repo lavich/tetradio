@@ -17,6 +17,7 @@ import { progress } from "../src/domain/stats";
 import { lessonMistakes, saveBlockProgress } from "../src/storage/course";
 import { cardCourses } from "../src/storage/courses";
 import { STORED_KINDS } from "../src/storage/kinds";
+import { recordAnswer } from "../src/storage/ops";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
 import { decodeSnapshot, encodeSnapshot } from "../src/sync/codec";
 import { applySnapshot, buildAndCommitMarked, readSnapshot } from "../src/sync/snapshot";
@@ -165,6 +166,49 @@ describe("карточки ошибок в базе", () => {
     expect(
       published.skills.find((entry) => unitKey(entry.ref as LearningRef) === unitKey(ref))?.skills.types.item?.recent,
     ).toEqual([true]);
+  });
+
+  it("неверный ответ на пункт урока не возвращает его в том же занятии", async () => {
+    await saveBlockProgress("m01-1", "forms", { done: true, answers: { q1: "είσαι" }, mistakes: ["q1"] }, db, now);
+    const ref = mistake("m01-1/forms/q1");
+    const [card] = await STORED_KINDS.mistake.contents([ref.id], db);
+    const state = (await db.cardStates.get(unitKey(ref)))!;
+    const item = {
+      id: "s-0",
+      ref,
+      unitKey: unitKey(ref),
+      card,
+      type: "item" as const,
+      options: ["είμαι", "είσαι", "είναι"],
+      isNew: false,
+      mode: "scheduled" as const,
+      expectedVersion: state.version,
+    };
+    const session = {
+      id: "s",
+      createdAt: now.toISOString(),
+      planDate: "2026-09-15",
+      items: [
+        item,
+        { ...item, id: "s-1", ref: mistake("m01-1/forms/q2"), unitKey: unitKey(mistake("m01-1/forms/q2")) },
+      ],
+      index: 0,
+      status: "active" as const,
+      activeTimeMs: 0,
+    };
+    await db.sessions.put(session);
+    await recordAnswer({
+      session,
+      item,
+      correct: false,
+      answer: "είσαι",
+      responseTimeMs: 2000,
+      activeTimeMs: 2000,
+      timezone: "UTC",
+      now,
+      database: db,
+    });
+    expect((await db.sessions.get("s"))!.items.map((entry) => entry.id)).toEqual(["s-0", "s-1"]);
   });
 
   it("содержимое — пункт из пакета; задание к тексту и убранный пункт спросить нельзя", async () => {
