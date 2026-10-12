@@ -116,6 +116,9 @@
     text-underline-offset: 4px;
   }
 }
+.quietButton:focus-visible {
+  outline-width: 2px;
+}
 .quietButton:disabled {
   opacity: 0.5;
   cursor: default;
