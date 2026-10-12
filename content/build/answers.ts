@@ -9,7 +9,7 @@ export interface VoicedAnswer {
   file: string;
 }
 
-/** Озвучиваемые ответы урока по исходнику: общая для сборки и озвучки, чтобы тексты и файлы совпали. */
+/** Общая для сборки и озвучки: тексты и файлы записей должны совпасть. */
 export function answerVoicing(lessonId: string, blocks: unknown, profile: LanguageProfile): VoicedAnswer[] {
   if (!Array.isArray(blocks)) return [];
   return blocks.flatMap((block) => {
@@ -26,7 +26,6 @@ export function answerVoicing(lessonId: string, blocks: unknown, profile: Langua
   });
 }
 
-/** Запись свежая, если сделана для нынешнего текста голосом диктора. */
 export const answerFresh = (manifest: VoiceManifest, answer: VoicedAnswer, voices: VoiceMap) =>
   !!voices.narrator &&
   manifest[answer.file]?.voice === voices.narrator &&
@@ -36,10 +35,8 @@ type PlannedAnswer = VoicedAnswer & { label: string; voices: VoiceMap; voice: st
 export interface AnswerVoicePlan {
   answers: PlannedAnswer[];
   pending: PlannedAnswer[];
-  /** Файлы `answers/…`, которым больше нет пункта. */
   stale: string[];
 }
-/** План озвучки ответов без сети; `existing` — файлы в `audio/answers`. */
 export function planAnswerVoices(
   lessons: Iterable<[id: string, blocks: unknown]>,
   context: (lessonId: string) => { voices: VoiceMap | undefined; profile: LanguageProfile },

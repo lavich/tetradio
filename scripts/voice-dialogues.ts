@@ -177,7 +177,6 @@ for (const dir of CARDS) {
   }
 }
 
-/** Озвучка группы по плану: записи без свежего файла — синтез, файлы без записи в плане — удаление. */
 async function voiceGroup(
   group: string,
   plan: (existing: string[]) => {

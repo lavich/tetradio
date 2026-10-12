@@ -17,10 +17,7 @@ export function spokenChoice(prompt: string, option: string, profile: LanguagePr
   return CYRILLIC.test(sentence) ? word : sentence;
 }
 
-/**
- * Верный ответ пункта вслух: у перевода — первая принимаемая форма, у пропуска — предложение с ней.
- * Ответ по-русски и выбор не озвучиваются: там нечего слушать или вариант уже звучит при нажатии.
- */
+/** Ответ по-русски нечего слушать, а выбор и соединение уже звучат при нажатии варианта. */
 export function spokenAnswer(
   format: ExerciseFormat,
   prompt: string,

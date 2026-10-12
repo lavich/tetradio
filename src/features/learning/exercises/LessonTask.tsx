@@ -25,7 +25,6 @@ const useLang = () => {
   return (text: string) => (profile.script.test(text) ? profile.code : undefined);
 };
 
-/** Верный ответ вслух — у перевода и пропуска; звучит записью из пакета или синтезом устройства. */
 function Answer({ task, autoSpeak }: { task: MistakeItem; autoSpeak?: boolean }) {
   const profile = useProfile();
   const text = spokenAnswer(task.format, task.prompt, task.answer[0], profile);

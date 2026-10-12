@@ -16,7 +16,6 @@ import css from "./blocks.module.css";
 
 const statusLabel: Record<ItemResult["status"], string> = { correct: "верно", almost: "почти", wrong: "неверно" };
 
-/** Верный ответ перевода или пропуска после проверки — записью из пакета или синтезом устройства. */
 function ListenAnswer({ text, audioAssetId }: { text: string; audioAssetId?: string }) {
   const profile = useProfile();
   if (useTextAudioKind(audioAssetId, profile) === "none") return null;

@@ -142,7 +142,7 @@ export interface ContentPackage {
   marks?: PackageMarks;
   /** Записи реплик: блок аудирования → медиа каждой реплики по порядку, `null` — реплика без записи. */
   lineAudio?: Record<string, (string | null)[]>;
-  /** Записи верных ответов: блок задания → пункт → медиа; у пунктов без записи ответ звучит синтезом. */
+  /** Записи верных ответов: блок задания → пункт → медиа. */
   itemAudio?: Record<string, Record<string, string>>;
   /** Тексты для беглого чтения, которые открывает этот урок. */
   readings?: PackageReading[];
