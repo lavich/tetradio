@@ -45,3 +45,34 @@ export function useRevealSpeech(card: SessionCard, itemId: string, answered: boo
     else if (card.kind === "phrase") void playText(card.phrase.text, card.phrase.audioAssetId, profile);
   }, [answered, enabled]);
 }
+
+/**
+ * Фокус на поле нового задания — только при мыши и клавиатуре: на телефоне он поднял бы экранную клавиатуру
+ * поверх задания. Ссылка-колбэк: поле появляется заново с каждой карточкой.
+ */
+export function focusWithKeyboard(element: HTMLElement | null) {
+  if (element && typeof matchMedia === "function" && matchMedia("(pointer: fine)").matches)
+    element.focus({ preventScroll: true });
+}
+
+/** Номер варианта по нажатой цифре: `1` — первый. */
+export const digitIndex = (key: string) => (/^[1-9]$/.test(key) ? Number(key) - 1 : -1);
+
+/**
+ * Клавиши задания без фокуса на нём: после «Далее» фокус уходит с исчезнувшей кнопки на страницу.
+ * Набор в полях и сочетания с модификаторами не перехватываются; `onKey` возвращает, обработана ли клавиша.
+ */
+export function useTaskKeys(active: boolean, onKey: (event: KeyboardEvent) => boolean) {
+  const latest = useRef(onKey);
+  latest.current = onKey;
+  useEffect(() => {
+    if (!active) return;
+    const listener = (event: KeyboardEvent) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) return;
+      if (event.target instanceof HTMLElement && event.target.closest("input, textarea, [contenteditable]")) return;
+      if (latest.current(event)) event.preventDefault();
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
+  }, [active]);
+}

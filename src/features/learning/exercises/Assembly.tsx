@@ -7,7 +7,7 @@ import { useProfile } from "../../../shared/language";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./assembly.module.css";
-import { useRevealed, useRevealSpeech } from "./hooks";
+import { digitIndex, focusWithKeyboard, useRevealed, useRevealSpeech, useTaskKeys } from "./hooks";
 import { wordOf, type ExerciseProps, type Status } from "./model";
 import { Primary, QuietActions, QuietButton, Reveal, TaskHead, Verdict, WordReveal } from "./parts";
 
@@ -57,6 +57,20 @@ export function Assembly({
     setSaving(false);
     if (saved) setResult(skip ? { status: "wrong", message: assemblySkipMessage(word.greek), skipped: true } : checked);
   };
+  useTaskKeys(!result && !saving, (event) => {
+    if (event.key === "Backspace") {
+      setPlaced(placed.slice(0, -1));
+      return true;
+    }
+    if (event.key === "Enter" && !(event.target instanceof HTMLButtonElement)) {
+      void check();
+      return true;
+    }
+    const index = digitIndex(event.key);
+    if (index < 0 || index >= pool.length || placed.includes(index)) return false;
+    setPlaced([...placed, index]);
+    return true;
+  });
   return (
     <>
       {!result && (
@@ -84,12 +98,13 @@ export function Assembly({
               ))
             )}
           </div>
-          <div className={s.tiles} lang={lang}>
+          <div ref={focusWithKeyboard} tabIndex={-1} className={s.tiles} lang={lang}>
             {pool.map((tile, index) => (
               <button
                 key={`${tile}-${index}`}
                 type="button"
                 data-testid="tile"
+                data-key={index < 9 ? index + 1 : undefined}
                 disabled={placed.includes(index) || saving}
                 className={s.tile}
                 onClick={() => setPlaced([...placed, index])}

@@ -17,6 +17,7 @@
     background-color 160ms ease-out;
 }
 .chip {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -72,6 +73,24 @@
 .chip:disabled,
 .line:disabled {
   cursor: default;
+}
+/* У сетки нет букв вариантов: номер для выбора цифрой — только там, где клавиатура есть. */
+@media (pointer: fine) {
+  .chip::after {
+    content: attr(data-key);
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    font: 11px/1 var(--font-ui);
+    color: var(--muted-foreground);
+  }
+  .chip[data-answer]::after {
+    content: none;
+  }
+}
+.grid:focus,
+.lines:focus {
+  outline: none;
 }
 .optionTick {
   flex: none;

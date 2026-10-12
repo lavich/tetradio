@@ -8,7 +8,7 @@ import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./spelling.module.css";
 import { AnswerMask } from "./AnswerMask";
-import { useRevealed } from "./hooks";
+import { useRevealed, focusWithKeyboard } from "./hooks";
 import type { ExerciseProps, Status } from "./model";
 import { Primary, QuietActions, QuietButton, Verdict } from "./parts";
 import { Corrected } from "./Spelling";
@@ -82,6 +82,7 @@ export function WordGap({ item, onAnswer, onNext, nextLabel = "Далее" }: Ex
       <div className={s.field}>
         <AnswerMask mask={mask} value={value} />
         <input
+          ref={focusWithKeyboard}
           className={`${s.answer} ${mask ? s.masked : ""}`}
           type="text"
           value={value}

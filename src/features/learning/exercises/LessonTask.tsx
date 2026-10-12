@@ -7,7 +7,7 @@ import exercise from "./exercise.module.css";
 import s from "./spelling.module.css";
 import { Choice } from "./Choice";
 import type { ExerciseProps, Status } from "./model";
-import { useRevealed } from "./hooks";
+import { useRevealed, focusWithKeyboard } from "./hooks";
 import { Primary, QuietActions, QuietButton, TaskHead, Verdict } from "./parts";
 
 const taskOf = (props: ExerciseProps): MistakeItem => {
@@ -107,6 +107,7 @@ function TextTask({ item, onAnswer, onNext, nextLabel = "Далее", task }: Ex
       <TaskHead prompt={instructionOf(task)} meaning={task.prompt} />
       <div className={s.field}>
         <input
+          ref={focusWithKeyboard}
           className={s.answer}
           type="text"
           value={value}
