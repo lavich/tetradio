@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ExerciseBlock } from "../../../content/course";
-import { mistakesOf, scoreExercise, spokenChoice, type ItemResult } from "../../../domain/course";
+import { mistakesOf, scoreExercise, type ItemResult } from "../../../domain/course";
+import { spokenAnswer, spokenChoice } from "../../../domain/spoken";
 import { shuffle } from "../../../domain/learning";
 import type { BlockProgress } from "../../../domain/types";
-import { speakPhrase } from "../../../shared/audio";
+import { playText, speakPhrase, useTextAudioKind } from "../../../shared/audio";
 import { useProfile } from "../../../shared/language";
 import { Tick } from "../../../shared/Tick";
 import type { BlockPatch } from "../../../storage/course";
@@ -13,6 +15,17 @@ import base from "../course.module.css";
 import css from "./blocks.module.css";
 
 const statusLabel: Record<ItemResult["status"], string> = { correct: "верно", almost: "почти", wrong: "неверно" };
+
+function ListenAnswer({ text, audioAssetId }: { text: string; audioAssetId?: string }) {
+  const profile = useProfile();
+  if (useTextAudioKind(audioAssetId, profile) === "none") return null;
+  return (
+    <Button variant="quiet" size="sm" onClick={() => void playText(text, audioAssetId, profile)}>
+      <Volume2 aria-hidden />
+      Послушать ответ
+    </Button>
+  );
+}
 
 export function Exercise({
   block,
@@ -75,6 +88,7 @@ export function Exercise({
       {block.items.map((item, index) => {
         const result = score?.results[item.id];
         const given = answers[item.id] ?? "";
+        const spoken = result ? spokenAnswer(block.format, item.prompt, item.answer[0], profile) : null;
         return (
           <div key={item.id} className={css.item}>
             {result && result.status !== "wrong" ? (
@@ -130,6 +144,7 @@ export function Exercise({
                 </p>
               )
             ) : null}
+            {spoken ? <ListenAnswer text={spoken} audioAssetId={item.audioAssetId} /> : null}
           </div>
         );
       })}

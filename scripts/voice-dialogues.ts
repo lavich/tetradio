@@ -1,15 +1,18 @@
 // Озвучка: реплики аудирования голосом персонажа из content/voices/<язык курса>.yaml, слова и фразы — голосом диктора,
-// тексты для чтения — по предложениям голосами рассказчика и героев (Google Cloud TTS). Файлы —
-// content/audio/<урок>/<блок>-<n>.mp3, audio/words/<id>.mp3, audio/phrases/<id>.mp3, audio/readings/<текст>/<n>.mp3;
-// `audio:` пишется в реплику урока или в файл карточки, записи текстов находит сборка по манифесту. Переозвучиваются только записи без файла или с изменившимся
-// текстом либо голосом (content/audio/dialogues.json).
-// Запуск: GOOGLE_TTS_KEY=… npm run voices -- m02-1 words phrases readings; без аргументов — всё; --check — только отчёт, без ключа.
+// тексты для чтения — по предложениям голосами рассказчика и героев, верные ответы перевода и пропуска — голосом диктора
+// (Google Cloud TTS). Файлы — content/audio/<урок>/<блок>-<n>.mp3, audio/words/<id>.mp3, audio/phrases/<id>.mp3,
+// audio/readings/<текст>/<n>.mp3, audio/answers/<урок>/<блок>-<пункт>.mp3; `audio:` пишется в реплику урока или
+// в файл карточки, записи текстов и ответов находит сборка по манифесту. Переозвучиваются только записи без файла
+// или с изменившимся текстом либо голосом (content/audio/dialogues.json).
+// Запуск: GOOGLE_TTS_KEY=… npm run voices -- m02-1 words phrases readings answers; без аргументов — всё; --check — только отчёт, без ключа.
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { isMap, isScalar, isSeq, parseDocument, type Node, type YAMLMap } from "yaml";
 import { LANGUAGE } from "../content/build/common.ts";
 import { buildCourses } from "../content/build/courses.ts";
+import { planAnswerVoices } from "../content/build/answers.ts";
 import { planReadingVoices } from "../content/build/readings.ts";
+import { profileOf } from "../src/domain/language.ts";
 import { readSources } from "../content/build/sources.ts";
 import {
   cardFile,
@@ -33,9 +36,12 @@ const lessons = readdirSync(join(ROOT, "lessons"))
   .map((file) => file.slice(0, -".yaml".length))
   .sort();
 const CARDS = ["words", "phrases"] as const;
+const GROUPS = ["readings", "answers"];
 for (const id of wanted)
-  if (!lessons.includes(id) && !(CARDS as readonly string[]).includes(id) && id !== "readings")
-    throw new Error(`Урока ${id} нет в content/lessons; слова и фразы — words и phrases, тексты — readings`);
+  if (!lessons.includes(id) && !(CARDS as readonly string[]).includes(id) && !GROUPS.includes(id))
+    throw new Error(
+      `Урока ${id} нет в content/lessons; слова и фразы — words и phrases, тексты — readings, ответы — answers`,
+    );
 const key = process.env.GOOGLE_TTS_KEY;
 
 const sources = readSources(ROOT);
@@ -171,35 +177,61 @@ for (const dir of CARDS) {
   }
 }
 
-if (!wanted.length || wanted.includes("readings")) {
-  const dir = join(ROOT, "audio", "readings");
+async function voiceGroup(
+  group: string,
+  plan: (existing: string[]) => {
+    pending: { file: string; text: string; voice: string; voices: VoiceMap; label: string }[];
+    stale: string[];
+    total: number;
+  },
+) {
+  const dir = join(ROOT, "audio", group);
   const existing = existsSync(dir)
     ? readdirSync(dir, { recursive: true, encoding: "utf8" })
         .filter((file) => file.endsWith(".mp3"))
         .map((file) => relative(join(ROOT, "audio"), join(dir, file)).split("\\").join("/"))
     : [];
-  const plan = planReadingVoices(
-    sources.readings,
-    (src) => sources.voices.get(courseLanguages.get(src.course) ?? LANGUAGE),
-    manifest,
-    existing,
-  );
-  stats.lines += plan.sentences.length;
-  for (const sentence of plan.pending)
-    await record(sentence.file, sentence.text, sentence.voice, sentence.voices, sentence.label);
-  for (const file of plan.stale) {
+  const { pending: due, stale: extra, total } = plan(existing);
+  stats.lines += total;
+  for (const entry of due) await record(entry.file, entry.text, entry.voice, entry.voices, entry.label);
+  for (const file of extra) {
     stale.push(file);
     if (check) continue;
     rmSync(join(ROOT, "audio", file), { force: true });
     delete manifest[file];
   }
-  if (!check && plan.stale.length) {
+  if (!check && extra.length) {
     saveManifest();
-    for (const reading of existsSync(dir) ? readdirSync(dir, { withFileTypes: true }) : [])
-      if (reading.isDirectory() && !readdirSync(join(dir, reading.name)).length)
-        rmSync(join(dir, reading.name), { recursive: true });
+    for (const entry of existsSync(dir) ? readdirSync(dir, { withFileTypes: true }) : [])
+      if (entry.isDirectory() && !readdirSync(join(dir, entry.name)).length)
+        rmSync(join(dir, entry.name), { recursive: true });
   }
 }
+
+if (!wanted.length || wanted.includes("readings"))
+  await voiceGroup("readings", (existing) => {
+    const plan = planReadingVoices(
+      sources.readings,
+      (src) => sources.voices.get(courseLanguages.get(src.course) ?? LANGUAGE),
+      manifest,
+      existing,
+    );
+    return { ...plan, total: plan.sentences.length };
+  });
+
+if (!wanted.length || wanted.includes("answers"))
+  await voiceGroup("answers", (existing) => {
+    const plan = planAnswerVoices(
+      [...sources.lessons].map(([id, src]) => [id, src.blocks]),
+      (lessonId) => {
+        const language = languages.get(lessonId) ?? LANGUAGE;
+        return { voices: sources.voices.get(language), profile: profileOf(language) };
+      },
+      manifest,
+      existing,
+    );
+    return { ...plan, total: plan.answers.length };
+  });
 
 /** Ссылка на файл: замена значения `audio` либо новая строка после поля текста с тем же отступом. */
 function reference(source: string, line: YAMLMap<unknown, unknown>, textKey: string, file: string) {

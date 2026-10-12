@@ -146,19 +146,3 @@ export function testResult(blocks: LessonBlock[], progress: Map<string, BlockPro
 
 /** Число слов письменного ответа — по пробелам, как считает экзаменатор; пунктуация не слово. */
 export const wordCount = (text: string) => text.split(/\s+/).filter((token) => /[\p{L}\p{N}]/u.test(token)).length;
-
-const CYRILLIC = /[а-яё]/iu;
-/**
- * Что произнести при выборе варианта: предложение с подставленным вариантом — форма слышна в контексте.
- * Русские пояснения в скобках не читаются; если русский остаётся, звучит только сам вариант.
- */
-export function spokenChoice(prompt: string, option: string, profile: LanguageProfile = PROFILES.el): string | null {
-  const word = profile.script.test(option) && !CYRILLIC.test(option) ? option : null;
-  if (!/_{2,}/.test(prompt)) return word;
-  if (!word) return null;
-  const sentence = prompt
-    .replace(/_{2,}/, option)
-    .replace(/\s*\([^)]*\)/g, "")
-    .trim();
-  return CYRILLIC.test(sentence) ? word : sentence;
-}

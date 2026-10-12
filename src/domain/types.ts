@@ -96,6 +96,7 @@ export interface MistakeItem {
   options?: string[];
   answer: string[];
   explanation?: string;
+  audioAssetId?: string;
 }
 /** Содержимое карточки в сессии: снимок на момент создания занятия, обновление пакета его не меняет. */
 export type SessionCard =

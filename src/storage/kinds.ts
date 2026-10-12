@@ -74,6 +74,7 @@ async function mistakeItems(ids: string[], database: AppDatabase): Promise<Map<s
           ...(block.format === "choice" ? { options: item.options } : block.bank ? { options: block.bank } : {}),
           answer: item.answer,
           ...(item.explanation ? { explanation: item.explanation } : {}),
+          ...(item.audioAssetId ? { audioAssetId: item.audioAssetId } : {}),
         });
       }
     }

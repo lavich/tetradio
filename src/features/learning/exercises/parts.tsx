@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { Phrase, Word } from "../../../domain/types";
 import { ExampleBox, ReadingNotes, SpeakButton, WordArt } from "../../words/WordCardView";
 import ui from "../../../shared/ui.module.css";
+import { playText } from "../../../shared/audio";
 import { cx } from "../../../shared/cx";
 import { useProfile } from "../../../shared/language";
 import { CloudAction, Instruction } from "../notebook";
@@ -151,6 +152,33 @@ export function PhraseReveal({ phrase, speak }: { phrase: Phrase; speak?: boolea
       {phrase.usage && <p className={s.hint}>{phrase.usage}</p>}
       {phrase.note && <p className={s.hint}>{phrase.note}</p>}
     </>
+  );
+}
+/** Раскрытие монтируется вместе с итогом, поэтому автоозвучка — при монтировании; флаг не даёт строгому режиму озвучить дважды. */
+export function AnswerReveal({
+  text,
+  audioAssetId,
+  autoSpeak,
+}: {
+  text: string;
+  audioAssetId?: string;
+  autoSpeak?: boolean;
+}) {
+  const profile = useProfile();
+  const played = useRef(false);
+  useEffect(() => {
+    if (!autoSpeak || played.current) return;
+    played.current = true;
+    void playText(text, audioAssetId, profile);
+  }, []);
+  return (
+    <Reveal>
+      <GreekHead
+        text={text}
+        phrase
+        speak={<SpeakText text={text} audioAssetId={audioAssetId} label="Послушать ответ" quiet />}
+      />
+    </Reveal>
   );
 }
 /** Раскрытие после ответа отделено от задания линейкой: это уже справка, а не вопрос. */
