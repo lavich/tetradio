@@ -11,7 +11,7 @@ import { arrowFocus, digitIndex, focusWithKeyboard, useRevealed, useRevealSpeech
 import { wordOf, type ExerciseProps, type Status } from "./model";
 import { Primary, QuietActions, QuietButton, Reveal, TaskHead, Verdict, WordReveal } from "./parts";
 
-/** Поставленный слог гаснет и теряет фокус: фокус переходит к следующему свободному слогу, чтобы стрелки работали дальше. */
+/** Поставленный слог отключается, и браузер снимает с него фокус — стрелки перестали бы работать. */
 function keepFocusAfter(tile: HTMLButtonElement) {
   requestAnimationFrame(() => {
     const group = tile.parentElement;

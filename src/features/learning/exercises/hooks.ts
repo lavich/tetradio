@@ -46,22 +46,15 @@ export function useRevealSpeech(card: SessionCard, itemId: string, answered: boo
   }, [answered, enabled]);
 }
 
-/**
- * Фокус на поле нового задания — только при мыши и клавиатуре: на телефоне он поднял бы экранную клавиатуру
- * поверх задания. Ссылка-колбэк: поле появляется заново с каждой карточкой.
- */
+/** На телефоне фокус поднял бы экранную клавиатуру поверх задания. */
 export function focusWithKeyboard(element: HTMLElement | null) {
   if (element && typeof matchMedia === "function" && matchMedia("(pointer: fine)").matches)
     element.focus({ preventScroll: true });
 }
 
-/** Номер варианта по нажатой цифре: `1` — первый. */
 export const digitIndex = (key: string) => (/^[1-9]$/.test(key) ? Number(key) - 1 : -1);
 
-/**
- * Клавиши задания без фокуса на нём: после «Далее» фокус уходит с исчезнувшей кнопки на страницу.
- * Набор в полях и сочетания с модификаторами не перехватываются; `onKey` возвращает, обработана ли клавиша.
- */
+/** Слушаем документ: после «Далее» фокус уходит с исчезнувшей кнопки на страницу, а не в задание. */
 export function useTaskKeys(active: boolean, onKey: (event: KeyboardEvent) => boolean) {
   const latest = useRef(onKey);
   latest.current = onKey;
@@ -83,10 +76,7 @@ const ARROWS: Record<string, [across: number, down: number]> = {
   ArrowDown: [0, 1],
   ArrowUp: [0, -1],
 };
-/**
- * Стрелки переводят фокус между доступными кнопками группы по кругу; Enter и пробел нажимают кнопку сами.
- * Первая стрелка с самой группы — к первой кнопке: так повторный Enter после «Далее» не выбирает вариант.
- */
+/** Фокус после «Далее» — на группе, а не на первой кнопке: удержанный Enter иначе выбрал бы вариант. */
 export const arrowFocus =
   (columns = 1) =>
   (event: React.KeyboardEvent<HTMLElement>) => {

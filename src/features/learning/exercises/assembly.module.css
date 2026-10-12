@@ -59,7 +59,6 @@
   opacity: 0.35;
   cursor: default;
 }
-/* Цифра слога для набора с клавиатуры — только там, где клавиатура есть. */
 @media (pointer: fine) {
   .tile[data-key]::after {
     content: attr(data-key);
