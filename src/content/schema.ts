@@ -2,6 +2,7 @@ import type {
   LessonCardKind,
   Example,
   Gloss,
+  Paradigm,
   Provenance,
   ProvenanceOperation,
   Segment,
@@ -72,6 +73,8 @@ export interface CatalogEntry {
   readings?: number;
   /** Записи предложений текстов: пакет, поставленный сборкой без записей, ставится заново. */
   readingAudio?: number;
+  /** Слова с таблицей спряжения: пакет, поставленный версией без таблиц, ставится заново. */
+  paradigms?: number;
 }
 export interface Catalog {
   schemaVersion: SchemaVersion;
@@ -90,6 +93,7 @@ export interface PackageWord {
   note?: string;
   /** Грамматические формы строкой: «мн. οι δρόμοι», «аор. έγραψα; буд. θα γράψω», три рода прилагательного. */
   forms?: string;
+  paradigm?: Paradigm;
   segments: Segment[];
   examples: Example[];
   imageAssetId?: string;
@@ -166,6 +170,9 @@ export interface PackageReading {
   /** Запись каждого предложения (`sentencesOf(text)`) — id медиа пакета или `null`: без записи звучит синтез. */
   audio?: (string | null)[];
 }
+/** Слова с таблицей спряжения: пакет и слово, поставленные версией без таблиц, ставятся заново. */
+export const paradigmsOf = (words: { paradigm?: unknown }[] | undefined) =>
+  (words ?? []).filter((word) => word.paradigm).length;
 /** Записи предложений в текстах пакета: меньше, чем в каталоге, — пакет ставился сборкой без записей. */
 export const voicedOf = (readings: Pick<PackageReading, "audio">[] | undefined) =>
   (readings ?? []).reduce((sum, reading) => sum + (reading.audio ?? []).filter(Boolean).length, 0);
@@ -285,6 +292,7 @@ export function parseCatalog(input: unknown): Catalog {
     };
     if (item.readings !== undefined) lesson.readings = num(item.readings, `${path}.readings`);
     if (item.readingAudio !== undefined) lesson.readingAudio = num(item.readingAudio, `${path}.readingAudio`);
+    if (item.paradigms !== undefined) lesson.paradigms = num(item.paradigms, `${path}.paradigms`);
     const wordIds = opt(item.wordIds, (value) =>
       list(value, `${path}.wordIds`).map((id, i) => str(id, `${path}.wordIds[${i}]`)),
     );
@@ -373,6 +381,16 @@ function parseGlosses(input: unknown, greek: string, path: string): Gloss[] {
   });
 }
 
+function parseParadigm(input: unknown, path: string): Paradigm {
+  const raw = obj(input, path);
+  const persons = (value: unknown, field: string) => {
+    const forms = list(value, `${path}.${field}`).map((form, i) => str(form, `${path}.${field}[${i}]`));
+    if (forms.length !== 6) throw new ContentError(`${path}.${field}: ожидалось шесть форм`);
+    return forms;
+  };
+  return { present: persons(raw.present, "present"), past: persons(raw.past, "past") };
+}
+
 function parseWord(input: unknown, path: string): PackageWord {
   const raw = obj(input, path);
   const segments = list(raw.segments ?? [], `${path}.segments`).map((entry, i): Segment => {
@@ -410,6 +428,8 @@ function parseWord(input: unknown, path: string): PackageWord {
   if (note) word.note = note;
   const forms = opt(raw.forms, (v) => str(v, `${path}.forms`));
   if (forms) word.forms = forms;
+  const paradigm = opt(raw.paradigm, (v) => parseParadigm(v, `${path}.paradigm`));
+  if (paradigm) word.paradigm = paradigm;
   const source = opt(raw.source, (v) => str(v, `${path}.source`));
   if (source) word.source = source;
   const image = opt(raw.imageAssetId, (v) => str(v, `${path}.imageAssetId`));
@@ -758,6 +778,7 @@ export const SHIPPED_FIELDS = [
   "ipa",
   "note",
   "forms",
+  "paradigm",
   "segments",
   "examples",
   "imageAssetId",

@@ -5,7 +5,7 @@ import { applyPackage, type InstallResult } from "./apply";
 import { fetcher, type ContentFetcher } from "./fetcher";
 import { pruneMedia } from "./media";
 import { catalogSettled, courseKey, setPhase } from "./phases";
-import { voicedOf, ContentError, parsePackage } from "./schema";
+import { paradigmsOf, voicedOf, ContentError, parsePackage } from "./schema";
 
 const inflight = new Map<string, Promise<InstallResult>>();
 
@@ -101,7 +101,8 @@ export function installLesson(
         installed &&
         installed.version === entry.version &&
         (installed.readings?.length ?? 0) >= (entry.readings ?? 0) &&
-        voicedOf(installed.readings) >= (entry.readingAudio ?? 0)
+        voicedOf(installed.readings) >= (entry.readingAudio ?? 0) &&
+        paradigmsOf(installed.words) >= (entry.paradigms ?? 0)
       )
         return { status: "current", added: 0, changed: 0 } as InstallResult;
       const pack = parsePackage(await source.json(entry.url));

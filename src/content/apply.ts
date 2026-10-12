@@ -5,6 +5,7 @@ import { CARD_KINDS, type InstalledPackage, type LearningRef, type Phrase, type 
 import { STORED_KINDS } from "../storage/kinds";
 import {
   SHIPPED_FIELDS,
+  paradigmsOf,
   voicedOf,
   type ContentPackage,
   type PackagePhrase,
@@ -39,7 +40,7 @@ const phraseFromPackage = (card: PackagePhrase, at: string): Phrase => {
 
 /**
  * Карточки принадлежат пакету: новая ревизия перезаписывает поставляемые поля целиком, `createdAt` остаётся.
- * Карточка той же ревизии не перезаписывается.
+ * Карточка той же ревизии не перезаписывается, если в ней нет поля, которое версия приложения не знала (`missing`).
  */
 async function applyCards<
   P extends { id: string; revision: string },
@@ -50,12 +51,13 @@ async function applyCards<
   build: (card: P, at: string) => L,
   now: string,
   result: InstallResult,
+  missing: (card: P, stored: L) => boolean = () => false,
 ) {
   const local = await table.bulkGet(incoming.map((card) => card.id));
   const rows: L[] = [];
   incoming.forEach((card, index) => {
     const stored = local[index];
-    if (stored?.revision === card.revision) return;
+    if (stored?.revision === card.revision && !missing(card, stored)) return;
     const row = build(card, now);
     if (stored) {
       result.changed++;
@@ -96,7 +98,8 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         installed &&
         installed.version === pack.version &&
         (installed.readings?.length ?? 0) >= (pack.readings?.length ?? 0) &&
-        voicedOf(installed.readings) >= voicedOf(pack.readings)
+        voicedOf(installed.readings) >= voicedOf(pack.readings) &&
+        paradigmsOf(installed.words) >= paradigmsOf(pack.words)
       )
         return { status: "current", added: 0, changed: 0 };
       const result: InstallResult = { status: installed ? "updated" : "installed", added: 0, changed: 0 };
@@ -108,7 +111,14 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
           completed: false,
           updatedAt: now,
         });
-      await applyCards(pack.words, database.words, (card, at) => indexWord(wordFromPackage(card, at)), now, result);
+      await applyCards(
+        pack.words,
+        database.words,
+        (card, at) => indexWord(wordFromPackage(card, at)),
+        now,
+        result,
+        (card, stored) => !!card.paradigm && !stored.paradigm,
+      );
       await applyCards(pack.phrases, database.phrases, phraseFromPackage, now, result);
       const incoming = new Set<string>();
       for (const item of pack.items) {

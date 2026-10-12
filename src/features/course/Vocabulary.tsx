@@ -6,6 +6,7 @@ import type { LanguageProfile } from "../../domain/language";
 import { playText, playWord, type PlayResult } from "../../shared/audio";
 import { noVoice, useProfile } from "../../shared/language";
 import { useAssetUrl } from "../../shared/store";
+import { VerbForms } from "../../shared/VerbForms";
 import { livePhrases, liveWords } from "../../storage/queries";
 import css from "./vocabulary.module.css";
 
@@ -54,9 +55,7 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                     {word.greek}
                   </span>
                   {word.forms ? (
-                    <span className={css.vocabForms} lang={profile.code}>
-                      {word.forms}
-                    </span>
+                    <VerbForms headword={word.greek} forms={word.forms} labels={false} className={css.vocabForms} />
                   ) : null}
                   <span className={css.vocabRu}>{word.russian}</span>
                 </span>

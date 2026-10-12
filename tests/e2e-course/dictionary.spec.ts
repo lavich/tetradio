@@ -42,3 +42,49 @@ test("широкое окно: словарь и открытое слово р�
   expect(sheet.x).toBeGreaterThan(list.x + list.width);
   await expect(page.getByTestId("entry-sheet")).toContainText("Как тебя зовут?");
 });
+
+test("лист глагола: ряд основных форм, таблица по лицам, форма звучит по нажатию", async ({ page }) => {
+  await page.addInitScript(() => {
+    const greek = { lang: "el-GR", name: "Test Greek", voiceURI: "test-el", default: true, localService: true };
+    const synth = {
+      getVoices: () => [greek],
+      speak(utterance: { text: string; onstart?: () => void; onend?: () => void }) {
+        ((window as unknown as { __spoken: string[] }).__spoken ??= []).push(utterance.text);
+        setTimeout(() => {
+          utterance.onstart?.();
+          utterance.onend?.();
+        }, 5);
+      },
+      cancel() {},
+      addEventListener() {},
+      removeEventListener() {},
+    };
+    Object.defineProperty(window, "speechSynthesis", { value: synth, configurable: true });
+    class Utterance {
+      constructor(public text: string) {}
+    }
+    Object.defineProperty(window, "SpeechSynthesisUtterance", { value: Utterance, configurable: true });
+  });
+  const spoken = () => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken ?? []);
+  await page.goto("/app/words");
+  await page.getByRole("link", { name: /είμαι/ }).click();
+  const sheet = page.getByTestId("entry-sheet");
+  const row = sheet.getByTestId("verb-forms");
+  await expect(row).toContainText("είμαι");
+  await expect(row).toContainText("сейчас");
+  await expect(row).toContainText("ήμουν");
+  await expect(row).toContainText("было");
+  await expect(row).toContainText("θα είμαι");
+  await expect(row).toContainText("будет");
+
+  await row.getByRole("button", { name: "Произнести: ήμουν" }).click();
+  await expect.poll(spoken).toContain("ήμουν");
+
+  const table = sheet.getByTestId("paradigm");
+  await expect(table.getByRole("table")).toBeHidden();
+  await table.getByText("Все формы").click();
+  await expect(table.getByRole("row", { name: /^мы/ })).toContainText("είμαστε");
+  await expect(table.getByRole("row", { name: /^мы/ })).toContainText("ήμασταν");
+  await table.getByRole("button", { name: "Произнести: ήσουν" }).click();
+  await expect.poll(spoken).toContain("ήσουν");
+});

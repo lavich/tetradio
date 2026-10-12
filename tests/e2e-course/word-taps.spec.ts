@@ -87,6 +87,8 @@ test("слово урока в объяснении: звучит карточк
   await expect(hint).toHaveCount(0);
   await sheet.getByRole("button", { name: "Ещё раз" }).click();
   await expect.poll(async () => (await spoken(page)).length).toBe(2);
+  await sheet.getByRole("button", { name: "Произнести: ήμουν" }).click();
+  await expect.poll(() => spoken(page)).toContain("ήμουν");
   await page.keyboard.press("Escape");
   await expect(sheet).toHaveCount(0);
   await explanation.getByRole("button", { name: "Произнести и перевести: από", exact: true }).first().click();
@@ -150,6 +152,12 @@ test("нет греческого голоса: подсказка с перев
   const sheet = page.getByRole("dialog", { name: "από" });
   await expect(sheet).toContainText("из, от");
   await expect(sheet).toContainText("На устройстве нет греческого голоса — включите его в настройках речи.");
+  await page.keyboard.press("Escape");
+
+  await page.getByRole("button", { name: "Произнести и перевести: Είμαι", exact: true }).first().click();
+  const verb = page.getByRole("dialog", { name: "είμαι" });
+  await verb.getByRole("button", { name: "Произнести: ήμουν" }).click();
+  await expect(verb.getByText("На устройстве нет греческого голоса", { exact: false })).toHaveCount(1);
 });
 
 test("слова в таблице объяснения нажимаются так же, как в тексте", async ({ page }) => {

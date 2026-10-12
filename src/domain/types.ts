@@ -15,11 +15,12 @@ import type {
   LessonBlock,
   LessonKind,
 } from "../content/course";
-import type { CardKind, Example, Segment } from "./card-fields.ts";
+import type { CardKind, Example, Paradigm, Segment } from "./card-fields.ts";
 
 // Значение загружает и Node при сборке контента, поэтому путь с расширением.
 export { CARD_KINDS, LESSON_CARD_KINDS } from "./card-fields.ts";
 export type {
+  Paradigm,
   CardKind,
   LessonCardKind,
   Example,
@@ -45,6 +46,7 @@ export interface Word {
   note?: string;
   /** Грамматические формы строкой (мн. ч., аорист и будущее, три рода) — поставляются курсом. */
   forms?: string;
+  paradigm?: Paradigm;
   segments: Segment[];
   examples: Example[];
   imageAssetId?: string;
