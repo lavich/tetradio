@@ -96,6 +96,8 @@ export interface MistakeItem {
   options?: string[];
   answer: string[];
   explanation?: string;
+  /** Запись верного ответа перевода или пропуска; без неё ответ звучит синтезом устройства. */
+  audioAssetId?: string;
 }
 /** Содержимое карточки в сессии: снимок на момент создания занятия, обновление пакета его не меняет. */
 export type SessionCard =

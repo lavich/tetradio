@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { checkItem, spokenChoice } from "../src/domain/course";
+import { checkItem } from "../src/domain/course";
+import { spokenChoice } from "../src/domain/spoken";
 import type { ExerciseBlock, ExerciseItem } from "../src/content/course";
 import { PROFILES, profileOf } from "../src/domain/language";
 import { isCheckable } from "../src/domain/kinds";

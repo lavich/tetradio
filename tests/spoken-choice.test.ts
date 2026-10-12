@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { spokenChoice } from "../src/domain/course";
+import { spokenAnswer, spokenChoice } from "../src/domain/spoken";
 
 describe("произношение выбранного варианта", () => {
   it("предложение с пропуском звучит целиком с подставленным вариантом", () => {
@@ -17,5 +17,16 @@ describe("произношение выбранного варианта", () =>
     expect(spokenChoice("Η Άννα είναι από την Κύπρο.", "Σωστό")).toBe("Σωστό");
     expect(spokenChoice("Где живёт Анна?", "в Лимасоле")).toBeNull();
     expect(spokenChoice("Μένω ___ Λεμεσό.", "в")).toBeNull();
+  });
+});
+
+describe("верный ответ вслух", () => {
+  it("перевод — сам ответ, пропуск — предложение с ним, выбор и русский ответ — не звучат", () => {
+    expect(spokenAnswer("text", "Моей сестре тридцать лет.", "Η αδελφή μου είναι τριάντα χρονών.")).toBe(
+      "Η αδελφή μου είναι τριάντα χρονών.",
+    );
+    expect(spokenAnswer("gap", "Η φίλη μου ___ μένει στην Πάφο.", "που")).toBe("Η φίλη μου που μένει στην Πάφο.");
+    expect(spokenAnswer("text", "Πού μένει η Άννα;", "в Лимасоле")).toBeNull();
+    expect(spokenAnswer("choice", "Η Άννα είναι…", "Σωστό")).toBeNull();
   });
 });

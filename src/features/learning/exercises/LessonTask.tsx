@@ -1,5 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import { checkItem } from "../../../domain/course";
+import { spokenAnswer } from "../../../domain/spoken";
 import { instructionOf } from "../../../domain/item-exercise";
 import type { MistakeItem } from "../../../domain/types";
 import { useProfile } from "../../../shared/language";
@@ -8,7 +9,7 @@ import s from "./spelling.module.css";
 import { Choice } from "./Choice";
 import type { ExerciseProps, Status } from "./model";
 import { focusWithKeyboard, useRevealed } from "./hooks";
-import { Primary, QuietActions, QuietButton, TaskHead, Verdict } from "./parts";
+import { AnswerReveal, Primary, QuietActions, QuietButton, TaskHead, Verdict } from "./parts";
 
 const taskOf = (props: ExerciseProps): MistakeItem => {
   const { card } = props.item;
@@ -24,8 +25,17 @@ const useLang = () => {
   return (text: string) => (profile.script.test(text) ? profile.code : undefined);
 };
 
+/** Верный ответ вслух — у перевода и пропуска; звучит записью из пакета или синтезом устройства. */
+function Answer({ task, autoSpeak }: { task: MistakeItem; autoSpeak?: boolean }) {
+  const profile = useProfile();
+  const text = spokenAnswer(task.format, task.prompt, task.answer[0], profile);
+  return text ? <AnswerReveal text={text} audioAssetId={task.audioAssetId} autoSpeak={autoSpeak} /> : null;
+}
+
+type TaskProps = ExerciseProps & { autoSpeak?: boolean };
+
 /** Пункт задания урока в своём формате: ввод проверяется так же, как в уроке, выбор — по ключу. */
-export function LessonTask(props: ExerciseProps) {
+export function LessonTask(props: TaskProps) {
   const task = taskOf(props);
   const lang = useLang();
   if (task.format === "text") return <TextTask {...props} task={task} />;
@@ -41,12 +51,17 @@ export function LessonTask(props: ExerciseProps) {
           {task.prompt}
         </p>
       }
-      after={<Explanation task={task} />}
+      after={
+        <>
+          <Explanation task={task} />
+          <Answer task={task} autoSpeak={props.autoSpeak} />
+        </>
+      }
     />
   );
 }
 
-function TextTask({ item, onAnswer, onNext, nextLabel = "Далее", task }: ExerciseProps & { task: MistakeItem }) {
+function TextTask({ item, onAnswer, onNext, nextLabel = "Далее", autoSpeak, task }: TaskProps & { task: MistakeItem }) {
   const formId = useId();
   const profile = useProfile();
   const lang = useLang();
@@ -90,6 +105,7 @@ function TextTask({ item, onAnswer, onNext, nextLabel = "Далее", task }: Ex
             </p>
           </Verdict>
           <Explanation task={task} />
+          <Answer task={task} autoSpeak={autoSpeak} />
         </div>
         <Primary focus onClick={onNext}>
           {nextLabel}

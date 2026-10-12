@@ -152,6 +152,13 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
         ? `; без записи ${silent} реплик в ${unvoiced.size} уроках${stale.length ? ` (устарело после правки ${stale.length})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- <урок>`
         : ""),
   );
+  const answers = built.voicing.answers;
+  console.log(
+    `Ответы перевода и пропуска: с записью ${answers.voiced}` +
+      (answers.unvoiced
+        ? `; без записи ${answers.unvoiced}${answers.stale ? ` (устарело после правки ${answers.stale})` : ""} — звучат синтезом устройства, озвучка: npm run voices -- answers`
+        : ""),
+  );
   const cards = built.cardVoicing;
   const silentCards = built.words.length + built.phrases.length - cards.voiced;
   console.log(

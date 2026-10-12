@@ -35,7 +35,7 @@ export function packLessons(
       draft.media = [...draft.media, ...voiced.filter((item) => !draft.media.some((own) => own.id === item.id))];
     const version = hash(canonical({ ...draft, version: undefined }));
     const pack = { ...draft, version };
-    if (marked || pack.lineAudio || texts) {
+    if (marked || pack.lineAudio || pack.itemAudio || texts) {
       try {
         const parsed = parsePackage(JSON.parse(JSON.stringify(pack)));
         if (voicedOf(parsed.readings) !== voicedOf(pack.readings))

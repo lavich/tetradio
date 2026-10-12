@@ -4,7 +4,9 @@ import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { stringify } from "yaml";
 import { buildContent } from "../content/build";
+import { planAnswerVoices } from "../content/build/answers";
 import { lineHash, spokenText } from "../content/build/voices";
+import { PROFILES } from "../src/domain/language";
 import { parseBlocks, publicationGaps } from "../src/content/course";
 import { ContentError, parseCatalog, parsePackage } from "../src/content/schema";
 
@@ -747,5 +749,80 @@ describe("записи слов и фраз", () => {
   });
   it("без диктора в карте голосов запись карточки отклоняет сборку", () => {
     expect(failure(files(fresh, { ...voicesMap, narrator: undefined }))).toMatch(/narrator в voices\/el\.yaml/);
+  });
+});
+
+describe("записи ответов перевода и пропуска", () => {
+  const voicesMap = {
+    source: "Синтез речи Google Cloud TTS, голос Chirp 3 HD {voice}",
+    language: "el-GR",
+    prefix: "el-GR-Chirp3-HD-",
+    pools: { female: ["Aoede", "Kore"], male: ["Charon", "Puck"] },
+    narrator: "Kore",
+    characters: { Άννα: { gender: "female", voice: "Aoede" }, Νίκος: { gender: "male", voice: "Charon" } },
+  };
+  const json = (value: unknown) => new TextEncoder().encode(JSON.stringify(value));
+  const files = (manifest: Record<string, { voice: string; hash: string }>) => ({
+    ...base(),
+    "voices/el.yaml": voicesMap,
+    "audio/answers/m01-1/dialogue-q-q1.mp3": new Uint8Array([1]),
+    "audio/answers/m01-test/gaps-g1.mp3": new Uint8Array([2]),
+    "audio/dialogues.json": json(manifest),
+  });
+  const fresh = {
+    "answers/m01-1/dialogue-q-q1.mp3": { voice: "Kore", hash: lineHash("Νίκο", "Kore", "el-GR") },
+    "answers/m01-test/gaps-g1.mp3": { voice: "Kore", hash: lineHash("Εγώ είμαι η Άννα.", "Kore", "el-GR") },
+  };
+  const packOf = (content: ReturnType<typeof build>, id: string) =>
+    parsePackage(JSON.parse(JSON.stringify(content.packages.find((pack) => pack.id === id))));
+  const itemOf = (pack: ReturnType<typeof parsePackage>, blockId: string) => {
+    const block = pack.blocks!.find((candidate) => candidate.id === blockId)!;
+    return block.type === "exercise" ? block.items[0] : undefined;
+  };
+
+  it("перевод звучит первой формой ответа, пропуск — предложением с ним; запись читает диктор", () => {
+    const content = build(files(fresh));
+    expect(itemOf(packOf(content, "m01-1"), "dialogue-q")!.audioAssetId).toBe("answer-m01-1-dialogue-q-q1");
+    const test = packOf(content, "m01-test");
+    expect(test.itemAudio).toEqual({ gaps: { g1: "answer-m01-test-gaps-g1" } });
+    expect(itemOf(test, "gaps")!.audioAssetId).toBe("answer-m01-test-gaps-g1");
+    expect(test.media.find((item) => item.id === "answer-m01-test-gaps-g1")).toMatchObject({
+      kind: "audio",
+      source: "Синтез речи Google Cloud TTS, голос Chirp 3 HD Kore",
+    });
+    expect(content.voicing.answers).toEqual({ voiced: 2, unvoiced: 0, stale: 0 });
+  });
+  it("запись до правки ответа не публикуется: ответ звучит синтезом", () => {
+    const content = build(
+      files({
+        ...fresh,
+        "answers/m01-test/gaps-g1.mp3": { voice: "Kore", hash: lineHash("Εγώ είσαι", "Kore", "el-GR") },
+      }),
+    );
+    expect(packOf(content, "m01-test").itemAudio).toBeUndefined();
+    expect(content.voicing.answers).toEqual({ voiced: 1, unvoiced: 1, stale: 1 });
+  });
+  it("пакет с записью ответа чужого блока, пункта или медиа отклоняется", () => {
+    const raw = JSON.parse(JSON.stringify(build(files(fresh)).packages.find((pack) => pack.id === "m01-test")));
+    expect(() => parsePackage({ ...raw, itemAudio: { nope: { g1: "answer-m01-test-gaps-g1" } } })).toThrow(
+      /задания с таким id нет/,
+    );
+    expect(() => parsePackage({ ...raw, itemAudio: { gaps: { g9: "answer-m01-test-gaps-g1" } } })).toThrow(
+      /пункта с таким id нет/,
+    );
+    expect(() => parsePackage({ ...raw, itemAudio: { gaps: { g1: "нет-такого" } } })).toThrow(/нет в пакете/);
+  });
+  it("план озвучки: без записи или устаревшее — озвучить, файл без пункта — удалить", () => {
+    const voices = { ...voicesMap, file: "voices/el.yaml", characters: new Map(), pools: voicesMap.pools };
+    const plan = planAnswerVoices(
+      [["m01-test", test.blocks]],
+      () => ({ voices, profile: PROFILES.el }),
+      { "answers/m01-test/gone-q1.mp3": { voice: "Kore", hash: "x" } },
+      ["answers/m01-test/gaps-g1.mp3", "answers/m01-test/gone-q1.mp3"],
+    );
+    expect(plan.pending.map((answer) => [answer.file, answer.text])).toEqual([
+      ["answers/m01-test/gaps-g1.mp3", "Εγώ είμαι η Άννα."],
+    ]);
+    expect(plan.stale).toEqual(["answers/m01-test/gone-q1.mp3"]);
   });
 });
