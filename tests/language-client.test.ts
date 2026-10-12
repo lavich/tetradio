@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { PROFILES } from "../src/domain/language";
-import { optionLetter } from "../src/features/learning/exercises/Choice";
 import { noVoice } from "../src/shared/language";
 import { pageDate } from "../src/shared/notebook";
 import { voicesOf } from "../src/shared/voices";
@@ -22,12 +21,6 @@ describe("язык курса в интерфейсе", () => {
     expect(voicesOf(voices, PROFILES.el).map((voice) => voice.name)).toEqual(["Ελληνικά"]);
     expect(voicesOf(voices, PROFILES.en).map((voice) => voice.name)).toEqual(["British", "American"]);
     expect(voicesOf([{ lang: "ru-RU" }], PROFILES.en)).toEqual([]);
-  });
-
-  it("буквы вариантов — из профиля: α β γ у греческого, a b c у английского", () => {
-    expect([0, 1, 2].map((index) => optionLetter(index, PROFILES.el))).toEqual(["α", "β", "γ"]);
-    expect([0, 1, 2].map((index) => optionLetter(index, PROFILES.en))).toEqual(["a", "b", "c"]);
-    expect(optionLetter(6, PROFILES.en)).toBe("7");
   });
 
   it("сообщение об отсутствии голоса называет язык; греческое — прежнее", () => {

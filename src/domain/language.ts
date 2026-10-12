@@ -17,8 +17,6 @@ export interface LanguageProfile {
   article: RegExp | null;
   /** Слоги и ударение: сборка из слогов и строка ударения на карточке. */
   syllables: boolean;
-  /** Буквы вариантов ответа: стиль счётчика и те же буквы для текста «Верно: β) …». */
-  letters: { style: string; chars: readonly string[] };
   /** Дата на странице тетради. */
   date: { locale: string; upper: boolean };
   /** Подписи в интерфейсе: «Напиши по-гречески», «Поиск по греческому». */
@@ -83,7 +81,6 @@ const el: LanguageProfile = {
   ending: GREEK_ENDING,
   article: /^(ο|η|το|οι|τα|τον|την|τους|τις)\s+/u,
   syllables: true,
-  letters: { style: "lower-greek", chars: ["α", "β", "γ", "δ", "ε", "ζ"] },
   date: { locale: "el-GR", upper: true },
   names: { in: "по-гречески", by: "по греческому", title: "Греческий" },
   cover: { lesson: "ΜΑΘΗΜΑ", name: "ΟΝΟΜΑ" },
@@ -107,7 +104,6 @@ const en: LanguageProfile = {
   ending: ENGLISH_ENDING,
   article: /^(a|an|the)\s+/u,
   syllables: false,
-  letters: { style: "lower-latin", chars: ["a", "b", "c", "d", "e", "f"] },
   date: { locale: "en-GB", upper: false },
   names: { in: "по-английски", by: "по английскому", title: "Английский" },
   cover: { lesson: "LESSON", name: "NAME" },

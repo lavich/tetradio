@@ -5,15 +5,12 @@ import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./choice.module.css";
 import { digitIndex, useRevealed, useTaskKeys } from "./hooks";
-import type { LanguageProfile } from "../../../domain/language";
 import { useProfile } from "../../../shared/language";
 import { type ExerciseProps } from "./model";
 import { Primary, QuietActions, QuietButton } from "./parts";
 
-/** Короткие варианты — сеткой 2 × 2, иначе строками α) β) γ) δ). Порог — то, что помещается в половину узкого листа. */
+/** Короткие варианты — сеткой 2 × 2, иначе строками 1) 2) 3) 4). Порог — то, что помещается в половину узкого листа. */
 const SHORT_OPTION = 12;
-export const optionLetter = (index: number, profile: LanguageProfile) =>
-  profile.letters.chars[index] ?? String(index + 1);
 export const optionsFit = (options: string[]) =>
   options.length <= 4 && options.every((option) => [...option].length <= SHORT_OPTION);
 
@@ -87,7 +84,6 @@ export function Choice({
         aria-label={prompt}
         className={grid ? s.grid : s.lines}
         lang={greekOptions ? profile.code : undefined}
-        style={{ ["--letters" as string]: profile.letters.style }}
       >
         {options.map((option, index) => {
           const mark = answered
@@ -129,7 +125,7 @@ export function Choice({
             <>
               Верно:{" "}
               <span lang={greekOptions ? profile.code : undefined}>
-                {grid || right < 0 ? "" : `${optionLetter(right, profile)}) `}
+                {grid || right < 0 ? "" : `${right + 1}) `}
                 {correct}
               </span>
             </>
