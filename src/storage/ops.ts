@@ -123,7 +123,9 @@ export async function recordAnswer({
       // Позиция сессии = сколько упражнений уже отвечено; экран сам решает, когда листать дальше.
       const stored = (await database.sessions.get(session.id)) ?? session;
       const items = stored.items.map((entry) => (entry.id === item.id ? { ...entry, eventId } : entry));
-      if (!correct && !items.some((entry) => entry.retryOf && entry.unitKey === item.unitKey)) {
+      // Пункт урока повторился бы тем же заданием через три карточки после показанного ответа: его вернёт расписание.
+      const retries = item.ref.kind !== "mistake";
+      if (!correct && retries && !items.some((entry) => entry.retryOf && entry.unitKey === item.unitKey)) {
         const position = items.findIndex((entry) => entry.id === item.id);
         items.splice(Math.min(position + 3, items.length), 0, {
           ...item,
