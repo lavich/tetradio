@@ -147,7 +147,7 @@ test("страница занятия: дата по-гречески, сдел�
   await expect(rows.nth(2).getByRole("img", { name: "верно" })).toBeVisible();
 });
 
-test("короткие варианты — сеткой 2 × 2, длинные — строками α–δ на всю ширину с переносом", async ({ page }) => {
+test("короткие варианты — сеткой 2 × 2, длинные — строками 1)–4) на всю ширину с переносом", async ({ page }) => {
   await seedSession(page, { done: 0, phrase: false });
   const options = page.getByTestId("option");
   const [a, b, c] = await Promise.all([0, 1, 2].map((index) => options.nth(index).boundingBox()));
@@ -159,11 +159,13 @@ test("короткие варианты — сеткой 2 × 2, длинные 
     const box = (await options.nth(index).boundingBox())!;
     expect(box.width).toBeGreaterThan(sheet.width - 40); // строка на всю ширину листа
   }
-  expect(await options.first().evaluate((node) => getComputedStyle(node, "::before").content)).toContain("lower-greek"); // буквы α β γ δ
+  expect(await options.first().evaluate((node) => getComputedStyle(node, "::before").content)).toBe(
+    'counter(option) ")"',
+  ); // номера 1) 2) 3) 4)
   expect((await options.first().boundingBox())!.height).toBeGreaterThan(40); // длинный вариант переносится
   await options.nth(2).click();
   await expect(page.locator('[data-answer="wrong"] span').first()).toHaveCSS("text-decoration-line", "line-through");
-  await expect(page.getByRole("status")).toHaveText("Верно: β) Я хотел(а) бы открыть счёт.");
+  await expect(page.getByRole("status")).toHaveText("Верно: 2) Я хотел(а) бы открыть счёт.");
 });
 
 test("от 900 px: слева страница со списком, справа лист; облачко под правой колонкой", async ({ page }) => {
