@@ -59,8 +59,12 @@ afterEach(() => {
 const render = async (node: React.ReactNode) => act(async () => root.render(node));
 const press = async (key: string) =>
   act(async () => {
-    document.body.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }));
+    (document.activeElement ?? document.body).dispatchEvent(
+      new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }),
+    );
   });
+const focused = () => document.activeElement?.textContent;
+const frame = () => act(() => new Promise((resolve) => requestAnimationFrame(resolve)));
 const assembled = () => [...host.querySelectorAll("[data-testid=placed]")].map((placed) => placed.textContent).join("");
 
 describe("письмо с клавиатуры", () => {
@@ -96,6 +100,19 @@ describe("выбор варианта с клавиатуры", () => {
     await render(choice());
     expect(document.activeElement?.contains(host.querySelector("[data-testid=option]"))).toBe(true);
   });
+  it("стрелки ходят по сетке вариантов по кругу, первая — от группы к первому варианту", async () => {
+    await render(choice());
+    await press("ArrowDown");
+    expect(focused()).toBe("вода");
+    await press("ArrowDown");
+    expect(focused()).toBe("дом");
+    await press("ArrowRight");
+    expect(focused()).toBe("кот");
+    await press("ArrowRight");
+    expect(focused()).toBe("вода");
+    await press("ArrowLeft");
+    expect(focused()).toBe("кот");
+  });
   it("после ответа цифры больше не выбирают", async () => {
     await render(choice());
     await press("1");
@@ -118,6 +135,14 @@ describe("сборка слова с клавиатуры", () => {
     expect(assembled()).toBe("νερό");
     await press("Enter");
     expect(answers).toMatchObject([{ correct: true }]);
+  });
+  it("поставленный стрелкой и нажатием слог передаёт фокус следующему свободному", async () => {
+    await render(assembly());
+    await press("ArrowRight");
+    expect(focused()).toBe("ρό");
+    await act(async () => (document.activeElement as HTMLButtonElement).click());
+    await frame();
+    expect(focused()).toBe("νε");
   });
   it("поставленный слог второй раз не ставится", async () => {
     await render(assembly());

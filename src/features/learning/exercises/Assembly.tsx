@@ -7,9 +7,20 @@ import { useProfile } from "../../../shared/language";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./assembly.module.css";
-import { digitIndex, focusWithKeyboard, useRevealed, useRevealSpeech, useTaskKeys } from "./hooks";
+import { arrowFocus, digitIndex, focusWithKeyboard, useRevealed, useRevealSpeech, useTaskKeys } from "./hooks";
 import { wordOf, type ExerciseProps, type Status } from "./model";
 import { Primary, QuietActions, QuietButton, Reveal, TaskHead, Verdict, WordReveal } from "./parts";
+
+/** Поставленный слог гаснет и теряет фокус: фокус переходит к следующему свободному слогу, чтобы стрелки работали дальше. */
+function keepFocusAfter(tile: HTMLButtonElement) {
+  requestAnimationFrame(() => {
+    const group = tile.parentElement;
+    if (!group || (group.contains(document.activeElement) && document.activeElement !== tile)) return;
+    const free = [...group.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")];
+    const next = free.find((button) => tile.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING);
+    (next ?? free[0] ?? group).focus();
+  });
+}
 
 /**
  * Ступень перед свободным написанием: слово собирается из перемешанных слогов в строку листа. Только для слов.
@@ -98,7 +109,15 @@ export function Assembly({
               ))
             )}
           </div>
-          <div ref={focusWithKeyboard} tabIndex={-1} className={s.tiles} lang={lang}>
+          <div
+            ref={focusWithKeyboard}
+            tabIndex={-1}
+            role="group"
+            aria-label="Слоги"
+            onKeyDown={arrowFocus()}
+            className={s.tiles}
+            lang={lang}
+          >
             {pool.map((tile, index) => (
               <button
                 key={`${tile}-${index}`}
@@ -107,7 +126,10 @@ export function Assembly({
                 data-key={index < 9 ? index + 1 : undefined}
                 disabled={placed.includes(index) || saving}
                 className={s.tile}
-                onClick={() => setPlaced([...placed, index])}
+                onClick={(event) => {
+                  if (event.currentTarget === document.activeElement) keepFocusAfter(event.currentTarget);
+                  setPlaced([...placed, index]);
+                }}
               >
                 {tile}
               </button>

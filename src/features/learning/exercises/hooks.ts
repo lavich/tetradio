@@ -76,3 +76,27 @@ export function useTaskKeys(active: boolean, onKey: (event: KeyboardEvent) => bo
     return () => document.removeEventListener("keydown", listener);
   }, [active]);
 }
+
+const ARROWS: Record<string, [across: number, down: number]> = {
+  ArrowRight: [1, 0],
+  ArrowLeft: [-1, 0],
+  ArrowDown: [0, 1],
+  ArrowUp: [0, -1],
+};
+/**
+ * Стрелки переводят фокус между доступными кнопками группы по кругу; Enter и пробел нажимают кнопку сами.
+ * Первая стрелка с самой группы — к первой кнопке: так повторный Enter после «Далее» не выбирает вариант.
+ */
+export const arrowFocus =
+  (columns = 1) =>
+  (event: React.KeyboardEvent<HTMLElement>) => {
+    const arrow = ARROWS[event.key];
+    if (!arrow || event.altKey || event.ctrlKey || event.metaKey) return;
+    const buttons = [...event.currentTarget.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")];
+    if (!buttons.length) return;
+    event.preventDefault();
+    const step = arrow[0] + arrow[1] * columns;
+    const current = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    const next = current < 0 ? (step > 0 ? 0 : buttons.length - 1) : (current + step + buttons.length) % buttons.length;
+    buttons[next].focus();
+  };

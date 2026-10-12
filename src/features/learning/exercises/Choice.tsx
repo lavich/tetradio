@@ -4,7 +4,7 @@ import { cx } from "../../../shared/cx";
 import { Instruction } from "../notebook";
 import exercise from "./exercise.module.css";
 import s from "./choice.module.css";
-import { digitIndex, focusWithKeyboard, useRevealed, useTaskKeys } from "./hooks";
+import { arrowFocus, digitIndex, focusWithKeyboard, useRevealed, useTaskKeys } from "./hooks";
 import type { LanguageProfile } from "../../../domain/language";
 import { useProfile } from "../../../shared/language";
 import { type ExerciseProps } from "./model";
@@ -79,6 +79,9 @@ export function Choice({
       <div
         ref={focusWithKeyboard}
         tabIndex={-1}
+        role="group"
+        aria-label="Варианты ответа"
+        onKeyDown={arrowFocus(grid ? 2 : 1)}
         className={grid ? s.grid : s.lines}
         lang={greekOptions ? profile.code : undefined}
         style={{ ["--letters" as string]: profile.letters.style }}
