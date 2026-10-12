@@ -106,6 +106,7 @@ export function Assembly({
                 <button
                   key={`${index}-${position}`}
                   type="button"
+                  tabIndex={0}
                   data-testid="placed"
                   disabled={saving}
                   className={s.placed}
@@ -128,6 +129,7 @@ export function Assembly({
               <button
                 key={`${tile}-${index}`}
                 type="button"
+                tabIndex={0}
                 data-testid="tile"
                 data-key={index < 9 ? index + 1 : undefined}
                 disabled={placed.includes(index) || saving}

@@ -60,6 +60,10 @@
   cursor: default;
 }
 @media (pointer: fine) {
+  .tile:focus {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+  }
   .tile[data-key]::after {
     content: attr(data-key);
     content: attr(data-key) / "";

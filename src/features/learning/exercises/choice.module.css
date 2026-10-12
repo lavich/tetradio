@@ -76,6 +76,12 @@
 }
 /* У сетки нет букв вариантов, как у строк, — номер для цифры нужен только ей. */
 @media (pointer: fine) {
+  /* Фокус при открытии задания ставится скриптом, и после клика мышью :focus-visible его не показал бы. */
+  .chip:focus,
+  .line:focus {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+  }
   .chip[data-key]::after {
     content: attr(data-key);
     /* Номер не входит в имя кнопки для читалки; строка выше — для WebKit без альтернативного текста у content. */

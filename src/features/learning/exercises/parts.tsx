@@ -53,7 +53,10 @@ export function Primary({
   );
 }
 
-/** Тихие действия под заданием: «Не знаю» и отказ от аудио — текстом, без кнопок-плашек. */
+/**
+ * Тихие действия под заданием: «Не знаю» и отказ от аудио — текстом, без кнопок-плашек.
+ * Явный `tabIndex` — для WebKit (Safari, Telegram macOS): кнопку без него Tab по умолчанию пропускает.
+ */
 export function QuietActions({ children }: { children: React.ReactNode }) {
   return <div className={s.quietActions}>{children}</div>;
 }
@@ -67,7 +70,7 @@ export function QuietButton({
   disabled?: boolean;
 }) {
   return (
-    <button type="button" className={s.quietButton} disabled={disabled} onClick={onClick}>
+    <button type="button" tabIndex={0} className={s.quietButton} disabled={disabled} onClick={onClick}>
       {children}
     </button>
   );

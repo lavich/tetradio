@@ -101,6 +101,7 @@ export function Choice({
             <button
               key={option}
               type="button"
+              tabIndex={0}
               data-testid="option"
               data-answer={mark}
               data-key={answered ? undefined : index + 1}
