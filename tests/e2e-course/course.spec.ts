@@ -1,4 +1,5 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test } from "../playwright-test";
+import { type Locator, type Page } from "@playwright/test";
 
 /**
  * Синтез речи подменяется, чтобы проверки не зависели от голосов машины: `none` — греческого голоса нет,

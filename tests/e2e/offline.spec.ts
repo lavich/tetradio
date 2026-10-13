@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 import { installLessons, ready } from "./helpers";
 
 test("работает без сети после закрытия страницы для скачанного урока", async ({ context, page }) => {

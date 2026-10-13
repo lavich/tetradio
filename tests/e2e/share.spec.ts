@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 
 /** Сколько записей в хранилищах браузерной базы: просмотр по ссылке не должен ничего в неё положить. */
 const stored = (page: import("@playwright/test").Page) =>

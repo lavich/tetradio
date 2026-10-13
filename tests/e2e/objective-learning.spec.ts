@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright-test";
+import { type Page } from "@playwright/test";
 import { GREEK_VOICE, installLessons, ready, setSettings } from "./helpers";
 
 async function installSession(page: Page, type: string, isNew = false, count = 1, wordId = "w034") {

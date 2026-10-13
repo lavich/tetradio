@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 import { installLessons } from "./helpers";
 
 /** Голоса в headless-браузере нет, поэтому подставляем свой и проверяем, что именно уходит в синтез. */

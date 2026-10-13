@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 import { breakStorage, installLessons, seedQueue } from "./helpers";
 import { DARK, LIGHT, openTelegram, tg } from "./telegram";
 

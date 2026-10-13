@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 
 test("вкладка «Прогресс»: навыки по курсу, путь и темп, неделя, слова и «Настройки и данные»", async ({ page }) => {
   await page.goto("/app/");

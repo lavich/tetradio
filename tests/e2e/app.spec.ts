@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 import { completeLessons, installLessons, ready, seedQueue } from "./helpers";
 
 test.beforeEach(async ({ page }) => {

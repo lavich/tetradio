@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright-test";
+import { type Page } from "@playwright/test";
 
 const GREEK_WORDS = ["γεια", "καλημέρα", "είμαι", "από", "η χώρα"];
 const ENGLISH_WORDS = ["to go", "the bus", "to read", "the coffee", "to write"];

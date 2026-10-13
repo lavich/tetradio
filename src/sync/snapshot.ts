@@ -163,11 +163,18 @@ async function readProgress(database: AppDatabase, now: Date): Promise<Progress>
     states: states.sort(byKey),
   };
 }
-/** Сводки навыков и статистики: база предыдущего снимка плюс локальные события после её отсечки. */
-async function readSummary(database: AppDatabase): Promise<Summary> {
+/**
+ * Сводки навыков и статистики: база предыдущего снимка плюс локальные события после её отсечки и до `until`
+ * включительно. Событие позже `until` учтёт следующая сводка — иначе его посчитали бы эта и следующая.
+ */
+async function readSummary(database: AppDatabase, until: string): Promise<Summary> {
   const base = await database.baseSummary.get("base");
   const fresh: ReviewEvent[] = byTime(
-    base ? await database.events.where("createdAt").above(base.asOf).toArray() : await database.events.toArray(),
+    !base
+      ? await database.events.where("createdAt").belowOrEqual(until).toArray()
+      : base.asOf < until
+        ? await database.events.where("createdAt").between(base.asOf, until, false, true).toArray()
+        : [],
   );
   const skills = new Map<string, { ref: StoredRef; skills: SkillSummary }>(
     (await database.cardSkills.toArray()).map((row) => [row.unitKey, { ref: row.ref, skills: row.skills }]),
@@ -184,7 +191,8 @@ async function readSummary(database: AppDatabase): Promise<Summary> {
 }
 /** Компактный снимок из локальной базы; вызывается внутри транзакции чтения по `SNAPSHOT_TABLES`. */
 export async function buildSnapshot(database: AppDatabase, now: Date): Promise<CompactSnapshot> {
-  return { ...(await readProgress(database, now)), ...(await readSummary(database)) };
+  const progress = await readProgress(database, now);
+  return { ...progress, ...(await readSummary(database, progress.createdAt)) };
 }
 export const readSnapshot = (database: AppDatabase, now: Date) =>
   database.transaction("r", tables(database, SNAPSHOT_TABLES), () => buildSnapshot(database, now));
@@ -214,8 +222,11 @@ export async function buildAndCommitMarked(
     progress: await readProgress(database, now),
   }));
   const summary = await database.transaction("rw", tables(database, SUMMARY_TABLES), async () => {
-    const summary = await readSummary(database);
-    await commitBase(database, summary, versionId, progress.createdAt);
+    const summary = await readSummary(database, progress.createdAt);
+    // Часы устройства могли уйти назад: отсечка не отступает, иначе учтённые события посчитались бы снова.
+    const base = await database.baseSummary.get("base");
+    const asOf = base && base.asOf > progress.createdAt ? base.asOf : progress.createdAt;
+    await commitBase(database, summary, versionId, asOf);
     return summary;
   });
   return { snapshot: { ...progress, ...summary }, mark };

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 import { openTelegram } from "../e2e/telegram";
 
 test("копия: изменение облака на другом устройстве после предпросмотра требует нового предпросмотра", async ({

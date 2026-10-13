@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 
 /** `/web/` — сборка курса-демо без мока Telegram: статичный лендинг с пробным уроком из урока 1.1. */
 test("пробный урок на статичном лендинге: ответы, строки сделанного, итог и повтор; база и service worker не создаются", async ({

@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright-test";
+import { type Page } from "@playwright/test";
 import { installLessons, seedQueue } from "./helpers";
 import { bridgeScript, launchHash, openTelegram, tg } from "./telegram";
 

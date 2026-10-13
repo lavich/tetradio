@@ -6,10 +6,15 @@ import { dbAssetSource, releaseAssetUrl, type AssetSource } from "./store";
 import { voicesOf } from "./voices";
 
 export type AudioKind = "file" | "voice" | "none";
-/** Итог воспроизведения: `error` — файл или голос есть, но проигрывание отклонено; это не ошибка знания слова. */
-export type PlayResult = AudioKind | "error";
+/**
+ * Итог воспроизведения: `error` — файл или голос есть, но проигрывание отклонено; это не ошибка знания слова.
+ * `stopped` — до начала звука его остановили или запустили другой.
+ */
+export type PlayResult = AudioKind | "error" | "stopped";
 const cachedVoices = new Map<Language, SpeechSynthesisVoice | null>();
-let current: HTMLAudioElement | null = null;
+let current: { audio: HTMLAudioElement; release: () => void } | null = null;
+/** Растёт при каждой остановке: вызов, дождавшийся файла после неё, уже не должен звучать. */
+let generation = 0;
 // Список голосов приходит асинхронно, поэтому сбрасываем кеш, когда браузер его обновил.
 if (typeof speechSynthesis !== "undefined") {
   speechSynthesis.getVoices();
@@ -119,13 +124,22 @@ function speakOnce(text: string, voice: SpeechSynthesisVoice, rate: number, lang
   });
 }
 /** Озвучка голосом с одной повторной попыткой: молчание после повтора — честный отказ, а не мнимый успех. */
-async function speakVoice(text: string, rate: number, stopped: boolean, profile: LanguageProfile): Promise<PlayResult> {
+async function speakVoice(
+  text: string,
+  rate: number,
+  stopped: boolean,
+  profile: LanguageProfile,
+  mine = generation,
+): Promise<PlayResult> {
   const voice = await voiceReady(profile);
+  if (mine !== generation) return "stopped";
   if (!voice) return "none";
   if (stopped) await wait(RESTART_DELAY); // отменённой реплике нужен такт, иначе синтезатор съест новую
+  if (mine !== generation) return "stopped";
   if (await speakOnce(text, voice, rate, profile.voice)) return "voice";
   cancelSpeech();
   await wait(RESTART_DELAY);
+  if (mine !== generation) return "stopped"; // реплику оборвала остановка, а не синтезатор — повтор не нужен
   return (await speakOnce(text, voice, rate, profile.voice)) ? "voice" : "error";
 }
 /** Предложения читает системный голос: записанных файлов для примеров нет. */
@@ -150,16 +164,46 @@ function cancelSpeech(): boolean {
 }
 /** Возвращает, была ли остановлена речь: следующей реплике после отмены нужен такт. */
 export function stopAudio(): boolean {
+  generation++;
   if (current) {
+    const { audio, release } = current;
+    current = null;
     try {
-      current.pause();
-      current.currentTime = 0;
+      audio.pause();
+      audio.currentTime = 0;
     } catch {
       /* элемент уже освобождён */
     }
-    current = null;
+    release();
   }
   return cancelSpeech();
+}
+/** Файл звучит, только если за время загрузки звук не остановили; адрес освобождается при любом исходе. */
+async function playFile(url: string, free: (url: string) => void, mine: number): Promise<PlayResult> {
+  let freed = false;
+  const release = () => {
+    if (freed) return;
+    freed = true;
+    free(url);
+  };
+  if (mine !== generation) {
+    release();
+    return "stopped";
+  }
+  const audio = new Audio(url);
+  current = { audio, release };
+  const finish = () => {
+    release();
+    if (current?.audio === audio) current = null;
+  };
+  audio.addEventListener("ended", finish, { once: true });
+  try {
+    await audio.play();
+    return "file";
+  } catch {
+    finish();
+    return mine === generation ? "error" : "stopped";
+  }
 }
 /**
  * Отказ воспроизведения не подавляется: экран получает `error` и предлагает повтор или продолжение без аудирования.
@@ -171,25 +215,14 @@ export async function playWord(
   source: AssetSource = dbAssetSource,
 ): Promise<PlayResult> {
   const stopped = stopAudio();
+  const mine = generation;
   if (word.audioAssetId) {
     const url = await source.url(word.audioAssetId).catch(() => null);
-    if (url) {
-      const audio = new Audio(url);
-      current = audio;
-      const release = () => releaseAssetUrl(url);
-      audio.addEventListener("ended", release, { once: true });
-      try {
-        await audio.play();
-        return "file";
-      } catch {
-        release();
-        if (current === audio) current = null;
-        return "error";
-      }
-    }
-    if (!(await voiceReady(profile))) return "error"; // файл обещан, но недоступен, а голоса нет
+    if (url) return playFile(url, releaseAssetUrl, mine);
+    if (mine !== generation) return "stopped";
+    if (!(await voiceReady(profile))) return mine === generation ? "error" : "stopped"; // файл обещан, но недоступен, а голоса нет
   }
-  return speakVoice(word.greek, 0.9, stopped, profile);
+  return speakVoice(word.greek, 0.9, stopped, profile, mine);
 }
 /** Голос появляется асинхронно, поэтому доступность пересчитывается после загрузки списка. */
 export function useVoice(profile: LanguageProfile): boolean {
@@ -231,26 +264,14 @@ export async function playText(
   profile: LanguageProfile,
 ): Promise<PlayResult> {
   const stopped = stopAudio();
+  const mine = generation;
   if (audioAssetId) {
     const asset = await ensureAsset(audioAssetId).catch(() => null);
-    if (asset) {
-      const url = URL.createObjectURL(asset.blob);
-      const audio = new Audio(url);
-      current = audio;
-      const release = () => URL.revokeObjectURL(url);
-      audio.addEventListener("ended", release, { once: true });
-      try {
-        await audio.play();
-        return "file";
-      } catch {
-        release();
-        if (current === audio) current = null;
-        return "error";
-      }
-    }
-    if (!(await voiceReady(profile))) return "error";
+    if (asset) return playFile(URL.createObjectURL(asset.blob), (url) => URL.revokeObjectURL(url), mine);
+    if (mine !== generation) return "stopped";
+    if (!(await voiceReady(profile))) return mine === generation ? "error" : "stopped";
   }
-  return speakVoice(text, 0.85, stopped, profile);
+  return speakVoice(text, 0.85, stopped, profile, mine);
 }
 export const textAudioKind = (audioAssetId: string | undefined, profile: LanguageProfile): AudioKind =>
   audioAssetId ? "file" : voiceOf(profile) ? "voice" : "none";

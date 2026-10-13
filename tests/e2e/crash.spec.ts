@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 import { breakStorage, completeLessons, installLessons, ready } from "./helpers";
 
 /** Тестовая сборка идёт без адреса приёма: ни один сценарий, включая сбои, не должен обращаться к сервису отчётов и грузить его чанк. */
