@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright-test";
+import { type Page } from "@playwright/test";
 
 const MISTAKE = JSON.stringify(["mistake", "m01-1/forms/q2"]);
 

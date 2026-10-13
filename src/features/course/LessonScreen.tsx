@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -54,6 +54,8 @@ export function CourseLessonScreen() {
     [lessonCourse],
   );
   const [problem, setProblem] = useState("");
+  // Кнопка тренировки есть в трёх местах, поэтому повторное нажатие отсекается здесь, а не их состоянием.
+  const starting = useRef(false);
   const profile = useLessonProfile(lessonId);
   const spread = useSpread();
   const numbering = useMemo(() => numberBlocks(lesson?.blocks ?? []), [lesson]);
@@ -87,15 +89,23 @@ export function CourseLessonScreen() {
   const answered = (target: string) =>
     lesson.blocks.some((block) => block.type === "exercise" && block.about === target && progress.get(block.id)?.done);
   const practiceWords = async () => {
+    if (starting.current) return;
+    starting.current = true;
     setProblem("");
-    // Курс урока может ещё читаться: без него в варианты попали бы слова всех курсов.
-    const courseId = lessonCourse ?? (await lessonCourses([lessonId])).get(lessonId);
-    const created =
-      items?.length && courseId
-        ? await startSession(new Date(), { refs: items.map((item) => item.ref), mode: "practice", courseId })
-        : null;
-    if (!created) return setProblem("В уроке нет доступных карточек.");
-    void navigate(await sessionPath(created.courseId));
+    try {
+      // Курс урока может ещё читаться: без него в варианты попали бы слова всех курсов.
+      const courseId = lessonCourse ?? (await lessonCourses([lessonId])).get(lessonId);
+      const created =
+        items?.length && courseId
+          ? await startSession(new Date(), { refs: items.map((item) => item.ref), mode: "practice", courseId })
+          : null;
+      if (!created) return setProblem("В уроке нет доступных карточек.");
+      void navigate(await sessionPath(created.courseId));
+    } catch (error) {
+      setProblem(error instanceof Error ? error.message : "Не удалось начать тренировку.");
+    } finally {
+      starting.current = false;
+    }
   };
   const fromModule = !!(location.state as { fromModule?: boolean } | null)?.fromModule;
   const toModule = () => {

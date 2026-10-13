@@ -273,3 +273,78 @@ describe("голос по языку текста", () => {
     expect(await playText("Hello", undefined, PROFILES.en)).toBe("none");
   });
 });
+
+describe("остановка во время загрузки файла", () => {
+  const played: string[] = [];
+  const paused: string[] = [];
+  beforeEach(() => {
+    played.length = 0;
+    paused.length = 0;
+    (globalThis as { Audio?: unknown }).Audio = class {
+      src: string;
+      constructor(src: string) {
+        this.src = src;
+      }
+      addEventListener() {}
+      pause() {
+        paused.push(this.src);
+      }
+      play() {
+        played.push(this.src);
+        return Promise.resolve();
+      }
+    };
+  });
+  afterEach(() => {
+    delete (globalThis as { Audio?: unknown }).Audio;
+  });
+  /** Источник, который отдаёт адрес только по команде: так видна гонка «Далее» во время загрузки. */
+  function slowSource() {
+    const pending = new Map<string, (url: string) => void>();
+    return {
+      source: { url: (id: string) => new Promise<string | null>((resolve) => pending.set(id, resolve)) },
+      deliver: (id: string) => pending.get(id)!(`blob:${id}`),
+    };
+  }
+
+  it("файл, догрузившийся после остановки, не звучит и освобождается", async () => {
+    const { synth } = fakeSynth();
+    const { playWord, stopAudio } = await load(synth);
+    const revoke = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+    const { source, deliver } = slowSource();
+    const result = playWord(word({ audioAssetId: "a" }), PROFILES.el, source);
+    stopAudio();
+    deliver("a");
+    expect(await result).toBe("stopped");
+    expect(played).toEqual([]);
+    expect(revoke).toHaveBeenCalledWith("blob:a");
+    revoke.mockRestore();
+  });
+
+  it("при двойном запуске звучит только последний", async () => {
+    const { synth } = fakeSynth();
+    const { playWord } = await load(synth);
+    const { source, deliver } = slowSource();
+    const first = playWord(word({ audioAssetId: "a" }), PROFILES.el, source);
+    const second = playWord(word({ id: "w2", audioAssetId: "b" }), PROFILES.el, source);
+    deliver("b");
+    deliver("a");
+    expect(await second).toBe("file");
+    expect(await first).toBe("stopped");
+    expect(played).toEqual(["blob:b"]);
+  });
+
+  it("остановка играющего файла освобождает его адрес", async () => {
+    const { synth } = fakeSynth();
+    const { playWord, stopAudio } = await load(synth);
+    const revoke = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+    const { source, deliver } = slowSource();
+    const result = playWord(word({ audioAssetId: "a" }), PROFILES.el, source);
+    deliver("a");
+    expect(await result).toBe("file");
+    stopAudio();
+    expect(paused).toEqual(["blob:a"]);
+    expect(revoke).toHaveBeenCalledTimes(1);
+    revoke.mockRestore();
+  });
+});

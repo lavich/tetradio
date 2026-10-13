@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -70,6 +70,7 @@ export function SessionScreen() {
   const nativeBack = usePlatform().capabilities.back;
   // Нативный «Назад» Telegram выполняет тот же выход из занятия, что и крестик: принятые ответы уже сохранены.
   const leaveRef = useRef<() => void>(() => navigate("/", { replace: true }));
+  const leaving = useRef(false);
   const [backHandler] = useState(() => () => leaveRef.current());
   useBackHandler(backHandler);
   const item = session && position >= 0 ? session.items[position] : undefined;
@@ -101,6 +102,9 @@ export function SessionScreen() {
     if (previous.current && !document.hidden) active.current.ms += Date.now() - active.current.since;
     previous.current = item?.id;
     active.current.since = Date.now();
+  }, [item?.id, introduction?.unitKey]);
+  // Раньше автоозвучки новой карточки: обычный эффект экрана срабатывает после эффектов карточки и отменил бы её звук.
+  useLayoutEffect(() => {
     stopAudio();
   }, [item?.id, introduction?.unitKey]);
   useEffect(() => {
@@ -189,8 +193,17 @@ export function SessionScreen() {
     setCursor(following);
   };
   const leave = async () => {
-    await endSession({ ...session, activeTimeMs: activeMs() });
-    void navigate("/", { replace: true });
+    if (leaving.current) return;
+    leaving.current = true;
+    setProblem("");
+    try {
+      await endSession({ ...session, activeTimeMs: activeMs() });
+      void navigate("/", { replace: true });
+    } catch {
+      setProblem("Не удалось закрыть занятие. Попробуйте ещё раз.");
+    } finally {
+      leaving.current = false;
+    }
   };
   leaveRef.current = leave;
   const skip = async () => {

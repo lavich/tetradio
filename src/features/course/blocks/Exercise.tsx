@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ExerciseBlock } from "../../../content/course";
@@ -51,7 +51,10 @@ export function Exercise({
     if (checked) return;
     setAnswers((prev) => ({ ...prev, [itemId]: value }));
   };
+  const checking = useRef(false);
   const check = async () => {
+    if (checking.current) return;
+    checking.current = true;
     const result = scoreExercise(block, answers, profile);
     const saved = await store({
       done: true,
@@ -59,6 +62,7 @@ export function Exercise({
       score: { correct: result.correct, almost: result.almost, total: result.total },
       mistakes: mistakesOf(block, answers, result),
     });
+    checking.current = false;
     if (saved) setChecked(true);
   };
   const retry = async () => {

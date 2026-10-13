@@ -350,6 +350,16 @@ describe("конфликты независимых изменений", () => {
     expect(restored.phase).toBe("conflict");
     expect(restored.conflict?.kind).toBe("restored");
   });
+  it("ответ, сохранённый во время сборки снимка, учитывается в сводке один раз", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    const { buildAndCommit } = await import("../src/sync/snapshot");
+    const cutoff = new Date(clockMs + 150_000); // между первым ответом (+2 мин) и вторым (+3 мин)
+    await study(phone, [true, true]);
+    // Публикация взяла «сейчас» до второго ответа, а сводку собрала уже после него.
+    expect((await buildAndCommit(phone.db, cutoff, "phone-1")).stats.answers).toBe(1);
+    expect((await buildAndCommit(phone.db, tick(), "phone-2")).stats.answers).toBe(2);
+    expect(await phone.db.events.count()).toBe(2);
+  });
   it("конфликт двух других устройств при чистой локальной базе тоже требует выбора", async () => {
     const { phone, tablet } = await pair();
     const clean = await device("clean", { lessons: ["mech-1"] });

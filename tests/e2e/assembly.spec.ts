@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 import { installLessons } from "./helpers";
 
 /** Слово со сроком и пройденными recall/recognition получает сборку следующим навыком. */

@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright-test";
+import { type Page } from "@playwright/test";
 
 /** Синтез речи подменяется: `none` — греческого голоса нет, `instant` — голос есть, реплики записываются в `__spoken`. */
 async function voices(page: Page, mode: "none" | "instant") {

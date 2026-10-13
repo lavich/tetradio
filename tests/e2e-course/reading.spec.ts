@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright-test";
+import { type Page } from "@playwright/test";
 
 /** Греческий голос есть, каждая фраза «звучит» мгновенно; сказанное копится в `__spoken`. */
 async function voice(page: Page) {

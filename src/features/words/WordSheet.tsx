@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Share2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +10,7 @@ import { useProfile } from "../../shared/language";
 import { usePhrase, useWordLesson } from "../../shared/store";
 import { db } from "../../storage/db";
 import { Tick } from "../../shared/Tick";
+import { useAction } from "../../shared/action";
 import { WordForms } from "../../shared/VerbForms";
 import type { DictionaryLesson } from "../../storage/dictionary";
 import { dexieSource } from "../../storage/queries";
@@ -154,15 +154,16 @@ function Skills({ word }: { word: Word }) {
 function Practice({ ref_, courseId, label }: { ref_: LearningRef; courseId?: string; label: string }) {
   const now = useNow();
   const navigate = useNavigate();
-  const [problem, setProblem] = useState("");
-  const practice = async () => {
-    const session = await startSession(now, { refs: [ref_], mode: "practice", courseId });
-    if (!session) return setProblem("Не удалось собрать тренировку.");
-    void navigate(await sessionPath(session.courseId));
-  };
+  const { busy, problem, setProblem, run } = useAction("Не удалось собрать тренировку.");
+  const practice = () =>
+    run(async () => {
+      const session = await startSession(now, { refs: [ref_], mode: "practice", courseId });
+      if (!session) return setProblem("Не удалось собрать тренировку.");
+      void navigate(await sessionPath(session.courseId));
+    });
   return (
     <>
-      <Button variant="soft" size="md" className="mt-4" onClick={practice}>
+      <Button variant="soft" size="md" className="mt-4" disabled={busy} onClick={() => void practice()}>
         {label}
       </Button>
       {problem && (

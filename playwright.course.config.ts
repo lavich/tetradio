@@ -18,6 +18,7 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${port}`,
     browserName: "chromium",
+    launchOptions: { args: ["--mute-audio"] },
     viewport: { width: 390, height: 844 },
     deviceScaleFactor: 2,
     trace: "retain-on-failure",

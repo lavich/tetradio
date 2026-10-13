@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../playwright-test";
 import { installLessons, ready } from "./helpers";
 
 /** Разметка слов примера: пример слова урока 1.4, ссылка ведёт на «ο άντρας» из урока 1.3. Случай «карточки нет» — в компонентном тесте. */
