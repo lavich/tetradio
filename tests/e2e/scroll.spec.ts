@@ -48,6 +48,17 @@ test("поиск и фильтр живут в адресе: «Назад» со
   await expect(page).toHaveURL(/\/words$/);
 
   const list = page.getByRole("region", { name: "Словарь" });
+  await page.mouse.move(200, 400);
+  await page.mouse.wheel(0, 82);
+  const before = await settled(page);
+  expect(before).toBeGreaterThan(50);
+  await page.getByRole("searchbox").fill("ο");
+  await list.getByRole("link").first().click();
+  await expect(page.getByTestId("entry-sheet")).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole("searchbox")).toHaveValue("ο");
+  await expect.poll(() => scrollY(page)).toBe(before);
+
   await page.getByRole("searchbox").fill("φίλ");
   await list.getByRole("link", { name: /ο φίλος/ }).click();
   await expect(page.getByTestId("entry-sheet")).toBeVisible();

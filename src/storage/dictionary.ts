@@ -99,10 +99,7 @@ export async function dictionary(courseId?: string, database: AppDatabase = db):
 
 export type MarkFilter = CardMark | "all";
 
-/**
- * Каждое слово запроса — начало какого-то слова греческого или перевода. Урок, где подошло всё, возвращается тем же
- * объектом, чтобы его строки не перерисовывались.
- */
+/** Урок, где подошло всё, возвращается тем же объектом, чтобы его строки не перерисовывались. */
 export function filterDictionary(lessons: DictionaryLesson[], filter: MarkFilter, query: string) {
   const wanted = searchTokens(query);
   if (filter === "all" && !wanted.length) return lessons;

@@ -2,7 +2,7 @@ import { memo, useDeferredValue, useEffect, useMemo, useRef, useState, type Mous
 import { useLiveQuery } from "dexie-react-hooks";
 import { Search } from "lucide-react";
 import { useHref, useLocation, useNavigate, useNavigationType, useParams, useSearchParams } from "react-router-dom";
-import { KEEP_SCROLL } from "../../app/scroll";
+import { KEEP_SCROLL, rememberScroll } from "../../app/scroll";
 import { Screen } from "../../app/Screen";
 import { CourseSwitch } from "../../shared/CourseSwitch";
 import { useCardCourse, useFollowCourse } from "../../shared/courses";
@@ -129,6 +129,7 @@ function Dictionary({
     clearTimeout(timer.current);
     timer.current = undefined;
     setParams(searchOf(q, mark), { replace: true });
+    rememberScroll();
   };
   const flush = () => {
     if (timer.current !== undefined) write(query, filter);

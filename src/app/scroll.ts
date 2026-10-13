@@ -29,6 +29,13 @@ function savePosition(key: string, top: number) {
 const UNKEYED = "default";
 const RESTORING = "data-restoring";
 const SETTLED_FRAMES = 10;
+const IDLE_FRAMES = 60;
+
+/** Для replace перед PUSH: маршрутизатор сливает их в один переход, и хук замены не увидит. */
+export function rememberScroll() {
+  const key = (window.history.state as { key?: string } | null)?.key ?? UNKEYED;
+  savePosition(key, Math.round(window.scrollY));
+}
 
 /** Позиция «Назад» возвращается, когда экран дорос до неё: данные приходят live-запросами после первого кадра. */
 export function useScrollMemory(root: RefObject<HTMLElement | null>) {
@@ -65,7 +72,7 @@ export function useScrollMemory(root: RefObject<HTMLElement | null>) {
   }, [location.key, location.pathname, location.state, action, root]);
 }
 
-/** Сдаётся при вводе, по таймауту или когда выросшая страница перестала меняться: цель недостижима. */
+/** Сдаётся при вводе, по таймауту или когда страница перестала меняться: цель недостижима. */
 function restore(app: HTMLElement | null, key: string, target: number) {
   savePosition(key, target);
   window.scrollTo(0, target);
@@ -97,7 +104,7 @@ function restore(app: HTMLElement | null, key: string, target: number) {
       still = 0;
       window.scrollTo(0, target);
       if (Math.abs(window.scrollY - target) < 1) return stop();
-    } else if (grown && ++still >= SETTLED_FRAMES) return stop();
+    } else if (++still >= (grown ? SETTLED_FRAMES : IDLE_FRAMES)) return stop();
     frame = requestAnimationFrame(tick);
   };
   app.setAttribute(RESTORING, "");
