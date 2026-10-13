@@ -56,6 +56,32 @@ function knownStats(stats: StatsSummary): StatsSummary {
   };
 }
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+const adoptableRef = (ref: StoredRef) => knownRef(ref) !== ref;
+const adoptableType = (type: StoredType) => knownType(type) !== type;
+const adoptableKey = (key: string) => key.includes(`"~`) && knownKey(key) !== key;
+/** Есть ли что переносить: без этой проверки каждый запуск брал бы запись по всем таблицам. */
+async function hasAdoptable(database: AppDatabase): Promise<boolean> {
+  return database.transaction("r", database.cardStash, database.cardSkills, database.baseSummary, async () => {
+    if ((await database.cardStash.toArray()).some((row) => adoptableRef(row.ref))) return true;
+    const skills = await database.cardSkills.toArray();
+    if (
+      skills.some(
+        ({ ref, skills }) =>
+          adoptableRef(ref) ||
+          (Object.keys(skills.types) as StoredType[]).some(adoptableType) ||
+          skills.lastTypes.some(adoptableType),
+      )
+    )
+      return true;
+    const stats = (await database.baseSummary.get("base"))?.stats;
+    return (
+      !!stats &&
+      ((Object.keys(stats.recentByType) as StoredType[]).some(adoptableType) ||
+        stats.answeredKeys.some(adoptableKey) ||
+        stats.days.some((day) => day.keys.some(adoptableKey)))
+    );
+  });
+}
 
 /**
  * После обновления приложение узнало вид или тип проверки, которые хранились как незнакомые: отложенные состояния,
@@ -63,6 +89,7 @@ const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
  * становится обычным прогрессом. Чтение и запись — одной транзакцией: обмен в другой вкладке не вклинится.
  */
 export async function adoptKnownForeign(database: AppDatabase): Promise<void> {
+  if (!(await hasAdoptable(database))) return;
   await database.transaction("rw", database.tables, async () => {
     for (const row of await database.cardStash.toArray()) {
       const ref = knownRef(row.ref);
