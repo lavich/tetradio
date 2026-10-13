@@ -38,7 +38,6 @@
   --cell: 24px;
   --field: 56px;
   --ok: #15803d;
-  /* 3,5:1 — только для галочек и зачёркиваний; текст «почти» — --almost-fg. */
   --almost: #b7791f;
   --radius: 0.875rem;
   --radius-card: 18px;
