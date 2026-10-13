@@ -138,7 +138,7 @@ export function writeContent(publicDir = "public", root = defaultRoot()) {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  // `CONTENT_ROOT` подменяет исходники: e2e-проверки механик собираются на фикстуре, продукт — только из content/.
+  // `CONTENT_ROOT` подменяет исходники для локального просмотра фикстуры; продукт — только из content/.
   const built = writeContent("public", process.env.CONTENT_ROOT || defaultRoot());
   console.log(
     `Контент: ${built.packages.length} пакетов, ${built.words.length} слов, ${built.phrases.length} фраз, ${built.files.length} файлов → public/content`,

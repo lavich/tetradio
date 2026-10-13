@@ -21,7 +21,7 @@
   предпросмотра (подробно — [design.md](../openspec/changes/archive/2026-10-01-course-progress-sync/design.md), «Резервная копия»).
 - Мок включается только флагом сборки: `npm run dev:mock`, e2e (`playwright.config.ts`, `playwright.course.config.ts`)
   и unit-тесты (`vite.config.ts` → `test.env`). Деплой на GitHub Pages собирается с пустым `VITE_TELEGRAM_MOCK`.
-  Сборка e2e кладёт рядом production-вариант без мока в `dist/web/` — на нём проверяется экран «Откройте в Telegram».
+  Сборка e2e кладёт рядом production-вариант без мока в `.e2e/mechanics/dist/web/` — на нём проверяется экран «Откройте в Telegram».
 
 Код: `src/platform/launch.ts` (контекст запуска), `src/storage/profile.ts` (владелец и имя базы), `src/storage/db.ts`
 (база без владельца не открывается), `src/main.tsx` и `src/app/LaunchGate.tsx` (экраны остановленного запуска).

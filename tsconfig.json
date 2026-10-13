@@ -21,6 +21,7 @@
     "scripts",
     "vite.config.ts",
     "playwright.config.ts",
-    "playwright.course.config.ts"
+    "playwright.course.config.ts",
+    "playwright.courses.config.ts"
   ]
 }

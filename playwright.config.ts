@@ -1,13 +1,14 @@
 import { defineConfig } from "@playwright/test";
-const port = Number(process.env.PLAYWRIGHT_PORT ?? 4173);
+const port = Number(process.env.PLAYWRIGHT_PORT ?? 4176);
 /**
  * Браузерные проверки идут по production build, как и реальное использование. Механики проверяются на маленькой
  * фикстуре из слов лексикона (tests/fixtures/mechanics), а не на курсе: его состав меняется вместе с программой.
- * Сборка — с моком Telegram (`VITE_TELEGRAM_MOCK=1`), т. к. тесты идут в обычном Chromium; в `dist/web/` — та же
+ * Сборка — с моком Telegram (`VITE_TELEGRAM_MOCK=1`), т. к. тесты идут в обычном Chromium; в `web/` — та же
  * сборка без флага, как на GitHub Pages: на ней проверяется экран «Откройте в Telegram».
  */
 export default defineConfig({
   testDir: "tests/e2e",
+  outputDir: "test-results/e2e",
   timeout: 60000,
   // У каждого теста свой контекст браузера и своя база: тесты независимы и идут параллельно.
   fullyParallel: true,
@@ -27,9 +28,9 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: `CONTENT_ROOT=tests/fixtures/mechanics npm run content && npx tsc -b && VITE_TELEGRAM_MOCK=1 npx vite build && BASE_PATH=/web/ npx vite build --outDir dist/web && npx vite preview --host 0.0.0.0 --port ${port} --strictPort`,
+    command: `node scripts/e2e-server.ts mechanics tests/fixtures/mechanics ${port} --web`,
     url: `http://localhost:${port}`,
-    reuseExistingServer: true,
+    reuseExistingServer: false,
     timeout: 120000,
   },
 });
