@@ -11,6 +11,7 @@ import { STORED_KINDS } from "../src/storage/kinds";
 import { submitAnswer } from "../src/storage/ops";
 import { courseProgress, type CourseProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
+import { markRead, moduleReadings, nextReading, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 
 const demo = buildContent("tests/fixtures/course-demo");
@@ -184,5 +185,45 @@ describe("живые запросы курса не перечитывают п�
     });
     expect(inside).toEqual([]);
     expect(await STORED_KINDS.mistake.presentIds([forms], db)).toEqual([]);
+  });
+
+  it("тексты для чтения читают только пакеты с нужными текстами, а не все установленные", async () => {
+    let runs = 0;
+    const reading = watch(() => (runs++, nextReading("greek-a2", db)));
+    await settle();
+    expect(reading.seen.at(-1)).toBeUndefined();
+    let [before, ran] = [reads.rows, runs];
+    // Перезапуск строки «Почитать» не читает пакеты непройденных уроков.
+    await db.lessons.update("m01-test", { title: "Контрольная" });
+    await settle();
+    expect(runs).toBeGreaterThan(ran);
+    expect(reads.rows - before).toBe(0);
+
+    before = reads.rows;
+    await db.lessons.update("m01-1", { completed: true });
+    await settle();
+    expect(reading.seen.at(-1)?.reading.id).toBe("r-m01-anna");
+    // Пройденный урок: его сводка (один раз) и сам пакет с текстом.
+    expect(reads.rows - before).toBe(2);
+
+    const pack = demo.packages.find((item) => item.id === "m01-1")!;
+    const renamed = pack.readings!.map((text, index) => (index ? text : { ...text, title: "Новый текст" }));
+    await applyPackage({ ...pack, version: `${pack.version}-next`, readings: renamed }, db);
+    await settle();
+    expect(reading.seen.at(-1)?.reading.title).toBe("Новый текст");
+    await markRead("r-m01-anna", true, db);
+    await settle();
+    expect(reading.seen.at(-1)).toBeUndefined();
+    reading.stop();
+
+    // Из четырёх пакетов модуля тексты есть у двух: после первого чтения сводок читаются только они.
+    await moduleReadings("m01", db);
+    before = reads.rows;
+    expect((await moduleReadings("m01", db)).map((view) => view.reading.id)).toEqual(["r-m01-anna", "r-m01-lemesos"]);
+    expect(reads.rows - before).toBe(2);
+    before = reads.rows;
+    expect((await readingPage("r-m01-lemesos", db))?.reading.id).toBe("r-m01-lemesos");
+    expect(reads.rows - before).toBe(2);
+    expect(await readingPage("r-missing", db)).toBeNull();
   });
 });

@@ -12,6 +12,8 @@ export interface LessonOutline {
   tasks: string[];
   skills: SkillTask[];
   mistakes: Set<string>;
+  module?: { id: string; position: number };
+  readings: string[];
 }
 
 /** Задания к чтению и аудированию без текста не решить: их пункты в повторение не идут. */
@@ -26,6 +28,8 @@ const outlineOf = (pack: InstalledPackage): LessonOutline => ({
   tasks: taskIds(pack.blocks ?? []),
   skills: skillTasks(pack.blocks ?? []),
   mistakes: new Set(mistakeIdsOf(pack.lessonId, pack.blocks)),
+  module: pack.module,
+  readings: (pack.readings ?? []).map((reading) => reading.id),
 });
 
 interface Cache {

@@ -3,6 +3,7 @@ import type { InstalledPackage } from "../domain/types";
 import { blockKey, saveBlockProgress, type TapCard } from "./course";
 import { courseLessonIds } from "./courses";
 import { db, type AppDatabase } from "./db";
+import { lessonOutlines, type LessonOutline } from "./outlines";
 
 /** Отметка «прочитано» — строка блока текста: ключ `<текст>/read` переносится синхронизацией как блок урока. */
 const READ_BLOCK = "read";
@@ -41,8 +42,23 @@ async function views(packages: InstalledPackage[], database: AppDatabase): Promi
     ...(marks[index]?.done ? { readAt: marks[index]!.updatedAt } : {}),
   }));
 }
+/** Пакеты целиком весят мегабайты: выбор — по сводкам, читаются только пакеты с нужными текстами. */
+async function packagesWith(
+  ids: string[],
+  wanted: (outline: LessonOutline, id: string) => boolean,
+  database: AppDatabase,
+): Promise<InstalledPackage[]> {
+  const outlines = await lessonOutlines(ids, database);
+  const chosen = ids.filter((id, index) => {
+    const outline = outlines[index];
+    return !!outline?.readings.length && wanted(outline, id);
+  });
+  return (await database.packages.bulkGet(chosen)).filter((pack): pack is InstalledPackage => !!pack);
+}
+const installedIds = async (database: AppDatabase) =>
+  (await database.packages.toCollection().primaryKeys()) as string[];
 const modulePackages = async (moduleId: string, database: AppDatabase) =>
-  (await database.packages.toArray()).filter((pack) => pack.module?.id === moduleId);
+  packagesWith(await installedIds(database), (outline) => outline.module?.id === moduleId, database);
 
 /** Тексты модуля в порядке программы: по месту открывающего урока, внутри урока — по порядку пакета. */
 export const moduleReadings = async (moduleId: string, database: AppDatabase = db) =>
@@ -50,10 +66,13 @@ export const moduleReadings = async (moduleId: string, database: AppDatabase = d
 
 /** Экран текста: сам текст, разметка слов, карточки подсказок и следующий текст модуля. */
 export async function readingPage(id: string, database: AppDatabase = db): Promise<ReadingPage | null> {
-  const owner = (await database.packages.toArray()).find((pack) => pack.readings?.some((reading) => reading.id === id));
+  const ids = await installedIds(database);
+  const owner = (await lessonOutlines(ids, database)).find((outline) => outline?.readings.includes(id));
   if (!owner?.module) return null;
   const all = await moduleReadings(owner.module.id, database);
   const at = all.findIndex((view) => view.reading.id === id);
+  // Сводка могла устареть: пакет обновился между выбором владельца и чтением.
+  if (at < 0) return null;
   const view = all[at];
   return {
     ...view,
@@ -65,12 +84,15 @@ export async function readingPage(id: string, database: AppDatabase = db): Promi
 
 /** Первый открытый непрочитанный текст курса — строка «Почитать» на «Сегодня». */
 export async function nextReading(courseId: string, database: AppDatabase = db): Promise<ReadingView | undefined> {
-  const own = new Set(await courseLessonIds(courseId, database));
-  const packages = (await database.packages.toArray()).filter((pack) => own.has(pack.lessonId));
+  // Текст закрытого урока «Сегодня» не предлагает: пакеты непройденных уроков не читаются.
+  const completed = (await database.lessons.toArray()).flatMap((lesson) => (lesson.completed ? [lesson.id] : []));
+  const packages = await packagesWith(completed, () => true, database);
   const modules = new Map((await database.modules.toArray()).map((module) => [module.id, module.number]));
   const all = await views(packages, database);
+  // Курс — последним: чтения после `await courseLessonIds` живой запрос не отслеживает.
+  const own = new Set(await courseLessonIds(courseId, database));
   return all
-    .filter((view) => view.open && !view.readAt)
+    .filter((view) => own.has(view.after.id) && view.open && !view.readAt)
     .sort((a, b) => (modules.get(a.moduleId) ?? 0) - (modules.get(b.moduleId) ?? 0))[0];
 }
 
