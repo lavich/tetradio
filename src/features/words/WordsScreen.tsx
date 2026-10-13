@@ -1,7 +1,7 @@
-import { memo, useDeferredValue, useMemo, useState } from "react";
+import { memo, useDeferredValue, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Search } from "lucide-react";
-import { Link, useLocation, useNavigationType, useParams, useSearchParams } from "react-router-dom";
+import { useHref, useLocation, useNavigate, useNavigationType, useParams, useSearchParams } from "react-router-dom";
 import { KEEP_SCROLL } from "../../app/scroll";
 import { Screen } from "../../app/Screen";
 import { CourseSwitch } from "../../shared/CourseSwitch";
@@ -33,6 +33,7 @@ const FILTERS: { key: Filter; label: string }[] = [
 const toFilter = (value: string | null): Filter => FILTERS.find((item) => item.key === value)?.key ?? "all";
 const searchOf = (query: string, filter: Filter) =>
   new URLSearchParams({ ...(query && { q: query }), ...(filter !== "all" && { filter }) });
+const URL_DELAY = 300;
 const MARK_LABEL: Record<CardMark, string> = { new: "не начато", learning: "учу", solid: "закреплено" };
 
 export const entryPath = (entry: Pick<DictionaryEntry, "ref">) =>
@@ -120,17 +121,58 @@ function Dictionary({
       setFilter(toFilter(params.get("filter")));
     }
   }
+  const navigate = useNavigate();
+  const base = useHref("/").replace(/\/$/, "");
+  const timer = useRef<number | undefined>(undefined);
   // Замена, а не новая запись: «Назад» со слова возвращает тот же поиск, а история не копит буквы.
-  const remember = (next: { q?: string; filter?: Filter }) => {
-    const q = next.q ?? query;
-    const mark = next.filter ?? filter;
-    setQuery(q);
-    setFilter(mark);
+  const write = (q: string, mark: Filter) => {
+    clearTimeout(timer.current);
+    timer.current = undefined;
     setParams(searchOf(q, mark), { replace: true });
+  };
+  const flush = () => {
+    if (timer.current !== undefined) write(query, filter);
+  };
+  useEffect(() => () => clearTimeout(timer.current), []);
+  useEffect(() => {
+    if (navigation === "REPLACE") return;
+    clearTimeout(timer.current);
+    timer.current = undefined;
+  }, [key, navigation]);
+  const changeQuery = (q: string) => {
+    setQuery(q);
+    clearTimeout(timer.current);
+    // WebKit бросает SecurityError после ~100 replaceState за 10 с, поэтому адрес — не на каждый символ.
+    timer.current = window.setTimeout(() => write(q, filter), URL_DELAY);
+  };
+  const changeFilter = (mark: Filter) => {
+    setFilter(mark);
+    write(query, mark);
+  };
+  // Строки — обычные ссылки без подписки на адрес: иначе каждый символ поиска перерисовывал бы все ~1300.
+  const open = (event: MouseEvent) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    )
+      return;
+    const link = (event.target as Element).closest<HTMLAnchorElement>("a[data-path]");
+    if (!link?.dataset.path) return;
+    event.preventDefault();
+    flush();
+    if (spread)
+      void navigate(
+        { pathname: link.dataset.path, search: searchOf(query, filter).toString() },
+        { state: KEEP_SCROLL },
+      );
+    else void navigate(link.dataset.path);
   };
   const shownQuery = useDeferredValue(query);
   const shownFilter = useDeferredValue(filter);
-  const search = spread ? searchOf(shownQuery, shownFilter).toString() : "";
   const { names, code } = useProfile();
   const counts = useMemo(() => countMarks(lessons), [lessons]);
   const shown = useMemo(() => filterDictionary(lessons, shownFilter, shownQuery), [lessons, shownFilter, shownQuery]);
@@ -149,7 +191,7 @@ function Dictionary({
     [shown, current],
   );
   return (
-    <section className={cx(nb.page, css.page)} aria-label="Словарь">
+    <section className={cx(nb.page, css.page)} aria-label="Словарь" onClick={open}>
       {switcher && <CourseSwitch />}
       <h1 className={nb.title}>Словарь</h1>
       <p className={nb.meta} data-testid="word-count">
@@ -162,7 +204,8 @@ function Dictionary({
         <input
           type="search"
           value={query}
-          onChange={(event) => remember({ q: event.target.value })}
+          onChange={(event) => changeQuery(event.target.value)}
+          onBlur={flush}
           placeholder="Найти слово или фразу"
           aria-label={`Поиск ${names.by} или русскому`}
           autoComplete="off"
@@ -174,7 +217,7 @@ function Dictionary({
         {FILTERS.map((item, index) => (
           <span key={item.key}>
             {index > 0 && <span aria-hidden> · </span>}
-            <button type="button" aria-pressed={filter === item.key} onClick={() => remember({ filter: item.key })}>
+            <button type="button" aria-pressed={filter === item.key} onClick={() => changeFilter(item.key)}>
               {item.label} {counts[item.key]}
             </button>
           </span>
@@ -187,13 +230,13 @@ function Dictionary({
       ) : (
         shown.map((lesson, index) => (
           <LessonSection
-            key={lesson.id}
+            // Новый элемент при другом числе строк: contain-intrinsic-size: auto помнил бы высоту прежнего набора.
+            key={`${lesson.id}:${lesson.entries.length}`}
             lesson={lesson}
             newModule={index === 0 || shown[index - 1].moduleId !== lesson.moduleId}
             code={code}
             current={lesson.id === currentLesson ? current : undefined}
-            search={search}
-            spread={spread}
+            base={base}
           />
         ))
       )}
@@ -208,26 +251,25 @@ const LessonSection = memo(function LessonSection({
   newModule,
   code,
   current,
-  search,
-  spread,
+  base,
 }: {
   lesson: DictionaryLesson;
   newModule: boolean;
   code: string;
   current?: string;
-  search: string;
-  spread: boolean;
+  base: string;
 }) {
+  const heading = newModule && !!lesson.moduleId;
   const solid = lesson.entries.filter((entry) => entry.mark === "solid").length;
   return (
     <section
       className={css.section}
       // Оценка занижена: страница длиннее настоящей не вернула бы позицию у конца списка после «Назад».
-      style={{ containIntrinsicSize: `auto ${lesson.entries.length * 48 + (newModule ? 112 : 52)}px` }}
+      style={{ containIntrinsicSize: `auto ${lesson.entries.length * 48 + (heading ? 112 : 52)}px` }}
       aria-label={lesson.title}
       data-testid="dictionary-lesson"
     >
-      {newModule && lesson.moduleId && (
+      {heading && (
         <p className={css.module}>
           Модуль {String(lesson.moduleNumber).padStart(2, "0")} · <span lang={code}>{lesson.moduleTitle}</span>
         </p>
@@ -242,9 +284,9 @@ const LessonSection = memo(function LessonSection({
       <ul className={css.rows}>
         {lesson.entries.map((entry) => (
           <li key={entry.key}>
-            <Link
-              to={spread ? { pathname: entryPath(entry), search } : entryPath(entry)}
-              state={spread ? KEEP_SCROLL : undefined}
+            <a
+              href={base + entryPath(entry)}
+              data-path={entryPath(entry)}
               className={css.row}
               aria-current={current === refKey(entry) ? "page" : undefined}
             >
@@ -253,7 +295,7 @@ const LessonSection = memo(function LessonSection({
               </span>
               <span className={css.russian}>{entry.russian}</span>
               <Mark mark={entry.mark} />
-            </Link>
+            </a>
           </li>
         ))}
       </ul>

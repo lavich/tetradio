@@ -8,6 +8,9 @@ const USER_INPUT = ["wheel", "touchstart", "pointerdown", "keydown"] as const;
 /** Переход по ссылке с таким состоянием оставляет прокрутку: на развороте словаря лист слова липнет к верху сам. */
 export const KEEP_SCROLL = { keepScroll: true };
 
+const loadType = () =>
+  (performance.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined)?.type ?? "navigate";
+
 function readPosition(key: string) {
   try {
     return Number(sessionStorage.getItem(PREFIX + key)) || 0;
@@ -23,6 +26,10 @@ function savePosition(key: string, top: number) {
   }
 }
 
+const UNKEYED = "default";
+const RESTORING = "data-restoring";
+const SETTLED_FRAMES = 10;
+
 /** Позиция «Назад» возвращается, когда экран дорос до неё: данные приходят live-запросами после первого кадра. */
 export function useScrollMemory(root: RefObject<HTMLElement | null>) {
   const location = useLocation();
@@ -32,62 +39,74 @@ export function useScrollMemory(root: RefObject<HTMLElement | null>) {
 
   useEffect(() => {
     history.scrollRestoration = "manual";
-    const save = () => savePosition(current.current, Math.round(window.scrollY));
+    const save = () => {
+      if (root.current?.hasAttribute(RESTORING)) return;
+      savePosition(current.current, Math.round(window.scrollY));
+    };
     window.addEventListener("scroll", save, { passive: true });
     return () => window.removeEventListener("scroll", save);
-  }, []);
+  }, [root]);
 
   useLayoutEffect(() => {
+    const previous = current.current;
+    const mounted = previous === location.key;
     current.current = location.key;
     const moved = path.current !== location.pathname;
     path.current = location.pathname;
-    if (action !== "POP") {
-      const keep = (location.state as { keepScroll?: boolean } | null)?.keepScroll;
-      if (!keep && (action === "PUSH" || moved)) window.scrollTo(0, 0);
-      return;
+    if (action === "POP") {
+      // Первая запись вкладки всегда "default": новая загрузка взяла бы позицию прошлой.
+      if (mounted && location.key === UNKEYED && loadType() === "navigate") return savePosition(UNKEYED, 0);
+      return restore(root.current, location.key, readPosition(location.key));
     }
-    const target = readPosition(location.key);
-    const app = root.current;
-    let observer: ResizeObserver | undefined;
-    let timer = 0;
-    let frame = 0;
-    const listen = (on: boolean) => {
-      for (const type of USER_INPUT)
-        if (on) window.addEventListener(type, stop, { passive: true });
-        else window.removeEventListener(type, stop);
-    };
-    function stop() {
-      observer?.disconnect();
-      clearTimeout(timer);
-      listen(false);
-      // Снимается через кадр: размеры частей должны успеть запомниться (contain-intrinsic-size: auto).
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        frame = requestAnimationFrame(() => app?.removeAttribute("data-restoring"));
-      });
-    }
-    const attempt = () => {
-      window.scrollTo(0, target);
-      if (Math.abs(window.scrollY - target) < 1) stop();
-    };
-    const cleanup = () => {
-      stop();
-      cancelAnimationFrame(frame);
-      app?.removeAttribute("data-restoring");
-    };
-    if (!target || !app || typeof ResizeObserver !== "function") {
-      window.scrollTo(0, target);
-      return;
-    }
-    // Без content-visibility на время возврата: оценка высоты непоказанных частей сдвинула бы позицию.
-    app.setAttribute("data-restoring", "");
-    attempt();
-    if (Math.abs(window.scrollY - target) >= 1) {
-      observer = new ResizeObserver(attempt);
-      observer.observe(app);
-      timer = window.setTimeout(stop, RESTORE_TIMEOUT);
-      listen(true);
-    }
-    return cleanup;
+    if (action === "REPLACE" && !moved) return savePosition(location.key, readPosition(previous));
+    if ((location.state as { keepScroll?: boolean } | null)?.keepScroll)
+      return restore(root.current, location.key, readPosition(previous));
+    window.scrollTo(0, 0);
   }, [location.key, location.pathname, location.state, action, root]);
+}
+
+/** Сдаётся при вводе, по таймауту или когда выросшая страница перестала меняться: цель недостижима. */
+function restore(app: HTMLElement | null, key: string, target: number) {
+  savePosition(key, target);
+  window.scrollTo(0, target);
+  if (!app || Math.abs(window.scrollY - target) < 1) return;
+  let timer = 0;
+  let frame = 0;
+  let height = -1;
+  let grown = false;
+  let still = 0;
+  const listen = (on: boolean) => {
+    for (const type of USER_INPUT)
+      if (on) window.addEventListener(type, stop, { passive: true });
+      else window.removeEventListener(type, stop);
+  };
+  function stop() {
+    clearTimeout(timer);
+    listen(false);
+    // Через два кадра: contain-intrinsic-size: auto должен успеть запомнить настоящие высоты.
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => app?.removeAttribute(RESTORING));
+    });
+  }
+  const tick = () => {
+    const now = document.documentElement.scrollHeight;
+    if (now !== height) {
+      grown ||= height >= 0;
+      height = now;
+      still = 0;
+      window.scrollTo(0, target);
+      if (Math.abs(window.scrollY - target) < 1) return stop();
+    } else if (grown && ++still >= SETTLED_FRAMES) return stop();
+    frame = requestAnimationFrame(tick);
+  };
+  app.setAttribute(RESTORING, "");
+  timer = window.setTimeout(stop, RESTORE_TIMEOUT);
+  listen(true);
+  tick();
+  return () => {
+    stop();
+    cancelAnimationFrame(frame);
+    app.removeAttribute(RESTORING);
+  };
 }
