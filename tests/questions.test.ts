@@ -63,4 +63,14 @@ describe("вопросы к тексту при сборке", () => {
     );
     expect(buildContent(root).unfamiliar.join("\n")).not.toMatch(/κολυμπάει/);
   });
+
+  it("греческий вопрос с выбором ответа в модулях 1–8 отклоняет сборку", () => {
+    const root = demoWith((body) =>
+      body.replace(
+        "          - Σωστό\n          - Λάθος\n        answer: Λάθος",
+        "          - Ναι\n          - Όχι\n        answer: Όχι",
+      ),
+    );
+    expect(() => buildContent(root)).toThrow(/anna-tf: в модулях 1–8 вопросы с выбором ответа — по-русски/);
+  });
 });

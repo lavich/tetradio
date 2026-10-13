@@ -16,6 +16,10 @@ import { cardDescriber } from "./mark-courses.ts";
 
 /** Ответы «верно/неверно» названы в инструкции задания. */
 const VERDICTS = new Set(["Σωστό", "Λάθος"]);
+/** До пробника K1 (модули 1–8) вопросы с выбором ответа — по-русски: греческих вопросительных слов ещё мало. */
+const RUSSIAN_THROUGH = 8;
+const isVerdict = (block: { items: { options?: string[] }[] }) =>
+  block.items.every((item) => (item.options ?? []).every((option) => VERDICTS.has(option)));
 const ADJECTIVE = ["η", "ο", "ον", "οι", "ες", "α", "ου", "ους", "ων", "ης", "ε"];
 const STRESSED = ["ή", "ό", "όν", "οί", "ές", "ά", "ού", "ούς", "ών", "ής", "έ"];
 
@@ -51,13 +55,16 @@ const greekOnly = (block: { items: { prompt: string }[] }) =>
 interface Input {
   courses: CatalogCourse[];
   modules: CatalogModule[];
+  moduleOf: Map<string, { id: string }>;
   drafts: Map<string, ContentPackage>;
   words: Map<string, PackageWord>;
   phrases: Map<string, PackagePhrase>;
 }
 
 /** Вопросы с выбором ответа к тексту или аудио — на одном языке; непройденные слова греческих вопросов — в отчёт. */
-export function checkQuestions({ courses, modules, drafts, words, phrases }: Input) {
+export function checkQuestions({ courses, modules, moduleOf, drafts, words, phrases }: Input) {
+  const numberOf = new Map(modules.map((module) => [module.id, module.number]));
+  const checkpoints = new Set(modules.flatMap((module) => [module.checkpointId ?? "", ...(module.reviewIds ?? [])]));
   const describe = cardDescriber(words, phrases);
   const cribOf = new Map<string, string[]>();
   for (const module of modules) {
@@ -76,6 +83,10 @@ export function checkQuestions({ courses, modules, drafts, words, phrases }: Inp
       if (scripts.has("both")) problems.push(`${where}: вопрос на двух языках — пояснение выносится в скобки`);
       else if (scripts.size > 1) problems.push(`${where}: вопросы на греческом и на русском — в задании один язык`);
       if (scripts.size !== 1 || !scripts.has("el")) continue;
+      const placement = moduleOf.get(lessonId);
+      const number = placement && numberOf.get(placement.id);
+      if (number && number <= RUSSIAN_THROUGH && !checkpoints.has(lessonId) && !isVerdict(block))
+        problems.push(`${where}: в модулях 1–${RUSSIAN_THROUGH} вопросы с выбором ответа — по-русски`);
       for (const item of block.items)
         for (const option of item.options ?? [])
           if (!VERDICTS.has(option) && scriptOf(option) !== "el" && scriptOf(option) !== undefined)

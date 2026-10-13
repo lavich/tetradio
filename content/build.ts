@@ -87,7 +87,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   // Слова прошлых уроков известны только после разбора всех уроков, поэтому версии считаются после разметки.
   const marks = markCourses(courses, modules, moduleOf, drafts, words, phrases);
   const readings = buildReadings({ sources, courses, modules, moduleOf, drafts, words, phrases, media, legacy, art });
-  const unfamiliar = checkQuestions({ courses, modules, drafts, words, phrases });
+  const unfamiliar = checkQuestions({ courses, modules, moduleOf, drafts, words, phrases });
   const { packages, entries, files } = packLessons(drafts, marks, readings.byLesson, readings.mediaOf);
   checkCoverage({ sources, words, phrases, used, checkpoints, reviews, lessonsForModule, modules });
   for (const { item, body } of media.values()) files.push({ path: item.url, body, mimeType: item.mimeType });
