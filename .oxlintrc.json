@@ -18,8 +18,7 @@
   },
   "ignorePatterns": [
     "dist",
-    "dist-course",
-    "dist-courses",
+    ".e2e",
     "public/content",
     "docs/art-sheet.html",
     ".vitest",

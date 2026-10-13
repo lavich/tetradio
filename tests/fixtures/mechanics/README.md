@@ -1,6 +1,6 @@
 # Фикстура механик
 
-Источник контента для unit-тестов (`tests/helpers/content.ts`) и браузерных проверок механик (`playwright.config.ts`, `CONTENT_ROOT=tests/fixtures/mechanics`). В продукт не входит.
+Источник контента для unit-тестов (`tests/helpers/content.ts`) и браузерных проверок механик (`playwright.config.ts` через `scripts/e2e-server.ts`). В продукт не входит.
 
 Формат — как у `content/` (`docs/course/format.md`). Слова и фразы скопированы из `content/words/greek-a2` и `content/phrases/greek-a2` модулей 01–03 с теми же `w…`/`p…`; ради проверок механик к копиям добавлены `verified`, `reading`, `examples` (у `ο γιατρός` — с разметкой слов) и `image`. Тексты примеров — собственные, не материал курса.
 

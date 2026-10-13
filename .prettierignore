@@ -33,8 +33,7 @@ package-lock.json
 .impeccable
 docs/audit
 docs/design
-dist-course
-dist-courses
+.e2e
 
 # Рабочие копии агентов
 .claude

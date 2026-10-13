@@ -6,6 +6,7 @@ const port = Number(process.env.PLAYWRIGHT_COURSES_PORT ?? 4175);
  */
 export default defineConfig({
   testDir: "tests/e2e-courses",
+  outputDir: "test-results/e2e-courses",
   timeout: 60000,
   // У каждого теста свой контекст браузера и своя база: тесты независимы и идут параллельно.
   fullyParallel: true,
@@ -24,7 +25,7 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: `CONTENT_ROOT=tests/fixtures/two-courses npm run content && npx tsc -b && VITE_TELEGRAM_MOCK=1 npx vite build --outDir dist-courses && npx vite preview --outDir dist-courses --host 0.0.0.0 --port ${port} --strictPort`,
+    command: `node scripts/e2e-server.ts courses tests/fixtures/two-courses ${port}`,
     url: `http://localhost:${port}`,
     reuseExistingServer: false,
     timeout: 120000,

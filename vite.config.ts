@@ -11,6 +11,8 @@ import { renderLanding } from "./src/landing/render.ts";
 import { loadLandingData } from "./src/landing/sample.ts";
 
 const base = process.env.BASE_PATH ?? "/";
+/** e2e собирают контент фикстуры в свою папку (`scripts/e2e-server.ts`), а не в общий `public/`. */
+const publicDir = process.env.PUBLIC_DIR ?? "public";
 /** Версия и сборка попадают в метки отчётов о сбоях и в имя релиза; без CI сборка называется `dev`. */
 const appVersion = (JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as { version: string })
   .version;
@@ -69,7 +71,7 @@ const landingPage = (): Plugin => {
       handler(html, ctx) {
         if (path.resolve(ctx.filename) !== path.join(root, "index.html")) return html;
         const read = (url: string) => {
-          const file = path.join(root, "public", url);
+          const file = path.join(path.resolve(root, publicDir), url);
           return existsSync(file) ? readFileSync(file, "utf8") : null;
         };
         const mock = /^[1-9]\d{0,15}$/.test(env.VITE_TELEGRAM_MOCK ?? "");
@@ -107,7 +109,8 @@ const tunnelHost = process.env.TUNNEL_HOST;
 
 export default defineConfig({
   base,
-  server: { allowedHosts: tunnelHost ? [tunnelHost] : undefined },
+  publicDir,
+  server: { allowedHosts: tunnelHost ? [tunnelHost] : undefined, watch: { ignored: ["**/.e2e/**"] } },
   define: { __APP_VERSION__: JSON.stringify(appVersion), __APP_BUILD__: JSON.stringify(appBuild) },
   // Карты кода нужны только для загрузки в сервис: без реквизитов их нет и в dist, с реквизитами плагин удаляет их после загрузки.
   // Service worker собирается позже этого удаления, поэтому его карты выключены отдельно (`workbox.sourcemap:false`).
