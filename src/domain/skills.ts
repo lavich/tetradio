@@ -72,7 +72,7 @@ export interface StatsSummary {
   answeredKeys: string[];
 }
 export const emptyStats = (): StatsSummary => ({ days: [], recentByType: {}, answers: 0, answeredKeys: [] });
-/** Ответы по порядку времени; ключи копятся во множествах, иначе каждая проверка шла бы по всему списку. */
+/** Ответы — по порядку времени: от него зависят последние исходы по типам. */
 export function foldStats(
   summary: StatsSummary,
   events: Pick<ReviewEvent, "type" | "correct" | "rating" | "unitKey" | "localDate">[],

@@ -282,7 +282,6 @@ export async function applySnapshot(
         else pending[lesson.id] = lesson;
       }
       await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
-      // Как и блоки: завершение урока, которого в версии нет, снимается.
       const listed = new Set(snapshot.lessons.map((lesson) => lesson.id));
       for (const lesson of await database.lessons.toArray())
         if (lesson.completed && !listed.has(lesson.id))
