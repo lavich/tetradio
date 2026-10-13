@@ -1,8 +1,9 @@
 import type { CardFacts } from "../domain/kinds";
-import type { ExerciseBlock, LessonBlock } from "../content/course";
+import type { LessonBlock } from "../content/course";
 import type { CardKind, InstalledPackage, MistakeItem, SessionCard } from "../domain/types";
 import type { AppDatabase } from "./db";
 import { lessonCourses } from "./lesson-courses";
+import { lessonOutlines, mistakeId, mistakeIdsOf, reviewable } from "./outlines";
 
 /**
  * Хранение вида карточки: где лежит содержимое и как его читать. Пара к `KINDS` домена;
@@ -51,9 +52,6 @@ const phrase: StoredKind = {
   packageIds: (pack) => pack.phrases.map((card) => card.id),
 };
 
-/** Задания к чтению и аудированию без текста не решить: их пункты в повторение не идут. */
-const reviewable = (block: LessonBlock): block is ExerciseBlock => block.type === "exercise" && !block.about;
-const mistakeId = (lessonId: string, blockId: string, itemId: string) => `${lessonId}/${blockId}/${itemId}`;
 /** Пункты по идентификаторам из установленных пакетов; убранного пункта в ответе нет. */
 async function mistakeItems(ids: string[], database: AppDatabase): Promise<Map<string, MistakeItem>> {
   const wanted = new Set(ids);
@@ -83,15 +81,17 @@ async function mistakeItems(ids: string[], database: AppDatabase): Promise<Map<s
 }
 const mistake: StoredKind = {
   tables: ["packages"],
-  presentIds: async (ids, database) => [...(await mistakeItems(ids, database)).keys()],
+  presentIds: async (ids, database) => {
+    const wanted = [...new Set(ids)];
+    const outlines = await lessonOutlines([...new Set(wanted.map((id) => id.split("/")[0]))], database);
+    const present = new Set(outlines.flatMap((outline) => [...(outline?.mistakes ?? [])]));
+    return wanted.filter((id) => present.has(id));
+  },
   contents: async (ids, database) =>
     [...(await mistakeItems(ids, database)).values()].map((item) => ({ kind: "mistake" as const, mistake: item })),
   facts: async (ids) => new Map(ids.map((id) => [id, { kind: "mistake" as const }])),
   count: (database) => database.cardStates.where("ref.kind").equals("mistake").count(),
-  packageIds: (pack) =>
-    (pack.blocks ?? [])
-      .filter(reviewable)
-      .flatMap((block) => block.items.map((item) => mistakeId(pack.id, block.id, item.id))),
+  packageIds: (pack) => mistakeIdsOf(pack.id, pack.blocks),
   // Курс ошибки — курс её урока: связей с уроками в `lessonItems` у неё нет.
   coursesOf: async (ids, database) => {
     const courses = await lessonCourses(

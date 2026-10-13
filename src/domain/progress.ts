@@ -86,11 +86,26 @@ export interface SkillProgress {
   source: "task" | "self";
 }
 
+export interface SkillTask {
+  id: string;
+  skill: Skill;
+  size: number;
+}
+export function skillTasks(blocks: LessonBlock[]): SkillTask[] {
+  return blocks.flatMap((block): SkillTask[] => {
+    if (block.type === "writing" || block.type === "speaking")
+      return [{ id: block.id, skill: block.type, size: block.criteria.length }];
+    if (block.type !== "exercise") return [];
+    const skill = skillOf(block, blocks);
+    return skill ? [{ id: block.id, skill, size: block.items.length }] : [];
+  });
+}
+
 /**
  * Прогресс навыка по всему курсу: верное из всего, что курс даёт по навыку. Чтение и аудирование — пункты заданий
  * к текстам (уроки и контрольные), «почти» засчитывается; письмо и речь — критерии самопроверки.
  */
-export function skillProgress(lessons: { blocks: LessonBlock[]; progress: Map<string, BlockProgress> }[]) {
+export function skillProgress(lessons: { tasks: SkillTask[]; progress: Map<string, BlockProgress> }[]) {
   const sums = new Map<Skill, SkillProgress>(
     SKILLS.map((skill) => [
       skill,
@@ -103,27 +118,15 @@ export function skillProgress(lessons: { blocks: LessonBlock[]; progress: Map<st
       },
     ]),
   );
-  for (const { blocks, progress } of lessons)
-    for (const block of blocks) {
-      const mark = progress.get(block.id);
-      if (block.type === "writing" || block.type === "speaking") {
-        const entry = sums.get(block.type)!;
-        entry.total += block.criteria.length;
-        if (mark?.done) {
-          entry.attempted += block.criteria.length;
-          entry.earned += mark.checks?.length ?? 0;
-        }
-        continue;
-      }
-      if (block.type !== "exercise") continue;
-      const skill = skillOf(block, blocks);
-      if (!skill) continue;
-      const entry = sums.get(skill)!;
-      entry.total += block.items.length;
-      if (mark?.done) {
-        entry.attempted += block.items.length;
-        entry.earned += mark.score ? mark.score.correct + mark.score.almost : 0;
-      }
+  for (const { tasks, progress } of lessons)
+    for (const task of tasks) {
+      const mark = progress.get(task.id);
+      const entry = sums.get(task.skill)!;
+      entry.total += task.size;
+      if (!mark?.done) continue;
+      entry.attempted += task.size;
+      entry.earned +=
+        entry.source === "self" ? (mark.checks?.length ?? 0) : mark.score ? mark.score.correct + mark.score.almost : 0;
     }
   return [...sums.values()];
 }

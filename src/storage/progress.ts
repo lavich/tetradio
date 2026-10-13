@@ -5,6 +5,7 @@ import type { BlockProgress } from "../domain/types";
 import { lessonDays, moduleViews, type ModuleView } from "./course";
 import { cardsInCourse, primaryCourse } from "./courses";
 import { db, type AppDatabase } from "./db";
+import { lessonOutlines } from "./outlines";
 
 export interface CourseProgress {
   views: ModuleView[];
@@ -38,8 +39,8 @@ export async function courseProgress(
   const views = await moduleViews(courseId, database);
   const course = courseId ? await database.courses.get(courseId) : undefined;
   const ids = views.flatMap((view) => lessonsOf(view).map((lesson) => lesson.id));
-  const [packs, lessons, rows] = await Promise.all([
-    database.packages.bulkGet(ids),
+  const [outlines, lessons, rows] = await Promise.all([
+    lessonOutlines(ids, database),
     database.lessons.bulkGet(ids),
     database.blockProgress.where("lessonId").anyOf(ids).toArray(),
   ]);
@@ -52,12 +53,14 @@ export async function courseProgress(
 
   const skills = skillProgress(
     ids.flatMap((id, index) => {
-      const blocks = packs[index]?.blocks;
-      return blocks ? [{ blocks, progress: progress.get(id) ?? new Map<string, BlockProgress>() }] : [];
+      const outline = outlines[index];
+      return outline?.course
+        ? [{ tasks: outline.skills, progress: progress.get(id) ?? new Map<string, BlockProgress>() }]
+        : [];
     }),
   );
   // Курс докачивается фоном: пока скачано не всё, доля считается по скачанным урокам.
-  const installed = packs.filter((pack) => pack?.blocks).length;
+  const installed = outlines.filter((outline) => outline?.course).length;
 
   const completedDays = lessons
     .filter((lesson) => lesson?.completed)
