@@ -298,6 +298,19 @@ describe("конфликты независимых изменений", () => {
     expect(await readMeta(tablet.db, META.dirty)).not.toBeNull();
     expect(resolved.dirty).toBe(true);
   });
+  it("выбор чужой версии снимает завершение уроков, которых в ней нет, как и их блоки", async () => {
+    const { phone, tablet } = await pair();
+    await installCompleted(tablet.db, ["mech-2"]);
+    await study(phone, [false, true]);
+    await study(tablet, [true, false, true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => !branch.local)!.id);
+    expect(await tablet.db.lessons.get("mech-2")).toMatchObject({ completed: false, updatedAt: now().toISOString() });
+    expect((await tablet.db.lessons.get("mech-1"))?.completed).toBe(true);
+    const [stored] = await tablet.sync.listStored();
+    expect(stored.snapshot.lessons.find((lesson) => lesson.id === "mech-2")?.completed).toBe(true);
+  });
   it("два устройства опубликовали почти одновременно: чистое устройство не принимает чужую версию молча", async () => {
     const { phone, tablet } = await pair();
     await study(phone, [true, false]);
