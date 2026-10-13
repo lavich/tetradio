@@ -6,6 +6,7 @@ import { useVoice } from "../../shared/audio";
 import { useProfile } from "../../shared/language";
 import { courseOfCard } from "../../storage/courses";
 import { lessonMates, optionPool } from "../../storage/queries";
+import { zoned } from "../../storage/zone";
 
 export const EXERCISE_LABELS: Record<WordExerciseType, string> = {
   recognition: "Узнавание",
@@ -32,9 +33,9 @@ export function useWordExercises(word: Word | undefined) {
   return word && sources && sources.id === word.id ? wordExerciseOptions(word, sources, voice, profile) : undefined;
 }
 /** Источники вариантов слова вне занятия: близкие — только соседи по урокам, пул — слова курса этого слова. */
-export async function wordSources(id: string) {
+export const wordSources = zoned(async function wordSources(id: string) {
   const key = unitKey(wordRef(id));
   const courseId = await courseOfCard(key);
   const [mates, pool] = await Promise.all([lessonMates([id]), optionPool(OPTION_POOL, courseId)]);
   return { id, close: mates.get(id) ?? [], pool };
-}
+});

@@ -199,12 +199,12 @@ describe("живые запросы курса не перечитывают п�
     expect(runs).toBeGreaterThan(ran);
     expect(reads.rows - before).toBe(0);
 
-    before = reads.rows;
+    [before, ran] = [reads.rows, runs];
     await db.lessons.update("m01-1", { completed: true });
     await settle();
     expect(reading.seen.at(-1)?.reading.id).toBe("r-m01-anna");
-    // Пройденный урок: его сводка (один раз) и сам пакет с текстом.
-    expect(reads.rows - before).toBe(2);
+    // Сводка пройденного урока — один раз, пакет с текстом — на каждый перезапуск: оптимистичный Dexie может дать два.
+    expect(reads.rows - before).toBe(1 + runs - ran);
 
     const pack = demo.packages.find((item) => item.id === "m01-1")!;
     const renamed = pack.readings!.map((text, index) => (index ? text : { ...text, title: "Новый текст" }));

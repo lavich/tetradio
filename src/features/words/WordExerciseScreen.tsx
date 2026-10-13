@@ -8,6 +8,7 @@ import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { unitKey, wordRef } from "../../domain/refs";
 import type { SessionItem } from "../../domain/types";
 import { hapticsEnabled } from "../../platform/haptics";
+import { reportError } from "../../reporting/reporting";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
 import { stopAudio, useVoice } from "../../shared/audio";
 import { useCardProfile } from "../../shared/courses";
@@ -47,25 +48,28 @@ export function WordExerciseScreen() {
   useEffect(() => {
     if (!live || !profile || !isWordExercise(type)) return;
     let alive = true;
-    void wordSources(live.id).then((sources) => {
-      if (!alive) return;
-      const exercise = buildWordExercise(live, type, sources, Math.random, voice, profile);
-      if (!exercise) {
-        const status = wordExerciseOptions(live, sources, voice, profile)[type];
-        setReason(status.available ? "" : status.reason);
-        return setItem(null);
-      }
-      setItem({
-        id: `free-${Date.now().toString(36)}-${attempt}`,
-        ref: wordRef(live.id),
-        unitKey: unitKey(wordRef(live.id)),
-        card: { kind: "word", word: live },
-        ...exercise,
-        isNew: false,
-        mode: "practice",
-        expectedVersion: 0,
-      });
-    });
+    void wordSources(live.id).then(
+      (sources) => {
+        if (!alive) return;
+        const exercise = buildWordExercise(live, type, sources, Math.random, voice, profile);
+        if (!exercise) {
+          const status = wordExerciseOptions(live, sources, voice, profile)[type];
+          setReason(status.available ? "" : status.reason);
+          return setItem(null);
+        }
+        setItem({
+          id: `free-${Date.now().toString(36)}-${attempt}`,
+          ref: wordRef(live.id),
+          unitKey: unitKey(wordRef(live.id)),
+          card: { kind: "word", word: live },
+          ...exercise,
+          isNew: false,
+          mode: "practice",
+          expectedVersion: 0,
+        });
+      },
+      (error: unknown) => void reportError(error, { category: "storage" }),
+    );
     return () => {
       alive = false;
     };

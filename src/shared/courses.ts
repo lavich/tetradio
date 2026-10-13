@@ -2,6 +2,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect } from "react";
 import { DEFAULT_LANGUAGE, PROFILES, type LanguageProfile } from "../domain/language";
 import { unitKey } from "../domain/refs";
+import { reportError } from "../reporting/reporting";
 import type { LearningRef, Session } from "../domain/types";
 import {
   activeSession,
@@ -38,7 +39,9 @@ export const useCourseSession = (courseId: string | undefined): Session | null |
 export function useFollowCourse(courseId: string | undefined) {
   useEffect(() => {
     if (!courseId) return;
-    void currentCourse().then((current) => (current === courseId ? undefined : setCurrentCourse(courseId)));
+    void currentCourse()
+      .then((current) => (current === courseId ? undefined : setCurrentCourse(courseId)))
+      .catch((error: unknown) => void reportError(error, { category: "storage" }));
   }, [courseId]);
 }
 

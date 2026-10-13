@@ -7,17 +7,25 @@ import { makePlan, makeSession, nextState } from "../src/domain/learning";
 import { unitKey, wordRef } from "../src/domain/refs";
 import { progress } from "../src/domain/stats";
 import { wordSources } from "../src/features/words/word-exercises";
-import { lessonDays, moduleViews, reviewedOn } from "../src/storage/course";
+import {
+  courseLesson,
+  lessonDays,
+  lessonMistakes,
+  moduleViews,
+  nextCourseLesson,
+  reviewedOn,
+} from "../src/storage/course";
 import {
   activeSession,
   cardsInCourse,
   courseOfCard,
   currentCourse,
+  lessonCourses,
   primaryCourse,
   profileOfCourse,
   sessionCourse,
 } from "../src/storage/courses";
-import { db } from "../src/storage/db";
+import { db, type StoredWord } from "../src/storage/db";
 import { dictionary } from "../src/storage/dictionary";
 import { submitAnswer } from "../src/storage/ops";
 import { courseProgress } from "../src/storage/progress";
@@ -65,6 +73,7 @@ function watch(query: () => unknown) {
 }
 
 let wordId = "";
+let word: StoredWord;
 const key = () => unitKey(wordRef(wordId));
 
 describe("живые запросы отслеживают чтения после вложенных async-функций", () => {
@@ -74,6 +83,7 @@ describe("живые запросы отслеживают чтения посл
     wordId = (await db.lessonItems.where("lessonId").equals("m01-1").toArray()).find(
       (item) => item.ref.kind === "word",
     )!.ref.id;
+    word = (await db.words.get(wordId))!;
     const session = await makeSession({ source: dexieSource(db), now, random: () => 0.42, courseId: COURSE });
     await db.sessions.add(session);
     await submitAnswer({
@@ -97,6 +107,17 @@ describe("живые запросы отслеживают чтения посл
     "«Сегодня»: повторено": () => reviewedOn("2026-09-15", COURSE),
     "«Сегодня»: «Почитать»": async () => (await nextReading(COURSE)) ?? null,
     "«Курс»": async () => moduleViews(await currentCourse()),
+    модуль: async () => {
+      const own = await db.modules.get("m01");
+      return (await moduleViews(own?.courseId)).find((item) => item.module.id === "m01") ?? null;
+    },
+    "урок: страница": () => courseLesson("m01-1"),
+    "урок: ошибки": () => lessonMistakes("m01-1"),
+    "урок: следующий": () => nextCourseLesson(COURSE),
+    "урок: язык": async () => {
+      const courseId = (await lessonCourses(["m01-1"])).get("m01-1");
+      return courseId ? profileOfCourse(courseId) : null;
+    },
     "модуль: тексты": () => moduleReadings("m01"),
     текст: async () => (await readingPage("r-m01-anna")) ?? null,
     "«Слова»": async () => {
@@ -109,10 +130,13 @@ describe("живые запросы отслеживают чтения посл
     "«Прогресс»: ошибки": () => mistakeCount(COURSE),
     "«Прогресс»: трудные": async () => (await cardsInCourse([key()], COURSE)).size,
     "слово: упражнения": () => wordSources(wordId),
+    "слово: навыки": () => dexieSource().skillsOf({ kind: "word", word }),
     "слово: язык": async () => profileOfCourse((await courseOfCard(key()))!),
     занятие: async () => {
       const found = await activeSession(await primaryCourse());
-      return found && profileOfCourse((await sessionCourse(found))!);
+      if (!found) return { session: null, profile: undefined };
+      const courseId = await sessionCourse(found);
+      return { session: found, profile: courseId ? await profileOfCourse(courseId) : undefined };
     },
   };
 
