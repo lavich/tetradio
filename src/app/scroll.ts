@@ -23,11 +23,7 @@ function savePosition(key: string, top: number) {
   }
 }
 
-/**
- * Прокрутка окна между экранами: переход вперёд открывает экран сверху, «Назад» возвращает прежнюю позицию.
- * Замена адреса на том же экране (поиск словаря, страница урока) прокрутку не трогает. Позиция возвращается, когда
- * экран дорос до неё: данные экранов приходят live-запросами уже после первого кадра.
- */
+/** Позиция «Назад» возвращается, когда экран дорос до неё: данные приходят live-запросами после первого кадра. */
 export function useScrollMemory(root: RefObject<HTMLElement | null>) {
   const location = useLocation();
   const action = useNavigationType();
@@ -83,8 +79,7 @@ export function useScrollMemory(root: RefObject<HTMLElement | null>) {
       window.scrollTo(0, target);
       return;
     }
-    // Пока позиция возвращается, длинные списки раскладываются целиком, без content-visibility: иначе высота ещё
-    // не показанных частей была бы оценкой и позиция пришлась бы на другое место.
+    // Без content-visibility на время возврата: оценка высоты непоказанных частей сдвинула бы позицию.
     app.setAttribute("data-restoring", "");
     attempt();
     if (Math.abs(window.scrollY - target) >= 1) {

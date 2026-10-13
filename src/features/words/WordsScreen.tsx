@@ -109,7 +109,7 @@ function Dictionary({
   const { key } = useLocation();
   const navigation = useNavigationType();
   const spread = useSpread();
-  // Своё состояние, а не чтение адреса: адрес обновляется переходом, а он у маршрутизатора не срочный и отставал бы от ввода.
+  // Не из адреса напрямую: обновление адреса у маршрутизатора не срочное и отставало бы от ввода.
   const [query, setQuery] = useState(() => params.get("q") ?? "");
   const [filter, setFilter] = useState(() => toFilter(params.get("filter")));
   const [seen, setSeen] = useState(key);
@@ -120,7 +120,7 @@ function Dictionary({
       setFilter(toFilter(params.get("filter")));
     }
   }
-  // Поиск и фильтр живут в адресе с заменой: «Назад» со слова возвращает тот же список, а история не копит буквы.
+  // Замена, а не новая запись: «Назад» со слова возвращает тот же поиск, а история не копит буквы.
   const remember = (next: { q?: string; filter?: Filter }) => {
     const q = next.q ?? query;
     const mark = next.filter ?? filter;
@@ -191,7 +191,6 @@ function Dictionary({
             lesson={lesson}
             newModule={index === 0 || shown[index - 1].moduleId !== lesson.moduleId}
             code={code}
-            // Отметка открытого слова перерисовывает только его урок, а не весь список.
             current={lesson.id === currentLesson ? current : undefined}
             search={search}
             spread={spread}
@@ -223,8 +222,7 @@ const LessonSection = memo(function LessonSection({
   return (
     <section
       className={css.section}
-      // Высота до первого показа — нижняя оценка по числу строк: страница не длиннее настоящей, иначе позиция у конца
-      // списка, запомненная до «Назад», не вернулась бы целиком.
+      // Оценка занижена: страница длиннее настоящей не вернула бы позицию у конца списка после «Назад».
       style={{ containIntrinsicSize: `auto ${lesson.entries.length * 48 + (newModule ? 112 : 52)}px` }}
       aria-label={lesson.title}
       data-testid="dictionary-lesson"

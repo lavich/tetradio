@@ -100,8 +100,7 @@ export async function dictionary(courseId?: string, database: AppDatabase = db):
 export type MarkFilter = CardMark | "all";
 
 /**
- * Карточки под фильтр состояния и запрос; уроки без подходящих карточек отброшены. Поиск — по началу слов греческого
- * и перевода: каждое слово запроса — начало какого-то слова карточки. Урок, где подошло всё, возвращается тем же
+ * Каждое слово запроса — начало какого-то слова греческого или перевода. Урок, где подошло всё, возвращается тем же
  * объектом, чтобы его строки не перерисовывались.
  */
 export function filterDictionary(lessons: DictionaryLesson[], filter: MarkFilter, query: string) {
