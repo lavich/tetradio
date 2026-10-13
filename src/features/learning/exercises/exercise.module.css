@@ -86,7 +86,7 @@
   color: var(--ok);
 }
 .verdictAlmost {
-  color: var(--almost);
+  color: var(--almost-fg);
 }
 .verdictBad {
   color: var(--pen);

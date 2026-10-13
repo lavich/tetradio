@@ -130,6 +130,9 @@
 
 /* Оттенки проверки поверх базовых цветов: «почти» — янтарный, проваленный итог — красная ручка. */
 .almost {
+  color: var(--almost-fg);
+}
+.itemMark.almost {
   color: var(--almost);
 }
 .failed {

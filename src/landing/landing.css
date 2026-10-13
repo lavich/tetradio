@@ -474,7 +474,8 @@
   color: var(--pen);
 }
 .lp-almostStrike {
-  color: var(--almost);
+  color: var(--almost-fg);
+  text-decoration-color: var(--almost);
 }
 .lp-penIns,
 .lp-almostIns {

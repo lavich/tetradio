@@ -46,9 +46,9 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
               <button
                 type="button"
                 className={css.vocabRow}
-                aria-label={`Произнести: ${word.greek}`}
                 onClick={() => void playWord(word, profile).then(heard(profile))}
               >
+                <span className="sr-only">Произнести: </span>
                 <Thumb assetId={word.imageAssetId} />
                 <span className={css.vocabText}>
                   <span className={css.vocabGreek} lang={profile.code}>
@@ -72,9 +72,9 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
               <button
                 type="button"
                 className={css.vocabRow}
-                aria-label={`Произнести: ${phrase.text}`}
                 onClick={() => void playText(phrase.text, phrase.audioAssetId, profile).then(heard(profile))}
               >
+                <span className="sr-only">Произнести: </span>
                 <span className={css.vocabText}>
                   <span className={css.vocabGreek} lang={profile.code}>
                     {phrase.text}
