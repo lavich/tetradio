@@ -26,7 +26,7 @@ colors:
   dark-background: "#17212b"
   dark-card: "#232e3c"
   dark-foreground: "#f5f5f5"
-  dark-muted-foreground: "#a3adb8"
+  dark-muted-foreground: "#a3adb8" # запасной hint; в Telegram подписи — hint с 50 % текста
   dark-primary: "#5288c1"
   dark-ok: "#4ade80"
   dark-almost: "#fbbf24"

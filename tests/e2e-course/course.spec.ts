@@ -178,6 +178,10 @@ test("урок курса: задания с ключом, чтение, ауд�
   await answers.getByRole("textbox", { name: "Ответ 2" }).fill("από την Ελλάδα");
   await answers.getByRole("button", { name: "Проверить" }).click();
   await expect(answers).toContainText("Почти — проверьте ударение: Μαρία");
+  const almostLine = answers.getByText("Почти — проверьте ударение");
+  expect(await almostLine.evaluate((node) => getComputedStyle(node).color)).toBe(await colorOf("--almost-fg"));
+  const almostTick = answers.getByRole("img", { name: "почти" });
+  expect(await almostTick.evaluate((node) => getComputedStyle(node).color)).toBe(await colorOf("--almost"));
   await expect(answers.getByRole("status")).toHaveText("2 из 2");
   // После ответа транскрипт открыт.
   await expect(listening.getByRole("list")).toContainText("Είμαι από την Ελλάδα.");
@@ -429,7 +433,7 @@ test("слова урока: нажатие произносит слово ил
   const words = await turnTo(page, "Слова урока");
   const first = words.getByRole("button", { name: /^Произнести: / }).first();
   const label = (await first.locator("[lang]").first().textContent())!;
-  await expect(first).toHaveAccessibleName(/^Произнести: \S+.*[а-яё]/);
+  await expect(first).toHaveAccessibleName(new RegExp(`^Произнести: ${label} .*[а-яё]`));
   await first.click();
   await expect
     .poll(() => page.evaluate(() => (window as unknown as { __spoken?: string[] }).__spoken ?? []))
