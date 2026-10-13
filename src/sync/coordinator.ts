@@ -413,8 +413,9 @@ export class SyncCoordinator {
     clock[device] = (clock[device] ?? 0) + 1;
     const id = `${device}-${clock[device]}`;
     const now = this.options.now();
+    // Версия уже применена и сняла метку: любая метка после этого — изменение, которого в версии нет.
     const { snapshot, mark } = override
-      ? { snapshot: override, mark: await readMeta(database, META.dirty) }
+      ? { snapshot: override, mark: null }
       : await buildAndCommitMarked(database, now, id);
     const meta = {
       id,

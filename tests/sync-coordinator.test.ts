@@ -2,7 +2,8 @@ import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
-import { submitAnswer } from "../src/storage/ops";
+import Dexie from "dexie";
+import { markChanged, submitAnswer } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { kvAdapter } from "../src/sync/adapter";
@@ -273,6 +274,29 @@ describe("конфликты независимых изменений", () => {
     expect(await tablet.db.events.count()).toBe(3); // собственная история устройства не удаляется, чужая не копируется
     expect((await phone.sync.exchange()).phase).toBe("synced");
     expect(await statesOf(phone)).toEqual(phoneStates);
+  });
+  it("ответ, записанный во время применения выбранной облачной версии, остаётся неопубликованным изменением", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false, true]);
+    await study(tablet, [true, false, true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    const remote = conflict.conflict!.branches.find((branch) => !branch.local)!;
+    let answered: Promise<unknown> | null = null;
+    const answer = () => {
+      // Запись встаёт в очередь за транзакцией применения и выполняется раньше следующего чтения координатора.
+      answered ??= Dexie.ignoreTransaction(() => markChanged(tablet.db));
+    };
+    tablet.db.baseSummary.hook("creating", answer);
+    tablet.db.baseSummary.hook("updating", answer);
+    const resolved = await tablet.sync.resolve(remote.id);
+    tablet.db.baseSummary.hook("creating").unsubscribe(answer);
+    tablet.db.baseSummary.hook("updating").unsubscribe(answer);
+    expect(answered).not.toBeNull();
+    await answered;
+    expect(resolved.phase).toBe("synced");
+    expect(await readMeta(tablet.db, META.dirty)).not.toBeNull();
+    expect(resolved.dirty).toBe(true);
   });
   it("два устройства опубликовали почти одновременно: чистое устройство не принимает чужую версию молча", async () => {
     const { phone, tablet } = await pair();
