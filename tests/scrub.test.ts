@@ -71,6 +71,33 @@ describe("очистка события", () => {
     );
     expect(out.breadcrumbs).toEqual([{ category: "navigation", data: { from: "/", to: "/words/w038" } }]);
   });
+  it("скрывает имя базы владельца — бот и Telegram ID — во всех текстах события", () => {
+    const name = "tetradio-tg-tetradio_bot-123456789";
+    const out = scrubEvent(
+      event({
+        message: `Database ${name} is closed`,
+        logentry: { message: `open ${name}`, params: [name] },
+        exception: {
+          values: [
+            { type: "DatabaseClosedError", value: `Database ${name} has been closed` },
+            { type: "UnknownError", value: `Unable to open ${name}`, mechanism: { type: "chained", data: { name } } },
+          ],
+        },
+        breadcrumbs: [
+          { category: "tetradio.lifecycle", message: `reopen ${name}`, data: { lock: `tetradio-sync-${name}` } },
+        ],
+        extra: { componentStack: `at Db(${name})` },
+        contexts: { storage: { database: name } },
+        tags: { lock: `tetradio-sync-${name}` },
+      }),
+      ORIGIN,
+    );
+    const text = JSON.stringify(out);
+    expect(text).not.toContain("123456789");
+    expect(text).not.toContain("tetradio_bot");
+    expect(out.exception?.values?.[0].value).toBe("Database tetradio-tg-… has been closed");
+    expect(out.exception?.values?.[0].type).toBe("DatabaseClosedError");
+  });
   it("не трогает метки и не падает на пустом событии", () => {
     const out = scrubEvent(event({ tags: { env: "telegram", "tg.version": "8.0" } }), ORIGIN);
     expect(out.tags).toEqual({ env: "telegram", "tg.version": "8.0" });
