@@ -2,12 +2,15 @@
 import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { act } from "react";
+import { createEmptyCard } from "ts-fsrs";
 import { createRoot, type Root } from "react-dom/client";
 import { MemoryRouter } from "react-router-dom";
 import { SessionScreen } from "../src/features/learning/SessionScreen";
 import { SettingsScreen } from "../src/features/progress/SettingsScreen";
 import { db } from "../src/storage/db";
-import { loadSettings } from "../src/storage/queries";
+import { dexieSource, loadSettings } from "../src/storage/queries";
+import { makeSession } from "../src/domain/learning";
+import { installCompleted } from "./helpers/content";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 if (!globalThis.ResizeObserver)
@@ -57,5 +60,38 @@ describe("занятие без активной сессии", () => {
   it("показывает «Активного занятия нет», а не вечный скелет", async () => {
     mount(<SessionScreen />);
     await until(() => host.textContent!.includes("Активного занятия нет."), "пустое состояние");
+  });
+});
+
+describe("занятие после применения версии из облака", () => {
+  it("ответ на карточку с изменившимся состоянием даёт обычную обратную связь и ведёт дальше", async () => {
+    await installCompleted(db, ["mech-1"]);
+    const made = await makeSession({ source: dexieSource(db), now: new Date(), random: () => 0.42 });
+    const first = made.items.findIndex((entry) => entry.type === "recognition");
+    const item = made.items[first];
+    await db.sessions.add({
+      ...made,
+      introducedKeys: made.items.map((entry) => entry.unitKey),
+      items: made.items.map((entry, index) => (index < first ? { ...entry, skipped: true } : entry)),
+      index: first,
+    });
+    // Облако принесло состояние карточки новее того, что ожидает пункт занятия.
+    await db.cardStates.put({
+      unitKey: item.unitKey,
+      ref: item.ref,
+      introducedAt: new Date().toISOString(),
+      version: item.expectedVersion + 1,
+      card: createEmptyCard(),
+    });
+    mount(<SessionScreen />);
+    await until(() => !!host.querySelector('[data-testid="option"]'), "варианты ответа");
+    await act(async () => host.querySelector<HTMLButtonElement>('[data-testid="option"]')!.click());
+    await until(() => !!host.querySelector('[role="status"]'), "обратная связь");
+    expect(host.textContent).not.toMatch(/Не удалось|другой вкладке/);
+    const next = [...host.querySelectorAll("button")].find((button) => button.textContent === "Далее")!;
+    await act(async () => next.click());
+    await until(() => host.textContent!.includes(`${first + 2} из `), "следующее упражнение");
+    expect((await db.events.toArray()).map((event) => event.itemId)).toEqual([item.id]);
+    expect((await db.cardStates.get(item.unitKey))!.version).toBe(item.expectedVersion + 2);
   });
 });

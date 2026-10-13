@@ -39,11 +39,6 @@ export const markChanged = (database: AppDatabase) => database.meta.put({ key: D
 export const announceChange = (event: SyncEvent = "changed") => syncEvents.emit(event);
 const settled = (items: SessionItem[]) => items.filter((entry) => entry.eventId || entry.skipped).length;
 
-export class ConflictError extends Error {
-  constructor() {
-    super("Карточка уже отвечена в другой вкладке. Обновите страницу.");
-  }
-}
 const stamp = (now: Date) => now.toISOString();
 
 export interface AnswerInput {
@@ -96,8 +91,8 @@ export async function recordAnswer({
     async () => {
       const existing = await database.events.get(eventId);
       if (existing) return { event: existing, created: false }; // повторное нажатие не создаёт второй ответ
+      // Состояние могло смениться после сборки занятия (облако, другая вкладка): ответ считается от свежего.
       const state = await database.cardStates.get(item.unitKey);
-      if ((state?.version ?? 0) !== item.expectedVersion) throw new ConflictError();
       const rating = gradeFor(outcome, item.type, responseTimeMs, state?.card.state ?? State.New);
       const updated = item.mode === "scheduled" ? nextState(state, item.ref, rating, now) : undefined;
       const event: ReviewEvent = {

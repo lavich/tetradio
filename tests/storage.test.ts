@@ -4,7 +4,7 @@ import { createEmptyCard, Rating, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { wordRef } from "./helpers/cards";
-import { ConflictError, markIntroduced, submitAnswer } from "../src/storage/ops";
+import { markIntroduced, submitAnswer } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { type Word } from "../src/domain/types";
 import { completeLessons, installLessons, wordsOf } from "./helpers/content";
@@ -139,12 +139,22 @@ describe("запись ответа", () => {
     expect((await db.cardStates.get(session.items[0].unitKey))!.version).toBe(1);
     expect((await db.sessions.get(session.id))!.index).toBe(1);
   });
-  it("отклоняет ответ из другой вкладки и не теряет уже записанные данные", async () => {
+  it("ответ на карточку, состояние которой сменила версия из облака, засчитывается поверх свежего состояния", async () => {
     const { session } = await prepare();
-    await answer(session);
-    const stale = { ...session.items[0], id: `${session.items[0].id}-copy` };
-    await expect(answer(session, stale)).rejects.toBeInstanceOf(ConflictError);
+    const [first, second] = session.items;
+    await asMature(first);
+    const cloud = (await db.cardStates.get(first.unitKey))!;
+    expect(first.expectedVersion).toBe(0);
+    const event = await answer(session, first);
+    expect(event.before).toEqual(cloud.card);
+    expect(event.after!.reps).toBe(cloud.card.reps + 1);
+    expect(event.after!.stability).toBeGreaterThan(cloud.card.stability);
+    expect((await db.cardStates.get(first.unitKey))!.version).toBe(2);
     expect(await db.events.count()).toBe(1);
+    const stored = (await db.sessions.get(session.id))!;
+    expect(stored.index).toBe(1);
+    await answer(stored, second);
+    expect((await db.sessions.get(session.id))!.index).toBe(2);
   });
   it("знакомство сохраняется без ответа и изменения расписания", async () => {
     const { session } = await prepare();
@@ -333,7 +343,7 @@ describe("запись ответа на смешанном уроке", () => {
     expect(second.unitKey).not.toBe(first.unitKey);
     expect(new Date(second.card.due).getTime()).toBeLessThan(new Date(first.card.due).getTime());
   });
-  it("двойное нажатие и вторая вкладка: одно событие, не более одной дополнительной попытки, конфликт версии", async () => {
+  it("двойное нажатие и вторая вкладка: одно событие, не более одной дополнительной попытки", async () => {
     const { session, item } = await prepare();
     const target = item("p-xora");
     await Promise.all([answer(session, target, { correct: false }), answer(session, target, { correct: false })]);
@@ -341,10 +351,6 @@ describe("запись ответа на смешанном уроке", () => {
     const stored = (await db.sessions.get(session.id))!;
     expect(stored.items.filter((entry) => entry.retryOf === target.id)).toHaveLength(1);
     expect(stored.items).toHaveLength(session.items.length + 1);
-    const stale = { ...target, id: `${target.id}-copy` };
-    await expect(answer(session, stale)).rejects.toBeInstanceOf(ConflictError);
-    expect(await db.events.count()).toBe(1);
-    expect((await db.cardStates.get(K("phrase", "p-xora")))!.version).toBe(1);
   });
   it("дополнительная и ручная тренировки сохраняют результат без сдвига расписания", async () => {
     const { session, item } = await prepare();
