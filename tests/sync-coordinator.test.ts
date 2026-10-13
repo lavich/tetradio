@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import Dexie from "dexie";
@@ -354,6 +354,41 @@ describe("конфликты независимых изменений", () => {
     const pointers = [...cloud.store.keys()].filter((key) => key.startsWith("p_"));
     expect(new Set(pointers).size).toBe(pointers.length);
     expect((await phone.sync.exchange()).phase).toBe("synced");
+  });
+  it("выбор исчезнувшей версии не роняет ни выбор, ни обмен, ожидающий его", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false]);
+    await study(tablet, [true]);
+    await phone.sync.exchange();
+    expect((await tablet.sync.exchange()).phase).toBe("conflict");
+    const choice = tablet.sync.resolve("gone");
+    const waiting = tablet.sync.exchange();
+    await expect(choice).resolves.toMatchObject({ phase: "conflict" });
+    await expect(waiting).resolves.toMatchObject({ phase: "conflict" });
+  });
+  it("изменение во время выбора версии публикуется следующим обменом сразу после выбора", async () => {
+    let during: (() => Promise<void>) | null = null;
+    cloud = memoryTransport({
+      intercept: async (op, key) => {
+        if (op !== "setItem" || !key?.startsWith("p_") || !during) return;
+        const run = during;
+        during = null;
+        await run();
+      },
+    });
+    const { phone, tablet } = await pair();
+    await study(phone, [false]);
+    await study(tablet, [true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    during = async () => {
+      await study(tablet, [true]);
+      void tablet.sync.exchange();
+    };
+    const resolved = await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => branch.local)!.id);
+    expect(during).toBeNull();
+    expect(resolved.phase).toBe("synced");
+    await vi.waitFor(async () => expect(await readMeta(tablet.db, META.dirty)).toBeNull());
   });
   it("поздняя независимая ветвь после разрешения вызывает новый конфликт, а не молчаливую перезапись", async () => {
     const { phone, tablet } = await pair();

@@ -163,12 +163,13 @@ export class SyncCoordinator {
     }
     this.again = false;
     this.lastStart = this.options.now().getTime();
-    this.running = this.run().finally(() => {
-      this.running = null;
-      if (this.again && this.status.phase !== "error" && this.status.phase !== "conflict") void this.exchange();
-    });
+    this.running = this.run().finally(this.settle);
     return this.running;
   }
+  private settle = () => {
+    this.running = null;
+    if (this.again && this.status.phase !== "error" && this.status.phase !== "conflict") void this.exchange();
+  };
   private again = false;
   private lastStart = -Infinity;
   /**
@@ -489,22 +490,25 @@ export class SyncCoordinator {
   async resolve(branchId: string): Promise<SyncStatus> {
     // Выбор версии — тоже обмен: не параллельно с фоновым обменом и не в двух вкладках сразу.
     while (this.running) await this.running;
+    this.again = false;
     this.running = (async () => {
-      const lock = await this.options.lock(() => this.resolveNow(branchId));
-      if (lock === "unsupported") await this.resolveNow(branchId);
-      else if (lock === "busy")
-        this.update({ reason: "Синхронизацией занята другая вкладка: выберите версию ещё раз чуть позже." });
+      try {
+        const lock = await this.options.lock(() => this.resolveNow(branchId));
+        if (lock === "unsupported") await this.resolveNow(branchId);
+        else if (lock === "busy")
+          this.update({ reason: "Синхронизацией занята другая вкладка: выберите версию ещё раз чуть позже." });
+      } catch (error) {
+        this.fail(error);
+      }
       return this.status;
-    })().finally(() => {
-      this.running = null;
-    });
+    })().finally(this.settle);
     return this.running;
   }
   private async resolveNow(branchId: string): Promise<void> {
     const conflict = this.status.conflict;
-    if (!conflict) return;
-    const chosen = conflict.branches.find((branch) => branch.id === branchId);
-    if (!chosen) throw new Error("Версия не найдена");
+    // Конфликт успели пересчитать: экран уже показывает новые ветви, выбор повторяется по ним.
+    const chosen = conflict?.branches.find((branch) => branch.id === branchId);
+    if (!conflict || !chosen) return;
     const { database } = this.options;
     const device = await this.deviceId();
     const now = this.options.now().toISOString();
