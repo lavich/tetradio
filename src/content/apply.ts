@@ -120,21 +120,20 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         (card, stored) => !!card.paradigm && !stored.paradigm,
       );
       await applyCards(pack.phrases, database.phrases, phraseFromPackage, now, result);
-      const incoming = new Set<string>();
-      for (const item of pack.items) {
+      const links = pack.items.map((item) => {
         const ref: LearningRef = { kind: item.kind, id: item.id };
-        const key = unitKey(ref);
-        incoming.add(key);
-        await database.lessonItems.put({ lessonId: pack.id, unitKey: key, ref, position: item.position });
-      }
+        return { lessonId: pack.id, unitKey: unitKey(ref), ref, position: item.position };
+      });
+      await database.lessonItems.bulkPut(links);
+      const incoming = new Set(links.map((link) => link.unitKey));
       /**
        * Состав урока принадлежит автору: карточка, исчезнувшая из новой версии, теряет связь с уроком.
        * Сама карточка, её прогресс и история остаются — она может жить в других уроках и в словаре.
        */
-      for (const item of installed?.items ?? []) {
-        const key = unitKey({ kind: item.kind, id: item.id });
-        if (!incoming.has(key)) await database.lessonItems.delete([pack.id, key]);
-      }
+      const gone = (installed?.items ?? [])
+        .map((item) => unitKey({ kind: item.kind, id: item.id }))
+        .filter((key) => !incoming.has(key));
+      if (gone.length) await database.lessonItems.bulkDelete(gone.map((key): [string, string] => [pack.id, key]));
       await database.media.bulkPut(pack.media);
       const record: InstalledPackage = {
         lessonId: pack.id,
