@@ -13,6 +13,7 @@ import { installLesson, refreshCatalog, syncCourses } from "./content/client";
 import { forgetLaunch } from "./platform/launch";
 import { dropServiceWorker, wantsServiceWorker } from "./platform/service-worker";
 import { initPlatform, telegramBridge } from "./platform/platform";
+import type { TelegramWebApp } from "./platform/telegram-types";
 import { installEarlyHandlers, reportError, setReportingEnabled } from "./reporting/reporting";
 import { bindReportingToSettings } from "./reporting/settings";
 import { db, ensureDefaults } from "./storage/db";
@@ -110,21 +111,23 @@ function start(profile: Profile) {
     .catch(() => undefined);
   // Bridge Telegram загружается параллельно и не задерживает рендер; синхронизация подключается после базы и bridge.
   // Владелец сверяется с пользователем bridge: контекст, восстановленный из вкладки, не должен открыть чужие данные.
-  const platform = initPlatform().then(() => {
-    const matches = ownerMatches(profile, telegramBridge()?.initDataUnsafe?.user?.id);
-    if (!matches) {
+  // Координатор синхронизации не нужен первому кадру: его чанк грузится параллельно с базой и bridge.
+  const syncReady = Promise.all([database, import("./sync")]).then(([, { connectSync }]) => connectSync);
+  // Bridge позже тайм-аута сверяет владельца и подключает синхронизацию второй раз, уже с CloudStorage.
+  const connect = (app: TelegramWebApp | null) => {
+    if (stopped) return;
+    if (!ownerMatches(profile, app?.initDataUnsafe?.user?.id)) {
       forgetLaunch();
       stop("owner-mismatch");
+      return;
     }
-    return matches;
-  });
-  // Координатор синхронизации не нужен первому кадру: его чанк грузится параллельно с базой и bridge.
-  const syncModule = import("./sync");
-  Promise.all([database, platform, syncModule])
-    .then(([, matches, { connectSync }]) => {
-      if (matches) connectSync(telegramBridge());
-    })
-    .catch((error) => console.warn("Синхронизация не подключена", error));
+    syncReady
+      .then((connectSync) => {
+        if (!stopped) connectSync(app);
+      })
+      .catch((error) => console.warn("Синхронизация не подключена", error));
+  };
+  void initPlatform(undefined, connect).then(() => connect(telegramBridge()));
   root.render(
     <StrictMode>
       <BrowserRouter basename={`${import.meta.env.BASE_URL}app`}>

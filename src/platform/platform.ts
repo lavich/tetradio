@@ -38,20 +38,45 @@ export function setPlatform(next: PlatformAdapter, app: TelegramWebApp | null = 
   notify();
 }
 
+function connectBridge(app: TelegramWebApp): PlatformAdapter {
+  const next = telegramAdapter(app);
+  setPlatform(next, app);
+  next.ready();
+  return next;
+}
+
 /**
  * Неблокирующая инициализация: bridge загружается только при запуске из Telegram; браузер ничего не ждёт.
- * Ошибка загрузки, тайм-аут или частично доступный API оставляют рабочий интерфейс.
+ * Ошибка загрузки или частично доступный API оставляют рабочий интерфейс. По тайм-ауту промис отвечает
+ * текущим адаптером, но загрузка продолжается: поздний bridge подключает Telegram и передаётся в `onLate`.
  */
-export async function initPlatform(timeoutMs = 4000): Promise<PlatformAdapter> {
+export async function initPlatform(timeoutMs = 4000, onLate?: (app: TelegramWebApp) => void): Promise<PlatformAdapter> {
   document.documentElement.dataset.platform = launchContext().kind;
   if (!isTelegramLaunch()) return adapter;
+  const started = performance.now();
   try {
-    const app = await loadTelegramBridge(timeoutMs);
-    if (!app) return adapter;
-    const next = telegramAdapter(app);
-    setPlatform(next, app);
-    next.ready();
-    return next;
+    const loaded = loadTelegramBridge();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const app = await Promise.race([
+      loaded,
+      new Promise<"timeout">((resolve) => (timer = setTimeout(() => resolve("timeout"), timeoutMs))),
+    ]);
+    clearTimeout(timer);
+    if (app === "timeout") {
+      lifecycle("bridgeTimeout", { timeoutMs });
+      void loaded.then((late) => {
+        lifecycle("bridgeLate", { ms: Math.round(performance.now() - started), loaded: !!late });
+        if (!late || bridge) return;
+        try {
+          connectBridge(late);
+          onLate?.(late);
+        } catch (error) {
+          console.warn("Интеграция Telegram недоступна, работает обычный режим", error);
+        }
+      });
+      return adapter;
+    }
+    return app ? connectBridge(app) : adapter;
   } catch (error) {
     console.warn("Интеграция Telegram недоступна, работает обычный режим", error);
     return adapter;

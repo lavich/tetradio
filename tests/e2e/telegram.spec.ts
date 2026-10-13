@@ -38,6 +38,29 @@ test.describe("запуск внутри Telegram", () => {
     await expect(page.getByTestId("storage-scope")).toContainText("облачной синхронизации нет");
     expect(await databases(page)).toEqual(["tetradio-mock-1"]);
   });
+  test("bridge позже тайм-аута подключает Telegram и облачную синхронизацию", async ({ page }) => {
+    const { bridgeScript, launchHash } = await import("./telegram");
+    await page.route("https://telegram.org/**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 8000));
+      await route.fulfill({ contentType: "text/javascript", body: bridgeScript({}) });
+    });
+    await page.goto(`/app/progress${launchHash({})}`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "disabled", { timeout: 7500 });
+    await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "synced", { timeout: 15000 });
+    expect(await page.locator("html").getAttribute("data-theme")).toBe("light");
+    expect(await tg(page).calls()).toContain("ready");
+  });
+  test("поздний bridge другого пользователя останавливает запуск до синхронизации", async ({ page }) => {
+    const { bridgeScript, launchHash } = await import("./telegram");
+    await page.route("https://telegram.org/**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 8000));
+      await route.fulfill({ contentType: "text/javascript", body: bridgeScript({ userId: 2002 }) });
+    });
+    await page.goto(`/app/${launchHash({})}`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByTestId("today-title")).toBeVisible();
+    await expect(page.getByTestId("launch-error")).toBeVisible({ timeout: 15000 });
+    expect(Object.keys(await tg(page).cloud())).toHaveLength(0);
+  });
   test("ошибка загрузки bridge при запуске из Telegram оставляет обычный интерфейс", async ({ page }) => {
     await page.route("https://telegram.org/**", (route) => route.abort());
     const { launchHash } = await import("./telegram");

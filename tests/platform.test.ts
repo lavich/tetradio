@@ -4,7 +4,7 @@ import { takeConsole } from "./setup/console";
 import { parseLaunch, launchContext, resetLaunchContext, startRoute } from "../src/platform/launch";
 import { telegramAdapter, webAdapter } from "../src/platform/adapter";
 import { loadTelegramBridge, resetBridge } from "../src/platform/bridge";
-import { applyEnvironment, platform, setPlatform } from "../src/platform/platform";
+import { applyEnvironment, initPlatform, platform, setPlatform, telegramBridge } from "../src/platform/platform";
 import type { TelegramWebApp } from "../src/platform/telegram-types";
 import { profileFor } from "../src/storage/profile";
 
@@ -321,15 +321,19 @@ describe("загрузка bridge", () => {
   afterEach(() => {
     resetBridge();
     delete (window as unknown as { Telegram?: unknown }).Telegram;
-    vi.useRealTimers();
+    document.querySelectorAll('script[src*="telegram-web-app"]').forEach((script) => script.remove());
+    setPlatform(webAdapter());
+    window.history.replaceState(null, "", "/");
+    sessionStorage.clear();
+    resetLaunchContext();
   });
   it("существующий объект используется без сетевой загрузки", async () => {
     const { app } = fakeApp();
     (window as unknown as { Telegram: unknown }).Telegram = { WebApp: app };
-    expect(await loadTelegramBridge(10)).toBe(app);
+    expect(await loadTelegramBridge()).toBe(app);
     expect(document.querySelector('script[src*="telegram-web-app"]')).toBeNull();
   });
-  it("ошибка загрузки и тайм-аут оставляют браузерный режим", async () => {
+  it("ошибка загрузки оставляет браузерный режим", async () => {
     const failing = document.implementation.createHTMLDocument();
     const original = failing.createElement.bind(failing);
     failing.createElement = ((tag: string) => {
@@ -337,10 +341,45 @@ describe("загрузка bridge", () => {
       if (tag === "script") setTimeout(() => element.onerror?.(new Event("error")), 0);
       return element;
     }) as typeof failing.createElement;
-    expect(await loadTelegramBridge(1000, failing)).toBeNull();
-    resetBridge();
-    const silent = document.implementation.createHTMLDocument();
-    expect(await loadTelegramBridge(20, silent)).toBeNull();
+    expect(await loadTelegramBridge(failing)).toBeNull();
+  });
+
+  const telegramLaunch = () => {
+    window.history.replaceState(
+      null,
+      "",
+      `/#tgWebAppPlatform=ios&tgWebAppData=${encodeURIComponent(initData({ id: 7 }))}`,
+    );
+    resetLaunchContext();
+  };
+  const script = () => document.querySelector<HTMLScriptElement>('script[src*="telegram-web-app"]')!;
+  it("bridge после тайм-аута подключает Telegram, вызывает ready и передаётся в onLate; крошки — тайм-аут и время загрузки", async () => {
+    const { pendingCrumbs, resetReporting } = await import("../src/reporting/reporting");
+    resetReporting({ dsn: "https://key@o1.ingest.sentry.io/1", loader: () => Promise.reject(new Error("не в тесте")) });
+    telegramLaunch();
+    const onLate = vi.fn();
+    expect((await initPlatform(10, onLate)).kind).toBe("web");
+    expect(onLate).not.toHaveBeenCalled();
+    const { app, calls } = fakeApp();
+    (window as unknown as { Telegram: unknown }).Telegram = { WebApp: app };
+    script().onload?.(new Event("load"));
+    await vi.waitFor(() => expect(onLate).toHaveBeenCalledWith(app));
+    expect(platform().kind).toBe("telegram");
+    expect(telegramBridge()).toBe(app);
+    expect(calls.filter((call) => call === "ready")).toHaveLength(1);
+    const crumbs = pendingCrumbs().filter((crumb) => crumb.message.startsWith("bridge"));
+    expect(crumbs.map((crumb) => crumb.message)).toEqual(["bridgeTimeout", "bridgeLate"]);
+    expect(crumbs[1].data).toMatchObject({ loaded: true, ms: expect.any(Number) });
+    resetReporting();
+  });
+  it("ошибка загрузки после тайм-аута оставляет браузерный режим и не зовёт onLate", async () => {
+    telegramLaunch();
+    const onLate = vi.fn();
+    await initPlatform(10, onLate);
+    script().onerror?.(new Event("error"));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(onLate).not.toHaveBeenCalled();
+    expect(platform().kind).toBe("web");
   });
 });
 
