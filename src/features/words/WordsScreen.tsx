@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useDeferredValue, useMemo, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Search } from "lucide-react";
 import { Link, useLocation, useNavigationType, useParams, useSearchParams } from "react-router-dom";
@@ -13,7 +13,14 @@ import nb from "../../shared/notebook.module.css";
 import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
 import { currentCourse } from "../../storage/courses";
-import { dictionary, matchesQuery, type CardMark, type DictionaryEntry } from "../../storage/dictionary";
+import {
+  countMarks,
+  dictionary,
+  filterDictionary,
+  type CardMark,
+  type DictionaryEntry,
+  type DictionaryLesson,
+} from "../../storage/dictionary";
 import { EntrySheet } from "./WordSheet";
 import css from "./dictionary.module.css";
 
@@ -94,7 +101,7 @@ function Dictionary({
   current,
   switcher,
 }: {
-  lessons: Awaited<ReturnType<typeof dictionary>>;
+  lessons: DictionaryLesson[];
   current?: string;
   switcher?: boolean;
 }) {
@@ -121,26 +128,32 @@ function Dictionary({
     setFilter(mark);
     setParams(searchOf(q, mark), { replace: true });
   };
-  const search = searchOf(query, filter).toString();
+  const shownQuery = useDeferredValue(query);
+  const shownFilter = useDeferredValue(filter);
+  const search = spread ? searchOf(shownQuery, shownFilter).toString() : "";
   const { names, code } = useProfile();
-  const all = lessons.flatMap((lesson) => lesson.entries);
-  const count = (key: Filter) => (key === "all" ? all.length : all.filter((entry) => entry.mark === key).length);
-  const shown = lessons
-    .map((lesson) => ({
-      ...lesson,
-      entries: lesson.entries.filter(
-        (entry) => (filter === "all" || entry.mark === filter) && (!query.trim() || matchesQuery(entry, query)),
-      ),
-    }))
-    .filter((lesson) => lesson.entries.length);
-  const found = shown.flatMap((lesson) => lesson.entries);
-  const phrases = found.filter((entry) => entry.phrase).length;
+  const counts = useMemo(() => countMarks(lessons), [lessons]);
+  const shown = useMemo(() => filterDictionary(lessons, shownFilter, shownQuery), [lessons, shownFilter, shownQuery]);
+  const found = useMemo(() => {
+    let words = 0;
+    let phrases = 0;
+    for (const lesson of shown)
+      for (const entry of lesson.entries) {
+        if (entry.phrase) phrases++;
+        else words++;
+      }
+    return { words, phrases };
+  }, [shown]);
+  const currentLesson = useMemo(
+    () => (current ? shown.find((lesson) => lesson.entries.some((entry) => refKey(entry) === current))?.id : undefined),
+    [shown, current],
+  );
   return (
     <section className={cx(nb.page, css.page)} aria-label="Словарь">
       {switcher && <CourseSwitch />}
       <h1 className={nb.title}>Словарь</h1>
       <p className={nb.meta} data-testid="word-count">
-        {[withCount(found.length - phrases, WORDS), phrases && withCount(phrases, ["фраза", "фразы", "фраз"])]
+        {[withCount(found.words, WORDS), found.phrases && withCount(found.phrases, ["фраза", "фразы", "фраз"])]
           .filter(Boolean)
           .join(" · ")}
       </p>
@@ -162,58 +175,93 @@ function Dictionary({
           <span key={item.key}>
             {index > 0 && <span aria-hidden> · </span>}
             <button type="button" aria-pressed={filter === item.key} onClick={() => remember({ filter: item.key })}>
-              {item.label} {count(item.key)}
+              {item.label} {counts[item.key]}
             </button>
           </span>
         ))}
       </p>
-      {!all.length ? (
+      {!counts.all ? (
         <p className={css.empty}>Слова и фразы появятся здесь, когда вы откроете первый урок курса.</p>
       ) : !shown.length ? (
         <p className={css.empty}>Ничего не нашлось.</p>
       ) : (
-        shown.map((lesson, index) => {
-          const solid = lesson.entries.filter((entry) => entry.mark === "solid").length;
-          const newModule = index === 0 || shown[index - 1].moduleId !== lesson.moduleId;
-          return (
-            <section key={lesson.id} aria-label={lesson.title} data-testid="dictionary-lesson">
-              {newModule && lesson.moduleId && (
-                <p className={css.module}>
-                  Модуль {String(lesson.moduleNumber).padStart(2, "0")} · <span lang={code}>{lesson.moduleTitle}</span>
-                </p>
-              )}
-              <h2 className={css.lesson}>
-                {lesson.number && <span className={css.number}>{lesson.number}</span>}
-                <span className={css.lessonTitle}>{lesson.title}</span>
-                <span className={css.solid} aria-label={`закреплено ${solid} из ${lesson.entries.length}`}>
-                  {solid} из {lesson.entries.length}
-                </span>
-              </h2>
-              <ul className={css.rows}>
-                {lesson.entries.map((entry) => (
-                  <li key={entry.key}>
-                    <Link
-                      to={spread ? { pathname: entryPath(entry), search } : entryPath(entry)}
-                      state={spread ? KEEP_SCROLL : undefined}
-                      className={css.row}
-                      aria-current={current === `${entry.ref.kind}:${entry.ref.id}` ? "page" : undefined}
-                    >
-                      <span className={cx(css.greek, entry.phrase && css.phrase)} lang={code}>
-                        {entry.greek}
-                      </span>
-                      <span className={css.russian}>{entry.russian}</span>
-                      <Mark mark={entry.mark} />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          );
-        })
+        shown.map((lesson, index) => (
+          <LessonSection
+            key={lesson.id}
+            lesson={lesson}
+            newModule={index === 0 || shown[index - 1].moduleId !== lesson.moduleId}
+            code={code}
+            // Отметка открытого слова перерисовывает только его урок, а не весь список.
+            current={lesson.id === currentLesson ? current : undefined}
+            search={search}
+            spread={spread}
+          />
+        ))
       )}
     </section>
   );
 }
+
+const refKey = (entry: DictionaryEntry) => `${entry.ref.kind}:${entry.ref.id}`;
+
+const LessonSection = memo(function LessonSection({
+  lesson,
+  newModule,
+  code,
+  current,
+  search,
+  spread,
+}: {
+  lesson: DictionaryLesson;
+  newModule: boolean;
+  code: string;
+  current?: string;
+  search: string;
+  spread: boolean;
+}) {
+  const solid = lesson.entries.filter((entry) => entry.mark === "solid").length;
+  return (
+    <section
+      className={css.section}
+      // Высота до первого показа — нижняя оценка по числу строк: страница не длиннее настоящей, иначе позиция у конца
+      // списка, запомненная до «Назад», не вернулась бы целиком.
+      style={{ containIntrinsicSize: `auto ${lesson.entries.length * 48 + (newModule ? 112 : 52)}px` }}
+      aria-label={lesson.title}
+      data-testid="dictionary-lesson"
+    >
+      {newModule && lesson.moduleId && (
+        <p className={css.module}>
+          Модуль {String(lesson.moduleNumber).padStart(2, "0")} · <span lang={code}>{lesson.moduleTitle}</span>
+        </p>
+      )}
+      <h2 className={css.lesson}>
+        {lesson.number && <span className={css.number}>{lesson.number}</span>}
+        <span className={css.lessonTitle}>{lesson.title}</span>
+        <span className={css.solid} aria-label={`закреплено ${solid} из ${lesson.entries.length}`}>
+          {solid} из {lesson.entries.length}
+        </span>
+      </h2>
+      <ul className={css.rows}>
+        {lesson.entries.map((entry) => (
+          <li key={entry.key}>
+            <Link
+              to={spread ? { pathname: entryPath(entry), search } : entryPath(entry)}
+              state={spread ? KEEP_SCROLL : undefined}
+              className={css.row}
+              aria-current={current === refKey(entry) ? "page" : undefined}
+            >
+              <span className={cx(css.greek, entry.phrase && css.phrase)} lang={code}>
+                {entry.greek}
+              </span>
+              <span className={css.russian}>{entry.russian}</span>
+              <Mark mark={entry.mark} />
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+});
 
 function Mark({ mark }: { mark: CardMark }) {
   if (mark === "solid") return <Tick className={css.tick} label={MARK_LABEL.solid} />;

@@ -28,9 +28,13 @@ test("словарь: «Назад» со слова возвращает пои
   const rows = list.getByRole("link");
   await expect.poll(() => rows.count()).toBeGreaterThan(40);
   const target = rows.nth(40);
-  await target.scrollIntoViewIfNeeded();
-  const name = await target.getAttribute("href");
+  // Колесом, как пользователь: уроки по пути показываются и запоминают свою высоту (content-visibility).
+  await page.mouse.move(200, 200);
+  while ((await target.boundingBox())!.y > 200) await page.mouse.wheel(0, 100);
+  await page.waitForTimeout(200);
+  const href = await target.getAttribute("href");
   const before = await scrollY(page);
+  const box = (await target.boundingBox())!;
   expect(before).toBeGreaterThan(1000);
   await target.click();
   await expect(page.getByTestId("entry-sheet")).toBeVisible();
@@ -39,7 +43,7 @@ test("словарь: «Назад» со слова возвращает пои
   await page.goBack();
   await expect(page).toHaveURL(/\/words$/);
   await expect.poll(() => scrollY(page)).toBe(before);
-  await expect(list.locator(`a[href="${name}"]`)).toBeInViewport();
+  await expect.poll(async () => (await list.locator(`a[href="${href}"]`).boundingBox())!.y).toBeCloseTo(box.y, 0);
 
   await page.getByRole("navigation", { name: "Основные разделы" }).getByRole("link", { name: "Прогресс" }).click();
   await expect(page).toHaveURL(/\/progress$/);

@@ -51,23 +51,48 @@ export function useScrollMemory(root: RefObject<HTMLElement | null>) {
       return;
     }
     const target = readPosition(location.key);
+    const app = root.current;
     let observer: ResizeObserver | undefined;
     let timer = 0;
-    const stop = () => {
+    let frame = 0;
+    const listen = (on: boolean) => {
+      for (const type of USER_INPUT)
+        if (on) window.addEventListener(type, stop, { passive: true });
+        else window.removeEventListener(type, stop);
+    };
+    function stop() {
       observer?.disconnect();
       clearTimeout(timer);
-      for (const type of USER_INPUT) window.removeEventListener(type, stop);
-    };
+      listen(false);
+      // Снимается через кадр: размеры частей должны успеть запомниться (contain-intrinsic-size: auto).
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        frame = requestAnimationFrame(() => app?.removeAttribute("data-restoring"));
+      });
+    }
     const attempt = () => {
       window.scrollTo(0, target);
       if (Math.abs(window.scrollY - target) < 1) stop();
     };
+    const cleanup = () => {
+      stop();
+      cancelAnimationFrame(frame);
+      app?.removeAttribute("data-restoring");
+    };
+    if (!target || !app || typeof ResizeObserver !== "function") {
+      window.scrollTo(0, target);
+      return;
+    }
+    // Пока позиция возвращается, длинные списки раскладываются целиком, без content-visibility: иначе высота ещё
+    // не показанных частей была бы оценкой и позиция пришлась бы на другое место.
+    app.setAttribute("data-restoring", "");
     attempt();
-    if (Math.abs(window.scrollY - target) < 1 || !root.current || typeof ResizeObserver !== "function") return stop;
-    observer = new ResizeObserver(attempt);
-    observer.observe(root.current);
-    timer = window.setTimeout(stop, RESTORE_TIMEOUT);
-    for (const type of USER_INPUT) window.addEventListener(type, stop, { passive: true });
-    return stop;
+    if (Math.abs(window.scrollY - target) >= 1) {
+      observer = new ResizeObserver(attempt);
+      observer.observe(app);
+      timer = window.setTimeout(stop, RESTORE_TIMEOUT);
+      listen(true);
+    }
+    return cleanup;
   }, [location.key, location.pathname, location.state, action, root]);
 }

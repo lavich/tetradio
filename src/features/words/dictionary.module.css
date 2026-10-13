@@ -293,3 +293,12 @@
     align-self: start;
   }
 }
+/* Уроки вне экрана не раскладываются: на ~1300 строк это главная цена каждого символа поиска. Оценка высоты — в разметке. */
+.section {
+  content-visibility: auto;
+}
+/* Пока возвращается позиция, уроки раскладываются целиком, с той же изоляцией, что у показанных: иначе поля бы схлопывались. */
+:global([data-restoring]) .section {
+  content-visibility: visible;
+  contain: layout style paint;
+}
