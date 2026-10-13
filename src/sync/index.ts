@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { installLesson } from "../content/client";
+import { installPackages } from "../content/client";
 import { launchContext } from "../platform/launch";
 import type { TelegramWebApp } from "../platform/telegram-types";
 import { lifecycle, reportError } from "../reporting/reporting";
@@ -23,9 +23,7 @@ export const sync = new SyncCoordinator({
   lock: webLock(`tetradio-sync-${db.name}`),
   recover: heal,
 });
-sync.onMissingPackages = (ids) => {
-  for (const id of ids) installLesson(id).catch(() => undefined);
-};
+sync.onMissingPackages = (ids) => void installPackages(ids);
 // Отключённый транспорт и клиент без CloudStorage — штатные состояния, не сбои.
 sync.onFailure = (error, kind) => {
   if (kind !== "disabled" && kind !== "unavailable") reportError(error, { category: "sync", extra: { kind } });

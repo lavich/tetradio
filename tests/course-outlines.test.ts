@@ -11,6 +11,7 @@ import { STORED_KINDS } from "../src/storage/kinds";
 import { submitAnswer } from "../src/storage/ops";
 import { courseProgress, type CourseProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
+import { lessonOutlines } from "../src/storage/outlines";
 import { markRead, moduleReadings, nextReading, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 
@@ -199,12 +200,13 @@ describe("живые запросы курса не перечитывают п�
     expect(runs).toBeGreaterThan(ran);
     expect(reads.rows - before).toBe(0);
 
+    await lessonOutlines(["m01-1"], db);
     [before, ran] = [reads.rows, runs];
     await db.lessons.update("m01-1", { completed: true });
     await settle();
     expect(reading.seen.at(-1)?.reading.id).toBe("r-m01-anna");
-    // Сводка пройденного урока — один раз, пакет с текстом — на каждый перезапуск: оптимистичный Dexie может дать два.
-    expect(reads.rows - before).toBe(1 + runs - ran);
+    // Сводка уже в кэше; пакет с текстом — на каждый перезапуск: оптимистичный Dexie может дать два.
+    expect(reads.rows - before).toBe(runs - ran);
 
     const pack = demo.packages.find((item) => item.id === "m01-1")!;
     const renamed = pack.readings!.map((text, index) => (index ? text : { ...text, title: "Новый текст" }));

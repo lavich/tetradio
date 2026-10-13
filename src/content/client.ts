@@ -13,4 +13,11 @@ export {
   type CatalogPhase,
   type InstallPhase,
 } from "./phases";
-export { courseInstallOrder, installCourse, installLesson, toContentError, type CourseInstallResult } from "./install";
+export {
+  courseInstallOrder,
+  installCourse,
+  installLesson,
+  installPackages,
+  toContentError,
+  type CourseInstallResult,
+} from "./install";
