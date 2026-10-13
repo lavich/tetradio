@@ -71,6 +71,8 @@ export async function readingPage(id: string, database: AppDatabase = db): Promi
   if (!owner?.module) return null;
   const all = await moduleReadings(owner.module.id, database);
   const at = all.findIndex((view) => view.reading.id === id);
+  // Сводка могла устареть: пакет обновился между выбором владельца и чтением.
+  if (at < 0) return null;
   const view = all[at];
   return {
     ...view,
@@ -82,16 +84,15 @@ export async function readingPage(id: string, database: AppDatabase = db): Promi
 
 /** Первый открытый непрочитанный текст курса — строка «Почитать» на «Сегодня». */
 export async function nextReading(courseId: string, database: AppDatabase = db): Promise<ReadingView | undefined> {
-  const own = await courseLessonIds(courseId, database);
   // Текст закрытого урока «Сегодня» не предлагает: пакеты непройденных уроков не читаются.
-  const completed = new Set(
-    (await database.lessons.bulkGet(own)).flatMap((lesson) => (lesson?.completed ? [lesson.id] : [])),
-  );
-  const packages = await packagesWith(own, (_, id) => completed.has(id), database);
+  const completed = (await database.lessons.toArray()).flatMap((lesson) => (lesson.completed ? [lesson.id] : []));
+  const packages = await packagesWith(completed, () => true, database);
   const modules = new Map((await database.modules.toArray()).map((module) => [module.id, module.number]));
   const all = await views(packages, database);
+  // Курс — последним: чтения после `await courseLessonIds` живой запрос не отслеживает.
+  const own = new Set(await courseLessonIds(courseId, database));
   return all
-    .filter((view) => view.open && !view.readAt)
+    .filter((view) => own.has(view.after.id) && view.open && !view.readAt)
     .sort((a, b) => (modules.get(a.moduleId) ?? 0) - (modules.get(b.moduleId) ?? 0))[0];
 }
 
