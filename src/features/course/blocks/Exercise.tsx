@@ -12,6 +12,7 @@ import { Tick } from "../../../shared/Tick";
 import type { BlockPatch } from "../../../storage/course";
 import { SaveProblem, useSave } from "./save";
 import base from "../course.module.css";
+import { scriptOf } from "../../../domain/script";
 import css from "./blocks.module.css";
 
 const statusLabel: Record<ItemResult["status"], string> = { correct: "верно", almost: "почти", wrong: "неверно" };
@@ -37,6 +38,8 @@ export function Exercise({
   save: (patch: BlockPatch) => Promise<unknown>;
 }) {
   const profile = useProfile();
+  // Вопросы и варианты бывают и по-русски: язык курса — только тексту на нём.
+  const langOf = (text: string) => (scriptOf(text, profile) === profile.code ? profile.code : undefined);
   const [answers, setAnswers] = useState<Record<string, string>>(progress?.answers ?? {});
   const [checked, setChecked] = useState(!!progress?.done);
   const { store, problem } = useSave(save);
@@ -97,7 +100,7 @@ export function Exercise({
                 label={statusLabel[result.status]}
               />
             ) : null}
-            <p className={css.prompt} lang={profile.code}>
+            <p className={css.prompt} lang={langOf(item.prompt)}>
               <span className={base.soft}>{index + 1}. </span>
               {item.prompt}
             </p>
@@ -121,7 +124,7 @@ export function Exercise({
                     key={option}
                     type="button"
                     className={css.option}
-                    lang={profile.code}
+                    lang={langOf(option)}
                     aria-pressed={given === option}
                     disabled={checked}
                     onClick={() => {
@@ -139,7 +142,7 @@ export function Exercise({
               result.status === "correct" ? null : (
                 <p className={result.status === "almost" ? `${base.pen} ${base.almost}` : base.pen}>
                   {result.status === "almost" ? `Почти — проверьте ${profile.almost.check}: ` : "Верно: "}
-                  <span lang={profile.code}>{result.expected}</span>
+                  <span lang={langOf(result.expected)}>{result.expected}</span>
                   {item.explanation ? ` — ${item.explanation}` : ""}
                 </p>
               )

@@ -157,13 +157,13 @@ blocks:
           - Το ξενοδοχείο.
         answer: Το χωριό.
       - id: q5
-        prompt: Сколько стоила гостиница за ночь?
+        prompt: Πόσο ήταν το ξενοδοχείο τη νύχτα;
         options:
           - 15 €
           - 50 €
           - 500 €
         answer: 50 €
-        explanation: Πενήντα ευρώ τη νύχτα.
+        explanation: Πενήντα ευρώ τη νύχτα. — «Пятьдесят евро за ночь».
   - type: exercise
     id: grammar
     graded: true
