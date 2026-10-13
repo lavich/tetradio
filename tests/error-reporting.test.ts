@@ -39,18 +39,6 @@ describe("границы данных в сообщениях ошибок", () 
     const word = (item.card as { kind: "word"; word: { greek: string; russian: string } }).word;
     const secret = [word.greek, word.russian, "мой тайный ответ"];
     const failures: unknown[] = [];
-    // Конфликт версий: слово уже отвечено в другой вкладке.
-    await recordAnswer({
-      session,
-      item: { ...item, expectedVersion: 99 },
-      correct: false,
-      answer: secret[2],
-      responseTimeMs: 1,
-      activeTimeMs: 1,
-      timezone: "UTC",
-      now,
-      database: db,
-    }).catch((error) => failures.push(error));
     // Отказ хранилища: база закрыта.
     db.close();
     await recordAnswer({
@@ -64,7 +52,7 @@ describe("границы данных в сообщениях ошибок", () 
       now,
       database: db,
     }).catch((error) => failures.push(error));
-    expect(failures).toHaveLength(2);
+    expect(failures).toHaveLength(1);
     for (const failure of failures) {
       const text = [String(failure), (failure as Error).message, (failure as Error).stack ?? ""].join("\n");
       for (const word of secret) expect(text).not.toContain(word);

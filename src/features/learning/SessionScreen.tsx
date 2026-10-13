@@ -13,7 +13,7 @@ import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
 import { activeSession, primaryCourse, profileOfCourse, sessionCourse } from "../../storage/courses";
 import { db } from "../../storage/db";
-import { ConflictError, endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
+import { endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
 import { ExerciseView, Introduction, type Answer } from "./exercises";
 import { useWide } from "../../shared/media";
 import { compositionLine, DoneList, doneRows, PageHead, SessionShell } from "./notebook";
@@ -168,12 +168,8 @@ export function SessionScreen() {
       // Отклик — один раз после успешного локального сохранения нового ответа; повтор, ошибка записи и пропуск его не дают.
       if (created && hapticsEnabled()) haptic(status === "almost" ? "warning" : correct ? "success" : "error");
       return true;
-    } catch (error) {
-      setProblem(
-        error instanceof ConflictError
-          ? error.message
-          : "Не удалось сохранить ответ. Проверьте место на устройстве и попробуйте ещё раз.",
-      );
+    } catch {
+      setProblem("Не удалось сохранить ответ. Проверьте место на устройстве и попробуйте ещё раз.");
       return false;
     }
   };
