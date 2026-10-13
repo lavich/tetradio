@@ -1,10 +1,11 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
 import { updateReady } from "../main";
 import { useBackHandler, useEnvironment } from "../platform/platform";
 import { loadScreen } from "./stale-build";
+import { useScrollMemory } from "./scroll";
 // «Сегодня» открывается первым и в браузере, и в Mini App, поэтому грузится сразу: иначе первый кадр пустой.
 import { TodayScreen } from "../features/today/TodayScreen";
 import ui from "../shared/ui.module.css";
@@ -50,8 +51,10 @@ export function App() {
   const immersive = pathname.startsWith("/session") || /^\/words\/[^/]+\/exercise\//.test(pathname);
   // В уроке курса облачко снизу — листание страниц; выход из урока — «Назад».
   const lesson = /^\/course\/[^/]+\/[^/]+/.test(pathname);
+  const root = useRef<HTMLDivElement>(null);
   useEnvironment();
   useStartRoute();
+  useScrollMemory(root);
   // Резервный возврат Telegram: на «Сегодня» кнопка скрыта, на остальных экранах без своего обработчика ведёт назад или на главный.
   const goBack = useGoBack();
   useBackHandler(pathname === "/" ? null : goBack, 0);
@@ -73,7 +76,7 @@ export function App() {
     return () => window.removeEventListener("tetradio:update", notice);
   }, [immersive]);
   return (
-    <div className={ui.app}>
+    <div ref={root} className={ui.app}>
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<TodayScreen />} />

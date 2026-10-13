@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Search } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigationType, useParams, useSearchParams } from "react-router-dom";
+import { KEEP_SCROLL } from "../../app/scroll";
 import { Screen } from "../../app/Screen";
 import { CourseSwitch } from "../../shared/CourseSwitch";
 import { useCardCourse, useFollowCourse } from "../../shared/courses";
@@ -22,6 +23,9 @@ const FILTERS: { key: Filter; label: string }[] = [
   { key: "learning", label: "учу" },
   { key: "solid", label: "закреплены" },
 ];
+const toFilter = (value: string | null): Filter => FILTERS.find((item) => item.key === value)?.key ?? "all";
+const searchOf = (query: string, filter: Filter) =>
+  new URLSearchParams({ ...(query && { q: query }), ...(filter !== "all" && { filter }) });
 const MARK_LABEL: Record<CardMark, string> = { new: "не начато", learning: "учу", solid: "закреплено" };
 
 export const entryPath = (entry: Pick<DictionaryEntry, "ref">) =>
@@ -94,8 +98,30 @@ function Dictionary({
   current?: string;
   switcher?: boolean;
 }) {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<Filter>("all");
+  const [params, setParams] = useSearchParams();
+  const { key } = useLocation();
+  const navigation = useNavigationType();
+  const spread = useSpread();
+  // Своё состояние, а не чтение адреса: адрес обновляется переходом, а он у маршрутизатора не срочный и отставал бы от ввода.
+  const [query, setQuery] = useState(() => params.get("q") ?? "");
+  const [filter, setFilter] = useState(() => toFilter(params.get("filter")));
+  const [seen, setSeen] = useState(key);
+  if (seen !== key) {
+    setSeen(key);
+    if (navigation !== "REPLACE") {
+      setQuery(params.get("q") ?? "");
+      setFilter(toFilter(params.get("filter")));
+    }
+  }
+  // Поиск и фильтр живут в адресе с заменой: «Назад» со слова возвращает тот же список, а история не копит буквы.
+  const remember = (next: { q?: string; filter?: Filter }) => {
+    const q = next.q ?? query;
+    const mark = next.filter ?? filter;
+    setQuery(q);
+    setFilter(mark);
+    setParams(searchOf(q, mark), { replace: true });
+  };
+  const search = searchOf(query, filter).toString();
   const { names, code } = useProfile();
   const all = lessons.flatMap((lesson) => lesson.entries);
   const count = (key: Filter) => (key === "all" ? all.length : all.filter((entry) => entry.mark === key).length);
@@ -123,7 +149,7 @@ function Dictionary({
         <input
           type="search"
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => remember({ q: event.target.value })}
           placeholder="Найти слово или фразу"
           aria-label={`Поиск ${names.by} или русскому`}
           autoComplete="off"
@@ -135,7 +161,7 @@ function Dictionary({
         {FILTERS.map((item, index) => (
           <span key={item.key}>
             {index > 0 && <span aria-hidden> · </span>}
-            <button type="button" aria-pressed={filter === item.key} onClick={() => setFilter(item.key)}>
+            <button type="button" aria-pressed={filter === item.key} onClick={() => remember({ filter: item.key })}>
               {item.label} {count(item.key)}
             </button>
           </span>
@@ -167,7 +193,8 @@ function Dictionary({
                 {lesson.entries.map((entry) => (
                   <li key={entry.key}>
                     <Link
-                      to={entryPath(entry)}
+                      to={spread ? { pathname: entryPath(entry), search } : entryPath(entry)}
+                      state={spread ? KEEP_SCROLL : undefined}
                       className={css.row}
                       aria-current={current === `${entry.ref.kind}:${entry.ref.id}` ? "page" : undefined}
                     >
