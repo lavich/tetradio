@@ -4,7 +4,7 @@ import { createEmptyCard, Rating, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { wordRef } from "./helpers/cards";
-import { markIntroduced, submitAnswer } from "../src/storage/ops";
+import { endSession, markIntroduced, submitAnswer } from "../src/storage/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { type Word } from "../src/domain/types";
 import { completeLessons, installLessons, wordsOf } from "./helpers/content";
@@ -217,6 +217,21 @@ describe("запись ответа", () => {
     expect(event.rating).toBe(Rating.Good); // карточка после ошибки в изучении: Easy только в повторении
     expect((await db.sessions.get(session.id))!.status).toBe("done");
     expect(await db.cardStates.get(session.items[0].unitKey)).toEqual(state);
+  });
+  it("выход из занятия сохраняет ответ и попытку, записанные после копии занятия у экрана", async () => {
+    const { session } = await prepare();
+    // Экран держит занятие, прочитанное до ответа: в его копии нет ни события, ни дополнительной попытки.
+    const screen = { ...session, activeTimeMs: 9000 };
+    await answer(session, session.items[0], { correct: false });
+    const answered = (await db.sessions.get(session.id))!;
+    await endSession(screen, db);
+    const ended = (await db.sessions.get(session.id))!;
+    expect(ended.items).toEqual(answered.items);
+    expect(ended.items[0].eventId).toBeTruthy();
+    expect(ended.items.some((item) => item.retryOf === session.items[0].id)).toBe(true);
+    expect(ended.index).toBe(1);
+    expect(ended.status).toBe("ended");
+    expect(ended.activeTimeMs).toBe(9000);
   });
   it("ошибка транзакции откатывает событие, состояние и дополнительную попытку", async () => {
     const { session } = await prepare();

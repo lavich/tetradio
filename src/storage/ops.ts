@@ -230,8 +230,18 @@ export async function skipItem(
   // Пропуск последнего задания завершает занятие: накопленные ответы уходят в облако.
   if (finished) announceChange("finished");
 }
+/** Из копии экрана берётся только время: ответы и попытки могли записаться после того, как экран её прочитал. */
 export const endSession = async (session: Session, database: AppDatabase = db) => {
-  await database.sessions.put({ ...session, status: session.index >= session.items.length ? "done" : "ended" });
+  await database.transaction("rw", database.sessions, async () => {
+    const stored = (await database.sessions.get(session.id)) ?? session;
+    const answered = settled(stored.items);
+    await database.sessions.put({
+      ...stored,
+      index: answered,
+      activeTimeMs: session.activeTimeMs,
+      status: answered >= stored.items.length ? "done" : "ended",
+    });
+  });
   announceChange("finished");
 };
 
