@@ -6,21 +6,13 @@ import { makeSession } from "../src/domain/learning";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { blockProgressOf, completeLesson, saveBlockProgress } from "../src/storage/course";
-import { submitAnswer } from "../src/storage/ops";
+import { buildAndCommit, submitAnswer } from "./helpers/ops";
 import type { TelegramCloudStorage } from "../src/platform/telegram-types";
 import { kvAdapter } from "../src/sync/adapter";
 import { decodeSnapshot, encodeSnapshot, SnapshotFormatError } from "../src/sync/codec";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { syncEvents } from "../src/sync/events";
-import {
-  applySnapshot,
-  buildAndCommit,
-  buildSnapshot,
-  describeSnapshot,
-  META,
-  readMeta,
-  readPending,
-} from "../src/sync/snapshot";
+import { applySnapshot, buildSnapshot, describeSnapshot, META, readMeta, readPending } from "../src/sync/snapshot";
 import { cloudStorageTransport, memoryTransport, type MemoryTransport } from "../src/sync/transport";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
 import { installLessons, memoryFetcher } from "./helpers/content";

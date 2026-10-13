@@ -6,7 +6,7 @@ import { installLesson, refreshCatalog } from "../src/content/client";
 import { makeSession } from "../src/domain/learning";
 import { exportWordsTsv } from "../src/features/backup/backup";
 import { sessionPath } from "../src/features/learning/session-actions";
-import { coursesOrder, primaryCourse, setPrimaryCourse } from "../src/storage/courses";
+import { courses, primaryCourse, setPrimaryCourse } from "../src/storage/courses";
 import { db } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { memoryFetcher } from "./helpers/content";
@@ -29,7 +29,7 @@ async function install(...lessonIds: string[]) {
 describe("порядок установки курсов", () => {
   it("курс запоминается первым установленным уроком, не дожидаясь следующего каталога", async () => {
     await install("m01-1", "e01-1");
-    expect(await coursesOrder(db)).toEqual(["greek-a2", "english"]);
+    expect((await courses(db)).map((course) => course.id)).toEqual(["greek-a2", "english"]);
     expect(await primaryCourse(db)).toBe("greek-a2");
   });
   it("английский, поставленный первым, становится основным", async () => {

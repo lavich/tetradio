@@ -54,11 +54,8 @@ export interface AnswerInput {
   now?: Date;
   database?: AppDatabase;
 }
-/** Один ответ = одно событие, один пересчёт FSRS и одна позиция сессии, в одной транзакции. */
-export async function submitAnswer(input: AnswerInput): Promise<ReviewEvent> {
-  return (await recordAnswer(input)).event;
-}
 /**
+ * Один ответ = одно событие, один пересчёт FSRS и одна позиция сессии, в одной транзакции.
  * `created:false` — ответ уже был записан (повторное нажатие, вторая вкладка): отклик и синхронизация не повторяются.
  * Снимок содержимого и описание цели берутся из карточки сессии, а не из свежей версии пакета.
  */

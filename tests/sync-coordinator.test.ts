@@ -3,7 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import Dexie from "dexie";
-import { markChanged, submitAnswer } from "../src/storage/ops";
+import { markChanged } from "../src/storage/ops";
+import { buildAndCommit, submitAnswer } from "./helpers/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { kvAdapter } from "../src/sync/adapter";
@@ -282,18 +283,18 @@ describe("конфликты независимых изменений", () => {
     await phone.sync.exchange();
     const conflict = await tablet.sync.exchange();
     const remote = conflict.conflict!.branches.find((branch) => !branch.local)!;
-    let answered: Promise<unknown> | null = null;
+    const answered: Promise<unknown>[] = [];
     const answer = () => {
       // Запись встаёт в очередь за транзакцией применения и выполняется раньше следующего чтения координатора.
-      answered ??= Dexie.ignoreTransaction(() => markChanged(tablet.db));
+      if (!answered.length) answered.push(Dexie.ignoreTransaction(() => markChanged(tablet.db)));
     };
     tablet.db.baseSummary.hook("creating", answer);
     tablet.db.baseSummary.hook("updating", answer);
     const resolved = await tablet.sync.resolve(remote.id);
     tablet.db.baseSummary.hook("creating").unsubscribe(answer);
     tablet.db.baseSummary.hook("updating").unsubscribe(answer);
-    expect(answered).not.toBeNull();
-    await answered;
+    expect(answered).toHaveLength(1);
+    await Promise.all(answered);
     expect(resolved.phase).toBe("synced");
     expect(await readMeta(tablet.db, META.dirty)).not.toBeNull();
     expect(resolved.dirty).toBe(true);
@@ -424,7 +425,6 @@ describe("конфликты независимых изменений", () => {
   });
   it("ответ, сохранённый во время сборки снимка, учитывается в сводке один раз", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
-    const { buildAndCommit } = await import("../src/sync/snapshot");
     const cutoff = new Date(clockMs + 150_000); // между первым ответом (+2 мин) и вторым (+3 мин)
     await study(phone, [true, true]);
     // Публикация взяла «сейчас» до второго ответа, а сводку собрала уже после него.
@@ -441,7 +441,6 @@ describe("конфликты независимых изменений", () => {
     await phone.sync.exchange();
     // планшет публикует без чтения телефона: эмулируем гонку прямой записью указателя другого клиента
     const adapter = kvAdapter(cloud);
-    const { buildAndCommit } = await import("../src/sync/snapshot");
     const tabletDevice = await tablet.sync.deviceId();
     const snapshot = await buildAndCommit(tablet.db, now(), `${tabletDevice}-1`);
     const tabletClock = JSON.parse((await readMeta(tablet.db, META.clock))!);

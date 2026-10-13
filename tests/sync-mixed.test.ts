@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
-import { applySnapshot, buildAndCommit, buildSnapshot, META, readMeta } from "../src/sync/snapshot";
+import { applySnapshot, buildSnapshot, META, readMeta } from "../src/sync/snapshot";
 import { decodeSnapshot, encodeRef, encodeSnapshot, SnapshotFormatError } from "../src/sync/codec";
 import { kvAdapter, splitParts } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
@@ -11,7 +11,7 @@ import { dexieSource } from "../src/storage/queries";
 import type { SkillSummary } from "../src/domain/skills";
 import { makeSession } from "../src/domain/learning";
 import { installLesson, refreshCatalog } from "../src/content/client";
-import { submitAnswer } from "../src/storage/ops";
+import { buildAndCommit, submitAnswer } from "./helpers/ops";
 import { unitKey } from "./helpers/cards";
 import { memoryFetcher } from "./helpers/content";
 import { installMixed, MIXED_LESSON, mixedContent } from "./helpers/mixed";

@@ -6,7 +6,7 @@ import { PROFILES } from "../src/domain/language";
 import { gapAnswer, gapOf, gapped, gapWord } from "../src/domain/word-gap";
 import type { Phrase, ReviewEvent, Session, SessionItem } from "../src/domain/types";
 import { AppDatabase } from "../src/storage/db";
-import { submitAnswer } from "../src/storage/ops";
+import { submitAnswer } from "./helpers/ops";
 import { doneRows } from "../src/features/learning/notebook";
 import { decodeSnapshot, encodeSnapshot } from "../src/sync/codec";
 import { SNAPSHOT_FORMAT, type CompactSnapshot } from "../src/sync/types";

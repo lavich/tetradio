@@ -204,9 +204,6 @@ export async function commitBase(database: AppDatabase, snapshot: Summary, versi
   );
   await database.baseSummary.put({ id: "base", asOf, versionId, stats: snapshot.stats });
 }
-export async function buildAndCommit(database: AppDatabase, now: Date, versionId: string): Promise<CompactSnapshot> {
-  return (await buildAndCommitMarked(database, now, versionId)).snapshot;
-}
 /**
  * Прогресс читается без блокировки записи, затем сводки собираются и фиксируются одной транзакцией по своим таблицам:
  * отсечка совпадает с прочитанными событиями. Отметка изменений читается первой — изменение между двумя транзакциями

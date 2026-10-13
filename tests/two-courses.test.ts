@@ -11,7 +11,6 @@ import {
   cardCourses,
   cardLanguages,
   courses,
-  coursesOrder,
   currentCourse,
   primaryCourse,
   profileOfCourse,
@@ -181,10 +180,10 @@ const englishIds = new Set([...englishWords, ...englishPhrases].map((card) => ca
 
 describe("порядок курсов", () => {
   it("основной — установленный первым, а не первый в каталоге; смена основного запоминается и не меняет порядок", async () => {
-    expect(await coursesOrder(db)).toEqual([GREEK, ENGLISH]);
+    expect((await courses(db)).map((course) => course.id)).toEqual([GREEK, ENGLISH]);
     expect(await primaryCourse(db)).toBe(GREEK);
     await setPrimaryCourse(ENGLISH, db);
-    expect(await coursesOrder(db)).toEqual([GREEK, ENGLISH]);
+    expect((await courses(db)).map((course) => course.id)).toEqual([GREEK, ENGLISH]);
     expect(await primaryCourse(db)).toBe(ENGLISH);
     expect(await currentCourse(db)).toBe(ENGLISH);
     // Основным не становится курс, которого нет на устройстве.
@@ -196,7 +195,7 @@ describe("порядок курсов", () => {
     const fresh = new AppDatabase("tetradio-two-courses-greek");
     await seedCatalog(fresh);
     await install(fresh, GREEK);
-    expect(await coursesOrder(fresh)).toEqual([GREEK, ENGLISH]);
+    expect((await courses(fresh)).map((course) => course.id)).toEqual([GREEK, ENGLISH]);
     expect((await courses(fresh)).map((course) => [course.id, course.installed, course.language])).toEqual([
       [GREEK, true, "el"],
       [ENGLISH, false, "en"],
