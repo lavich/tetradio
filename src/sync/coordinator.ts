@@ -454,7 +454,7 @@ export class SyncCoordinator {
   private async cleanup(device: string, applied: Clock, force: boolean) {
     const { adapter, database } = this.options;
     const { pointers } = await adapter.listPointers();
-    const protectedIds = new Set((await database.syncVersions.toArray()).map((row) => row.meta.id));
+    const protectedIds = new Set((await database.syncVersions.toCollection().primaryKeys()) as string[]);
     for (const pointer of pointers) if (pointer.device === device) protectedIds.add(pointer.id);
     const own = (await adapter.listGenerations()).filter((id) => id.startsWith(`${device}-`) && !protectedIds.has(id));
     if (own.length) await adapter.removeGenerations(own);

@@ -511,6 +511,30 @@ describe("надёжность публикации и лимиты", () => {
     expect(after).toContain(`${tabletDevice}-1`);
     expect(after).toContain(`${phoneDevice}-3`); // чужое поколение не удалено планшетом
   });
+  it("своё поколение, сохранённое как отвергнутая версия, уборка не удаляет", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    const pointer = (await kvAdapter(cloud).listPointers()).pointers[0];
+    await phone.db.syncVersions.put({
+      id: pointer.id,
+      role: "rejected",
+      createdAt: now().toISOString(),
+      meta: pointer,
+      snapshot: await kvAdapter(cloud).readVersion(pointer),
+      note: "",
+    });
+    await study(phone, [false]);
+    await phone.sync.exchange();
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const generations = await kvAdapter(cloud).listGenerations();
+    expect(generations.filter((id) => id.startsWith(`${phoneDevice}-`)).sort()).toEqual([
+      `${phoneDevice}-1`,
+      `${phoneDevice}-3`,
+    ]);
+  });
   it("указатель другого устройства, вошедший в принятую версию, удаляется с частями через 30 дней, не раньше", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
     const tablet = await device("tablet", { lessons: ["mech-1"] });
