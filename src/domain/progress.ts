@@ -90,14 +90,15 @@ export interface SkillTask {
   id: string;
   skill: Skill;
   size: number;
+  source: SkillProgress["source"];
 }
 export function skillTasks(blocks: LessonBlock[]): SkillTask[] {
   return blocks.flatMap((block): SkillTask[] => {
     if (block.type === "writing" || block.type === "speaking")
-      return [{ id: block.id, skill: block.type, size: block.criteria.length }];
+      return [{ id: block.id, skill: block.type, size: block.criteria.length, source: "self" }];
     if (block.type !== "exercise") return [];
     const skill = skillOf(block, blocks);
-    return skill ? [{ id: block.id, skill, size: block.items.length }] : [];
+    return skill ? [{ id: block.id, skill, size: block.items.length, source: "task" }] : [];
   });
 }
 
@@ -126,7 +127,7 @@ export function skillProgress(lessons: { tasks: SkillTask[]; progress: Map<strin
       if (!mark?.done) continue;
       entry.attempted += task.size;
       entry.earned +=
-        entry.source === "self" ? (mark.checks?.length ?? 0) : mark.score ? mark.score.correct + mark.score.almost : 0;
+        task.source === "self" ? (mark.checks?.length ?? 0) : mark.score ? mark.score.correct + mark.score.almost : 0;
     }
   return [...sums.values()];
 }

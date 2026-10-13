@@ -1,4 +1,4 @@
-// Пакеты курса весят мегабайты, а живые запросы перезапускаются на каждом ответе: их сводки держатся в памяти.
+// Кэш сводок: живые запросы курса перезапускаются на каждом ответе, а пакеты весят мегабайты.
 import Dexie, { cmp, RangeSet, type ObservabilitySet } from "dexie";
 import type { ExerciseBlock, LessonBlock, LessonKind } from "../content/course";
 import { taskIds } from "../domain/course";
@@ -70,8 +70,9 @@ function cacheOf(database: AppDatabase): Cache {
 }
 
 export async function lessonOutlines(ids: string[], database: AppDatabase): Promise<(LessonOutline | undefined)[]> {
-  // Событие об изменении приходит после фиксации: внутри транзакции записи кэш мог устареть.
-  if (Dexie.currentTransaction) return (await database.packages.bulkGet(ids)).map((pack) => pack && outlineOf(pack));
+  // Сброс приходит после фиксации, а транзакция записи видит свои незафиксированные пакеты.
+  if (Dexie.currentTransaction?.mode === "readwrite")
+    return (await database.packages.bulkGet(ids)).map((pack) => pack && outlineOf(pack));
   const cache = cacheOf(database);
   const start = cache.generation;
   // Ключи, а не пакеты: так запрос подписан на эти уроки и перезапустится, когда пакет сменится.
