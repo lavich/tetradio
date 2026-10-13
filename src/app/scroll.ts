@@ -72,7 +72,6 @@ export function useScrollMemory(root: RefObject<HTMLElement | null>) {
   }, [location.key, location.pathname, location.state, action, root]);
 }
 
-/** Сдаётся при вводе, по таймауту или когда страница перестала меняться: цель недостижима. */
 function restore(app: HTMLElement | null, key: string, target: number) {
   savePosition(key, target);
   window.scrollTo(0, target);

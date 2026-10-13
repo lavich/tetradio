@@ -18,7 +18,7 @@ const settled = (page: Page) =>
         tick();
       }),
   );
-/** Колесом, как пользователь: уроки по пути показываются и запоминают свою высоту (content-visibility). */
+/** Колесом: уроки по пути показываются и запоминают высоту (content-visibility). */
 async function wheelTo(page: Page, target: Locator, top = 200, step = 100) {
   await page.mouse.move(200, 200);
   for (let turn = 0; turn < 100 && (await target.boundingBox())!.y > top; turn++) {
@@ -65,7 +65,9 @@ test("поиск и фильтр живут в адресе: «Назад» со
   await page.getByRole("button", { name: "Назад" }).click();
   await expect(page).toHaveURL(/\/words\?q=/);
   await expect(page.getByRole("searchbox")).toHaveValue("φίλ");
-  await expect(list.getByRole("link")).toHaveCount(await list.getByRole("link", { name: /φίλ/ }).count());
+  const found = await list.getByRole("link", { name: /φίλ/ }).count();
+  expect(found).toBeGreaterThan(0);
+  await expect(list.getByRole("link")).toHaveCount(found);
 });
 
 test("«Назад» возвращает строку на её место, переход в другой раздел открывается сверху", async ({ page }) => {
@@ -149,4 +151,27 @@ test("разворот: слово открывается рядом, списо
   await expect(first).not.toHaveAttribute("aria-current", "page");
   const lessonOf = (row: Locator) => row.evaluate((link) => link.closest("section")?.getAttribute("aria-label"));
   expect(await lessonOf(other)).not.toBe(await lessonOf(first));
+});
+
+test.describe(() => {
+  test.use({ serviceWorkers: "block" });
+  test("переход сразу после ввода не откатывается отложенной записью поиска", async ({ page }) => {
+    await page.goto("/app/words");
+    let release!: () => void;
+    const loaded = new Promise<void>((resolve) => (release = resolve));
+    await page.route(/ProgressScreen-[^/]*\.js$/, async (route) => {
+      await loaded;
+      await route.continue();
+    });
+    await page.getByRole("searchbox").fill("φίλ");
+    // Без blur поиска, как касание на iOS: иначе адрес записался бы сразу.
+    await page
+      .getByRole("navigation", { name: "Основные разделы" })
+      .getByRole("link", { name: "Прогресс" })
+      .evaluate((link: HTMLElement) => link.click());
+    await page.waitForTimeout(600);
+    release();
+    await expect(page.getByRole("region", { name: "Словарь" })).toBeHidden();
+    await expect(page).toHaveURL(/\/progress$/);
+  });
 });

@@ -144,7 +144,11 @@ function Dictionary({
     setQuery(q);
     clearTimeout(timer.current);
     // WebKit бросает SecurityError после ~100 replaceState за 10 с, поэтому адрес — не на каждый символ.
-    timer.current = window.setTimeout(() => write(q, filter), URL_DELAY);
+    const entry = (window.history.state as { key?: string } | null)?.key;
+    // Маршрутизатор меняет адрес раньше, чем экран: запись по старому адресу отменила бы переход.
+    timer.current = window.setTimeout(() => {
+      if ((window.history.state as { key?: string } | null)?.key === entry) write(q, filter);
+    }, URL_DELAY);
   };
   const changeFilter = (mark: Filter) => {
     setFilter(mark);
