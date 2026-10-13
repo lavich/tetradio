@@ -38,6 +38,7 @@
   --cell: 24px;
   --field: 56px;
   --ok: #15803d;
+  /* 3,5:1 — только для галочек и зачёркиваний; текст «почти» — --almost-fg. */
   --almost: #b7791f;
   --radius: 0.875rem;
   --radius-card: 18px;
@@ -89,7 +90,8 @@
   --secondary: var(--tg-theme-secondary-bg-color, #f0f0ec);
   --secondary-foreground: var(--tg-theme-text-color, #171717);
   --muted: var(--tg-theme-secondary-bg-color, #f0f0ec);
-  --muted-foreground: var(--tg-theme-hint-color, #6b7280);
+  /* Подсказочный цвет Telegram ниже AA на светлых темах — примесь текста поднимает мелкие подписи. */
+  --muted-foreground: color-mix(in srgb, var(--tg-theme-hint-color, #6b7280), var(--foreground) 50%);
   --accent: color-mix(in srgb, var(--primary) 12%, var(--background));
   --accent-foreground: var(--tg-theme-accent-text-color, var(--primary));
   --soft: color-mix(in srgb, var(--primary) 12%, var(--background));
@@ -115,7 +117,7 @@
   --secondary: var(--tg-theme-secondary-bg-color, #232e3c);
   --secondary-foreground: var(--tg-theme-text-color, #f5f5f5);
   --muted: var(--tg-theme-secondary-bg-color, #232e3c);
-  --muted-foreground: var(--tg-theme-hint-color, #a3adb8);
+  --muted-foreground: color-mix(in srgb, var(--tg-theme-hint-color, #a3adb8), var(--foreground) 50%);
   --primary: var(--tg-theme-button-color, #5288c1);
   --primary-foreground: var(--tg-theme-button-text-color, #ffffff);
   --destructive: var(--tg-theme-destructive-text-color, #f87171);
