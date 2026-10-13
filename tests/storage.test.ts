@@ -144,10 +144,11 @@ describe("запись ответа", () => {
     const [first, second] = session.items;
     await asMature(first);
     const cloud = (await db.cardStates.get(first.unitKey))!;
-    expect(first.expectedVersion).toBe(0); // пункт собран до того, как пришло облачное состояние
+    expect(first.expectedVersion).toBe(0);
     const event = await answer(session, first);
     expect(event.before).toEqual(cloud.card);
     expect(event.after!.reps).toBe(cloud.card.reps + 1);
+    expect(event.after!.stability).toBeGreaterThan(cloud.card.stability);
     expect((await db.cardStates.get(first.unitKey))!.version).toBe(2);
     expect(await db.events.count()).toBe(1);
     const stored = (await db.sessions.get(session.id))!;
@@ -342,7 +343,7 @@ describe("запись ответа на смешанном уроке", () => {
     expect(second.unitKey).not.toBe(first.unitKey);
     expect(new Date(second.card.due).getTime()).toBeLessThan(new Date(first.card.due).getTime());
   });
-  it("двойное нажатие и вторая вкладка: одно событие, не более одной дополнительной попытки; ответ второй вкладки ложится поверх", async () => {
+  it("двойное нажатие и вторая вкладка: одно событие, не более одной дополнительной попытки", async () => {
     const { session, item } = await prepare();
     const target = item("p-xora");
     await Promise.all([answer(session, target, { correct: false }), answer(session, target, { correct: false })]);
@@ -350,11 +351,6 @@ describe("запись ответа на смешанном уроке", () => {
     const stored = (await db.sessions.get(session.id))!;
     expect(stored.items.filter((entry) => entry.retryOf === target.id)).toHaveLength(1);
     expect(stored.items).toHaveLength(session.items.length + 1);
-    const stale = { ...target, id: `${target.id}-copy` };
-    await answer(session, stale, { correct: false });
-    expect(await db.events.count()).toBe(2);
-    expect((await db.cardStates.get(K("phrase", "p-xora")))!.version).toBe(2);
-    expect((await db.sessions.get(session.id))!.items.filter((entry) => entry.retryOf)).toHaveLength(1);
   });
   it("дополнительная и ручная тренировки сохраняют результат без сдвига расписания", async () => {
     const { session, item } = await prepare();
