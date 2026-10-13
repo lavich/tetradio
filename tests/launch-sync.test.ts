@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { launchSync } from "../src/app/launch-sync";
+import { launchSync, syncOnceOpened } from "../src/app/launch-sync";
 import type { TelegramWebApp } from "../src/platform/telegram-types";
 import type { Profile } from "../src/storage/profile";
 import type { SyncStatus } from "../src/sync/coordinator";
@@ -93,5 +93,31 @@ describe("текст строки синхронизации", () => {
     });
     expect(syncLineState(status(), "none")).toMatchObject({ text: "Только на этом устройстве", retry: false });
     expect(syncLineState(status({ phase: "error" }), "ready")).toMatchObject({ failed: true, retry: true });
+  });
+  it("база не открылась: синхронизация не подключается и не шлёт отчёты повторов", async () => {
+    const connectSync = vi.fn();
+    const connect = launchSync({
+      profile,
+      stopped: () => false,
+      onMismatch: vi.fn(),
+      connectSync: syncOnceOpened(
+        Promise.reject(new DOMException("denied", "SecurityError")),
+        Promise.resolve(connectSync),
+      ),
+    });
+    await connect(bridgeOf(7));
+    expect(connectSync).not.toHaveBeenCalled();
+  });
+  it("открытая база подключает синхронизацию как обычно", async () => {
+    const connectSync = vi.fn();
+    const connect = launchSync({
+      profile,
+      stopped: () => false,
+      onMismatch: vi.fn(),
+      connectSync: syncOnceOpened(Promise.resolve(), Promise.resolve(connectSync)),
+    });
+    const app = bridgeOf(7);
+    await connect(app);
+    expect(connectSync).toHaveBeenCalledWith(app);
   });
 });

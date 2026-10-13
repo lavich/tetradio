@@ -8,7 +8,7 @@ import { registerSW } from "virtual:pwa-register";
 import { App } from "./app/App";
 import { CrashScreen } from "./app/CrashScreen";
 import { LaunchGate, type LaunchStop } from "./app/LaunchGate";
-import { launchSync } from "./app/launch-sync";
+import { launchSync, syncOnceOpened } from "./app/launch-sync";
 import { Recovery } from "./app/Recovery";
 import { installLesson, refreshCatalog, syncCourses } from "./content/client";
 import { forgetLaunch } from "./platform/launch";
@@ -117,7 +117,10 @@ function start(profile: Profile) {
       forgetLaunch();
       stop("owner-mismatch");
     },
-    connectSync: Promise.all([database, import("./sync")]).then(([, { connectSync }]) => connectSync),
+    connectSync: syncOnceOpened(
+      opened,
+      Promise.all([database, import("./sync")]).then(([, { connectSync }]) => connectSync),
+    ),
   });
   // По тайм-ауту — без облака; поздний bridge сверяет владельца и подключает CloudStorage.
   void initPlatform(undefined, (app) => void connect(app)).then(() => connect(telegramBridge()));
