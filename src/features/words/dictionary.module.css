@@ -107,7 +107,8 @@
 }
 .row:focus-visible {
   outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  /* Внутрь: секция с contain: paint обрезала бы рамку снаружи. */
+  outline-offset: -2px;
   border-radius: 8px;
 }
 @media (hover: hover) {
@@ -292,4 +293,13 @@
     top: 0;
     align-self: start;
   }
+}
+/* На ~1300 строк раскладка уроков вне экрана — главная цена каждого символа поиска. */
+.section {
+  content-visibility: auto;
+}
+/* Та же изоляция, что у показанных: без неё схлопнулись бы поля и позиция сдвинулась. */
+:global([data-restoring]) .section {
+  content-visibility: visible;
+  contain: layout style paint;
 }

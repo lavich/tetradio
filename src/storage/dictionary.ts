@@ -97,8 +97,28 @@ export async function dictionary(courseId?: string, database: AppDatabase = db):
   });
 }
 
-/** Поиск по началу слов греческого и перевода: каждое слово запроса — начало какого-то слова карточки. */
-export function matchesQuery(entry: DictionaryEntry, query: string) {
+export type MarkFilter = CardMark | "all";
+
+/** Урок, где подошло всё, возвращается тем же объектом, чтобы его строки не перерисовывались. */
+export function filterDictionary(lessons: DictionaryLesson[], filter: MarkFilter, query: string) {
   const wanted = searchTokens(query);
-  return wanted.every((token) => entry.tokens.some((own) => own.startsWith(token)));
+  if (filter === "all" && !wanted.length) return lessons;
+  const fits = (entry: DictionaryEntry) =>
+    (filter === "all" || entry.mark === filter) &&
+    wanted.every((token) => entry.tokens.some((own) => own.startsWith(token)));
+  return lessons.flatMap((lesson) => {
+    const entries = lesson.entries.filter(fits);
+    if (!entries.length) return [];
+    return entries.length === lesson.entries.length ? [lesson] : [{ ...lesson, entries }];
+  });
+}
+
+export function countMarks(lessons: DictionaryLesson[]) {
+  const counts: Record<MarkFilter, number> = { all: 0, new: 0, learning: 0, solid: 0 };
+  for (const lesson of lessons)
+    for (const entry of lesson.entries) {
+      counts.all++;
+      counts[entry.mark]++;
+    }
+  return counts;
 }
