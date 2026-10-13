@@ -15,6 +15,7 @@ import { buildCourses } from "./build/courses.ts";
 import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons.ts";
 import { markCourses, type MarksReport } from "./build/mark-courses.ts";
 import { buildReadings, type ReadingReport } from "./build/readings.ts";
+import { checkQuestions } from "./build/questions.ts";
 import { buildMedia } from "./build/media.ts";
 import { packLessons, type BuiltFile } from "./build/output.ts";
 import { checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
@@ -51,6 +52,8 @@ export interface BuiltContent {
   readings: ReadingReport[];
   /** Опубликованные модули курса с полкой, где текстов для чтения меньше двух. */
   sparseReadings: string[];
+  /** Вопросы к текстам с непройденными словами: «урок: задание.вопрос: слова». */
+  unfamiliar: string[];
 }
 
 /**
@@ -84,6 +87,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   // Слова прошлых уроков известны только после разбора всех уроков, поэтому версии считаются после разметки.
   const marks = markCourses(courses, modules, moduleOf, drafts, words, phrases);
   const readings = buildReadings({ sources, courses, modules, moduleOf, drafts, words, phrases, media, legacy, art });
+  const unfamiliar = checkQuestions({ courses, modules, moduleOf, drafts, words, phrases });
   const { packages, entries, files } = packLessons(drafts, marks, readings.byLesson, readings.mediaOf);
   checkCoverage({ sources, words, phrases, used, checkpoints, reviews, lessonsForModule, modules });
   for (const { item, body } of media.values()) files.push({ path: item.url, body, mimeType: item.mimeType });
@@ -108,6 +112,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     cardVoicing,
     readings: readings.report,
     sparseReadings: readings.sparse,
+    unfamiliar,
   };
 }
 
@@ -176,6 +181,10 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     );
   if (built.sparseReadings.length)
     console.log(`Чтение: меньше двух текстов в модулях ${built.sparseReadings.join(", ")}`);
+  if (built.unfamiliar.length) {
+    console.log(`Вопросы к текстам: непройденные слова в ${built.unfamiliar.length} вопросах`);
+    for (const line of built.unfamiliar) console.log(`  ${line}`);
+  }
   const tables = built.words.filter((word) => word.paradigm);
   console.log(`Спряжение: таблицы у ${tables.length} глаголов — весь список: PARADIGM_REPORT=1 node content/build.ts`);
   if (process.env.PARADIGM_REPORT)

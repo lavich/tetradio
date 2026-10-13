@@ -57,15 +57,11 @@ export function coverage({
   lessonGlosses,
   profile = PROFILES.el,
 }: CoverageInput): Coverage {
+  return coverer(cards, lessonGlosses, profile)(text, glosses, names);
+}
+/** Сопоставитель и словарь собираются один раз на набор карточек: много коротких текстов меряются быстро. */
+export function coverer(cards: MatchCard[], lessonGlosses: string[], profile: LanguageProfile = PROFILES.el) {
   const matcher = buildMatcher(cards, profile);
-  const tokens = matcher.tokenize(text);
-  const covered = new Set<number>();
-  for (const found of candidates(text, matcher))
-    for (let at = found.start; at < found.start + found.length; at++) covered.add(at);
-  const nameSet = new Set(names.map(norm));
-  const glossed = new Set<number>();
-  for (const span of glossSpans(text, glosses))
-    for (let at = span.start; at < span.start + span.length; at++) glossed.add(at);
   const surfaces = new Set<string>();
   for (const card of cards) {
     const pieces = card.forms ? formPieces(card.forms) : [];
@@ -74,21 +70,31 @@ export function coverage({
   }
   for (const gloss of lessonGlosses) for (const token of matcher.tokenize(gloss)) surfaces.add(bare(token.norm));
   const stems = [...surfaces].filter((surface) => surface.length >= STEM);
-  const result: Coverage = { total: tokens.length, known: 0, strict: 0, glossed: 0, named: 0, unknown: [] };
-  // Глосса не делает слово знакомым и не мешает ему быть знакомым: доля без глосс от них не зависит.
-  for (const token of tokens) {
-    const word = bare(token.norm);
-    if (glossed.has(token.start)) result.glossed++;
-    if (covered.has(token.start) || GRAMMAR.has(token.norm)) {
-      result.known++;
-      result.strict++;
-    } else if (nameSet.has(token.norm)) {
-      result.known++;
-      result.strict++;
-      result.named++;
-    } else if (surfaces.has(word) || sharesStem(word, stems, profile)) result.known++;
-    else if (!glossed.has(token.start)) result.unknown.push(text.slice(token.start, token.end));
-  }
-  return result;
+  return (text: string, glosses: CoverageInput["glosses"], names: string[]): Coverage => {
+    const tokens = matcher.tokenize(text);
+    const covered = new Set<number>();
+    for (const found of candidates(text, matcher))
+      for (let at = found.start; at < found.start + found.length; at++) covered.add(at);
+    const nameSet = new Set(names.map(norm));
+    const glossed = new Set<number>();
+    for (const span of glossSpans(text, glosses))
+      for (let at = span.start; at < span.start + span.length; at++) glossed.add(at);
+    const result: Coverage = { total: tokens.length, known: 0, strict: 0, glossed: 0, named: 0, unknown: [] };
+    // Глосса не делает слово знакомым и не мешает ему быть знакомым: доля без глосс от них не зависит.
+    for (const token of tokens) {
+      const word = bare(token.norm);
+      if (glossed.has(token.start)) result.glossed++;
+      if (covered.has(token.start) || GRAMMAR.has(token.norm)) {
+        result.known++;
+        result.strict++;
+      } else if (nameSet.has(token.norm)) {
+        result.known++;
+        result.strict++;
+        result.named++;
+      } else if (surfaces.has(word) || sharesStem(word, stems, profile)) result.known++;
+      else if (!glossed.has(token.start)) result.unknown.push(text.slice(token.start, token.end));
+    }
+    return result;
+  };
 }
 export const share = (part: number, total: number) => (total ? Math.round((1000 * part) / total) / 10 : 0);
