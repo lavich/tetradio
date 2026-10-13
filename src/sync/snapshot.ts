@@ -186,7 +186,7 @@ async function readSummary(database: AppDatabase, until: string): Promise<Summar
         ref: event.ref,
         skills: foldSkill(skills.get(event.unitKey)?.skills ?? emptySkills(), event),
       });
-  const stats = fresh.reduce((summary, event) => foldStats(summary, event, KEEP_DAYS), base?.stats ?? emptyStats());
+  const stats = foldStats(base?.stats ?? emptyStats(), fresh, KEEP_DAYS);
   return { skills: [...skills.values()].sort(byKey), stats: { ...stats, days: stats.days.slice(-KEEP_DAYS) } };
 }
 /** Компактный снимок из локальной базы; вызывается внутри транзакции чтения по `SNAPSHOT_TABLES`. */

@@ -168,9 +168,10 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
     phrasePool: async (_want, courseId) =>
       courseId ? courseIds("phrase", courseId).flatMap((id) => phrases.get(id) ?? []) : livePhrases,
     daysBetween: async (from, to) =>
-      byTime(data.events.filter((event) => event.localDate >= from && event.localDate <= to)).reduce(
-        (summary, event) => foldStats(summary, event, Infinity),
+      foldStats(
         emptyStats(),
+        byTime(data.events.filter((event) => event.localDate >= from && event.localDate <= to)),
+        Infinity,
       ).days,
     recentByType: async (type, limit) =>
       sorted(data.events.filter((event) => event.type === type))
