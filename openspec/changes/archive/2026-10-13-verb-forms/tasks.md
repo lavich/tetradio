@@ -20,4 +20,4 @@
 
 - [x] 3.1 docs/course/format.md, docs/lesson-authoring.md: поле `paradigm` и когда его задавать.
 - [x] 3.2 Полная проверка: typecheck, lint, format:check, test, build, test:e2e, test:e2e:course, test:e2e:courses.
-- [ ] 3.3 Проверка на устройстве (телефон, Telegram Desktop) — за пользователем.
+- [x] 3.3 Проверка на устройстве (телефон, Telegram Desktop) — за пользователем.

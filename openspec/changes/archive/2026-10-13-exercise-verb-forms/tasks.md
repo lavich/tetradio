@@ -10,4 +10,4 @@
 ## 2. Проверка
 
 - [x] 2.1 Полная проверка: typecheck, lint, format:check, test, build, test:e2e, test:e2e:course, test:e2e:courses.
-- [ ] 2.2 Проверка на устройстве — за пользователем.
+- [x] 2.2 Проверка на устройстве — за пользователем.
