@@ -32,11 +32,42 @@ test.describe("запуск внутри Telegram", () => {
     await expect(page.getByRole("alertdialog")).toHaveCount(0);
     await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
     await expect(page.getByTestId("sync-status")).toHaveCount(0);
+    await expect(page.getByText("Данные хранятся только в этом браузере")).toBeVisible();
+    await expect(page.getByText("Подключение к Telegram…")).toHaveCount(0);
     await expect(page.locator("header").getByText("τετράδιο")).toBeVisible();
     await page.getByRole("link", { name: "Настройки и данные" }).click();
     await expect(page.getByTestId("storage-scope")).toContainText("Режим разработки: тестовый пользователь");
     await expect(page.getByTestId("storage-scope")).toContainText("облачной синхронизации нет");
     expect(await databases(page)).toEqual(["tetradio-mock-1"]);
+  });
+  test("bridge позже тайм-аута: сначала «Подключение к Telegram…», затем облачная синхронизация", async ({ page }) => {
+    const { bridgeScript, launchHash } = await import("./telegram");
+    await page.route("https://telegram.org/**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await route.fulfill({ contentType: "text/javascript", body: bridgeScript({}) });
+    });
+    await page.goto(`/app/progress${launchHash({})}`, { waitUntil: "domcontentloaded" });
+    const status = page.getByTestId("sync-status");
+    await expect(status).toBeVisible();
+    await expect(status).toHaveAttribute("data-phase", "connecting");
+    await expect(status).toHaveText("Подключение к Telegram…");
+    await expect(status.getByRole("button", { name: "Повторить синхронизацию" })).toHaveCount(0);
+    await expect(status).toHaveAttribute("data-phase", "synced", { timeout: 20000 });
+    await expect(status).toContainText("Синхронизировано");
+    expect(await page.locator("html").getAttribute("data-theme")).toBe("light");
+    expect(await tg(page).calls()).toContain("ready");
+  });
+  test("поздний bridge другого пользователя останавливает запуск до синхронизации", async ({ page }) => {
+    const { bridgeScript, launchHash } = await import("./telegram");
+    await page.route("https://telegram.org/**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await route.fulfill({ contentType: "text/javascript", body: bridgeScript({ userId: 2002 }) });
+    });
+    await page.goto(`/app/${launchHash({})}`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByTestId("today-title")).toBeVisible();
+    await expect(page.getByTestId("launch-error")).toBeVisible({ timeout: 20000 });
+    await page.waitForTimeout(3000); // дольше задержки первого обмена после подключения
+    expect(Object.keys(await tg(page).cloud())).toHaveLength(0);
   });
   test("ошибка загрузки bridge при запуске из Telegram оставляет обычный интерфейс", async ({ page }) => {
     await page.route("https://telegram.org/**", (route) => route.abort());
@@ -44,6 +75,8 @@ test.describe("запуск внутри Telegram", () => {
     await page.goto(`/app/${launchHash({})}`);
     await expect(page.getByTestId("today-title")).toBeVisible();
     await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
+    await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "unavailable");
+    await expect(page.getByTestId("sync-status")).toHaveText("Синхронизация недоступна — перезапустите приложение");
     await expect(page.getByRole("button", { name: "Назад" })).toHaveCount(0);
     await page.getByRole("link", { name: "Настройки" }).click();
     await expect(page.getByRole("button", { name: "Назад" })).toBeVisible(); // нативной кнопки нет — внутренняя остаётся

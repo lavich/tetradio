@@ -1,8 +1,9 @@
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { syncPhaseText } from "../../app/TelegramNotices";
+import { useBridgeState } from "../../platform/platform";
 import { currentProfile } from "../../storage/profile";
 import { sync, useSyncStatus } from "../../sync";
+import { syncLineState } from "../../sync/status-text";
 import ui from "../../shared/ui.module.css";
 import css from "./progress.module.css";
 
@@ -10,19 +11,17 @@ import css from "./progress.module.css";
 export function SyncLine() {
   const profile = currentProfile();
   const status = useSyncStatus();
+  const bridge = useBridgeState();
   if (profile.kind !== "telegram") return <p className={css.status}>Данные хранятся только в этом браузере</p>;
-  const failed = status.phase === "error" || status.phase === "paused";
+  const line = syncLineState(status, bridge);
   return (
     <>
-      <div className={css.status} data-testid="sync-status" data-phase={status.phase}>
-        <span>
-          {syncPhaseText(status.phase, status.lastConfirmedAt)}
-          {status.dirty && status.phase !== "syncing" ? " · есть неотправленные изменения" : ""}
-        </span>
-        {status.phase !== "disabled" && (
+      <div className={css.status} data-testid="sync-status" data-phase={line.phase}>
+        <span>{line.text}</span>
+        {line.retry && (
           <Button
             size="sm"
-            variant={failed ? "soft" : "quiet"}
+            variant={line.failed ? "soft" : "quiet"}
             disabled={status.phase === "syncing"}
             onClick={() => void sync.exchange()}
             aria-label="Повторить синхронизацию"

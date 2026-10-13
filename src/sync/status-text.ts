@@ -1,0 +1,43 @@
+import type { BridgeState } from "../platform/platform";
+import type { SyncStatus } from "./coordinator";
+
+export const when = (iso: string) =>
+  iso
+    ? new Date(iso).toLocaleString("ru-RU", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })
+    : "—";
+
+export const syncPhaseText = (phase: string, lastConfirmedAt: string | null) =>
+  ({
+    disabled: "Только на этом устройстве",
+    paused: "Синхронизация приостановлена",
+    idle: "Сохранено на устройстве",
+    syncing: "Синхронизация…",
+    synced: `Синхронизировано${lastConfirmedAt ? ` · ${when(lastConfirmedAt)}` : ""}`,
+    error: "Ошибка синхронизации",
+    conflict: "Конфликт версий",
+  })[phase] ?? phase;
+
+export interface SyncLineState {
+  phase: string;
+  text: string;
+  retry: boolean;
+  failed: boolean;
+}
+/** Без bridge облака нет: пока он грузится или сорвался, фаза координатора о синхронизации ничего не говорит. */
+export function syncLineState(status: SyncStatus, bridge: BridgeState): SyncLineState {
+  if (bridge === "slow") return { phase: "connecting", text: "Подключение к Telegram…", retry: false, failed: false };
+  if (bridge === "failed")
+    return {
+      phase: "unavailable",
+      text: "Синхронизация недоступна — перезапустите приложение",
+      retry: false,
+      failed: true,
+    };
+  const dirty = status.dirty && status.phase !== "syncing" ? " · есть неотправленные изменения" : "";
+  return {
+    phase: status.phase,
+    text: `${syncPhaseText(status.phase, status.lastConfirmedAt)}${dirty}`,
+    retry: status.phase !== "disabled",
+    failed: status.phase === "error" || status.phase === "paused",
+  };
+}

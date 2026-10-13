@@ -8,6 +8,7 @@ import { registerSW } from "virtual:pwa-register";
 import { App } from "./app/App";
 import { CrashScreen } from "./app/CrashScreen";
 import { LaunchGate, type LaunchStop } from "./app/LaunchGate";
+import { launchSync } from "./app/launch-sync";
 import { Recovery } from "./app/Recovery";
 import { installLesson, refreshCatalog, syncCourses } from "./content/client";
 import { forgetLaunch } from "./platform/launch";
@@ -17,7 +18,7 @@ import { installEarlyHandlers, reportError, setReportingEnabled } from "./report
 import { bindReportingToSettings } from "./reporting/settings";
 import { db, ensureDefaults } from "./storage/db";
 import { adoptKnownForeign } from "./storage/foreign";
-import { launchProfile, MOCK_USER, ownerMatches, type Profile } from "./storage/profile";
+import { launchProfile, MOCK_USER, type Profile } from "./storage/profile";
 import "./styles.css";
 
 // Ранние обработчики ошибок ставятся до всего остального: отказы запуска копятся до загрузки SDK отчётов.
@@ -108,23 +109,18 @@ function start(profile: Profile) {
   refreshCatalog()
     .then(() => syncCourses())
     .catch(() => undefined);
-  // Bridge Telegram загружается параллельно и не задерживает рендер; синхронизация подключается после базы и bridge.
-  // Владелец сверяется с пользователем bridge: контекст, восстановленный из вкладки, не должен открыть чужие данные.
-  const platform = initPlatform().then(() => {
-    const matches = ownerMatches(profile, telegramBridge()?.initDataUnsafe?.user?.id);
-    if (!matches) {
+  // Координатор синхронизации не нужен первому кадру: его чанк грузится параллельно с базой и bridge.
+  const connect = launchSync({
+    profile,
+    stopped: () => stopped,
+    onMismatch: () => {
       forgetLaunch();
       stop("owner-mismatch");
-    }
-    return matches;
+    },
+    connectSync: Promise.all([database, import("./sync")]).then(([, { connectSync }]) => connectSync),
   });
-  // Координатор синхронизации не нужен первому кадру: его чанк грузится параллельно с базой и bridge.
-  const syncModule = import("./sync");
-  Promise.all([database, platform, syncModule])
-    .then(([, matches, { connectSync }]) => {
-      if (matches) connectSync(telegramBridge());
-    })
-    .catch((error) => console.warn("Синхронизация не подключена", error));
+  // По тайм-ауту — без облака; поздний bridge сверяет владельца и подключает CloudStorage.
+  void initPlatform(undefined, (app) => void connect(app)).then(() => connect(telegramBridge()));
   root.render(
     <StrictMode>
       <BrowserRouter basename={`${import.meta.env.BASE_URL}app`}>
