@@ -11,6 +11,9 @@ import type { TelegramWebApp } from "./telegram-types";
  */
 let adapter: PlatformAdapter = webAdapter();
 let bridge: TelegramWebApp | null = null;
+/** `slow` — тайм-аут прошёл, bridge ещё грузится; `failed` — загрузка сорвалась внутри Telegram. */
+export type BridgeState = "none" | "slow" | "ready" | "failed";
+let bridgeState: BridgeState = "none";
 /** Последняя положительная высота: свёрнутый Mini App присылает нули. */
 let lastHeight: number | null = null;
 const listeners = new Set<() => void>();
@@ -24,6 +27,15 @@ const subscribe = (listener: () => void) => {
 
 export const platform = () => adapter;
 export const telegramBridge = () => bridge;
+export const telegramBridgeState = () => bridgeState;
+export function useBridgeState(): BridgeState {
+  return useSyncExternalStore(subscribe, telegramBridgeState, telegramBridgeState);
+}
+function setBridgeState(next: BridgeState) {
+  if (bridgeState === next) return;
+  bridgeState = next;
+  notify();
+}
 export function usePlatform(): PlatformAdapter {
   return useSyncExternalStore(subscribe, platform, platform);
 }
@@ -42,16 +54,17 @@ function connectBridge(app: TelegramWebApp): PlatformAdapter {
   const next = telegramAdapter(app);
   setPlatform(next, app);
   next.ready();
+  setBridgeState("ready");
   return next;
 }
 
 /**
  * Неблокирующая инициализация: bridge загружается только при запуске из Telegram; браузер ничего не ждёт.
- * Ошибка загрузки или частично доступный API оставляют рабочий интерфейс. По тайм-ауту промис отвечает
- * текущим адаптером, но загрузка продолжается: поздний bridge подключает Telegram и передаётся в `onLate`.
+ * По тайм-ауту отвечает текущим адаптером, а поздний bridge подключается и передаётся в `onLate`.
  */
 export async function initPlatform(timeoutMs = 4000, onLate?: (app: TelegramWebApp) => void): Promise<PlatformAdapter> {
   document.documentElement.dataset.platform = launchContext().kind;
+  setBridgeState("none");
   if (!isTelegramLaunch()) return adapter;
   const started = performance.now();
   try {
@@ -64,20 +77,31 @@ export async function initPlatform(timeoutMs = 4000, onLate?: (app: TelegramWebA
     clearTimeout(timer);
     if (app === "timeout") {
       lifecycle("bridgeTimeout", { timeoutMs });
+      setBridgeState("slow");
       void loaded.then((late) => {
         lifecycle("bridgeLate", { ms: Math.round(performance.now() - started), loaded: !!late });
-        if (!late || bridge) return;
+        if (bridge) return;
+        if (!late) return setBridgeState("failed");
         try {
           connectBridge(late);
+        } catch (error) {
+          setBridgeState("failed");
+          console.warn("Интеграция Telegram недоступна, работает обычный режим", error);
+          return;
+        }
+        try {
           onLate?.(late);
         } catch (error) {
-          console.warn("Интеграция Telegram недоступна, работает обычный режим", error);
+          console.warn("Поздний bridge Telegram не обработан", error);
         }
       });
       return adapter;
     }
-    return app ? connectBridge(app) : adapter;
+    if (app) return connectBridge(app);
+    setBridgeState("failed");
+    return adapter;
   } catch (error) {
+    setBridgeState("failed");
     console.warn("Интеграция Telegram недоступна, работает обычный режим", error);
     return adapter;
   }

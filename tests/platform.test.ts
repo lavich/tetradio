@@ -4,8 +4,16 @@ import { takeConsole } from "./setup/console";
 import { parseLaunch, launchContext, resetLaunchContext, startRoute } from "../src/platform/launch";
 import { telegramAdapter, webAdapter } from "../src/platform/adapter";
 import { loadTelegramBridge, resetBridge } from "../src/platform/bridge";
-import { applyEnvironment, initPlatform, platform, setPlatform, telegramBridge } from "../src/platform/platform";
+import {
+  applyEnvironment,
+  initPlatform,
+  platform,
+  setPlatform,
+  telegramBridge,
+  telegramBridgeState,
+} from "../src/platform/platform";
 import type { TelegramWebApp } from "../src/platform/telegram-types";
+import { pendingCrumbs, resetReporting } from "../src/reporting/reporting";
 import { profileFor } from "../src/storage/profile";
 
 const initData = (user: object | null) =>
@@ -326,6 +334,7 @@ describe("загрузка bridge", () => {
     window.history.replaceState(null, "", "/");
     sessionStorage.clear();
     resetLaunchContext();
+    resetReporting();
   });
   it("существующий объект используется без сетевой загрузки", async () => {
     const { app } = fakeApp();
@@ -354,23 +363,23 @@ describe("загрузка bridge", () => {
   };
   const script = () => document.querySelector<HTMLScriptElement>('script[src*="telegram-web-app"]')!;
   it("bridge после тайм-аута подключает Telegram, вызывает ready и передаётся в onLate; крошки — тайм-аут и время загрузки", async () => {
-    const { pendingCrumbs, resetReporting } = await import("../src/reporting/reporting");
     resetReporting({ dsn: "https://key@o1.ingest.sentry.io/1", loader: () => Promise.reject(new Error("не в тесте")) });
     telegramLaunch();
     const onLate = vi.fn();
     expect((await initPlatform(10, onLate)).kind).toBe("web");
     expect(onLate).not.toHaveBeenCalled();
+    expect(telegramBridgeState()).toBe("slow");
     const { app, calls } = fakeApp();
     (window as unknown as { Telegram: unknown }).Telegram = { WebApp: app };
     script().onload?.(new Event("load"));
     await vi.waitFor(() => expect(onLate).toHaveBeenCalledWith(app));
     expect(platform().kind).toBe("telegram");
     expect(telegramBridge()).toBe(app);
+    expect(telegramBridgeState()).toBe("ready");
     expect(calls.filter((call) => call === "ready")).toHaveLength(1);
     const crumbs = pendingCrumbs().filter((crumb) => crumb.message.startsWith("bridge"));
     expect(crumbs.map((crumb) => crumb.message)).toEqual(["bridgeTimeout", "bridgeLate"]);
     expect(crumbs[1].data).toMatchObject({ loaded: true, ms: expect.any(Number) });
-    resetReporting();
   });
   it("ошибка загрузки после тайм-аута оставляет браузерный режим и не зовёт onLate", async () => {
     telegramLaunch();
@@ -380,6 +389,7 @@ describe("загрузка bridge", () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(onLate).not.toHaveBeenCalled();
     expect(platform().kind).toBe("web");
+    expect(telegramBridgeState()).toBe("failed");
   });
 });
 

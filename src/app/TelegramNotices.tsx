@@ -11,13 +11,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { sync, useSyncStatus } from "../sync";
 import { readMeta } from "../sync/snapshot";
+import { when } from "../sync/status-text";
 import { CARDS, withCount } from "../shared/format";
 import ui from "../shared/ui.module.css";
 
-const when = (iso: string) =>
-  iso
-    ? new Date(iso).toLocaleString("ru-RU", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })
-    : "—";
 /**
  * Конфликт независимых версий: пользователь выбирает целую версию. Выбор не объединяет ответы другой версии,
  * отвергнутая версия сохраняется на устройстве и доступна для копии на экране «Настройки и данные».
@@ -103,15 +100,4 @@ export function SyncConflictDialog() {
     </AlertDialog>
   );
 }
-/** Заглушка, чтобы у экрана копий и «Ещё» был общий текст статуса. */
-export const syncPhaseText = (phase: string, lastConfirmedAt: string | null) =>
-  ({
-    disabled: "Только на этом устройстве",
-    paused: "Синхронизация приостановлена",
-    idle: "Сохранено на устройстве",
-    syncing: "Синхронизация…",
-    synced: `Синхронизировано${lastConfirmedAt ? ` · ${when(lastConfirmedAt)}` : ""}`,
-    error: "Ошибка синхронизации",
-    conflict: "Конфликт версий",
-  })[phase] ?? phase;
 export { readMeta };
