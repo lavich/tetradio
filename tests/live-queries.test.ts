@@ -1,0 +1,171 @@
+import "fake-indexeddb/auto";
+import Dexie, { liveQuery } from "dexie";
+import { Rating } from "ts-fsrs";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { buildContent } from "../content/build";
+import { makePlan, makeSession, nextState } from "../src/domain/learning";
+import { unitKey, wordRef } from "../src/domain/refs";
+import { progress } from "../src/domain/stats";
+import { wordSources } from "../src/features/words/word-exercises";
+import { lessonDays, moduleViews, reviewedOn } from "../src/storage/course";
+import {
+  activeSession,
+  cardsInCourse,
+  courseOfCard,
+  currentCourse,
+  primaryCourse,
+  profileOfCourse,
+  sessionCourse,
+} from "../src/storage/courses";
+import { db } from "../src/storage/db";
+import { dictionary } from "../src/storage/dictionary";
+import { submitAnswer } from "../src/storage/ops";
+import { courseProgress } from "../src/storage/progress";
+import { dexieSource, mistakeCount } from "../src/storage/queries";
+import { markRead, moduleReadings, nextReading, readingPage } from "../src/storage/readings";
+import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
+
+const demo = buildContent("tests/fixtures/course-demo");
+const now = new Date("2026-09-15T09:00:00Z");
+const tz = "Asia/Nicosia";
+const COURSE = "greek-a2";
+const settle = () => new Promise((resolve) => setTimeout(resolve, 100));
+
+// Чтение без подписки в зоне Dexie: изменение этих строк живой запрос не перезапустит.
+const untracked: string[] = [];
+let checking = false;
+db.use({
+  stack: "dbcore",
+  name: "untracked-reads",
+  level: 100,
+  create: (down) => ({
+    ...down,
+    table: (name) => {
+      const table = down.table(name);
+      const check = (req: { trans: unknown }) => {
+        const live = (Dexie.Promise as unknown as { PSD: { subscr?: object } }).PSD.subscr;
+        if (checking && !live && (req.trans as IDBTransaction).mode === "readonly") untracked.push(name);
+      };
+      return {
+        ...table,
+        get: (req) => (check(req), table.get(req)),
+        getMany: (req) => (check(req), table.getMany(req)),
+        query: (req) => (check(req), table.query(req)),
+        count: (req) => (check(req), table.count(req)),
+        openCursor: (req) => (check(req), table.openCursor(req)),
+      };
+    },
+  }),
+});
+
+function watch(query: () => unknown) {
+  let runs = 0;
+  const subscription = liveQuery(() => (runs++, query()) as Promise<unknown>).subscribe({ next: () => {} });
+  return { runs: () => runs, stop: () => subscription.unsubscribe() };
+}
+
+let wordId = "";
+const key = () => unitKey(wordRef(wordId));
+
+describe("живые запросы отслеживают чтения после вложенных async-функций", () => {
+  beforeAll(async () => {
+    await installLessons(db, ["m01-1", "m01-test", "m01-k1", "m01-r1"], memoryFetcher(demo));
+    await completeLessons(db, ["m01-1"]);
+    wordId = (await db.lessonItems.where("lessonId").equals("m01-1").toArray()).find(
+      (item) => item.ref.kind === "word",
+    )!.ref.id;
+    const session = await makeSession({ source: dexieSource(db), now, random: () => 0.42, courseId: COURSE });
+    await db.sessions.add(session);
+    await submitAnswer({
+      session,
+      item: session.items[0],
+      correct: true,
+      answer: "",
+      responseTimeMs: 1000,
+      activeTimeMs: 1000,
+      timezone: tz,
+      now,
+      database: db,
+    });
+  });
+  afterAll(() => db.close());
+
+  // Форма запроса (стрелка или async) — как в экране: от неё зависит, удержит ли Dexie зону.
+  const screens: Record<string, () => unknown> = {
+    "«Сегодня»: план": () => makePlan(dexieSource(), now, { courseId: COURSE }),
+    "«Сегодня»: дни уроков": () => lessonDays("2026-09-14", tz, COURSE),
+    "«Сегодня»: повторено": () => reviewedOn("2026-09-15", COURSE),
+    "«Сегодня»: «Почитать»": async () => (await nextReading(COURSE)) ?? null,
+    "«Курс»": async () => moduleViews(await currentCourse()),
+    "модуль: тексты": () => moduleReadings("m01"),
+    текст: async () => (await readingPage("r-m01-anna")) ?? null,
+    "«Слова»": async () => {
+      const courseId = await currentCourse();
+      return { courseId, lessons: await dictionary(courseId) };
+    },
+    "«Прогресс»: словарь": () => dictionary(COURSE),
+    "«Прогресс»": () => courseProgress(now, tz, COURSE),
+    "«Прогресс»: статистика": () => progress(dexieSource(), now),
+    "«Прогресс»: ошибки": () => mistakeCount(COURSE),
+    "«Прогресс»: трудные": async () => (await cardsInCourse([key()], COURSE)).size,
+    "слово: упражнения": () => wordSources(wordId),
+    "слово: язык": async () => profileOfCourse((await courseOfCard(key()))!),
+    занятие: async () => {
+      const found = await activeSession(await primaryCourse());
+      return found && profileOfCourse((await sessionCourse(found))!);
+    },
+  };
+
+  for (const [name, query] of Object.entries(screens))
+    it(`${name}: каждое чтение попадает в подписку`, async () => {
+      untracked.length = 0;
+      checking = true;
+      await new Promise((resolve) => {
+        const subscription = liveQuery(query as () => Promise<unknown>).subscribe({
+          next: () => (subscription.unsubscribe(), resolve(undefined)),
+        });
+      });
+      checking = false;
+      expect(untracked).toEqual([]);
+    });
+
+  it("словарь «Прогресса» обновляет отметки после ответа", async () => {
+    const words = watch(() => dictionary(COURSE));
+    await settle();
+    const ran = words.runs();
+    await db.cardStates.put(nextState(undefined, wordRef(wordId), Rating.Good, now));
+    await settle();
+    expect(words.runs()).toBeGreaterThan(ran);
+    words.stop();
+  });
+
+  it("статистика «Прогресса» обновляется после изменения карточки", async () => {
+    const stats = watch(() => progress(dexieSource(), now));
+    await settle();
+    const ran = stats.runs();
+    await db.cardStates.put(nextState(undefined, wordRef(wordId), Rating.Again, now));
+    await settle();
+    expect(stats.runs()).toBeGreaterThan(ran);
+    stats.stop();
+  });
+
+  it("тексты модуля обновляют отметку «прочитано»", async () => {
+    const texts = watch(() => moduleReadings("m01"));
+    await settle();
+    const ran = texts.runs();
+    await markRead("r-m01-anna", true);
+    await settle();
+    expect(texts.runs()).toBeGreaterThan(ran);
+    texts.stop();
+  });
+
+  it("упражнения слова обновляются после изменения уроков", async () => {
+    const options = watch(() => wordSources(wordId));
+    await settle();
+    const ran = options.runs();
+    await db.lessons.update("m01-1", { title: "Новое название" });
+    await settle();
+    expect(options.runs()).toBeGreaterThan(ran);
+    options.stop();
+  });
+});

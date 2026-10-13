@@ -6,6 +6,7 @@ import { lessonDays, moduleViews, type ModuleView } from "./course";
 import { cardsInCourse, primaryCourse } from "./courses";
 import { db, type AppDatabase } from "./db";
 import { lessonOutlines } from "./outlines";
+import { zoned } from "./zone";
 
 export interface CourseProgress {
   views: ModuleView[];
@@ -27,7 +28,7 @@ const lessonsOf = (view: ModuleView) => [
 ];
 
 /** Прогресс курса: календарь, порог и неделя — этого курса; без курса — основного. */
-export async function courseProgress(
+export const courseProgress = zoned(async function courseProgress(
   now: Date,
   timezone: string,
   courseId?: string,
@@ -98,4 +99,4 @@ export async function courseProgress(
       cards: new Set(scheduled.map((event) => event.unitKey)).size,
     },
   };
-}
+});

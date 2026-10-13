@@ -4,6 +4,7 @@ import type { CardKind, InstalledPackage, MistakeItem, SessionCard } from "../do
 import type { AppDatabase } from "./db";
 import { lessonCourses } from "./lesson-courses";
 import { lessonOutlines, mistakeId, mistakeIdsOf, reviewable } from "./outlines";
+import { zoned } from "./zone";
 
 /**
  * Хранение вида карточки: где лежит содержимое и как его читать. Пара к `KINDS` домена;
@@ -27,33 +28,45 @@ type PackageCards = Pick<InstalledPackage, "words" | "phrases"> & { id: string; 
 
 const word: StoredKind = {
   tables: ["words"],
-  presentIds: async (ids, database) => (await database.words.where("id").anyOf(ids).primaryKeys()) as string[],
-  contents: async (ids, database) =>
+  presentIds: zoned(async (ids, database) => (await database.words.where("id").anyOf(ids).primaryKeys()) as string[]),
+  contents: zoned(async (ids, database) =>
     (await database.words.bulkGet(ids)).flatMap((card) => (card ? [{ kind: "word" as const, word: card }] : [])),
-  facts: async (ids) => new Map(ids.map((id) => [id, { kind: "word" as const }])),
+  ),
+  facts: zoned(async (ids) => new Map(ids.map((id) => [id, { kind: "word" as const }]))),
   count: (database) => database.words.count(),
   packageIds: (pack) => pack.words.map((card) => card.id),
 };
 const phrase: StoredKind = {
   tables: ["phrases"],
-  presentIds: async (ids, database) => (await database.phrases.where("id").anyOf(ids).primaryKeys()) as string[],
-  contents: async (ids, database) =>
+  presentIds: zoned(async (ids, database) => (await database.phrases.where("id").anyOf(ids).primaryKeys()) as string[]),
+  contents: zoned(async (ids, database) =>
     (await database.phrases.bulkGet(ids)).flatMap((card) => (card ? [{ kind: "phrase" as const, phrase: card }] : [])),
+  ),
   // Признаки фразы лежат в её записи; читаются только записи кандидатов, а не таблица целиком.
-  facts: async (ids, database) =>
-    new Map(
-      (await database.phrases.bulkGet(ids)).flatMap((card) =>
-        card
-          ? [[card.id, { kind: "phrase" as const, hasTranslation: !!card.translation, hasAudio: !!card.audioAssetId }]]
-          : [],
+  facts: zoned(
+    async (ids, database) =>
+      new Map(
+        (await database.phrases.bulkGet(ids)).flatMap((card) =>
+          card
+            ? [
+                [
+                  card.id,
+                  { kind: "phrase" as const, hasTranslation: !!card.translation, hasAudio: !!card.audioAssetId },
+                ],
+              ]
+            : [],
+        ),
       ),
-    ),
+  ),
   count: (database) => database.phrases.count(),
   packageIds: (pack) => pack.phrases.map((card) => card.id),
 };
 
 /** Пункты по идентификаторам из установленных пакетов; убранного пункта в ответе нет. */
-async function mistakeItems(ids: string[], database: AppDatabase): Promise<Map<string, MistakeItem>> {
+const mistakeItems = zoned(async function mistakeItems(
+  ids: string[],
+  database: AppDatabase,
+): Promise<Map<string, MistakeItem>> {
   const wanted = new Set(ids);
   const lessonIds = [...new Set(ids.map((id) => id.split("/")[0]))];
   const items = new Map<string, MistakeItem>();
@@ -78,28 +91,29 @@ async function mistakeItems(ids: string[], database: AppDatabase): Promise<Map<s
     }
   }
   return items;
-}
+});
 const mistake: StoredKind = {
   tables: ["packages"],
-  presentIds: async (ids, database) => {
+  presentIds: zoned(async (ids, database) => {
     const wanted = [...new Set(ids)];
     const outlines = await lessonOutlines([...new Set(wanted.map((id) => id.split("/")[0]))], database);
     const present = new Set(outlines.flatMap((outline) => [...(outline?.mistakes ?? [])]));
     return wanted.filter((id) => present.has(id));
-  },
-  contents: async (ids, database) =>
+  }),
+  contents: zoned(async (ids, database) =>
     [...(await mistakeItems(ids, database)).values()].map((item) => ({ kind: "mistake" as const, mistake: item })),
-  facts: async (ids) => new Map(ids.map((id) => [id, { kind: "mistake" as const }])),
+  ),
+  facts: zoned(async (ids) => new Map(ids.map((id) => [id, { kind: "mistake" as const }]))),
   count: (database) => database.cardStates.where("ref.kind").equals("mistake").count(),
   packageIds: (pack) => mistakeIdsOf(pack.id, pack.blocks),
   // Курс ошибки — курс её урока: связей с уроками в `lessonItems` у неё нет.
-  coursesOf: async (ids, database) => {
+  coursesOf: zoned(async (ids, database) => {
     const courses = await lessonCourses(
       ids.map((id) => id.split("/")[0]),
       database,
     );
     return new Map(ids.flatMap((id) => (courses.has(id.split("/")[0]) ? [[id, courses.get(id.split("/")[0])!]] : [])));
-  },
+  }),
 };
 
 export const STORED_KINDS: Record<CardKind, StoredKind> = { word, phrase, mistake };

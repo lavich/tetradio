@@ -5,6 +5,7 @@ import { taskIds } from "../domain/course";
 import { skillTasks, type SkillTask } from "../domain/progress";
 import type { InstalledPackage } from "../domain/types";
 import type { AppDatabase } from "./db";
+import { zoned } from "./zone";
 
 export interface LessonOutline {
   kind?: LessonKind;
@@ -73,7 +74,10 @@ function cacheOf(database: AppDatabase): Cache {
   return fresh;
 }
 
-export async function lessonOutlines(ids: string[], database: AppDatabase): Promise<(LessonOutline | undefined)[]> {
+export const lessonOutlines = zoned(async function lessonOutlines(
+  ids: string[],
+  database: AppDatabase,
+): Promise<(LessonOutline | undefined)[]> {
   // Сброс приходит после фиксации, а транзакция записи видит свои незафиксированные пакеты.
   if (Dexie.currentTransaction?.mode === "readwrite")
     return (await database.packages.bulkGet(ids)).map((pack) => pack && outlineOf(pack));
@@ -99,4 +103,4 @@ export async function lessonOutlines(ids: string[], database: AppDatabase): Prom
     }
   }
   return ids.map((id) => outlines.get(id));
-}
+});

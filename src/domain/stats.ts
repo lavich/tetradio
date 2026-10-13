@@ -76,7 +76,8 @@ export async function progress(source: StatsSource, now: Date): Promise<Progress
     skills.push({ type, attempts: recent.length, correct, rate: recent.length ? correct / recent.length : null });
   }
   // Срок сравниваем по календарной дате в зоне пользователя: «не позже дня» значит раньше начала следующего дня.
-  const dueBefore = async (date: string) => (await source.dueKeysBefore(zonedStart(addDays(date, 1), timezone))).length;
+  const dueBefore = (date: string) =>
+    source.dueKeysBefore(zonedStart(addDays(date, 1), timezone)).then((keys) => keys.length);
   const groups = { fresh: 0, learning: 0, review: 0, solid: 0 };
   let tracked = 0;
   const struggling: LearningState[] = [];

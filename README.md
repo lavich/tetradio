@@ -20,6 +20,8 @@ npm run build
 
 Переменные окружения (все необязательны локально): `VITE_TELEGRAM_BOT` — имя бота Mini App (без неё — заглушка `tetradio_local`, не совпадающая с реальным ботом); `VITE_SENTRY_DSN` и `SENTRY_*` — отчёты о сбоях, без них выключены; `BASE_PATH` — базовый путь при размещении; `VITE_TELEGRAM_MOCK=<id>` — мок Telegram для разработки и e2e (только явным флагом, в деплое не задаётся). Владелец данных и изоляция аккаунтов — [docs/account.md](docs/account.md).
 
+Живые запросы (`useLiveQuery`): Dexie отслеживает чтения только внутри своей зоны, а `await` нативного промиса вложенной async-функции её теряет — изменения строк, прочитанных после такого `await`, экран не увидит. Поэтому async-функции чтения в `src/storage` объявляются через `zoned(...)` (`src/storage/zone.ts`) и возвращают промис Dexie; в коде вне хранилища внутри запроса ждут только их, промисы Dexie или `.then` на них. Проверка — `tests/live-queries.test.ts`: новый запрос экрана добавляется в его список.
+
 Деплой — `.github/workflows/deploy.yml`: каждый push в `main` публикует сборку на GitHub Pages: лендинг — `https://tetradio.app/`, Mini App — `https://tetradio.app/app/` (домен в Cloudflare). База берётся из настроек Pages; имя бота (`VITE_TELEGRAM_BOT=TetradioBot`) и адрес приёма отчётов (`VITE_SENTRY_DSN`) — переменные репозитория, реквизиты загрузки карт кода — секреты `SENTRY_*`.
 
 ## Документация
