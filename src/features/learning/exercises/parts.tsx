@@ -11,6 +11,7 @@ import session from "../session.module.css";
 import s from "./exercise.module.css";
 import type { Status } from "./model";
 import { SpeakText } from "./SpeakText";
+import { WordForms } from "../../../shared/VerbForms";
 
 /**
  * Основное действие листа — в облачке занятия; `disabled` держит место, пока ответа нет.
@@ -124,6 +125,7 @@ export function WordReveal({ word, speak, large }: { word: Word; speak?: boolean
         </div>
         <WordArt word={word} className={s.pic} />
       </div>
+      <WordForms word={word} className={s.forms} verbsOnly />
       <ReadingNotes word={word} bare />
       {word.examples[0] && <ExampleBox example={word.examples[0]} bare />}
     </>

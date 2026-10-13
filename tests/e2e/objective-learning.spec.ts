@@ -1,9 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 import { GREEK_VOICE, installLessons, ready, setSettings } from "./helpers";
 
-async function installSession(page: Page, type: string, isNew = false, count = 1) {
+async function installSession(page: Page, type: string, isNew = false, count = 1, wordId = "w034") {
   await page.evaluate(
-    async ({ type, isNew, count }) => {
+    async ({ type, isNew, count, wordId }) => {
       const db = await new Promise<IDBDatabase>((resolve) => {
         const r = indexedDB.open("tetradio-mock-1");
         r.onsuccess = () => resolve(r.result);
@@ -12,7 +12,7 @@ async function installSession(page: Page, type: string, isNew = false, count = 1
       const request = tx.objectStore("words").getAll();
       request.onsuccess = () => {
         const pool = request.result;
-        const selected = count === 1 ? [pool.find((word) => word.id === "w034")] : pool.slice(0, count);
+        const selected = count === 1 ? [pool.find((word) => word.id === wordId)] : pool.slice(0, count);
         const items = selected.map((word, index) => ({
           id: `objective-${index}`,
           ref: { kind: "word", id: word.id },
@@ -48,7 +48,7 @@ async function installSession(page: Page, type: string, isNew = false, count = 1
       });
       db.close();
     },
-    { type, isNew, count },
+    { type, isNew, count, wordId },
   );
   await page.goto("/app/session");
   await page.getByTestId("prompt").first().waitFor();
@@ -212,4 +212,28 @@ test("неверный выбор зачёркнут красной ручкой
   await expect(wrong).toHaveCSS("opacity", "1");
   await expect(page.getByTestId("feedback")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
+});
+
+test("у глагола в знакомстве и после ответа — ряд форм и таблица по лицам", async ({ page }) => {
+  await page.addInitScript(GREEK_VOICE);
+  await setSettings(page, { autoSpeak: false });
+  await installLessons(page, ["mech-1"]);
+  await installSession(page, "recognition", true, 1, "w036");
+  await expect(page.getByTestId("prompt")).toHaveText("Новое слово");
+  const row = page.getByTestId("verb-forms");
+  await expect(row).toContainText("έμεινα");
+  await expect(row).toContainText("θα μείνω");
+  await page.getByTestId("paradigm").getByText("Все формы").click();
+  await expect(page.getByTestId("paradigm").getByRole("row", { name: /^мы/ })).toContainText("μείναμε");
+  await page.getByRole("button", { name: "Далее", exact: true }).click();
+
+  await expect(page.getByTestId("prompt")).toHaveText("Что значит это слово?");
+  await expect(page.getByTestId("verb-forms")).toHaveCount(0);
+  await expect(page.getByTestId("paradigm")).toHaveCount(0);
+  await page.getByTestId("option").first().click();
+  await expect(page.getByTestId("verb-forms")).toContainText("έμεινα");
+  await page.getByRole("button", { name: "Произнести: έμεινα" }).click();
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken))
+    .toContain("έμεινα");
 });
