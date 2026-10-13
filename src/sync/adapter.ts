@@ -192,13 +192,14 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
     async removeDevice(meta) {
       ensure();
       const name = pointerKey(meta.device);
-      const current = (await transport.getItems([name]))[name];
-      if (current === undefined || parsePointer(current)?.id !== meta.id) return false;
       const counter = meta.clock[meta.device] ?? 0;
       const parts = (await transport.getKeys()).filter((key) => {
         const version = parseVersionId(parsePartKey(key)?.versionId ?? "");
         return !!version && version.device === meta.device && version.counter <= counter;
       });
+      // Сравнения с удалением нет: указатель читается последним перед удалением, чтобы окно гонки было минимальным.
+      const current = (await transport.getItems([name]))[name];
+      if (current === undefined || parsePointer(current)?.id !== meta.id) return false;
       // Указатель первым: без него части не выглядят версией, даже если удаление частей оборвётся.
       await transport.removeItems([name]);
       if (parts.length) await transport.removeItems(parts);
