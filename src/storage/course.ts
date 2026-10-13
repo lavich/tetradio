@@ -4,7 +4,7 @@
  */
 import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
 import { cardRef, decodeMarks, READING_PREFIX, type BlockMarks } from "../content/schema";
-import { lessonDone, lessonTally, type LessonTally } from "../domain/course";
+import { lessonDone, tallyOf, type LessonTally } from "../domain/course";
 import { localDay, nextState } from "../domain/learning";
 import { unitKey } from "../domain/refs";
 import { Rating } from "ts-fsrs";
@@ -13,6 +13,7 @@ import { cardsInCourse, lessonCourses, primaryCourse } from "./courses";
 import { db, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
 import { announceChange, markChanged } from "./ops";
+import { lessonOutlines } from "./outlines";
 
 export const blockKey = (lessonId: string, blockId: string) => `${lessonId}/${blockId}`;
 
@@ -194,8 +195,8 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
     ...(module.checkpointId ? [module.checkpointId] : []),
     ...(module.reviewIds ?? []),
   ]);
-  const [packs, lessons, entries, progress] = await Promise.all([
-    database.packages.bulkGet(lessonIds),
+  const [outlines, lessons, entries, progress] = await Promise.all([
+    lessonOutlines(lessonIds, database),
     database.lessons.bulkGet(lessonIds),
     database.catalog.bulkGet(lessonIds),
     database.blockProgress.where("lessonId").anyOf(lessonIds).toArray(),
@@ -210,16 +211,16 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
   return modules.map(({ position: _position, ...module }) => {
     const view = (id: string): ModuleLessonView => {
       const index = at++;
-      const pack = packs[index],
+      const outline = outlines[index],
         lesson = lessons[index],
         entry = entries[index];
       return {
         id,
         title: lesson?.title ?? entry?.title ?? id,
-        kind: pack?.kind ?? "lesson",
-        installed: !!pack,
+        kind: outline?.kind ?? "lesson",
+        installed: !!outline,
         completed: !!lesson?.completed,
-        tally: lessonTally(pack?.blocks ?? [], byLesson.get(id) ?? new Map()),
+        tally: tallyOf(outline?.tasks ?? [], byLesson.get(id) ?? new Map()),
       };
     };
     const views = module.lessonIds.map(view);

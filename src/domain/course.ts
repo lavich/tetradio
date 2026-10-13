@@ -99,10 +99,13 @@ export interface LessonTally {
   done: number;
   total: number;
 }
-export const lessonTally = (blocks: LessonBlock[], progress: Map<string, BlockProgress>): LessonTally => {
-  const tasks = blocks.filter(isTask);
-  return { done: tasks.filter((block) => progress.get(block.id)?.done).length, total: tasks.length };
-};
+export const taskIds = (blocks: LessonBlock[]) => blocks.filter(isTask).map((block) => block.id);
+export const tallyOf = (tasks: string[], progress: Map<string, BlockProgress>): LessonTally => ({
+  done: tasks.filter((id) => progress.get(id)?.done).length,
+  total: tasks.length,
+});
+export const lessonTally = (blocks: LessonBlock[], progress: Map<string, BlockProgress>) =>
+  tallyOf(taskIds(blocks), progress);
 
 export interface SkillResult {
   skill: Skill;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { LessonBlock } from "../src/content/course";
-import { coursePace, skillProgress, type ModuleLoad } from "../src/domain/progress";
+import { coursePace, skillProgress, skillTasks, type ModuleLoad } from "../src/domain/progress";
 import type { BlockProgress } from "../src/domain/types";
 import { GREEK_CALENDAR } from "./helpers/calendar";
 
@@ -98,13 +98,13 @@ describe("навыки по всему курсу", () => {
   it("доля — верное из всего курса, качество — верное из выполненного", () => {
     const skills = skillProgress([
       {
-        blocks,
+        tasks: skillTasks(blocks),
         progress: new Map([
           ["about-text", mark({ score: { correct: 2, almost: 1, total: 4 } })],
           ["letter", mark({ checks: [0, 1, 2] })],
         ]),
       },
-      { blocks, progress: new Map() },
+      { tasks: skillTasks(blocks), progress: new Map() },
     ]);
     const reading = skills.find((item) => item.skill === "reading")!;
     expect(reading).toMatchObject({ earned: 3, attempted: 4, total: 8, source: "task" });
