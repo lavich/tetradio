@@ -498,6 +498,7 @@ export class SyncCoordinator {
    * новая версия отмечает все известные ветви рассмотренными; ответы другой версии не объединяются.
    */
   async resolve(branchId: string): Promise<SyncStatus> {
+    if (this.status.reason) this.update({ reason: null });
     // Выбор версии — тоже обмен: не параллельно с фоновым обменом и не в двух вкладках сразу.
     while (this.running) await this.running;
     this.again = false;
@@ -518,7 +519,10 @@ export class SyncCoordinator {
     const conflict = this.status.conflict;
     // Конфликт успели пересчитать: экран уже показывает новые ветви, выбор повторяется по ним.
     const chosen = conflict?.branches.find((branch) => branch.id === branchId);
-    if (!conflict || !chosen) return;
+    if (!conflict || !chosen) {
+      if (conflict) this.update({ reason: "Версии изменились — выберите ещё раз." });
+      return;
+    }
     const { database } = this.options;
     const device = await this.deviceId();
     const now = this.options.now().toISOString();

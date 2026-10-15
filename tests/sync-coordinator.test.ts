@@ -367,6 +367,19 @@ describe("конфликты независимых изменений", () => {
     await expect(choice).resolves.toMatchObject({ phase: "conflict" });
     await expect(waiting).resolves.toMatchObject({ phase: "conflict" });
   });
+  it("выбор исчезнувшей версии просит выбрать ещё раз; следующий выбор снимает просьбу", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false]);
+    await study(tablet, [true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    const stale = await tablet.sync.resolve("gone");
+    expect(stale).toMatchObject({ phase: "conflict", reason: "Версии изменились — выберите ещё раз." });
+    const local = conflict.conflict!.branches.find((branch) => branch.local)!;
+    const choice = tablet.sync.resolve(local.id);
+    expect(tablet.sync.getStatus().reason).toBeNull();
+    expect(await choice).toMatchObject({ phase: "synced", reason: null });
+  });
   it("изменение во время выбора версии публикуется следующим обменом сразу после выбора", async () => {
     let during: (() => Promise<void>) | null = null;
     cloud = memoryTransport({

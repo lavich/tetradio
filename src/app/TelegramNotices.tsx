@@ -52,6 +52,11 @@ export function SyncConflictDialog() {
             добавятся; она сохранится на этом устройстве, и её можно будет скачать на экране «Настройки и данные». До
             выбора занятия продолжаются, синхронизация не считается успешной.
           </AlertDialogDescription>
+          {status.reason && (
+            <p role="status" className="m-0 text-sm font-semibold">
+              {status.reason}
+            </p>
+          )}
         </AlertDialogHeader>
         <div className={ui.stack} role="list">
           {conflict.branches.map((branch) => (
