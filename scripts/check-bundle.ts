@@ -73,9 +73,11 @@ function checkPage(page: string, limit: number) {
 checkPage("app/index.html", INITIAL_LIMIT);
 checkPage("index.html", LANDING_LIMIT);
 
-const landingCss = [
+const landingCssLinks = [
   ...readFileSync(join(dist, "index.html"), "utf8").matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+\.css)"/g),
-]
+];
+if (!landingCssLinks.length) problems.push("в index.html не найдены ссылки на CSS");
+const landingCss = landingCssLinks
   .map((match) => statSync(join(dist, inDist(match[1]!))).size)
   .reduce((sum, size) => sum + size, 0);
 console.log(`index.html: CSS ${landingCss} байт (предел ${LANDING_CSS_LIMIT})`);
@@ -83,6 +85,7 @@ if (landingCss > LANDING_CSS_LIMIT)
   problems.push(`index.html: CSS ${landingCss} байт больше предела ${LANDING_CSS_LIMIT}`);
 
 const precached = [...readFileSync(join(dist, "sw.js"), "utf8").matchAll(/url:"([^"]+)"/g)].map((match) => match[1]!);
+if (!precached.length) problems.push("в sw.js не найден список precache");
 const outOfScope = precached.filter((url) => /^(index|404)\.html$|^assets\/landing-/.test(url));
 if (outOfScope.length) problems.push(`в precache файлы вне области service worker: ${outOfScope.join(", ")}`);
 

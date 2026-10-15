@@ -1,5 +1,35 @@
 import { useEffect, useState } from "react";
 
+let conflictDialog: Promise<typeof import("./TelegramNotices")> | undefined;
+/** Чанк диалога берётся заранее, пока сборка на сервере та же: после деплоя у спящего WebView старого чанка уже нет. */
+export function loadConflictDialog() {
+  conflictDialog ??= import("./TelegramNotices").catch((error: unknown) => {
+    conflictDialog = undefined;
+    throw error;
+  });
+  return conflictDialog;
+}
+
+/** После загрузки страницы и паузы: запросы не делят канал с первым экраном (каталог, шрифты). */
+export function afterStartup(run: () => void, delayMs = 2000): () => void {
+  let cancel = () => {};
+  const wait = () => {
+    const timer = setTimeout(() => {
+      if (typeof requestIdleCallback === "function") {
+        const id = requestIdleCallback(run, { timeout: 5000 });
+        cancel = () => cancelIdleCallback(id);
+      } else run();
+    }, delayMs);
+    cancel = () => clearTimeout(timer);
+  };
+  if (document.readyState === "complete") wait();
+  else window.addEventListener("load", wait, { once: true });
+  return () => {
+    window.removeEventListener("load", wait);
+    cancel();
+  };
+}
+
 const INTERACTIONS = ["pointerdown", "keydown"] as const;
 
 /** Первое касание или клавиша: всплывающие сообщения появляются только в ответ на действия, их чанк ждёт до них. */

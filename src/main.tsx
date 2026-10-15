@@ -1,6 +1,7 @@
 import "@fontsource-variable/literata/wght.css";
 import "@fontsource-variable/literata/wght-italic.css";
 import "@fontsource-variable/manrope";
+import "./styles.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -19,7 +20,6 @@ import { bindReportingToSettings } from "./reporting/settings";
 import { db, ensureDefaults } from "./storage/db";
 import { adoptKnownForeign } from "./storage/foreign";
 import { launchProfile, MOCK_USER, type Profile } from "./storage/profile";
-import "./styles.css";
 
 // Ранние обработчики ошибок ставятся до всего остального: отказы запуска копятся до загрузки SDK отчётов.
 installEarlyHandlers();

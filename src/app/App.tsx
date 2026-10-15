@@ -4,7 +4,7 @@ import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
 import { updateReady } from "../main";
 import { useBackHandler, useEnvironment } from "../platform/platform";
-import { useFirstInteraction, useSyncConflictSeen } from "./deferred";
+import { afterStartup, loadConflictDialog, useFirstInteraction, useSyncConflictSeen } from "./deferred";
 import { loadScreen } from "./stale-build";
 import { useScrollMemory } from "./scroll";
 // «Сегодня» открывается первым и в браузере, и в Mini App, поэтому грузится сразу: иначе первый кадр пустой.
@@ -26,7 +26,7 @@ const SessionScreen = named("SessionScreen", () => import("../features/learning/
 const ResultScreen = named("ResultScreen", () => import("../features/learning/ResultScreen"));
 const ProgressScreen = named("ProgressScreen", () => import("../features/progress/ProgressScreen"));
 const SettingsScreen = named("SettingsScreen", () => import("../features/progress/SettingsScreen"));
-// Уведомления и диалог конфликта не нужны первому кадру: грузятся следом, без чанка — просто не показываются.
+// Уведомления и диалог конфликта не нужны первому кадру: без чанка они просто не показываются.
 const optional = <P extends object>(load: () => Promise<React.ComponentType<P>>) =>
   lazy(() =>
     load().then(
@@ -38,7 +38,7 @@ const optional = <P extends object>(load: () => Promise<React.ComponentType<P>>)
     ),
   );
 const Toaster = optional(() => import("@/components/ui/sonner").then((module) => module.Toaster));
-const SyncConflictDialog = optional(() => import("./TelegramNotices").then((module) => module.SyncConflictDialog));
+const SyncConflictDialog = optional(() => loadConflictDialog().then((module) => module.SyncConflictDialog));
 
 /** Прежние адреса раздела «Ещё» остаются в закладках и истории Telegram. */
 function MoreRedirect() {
@@ -62,6 +62,7 @@ export function App() {
   const interacted = useFirstInteraction();
   const [updateNotice, setUpdateNotice] = useState(false);
   const conflict = useSyncConflictSeen();
+  useEffect(() => afterStartup(() => void loadConflictDialog().catch(() => undefined)), []);
   useEffect(() => {
     // Обновление предлагаем между занятиями, чтобы не прервать ответ.
     const notice = () => {
