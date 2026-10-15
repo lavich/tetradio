@@ -75,6 +75,7 @@ export const EXCHANGE_INTERVAL_MS = 2 * 60 * 1000;
 const CHANGE_DELAY_MS = 2000;
 /** Страховка от бесконечного повтора: сам предел попыток лечения задаёт тот, кто его подключает. */
 const MAX_RECOVERIES = 3;
+export const STALE_CHOICE = "Версии изменились — выберите ещё раз.";
 const INITIAL: SyncStatus = {
   phase: "idle",
   lastConfirmedAt: null,
@@ -515,12 +516,16 @@ export class SyncCoordinator {
     })().finally(this.settle);
     return this.running;
   }
+  /** Окно выбора закрыто: просьба выбрать ещё раз больше ни к чему не относится. */
+  dismissChoice() {
+    if (this.status.reason === STALE_CHOICE) this.update({ reason: null });
+  }
   private async resolveNow(branchId: string): Promise<void> {
     const conflict = this.status.conflict;
     // Конфликт успели пересчитать: экран уже показывает новые ветви, выбор повторяется по ним.
     const chosen = conflict?.branches.find((branch) => branch.id === branchId);
     if (!conflict || !chosen) {
-      if (conflict) this.update({ reason: "Версии изменились — выберите ещё раз." });
+      if (conflict) this.update({ reason: STALE_CHOICE });
       return;
     }
     const { database } = this.options;

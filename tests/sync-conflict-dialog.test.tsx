@@ -37,6 +37,7 @@ vi.mock("../src/sync", () => ({
       store.set({ reason: "Версии изменились — выберите ещё раз." });
       return store.status;
     },
+    dismissChoice: () => store.set({ reason: null }),
   },
   useSyncStatus: () => useSyncExternalStore(store.subscribe, () => store.status),
 }));
@@ -72,5 +73,9 @@ describe("окно выбора версии", () => {
     );
     await act(async () => buttons[1].click());
     expect(dialog().querySelector("[role=status]")?.textContent).toBe("Версии изменились — выберите ещё раз.");
+    const later = [...dialog().querySelectorAll("button")].find((button) => button.textContent === "Решить позже")!;
+    act(() => later.click());
+    expect(store.status.reason).toBeNull();
+    expect(document.querySelector("[role=alertdialog]")).toBeNull();
   });
 });

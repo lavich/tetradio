@@ -97,7 +97,14 @@ export function SyncConflictDialog() {
           >
             {saving ? "Готовим копию…" : "Сначала сохранить полную копию"}
           </Button>
-          <AlertDialogCancel size="md" className="sm:w-auto" onClick={() => setDismissed(key)}>
+          <AlertDialogCancel
+            size="md"
+            className="sm:w-auto"
+            onClick={() => {
+              setDismissed(key);
+              sync.dismissChoice();
+            }}
+          >
             Решить позже
           </AlertDialogCancel>
         </AlertDialogFooter>

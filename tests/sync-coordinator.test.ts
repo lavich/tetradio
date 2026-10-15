@@ -380,6 +380,27 @@ describe("конфликты независимых изменений", () => {
     expect(tablet.sync.getStatus().reason).toBeNull();
     expect(await choice).toMatchObject({ phase: "synced", reason: null });
   });
+  it("закрытие окна выбора снимает просьбу выбрать ещё раз, но не причину занятой вкладки", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false]);
+    await study(tablet, [true]);
+    await phone.sync.exchange();
+    await tablet.sync.exchange();
+    await tablet.sync.resolve("gone");
+    tablet.sync.dismissChoice();
+    expect(tablet.sync.getStatus()).toMatchObject({ phase: "conflict", reason: null });
+    const otherTab = new SyncCoordinator({
+      database: tablet.db,
+      adapter: kvAdapter(cloud),
+      now,
+      lock: async () => "busy",
+      schedule: () => () => undefined,
+    });
+    const { reason } = await otherTab.resolve("any");
+    expect(reason).toContain("другая вкладка");
+    otherTab.dismissChoice();
+    expect(otherTab.getStatus().reason).toBe(reason);
+  });
   it("изменение во время выбора версии публикуется следующим обменом сразу после выбора", async () => {
     let during: (() => Promise<void>) | null = null;
     cloud = memoryTransport({
