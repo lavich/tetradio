@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
-import { deviceTimezone, formatDay, isDue, localDay, reviewCutoff } from "../../domain/learning";
+import { addDays, deviceTimezone, formatDay, isDue, reviewCutoff, studyDay } from "../../domain/learning";
 import { CARD_KINDS, type CardKind, type LearningRef, type ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
 import { CARDS, minutes, PHRASES, plural, withCount, WORDS } from "../../shared/format";
@@ -40,6 +40,19 @@ export const snapshotLabel = ({ snapshot }: Pick<ReviewEvent, "snapshot">) =>
       : "prompt" in snapshot
         ? snapshot.prompt
         : "";
+/** Когда вернутся ошибки — по учебному дню срока каждой карточки, сгруппировано по дням: общий срок не выдумываем. */
+export function returnDays(now: Date, timezone: string, returns: { due: Date | string; label: string }[]) {
+  const today = studyDay(now, timezone);
+  const tomorrow = addDays(today, 1);
+  const days = new Map<string, string[]>();
+  for (const { due, label } of returns) {
+    const day = studyDay(new Date(due), timezone);
+    days.set(day, [...(days.get(day) ?? []), label]);
+  }
+  return [...days].map(
+    ([day, names]) => [day === today ? "сегодня" : day === tomorrow ? "завтра" : formatDay(day), names] as const,
+  );
+}
 const keyOf = (ref: LearningRef) => JSON.stringify([ref.kind, ref.id]);
 
 export function ResultScreen() {
@@ -77,19 +90,17 @@ export function ResultScreen() {
     const state = result?.states.get(keyOf(ref));
     return state && isDue(state.card, now, cutoff);
   });
-  // Когда вернутся ошибки — по сроку каждой карточки, сгруппировано по дням: общий срок не выдумываем.
-  const returns = new Map<string, string[]>();
-  for (const ref of mistakeRefs) {
-    const state = result?.states.get(keyOf(ref));
-    if (!state || readyAgain.includes(ref)) continue;
-    const day = localDay(new Date(state.card.due), deviceTimezone());
-    const event = mistakes.find((entry) => entry.unitKey === keyOf(ref) || entry.ref.id === ref.id);
-    const label = event ? snapshotLabel(event) : "";
-    if (label) returns.set(day, [...(returns.get(day) ?? []), label]);
-  }
-  const today = localDay(now, deviceTimezone());
-  const tomorrow = localDay(new Date(now.getTime() + 86_400_000), deviceTimezone());
-  const dayName = (day: string) => (day === today ? "сегодня" : day === tomorrow ? "завтра" : formatDay(day));
+  const returns = returnDays(
+    now,
+    deviceTimezone(),
+    mistakeRefs.flatMap((ref) => {
+      const state = result?.states.get(keyOf(ref));
+      if (!state || readyAgain.includes(ref)) return [];
+      const event = mistakes.find((entry) => entry.unitKey === keyOf(ref) || entry.ref.id === ref.id);
+      const label = event ? snapshotLabel(event) : "";
+      return label ? [{ due: state.card.due, label }] : [];
+    }),
+  );
   const rows = session ? doneRows(session, new Map(events.map((event) => [event.id, event]))) : [];
   const almost = events.filter((event) => markOf(event) === "almost").length;
 
@@ -102,7 +113,7 @@ export function ResultScreen() {
     <ProfileContext value={profile}>
       <main className={`${s.session} ${s.result}`}>
         <div className={s.page}>
-          <PageHead day={session?.planDate ?? today} />
+          <PageHead day={session?.planDate ?? studyDay(now, deviceTimezone())} />
           <DoneList rows={rows} />
           <section className={s.summary} aria-labelledby="result-title">
             <h2 id="result-title" className={s.summaryTitle}>
@@ -111,9 +122,9 @@ export function ResultScreen() {
             <p className={s.summaryLine} data-testid="composition">
               {countText(byKind, unique.size)} · {clean} сразу, {unique.size - clean} с исправлением.
             </p>
-            {[...returns].map(([day, names]) => (
+            {returns.map(([day, names]) => (
               <p key={day} className={s.summaryNote}>
-                {plural(names.length, ["Ошибка вернётся", "Ошибки вернутся", "Ошибки вернутся"])} {dayName(day)}:{" "}
+                {plural(names.length, ["Ошибка вернётся", "Ошибки вернутся", "Ошибки вернутся"])} {day}:{" "}
                 <b lang={profile.code}>{names.join(", ")}</b>.
               </p>
             ))}

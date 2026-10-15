@@ -5,7 +5,7 @@ import { Screen } from "../../app/Screen";
 import { installLesson } from "../../content/client";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { moduleReadings } from "../../storage/readings";
-import { readDay, WORDS, withCount } from "../../shared/format";
+import { eventDay, WORDS, withCount } from "../../shared/format";
 import { db } from "../../storage/db";
 import { useFollowCourse } from "../../shared/courses";
 import { Tick } from "../../shared/Tick";
@@ -123,7 +123,7 @@ export function ModuleScreen() {
               </span>
             );
             const meta = readAt ? (
-              `прочитано ${readDay(readAt)}`
+              `прочитано ${eventDay(readAt)}`
             ) : open ? null : (
               <>
                 откроется после урока «<span lang={profile.code}>{after.title}</span>»

@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { recordAnswer, skipItem } from "../src/storage/ops";
+import { reviewedOn } from "../src/storage/course";
 import { makeSession } from "../src/domain/learning";
 import { exportFull, inspectBackup, restoreBackup, transferFile, TRANSFER_TEXT } from "../src/features/backup/backup";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
@@ -54,6 +55,24 @@ describe("жизненный цикл ответа", () => {
     // Отметка изменений не обновилась: повтор не считается новым изменением.
     expect(mark).toBeTruthy();
     expect(await readMeta(db, META.dirty)).toBe(mark);
+  });
+  it("ответ после полуночи до 04:00 относится к вчерашнему учебному дню", async () => {
+    const session = await makeSession({ source: dexieSource(db), now, random: () => 0.3 });
+    await db.sessions.add(session);
+    const { event } = await recordAnswer({
+      session,
+      item: session.items[0],
+      correct: true,
+      answer: "",
+      responseTimeMs: 1,
+      activeTimeMs: 1,
+      timezone: "Asia/Nicosia",
+      now: new Date("2026-09-16T21:20:00Z"),
+      database: db,
+    });
+    expect(event.localDate).toBe("2026-09-16");
+    expect(await reviewedOn("2026-09-16", undefined, db)).toBe(1);
+    expect(await reviewedOn("2026-09-17", undefined, db)).toBe(0);
   });
   it("пропуск аудирования не создаёт события и не двигает интервал, но сдвигает позицию занятия", async () => {
     const session = await makeSession({ source: dexieSource(db), now, random: () => 0.3 });

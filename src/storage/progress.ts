@@ -1,5 +1,5 @@
 import type { CourseCalendar } from "../content/course";
-import { localDay, mondayOf } from "../domain/learning";
+import { mondayOf, studyDay } from "../domain/learning";
 import { coursePace, skillProgress, type Pace, type SkillProgress } from "../domain/progress";
 import type { BlockProgress } from "../domain/types";
 import { lessonDays, moduleViews, type ModuleView } from "./course";
@@ -34,7 +34,7 @@ export const courseProgress = zoned(async function courseProgress(
   courseId?: string,
   database: AppDatabase = db,
 ): Promise<CourseProgress> {
-  const today = localDay(now, timezone);
+  const today = studyDay(now, timezone);
   const monday = mondayOf(today);
   courseId ??= await primaryCourse(database);
   const views = await moduleViews(courseId, database);
@@ -65,7 +65,7 @@ export const courseProgress = zoned(async function courseProgress(
 
   const completedDays = lessons
     .filter((lesson) => lesson?.completed)
-    .map((lesson) => localDay(new Date(lesson!.updatedAt), timezone));
+    .map((lesson) => studyDay(new Date(lesson!.updatedAt), timezone));
   const pace = coursePace(
     views.map((view) => ({
       number: view.module.number,

@@ -5,7 +5,7 @@
 import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
 import { cardRef, decodeMarks, READING_PREFIX, type BlockMarks } from "../content/schema";
 import { lessonDone, tallyOf, type LessonTally } from "../domain/course";
-import { localDay, nextState } from "../domain/learning";
+import { DAY_STARTS_AT, nextState, studyDay, zonedStart } from "../domain/learning";
 import { unitKey } from "../domain/refs";
 import { Rating } from "ts-fsrs";
 import type { BlockProgress, Lesson, StoredModule } from "../domain/types";
@@ -270,9 +270,10 @@ export const lessonDays = zoned(async function lessonDays(
   courseId?: string,
   database: AppDatabase = db,
 ): Promise<string[]> {
+  const since = zonedStart(from, timezone, DAY_STARTS_AT).getTime();
   // Чтение днём занятий не считается: отметка «прочитано» — строка блока текста.
   let rows = await database.blockProgress
-    .filter((row) => row.done && !row.lessonId.startsWith(READING_PREFIX))
+    .filter((row) => row.done && !row.lessonId.startsWith(READING_PREFIX) && Date.parse(row.updatedAt) >= since)
     .toArray();
   if (courseId) {
     const owners = await lessonCourses(
@@ -281,7 +282,7 @@ export const lessonDays = zoned(async function lessonDays(
     );
     rows = rows.filter((row) => owners.get(row.lessonId) === courseId);
   }
-  const days = new Set(rows.map((row) => localDay(new Date(row.updatedAt), timezone)).filter((day) => day >= from));
+  const days = new Set(rows.map((row) => studyDay(new Date(row.updatedAt), timezone)));
   return [...days].sort();
 });
 

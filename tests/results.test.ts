@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
-import { compositionText, countText } from "../src/features/learning/ResultScreen";
+import { compositionText, countText, returnDays } from "../src/features/learning/ResultScreen";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { LEECH_LAPSES, lessonProgress, progress, SKILL_NAMES, SKILL_TYPES, SOLID_DAYS } from "../src/domain/stats";
-import { localDay } from "../src/domain/learning";
+import { studyDay } from "../src/domain/learning";
 import { foldStats, emptyStats } from "../src/domain/skills";
 import {
   type CardKind,
@@ -38,7 +38,7 @@ const event = (
   correct,
   answer: "",
   createdAt: at,
-  localDate: localDay(new Date(at), "Asia/Nicosia"),
+  localDate: studyDay(new Date(at), "Asia/Nicosia"),
   responseTimeMs: 900,
   ...over,
 });
@@ -122,14 +122,14 @@ describe("результат смешанного занятия", () => {
     });
     expect(SKILL_NAMES.comprehension).toBe("Понимание на слух");
   });
-  it("ответ около полуночи относится ко дню выбранной зоны, и день считает уникальные карточки любого вида", async () => {
+  it("ответ после полуночи относится к учебному дню выбранной зоны, и день считает уникальные карточки любого вида", async () => {
     const late = event(ref("phrase", "p1"), "spelling", true, "2026-09-14T22:30:00Z"); // 01:30 15 сентября в Никосии
     const again = event(ref("phrase", "p1"), "spelling", false, "2026-09-14T22:40:00Z", { id: "again" });
     const word = event(wordRef("w1"), "spelling", true, "2026-09-14T22:45:00Z");
     const stats = await progress(fromSnapshot(base({ events: [late, again, word] })), now);
-    const day = stats.days.find((d) => d.date === "2026-09-15")!;
-    expect(day).toEqual({ date: "2026-09-15", answers: 3, cards: 2 });
-    expect(stats.days.find((d) => d.date === "2026-09-14")!.answers).toBe(0);
+    const day = stats.days.find((d) => d.date === "2026-09-14")!;
+    expect(day).toEqual({ date: "2026-09-14", answers: 3, cards: 2 });
+    expect(stats.days.find((d) => d.date === "2026-09-15")!.answers).toBe(0);
     expect(stats.skills.find((skill) => skill.type === "spelling")).toEqual({
       type: "spelling",
       attempts: 3,
@@ -220,5 +220,30 @@ describe("карточки, которые не даются", () => {
       now,
     );
     expect(stats.leeches).toEqual([]);
+  });
+});
+
+describe("когда вернутся ошибки", () => {
+  const tz = "Asia/Nicosia";
+  it("срок до 04:00 завтра — сегодня, после — завтра", () => {
+    // 23:50 15 октября в Никосии.
+    const at = new Date("2026-10-15T20:50:00Z");
+    expect(
+      returnDays(at, tz, [
+        { due: "2026-10-15T21:00:00Z", label: "α" },
+        { due: "2026-10-16T01:30:00Z", label: "β" },
+        { due: "2026-10-18T09:00:00Z", label: "γ" },
+      ]),
+    ).toEqual([
+      ["сегодня", ["α"]],
+      ["завтра", ["β"]],
+      ["18 октября", ["γ"]],
+    ]);
+  });
+  it("в ночь перевода на летнее время «завтра» не пропадает", () => {
+    // 23:00 28 марта в Никосии; сутки до 04:00 29-го — 23 часа.
+    expect(returnDays(new Date("2026-03-28T21:00:00Z"), tz, [{ due: "2026-03-29T07:00:00Z", label: "α" }])).toEqual([
+      ["завтра", ["α"]],
+    ]);
   });
 });

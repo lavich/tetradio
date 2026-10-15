@@ -136,3 +136,12 @@ studyDay(at, tz) = localDay(at, tz), если at >= zonedStart(localDay(at, tz),
 
 1. Дата в заголовке «Сегодня» с 0:00 до 4:00 — «Вчерашнюю (Recommended)»: дата учебного дня без пометок.
 2. Даты фактов «Урок пройден · …» и «прочитано …» — «По учебному дню (Recommended)».
+
+## Реализация
+
+- `readDay` переименована в `eventDay(iso, timezone?)` (`src/shared/format.ts`) и подписывает и «прочитано …», и «Урок пройден · …»: одна функция для дат фактов.
+- Группировка возвратов ошибок вынесена в `returnDays` (`ResultScreen.tsx`), как в задаче 3.3.
+- Новых функций чтения нет: `studyDay`, `eventDay` и `returnDays` — чистые; `lessonDays` и `courseProgress` уже обёрнуты `zoned`.
+- Тесты задач легли в существующие файлы: 2.1 — `tests/telegram-ui.test.ts`, 2.2 — `tests/two-courses.test.ts`; 3.1 и 3.2 — новый `tests/e2e/day-boundary.spec.ts` с `page.clock` и `timezoneId: "Asia/Nicosia"`, вспомогательные `putRecords` и `firstWords` в `tests/e2e/helpers.ts`. Отметка в 3.1 проверяется по записанному ответу, а не по пройденному занятию: запись ответа в 00:20 проверена unit-тестом 2.1.
+- e2e-фикстуры с `localDate: at.slice(0, 10)` не менялись (задача 4.1): весь `npm run test:e2e` прошёл в зоне `Etc/GMT+7`, где было 01:04 по местному времени.
+- Под `page.clock` объект `Date`, созданный страницей и записанный в IndexedDB, читается обратно не датой, и приложение падает. Постоянные e2e пишут только строки; временный тест для скриншотов писал сроки числами.

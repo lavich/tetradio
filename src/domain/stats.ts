@@ -1,5 +1,5 @@
 import { State } from "ts-fsrs";
-import { addDays, localDay, zonedStart } from "./time";
+import { addDays, DAY_STARTS_AT, studyDay, zonedStart } from "./time";
 import type { DaySummary } from "./skills";
 import type { CardKind, ExerciseType, LearningRef, LearningState } from "./types";
 
@@ -62,7 +62,7 @@ export const SKILL_TYPES: ExerciseType[] = ["recognition", "assembly", "spelling
 /** Статистика считается по записанным событиям, а не по показам экрана. */
 export async function progress(source: StatsSource, now: Date): Promise<Progress> {
   const timezone = source.timezone();
-  const today = localDay(now, timezone);
+  const today = studyDay(now, timezone);
   const period = await source.daysBetween(addDays(today, -6), today);
   const days: DayStat[] = Array.from({ length: 7 }, (_, index) => {
     const date = addDays(today, index - 6);
@@ -75,9 +75,9 @@ export async function progress(source: StatsSource, now: Date): Promise<Progress
     const correct = recent.filter(Boolean).length;
     skills.push({ type, attempts: recent.length, correct, rate: recent.length ? correct / recent.length : null });
   }
-  // Срок сравниваем по календарной дате в зоне пользователя: «не позже дня» значит раньше начала следующего дня.
+  // «Не позже дня» — раньше начала следующего учебного дня в зоне пользователя.
   const dueBefore = (date: string) =>
-    source.dueKeysBefore(zonedStart(addDays(date, 1), timezone)).then((keys) => keys.length);
+    source.dueKeysBefore(zonedStart(addDays(date, 1), timezone, DAY_STARTS_AT)).then((keys) => keys.length);
   const groups = { fresh: 0, learning: 0, review: 0, solid: 0 };
   let tracked = 0;
   const struggling: LearningState[] = [];
