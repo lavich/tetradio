@@ -75,7 +75,6 @@ export async function progress(source: StatsSource, now: Date): Promise<Progress
     const correct = recent.filter(Boolean).length;
     skills.push({ type, attempts: recent.length, correct, rate: recent.length ? correct / recent.length : null });
   }
-  // «Не позже дня» — раньше начала следующего учебного дня в зоне пользователя.
   const dueBefore = (date: string) =>
     source.dueKeysBefore(zonedStart(addDays(date, 1), timezone, DAY_STARTS_AT)).then((keys) => keys.length);
   const groups = { fresh: 0, learning: 0, review: 0, solid: 0 };

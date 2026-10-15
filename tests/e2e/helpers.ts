@@ -385,15 +385,17 @@ export async function putRecords(page: Page, records: Record<string, unknown[]>,
 export async function firstWords(page: Page, count: number, databaseName = "tetradio-mock-1") {
   return page.evaluate(
     async ([count, databaseName]) => {
-      const database = await new Promise<IDBDatabase>((resolve) => {
+      const database = await new Promise<IDBDatabase>((resolve, reject) => {
         const request = indexedDB.open(databaseName);
         request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
       });
       let words: { id: string; greek: string; russian: string }[] = [];
       for (let attempt = 0; attempt < 100 && words.length < count; attempt++) {
-        words = await new Promise((resolve) => {
+        words = await new Promise((resolve, reject) => {
           const request = database.transaction("words").objectStore("words").getAll();
           request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
         });
         if (words.length < count) await new Promise((resolve) => setTimeout(resolve, 100));
       }

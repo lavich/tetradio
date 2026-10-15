@@ -4,7 +4,6 @@ import { firstWords, installLessons, putRecords } from "./helpers";
 
 test.use({ timezoneId: "Asia/Nicosia" });
 
-/** Ответ занятия по плану: учебный день записан так, как его пишет приложение. */
 async function seedAnswer(page: Page, createdAt: string, localDate: string) {
   const [word] = await firstWords(page, 1);
   await putRecords(page, {

@@ -52,7 +52,6 @@ export function zonedStart(day: string, timezone: string, hour = 0): Date {
   const first = new Date(guess.getTime() - offset(guess));
   return new Date(guess.getTime() - offset(first));
 }
-/** Учебный день момента: с `DAY_STARTS_AT` до того же часа следующего календарного дня. */
 export function studyDay(at: Date, timezone: string): string {
   const day = localDay(at, timezone);
   return at < zonedStart(day, timezone, DAY_STARTS_AT) ? addDays(day, -1) : day;
