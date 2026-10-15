@@ -1,4 +1,5 @@
 import { db, type AppDatabase } from "../storage/db";
+import { lessonOutlines } from "../storage/outlines";
 import type { Asset } from "../domain/types";
 import { fetcher, type ContentFetcher } from "./fetcher";
 import { toContentError } from "./install";
@@ -95,6 +96,15 @@ export async function downloadLessonMedia(
 
 /** Без уборки каждая переозвучка или замена картинки оставляла бы на устройстве прежнюю копию. */
 export async function pruneMedia(database: AppDatabase = db): Promise<number> {
+  // Сводки из кэша могут отстать от соседней вкладки, поэтому удаление решает только полное чтение пакетов.
+  const lessons = (await database.packages.toCollection().primaryKeys()) as string[];
+  const [outlines, assets, refs] = await Promise.all([
+    lessonOutlines(lessons, database),
+    database.assets.toCollection().primaryKeys(),
+    database.media.toCollection().primaryKeys(),
+  ]);
+  const listed = new Set(outlines.flatMap((outline) => outline?.media ?? []));
+  if (assets.every((id) => listed.has(id)) && refs.every((id) => listed.has(id))) return 0;
   return database.transaction("rw", [database.packages, database.assets, database.media], async () => {
     const used = new Set<string>();
     await database.packages.each((pack) => {

@@ -15,6 +15,7 @@ export interface LessonOutline {
   mistakes: Set<string>;
   module?: { id: string; position: number };
   readings: string[];
+  media: string[];
 }
 
 /** Задания к чтению и аудированию без текста не решить: их пункты в повторение не идут. */
@@ -31,6 +32,7 @@ const outlineOf = (pack: InstalledPackage): LessonOutline => ({
   mistakes: new Set(mistakeIdsOf(pack.lessonId, pack.blocks)),
   module: pack.module,
   readings: (pack.readings ?? []).map((reading) => reading.id),
+  media: pack.media.map((item) => item.id),
 });
 
 interface Cache {

@@ -55,26 +55,46 @@ export async function installCourse(
   source: ContentFetcher = fetcher,
 ): Promise<CourseInstallResult> {
   const order = await courseInstallOrder(courseId, database);
-  const result: CourseInstallResult = { installed: 0, updated: 0, failed: 0 };
   setPhase(courseKey(courseId), { phase: "loading" });
-  let failure: ContentError | null = null;
-  for (const id of order) {
-    try {
-      const outcome = await installLesson(id, database, source, false);
-      if (outcome.status === "installed") result.installed++;
-      if (outcome.status === "updated") result.updated++;
-    } catch (error) {
-      result.failed++;
-      failure = toContentError(error);
-    }
-  }
-  if (result.installed || result.updated) await pruneMedia(database).catch(() => undefined);
+  const { result, failure } = await installInTurn(order, database, source);
   if (failure) setPhase(courseKey(courseId), { phase: "error", message: failure.message, kind: failure.kind });
   else setPhase(courseKey(courseId), { phase: "idle" });
   return result;
 }
 
-/** `prune: false` — уборку медиа сделает установка курса один раз после всех уроков. */
+const PACKAGE_DOWNLOADS = 4;
+/** Несколько загрузок сразу и одна уборка медиа в конце: уборка после каждого пакета перечитывала бы все. */
+export async function installPackages(
+  lessonIds: string[],
+  database: AppDatabase = db,
+  source: ContentFetcher = fetcher,
+): Promise<CourseInstallResult> {
+  return (await installInTurn(lessonIds, database, source, PACKAGE_DOWNLOADS)).result;
+}
+
+async function installInTurn(lessonIds: string[], database: AppDatabase, source: ContentFetcher, parallel = 1) {
+  const result: CourseInstallResult = { installed: 0, updated: 0, failed: 0 };
+  let failure = null as ContentError | null;
+  let next = 0;
+  const worker = async () => {
+    while (next < lessonIds.length) {
+      const id = lessonIds[next++];
+      try {
+        const outcome = await installLesson(id, database, source, false);
+        if (outcome.status === "installed") result.installed++;
+        if (outcome.status === "updated") result.updated++;
+      } catch (error) {
+        result.failed++;
+        failure = toContentError(error);
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(parallel, lessonIds.length) }, worker));
+  if (result.installed || result.updated) await pruneMedia(database).catch(() => undefined);
+  return { result, failure };
+}
+
+/** `prune: false` — уборку медиа сделает пакетная установка один раз после всех уроков. */
 export function installLesson(
   lessonId: string,
   database: AppDatabase = db,

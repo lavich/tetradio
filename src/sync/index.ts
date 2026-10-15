@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { installLesson } from "../content/client";
+import { installPackages } from "../content/client";
 import { launchContext } from "../platform/launch";
 import type { TelegramWebApp } from "../platform/telegram-types";
 import { lifecycle, reportError } from "../reporting/reporting";
@@ -24,7 +24,7 @@ export const sync = new SyncCoordinator({
   recover: heal,
 });
 sync.onMissingPackages = (ids) => {
-  for (const id of ids) installLesson(id).catch(() => undefined);
+  installPackages(ids).catch((error: unknown) => reportError(error, { category: "content" }));
 };
 // Отключённый транспорт и клиент без CloudStorage — штатные состояния, не сбои.
 sync.onFailure = (error, kind) => {
