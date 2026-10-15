@@ -219,14 +219,18 @@ export class SyncCoordinator {
     if (lock === "unsupported") {
       // Без блокировки нельзя гарантировать одного писателя: читаем и применяем, но не публикуем.
       writes = false;
-      this.update({ phase: "syncing", error: null });
+      this.update({ phase: "syncing", error: null, reason: null });
       await this.decide(writes, 0);
     }
   }
   private fail(error: unknown) {
     const kind: SyncErrorKind | "unknown" = error instanceof SyncError ? error.kind : "unknown";
     const message = error instanceof Error ? error.message : "Синхронизация не удалась";
-    this.update({ phase: "error", error: { kind, message } });
+    this.update({
+      phase: "error",
+      error: { kind, message },
+      ...(this.status.reason === STALE_CHOICE ? { reason: null } : {}),
+    });
     this.onFailure?.(error, kind);
     if (kind !== "disabled" && kind !== "format") {
       this.cancelRetry = this.options.schedule(() => {
@@ -516,9 +520,9 @@ export class SyncCoordinator {
     })().finally(this.settle);
     return this.running;
   }
-  /** Окно выбора закрыто: просьба выбрать ещё раз больше ни к чему не относится. */
+  /** Окно выбора закрыто: причины, просящие выбрать версию, больше ни к чему не относятся. */
   dismissChoice() {
-    if (this.status.reason === STALE_CHOICE) this.update({ reason: null });
+    if (this.status.phase === "conflict" && this.status.reason) this.update({ reason: null });
   }
   private async resolveNow(branchId: string): Promise<void> {
     const conflict = this.status.conflict;

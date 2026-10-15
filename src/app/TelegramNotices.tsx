@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -24,9 +24,17 @@ export function SyncConflictDialog() {
   const [busy, setBusy] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [dismissed, setDismissed] = useState<string | null>(null);
+  const list = useRef<HTMLDivElement>(null);
+  const focused = useRef<string | null>(null);
   const conflict = status.conflict;
-  if (!conflict || status.phase !== "conflict") return null;
-  const key = conflict.branches.map((branch) => branch.id).join("|");
+  const key = conflict?.branches.map((branch) => branch.id).join("|") ?? null;
+  // Кнопка выбранной ветви исчезает вместе с ней, и фокус ушёл бы на body.
+  useEffect(() => {
+    if (!key || busy) return;
+    if (focused.current && focused.current !== key) list.current?.querySelector("button")?.focus();
+    focused.current = key;
+  }, [key, busy]);
+  if (!conflict || !key || status.phase !== "conflict") return null;
   if (dismissed === key) return null;
   const titles = {
     diverged: "Прогресс разошёлся между устройствами",
@@ -52,13 +60,11 @@ export function SyncConflictDialog() {
             добавятся; она сохранится на этом устройстве, и её можно будет скачать на экране «Настройки и данные». До
             выбора занятия продолжаются, синхронизация не считается успешной.
           </AlertDialogDescription>
-          {status.reason && (
-            <p role="status" className="m-0 text-sm font-semibold">
-              {status.reason}
-            </p>
-          )}
+          <p role="status" className={status.reason ? ui.note : "sr-only"}>
+            {status.reason ?? ""}
+          </p>
         </AlertDialogHeader>
-        <div className={ui.stack} role="list">
+        <div ref={list} className={ui.stack} role="list">
           {conflict.branches.map((branch) => (
             <div key={branch.id} role="listitem" className="rounded-[14px] border border-border p-3">
               <p className="m-0 font-semibold">{branch.label}</p>

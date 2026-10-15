@@ -34,7 +34,10 @@ const store = vi.hoisted(() => {
 vi.mock("../src/sync", () => ({
   sync: {
     resolve: async () => {
-      store.set({ reason: "Версии изменились — выберите ещё раз." });
+      store.set({
+        reason: "Версии изменились — выберите ещё раз.",
+        conflict: { kind: "diverged", branches: [branch("local", true), branch("ios-3", false)] },
+      });
       return store.status;
     },
     dismissChoice: () => store.set({ reason: null }),
@@ -52,7 +55,7 @@ afterEach(() => {
 });
 
 describe("окно выбора версии", () => {
-  it("выбор исчезнувшей версии показывает просьбу выбрать ещё раз", async () => {
+  it("выбор исчезнувшей версии показывает просьбу выбрать ещё раз и возвращает фокус к выбору", async () => {
     store.status = {
       phase: "conflict",
       lastConfirmedAt: null,
@@ -67,12 +70,12 @@ describe("окно выбора версии", () => {
     root = createRoot(container);
     act(() => root!.render(<SyncConflictDialog />));
     const dialog = () => document.querySelector("[role=alertdialog]")!;
-    expect(dialog().querySelector("[role=status]")).toBeNull();
-    const buttons = [...dialog().querySelectorAll("button")].filter(
-      (button) => button.textContent === "Продолжить с этой версии",
-    );
-    await act(async () => buttons[1].click());
+    expect(dialog().querySelector("[role=status]")?.textContent).toBe("");
+    const choices = () =>
+      [...dialog().querySelectorAll("button")].filter((button) => button.textContent === "Продолжить с этой версии");
+    await act(async () => choices()[1].click());
     expect(dialog().querySelector("[role=status]")?.textContent).toBe("Версии изменились — выберите ещё раз.");
+    expect(document.activeElement).toBe(choices()[0]);
     const later = [...dialog().querySelectorAll("button")].find((button) => button.textContent === "Решить позже")!;
     act(() => later.click());
     expect(store.status.reason).toBeNull();

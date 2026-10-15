@@ -329,7 +329,11 @@ export async function applySnapshot(
  * Пакет установлен: отложенные состояния его карточек переходят в обычную таблицу, завершение урока — из снимка.
  * Вызывается внутри транзакции установки пакета.
  */
-export async function adoptStash(database: AppDatabase, lessonId: string, refs: LearningRef[]): Promise<void> {
+export const adoptStash = zoned(async function adoptStash(
+  database: AppDatabase,
+  lessonId: string,
+  refs: LearningRef[],
+): Promise<void> {
   for (const ref of refs) {
     // Пакет мог встать раньше переноса узнанного вида: тогда состояние ещё лежит под ключом незнакомого.
     const keys = [unitKey(ref), storedKey({ code: KINDS[ref.kind].code, id: ref.id })];
@@ -346,7 +350,7 @@ export async function adoptStash(database: AppDatabase, lessonId: string, refs: 
     delete pending[lessonId];
     await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
   }
-}
+});
 
 export interface SnapshotDescription {
   cards: number;
