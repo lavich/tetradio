@@ -23,7 +23,9 @@ export const sync = new SyncCoordinator({
   lock: webLock(`tetradio-sync-${db.name}`),
   recover: heal,
 });
-sync.onMissingPackages = (ids) => void installPackages(ids);
+sync.onMissingPackages = (ids) => {
+  installPackages(ids).catch((error: unknown) => reportError(error, { category: "content" }));
+};
 // Отключённый транспорт и клиент без CloudStorage — штатные состояния, не сбои.
 sync.onFailure = (error, kind) => {
   if (kind !== "disabled" && kind !== "unavailable") reportError(error, { category: "sync", extra: { kind } });

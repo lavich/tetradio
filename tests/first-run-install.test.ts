@@ -87,6 +87,43 @@ describe("первый запуск на новом устройстве", () =>
     expect(prune).toHaveBeenCalledTimes(1);
     expect(reads.rows).toBeLessThanOrEqual(LESSONS.length);
   });
+  it("качает не больше четырёх пакетов сразу, а ошибка одного не останавливает остальные", async () => {
+    const copies = Array.from({ length: 10 }, (_, index) => `mech-copy-${index}`);
+    const packages = Object.fromEntries(
+      copies.map((id) => [`content/packages/${id}.json`, { ...packageOf("mech-1"), id }]),
+    );
+    const catalog = {
+      ...content.catalog,
+      lessons: copies.map((id, index) => ({
+        ...content.catalog.lessons.find((lesson) => lesson.id === "mech-1")!,
+        id,
+        url: `content/packages/${id}.json`,
+        position: index,
+      })),
+    };
+    const base = memoryFetcher(content, { "content/catalog.json": catalog, ...packages });
+    const broken = "content/packages/mech-copy-3.json";
+    let active = 0;
+    let peak = 0;
+    const fetcher = {
+      ...base,
+      json: async (url: string) => {
+        if (!(url in packages)) return base.json(url);
+        peak = Math.max(peak, ++active);
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        active--;
+        if (url === broken) throw new Error("сбой сети");
+        return base.json(url);
+      },
+    };
+    await refreshCatalog(db, fetcher);
+    const result = await installPackages(copies, db, fetcher);
+    expect(peak).toBe(4);
+    expect(result).toEqual({ installed: copies.length - 1, updated: 0, failed: 1 });
+    expect((await db.packages.toCollection().primaryKeys()).sort()).toEqual(
+      copies.filter((id) => id !== "mech-copy-3").sort(),
+    );
+  });
   it("синхронизация отдаёт недостающие пакеты одной пакетной установкой", async () => {
     const client = await import("../src/content/client");
     const batch = vi.spyOn(client, "installPackages").mockResolvedValue({ installed: 0, updated: 0, failed: 0 });
