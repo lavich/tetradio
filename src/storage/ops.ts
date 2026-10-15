@@ -136,7 +136,8 @@ export async function recordAnswer({
         items,
         index: answered,
         activeTimeMs,
-        status: answered >= items.length ? "done" : "active",
+        // Занятие могли закрыть, пока ответ готовился вне транзакции: закрытое не открывается снова.
+        status: answered >= items.length ? "done" : stored.status === "ended" ? "ended" : "active",
       });
       await markChanged(database);
       return { event, created: true, finished: answered >= items.length };

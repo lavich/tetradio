@@ -234,6 +234,14 @@ describe("запись ответа", () => {
     expect(ended.status).toBe("ended");
     expect(ended.activeTimeMs).toBe(9000);
   });
+  it("ответ, записанный уже после выхода из занятия, не открывает занятие снова", async () => {
+    const { session } = await prepare();
+    await endSession(session, db);
+    await answer(session, session.items[0], { correct: false });
+    const stored = (await db.sessions.get(session.id))!;
+    expect(stored.items[0].eventId).toBeTruthy();
+    expect(stored.status).toBe("ended");
+  });
   it("ошибка транзакции откатывает событие, состояние и дополнительную попытку", async () => {
     const { session } = await prepare();
     const fail = () => {
