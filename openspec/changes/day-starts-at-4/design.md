@@ -9,7 +9,7 @@
 - День ответа хранится в событии строкой `localDate` (`src/storage/ops.ts:108`) и индексирован (`src/storage/db.ts:91`). По нему работают галочка `reviewedOn` (`src/storage/course.ts:289-297`), дни повторения недели (`src/storage/progress.ts:80,98`), дни статистики (`src/storage/queries.ts:223-231`) и облачная сводка `stats.days` (`foldStats`, `src/domain/skills.ts:76-100`; `readSummary`, `src/sync/snapshot.ts:170-191`).
 - Сами события в облако не попадают. В снимке только сводка `stats` за `KEEP_DAYS = 14` дней (`src/sync/snapshot.ts:38`, `src/sync/codec.ts:182,192`). Галочка и дни повторения недели и сейчас считаются по событиям своего устройства.
 - Дни уроков (`lessonDays`, `src/storage/course.ts:267-287`) и дни завершения уроков для темпа (`src/storage/progress.ts:66-68`) хранятся моментами (`updatedAt`) и переводятся в день при чтении.
-- Разбор #146 упоминал на «Прогрессе» строку «к повторению сегодня» и диаграмму по дням. После #87 их на экране нет. `ProgressScreen` берёт из `progress()` только `leeches` (`src/features/progress/ProgressScreen.tsx:38-49`). `progress().due` и `progress().days` считаются, но не показываются. Из дней облачной сводки виден только последний день — «последнее занятие <дата>» в окне конфликта версий (`describeSnapshot.lastDay`, `src/sync/snapshot.ts:355`; `src/app/TelegramNotices.tsx:63`). «Прогресс» сейчас зависит от дня через `courseProgress`: темп, положение против календаря и строку недели.
+- Разбор #146 упоминал на «Прогрессе» строку «к повторению сегодня» и диаграмму по дням. После #87 их на экране нет. `ProgressScreen` берёт из `progress()` только `leeches` (`src/features/progress/ProgressScreen.tsx:38-49`). `progress().due` и `progress().days` считаются, но не показываются. Из дней облачной сводки виден только последний день — «последнее занятие <дата>» в окне конфликта версий (`describeSnapshot.lastDay`, `src/sync/snapshot.ts:374`; `src/app/TelegramNotices.tsx:74`). «Прогресс» сейчас зависит от дня через `courseProgress`: темп, положение против календаря и строку недели.
 
 ## Goals / Non-Goals
 
@@ -92,7 +92,7 @@ studyDay(at, tz) = localDay(at, tz), если at >= zonedStart(localDay(at, tz),
 | 42 | `src/features/backup/backup.ts:106` `backupName` | дата UTC | без изменений: имя файла, не день занятий (вне объёма) |
 | 43 | `src/sync/coordinator.ts:72` `FOREIGN_KEEP_MS` | длительность 30 суток | без изменений, не граница дня |
 | 44 | `src/features/course/LessonScreen.tsx:100`, `src/features/words/WordSheet.tsx:155` практика от `now` | `planDate` из плана | без изменений, наследуют п. 8 |
-| 45 | `src/sync/snapshot.ts:355` `lastDay`, `src/app/TelegramNotices.tsx:63` «последнее занятие» в окне конфликта | последний день сводки | без изменений, наследует п. 11 |
+| 45 | `src/sync/snapshot.ts:374` `lastDay`, `src/app/TelegramNotices.tsx:74` «последнее занятие» в окне конфликта | последний день сводки | без изменений, наследует п. 11 |
 
 Итого 45 мест. Меняются 18: п. 3, 6–8, 10–12, 14–15, 18–19, 24, 26, 30, 32–33, 36–37. Остальные наследуют учебный день или остаются календарными.
 
