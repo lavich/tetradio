@@ -1,6 +1,7 @@
 import type { Card } from "ts-fsrs";
 import { READING_PREFIX } from "../content/schema";
 import type { AppDatabase } from "../storage/db";
+import { zoned } from "../storage/zone";
 import { byTime, emptySkills, emptyStats, foldSkill, foldStats, type SkillSummary } from "../domain/skills";
 import { KINDS } from "../domain/kinds";
 import { isForeign, storedKey, unitKey } from "../domain/refs";
@@ -63,7 +64,9 @@ const reviveState = (state: CompactState & { ref: LearningRef }): LearningState 
   version: state.version,
 });
 
-export const readMeta = async (database: AppDatabase, key: string) => (await database.meta.get(key))?.value ?? null;
+export const readMeta = zoned(
+  async (database: AppDatabase, key: string) => (await database.meta.get(key))?.value ?? null,
+);
 export const writeMeta = (database: AppDatabase, key: string, value: string | null) =>
   value === null ? database.meta.delete(key) : database.meta.put({ key, value });
 export const parseClock = (raw: string | null): Clock => {
@@ -76,7 +79,7 @@ export const parseClock = (raw: string | null): Clock => {
 };
 
 /** Ключи перечисленных карточек, которые есть на устройстве; ключи снятых и незнакомых видов сюда не попадают. */
-async function presentKeys(database: AppDatabase, refs: StoredRef[]): Promise<Set<string>> {
+const presentKeys = zoned(async function presentKeys(database: AppDatabase, refs: StoredRef[]): Promise<Set<string>> {
   const keys = new Set<string>();
   for (const kind of CARD_KINDS) {
     const ids = refs.flatMap((ref) => (!isForeign(ref) && ref.kind === kind ? [ref.id] : []));
@@ -84,7 +87,7 @@ async function presentKeys(database: AppDatabase, refs: StoredRef[]): Promise<Se
       for (const id of await STORED_KINDS[kind].presentIds(ids, database)) keys.add(unitKey({ kind, id }));
   }
   return keys;
-}
+});
 const compactLesson = (lesson: Lesson): CompactLesson => ({
   id: lesson.id,
   completed: lesson.completed,
@@ -105,7 +108,7 @@ const byBlock = (a: CompactBlock, b: CompactBlock) =>
  * Блоки версии заменяют локальные целиком. Ответы и текст остаются, только если версия не новее локальной записи:
  * у более новой попытки с другого устройства старые ответы не соответствовали бы её счёту.
  */
-async function applyBlocks(database: AppDatabase, blocks: CompactBlock[]) {
+const applyBlocks = zoned(async function applyBlocks(database: AppDatabase, blocks: CompactBlock[]) {
   const local = new Map((await database.blockProgress.toArray()).map((row) => [row.key, row]));
   const rows = blocks.map((block): BlockProgress => {
     const key = blockKey(block.lessonId, block.blockId);
@@ -126,7 +129,7 @@ async function applyBlocks(database: AppDatabase, blocks: CompactBlock[]) {
   const incoming = new Set(rows.map((row) => row.key));
   await database.blockProgress.bulkDelete([...local.keys()].filter((key) => !incoming.has(key)));
   await database.blockProgress.bulkPut(rows);
-}
+});
 const uniqueRefs = (refs: LearningRef[]) => [...new Map(refs.map((ref) => [unitKey(ref), ref])).values()];
 const byKey = (a: { ref: StoredRef }, b: { ref: StoredRef }) => storedKey(a.ref).localeCompare(storedKey(b.ref));
 
@@ -139,14 +142,14 @@ const SUMMARY_TABLES = ["cardSkills", "baseSummary", "events", ...CONTENT_TABLES
 export const SNAPSHOT_TABLES = [...new Set([...PROGRESS_TABLES, ...SUMMARY_TABLES])];
 const tables = (database: AppDatabase, names: readonly string[]) => names.map((name) => database.table(name));
 
-async function readProgress(database: AppDatabase, now: Date): Promise<Progress> {
+const readProgress = zoned(async function readProgress(database: AppDatabase, now: Date): Promise<Progress> {
   const packages = new Set((await database.packages.toCollection().primaryKeys()) as string[]);
   const lessons: CompactLesson[] = (await database.lessons.toArray())
     .filter((lesson) => packages.has(lesson.id))
     .map(compactLesson);
   // Уроки из чужого снимка, ещё не появившиеся здесь, остаются в версии: иначе публикация отсюда их бы потеряла.
   const present = new Set(lessons.map((lesson) => lesson.id));
-  const pending = parsePending((await database.meta.get(META.pendingLessons))?.value ?? null);
+  const pending = await readPending(database);
   for (const lesson of Object.values(pending)) if (!present.has(lesson.id)) lessons.push(lesson);
   lessons.sort((a, b) => a.id.localeCompare(b.id));
   const blocks = (await database.blockProgress.toArray()).map(compactBlock).sort(byBlock);
@@ -162,12 +165,12 @@ async function readProgress(database: AppDatabase, now: Date): Promise<Progress>
     blocks,
     states: states.sort(byKey),
   };
-}
+});
 /**
  * Сводки навыков и статистики: база предыдущего снимка плюс локальные события после её отсечки и до `until`
  * включительно. Событие позже `until` учтёт следующая сводка — иначе его посчитали бы эта и следующая.
  */
-async function readSummary(database: AppDatabase, until: string): Promise<Summary> {
+const readSummary = zoned(async function readSummary(database: AppDatabase, until: string): Promise<Summary> {
   const base = await database.baseSummary.get("base");
   const fresh: ReviewEvent[] = byTime(
     !base
@@ -188,22 +191,30 @@ async function readSummary(database: AppDatabase, until: string): Promise<Summar
       });
   const stats = foldStats(base?.stats ?? emptyStats(), fresh, KEEP_DAYS);
   return { skills: [...skills.values()].sort(byKey), stats: { ...stats, days: stats.days.slice(-KEEP_DAYS) } };
-}
+});
 /** Компактный снимок из локальной базы; вызывается внутри транзакции чтения по `SNAPSHOT_TABLES`. */
-export async function buildSnapshot(database: AppDatabase, now: Date): Promise<CompactSnapshot> {
+export const buildSnapshot = zoned(async function buildSnapshot(
+  database: AppDatabase,
+  now: Date,
+): Promise<CompactSnapshot> {
   const progress = await readProgress(database, now);
   return { ...progress, ...(await readSummary(database, progress.createdAt)) };
-}
+});
 export const readSnapshot = (database: AppDatabase, now: Date) =>
   database.transaction("r", tables(database, SNAPSHOT_TABLES), () => buildSnapshot(database, now));
 /** Новая база: отсечка — момент сборки, локальные события до неё считаются учтёнными в снимке. */
-export async function commitBase(database: AppDatabase, snapshot: Summary, versionId: string, asOf: string) {
+export const commitBase = zoned(async function commitBase(
+  database: AppDatabase,
+  snapshot: Summary,
+  versionId: string,
+  asOf: string,
+) {
   await database.cardSkills.clear();
   await database.cardSkills.bulkPut(
     snapshot.skills.map((entry) => ({ unitKey: storedKey(entry.ref), ref: entry.ref, skills: entry.skills })),
   );
   await database.baseSummary.put({ id: "base", asOf, versionId, stats: snapshot.stats });
-}
+});
 /**
  * Прогресс читается без блокировки записи, затем сводки собираются и фиксируются одной транзакцией по своим таблицам:
  * отсечка совпадает с прочитанными событиями. Отметка изменений читается первой — изменение между двумя транзакциями
@@ -228,12 +239,15 @@ export async function buildAndCommitMarked(
   });
   return { snapshot: { ...progress, ...summary }, mark };
 }
-export async function clearDirty(database: AppDatabase, mark: string | null): Promise<boolean> {
+export const clearDirty = zoned(async function clearDirty(
+  database: AppDatabase,
+  mark: string | null,
+): Promise<boolean> {
   const current = await readMeta(database, META.dirty);
   if (current !== null && current !== mark) return false;
   await writeMeta(database, META.dirty, null);
   return true;
-}
+});
 
 export type PendingLessons = Record<string, CompactLesson>;
 /** Отложенные до обновления записи хранят урок формата 3 — со статусом вместо завершения. */
@@ -251,8 +265,9 @@ const parsePending = (raw: string | null): PendingLessons => {
     return {};
   }
 };
-export const readPending = async (database: AppDatabase): Promise<PendingLessons> =>
-  parsePending(await readMeta(database, META.pendingLessons));
+export const readPending = zoned(async (database: AppDatabase): Promise<PendingLessons> =>
+  parsePending(await readMeta(database, META.pendingLessons)),
+);
 
 /**
  * Применение целой версии одной транзакцией: настройки, предел курса, завершение уроков, блоки курса,
@@ -314,7 +329,11 @@ export async function applySnapshot(
  * Пакет установлен: отложенные состояния его карточек переходят в обычную таблицу, завершение урока — из снимка.
  * Вызывается внутри транзакции установки пакета.
  */
-export async function adoptStash(database: AppDatabase, lessonId: string, refs: LearningRef[]): Promise<void> {
+export const adoptStash = zoned(async function adoptStash(
+  database: AppDatabase,
+  lessonId: string,
+  refs: LearningRef[],
+): Promise<void> {
   for (const ref of refs) {
     // Пакет мог встать раньше переноса узнанного вида: тогда состояние ещё лежит под ключом незнакомого.
     const keys = [unitKey(ref), storedKey({ code: KINDS[ref.kind].code, id: ref.id })];
@@ -331,7 +350,7 @@ export async function adoptStash(database: AppDatabase, lessonId: string, refs: 
     delete pending[lessonId];
     await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
   }
-}
+});
 
 export interface SnapshotDescription {
   cards: number;

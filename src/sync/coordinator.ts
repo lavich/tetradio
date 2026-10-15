@@ -75,6 +75,7 @@ export const EXCHANGE_INTERVAL_MS = 2 * 60 * 1000;
 const CHANGE_DELAY_MS = 2000;
 /** Страховка от бесконечного повтора: сам предел попыток лечения задаёт тот, кто его подключает. */
 const MAX_RECOVERIES = 3;
+export const STALE_CHOICE = "Версии изменились — выберите ещё раз.";
 const INITIAL: SyncStatus = {
   phase: "idle",
   lastConfirmedAt: null,
@@ -218,14 +219,18 @@ export class SyncCoordinator {
     if (lock === "unsupported") {
       // Без блокировки нельзя гарантировать одного писателя: читаем и применяем, но не публикуем.
       writes = false;
-      this.update({ phase: "syncing", error: null });
+      this.update({ phase: "syncing", error: null, reason: null });
       await this.decide(writes, 0);
     }
   }
   private fail(error: unknown) {
     const kind: SyncErrorKind | "unknown" = error instanceof SyncError ? error.kind : "unknown";
     const message = error instanceof Error ? error.message : "Синхронизация не удалась";
-    this.update({ phase: "error", error: { kind, message } });
+    this.update({
+      phase: "error",
+      error: { kind, message },
+      ...(this.status.reason === STALE_CHOICE ? { reason: null } : {}),
+    });
     this.onFailure?.(error, kind);
     if (kind !== "disabled" && kind !== "format") {
       this.cancelRetry = this.options.schedule(() => {
@@ -498,6 +503,7 @@ export class SyncCoordinator {
    * новая версия отмечает все известные ветви рассмотренными; ответы другой версии не объединяются.
    */
   async resolve(branchId: string): Promise<SyncStatus> {
+    if (this.status.reason) this.update({ reason: null });
     // Выбор версии — тоже обмен: не параллельно с фоновым обменом и не в двух вкладках сразу.
     while (this.running) await this.running;
     this.again = false;
@@ -514,11 +520,18 @@ export class SyncCoordinator {
     })().finally(this.settle);
     return this.running;
   }
+  /** Окно выбора закрыто: причины, просящие выбрать версию, больше ни к чему не относятся. */
+  dismissChoice() {
+    if (this.status.phase === "conflict" && this.status.reason) this.update({ reason: null });
+  }
   private async resolveNow(branchId: string): Promise<void> {
     const conflict = this.status.conflict;
     // Конфликт успели пересчитать: экран уже показывает новые ветви, выбор повторяется по ним.
     const chosen = conflict?.branches.find((branch) => branch.id === branchId);
-    if (!conflict || !chosen) return;
+    if (!conflict || !chosen) {
+      if (conflict) this.update({ reason: STALE_CHOICE });
+      return;
+    }
     const { database } = this.options;
     const device = await this.deviceId();
     const now = this.options.now().toISOString();

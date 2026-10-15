@@ -8,7 +8,7 @@ import { buildAndCommit, submitAnswer } from "./helpers/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { kvAdapter } from "../src/sync/adapter";
-import { SyncCoordinator } from "../src/sync/coordinator";
+import { SyncCoordinator, type CoordinatorOptions } from "../src/sync/coordinator";
 import { memoryTransport, disabledTransport, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
@@ -25,7 +25,10 @@ const tick = (minutes = 1) => {
 };
 const now = () => new Date(clockMs);
 let counter = 0;
-async function device(name: string, options: { lessons?: string[]; label?: string; maxKeys?: number } = {}) {
+async function device(
+  name: string,
+  options: { lessons?: string[]; label?: string; maxKeys?: number } & Pick<CoordinatorOptions, "lock" | "online"> = {},
+) {
   const db = new AppDatabase(`tetradio-sync-${name}-${++counter}`);
   await db.delete();
   await db.open();
@@ -37,6 +40,8 @@ async function device(name: string, options: { lessons?: string[]; label?: strin
     label: options.label ?? name,
     schedule: () => () => undefined,
     retryBaseMs: 1,
+    ...(options.lock ? { lock: options.lock } : {}),
+    ...(options.online ? { online: options.online } : {}),
   });
   return { db, sync, name };
 }
@@ -366,6 +371,75 @@ describe("конфликты независимых изменений", () => {
     const waiting = tablet.sync.exchange();
     await expect(choice).resolves.toMatchObject({ phase: "conflict" });
     await expect(waiting).resolves.toMatchObject({ phase: "conflict" });
+  });
+  it("выбор исчезнувшей версии просит выбрать ещё раз; следующий выбор снимает просьбу", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false]);
+    await study(tablet, [true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    const stale = await tablet.sync.resolve("gone");
+    expect(stale).toMatchObject({ phase: "conflict", reason: "Версии изменились — выберите ещё раз." });
+    const local = conflict.conflict!.branches.find((branch) => branch.local)!;
+    const choice = tablet.sync.resolve(local.id);
+    expect(tablet.sync.getStatus().reason).toBeNull();
+    expect(await choice).toMatchObject({ phase: "synced", reason: null });
+  });
+  it("закрытие окна выбора снимает причины выбора; вне конфликта причина занятой вкладки остаётся", async () => {
+    let busy = false;
+    const phone = await device("phone", { lessons: ["mech-1"], label: "ios" });
+    const tablet = await device("tablet", {
+      lessons: ["mech-1"],
+      lock: async (run) => (busy ? "busy" : (await run(), "acquired")),
+    });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    await study(tablet, [true]);
+    const conflict = await tablet.sync.exchange();
+    expect(conflict.phase).toBe("conflict");
+    await tablet.sync.resolve("gone");
+    tablet.sync.dismissChoice();
+    expect(tablet.sync.getStatus()).toMatchObject({ phase: "conflict", reason: null });
+    busy = true;
+    expect((await tablet.sync.resolve(conflict.conflict!.branches[0].id)).reason).toContain("другая вкладка");
+    tablet.sync.dismissChoice();
+    expect(tablet.sync.getStatus()).toMatchObject({ phase: "conflict", reason: null });
+    const otherTab = new SyncCoordinator({
+      database: tablet.db,
+      adapter: kvAdapter(cloud),
+      now,
+      lock: async () => "busy",
+      schedule: () => () => undefined,
+    });
+    const { reason } = await otherTab.exchange();
+    expect(reason).toContain("другая вкладка");
+    otherTab.dismissChoice();
+    expect(otherTab.getStatus().reason).toBe(reason);
+  });
+  it("сбой обмена снимает просьбу выбрать ещё раз", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false]);
+    await study(tablet, [true]);
+    await phone.sync.exchange();
+    await tablet.sync.exchange();
+    expect((await tablet.sync.resolve("gone")).reason).toMatch(/Версии изменились/);
+    tablet.db.close();
+    expect(await tablet.sync.exchange()).toMatchObject({ phase: "error", reason: null });
+  });
+  it("без блокировок вкладок прежняя причина «Нет сети» не остаётся в окне конфликта", async () => {
+    let online = false;
+    const phone = await device("phone", { lessons: ["mech-1"], label: "ios" });
+    const tablet = await device("tablet", {
+      lessons: ["mech-1"],
+      lock: async () => "unsupported",
+      online: () => online,
+    });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    await study(tablet, [true]);
+    expect((await tablet.sync.exchange()).reason).toMatch(/Нет сети/);
+    online = true;
+    expect(await tablet.sync.exchange()).toMatchObject({ phase: "conflict", reason: null });
   });
   it("изменение во время выбора версии публикуется следующим обменом сразу после выбора", async () => {
     let during: (() => Promise<void>) | null = null;

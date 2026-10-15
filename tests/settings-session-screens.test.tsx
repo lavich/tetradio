@@ -12,6 +12,8 @@ import { dexieSource, loadSettings } from "../src/storage/queries";
 import { makeSession } from "../src/domain/learning";
 import { installCompleted } from "./helpers/content";
 
+if (!Element.prototype.scrollIntoView) Element.prototype.scrollIntoView = () => undefined;
+
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 if (!globalThis.ResizeObserver)
   globalThis.ResizeObserver = class {
