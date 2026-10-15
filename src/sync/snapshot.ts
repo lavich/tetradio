@@ -186,7 +186,7 @@ async function readSummary(database: AppDatabase, until: string): Promise<Summar
         ref: event.ref,
         skills: foldSkill(skills.get(event.unitKey)?.skills ?? emptySkills(), event),
       });
-  const stats = fresh.reduce((summary, event) => foldStats(summary, event, KEEP_DAYS), base?.stats ?? emptyStats());
+  const stats = foldStats(base?.stats ?? emptyStats(), fresh, KEEP_DAYS);
   return { skills: [...skills.values()].sort(byKey), stats: { ...stats, days: stats.days.slice(-KEEP_DAYS) } };
 }
 /** Компактный снимок из локальной базы; вызывается внутри транзакции чтения по `SNAPSHOT_TABLES`. */
@@ -203,9 +203,6 @@ export async function commitBase(database: AppDatabase, snapshot: Summary, versi
     snapshot.skills.map((entry) => ({ unitKey: storedKey(entry.ref), ref: entry.ref, skills: entry.skills })),
   );
   await database.baseSummary.put({ id: "base", asOf, versionId, stats: snapshot.stats });
-}
-export async function buildAndCommit(database: AppDatabase, now: Date, versionId: string): Promise<CompactSnapshot> {
-  return (await buildAndCommitMarked(database, now, versionId)).snapshot;
 }
 /**
  * Прогресс читается без блокировки записи, затем сводки собираются и фиксируются одной транзакцией по своим таблицам:
@@ -285,6 +282,10 @@ export async function applySnapshot(
         else pending[lesson.id] = lesson;
       }
       await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
+      const listed = new Set(snapshot.lessons.map((lesson) => lesson.id));
+      for (const lesson of await database.lessons.toArray())
+        if (lesson.completed && !listed.has(lesson.id))
+          await database.lessons.update(lesson.id, { completed: false, updatedAt: now.toISOString() });
       await applyBlocks(database, snapshot.blocks);
       const incoming = new Set(snapshot.states.map((state) => storedKey(state.ref)));
       // Карточки, которых нет в выбранной версии, снова становятся новыми.

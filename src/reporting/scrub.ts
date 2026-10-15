@@ -59,7 +59,28 @@ export function filterBreadcrumb(crumb: Breadcrumb, own: string = origin()): Bre
   return null;
 }
 
+/** Имя базы владельца — `tetradio-tg-<бот>-<Telegram ID>` — попадает в тексты ошибок IndexedDB и Dexie. */
+const DATABASE_NAME = /tetradio-tg-[\w-]+/g;
+const scrubText = (text: string) => text.replace(DATABASE_NAME, "tetradio-tg-…");
+const isPlain = (value: object) => {
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+};
+function scrubTexts(value: unknown, seen: WeakSet<object>): unknown {
+  if (typeof value === "string") return scrubText(value);
+  if (!value || typeof value !== "object" || seen.has(value)) return value;
+  if (!Array.isArray(value) && !isPlain(value)) return value;
+  seen.add(value);
+  const record = value as Record<string, unknown>;
+  for (const key of Object.keys(record)) record[key] = scrubTexts(record[key], seen);
+  return value;
+}
+
 export function scrubEvent<T extends ErrorEvent>(event: T, own: string = origin()): T {
+  const seen = new WeakSet<object>();
+  for (const key of Object.keys(event) as (keyof T)[])
+    // Служебные данные SDK не отправляются и могут ссылаться на его внутренние объекты.
+    if (key !== "sdkProcessingMetadata") event[key] = scrubTexts(event[key], seen) as T[keyof T];
   delete event.user;
   if (event.request) {
     const url = event.request.url;

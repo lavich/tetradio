@@ -54,11 +54,8 @@ export interface AnswerInput {
   now?: Date;
   database?: AppDatabase;
 }
-/** Один ответ = одно событие, один пересчёт FSRS и одна позиция сессии, в одной транзакции. */
-export async function submitAnswer(input: AnswerInput): Promise<ReviewEvent> {
-  return (await recordAnswer(input)).event;
-}
 /**
+ * Один ответ = одно событие, один пересчёт FSRS и одна позиция сессии, в одной транзакции.
  * `created:false` — ответ уже был записан (повторное нажатие, вторая вкладка): отклик и синхронизация не повторяются.
  * Снимок содержимого и описание цели берутся из карточки сессии, а не из свежей версии пакета.
  */
@@ -139,7 +136,8 @@ export async function recordAnswer({
         items,
         index: answered,
         activeTimeMs,
-        status: answered >= items.length ? "done" : "active",
+        // Занятие могли закрыть, пока ответ готовился вне транзакции: закрытое не открывается снова.
+        status: answered >= items.length ? "done" : stored.status === "ended" ? "ended" : "active",
       });
       await markChanged(database);
       return { event, created: true, finished: answered >= items.length };
@@ -230,8 +228,18 @@ export async function skipItem(
   // Пропуск последнего задания завершает занятие: накопленные ответы уходят в облако.
   if (finished) announceChange("finished");
 }
+/** Из копии экрана берётся только время: ответы и попытки могли записаться после того, как экран её прочитал. */
 export const endSession = async (session: Session, database: AppDatabase = db) => {
-  await database.sessions.put({ ...session, status: session.index >= session.items.length ? "done" : "ended" });
+  await database.transaction("rw", database.sessions, async () => {
+    const stored = (await database.sessions.get(session.id)) ?? session;
+    const answered = settled(stored.items);
+    await database.sessions.put({
+      ...stored,
+      index: answered,
+      activeTimeMs: session.activeTimeMs,
+      status: answered >= stored.items.length ? "done" : "ended",
+    });
+  });
   announceChange("finished");
 };
 

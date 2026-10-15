@@ -1,8 +1,10 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
-import { submitAnswer } from "../src/storage/ops";
+import Dexie from "dexie";
+import { markChanged } from "../src/storage/ops";
+import { buildAndCommit, submitAnswer } from "./helpers/ops";
 import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { kvAdapter } from "../src/sync/adapter";
@@ -274,6 +276,42 @@ describe("конфликты независимых изменений", () => {
     expect((await phone.sync.exchange()).phase).toBe("synced");
     expect(await statesOf(phone)).toEqual(phoneStates);
   });
+  it("ответ, записанный во время применения выбранной облачной версии, остаётся неопубликованным изменением", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false, true]);
+    await study(tablet, [true, false, true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    const remote = conflict.conflict!.branches.find((branch) => !branch.local)!;
+    const answered: Promise<unknown>[] = [];
+    const answer = () => {
+      // Запись встаёт в очередь за транзакцией применения и выполняется раньше следующего чтения координатора.
+      if (!answered.length) answered.push(Dexie.ignoreTransaction(() => markChanged(tablet.db)));
+    };
+    tablet.db.baseSummary.hook("creating", answer);
+    tablet.db.baseSummary.hook("updating", answer);
+    const resolved = await tablet.sync.resolve(remote.id);
+    tablet.db.baseSummary.hook("creating").unsubscribe(answer);
+    tablet.db.baseSummary.hook("updating").unsubscribe(answer);
+    expect(answered).toHaveLength(1);
+    await Promise.all(answered);
+    expect(resolved.phase).toBe("synced");
+    expect(await readMeta(tablet.db, META.dirty)).not.toBeNull();
+    expect(resolved.dirty).toBe(true);
+  });
+  it("выбор чужой версии снимает завершение уроков, которых в ней нет, как и их блоки", async () => {
+    const { phone, tablet } = await pair();
+    await installCompleted(tablet.db, ["mech-2"]);
+    await study(phone, [false, true]);
+    await study(tablet, [true, false, true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => !branch.local)!.id);
+    expect(await tablet.db.lessons.get("mech-2")).toMatchObject({ completed: false, updatedAt: now().toISOString() });
+    expect((await tablet.db.lessons.get("mech-1"))?.completed).toBe(true);
+    const [stored] = await tablet.sync.listStored();
+    expect(stored.snapshot.lessons.find((lesson) => lesson.id === "mech-2")?.completed).toBe(true);
+  });
   it("два устройства опубликовали почти одновременно: чистое устройство не принимает чужую версию молча", async () => {
     const { phone, tablet } = await pair();
     await study(phone, [true, false]);
@@ -318,6 +356,41 @@ describe("конфликты независимых изменений", () => {
     expect(new Set(pointers).size).toBe(pointers.length);
     expect((await phone.sync.exchange()).phase).toBe("synced");
   });
+  it("выбор исчезнувшей версии не роняет ни выбор, ни обмен, ожидающий его", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false]);
+    await study(tablet, [true]);
+    await phone.sync.exchange();
+    expect((await tablet.sync.exchange()).phase).toBe("conflict");
+    const choice = tablet.sync.resolve("gone");
+    const waiting = tablet.sync.exchange();
+    await expect(choice).resolves.toMatchObject({ phase: "conflict" });
+    await expect(waiting).resolves.toMatchObject({ phase: "conflict" });
+  });
+  it("изменение во время выбора версии публикуется следующим обменом сразу после выбора", async () => {
+    let during: (() => Promise<void>) | null = null;
+    cloud = memoryTransport({
+      intercept: async (op, key) => {
+        if (op !== "setItem" || !key?.startsWith("p_") || !during) return;
+        const run = during;
+        during = null;
+        await run();
+      },
+    });
+    const { phone, tablet } = await pair();
+    await study(phone, [false]);
+    await study(tablet, [true]);
+    await phone.sync.exchange();
+    const conflict = await tablet.sync.exchange();
+    during = async () => {
+      await study(tablet, [true]);
+      void tablet.sync.exchange();
+    };
+    const resolved = await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => branch.local)!.id);
+    expect(during).toBeNull();
+    expect(resolved.phase).toBe("synced");
+    await vi.waitFor(async () => expect(await readMeta(tablet.db, META.dirty)).toBeNull());
+  });
   it("поздняя независимая ветвь после разрешения вызывает новый конфликт, а не молчаливую перезапись", async () => {
     const { phone, tablet } = await pair();
     const laptop = await device("laptop", { lessons: ["mech-1"], label: "web" });
@@ -352,7 +425,6 @@ describe("конфликты независимых изменений", () => {
   });
   it("ответ, сохранённый во время сборки снимка, учитывается в сводке один раз", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
-    const { buildAndCommit } = await import("../src/sync/snapshot");
     const cutoff = new Date(clockMs + 150_000); // между первым ответом (+2 мин) и вторым (+3 мин)
     await study(phone, [true, true]);
     // Публикация взяла «сейчас» до второго ответа, а сводку собрала уже после него.
@@ -369,7 +441,6 @@ describe("конфликты независимых изменений", () => {
     await phone.sync.exchange();
     // планшет публикует без чтения телефона: эмулируем гонку прямой записью указателя другого клиента
     const adapter = kvAdapter(cloud);
-    const { buildAndCommit } = await import("../src/sync/snapshot");
     const tabletDevice = await tablet.sync.deviceId();
     const snapshot = await buildAndCommit(tablet.db, now(), `${tabletDevice}-1`);
     const tabletClock = JSON.parse((await readMeta(tablet.db, META.clock))!);
@@ -439,6 +510,49 @@ describe("надёжность публикации и лимиты", () => {
     expect(after).toContain(`${tabletDevice}-1`);
     expect(after).toContain(`${phoneDevice}-3`); // чужое поколение не удалено планшетом
   });
+  it("хранятся пять последних отвергнутых версий, старшие удаляются при следующей публикации", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const pointer = (await kvAdapter(cloud).listPointers()).pointers[0];
+    const snapshot = await kvAdapter(cloud).readVersion(pointer);
+    await phone.db.syncVersions.bulkPut(
+      Array.from({ length: 7 }, (_, index) => ({
+        id: `old-${index}`,
+        role: "rejected" as const,
+        createdAt: `2026-09-0${index + 1}T00:00:00.000Z`,
+        meta: { ...pointer, id: `old-${index}` },
+        snapshot,
+      })),
+    );
+    await study(phone, [false]);
+    await phone.sync.exchange();
+    expect((await phone.sync.listStored()).map((row) => row.id)).toEqual(["old-6", "old-5", "old-4", "old-3", "old-2"]);
+  });
+  it("своё поколение, сохранённое как отвергнутая версия, уборка не удаляет", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    const pointer = (await kvAdapter(cloud).listPointers()).pointers[0];
+    await phone.db.syncVersions.put({
+      id: pointer.id,
+      role: "rejected",
+      createdAt: now().toISOString(),
+      meta: pointer,
+      snapshot: await kvAdapter(cloud).readVersion(pointer),
+      note: "",
+    });
+    await study(phone, [false]);
+    await phone.sync.exchange();
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const generations = await kvAdapter(cloud).listGenerations();
+    expect(generations.filter((id) => id.startsWith(`${phoneDevice}-`)).sort()).toEqual([
+      `${phoneDevice}-1`,
+      `${phoneDevice}-3`,
+    ]);
+  });
   it("указатель другого устройства, вошедший в принятую версию, удаляется с частями через 30 дней, не раньше", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
     const tablet = await device("tablet", { lessons: ["mech-1"] });
@@ -462,6 +576,21 @@ describe("надёжность публикации и лимиты", () => {
     expect((await phone.sync.exchange()).phase).toBe("synced");
     expect((await tablet.sync.exchange()).phase).toBe("synced");
     expect(await statesOf(tablet)).toEqual(await statesOf(phone));
+  });
+  it("указатель устройства убрала чужая уборка — следующий обмен выпускает версию снова", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
+    await study(phone, [true, true]);
+    await phone.sync.exchange();
+    await tablet.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    const pointer = (await kvAdapter(cloud).listPointers()).pointers.find((item) => item.device === phoneDevice)!;
+    expect(await kvAdapter(cloud).removeDevice(pointer)).toBe(true);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    expect(cloud.store.has(`p_${phoneDevice}`)).toBe(true);
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    expect((await fresh.sync.exchange()).phase).toBe("synced");
+    expect((await stats(fresh)).totals.answers).toBe(2);
   });
   it("старый указатель, не вошедший в принятую версию, не удаляется", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });

@@ -240,3 +240,28 @@ it("доменные модули не импортируют Telegram API", asy
     expect(text, file).not.toMatch(/window\.Telegram|telegram-web-app|Telegram\.WebApp/);
   }
 });
+
+describe("удаление указателя другого устройства", () => {
+  it("устройство опубликовало новую версию во время удаления: его новый указатель и части остаются", async () => {
+    let during: (() => Promise<void>) | null = null;
+    const memory = memoryTransport({
+      intercept: async (op) => {
+        if (op !== "getKeys" || !during) return;
+        const publish = during;
+        during = null;
+        await publish();
+      },
+    });
+    const adapter = kvAdapter(memory);
+    const old = await adapter.publishVersion(meta("dev2-1", "dev2", { dev2: 1 }), snapshot(60));
+    during = async () => {
+      await adapter.publishVersion(meta("dev2-2", "dev2", { dev2: 2 }), snapshot(60));
+    };
+    expect(await adapter.removeDevice(old)).toBe(false);
+    const keys = [...memory.store.keys()];
+    expect(keys).toContain(pointerKey("dev2"));
+    expect(keys.filter((key) => parsePartKey(key)?.versionId === "dev2-2").length).toBeGreaterThan(0);
+    const { pointers } = await adapter.listPointers();
+    expect(pointers.map((pointer) => pointer.id)).toEqual(["dev2-2"]);
+  });
+});

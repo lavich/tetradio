@@ -1,6 +1,12 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { lifecycle, reportError } from "../reporting/reporting";
-import { isStorageError, RECOVERY_ATTEMPTS, RECOVERY_WINDOW_MS, reopenDatabase } from "../storage/recovery";
+import {
+  isStorageError,
+  RECOVERY_ATTEMPTS,
+  RECOVERY_WINDOW_MS,
+  reopenDatabase,
+  reportHealedSuspect,
+} from "../storage/recovery";
 import { CrashScreen } from "./CrashScreen";
 import ui from "../shared/ui.module.css";
 
@@ -39,6 +45,7 @@ export class Recovery extends Component<{ children: ReactNode }, State> {
     reopenDatabase().then(
       () => {
         lifecycle("storageRecovered", { attempt });
+        reportHealedSuspect(error);
         this.setState((state) => ({ error: null, recovering: false, generation: state.generation + 1 }));
       },
       (failure) => {

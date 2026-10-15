@@ -7,7 +7,7 @@ import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { parseCatalog, SCHEMA_VERSION, type CatalogEntry } from "../src/content/schema";
 import { refreshCatalog } from "../src/content/client";
-import { submitAnswer } from "../src/storage/ops";
+import { submitAnswer } from "./helpers/ops";
 import { type LearningState, type ReviewEvent, type Word } from "../src/domain/types";
 import { itemOfLink, wordEvent, wordState } from "./helpers/cards";
 

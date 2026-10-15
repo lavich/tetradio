@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { takeConsole } from "./setup/console";
 import Dexie from "dexie";
 import { AppDatabase } from "../src/storage/db";
-import { isStorageError, reopenDatabase, storageHealer } from "../src/storage/recovery";
+import { isStorageError, reopenDatabase, storageHealer, suspectReporter } from "../src/storage/recovery";
 
 describe("восстановление после сбоя хранилища", () => {
   it("ошибки хранилища распознаются по имени, в том числе вложенные в ошибку Dexie; остальные — нет", () => {
@@ -67,6 +67,21 @@ describe("восстановление после сбоя хранилища", 
     at += 60000; // окно прошло — счёт начинается заново
     expect(await heal(sleepy)).toBe(true);
     expect(reopened).toBe(4);
+  });
+  it("неактивная транзакция лечится, но о ней уходит один отчёт за запуск; сон WebView отчёта не даёт", async () => {
+    const reports: unknown[] = [];
+    const heal = storageHealer({
+      reopen: async () => undefined,
+      onHealed: suspectReporter((error) => reports.push(error)),
+    });
+    const inactive = Object.assign(new Dexie.DexieError("PromiseFailed", "wrapped"), {
+      inner: new DOMException("", "TransactionInactiveError"),
+    });
+    expect(await heal(new DOMException("", "UnknownError"))).toBe(true);
+    expect(reports).toEqual([]);
+    expect(await heal(inactive)).toBe(true);
+    expect(await heal(new DOMException("", "TransactionInactiveError"))).toBe(true);
+    expect(reports).toEqual([inactive]);
   });
   it("не считает лечением неудачное переоткрытие", async () => {
     const heal = storageHealer({ reopen: () => Promise.reject(new Error("нет места")) });

@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import "./helpers/self";
 import Dexie from "dexie";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createEmptyCard } from "ts-fsrs";
 import { AppDatabase } from "../src/storage/db";
 import { applySnapshot, buildSnapshot } from "../src/sync/snapshot";
@@ -143,6 +143,32 @@ describe("устройство без вида", () => {
     expect(encodeSnapshot(await buildSnapshot(db, now))).toBe(before);
   });
 
+  it("без узнанных видов и типов запуск не берёт транзакцию записи", async () => {
+    await applySnapshot(db, decodeSnapshot(JSON.stringify(wire(5))), "new-1", { new: 1 }, now);
+    const transaction = vi.spyOn(db, "transaction");
+    await adoptKnownForeign(db);
+    expect(transaction.mock.calls.map(([mode]) => mode)).not.toContain("rw");
+    transaction.mockRestore();
+  });
+  it("узнанный ключ только в сводке статистики тоже переносится", async () => {
+    const foreignPhrase = storedKey({ code: "p", id: "p1" });
+    const phrase = unitKey({ kind: "phrase", id: "p1" });
+    await db.baseSummary.put({
+      id: "base",
+      asOf: now.toISOString(),
+      versionId: "new-1",
+      stats: {
+        days: [{ date: "2026-09-15", answers: 1, keys: [foreignPhrase] }],
+        recentByType: {},
+        answers: 1,
+        answeredKeys: [foreignPhrase],
+      },
+    });
+    await adoptKnownForeign(db);
+    const stats = (await db.baseSummary.get("base"))!.stats;
+    expect(stats.days[0].keys).toEqual([phrase]);
+    expect(stats.answeredKeys).toEqual([phrase]);
+  });
   it("узнанный тип проверки сливается с известным, ключи карточек в статистике не двоятся", async () => {
     const word = unitKey({ kind: "word", id: "w1" });
     const foreignPhrase = storedKey({ code: "p", id: "p1" });

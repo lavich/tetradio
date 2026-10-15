@@ -8,7 +8,7 @@ import { makeSession, nextState } from "../src/domain/learning";
 import { moduleViews, saveBlockProgress, type ModuleView } from "../src/storage/course";
 import { AppDatabase } from "../src/storage/db";
 import { STORED_KINDS } from "../src/storage/kinds";
-import { submitAnswer } from "../src/storage/ops";
+import { submitAnswer } from "./helpers/ops";
 import { courseProgress, type CourseProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
 import { lessonOutlines } from "../src/storage/outlines";

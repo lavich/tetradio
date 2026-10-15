@@ -24,3 +24,15 @@ export function launchSync({ profile, stopped, onMismatch, connectSync }: Launch
       .catch((error) => console.warn("Синхронизация не подключена", error));
   };
 }
+
+/** База не открылась — синхронизация не подключается: каждый повтор обмена слал бы новый отчёт о том же сбое. */
+export function syncOnceOpened(opened: Promise<unknown>, load: Promise<ConnectSync>): Promise<ConnectSync> {
+  const skip: ConnectSync = () => undefined;
+  return Promise.all([
+    opened.then(
+      () => true,
+      () => false,
+    ),
+    load,
+  ]).then(([open, connect]) => (open ? connect : skip));
+}

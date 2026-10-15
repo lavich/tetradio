@@ -227,10 +227,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       const start: DaySummary[] = (base?.stats.days ?? [])
         .filter((day) => day.date >= from && day.date <= to)
         .map((day) => ({ ...day, keys: [...day.keys] }));
-      return byTime(fresh).reduce((summary, event) => foldStats(summary, event, Infinity), {
-        ...emptyStats(),
-        days: start,
-      }).days;
+      return foldStats({ ...emptyStats(), days: start }, byTime(fresh), Infinity).days;
     }),
     recentByType: zoned(async (type, limit) => {
       const base = await database.baseSummary.get("base");

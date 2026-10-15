@@ -72,32 +72,31 @@ export interface StatsSummary {
   answeredKeys: string[];
 }
 export const emptyStats = (): StatsSummary => ({ days: [], recentByType: {}, answers: 0, answeredKeys: [] });
+/** Ответы — по порядку времени: от него зависят последние исходы по типам. */
 export function foldStats(
   summary: StatsSummary,
-  event: Pick<ReviewEvent, "type" | "correct" | "rating" | "unitKey" | "localDate">,
+  events: Pick<ReviewEvent, "type" | "correct" | "rating" | "unitKey" | "localDate">[],
   keepDays = 14,
 ): StatsSummary {
-  const days = summary.days.some((day) => day.date === event.localDate)
-    ? summary.days.map((day) =>
-        day.date === event.localDate
-          ? {
-              ...day,
-              answers: day.answers + 1,
-              keys: day.keys.includes(event.unitKey) ? day.keys : [...day.keys, event.unitKey],
-            }
-          : day,
-      )
-    : [...summary.days, { date: event.localDate, answers: 1, keys: [event.unitKey] }];
-  const sorted = days.sort((a, b) => a.date.localeCompare(b.date));
+  const days = new Map(summary.days.map((day) => [day.date, { answers: day.answers, keys: new Set(day.keys) }]));
+  const answeredKeys = new Set(summary.answeredKeys);
+  const recentByType: Partial<Record<StoredType, boolean[]>> = { ...summary.recentByType };
+  for (const event of events) {
+    const day = days.get(event.localDate);
+    if (day) {
+      day.answers++;
+      day.keys.add(event.unitKey);
+    } else days.set(event.localDate, { answers: 1, keys: new Set([event.unitKey]) });
+    answeredKeys.add(event.unitKey);
+    recentByType[event.type] = [...(recentByType[event.type] ?? []), succeeded(event)].slice(-RECENT);
+  }
   return {
-    days: sorted.slice(-keepDays),
-    recentByType: {
-      ...summary.recentByType,
-      [event.type]: [...(summary.recentByType[event.type] ?? []), succeeded(event)].slice(-RECENT),
-    },
-    answers: summary.answers + 1,
-    answeredKeys: summary.answeredKeys.includes(event.unitKey)
-      ? summary.answeredKeys
-      : [...summary.answeredKeys, event.unitKey],
+    days: [...days]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .slice(-keepDays)
+      .map(([date, day]) => ({ date, answers: day.answers, keys: [...day.keys] })),
+    recentByType,
+    answers: summary.answers + events.length,
+    answeredKeys: [...answeredKeys],
   };
 }

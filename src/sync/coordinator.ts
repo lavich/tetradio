@@ -70,6 +70,7 @@ export interface CoordinatorOptions {
   retryBaseMs?: number;
 }
 const FOREIGN_KEEP_MS = 30 * 24 * 60 * 60 * 1000;
+const KEEP_REJECTED = 5;
 export const EXCHANGE_INTERVAL_MS = 2 * 60 * 1000;
 const CHANGE_DELAY_MS = 2000;
 /** Страховка от бесконечного повтора: сам предел попыток лечения задаёт тот, кто его подключает. */
@@ -163,12 +164,13 @@ export class SyncCoordinator {
     }
     this.again = false;
     this.lastStart = this.options.now().getTime();
-    this.running = this.run().finally(() => {
-      this.running = null;
-      if (this.again && this.status.phase !== "error" && this.status.phase !== "conflict") void this.exchange();
-    });
+    this.running = this.run().finally(this.settle);
     return this.running;
   }
+  private settle = () => {
+    this.running = null;
+    if (this.again && this.status.phase !== "error" && this.status.phase !== "conflict") void this.exchange();
+  };
   private again = false;
   private lastStart = -Infinity;
   /**
@@ -298,7 +300,9 @@ export class SyncCoordinator {
         ]);
         return;
       }
-      if (flags.dirty || flags.restored || (never && local && !mine)) {
+      // Наш указатель убрала уборка другого устройства, а мы на нём: версию нужно выпустить снова.
+      const lost = !mine && !!flags.appliedId?.startsWith(`${device}-`);
+      if (flags.dirty || flags.restored || lost || (never && local && !mine)) {
         if (!writes) {
           this.update({
             phase: "paused",
@@ -413,8 +417,9 @@ export class SyncCoordinator {
     clock[device] = (clock[device] ?? 0) + 1;
     const id = `${device}-${clock[device]}`;
     const now = this.options.now();
+    // Версия уже применена и сняла метку: любая метка после этого — изменение, которого в версии нет.
     const { snapshot, mark } = override
-      ? { snapshot: override, mark: await readMeta(database, META.dirty) }
+      ? { snapshot: override, mark: null }
       : await buildAndCommitMarked(database, now, id);
     const meta = {
       id,
@@ -446,13 +451,20 @@ export class SyncCoordinator {
     }
   }
   /**
-   * Уборка облака: свои поколения, кроме опубликованного и сохранённых альтернатив, и указатели других устройств,
-   * полностью вошедшие в `applied`, — старше 30 дней или любые при `force`. Их прогресс уже есть на этом устройстве.
+   * Уборка: отвергнутые версии сверх пяти последних; в облаке — свои поколения, кроме опубликованного и сохранённых
+   * альтернатив, и указатели других устройств, полностью вошедшие в `applied`, — старше 30 дней или любые при `force`.
+   * Их прогресс уже есть на этом устройстве.
    */
   private async cleanup(device: string, applied: Clock, force: boolean) {
     const { adapter, database } = this.options;
     const { pointers } = await adapter.listPointers();
-    const protectedIds = new Set((await database.syncVersions.toArray()).map((row) => row.meta.id));
+    const rejected = (await database.syncVersions
+      .orderBy("createdAt")
+      .reverse()
+      .filter((row) => row.role === "rejected")
+      .primaryKeys()) as string[];
+    await database.syncVersions.bulkDelete(rejected.slice(KEEP_REJECTED));
+    const protectedIds = new Set((await database.syncVersions.toCollection().primaryKeys()) as string[]);
     for (const pointer of pointers) if (pointer.device === device) protectedIds.add(pointer.id);
     const own = (await adapter.listGenerations()).filter((id) => id.startsWith(`${device}-`) && !protectedIds.has(id));
     if (own.length) await adapter.removeGenerations(own);
@@ -482,28 +494,31 @@ export class SyncCoordinator {
   onFailure: ((error: unknown, kind: SyncErrorKind | "unknown") => void) | null = null;
 
   /**
-   * Разрешение конфликта целой версией. Отвергнутые ветви сохраняются локально до явного удаления,
+   * Разрешение конфликта целой версией. Отвергнутые ветви сохраняются локально (пять последних),
    * новая версия отмечает все известные ветви рассмотренными; ответы другой версии не объединяются.
    */
   async resolve(branchId: string): Promise<SyncStatus> {
     // Выбор версии — тоже обмен: не параллельно с фоновым обменом и не в двух вкладках сразу.
     while (this.running) await this.running;
+    this.again = false;
     this.running = (async () => {
-      const lock = await this.options.lock(() => this.resolveNow(branchId));
-      if (lock === "unsupported") await this.resolveNow(branchId);
-      else if (lock === "busy")
-        this.update({ reason: "Синхронизацией занята другая вкладка: выберите версию ещё раз чуть позже." });
+      try {
+        const lock = await this.options.lock(() => this.resolveNow(branchId));
+        if (lock === "unsupported") await this.resolveNow(branchId);
+        else if (lock === "busy")
+          this.update({ reason: "Синхронизацией занята другая вкладка: выберите версию ещё раз чуть позже." });
+      } catch (error) {
+        this.fail(error);
+      }
       return this.status;
-    })().finally(() => {
-      this.running = null;
-    });
+    })().finally(this.settle);
     return this.running;
   }
   private async resolveNow(branchId: string): Promise<void> {
     const conflict = this.status.conflict;
-    if (!conflict) return;
-    const chosen = conflict.branches.find((branch) => branch.id === branchId);
-    if (!chosen) throw new Error("Версия не найдена");
+    // Конфликт успели пересчитать: экран уже показывает новые ветви, выбор повторяется по ним.
+    const chosen = conflict?.branches.find((branch) => branch.id === branchId);
+    if (!conflict || !chosen) return;
     const { database } = this.options;
     const device = await this.deviceId();
     const now = this.options.now().toISOString();

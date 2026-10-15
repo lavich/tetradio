@@ -6,7 +6,7 @@ import { AppDatabase } from "../src/storage/db";
 import { exportFull, exportWordsTsv, inspectBackup, restoreBackup } from "../src/features/backup/backup";
 import { lessonItems, dexieSource } from "../src/storage/queries";
 import { makeSession } from "../src/domain/learning";
-import { submitAnswer } from "../src/storage/ops";
+import { submitAnswer } from "./helpers/ops";
 import { applyPackage } from "../src/content/client";
 import { phraseRevisionOf } from "../content/build";
 import { unitKey, wordKeyOf, wordRef } from "./helpers/cards";

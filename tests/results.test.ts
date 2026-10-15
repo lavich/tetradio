@@ -136,7 +136,7 @@ describe("результат смешанного занятия", () => {
       correct: 2,
       rate: 2 / 3,
     });
-    const folded = [late, again, word].reduce((summary, e) => foldStats(summary, e), emptyStats());
+    const folded = foldStats(emptyStats(), [late, again, word]);
     expect(folded.days[0].keys).toEqual([unitKey(ref("phrase", "p1")), unitKey(wordRef("w1"))]);
   });
   it("единый порог устойчивости 21 день для всех видов; устойчивая фраза не делает урок освоенным", () => {

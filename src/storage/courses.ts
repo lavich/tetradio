@@ -106,9 +106,6 @@ export async function rememberCourses(database: AppDatabase = db): Promise<void>
   const first = list.find((course) => course.installed)?.id;
   if (!home && first) await database.meta.put({ key: HOME_COURSE_KEY, value: first });
 }
-export const coursesOrder = zoned(async (database: AppDatabase = db) =>
-  (await courses(database)).map((course) => course.id),
-);
 
 /** Основной курс — выбранный в настройках, если он установлен, иначе установленный первым; без уроков — первый в каталоге. */
 export const primaryCourse = zoned(async function primaryCourse(
