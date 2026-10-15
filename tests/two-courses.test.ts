@@ -21,8 +21,9 @@ import {
 } from "../src/storage/courses";
 import { dexieSource, optionPool, studiedLessons } from "../src/storage/queries";
 import { courseProgress } from "../src/storage/progress";
+import { dayMonth } from "../src/shared/format";
 import { dictionary } from "../src/storage/dictionary";
-import { moduleViews, reviewedOn } from "../src/storage/course";
+import { lessonDays, moduleViews, reviewedOn } from "../src/storage/course";
 import { recordAnswer } from "../src/storage/ops";
 import { GREEK_CALENDAR } from "./helpers/calendar";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
@@ -392,5 +393,41 @@ describe("экраны курса", () => {
     expect(greek.week).toMatchObject({ cards: 1, lessonDays: [] });
     expect(await reviewedOn("2026-10-08", ENGLISH, db)).toBe(2);
     expect(await reviewedOn("2026-10-08", undefined, db)).toBe(3);
+  });
+  it("неделя и темп — по учебному дню: занятие после полуночи вчерашнее", async () => {
+    const tz = "Asia/Nicosia";
+    // Понедельник 12.10, 00:30 в Никосии — ещё воскресенье 11.10.
+    await db.blockProgress.add({
+      key: "e1/x",
+      lessonId: "e1",
+      blockId: "x",
+      done: true,
+      updatedAt: "2026-10-11T21:30:00Z",
+    });
+    const night = await courseProgress(new Date("2026-10-11T22:00:00Z"), tz, ENGLISH, db);
+    expect(night.week).toMatchObject({ today: "2026-10-11", monday: "2026-10-05", lessonDays: ["2026-10-11"] });
+    expect(await lessonDays("2026-10-05", tz, ENGLISH, db)).toEqual(["2026-10-11"]);
+    const morning = await courseProgress(new Date("2026-10-12T02:00:00Z"), tz, ENGLISH, db);
+    expect(morning.week).toMatchObject({ today: "2026-10-12", monday: "2026-10-12", lessonDays: [] });
+  });
+  it("даты курса календарные, а положение против календаря в 02:00 — на вчерашний учебный день", async () => {
+    const calendar = {
+      start: "2026-11-02",
+      checkpoints: [{ label: "K1", title: "Контрольная", afterModule: 1, date: "2026-12-20" }],
+    };
+    await db.courses.update(ENGLISH, { calendar });
+    await db.lessons.update("e1", { completed: false });
+    const night = await courseProgress(new Date("2026-12-20T02:00:00+02:00"), "Asia/Nicosia", ENGLISH, db);
+    const evening = await courseProgress(new Date("2026-12-19T20:00:00+02:00"), "Asia/Nicosia", ENGLISH, db);
+    expect(night.week.today).toBe("2026-12-19");
+    expect(night.pace.next?.checkpoint.date).toBe("2026-12-20");
+    expect(dayMonth(night.pace.next!.checkpoint.date)).toBe("20 декабря");
+    expect(night.pace).toEqual(evening.pace);
+  });
+  it("урок, завершённый ночью, в темпе — урок предыдущего дня", async () => {
+    // Понедельник 05.10, 01:30 в Никосии — учебный день воскресенья 04.10: истории восемь дней, а не семь.
+    await db.lessons.update("e1", { completed: true, updatedAt: "2026-10-04T22:30:00Z" });
+    const progress = await courseProgress(new Date("2026-10-11T02:00:00Z"), "Asia/Nicosia", ENGLISH, db);
+    expect(progress.pace.recentPerWeek).toBe(0.9);
   });
 });

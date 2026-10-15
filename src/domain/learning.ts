@@ -1,4 +1,4 @@
-export { addDays, deviceTimezone, formatDay, localDay, mondayOf, zonedStart } from "./time";
+export { addDays, deviceTimezone, formatDay, localDay, mondayOf, studyDay, zonedStart } from "./time";
 export {
   DAY_STARTS_AT,
   isDue,

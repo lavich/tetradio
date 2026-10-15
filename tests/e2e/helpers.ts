@@ -361,3 +361,47 @@ export const readTable = (page: Page, name: string, databaseName = "tetradio-moc
     },
     [name, databaseName] as const,
   );
+
+export async function putRecords(page: Page, records: Record<string, unknown[]>, databaseName = "tetradio-mock-1") {
+  await page.evaluate(
+    async ([records, databaseName]) => {
+      const database = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = indexedDB.open(databaseName);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const tx = database.transaction(Object.keys(records), "readwrite");
+      for (const [store, rows] of Object.entries(records)) for (const row of rows) tx.objectStore(store).put(row);
+      await new Promise<void>((resolve, reject) => {
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+      database.close();
+    },
+    [records, databaseName] as const,
+  );
+}
+/** Первые слова установленных уроков: ждём, пока установка допишет их в базу. */
+export async function firstWords(page: Page, count: number, databaseName = "tetradio-mock-1") {
+  return page.evaluate(
+    async ([count, databaseName]) => {
+      const database = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = indexedDB.open(databaseName);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      let words: { id: string; greek: string; russian: string }[] = [];
+      for (let attempt = 0; attempt < 100 && words.length < count; attempt++) {
+        words = await new Promise((resolve, reject) => {
+          const request = database.transaction("words").objectStore("words").getAll();
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+        });
+        if (words.length < count) await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      database.close();
+      return words.slice(0, count);
+    },
+    [count, databaseName] as const,
+  );
+}

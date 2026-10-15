@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { deviceTimezone, localDay, mondayOf, type DailyPlan } from "../../domain/learning";
+import { deviceTimezone, mondayOf, studyDay, type DailyPlan } from "../../domain/learning";
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
@@ -40,7 +40,7 @@ export function CourseToday({
   more?: React.ReactNode;
 }) {
   const spread = useSpread();
-  const today = localDay(now, deviceTimezone());
+  const today = studyDay(now, deviceTimezone());
   const monday = mondayOf(today);
   const views = useLiveQuery(() => moduleViews(courseId), [courseId]);
   const reviewed = useLiveQuery(() => reviewedOn(today, courseId), [today, courseId]);

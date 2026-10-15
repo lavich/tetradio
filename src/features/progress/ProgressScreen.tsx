@@ -12,7 +12,7 @@ import { dayMonth, withCount } from "../../shared/format";
 import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
-import { deviceTimezone } from "../../domain/time";
+import { deviceTimezone, studyDay } from "../../domain/time";
 import { cardsInCourse, currentCourse } from "../../storage/courses";
 import { courseProgress, type CourseProgress } from "../../storage/progress";
 import { useStats } from "../../shared/store";
@@ -32,7 +32,7 @@ export function ProgressScreen() {
   const courseId = course ?? undefined;
   const data = useLiveQuery(
     () => (course === undefined ? undefined : courseProgress(now, deviceTimezone(), courseId)),
-    [now.toDateString(), deviceTimezone(), course],
+    [studyDay(now, deviceTimezone()), deviceTimezone(), course],
   );
   const words = useLiveQuery(() => (course === undefined ? undefined : dictionary(courseId)), [course]);
   const stats = useStats(now);

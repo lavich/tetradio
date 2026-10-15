@@ -1,3 +1,5 @@
+/** Час смены учебного дня: ответ поздно вечером и занятие после полуночи — один день, как в Anki. */
+export const DAY_STARTS_AT = 4;
 /** Часовой пояс устройства: по нему считаются день, сроки и неделя. */
 export const deviceTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 const dayFormats = new Map<string, Intl.DateTimeFormat>();
@@ -49,4 +51,8 @@ export function zonedStart(day: string, timezone: string, hour = 0): Date {
   };
   const first = new Date(guess.getTime() - offset(guess));
   return new Date(guess.getTime() - offset(first));
+}
+export function studyDay(at: Date, timezone: string): string {
+  const day = localDay(at, timezone);
+  return at < zonedStart(day, timezone, DAY_STARTS_AT) ? addDays(day, -1) : day;
 }

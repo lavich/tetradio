@@ -8,7 +8,7 @@ import { glossSpans } from "../../content/course";
 import type { PackageReading } from "../../content/schema";
 import { sentenceRanges, sentencesOf } from "../../domain/sentences";
 import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
-import { readDay, WORDS, withCount } from "../../shared/format";
+import { eventDay, WORDS, withCount } from "../../shared/format";
 import { noVoice, ProfileContext, useLessonProfile, useProfile } from "../../shared/language";
 import { useAssetSource } from "../../shared/store";
 import { Tick } from "../../shared/Tick";
@@ -167,7 +167,7 @@ export function ReadingScreen() {
                     <span aria-hidden="true">
                       <Tick className={base.mark} />
                     </span>{" "}
-                    Прочитано {readDay(readAt)}
+                    Прочитано {eventDay(readAt)}
                   </p>
                   <div className={base.actions}>
                     {next?.open ? <Button onClick={openNext}>Следующий текст</Button> : null}

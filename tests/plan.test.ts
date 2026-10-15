@@ -10,6 +10,7 @@ import {
   reviewCutoff,
   shuffleTiles,
   spellingUnlocked,
+  studyDay,
 } from "../src/domain/learning";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { diffChars } from "../src/domain/spelling";
@@ -434,6 +435,22 @@ describe("срок повторения по дню", () => {
     expect((await makePlan(source, new Date("2026-09-15T21:05:00Z"))).reviews).toHaveLength(0);
     expect((await makePlan(source, new Date("2026-09-16T01:01:00Z"))).reviews).toHaveLength(1);
   });
+  it("ночью план и занятие относятся ко вчерашнему учебному дню", async () => {
+    const pool = words(2);
+    const data = base({
+      words: pool,
+      lessons: [
+        lesson(
+          "l1",
+          pool.map((w) => w.id),
+        ),
+      ],
+    });
+    const night = new Date("2026-09-15T22:30:00Z");
+    expect((await planOf(data, night)).today).toBe("2026-09-15");
+    expect((await planOf(data, new Date("2026-09-16T01:00:00Z"))).today).toBe("2026-09-16");
+    expect((await sessionOf({ data, now: night }))?.planDate).toBe("2026-09-15");
+  });
   it("короткий шаг изучения ждёт своего момента", async () => {
     const pool = words(3);
     const states = [
@@ -490,18 +507,19 @@ describe("статистика", () => {
     expect(stats.days).toHaveLength(7);
     expect(stats.groups.fresh).toBe(3);
   });
-  it("сроки считает по календарю выбранной зоны, а не по суткам UTC", async () => {
-    const pool = words(2);
-    // 22:00 UTC — это уже 01:00 следующего дня в Никосии, значит «сегодня» такое повторение не готово.
+  it("сроки считает до 04:00 следующего дня в выбранной зоне", async () => {
+    const pool = words(3);
+    // 22:00 UTC — 01:00 16-го в Никосии, ещё учебный день 15-го; 02:00 UTC — уже 05:00, день 16-го.
     const states = [
       { ...learned(pool[0].id, "2026-09-15T22:00:00Z") },
       { ...learned(pool[1].id, "2026-09-15T12:00:00Z") },
+      { ...learned(pool[2].id, "2026-09-16T02:00:00Z") },
     ];
     const stats = await progress(fromSnapshot(base({ words: pool, states })), now);
-    expect(stats.due.today).toBe(1);
-    expect(stats.due.tomorrow).toBe(2);
+    expect(stats.due.today).toBe(2);
+    expect(stats.due.tomorrow).toBe(3);
   });
-  it("считает дни по локальной полуночи выбранной зоны", async () => {
+  it("считает дни по учебному дню выбранной зоны", async () => {
     const pool = words(2);
     const events: ReviewEvent[] = [
       wordEvent(pool[0].id, {
@@ -515,12 +533,14 @@ describe("статистика", () => {
         correct: null,
         answer: "",
         createdAt: "2026-09-14T22:30:00Z",
-        localDate: localDay(new Date("2026-09-14T22:30:00Z"), "Asia/Nicosia"),
+        localDate: studyDay(new Date("2026-09-14T22:30:00Z"), "Asia/Nicosia"),
         responseTimeMs: 900,
       }),
     ];
+    const night = await progress(fromSnapshot(base({ words: pool, events })), new Date("2026-09-14T23:00:00Z"));
+    expect(night.days.at(-1)).toMatchObject({ date: "2026-09-14", answers: 1 });
     const stats = await progress(fromSnapshot(base({ words: pool, events })), now);
-    expect(stats.days.find((day) => day.date === "2026-09-15")!.answers).toBe(1);
+    expect(stats.days.find((day) => day.date === "2026-09-14")!.answers).toBe(1);
   });
 });
 

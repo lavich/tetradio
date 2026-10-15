@@ -3,17 +3,13 @@ import type { CatalogModule } from "../content/course";
 import { isCheckable, KINDS, needsFacts, type AvailabilityContext, type CardFacts } from "./kinds";
 import type { Voices } from "./language";
 import { unitKey } from "./refs";
-import { addDays, localDay, zonedStart } from "./time";
+import { addDays, DAY_STARTS_AT, studyDay, zonedStart } from "./time";
 import type { LearningRef, LearningState, Lesson, LessonItem } from "./types";
 
-/** Час смены дня повторений: ответ поздно вечером и занятие после полуночи — один день, как в Anki. */
-export const DAY_STARTS_AT = 4;
-/** Ближайшая смена дня повторений после `now`: срок до неё — сегодняшний. */
-export function reviewCutoff(now: Date, timezone: string): Date {
-  const today = localDay(now, timezone);
-  const start = zonedStart(today, timezone, DAY_STARTS_AT);
-  return start > now ? start : zonedStart(addDays(today, 1), timezone, DAY_STARTS_AT);
-}
+export { DAY_STARTS_AT };
+/** Конец учебного дня `now`: срок до него — сегодняшний. */
+export const reviewCutoff = (now: Date, timezone: string): Date =>
+  zonedStart(addDays(studyDay(now, timezone), 1), timezone, DAY_STARTS_AT);
 /** Повторение в днях ждёт своего дня, а короткий шаг изучения — точного момента, иначе 10 минут сжались бы в ноль. */
 export function isDue(card: Pick<Card, "state" | "due">, now: Date, cutoff: Date): boolean {
   const due = new Date(card.due).getTime();
@@ -92,7 +88,7 @@ export interface PlanOptions {
   courseId?: string;
 }
 export async function makePlan(source: PlanSource, now: Date, options: PlanOptions = {}): Promise<DailyPlan> {
-  const today = localDay(now, source.timezone());
+  const today = studyDay(now, source.timezone());
   const { courseId } = options;
   const [lessons, phrasePool] = await Promise.all([source.studiedLessons(courseId), source.phraseCount(courseId)]);
   const availability: AvailabilityContext = { hasVoice: options.hasVoice ?? false, phrasePool };

@@ -8,7 +8,7 @@ import type { CourseLesson, ModuleLessonView } from "../../storage/course";
 import { useProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
-import { PHRASES, WORDS, withCount } from "../../shared/format";
+import { eventDay, PHRASES, WORDS, withCount } from "../../shared/format";
 import { blockLabel } from "./paginate";
 import { VocabularyList } from "./Vocabulary";
 import ui from "../../shared/ui.module.css";
@@ -90,7 +90,7 @@ export function LessonSummary({
   const cards = [words ? withCount(words, WORDS) : "", phrases ? withCount(phrases, PHRASES) : ""]
     .filter(Boolean)
     .join(" и ");
-  const day = lesson.lesson?.updatedAt ? new Date(lesson.lesson.updatedAt) : new Date();
+  const day = eventDay(lesson.lesson?.updatedAt ?? new Date().toISOString());
   return (
     <>
       <div className={css.stamp}>
@@ -98,7 +98,7 @@ export function LessonSummary({
         <h2 className={base.title}>Урок пройден</h2>
       </div>
       <p className={base.date}>
-        {day.toLocaleDateString("ru-RU", { day: "numeric", month: "long" })} · {lesson.title}
+        {day} · {lesson.title}
       </p>
 
       {result ? (
