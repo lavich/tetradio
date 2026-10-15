@@ -70,6 +70,7 @@ export interface CoordinatorOptions {
   retryBaseMs?: number;
 }
 const FOREIGN_KEEP_MS = 30 * 24 * 60 * 60 * 1000;
+const KEEP_REJECTED = 5;
 export const EXCHANGE_INTERVAL_MS = 2 * 60 * 1000;
 const CHANGE_DELAY_MS = 2000;
 /** Страховка от бесконечного повтора: сам предел попыток лечения задаёт тот, кто его подключает. */
@@ -448,12 +449,19 @@ export class SyncCoordinator {
     }
   }
   /**
-   * Уборка облака: свои поколения, кроме опубликованного и сохранённых альтернатив, и указатели других устройств,
-   * полностью вошедшие в `applied`, — старше 30 дней или любые при `force`. Их прогресс уже есть на этом устройстве.
+   * Уборка: отвергнутые версии сверх пяти последних; в облаке — свои поколения, кроме опубликованного и сохранённых
+   * альтернатив, и указатели других устройств, полностью вошедшие в `applied`, — старше 30 дней или любые при `force`.
+   * Их прогресс уже есть на этом устройстве.
    */
   private async cleanup(device: string, applied: Clock, force: boolean) {
     const { adapter, database } = this.options;
     const { pointers } = await adapter.listPointers();
+    const rejected = (await database.syncVersions
+      .orderBy("createdAt")
+      .reverse()
+      .filter((row) => row.role === "rejected")
+      .primaryKeys()) as string[];
+    await database.syncVersions.bulkDelete(rejected.slice(KEEP_REJECTED));
     const protectedIds = new Set((await database.syncVersions.toCollection().primaryKeys()) as string[]);
     for (const pointer of pointers) if (pointer.device === device) protectedIds.add(pointer.id);
     const own = (await adapter.listGenerations()).filter((id) => id.startsWith(`${device}-`) && !protectedIds.has(id));

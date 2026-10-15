@@ -510,6 +510,25 @@ describe("надёжность публикации и лимиты", () => {
     expect(after).toContain(`${tabletDevice}-1`);
     expect(after).toContain(`${phoneDevice}-3`); // чужое поколение не удалено планшетом
   });
+  it("хранятся пять последних отвергнутых версий, старшие удаляются при следующей публикации", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const pointer = (await kvAdapter(cloud).listPointers()).pointers[0];
+    const snapshot = await kvAdapter(cloud).readVersion(pointer);
+    await phone.db.syncVersions.bulkPut(
+      Array.from({ length: 7 }, (_, index) => ({
+        id: `old-${index}`,
+        role: "rejected" as const,
+        createdAt: `2026-09-0${index + 1}T00:00:00.000Z`,
+        meta: { ...pointer, id: `old-${index}` },
+        snapshot,
+      })),
+    );
+    await study(phone, [false]);
+    await phone.sync.exchange();
+    expect((await phone.sync.listStored()).map((row) => row.id)).toEqual(["old-6", "old-5", "old-4", "old-3", "old-2"]);
+  });
   it("своё поколение, сохранённое как отвергнутая версия, уборка не удаляет", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
     await study(phone, [true]);
