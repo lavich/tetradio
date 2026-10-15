@@ -158,7 +158,8 @@ export default defineConfig({
         skipWaiting: false,
         // Шрифты — только наборы символов курса (латиница, кириллица, греческий): Mini App должен открываться без сети.
         globPatterns: ["**/*.{js,css,html,svg,png,webp,json}", "**/*-{latin,cyrillic,greek}-wght-*.woff2"],
-        globIgnores: ["**/content/**", "og.png", "icon-512.png"],
+        // Лендинг и 404.html вне области service worker (`app/`): офлайн их не открыть, кешировать незачем.
+        globIgnores: ["**/content/**", "og.png", "icon-512.png", "index.html", "404.html", "assets/landing-*"],
         navigateFallback: "app/index.html",
         navigateFallbackDenylist: [/\/content\//],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
