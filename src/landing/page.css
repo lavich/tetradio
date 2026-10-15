@@ -1,0 +1,7 @@
+/* Лендинг — статичная разметка: утилиты Tailwind только из его исходников, а не всего приложения. */
+@import "tailwindcss" source(none);
+@source "./render.ts";
+@source "./main.ts";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "../theme.css";

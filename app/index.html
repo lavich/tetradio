@@ -8,6 +8,11 @@
     <title>Τετράδιο</title>
     <link rel="icon" href="%BASE_URL%icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
+    <!-- Каталог нужен первому экрану: запрос идёт параллельно с JS, его забирает первый refreshCatalog. -->
+    <script>
+      window.__catalog = fetch("%BASE_URL%content/catalog.json", { cache: "no-cache" });
+      window.__catalog.catch(function () {});
+    </script>
   </head>
   <body>
     <div id="root"></div>

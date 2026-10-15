@@ -18,11 +18,19 @@ export const networkError = (what: string) =>
 export const contentUrl = (url: string, base: string = import.meta.env.BASE_URL) =>
   `${base.endsWith("/") ? base : `${base}/`}${url}`;
 
+const CATALOG = "content/catalog.json";
+function takeEarly(url: string, base: string) {
+  if (typeof window === "undefined" || url !== CATALOG || base !== import.meta.env.BASE_URL) return undefined;
+  const early = window.__catalog;
+  window.__catalog = undefined;
+  return early;
+}
+
 export function httpFetcher(base: string = import.meta.env.BASE_URL): ContentFetcher {
   const load = async (url: string, what: string, init?: RequestInit) => {
     let response: Response;
     try {
-      response = await fetch(contentUrl(url, base), init);
+      response = await (takeEarly(url, base) ?? fetch(contentUrl(url, base), init));
     } catch {
       throw networkError(what);
     }

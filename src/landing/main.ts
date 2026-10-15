@@ -1,7 +1,7 @@
 import "@fontsource-variable/literata/wght.css";
 import "@fontsource-variable/literata/wght-italic.css";
 import "@fontsource-variable/manrope";
-import "../styles.css";
+import "./page.css";
 import "./landing.css";
 import type { ExerciseBlock, ExerciseItem } from "../content/course";
 import { checkItem, type ItemResult } from "../domain/course";
