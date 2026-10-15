@@ -14,13 +14,14 @@ import { db, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
 import { announceChange, markChanged } from "./ops";
 import { lessonOutlines } from "./outlines";
+import { zoned } from "./zone";
 
 export const blockKey = (lessonId: string, blockId: string) => `${lessonId}/${blockId}`;
 
-export async function blockProgressOf(lessonId: string, database: AppDatabase = db) {
+export const blockProgressOf = zoned(async function blockProgressOf(lessonId: string, database: AppDatabase = db) {
   const rows = await database.blockProgress.where("lessonId").equals(lessonId).toArray();
   return new Map(rows.map((row) => [row.blockId, row]));
-}
+});
 
 export type BlockPatch = Partial<Omit<BlockProgress, "key" | "lessonId" | "blockId" | "updatedAt">> & {
   /** Неверные пункты задания: из них рождаются карточки ошибок; в запись блока не идут. */
@@ -71,12 +72,15 @@ export async function saveBlockProgress(
 }
 
 /** Карточки ошибок урока по состояниям — одинаковы на всех устройствах; убранный обновлением пункт не считается. */
-export async function lessonMistakes(lessonId: string, database: AppDatabase = db): Promise<number> {
+export const lessonMistakes = zoned(async function lessonMistakes(
+  lessonId: string,
+  database: AppDatabase = db,
+): Promise<number> {
   const ids = (await database.cardStates.where("ref.kind").equals("mistake").toArray())
     .map((state) => state.ref.id)
     .filter((id) => id.startsWith(`${lessonId}/`));
   return (await STORED_KINDS.mistake.presentIds(ids, database)).length;
-}
+});
 
 export interface CourseLesson {
   id: string;
@@ -100,7 +104,10 @@ export interface TapCard {
   audioAssetId?: string;
 }
 /** Урок курса из установленного пакета; без пакета (не скачан, черновик) — `null`. */
-export async function courseLesson(lessonId: string, database: AppDatabase = db): Promise<CourseLesson | null> {
+export const courseLesson = zoned(async function courseLesson(
+  lessonId: string,
+  database: AppDatabase = db,
+): Promise<CourseLesson | null> {
   const [pack, lesson] = await Promise.all([database.packages.get(lessonId), database.lessons.get(lessonId)]);
   if (!pack?.module || !pack.blocks) return null;
   return {
@@ -136,7 +143,7 @@ export async function courseLesson(lessonId: string, database: AppDatabase = db)
       ...(pack.marks?.cards ?? []).map((card): [string, TapCard] => [card.ref, card]),
     ]),
   };
-}
+});
 
 export class LessonIncompleteError extends Error {}
 /** Урок завершается только выполненным: просмотр страницы не равен освоению. */
@@ -184,7 +191,10 @@ export interface ModuleView {
   completed: boolean;
 }
 /** Модули курса по номеру программы с состоянием уроков; черновики — без уроков. Без курса — основной курс. */
-export async function moduleViews(courseId?: string, database: AppDatabase = db): Promise<ModuleView[]> {
+export const moduleViews = zoned(async function moduleViews(
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<ModuleView[]> {
   courseId ??= await primaryCourse(database);
   const modules: StoredModule[] = courseId
     ? await database.modules.where("courseId").equals(courseId).toArray()
@@ -234,10 +244,10 @@ export async function moduleViews(courseId?: string, database: AppDatabase = db)
       completed: views.length > 0 && views.every((item) => item.completed),
     };
   });
-}
+});
 
 /** Следующий шаг курса: первый незавершённый урок опубликованного модуля в порядке программы. */
-export async function nextCourseLesson(
+export const nextCourseLesson = zoned(async function nextCourseLesson(
   courseId?: string,
   database: AppDatabase = db,
 ): Promise<{ module: CatalogModule; lesson: ModuleLessonView } | null> {
@@ -251,10 +261,10 @@ export async function nextCourseLesson(
     if (review) return { module: view.module, lesson: review };
   }
   return null;
-}
+});
 
 /** Дни с выполненными заданиями уроков с `from` включительно — занятия курса на этой неделе; без курса — всех. */
-export async function lessonDays(
+export const lessonDays = zoned(async function lessonDays(
   from: string,
   timezone: string,
   courseId?: string,
@@ -273,11 +283,15 @@ export async function lessonDays(
   }
   const days = new Set(rows.map((row) => localDay(new Date(row.updatedAt), timezone)).filter((day) => day >= from));
   return [...days].sort();
-}
+});
 
 /** Сколько карточек повторено в этот день по плану; тренировка не в счёт. С курсом — только карточки курса. */
-export async function reviewedOn(day: string, courseId?: string, database: AppDatabase = db): Promise<number> {
+export const reviewedOn = zoned(async function reviewedOn(
+  day: string,
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<number> {
   const events = await database.events.where("localDate").equals(day).toArray();
   const keys = [...new Set(events.filter((event) => event.mode !== "practice").map((event) => event.unitKey))];
   return courseId ? (await cardsInCourse(keys, courseId, database)).size : keys.length;
-}
+});

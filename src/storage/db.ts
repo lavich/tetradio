@@ -117,9 +117,8 @@ if (launch.kind === "blocked") db.close({ disableAutoOpen: true });
 export const SCHEMA_VERSION = 9;
 
 /** WebKit (Telegram на macOS) отклоняет курсор по индексу пустой таблицы с UnknownError «Unable to open cursor». */
-export async function distinctKeys<T>(table: Table<T>, index: string): Promise<IndexableType[]> {
-  return (await table.count()) ? table.orderBy(index).uniqueKeys() : [];
-}
+export const distinctKeys = <T>(table: Table<T>, index: string): Promise<IndexableType[]> =>
+  table.count().then((count) => (count ? table.orderBy(index).uniqueKeys() : []));
 /** Таблицы пользовательских данных: входят в полную копию. Каталог — кеш, а не данные пользователя; альтернативные версии облака — тоже. */
 export const TABLES = [
   "words",

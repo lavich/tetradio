@@ -35,6 +35,7 @@ import {
   type SessionCard,
   type Word,
 } from "../domain/types";
+import { zoned } from "./zone";
 
 const span = (first: string) =>
   [
@@ -42,13 +43,18 @@ const span = (first: string) =>
     [first, Dexie.maxKey],
   ] as const;
 
-export const loadSettings = async (database: AppDatabase = db) => fillSettings(await database.settings.get("settings"));
+export const loadSettings = zoned(async (database: AppDatabase = db) =>
+  fillSettings(await database.settings.get("settings")),
+);
 export const loadLessons = (database: AppDatabase = db) => database.lessons.toArray();
 /**
  * Уроки — источник новых карточек: пройденные и начатые, где выполнено хотя бы одно задание. С курсом — уроки
  * этого курса в порядке его программы; без курса — всех курсов.
  */
-export async function studiedLessons(courseId?: string, database: AppDatabase = db): Promise<PlanLesson[]> {
+export const studiedLessons = zoned(async function studiedLessons(
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<PlanLesson[]> {
   // Булево поле IndexedDB не индексирует, а уроков — десятки.
   const [all, rows, own] = await Promise.all([
     database.lessons.toArray(),
@@ -68,7 +74,7 @@ export async function studiedLessons(courseId?: string, database: AppDatabase = 
   ]);
   const catalog = new Map(done.map((lesson, index) => [lesson.id, entries[index]?.position]));
   return programmeOrder(done, modules, (id) => catalog.get(id));
-}
+});
 /** Связи урока в авторском порядке: по индексу, без чтения карточек. */
 export const lessonItems = (lessonId: string, database: AppDatabase = db): Promise<LessonItem[]> =>
   database.lessonItems
@@ -81,7 +87,10 @@ const byKind = (refs: LearningRef[]) => {
   return groups;
 };
 /** Ключи существующих карточек: только ключи индексов, записи с текстами не читаются. */
-export async function liveKeys(refs: LearningRef[], database: AppDatabase = db): Promise<Set<string>> {
+export const liveKeys = zoned(async function liveKeys(
+  refs: LearningRef[],
+  database: AppDatabase = db,
+): Promise<Set<string>> {
   if (!refs.length) return new Set();
   const groups = byKind(refs);
   const live = new Set<string>();
@@ -90,29 +99,36 @@ export async function liveKeys(refs: LearningRef[], database: AppDatabase = db):
     for (const id of await STORED_KINDS[kind].presentIds(groups[kind], database)) live.add(unitKey({ kind, id }));
   }
   return live;
-}
-export const statesOf = async (refs: LearningRef[], database: AppDatabase = db) =>
-  new Map(
-    (await database.cardStates.bulkGet(refs.map(unitKey)))
-      .filter((s): s is LearningState => !!s)
-      .map((s) => [s.unitKey, s]),
-  );
-export const liveWords = async (ids: string[], database: AppDatabase = db): Promise<StoredWord[]> =>
-  (await database.words.bulkGet(ids)).filter((w): w is StoredWord => !!w);
-export const livePhrases = async (ids: string[], database: AppDatabase = db): Promise<Phrase[]> =>
-  (await database.phrases.bulkGet(ids)).filter((p): p is Phrase => !!p);
+});
+export const statesOf = zoned(
+  async (refs: LearningRef[], database: AppDatabase = db) =>
+    new Map(
+      (await database.cardStates.bulkGet(refs.map(unitKey)))
+        .filter((s): s is LearningState => !!s)
+        .map((s) => [s.unitKey, s]),
+    ),
+);
+export const liveWords = zoned(async (ids: string[], database: AppDatabase = db): Promise<StoredWord[]> =>
+  (await database.words.bulkGet(ids)).filter((w): w is StoredWord => !!w),
+);
+export const livePhrases = zoned(async (ids: string[], database: AppDatabase = db): Promise<Phrase[]> =>
+  (await database.phrases.bulkGet(ids)).filter((p): p is Phrase => !!p),
+);
 /** Полное содержимое перечисленных карточек; читаются только они. */
-export async function cardsOf(refs: LearningRef[], database: AppDatabase = db): Promise<Map<string, SessionCard>> {
+export const cardsOf = zoned(async function cardsOf(
+  refs: LearningRef[],
+  database: AppDatabase = db,
+): Promise<Map<string, SessionCard>> {
   const groups = byKind(refs);
   const cards = new Map<string, SessionCard>();
   for (const kind of CARD_KINDS)
     if (groups[kind].length)
       for (const card of await STORED_KINDS[kind].contents(groups[kind], database)) cards.set(cardKey(card), card);
   return cards;
-}
+});
 
 /** Состояния карточек исчезающих видов без содержимого: план их не спрашивает, поэтому и счётчики их не видят. */
-async function vanishedKeys(database: AppDatabase): Promise<Set<string>> {
+const vanishedKeys = zoned(async function vanishedKeys(database: AppDatabase): Promise<Set<string>> {
   const gone = new Set<string>();
   for (const kind of CARD_KINDS.filter((kind) => KINDS[kind].vanishes)) {
     const states = await database.cardStates.where("ref.kind").equals(kind).toArray();
@@ -125,9 +141,12 @@ async function vanishedKeys(database: AppDatabase): Promise<Set<string>> {
     for (const state of states) if (!present.has(state.ref.id)) gone.add(state.unitKey);
   }
   return gone;
-}
+});
 /** Карточки ошибок уроков курса, которые можно спросить: убранный обновлением пункт не считается. */
-export async function mistakeCount(courseId?: string, database: AppDatabase = db): Promise<number> {
+export const mistakeCount = zoned(async function mistakeCount(
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<number> {
   const states = await database.cardStates.where("ref.kind").equals("mistake").toArray();
   const live = new Set(
     await STORED_KINDS.mistake.presentIds(
@@ -137,7 +156,7 @@ export async function mistakeCount(courseId?: string, database: AppDatabase = db
   );
   const keys = states.filter((state) => live.has(state.ref.id)).map((state) => state.unitKey);
   return courseId ? (await cardsInCourse(keys, courseId, database)).size : keys.length;
-}
+});
 
 export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
   return {
@@ -145,10 +164,10 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
     studiedLessons: (courseId) => studiedLessons(courseId, database),
     itemsOf: (lessonIds) =>
       lessonIds.length ? database.lessonItems.where("lessonId").anyOf(lessonIds).toArray() : Promise.resolve([]),
-    lessonRefs: async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref),
+    lessonRefs: zoned(async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref)),
     statesOf: (refs) => statesOf(refs, database),
     liveKeys: (refs) => liveKeys(refs, database),
-    dueStates: async (until, courseId) => {
+    dueStates: zoned(async (until, courseId) => {
       const due = await database.cardStates.where("card.due").belowOrEqual(until).toArray();
       if (!courseId) return due;
       const own = await cardsInCourse(
@@ -157,8 +176,8 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
         database,
       );
       return due.filter((state) => own.has(state.unitKey));
-    },
-    factsOf: async (refs) => {
+    }),
+    factsOf: zoned(async (refs) => {
       const facts = new Map<string, CardFacts>();
       const groups = byKind(refs);
       for (const kind of CARD_KINDS)
@@ -170,8 +189,8 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       const languages = known.length ? await cardLanguages(known, database) : new Map();
       for (const [key, language] of languages) facts.set(key, { ...facts.get(key)!, language });
       return facts;
-    },
-    phraseCount: async (courseId) =>
+    }),
+    phraseCount: zoned(async (courseId) =>
       courseId
         ? (
             await database.phrases
@@ -180,9 +199,10 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
               .primaryKeys()
           ).length
         : database.phrases.count(),
+    ),
     languagesOf: (refs) => cardLanguages(refs, database),
     cardsOf: (refs) => cardsOf(refs, database),
-    skillsOf: async (card) => {
+    skillsOf: zoned(async (card) => {
       const key = cardKey(card);
       const base = await database.baseSummary.get("base");
       // Без базы сводка считается по всей локальной истории.
@@ -196,11 +216,11 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
         );
       const row = await database.cardSkills.get(key);
       return summarizeEvents(key, await eventsAfter(database, key, base.asOf), row?.skills ?? emptySkills());
-    },
+    }),
     optionPool: (want, courseId) => optionPool(want, courseId, database),
     lessonMatesOf: (wordIds) => lessonMates(wordIds, database),
     phrasePool: (want, courseId) => phrasePool(want, courseId, database),
-    daysBetween: async (from, to) => {
+    daysBetween: zoned(async (from, to) => {
       const base = await database.baseSummary.get("base");
       const local = await database.events.where("localDate").between(from, to, true, true).toArray();
       const fresh = base ? local.filter((event) => event.createdAt > base.asOf) : local;
@@ -211,34 +231,35 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
         ...emptyStats(),
         days: start,
       }).days;
-    },
-    recentByType: async (type, limit) => {
+    }),
+    recentByType: zoned(async (type, limit) => {
       const base = await database.baseSummary.get("base");
       const range = base
         ? database.events.where("[type+createdAt]").between([type, base.asOf], [type, Dexie.maxKey], false, true)
         : database.events.where("[type+createdAt]").between(...span(type));
       const local = (await range.reverse().limit(limit).toArray()).reverse().map(succeeded);
       return [...(base?.stats.recentByType[type] ?? []), ...local].slice(-limit);
-    },
-    dueKeysBefore: async (instant) => {
+    }),
+    dueKeysBefore: zoned(async (instant) => {
       const gone = await vanishedKeys(database);
       const keys = (await database.cardStates.where("card.due").below(instant).primaryKeys()) as string[];
       return keys.filter((key) => !gone.has(key));
-    },
-    cardCount: async () => {
+    }),
+    cardCount: zoned(async () => {
       let total = 0;
       for (const kind of CARD_KINDS) total += await STORED_KINDS[kind].count(database);
       return total - (await vanishedKeys(database)).size;
-    },
-    eachState: async (visit) => {
+    }),
+    eachState: zoned(async (visit) => {
       const gone = await vanishedKeys(database);
       await database.cardStates.each((state) => {
         if (!gone.has(state.unitKey)) visit(state);
       });
-    },
-    labelsOf: async (refs) =>
-      new Map([...(await cardsOf(refs, database))].map(([key, card]) => [key, cardLabel(card)])),
-    totals: async () => {
+    }),
+    labelsOf: zoned(
+      async (refs) => new Map([...(await cardsOf(refs, database))].map(([key, card]) => [key, cardLabel(card)])),
+    ),
+    totals: zoned(async () => {
       const base = await database.baseSummary.get("base");
       const count = (keys: Iterable<string>) => {
         const byKind = Object.fromEntries(CARD_KINDS.map((kind) => [kind, 0])) as Record<CardKind, number>;
@@ -261,7 +282,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       const known = new Set(base.stats.answeredKeys);
       for (const event of fresh) known.add(event.unitKey);
       return { answers: base.stats.answers + fresh.length, ...count(known) };
-    },
+    }),
   };
 }
 
@@ -284,7 +305,11 @@ const sample = (ids: string[], want: number) => {
  * с полным снимком; большой — несколькими случайными порциями без чтения всей таблицы. С курсом — слова уроков
  * этого курса: варианты не приходят из другого языка.
  */
-export async function optionPool(want: number, courseId?: string, database: AppDatabase = db): Promise<Word[]> {
+export const optionPool = zoned(async function optionPool(
+  want: number,
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<Word[]> {
   if (courseId) return liveWords(sample(await courseCardIds(courseId, "word", database), want), database);
   const total = await database.words.count();
   if (total <= want) return database.words.toArray();
@@ -296,13 +321,16 @@ export async function optionPool(want: number, courseId?: string, database: AppD
       seen.set(word.id, word);
   }
   return [...seen.values()];
-}
+});
 /**
  * Соседи слов по урокам: слова не дальше `LESSON_MATES_RADIUS` позиций в каждом уроке слова. Позиции идут
  * с пропусками, а фразы занимают их наравне со словами, поэтому соседей бывает и меньше: окно ограничивает
  * чтение, а не обещает число слов. Читаются только ссылки окна и слова по id — не весь урок.
  */
-export async function lessonMates(wordIds: string[], database: AppDatabase = db): Promise<Map<string, Word[]>> {
+export const lessonMates = zoned(async function lessonMates(
+  wordIds: string[],
+  database: AppDatabase = db,
+): Promise<Map<string, Word[]>> {
   const links = wordIds.length
     ? await database.lessonItems.where("unitKey").anyOf(wordIds.map(wordKeyOf)).toArray()
     : [];
@@ -331,9 +359,13 @@ export async function lessonMates(wordIds: string[], database: AppDatabase = db)
   return new Map(
     wordIds.map((id) => [id, [...(mateIds.get(id) ?? [])].flatMap((mate) => live.get(mate) ?? [])] as const),
   );
-}
+});
 /** Пул фраз для вариантов: те же правила, что у слов, — целиком для маленькой таблицы, порциями для большой. */
-export async function phrasePool(want: number, courseId?: string, database: AppDatabase = db): Promise<Phrase[]> {
+export const phrasePool = zoned(async function phrasePool(
+  want: number,
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<Phrase[]> {
   if (courseId) return livePhrases(sample(await courseCardIds(courseId, "phrase", database), want), database);
   const total = await database.phrases.count();
   if (total <= want) return database.phrases.toArray();
@@ -345,7 +377,7 @@ export async function phrasePool(want: number, courseId?: string, database: AppD
       seen.set(phrase.id, phrase);
   }
   return [...seen.values()];
-}
+});
 
 /** `cardCount` — живые карточки всех видов; `wordCount` и другие счётчики — по видам для подписей состава. */
 export interface LessonView extends Lesson {
@@ -355,7 +387,10 @@ export interface LessonView extends Lesson {
   progress?: LessonProgress;
 }
 /** С прогрессом состояния карточек урока читаются один раз здесь, по ключам связей; экраны получают группы готовыми. */
-export async function lessonViews(database: AppDatabase = db, withProgress = false): Promise<LessonView[]> {
+export const lessonViews = zoned(async function lessonViews(
+  database: AppDatabase = db,
+  withProgress = false,
+): Promise<LessonView[]> {
   const lessons = await loadLessons(database);
   return Promise.all(
     lessons.map(async (lesson) => {
@@ -379,12 +414,15 @@ export async function lessonViews(database: AppDatabase = db, withProgress = fal
       return view;
     }),
   );
-}
-export async function lessonsOfCard(ref: LearningRef, database: AppDatabase = db): Promise<Lesson[]> {
+});
+export const lessonsOfCard = zoned(async function lessonsOfCard(
+  ref: LearningRef,
+  database: AppDatabase = db,
+): Promise<Lesson[]> {
   const links = await database.lessonItems.where("unitKey").equals(unitKey(ref)).toArray();
   const lessons = await loadLessons(database);
   return lessons.filter((lesson) => links.some((link) => link.lessonId === lesson.id));
-}
+});
 /** Урок целиком: связи в авторском порядке, живые карточки трёх видов и их состояния — одной выборкой на таблицу. */
 export interface LessonDetail {
   lesson: Lesson;
@@ -394,7 +432,10 @@ export interface LessonDetail {
   phrases: Phrase[];
   states: Map<string, LearningState>;
 }
-export async function lessonDetail(id: string, database: AppDatabase = db): Promise<LessonDetail | null> {
+export const lessonDetail = zoned(async function lessonDetail(
+  id: string,
+  database: AppDatabase = db,
+): Promise<LessonDetail | null> {
   const lesson = (await loadLessons(database)).find((item) => item.id === id);
   if (!lesson) return null;
   const links = await lessonItems(id, database);
@@ -417,7 +458,7 @@ export async function lessonDetail(id: string, database: AppDatabase = db): Prom
       database,
     ),
   };
-}
+});
 
 export type WordGroup = "new" | "learning" | "review" | "solid";
 export const stateGroup = (state: LearningState | undefined): WordGroup => {
@@ -425,11 +466,14 @@ export const stateGroup = (state: LearningState | undefined): WordGroup => {
   if (state.card.state === State.Learning || state.card.state === State.Relearning) return "learning";
   return state.card.scheduled_days >= 21 ? "solid" : "review";
 };
-export async function searchWordIds(query: string, database: AppDatabase = db): Promise<string[]> {
+export const searchWordIds = zoned(async function searchWordIds(
+  query: string,
+  database: AppDatabase = db,
+): Promise<string[]> {
   const tokens = searchTokens(query);
   if (!tokens.length) return [];
   const sets = await Promise.all(tokens.map((token) => database.words.where("tokens").startsWith(token).primaryKeys()));
   const [first, ...rest] = sets;
   const others = rest.map((set) => new Set(set));
   return [...new Set(first)].filter((id) => others.every((set) => set.has(id)));
-}
+});

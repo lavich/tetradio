@@ -3,6 +3,7 @@ import { moduleViews } from "./course";
 import { courseLessonIds, primaryCourse } from "./courses";
 import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import { lessonItems, livePhrases, liveWords, stateGroup, statesOf } from "./queries";
+import { zoned } from "./zone";
 
 export type CardMark = "new" | "learning" | "solid";
 export interface DictionaryEntry {
@@ -31,7 +32,10 @@ export interface DictionaryLesson {
  * в уроке, где введена впервые; повтор в следующих уроках её не дублирует. «Учу» — и изучение, и повторение
  * до закрепления.
  */
-export async function dictionary(courseId?: string, database: AppDatabase = db): Promise<DictionaryLesson[]> {
+export const dictionary = zoned(async function dictionary(
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<DictionaryLesson[]> {
   courseId ??= await primaryCourse(database);
   const lessons = (await moduleViews(courseId, database)).flatMap((view) => [
     ...view.lessons.map((lesson, index) => ({ view, lesson, number: `${view.module.number}.${index + 1}` })),
@@ -95,7 +99,7 @@ export async function dictionary(courseId?: string, database: AppDatabase = db):
       entries,
     };
   });
-}
+});
 
 export type MarkFilter = CardMark | "all";
 

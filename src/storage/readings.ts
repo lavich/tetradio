@@ -4,6 +4,7 @@ import { blockKey, saveBlockProgress, type TapCard } from "./course";
 import { courseLessonIds } from "./courses";
 import { db, type AppDatabase } from "./db";
 import { lessonOutlines, type LessonOutline } from "./outlines";
+import { zoned } from "./zone";
 
 /** Отметка «прочитано» — строка блока текста: ключ `<текст>/read` переносится синхронизацией как блок урока. */
 const READ_BLOCK = "read";
@@ -22,7 +23,7 @@ export interface ReadingPage extends ReadingView {
   next?: ReadingView;
 }
 
-async function views(packages: InstalledPackage[], database: AppDatabase): Promise<ReadingView[]> {
+const views = zoned(async function views(packages: InstalledPackage[], database: AppDatabase): Promise<ReadingView[]> {
   const withTexts = packages
     .filter(
       (pack): pack is InstalledPackage & { module: { id: string; position: number } } =>
@@ -41,9 +42,9 @@ async function views(packages: InstalledPackage[], database: AppDatabase): Promi
     open: !!lesson?.completed,
     ...(marks[index]?.done ? { readAt: marks[index]!.updatedAt } : {}),
   }));
-}
+});
 /** Пакеты целиком весят мегабайты: выбор — по сводкам, читаются только пакеты с нужными текстами. */
-async function packagesWith(
+const packagesWith = zoned(async function packagesWith(
   ids: string[],
   wanted: (outline: LessonOutline, id: string) => boolean,
   database: AppDatabase,
@@ -54,18 +55,24 @@ async function packagesWith(
     return !!outline?.readings.length && wanted(outline, id);
   });
   return (await database.packages.bulkGet(chosen)).filter((pack): pack is InstalledPackage => !!pack);
-}
-const installedIds = async (database: AppDatabase) =>
-  (await database.packages.toCollection().primaryKeys()) as string[];
-const modulePackages = async (moduleId: string, database: AppDatabase) =>
-  packagesWith(await installedIds(database), (outline) => outline.module?.id === moduleId, database);
+});
+const installedIds = zoned(
+  async (database: AppDatabase) => (await database.packages.toCollection().primaryKeys()) as string[],
+);
+const modulePackages = zoned(async (moduleId: string, database: AppDatabase) =>
+  packagesWith(await installedIds(database), (outline) => outline.module?.id === moduleId, database),
+);
 
 /** Тексты модуля в порядке программы: по месту открывающего урока, внутри урока — по порядку пакета. */
-export const moduleReadings = async (moduleId: string, database: AppDatabase = db) =>
-  views(await modulePackages(moduleId, database), database);
+export const moduleReadings = zoned(async (moduleId: string, database: AppDatabase = db) =>
+  views(await modulePackages(moduleId, database), database),
+);
 
 /** Экран текста: сам текст, разметка слов, карточки подсказок и следующий текст модуля. */
-export async function readingPage(id: string, database: AppDatabase = db): Promise<ReadingPage | null> {
+export const readingPage = zoned(async function readingPage(
+  id: string,
+  database: AppDatabase = db,
+): Promise<ReadingPage | null> {
   const ids = await installedIds(database);
   const owner = (await lessonOutlines(ids, database)).find((outline) => outline?.readings.includes(id));
   if (!owner?.module) return null;
@@ -80,21 +87,23 @@ export async function readingPage(id: string, database: AppDatabase = db): Promi
     cards: new Map((view.reading.marks?.cards ?? []).map((card): [string, TapCard] => [card.ref, card])),
     ...(all[at + 1] ? { next: all[at + 1] } : {}),
   };
-}
+});
 
 /** Первый открытый непрочитанный текст курса — строка «Почитать» на «Сегодня». */
-export async function nextReading(courseId: string, database: AppDatabase = db): Promise<ReadingView | undefined> {
+export const nextReading = zoned(async function nextReading(
+  courseId: string,
+  database: AppDatabase = db,
+): Promise<ReadingView | undefined> {
   // Текст закрытого урока «Сегодня» не предлагает: пакеты непройденных уроков не читаются.
   const completed = (await database.lessons.toArray()).flatMap((lesson) => (lesson.completed ? [lesson.id] : []));
   const packages = await packagesWith(completed, () => true, database);
   const modules = new Map((await database.modules.toArray()).map((module) => [module.id, module.number]));
   const all = await views(packages, database);
-  // Курс — последним: чтения после `await courseLessonIds` живой запрос не отслеживает.
   const own = new Set(await courseLessonIds(courseId, database));
   return all
     .filter((view) => own.has(view.after.id) && view.open && !view.readAt)
     .sort((a, b) => (modules.get(a.moduleId) ?? 0) - (modules.get(b.moduleId) ?? 0))[0];
-}
+});
 
 export const markRead = (id: string, done: boolean, database: AppDatabase = db) =>
   saveBlockProgress(id, READ_BLOCK, { done }, database);

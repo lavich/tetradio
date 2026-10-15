@@ -9,6 +9,7 @@ import { CARD_KINDS, type CardKind, type LearningRef, type Session } from "../do
 import { db, distinctKeys, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
 import { lessonCourses } from "./lesson-courses";
+import { zoned } from "./zone";
 
 export { lessonCourses };
 
@@ -27,14 +28,18 @@ export interface CourseEntry {
 }
 
 // Курс в базе язык не хранит: он есть у записей каталога его уроков.
-export async function courseLanguage(courseId: string, database: AppDatabase = db): Promise<Language> {
+export const courseLanguage = zoned(async function courseLanguage(
+  courseId: string,
+  database: AppDatabase = db,
+): Promise<Language> {
   const language = (await database.catalog.where("courseId").equals(courseId).first())?.language;
   return isLanguage(language) ? language : DEFAULT_LANGUAGE;
-}
-export const profileOfCourse = async (courseId: string, database: AppDatabase = db) =>
-  profileOf(await courseLanguage(courseId, database));
+});
+export const profileOfCourse = zoned(async (courseId: string, database: AppDatabase = db) =>
+  profileOf(await courseLanguage(courseId, database)),
+);
 
-const readOrder = async (database: AppDatabase): Promise<string[]> => {
+const readOrder = zoned(async (database: AppDatabase): Promise<string[]> => {
   const raw = (await database.meta.get(COURSES_ORDER_KEY))?.value;
   try {
     const order = raw ? JSON.parse(raw) : [];
@@ -42,13 +47,13 @@ const readOrder = async (database: AppDatabase): Promise<string[]> => {
   } catch {
     return [];
   }
-};
+});
 
 /**
  * Курсы по порядку установки, затем остальные — по месту в каталоге. Порядок не зависит от основного курса: переключатели
  * не переставляют варианты после выбора. Курс, которого нет ни в каталоге, ни на устройстве, не показывается.
  */
-export async function courses(database: AppDatabase = db): Promise<CourseEntry[]> {
+export const courses = zoned(async function courses(database: AppDatabase = db): Promise<CourseEntry[]> {
   const [rows, entries, installedIds, stored] = await Promise.all([
     database.courses.toArray(),
     database.catalog.toArray(),
@@ -84,7 +89,7 @@ export async function courses(database: AppDatabase = db): Promise<CourseEntry[]
       installed: installed.has(course.id),
     };
   });
-}
+});
 /**
  * Запоминает установленные курсы в конце порядка: так порядок по умолчанию — порядок установки, а не место
  * курса в каталоге. Первый установленный курс запоминается как домашний. Вызывается при обновлении каталога, в его
@@ -101,14 +106,18 @@ export async function rememberCourses(database: AppDatabase = db): Promise<void>
   const first = list.find((course) => course.installed)?.id;
   if (!home && first) await database.meta.put({ key: HOME_COURSE_KEY, value: first });
 }
-export const coursesOrder = async (database: AppDatabase = db) => (await courses(database)).map((course) => course.id);
+export const coursesOrder = zoned(async (database: AppDatabase = db) =>
+  (await courses(database)).map((course) => course.id),
+);
 
 /** Основной курс — выбранный в настройках, если он установлен, иначе установленный первым; без уроков — первый в каталоге. */
-export async function primaryCourse(database: AppDatabase = db): Promise<string | undefined> {
+export const primaryCourse = zoned(async function primaryCourse(
+  database: AppDatabase = db,
+): Promise<string | undefined> {
   const [list, chosen] = await Promise.all([courses(database), database.meta.get(PRIMARY_COURSE_KEY)]);
   const installed = list.filter((course) => course.installed);
   return (installed.find((course) => course.id === chosen?.value) ?? installed[0] ?? list[0])?.id;
-}
+});
 export const setPrimaryCourse = (courseId: string, database: AppDatabase = db) =>
   database.meta.put({ key: PRIMARY_COURSE_KEY, value: courseId }).then(() => undefined);
 
@@ -116,25 +125,30 @@ export const setPrimaryCourse = (courseId: string, database: AppDatabase = db) =
  * Данные без курса — занятия и уроки прежней версии, карточки, снятые обновлением с уроков, — у домашнего курса:
  * установленного первым. Не у основного: иначе смена основного перенесла бы их в другой язык.
  */
-export async function homeCourse(database: AppDatabase = db): Promise<string | undefined> {
+export const homeCourse = zoned(async function homeCourse(database: AppDatabase = db): Promise<string | undefined> {
   return (await database.meta.get(HOME_COURSE_KEY))?.value ?? primaryCourse(database);
-}
+});
 
 /**
  * Курс экранов «Курс», «Слова» и «Прогресс»: выбранный, если он установлен, иначе основной. Пока ничего не
  * установлено — выбранный из каталога.
  */
-export async function currentCourse(database: AppDatabase = db): Promise<string | undefined> {
+export const currentCourse = zoned(async function currentCourse(
+  database: AppDatabase = db,
+): Promise<string | undefined> {
   const [chosen, list] = await Promise.all([database.meta.get(CURRENT_COURSE_KEY), courses(database)]);
   const installed = list.filter((course) => course.installed);
   const pool = installed.length ? installed : list;
   return pool.find((course) => course.id === chosen?.value)?.id ?? primaryCourse(database);
-}
+});
 export const setCurrentCourse = (courseId: string, database: AppDatabase = db) =>
   database.meta.put({ key: CURRENT_COURSE_KEY, value: courseId }).then(() => undefined);
 
 /** Курс карточки — курс урока, в котором она стоит: сборка не пускает карточку в уроки двух курсов. */
-export async function courseOfCards(unitKeys: string[], database: AppDatabase = db): Promise<Map<string, string>> {
+export const courseOfCards = zoned(async function courseOfCards(
+  unitKeys: string[],
+  database: AppDatabase = db,
+): Promise<Map<string, string>> {
   if (!unitKeys.length) return new Map();
   const result = await ownCourses(unitKeys, database);
   const items = await database.lessonItems.where("unitKey").anyOf(unitKeys).toArray();
@@ -147,9 +161,12 @@ export async function courseOfCards(unitKeys: string[], database: AppDatabase = 
     if (course && !result.has(item.unitKey)) result.set(item.unitKey, course);
   }
   return result;
-}
+});
 /** Курс карточек видов, которые знают его сами, без связей с уроками. */
-async function ownCourses(unitKeys: string[], database: AppDatabase): Promise<Map<string, string>> {
+const ownCourses = zoned(async function ownCourses(
+  unitKeys: string[],
+  database: AppDatabase,
+): Promise<Map<string, string>> {
   const result = new Map<string, string>();
   const kinds = CARD_KINDS.filter((kind) => STORED_KINDS[kind].coursesOf);
   if (!kinds.length) return result;
@@ -161,28 +178,35 @@ async function ownCourses(unitKeys: string[], database: AppDatabase): Promise<Ma
     for (const [id, course] of await coursesOf(ids, database)) result.set(unitKey({ kind, id }), course);
   }
   return result;
-}
+});
 
 /** Курс карточек; карточка вне уроков (связь снята обновлением) — у домашнего курса: так её повторение не теряется. */
-export async function cardCourses(unitKeys: string[], database: AppDatabase = db): Promise<Map<string, string>> {
+export const cardCourses = zoned(async function cardCourses(
+  unitKeys: string[],
+  database: AppDatabase = db,
+): Promise<Map<string, string>> {
   const owners = await courseOfCards(unitKeys, database);
   const home = unitKeys.some((key) => !owners.has(key)) ? await homeCourse(database) : undefined;
   if (home) for (const key of unitKeys) if (!owners.has(key)) owners.set(key, home);
   return owners;
-}
-export const courseOfCard = async (unitKey: string, database: AppDatabase = db) =>
-  (await cardCourses([unitKey], database)).get(unitKey);
+});
+export const courseOfCard = zoned(async (unitKey: string, database: AppDatabase = db) =>
+  (await cardCourses([unitKey], database)).get(unitKey),
+);
 
-export async function cardsInCourse(
+export const cardsInCourse = zoned(async function cardsInCourse(
   unitKeys: string[],
   courseId: string,
   database: AppDatabase = db,
 ): Promise<Set<string>> {
   const owners = await cardCourses(unitKeys, database);
   return new Set(unitKeys.filter((key) => owners.get(key) === courseId));
-}
+});
 
-export async function cardLanguages(refs: LearningRef[], database: AppDatabase = db): Promise<Map<string, Language>> {
+export const cardLanguages = zoned(async function cardLanguages(
+  refs: LearningRef[],
+  database: AppDatabase = db,
+): Promise<Map<string, Language>> {
   const keys = refs.map(unitKey);
   const owners = await cardCourses(keys, database);
   const languages = new Map(
@@ -191,10 +215,13 @@ export async function cardLanguages(refs: LearningRef[], database: AppDatabase =
     ),
   );
   return new Map(keys.map((key) => [key, languages.get(owners.get(key) ?? "") ?? DEFAULT_LANGUAGE]));
-}
+});
 
 /** Уроки курса на устройстве; урок без курса (старый профиль) — у домашнего курса. */
-export async function courseLessonIds(courseId: string, database: AppDatabase = db): Promise<string[]> {
+export const courseLessonIds = zoned(async function courseLessonIds(
+  courseId: string,
+  database: AppDatabase = db,
+): Promise<string[]> {
   const lessons = await database.lessons.toArray();
   const owners = await lessonCourses(
     lessons.filter((lesson) => !lesson.courseId).map((lesson) => lesson.id),
@@ -205,22 +232,30 @@ export async function courseLessonIds(courseId: string, database: AppDatabase = 
   return lessons
     .filter((lesson) => (ownerOf(lesson.id, lesson.courseId) ?? home) === courseId)
     .map((lesson) => lesson.id);
-}
+});
 
 /** Идентификаторы карточек вида в уроках курса, по порядку id. */
-export async function courseCardIds(courseId: string, kind: CardKind, database: AppDatabase = db): Promise<string[]> {
+export const courseCardIds = zoned(async function courseCardIds(
+  courseId: string,
+  kind: CardKind,
+  database: AppDatabase = db,
+): Promise<string[]> {
   const lessonIds = await courseLessonIds(courseId, database);
   if (!lessonIds.length) return [];
   const items = await database.lessonItems.where("lessonId").anyOf(lessonIds).toArray();
   return [...new Set(items.filter((item) => item.ref.kind === kind).map((item) => item.ref.id))].sort();
-}
+});
 
 /** Курс занятия; занятие прежней версии без курса — занятие домашнего курса. */
-export const sessionCourse = async (session: Pick<Session, "courseId">, database: AppDatabase = db) =>
-  session.courseId ?? homeCourse(database);
+export const sessionCourse = zoned(
+  async (session: Pick<Session, "courseId">, database: AppDatabase = db) => session.courseId ?? homeCourse(database),
+);
 
 /** Незавершённое занятие курса, последнее по времени; без курса — любое, как до двух курсов. */
-export async function activeSession(courseId?: string, database: AppDatabase = db): Promise<Session | null> {
+export const activeSession = zoned(async function activeSession(
+  courseId?: string,
+  database: AppDatabase = db,
+): Promise<Session | null> {
   const active = await database.sessions
     .where("[status+createdAt]")
     .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
@@ -229,4 +264,4 @@ export async function activeSession(courseId?: string, database: AppDatabase = d
   if (!courseId) return active[0] ?? null;
   const home = active.some((session) => !session.courseId) ? await homeCourse(database) : undefined;
   return active.find((session) => (session.courseId ?? home) === courseId) ?? null;
-}
+});
