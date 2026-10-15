@@ -27,7 +27,7 @@ import {
 } from "../src/storage/courses";
 import { db, type StoredWord } from "../src/storage/db";
 import { dictionary } from "../src/storage/dictionary";
-import { submitAnswer } from "../src/storage/ops";
+import { submitAnswer } from "./helpers/ops";
 import { courseProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
 import { markRead, moduleReadings, nextReading, readingPage } from "../src/storage/readings";
