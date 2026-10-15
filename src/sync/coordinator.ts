@@ -300,7 +300,9 @@ export class SyncCoordinator {
         ]);
         return;
       }
-      if (flags.dirty || flags.restored || (never && local && !mine)) {
+      // Наш указатель убрала уборка другого устройства, а мы на нём: версию нужно выпустить снова.
+      const lost = !mine && !!flags.appliedId?.startsWith(`${device}-`);
+      if (flags.dirty || flags.restored || lost || (never && local && !mine)) {
         if (!writes) {
           this.update({
             phase: "paused",
@@ -492,7 +494,7 @@ export class SyncCoordinator {
   onFailure: ((error: unknown, kind: SyncErrorKind | "unknown") => void) | null = null;
 
   /**
-   * Разрешение конфликта целой версией. Отвергнутые ветви сохраняются локально до явного удаления,
+   * Разрешение конфликта целой версией. Отвергнутые ветви сохраняются локально (пять последних),
    * новая версия отмечает все известные ветви рассмотренными; ответы другой версии не объединяются.
    */
   async resolve(branchId: string): Promise<SyncStatus> {

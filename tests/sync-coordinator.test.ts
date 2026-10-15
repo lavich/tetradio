@@ -577,6 +577,21 @@ describe("надёжность публикации и лимиты", () => {
     expect((await tablet.sync.exchange()).phase).toBe("synced");
     expect(await statesOf(tablet)).toEqual(await statesOf(phone));
   });
+  it("указатель устройства убрала чужая уборка — следующий обмен выпускает версию снова", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
+    await study(phone, [true, true]);
+    await phone.sync.exchange();
+    await tablet.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    const pointer = (await kvAdapter(cloud).listPointers()).pointers.find((item) => item.device === phoneDevice)!;
+    expect(await kvAdapter(cloud).removeDevice(pointer)).toBe(true);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    expect(cloud.store.has(`p_${phoneDevice}`)).toBe(true);
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    expect((await fresh.sync.exchange()).phase).toBe("synced");
+    expect((await stats(fresh)).totals.answers).toBe(2);
+  });
   it("старый указатель, не вошедший в принятую версию, не удаляется", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
     await study(phone, [true]);
