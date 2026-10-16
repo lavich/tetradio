@@ -63,6 +63,8 @@ async function start(page: Page) {
   await expect(page.getByTestId("cards-later")).toBeVisible();
   await expect(page.getByText("Занятие не назначено")).toHaveCount(0);
 }
+/** Скрытая запятая — отдельный блок, и Chromium ставит пробел и перед ней; на слух это та же пауза. */
+const heard = (name: string) => new RegExp(`^${name.replace(/[?.]/g, "\\$&").replace(/,/g, " ?,")}$`);
 const section = (page: Page, name: string) => page.getByRole("region", { name });
 /** Урок листается страницами: вперёд, пока нужный блок не окажется на открытой странице. */
 async function turnTo(page: Page, name: string) {
@@ -440,6 +442,20 @@ test("слова урока: нажатие произносит слово ил
     .toContain(label);
   await expect(page).toHaveURL(/\/course\//);
   await expect(words.getByRole("link")).toHaveCount(0);
+});
+
+test("слова урока на слух: заглавное слово один раз, формы через запятую с подписью, греческое с lang", async ({
+  page,
+}) => {
+  await start(page);
+  await page.goto("/app/course/m01/m01-1?p=1");
+  const words = await turnTo(page, "Слова урока");
+  const verb = words.getByRole("button", { name: /^Произнести: είμαι/ });
+  await expect(verb).toHaveAccessibleName(heard("Произнести: είμαι, было ήμουν, будет θα είμαι, быть"));
+  await expect(verb.locator("[lang=el]:not([aria-hidden] *)")).toHaveText(["είμαι", "ήμουν", "θα είμαι"]);
+  await expect(words.getByRole("button", { name: /^Произнести: γεια/ })).toHaveAccessibleName(
+    heard("Произнести: γεια, привет; пока"),
+  );
 });
 
 test("снизу одно облачко: в разделах — меню, в уроке — листание", async ({ page }) => {

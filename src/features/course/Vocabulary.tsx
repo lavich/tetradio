@@ -55,8 +55,15 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                     {word.greek}
                   </span>
                   {word.forms ? (
-                    <VerbForms headword={word.greek} forms={word.forms} labels={false} className={css.vocabForms} />
+                    <VerbForms
+                      headword={word.greek}
+                      forms={word.forms}
+                      labels={false}
+                      headwordShown
+                      className={css.vocabForms}
+                    />
                   ) : null}
+                  <span className="sr-only">, </span>
                   <span className={css.vocabRu}>{word.russian}</span>
                 </span>
                 <Volume2 className={css.vocabSound} aria-hidden />
