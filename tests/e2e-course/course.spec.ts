@@ -64,7 +64,10 @@ async function start(page: Page) {
   await expect(page.getByText("Занятие не назначено")).toHaveCount(0);
 }
 /** Скрытая запятая — отдельный блок, и Chromium ставит пробел и перед ней; на слух это та же пауза. */
-const heard = (name: string) => new RegExp(`^${name.replace(/[?.]/g, "\\$&").replace(/,/g, " ?,")}$`);
+const heard = (name: string) => {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`^${escaped.replace(/,/g, " ?,")}$`);
+};
 const section = (page: Page, name: string) => page.getByRole("region", { name });
 /** Урок листается страницами: вперёд, пока нужный блок не окажется на открытой странице. */
 async function turnTo(page: Page, name: string) {

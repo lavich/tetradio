@@ -32,7 +32,7 @@ function Form({
   if (!onSay) return shown;
   return (
     <button type="button" className={css.say} aria-describedby={labelId} onClick={() => onSay(form)}>
-      <span className="sr-only">Произнести: </span>
+      <span className="sr-only select-none">Произнести: </span>
       {shown}
     </button>
   );
@@ -80,10 +80,11 @@ function PlainForms({
     headwordShown && rest.length > 0 && first.slice(0, -1).normalize("NFC") === headword.normalize("NFC");
   return (
     <span className={className}>
+      {headwordShown && <span className="sr-only select-none">, </span>}
       {plural && (
         <>
           <span aria-hidden>мн.</span>
-          <span className="sr-only">множественное</span>{" "}
+          <span className="sr-only select-none">множественное число</span>{" "}
         </>
       )}
       {repeatsHeadword ? (
@@ -100,7 +101,7 @@ function PlainForms({
   );
 }
 
-/** `headwordShown` — заглавное слово уже прочитано рядом (строка словарика): первая форма скринридеру не повторяется. */
+/** `headwordShown` — заглавное слово уже прочитано рядом (строка словарика): первая форма без кнопки скринридеру не повторяется. */
 export function VerbForms({
   headword,
   forms,
@@ -117,6 +118,7 @@ export function VerbForms({
   className?: string;
 }) {
   const id = useId();
+  const hideHeadword = headwordShown && !onSay;
   const parts = principalParts(headword, forms);
   if (!parts)
     return <PlainForms headword={headword} forms={forms} headwordShown={headwordShown} className={className} />;
@@ -129,8 +131,8 @@ export function VerbForms({
               →
             </span>
           )}
-          <span className={css.part} aria-hidden={(headwordShown && index === 0) || undefined}>
-            {!labels && index > 0 && <span className="sr-only">, {part.label} </span>}
+          <span className={css.part} aria-hidden={(hideHeadword && index === 0) || undefined}>
+            {!labels && index > 0 && <span className="sr-only select-none">, {part.label} </span>}
             <Form
               form={part.form}
               endings={endingsOf(part.label)}
@@ -138,7 +140,7 @@ export function VerbForms({
               labelId={labels ? `${id}-${index}` : undefined}
             />
             {labels && (
-              <span className={css.label} id={`${id}-${index}`}>
+              <span className={css.label} id={`${id}-${index}`} aria-hidden>
                 {part.label}
               </span>
             )}

@@ -48,7 +48,7 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                 className={css.vocabRow}
                 onClick={() => void playWord(word, profile).then(heard(profile))}
               >
-                <span className="sr-only">Произнести: </span>
+                <span className="sr-only select-none">Произнести: </span>
                 <Thumb assetId={word.imageAssetId} />
                 <span className={css.vocabText}>
                   <span className={css.vocabGreek} lang={profile.code}>
@@ -63,7 +63,7 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                       className={css.vocabForms}
                     />
                   ) : null}
-                  <span className="sr-only">, </span>
+                  {word.russian && <span className="sr-only select-none">, </span>}
                   <span className={css.vocabRu}>{word.russian}</span>
                 </span>
                 <Volume2 className={css.vocabSound} aria-hidden />
@@ -81,7 +81,7 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                 className={css.vocabRow}
                 onClick={() => void playText(phrase.text, phrase.audioAssetId, profile).then(heard(profile))}
               >
-                <span className="sr-only">Произнести: </span>
+                <span className="sr-only select-none">Произнести: </span>
                 <span className={css.vocabText}>
                   <span className={css.vocabGreek} lang={profile.code}>
                     {phrase.text}

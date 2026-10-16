@@ -77,6 +77,12 @@ test("лист глагола: ряд основных форм, таблица 
   await expect(row).toContainText("θα είμαι");
   await expect(row).toContainText("будет");
 
+  const copied = await row.evaluate((node) => {
+    getSelection()!.selectAllChildren(node);
+    return getSelection()!.toString();
+  });
+  expect(copied).toBe("είμαι\nсейчас\n→\nήμουν\nбыло\n→\nθα είμαι\nбудет");
+  expect(await row.ariaSnapshot()).not.toMatch(/text: было/);
   const past = row.getByRole("button", { name: "Произнести: ήμουν" });
   await expect(past).toHaveAccessibleName("Произнести: ήμουν");
   await expect(past).toHaveAccessibleDescription("было");
