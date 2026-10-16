@@ -77,7 +77,18 @@ test("лист глагола: ряд основных форм, таблица 
   await expect(row).toContainText("θα είμαι");
   await expect(row).toContainText("будет");
 
-  await row.getByRole("button", { name: "Произнести: ήμουν" }).click();
+  const copied = await row.evaluate((node) => {
+    getSelection()!.selectAllChildren(node);
+    return getSelection()!.toString();
+  });
+  expect(copied).toBe("είμαι\nсейчас\n→\nήμουν\nбыло\n→\nθα είμαι\nбудет");
+  expect(await row.ariaSnapshot()).not.toMatch(/text: было/);
+  const past = row.getByRole("button", { name: "Произнести: ήμουν" });
+  await expect(past).toHaveAccessibleName("Произнести: ήμουν");
+  await expect(past).toHaveAccessibleDescription("было");
+  await expect(past).not.toHaveAttribute("aria-label");
+  await expect(past.locator("[lang=el]")).toHaveText("ήμουν");
+  await past.click();
   await expect.poll(spoken).toContain("ήμουν");
 
   const table = sheet.getByTestId("paradigm");
@@ -85,6 +96,10 @@ test("лист глагола: ряд основных форм, таблица 
   await table.getByText("Все формы").click();
   await expect(table.getByRole("row", { name: /^мы/ })).toContainText("είμαστε");
   await expect(table.getByRole("row", { name: /^мы/ })).toContainText("ήμασταν");
-  await table.getByRole("button", { name: "Произнести: ήσουν" }).click();
+  const cell = table.getByRole("button", { name: "Произнести: ήσουν" });
+  await expect(cell).toHaveAccessibleName("Произнести: ήσουν");
+  await expect(cell).not.toHaveAttribute("aria-label");
+  await expect(cell.locator("[lang=el]")).toHaveText("ήσουν");
+  await cell.click();
   await expect.poll(spoken).toContain("ήσουν");
 });

@@ -1,11 +1,21 @@
-import { Fragment, useState } from "react";
+import { Fragment, useId, useState } from "react";
 import type { Paradigm, Word } from "../domain/types";
 import { ENDINGS, endingsOf, principalParts, splitEnding } from "../domain/verb-forms";
 import { playText, type PlayResult } from "./audio";
 import { noVoice, useProfile } from "./language";
 import css from "./verb-forms.module.css";
 
-function Form({ form, endings, onSay }: { form: string; endings: string[]; onSay?: (form: string) => void }) {
+function Form({
+  form,
+  endings,
+  onSay,
+  labelId,
+}: {
+  form: string;
+  endings: string[];
+  onSay?: (form: string) => void;
+  labelId?: string;
+}) {
   const { code } = useProfile();
   const [stem, ending] = splitEnding(form, code, endings);
   const text = (
@@ -21,7 +31,8 @@ function Form({ form, endings, onSay }: { form: string; endings: string[]; onSay
   );
   if (!onSay) return shown;
   return (
-    <button type="button" className={css.say} aria-label={`Произнести: ${form}`} onClick={() => onSay(form)}>
+    <button type="button" className={css.say} aria-describedby={labelId} onClick={() => onSay(form)}>
+      <span className="sr-only select-none">Произнести: </span>
       {shown}
     </button>
   );
@@ -41,27 +52,76 @@ export function useSay() {
   return { say, note };
 }
 
+const PLURAL = /^мн\.\s*/u;
+
+/** Строка форм не-глагола: «мн.» звучит словом, а не буквами греческого голоса; повтор заглавного слова не звучит. */
+function PlainForms({
+  headword,
+  forms,
+  headwordShown,
+  className,
+}: {
+  headword: string;
+  forms: string;
+  headwordShown: boolean;
+  className?: string;
+}) {
+  const { code } = useProfile();
+  if (!/\p{L}/u.test(forms))
+    return (
+      <span className={className} aria-hidden>
+        {forms}
+      </span>
+    );
+  const plural = PLURAL.exec(forms);
+  const greek = plural ? forms.slice(plural[0].length) : forms;
+  const [first, ...rest] = greek.split(/(?<=,)\s*/u);
+  const repeatsHeadword =
+    headwordShown && rest.length > 0 && first.slice(0, -1).normalize("NFC") === headword.normalize("NFC");
+  return (
+    <span className={className}>
+      {headwordShown && <span className="sr-only select-none">, </span>}
+      {plural && (
+        <>
+          <span aria-hidden>мн.</span>
+          <span className="sr-only select-none">множественное число</span>{" "}
+        </>
+      )}
+      {repeatsHeadword ? (
+        <>
+          <span lang={code} aria-hidden>
+            {first}{" "}
+          </span>
+          <span lang={code}>{rest.join(" ")}</span>
+        </>
+      ) : (
+        <span lang={code}>{greek}</span>
+      )}
+    </span>
+  );
+}
+
+/** `headwordShown` — заглавное слово уже прочитано рядом (строка словарика): первая форма без кнопки скринридеру не повторяется. */
 export function VerbForms({
   headword,
   forms,
   labels = true,
+  headwordShown = false,
   onSay,
   className,
 }: {
   headword: string;
   forms: string;
   labels?: boolean;
+  headwordShown?: boolean;
   onSay?: (form: string) => void;
   className?: string;
 }) {
-  const { code } = useProfile();
+  const id = useId();
+  const hideHeadword = headwordShown && !onSay;
   const parts = principalParts(headword, forms);
   if (!parts)
-    return (
-      <span className={className} lang={code}>
-        {forms}
-      </span>
-    );
+    return <PlainForms headword={headword} forms={forms} headwordShown={headwordShown} className={className} />;
   return (
     <span className={`${css.row} ${className ?? ""}`} data-testid="verb-forms">
       {parts.map((part, index) => (
@@ -71,9 +131,19 @@ export function VerbForms({
               →
             </span>
           )}
-          <span className={css.part}>
-            <Form form={part.form} endings={endingsOf(part.label)} onSay={onSay} />
-            {labels && <span className={css.label}>{part.label}</span>}
+          <span className={css.part} aria-hidden={(hideHeadword && index === 0) || undefined}>
+            {!labels && index > 0 && <span className="sr-only select-none">, {part.label} </span>}
+            <Form
+              form={part.form}
+              endings={endingsOf(part.label)}
+              onSay={onSay}
+              labelId={labels ? `${id}-${index}` : undefined}
+            />
+            {labels && (
+              <span className={css.label} id={`${id}-${index}`} aria-hidden>
+                {part.label}
+              </span>
+            )}
           </span>
         </Fragment>
       ))}
