@@ -5,7 +5,6 @@ import { Screen } from "../../app/Screen";
 import { installLesson } from "../../content/client";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { moduleReadings } from "../../storage/readings";
-import { eventDay, WORDS, withCount } from "../../shared/format";
 import { db } from "../../storage/db";
 import { useFollowCourse } from "../../shared/courses";
 import { Tick } from "../../shared/Tick";
@@ -14,6 +13,7 @@ import { useCourseProfile } from "../../shared/language";
 
 import { checkpointLabels } from "./checkpoints";
 import { ModuleCover } from "./ModuleCover";
+import { ReadingRow } from "./ReadingRow";
 import ui from "../../shared/ui.module.css";
 import base from "./course.module.css";
 import css from "./module-screen.module.css";
@@ -112,40 +112,9 @@ export function ModuleScreen() {
       ) : null}
       {readings.length ? (
         <ol className={`${css.lessons} ${css.tocBreak}`} aria-label="Чтение">
-          {readings.map(({ reading, open, readAt, after }) => {
-            const title = (
-              <span className={css.tocLine}>
-                <h3 className={css.blockTitle} lang={profile.code}>
-                  {reading.title}
-                </h3>
-                <span className={css.dots} aria-hidden="true" />
-                <span className={css.tocCount}>{withCount(reading.words, WORDS)}</span>
-              </span>
-            );
-            const meta = readAt ? (
-              `прочитано ${eventDay(readAt)}`
-            ) : open ? null : (
-              <>
-                откроется после урока «<span lang={profile.code}>{after.title}</span>»
-              </>
-            );
-            return (
-              <li key={reading.id}>
-                {readAt ? <Tick className={base.mark} label="прочитано" /> : <span className={base.gutter}>текст</span>}
-                {open ? (
-                  <Link className={css.lessonLink} to={`/course/${module.id}/read/${reading.id}`} state={FROM_MODULE}>
-                    {title}
-                    {meta ? <span className={css.meta}>{meta}</span> : null}
-                  </Link>
-                ) : (
-                  <div className={css.lessonLink}>
-                    {title}
-                    <span className={css.meta}>{meta}</span>
-                  </div>
-                )}
-              </li>
-            );
-          })}
+          {readings.map((reading) => (
+            <ReadingRow key={reading.reading.id} view={reading} code={profile.code} state={FROM_MODULE} />
+          ))}
         </ol>
       ) : null}
       {module.grammar.length ? (

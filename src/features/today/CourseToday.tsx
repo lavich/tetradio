@@ -7,19 +7,27 @@ import { deviceTimezone, mondayOf, studyDay, type DailyPlan } from "../../domain
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
-import { lessonIn, withCount, WORDS } from "../../shared/format";
+import { lessonIn, withCount } from "../../shared/format";
 import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
 import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
 import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
-import { lessonDays, moduleViews, reviewedOn, type ModuleLessonView, type ModuleView } from "../../storage/course";
+import {
+  courseFinished,
+  lessonDays,
+  moduleViews,
+  nextStep,
+  reviewedOn,
+  type ModuleLessonView,
+  type ModuleView,
+} from "../../storage/course";
 import { dexieSource } from "../../storage/queries";
-import { nextReading } from "../../storage/readings";
-import { ExamLine } from "../course/ExamLine";
+import { courseReadings } from "../../storage/readings";
 import { sessionPath, startSession } from "../learning/session-actions";
 import { DayNotes } from "./DayNotes";
+import { ReadingSheet } from "./ReadingSheet";
 import css from "./today.module.css";
 
 /**
@@ -46,7 +54,7 @@ export function CourseToday({
   const reviewed = useLiveQuery(() => reviewedOn(today, courseId), [today, courseId]);
   const week = useLiveQuery(() => lessonDays(monday, deviceTimezone(), courseId), [monday, deviceTimezone(), courseId]);
   const profile = useCourseProfile(courseId);
-  const reading = useLiveQuery(async () => (courseId ? ((await nextReading(courseId)) ?? null) : null), [courseId]);
+  const readings = useLiveQuery(async () => (courseId ? await courseReadings(courseId) : null), [courseId]);
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,
@@ -54,11 +62,12 @@ export function CourseToday({
     ...view.review,
   ]);
   const last = lessons.filter((lesson) => lesson.completed).at(-1);
-  const finished = !!lessons.length && lessons.every((lesson) => lesson.completed);
   const next = nextStep(views ?? []);
+  const finished = courseFinished(views ?? [], next);
   const due = plan.newRefs.length + plan.reviews.length;
   const reviewFirst = !!unfinished || due > 0;
-  if (!views || reviewed === undefined || !week) return <div aria-busy="true" aria-label="План дня загружается" />;
+  if (!views || reviewed === undefined || !week || readings === undefined)
+    return <div aria-busy="true" aria-label="План дня загружается" />;
 
   const page = (
     <section className={cx(nb.page, css.page)}>
@@ -77,14 +86,9 @@ export function CourseToday({
         last={last}
         primary={reviewFirst}
       />
-      {reading ? (
-        <p className={nb.meta} data-testid="reading-next">
-          <Link to={`/course/${reading.moduleId}/read/${reading.reading.id}`}>
-            Почитать: <span lang={profile.code}>{reading.reading.title}</span>,{" "}
-            {withCount(reading.reading.words, WORDS)}
-          </Link>
-        </p>
-      ) : null}
+      {courseId && readings && (
+        <ReadingSheet courseId={courseId} readings={readings} primary={!reviewFirst && next === null} />
+      )}
       <DayNotes plan={plan} />
       {finished ? (
         <p className={css.finished} data-testid="course-finished">
@@ -98,11 +102,6 @@ export function CourseToday({
           week={spread ? undefined : (week?.length ?? 0)}
         />
       ) : null}
-      {views?.[0] && (
-        <div className={css.exam}>
-          <ExamLine courseId={views[0].module.courseId} />
-        </div>
-      )}
       {more}
     </section>
   );
@@ -118,18 +117,6 @@ export function CourseToday({
       )}
     </ProfileContext>
   );
-}
-
-export function nextStep(views: ModuleView[]): { view: ModuleView; lesson: ModuleLessonView } | null {
-  for (const view of views) {
-    if (view.module.status !== "published") continue;
-    const lesson =
-      view.lessons.find((item) => !item.completed) ??
-      (view.checkpoint && !view.checkpoint.completed ? view.checkpoint : undefined) ??
-      view.review.find((item) => !item.completed);
-    if (lesson) return { view, lesson };
-  }
-  return null;
 }
 
 function Review({

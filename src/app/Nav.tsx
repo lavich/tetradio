@@ -1,4 +1,4 @@
-import { BookOpen, ChartNoAxesColumn, Home, Rows3 } from "lucide-react";
+import { BookOpen, BookOpenText, ChartNoAxesColumn, Home, Rows3 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import nav from "./Nav.module.css";
@@ -7,6 +7,7 @@ const LINKS: { to: string; label: string; Icon: typeof Home }[] = [
   { to: "/", label: "Сегодня", Icon: Home },
   { to: "/course", label: "Курс", Icon: BookOpen },
   { to: "/words", label: "Слова", Icon: Rows3 },
+  { to: "/reading", label: "Чтение", Icon: BookOpenText },
   { to: "/progress", label: "Прогресс", Icon: ChartNoAxesColumn },
 ];
 export function Nav() {

@@ -113,6 +113,9 @@
   line-height: 1.25;
   white-space: normal;
 }
+.greekTitle {
+  font-family: var(--font-print);
+}
 .nextLabel {
   font-size: 12px;
   font-weight: 500;

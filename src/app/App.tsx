@@ -17,6 +17,7 @@ const CourseScreen = named("CourseScreen", () => import("../features/course/Shel
 const ModuleScreen = named("ModuleScreen", () => import("../features/course/ModuleScreen"));
 const CourseLessonScreen = named("CourseLessonScreen", () => import("../features/course/LessonScreen"));
 const ReadingScreen = named("ReadingScreen", () => import("../features/course/ReadingScreen"));
+const ReadingsScreen = named("ReadingsScreen", () => import("../features/course/ReadingsScreen"));
 const WordsScreen = named("WordsScreen", () => import("../features/words/WordsScreen"));
 const WordScreen = named("WordScreen", () => import("../features/words/WordScreen"));
 const PhraseScreen = named("PhraseScreen", () => import("../features/words/WordScreen"));
@@ -91,6 +92,7 @@ export function App() {
           <Route path="/course/:moduleId/:lessonId" element={<CourseLessonScreen />} />
           <Route path="/course/:moduleId/read/:readingId" element={<ReadingScreen />} />
           <Route path="/lessons/*" element={<Navigate to="/course" replace />} />
+          <Route path="/reading" element={<ReadingsScreen />} />
           <Route path="/words" element={<WordsScreen />} />
           <Route path="/words/:id" element={<WordScreen />} />
           <Route path="/words/phrase/:id" element={<PhraseScreen />} />

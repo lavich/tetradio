@@ -53,6 +53,9 @@
   font-weight: 600;
   line-height: var(--cell);
 }
+.greekTitle {
+  font-family: var(--font-print);
+}
 .later {
   color: var(--muted-foreground);
 }
@@ -69,6 +72,10 @@
   text-decoration-color: var(--input);
   text-underline-offset: 4px;
   cursor: pointer;
+}
+.linkQuiet {
+  display: inline-flex;
+  align-items: center;
 }
 @media (hover: hover) {
   .quiet:hover:not(:disabled) {
@@ -200,9 +207,6 @@
   font-family: var(--font-print);
   font-size: 16px;
   line-height: var(--cell);
-}
-.exam {
-  margin-top: calc(var(--cell) * 2);
 }
 
 .spread > .page:first-child > * {

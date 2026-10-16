@@ -30,7 +30,7 @@ import { dictionary } from "../src/storage/dictionary";
 import { submitAnswer } from "./helpers/ops";
 import { courseProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
-import { markRead, moduleReadings, nextReading, readingPage } from "../src/storage/readings";
+import { markRead, moduleReadings, courseReadings, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 
 const demo = buildContent("tests/fixtures/course-demo");
@@ -105,7 +105,7 @@ describe("живые запросы отслеживают чтения посл
     "«Сегодня»: план": () => makePlan(dexieSource(), now, { courseId: COURSE }),
     "«Сегодня»: дни уроков": () => lessonDays("2026-09-14", tz, COURSE),
     "«Сегодня»: повторено": () => reviewedOn("2026-09-15", COURSE),
-    "«Сегодня»: «Почитать»": async () => (await nextReading(COURSE)) ?? null,
+    "«Сегодня»: «Чтение»": async () => courseReadings(COURSE),
     "«Курс»": async () => moduleViews(await currentCourse()),
     модуль: async () => {
       const own = await db.modules.get("m01");

@@ -15,6 +15,8 @@ import {
   saveBlockProgress,
 } from "../../storage/course";
 import { lessonCourses } from "../../storage/courses";
+import { courseReadings } from "../../storage/readings";
+import { settledFor } from "./settled";
 import { db } from "../../storage/db";
 import { useFollowCourse } from "../../shared/courses";
 import { lessonItems } from "../../storage/queries";
@@ -43,12 +45,19 @@ export function CourseLessonScreen() {
   const items = useLiveQuery(() => lessonItems(lessonId), [lessonId]);
   const mistakes = useLiveQuery(() => lessonMistakes(lessonId), [lessonId]) ?? 0;
   const finished = !!lesson?.lesson?.completed;
-  const lessonCourse = useLiveQuery(async () => (await lessonCourses([lessonId])).get(lessonId), [lessonId]);
-  useFollowCourse(lessonCourse);
-  const next = useLiveQuery(
-    () => (finished && lessonCourse ? nextCourseLesson(lessonCourse) : null),
-    [finished, lessonCourse, lessonId],
-  );
+  const lessonCourse = useLiveQuery(async () => (await lessonCourses([lessonId])).get(lessonId) ?? null, [lessonId]);
+  useFollowCourse(lessonCourse ?? undefined);
+  // Итог не показывает кнопки, пока не известны следующий шаг и, если шага нет, первый непрочитанный текст: они бы сдвигались.
+  const live = useLiveQuery(async () => {
+    if (!finished || lessonCourse === undefined) return undefined;
+    const step = lessonCourse ? await nextCourseLesson(lessonCourse) : null;
+    const reading = step || !lessonCourse ? null : ((await courseReadings(lessonCourse)).unread[0] ?? null);
+    return { lessonId, step, reading };
+  }, [finished, lessonCourse, lessonId]);
+  // При смене зависимостей хук держит прежний результат: итог другого урока не показывается как свой.
+  const ending = settledFor(live, lessonId);
+  const next = ending === undefined ? undefined : ending.step;
+  const reading = ending?.reading ?? null;
   const passShare = useLiveQuery(
     async () => (lessonCourse ? (await db.courses.get(lessonCourse))?.passShare : undefined),
     [lessonCourse],
@@ -170,12 +179,14 @@ export function CourseLessonScreen() {
           numbering={numbering}
           items={items ?? []}
           mistakes={mistakes}
-          next={next?.lesson}
+          next={next === undefined ? undefined : (next?.lesson ?? null)}
+          reading={reading}
           withList={review}
           problem={problem}
           practice={() => void practiceWords()}
           go={go}
           openNext={openNext}
+          openReading={() => reading && void navigate(`/course/${reading.moduleId}/read/${reading.reading.id}`)}
           toModule={toModule}
         />
       ) : (
