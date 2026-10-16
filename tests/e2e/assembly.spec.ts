@@ -60,32 +60,7 @@ const dueWithHistory = (page: import("@playwright/test").Page, wordId: string, t
 async function openAssembly(page: import("@playwright/test").Page) {
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
-  for (let step = 0; step < 12; step++) {
-    await page.waitForTimeout(120);
-    const prompt = await page
-      .getByTestId("prompt")
-      .first()
-      .innerText()
-      .catch(() => "");
-    if (prompt === "Собери слово") return;
-    const next = page.getByRole("button", { name: "Далее" });
-    if (await next.isVisible().catch(() => false)) {
-      await next.click({ timeout: 5000 }).catch(() => undefined);
-      continue;
-    }
-    const option = page.getByTestId("option").and(page.locator(":not([disabled])")).first();
-    if (await option.isVisible().catch(() => false)) {
-      await option.click();
-      continue;
-    }
-    const input = page.getByLabel("Твой ответ по-гречески");
-    if (await input.isVisible().catch(() => false)) {
-      await input.fill("λάθος");
-      await page.getByRole("button", { name: "Проверить" }).click();
-      continue;
-    }
-  }
-  throw new Error("Сборка не выпала за отведённые шаги");
+  await expect(page.getByTestId("prompt").first()).toHaveText("Собери слово");
 }
 
 const updateWord = (page: import("@playwright/test").Page, greek: string, russian: string) =>

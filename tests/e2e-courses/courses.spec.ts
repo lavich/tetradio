@@ -78,7 +78,7 @@ test("«Сегодня»: основной греческий курс цели�
   expect(line!.y).toBeGreaterThan(main!.y);
 
   await other.getByRole("link", { name: /Дорога на работу/ }).click();
-  await expect(page).toHaveURL(/\/course\/e01\/e01-1$/);
+  await expect(page).toHaveURL(/\/course\/e01\/e01-1\?p=\d+$/);
 });
 
 test("переключатель на «Словах» меняет курс «Слов», «Курса» и «Прогресса» и переживает перезапуск", async ({

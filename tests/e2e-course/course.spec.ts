@@ -118,6 +118,9 @@ test("урок из конца очереди скачивается сразу 
 });
 
 test("сбой скачивания открытого урока показывает ошибку и повтор", async ({ page }) => {
+  // Фоновая очередь курса стоит после первого урока: иначе она сама доходит до этого урока, и на экране мелькает
+  // её ошибка, а собственная попытка урока идёт следом — уже после того, как тест вернул сеть.
+  await page.route(/\/content\/packages\/(?!m01-1@|m01-r1@)/, () => {});
   await page.route("**/content/packages/m01-r1*", (route) => route.abort());
   await page.goto("/app/");
   await page.getByRole("button", { name: "Учить курс" }).click();
@@ -309,10 +312,8 @@ test("урок, открытый с модуля: после завершени�
   await start(page);
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await page.getByRole("link", { name: /Модуль 1: Знакомство/ }).click();
-  await page
-    .getByRole("link", { name: /Контрольная/ })
-    .first()
-    .click();
+  await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
+  await page.getByRole("link", { name: /Контрольная модуля 01/ }).click();
   const tf = await turnTo(page, "Верно или неверно?");
   await tf.getByRole("group", { name: "Варианты 1" }).getByRole("button", { name: "Σωστό" }).click();
   await tf.getByRole("group", { name: "Варианты 2" }).getByRole("button", { name: "Σωστό" }).click();

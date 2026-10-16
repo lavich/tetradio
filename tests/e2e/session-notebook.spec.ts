@@ -22,24 +22,30 @@ const LONG = [
  * Занятие на странице тетради: `done` уже отвеченных узнаваний слова «ο φίλος» (верно, кроме второго)
  * и текущее задание — узнавание слова с короткими вариантами или фразы с длинными.
  */
+const installedWord = (page: Page) =>
+  page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve) => {
+      const request = indexedDB.open("tetradio-mock-1");
+      request.onsuccess = () => resolve(request.result);
+    });
+    const words: { id: string; greek: string; russian: string }[] = await new Promise((resolve) => {
+      const request = database.transaction("words").objectStore("words").getAll();
+      request.onsuccess = () => resolve(request.result);
+    });
+    database.close();
+    return words.find((entry) => entry.greek === "ο φίλος") ?? null;
+  });
+
 async function seedSession(page: Page, { done, phrase }: { done: number; phrase: boolean }) {
+  // Слова урока пишутся после установки пакета асинхронно: ждём, пока нужное окажется в базе.
+  await expect.poll(() => installedWord(page)).not.toBeNull();
+  const word = (await installedWord(page))!;
   await page.evaluate(
-    async ({ done, phrase, PHRASE, LONG }) => {
+    async ({ word, done, phrase, PHRASE, LONG }) => {
       const database = await new Promise<IDBDatabase>((resolve) => {
         const request = indexedDB.open("tetradio-mock-1");
         request.onsuccess = () => resolve(request.result);
       });
-      // Слова урока пишутся после установки пакета асинхронно: ждём, пока нужное окажется в базе.
-      let word: { id: string; greek: string; russian: string } | undefined;
-      for (let attempt = 0; attempt < 100 && !word; attempt++) {
-        const words: { id: string; greek: string; russian: string }[] = await new Promise((resolve) => {
-          const request = database.transaction("words").objectStore("words").getAll();
-          request.onsuccess = () => resolve(request.result);
-        });
-        word = words.find((entry) => entry.greek === "ο φίλος");
-        if (!word) await new Promise((resolve) => setTimeout(resolve, 100));
-      }
-      if (!word) throw new Error("слово «ο φίλος» не установилось");
       const now = new Date().toISOString();
       const ref = { kind: "word", id: word.id };
       const unitKey = JSON.stringify(["word", word.id]);
@@ -114,7 +120,7 @@ async function seedSession(page: Page, { done, phrase }: { done: number; phrase:
       });
       database.close();
     },
-    { done, phrase, PHRASE, LONG },
+    { word, done, phrase, PHRASE, LONG },
   );
   await page.goto("/app/session");
   await page.getByTestId("prompt").waitFor();
