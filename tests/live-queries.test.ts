@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import Dexie, { liveQuery } from "dexie";
 import { Rating } from "ts-fsrs";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { buildContent } from "../content/build";
 import { makePlan, makeSession, nextState } from "../src/domain/learning";
 import { unitKey, wordRef } from "../src/domain/refs";
@@ -37,7 +37,6 @@ const demo = buildContent("tests/fixtures/course-demo");
 const now = new Date("2026-09-15T09:00:00Z");
 const tz = "Asia/Nicosia";
 const COURSE = "greek-a2";
-const settle = () => new Promise((resolve) => setTimeout(resolve, 100));
 
 // Чтение без подписки в зоне Dexie: изменение этих строк живой запрос не перезапустит.
 const untracked: string[] = [];
@@ -68,8 +67,10 @@ db.use({
 
 function watch(query: () => unknown) {
   let runs = 0;
-  const subscription = liveQuery(() => (runs++, query()) as Promise<unknown>).subscribe({ next: () => {} });
-  return { runs: () => runs, stop: () => subscription.unsubscribe() };
+  let first: () => void;
+  const answered = new Promise<void>((resolve) => (first = resolve));
+  const subscription = liveQuery(() => (runs++, query()) as Promise<unknown>).subscribe({ next: () => first() });
+  return { runs: () => runs, answered: () => answered, stop: () => subscription.unsubscribe() };
 }
 
 let wordId = "";
@@ -155,41 +156,37 @@ describe("живые запросы отслеживают чтения посл
 
   it("словарь «Прогресса» обновляет отметки после ответа", async () => {
     const words = watch(() => dictionary(COURSE));
-    await settle();
+    await words.answered();
     const ran = words.runs();
     await db.cardStates.put(nextState(undefined, wordRef(wordId), Rating.Good, now));
-    await settle();
-    expect(words.runs()).toBeGreaterThan(ran);
+    await vi.waitFor(() => expect(words.runs()).toBeGreaterThan(ran));
     words.stop();
   });
 
   it("статистика «Прогресса» обновляется после изменения карточки", async () => {
     const stats = watch(() => progress(dexieSource(), now));
-    await settle();
+    await stats.answered();
     const ran = stats.runs();
     await db.cardStates.put(nextState(undefined, wordRef(wordId), Rating.Again, now));
-    await settle();
-    expect(stats.runs()).toBeGreaterThan(ran);
+    await vi.waitFor(() => expect(stats.runs()).toBeGreaterThan(ran));
     stats.stop();
   });
 
   it("тексты модуля обновляют отметку «прочитано»", async () => {
     const texts = watch(() => moduleReadings("m01"));
-    await settle();
+    await texts.answered();
     const ran = texts.runs();
     await markRead("r-m01-anna", true);
-    await settle();
-    expect(texts.runs()).toBeGreaterThan(ran);
+    await vi.waitFor(() => expect(texts.runs()).toBeGreaterThan(ran));
     texts.stop();
   });
 
   it("упражнения слова обновляются после изменения уроков", async () => {
     const options = watch(() => wordSources(wordId));
-    await settle();
+    await options.answered();
     const ran = options.runs();
     await db.lessons.update("m01-1", { title: "Новое название" });
-    await settle();
-    expect(options.runs()).toBeGreaterThan(ran);
+    await vi.waitFor(() => expect(options.runs()).toBeGreaterThan(ran));
     options.stop();
   });
 });

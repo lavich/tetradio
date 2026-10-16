@@ -65,9 +65,13 @@ const complete = (page: Page, lessonId: string) =>
     const tx = db.transaction("lessons", "readwrite");
     const store = tx.objectStore("lessons");
     const request = store.get(lessonId);
-    request.onsuccess = () => store.put({ ...request.result, completed: true });
-    await new Promise<void>((resolve) => {
+    request.onsuccess = () => {
+      if (request.result) store.put({ ...request.result, completed: true });
+      else tx.abort();
+    };
+    await new Promise<void>((resolve, reject) => {
       tx.oncomplete = () => resolve();
+      tx.onabort = () => reject(new Error(`урок ${lessonId} ещё не установлен`));
     });
     db.close();
   }, lessonId);
@@ -86,6 +90,7 @@ test("полка «Чтение»: текст открывается после 
   await expect(shelf.getByRole("listitem")).toHaveCount(2);
   await expect(shelf).toContainText("откроется после урока «Знакомство и είμαι»");
   await expect(shelf.getByRole("link")).toHaveCount(0);
+  await expect(page.getByText("скачивается…")).toHaveCount(0);
   await page.goto("/app/");
   await expect(page.getByTestId("today-title")).toBeAttached();
   await expect(page.getByTestId("reading-sheet")).toBeVisible();
@@ -135,12 +140,7 @@ test("полка «Чтение»: текст открывается после 
 test("предложение без записи звучит синтезом, остальные — файлами", async ({ page }) => {
   await voice(page);
   await recordings(page);
-  await page.goto("/app/");
-  await page.getByRole("button", { name: "Учить курс" }).click();
-  await expect(page.getByTestId("course-next")).toBeVisible();
-  // Контрольная скачивается после урока: отметка ставится, когда её пакет уже на устройстве.
-  await page.goto("/app/course/m01");
-  await expect(page.getByRole("list", { name: "Чтение" }).getByRole("listitem")).toHaveCount(2);
+  await startCourse(page);
   await complete(page, "m01-test");
   await page.goto("/app/course/m01/read/r-m01-lemesos");
   await expect(page.getByRole("heading", { name: "Η Άννα στη Λεμεσό", level: 1 })).toBeVisible();
@@ -154,9 +154,7 @@ test("предложение без записи звучит синтезом, 
 test("звучащее предложение подсвечено в тексте; после остановки подсветки нет", async ({ page }) => {
   await voice(page);
   await recordings(page, true);
-  await page.goto("/app/");
-  await page.getByRole("button", { name: "Учить курс" }).click();
-  await expect(page.getByTestId("course-next")).toBeVisible();
+  await startCourse(page);
   await complete(page, "m01-1");
   await page.goto("/app/course/m01/read/r-m01-anna");
   await expect(page.getByTestId("speaking")).toHaveCount(0);
@@ -228,6 +226,7 @@ async function startCourse(page: Page) {
   await expect(page.getByTestId("course-next")).toBeVisible();
   await page.goto("/app/course/m01");
   await expect(page.getByRole("list", { name: "Чтение" }).getByRole("listitem")).toHaveCount(2);
+  await expect(page.getByText("скачивается…")).toHaveCount(0);
 }
 const markReadOnToday = async (page: Page, id: string) => {
   await page.goto(`/app/course/m01/read/${id}`);
@@ -354,6 +353,7 @@ test("раздел «Чтение»: состояния списка по ход
 
   await page.goto("/app/course/m01");
   await expect(page.getByRole("list", { name: "Чтение" }).getByRole("listitem")).toHaveCount(2);
+  await expect(page.getByText("скачивается…")).toHaveCount(0);
   await complete(page, "m01-1");
   await page.goto("/app/reading");
   await expect(page.getByRole("heading", { name: "Модуль 1", level: 2 })).toBeVisible();
