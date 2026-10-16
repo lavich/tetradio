@@ -215,13 +215,16 @@ test("неверный выбор зачёркнут красной ручкой
   await expect(page.getByRole("button", { name: "Далее", exact: true })).toBeEnabled();
 });
 
-test("в написании зачёркнутая буква — цветом чернил ученика, красной остаётся только поправка", async ({ page }) => {
+test("в написании буква ученика остаётся чернилами, красной ручкой — линия зачёркивания и поправка", async ({
+  page,
+}) => {
   await installSession(page, "spelling");
   await page.getByLabel("Твой ответ по-гречески").fill("λάθος");
   await page.getByRole("button", { name: "Проверить" }).click();
   const chars = page.getByTestId("chars");
   await expect(chars.locator("s").first()).toHaveCSS("text-decoration-line", "line-through");
   await expect(chars.locator("s").first()).toHaveCSS("color", "rgb(31, 71, 184)");
+  await expect(chars.locator("s").first()).toHaveCSS("text-decoration-color", "rgb(207, 47, 43)");
   await expect(chars.locator("sup").first()).toHaveCSS("color", "rgb(207, 47, 43)");
 });
 
