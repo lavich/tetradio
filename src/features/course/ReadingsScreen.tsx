@@ -19,28 +19,27 @@ export function ReadingsScreen() {
     return { courseId, readings: courseId ? await courseReadings(courseId) : null };
   }, []);
   const profile = useCourseProfile(data?.courseId);
-  if (data === undefined) return <Screen />;
-  const { open, unread, closed, pending } = data.readings ?? { open: [], unread: [], closed: 0, pending: 0 };
+  if (data === undefined || !data.readings) return <Screen />;
+  const { open, unread, closed, pending } = data.readings;
   return (
     <Screen>
       <CourseSwitch />
       <h1>Чтение</h1>
-      {pending > 0 ? (
-        <p className={base.meta}>Тексты скачиваются.</p>
-      ) : open.length ? (
+      {open.length ? (
         <>
           <p className={base.meta} data-testid="reading-summary">
             Прочитано {open.length - unread.length} из {open.length} открытых
           </p>
+          {pending > 0 ? <p className={base.meta}>Часть текстов ещё скачивается.</p> : null}
           {groupByModule(open).map((group) => (
             <Group key={group.module.number} group={group} code={profile.code} />
           ))}
         </>
-      ) : closed ? (
-        <p className={base.meta}>Тексты откроются после первых уроков.</p>
-      ) : (
+      ) : pending > 0 ? (
+        <p className={base.meta}>Тексты скачиваются.</p>
+      ) : !closed ? (
         <p className={base.meta}>В этом курсе текстов нет.</p>
-      )}
+      ) : null}
       {pending === 0 && closed ? <p className={reading.closed}>{closedLine(closed)}</p> : null}
     </Screen>
   );

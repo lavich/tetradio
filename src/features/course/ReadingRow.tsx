@@ -16,13 +16,7 @@ export function ReadingRow({ view, code, state }: { view: ReadingView; code: str
       <span className={css.tocCount}>{withCount(reading.words, WORDS)}</span>
     </span>
   );
-  const meta = readAt ? (
-    `прочитано ${eventDay(readAt)}`
-  ) : open ? null : (
-    <>
-      откроется после урока «<span lang={code}>{after.title}</span>»
-    </>
-  );
+  const meta = readAt ? `прочитано ${eventDay(readAt)}` : open ? null : <>откроется после урока «{after.title}»</>;
   return (
     <li>
       {readAt ? <Tick className={base.mark} label="прочитано" /> : <span className={base.gutter}>текст</span>}

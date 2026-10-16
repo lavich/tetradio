@@ -279,6 +279,16 @@ test("«Сегодня»: «Читать» вторичная, пока есть
   await page.goto("/app/");
   await expect(page.getByTestId("cards-today")).toBeVisible();
   await expect(primary(page)).toHaveAttribute("data-primary", "false");
+  const border = await primary(page).evaluate((node) => getComputedStyle(node).borderTopColor);
+  const ink = await primary(page).evaluate((node) => {
+    const probe = document.createElement("span");
+    probe.style.color = "var(--primary)";
+    node.append(probe);
+    const color = getComputedStyle(probe).color;
+    probe.remove();
+    return color;
+  });
+  expect(border).toBe(ink);
   await expect(page.getByTestId("exam-line")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Повторить карточки" })).toBeVisible();
 
@@ -338,8 +348,8 @@ test("раздел «Чтение»: состояния списка по ход
   await expect(page.getByTestId("course-next")).toBeVisible();
   await page.goto("/app/reading");
   await expect(page.getByRole("heading", { name: "Чтение", level: 1 })).toBeVisible();
-  await expect(page.getByText("Тексты откроются после первых уроков.")).toBeVisible();
   await expect(page.getByText("Ещё 2 текста откроются после уроков.")).toBeVisible();
+  await expect(page.getByText("Тексты откроются после первых уроков.")).toHaveCount(0);
   await expect(page.getByTestId("reading-summary")).toHaveCount(0);
 
   await page.goto("/app/course/m01");
@@ -365,7 +375,8 @@ test("раздел «Чтение»: состояния списка по ход
   await expect(page.getByTestId("reading-summary")).toHaveText("Прочитано 1 из 2 открытых");
 
   for (const id of ["m01-k1", "m01-r1"]) await complete(page, id);
-  await expect(page.getByText(/откроются после/)).toHaveCount(0);
+  await expect(page.getByText(/откроется? после/)).toHaveCount(0);
+  await expect(page.getByText(/Ещё \d+ текст/)).toHaveCount(0);
 });
 
 test("раздел «Чтение»: вкладка выделена, из текста «К списку текстов» возвращает в список", async ({ page }) => {
@@ -429,18 +440,27 @@ test("нижнее меню: пять вкладок помещаются в о�
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
+  await page.goto("/app/progress");
+  const active = nav(page).getByRole("link", { name: "Прогресс" });
+  await expect(active).toHaveAttribute("aria-current", "page");
+  const label = active.locator("span");
+  expect(await label.evaluate((node) => node.scrollWidth <= node.clientWidth + 0.5)).toBe(true);
+  expect((await active.boundingBox())!.width).toBeGreaterThanOrEqual(44);
 });
 
-/** Пройденный урок листается к итогу: страницы с заданиями идут перед ним. */
+/** Пройденный урок листается к итогу: каждый шаг ждёт смены «стр. N из M», а не времени. */
 async function openSummary(page: Page, lessonId: string) {
   await page.goto(`/app/course/m01/${lessonId}`);
   const stamp = page.getByRole("heading", { name: "Урок пройден" });
+  const counter = page.getByTestId("page-count");
   const forward = page
     .getByRole("navigation", { name: "Страницы урока" })
     .getByRole("button", { name: /Далее|К итогу/ });
+  await expect(counter).toContainText("стр.");
   for (let turns = 0; turns < 20 && !(await stamp.isVisible()); turns++) {
+    const before = await counter.textContent();
     await forward.click();
-    await page.waitForTimeout(150);
+    await expect(counter).not.toHaveText(before!);
   }
   await expect(stamp).toBeVisible();
 }
@@ -490,4 +510,34 @@ test("итог последнего занятия без непрочитанн
   await openSummary(page, "m01-r1");
   await expect(page.getByRole("button", { name: "К модулю" })).toBeVisible();
   await expect(page.getByRole("button", { name: /Читать/ })).toHaveCount(0);
+});
+
+test("«Сегодня»: лист «Чтение» не вставляется позже остальной страницы", async ({ page }) => {
+  await startCourse(page);
+  await complete(page, "m01-1");
+  await page.goto("/app/");
+  await expect(page.getByTestId("today-title")).toBeAttached();
+  expect(await sheet(page).count()).toBe(1);
+  expect(await page.locator('[aria-busy="true"]').count()).toBe(0);
+});
+
+test("недокачанный урок не прячет открытые тексты: подпись на листе и в разделе", async ({ page }) => {
+  await startCourse(page);
+  await page.route("**/content/packages/**", (route) => route.abort());
+  await page.evaluate(removePackage, "m01-1");
+  await complete(page, "m01-1");
+  await complete(page, "m01-test");
+  await page.goto("/app/");
+  await expect(page.getByTestId("reading-today")).toContainText("Η Άννα στη Λεμεσό");
+  await expect(sheet(page)).toContainText("Часть текстов ещё скачивается.");
+  await expect(sheet(page)).not.toContainText("откроется");
+  await page.goto("/app/reading");
+  await expect(page.getByTestId("reading-summary")).toHaveText("Прочитано 0 из 1 открытых");
+  await expect(page.getByText("Часть текстов ещё скачивается.")).toBeVisible();
+  await expect(page.getByText(/Ещё \d+ текст/)).toHaveCount(0);
+
+  await page.evaluate(removePackage, "m01-test");
+  await page.goto("/app/reading");
+  await expect(page.getByText("Тексты скачиваются.")).toBeVisible();
+  await expect(page.getByTestId("reading-summary")).toHaveCount(0);
 });

@@ -1,6 +1,6 @@
 import type { CatalogModule } from "../content/course";
 import { decodeMarks, type BlockMarks, type PackageReading } from "../content/schema";
-import type { InstalledPackage } from "../domain/types";
+import type { InstalledPackage, StoredModule } from "../domain/types";
 import { blockKey, saveBlockProgress, type TapCard } from "./course";
 import { db, type AppDatabase } from "./db";
 import { lessonOutlines, type LessonOutline } from "./outlines";
@@ -31,8 +31,12 @@ const lessonsOf = (module: CatalogModule) => [
   ...(module.reviewIds ?? []),
 ];
 
-const views = zoned(async function views(packages: InstalledPackage[], database: AppDatabase): Promise<ReadingView[]> {
-  const modules = (await database.modules.toArray()).sort((a, b) => a.number - b.number);
+const views = zoned(async function views(
+  packages: InstalledPackage[],
+  database: AppDatabase,
+  known?: StoredModule[],
+): Promise<ReadingView[]> {
+  const modules = known ?? (await database.modules.toArray()).sort((a, b) => a.number - b.number);
   const order = new Map(modules.flatMap(lessonsOf).map((id, index) => [id, index]));
   const withTexts = packages
     .filter(
@@ -43,7 +47,7 @@ const views = zoned(async function views(packages: InstalledPackage[], database:
       (a, b) =>
         (order.get(a.lessonId) ?? Infinity) - (order.get(b.lessonId) ?? Infinity) ||
         a.module.position - b.module.position ||
-        a.lessonId.localeCompare(b.lessonId),
+        a.lessonId.localeCompare(b.lessonId, undefined, { numeric: true }),
     );
   const lessons = await database.lessons.bulkGet(withTexts.map((pack) => pack.lessonId));
   const readings = withTexts.flatMap((pack, index) =>
@@ -149,7 +153,9 @@ export const courseReadings = zoned(async function courseReadings(
     (sum, { count }, index) => sum + Math.max(0, count - (outlines[index]?.readings.length ?? 0)),
     0,
   );
-  const open = (await views(await packagesWith(doneIds, () => true, database), database)).filter((view) => view.open);
+  const open = (await views(await packagesWith(doneIds, () => true, database), database, modules)).filter(
+    (view) => view.open,
+  );
   return {
     open,
     unread: open.filter((view) => !view.readAt),
@@ -166,7 +172,9 @@ export const nextUnreadReading = zoned(async function nextUnreadReading(
   database: AppDatabase = db,
 ): Promise<ReadingView | undefined> {
   const { open } = await courseReadings(courseId, database);
-  return open.slice(open.findIndex((view) => view.reading.id === afterId) + 1).find((view) => !view.readAt);
+  const at = open.findIndex((view) => view.reading.id === afterId);
+  if (at < 0) return undefined;
+  return open.slice(at + 1).find((view) => !view.readAt);
 });
 
 export const markRead = (id: string, done: boolean, database: AppDatabase = db) =>

@@ -73,7 +73,7 @@
   text-underline-offset: 4px;
   cursor: pointer;
 }
-linkQuiet {
+.linkQuiet {
   display: inline-flex;
   align-items: center;
 }

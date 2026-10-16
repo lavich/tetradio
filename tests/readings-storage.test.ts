@@ -1,4 +1,5 @@
 import "fake-indexeddb/auto";
+import { liveQuery } from "dexie";
 import "./helpers/self";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { buildContent } from "../content/build";
@@ -107,6 +108,23 @@ describe("тексты для чтения на устройстве", () => {
     expect((await courseReadings(course, db)).open[0]).toMatchObject({ module: { number: 1 }, open: true });
   });
 
+  it("живой запрос перезапускается при смене числа текстов в каталоге и при прохождении урока", async () => {
+    const seen: { open: number; closed: number }[] = [];
+    const subscription = liveQuery(() => courseReadings(course, db)).subscribe({
+      next: ({ open, closed }) => seen.push({ open: open.length, closed }),
+    });
+    const settle = () => new Promise((resolve) => setTimeout(resolve, 50));
+    await settle();
+    expect(seen.at(-1)).toEqual({ open: 0, closed: 2 });
+    await db.catalog.update("m01-test", { readings: 3 });
+    await settle();
+    expect(seen.at(-1)).toEqual({ open: 0, closed: 4 });
+    await db.lessons.update("m01-1", { completed: true });
+    await settle();
+    expect(seen.at(-1)).toEqual({ open: 1, closed: 3 });
+    subscription.unsubscribe();
+  });
+
   it("курс без текстов: ничего открытого, закрытого и скачиваемого", async () => {
     await db.lessons.update("m01-1", { completed: true });
     expect(await courseReadings("nothing", db)).toEqual({ open: [], unread: [], closed: 0, pending: 0 });
@@ -179,11 +197,13 @@ interface SeedLesson {
 interface SeedModule {
   id: string;
   number: number;
+  position?: number;
   lessons: SeedLesson[];
   checkpoint?: SeedLesson;
 }
 async function seed(database: AppDatabase, courseId: string, modules: SeedModule[]) {
-  for (const [position, module] of modules.entries()) {
+  for (const [index, module] of modules.entries()) {
+    const position = module.position ?? index;
     const all = [...module.lessons, ...(module.checkpoint ? [module.checkpoint] : [])];
     await database.modules.put({
       id: module.id,
@@ -235,28 +255,30 @@ describe("порядок и счёт текстов по программе", ()
     await db.delete();
   });
 
-  it("порядок программы, а не ключа: m01-2 идёт перед m01-10, контрольная — после уроков, модули — по номеру", async () => {
+  it("порядок программы, а не ключа и не позиции модуля: m01-2 идёт перед m01-10, контрольная — после уроков", async () => {
     await seed(db, "syn", [
       {
         id: "m03",
         number: 3,
+        position: 2,
         lessons: [{ id: "m03-1", readings: ["c"], done: true }],
       },
       {
         id: "m01",
         number: 1,
+        position: 5,
         lessons: [
-          { id: "m01-10", readings: ["b"], done: true },
           { id: "m01-2", readings: ["a1", "a2"], done: true },
+          { id: "m01-10", readings: ["b"], done: true },
         ],
-        checkpoint: { id: "m01-k1", readings: ["k"], done: true },
+        checkpoint: { id: "m00-k1", readings: ["k"], done: true },
       },
     ]);
-    const expected = ["b", "a1", "a2", "k"];
+    const expected = ["a1", "a2", "b", "k"];
     expect(ids((await courseReadings("syn", db)).open)).toEqual([...expected, "c"]);
     expect(ids(await moduleReadings("m01", db))).toEqual(expected);
-    expect((await readingPage("a1", db))!.next?.reading.id).toBe("a2");
-    expect((await readingPage("a2", db))!.next?.reading.id).toBe("k");
+    expect((await readingPage("a2", db))!.next?.reading.id).toBe("b");
+    expect((await readingPage("b", db))!.next?.reading.id).toBe("k");
   });
 
   it("группировка по модулям: у каждого текста номер и название модуля", async () => {
@@ -294,6 +316,24 @@ describe("порядок и счёт текстов по программе", ()
     const after = await courseReadings("syn", db);
     expect(after.pending).toBe(0);
     expect(ids(after.open)).toEqual(["a"]);
+  });
+
+  it("один недокачанный урок не прячет уже открытые тексты", async () => {
+    await seed(db, "syn", [
+      {
+        id: "m01",
+        number: 1,
+        lessons: [
+          { id: "m01-1", readings: ["a"], done: true, installed: false },
+          { id: "m01-2", readings: ["b"], done: true },
+          { id: "m01-3", readings: ["c"], done: false },
+        ],
+      },
+    ]);
+    const result = await courseReadings("syn", db);
+    expect(ids(result.open)).toEqual(["b"]);
+    expect(ids(result.unread)).toEqual(["b"]);
+    expect(result).toMatchObject({ pending: 1, closed: 1 });
   });
 
   it("без скачанных пакетов не падает и пакеты закрытых уроков не читает", async () => {
@@ -346,5 +386,6 @@ describe("порядок и счёт текстов по программе", ()
     expect(await after("a")).toBe("b");
     expect(await after("b")).toBe("d");
     expect(await after("d")).toBeUndefined();
+    expect(await after("нет-такого")).toBeUndefined();
   });
 });

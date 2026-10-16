@@ -2,12 +2,14 @@ import { ArrowRight } from "lucide-react";
 import { useId } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "cn";
 import { cx } from "../../shared/cx";
 import { withCount, WORDS } from "../../shared/format";
 import { useProfile } from "../../shared/language";
 import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
-import { setCurrentCourse } from "../../storage/courses";
+import { reportError } from "../../reporting/reporting";
+import { currentCourse, setCurrentCourse } from "../../storage/courses";
 import type { CourseReadings } from "../../storage/readings";
 import css from "./today.module.css";
 
@@ -27,17 +29,14 @@ export function ReadingSheet({
   const navigate = useNavigate();
   const { code } = useProfile();
   const { open, unread, closed, closedAfter, pending } = readings;
-  if (pending > 0 || (!open.length && !closed)) return null;
+  // Пока часть пакетов не скачана, счёт закрытых и «Нет текстов» неполны; открытых нет вовсе — лист нечему показать.
+  if (pending > 0 ? !open.length : !open.length && !closed) return null;
   const first = unread[0];
-  const later = closedAfter && (
-    <p className={nb.meta}>
-      Следующий текст откроется после урока «
-      <span lang={code} className={css.greekTitle}>
-        {closedAfter.title}
-      </span>
-      »
-    </p>
-  );
+  const later =
+    closedAfter && !pending ? (
+      <p className={nb.meta}>Следующий текст откроется после урока «{closedAfter.title}»</p>
+    ) : null;
+  const downloading = pending > 0 ? <p className={nb.meta}>Часть текстов ещё скачивается.</p> : null;
   // «Сегодня» показывает основной курс, а вкладка — выбранный: без ожидания на кадр мелькнул бы прежний.
   const all = (
     <Link
@@ -47,7 +46,15 @@ export function ReadingSheet({
       onClick={(event) => {
         if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return;
         event.preventDefault();
-        void setCurrentCourse(courseId).then(() => navigate("/reading"));
+        void (async () => {
+          try {
+            if ((await currentCourse()) !== courseId) await setCurrentCourse(courseId);
+          } catch (error) {
+            void reportError(error, { category: "storage" });
+          } finally {
+            void navigate("/reading");
+          }
+        })();
       }}
     >
       Все тексты
@@ -71,11 +78,15 @@ export function ReadingSheet({
               </span>{" "}
               · {withCount(first.reading.words, WORDS)}
             </p>
+            {downloading}
           </div>
         </div>
         <Link
           to={`/course/${first.moduleId}/read/${first.reading.id}`}
-          className={buttonVariants({ variant: primary ? "default" : "soft", size: "md" })}
+          className={cn(
+            buttonVariants({ variant: primary ? "default" : "soft", size: "md" }),
+            !primary && "border-primary",
+          )}
           data-primary={primary}
         >
           Читать
@@ -94,6 +105,7 @@ export function ReadingSheet({
             Чтение
           </h2>
           {open.length ? <p className={nb.meta}>Прочитано {withCount(open.length, TEXTS)}</p> : later}
+          {open.length ? downloading : null}
         </div>
       </div>
       {open.length ? later : null}
