@@ -18,10 +18,6 @@ const LONG = [
   "Я хотел(а) бы снять деньги со счёта.",
 ];
 
-/**
- * Занятие на странице тетради: `done` уже отвеченных узнаваний слова «ο φίλος» (верно, кроме второго)
- * и текущее задание — узнавание слова с короткими вариантами или фразы с длинными.
- */
 const installedWord = (page: Page) =>
   page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve) => {
@@ -36,6 +32,10 @@ const installedWord = (page: Page) =>
     return words.find((entry) => entry.greek === "ο φίλος") ?? null;
   });
 
+/**
+ * Занятие на странице тетради: `done` уже отвеченных узнаваний слова «ο φίλος» (верно, кроме второго)
+ * и текущее задание — узнавание слова с короткими вариантами или фразы с длинными.
+ */
 async function seedSession(page: Page, { done, phrase }: { done: number; phrase: boolean }) {
   // Слова урока пишутся после установки пакета асинхронно: ждём, пока нужное окажется в базе.
   await expect.poll(() => installedWord(page)).not.toBeNull();

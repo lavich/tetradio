@@ -58,6 +58,7 @@ const dueWithHistory = (page: import("@playwright/test").Page, wordId: string, t
   );
 
 async function openAssembly(page: import("@playwright/test").Page) {
+  await expect(page.getByTestId("cards-today")).toHaveText("1 повторение");
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await page.waitForURL("**/session");
   await expect(page.getByTestId("prompt").first()).toHaveText("Собери слово");

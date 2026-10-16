@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import Dexie, { liveQuery } from "dexie";
 import { Rating } from "ts-fsrs";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { buildContent } from "../content/build";
 import { makePlan, makeSession, nextState } from "../src/domain/learning";
 import { unitKey, wordRef } from "../src/domain/refs";
@@ -67,22 +67,10 @@ db.use({
 
 function watch(query: () => unknown) {
   let runs = 0;
-  let results = 0;
-  let waiting: (() => void) | undefined;
-  const subscription = liveQuery(() => (runs++, query()) as Promise<unknown>).subscribe({
-    next: () => {
-      results++;
-      waiting?.();
-    },
-  });
-  const result = (count: number) =>
-    new Promise<void>((resolve) => {
-      waiting = () => {
-        if (results >= count) resolve();
-      };
-      waiting();
-    });
-  return { runs: () => runs, result, stop: () => subscription.unsubscribe() };
+  let first: () => void;
+  const answered = new Promise<void>((resolve) => (first = resolve));
+  const subscription = liveQuery(() => (runs++, query()) as Promise<unknown>).subscribe({ next: () => first() });
+  return { runs: () => runs, answered: () => answered, stop: () => subscription.unsubscribe() };
 }
 
 let wordId = "";
@@ -168,41 +156,37 @@ describe("живые запросы отслеживают чтения посл
 
   it("словарь «Прогресса» обновляет отметки после ответа", async () => {
     const words = watch(() => dictionary(COURSE));
-    await words.result(1);
+    await words.answered();
     const ran = words.runs();
     await db.cardStates.put(nextState(undefined, wordRef(wordId), Rating.Good, now));
-    await words.result(2);
-    expect(words.runs()).toBeGreaterThan(ran);
+    await vi.waitFor(() => expect(words.runs()).toBeGreaterThan(ran));
     words.stop();
   });
 
   it("статистика «Прогресса» обновляется после изменения карточки", async () => {
     const stats = watch(() => progress(dexieSource(), now));
-    await stats.result(1);
+    await stats.answered();
     const ran = stats.runs();
     await db.cardStates.put(nextState(undefined, wordRef(wordId), Rating.Again, now));
-    await stats.result(2);
-    expect(stats.runs()).toBeGreaterThan(ran);
+    await vi.waitFor(() => expect(stats.runs()).toBeGreaterThan(ran));
     stats.stop();
   });
 
   it("тексты модуля обновляют отметку «прочитано»", async () => {
     const texts = watch(() => moduleReadings("m01"));
-    await texts.result(1);
+    await texts.answered();
     const ran = texts.runs();
     await markRead("r-m01-anna", true);
-    await texts.result(2);
-    expect(texts.runs()).toBeGreaterThan(ran);
+    await vi.waitFor(() => expect(texts.runs()).toBeGreaterThan(ran));
     texts.stop();
   });
 
   it("упражнения слова обновляются после изменения уроков", async () => {
     const options = watch(() => wordSources(wordId));
-    await options.result(1);
+    await options.answered();
     const ran = options.runs();
     await db.lessons.update("m01-1", { title: "Новое название" });
-    await options.result(2);
-    expect(options.runs()).toBeGreaterThan(ran);
+    await vi.waitFor(() => expect(options.runs()).toBeGreaterThan(ran));
     options.stop();
   });
 });
