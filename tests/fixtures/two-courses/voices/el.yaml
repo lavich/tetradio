@@ -5,6 +5,8 @@ prefix: el-GR-Chirp3-HD-
 pools:
   female: [Aoede, Kore]
   male: [Charon, Puck]
+reader: Aoede
 characters:
   Νίκος: { gender: male, voice: Charon }
+  Άννα: { gender: female, voice: Kore }
   Μαρία: { gender: female, voice: Aoede }

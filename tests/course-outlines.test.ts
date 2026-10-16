@@ -12,7 +12,7 @@ import { submitAnswer } from "./helpers/ops";
 import { courseProgress, type CourseProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
 import { lessonOutlines } from "../src/storage/outlines";
-import { markRead, moduleReadings, nextReading, readingPage } from "../src/storage/readings";
+import { markRead, courseReadings, moduleReadings, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 
 const demo = buildContent("tests/fixtures/course-demo");
@@ -190,11 +190,11 @@ describe("живые запросы курса не перечитывают п�
 
   it("тексты для чтения читают только пакеты с нужными текстами, а не все установленные", async () => {
     let runs = 0;
-    const reading = watch(() => (runs++, nextReading("greek-a2", db)));
+    const reading = watch(async () => (runs++, (await courseReadings("greek-a2", db)).unread[0]));
     await settle();
     expect(reading.seen.at(-1)).toBeUndefined();
     let [before, ran] = [reads.rows, runs];
-    // Перезапуск строки «Почитать» не читает пакеты непройденных уроков.
+    // Перезапуск листа «Чтение» не читает пакеты непройденных уроков.
     await db.lessons.update("m01-test", { title: "Контрольная" });
     await settle();
     expect(runs).toBeGreaterThan(ran);

@@ -40,11 +40,13 @@ const render = async (updatedAt: string) => {
         items={[]}
         mistakes={0}
         next={null}
+        reading={null}
         withList={false}
         problem=""
         practice={noop}
         go={noop}
         openNext={noop}
+        openReading={noop}
         toModule={noop}
       />,
     ),

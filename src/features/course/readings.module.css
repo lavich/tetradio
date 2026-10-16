@@ -1,0 +1,14 @@
+.module {
+  margin: calc(var(--cell) * 1.5) 0 0;
+  font-family: var(--font-print);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: var(--cell);
+}
+.closed {
+  margin: calc(var(--cell) * 1.5) 0 0;
+  font-family: var(--font-print);
+  font-size: 16px;
+  line-height: var(--cell);
+  color: var(--muted-foreground);
+}

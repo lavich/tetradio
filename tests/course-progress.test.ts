@@ -9,8 +9,12 @@ import {
   completeLesson,
   courseLesson,
   LessonIncompleteError,
+  type ModuleLessonView,
+  type ModuleView,
+  courseFinished,
   moduleViews,
   nextCourseLesson,
+  nextStep,
   saveBlockProgress,
 } from "../src/storage/course";
 import { AppDatabase } from "../src/storage/db";
@@ -167,17 +171,31 @@ describe("прогресс курса в базе", () => {
   });
 
   it("следующий шаг курса — первый незавершённый урок опубликованного модуля", async () => {
+    const step = async () => nextStep(await moduleViews("greek-a2", db));
     expect((await nextCourseLesson("greek-a2", db))!.lesson.id).toBe("m01-1");
+    expect((await step())!.lesson.id).toBe("m01-1");
     await db.lessons.update("m01-1", { completed: true });
     expect((await nextCourseLesson("greek-a2", db))!.lesson.id).toBe("m01-test");
+    expect((await step())!.lesson.id).toBe("m01-test");
     await db.lessons.update("m01-test", { completed: true });
-    // Уроки модуля пройдены — следующий шаг контрольная точка после него.
     expect((await nextCourseLesson("greek-a2", db))!.lesson).toMatchObject({ id: "m01-k1", kind: "test" });
+    expect((await step())!.lesson.id).toBe("m01-k1");
     await db.lessons.update("m01-k1", { completed: true });
     expect((await nextCourseLesson("greek-a2", db))!.lesson).toMatchObject({ id: "m01-r1", kind: "lesson" });
+    expect((await step())!.lesson.id).toBe("m01-r1");
     await db.lessons.update("m01-r1", { completed: true });
-    // Черновик m02 следующим шагом не становится.
     expect(await nextCourseLesson("greek-a2", db)).toBeNull();
+    expect(await step()).toBeNull();
+    expect(courseFinished(await moduleViews("greek-a2", db), null)).toBe(true);
     expect((await moduleViews("greek-a2", db))[0].completed).toBe(true);
+  });
+
+  it("курс из одних черновиков не считается пройденным", () => {
+    const draft = { module: { status: "draft" } } as ModuleView;
+    const published = { module: { status: "published" } } as ModuleView;
+    expect(courseFinished([draft], null)).toBe(false);
+    expect(courseFinished([], null)).toBe(false);
+    expect(courseFinished([draft, published], null)).toBe(true);
+    expect(courseFinished([published], { view: published, lesson: {} as ModuleLessonView })).toBe(false);
   });
 });

@@ -5,6 +5,7 @@ import { SKILL_LABEL } from "../../content/course";
 import { isTask, lessonDone, lessonTally, testResult } from "../../domain/course";
 import type { BlockProgress, LessonItem } from "../../domain/types";
 import type { CourseLesson, ModuleLessonView } from "../../storage/course";
+import type { ReadingView } from "../../storage/readings";
 import { useProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
 import { cx } from "../../shared/cx";
@@ -30,11 +31,13 @@ export function LessonSummary({
   items,
   mistakes,
   next,
+  reading,
   withList,
   problem,
   practice,
   go,
   openNext,
+  openReading,
   toModule,
 }: {
   lesson: CourseLesson;
@@ -46,15 +49,20 @@ export function LessonSummary({
   items: LessonItem[];
   /** Пункты заданий урока, ушедшие в повторение карточками ошибок. */
   mistakes: number;
+  /** `undefined` — следующий шаг ещё не известен: кнопок нет. */
   next: ModuleLessonView | null | undefined;
+  /** Первый непрочитанный открытый текст, когда следующего шага у курса нет. */
+  reading: ReadingView | null;
   /** Карточки урока — на соседней странице разворота. */
   withList: boolean;
   problem: string;
   practice: () => void;
   go: (target: number, direction: "next" | "prev") => void;
   openNext: () => void;
+  openReading: () => void;
   toModule: () => void;
 }) {
+  const { code } = useProfile();
   const complete = lessonDone(lesson.blocks, progress);
   const tally = lessonTally(lesson.blocks, progress);
   const finished = !!lesson.lesson?.completed;
@@ -147,20 +155,37 @@ export function LessonSummary({
         </p>
       ) : null}
 
-      <div className={css.next}>
-        {next ? (
-          <Button size="xl" className={css.nextButton} onClick={openNext}>
-            <span className={css.nextText}>
-              <span className={css.nextLabel}>Следующий урок</span>
-              {next.title}
-            </span>
-            <ChevronRight data-icon="inline-end" />
+      {next === undefined ? null : (
+        <div className={css.next}>
+          {next ? (
+            <Button size="xl" className={css.nextButton} onClick={openNext}>
+              <span className={css.nextText}>
+                <span className={css.nextLabel}>Следующий урок</span>
+                {next.title}
+              </span>
+              <ChevronRight data-icon="inline-end" />
+            </Button>
+          ) : reading ? (
+            <Button
+              size="xl"
+              className={css.nextButton}
+              onClick={openReading}
+              aria-label={`Читать: ${reading.reading.title}`}
+            >
+              <span className={css.nextText}>
+                <span className={css.nextLabel}>Читать</span>
+                <span lang={code} className={css.greekTitle}>
+                  {reading.reading.title}
+                </span>
+              </span>
+              <ChevronRight data-icon="inline-end" />
+            </Button>
+          ) : null}
+          <Button variant={next || reading ? "ghost" : "soft"} size="md" onClick={toModule}>
+            К модулю
           </Button>
-        ) : null}
-        <Button variant={next ? "ghost" : "soft"} size="md" onClick={toModule}>
-          К модулю
-        </Button>
-      </div>
+        </div>
+      )}
     </>
   );
 }

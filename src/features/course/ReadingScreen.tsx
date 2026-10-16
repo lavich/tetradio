@@ -12,7 +12,9 @@ import { eventDay, WORDS, withCount } from "../../shared/format";
 import { noVoice, ProfileContext, useLessonProfile, useProfile } from "../../shared/language";
 import { useAssetSource } from "../../shared/store";
 import { Tick } from "../../shared/Tick";
-import { markRead, readingPage } from "../../storage/readings";
+import { db } from "../../storage/db";
+import { markRead, nextUnreadReading, readingPage } from "../../storage/readings";
+import { readingExits, type ReadingEntry } from "./reading-groups";
 import { Marked, TapHint, useFieldMarks, WordTaps } from "./WordTaps";
 import ui from "../../shared/ui.module.css";
 import base from "./course.module.css";
@@ -119,12 +121,18 @@ export function ReadingScreen() {
   const [line, setLine] = useState(-1);
   useEffect(() => setLine(-1), [readingId]);
   const profile = useLessonProfile(page?.after.id);
-  const fromModule = !!(location.state as { fromModule?: boolean } | null)?.fromModule;
+  const entry = location.state as ReadingEntry | null;
+  const listNext = useLiveQuery(async () => {
+    if (!entry?.fromReadings) return null;
+    const module = await db.modules.get(moduleId);
+    return module ? ((await nextUnreadReading(module.courseId, readingId)) ?? null) : null;
+  }, [entry?.fromReadings, moduleId, readingId]);
   const toModule = () => {
-    // Открыт с полки модуля — возвращаемся на неё же, иначе модуль окажется в истории дважды.
-    if (fromModule) void navigate(-1);
+    // Открыт с полки модуля или из списка — возвращаемся туда же, иначе она окажется в истории дважды.
+    if (entry?.fromModule || entry?.fromReadings) void navigate(-1);
     else void navigate(`/course/${moduleId}`, { replace: true });
   };
+  const exits = readingExits(entry, page?.next, listNext ?? undefined);
   if (page === undefined) return <Screen back="" />;
   if (page === null)
     return (
@@ -132,12 +140,13 @@ export function ReadingScreen() {
         <p className={ui.note}>Текста нет на устройстве: откройте модуль, его уроки и тексты скачаются.</p>
         <div className={base.actions}>
           <Button variant="soft" onClick={toModule}>
-            К модулю
+            {exits.label}
           </Button>
         </div>
       </Screen>
     );
-  const { reading, open, readAt, next } = page;
+  const { reading, open, readAt } = page;
+  const next = exits.next;
   const openNext = () => {
     if (!next) return;
     void navigate(`/course/${next.moduleId}/read/${next.reading.id}`, { replace: true, state: location.state });
@@ -170,9 +179,9 @@ export function ReadingScreen() {
                     Прочитано {eventDay(readAt)}
                   </p>
                   <div className={base.actions}>
-                    {next?.open ? <Button onClick={openNext}>Следующий текст</Button> : null}
+                    {next ? <Button onClick={openNext}>Следующий текст</Button> : null}
                     <Button variant="soft" onClick={toModule}>
-                      К модулю
+                      {exits.label}
                     </Button>
                     <Button variant="quiet" onClick={() => void markRead(reading.id, false)}>
                       Снять отметку

@@ -247,20 +247,29 @@ export const moduleViews = zoned(async function moduleViews(
 });
 
 /** Следующий шаг курса: первый незавершённый урок опубликованного модуля в порядке программы. */
+export function nextStep(views: ModuleView[]): { view: ModuleView; lesson: ModuleLessonView } | null {
+  for (const view of views) {
+    if (view.module.status !== "published") continue;
+    // Уроки модуля пройдены — следующий шаг контрольная точка после него.
+    const lesson =
+      view.lessons.find((item) => !item.completed) ??
+      (view.checkpoint && !view.checkpoint.completed ? view.checkpoint : undefined) ??
+      view.review.find((item) => !item.completed);
+    if (lesson) return { view, lesson };
+  }
+  return null;
+}
+
+/** У курса из одних черновиков шага нет, но он не пройден. */
+export const courseFinished = (views: ModuleView[], next: ReturnType<typeof nextStep>) =>
+  next === null && views.some((view) => view.module.status === "published");
+
 export const nextCourseLesson = zoned(async function nextCourseLesson(
   courseId?: string,
   database: AppDatabase = db,
 ): Promise<{ module: CatalogModule; lesson: ModuleLessonView } | null> {
-  for (const view of await moduleViews(courseId, database)) {
-    if (view.module.status !== "published") continue;
-    const lesson = view.lessons.find((item) => !item.completed);
-    if (lesson) return { module: view.module, lesson };
-    // Уроки модуля пройдены — следующий шаг контрольная точка после него.
-    if (view.checkpoint && !view.checkpoint.completed) return { module: view.module, lesson: view.checkpoint };
-    const review = view.review.find((item) => !item.completed);
-    if (review) return { module: view.module, lesson: review };
-  }
-  return null;
+  const step = nextStep(await moduleViews(courseId, database));
+  return step && { module: step.view.module, lesson: step.lesson };
 });
 
 /** Дни с выполненными заданиями уроков с `from` включительно — занятия курса на этой неделе; без курса — всех. */

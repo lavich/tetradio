@@ -213,7 +213,7 @@ components:
     textColor: "{colors.muted-foreground}"
     typography: "{typography.nav-label}"
     rounded: "{rounded.pill}"
-    width: "74px"
+    width: "62px"
     height: "50px"
   cloud-link-active:
     backgroundColor: "{colors.soft}"
@@ -420,7 +420,7 @@ components:
 ### Floating cloud (облачко)
 
 - **Style:** «пилюля» по центру внизу, на 14 px выше safe-area. Внутренний отступ 5 px, обводка `border`, фон `--nav-bg` с blur 14 px, тень облачка.
-- **Меню разделов:** пункты 74 × 50 px, иконка над подписью 11.5px `muted-foreground`. Активный — текст `primary` 700 на `soft`.
+- **Меню разделов:** пять пунктов по 62 × 50 px в облачке 322 px (в окне уже — делят ширину поровну, не меньше 44 px; поля 16 px; до 340 px подпись 11 px), иконка над подписью 11.5px `muted-foreground`. Активный — текст `primary` 700 на `soft`.
 - **Листание урока:** высота 60 px, ширина `min(360px, 100% − 32px)`. «‹» ghost, в центре Literata 15px «стр. N из M» и строка Manrope «заданий X из Y», справа главная кнопка «Далее ›» / «К итогу». Меню разделов в уроке скрыто.
 - **Облачко занятия:** то же. «Закрыть», «N из M» с составом («3 новых · 9 повторений»), главная кнопка-пилюля 16px 600. От 900 px облачко стоит под правой колонкой, шириной `min(420px, 46%)`.
 

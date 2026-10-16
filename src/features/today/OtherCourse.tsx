@@ -5,10 +5,9 @@ import { Button } from "@/components/ui/button";
 import { useAction } from "../../shared/action";
 import { useCourseSession } from "../../shared/courses";
 import { usePlan } from "../../shared/store";
-import { moduleViews } from "../../storage/course";
+import { moduleViews, nextStep } from "../../storage/course";
 import type { CourseEntry } from "../../storage/courses";
 import { sessionPath, startSession } from "../learning/session-actions";
-import { nextStep } from "./CourseToday";
 import css from "./today.module.css";
 
 /** Второй курс на «Сегодня» — одной строкой под основным: следующий урок и повторение своих карточек. */

@@ -178,3 +178,62 @@ test("один курс — без переключателя и без стро
   await expect(page.getByRole("heading", { name: "Занятия" })).toBeVisible();
   await expect(page.getByRole("radiogroup", { name: "Основной курс" })).toHaveCount(0);
 });
+
+/** Урок пройден записью в базу: проверяется «Сегодня», а не урок. */
+const completeLesson = (page: Page, lessonId: string) =>
+  page.evaluate(async (lessonId) => {
+    const db = await new Promise<IDBDatabase>((resolve) => {
+      const request = indexedDB.open("tetradio-mock-1");
+      request.onsuccess = () => resolve(request.result);
+    });
+    const tx = db.transaction("lessons", "readwrite");
+    const store = tx.objectStore("lessons");
+    const request = store.get(lessonId);
+    request.onsuccess = () => store.put({ ...request.result, completed: true });
+    await new Promise<void>((resolve) => {
+      tx.oncomplete = () => resolve();
+    });
+    db.close();
+  }, lessonId);
+
+test("«Все тексты» открывает раздел основного курса, даже если выбран другой; у английского текстов нет", async ({
+  page,
+}) => {
+  await installBoth(page);
+  await completeLesson(page, "m01-1");
+  await page.goto("/app/words");
+  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский" }).click();
+  await expect(page.getByText("the bus", { exact: true })).toBeVisible();
+
+  await page.goto("/app/");
+  await page.getByTestId("reading-all").click();
+  await expect(page).toHaveURL(/\/app\/reading$/);
+  await expect(
+    page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Греческий" }),
+  ).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByRole("link", { name: /Η Άννα/ })).toBeVisible();
+
+  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский" }).click();
+  await expect(page.getByText("В этом курсе текстов нет.")).toBeVisible();
+  await expect(page.getByTestId("reading-summary")).toHaveCount(0);
+});
+
+test("лист «Чтение» только у основного курса: у строки второго курса его нет, у английского основного — нет совсем", async ({
+  page,
+}) => {
+  await installBoth(page);
+  await completeLesson(page, "m01-1");
+  await page.goto("/app/");
+  await expect(page.getByTestId("reading-today")).toHaveText("Η Άννα · 28 слов");
+  await expect(page.getByTestId("reading-sheet")).toHaveCount(1);
+  await expect(page.getByTestId("other-course").getByTestId("reading-sheet")).toHaveCount(0);
+
+  await page.goto("/app/progress/settings");
+  const choice = page.getByRole("radiogroup", { name: "Основной курс" });
+  await choice.getByRole("radio", { name: "Английский" }).click();
+  await expect(choice.getByRole("radio", { name: "Английский" })).toHaveAttribute("aria-checked", "true");
+  await page.goto("/app/");
+  await expect(page.getByTestId("course-next")).toContainText("Дорога на работу");
+  await expect(page.getByTestId("reading-sheet")).toHaveCount(0);
+  await expect(page.getByTestId("other-course").getByTestId("reading-sheet")).toHaveCount(0);
+});
