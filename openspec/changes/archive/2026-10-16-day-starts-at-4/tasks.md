@@ -24,4 +24,4 @@
 
 - [x] 4.1 e2e-фикстуры с `localDate: at.slice(0, 10)` (`tests/e2e/helpers.ts:96`, `tests/e2e/assembly.spec.ts:48`, `tests/e2e/session-notebook.spec.ts:108`) не зависят от часа запуска; фикстуры `results.test.ts:41,125-140` с `localDate` по полуночи переведены на `studyDay`. Проверка: `npm run test:e2e` зелёный при системных часах 01:00 UTC (например, `faketime` или `page.clock` в общем `beforeEach`)
 - [x] 4.2 Полная проверка: `npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:e2e && npm run test:e2e:course && npm run test:e2e:courses`. Проверка: все команды зелёные
-- [ ] 4.3 Проверка на устройстве после выпуска: занятие после полуночи отмечено вчерашним днём, в 04:00 «Сегодня» переходит на новый день; запись итога — в PR. Проверка: подтверждение пользователя
+- [x] 4.3 Проверка на устройстве после выпуска: занятие после полуночи отмечено вчерашним днём, в 04:00 «Сегодня» переходит на новый день; запись итога — в PR. Проверка: подтверждение пользователя
