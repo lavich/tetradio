@@ -32,7 +32,10 @@ function countReads(database: AppDatabase) {
           getMany: (req) => (readonly(req) && add(name, req.keys.length), table.getMany(req)),
           query: async (req) => {
             const res = await table.query(req);
-            if (readonly(req) && req.values) add(name, res.result.length);
+            if (readonly(req) && req.values) {
+              add(name, res.result.length);
+              add(`${name}:query`, 1);
+            }
             return res;
           },
         };
@@ -48,14 +51,7 @@ function watch() {
   return { last: () => seen.at(-1)!, stop: () => subscription.unsubscribe() };
 }
 
-async function cold() {
-  const fresh = new AppDatabase(NAME);
-  try {
-    return await dictionary(COURSE, fresh);
-  } finally {
-    fresh.close();
-  }
-}
+const cold = () => db.transaction("rw", db.tables, () => dictionary(COURSE, db));
 
 const entryOf = (lessons: DictionaryLesson[], id: string) =>
   lessons.flatMap((lesson) => lesson.entries).find((entry) => entry.ref.kind === "word" && entry.ref.id === id);
@@ -156,6 +152,65 @@ describe("словарь во время установки курса", () => {
     expect(live.last().slice(0, 2)).toEqual(before);
     expect(live.last()[0]).toBe(before[0]);
     expect(live.last()[1]).toBe(before[1]);
+    live.stop();
+  });
+
+  it("новая отметка меняет только свой урок", async () => {
+    for (const id of ["mech-1", "mech-2", "mech-3"]) await installLesson(id, db, fetcher);
+    const live = watch();
+    await settle();
+    const before = live.last();
+    const first = before[0].entries.find((entry) => entry.ref.kind === "word")!;
+    await db.cardStates.put(nextState(undefined, first.ref, Rating.Good, now));
+    await settle();
+    expect(live.last()[0]).not.toBe(before[0]);
+    expect(entryOf(live.last(), first.ref.id)?.mark).toBe("learning");
+    expect(live.last()[1]).toBe(before[1]);
+    expect(live.last()[2]).toBe(before[2]);
+    live.stop();
+  });
+
+  it("пакет из 50+ слов сбрасывает кэш слов целиком, следующий пакет — снова только свои", async () => {
+    for (const id of ["mech-1", "mech-2"]) await installLesson(id, db, fetcher);
+    const live = watch();
+    await settle();
+    const base = packageOf("mech-3");
+    const words = Array.from({ length: 55 }, (_, index) => {
+      const { revision: _revision, ...rest } = base.words[0];
+      const next = { ...rest, id: `big-${index}`, greek: `λέξη${index}`, russian: `слово ${index}` };
+      return { ...next, revision: revisionOf(next) };
+    });
+    const big = {
+      ...base,
+      id: "mech-big",
+      lesson: { ...base.lesson, title: "Большой урок" },
+      words,
+      phrases: [],
+      items: words.map((word, position) => ({ kind: "word" as const, id: word.id, position })),
+      media: [],
+      readings: undefined,
+    };
+    for (const table of Object.keys(reads)) delete reads[table];
+    await applyPackage(big, db);
+    await settle();
+    expect(live.last().at(-1)!.entries).toHaveLength(55);
+    expect(reads.words).toBe(await db.words.count());
+    expect(live.last()).toEqual(await cold());
+
+    for (const table of Object.keys(reads)) delete reads[table];
+    await installLesson("mech-4", db, fetcher);
+    await settle();
+    expect(reads.words ?? 0).toBeLessThanOrEqual(packageOf("mech-4").words.length);
+    expect(live.last()).toEqual(await cold());
+    live.stop();
+  });
+
+  it("связи уроков не читаются запросом, который Dexie кэширует оптимистично", async () => {
+    const live = watch();
+    for (const id of ["mech-1", "mech-2"]) await installLesson(id, db, fetcher);
+    await settle();
+    expect(live.last()).toHaveLength(2);
+    expect(reads["lessonItems:query"] ?? 0).toBe(0);
     live.stop();
   });
 });

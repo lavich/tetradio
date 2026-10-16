@@ -9,6 +9,7 @@ interface Store<V> {
   generation: number;
   changed: Map<string, number>;
   cleared: number;
+  readers: number;
 }
 interface Registered {
   table: string;
@@ -36,6 +37,7 @@ Dexie.on("storagemutated", (parts: ObservabilitySet) => {
         if (key === undefined) {
           store.rows.clear();
           store.reading.clear();
+          store.changed.clear();
           store.cleared = generation;
           break;
         }
@@ -50,6 +52,9 @@ Dexie.on("storagemutated", (parts: ObservabilitySet) => {
 /**
  * Строки таблицы в памяти, по ключу `keyOf(первичный ключ)`; запись сбрасывает только изменённые ключи. Кэш не
  * подписывает живой запрос: подписка — забота вызывающего.
+ *
+ * Запись от 50 строк одной операцией Dexie отмечает всей таблицей, без ключей: такая запись сбрасывает кэш
+ * таблицы целиком.
  */
 export function rowCache<V>(
   table: string,
@@ -67,19 +72,29 @@ export function rowCache<V>(
       generation: 0,
       changed: new Map(),
       cleared: 0,
+      readers: 0,
     };
     cache.stores.set(database.name, fresh as Store<unknown>);
     return fresh;
   };
   /** Отсутствие строки тоже запоминается: `load` возвращает `undefined` для ключа, которого нет в базе. */
-  return zoned(async function rows(
+  const rows = zoned(async function rows(
     keys: string[],
     database: AppDatabase,
     load: (keys: string[]) => Promise<(V | undefined)[]>,
   ): Promise<(V | undefined)[]> {
+    const transaction = Dexie.currentTransaction;
     // Сброс приходит после фиксации, а транзакция записи видит свои незафиксированные строки.
-    if (Dexie.currentTransaction?.mode === "readwrite") return load(keys);
+    if (transaction?.mode === "readwrite") return load(keys);
     const store = storeOf(database);
+    // Явная транзакция не ждёт чужих чтений: IndexedDB зафиксирует её, пока она ждёт, и следующая операция в ней
+    // упадёт. Её откат не должен ронять и чужих читателей, поэтому она читает сама и ничего не публикует.
+    if (transaction) {
+      const missing = [...new Set(keys.filter((key) => !store.rows.has(key)))];
+      const read = missing.length ? await load(missing) : [];
+      const own = new Map(missing.map((key, index) => [key, read[index]]));
+      return keys.map((key) => (own.has(key) ? own.get(key) : store.rows.get(key)));
+    }
     const start = store.generation;
     const found = new Map<string, V | undefined>();
     const waiting = new Map<string, Promise<V | undefined>>();
@@ -91,28 +106,35 @@ export function rowCache<V>(
       else if (reading) waiting.set(key, reading);
       else missing.push(key);
     }
-    if (missing.length) {
-      const read = load(missing);
-      const own = missing.map((key, index) => {
-        const row = read.then((rows) => rows[index]);
-        row.catch(() => undefined);
-        store.reading.set(key, row);
-        waiting.set(key, row);
-        return row;
-      });
-      try {
-        const rows = await read;
-        missing.forEach((key, index) => {
-          // Строка, изменённая во время чтения, могла прочитаться прежней: такую не запоминаем.
-          if (Math.max(store.cleared, store.changed.get(key) ?? 0) <= start) store.rows.set(key, rows[index]);
+    store.readers++;
+    try {
+      if (missing.length) {
+        const read = load(missing);
+        const own = missing.map((key, index) => {
+          const row = read.then((rows) => rows[index]);
+          row.catch(() => undefined);
+          store.reading.set(key, row);
+          waiting.set(key, row);
+          return row;
         });
-      } finally {
-        missing.forEach((key, index) => {
-          if (store.reading.get(key) === own[index]) store.reading.delete(key);
-        });
+        try {
+          const rows = await read;
+          missing.forEach((key, index) => {
+            // Строка, изменённая во время чтения, могла прочитаться прежней: такую не запоминаем.
+            if (Math.max(store.cleared, store.changed.get(key) ?? 0) <= start) store.rows.set(key, rows[index]);
+          });
+        } finally {
+          missing.forEach((key, index) => {
+            if (store.reading.get(key) === own[index]) store.reading.delete(key);
+          });
+        }
       }
+      for (const [key, row] of waiting) found.set(key, await row);
+    } finally {
+      // Отметки нужны только чтениям, начатым до изменения.
+      if (--store.readers === 0) store.changed.clear();
     }
-    for (const [key, row] of waiting) found.set(key, await row);
     return keys.map((key) => found.get(key));
   });
+  return Object.assign(rows, { tracked: (database: AppDatabase) => storeOf(database).changed.size });
 }

@@ -1,9 +1,10 @@
+import Dexie from "dexie";
 import { unitKey } from "../domain/refs";
 import type { LearningRef, LearningState, LessonItem, Phrase } from "../domain/types";
 import { moduleViews } from "./course";
 import { courseLessonIds, primaryCourse } from "./courses";
 import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
-import { lessonItems, stateGroup } from "./queries";
+import { stateGroup } from "./queries";
 import { rowCache } from "./row-cache";
 import { zoned } from "./zone";
 
@@ -66,7 +67,7 @@ export const dictionary = zoned(async function dictionary(
     await links(
       installed.map(({ lesson }) => lesson.id),
       database,
-      (ids) => Promise.all(ids.map((id) => lessonItems(id, database))),
+      (ids) => Promise.all(ids.map((id) => linksOf(id, database))),
     )
   ).map((list) => list ?? []);
   const refs = items.flat().map((item) => item.ref);
@@ -125,15 +126,28 @@ export const dictionary = zoned(async function dictionary(
     const before = previous.get(lesson.id);
     return before && sameLesson(before, next) ? before : next;
   });
-  const byCourse = shown.get(database) ?? new Map<string | undefined, Map<string, DictionaryLesson>>();
-  byCourse.set(courseId, new Map(result.map((lesson) => [lesson.id, lesson])));
-  shown.set(database, byCourse);
+  if (!Dexie.currentTransaction) {
+    const byCourse = shown.get(database) ?? new Map<string | undefined, Map<string, DictionaryLesson>>();
+    byCourse.set(courseId, new Map(result.map((lesson) => [lesson.id, lesson])));
+    shown.set(database, byCourse);
+  }
   return result;
 });
 
 const links = rowCache<LessonItem[]>("lessonItems", (key) =>
   Array.isArray(key) && typeof key[0] === "string" ? key[0] : undefined,
 );
+/**
+ * Ключи и `bulkGet`, а не запрос со строками: такой запрос в живом запросе Dexie отдаёт с ещё не зафиксированной
+ * записью вне явной транзакции, и после её отката кэш хранил бы строки, которых нет.
+ */
+const linksOf = zoned(async function linksOf(lessonId: string, database: AppDatabase): Promise<LessonItem[]> {
+  const keys = await database.lessonItems
+    .where("[lessonId+position]")
+    .between([lessonId, Dexie.minKey], [lessonId, Dexie.maxKey])
+    .primaryKeys();
+  return (await database.lessonItems.bulkGet(keys)).filter((item): item is LessonItem => !!item);
+});
 const wordRows = rowCache<StoredWord>("words");
 const phraseRows = rowCache<Phrase>("phrases");
 const stateRows = rowCache<LearningState>("cardStates");
