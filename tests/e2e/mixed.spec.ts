@@ -163,10 +163,11 @@ test("занятие: знакомство с фразой, «Не знаю» с
   expect(seen.size).toBeGreaterThan(0);
   expect(skipped && restarted).toBe(true);
   await expect(page.getByRole("heading", { name: "Занятие завершено" })).toBeVisible();
-  await expect(page.getByTestId("composition")).toContainText("фраз");
+  await expect(page.getByTestId("result-count")).toContainText("без ошибок");
 
   // Ответы сохранены, сроки независимы: ошибка не сдвинула остальные карточки.
   const events = await readTable(page, "events");
+  await expect(page.getByTestId("result-cells").locator("i")).toHaveCount(new Set(events.map((e) => e.unitKey)).size);
   const failed = events.find((item) => item.correct === false);
   expect(failed.snapshot.text ?? failed.snapshot.greek).toBeTruthy();
   // Каждая ошибка добавила дополнительную попытку своей карточки, и не больше одной на карточку.

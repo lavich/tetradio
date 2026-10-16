@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode, type Ref } from "react";
+import { createContext, useContext, useId, useState, type ReactNode, type Ref } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -42,14 +42,14 @@ export function Instruction({ prompt, children }: { prompt: string; children?: R
   );
 }
 
-export function PageHead({ day }: { day: string }) {
+export function PageHead({ day, title = "Повторение" }: { day: string; title?: string }) {
   const profile = useProfile();
   return (
     <header className={s.head}>
       <p className={s.date} lang={profile.code}>
         {pageDate(day, profile)}
       </p>
-      <h1 className={s.title}>Повторение</h1>
+      <h1 className={s.title}>{title}</h1>
     </header>
   );
 }
@@ -163,21 +163,36 @@ export function DoneList({
   rows,
   folded,
   onToggle,
+  title,
+  foldLabel,
 }: {
   rows: DoneRow[];
   /** `undefined` — сворачивать нечего (широкий экран или итог). */
   folded?: boolean;
   onToggle?: () => void;
+  title?: string;
+  foldLabel?: string;
 }) {
   const { code } = useProfile();
+  const titleId = useId();
   if (!rows.length) return null;
+  const action = folded ? "показать" : "скрыть";
   const toggle = onToggle && folded !== undefined && (
-    <button type="button" className={s.fold} aria-expanded={!folded} onClick={onToggle}>
-      Сделано {rows.length} — {folded ? "показать" : "скрыть"}
+    <button type="button" className={foldLabel ? s.foldGroup : s.fold} aria-expanded={!folded} onClick={onToggle}>
+      {foldLabel ? `${foldLabel} — ${rows.length}, ${action}` : `Сделано ${rows.length} — ${action}`}
     </button>
   );
   return (
-    <section className={s.done} aria-label="Сделано">
+    <section
+      className={s.done}
+      aria-label={title ? undefined : (foldLabel ?? "Сделано")}
+      aria-labelledby={title ? titleId : undefined}
+    >
+      {title && (
+        <h2 id={titleId} className={s.groupTitle}>
+          {title}
+        </h2>
+      )}
       {toggle}
       {!folded && (
         <ol className={s.doneList} data-done-list>

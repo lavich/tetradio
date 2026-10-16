@@ -79,8 +79,8 @@ test("занятие: знакомство, четыре упражнения, �
   }
   expect([...seen].sort()).toEqual(["assembly", "intro", "listening", "recognition", "spelling"]);
   await expect(page.getByRole("heading", { name: "Занятие завершено" })).toBeVisible();
-  await expect(page.getByText(/Объективная точность/)).toBeVisible();
-  await expect(page.getByText(/Активное время/)).toBeVisible();
+  await expect(page.getByTestId("result-count")).toContainText("без ошибок");
+  await expect(page.getByText(/\d+ ответ\S* · .*(точность|самооценка).* · \d+ мин/)).toBeVisible();
   // Активное время копится по всем упражнениям и переживает возврат в занятие.
   const activeMs = await page.evaluate(
     () =>

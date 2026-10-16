@@ -123,7 +123,8 @@
   color: var(--muted-foreground);
   font-weight: 400;
 }
-.fold {
+.fold,
+.foldGroup {
   display: block;
   margin: 4px 0 0 28px;
   padding: 0;
@@ -133,8 +134,13 @@
   color: var(--primary);
   cursor: pointer;
 }
+.foldGroup {
+  margin-top: 4px;
+  padding: 10px 0;
+}
 @media (hover: hover) {
-  .fold:hover {
+  .fold:hover,
+  .foldGroup:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -229,39 +235,91 @@
   font-weight: 600;
 }
 
-/* Сводка итога: под списком на телефоне, листом справа на широком экране. */
-.summary {
-  margin-top: 18px;
-  padding: 14px 0 0 28px;
-  border-top: 1.5px solid var(--foreground);
+.recap {
+  margin-top: 10px;
+  padding: 20px 20px 18px;
+  background: var(--card);
+  border: 1px solid var(--input);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px -12px var(--shadow);
 }
-.summaryTitle {
-  margin: 0 0 4px;
-  font-family: var(--font-print);
-  font-size: 19px;
-  font-weight: 700;
-  line-height: var(--cell);
-}
-.summaryLine {
+.big {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
   margin: 0;
+  font-family: var(--font-print);
+}
+.big b {
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+.big span {
+  font-size: 19px;
+  line-height: var(--cell);
+  color: var(--muted-foreground);
+}
+.strip {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  margin: 16px 0 4px;
+}
+.strip i {
+  flex: 1;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--ok);
+}
+.strip i.cellWrong,
+.strip i.cellAlmost {
+  height: 14px;
+}
+.strip i.cellWrong {
+  background: var(--pen);
+}
+.strip i.cellAlmost {
+  background: var(--almost);
+}
+.back {
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1.5px solid var(--input);
   font-family: var(--font-print);
   font-size: 17px;
   line-height: 26px;
+  overflow-wrap: anywhere;
 }
-.summaryNote {
-  margin: 4px 0 0;
-  font-size: 15px;
-  line-height: 22px;
+.back small {
+  display: block;
+  font: 600 12.5px/var(--cell) var(--font-ui);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: var(--muted-foreground);
 }
-.summaryNote b {
-  font-family: var(--font-print);
+.back b {
   font-weight: 600;
-  color: var(--foreground);
 }
-.summaryActions {
-  display: grid;
-  margin-top: 14px;
+.meta {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--muted-foreground);
+}
+.again {
+  width: 100%;
+  margin-top: 16px;
+}
+.groupTitle {
+  margin: 22px 0 2px;
+  font: 600 13px/var(--cell) var(--font-ui);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
 }
 
 @media (min-width: 900px) {
@@ -282,7 +340,7 @@
     text-align: left;
   }
   .sheet,
-  .summary {
+  .recap {
     grid-column: 2;
     grid-row: 1 / span 40;
     margin: 0;
@@ -291,12 +349,6 @@
   .sheet {
     position: sticky;
     top: 12px;
-  }
-  .summary {
-    background: var(--card);
-    border: 1px solid var(--input);
-    border-radius: 14px;
-    box-shadow: 0 10px 30px -12px var(--shadow);
   }
   .fold {
     display: none;
