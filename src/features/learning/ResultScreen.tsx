@@ -1,35 +1,20 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { addDays, deviceTimezone, formatDay, isDue, reviewCutoff, studyDay } from "../../domain/learning";
-import { CARD_KINDS, type CardKind, type LearningRef, type ReviewEvent } from "../../domain/types";
+import type { LearningRef, ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
-import { CARDS, minutes, PHRASES, plural, withCount, WORDS } from "../../shared/format";
+import { CARDS, withCount } from "../../shared/format";
 import { statesOf } from "../../storage/queries";
 import { profileOfCourse, sessionCourse } from "../../storage/courses";
 import { db } from "../../storage/db";
 import { ProfileContext } from "../../shared/language";
 import { sessionPath, startSession } from "./session-actions";
-import { compositionLine, DoneList, doneRows, markOf, PageHead } from "./notebook";
+import { DoneList, doneRows, PageHead } from "./notebook";
+import { answersLine, cardOutcomes, isMistake, limitNames, splitRows } from "./result";
 import s from "./session.module.css";
-
-const KIND_FORMS: Record<CardKind, [string, string, string]> = {
-  word: WORDS,
-  phrase: PHRASES,
-  mistake: ["задание урока", "задания урока", "заданий урока"],
-};
-/** Состав уникальных карточек по видам: «2 слова · 1 фраза», только непустые группы. */
-export const compositionText = (byKind: Record<CardKind, number>) =>
-  CARD_KINDS.filter((kind) => byKind[kind])
-    .map((kind) => withCount(byKind[kind], KIND_FORMS[kind]))
-    .join(" · ");
-/** Число карточек занятия: один вид называется своим словом, несколько — «карточки» с составом. */
-export function countText(byKind: Record<CardKind, number>, total: number) {
-  const present = CARD_KINDS.filter((kind) => byKind[kind]);
-  if (present.length === 1) return withCount(total, KIND_FORMS[present[0]]);
-  return present.length ? `${withCount(total, CARDS)} (${compositionText(byKind)})` : withCount(total, CARDS);
-}
 
 /** Подпись карточки из снимка ответа: у задания урока — его вопрос. */
 export const snapshotLabel = ({ snapshot }: Pick<ReviewEvent, "snapshot">) =>
@@ -59,6 +44,7 @@ export function ResultScreen() {
   const { id } = useParams();
   const navigate = useNavigate();
   const now = useNow();
+  const [cleanFolded, setCleanFolded] = useState(true);
   const session = useLiveQuery(() => (id ? db.sessions.get(id) : undefined), [id]);
   const profile =
     useLiveQuery(async () => {
@@ -67,24 +53,13 @@ export function ResultScreen() {
     }, [session?.id]) ?? PROFILES[DEFAULT_LANGUAGE];
   const result = useLiveQuery(async () => {
     const events = id ? await db.events.where("sessionId").equals(id).toArray() : [];
-    const mistakes = events.filter(
-      (event) => event.correct === false || (event.correct === null && event.rating === 1),
-    );
+    const mistakes = events.filter(isMistake);
     const mistakeRefs = [...new Map(mistakes.map((event) => [event.unitKey, event.ref])).values()];
     return { events, mistakes, mistakeRefs, states: await statesOf(mistakeRefs) };
   }, [id]);
   const events = result?.events ?? [],
-    mistakes = result?.mistakes ?? [],
     mistakeRefs = result?.mistakeRefs ?? [];
-  // Повторная попытка той же карточки не увеличивает число уникальных карточек.
-  const unique = new Map(events.map((event) => [event.unitKey, event.ref]));
-  const byKind = Object.fromEntries(CARD_KINDS.map((kind) => [kind, 0])) as Record<CardKind, number>;
-  // Снятый вид разряда в разбивке не занимает: его ответы остаются в общем числе и в точности.
-  for (const ref of unique.values()) if (ref.kind in byKind) byKind[ref.kind]++;
-  const objective = events.filter((event) => event.correct !== null);
-  // «Сразу» — карточка без единой ошибки в занятии; остальные прошли с исправлением.
-  const corrected = new Set(mistakes.map((event) => event.unitKey));
-  const clean = [...unique.keys()].filter((key) => !corrected.has(key)).length;
+  const { cells, corrected, clean } = cardOutcomes(events);
   const cutoff = reviewCutoff(now, deviceTimezone());
   const readyAgain: LearningRef[] = mistakeRefs.filter((ref) => {
     const state = result?.states.get(keyOf(ref));
@@ -96,13 +71,13 @@ export function ResultScreen() {
     mistakeRefs.flatMap((ref) => {
       const state = result?.states.get(keyOf(ref));
       if (!state || readyAgain.includes(ref)) return [];
-      const event = mistakes.find((entry) => entry.unitKey === keyOf(ref) || entry.ref.id === ref.id);
+      const event = result?.mistakes.find((entry) => entry.unitKey === keyOf(ref) || entry.ref.id === ref.id);
       const label = event ? snapshotLabel(event) : "";
       return label ? [{ due: state.card.due, label }] : [];
     }),
   );
   const rows = session ? doneRows(session, new Map(events.map((event) => [event.id, event]))) : [];
-  const almost = events.filter((event) => markOf(event) === "almost").length;
+  const groups = splitRows(rows, corrected);
 
   const repeat = async () => {
     const courseId = session ? await sessionCourse(session) : undefined;
@@ -113,44 +88,64 @@ export function ResultScreen() {
     <ProfileContext value={profile}>
       <main className={`${s.session} ${s.result}`}>
         <div className={s.page}>
-          <PageHead day={session?.planDate ?? studyDay(now, deviceTimezone())} />
-          <DoneList rows={rows} />
-          <section className={s.summary} aria-labelledby="result-title">
-            <h2 id="result-title" className={s.summaryTitle}>
-              Занятие завершено
-            </h2>
-            <p className={s.summaryLine} data-testid="composition">
-              {countText(byKind, unique.size)} · {clean} сразу, {unique.size - clean} с исправлением.
-            </p>
-            {returns.map(([day, names]) => (
-              <p key={day} className={s.summaryNote}>
-                {plural(names.length, ["Ошибка вернётся", "Ошибки вернутся", "Ошибки вернутся"])} {day}:{" "}
-                <b lang={profile.code}>{names.join(", ")}</b>.
-              </p>
-            ))}
-            <p className={s.summaryNote}>
-              Упражнений: {events.length}, ошибок: {mistakes.length}
-              {almost ? `, из них «почти»: ${almost}` : ""}.{" "}
-              {objective.length
-                ? `Объективная точность (выбор, сборка, аудирование, написание, задания уроков): ${Math.round((objective.filter((event) => event.correct).length / objective.length) * 100)}% из ${withCount(objective.length, ["ответа", "ответов", "ответов"])}.`
-                : "Объективных проверок в этом занятии не было — только самооценка. Точность: нет данных."}
-            </p>
-            <p className={s.summaryNote}>Активное время: {minutes(session?.activeTimeMs ?? 0)}</p>
-            {readyAgain.length > 0 && (
-              <div className={s.summaryActions}>
-                <Button variant="soft" size="xl" onClick={repeat}>
+          <PageHead day={session?.planDate ?? studyDay(now, deviceTimezone())} title="Занятие завершено" />
+          {result && (
+            <section className={s.recap} aria-label="Результат занятия">
+              {cells.length ? (
+                <>
+                  <p className={s.big} data-testid="result-count">
+                    <b>{clean}</b> <span>из {cells.length} без ошибок</span>
+                  </p>
+                  <div className={s.strip} aria-hidden="true" data-testid="result-cells">
+                    {cells.map((kind, index) => (
+                      <i
+                        key={index}
+                        className={kind === "wrong" ? s.cellWrong : kind === "almost" ? s.cellAlmost : ""}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p className={s.big}>
+                  <span>Ответов нет</span>
+                </p>
+              )}
+              {returns.map(([day, names]) => {
+                const { shown, rest } = limitNames(names);
+                return (
+                  <p key={day} className={s.back}>
+                    <small>
+                      {names.length > 1 ? "Вернутся" : "Вернётся"} {day}
+                    </small>
+                    <b lang={profile.code}>{shown.join(", ")}</b>
+                    {rest > 0 && ` и ещё ${rest}`}
+                  </p>
+                );
+              })}
+              {cells.length > 0 && <p className={s.meta}>{answersLine(events, session?.activeTimeMs ?? 0)}</p>}
+              {readyAgain.length > 0 && (
+                <Button variant="soft" size="xl" className={s.again} onClick={repeat}>
                   Повторить ошибки ({readyAgain.length})
                 </Button>
-              </div>
-            )}
-          </section>
+              )}
+            </section>
+          )}
+          {result && (
+            <>
+              <DoneList rows={groups.fixed} title={`С исправлением · ${groups.fixedCards}`} />
+              <DoneList rows={groups.skipped} title={`Пропущено · ${groups.skipped.length}`} />
+              <DoneList
+                rows={groups.clean}
+                folded={cleanFolded}
+                onToggle={() => setCleanFolded(!cleanFolded)}
+                foldLabel="Без ошибок"
+              />
+            </>
+          )}
         </div>
         <div className={s.cloud} role="group" aria-label="Итог занятия" data-cloud>
           <span className={s.count}>
-            <span>
-              {rows.length} из {session?.items.length ?? rows.length}
-            </span>
-            <small>{session ? compositionLine(session.items) : ""}</small>
+            <span>{cells.length ? withCount(cells.length, CARDS) : ""}</span>
           </span>
           <Button size="md" className={s.primary} onClick={() => navigate("/", { replace: true })}>
             Готово

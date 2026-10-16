@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
-import { compositionText, countText, returnDays } from "../src/features/learning/ResultScreen";
+import { returnDays } from "../src/features/learning/ResultScreen";
+import { answersLine, cardOutcomes, limitNames, splitRows } from "../src/features/learning/result";
+import type { DoneRow } from "../src/features/learning/notebook";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
 import { LEECH_LAPSES, lessonProgress, progress, SKILL_NAMES, SKILL_TYPES, SOLID_DAYS } from "../src/domain/stats";
 import { studyDay } from "../src/domain/learning";
@@ -42,13 +44,6 @@ const event = (
   responseTimeMs: 900,
   ...over,
 });
-/** Уникальные карточки сессии по видам — то же правило, что на экране результата. */
-function uniqueByKind(events: ReviewEvent[]) {
-  const unique = new Map(events.map((e) => [e.unitKey, e.ref]));
-  const byKind: Record<CardKind, number> = { word: 0, phrase: 0, mistake: 0 };
-  for (const r of unique.values()) if (r.kind in byKind) byKind[r.kind]++;
-  return { byKind, total: unique.size };
-}
 const base = (over: Partial<Snapshot>): Snapshot => ({
   words: [],
   lessons: [],
@@ -60,36 +55,105 @@ const base = (over: Partial<Snapshot>): Snapshot => ({
 });
 
 describe("результат смешанного занятия", () => {
-  it("повторная попытка той же фразы не увеличивает число уникальных карточек; состав по видам", () => {
+  it("повторная попытка той же фразы не увеличивает число уникальных карточек", () => {
     const events = [
       event(wordRef("w1"), "recognition", true, "2026-09-15T08:00:00Z"),
       event(wordRef("w2"), "spelling", false, "2026-09-15T08:01:00Z"),
       event(ref("phrase", "p1"), "spelling", false, "2026-09-15T08:02:00Z"),
       event(ref("phrase", "p1"), "recognition", true, "2026-09-15T08:03:00Z", { mode: "practice", id: "retry" }),
     ];
-    const { byKind, total } = uniqueByKind(events);
+    const outcome = cardOutcomes(events);
     expect(events).toHaveLength(4);
-    expect(total).toBe(3);
-    expect(compositionText(byKind)).toBe("2 слова · 1 фраза");
-    expect(compositionText({ word: 3, phrase: 0, mistake: 0 })).toBe("3 слова");
-    expect(compositionText({ word: 0, phrase: 2, mistake: 0 })).toBe("2 фразы");
+    expect(outcome.cells).toEqual(["clean", "wrong", "wrong"]);
+    expect(outcome.clean).toBe(1);
   });
-  it("один вид называется своим словом, несколько — карточками с составом", () => {
-    expect(countText({ word: 0, phrase: 2, mistake: 0 }, 2)).toBe("2 фразы");
-    expect(countText({ word: 3, phrase: 0, mistake: 0 }, 3)).toBe("3 слова");
-    expect(countText({ word: 2, phrase: 1, mistake: 0 }, 3)).toBe("3 карточки (2 слова · 1 фраза)");
-  });
-  it("карточка снятого вида не занимает разряд в разбивке, но её ответы остаются в общем числе", () => {
+  it("карточка снятого вида входит в общее число карточек", () => {
     const events = [
       event(wordRef("w1"), "recognition", true, "2026-09-15T08:00:00Z"),
       event(dropped("c1"), "cloze", true, "2026-09-15T08:01:00Z"),
     ];
-    const { byKind, total } = uniqueByKind(events);
-    expect(events).toHaveLength(2);
-    expect(total).toBe(2);
-    expect(byKind).toEqual({ word: 1, phrase: 0, mistake: 0 });
-    expect(compositionText(byKind)).toBe("1 слово");
+    expect(cardOutcomes(events).cells).toHaveLength(2);
   });
+  it("только «почти» даёт янтарную клетку, любая другая ошибка — красную, порядок по времени ответа", () => {
+    const almost = (r: LearningRef, at: string, over: Partial<ReviewEvent> = {}) =>
+      event(r, "spelling", false, at, { rating: 2, ...over });
+    const events = [
+      event(wordRef("w3"), "spelling", true, "2026-09-15T08:03:00Z"),
+      almost(wordRef("w1"), "2026-09-15T08:01:00Z"),
+      almost(wordRef("w2"), "2026-09-15T08:02:00Z"),
+      event(wordRef("w2"), "spelling", false, "2026-09-15T08:02:30Z", { id: "again" }),
+    ];
+    expect(cardOutcomes(events).cells).toEqual(["almost", "wrong", "clean"]);
+  });
+  it("без ответов нет клеток", () => {
+    expect(cardOutcomes([])).toEqual({ cells: [], corrected: new Set(), clean: 0 });
+  });
+});
+
+describe("группы строк итога", () => {
+  const row = (id: string, unitKey: string, mark: DoneRow["mark"]): DoneRow => ({
+    id,
+    unitKey,
+    prompt: "",
+    promptGreek: true,
+    expected: "",
+    expectedGreek: true,
+    given: "",
+    mark,
+  });
+  it("обе попытки карточки с ошибкой идут в первую группу, N считает карточки, пропуск отдельно", () => {
+    const rows = [
+      row("1", "a", "correct"),
+      row("2", "b", "wrong"),
+      row("3", "b", "correct"),
+      row("4", "c", "skipped"),
+      row("5", "d", "almost"),
+    ];
+    const groups = splitRows(rows, new Set(["b", "d"]));
+    expect(groups.fixed.map((r) => r.id)).toEqual(["2", "3", "5"]);
+    expect(groups.fixedCards).toBe(2);
+    expect(groups.skipped.map((r) => r.id)).toEqual(["4"]);
+    expect(groups.clean.map((r) => r.id)).toEqual(["1"]);
+  });
+  it("без ошибок все строки в нижней группе", () => {
+    const groups = splitRows([row("1", "a", "correct")], new Set());
+    expect(groups).toMatchObject({ fixed: [], skipped: [], fixedCards: 0 });
+    expect(groups.clean).toHaveLength(1);
+  });
+});
+
+describe("строка ответов и точности", () => {
+  const answered = (correct: boolean | null) => ({ correct });
+  it("все ответы с проверкой: число ответов, точность, минуты", () => {
+    const events = [answered(true), answered(true), answered(true), answered(false)];
+    expect(answersLine(events, 7 * 60000 + 12000)).toBe("4 ответа · точность 75% · 7 минут");
+  });
+  it("часть ответов без проверки называется числом проверяемых", () => {
+    expect(
+      answersLine(
+        [
+          ...Array<boolean | null>(18).fill(true),
+          ...Array<boolean | null>(4).fill(false),
+          ...Array<boolean | null>(4).fill(null),
+        ].map(answered),
+        5 * 60000,
+      ),
+    ).toBe("26 ответов · точность 82% по 22 проверяемым · 5 минут");
+  });
+  it("без проверяемых ответов точности нет", () => {
+    expect(answersLine([answered(null)], 0)).toBe("1 ответ · самооценка, точности нет · 1 минута");
+  });
+});
+
+describe("слова блока «Вернутся»", () => {
+  it("шесть слов показываются целиком, седьмое уходит в «и ещё»", () => {
+    const names = ["a", "b", "c", "d", "e", "f"];
+    expect(limitNames(names)).toEqual({ shown: names, rest: 0 });
+    expect(limitNames([...names, "g"])).toEqual({ shown: names, rest: 1 });
+  });
+});
+
+describe("статистика занятия", () => {
   it("историческая самооценка не создаёт объективных попыток, а без наблюдений навык «ещё не проверяли»", async () => {
     const data = base({ events: [event(wordRef("w1"), "recall", null, "2026-09-14T09:00:00Z", { rating: 3 })] });
     const stats = await progress(fromSnapshot(data), now);
