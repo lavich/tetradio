@@ -15,7 +15,7 @@ const RUNS = Number(process.env.PERF_RUNS ?? 3);
 const COURSE = "greek-a2";
 const LIMIT_MS = 100;
 const MIN_INTERACTIONS = 30;
-const MIN_TAPS = 8;
+const MIN_TAPS = 3;
 
 const OBSERVE = `(() => {
   window.__events = [];

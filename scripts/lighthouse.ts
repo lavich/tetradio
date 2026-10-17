@@ -64,7 +64,10 @@ try {
       tbt: audits["total-blocking-time"]!.numericValue!,
       weight: audits["total-byte-weight"]!.numericValue!,
     });
-    const requests = (audits["network-requests"]!.details as unknown as { items: Request[] }).items;
+    const network = audits["network-requests"];
+    if (!network?.details)
+      throw new Error(`lighthouse: нет списка запросов: ${JSON.stringify(network ?? "аудита нет")}`);
+    const requests = (network.details as unknown as { items: Request[] }).items;
     const found = lazyScripts(requests, html, inDistOf("/"), origin);
     const bytes = found.reduce((sum, chunk) => sum + chunk.bytes, 0);
     // Худший из прогонов: ленивая загрузка зависит от того, успел ли кадр до паузы.
