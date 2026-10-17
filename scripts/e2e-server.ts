@@ -1,5 +1,5 @@
-import { spawn, spawnSync } from "node:child_process";
-import { cpSync, rmSync } from "node:fs";
+import { spawn, type ChildProcess } from "node:child_process";
+import { cpSync, renameSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { writeContent } from "../content/build.ts";
 
@@ -15,16 +15,31 @@ cpSync("public", publicDir, { recursive: true, filter: (src) => src !== join("pu
 writeContent(publicDir, fixture);
 
 const env = { ...process.env, PUBLIC_DIR: publicDir };
-const vite = (args: string[], extra: Record<string, string> = {}) => {
-  const run = spawnSync("npx", ["vite", ...args], { stdio: "inherit", env: { ...env, ...extra } });
-  if (run.status !== 0) process.exit(run.status ?? 1);
+const children = new Set<ChildProcess>();
+const stop = (code: number) => {
+  for (const child of children) child.kill();
+  process.exit(code);
 };
-vite(["build", "--outDir", outDir], { VITE_TELEGRAM_MOCK: "1" });
-// Вариант для GitHub Pages — без мока, даже если он задан в окружении разработчика.
-if (flags.includes("--web"))
-  vite(["build", "--outDir", join(outDir, "web")], { BASE_PATH: "/web/", VITE_TELEGRAM_MOCK: "" });
+for (const signal of ["SIGINT", "SIGTERM"] as const) process.on(signal, () => stop(1));
+const vite = (args: string[], extra: Record<string, string> = {}) =>
+  new Promise<void>((resolve) => {
+    const run = spawn("npx", ["vite", ...args], { stdio: "inherit", env: { ...env, ...extra } });
+    children.add(run);
+    run.on("exit", (code) => (code === 0 ? resolve() : stop(code ?? 1)));
+  });
+// Вариант для GitHub Pages — без мока, даже если он задан в окружении разработчика. Собирается рядом, а не в `dist/web`:
+// сборка `dist` очищает каталог и стёрла бы вложенный вариант.
+const webTmp = join(dir, "web-tmp");
+await Promise.all([
+  vite(["build", "--outDir", outDir], { VITE_TELEGRAM_MOCK: "1" }),
+  flags.includes("--web")
+    ? vite(["build", "--outDir", webTmp], { BASE_PATH: "/web/", VITE_TELEGRAM_MOCK: "" })
+    : undefined,
+]);
+if (flags.includes("--web")) renameSync(webTmp, join(outDir, "web"));
 
 const serve = ["vite", "preview", "--outDir", outDir, "--host", "0.0.0.0", "--port", port, "--strictPort"];
 const preview = spawn("npx", serve, { stdio: "inherit", env });
-for (const signal of ["SIGINT", "SIGTERM"] as const) process.on(signal, () => preview.kill(signal));
+children.clear();
+children.add(preview);
 preview.on("exit", (code, signal) => process.exit(code ?? (signal ? 1 : 0)));

@@ -6,6 +6,10 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 5
+    # Версия Playwright связана с образом в ci.yml, openspec — с правилами spec: обновляются вручную одним PR.
+    ignore:
+      - dependency-name: "@playwright/test"
+      - dependency-name: "@fission-ai/openspec"
     groups:
       minor-and-patch:
         update-types: [minor, patch]

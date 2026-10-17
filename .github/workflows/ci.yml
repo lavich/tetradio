@@ -71,7 +71,7 @@ jobs:
           BASE_PATH: /tetradio/
 
   e2e:
-    name: e2e ${{ matrix.shard }}/2
+    name: e2e ${{ matrix.shard }}/${{ matrix.shards }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     # Браузер и системные пакеты уже в образе: установка через apt на runner занимала от 15 с до 6 мин.
@@ -81,7 +81,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2]
+        shard: [1, 2, 3]
+        shards: [3]
     steps:
       - uses: actions/checkout@v7
       # Node из образа не используется: версия та же, что в deploy.yml.
@@ -92,7 +93,7 @@ jobs:
       - run: npm ci
       - name: Playwright version matches the container image
         run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
-      - run: npm run test:e2e -- --shard=${{ matrix.shard }}/2
+      - run: npm run test:e2e -- --shard=${{ matrix.shard }}/${{ matrix.shards }}
       - if: failure()
         uses: actions/upload-artifact@v7
         with:
@@ -104,12 +105,16 @@ jobs:
           if-no-files-found: ignore
 
   e2e-course:
-    name: e2e-course
+    name: e2e-course (${{ matrix.config }})
     runs-on: ubuntu-latest
     timeout-minutes: 15
     container: mcr.microsoft.com/playwright:v1.63.0-noble
     env:
       PLAYWRIGHT_IMAGE_VERSION: 1.63.0
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [course, courses]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -119,12 +124,11 @@ jobs:
       - run: npm ci
       - name: Playwright version matches the container image
         run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
-      - run: npm run test:e2e:course
-      - run: npm run test:e2e:courses
+      - run: npm run test:e2e:${{ matrix.config }}
       - if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report-course
+          name: playwright-report-${{ matrix.config }}
           path: |
             playwright-report
             test-results
