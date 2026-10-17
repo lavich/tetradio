@@ -12,17 +12,19 @@ import { lazyScripts, verdict, type Request, type Run } from "./lighthouse-repor
  */
 const PORT = Number(process.env.LIGHTHOUSE_PORT ?? 4188);
 const RUNS = Number(process.env.LIGHTHOUSE_RUNS ?? 3);
-const origin = `http://localhost:${PORT}`;
+const origin = `http://127.0.0.1:${PORT}`;
 const jsonAt = process.argv.indexOf("--json");
 const jsonPath = jsonAt < 0 ? undefined : process.argv[jsonAt + 1];
 
 const preview = spawn(
   process.execPath,
-  ["node_modules/vite/bin/vite.js", "preview", "--port", String(PORT), "--strictPort"],
+  ["node_modules/vite/bin/vite.js", "preview", "--host", "127.0.0.1", "--port", String(PORT), "--strictPort"],
   {
-    stdio: "ignore",
+    stdio: "inherit",
   },
 );
+let previewExit: number | null | undefined;
+preview.on("exit", (code) => (previewExit = code ?? 1));
 let chrome: Awaited<ReturnType<typeof launch>> | undefined;
 const stop = () => {
   preview.kill();
@@ -41,6 +43,7 @@ try {
       )
     )
       break;
+    if (previewExit !== undefined) throw new Error(`lighthouse: vite preview завершился с кодом ${previewExit}`);
     if (waited > 30_000) throw new Error("lighthouse: vite preview не поднялся");
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
