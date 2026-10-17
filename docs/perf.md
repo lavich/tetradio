@@ -17,6 +17,10 @@ done
 
 Метрики — `first-contentful-paint` и `largest-contentful-paint` в JSON, берётся медиана. Вклад отдельного ресурса — тем же замером с `--blocked-url-patterns='*literata-latin*'`.
 
+## Ночной замер под нагрузкой
+
+Workflow `perf-nightly.yml` (03:00 UTC и вручную; не входит в `checks`) собирает mock-сборку на настоящем курсе и с CPU ×4 измеряет установку курса (время, TBT) и отклик в уроке (p98 Event Timing нажатий, предел 100 мс). Локально: `PERF_RATE=4 npm run perf`; итоги — `test-results/perf/*.json`.
+
 ## Замеры
 
 | Дата | Состояние | Performance | FCP | LCP |
