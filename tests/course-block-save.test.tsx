@@ -77,8 +77,19 @@ describe("письмо: черновик не теряется при закры
     await type("Γεια");
     await type("Γεια σου");
     expect(saved).toEqual([]);
-    await act(async () => vi.advanceTimersByTime(800));
-    expect(saved).toEqual([{ text: "Γεια σου" }]);
+    await act(async () => vi.advanceTimersByTime(2000));
+    expect(saved).toEqual([{ text: "Γεια σου", quiet: true }]);
+  });
+  it("тихая запись по паузе повторяется с объявлением при потере фокуса и не дублируется", async () => {
+    vi.useFakeTimers();
+    act(() => root.render(<Writing block={writing} progress={undefined} save={save} />));
+    await type("Γεια σου");
+    await act(async () => vi.advanceTimersByTime(2000));
+    expect(saved).toEqual([{ text: "Γεια σου", quiet: true }]);
+    await act(async () => host.querySelector("textarea")!.dispatchEvent(new FocusEvent("focusout", { bubbles: true })));
+    expect(saved).toEqual([{ text: "Γεια σου", quiet: true }, { text: "Γεια σου" }]);
+    await act(async () => window.dispatchEvent(new Event("pagehide")));
+    expect(saved).toHaveLength(2);
   });
   it("уход страницы в фон и размонтирование пишут черновик сразу", async () => {
     vi.useFakeTimers();
@@ -94,7 +105,7 @@ describe("письмо: черновик не теряется при закры
     await type("Γεια σου φίλε");
     act(() => root.render(<p />));
     expect(saved.at(-1)).toEqual({ text: "Γεια σου φίλε" });
-    await act(async () => vi.advanceTimersByTime(800));
+    await act(async () => vi.advanceTimersByTime(2000));
     expect(saved).toHaveLength(3);
   });
   it("сбой записи показывает жалобу", async () => {
@@ -163,5 +174,31 @@ describe("речь: микрофон не остаётся включённым"
     expect(mic.track.stop).not.toHaveBeenCalled();
     act(() => root.render(<p />));
     expect(mic.track.stop).toHaveBeenCalled();
+  });
+  it("onstop после ухода с урока не создаёт адрес записи, который некому освободить", async () => {
+    const track = { stop: vi.fn() };
+    const recorders: { onstop?: () => void }[] = [];
+    vi.stubGlobal("navigator", {
+      mediaDevices: { getUserMedia: () => Promise.resolve({ getTracks: () => [track] } as unknown as MediaStream) },
+    });
+    vi.stubGlobal(
+      "MediaRecorder",
+      class {
+        mimeType = "audio/webm";
+        start = vi.fn();
+        stop = vi.fn();
+        constructor() {
+          recorders.push(this);
+        }
+      },
+    );
+    const create = vi.fn(() => "blob:recording");
+    vi.stubGlobal("URL", Object.assign(URL, { createObjectURL: create }));
+    act(() => root.render(<Speaking block={speaking} progress={undefined} save={save} />));
+    await press("Начать");
+    await act(async () => void (await Promise.resolve()));
+    act(() => root.render(<p />));
+    recorders[0].onstop?.();
+    expect(create).not.toHaveBeenCalled();
   });
 });

@@ -11,7 +11,7 @@ import {
   subscribeInstall,
 } from "../content/client";
 import type { ContentPackage } from "../content/schema";
-import { makePlan } from "../domain/learning";
+import { deviceTimezone, makePlan, studyDay } from "../domain/learning";
 import { progress } from "../domain/stats";
 import { defaultSettings } from "../domain/types";
 import { db } from "../storage/db";
@@ -31,13 +31,33 @@ export const useInstalledCount = () => useLiveQuery(() => db.packages.count(), [
 export const useWord = (id: string | undefined) => useLiveQuery(() => (id ? db.words.get(id) : undefined), [id]);
 export const usePhrase = (id: string | undefined) =>
   useLiveQuery(async () => (id ? ((await db.phrases.get(id)) ?? null) : undefined), [id]);
-/** План курса; `null` — по всем курсам (курсов в каталоге нет), `undefined` — курс ещё читается. */
-export const usePlan = (now: Date, courseId: string | null | undefined) =>
-  useLiveQuery(
-    () => (courseId === undefined ? undefined : makePlan(dexieSource(), now, { courseId: courseId ?? undefined })),
-    [now.getTime(), courseId],
+/**
+ * План курса; `null` — по всем курсам (курсов в каталоге нет), `undefined` — курс ещё читается.
+ * Время запрос берёт сам: перечитывается по сроку `wakeAt` и при возврате в приложение, а не каждую минуту.
+ */
+export function usePlan(courseId: string | null | undefined) {
+  const [tick, setTick] = useState(0);
+  const plan = useLiveQuery(
+    () =>
+      courseId === undefined ? undefined : makePlan(dexieSource(), new Date(), { courseId: courseId ?? undefined }),
+    [courseId, tick],
   );
-export const useStats = (now: Date) => useLiveQuery(() => progress(dexieSource(), now), [now.getTime()]);
+  const wakeAt = plan?.wakeAt.getTime();
+  useEffect(() => {
+    if (wakeAt === undefined) return;
+    const id = setTimeout(() => setTick((value) => value + 1), Math.max(wakeAt - Date.now(), 0) + 50);
+    return () => clearTimeout(id);
+  }, [wakeAt]);
+  useEffect(() => {
+    const wake = () => document.visibilityState === "visible" && setTick((value) => value + 1);
+    document.addEventListener("visibilitychange", wake);
+    return () => document.removeEventListener("visibilitychange", wake);
+  }, []);
+  return plan;
+}
+/** Статистика зависит от учебного дня, а не от минуты. */
+export const useStats = (now: Date) =>
+  useLiveQuery(() => progress(dexieSource(), now), [studyDay(now, deviceTimezone())]);
 /** Счётчики экрана «Ещё»: только числа по индексам, без чтения самих карточек. */
 export const useCounts = () =>
   useLiveQuery(async () => {

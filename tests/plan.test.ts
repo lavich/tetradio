@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createEmptyCard, Rating, State } from "ts-fsrs";
 import {
   chooseType,
+  deviceTimezone,
   localDay,
   makePlan,
   makeSession,
@@ -460,6 +461,38 @@ describe("срок повторения по дню", () => {
     ];
     const plan = await makePlan(fromSnapshot(base({ words: pool, states })), now);
     expect(plan.reviews.map((review) => review.ref.id)).toEqual([pool[2].id]);
+  });
+  it("wakeAt — ближайший срок карточки обучения, иначе конец учебного дня", async () => {
+    const pool = words(3);
+    const states = [
+      learned(pool[0].id, "2026-09-15T09:20:00Z", State.Learning),
+      learned(pool[1].id, "2026-09-15T09:10:00Z", State.Relearning),
+      learned(pool[2].id, "2026-09-15T20:00:00Z", State.Review),
+    ];
+    const plan = await makePlan(fromSnapshot(base({ words: pool, states })), now);
+    expect(plan.wakeAt.toISOString()).toBe("2026-09-15T09:10:00.000Z");
+    const quiet = await makePlan(fromSnapshot(base({ words: pool, states: states.slice(2) })), now);
+    expect(quiet.wakeAt).toEqual(reviewCutoff(now, deviceTimezone()));
+  });
+  it("план в момент wakeAt совпадает с планом, пересчитанным каждую минуту", async () => {
+    const pool = words(2);
+    const states = [
+      learned(pool[0].id, "2026-09-15T09:10:30Z", State.Learning),
+      learned(pool[1].id, "2026-09-15T09:25:00Z", State.Relearning),
+    ];
+    const source = fromSnapshot(base({ words: pool, states }));
+    let at = now;
+    for (let step = 0; step < 2; step++) {
+      const plan = await makePlan(source, at);
+      const woken = await makePlan(source, plan.wakeAt);
+      for (let minute = 0; minute < 40; minute++) {
+        const probe = new Date(at.getTime() + minute * 60000);
+        if (probe < plan.wakeAt) expect((await makePlan(source, probe)).reviews).toEqual(plan.reviews);
+        else expect((await makePlan(source, probe)).reviews.length).toBeGreaterThanOrEqual(woken.reviews.length);
+      }
+      expect(woken.reviews.length).toBe(plan.reviews.length + 1);
+      at = plan.wakeAt;
+    }
   });
   it.each([
     ["2026-09-15T09:00:00Z", "Asia/Nicosia", "2026-09-16T01:00:00.000Z"],

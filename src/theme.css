@@ -63,7 +63,7 @@
   --art-bg: #eef2fa;
   --speak-disabled: #c9ced8;
   --shadow: rgba(0, 0, 0, 0.22);
-  --nav-bg: color-mix(in srgb, var(--card) 86%, transparent);
+  --nav-bg: color-mix(in srgb, var(--card) 97%, transparent);
   --cloud-shadow: 0 8px 28px rgb(35 38 44 / 0.12), 0 1px 3px rgb(35 38 44 / 0.08);
   /* Плавающее облачко снизу: высота 60px, отступ 14px от края. */
   --cloud-space: calc(60px + 14px + var(--inset-bottom));
@@ -329,4 +329,11 @@
     linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: var(--cell) var(--cell);
   background-position: -1px -1px;
+}
+
+/* Размытие под плавающими панелями рвёт скролл на бюджетных телефонах: на них фон почти непрозрачный. */
+@media (hover: hover) and (pointer: fine) {
+  :root {
+    --nav-bg: color-mix(in srgb, var(--card) 86%, transparent);
+  }
 }

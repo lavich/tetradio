@@ -11,6 +11,8 @@ import { SaveProblem, useSave } from "./save";
 import base from "../course.module.css";
 import css from "./blocks.module.css";
 
+const DRAFT_PAUSE_MS = 2000;
+
 export function Writing({
   block,
   progress,
@@ -26,14 +28,17 @@ export function Writing({
   const { store, problem } = useSave(save);
   const { code } = useProfile();
   const draft = useRef<string | null>(null);
+  // `quiet` — записано без объявления синхронизации: на blur и при уходе в фон запись повторяется с объявлением.
+  const written = useRef<"unsaved" | "quiet" | "announced">("announced");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [flush] = useState(() => () => {
+  const [write] = useState(() => (quiet: boolean) => {
     if (timer.current) clearTimeout(timer.current);
     timer.current = null;
-    if (draft.current === null) return;
-    void store({ text: draft.current });
-    draft.current = null;
+    if (draft.current === null || written.current === "announced" || (quiet && written.current === "quiet")) return;
+    void store(quiet ? { text: draft.current, quiet } : { text: draft.current });
+    written.current = quiet ? "quiet" : "announced";
   });
+  const [flush] = useState(() => () => write(false));
   // Мини-приложение закрывают без blur: черновик пишется по ходу набора и при уходе страницы в фон.
   useEffect(() => {
     const hide = () => {
@@ -73,8 +78,9 @@ export function Writing({
         onChange={(event) => {
           setText(event.target.value);
           draft.current = event.target.value;
+          written.current = "unsaved";
           if (timer.current) clearTimeout(timer.current);
-          timer.current = setTimeout(flush, 800);
+          timer.current = setTimeout(() => write(true), DRAFT_PAUSE_MS);
         }}
         onBlur={flush}
       />
@@ -90,6 +96,7 @@ export function Writing({
                 size="md"
                 onClick={() => {
                   draft.current = null;
+                  written.current = "announced";
                   void store({ done: true, text, checks });
                 }}
               >
@@ -107,6 +114,7 @@ export function Writing({
             onClick={() => {
               setReview(true);
               draft.current = text;
+              written.current = "unsaved";
               flush();
             }}
           >

@@ -11,9 +11,9 @@ import { sessionPath, startSession } from "../learning/session-actions";
 import css from "./today.module.css";
 
 /** Второй курс на «Сегодня» — одной строкой под основным: следующий урок и повторение своих карточек. */
-export function OtherCourse({ course, now }: { course: CourseEntry; now: Date }) {
+export function OtherCourse({ course }: { course: CourseEntry }) {
   const navigate = useNavigate();
-  const plan = usePlan(now, course.id);
+  const plan = usePlan(course.id);
   const views = useLiveQuery(() => moduleViews(course.id), [course.id]);
   const unfinished = useCourseSession(course.id);
   const { busy, problem, setProblem, run } = useAction("Не удалось начать повторение");
@@ -22,7 +22,7 @@ export function OtherCourse({ course, now }: { course: CourseEntry; now: Date })
   const due = plan.newRefs.length + plan.reviews.length;
   const review = () =>
     run(async () => {
-      if (!unfinished && !(await startSession(now, { courseId: course.id })))
+      if (!unfinished && !(await startSession(new Date(), { courseId: course.id })))
         return setProblem("На сегодня карточек нет.");
       void navigate(await sessionPath(course.id));
     });

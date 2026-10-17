@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { deviceTimezone, mondayOf, studyDay, type DailyPlan } from "../../domain/learning";
+import { deviceTimezone, mondayOf, type DailyPlan } from "../../domain/learning";
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
@@ -37,18 +37,16 @@ import css from "./today.module.css";
 export function CourseToday({
   courseId,
   plan,
-  now,
   unfinished,
   more,
 }: {
   courseId: string | undefined;
   plan: DailyPlan;
-  now: Date;
   unfinished: Session | null;
   more?: React.ReactNode;
 }) {
   const spread = useSpread();
-  const today = studyDay(now, deviceTimezone());
+  const today = plan.today;
   const monday = mondayOf(today);
   const views = useLiveQuery(() => moduleViews(courseId), [courseId]);
   const reviewed = useLiveQuery(() => reviewedOn(today, courseId), [today, courseId]);
@@ -80,7 +78,6 @@ export function CourseToday({
       <Review
         courseId={courseId}
         plan={plan}
-        now={now}
         unfinished={unfinished}
         reviewed={reviewed ?? 0}
         last={last}
@@ -122,7 +119,6 @@ export function CourseToday({
 function Review({
   courseId,
   plan,
-  now,
   unfinished,
   reviewed,
   last,
@@ -130,7 +126,6 @@ function Review({
 }: {
   courseId: string | undefined;
   plan: DailyPlan;
-  now: Date;
   unfinished: Session | null;
   reviewed: number;
   last?: ModuleLessonView;
@@ -143,7 +138,7 @@ function Review({
   const review = () =>
     run(async () => {
       if (unfinished) return navigate(await sessionPath(courseId));
-      if (!(await startSession(now, { courseId }))) return setProblem("На сегодня карточек нет.");
+      if (!(await startSession(new Date(), { courseId }))) return setProblem("На сегодня карточек нет.");
       void navigate(await sessionPath(courseId));
     });
   // Тренировка не сдвигает интервалы: навык фиксируется, расписание повторений остаётся прежним.
@@ -151,7 +146,7 @@ function Review({
     run(async () => {
       if (!last) return;
       const refs = await dexieSource().lessonRefs(last.id);
-      const session = refs.length ? await startSession(now, { refs, mode: "practice", courseId }) : null;
+      const session = refs.length ? await startSession(new Date(), { refs, mode: "practice", courseId }) : null;
       if (!session) return setProblem("В уроке нет карточек для тренировки.");
       void navigate(await sessionPath(courseId));
     });
