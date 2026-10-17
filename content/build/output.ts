@@ -36,14 +36,12 @@ export function packLessons(
       draft.media = [...draft.media, ...voiced.filter((item) => !draft.media.some((own) => own.id === item.id))];
     const version = hash(canonical({ ...draft, version: undefined }));
     const pack = { ...draft, version };
-    if (marked || pack.lineAudio || pack.itemAudio || texts) {
-      try {
-        const parsed = parsePackage(JSON.parse(JSON.stringify(pack)));
-        if (voicedOf(parsed.readings) !== voicedOf(pack.readings))
-          throw new ContentError("записи текста для чтения не совпали с его предложениями");
-      } catch (error) {
-        throw error instanceof ContentError ? new ContentError(`lessons/${id}.yaml: ${error.message}`) : error;
-      }
+    try {
+      const parsed = parsePackage(JSON.parse(JSON.stringify(pack)));
+      if (texts && voicedOf(parsed.readings) !== voicedOf(pack.readings))
+        throw new ContentError("записи текста для чтения не совпали с его предложениями");
+    } catch (error) {
+      throw error instanceof ContentError ? new ContentError(`lessons/${id}.yaml: ${error.message}`) : error;
     }
     const body = JSON.stringify(pack);
     const url = `content/packages/${id}@${version}.json`;

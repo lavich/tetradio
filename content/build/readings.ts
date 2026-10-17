@@ -258,6 +258,9 @@ export function buildReadings({
     if (src.narrator !== undefined && (typeof src.narrator !== "string" || !src.narrator.trim()))
       fail(`${where}: narrator — имя героя`);
     const at = course.lessonIds.indexOf(src.after);
+    const placement = moduleOf.get(src.after);
+    if (placement?.draft && course.moduleIds?.includes(placement.id))
+      fail(`${where}: урок ${src.after} в модуле-черновике — текст открывается после урока опубликованного модуля`);
     if (at < 0 || !drafts.has(src.after)) fail(`${where}: урока ${src.after} нет в курсе ${course.id}`);
     const { cards, introduced, matcher, measure } = courseWords(course);
     const measured = measure(text, glosses, names, at);

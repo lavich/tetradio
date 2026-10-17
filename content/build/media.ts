@@ -1,6 +1,6 @@
 import { extname } from "node:path";
 import type { PackageMedia, PackagePhrase, PackageWord } from "../../src/content/schema.ts";
-import { checkArt, LEGACY_FILE, readLegacy, type ArtReport } from "../art.ts";
+import { checkArt, forbiddenIn, LEGACY_FILE, readLegacy, type ArtReport } from "../art.ts";
 import { audioAssetId } from "./cards.ts";
 import { fail, hash } from "./common.ts";
 import type { ContentRoot } from "./sources.ts";
@@ -34,13 +34,13 @@ export function mediaFor(
   if (!body) fail(`${where}: файла ${dir}/${file} нет`);
   const ext = extname(file).toLowerCase();
   const mimeType = MIME[ext] ?? fail(`${where}: неизвестный тип файла ${file}`);
-  // Картинка из готовой библиотеки: только SVG без скриптов и внешних ссылок, небольшого размера — вне стандарта своих иллюстраций.
+  // Картинка библиотеки вне стандарта иллюстраций: SVG до 12 КБ с теми же запретами.
   if (dir === "pictures") {
     const svg = Buffer.from(body!).toString("utf8");
     if (extname(file).toLowerCase() !== ".svg") fail(`${where}: картинка библиотеки — только SVG`);
     if (body!.byteLength > 12_000) fail(`${where}: картинка ${file} больше 12 КБ`);
-    if (/<script|<foreignObject|\son\w+=|(?:href|src)=["'](?!#)/i.test(svg))
-      fail(`${where}: в ${file} скрипт, обработчик или внешняя ссылка`);
+    const forbidden = forbiddenIn(svg);
+    if (forbidden) fail(`${where}: в ${file} ${forbidden}`);
   }
   // Иллюстрация подчиняется стандарту (docs/art-standard.md); файлы до стандарта из legacy.txt считаются в отчёте о миграции.
   if (dir === "art" && mimeType === "image/svg+xml") {

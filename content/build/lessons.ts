@@ -1,5 +1,4 @@
 import {
-  ContentError,
   SCHEMA_VERSION,
   type ContentPackage,
   type PackageItem,
@@ -125,12 +124,6 @@ export function buildLessons(input: LessonsInput) {
     const where = `lessons/${id}.yaml`;
     const courseId = courseOf.get(id) ?? (fail(`${where}: урок не входит ни в один курс`) as string);
     const title = text(src.title, `${where}.title`)!;
-    // Положение урока во времени не поставляется: статус занятия и дата принадлежат пользователю.
-    for (const field of ["status", "targetDate"] as const)
-      if (field in (src as object))
-        fail(
-          `${where}.${field}: поле не поставляется — статус занятия и дата урока принадлежат пользователю и задаются расписанием курса`,
-        );
     // `words` — сокращение словарного урока; `items` — смешанный порядок. Оба сразу делают порядок неоднозначным.
     if (src.words !== undefined && src.items !== undefined) fail(`${where}: укажите либо words, либо items, но не оба`);
     const refs: LessonItemSource[] =
@@ -194,11 +187,7 @@ export function buildLessons(input: LessonsInput) {
         blockMedia.push(built.item);
         return { ...rest, audioAssetId: assetId };
       });
-      try {
-        blocks = parseBlocks(nfc(raw), `${where}.blocks`);
-      } catch (error) {
-        throw error instanceof ContentError ? new ContentError(error.message) : error;
-      }
+      blocks = parseBlocks(nfc(raw), `${where}.blocks`);
     }
     if (src.kind !== undefined && src.kind !== "lesson" && src.kind !== "test")
       fail(`${where}.kind: ожидалось lesson или test`);

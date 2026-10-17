@@ -27,17 +27,19 @@ const fail: (message: string) => never = (message) => {
 const KEYWORDS = new Set(["none", "currentcolor", "transparent", "inherit"]);
 const COLOR_ATTRS = "fill|stroke|stop-color|color|flood-color|lighting-color";
 const FORBIDDEN: [RegExp, string][] = [
-  [/<(text|tspan|textPath)[\s>/]/, "подпись в картинке выдаёт ответ"],
-  [/<(title|desc|metadata)[\s>/]/, "заголовок или описание могут выдать ответ — подпись картинке даёт клиент"],
-  [/<script[\s>/]/, "скрипт"],
+  [/<(text|tspan|textPath)[\s>/]/i, "подпись в картинке выдаёт ответ"],
+  [/<(title|desc|metadata)[\s>/]/i, "заголовок или описание могут выдать ответ — подпись картинке даёт клиент"],
+  [/<script[\s>/]/i, "скрипт"],
   [/\son[a-z]+\s*=/i, "обработчик события"],
-  [/<style[\s>/]/, "стили: цвета задаются атрибутами, анимация запрещена"],
-  [/<(animate|animateMotion|animateTransform|set|discard)[\s>/]/, "анимация: картинка видна и в момент ответа"],
-  [/<(image|foreignObject)[\s>/]/, "растровое или встроенное содержимое"],
+  [/<style[\s>/]/i, "стили: цвета задаются атрибутами, анимация запрещена"],
+  [/<(animate|animateMotion|animateTransform|set|discard)[\s>/]/i, "анимация: картинка видна и в момент ответа"],
+  [/<(image|foreignObject)[\s>/]/i, "растровое или встроенное содержимое"],
   [/\bdata:/i, "встроенные данные"],
-  [/(?:xlink:)?href\s*=\s*["'](?!#)/, "ссылка не на элемент этого файла"],
-  [/url\(\s*["']?(?!#)/, "url() не на элемент этого файла"],
+  [/(?:xlink:)?href\s*=\s*["'](?!#)/i, "ссылка не на элемент этого файла"],
+  [/url\(\s*["']?(?!#)/i, "url() не на элемент этого файла"],
 ];
+
+export const forbiddenIn = (svg: string) => FORBIDDEN.find(([pattern]) => pattern.test(svg))?.[1];
 
 /** Цвет в нормальной записи: нижний регистр, шесть знаков. Служебные слова — как есть; всё остальное — чужой цвет. */
 export const normalizeColor = (raw: string) => {
@@ -86,8 +88,8 @@ export interface ArtReport {
 export function checkArt(file: string, body: Uint8Array, legacy: Set<string>, palette = PALETTE): boolean {
   const where = `art/${file}`;
   const svg = Buffer.from(body).toString("utf8");
-  for (const [pattern, reason] of FORBIDDEN)
-    if (pattern.test(svg)) fail(`${where}: ${reason} — запрещено стандартом иллюстраций (docs/art-standard.md)`);
+  const forbidden = forbiddenIn(svg);
+  if (forbidden) fail(`${where}: ${forbidden} — запрещено стандартом иллюстраций (docs/art-standard.md)`);
   const viewBox = /<svg\b[^>]*\bviewBox\s*=\s*["']([^"']*)["']/
     .exec(svg)?.[1]
     .trim()

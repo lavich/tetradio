@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { parse } from "yaml";
 import { ContentError } from "../../src/content/schema.ts";
 import { isLanguage, type Language } from "../../src/domain/language.ts";
 
@@ -23,6 +24,16 @@ export const pick = <T extends object>(value: T, fields: readonly (keyof T)[]) =
 
 export const fail: (message: string) => never = (message) => {
   throw new ContentError(message);
+};
+export const parseYaml = (body: string, where: string): Record<string, unknown> => {
+  let doc: unknown;
+  try {
+    doc = parse(body);
+  } catch (error) {
+    fail(`${where}: ${error instanceof Error ? error.message.split("\n")[0] : String(error)}`);
+  }
+  if (!doc || typeof doc !== "object" || Array.isArray(doc)) fail(`${where}: ожидалась карта полей`);
+  return doc as Record<string, unknown>;
 };
 export const languageOf = (value: unknown, where: string): Language => {
   if (value === undefined || value === null) return LANGUAGE;

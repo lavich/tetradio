@@ -1,6 +1,7 @@
 /** Окончания выводятся только с тем же ударением и основой от трёх букв: лучше не найти форму, чем привязать чужое слово. */
 import { glossSpans, tapFields, type LessonBlock } from "../src/content/course.ts";
 import type { BlockMarks, MarkCard, PackageMarks, WordMark } from "../src/content/schema.ts";
+import { ARTICLE_WORDS } from "./greek.ts";
 import { PROFILES, type Language, type LanguageProfile } from "../src/domain/language.ts";
 
 export interface MatchCard {
@@ -31,7 +32,7 @@ export const norm = (value: string) => {
   return out;
 };
 const normSet = (values: string[]) => new Set(values.map(norm));
-const ARTICLES = normSet(["ο", "η", "το", "οι", "τα", "τον", "την", "τη", "του", "της", "των", "τους", "τις", "τ"]);
+const ARTICLES = normSet(ARTICLE_WORDS);
 /** «σε» — и «в», и «тебя», «του» — и «его», и артикль: отдельно (не во фразе) перевод карточки чаще неверен. */
 export const HOMOGRAPHS = normSet(["σε", "με", "του", "της", "μου", "σου", "μας", "σας", "τους", "ένα", "τα", "το"]);
 const IRREGULAR: Record<string, string[]> = {
