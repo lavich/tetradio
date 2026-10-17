@@ -1,7 +1,6 @@
 import { Volume2, X } from "lucide-react";
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useId,
@@ -9,6 +8,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type KeyboardEvent,
   type ReactNode,
 } from "react";
@@ -21,6 +21,13 @@ import type { TapCard } from "../../storage/course";
 import css from "./word-taps.module.css";
 
 const HINT_KEY = "word-taps-hint";
+const markHintSeen = () => {
+  try {
+    localStorage.setItem(HINT_KEY, "1");
+  } catch {
+    /* хранилище недоступно */
+  }
+};
 const hintSeen = () => {
   try {
     return localStorage.getItem(HINT_KEY) === "1";
@@ -37,16 +44,47 @@ interface Open {
   played: Promise<PlayResult>;
   seq: number;
 }
+interface TapState {
+  open: Open | null;
+  hint: boolean;
+}
+/** Открытое слово и подсказка живут вне контекста: их смена не должна перерисовывать каждое слово страницы. */
+function createTapStore() {
+  let state: TapState = { open: null, hint: !hintSeen() };
+  let seq = 0;
+  const listeners = new Set<() => void>();
+  const set = (next: Partial<TapState>) => {
+    state = { ...state, ...next };
+    listeners.forEach((listener) => listener());
+  };
+  return {
+    get: () => state,
+    subscribe: (listener: () => void) => {
+      listeners.add(listener);
+      return () => void listeners.delete(listener);
+    },
+    show(next: Omit<Open, "seq">) {
+      set({ open: { ...next, seq: ++seq }, hint: false });
+      markHintSeen();
+    },
+    close: () => {
+      if (state.open) set({ open: null });
+    },
+    dismissHint: () => {
+      set({ hint: false });
+      markHintSeen();
+    },
+  };
+}
+type TapStore = ReturnType<typeof createTapStore>;
 interface Taps {
   marks: BlockMarks;
   cards: Map<string, TapCard>;
-  open: Open | null;
-  show: (next: Omit<Open, "seq">) => void;
-  close: () => void;
-  hint: boolean;
-  dismissHint: () => void;
+  store: TapStore;
 }
 const TapsContext = createContext<Taps | null>(null);
+const useTapState = <T,>(store: TapStore, pick: (state: TapState) => T) =>
+  useSyncExternalStore(store.subscribe, () => pick(store.get()));
 
 export function WordTaps({
   marks,
@@ -59,37 +97,21 @@ export function WordTaps({
   page: number;
   children: ReactNode;
 }) {
-  const [open, setOpen] = useState<Open | null>(null);
-  const [hint, setHint] = useState(() => !hintSeen());
-  const dismissHint = useCallback(() => {
-    setHint(false);
-    try {
-      localStorage.setItem(HINT_KEY, "1");
-    } catch {
-      /* хранилище недоступно */
-    }
-  }, []);
-  const close = useCallback(() => setOpen(null), []);
-  const seq = useRef(0);
-  const show = useCallback(
-    (next: Omit<Open, "seq">) => {
-      setOpen({ ...next, seq: ++seq.current });
-      dismissHint();
-    },
-    [dismissHint],
-  );
-  useEffect(() => setOpen(null), [page]);
+  const [store] = useState(createTapStore);
+  useEffect(() => store.close(), [store, page]);
   useInkStroke();
-  const value = useMemo(
-    () => ({ marks, cards, open, show, close, hint, dismissHint }),
-    [marks, cards, open, show, close, hint, dismissHint],
-  );
+  const value = useMemo(() => ({ marks, cards, store }), [marks, cards, store]);
   return (
     <TapsContext.Provider value={value}>
       {children}
-      {open ? <WordSheet key={open.seq} open={open} onClose={close} /> : null}
+      <OpenSheet store={store} />
     </TapsContext.Provider>
   );
+}
+
+function OpenSheet({ store }: { store: TapStore }) {
+  const open = useTapState(store, (state) => state.open);
+  return open ? <WordSheet key={open.seq} open={open} onClose={store.close} /> : null;
 }
 
 const useTaps = () => useContext(TapsContext);
@@ -121,15 +143,15 @@ function useInkStroke() {
 }
 
 function TapWord({ card, stroke, gloss, text }: { card: TapCard; stroke?: boolean; gloss?: boolean; text: string }) {
-  const taps = useTaps()!;
+  const { store } = useTaps()!;
   const profile = useProfile();
   const ref = useRef<HTMLSpanElement>(null);
-  const active = taps.open?.anchor === ref.current && !!ref.current;
+  const active = useTapState(store, (state) => !!ref.current && state.open?.anchor === ref.current);
   const activate = (keyboard: boolean, point?: { x: number; y: number }) => {
-    if (active) return taps.close();
+    if (active) return store.close();
     // Звучит карточка, а не форма из текста: то же произношение, что в словах урока и в подсказке.
     const played = playText(card.greek, card.audioAssetId, profile);
-    taps.show({ card, anchor: ref.current!, keyboard, point, played });
+    store.show({ card, anchor: ref.current!, keyboard, point, played });
   };
   return (
     <span
@@ -213,13 +235,17 @@ export function Marked({
 
 export function TapHint() {
   const taps = useTaps();
-  if (!taps?.hint || !Object.keys(taps.marks).length) return null;
+  return taps ? <Hint taps={taps} /> : null;
+}
+function Hint({ taps }: { taps: Taps }) {
+  const hint = useTapState(taps.store, (state) => state.hint);
+  if (!hint || !Object.keys(taps.marks).length) return null;
   return (
     <p className={css.tapHint} role="note">
       <span>
         Нажмите на <span className={`${css.stroke} ${css.hintWord}`}>слово</span> — услышите его и увидите перевод
       </span>
-      <button type="button" className={css.tapHintClose} aria-label="Скрыть подсказку" onClick={taps.dismissHint}>
+      <button type="button" className={css.tapHintClose} aria-label="Скрыть подсказку" onClick={taps.store.dismissHint}>
         <X aria-hidden size={16} />
       </button>
     </p>

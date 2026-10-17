@@ -71,8 +71,12 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--nav-bg);
-  backdrop-filter: blur(14px);
   box-shadow: var(--cloud-shadow);
+}
+@media (hover: hover) and (pointer: fine) {
+  .pager {
+    backdrop-filter: blur(14px);
+  }
 }
 .pager > button {
   border-radius: 999px;

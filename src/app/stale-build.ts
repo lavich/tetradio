@@ -1,4 +1,5 @@
 import { lifecycle } from "../reporting/reporting";
+import { trackLoading } from "./loading";
 
 const KEY = "tetradio:stale-build-reload";
 /** Перезагрузка чаще этого считается циклом: чанк не грузится не из-за сборки, и отказ уходит в границу ошибок. */
@@ -24,7 +25,7 @@ export function loadScreen<T>(load: () => Promise<T>, options: StaleBuildOptions
     online = () => navigator.onLine !== false,
     now = Date.now,
   } = options;
-  return load().catch((error: unknown) => {
+  return trackLoading(load()).catch((error: unknown) => {
     if (!(error instanceof TypeError) || !online()) throw error;
     const at = now();
     try {

@@ -33,6 +33,8 @@ export interface DailyPlan {
   reviews: { ref: LearningRef; state: LearningState }[];
   origins: Map<string, WordOrigin>;
   unavailable: LearningRef[];
+  /** Когда план может измениться сам: срок ближайшей карточки обучения или конец учебного дня. */
+  wakeAt: Date;
 }
 
 export interface PlanLesson {
@@ -108,8 +110,16 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
   const [live, states] = await Promise.all([source.liveKeys(refs), source.statesOf(refs)]);
   const candidates = refs.filter((ref) => live.has(unitKey(ref)) && !states.has(unitKey(ref)));
   const cutoff = reviewCutoff(now, source.timezone());
-  const due = (await source.dueStates(new Date(cutoff.getTime() - 1), courseId)).filter((state) =>
-    isDue(state.card, now, cutoff),
+  const ahead = await source.dueStates(new Date(cutoff.getTime() - 1), courseId);
+  const due = ahead.filter((state) => isDue(state.card, now, cutoff));
+  const wakeAt = new Date(
+    Math.min(
+      cutoff.getTime(),
+      ...ahead
+        .filter((state) => state.card.state !== State.Review && !isDue(state.card, now, cutoff))
+        .map((state) => new Date(state.card.due).getTime())
+        .filter(Number.isFinite),
+    ),
   );
   const dueRefs = due.map((state) => state.ref);
   // Слова и фразы с базы не удаляются, а слово проверяемо всегда: на большой базе план не читает их записи.
@@ -145,5 +155,5 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     )
     .map((s) => ({ ref: s.ref, state: s }));
 
-  return { today, newRefs, reviews, origins, unavailable };
+  return { today, newRefs, reviews, origins, unavailable, wakeAt };
 }

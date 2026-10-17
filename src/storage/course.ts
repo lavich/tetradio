@@ -26,6 +26,8 @@ export const blockProgressOf = zoned(async function blockProgressOf(lessonId: st
 export type BlockPatch = Partial<Omit<BlockProgress, "key" | "lessonId" | "blockId" | "updatedAt">> & {
   /** Неверные пункты задания: из них рождаются карточки ошибок; в запись блока не идут. */
   mistakes?: string[];
+  /** Запись без объявления изменения синхронизации: черновик по ходу набора; в запись блока не идёт. */
+  quiet?: boolean;
 };
 /**
  * Сохраняет выполнение блока поверх прежнего: повторная проверка задания заменяет ответы и счёт.
@@ -35,7 +37,7 @@ export type BlockPatch = Partial<Omit<BlockProgress, "key" | "lessonId" | "block
 export async function saveBlockProgress(
   lessonId: string,
   blockId: string,
-  { mistakes = [], ...patch }: BlockPatch,
+  { mistakes = [], quiet = false, ...patch }: BlockPatch,
   database: AppDatabase = db,
   now = new Date(),
 ): Promise<BlockProgress> {
@@ -66,7 +68,7 @@ export async function saveBlockProgress(
       return row;
     },
   );
-  announceChange();
+  if (!quiet) announceChange();
   if (saved.done) await completeIfDone(lessonId, database);
   return saved;
 }

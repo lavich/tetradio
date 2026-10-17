@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { LoadingBar } from "./LoadingBar";
 import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
 import { updateReady } from "../main";
@@ -115,6 +116,8 @@ export function App() {
       )}
       {!immersive && !lesson && <Nav />}
       <Suspense fallback={null}>{!immersive && conflict && <SyncConflictDialog />}</Suspense>
+      {/* Последним: `.app > .screen:first-child` в ui.module.css ждёт экран первым. */}
+      <LoadingBar />
     </div>
   );
 }

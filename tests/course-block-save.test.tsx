@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import type { ExerciseBlock, SpeakingBlock, WritingBlock } from "../src/content/course";
 import { Exercise, Speaking, Writing } from "../src/features/course/blocks";
 import type { BlockPatch } from "../src/storage/course";
+import type { BlockProgress } from "../src/domain/types";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -33,6 +34,8 @@ const speaking: SpeakingBlock = {
   criteria: ["Говорю без пауз"],
 };
 
+// eslint-disable-next-line typescript/unbound-method -- статический метод URL, присваивается обратно как есть
+const createObjectURL = URL.createObjectURL;
 let host: HTMLDivElement, root: Root;
 let saved: BlockPatch[];
 let failing: boolean;
@@ -52,6 +55,7 @@ afterEach(() => {
   host.remove();
   vi.useRealTimers();
   vi.unstubAllGlobals();
+  URL.createObjectURL = createObjectURL;
 });
 
 const type = (text: string) =>
@@ -77,8 +81,19 @@ describe("письмо: черновик не теряется при закры
     await type("Γεια");
     await type("Γεια σου");
     expect(saved).toEqual([]);
-    await act(async () => vi.advanceTimersByTime(800));
-    expect(saved).toEqual([{ text: "Γεια σου" }]);
+    await act(async () => vi.advanceTimersByTime(2000));
+    expect(saved).toEqual([{ text: "Γεια σου", quiet: true }]);
+  });
+  it("тихая запись по паузе повторяется с объявлением при потере фокуса и не дублируется", async () => {
+    vi.useFakeTimers();
+    act(() => root.render(<Writing block={writing} progress={undefined} save={save} />));
+    await type("Γεια σου");
+    await act(async () => vi.advanceTimersByTime(2000));
+    expect(saved).toEqual([{ text: "Γεια σου", quiet: true }]);
+    await act(async () => host.querySelector("textarea")!.dispatchEvent(new FocusEvent("focusout", { bubbles: true })));
+    expect(saved).toEqual([{ text: "Γεια σου", quiet: true }, { text: "Γεια σου" }]);
+    await act(async () => window.dispatchEvent(new Event("pagehide")));
+    expect(saved).toHaveLength(2);
   });
   it("уход страницы в фон и размонтирование пишут черновик сразу", async () => {
     vi.useFakeTimers();
@@ -94,7 +109,7 @@ describe("письмо: черновик не теряется при закры
     await type("Γεια σου φίλε");
     act(() => root.render(<p />));
     expect(saved.at(-1)).toEqual({ text: "Γεια σου φίλε" });
-    await act(async () => vi.advanceTimersByTime(800));
+    await act(async () => vi.advanceTimersByTime(2000));
     expect(saved).toHaveLength(3);
   });
   it("сбой записи показывает жалобу", async () => {
@@ -163,5 +178,67 @@ describe("речь: микрофон не остаётся включённым"
     expect(mic.track.stop).not.toHaveBeenCalled();
     act(() => root.render(<p />));
     expect(mic.track.stop).toHaveBeenCalled();
+  });
+  it("onstop после ухода с урока не создаёт адрес записи, который некому освободить", async () => {
+    const track = { stop: vi.fn() };
+    const recorders: { onstop?: () => void }[] = [];
+    vi.stubGlobal("navigator", {
+      mediaDevices: { getUserMedia: () => Promise.resolve({ getTracks: () => [track] } as unknown as MediaStream) },
+    });
+    vi.stubGlobal(
+      "MediaRecorder",
+      class {
+        mimeType = "audio/webm";
+        onstop?: () => void;
+        start = vi.fn();
+        stop = vi.fn();
+        constructor() {
+          recorders.push(this);
+        }
+      },
+    );
+    const create = vi.fn(() => "blob:recording");
+    URL.createObjectURL = create;
+    act(() => root.render(<Speaking block={speaking} progress={undefined} save={save} />));
+    await press("Начать");
+    await act(async () => {
+      await Promise.resolve();
+    });
+    act(() => root.render(<p />));
+    recorders[0].onstop?.();
+    expect(create).not.toHaveBeenCalled();
+  });
+});
+
+describe("задание: выполнение, пришедшее синхронизацией", () => {
+  const done: BlockProgress = {
+    key: "l/forms",
+    lessonId: "l",
+    blockId: "forms",
+    done: true,
+    score: { correct: 1, almost: 0, total: 1 },
+    updatedAt: "",
+  };
+  it("пустое задание показывает результат без переоткрытия", async () => {
+    act(() => root.render(<Exercise block={exercise} progress={undefined} save={save} />));
+    expect(host.querySelector('[role="status"]')).toBeNull();
+    act(() => root.render(<Exercise block={exercise} progress={done} save={save} />));
+    expect(host.querySelector('[role="status"]')?.textContent).toBe("1 из 1 · на другом устройстве");
+  });
+  it("начатые ответы остаются, результат не подменяет их", async () => {
+    act(() => root.render(<Exercise block={exercise} progress={undefined} save={save} />));
+    await press("είμαι");
+    act(() => root.render(<Exercise block={exercise} progress={done} save={save} />));
+    expect(host.querySelector('[role="status"]')).toBeNull();
+  });
+  it("после «Ещё раз» прежний результат не возвращается", async () => {
+    act(() => root.render(<Exercise block={exercise} progress={undefined} save={save} />));
+    await press("είμαι");
+    await press("Проверить");
+    act(() => root.render(<Exercise block={exercise} progress={done} save={save} />));
+    await press("Ещё раз");
+    expect(host.querySelector('[role="status"]')).toBeNull();
+    act(() => root.render(<Exercise block={exercise} progress={{ ...done, done: false }} save={save} />));
+    expect(host.querySelector('[role="status"]')).toBeNull();
   });
 });

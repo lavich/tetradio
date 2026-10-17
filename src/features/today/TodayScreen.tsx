@@ -1,5 +1,4 @@
 import { Screen } from "../../app/Screen";
-import { useNow } from "../../shared/clock";
 import { useCourses, useCourseSession, usePrimaryCourse } from "../../shared/courses";
 import { useInstalledCount, usePlan } from "../../shared/store";
 import { CourseToday } from "./CourseToday";
@@ -7,9 +6,8 @@ import { CourseStart } from "./FirstRun";
 import { OtherCourse } from "./OtherCourse";
 
 export function TodayScreen() {
-  const now = useNow();
   const primary = usePrimaryCourse();
-  const plan = usePlan(now, primary);
+  const plan = usePlan(primary);
   const installed = useInstalledCount();
   const unfinished = useCourseSession(primary ?? undefined);
   const others = useCourses()?.filter((course) => course.id !== primary);
@@ -32,10 +30,9 @@ export function TodayScreen() {
       <CourseToday
         courseId={primary ?? undefined}
         plan={plan}
-        now={now}
         unfinished={unfinished}
         more={others?.map((course) => (
-          <OtherCourse key={course.id} course={course} now={now} />
+          <OtherCourse key={course.id} course={course} />
         ))}
       />
     </Screen>

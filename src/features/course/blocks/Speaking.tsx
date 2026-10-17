@@ -36,15 +36,17 @@ export function Speaking({
   const stream = useRef<MediaStream | null>(null);
   const attempt = useRef(0);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
-  useEffect(
-    () => () => {
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
       attempt.current++;
       if (timer.current) clearInterval(timer.current);
       recorder.current?.stop();
       if (stream.current) silence(stream.current);
-    },
-    [],
-  );
+    };
+  }, []);
   useEffect(() => () => void (recording && URL.revokeObjectURL(recording)), [recording]);
   const stop = () => {
     attempt.current++;
@@ -74,6 +76,8 @@ export function Speaking({
       media.onstop = () => {
         silence(source);
         if (stream.current === source) stream.current = null;
+        // `onstop` приходит после размонтирования: адрес, созданный тогда, никто не освободит.
+        if (!mounted.current) return;
         setRecording(URL.createObjectURL(new Blob(chunks, { type: media.mimeType })));
       };
       media.start();
