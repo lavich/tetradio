@@ -53,7 +53,9 @@
 
 ## Реализация
 
-Отклонения от дизайна и базовые замеры — по ходу работы.
+Базовые замеры 17.10.2026 (окружение CI): стартовый JS 595 789 / gzip 202 122 / brotli 177 271; CSS 93 975 / gzip 19 085; precache 1 479 087, шрифты 250 952. Lighthouse (локально, три прогона): LCP 3 917 / 3 455 / 3 454 мс (медиана 3 455), TBT 0, вес 410 159 байт; ленивые чанки первого экрана — 5, 32 750 байт передачи (`workbox-window`, `sync`, `TelegramNotices`, `alert-dialog`, `status-text`); предел 36 000 (+10%).
+
+Отклонения: `check:bundle` разбит на `scripts/bundle-metrics.ts` (чистые функции, тесты) и сам скрипт; Lighthouse — `scripts/lighthouse.ts` + `scripts/lighthouse-report.ts` (решение по порогам, тесты); `chrome-launcher` добавлен devDependency вместе с `lighthouse` — запуск Chromium из Playwright.
 
 ## Риски / компромиссы
 
