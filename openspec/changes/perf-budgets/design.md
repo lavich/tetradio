@@ -49,7 +49,7 @@
 
 ### Отчёт vitest
 
-- Репортёр `tests/setup/slow-files-reporter.ts` (`onTestRunEnd`: длительность модуля — `endTime − startTime` из `diagnostic()`, а не только `duration` тестов и хуков: импорт и окружение тоже считаются): список файлов > 10 с в stdout (`::warning file=…::`) и в `$GITHUB_STEP_SUMMARY`, если переменная задана. Подключается в `vite.config.ts` через `reporters: ["default", "./tests/setup/slow-files-reporter.ts", ...(GITHUB_ACTIONS ? ["github-actions"] : [])]` (явный список заменяет умолчание vitest, где аннотации включены в CI) — сам репортёр не ломает прогон. Локально печатает те же строки, без записи в сводку. Проект `heavy` (`scale` ≈30 с, `sync-size` ≈11 с) идёт с порогом 40 с, чтобы предупреждение значило рост, а не норму.
+- Репортёр `tests/setup/slow-files-reporter.ts` (`onTestRunEnd`: длительность модуля — сумма полей `diagnostic()` (`duration`, `collectDuration`, `setupDuration`, `environmentSetupDuration`, `prepareDuration`), а не только `duration` тестов и хуков: импорт и окружение тоже считаются): список файлов > 10 с в stdout (`::warning file=…::`) и в `$GITHUB_STEP_SUMMARY`, если переменная задана. Подключается в `vite.config.ts` через `reporters: ["default", "./tests/setup/slow-files-reporter.ts", ...(GITHUB_ACTIONS ? ["github-actions"] : [])]` (явный список заменяет умолчание vitest, где аннотации включены в CI) — сам репортёр не ломает прогон. Локально печатает те же строки, без записи в сводку. Проект `heavy` (`scale` 30–38 с, `sync-size` ≈11 с) идёт с порогом 60 с, чтобы предупреждение значило рост, а не норму.
 
 ## Реализация
 
