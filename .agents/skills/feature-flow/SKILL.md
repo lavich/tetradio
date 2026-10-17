@@ -29,8 +29,13 @@ description: Процесс изменения в Τετράδιο от идеи
 ## 4. Реализация
 - Свежий ворктри от `main`; если `main` ушёл вперёд — `git rebase origin/main` до начала.
 - Базовый прогон тестов до правок. Задачи — по порядку tasks.md, тест на каждую; отклонения от дизайна записать в раздел «Реализация» в design.md; отметить `- [x]`.
-- Полная проверка:
-  `npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:e2e && npm run test:e2e:course` (и `test:e2e:courses`, если задеты два курса).
+- Полная проверка — набор CI (`.github/workflows/ci.yml`); `npm test` заменяет `test:unit` и `test:heavy`:
+  ```
+  npm run format:check && npm run lint && npm run typecheck && npm run check:config && npm run spec && npm run lexicon:check && npm test
+  BASE_PATH=/tetradio/ VITE_TELEGRAM_MOCK= VITE_TELEGRAM_BOT=TetradioBot SENTRY_DEBUG_IDS=1 VITE_SENTRY_DSN=https://00000000000000000000000000000000@o0000000.ingest.de.sentry.io/0000000000000000 npm run build
+  BASE_PATH=/tetradio/ npm run check:bundle
+  npm run test:e2e && npm run test:e2e:course && npm run test:e2e:courses
+  ```
 - Экраны — проверить скриншотом временного e2e-теста, затем удалить его.
 
 ## 5. Перекрёстное ревью кода
