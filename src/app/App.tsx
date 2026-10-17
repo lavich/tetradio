@@ -4,7 +4,7 @@ import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
 import { updateReady } from "../main";
 import { useBackHandler, useEnvironment } from "../platform/platform";
-import { afterStartup, loadConflictDialog, useFirstInteraction, useSyncConflictSeen } from "./deferred";
+import { afterStartup, loadConflictDialog, syncNeededNow, useFirstInteraction, useSyncConflictSeen } from "./deferred";
 import { loadScreen } from "./stale-build";
 import { useScrollMemory } from "./scroll";
 // «Сегодня» открывается первым и в браузере, и в Mini App, поэтому грузится сразу: иначе первый кадр пустой.
@@ -63,6 +63,9 @@ export function App() {
   const interacted = useFirstInteraction();
   const [updateNotice, setUpdateNotice] = useState(false);
   const conflict = useSyncConflictSeen();
+  useEffect(() => {
+    if (pathname.startsWith("/progress")) syncNeededNow();
+  }, [pathname]);
   useEffect(() => afterStartup(() => void loadConflictDialog().catch(() => undefined)), []);
   useEffect(() => {
     // Обновление предлагаем между занятиями, чтобы не прервать ответ.

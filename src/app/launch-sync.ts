@@ -11,6 +11,8 @@ export interface LaunchSyncOptions {
 
 /** Синхронизация подключается только после сверки владельца с пользователем bridge. */
 export function launchSync({ profile, stopped, onMismatch, connectSync }: LaunchSyncOptions) {
+  // Отказ чанка до первого подключения не должен уйти в отчёт о сбое: его разбирает `connect`.
+  connectSync.catch(() => undefined);
   return (app: TelegramWebApp | null): Promise<void> => {
     if (stopped()) return Promise.resolve();
     if (!ownerMatches(profile, app?.initDataUnsafe?.user?.id)) {
@@ -35,4 +37,14 @@ export function syncOnceOpened(opened: Promise<unknown>, load: Promise<ConnectSy
     ),
     load,
   ]).then(([open, connect]) => (open ? connect : skip));
+}
+
+/** Загрузка после запуска с отменой; отказ чанка не должен стать необработанным до подключения облака. */
+export function deferredLoad<T>(schedule: (run: () => void) => () => void, load: () => Promise<T>) {
+  let cancel = () => {};
+  const promise = new Promise<T>((resolve, reject) => {
+    cancel = schedule(() => load().then(resolve, reject));
+  });
+  promise.catch(() => undefined);
+  return { promise, cancel: () => cancel() };
 }
