@@ -1,11 +1,11 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { buildContent } from "../content/build";
 import { parseCatalog, parsePackage } from "../src/content/schema";
 import { GREEK_CALENDAR } from "./helpers/calendar";
+import { realContent } from "./helpers/real-content";
 
 /** Настоящий курс из content/: собирается, модули по программе, опубликованы только проверенные. */
-const content = buildContent("content");
+const content = realContent();
 const catalog = parseCatalog(JSON.parse(content.files.find((f) => f.path === "content/catalog.json")!.body as string));
 const greek = catalog.courses.find((course) => course.id === "greek-a2")!;
 const modulesOf = (courseId: string) => catalog.modules!.filter((module) => module.courseId === courseId);
@@ -57,16 +57,17 @@ describe("курс в продукте", () => {
     expect(content.words.some((word) => /^w\d{2}-\d{2}$/.test(word.id))).toBe(false);
     expect(catalog.courses.map((c) => c.id)).toEqual(["english-it", "greek-a2"]);
   });
-  it("английский для IT: 16 модулей программы без календаря, опубликован e01", () => {
+  it("английский для IT: 16 модулей программы без календаря, опубликованы модули с первого", () => {
     const english = catalog.courses.find((course) => course.id === "english-it")!;
     expect(english).toMatchObject({ title: "Английский для IT", language: "en" });
     expect(english).not.toHaveProperty("calendar");
     expect(modulesOf("english-it").map((m) => m.number)).toEqual(Array.from({ length: 16 }, (_, i) => i + 1));
-    expect(
-      modulesOf("english-it")
-        .filter((m) => m.status === "published")
-        .map((m) => m.id),
-    ).toEqual(["e01"]);
+    // Опубликованные модули идут подряд с первого: новый английский модуль тест не ломает.
+    const published = modulesOf("english-it")
+      .filter((m) => m.status === "published")
+      .map((m) => m.number);
+    expect(published.length).toBeGreaterThan(0);
+    expect(published).toEqual(Array.from({ length: published.length }, (_, i) => i + 1));
   });
   it("карточки английского курса — ew… и ep…", () => {
     const packs = packagesOf("english-it");

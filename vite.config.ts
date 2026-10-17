@@ -104,6 +104,8 @@ const appFallback = (): Plugin => {
   };
 };
 
+const heavy = ["tests/scale.test.ts", "tests/sync-size.test.ts"];
+
 /** HTTPS-туннель для Mini App бота разработки: разрешается только конкретный hostname из переменной окружения. */
 const tunnelHost = process.env.TUNNEL_HOST;
 
@@ -169,9 +171,17 @@ export default defineConfig({
   ],
   // Unit-тесты открывают базу вне Telegram, как сборка с моком (`tetradio-mock-1`).
   test: {
-    include: ["tests/**/*.test.{ts,tsx}"],
+    // `heavy` — тесты на больших объёмах: отдельным проектом они идут в своей задаче CI параллельно с остальными.
+    projects: [
+      {
+        extends: true,
+        test: { name: "unit", include: ["tests/**/*.test.{ts,tsx}"], exclude: heavy },
+      },
+      { extends: true, test: { name: "heavy", include: heavy } },
+    ],
     environment: "node",
     env: { VITE_TELEGRAM_MOCK: "1" },
     setupFiles: ["tests/setup/console.ts"],
+    globalSetup: ["tests/setup/real-content.ts"],
   },
 });

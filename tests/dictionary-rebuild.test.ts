@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { liveQuery } from "dexie";
 import { Rating } from "ts-fsrs";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { revisionOf } from "../content/build";
 import { applyPackage, installLesson, refreshCatalog } from "../src/content/client";
 import { nextState } from "../src/domain/learning";
@@ -13,7 +13,6 @@ import { memoryFetcher, packageOf } from "./helpers/content";
 const NAME = "tetradio-dictionary-rebuild";
 const COURSE = "mechanics";
 const now = new Date("2026-09-15T09:00:00Z");
-const settle = () => new Promise((resolve) => setTimeout(resolve, 100));
 
 function countReads(database: AppDatabase) {
   const keys: Record<string, number> = {};
@@ -48,10 +47,22 @@ function countReads(database: AppDatabase) {
 function watch() {
   const seen: DictionaryLesson[][] = [];
   const subscription = liveQuery(() => dictionary(COURSE, db)).subscribe({ next: (value) => seen.push(value) });
-  return { last: () => seen.at(-1)!, stop: () => subscription.unsubscribe() };
+  return { last: () => seen.at(-1)!, runs: () => seen.length, stop: () => subscription.unsubscribe() };
 }
 
-const cold = () => db.transaction("rw", db.tables, () => dictionary(COURSE, db));
+// Сверка идёт через отдельное подключение без счётчика: чтения живого запроса считаются только свои.
+let reader: AppDatabase;
+const cold = () => reader.transaction("rw", reader.tables, () => dictionary(COURSE, reader));
+/** Ждёт, пока живой словарь сойдётся со свежим чтением и перестанет перезапускаться. */
+const settle = async (live: ReturnType<typeof watch>) => {
+  await vi.waitFor(async () => expect(live.last()).toEqual(await cold()));
+  let runs = -1;
+  await vi.waitFor(() => {
+    const before = runs;
+    runs = live.runs();
+    expect(runs).toBe(before);
+  });
+};
 
 const entryOf = (lessons: DictionaryLesson[], id: string) =>
   lessons.flatMap((lesson) => lesson.entries).find((entry) => entry.ref.kind === "word" && entry.ref.id === id);
@@ -63,20 +74,24 @@ beforeEach(async () => {
   await new AppDatabase(NAME).delete();
   db = new AppDatabase(NAME);
   reads = countReads(db);
+  reader = new AppDatabase(NAME);
   await refreshCatalog(db, fetcher);
 });
-afterEach(() => db.close());
+afterEach(() => {
+  reader.close();
+  db.close();
+});
 
 describe("словарь во время установки курса", () => {
   it("совпадает с прочитанным заново после установки, повторной установки, обновления и удаления", async () => {
     const live = watch();
     for (const id of ["mech-1", "mech-2", "mech-3", "mech-4"]) await installLesson(id, db, fetcher);
-    await settle();
+    await settle(live);
     expect(live.last().map((lesson) => lesson.id)).toEqual(["mech-1", "mech-2", "mech-3", "mech-4"]);
     expect(live.last()).toEqual(await cold());
 
     expect(await applyPackage(packageOf("mech-2"), db)).toMatchObject({ status: "current" });
-    await settle();
+    await settle(live);
     expect(live.last()).toEqual(await cold());
 
     const pack = packageOf("mech-1");
@@ -98,28 +113,28 @@ describe("словарь во время установки курса", () => {
       },
       db,
     );
-    await settle();
+    await settle(live);
     expect(entryOf(live.last(), renamed.id)?.russian).toBe("новый перевод");
     expect(entryOf(live.last(), dropped.id)).toBeUndefined();
     expect(live.last()).toEqual(await cold());
 
     await db.cardStates.put(nextState(undefined, wordRef(renamed.id), Rating.Good, now));
-    await settle();
+    await settle(live);
     expect(entryOf(live.last(), renamed.id)?.mark).not.toBe("new");
     expect(live.last()).toEqual(await cold());
 
     await db.cardStates.delete(unitKey(wordRef(renamed.id)));
-    await settle();
+    await settle(live);
     expect(entryOf(live.last(), renamed.id)?.mark).toBe("new");
 
     const removed = packageOf("mech-4").items.find((item) => item.kind === "word")!;
     await db.words.delete(removed.id);
-    await settle();
+    await settle(live);
     expect(entryOf(live.last(), removed.id)).toBeUndefined();
     expect(live.last()).toEqual(await cold());
 
     await db.words.clear();
-    await settle();
+    await settle(live);
     expect(live.last().flatMap((lesson) => lesson.entries.filter((entry) => entry.word))).toEqual([]);
     expect(live.last()).toEqual(await cold());
     live.stop();
@@ -128,11 +143,11 @@ describe("словарь во время установки курса", () => {
   it("новый пакет перечитывает только свои слова, фразы, связи и состояния", async () => {
     for (const id of ["mech-1", "mech-2", "mech-3"]) await installLesson(id, db, fetcher);
     const live = watch();
-    await settle();
+    await settle(live);
     for (const table of Object.keys(reads)) delete reads[table];
 
     await installLesson("mech-4", db, fetcher);
-    await settle();
+    await settle(live);
     const added = packageOf("mech-4");
     expect(live.last().at(-1)!.id).toBe("mech-4");
     expect(reads.words ?? 0).toBeLessThanOrEqual(added.words.length);
@@ -145,10 +160,10 @@ describe("словарь во время установки курса", () => {
   it("неизменившиеся уроки остаются теми же объектами", async () => {
     for (const id of ["mech-1", "mech-2"]) await installLesson(id, db, fetcher);
     const live = watch();
-    await settle();
+    await settle(live);
     const before = live.last();
     await installLesson("mech-3", db, fetcher);
-    await settle();
+    await settle(live);
     expect(live.last().slice(0, 2)).toEqual(before);
     expect(live.last()[0]).toBe(before[0]);
     expect(live.last()[1]).toBe(before[1]);
@@ -158,11 +173,11 @@ describe("словарь во время установки курса", () => {
   it("новая отметка меняет только свой урок", async () => {
     for (const id of ["mech-1", "mech-2", "mech-3"]) await installLesson(id, db, fetcher);
     const live = watch();
-    await settle();
+    await settle(live);
     const before = live.last();
     const first = before[0].entries.find((entry) => entry.ref.kind === "word")!;
     await db.cardStates.put(nextState(undefined, first.ref, Rating.Good, now));
-    await settle();
+    await settle(live);
     expect(live.last()[0]).not.toBe(before[0]);
     expect(entryOf(live.last(), first.ref.id)?.mark).toBe("learning");
     expect(live.last()[1]).toBe(before[1]);
@@ -173,7 +188,7 @@ describe("словарь во время установки курса", () => {
   it("пакет из 50+ слов сбрасывает кэш слов целиком, следующий пакет — снова только свои", async () => {
     for (const id of ["mech-1", "mech-2"]) await installLesson(id, db, fetcher);
     const live = watch();
-    await settle();
+    await settle(live);
     const base = packageOf("mech-3");
     const words = Array.from({ length: 55 }, (_, index) => {
       const { revision: _revision, ...rest } = base.words[0];
@@ -192,14 +207,14 @@ describe("словарь во время установки курса", () => {
     };
     for (const table of Object.keys(reads)) delete reads[table];
     await applyPackage(big, db);
-    await settle();
+    await settle(live);
     expect(live.last().at(-1)!.entries).toHaveLength(55);
     expect(reads.words).toBe(await db.words.count());
     expect(live.last()).toEqual(await cold());
 
     for (const table of Object.keys(reads)) delete reads[table];
     await installLesson("mech-4", db, fetcher);
-    await settle();
+    await settle(live);
     expect(reads.words ?? 0).toBeLessThanOrEqual(packageOf("mech-4").words.length);
     expect(live.last()).toEqual(await cold());
     live.stop();
@@ -208,7 +223,7 @@ describe("словарь во время установки курса", () => {
   it("связи уроков не читаются запросом, который Dexie кэширует оптимистично", async () => {
     const live = watch();
     for (const id of ["mech-1", "mech-2"]) await installLesson(id, db, fetcher);
-    await settle();
+    await settle(live);
     expect(live.last()).toHaveLength(2);
     expect(reads["lessonItems:query"] ?? 0).toBe(0);
     live.stop();

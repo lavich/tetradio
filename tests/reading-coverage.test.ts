@@ -1,25 +1,14 @@
 import { readFileSync } from "node:fs";
 import { parse } from "yaml";
 import { describe, expect, it } from "vitest";
-import { buildContent } from "../content/build";
-import { coverage, share } from "../content/coverage";
 import type { MatchCard } from "../content/marks";
+import { coverage, share } from "../content/coverage";
 
-/** Словарь пилота — карточки и глоссы уроков m01–m03 настоящего курса. */
-const built = buildContent("content");
-const lessons = built.packages.filter((pack) => /^m0[123]-/.test(pack.id));
-const words = new Map(built.words.map((word) => [word.id, word]));
-const phrases = new Map(built.phrases.map((phrase) => [phrase.id, phrase]));
-const cards: MatchCard[] = lessons.flatMap((pack) =>
-  pack.items.map((item) =>
-    item.kind === "word"
-      ? { ref: item.id, text: words.get(item.id)!.greek, forms: words.get(item.id)!.forms }
-      : { ref: item.id, text: phrases.get(item.id)!.text, phrase: true },
-  ),
-);
-const lessonGlosses = lessons.flatMap((pack) =>
-  (pack.blocks ?? []).flatMap((block) => ("glosses" in block && block.glosses ? block.glosses.map((g) => g.text) : [])),
-);
+/** Снимок словаря уроков m01–m03 и пилотных текстов: ожидания не плывут вместе с курсом (`tests/fixtures/reading-pilot`). */
+const { cards, lessonGlosses } = JSON.parse(readFileSync("tests/fixtures/reading-pilot/vocabulary.json", "utf8")) as {
+  cards: MatchCard[];
+  lessonGlosses: string[];
+};
 interface Pilot {
   id: string;
   text: string;
@@ -27,9 +16,8 @@ interface Pilot {
   glosses?: Record<string, string>;
   expected: { strict?: number; known?: number; glosses?: number; names?: number; passes?: boolean; unknown?: string[] };
 }
-const pilots = parse(
-  readFileSync("openspec/changes/archive/2026-10-11-reading-shelf/pilot-texts.yaml", "utf8"),
-) as Pilot[];
+const pilots = parse(readFileSync("tests/fixtures/reading-pilot/texts.yaml", "utf8")) as Pilot[];
+it("пилотные тексты на месте", () => expect(pilots.length).toBeGreaterThan(0));
 const measure = (pilot: Pilot) =>
   coverage({
     text: pilot.text,

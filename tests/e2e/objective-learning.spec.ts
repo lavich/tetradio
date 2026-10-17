@@ -161,12 +161,11 @@ test("знакомство озвучивается само, а с выключ
   await setSettings(page, { autoSpeak: false });
   await installSession(page, "recognition", true);
   await expect(page.getByTestId("prompt")).toHaveText("Новое слово");
-  await page.waitForTimeout(500);
-  expect(await page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken)).toEqual([]);
+  const spoken = () => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken);
+  expect(await spoken()).toEqual([]);
   await page.getByRole("button", { name: "Послушать слово" }).click();
-  await expect
-    .poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken))
-    .toContain("ο φίλος");
+  // Точное равенство: автозапуск, сработавший до или вместе с нажатием, дал бы второй голос.
+  await expect.poll(spoken).toEqual(["ο φίλος"]);
 });
 
 test("знакомство идёт отдельным проходом и переживает перезагрузку без ответа", async ({ page }) => {

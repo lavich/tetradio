@@ -239,7 +239,8 @@ function compactJson(value: unknown, indent = ""): string {
 describe("эталон планировщика", () => {
   it("совпадает с зафиксированными сценариями", async () => {
     const actual = await recordGolden();
-    if (!existsSync(FIXTURE) || process.env.UPDATE_GOLDEN === "1") {
+    // В CI отсутствующий эталон не создаётся молча: иначе тест без эталона проходит.
+    if (process.env.UPDATE_GOLDEN === "1" || (!existsSync(FIXTURE) && !process.env.CI)) {
       writeFileSync(FIXTURE, `${compactJson(actual)}\n`);
       return;
     }

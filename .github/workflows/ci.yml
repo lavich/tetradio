@@ -45,7 +45,21 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npm test
+      - run: npm run test:unit
+
+  # Тесты на больших объёмах (scale, sync-size) идут отдельной задачей: не удлиняют unit.
+  unit-heavy:
+    name: unit-heavy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run test:heavy
 
   build:
     name: build
@@ -94,6 +108,8 @@ jobs:
       - name: Playwright version matches the container image
         run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
       - run: npm run test:e2e -- --shard=${{ matrix.shard }}/${{ matrix.shards }}
+      - if: always()
+        run: npm run check:flaky -- test-results/e2e.json
       - if: failure()
         uses: actions/upload-artifact@v7
         with:
@@ -125,6 +141,8 @@ jobs:
       - name: Playwright version matches the container image
         run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
       - run: npm run test:e2e:${{ matrix.config }}
+      - if: always()
+        run: npm run check:flaky -- test-results/e2e-${{ matrix.config }}.json
       - if: failure()
         uses: actions/upload-artifact@v7
         with:
@@ -139,7 +157,7 @@ jobs:
   checks:
     name: checks
     if: always()
-    needs: [static, unit, build, e2e, e2e-course]
+    needs: [static, unit, unit-heavy, build, e2e, e2e-course]
     runs-on: ubuntu-latest
     steps:
       - name: All jobs passed

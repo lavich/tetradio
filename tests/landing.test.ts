@@ -1,14 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { buildContent } from "../content/build";
+import { buildContent, type BuiltContent } from "../content/build";
 import { checkItem } from "../src/domain/course";
 import { renderLanding } from "../src/landing/render";
 import { loadLandingData, pickSample } from "../src/landing/sample";
+import { realContent } from "./helpers/real-content";
 
-const files = (root: string) => {
-  const built = new Map(buildContent(root).files.map((file) => [file.path, file.body as string]));
+const files = (source: string | BuiltContent) => {
+  const content = typeof source === "string" ? buildContent(source) : source;
+  const built = new Map(content.files.map((file) => [file.path, file.body as string]));
   return (url: string) => built.get(url) ?? null;
 };
-const course = loadLandingData(files("content"));
+const course = loadLandingData(files(realContent()));
 
 describe("пробный урок лендинга", () => {
   it("берёт из настоящего урока 1.1 четыре задания: два выбора и два письма", () => {

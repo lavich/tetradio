@@ -78,10 +78,28 @@ function source(missing: string[] = []) {
   };
 }
 
+/** Паузы и ожидание голосов идут на поддельных часах: `playDialogue` доигрывается, пока они крутятся. */
+async function load() {
+  const module = await import("../src/shared/dialogue");
+  return {
+    stopDialogue: module.stopDialogue,
+    playDialogue: async (...args: Parameters<typeof module.playDialogue>) => {
+      const playing = module.playDialogue(...args);
+      let done = false;
+      void playing.finally(() => (done = true));
+      for (let tick = 0; !done && tick < 1000; tick++) await vi.advanceTimersByTimeAsync(100);
+      if (!done) throw new Error("диалог не закончился за 100 с поддельного времени");
+      return playing;
+    },
+  };
+}
+
 beforeEach(() => {
   vi.resetModules();
+  vi.useFakeTimers();
 });
 afterEach(() => {
+  vi.useRealTimers();
   delete (globalThis as { Audio?: unknown }).Audio;
   delete (globalThis as { speechSynthesis?: unknown }).speechSynthesis;
   delete (globalThis as { SpeechSynthesisUtterance?: unknown }).SpeechSynthesisUtterance;
@@ -91,7 +109,7 @@ describe("аудирование записями реплик", () => {
   it("реплики звучат файлами по порядку, синтез не нужен; подсветка идёт по репликам", async () => {
     const audio = fakeAudio();
     const spoken = fakeSynth();
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     const shown: number[] = [];
     const result = await playDialogue(lines, "normal", (index) => shown.push(index), source());
     expect(result).toBe("done");
@@ -107,14 +125,14 @@ describe("аудирование записями реплик", () => {
   it("медленный режим замедляет файл, а не берёт другой", async () => {
     const audio = fakeAudio();
     fakeSynth();
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     await playDialogue(lines.slice(0, 1), "slow", undefined, source());
     expect(audio.played).toEqual([{ src: "/media/line-1.mp3", rate: 0.8 }]);
   });
   it("запись следующей реплики запрашивается, пока звучит текущая", async () => {
     const audio = fakeAudio();
     fakeSynth();
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     const files = source();
     const asked: number[] = [];
     await playDialogue(lines, "normal", () => asked.push(files.asked.length), files);
@@ -125,7 +143,7 @@ describe("аудирование записями реплик", () => {
   it("записи нет на устройстве и её не скачать — реплика звучит синтезом, остальные файлами", async () => {
     const audio = fakeAudio();
     const spoken = fakeSynth();
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     const result = await playDialogue(lines, "normal", undefined, source(["line-2"]));
     expect(result).toBe("done");
     expect(audio.played.map((entry) => entry.src)).toEqual(["/media/line-1.mp3", "/media/line-3.mp3"]);
@@ -134,7 +152,7 @@ describe("аудирование записями реплик", () => {
   it("без записей диалог звучит синтезом устройства, как раньше", async () => {
     const audio = fakeAudio();
     const spoken = fakeSynth();
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     const plain = lines.map(({ audioAssetId: _, ...line }) => line);
     expect(await playDialogue(plain, "slow", undefined, source())).toBe("done");
     expect(audio.played).toHaveLength(0);
@@ -143,21 +161,21 @@ describe("аудирование записями реплик", () => {
   it("вопрос без записи звучит синтезом с «?»", async () => {
     fakeAudio();
     const spoken = fakeSynth();
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     await playDialogue([{ speaker: "Αντρέας", text: "Μιλάτε αγγλικά;" }], "normal", undefined, source());
     expect(spoken.map((utterance) => utterance.text)).toEqual(["Μιλάτε αγγλικά?"]);
   });
   it("отказ воспроизведения файла — ошибка, а не молчаливая подмена голосом", async () => {
     fakeAudio({ refuse: true });
     const spoken = fakeSynth();
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     expect(await playDialogue(lines, "normal", undefined, source())).toBe("error");
     expect(spoken).toHaveLength(0);
   });
   it("остановка прерывает диалог на текущей реплике", async () => {
     const audio = fakeAudio();
     fakeSynth();
-    const { playDialogue, stopDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue, stopDialogue } = await load();
     const playing = playDialogue(lines, "normal", (index) => index === 1 && stopDialogue(), source());
     expect(await playing).toBe("stopped");
     expect(audio.played.map((entry) => entry.src)).toEqual(["/media/line-1.mp3"]);
@@ -168,7 +186,7 @@ describe("чтение текста вслух: откат по строке", (
   it("несыгравшая запись заменяется синтезом, текст доходит до конца", async () => {
     fakeAudio({ refuse: true });
     const spoken = fakeSynth();
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     expect(await playDialogue(lines, "normal", undefined, source(), undefined, true)).toBe("done");
     expect(spoken.map((utterance) => utterance.text)).toEqual(["Καλησπέρα!", "Γεια σου!", "Χάρηκα."]);
   });
@@ -176,7 +194,7 @@ describe("чтение текста вслух: откат по строке", (
     const audio = fakeAudio();
     fakeSynth();
     (globalThis as { speechSynthesis: { getVoices: () => unknown[] } }).speechSynthesis.getVoices = () => [];
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     expect(await playDialogue(lines, "slow", undefined, source(["line-2"]), undefined, true)).toBe("done");
     expect(audio.played).toEqual([
       { src: "/media/line-1.mp3", rate: 0.8 },
@@ -187,7 +205,7 @@ describe("чтение текста вслух: откат по строке", (
     fakeAudio();
     fakeSynth();
     (globalThis as { speechSynthesis: { getVoices: () => unknown[] } }).speechSynthesis.getVoices = () => [];
-    const { playDialogue } = await import("../src/shared/dialogue");
+    const { playDialogue } = await load();
     expect(
       await playDialogue(lines, "normal", undefined, source(["line-1", "line-2", "line-3"]), undefined, true),
     ).toBe("none");

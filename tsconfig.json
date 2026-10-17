@@ -20,6 +20,7 @@
     "content",
     "scripts",
     "vite.config.ts",
+    "playwright.base.ts",
     "playwright.config.ts",
     "playwright.course.config.ts",
     "playwright.courses.config.ts",
