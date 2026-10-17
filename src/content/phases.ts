@@ -48,7 +48,7 @@ export const setPhase = (lessonId: string, phase: InstallPhase) => {
   listeners.forEach((fn) => fn());
 };
 /** Снимок для useSyncExternalStore должен быть стабильным по ссылке, иначе React зациклится. */
-export const installPhase = (lessonId: string): InstallPhase => phases.get(lessonId) ?? IDLE;
+const installPhase = (lessonId: string): InstallPhase => phases.get(lessonId) ?? IDLE;
 export const subscribeInstall = (listener: () => void) => {
   listeners.add(listener);
   return () => {
@@ -56,6 +56,6 @@ export const subscribeInstall = (listener: () => void) => {
   };
 };
 
-/** Ключ курса в общем хранилище состояний загрузки: идентификаторы курса и урока не пересекаются. */
+/** Ключ состояния загрузки курса. */
 export const courseKey = (courseId: string) => `course:${courseId}`;
 export const coursePhase = (courseId: string) => installPhase(courseKey(courseId));

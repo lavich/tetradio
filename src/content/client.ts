@@ -6,7 +6,6 @@ export { contentUrl, fetcher, httpFetcher, useFetcher, type ContentFetcher } fro
 export {
   catalogPhase,
   coursePhase,
-  installPhase,
   resetCatalogPhase,
   subscribeCatalog,
   subscribeInstall,
