@@ -85,7 +85,6 @@ export function App() {
   }, [immersive]);
   return (
     <div ref={root} className={ui.app}>
-      <LoadingBar />
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<TodayScreen />} />
@@ -117,6 +116,8 @@ export function App() {
       )}
       {!immersive && !lesson && <Nav />}
       <Suspense fallback={null}>{!immersive && conflict && <SyncConflictDialog />}</Suspense>
+      {/* Последним: `.app > .screen:first-child` в ui.module.css ждёт экран первым. */}
+      <LoadingBar />
     </div>
   );
 }

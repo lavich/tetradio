@@ -20,7 +20,7 @@ afterEach(() => {
   host.remove();
   vi.useRealTimers();
 });
-const shown = () => host.querySelector("[role=status]") !== null;
+const shown = () => host.querySelector("[aria-live=polite]")?.textContent === "Загрузка экрана";
 
 describe("индикация загрузки экрана", () => {
   it("быстрая загрузка ничего не показывает", async () => {

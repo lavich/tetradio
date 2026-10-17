@@ -117,7 +117,8 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
       cutoff.getTime(),
       ...ahead
         .filter((state) => state.card.state !== State.Review && !isDue(state.card, now, cutoff))
-        .map((state) => new Date(state.card.due).getTime()),
+        .map((state) => new Date(state.card.due).getTime())
+        .filter(Number.isFinite),
     ),
   );
   const dueRefs = due.map((state) => state.ref);

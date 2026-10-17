@@ -80,4 +80,27 @@ describe("нажатие на слово", () => {
     expect(renders.count).toBeLessThan(10);
     expect(document.querySelector("[role=dialog]")).not.toBeNull();
   });
+
+  it("лист закрывается по Escape, повторному нажатию и смене страницы", async () => {
+    const view = (page: number) => (
+      <WordTaps marks={marks} cards={cards} page={page}>
+        <p>
+          <Marked text={text} marks={marks.b.text} />
+        </p>
+      </WordTaps>
+    );
+    await act(async () => root.render(view(0)));
+    const sheet = () => document.querySelector("[role=dialog]");
+    await tap(0);
+    expect(sheet()).not.toBeNull();
+    await act(async () => void document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" })));
+    expect(sheet()).toBeNull();
+    await tap(0);
+    await tap(0);
+    expect(sheet()).toBeNull();
+    await tap(2);
+    expect(sheet()).not.toBeNull();
+    await act(async () => root.render(view(1)));
+    expect(sheet()).toBeNull();
+  });
 });

@@ -34,6 +34,8 @@ const speaking: SpeakingBlock = {
   criteria: ["Говорю без пауз"],
 };
 
+// eslint-disable-next-line typescript/unbound-method -- статический метод URL, присваивается обратно как есть
+const createObjectURL = URL.createObjectURL;
 let host: HTMLDivElement, root: Root;
 let saved: BlockPatch[];
 let failing: boolean;
@@ -53,6 +55,7 @@ afterEach(() => {
   host.remove();
   vi.useRealTimers();
   vi.unstubAllGlobals();
+  URL.createObjectURL = createObjectURL;
 });
 
 const type = (text: string) =>
@@ -195,7 +198,7 @@ describe("речь: микрофон не остаётся включённым"
       },
     );
     const create = vi.fn(() => "blob:recording");
-    vi.stubGlobal("URL", Object.assign(URL, { createObjectURL: create }));
+    URL.createObjectURL = create;
     act(() => root.render(<Speaking block={speaking} progress={undefined} save={save} />));
     await press("Начать");
     await act(async () => {

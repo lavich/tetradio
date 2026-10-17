@@ -47,7 +47,7 @@ export function usePlan(courseId: string | null | undefined) {
     if (wakeAt === undefined) return;
     const id = setTimeout(() => setTick((value) => value + 1), Math.max(wakeAt - Date.now(), 0) + 50);
     return () => clearTimeout(id);
-  }, [wakeAt]);
+  }, [wakeAt, tick]);
   useEffect(() => {
     const wake = () => document.visibilityState === "visible" && setTick((value) => value + 1);
     document.addEventListener("visibilitychange", wake);
