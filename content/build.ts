@@ -12,6 +12,7 @@ import {
 import { LEGACY_FILE, type ArtReport } from "./art.ts";
 import { checkCardAudio, type CardVoicing } from "./build/card-audio.ts";
 import { buildCards } from "./build/cards.ts";
+import { checkBudgets } from "./build/budgets.ts";
 import { buildCourses } from "./build/courses.ts";
 import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons.ts";
 import { markCourses, type MarksReport } from "./build/mark-courses.ts";
@@ -147,6 +148,12 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   console.log(
     `Контент: ${built.packages.length} пакетов, ${built.words.length} слов, ${built.phrases.length} фраз, ${built.files.length} файлов → public/content`,
   );
+  const budgets = checkBudgets(built.files, built.catalog);
+  console.log(budgets.summary);
+  if (budgets.violations.length) {
+    console.error(`Бюджеты контента нарушены:\n- ${budgets.violations.join("\n- ")}`);
+    process.exit(1);
+  }
   console.log(`Иллюстрации: ${built.art.files}, вне палитры (art/${LEGACY_FILE}): ${built.art.legacy}`);
   const counts = [...built.marks.lessons.values()];
   const sum = (key: "lesson" | "earlier") => counts.reduce((total, entry) => total + entry[key], 0);
