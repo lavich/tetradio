@@ -1,8 +1,10 @@
 # Скорость первого экрана
 
-Замер Lighthouse на мобильном профиле (150 мс, 1,6 Мбит/с, CPU ×4), mock-сборка, медиана трёх прогонов. В CI не входит; в CI держит предел стартового графа `npm run check:bundle`.
+Замер Lighthouse на мобильном профиле (150 мс, 1,6 Мбит/с, CPU ×4), mock-сборка, медиана трёх прогонов. В CI то же делает задача `lighthouse` (`npm run lighthouse`); размеры сборки держит `npm run check:bundle`.
 
 ## Протокол
+
+Автоматически: `VITE_TELEGRAM_MOCK=1 npm run build && npm run lighthouse` — три прогона, медианы, пороги из `scripts/lighthouse-report.ts` (LCP > 3 с — предупреждение, > 4 с — ошибка; TBT ≤ 200 мс; вес ≤ 450 КиБ; вес ленивых чанков первого экрана ≤ 36 000 байт). Вручную — как ниже.
 
 ```sh
 VITE_TELEGRAM_MOCK=1 npm run build
@@ -14,6 +16,10 @@ done
 ```
 
 Метрики — `first-contentful-paint` и `largest-contentful-paint` в JSON, берётся медиана. Вклад отдельного ресурса — тем же замером с `--blocked-url-patterns='*literata-latin*'`.
+
+## Ночной замер под нагрузкой
+
+Workflow `perf-nightly.yml` (03:00 UTC и вручную; не входит в `checks`) собирает mock-сборку на настоящем курсе и с CPU ×4 измеряет установку курса (время, TBT) и отклик в уроке (p98 Event Timing нажатий, предел 100 мс). Локально: `PERF_RATE=4 npm run perf`; итоги — `test-results/perf/*.json`.
 
 ## Замеры
 

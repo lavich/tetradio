@@ -1,0 +1,96 @@
+import { spawn } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import { launch } from "chrome-launcher";
+import lighthouse from "lighthouse";
+import { chromium } from "@playwright/test";
+import { inDistOf } from "./bundle-metrics.ts";
+import { lazyScripts, verdict, type Request, type Run } from "./lighthouse-report.ts";
+
+/**
+ * Lighthouse на mock-сборке (`VITE_TELEGRAM_MOCK=1 npm run build`): мобильный профиль Lighthouse (150 мс, 1,6 Мбит/с, CPU ×4),
+ * медиана трёх прогонов. Запуск: `npm run lighthouse [-- --json путь]`; протокол и замеры — docs/perf.md.
+ */
+const PORT = Number(process.env.LIGHTHOUSE_PORT ?? 4188);
+const RUNS = Number(process.env.LIGHTHOUSE_RUNS ?? 3);
+const origin = `http://127.0.0.1:${PORT}`;
+const jsonAt = process.argv.indexOf("--json");
+const jsonPath = jsonAt < 0 ? undefined : process.argv[jsonAt + 1];
+
+const preview = spawn(
+  process.execPath,
+  ["node_modules/vite/bin/vite.js", "preview", "--host", "127.0.0.1", "--port", String(PORT), "--strictPort"],
+  {
+    stdio: "inherit",
+  },
+);
+let previewExit: number | null | undefined;
+preview.on("exit", (code) => (previewExit = code ?? 1));
+let chrome: Awaited<ReturnType<typeof launch>> | undefined;
+const stop = () => {
+  preview.kill();
+  chrome?.kill();
+};
+try {
+  chrome = await launch({
+    chromePath: chromium.executablePath(),
+    chromeFlags: ["--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--mute-audio"],
+  });
+  for (let waited = 0; ; waited += 250) {
+    if (
+      await fetch(`${origin}/app/`).then(
+        (response) => response.ok,
+        () => false,
+      )
+    )
+      break;
+    if (previewExit !== undefined) throw new Error(`lighthouse: vite preview завершился с кодом ${previewExit}`);
+    if (waited > 30_000) throw new Error("lighthouse: vite preview не поднялся");
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  const runs: Run[] = [];
+  let lazyBytes = 0;
+  let lazy: { path: string; bytes: number }[] = [];
+  const html = readFileSync("dist/app/index.html", "utf8");
+  for (let run = 1; run <= RUNS; run++) {
+    const result = await lighthouse(`${origin}/app/`, {
+      port: chrome.port,
+      onlyCategories: ["performance"],
+      output: "json",
+      logLevel: "error",
+    });
+    const audits = result!.lhr.audits;
+    runs.push({
+      lcp: audits["largest-contentful-paint"]!.numericValue!,
+      tbt: audits["total-blocking-time"]!.numericValue!,
+      weight: audits["total-byte-weight"]!.numericValue!,
+    });
+    const network = audits["network-requests"];
+    if (!network?.details)
+      throw new Error(`lighthouse: нет списка запросов: ${JSON.stringify(network ?? "аудита нет")}`);
+    const requests = (network.details as unknown as { items: Request[] }).items;
+    const found = lazyScripts(requests, html, inDistOf("/"), origin);
+    const bytes = found.reduce((sum, chunk) => sum + chunk.bytes, 0);
+    // Худший из прогонов: ленивая загрузка зависит от того, успел ли кадр до паузы.
+    if (bytes >= lazyBytes) [lazyBytes, lazy] = [bytes, found];
+    console.log(`прогон ${run}: ${JSON.stringify(runs.at(-1))}`);
+  }
+  const result = verdict(runs, lazyBytes);
+  console.log(
+    `медиана: LCP ${Math.round(result.lcp)} мс, TBT ${Math.round(result.tbt)} мс, вес ${Math.round(result.weight)} байт; ` +
+      `ленивые чанки первого экрана: ${lazy.length}, ${lazyBytes} байт (${lazy.map((chunk) => chunk.path).join(", ")})`,
+  );
+  for (const warning of result.warnings) console.log(`::warning title=Lighthouse::${warning}`);
+  if (jsonPath) writeFileSync(jsonPath, JSON.stringify({ runs, ...result, lazy }, null, 2));
+  if (process.env.GITHUB_STEP_SUMMARY)
+    writeFileSync(
+      process.env.GITHUB_STEP_SUMMARY,
+      `### Lighthouse (медиана ${RUNS} прогонов)\n\n| LCP | TBT | Вес | Ленивые чанки |\n|---|---|---|---|\n| ${Math.round(result.lcp)} мс | ${Math.round(result.tbt)} мс | ${Math.round(result.weight)} байт | ${lazy.length}, ${lazyBytes} байт |\n`,
+      { flag: "a" },
+    );
+  if (result.errors.length) {
+    console.error(`Бюджет Lighthouse не выдержан:\n- ${result.errors.join("\n- ")}`);
+    process.exitCode = 1;
+  }
+} finally {
+  stop();
+}

@@ -171,6 +171,12 @@ export default defineConfig({
   ],
   // Unit-тесты открывают базу вне Telegram, как сборка с моком (`tetradio-mock-1`).
   test: {
+    // Явный список заменяет умолчание vitest: аннотации github-actions в CI возвращаем сами.
+    reporters: [
+      "default",
+      "./tests/setup/slow-files-reporter.ts",
+      ...(process.env.GITHUB_ACTIONS ? ["github-actions"] : []),
+    ],
     // `heavy` — тесты на больших объёмах: отдельным проектом они идут в своей задаче CI параллельно с остальными.
     projects: [
       {

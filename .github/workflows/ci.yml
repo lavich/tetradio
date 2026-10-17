@@ -64,7 +64,14 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    # Предел стартового графа мерится на бандле deploy: те же база, имя бота, адрес приёма и debug ID отчётов о сбоях.
+    env:
+      BASE_PATH: /tetradio/
+      VITE_TELEGRAM_MOCK: ""
+      VITE_TELEGRAM_BOT: ${{ vars.VITE_TELEGRAM_BOT || 'TetradioBot' }}
+      VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN || 'https://00000000000000000000000000000000@o0000000.ingest.de.sentry.io/0000000000000000' }}
+      SENTRY_DEBUG_IDS: "1"
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -72,17 +79,49 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      # Предел стартового графа мерится на бандле deploy: те же база, имя бота, адрес приёма и debug ID отчётов о сбоях.
+      - run: npm run build
+      - run: npm run check:bundle -- --json bundle-head.json
+      # Метрики базы снимает скрипт из PR над `dist` базы: так сравнение работает и пока в базе нет `--json`. Отказ базы не валит задачу.
+      - if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if git fetch --depth=1 origin "$BASE_SHA" &&
+            git worktree add ../base "$BASE_SHA" &&
+            npm --prefix ../base ci &&
+            npm --prefix ../base run build; then
+            node scripts/check-bundle.ts --dist ../base/dist --json bundle-base.json || true
+          fi
+          node scripts/bundle-diff.ts bundle-head.json bundle-base.json >> "$GITHUB_STEP_SUMMARY"
+
+  # Lighthouse на mock-сборке (мобильный профиль, медиана трёх прогонов): пороги LCP, TBT и веса — scripts/lighthouse-report.ts.
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container: mcr.microsoft.com/playwright:v1.63.0-noble
+    env:
+      PLAYWRIGHT_IMAGE_VERSION: 1.63.0
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Playwright version matches the container image
+        run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
       - run: npm run build
         env:
-          BASE_PATH: /tetradio/
-          VITE_TELEGRAM_MOCK: ""
-          VITE_TELEGRAM_BOT: ${{ vars.VITE_TELEGRAM_BOT || 'TetradioBot' }}
-          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN || 'https://00000000000000000000000000000000@o0000000.ingest.de.sentry.io/0000000000000000' }}
-          SENTRY_DEBUG_IDS: "1"
-      - run: npm run check:bundle
-        env:
-          BASE_PATH: /tetradio/
+          VITE_TELEGRAM_MOCK: "1"
+      - run: npm run lighthouse -- --json lighthouse.json
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse
+          path: lighthouse.json
+          retention-days: 7
+          if-no-files-found: ignore
 
   e2e:
     name: e2e ${{ matrix.shard }}/${{ matrix.shards }}
@@ -157,7 +196,7 @@ jobs:
   checks:
     name: checks
     if: always()
-    needs: [static, unit, unit-heavy, build, e2e, e2e-course]
+    needs: [static, unit, unit-heavy, build, lighthouse, e2e, e2e-course]
     runs-on: ubuntu-latest
     steps:
       - name: All jobs passed
