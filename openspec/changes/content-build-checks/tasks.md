@@ -24,4 +24,4 @@
 ## 5. Артикли и проверка
 
 - [x] 5.1 `content/greek.ts` с `ARTICLE_WORDS`; `marks.ts` и `coverage.ts` берут его (`check-lexicon.ts` не трогаем). Тест: `ARTICLES` и начало `GRAMMAR` равны прежним литералам; `public/content` совпадает с эталоном 1.1 побайтово, вывод сборки совпадает, кроме строк спорных мест (их меняет 4.2).
-- [ ] 5.2 Полная проверка: `npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:e2e && npm run test:e2e:course`. Проверка: всё зелёное.
+- [x] 5.2 Полная проверка: `npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:e2e && npm run test:e2e:course`. Проверка: всё зелёное.
