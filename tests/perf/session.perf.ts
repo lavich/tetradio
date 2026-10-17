@@ -15,6 +15,7 @@ const RUNS = Number(process.env.PERF_RUNS ?? 3);
 const COURSE = "greek-a2";
 const LIMIT_MS = 100;
 const MIN_INTERACTIONS = 30;
+const MIN_TAPS = 8;
 
 const OBSERVE = `(() => {
   window.__events = [];
@@ -26,25 +27,31 @@ const OBSERVE = `(() => {
 const results: { latencies: number[] }[] = [];
 
 /** Промах по перерисованному элементу не валит замер: нажатия считает браузер (`interactionCount`). */
-const tap = (target: Locator) => target.click({ force: true, timeout: 3000 }).catch(() => undefined);
+const tap = (target: Locator) =>
+  target.click({ force: true, timeout: 3000 }).then(
+    () => true,
+    () => false,
+  );
 
 /** Страница урока: слова, варианты ответа, «Проверить», затем следующая страница. Выбор по CSS: поиск по ролям под ×4 слишком медленный. */
 async function playLesson(page: Page) {
+  let taps = 0;
   const forward = page.locator('nav[aria-label="Страницы урока"] button:last-child');
   const done = async () => /К итогу/.test((await forward.textContent({ timeout: 5000 }).catch(() => "К итогу")) ?? "");
   for (let turn = 0; turn < 12; turn++) {
     const words = page.locator('button[aria-label^="Произнести и перевести"]');
     for (let index = 0; index < Math.min(4, await words.count()); index++) {
-      await tap(words.nth(index));
+      if (await tap(words.nth(index))) taps++;
       await page.keyboard.press("Escape");
     }
     const options = page.locator("article button", { hasText: /^\[/ });
-    for (let pick = 0; pick < Math.min(6, await options.count()); pick++) await tap(options.nth(pick));
+    for (let pick = 0; pick < Math.min(6, await options.count()); pick++) if (await tap(options.nth(pick))) taps++;
     const check = page.locator("article button", { hasText: /^Проверить$/ });
-    if ((await check.count()) && (await check.isEnabled())) await tap(check);
+    if ((await check.count()) && (await check.isEnabled())) if (await tap(check)) taps++;
     if (await done()) break;
     await forward.click({ timeout: 10_000 });
   }
+  return taps;
 }
 
 test.describe.configure({ mode: "serial" });
@@ -62,7 +69,8 @@ for (let run = 1; run <= RUNS; run++)
     await cdp.send("Emulation.setCPUThrottlingRate", { rate: RATE });
     await lesson.click();
     await page.getByRole("article").first().waitFor();
-    await playLesson(page);
+    const taps = await playLesson(page);
+    expect(taps, "нажатий по словам и заданиям: разметка урока изменилась?").toBeGreaterThanOrEqual(MIN_TAPS);
     const { events, count } = await page.evaluate(() => ({
       events: (window as unknown as { __events: InteractionEntry[] }).__events,
       count: performance.interactionCount,

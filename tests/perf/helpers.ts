@@ -25,10 +25,10 @@ export const lessonCount = (page: Page, course: string) =>
   }, course);
 
 /** Итог замера: JSON в `test-results/perf` (артефакт CI) и таблица в сводку задачи. */
-export function publish(name: string, title: string, rows: Record<string, number | string>[]) {
+export function publish(name: string, title: string, rows: Record<string, number | string>[], summary = true) {
   mkdirSync("test-results/perf", { recursive: true });
   writeFileSync(`test-results/perf/${name}.json`, JSON.stringify(rows, null, 2));
-  if (!process.env.GITHUB_STEP_SUMMARY || !rows.length) return;
+  if (!summary || !process.env.GITHUB_STEP_SUMMARY || !rows.length) return;
   const columns = Object.keys(rows[0]!);
   const table = [
     `| ${columns.join(" | ")} |`,

@@ -42,13 +42,12 @@ export function mp3Bitrate(body: Uint8Array): number | undefined {
   if (layer !== 1 || version === 1 || !rate || index === 0 || index === 15) return undefined;
   const mono = ((body[at + 3]! >> 6) & 3) === 3;
   const nominal = (version === 3 ? BITRATES_V1_L3 : BITRATES_V2_L3)[index]! * 1000;
-  const side = version === 3 ? (mono ? 17 : 32) : mono ? 9 : 17;
+  const side = (version === 3 ? (mono ? 17 : 32) : mono ? 9 : 17) + ((body[at + 1]! & 1) === 0 ? 2 : 0);
   const tag = String.fromCharCode(...body.subarray(at + 4 + side, at + 8 + side));
-  if (tag !== "Xing" && tag !== "Info") return nominal;
-  const flags = body[at + 11 + side]!;
-  if (!(flags & 1)) return nominal;
+  // У CBR кадр Info несёт номинальный битрейт; средний считается только у VBR (Xing), число кадров в теге — без самого кадра тега.
+  if (tag !== "Xing" || !(body[at + 11 + side]! & 1)) return nominal;
   const view = new DataView(body.buffer, body.byteOffset + at + 12 + side, 4);
-  const seconds = (view.getUint32(0) * (version === 3 ? 1152 : 576)) / rate;
+  const seconds = ((view.getUint32(0) + 1) * (version === 3 ? 1152 : 576)) / rate;
   return seconds > 0 ? Math.round(((body.length - at) * 8) / seconds) : nominal;
 }
 
@@ -88,8 +87,12 @@ export function checkBudgets(files: BuiltFile[], catalog: Catalog, limits: Conte
     }
   }
   const courses = new Map<string, number>();
-  for (const lesson of catalog.lessons)
-    courses.set(lesson.courseId, (courses.get(lesson.courseId) ?? 0) + (gzipOf.get(lesson.url) ?? 0));
+  for (const lesson of catalog.lessons) {
+    const size = gzipOf.get(lesson.url);
+    if (size === undefined)
+      violations.push(`урок ${lesson.id}: пакет ${lesson.url} из каталога не найден среди файлов`);
+    courses.set(lesson.courseId, (courses.get(lesson.courseId) ?? 0) + (size ?? 0));
+  }
   let courseMax = 0;
   for (const [id, size] of courses) {
     courseMax = Math.max(courseMax, size);

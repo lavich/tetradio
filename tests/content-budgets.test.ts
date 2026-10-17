@@ -34,8 +34,16 @@ describe("битрейт mp3", () => {
     expect(mp3Bitrate(new Uint8Array([...id3, ...frame(4)]))).toBe(32_000);
   });
 
+  it("CBR с кадром Info остаётся на номинале: кадр тега не завышает средний битрейт", () => {
+    const tag = [...new TextEncoder().encode("Info"), 0, 0, 0, 1, 0, 0, 0, 20];
+    const first = frame(4, [...Array.from({ length: 9 }, () => 0), ...tag]);
+    const body = new Uint8Array(21 * 96);
+    body.set(first);
+    expect(mp3Bitrate(body)).toBe(32_000);
+  });
+
   it("у VBR берёт средний по числу кадров, а не номинал Xing-кадра", () => {
-    const tag = [...new TextEncoder().encode("Info"), 0, 0, 0, 1, 0, 0, 0, 10];
+    const tag = [...new TextEncoder().encode("Xing"), 0, 0, 0, 1, 0, 0, 0, 10];
     const first = new Uint8Array([
       ...frame(4, [...Array.from({ length: 9 }, () => 0), ...tag]),
       ...Array.from({ length: 500 }, () => 0),
@@ -72,6 +80,12 @@ describe("бюджеты контента", () => {
     expect(checkBudgets(files, ok, limits).violations[0]).toMatch(/^каталог: \d+ байт gzip больше предела 100$/);
   });
 
+  it("пакет из каталога без файла — нарушение, а не тихие 0 байт", () => {
+    expect(checkBudgets([], ok, limits).violations).toEqual([
+      "урок a: пакет content/packages/a.json из каталога не найден среди файлов",
+    ]);
+  });
+
   it("курс — сумма gzip его пакетов", () => {
     const files = [pack("a", noise(120)), pack("b", noise(120))];
     const lessons = catalog([
@@ -98,7 +112,7 @@ describe("бюджеты контента", () => {
       mp3("big", new Uint8Array([...frame(4), ...Array.from({ length: 600 }, () => 0)])),
       mp3("bad", new Uint8Array(8)),
     ];
-    expect(checkBudgets(files, ok, limits).violations).toEqual([
+    expect(checkBudgets(files, catalog([]), limits).violations).toEqual([
       "аудио content/media/fast.mp3: 64000 бит/с больше предела 32000",
       "аудио content/media/big.mp3: 604 байт больше предела 500",
       "аудио content/media/bad.mp3: заголовок mp3 (Layer III) не разобран",

@@ -53,5 +53,5 @@ for (let run = 1; run <= RUNS; run++)
     };
     console.log(JSON.stringify(result));
     results.push(result);
-    publish("install", `Установка курса ×${RATE}: ${results.length} из ${RUNS}`, results);
+    publish("install", `Установка курса ×${RATE}`, results, results.length === RUNS);
   });
