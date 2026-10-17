@@ -4,7 +4,8 @@
 // audio/readings/<текст>/<n>.mp3, audio/answers/<урок>/<блок>-<пункт>.mp3; `audio:` пишется в реплику урока или
 // в файл карточки, записи текстов и ответов находит сборка по манифесту. Переозвучиваются только записи без файла
 // или с изменившимся текстом либо голосом (content/audio/dialogues.json).
-// Запуск: GOOGLE_TTS_KEY=… npm run voices -- m02-1 words phrases readings answers; без аргументов — всё; --check — только отчёт, без ключа.
+// Запуск: npm run voices -- m02-1 words phrases readings answers (ключ GOOGLE_TTS_KEY — из окружения или .env);
+// без аргументов — всё, кроме реплик и ответов черновых модулей; --check — только отчёт, без ключа.
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { isMap, isScalar, isSeq, parseDocument, type Node, type YAMLMap } from "yaml";
@@ -17,8 +18,13 @@ import { readSources } from "../content/build/sources.ts";
 import {
   cardFile,
   lineFile,
+  isLineFile,
   lineHash,
+  parseReply,
+  retrying,
   spokenText,
+  staleRecords,
+  voiceableLessons,
   MANIFEST_FILE,
   voiceOf,
   voicesFile,
@@ -40,12 +46,13 @@ const GROUPS = ["readings", "answers"];
 for (const id of wanted)
   if (!lessons.includes(id) && !(CARDS as readonly string[]).includes(id) && !GROUPS.includes(id))
     throw new Error(
-      `Урока ${id} нет в content/lessons; слова и фразы — words и phrases, тексты — readings, ответы — answers`,
+      `Урока ${id} нет в ${join(ROOT, "lessons")}; слова и фразы — words и phrases, тексты — readings, ответы — answers`,
     );
 const key = process.env.GOOGLE_TTS_KEY;
 
 const sources = readSources(ROOT);
-const { languages, courseLanguages } = buildCourses(sources);
+const { languages, courseLanguages, moduleOf } = buildCourses(sources);
+const drafts = new Set([...moduleOf].filter(([, placement]) => placement.draft).map(([id]) => id));
 const voicesOf = (lessonId: string) => {
   const language = languages.get(lessonId) ?? LANGUAGE;
   return sources.voices.get(language) ?? fail(`${lessonId}: нет карты голосов ${voicesFile(language)} для языка курса`);
@@ -58,20 +65,21 @@ const manifest: VoiceManifest = existsSync(manifestPath) ? JSON.parse(readFileSy
 
 async function synthesize(text: string, voice: string, voices: VoiceMap): Promise<Buffer> {
   if (!key) throw new Error("Нужен ключ: GOOGLE_TTS_KEY=… npm run voices -- <урок>; без ключа — --check");
-  const response = await fetch("https://texttospeech.googleapis.com/v1/text:synthesize", {
-    method: "POST",
-    // Ключ в заголовке, а не в адресе: адрес попадает в тексты ошибок.
-    headers: { "content-type": "application/json", "x-goog-api-key": key! },
-    body: JSON.stringify({
-      input: { text },
-      voice: { languageCode: voices.language, name: `${voices.prefix}${voice}` },
-      audioConfig: { audioEncoding: "MP3" },
+  const response = await retrying(() =>
+    fetch("https://texttospeech.googleapis.com/v1/text:synthesize", {
+      method: "POST",
+      // Ключ в заголовке, а не в адресе: адрес попадает в тексты ошибок.
+      headers: { "content-type": "application/json", "x-goog-api-key": key! },
+      body: JSON.stringify({
+        input: { text },
+        voice: { languageCode: voices.language, name: `${voices.prefix}${voice}` },
+        audioConfig: { audioEncoding: "MP3" },
+      }),
     }),
-  });
-  const body = (await response.json()) as { audioContent?: string; error?: { message?: string } };
-  if (!response.ok || !body.audioContent)
-    throw new Error(`Синтез «${text.slice(0, 40)}…» (${voice}): ${response.status} ${body.error?.message ?? ""}`);
-  return Buffer.from(body.audioContent, "base64");
+  );
+  const reply = parseReply(response.status, await response.text(), key);
+  if (!response.ok || !reply.audio) throw new Error(`Синтез «${text.slice(0, 40)}…» (${voice}): ${reply.problem}`);
+  return Buffer.from(reply.audio, "base64");
 }
 
 // Chirp 3 HD на коротком слове иногда отдаёт тишину или обрывок ~0,3 с; самое короткое живое слово — 0,5 с.
@@ -122,7 +130,69 @@ function saveManifest() {
   writeFileSync(manifestPath, JSON.stringify(sortKeys(manifest), null, 2) + "\n");
 }
 
-for (const lessonId of wanted.length ? wanted.filter((id) => lessons.includes(id)) : lessons) {
+function removeFiles(files: string[]) {
+  for (const file of files) {
+    stale.push(file);
+    if (check) continue;
+    rmSync(join(ROOT, "audio", file), { force: true });
+    delete manifest[file];
+  }
+  if (check || !files.length) return;
+  saveManifest();
+  const audio = join(ROOT, "audio");
+  for (const dir of new Set(files.map((file) => dirname(file))))
+    for (let at = join(audio, dir); at !== audio && existsSync(at) && !readdirSync(at).length; at = dirname(at))
+      rmSync(at, { recursive: true });
+}
+
+// До синтеза: ошибка озвучки не должна оставлять лишние файлы.
+{
+  const planned = new Set<string>();
+  // Блок или урок с непонятной структурой — правка в процессе: его файлы не трогаем.
+  const kept: string[] = [];
+  const planAudio = (value: unknown) => {
+    if (typeof value === "string") planned.add(value);
+  };
+  for (const [lessonId, src] of sources.lessons) {
+    if (!Array.isArray(src.blocks)) kept.push(`${lessonId}/`);
+    for (const block of Array.isArray(src.blocks) ? src.blocks : []) {
+      const { type, id, transcript } = (block ?? {}) as Record<string, unknown>;
+      if (type !== "listening" || !Array.isArray(transcript)) {
+        kept.push(`${lessonId}/${String(id)}-`);
+        continue;
+      }
+      planAudio((block as Record<string, unknown>).audio);
+      transcript.forEach((line, index) => {
+        planned.add(lineFile(lessonId, String(id), index));
+        planAudio((line as Record<string, unknown> | null)?.audio);
+      });
+    }
+  }
+  const lineScope = (file: string) => {
+    const lesson = file.slice(0, file.indexOf("/"));
+    return (
+      isLineFile(file) &&
+      !kept.some((prefix) => file.startsWith(prefix)) &&
+      (!wanted.length || wanted.includes(lesson)) &&
+      !drafts.has(lesson)
+    );
+  };
+  for (const dir of CARDS)
+    for (const [id, src] of dir === "words" ? sources.words : sources.phrases) {
+      planned.add(cardFile(dir, id));
+      planAudio(src.audio);
+    }
+  const cardScope = (file: string) =>
+    CARDS.some((dir) => file.startsWith(`${dir}/`) && (!wanted.length || wanted.includes(dir)));
+  const onDisk = existsSync(join(ROOT, "audio"))
+    ? readdirSync(join(ROOT, "audio"), { recursive: true, encoding: "utf8" })
+        .filter((file) => file.endsWith(".mp3"))
+        .map((file) => file.split("\\").join("/"))
+    : [];
+  removeFiles(staleRecords(planned, manifest, onDisk, (file) => lineScope(file) || cardScope(file)));
+}
+
+for (const lessonId of voiceableLessons(lessons, drafts, wanted)) {
   const path = join(ROOT, "lessons", `${lessonId}.yaml`);
   const source = readFileSync(path, "utf8");
   const doc = parseDocument(source);
@@ -194,18 +264,7 @@ async function voiceGroup(
   const { pending: due, stale: extra, total } = plan(existing);
   stats.lines += total;
   for (const entry of due) await record(entry.file, entry.text, entry.voice, entry.voices, entry.label);
-  for (const file of extra) {
-    stale.push(file);
-    if (check) continue;
-    rmSync(join(ROOT, "audio", file), { force: true });
-    delete manifest[file];
-  }
-  if (!check && extra.length) {
-    saveManifest();
-    for (const entry of existsSync(dir) ? readdirSync(dir, { withFileTypes: true }) : [])
-      if (entry.isDirectory() && !readdirSync(join(dir, entry.name)).length)
-        rmSync(join(dir, entry.name), { recursive: true });
-  }
+  removeFiles(extra);
 }
 
 if (!wanted.length || wanted.includes("readings"))
@@ -225,7 +284,7 @@ if (!wanted.length || wanted.includes("answers"))
       [...sources.lessons].map(([id, src]) => [id, src.blocks]),
       (lessonId) => {
         const language = languages.get(lessonId) ?? LANGUAGE;
-        return { voices: sources.voices.get(language), profile: profileOf(language) };
+        return { voices: sources.voices.get(language), profile: profileOf(language), held: drafts.has(lessonId) };
       },
       manifest,
       existing,
