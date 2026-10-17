@@ -43,6 +43,7 @@ export function planAnswerVoices(
   manifest: VoiceManifest,
   existing: string[],
 ): AnswerVoicePlan {
+  const onDisk = new Set(existing);
   const answers: PlannedAnswer[] = [];
   const pending: PlannedAnswer[] = [];
   const skipped: string[] = [];
@@ -60,7 +61,7 @@ export function planAnswerVoices(
         voice: voices.narrator,
       };
       answers.push(entry);
-      if (!existing.includes(answer.file) || !answerFresh(manifest, answer, voices)) pending.push(entry);
+      if (!onDisk.has(answer.file) || !answerFresh(manifest, answer, voices)) pending.push(entry);
     }
   }
   const planned = new Set(answers.map((answer) => answer.file));

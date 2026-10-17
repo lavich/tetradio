@@ -8,6 +8,8 @@ export interface MatchCard {
   text: string;
   forms?: string;
   phrase?: boolean;
+  /** Позиция урока появления в курсе: сопоставитель курса отсекает карточки поздних уроков. */
+  at?: number;
 }
 
 type Tier = 0 | 1;
@@ -16,9 +18,18 @@ interface Pattern {
   gaps: string[];
   ref: string;
   tier: Tier;
+  at: number;
 }
 
-export const norm = (value: string) => value.normalize("NFC").toLowerCase().replace(/ς/g, "σ");
+const normCache = new Map<string, string>();
+export const norm = (value: string) => {
+  let out = normCache.get(value);
+  if (out === undefined) {
+    out = value.normalize("NFC").toLowerCase().replace(/ς/g, "σ");
+    normCache.set(value, out);
+  }
+  return out;
+};
 const normSet = (values: string[]) => new Set(values.map(norm));
 const ARTICLES = normSet(["ο", "η", "το", "οι", "τα", "τον", "την", "τη", "του", "της", "των", "τους", "τις", "τ"]);
 /** «σε» — и «в», и «тебя», «του» — и «его», и артикль: отдельно (не во фразе) перевод карточки чаще неверен. */
@@ -31,8 +42,19 @@ const IRREGULAR: Record<string, string[]> = {
   ακούω: ["ακούς", "ακούει", "ακούμε", "ακούτε", "ακούνε", "ακούν"],
 };
 
-const isGreekLetter = (char: string) => /\p{M}/u.test(char) || (/\p{L}/u.test(char) && /\p{Script=Greek}/u.test(char));
-const isLetter = (char: string) => /[\p{L}\p{M}]/u.test(char);
+const memo = (test: (char: string) => boolean) => {
+  const cache = new Map<string, boolean>();
+  return (char: string) => {
+    let out = cache.get(char);
+    if (out === undefined) {
+      out = test(char);
+      cache.set(char, out);
+    }
+    return out;
+  };
+};
+const isGreekLetter = memo((char) => /\p{M}/u.test(char) || (/\p{L}/u.test(char) && /\p{Script=Greek}/u.test(char)));
+const isLetter = memo((char) => /[\p{L}\p{M}]/u.test(char));
 
 const gapKey = (gap: string) => {
   const flat = gap.replace(/[’ʼ′]/g, "'").replace(/\s+/g, " ");
@@ -277,11 +299,11 @@ export function buildMatcher(cards: MatchCard[], profile: LanguageProfile = PROF
   const patterns = new Map<string, Pattern[]>();
   const skipped: string[] = [];
   const seen = new Set<string>();
-  const add = (surface: string, ref: string, tier: Tier) => {
+  const add = (surface: string, ref: string, tier: Tier, at: number) => {
     const tokens = tokenize(surface);
     if (!tokens.length) return;
     if (tokens.length === 1 && morphology.unsearched.has(tokens[0].norm)) return;
-    const pattern: Pattern = { tokens: tokens.map((t) => t.norm), gaps: gapsOf(surface, tokens), ref, tier };
+    const pattern: Pattern = { tokens: tokens.map((t) => t.norm), gaps: gapsOf(surface, tokens), ref, tier, at };
     const key = `${ref}|${pattern.tokens.join(" ")}|${pattern.gaps.join("|")}`;
     if (seen.has(key)) return;
     seen.add(key);
@@ -289,22 +311,23 @@ export function buildMatcher(cards: MatchCard[], profile: LanguageProfile = PROF
     list.push(pattern);
     patterns.set(pattern.tokens[0], list);
   };
-  const withArticle = (surface: string, ref: string, tier: Tier) => {
-    add(surface, ref, tier);
+  const withArticle = (surface: string, ref: string, tier: Tier, at: number) => {
+    add(surface, ref, tier, at);
     const tokens = tokenize(surface);
-    if (tokens.length > 1 && morphology.leading.has(tokens[0].norm)) add(surface.slice(tokens[1].start), ref, tier);
+    if (tokens.length > 1 && morphology.leading.has(tokens[0].norm)) add(surface.slice(tokens[1].start), ref, tier, at);
   };
   for (const card of cards) {
     const text = card.text.normalize("NFC").trim();
     const tokens = tokenize(text);
     if (tokens.length === 1 && morphology.homographs.has(tokens[0].norm)) skipped.push(`${card.ref} «${text}»`);
+    const at = card.at ?? 0;
     if (card.phrase) {
-      add(text, card.ref, 0);
+      add(text, card.ref, 0, at);
       continue;
     }
-    withArticle(text, card.ref, 0);
-    const derived = morphology.forms(card, text, tokens, (piece) => withArticle(piece, card.ref, 0));
-    for (const form of derived) add(form, card.ref, 1);
+    withArticle(text, card.ref, 0, at);
+    const derived = morphology.forms(card, text, tokens, (piece) => withArticle(piece, card.ref, 0, at));
+    for (const form of derived) add(form, card.ref, 1, at);
   }
   return { patterns, skipped, tokenize };
 }
@@ -319,11 +342,12 @@ export interface Candidate extends Span {
   tier: Tier;
 }
 
-export function candidates(text: string, matcher: Matcher): Candidate[] {
+export function candidates(text: string, matcher: Matcher, upto = Infinity): Candidate[] {
   const tokens = matcher.tokenize(text);
   const found: Candidate[] = [];
   tokens.forEach((token, i) => {
     for (const pattern of matcher.patterns.get(token.norm) ?? []) {
+      if (pattern.at > upto) continue;
       const n = pattern.tokens.length;
       if (i + n > tokens.length) continue;
       let ok = true;
@@ -397,6 +421,8 @@ export interface LessonMarksInput {
   matcher: Matcher;
   own: Set<string>;
   rank: (ref: string) => number | undefined;
+  /** Карточки уроков позже этого не ищутся. */
+  upto?: number;
 }
 export interface Ambiguity {
   block: string;
@@ -405,14 +431,14 @@ export interface Ambiguity {
   refs: string[];
 }
 /** Глосса автора важнее найденного; карточкой она становится, если совпадает с написанием или содержит его. */
-export function lessonMarks({ blocks, matcher, own, rank }: LessonMarksInput) {
+export function lessonMarks({ blocks, matcher, own, rank, upto }: LessonMarksInput) {
   const out: BlockMarks = {};
   const ambiguous: Ambiguity[] = [];
   const order = (ref: string) => rank(ref) ?? Infinity;
   for (const block of blocks) {
     const seen = new Set<string>();
     for (const [field, text] of tapFields(block)) {
-      const found = candidates(text, matcher).filter((c) => rank(c.ref) !== undefined);
+      const found = candidates(text, matcher, upto).filter((c) => rank(c.ref) !== undefined);
       const report = (span: Span, refs: string[]) =>
         ambiguous.push({ block: block.id, field, text: text.slice(span.start, span.start + span.length), refs });
       let spans: Span[];

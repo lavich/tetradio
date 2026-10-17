@@ -20,7 +20,7 @@ const common = (a: string, b: string) => {
   return at;
 };
 /** Основа засчитывается, если общее начало не короче пяти букв и выходит за приставку хотя бы на три. */
-function sharesStem(word: string, stems: string[], profile: LanguageProfile) {
+function sharesStem(word: string, stems: readonly string[], profile: LanguageProfile) {
   if (word.length < STEM) return false;
   const prefix =
     profile.code === "el" ? Math.max(0, ...PREFIXES.filter((p) => word.startsWith(p)).map((p) => p.length)) : 0;
@@ -57,23 +57,52 @@ export function coverage({
   lessonGlosses,
   profile = PROFILES.el,
 }: CoverageInput): Coverage {
-  return coverer(cards, lessonGlosses, profile)(text, glosses, names);
+  return coverer(
+    cards,
+    lessonGlosses.map((gloss) => ({ text: gloss, at: 0 })),
+    profile,
+  )(text, glosses, names);
 }
-/** Сопоставитель и словарь собираются один раз на набор карточек: много коротких текстов меряются быстро. */
-export function coverer(cards: MatchCard[], lessonGlosses: string[], profile: LanguageProfile = PROFILES.el) {
-  const matcher = buildMatcher(cards, profile);
-  const surfaces = new Set<string>();
+/**
+ * Сопоставитель и словарь собираются один раз на курс: карточки и знакомые строки помнят урок появления `at`,
+ * а текст меряется по уроку `upto` включительно — как по набору карточек уроков до него.
+ */
+export function coverer(
+  cards: MatchCard[],
+  lessonGlosses: { text: string; at: number }[],
+  profile: LanguageProfile = PROFILES.el,
+  matcher = buildMatcher(cards, profile),
+) {
+  const surfaces = new Map<string, number>();
+  const learn = (piece: string, at: number) => {
+    for (const token of matcher.tokenize(piece)) {
+      const word = bare(token.norm);
+      const seen = surfaces.get(word);
+      if (seen === undefined || at < seen) surfaces.set(word, at);
+    }
+  };
   for (const card of cards) {
     const pieces = card.forms ? formPieces(card.forms) : [];
-    for (const piece of [card.text, ...pieces])
-      for (const token of matcher.tokenize(piece)) surfaces.add(bare(token.norm));
+    for (const piece of [card.text, ...pieces]) learn(piece, card.at ?? 0);
   }
-  for (const gloss of lessonGlosses) for (const token of matcher.tokenize(gloss)) surfaces.add(bare(token.norm));
-  const stems = [...surfaces].filter((surface) => surface.length >= STEM);
-  return (text: string, glosses: CoverageInput["glosses"], names: string[]): Coverage => {
+  for (const gloss of lessonGlosses) learn(gloss.text, gloss.at);
+  const stemsByAt = [...surfaces].filter(([surface]) => surface.length >= STEM).sort((a, b) => a[1] - b[1]);
+  const stemViews = new Map<number, string[]>();
+  const stemsUpto = (upto: number) => {
+    let view = stemViews.get(upto);
+    if (!view) {
+      const end = stemsByAt.findIndex(([, at]) => at > upto);
+      view = stemsByAt.slice(0, end < 0 ? stemsByAt.length : end).map(([surface]) => surface);
+      stemViews.set(upto, view);
+    }
+    return view;
+  };
+  return (text: string, glosses: CoverageInput["glosses"], names: string[], upto = Infinity): Coverage => {
+    const stems = stemsUpto(upto);
+    const known = (word: string) => surfaces.get(word) !== undefined && surfaces.get(word)! <= upto;
     const tokens = matcher.tokenize(text);
     const covered = new Set<number>();
-    for (const found of candidates(text, matcher))
+    for (const found of candidates(text, matcher, upto))
       for (let at = found.start; at < found.start + found.length; at++) covered.add(at);
     const nameSet = new Set(names.map(norm));
     const glossed = new Set<number>();
@@ -91,7 +120,7 @@ export function coverer(cards: MatchCard[], lessonGlosses: string[], profile: La
         result.known++;
         result.strict++;
         result.named++;
-      } else if (surfaces.has(word) || sharesStem(word, stems, profile)) result.known++;
+      } else if (known(word) || sharesStem(word, stems, profile)) result.known++;
       else if (!glossed.has(token.start)) result.unknown.push(text.slice(token.start, token.end));
     }
     return result;

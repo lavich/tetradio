@@ -97,27 +97,32 @@ export function checkQuestions({ courses, modules, moduleOf, drafts, words, phra
     if (!course.moduleIds || course.language !== "el") continue;
     const profile = profileOf(course.language);
     const cards = new Map<string, MatchCard>();
-    const known = new Set<string>();
-    for (const lessonId of course.lessonIds) {
+    const known: { text: string; at: number }[] = [];
+    course.lessonIds.forEach((lessonId, at) => {
       const pack = drafts.get(lessonId);
-      if (!pack) continue;
-      for (const line of cribOf.get(lessonId) ?? []) known.add(line);
+      if (!pack) return;
+      for (const line of cribOf.get(lessonId) ?? []) known.push({ text: line, at });
       for (const item of pack.items) {
         const ref = cardRef(item.kind, item.id);
         if (cards.has(ref)) continue;
         const card = describe(item.kind as LessonCardKind, item.id);
-        cards.set(ref, { ref, text: card.text, forms: card.forms, phrase: item.kind === "phrase" });
-        if (item.kind === "word") for (const form of inflected(words.get(item.id))) known.add(form);
+        cards.set(ref, { ref, text: card.text, forms: card.forms, phrase: item.kind === "phrase", at });
+        if (item.kind === "word") for (const form of inflected(words.get(item.id))) known.push({ text: form, at });
       }
+      for (const block of pack.blocks ?? [])
+        if ("glosses" in block && block.glosses)
+          for (const gloss of block.glosses) known.push({ text: gloss.text, at });
+    });
+    let measure: ReturnType<typeof coverer> | undefined;
+    for (const [at, lessonId] of course.lessonIds.entries()) {
+      const pack = drafts.get(lessonId);
+      if (!pack) continue;
       const blocks = pack.blocks ?? [];
-      for (const block of blocks)
-        if ("glosses" in block && block.glosses) for (const gloss of block.glosses) known.add(gloss.text);
-      let measure: ReturnType<typeof coverer> | undefined;
       for (const block of blocks) {
         if (block.type !== "exercise" || !block.about || block.format !== "choice") continue;
         const where = `lessons/${lessonId}.yaml: ${block.id}`;
         if (!greekOnly(block)) continue;
-        measure ??= coverer([...cards.values()], [...known], profile);
+        measure ??= coverer([...cards.values()], known, profile);
         const source = blocks.find((other) => other.id === block.about);
         const sourceText =
           source?.type === "reading"
@@ -129,7 +134,7 @@ export function checkQuestions({ courses, modules, moduleOf, drafts, words, phra
         for (const item of block.items) {
           const options = (item.options ?? []).filter((option) => !VERDICTS.has(option));
           const text = withoutGlossed(item.prompt, [item.prompt.replace(/\([^)]*\)/gu, ""), ...options].join("\n"));
-          const measured = measure(text, [], [...namesIn(text), ...sourceNames]);
+          const measured = measure(text, [], [...namesIn(text), ...sourceNames], at);
           if (measured.unknown.length)
             unfamiliar.push(`${where}.${item.id}: непройденные слова: ${[...new Set(measured.unknown)].join(", ")}`);
         }

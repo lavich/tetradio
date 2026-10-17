@@ -13,7 +13,7 @@ import {
 import type { CatalogModule } from "../../src/content/course.ts";
 import type { LessonCardKind } from "../../src/domain/types.ts";
 import { profileOf } from "../../src/domain/language.ts";
-import { coverage, share } from "../coverage.ts";
+import { coverer, share } from "../coverage.ts";
 import { buildMatcher, encodeMarks, lessonMarks, type MatchCard } from "../marks.ts";
 import { cardDescriber } from "./mark-courses.ts";
 import { mediaFor, type BuiltMedia } from "./media.ts";
@@ -92,6 +92,7 @@ export function planReadingVoices(
   manifest: VoiceManifest,
   existing: string[],
 ): ReadingVoicePlan {
+  const onDisk = new Set(existing);
   const sentences: ReadingVoicePlan["sentences"] = [];
   const pending: ReadingVoicePlan["pending"] = [];
   const skipped: string[] = [];
@@ -115,7 +116,7 @@ export function planReadingVoices(
       sentences.push(entry);
       const done = manifest[sentence.file];
       if (
-        !existing.includes(sentence.file) ||
+        !onDisk.has(sentence.file) ||
         done?.voice !== sentence.voice ||
         done.hash !== lineHash(sentence.text, sentence.voice, voices.language)
       )
@@ -181,6 +182,38 @@ export function buildReadings({
   const shelved = new Set<string>();
   const numberOf = new Map(modules.map((module) => [module.id, module.number]));
   const describe = cardDescriber(words, phrases);
+  const courseCache = new Map<string, ReturnType<typeof wordsOf>>();
+  const wordsOf = (course: CatalogCourse) => {
+    const cards = new Map<string, { kind: LessonCardKind; id: string }>();
+    const introduced = new Map<string, { at: number; label: string }>();
+    const matchCards: MatchCard[] = [];
+    const lessonGlosses: { text: string; at: number }[] = [];
+    course.lessonIds.forEach((lessonId, index) => {
+      const pack = drafts.get(lessonId);
+      if (!pack) return;
+      const placement = moduleOf.get(pack.id);
+      const label = placement ? `${numberOf.get(placement.id)}.${placement.position + 1}` : pack.id;
+      for (const item of pack.items) {
+        const ref = cardRef(item.kind, item.id);
+        if (cards.has(ref)) continue;
+        cards.set(ref, { kind: item.kind, id: item.id });
+        introduced.set(ref, { at: index, label });
+        const card = describe(item.kind, item.id);
+        matchCards.push({ ref, text: card.text, forms: card.forms, phrase: item.kind === "phrase", at: index });
+      }
+      for (const block of pack.blocks ?? [])
+        if ("glosses" in block && block.glosses)
+          for (const gloss of block.glosses) lessonGlosses.push({ text: gloss.text, at: index });
+    });
+    const profile = profileOf(course.language);
+    const matcher = buildMatcher(matchCards, profile);
+    return { cards, introduced, matcher, measure: coverer(matchCards, lessonGlosses, profile, matcher) };
+  };
+  const courseWords = (course: CatalogCourse) => {
+    let cached = courseCache.get(course.id);
+    if (!cached) courseCache.set(course.id, (cached = wordsOf(course)));
+    return cached;
+  };
   for (const [id, src] of sources.readings) {
     const where = `readings/${src.file}`;
     const extra = Object.keys(src).filter((key) => key !== "file" && key !== "course" && !FIELDS.includes(key));
@@ -226,37 +259,8 @@ export function buildReadings({
       fail(`${where}: narrator — имя героя`);
     const at = course.lessonIds.indexOf(src.after);
     if (at < 0 || !drafts.has(src.after)) fail(`${where}: урока ${src.after} нет в курсе ${course.id}`);
-    const lessons = course.lessonIds.slice(0, at + 1).map((lessonId) => drafts.get(lessonId)!);
-
-    const cards = new Map<string, { kind: LessonCardKind; id: string }>();
-    const introduced = new Map<string, { at: number; label: string }>();
-    lessons.forEach((pack, index) => {
-      const placement = moduleOf.get(pack.id);
-      const label = placement ? `${numberOf.get(placement.id)}.${placement.position + 1}` : pack.id;
-      for (const item of pack.items) {
-        const ref = cardRef(item.kind, item.id);
-        cards.set(ref, { kind: item.kind, id: item.id });
-        if (!introduced.has(ref)) introduced.set(ref, { at: index, label });
-      }
-    });
-    const matchCards: MatchCard[] = [...cards].map(([ref, { kind, id: cardId }]) => {
-      const card = describe(kind, cardId);
-      return { ref, text: card.text, forms: card.forms, phrase: kind === "phrase" };
-    });
-    const lessonGlosses = lessons.flatMap((pack) =>
-      (pack.blocks ?? []).flatMap((block) =>
-        "glosses" in block && block.glosses ? block.glosses.map((g) => g.text) : [],
-      ),
-    );
-    const profile = profileOf(course.language);
-    const measured = coverage({
-      text,
-      glosses,
-      names,
-      cards: matchCards,
-      lessonGlosses,
-      profile,
-    });
+    const { cards, introduced, matcher, measure } = courseWords(course);
+    const measured = measure(text, glosses, names, at);
     const known = share(measured.known, measured.total);
     if (known < KNOWN)
       fail(
@@ -317,12 +321,12 @@ export function buildReadings({
       if (audio.some(Boolean)) reading.audio = audio;
     } else unvoiced = sentencesOf(text).length;
     const block = readingBlock(reading);
-    const matcher = buildMatcher(matchCards, profile);
     const found = lessonMarks({
       blocks: [block],
       matcher,
       own: new Set(),
-      rank: (ref) => (introduced.has(ref) ? at - introduced.get(ref)!.at : undefined),
+      rank: (ref) => (introduced.has(ref) && introduced.get(ref)!.at <= at ? at - introduced.get(ref)!.at : undefined),
+      upto: at,
     });
     const used = [
       ...new Set(
