@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ExerciseBlock } from "../../../content/course";
@@ -43,6 +43,13 @@ export function Exercise({
   const [answers, setAnswers] = useState<Record<string, string>>(progress?.answers ?? {});
   const [checked, setChecked] = useState(!!progress?.done);
   const { store, problem } = useSave(save);
+  // Выполнение пришло синхронизацией в пустое задание; начатые ответы не затираются.
+  const done = !!progress?.done;
+  const wasDone = useRef(done);
+  useEffect(() => {
+    if (done && !wasDone.current && !checked && !Object.keys(answers).length) setChecked(true);
+    wasDone.current = done;
+  }, [done, checked, answers]);
   // Выполнено на другом устройстве: счёт пришёл синхронизацией, а введённые ответы остались там.
   const elsewhere = checked && !Object.keys(answers).length;
   const score = checked && !elsewhere ? scoreExercise(block, answers, profile) : null;

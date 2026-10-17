@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import type { ExerciseBlock, SpeakingBlock, WritingBlock } from "../src/content/course";
 import { Exercise, Speaking, Writing } from "../src/features/course/blocks";
 import type { BlockPatch } from "../src/storage/course";
+import type { BlockProgress } from "../src/domain/types";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -185,6 +186,7 @@ describe("речь: микрофон не остаётся включённым"
       "MediaRecorder",
       class {
         mimeType = "audio/webm";
+        onstop?: () => void;
         start = vi.fn();
         stop = vi.fn();
         constructor() {
@@ -196,9 +198,44 @@ describe("речь: микрофон не остаётся включённым"
     vi.stubGlobal("URL", Object.assign(URL, { createObjectURL: create }));
     act(() => root.render(<Speaking block={speaking} progress={undefined} save={save} />));
     await press("Начать");
-    await act(async () => void (await Promise.resolve()));
+    await act(async () => {
+      await Promise.resolve();
+    });
     act(() => root.render(<p />));
     recorders[0].onstop?.();
     expect(create).not.toHaveBeenCalled();
+  });
+});
+
+describe("задание: выполнение, пришедшее синхронизацией", () => {
+  const done: BlockProgress = {
+    key: "l/forms",
+    lessonId: "l",
+    blockId: "forms",
+    done: true,
+    score: { correct: 1, almost: 0, total: 1 },
+    updatedAt: "",
+  };
+  it("пустое задание показывает результат без переоткрытия", async () => {
+    act(() => root.render(<Exercise block={exercise} progress={undefined} save={save} />));
+    expect(host.querySelector('[role="status"]')).toBeNull();
+    act(() => root.render(<Exercise block={exercise} progress={done} save={save} />));
+    expect(host.querySelector('[role="status"]')?.textContent).toBe("1 из 1 · на другом устройстве");
+  });
+  it("начатые ответы остаются, результат не подменяет их", async () => {
+    act(() => root.render(<Exercise block={exercise} progress={undefined} save={save} />));
+    await press("είμαι");
+    act(() => root.render(<Exercise block={exercise} progress={done} save={save} />));
+    expect(host.querySelector('[role="status"]')).toBeNull();
+  });
+  it("после «Ещё раз» прежний результат не возвращается", async () => {
+    act(() => root.render(<Exercise block={exercise} progress={undefined} save={save} />));
+    await press("είμαι");
+    await press("Проверить");
+    act(() => root.render(<Exercise block={exercise} progress={done} save={save} />));
+    await press("Ещё раз");
+    expect(host.querySelector('[role="status"]')).toBeNull();
+    act(() => root.render(<Exercise block={exercise} progress={{ ...done, done: false }} save={save} />));
+    expect(host.querySelector('[role="status"]')).toBeNull();
   });
 });

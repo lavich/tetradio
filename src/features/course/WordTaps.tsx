@@ -59,7 +59,7 @@ function createTapStore() {
   };
   return {
     get: () => state,
-    subscribe(listener: () => void) {
+    subscribe: (listener: () => void) => {
       listeners.add(listener);
       return () => void listeners.delete(listener);
     },
