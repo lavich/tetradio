@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { launchSync, syncOnceOpened } from "../src/app/launch-sync";
+import { deferredLoad, launchSync, syncOnceOpened } from "../src/app/launch-sync";
 import type { TelegramWebApp } from "../src/platform/telegram-types";
 import type { Profile } from "../src/storage/profile";
 import type { SyncStatus } from "../src/sync/coordinator";
@@ -119,5 +119,46 @@ describe("текст строки синхронизации", () => {
     const app = bridgeOf(7);
     await connect(app);
     expect(connectSync).toHaveBeenCalledWith(app);
+  });
+});
+
+describe("deferredLoad", () => {
+  it("грузит только по сигналу расписания и отдаёт результат", async () => {
+    let fire = () => {};
+    const load = vi.fn(() => Promise.resolve("sync"));
+    const { promise } = deferredLoad((run) => ((fire = run), () => {}), load);
+    expect(load).not.toHaveBeenCalled();
+    fire();
+    await expect(promise).resolves.toBe("sync");
+  });
+
+  it("отмена доходит до расписания: остановленный запуск не грузит чанк", () => {
+    const cancel = vi.fn();
+    const load = vi.fn(() => Promise.resolve(1));
+    deferredLoad(() => cancel, load).cancel();
+    expect(cancel).toHaveBeenCalledOnce();
+    expect(load).not.toHaveBeenCalled();
+  });
+
+  it("отказ чанка до подключения облака не остаётся необработанным, подключение получает его в предупреждение", async () => {
+    const unhandled = vi.fn();
+    process.on("unhandledRejection", unhandled);
+    const { promise } = deferredLoad(
+      (run) => (run(), () => {}),
+      () => Promise.reject(new Error("чанка нет")),
+    );
+    const connect = launchSync({
+      profile,
+      stopped: () => false,
+      onMismatch: () => {},
+      connectSync: syncOnceOpened(Promise.resolve(), promise as Promise<() => void>),
+    });
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(unhandled).not.toHaveBeenCalled();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    await connect(bridgeOf(7));
+    expect(warn).toHaveBeenCalledOnce();
+    warn.mockRestore();
+    process.off("unhandledRejection", unhandled);
   });
 });

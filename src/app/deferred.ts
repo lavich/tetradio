@@ -10,6 +10,16 @@ export function loadConflictDialog() {
   return conflictDialog;
 }
 
+let syncChunk: Promise<typeof import("../sync")> | undefined;
+/** Один запрос чанка синхронизации на подключение облака и на слежение за конфликтом. */
+export function loadSync() {
+  syncChunk ??= import("../sync").catch((error: unknown) => {
+    syncChunk = undefined;
+    throw error;
+  });
+  return syncChunk;
+}
+
 /** После загрузки страницы и паузы: запросы не делят канал с первым экраном (каталог, шрифты). */
 export function afterStartup(run: () => void, delayMs = 2000): () => void {
   let cancel = () => {};
@@ -26,6 +36,31 @@ export function afterStartup(run: () => void, delayMs = 2000): () => void {
   else window.addEventListener("load", wait, { once: true });
   return () => {
     window.removeEventListener("load", wait);
+    cancel();
+  };
+}
+
+const early = new Set<() => void>();
+/** Экрану, которому нужно облако (копия, статус синхронизации), пауза после запуска не нужна. */
+export function syncNeededNow() {
+  for (const run of early) run();
+}
+
+/** Как `afterStartup`, но `syncNeededNow` запускает раньше срока; запуск ровно один раз. */
+export function afterStartupOrNeeded(run: () => void, delayMs?: number): () => void {
+  let done = false;
+  const once = () => {
+    if (done) return;
+    done = true;
+    early.delete(once);
+    cancel();
+    run();
+  };
+  const cancel = afterStartup(once, delayMs);
+  early.add(once);
+  return () => {
+    done = true;
+    early.delete(once);
     cancel();
   };
 }
@@ -53,18 +88,21 @@ export function useSyncConflictSeen(): boolean {
     if (seen) return;
     let live = true;
     let unsubscribe: (() => void) | undefined;
-    import("../sync")
-      .then(({ sync }) => {
-        if (!live) return;
-        const check = () => {
-          if (sync.getStatus().phase === "conflict") setSeen(true);
-        };
-        unsubscribe = sync.subscribe(check);
-        check();
-      })
-      .catch(() => undefined);
+    const cancel = afterStartupOrNeeded(() => {
+      loadSync()
+        .then(({ sync }) => {
+          if (!live) return;
+          const check = () => {
+            if (sync.getStatus().phase === "conflict") setSeen(true);
+          };
+          unsubscribe = sync.subscribe(check);
+          check();
+        })
+        .catch(() => undefined);
+    });
     return () => {
       live = false;
+      cancel();
       unsubscribe?.();
     };
   }, [seen]);

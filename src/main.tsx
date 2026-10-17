@@ -7,9 +7,10 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { registerSW } from "virtual:pwa-register";
 import { App } from "./app/App";
+import { afterStartup, afterStartupOrNeeded, loadSync } from "./app/deferred";
 import { CrashScreen } from "./app/CrashScreen";
 import { LaunchGate, type LaunchStop } from "./app/LaunchGate";
-import { launchSync, syncOnceOpened } from "./app/launch-sync";
+import { deferredLoad, launchSync, syncOnceOpened } from "./app/launch-sync";
 import { Recovery } from "./app/Recovery";
 import { installLesson, refreshCatalog, syncCourses } from "./content/client";
 import { forgetLaunch } from "./platform/launch";
@@ -36,17 +37,24 @@ function setupServiceWorker(wanted: boolean) {
       caches: typeof caches === "undefined" ? undefined : caches,
     }).catch((error) => console.warn("Service worker не снят", error));
     if (!wanted) return;
-    const update = registerSW({
-      onNeedRefresh() {
-        updateReady.value = true;
-        window.dispatchEvent(new CustomEvent("tetradio:update"));
-      },
-      onRegisterError(error) {
+    // Регистрация не нужна первому кадру: workbox-window грузится после запуска, а не вместе с экраном.
+    afterStartup(() => {
+      try {
+        const update = registerSW({
+          onNeedRefresh() {
+            updateReady.value = true;
+            window.dispatchEvent(new CustomEvent("tetradio:update"));
+          },
+          onRegisterError(error) {
+            console.warn("Service worker недоступен", error);
+            reportError(error, { category: "service-worker" });
+          },
+        });
+        updateReady.apply = () => update(true);
+      } catch (error) {
         console.warn("Service worker недоступен", error);
-        reportError(error, { category: "service-worker" });
-      },
+      }
     });
-    updateReady.apply = () => update(true);
   } catch (error) {
     console.warn("Service worker недоступен", error);
   }
@@ -54,8 +62,10 @@ function setupServiceWorker(wanted: boolean) {
 
 const root = createRoot(document.getElementById("root")!);
 let stopped = false;
+let cancelSyncLoad = () => {};
 const stop = (reason: Exclude<LaunchStop, "outside-telegram">) => {
   stopped = true;
+  cancelSyncLoad();
   db.close({ disableAutoOpen: true });
   root.render(
     <StrictMode>
@@ -109,7 +119,9 @@ function start(profile: Profile) {
   refreshCatalog()
     .then(() => syncCourses())
     .catch(() => undefined);
-  // Координатор синхронизации не нужен первому кадру: его чанк грузится параллельно с базой и bridge.
+  // Чанк sync берётся после запуска; проверка владельца его не ждёт.
+  const syncModule = deferredLoad(afterStartupOrNeeded, loadSync);
+  cancelSyncLoad = syncModule.cancel;
   const connect = launchSync({
     profile,
     stopped: () => stopped,
@@ -119,7 +131,7 @@ function start(profile: Profile) {
     },
     connectSync: syncOnceOpened(
       opened,
-      Promise.all([database, import("./sync")]).then(([, { connectSync }]) => connectSync),
+      Promise.all([database, syncModule.promise]).then(([, { connectSync }]) => connectSync),
     ),
   });
   // По тайм-ауту — без облака; поздний bridge сверяет владельца и подключает CloudStorage.

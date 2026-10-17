@@ -11,13 +11,16 @@ import { join } from "node:path";
  * 851 462 байта до отчётов о сбоях, 860 271 на `main` перед карточками трёх видов, 893 732 после них,
  * 902 808 перед разделением маршрутов. После разделения граф — 653 905 байт. На бандле deploy (с debug ID
  * отчётов о сбоях) — 700 168 перед отложенной загрузкой уведомлений и синхронизации, 583 884 после неё.
+ * 592 461 с #151 (чанки синхронизации и service worker вне графа).
  * Текущий предел — этот замер плюс запас на лёгкий модуль и экран сбоя.
  */
-const INITIAL_LIMIT = 700_000;
+const INITIAL_LIMIT = 620_000;
 /** Лендинг — статичный HTML со скриптом без React: 18 502 байта при переходе на статичную страницу. */
 const LANDING_LIMIT = 40_000;
 /** CSS лендинга без утилит приложения: 35 138 байт; со всем CSS приложения было 93 060. */
 const LANDING_CSS_LIMIT = 45_000;
+/** Облако, диалог конфликта и регистрация service worker грузятся после первого кадра: в стартовом графе их быть не должно. */
+const DEFERRED_CHUNK = /(^|\/)(sync|TelegramNotices|workbox-window\.[\w.]+)-[\w-]+\.js$/;
 const SDK_MARKER = "sentry.javascript.";
 const dist = "dist";
 /** Адреса в HTML начинаются с базы сборки (`BASE_PATH`, как в vite.config.ts): без неё это путь внутри `dist`. */
@@ -51,6 +54,8 @@ function checkPage(page: string, limit: number) {
       `${page}: стартовый граф ${initialPaths.length} чанк(ов): ${size} байт (предел ${limit}); из них ${entryPath}: ${Buffer.byteLength(entry)}`,
     );
     if (size > limit) problems.push(`${page}: стартовый граф ${size} байт больше предела ${limit}`);
+    const early = initialPaths.filter((path) => DEFERRED_CHUNK.test(path));
+    if (early.length) problems.push(`${page}: отложенные чанки попали в стартовый граф: ${early.join(", ")}`);
     const withSdk = initial.filter((chunk) => chunk.code.includes(SDK_MARKER));
     if (withSdk.length)
       problems.push(
