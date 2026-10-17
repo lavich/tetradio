@@ -33,6 +33,7 @@ async function views(database: AppDatabase) {
   return {
     plan: {
       ...plan,
+      wakeAt: undefined, // зависит от часового пояса машины
       reviews: plan.reviews.map((review) => review.state.unitKey),
       origins: [...plan.origins],
     },
@@ -362,7 +363,7 @@ describe("обновление копии v8", () => {
           ],
           "today": "2026-10-04",
           "unavailable": [],
-          "wakeAt": 2026-10-05T01:00:00.000Z,
+          "wakeAt": undefined,
         },
         "stats": {
           "days": [

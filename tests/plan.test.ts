@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { createEmptyCard, Rating, State } from "ts-fsrs";
 import {
   chooseType,
-  deviceTimezone,
   localDay,
   makePlan,
   makeSession,
@@ -469,10 +468,11 @@ describe("срок повторения по дню", () => {
       learned(pool[1].id, "2026-09-15T09:10:00Z", State.Relearning),
       learned(pool[2].id, "2026-09-15T20:00:00Z", State.Review),
     ];
-    const plan = await makePlan(fromSnapshot(base({ words: pool, states })), now);
+    const source = fromSnapshot(base({ words: pool, states }));
+    const plan = await makePlan(source, now);
     expect(plan.wakeAt.toISOString()).toBe("2026-09-15T09:10:00.000Z");
     const quiet = await makePlan(fromSnapshot(base({ words: pool, states: states.slice(2) })), now);
-    expect(quiet.wakeAt).toEqual(reviewCutoff(now, deviceTimezone()));
+    expect(quiet.wakeAt).toEqual(reviewCutoff(now, source.timezone()));
   });
   it("план в момент wakeAt совпадает с планом, пересчитанным каждую минуту", async () => {
     const pool = words(2);
