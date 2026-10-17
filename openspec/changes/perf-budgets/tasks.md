@@ -1,0 +1,15 @@
+# Tasks
+
+Зависимости: после #151 (`first-screen-light`, влит; архивируется независимо) и #157 (CI, влит). Пересечения: `.github/workflows/ci.yml`, `scripts/check-bundle.ts`, `docs/perf.md`, `vite.config.ts` (только `test.reporters`) — правки добавляющие; при конфликте — rebase.
+
+- [ ] 1.1 Базовые замеры окружением CI (`SENTRY_DEBUG_IDS=1`, DSN) (gzip/brotli/CSS/precache/шрифты, размеры контента, три прогона Lighthouse, ленивые чанки первого экрана, p98 в уроке при ×4) записать в «Реализация» design.md. Проверка: числа в design.md.
+- [ ] 2.1 `check:bundle`: метрики отдельной функцией, пределы gzip/brotli/CSS/precache/шрифтов (265 000), `--json`, `--dist`. Проверка: `npm run build && npm run check:bundle` зелёный; тест (`tests/check-bundle.test.ts`) на чистой функции метрик и на сообщении о превышении; красный при искусственно заниженном пределе.
+- [ ] 2.2 `scripts/bundle-diff.ts` и шаги `build` в `ci.yml` (база по `base.sha`, метрики скриптом HEAD над `dist` базы, таблица в сводку, таймаут 15 мин; отказ базы не валит задачу). Проверка: unit-тест таблицы (рост, падение, нет базы); прогон шагов в PR.
+- [ ] 3.1 `scripts/lighthouse.ts` + `lighthouse` в devDependencies: три прогона (`--no-sandbox`), медианы, пороги, список и предел веса ленивых JS-чанков первого экрана (база + 10%), JSON. Проверка: unit-тест медианы и решения по порогам (3,5 с — предупреждение, 4,2 с — ошибка, выброс среди трёх); локальный прогон.
+- [ ] 3.2 Задача `lighthouse` в `ci.yml` (контейнер Playwright, mock-сборка), добавить в `checks.needs`; раздел «В CI» в `docs/perf.md`. Проверка: зелёная задача в PR, `prettier --check docs/perf.md`.
+- [ ] 4.1 `content/build/budgets.ts`: gzip пакетов, каталога, курсов; разбор битрейта mp3; вызов из CLI-ветки `content/build.ts`; Xing/Info у VBR; строка отчёта. Проверка: unit-тесты на малых входах (раздутый пакет, каталог, курс, mp3 с высоким битрейтом, не-mp3 заголовок, фикстуры без пределов); `npm run content` зелёный на настоящем контенте.
+- [ ] 5.1 `tests/perf/session.perf.ts`: p98 задержки отклика в уроке при ×4 (один тест, три прогона, группировка по `interactionId`, `interactionCount`); `install.perf.ts` пишет JSON-итог. Проверка: unit-тест расчёта p98; локальный `PERF_RATE=4 npm run perf` даёт ≥30 нажатий и p98.
+- [ ] 5.2 `.github/workflows/perf-nightly.yml` (schedule, workflow_dispatch, сводка, артефакт). Проверка: `workflow_dispatch` из ветки зелёный; в `checks.needs` не входит.
+- [ ] 6.1 `tests/setup/slow-files-reporter.ts` + `vite.config.ts` (с `github-actions` в CI). Проверка: unit-тест репортёра (11 с — в списке, 9 с — нет, `heavy` 30 с — нет); вывод в `unit`/`unit-heavy`.
+- [ ] 7.1 Полная проверка набором CI из feature-flow + `lighthouse` локально. Проверка: все зелёные.
+- [ ] 7.2 `docs/perf.md`, `docs/release/checks.md:17` (устаревшее «693 940 из 700 000»), процесс (где описаны проверки, например `.claude/skills/feature-flow` и `.agents/skills/feature-flow`: набор CI — добавить `check:bundle` без изменений, `lighthouse` — отдельной строкой). Проверка: `prettier --check`; `tests/process-docs.test.ts` зелёный (шаги `ci.yml` и правка обоих навыков — одним коммитом).
