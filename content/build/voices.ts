@@ -152,3 +152,62 @@ export function parseManifest(body: Uint8Array | undefined): VoiceManifest {
     return fail(`${MANIFEST_FILE}: не JSON`);
   }
 }
+
+/** Уроки для синтеза: без аргументов — все, кроме черновых; названные явно озвучиваются при любом статусе. */
+export function voiceableLessons(lessons: string[], drafts: Set<string>, wanted: string[]): string[] {
+  return wanted.length ? wanted.filter((id) => lessons.includes(id)) : lessons.filter((id) => !drafts.has(id));
+}
+
+/** Файл реплики аудирования: `<урок>/<блок>-<n>.mp3`, не слово, фраза, текст или ответ. */
+export const isLineFile = (file: string) =>
+  /^(?!(?:words|phrases|readings|answers)\/)[^/]+\/[^/]+-\d+\.mp3$/.test(file);
+
+/** Файлы на диске и в манифесте из области `owns`, которых нет среди запланированных. */
+export const staleRecords = (
+  planned: Set<string>,
+  manifest: VoiceManifest,
+  existing: string[],
+  owns: (file: string) => boolean,
+) => [...new Set([...existing, ...Object.keys(manifest)])].filter((file) => owns(file) && !planned.has(file)).sort();
+
+const RETRY_ATTEMPTS = 5;
+const RETRY_MAX_WAIT_MS = 30_000;
+const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Повторяет запрос при сетевой ошибке, 429 и 5xx; после последней попытки возвращает ответ как есть. */
+export async function retrying(
+  send: () => Promise<Response>,
+  sleep: (ms: number) => Promise<unknown> = pause,
+): Promise<Response> {
+  for (let attempt = 1; ; attempt++) {
+    let response: Response | undefined;
+    let failure: unknown;
+    try {
+      response = await send();
+    } catch (error) {
+      failure = error;
+    }
+    const again = !response || response.status === 429 || response.status >= 500;
+    if (!again || attempt === RETRY_ATTEMPTS) {
+      if (response) return response;
+      throw failure;
+    }
+    await response?.body?.cancel();
+    const seconds = Number(response?.headers.get("retry-after"));
+    await sleep(
+      Number.isFinite(seconds) && seconds > 0 ? Math.min(seconds * 1000, RETRY_MAX_WAIT_MS) : 1000 * 2 ** (attempt - 1),
+    );
+  }
+}
+
+export const redactKey = (message: string, key: string | undefined) => (key ? message.replaceAll(key, "***") : message);
+
+/** Ответ синтеза: прокси и 502 отдают HTML вместо JSON, поэтому тело разбирается без падения. */
+export function parseReply(status: number, text: string, key: string | undefined) {
+  let body: { audioContent?: string; error?: { message?: string } } = {};
+  try {
+    body = JSON.parse(text) ?? {};
+  } catch {}
+  const detail = body.error?.message ?? (body.audioContent ? "" : text.slice(0, 80));
+  return { audio: body.audioContent, problem: `${status} ${redactKey(detail, key)}`.trim() };
+}

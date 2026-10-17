@@ -39,7 +39,7 @@ export interface AnswerVoicePlan {
 }
 export function planAnswerVoices(
   lessons: Iterable<[id: string, blocks: unknown]>,
-  context: (lessonId: string) => { voices: VoiceMap | undefined; profile: LanguageProfile },
+  context: (lessonId: string) => { voices: VoiceMap | undefined; profile: LanguageProfile; held?: boolean },
   manifest: VoiceManifest,
   existing: string[],
 ): AnswerVoicePlan {
@@ -48,8 +48,8 @@ export function planAnswerVoices(
   const pending: PlannedAnswer[] = [];
   const skipped: string[] = [];
   for (const [lessonId, blocks] of lessons) {
-    const { voices, profile } = context(lessonId);
-    if (!voices?.narrator) {
+    const { voices, profile, held } = context(lessonId);
+    if (held || !voices?.narrator) {
       skipped.push(`answers/${lessonId}/`);
       continue;
     }
