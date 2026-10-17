@@ -47,7 +47,8 @@ async function playLesson(page: Page) {
     const options = page.locator("article button", { hasText: /^\[/ });
     for (let pick = 0; pick < Math.min(6, await options.count()); pick++) if (await tap(options.nth(pick))) taps++;
     const check = page.locator("article button", { hasText: /^Проверить$/ });
-    if ((await check.count()) && (await check.isEnabled())) if (await tap(check)) taps++;
+    if ((await check.count()) && (await check.isEnabled({ timeout: 3000 }).catch(() => false)))
+      if (await tap(check)) taps++;
     if (await done()) break;
     await forward.click({ timeout: 10_000 });
   }

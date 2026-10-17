@@ -33,7 +33,7 @@ const stop = () => {
 try {
   chrome = await launch({
     chromePath: chromium.executablePath(),
-    chromeFlags: ["--headless=new", "--no-sandbox", "--mute-audio"],
+    chromeFlags: ["--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--mute-audio"],
   });
   for (let waited = 0; ; waited += 250) {
     if (
