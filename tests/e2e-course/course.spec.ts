@@ -117,10 +117,37 @@ test("урок из конца очереди скачивается сразу 
   await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 /, { timeout: 4000 });
 });
 
+test("очередь курса упала на уроке до его открытия: экран сразу «скачивается…», без чужой ошибки", async ({ page }) => {
+  const failed = page.waitForEvent("requestfailed", (request) => request.url().includes("/content/packages/m01-r1"));
+  await page.route("**/content/packages/m01-r1*", (route) => route.abort());
+  await page.goto("/app/");
+  await page.getByRole("button", { name: "Учить курс" }).click();
+  await failed;
+  await expect(page.getByTestId("course-next")).toBeVisible();
+  await page.unroute("**/content/packages/m01-r1*");
+  await page.route("**/content/packages/m01-r1*", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await route.continue();
+  });
+  await page.evaluate(() => {
+    const flag = window as unknown as { __alerted: boolean };
+    flag.__alerted = false;
+    new MutationObserver((records) => {
+      const shown = (node: Node) =>
+        node instanceof Element && (node.matches('[role="alert"]') || !!node.querySelector('[role="alert"]'));
+      if (records.some((record) => [...record.addedNodes].some(shown))) flag.__alerted = true;
+    }).observe(document.body, { childList: true, subtree: true });
+  });
+  await openInApp(page, "/app/course/m01/m01-r1");
+  await expect(page.getByRole("status")).toHaveText("Урок скачивается…");
+  await expect(page.getByRole("article").first()).toHaveAttribute("aria-label", /^Страница 1 /);
+  expect(await page.evaluate(() => (window as unknown as { __alerted: boolean }).__alerted)).toBe(false);
+});
+
 test("сбой скачивания открытого урока показывает ошибку и повтор", async ({ page }) => {
-  // Фоновая очередь курса стоит после первого урока: иначе она сама доходит до этого урока, и на экране мелькает
-  // её ошибка, а собственная попытка урока идёт следом — уже после того, как тест вернул сеть. Первый урок
-  // пропускается: очередь ставит его первым, а «Сегодня» без него не показывает следующий шаг.
+  // Фоновая очередь курса стоит после первого урока: иначе она сама доходит до этого урока и подключается к ней
+  // попытка экрана — исход зависит от того, когда тест вернул сеть. Первый урок пропускается: очередь ставит его
+  // первым, а «Сегодня» без него не показывает следующий шаг.
   await page.route(/\/content\/packages\/(?!m01-1@|m01-r1@)/, () => {});
   await page.route("**/content/packages/m01-r1*", (route) => route.abort());
   await page.goto("/app/");

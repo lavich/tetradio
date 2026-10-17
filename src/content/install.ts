@@ -104,7 +104,6 @@ export function installLesson(
   const running = inflight.get(lessonId);
   if (running) return running;
   const task = (async () => {
-    setPhase(lessonId, { phase: "loading" });
     let version: string | undefined;
     try {
       let entry = await database.catalog.get(lessonId);
@@ -132,11 +131,9 @@ export function installLesson(
       // Порядок курсов — порядок установки: курс запоминается первым уроком, не дожидаясь следующего каталога.
       if (result.status === "installed") await rememberCourses(database);
       if (prune) await pruneMedia(database).catch(() => undefined);
-      setPhase(lessonId, { phase: "idle" });
       return result;
     } catch (error) {
       const wrapped = toContentError(error);
-      setPhase(lessonId, { phase: "error", message: wrapped.message, kind: wrapped.kind });
       // Отсутствие сети — штатный случай офлайна; отчёт уходит об отклонённом или не сохранившемся пакете, без его содержимого.
       if (wrapped.kind !== "network")
         reportError(wrapped, {
