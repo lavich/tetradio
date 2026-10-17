@@ -6,7 +6,8 @@
  *
  * По умолчанию «Слова», ×8, три прогона; итог — строка JSON на прогон, сравнивать медиану.
  */
-import { test, type Page } from "@playwright/test";
+import { test } from "@playwright/test";
+import { installed, lessonCount, publish } from "./helpers";
 
 const SCREENS = { words: "Слова", progress: "Прогресс", today: "" } as const;
 const SCREEN = (process.env.PERF_SCREEN ?? "words") as keyof typeof SCREENS;
@@ -21,19 +22,7 @@ const OBSERVE = `(() => {
   }).observe({ type: "longtask", buffered: true });
 })();`;
 
-const installed = (page: Page) =>
-  page.evaluate(async () => {
-    const database = await new Promise<IDBDatabase>((resolve) => {
-      const request = indexedDB.open("tetradio-mock-1");
-      request.onsuccess = () => resolve(request.result);
-    });
-    const count = await new Promise<number>((resolve) => {
-      const request = database.transaction("packages").objectStore("packages").count();
-      request.onsuccess = () => resolve(request.result);
-    });
-    database.close();
-    return count;
-  });
+const results: Record<string, number | string>[] = [];
 
 for (let run = 1; run <= RUNS; run++)
   test(`${SCREEN} ×${RATE}, прогон ${run}`, async ({ page, context }) => {
@@ -41,12 +30,7 @@ for (let run = 1; run <= RUNS; run++)
     await page.goto("/app/");
     const learn = page.getByRole("button", { name: "Учить курс «Греческий»" });
     await learn.waitFor();
-    const total = await page.evaluate(async (course) => {
-      const catalog = (await (await fetch("/content/catalog.json")).json()) as {
-        courses: { id: string; lessonIds: string[] }[];
-      };
-      return catalog.courses.find((item) => item.id === course)!.lessonIds.length;
-    }, COURSE);
+    const total = await lessonCount(page, COURSE);
     const cdp = await context.newCDPSession(page);
     await cdp.send("Emulation.setCPUThrottlingRate", { rate: RATE });
     const start = await page.evaluate(() => performance.now());
@@ -58,15 +42,16 @@ for (let run = 1; run <= RUNS; run++)
     const tasks = (
       await page.evaluate(() => (window as unknown as { __longTasks: [number, number][] }).__longTasks)
     ).filter(([at]) => at >= start);
-    console.log(
-      JSON.stringify({
-        screen: SCREEN,
-        rate: RATE,
-        packages: total,
-        installMs: Math.round(done - start),
-        tbtMs: Math.round(tasks.reduce((sum, [, duration]) => sum + Math.max(0, duration - 50), 0)),
-        longTasks: tasks.length,
-        maxTaskMs: Math.round(Math.max(0, ...tasks.map(([, duration]) => duration))),
-      }),
-    );
+    const result = {
+      screen: SCREEN,
+      rate: RATE,
+      packages: total,
+      installMs: Math.round(done - start),
+      tbtMs: Math.round(tasks.reduce((sum, [, duration]) => sum + Math.max(0, duration - 50), 0)),
+      longTasks: tasks.length,
+      maxTaskMs: Math.round(Math.max(0, ...tasks.map(([, duration]) => duration))),
+    };
+    console.log(JSON.stringify(result));
+    results.push(result);
+    publish("install", `Установка курса ×${RATE}`, results, results.length === RUNS);
   });

@@ -1,0 +1,48 @@
+name: Perf nightly
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+  # Только правки самого замера: иначе новый workflow нечем проверить до мержа. В обязательные проверки (`checks` в ci.yml) не входит.
+  pull_request:
+    paths:
+      - .github/workflows/perf-nightly.yml
+      - tests/perf/**
+      - playwright.perf.config.ts
+
+permissions:
+  contents: read
+
+concurrency:
+  group: perf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  perf:
+    name: perf ×4
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    container: mcr.microsoft.com/playwright:v1.63.0-noble
+    env:
+      PLAYWRIGHT_IMAGE_VERSION: 1.63.0
+      PERF_RATE: "4"
+      PERF_RUNS: "3"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Playwright version matches the container image
+        run: test "$(node -p "require('@playwright/test/package.json').version")" = "$PLAYWRIGHT_IMAGE_VERSION"
+      # Установка курса и p98 отклика в уроке; p98 выше 100 мс валит прогон, время установки и TBT — только в сводку.
+      - run: npm run perf
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: perf
+          path: test-results/perf/*.json
+          retention-days: 30
+          if-no-files-found: ignore

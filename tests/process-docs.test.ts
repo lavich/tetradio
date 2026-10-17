@@ -9,6 +9,7 @@ const CI = ".github/workflows/ci.yml";
 const NOT_IN_FULL_CHECK = new Set(["check:flaky", "test:unit", "test:heavy"]);
 
 interface Job {
+  env?: Record<string, string>;
   strategy?: { matrix?: Record<string, unknown[]> };
   steps?: { run?: string; env?: Record<string, string> }[];
 }
@@ -60,9 +61,12 @@ describe("процесс: навыки и CI", () => {
 
   it("сборка в навыке получает те же переменные, что в CI", () => {
     const section = section4(readFileSync(CLAUDE_COPY, "utf8"));
-    const build = Object.values(jobs())
-      .flatMap((job) => job.steps ?? [])
-      .find((step) => step.run === "npm run build");
-    for (const key of Object.keys(build?.env ?? {})) expect(section, key).toContain(`${key}=`);
+    const job = jobs().build;
+    const step = job?.steps?.find((candidate) => candidate.run === "npm run build");
+    const env = { ...job?.env, ...step?.env };
+    expect(Object.keys(env), "env сборки deploy в ci.yml").toEqual(
+      expect.arrayContaining(["BASE_PATH", "SENTRY_DEBUG_IDS"]),
+    );
+    for (const key of Object.keys(env)) expect(section, key).toContain(`${key}=`);
   });
 });

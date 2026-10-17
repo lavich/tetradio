@@ -1,5 +1,6 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { inDistOf, measure, overLimits, type BundleLimits } from "./bundle-metrics.ts";
 
 /**
  * Проверка сборки после `vite build`: стартовая загрузка не выросла сверх предела и не содержит SDK отчётов
@@ -13,8 +14,18 @@ import { join } from "node:path";
  * отчётов о сбоях) — 700 168 перед отложенной загрузкой уведомлений и синхронизации, 583 884 после неё.
  * 592 461 с #151 (чанки синхронизации и service worker вне графа).
  * Текущий предел — этот замер плюс запас на лёгкий модуль и экран сбоя.
+ * Замер 17.10.2026 бандла deploy (#160): gzip 202 122, brotli 177 271, CSS первого экрана 93 975 (gzip 19 085),
+ * precache 1 479 087 из 87 файлов, шрифты в precache 250 952. Пределы — этот замер плюс 4–5% (CSS gzip +10%).
  */
 const INITIAL_LIMIT = 620_000;
+const LIMITS: Partial<BundleLimits> = {
+  initialGzip: 210_000,
+  initialBrotli: 185_000,
+  cssRaw: 100_000,
+  cssGzip: 21_000,
+  precacheBytes: 1_550_000,
+  fontBytes: 265_000,
+};
 /** Лендинг — статичный HTML со скриптом без React: 18 502 байта при переходе на статичную страницу. */
 const LANDING_LIMIT = 40_000;
 /** CSS лендинга без утилит приложения: 35 138 байт; со всем CSS приложения было 93 060. */
@@ -22,10 +33,15 @@ const LANDING_CSS_LIMIT = 45_000;
 /** Облако, диалог конфликта и регистрация service worker грузятся после первого кадра: в стартовом графе их быть не должно. */
 const DEFERRED_CHUNK = /(^|\/)(sync|TelegramNotices|workbox-window\.[\w.]+)-[\w-]+\.js$/;
 const SDK_MARKER = "sentry.javascript.";
-const dist = "dist";
+const flag = (name: string) => {
+  const at = process.argv.indexOf(name);
+  return at < 0 ? undefined : process.argv[at + 1];
+};
+const dist = flag("--dist") ?? "dist";
+const jsonPath = flag("--json");
 /** Адреса в HTML начинаются с базы сборки (`BASE_PATH`, как в vite.config.ts): без неё это путь внутри `dist`. */
 const base = process.env.BASE_PATH ?? "/";
-const inDist = (href: string) => (href.startsWith(base) ? href.slice(base.length) : href.replace(/^\//, ""));
+const inDist = inDistOf(base);
 const problems: string[] = [];
 
 const walk = (dir: string): string[] =>
@@ -88,6 +104,17 @@ const landingCss = landingCssLinks
 console.log(`index.html: CSS ${landingCss} байт (предел ${LANDING_CSS_LIMIT})`);
 if (landingCss > LANDING_CSS_LIMIT)
   problems.push(`index.html: CSS ${landingCss} байт больше предела ${LANDING_CSS_LIMIT}`);
+
+const metrics = measure(dist, base);
+if (metrics) {
+  console.log(
+    `метрики: ${Object.entries(metrics)
+      .map(([key, value]) => `${key} ${value}`)
+      .join(", ")}`,
+  );
+  problems.push(...overLimits(metrics, LIMITS));
+  if (jsonPath) writeFileSync(jsonPath, JSON.stringify(metrics, null, 2));
+}
 
 const precached = [...readFileSync(join(dist, "sw.js"), "utf8").matchAll(/url:"([^"]+)"/g)].map((match) => match[1]!);
 if (!precached.length) problems.push("в sw.js не найден список precache");
