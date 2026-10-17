@@ -1,8 +1,10 @@
 # Скорость первого экрана
 
-Замер Lighthouse на мобильном профиле (150 мс, 1,6 Мбит/с, CPU ×4), mock-сборка, медиана трёх прогонов. В CI не входит; в CI держит предел стартового графа `npm run check:bundle`.
+Замер Lighthouse на мобильном профиле (150 мс, 1,6 Мбит/с, CPU ×4), mock-сборка, медиана трёх прогонов. В CI то же делает задача `lighthouse` (`npm run lighthouse`); размеры сборки держит `npm run check:bundle`.
 
 ## Протокол
+
+Автоматически: `VITE_TELEGRAM_MOCK=1 npm run build && npm run lighthouse` — три прогона, медианы, пороги из `scripts/lighthouse-report.ts` (LCP > 3 с — предупреждение, > 4 с — ошибка; TBT ≤ 200 мс; вес ≤ 450 КиБ; вес ленивых чанков первого экрана ≤ 36 000 байт). Вручную — как ниже.
 
 ```sh
 VITE_TELEGRAM_MOCK=1 npm run build
