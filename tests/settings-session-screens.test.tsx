@@ -93,7 +93,10 @@ describe("занятие после применения версии из об�
     const next = [...host.querySelectorAll("button")].find((button) => button.textContent === "Далее")!;
     await act(async () => next.click());
     await until(() => host.textContent!.includes(`${first + 2} из `), "следующее упражнение");
-    expect((await db.events.toArray()).map((event) => event.itemId)).toEqual([item.id]);
-    expect((await db.cardStates.get(item.unitKey))!.version).toBe(item.expectedVersion + 2);
+    // Экран ещё дописывает состояние после перехода: чтения базы идут внутри act, иначе его обновление — вне act.
+    await act(async () => {
+      expect((await db.events.toArray()).map((event) => event.itemId)).toEqual([item.id]);
+      expect((await db.cardStates.get(item.unitKey))!.version).toBe(item.expectedVersion + 2);
+    });
   });
 });

@@ -55,7 +55,6 @@ async function prepare(page: Page, options: Parameters<typeof seedMixedLesson>[1
 }
 
 test("фразы смешанного урока — в словаре вместе со словами", async ({ page }) => {
-  test.setTimeout(120000);
   await page.addInitScript(NO_VOICE);
   await prepare(page);
   // Словарь показывает и слова, и фразы урока.
@@ -68,7 +67,6 @@ test("фразы смешанного урока — в словаре вмес�
 });
 
 test("при системном голосе фраза без перевода проверяема аудированием", async ({ page }) => {
-  test.setTimeout(150000);
   await page.addInitScript(GREEK_VOICE);
   await prepare(page);
   // Фраза без перевода: с голосом её тренировка начинается знакомством, затем идёт проверка.
@@ -86,7 +84,7 @@ test("занятие: знакомство с фразой, «Не знаю» с
   page,
   context,
 }) => {
-  test.setTimeout(180000);
+  test.setTimeout(100000);
   await page.addInitScript(NO_VOICE);
   await prepare(page);
   await page.setViewportSize({ width: 360, height: 560 }); // узкая ширина с местом под экранную клавиатуру; остальные сценарии идут на 390 из конфигурации
@@ -187,7 +185,7 @@ test("занятие: знакомство с фразой, «Не знаю» с
 });
 
 test("полная копия переносит смешанный урок с прогрессом во второй профиль", async ({ browser }) => {
-  test.setTimeout(180000);
+  test.setTimeout(100000);
   const source = await browser.newContext();
   const page = await source.newPage();
   await page.addInitScript(NO_VOICE);
@@ -278,7 +276,6 @@ test("полная копия переносит смешанный урок с 
 test("внутри Telegram: возврат из свёрнутого клиента не сбрасывает задание фразы, нативный «Назад» выходит с сохранением", async ({
   page,
 }) => {
-  test.setTimeout(150000);
   await page.addInitScript(NO_VOICE);
   await openTelegram(page, { noCloud: true });
   await installLessons(page, ["mech-1"]);

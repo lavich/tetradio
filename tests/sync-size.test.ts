@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import { createEmptyCard } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import { buildSnapshot, KEEP_DAYS } from "../src/sync/snapshot";
-import { buildContent } from "../content/build";
 import { emptySkills, foldSkill, type SkillSummary, type StatsSummary } from "../src/domain/skills";
 import { unitKey } from "../src/domain/refs";
 import type { BlockProgress, InstalledPackage, LearningRef, LearningState, Lesson, Phrase } from "../src/domain/types";
@@ -12,6 +11,7 @@ import { decodeSnapshot, encodeSnapshot } from "../src/sync/codec";
 import { CLOUD_LIMITS } from "../src/sync/transport";
 import type { ExerciseType, ReviewEvent, Word } from "../src/domain/types";
 import { installLessons } from "./helpers/content";
+import { realContent } from "./helpers/real-content";
 import { wordEvent, wordState } from "./helpers/cards";
 
 const TYPES: ExerciseType[] = ["recognition", "assembly", "spelling", "listening"];
@@ -170,7 +170,7 @@ describe("размер компактного снимка (задача 0.4)", 
         })),
     );
     // Ошибки уроков с идентификаторами настоящих пунктов курса: они в разы длиннее `w0001`.
-    const mistakes: LearningRef[] = buildContent("content")
+    const mistakes: LearningRef[] = realContent()
       .packages.flatMap((pack) =>
         (pack.blocks ?? []).flatMap((block) =>
           block.type === "exercise" && !block.about
@@ -230,7 +230,7 @@ describe("размер компактного снимка (задача 0.4)", 
     };
     await db.baseSummary.put({ id: "base", asOf: stamp, versionId: "base", stats });
     // С запасом: запись у каждого блока, хотя в приложении её заводят только задания, письмо и речь.
-    const course = buildContent("content").packages.filter((pack) => pack.blocks);
+    const course = realContent().packages.filter((pack) => pack.blocks);
     const lesson = (id: string): Lesson => ({
       id,
       courseId: "greek-a2",
