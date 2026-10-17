@@ -1,9 +1,8 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, extname, join, relative, sep } from "node:path";
-import { parse } from "yaml";
 import type { LessonKind } from "../../src/content/course.ts";
 import { LANGUAGES, PROFILES, type Language, type LanguageProfile } from "../../src/domain/language.ts";
-import { fail, LANGUAGE, languageOf } from "./common.ts";
+import { fail, LANGUAGE, languageOf, parseYaml } from "./common.ts";
 import { parseVoices, voicesFile, type VoiceMap } from "./voices.ts";
 
 export interface WordSource {
@@ -159,12 +158,13 @@ export interface ContentRoot {
 export function readSources(root: string): ContentRoot {
   const isYaml = (file: string) => /\.ya?ml$/.test(file);
   const list = (dir: string) => (existsSync(join(root, dir)) ? readdirSync(join(root, dir)) : []).filter(isYaml).sort();
-  const load = <T>(dir: string, file: string) => parse(readFileSync(join(root, dir, file), "utf8")) as T;
+  const load = <T>(dir: string, file: string) =>
+    parseYaml(readFileSync(join(root, dir, file), "utf8"), `${dir}/${file}`) as T;
   const byId = <T extends { id?: unknown }>(dir: string) => {
     const map = new Map<string, Sourced<T>>();
     for (const file of list(dir)) {
       const doc = load<T>(dir, file);
-      const id = idOf(doc, file);
+      const id = idOf(doc, `${dir}/${file}`);
       const twin = map.get(id);
       if (twin) fail(`${dir}/${file}: идентификатор «${id}» уже занят файлом ${dir}/${twin.file}`);
       map.set(id, { ...doc, file });
@@ -202,12 +202,21 @@ export function readSources(root: string): ContentRoot {
   const words = cards<WordSource>("words"),
     phrases = cards<PhraseSource>("phrases"),
     readings = cards<ReadingSource>("readings");
-  const lessons = new Map(
-    list("lessons").map((file) => [basename(file, extname(file)), load<LessonSource>("lessons", file)]),
-  );
+  const lessons = new Map<string, LessonSource>();
+  const lessonFiles = new Map<string, string>();
+  for (const file of list("lessons")) {
+    const id = basename(file, extname(file));
+    const twin = lessonFiles.get(id);
+    if (twin) fail(`lessons/${file}: урок «${id}» уже есть в файле lessons/${twin}`);
+    lessonFiles.set(id, file);
+    lessons.set(id, load<LessonSource>("lessons", file));
+  }
   const files = new Map<string, Uint8Array>();
   const picturesDoc = existsSync(join(root, "pictures.yaml"))
-    ? (parse(readFileSync(join(root, "pictures.yaml"), "utf8")) as { source?: unknown; words?: unknown })
+    ? (parseYaml(readFileSync(join(root, "pictures.yaml"), "utf8"), "pictures.yaml") as {
+        source?: unknown;
+        words?: unknown;
+      })
     : null;
   if (picturesDoc && (typeof picturesDoc.source !== "string" || !picturesDoc.source.trim()))
     fail("pictures.yaml: нужен source — библиотека и лицензия картинок");
@@ -229,7 +238,9 @@ export function readSources(root: string): ContentRoot {
   const voices = new Map<Language, VoiceMap>();
   for (const file of list("voices")) {
     const language = languageOf(basename(file, extname(file)), `voices/${file}`);
-    voices.set(language, parseVoices(readFileSync(join(root, "voices", file), "utf8"), voicesFile(language), language));
+    const body = readFileSync(join(root, "voices", file), "utf8");
+    parseYaml(body, `voices/${file}`);
+    voices.set(language, parseVoices(body, voicesFile(language), language));
   }
   return { words, phrases, lessons, readings, courses, modules, pictures, files, voices };
 }
@@ -245,4 +256,116 @@ export function checkSourceScripts(
     checkScripts(src, `phrases/${src.file}`, courses.get(src.course) ?? LANGUAGE);
   for (const [id, src] of sources.modules) checkScripts(src, `modules/${src.file}`, modules.get(id) ?? LANGUAGE);
   for (const [id, src] of sources.lessons) checkScripts(src, `lessons/${id}.yaml`, lessons.get(id) ?? LANGUAGE);
+}
+
+const WORD_FIELDS = {
+  id: true,
+  greek: true,
+  russian: true,
+  ipa: true,
+  note: true,
+  forms: true,
+  paradigm: true,
+  verified: true,
+  source: true,
+  image: true,
+  audio: true,
+  reading: true,
+  examples: true,
+} satisfies Record<keyof WordSource, true>;
+const PHRASE_FIELDS = {
+  id: true,
+  text: true,
+  translation: true,
+  usage: true,
+  note: true,
+  audio: true,
+  provenance: true,
+} satisfies Record<keyof PhraseSource, true>;
+const LESSON_FIELDS = {
+  title: true,
+  language: true,
+  words: true,
+  items: true,
+  kind: true,
+  blocks: true,
+} satisfies Record<keyof LessonSource, true>;
+const MODULE_FIELDS = {
+  id: true,
+  number: true,
+  title: true,
+  subtitle: true,
+  status: true,
+  goal: true,
+  grammar: true,
+  sessions: true,
+  lessons: true,
+  checkpoint: true,
+  review: true,
+  crib: true,
+} satisfies Record<keyof ModuleSource, true>;
+const COURSE_FIELDS = {
+  id: true,
+  title: true,
+  language: true,
+  source: true,
+  lessons: true,
+  modules: true,
+  exam: true,
+  passShare: true,
+  calendar: true,
+} satisfies Record<keyof CourseSource, true>;
+
+const USER_OWNED =
+  "поле не поставляется — статус занятия и дата урока принадлежат пользователю и задаются расписанием курса";
+const LESSON_HINTS: Record<string, string> = { status: USER_OWNED, targetDate: USER_OWNED };
+
+/** Поля, которые `readSources` дописывает сам: из YAML их быть не должно, но и отказом они не считаются. */
+const FILE_ADDED = ["file"];
+const CARD_ADDED = ["file", "course"];
+
+function checkShape(
+  doc: object,
+  fields: Record<string, true>,
+  lists: string[],
+  where: string,
+  hints: Record<string, string> = {},
+  added: string[] = [],
+) {
+  const record = doc as Record<string, unknown>;
+  for (const key of Object.keys(record)) {
+    if (added.includes(key)) continue;
+    if (Object.hasOwn(hints, key)) fail(`${where}.${key}: ${hints[key]}`);
+    if (!Object.hasOwn(fields, key)) fail(`${where}: лишнее поле ${key}`);
+  }
+  for (const key of lists)
+    if (record[key] !== undefined && !Array.isArray(record[key])) fail(`${where}.${key}: ожидался список`);
+}
+function checkEntries(doc: object, key: string, where: string) {
+  const list = (doc as Record<string, unknown>)[key];
+  if (Array.isArray(list))
+    list.forEach((entry, index) => {
+      if (!entry || typeof entry !== "object" || Array.isArray(entry))
+        fail(`${where}.${key}[${index}]: ожидалась карта полей`);
+    });
+}
+
+/** Разбор файлов — в `readSources`: озвучка читает недописанные уроки, поэтому форма проверяется отдельно. */
+export function checkSources(sources: ContentRoot) {
+  for (const src of sources.words.values()) {
+    const where = `words/${src.file}`;
+    checkShape(src, WORD_FIELDS, ["reading", "examples"], where, {}, CARD_ADDED);
+    checkEntries(src, "reading", where);
+    checkEntries(src, "examples", where);
+  }
+  for (const src of sources.phrases.values()) checkShape(src, PHRASE_FIELDS, [], `phrases/${src.file}`, {}, CARD_ADDED);
+  for (const [id, src] of sources.lessons) {
+    const where = `lessons/${id}.yaml`;
+    checkShape(src, LESSON_FIELDS, ["words", "items"], where, LESSON_HINTS);
+    checkEntries(src, "items", where);
+  }
+  for (const src of sources.modules.values())
+    checkShape(src, MODULE_FIELDS, ["grammar", "lessons", "review"], `modules/${src.file}`, {}, FILE_ADDED);
+  for (const src of sources.courses.values())
+    checkShape(src, COURSE_FIELDS, ["lessons", "modules"], `courses/${src.file}`, {}, FILE_ADDED);
 }

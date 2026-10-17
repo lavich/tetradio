@@ -1,12 +1,16 @@
 import { glossSpans } from "../src/content/course.ts";
+import { ARTICLE_WORDS } from "./greek.ts";
 import { PROFILES, type LanguageProfile } from "../src/domain/language.ts";
 import { buildMatcher, candidates, formPieces, norm, type MatchCard } from "./marks.ts";
 
 /** Служебные слова, которые курс учит грамматикой, а не карточками: артикли, слитные предлоги, энклитики, частицы. */
 const GRAMMAR = new Set(
-  "ο η το οι τα τον την τη του της των τους τις στο στη στην στον στα στους στις σε με σ τ μ να θα κι μου σου μας σας ένα έναν μία μια αυτό αυτή πιο α"
-    .split(" ")
-    .map(norm),
+  [
+    ...ARTICLE_WORDS,
+    ..."στο στη στην στον στα στους στις σε με σ μ να θα κι μου σου μας σας ένα έναν μία μια αυτό αυτή πιο α".split(
+      " ",
+    ),
+  ].map(norm),
 );
 /** Частые приставки: общее начало, которое сводится к ним, не делает слово знакомым (καταλαβαίνω ≠ κατάστημα). */
 const PREFIXES = ["παρα", "κατα", "μετα", "συν", "συγ", "συμ", "προ", "απο", "επι", "δια", "υπο", "ανα", "εκ", "εξ"];

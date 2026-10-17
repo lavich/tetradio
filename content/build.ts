@@ -2,6 +2,7 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  parseCatalog,
   SCHEMA_VERSION,
   type Catalog,
   type ContentPackage,
@@ -18,7 +19,7 @@ import { buildReadings, type ReadingReport } from "./build/readings.ts";
 import { checkQuestions } from "./build/questions.ts";
 import { buildMedia } from "./build/media.ts";
 import { packLessons, type BuiltFile } from "./build/output.ts";
-import { checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
+import { checkSources, checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
 
 export { LANGUAGE } from "./build/common.ts";
 export { audioAssetId, imageAssetId, phraseRevisionOf, revisionOf } from "./build/cards.ts";
@@ -66,13 +67,14 @@ export interface BuiltContent {
  */
 export function buildContent(root = defaultRoot()): BuiltContent {
   const sources = readSources(root);
+  checkSources(sources);
   // Письменность карточки проверяется по языку курса её папки, поэтому курсы разбираются до карточек.
   const { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages, courseLanguages } =
     buildCourses(sources);
   checkSourceScripts(sources, courseLanguages, languages, moduleLanguages);
-  const cardVoicing = checkCardAudio(sources, courseLanguages);
-  const { words, phrases } = buildCards(sources, courseLanguages);
-  const { legacy, art, media } = buildMedia(sources, words, phrases, cardVoicing.sources);
+  const { voicing: cardVoicing, sources: voiced } = checkCardAudio(sources, courseLanguages);
+  const { words, phrases } = buildCards(voiced, courseLanguages);
+  const { legacy, art, media } = buildMedia(voiced, words, phrases, cardVoicing.sources);
   const { used, lessonsForModule, drafts, voicing } = buildLessons({
     sources,
     words,
@@ -98,7 +100,9 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     lessons: entries,
     ...(modules.length ? { modules } : {}),
   };
-  files.push({ path: "content/catalog.json", body: JSON.stringify(catalog), mimeType: "application/json" });
+  const catalogBody = JSON.stringify(catalog);
+  parseCatalog(JSON.parse(catalogBody));
+  files.push({ path: "content/catalog.json", body: catalogBody, mimeType: "application/json" });
   return {
     catalog,
     packages,
@@ -190,8 +194,23 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   if (process.env.PARADIGM_REPORT)
     for (const word of tables)
       console.log(`  ${word.greek}: ${word.paradigm!.present.join(" ")} | ${word.paradigm!.past.join(" ")}`);
-  const shown = process.env.MARKS_REPORT ? built.marks.ambiguous : built.marks.ambiguous.slice(0, 5);
-  for (const entry of shown)
-    console.log(`  ${entry.lessonId} ${entry.block}.${entry.field}: «${entry.text}» → ${entry.refs.join(" или ")}`);
-  if (shown.length < built.marks.ambiguous.length) console.log("  … весь список: MARKS_REPORT=1 node content/build.ts");
+  // Одно слово с теми же карточками повторяется по урокам и блокам: в отчёте оно одна строка с местами.
+  const groups = new Map<string, { text: string; refs: string[]; places: Map<string, number> }>();
+  for (const entry of built.marks.ambiguous) {
+    const key = `${entry.text}\u0000${entry.refs.join(" ")}`;
+    const group = groups.get(key) ?? { text: entry.text, refs: entry.refs, places: new Map() };
+    const place = `${entry.lessonId} ${entry.block}.${entry.field}`;
+    group.places.set(place, (group.places.get(place) ?? 0) + 1);
+    groups.set(key, group);
+  }
+  const shown = process.env.MARKS_REPORT ? [...groups.values()] : [...groups.values()].slice(0, 5);
+  for (const group of shown) {
+    const places = [...group.places].map(([place, count]) => (count > 1 ? `${place} ×${count}` : place));
+    const listed = process.env.MARKS_REPORT ? places : places.slice(0, 3);
+    const more = places.length - listed.length;
+    console.log(
+      `  «${group.text}» → ${group.refs.join(" или ")}: ${listed.join(", ")}${more > 0 ? ` и ещё ${more}` : ""}`,
+    );
+  }
+  if (shown.length < groups.size) console.log("  … весь список: MARKS_REPORT=1 node content/build.ts");
 }

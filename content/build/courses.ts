@@ -1,4 +1,4 @@
-import { ContentError, type CatalogCourse } from "../../src/content/schema.ts";
+import { type CatalogCourse } from "../../src/content/schema.ts";
 import { parseCalendar, parseExam, parseModule, parsePassShare, type CatalogModule } from "../../src/content/course.ts";
 import type { Language } from "../../src/domain/language.ts";
 import { fail, LANGUAGE, languageOf, nfc, text } from "./common.ts";
@@ -51,26 +51,21 @@ export function buildCourses(sources: ContentRoot) {
         moduleOwner.set(moduleId, courseId);
         const ownLessons = moduleSrc.lessons ?? [];
         if (!Array.isArray(ownLessons)) fail(`${at}.lessons: ожидался список`);
-        let module: CatalogModule;
-        try {
-          module = parseModule(
-            nfc({
-              ...moduleSrc,
-              id: moduleId,
-              courseId,
-              lessonIds: moduleSrc.status === "published" ? ownLessons : [],
-              checkpointId: moduleSrc.status === "published" ? moduleSrc.checkpoint : undefined,
-              reviewIds: moduleSrc.status === "published" ? moduleSrc.review : undefined,
-              lessons: undefined,
-              checkpoint: undefined,
-              review: undefined,
-              file: undefined,
-            }),
-            at,
-          );
-        } catch (error) {
-          throw error instanceof ContentError ? new ContentError(error.message) : error;
-        }
+        const module = parseModule(
+          nfc({
+            ...moduleSrc,
+            id: moduleId,
+            courseId,
+            lessonIds: moduleSrc.status === "published" ? ownLessons : [],
+            checkpointId: moduleSrc.status === "published" ? moduleSrc.checkpoint : undefined,
+            reviewIds: moduleSrc.status === "published" ? moduleSrc.review : undefined,
+            lessons: undefined,
+            checkpoint: undefined,
+            review: undefined,
+            file: undefined,
+          }),
+          at,
+        );
         const twin = numbers.get(module.number);
         if (twin) fail(`${at}.number: номер ${module.number} уже у модуля ${twin}`);
         numbers.set(module.number, moduleId);

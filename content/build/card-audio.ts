@@ -12,10 +12,17 @@ export interface CardVoicing {
   sources: Map<string, string>;
 }
 
-/** Слова и фразы читает диктор карты голосов; устаревшая запись снимается с карточки до сборки карточек. */
-export function checkCardAudio(sources: ContentRoot, courseLanguages: Map<string, Language>): CardVoicing {
+/**
+ * Слова и фразы читает диктор карты голосов; устаревшая запись снимается с карточки до сборки карточек.
+ * Исходники не меняются: сборка дальше идёт по копии `sources` без устаревших записей.
+ */
+export function checkCardAudio(
+  sources: ContentRoot,
+  courseLanguages: Map<string, Language>,
+): { voicing: CardVoicing; sources: ContentRoot } {
   const manifest = parseManifest(sources.files.get(MANIFEST_FILE));
   const voicing: CardVoicing = { voiced: 0, stale: [], sources: new Map() };
+  const silenced = new Set<string>();
   const check = (where: string, id: string, src: { audio?: string; course: string }, text: unknown) => {
     if (src.audio === undefined) return;
     if (typeof src.audio !== "string") fail(`${where}.audio: ожидалось имя файла в audio/`);
@@ -26,7 +33,7 @@ export function checkCardAudio(sources: ContentRoot, courseLanguages: Map<string
     const done = manifest[src.audio];
     if (!done || done.voice !== voice || done.hash !== lineHash(String(text), voice, voices.language)) {
       voicing.stale.push(where);
-      delete src.audio;
+      silenced.add(where);
       return;
     }
     voicing.sources.set(audioAssetId(id), voices.source.replaceAll("{voice}", voice));
@@ -34,5 +41,16 @@ export function checkCardAudio(sources: ContentRoot, courseLanguages: Map<string
   };
   for (const [id, src] of sources.words) check(`words/${src.file}`, id, src, src.greek);
   for (const [id, src] of sources.phrases) check(`phrases/${src.file}`, id, src, src.text);
-  return voicing;
+  const unvoiced = <T extends { audio?: string }>(map: Map<string, T>, dir: string) =>
+    new Map(
+      [...map].map(([id, src]) => {
+        if (!silenced.has(`${dir}/${(src as { file?: string }).file}`)) return [id, src] as const;
+        const { audio: _audio, ...rest } = src;
+        return [id, rest as T] as const;
+      }),
+    );
+  return {
+    voicing,
+    sources: { ...sources, words: unvoiced(sources.words, "words"), phrases: unvoiced(sources.phrases, "phrases") },
+  };
 }

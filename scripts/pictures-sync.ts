@@ -6,10 +6,12 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { basename, join } from "node:path";
 import { parse, stringify } from "yaml";
 
+/** Закреплено коммитом: ссылка на `main` меняла бы картинки под ногами. */
+const COMMIT = "1ffb34c752ecf5d402f04cfb4b392c77f57c54bc";
 /** Зеркала репозитория: CDN иногда отвечает 403 на отдельные файлы — тогда берём прямо с GitHub. */
 const MIRRORS = [
-  "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/",
-  "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/",
+  `https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@${COMMIT}/`,
+  `https://raw.githubusercontent.com/microsoft/fluentui-emoji/${COMMIT}/`,
 ];
 const SOURCE = "Microsoft Fluent Emoji (Flat), лицензия MIT — github.com/microsoft/fluentui-emoji";
 const dir = "content/pictures";
