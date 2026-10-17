@@ -16,16 +16,23 @@ const origin = `http://localhost:${PORT}`;
 const jsonAt = process.argv.indexOf("--json");
 const jsonPath = jsonAt < 0 ? undefined : process.argv[jsonAt + 1];
 
-const preview = spawn("npx", ["vite", "preview", "--port", String(PORT), "--strictPort"], { stdio: "ignore" });
-const chrome = await launch({
-  chromePath: chromium.executablePath(),
-  chromeFlags: ["--headless=new", "--no-sandbox", "--mute-audio"],
-});
+const preview = spawn(
+  process.execPath,
+  ["node_modules/vite/bin/vite.js", "preview", "--port", String(PORT), "--strictPort"],
+  {
+    stdio: "ignore",
+  },
+);
+let chrome: Awaited<ReturnType<typeof launch>> | undefined;
 const stop = () => {
   preview.kill();
-  chrome.kill();
+  chrome?.kill();
 };
 try {
+  chrome = await launch({
+    chromePath: chromium.executablePath(),
+    chromeFlags: ["--headless=new", "--no-sandbox", "--mute-audio"],
+  });
   for (let waited = 0; ; waited += 250) {
     if (
       await fetch(`${origin}/app/`).then(
@@ -38,7 +45,9 @@ try {
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
   const runs: Run[] = [];
-  let requests: Request[] = [];
+  let lazyBytes = 0;
+  let lazy: { path: string; bytes: number }[] = [];
+  const html = readFileSync("dist/app/index.html", "utf8");
   for (let run = 1; run <= RUNS; run++) {
     const result = await lighthouse(`${origin}/app/`, {
       port: chrome.port,
@@ -52,11 +61,13 @@ try {
       tbt: audits["total-blocking-time"]!.numericValue!,
       weight: audits["total-byte-weight"]!.numericValue!,
     });
-    requests = (audits["network-requests"]!.details as unknown as { items: Request[] }).items;
+    const requests = (audits["network-requests"]!.details as unknown as { items: Request[] }).items;
+    const found = lazyScripts(requests, html, inDistOf("/"), origin);
+    const bytes = found.reduce((sum, chunk) => sum + chunk.bytes, 0);
+    // Худший из прогонов: ленивая загрузка зависит от того, успел ли кадр до паузы.
+    if (bytes >= lazyBytes) [lazyBytes, lazy] = [bytes, found];
     console.log(`прогон ${run}: ${JSON.stringify(runs.at(-1))}`);
   }
-  const lazy = lazyScripts(requests, readFileSync("dist/app/index.html", "utf8"), inDistOf("/"), origin);
-  const lazyBytes = lazy.reduce((sum, chunk) => sum + chunk.bytes, 0);
   const result = verdict(runs, lazyBytes);
   console.log(
     `медиана: LCP ${Math.round(result.lcp)} мс, TBT ${Math.round(result.tbt)} мс, вес ${Math.round(result.weight)} байт; ` +

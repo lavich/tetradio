@@ -86,14 +86,10 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          if (
-            set -e
-            git fetch --depth=1 origin "$BASE_SHA"
-            git worktree add ../base "$BASE_SHA"
-            cd ../base
-            npm ci
-            npm run build
-          ); then
+          if git fetch --depth=1 origin "$BASE_SHA" &&
+            git worktree add ../base "$BASE_SHA" &&
+            npm --prefix ../base ci &&
+            npm --prefix ../base run build; then
             node scripts/check-bundle.ts --dist ../base/dist --json bundle-base.json || true
           fi
           node scripts/bundle-diff.ts bundle-head.json bundle-base.json >> "$GITHUB_STEP_SUMMARY"
