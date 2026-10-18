@@ -12,6 +12,8 @@ const ARTICLES = /^(ο|η|το|οι|τα) /;
 /** Минимум слов (без фраз) по номеру модуля; сверху допускается запас на числа и опорные слова. */
 const target = (module: number) => (module <= 8 ? 35 : module <= 21 ? 40 : 30);
 const SLACK = 12;
+/** Модуль 04 несёт βρίσκομαι и το τηλέφωνο сверх запаса (docs/course/lexicon/README.md). */
+const EXTRA: Record<number, number> = { 4: 1 };
 /**
  * Опорные частотные слова и последний модуль, где они должны быть введены: тематическая генерация по модулям
  * их теряет, а без них не строятся тексты первых уроков.
@@ -127,8 +129,10 @@ for (const name of files) {
       if (accents > 1) warnings.push(`${at}: «${word}» с двумя ударениями`);
     }
   }
-  if (moduleWords < target(module) || moduleWords > target(module) + SLACK)
-    errors.push(`${name}: ${moduleWords} слов, ожидается ${target(module)}–${target(module) + SLACK}`);
+  if (moduleWords < target(module) || moduleWords > target(module) + SLACK + (EXTRA[module] ?? 0))
+    errors.push(
+      `${name}: ${moduleWords} слов, ожидается ${target(module)}–${target(module) + SLACK + (EXTRA[module] ?? 0)}`,
+    );
   if (modulePhrases < 10 || modulePhrases > 15) errors.push(`${name}: ${modulePhrases} фраз вместо 10–15`);
   words += moduleWords;
   phrases += modulePhrases;

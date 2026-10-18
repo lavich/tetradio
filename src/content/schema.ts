@@ -388,7 +388,12 @@ function parseParadigm(input: unknown, path: string): Paradigm {
     if (forms.length !== 6) throw new ContentError(`${path}.${field}: ожидалось шесть форм`);
     return forms;
   };
-  return { present: persons(raw.present, "present"), past: persons(raw.past, "past") };
+  const table: Paradigm = { present: persons(raw.present, "present"), past: persons(raw.past, "past") };
+  if (raw.third !== undefined) {
+    if (raw.third !== true) throw new ContentError(`${path}.third: ожидалось true`);
+    table.third = true;
+  }
+  return table;
 }
 
 function parseWord(input: unknown, path: string): PackageWord {

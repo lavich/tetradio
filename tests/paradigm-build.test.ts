@@ -48,6 +48,26 @@ describe("таблица спряжения при сборке", () => {
   });
 });
 
+describe("таблица из третьего лица", () => {
+  it("third при явных формах едет в пакете", () => {
+    const root = demoWith(EIMAI, (body) => body.replace("paradigm:\n", "paradigm:\n  third: true\n"));
+    const pack = buildContent(root).packages.find((p) => p.id === "m01-1")!;
+    expect(pack.words.find((word) => word.greek === "είμαι")?.paradigm?.third).toBe(true);
+  });
+  it("third без форм там, где правила не справляются, не проходит сборку", () => {
+    const root = demoWith(EIMAI, (body) => body.replace(/paradigm:\n(?: {2}.*\n)+/, "paradigm:\n  third: true\n"));
+    expect(() => buildContent(root)).toThrow(/eimai\.yaml: спряжение «είμαι» не выводится правилами/);
+  });
+  it("third при одном present без past не проходит сборку", () => {
+    const root = demoWith(EIMAI, (body) => body.replace(/ {2}past: .*\n/, "  third: true\n"));
+    expect(() => buildContent(root)).toThrow(/paradigm\.past: нужны шесть форм/);
+  });
+  it("third — только true", () => {
+    const root = demoWith(EIMAI, (body) => body.replace("paradigm:\n", "paradigm:\n  third: false\n"));
+    expect(() => buildContent(root)).toThrow(/paradigm\.third: ожидалось true/);
+  });
+});
+
 describe("установка без таблиц", () => {
   it("пакет и слово, поставленные версией без таблиц, ставятся заново", async () => {
     const demo = buildContent(DEMO);

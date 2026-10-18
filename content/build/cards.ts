@@ -67,7 +67,13 @@ function paradigmOf(
       fail(`${where}.paradigm: ожидалось { present, past }`);
     if (!hasParadigm(word, forms))
       fail(`${where}.paradigm: таблица — только у глагола с лицами и формами «аор.» или «прош.»`);
-    const table = src.paradigm as { present?: unknown; past?: unknown };
+    const table = src.paradigm as { present?: unknown; past?: unknown; third?: unknown };
+    if (table.third !== undefined && table.third !== true) fail(`${where}.paradigm.third: ожидалось true`);
+    if (table.third && table.present === undefined && table.past === undefined) {
+      const built = conjugate(word, forms!);
+      if (!built) fail(`${where}: спряжение «${word}» не выводится правилами — задайте present и past`);
+      return { ...built, third: true };
+    }
     const persons = (value: unknown, field: string) => {
       if (!Array.isArray(value) || value.length !== 6)
         fail(`${where}.paradigm.${field}: нужны шесть форм — я, ты, он, мы, вы, они`);
@@ -81,7 +87,7 @@ function paradigmOf(
     if (explicit.present[0] !== word) fail(`${where}.paradigm.present[0]: первая форма — заглавная «${word}»`);
     const first = principal(forms!).past;
     if (first && explicit.past[0] !== first) fail(`${where}.paradigm.past[0]: первая форма — «${first}» из forms`);
-    return explicit;
+    return table.third ? { ...explicit, third: true } : explicit;
   }
   if (language !== "el" || !hasParadigm(word, forms)) return undefined;
   const built = conjugate(word, forms!);

@@ -4,5 +4,7 @@ audio: words/w374.mp3
 russian: стоить
 ipa: /kosˈtizo/
 forms: аор. κόστισα; буд. θα κοστίσω
+paradigm:
+  third: true
 note: Πόσο κοστίζει;
 source: Лексикон курса, модуль 10 (docs/course/lexicon/10.tsv)

@@ -1,6 +1,8 @@
 title: Договариваемся о встрече
 kind: lesson
 items:
+  - kind: word
+    id: w924
   - kind: phrase
     id: p050
   - kind: phrase
@@ -9,6 +11,8 @@ items:
     id: p052
   - kind: phrase
     id: p053
+  - kind: phrase
+    id: p330
 blocks:
   - type: explanation
     id: meeting
@@ -38,7 +42,7 @@ blocks:
           - Εντάξει! Τα λέμε αύριο στις επτά.
   - type: vocabulary
     id: words
-    title: Фразы урока
+    title: Слова и фразы урока
   - type: exercise
     id: meeting-match
     title: Вопрос и ответ

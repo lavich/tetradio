@@ -21,6 +21,7 @@ items:
   - { kind: word, id: w885 }  # η επιστολή
   - { kind: word, id: w886 }  # επισυνάπτω
   - { kind: word, id: w878 }  # η προθεσμία
+  - { kind: word, id: w928 }  # ζητάω
   - { kind: phrase, id: p301 }  # Αξιότιμε κύριε,
   - { kind: phrase, id: p302 }  # Αξιότιμη κυρία,
   - { kind: phrase, id: p305 }  # Θα ήθελα να ρωτήσω αν…

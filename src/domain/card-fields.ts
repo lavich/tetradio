@@ -16,10 +16,11 @@ export interface Example {
   source?: string;
   glosses?: Gloss[];
 }
-/** Спряжение глагола по лицам «я, ты, он, мы, вы, они»: настоящее и прошедшее. */
+/** Спряжение глагола по лицам «я, ты, он, мы, вы, они»: настоящее и прошедшее; `third` — показывать только «он, она» и «они». */
 export interface Paradigm {
   present: string[];
   past: string[];
+  third?: true;
 }
 export interface Segment {
   text: string;
