@@ -9,6 +9,8 @@ import { packLessons } from "../content/build/output";
 import { lineHash } from "../content/build/voices";
 import { ContentError } from "../src/content/schema";
 
+const EL = { language: "el-GR", respell: new Map<string, string>() };
+
 type Files = Record<string, unknown>;
 const roots: string[] = [];
 afterEach(() => roots.splice(0).forEach((root) => rmSync(root, { recursive: true, force: true })));
@@ -171,7 +173,7 @@ describe("сообщения и исходники при сборке", () => {
       "audio/words/geia.mp3": new Uint8Array([1]),
       "audio/dialogues.json": new TextEncoder().encode(JSON.stringify({ "words/geia.mp3": { voice: "Aoede", hash } })),
     });
-    const fresh = buildContent(write(files(lineHash("γεια", "Aoede", "el-GR"))));
+    const fresh = buildContent(write(files(lineHash("γεια", "Aoede", EL))));
     expect(fresh.words[0].audioAssetId).toBe("snd-geia");
     const stale = buildContent(write(files("устарел")));
     expect(stale.cardVoicing.stale).toEqual(["words/greek-a2/geia.yaml"]);

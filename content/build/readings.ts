@@ -118,7 +118,7 @@ export function planReadingVoices(
       if (
         !onDisk.has(sentence.file) ||
         done?.voice !== sentence.voice ||
-        done.hash !== lineHash(sentence.text, sentence.voice, voices.language)
+        done.hash !== lineHash(sentence.text, sentence.voice, voices)
       )
         pending.push(entry);
     }
@@ -302,7 +302,7 @@ export function buildReadings({
       );
       const audio = sentences.map(({ text: sentence, voice, file }, index): string | null => {
         const done = manifest[file];
-        if (!done || done.voice !== voice || done.hash !== lineHash(sentence, voice, voices.language)) {
+        if (!done || done.voice !== voice || done.hash !== lineHash(sentence, voice, voices)) {
           unvoiced++;
           return null;
         }

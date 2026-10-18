@@ -22,7 +22,7 @@ import {
   lineHash,
   parseReply,
   retrying,
-  spokenText,
+  synthText,
   staleRecords,
   voiceableLessons,
   MANIFEST_FILE,
@@ -107,7 +107,7 @@ const stale: string[] = [];
 /** Синтезирует запись, если файла нет или он сделан для другого текста либо голоса. */
 async function voice(file: string, text: string, name: string, voices: VoiceMap, label: string) {
   const target = join(ROOT, "audio", file);
-  const hash = lineHash(text, name, voices.language);
+  const hash = lineHash(text, name, voices);
   stats.lines++;
   if (existsSync(target) && manifest[file]?.hash === hash && manifest[file]?.voice === name) return;
   await record(file, text, name, voices, label);
@@ -115,10 +115,10 @@ async function voice(file: string, text: string, name: string, voices: VoiceMap,
 
 async function record(file: string, text: string, name: string, voices: VoiceMap, label: string) {
   const target = join(ROOT, "audio", file);
-  const hash = lineHash(text, name, voices.language);
+  const hash = lineHash(text, name, voices);
   pending.push(`${label} (${name})`);
   if (check) return;
-  const audio = await synthesizeWhole(spokenText(text, voices.language), name, voices);
+  const audio = await synthesizeWhole(synthText(text, voices.language, voices.respell), name, voices);
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, audio);
   manifest[file] = { voice: name, hash };
