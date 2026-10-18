@@ -1,7 +1,7 @@
 import Dexie from "dexie";
 import { State } from "ts-fsrs";
 import { db, distinctKeys, searchTokens, type AppDatabase, type StoredWord } from "./db";
-import { cardLanguages, cardsInCourse, courseCardIds, courseLessonIds } from "./courses";
+import { cardLanguages, cardsInCourse, courseCardIds, courseLessonIds, lessonItemsOf } from "./courses";
 import { STORED_KINDS } from "./kinds";
 import { cardKey, cardLabel, KINDS } from "../domain/kinds";
 import {
@@ -162,8 +162,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
   return {
     timezone: deviceTimezone,
     studiedLessons: (courseId) => studiedLessons(courseId, database),
-    itemsOf: (lessonIds) =>
-      lessonIds.length ? database.lessonItems.where("lessonId").anyOf(lessonIds).toArray() : Promise.resolve([]),
+    itemsOf: (lessonIds) => lessonItemsOf(lessonIds, database),
     lessonRefs: zoned(async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref)),
     statesOf: (refs) => statesOf(refs, database),
     liveKeys: (refs) => liveKeys(refs, database),

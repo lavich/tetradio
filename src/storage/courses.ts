@@ -5,7 +5,7 @@
 import Dexie from "dexie";
 import { DEFAULT_LANGUAGE, isLanguage, profileOf, type Language, type LanguageProfile } from "../domain/language";
 import { tryParseUnitKey, unitKey } from "../domain/refs";
-import { CARD_KINDS, type CardKind, type LearningRef, type Session } from "../domain/types";
+import { CARD_KINDS, type CardKind, type LearningRef, type LessonItem, type Session } from "../domain/types";
 import { db, distinctKeys, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
 import { lessonCourses } from "./lesson-courses";
@@ -231,6 +231,16 @@ export const courseLessonIds = zoned(async function courseLessonIds(
     .map((lesson) => lesson.id);
 });
 
+/** `anyOf("lessonId")` идёт курсором по шагу на строку: на курсе из сотни уроков это секунды, `toArray` — миллисекунды. */
+export const lessonItemsOf = zoned(async function lessonItemsOf(
+  lessonIds: string[],
+  database: AppDatabase = db,
+): Promise<LessonItem[]> {
+  if (!lessonIds.length) return [];
+  const wanted = new Set(lessonIds);
+  return (await database.lessonItems.toArray()).filter((item) => wanted.has(item.lessonId));
+});
+
 /** Идентификаторы карточек вида в уроках курса, по порядку id. */
 export const courseCardIds = zoned(async function courseCardIds(
   courseId: string,
@@ -239,7 +249,7 @@ export const courseCardIds = zoned(async function courseCardIds(
 ): Promise<string[]> {
   const lessonIds = await courseLessonIds(courseId, database);
   if (!lessonIds.length) return [];
-  const items = await database.lessonItems.where("lessonId").anyOf(lessonIds).toArray();
+  const items = await lessonItemsOf(lessonIds, database);
   return [...new Set(items.filter((item) => item.ref.kind === kind).map((item) => item.ref.id))].sort();
 });
 
