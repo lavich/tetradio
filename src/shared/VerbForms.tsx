@@ -152,6 +152,7 @@ export function VerbForms({
 }
 
 const PERSONS = ["я", "ты", "он, она", "мы", "вы", "они"];
+const THIRD = [2, 5];
 
 export function ParadigmTable({ paradigm, onSay }: { paradigm: Paradigm; onSay: (form: string) => void }) {
   return (
@@ -159,6 +160,7 @@ export function ParadigmTable({ paradigm, onSay }: { paradigm: Paradigm; onSay: 
       <summary className={css.summary}>Все формы</summary>
       <div className={css.scroll}>
         <table className={css.table}>
+          {paradigm.third && <caption className="sr-only">Только третье лицо: он, она и они</caption>}
           <thead>
             <tr>
               <td />
@@ -167,17 +169,19 @@ export function ParadigmTable({ paradigm, onSay }: { paradigm: Paradigm; onSay: 
             </tr>
           </thead>
           <tbody>
-            {PERSONS.map((person, index) => (
-              <tr key={person}>
-                <th scope="row">{person}</th>
-                <td>
-                  <Form form={paradigm.present[index]} endings={ENDINGS.present[index]} onSay={onSay} />
-                </td>
-                <td>
-                  <Form form={paradigm.past[index]} endings={ENDINGS.past[index]} onSay={onSay} />
-                </td>
-              </tr>
-            ))}
+            {PERSONS.map((person, index) => ({ person, index }))
+              .filter(({ index }) => !paradigm.third || THIRD.includes(index))
+              .map(({ person, index }) => (
+                <tr key={person}>
+                  <th scope="row">{person}</th>
+                  <td>
+                    <Form form={paradigm.present[index]} endings={ENDINGS.present[index]} onSay={onSay} />
+                  </td>
+                  <td>
+                    <Form form={paradigm.past[index]} endings={ENDINGS.past[index]} onSay={onSay} />
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

@@ -4,5 +4,7 @@ audio: words/w268.mp3
 russian: нравиться
 ipa: /aˈreso/
 forms: аор. άρεσα; буд. θα αρέσω
+paradigm:
+  third: true
 note: μου αρέσει + ед., μου αρέσουν + мн.
 source: Лексикон курса, модуль 08 (docs/course/lexicon/08.tsv)
