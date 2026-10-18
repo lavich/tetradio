@@ -1,5 +1,6 @@
 id: p330
 text: Πάμε για καφέ;
+audio: phrases/p330.mp3
 translation: Пойдём на кофе?
 provenance:
   sourceLabel: Лексикон курса, модуль 04 (docs/course/lexicon/04.tsv)

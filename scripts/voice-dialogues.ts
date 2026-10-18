@@ -37,6 +37,7 @@ const ROOT = process.env.CONTENT_ROOT || "content";
 const args = process.argv.slice(2);
 const check = args.includes("--check");
 const wanted = args.filter((arg) => !arg.startsWith("--"));
+const course = args.find((arg) => arg.startsWith("--course="))?.slice("--course=".length);
 const lessons = readdirSync(join(ROOT, "lessons"))
   .filter((file) => file.endsWith(".yaml"))
   .map((file) => file.slice(0, -".yaml".length))
@@ -52,6 +53,8 @@ const key = process.env.GOOGLE_TTS_KEY;
 
 const sources = readSources(ROOT);
 const { languages, courseLanguages, moduleOf } = buildCourses(sources);
+if (course && !courseLanguages.has(course))
+  throw new Error(`Курса ${course} нет; есть: ${[...courseLanguages.keys()].join(", ")}`);
 const drafts = new Set([...moduleOf].filter(([, placement]) => placement.draft).map(([id]) => id));
 const voicesOf = (lessonId: string) => {
   const language = languages.get(lessonId) ?? LANGUAGE;
@@ -182,8 +185,9 @@ function removeFiles(files: string[]) {
       planned.add(cardFile(dir, id));
       planAudio(src.audio);
     }
+  // С `--course` файл без исходника не отнести к курсу: очистка карточек ждёт запуска без него.
   const cardScope = (file: string) =>
-    CARDS.some((dir) => file.startsWith(`${dir}/`) && (!wanted.length || wanted.includes(dir)));
+    !course && CARDS.some((dir) => file.startsWith(`${dir}/`) && (!wanted.length || wanted.includes(dir)));
   const onDisk = existsSync(join(ROOT, "audio"))
     ? readdirSync(join(ROOT, "audio"), { recursive: true, encoding: "utf8" })
         .filter((file) => file.endsWith(".mp3"))
@@ -231,6 +235,7 @@ for (const dir of CARDS) {
   if (wanted.length && !wanted.includes(dir)) continue;
   for (const [id, src] of dir === "words" ? sources.words : sources.phrases) {
     const textKey = dir === "words" ? "greek" : "text";
+    if (course && src.course !== course) continue;
     const language = courseLanguages.get(src.course) ?? LANGUAGE;
     const voices =
       sources.voices.get(language) ?? fail(`${dir}/${src.file}: нет карты голосов ${voicesFile(language)}`);

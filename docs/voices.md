@@ -48,6 +48,7 @@
 ```bash
 npm run voices -- m02-1 m02-2   # без аргументов — всё, кроме реплик и ответов черновых модулей
 npm run voices -- words phrases # только слова и фразы
+npm run voices -- words phrases --course=greek-a2 # слова и фразы одного курса
 npm run voices -- readings      # только тексты для чтения
 npm run voices -- answers       # только ответы заданий
 npm run voices -- --check m02-1                  # что не озвучено или устарело; без ключа и сети
