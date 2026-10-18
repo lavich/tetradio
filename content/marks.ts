@@ -343,6 +343,31 @@ export interface Candidate extends Span {
   tier: Tier;
 }
 
+const HYPHENS = /[-\u2010\u2011\u00AD]/;
+/** Обломок слова: слог через разметку или дефис, суффикс «-ζω», цепочка слогов «ε-τοι-μά-ζω»; «δύο-τρεις» и счёт словами — не обломок. */
+function fragment(text: string, start: number, end: number) {
+  const skip = (at: number, step: 1 | -1) => {
+    while (text[at] === "*" || text[at] === "_") at += step;
+    return at;
+  };
+  const wordChar = (char: string | undefined) => char !== undefined && (isLetter(char) || HYPHENS.test(char));
+  for (const [at, step] of [
+    [skip(start - 1, -1), -1],
+    [skip(end, 1), 1],
+  ] as const) {
+    const char = text[at];
+    if (char === undefined) continue;
+    if (isLetter(char)) return true;
+    if (HYPHENS.test(char) && !isLetter(text[skip(at + step, step)] ?? " ")) return true;
+  }
+  let from = start;
+  let to = end;
+  while (wordChar(text[from - 1])) from--;
+  while (wordChar(text[to])) to++;
+  const pieces = [text.slice(from, start), text.slice(end, to)].flatMap((side) => side.split(HYPHENS));
+  return pieces.filter(Boolean).length >= 2 && pieces.every((piece) => letters(piece) <= 3);
+}
+
 export function candidates(text: string, matcher: Matcher, upto = Infinity): Candidate[] {
   const tokens = matcher.tokenize(text);
   const found: Candidate[] = [];
@@ -358,6 +383,7 @@ export function candidates(text: string, matcher: Matcher, upto = Infinity): Can
           gapKey(text.slice(tokens[i + k - 1].end, tokens[i + k].start)) === pattern.gaps[k - 1];
       if (!ok) continue;
       const end = tokens[i + n - 1].end;
+      if (fragment(text, token.start, end)) continue;
       found.push({ start: token.start, length: end - token.start, ref: pattern.ref, tokens: n, tier: pattern.tier });
     }
   });
