@@ -7,6 +7,7 @@ import { buildContent } from "../content/build";
 import { buildMatcher, candidates, choose, formPieces, lessonMarks, type MatchCard } from "../content/marks";
 import { parseBlocks, type LessonBlock } from "../src/content/course";
 import { ContentError, decodeMarks, parseMarks, parsePackage } from "../src/content/schema";
+import { realContent } from "./helpers/real-content";
 
 function found(text: string, cards: MatchCard[], rank: (ref: string) => number = () => 0) {
   const matcher = buildMatcher(cards);
@@ -282,5 +283,34 @@ describe("разметка в пакете", () => {
     ])
       expect(() => parseMarks(bad, lesson, items)).toThrow(ContentError);
     expect(() => parseMarks({ refs: [], cards: [], blocks: { nope: {} } }, lesson, items)).toThrow(ContentError);
+  });
+});
+
+describe("обломки слов не подсвечиваются", () => {
+  const zo = [word("w:zo", "ζω", "аор. έζησα; буд. θα ζήσω")];
+  it("слог после разметки, дефиса или тире — не слово", () => {
+    expect(found("δια**βά**ζω; ε-τοι-μά-ζω; **-ζω**; -ζω", zo)).toEqual([]);
+    const dyo = [word("w:dyo", "δύο")];
+    expect(found("ένα-δύο-τρία; δύο-τρεις-τέσσερις; **δύο**-**τρεις**", dyo)).toEqual([
+      "δύο→w:dyo",
+      "δύο→w:dyo",
+      "δύο→w:dyo",
+    ]);
+    expect(found("δύο-**τρεις**", [word("w:dyo", "δύο")])).toEqual(["δύο→w:dyo"]);
+    expect(found("**Ζω** εδώ. Ζω, ζεις. «Ζω».", zo)).toEqual(["Ζω→w:zo", "Ζω→w:zo", "Ζω→w:zo"]);
+  });
+  it("в настоящем курсе нет подсветки ζω в «διαβάζω» и «-ζω»", () => {
+    const zoRef = `w:${realContent().words.find((w) => w.greek === "ζω")!.id}`;
+    const hits = realContent().packages.flatMap((pack) => {
+      const idx = pack.marks?.refs.indexOf(zoRef) ?? -1;
+      if (idx < 0) return [];
+      return Object.entries(pack.marks!.blocks).flatMap(([block, fields]) =>
+        Object.entries(fields).flatMap(([field, marks]) =>
+          marks.filter((mark) => mark[2] === idx).map((mark) => `${pack.id} ${block}.${field}@${mark[0]}`),
+        ),
+      );
+    });
+    expect(hits.filter((hit) => /^m(05-1|14-1) /.test(hit))).toEqual([]);
+    expect(hits).toContain("m24-m3 life-in-cyprus.model@0");
   });
 });
