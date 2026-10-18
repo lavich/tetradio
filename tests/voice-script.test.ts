@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { describe, expect, it } from "vitest";
 import { planAnswerVoices } from "../content/build/answers";
 import { profileOf } from "../src/domain/language";
@@ -130,5 +131,27 @@ describe("отбор уроков и очистка озвучки", () => {
     );
     expect(plan.pending).toEqual([]);
     expect(plan.stale).toEqual([]);
+  });
+});
+
+describe("--course ограничивает озвучку карточек одним курсом", () => {
+  const run = (...args: string[]) =>
+    spawnSync(process.execPath, ["scripts/voice-dialogues.ts", "--check", "words", "phrases", ...args], {
+      encoding: "utf8",
+    });
+  const pending = (out: string) => out.split("\n").filter((line) => line.includes("нет записи или устарела"));
+
+  it("в проверке только записи названного курса", () => {
+    for (const course of ["greek-a2", "english-it"]) {
+      const result = run(`--course=${course}`);
+      expect(result.status, result.stderr).toBe(0);
+      for (const line of pending(result.stdout)) expect(line, course).toContain(`/${course}/`);
+    }
+  });
+
+  it("неизвестный курс — ошибка со списком курсов", () => {
+    const result = run("--course=nope");
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain("Курса nope нет; есть:");
   });
 });

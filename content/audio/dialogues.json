@@ -4295,6 +4295,10 @@
     "voice": "Kore",
     "hash": "61d21193a3d6a8c0"
   },
+  "phrases/p330.mp3": {
+    "voice": "Kore",
+    "hash": "af029f6442ef26b2"
+  },
   "readings/r-m01-gnorimia/1.mp3": {
     "voice": "Zephyr",
     "hash": "dcc1cf4db629d875"
@@ -18558,5 +18562,37 @@
   "words/w921.mp3": {
     "voice": "Kore",
     "hash": "3b9ea4e690dcfe1b"
+  },
+  "words/w922.mp3": {
+    "voice": "Kore",
+    "hash": "a90220b8dbd24444"
+  },
+  "words/w923.mp3": {
+    "voice": "Kore",
+    "hash": "87f8061811cd827e"
+  },
+  "words/w924.mp3": {
+    "voice": "Kore",
+    "hash": "64ea15ffcd2bf675"
+  },
+  "words/w925.mp3": {
+    "voice": "Kore",
+    "hash": "5f571d9bd8a30971"
+  },
+  "words/w926.mp3": {
+    "voice": "Kore",
+    "hash": "d8d58afbdb55deb6"
+  },
+  "words/w927.mp3": {
+    "voice": "Kore",
+    "hash": "15c546606df3913c"
+  },
+  "words/w928.mp3": {
+    "voice": "Kore",
+    "hash": "f417388945a346f1"
+  },
+  "words/w929.mp3": {
+    "voice": "Kore",
+    "hash": "83f9ce022724d401"
   }
 }
