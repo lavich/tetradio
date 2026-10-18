@@ -29,7 +29,7 @@ export function answerVoicing(lessonId: string, blocks: unknown, profile: Langua
 export const answerFresh = (manifest: VoiceManifest, answer: VoicedAnswer, voices: VoiceMap) =>
   !!voices.narrator &&
   manifest[answer.file]?.voice === voices.narrator &&
-  manifest[answer.file]?.hash === lineHash(answer.text, voices.narrator, voices.language);
+  manifest[answer.file]?.hash === lineHash(answer.text, voices.narrator, voices);
 
 type PlannedAnswer = VoicedAnswer & { label: string; voices: VoiceMap; voice: string };
 export interface AnswerVoicePlan {

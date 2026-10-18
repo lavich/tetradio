@@ -10,6 +10,8 @@ import { PROFILES } from "../src/domain/language";
 import { parseBlocks, publicationGaps } from "../src/content/course";
 import { ContentError, parseCatalog, parsePackage } from "../src/content/schema";
 
+const EL = { language: "el-GR", respell: new Map<string, string>() };
+
 /** Минимальный курс программы: один опубликованный модуль из урока и контрольной и один черновик. */
 type Files = Record<string, unknown>;
 const listening = {
@@ -619,7 +621,7 @@ describe("голоса аудирования", () => {
     "audio/dialogues.json": json(manifest),
   });
   const fresh = {
-    "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Γεια σου! Πώς σε λένε;", "Aoede", "el-GR") },
+    "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Γεια σου! Πώς σε λένε;", "Aoede", EL) },
   };
 
   it("запись реплики — медиа пакета с версией в имени и источником голоса; в реплику её кладёт разбор пакета", () => {
@@ -647,11 +649,11 @@ describe("голоса аудирования", () => {
     expect(spokenText("Πού είσαι; Καλά.", "el-GR")).toBe("Πού είσαι? Καλά.");
     expect(spokenText("Πού είσαι\u037e", "el-GR")).toBe("Πού είσαι?");
     expect(spokenText("Wait; then go.", "en-US")).toBe("Wait; then go.");
-    expect(lineHash("Είσαι καλά;", "Aoede", "el-GR")).toBe(lineHash("Είσαι καλά?", "Aoede", "el-GR"));
+    expect(lineHash("Είσαι καλά;", "Aoede", EL)).toBe(lineHash("Είσαι καλά?", "Aoede", EL));
   });
   it("запись, сделанная до правки текста или смены голоса, не публикуется: реплика звучит синтезом", () => {
     const content = build(
-      files({ "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Старый текст", "Aoede", "el-GR") } }),
+      files({ "m01-1/dialogue-1.mp3": { voice: "Aoede", hash: lineHash("Старый текст", "Aoede", EL) } }),
     );
     expect(content.packages[0].lineAudio).toBeUndefined();
     expect(content.voicing.stale).toEqual(["m01-1/dialogue#1"]);
@@ -721,8 +723,8 @@ describe("записи слов и фраз", () => {
     "audio/dialogues.json": json(manifest),
   });
   const fresh = {
-    "words/geia.mp3": { voice: "Kore", hash: lineHash("γεια", "Kore", "el-GR") },
-    "phrases/p1.mp3": { voice: "Kore", hash: lineHash("Μιλάτε αγγλικά;", "Kore", "el-GR") },
+    "words/geia.mp3": { voice: "Kore", hash: lineHash("γεια", "Kore", EL) },
+    "phrases/p1.mp3": { voice: "Kore", hash: lineHash("Μιλάτε αγγλικά;", "Kore", EL) },
   };
 
   it("запись читает диктор: карточка получает медиа с подписью его голоса", () => {
@@ -739,7 +741,7 @@ describe("записи слов и фраз", () => {
   });
   it("запись до правки текста или смены диктора не публикуется: карточка звучит синтезом", () => {
     const edited = build(
-      files({ ...fresh, "phrases/p1.mp3": { voice: "Kore", hash: lineHash("Старый текст", "Kore", "el-GR") } }),
+      files({ ...fresh, "phrases/p1.mp3": { voice: "Kore", hash: lineHash("Старый текст", "Kore", EL) } }),
     );
     expect(edited.packages[0].phrases.find((item) => item.id === "p1")).not.toHaveProperty("audioAssetId");
     expect(edited.packages[0].media.some((item) => item.id === "snd-p1")).toBe(false);
@@ -770,8 +772,8 @@ describe("записи ответов перевода и пропуска", () 
     "audio/dialogues.json": json(manifest),
   });
   const fresh = {
-    "answers/m01-1/dialogue-q-q1.mp3": { voice: "Kore", hash: lineHash("Νίκο", "Kore", "el-GR") },
-    "answers/m01-test/gaps-g1.mp3": { voice: "Kore", hash: lineHash("Εγώ είμαι η Άννα.", "Kore", "el-GR") },
+    "answers/m01-1/dialogue-q-q1.mp3": { voice: "Kore", hash: lineHash("Νίκο", "Kore", EL) },
+    "answers/m01-test/gaps-g1.mp3": { voice: "Kore", hash: lineHash("Εγώ είμαι η Άννα.", "Kore", EL) },
   };
   const packOf = (content: ReturnType<typeof build>, id: string) =>
     parsePackage(JSON.parse(JSON.stringify(content.packages.find((pack) => pack.id === id))));
@@ -796,7 +798,7 @@ describe("записи ответов перевода и пропуска", () 
     const content = build(
       files({
         ...fresh,
-        "answers/m01-test/gaps-g1.mp3": { voice: "Kore", hash: lineHash("Εγώ είσαι", "Kore", "el-GR") },
+        "answers/m01-test/gaps-g1.mp3": { voice: "Kore", hash: lineHash("Εγώ είσαι", "Kore", EL) },
       }),
     );
     expect(packOf(content, "m01-test").itemAudio).toBeUndefined();
@@ -813,7 +815,13 @@ describe("записи ответов перевода и пропуска", () 
     expect(() => parsePackage({ ...raw, itemAudio: { gaps: { g1: "нет-такого" } } })).toThrow(/нет в пакете/);
   });
   it("план озвучки: без записи или устаревшее — озвучить, файл без пункта — удалить", () => {
-    const voices = { ...voicesMap, file: "voices/el.yaml", characters: new Map(), pools: voicesMap.pools };
+    const voices = {
+      ...voicesMap,
+      file: "voices/el.yaml",
+      characters: new Map(),
+      respell: new Map(),
+      pools: voicesMap.pools,
+    };
     const plan = planAnswerVoices(
       [["m01-test", test.blocks]],
       () => ({ voices, profile: PROFILES.el }),

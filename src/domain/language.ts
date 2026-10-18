@@ -124,6 +124,12 @@ export const spokenText = (text: string, language: string) => {
   return language === "el" || language.startsWith("el-") ? nfc.replaceAll(";", "?") : nfc;
 };
 
+// Только облако: синтез устройства читает `spokenText`, заглавные подмены ему не нужны.
+export const synthText = (text: string, language: string, respell?: ReadonlyMap<string, string>) => {
+  const spoken = spokenText(text, language);
+  return respell?.size ? spoken.replace(/\p{L}+/gu, (word) => respell.get(word.toLowerCase()) ?? word) : spoken;
+};
+
 export const PROFILES: Record<Language, LanguageProfile> = { el, en };
 export const DEFAULT_LANGUAGE: Language = "el";
 export const profileOf = (language: string | undefined): LanguageProfile => {

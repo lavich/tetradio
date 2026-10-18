@@ -753,7 +753,7 @@
   },
   "m08-test/dinner-1.mp3": {
     "voice": "Algenib",
-    "hash": "0c9549c239c860c0"
+    "hash": "acd5655b60cbd101"
   },
   "m08-test/dinner-10.mp3": {
     "voice": "Zephyr",
@@ -1529,7 +1529,7 @@
   },
   "m15-m1/excursion-1.mp3": {
     "voice": "Alnilam",
-    "hash": "486d595055d6dd38"
+    "hash": "3eb1cec2da4cfdcc"
   },
   "m15-m1/friday-1.mp3": {
     "voice": "Iapetus",
@@ -2701,7 +2701,7 @@
   },
   "m24-2/new-neighbour-1.mp3": {
     "voice": "Despina",
-    "hash": "640b61166e82a173"
+    "hash": "1b38f53095531aef"
   },
   "m24-2/new-neighbour-10.mp3": {
     "voice": "Autonoe",
@@ -3049,7 +3049,7 @@
   },
   "phrases/p012.mp3": {
     "voice": "Kore",
-    "hash": "0858f585b4717628"
+    "hash": "5b4a85703308a514"
   },
   "phrases/p013.mp3": {
     "voice": "Kore",
@@ -4237,7 +4237,7 @@
   },
   "phrases/p315.mp3": {
     "voice": "Kore",
-    "hash": "fb3f39595ba0a1e0"
+    "hash": "33da3efe5d4adf7b"
   },
   "phrases/p316.mp3": {
     "voice": "Kore",
@@ -4293,7 +4293,7 @@
   },
   "phrases/p329.mp3": {
     "voice": "Kore",
-    "hash": "61d21193a3d6a8c0"
+    "hash": "10eb201ae21563d4"
   },
   "phrases/p330.mp3": {
     "voice": "Kore",
@@ -4477,7 +4477,7 @@
   },
   "readings/r-m01-tilefono/5.mp3": {
     "voice": "Schedar",
-    "hash": "01dddc1f9fdf6e00"
+    "hash": "cb470a46ae4f6f79"
   },
   "readings/r-m01-tilefono/6.mp3": {
     "voice": "Schedar",
@@ -4753,7 +4753,7 @@
   },
   "readings/r-m02-gnorimia/48.mp3": {
     "voice": "Erinome",
-    "hash": "5ac786350c4ccaff"
+    "hash": "7fc0dab58f0cedf6"
   },
   "readings/r-m02-gnorimia/49.mp3": {
     "voice": "Gacrux",
@@ -5785,7 +5785,7 @@
   },
   "readings/r-m06-diamerisma/10.mp3": {
     "voice": "Sadaltager",
-    "hash": "7dabb151bb10a8f2"
+    "hash": "5d0f566c468ed404"
   },
   "readings/r-m06-diamerisma/11.mp3": {
     "voice": "Sadachbia",
@@ -5933,7 +5933,7 @@
   },
   "readings/r-m06-diamerisma/44.mp3": {
     "voice": "Sadachbia",
-    "hash": "333fe64026901746"
+    "hash": "9d845e3d141a39f7"
   },
   "readings/r-m06-diamerisma/45.mp3": {
     "voice": "Sadachbia",
@@ -6561,7 +6561,7 @@
   },
   "readings/r-m08-kyriaki/21.mp3": {
     "voice": "Zephyr",
-    "hash": "358c208045078712"
+    "hash": "5b576a17d042dbac"
   },
   "readings/r-m08-kyriaki/22.mp3": {
     "voice": "Zephyr",
@@ -8469,7 +8469,7 @@
   },
   "readings/r-m12-perioxi/54.mp3": {
     "voice": "Zephyr",
-    "hash": "67b4c8c70402d2b0"
+    "hash": "b35a467d296f5a4d"
   },
   "readings/r-m12-perioxi/55.mp3": {
     "voice": "Zephyr",
@@ -8977,7 +8977,7 @@
   },
   "readings/r-m13-pafos/56.mp3": {
     "voice": "Kore",
-    "hash": "8d286309f5a9722b"
+    "hash": "c699dd0671f8e8f0"
   },
   "readings/r-m13-pafos/57.mp3": {
     "voice": "Kore",
@@ -9741,7 +9741,7 @@
   },
   "readings/r-m15-synentefxi/33.mp3": {
     "voice": "Vindemiatrix",
-    "hash": "609d26d1f4ec3dfa"
+    "hash": "aee6e54e6e63dbdd"
   },
   "readings/r-m15-synentefxi/34.mp3": {
     "voice": "Zephyr",

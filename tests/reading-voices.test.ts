@@ -3,6 +3,8 @@ import { planReadingVoices, readingVoicing } from "../content/build/readings";
 import type { CourseCard, ReadingSource } from "../content/build/sources";
 import { lineHash, parseVoices, type VoiceManifest } from "../content/build/voices";
 
+const EL = { language: "el-GR", respell: new Map<string, string>() };
+
 const map = parseVoices(
   `source: TTS {voice}
 language: el-GR
@@ -74,7 +76,7 @@ describe("план озвучки текстов", () => {
     course: "greek-a2",
     ...extra,
   });
-  const done = (text: string, voice: string) => ({ voice, hash: lineHash(text, voice, "el-GR") });
+  const done = (text: string, voice: string) => ({ voice, hash: lineHash(text, voice, EL) });
 
   it("озвучивает новое и изменённое, удаляет лишнее, готовое не трогает", () => {
     const readings = new Map([["r-t", card("Καλημέρα. Τι κάνεις;\n— Καλά.", { speakers: ["Νίκος"] })]]);

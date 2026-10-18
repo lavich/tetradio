@@ -1,8 +1,8 @@
 import { parse } from "yaml";
-import { spokenText } from "../../src/domain/language.ts";
+import { spokenText, synthText } from "../../src/domain/language.ts";
 import { fail, hash } from "./common.ts";
 
-export { spokenText };
+export { spokenText, synthText };
 
 /** Карта голосов своя у каждого языка: голоса синтеза у языков разные. */
 export const voicesFile = (language: string) => `voices/${language}.yaml`;
@@ -20,12 +20,14 @@ export interface VoiceMap {
   /** Чтец повествования текстов для чтения, если текст рассказан не от лица героя. */
   reader?: string;
   characters: Map<string, { gender: Gender; voice: string }>;
+  /** Слово (нижний регистр) → написание, с которым оно уходит в облачный синтез. */
+  respell: Map<string, string>;
 }
 /** Что озвучено: файл реплики → голос и хэш (текст + голос) на момент синтеза. */
 export type VoiceManifest = Record<string, { voice: string; hash: string }>;
 
-export const lineHash = (text: string, voice: string, language: string) =>
-  hash(`${spokenText(text, language)}\n${voice}`, 16);
+export const lineHash = (text: string, voice: string, voices: Pick<VoiceMap, "language" | "respell">) =>
+  hash(`${synthText(text, voices.language, voices.respell)}\n${voice}`, 16);
 export const lineFile = (lessonId: string, blockId: string, index: number) => `${lessonId}/${blockId}-${index + 1}.mp3`;
 export const cardFile = (dir: "words" | "phrases", id: string) => `${dir}/${id}.mp3`;
 export const answerFile = (lessonId: string, blockId: string, itemId: string) =>
@@ -56,6 +58,7 @@ export function parseVoices(body: string, file: string, code?: string): VoiceMap
     prefix: str("prefix"),
     pools: { female: strings(pools?.female, at("pools.female")), male: strings(pools?.male, at("pools.male")) },
     characters: new Map(),
+    respell: new Map(),
   };
   if (code && map.language !== code && !map.language.startsWith(`${code}-`))
     fail(`${at("language")}: ${map.language} — не язык файла (${code})`);
@@ -68,6 +71,19 @@ export function parseVoices(body: string, file: string, code?: string): VoiceMap
   if (raw!.reader !== undefined) {
     map.reader = str("reader");
     if (!all.has(map.reader)) fail(`${at("reader")}: голоса ${map.reader} нет в pools`);
+  }
+  const respell = raw!.respell;
+  if (respell !== undefined) {
+    if (!respell || typeof respell !== "object" || Array.isArray(respell))
+      fail(`${at("respell")}: ожидалась карта «слово: написание»`);
+    for (const [word, spelling] of Object.entries(respell as Record<string, unknown>)) {
+      const key = word.normalize("NFC").toLowerCase();
+      if (!/^\p{L}+$/u.test(key)) fail(`${at(`respell.${word}`)}: ключ — одно слово из букв`);
+      if (typeof spelling !== "string" || !spelling.trim())
+        fail(`${at(`respell.${word}`)}: написание для синтеза — непустая строка`);
+      if (map.respell.has(key)) fail(`${at(`respell.${word}`)}: слово задано дважды (регистр не различается)`);
+      map.respell.set(key, (spelling as string).normalize("NFC"));
+    }
   }
   const characters = raw!.characters;
   if (!characters || typeof characters !== "object" || Array.isArray(characters))

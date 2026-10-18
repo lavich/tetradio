@@ -31,7 +31,7 @@ export function checkCardAudio(
       sources.voices.get(language) ?? fail(`${where}.audio: запись требует карты голосов ${voicesFile(language)}`);
     const voice = voices.narrator ?? fail(`${where}.audio: запись читает диктор — narrator в ${voices.file}`);
     const done = manifest[src.audio];
-    if (!done || done.voice !== voice || done.hash !== lineHash(String(text), voice, voices.language)) {
+    if (!done || done.voice !== voice || done.hash !== lineHash(String(text), voice, voices)) {
       voicing.stale.push(where);
       silenced.add(where);
       return;
