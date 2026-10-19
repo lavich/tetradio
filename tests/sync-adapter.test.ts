@@ -399,3 +399,45 @@ it("версия формата 5, записанная прежним прил�
   const [pointer] = (await adapter.listPointers()).pointers;
   expect(await adapter.readVersion(pointer)).toEqual(data);
 });
+
+describe("объявление читаемых форматов в своём указателе", () => {
+  const publish = async (memory: ReturnType<typeof memoryTransport>) =>
+    (await kvAdapter(memory).publishVersion(metaOf("dev1-1", "dev1", { dev1: 1 }, [], 6), snapshot(600))).meta;
+
+  it("меняет только reads в сыром значении: content и незнакомые поля сохраняются, версия читается", async () => {
+    const memory = memoryTransport();
+    const published = await publish(memory);
+    const raw = JSON.parse(memory.store.get(pointerKey("dev1"))!);
+    memory.store.set(pointerKey("dev1"), JSON.stringify({ ...raw, zz: { future: true } }));
+    expect(await kvAdapter(memory).declareReads("dev1", "dev1-1", [3, 4, 5])).toBe(true);
+    expect(JSON.parse(memory.store.get(pointerKey("dev1"))!)).toEqual({
+      ...raw,
+      zz: { future: true },
+      reads: [3, 4, 5],
+    });
+    const [pointer] = (await kvAdapter(memory).listPointers()).pointers;
+    expect(await kvAdapter(memory).readVersion(pointer)).toEqual({ ...snapshot(600), format: SNAPSHOT_FORMAT });
+    expect(pointer.content).toBe(published.content);
+  });
+  it("указатель другой версии или нет частей — записи нет", async () => {
+    const memory = memoryTransport();
+    await publish(memory);
+    const before = setItems(memory).length;
+    expect(await kvAdapter(memory).declareReads("dev1", "dev1-0", [3, 4, 5, 6])).toBe(false);
+    memory.store.delete(partKey("dev1-1", 0));
+    expect(await kvAdapter(memory).declareReads("dev1", "dev1-1", [3, 4, 5, 6])).toBe(false);
+    expect(setItems(memory).length).toBe(before);
+  });
+  it("части удалены между проверкой и записью — указатель без частей не остаётся", async () => {
+    const memory = memoryTransport();
+    const published = await publish(memory);
+    const write = memory.setItem.bind(memory);
+    memory.setItem = async (key, value) => {
+      if (key === pointerKey("dev1"))
+        for (let index = 0; index < published.parts; index++) memory.store.delete(partKey("dev1-1", index));
+      await write(key, value);
+    };
+    expect(await kvAdapter(memory).declareReads("dev1", "dev1-1", [3, 4, 5, 6])).toBe(false);
+    expect(memory.store.has(pointerKey("dev1"))).toBe(false);
+  });
+});

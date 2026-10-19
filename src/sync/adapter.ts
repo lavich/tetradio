@@ -39,6 +39,11 @@ export interface SyncAdapter {
     meta: Omit<VersionMeta, "parts" | "checksum" | "content">,
     snapshot: CompactSnapshot,
   ): Promise<PublishedVersion>;
+  /**
+   * Меняет в собственном указателе версии `id` только поле `reads`, остальные поля сырого значения сохраняются.
+   * `false` — указатель уже другой или частей версии нет; если части пропали во время записи, указатель удаляется.
+   */
+  declareReads(device: string, id: string, reads: number[]): Promise<boolean>;
   /** Идентификаторы версий, части которых лежат в облаке (включая незавершённые публикации). */
   listGenerations(): Promise<string[]>;
   /** Удаляет части перечисленных версий; указатели других устройств не трогает. */
@@ -106,6 +111,10 @@ export function parsePointer(raw: string): VersionMeta | null {
       content: typeof meta.content === "string" ? meta.content : undefined,
       resolves: Array.isArray(meta.resolves) ? meta.resolves.filter((item: unknown) => typeof item === "string") : [],
       label: typeof meta.label === "string" ? meta.label : undefined,
+      reads:
+        Array.isArray(meta.reads) && meta.reads.every((format: unknown) => typeof format === "number")
+          ? meta.reads
+          : undefined,
     };
   } catch {
     return null;
@@ -209,6 +218,24 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       for (let index = 0; index < parts.length; index++) await transport.setItem(partKey(meta.id, index), parts[index]);
       await transport.setItem(pointerName, pointer);
       return { meta: full, chars: text.length };
+    },
+    async declareReads(device, id, reads) {
+      ensure();
+      const name = pointerKey(device);
+      const raw = (await transport.getItems([name]))[name];
+      const meta = raw === undefined ? null : parsePointer(raw);
+      if (!meta || meta.id !== id) return false;
+      const complete = async () => {
+        const keys = new Set(await transport.getKeys());
+        return Array.from({ length: meta.parts }, (_, index) => partKey(id, index)).every((key) => keys.has(key));
+      };
+      if (!(await complete())) return false;
+      await transport.setItem(name, JSON.stringify({ ...JSON.parse(raw!), reads }));
+      // Чужая уборка могла удалить указатель и части между проверкой и записью: указатель без частей не оставляем,
+      // и следующий обмен опубликует версию заново, как после любой потери своего указателя.
+      if (await complete()) return true;
+      await transport.removeItems([name]);
+      return false;
     },
     async listGenerations() {
       ensure();

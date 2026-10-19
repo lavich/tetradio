@@ -1,0 +1,135 @@
+{
+  "cloud": {
+    "v_fresh6aa-3_0": "lZHdioNADIXfJdexJJkxo76KeNHt7lLoD6UtWBDfvYmj2N61ogyTc/JFTgb4h0YRdtBwqiUS2WsPwg2aYTTBzrZDONrRwulvty8YkNHdgbOZOjNczLDodv3Jbbf71Nf33uQDKq3yANkwV0yhTkgbpZSIVQ0cMKKp9r2N8BuryNwdO3SqZGqZguR6WKn8So3fUEOmalnrXF+p8kotP6R6EIc1CLhuPcIBrp4Z05xN4Dl8s28nZakvMY9Oethi4HeiCYkWTAVXYH/Sdi4bcwJnroOMY4s8QxMRel/LOD4B",
+    "p_fresh6aa": "{\"id\":\"fresh6aa-3\",\"device\":\"fresh6aa\",\"clock\":{\"fresh6aa\":3},\"createdAt\":\"2026-10-19T09:00:00.000Z\",\"format\":6,\"resolves\":[],\"label\":\"ios\",\"reads\":[3,4,5,6],\"parts\":1,\"checksum\":\"f7ea4849\",\"content\":\"46cdb46a\"}"
+  },
+  "snapshot": {
+    "format": 6,
+    "createdAt": "2026-10-19T09:00:00.000Z",
+    "lessons": [
+      {
+        "id": "mech-1",
+        "completed": true,
+        "updatedAt": "2026-10-18T09:00:00.000Z"
+      }
+    ],
+    "packages": [
+      "mech-1"
+    ],
+    "blocks": [],
+    "states": [
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w1"
+        },
+        "card": {
+          "due": "2026-10-20T09:00:00.000Z",
+          "stability": 2.11810397,
+          "difficulty": 0.60770166,
+          "elapsed_days": 1,
+          "scheduled_days": 3,
+          "reps": 4,
+          "lapses": 0,
+          "state": 2,
+          "learning_steps": 0,
+          "last_review": "2026-10-18T09:00:00.000Z"
+        },
+        "introducedAt": "2026-10-10T09:00:00.000Z",
+        "version": 4
+      },
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w2"
+        },
+        "card": {
+          "due": "2026-10-21T09:00:00.000Z",
+          "stability": 3.11810397,
+          "difficulty": 1.60770166,
+          "elapsed_days": 1,
+          "scheduled_days": 4,
+          "reps": 4,
+          "lapses": 0,
+          "state": 2,
+          "learning_steps": 0,
+          "last_review": "2026-10-18T09:00:00.000Z"
+        },
+        "introducedAt": "2026-10-10T09:00:00.000Z",
+        "version": 4
+      },
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w3"
+        },
+        "card": {
+          "due": "2026-10-22T09:00:00.000Z",
+          "stability": 4.11810397,
+          "difficulty": 2.60770166,
+          "elapsed_days": 1,
+          "scheduled_days": 5,
+          "reps": 4,
+          "lapses": 0,
+          "state": 2,
+          "learning_steps": 0,
+          "last_review": "2026-10-18T09:00:00.000Z"
+        },
+        "introducedAt": "2026-10-10T09:00:00.000Z",
+        "version": 4
+      }
+    ],
+    "skills": [
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w1"
+        },
+        "skills": {
+          "lastTypes": [
+            "recognition",
+            "assembly"
+          ],
+          "cleanAssemblies": 1,
+          "types": {
+            "recognition": {
+              "recent": [
+                true,
+                false,
+                true
+              ],
+              "lastAt": "2026-10-18T08:00:00.000Z"
+            },
+            "assembly": {
+              "recent": [
+                true
+              ],
+              "lastAt": "2026-10-18T09:00:00.000Z"
+            }
+          }
+        }
+      }
+    ],
+    "stats": {
+      "days": [
+        {
+          "date": "2026-10-18",
+          "answers": 4,
+          "keys": []
+        }
+      ],
+      "recentByType": {
+        "recognition": [
+          true,
+          false,
+          true
+        ],
+        "assembly": [
+          true
+        ]
+      },
+      "answers": 4,
+      "answeredKeys": []
+    }
+  }
+}

@@ -1,6 +1,9 @@
 import { inflateRawSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
+import { kvAdapter } from "../src/sync/adapter";
 import { encodeSnapshot, packSnapshot, unpackSnapshot } from "../src/sync/codec";
+import { memoryTransport } from "../src/sync/transport";
+import fixture from "./fixtures/sync-format6.json";
 import { SNAPSHOT_FORMAT, type CompactSnapshot } from "../src/sync/types";
 
 const greek: CompactSnapshot = {
@@ -54,4 +57,13 @@ describe("упаковка снимка формата 6", () => {
     const truncated = bytes.subarray(0, Math.floor(bytes.length / 2)).toString("base64");
     expect(() => unpackSnapshot(truncated)).toThrow();
   });
+});
+
+it("облако после настоящей публикации формата 6 читается в ожидаемый снимок", async () => {
+  const cloud = memoryTransport();
+  for (const [key, value] of Object.entries(fixture.cloud)) cloud.store.set(key, value);
+  const adapter = kvAdapter(cloud);
+  const [pointer] = (await adapter.listPointers()).pointers;
+  expect(pointer).toMatchObject({ format: 6, reads: [3, 4, 5, 6], content: expect.any(String) });
+  expect(await adapter.readVersion(pointer)).toEqual(fixture.snapshot);
 });

@@ -17,21 +17,22 @@ import {
   type SnapshotDescription,
 } from "./snapshot";
 import { SyncError, type SyncErrorKind } from "./transport";
+import { keepsPointer, notePeers, writeFormat, type Peers } from "./peers";
 import {
+  DECLARED_READS,
   SNAPSHOT_FORMAT,
   SUPPORTED_SNAPSHOT_FORMATS,
+  WRITE_FORMAT,
   type Clock,
   type CompactSnapshot,
   type SyncVersionRow,
   type VersionMeta,
 } from "./types";
-/**
- * Пока устройства не объявляют чтение формата 6, его запись оставила бы прежние сборки с ошибкой формата:
- * координатор публикует формат 5, а формат 6 включает согласование по указателям.
- */
-const PUBLISH_FORMAT = 5;
 /** Читаемые форматы: текущий и предыдущий; более новый или неизвестный — отказ без записи. */
 const readable = (format: number) => (SUPPORTED_SNAPSHOT_FORMATS as readonly number[]).includes(format);
+const NEWEST_FORMAT = Math.max(...SUPPORTED_SNAPSHOT_FORMATS);
+const sameReads = (a: number[] | undefined, b: number[] | undefined) =>
+  JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 
 export type SyncPhase = "disabled" | "paused" | "idle" | "syncing" | "synced" | "error" | "conflict";
 export interface ConflictBranch {
@@ -252,8 +253,12 @@ export class SyncCoordinator {
     const flags = await this.flags();
     const listing = await adapter.listPointers();
     this.update({ keys: { used: listing.keys, max: adapter.capabilities().maxKeys } });
+    await this.notePeers(device, listing.pointers);
     const others = listing.pointers.filter((pointer) => pointer.device !== device);
     const mine = listing.pointers.find((pointer) => pointer.device === device) ?? null;
+    // Без Web Locks писатель на устройстве не гарантирован; указатель более новой сборки этого устройства не трогаем.
+    if (writes && mine && readable(mine.format) && !sameReads(mine.reads, DECLARED_READS))
+      await adapter.declareReads(device, mine.id, DECLARED_READS);
     let candidates = others.filter((pointer) => !dominates(flags.clock, pointer.clock));
     candidates = candidates.filter(
       (candidate) =>
@@ -432,14 +437,17 @@ export class SyncCoordinator {
     const { snapshot, mark } = override
       ? { snapshot: override, mark: null }
       : await buildAndCommitMarked(database, now, id);
+    // Облако перечитывается здесь: выбор версии в конфликте публикует без нового чтения в `decide`.
+    const peers = await this.notePeers(device, (await adapter.listPointers()).pointers);
     const meta = {
       id,
       device,
       clock,
       createdAt: now.toISOString(),
-      format: PUBLISH_FORMAT,
+      format: writeFormat(peers, now, WRITE_FORMAT),
       resolves,
       label: this.options.label || undefined,
+      reads: DECLARED_READS,
     };
     const started = performance.now();
     let published;
@@ -477,6 +485,8 @@ export class SyncCoordinator {
   private async cleanup(device: string, applied: Clock, force: boolean) {
     const { adapter, database } = this.options;
     const { pointers } = await adapter.listPointers();
+    const peers = await this.notePeers(device, pointers);
+    const now = this.options.now();
     const rejected = (await database.syncVersions
       .orderBy("createdAt")
       .reverse()
@@ -487,15 +497,30 @@ export class SyncCoordinator {
     for (const pointer of pointers) if (pointer.device === device) protectedIds.add(pointer.id);
     const own = (await adapter.listGenerations()).filter((id) => id.startsWith(`${device}-`) && !protectedIds.has(id));
     if (own.length) await adapter.removeGenerations(own);
-    const cutoff = this.options.now().getTime() - FOREIGN_KEEP_MS;
+    const cutoff = now.getTime() - FOREIGN_KEEP_MS;
     for (const pointer of pointers)
       if (
         pointer.device !== device &&
         dominates(applied, pointer.clock) &&
-        (force || Date.parse(pointer.createdAt) < cutoff)
+        (force || Date.parse(pointer.createdAt) < cutoff) &&
+        !keepsPointer(peers, pointer, now, NEWEST_FORMAT)
       )
         await adapter.removeDevice(pointer);
     this.update({ keys: { used: (await adapter.room(0, device)).keys, max: adapter.capabilities().maxKeys } });
+  }
+  private async notePeers(device: string, pointers: VersionMeta[]): Promise<Peers> {
+    const { database } = this.options;
+    const stored = await readMeta(database, META.peers);
+    let known: Peers = {};
+    try {
+      known = stored ? (JSON.parse(stored) as Peers) : {};
+    } catch {
+      /* испорченный реестр начинается заново: все видимые указатели считаются свежими */
+    }
+    const peers = notePeers(known, pointers, device, this.options.now());
+    const next = JSON.stringify(peers);
+    if (next !== stored) await writeMeta(database, META.peers, next);
+    return peers;
   }
   private async installMissing(packages: string[]) {
     try {

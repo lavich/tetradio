@@ -13,6 +13,12 @@ import type { StoredRef } from "../domain/types";
  */
 export const SNAPSHOT_FORMAT = 6;
 export const SUPPORTED_SNAPSHOT_FORMATS = [3, 4, 5, 6] as const;
+/**
+ * Наибольший формат записи и объявляемое чтение (`reads` указателя). Формат 6 пишется, только если его объявили
+ * все активные устройства. Сборка отката пишет 5 и объявляет `[3, 4, 5]`, продолжая читать 6.
+ */
+export const WRITE_FORMAT = 6;
+export const DECLARED_READS: number[] = [3, 4, 5, 6];
 /** Вектор счётчиков устройств: причинная база версии. */
 export type Clock = Record<string, number>;
 
@@ -74,6 +80,8 @@ export interface VersionMeta {
   content?: string;
   resolves: string[];
   /** Платформа устройства для отображения в конфликте. */ label?: string;
+  /** Форматы, которые объявляет опубликовавшее приложение; без поля — не выше 5. */
+  reads?: number[];
 }
 export interface StoredVersion {
   meta: VersionMeta;
