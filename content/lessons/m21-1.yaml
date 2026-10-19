@@ -8,7 +8,6 @@ items:
   - { kind: word, id: w795 } # δέχομαι
   - { kind: word, id: w797 } # συμφωνώ
   - { kind: word, id: w804 } # ευχαρίστως
-  - { kind: word, id: w805 } # τα γενέθλια
   - { kind: word, id: w806 } # το πάρτι
   - { kind: word, id: w809 } # ο καλεσμένος
   - { kind: word, id: w810 } # το δώρο

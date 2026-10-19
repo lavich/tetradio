@@ -7,6 +7,8 @@ items:
     id: w924
   - kind: word
     id: w930
+  - kind: word
+    id: w805
   - kind: phrase
     id: p050
   - kind: phrase
