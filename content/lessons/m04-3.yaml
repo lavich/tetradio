@@ -2,7 +2,11 @@ title: Договариваемся о встрече
 kind: lesson
 items:
   - kind: word
+    id: w338
+  - kind: word
     id: w924
+  - kind: word
+    id: w930
   - kind: phrase
     id: p050
   - kind: phrase
