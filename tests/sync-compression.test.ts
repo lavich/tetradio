@@ -1,7 +1,8 @@
 import { inflateRawSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
 import { kvAdapter } from "../src/sync/adapter";
-import { encodeSnapshot, packSnapshot, unpackSnapshot } from "../src/sync/codec";
+import { encodeSnapshot } from "../src/sync/codec";
+import { packSnapshot, unpackSnapshot } from "../src/sync/compression";
 import { memoryTransport } from "../src/sync/transport";
 import fixture from "./fixtures/sync-format6.json";
 import { SNAPSHOT_FORMAT, type CompactSnapshot } from "../src/sync/types";

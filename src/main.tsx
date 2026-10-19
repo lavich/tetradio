@@ -7,6 +7,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { registerSW } from "virtual:pwa-register";
 import { App } from "./app/App";
+import { autoUpdate, updateReady } from "./app/auto-update";
 import { afterStartup, afterStartupOrNeeded, loadSync } from "./app/deferred";
 import { CrashScreen } from "./app/CrashScreen";
 import { LaunchGate, type LaunchStop } from "./app/LaunchGate";
@@ -26,7 +27,6 @@ import { launchProfile, MOCK_USER, type Profile } from "./storage/profile";
 installEarlyHandlers();
 // Только в сборке с моком Telegram: e2e ставят отдельные уроки фикстуры, экрана урока вне курса нет.
 if (MOCK_USER !== null) Object.assign(window, { __installLesson: installLesson });
-export const updateReady = { value: false, apply: () => {} };
 // WebView без service worker не должен обрушить запуск: регистрация обёрнута, обновления просто недоступны.
 function setupServiceWorker(wanted: boolean) {
   try {
@@ -42,16 +42,23 @@ function setupServiceWorker(wanted: boolean) {
       try {
         const update = registerSW({
           onNeedRefresh() {
+            if (autoUpdate.needRefresh()) return;
             updateReady.value = true;
             window.dispatchEvent(new CustomEvent("tetradio:update"));
           },
+          onRegisteredSW(_url, registration) {
+            if (registration) autoUpdate.registered(registration);
+            else autoUpdate.registerFailed();
+          },
           onRegisterError(error) {
+            autoUpdate.registerFailed();
             console.warn("Service worker недоступен", error);
             reportError(error, { category: "service-worker" });
           },
         });
         updateReady.apply = () => update(true);
       } catch (error) {
+        autoUpdate.registerFailed();
         console.warn("Service worker недоступен", error);
       }
     });

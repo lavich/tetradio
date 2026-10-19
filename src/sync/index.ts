@@ -27,6 +27,8 @@ sync.onMissingPackages = (ids) => {
   installPackages(ids).catch((error: unknown) => reportError(error, { category: "content" }));
 };
 // Отключённый транспорт и клиент без CloudStorage — штатные состояния, не сбои.
+// Модуль автообновления живёт в основном чанке: событие не тянет его зависимости в чанк синхронизации.
+sync.onNewerFormat = () => window.dispatchEvent(new CustomEvent("tetradio:newer-format"));
 sync.onFailure = (error, kind) => {
   if (kind !== "disabled" && kind !== "unavailable") reportError(error, { category: "sync", extra: { kind } });
 };

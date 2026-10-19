@@ -84,6 +84,16 @@ describe("текст строки синхронизации", () => {
       retry: false,
     });
   });
+  it("облако новее приложения и идёт автообновление — «Обновляем приложение…» без повтора", () => {
+    const newer = status({ phase: "error", error: { kind: "format", message: "Обновите приложение" } });
+    expect(syncLineState(newer, "ready", true)).toEqual({
+      phase: "updating",
+      text: "Обновляем приложение…",
+      retry: false,
+      failed: false,
+    });
+    expect(syncLineState(newer, "ready", false)).toMatchObject({ phase: "error", retry: true, failed: true });
+  });
   it("с bridge и вне Telegram — статус координатора", () => {
     expect(syncLineState(status({ phase: "idle", dirty: true }), "ready")).toEqual({
       phase: "idle",

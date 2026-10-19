@@ -204,6 +204,7 @@ export class SyncCoordinator {
   /** Один заход обмена: отказ пробрасывается наверх, где решается — лечить хранилище или сообщать о сбое. */
   private async cycle(): Promise<void> {
     const { adapter } = this.options;
+    this.newerFormat = false;
     const flags = await this.flags();
     this.update({ dirty: flags.dirty || !!flags.restored, lastConfirmedAt: flags.lastOk });
     if (!adapter.capabilities().available) {
@@ -239,6 +240,7 @@ export class SyncCoordinator {
       ...(this.status.reason === STALE_CHOICE ? { reason: null } : {}),
     });
     this.onFailure?.(error, kind);
+    if (kind === "format" && this.newerFormat) this.onNewerFormat?.();
     if (kind !== "disabled" && kind !== "format") {
       this.cancelRetry = this.options.schedule(() => {
         void this.exchange();
@@ -281,11 +283,13 @@ export class SyncCoordinator {
                 other !== pointer && dominates(other.clock, pointer.clock) && !sameClock(other.clock, pointer.clock),
             ),
         );
-        if (latest.some((pointer) => !readable(pointer.format)))
+        if (latest.some((pointer) => !readable(pointer.format))) {
+          this.newerFormat = latest.some((pointer) => pointer.format > NEWEST_FORMAT);
           throw new SyncError(
             "format",
             "В облаке версия другого формата. Обновите приложение; локальные данные не изменены.",
           );
+        }
         const remote: ConflictBranch[] = [];
         for (const pointer of latest) {
           const snapshot = await adapter.readVersion(pointer);
@@ -334,11 +338,13 @@ export class SyncCoordinator {
       await this.confirm();
       return;
     }
-    if (candidates.some((candidate) => !readable(candidate.format)))
+    if (candidates.some((candidate) => !readable(candidate.format))) {
+      this.newerFormat = candidates.some((candidate) => candidate.format > NEWEST_FORMAT);
       throw new SyncError(
         "format",
         "В облаке версия другого формата. Обновите приложение или повторите чтение позже; локальные данные не изменены.",
       );
+    }
     const remote: ConflictBranch[] = [];
     for (const candidate of candidates) {
       try {
@@ -534,6 +540,9 @@ export class SyncCoordinator {
   }
   /** Экран подписывается, чтобы догрузить стандартные пакеты, нужные полученному прогрессу. */
   onMissingPackages: ((lessonIds: string[]) => void) | null = null;
+  /** Приложение подписывается, чтобы само загрузить новую сборку: в облаке версия формата новее этой. */
+  onNewerFormat: (() => void) | null = null;
+  private newerFormat = false;
   /** Приложение подписывается, чтобы отправить отчёт о сбое синхронизации; координатор сам о сервисе отчётов не знает. */
   onFailure: ((error: unknown, kind: SyncErrorKind | "unknown") => void) | null = null;
 

@@ -1,4 +1,4 @@
-import { decodeSnapshot, encodeSnapshot, packSnapshot, SnapshotFormatError, unpackSnapshot } from "./codec";
+import { decodeSnapshot, encodeSnapshot, SnapshotFormatError } from "./codec";
 import { SyncError, validKey, type KeyValueTransport } from "./transport";
 import {
   SNAPSHOT_FORMAT,
@@ -121,9 +121,10 @@ export function parsePointer(raw: string): VersionMeta | null {
   }
 }
 
-const unpacksTo = (text: string, json: string) => {
+const compression = () => import("./compression");
+const unpacksTo = (unpack: (text: string) => string, text: string, json: string) => {
   try {
-    return unpackSnapshot(text) === json;
+    return unpack(text) === json;
   } catch {
     return false;
   }
@@ -175,6 +176,7 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       const packed = meta.format === PACKED_FORMAT;
       let json = text;
       if (packed) {
+        const { unpackSnapshot } = await compression();
         try {
           json = unpackSnapshot(text);
         } catch {
@@ -197,8 +199,9 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
         throw new SyncError("format", `Запись версии формата ${meta.format} не поддерживается.`);
       const json = encodeSnapshot(snapshot, meta.format);
       const packed = meta.format === PACKED_FORMAT;
-      const text = packed ? packSnapshot(json) : json;
-      if (packed && !unpacksTo(text, json))
+      const codec = packed ? await compression() : null;
+      const text = codec ? codec.packSnapshot(json) : json;
+      if (codec && !unpacksTo(codec.unpackSnapshot, text, json))
         throw new SyncError("integrity", "Упакованный снимок не совпал с исходным: публикация отменена.");
       const parts = splitParts(text, partSize);
       const full: VersionMeta = {

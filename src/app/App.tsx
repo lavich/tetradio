@@ -3,7 +3,7 @@ import { Navigate, Route, Routes, useLocation, useParams } from "react-router-do
 import { LoadingBar } from "./LoadingBar";
 import { Nav } from "./Nav";
 import { useGoBack, useStartRoute } from "./navigation";
-import { updateReady } from "../main";
+import { autoUpdate, UPDATE_TOAST, updateReady } from "./auto-update";
 import { useBackHandler, useEnvironment } from "../platform/platform";
 import { afterStartup, loadConflictDialog, syncNeededNow, useFirstInteraction, useSyncConflictSeen } from "./deferred";
 import { loadScreen } from "./stale-build";
@@ -66,6 +66,7 @@ export function App() {
   const conflict = useSyncConflictSeen();
   useEffect(() => {
     if (pathname.startsWith("/progress")) syncNeededNow();
+    autoUpdate.route(pathname);
   }, [pathname]);
   useEffect(() => afterStartup(() => void loadConflictDialog().catch(() => undefined)), []);
   useEffect(() => {
@@ -76,6 +77,7 @@ export function App() {
       import("sonner")
         .then(({ toast }) =>
           toast("Есть обновление приложения", {
+            id: UPDATE_TOAST,
             duration: Infinity,
             action: { label: "Обновить", onClick: () => updateReady.apply() },
           }),

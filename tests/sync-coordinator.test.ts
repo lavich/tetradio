@@ -16,7 +16,7 @@ import { installCompleted, installLessons, memoryFetcher, packageOf } from "./he
 import { installLesson, refreshCatalog } from "../src/content/client";
 import type { Word } from "../src/domain/types";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
-import { FORMAT5_BUILD, loadBuild } from "./helpers/builds";
+import { FORMAT5_BUILD, loadBuild, ROLLBACK_BUILD } from "./helpers/builds";
 
 const lifecycle = vi.hoisted(() => vi.fn());
 vi.mock("../src/reporting/reporting", async (original) => ({
@@ -1078,4 +1078,73 @@ it("устаревшая сборка из кеша на том же устро�
   await exchange(phone);
   expect(phases.every((phase) => phase === "synced")).toBe(true);
   expect(await statesOf(phone)).toEqual(await statesOf(tablet));
+});
+
+describe("облако новее приложения", () => {
+  const withPointer = async (format: number) => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
+    await tablet.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    const pointer = JSON.parse(cloud.store.get(`p_${phoneDevice}`)!);
+    cloud.store.set(
+      `p_${phoneDevice}`,
+      JSON.stringify({ ...pointer, id: `${phoneDevice}-9`, format, clock: { [phoneDevice]: 9 } }),
+    );
+    const newer = vi.fn();
+    tablet.sync.onNewerFormat = newer;
+    return { tablet, newer };
+  };
+
+  it("формат новее своего — колбэк один раз за заход", async () => {
+    const { tablet, newer } = await withPointer(SNAPSHOT_FORMAT + 1);
+    expect((await tablet.sync.exchange()).error?.kind).toBe("format");
+    expect(newer).toHaveBeenCalledTimes(1);
+    await tablet.sync.exchange();
+    expect(newer).toHaveBeenCalledTimes(2);
+  });
+  it.each([2, 3, 4, 5, 6])("формат %i — колбэка нет", async (format) => {
+    const { tablet, newer } = await withPointer(format);
+    await tablet.sync.exchange();
+    expect(newer).not.toHaveBeenCalled();
+  });
+  it("другая ошибка — колбэка нет", async () => {
+    const { tablet, newer } = await withPointer(SNAPSHOT_FORMAT);
+    for (const key of [...cloud.store.keys()].filter((key) => key.startsWith("v_"))) cloud.store.delete(key);
+    expect((await tablet.sync.exchange()).phase).toBe("error");
+    expect(newer).not.toHaveBeenCalled();
+  });
+});
+
+it("сборка отката читает 6, снимает 6 из reads своего указателя, и новые устройства пишут 5 без окна выбора", async () => {
+  const pointerOf = async (dev: Device) => JSON.parse(cloud.store.get(`p_${await dev.sync.deviceId()}`)!);
+  const phases: string[] = [];
+  const exchange = async (dev: Device) => phases.push((await dev.sync.exchange()).phase);
+  const phone = await device("phone", { lessons: ["mech-1"] });
+  const tablet = await device("tablet", { lessons: ["mech-1"] });
+  await study(phone, [true, false]);
+  await exchange(phone);
+  const six = await pointerOf(phone);
+  expect(six.format).toBe(6);
+  await exchange(tablet);
+  const rollback = await device("phone", { db: phone.db, build: await loadBuild(ROLLBACK_BUILD) });
+  await exchange(rollback);
+  expect(await pointerOf(phone)).toEqual({ ...six, reads: [3, 4, 5] });
+  const fresh = await device("fresh", { lessons: ["mech-1"] });
+  await exchange(fresh);
+  expect(await statesOf(fresh)).toEqual(await statesOf(phone));
+  await study(tablet, [true]);
+  await exchange(tablet);
+  expect((await pointerOf(tablet)).format).toBe(5);
+  await exchange(rollback);
+  await study(rollback, [false]);
+  await exchange(rollback);
+  expect((await pointerOf(phone)).format).toBe(5);
+  await exchange(tablet);
+  await exchange(fresh);
+  expect(phases.every((phase) => phase === "synced")).toBe(true);
+  expect(await statesOf(tablet)).toEqual(await statesOf(phone));
+  expect(await statesOf(fresh)).toEqual(await statesOf(phone));
 });

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { checksum, kvAdapter, parsePartKey, partKey, pointerKey, splitParts } from "../src/sync/adapter";
-import { encodeSnapshot, packSnapshot, unpackSnapshot } from "../src/sync/codec";
+import { encodeSnapshot } from "../src/sync/codec";
+import { packSnapshot, unpackSnapshot } from "../src/sync/compression";
 import { cloudStorageTransport, disabledTransport, memoryTransport, SyncError } from "../src/sync/transport";
 import { SNAPSHOT_FORMAT, type CompactSnapshot, type VersionMeta } from "../src/sync/types";
 import type { TelegramCloudStorage } from "../src/platform/telegram-types";
@@ -275,7 +276,7 @@ describe("удаление указателя другого устройств�
 
 describe("формат 6: упаковка снимка", () => {
   afterEach(() => {
-    vi.doUnmock("../src/sync/codec");
+    vi.doUnmock("../src/sync/compression");
     vi.doUnmock("../src/sync/types");
     vi.resetModules();
   });
@@ -328,8 +329,8 @@ describe("формат 6: упаковка снимка", () => {
   });
   it("упаковщик вернул испорченный поток — ошибка до записи, в облаке ни одной записи", async () => {
     vi.resetModules();
-    vi.doMock("../src/sync/codec", async (original) => {
-      const codec = await original<typeof import("../src/sync/codec")>();
+    vi.doMock("../src/sync/compression", async (original) => {
+      const codec = await original<typeof import("../src/sync/compression")>();
       return {
         ...codec,
         packSnapshot: (json: string) => {
