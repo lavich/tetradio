@@ -17,6 +17,12 @@ import { installLesson, refreshCatalog } from "../src/content/client";
 import type { Word } from "../src/domain/types";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
 
+const lifecycle = vi.hoisted(() => vi.fn());
+vi.mock("../src/reporting/reporting", async (original) => ({
+  ...(await original<typeof import("../src/reporting/reporting")>()),
+  lifecycle,
+}));
+
 let cloud: MemoryTransport;
 let clockMs = Date.parse("2026-09-16T08:00:00Z");
 const tick = (minutes = 1) => {
@@ -822,5 +828,31 @@ describe("надёжность публикации и лимиты", () => {
       schedule: () => () => undefined,
     });
     expect((await sync.exchange()).phase).toBe("disabled");
+  });
+});
+
+describe("крошка публикации", () => {
+  const published = () => lifecycle.mock.calls.filter(([message]) => message === "syncPublished");
+
+  it("после записи указателя — одна крошка с форматом, числом частей и длиной записанного текста", async () => {
+    lifecycle.mockClear();
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true, false, true]);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    const pointer = JSON.parse(cloud.store.get(`p_${await phone.sync.deviceId()}`)!);
+    const text = Array.from({ length: pointer.parts }, (_, index) => cloud.store.get(`v_${pointer.id}_${index}`)).join(
+      "",
+    );
+    expect(published()).toEqual([
+      ["syncPublished", { ms: expect.any(Number), parts: pointer.parts, chars: text.length, format: pointer.format }],
+    ]);
+  });
+  it("при нехватке места крошки нет", async () => {
+    lifecycle.mockClear();
+    cloud = memoryTransport({ limits: { maxKeys: 1 } });
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true, false, true]);
+    expect((await phone.sync.exchange()).error).toMatchObject({ kind: "limit" });
+    expect(published()).toEqual([]);
   });
 });

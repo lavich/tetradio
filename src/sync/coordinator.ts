@@ -1,3 +1,4 @@
+import { lifecycle } from "../reporting/reporting";
 import type { AppDatabase } from "../storage/db";
 import type { SyncAdapter } from "./adapter";
 import { dominates, mergeClocks, sameClock } from "./clock";
@@ -24,6 +25,11 @@ import {
   type SyncVersionRow,
   type VersionMeta,
 } from "./types";
+/**
+ * Пока устройства не объявляют чтение формата 6, его запись оставила бы прежние сборки с ошибкой формата:
+ * координатор публикует формат 5, а формат 6 включает согласование по указателям.
+ */
+const PUBLISH_FORMAT = 5;
 /** Читаемые форматы: текущий и предыдущий; более новый или неизвестный — отказ без записи. */
 const readable = (format: number) => (SUPPORTED_SNAPSHOT_FORMATS as readonly number[]).includes(format);
 
@@ -431,17 +437,25 @@ export class SyncCoordinator {
       device,
       clock,
       createdAt: now.toISOString(),
-      format: SNAPSHOT_FORMAT,
+      format: PUBLISH_FORMAT,
       resolves,
       label: this.options.label || undefined,
     };
+    const started = performance.now();
+    let published;
     try {
-      await adapter.publishVersion(meta, snapshot);
+      published = await adapter.publishVersion(meta, snapshot);
     } catch (error) {
       if (!(error instanceof SyncError && error.kind === "limit")) throw error;
       await this.cleanup(device, clock, true);
-      await adapter.publishVersion(meta, snapshot);
+      published = await adapter.publishVersion(meta, snapshot);
     }
+    lifecycle("syncPublished", {
+      ms: Math.round(performance.now() - started),
+      parts: published.meta.parts,
+      chars: published.chars,
+      format: published.meta.format,
+    });
     await database.transaction("rw", database.meta, async () => {
       await writeMeta(database, META.applied, id);
       await writeMeta(database, META.clock, JSON.stringify(clock));

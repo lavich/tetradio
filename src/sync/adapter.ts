@@ -1,4 +1,4 @@
-import { decodeSnapshot, encodeSnapshot, SnapshotFormatError } from "./codec";
+import { decodeSnapshot, encodeSnapshot, packSnapshot, SnapshotFormatError, unpackSnapshot } from "./codec";
 import { SyncError, validKey, type KeyValueTransport } from "./transport";
 import {
   SNAPSHOT_FORMAT,
@@ -24,12 +24,21 @@ export interface PointerListing {
   invalid: string[];
   keys: number;
 }
+export interface PublishedVersion {
+  meta: VersionMeta;
+  /** Длина записанного текста всех частей. */
+  chars: number;
+}
 export interface SyncAdapter {
   capabilities(): SyncCapabilities;
   listPointers(): Promise<PointerListing>;
   readVersion(meta: VersionMeta): Promise<CompactSnapshot>;
   /** Идемпотентно: повтор той же версии перезаписывает те же части и указатель. */
-  publishVersion(meta: Omit<VersionMeta, "parts" | "checksum">, snapshot: CompactSnapshot): Promise<VersionMeta>;
+  /** Формат записи — `meta.format`: 5 пишется JSON, 6 — упакованным; другой — отказ `format`. */
+  publishVersion(
+    meta: Omit<VersionMeta, "parts" | "checksum" | "content">,
+    snapshot: CompactSnapshot,
+  ): Promise<PublishedVersion>;
   /** Идентификаторы версий, части которых лежат в облаке (включая незавершённые публикации). */
   listGenerations(): Promise<string[]>;
   /** Удаляет части перечисленных версий; указатели других устройств не трогает. */
@@ -43,6 +52,8 @@ export interface SyncAdapter {
   room(partsNeeded: number, ownDevice: string): Promise<{ free: number; needed: number; keys: number }>;
 }
 export const PART_SIZE = 4000;
+const WRITABLE_FORMATS = [5, 6];
+const PACKED_FORMAT = 6;
 const POINTER = "p_",
   PART = "v_";
 export const pointerKey = (device: string) => `${POINTER}${device}`;
@@ -92,6 +103,7 @@ export function parsePointer(raw: string): VersionMeta | null {
       format: meta.format,
       parts: meta.parts,
       checksum: meta.checksum,
+      content: typeof meta.content === "string" ? meta.content : undefined,
       resolves: Array.isArray(meta.resolves) ? meta.resolves.filter((item: unknown) => typeof item === "string") : [],
       label: typeof meta.label === "string" ? meta.label : undefined,
     };
@@ -99,6 +111,14 @@ export function parsePointer(raw: string): VersionMeta | null {
     return null;
   }
 }
+
+const unpacksTo = (text: string, json: string) => {
+  try {
+    return unpackSnapshot(text) === json;
+  } catch {
+    return false;
+  }
+};
 
 export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
   const limits = transport.limits;
@@ -143,8 +163,19 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       const text = keys.map((key) => values[key]).join("");
       if (checksum(text) !== meta.checksum)
         throw new SyncError("integrity", `Контрольная сумма версии ${meta.id} не совпадает.`);
+      const packed = meta.format === PACKED_FORMAT;
+      let json = text;
+      if (packed) {
+        try {
+          json = unpackSnapshot(text);
+        } catch {
+          throw new SyncError("integrity", `Версия ${meta.id} не распаковывается.`);
+        }
+        if (meta.content === undefined || checksum(json) !== meta.content)
+          throw new SyncError("integrity", `Содержимое версии ${meta.id} не совпадает с указателем.`);
+      }
       try {
-        return decodeSnapshot(text);
+        return decodeSnapshot(json, packed ? meta.format : undefined);
       } catch (error) {
         if (error instanceof SnapshotFormatError)
           throw new SyncError("format", "Содержимое версии не соответствует формату.");
@@ -153,9 +184,20 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
     },
     async publishVersion(meta, snapshot) {
       ensure();
-      const text = encodeSnapshot(snapshot);
+      if (!WRITABLE_FORMATS.includes(meta.format))
+        throw new SyncError("format", `Запись версии формата ${meta.format} не поддерживается.`);
+      const json = encodeSnapshot(snapshot, meta.format);
+      const packed = meta.format === PACKED_FORMAT;
+      const text = packed ? packSnapshot(json) : json;
+      if (packed && !unpacksTo(text, json))
+        throw new SyncError("integrity", "Упакованный снимок не совпал с исходным: публикация отменена.");
       const parts = splitParts(text, partSize);
-      const full: VersionMeta = { ...meta, parts: parts.length, checksum: checksum(text) };
+      const full: VersionMeta = {
+        ...meta,
+        parts: parts.length,
+        checksum: checksum(text),
+        ...(packed ? { content: checksum(json) } : {}),
+      };
       const pointer = JSON.stringify(full);
       if (pointer.length > limits.maxValueLength)
         throw new SyncError("limit", "Указатель версии не помещается в одно значение.");
@@ -166,7 +208,7 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       // Части публикуются до указателя: неполная запись никогда не выглядит доступной версией.
       for (let index = 0; index < parts.length; index++) await transport.setItem(partKey(meta.id, index), parts[index]);
       await transport.setItem(pointerName, pointer);
-      return full;
+      return { meta: full, chars: text.length };
     },
     async listGenerations() {
       ensure();

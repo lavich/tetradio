@@ -109,7 +109,7 @@ describe("компактный снимок", () => {
     const lessonId = (await phone.db.lessons.toArray())[0].id;
     await phone.db.lessons.update(lessonId, { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
-    const wire = JSON.parse(encodeSnapshot(snapshot));
+    const wire = JSON.parse(encodeSnapshot(snapshot, 5));
     expect(wire.f).toBe(5);
     expect(wire.s).toEqual({});
     expect(wire.cs).toEqual([]);
