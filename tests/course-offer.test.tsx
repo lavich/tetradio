@@ -77,9 +77,9 @@ describe("карточка курса", () => {
     expect(offer.text).toBe("Английский1 модуль");
   });
   it.each([
-    [1, "16 модулей, готов 1"],
-    [2, "16 модулей, готовы 2"],
-    [5, "16 модулей, готово 5"],
+    [1, "Готов 1 модуль из 16"],
+    [2, "Готовы 2 модуля из 16"],
+    [5, "Готово 5 модулей из 16"],
   ])("черновые модули: %i готовых — «%s»", (published, volume) => {
     const [offer] = render([course("it")], [entry("e1", "it", "en", 0)], modules("it", 16, published));
     expect(offer.text).toContain(volume);
@@ -93,7 +93,15 @@ describe("карточка курса", () => {
     const [offer] = render([course("mech")], [entry("a", "mech", "el", 0), entry("b", "mech", "el", 1)], []);
     expect(offer.text).toContain("2 урока");
   });
-  it("два языка — группы по месту курса, названия курсов на третьем уровне", () => {
+  it("греческое слово в цели размечено языком", () => {
+    render(
+      [course("greek-a2", { goal: "До экзамена ΚΕΓ A2" })],
+      [entry("m01-1", "greek-a2", "el", 0)],
+      modules("greek-a2", 1, 1),
+    );
+    expect(container.querySelector('[lang="el"]')?.textContent).toBe("ΚΕΓ");
+  });
+  it("заголовок языка — только у языка с двумя курсами и больше; главная кнопка — у первого курса", () => {
     const offers = render(
       [
         course("english", { language: "en", order: 2 }),
@@ -103,12 +111,14 @@ describe("карточка курса", () => {
       [entry("e1", "english", "en", 0), entry("g1", "greek-a2", "el", 1)],
       [...modules("travel", 1, 0)],
     );
-    expect([...container.querySelectorAll("h2")].map((h) => h.textContent)).toEqual(["Греческий", "Английский"]);
+    expect([...container.querySelectorAll("h2")].map((h) => h.textContent)).toEqual(["greek-a2", "Английский"]);
     expect(offers.map((offer) => [offer.title, offer.heading])).toEqual([
-      ["greek-a2", "H3"],
+      ["greek-a2", "H2"],
       ["english", "H3"],
       ["travel", "H3"],
     ]);
+    const buttons = [...container.querySelectorAll("button")];
+    expect(buttons.map((button) => button.className.includes("bg-primary "))).toEqual([true, false]);
   });
   it("курс, убранный из каталога, не показывается", () => {
     const offers = render([course("gone"), course("en")], [entry("e1", "en", "en", 0)], []);

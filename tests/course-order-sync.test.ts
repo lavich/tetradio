@@ -5,10 +5,12 @@ import { installCourse, installPackages, refreshCatalog } from "../src/content/c
 import { AppDatabase } from "../src/storage/db";
 import {
   COURSES_ORDER_KEY,
+  currentCourse,
   HOME_COURSE_KEY,
   homeCourse,
   PRIMARY_COURSE_KEY,
   primaryCourse,
+  shelfCourse,
 } from "../src/storage/courses";
 import { kvAdapter } from "../src/sync/adapter";
 import { META, writeMeta } from "../src/sync/snapshot";
@@ -88,6 +90,20 @@ describe("порядок курсов на новом устройстве", () 
     await receive(tablet);
     expect(await order(tablet.db)).toEqual(["english", "greek-a2"]);
     expect((await tablet.db.meta.get(HOME_COURSE_KEY))?.value).toBe("english");
+  });
+});
+
+describe("новое устройство, пока стоят только английские пакеты", () => {
+  it("основной, курс экранов и полка — греческий, начатый первым", async () => {
+    await phoneWithBothCourses();
+    const fresh = await device("partial");
+    const fetcher = memoryFetcher(twoCourses);
+    await refreshCatalog(fresh.db, fetcher);
+    expect((await fresh.sync.exchange()).phase).toBe("synced");
+    await installPackages(["e01-1"], fresh.db, fetcher);
+    expect(await primaryCourse(fresh.db)).toBe("greek-a2");
+    expect(await currentCourse(fresh.db)).toBe("greek-a2");
+    expect(await shelfCourse(fresh.db)).toBe("greek-a2");
   });
 });
 

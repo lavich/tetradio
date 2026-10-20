@@ -24,7 +24,7 @@ function coverLabel(view: ModuleView) {
 export function CourseScreen() {
   const data = useLiveQuery(async () => {
     const courseId = await shelfCourse();
-    const started = (await courses()).some((course) => course.id === courseId && course.installed);
+    const started = (await courses()).some((course) => course.id === courseId && course.started);
     return { courseId, views: started ? await moduleViews(courseId) : [] };
   }, []);
   const courseId = data?.courseId;

@@ -17,12 +17,9 @@ export function BrandBar({ subtitle }: { subtitle?: string }) {
   return (
     <header className={cx(top.topbar, compact && top.compact)}>
       {!compact && (
-        <>
-          <span className={top.brand}>τετράδιο</span>
-          <span aria-hidden style={{ fontSize: 22 }}>
-            🇬🇷
-          </span>
-        </>
+        <span className={top.brand} lang="el">
+          τετράδιο
+        </span>
       )}
       {subtitle && <span className={ui.note}>{subtitle}</span>}
     </header>

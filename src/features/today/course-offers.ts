@@ -20,8 +20,9 @@ export interface OfferGroup {
 function volumeOf(modules: StoredModule[], lessons: number) {
   if (!modules.length) return withCount(lessons, LESSONS_COUNT);
   const published = modules.filter((module) => module.status === "published").length;
-  const total = withCount(modules.length, MODULES_COUNT);
-  return published === modules.length ? total : `${total}, ${plural(published, READY)} ${published}`;
+  if (published === modules.length) return withCount(modules.length, MODULES_COUNT);
+  const ready = plural(published, READY);
+  return `${ready[0].toUpperCase()}${ready.slice(1)} ${withCount(published, MODULES_COUNT)} из ${modules.length}`;
 }
 
 /** Курсы текущего каталога для карточек: с уроками или с модулями; убранный из каталога курс не показывается. */

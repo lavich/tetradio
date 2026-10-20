@@ -562,14 +562,16 @@ describe("данные курса для выбора", () => {
     expect(message).toContain("courses/greek-a2.yaml");
     expect(message).toContain("courses/english-it.yaml");
   });
-  it("каталог: неверное место — ошибка с путём поля, неизвестное поле курса пропускается", () => {
+  it("клиент: неверное поле выбора курса отбрасывается, каталог читается; неизвестное поле пропускается", () => {
     const catalog = JSON.parse(build(base()).files.find((f) => f.path === "content/catalog.json")!.body as string);
-    expect(() => parseCatalog({ ...catalog, courses: [{ ...catalog.courses[0], order: 0 }] })).toThrow(
-      "каталог.courses[0].order",
-    );
-    expect(parseCatalog({ ...catalog, courses: [{ ...catalog.courses[0], future: 1 }] }).courses[0]).not.toHaveProperty(
-      "future",
-    );
+    const course = parseCatalog({
+      ...catalog,
+      courses: [
+        { ...catalog.courses[0], order: 0, level: "Pre-A1 → A1", short: "а".repeat(20), goal: "Цель", future: 1 },
+      ],
+    }).courses[0];
+    for (const field of ["order", "level", "short", "future"]) expect(course).not.toHaveProperty(field);
+    expect(course.goal).toBe("Цель");
   });
 });
 

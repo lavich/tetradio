@@ -10,8 +10,8 @@ import {
   courses,
   currentCourse,
   primaryCourse,
+  followCourse,
   profileOfCourse,
-  selectedCourse,
   setCurrentCourse,
   setPrimaryCourse,
   shelfCourse,
@@ -31,7 +31,7 @@ export const usePrimaryCourse = (): string | null | undefined =>
   useLiveQuery(async () => (await primaryCourse()) ?? null, []);
 export { setPrimaryCourse };
 
-/** Курс «Курса», «Слов» и «Прогресса» и его смена; выбор общий для трёх экранов и переживает перезапуск. */
+/** Курс «Слов», «Чтения» и «Прогресса» и смена выбора; выбор переживает перезапуск, неначатый курс выбирает только «Курс». */
 export const useCurrentCourse = (): [string | undefined, (courseId: string) => Promise<void>] => [
   useLiveQuery(() => currentCourse(), []),
   setCurrentCourse,
@@ -45,9 +45,7 @@ export const useCourseSession = (courseId: string | undefined): Session | null |
 export function useFollowCourse(courseId: string | undefined) {
   useEffect(() => {
     if (!courseId) return;
-    void selectedCourse()
-      .then((current) => (current === courseId ? undefined : setCurrentCourse(courseId)))
-      .catch((error: unknown) => void reportError(error, { category: "storage" }));
+    void followCourse(courseId).catch((error: unknown) => void reportError(error, { category: "storage" }));
   }, [courseId]);
 }
 

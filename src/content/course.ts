@@ -192,6 +192,21 @@ const line = (value: unknown, path: string, max: number) => {
   if (text.length > max) throw new ContentError(`${path}: не длиннее ${max} символов`);
   return text;
 };
+/**
+ * Поля выбора курса из каталога: только для показа, поэтому неверное поле отбрасывается, а не валит каталог —
+ * клиент, которому новая сборка прислала незнакомую форму, продолжает получать обновления каталога.
+ */
+export function readCourseChoice(input: Record<string, unknown>): CourseChoice {
+  const choice: CourseChoice = {};
+  for (const field of ["level", "goal", "short", "order"] as const)
+    try {
+      Object.assign(choice, parseCourseChoice({ [field]: input[field] }, "каталог"));
+    } catch (error) {
+      if (!(error instanceof ContentError)) throw error;
+    }
+  return choice;
+}
+/** Строгая проверка в сборке: ошибка называет файл курса и поле. */
 export function parseCourseChoice(input: Record<string, unknown>, path: string): CourseChoice {
   const choice: CourseChoice = {};
   if (input.level !== undefined) {

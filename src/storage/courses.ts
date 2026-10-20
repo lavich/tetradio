@@ -1,6 +1,6 @@
 /**
- * Несколько курсов на устройстве: порядок курсов и основной курс, курс экранов «Курс», «Слова», «Прогресс»,
- * курс карточки и язык курса. Порядок и выбранный курс — настройки устройства в `meta`: в облако не идут.
+ * Несколько курсов на устройстве: порядок курсов, основной и домашний курс, курс «Курса» и курс «Слов», «Чтения»,
+ * «Прогресса», курс карточки и язык курса. Порядок и выбор — настройки устройства в `meta`: в облако не идут.
  */
 import Dexie from "dexie";
 import { DEFAULT_LANGUAGE, isLanguage, profileOf, type Language, type LanguageProfile } from "../domain/language";
@@ -10,7 +10,7 @@ import { db, distinctKeys, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
 import { lessonCourses } from "./lesson-courses";
 import { zoned } from "./zone";
-import { readPending } from "../sync/snapshot";
+import { readPending } from "./pending";
 
 export { lessonCourses };
 
@@ -27,6 +27,8 @@ export interface CourseEntry {
   profile: LanguageProfile;
   /** На устройстве есть уроки курса. */
   installed: boolean;
+  /** Курс начат: его уроки на устройстве или ждут установки из снимка другого устройства. */
+  started: boolean;
   /** Имя в переключателе курса. */
   short?: string;
 }
@@ -58,13 +60,15 @@ const readOrder = zoned(async (database: AppDatabase): Promise<string[]> => {
  * не переставляют варианты после выбора. Курс, которого нет ни в каталоге, ни на устройстве, не показывается.
  */
 export const courses = zoned(async function courses(database: AppDatabase = db): Promise<CourseEntry[]> {
-  const [rows, entries, installedIds, stored] = await Promise.all([
+  const [rows, entries, installedIds, stored, pending] = await Promise.all([
     database.courses.toArray(),
     database.catalog.toArray(),
     distinctKeys(database.lessons, "courseId"),
     readOrder(database),
+    readPending(database),
   ]);
   const installed = new Set(installedIds.map(String));
+  const waiting = new Set(entries.filter((entry) => entry.id in pending).map((entry) => entry.courseId));
   const rank = new Map<string, number>();
   const language = new Map<string, Language>();
   for (const entry of entries) {
@@ -92,6 +96,7 @@ export const courses = zoned(async function courses(database: AppDatabase = db):
       language: code,
       profile: profileOf(code),
       installed: installed.has(course.id),
+      started: installed.has(course.id) || waiting.has(course.id),
       ...(course.short ? { short: course.short } : {}),
     };
   });
@@ -138,13 +143,17 @@ const courseStarts = zoned(async function courseStarts(database: AppDatabase): P
   return starts;
 });
 
-/** Основной курс — выбранный в настройках, если он установлен, иначе установленный первым; без уроков — первый в каталоге. */
+/**
+ * Основной курс — выбранный в настройках, если он начат, иначе начатый первым; без начатых — первый в каталоге.
+ * Начатым считается и курс, чьи уроки ещё ждут установки из снимка: на новом устройстве пакеты ставятся по id, и
+ * основным иначе на время стал бы курс, чьи пакеты пришли раньше.
+ */
 export const primaryCourse = zoned(async function primaryCourse(
   database: AppDatabase = db,
 ): Promise<string | undefined> {
   const [list, chosen] = await Promise.all([courses(database), database.meta.get(PRIMARY_COURSE_KEY)]);
-  const installed = list.filter((course) => course.installed);
-  return (installed.find((course) => course.id === chosen?.value) ?? installed[0] ?? list[0])?.id;
+  const started = list.filter((course) => course.started);
+  return (started.find((course) => course.id === chosen?.value) ?? started[0] ?? list[0])?.id;
 });
 export const setPrimaryCourse = (courseId: string, database: AppDatabase = db) =>
   database.meta.put({ key: PRIMARY_COURSE_KEY, value: courseId }).then(() => undefined);
@@ -184,22 +193,51 @@ export const currentCourse = zoned(async function currentCourse(
   );
 });
 
-/** Курс «Курса»: выбранный, в том числе неначатый курс каталога, иначе курс остальных экранов. */
+/**
+ * Курс «Курса»: выбранный, в том числе неначатый курс каталога, иначе курс остальных экранов. Неначатый выбор,
+ * сохранённый прежней версией (без ключа начатого выбора), полку не открывает: прежде он значил «показать основной».
+ */
 export const shelfCourse = zoned(async function shelfCourse(database: AppDatabase = db): Promise<string | undefined> {
-  const [chosen, list] = await Promise.all([selectedCourse(database), courses(database)]);
-  return list.find((course) => course.id === chosen)?.id ?? currentCourse(database);
+  const [chosen, marked, list] = await Promise.all([
+    selectedCourse(database),
+    database.meta.get(CURRENT_STARTED_COURSE_KEY),
+    courses(database),
+  ]);
+  const course = list.find((item) => item.id === chosen);
+  return (
+    (course && (course.started || marked || !list.some((item) => item.started)) ? course.id : undefined) ??
+    currentCourse(database)
+  );
 });
 
 /**
  * Неначатый курс выбирают только на «Курсе»; прежде чем выбор уйдёт на него, начатый выбор запоминается отдельно —
- * его показывают «Слова», «Чтение» и «Прогресс».
+ * его показывают «Слова», «Чтение» и «Прогресс». Пустое значение — выбор новой версии без начатого курса.
  */
 export async function setCurrentCourse(courseId: string, database: AppDatabase = db): Promise<void> {
-  const [list, chosen] = await Promise.all([courses(database), selectedCourse(database)]);
+  const [list, chosen, marked] = await Promise.all([
+    courses(database),
+    selectedCourse(database),
+    database.meta.get(CURRENT_STARTED_COURSE_KEY),
+  ]);
   const started = (id: string | undefined) => list.some((course) => course.id === id && course.installed);
-  const remember = started(courseId) ? courseId : started(chosen) ? chosen : undefined;
-  if (remember) await database.meta.put({ key: CURRENT_STARTED_COURSE_KEY, value: remember });
+  const remember = started(courseId) ? courseId : (started(chosen) && chosen) || marked?.value || "";
+  await database.meta.put({ key: CURRENT_STARTED_COURSE_KEY, value: remember });
   await database.meta.put({ key: CURRENT_COURSE_KEY, value: courseId });
+}
+
+/**
+ * Модуль, урок или текст, открытые по ссылке, делают свой курс выбранным. Если он и так показан, а на «Курсе» не
+ * выбран неначатый курс, выбор не записывается: без явного выбора экраны следуют за основным курсом.
+ */
+export async function followCourse(courseId: string, database: AppDatabase = db): Promise<void> {
+  const [current, chosen, list] = await Promise.all([
+    currentCourse(database),
+    selectedCourse(database),
+    courses(database),
+  ]);
+  const unstartedChosen = !!chosen && chosen !== courseId && !list.some((c) => c.id === chosen && c.installed);
+  if (current !== courseId || unstartedChosen) await setCurrentCourse(courseId, database);
 }
 
 /** Курс карточки — курс урока, в котором она стоит: сборка не пускает карточку в уроки двух курсов. */

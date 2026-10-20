@@ -26,7 +26,7 @@ export function ModuleScreen() {
   const { moduleId = "" } = useParams();
   const found = useLiveQuery(async () => {
     const own = await db.modules.get(moduleId);
-    const started = !!own && (await courses()).some((course) => course.id === own.courseId && course.installed);
+    const started = !!own && (await courses()).some((course) => course.id === own.courseId && course.started);
     const view = (await moduleViews(own?.courseId)).find((item) => item.module.id === moduleId) ?? null;
     return { view, started };
   }, [moduleId]);

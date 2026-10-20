@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { GraduationCap, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { PROFILES } from "../../domain/language";
 import type { Course, StoredModule } from "../../domain/types";
 import { coursePhase, installCourse, subscribeInstall } from "../../content/client";
@@ -11,18 +11,23 @@ import type { StoredCatalogEntry } from "../../storage/db";
 import ui from "../../shared/ui.module.css";
 import { courseOffers, groupByLanguage, type CourseOfferView } from "./course-offers";
 
+export const OFFLINE_HINT = "Уроки загрузятся на устройство и будут доступны без сети.";
+
 /**
- * Карточки курсов каталога по языкам. Пока ставится первый урок одного курса, другие начать нельзя: так курс,
- * нажатый первым, первым и встаёт в порядок курсов, становится основным и домашним.
+ * Карточки курсов каталога. Пока ставится первый урок одного курса, «Учить курс» у других недоступна: так курс,
+ * нажатый первым, первым встаёт в порядок курсов и становится основным и домашним.
  */
 export function FirstRun({
   courses,
   entries,
   modules,
+  hint = true,
 }: {
   courses: Course[];
   entries: StoredCatalogEntry[];
   modules: StoredModule[];
+  /** Подсказка под кнопкой; стартовый экран пишет её один раз под подзаголовком. */
+  hint?: boolean;
 }) {
   const offers = courseOffers(courses, entries, modules);
   const loading = useSyncExternalStore(
@@ -33,49 +38,88 @@ export function FirstRun({
     return (
       <Card className="mb-3 bg-soft ring-0">
         <CardHeader>
-          <CardTitle className="text-xl font-bold">Каталог ещё не загружен</CardTitle>
+          <p className="m-0 text-xl font-bold">Каталог ещё не загружен</p>
           <CardDescription className="text-foreground/75">Проверьте сеть — курс появится сам.</CardDescription>
         </CardHeader>
       </Card>
     );
   const busy = offers.find((offer) => offer.course.id === loading);
-  const groups = groupByLanguage(offers);
+  const first = offers.find((offer) => offer.ready);
   const card = (offer: CourseOfferView, level: 2 | 3) => (
-    <CourseOffer key={offer.course.id} offer={offer} level={level} waitFor={busy !== offer ? busy : undefined} />
+    <CourseOffer
+      key={offer.course.id}
+      offer={offer}
+      level={level}
+      main={offer === first}
+      hint={hint}
+      waitFor={busy !== offer ? busy : undefined}
+    />
   );
-  if (groups.length < 2) return <>{offers.map((offer) => card(offer, 2))}</>;
   return (
     <>
-      {groups.map((group) => (
-        <section
-          key={group.language}
-          aria-labelledby={`courses-${group.language}`}
-          data-testid={`courses-${group.language}`}
-        >
-          <h2 id={`courses-${group.language}`} className="mb-3 text-lg font-bold">
-            {PROFILES[group.language].names.title}
-          </h2>
-          {group.offers.map((offer) => card(offer, 3))}
-        </section>
-      ))}
+      {groupByLanguage(offers).map((group) =>
+        group.offers.length < 2 ? (
+          card(group.offers[0], 2)
+        ) : (
+          <section
+            key={group.language}
+            aria-labelledby={`courses-${group.language}`}
+            data-testid={`courses-${group.language}`}
+          >
+            <h2 id={`courses-${group.language}`} className="mt-0 mb-3 text-lg font-bold">
+              {PROFILES[group.language].names.title}
+            </h2>
+            {group.offers.map((offer) => card(offer, 3))}
+          </section>
+        ),
+      )}
     </>
   );
 }
 
-function CourseOffer({ offer, level, waitFor }: { offer: CourseOfferView; level: 2 | 3; waitFor?: CourseOfferView }) {
+/** Греческие слова в русской строке («экзамен ΚΕΓ») читалка и шрифт должны получить как греческие. */
+function withGreek(text: string) {
+  return text.split(/([Ͱ-Ͽἀ-῿]+)/u).map((part, index) =>
+    index % 2 ? (
+      <span key={index} lang="el">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
+
+function CourseOffer({
+  offer,
+  level,
+  main,
+  hint,
+  waitFor,
+}: {
+  offer: CourseOfferView;
+  level: 2 | 3;
+  main: boolean;
+  hint: boolean;
+  waitFor?: CourseOfferView;
+}) {
   const { course } = offer;
   const phase = useCoursePhase(course.id);
   const loading = phase.phase === "loading";
-  const learn = () => void holdUpdate(installCourse(course.id)).catch(() => undefined);
+  const blocked = loading || !!waitFor;
+  const learn = () => {
+    if (blocked) return;
+    void holdUpdate(installCourse(course.id)).catch(() => undefined);
+  };
   const Heading = level === 2 ? "h2" : "h3";
   return (
-    <section className="mb-6" data-testid="course-offer" aria-labelledby={`offer-${course.id}`}>
+    <article className="mb-6" data-testid="course-offer" aria-labelledby={`offer-${course.id}`}>
       <Card className="mb-3 bg-soft ring-0" data-testid="first-course">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold [overflow-wrap:anywhere]">
-            <Heading id={`offer-${course.id}`}>{offer.title}</Heading>
-          </CardTitle>
-          {offer.goal ? <CardDescription className="text-foreground">{offer.goal}</CardDescription> : null}
+          <Heading id={`offer-${course.id}`} className="m-0 text-xl leading-snug font-bold [overflow-wrap:anywhere]">
+            {offer.title}
+          </Heading>
+          {offer.goal ? <CardDescription className="text-foreground">{withGreek(offer.goal)}</CardDescription> : null}
           <CardDescription className="text-foreground/75">{offer.volume}</CardDescription>
         </CardHeader>
       </Card>
@@ -87,14 +131,19 @@ function CourseOffer({ offer, level, waitFor }: { offer: CourseOfferView; level:
         <>
           <Button
             size="xl"
+            variant={main ? "default" : "soft"}
             onClick={learn}
-            disabled={loading || !!waitFor}
-            aria-label={`Учить курс «${course.title}»`}
+            aria-disabled={blocked || undefined}
+            className="aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+            aria-label={loading ? `Загружаем курс «${course.title}»…` : `Учить курс «${course.title}»`}
             aria-describedby={waitFor ? `wait-${course.id}` : undefined}
           >
             <GraduationCap data-icon="inline-start" />
             {loading ? "Загружаем курс…" : "Учить курс"}
           </Button>
+          <p className="sr-only" role="status">
+            {loading ? `Загружаем курс «${course.title}»` : ""}
+          </p>
           {phase.phase === "error" ? (
             <div className="mt-2">
               <p className={ui.error} role="alert" data-testid="course-error">
@@ -109,19 +158,19 @@ function CourseOffer({ offer, level, waitFor }: { offer: CourseOfferView; level:
             <p className={ui.hint} id={`wait-${course.id}`}>
               Сначала загрузится «{waitFor.course.title}»
             </p>
-          ) : (
-            <p className={ui.hint}>Уроки загрузятся на устройство и будут доступны без сети.</p>
-          )}
+          ) : hint ? (
+            <p className={ui.hint}>{OFFLINE_HINT}</p>
+          ) : null}
         </>
       )}
-    </section>
+    </article>
   );
 }
 
 /** Начало курса там, где каталог есть, а уроков курса на устройстве ещё нет: на полке и в модуле — одного курса. */
-export function CourseStart({ courseId }: { courseId?: string }) {
+export function CourseStart({ courseId, hint = true }: { courseId?: string; hint?: boolean }) {
   const courses = useCourses();
   const catalog = useCatalog();
   const offered = (courses ?? []).filter((course) => !courseId || course.id === courseId);
-  return <FirstRun courses={offered} entries={catalog?.entries ?? []} modules={catalog?.modules ?? []} />;
+  return <FirstRun courses={offered} entries={catalog?.entries ?? []} modules={catalog?.modules ?? []} hint={hint} />;
 }

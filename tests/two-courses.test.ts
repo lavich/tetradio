@@ -12,6 +12,7 @@ import {
   cardLanguages,
   courses,
   currentCourse,
+  followCourse,
   primaryCourse,
   profileOfCourse,
   rememberCourses,
@@ -525,5 +526,68 @@ describe("выбор неначатого курса на «Курсе»", () =>
     await fresh.catalog.bulkAdd(catalog);
     expect(await shelfCourse(fresh)).toBe(GREEK);
     fresh.close();
+  });
+});
+
+describe("каталог с неверным полем выбора курса", () => {
+  it("применяется: прежний клиент не остаётся без обновлений, поле пустое", async () => {
+    await new AppDatabase("tetradio-course-lenient").delete();
+    const fresh = new AppDatabase("tetradio-course-lenient");
+    const catalog = JSON.parse(content.files.find((file) => file.path === "content/catalog.json")!.body as string);
+    const [first] = catalog.courses;
+    await refreshCatalog(
+      fresh,
+      memoryFetcher(content, {
+        "content/catalog.json": { ...catalog, courses: [{ ...first, level: "Pre-A1 → A1", short: "а".repeat(20) }] },
+      }),
+    );
+    const stored = await fresh.courses.get(first.id);
+    expect(stored).toBeDefined();
+    expect(stored).not.toHaveProperty("level");
+    expect(stored).not.toHaveProperty("short");
+    fresh.close();
+  });
+});
+
+describe("выбор после обновления и ссылки", () => {
+  it("первый запуск новой версии: сохранённый ранее неначатый выбор не открывает карточку вместо полки", async () => {
+    await db.lessons.where("courseId").equals(ENGLISH).delete();
+    await db.meta.put({ key: "currentCourse", value: ENGLISH });
+    expect(await shelfCourse(db)).toBe(GREEK);
+    await setCurrentCourse(ENGLISH, db);
+    expect(await shelfCourse(db)).toBe(ENGLISH);
+  });
+  it("без начатых курсов выбор неначатого на «Курсе» действует", async () => {
+    await new AppDatabase("tetradio-shelf-fresh").delete();
+    const fresh = new AppDatabase("tetradio-shelf-fresh");
+    await fresh.courses.bulkAdd([
+      { ...courseRows[0], order: 1 },
+      { ...courseRows[1], order: 2 },
+    ]);
+    await fresh.catalog.bulkAdd(catalog);
+    await setCurrentCourse(ENGLISH, fresh);
+    expect(await shelfCourse(fresh)).toBe(ENGLISH);
+    fresh.close();
+  });
+  it("ссылка на курс, совпадающий с показанным, не закрепляет выбор: смена основного снова переводит экраны", async () => {
+    await followCourse(GREEK, db);
+    await setPrimaryCourse(ENGLISH, db);
+    expect(await currentCourse(db)).toBe(ENGLISH);
+  });
+  it("ссылка на показанный курс при выбранном неначатом возвращает полку", async () => {
+    await db.lessons.where("courseId").equals(ENGLISH).delete();
+    await setCurrentCourse(ENGLISH, db);
+    await followCourse(GREEK, db);
+    expect(await shelfCourse(db)).toBe(GREEK);
+  });
+  it("курс, начатый на другом устройстве и ещё не скачанный, — начат", async () => {
+    await db.lessons.where("courseId").equals(ENGLISH).delete();
+    await db.meta.put({
+      key: "sync:pendingLessons",
+      value: JSON.stringify({ e1: { id: "e1", completed: true, updatedAt: "2026-10-07T09:00:00Z" } }),
+    });
+    const english = (await courses(db)).find((course) => course.id === ENGLISH)!;
+    expect(english.installed).toBe(false);
+    expect(english.started).toBe(true);
   });
 });

@@ -250,20 +250,28 @@ test("лист «Чтение» только у основного курса: �
   await expect(page.getByTestId("other-course").getByTestId("reading-sheet")).toHaveCount(0);
 });
 
-/** Выбор курса из базы: открытие урока пишет его после первого кадра. */
-const savedCourse = (page: Page) =>
-  page.evaluate(async () => {
-    const database = await new Promise<IDBDatabase>((resolve) => {
-      const request = indexedDB.open("tetradio-mock-1");
-      request.onsuccess = () => resolve(request.result);
-    });
-    const row = await new Promise<{ value?: string } | undefined>((resolve) => {
-      const request = database.transaction("meta").objectStore("meta").get("currentCourse");
-      request.onsuccess = () => resolve(request.result);
-    });
-    database.close();
-    return row?.value;
-  });
+/** Записи хранилища из базы приложения: проверяется то, что записано, а не то, что видно. */
+const rows = <T>(page: Page, store: string, key?: string) =>
+  page.evaluate(
+    async ({ store, key }) => {
+      const database = await new Promise<IDBDatabase>((resolve) => {
+        const request = indexedDB.open("tetradio-mock-1");
+        request.onsuccess = () => resolve(request.result);
+      });
+      const result = await new Promise<unknown>((resolve) => {
+        const objects = database.transaction(store).objectStore(store);
+        const request = key === undefined ? objects.getAll() : objects.get(key);
+        request.onsuccess = () => resolve(request.result);
+      });
+      database.close();
+      return result;
+    },
+    { store, key },
+  ) as Promise<T>;
+const savedCourse = async (page: Page) =>
+  (await rows<{ value?: string } | undefined>(page, "meta", "currentCourse"))?.value;
+const lessonsOf = async (page: Page, courseId: string) =>
+  (await rows<{ courseId?: string }[]>(page, "lessons")).filter((lesson) => lesson.courseId === courseId).length;
 
 /** Пакеты курса ждут, пока тест не отпустит их: состояние «загружается» видно без гонки. */
 async function holdPackages(page: Page, prefix: string) {
@@ -274,6 +282,15 @@ async function holdPackages(page: Page, prefix: string) {
     await route.continue();
   });
   return release;
+}
+/** Запросы пакетов курса: адрес модуля или урока неначатого курса не должен их делать. */
+async function watchPackages(page: Page, prefix: string) {
+  const asked: string[] = [];
+  await page.route(`**/content/packages/${prefix}*`, async (route) => {
+    asked.push(route.request().url());
+    await route.continue();
+  });
+  return asked;
 }
 
 test("второй курс с полки: карточка неначатого курса, «Учить курс», затем его обложки", async ({ page }) => {
@@ -293,7 +310,10 @@ test("второй курс с полки: карточка неначатого
 
   const release = await holdPackages(page, "e01-");
   await offer.getByRole("button", { name: "Учить курс «Английский»" }).click();
-  await expect(offer.getByRole("button", { name: "Учить курс «Английский»" })).toHaveText("Загружаем курс…");
+  const loading = offer.getByRole("button", { name: "Загружаем курс «Английский»…" });
+  await expect(loading).toHaveText("Загружаем курс…");
+  await expect(loading).toBeFocused();
+  await expect(offer.getByRole("status")).toHaveText("Загружаем курс «Английский»");
   release();
   await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
   await expect(switcher.getByRole("radio", { name: "Английский" })).toHaveAttribute("aria-checked", "true");
@@ -331,51 +351,97 @@ test("стартовый экран: курсы по языкам по мест�
   await expect(page.getByRole("link", { name: /Модуль 1:/ })).toHaveCount(0);
 
   await page.goto("/app/");
-  await expect(page.getByTestId("today-title")).toHaveText("Τετράδιο");
-  await expect(page.getByTestId("today-title")).toHaveAttribute("lang", "el");
+  await expect(page.getByTestId("today-title")).toHaveText("Выберите курс");
+  await expect(page.getByText("🇬🇷")).toHaveCount(0);
+  await expect(page.getByText("τετράδιο", { exact: true })).toHaveAttribute("lang", "el");
   await expect(page.getByText("Курсы языков с уроками по программе и ежедневным повторением карточек")).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Греческий", "Английский"]);
-  const greek = page.getByTestId("courses-el").getByTestId("course-offer");
-  await expect(greek).toHaveCount(1);
-  await expect(greek.getByRole("heading", { level: 3 })).toHaveText("Греческий · A0 → A2");
-  await expect(greek.getByTestId("first-course")).toContainText("С нуля до экзамена ΚΕΓ A2");
-  await expect(greek.getByTestId("first-course")).toContainText("2 модуля, готов 1");
+  await expect(page.getByText("Уроки загрузятся на устройство и будут доступны без сети.")).toHaveCount(1);
+  await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Греческий · A0 → A2", "Английский"]);
+  const offers = page.getByTestId("course-offer");
+  await expect(offers.nth(0).getByTestId("first-course")).toHaveText(
+    "Греческий · A0 → A2С нуля до экзамена ΚΕΓ A2Готов 1 модуль из 2",
+  );
+  await expect(offers.nth(0).locator('[lang="el"]')).toHaveText("ΚΕΓ");
   await expect(page.getByText(/в неделю/)).toHaveCount(0);
   const english = page.getByTestId("courses-en").getByTestId("course-offer");
   await expect(english.getByRole("heading", { level: 3 })).toHaveText([
     "Английский · B1 → B2",
     "Английский для путешествий · B1 → B1+",
   ]);
-  await expect(english.nth(0)).toContainText("1 модуль");
-  await expect(english.nth(0).getByRole("button", { name: "Учить курс «Английский»" })).toBeEnabled();
+  await expect(english.nth(0).getByTestId("first-course")).toHaveText("Английский · B1 → B21 модуль");
+  const learnEnglish = english.nth(0).getByRole("button", { name: "Учить курс «Английский»" });
+  await expect(learnEnglish).not.toHaveAttribute("aria-disabled");
   await expect(english.nth(1).getByTestId("course-preparing")).toHaveText("Готовится");
   await expect(english.nth(1).getByRole("button")).toHaveCount(0);
 
   const release = await holdPackages(page, "m01-");
-  await greek.getByRole("button", { name: "Учить курс «Греческий»" }).click();
-  await expect(english.nth(0).getByRole("button", { name: "Учить курс «Английский»" })).toBeDisabled();
-  await expect(english.nth(0)).toContainText("Сначала загрузится «Греческий»");
+  await offers.nth(0).getByRole("button", { name: "Учить курс «Греческий»" }).click();
+  await expect(learnEnglish).toHaveAttribute("aria-disabled", "true");
+  await expect(learnEnglish).toHaveAccessibleDescription("Сначала загрузится «Греческий»");
+  await learnEnglish.click({ force: true });
+  expect(await lessonsOf(page, "english")).toBe(0);
   release();
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
 });
 
-test("адрес модуля неначатого курса — карточка курса, уроки не ставятся до нажатия", async ({ page }) => {
+test("адрес модуля и урока неначатого курса — карточка курса, пакеты не запрашиваются до нажатия", async ({ page }) => {
   await openModule(page, "m01");
+  const asked = await watchPackages(page, "e01-");
   await page.goto("/app/course/e01");
   await expect(page.getByRole("button", { name: "Учить курс «Английский»" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Содержание" })).toHaveCount(0);
-  await page.waitForTimeout(500);
-  const englishLessons = await page.evaluate(async () => {
+  await page.goto("/app/course/e01/e01-1");
+  await expect(page.getByRole("button", { name: "Учить курс «Английский»" })).toBeVisible();
+  await expect(page.getByText("Урок скачивается…")).toHaveCount(0);
+  expect(asked).toEqual([]);
+  expect(await lessonsOf(page, "english")).toBe(0);
+});
+
+test("курс, начатый на другом устройстве и не скачанный, — без «+», модуль докачивает уроки", async ({ page }) => {
+  await openModule(page, "m01");
+  await page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve) => {
       const request = indexedDB.open("tetradio-mock-1");
       request.onsuccess = () => resolve(request.result);
     });
-    const lessons = await new Promise<{ courseId?: string }[]>((resolve) => {
-      const request = database.transaction("lessons").objectStore("lessons").getAll();
-      request.onsuccess = () => resolve(request.result);
-    });
+    const pending = { "e01-1": { id: "e01-1", completed: true, updatedAt: "2026-10-01T09:00:00.000Z" } };
+    const tx = database.transaction("meta", "readwrite");
+    tx.objectStore("meta").put({ key: "sync:pendingLessons", value: JSON.stringify(pending) });
+    await new Promise<void>((resolve) => (tx.oncomplete = () => resolve()));
     database.close();
-    return lessons.filter((lesson) => lesson.courseId === "english").length;
   });
-  expect(englishLessons).toBe(0);
+  await page.goto("/app/course");
+  await expect(page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio")).toHaveText([
+    "Греческий",
+    "Английский",
+  ]);
+  await page.goto("/app/course/e01");
+  await expect(page.getByRole("heading", { name: "Содержание" })).toBeVisible();
+  await expect.poll(() => lessonsOf(page, "english")).toBeGreaterThan(0);
+});
+
+test("три курса в переключателе на 360 px — имена целиком, лента прокручивается", async ({ page }) => {
+  await page.route("**/content/catalog.json", async (route) => {
+    const catalog = await (await route.fetch()).json();
+    const lesson = catalog.lessons.find((entry: { id: string }) => entry.id === "e01-1");
+    catalog.courses.push({
+      id: "english-2",
+      title: "Английский 2",
+      language: "en",
+      short: "Английский 2",
+      order: 4,
+      lessonIds: ["e02-copy"],
+    });
+    catalog.lessons.push({ ...lesson, id: "e02-copy", courseId: "english-2" });
+    await route.fulfill({ json: catalog });
+  });
+  await page.setViewportSize({ width: 360, height: 800 });
+  await openModule(page, "m01");
+  await page.goto("/app/course");
+  const radios = page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio");
+  await expect(radios).toHaveText(["Греческий", "+ Английский", "+ Английский 2"]);
+  const clipped = await radios.evaluateAll(
+    (items) => items.filter((item) => item.scrollWidth > item.clientWidth + 1).length,
+  );
+  expect(clipped).toBe(0);
 });

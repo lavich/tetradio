@@ -1,4 +1,5 @@
 import { useRef, type KeyboardEvent } from "react";
+import type { CourseEntry } from "../storage/courses";
 import { useAllCourses, useCourses, useCurrentCourse, useShelfCourse } from "./courses";
 import { cx } from "./cx";
 import css from "./course-switch.module.css";
@@ -69,11 +70,25 @@ export function Segmented({
  * каталога: их начинают с полки. На остальных экранах — только начатые; один курс — ничего.
  */
 export function CourseSwitch({ shelf = false }: { shelf?: boolean }) {
-  const started = useCourses();
-  const all = useAllCourses();
+  return shelf ? <ShelfSwitch /> : <StartedSwitch />;
+}
+function StartedSwitch() {
   const [current, choose] = useCurrentCourse();
-  const shelfCourse = useShelfCourse();
-  const courses = shelf ? all : started;
+  return <Switch courses={useCourses()} value={current} choose={choose} />;
+}
+function ShelfSwitch() {
+  const [, choose] = useCurrentCourse();
+  return <Switch courses={useAllCourses()} value={useShelfCourse()} choose={choose} />;
+}
+function Switch({
+  courses,
+  value,
+  choose,
+}: {
+  courses: CourseEntry[] | undefined;
+  value: string | undefined;
+  choose: (id: string) => Promise<void>;
+}) {
   if (!courses || courses.length < 2) return null;
   return (
     <Segmented
@@ -82,9 +97,9 @@ export function CourseSwitch({ shelf = false }: { shelf?: boolean }) {
       options={courses.map((course) => ({
         id: course.id,
         title: course.short ?? course.title,
-        unstarted: !course.installed,
+        unstarted: !course.started,
       }))}
-      value={shelf ? shelfCourse : current}
+      value={value}
       onChange={(id) => void choose(id)}
     />
   );

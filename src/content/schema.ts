@@ -14,7 +14,7 @@ import { sentencesOf } from "../domain/sentences.ts";
 import {
   parseBlocks,
   parseCalendar,
-  parseCourseChoice,
+  readCourseChoice,
   parseExam,
   parseModule,
   parsePassShare,
@@ -326,7 +326,7 @@ export function parseCatalog(input: unknown): Catalog {
     if (item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
     if (item.passShare !== undefined) course.passShare = parsePassShare(item.passShare, `${path}.passShare`);
     if (item.calendar !== undefined) calendars.set(course, item.calendar);
-    Object.assign(course, parseCourseChoice(item, path));
+    Object.assign(course, readCourseChoice(item));
     return course;
   });
   unique(
