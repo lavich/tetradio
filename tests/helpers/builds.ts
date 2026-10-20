@@ -34,7 +34,12 @@ export async function loadBuild(constants: BuildConstants) {
       import("../../src/sync/coordinator"),
       import("../../src/sync/adapter"),
     ]);
-    return { SyncCoordinator: coordinator.SyncCoordinator, kvAdapter: adapter.kvAdapter };
+    // Настоящий `main` не знает `reads` и свой указатель вне публикации не переписывает.
+    const kvAdapter: typeof adapter.kvAdapter =
+      constants.DECLARED_READS === undefined
+        ? (transport) => ({ ...adapter.kvAdapter(transport), declareReads: async () => false })
+        : adapter.kvAdapter;
+    return { SyncCoordinator: coordinator.SyncCoordinator, kvAdapter };
   } finally {
     vi.doUnmock("../../src/sync/types");
   }

@@ -1172,3 +1172,103 @@ it("часть приложения не загрузилась — сигнал
   expect(newer).toHaveBeenCalledTimes(1);
   expect(schedule).toHaveBeenCalledTimes(1);
 });
+
+describe("устойчивость согласования", () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const pointerOf = async (dev: Device) => JSON.parse(cloud.store.get(`p_${await dev.sync.deviceId()}`)!);
+  const partsOf = (id: string) => [...cloud.store.keys()].filter((key) => key.startsWith(`v_${id}_`));
+
+  it("свой указатель без частей снимается и версия публикуется заново в том же обмене", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const broken = await pointerOf(phone);
+    for (const key of partsOf(broken.id)) cloud.store.delete(key);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    const fixed = await pointerOf(phone);
+    expect(fixed.id).not.toBe(broken.id);
+    expect(partsOf(fixed.id)).toHaveLength(fixed.parts);
+  });
+  it("сбой переписывания reads не обрывает обмен", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    await study(old, [true]);
+    await old.sync.exchange();
+    const adapter = kvAdapter(cloud);
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const updated = new SyncCoordinator({
+      database: old.db,
+      adapter: { ...adapter, declareReads: () => Promise.reject(new SyncError("transport", "обрыв")) },
+      now,
+      schedule: () => () => undefined,
+    });
+    await study({ db: old.db, sync: updated, name: "old" }, [false]);
+    expect((await updated.exchange()).phase).toBe("synced");
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
+  });
+  it("часы ушли назад: время в реестре не дольше текущего, устройство не считается активным лишний год", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await study(old, [true]);
+    await old.sync.exchange();
+    await fresh.sync.exchange();
+    const peers = JSON.parse((await readMeta(fresh.db, META.peers))!);
+    for (const peer of Object.values(peers) as { seenAt: string }[])
+      peer.seenAt = new Date(clockMs + 365 * DAY).toISOString();
+    await writeMeta(fresh.db, META.peers, JSON.stringify(peers));
+    await fresh.sync.exchange();
+    clockMs += 31 * DAY;
+    await study(fresh, [true]);
+    await fresh.sync.exchange();
+    expect((await pointerOf(fresh)).format).toBe(6);
+  });
+  it.each(["null", "[1, 2]", '"строка"', '{"dev": 5}', "не json"])(
+    "испорченный реестр %s не ломает обмен",
+    async (raw) => {
+      const phone = await device("phone", { lessons: ["mech-1"] });
+      await writeMeta(phone.db, META.peers, raw);
+      await study(phone, [true]);
+      expect((await phone.sync.exchange()).phase).toBe("synced");
+    },
+  );
+  it("обычная уборка не удаляет указатель активного прежнего устройства, хотя его createdAt старше 30 дней", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    clockMs -= 40 * DAY;
+    await study(old, [true]);
+    await old.sync.exchange();
+    clockMs += 40 * DAY;
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await fresh.sync.exchange();
+    await study(fresh, [true]);
+    expect((await fresh.sync.exchange()).phase).toBe("synced");
+    expect(cloud.store.has(`p_${await old.sync.deviceId()}`)).toBe(true);
+  });
+  it("публикация пишет свой указатель одним setItem, уже с reads", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    const from = cloud.log.length;
+    await phone.sync.exchange();
+    const name = `p_${await phone.sync.deviceId()}`;
+    expect(cloud.log.slice(from).filter((entry) => entry === `setItem ${name}`)).toHaveLength(1);
+    expect(JSON.parse(cloud.store.get(name)!).reads).toEqual([3, 4, 5, 6]);
+  });
+  it("сборка формата 5 не переписывает указатель своего устройства, опубликованный новой сборкой", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const other = await device("other", { lessons: ["mech-1"], build: legacy });
+    await study(other, [true]);
+    await other.sync.exchange();
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await phone.sync.exchange();
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const name = `p_${await phone.sync.deviceId()}`;
+    const raw = cloud.store.get(name);
+    expect(JSON.parse(raw!).format).toBe(5);
+    const cached = await device("phone", { db: phone.db, build: legacy });
+    await cached.sync.exchange();
+    expect(cloud.store.get(name)).toBe(raw);
+  });
+});

@@ -12,6 +12,7 @@ import { submitAnswer } from "./helpers/ops";
 import { installCompleted } from "./helpers/content";
 import { FORMAT5_BUILD, loadBuild } from "./helpers/builds";
 import fixture from "./fixtures/sync-format6.json";
+import mainCloud from "./fixtures/sync-format5-main.json";
 
 let cloud: MemoryTransport;
 let clockMs = Date.parse("2026-10-20T08:00:00Z");
@@ -132,4 +133,17 @@ describe("сборка формата 5 встречает формат 6", () =
       published.id,
     ]);
   });
+});
+
+it("облако, записанное кодом main, ветка применяет без конфликта и отвечает форматом 5", async () => {
+  for (const [key, value] of Object.entries(mainCloud.cloud)) cloud.store.set(key, value);
+  const fresh = await device(current, "fresh");
+  expect((await fresh.sync.exchange()).phase).toBe("synced");
+  const applied = await fresh.db.cardStates.count();
+  expect(applied).toBe(mainCloud.snapshot.states.length);
+  const [pointer] = (await kvAdapter(cloud).listPointers()).pointers;
+  expect(await kvAdapter(cloud).readVersion(pointer)).toEqual({ ...mainCloud.snapshot, format: 6 });
+  await study(fresh, [true]);
+  expect((await fresh.sync.exchange()).phase).toBe("synced");
+  expect(JSON.parse(cloud.store.get(`p_${await fresh.sync.deviceId()}`)!).format).toBe(5);
 });

@@ -23,6 +23,8 @@ export interface PointerListing {
   pointers: VersionMeta[];
   invalid: string[];
   keys: number;
+  /** Версии, у указателя которых в облаке нет всех частей. */
+  incomplete: string[];
 }
 export interface PublishedVersion {
   meta: VersionMeta;
@@ -170,7 +172,14 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
         if (meta) pointers.push(meta);
         else invalid.push(key);
       }
-      return { pointers, invalid, keys: keys.length };
+      const present = new Set(keys);
+      const incomplete = pointers
+        .filter(
+          (meta) =>
+            !Array.from({ length: meta.parts }, (_, index) => partKey(meta.id, index)).every((key) => present.has(key)),
+        )
+        .map((meta) => meta.id);
+      return { pointers, invalid, keys: keys.length, incomplete };
     },
     async readVersion(meta) {
       ensure();

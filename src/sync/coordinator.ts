@@ -17,7 +17,7 @@ import {
   type SnapshotDescription,
 } from "./snapshot";
 import { SyncError, type SyncErrorKind } from "./transport";
-import { keepsPointer, notePeers, writeFormat, type Peers } from "./peers";
+import { keepsPointer, notePeers, parsePeers, writeFormat, type Peers } from "./peers";
 import {
   DECLARED_READS,
   SNAPSHOT_FORMAT,
@@ -257,10 +257,17 @@ export class SyncCoordinator {
     this.update({ keys: { used: listing.keys, max: adapter.capabilities().maxKeys } });
     await this.notePeers(device, listing.pointers);
     const others = listing.pointers.filter((pointer) => pointer.device !== device);
-    const mine = listing.pointers.find((pointer) => pointer.device === device) ?? null;
+    let mine = listing.pointers.find((pointer) => pointer.device === device) ?? null;
+    // Переписывание `reads` в гонке с чужой уборкой может оставить свой указатель без частей: снимаем его,
+    // и версия публикуется заново по правилу потерянного указателя.
+    if (writes && mine && listing.incomplete.includes(mine.id) && (await adapter.removeDevice(mine))) mine = null;
     // Без Web Locks писатель на устройстве не гарантирован; указатель более новой сборки этого устройства не трогаем.
     if (writes && mine && readable(mine.format) && !sameReads(mine.reads, DECLARED_READS))
-      await adapter.declareReads(device, mine.id, DECLARED_READS);
+      try {
+        await adapter.declareReads(device, mine.id, DECLARED_READS);
+      } catch (error) {
+        console.warn("Объявление читаемых форматов отложено", error);
+      }
     let candidates = others.filter((pointer) => !dominates(flags.clock, pointer.clock));
     candidates = candidates.filter(
       (candidate) =>
@@ -517,13 +524,8 @@ export class SyncCoordinator {
   private async notePeers(device: string, pointers: VersionMeta[]): Promise<Peers> {
     const { database } = this.options;
     const stored = await readMeta(database, META.peers);
-    let known: Peers = {};
-    try {
-      known = stored ? (JSON.parse(stored) as Peers) : {};
-    } catch {
-      /* испорченный реестр начинается заново: все видимые указатели считаются свежими */
-    }
-    const peers = notePeers(known, pointers, device, this.options.now());
+    const now = this.options.now();
+    const peers = notePeers(parsePeers(stored, now), pointers, device, now);
     const next = JSON.stringify(peers);
     if (next !== stored) await writeMeta(database, META.peers, next);
     return peers;
