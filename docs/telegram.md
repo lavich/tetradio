@@ -85,12 +85,12 @@ Telegram.WebApp.CloudStorage.getKeys((_, keys) =>
 })();
 ```
 
-Проверка автообновления: положить указатель формата новее приложения, уйти на «Сегодня» и подождать; после проверки удалить ключ.
+Проверка автообновления: положить указатель формата новее приложения, уйти на «Сегодня» и подождать; после проверки удалить ключ. `reads` с 6 нужен, чтобы этот указатель не заставлял устройства 30 дней писать формат 5.
 
 ```js
 Telegram.WebApp.CloudStorage.setItem(
   "p_check0001",
-  JSON.stringify({ id: "check0001-1", device: "check0001", clock: { check0001: 1 }, createdAt: new Date().toISOString(), format: 99, parts: 1, checksum: "00000000", resolves: [] }),
+  JSON.stringify({ id: "check0001-1", device: "check0001", clock: { check0001: 1 }, createdAt: new Date().toISOString(), format: 99, parts: 1, checksum: "00000000", resolves: [], reads: [3, 4, 5, 6] }),
 );
 // после проверки: Telegram.WebApp.CloudStorage.removeItem("p_check0001")
 ```
