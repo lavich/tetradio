@@ -296,7 +296,7 @@ describe("обмен смешанным прогрессом между устр
       const status = await tablet.sync.exchange();
       expect(status.phase).toBe("error");
       expect(status.error?.kind).toBe("format");
-      expect(status.error?.message).toMatch(/Обновите приложение/);
+      expect(status.error?.message).toMatch(/Перезапустите приложение/);
       expect(await statesOf(tablet)).toEqual(before);
       expect(cloud.store.has(`p_${await tablet.sync.deviceId()}`)).toBe(false);
       expect(await readMeta(tablet.db, META.dirty)).toBeTruthy();

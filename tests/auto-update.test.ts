@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createAutoUpdater, type AutoUpdatePorts } from "../src/app/auto-update";
+import { bindInteractions, createAutoUpdater, type AutoUpdatePorts } from "../src/app/auto-update";
 
 const memoryStorage = () => {
   const values = new Map<string, string>();
@@ -152,7 +152,7 @@ describe("автообновление при облаке новее прило
     expect(updater.needRefresh()).toBe(false);
     expect(updater.state()).toBe("idle");
   });
-  it("новой сборки нет — прежний статус «Обновите приложение», перезагрузки нет", async () => {
+  it("новой сборки нет — прежний статус «Перезапустите приложение», перезагрузки нет", async () => {
     const { updater, reload } = setup();
     const { registration } = fakeRegistration(false);
     updater.registered(registration);
@@ -251,4 +251,21 @@ describe("автообновление при облаке новее прило
     await settle(4000);
     expect(reload).toHaveBeenCalledTimes(1);
   });
+  it("без service worker после перезагрузки на этой сборке «Обновляем…» не мелькает", () => {
+    const storage = memoryStorage();
+    storage.setItem("tetradio:auto-update-build", "b1");
+    const { updater } = setup({ container: null, storage });
+    const states: string[] = [];
+    updater.subscribe(() => states.push(updater.state()));
+    updater.request();
+    expect(states).toEqual(["none"]);
+  });
+});
+
+it("колесо мыши, прокрутка и движение пальца считаются касанием", () => {
+  const target = new EventTarget();
+  const interacted = vi.fn();
+  bindInteractions(target, { interacted });
+  for (const type of ["pointerdown", "keydown", "wheel", "touchmove", "scroll"]) target.dispatchEvent(new Event(type));
+  expect(interacted).toHaveBeenCalledTimes(5);
 });

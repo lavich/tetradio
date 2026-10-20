@@ -172,7 +172,7 @@ describe.each(contract)("контракт адаптера синхрониза�
     expect(listing.pointers[0].format).toBe(SNAPSHOT_FORMAT + 1);
     await expect(adapter.readVersion(listing.pointers[0])).rejects.toMatchObject({
       kind: "format",
-      message: expect.stringMatching(/Обновите приложение/),
+      message: expect.stringMatching(/Перезапустите приложение/),
     });
     memory.store.set(pointerKey("dev2"), "не json");
     expect((await adapter.listPointers()).invalid).toEqual([pointerKey("dev2")]);

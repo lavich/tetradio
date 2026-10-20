@@ -67,7 +67,10 @@ async function expectUpdateAsked(dev: Device, cloudBefore: Record<string, string
   const dirty = await readMeta(dev.db, META.dirty);
   const status = await dev.sync.exchange();
   expect(status.phase).toBe("error");
-  expect(status.error).toMatchObject({ kind: "format", message: expect.stringMatching(/Обновите приложение/) });
+  expect(status.error).toMatchObject({
+    kind: "format",
+    message: expect.stringMatching(/(Обновите|Перезапустите) приложение/),
+  });
   expect(await states(dev)).toEqual(before);
   expect(await readMeta(dev.db, META.dirty)).toBe(dirty);
   expect(cloudCopy()).toEqual(cloudBefore);

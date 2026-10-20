@@ -187,7 +187,7 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
         throw new SyncError(
           "format",
           meta.format > SNAPSHOT_FORMAT
-            ? "В облаке версия более нового формата. Обновите приложение."
+            ? "В облаке версия более нового формата. Перезапустите приложение."
             : "В облаке версия устаревшего формата.",
         );
       const keys = Array.from({ length: meta.parts }, (_, index) => partKey(meta.id, index));

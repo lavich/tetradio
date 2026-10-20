@@ -1,4 +1,5 @@
 import { RefreshCw } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useBridgeState } from "../../platform/platform";
 import { currentProfile } from "../../storage/profile";
@@ -13,12 +14,13 @@ export function SyncLine() {
   const profile = currentProfile();
   const status = useSyncStatus();
   const bridge = useBridgeState();
+  const { pathname } = useLocation();
   const updating = useAutoUpdateState() === "updating";
   if (profile.kind !== "telegram") return <p className={css.status}>Данные хранятся только в этом браузере</p>;
-  const line = syncLineState(status, bridge, updating);
+  const line = syncLineState(status, bridge, updating, pathname === "/");
   return (
     <>
-      <div className={css.status} data-testid="sync-status" data-phase={line.phase}>
+      <div className={css.status} role="status" data-testid="sync-status" data-phase={line.phase}>
         <span>{line.text}</span>
         {line.retry && (
           <Button

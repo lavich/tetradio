@@ -294,7 +294,7 @@ export class SyncCoordinator {
           this.newerFormat = latest.some((pointer) => pointer.format > NEWEST_FORMAT);
           throw new SyncError(
             "format",
-            "В облаке версия другого формата. Обновите приложение; локальные данные не изменены.",
+            "В облаке версия другого формата. Перезапустите приложение; локальные данные не изменены.",
           );
         }
         const remote: ConflictBranch[] = [];
@@ -349,7 +349,7 @@ export class SyncCoordinator {
       this.newerFormat = candidates.some((candidate) => candidate.format > NEWEST_FORMAT);
       throw new SyncError(
         "format",
-        "В облаке версия другого формата. Обновите приложение или повторите чтение позже; локальные данные не изменены.",
+        "В облаке версия другого формата. Перезапустите приложение или повторите чтение позже; локальные данные не изменены.",
       );
     }
     const remote: ConflictBranch[] = [];

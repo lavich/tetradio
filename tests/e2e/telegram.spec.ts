@@ -689,7 +689,7 @@ const NEWER_POINTER = {
     resolves: [],
   }),
 };
-const UPDATING_ELSEWHERE = "Обновляем приложение…";
+const UPDATING_ELSEWHERE = "Обновим приложение на экране «Сегодня»";
 const putNewerPointer = (page: import("@playwright/test").Page) =>
   page.evaluate(
     ([key, value]) =>
@@ -709,7 +709,7 @@ const mark = (page: import("@playwright/test").Page) =>
 
 test.describe("облако новее приложения: без service worker", () => {
   test.use({ serviceWorkers: "block" });
-  test("во время занятия перезагрузки и окна выбора нет; на «Сегодня» — одна перезагрузка, затем «Обновите приложение»", async ({
+  test("во время занятия перезагрузки и окна выбора нет; на «Сегодня» — одна перезагрузка, затем «Перезапустите приложение»", async ({
     page,
   }) => {
     let loads = 0;
@@ -728,7 +728,7 @@ test.describe("облако новее приложения: без service work
     await putNewerPointer(page);
     await tg(page).setHidden(true);
     await tg(page).setHidden(false);
-    await expect(page.getByTestId("sync-status")).toHaveText(UPDATING_ELSEWHERE, { timeout: 20000 });
+    await expect(page.getByRole("status").filter({ hasText: UPDATING_ELSEWHERE })).toBeVisible({ timeout: 20000 });
     await expect(page.getByTestId("sync-status").getByRole("button")).toHaveCount(0);
     expect(await page.evaluate(() => localStorage.getItem("tetradio:auto-update-build"))).toBeNull();
     await mark(page);
@@ -746,7 +746,7 @@ test.describe("облако новее приложения: без service work
     await page.waitForSelector("[data-testid=today-title]");
     await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "error", { timeout: 20000 });
-    await expect(page.getByText(/Обновите приложение/)).toBeVisible();
+    await expect(page.getByText(/Перезапустите приложение/)).toBeVisible();
     await page.getByRole("navigation").getByRole("link", { name: "Сегодня" }).click();
     await page.waitForTimeout(6000);
     expect(loads).toBe(before + 1);
@@ -821,9 +821,13 @@ test("облако новее приложения с service worker: новая
     expect(server.state.swRequests).toBeGreaterThan(requestsBefore);
     await page.waitForSelector("[data-testid=today-title]");
     await expect(page.getByRole("alertdialog")).toHaveCount(0);
+    await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
+    expect(await page.evaluate(async () => (await navigator.serviceWorker.ready).waiting === null)).toBe(true);
+    await page.waitForTimeout(4000);
+    await expect(page.getByText("Есть обновление приложения")).toHaveCount(0);
     await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
     await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "error", { timeout: 20000 });
-    await expect(page.getByText(/Обновите приложение/)).toBeVisible();
+    await expect(page.getByText(/Перезапустите приложение/)).toBeVisible();
     expect(loads).toBe(before + 1);
   } finally {
     await server.close();

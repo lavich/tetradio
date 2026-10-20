@@ -35,8 +35,8 @@ const SAFE_ROUTE = "/";
 /**
  * Тихое обновление, когда в облаке версия формата новее приложения: новая сборка применяется сама в безопасный
  * момент — на «Сегодня», без диалога и ввода, после паузы без касаний. Остальные обновления — через уведомление.
- * `updateSW` из `vite-plugin-pwa` только посылает `SKIP_WAITING`, а перезагружает лишь при `isUpdate` своего
- * обработчика `controlling`, поэтому перезагрузка по `controllerchange` — здесь.
+ * Обработчик `controlling` плагина PWA ставится только после его `onNeedRefresh` и перезагружает лишь при
+ * `isUpdate`, а ожидающую сборку мы могли застать и без него: поэтому своя перезагрузка по `controllerchange`.
  */
 export function createAutoUpdater(ports: AutoUpdatePorts) {
   let wanted = false;
@@ -132,7 +132,7 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
     request() {
       if (wanted) return;
       wanted = true;
-      if (unsupported) return setState("none");
+      if (unsupported || (withoutWorker && reloadedOnThisBuild())) return setState("none");
       setState("updating");
       if (waitingSeen || updateReady.value) {
         updateReady.value = false;
@@ -223,10 +223,16 @@ export const autoUpdate = createAutoUpdater({
     return () => clearTimeout(id);
   },
 });
+const INTERACTIONS = ["pointerdown", "keydown", "wheel", "touchmove", "scroll"];
+export function bindInteractions(
+  target: Pick<EventTarget, "addEventListener">,
+  updater: Pick<AutoUpdater, "interacted">,
+) {
+  const interacted = () => updater.interacted();
+  for (const type of INTERACTIONS) target.addEventListener(type, interacted, { capture: true, passive: true });
+}
 if (typeof window !== "undefined") {
-  const interacted = () => autoUpdate.interacted();
-  window.addEventListener("pointerdown", interacted, { capture: true, passive: true });
-  window.addEventListener("keydown", interacted, { capture: true });
+  bindInteractions(window, autoUpdate);
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") autoUpdate.visible();
   });

@@ -24,7 +24,12 @@ export interface SyncLineState {
   failed: boolean;
 }
 /** Без bridge облака нет: пока он грузится или сорвался, фаза координатора о синхронизации ничего не говорит. */
-export function syncLineState(status: SyncStatus, bridge: BridgeState, updating = false): SyncLineState {
+export function syncLineState(
+  status: SyncStatus,
+  bridge: BridgeState,
+  updating = false,
+  onToday = false,
+): SyncLineState {
   if (bridge === "slow") return { phase: "connecting", text: "Подключение к Telegram…", retry: false, failed: false };
   if (bridge === "failed")
     return {
@@ -34,7 +39,12 @@ export function syncLineState(status: SyncStatus, bridge: BridgeState, updating 
       failed: true,
     };
   if (updating && (status.error?.kind === "format" || status.error?.kind === "stale"))
-    return { phase: "updating", text: "Обновляем приложение…", retry: false, failed: false };
+    return {
+      phase: "updating",
+      text: onToday ? "Обновляем приложение…" : "Обновим приложение на экране «Сегодня»",
+      retry: false,
+      failed: false,
+    };
   const dirty = status.dirty && status.phase !== "syncing" ? " · есть неотправленные изменения" : "";
   return {
     phase: status.phase,
