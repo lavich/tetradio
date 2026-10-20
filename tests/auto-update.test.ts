@@ -187,4 +187,35 @@ describe("автообновление при облаке новее прило
     await settle(4000);
     expect(reload).toHaveBeenCalledTimes(1);
   });
+  it("установка новой сборки сорвалась — «Перезапустите приложение» вместо вечного «Обновляем…»", async () => {
+    const { updater, reload } = setup();
+    const installing = Object.assign(new EventTarget(), { state: "installing" });
+    const registration = {
+      waiting: null,
+      installing: null as typeof installing | null,
+      update: vi.fn(async () => {
+        registration.installing = installing;
+      }),
+    };
+    updater.registered(registration);
+    updater.route("/");
+    updater.request();
+    await settle(1000);
+    expect(updater.state()).toBe("updating");
+    installing.state = "redundant";
+    installing.dispatchEvent(new Event("statechange"));
+    expect(updater.state()).toBe("none");
+    await settle(10_000);
+    expect(reload).not.toHaveBeenCalled();
+  });
+  it("сборка без регистрации service worker (разработка) — сразу «Перезапустите приложение»", async () => {
+    const { updater, reload } = setup();
+    updater.unsupported();
+    updater.route("/");
+    updater.request();
+    expect(updater.state()).toBe("none");
+    await settle(10_000);
+    expect(reload).not.toHaveBeenCalled();
+  });
 });
+

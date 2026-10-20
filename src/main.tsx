@@ -37,6 +37,7 @@ function setupServiceWorker(wanted: boolean) {
       caches: typeof caches === "undefined" ? undefined : caches,
     }).catch((error) => console.warn("Service worker не снят", error));
     if (!wanted) return;
+    if (import.meta.env.DEV) autoUpdate.unsupported();
     // Регистрация не нужна первому кадру: workbox-window грузится после запуска, а не вместе с экраном.
     afterStartup(() => {
       try {

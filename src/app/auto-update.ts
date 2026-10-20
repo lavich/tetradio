@@ -4,9 +4,10 @@ import { useSyncExternalStore } from "react";
 export const updateReady = { value: false, apply: () => {} };
 export const UPDATE_TOAST = "app-update";
 
+type Installing = Pick<EventTarget, "addEventListener"> & { state: string };
 type Registration = {
   waiting: { postMessage(message: unknown): void } | null;
-  installing: unknown;
+  installing: Installing | null;
   update(): Promise<unknown>;
 };
 export interface AutoUpdatePorts {
@@ -42,6 +43,7 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
   let waitingSeen = false;
   let registration: Registration | null = null;
   let withoutWorker = ports.container === null;
+  let unsupported = false;
   let route = "";
   let lastInteraction = ports.now();
   let state: AutoUpdateState = "idle";
@@ -106,8 +108,16 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
     const current = registration;
     current.update().then(
       () => {
+        const installing = current.installing;
         if (current.waiting) becomeReady();
-        else if (!current.installing && !ready) setState("none");
+        else if (!installing) {
+          if (!ready) setState("none");
+        } else
+          // Сорвавшаяся установка не даёт `onNeedRefresh`: без этого статус навсегда остался бы «Обновляем…».
+          installing.addEventListener("statechange", () => {
+            if (installing.state === "redundant" && !ready) setState("none");
+            else if (current.waiting) becomeReady();
+          });
       },
       () => setState("none"),
     );
@@ -117,6 +127,7 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
     request() {
       if (wanted) return;
       wanted = true;
+      if (unsupported) return setState("none");
       setState("updating");
       if (waitingSeen || updateReady.value) {
         updateReady.value = false;
@@ -128,6 +139,11 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
     registered(next: Registration) {
       registration = next;
       if (wanted) search();
+    },
+    /** Сборка без регистрации service worker (разработка без `devOptions`): обновиться само нечем. */
+    unsupported() {
+      unsupported = true;
+      if (wanted && !ready) setState("none");
     },
     registerFailed() {
       if (wanted && !ready) startWithoutWorker();
