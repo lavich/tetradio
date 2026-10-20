@@ -42,7 +42,7 @@
     "@base-ui/react": "^1.9.0",
     "@fontsource-variable/literata": "^5.3.0",
     "@fontsource-variable/manrope": "^5.3.0",
-    "@sentry/react": "^10.75.0",
+    "@sentry/react": "^11.8.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.0",
     "dexie": "^4.4.6",
