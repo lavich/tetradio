@@ -96,6 +96,8 @@ export interface ModuleSource {
   /** Уроки после контрольной точки (`kind: lesson`). */
   review?: string[];
   crib?: unknown;
+  /** Опубликован частично: уроки поставляются, недостающие навыки и контрольная — в отчёте сборки. */
+  partial?: unknown;
 }
 
 /**
@@ -307,6 +309,7 @@ const MODULE_FIELDS = {
   checkpoint: true,
   review: true,
   crib: true,
+  partial: true,
 } satisfies Record<keyof ModuleSource, true>;
 const COURSE_FIELDS = {
   id: true,

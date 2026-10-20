@@ -19,6 +19,7 @@ export function buildCourses(sources: ContentRoot) {
   /** Место урока в модуле; уроки черновиков проверяются, но не поставляются. */
   const moduleOf = new Map<string, { id: string; position: number; draft: boolean }>();
   const moduleOwner = new Map<string, string>();
+  const partial = new Set<string>();
   /** Урок контрольной точки → файл модуля: точка обязана быть контрольной с оцениваемыми заданиями. */
   const checkpoints = new Map<string, string>();
   const reviews = new Map<string, string>();
@@ -56,6 +57,11 @@ export function buildCourses(sources: ContentRoot) {
         const owner = moduleOwner.get(moduleId);
         if (owner) fail(`${where}: модуль ${moduleId} уже входит в курс ${owner}`);
         moduleOwner.set(moduleId, courseId);
+        if (moduleSrc.partial !== undefined) {
+          if (moduleSrc.partial !== true || moduleSrc.status !== "published")
+            fail(`${at}.partial: только true и только у опубликованного модуля`);
+          partial.add(moduleId);
+        }
         const ownLessons = moduleSrc.lessons ?? [];
         if (!Array.isArray(ownLessons)) fail(`${at}.lessons: ожидался список`);
         const module = parseModule(
@@ -69,6 +75,7 @@ export function buildCourses(sources: ContentRoot) {
             lessons: undefined,
             checkpoint: undefined,
             review: undefined,
+            partial: undefined,
             file: undefined,
           }),
           at,
@@ -161,5 +168,16 @@ export function buildCourses(sources: ContentRoot) {
   }
   const place = (course: CatalogCourse) => course.order ?? Number.MAX_SAFE_INTEGER;
   courses.sort((a, b) => place(a) - place(b) || a.id.localeCompare(b.id));
-  return { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages, courseLanguages };
+  return {
+    courseOf,
+    courses,
+    modules,
+    moduleOf,
+    checkpoints,
+    reviews,
+    partial,
+    languages,
+    moduleLanguages,
+    courseLanguages,
+  };
 }

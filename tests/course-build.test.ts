@@ -246,6 +246,52 @@ describe("запрет публикации неполного модуля", ()
   });
 });
 
+describe("частично опубликованный модуль", () => {
+  const partial = (module: Record<string, unknown> = {}): Files => {
+    const files: Files = withLesson((b) => b.filter((x) => x.type !== "writing" && x.type !== "speaking"));
+    files["modules/m01.yaml"] = {
+      ...(files["modules/m01.yaml"] as Record<string, unknown>),
+      lessons: ["m01-1"],
+      partial: true,
+      ...module,
+    };
+    delete files["lessons/m01-test.yaml"];
+    return files;
+  };
+  it("поставляет уроки без письма, речи и контрольной и называет недостающее в отчёте", () => {
+    const content = build(partial());
+    expect(content.packages.map((p) => p.id)).toEqual(["m01-1"]);
+    expect(content.partial).toEqual([
+      { id: "m01", gaps: ["нет письменного задания", "нет устного задания", "нет контрольной (урок с kind: test)"] },
+    ]);
+    const catalog = JSON.parse(content.files.find((f) => f.path === "content/catalog.json")!.body as string);
+    expect(catalog.modules[0]).toMatchObject({ id: "m01", status: "published", lessonIds: ["m01-1"] });
+    expect(catalog.modules[0]).not.toHaveProperty("partial");
+    parseCatalog(catalog);
+  });
+  it("без поля — прежний отказ", () => {
+    const files = partial();
+    delete (files["modules/m01.yaml"] as Record<string, unknown>).partial;
+    expect(failure(files)).toContain("модуль m01 нельзя опубликовать");
+  });
+  it("у полного модуля отчёт пуст", () => {
+    expect(build(base()).partial).toEqual([]);
+  });
+  it.each([
+    ["черновик", { status: "draft" }],
+    ["false", { partial: false }],
+    ["строка", { partial: "yes" }],
+  ])("%s — ошибка с файлом модуля и полем", (_name, module) => {
+    expect(failure(partial(module))).toContain("modules/m01.yaml.partial");
+  });
+  it("урок без блоков в частичном модуле — отказ с уроком", () => {
+    const files = partial();
+    (files["modules/m01.yaml"] as { lessons: string[] }).lessons = ["m01-1", "m01-2"];
+    files["lessons/m01-2.yaml"] = { title: "Пустой", kind: "lesson", items: [{ kind: "word", id: "geia" }] };
+    expect(failure(files)).toContain("урок m01-2: нет блоков");
+  });
+});
+
 describe("задания и ключи ответов", () => {
   const exercise = (patch: Record<string, unknown>) =>
     withLesson((b) => b.map((x) => (x.id === "text-tf" ? { ...x, ...patch } : x)));
