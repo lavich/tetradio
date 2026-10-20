@@ -11,6 +11,7 @@ import { STORED_KINDS } from "./kinds";
 import { lessonCourses } from "./lesson-courses";
 import { zoned } from "./zone";
 import { readPending } from "./pending";
+import { isPaused, readPauses } from "./pauses";
 
 export { lessonCourses };
 
@@ -31,6 +32,8 @@ export interface CourseEntry {
   started: boolean;
   /** Имя в переключателе курса. */
   short?: string;
+  /** Курс на паузе с этого момента. */
+  pausedAt?: string;
 }
 
 // Курс в базе язык не хранит: он есть у записей каталога его уроков.
@@ -60,12 +63,13 @@ const readOrder = zoned(async (database: AppDatabase): Promise<string[]> => {
  * не переставляют варианты после выбора. Курс, которого нет ни в каталоге, ни на устройстве, не показывается.
  */
 export const courses = zoned(async function courses(database: AppDatabase = db): Promise<CourseEntry[]> {
-  const [rows, entries, installedIds, stored, pending] = await Promise.all([
+  const [rows, entries, installedIds, stored, pending, pauses] = await Promise.all([
     database.courses.toArray(),
     database.catalog.toArray(),
     distinctKeys(database.lessons, "courseId"),
     readOrder(database),
     readPending(database),
+    readPauses(database),
   ]);
   const installed = new Set(installedIds.map(String));
   const waiting = new Set(entries.filter((entry) => entry.id in pending).map((entry) => entry.courseId));
@@ -90,14 +94,17 @@ export const courses = zoned(async function courses(database: AppDatabase = db):
     );
   return sorted.map((course) => {
     const code = language.get(course.id) ?? (isLanguage(course.language) ? course.language : DEFAULT_LANGUAGE);
+    const pause = pauses[course.id];
+    const started = installed.has(course.id) || waiting.has(course.id);
     return {
       id: course.id,
       title: course.title,
       language: code,
       profile: profileOf(code),
       installed: installed.has(course.id),
-      started: installed.has(course.id) || waiting.has(course.id),
+      started,
       ...(course.short ? { short: course.short } : {}),
+      ...(started && isPaused(pause) ? { pausedAt: pause.pausedAt } : {}),
     };
   });
 });
@@ -155,6 +162,30 @@ export const primaryCourse = zoned(async function primaryCourse(
   const started = list.filter((course) => course.started);
   return (started.find((course) => course.id === chosen?.value) ?? started[0] ?? list[0])?.id;
 });
+/**
+ * Курс «Сегодня»: основной, если он не на паузе; иначе следующий за ним по порядку курсов, по кругу, начатый и не на
+ * паузе. `undefined` — все начатые курсы на паузе. Основной курс остальных экранов и владелец данных без курса —
+ * по-прежнему `primaryCourse()`: пауза не должна переносить их в другой курс.
+ */
+export const todayCourse = zoned(async function todayCourse(database: AppDatabase = db): Promise<string | undefined> {
+  const [list, primary] = await Promise.all([courses(database), primaryCourse(database)]);
+  const started = list.filter((course) => course.started);
+  if (!started.length) return primary;
+  const from = Math.max(
+    0,
+    started.findIndex((course) => course.id === primary),
+  );
+  for (let step = 0; step < started.length; step++) {
+    const course = started[(from + step) % started.length];
+    if (!course.pausedAt) return course.id;
+  }
+  return undefined;
+});
+/** Курс занятия «Сегодня» без курса в адресе; все курсы на паузе — основной, как раньше. */
+export const sessionDefaultCourse = zoned(
+  async (database: AppDatabase = db): Promise<string | undefined> =>
+    (await todayCourse(database)) ?? primaryCourse(database),
+);
 export const setPrimaryCourse = (courseId: string, database: AppDatabase = db) =>
   database.meta.put({ key: PRIMARY_COURSE_KEY, value: courseId }).then(() => undefined);
 

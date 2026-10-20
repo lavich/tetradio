@@ -5,16 +5,25 @@ import ui from "../../shared/ui.module.css";
 
 const GENITIVE_CARDS: [string, string, string] = ["карточки", "карточек", "карточек"];
 
+export const AFTER_PAUSE = "После паузы: сначала то, что могло забыться";
+
 export function DayNotes({ plan }: { plan: DailyPlan }) {
-  if (!plan.unavailable.length) return null;
+  if (!plan.unavailable.length && !plan.pauseDebt) return null;
   return (
     <div className="mt-4 grid gap-2.5">
-      <Note
-        testId="unavailable"
-        summary={`У ${withCount(plan.unavailable.length, GENITIVE_CARDS)} нет доступного упражнения`}
-      >
-        У них нет перевода и озвучки; дневной предел они не занимают.
-      </Note>
+      {plan.pauseDebt ? (
+        <p className={ui.note} data-testid="after-pause">
+          {AFTER_PAUSE}
+        </p>
+      ) : null}
+      {plan.unavailable.length ? (
+        <Note
+          testId="unavailable"
+          summary={`У ${withCount(plan.unavailable.length, GENITIVE_CARDS)} нет доступного упражнения`}
+        >
+          У них нет перевода и озвучки; дневной предел они не занимают.
+        </Note>
+      ) : null}
     </div>
   );
 }

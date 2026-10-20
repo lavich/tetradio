@@ -17,6 +17,7 @@ import {
   type SnapshotDescription,
 } from "./snapshot";
 import { SyncError, type SyncErrorKind } from "./transport";
+import { mergePauses, parsePauses, readPauses, samePauses, writePauses, type CoursePauses } from "../storage/pauses";
 import { keepsPointer, notePeers, parsePeers, writeFormat, type Peers } from "./peers";
 import {
   DECLARED_READS,
@@ -203,6 +204,14 @@ export class SyncCoordinator {
   }
   /** Один заход обмена: отказ пробрасывается наверх, где решается — лечить хранилище или сообщать о сбое. */
   private async cycle(): Promise<void> {
+    this.pausesRead = null;
+    try {
+      await this.cycleOnce();
+    } finally {
+      this.pausesRead = null;
+    }
+  }
+  private async cycleOnce(): Promise<void> {
     const { adapter } = this.options;
     this.newerFormat = false;
     const flags = await this.flags();
@@ -218,6 +227,7 @@ export class SyncCoordinator {
     let writes = true;
     const lock = await this.options.lock(async () => {
       this.update({ phase: "syncing", error: null, reason: null });
+      await this.exchangePauses();
       await this.decide(writes, 0);
     });
     if (lock === "busy") {
@@ -228,8 +238,56 @@ export class SyncCoordinator {
       // Без блокировки нельзя гарантировать одного писателя: читаем и применяем, но не публикуем.
       writes = false;
       this.update({ phase: "syncing", error: null, reason: null });
+      await this.exchangePauses();
       await this.decide(writes, 0);
     }
+  }
+  /**
+   * Паузы курсов идут мимо версий: свой ключ на устройство, слияние по времени изменения. Версии, конфликты и окно
+   * выбора их не касаются. Свой ключ пишется и без блокировки вкладок: его содержимое — слияние той же базы, гонка двух
+   * вкладок даёт одинаковое значение, а отставшее перепишет следующий обмен. Сбой не трогает прогресс: повтор — при
+   * следующем обмене.
+   */
+  private async exchangePauses() {
+    const { adapter, database } = this.options;
+    if (!adapter.listCoursePauses || !adapter.writeCoursePauses) return;
+    try {
+      const device = await this.deviceId();
+      const remote = await adapter.listCoursePauses();
+      const known = new Set((await database.courses.toCollection().primaryKeys()) as string[]);
+      // Записи курсов, которых нет в каталоге, отбрасываются: значение ключа ограничено 4096 символами.
+      const own = (pauses: CoursePauses) =>
+        known.size ? Object.fromEntries(Object.entries(pauses).filter(([courseId]) => known.has(courseId))) : pauses;
+      const cloud = own(mergePauses(...Object.values(remote).map(parsePauses)));
+      const merged = await database.transaction("rw", database.meta, async () => {
+        const local = await readPauses(database);
+        const next = own(mergePauses(local, cloud));
+        if (!samePauses(next, local)) await writePauses(database, next);
+        return next;
+      });
+      // Свой ключ — только когда у устройства есть то, чего нет ни в одном ключе облака: устройства, которые лишь
+      // читают паузы, ключей не заводят.
+      if (!samePauses(mergePauses(cloud, merged), cloud))
+        await adapter.writeCoursePauses(device, JSON.stringify(merged));
+      this.pausesRead = remote;
+    } catch (error) {
+      // Отказ облака при этом виден по обмену версиями; здесь — только след для отчёта о сбое.
+      lifecycle("syncPausesDeferred", { kind: error instanceof SyncError ? error.kind : "unknown" });
+    }
+  }
+  /** Ключи пауз, прочитанные в этом заходе обмена; без них уборка ключи пауз не трогает. */
+  private pausesRead: Record<string, string> | null = null;
+  /**
+   * Ключ пауз устройства без указателя убирается, когда все его записи уже есть здесь: их не потерять. Устройство,
+   * переписавшее ключ после чтения, его сохраняет — удаление сверяет значение.
+   */
+  private async dropPauseKeys(device: string, active: Set<string>) {
+    const { adapter, database } = this.options;
+    if (!this.pausesRead || !adapter.removeCoursePauses) return;
+    const local = await readPauses(database);
+    for (const [other, raw] of Object.entries(this.pausesRead))
+      if (other !== device && !active.has(other) && samePauses(mergePauses(local, parsePauses(raw)), local))
+        await adapter.removeCoursePauses(other, raw);
   }
   private fail(error: unknown) {
     const kind: SyncErrorKind | "unknown" = error instanceof SyncError ? error.kind : "unknown";
@@ -511,14 +569,17 @@ export class SyncCoordinator {
     const own = (await adapter.listGenerations()).filter((id) => id.startsWith(`${device}-`) && !protectedIds.has(id));
     if (own.length) await adapter.removeGenerations(own);
     const cutoff = now.getTime() - FOREIGN_KEEP_MS;
+    const active = new Set(pointers.map((pointer) => pointer.device));
     for (const pointer of pointers)
       if (
         pointer.device !== device &&
         dominates(applied, pointer.clock) &&
         (force || Date.parse(pointer.createdAt) < cutoff) &&
-        !keepsPointer(peers, pointer, now, NEWEST_FORMAT)
+        !keepsPointer(peers, pointer, now, NEWEST_FORMAT) &&
+        (await adapter.removeDevice(pointer))
       )
-        await adapter.removeDevice(pointer);
+        active.delete(pointer.device);
+    await this.dropPauseKeys(device, active);
     this.update({ keys: { used: (await adapter.room(0, device)).keys, max: adapter.capabilities().maxKeys } });
   }
   private async notePeers(device: string, pointers: VersionMeta[]): Promise<Peers> {

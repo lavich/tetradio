@@ -445,3 +445,297 @@ test("три курса в переключателе на 360 px — имена
   );
   expect(clipped).toBe(0);
 });
+
+async function toggleFromShelf(page: Page, course: string, action: "Приостановить курс" | "Продолжить курс") {
+  await page.goto("/app/course");
+  const switcher = page.getByRole("radiogroup", { name: "Курс" });
+  if (await switcher.count()) await switcher.getByRole("radio", { name: course, exact: true }).click();
+  await page.getByRole("button", { name: `Действия с курсом «${course}»` }).click();
+  await page.getByRole("menuitem", { name: action }).click();
+  const paused = page.getByTestId("shelf-paused");
+  if (action === "Приостановить курс") await expect(paused).toBeVisible();
+  else await expect(paused).toHaveCount(0);
+}
+const overdueEnglish = (page: Page, count: number, dueDays: number) =>
+  page.evaluate(
+    async ({ count, dueDays }) => {
+      const database = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = indexedDB.open("tetradio-mock-1");
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const items = await new Promise<{ lessonId: string; unitKey: string; ref: unknown }[]>((resolve) => {
+        const request = database.transaction("lessonItems").objectStore("lessonItems").getAll();
+        request.onsuccess = () => resolve(request.result);
+      });
+      const own = items.filter((item) => item.lessonId.startsWith("e01")).slice(0, count);
+      const day = 86400000;
+      const write = database.transaction("cardStates", "readwrite");
+      for (const item of own)
+        write.objectStore("cardStates").put({
+          unitKey: item.unitKey,
+          ref: item.ref,
+          card: {
+            due: new Date(Date.now() + dueDays * day),
+            stability: 3,
+            difficulty: 5,
+            elapsed_days: 0,
+            scheduled_days: 3,
+            learning_steps: 0,
+            reps: 2,
+            lapses: 0,
+            state: 2,
+            last_review: new Date(Date.now() - 30 * day),
+          },
+          introducedAt: new Date(Date.now() - 40 * day).toISOString(),
+          version: 1,
+        });
+      await new Promise((resolve) => (write.oncomplete = resolve));
+      database.close();
+    },
+    { count, dueDays },
+  );
+const contrastOfCovers = (page: Page) =>
+  page.evaluate(() => {
+    const rgb = (value: string) =>
+      value
+        .match(/[\d.]+/g)!
+        .slice(0, 3)
+        .map(Number);
+    const lum = ([r, g, b]: number[]) => {
+      const c = [r, g, b].map((v) => {
+        const s = v / 255;
+        return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    };
+    const ratio = (a: number[], b: number[]) => {
+      const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+      return (x + 0.05) / (y + 0.05);
+    };
+    return [...document.querySelectorAll<HTMLElement>('a[aria-label^="Модуль"]')].map((cover) => ({
+      ratio: ratio(rgb(getComputedStyle(cover).color), rgb(getComputedStyle(cover).backgroundColor)),
+      filter: getComputedStyle(cover).filter,
+    }));
+  });
+
+test("пауза с полки убирает английский с «Сегодня», возврат возвращает", async ({ page }) => {
+  await installBoth(page);
+  await toggleFromShelf(page, "Английский", "Приостановить курс");
+  const status = page.getByTestId("shelf-status");
+  await expect(status).toHaveText("Курс «Английский» на паузе. Вернуть его можно на полке или в настройках.");
+  await expect(status).toHaveClass(/sr-only/);
+  const paused = page.getByTestId("shelf-paused");
+  await expect(paused).toContainText(/^На паузе с \d+ [а-я]+/);
+  await expect(paused.getByRole("button", { name: "Продолжить курс" })).toBeFocused();
+  await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
+  await page.goto("/app/");
+  await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
+  await expect(page.getByTestId("other-course")).toHaveCount(0);
+
+  await page.goto("/app/course");
+  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский", exact: true }).click();
+  await paused.getByRole("button", { name: "Продолжить курс" }).click();
+  await expect(paused).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Действия с курсом «Английский»" })).toBeFocused();
+  await page.goto("/app/");
+  await expect(page.getByTestId("other-course").getByRole("heading", { name: "Английский" })).toBeVisible();
+});
+
+test("строка статуса паузы не переходит на полку другого курса", async ({ page }) => {
+  await installBoth(page);
+  await toggleFromShelf(page, "Английский", "Приостановить курс");
+  await expect(page.getByTestId("shelf-status")).toHaveText(/на паузе/);
+  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Греческий" }).click();
+  await expect(page.getByRole("button", { name: "Действия с курсом «Греческий»" })).toBeVisible();
+  await expect(page.getByTestId("shelf-status")).toHaveText("");
+});
+
+test("основной на паузе из настроек — на «Сегодня» основным становится следующий, после возврата — прежний", async ({
+  page,
+}) => {
+  await installBoth(page);
+  await page.goto("/app/progress/settings");
+  const courses = page.getByTestId("settings-courses");
+  const pause = courses.getByRole("button", { name: "Приостановить курс «Греческий»" });
+  await pause.click();
+  await expect(page.getByTestId("courses-status")).toHaveText("Курс «Греческий» на паузе.");
+  const resume = courses.getByRole("button", { name: "Продолжить курс «Греческий»" });
+  await expect(resume).toBeFocused();
+  await expect(courses.getByTestId("settings-course").first()).toContainText(/Греческий\s*На паузе с/);
+  const choice = page.getByRole("radiogroup", { name: "Основной курс" });
+  const greek = choice.getByRole("radio", { name: "Греческий, на паузе" });
+  await expect(greek).toHaveAttribute("aria-checked", "true");
+  await expect(greek).toHaveAttribute("aria-disabled", "true");
+  await greek.dispatchEvent("click");
+  await expect(greek).toHaveAttribute("aria-checked", "true");
+
+  await page.goto("/app/");
+  await expect(page.getByTestId("course-next")).toContainText("Дорога на работу");
+  await expect(page.getByTestId("other-course")).toHaveCount(0);
+  await page.goto("/app/words");
+  const words = page.getByRole("radiogroup", { name: "Курс" });
+  await words.getByRole("radio", { name: "Греческий" }).click();
+  await expect(words.getByRole("radio", { name: "Греческий" })).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByText("γεια").first()).toBeVisible();
+
+  await page.goto("/app/progress/settings");
+  await resume.click();
+  await expect(courses.getByRole("button", { name: "Приостановить курс «Греческий»" })).toBeFocused();
+  await page.goto("/app/");
+  await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
+});
+
+test("выбор основного из трёх курсов с пометкой «на паузе» на 360 px — имена целиком", async ({ page }) => {
+  await page.route("**/content/catalog.json", async (route) => {
+    const catalog = await (await route.fetch()).json();
+    const lesson = catalog.lessons.find((entry: { id: string }) => entry.id === "e01-1");
+    catalog.courses.push({
+      id: "english-2",
+      title: "Английский 2",
+      language: "en",
+      short: "Английский 2",
+      order: 4,
+      lessonIds: ["e02-copy"],
+    });
+    catalog.lessons.push({ ...lesson, id: "e02-copy", courseId: "english-2" });
+    await route.fulfill({ json: catalog });
+  });
+  await page.setViewportSize({ width: 360, height: 800 });
+  await installBoth(page);
+  await page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve) => {
+      const request = indexedDB.open("tetradio-mock-1");
+      request.onsuccess = () => resolve(request.result);
+    });
+    const write = database.transaction("meta", "readwrite");
+    write.objectStore("meta").put({
+      key: "sync:pendingLessons",
+      value: JSON.stringify({
+        "e02-copy": { id: "e02-copy", completed: true, updatedAt: new Date().toISOString() },
+      }),
+    });
+    await new Promise((resolve) => (write.oncomplete = resolve));
+    database.close();
+  });
+  await page.goto("/app/progress/settings");
+  await page.getByRole("button", { name: "Приостановить курс «Английский»" }).click();
+  const radios = page.getByRole("radiogroup", { name: "Основной курс" }).getByRole("radio");
+  await expect(radios).toHaveText(["Греческий", "Английский · на паузе", "Английский 2"]);
+  const clipped = await radios.evaluateAll(
+    (items) => items.filter((item) => item.scrollWidth > item.clientWidth + 1).length,
+  );
+  expect(clipped).toBe(0);
+});
+
+test("все курсы на паузе — «Все курсы на паузе», «Начать другой курс» открывает карточку неначатого", async ({
+  page,
+}) => {
+  await openModule(page, "m01");
+  await toggleFromShelf(page, "Греческий", "Приостановить курс");
+  await page.goto("/app/progress");
+  await expect(page.getByTestId("progress-paused")).toContainText(
+    /^Курс на паузе с \d+ [а-я]+\. Календарь курса не сдвигается\.$/,
+  );
+  await page.goto("/app/");
+  await expect(page.getByRole("heading", { level: 1, name: "Все курсы на паузе" })).toBeVisible();
+  await expect(page.getByTestId("paused-course")).toHaveCount(1);
+  await expect(page.getByTestId("paused-course")).toContainText("На паузе с");
+  await page.reload();
+  await expect(page.getByRole("heading", { level: 1, name: "Все курсы на паузе" })).toBeVisible();
+  await page.getByRole("button", { name: "Начать другой курс" }).click();
+  await expect(page).toHaveURL(/\/course$/);
+  await expect(page.getByTestId("course-offer").getByRole("button", { name: "Учить курс «Английский»" })).toBeVisible();
+
+  await page.goto("/app/");
+  await page.getByRole("button", { name: /^Продолжить курс/ }).click();
+  await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
+  await expect(page.getByTestId("today-title")).toBeFocused();
+});
+
+test("после паузы — полное число и строка «сначала то, что могло забыться», пока долг не повторён", async ({
+  page,
+}) => {
+  await installBoth(page);
+  await startLesson(page, "/app/course/e01/e01-1", "Верно или неверно?", "False");
+  await overdueEnglish(page, 3, -20);
+  await toggleFromShelf(page, "Английский", "Приостановить курс");
+  await page.goto("/app/");
+  await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
+  await expect(page.getByTestId("other-course")).toHaveCount(0);
+  await toggleFromShelf(page, "Английский", "Продолжить курс");
+  await page.goto("/app/");
+  const other = page.getByTestId("other-course");
+  await expect(other.getByRole("button", { name: "Повторить 5" })).toBeVisible();
+  await expect(other.getByTestId("after-pause")).toHaveText("После паузы: сначала то, что могло забыться");
+  await overdueEnglish(page, 3, 3);
+  await page.reload();
+  await expect(other.getByRole("button", { name: "Повторить 2" })).toBeVisible();
+  await expect(other.getByTestId("after-pause")).toHaveCount(0);
+});
+
+test("меню «⋯»: клавиатура, щелчок вне, Tab, 44 px, полка на паузе на 360 px с читаемыми обложками", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await installBoth(page);
+  await page.goto("/app/course");
+  await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
+  const before = await contrastOfCovers(page);
+  expect(before.length).toBeGreaterThan(0);
+  const trigger = page.getByRole("button", { name: "Действия с курсом «Английский»" });
+  const box = await trigger.boundingBox();
+  expect(box!.width).toBeGreaterThanOrEqual(44);
+  expect(box!.height).toBeGreaterThanOrEqual(44);
+  const item = page.getByRole("menuitem", { name: "Приостановить курс" });
+  await trigger.click();
+  await expect(item).toBeVisible();
+  await page.getByRole("heading", { name: "Полка" }).click();
+  await expect(item).toHaveCount(0);
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+  await expect(item).toBeFocused();
+  await expect(trigger).toHaveAttribute("aria-controls", (await page.getByRole("menu").getAttribute("id"))!);
+  await page.keyboard.press("Tab");
+  await expect(item).toHaveCount(0);
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Escape");
+  await expect(item).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Enter");
+  const resume = page.getByTestId("shelf-paused").getByRole("button", { name: "Продолжить курс" });
+  await expect(resume).toBeFocused();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  const after = await contrastOfCovers(page);
+  for (const [index, cover] of after.entries()) {
+    expect(cover.filter).toBe("none");
+    expect(cover.ratio).toBeGreaterThanOrEqual(Math.min(4.5, before[index].ratio));
+  }
+  const text = await page
+    .getByTestId("shelf-paused")
+    .locator("p")
+    .evaluate((node) => {
+      const rgb = (value: string) =>
+        value
+          .match(/[\d.]+/g)!
+          .slice(0, 3)
+          .map(Number);
+      const lum = ([r, g, b]: number[]) =>
+        [r, g, b]
+          .map((v) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4))
+          .reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
+      let background: Element | null = node;
+      while (background && getComputedStyle(background).backgroundColor === "rgba(0, 0, 0, 0)")
+        background = background.parentElement;
+      const [x, y] = [
+        lum(rgb(getComputedStyle(node).color)),
+        lum(rgb(getComputedStyle(background ?? document.body).backgroundColor)),
+      ].sort((p, q) => q - p);
+      return (x + 0.05) / (y + 0.05);
+    });
+  expect(text).toBeGreaterThanOrEqual(4.5);
+  await page.keyboard.press("Enter");
+  await expect(trigger).toBeFocused();
+});

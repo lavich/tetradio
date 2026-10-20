@@ -52,3 +52,9 @@
     transition: none;
   }
 }
+.option[aria-disabled="true"] {
+  cursor: default;
+}
+.optionNote {
+  font-weight: 500;
+}

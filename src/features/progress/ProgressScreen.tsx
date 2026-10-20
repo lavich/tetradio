@@ -8,12 +8,12 @@ import { useNow } from "../../shared/clock";
 import { CourseSwitch } from "../../shared/CourseSwitch";
 import { cx } from "../../shared/cx";
 import { useCourseProfile } from "../../shared/language";
-import { dayMonth, withCount } from "../../shared/format";
+import { dayMonth, pausedSince, withCount } from "../../shared/format";
 import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { deviceTimezone, studyDay } from "../../domain/time";
-import { cardsInCourse, currentCourse } from "../../storage/courses";
+import { cardsInCourse, courses, currentCourse } from "../../storage/courses";
 import { courseProgress, type CourseProgress } from "../../storage/progress";
 import { useStats } from "../../shared/store";
 import { dictionary, type DictionaryLesson } from "../../storage/dictionary";
@@ -31,7 +31,13 @@ export function ProgressScreen() {
   const course = useLiveQuery(async () => (await currentCourse()) ?? null, []);
   const courseId = course ?? undefined;
   const data = useLiveQuery(
-    () => (course === undefined ? undefined : courseProgress(now, deviceTimezone(), courseId)),
+    async () =>
+      course === undefined
+        ? undefined
+        : {
+            ...(await courseProgress(now, deviceTimezone(), courseId)),
+            pausedAt: courseId ? (await courses()).find((entry) => entry.id === courseId)?.pausedAt : undefined,
+          },
     [studyDay(now, deviceTimezone()), deviceTimezone(), course],
   );
   const words = useLiveQuery(() => (course === undefined ? undefined : dictionary(courseId)), [course]);
@@ -55,7 +61,7 @@ export function ProgressScreen() {
       <h1 className={nb.title}>Прогресс</h1>
     </>
   );
-  const path = <Path data={data} />;
+  const path = <Path data={data} pausedAt={data.pausedAt} />;
   const ready = <Skills skills={data.skills} complete={data.complete} passShare={data.passShare} />;
   const cards = (
     <Cards
@@ -224,7 +230,7 @@ function Cards({
   );
 }
 
-function Path({ data }: { data: CourseProgress }) {
+function Path({ data, pausedAt }: { data: CourseProgress; pausedAt?: string }) {
   const { pace, views, current, calendar } = data;
   return (
     <section aria-labelledby="path">
@@ -249,6 +255,11 @@ function Path({ data }: { data: CourseProgress }) {
           );
         })}
       </div>
+      {pausedAt && (
+        <p className={css.plan} data-testid="progress-paused">
+          Курс на паузе с {pausedSince(pausedAt)}. Календарь курса не сдвигается.
+        </p>
+      )}
       <Pace pace={pace} planned={!!calendar} />
     </section>
   );

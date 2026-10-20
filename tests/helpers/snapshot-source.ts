@@ -1,4 +1,5 @@
 import { LESSON_MATES_RADIUS, programmeOrder, type CardFacts, type SessionSource } from "../../src/domain/learning";
+import type { PlanPause } from "../../src/domain/plan";
 import { unitKey, wordKeyOf, wordRef } from "../../src/domain/refs";
 import { DEFAULT_LANGUAGE, type Language } from "../../src/domain/language";
 import { byTime, emptyStats, foldStats, summarizeEvents } from "../../src/domain/skills";
@@ -41,6 +42,8 @@ export interface Snapshot {
   timezone?: string;
   /** Язык курса по id; без записи — язык по умолчанию. */
   languages?: Record<string, Language>;
+  /** Паузы курсов по id. */
+  pauses?: Record<string, PlanPause>;
 }
 
 export const itemOfLink = (link: Snapshot["links"][number]): LessonItem => ({
@@ -93,6 +96,7 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
   };
   return {
     timezone: () => data.timezone ?? "Asia/Nicosia",
+    pauseOf: async (courseId) => data.pauses?.[courseId],
     studiedLessons: async (courseId) =>
       programmeOrder(
         data.lessons.filter(

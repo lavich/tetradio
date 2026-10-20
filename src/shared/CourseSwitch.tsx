@@ -9,6 +9,8 @@ interface Option {
   title: string;
   /** Курс не начат: «+» перед именем, читалка слышит «не начат». */
   unstarted?: boolean;
+  /** Вариант виден, но не выбирается: щелчок и стрелки его пропускают. Подпись видна рядом с именем. */
+  disabled?: string;
 }
 
 /** Выбор одного курса: стрелки двигают выбор, Tab входит только в выбранный вариант. */
@@ -36,7 +38,11 @@ export function Segmented({
       event.key === "Home" ? 0 : event.key === "End" ? options.length - 1 : step ? index + step : undefined;
     if (target === undefined) return;
     event.preventDefault();
-    const next = (target + options.length) % options.length;
+    const direction = step ?? (event.key === "Home" ? 1 : -1);
+    let next = (target + options.length) % options.length;
+    for (let tries = 0; options[next].disabled && tries < options.length; tries++)
+      next = (next + direction + options.length) % options.length;
+    if (options[next].disabled) return;
     buttons.current[next]?.focus();
     onChange(options[next].id);
   };
@@ -53,12 +59,20 @@ export function Segmented({
           aria-checked={index === selected}
           tabIndex={index === selected ? 0 : -1}
           className={cx(css.option, index === selected && css.selected)}
-          onClick={() => onChange(option.id)}
+          onClick={() => !option.disabled && onChange(option.id)}
           onKeyDown={(event) => move(event, index)}
-          aria-label={option.unstarted ? `${option.title}, не начат` : undefined}
+          aria-disabled={option.disabled ? true : undefined}
+          aria-label={
+            option.unstarted
+              ? `${option.title}, не начат`
+              : option.disabled
+                ? `${option.title}, ${option.disabled}`
+                : undefined
+          }
         >
           {option.unstarted ? <span aria-hidden="true">+ </span> : null}
           {option.title}
+          {option.disabled ? <span className={css.optionNote}> · {option.disabled}</span> : null}
         </button>
       ))}
     </div>

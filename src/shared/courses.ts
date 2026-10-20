@@ -15,6 +15,7 @@ import {
   setCurrentCourse,
   setPrimaryCourse,
   shelfCourse,
+  todayCourse,
   type CourseEntry,
 } from "../storage/courses";
 
@@ -30,6 +31,13 @@ export const useShelfCourse = (): string | undefined => useLiveQuery(() => shelf
 export const usePrimaryCourse = (): string | null | undefined =>
   useLiveQuery(async () => (await primaryCourse()) ?? null, []);
 export { setPrimaryCourse };
+
+/** Курс «Сегодня» — основной или следующий не на паузе: `null` — все начатые курсы на паузе или курсов нет. */
+export const useTodayCourse = (): string | null | undefined =>
+  useLiveQuery(async () => (await todayCourse()) ?? null, []);
+/** Начатые курсы, в том числе ещё не скачанные. */
+export const useStartedCourses = (): CourseEntry[] | undefined =>
+  useLiveQuery(async () => (await courses()).filter((course) => course.started), []);
 
 /** Курс «Слов», «Чтения» и «Прогресса» и смена выбора; выбор переживает перезапуск, неначатый курс выбирает только «Курс». */
 export const useCurrentCourse = (): [string | undefined, (courseId: string) => Promise<void>] => [

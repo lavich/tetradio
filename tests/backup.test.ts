@@ -16,6 +16,8 @@ import { installCompleted } from "./helpers/content";
 import { kvAdapter } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport } from "../src/sync/transport";
+import { readPauses } from "../src/storage/pauses";
+import { pauseCourse } from "../src/storage/pause-actions";
 
 const NAME = "tetradio-backup";
 /** Тестовая база называется иначе, а копия проверяется по имени базы приложения. */
@@ -55,6 +57,18 @@ describe("полная копия", () => {
     expect(await fresh.lessonItems.count()).toBe(itemCountOf("mech-2"));
     expect((await fresh.packages.get("mech-2"))!.version).toBe(packageOf("mech-2").version);
     expect(await fresh.catalog.count()).toBe(0);
+    fresh.close();
+    await fresh.delete();
+  });
+  it("копия переносит паузы курсов", async () => {
+    await installLessons(db, ["mech-2"]);
+    await pauseCourse("english", new Date("2026-10-12T09:00:00Z"), db);
+    const copy = asLexi(JSON.parse(await (await exportFull(db)).text()));
+    const fresh = new AppDatabase("tetradio-restore-pauses");
+    await fresh.delete();
+    await fresh.open();
+    await restoreBackup(copy, fresh);
+    expect(await readPauses(fresh)).toEqual(await readPauses(db));
     fresh.close();
     await fresh.delete();
   });
