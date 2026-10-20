@@ -2,7 +2,7 @@ import { Screen } from "../../app/Screen";
 import { useCourses, useCourseSession, usePrimaryCourse } from "../../shared/courses";
 import { useInstalledCount, usePlan } from "../../shared/store";
 import { CourseToday } from "./CourseToday";
-import { CourseStart } from "./FirstRun";
+import { CourseStart, OFFLINE_HINT } from "./FirstRun";
 import { OtherCourse } from "./OtherCourse";
 
 export function TodayScreen() {
@@ -15,8 +15,12 @@ export function TodayScreen() {
   if (installed === 0)
     return (
       <Screen>
-        <h1 data-testid="today-title">Начните с курса</h1>
-        <CourseStart />
+        <h1 data-testid="today-title">Выберите курс</h1>
+        <p className="mb-1 text-muted-foreground">
+          Курсы языков с уроками по программе и ежедневным повторением карточек
+        </p>
+        <p className="mt-0 mb-6 text-sm text-muted-foreground">{OFFLINE_HINT}</p>
+        <CourseStart hint={false} />
       </Screen>
     );
   if (!plan || installed === undefined || unfinished === undefined)

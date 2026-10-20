@@ -1,4 +1,8 @@
 title: Греческий
+level: A0 → A2
+goal: С нуля до экзамена ΚΕΓ A2
+short: Греческий
+order: 1
 modules:
   - m01
   - m02

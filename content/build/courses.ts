@@ -1,5 +1,12 @@
 import { type CatalogCourse } from "../../src/content/schema.ts";
-import { parseCalendar, parseExam, parseModule, parsePassShare, type CatalogModule } from "../../src/content/course.ts";
+import {
+  parseCalendar,
+  parseCourseChoice,
+  parseExam,
+  parseModule,
+  parsePassShare,
+  type CatalogModule,
+} from "../../src/content/course.ts";
 import type { Language } from "../../src/domain/language.ts";
 import { fail, LANGUAGE, languageOf, nfc, text } from "./common.ts";
 import type { ContentRoot, CourseSource } from "./sources.ts";
@@ -121,6 +128,7 @@ export function buildCourses(sources: ContentRoot) {
         ...(src.calendar !== undefined
           ? { calendar: parseCalendar(nfc(src.calendar), `${where}.calendar`, [...numbers.keys()]) }
           : {}),
+        ...parseCourseChoice(src as unknown as Record<string, unknown>, where),
       });
       continue;
     }
@@ -137,10 +145,21 @@ export function buildCourses(sources: ContentRoot) {
       title,
       language: courseLanguage(courseId, where, src, src.lessons!),
       lessonIds: [...src.lessons!],
+      ...parseCourseChoice(src as unknown as Record<string, unknown>, where),
     };
     const source = text(src.source, `${where}.source`, false);
     if (source) course.source = source;
     courses.push(course);
   }
+  const places = new Map<number, string>();
+  for (const [courseId, src] of sources.courses) {
+    const order = courses.find((course) => course.id === courseId)?.order;
+    if (order === undefined) continue;
+    const twin = places.get(order);
+    if (twin) fail(`courses/${twin}.order и courses/${src.file}.order: место ${order} у двух курсов`);
+    places.set(order, src.file);
+  }
+  const place = (course: CatalogCourse) => course.order ?? Number.MAX_SAFE_INTEGER;
+  courses.sort((a, b) => place(a) - place(b) || a.id.localeCompare(b.id));
   return { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages, courseLanguages };
 }

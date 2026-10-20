@@ -65,7 +65,11 @@ export const useCounts = () =>
     return { words, cards: words + phrases, answers };
   }, []);
 
-export const useCatalog = () => useLiveQuery(async () => ({ entries: await db.catalog.toArray() }), []);
+export const useCatalog = () =>
+  useLiveQuery(async () => {
+    const [entries, modules] = await Promise.all([db.catalog.toArray(), db.modules.toArray()]);
+    return { entries, modules };
+  }, []);
 export const useCatalogPhase = () => useSyncExternalStore(subscribeCatalog, catalogPhase);
 /** Урок каталога, из которого слово: `undefined` — ещё читается, `null` — слова в каталоге нет. */
 export const useWordLesson = (id: string | undefined) =>

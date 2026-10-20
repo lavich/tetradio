@@ -19,6 +19,8 @@ export const CARDS: [string, string, string] = ["карточка", "карто�
 export const PHRASES: [string, string, string] = ["фраза", "фразы", "фраз"];
 export const LESSONS: [string, string, string] = ["занятия", "занятий", "занятий"];
 export const LESSONS_COUNT: [string, string, string] = ["урок", "урока", "уроков"];
+export const MODULES_COUNT: [string, string, string] = ["модуль", "модуля", "модулей"];
+export const READY: [string, string, string] = ["готов", "готовы", "готово"];
 const day = (value: string) => new Date(`${value}T12:00:00Z`);
 export const weekday = (value: string) => day(value).toLocaleDateString("ru-RU", { weekday: "long", timeZone: "UTC" });
 export const dativeWeekday = (value: string) => DATIVE[weekday(value)] ?? weekday(value);

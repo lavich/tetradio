@@ -60,6 +60,10 @@ export interface CourseSource {
   exam?: unknown;
   passShare?: unknown;
   calendar?: unknown;
+  level?: unknown;
+  goal?: unknown;
+  short?: unknown;
+  order?: unknown;
 }
 /** Текст для беглого чтения: `readings/<курс>/<id>.yaml`; открывается после урока `after`. */
 export interface ReadingSource {
@@ -314,6 +318,10 @@ const COURSE_FIELDS = {
   exam: true,
   passShare: true,
   calendar: true,
+  level: true,
+  goal: true,
+  short: true,
+  order: true,
 } satisfies Record<keyof CourseSource, true>;
 
 const USER_OWNED =

@@ -55,7 +55,7 @@ describe("курс в продукте", () => {
   });
   it("контента Tavelori в продукте нет", () => {
     expect(content.words.some((word) => /^w\d{2}-\d{2}$/.test(word.id))).toBe(false);
-    expect(catalog.courses.map((c) => c.id)).toEqual(["english-it", "greek-a2"]);
+    expect(catalog.courses.map((c) => c.id)).toEqual(["greek-a2", "english-it"]);
   });
   it("английский для IT: 16 модулей программы без календаря, опубликованы модули с первого", () => {
     const english = catalog.courses.find((course) => course.id === "english-it")!;

@@ -508,6 +508,73 @@ describe("календарь курса", () => {
   });
 });
 
+describe("данные курса для выбора", () => {
+  const withCourse = (fields: Record<string, unknown>): Files => {
+    const files = base();
+    files["courses/greek-a2.yaml"] = { ...(files["courses/greek-a2.yaml"] as Record<string, unknown>), ...fields };
+    return files;
+  };
+  const englishCourse = (fields: Record<string, unknown>): Files => ({
+    "courses/english-it.yaml": { title: "Английский", language: "en", modules: ["e01"], ...fields },
+    "modules/e01.yaml": {
+      number: 1,
+      title: "Work",
+      subtitle: "Работа",
+      status: "draft",
+      goal: "Рассказать",
+      sessions: 3,
+    },
+  });
+  const catalogOf = (files: Files) =>
+    parseCatalog(JSON.parse(build(files).files.find((f) => f.path === "content/catalog.json")!.body as string));
+
+  it("уровень, цель, короткое имя и место едут в каталоге", () => {
+    const fields = { level: "A0 → A2", goal: "С нуля до экзамена", short: "Греческий", order: 1 };
+    expect(catalogOf(withCourse(fields)).courses[0]).toMatchObject(fields);
+    expect(catalogOf(withCourse({ level: "B1 → B1+" })).courses[0].level).toBe("B1 → B1+");
+  });
+  it("без полей курса в каталоге их нет", () => {
+    const course = catalogOf(base()).courses[0];
+    for (const field of ["level", "goal", "short", "order"]) expect(course).not.toHaveProperty(field);
+  });
+  it("курсы в каталоге — по месту, без места — после, по id", () => {
+    const ordered = { ...withCourse({ order: 1 }), ...englishCourse({ order: 2 }) };
+    expect(catalogOf(ordered).courses.map((course) => course.id)).toEqual(["greek-a2", "english-it"]);
+    const unordered = { ...withCourse({ order: 1 }), ...englishCourse({}) };
+    expect(catalogOf(unordered).courses.map((course) => course.id)).toEqual(["greek-a2", "english-it"]);
+    expect(catalogOf({ ...base(), ...englishCourse({}) }).courses.map((course) => course.id)).toEqual([
+      "english-it",
+      "greek-a2",
+    ]);
+  });
+  it("неверные поля отклоняются с файлом и именем поля", () => {
+    for (const level of ["B3", "A2 -> B1", "A2 → ", ""])
+      expect(failure(withCourse({ level }))).toMatch(/courses\/greek-a2\.yaml\.level/);
+    expect(failure(withCourse({ goal: "Первая строка\nвторая" }))).toMatch(/courses\/greek-a2\.yaml\.goal/);
+    expect(failure(withCourse({ goal: "а".repeat(91) }))).toMatch(/courses\/greek-a2\.yaml\.goal/);
+    expect(() => build(withCourse({ goal: "а".repeat(90) }))).not.toThrow();
+    expect(failure(withCourse({ short: "Английский для IT" }))).toMatch(/courses\/greek-a2\.yaml\.short/);
+    for (const order of [0, 1.5, "1"]) expect(failure(withCourse({ order }))).toMatch(/courses\/greek-a2\.yaml\.order/);
+  });
+  it("одно место у двух курсов — ошибка с обоими файлами", () => {
+    const message = failure({ ...withCourse({ order: 1 }), ...englishCourse({ order: 1 }) });
+    expect(message).toContain("order");
+    expect(message).toContain("courses/greek-a2.yaml");
+    expect(message).toContain("courses/english-it.yaml");
+  });
+  it("клиент: неверное поле выбора курса отбрасывается, каталог читается; неизвестное поле пропускается", () => {
+    const catalog = JSON.parse(build(base()).files.find((f) => f.path === "content/catalog.json")!.body as string);
+    const course = parseCatalog({
+      ...catalog,
+      courses: [
+        { ...catalog.courses[0], order: 0, level: "Pre-A1 → A1", short: "а".repeat(20), goal: "Цель", future: 1 },
+      ],
+    }).courses[0];
+    for (const field of ["order", "level", "short", "future"]) expect(course).not.toHaveProperty(field);
+    expect(course.goal).toBe("Цель");
+  });
+});
+
 describe("лишние поля", () => {
   it("хвост реплики, отрезанный запятой в YAML, — ошибка сборки, а не потерянный текст", () => {
     const split = withLesson((b) =>

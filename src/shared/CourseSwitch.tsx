@@ -1,11 +1,14 @@
 import { useRef, type KeyboardEvent } from "react";
-import { useCourses, useCurrentCourse } from "./courses";
+import type { CourseEntry } from "../storage/courses";
+import { useAllCourses, useCourses, useCurrentCourse, useShelfCourse } from "./courses";
 import { cx } from "./cx";
 import css from "./course-switch.module.css";
 
 interface Option {
   id: string;
   title: string;
+  /** Курс не начат: «+» перед именем, читалка слышит «не начат». */
+  unstarted?: boolean;
 }
 
 /** Выбор одного курса: стрелки двигают выбор, Tab входит только в выбранный вариант. */
@@ -52,7 +55,9 @@ export function Segmented({
           className={cx(css.option, index === selected && css.selected)}
           onClick={() => onChange(option.id)}
           onKeyDown={(event) => move(event, index)}
+          aria-label={option.unstarted ? `${option.title}, не начат` : undefined}
         >
+          {option.unstarted ? <span aria-hidden="true">+ </span> : null}
           {option.title}
         </button>
       ))}
@@ -60,17 +65,41 @@ export function Segmented({
   );
 }
 
-/** Переключатель курса над заголовком «Курса», «Слов» и «Прогресса»; выбор общий для трёх экранов. Один курс — ничего. */
-export function CourseSwitch() {
-  const courses = useCourses();
+/**
+ * Переключатель курса над заголовком «Курса», «Слов», «Чтения» и «Прогресса». На «Курсе» в нём и неначатые курсы
+ * каталога: их начинают с полки. На остальных экранах — только начатые; один курс — ничего.
+ */
+export function CourseSwitch({ shelf = false }: { shelf?: boolean }) {
+  return shelf ? <ShelfSwitch /> : <StartedSwitch />;
+}
+function StartedSwitch() {
   const [current, choose] = useCurrentCourse();
+  return <Switch courses={useCourses()} value={current} choose={choose} />;
+}
+function ShelfSwitch() {
+  const [, choose] = useCurrentCourse();
+  return <Switch courses={useAllCourses()} value={useShelfCourse()} choose={choose} />;
+}
+function Switch({
+  courses,
+  value,
+  choose,
+}: {
+  courses: CourseEntry[] | undefined;
+  value: string | undefined;
+  choose: (id: string) => Promise<void>;
+}) {
   if (!courses || courses.length < 2) return null;
   return (
     <Segmented
       label="Курс"
       testId="course-switch"
-      options={courses}
-      value={current}
+      options={courses.map((course) => ({
+        id: course.id,
+        title: course.short ?? course.title,
+        unstarted: !course.started,
+      }))}
+      value={value}
       onChange={(id) => void choose(id)}
     />
   );

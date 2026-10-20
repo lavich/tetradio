@@ -173,6 +173,53 @@ export function parsePassShare(input: unknown, path: string): number {
   return input;
 }
 
+/** Поля курса, по которым его выбирают: карточка курса, переключатель и порядок курсов. */
+export interface CourseChoice {
+  /** Ступени: «A0 → A2», «B1 → B1+». */
+  level?: string;
+  goal?: string;
+  /** Имя в переключателе курса. */
+  short?: string;
+  /** Место среди курсов: стартовый экран, переключатель и основной курс, пока ничего не начато. */
+  order?: number;
+}
+const LEVEL = /^(A0|A1|A2|B1|B2|C1|C2)\+?( → (A1|A2|B1|B2|C1|C2)\+?)?$/;
+export const GOAL_MAX = 90;
+export const SHORT_MAX = 14;
+const line = (value: unknown, path: string, max: number) => {
+  const text = str(value, path).normalize("NFC");
+  if (/[\r\n]/.test(text)) throw new ContentError(`${path}: одна строка без перевода строки`);
+  if (text.length > max) throw new ContentError(`${path}: не длиннее ${max} символов`);
+  return text;
+};
+/**
+ * Поля выбора курса из каталога: только для показа, поэтому неверное поле отбрасывается, а не валит каталог —
+ * клиент, которому новая сборка прислала незнакомую форму, продолжает получать обновления каталога.
+ */
+export function readCourseChoice(input: Record<string, unknown>): CourseChoice {
+  const choice: CourseChoice = {};
+  for (const field of ["level", "goal", "short", "order"] as const)
+    try {
+      Object.assign(choice, parseCourseChoice({ [field]: input[field] }, "каталог"));
+    } catch (error) {
+      if (!(error instanceof ContentError)) throw error;
+    }
+  return choice;
+}
+/** Строгая проверка в сборке: ошибка называет файл курса и поле. */
+export function parseCourseChoice(input: Record<string, unknown>, path: string): CourseChoice {
+  const choice: CourseChoice = {};
+  if (input.level !== undefined) {
+    const level = str(input.level, `${path}.level`).normalize("NFC");
+    if (!LEVEL.test(level)) throw new ContentError(`${path}.level: ожидались уровни вида «A0 → A2» или «B1»`);
+    choice.level = level;
+  }
+  if (input.goal !== undefined) choice.goal = line(input.goal, `${path}.goal`, GOAL_MAX);
+  if (input.short !== undefined) choice.short = line(input.short, `${path}.short`, SHORT_MAX);
+  if (input.order !== undefined) choice.order = int(input.order, `${path}.order`, 1);
+  return choice;
+}
+
 export interface Checkpoint {
   label: string;
   title: string;

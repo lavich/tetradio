@@ -10,22 +10,28 @@ import {
   courses,
   currentCourse,
   primaryCourse,
+  followCourse,
   profileOfCourse,
   setCurrentCourse,
   setPrimaryCourse,
+  shelfCourse,
   type CourseEntry,
 } from "../storage/courses";
 
 /** Установленные курсы по порядку установки. `undefined` — ещё читается. */
 export const useCourses = (): CourseEntry[] | undefined =>
   useLiveQuery(async () => (await courses()).filter((course) => course.installed), []);
+/** Начатые курсы, затем неначатые курсы каталога с уроками — варианты переключателя «Курса». */
+export const useAllCourses = (): CourseEntry[] | undefined => useLiveQuery(() => courses(), []);
+/** Курс «Курса»: бывает и неначатым. */
+export const useShelfCourse = (): string | undefined => useLiveQuery(() => shelfCourse(), []);
 
 /** Основной курс: `null` — курсов в каталоге нет, `undefined` — ещё читается. */
 export const usePrimaryCourse = (): string | null | undefined =>
   useLiveQuery(async () => (await primaryCourse()) ?? null, []);
 export { setPrimaryCourse };
 
-/** Курс «Курса», «Слов» и «Прогресса» и его смена; выбор общий для трёх экранов и переживает перезапуск. */
+/** Курс «Слов», «Чтения» и «Прогресса» и смена выбора; выбор переживает перезапуск, неначатый курс выбирает только «Курс». */
 export const useCurrentCourse = (): [string | undefined, (courseId: string) => Promise<void>] => [
   useLiveQuery(() => currentCourse(), []),
   setCurrentCourse,
@@ -39,9 +45,7 @@ export const useCourseSession = (courseId: string | undefined): Session | null |
 export function useFollowCourse(courseId: string | undefined) {
   useEffect(() => {
     if (!courseId) return;
-    void currentCourse()
-      .then((current) => (current === courseId ? undefined : setCurrentCourse(courseId)))
-      .catch((error: unknown) => void reportError(error, { category: "storage" }));
+    void followCourse(courseId).catch((error: unknown) => void reportError(error, { category: "storage" }));
   }, [courseId]);
 }
 

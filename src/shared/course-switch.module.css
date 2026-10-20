@@ -5,6 +5,9 @@
   grid-auto-columns: 1fr;
   width: fit-content;
   max-width: 100%;
+  /* Три курса и больше на узком экране не помещаются: лента прокручивается, имена не обрезаются. */
+  overflow-x: auto;
+  scrollbar-width: none;
   margin: 0 0 12px;
   padding: 3px;
   gap: 2px;
@@ -13,7 +16,7 @@
   background: var(--muted);
 }
 .option {
-  min-width: 0;
+  min-width: max-content;
   min-height: 44px;
   padding: 0 18px;
   border: 1px solid transparent;
@@ -42,7 +45,7 @@
 }
 .option:focus-visible {
   outline: 3px solid var(--primary);
-  outline-offset: 2px;
+  outline-offset: -3px;
 }
 @media (prefers-reduced-motion: reduce) {
   .option {

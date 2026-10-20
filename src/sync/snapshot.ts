@@ -15,6 +15,7 @@ import {
 } from "../domain/types";
 import { CONTENT_TABLES, STORED_KINDS } from "../storage/kinds";
 import { blockKey } from "../storage/course";
+import { PENDING_LESSONS_KEY, readPending, type PendingLessons } from "../storage/pending";
 import type { BlockProgress } from "../domain/types";
 import {
   SNAPSHOT_FORMAT,
@@ -34,7 +35,7 @@ export const META = {
   dirty: "sync:dirty",
   lastOk: "sync:lastOk",
   restored: "sync:restored",
-  pendingLessons: "sync:pendingLessons",
+  pendingLessons: PENDING_LESSONS_KEY,
   peers: "sync:peers",
 } as const;
 export const KEEP_DAYS = 14;
@@ -250,25 +251,7 @@ export const clearDirty = zoned(async function clearDirty(
   return true;
 });
 
-export type PendingLessons = Record<string, CompactLesson>;
-/** Отложенные до обновления записи хранят урок формата 3 — со статусом вместо завершения. */
-const parsePending = (raw: string | null): PendingLessons => {
-  try {
-    const parsed = JSON.parse(raw ?? "{}") as Record<string, CompactLesson & { status?: string }>;
-    if (!parsed || typeof parsed !== "object") return {};
-    return Object.fromEntries(
-      Object.entries(parsed).map(([id, lesson]) => [
-        id,
-        { id: lesson.id, completed: lesson.completed ?? lesson.status === "completed", updatedAt: lesson.updatedAt },
-      ]),
-    );
-  } catch {
-    return {};
-  }
-};
-export const readPending = zoned(async (database: AppDatabase): Promise<PendingLessons> =>
-  parsePending(await readMeta(database, META.pendingLessons)),
-);
+export { readPending, type PendingLessons } from "../storage/pending";
 
 /**
  * Применение целой версии одной транзакцией: настройки, предел курса, завершение уроков, блоки курса,
