@@ -63,6 +63,8 @@ export interface SyncAdapter {
    */
   listCoursePauses?(): Promise<Record<string, string>>;
   writeCoursePauses?(device: string, value: string): Promise<void>;
+  /** Удаляет ключ пауз устройства, если он всё ещё `expected`; `false` — устройство успело его переписать. */
+  removeCoursePauses?(device: string, expected: string): Promise<boolean>;
 }
 export const PART_SIZE = 4000;
 const WRITABLE_FORMATS = [5, 6];
@@ -309,9 +311,6 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       // Указатель первым: без него части не выглядят версией, даже если удаление частей оборвётся.
       await transport.removeItems([name]);
       if (parts.length) await transport.removeItems(parts);
-      // Паузы удалённого устройства уже слиты в записи других: его ключ больше не нужен.
-      const pauses = pausesKey(meta.device);
-      if ((await transport.getKeys()).includes(pauses)) await transport.removeItems([pauses]);
       return true;
     },
     async listCoursePauses() {
@@ -332,6 +331,13 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       if (!keys.includes(name) && keys.length >= limits.maxKeys)
         throw new SyncError("limit", "В облаке нет места для пауз курсов.");
       await transport.setItem(name, value);
+    },
+    async removeCoursePauses(device, expected) {
+      ensure();
+      const name = pausesKey(device);
+      if ((await transport.getItems([name]))[name] !== expected) return false;
+      await transport.removeItems([name]);
+      return true;
     },
     async room(partsNeeded, ownDevice) {
       ensure();

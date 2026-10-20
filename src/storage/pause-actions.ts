@@ -11,7 +11,10 @@ async function setPause(courseId: string, paused: boolean, now: Date, database: 
     const pauses = await readPauses(database);
     const known = pauses[courseId];
     if (!!known?.pausedAt === paused) return;
-    const at = now.toISOString();
+    // Возврат на устройстве с отстающими часами не раньше самой паузы: иначе граница долга ушла бы в прошлое.
+    const at = new Date(
+      paused || !known?.pausedAt ? now.getTime() : Math.max(now.getTime(), Date.parse(known.pausedAt)),
+    ).toISOString();
     const updatedAt = new Date(Math.max(now.getTime(), known ? Date.parse(known.updatedAt) + 1 : 0)).toISOString();
     pauses[courseId] = paused
       ? { pausedAt: at, resumedAt: null, updatedAt }

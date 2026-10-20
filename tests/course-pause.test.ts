@@ -60,12 +60,12 @@ describe("запись паузы", () => {
     });
     expect((await courses(db)).find((course) => course.id === B)?.pausedAt).toBeUndefined();
   });
-  it("отстающие часы — изменение на 1 мс позже известной записи", async () => {
+  it("отстающие часы — изменение на 1 мс позже известной записи, возврат не раньше паузы", async () => {
     await pauseCourse(B, at("2026-10-12T10:00:00Z"), db);
     await resumeCourse(B, at("2026-10-12T09:00:00Z"), db);
     expect((await readPauses(db))[B]).toEqual({
       pausedAt: null,
-      resumedAt: "2026-10-12T09:00:00.000Z",
+      resumedAt: "2026-10-12T10:00:00.000Z",
       updatedAt: "2026-10-12T10:00:00.001Z",
     });
   });
