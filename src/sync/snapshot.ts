@@ -17,13 +17,11 @@ import { CONTENT_TABLES, STORED_KINDS } from "../storage/kinds";
 import { blockKey } from "../storage/course";
 import { PENDING_LESSONS_KEY, readPending, type PendingLessons } from "../storage/pending";
 import type { BlockProgress } from "../domain/types";
-import { mergePauses, PAUSES_MARK_KEY, readPauses, writePauses, type CoursePauses } from "../storage/pauses";
 import {
   SNAPSHOT_FORMAT,
   type Clock,
   type CompactBlock,
   type CompactLesson,
-  type CompactPause,
   type CompactSnapshot,
   type CompactState,
   type SerializedCard,
@@ -39,25 +37,8 @@ export const META = {
   restored: "sync:restored",
   pendingLessons: PENDING_LESSONS_KEY,
   peers: "sync:peers",
-  pauses: PAUSES_MARK_KEY,
 } as const;
 export const KEEP_DAYS = 14;
-
-export const compactPauses = (pauses: CoursePauses): CompactPause[] =>
-  Object.entries(pauses)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([courseId, pause]) => ({ courseId, ...pause }));
-const pausesOf = (list: CompactPause[] | undefined): CoursePauses =>
-  Object.fromEntries((list ?? []).map(({ courseId, ...pause }) => [courseId, pause]));
-/** Паузы версии сливаются с паузами устройства в базу; паузы версий без них не меняются. */
-export const mergeSnapshotPauses = zoned(async function mergeSnapshotPauses(
-  database: AppDatabase,
-  lists: (CompactPause[] | undefined)[],
-): Promise<void> {
-  const local = await readPauses(database);
-  const merged = mergePauses(local, ...lists.map(pausesOf));
-  if (JSON.stringify(merged) !== JSON.stringify(local)) await writePauses(database, merged);
-});
 
 export const serializeCard = (card: Card): SerializedCard => ({
   ...card,
@@ -178,7 +159,6 @@ const readProgress = zoned(async function readProgress(database: AppDatabase, no
   const known = new Set(rawStates.map((state) => state.unitKey));
   const states = rawStates.map(serializeState);
   for (const row of await database.cardStash.toArray()) if (!known.has(row.unitKey)) states.push(row.state);
-  const pauses = compactPauses(await readPauses(database));
   return {
     format: SNAPSHOT_FORMAT,
     createdAt: now.toISOString(),
@@ -186,7 +166,6 @@ const readProgress = zoned(async function readProgress(database: AppDatabase, no
     packages: [...packages].sort(),
     blocks,
     states: states.sort(byKey),
-    ...(pauses.length ? { pauses } : {}),
   };
 });
 /**
@@ -247,16 +226,11 @@ export async function buildAndCommitMarked(
   database: AppDatabase,
   now: Date,
   versionId: string,
-): Promise<{ snapshot: CompactSnapshot; mark: string | null; pausesMark: string | null }> {
-  const { mark, pausesMark, progress } = await database.transaction(
-    "r",
-    tables(database, PROGRESS_TABLES),
-    async () => ({
-      mark: await readMeta(database, META.dirty),
-      pausesMark: await readMeta(database, META.pauses),
-      progress: await readProgress(database, now),
-    }),
-  );
+): Promise<{ snapshot: CompactSnapshot; mark: string | null }> {
+  const { mark, progress } = await database.transaction("r", tables(database, PROGRESS_TABLES), async () => ({
+    mark: await readMeta(database, META.dirty),
+    progress: await readProgress(database, now),
+  }));
   const summary = await database.transaction("rw", tables(database, SUMMARY_TABLES), async () => {
     const summary = await readSummary(database, progress.createdAt);
     // Часы устройства могли уйти назад: отсечка не отступает, иначе учтённые события посчитались бы снова.
@@ -265,12 +239,8 @@ export async function buildAndCommitMarked(
     await commitBase(database, summary, versionId, asOf);
     return summary;
   });
-  return { snapshot: { ...progress, ...summary }, mark, pausesMark };
+  return { snapshot: { ...progress, ...summary }, mark };
 }
-/** Снимает отметку пауз, только если после сборки снимка паузу не меняли. */
-export const clearPausesMark = zoned(async function clearPausesMark(database: AppDatabase, mark: string | null) {
-  if (mark !== null && (await readMeta(database, META.pauses)) === mark) await writeMeta(database, META.pauses, null);
-});
 export const clearDirty = zoned(async function clearDirty(
   database: AppDatabase,
   mark: string | null,
@@ -330,7 +300,6 @@ export async function applySnapshot(
         if (known.has(key) && isKnown(state)) await database.cardStates.put(reviveState(state));
         else await database.cardStash.put({ unitKey: key, ref: state.ref, state });
       }
-      await applyPauses(database, snapshot.pauses);
       await commitBase(database, snapshot, versionId, now.toISOString());
       await writeMeta(database, META.applied, versionId);
       await writeMeta(database, META.clock, JSON.stringify(clock));
@@ -339,13 +308,6 @@ export async function applySnapshot(
     },
   );
 }
-
-/**
- * Паузы версии сливаются с паузами устройства. Своя более новая пауза, которой в версии нет (версия прежней сборки
- * без пауз), отдельно не публикуется: она уйдёт со следующей своей публикацией прогресса. Немедленная публикация
- * поверх версии прежней сборки дала бы этой сборке окно выбора при её неотправленных ответах.
- */
-const applyPauses = (database: AppDatabase, list: CompactPause[] | undefined) => mergeSnapshotPauses(database, [list]);
 
 /**
  * Пакет установлен: отложенные состояния его карточек переходят в обычную таблицу, завершение урока — из снимка.

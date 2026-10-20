@@ -8,7 +8,6 @@ import {
   SUPPORTED_SNAPSHOT_FORMATS,
   type CompactBlock,
   type CompactLesson,
-  type CompactPause,
   type CompactSnapshot,
   type CompactState,
   type SerializedCard,
@@ -100,36 +99,7 @@ interface Wire {
   st: WireState[];
   sk: WireSkill[];
   x: { d: WireDay[]; r: Record<string, string>; n: number; w: string[] };
-  /**
-   * Паузы курсов `[курс, пауза мс|0, возврат мс|0, изменение мс]`; только при непустом списке. Прежние сборки ключ
-   * пропускают: `decodeSnapshot` не отвергает незнакомые ключи верхнего уровня.
-   */
-  cp?: WirePause[];
 }
-type WirePause = [string, number, number, number];
-const encodePause = (pause: CompactPause): WirePause => [
-  pause.courseId,
-  ms(pause.pausedAt ?? undefined),
-  ms(pause.resumedAt ?? undefined),
-  ms(pause.updatedAt),
-];
-/** Неразборная строка пауз пропускается: из-за неё нельзя отказываться от всей версии. */
-const decodePauses = (wire: unknown[]): CompactPause[] =>
-  wire.flatMap((row): CompactPause[] => {
-    if (!Array.isArray(row)) return [];
-    const [courseId, paused, resumed, updated] = row as unknown[];
-    const time = (value: unknown) => typeof value === "number" && Number.isFinite(value) && value >= 0;
-    if (typeof courseId !== "string" || !courseId || !time(paused) || !time(resumed) || !time(updated) || !updated)
-      return [];
-    return [
-      {
-        courseId,
-        pausedAt: paused ? iso(paused as number) : null,
-        resumedAt: resumed ? iso(resumed as number) : null,
-        updatedAt: iso(updated as number),
-      },
-    ];
-  });
 const encodeState = (state: CompactState): WireState => {
   const card = state.card;
   return [
@@ -283,7 +253,6 @@ export function encodeSnapshot(snapshot: CompactSnapshot, format: number = snaps
     st: snapshot.states.map(encodeState),
     sk: snapshot.skills.map((entry) => encodeSkill(entry.ref, entry.skills)),
     x: encodeStats(snapshot.stats),
-    ...(snapshot.pauses?.length ? { cp: snapshot.pauses.map(encodePause) } : {}),
   };
   return JSON.stringify(wire);
 }
@@ -325,6 +294,5 @@ export function decodeSnapshot(text: string, expectedFormat?: number): CompactSn
     states: wire.st.map((state) => decodeState(state, wire.f)).filter(alive),
     skills: wire.sk.map((skill) => decodeSkill(skill, wire.f)).filter(alive),
     stats: decodeStats(wire.x, wire.f),
-    ...(Array.isArray(wire.cp) ? { pauses: decodePauses(wire.cp) } : {}),
   };
 }

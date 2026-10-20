@@ -16,7 +16,7 @@ import { installCompleted } from "./helpers/content";
 import { kvAdapter } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport } from "../src/sync/transport";
-import { PAUSES_MARK_KEY, readPauses } from "../src/storage/pauses";
+import { readPauses } from "../src/storage/pauses";
 import { pauseCourse } from "../src/storage/pause-actions";
 
 const NAME = "tetradio-backup";
@@ -60,17 +60,15 @@ describe("полная копия", () => {
     fresh.close();
     await fresh.delete();
   });
-  it("копия переносит паузы курсов; отметка пауз остаётся своей у установки", async () => {
+  it("копия переносит паузы курсов", async () => {
     await installLessons(db, ["mech-2"]);
     await pauseCourse("english", new Date("2026-10-12T09:00:00Z"), db);
     const copy = asLexi(JSON.parse(await (await exportFull(db)).text()));
     const fresh = new AppDatabase("tetradio-restore-pauses");
     await fresh.delete();
     await fresh.open();
-    await fresh.meta.put({ key: PAUSES_MARK_KEY, value: "own" });
     await restoreBackup(copy, fresh);
     expect(await readPauses(fresh)).toEqual(await readPauses(db));
-    expect((await fresh.meta.get(PAUSES_MARK_KEY))?.value).toBe("own");
     fresh.close();
     await fresh.delete();
   });

@@ -2,11 +2,6 @@ import { db, type AppDatabase } from "./db";
 import { zoned } from "./zone";
 
 export const COURSE_PAUSES_KEY = "coursePauses";
-/**
- * Отметка «паузы курсов ещё не опубликованы». Отдельно от `sync:dirty`: пауза сливается сама и не должна вызывать
- * окно выбора версии, где выбор «Это устройство» стёр бы ответы другого устройства.
- */
-export const PAUSES_MARK_KEY = "sync:pauses";
 
 /** Пауза курса: `pausedAt` задан — курс на паузе; после возврата запись остаётся с `resumedAt` — границей долга. */
 export interface CoursePause {
@@ -58,8 +53,11 @@ export function mergePauses(...lists: (CoursePauses | undefined)[]): CoursePause
   const merged: CoursePauses = {};
   for (const list of lists)
     for (const [courseId, pause] of Object.entries(list ?? {})) merged[courseId] = laterPause(merged[courseId], pause)!;
-  return merged;
+  return Object.fromEntries(Object.entries(merged).sort(([a], [b]) => a.localeCompare(b)));
 }
+/** Одинаковые записи в любом порядке курсов. */
+export const samePauses = (a: CoursePauses, b: CoursePauses) =>
+  JSON.stringify(mergePauses(a)) === JSON.stringify(mergePauses(b));
 export const samePause = (a: CoursePause | undefined, b: CoursePause | undefined) =>
   JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 

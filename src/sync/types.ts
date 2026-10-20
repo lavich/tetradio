@@ -62,17 +62,6 @@ export interface CompactSnapshot {
   states: CompactState[];
   skills: { ref: StoredRef; skills: SkillSummary }[];
   stats: StatsSummary;
-  /**
-   * Паузы курсов. Не задано — версия о паузах ничего не говорит (прежняя сборка или паузы не было): паузы устройства
-   * не меняются. Сливаются по более позднему изменению, а не заменяются версией.
-   */
-  pauses?: CompactPause[];
-}
-export interface CompactPause {
-  courseId: string;
-  pausedAt: string | null;
-  resumedAt: string | null;
-  updatedAt: string;
 }
 
 /** Опубликованная версия: идентификатор, устройство, причинная база и разрешённые ветви. */
@@ -93,12 +82,6 @@ export interface VersionMeta {
   /** Платформа устройства для отображения в конфликте. */ label?: string;
   /** Форматы, которые объявляет опубликовавшее приложение; без поля — не выше 5. */
   reads?: number[];
-  /**
-   * Публикация только пауз: прогресс в снимке — версии с этими часами, новое в нём — только паузы курсов. Устройство,
-   * у которого применена та же версия, сливает паузы, не показывая окна выбора из-за своих неотправленных ответов.
-   * Прежние сборки поле пропускают.
-   */
-  pausesOver?: Clock;
 }
 export interface StoredVersion {
   meta: VersionMeta;

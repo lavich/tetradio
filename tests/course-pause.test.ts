@@ -10,14 +10,7 @@ import {
   setPrimaryCourse,
   todayCourse,
 } from "../src/storage/courses";
-import {
-  COURSE_PAUSES_KEY,
-  mergePauses,
-  parsePauses,
-  PAUSES_MARK_KEY,
-  readPauses,
-  type CoursePause,
-} from "../src/storage/pauses";
+import { COURSE_PAUSES_KEY, mergePauses, parsePauses, readPauses, type CoursePause } from "../src/storage/pauses";
 import { pauseCourse, resumeCourse } from "../src/storage/pause-actions";
 import { DIRTY_KEY } from "../src/storage/ops";
 import { dexieSource } from "../src/storage/queries";
@@ -49,12 +42,11 @@ afterEach(() => db.close());
 const at = (time: string) => new Date(time);
 
 describe("запись паузы", () => {
-  it("пауза пишет запись и отметку пауз, но не отметку неопубликованных изменений", async () => {
+  it("пауза пишет запись, но не отметку неопубликованных изменений", async () => {
     await pauseCourse(B, at("2026-10-12T09:00:00Z"), db);
     expect(await readPauses(db)).toEqual({
       [B]: { pausedAt: "2026-10-12T09:00:00.000Z", resumedAt: null, updatedAt: "2026-10-12T09:00:00.000Z" },
     });
-    expect((await db.meta.get(PAUSES_MARK_KEY))?.value).toBeTruthy();
     expect(await db.meta.get(DIRTY_KEY)).toBeUndefined();
     expect((await courses(db)).find((course) => course.id === B)?.pausedAt).toBe("2026-10-12T09:00:00.000Z");
   });

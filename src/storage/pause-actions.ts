@@ -1,13 +1,6 @@
 import { syncEvents } from "../sync/events";
 import { db, type AppDatabase } from "./db";
-import { PAUSES_MARK_KEY, readPauses, writePauses } from "./pauses";
-
-let marks = 0;
-const markPauses = (database: AppDatabase) =>
-  database.meta.put({
-    key: PAUSES_MARK_KEY,
-    value: `${Date.now().toString(36)}-${(++marks).toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
-  });
+import { readPauses, writePauses } from "./pauses";
 
 /**
  * Даты паузы и возврата — по часам устройства; время изменения не раньше известной записи + 1 мс: часы устройства
@@ -24,7 +17,6 @@ async function setPause(courseId: string, paused: boolean, now: Date, database: 
       ? { pausedAt: at, resumedAt: null, updatedAt }
       : { pausedAt: null, resumedAt: at, updatedAt };
     await writePauses(database, pauses);
-    await markPauses(database);
   });
   syncEvents.emit("changed");
 }

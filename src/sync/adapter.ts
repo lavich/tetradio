@@ -57,12 +57,21 @@ export interface SyncAdapter {
   removeDevice(meta: VersionMeta): Promise<boolean>;
   /** Сколько ключей займёт версия и сколько свободно с учётом собственного указателя. */
   room(partsNeeded: number, ownDevice: string): Promise<{ free: number; needed: number; keys: number }>;
+  /**
+   * Паузы курсов — отдельно от версий: ключ `cp_<устройство>` на устройство, пишет его только оно само. Значения по
+   * устройствам; ключей версий и указателей эти методы не касаются.
+   */
+  listCoursePauses?(): Promise<Record<string, string>>;
+  writeCoursePauses?(device: string, value: string): Promise<void>;
 }
 export const PART_SIZE = 4000;
 const WRITABLE_FORMATS = [5, 6];
 const PACKED_FORMAT = 6;
 const POINTER = "p_",
-  PART = "v_";
+  PART = "v_",
+  PAUSES = "cp_";
+/** Не совпадает с указателем (`p_` в начале) и частью (`v_…_n`): прежние сборки ключ не читают и не убирают. */
+export const pausesKey = (device: string) => `${PAUSES}${device}`;
 export const pointerKey = (device: string) => `${POINTER}${device}`;
 export const partKey = (versionId: string, index: number) => `${PART}${versionId}_${index}`;
 export const parsePartKey = (key: string): { versionId: string; index: number } | null => {
@@ -117,7 +126,6 @@ export function parsePointer(raw: string): VersionMeta | null {
         Array.isArray(meta.reads) && meta.reads.every((format: unknown) => typeof format === "number")
           ? meta.reads
           : undefined,
-      ...(isClock(meta.pausesOver) ? { pausesOver: meta.pausesOver } : {}),
     };
   } catch {
     return null;
@@ -301,7 +309,29 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       // Указатель первым: без него части не выглядят версией, даже если удаление частей оборвётся.
       await transport.removeItems([name]);
       if (parts.length) await transport.removeItems(parts);
+      // Паузы удалённого устройства уже слиты в записи других: его ключ больше не нужен.
+      const pauses = pausesKey(meta.device);
+      if ((await transport.getKeys()).includes(pauses)) await transport.removeItems([pauses]);
       return true;
+    },
+    async listCoursePauses() {
+      ensure();
+      const keys = (await transport.getKeys()).filter((key) => key.startsWith(PAUSES));
+      const values = await transport.getItems(keys);
+      return Object.fromEntries(
+        keys.flatMap((key) => (values[key] === undefined ? [] : [[key.slice(PAUSES.length), values[key]]])),
+      );
+    },
+    async writeCoursePauses(device, value) {
+      ensure();
+      const name = pausesKey(device);
+      if (!validKey(name, limits)) throw new SyncError("transport", "Недопустимый идентификатор устройства.");
+      if (value.length > limits.maxValueLength)
+        throw new SyncError("limit", "Паузы курсов не помещаются в одно значение.");
+      const keys = await transport.getKeys();
+      if (!keys.includes(name) && keys.length >= limits.maxKeys)
+        throw new SyncError("limit", "В облаке нет места для пауз курсов.");
+      await transport.setItem(name, value);
     },
     async room(partsNeeded, ownDevice) {
       ensure();
