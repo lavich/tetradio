@@ -62,6 +62,17 @@ export interface CompactSnapshot {
   states: CompactState[];
   skills: { ref: StoredRef; skills: SkillSummary }[];
   stats: StatsSummary;
+  /**
+   * Паузы курсов. Не задано — версия о паузах ничего не говорит (прежняя сборка или паузы не было): паузы устройства
+   * не меняются. Сливаются по более позднему изменению, а не заменяются версией.
+   */
+  pauses?: CompactPause[];
+}
+export interface CompactPause {
+  courseId: string;
+  pausedAt: string | null;
+  resumedAt: string | null;
+  updatedAt: string;
 }
 
 /** Опубликованная версия: идентификатор, устройство, причинная база и разрешённые ветви. */

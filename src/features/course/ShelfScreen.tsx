@@ -1,10 +1,16 @@
 import { useLiveQuery } from "dexie-react-hooks";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { courses, shelfCourse } from "../../storage/courses";
 import { db } from "../../storage/db";
 import { CourseSwitch } from "../../shared/CourseSwitch";
+import { useAction } from "../../shared/action";
+import { pausedSince } from "../../shared/format";
+import { pauseCourse, resumeCourse } from "../../storage/pauses";
+import { CourseMenu } from "./CourseMenu";
 import { useCourseProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
 import { coverColor } from "../../shared/notebook";
@@ -24,20 +30,40 @@ function coverLabel(view: ModuleView) {
 export function CourseScreen() {
   const data = useLiveQuery(async () => {
     const courseId = await shelfCourse();
-    const started = (await courses()).some((course) => course.id === courseId && course.started);
-    return { courseId, views: started ? await moduleViews(courseId) : [] };
+    const entry = (await courses()).find((course) => course.id === courseId && course.started);
+    return { courseId, pausedAt: entry?.pausedAt, views: entry ? await moduleViews(courseId) : [] };
   }, []);
+  const [status, setStatus] = useState("");
+  const { busy, problem, run } = useAction("Не удалось изменить курс");
   const courseId = data?.courseId;
   const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
   const profile = useCourseProfile(courseId);
   if (data === undefined) return <Screen />;
-  const { views } = data;
+  const { views, pausedAt } = data;
+  const title = course?.short ?? course?.title ?? "";
+  const toggle = () =>
+    run(async () => {
+      if (!courseId) return;
+      if (pausedAt) {
+        await resumeCourse(courseId);
+        setStatus(`Курс «${title}» продолжается.`);
+      } else {
+        await pauseCourse(courseId);
+        setStatus(`Курс «${title}» на паузе. Вернуть его можно на полке или в настройках.`);
+      }
+    });
+  const statusLine = (
+    <p className={css.status} role="status" data-testid="shelf-status">
+      {status}
+    </p>
+  );
   if (!views.length)
     return (
       <Screen>
         <CourseSwitch shelf />
         <h1>Полка</h1>
         <CourseStart courseId={courseId} />
+        {statusLine}
       </Screen>
     );
   const filled = views.filter((view) => view.completed).length;
@@ -46,14 +72,31 @@ export function CourseScreen() {
   return (
     <Screen>
       <CourseSwitch shelf />
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex items-center justify-between gap-3">
         <h1>Полка</h1>
-        <span className={base.meta}>
-          {filled} из {views.length} заполнено
+        <span className="flex items-center gap-1">
+          <span className={base.meta}>
+            {filled} из {views.length} заполнено
+          </span>
+          <CourseMenu title={title} paused={!!pausedAt} onToggle={() => void toggle()} disabled={busy} />
         </span>
       </div>
       <ExamLine courseId={views[0].module.courseId} />
-      <div className={css.shelf}>
+      {statusLine}
+      {problem && (
+        <p className={css.problem} role="alert">
+          {problem}
+        </p>
+      )}
+      {pausedAt && (
+        <div className={css.paused} data-testid="shelf-paused">
+          <p className={css.pausedText}>На паузе с {pausedSince(pausedAt)}</p>
+          <Button size="md" className="w-auto" onClick={() => void toggle()} disabled={busy}>
+            Продолжить курс
+          </Button>
+        </div>
+      )}
+      <div className={pausedAt ? `${css.shelf} ${css.shelfPaused}` : css.shelf}>
         {views.map((view) => {
           const { module } = view;
           const draft = module.status === "draft";

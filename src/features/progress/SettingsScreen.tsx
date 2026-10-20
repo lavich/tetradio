@@ -4,9 +4,11 @@ import { BackupSection, REPORT_BOUNDARIES } from "../backup/BackupSection";
 import { useHapticsSetting } from "../../platform/haptics";
 import { launchContext } from "../../platform/launch";
 import { useLaunchMode, usePlatform } from "../../platform/platform";
-import { setPrimaryCourse, useCourses, usePrimaryCourse } from "../../shared/courses";
+import { Button } from "@/components/ui/button";
+import { pauseCourse, resumeCourse, setPrimaryCourse, usePrimaryCourse, useStartedCourses } from "../../shared/courses";
+import { useAction } from "../../shared/action";
 import { Segmented } from "../../shared/CourseSwitch";
-import { CARDS, withCount, WORDS } from "../../shared/format";
+import { CARDS, pausedSince, withCount, WORDS } from "../../shared/format";
 import { megabytes, useOfflineStatus } from "../../shared/offline";
 import { useCounts, useSettings } from "../../shared/store";
 import { currentProfile } from "../../storage/profile";
@@ -32,11 +34,11 @@ export function SettingsScreen() {
   }, [ready, settings]);
   return (
     <Screen back="Настройки и данные">
+      <Courses />
       <section aria-labelledby="lessons" className={css.section}>
         <h2 id="lessons" className={css.heading}>
           Занятия
         </h2>
-        <PrimaryCourse />
         <Toggle
           testId="auto-speak-settings"
           label="Озвучивать автоматически"
@@ -102,25 +104,84 @@ export function SettingsScreen() {
   );
 }
 
-/** Основной курс — первым и целиком на «Сегодня»; остальные — строкой под ним. Один курс — выбирать нечего. */
-function PrimaryCourse() {
-  const courses = useCourses();
+/**
+ * Курсы: основной и пауза. Курс на паузе остаётся в выборе основного неактивным вариантом: иначе выбор показал бы
+ * другой курс выбранным, а стрелки сразу перезаписали бы основной.
+ */
+function Courses() {
+  const courses = useStartedCourses();
   const primary = usePrimaryCourse();
-  if (!courses || courses.length < 2) return null;
+  const [status, setStatus] = useState("");
+  const { busy, problem, run } = useAction("Не удалось изменить курс");
+  if (!courses?.length) return null;
+  const toggle = (id: string, title: string, paused: boolean) =>
+    run(async () => {
+      if (paused) {
+        await resumeCourse(id);
+        setStatus(`Курс «${title}» продолжается.`);
+      } else {
+        await pauseCourse(id);
+        setStatus(`Курс «${title}» на паузе. Вернуть его можно на полке или в настройках.`);
+      }
+    });
   return (
-    <div className={css.choice} data-testid="primary-course">
-      <span className={css.toggleText}>
-        <span className={css.toggleLabel}>Основной курс</span>
-        <span className={css.note}>Он первым и целиком на «Сегодня», остальные — строкой ниже.</span>
-      </span>
-      <Segmented
-        label="Основной курс"
-        testId="primary-course-choice"
-        options={courses}
-        value={primary}
-        onChange={(id) => void setPrimaryCourse(id)}
-      />
-    </div>
+    <section aria-labelledby="courses" className={css.section} data-testid="settings-courses">
+      <h2 id="courses" className={css.heading}>
+        Курсы
+      </h2>
+      {courses.length > 1 && (
+        <div className={css.choice} data-testid="primary-course">
+          <span className={css.toggleText}>
+            <span className={css.toggleLabel}>Основной курс</span>
+            <span className={css.note}>Он первым и целиком на «Сегодня», остальные — строкой ниже.</span>
+          </span>
+          <Segmented
+            label="Основной курс"
+            testId="primary-course-choice"
+            options={courses.map((course) => ({
+              id: course.id,
+              title: course.short ?? course.title,
+              ...(course.pausedAt ? { disabled: "на паузе" } : {}),
+            }))}
+            value={primary}
+            onChange={(id) => void setPrimaryCourse(id)}
+          />
+        </div>
+      )}
+      <p className={`${css.note} py-2`}>
+        Курс на паузе не показывается на «Сегодня», его карточки не повторяются. Прогресс сохраняется.
+      </p>
+      <ul className={css.courseList}>
+        {courses.map((course) => (
+          <li key={course.id} className={css.courseRow} data-testid="settings-course">
+            <span className={css.toggleText}>
+              <span className={css.toggleLabel}>{course.title}</span>
+              <span className={css.note}>
+                {course.pausedAt ? `На паузе с ${pausedSince(course.pausedAt)}` : "Идёт"}
+              </span>
+            </span>
+            <Button
+              size="md"
+              variant="soft"
+              className="w-auto flex-none"
+              disabled={busy}
+              onClick={() => void toggle(course.id, course.title, !!course.pausedAt)}
+              aria-label={`${course.pausedAt ? "Продолжить" : "Приостановить"} курс «${course.title}»`}
+            >
+              {course.pausedAt ? "Продолжить" : "Приостановить"}
+            </Button>
+          </li>
+        ))}
+      </ul>
+      <p className={css.ok} role="status" data-testid="courses-status">
+        {status}
+      </p>
+      {problem && (
+        <p className={css.error} role="alert">
+          {problem}
+        </p>
+      )}
+    </section>
   );
 }
 

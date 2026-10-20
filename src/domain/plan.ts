@@ -3,6 +3,7 @@ import type { CatalogModule } from "../content/course";
 import { isCheckable, KINDS, needsFacts, type AvailabilityContext, type CardFacts } from "./kinds";
 import type { Voices } from "./language";
 import { unitKey } from "./refs";
+import { scheduler } from "./scheduling";
 import { addDays, DAY_STARTS_AT, studyDay, zonedStart } from "./time";
 import type { LearningRef, LearningState, Lesson, LessonItem } from "./types";
 
@@ -17,7 +18,16 @@ export function isDue(card: Pick<Card, "state" | "due">, now: Date, cutoff: Date
 }
 
 /** Зрелость состояния для очередей: сперва то, что переучивается, потом разучиваемое, потом повторяемое. */
-const stateRank = (card: Card) => (card.state === State.Relearning ? 0 : card.state === State.Learning ? 1 : 2);
+const stateRank = (card: Card) => (card.state === State.Relearning ? 0 : card.state === State.Learning ? 1 : 3);
+/** Карточка без даты последнего повторения (старые снимки) для FSRS невалидна: считаем её забытой. */
+function retrievability(card: Card, now: Date): number {
+  if (!card.last_review) return 0;
+  try {
+    return scheduler.get_retrievability(card, now, false);
+  } catch {
+    return 0;
+  }
+}
 
 export interface WordOrigin {
   lessonId: string;
@@ -35,6 +45,8 @@ export interface DailyPlan {
   unavailable: LearningRef[];
   /** Когда план может измениться сам: срок ближайшей карточки обучения или конец учебного дня. */
   wakeAt: Date;
+  /** Повторений долга паузы среди `reviews`; без долга поля нет. */
+  pauseDebt?: number;
 }
 
 export interface PlanLesson {
@@ -82,6 +94,12 @@ export interface PlanSource {
   factsOf(refs: LearningRef[]): Promise<Map<string, CardFacts>>;
   /** Число живых фраз курса: достаточность пула вариантов для аудирования фраз. */
   phraseCount(courseId?: string): Promise<number>;
+  /** Пауза курса: `pausedAt` — курс на паузе, `resumedAt` — когда возвращён. */
+  pauseOf?(courseId: string): Promise<PlanPause | undefined>;
+}
+export interface PlanPause {
+  pausedAt: string | null;
+  resumedAt: string | null;
 }
 
 export interface PlanOptions {
@@ -90,8 +108,23 @@ export interface PlanOptions {
   courseId?: string;
 }
 export async function makePlan(source: PlanSource, now: Date, options: PlanOptions = {}): Promise<DailyPlan> {
-  const today = studyDay(now, source.timezone());
+  const timezone = source.timezone();
+  const today = studyDay(now, timezone);
   const { courseId } = options;
+  const pause = courseId ? await source.pauseOf?.(courseId) : undefined;
+  if (pause?.pausedAt)
+    return {
+      today,
+      newRefs: [],
+      reviews: [],
+      origins: new Map(),
+      unavailable: [],
+      wakeAt: reviewCutoff(now, timezone),
+    };
+  // Долг паузы — повторения со сроком раньше дня возврата: они идут от самых забытых, сроки не сдвигаются.
+  const debtBefore = pause?.resumedAt
+    ? zonedStart(studyDay(new Date(pause.resumedAt), timezone), timezone, DAY_STARTS_AT).getTime()
+    : undefined;
   const [lessons, phrasePool] = await Promise.all([source.studiedLessons(courseId), source.phraseCount(courseId)]);
   const availability: AvailabilityContext = { hasVoice: options.hasVoice ?? false, phrasePool };
 
@@ -145,15 +178,23 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
 
   const askable = due.filter((state) => !KINDS[state.ref.kind].vanishes || dueLive.has(state.unitKey));
   for (const state of askable) if (!checkable(state.ref)) unavailable.push(state.ref);
+  const debt = new Map<string, number>();
+  if (debtBefore !== undefined)
+    for (const state of askable)
+      if (state.card.state === State.Review && new Date(state.card.due).getTime() < debtBefore)
+        debt.set(state.unitKey, retrievability(state.card, now));
+  const queue = (state: LearningState) => (debt.has(state.unitKey) ? 2 : stateRank(state.card));
   const reviews = askable
     .filter((state) => checkable(state.ref))
     .sort(
       (a, b) =>
-        stateRank(a.card) - stateRank(b.card) ||
+        queue(a) - queue(b) ||
+        (debt.get(a.unitKey) ?? 0) - (debt.get(b.unitKey) ?? 0) ||
         new Date(a.card.due).getTime() - new Date(b.card.due).getTime() ||
         a.unitKey.localeCompare(b.unitKey),
     )
     .map((s) => ({ ref: s.ref, state: s }));
+  const pauseDebt = reviews.filter((review) => debt.has(review.state.unitKey)).length;
 
-  return { today, newRefs, reviews, origins, unavailable, wakeAt };
+  return { today, newRefs, reviews, origins, unavailable, wakeAt, ...(pauseDebt ? { pauseDebt } : {}) };
 }

@@ -699,3 +699,116 @@ describe("дневной план со смешанными карточками
     expect(plan.reviews.map((review) => review.ref)).toEqual([W(pool[0].id), P("q1"), P("p1")]);
   });
 });
+
+describe("курс на паузе и долг после паузы", () => {
+  const reviewed = (id: string, due: string, lastReview: string, stability: number, state = State.Review) =>
+    wordState(id, {
+      introducedAt: "2026-08-01T09:00:00Z",
+      version: 1,
+      card: {
+        ...createEmptyCard(new Date("2026-08-01")),
+        due: new Date(due),
+        last_review: new Date(lastReview),
+        stability,
+        difficulty: 5,
+        state,
+        scheduled_days: 3,
+        reps: 3,
+      },
+    });
+  const resumed = { a2: { pausedAt: null, resumedAt: "2026-09-15T08:00:00Z" } };
+  const debtData = (pauses?: Snapshot["pauses"]) =>
+    base({
+      words: words(4),
+      lessons: [lesson("l1", ["w0", "w1", "w2", "w3"])],
+      states: [
+        reviewed("w0", "2026-09-02T09:00:00Z", "2026-08-20T09:00:00Z", 100),
+        reviewed("w1", "2026-09-10T09:00:00Z", "2026-09-08T09:00:00Z", 2),
+        reviewed("w2", "2026-09-15T05:00:00Z", "2026-09-10T09:00:00Z", 5),
+        reviewed("w3", "2026-09-15T08:30:00Z", "2026-09-15T08:20:00Z", 1, State.Relearning),
+      ],
+      pauses,
+    });
+  const coursePlan = (data: Snapshot, at = now) => makePlan(fromSnapshot(data), at, { courseId: "a2" });
+
+  it("курс на паузе — пустой план, состояния карточек не меняются", async () => {
+    const data = debtData({ a2: { pausedAt: "2026-09-01T09:00:00Z", resumedAt: null } });
+    const before = structuredClone(data.states);
+    const plan = await coursePlan(data);
+    expect(plan.newRefs).toEqual([]);
+    expect(plan.reviews).toEqual([]);
+    expect(plan.unavailable).toEqual([]);
+    expect(plan.pauseDebt).toBeUndefined();
+    expect(data.states).toEqual(before);
+    const session = await makeSession({ source: fromSnapshot(data), now, courseId: "a2", random: () => 0.3 });
+    expect(session.items).toEqual([]);
+  });
+  it("долг паузы — после переучиваемых, от наименьшей извлекаемости, затем сегодняшние по сроку", async () => {
+    const plan = await coursePlan(debtData(resumed));
+    expect(idsOf(plan.reviews.map((review) => review.ref))).toEqual(["w3", "w1", "w0", "w2"]);
+    expect(plan.pauseDebt).toBe(2);
+  });
+  it("страж: без паузы порядок прежний — по сроку, поля долга нет", async () => {
+    const plan = await coursePlan(debtData());
+    expect(idsOf(plan.reviews.map((review) => review.ref))).toEqual(["w3", "w0", "w1", "w2"]);
+    expect("pauseDebt" in plan).toBe(false);
+  });
+  it("долг разобран — строки долга нет: повторённая карточка получает срок позже границы", async () => {
+    const data = debtData(resumed);
+    expect((await coursePlan(data)).pauseDebt).toBe(2);
+    data.states = data.states.map((state) =>
+      state.unitKey === wordKeyOf("w0") || state.unitKey === wordKeyOf("w1")
+        ? { ...state, card: { ...state.card, due: new Date("2026-09-15T08:40:00Z"), state: State.Relearning } }
+        : state,
+    );
+    const plan = await coursePlan(data);
+    expect(plan.pauseDebt).toBeUndefined();
+  });
+  it("карточка долга без даты последнего повторения — первой, план не падает", async () => {
+    const data = debtData(resumed);
+    data.states.push(learned("w9", "2026-09-05T09:00:00Z"));
+    data.words.push(word("w9", 9));
+    data.links.push({ lessonId: "l1", wordId: "w9", position: 9 });
+    const plan = await coursePlan(data);
+    expect(idsOf(plan.reviews.map((review) => review.ref)).slice(0, 2)).toEqual(["w3", "w9"]);
+    expect(plan.pauseDebt).toBe(3);
+  });
+  describe("занятие при долге", () => {
+    const many = (debt: number, fresh: number) => {
+      const debtIds = Array.from({ length: debt }, (_, i) => `d${i}`);
+      const freshIds = Array.from({ length: fresh }, (_, i) => `n${i}`);
+      // Чем больше номер, тем меньше стабильность: извлекаемость убывает с номером.
+      const states = debtIds.map((id, i) => reviewed(id, "2026-09-05T09:00:00Z", "2026-09-01T09:00:00Z", 200 - i));
+      return {
+        debtIds,
+        data: base({
+          words: [...debtIds, ...freshIds].map((id, i) => word(id, i)),
+          lessons: [lesson("l1", [...debtIds, ...freshIds])],
+          states,
+          pauses: resumed,
+        }),
+      };
+    };
+    it("147 долга и новые — 20 повторений с наименьшей извлекаемостью, новых нет", async () => {
+      const { data, debtIds } = many(147, 30);
+      const plan = await coursePlan(data);
+      expect(plan.reviews).toHaveLength(147);
+      const session = await makeSession({ source: fromSnapshot(data), now, courseId: "a2", random: () => 0.3 });
+      expect(session.items).toHaveLength(SESSION_SIZE);
+      expect(session.items.every((item) => !item.isNew)).toBe(true);
+      expect(session.items.map((item) => item.ref.id).sort()).toEqual(debtIds.slice(-SESSION_SIZE).sort());
+    });
+    it("страж: 7 долга и 30 новых — 7 повторений и 13 новых", async () => {
+      const { data } = many(7, 30);
+      const session = await makeSession({ source: fromSnapshot(data), now, courseId: "a2", random: () => 0.3 });
+      expect(session.items.filter((item) => !item.isNew)).toHaveLength(7);
+      expect(session.items.filter((item) => item.isNew)).toHaveLength(13);
+    });
+    it("страж: без паузы новые получают свои места", async () => {
+      const { data } = many(147, 30);
+      delete data.pauses;
+      const session = await makeSession({ source: fromSnapshot(data), now, courseId: "a2", random: () => 0.3 });
+      expect(session.items.filter((item) => item.isNew)).toHaveLength(SESSION_SIZE / 2);
+    });
+  });
+});

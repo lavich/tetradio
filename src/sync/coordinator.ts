@@ -7,6 +7,9 @@ import {
   applySnapshot,
   buildAndCommitMarked,
   clearDirty,
+  clearPausesMark,
+  compactPauses,
+  mergeSnapshotPauses,
   describeSnapshot,
   hasLocalProgress,
   META,
@@ -17,6 +20,7 @@ import {
   type SnapshotDescription,
 } from "./snapshot";
 import { SyncError, type SyncErrorKind } from "./transport";
+import { readPauses } from "../storage/pauses";
 import { keepsPointer, notePeers, parsePeers, writeFormat, type Peers } from "./peers";
 import {
   DECLARED_READS,
@@ -158,6 +162,8 @@ export class SyncCoordinator {
       appliedId: await readMeta(database, META.applied),
       clock: parseClock(await readMeta(database, META.clock)),
       dirty: !!(await readMeta(database, META.dirty)),
+      // Паузы курсов ждут публикации, но расхождением не считаются: они сливаются сами.
+      pauses: !!(await readMeta(database, META.pauses)),
       restored: await readMeta(database, META.restored),
       lastOk: await readMeta(database, META.lastOk),
     };
@@ -206,7 +212,7 @@ export class SyncCoordinator {
     const { adapter } = this.options;
     this.newerFormat = false;
     const flags = await this.flags();
-    this.update({ dirty: flags.dirty || !!flags.restored, lastConfirmedAt: flags.lastOk });
+    this.update({ dirty: flags.dirty || flags.pauses || !!flags.restored, lastConfirmedAt: flags.lastOk });
     if (!adapter.capabilities().available) {
       this.update({ phase: "disabled", reason: null });
       return;
@@ -329,7 +335,7 @@ export class SyncCoordinator {
       }
       // Наш указатель убрала уборка другого устройства, а мы на нём: версию нужно выпустить снова.
       const lost = !mine && !!flags.appliedId?.startsWith(`${device}-`);
-      if (flags.dirty || flags.restored || lost || (never && local && !mine)) {
+      if (flags.dirty || flags.pauses || flags.restored || lost || (never && local && !mine)) {
         if (!writes) {
           this.update({
             phase: "paused",
@@ -413,7 +419,10 @@ export class SyncCoordinator {
           this.update({ phase: "idle", dirty: true });
           return;
         }
-        await this.confirm();
+        // Пауза этого устройства новее версии или её в версии нет: публикуем поверх применённой, без окна выбора.
+        if (writes && (await readMeta(database, META.pauses)))
+          await this.publish(device, branch.meta!.clock, [], [], null);
+        else await this.confirm();
         await this.installMissing(branch.snapshot.packages);
         return;
       }
@@ -447,8 +456,17 @@ export class SyncCoordinator {
     const id = `${device}-${clock[device]}`;
     const now = this.options.now();
     // Версия уже применена и сняла метку: любая метка после этого — изменение, которого в версии нет.
-    const { snapshot, mark } = override
-      ? { snapshot: override, mark: null }
+    // Паузы выбранной версии заменяются паузами базы: в неё уже слиты паузы всех ветвей конфликта.
+    const { snapshot, mark, pausesMark } = override
+      ? await database.transaction("r", database.meta, async () => {
+          const pauses = compactPauses(await readPauses(database));
+          const { pauses: _, ...rest } = override;
+          return {
+            snapshot: pauses.length ? { ...rest, pauses } : rest,
+            mark: null,
+            pausesMark: await readMeta(database, META.pauses),
+          };
+        })
       : await buildAndCommitMarked(database, now, id);
     // Облако перечитывается здесь: выбор версии в конфликте публикует без нового чтения в `decide`.
     const peers = await this.notePeers(device, (await adapter.listPointers()).pointers);
@@ -481,6 +499,7 @@ export class SyncCoordinator {
       await writeMeta(database, META.applied, id);
       await writeMeta(database, META.clock, JSON.stringify(clock));
       await clearDirty(database, mark);
+      await clearPausesMark(database, pausesMark);
       await writeMeta(database, META.restored, null);
     });
     await this.confirm();
@@ -614,6 +633,11 @@ export class SyncCoordinator {
     const clocks = remote.map((branch) => branch.meta!.clock);
     this.update({ phase: "syncing", conflict: null });
     try {
+      // Паузы не выбираются вместе с версией: более поздняя пауза любой ветви сохраняется.
+      await mergeSnapshotPauses(
+        database,
+        conflict.branches.map((branch) => branch.snapshot.pauses),
+      );
       const flags = await this.flags();
       if (chosen.local) {
         await this.publish(device, flags.clock, clocks, resolves, null);
@@ -669,7 +693,8 @@ export class SyncCoordinator {
       void this.exchange();
     };
     const hidden = async () => {
-      if (pending || (await readMeta(this.options.database, META.dirty))) flush();
+      const { database } = this.options;
+      if (pending || (await readMeta(database, META.dirty)) || (await readMeta(database, META.pauses))) flush();
     };
     const visibility = () => {
       if (document.visibilityState === "visible") void this.exchange();

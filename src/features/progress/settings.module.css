@@ -173,3 +173,16 @@
 .about[open] summary {
   margin-bottom: 4px;
 }
+.courseList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.courseRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}

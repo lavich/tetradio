@@ -11,7 +11,7 @@ import { deviceTimezone } from "../../domain/time";
 import { Skeleton } from "@/components/ui/skeleton";
 import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
-import { activeSession, primaryCourse, profileOfCourse, sessionCourse } from "../../storage/courses";
+import { activeSession, sessionDefaultCourse, profileOfCourse, sessionCourse } from "../../storage/courses";
 import { db } from "../../storage/db";
 import { endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
 import { ExerciseView, Introduction, type Answer } from "./exercises";
@@ -32,7 +32,9 @@ export function SessionScreen() {
   // `undefined` — ещё читается, `null` — активного занятия нет.
   // Язык курса читается вместе с занятием: первая озвучка не должна прозвучать голосом другого языка.
   const loaded = useLiveQuery(async () => {
-    const found = sessionId ? await db.sessions.get(sessionId) : await activeSession(course ?? (await primaryCourse()));
+    const found = sessionId
+      ? await db.sessions.get(sessionId)
+      : await activeSession(course ?? (await sessionDefaultCourse()));
     if (!found) return { session: null, profile: undefined };
     const courseId = await sessionCourse(found);
     return { session: found, profile: courseId ? await profileOfCourse(courseId) : PROFILES[DEFAULT_LANGUAGE] };

@@ -111,3 +111,94 @@
   border-top: 1.5px solid var(--pen);
   opacity: 0.6;
 }
+/* Полка курса на паузе: обложки без цвета, но с прежней яркостью — подписи остаются читаемыми. */
+.shelfPaused .cover {
+  filter: grayscale(0.85);
+}
+.paused {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-top: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.pausedText {
+  margin: 0;
+  font-family: var(--font-print);
+  font-size: 16px;
+  font-weight: 600;
+}
+.status {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted-foreground);
+}
+.problem {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: var(--destructive);
+}
+.menu {
+  position: relative;
+}
+.menuTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.menuTrigger:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 0;
+}
+@media (hover: hover) {
+  .menuTrigger:hover {
+    background: var(--muted);
+    color: var(--foreground);
+  }
+}
+.menuPopup {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 50;
+  min-width: 12rem;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow:
+    0 8px 20px -10px var(--shadow),
+    0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+.menuItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: 400 14px var(--font-sans);
+  color: inherit;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.menuItem:focus-visible,
+.menuItem:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  outline: none;
+}

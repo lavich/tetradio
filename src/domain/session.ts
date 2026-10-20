@@ -55,7 +55,8 @@ export async function makeSession({
     const states = await source.statesOf(kept);
     chosen = kept.map((ref) => ({ ref, isNew: !states.has(unitKey(ref)) }));
   } else {
-    const reserve = Math.ceil(size / 2);
+    // Пока есть долг паузы, новые карточки занимают только места, оставшиеся после повторений.
+    const reserve = plan.pauseDebt ? 0 : Math.ceil(size / 2);
     const newOnes = plan.newRefs.slice(0, reserve);
     const reviews = shareReviews(plan.reviews, Math.max(size - newOnes.length, plan.reviews.length ? 1 : 0));
     const extraNew = plan.newRefs.slice(

@@ -8,6 +8,7 @@ import { usePlan } from "../../shared/store";
 import { moduleViews, nextStep } from "../../storage/course";
 import type { CourseEntry } from "../../storage/courses";
 import { sessionPath, startSession } from "../learning/session-actions";
+import { AFTER_PAUSE } from "./DayNotes";
 import css from "./today.module.css";
 
 /** Второй курс на «Сегодня» — одной строкой под основным: следующий урок и повторение своих карточек. */
@@ -41,6 +42,11 @@ export function OtherCourse({ course }: { course: CourseEntry }) {
           <span className={css.otherNone}>повторений нет</span>
         )}
       </div>
+      {plan.pauseDebt ? (
+        <p className={css.otherNone} data-testid="after-pause">
+          {AFTER_PAUSE}
+        </p>
+      ) : null}
       {next ? (
         <Link to={`/course/${next.view.module.id}/${next.lesson.id}`} className={css.otherLesson}>
           <span className="min-w-0 truncate">

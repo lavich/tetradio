@@ -1,4 +1,5 @@
 import Dexie from "dexie";
+import { readPauses } from "./pauses";
 import { State } from "ts-fsrs";
 import { db, distinctKeys, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import { cardLanguages, cardsInCourse, courseCardIds, courseLessonIds, lessonItemsOf } from "./courses";
@@ -189,6 +190,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       for (const [key, language] of languages) facts.set(key, { ...facts.get(key)!, language });
       return facts;
     }),
+    pauseOf: zoned(async (courseId) => (await readPauses(database))[courseId]),
     phraseCount: zoned(async (courseId) =>
       courseId
         ? (

@@ -1,4 +1,4 @@
-import { deviceTimezone, studyDay } from "../domain/time";
+import { deviceTimezone, localDay, studyDay } from "../domain/time";
 const DATIVE: Record<string, string> = {
   понедельник: "понедельнику",
   вторник: "вторнику",
@@ -26,6 +26,16 @@ export const weekday = (value: string) => day(value).toLocaleDateString("ru-RU",
 export const dativeWeekday = (value: string) => DATIVE[weekday(value)] ?? weekday(value);
 export const dayMonth = (value: string) =>
   day(value).toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "UTC" });
+/** Календарный день паузы, не позже сегодняшнего: часы другого устройства могли уйти вперёд; год — если не текущий. */
+export function pausedSince(pausedAt: string, now = new Date(), timezone = deviceTimezone()): string {
+  const at = new Date(Math.min(Date.parse(pausedAt), now.getTime()));
+  const value = localDay(at, timezone);
+  return value.slice(0, 4) === localDay(now, timezone).slice(0, 4)
+    ? dayMonth(value)
+    : day(value)
+        .toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+        .replace(/\s*г\.$/, "");
+}
 /** «12 октября» по учебному дню: отметка в 00:30 подписана вчерашним днём, как на неделе. */
 export const eventDay = (iso: string, timezone = deviceTimezone()) => dayMonth(studyDay(new Date(iso), timezone));
 export const shortTitle = (title: string) => title.replace(/^Урок\s+/i, "");
