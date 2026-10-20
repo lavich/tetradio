@@ -1,0 +1,7 @@
+id: tp014
+text: "Do I need to collect my bags before my connection?"
+translation: "Мне нужно забирать багаж перед стыковкой?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md

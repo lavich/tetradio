@@ -1,0 +1,8 @@
+id: tp009
+text: "What's the purpose of your visit?"
+translation: "Какова цель вашего визита?"
+note: "вопрос на паспортном контроле"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md

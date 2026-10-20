@@ -1,0 +1,7 @@
+id: tp001
+text: "Could I have an aisle seat, please?"
+translation: "Можно мне место у прохода?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md

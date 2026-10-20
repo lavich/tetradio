@@ -1,0 +1,8 @@
+id: tp002
+text: "Would it be possible to check this bag through to Lisbon?"
+translation: "Можно сдать эту сумку сразу до Лиссабона?"
+note: "на стыковочном рейсе: багаж едет до конечного пункта, забирать его на пересадке не нужно"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md

@@ -1,0 +1,255 @@
+title: Вежливые просьбы у стойки регистрации
+kind: lesson
+items:
+  - { kind: word, id: tw001 }
+  - { kind: word, id: tw002 }
+  - { kind: word, id: tw003 }
+  - { kind: word, id: tw004 }
+  - { kind: word, id: tw005 }
+  - { kind: word, id: tw006 }
+  - { kind: word, id: tw007 }
+  - { kind: word, id: tw008 }
+  - { kind: phrase, id: tp001 }
+  - { kind: phrase, id: tp002 }
+  - { kind: phrase, id: tp003 }
+  - { kind: phrase, id: tp004 }
+  - { kind: phrase, id: tp005 }
+  - { kind: phrase, id: tp006 }
+  - { kind: phrase, id: tp007 }
+  - { kind: phrase, id: tp008 }
+blocks:
+  - type: explanation
+    id: requests
+    title: Вежливые просьбы
+    body: |-
+      В аэропорту почти всё начинается с просьбы: место, багаж, вопрос о посадке. По-русски «Дайте мне место у прохода» звучит нормально, а по-английски прямое **Give me an aisle seat** звучит грубо. Просьбу задают вопросом, и чем необычнее просьба, тем длиннее вопрос.
+
+      **Could I…? / Could you…?** — обычная вежливая просьба: **Could I have** an aisle seat, please? **Could you put** a fragile sticker on it? Can I…? тоже возможно, но звучит проще и короче.
+
+      **Would it be possible to…?** — когда просите о чём-то сверх обычного: **Would it be possible to** check this bag through to Lisbon? После possible — **to** и глагол.
+
+      **Do you mind if I…?** — спросить разрешения: **Do you mind if I** take this on board? Вопрос буквально значит «Вы против, если…?», поэтому ответ **No, not at all** или **No, go ahead** значит «можно». А **Yes, I do** или **I'm afraid…** значит «нельзя».
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - Could I + глагол…?
+          - Could I have a window seat, please?
+        - - Could you + глагол…?
+          - Could you weigh this bag, please?
+        - - Would it be possible to + глагол…?
+          - Would it be possible to change my seat?
+        - - Do you mind if I + глагол…?
+          - Do you mind if I leave my bag here for a minute?
+        - - ответ «можно»
+          - No, not at all. / No, go ahead.
+  - type: explanation
+    id: timetable
+    title: Расписание — present simple
+    body: |-
+      О рейсе по расписанию говорят в **present simple**, даже если речь о будущем: **The flight leaves at six fifteen.** **Boarding starts forty minutes before departure.** Так говорят в объявлениях, на табло и у стойки: это не ваш план, а расписание.
+
+      Вопросы — с **does**: **What time does** the flight **land**? **When does** boarding **start**? **Does** it **stop** in Frankfurt? Частая ошибка — забыть -s у he / she / it: the gate **closes** at 5:40, а не «the gate close».
+    table:
+      columns:
+        - вопрос
+        - ответ
+      rows:
+        - - What time does the flight leave?
+          - It leaves at 6:15.
+        - - When does boarding start?
+          - It starts at 5:35.
+        - - When does the gate close?
+          - It closes twenty minutes before departure.
+        - - What time do we land?
+          - We land at 9:50 local time.
+  - type: explanation
+    id: check-in-words
+    title: На регистрации
+    body: |-
+      На регистрации (**check in** — зарегистрироваться, the check-in desk — стойка) спрашивают про багаж. То, что берёте в салон, — **a carry-on** (в Британии чаще говорят hand luggage). То, что сдаёте, — **hold luggage**.
+
+      У билета есть **a baggage allowance** — сколько килограммов и мест можно провезти. Всё сверх нормы — **excess baggage**, за перевес доплачивают. Велосипед, лыжи или очень большой чемодан — **oversized** baggage, его сдают на отдельной стойке.
+
+      После регистрации вы получаете **a boarding pass** — посадочный талон. Место у окна — a window seat, у прохода — **an aisle seat**. В слове aisle буква s не читается: [айл].
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: request-choice
+    title: Какая просьба
+    instruction: Выберите вариант, который звучит вежливо и правильно.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы хотите место у прохода.
+        options:
+          - Could I have an aisle seat, please?
+          - Give me an aisle seat.
+          - I want aisle seat.
+        answer: Could I have an aisle seat, please?
+        explanation: Просьба — вопросом с Could I… и please; повелительное наклонение звучит как приказ.
+      - id: q2
+        prompt: Вы просите сдать багаж сразу до конечного пункта.
+        options:
+          - Would it be possible to check this bag through to Lisbon?
+          - Would it be possible check this bag through to Lisbon?
+          - Would it possible to check this bag through to Lisbon?
+        answer: Would it be possible to check this bag through to Lisbon?
+        explanation: Would it be possible + to + глагол; be не пропускается.
+      - id: q3
+        prompt: Вы спрашиваете, можно ли взять сумку в салон.
+        options:
+          - Do you mind if I take this on board?
+          - Do you mind if I will take this on board?
+          - Do you mind to take this on board?
+        answer: Do you mind if I take this on board?
+        explanation: После if — present simple без will.
+      - id: q4
+        prompt: Вы просите сотрудника взвесить сумку.
+        options:
+          - Could you weigh this bag, please?
+          - Could you to weigh this bag, please?
+          - Could you weighing this bag, please?
+        answer: Could you weigh this bag, please?
+        explanation: После could — глагол без to.
+      - id: q5
+        prompt: Вы спрашиваете, сколько стоит ещё одно место багажа.
+        options:
+          - How much is it for an extra bag?
+          - How much it is for an extra bag?
+          - How much does it for an extra bag?
+        answer: How much is it for an extra bag?
+        explanation: В вопросе is стоит перед it.
+      - id: q6
+        prompt: Вы спрашиваете, подходит ли сумка как ручная кладь.
+        options:
+          - Is this OK as a carry-on?
+          - Is this OK like a carry-on?
+          - This is OK as a carry-on?
+        answer: Is this OK as a carry-on?
+        explanation: As — «в качестве»; like — «похоже на».
+  - type: exercise
+    id: mind-answers
+    title: Что значит ответ
+    instruction: "Вы спросили: Do you mind if I take this on board? Можно или нельзя?"
+    format: choice
+    items:
+      - id: q1
+        prompt: No, not at all.
+        options: [можно, нельзя]
+        answer: можно
+        explanation: "«Нет, я совсем не против»."
+      - id: q2
+        prompt: "I'm afraid it's too big for the cabin."
+        options: [можно, нельзя]
+        answer: нельзя
+        explanation: "I'm afraid… — мягкое начало отказа: «боюсь, что…»."
+      - id: q3
+        prompt: No, go ahead.
+        options: [можно, нельзя]
+        answer: можно
+        explanation: Go ahead — «пожалуйста, давайте».
+      - id: q4
+        prompt: "Sorry, it has to go in the hold."
+        options: [можно, нельзя]
+        answer: нельзя
+        explanation: The hold — багажное отделение; сумку придётся сдать.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a carry-on
+      - hold luggage
+      - check in
+      - a boarding pass
+      - oversized
+      - excess baggage
+      - a baggage allowance
+      - an aisle seat
+      - a window seat
+      - a gate
+    items:
+      - { id: m1, prompt: ручная кладь, answer: a carry-on }
+      - { id: m2, prompt: багаж в багажном отделении, answer: hold luggage }
+      - { id: m3, prompt: зарегистрироваться на рейс, answer: check in }
+      - { id: m4, prompt: посадочный талон, answer: a boarding pass }
+      - { id: m5, prompt: негабаритный, answer: oversized }
+      - { id: m6, prompt: перевес багажа, answer: excess baggage }
+      - { id: m7, prompt: норма провоза багажа, answer: a baggage allowance }
+      - { id: m8, prompt: место у прохода, answer: an aisle seat }
+  - type: exercise
+    id: timetable-gap
+    title: Расписание
+    instruction: Вставьте глагол. Два слова лишние.
+    format: gap
+    bank:
+      - leaves
+      - starts
+      - closes
+      - lands
+      - does
+      - leave
+      - is leaving
+    items:
+      - id: g1
+        prompt: Our flight ___ at six fifteen in the morning.
+        answer: leaves
+        explanation: Расписание — present simple, у it окончание -s.
+      - id: g2
+        prompt: Boarding ___ forty minutes before departure.
+        answer: starts
+      - id: g3
+        prompt: The gate ___ twenty minutes before departure.
+        answer: closes
+      - id: g4
+        prompt: The plane ___ in Lisbon at 9:50 local time.
+        answer: lands
+      - id: g5
+        prompt: What time ___ the flight land?
+        answer: does
+        explanation: Вопрос в present simple — с does, глагол без -s.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'm, it's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Можно мне место у прохода?
+        answer:
+          - Could I have an aisle seat, please?
+          - Could I have an aisle seat?
+          - Can I have an aisle seat, please?
+          - Can I have an aisle seat?
+          - Could I get an aisle seat, please?
+      - id: q2
+        prompt: Ничего, если я возьму это в салон?
+        answer:
+          - Do you mind if I take this on board?
+          - Do you mind if I take it on board?
+          - Do you mind if I take this into the cabin?
+      - id: q3
+        prompt: Рейс вылетает в шесть пятнадцать.
+        answer:
+          - The flight leaves at six fifteen.
+          - The flight leaves at 6:15.
+          - The flight departs at six fifteen.
+          - The flight departs at 6:15.
+        explanation: Расписание — present simple, не will.
+      - id: q4
+        prompt: Сколько стоит ещё одно место багажа?
+        answer:
+          - How much is it for an extra bag?
+          - How much is an extra bag?
+          - How much does an extra bag cost?
+      - id: q5
+        prompt: Можете наклеить на неё наклейку «хрупкое»?
+        answer:
+          - Could you put a fragile sticker on it?
+          - Could you put a fragile sticker on it, please?
+          - Can you put a fragile sticker on it?
+          - Can you put a fragile sticker on it, please?

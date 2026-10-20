@@ -41,3 +41,5 @@ characters:
   Daniel: { gender: male, voice: Charon }
   Mark: { gender: male, voice: Iapetus }
   Elena: { gender: female, voice: Despina }
+  Aisha: { gender: female, voice: Leda }
+  Marco: { gender: male, voice: Puck }

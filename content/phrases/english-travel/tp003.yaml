@@ -1,0 +1,8 @@
+id: tp003
+text: "Do you mind if I take this on board?"
+translation: "Ничего, если я возьму это в салон?"
+note: "ответ No, not at all значит «можно»"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md

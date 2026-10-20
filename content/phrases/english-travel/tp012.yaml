@@ -1,0 +1,7 @@
+id: tp012
+text: "I've got nothing to declare."
+translation: "Мне нечего декларировать."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md
