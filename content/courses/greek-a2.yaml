@@ -1,4 +1,8 @@
 title: Греческий
+level: A0 → A2
+goal: "С нуля до экзамена ΚΕΓ A2: чтение, аудирование, письмо и речь"
+short: Греческий
+order: 1
 source: "Программа курса: docs/curriculum.md"
 modules:
   - m01

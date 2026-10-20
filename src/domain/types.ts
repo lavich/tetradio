@@ -10,6 +10,7 @@ import type {
 import type {
   CatalogModule,
   CourseCalendar,
+  CourseChoice,
   CourseExam,
   ExerciseFormat,
   LessonBlock,
@@ -113,9 +114,11 @@ export type CardSnapshot =
   | { template: string; answer: string }
   | { prompt: string; answer: string };
 /** Курс: название, экзамен и календарь приходят из каталога. */
-export interface Course {
+export interface Course extends CourseChoice {
   id: string;
   title: string;
+  /** Язык из каталога: у курса без уроков его не узнать по урокам. */
+  language?: string;
   /** Экзамен курса из каталога: общая дата и подтверждена ли местная. */
   exam?: CourseExam;
   passShare?: number;

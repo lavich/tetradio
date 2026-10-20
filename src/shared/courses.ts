@@ -11,14 +11,20 @@ import {
   currentCourse,
   primaryCourse,
   profileOfCourse,
+  selectedCourse,
   setCurrentCourse,
   setPrimaryCourse,
+  shelfCourse,
   type CourseEntry,
 } from "../storage/courses";
 
 /** Установленные курсы по порядку установки. `undefined` — ещё читается. */
 export const useCourses = (): CourseEntry[] | undefined =>
   useLiveQuery(async () => (await courses()).filter((course) => course.installed), []);
+/** Начатые курсы, затем неначатые курсы каталога с уроками — варианты переключателя «Курса». */
+export const useAllCourses = (): CourseEntry[] | undefined => useLiveQuery(() => courses(), []);
+/** Курс «Курса»: бывает и неначатым. */
+export const useShelfCourse = (): string | undefined => useLiveQuery(() => shelfCourse(), []);
 
 /** Основной курс: `null` — курсов в каталоге нет, `undefined` — ещё читается. */
 export const usePrimaryCourse = (): string | null | undefined =>
@@ -39,7 +45,7 @@ export const useCourseSession = (courseId: string | undefined): Session | null |
 export function useFollowCourse(courseId: string | undefined) {
   useEffect(() => {
     if (!courseId) return;
-    void currentCourse()
+    void selectedCourse()
       .then((current) => (current === courseId ? undefined : setCurrentCourse(courseId)))
       .catch((error: unknown) => void reportError(error, { category: "storage" }));
   }, [courseId]);

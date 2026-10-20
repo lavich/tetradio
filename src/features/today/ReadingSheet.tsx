@@ -9,7 +9,7 @@ import { useProfile } from "../../shared/language";
 import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
 import { reportError } from "../../reporting/reporting";
-import { currentCourse, setCurrentCourse } from "../../storage/courses";
+import { selectedCourse, setCurrentCourse } from "../../storage/courses";
 import type { CourseReadings } from "../../storage/readings";
 import css from "./today.module.css";
 
@@ -48,7 +48,7 @@ export function ReadingSheet({
         event.preventDefault();
         void (async () => {
           try {
-            if ((await currentCourse()) !== courseId) await setCurrentCourse(courseId);
+            if ((await selectedCourse()) !== courseId) await setCurrentCourse(courseId);
           } catch (error) {
             void reportError(error, { category: "storage" });
           } finally {

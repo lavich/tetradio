@@ -15,8 +15,10 @@ import {
   primaryCourse,
   profileOfCourse,
   rememberCourses,
+  selectedCourse,
   sessionCourse,
   setCurrentCourse,
+  shelfCourse,
   setPrimaryCourse,
 } from "../src/storage/courses";
 import { dexieSource, optionPool, studiedLessons } from "../src/storage/queries";
@@ -27,6 +29,8 @@ import { lessonDays, moduleViews, reviewedOn } from "../src/storage/course";
 import { recordAnswer } from "../src/storage/ops";
 import { GREEK_CALENDAR } from "./helpers/calendar";
 import { fromSnapshot, type Snapshot } from "./helpers/snapshot-source";
+import { content, memoryFetcher } from "./helpers/content";
+import { refreshCatalog } from "../src/content/client";
 
 const GREEK = "greek-a2";
 const ENGLISH = "english";
@@ -205,11 +209,13 @@ describe("порядок курсов", () => {
     expect((await fresh.meta.get("coursesOrder"))?.value).toBe(JSON.stringify([GREEK]));
     fresh.close();
   });
-  it("выбранный курс — основной, пока не выбран другой", async () => {
+  it("выбранный курс — основной, пока не выбран другой; курс, которого нет, не сбивает выбор начатого", async () => {
     expect(await currentCourse(db)).toBe(GREEK);
     await setCurrentCourse(ENGLISH, db);
     expect(await currentCourse(db)).toBe(ENGLISH);
     await setCurrentCourse("gone", db);
+    expect(await currentCourse(db)).toBe(ENGLISH);
+    await db.meta.delete("currentStartedCourse");
     expect(await currentCourse(db)).toBe(GREEK);
   });
   it("выбранный, но не установленный курс не выбран: переключатель и экран показывают один курс", async () => {
@@ -429,5 +435,95 @@ describe("экраны курса", () => {
     await db.lessons.update("e1", { completed: true, updatedAt: "2026-10-04T22:30:00Z" });
     const progress = await courseProgress(new Date("2026-10-11T02:00:00Z"), "Asia/Nicosia", ENGLISH, db);
     expect(progress.pace.recentPerWeek).toBe(0.9);
+  });
+});
+
+describe("данные курса из каталога", () => {
+  const raw = () => JSON.parse(content.files.find((file) => file.path === "content/catalog.json")!.body as string);
+  it("уровень, цель, короткое имя, место и язык курса — в базе; снятое из каталога поле исчезает", async () => {
+    await new AppDatabase("tetradio-course-choice").delete();
+    const fresh = new AppDatabase("tetradio-course-choice");
+    const catalog = raw();
+    const [first] = catalog.courses;
+    const fields = { level: "A0 → A2", goal: "С нуля", short: "Механики", order: 1 };
+    await refreshCatalog(
+      fresh,
+      memoryFetcher(content, { "content/catalog.json": { ...catalog, courses: [{ ...first, ...fields }] } }),
+    );
+    expect(await fresh.courses.get(first.id)).toMatchObject({ ...fields, language: first.language });
+    await refreshCatalog(fresh, memoryFetcher(content, { "content/catalog.json": { ...catalog, courses: [first] } }));
+    const stored = await fresh.courses.get(first.id);
+    for (const field of ["level", "goal", "short", "order"]) expect(stored).not.toHaveProperty(field);
+    await refreshCatalog(
+      fresh,
+      memoryFetcher(content, { "content/catalog.json": { ...catalog, courses: [{ ...first, language: "" }] } }),
+    );
+    expect(await fresh.courses.get(first.id)).not.toHaveProperty("language");
+    fresh.close();
+  });
+});
+
+describe("место курса", () => {
+  it("без начатых курсов первым идёт курс с местом 1, хотя его уроки в каталоге позже", async () => {
+    await new AppDatabase("tetradio-course-order").delete();
+    const fresh = new AppDatabase("tetradio-course-order");
+    await fresh.courses.bulkAdd([
+      { ...courseRows[0], order: 1 },
+      { ...courseRows[1], order: 2 },
+    ]);
+    await fresh.catalog.bulkAdd(catalog);
+    expect((await courses(fresh)).map((course) => course.id)).toEqual([GREEK, ENGLISH]);
+    expect(await primaryCourse(fresh)).toBe(GREEK);
+    expect(await currentCourse(fresh)).toBe(GREEK);
+    fresh.close();
+  });
+});
+
+describe("выбор неначатого курса на «Курсе»", () => {
+  const THIRD = "third";
+  const FOURTH = "fourth";
+  beforeEach(async () => {
+    await db.courses.bulkAdd([
+      { id: THIRD, title: "Третий", updatedAt: iso },
+      { id: FOURTH, title: "Четвёртый", updatedAt: iso },
+    ]);
+    await db.catalog.bulkAdd([entry("t1", THIRD, "en", 3), entry("f1", FOURTH, "en", 4)]);
+  });
+  const start = (courseId: string) =>
+    db.lessons.add({ id: `${courseId}-1`, courseId, title: courseId, completed: false, updatedAt: iso });
+
+  it("полка показывает неначатый, остальные экраны — последний выбранный начатый", async () => {
+    await setCurrentCourse(ENGLISH, db);
+    await setCurrentCourse(THIRD, db);
+    expect(await shelfCourse(db)).toBe(THIRD);
+    expect(await currentCourse(db)).toBe(ENGLISH);
+    await start(THIRD);
+    expect(await shelfCourse(db)).toBe(THIRD);
+    expect(await currentCourse(db)).toBe(THIRD);
+  });
+  it("начатый → неначатый → начат → неначатый: экраны помнят последний начатый", async () => {
+    await setCurrentCourse(ENGLISH, db);
+    await setCurrentCourse(THIRD, db);
+    await start(THIRD);
+    await setCurrentCourse(FOURTH, db);
+    expect(await currentCourse(db)).toBe(THIRD);
+    expect(await shelfCourse(db)).toBe(FOURTH);
+  });
+  it("выбор прежней версии сохраняется при первом выборе неначатого", async () => {
+    await db.meta.put({ key: "currentCourse", value: ENGLISH });
+    await setCurrentCourse(THIRD, db);
+    expect(await currentCourse(db)).toBe(ENGLISH);
+    expect(await selectedCourse(db)).toBe(THIRD);
+  });
+  it("без начатых курсов полка — первый курс по месту", async () => {
+    await new AppDatabase("tetradio-shelf-empty").delete();
+    const fresh = new AppDatabase("tetradio-shelf-empty");
+    await fresh.courses.bulkAdd([
+      { ...courseRows[0], order: 1 },
+      { ...courseRows[1], order: 2 },
+    ]);
+    await fresh.catalog.bulkAdd(catalog);
+    expect(await shelfCourse(fresh)).toBe(GREEK);
+    fresh.close();
   });
 });

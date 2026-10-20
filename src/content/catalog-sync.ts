@@ -46,6 +46,19 @@ export async function lessonOfWord(wordId: string, database: AppDatabase = db): 
   return firstLessonOf(await database.catalog.toArray(), wordId);
 }
 
+const CHOICE_FIELDS = ["level", "goal", "short", "order"] as const;
+const sorted = (value: unknown): unknown =>
+  Array.isArray(value)
+    ? value.map(sorted)
+    : value && typeof value === "object"
+      ? Object.fromEntries(
+          Object.keys(value)
+            .sort()
+            .map((key) => [key, sorted((value as Record<string, unknown>)[key])]),
+        )
+      : value;
+const sameJson = (a: unknown, b: unknown) => JSON.stringify(sorted(a)) === JSON.stringify(sorted(b));
+
 /**
  * Каталог — единственное место, где известен курс урока, установленного прежней версией.
  * Название и экзамен курса берутся из каталога, дневной предел остаётся пользовательским.
@@ -64,17 +77,14 @@ async function adoptCourses(catalog: Catalog, database: AppDatabase) {
       title: item.title,
       updatedAt: stored?.updatedAt ?? now,
     };
+    if (item.language) next.language = item.language;
     if (item.exam) next.exam = item.exam;
     if (item.passShare !== undefined) next.passShare = item.passShare;
     if (item.calendar) next.calendar = item.calendar;
-    if (
-      !stored ||
-      stored.title !== next.title ||
-      JSON.stringify(stored.exam) !== JSON.stringify(next.exam) ||
-      stored.passShare !== next.passShare ||
-      JSON.stringify(stored.calendar) !== JSON.stringify(next.calendar)
-    )
-      await database.courses.put({ ...next, updatedAt: now });
+    for (const field of CHOICE_FIELDS) if (item[field] !== undefined) Object.assign(next, { [field]: item[field] });
+    const { updatedAt: _stored, ...before } = stored ?? ({} as Partial<Course>);
+    const { updatedAt: _next, ...after } = next;
+    if (!stored || !sameJson(before, after)) await database.courses.put({ ...next, updatedAt: now });
   }
 }
 

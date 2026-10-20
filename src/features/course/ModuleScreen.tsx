@@ -6,6 +6,8 @@ import { installLesson } from "../../content/client";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { moduleReadings } from "../../storage/readings";
 import { db } from "../../storage/db";
+import { courses } from "../../storage/courses";
+import { CourseStart } from "../today/FirstRun";
 import { useFollowCourse } from "../../shared/courses";
 import { Tick } from "../../shared/Tick";
 import { useSpread } from "../../shared/media";
@@ -22,10 +24,13 @@ const FROM_MODULE = { fromModule: true };
 
 export function ModuleScreen() {
   const { moduleId = "" } = useParams();
-  const view = useLiveQuery(async () => {
+  const found = useLiveQuery(async () => {
     const own = await db.modules.get(moduleId);
-    return (await moduleViews(own?.courseId)).find((item) => item.module.id === moduleId) ?? null;
+    const started = !!own && (await courses()).some((course) => course.id === own.courseId && course.installed);
+    const view = (await moduleViews(own?.courseId)).find((item) => item.module.id === moduleId) ?? null;
+    return { view, started };
   }, [moduleId]);
+  const view = found?.view;
   const courseId = view?.module.courseId;
   useFollowCourse(courseId);
   const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
@@ -35,15 +40,23 @@ export function ModuleScreen() {
   const [problem, setProblem] = useState("");
   // Уроки опубликованного модуля скачиваются при открытии: без пакета урок не пройти.
   useEffect(() => {
-    if (!view) return;
+    if (!view || !found?.started) return;
     for (const lesson of [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : []), ...view.review])
       if (!lesson.installed)
         installLesson(lesson.id).catch(() =>
           setProblem("Не удалось скачать уроки модуля. Проверьте сеть и откройте модуль снова."),
         );
-  }, [view]);
+  }, [view, found?.started]);
   if (view === undefined) return <Screen back="Модуль" />;
   if (view === null) return <Navigate to="/course" replace />;
+  // Курс начинают только кнопкой: адрес модуля не должен тихо ставить уроки и менять порядок курсов.
+  if (!found?.started)
+    return (
+      <Screen back="Модуль">
+        <h1>{view.module.subtitle}</h1>
+        <CourseStart courseId={view.module.courseId} />
+      </Screen>
+    );
   const { module } = view;
   const draft = module.status === "draft";
   const done = view.lessons.filter((lesson) => lesson.completed).length;

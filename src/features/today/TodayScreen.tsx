@@ -15,7 +15,12 @@ export function TodayScreen() {
   if (installed === 0)
     return (
       <Screen>
-        <h1 data-testid="today-title">Начните с курса</h1>
+        <h1 data-testid="today-title" lang="el">
+          Τετράδιο
+        </h1>
+        <p className="mb-6 text-muted-foreground">
+          Курсы языков с уроками по программе и ежедневным повторением карточек
+        </p>
         <CourseStart />
       </Screen>
     );

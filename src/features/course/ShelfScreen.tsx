@@ -2,7 +2,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { moduleViews, type ModuleView } from "../../storage/course";
-import { currentCourse } from "../../storage/courses";
+import { courses, shelfCourse } from "../../storage/courses";
 import { db } from "../../storage/db";
 import { CourseSwitch } from "../../shared/CourseSwitch";
 import { useCourseProfile } from "../../shared/language";
@@ -23,8 +23,9 @@ function coverLabel(view: ModuleView) {
 
 export function CourseScreen() {
   const data = useLiveQuery(async () => {
-    const courseId = await currentCourse();
-    return { courseId, views: await moduleViews(courseId) };
+    const courseId = await shelfCourse();
+    const started = (await courses()).some((course) => course.id === courseId && course.installed);
+    return { courseId, views: started ? await moduleViews(courseId) : [] };
   }, []);
   const courseId = data?.courseId;
   const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
@@ -34,7 +35,7 @@ export function CourseScreen() {
   if (!views.length)
     return (
       <Screen>
-        <CourseSwitch />
+        <CourseSwitch shelf />
         <h1>Полка</h1>
         <CourseStart courseId={courseId} />
       </Screen>
@@ -44,7 +45,7 @@ export function CourseScreen() {
   const labels = checkpointLabels(course?.calendar);
   return (
     <Screen>
-      <CourseSwitch />
+      <CourseSwitch shelf />
       <div className="flex items-baseline justify-between gap-3">
         <h1>Полка</h1>
         <span className={base.meta}>

@@ -14,11 +14,13 @@ import { sentencesOf } from "../domain/sentences.ts";
 import {
   parseBlocks,
   parseCalendar,
+  parseCourseChoice,
   parseExam,
   parseModule,
   parsePassShare,
   type CatalogModule,
   type CourseCalendar,
+  type CourseChoice,
   type CourseExam,
   type Gloss as TextGloss,
   type LessonBlock,
@@ -41,7 +43,7 @@ import {
 export const SCHEMA_VERSION = 4;
 export type SchemaVersion = typeof SCHEMA_VERSION;
 
-export interface CatalogCourse {
+export interface CatalogCourse extends CourseChoice {
   id: string;
   title: string;
   language: string;
@@ -324,6 +326,7 @@ export function parseCatalog(input: unknown): Catalog {
     if (item.exam !== undefined) course.exam = parseExam(item.exam, `${path}.exam`);
     if (item.passShare !== undefined) course.passShare = parsePassShare(item.passShare, `${path}.passShare`);
     if (item.calendar !== undefined) calendars.set(course, item.calendar);
+    Object.assign(course, parseCourseChoice(item, path));
     return course;
   });
   unique(
