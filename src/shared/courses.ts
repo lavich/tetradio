@@ -18,7 +18,6 @@ import {
   todayCourse,
   type CourseEntry,
 } from "../storage/courses";
-export { pauseCourse, resumeCourse } from "../storage/pauses";
 
 /** Установленные курсы по порядку установки. `undefined` — ещё читается. */
 export const useCourses = (): CourseEntry[] | undefined =>

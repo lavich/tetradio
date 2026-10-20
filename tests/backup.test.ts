@@ -16,7 +16,8 @@ import { installCompleted } from "./helpers/content";
 import { kvAdapter } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport } from "../src/sync/transport";
-import { pauseCourse, PAUSES_MARK_KEY, readPauses } from "../src/storage/pauses";
+import { PAUSES_MARK_KEY, readPauses } from "../src/storage/pauses";
+import { pauseCourse } from "../src/storage/pause-actions";
 
 const NAME = "tetradio-backup";
 /** Тестовая база называется иначе, а копия проверяется по имени базы приложения. */

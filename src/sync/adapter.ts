@@ -117,6 +117,7 @@ export function parsePointer(raw: string): VersionMeta | null {
         Array.isArray(meta.reads) && meta.reads.every((format: unknown) => typeof format === "number")
           ? meta.reads
           : undefined,
+      ...(isClock(meta.pausesOver) ? { pausesOver: meta.pausesOver } : {}),
     };
   } catch {
     return null;

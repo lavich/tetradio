@@ -17,16 +17,7 @@ import { CONTENT_TABLES, STORED_KINDS } from "../storage/kinds";
 import { blockKey } from "../storage/course";
 import { PENDING_LESSONS_KEY, readPending, type PendingLessons } from "../storage/pending";
 import type { BlockProgress } from "../domain/types";
-import {
-  laterPause,
-  markPauses,
-  mergePauses,
-  PAUSES_MARK_KEY,
-  readPauses,
-  samePause,
-  writePauses,
-  type CoursePauses,
-} from "../storage/pauses";
+import { mergePauses, PAUSES_MARK_KEY, readPauses, writePauses, type CoursePauses } from "../storage/pauses";
 import {
   SNAPSHOT_FORMAT,
   type Clock,
@@ -350,18 +341,11 @@ export async function applySnapshot(
 }
 
 /**
- * Паузы версии сливаются с паузами устройства. Если своя запись новее записи версии или её в версии нет (версия прежней
- * сборки без пауз), ставится отметка пауз: устройство опубликует их одной версией поверх применённой.
+ * Паузы версии сливаются с паузами устройства. Своя более новая пауза, которой в версии нет (версия прежней сборки
+ * без пауз), отдельно не публикуется: она уйдёт со следующей своей публикацией прогресса. Немедленная публикация
+ * поверх версии прежней сборки дала бы этой сборке окно выбора при её неотправленных ответах.
  */
-const applyPauses = zoned(async function applyPauses(database: AppDatabase, list: CompactPause[] | undefined) {
-  const local = await readPauses(database);
-  const incoming = pausesOf(list);
-  await mergeSnapshotPauses(database, [list]);
-  const ahead = Object.entries(local).some(
-    ([courseId, pause]) => !samePause(pause, incoming[courseId]) && laterPause(pause, incoming[courseId]) === pause,
-  );
-  if (ahead) await markPauses(database);
-});
+const applyPauses = (database: AppDatabase, list: CompactPause[] | undefined) => mergeSnapshotPauses(database, [list]);
 
 /**
  * Пакет установлен: отложенные состояния его карточек переходят в обычную таблицу, завершение урока — из снимка.

@@ -1,4 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
+import { useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -30,6 +31,9 @@ import { DayNotes } from "./DayNotes";
 import { ReadingSheet } from "./ReadingSheet";
 import css from "./today.module.css";
 
+/** Возврат курса с экрана «Все курсы на паузе» меняет весь экран: фокус — на заголовок нового, а не на body. */
+export const titleFocus = { pending: false };
+
 /**
  * «Сегодня» курса — страница тетради с двумя ритмами: повторение каждый день, урок 2–3 раза в неделю.
  * Главная кнопка одна: у повторения, пока оно ждёт, потом у урока. На широком окне справа — тетрадь модуля.
@@ -52,6 +56,13 @@ export function CourseToday({
   const reviewed = useLiveQuery(() => reviewedOn(today, courseId), [today, courseId]);
   const week = useLiveQuery(() => lessonDays(monday, deviceTimezone(), courseId), [monday, deviceTimezone(), courseId]);
   const profile = useCourseProfile(courseId);
+  const title = useRef<HTMLHeadingElement>(null);
+  const shown = !!views && reviewed !== undefined;
+  useEffect(() => {
+    if (!shown || !titleFocus.pending) return;
+    titleFocus.pending = false;
+    title.current?.focus();
+  }, [shown]);
   const readings = useLiveQuery(async () => (courseId ? await courseReadings(courseId) : null), [courseId]);
 
   const lessons = (views ?? []).flatMap((view) => [
@@ -72,7 +83,7 @@ export function CourseToday({
       <p className={nb.date} lang={profile.code}>
         {pageDate(today, profile)}
       </p>
-      <h1 className="sr-only" data-testid="today-title">
+      <h1 ref={title} className="sr-only" data-testid="today-title" tabIndex={-1}>
         Сегодня
       </h1>
       <Review

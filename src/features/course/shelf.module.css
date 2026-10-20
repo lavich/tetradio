@@ -111,10 +111,6 @@
   border-top: 1.5px solid var(--pen);
   opacity: 0.6;
 }
-/* Полка курса на паузе: обложки без цвета, но с прежней яркостью — подписи остаются читаемыми. */
-.shelfPaused .cover {
-  filter: grayscale(0.85);
-}
 .paused {
   display: flex;
   flex-wrap: wrap;

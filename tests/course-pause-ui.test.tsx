@@ -9,7 +9,7 @@ import { Segmented } from "../src/shared/CourseSwitch";
 import { sessionPath } from "../src/features/learning/session-actions";
 import { db } from "../src/storage/db";
 import { rememberCourses, setPrimaryCourse } from "../src/storage/courses";
-import { pauseCourse } from "../src/storage/pauses";
+import { pauseCourse } from "../src/storage/pause-actions";
 import type { DailyPlan } from "../src/domain/learning";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;

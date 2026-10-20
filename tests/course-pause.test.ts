@@ -14,12 +14,11 @@ import {
   COURSE_PAUSES_KEY,
   mergePauses,
   parsePauses,
-  pauseCourse,
   PAUSES_MARK_KEY,
   readPauses,
-  resumeCourse,
   type CoursePause,
 } from "../src/storage/pauses";
+import { pauseCourse, resumeCourse } from "../src/storage/pause-actions";
 import { DIRTY_KEY } from "../src/storage/ops";
 import { dexieSource } from "../src/storage/queries";
 import { pausedSince } from "../src/shared/format";
@@ -72,7 +71,22 @@ describe("запись паузы", () => {
   it("отстающие часы — изменение на 1 мс позже известной записи", async () => {
     await pauseCourse(B, at("2026-10-12T10:00:00Z"), db);
     await resumeCourse(B, at("2026-10-12T09:00:00Z"), db);
-    expect((await readPauses(db))[B].updatedAt).toBe("2026-10-12T10:00:00.001Z");
+    expect((await readPauses(db))[B]).toEqual({
+      pausedAt: null,
+      resumedAt: "2026-10-12T09:00:00.000Z",
+      updatedAt: "2026-10-12T10:00:00.001Z",
+    });
+  });
+  it("время записи приводится к ISO", () => {
+    expect(
+      parsePauses(
+        JSON.stringify({
+          [B]: { pausedAt: "2026-10-12T12:00:00+03:00", resumedAt: null, updatedAt: "2026-10-12T09:00Z" },
+        }),
+      ),
+    ).toEqual({
+      [B]: { pausedAt: "2026-10-12T09:00:00.000Z", resumedAt: null, updatedAt: "2026-10-12T09:00:00.000Z" },
+    });
   });
   it("испорченная запись — нет паузы", async () => {
     expect(parsePauses("{")).toEqual({});

@@ -344,7 +344,9 @@ export class SyncCoordinator {
           });
           return;
         }
-        await this.publish(device, flags.clock, [], [], null);
+        // Только паузы: прогресс — применённой здесь версии, другое устройство сольёт их без окна выбора.
+        const pausesOnly = flags.pauses && !flags.dirty && !flags.restored && !lost && !!flags.appliedId;
+        await this.publish(device, flags.clock, [], [], null, pausesOnly ? flags.clock : undefined);
         if (depth < 1) await this.decide(writes, depth + 1); // поздняя конкурентная запись обнаруживается повторным чтением
         return;
       }
@@ -400,6 +402,29 @@ export class SyncCoordinator {
       this.conflict("initial", [await localBranch(), ...remote]);
       return;
     }
+    // Другие устройства опубликовали только паузы поверх той же версии, что применена здесь: свои неотправленные
+    // ответы не расходятся с ними — паузы сливаются, и публикуется свой прогресс без окна выбора.
+    if (
+      flags.dirty &&
+      remote.every((branch) => branch.meta!.pausesOver && sameClock(branch.meta!.pausesOver, flags.clock))
+    ) {
+      await mergeSnapshotPauses(
+        database,
+        remote.map((branch) => branch.snapshot.pauses),
+      );
+      if (!writes) {
+        this.update({ phase: "idle", dirty: true });
+        return;
+      }
+      await this.publish(
+        device,
+        flags.clock,
+        remote.map((branch) => branch.meta!.clock),
+        [],
+        null,
+      );
+      return;
+    }
     // Версия облака без уже опубликованного здесь — расхождение, а не обновление: молча её применять нельзя.
     const ahead = remote.filter((branch) => dominates(branch.meta!.clock, flags.clock));
     if (!flags.dirty && ahead.length === remote.length) {
@@ -419,9 +444,9 @@ export class SyncCoordinator {
           this.update({ phase: "idle", dirty: true });
           return;
         }
-        // Пауза этого устройства новее версии или её в версии нет: публикуем поверх применённой, без окна выбора.
+        // Пауза, поставленная здесь, ещё не опубликована: публикуем только её поверх применённой версии.
         if (writes && (await readMeta(database, META.pauses)))
-          await this.publish(device, branch.meta!.clock, [], [], null);
+          await this.publish(device, branch.meta!.clock, [], [], null, branch.meta!.clock);
         else await this.confirm();
         await this.installMissing(branch.snapshot.packages);
         return;
@@ -437,7 +462,8 @@ export class SyncCoordinator {
   private async confirm() {
     const at = this.options.now().toISOString();
     await writeMeta(this.options.database, META.lastOk, at);
-    const dirty = !!(await readMeta(this.options.database, META.dirty));
+    const { database } = this.options;
+    const dirty = !!(await readMeta(database, META.dirty)) || !!(await readMeta(database, META.pauses));
     this.retryMs = this.options.retryBaseMs ?? 30000;
     this.update({ phase: "synced", lastConfirmedAt: at, dirty, conflict: null, error: null, reason: null });
   }
@@ -449,6 +475,7 @@ export class SyncCoordinator {
     mergeWith: Clock[],
     resolves: string[],
     override: CompactSnapshot | null,
+    pausesOver?: Clock,
   ) {
     const { adapter, database } = this.options;
     const clock = mergeClocks(base, ...mergeWith);
@@ -479,6 +506,7 @@ export class SyncCoordinator {
       resolves,
       label: this.options.label || undefined,
       reads: DECLARED_READS,
+      ...(pausesOver ? { pausesOver } : {}),
     };
     const started = performance.now();
     let published;

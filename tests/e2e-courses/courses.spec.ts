@@ -446,7 +446,6 @@ test("три курса в переключателе на 360 px — имена
   expect(clipped).toBe(0);
 });
 
-/** Пауза и возврат с полки выбранного курса. */
 async function toggleFromShelf(page: Page, course: string, action: "Приостановить курс" | "Продолжить курс") {
   await page.goto("/app/course");
   const switcher = page.getByRole("radiogroup", { name: "Курс" });
@@ -457,7 +456,6 @@ async function toggleFromShelf(page: Page, course: string, action: "Приост
   if (action === "Приостановить курс") await expect(paused).toBeVisible();
   else await expect(paused).toHaveCount(0);
 }
-/** Просроченные повторения английских карточек — как будто курс долго стоял на паузе. */
 const overdueEnglish = (page: Page, count: number, dueDays: number) =>
   page.evaluate(
     async ({ count, dueDays }) => {
@@ -497,15 +495,39 @@ const overdueEnglish = (page: Page, count: number, dueDays: number) =>
     },
     { count, dueDays },
   );
+const contrastOfCovers = (page: Page) =>
+  page.evaluate(() => {
+    const rgb = (value: string) =>
+      value
+        .match(/[\d.]+/g)!
+        .slice(0, 3)
+        .map(Number);
+    const lum = ([r, g, b]: number[]) => {
+      const c = [r, g, b].map((v) => {
+        const s = v / 255;
+        return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    };
+    const ratio = (a: number[], b: number[]) => {
+      const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+      return (x + 0.05) / (y + 0.05);
+    };
+    return [...document.querySelectorAll<HTMLElement>('a[aria-label^="Модуль"]')].map((cover) => ({
+      ratio: ratio(rgb(getComputedStyle(cover).color), rgb(getComputedStyle(cover).backgroundColor)),
+      filter: getComputedStyle(cover).filter,
+    }));
+  });
 
 test("пауза с полки убирает английский с «Сегодня», возврат возвращает", async ({ page }) => {
   await installBoth(page);
   await toggleFromShelf(page, "Английский", "Приостановить курс");
-  await expect(page.getByTestId("shelf-status")).toHaveText(
-    "Курс «Английский» на паузе. Вернуть его можно на полке или в настройках.",
-  );
+  const status = page.getByTestId("shelf-status");
+  await expect(status).toHaveText("Курс «Английский» на паузе. Вернуть его можно на полке или в настройках.");
+  await expect(status).toHaveClass(/sr-only/);
   const paused = page.getByTestId("shelf-paused");
   await expect(paused).toContainText(/^На паузе с \d+ [а-я]+/);
+  await expect(paused.getByRole("button", { name: "Продолжить курс" })).toBeFocused();
   await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
@@ -515,8 +537,18 @@ test("пауза с полки убирает английский с «Сего
   await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский", exact: true }).click();
   await paused.getByRole("button", { name: "Продолжить курс" }).click();
   await expect(paused).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Действия с курсом «Английский»" })).toBeFocused();
   await page.goto("/app/");
   await expect(page.getByTestId("other-course").getByRole("heading", { name: "Английский" })).toBeVisible();
+});
+
+test("строка статуса паузы не переходит на полку другого курса", async ({ page }) => {
+  await installBoth(page);
+  await toggleFromShelf(page, "Английский", "Приостановить курс");
+  await expect(page.getByTestId("shelf-status")).toHaveText(/на паузе/);
+  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Греческий" }).click();
+  await expect(page.getByRole("button", { name: "Действия с курсом «Греческий»" })).toBeVisible();
+  await expect(page.getByTestId("shelf-status")).toHaveText("");
 });
 
 test("основной на паузе из настроек — на «Сегодня» основным становится следующий, после возврата — прежний", async ({
@@ -525,8 +557,11 @@ test("основной на паузе из настроек — на «Сего
   await installBoth(page);
   await page.goto("/app/progress/settings");
   const courses = page.getByTestId("settings-courses");
-  await courses.getByRole("button", { name: "Приостановить курс «Греческий»" }).click();
-  await expect(page.getByTestId("courses-status")).toContainText("Курс «Греческий» на паузе");
+  const pause = courses.getByRole("button", { name: "Приостановить курс «Греческий»" });
+  await pause.click();
+  await expect(page.getByTestId("courses-status")).toHaveText("Курс «Греческий» на паузе.");
+  const resume = courses.getByRole("button", { name: "Продолжить курс «Греческий»" });
+  await expect(resume).toBeFocused();
   await expect(courses.getByTestId("settings-course").first()).toContainText(/Греческий\s*На паузе с/);
   const choice = page.getByRole("radiogroup", { name: "Основной курс" });
   const greek = choice.getByRole("radio", { name: "Греческий, на паузе" });
@@ -538,7 +573,6 @@ test("основной на паузе из настроек — на «Сего
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Дорога на работу");
   await expect(page.getByTestId("other-course")).toHaveCount(0);
-  // Курс на паузе открывается на остальных экранах, как раньше.
   await page.goto("/app/words");
   const words = page.getByRole("radiogroup", { name: "Курс" });
   await words.getByRole("radio", { name: "Греческий" }).click();
@@ -546,10 +580,52 @@ test("основной на паузе из настроек — на «Сего
   await expect(page.getByText("γεια").first()).toBeVisible();
 
   await page.goto("/app/progress/settings");
-  await courses.getByRole("button", { name: "Продолжить курс «Греческий»" }).click();
-  await expect(courses.getByRole("button", { name: "Приостановить курс «Греческий»" })).toBeVisible();
+  await resume.click();
+  await expect(courses.getByRole("button", { name: "Приостановить курс «Греческий»" })).toBeFocused();
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
+});
+
+test("выбор основного из трёх курсов с пометкой «на паузе» на 360 px — имена целиком", async ({ page }) => {
+  await page.route("**/content/catalog.json", async (route) => {
+    const catalog = await (await route.fetch()).json();
+    const lesson = catalog.lessons.find((entry: { id: string }) => entry.id === "e01-1");
+    catalog.courses.push({
+      id: "english-2",
+      title: "Английский 2",
+      language: "en",
+      short: "Английский 2",
+      order: 4,
+      lessonIds: ["e02-copy"],
+    });
+    catalog.lessons.push({ ...lesson, id: "e02-copy", courseId: "english-2" });
+    await route.fulfill({ json: catalog });
+  });
+  await page.setViewportSize({ width: 360, height: 800 });
+  await installBoth(page);
+  await page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve) => {
+      const request = indexedDB.open("tetradio-mock-1");
+      request.onsuccess = () => resolve(request.result);
+    });
+    const write = database.transaction("meta", "readwrite");
+    write.objectStore("meta").put({
+      key: "sync:pendingLessons",
+      value: JSON.stringify({
+        "e02-copy": { id: "e02-copy", completed: true, updatedAt: new Date().toISOString() },
+      }),
+    });
+    await new Promise((resolve) => (write.oncomplete = resolve));
+    database.close();
+  });
+  await page.goto("/app/progress/settings");
+  await page.getByRole("button", { name: "Приостановить курс «Английский»" }).click();
+  const radios = page.getByRole("radiogroup", { name: "Основной курс" }).getByRole("radio");
+  await expect(radios).toHaveText(["Греческий", "Английский · на паузе", "Английский 2"]);
+  const clipped = await radios.evaluateAll(
+    (items) => items.filter((item) => item.scrollWidth > item.clientWidth + 1).length,
+  );
+  expect(clipped).toBe(0);
 });
 
 test("все курсы на паузе — «Все курсы на паузе», «Начать другой курс» открывает карточку неначатого", async ({
@@ -574,6 +650,7 @@ test("все курсы на паузе — «Все курсы на паузе�
   await page.goto("/app/");
   await page.getByRole("button", { name: /^Продолжить курс/ }).click();
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
+  await expect(page.getByTestId("today-title")).toBeFocused();
 });
 
 test("после паузы — полное число и строка «сначала то, что могло забыться», пока долг не повторён", async ({
@@ -584,6 +661,7 @@ test("после паузы — полное число и строка «сна
   await overdueEnglish(page, 3, -20);
   await toggleFromShelf(page, "Английский", "Приостановить курс");
   await page.goto("/app/");
+  await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
   await expect(page.getByTestId("other-course")).toHaveCount(0);
   await toggleFromShelf(page, "Английский", "Продолжить курс");
   await page.goto("/app/");
@@ -596,72 +674,68 @@ test("после паузы — полное число и строка «сна
   await expect(other.getByTestId("after-pause")).toHaveCount(0);
 });
 
-test("меню «⋯» с клавиатуры, 44 px, полка на паузе на 360 px без прокрутки и с читаемыми подписями", async ({
+test("меню «⋯»: клавиатура, щелчок вне, Tab, 44 px, полка на паузе на 360 px с читаемыми обложками", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 360, height: 780 });
   await installBoth(page);
   await page.goto("/app/course");
+  await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
+  const before = await contrastOfCovers(page);
+  expect(before.length).toBeGreaterThan(0);
   const trigger = page.getByRole("button", { name: "Действия с курсом «Английский»" });
   const box = await trigger.boundingBox();
   expect(box!.width).toBeGreaterThanOrEqual(44);
   expect(box!.height).toBeGreaterThanOrEqual(44);
+  const item = page.getByRole("menuitem", { name: "Приостановить курс" });
+  await trigger.click();
+  await expect(item).toBeVisible();
+  await page.getByRole("heading", { name: "Полка" }).click();
+  await expect(item).toHaveCount(0);
   await trigger.focus();
   await page.keyboard.press("Enter");
-  const item = page.getByRole("menuitem", { name: "Приостановить курс" });
   await expect(item).toBeFocused();
+  await expect(trigger).toHaveAttribute("aria-controls", (await page.getByRole("menu").getAttribute("id"))!);
+  await page.keyboard.press("Tab");
+  await expect(item).toHaveCount(0);
+  await trigger.focus();
+  await page.keyboard.press("Enter");
   await page.keyboard.press("Escape");
   await expect(item).toHaveCount(0);
   await expect(trigger).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(item).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(page.getByTestId("shelf-paused")).toBeVisible();
-  await expect(page.getByTestId("shelf-paused").getByRole("button", { name: "Продолжить курс" })).toBeVisible();
+  const resume = page.getByTestId("shelf-paused").getByRole("button", { name: "Продолжить курс" });
+  await expect(resume).toBeFocused();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  const contrast = await page.evaluate(() => {
-    const rgb = (value: string) =>
-      value
-        .match(/[\d.]+/g)!
-        .slice(0, 3)
-        .map(Number);
-    const lum = ([r, g, b]: number[]) => {
-      const c = [r, g, b].map((v) => {
-        const s = v / 255;
-        return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-      });
-      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-    };
-    const ratio = (a: number[], b: number[]) => {
-      const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+  const after = await contrastOfCovers(page);
+  for (const [index, cover] of after.entries()) {
+    expect(cover.filter).toBe("none");
+    expect(cover.ratio).toBeGreaterThanOrEqual(Math.min(4.5, before[index].ratio));
+  }
+  const text = await page
+    .getByTestId("shelf-paused")
+    .locator("p")
+    .evaluate((node) => {
+      const rgb = (value: string) =>
+        value
+          .match(/[\d.]+/g)!
+          .slice(0, 3)
+          .map(Number);
+      const lum = ([r, g, b]: number[]) =>
+        [r, g, b]
+          .map((v) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4))
+          .reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
+      let background: Element | null = node;
+      while (background && getComputedStyle(background).backgroundColor === "rgba(0, 0, 0, 0)")
+        background = background.parentElement;
+      const [x, y] = [
+        lum(rgb(getComputedStyle(node).color)),
+        lum(rgb(getComputedStyle(background ?? document.body).backgroundColor)),
+      ].sort((p, q) => q - p);
       return (x + 0.05) / (y + 0.05);
-    };
-    // CSS grayscale(amount) — матрица из Filter Effects для фона обложки; белый текст она не меняет.
-    const gray = ([r, g, b]: number[], amount: number) => {
-      const k = 1 - amount;
-      return [
-        (0.2126 + 0.7874 * k) * r + (0.7152 - 0.7152 * k) * g + (0.0722 - 0.0722 * k) * b,
-        (0.2126 - 0.2126 * k) * r + (0.7152 + 0.2848 * k) * g + (0.0722 - 0.0722 * k) * b,
-        (0.2126 - 0.2126 * k) * r + (0.7152 - 0.7152 * k) * g + (0.0722 + 0.9278 * k) * b,
-      ];
-    };
-    const covers = [...document.querySelectorAll<HTMLElement>('a[aria-label^="Модуль"]')];
-    const text = document.querySelector<HTMLElement>('[data-testid="shelf-paused"] p')!;
-    let background: Element | null = text;
-    while (background && getComputedStyle(background).backgroundColor === "rgba(0, 0, 0, 0)")
-      background = background.parentElement;
-    return {
-      text: ratio(
-        rgb(getComputedStyle(text).color),
-        rgb(getComputedStyle(background ?? document.body).backgroundColor),
-      ),
-      covers: covers.map((cover) => {
-        const bg = rgb(getComputedStyle(cover).backgroundColor);
-        const fg = rgb(getComputedStyle(cover).color);
-        return { before: ratio(fg, bg), after: ratio(fg, gray(bg, 0.85)) };
-      }),
-    };
-  });
-  expect(contrast.text).toBeGreaterThanOrEqual(4.5);
-  for (const cover of contrast.covers) expect(cover.after).toBeGreaterThanOrEqual(Math.min(4.5, cover.before));
+    });
+  expect(text).toBeGreaterThanOrEqual(4.5);
+  await page.keyboard.press("Enter");
+  await expect(trigger).toBeFocused();
 });

@@ -5,7 +5,8 @@ import { useHapticsSetting } from "../../platform/haptics";
 import { launchContext } from "../../platform/launch";
 import { useLaunchMode, usePlatform } from "../../platform/platform";
 import { Button } from "@/components/ui/button";
-import { pauseCourse, resumeCourse, setPrimaryCourse, usePrimaryCourse, useStartedCourses } from "../../shared/courses";
+import { setPrimaryCourse, usePrimaryCourse, useStartedCourses } from "../../shared/courses";
+import { pauseCourse, resumeCourse } from "../../storage/pause-actions";
 import { useAction } from "../../shared/action";
 import { Segmented } from "../../shared/CourseSwitch";
 import { CARDS, pausedSince, withCount, WORDS } from "../../shared/format";
@@ -114,16 +115,18 @@ function Courses() {
   const [status, setStatus] = useState("");
   const { busy, problem, run } = useAction("Не удалось изменить курс");
   if (!courses?.length) return null;
-  const toggle = (id: string, title: string, paused: boolean) =>
-    run(async () => {
+  const toggle = (id: string, title: string, paused: boolean) => {
+    if (busy) return;
+    return run(async () => {
       if (paused) {
         await resumeCourse(id);
         setStatus(`Курс «${title}» продолжается.`);
       } else {
         await pauseCourse(id);
-        setStatus(`Курс «${title}» на паузе. Вернуть его можно на полке или в настройках.`);
+        setStatus(`Курс «${title}» на паузе.`);
       }
     });
+  };
   return (
     <section aria-labelledby="courses" className={css.section} data-testid="settings-courses">
       <h2 id="courses" className={css.heading}>
@@ -164,7 +167,7 @@ function Courses() {
               size="md"
               variant="soft"
               className="w-auto flex-none"
-              disabled={busy}
+              aria-disabled={busy}
               onClick={() => void toggle(course.id, course.title, !!course.pausedAt)}
               aria-label={`${course.pausedAt ? "Продолжить" : "Приостановить"} курс «${course.title}»`}
             >

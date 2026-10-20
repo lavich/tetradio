@@ -31,7 +31,13 @@ export function ProgressScreen() {
   const course = useLiveQuery(async () => (await currentCourse()) ?? null, []);
   const courseId = course ?? undefined;
   const data = useLiveQuery(
-    () => (course === undefined ? undefined : courseProgress(now, deviceTimezone(), courseId)),
+    async () =>
+      course === undefined
+        ? undefined
+        : {
+            ...(await courseProgress(now, deviceTimezone(), courseId)),
+            pausedAt: courseId ? (await courses()).find((entry) => entry.id === courseId)?.pausedAt : undefined,
+          },
     [studyDay(now, deviceTimezone()), deviceTimezone(), course],
   );
   const words = useLiveQuery(() => (course === undefined ? undefined : dictionary(courseId)), [course]);
@@ -48,10 +54,6 @@ export function ProgressScreen() {
     return all.filter((leech) => own.has(leech.unitKey));
   }, [stats, courseId]);
   const profile = useCourseProfile(courseId);
-  const pausedAt = useLiveQuery(
-    async () => (courseId ? ((await courses()).find((entry) => entry.id === courseId)?.pausedAt ?? null) : null),
-    [courseId],
-  );
   if (!data) return <Screen wide />;
   const head = (
     <>
@@ -59,7 +61,7 @@ export function ProgressScreen() {
       <h1 className={nb.title}>Прогресс</h1>
     </>
   );
-  const path = <Path data={data} pausedAt={pausedAt ?? undefined} />;
+  const path = <Path data={data} pausedAt={data.pausedAt} />;
   const ready = <Skills skills={data.skills} complete={data.complete} passShare={data.passShare} />;
   const cards = (
     <Cards

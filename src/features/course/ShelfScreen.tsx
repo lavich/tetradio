@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
@@ -9,11 +9,11 @@ import { db } from "../../storage/db";
 import { CourseSwitch } from "../../shared/CourseSwitch";
 import { useAction } from "../../shared/action";
 import { pausedSince } from "../../shared/format";
-import { pauseCourse, resumeCourse } from "../../storage/pauses";
+import { pauseCourse, resumeCourse } from "../../storage/pause-actions";
 import { CourseMenu } from "./CourseMenu";
 import { useCourseProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
-import { coverColor } from "../../shared/notebook";
+import { coverColor, mutedCover } from "../../shared/notebook";
 import { CourseStart } from "../today/FirstRun";
 import { checkpointLabels } from "./checkpoints";
 import { ExamLine } from "./ExamLine";
@@ -34,16 +34,32 @@ export function CourseScreen() {
     return { courseId, pausedAt: entry?.pausedAt, views: entry ? await moduleViews(courseId) : [] };
   }, []);
   const [status, setStatus] = useState("");
-  const { busy, problem, run } = useAction("Не удалось изменить курс");
+  const { busy, problem, setProblem, run } = useAction("Не удалось изменить курс");
   const courseId = data?.courseId;
+  const trigger = useRef<HTMLButtonElement>(null);
+  const resume = useRef<HTMLButtonElement>(null);
+  // Кнопка, нажатая для паузы или возврата, исчезает: фокус переходит на ту, что её заменила, а не на body.
+  const focusAfter = useRef<"resume" | "menu" | null>(null);
+  const pausedNow = data?.pausedAt;
+  useEffect(() => {
+    if (focusAfter.current === "resume" && pausedNow) resume.current?.focus();
+    else if (focusAfter.current === "menu" && !pausedNow) trigger.current?.focus();
+    else return;
+    focusAfter.current = null;
+  }, [pausedNow]);
+  useEffect(() => {
+    setStatus("");
+    setProblem("");
+  }, [courseId, setProblem]);
   const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
   const profile = useCourseProfile(courseId);
   if (data === undefined) return <Screen />;
   const { views, pausedAt } = data;
   const title = course?.short ?? course?.title ?? "";
-  const toggle = () =>
-    run(async () => {
-      if (!courseId) return;
+  const toggle = () => {
+    if (busy || !courseId) return;
+    focusAfter.current = pausedAt ? "menu" : "resume";
+    return run(async () => {
       if (pausedAt) {
         await resumeCourse(courseId);
         setStatus(`Курс «${title}» продолжается.`);
@@ -52,8 +68,9 @@ export function CourseScreen() {
         setStatus(`Курс «${title}» на паузе. Вернуть его можно на полке или в настройках.`);
       }
     });
+  };
   const statusLine = (
-    <p className={css.status} role="status" data-testid="shelf-status">
+    <p className="sr-only" role="status" data-testid="shelf-status">
       {status}
     </p>
   );
@@ -78,7 +95,7 @@ export function CourseScreen() {
           <span className={base.meta}>
             {filled} из {views.length} заполнено
           </span>
-          <CourseMenu title={title} paused={!!pausedAt} onToggle={() => void toggle()} disabled={busy} />
+          <CourseMenu title={title} paused={!!pausedAt} onToggle={() => void toggle()} trigger={trigger} />
         </span>
       </div>
       <ExamLine courseId={views[0].module.courseId} />
@@ -91,12 +108,12 @@ export function CourseScreen() {
       {pausedAt && (
         <div className={css.paused} data-testid="shelf-paused">
           <p className={css.pausedText}>На паузе с {pausedSince(pausedAt)}</p>
-          <Button size="md" className="w-auto" onClick={() => void toggle()} disabled={busy}>
+          <Button ref={resume} size="md" className="w-auto" onClick={() => void toggle()} aria-disabled={busy}>
             Продолжить курс
           </Button>
         </div>
       )}
-      <div className={pausedAt ? `${css.shelf} ${css.shelfPaused}` : css.shelf}>
+      <div className={css.shelf}>
         {views.map((view) => {
           const { module } = view;
           const draft = module.status === "draft";
@@ -106,7 +123,9 @@ export function CourseScreen() {
               <Link
                 to={`/course/${module.id}`}
                 className={classes}
-                style={draft ? undefined : { background: coverColor(module.number) }}
+                style={
+                  draft ? undefined : { background: pausedAt ? mutedCover(module.number) : coverColor(module.number) }
+                }
                 aria-label={`Модуль ${module.number}: ${module.subtitle}. ${coverLabel(view)}`}
               >
                 {view.completed ? <Tick className={css.coverStamp} label="заполнена" /> : null}

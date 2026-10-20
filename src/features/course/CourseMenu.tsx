@@ -1,5 +1,5 @@
 import { Ellipsis } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type RefObject } from "react";
 import css from "./shelf.module.css";
 
 /**
@@ -10,15 +10,15 @@ export function CourseMenu({
   title,
   paused,
   onToggle,
-  disabled,
+  trigger,
 }: {
   title: string;
   paused: boolean;
   onToggle: () => void;
-  disabled?: boolean;
+  trigger: RefObject<HTMLButtonElement | null>;
 }) {
   const [open, setOpen] = useState(false);
-  const trigger = useRef<HTMLButtonElement>(null);
+  const popup = useId();
   const item = useRef<HTMLButtonElement>(null);
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -43,14 +43,15 @@ export function CourseMenu({
         aria-label={`Действия с курсом «${title}»`}
         aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={open ? popup : undefined}
         data-testid="course-menu"
-        disabled={disabled}
         onClick={() => setOpen((value) => !value)}
       >
         <Ellipsis aria-hidden size={20} />
       </button>
       {open && (
         <div
+          id={popup}
           role="menu"
           aria-label={`Действия с курсом «${title}»`}
           className={css.menuPopup}

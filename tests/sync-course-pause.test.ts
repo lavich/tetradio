@@ -3,7 +3,8 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
 import { makeSession } from "../src/domain/learning";
-import { pauseCourse, PAUSES_MARK_KEY, readPauses, resumeCourse } from "../src/storage/pauses";
+import { PAUSES_MARK_KEY, readPauses } from "../src/storage/pauses";
+import { pauseCourse, resumeCourse } from "../src/storage/pause-actions";
 import { kvAdapter } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { applySnapshot, buildSnapshot, META, readMeta, readSnapshot, writeMeta } from "../src/sync/snapshot";
@@ -106,7 +107,7 @@ describe("пауза в снимке", () => {
     expect(decoded.pauses).toEqual([pause]);
     expect(decoded.states).toHaveLength(1);
   });
-  it("страж: снимок с паузами разбирается кодом main без ошибки, паузы пропускаются", () => {
+  it("страж: разбор текста с паузами совпадает с результатом кодека main из фикстуры, кроме пауз", () => {
     for (const key of ["f5", "f6"] as const) {
       const { text, decoded } = pauseMain[key];
       const { pauses, ...rest } = decodeSnapshot(text);
@@ -127,7 +128,7 @@ describe("слияние пауз при применении версии", () 
     resumedAt: pausedAt ? null : updatedAt,
     updatedAt,
   });
-  it("запись версии новее заменяет, старше — нет и ставит отметку пауз", async () => {
+  it("запись версии новее заменяет, старше — нет; отметку пауз применение не ставит", async () => {
     const { dev, snapshot } = await base();
     await pauseCourse(COURSE, new Date("2026-10-12T09:00:00Z"), dev.db);
     await writeMeta(dev.db, PAUSES_MARK_KEY, null);
@@ -150,18 +151,14 @@ describe("слияние пауз при применении версии", () 
       now(),
     );
     expect(await paused(dev)).toBe(true);
-    expect(await readMeta(dev.db, PAUSES_MARK_KEY)).not.toBeNull();
+    expect(await readMeta(dev.db, PAUSES_MARK_KEY)).toBeNull();
   });
-  it("версия без пауз паузу не меняет и ставит отметку; та же запись — отметки нет", async () => {
+  it("версия без пауз паузу не меняет и отдельной публикации не требует", async () => {
     const { dev, snapshot } = await base();
     await pauseCourse(COURSE, new Date("2026-10-12T09:00:00Z"), dev.db);
     await writeMeta(dev.db, PAUSES_MARK_KEY, null);
     await applySnapshot(dev.db, snapshot, "x-1", { x: 1 }, now());
     expect(await paused(dev)).toBe(true);
-    expect(await readMeta(dev.db, PAUSES_MARK_KEY)).not.toBeNull();
-    await writeMeta(dev.db, PAUSES_MARK_KEY, null);
-    const same = await readSnapshot(dev.db, now());
-    await applySnapshot(dev.db, same, "x-2", { x: 2 }, now());
     expect(await readMeta(dev.db, PAUSES_MARK_KEY)).toBeNull();
   });
   it("равное время — одна и та же запись на обоих устройствах", async () => {
@@ -197,7 +194,6 @@ describe("пауза между устройствами", () => {
     expect(await phone.db.cardStates.toArray()).toEqual(await tablet.db.cardStates.toArray());
     expect((await tablet.sync.exchange()).phase).toBe("synced");
     expect(await paused(tablet)).toBe(true);
-    // Нет цикла: следующие обмены ничего не публикуют.
     const ids = [await pointerId(phone), await pointerId(tablet)];
     await phone.sync.exchange();
     await tablet.sync.exchange();
@@ -260,11 +256,68 @@ describe("пауза между устройствами", () => {
     await fresh.sync.exchange();
     expect(await pointerId(fresh)).toBe(id);
   });
-  it("другой аккаунт — своя база, паузы не переходят", async () => {
-    const mine = await device("mine");
-    const other = await device("other");
-    await pauseCourse(COURSE, tick(), mine.db);
-    expect(await readPauses(other.db)).toEqual({});
+});
+
+describe("пауза другого устройства и свои неотправленные ответы", () => {
+  it("пауза на другом устройстве при своих неотправленных ответах — окна выбора нет, ответы и пауза сохранены", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false, true, true]);
+    const answered = await phone.db.cardStates.toArray();
+    await pauseCourse(COURSE, tick(), tablet.db);
+    expect((await tablet.sync.exchange()).phase).toBe("synced");
+    const status = await phone.sync.exchange();
+    expect(status.phase).toBe("synced");
+    expect(status.conflict).toBeNull();
+    expect(await phone.db.cardStates.toArray()).toEqual(answered);
+    expect(await paused(phone)).toBe(true);
+    expect(await readMeta(phone.db, META.dirty)).toBeNull();
+    expect((await tablet.sync.exchange()).phase).toBe("synced");
+    expect(await tablet.db.cardStates.toArray()).toEqual(answered);
+    expect(await paused(tablet)).toBe(true);
+  });
+  it("публикация только паузы помечена часами применённой версии, обычная — нет", async () => {
+    const { phone, tablet } = await pair();
+    await pauseCourse(COURSE, tick(), tablet.db);
+    await tablet.sync.exchange();
+    const pointer = JSON.parse(cloud.store.get(`p_${await tablet.sync.deviceId()}`)!);
+    expect(pointer.pausesOver).toEqual(JSON.parse((await readMeta(phone.db, META.clock))!));
+    await study(tablet, [true]);
+    await tablet.sync.exchange();
+    expect(JSON.parse(cloud.store.get(`p_${await tablet.sync.deviceId()}`)!).pausesOver).toBeUndefined();
+  });
+  it("версия без пауз на устройстве с более новой паузой не вызывает отдельной публикации", async () => {
+    const { phone, tablet } = await pair();
+    await pauseCourse(COURSE, tick(), phone.db);
+    await phone.sync.exchange();
+    await tablet.db.meta.delete("coursePauses");
+    await study(tablet, [true]);
+    await tablet.sync.exchange();
+    const before = await pointerId(phone);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    expect(await pointerId(phone)).toBe(before);
+    expect(await paused(phone)).toBe(true);
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    await tablet.sync.exchange();
+    expect(await paused(tablet)).toBe(true);
+  });
+  it("без записи в облако неопубликованная пауза не показывается синхронизированной", async () => {
+    const phone = await device("phone");
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const reader = await device("reader");
+    const readOnly = new SyncCoordinator({
+      database: reader.db,
+      adapter: kvAdapter(cloud),
+      now,
+      label: "reader",
+      schedule: () => () => undefined,
+      retryBaseMs: 1,
+      lock: async () => "unsupported",
+    });
+    await pauseCourse(COURSE, tick(), reader.db);
+    const status = await readOnly.exchange();
+    expect(status.dirty).toBe(true);
   });
 });
 

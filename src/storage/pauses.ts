@@ -1,4 +1,3 @@
-import { syncEvents } from "../sync/events";
 import { db, type AppDatabase } from "./db";
 import { zoned } from "./zone";
 
@@ -24,6 +23,8 @@ export const isPause = (value: unknown): value is CoursePause => {
   return !!pause && isTime(pause.updatedAt) && isTimeOrNull(pause.pausedAt) && isTimeOrNull(pause.resumedAt);
 };
 
+const iso = (value: string | null) => (value === null ? null : new Date(value).toISOString());
+/** Время приводится к ISO: сравнение строк при слиянии должно совпадать на всех устройствах. */
 export function parsePauses(raw: string | null | undefined): CoursePauses {
   let value: unknown;
   try {
@@ -35,7 +36,12 @@ export function parsePauses(raw: string | null | undefined): CoursePauses {
   return Object.fromEntries(
     Object.entries(value).flatMap(([courseId, pause]) =>
       isPause(pause)
-        ? [[courseId, { pausedAt: pause.pausedAt, resumedAt: pause.resumedAt, updatedAt: pause.updatedAt }]]
+        ? [
+            [
+              courseId,
+              { pausedAt: iso(pause.pausedAt), resumedAt: iso(pause.resumedAt), updatedAt: iso(pause.updatedAt)! },
+            ],
+          ]
         : [],
     ),
   );
@@ -60,35 +66,8 @@ export const samePause = (a: CoursePause | undefined, b: CoursePause | undefined
 export const readPauses = zoned(async (database: AppDatabase = db): Promise<CoursePauses> =>
   parsePauses((await database.meta.get(COURSE_PAUSES_KEY))?.value),
 );
-export const writePauses = (database: AppDatabase, pauses: CoursePauses) =>
-  database.meta.put({ key: COURSE_PAUSES_KEY, value: JSON.stringify(pauses) });
-
-let marks = 0;
-export const markPauses = (database: AppDatabase) =>
-  database.meta.put({
-    key: PAUSES_MARK_KEY,
-    value: `${Date.now().toString(36)}-${(++marks).toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
-  });
 
 export const isPaused = (pause: CoursePause | undefined): pause is CoursePause & { pausedAt: string } =>
   !!pause?.pausedAt;
-
-/** Часы устройства могут отставать от записи, пришедшей с другого: новое изменение всё равно позже известного. */
-async function setPause(courseId: string, paused: boolean, now: Date, database: AppDatabase) {
-  await database.transaction("rw", database.meta, async () => {
-    const pauses = await readPauses(database);
-    const known = pauses[courseId];
-    if (!!known?.pausedAt === paused) return;
-    const at = new Date(Math.max(now.getTime(), known ? Date.parse(known.updatedAt) + 1 : 0)).toISOString();
-    pauses[courseId] = paused
-      ? { pausedAt: at, resumedAt: null, updatedAt: at }
-      : { pausedAt: null, resumedAt: at, updatedAt: at };
-    await writePauses(database, pauses);
-    await markPauses(database);
-  });
-  syncEvents.emit("changed");
-}
-export const pauseCourse = (courseId: string, now = new Date(), database: AppDatabase = db) =>
-  setPause(courseId, true, now, database);
-export const resumeCourse = (courseId: string, now = new Date(), database: AppDatabase = db) =>
-  setPause(courseId, false, now, database);
+export const writePauses = (database: AppDatabase, pauses: CoursePauses) =>
+  database.meta.put({ key: COURSE_PAUSES_KEY, value: JSON.stringify(pauses) });

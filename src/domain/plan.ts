@@ -21,7 +21,7 @@ export function isDue(card: Pick<Card, "state" | "due">, now: Date, cutoff: Date
 const stateRank = (card: Card) => (card.state === State.Relearning ? 0 : card.state === State.Learning ? 1 : 3);
 /** Карточка без даты последнего повторения (старые снимки) для FSRS невалидна: считаем её забытой. */
 function retrievability(card: Card, now: Date): number {
-  if (!card.last_review) return 0;
+  if (!card.last_review || Number.isNaN(new Date(card.last_review).getTime())) return 0;
   try {
     return scheduler.get_retrievability(card, now, false);
   } catch {

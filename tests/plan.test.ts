@@ -758,11 +758,18 @@ describe("курс на паузе и долг после паузы", () => {
     expect((await coursePlan(data)).pauseDebt).toBe(2);
     data.states = data.states.map((state) =>
       state.unitKey === wordKeyOf("w0") || state.unitKey === wordKeyOf("w1")
-        ? { ...state, card: { ...state.card, due: new Date("2026-09-15T08:40:00Z"), state: State.Relearning } }
+        ? { ...state, card: { ...state.card, due: new Date("2026-09-15T01:00:00Z") } }
         : state,
     );
     const plan = await coursePlan(data);
+    expect(plan.reviews.map((review) => review.ref.id)).toContain("w0");
     expect(plan.pauseDebt).toBeUndefined();
+    data.states = data.states.map((state) =>
+      state.unitKey === wordKeyOf("w0")
+        ? { ...state, card: { ...state.card, due: new Date("2026-09-15T00:59:59Z") } }
+        : state,
+    );
+    expect((await coursePlan(data)).pauseDebt).toBe(1);
   });
   it("карточка долга без даты последнего повторения — первой, план не падает", async () => {
     const data = debtData(resumed);
@@ -773,11 +780,20 @@ describe("курс на паузе и долг после паузы", () => {
     expect(idsOf(plan.reviews.map((review) => review.ref)).slice(0, 2)).toEqual(["w3", "w9"]);
     expect(plan.pauseDebt).toBe(3);
   });
+  it("карточка долга с неверной датой последнего повторения — первой, план не падает", async () => {
+    const data = debtData(resumed);
+    data.states = data.states.map((state) =>
+      state.unitKey === wordKeyOf("w0")
+        ? { ...state, card: { ...state.card, due: new Date("2026-09-12T09:00:00Z"), last_review: new Date("нет") } }
+        : state,
+    );
+    const plan = await coursePlan(data);
+    expect(idsOf(plan.reviews.map((review) => review.ref)).slice(0, 2)).toEqual(["w3", "w0"]);
+  });
   describe("занятие при долге", () => {
     const many = (debt: number, fresh: number) => {
       const debtIds = Array.from({ length: debt }, (_, i) => `d${i}`);
       const freshIds = Array.from({ length: fresh }, (_, i) => `n${i}`);
-      // Чем больше номер, тем меньше стабильность: извлекаемость убывает с номером.
       const states = debtIds.map((id, i) => reviewed(id, "2026-09-05T09:00:00Z", "2026-09-01T09:00:00Z", 200 - i));
       return {
         debtIds,
