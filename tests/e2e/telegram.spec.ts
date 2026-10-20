@@ -689,6 +689,19 @@ const NEWER_POINTER = {
     resolves: [],
   }),
 };
+const UPDATING_ELSEWHERE = "Обновляем приложение…";
+const putNewerPointer = (page: import("@playwright/test").Page) =>
+  page.evaluate(
+    ([key, value]) =>
+      new Promise((resolve) =>
+        (
+          window as unknown as {
+            Telegram: { WebApp: { CloudStorage: { setItem: (k: string, v: string, done: () => void) => void } } };
+          }
+        ).Telegram.WebApp.CloudStorage.setItem(key, value, () => resolve(null)),
+      ),
+    Object.entries(NEWER_POINTER)[0],
+  );
 const marked = (page: import("@playwright/test").Page) =>
   page.evaluate(() => (window as unknown as { __marker?: number }).__marker === 1);
 const mark = (page: import("@playwright/test").Page) =>
@@ -701,7 +714,7 @@ test.describe("облако новее приложения: без service work
   }) => {
     let loads = 0;
     page.on("load", () => loads++);
-    await openTelegram(page, { cloud: NEWER_POINTER });
+    await openTelegram(page);
     await installLessons(page, ["mech-1"]);
     await seedQueue(
       page,
@@ -712,8 +725,12 @@ test.describe("облако новее приложения: без service work
       TG_DB,
     );
     await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
-    await expect(page.getByTestId("sync-status")).toHaveText("Обновляем приложение…", { timeout: 20000 });
+    await putNewerPointer(page);
+    await tg(page).setHidden(true);
+    await tg(page).setHidden(false);
+    await expect(page.getByTestId("sync-status")).toHaveText(UPDATING_ELSEWHERE, { timeout: 20000 });
     await expect(page.getByTestId("sync-status").getByRole("button")).toHaveCount(0);
+    expect(await page.evaluate(() => localStorage.getItem("tetradio:auto-update-build"))).toBeNull();
     await mark(page);
     await page.getByRole("navigation").getByRole("link", { name: "Сегодня" }).click();
     await page.getByRole("button", { name: "Повторить карточки" }).click();
@@ -797,17 +814,7 @@ test("облако новее приложения с service worker: новая
     const before = loads;
     server.state.root = next;
     const requestsBefore = server.state.swRequests;
-    await page.evaluate(
-      ([key, value]) =>
-        new Promise((resolve) =>
-          (
-            window as unknown as {
-              Telegram: { WebApp: { CloudStorage: { setItem: (k: string, v: string, done: () => void) => void } } };
-            }
-          ).Telegram.WebApp.CloudStorage.setItem(key, value, () => resolve(null)),
-        ),
-      Object.entries(NEWER_POINTER)[0],
-    );
+    await putNewerPointer(page);
     await tg(page).setHidden(true);
     await tg(page).setHidden(false);
     await expect.poll(() => loads, { timeout: 30000 }).toBe(before + 1);
