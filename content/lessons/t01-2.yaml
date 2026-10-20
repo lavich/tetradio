@@ -116,7 +116,6 @@ blocks:
     title: London Gatwick — Departures
     text: |-
       DEPARTURES — 14:05
-
       14:25 BA 2550 Rome — Gate 4 — Final call
       14:35 TP 1331 Lisbon — Gate 12 — Boarding
       15:05 EZY 8031 Berlin — Delayed, new time 16:20
@@ -125,10 +124,10 @@ blocks:
 
       BOARDING PASS
       Passenger: IVANOVA / OLGA MS
-      From: London Gatwick (LGW) To: Lisbon (LIS)
-      Flight: TP 1331 Date: 14 MAY
-      Boarding: 14:00 Gate closes: 14:15 Departs: 14:35
-      Seat: 23C Group: 3
+      From: London Gatwick (LGW) · To: Lisbon (LIS)
+      Flight: TP 1331 · Date: 14 MAY
+      Boarding: 14:00 · Gate closes: 14:15 · Departs: 14:35
+      Seat: 23C · Group: 3
       Baggage: 1 cabin bag, 1 hold bag (23 kg)
     glosses:
       - { text: contact, russian: обратиться к }

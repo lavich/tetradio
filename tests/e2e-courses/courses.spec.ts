@@ -85,6 +85,37 @@ test("«Сегодня»: основной греческий курс цели�
   await expect(page).toHaveURL(/\/course\/e01\/e01-1\?p=\d+$/);
 });
 
+test("длинное название урока второго курса не расширяет «Сегодня» на 360 px", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await page.route("**/content/packages/e01-1*", async (route) => {
+    const response = await route.fetch();
+    const pack = await response.json();
+    pack.lesson.title = "Вежливые просьбы у стойки регистрации в аэропорту";
+    await route.fulfill({ response, json: pack });
+  });
+  await installBoth(page);
+  await page.goto("/app/");
+  const other = page.getByTestId("other-course");
+  await expect(other.getByRole("link", { name: /Вежливые просьбы/ })).toBeVisible();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
+test("строки текста для чтения в уроке не сливаются: табло и меню читаются построчно", async ({ page }) => {
+  await page.route("**/content/packages/e01-1*", async (route) => {
+    const response = await route.fetch();
+    const pack = await response.json();
+    const reading = pack.blocks.find((block: { type: string }) => block.type === "reading");
+    reading.text = reading.text.replace("bus. She", "bus.\nShe");
+    await route.fulfill({ response, json: pack });
+  });
+  await installBoth(page);
+  await page.goto("/app/course/e01/e01-1");
+  const reading = await turnTo(page, "Чтение: Anna");
+  const text = await reading.locator("p", { hasText: "Anna goes" }).evaluate((node) => (node as HTMLElement).innerText);
+  expect(text).toContain("bus.\nShe");
+});
+
 test("переключатель на «Словах» меняет курс «Слов», «Курса» и «Прогресса» и переживает перезапуск", async ({
   page,
 }) => {

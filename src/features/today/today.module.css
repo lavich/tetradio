@@ -267,6 +267,8 @@
 
 .other {
   display: grid;
+  /* Без явной колонки трек растёт по ширине строки урока, и обрезка названия многоточием не срабатывает. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 4px;
   margin-top: calc(var(--cell) * 2);
   padding-top: 12px;

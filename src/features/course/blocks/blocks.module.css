@@ -76,6 +76,8 @@
 }
 
 .reading {
+  /* Табло, меню и объявления в исходнике записаны строками и абзацами. */
+  white-space: pre-line;
   font-family: var(--font-print);
   font-size: 18px;
   line-height: calc(var(--cell) * 1.25);
