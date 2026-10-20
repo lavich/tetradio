@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Course } from "../../domain/types";
 import { installCourse } from "../../content/client";
+import { holdUpdate } from "../../app/auto-update";
 import { CARDS, LESSONS_COUNT, withCount } from "../../shared/format";
 import { useCatalog, useCoursePhase, useCourses } from "../../shared/store";
 import type { StoredCatalogEntry } from "../../storage/db";
@@ -37,7 +38,7 @@ function CourseOffer({ course, entries }: { course: Course; entries: StoredCatal
   const own = entries.filter((entry) => entry.courseId === course.id);
   const cards = own.reduce((sum, entry) => sum + entry.cardCount, 0);
   const loading = phase.phase === "loading";
-  const learn = () => void installCourse(course.id).catch(() => undefined);
+  const learn = () => void holdUpdate(installCourse(course.id)).catch(() => undefined);
   return (
     <section className="mb-6">
       <Card className="mb-3 bg-soft ring-0" data-testid="first-course">

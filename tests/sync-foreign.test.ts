@@ -7,6 +7,7 @@ import { AppDatabase } from "../src/storage/db";
 import { applySnapshot, buildSnapshot } from "../src/sync/snapshot";
 import { adoptKnownForeign } from "../src/storage/foreign";
 import { decodeSnapshot, encodeSnapshot } from "../src/sync/codec";
+import { packSnapshot, unpackSnapshot } from "../src/sync/compression";
 import { serializeCard } from "../src/sync/snapshot";
 import { storedKey, unitKey } from "../src/domain/refs";
 import { exportFull, restoreBackup } from "../src/features/backup/backup";
@@ -37,8 +38,15 @@ const wire = (format: number) => ({
 describe("формат 5: незнакомые виды и типы", () => {
   it("круг разбора и записи сохраняет незнакомые вид и тип без изменений", () => {
     const text = JSON.stringify(wire(5));
-    expect(JSON.parse(encodeSnapshot(decodeSnapshot(text)))).toEqual(wire(5));
-    expect(encodeSnapshot(decodeSnapshot(text))).not.toContain("undefined");
+    expect(JSON.parse(encodeSnapshot(decodeSnapshot(text), 5))).toEqual(wire(5));
+    expect(encodeSnapshot(decodeSnapshot(text), 5)).not.toContain("undefined");
+  });
+
+  it("формат 6 читает незнакомые вид и тип по правилам формата 5 и записывает их обратно", () => {
+    const text = unpackSnapshot(packSnapshot(JSON.stringify(wire(6))));
+    const decoded = decodeSnapshot(text);
+    expect(decoded).toEqual(decodeSnapshot(JSON.stringify(wire(5))));
+    expect(JSON.parse(encodeSnapshot(decoded, 6))).toEqual(wire(6));
   });
 
   it("код снятого вида отбрасывается и в формате 5", () => {

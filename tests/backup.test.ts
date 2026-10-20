@@ -12,6 +12,10 @@ import { phraseRevisionOf } from "../content/build";
 import { unitKey, wordKeyOf, wordRef } from "./helpers/cards";
 import { content, installLessons, itemCountOf, packageOf, wordsOf } from "./helpers/content";
 import { buildMixed, installMixed, MIXED_LESSON, MIXED_PHRASES, mixedPackage } from "./helpers/mixed";
+import { installCompleted } from "./helpers/content";
+import { kvAdapter } from "../src/sync/adapter";
+import { SyncCoordinator } from "../src/sync/coordinator";
+import { memoryTransport } from "../src/sync/transport";
 
 const NAME = "tetradio-backup";
 /** Тестовая база называется иначе, а копия проверяется по имени базы приложения. */
@@ -239,4 +243,47 @@ describe("полная копия", () => {
     expect(stored.revision).not.toBe(xora.revision);
     expect(content.packages.length).toBeGreaterThan(0);
   });
+});
+
+it("копия устройства, опубликовавшего формат 6, без облачных данных; после восстановления — выбор версии, а не ошибка формата", async () => {
+  const cloud = memoryTransport();
+  const coordinator = (database: AppDatabase) =>
+    new SyncCoordinator({ database, adapter: kvAdapter(cloud), schedule: () => () => undefined });
+  const source = new AppDatabase("tetradio-backup-format6");
+  await source.delete();
+  await source.open();
+  await installCompleted(source, ["mech-1"]);
+  const session = await makeSession({ source: dexieSource(source), now: new Date(), random: () => 0.31 });
+  await source.sessions.add(session);
+  const [item] = session.items;
+  await submitAnswer({
+    session,
+    item,
+    correct: true,
+    answer: "",
+    responseTimeMs: 900,
+    activeTimeMs: 900,
+    timezone: "Asia/Nicosia",
+    now: new Date(),
+    database: source,
+  });
+  expect((await coordinator(source).exchange()).phase).toBe("synced");
+  const pointer = [...cloud.store].find(([key]) => key.startsWith("p_"))![1];
+  expect(JSON.parse(pointer).format).toBe(6);
+  const parsed = JSON.parse(await (await exportFull(source)).text());
+  const rows = (name: string) =>
+    parsed.data.data.find((table: { tableName: string }) => table.tableName === name)?.rows ?? [];
+  expect(rows("syncVersions")).toEqual([]);
+  expect(rows("meta").filter((row: { key: string }) => row.key.startsWith("sync:"))).toEqual([]);
+  const target = new AppDatabase("tetradio-backup-format6-target");
+  await target.delete();
+  await target.open();
+  await restoreBackup(asLexi(parsed), target);
+  expect(await target.cardStates.count()).toBe(await source.cardStates.count());
+  const status = await coordinator(target).exchange();
+  expect(status.phase).toBe("conflict");
+  expect(status.conflict?.kind).toBe("restored");
+  source.close();
+  target.close();
+  await Promise.all([source.delete(), target.delete()]);
 });

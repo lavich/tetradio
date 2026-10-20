@@ -11,7 +11,9 @@ export interface TransportLimits {
   maxKeyLength: number;
 }
 export const CLOUD_LIMITS: TransportLimits = { maxKeys: 1024, maxValueLength: 4096, maxKeyLength: 128 };
-export type SyncErrorKind = "disabled" | "unavailable" | "transport" | "limit" | "format" | "integrity" | "busy";
+/** `stale` — часть приложения не загрузилась: после деплоя старой сборке нужна перезагрузка. */
+export type SyncErrorKind =
+  "disabled" | "unavailable" | "transport" | "limit" | "format" | "integrity" | "busy" | "stale";
 export class SyncError extends Error {
   constructor(
     public kind: SyncErrorKind,

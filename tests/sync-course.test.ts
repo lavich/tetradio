@@ -113,7 +113,7 @@ describe("снимок формата 5: прогресс курса", () => {
     await finishLesson(phone);
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
     expect(snapshot.format).toBe(SNAPSHOT_FORMAT);
-    expect(SNAPSHOT_FORMAT).toBe(5);
+    expect(SNAPSHOT_FORMAT).toBe(6);
     expect(snapshot.blocks.map((block) => block.blockId).sort()).toEqual([...TASKS].sort());
     expect(snapshot.blocks.find((block) => block.blockId === "cafe-q")).toMatchObject({
       done: true,

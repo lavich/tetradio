@@ -109,7 +109,7 @@ describe("компактный снимок", () => {
     const lessonId = (await phone.db.lessons.toArray())[0].id;
     await phone.db.lessons.update(lessonId, { completed: true, updatedAt: "2026-09-16T07:00:00.000Z" });
     const snapshot = await buildAndCommit(phone.db, now(), "dev-1");
-    const wire = JSON.parse(encodeSnapshot(snapshot));
+    const wire = JSON.parse(encodeSnapshot(snapshot, 5));
     expect(wire.f).toBe(5);
     expect(wire.s).toEqual({});
     expect(wire.cs).toEqual([]);
@@ -296,7 +296,7 @@ describe("обмен смешанным прогрессом между устр
       const status = await tablet.sync.exchange();
       expect(status.phase).toBe("error");
       expect(status.error?.kind).toBe("format");
-      expect(status.error?.message).toMatch(/Обновите приложение/);
+      expect(status.error?.message).toMatch(/Перезапустите приложение/);
       expect(await statesOf(tablet)).toEqual(before);
       expect(cloud.store.has(`p_${await tablet.sync.deviceId()}`)).toBe(false);
       expect(await readMeta(tablet.db, META.dirty)).toBeTruthy();

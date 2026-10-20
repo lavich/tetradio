@@ -23,13 +23,29 @@ export interface PointerListing {
   pointers: VersionMeta[];
   invalid: string[];
   keys: number;
+  /** Версии, у указателя которых в облаке нет всех частей. */
+  incomplete: string[];
+}
+export interface PublishedVersion {
+  meta: VersionMeta;
+  /** Длина записанного текста всех частей. */
+  chars: number;
 }
 export interface SyncAdapter {
   capabilities(): SyncCapabilities;
   listPointers(): Promise<PointerListing>;
   readVersion(meta: VersionMeta): Promise<CompactSnapshot>;
   /** Идемпотентно: повтор той же версии перезаписывает те же части и указатель. */
-  publishVersion(meta: Omit<VersionMeta, "parts" | "checksum">, snapshot: CompactSnapshot): Promise<VersionMeta>;
+  /** Формат записи — `meta.format`: 5 пишется JSON, 6 — упакованным; другой — отказ `format`. */
+  publishVersion(
+    meta: Omit<VersionMeta, "parts" | "checksum" | "content">,
+    snapshot: CompactSnapshot,
+  ): Promise<PublishedVersion>;
+  /**
+   * Меняет в собственном указателе версии `id` только поле `reads`, остальные поля сырого значения сохраняются.
+   * `false` — указатель уже другой или частей версии нет; если части пропали во время записи, указатель удаляется.
+   */
+  declareReads(device: string, id: string, reads: number[]): Promise<boolean>;
   /** Идентификаторы версий, части которых лежат в облаке (включая незавершённые публикации). */
   listGenerations(): Promise<string[]>;
   /** Удаляет части перечисленных версий; указатели других устройств не трогает. */
@@ -43,6 +59,8 @@ export interface SyncAdapter {
   room(partsNeeded: number, ownDevice: string): Promise<{ free: number; needed: number; keys: number }>;
 }
 export const PART_SIZE = 4000;
+const WRITABLE_FORMATS = [5, 6];
+const PACKED_FORMAT = 6;
 const POINTER = "p_",
   PART = "v_";
 export const pointerKey = (device: string) => `${POINTER}${device}`;
@@ -92,13 +110,43 @@ export function parsePointer(raw: string): VersionMeta | null {
       format: meta.format,
       parts: meta.parts,
       checksum: meta.checksum,
+      content: typeof meta.content === "string" ? meta.content : undefined,
       resolves: Array.isArray(meta.resolves) ? meta.resolves.filter((item: unknown) => typeof item === "string") : [],
       label: typeof meta.label === "string" ? meta.label : undefined,
+      reads:
+        Array.isArray(meta.reads) && meta.reads.every((format: unknown) => typeof format === "number")
+          ? meta.reads
+          : undefined,
     };
   } catch {
     return null;
   }
 }
+
+let compressionModule: Promise<typeof import("./compression")> | null = null;
+/**
+ * Чанк упаковки отдельный и грузится по требованию. После деплоя WebView без service worker держит старую сборку,
+ * чей чанк уже удалён: отказ — `stale` (нужна перезагрузка), а промис сбрасывается, чтобы повтор грузил заново.
+ */
+export function loadCompression() {
+  compressionModule ??= import("./compression").catch((error: unknown) => {
+    compressionModule = null;
+    throw new SyncError(
+      "stale",
+      "Не удалось загрузить часть приложения: вышла новая версия. Перезапустите приложение.",
+      error,
+    );
+  });
+  return compressionModule;
+}
+const compression = loadCompression;
+const unpacksTo = (unpack: (text: string) => string, text: string, json: string) => {
+  try {
+    return unpack(text) === json;
+  } catch {
+    return false;
+  }
+};
 
 export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
   const limits = transport.limits;
@@ -124,7 +172,14 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
         if (meta) pointers.push(meta);
         else invalid.push(key);
       }
-      return { pointers, invalid, keys: keys.length };
+      const present = new Set(keys);
+      const incomplete = pointers
+        .filter(
+          (meta) =>
+            !Array.from({ length: meta.parts }, (_, index) => partKey(meta.id, index)).every((key) => present.has(key)),
+        )
+        .map((meta) => meta.id);
+      return { pointers, invalid, keys: keys.length, incomplete };
     },
     async readVersion(meta) {
       ensure();
@@ -132,7 +187,7 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
         throw new SyncError(
           "format",
           meta.format > SNAPSHOT_FORMAT
-            ? "В облаке версия более нового формата. Обновите приложение."
+            ? "В облаке версия более нового формата. Перезапустите приложение."
             : "В облаке версия устаревшего формата.",
         );
       const keys = Array.from({ length: meta.parts }, (_, index) => partKey(meta.id, index));
@@ -143,8 +198,20 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       const text = keys.map((key) => values[key]).join("");
       if (checksum(text) !== meta.checksum)
         throw new SyncError("integrity", `Контрольная сумма версии ${meta.id} не совпадает.`);
+      const packed = meta.format === PACKED_FORMAT;
+      let json = text;
+      if (packed) {
+        const { unpackSnapshot } = await compression();
+        try {
+          json = unpackSnapshot(text);
+        } catch {
+          throw new SyncError("integrity", `Версия ${meta.id} не распаковывается.`);
+        }
+        if (meta.content === undefined || checksum(json) !== meta.content)
+          throw new SyncError("integrity", `Содержимое версии ${meta.id} не совпадает с указателем.`);
+      }
       try {
-        return decodeSnapshot(text);
+        return decodeSnapshot(json, packed ? meta.format : undefined);
       } catch (error) {
         if (error instanceof SnapshotFormatError)
           throw new SyncError("format", "Содержимое версии не соответствует формату.");
@@ -153,9 +220,21 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
     },
     async publishVersion(meta, snapshot) {
       ensure();
-      const text = encodeSnapshot(snapshot);
+      if (!WRITABLE_FORMATS.includes(meta.format))
+        throw new SyncError("format", `Запись версии формата ${meta.format} не поддерживается.`);
+      const json = encodeSnapshot(snapshot, meta.format);
+      const packed = meta.format === PACKED_FORMAT;
+      const codec = packed ? await compression() : null;
+      const text = codec ? codec.packSnapshot(json) : json;
+      if (codec && !unpacksTo(codec.unpackSnapshot, text, json))
+        throw new SyncError("integrity", "Упакованный снимок не совпал с исходным: публикация отменена.");
       const parts = splitParts(text, partSize);
-      const full: VersionMeta = { ...meta, parts: parts.length, checksum: checksum(text) };
+      const full: VersionMeta = {
+        ...meta,
+        parts: parts.length,
+        checksum: checksum(text),
+        ...(packed ? { content: checksum(json) } : {}),
+      };
       const pointer = JSON.stringify(full);
       if (pointer.length > limits.maxValueLength)
         throw new SyncError("limit", "Указатель версии не помещается в одно значение.");
@@ -166,7 +245,25 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       // Части публикуются до указателя: неполная запись никогда не выглядит доступной версией.
       for (let index = 0; index < parts.length; index++) await transport.setItem(partKey(meta.id, index), parts[index]);
       await transport.setItem(pointerName, pointer);
-      return full;
+      return { meta: full, chars: text.length };
+    },
+    async declareReads(device, id, reads) {
+      ensure();
+      const name = pointerKey(device);
+      const raw = (await transport.getItems([name]))[name];
+      const meta = raw === undefined ? null : parsePointer(raw);
+      if (!meta || meta.id !== id) return false;
+      const complete = async () => {
+        const keys = new Set(await transport.getKeys());
+        return Array.from({ length: meta.parts }, (_, index) => partKey(id, index)).every((key) => keys.has(key));
+      };
+      if (!(await complete())) return false;
+      await transport.setItem(name, JSON.stringify({ ...JSON.parse(raw!), reads }));
+      // Чужая уборка могла удалить указатель и части между проверкой и записью: указатель без частей не оставляем,
+      // и следующий обмен опубликует версию заново, как после любой потери своего указателя.
+      if (await complete()) return true;
+      await transport.removeItems([name]);
+      return false;
     },
     async listGenerations() {
       ensure();

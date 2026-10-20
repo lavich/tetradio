@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { holdUpdate } from "../app/auto-update";
 
 export type Describe = (error: unknown) => string;
 
@@ -17,7 +18,7 @@ export function useAction(fallback: string) {
     setBusy(true);
     setProblem("");
     try {
-      await action();
+      await holdUpdate(action());
     } catch (error) {
       setProblem(describe(error));
     } finally {

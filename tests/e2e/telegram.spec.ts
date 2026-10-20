@@ -1,6 +1,10 @@
 import { expect, test } from "../playwright-test";
 import { breakStorage, installLessons, seedQueue } from "./helpers";
-import { DARK, LIGHT, openTelegram, tg } from "./telegram";
+import { createServer, type Server } from "node:http";
+import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { extname, join } from "node:path";
+import { bridgeScript, DARK, launchHash, LIGHT, openTelegram, tg } from "./telegram";
 
 /** База Telegram-профиля тестового пользователя: отдельная от базы мока `tetradio-mock-1`. */
 const TG_DB = "tetradio-tg-tetradio_local-1001";
@@ -670,4 +674,163 @@ test.describe("ссылка на слово через бота", () => {
     await expect(page).toHaveURL(/\/share\/word\/w041$/);
     await expect(page.getByText("η χώρα", { exact: true }).first()).toBeVisible();
   });
+});
+
+/** Версия облака новее приложения: приложение обновляется само в безопасный момент. */
+const NEWER_POINTER = {
+  p_newdev01: JSON.stringify({
+    id: "newdev01-1",
+    device: "newdev01",
+    clock: { newdev01: 1 },
+    createdAt: "2026-10-19T00:00:00.000Z",
+    format: 7,
+    parts: 1,
+    checksum: "00000000",
+    resolves: [],
+  }),
+};
+const UPDATING_ELSEWHERE = "Обновим приложение на экране «Сегодня»";
+const putNewerPointer = (page: import("@playwright/test").Page) =>
+  page.evaluate(
+    ([key, value]) =>
+      new Promise((resolve) =>
+        (
+          window as unknown as {
+            Telegram: { WebApp: { CloudStorage: { setItem: (k: string, v: string, done: () => void) => void } } };
+          }
+        ).Telegram.WebApp.CloudStorage.setItem(key, value, () => resolve(null)),
+      ),
+    Object.entries(NEWER_POINTER)[0],
+  );
+const marked = (page: import("@playwright/test").Page) =>
+  page.evaluate(() => (window as unknown as { __marker?: number }).__marker === 1);
+const mark = (page: import("@playwright/test").Page) =>
+  page.evaluate(() => void ((window as unknown as { __marker?: number }).__marker = 1));
+
+test.describe("облако новее приложения: без service worker", () => {
+  test.use({ serviceWorkers: "block" });
+  test("во время занятия перезагрузки и окна выбора нет; на «Сегодня» — одна перезагрузка, затем «Перезапустите приложение»", async ({
+    page,
+  }) => {
+    let loads = 0;
+    page.on("load", () => loads++);
+    await openTelegram(page);
+    await installLessons(page, ["mech-1"]);
+    await seedQueue(
+      page,
+      [
+        { wordId: "w038", tested: ["recall"] },
+        { wordId: "w032", tested: ["recall"] },
+      ],
+      TG_DB,
+    );
+    await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
+    await putNewerPointer(page);
+    await tg(page).setHidden(true);
+    await tg(page).setHidden(false);
+    await expect(page.getByRole("status").filter({ hasText: UPDATING_ELSEWHERE })).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId("sync-status").getByRole("button")).toHaveCount(0);
+    expect(await page.evaluate(() => localStorage.getItem("tetradio:auto-update-build"))).toBeNull();
+    await mark(page);
+    await page.getByRole("navigation").getByRole("link", { name: "Сегодня" }).click();
+    await page.getByRole("button", { name: "Повторить карточки" }).click();
+    await page.waitForURL("**/session");
+    await page.getByTestId("option").and(page.locator(":not([disabled])")).first().click();
+    await page.waitForTimeout(6000);
+    expect(await marked(page)).toBe(true);
+    await expect(page.getByRole("alertdialog")).toHaveCount(0);
+    const before = loads;
+    await tg(page).back();
+    await expect(page.getByTestId("today-title")).toBeVisible();
+    await expect.poll(() => loads, { timeout: 15000 }).toBe(before + 1);
+    await page.waitForSelector("[data-testid=today-title]");
+    await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
+    await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "error", { timeout: 20000 });
+    await expect(page.getByText(/Перезапустите приложение/)).toBeVisible();
+    await page.getByRole("navigation").getByRole("link", { name: "Сегодня" }).click();
+    await page.waitForTimeout(6000);
+    expect(loads).toBe(before + 1);
+  });
+});
+
+/**
+ * Перехват `context.route` не видит запрос скрипта service worker при проверке обновления (проверено пробой в
+ * Chromium), поэтому новая сборка подаётся своим сервером: каталог сборки переключается на копию с изменённым `sw.js`.
+ */
+async function switchableServer(root: string) {
+  const types: Record<string, string> = {
+    ".html": "text/html",
+    ".js": "text/javascript",
+    ".css": "text/css",
+    ".json": "application/json",
+    ".webmanifest": "application/manifest+json",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+    ".woff2": "font/woff2",
+    ".mp3": "audio/mpeg",
+    ".txt": "text/plain",
+    ".xml": "application/xml",
+  };
+  const state = { root, swRequests: 0 };
+  const file = (path: string) => {
+    const direct = join(state.root, path);
+    if (existsSync(direct) && statSync(direct).isFile()) return direct;
+    if (existsSync(join(direct, "index.html"))) return join(direct, "index.html");
+    return path.startsWith("/app/") ? join(state.root, "app", "index.html") : join(state.root, "404.html");
+  };
+  const server: Server = createServer((request, response) => {
+    const path = decodeURIComponent(new URL(request.url ?? "/", "http://localhost").pathname);
+    if (path === "/sw.js") state.swRequests++;
+    const target = file(path);
+    response.writeHead(200, {
+      "content-type": types[extname(target)] ?? "application/octet-stream",
+      "cache-control": "no-cache",
+    });
+    response.end(readFileSync(target));
+  });
+  await new Promise<void>((resolve) => server.listen(0, resolve));
+  const port = (server.address() as { port: number }).port;
+  return { state, origin: `http://localhost:${port}`, close: () => new Promise((resolve) => server.close(resolve)) };
+}
+
+test("облако новее приложения с service worker: новая сборка ставится сама на «Сегодня», без окна выбора", async ({
+  page,
+}) => {
+  test.setTimeout(120000);
+  const base = mkdtempSync(join(tmpdir(), "tetradio-auto-update-"));
+  const current = join(base, "current");
+  const next = join(base, "next");
+  cpSync(join(".e2e", "mechanics", "dist"), current, { recursive: true });
+  cpSync(current, next, { recursive: true });
+  writeFileSync(join(next, "sw.js"), `${readFileSync(join(next, "sw.js"), "utf8")}\n// next build\n`);
+  const server = await switchableServer(current);
+  try {
+    let loads = 0;
+    page.on("load", () => loads++);
+    await page.addInitScript(bridgeScript({}));
+    await page.goto(`${server.origin}/app/${launchHash({})}`);
+    await page.waitForSelector("[data-testid=today-title]");
+    await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 30000 });
+    const before = loads;
+    server.state.root = next;
+    const requestsBefore = server.state.swRequests;
+    await putNewerPointer(page);
+    await tg(page).setHidden(true);
+    await tg(page).setHidden(false);
+    await expect.poll(() => loads, { timeout: 30000 }).toBe(before + 1);
+    expect(server.state.swRequests).toBeGreaterThan(requestsBefore);
+    await page.waitForSelector("[data-testid=today-title]");
+    await expect(page.getByRole("alertdialog")).toHaveCount(0);
+    await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
+    expect(await page.evaluate(async () => (await navigator.serviceWorker.ready).waiting === null)).toBe(true);
+    await page.waitForTimeout(4000);
+    await expect(page.getByText("Есть обновление приложения")).toHaveCount(0);
+    await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
+    await expect(page.getByTestId("sync-status")).toHaveAttribute("data-phase", "error", { timeout: 20000 });
+    await expect(page.getByText(/Перезапустите приложение/)).toBeVisible();
+    expect(loads).toBe(before + 1);
+  } finally {
+    await server.close();
+    rmSync(base, { recursive: true, force: true });
+  }
 });

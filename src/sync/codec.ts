@@ -241,9 +241,9 @@ const decodeBlocks = (wire: unknown): CompactBlock[] => {
 /** Ключи и состояния, которые формат снимка не сохраняет, выпадают из него. */
 const alive = <T>(value: T | null): value is T => value !== null;
 
-export function encodeSnapshot(snapshot: CompactSnapshot): string {
+export function encodeSnapshot(snapshot: CompactSnapshot, format: number = snapshot.format): string {
   const wire: Wire = {
-    f: snapshot.format,
+    f: format,
     c: ms(snapshot.createdAt),
     s: {},
     cs: [],
@@ -265,9 +265,14 @@ const decodeLessons = (wire: Wire): CompactLesson[] =>
         updatedAt: iso(at),
       }))
     : (wire.l as WireLesson[]).map(([id, completed, at]) => ({ id, completed: completed === 1, updatedAt: iso(at) }));
-/** Бросает `SnapshotFormatError` при неподдерживаемой версии формата или неверной структуре; повреждённый JSON — обычная ошибка разбора. */
-export function decodeSnapshot(text: string): CompactSnapshot {
+/**
+ * Бросает `SnapshotFormatError` при неподдерживаемой версии формата или неверной структуре; повреждённый JSON
+ * и формат, не совпавший с `expectedFormat`, — обычная ошибка.
+ */
+export function decodeSnapshot(text: string, expectedFormat?: number): CompactSnapshot {
   const wire = JSON.parse(text) as Wire;
+  if (expectedFormat !== undefined && wire?.f !== expectedFormat)
+    throw new Error(`Формат снимка ${String(wire?.f)} не совпадает с форматом версии ${expectedFormat}`);
   if (!(SUPPORTED_SNAPSHOT_FORMATS as readonly unknown[]).includes(wire?.f))
     throw new SnapshotFormatError(`Формат снимка ${String(wire?.f)} не поддерживается`);
   if (

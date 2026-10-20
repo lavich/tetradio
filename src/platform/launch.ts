@@ -32,6 +32,7 @@ export const DEFAULT_BOT: string = import.meta.env.VITE_TELEGRAM_BOT || "tetradi
 export const CONFIGURED_BOT: string | null = botName(import.meta.env.VITE_TELEGRAM_BOT);
 const STORAGE_KEY = "tetradio:launch";
 const CONSUMED_KEY = "tetradio:start-consumed";
+const RELOAD_KEY = "tetradio:start-skip-reload";
 
 const parseUser = (raw: string | null): TelegramUser | null => {
   if (!raw) return null;
@@ -163,14 +164,29 @@ export function startRoute(launch: LaunchContext): string | null {
 }
 
 let consumedInPage = false;
+/** Приложение перезагружает себя само (автообновление): тот же запуск не должен снова открыть путь из ссылки. */
+export function skipStartRouteOnReload() {
+  try {
+    sessionStorage.setItem(RELOAD_KEY, "1");
+  } catch {
+    /* без хранилища перезагрузка может снова открыть слово — как и без `launchId` */
+  }
+}
 /**
  * Путь запуска, если его ещё не открывали. С `launchId` метка в `sessionStorage` отличает перезагрузку того же
  * запуска от нового; без него повтор запрещает только флаг страницы: перезагрузка может снова открыть слово,
  * зато новый запуск никогда не примут за перезагрузку.
  */
 export function takeStartRoute(launch: LaunchContext = launchContext()): string | null {
+  let reloaded = false;
+  try {
+    reloaded = !!sessionStorage.getItem(RELOAD_KEY);
+    sessionStorage.removeItem(RELOAD_KEY);
+  } catch {
+    /* хранилище недоступно — обычные правила ниже */
+  }
   const route = startRoute(launch);
-  if (!route) return null;
+  if (!route || reloaded) return null;
   if (launch.launchId) {
     try {
       if (sessionStorage.getItem(CONSUMED_KEY) === launch.launchId) return null;

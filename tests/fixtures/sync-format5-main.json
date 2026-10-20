@@ -1,0 +1,172 @@
+{
+  "commit": "1b33167b",
+  "cloud": {
+    "v_mainold1-1_0": "{\"f\":5,\"c\":1792397040000,\"s\":{},\"cs\":[],\"l\":[[\"mech-1\",1,1792481915276]],\"p\":[\"mech-1\"],\"b\":[],\"st\":[[\"ww038\",1792397640000,2.3065,2.11810397,0,0,1,0,1,1,1792397040000,1792397040000,1],[\"ww070\",1792397520000,2.3065,2.11810397,0,0,1,0,1,1,1792396920000,1792396920000,1],[\"ww083\",1792397040000,0.212,6.4133,0,0,1,0,1,0,1792396980000,1792396980000,1]],\"sk\":[[\"ww038\",\"r\",0,{\"r\":[\"1\",1792397040000]}],[\"ww070\",\"r\",0,{\"r\":[\"1\",1792396920000]}],[\"ww083\",\"r\",0,{\"r\":[\"0\",1792396980000]}]],\"x\":{\"d\":[[\"2026-10-19\",3,[\"ww070\",\"ww083\",\"ww038\"]]],\"r\":{\"r\":\"101\"},\"n\":3,\"w\":[\"ww070\",\"ww083\",\"ww038\"]}}",
+    "p_mainold1": "{\"id\":\"mainold1-1\",\"device\":\"mainold1\",\"clock\":{\"mainold1\":1},\"createdAt\":\"2026-10-19T08:04:00.000Z\",\"format\":5,\"resolves\":[],\"label\":\"tdesktop\",\"parts\":1,\"checksum\":\"d40b1a4c\"}"
+  },
+  "snapshot": {
+    "format": 5,
+    "createdAt": "2026-10-19T08:04:00.000Z",
+    "lessons": [
+      {
+        "id": "mech-1",
+        "completed": true,
+        "updatedAt": "2026-10-20T07:38:35.276Z"
+      }
+    ],
+    "packages": [
+      "mech-1"
+    ],
+    "blocks": [],
+    "states": [
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w038"
+        },
+        "card": {
+          "due": "2026-10-19T08:14:00.000Z",
+          "stability": 2.3065,
+          "difficulty": 2.11810397,
+          "elapsed_days": 0,
+          "scheduled_days": 0,
+          "reps": 1,
+          "lapses": 0,
+          "state": 1,
+          "learning_steps": 1,
+          "last_review": "2026-10-19T08:04:00.000Z"
+        },
+        "introducedAt": "2026-10-19T08:04:00.000Z",
+        "version": 1
+      },
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w070"
+        },
+        "card": {
+          "due": "2026-10-19T08:12:00.000Z",
+          "stability": 2.3065,
+          "difficulty": 2.11810397,
+          "elapsed_days": 0,
+          "scheduled_days": 0,
+          "reps": 1,
+          "lapses": 0,
+          "state": 1,
+          "learning_steps": 1,
+          "last_review": "2026-10-19T08:02:00.000Z"
+        },
+        "introducedAt": "2026-10-19T08:02:00.000Z",
+        "version": 1
+      },
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w083"
+        },
+        "card": {
+          "due": "2026-10-19T08:04:00.000Z",
+          "stability": 0.212,
+          "difficulty": 6.4133,
+          "elapsed_days": 0,
+          "scheduled_days": 0,
+          "reps": 1,
+          "lapses": 0,
+          "state": 1,
+          "learning_steps": 0,
+          "last_review": "2026-10-19T08:03:00.000Z"
+        },
+        "introducedAt": "2026-10-19T08:03:00.000Z",
+        "version": 1
+      }
+    ],
+    "skills": [
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w038"
+        },
+        "skills": {
+          "lastTypes": [
+            "recognition"
+          ],
+          "cleanAssemblies": 0,
+          "types": {
+            "recognition": {
+              "recent": [
+                true
+              ],
+              "lastAt": "2026-10-19T08:04:00.000Z"
+            }
+          }
+        }
+      },
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w070"
+        },
+        "skills": {
+          "lastTypes": [
+            "recognition"
+          ],
+          "cleanAssemblies": 0,
+          "types": {
+            "recognition": {
+              "recent": [
+                true
+              ],
+              "lastAt": "2026-10-19T08:02:00.000Z"
+            }
+          }
+        }
+      },
+      {
+        "ref": {
+          "kind": "word",
+          "id": "w083"
+        },
+        "skills": {
+          "lastTypes": [
+            "recognition"
+          ],
+          "cleanAssemblies": 0,
+          "types": {
+            "recognition": {
+              "recent": [
+                false
+              ],
+              "lastAt": "2026-10-19T08:03:00.000Z"
+            }
+          }
+        }
+      }
+    ],
+    "stats": {
+      "days": [
+        {
+          "date": "2026-10-19",
+          "answers": 3,
+          "keys": [
+            "[\"word\",\"w070\"]",
+            "[\"word\",\"w083\"]",
+            "[\"word\",\"w038\"]"
+          ]
+        }
+      ],
+      "recentByType": {
+        "recognition": [
+          true,
+          false,
+          true
+        ]
+      },
+      "answers": 3,
+      "answeredKeys": [
+        "[\"word\",\"w070\"]",
+        "[\"word\",\"w083\"]",
+        "[\"word\",\"w038\"]"
+      ]
+    }
+  }
+}

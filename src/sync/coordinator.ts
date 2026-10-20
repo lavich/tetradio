@@ -1,3 +1,4 @@
+import { lifecycle } from "../reporting/reporting";
 import type { AppDatabase } from "../storage/db";
 import type { SyncAdapter } from "./adapter";
 import { dominates, mergeClocks, sameClock } from "./clock";
@@ -16,9 +17,12 @@ import {
   type SnapshotDescription,
 } from "./snapshot";
 import { SyncError, type SyncErrorKind } from "./transport";
+import { keepsPointer, notePeers, parsePeers, writeFormat, type Peers } from "./peers";
 import {
+  DECLARED_READS,
   SNAPSHOT_FORMAT,
   SUPPORTED_SNAPSHOT_FORMATS,
+  WRITE_FORMAT,
   type Clock,
   type CompactSnapshot,
   type SyncVersionRow,
@@ -26,6 +30,9 @@ import {
 } from "./types";
 /** Читаемые форматы: текущий и предыдущий; более новый или неизвестный — отказ без записи. */
 const readable = (format: number) => (SUPPORTED_SNAPSHOT_FORMATS as readonly number[]).includes(format);
+const NEWEST_FORMAT = Math.max(...SUPPORTED_SNAPSHOT_FORMATS);
+const sameReads = (a: number[] | undefined, b: number[] | undefined) =>
+  JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 
 export type SyncPhase = "disabled" | "paused" | "idle" | "syncing" | "synced" | "error" | "conflict";
 export interface ConflictBranch {
@@ -197,6 +204,7 @@ export class SyncCoordinator {
   /** Один заход обмена: отказ пробрасывается наверх, где решается — лечить хранилище или сообщать о сбое. */
   private async cycle(): Promise<void> {
     const { adapter } = this.options;
+    this.newerFormat = false;
     const flags = await this.flags();
     this.update({ dirty: flags.dirty || !!flags.restored, lastConfirmedAt: flags.lastOk });
     if (!adapter.capabilities().available) {
@@ -232,6 +240,7 @@ export class SyncCoordinator {
       ...(this.status.reason === STALE_CHOICE ? { reason: null } : {}),
     });
     this.onFailure?.(error, kind);
+    if ((kind === "format" && this.newerFormat) || kind === "stale") this.onNewerFormat?.();
     if (kind !== "disabled" && kind !== "format") {
       this.cancelRetry = this.options.schedule(() => {
         void this.exchange();
@@ -246,8 +255,19 @@ export class SyncCoordinator {
     const flags = await this.flags();
     const listing = await adapter.listPointers();
     this.update({ keys: { used: listing.keys, max: adapter.capabilities().maxKeys } });
+    await this.notePeers(device, listing.pointers);
     const others = listing.pointers.filter((pointer) => pointer.device !== device);
-    const mine = listing.pointers.find((pointer) => pointer.device === device) ?? null;
+    let mine = listing.pointers.find((pointer) => pointer.device === device) ?? null;
+    // Переписывание `reads` в гонке с чужой уборкой может оставить свой указатель без частей: снимаем его,
+    // и версия публикуется заново по правилу потерянного указателя.
+    if (writes && mine && listing.incomplete.includes(mine.id) && (await adapter.removeDevice(mine))) mine = null;
+    // Без Web Locks писатель на устройстве не гарантирован; указатель более новой сборки этого устройства не трогаем.
+    if (writes && mine && readable(mine.format) && !sameReads(mine.reads, DECLARED_READS))
+      try {
+        await adapter.declareReads(device, mine.id, DECLARED_READS);
+      } catch (error) {
+        console.warn("Объявление читаемых форматов отложено", error);
+      }
     let candidates = others.filter((pointer) => !dominates(flags.clock, pointer.clock));
     candidates = candidates.filter(
       (candidate) =>
@@ -270,11 +290,13 @@ export class SyncCoordinator {
                 other !== pointer && dominates(other.clock, pointer.clock) && !sameClock(other.clock, pointer.clock),
             ),
         );
-        if (latest.some((pointer) => !readable(pointer.format)))
+        if (latest.some((pointer) => !readable(pointer.format))) {
+          this.newerFormat = latest.some((pointer) => pointer.format > NEWEST_FORMAT);
           throw new SyncError(
             "format",
-            "В облаке версия другого формата. Обновите приложение; локальные данные не изменены.",
+            "В облаке версия другого формата. Перезапустите приложение; локальные данные не изменены.",
           );
+        }
         const remote: ConflictBranch[] = [];
         for (const pointer of latest) {
           const snapshot = await adapter.readVersion(pointer);
@@ -323,11 +345,13 @@ export class SyncCoordinator {
       await this.confirm();
       return;
     }
-    if (candidates.some((candidate) => !readable(candidate.format)))
+    if (candidates.some((candidate) => !readable(candidate.format))) {
+      this.newerFormat = candidates.some((candidate) => candidate.format > NEWEST_FORMAT);
       throw new SyncError(
         "format",
-        "В облаке версия другого формата. Обновите приложение или повторите чтение позже; локальные данные не изменены.",
+        "В облаке версия другого формата. Перезапустите приложение или повторите чтение позже; локальные данные не изменены.",
       );
+    }
     const remote: ConflictBranch[] = [];
     for (const candidate of candidates) {
       try {
@@ -426,22 +450,33 @@ export class SyncCoordinator {
     const { snapshot, mark } = override
       ? { snapshot: override, mark: null }
       : await buildAndCommitMarked(database, now, id);
+    // Облако перечитывается здесь: выбор версии в конфликте публикует без нового чтения в `decide`.
+    const peers = await this.notePeers(device, (await adapter.listPointers()).pointers);
     const meta = {
       id,
       device,
       clock,
       createdAt: now.toISOString(),
-      format: SNAPSHOT_FORMAT,
+      format: writeFormat(peers, now, WRITE_FORMAT),
       resolves,
       label: this.options.label || undefined,
+      reads: DECLARED_READS,
     };
+    const started = performance.now();
+    let published;
     try {
-      await adapter.publishVersion(meta, snapshot);
+      published = await adapter.publishVersion(meta, snapshot);
     } catch (error) {
       if (!(error instanceof SyncError && error.kind === "limit")) throw error;
       await this.cleanup(device, clock, true);
-      await adapter.publishVersion(meta, snapshot);
+      published = await adapter.publishVersion(meta, snapshot);
     }
+    lifecycle("syncPublished", {
+      ms: Math.round(performance.now() - started),
+      parts: published.meta.parts,
+      chars: published.chars,
+      format: published.meta.format,
+    });
     await database.transaction("rw", database.meta, async () => {
       await writeMeta(database, META.applied, id);
       await writeMeta(database, META.clock, JSON.stringify(clock));
@@ -463,6 +498,8 @@ export class SyncCoordinator {
   private async cleanup(device: string, applied: Clock, force: boolean) {
     const { adapter, database } = this.options;
     const { pointers } = await adapter.listPointers();
+    const peers = await this.notePeers(device, pointers);
+    const now = this.options.now();
     const rejected = (await database.syncVersions
       .orderBy("createdAt")
       .reverse()
@@ -473,15 +510,25 @@ export class SyncCoordinator {
     for (const pointer of pointers) if (pointer.device === device) protectedIds.add(pointer.id);
     const own = (await adapter.listGenerations()).filter((id) => id.startsWith(`${device}-`) && !protectedIds.has(id));
     if (own.length) await adapter.removeGenerations(own);
-    const cutoff = this.options.now().getTime() - FOREIGN_KEEP_MS;
+    const cutoff = now.getTime() - FOREIGN_KEEP_MS;
     for (const pointer of pointers)
       if (
         pointer.device !== device &&
         dominates(applied, pointer.clock) &&
-        (force || Date.parse(pointer.createdAt) < cutoff)
+        (force || Date.parse(pointer.createdAt) < cutoff) &&
+        !keepsPointer(peers, pointer, now, NEWEST_FORMAT)
       )
         await adapter.removeDevice(pointer);
     this.update({ keys: { used: (await adapter.room(0, device)).keys, max: adapter.capabilities().maxKeys } });
+  }
+  private async notePeers(device: string, pointers: VersionMeta[]): Promise<Peers> {
+    const { database } = this.options;
+    const stored = await readMeta(database, META.peers);
+    const now = this.options.now();
+    const peers = notePeers(parsePeers(stored, now), pointers, device, now);
+    const next = JSON.stringify(peers);
+    if (next !== stored) await writeMeta(database, META.peers, next);
+    return peers;
   }
   private async installMissing(packages: string[]) {
     try {
@@ -495,6 +542,9 @@ export class SyncCoordinator {
   }
   /** Экран подписывается, чтобы догрузить стандартные пакеты, нужные полученному прогрессу. */
   onMissingPackages: ((lessonIds: string[]) => void) | null = null;
+  /** Приложение подписывается, чтобы само загрузить новую сборку: в облаке версия формата новее этой или чанк этой сборки уже удалён. */
+  onNewerFormat: (() => void) | null = null;
+  private newerFormat = false;
   /** Приложение подписывается, чтобы отправить отчёт о сбое синхронизации; координатор сам о сервисе отчётов не знает. */
   onFailure: ((error: unknown, kind: SyncErrorKind | "unknown") => void) | null = null;
 

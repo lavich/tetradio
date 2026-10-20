@@ -23,7 +23,6 @@ const fake = vi.hoisted(() => {
   };
 });
 vi.mock("../src/sync", () => ({ sync: fake.sync }));
-vi.mock("../src/main", () => ({ updateReady: { value: false, apply: () => {} } }));
 vi.mock("../src/features/today/TodayScreen", () => ({ TodayScreen: () => <p>today</p> }));
 vi.mock("../src/app/Nav", () => ({ Nav: () => null }));
 vi.mock("../src/app/navigation", () => ({ useGoBack: () => () => {}, useStartRoute: () => {} }));

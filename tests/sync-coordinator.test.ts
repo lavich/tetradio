@@ -9,13 +9,20 @@ import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { kvAdapter } from "../src/sync/adapter";
 import { SyncCoordinator, type CoordinatorOptions } from "../src/sync/coordinator";
-import { memoryTransport, disabledTransport, type MemoryTransport } from "../src/sync/transport";
+import { memoryTransport, disabledTransport, SyncError, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
 import { installCompleted, installLessons, memoryFetcher, packageOf } from "./helpers/content";
 import { installLesson, refreshCatalog } from "../src/content/client";
 import type { Word } from "../src/domain/types";
 import { wordKeyOf, wordRef, wordState } from "./helpers/cards";
+import { FORMAT5_BUILD, loadBuild, ROLLBACK_BUILD } from "./helpers/builds";
+
+const lifecycle = vi.hoisted(() => vi.fn());
+vi.mock("../src/reporting/reporting", async (original) => ({
+  ...(await original<typeof import("../src/reporting/reporting")>()),
+  lifecycle,
+}));
 
 let cloud: MemoryTransport;
 let clockMs = Date.parse("2026-09-16T08:00:00Z");
@@ -25,17 +32,24 @@ const tick = (minutes = 1) => {
 };
 const now = () => new Date(clockMs);
 let counter = 0;
+type Build = Awaited<ReturnType<typeof loadBuild>>;
 async function device(
   name: string,
-  options: { lessons?: string[]; label?: string; maxKeys?: number } & Pick<CoordinatorOptions, "lock" | "online"> = {},
+  options: { lessons?: string[]; label?: string; maxKeys?: number; build?: Build; db?: AppDatabase } & Pick<
+    CoordinatorOptions,
+    "lock" | "online"
+  > = {},
 ) {
-  const db = new AppDatabase(`tetradio-sync-${name}-${++counter}`);
-  await db.delete();
-  await db.open();
+  const build = options.build ?? { SyncCoordinator, kvAdapter };
+  const db = options.db ?? new AppDatabase(`tetradio-sync-${name}-${++counter}`);
+  if (!options.db) {
+    await db.delete();
+    await db.open();
+  }
   if (options.lessons) await installCompleted(db, options.lessons);
-  const sync = new SyncCoordinator({
+  const sync = new build.SyncCoordinator({
     database: db,
-    adapter: kvAdapter(cloud),
+    adapter: build.kvAdapter(cloud),
     now,
     label: options.label ?? name,
     schedule: () => () => undefined,
@@ -750,7 +764,7 @@ describe("надёжность публикации и лимиты", () => {
     const status = await tablet.sync.exchange();
     expect(status.phase).toBe("error");
     expect(status.error?.kind).toBe("format");
-    expect(status.error?.message).toMatch(/Обновите приложение/);
+    expect(status.error?.message).toMatch(/Перезапустите приложение/);
     expect(await statesOf(tablet)).toEqual(before);
     expect(cloud.store.has(`p_${await tablet.sync.deviceId()}`)).toBe(false); // планшет ничего не опубликовал поверх неизвестного формата
     expect(await readMeta(tablet.db, META.dirty)).toBeTruthy();
@@ -822,5 +836,439 @@ describe("надёжность публикации и лимиты", () => {
       schedule: () => () => undefined,
     });
     expect((await sync.exchange()).phase).toBe("disabled");
+  });
+});
+
+describe("крошка публикации", () => {
+  const published = () => lifecycle.mock.calls.filter(([message]) => message === "syncPublished");
+
+  it("после записи указателя — одна крошка с форматом, числом частей и длиной записанного текста", async () => {
+    lifecycle.mockClear();
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true, false, true]);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    const pointer = JSON.parse(cloud.store.get(`p_${await phone.sync.deviceId()}`)!);
+    const text = Array.from({ length: pointer.parts }, (_, index) => cloud.store.get(`v_${pointer.id}_${index}`)).join(
+      "",
+    );
+    expect(published()).toEqual([
+      ["syncPublished", { ms: expect.any(Number), parts: pointer.parts, chars: text.length, format: pointer.format }],
+    ]);
+  });
+  it("при нехватке места крошки нет", async () => {
+    lifecycle.mockClear();
+    cloud = memoryTransport({ limits: { maxKeys: 1 } });
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true, false, true]);
+    expect((await phone.sync.exchange()).error).toMatchObject({ kind: "limit" });
+    expect(published()).toEqual([]);
+  });
+});
+
+describe("согласование формата записи", () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const pointerOf = async (dev: Device) => JSON.parse(cloud.store.get(`p_${await dev.sync.deviceId()}`)!);
+  const partsOf = (id: string) => [...cloud.store.keys()].filter((key) => key.startsWith(`v_${id}_`));
+  const phases: string[] = [];
+  const exchange = async (dev: Device) => {
+    const status = await dev.sync.exchange();
+    phases.push(status.phase);
+    return status;
+  };
+  const turn = async (dev: Device, answers: boolean[]) => {
+    await exchange(dev);
+    await study(dev, answers);
+    return exchange(dev);
+  };
+  beforeEach(() => {
+    phases.length = 0;
+  });
+
+  it("смешанные устройства: новое пишет формат 5, прежнее применяет его, ни конфликта, ни ошибки формата", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await turn(old, [true, false]);
+    await turn(fresh, [true]);
+    expect(await pointerOf(fresh)).toMatchObject({ format: 5, reads: [3, 4, 5, 6] });
+    await turn(old, [false]);
+    await turn(fresh, [true, true]);
+    await exchange(old);
+    expect((await pointerOf(fresh)).format).toBe(5);
+    expect((await pointerOf(old)).reads).toBeUndefined();
+    expect(phases.every((phase) => phase === "synced")).toBe(true);
+    expect(await statesOf(old)).toEqual(await statesOf(fresh));
+  });
+  it("после обновления прежнее устройство объявляет чтение 6 одним указателем, и следующая публикация — формат 6", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await turn(old, [true, false]);
+    await turn(fresh, [true]);
+    const freshFive = (await pointerOf(fresh)).id;
+    const before = await pointerOf(old);
+    const keys = [...cloud.store.keys()].sort();
+    const updated = await device("old", { db: old.db });
+    await exchange(updated);
+    const after = await pointerOf(updated);
+    expect(after).toEqual({ ...before, reads: [3, 4, 5, 6] });
+    expect([...cloud.store.keys()].sort()).toEqual(keys);
+    lifecycle.mockClear();
+    await turn(fresh, [false, true]);
+    const six = await pointerOf(fresh);
+    expect(six.format).toBe(6);
+    expect(lifecycle.mock.calls.filter(([message]) => message === "syncPublished")).toEqual([
+      ["syncPublished", expect.objectContaining({ format: 6, parts: six.parts })],
+    ]);
+    expect(partsOf(freshFive)).toEqual([]);
+    expect((await exchange(updated)).phase).toBe("synced");
+    expect(await statesOf(updated)).toEqual(await statesOf(fresh));
+    const [statsOld, statsFresh] = await Promise.all([stats(updated), stats(fresh)]);
+    expect(statsOld.totals).toEqual(statsFresh.totals);
+    expect(statsOld.days).toEqual(statsFresh.days);
+    expect(phases.every((phase) => phase === "synced")).toBe(true);
+  });
+  it("указатель без чтения 6, не менявшийся больше 30 дней по местным часам, не мешает формату 6", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await turn(old, [true]);
+    await turn(fresh, [true]);
+    expect((await pointerOf(fresh)).format).toBe(5);
+    clockMs += 31 * DAY;
+    await turn(fresh, [false]);
+    expect((await pointerOf(fresh)).format).toBe(6);
+  });
+  it("указатель активного прежнего устройства пропал из облака — новое всё равно пишет 5", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await turn(old, [true]);
+    await exchange(fresh);
+    const gone = await pointerOf(old);
+    cloud.store.delete(`p_${gone.device}`);
+    for (const key of partsOf(gone.id)) cloud.store.delete(key);
+    await study(fresh, [true]);
+    await exchange(fresh);
+    expect((await pointerOf(fresh)).format).toBe(5);
+  });
+  it("уборка при нехватке места не удаляет указатель активного устройства без чтения 6", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await turn(old, [true]);
+    await exchange(fresh);
+    await study(fresh, [true]);
+    cloud.limits.maxKeys = cloud.store.size + 1;
+    expect((await fresh.sync.exchange()).error).toMatchObject({ kind: "limit" });
+    expect(cloud.store.has(`p_${await old.sync.deviceId()}`)).toBe(true);
+  });
+  it.each([
+    ["на 40 дней в прошлом", (at: number) => new Date(at - 40 * DAY).toISOString()],
+    ["пустым", () => ""],
+  ])("указатель прежнего устройства со временем %s, увиденный впервые, считается свежим", async (_, createdAt) => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    await turn(old, [true]);
+    const raw = await pointerOf(old);
+    cloud.store.set(`p_${raw.device}`, JSON.stringify({ ...raw, createdAt: createdAt(clockMs) }));
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await turn(fresh, [true]);
+    expect((await pointerOf(fresh)).format).toBe(5);
+  });
+  it("выбор версии в конфликте решает формат по свежему чтению облака", async () => {
+    const one = await device("one", { lessons: ["mech-1"] });
+    const two = await device("two", { lessons: ["mech-1"] });
+    await turn(one, [true]);
+    await turn(two, [true]);
+    await turn(one, [false]);
+    await study(two, [true, true]);
+    const conflict = await two.sync.exchange();
+    expect(conflict.phase).toBe("conflict");
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const snapshot = await buildAndCommit(one.db, now(), "old-1");
+    await legacy
+      .kvAdapter(cloud)
+      .publishVersion(
+        { id: "old-1", device: "old", clock: { old: 1 }, createdAt: now().toISOString(), format: 5, resolves: [] },
+        snapshot,
+      );
+    const local = conflict.conflict!.branches.find((branch) => branch.local)!;
+    expect((await two.sync.resolve(local.id)).phase).toBe("synced");
+    expect((await pointerOf(two)).format).toBe(5);
+  });
+});
+
+describe("переписывание своего указателя", () => {
+  const pointerOf = async (dev: Device) => JSON.parse(cloud.store.get(`p_${await dev.sync.deviceId()}`)!);
+
+  it("части пропали во время переписывания — указатель снят, следующий обмен публикует версию заново", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    await study(old, [true, false]);
+    await old.sync.exchange();
+    const published = await pointerOf(old);
+    const write = cloud.setItem.bind(cloud);
+    let race = true;
+    cloud.setItem = async (key, value) => {
+      if (race && key === `p_${published.device}`) {
+        race = false;
+        cloud.store.delete(key);
+        for (let index = 0; index < published.parts; index++) cloud.store.delete(`v_${published.id}_${index}`);
+      }
+      await write(key, value);
+    };
+    const updated = await device("old", { db: old.db });
+    await updated.sync.exchange();
+    expect(cloud.store.has(`p_${published.device}`)).toBe(false);
+    expect((await updated.sync.exchange()).phase).toBe("synced");
+    expect((await pointerOf(updated)).id).not.toBe(published.id);
+    const other = await device("other", { lessons: ["mech-1"] });
+    expect((await other.sync.exchange()).phase).toBe("synced");
+    expect(await statesOf(other)).toEqual(await statesOf(updated));
+  });
+  it("указатель более новой сборки этого устройства не переписывается", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const raw = await pointerOf(phone);
+    const newer = JSON.stringify({ ...raw, format: SNAPSHOT_FORMAT + 1, reads: [3, 4, 5, 6, 7] });
+    cloud.store.set(`p_${raw.device}`, newer);
+    await phone.sync.exchange();
+    expect(cloud.store.get(`p_${raw.device}`)).toBe(newer);
+  });
+  it("без блокировки вкладок указатель не переписывается", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    await study(old, [true]);
+    await old.sync.exchange();
+    const before = cloud.store.get(`p_${await old.sync.deviceId()}`);
+    const updated = await device("old", { db: old.db, lock: async () => "unsupported" });
+    await updated.sync.exchange();
+    expect(cloud.store.get(`p_${await old.sync.deviceId()}`)).toBe(before);
+  });
+});
+
+it("устаревшая сборка из кеша на том же устройстве: пишет 5 без reads, другие пишут 5, после обновления снова 6", async () => {
+  const pointerOf = async (dev: Device) => JSON.parse(cloud.store.get(`p_${await dev.sync.deviceId()}`)!);
+  const phases: string[] = [];
+  const exchange = async (dev: Device) => phases.push((await dev.sync.exchange()).phase);
+  const phone = await device("phone", { lessons: ["mech-1"] });
+  const tablet = await device("tablet", { lessons: ["mech-1"] });
+  await study(tablet, [true]);
+  await exchange(tablet);
+  await exchange(phone);
+  await study(phone, [false, true]);
+  await exchange(phone);
+  expect((await pointerOf(phone)).format).toBe(6);
+  const cached = await device("phone", { db: phone.db, build: await loadBuild(FORMAT5_BUILD) });
+  await study(cached, [true]);
+  await exchange(cached);
+  expect(await pointerOf(phone)).toMatchObject({ format: 5 });
+  expect((await pointerOf(phone)).reads).toBeUndefined();
+  await exchange(tablet);
+  await study(tablet, [false]);
+  await exchange(tablet);
+  expect((await pointerOf(tablet)).format).toBe(5);
+  await exchange(phone);
+  expect((await pointerOf(phone)).reads).toEqual([3, 4, 5, 6]);
+  await study(tablet, [true]);
+  await exchange(tablet);
+  expect((await pointerOf(tablet)).format).toBe(6);
+  await exchange(phone);
+  expect(phases.every((phase) => phase === "synced")).toBe(true);
+  expect(await statesOf(phone)).toEqual(await statesOf(tablet));
+});
+
+describe("облако новее приложения", () => {
+  const withPointer = async (format: number) => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const tablet = await device("tablet", { lessons: ["mech-1"] });
+    await tablet.sync.exchange();
+    const phoneDevice = await phone.sync.deviceId();
+    const pointer = JSON.parse(cloud.store.get(`p_${phoneDevice}`)!);
+    cloud.store.set(
+      `p_${phoneDevice}`,
+      JSON.stringify({ ...pointer, id: `${phoneDevice}-9`, format, clock: { [phoneDevice]: 9 } }),
+    );
+    const newer = vi.fn();
+    tablet.sync.onNewerFormat = newer;
+    return { tablet, newer };
+  };
+
+  it("формат новее своего — колбэк один раз за заход", async () => {
+    const { tablet, newer } = await withPointer(SNAPSHOT_FORMAT + 1);
+    expect((await tablet.sync.exchange()).error?.kind).toBe("format");
+    expect(newer).toHaveBeenCalledTimes(1);
+    await tablet.sync.exchange();
+    expect(newer).toHaveBeenCalledTimes(2);
+  });
+  it.each([2, 3, 4, 5, 6])("формат %i — колбэка нет", async (format) => {
+    const { tablet, newer } = await withPointer(format);
+    await tablet.sync.exchange();
+    expect(newer).not.toHaveBeenCalled();
+  });
+  it("другая ошибка — колбэка нет", async () => {
+    const { tablet, newer } = await withPointer(SNAPSHOT_FORMAT);
+    for (const key of [...cloud.store.keys()].filter((key) => key.startsWith("v_"))) cloud.store.delete(key);
+    expect((await tablet.sync.exchange()).phase).toBe("error");
+    expect(newer).not.toHaveBeenCalled();
+  });
+});
+
+it("сборка отката читает 6, снимает 6 из reads своего указателя, и новые устройства пишут 5 без окна выбора", async () => {
+  const pointerOf = async (dev: Device) => JSON.parse(cloud.store.get(`p_${await dev.sync.deviceId()}`)!);
+  const phases: string[] = [];
+  const exchange = async (dev: Device) => phases.push((await dev.sync.exchange()).phase);
+  const phone = await device("phone", { lessons: ["mech-1"] });
+  const tablet = await device("tablet", { lessons: ["mech-1"] });
+  await study(phone, [true, false]);
+  await exchange(phone);
+  const six = await pointerOf(phone);
+  expect(six.format).toBe(6);
+  await exchange(tablet);
+  const rollback = await device("phone", { db: phone.db, build: await loadBuild(ROLLBACK_BUILD) });
+  await exchange(rollback);
+  expect(await pointerOf(phone)).toEqual({ ...six, reads: [3, 4, 5] });
+  const fresh = await device("fresh", { lessons: ["mech-1"] });
+  await exchange(fresh);
+  expect(await statesOf(fresh)).toEqual(await statesOf(phone));
+  await study(tablet, [true]);
+  await exchange(tablet);
+  expect((await pointerOf(tablet)).format).toBe(5);
+  await exchange(rollback);
+  await study(rollback, [false]);
+  await exchange(rollback);
+  expect((await pointerOf(phone)).format).toBe(5);
+  await exchange(tablet);
+  await exchange(fresh);
+  expect(phases.every((phase) => phase === "synced")).toBe(true);
+  expect(await statesOf(tablet)).toEqual(await statesOf(phone));
+  expect(await statesOf(fresh)).toEqual(await statesOf(phone));
+});
+
+it("часть приложения не загрузилась — сигнал обновиться и повтор по расписанию", async () => {
+  const schedule = vi.fn(() => () => undefined);
+  const db = new AppDatabase(`tetradio-sync-stale-${++counter}`);
+  await db.delete();
+  await db.open();
+  await installCompleted(db, ["mech-1"]);
+  const adapter = kvAdapter(cloud);
+  const sync = new SyncCoordinator({
+    database: db,
+    adapter: {
+      ...adapter,
+      publishVersion: () => Promise.reject(new SyncError("stale", "Перезапустите приложение")),
+    },
+    now,
+    schedule,
+  });
+  const newer = vi.fn();
+  sync.onNewerFormat = newer;
+  await study({ db, sync, name: "stale" }, [true]);
+  expect((await sync.exchange()).error?.kind).toBe("stale");
+  expect(newer).toHaveBeenCalledTimes(1);
+  expect(schedule).toHaveBeenCalledTimes(1);
+});
+
+describe("устойчивость согласования", () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const pointerOf = async (dev: Device) => JSON.parse(cloud.store.get(`p_${await dev.sync.deviceId()}`)!);
+  const partsOf = (id: string) => [...cloud.store.keys()].filter((key) => key.startsWith(`v_${id}_`));
+
+  it("свой указатель без частей снимается и версия публикуется заново в том же обмене", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const broken = await pointerOf(phone);
+    for (const key of partsOf(broken.id)) cloud.store.delete(key);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    const fixed = await pointerOf(phone);
+    expect(fixed.id).not.toBe(broken.id);
+    expect(partsOf(fixed.id)).toHaveLength(fixed.parts);
+  });
+  it("сбой переписывания reads не обрывает обмен", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    await study(old, [true]);
+    await old.sync.exchange();
+    const adapter = kvAdapter(cloud);
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const updated = new SyncCoordinator({
+      database: old.db,
+      adapter: { ...adapter, declareReads: () => Promise.reject(new SyncError("transport", "обрыв")) },
+      now,
+      schedule: () => () => undefined,
+    });
+    await study({ db: old.db, sync: updated, name: "old" }, [false]);
+    expect((await updated.exchange()).phase).toBe("synced");
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
+  });
+  it("часы ушли назад: время в реестре не дольше текущего, устройство не считается активным лишний год", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await study(old, [true]);
+    await old.sync.exchange();
+    await fresh.sync.exchange();
+    const peers = JSON.parse((await readMeta(fresh.db, META.peers))!);
+    for (const peer of Object.values(peers) as { seenAt: string }[])
+      peer.seenAt = new Date(clockMs + 365 * DAY).toISOString();
+    await writeMeta(fresh.db, META.peers, JSON.stringify(peers));
+    await fresh.sync.exchange();
+    clockMs += 31 * DAY;
+    await study(fresh, [true]);
+    await fresh.sync.exchange();
+    expect((await pointerOf(fresh)).format).toBe(6);
+  });
+  it.each(["null", "[1, 2]", '"строка"', '{"dev": 5}', "не json"])(
+    "испорченный реестр %s не ломает обмен",
+    async (raw) => {
+      const phone = await device("phone", { lessons: ["mech-1"] });
+      await writeMeta(phone.db, META.peers, raw);
+      await study(phone, [true]);
+      expect((await phone.sync.exchange()).phase).toBe("synced");
+    },
+  );
+  it("обычная уборка не удаляет указатель активного прежнего устройства, хотя его createdAt старше 30 дней", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const old = await device("old", { lessons: ["mech-1"], build: legacy });
+    clockMs -= 40 * DAY;
+    await study(old, [true]);
+    await old.sync.exchange();
+    clockMs += 40 * DAY;
+    const fresh = await device("fresh", { lessons: ["mech-1"] });
+    await fresh.sync.exchange();
+    await study(fresh, [true]);
+    expect((await fresh.sync.exchange()).phase).toBe("synced");
+    expect(cloud.store.has(`p_${await old.sync.deviceId()}`)).toBe(true);
+  });
+  it("публикация пишет свой указатель одним setItem, уже с reads", async () => {
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await study(phone, [true]);
+    const from = cloud.log.length;
+    await phone.sync.exchange();
+    const name = `p_${await phone.sync.deviceId()}`;
+    expect(cloud.log.slice(from).filter((entry) => entry === `setItem ${name}`)).toHaveLength(1);
+    expect(JSON.parse(cloud.store.get(name)!).reads).toEqual([3, 4, 5, 6]);
+  });
+  it("сборка формата 5 не переписывает указатель своего устройства, опубликованный новой сборкой", async () => {
+    const legacy = await loadBuild(FORMAT5_BUILD);
+    const other = await device("other", { lessons: ["mech-1"], build: legacy });
+    await study(other, [true]);
+    await other.sync.exchange();
+    const phone = await device("phone", { lessons: ["mech-1"] });
+    await phone.sync.exchange();
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    const name = `p_${await phone.sync.deviceId()}`;
+    const raw = cloud.store.get(name);
+    expect(JSON.parse(raw!).format).toBe(5);
+    const cached = await device("phone", { db: phone.db, build: legacy });
+    await cached.sync.exchange();
+    expect(cloud.store.get(name)).toBe(raw);
   });
 });

@@ -1,5 +1,6 @@
 import Dexie from "dexie";
 import { exportDB, importInto } from "dexie-export-import";
+import { holdUpdate } from "../../app/auto-update";
 import { AppDatabase, db, migrateV9, SCHEMA_VERSION, SYNC_META_PREFIX, TABLES } from "../../storage/db";
 import { isAppDatabaseName } from "../../storage/profile";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
@@ -72,11 +73,9 @@ const defaultPorts = (): TransferPorts => ({
  * Файловый share предпочтителен в WebView, где ссылка на Blob может не сработать; иначе обычное скачивание.
  * Отмена диалога отличается от ошибки и не считается сохранением.
  */
-export async function transferFile(
-  blob: Blob,
-  name: string,
-  ports: TransferPorts = defaultPorts(),
-): Promise<TransferOutcome> {
+export const transferFile = (blob: Blob, name: string, ports: TransferPorts = defaultPorts()) =>
+  holdUpdate(transferNow(blob, name, ports));
+async function transferNow(blob: Blob, name: string, ports: TransferPorts): Promise<TransferOutcome> {
   const file = new File([blob], name, { type: blob.type || "application/json" });
   if (ports.share && ports.canShare?.({ files: [file] })) {
     try {

@@ -46,7 +46,54 @@ TUNNEL_HOST=<имя>.trycloudflare.com npm run dev            # vite.config.ts �
 ## Откат
 
 - Быстрый: в BotFather вернуть адрес предыдущей проверенной сборки или отключить Main Mini App. Данные остаются на устройствах и в CloudStorage.
-- Сборка для отката должна понимать базу Dexie v9 и облачный формат 4. Более старый клиент не откроет базу новой версии, а облачную версию нового формата не применит и не перезапишет («обновите приложение»). Исправления поставляются вперёд; полная копия остаётся доступной.
+- Сборка для отката должна понимать базу Dexie v9 и облачные форматы, которые уже лежат в облаке. Более старый клиент не откроет базу новой версии, а облачную версию нового формата не применит и не перезапишет («обновите приложение»). Исправления поставляются вперёд; полная копия остаётся доступной.
+- **Формат 6 (сжатый снимок).** Откат — через сборку-цель: сборку с форматом 6, в которой `WRITE_FORMAT = 5` и `DECLARED_READS = [3, 4, 5]` (`src/sync/types.ts`). Она читает 6, при первом обмене снимает 6 из `reads` своего указателя, и остальные устройства по согласованию снова пишут 5 — без окна выбора. Она лечит только ошибки записи формата 6; ошибку чтения 6 лечит исправляющая сборка вперёд. На сборку до формата 6 — только когда все указатели `p_*` в облаке — `format: 5` и без 6 в `reads` (фрагмент ниже), то есть каждое устройство на сборке-цели уже опубликовало версию. Иначе откатанное устройство увидит «Обновите приложение», а его прежний указатель с 6 в `reads` продолжит разрешать запись 6.
+
+Указатели облака — в консоли WebView (Safari Web Inspector, `chrome://inspect`):
+
+```js
+Telegram.WebApp.CloudStorage.getKeys((_, keys) =>
+  Telegram.WebApp.CloudStorage.getItems(
+    keys.filter((key) => key.startsWith("p_")),
+    (_, items) =>
+      console.table(
+        Object.entries(items).map(([key, raw]) => {
+          const pointer = JSON.parse(raw);
+          return { key, id: pointer.id, format: pointer.format, reads: (pointer.reads || []).join(","), createdAt: pointer.createdAt };
+        }),
+      ),
+  ),
+);
+```
+
+Замер записи CloudStorage по одному и порциями (нужно 32 свободных ключа; тестовые ключи удаляются):
+
+```js
+(async () => {
+  const storage = Telegram.WebApp.CloudStorage;
+  const call = (method, ...args) =>
+    new Promise((resolve, reject) => storage[method](...args, (error, value) => (error ? reject(error) : resolve(value))));
+  const keys = Array.from({ length: 32 }, (_, index) => `bench_${index}`);
+  const value = "x".repeat(4000);
+  for (const batch of [1, 4, 8]) {
+    const started = performance.now();
+    for (let index = 0; index < keys.length; index += batch)
+      await Promise.all(keys.slice(index, index + batch).map((key) => call("setItem", key, value)));
+    console.log(`порциями по ${batch}: ${Math.round(performance.now() - started)} мс на ${keys.length} ключей`);
+    await call("removeItems", keys);
+  }
+})();
+```
+
+Проверка автообновления: положить указатель формата новее приложения, уйти на «Сегодня» и подождать; после проверки удалить ключ. `reads` с 6 нужен, чтобы этот указатель не заставлял устройства 30 дней писать формат 5.
+
+```js
+Telegram.WebApp.CloudStorage.setItem(
+  "p_check0001",
+  JSON.stringify({ id: "check0001-1", device: "check0001", clock: { check0001: 1 }, createdAt: new Date().toISOString(), format: 99, parts: 1, checksum: "00000000", resolves: [], reads: [3, 4, 5, 6] }),
+);
+// после проверки: Telegram.WebApp.CloudStorage.removeItem("p_check0001")
+```
 
 ## Проверки на реальных устройствах
 
@@ -65,5 +112,8 @@ TUNNEL_HOST=<имя>.trycloudflare.com npm run dev            # vite.config.ts �
 | Изоляция второго аккаунта на том же устройстве | не проверено | не проверено | не проверено |
 | Сворачивание во время занятия и возврат | белый экран 17.09.2026 до восстановления хранилища; после исправления не проверено | не проверено | — |
 | Сбой доходит до Sentry с метками Telegram и читаемым стеком | не проверено | не проверено | не проверено |
+| Смешанные версии обмениваются форматом 5 без окна выбора; после обновления всех — формат 6 | не проверено | не проверено | не проверено |
+| Замер записи CloudStorage: по одному и порциями по 4 и 8 (фрагмент выше) | не проверено | не проверено | не проверено |
+| Автообновление при указателе формата новее приложения (фрагмент выше) | не проверено | не проверено | не проверено |
 
-Автоматически, в Chromium с эмуляцией bridge (`tests/e2e/telegram.spec.ts`): запуск и его отказы, BackButton, тема, ширины 360/390 и клавиатура, отказ аудио, копии с отменой защитной копии, CloudStorage между двумя контекстами, изоляция аккаунта, клиент без CloudStorage, сворачивание с нулевым viewport, отказ IndexedDB после сна.
+Автоматически, в Chromium с эмуляцией bridge (`tests/e2e/telegram.spec.ts`): запуск и его отказы, BackButton, тема, ширины 360/390 и клавиатура, отказ аудио, копии с отменой защитной копии, CloudStorage между двумя контекстами, изоляция аккаунта, клиент без CloudStorage, сворачивание с нулевым viewport, отказ IndexedDB после сна, автообновление при облаке новее приложения (без service worker и с ним).

@@ -1,9 +1,11 @@
 import { RefreshCw } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useBridgeState } from "../../platform/platform";
 import { currentProfile } from "../../storage/profile";
 import { sync, useSyncStatus } from "../../sync";
 import { syncLineState } from "../../sync/status-text";
+import { useAutoUpdateState } from "../../app/auto-update";
 import ui from "../../shared/ui.module.css";
 import css from "./progress.module.css";
 
@@ -12,11 +14,13 @@ export function SyncLine() {
   const profile = currentProfile();
   const status = useSyncStatus();
   const bridge = useBridgeState();
+  const { pathname } = useLocation();
+  const updating = useAutoUpdateState() === "updating";
   if (profile.kind !== "telegram") return <p className={css.status}>Данные хранятся только в этом браузере</p>;
-  const line = syncLineState(status, bridge);
+  const line = syncLineState(status, bridge, updating, pathname === "/");
   return (
     <>
-      <div className={css.status} data-testid="sync-status" data-phase={line.phase}>
+      <div className={css.status} role="status" data-testid="sync-status" data-phase={line.phase}>
         <span>{line.text}</span>
         {line.retry && (
           <Button
@@ -31,7 +35,7 @@ export function SyncLine() {
           </Button>
         )}
       </div>
-      {status.error && <p className={ui.error}>{status.error.message}</p>}
+      {status.error && line.phase !== "updating" && <p className={ui.error}>{status.error.message}</p>}
       {status.reason && <p className={css.statusNote}>{status.reason}</p>}
     </>
   );
