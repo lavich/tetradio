@@ -14,7 +14,7 @@ crib:
   title: просьбы и расписание
   rows:
     - [просьба, "Could I…?"]
-    - [вежливее, "Would it be possible…?"]
+    - [необычная просьба, "Would it be possible to…?"]
     - [разрешение, "Do you mind if I…?"]
     - [ответ «можно», "No, go ahead."]
     - [расписание, It leaves at 6.]

@@ -1,7 +1,7 @@
 id: tp003
-text: "Do you mind if I take this on board?"
-translation: "Ничего, если я возьму это в салон?"
-note: "ответ No, not at all значит «можно»"
+text: "Do you mind if I put my bag on this seat?"
+translation: "Вы не против, если я положу сумку на это кресло?"
+note: "вопрос к соседу; ответ No, not at all или Sure, go ahead значит «можно»"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
   operation: requested-generation

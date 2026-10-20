@@ -1,7 +1,7 @@
 id: tp015
 text: "My bag didn't come out on the belt."
-translation: "Моя сумка не приехала на ленте."
-note: "belt — лента выдачи багажа"
+translation: "Моя сумка не появилась на ленте."
+note: "belt — лента выдачи багажа; пока стоите у ленты — My bag hasn't come out"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
   operation: requested-generation

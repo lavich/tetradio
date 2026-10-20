@@ -20,11 +20,11 @@ blocks:
     id: route
     title: Пересадка и прилёт
     body: |-
-      Если летите с пересадкой, у вас **a connecting flight** — стыковочный рейс, а время между рейсами — **a layover**. Главный вопрос на пересадке: **Do I need to collect my bags before my connection?** Если багаж сдан «сквозняком» (checked through), забирать его не нужно.
+      Если летите с пересадкой, у вас **a connecting flight** — стыковочный рейс, а время между рейсами — **a layover**. Главный вопрос на пересадке: **Do I need to collect my bags before my connection?** Если багаж сдан сразу до конечного пункта (checked through), забирать его не нужно.
 
-      После прилёта путь такой: паспортный контроль (passport control) → **baggage reclaim**, выдача багажа → **customs**, таможня. На таможне спрашивают **Anything to declare?** — есть ли что **declare**, декларировать. Обычный ответ: **I've got nothing to declare.** Если сумка не приехала: **My bag didn't come out on the belt.**
+      После прилёта путь такой: паспортный контроль (passport control) → **baggage reclaim**, выдача багажа → **customs**, таможня. На таможне спрашивают **Anything to declare?** — есть ли у вас что-то, что нужно **declare** — декларировать. Обычный ответ: **I've got nothing to declare.** Если сумка не приехала: **My bag didn't come out on the belt.**
 
-      На паспортном контроле задают короткие вопросы, и отвечать лучше так же коротко: **What's the purpose of your visit?** — **I'm here on holiday for a week.** **Where are you staying?** — **I'm staying at a hotel near the centre.** Здесь present continuous — о том, что уже решено на эти дни.
+      На паспортном контроле задают короткие вопросы, и отвечать лучше так же коротко: **What's the purpose of your visit?** — **I'm here on holiday for a week.** **Where are you staying?** — **I'm staying at a hotel near the centre.** Здесь present continuous: вы живёте там сейчас, временно, на время поездки.
 
       В объявлениях язык официальный: **Please proceed to gate 12** — «пройдите к выходу 12», **This is the final call for…** — последнее приглашение на посадку.
   - type: vocabulary
@@ -66,21 +66,33 @@ blocks:
           - I'm on holiday for a week.
           - I'm here on holiday for one week.
           - I'm here on vacation for a week.
+          - I'm on vacation for a week.
+          - I'm here for a week on holiday.
+          - I'm on holiday here for a week.
         explanation: On holiday — «в отпуске», американский вариант — on vacation.
       - id: q2
-        prompt: — Where are you staying? — Я остановился в отеле недалеко от центра.
+        prompt: — Where are you staying? — Я живу в отеле недалеко от центра.
         answer:
           - I'm staying at a hotel near the centre.
           - I'm staying in a hotel near the centre.
           - I'm staying at a hotel near the center.
           - I'm staying in a hotel near the center.
-        explanation: Решённое на эти дни — present continuous.
+          - I'm staying at a hotel not far from the centre.
+          - I'm staying in a hotel not far from the centre.
+          - I'm staying at a hotel near the city centre.
+          - I'm staying at a hotel close to the centre.
+          - I'm staying in a hotel close to the centre.
+        explanation: Временное, на время поездки, — present continuous.
       - id: q3
         prompt: — Anything to declare? — Мне нечего декларировать.
         answer:
           - I've got nothing to declare.
           - I have nothing to declare.
           - Nothing to declare.
+          - I don't have anything to declare.
+          - I haven't got anything to declare.
+          - No, nothing to declare.
+          - No, I've got nothing to declare.
       - id: q4
         prompt: Мне нужно забирать багаж перед стыковкой?
         answer:
@@ -88,6 +100,10 @@ blocks:
           - Do I need to collect my bags before my connecting flight?
           - Do I need to collect my luggage before my connection?
           - Do I have to collect my bags before my connection?
+          - Do I need to pick up my bags before my connection?
+          - Do I need to collect my baggage before my connection?
+          - Do I have to collect my luggage before my connection?
+          - Do I need to collect my bag before my connection?
   - type: explanation
     id: board-how
     title: Табло и посадочный талон
@@ -101,10 +117,10 @@ blocks:
     text: |-
       DEPARTURES — 14:05
 
+      14:25 BA 2550 Rome — Gate 4 — Final call
       14:35 TP 1331 Lisbon — Gate 12 — Boarding
-      14:50 FR 812 Rome — Gate 4 — Final call
       15:05 EZY 8031 Berlin — Delayed, new time 16:20
-      15:10 LH 2475 Munich — Go to gate 31
+      15:10 EZY 8371 Munich — Go to gate 31
       15:25 TK 1980 Istanbul — Cancelled, please contact the airline desk
 
       BOARDING PASS
@@ -113,7 +129,7 @@ blocks:
       Flight: TP 1331 Date: 14 MAY
       Boarding: 14:00 Gate closes: 14:15 Departs: 14:35
       Seat: 23C Group: 3
-      Baggage: 1 carry-on, 1 hold luggage 23 kg
+      Baggage: 1 cabin bag, 1 hold bag (23 kg)
     glosses:
       - { text: contact, russian: обратиться к }
       - { text: airline desk, russian: стойка авиакомпании }
@@ -174,7 +190,7 @@ blocks:
     plays: 2
     transcript:
       - { text: "Good afternoon. This is a gate change for passengers on flight TP 1331 to Lisbon. This flight will now depart from gate 16, not gate 12. Please proceed to gate 16." }
-      - { text: "This is the final call for passenger Marco Bianchi, travelling to Rome on flight FR 812. Please proceed immediately to gate 4, where the flight is ready to close." }
+      - { text: "This is the final call for passenger Tomasz Nowak, travelling to Rome on flight BA 2550. Please proceed immediately to gate 4, where your flight is now closing." }
       - { text: "We are sorry to announce that flight EZY 8031 to Berlin is delayed by about one hour and fifteen minutes. The new departure time is 16:20. Passengers can collect a food voucher from the information desk." }
       - { text: "Passengers arriving from Istanbul on flight TK 1979 can collect their bags from baggage reclaim, belt 5." }
   - type: exercise
@@ -190,13 +206,13 @@ blocks:
         answer: gate 16
         explanation: This flight will now depart from gate 16, not gate 12.
       - id: q2
-        prompt: Why do they call Marco Bianchi?
+        prompt: Why do they call Tomasz Nowak?
         options:
           - His flight is closing soon.
           - His bag is too big.
           - His flight is cancelled.
         answer: His flight is closing soon.
-        explanation: This is the final call… the flight is ready to close.
+        explanation: This is the final call… your flight is now closing.
       - id: q3
         prompt: How long is the delay of the Berlin flight?
         options:
@@ -225,7 +241,7 @@ blocks:
     body: |-
       Марко из Италии летит в Торонто с пересадкой в Лиссабоне. Послушайте его разговор с Аишей у стойки регистрации: что он просит, что не так с багажом и когда посадка.
 
-      Марко говорит по-английски уверенно, но с ошибками, как многие неносители: How much it is? вместо How much is it? Понимать такую речь — тоже навык поездки: Аиша его понимает, и вы поймёте.
+      Марко говорит по-английски уверенно, но с ошибками, как многие неносители: How much it is? вместо How much is it?, I take out… вместо I'll take out… Понимать такую речь — тоже навык поездки: Аиша его понимает, и вы поймёте.
   - type: listening
     id: desk
     title: At the check-in desk
@@ -240,7 +256,7 @@ blocks:
       - { speaker: Aisha, text: "Yes, it goes all the way to Toronto. You pick it up at baggage reclaim there. Can you put it on the scale, please?" }
       - { speaker: Aisha, text: "Hmm, it's twenty-six kilos. Your baggage allowance is twenty-three, so there's a charge for excess baggage." }
       - { speaker: Marco, text: "Oh no. How much it is?" }
-      - { speaker: Aisha, text: "Forty-five pounds. Or you can take some things out and put them in your carry-on." }
+      - { speaker: Aisha, text: "Forty-five pounds. Or you can take some things out and put them in your hand luggage." }
       - { speaker: Marco, text: "OK, I take out my shoes and a jacket. One moment… Is it OK now?" }
       - { speaker: Aisha, text: "Twenty-two and a half. That's fine. Do you have a seat preference?" }
       - { speaker: Marco, text: "Could I have an aisle seat, please? The flight to Toronto is long, and I like to walk a bit." }
@@ -280,11 +296,11 @@ blocks:
       - id: q4
         prompt: What does Marco do about it?
         options:
-          - He moves some things to his carry-on.
+          - He moves some things to his hand luggage.
           - He pays forty-five pounds.
           - He leaves the shoes at the desk.
-        answer: He moves some things to his carry-on.
-        explanation: I take out my shoes and a jacket — и сумка весит 22,5 кг.
+        answer: He moves some things to his hand luggage.
+        explanation: Марко вынимает обувь и куртку (правильно — I'll take out…), и сумка весит 22,5 кг.
       - id: q5
         prompt: Why does he want an aisle seat?
         options:
