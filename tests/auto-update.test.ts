@@ -22,6 +22,7 @@ function fakeRegistration(found: boolean) {
 function setup(overrides: Partial<AutoUpdatePorts> = {}) {
   const container = new EventTarget();
   const reload = vi.fn();
+  const markReload = vi.fn();
   const dismissNotice = vi.fn();
   let busy = false;
   const updater = createAutoUpdater({
@@ -29,6 +30,7 @@ function setup(overrides: Partial<AutoUpdatePorts> = {}) {
     storage: memoryStorage(),
     build: "b1",
     reload,
+    markReload,
     dismissNotice,
     busy: () => busy,
     now: () => Date.now(),
@@ -38,7 +40,7 @@ function setup(overrides: Partial<AutoUpdatePorts> = {}) {
     },
     ...overrides,
   });
-  return { updater, container, reload, dismissNotice, setBusy: (value: boolean) => (busy = value) };
+  return { updater, container, reload, markReload, dismissNotice, setBusy: (value: boolean) => (busy = value) };
 }
 const settle = async (ms = 0) => {
   await vi.advanceTimersByTimeAsync(ms);
@@ -217,5 +219,21 @@ describe("автообновление при облаке новее прило
     await settle(10_000);
     expect(reload).not.toHaveBeenCalled();
   });
+  it("перед применением путь запуска помечается использованным: перезагрузка не откроет слово из ссылки снова", async () => {
+    const withWorker = setup();
+    const { registration, waiting } = fakeRegistration(true);
+    withWorker.updater.registered(registration);
+    withWorker.updater.route("/");
+    withWorker.updater.request();
+    await settle(4000);
+    expect(withWorker.markReload).toHaveBeenCalledTimes(1);
+    expect(withWorker.markReload.mock.invocationCallOrder[0]).toBeLessThan(
+      waiting.postMessage.mock.invocationCallOrder[0],
+    );
+    const without = setup({ container: null });
+    without.updater.route("/");
+    without.updater.request();
+    await settle(4000);
+    expect(without.markReload.mock.invocationCallOrder[0]).toBeLessThan(without.reload.mock.invocationCallOrder[0]);
+  });
 });
-

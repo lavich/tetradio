@@ -485,4 +485,17 @@ describe("путь по параметру запуска", () => {
     expect(startRoute(tg(`w_${"a".repeat(60)}`))).toBe(`/share/word/${"a".repeat(60)}`);
     expect(startRoute({ ...parseLaunch(location("")), startParam: "w_w093" })).toBeNull();
   });
+  it("после перезагрузки автообновления путь запуска без query_id снова не открывается", async () => {
+    sessionStorage.clear();
+    vi.resetModules();
+    const fresh = await import("../src/platform/launch");
+    fresh.skipStartRouteOnReload();
+    vi.resetModules();
+    const reloaded = await import("../src/platform/launch");
+    expect(reloaded.takeStartRoute(tg("w_w093"))).toBeNull();
+    vi.resetModules();
+    const next = await import("../src/platform/launch");
+    expect(next.takeStartRoute(tg("w_w093"))).toBe("/share/word/w093");
+    sessionStorage.clear();
+  });
 });

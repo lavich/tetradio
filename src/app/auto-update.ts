@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { skipStartRouteOnReload } from "../platform/launch";
 
 /** Новая сборка ждёт (`onNeedRefresh`): уведомление «Обновить» и его действие. */
 export const updateReady = { value: false, apply: () => {} };
@@ -16,6 +17,8 @@ export interface AutoUpdatePorts {
   storage: Pick<Storage, "getItem" | "setItem"> | null;
   build: string;
   reload: () => void;
+  /** Перезагрузка — тот же запуск: путь из ссылки уже открывали. Плагин PWA тоже может перезагрузить страницу. */
+  markReload: () => void;
   dismissNotice: () => void;
   busy: () => boolean;
   now: () => number;
@@ -64,6 +67,7 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
   const apply = () => {
     applied = true;
     cancelCheck?.();
+    ports.markReload();
     if (withoutWorker) {
       try {
         ports.storage?.setItem(RELOADED_KEY, ports.build);
@@ -197,6 +201,7 @@ export const autoUpdate = createAutoUpdater({
   })(),
   build: typeof __APP_BUILD__ === "string" ? __APP_BUILD__ : "dev",
   reload: () => window.location.reload(),
+  markReload: skipStartRouteOnReload,
   dismissNotice: () => void import("sonner").then(({ toast }) => toast.dismiss(UPDATE_TOAST)).catch(() => undefined),
   busy: () => !!document.querySelector('[role="dialog"], [role="alertdialog"]') || editable(document.activeElement),
   now: () => Date.now(),
