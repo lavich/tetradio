@@ -121,7 +121,23 @@ export function parsePointer(raw: string): VersionMeta | null {
   }
 }
 
-const compression = () => import("./compression");
+let compressionModule: Promise<typeof import("./compression")> | null = null;
+/**
+ * Чанк упаковки отдельный и грузится по требованию. После деплоя WebView без service worker держит старую сборку,
+ * чей чанк уже удалён: отказ — `stale` (нужна перезагрузка), а промис сбрасывается, чтобы повтор грузил заново.
+ */
+export function loadCompression() {
+  compressionModule ??= import("./compression").catch((error: unknown) => {
+    compressionModule = null;
+    throw new SyncError(
+      "stale",
+      "Не удалось загрузить часть приложения: вышла новая версия. Перезапустите приложение.",
+      error,
+    );
+  });
+  return compressionModule;
+}
+const compression = loadCompression;
 const unpacksTo = (unpack: (text: string) => string, text: string, json: string) => {
   try {
     return unpack(text) === json;

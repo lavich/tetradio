@@ -240,7 +240,7 @@ export class SyncCoordinator {
       ...(this.status.reason === STALE_CHOICE ? { reason: null } : {}),
     });
     this.onFailure?.(error, kind);
-    if (kind === "format" && this.newerFormat) this.onNewerFormat?.();
+    if ((kind === "format" && this.newerFormat) || kind === "stale") this.onNewerFormat?.();
     if (kind !== "disabled" && kind !== "format") {
       this.cancelRetry = this.options.schedule(() => {
         void this.exchange();
@@ -540,7 +540,7 @@ export class SyncCoordinator {
   }
   /** Экран подписывается, чтобы догрузить стандартные пакеты, нужные полученному прогрессу. */
   onMissingPackages: ((lessonIds: string[]) => void) | null = null;
-  /** Приложение подписывается, чтобы само загрузить новую сборку: в облаке версия формата новее этой. */
+  /** Приложение подписывается, чтобы само загрузить новую сборку: в облаке версия формата новее этой или чанк этой сборки уже удалён. */
   onNewerFormat: (() => void) | null = null;
   private newerFormat = false;
   /** Приложение подписывается, чтобы отправить отчёт о сбое синхронизации; координатор сам о сервисе отчётов не знает. */

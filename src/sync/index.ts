@@ -6,7 +6,8 @@ import { lifecycle, reportError } from "../reporting/reporting";
 import { db } from "../storage/db";
 import { currentProfile } from "../storage/profile";
 import { storageHealer } from "../storage/recovery";
-import { kvAdapter } from "./adapter";
+import { kvAdapter, loadCompression } from "./adapter";
+import { afterFirstExchange } from "./warm";
 import { SyncCoordinator, webLock, type SyncStatus } from "./coordinator";
 import { cloudStorageTransport, disabledTransport } from "./transport";
 
@@ -30,7 +31,9 @@ sync.onMissingPackages = (ids) => {
 // Модуль автообновления живёт в основном чанке: событие не тянет его зависимости в чанк синхронизации.
 sync.onNewerFormat = () => window.dispatchEvent(new CustomEvent("tetradio:newer-format"));
 sync.onFailure = (error, kind) => {
-  if (kind !== "disabled" && kind !== "unavailable") reportError(error, { category: "sync", extra: { kind } });
+  // Удалённый чанк старой сборки лечит перезагрузка, а не разбор отчёта: повторы шли бы отчётом каждый раз.
+  if (kind === "stale") lifecycle("syncStaleChunk");
+  else if (kind !== "disabled" && kind !== "unavailable") reportError(error, { category: "sync", extra: { kind } });
 };
 
 export function connectSync(app: TelegramWebApp | null) {
@@ -40,6 +43,12 @@ export function connectSync(app: TelegramWebApp | null) {
     return;
   }
   sync.setAdapter(kvAdapter(cloudStorageTransport(app.CloudStorage)));
+  afterFirstExchange(
+    sync,
+    () => void loadCompression().catch(() => undefined),
+    (task) =>
+      typeof requestIdleCallback === "function" ? requestIdleCallback(task, { timeout: 10000 }) : setTimeout(task, 0),
+  );
   sync.start();
 }
 export const useSyncStatus = (): SyncStatus => useSyncExternalStore(sync.subscribe, sync.getStatus, sync.getStatus);

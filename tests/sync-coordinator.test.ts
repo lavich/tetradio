@@ -9,7 +9,7 @@ import { makePlan, makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
 import { kvAdapter } from "../src/sync/adapter";
 import { SyncCoordinator, type CoordinatorOptions } from "../src/sync/coordinator";
-import { memoryTransport, disabledTransport, type MemoryTransport } from "../src/sync/transport";
+import { memoryTransport, disabledTransport, SyncError, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
 import { installCompleted, installLessons, memoryFetcher, packageOf } from "./helpers/content";
@@ -1147,4 +1147,28 @@ it("сборка отката читает 6, снимает 6 из reads сво
   expect(phases.every((phase) => phase === "synced")).toBe(true);
   expect(await statesOf(tablet)).toEqual(await statesOf(phone));
   expect(await statesOf(fresh)).toEqual(await statesOf(phone));
+});
+
+it("часть приложения не загрузилась — сигнал обновиться и повтор по расписанию", async () => {
+  const schedule = vi.fn(() => () => undefined);
+  const db = new AppDatabase(`tetradio-sync-stale-${++counter}`);
+  await db.delete();
+  await db.open();
+  await installCompleted(db, ["mech-1"]);
+  const adapter = kvAdapter(cloud);
+  const sync = new SyncCoordinator({
+    database: db,
+    adapter: {
+      ...adapter,
+      publishVersion: () => Promise.reject(new SyncError("stale", "Перезапустите приложение")),
+    },
+    now,
+    schedule,
+  });
+  const newer = vi.fn();
+  sync.onNewerFormat = newer;
+  await study({ db, sync, name: "stale" }, [true]);
+  expect((await sync.exchange()).error?.kind).toBe("stale");
+  expect(newer).toHaveBeenCalledTimes(1);
+  expect(schedule).toHaveBeenCalledTimes(1);
 });

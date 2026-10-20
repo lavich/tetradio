@@ -33,7 +33,7 @@ export function syncLineState(status: SyncStatus, bridge: BridgeState, updating 
       retry: false,
       failed: true,
     };
-  if (updating && status.error?.kind === "format")
+  if (updating && (status.error?.kind === "format" || status.error?.kind === "stale"))
     return { phase: "updating", text: "Обновляем приложение…", retry: false, failed: false };
   const dirty = status.dirty && status.phase !== "syncing" ? " · есть неотправленные изменения" : "";
   return {

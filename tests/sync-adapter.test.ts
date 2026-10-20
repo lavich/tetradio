@@ -442,3 +442,26 @@ describe("объявление читаемых форматов в своём �
     expect(memory.store.has(pointerKey("dev1"))).toBe(false);
   });
 });
+
+describe("чанк упаковки не загрузился (сборка обновилась после деплоя)", () => {
+  afterEach(() => {
+    vi.doUnmock("../src/sync/compression");
+    vi.resetModules();
+  });
+  it("отказ — ошибка stale с просьбой перезапустить; следующая попытка грузит модуль заново", async () => {
+    vi.resetModules();
+    vi.doMock("../src/sync/compression", () => {
+      throw new TypeError("Failed to fetch dynamically imported module");
+    });
+    const { kvAdapter: staleAdapter } = await import("../src/sync/adapter");
+    const memory = memoryTransport();
+    const adapter = staleAdapter(memory);
+    await expect(
+      adapter.publishVersion(metaOf("dev1-1", "dev1", { dev1: 1 }, [], 6), snapshot(3)),
+    ).rejects.toMatchObject({ kind: "stale", message: expect.stringMatching(/Перезапустите приложение/) });
+    expect(setItems(memory)).toEqual([]);
+    vi.doUnmock("../src/sync/compression");
+    const published = (await adapter.publishVersion(metaOf("dev1-1", "dev1", { dev1: 1 }, [], 6), snapshot(3))).meta;
+    expect(published.format).toBe(6);
+  });
+});
