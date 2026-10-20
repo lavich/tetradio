@@ -51,6 +51,7 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
   let lastInteraction = ports.now();
   let state: AutoUpdateState = "idle";
   let cancelCheck: (() => void) | null = null;
+  let holds = 0;
   const listeners = new Set<() => void>();
 
   const setState = (next: AutoUpdateState) => {
@@ -63,7 +64,7 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
     reloaded = true;
     ports.reload();
   };
-  const safe = () => route === SAFE_ROUTE && !ports.busy() && ports.now() - lastInteraction >= IDLE_MS;
+  const safe = () => route === SAFE_ROUTE && holds === 0 && !ports.busy() && ports.now() - lastInteraction >= IDLE_MS;
   const apply = () => {
     applied = true;
     cancelCheck?.();
@@ -172,6 +173,18 @@ export function createAutoUpdater(ports: AutoUpdatePorts) {
       lastInteraction = ports.now();
       if (ready && !applied && !cancelCheck) check();
     },
+    /**
+     * Незаконченная работа, которую не видно по экрану: загрузка курса, восстановление копии, нативное окно
+     * передачи файла. Она могла начаться на другом экране и продолжаться на «Сегодня».
+     */
+    hold<T>(work: Promise<T>): Promise<T> {
+      holds++;
+      return work.finally(() => {
+        holds--;
+        lastInteraction = ports.now();
+      });
+    },
+    held: () => holds > 0,
     state: () => state,
     subscribe: (listener: () => void) => {
       listeners.add(listener);
@@ -219,4 +232,5 @@ if (typeof window !== "undefined") {
   });
   window.addEventListener("tetradio:newer-format", () => autoUpdate.request());
 }
+export const holdUpdate = <T>(work: Promise<T>) => autoUpdate.hold(work);
 export const useAutoUpdateState = () => useSyncExternalStore(autoUpdate.subscribe, autoUpdate.state, autoUpdate.state);

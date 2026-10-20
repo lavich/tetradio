@@ -236,4 +236,19 @@ describe("автообновление при облаке новее прило
     await settle(4000);
     expect(without.markReload.mock.invocationCallOrder[0]).toBeLessThan(without.reload.mock.invocationCallOrder[0]);
   });
+  it("незаконченная работа (загрузка курса, восстановление копии, окно передачи) откладывает перезагрузку", async () => {
+    const { updater, reload } = setup({ container: null });
+    let finish = () => {};
+    const work = updater.hold(new Promise<void>((resolve) => (finish = resolve)));
+    const failing = updater.hold(Promise.reject(new Error("отказ")));
+    await expect(failing).rejects.toThrow("отказ");
+    updater.route("/");
+    updater.request();
+    await settle(30_000);
+    expect(reload).not.toHaveBeenCalled();
+    finish();
+    await work;
+    await settle(4000);
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
 });

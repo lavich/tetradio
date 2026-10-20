@@ -3,6 +3,7 @@ import type { Word } from "../domain/types";
 import { launchContext } from "./launch";
 import { telegramBridge } from "./platform";
 import type { TelegramWebApp } from "./telegram-types";
+import { holdUpdate } from "../app/auto-update";
 
 /** Ссылка на слово всегда ведёт через бота: получатели в основном в Telegram. */
 export const wordLink = (wordId: string, bot: string) => `https://t.me/${bot}?startapp=w_${wordId}`;
@@ -24,7 +25,7 @@ export async function shareWord(
   }
   if (typeof navigator.share === "function") {
     try {
-      await navigator.share({ url, text });
+      await holdUpdate(navigator.share({ url, text }));
       return;
     } catch (error) {
       if ((error as { name?: string })?.name === "AbortError") return;
