@@ -292,6 +292,71 @@ describe("частично опубликованный модуль", () => {
   });
 });
 
+describe("карточки курсов одного языка", () => {
+  const englishCourse = (id: string, module: string, cards: Files): Files => {
+    const items = Object.keys(cards).map((path) => ({
+      kind: path.startsWith("words/") ? "word" : "phrase",
+      id: path.split("/").pop()!.replace(".yaml", ""),
+    }));
+    return {
+      [`courses/${id}.yaml`]: { title: id, language: "en", modules: [module] },
+      [`modules/${module}.yaml`]: {
+        number: 1,
+        title: "Start",
+        subtitle: "Начало",
+        status: "draft",
+        goal: "Начать",
+        sessions: 3,
+        lessons: [`${module}-1`],
+      },
+      [`lessons/${module}-1.yaml`]: {
+        title: "Начало",
+        kind: "lesson",
+        items,
+        blocks: [{ type: "vocabulary", id: "words" }],
+      },
+      ...cards,
+    };
+  };
+  const phrase = (text: string, translation: string) => ({
+    text,
+    translation,
+    provenance: { sourceLabel: "Тест", operation: "requested-generation", request: "Тест" },
+  });
+  const twoCourses = (it: Files, travel: Files): Files => ({
+    ...base(),
+    ...englishCourse("english-it", "e01", it),
+    ...englishCourse("english-travel", "t01", travel),
+  });
+  it("слово с артиклем и без в двух курсах одного языка — ошибка с обоими файлами", () => {
+    const message = failure(
+      twoCourses(
+        { "words/english-it/ew001.yaml": { greek: "a stakeholder", russian: "заинтересованная сторона" } },
+        { "words/english-travel/tw001.yaml": { greek: "Stakeholder", russian: "участник" } },
+      ),
+    );
+    expect(message).toContain("words/english-it/ew001.yaml");
+    expect(message).toContain("words/english-travel/tw001.yaml");
+  });
+  it("фраза с другим регистром и без знаков в двух курсах одного языка — ошибка с обоими файлами", () => {
+    const message = failure(
+      twoCourses(
+        { "phrases/english-it/ep001.yaml": phrase("Does that answer your question?", "Это ответ на ваш вопрос?") },
+        { "phrases/english-travel/tp001.yaml": phrase("does that answer your  question", "Я ответил?") },
+      ),
+    );
+    expect(message).toContain("phrases/english-it/ep001.yaml");
+    expect(message).toContain("phrases/english-travel/tp001.yaml");
+  });
+  it("фразовый глагол и существительное через дефис — разные карточки", () => {
+    const files = twoCourses(
+      { "words/english-it/ew001.yaml": { greek: "check in", russian: "зарегистрироваться" } },
+      { "words/english-travel/tw001.yaml": { greek: "a check-in", russian: "регистрация" } },
+    );
+    expect(() => build(files)).not.toThrow();
+  });
+});
+
 describe("задания и ключи ответов", () => {
   const exercise = (patch: Record<string, unknown>) =>
     withLesson((b) => b.map((x) => (x.id === "text-tf" ? { ...x, ...patch } : x)));

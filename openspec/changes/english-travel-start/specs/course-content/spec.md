@@ -38,9 +38,9 @@
 - **WHEN** в `phrases/english-it/` есть «Does that answer your question?», а в `phrases/english-travel/` — «does that answer your question»
 - **THEN** сборка падает с `ContentError`, в сообщении оба файла
 
-#### Scenario: Разные языки
-- **WHEN** у греческого и английского курсов есть карточки с одинаковой записью, например имя или аббревиатура
-- **THEN** сборка проходит
+#### Scenario: Разные тексты
+- **WHEN** в одном английском курсе слово `check in`, а в другом — `a check-in`
+- **THEN** сборка проходит: дефис различает тексты
 
 #### Scenario: Текущий контент
 - **WHEN** сборка идёт на настоящем контенте с курсами `greek-a2`, `english-it` и `english-travel`

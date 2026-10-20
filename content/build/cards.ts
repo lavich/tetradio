@@ -169,6 +169,37 @@ function describePhrase(id: string, src: Sourced<PhraseSource>): PackagePhrase {
   }
 }
 
+const LEADING_ARTICLE = /^(a|an|the|to|ο|η|το|οι|τα)\s+/;
+const sameWord = (text: string) =>
+  text.normalize("NFC").toLowerCase().replace(/\s+/g, " ").trim().replace(LEADING_ARTICLE, "");
+const samePhrase = (text: string) =>
+  text
+    .normalize("NFC")
+    .toLowerCase()
+    .replace(/[\p{P}\u037e]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+/**
+ * Тематические курсы одного языка не делят карточки: слово учится в одном курсе, в другом остаётся текстом с глоссой.
+ * Внутри курса и между языками действуют правила дублей «текст + перевод».
+ */
+function sharedAcrossCourses(
+  dir: "words" | "phrases",
+  cards: Iterable<[string, { course: string; file: string }, string]>,
+  languages: Map<string, Language>,
+) {
+  const first = new Map<string, { course: string; file: string }>();
+  for (const [, src, text] of cards) {
+    const key = `${languages.get(src.course) ?? LANGUAGE}\u0000${text}`;
+    const twin = first.get(key);
+    if (!twin) first.set(key, src);
+    else if (twin.course !== src.course)
+      fail(
+        `${dir}/${src.file} повторяет карточку курса ${twin.course} ${dir}/${twin.file}: у курсов одного языка общих карточек нет`,
+      );
+  }
+}
+
 /**
  * Одно и то же слово живёт в одном файле и получает один идентификатор во всех уроках.
  * Два файла с одинаковой парой «написание + перевод» — ошибка публикации, а не тихий дубликат.
@@ -213,5 +244,15 @@ export function buildCards(sources: ContentRoot, languages: Map<string, Language
     phraseByKey.set(key, id);
     phrases.set(id, phrase);
   }
+  sharedAcrossCourses(
+    "words",
+    [...sources.words].map(([id, src]) => [id, src, sameWord(words.get(id)!.greek)]),
+    languages,
+  );
+  sharedAcrossCourses(
+    "phrases",
+    [...sources.phrases].map(([id, src]) => [id, src, samePhrase(phrases.get(id)!.text)]),
+    languages,
+  );
   return { words, phrases };
 }
