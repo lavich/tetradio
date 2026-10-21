@@ -67,3 +67,4 @@ characters:
   Ben: { gender: male, voice: Fenrir }
   Sofia: { gender: female, voice: Despina }
   Mei: { gender: female, voice: Leda }
+  Tom: { gender: male, voice: Achird }

@@ -88,7 +88,7 @@ describe("английский для путешествий и общения",
   const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07", "t08"];
   const TRIP = STAGE.slice(0, 7);
   const RUDE =
-    /\b(fuck\w*|shit\w*|bitch\w*|bastard\w*|arse\w*|wank\w*|piss\w*|twat\w*|cunt\w*|prick\w*|slut\w*|whore\w*|bollocks)\b/i;
+    /\b(fuck\w*|shit\w*|bitch\w*|bastard\w*|arse(hole|s)?|wank\w*|piss\w*|twat\w*|cunt\w*|prick(s)?|slut\w*|whore\w*|bollocks|crap\w*|dick\w*|\bass(hole)?\b)\b/i;
   const IT_NAMES = new Set(
     packagesOf("english-it")
       .flatMap((pack) => pack.blocks ?? [])
@@ -111,7 +111,7 @@ describe("английский для путешествий и общения",
     Array.from({ length: 15 }, (_, i) => `${prefix}${String(15 * (number - 1) + i + 1).padStart(3, "0")}`);
   const wordCount = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
-  it("курс по программе: поля выбора, без календаря, 14 модулей, опубликованные модули по порядку", () => {
+  it("курс по программе: поля выбора, без календаря, 14 модулей, опубликованные модули", () => {
     expect(travel()).toMatchObject({
       title: "Английский для путешествий и общения",
       language: "en",

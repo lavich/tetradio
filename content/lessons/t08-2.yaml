@@ -101,9 +101,9 @@ blocks:
     id: hostel-how
     title: Знакомство в общей комнате
     body: |-
-      Теперь живой разговор в общей комнате хостела: британец Бен, итальянка Софья и Мэй из Сингапура. Сначала послушайте целиком, потом ответьте на вопросы и при втором прослушивании проверьте ответы. Транскрипт откроется после ответа.
+      Теперь живой разговор в общей комнате хостела: британец Бен, итальянка София и Мэй из Сингапура. Сначала послушайте целиком, потом ответьте на вопросы и при втором прослушивании проверьте ответы. Транскрипт откроется после ответа.
 
-      Софья говорит просто и иногда строит фразу по-итальянски: **I am here since Monday** вместо I've been here since Monday, **I do a trip** вместо I'm doing a trip, **is no problem** вместо it's no problem. Понять её легко, но повторять эти формы не нужно. Мэй говорит ровно и быстро, Бен — в обычном британском темпе, с короткими связками вроде **I'd say** и **a bit**.
+      София говорит просто и иногда строит фразу по-итальянски: **I am here since Monday** вместо I've been here since Monday, **I do a trip** вместо I'm doing a trip, **is no problem** вместо it's no problem. Её понятно, но повторять эти формы не нужно. Мэй говорит ровно и быстро, Бен — в обычном британском темпе, с короткой связкой **a bit**.
   - type: listening
     id: hostel
     title: In the hostel common room
@@ -121,7 +121,7 @@ blocks:
       - { speaker: Sofia, text: "Yes! Mei, come. This is Ben." }
       - { speaker: Mei, text: "Hi Ben, nice to meet you. Are you travelling on your own?" }
       - { speaker: Ben, text: "Yes, just me. What brings you to Scotland?" }
-      - { speaker: Mei, text: "I'm on a gap year. I left Singapore in March, and I'm travelling around for a few months. Sofia and I are off to Glasgow tomorrow." }
+      - { speaker: Mei, text: "I'm on a gap year. I left Singapore in March, and I'm travelling around for a few months. We're off to Glasgow on Saturday." }
       - { speaker: Ben, text: "Nice. Have you got a plan?" }
       - { speaker: Mei, text: "Not really. I'm quite laid-back about it. Do you have any recommendations?" }
       - { speaker: Ben, text: "The Kelvingrove museum is a must-see, and it's free. And the cafés in the West End are great." }
@@ -188,11 +188,10 @@ blocks:
   - type: exercise
     id: phrases-match
     title: Реплика и ответ
-    instruction: Подберите ответ на реплику. Два ответа лишние.
+    instruction: Подберите ответ на реплику. Три ответа лишние.
     format: match
     bank:
       - Not at all. Meet us at nine.
-      - I'm here for a long weekend.
       - No, never. And you?
       - I'm on a gap year.
       - The Kelvingrove museum is a must-see.
@@ -218,4 +217,4 @@ blocks:
       - { id: g4, prompt: "I'm ___ Leeds, but I travel a lot for work.", answer: based in }
       - { id: g5, prompt: "After two years on the road, he wants to ___ and find a job.", answer: settle down }
       - { id: g6, prompt: "Luis is very ___: he never plans more than a day ahead.", answer: laid-back }
-      - { id: g7, prompt: "The castle is a real ___ — don't miss it.", answer: must-see }
+      - { id: g7, prompt: "Edinburgh Castle is on every list: it's a real ___.", answer: must-see }

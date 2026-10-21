@@ -79,17 +79,17 @@ blocks:
     plays: 2
     transcript:
       - { speaker: Mei, text: "Excuse me, is this seat taken?" }
-      - { speaker: Ben, text: "No, go ahead." }
+      - { speaker: Tom, text: "No, go ahead." }
       - { speaker: Mei, text: "Thanks. I'm Mei. Where are you from originally?" }
-      - { speaker: Ben, text: "Manchester, but I'm based here in Lisbon now. I came for a gap year and stayed." }
+      - { speaker: Tom, text: "Manchester, but I'm based here in Lisbon now. I came for a gap year and stayed." }
       - { speaker: Mei, text: "Really? How long have you been here?" }
-      - { speaker: Ben, text: "Almost two years. I'm still not ready to leave." }
+      - { speaker: Tom, text: "Almost two years. I'm still not ready to leave." }
       - { speaker: Mei, text: "Have you ever been to Porto?" }
-      - { speaker: Ben, text: "Three times. It's a great city, but the train takes three hours." }
+      - { speaker: Tom, text: "Three times. It's a great city, but the train takes three hours." }
       - { speaker: Mei, text: "I've never been. I'm off to Porto on Sunday. Do you have any recommendations?" }
-      - { speaker: Ben, text: "Walk up to the viewpoints. The riverside is a bit touristy at night, but the little streets behind it are a hidden gem." }
+      - { speaker: Tom, text: "Walk up to the viewpoints. The riverside is a bit touristy at night, but the little streets behind it are a hidden gem." }
       - { speaker: Mei, text: "Perfect, thanks. It was nice meeting you." }
-      - { speaker: Ben, text: "You too. Have a good trip." }
+      - { speaker: Tom, text: "You too. Have a good trip." }
   - type: exercise
     id: terrace-q
     about: terrace
@@ -99,7 +99,7 @@ blocks:
     format: choice
     items:
       - id: q1
-        prompt: Where is Ben from originally?
+        prompt: Where is Tom from originally?
         options:
           - Manchester
           - Lisbon
@@ -107,7 +107,7 @@ blocks:
         answer: Manchester
         explanation: Manchester, but I'm based here in Lisbon now.
       - id: q2
-        prompt: How did Ben come to Lisbon?
+        prompt: How did Tom come to Lisbon?
         options:
           - for a gap year
           - for work
@@ -115,7 +115,7 @@ blocks:
         answer: for a gap year
         explanation: I came for a gap year and stayed.
       - id: q3
-        prompt: How long has Ben been in Lisbon?
+        prompt: How long has Tom been in Lisbon?
         options:
           - almost two years
           - three months
@@ -123,7 +123,7 @@ blocks:
         answer: almost two years
         explanation: Almost two years.
       - id: q4
-        prompt: How many times has Ben been to Porto?
+        prompt: How many times has Tom been to Porto?
         options:
           - three times
           - never
@@ -139,7 +139,7 @@ blocks:
         answer: on Sunday
         explanation: I'm off to Porto on Sunday.
       - id: q6
-        prompt: What does Ben say about the streets behind the riverside?
+        prompt: What does Tom say about the streets behind the riverside?
         options:
           - They are a hidden gem.
           - They are very touristy.
@@ -194,7 +194,7 @@ blocks:
       - { id: g3, prompt: "She travels with a big rucksack: a real ___.", answer: backpacker }
       - { id: g4, prompt: "The main square is nice, but very ___ in August.", answer: touristy }
       - { id: g5, prompt: "We want to see villages ___, away from the crowds.", answer: off the beaten track }
-      - { id: g6, prompt: "That little café behind the church is a real ___.", answer: hidden gem }
+      - { id: g6, prompt: "That café behind the church is a real ___ — few tourists know it.", answer: hidden gem }
       - { id: g7, prompt: "I wrote a day-by-day ___ for the whole trip.", answer: itinerary }
       - { id: g8, prompt: "After university he took a ___ and worked in three countries.", answer: gap year }
   - type: exercise
@@ -205,7 +205,7 @@ blocks:
     format: text
     items:
       - id: q1
-        prompt: Откуда вы родом?
+        prompt: Откуда вы родом? (спросите, где человек вырос, не только где живёт сейчас)
         answer:
           - Where are you from originally?
           - Where are you originally from?
@@ -226,6 +226,8 @@ blocks:
           - Do you have any recommendations, please?
           - Have you got any recommendations, please?
           - Do you have some recommendations?
+          - Can you recommend anything?
+          - Can you recommend something?
           - Have you got some recommendations?
         explanation: Do you have any recommendations? — просьба о совете.
       - id: q4

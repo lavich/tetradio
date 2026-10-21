@@ -174,6 +174,18 @@
 
 Сверка карточек (1.2, 21.10.2026): точных совпадений с `english-it`, `t01`–`t07` и между карточками модуля нет. Из кандидатов на замену: *a local* → *a backpacker*, *a day trip* → *an itinerary*, *a short break* → *a getaway* (*a stopover* занят карточкой `tw009`); *I'm on a gap year* → *I'm travelling around for a few months* (слово *a gap year* уже есть, фраза дублировала его), *We're heading to Glasgow tomorrow* → *We're off to Glasgow tomorrow* (слово *head to* остаётся отдельной карточкой). Примечания «в США» у *I'm here for a long weekend* и *Are you doing the walking tour tomorrow?* сняты: американской пары нет.
 
-Голоса: Pulcherrima, Achird, Orus проверены пробным запросом к сервису (HTTP 200, 21.10.2026) и добавлены в `pools` `content/voices/en.yaml`; персонажи t08 — Ben (Fenrir), Sofia (Despina), Mei (Leda), в диалогах `t08-2`, `t08-3`, `t08-test` голоса разные.
+Голоса: Pulcherrima, Achird, Orus проверены пробным запросом к сервису (HTTP 200, 21.10.2026) и добавлены в `pools` `content/voices/en.yaml`; персонажи t08 — Ben (Fenrir), Sofia (Despina), Mei (Leda), Tom (Achird), в диалогах `t08-2`, `t08-3`, `t08-test` голоса разные. Pulcherrima и Orus в `pools` пока не назначены: понадобятся персонажам t09+.
+
+### Языковая рецензия t08 (1.4)
+
+Замечания и решения, 21.10.2026:
+
+- `t08-2`, подбор реплик: ответ «I'm here for a long weekend.» подходил к m1 не хуже ключа — убран из банка, лишних ответов три, инструкция исправлена.
+- `t08-2` g7 и `t08-test` g6: пропуски сделаны однозначными (*a real must-see* — «Edinburgh Castle is on every list»; *a real hidden gem* — «few tourists know it»).
+- `tp116`: перевод без «уже»; `tw114`: «в США также a year off».
+- `t08-test` q1 — пояснение в задании про место, где человек вырос; q3 принимает *Can you recommend anything / something?*.
+- Собеседник Мэй в `t08-test` с другой биографией переименован: Ben → Tom (Achird), чтобы Ben оставался один человек (Лидс).
+- Правки текстов: «София» вместо «Софья», реплика Мэй «We're off to Glasgow on Saturday» (карточка `tp117` остаётся), убран «I'd say» из описания, оценочные «легко» нейтрализованы, критерий письма согласован с образцом (имя в приветствии).
+- Тест грубого сленга: `arse(hole|s)?`, `prick(s)?`, добавлены `crap`, `dick`, `ass(hole)`; заголовок теста курса без «по порядку».
 
 Тесты: `STAGE` дополнен `t08`, `WRITING` — `t08` (`friendly`, 20–40); блок «День поездки» читает `TRIP` (`t01`–`t07`), а не растущий `STAGE`; добавлен тест грубого сленга в карточках курса (`RUDE`). Каталог после `t08`: 24 032 из 25 000.
