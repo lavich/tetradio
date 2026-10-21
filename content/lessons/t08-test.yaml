@@ -78,18 +78,18 @@ blocks:
     title: On the hostel terrace
     plays: 2
     transcript:
-      - { speaker: Mei, text: "Excuse me, is this seat taken?" }
-      - { speaker: Tom, text: "No, go ahead." }
-      - { speaker: Mei, text: "Thanks. I'm Mei. Where are you from originally?" }
-      - { speaker: Tom, text: "Manchester, but I'm based here in Lisbon now. I came for a gap year and stayed." }
-      - { speaker: Mei, text: "Really? How long have you been here?" }
-      - { speaker: Tom, text: "Almost two years. I'm still not ready to leave." }
-      - { speaker: Mei, text: "Have you ever been to Porto?" }
-      - { speaker: Tom, text: "Three times. It's a great city, but the train takes three hours." }
-      - { speaker: Mei, text: "I've never been. I'm off to Porto on Sunday. Do you have any recommendations?" }
-      - { speaker: Tom, text: "Walk up to the viewpoints. The riverside is a bit touristy at night, but the little streets behind it are a hidden gem." }
-      - { speaker: Mei, text: "Perfect, thanks. It was nice meeting you." }
-      - { speaker: Tom, text: "You too. Have a good trip." }
+      - { speaker: Mei, text: "Excuse me, is this seat taken?", audio: t08-test/terrace-1.mp3 }
+      - { speaker: Tom, text: "No, go ahead.", audio: t08-test/terrace-2.mp3 }
+      - { speaker: Mei, text: "Thanks. I'm Mei. Where are you from originally?", audio: t08-test/terrace-3.mp3 }
+      - { speaker: Tom, text: "Manchester, but I'm based here in Lisbon now. I came for a gap year and stayed.", audio: t08-test/terrace-4.mp3 }
+      - { speaker: Mei, text: "Really? How long have you been here?", audio: t08-test/terrace-5.mp3 }
+      - { speaker: Tom, text: "Almost two years. I'm still not ready to leave.", audio: t08-test/terrace-6.mp3 }
+      - { speaker: Mei, text: "Have you ever been to Porto?", audio: t08-test/terrace-7.mp3 }
+      - { speaker: Tom, text: "Three times. It's a great city, but the train takes three hours.", audio: t08-test/terrace-8.mp3 }
+      - { speaker: Mei, text: "I've never been. I'm off to Porto on Sunday. Do you have any recommendations?", audio: t08-test/terrace-9.mp3 }
+      - { speaker: Tom, text: "Walk up to the viewpoints. The riverside is a bit touristy at night, but the little streets behind it are a hidden gem.", audio: t08-test/terrace-10.mp3 }
+      - { speaker: Mei, text: "Perfect, thanks. It was nice meeting you.", audio: t08-test/terrace-11.mp3 }
+      - { speaker: Tom, text: "You too. Have a good trip.", audio: t08-test/terrace-12.mp3 }
   - type: exercise
     id: terrace-q
     about: terrace

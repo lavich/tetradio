@@ -1,5 +1,6 @@
 id: tp124
 text: "Sorry, what?"
+audio: phrases/tp124.mp3
 translation: "Простите, что?"
 note: "переспрос, когда не расслышали"
 provenance:

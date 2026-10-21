@@ -37,6 +37,15 @@ pools:
     - Schedar
     - Umbriel
     - Zubenelgenubi
+# Сокращения переписки читаются побуквенно: заглавные через пробел (проверка на слух — за пользователем)
+respell:
+  tbh: T B H
+  hbu: H B U
+  wyd: W Y D
+  ngl: N G L
+  lol: L O L
+  idk: I D K
+  brb: B R B
 # Реплика без говорящего
 narrator: Kore
 characters:

@@ -1,5 +1,6 @@
 id: tp204
 text: "You're breaking up."
+audio: phrases/tp204.mp3
 translation: "Тебя плохо слышно: связь прерывается."
 note: "говорят собеседнику, чей звук или картинка пропадают"
 provenance:

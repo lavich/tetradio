@@ -100,11 +100,11 @@ blocks:
     title: Реплики собеседника — Уилл
     plays: 2
     transcript:
-      - { speaker: Will, text: "I had a really nice time tonight. Can I walk you to the station?" }
-      - { speaker: Will, text: "No worries, totally fine. If you could take a year off, what would you do?" }
-      - { speaker: Will, text: "That sounds great. Is it okay if I ask why you left your last job?" }
-      - { speaker: Will, text: "Of course, no problem. Is it okay if I text you tomorrow?" }
-      - { speaker: Will, text: "Good. Safe journey home." }
+      - { speaker: Will, text: "I had a really nice time tonight. Can I walk you to the station?", audio: t13-3/no-lines-1.mp3 }
+      - { speaker: Will, text: "No worries, totally fine. If you could take a year off, what would you do?", audio: t13-3/no-lines-2.mp3 }
+      - { speaker: Will, text: "That sounds great. Is it okay if I ask why you left your last job?", audio: t13-3/no-lines-3.mp3 }
+      - { speaker: Will, text: "Of course, no problem. Is it okay if I text you tomorrow?", audio: t13-3/no-lines-4.mp3 }
+      - { speaker: Will, text: "Good. Safe journey home.", audio: t13-3/no-lines-5.mp3 }
   - type: speaking
     id: no
     part: roleplay
@@ -141,10 +141,10 @@ blocks:
     title: Реплики собеседника — Лена
     plays: 2
     transcript:
-      - { speaker: Lena, text: "Thanks for tonight. I had a really nice time." }
-      - { speaker: Lena, text: "Thanks, but I'll make my own way. I'm used to the walk." }
-      - { speaker: Lena, text: "Yes, please do. But I'd rather not plan the weekend yet. Let's take it slow." }
-      - { speaker: Lena, text: "Thank you for understanding. Goodnight." }
+      - { speaker: Lena, text: "Thanks for tonight. I had a really nice time.", audio: t13-3/answer-lines-1.mp3 }
+      - { speaker: Lena, text: "Thanks, but I'll make my own way. I'm used to the walk.", audio: t13-3/answer-lines-2.mp3 }
+      - { speaker: Lena, text: "Yes, please do. But I'd rather not plan the weekend yet. Let's take it slow.", audio: t13-3/answer-lines-3.mp3 }
+      - { speaker: Lena, text: "Thank you for understanding. Goodnight.", audio: t13-3/answer-lines-4.mp3 }
   - type: speaking
     id: answer
     part: roleplay

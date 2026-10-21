@@ -98,11 +98,11 @@ blocks:
     title: Реплики собеседника — в общей комнате
     plays: 2
     transcript:
-      - { speaker: Zoe, text: "Hey, you were on the Skye tour yesterday, weren't you?" }
-      - { speaker: Zoe, text: "I thought so! I'm Zoe. Right, so we're gonna do the ghost tour tonight, it's at nine, and then Jack's mate is gonna drive us to a gig, you wanna come?" }
-      - { speaker: Zoe, text: "Sorry, I talk too fast. We're doing the ghost tour tonight at nine. Do you wanna come?" }
-      - { speaker: Zoe, text: "Outside the cathedral at ten to nine. Bring a jacket, it gets cold." }
-      - { speaker: Zoe, text: "No worries. See you tonight!" }
+      - { speaker: Zoe, text: "Hey, you were on the Skye tour yesterday, weren't you?", audio: t09-3/scene-lines-1.mp3 }
+      - { speaker: Zoe, text: "I thought so! I'm Zoe. Right, so we're gonna do the ghost tour tonight, it's at nine, and then Jack's mate is gonna drive us to a gig, you wanna come?", audio: t09-3/scene-lines-2.mp3 }
+      - { speaker: Zoe, text: "Sorry, I talk too fast. We're doing the ghost tour tonight at nine. Do you wanna come?", audio: t09-3/scene-lines-3.mp3 }
+      - { speaker: Zoe, text: "Outside the cathedral at ten to nine. Bring a jacket, it gets cold.", audio: t09-3/scene-lines-4.mp3 }
+      - { speaker: Zoe, text: "No worries. See you tonight!", audio: t09-3/scene-lines-5.mp3 }
   - type: speaking
     id: scene
     part: roleplay

@@ -1,5 +1,6 @@
 id: tp144
 text: "Are you being served?"
+audio: phrases/tp144.mp3
 translation: "Вас уже обслуживают?"
 note: "вопрос бармена, который подходит к стойке"
 provenance:

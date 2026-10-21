@@ -95,17 +95,17 @@ blocks:
     title: Closing time at The Anchor
     plays: 2
     transcript:
-      - { speaker: Dave, text: "Last orders, everyone. The bar closes at midnight." }
-      - { speaker: Zoe, text: "Thanks, Dave. Jack, shall I get you another?" }
-      - { speaker: Jack, text: "I'll pass on the next round, thanks. I'm a bit tipsy, and I've got a train in the morning." }
-      - { speaker: Zoe, text: "Fair enough. A water, then?" }
-      - { speaker: Jack, text: "A water would be great, yes." }
-      - { speaker: Zoe, text: "Dave, one pint of cider and one water, please. Can I put it on the tab?" }
-      - { speaker: Dave, text: "Of course. Your tab is forty-two pounds." }
-      - { speaker: Zoe, text: "Forty-two? That's more than I thought. Here's my card." }
-      - { speaker: Dave, text: "Thanks. And the water is on the house." }
-      - { speaker: Jack, text: "Cheers, Dave. Is the cloakroom still open?" }
-      - { speaker: Dave, text: "Yes, it's by the door, and it's open until midnight." }
+      - { speaker: Dave, text: "Last orders, everyone. The bar closes at midnight.", audio: t10-test/closing-1.mp3 }
+      - { speaker: Zoe, text: "Thanks, Dave. Jack, shall I get you another?", audio: t10-test/closing-2.mp3 }
+      - { speaker: Jack, text: "I'll pass on the next round, thanks. I'm a bit tipsy, and I've got a train in the morning.", audio: t10-test/closing-3.mp3 }
+      - { speaker: Zoe, text: "Fair enough. A water, then?", audio: t10-test/closing-4.mp3 }
+      - { speaker: Jack, text: "A water would be great, yes.", audio: t10-test/closing-5.mp3 }
+      - { speaker: Zoe, text: "Dave, one pint of cider and one water, please. Can I put it on the tab?", audio: t10-test/closing-6.mp3 }
+      - { speaker: Dave, text: "Of course. Your tab is forty-two pounds.", audio: t10-test/closing-7.mp3 }
+      - { speaker: Zoe, text: "Forty-two? That's more than I thought. Here's my card.", audio: t10-test/closing-8.mp3 }
+      - { speaker: Dave, text: "Thanks. And the water is on the house.", audio: t10-test/closing-9.mp3 }
+      - { speaker: Jack, text: "Cheers, Dave. Is the cloakroom still open?", audio: t10-test/closing-10.mp3 }
+      - { speaker: Dave, text: "Yes, it's by the door, and it's open until midnight.", audio: t10-test/closing-11.mp3 }
   - type: exercise
     id: closing-q
     about: closing

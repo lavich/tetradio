@@ -106,12 +106,12 @@ blocks:
     title: Реплики собеседника — перед экскурсией
     plays: 2
     transcript:
-      - { speaker: Mei, text: "Hi! Are you here for the walking tour too?" }
-      - { speaker: Mei, text: "I'm Mei. Where are you from?" }
-      - { speaker: Mei, text: "Have you ever been to Scotland before?" }
-      - { speaker: Mei, text: "This is my first time here. I'm on a gap year, so I'm not in a hurry. What do you do back home?" }
-      - { speaker: Mei, text: "That sounds interesting. Do you have any recommendations for Edinburgh?" }
-      - { speaker: Mei, text: "Thanks, I'll try that. Well, the guide's here. It was nice meeting you." }
+      - { speaker: Mei, text: "Hi! Are you here for the walking tour too?", audio: t08-3/scene-lines-1.mp3 }
+      - { speaker: Mei, text: "I'm Mei. Where are you from?", audio: t08-3/scene-lines-2.mp3 }
+      - { speaker: Mei, text: "Have you ever been to Scotland before?", audio: t08-3/scene-lines-3.mp3 }
+      - { speaker: Mei, text: "This is my first time here. I'm on a gap year, so I'm not in a hurry. What do you do back home?", audio: t08-3/scene-lines-4.mp3 }
+      - { speaker: Mei, text: "That sounds interesting. Do you have any recommendations for Edinburgh?", audio: t08-3/scene-lines-5.mp3 }
+      - { speaker: Mei, text: "Thanks, I'll try that. Well, the guide's here. It was nice meeting you.", audio: t08-3/scene-lines-6.mp3 }
   - type: speaking
     id: scene
     part: roleplay

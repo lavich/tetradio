@@ -1,5 +1,6 @@
 id: tp140
 text: "Two pints of lager, please."
+audio: phrases/tp140.mp3
 translation: "Две пинты лагера, пожалуйста."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10

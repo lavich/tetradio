@@ -1,5 +1,6 @@
 id: tp126
 text: "Sorry, you were saying?"
+audio: phrases/tp126.mp3
 translation: "Простите, вы что-то говорили?"
 note: "вернуть разговор после паузы или перебивания"
 provenance:

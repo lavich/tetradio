@@ -74,11 +74,11 @@ blocks:
     title: Реплики собеседника — в баре
     plays: 2
     transcript:
-      - { speaker: Dave, text: "Hi there. Are you being served?" }
-      - { speaker: Dave, text: "Sorry, it's loud in here. What would you like?" }
-      - { speaker: Dave, text: "Anything to eat with that?" }
-      - { speaker: Dave, text: "Paying now, or shall I open a tab?" }
-      - { speaker: Dave, text: "Thanks. Last orders are at eleven." }
+      - { speaker: Dave, text: "Hi there. Are you being served?", audio: t10-3/order-lines-1.mp3 }
+      - { speaker: Dave, text: "Sorry, it's loud in here. What would you like?", audio: t10-3/order-lines-2.mp3 }
+      - { speaker: Dave, text: "Anything to eat with that?", audio: t10-3/order-lines-3.mp3 }
+      - { speaker: Dave, text: "Paying now, or shall I open a tab?", audio: t10-3/order-lines-4.mp3 }
+      - { speaker: Dave, text: "Thanks. Last orders are at eleven.", audio: t10-3/order-lines-5.mp3 }
   - type: speaking
     id: order
     part: roleplay
@@ -115,11 +115,11 @@ blocks:
     title: Реплики собеседника — у стойки
     plays: 2
     transcript:
-      - { speaker: Ravi, text: "Hi. Are you waiting to be served too?" }
-      - { speaker: Ravi, text: "I'm Ravi, by the way. Are you here with friends?" }
-      - { speaker: Ravi, text: "I'm getting a round in for my table. Are you having another drink yourself?" }
-      - { speaker: Ravi, text: "Fair enough. I'd rather stick to water myself after a long day. Do you have plans for tomorrow?" }
-      - { speaker: Ravi, text: "Not sure yet. Enjoy your evening." }
+      - { speaker: Ravi, text: "Hi. Are you waiting to be served too?", audio: t10-3/counter-lines-1.mp3 }
+      - { speaker: Ravi, text: "I'm Ravi, by the way. Are you here with friends?", audio: t10-3/counter-lines-2.mp3 }
+      - { speaker: Ravi, text: "I'm getting a round in for my table. Are you having another drink yourself?", audio: t10-3/counter-lines-3.mp3 }
+      - { speaker: Ravi, text: "Fair enough. I'd rather stick to water myself after a long day. Do you have plans for tomorrow?", audio: t10-3/counter-lines-4.mp3 }
+      - { speaker: Ravi, text: "Not sure yet. Enjoy your evening.", audio: t10-3/counter-lines-5.mp3 }
   - type: speaking
     id: counter
     part: roleplay

@@ -1,5 +1,6 @@
 id: tp165
 text: "Text me when you get there."
+audio: phrases/tp165.mp3
 translation: "Напиши мне, когда доберёшься."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t11

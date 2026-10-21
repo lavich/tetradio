@@ -136,12 +136,12 @@ blocks:
     title: Voice messages — a gig on Friday
     plays: 2
     transcript:
-      - { speaker: Leo, text: "Hi Tess, it's Leo. Are you up for a gig on Friday? My cousin's band is playing at the Fleece, on Park Street. Doors open at eight, and the band is on at nine." }
-      - { speaker: Leo, text: "I've got two spare tickets, so you can bring a plus-one. Let me know by Wednesday, because I collect the tickets on Thursday." }
-      - { speaker: Tess, text: "Hi Leo, thanks for asking. Count me in, and I'll bring Zoe. Shall we say half past eight outside the venue?" }
-      - { speaker: Leo, text: "Half past eight is fine. It might be loud inside, so text me when you get there." }
-      - { speaker: Tess, text: "Will do. Could you send me the address?" }
-      - { speaker: Leo, text: "Sure, I'll send it now. See you on Friday." }
+      - { speaker: Leo, text: "Hi Tess, it's Leo. Are you up for a gig on Friday? My cousin's band is playing at the Fleece, on Park Street. Doors open at eight, and the band is on at nine.", audio: t11-2/voice-1.mp3 }
+      - { speaker: Leo, text: "I've got two spare tickets, so you can bring a plus-one. Let me know by Wednesday, because I collect the tickets on Thursday.", audio: t11-2/voice-2.mp3 }
+      - { speaker: Tess, text: "Hi Leo, thanks for asking. Count me in, and I'll bring Zoe. Shall we say half past eight outside the venue?", audio: t11-2/voice-3.mp3 }
+      - { speaker: Leo, text: "Half past eight is fine. It might be loud inside, so text me when you get there.", audio: t11-2/voice-4.mp3 }
+      - { speaker: Tess, text: "Will do. Could you send me the address?", audio: t11-2/voice-5.mp3 }
+      - { speaker: Leo, text: "Sure, I'll send it now. See you on Friday.", audio: t11-2/voice-6.mp3 }
   - type: exercise
     id: voice-q
     about: voice
@@ -217,15 +217,15 @@ blocks:
     title: At the housewarming
     plays: 2
     transcript:
-      - { speaker: Leo, text: "Tess! You made it. Come in. Is Zoe with you?" }
-      - { speaker: Tess, text: "Not yet. She's running a bit late, but she'll turn up around eight." }
-      - { speaker: Leo, text: "No problem. There are soft drinks in the kitchen, and tea if you'd like some." }
-      - { speaker: Tess, text: "Thanks. I brought sparkling water, since it's BYOB. Where shall I put it?" }
-      - { speaker: Leo, text: "In the fridge, please. Jack bailed on me this afternoon, so we're one person short." }
-      - { speaker: Tess, text: "That's a shame. Is it smart casual, like the invitation says? I wasn't sure about these shoes." }
-      - { speaker: Leo, text: "Yes, smart casual, and your shoes are fine." }
-      - { speaker: Zoe, text: "Hi, sorry I'm late. Leo, this is for the new flat." }
-      - { speaker: Leo, text: "Thank you, Zoe. You didn't have to." }
+      - { speaker: Leo, text: "Tess! You made it. Come in. Is Zoe with you?", audio: t11-2/party-1.mp3 }
+      - { speaker: Tess, text: "Not yet. She's running a bit late, but she'll turn up around eight.", audio: t11-2/party-2.mp3 }
+      - { speaker: Leo, text: "No problem. There are soft drinks in the kitchen, and tea if you'd like some.", audio: t11-2/party-3.mp3 }
+      - { speaker: Tess, text: "Thanks. I brought sparkling water, since it's BYOB. Where shall I put it?", audio: t11-2/party-4.mp3 }
+      - { speaker: Leo, text: "In the fridge, please. Jack bailed on me this afternoon, so we're one person short.", audio: t11-2/party-5.mp3 }
+      - { speaker: Tess, text: "That's a shame. Is it smart casual, like the invitation says? I wasn't sure about these shoes.", audio: t11-2/party-6.mp3 }
+      - { speaker: Leo, text: "Yes, smart casual, and your shoes are fine.", audio: t11-2/party-7.mp3 }
+      - { speaker: Zoe, text: "Hi, sorry I'm late. Leo, this is for the new flat.", audio: t11-2/party-8.mp3 }
+      - { speaker: Leo, text: "Thank you, Zoe. You didn't have to.", audio: t11-2/party-9.mp3 }
   - type: exercise
     id: party-q
     about: party

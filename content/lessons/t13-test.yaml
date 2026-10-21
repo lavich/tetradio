@@ -104,14 +104,14 @@ blocks:
     title: At the end of the evening — Sam and Ravi
     plays: 2
     transcript:
-      - { speaker: Sam, text: "I've really enjoyed tonight, Ravi. Would you like to go for one more drink somewhere?" }
-      - { speaker: Ravi, text: "Thanks, but I'd rather not. I have an early start tomorrow." }
-      - { speaker: Sam, text: "No worries, totally fine. It was a lovely evening anyway." }
-      - { speaker: Ravi, text: "It was. I'd like to see you again, though. If you could pick any place for next time, where would it be?" }
-      - { speaker: Sam, text: "That's easy. There's a tiny jazz bar I know. If I could, I'd go every Friday." }
-      - { speaker: Ravi, text: "Jazz sounds good. Let's take it slow and see how the week goes. Is it okay if I text you on Wednesday?" }
-      - { speaker: Sam, text: "Of course. Wednesday is perfect. Goodnight, Ravi." }
-      - { speaker: Ravi, text: "Goodnight, Sam. I had a really nice time." }
+      - { speaker: Sam, text: "I've really enjoyed tonight, Ravi. Would you like to go for one more drink somewhere?", audio: t13-test/refusal-1.mp3 }
+      - { speaker: Ravi, text: "Thanks, but I'd rather not. I have an early start tomorrow.", audio: t13-test/refusal-2.mp3 }
+      - { speaker: Sam, text: "No worries, totally fine. It was a lovely evening anyway.", audio: t13-test/refusal-3.mp3 }
+      - { speaker: Ravi, text: "It was. I'd like to see you again, though. If you could pick any place for next time, where would it be?", audio: t13-test/refusal-4.mp3 }
+      - { speaker: Sam, text: "That's easy. There's a tiny jazz bar I know. If I could, I'd go every Friday.", audio: t13-test/refusal-5.mp3 }
+      - { speaker: Ravi, text: "Jazz sounds good. Let's take it slow and see how the week goes. Is it okay if I text you on Wednesday?", audio: t13-test/refusal-6.mp3 }
+      - { speaker: Sam, text: "Of course. Wednesday is perfect. Goodnight, Ravi.", audio: t13-test/refusal-7.mp3 }
+      - { speaker: Ravi, text: "Goodnight, Sam. I had a really nice time.", audio: t13-test/refusal-8.mp3 }
   - type: exercise
     id: refusal-q
     about: refusal

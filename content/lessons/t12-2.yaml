@@ -195,12 +195,12 @@ blocks:
     title: Voice messages — Maya and Theo
     plays: 2
     transcript:
-      - { speaker: Maya, text: "Hi Theo, it's Maya. Thanks for your voice message, it was nice to hear a real voice. Your bio made me laugh, by the way. I'm a nurse, and I'm on nights this week, so evenings are tricky for me. I'm free on Saturday, though." }
-      - { speaker: Maya, text: "I'd love to hear more about your trip to Peru. And what's your go-to karaoke song? Mine is terrible, so no pressure. Fancy a coffee on Saturday morning? I know a café in the market. It's always busy, and I like that for a first meeting." }
-      - { speaker: Theo, text: "Hi Maya, thanks for the message. Not gonna lie, my karaoke song is Wonderwall, and I'm sorry about that. Peru was amazing, I'll tell you more over coffee. Saturday morning works for me." }
-      - { speaker: Theo, text: "Shall we say half past eleven, at the café in the market?" }
-      - { speaker: Maya, text: "Half past eleven is fine. I'll text a friend where I am, as I always do for a first meeting." }
-      - { speaker: Theo, text: "Of course, that makes sense. I'll do the same. See you on Saturday." }
+      - { speaker: Maya, text: "Hi Theo, it's Maya. Thanks for your voice message, it was nice to hear a real voice. Your bio made me laugh, by the way. I'm a nurse, and I'm on nights this week, so evenings are tricky for me. I'm free on Saturday, though.", audio: t12-2/voice-1.mp3 }
+      - { speaker: Maya, text: "I'd love to hear more about your trip to Peru. And what's your go-to karaoke song? Mine is terrible, so no pressure. Fancy a coffee on Saturday morning? I know a café in the market. It's always busy, and I like that for a first meeting.", audio: t12-2/voice-2.mp3 }
+      - { speaker: Theo, text: "Hi Maya, thanks for the message. Not gonna lie, my karaoke song is Wonderwall, and I'm sorry about that. Peru was amazing, I'll tell you more over coffee. Saturday morning works for me.", audio: t12-2/voice-3.mp3 }
+      - { speaker: Theo, text: "Shall we say half past eleven, at the café in the market?", audio: t12-2/voice-4.mp3 }
+      - { speaker: Maya, text: "Half past eleven is fine. I'll text a friend where I am, as I always do for a first meeting.", audio: t12-2/voice-5.mp3 }
+      - { speaker: Theo, text: "Of course, that makes sense. I'll do the same. See you on Saturday.", audio: t12-2/voice-6.mp3 }
   - type: exercise
     id: voice-q
     about: voice

@@ -199,16 +199,16 @@ blocks:
     title: At the end of the evening — Lena and Will
     plays: 2
     transcript:
-      - { speaker: Will, text: "I'm glad we came here. If you could live anywhere, where would it be?" }
-      - { speaker: Lena, text: "Lisbon, I think. I'm kind of a morning person, and I'd love to have coffee by the sea. What about you?" }
-      - { speaker: Will, text: "I'd rather stay in the north, honestly. I'd miss the hills. Is it okay if I ask what you do at the weekend?" }
-      - { speaker: Lena, text: "Sure. I climb on Saturdays, and on Sundays I'd rather stay in and read." }
-      - { speaker: Will, text: "That sounds good to me. I'm a bit nervous to say this, but I'd like to see you again." }
-      - { speaker: Lena, text: "I'd like that too. Let's take it slow, though. I'd rather not plan the whole month tonight." }
-      - { speaker: Will, text: "No worries, totally fine. We can just text on Monday. It's getting late. Can I walk you to the station?" }
-      - { speaker: Lena, text: "Thanks, but I'll make my own way. I had a really nice time, though." }
-      - { speaker: Will, text: "No worries, totally fine. Safe journey home." }
-      - { speaker: Lena, text: "Goodnight, Will." }
+      - { speaker: Will, text: "I'm glad we came here. If you could live anywhere, where would it be?", audio: t13-2/date-1.mp3 }
+      - { speaker: Lena, text: "Lisbon, I think. I'm kind of a morning person, and I'd love to have coffee by the sea. What about you?", audio: t13-2/date-2.mp3 }
+      - { speaker: Will, text: "I'd rather stay in the north, honestly. I'd miss the hills. Is it okay if I ask what you do at the weekend?", audio: t13-2/date-3.mp3 }
+      - { speaker: Lena, text: "Sure. I climb on Saturdays, and on Sundays I'd rather stay in and read.", audio: t13-2/date-4.mp3 }
+      - { speaker: Will, text: "That sounds good to me. I'm a bit nervous to say this, but I'd like to see you again.", audio: t13-2/date-5.mp3 }
+      - { speaker: Lena, text: "I'd like that too. Let's take it slow, though. I'd rather not plan the whole month tonight.", audio: t13-2/date-6.mp3 }
+      - { speaker: Will, text: "No worries, totally fine. We can just text on Monday. It's getting late. Can I walk you to the station?", audio: t13-2/date-7.mp3 }
+      - { speaker: Lena, text: "Thanks, but I'll make my own way. I had a really nice time, though.", audio: t13-2/date-8.mp3 }
+      - { speaker: Will, text: "No worries, totally fine. Safe journey home.", audio: t13-2/date-9.mp3 }
+      - { speaker: Lena, text: "Goodnight, Will.", audio: t13-2/date-10.mp3 }
   - type: exercise
     id: date-q
     about: date

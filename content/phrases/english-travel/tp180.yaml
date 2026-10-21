@@ -1,5 +1,6 @@
 id: tp180
 text: "Could you send me a voice message?"
+audio: phrases/tp180.mp3
 translation: "Не могли бы вы прислать мне голосовое сообщение?"
 note: "вежливая просьба; голосовое сообщение — voice message или voice note"
 provenance:

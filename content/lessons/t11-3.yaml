@@ -77,11 +77,11 @@ blocks:
     title: Реплики собеседника — приглашение
     plays: 2
     transcript:
-      - { speaker: Tess, text: "Hi, I'm Tess. Are you a friend of Leo's?" }
-      - { speaker: Tess, text: "Nice to meet you. What are you up to this week?" }
-      - { speaker: Tess, text: "A gig sounds good. What time does it kick off?" }
-      - { speaker: Tess, text: "Half past eight works for me. Shall we swap contacts, so we can sort out the details?" }
-      - { speaker: Tess, text: "Instagram is fine. I'll message you on Thursday. See you on Friday." }
+      - { speaker: Tess, text: "Hi, I'm Tess. Are you a friend of Leo's?", audio: t11-3/invite-lines-1.mp3 }
+      - { speaker: Tess, text: "Nice to meet you. What are you up to this week?", audio: t11-3/invite-lines-2.mp3 }
+      - { speaker: Tess, text: "A gig sounds good. What time does it kick off?", audio: t11-3/invite-lines-3.mp3 }
+      - { speaker: Tess, text: "Half past eight works for me. Shall we swap contacts, so we can sort out the details?", audio: t11-3/invite-lines-4.mp3 }
+      - { speaker: Tess, text: "Instagram is fine. I'll message you on Thursday. See you on Friday.", audio: t11-3/invite-lines-5.mp3 }
   - type: speaking
     id: invite
     part: roleplay
@@ -118,11 +118,11 @@ blocks:
     title: Реплики собеседника — перенос встречи
     plays: 2
     transcript:
-      - { speaker: Leo, text: "Hello, Leo speaking. Are we still on for Saturday?" }
-      - { speaker: Leo, text: "Oh, that's a shame. Is everything OK?" }
-      - { speaker: Leo, text: "No worries. Could you make Sunday instead?" }
-      - { speaker: Leo, text: "Sunday works. Shall we say six, the same time?" }
-      - { speaker: Leo, text: "Perfect. Text me when you leave, and I'll put the kettle on." }
+      - { speaker: Leo, text: "Hello, Leo speaking. Are we still on for Saturday?", audio: t11-3/move-lines-1.mp3 }
+      - { speaker: Leo, text: "Oh, that's a shame. Is everything OK?", audio: t11-3/move-lines-2.mp3 }
+      - { speaker: Leo, text: "No worries. Could you make Sunday instead?", audio: t11-3/move-lines-3.mp3 }
+      - { speaker: Leo, text: "Sunday works. Shall we say six, the same time?", audio: t11-3/move-lines-4.mp3 }
+      - { speaker: Leo, text: "Perfect. Text me when you leave, and I'll put the kettle on.", audio: t11-3/move-lines-5.mp3 }
   - type: speaking
     id: move
     part: roleplay

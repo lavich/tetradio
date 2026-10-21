@@ -1,5 +1,6 @@
 id: tp139
 text: "Shall I get you another?"
+audio: phrases/tp139.mp3
 translation: "Взять вам ещё один?"
 note: "предложение, от которого можно отказаться"
 provenance:

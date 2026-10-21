@@ -97,17 +97,17 @@ blocks:
     title: A phone call about the gig
     plays: 2
     transcript:
-      - { speaker: Jack, text: "Hi Tess, it's Jack. Are you still coming to the gig tonight?" }
-      - { speaker: Tess, text: "I'm so sorry, Jack, I'm running late. I'm stuck at work until half past eight." }
-      - { speaker: Jack, text: "No worries. The band is on at nine, so you can still make it. Shall I wait for you outside?" }
-      - { speaker: Tess, text: "Please don't wait. I'll be there as soon as I can. Which entrance is it?" }
-      - { speaker: Jack, text: "The side entrance on Park Street. The main door has a long queue." }
-      - { speaker: Tess, text: "Got it. Is there a dress code?" }
-      - { speaker: Jack, text: "No, it's very casual. Zoe is turning up around ten, so you can sit with her." }
-      - { speaker: Tess, text: "Great. Can I bring a plus-one? My brother would love it." }
-      - { speaker: Jack, text: "Sure, but he needs a ticket. They cost twelve pounds at the door." }
-      - { speaker: Tess, text: "That's fine. I'll text you when I get there." }
-      - { speaker: Jack, text: "Perfect. See you later." }
+      - { speaker: Jack, text: "Hi Tess, it's Jack. Are you still coming to the gig tonight?", audio: t11-test/gig-call-1.mp3 }
+      - { speaker: Tess, text: "I'm so sorry, Jack, I'm running late. I'm stuck at work until half past eight.", audio: t11-test/gig-call-2.mp3 }
+      - { speaker: Jack, text: "No worries. The band is on at nine, so you can still make it. Shall I wait for you outside?", audio: t11-test/gig-call-3.mp3 }
+      - { speaker: Tess, text: "Please don't wait. I'll be there as soon as I can. Which entrance is it?", audio: t11-test/gig-call-4.mp3 }
+      - { speaker: Jack, text: "The side entrance on Park Street. The main door has a long queue.", audio: t11-test/gig-call-5.mp3 }
+      - { speaker: Tess, text: "Got it. Is there a dress code?", audio: t11-test/gig-call-6.mp3 }
+      - { speaker: Jack, text: "No, it's very casual. Zoe is turning up around ten, so you can sit with her.", audio: t11-test/gig-call-7.mp3 }
+      - { speaker: Tess, text: "Great. Can I bring a plus-one? My brother would love it.", audio: t11-test/gig-call-8.mp3 }
+      - { speaker: Jack, text: "Sure, but he needs a ticket. They cost twelve pounds at the door.", audio: t11-test/gig-call-9.mp3 }
+      - { speaker: Tess, text: "That's fine. I'll text you when I get there.", audio: t11-test/gig-call-10.mp3 }
+      - { speaker: Jack, text: "Perfect. See you later.", audio: t11-test/gig-call-11.mp3 }
   - type: exercise
     id: gig-call-q
     about: gig-call

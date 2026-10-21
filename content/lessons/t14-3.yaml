@@ -98,11 +98,11 @@ blocks:
     title: Реплики собеседника — Аника
     plays: 2
     transcript:
-      - { speaker: Anika, text: "Hi! Can you hear me? The signal here is patchy." }
-      - { speaker: Anika, text: "It's been ages! What have you been up to?" }
-      - { speaker: Anika, text: "Sorry, you're breaking up. Could you say that again?" }
-      - { speaker: Anika, text: "That's good news. You're a busy person! I'm kidding. When can we catch up properly?" }
-      - { speaker: Anika, text: "Sunday works. The line is terrible, so let me call you back in five minutes." }
+      - { speaker: Anika, text: "Hi! Can you hear me? The signal here is patchy.", audio: t14-3/call-lines-1.mp3 }
+      - { speaker: Anika, text: "It's been ages! What have you been up to?", audio: t14-3/call-lines-2.mp3 }
+      - { speaker: Anika, text: "Sorry, you're breaking up. Could you say that again?", audio: t14-3/call-lines-3.mp3 }
+      - { speaker: Anika, text: "That's good news. You're a busy person! I'm kidding. When can we catch up properly?", audio: t14-3/call-lines-4.mp3 }
+      - { speaker: Anika, text: "Sunday works. The line is terrible, so let me call you back in five minutes.", audio: t14-3/call-lines-5.mp3 }
   - type: speaking
     id: call
     part: roleplay

@@ -1,5 +1,6 @@
 id: tp128
 text: "Sounds good."
+audio: phrases/tp128.mp3
 translation: "Звучит хорошо, договорились."
 note: "сокращение от That sounds good"
 provenance:

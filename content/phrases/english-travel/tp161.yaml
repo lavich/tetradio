@@ -1,5 +1,6 @@
 id: tp161
 text: "Can I get your number?"
+audio: phrases/tp161.mp3
 translation: "Можно твой номер телефона?"
 note: "просьбу о номере можно принять или вежливо отклонить"
 provenance:

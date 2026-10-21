@@ -1,5 +1,6 @@
 id: tp195
 text: "Can I walk you to the station?"
+audio: phrases/tp195.mp3
 translation: "Можно проводить тебя до станции?"
 note: "предложение, от которого можно отказаться: I'll make my own way, thanks; в США также Can I walk you to the subway?"
 provenance:
