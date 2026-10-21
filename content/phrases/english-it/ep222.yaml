@@ -1,0 +1,7 @@
+id: ep222
+text: "Since then, we've used the same process for every release."
+translation: "С тех пор мы используем один и тот же процесс для каждого релиза."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep219
+text: "We cut the review time from three days to one."
+translation: "Мы сократили время ревью с трёх дней до одного."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md

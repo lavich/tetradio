@@ -1,0 +1,7 @@
+id: ep204
+text: "The situation was that two teams needed the same engineer."
+translation: "Ситуация была такая: одного и того же инженера просили две команды."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md

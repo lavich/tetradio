@@ -1,4 +1,5 @@
 import "fake-indexeddb/auto";
+import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { wordCount } from "../src/domain/course";
 import { parseCatalog } from "../src/content/schema";
@@ -12,8 +13,76 @@ const catalog = parseCatalog(JSON.parse(content.files.find((f) => f.path === "co
 const modulesOf = (courseId: string) => catalog.modules!.filter((module) => module.courseId === courseId);
 const packagesOf = (courseId: string) => content.packages.filter((pack) => pack.courseId === courseId);
 
-describe("английский для IT: ступень B1+", () => {
-  const STAGE = ["e01", "e02", "e03", "e04", "e05", "e06", "e07", "e08"];
+const MAX_LINE_WORDS = 90;
+const MAX_SOURCE_BYTES = 60_000;
+const MAX_TEXT_VARIANTS = 200;
+
+type Blocks = NonNullable<ReturnType<typeof realContent>["packages"][number]["blocks"]>;
+
+const sourceBytes = (source: string) =>
+  Buffer.byteLength(source.replace(/,\s*audio:\s*[^\s,}]+/g, "").replace(/^[ \t]*audio:.*(\n|$)/gm, ""));
+const longestLineWords = (blocks: Blocks) =>
+  Math.max(
+    0,
+    ...blocks.flatMap((block) =>
+      block.type === "listening" ? block.transcript.map((line) => wordCount(line.text)) : [],
+    ),
+  );
+const maxTextVariants = (blocks: Blocks) =>
+  Math.max(
+    0,
+    ...blocks.flatMap((block) =>
+      block.type === "exercise" && block.format === "text" ? block.items.map((item) => item.answer.length) : [],
+    ),
+  );
+
+describe("размер источников ступени B2 (функции проверены на синтетических данных)", () => {
+  const listening = (words: number) =>
+    [
+      {
+        type: "listening",
+        id: "l",
+        title: "l",
+        plays: 2,
+        transcript: [{ speaker: "Mark", text: Array.from({ length: words }, () => "word").join(" ") }],
+      },
+    ] as unknown as Blocks;
+  const exercise = (variants: number) =>
+    [
+      {
+        type: "exercise",
+        id: "x",
+        title: "x",
+        instruction: "x",
+        format: "text",
+        items: [{ id: "q1", prompt: "q", answer: Array.from({ length: variants }, (_, i) => `variant ${i}`) }],
+      },
+    ] as unknown as Blocks;
+
+  it("реплика в 120 слов не проходит предел, в 90 слов проходит", () => {
+    expect(longestLineWords(listening(120))).toBeGreaterThan(MAX_LINE_WORDS);
+    expect(longestLineWords(listening(90))).toBeLessThanOrEqual(MAX_LINE_WORDS);
+  });
+
+  it("пункт text в 300 вариантов не проходит предел, в 200 проходит", () => {
+    expect(maxTextVariants(exercise(300))).toBeGreaterThan(MAX_TEXT_VARIANTS);
+    expect(maxTextVariants(exercise(200))).toBeLessThanOrEqual(MAX_TEXT_VARIANTS);
+  });
+
+  it("источник в 61 000 байт не проходит предел, в 59 000 проходит; строки audio: не считаются", () => {
+    expect(sourceBytes("a".repeat(61_000))).toBeGreaterThan(MAX_SOURCE_BYTES);
+    expect(sourceBytes("a".repeat(59_000))).toBeLessThanOrEqual(MAX_SOURCE_BYTES);
+    const line = '      - { speaker: Mark, text: "Hello.", audio: e09-2/call-1.mp3 }\n';
+    const bare = '      - { speaker: Mark, text: "Hello." }\n';
+    expect(sourceBytes(line.repeat(100))).toBe(Buffer.byteLength(bare.repeat(100)));
+    expect(sourceBytes("title: x\n  audio: words/ew1.mp3\n")).toBe(Buffer.byteLength("title: x\n"));
+  });
+});
+
+describe("английский для IT: ступень B1+ и B2", () => {
+  const STAGE_1 = ["e01", "e02", "e03", "e04", "e05", "e06", "e07", "e08"];
+  const STAGE_2 = ["e09"];
+  const STAGE = [...STAGE_1, ...STAGE_2];
   const WRITING: Record<string, { register: string; min: number; max: number }> = {
     e01: { register: "formal", min: 60, max: 90 },
     e02: { register: "formal", min: 60, max: 90 },
@@ -23,6 +92,7 @@ describe("английский для IT: ступень B1+", () => {
     e06: { register: "formal", min: 80, max: 120 },
     e07: { register: "formal", min: 80, max: 120 },
     e08: { register: "formal", min: 80, max: 120 },
+    e09: { register: "formal", min: 80, max: 120 },
   };
   const WORDS = [18, 17];
   const PHRASES = [8, 8, 9];
@@ -131,8 +201,9 @@ describe("английский для IT: ступень B1+", () => {
       if (number >= 2 && number <= 4)
         for (const block of speaking) expect(block.seconds, block.id).toBeLessThanOrEqual(60);
       if (number >= 5) {
-        for (const block of speaking) expect(block.seconds, block.id).toBeLessThanOrEqual(120);
-        expect(speaking.some((block) => block.seconds >= 60)).toBe(true);
+        const limit = number >= 13 ? 180 : 120;
+        for (const block of speaking) expect(block.seconds, block.id).toBeLessThanOrEqual(limit);
+        expect(speaking.some((block) => block.seconds >= (number >= 9 ? 90 : 60))).toBe(true);
         expect(speaking.some((block) => block.part === "roleplay")).toBe(true);
         blocks.forEach((block, i) => {
           if (block.type !== "speaking" || block.part !== "roleplay") return;
@@ -156,6 +227,18 @@ describe("английский для IT: ступень B1+", () => {
       for (const block of blocks) if (block.type === "listening") expect(block.plays, block.id).toBe(2);
     });
 
+    if (STAGE_2.includes(moduleId))
+      it("размер: строка аудирования не длиннее 90 слов, пункт text не больше 200 вариантов, исходник не больше 60 000 байт", () => {
+        for (const id of lessonIds) {
+          expect(longestLineWords(blocksOf(id)), id).toBeLessThanOrEqual(MAX_LINE_WORDS);
+          expect(maxTextVariants(blocksOf(id)), id).toBeLessThanOrEqual(MAX_TEXT_VARIANTS);
+          expect(
+            sourceBytes(readFileSync(new URL(`../content/lessons/${id}.yaml`, import.meta.url), "utf8")),
+            id,
+          ).toBeLessThanOrEqual(MAX_SOURCE_BYTES);
+        }
+      });
+
     it("говорящие — в карте голосов en и не из курса для путешествий", () => {
       const cast = content.sources.voices.get("en")!.characters;
       const speakers = new Set(
@@ -174,7 +257,9 @@ describe("английский для IT: ступень B1+", () => {
 
   describe("контрольная точка «Пробный звонок рекрутера»", () => {
     const blocks = () => blocksOf("e08-c1");
-    const stageLessons = STAGE.flatMap((moduleId) => ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`));
+    const stageLessons = STAGE_1.flatMap((moduleId) =>
+      ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`),
+    );
     let db: AppDatabase;
     beforeEach(async () => {
       await new AppDatabase("tetradio-it-checkpoint").delete();

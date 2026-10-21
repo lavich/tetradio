@@ -1,0 +1,423 @@
+title: ответ по схеме STAR в подготовке к интервью и поведенческое интервью
+kind: lesson
+items:
+  - { kind: word, id: ew299 }
+  - { kind: word, id: ew300 }
+  - { kind: word, id: ew301 }
+  - { kind: word, id: ew302 }
+  - { kind: word, id: ew303 }
+  - { kind: word, id: ew304 }
+  - { kind: word, id: ew305 }
+  - { kind: word, id: ew306 }
+  - { kind: word, id: ew307 }
+  - { kind: word, id: ew308 }
+  - { kind: word, id: ew309 }
+  - { kind: word, id: ew310 }
+  - { kind: word, id: ew311 }
+  - { kind: word, id: ew312 }
+  - { kind: word, id: ew313 }
+  - { kind: word, id: ew314 }
+  - { kind: word, id: ew315 }
+  - { kind: phrase, id: ep209 }
+  - { kind: phrase, id: ep210 }
+  - { kind: phrase, id: ep211 }
+  - { kind: phrase, id: ep212 }
+  - { kind: phrase, id: ep213 }
+  - { kind: phrase, id: ep214 }
+  - { kind: phrase, id: ep215 }
+  - { kind: phrase, id: ep216 }
+blocks:
+  - type: explanation
+    id: work-words
+    title: Слова о работе команды
+    body: |-
+      Тексты урока описывают, как один человек организует работу нескольких. Слова урока образуют три группы.
+
+      **Организация.** **Delegate** — передать часть своей работы другому человеку, **coordinate** — согласовывать действия нескольких людей или команд, **facilitate** — вести обсуждение так, чтобы высказались все и пришли к решению, **set expectations** — заранее договориться, что будет сделано и к какому сроку, **a status report** — короткий отчёт о ходе работ, **a point of contact** — человек, к которому обращаются по вопросу.
+
+      **Люди.** **Persuade** — доводами склонить человека к решению, **buy-in** — согласие людей, от которых зависит решение, **resourceful** — находчивый, **single-handedly** — без помощи других. В ответе о командной работе слово **single-handedly** звучит редко: чаще говорят **we**.
+
+      **Дела и ресурсы.** **Stay on top of** — успевать следить за задачами и сроками, **follow through** — выполнить обещанное, **wrap up** — закончить встречу, разговор или этап работы, **loop in** — добавить человека в переписку, чтобы он был в курсе, **workload** — объём работы на человека или команду, **bandwidth** — свободные время и силы на новую задачу. **Consequently** — вводное слово перед следствием: **The interview is a conversation. Consequently, you do not need slides.**
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Организация и люди
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - delegate
+      - coordinate
+      - facilitate
+      - persuade
+      - follow through
+      - wrap up
+      - loop in
+      - set expectations
+      - buy-in
+      - resourceful
+    items:
+      - { id: m1, prompt: "передать часть своей работы другому человеку", answer: delegate }
+      - { id: m2, prompt: "согласовывать действия нескольких людей или команд, чтобы они не мешали друг другу", answer: coordinate }
+      - { id: m3, prompt: "вести обсуждение так, чтобы высказались все и группа пришла к решению", answer: facilitate }
+      - { id: m4, prompt: "доводами склонить человека к решению", answer: persuade }
+      - { id: m5, prompt: "выполнить обещанное после того, как о нём договорились", answer: follow through }
+      - { id: m6, prompt: "закончить встречу, разговор или этап работы", answer: wrap up }
+      - { id: m7, prompt: "добавить человека в переписку, чтобы он был в курсе", answer: loop in }
+      - { id: m8, prompt: "заранее договориться, что будет сделано и к какому сроку", answer: set expectations }
+  - type: exercise
+    id: words-gap
+    title: Работа команды
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a status report
+      - buy-in
+      - stay on top of
+      - resourceful
+      - workload
+      - bandwidth
+      - a point of contact
+      - single-handedly
+      - consequently
+      - loop in
+      - delegate
+    items:
+      - id: g1
+        prompt: Every Friday, I sent ___ with what was done and what came next. (отчёт о ходе работ)
+        answer: a status report
+      - id: g2
+        prompt: Before we change the process, we need ___ from the whole team. (поддержка решения)
+        answer: buy-in
+      - id: g3
+        prompt: Our team uses a shared board to ___ every open task. (держать под контролем)
+        answer: stay on top of
+      - id: g4
+        prompt: He found a free tool, wrote a script and solved the problem in an hour. He is very ___. (находчивый)
+        answer: resourceful
+      - id: g5
+        prompt: My ___ was too heavy last month, so I asked my manager to move one task. (объём работы)
+        answer: workload
+      - id: g6
+        prompt: "I cannot take another project now: I do not have the ___. (свободные время и силы)"
+        answer: bandwidth
+      - id: g7
+        prompt: Pavel is ___ for any question about the schedule. (контактное лицо)
+        answer: a point of contact
+      - id: g8
+        prompt: She did not rebuild the system ___. Four people worked on it. (в одиночку)
+        answer: single-handedly
+      - id: g9
+        prompt: The interview is a conversation. ___, you do not need slides. (как следствие)
+        answer: consequently
+  - type: explanation
+    id: reading-how
+    title: Как читать рассказ по схеме STAR
+    body: |-
+      Текст по схеме STAR читается по частям. Найдите, где кончается ситуация и начинаются действия: слова **My task was…** отделяют задачу, **The first thing I did was…** открывает действия, **As a result…** вводит итог. В действиях следите за местоимениями: **I** показывает ваш личный вклад, **we** — результат команды.
+
+      Времена подсказывают порядок. Past simple двигает рассказ вперёд, past continuous описывает фон (**we were preparing…**), past perfect указывает на то, что было раньше (**we had already lost a week**). Слова вне списков переведены под текстом.
+  - type: reading
+    id: blog
+    title: "A STAR answer in four steps"
+    text: |-
+      A STAR answer in four steps
+
+      Behavioral questions ask about the past: "Tell me about a time you faced a challenge." Interviewers use them because the way you handled a real situation shows how you work. A clear answer is short, specific and told in order. Here is an example from a candidate for a backend role.
+
+      Situation. At my previous company, we were preparing two releases at the same time, and we had a very tight deadline. Two teams needed the same engineer, so he was double-booked, and nobody owned the problem. By the time I noticed it, we had already lost a week.
+
+      Task. My task was to get the release out on time, and I had to coordinate the work across both teams.
+
+      Action. The first thing I did was talk to everyone involved. Then I wrote a short plan and set expectations about who would do what. I asked my manager to help us prioritise, and I set up a daily call so that nobody was out of sync. I kept the stakeholders in the loop with a short status report every Friday.
+
+      Result. As a result, we shipped on time. We cut the review time from three days to one. In the end, both teams agreed on a plan, and since then we have used the same process for every release.
+
+      Notice three things. The story follows the four parts in order. Past simple moves it forward, past continuous describes the background, and past perfect shows what had happened earlier. The candidate says I for personal actions and we for the team's results: a story in which one person did everything single-handedly sounds less realistic than a story about teamwork.
+    glosses:
+      - { text: Behavioral, russian: поведенческие }
+      - { text: handled, russian: справились с }
+      - { text: specific, russian: конкретный }
+      - { text: noticed, russian: заметил }
+      - { text: "out of sync", russian: "не успевать за остальными" }
+      - { text: Notice, russian: заметьте }
+      - { text: background, russian: фон }
+      - { text: realistic, russian: правдоподобно }
+  - type: exercise
+    id: blog-tf
+    about: blog
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Interviewers ask behavioral questions because the way a candidate handled a real situation shows how they work.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: In the example, the candidate had plenty of time before the deadline.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We had a very tight deadline — срок был жёсткий, и неделя уже была потеряна.
+      - id: q3
+        prompt: The candidate noticed the problem after the team had already lost a week.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: The candidate asked both teams to hire another engineer.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: В тексте кандидат написал план, попросил помощи с приоритетами у руководителя и назначил ежедневный созвон.
+      - id: q5
+        prompt: The candidate sent a status report every Friday.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q6
+        prompt: In the end, a review still took three days.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We cut the review time from three days to one — время ревью сократили до одного дня.
+  - type: exercise
+    id: blog-find
+    about: blog
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What was the candidate's task?
+        options:
+          - to get the release out on time
+          - to hire a new engineer
+          - to write a new process for HR
+        answer: to get the release out on time
+      - id: q2
+        prompt: What did the candidate do first?
+        options:
+          - talked to everyone involved
+          - wrote a status report
+          - asked the manager for another engineer
+        answer: talked to everyone involved
+      - id: q3
+        prompt: How often did the candidate send a status report?
+        options: [every Friday, every day, every month]
+        answer: every Friday
+      - id: q4
+        prompt: How long did a review take at the end?
+        options: [one day, three days, two weeks]
+        answer: one day
+      - id: q5
+        prompt: What does the text advise about I and we?
+        options:
+          - I for personal actions, we for the team's results
+          - we for all the actions
+          - I for the team's results
+        answer: I for personal actions, we for the team's results
+  - type: exercise
+    id: blog-grammar
+    about: blog
+    title: Времена в рассказе
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«We were preparing two releases at the same time.» Почему здесь past continuous?"
+        options:
+          - действие было в процессе, это фон рассказа
+          - действие закончилось раньше других
+          - действие следует за предыдущим по порядку
+        answer: действие было в процессе, это фон рассказа
+        explanation: Past continuous описывает то, что происходило в то время.
+      - id: q2
+        prompt: "«By the time I noticed it, we had already lost a week.» Почему здесь past perfect?"
+        options:
+          - потеря недели произошла раньше момента, когда это заметили
+          - это фон рассказа
+          - это план на будущее
+        answer: потеря недели произошла раньше момента, когда это заметили
+        explanation: Past perfect показывает событие, которое случилось раньше другого события прошлого.
+      - id: q3
+        prompt: "«Two teams needed the same engineer.» В каком времени глагол needed?"
+        options: [past simple, past perfect, past continuous]
+        answer: past simple
+        explanation: Needed — вторая форма, past simple.
+      - id: q4
+        prompt: Какое предложение текста относится к части Result?
+        options:
+          - As a result, we shipped on time.
+          - My task was to get the release out on time.
+          - I set up a daily call so that nobody was out of sync.
+        answer: As a result, we shipped on time.
+        explanation: Фраза As a result вводит итог.
+  - type: reading
+    id: email
+    title: "Your behavioral interview on Thursday"
+    text: |-
+      Subject: Your behavioral interview on Thursday
+
+      Dear Camille,
+
+      Thank you for your time on the phone. Your next step is a behavioral interview with me and one engineer. It lasts forty-five minutes, and we wrap up with your questions to us.
+
+      I will ask about four situations: a disagreement with a colleague, a tight deadline, a time you delegated work, and a time you persuaded a team to change a plan. Please prepare one example for each, in STAR format. Describe the work in general terms: please do not name clients or share internal figures.
+
+      The interview is a conversation, so you do not need slides or code. Your point of contact for scheduling is Pavel Dvorak from HR. If your workload is heavy this week, tell him, and we can move the call to Friday. We would like you to be comfortable, and consequently there is no need to rush your preparation.
+
+      Kind regards,
+      Ingrid Larsen
+      Engineering Manager
+    glosses:
+      - { text: situations, russian: ситуации }
+      - { text: general terms, russian: "общих чертах" }
+      - { text: internal figures, russian: "внутренние цифры" }
+      - { text: comfortable, russian: "спокойно" }
+      - { text: rush, russian: торопиться }
+  - type: exercise
+    id: email-tf
+    about: email
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The interview lasts forty-five minutes.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: Camille has to prepare slides.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: You do not need slides or code — слайды и код не нужны.
+      - id: q3
+        prompt: Ingrid asks Camille to use real client names in her examples.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Please do not name clients — названия клиентов не называют.
+      - id: q4
+        prompt: Pavel Dvorak is the point of contact for scheduling.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: The call can move to Friday if Camille's workload is heavy this week.
+        options: ["True", "False"]
+        answer: "True"
+  - type: exercise
+    id: email-find
+    about: email
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How many situations does Ingrid plan to ask about?
+        options: [four, three, five]
+        answer: four
+      - id: q2
+        prompt: What should Camille prepare for each situation?
+        options:
+          - one example in STAR format
+          - a slide
+          - a code sample
+        answer: one example in STAR format
+      - id: q3
+        prompt: Who takes part in the interview?
+        options:
+          - Ingrid and one engineer
+          - Ingrid and the HR team
+          - two engineers and Pavel
+        answer: Ingrid and one engineer
+      - id: q4
+        prompt: How should Camille describe her work?
+        options:
+          - in general terms
+          - with internal numbers
+          - with client names
+        answer: in general terms
+  - type: explanation
+    id: listening-how
+    title: Поведенческое интервью на слух
+    body: |-
+      В поведенческом интервью интервьюер задаёт вопрос и перебивает рассказ короткими репликами: **Mm-hm. And what was your task? What did you do? How did it end?** Эти реплики открывают следующую часть STAR. Слушайте, какая часть звучит сейчас: ситуация, задача, действия или результат.
+
+      Послушайте, как Ingrid проводит интервью с Camille. Сначала целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: interview
+    title: A behavioral interview
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Thanks for coming in, Camille. Let's start with a behavioral question. Tell me about a time you disagreed with a colleague." }
+      - { speaker: Camille, text: "Of course. About a year ago, I was working on a notifications service with another backend developer. We were building the first version when we disagreed about the design. He wanted to use a message queue, and I wanted to start with a simple database table." }
+      - { speaker: Ingrid, text: "Mm-hm. And what was your task?" }
+      - { speaker: Camille, text: "My task was to deliver a working version in six weeks. We had already lost two weeks, because we had been arguing about the design, so we needed a decision quickly." }
+      - { speaker: Ingrid, text: "I see. What did you do?" }
+      - { speaker: Camille, text: "First, I asked him for a short call. I listened to his concerns and wrote down the risks of both options. Then I suggested a test. We built a small prototype of each version in two days, and we measured the load. I also asked our lead to join the call, so the decision was not only ours." }
+      - { speaker: Ingrid, text: "And how did it end?" }
+      - { speaker: Camille, text: "The database table handled ten times more traffic than we needed, so we agreed to start with it. We shipped on time, and we added the queue later, when the load had grown." }
+      - { speaker: Ingrid, text: "What did you learn from it?" }
+      - { speaker: Camille, text: "I learned to test an idea before I argue about it. Since then, I have suggested a small experiment first, and he and I still work well together." }
+      - { speaker: Ingrid, text: "Thank you. That was a clear example. Let's move on to the next question." }
+  - type: exercise
+    id: interview-q
+    about: interview
+    title: Что сказали в разговоре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Ingrid ask Camille to talk about?
+        options:
+          - a time she disagreed with a colleague
+          - a time she missed a deadline
+          - a time she led a new team
+        answer: a time she disagreed with a colleague
+      - id: q2
+        prompt: What were Camille and her colleague building?
+        options: [a notifications service, a payment page, a mobile app]
+        answer: a notifications service
+      - id: q3
+        prompt: What did the colleague want to use?
+        options: [a message queue, a database table, a cache]
+        answer: a message queue
+      - id: q4
+        prompt: How long did they have to deliver a working version?
+        options: [six weeks, two weeks, three months]
+        answer: six weeks
+      - id: q5
+        prompt: How did Camille test the two ideas?
+        options:
+          - They built a small prototype of each version.
+          - They asked other teams to vote.
+          - They read the documentation.
+        answer: They built a small prototype of each version.
+      - id: q6
+        prompt: What did the team add later?
+        options: [the queue, a second database, a mobile client]
+        answer: the queue
+  - type: exercise
+    id: interview-star
+    about: interview
+    title: Какая это часть STAR
+    instruction: Выберите часть схемы, к которой относится фраза из записи.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«We were building the first version when we disagreed about the design.»"
+        options: [Situation, Task, Action, Result]
+        answer: Situation
+        explanation: "Фраза описывает обстановку: что происходило, когда возникло разногласие."
+      - id: q2
+        prompt: "«My task was to deliver a working version in six weeks.»"
+        options: [Situation, Task, Action, Result]
+        answer: Task
+        explanation: Фраза My task was… называет ответственность кандидата.
+      - id: q3
+        prompt: "«We built a small prototype of each version in two days.»"
+        options: [Situation, Task, Action, Result]
+        answer: Action
+        explanation: Фраза описывает шаг, который сделали Camille и коллега.
+      - id: q4
+        prompt: "«We shipped on time, and we added the queue later.»"
+        options: [Situation, Task, Action, Result]
+        answer: Result
+        explanation: Фраза описывает итог и следующий шаг.

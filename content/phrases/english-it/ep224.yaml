@@ -1,0 +1,7 @@
+id: ep224
+text: "I have another example if that would help."
+translation: "У меня есть ещё один пример, если он пригодится."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md
