@@ -169,3 +169,11 @@
 ### Группа 0
 
 Базовый замер на `main` после #232 (21.10.2026): `npm run content` — пакет max 32 973 из 40 000, каталог 23 590 из 25 000, курс max 1 412 024 из 1 600 000 (gzip), mp3 max 183 264 из 250 000 байт. Исходные числа для решения 4. `english-travel-trip` заархивирован, MODIFIED-дельта ступени 1 добавлена в `specs/course-content/spec.md`.
+
+### Модуль t08
+
+Сверка карточек (1.2, 21.10.2026): точных совпадений с `english-it`, `t01`–`t07` и между карточками модуля нет. Из кандидатов на замену: *a local* → *a backpacker*, *a day trip* → *an itinerary*, *a short break* → *a getaway* (*a stopover* занят карточкой `tw009`); *I'm on a gap year* → *I'm travelling around for a few months* (слово *a gap year* уже есть, фраза дублировала его), *We're heading to Glasgow tomorrow* → *We're off to Glasgow tomorrow* (слово *head to* остаётся отдельной карточкой). Примечания «в США» у *I'm here for a long weekend* и *Are you doing the walking tour tomorrow?* сняты: американской пары нет.
+
+Голоса: Pulcherrima, Achird, Orus проверены пробным запросом к сервису (HTTP 200, 21.10.2026) и добавлены в `pools` `content/voices/en.yaml`; персонажи t08 — Ben (Fenrir), Sofia (Despina), Mei (Leda), в диалогах `t08-2`, `t08-3`, `t08-test` голоса разные.
+
+Тесты: `STAGE` дополнен `t08`, `WRITING` — `t08` (`friendly`, 20–40); блок «День поездки» читает `TRIP` (`t01`–`t07`), а не растущий `STAGE`; добавлен тест грубого сленга в карточках курса (`RUDE`). Каталог после `t08`: 24 032 из 25 000.

@@ -1,0 +1,8 @@
+id: tp108
+text: "What brings you to Edinburgh?"
+translation: "Что привело вас в Эдинбург?"
+note: "дословно — что вас сюда привело"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md

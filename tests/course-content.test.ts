@@ -85,7 +85,10 @@ describe("курс в продукте", () => {
 });
 
 describe("английский для путешествий и общения", () => {
-  const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07"];
+  const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07", "t08"];
+  const TRIP = STAGE.slice(0, 7);
+  const RUDE =
+    /\b(fuck\w*|shit\w*|bitch\w*|bastard\w*|arse\w*|wank\w*|piss\w*|twat\w*|cunt\w*|prick\w*|slut\w*|whore\w*|bollocks)\b/i;
   const IT_NAMES = new Set(
     packagesOf("english-it")
       .flatMap((pack) => pack.blocks ?? [])
@@ -99,6 +102,7 @@ describe("английский для путешествий и общения",
     t05: { register: "formal", min: 60, max: 100 },
     t06: { register: "formal", min: 60, max: 100 },
     t07: { register: "formal", min: 80, max: 100 },
+    t08: { register: "friendly", min: 20, max: 40 },
   };
   const travel = () => catalog.courses.find((course) => course.id === "english-travel");
   const lessonOf = (id: string) => packagesOf("english-travel").find((pack) => pack.id === id);
@@ -107,7 +111,7 @@ describe("английский для путешествий и общения",
     Array.from({ length: 15 }, (_, i) => `${prefix}${String(15 * (number - 1) + i + 1).padStart(3, "0")}`);
   const wordCount = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
-  it("курс по программе: поля выбора, без календаря, 14 модулей, ступень опубликована, остальные — черновики", () => {
+  it("курс по программе: поля выбора, без календаря, 14 модулей, опубликованные модули по порядку", () => {
     expect(travel()).toMatchObject({
       title: "Английский для путешествий и общения",
       language: "en",
@@ -126,6 +130,15 @@ describe("английский для путешествий и общения",
     expect(modules.map((m) => m.number)).toEqual(Array.from({ length: 14 }, (_, i) => i + 1));
     for (const module of modules.filter((m) => !STAGE.includes(m.id))) expect(module.status, module.id).toBe("draft");
     expect(content.partial).toEqual([]);
+  });
+
+  it("в карточках курса нет грубого и бранного сленга", () => {
+    const cards = packagesOf("english-travel").flatMap((pack) => [
+      ...pack.words.map((word) => `${word.greek} ${word.russian}`),
+      ...pack.phrases.map((phrase) => `${phrase.text} ${phrase.translation ?? ""}`),
+    ]);
+    expect(cards.length).toBeGreaterThan(0);
+    for (const card of cards) expect(card, card).not.toMatch(RUDE);
   });
 
   describe.each(STAGE)("модуль %s", (moduleId) => {
@@ -225,7 +238,7 @@ describe("английский для путешествий и общения",
 
   describe("контрольная точка «День поездки»", () => {
     const blocks = () => blocksOf("t07-c1");
-    const stageLessons = STAGE.flatMap((moduleId) => ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`));
+    const stageLessons = TRIP.flatMap((moduleId) => ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`));
     let db: AppDatabase;
     beforeEach(async () => {
       await new AppDatabase("tetradio-travel-checkpoint").delete();

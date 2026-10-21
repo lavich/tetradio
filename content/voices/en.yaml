@@ -17,9 +17,11 @@ pools:
     - Laomedeia
     - Leda
     - Sulafat
+    - Pulcherrima
     - Vindemiatrix
     - Zephyr
   male:
+    - Achird
     - Algenib
     - Algieba
     - Alnilam
@@ -27,6 +29,7 @@ pools:
     - Enceladus
     - Fenrir
     - Iapetus
+    - Orus
     - Puck
     - Rasalgethi
     - Sadachbia
@@ -61,3 +64,6 @@ characters:
   Megan: { gender: female, voice: Vindemiatrix }
   Piotr: { gender: male, voice: Umbriel }
   Joanne: { gender: female, voice: Zephyr }
+  Ben: { gender: male, voice: Fenrir }
+  Sofia: { gender: female, voice: Despina }
+  Mei: { gender: female, voice: Leda }

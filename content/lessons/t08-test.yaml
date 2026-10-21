@@ -1,0 +1,243 @@
+title: Контрольная модуля t08
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: посты на доске объявлений хостела, знакомство в общей комнате, present perfect для опыта, ответы So do I и Neither do I, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: board
+    title: Hostel notice board — Lisbon
+    text: |-
+      HOSTEL NOTICE BOARD — LISBON
+
+      Ana, Brazil — I'm based in São Paulo and I'm here for a short getaway. I love food markets, so I'm looking for places off the beaten track. Do you have any recommendations? I'm free on Thursday evening, if anyone fancies dinner.
+
+      Peter, Canada — Day 2 of my gap year. We're off to Porto on Sunday. Has anyone been there? I've never been, and I'd love some tips. I'm laid-back about plans, but the old bookshop is a must-see for me.
+
+      Mia, Germany — I've been in Lisbon for a month, and I'm thinking about settling down here. The old town is lovely, but it's very touristy in summer.
+    glosses:
+      - { text: fancies, russian: "хочет, не против" }
+      - { text: tips, russian: советы }
+      - { text: settling down, russian: осесть на месте }
+      - { text: old town, russian: старый город }
+  - type: exercise
+    id: board-q
+    about: board
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What kind of places does Ana want?
+        options:
+          - places off the beaten track
+          - famous places from the guidebook
+          - places near the hostel
+        answer: places off the beaten track
+        explanation: I'm looking for places off the beaten track.
+      - id: q2
+        prompt: When is Ana free for dinner?
+        options:
+          - on Thursday evening
+          - on Sunday
+          - every evening
+        answer: on Thursday evening
+        explanation: I'm free on Thursday evening.
+      - id: q3
+        prompt: Has Peter been to Porto?
+        options:
+          - No, he's going on Sunday.
+          - Yes, once.
+          - Yes, he lives there.
+        answer: No, he's going on Sunday.
+        explanation: We're off to Porto on Sunday… I've never been.
+      - id: q4
+        prompt: How long has Mia been in Lisbon?
+        options:
+          - for a month
+          - for two days
+          - for a year
+        answer: for a month
+        explanation: I've been in Lisbon for a month.
+      - id: q5
+        prompt: Why doesn't Mia recommend the old town in summer?
+        options:
+          - It's very touristy.
+          - It's too far from the hostel.
+          - It's closed.
+        answer: It's very touristy.
+        explanation: The old town is lovely, but it's very touristy in summer.
+  - type: listening
+    id: terrace
+    title: On the hostel terrace
+    plays: 2
+    transcript:
+      - { speaker: Mei, text: "Excuse me, is this seat taken?" }
+      - { speaker: Ben, text: "No, go ahead." }
+      - { speaker: Mei, text: "Thanks. I'm Mei. Where are you from originally?" }
+      - { speaker: Ben, text: "Manchester, but I'm based here in Lisbon now. I came for a gap year and stayed." }
+      - { speaker: Mei, text: "Really? How long have you been here?" }
+      - { speaker: Ben, text: "Almost two years. I'm still not ready to leave." }
+      - { speaker: Mei, text: "Have you ever been to Porto?" }
+      - { speaker: Ben, text: "Three times. It's a great city, but the train takes three hours." }
+      - { speaker: Mei, text: "I've never been. I'm off to Porto on Sunday. Do you have any recommendations?" }
+      - { speaker: Ben, text: "Walk up to the viewpoints. The riverside is a bit touristy at night, but the little streets behind it are a hidden gem." }
+      - { speaker: Mei, text: "Perfect, thanks. It was nice meeting you." }
+      - { speaker: Ben, text: "You too. Have a good trip." }
+  - type: exercise
+    id: terrace-q
+    about: terrace
+    graded: true
+    title: Аудирование — на террасе
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where is Ben from originally?
+        options:
+          - Manchester
+          - Lisbon
+          - Porto
+        answer: Manchester
+        explanation: Manchester, but I'm based here in Lisbon now.
+      - id: q2
+        prompt: How did Ben come to Lisbon?
+        options:
+          - for a gap year
+          - for work
+          - for a long weekend
+        answer: for a gap year
+        explanation: I came for a gap year and stayed.
+      - id: q3
+        prompt: How long has Ben been in Lisbon?
+        options:
+          - almost two years
+          - three months
+          - three times
+        answer: almost two years
+        explanation: Almost two years.
+      - id: q4
+        prompt: How many times has Ben been to Porto?
+        options:
+          - three times
+          - never
+          - once
+        answer: three times
+        explanation: Have you ever been to Porto? — Three times.
+      - id: q5
+        prompt: When is Mei going to Porto?
+        options:
+          - on Sunday
+          - this evening
+          - next year
+        answer: on Sunday
+        explanation: I'm off to Porto on Sunday.
+      - id: q6
+        prompt: What does Ben say about the streets behind the riverside?
+        options:
+          - They are a hidden gem.
+          - They are very touristy.
+          - They are closed at night.
+        answer: They are a hidden gem.
+        explanation: The riverside is touristy at night, but the little streets behind it are a hidden gem.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Опыт и согласие
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Have you ever ___ to Lisbon?
+        options: [been, went, gone]
+        answer: been
+      - id: q2
+        prompt: I ___ to Porto last summer.
+        options: [went, have been, have gone]
+        answer: went
+        explanation: Есть точное время — past simple.
+      - id: q3
+        prompt: "I love street food. — ___"
+        options: [So do I., So am I., Neither do I.]
+        answer: So do I.
+      - id: q4
+        prompt: "I've never been to Skye. — ___"
+        options: [Neither have I., So have I., Neither haven't I.]
+        answer: Neither have I.
+        explanation: Neither уже содержит отрицание, второго not не нужно.
+      - id: q5
+        prompt: "Are you travelling on your own? — ___"
+        options: ["Yes, I am.", "Yes, I do.", "Yes, I have."]
+        answer: "Yes, I am."
+        explanation: Вопрос с are — ответ с am.
+      - id: q6
+        prompt: Where's Anna? — She's ___ to the station to buy tickets.
+        options: [gone, been, went]
+        answer: gone
+        explanation: Ушла и ещё не вернулась — gone.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово или оборот. Четыре варианта лишние.
+    format: gap
+    bank: [fellow traveller, dorm, bunk, backpacker, off the beaten track, hidden gem, touristy, itinerary, gap year, getaway, laid-back, must-see]
+    items:
+      - { id: g1, prompt: "In our hostel I slept in a six-bed ___.", answer: dorm }
+      - { id: g2, prompt: "I always take the top ___ — it's quieter.", answer: bunk }
+      - { id: g3, prompt: "She travels with a big rucksack: a real ___.", answer: backpacker }
+      - { id: g4, prompt: "The main square is nice, but very ___ in August.", answer: touristy }
+      - { id: g5, prompt: "We want to see villages ___, away from the crowds.", answer: off the beaten track }
+      - { id: g6, prompt: "That little café behind the church is a real ___.", answer: hidden gem }
+      - { id: g7, prompt: "I wrote a day-by-day ___ for the whole trip.", answer: itinerary }
+      - { id: g8, prompt: "After university he took a ___ and worked in three countries.", answer: gap year }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, I'd) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Откуда вы родом?
+        answer:
+          - Where are you from originally?
+          - Where are you originally from?
+          - Where are you from, originally?
+          - Where do you come from originally?
+        explanation: Originally — место, где человек родился или вырос, без учёта нынешнего города.
+      - id: q2
+        prompt: Я тоже нет. (в ответ на «I've never been to Rome»)
+        answer:
+          - Neither have I.
+          - Me neither.
+        explanation: После отрицания в present perfect — Neither have I.
+      - id: q3
+        prompt: Вы можете что-нибудь посоветовать?
+        answer:
+          - Do you have any recommendations?
+          - Have you got any recommendations?
+          - Do you have any recommendations, please?
+          - Have you got any recommendations, please?
+          - Do you have some recommendations?
+          - Have you got some recommendations?
+        explanation: Do you have any recommendations? — просьба о совете.
+      - id: q4
+        prompt: Можно к вам присоединиться?
+        answer:
+          - Mind if I join you?
+          - Do you mind if I join you?
+          - Would you mind if I joined you?
+          - Is it OK if I join you?
+          - Can I join you?
+          - Could I join you?
+          - May I join you?
+          - Do you mind if I join?
+          - Mind if I join?
+        explanation: Mind if I join you? — разговорная форма вежливой просьбы.

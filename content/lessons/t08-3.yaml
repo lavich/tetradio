@@ -1,0 +1,169 @@
+title: Первое сообщение, рассказ о себе и сцена знакомства
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: talk-bank
+    title: Банк фраз — знакомство
+    body: |-
+      Первый разговор с незнакомым человеком строится по одной схеме: начало → откуда вы → зачем здесь → опыт и планы → вопрос собеседнику → прощание. Каждый шаг умещается в одну-две фразы, и каждый заканчивается вопросом или паузой, на которую собеседник может ответить.
+
+      **Начало:** **Is this seat taken?** / **Are you here for the walking tour too?** **Откуда вы:** **I'm originally from Warsaw, but I'm based in Berlin now.** **Зачем здесь:** **I'm here for a long weekend.** / **I'm on a gap year.** **Опыт:** **I've been to Scotland once.** / **I've never been, but I'd love to.** **Согласие:** **So do I.** / **Neither have I.** **Вопрос собеседнику:** **What about you?** / **Do you have any recommendations?** **Прощание:** **It was nice meeting you.**
+
+      Рассказ о себе на 30–60 секунд — это пять-шесть коротких предложений: имя, откуда и где живёте, чем занимаетесь, зачем в этом месте, план. Закончите вопросом: Where are you from? Have you ever been to…? Так человек получает повод ответить, и разговор идёт дальше.
+
+      Составьте свой банк: запишите эти фразы о себе и о ближайшей поездке и проговорите вслух.
+    table:
+      columns:
+        - шаг
+        - фраза
+      rows:
+        - - начало
+          - Is this seat taken?
+        - - откуда
+          - I'm originally from Warsaw, but I'm based in Berlin now.
+        - - зачем здесь
+          - I'm here for a long weekend.
+        - - опыт
+          - I've never been, but I'd love to.
+        - - согласие
+          - Neither have I.
+        - - вопрос собеседнику
+          - Do you have any recommendations?
+        - - прощание
+          - It was nice meeting you.
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - I'm originally from Warsaw.
+      - I'm here for a long weekend.
+      - Neither have I.
+      - So do I.
+      - No, go ahead.
+      - Yes, I have. Twice.
+      - You too. See you later.
+      - It costs ten pounds.
+    items:
+      - { id: m1, prompt: "Where are you from originally?", answer: "I'm originally from Warsaw." }
+      - { id: m2, prompt: "What brings you to Edinburgh?", answer: "I'm here for a long weekend." }
+      - { id: m3, prompt: "I've never been to Skye.", answer: "Neither have I." }
+      - { id: m4, prompt: "Is this seat taken?", answer: "No, go ahead." }
+      - { id: m5, prompt: "Have you ever been to Berlin?", answer: "Yes, I have. Twice." }
+      - { id: m6, prompt: "It was nice meeting you.", answer: "You too. See you later." }
+  - type: explanation
+    id: writing-how
+    title: Первое сообщение новому знакомому
+    body: |-
+      После хостела, экскурсии или вечера люди обмениваются контактами и пишут первое сообщение. Оно короткое, 20–40 слов, и дружеское: вы пишете человеку, с которым только что познакомились.
+
+      Порядок: приветствие и напоминание, кто вы (**Hi Mei! It's Ben from the hostel.**) → одна фраза о знакомстве (**It was nice meeting you yesterday.**) → предложение или вопрос (**Are you still up for the walking tour at ten?**) → конкретное время и место (**I'll be at the front desk at half past nine.**) → лёгкое окончание (**See you there!**).
+
+      Регистр дружеский: Hi вместо Dear, сокращения (I'm, it's, I'll), один восклицательный знак допустим, подпись — имя. Не пишите сразу о личном и не задавайте много вопросов подряд: одного вопроса достаточно, чтобы собеседник ответил.
+  - type: writing
+    id: first-message
+    register: friendly
+    prompt: "Вы познакомились с попутчиком в хостеле и обменялись контактами. Напишите ему первое сообщение в мессенджере (20–40 слов): напомните, кто вы и где познакомились, скажите, что было приятно, и предложите встретиться завтра — укажите время и место. Детали придумайте или возьмите из своей поездки."
+    words: { min: 20, max: 40 }
+    model: |-
+      Hi Mei! It's Ben from the hostel. It was nice meeting you yesterday. Are you still up for the walking tour at ten tomorrow? I'll be at the front desk at half past nine. See you there!
+    criteria:
+      - 20–40 слов; есть кто вы, фраза о знакомстве, предложение, время и место
+      - "Дружеский регистр: Hi, сокращения (It's, I'll), подпись или имя в начале"
+      - "Приятно познакомиться в past simple: It was nice meeting you yesterday"
+      - Один вопрос с понятным ответом, время и место названы точно
+      - Короткие предложения без лишних подробностей
+  - type: explanation
+    id: speaking-how
+    title: Рассказ о себе
+    body: |-
+      Первое устное задание — рассказ о себе на 30–60 секунд. Вы стоите в очереди на экскурсию, рядом человек, который улыбнулся вам. Назовите имя, скажите, откуда вы и где живёте, чем занимаетесь, зачем в этом месте и что планируете. В конце задайте встречный вопрос: так рассказ превращается в разговор.
+
+      Не заучивайте образец. Возьмите факты о себе и расскажите своими словами, используя шаги из банка фраз. Запишите, переслушайте, сверьте с критериями и запишите второй дубль: на втором обычно меньше пауз.
+  - type: speaking
+    id: about-me
+    part: monologue
+    prompt: "Вы в очереди на экскурсию и знакомитесь с человеком рядом. Расскажите о себе за 30–60 секунд: имя, откуда вы и где живёте, чем занимаетесь, зачем здесь, что планируете. Закончите вопросом к собеседнику. Запишите свою часть."
+    seconds: 45
+    model: "Hi, I'm Alex. I'm originally from Warsaw, but I'm based in Berlin now. I work as a designer in a small studio. I'm here for a long weekend, a little getaway before a busy month. I've been to Scotland once before, three years ago, and I loved it. I'm travelling on my own, and I'm quite laid-back about plans. Where are you from? Have you ever been to Berlin?"
+    criteria:
+      - 30–60 секунд, пять-шесть коротких предложений без долгих пауз
+      - "Есть имя, откуда и где живёте (originally / based in), чем занимаетесь, зачем здесь, план"
+      - "Опыт — present perfect: I've been to Scotland once; дата — past simple: three years ago"
+      - Закончили встречным вопросом
+      - На второй попытке — меньше заминок и повторов
+  - type: explanation
+    id: scene-how
+    title: Сцена знакомства
+    body: |-
+      Теперь сцена: вы стоите у стойки регистрации перед пешеходной экскурсией, и рядом оказывается Мэй. Сначала звучат только её реплики, подряд, два раза. Послушайте и поймите, о чём она спросит. Потом откройте текст реплик кнопкой «Открыть текст» и держите его перед глазами.
+
+      В задании речи включите запись и ведите разговор: отвечайте на каждую реплику Мэй по порядку, одной-двумя фразами. Переслушайте запись и сверьте с образцом и критериями.
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника — перед экскурсией
+    plays: 2
+    transcript:
+      - { speaker: Mei, text: "Hi! Are you here for the walking tour too?" }
+      - { speaker: Mei, text: "I'm Mei. Where are you from?" }
+      - { speaker: Mei, text: "Have you ever been to Scotland before?" }
+      - { speaker: Mei, text: "This is my first time here. I'm on a gap year, so I'm not in a hurry. What do you do back home?" }
+      - { speaker: Mei, text: "That sounds interesting. Do you have any recommendations for Edinburgh?" }
+      - { speaker: Mei, text: "Thanks, I'll try that. Well, the guide's here. It was nice meeting you." }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы в Эдинбурге, стоите у стойки регистрации перед пешеходной экскурсией. Рядом путешественница Мэй. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Подтвердите, что идёте на экскурсию, назовите имя и откуда вы, ответьте про Шотландию, расскажите, чем занимаетесь, дайте совет по Эдинбургу и попрощайтесь. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Mei: Hi! Are you here for the walking tour too?
+      You: Yes, I am. Hi, I'm Alex.
+      Mei: I'm Mei. Where are you from?
+      You: I'm originally from Warsaw, but I'm based in Berlin now.
+      Mei: Have you ever been to Scotland before?
+      You: Yes, I have. Once, about three years ago. And you?
+      Mei: This is my first time here. I'm on a gap year, so I'm not in a hurry. What do you do back home?
+      You: I'm a designer. I work in a small studio in Berlin.
+      Mei: That sounds interesting. Do you have any recommendations for Edinburgh?
+      You: Yes, Dean Village is a real hidden gem. It's off the beaten track, but only a short walk from here.
+      Mei: Thanks, I'll try that. Well, the guide's here. It was nice meeting you.
+      You: You too. Enjoy the tour!
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Откуда вы: I'm originally from… / I'm based in…"
+      - "Опыт — present perfect (Yes, I have; I've never been), подробности — past simple (three years ago)"
+      - "Совет — конкретное место и причина: Dean Village is a real hidden gem"
+      - "Прощание — It was nice meeting you / You too"
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Have you ever ___ to Edinburgh?
+        options: [been, went, gone]
+        answer: been
+      - id: q2
+        prompt: "I've never tried haggis. — ___"
+        options: [Neither have I., So have I., Neither haven't I.]
+        answer: Neither have I.
+        explanation: После отрицания в present perfect — Neither have I.
+      - id: q3
+        prompt: I ___ to Porto in 2022.
+        options: [went, have been, have gone]
+        answer: went
+        explanation: Есть точный год — past simple.
+      - id: q4
+        prompt: "Are you travelling on your own? — ___"
+        options: ["Yes, I am.", "Yes, I do.", "Yes, I travel."]
+        answer: "Yes, I am."
+        explanation: Вопрос с are — ответ с am.
+      - id: q5
+        prompt: I love hiking. — ___
+        options: [So do I., So am I., Neither do I.]
+        answer: So do I.

@@ -1,0 +1,7 @@
+id: tp115
+text: "I'm here for a long weekend."
+translation: "Я здесь на длинные выходные."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md

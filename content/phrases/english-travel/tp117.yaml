@@ -1,0 +1,8 @@
+id: tp117
+text: "We're off to Glasgow tomorrow."
+translation: "Завтра мы едем в Глазго."
+note: "off to — разговорное «едем в»"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md
