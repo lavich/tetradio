@@ -198,7 +198,7 @@
   color: var(--accent-foreground);
   outline: none;
 }
-.course + .course {
+.course + * {
   margin-top: calc(var(--cell) * 1.5);
 }
 .head {
