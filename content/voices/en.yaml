@@ -48,6 +48,9 @@ characters:
   Viktor: { gender: male, voice: Algieba }
   Isabel: { gender: female, voice: Laomedeia }
   Samir: { gender: male, voice: Schedar }
+  Yuki: { gender: female, voice: Autonoe }
+  Ethan: { gender: male, voice: Umbriel }
+  Katarina: { gender: female, voice: Zephyr }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

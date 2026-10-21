@@ -1,0 +1,7 @@
+id: ep086
+text: "It's a lot less verbose than Java."
+translation: "Он гораздо менее многословен, чем Java."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

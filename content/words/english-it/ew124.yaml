@@ -1,0 +1,6 @@
+id: ew124
+greek: "statically typed"
+russian: "со статической типизацией"
+ipa: /ˌstætɪkli ˈtaɪpt/
+note: "типы проверяются до запуска: Java, Go, TypeScript"
+source: "Лексикон курса «Английский для IT», модуль e04 (docs/curriculum-english-it.md)"

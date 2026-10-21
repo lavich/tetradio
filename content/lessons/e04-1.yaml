@@ -1,0 +1,450 @@
+title: Сравнения, as … as, the more … the more — выбор технологии
+kind: lesson
+items:
+  - { kind: word, id: ew106 }
+  - { kind: word, id: ew107 }
+  - { kind: word, id: ew108 }
+  - { kind: word, id: ew109 }
+  - { kind: word, id: ew110 }
+  - { kind: word, id: ew111 }
+  - { kind: word, id: ew112 }
+  - { kind: word, id: ew113 }
+  - { kind: word, id: ew114 }
+  - { kind: word, id: ew115 }
+  - { kind: word, id: ew116 }
+  - { kind: word, id: ew117 }
+  - { kind: word, id: ew118 }
+  - { kind: word, id: ew119 }
+  - { kind: word, id: ew120 }
+  - { kind: word, id: ew121 }
+  - { kind: word, id: ew122 }
+  - { kind: word, id: ew123 }
+  - { kind: phrase, id: ep076 }
+  - { kind: phrase, id: ep077 }
+  - { kind: phrase, id: ep078 }
+  - { kind: phrase, id: ep079 }
+  - { kind: phrase, id: ep080 }
+  - { kind: phrase, id: ep081 }
+  - { kind: phrase, id: ep082 }
+  - { kind: phrase, id: ep083 }
+blocks:
+  - type: explanation
+    id: comparatives
+    title: Сравнительная степень
+    body: |-
+      Ответ на вопрос **Why did you choose X over Y?** начинается со сравнения двух вариантов. Три конструкции закрывают почти все случаи: сравнительная степень, **as … as** и **the more … the more**.
+
+      Сравнительная степень зависит от длины прилагательного. К коротким (*fast, simple, light*) добавляется **-er**: **faster, simpler, lighter**. У прилагательных на *-y* буква *y* меняется на *i*: *easy — easier*. Длинные (*maintainable, reliable, verbose*) получают **more** или **less**: **more maintainable, less verbose**. Три исключения: *good — better, bad — worse, far — further*. Второй объект вводит слово **than**: **Python is easier to learn than C++.**
+
+      Сравнение можно усилить словами **much, far, a lot** и ослабить словами **slightly, a bit**: *It's a lot less verbose than Java. It's slightly slower.* Превосходная степень (**the fastest, the most reliable**) выбирает одного лидера из нескольких: *This is the most popular framework in our team.*
+
+      Типичная ошибка русскоговорящих — два показателя сразу: *more faster, more better*. Нужен один: **faster, better**. Слово «чем» передаётся словом **than**; *then* означает «затем».
+    table:
+      columns:
+        - ситуация
+        - правило
+        - пример
+      rows:
+        - - короткое прилагательное
+          - -er
+          - Go is faster than Java at startup.
+        - - прилагательное на -y
+          - y меняется на i, затем -er
+          - Python is easier to learn than C++.
+        - - длинное прилагательное
+          - more или less + прилагательное
+          - This library is more maintainable than the old one.
+        - - исключения
+          - better, worse, further
+          - The new version is better than the old one.
+        - - усилить или ослабить
+          - much, a lot, far — slightly, a bit
+          - It's a lot less verbose than Java.
+  - type: explanation
+    id: as-as
+    title: As … as — одинаково и почти одинаково
+    body: |-
+      Конструкция **as + прилагательное + as** говорит, что у двух объектов признак выражен одинаково: **It's as fast as the old version.** Отрицание **not as … as** означает, что у первого объекта признак слабее: **TypeScript is not as flexible as plain JavaScript.** По смыслу это то же, что **less … than**: *TypeScript is less flexible than plain JavaScript.*
+
+      Слова **almost, nearly, just** и кратные числа (**twice, three times, half**) уточняют разницу: **almost as fast as, twice as fast as, half as expensive as.** С существительными используются **as much as** (неисчисляемые) и **as many as** (исчисляемые): *The new framework has as many dependencies as the old one.*
+
+      Между двумя *as* прилагательное стоит в исходной форме: **as fast as, as reliable as.** Русскоговорящие часто ставят после первого *as* слово *than* или добавляют *-er*: *as fast than, as faster as*. После *as … as* нужна исходная форма, после сравнительной степени — **than**.
+    table:
+      columns:
+        - конструкция
+        - значение
+        - пример
+      rows:
+        - - as … as
+          - признак одинаков
+          - It's as fast as the old version.
+        - - not as … as
+          - у первого объекта слабее
+          - TypeScript is not as flexible as plain JavaScript.
+        - - almost / nearly as … as
+          - чуть слабее
+          - The new build is almost as fast as the old one.
+        - - twice / three times as … as
+          - во сколько раз больше
+          - Go was twice as fast as Python in our test.
+        - - less … than
+          - то же, что not as … as
+          - It's less flexible than plain JavaScript.
+  - type: explanation
+    id: the-more
+    title: The more … the more
+    body: |-
+      Конструкция **the more … the more** связывает два изменения: чем сильнее меняется первое, тем сильнее меняется второе. Обе части начинаются с **the** и сравнительной степени: **The more we scaled, the more we needed a typed language.** Вместо *more* может стоять любое сравнительное прилагательное: **The bigger the team, the harder the communication.** Для уменьшения используется **less**: *The less boilerplate we write, the faster we ship.*
+
+      После первой части порядок слов обычный: подлежащее и сказуемое (*the more we scaled*). В короткой форме глагол *be* часто опускается: *The bigger the team, the harder the communication.* В полной форме он остаётся: *The bigger the team is, the harder the communication is.*
+
+      Типичная ошибка — пропустить второе *the*: *The more we scaled, more we needed types.* Русское «чем … тем» подсказывает пару, и в английском она тоже нужна: **the …, the …**.
+    table:
+      columns:
+        - схема
+        - пример
+      rows:
+        - - the more + подлежащее + глагол, the more …
+          - The more we scaled, the more we needed a typed language.
+        - - the + прилагательное -er, the + прилагательное -er
+          - The bigger the team, the harder the communication.
+        - - the more + прилагательное, the more …
+          - The more complex the system, the more tests it needs.
+        - - the less …, the + сравнительная степень
+          - The less boilerplate we write, the faster we ship.
+  - type: explanation
+    id: stack-words
+    title: Слова для разговора о стеке
+    body: |-
+      Слова урока образуют три группы.
+
+      **Качество технологии.** **Maintainable** — код легко менять, **reliable** — не даёт сбоев, **performant** — работает быстро (слово из жаргона IT), **intuitive** — понятен без инструкции, **concise** — коротко выражает мысль, **type-safe** — ошибки типов находятся до запуска.
+
+      **Вес и неудобство.** **Lightweight** — небольшой и нетребовательный, **bloated** — перегруженный лишним, **verbose** — требует много строк для простого действия, **cumbersome** — неудобный и громоздкий, **overkill** — слишком мощный для задачи. **Boilerplate** — повторяющийся шаблонный код.
+
+      **Окружение технологии.** **A framework** задаёт структуру приложения, **a dependency** — внешняя библиотека, от которой зависит проект, **tooling** — инструменты сборки и проверки кода, **an ecosystem** — библиотеки, инструменты и сообщество вокруг технологии, **open-source** — исходный код открыт. **A learning curve** — время, нужное на освоение: *steep* — осваивать трудно, *gentle* — легко.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: comparative-choice
+    title: Сравнительная степень
+    instruction: Выберите форму. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Go is ___ than Java for a small service. (проще)"
+        options: [simpler, more simpler, simplest]
+        answer: simpler
+        explanation: Прилагательное simple короткое, поэтому берёт -er; more и -er вместе не ставятся.
+      - id: q2
+        prompt: "This library is ___ than the old one. (удобнее поддерживать)"
+        options: [more maintainable, maintainabler, most maintainable]
+        answer: more maintainable
+        explanation: Длинное прилагательное получает more.
+      - id: q3
+        prompt: "The new version is ___ than the old one. (хуже)"
+        options: [worse, more bad, the worst]
+        answer: worse
+        explanation: Bad — исключение, сравнительная степень worse.
+      - id: q4
+        prompt: "Python is ___ to learn than C++. (проще)"
+        options: [easier, more easier, the easiest]
+        answer: easier
+        explanation: Easy заканчивается на -y, поэтому y меняется на i и добавляется -er.
+      - id: q5
+        prompt: Rust has a steeper learning curve ___ Go.
+        options: [than, then, as]
+        answer: than
+        explanation: Второй объект сравнения вводит than; then означает «затем».
+      - id: q6
+        prompt: "This framework is ___ less verbose than Java. (намного)"
+        options: [a lot, many, very]
+        answer: a lot
+        explanation: Сравнение усиливают словами much, far, a lot; many и very так не используются.
+  - type: exercise
+    id: as-choice
+    title: As … as
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: It's almost ___ fast as the old version.
+        options: [as, than, like]
+        answer: as
+        explanation: Конструкция as … as — между двумя as стоит исходная форма прилагательного.
+      - id: q2
+        prompt: TypeScript is not as flexible ___ plain JavaScript.
+        options: [as, than, from]
+        answer: as
+      - id: q3
+        prompt: The new build is twice as fast ___ the old one.
+        options: [as, than, to]
+        answer: as
+        explanation: Кратное число стоит перед первым as, вторая часть — as.
+      - id: q4
+        prompt: "Our team is as ___ as theirs. (такая же опытная)"
+        options: [experienced, more experienced, most experienced]
+        answer: experienced
+        explanation: Между двумя as прилагательное стоит в исходной форме.
+      - id: q5
+        prompt: Какое предложение близко по смыслу к «X is not as fast as Y»?
+        options:
+          - Y is faster than X.
+          - X is faster than Y.
+        answer: Y is faster than X.
+        explanation: Not as fast as означает, что у первого объекта скорость ниже.
+      - id: q6
+        prompt: "It has as ___ dependencies as the old one. (столько же)"
+        options: [many, much, more]
+        answer: many
+        explanation: Dependencies исчисляемое, поэтому as many … as.
+  - type: exercise
+    id: more-choice
+    title: The more … the more
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: The ___ we scaled, the more we needed monitoring.
+        options: [more, most, much]
+        answer: more
+        explanation: Конструкция начинается с the и сравнительной степени.
+      - id: q2
+        prompt: The more we scaled, ___ more we needed a typed language.
+        options: [the, a, that]
+        answer: the
+        explanation: Во второй части тоже нужно the.
+      - id: q3
+        prompt: The bigger the team, ___ harder the communication.
+        options: [the, more, a]
+        answer: the
+      - id: q4
+        prompt: "The ___ the system, the more tests it needs. (сложнее)"
+        options: [more complex, complexer, most complex]
+        answer: more complex
+        explanation: Complex длинное прилагательное, поэтому more complex.
+      - id: q5
+        prompt: "The less boilerplate we write, the ___ we ship. (быстрее)"
+        options: [faster, more fast, fastest]
+        answer: faster
+      - id: q6
+        prompt: Какое предложение верно?
+        options:
+          - The more tests we write, the fewer bugs we ship.
+          - The more tests we write, fewer bugs we ship.
+        answer: The more tests we write, the fewer bugs we ship.
+        explanation: Во второй части нужно the.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - bloated
+      - lightweight
+      - boilerplate
+      - a dependency
+      - an ecosystem
+      - concise
+      - overkill
+      - a learning curve
+      - cumbersome
+      - verbose
+    items:
+      - { id: m1, prompt: "содержит много ненужных функций и зависимостей", answer: bloated }
+      - { id: m2, prompt: "небольшой и нетребовательный к ресурсам", answer: lightweight }
+      - { id: m3, prompt: "повторяющийся код, который почти не меняется", answer: boilerplate }
+      - { id: m4, prompt: "внешняя библиотека, от которой зависит проект", answer: a dependency }
+      - { id: m5, prompt: "библиотеки, инструменты и сообщество вокруг технологии", answer: an ecosystem }
+      - { id: m6, prompt: "краткий, выражающий мысль коротко", answer: concise }
+      - { id: m7, prompt: "слишком мощное решение для простой задачи", answer: overkill }
+      - { id: m8, prompt: "время, которое нужно на освоение инструмента", answer: a learning curve }
+  - type: exercise
+    id: quality-gap
+    title: Качества технологии
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - maintainable
+      - reliable
+      - performant
+      - intuitive
+      - type-safe
+      - open-source
+      - boilerplate
+      - verbose
+      - concise
+      - tooling
+    items:
+      - id: g1
+        prompt: The compiler finds type mistakes before the code runs, so the language is ___. (типобезопасный)
+        answer: type-safe
+      - id: g2
+        prompt: Anyone can use the API without reading the documentation because it is so ___. (понятный без инструкции)
+        answer: intuitive
+      - id: g3
+        prompt: New developers change the code easily because it is ___. (легко менять и сопровождать)
+        answer: maintainable
+      - id: g4
+        prompt: The library is ___, so anyone can read its source code and contribute. (с открытым кодом)
+        answer: open-source
+      - id: g5
+        prompt: Java needs a lot of ___, which means repeated code even for simple tasks. (шаблонный код)
+        answer: boilerplate
+      - id: g6
+        prompt: The service never fails during peak hours, so it is very ___. (не даёт сбоев)
+        answer: reliable
+      - id: g7
+        prompt: A good editor and a linter are part of the ___ around a language. (инструменты)
+        answer: tooling
+      - id: g8
+        prompt: The code is short and clear, so it is ___. (краткий)
+        answer: concise
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (it is, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Python проще выучить, чем C++.
+        answer:
+          - "Python is easier to learn than C++"
+          - "It is easier to learn Python than C++"
+          - "Learning Python is easier than learning C++"
+          - "Learning Python is simpler than learning C++"
+          - "It is easier to study Python than C++"
+          - "It is simpler to learn Python than C++"
+          - "It is simpler to study Python than C++"
+          - "Python is easier to study than C++"
+          - "Python is simpler to learn than C++"
+          - "Python is simpler to study than C++"
+        explanation: Сравнительная степень easier и слово than.
+      - id: q2
+        prompt: Новый сервис почти так же быстр, как старый.
+        answer:
+          - "The new service is almost as fast as the old one"
+          - "The new service is almost as fast as the old service"
+          - "The new service is almost as fast as the old version"
+          - "The new service is almost as fast as the previous one"
+          - "The new service is almost as fast as the previous version"
+          - "The new service is almost as fast as the previous service"
+          - "The new service is nearly as fast as the old one"
+          - "The new service is nearly as fast as the old service"
+          - "The new service is nearly as fast as the old version"
+          - "The new service is nearly as fast as the previous one"
+          - "The new service is nearly as fast as the previous version"
+          - "The new service is nearly as fast as the previous service"
+        explanation: Almost as … as — исходная форма прилагательного между двумя as.
+      - id: q3
+        prompt: TypeScript не такой гибкий, как JavaScript, но безопаснее.
+        answer:
+          - "TypeScript is not as flexible as plain JavaScript, but it is safer"
+          - "TypeScript is not as flexible as plain JavaScript, but safer"
+          - "TypeScript is not as flexible as plain JavaScript but it is safer"
+          - "TypeScript is not as flexible as plain JavaScript but safer"
+          - "TypeScript is not as flexible as JavaScript, but it is safer"
+          - "TypeScript is not as flexible as JavaScript, but safer"
+          - "TypeScript is not as flexible as JavaScript but it is safer"
+          - "TypeScript is not as flexible as JavaScript but safer"
+          - "TypeScript is less flexible than plain JavaScript, but it is safer"
+          - "TypeScript is less flexible than plain JavaScript, but safer"
+          - "TypeScript is less flexible than plain JavaScript but it is safer"
+          - "TypeScript is less flexible than plain JavaScript but safer"
+          - "TypeScript is less flexible than JavaScript, but it is safer"
+          - "TypeScript is less flexible than JavaScript, but safer"
+          - "TypeScript is less flexible than JavaScript but it is safer"
+          - "TypeScript is less flexible than JavaScript but safer"
+        explanation: Not as … as или less … than, затем safer.
+      - id: q4
+        prompt: Чем больше команда, тем сложнее общение.
+        answer:
+          - "The bigger the team is, the harder the communication is"
+          - "The bigger the team is, the harder the communication"
+          - "The bigger the team is, the more difficult the communication is"
+          - "The bigger the team is, the more difficult the communication"
+          - "The bigger the team is, the more complicated the communication is"
+          - "The bigger the team is, the more complicated the communication"
+          - "The bigger the team is, the more complex the communication is"
+          - "The bigger the team is, the more complex the communication"
+          - "The bigger the team is the harder the communication is"
+          - "The bigger the team is the harder the communication"
+          - "The bigger the team is the more difficult the communication is"
+          - "The bigger the team is the more difficult the communication"
+          - "The bigger the team is the more complicated the communication is"
+          - "The bigger the team is the more complicated the communication"
+          - "The bigger the team is the more complex the communication is"
+          - "The bigger the team is the more complex the communication"
+          - "The bigger the team, the harder the communication is"
+          - "The bigger the team, the harder the communication"
+          - "The bigger the team, the more difficult the communication is"
+          - "The bigger the team, the more difficult the communication"
+          - "The bigger the team, the more complicated the communication is"
+          - "The bigger the team, the more complicated the communication"
+          - "The bigger the team, the more complex the communication is"
+          - "The bigger the team, the more complex the communication"
+          - "The bigger the team the harder the communication is"
+          - "The bigger the team the harder the communication"
+          - "The bigger the team the more difficult the communication is"
+          - "The bigger the team the more difficult the communication"
+          - "The bigger the team the more complicated the communication is"
+          - "The bigger the team the more complicated the communication"
+          - "The bigger the team the more complex the communication is"
+          - "The bigger the team the more complex the communication"
+          - "The larger the team is, the harder the communication is"
+          - "The larger the team is, the harder the communication"
+          - "The larger the team is, the more difficult the communication is"
+          - "The larger the team is, the more difficult the communication"
+          - "The larger the team is, the more complicated the communication is"
+          - "The larger the team is, the more complicated the communication"
+          - "The larger the team is, the more complex the communication is"
+          - "The larger the team is, the more complex the communication"
+          - "The larger the team is the harder the communication is"
+          - "The larger the team is the harder the communication"
+          - "The larger the team is the more difficult the communication is"
+          - "The larger the team is the more difficult the communication"
+          - "The larger the team is the more complicated the communication is"
+          - "The larger the team is the more complicated the communication"
+          - "The larger the team is the more complex the communication is"
+          - "The larger the team is the more complex the communication"
+          - "The larger the team, the harder the communication is"
+          - "The larger the team, the harder the communication"
+          - "The larger the team, the more difficult the communication is"
+          - "The larger the team, the more difficult the communication"
+          - "The larger the team, the more complicated the communication is"
+          - "The larger the team, the more complicated the communication"
+          - "The larger the team, the more complex the communication is"
+          - "The larger the team, the more complex the communication"
+          - "The larger the team the harder the communication is"
+          - "The larger the team the harder the communication"
+          - "The larger the team the more difficult the communication is"
+          - "The larger the team the more difficult the communication"
+          - "The larger the team the more complicated the communication is"
+          - "The larger the team the more complicated the communication"
+          - "The larger the team the more complex the communication is"
+          - "The larger the team the more complex the communication"
+        explanation: The … , the … со сравнительной степенью в обеих частях.
+      - id: q5
+        prompt: Мы выбрали PostgreSQL вместо MongoDB, потому что он надёжнее.
+        answer:
+          - "We chose PostgreSQL over MongoDB because it is more reliable"
+          - "We chose PostgreSQL over MongoDB since it is more reliable"
+          - "We chose PostgreSQL instead of MongoDB because it is more reliable"
+          - "We chose PostgreSQL instead of MongoDB since it is more reliable"
+          - "We picked PostgreSQL over MongoDB because it is more reliable"
+          - "We picked PostgreSQL over MongoDB since it is more reliable"
+          - "We picked PostgreSQL instead of MongoDB because it is more reliable"
+          - "We picked PostgreSQL instead of MongoDB since it is more reliable"
+          - "We went with PostgreSQL over MongoDB because it is more reliable"
+          - "We went with PostgreSQL over MongoDB since it is more reliable"
+          - "We went with PostgreSQL instead of MongoDB because it is more reliable"
+          - "We went with PostgreSQL instead of MongoDB since it is more reliable"
+        explanation: Choose X over Y; reliable длинное прилагательное, поэтому more reliable.
+      - id: q6
+        prompt: Этот фреймворк гораздо менее многословен, чем Java.
+        answer:
+          - "This framework is much less verbose than Java"
+          - "This framework is a lot less verbose than Java"
+          - "This framework is far less verbose than Java"
+        explanation: Усилитель much, a lot или far стоит перед less.

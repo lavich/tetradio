@@ -1,0 +1,237 @@
+title: Контрольная модуля e04
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, сравнения, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: monorepo
+    title: Monorepo or separate repositories?
+    text: |-
+      Last year our company moved twelve services into one monorepo. Before that, every service had its own repository, and the same linter settings were copied twelve times.
+
+      The change had clear advantages. Sharing code became much easier, and one pull request could update an API and all its clients. The tooling was also more consistent. On the other hand, the drawbacks were real. The more developers joined, the slower the full build became, and the repository grew bloated with old code. We solved this by building only the services that had changed. After that, the build was almost as fast as before.
+
+      Looking back, we would choose a monorepo again, but we would invest in build tooling from the start.
+    glosses:
+      - { text: pull request, russian: запрос на слияние изменений }
+      - { text: consistent, russian: единообразный }
+      - { text: build, russian: сборка проекта }
+      - { text: invest in, russian: вложить усилия в }
+  - type: exercise
+    id: monorepo-tf
+    about: monorepo
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Before the change, every service had its own repository.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: The linter settings were shared from the beginning.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The same settings were copied twelve times — настройки копировали в каждый репозиторий.
+      - id: q3
+        prompt: In the monorepo, one pull request can update an API and its clients.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: The full build became faster as more developers joined.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The more developers joined, the slower the build became — чем больше людей, тем медленнее сборка.
+      - id: q5
+        prompt: The company would not choose a monorepo again.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We would choose a monorepo again — выбрали бы снова, но вложились бы в инструменты сборки.
+  - type: listening
+    id: call
+    title: Why Python over Go?
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Daniel, your CV says you built a data service in Python. Why did you choose Python over Go?" }
+      - { speaker: Daniel, text: "Mostly because of the team. Everyone knew Python, and the learning curve for Go would have cost us a month." }
+      - { speaker: Katarina, text: "Did you compare them in any way?" }
+      - { speaker: Daniel, text: "Yes, we ran a benchmark on a real workload. Go was twice as fast, but Python was fast enough for our traffic." }
+      - { speaker: Katarina, text: "So performance wasn't the main factor?" }
+      - { speaker: Daniel, text: "Not at that stage. We cared more about the ecosystem. For data work, Python has better libraries out of the box." }
+      - { speaker: Katarina, text: "And the drawbacks?" }
+      - { speaker: Daniel, text: "Python is dynamically typed, so we needed a linter and a lot of tests. The bigger the codebase became, the more we relied on them." }
+      - { speaker: Katarina, text: "Would you make the same choice today?" }
+      - { speaker: Daniel, text: "For that team, yes. For a new service with high traffic, I would look at Go." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why did Daniel choose Python?
+        options:
+          - Everyone on the team already knew it.
+          - It was cheaper than Go.
+          - Go was not available.
+        answer: Everyone on the team already knew it.
+      - id: q2
+        prompt: How did the team compare the two languages?
+        options:
+          - with a benchmark on a real workload
+          - with a survey of other companies
+          - with a short test on a laptop
+        answer: with a benchmark on a real workload
+      - id: q3
+        prompt: What did the benchmark show?
+        options:
+          - Go was twice as fast, but Python was fast enough.
+          - Python was twice as fast as Go.
+          - Both languages had the same speed.
+        answer: Go was twice as fast, but Python was fast enough.
+        explanation: Go was twice as fast — Go вдвое быстрее, но скорости Python хватало для трафика.
+      - id: q4
+        prompt: What was a drawback of Python for the team?
+        options:
+          - It needed a linter and many tests.
+          - It had no libraries for data work.
+          - It was hard to hire people.
+        answer: It needed a linter and many tests.
+      - id: q5
+        prompt: What would Daniel consider for a new high-traffic service?
+        options:
+          - Go
+          - Java
+          - nothing different
+        answer: Go
+  - type: exercise
+    id: comparisons
+    graded: true
+    title: Сравнения
+    instruction: Выберите правильную форму. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Python is ___ than C++ for beginners. (проще)"
+        options: [easier, more easier, the easiest]
+        answer: easier
+        explanation: Easy — на -y, поэтому easier; more и -er вместе не ставятся.
+      - id: q2
+        prompt: The new tool is almost ___ fast as the old one.
+        options: [as, than, like]
+        answer: as
+      - id: q3
+        prompt: The ___ we scaled, the more we needed monitoring.
+        options: [more, much, most]
+        answer: more
+      - id: q4
+        prompt: "This framework is ___ than the old one. (менее многословен)"
+        options: [less verbose, least verbose, more verbosely]
+        answer: less verbose
+      - id: q5
+        prompt: TypeScript is not as flexible ___ JavaScript.
+        options: [as, than, from]
+        answer: as
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [benchmark, drawback, deprecated, linter, runtime, lock-in, opinionated, abstraction]
+    items:
+      - { id: g1, prompt: "We ran a ___ to compare the two databases on the same data. (замер производительности)", answer: benchmark }
+      - { id: g2, prompt: "The main ___ of this tool is the lack of documentation. (недостаток)", answer: drawback }
+      - { id: g3, prompt: "The API still works, but it is ___ and will be removed next year. (устарел)", answer: deprecated }
+      - { id: g4, prompt: "A ___ finds style problems in the code before it runs.", answer: linter }
+      - { id: g5, prompt: "Node.js is a JavaScript ___. (среда выполнения)", answer: runtime }
+      - { id: g6, prompt: "Using one provider's special services creates vendor ___. (привязка)", answer: lock-in }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (it is, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Этот инструмент почти так же быстр, как старый.
+        answer:
+          - "This tool is almost as fast as the old one"
+          - "This tool is almost as fast as the old tool"
+          - "This tool is almost as fast as the old version"
+          - "This tool is almost as fast as the previous one"
+          - "This tool is almost as fast as the previous tool"
+          - "This tool is almost as fast as the previous version"
+          - "This tool is nearly as fast as the old one"
+          - "This tool is nearly as fast as the old tool"
+          - "This tool is nearly as fast as the old version"
+          - "This tool is nearly as fast as the previous one"
+          - "This tool is nearly as fast as the previous tool"
+          - "This tool is nearly as fast as the previous version"
+          - "It is almost as fast as the old one"
+          - "It is almost as fast as the old tool"
+          - "It is almost as fast as the old version"
+          - "It is almost as fast as the previous one"
+          - "It is almost as fast as the previous tool"
+          - "It is almost as fast as the previous version"
+          - "It is nearly as fast as the old one"
+          - "It is nearly as fast as the old tool"
+          - "It is nearly as fast as the old version"
+          - "It is nearly as fast as the previous one"
+          - "It is nearly as fast as the previous tool"
+          - "It is nearly as fast as the previous version"
+          - "This one is almost as fast as the old one"
+          - "This one is almost as fast as the old tool"
+          - "This one is almost as fast as the old version"
+          - "This one is almost as fast as the previous one"
+          - "This one is almost as fast as the previous tool"
+          - "This one is almost as fast as the previous version"
+          - "This one is nearly as fast as the old one"
+          - "This one is nearly as fast as the old tool"
+          - "This one is nearly as fast as the old version"
+          - "This one is nearly as fast as the previous one"
+          - "This one is nearly as fast as the previous tool"
+          - "This one is nearly as fast as the previous version"
+      - id: q2
+        prompt: Чем больше мы росли, тем больше нам был нужен типизированный язык.
+        answer:
+          - "The more we grew, the more we needed a typed language"
+          - "The more we grew, the more we needed a type-safe language"
+          - "The more we grew, the more we needed a statically typed language"
+          - "The more we grew, the more we needed a strongly typed language"
+          - "The more we grew the more we needed a typed language"
+          - "The more we grew the more we needed a type-safe language"
+          - "The more we grew the more we needed a statically typed language"
+          - "The more we grew the more we needed a strongly typed language"
+          - "The more we scaled, the more we needed a typed language"
+          - "The more we scaled, the more we needed a type-safe language"
+          - "The more we scaled, the more we needed a statically typed language"
+          - "The more we scaled, the more we needed a strongly typed language"
+          - "The more we scaled the more we needed a typed language"
+          - "The more we scaled the more we needed a type-safe language"
+          - "The more we scaled the more we needed a statically typed language"
+          - "The more we scaled the more we needed a strongly typed language"
+      - id: q3
+        prompt: Мы выбрали Go вместо Java, потому что он проще.
+        answer:
+          - "We chose Go over Java because it is simpler"
+          - "We chose Go over Java because it is easier"
+          - "We chose Go instead of Java because it is simpler"
+          - "We chose Go instead of Java because it is easier"
+          - "We picked Go over Java because it is simpler"
+          - "We picked Go over Java because it is easier"
+          - "We picked Go instead of Java because it is simpler"
+          - "We picked Go instead of Java because it is easier"
+          - "We went with Go over Java because it is simpler"
+          - "We went with Go over Java because it is easier"
+          - "We went with Go instead of Java because it is simpler"
+          - "We went with Go instead of Java because it is easier"

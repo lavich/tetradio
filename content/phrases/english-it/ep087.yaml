@@ -1,0 +1,7 @@
+id: ep087
+text: "It works for a small team, but it won't scale forever."
+translation: "Для небольшой команды он подходит, но расти бесконечно не сможет."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

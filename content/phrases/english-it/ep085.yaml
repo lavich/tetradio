@@ -1,0 +1,7 @@
+id: ep085
+text: "Its main weakness is the learning curve."
+translation: "Его главная слабость — порог входа."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

@@ -1,0 +1,458 @@
+title: Why did you choose X over Y? — письмо и речь
+kind: lesson
+items:
+  - { kind: phrase, id: ep092 }
+  - { kind: phrase, id: ep093 }
+  - { kind: phrase, id: ep094 }
+  - { kind: phrase, id: ep095 }
+  - { kind: phrase, id: ep096 }
+  - { kind: phrase, id: ep097 }
+  - { kind: phrase, id: ep098 }
+  - { kind: phrase, id: ep099 }
+  - { kind: phrase, id: ep100 }
+blocks:
+  - type: explanation
+    id: formula
+    title: "Схема ответа: решение, критерии, проверка, недостаток, вывод"
+    body: |-
+      **Why did you choose X over Y?** — вопрос, на котором интервьюер проверяет, как вы принимаете технические решения: по фактам или по моде. Ответ длится около минуты и идёт по пяти шагам.
+
+      **1. Решение** — одно предложение: **We chose Go over Java for the new service.** Сразу называются оба варианта.
+
+      **2. Критерии** — один-два главных: **It comes down to team experience. We compared them in terms of performance and maintenance cost.**
+
+      **3. Проверка** — факт вместо мнения: **We tested both on a real workload. Go was almost as fast as Java, and the code was a lot less verbose.**
+
+      **4. Недостаток выбора** — один, названный спокойно: **Its main weakness is the learning curve.** Интервьюер ожидает его услышать: так видно, что вы взвесили оба варианта.
+
+      **5. Вывод** — условие или оценка: **For a team our size, it was the pragmatic choice. If I could choose again, I'd pick the same stack.**
+    table:
+      columns:
+        - шаг
+        - язык
+        - пример
+      rows:
+        - - решение
+          - choose X over Y, go with X
+          - We chose Go over Java for the new service.
+        - - критерии
+          - it comes down to, in terms of
+          - It comes down to team experience.
+        - - проверка
+          - test, benchmark, as … as, than
+          - Go was almost as fast as Java.
+        - - недостаток
+          - the main drawback / weakness is
+          - Its main weakness is the learning curve.
+        - - вывод
+          - for a team our size, if I could choose again
+          - For a team our size, it was the pragmatic choice.
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: good-answer
+    title: Подходящий ответ
+    instruction: Выберите вариант, который подходит для собеседования.
+    format: choice
+    items:
+      - id: q1
+        prompt: С чего начать ответ на «Why did you choose X over Y?»
+        options:
+          - We chose Go over Java for the new service.
+          - I always choose what is popular.
+          - It was my manager's decision, so I can't say.
+        answer: We chose Go over Java for the new service.
+        explanation: Начало называет оба варианта и решение. Ссылка на моду и отказ отвечать не показывают, как вы рассуждали.
+      - id: q2
+        prompt: Как назвать главный критерий?
+        options:
+          - It comes down to team experience.
+          - It just felt right.
+          - Everybody uses it.
+        answer: It comes down to team experience.
+        explanation: Критерий, который можно проверить, показывает, что решение было обдуманным.
+      - id: q3
+        prompt: Как показать, что выбор проверен?
+        options:
+          - We tested both on a real workload.
+          - I read a blog post about it.
+          - We didn't have time to compare them.
+        answer: We tested both on a real workload.
+        explanation: Замер на реальной нагрузке сильнее, чем мнение из статьи.
+      - id: q4
+        prompt: Как назвать недостаток своего выбора?
+        options:
+          - Its main weakness is the learning curve.
+          - It has no weaknesses.
+          - I'd rather not talk about it.
+        answer: Its main weakness is the learning curve.
+        explanation: Один названный недостаток показывает, что вы взвесили оба варианта.
+  - type: exercise
+    id: grammar-fix
+    title: Какое предложение верно
+    instruction: Выберите верный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы сравниваете скорость двух версий.
+        options:
+          - It's almost as fast as the old version.
+          - It's almost as faster as the old version.
+          - It's almost as fast than the old version.
+        answer: It's almost as fast as the old version.
+        explanation: Между двумя as прилагательное стоит в исходной форме.
+      - id: q2
+        prompt: Вы говорите, что Python проще C++.
+        options:
+          - Python is much easier to learn than C++.
+          - Python is much more easier to learn than C++.
+          - Python is much easier to learn then C++.
+        answer: Python is much easier to learn than C++.
+        explanation: Один показатель сравнения и слово than.
+      - id: q3
+        prompt: Вы объясняете, что потребность в типах росла вместе с проектом.
+        options:
+          - The more we scaled, the more we needed a typed language.
+          - The more we scaled, more we needed a typed language.
+          - More we scaled, the more we needed a typed language.
+        answer: The more we scaled, the more we needed a typed language.
+        explanation: В обеих частях нужно the и сравнительная степень.
+      - id: q4
+        prompt: Вы называете выбранный инструмент и отвергнутый.
+        options:
+          - I chose Go over Java.
+          - I chose Go than Java.
+          - I chose Go against Java.
+        answer: I chose Go over Java.
+        explanation: Choose X over Y — устойчивое сочетание для «выбрать X вместо Y».
+  - type: explanation
+    id: writing-how
+    title: Сравнение двух инструментов
+    body: |-
+      Письменная задача — сравнение двух инструментов, 60–100 слов, для внутренней заметки или описания проекта. Схема та же, что в устном ответе, но плотнее: что сравнивали, критерии, результат замера, решение, недостаток.
+
+      Пишите от первого лица множественного числа или безлично, без приветствия. Формулы: 1) **Our team compared two tools for…**; 2) критерии и замер — **In our benchmark, … was almost / twice as fast as…**; 3) преимущество второго варианта — **… has a larger ecosystem, which is its main advantage**; 4) решение — **We chose X over Y because…**; 5) недостаток — **Its main drawback is…**.
+
+      Формальный текст использует нейтральные слова: *compared, evaluated, chose*. Оценки вроде *awesome* и *terrible* не нужны: сравнение выражается числом и критерием.
+
+      Проверьте себя: после *as … as* стоит исходная форма, после сравнительной степени — *than*; в *the more … the more* есть оба *the*; решение названо через *chose X over Y*.
+  - type: exercise
+    id: sentences
+    title: Предложения для сравнения
+    instruction: Переведите на английский. Пишите сокращения полностью (it is, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Мы сравнили два инструмента по скорости и стоимости поддержки.
+        answer:
+          - "We compared the two tools in terms of speed and maintenance costs"
+          - "We compared the two tools in terms of speed and maintenance cost"
+          - "We compared the two tools in terms of speed and the cost of maintenance"
+          - "We compared the two tools by speed and maintenance costs"
+          - "We compared the two tools by speed and maintenance cost"
+          - "We compared the two tools by speed and the cost of maintenance"
+          - "We compared the two tools on speed and maintenance costs"
+          - "We compared the two tools on speed and maintenance cost"
+          - "We compared the two tools on speed and the cost of maintenance"
+          - "We compared two tools in terms of speed and maintenance costs"
+          - "We compared two tools in terms of speed and maintenance cost"
+          - "We compared two tools in terms of speed and the cost of maintenance"
+          - "We compared two tools by speed and maintenance costs"
+          - "We compared two tools by speed and maintenance cost"
+          - "We compared two tools by speed and the cost of maintenance"
+          - "We compared two tools on speed and maintenance costs"
+          - "We compared two tools on speed and maintenance cost"
+          - "We compared two tools on speed and the cost of maintenance"
+      - id: q2
+        prompt: Мы выбрали Vite вместо Webpack.
+        answer:
+          - "We chose Vite over Webpack"
+          - "We chose Vite instead of Webpack"
+          - "We picked Vite over Webpack"
+          - "We picked Vite instead of Webpack"
+          - "We selected Vite over Webpack"
+          - "We selected Vite instead of Webpack"
+          - "We went with Vite over Webpack"
+          - "We went with Vite instead of Webpack"
+        explanation: Choose X over Y.
+      - id: q3
+        prompt: Главный недостаток — меньшая экосистема.
+        answer:
+          - "The main drawback is a smaller ecosystem"
+          - "The main drawback is the smaller ecosystem"
+          - "The main drawback is its smaller ecosystem"
+          - "The main downside is a smaller ecosystem"
+          - "The main downside is the smaller ecosystem"
+          - "The main downside is its smaller ecosystem"
+          - "The main weakness is a smaller ecosystem"
+          - "The main weakness is the smaller ecosystem"
+          - "The main weakness is its smaller ecosystem"
+          - "The main disadvantage is a smaller ecosystem"
+          - "The main disadvantage is the smaller ecosystem"
+          - "The main disadvantage is its smaller ecosystem"
+          - "The biggest drawback is a smaller ecosystem"
+          - "The biggest drawback is the smaller ecosystem"
+          - "The biggest drawback is its smaller ecosystem"
+          - "The biggest downside is a smaller ecosystem"
+          - "The biggest downside is the smaller ecosystem"
+          - "The biggest downside is its smaller ecosystem"
+          - "The biggest weakness is a smaller ecosystem"
+          - "The biggest weakness is the smaller ecosystem"
+          - "The biggest weakness is its smaller ecosystem"
+          - "The biggest disadvantage is a smaller ecosystem"
+          - "The biggest disadvantage is the smaller ecosystem"
+          - "The biggest disadvantage is its smaller ecosystem"
+          - "Its main drawback is a smaller ecosystem"
+          - "Its main drawback is the smaller ecosystem"
+          - "Its main drawback is its smaller ecosystem"
+          - "Its main downside is a smaller ecosystem"
+          - "Its main downside is the smaller ecosystem"
+          - "Its main downside is its smaller ecosystem"
+          - "Its main weakness is a smaller ecosystem"
+          - "Its main weakness is the smaller ecosystem"
+          - "Its main weakness is its smaller ecosystem"
+          - "Its main disadvantage is a smaller ecosystem"
+          - "Its main disadvantage is the smaller ecosystem"
+          - "Its main disadvantage is its smaller ecosystem"
+          - "Its biggest drawback is a smaller ecosystem"
+          - "Its biggest drawback is the smaller ecosystem"
+          - "Its biggest drawback is its smaller ecosystem"
+          - "Its biggest downside is a smaller ecosystem"
+          - "Its biggest downside is the smaller ecosystem"
+          - "Its biggest downside is its smaller ecosystem"
+          - "Its biggest weakness is a smaller ecosystem"
+          - "Its biggest weakness is the smaller ecosystem"
+          - "Its biggest weakness is its smaller ecosystem"
+          - "Its biggest disadvantage is a smaller ecosystem"
+          - "Its biggest disadvantage is the smaller ecosystem"
+          - "Its biggest disadvantage is its smaller ecosystem"
+        explanation: После is стоит существительное с прилагательным в сравнительной степени.
+      - id: q4
+        prompt: Чем больше становился проект, тем заметнее была разница.
+        answer:
+          - "The bigger the project became, the more noticeable the difference was"
+          - "The more the project grew, the more noticeable the difference was"
+          - "The bigger the project, the more noticeable the difference"
+          - "The bigger the project, the more visible the difference"
+          - "The bigger the project, the more obvious the difference"
+          - "The bigger the project, the clearer the difference"
+          - "The bigger the project the more noticeable the difference"
+          - "The bigger the project the more visible the difference"
+          - "The bigger the project the more obvious the difference"
+          - "The bigger the project the clearer the difference"
+          - "The more the project grew, the more noticeable the difference became"
+          - "The more the project grew, the more visible the difference was"
+          - "The more the project grew, the more visible the difference became"
+          - "The more the project grew, the more obvious the difference was"
+          - "The more the project grew, the more obvious the difference became"
+          - "The more the project grew, the clearer the difference was"
+          - "The more the project grew, the clearer the difference became"
+          - "The more the project grew the more noticeable the difference was"
+          - "The more the project grew the more noticeable the difference became"
+          - "The more the project grew the more visible the difference was"
+          - "The more the project grew the more visible the difference became"
+          - "The more the project grew the more obvious the difference was"
+          - "The more the project grew the more obvious the difference became"
+          - "The more the project grew the clearer the difference was"
+          - "The more the project grew the clearer the difference became"
+          - "The bigger the project became, the more noticeable the difference became"
+          - "The bigger the project became, the more visible the difference was"
+          - "The bigger the project became, the more visible the difference became"
+          - "The bigger the project became, the more obvious the difference was"
+          - "The bigger the project became, the more obvious the difference became"
+          - "The bigger the project became, the clearer the difference was"
+          - "The bigger the project became, the clearer the difference became"
+          - "The bigger the project became the more noticeable the difference was"
+          - "The bigger the project became the more noticeable the difference became"
+          - "The bigger the project became the more visible the difference was"
+          - "The bigger the project became the more visible the difference became"
+          - "The bigger the project became the more obvious the difference was"
+          - "The bigger the project became the more obvious the difference became"
+          - "The bigger the project became the clearer the difference was"
+          - "The bigger the project became the clearer the difference became"
+          - "The bigger the project got, the more noticeable the difference was"
+          - "The bigger the project got, the more noticeable the difference became"
+          - "The bigger the project got, the more visible the difference was"
+          - "The bigger the project got, the more visible the difference became"
+          - "The bigger the project got, the more obvious the difference was"
+          - "The bigger the project got, the more obvious the difference became"
+          - "The bigger the project got, the clearer the difference was"
+          - "The bigger the project got, the clearer the difference became"
+          - "The bigger the project got the more noticeable the difference was"
+          - "The bigger the project got the more noticeable the difference became"
+          - "The bigger the project got the more visible the difference was"
+          - "The bigger the project got the more visible the difference became"
+          - "The bigger the project got the more obvious the difference was"
+          - "The bigger the project got the more obvious the difference became"
+          - "The bigger the project got the clearer the difference was"
+          - "The bigger the project got the clearer the difference became"
+          - "The bigger the project, the more noticeable the difference was"
+          - "The bigger the project, the more noticeable the difference became"
+          - "The bigger the project, the more visible the difference was"
+          - "The bigger the project, the more visible the difference became"
+          - "The bigger the project, the more obvious the difference was"
+          - "The bigger the project, the more obvious the difference became"
+          - "The bigger the project, the clearer the difference was"
+          - "The bigger the project, the clearer the difference became"
+          - "The bigger the project the more noticeable the difference was"
+          - "The bigger the project the more noticeable the difference became"
+          - "The bigger the project the more visible the difference was"
+          - "The bigger the project the more visible the difference became"
+          - "The bigger the project the more obvious the difference was"
+          - "The bigger the project the more obvious the difference became"
+          - "The bigger the project the clearer the difference was"
+          - "The bigger the project the clearer the difference became"
+        explanation: The … , the … со сравнительной степенью в обеих частях.
+      - id: q5
+        prompt: Для команды нашего размера это был прагматичный выбор.
+        answer:
+          - "For a team our size, it was the pragmatic choice"
+          - "For a team our size, it was the pragmatic decision"
+          - "For a team our size, it was the practical choice"
+          - "For a team our size, it was the practical decision"
+          - "For a team our size, it was a pragmatic choice"
+          - "For a team our size, it was a pragmatic decision"
+          - "For a team our size, it was a practical choice"
+          - "For a team our size, it was a practical decision"
+          - "For a team our size it was the pragmatic choice"
+          - "For a team our size it was the pragmatic decision"
+          - "For a team our size it was the practical choice"
+          - "For a team our size it was the practical decision"
+          - "For a team our size it was a pragmatic choice"
+          - "For a team our size it was a pragmatic decision"
+          - "For a team our size it was a practical choice"
+          - "For a team our size it was a practical decision"
+          - "For a team of our size, it was the pragmatic choice"
+          - "For a team of our size, it was the pragmatic decision"
+          - "For a team of our size, it was the practical choice"
+          - "For a team of our size, it was the practical decision"
+          - "For a team of our size, it was a pragmatic choice"
+          - "For a team of our size, it was a pragmatic decision"
+          - "For a team of our size, it was a practical choice"
+          - "For a team of our size, it was a practical decision"
+          - "For a team of our size it was the pragmatic choice"
+          - "For a team of our size it was the pragmatic decision"
+          - "For a team of our size it was the practical choice"
+          - "For a team of our size it was the practical decision"
+          - "For a team of our size it was a pragmatic choice"
+          - "For a team of our size it was a pragmatic decision"
+          - "For a team of our size it was a practical choice"
+          - "For a team of our size it was a practical decision"
+      - id: q6
+        prompt: Если бы я выбирал снова, я выбрал бы то же самое.
+        answer:
+          - "If I could choose again, I would choose the same thing"
+          - "If I could choose again, I would choose the same"
+          - "If I could choose again, I would pick the same thing"
+          - "If I could choose again, I would pick the same"
+          - "If I could choose again, I would make the same choice"
+          - "If I could choose again, I would do the same"
+          - "If I could choose again I would choose the same thing"
+          - "If I could choose again I would choose the same"
+          - "If I could choose again I would pick the same thing"
+          - "If I could choose again I would pick the same"
+          - "If I could choose again I would make the same choice"
+          - "If I could choose again I would do the same"
+          - "If I had to choose again, I would choose the same thing"
+          - "If I had to choose again, I would choose the same"
+          - "If I had to choose again, I would pick the same thing"
+          - "If I had to choose again, I would pick the same"
+          - "If I had to choose again, I would make the same choice"
+          - "If I had to choose again, I would do the same"
+          - "If I had to choose again I would choose the same thing"
+          - "If I had to choose again I would choose the same"
+          - "If I had to choose again I would pick the same thing"
+          - "If I had to choose again I would pick the same"
+          - "If I had to choose again I would make the same choice"
+          - "If I had to choose again I would do the same"
+          - "If I chose again, I would choose the same thing"
+          - "If I chose again, I would choose the same"
+          - "If I chose again, I would pick the same thing"
+          - "If I chose again, I would pick the same"
+          - "If I chose again, I would make the same choice"
+          - "If I chose again, I would do the same"
+          - "If I chose again I would choose the same thing"
+          - "If I chose again I would choose the same"
+          - "If I chose again I would pick the same thing"
+          - "If I chose again I would pick the same"
+          - "If I chose again I would make the same choice"
+          - "If I chose again I would do the same"
+        explanation: Условие в past simple, результат — would и начальная форма.
+  - type: writing
+    id: tools
+    register: formal
+    prompt: "Сравните два инструмента, которыми вы пользуетесь (60–100 слов): что сравнивали, критерии, результат замера, решение и один недостаток."
+    words: { min: 60, max: 100 }
+    model: Our team compared two build tools, Vite and Webpack. Vite is much faster to start, and its configuration is more concise. Webpack has a larger ecosystem of plugins, which is its main advantage. In our benchmark, the development server started three times faster with Vite, and the production build was almost as fast as with Webpack. The more the project grew, the more we noticed the difference. We chose Vite over Webpack because speed and simple configuration matter most to our team. Its main drawback is a smaller choice of plugins.
+    criteria:
+      - 60–100 слов, без приветствия и подписи
+      - "Есть части: что сравнивали, критерии, результат замера, решение, недостаток"
+      - "После as … as — исходная форма прилагательного, после сравнительной степени — than"
+      - "Решение названо через chose X over Y; есть хотя бы одна конструкция the more … the more или as … as"
+      - Оценочных слов вроде awesome и terrible нет, сравнение выражено критерием или числом
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответ
+    body: |-
+      Четвёртый ответ вашего **банка ответов** — Why did you choose X over Y? К нему же сводятся вопросы о стеке, фреймворке и базе данных.
+
+      1) Выберите решение, которое вы можете объяснить: оба варианта, критерий, результат проверки. 2) Выпишите ключевые слова по пяти шагам схемы, не целый текст. 3) Запишите ответ и уложитесь в 60 секунд. 4) Переслушайте и сверьте с образцом и критериями. 5) Запишите ещё раз.
+
+      Уточняющий вопрос о недостатках проверяет, как вы взвесили оба варианта. Назовите один недостаток, объясните, как вы с ним справились, и закончите кратко.
+  - type: speaking
+    id: why-over
+    part: monologue
+    prompt: "Интервьюер: «Why did you choose X over Y?» Ответьте за 60 секунд на примере своего решения: оба варианта, критерий, результат проверки, недостаток, вывод."
+    seconds: 60
+    model: "We chose Go over Java for the new service. It comes down to team experience and running cost. We compared them in terms of performance and maintenance cost, and we tested both on a real workload. Go was almost as fast as Java, but it used much less memory, and the code was a lot less verbose. The more traffic we got, the more that mattered. The main drawback is a smaller ecosystem. For a team our size, it was the pragmatic choice. If I could choose again, I'd pick the same stack."
+    criteria:
+      - "Порядок: решение — критерий — проверка — недостаток — вывод"
+      - Около 60 секунд, без долгих пауз; названы оба варианта
+      - "As … as, than и the more … the more употреблены по форме: исходная форма после as … as, than после сравнительной степени"
+      - "Есть результат проверки: замер, число или факт"
+      - Недостаток назван спокойно, без обвинений в адрес технологии или коллег
+  - type: speaking
+    id: downsides
+    part: interview
+    prompt: "Интервьюер уточняет: «What are the downsides of that choice?» Ответьте за 30 секунд: один недостаток, как вы с ним справились, и что сейчас."
+    seconds: 30
+    model: "The main drawback is the ecosystem: Go has fewer ready-made libraries than Java, so we wrote some parts ourselves. We reduced the risk with a short style guide and by pairing newcomers with experienced colleagues on those parts. So far, it hasn't caused serious problems."
+    criteria:
+      - Назван один конкретный недостаток
+      - Объяснено, как команда справилась с ним
+      - Есть итог на сегодня одной фразой
+      - Ответ укладывается в 30 секунд
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "The ___ the team, the harder the communication. (больше)"
+        options: [bigger, more big, biggest]
+        answer: bigger
+        explanation: Короткое прилагательное — -er, и в конструкции the … , the … нужно the.
+      - id: q2
+        prompt: The new tool is twice as fast ___ the old one.
+        options: [as, than, to]
+        answer: as
+      - id: q3
+        prompt: "The old API is ___, so we should not use it in new code. (устарел)"
+        options: [deprecated, lightweight, concise]
+        answer: deprecated
+        explanation: Deprecated — устаревший, не рекомендуемый к использованию.
+      - id: q4
+        prompt: "We ran a ___ to compare both tools on the same data. (замер)"
+        options: [benchmark, drawback, tooling]
+        answer: benchmark
+      - id: q5
+        prompt: "This tool is ___ our needs: a much simpler one would be enough. (слишком мощный)"
+        options: [overkill for, reliable for, intuitive for]
+        answer: overkill for
+        explanation: Overkill for — избыточный для задачи.
+      - id: q6
+        prompt: "I chose Go ___ Java. (вместо)"
+        options: [over, than, against]
+        answer: over

@@ -1,0 +1,7 @@
+id: ep095
+text: "I'm quick to pick up new tools."
+translation: "Я быстро осваиваю новые инструменты."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

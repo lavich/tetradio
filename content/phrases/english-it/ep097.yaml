@@ -1,0 +1,7 @@
+id: ep097
+text: "I try to avoid tools with a single maintainer."
+translation: "Я стараюсь избегать инструментов с единственным сопровождающим."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

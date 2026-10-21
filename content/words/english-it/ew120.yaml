@@ -1,0 +1,6 @@
+id: ew120
+greek: "type-safe"
+russian: "типобезопасный"
+ipa: /ˌtaɪp ˈseɪf/
+note: "компилятор находит ошибки типов до запуска"
+source: "Лексикон курса «Английский для IT», модуль e04 (docs/curriculum-english-it.md)"
