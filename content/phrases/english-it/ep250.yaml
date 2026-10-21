@@ -1,0 +1,7 @@
+id: ep250
+text: "It's better to admit a mistake than to hide it."
+translation: "Лучше признать ошибку, чем скрывать её."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

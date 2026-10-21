@@ -1,0 +1,7 @@
+id: ep246
+text: "I've learned to double-check before I deploy."
+translation: "Я научился перепроверять перед развёртыванием."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

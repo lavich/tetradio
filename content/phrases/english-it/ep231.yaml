@@ -1,0 +1,7 @@
+id: ep231
+text: "I could have avoided it with a simple check."
+translation: "Я мог бы избежать этого простой проверкой."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

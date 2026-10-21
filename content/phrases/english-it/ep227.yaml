@@ -1,0 +1,7 @@
+id: ep227
+text: "I should have asked for help earlier."
+translation: "Мне следовало раньше попросить помощи."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

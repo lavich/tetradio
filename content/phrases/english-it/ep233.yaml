@@ -1,0 +1,7 @@
+id: ep233
+text: "It was my mistake, and I take full responsibility."
+translation: "Это была моя ошибка, и я полностью отвечаю за неё."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

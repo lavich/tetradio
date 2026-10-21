@@ -1,0 +1,7 @@
+id: ep228
+text: "I shouldn't have merged it on a Friday."
+translation: "Мне не следовало вливать это в пятницу."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

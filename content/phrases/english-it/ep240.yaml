@@ -1,0 +1,7 @@
+id: ep240
+text: "We added a check to the deployment pipeline."
+translation: "Мы добавили проверку в конвейер развёртывания."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

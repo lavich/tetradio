@@ -1,0 +1,7 @@
+id: ep237
+text: "I informed the team as soon as I noticed."
+translation: "Я сообщил команде, как только заметил."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

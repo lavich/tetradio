@@ -79,6 +79,7 @@ characters:
   Gregor: { gender: male, voice: Rasalgethi }
   Ingrid: { gender: female, voice: Erinome }
   Camille: { gender: female, voice: Vindemiatrix }
+  Tobias: { gender: male, voice: Sadachbia }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

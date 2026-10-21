@@ -1,0 +1,7 @@
+id: ep245
+text: "Knowing what I know now, I would have called a meeting sooner."
+translation: "Зная то, что знаю сейчас, я бы раньше созвал встречу."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

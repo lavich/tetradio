@@ -1,0 +1,7 @@
+id: ep247
+text: "These days, I never deploy without a rollback plan."
+translation: "Теперь я не развёртываю изменения без плана отката."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

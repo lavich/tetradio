@@ -1,0 +1,559 @@
+title: conditional 3, should have, could have, wish — разговор об ошибке
+kind: lesson
+items:
+  - { kind: word, id: ew316 }
+  - { kind: word, id: ew317 }
+  - { kind: word, id: ew318 }
+  - { kind: word, id: ew319 }
+  - { kind: word, id: ew320 }
+  - { kind: word, id: ew321 }
+  - { kind: word, id: ew322 }
+  - { kind: word, id: ew323 }
+  - { kind: word, id: ew324 }
+  - { kind: word, id: ew325 }
+  - { kind: word, id: ew326 }
+  - { kind: word, id: ew327 }
+  - { kind: word, id: ew328 }
+  - { kind: word, id: ew329 }
+  - { kind: word, id: ew330 }
+  - { kind: word, id: ew331 }
+  - { kind: word, id: ew332 }
+  - { kind: word, id: ew333 }
+  - { kind: phrase, id: ep226 }
+  - { kind: phrase, id: ep227 }
+  - { kind: phrase, id: ep228 }
+  - { kind: phrase, id: ep229 }
+  - { kind: phrase, id: ep230 }
+  - { kind: phrase, id: ep231 }
+  - { kind: phrase, id: ep232 }
+  - { kind: phrase, id: ep233 }
+blocks:
+  - type: explanation
+    id: cond3
+    title: Conditional 3 — что было бы при других действиях
+    body: |-
+      Conditional 3 описывает прошлое, которое уже нельзя изменить: что произошло бы, если бы вы поступили иначе. В рассказе об ошибке эта конструкция связывает причину и последствие: **If I had tested it first, I would have caught the bug.**
+
+      Форма: **if + had + третья форма глагола, would have + третья форма глагола.** Часть с if называет то, чего не было (я не протестировал), главная часть — результат, который не наступил (баг не нашли). Части можно поменять местами: **I would have caught the bug if I had tested it first.** Запятая нужна, когда часть с if стоит первой.
+
+      Вместо **would have** возможны **could have** («смогли бы») и **might have** («возможно, произошло бы»): **If we had set up an alert, we could have noticed sooner.** **If we had skipped the check, the bug might have reached users.**
+
+      Отрицание строится с **hadn't** в части с if и с **wouldn't have** в главной части: **If I hadn't merged it on a Friday, we wouldn't have worked at the weekend.**
+    table:
+      columns:
+        - часть
+        - форма
+        - пример
+      rows:
+        - - условие
+          - if + had + третья форма
+          - If I had read the logs more carefully
+        - - результат
+          - would have + третья форма
+          - I would have found the cause.
+        - - результат, который был возможен
+          - could have + третья форма
+          - we could have noticed sooner.
+        - - результат, который был вероятен
+          - might have + третья форма
+          - the bug might have reached users.
+        - - отрицание
+          - hadn't + третья форма; wouldn't have + третья форма
+          - If I hadn't merged it, we wouldn't have worked at the weekend.
+  - type: explanation
+    id: cond3-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **Would в части с if.** По-русски «бы» стоит в обеих частях: «Если бы я проверил, я бы нашёл». В английском «бы» есть только в главной части, а в части с if стоит **had**. Форма *If I would have tested it* ошибочна: **If I had tested it, I would have caught the bug.**
+
+      **Past simple в части с if.** *If I tested it, I would have caught the bug* смешивает прошлое и настоящее. Для прошлого нужен past perfect: **If I had tested it.**
+
+      **Would и инфинитив в главной части.** *If I had tested it, I would catch the bug* относится к настоящему. Результат в прошлом требует формы **would have caught**.
+
+      **Would have и неверная форма глагола.** После would have, could have и should have стоит третья форма глагола. Верно **I would have asked**; форма *I would have ask* ошибочна, как и *I should have went* вместо **I should have gone**. Часто пишут *should of* вместо *should have*: так звучит сокращение *should've*, но в тексте нужна форма **have**.
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - If I would have tested it, I would have caught the bug.
+          - If I had tested it, I would have caught the bug.
+          - в части с if стоит had, would там нет
+        - - If I tested it, I would have caught the bug.
+          - If I had tested it, I would have caught the bug.
+          - для прошлого нужен past perfect
+        - - If I had tested it, I would catch the bug.
+          - If I had tested it, I would have caught the bug.
+          - результат в прошлом — would have + третья форма
+        - - I should of asked for help.
+          - I should have asked for help.
+          - после should стоит have, затем третья форма
+  - type: explanation
+    id: should-have
+    title: Should have, could have и wish
+    body: |-
+      **Should have + третья форма** — нужно было сделать, но вы не сделали: **I should have asked for help earlier.** **Shouldn't have + третья форма** — вы сделали то, чего делать не следовало: **I shouldn't have merged it on a Friday.** Обе формы оценивают ваше собственное решение. В рассказе об ошибке одна такая фраза показывает, что вы поняли, что пошло не так.
+
+      **Could have + третья форма** — возможность была, но ею не воспользовались: **I could have avoided it with a simple check.**
+
+      **Wish + had + третья форма** — сожаление о конкретном случае в прошлом: **I wish I had read the logs more carefully.** После **wish** past simple относится к настоящему: **I wish I knew the answer** — жаль, что я его не знаю.
+
+      Эти конструкции подходят для рассказа о себе. О коллегах так говорят осторожно: фраза *You should have checked it* звучит как упрёк. Для разбора чужих действий используют процесс: **The review was skipped**, **We had no alert**.
+    table:
+      columns:
+        - конструкция
+        - смысл
+        - пример
+      rows:
+        - - should have + третья форма
+          - нужно было сделать, но не сделал
+          - I should have asked for help earlier.
+        - - shouldn't have + третья форма
+          - сделал то, чего не следовало
+          - I shouldn't have merged it on a Friday.
+        - - could have + третья форма
+          - была возможность, но ею не воспользовался
+          - I could have avoided it with a simple check.
+        - - wish + had + третья форма
+          - сожаление о прошлом случае
+          - I wish I had read the logs more carefully.
+        - - wish + past simple
+          - сожаление о настоящем
+          - I wish I knew the answer.
+  - type: explanation
+    id: terms-words
+    title: Слова урока о сбое, причине и реакции
+    body: |-
+      Слова урока образуют три группы.
+
+      **Сбой и его разбор.** **An outage** — сервис полностью недоступен, **an incident** — любое событие, которое нарушило или могло нарушить работу и требует разбора. **A root cause** — основная причина сбоя, **a postmortem** — письменный разбор после сбоя. **A near miss** — вред чуть не случился, **a false alarm** — оповещение сработало без проблемы. **Data loss** — данные пропали, **a knock-on effect** — последствие, вызванное другим последствием.
+
+      **Причины ошибки.** **A misjudgement** — неверная оценка риска, **a lapse** — короткое упущение внимания, **overlook** — не заметить то, что было на виду, **underestimate** — счесть риск или объём меньше, чем они есть, **cut corners** — пропустить обязательные шаги ради срока.
+
+      **Реакция.** **Own up to** — прямо признать свою ошибку, **a wake-up call** — событие, после которого вы относитесь к делу иначе, **a safeguard** — защитная мера, которая заранее ограничивает вред, **mitigate** — уменьшить ущерб, **recover from** — вернуться в рабочее состояние после сбоя.
+
+      Об ошибке рассказывают так, чтобы слушатель видел процесс и ваш вывод. Свою долю ответственности называют прямо. Коллег и руководителя по имени не обвиняют, названия клиентов и внутренние цифры не приводят.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: cond3-choice
+    title: Conditional 3
+    instruction: Выберите вариант. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If I ___ the logs, I would have found the cause. (в прошлом не прочитал)"
+        options: [had read, would have read, have read]
+        answer: had read
+        explanation: В части с if стоит had и третья форма глагола.
+      - id: q2
+        prompt: "If we had set up an alert, we ___ the problem sooner. (в прошлом заметили бы)"
+        options: [would have noticed, would noticed, had noticed]
+        answer: would have noticed
+        explanation: В главной части стоит would have и третья форма глагола.
+      - id: q3
+        prompt: "I would have caught the bug if I ___ it first. (в прошлом не протестировал)"
+        options: [had tested, would have tested, tested]
+        answer: had tested
+        explanation: Если часть с if стоит второй, в ней всё равно нужен had и третья форма.
+      - id: q4
+        prompt: "If I ___ it on a Friday, we would not have worked at the weekend. (в прошлом влил)"
+        options: [had not merged, did not merge, would not have merged]
+        answer: had not merged
+        explanation: Отрицание в части с if — had not и третья форма глагола.
+      - id: q5
+        prompt: "If the alert had fired earlier, we ___ the change back sooner. (могли бы откатить)"
+        options: [could have rolled, could rolled, can have rolled]
+        answer: could have rolled
+        explanation: Возможность в прошлом передаёт could have и третья форма глагола.
+      - id: q6
+        prompt: "If I hadn't overlooked the warning, I ___ the outage. (в прошлом предотвратил бы)"
+        options: [would have prevented, would had prevented, will have prevented]
+        answer: would have prevented
+        explanation: Результат в прошлом — would have и третья форма; формы would had и will have здесь ошибочны.
+  - type: exercise
+    id: modals-choice
+    title: Should have, could have, wish
+    instruction: Выберите вариант. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "The change was risky, and the team was online. I ___ for help. (нужно было попросить, но я не попросил)"
+        options: [should have asked, should asked, should have ask]
+        answer: should have asked
+        explanation: Упущенное действие передаёт should have и третья форма глагола.
+      - id: q2
+        prompt: "It was Friday evening. I ___ the change. (не следовало вливать, но влил)"
+        options: [shouldn't have merged, shouldn't merged, couldn't have merge]
+        answer: shouldn't have merged
+        explanation: Действие, которого не следовало делать, — shouldn't have и третья форма глагола.
+      - id: q3
+        prompt: "A simple check was possible, so I ___ the bug. (в прошлом мог бы избежать)"
+        options: [could have avoided, could avoided, could have avoid]
+        answer: could have avoided
+        explanation: Невыполненная возможность в прошлом — could have и третья форма глагола.
+      - id: q4
+        prompt: "I wish I ___ the logs more carefully before the release. (сожаление о прошлом)"
+        options: [had read, would have read, have read]
+        answer: had read
+        explanation: Сожаление о прошлом случае — wish и had с третьей формой глагола.
+      - id: q5
+        prompt: Какое предложение верно?
+        options:
+          - If I would have asked, we would have avoided it.
+          - If I had asked, we would have avoided it.
+          - If I asked, we would have avoided it.
+        answer: If I had asked, we would have avoided it.
+        explanation: В части с if нужен had и третья форма глагола, would там не ставят.
+      - id: q6
+        prompt: Какое предложение верно?
+        options:
+          - I should of tested it.
+          - I should have tested it.
+          - I should tested it.
+        answer: I should have tested it.
+        explanation: После should стоит have и третья форма глагола; should of ошибочно.
+  - type: exercise
+    id: incident-match
+    title: Сбой и разбор
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - an outage
+      - a root cause
+      - a postmortem
+      - a near miss
+      - a false alarm
+      - data loss
+      - a knock-on effect
+      - a safeguard
+      - mitigate
+    items:
+      - { id: m1, prompt: "сервис полностью недоступен для пользователей", answer: an outage }
+      - { id: m2, prompt: "основная причина, из-за которой произошёл сбой", answer: a root cause }
+      - { id: m3, prompt: "письменный разбор после сбоя: что произошло, почему и что изменить", answer: a postmortem }
+      - { id: m4, prompt: "ситуация, в которой вред чуть не случился, но не случился", answer: a near miss }
+      - { id: m5, prompt: "оповещение сработало, хотя проблемы нет", answer: a false alarm }
+      - { id: m6, prompt: "данные пропали и не восстановлены", answer: data loss }
+      - { id: m7, prompt: "последствие, которое вызвано другим последствием", answer: a knock-on effect }
+  - type: exercise
+    id: cause-gap
+    title: Причины ошибки
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a misjudgement
+      - overlook
+      - underestimate
+      - cut corners
+      - a lapse
+      - a wake-up call
+      - a safeguard
+      - mitigate
+    items:
+      - id: g1
+        prompt: "I assumed the change was small, so I did not test it. That was ___ of the risk. (неверная оценка)"
+        answer: a misjudgement
+      - id: g2
+        prompt: A tired person can easily ___ one small warning in a long log file. (не заметить)
+        answer: overlook
+      - id: g3
+        prompt: "My estimate was too low: I tend to ___ how fast the load grows. (недооценивать)"
+        answer: underestimate
+      - id: g4
+        prompt: "When a deadline is close, some people ___ and skip the tests. (срезать углы)"
+        answer: cut corners
+      - id: g5
+        prompt: I forgot to renew the certificate. It was ___ of attention, and I renewed it the same day. (промах)
+        answer: a lapse
+      - id: g6
+        prompt: "The outage was ___ for the whole team: we reviewed every check after it. (тревожный сигнал)"
+        answer: a wake-up call
+  - type: exercise
+    id: handling-gap
+    title: Реакция на сбой
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - an incident
+      - mitigate
+      - a safeguard
+      - recover from
+      - own up to
+      - overlook
+      - a lapse
+    items:
+      - id: g1
+        prompt: The alert fired, so the on-call engineer opened ___ and started to investigate. (инцидент)
+        answer: an incident
+      - id: g2
+        prompt: We could not stop the problem at once, so we worked to ___ the impact on users first. (смягчить)
+        answer: mitigate
+      - id: g3
+        prompt: "Now every change goes through ___: an automatic check that blocks unreviewed code. (защитная мера)"
+        answer: a safeguard
+      - id: g4
+        prompt: The service needed an hour to ___ the failure; then it was back to normal. (оправиться после)
+        answer: recover from
+      - id: g5
+        prompt: I made the mistake, so I decided to ___ it in the team channel. (признать)
+        answer: own up to
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Если бы я сначала это протестировал, я бы нашёл баг.
+        answer:
+          - "If I had tested it first, I would have caught the bug"
+          - "If I had tested it first, I would have caught this bug"
+          - "If I had tested it first, I would have caught a bug"
+          - "If I had tested it first, I would have found the bug"
+          - "If I had tested it first, I would have found this bug"
+          - "If I had tested it first, I would have found a bug"
+          - "If I had tested it first I would have caught the bug"
+          - "If I had tested it first I would have caught this bug"
+          - "If I had tested it first I would have caught a bug"
+          - "If I had tested it first I would have found the bug"
+          - "If I had tested it first I would have found this bug"
+          - "If I had tested it first I would have found a bug"
+          - "If I had tested this first, I would have caught the bug"
+          - "If I had tested this first, I would have caught this bug"
+          - "If I had tested this first, I would have caught a bug"
+          - "If I had tested this first, I would have found the bug"
+          - "If I had tested this first, I would have found this bug"
+          - "If I had tested this first, I would have found a bug"
+          - "If I had tested this first I would have caught the bug"
+          - "If I had tested this first I would have caught this bug"
+          - "If I had tested this first I would have caught a bug"
+          - "If I had tested this first I would have found the bug"
+          - "If I had tested this first I would have found this bug"
+          - "If I had tested this first I would have found a bug"
+          - "If I had checked it first, I would have caught the bug"
+          - "If I had checked it first, I would have caught this bug"
+          - "If I had checked it first, I would have caught a bug"
+          - "If I had checked it first, I would have found the bug"
+          - "If I had checked it first, I would have found this bug"
+          - "If I had checked it first, I would have found a bug"
+          - "If I had checked it first I would have caught the bug"
+          - "If I had checked it first I would have caught this bug"
+          - "If I had checked it first I would have caught a bug"
+          - "If I had checked it first I would have found the bug"
+          - "If I had checked it first I would have found this bug"
+          - "If I had checked it first I would have found a bug"
+          - "If I had checked this first, I would have caught the bug"
+          - "If I had checked this first, I would have caught this bug"
+          - "If I had checked this first, I would have caught a bug"
+          - "If I had checked this first, I would have found the bug"
+          - "If I had checked this first, I would have found this bug"
+          - "If I had checked this first, I would have found a bug"
+          - "If I had checked this first I would have caught the bug"
+          - "If I had checked this first I would have caught this bug"
+          - "If I had checked this first I would have caught a bug"
+          - "If I had checked this first I would have found the bug"
+          - "If I had checked this first I would have found this bug"
+          - "If I had checked this first I would have found a bug"
+          - "If I had first tested it, I would have caught the bug"
+          - "If I had first tested it, I would have caught this bug"
+          - "If I had first tested it, I would have caught a bug"
+          - "If I had first tested it, I would have found the bug"
+          - "If I had first tested it, I would have found this bug"
+          - "If I had first tested it, I would have found a bug"
+          - "If I had first tested it I would have caught the bug"
+          - "If I had first tested it I would have caught this bug"
+          - "If I had first tested it I would have caught a bug"
+          - "If I had first tested it I would have found the bug"
+          - "If I had first tested it I would have found this bug"
+          - "If I had first tested it I would have found a bug"
+          - "If I had first tested this, I would have caught the bug"
+          - "If I had first tested this, I would have caught this bug"
+          - "If I had first tested this, I would have caught a bug"
+          - "If I had first tested this, I would have found the bug"
+          - "If I had first tested this, I would have found this bug"
+          - "If I had first tested this, I would have found a bug"
+          - "If I had first tested this I would have caught the bug"
+          - "If I had first tested this I would have caught this bug"
+          - "If I had first tested this I would have caught a bug"
+          - "If I had first tested this I would have found the bug"
+          - "If I had first tested this I would have found this bug"
+          - "If I had first tested this I would have found a bug"
+          - "If I had first checked it, I would have caught the bug"
+          - "If I had first checked it, I would have caught this bug"
+          - "If I had first checked it, I would have caught a bug"
+          - "If I had first checked it, I would have found the bug"
+          - "If I had first checked it, I would have found this bug"
+          - "If I had first checked it, I would have found a bug"
+          - "If I had first checked it I would have caught the bug"
+          - "If I had first checked it I would have caught this bug"
+          - "If I had first checked it I would have caught a bug"
+          - "If I had first checked it I would have found the bug"
+          - "If I had first checked it I would have found this bug"
+          - "If I had first checked it I would have found a bug"
+          - "If I had first checked this, I would have caught the bug"
+          - "If I had first checked this, I would have caught this bug"
+          - "If I had first checked this, I would have caught a bug"
+          - "If I had first checked this, I would have found the bug"
+          - "If I had first checked this, I would have found this bug"
+          - "If I had first checked this, I would have found a bug"
+          - "If I had first checked this I would have caught the bug"
+          - "If I had first checked this I would have caught this bug"
+          - "If I had first checked this I would have caught a bug"
+          - "If I had first checked this I would have found the bug"
+          - "If I had first checked this I would have found this bug"
+          - "If I had first checked this I would have found a bug"
+          - "I would have caught the bug if I had first tested it"
+          - "I would have caught the bug if I had first tested this"
+          - "I would have caught the bug if I had first checked it"
+          - "I would have caught the bug if I had first checked this"
+          - "I would have caught this bug if I had first tested it"
+          - "I would have caught this bug if I had first tested this"
+          - "I would have caught this bug if I had first checked it"
+          - "I would have caught this bug if I had first checked this"
+          - "I would have caught a bug if I had first tested it"
+          - "I would have caught a bug if I had first tested this"
+          - "I would have caught a bug if I had first checked it"
+          - "I would have caught a bug if I had first checked this"
+          - "I would have found the bug if I had first tested it"
+          - "I would have found the bug if I had first tested this"
+          - "I would have found the bug if I had first checked it"
+          - "I would have found the bug if I had first checked this"
+          - "I would have found this bug if I had first tested it"
+          - "I would have found this bug if I had first tested this"
+          - "I would have found this bug if I had first checked it"
+          - "I would have found this bug if I had first checked this"
+          - "I would have found a bug if I had first tested it"
+          - "I would have found a bug if I had first tested this"
+          - "I would have found a bug if I had first checked it"
+          - "I would have found a bug if I had first checked this"
+          - "I would have caught the bug if I had tested it first"
+          - "I would have caught the bug if I had tested this first"
+          - "I would have caught the bug if I had checked it first"
+          - "I would have caught the bug if I had checked this first"
+          - "I would have caught this bug if I had tested it first"
+          - "I would have caught this bug if I had tested this first"
+          - "I would have caught this bug if I had checked it first"
+          - "I would have caught this bug if I had checked this first"
+          - "I would have caught a bug if I had tested it first"
+          - "I would have caught a bug if I had tested this first"
+          - "I would have caught a bug if I had checked it first"
+          - "I would have caught a bug if I had checked this first"
+          - "I would have found the bug if I had tested it first"
+          - "I would have found the bug if I had tested this first"
+          - "I would have found the bug if I had checked it first"
+          - "I would have found the bug if I had checked this first"
+          - "I would have found this bug if I had tested it first"
+          - "I would have found this bug if I had tested this first"
+          - "I would have found this bug if I had checked it first"
+          - "I would have found this bug if I had checked this first"
+          - "I would have found a bug if I had tested it first"
+          - "I would have found a bug if I had tested this first"
+          - "I would have found a bug if I had checked it first"
+          - "I would have found a bug if I had checked this first"
+        explanation: Conditional 3 — if + had + третья форма, would have + третья форма.
+      - id: q2
+        prompt: Мне следовало раньше попросить помощи.
+        answer:
+          - "I should have asked for help earlier"
+          - "I should have asked for help sooner"
+          - "I should have asked someone for help earlier"
+          - "I should have asked someone for help sooner"
+        explanation: Should have и третья форма глагола; помощь — ask for help.
+      - id: q3
+        prompt: Мне не следовало вливать это в пятницу.
+        answer:
+          - "I should not have merged it on a Friday"
+          - "I should not have merged it on Friday"
+          - "I should not have merged this on a Friday"
+          - "I should not have merged this on Friday"
+          - "I should not have merged the change on a Friday"
+          - "I should not have merged the change on Friday"
+          - "I should not have merged this change on a Friday"
+          - "I should not have merged this change on Friday"
+        explanation: Shouldn't have и третья форма глагола; вливать изменение — merge.
+      - id: q4
+        prompt: Жаль, что я не прочитал логи внимательнее.
+        answer:
+          - "I wish I had read the logs more carefully"
+          - "I wish I had read the logs more closely"
+          - "I wish I had read the logs more thoroughly"
+        explanation: Сожаление о прошлом — wish + had + третья форма.
+      - id: q5
+        prompt: Если бы мы настроили оповещение, мы заметили бы проблему раньше.
+        answer:
+          - "If we had set up an alert, we would have noticed the problem earlier"
+          - "If we had set up an alert, we would have noticed the problem sooner"
+          - "If we had set up an alert, we would have noticed the issue earlier"
+          - "If we had set up an alert, we would have noticed the issue sooner"
+          - "If we had set up an alert, we would have noticed it earlier"
+          - "If we had set up an alert, we would have noticed it sooner"
+          - "If we had set up an alert we would have noticed the problem earlier"
+          - "If we had set up an alert we would have noticed the problem sooner"
+          - "If we had set up an alert we would have noticed the issue earlier"
+          - "If we had set up an alert we would have noticed the issue sooner"
+          - "If we had set up an alert we would have noticed it earlier"
+          - "If we had set up an alert we would have noticed it sooner"
+          - "If we had set up alerts, we would have noticed the problem earlier"
+          - "If we had set up alerts, we would have noticed the problem sooner"
+          - "If we had set up alerts, we would have noticed the issue earlier"
+          - "If we had set up alerts, we would have noticed the issue sooner"
+          - "If we had set up alerts, we would have noticed it earlier"
+          - "If we had set up alerts, we would have noticed it sooner"
+          - "If we had set up alerts we would have noticed the problem earlier"
+          - "If we had set up alerts we would have noticed the problem sooner"
+          - "If we had set up alerts we would have noticed the issue earlier"
+          - "If we had set up alerts we would have noticed the issue sooner"
+          - "If we had set up alerts we would have noticed it earlier"
+          - "If we had set up alerts we would have noticed it sooner"
+          - "If we had configured an alert, we would have noticed the problem earlier"
+          - "If we had configured an alert, we would have noticed the problem sooner"
+          - "If we had configured an alert, we would have noticed the issue earlier"
+          - "If we had configured an alert, we would have noticed the issue sooner"
+          - "If we had configured an alert, we would have noticed it earlier"
+          - "If we had configured an alert, we would have noticed it sooner"
+          - "If we had configured an alert we would have noticed the problem earlier"
+          - "If we had configured an alert we would have noticed the problem sooner"
+          - "If we had configured an alert we would have noticed the issue earlier"
+          - "If we had configured an alert we would have noticed the issue sooner"
+          - "If we had configured an alert we would have noticed it earlier"
+          - "If we had configured an alert we would have noticed it sooner"
+          - "If we had configured alerts, we would have noticed the problem earlier"
+          - "If we had configured alerts, we would have noticed the problem sooner"
+          - "If we had configured alerts, we would have noticed the issue earlier"
+          - "If we had configured alerts, we would have noticed the issue sooner"
+          - "If we had configured alerts, we would have noticed it earlier"
+          - "If we had configured alerts, we would have noticed it sooner"
+          - "If we had configured alerts we would have noticed the problem earlier"
+          - "If we had configured alerts we would have noticed the problem sooner"
+          - "If we had configured alerts we would have noticed the issue earlier"
+          - "If we had configured alerts we would have noticed the issue sooner"
+          - "If we had configured alerts we would have noticed it earlier"
+          - "If we had configured alerts we would have noticed it sooner"
+          - "We would have noticed the problem earlier if we had set up an alert"
+          - "We would have noticed the problem earlier if we had set up alerts"
+          - "We would have noticed the problem earlier if we had configured an alert"
+          - "We would have noticed the problem earlier if we had configured alerts"
+          - "We would have noticed the problem sooner if we had set up an alert"
+          - "We would have noticed the problem sooner if we had set up alerts"
+          - "We would have noticed the problem sooner if we had configured an alert"
+          - "We would have noticed the problem sooner if we had configured alerts"
+          - "We would have noticed the issue earlier if we had set up an alert"
+          - "We would have noticed the issue earlier if we had set up alerts"
+          - "We would have noticed the issue earlier if we had configured an alert"
+          - "We would have noticed the issue earlier if we had configured alerts"
+          - "We would have noticed the issue sooner if we had set up an alert"
+          - "We would have noticed the issue sooner if we had set up alerts"
+          - "We would have noticed the issue sooner if we had configured an alert"
+          - "We would have noticed the issue sooner if we had configured alerts"
+          - "We would have noticed it earlier if we had set up an alert"
+          - "We would have noticed it earlier if we had set up alerts"
+          - "We would have noticed it earlier if we had configured an alert"
+          - "We would have noticed it earlier if we had configured alerts"
+          - "We would have noticed it sooner if we had set up an alert"
+          - "We would have noticed it sooner if we had set up alerts"
+          - "We would have noticed it sooner if we had configured an alert"
+          - "We would have noticed it sooner if we had configured alerts"
+        explanation: В части с if стоит had и третья форма, в главной — would have и третья форма.
