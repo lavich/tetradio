@@ -1,0 +1,354 @@
+title: README проекта и объяснение архитектуры коллегой
+kind: lesson
+items:
+  - { kind: word, id: ew194 }
+  - { kind: word, id: ew195 }
+  - { kind: word, id: ew196 }
+  - { kind: word, id: ew197 }
+  - { kind: word, id: ew198 }
+  - { kind: word, id: ew199 }
+  - { kind: word, id: ew200 }
+  - { kind: word, id: ew201 }
+  - { kind: word, id: ew202 }
+  - { kind: word, id: ew203 }
+  - { kind: word, id: ew204 }
+  - { kind: word, id: ew205 }
+  - { kind: word, id: ew206 }
+  - { kind: word, id: ew207 }
+  - { kind: word, id: ew208 }
+  - { kind: word, id: ew209 }
+  - { kind: word, id: ew210 }
+  - { kind: phrase, id: ep134 }
+  - { kind: phrase, id: ep135 }
+  - { kind: phrase, id: ep136 }
+  - { kind: phrase, id: ep137 }
+  - { kind: phrase, id: ep138 }
+  - { kind: phrase, id: ep139 }
+  - { kind: phrase, id: ep140 }
+  - { kind: phrase, id: ep141 }
+blocks:
+  - type: explanation
+    id: system-words
+    title: Слова для надёжности и запуска
+    body: |-
+      Слова урока описывают, как части системы общаются друг с другом и что происходит при сбое.
+
+      **Сообщения.** **A producer** отправляет сообщения в очередь, **a consumer** читает их и обрабатывает. **Serialise** — превратить объект в строку или байты для передачи. **A trigger** — событие, которое запускает обработку. Вызов **synchronous**, когда вызывающий ждёт ответа, и **asynchronous**, когда он продолжает работу.
+
+      **Надёжность.** **A retry** — повторная попытка после сбоя, **fail over** — переключиться на резервную систему, **a circuit breaker** — прекращает вызовы к сервису, который сбоит. **Rate limiting** ограничивает число запросов от одного клиента за период. **Idempotent** — повторный вызов даёт тот же результат, поэтому повтор не создаёт дубль. **Throughput** — число запросов, которое система обрабатывает за секунду.
+
+      **Запуск и наблюдение.** **A container** — приложение вместе со всеми зависимостями, **an orchestrator** запускает и перезапускает контейнеры на многих серверах. **Stateless** — сервис не хранит данные между запросами, поэтому любой экземпляр обработает следующий запрос. **A shard** — часть большой базы данных, **a third-party service** — сервис другой компании, **observability** — логи, метрики и трассировки показывают, что происходит в системе.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините определение с английским словом. Два английских слова лишние.
+    format: match
+    bank:
+      - serialise
+      - a consumer
+      - fail over
+      - a circuit breaker
+      - rate limiting
+      - synchronous
+      - an orchestrator
+      - a shard
+      - a producer
+      - a trigger
+    items:
+      - { id: m1, prompt: "превратить объект в строку или байты для передачи", answer: serialise }
+      - { id: m2, prompt: "часть системы, которая читает сообщения из очереди", answer: a consumer }
+      - { id: m3, prompt: "автоматически переключиться на резервный сервер при сбое", answer: fail over }
+      - { id: m4, prompt: "предохранитель, который прекращает вызовы к сервису, который сбоит", answer: a circuit breaker }
+      - { id: m5, prompt: "ограничение числа запросов от одного клиента за период", answer: rate limiting }
+      - { id: m6, prompt: "вызывающий ждёт ответа и не продолжает работу", answer: synchronous }
+      - { id: m7, prompt: "программа, которая запускает и перезапускает контейнеры на многих серверах", answer: an orchestrator }
+      - { id: m8, prompt: "часть большой базы данных, которая хранится отдельно", answer: a shard }
+  - type: exercise
+    id: words-gap
+    title: Надёжность и запуск
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - throughput
+      - observability
+      - stateless
+      - idempotent
+      - retry
+      - container
+      - third-party
+      - trigger
+      - producer
+      - consumer
+    items:
+      - id: g1
+        prompt: The system handles ten thousand requests per second, so its ___ is high. (пропускная способность)
+        answer: throughput
+      - id: g2
+        prompt: Logs, metrics and traces give us ___ into what happens in production. (наблюдаемость)
+        answer: observability
+      - id: g3
+        prompt: A ___ service keeps no data between requests, so any server can handle the next one. (без состояния)
+        answer: stateless
+      - id: g4
+        prompt: Calling the payment endpoint twice does not charge the customer twice, because the call is ___. (идемпотентный)
+        answer: idempotent
+      - id: g5
+        prompt: After a timeout, the client sends a ___ after two seconds. (повторная попытка)
+        answer: retry
+      - id: g6
+        prompt: The application runs in a ___ together with all its dependencies. (контейнер)
+        answer: container
+      - id: g7
+        prompt: We call a ___ service to send emails, because the email provider belongs to another company. (сторонний)
+        answer: third-party
+      - id: g8
+        prompt: A new file in storage is the ___ that starts the processing function. (событие, которое запускает)
+        answer: trigger
+  - type: explanation
+    id: reading-how
+    title: Как читать README
+    body: |-
+      README отвечает на четыре вопроса: что делает проект, как он устроен, как его запустить и как вносить изменения. Читая текст, ищите ответ на каждый из них в своём разделе: описание — в начале, устройство — в разделе об архитектуре, запуск — в списке шагов.
+
+      В описании устройства преобладает passive: **The queue is read by two consumers. The data is cached in Redis.** Из такого предложения понятно, что происходит с данными, а исполнитель стоит после **by**, если он назван. Связки **First, Then, After that, Finally** показывают порядок шагов.
+
+      Названия технологий (*Go, Redis, PostgreSQL*) и команды (`docker compose up`) в тексте не переводятся. Слова вне списков переведены под текстом.
+  - type: reading
+    id: readme
+    title: "README: Orders API"
+    text: |-
+      Orders API
+
+      Orders API accepts orders from the web shop and the mobile app. It is written in Go and runs in containers.
+
+      Architecture
+
+      Every request first goes through the API gateway. There, the user is authenticated and the payload is validated. Then the gateway routes the request to the orders service.
+
+      The orders service saves the order in PostgreSQL. After that, it publishes an event to the message queue and returns the response to the client. The queue is read by two consumers: one sends a confirmation email, and the other updates the stock. If a consumer fails, the message is retried, because both handlers are idempotent.
+
+      Product data is cached in Redis for ten minutes. If Redis is not available, the data is read directly from the database.
+
+      Running locally
+
+      1. Copy .env.example to .env.
+      2. Run docker compose up.
+      3. Open the health page. If you see "ok", all services are running.
+
+      Configuration
+
+      The service is configured with environment variables. Secrets are never stored in the repository.
+
+      Contributing
+
+      Open a pull request against main. All changes are reviewed by one maintainer and checked by the CI pipeline before they are merged.
+    glosses:
+      - { text: accepts, russian: принимает }
+      - { text: confirmation, russian: подтверждение }
+      - { text: the stock, russian: "остатки на складе" }
+      - { text: Secrets, russian: "секретные данные: пароли и ключи" }
+      - { text: environment variables, russian: переменные окружения }
+      - { text: maintainer, russian: "сопровождающий проекта" }
+      - { text: merged, russian: "влиты в основную ветку" }
+      - { text: handlers, russian: обработчики }
+      - { text: health page, russian: "страница проверки состояния" }
+      - { text: pull request, russian: "запрос на слияние изменений" }
+  - type: exercise
+    id: readme-tf
+    about: readme
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Orders API accepts orders from the web shop and the mobile app.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: The payload is validated by the orders service.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: There, the user is authenticated and the payload is validated — проверка выполняется на шлюзе.
+      - id: q3
+        prompt: The order is saved in PostgreSQL before the event is published.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: The orders service saves the order in PostgreSQL. After that, it publishes an event.
+      - id: q4
+        prompt: Both consumers send confirmation emails.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: One sends a confirmation email, and the other updates the stock — один отправляет письмо, другой обновляет остатки.
+      - id: q5
+        prompt: Product data is read from the database when Redis is not available.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q6
+        prompt: Secrets are stored in the repository.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Secrets are never stored in the repository — секретные данные в репозитории не хранятся.
+  - type: exercise
+    id: readme-find
+    about: readme
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where is the user authenticated?
+        options: [at the API gateway, in the orders service, in PostgreSQL]
+        answer: at the API gateway
+      - id: q2
+        prompt: How long is product data cached?
+        options: [ten minutes, one hour, two hundred milliseconds]
+        answer: ten minutes
+      - id: q3
+        prompt: What is the first step when you run the project locally?
+        options:
+          - Copy .env.example to .env.
+          - Run docker compose up.
+          - Open the health page.
+        answer: Copy .env.example to .env.
+      - id: q4
+        prompt: How is the service configured?
+        options:
+          - with environment variables
+          - with a file in the repository
+          - with command-line flags
+        answer: with environment variables
+      - id: q5
+        prompt: Who reviews the changes before they are merged?
+        options: [one maintainer, the CI pipeline only, two maintainers]
+        answer: one maintainer
+        explanation: All changes are reviewed by one maintainer and checked by the CI pipeline — проверяют и человек, и CI.
+  - type: exercise
+    id: readme-grammar
+    about: readme
+    title: Passive в тексте
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«The queue is read by two consumers.» Кто выполняет действие?"
+        options: [two consumers, the queue, the orders service]
+        answer: two consumers
+        explanation: После by стоит исполнитель.
+      - id: q2
+        prompt: Какое предложение из текста стоит в passive?
+        options:
+          - The payload is validated.
+          - The gateway routes the request.
+          - The orders service saves the order.
+        answer: The payload is validated.
+        explanation: Is и V3 — validated; в двух других предложениях подлежащее само выполняет действие.
+      - id: q3
+        prompt: "«Secrets are never stored in the repository.» Где стоит never?"
+        options: [после are, перед are, в конце предложения]
+        answer: после are
+        explanation: Наречие стоит между are и V3.
+      - id: q4
+        prompt: Каким словом начинается предложение о маршрутизации запроса к orders service?
+        options: [Then, Finally, Once]
+        answer: Then
+  - type: explanation
+    id: listening-how
+    title: Объяснение архитектуры
+    body: |-
+      Коллега объясняет устройство системы тому, кто пришёл в команду, и идёт по пути запроса: каждый шаг — отдельное предложение со связкой. Слушайте глаголы в passive (*is authenticated, is routed, is published*): они называют шаги, а слова *Because, so, if* объясняют причину.
+
+      Послушайте, как Samir рассказывает Isabel о системе заказов. Сначала целиком, затем ответьте на вопросы, проверяя себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: walkthrough
+    title: A walk through the system
+    plays: 2
+    transcript:
+      - { speaker: Samir, text: "Welcome to the team, Isabel. Let me describe how an order moves through the system." }
+      - { speaker: Samir, text: "First, the request is sent to the API gateway. There, the user is authenticated and the payload is validated." }
+      - { speaker: Isabel, text: "And what happens if the validation fails?" }
+      - { speaker: Samir, text: "Then the request is rejected, and the client gets an error right away. If everything is fine, the request is routed to the orders service." }
+      - { speaker: Isabel, text: "Is the data stored there?" }
+      - { speaker: Samir, text: "Yes. The order is saved in PostgreSQL. After that, an event is published to the queue." }
+      - { speaker: Isabel, text: "Why do you use a queue here?" }
+      - { speaker: Samir, text: "The email provider is a third-party service, and it can be slow. With the queue, the order is confirmed in under two hundred milliseconds, and the email is sent later by a consumer." }
+      - { speaker: Isabel, text: "What happens if the provider is down?" }
+      - { speaker: Samir, text: "The consumer retries the message three times. If it still fails, the message is moved to a separate queue, and an alert is sent to the on-call engineer." }
+      - { speaker: Isabel, text: "Can the same email be sent twice?" }
+      - { speaker: Samir, text: "No. The handler is idempotent, so a retry does not create a duplicate." }
+  - type: exercise
+    id: walkthrough-q
+    about: walkthrough
+    title: Что рассказал Samir
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where is the payload validated?
+        options: [at the API gateway, in the orders service, at the email provider]
+        answer: at the API gateway
+      - id: q2
+        prompt: What happens when the validation fails?
+        options:
+          - The request is rejected and the client gets an error.
+          - The request is retried three times.
+          - The request is moved to a separate queue.
+        answer: The request is rejected and the client gets an error.
+      - id: q3
+        prompt: Where is the order saved?
+        options: [PostgreSQL, Redis, the queue]
+        answer: PostgreSQL
+      - id: q4
+        prompt: Why does the system use a queue?
+        options:
+          - The email provider can be slow.
+          - The database is too small.
+          - The gateway cannot route requests.
+        answer: The email provider can be slow.
+        explanation: Слова the email provider is a third-party service, and it can be slow объясняют причину.
+      - id: q5
+        prompt: How fast is the order confirmed?
+        options:
+          - in under two hundred milliseconds
+          - in about two seconds
+          - after the email is sent
+        answer: in under two hundred milliseconds
+      - id: q6
+        prompt: What happens after three failed attempts?
+        options:
+          - The message is moved to a separate queue, and an alert is sent.
+          - The message is deleted.
+          - The order is cancelled.
+        answer: The message is moved to a separate queue, and an alert is sent.
+      - id: q7
+        prompt: Why is the same email not sent twice?
+        options:
+          - The handler is idempotent.
+          - There is only one consumer.
+          - The queue deletes old messages.
+        answer: The handler is idempotent.
+        explanation: Idempotent — повторный вызов даёт тот же результат, поэтому повтор не создаёт дубль.
+  - type: exercise
+    id: walkthrough-phrases
+    about: walkthrough
+    title: Фразы из разговора
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - authenticated
+      - routed
+      - published
+      - retries
+      - idempotent
+      - alert
+      - cached
+      - throttled
+    items:
+      - { id: g1, prompt: "The user is ___ at the gateway. (проходит аутентификацию)", answer: authenticated }
+      - { id: g2, prompt: "The request is ___ to the orders service. (направляется)", answer: routed }
+      - { id: g3, prompt: "After that, an event is ___ to the queue. (публикуется)", answer: published }
+      - { id: g4, prompt: "The consumer ___ the message three times. (повторяет попытку)", answer: retries }
+      - { id: g5, prompt: "The handler is ___, so a retry does not create a duplicate. (идемпотентный)", answer: idempotent }
+      - { id: g6, prompt: "An ___ is sent to the on-call engineer. (оповещение)", answer: alert }

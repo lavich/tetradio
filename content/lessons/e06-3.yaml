@@ -1,0 +1,639 @@
+title: How it works — письмо и речь
+kind: lesson
+items:
+  - { kind: phrase, id: ep142 }
+  - { kind: phrase, id: ep143 }
+  - { kind: phrase, id: ep144 }
+  - { kind: phrase, id: ep145 }
+  - { kind: phrase, id: ep146 }
+  - { kind: phrase, id: ep147 }
+  - { kind: phrase, id: ep148 }
+  - { kind: phrase, id: ep149 }
+  - { kind: phrase, id: ep150 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: "Схема описания архитектуры в пяти шагах"
+    body: |-
+      Описание архитектуры строится как короткий маршрут, и каждый шаг занимает одну-две фразы.
+
+      **1. Обзор.** Назовите масштаб и число частей: **Let me describe the architecture at a high level. It's a fairly standard setup. The system consists of three main parts.**
+
+      **2. Путь запроса.** Ведите слушателя по шагам и связывайте их: **Let me trace a request through the system. First, … After that, an event is published to the queue. Finally, the response is sent back to the client.** Глаголы стоят в passive.
+
+      **3. Ответственная часть.** Назовите сервис, от которого зависит остальное, и скажите, как он защищён: **The most critical part is the payment service.**
+
+      **4. Предложение нарисовать.** **I can draw it if that helps.** Интервьюер решает, нужна ли схема.
+
+      **5. Завершение.** **That covers the main flow.** После этого интервьюер задаёт уточняющие вопросы.
+    table:
+      columns:
+        - шаг
+        - язык
+        - пример
+      rows:
+        - - обзор
+          - at a high level, consists of
+          - The system consists of three main parts.
+        - - путь запроса
+          - First, … After that, … Finally, …
+          - After that, an event is published to the queue.
+        - - ответственная часть
+          - The most critical part is…
+          - The most critical part is the payment service.
+        - - предложить схему
+          - I can draw it if…
+          - I can draw it if that helps.
+        - - завершить
+          - That covers…
+          - That covers the main flow.
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: good-structure
+    title: Подходящая реакция
+    instruction: Выберите вариант, который подходит для собеседования.
+    format: choice
+    items:
+      - id: q1
+        prompt: Интервьюер просит описать систему. С чего начать?
+        options:
+          - Let me describe the architecture at a high level.
+          - It is complicated.
+          - Which part do you want first?
+        answer: Let me describe the architecture at a high level.
+        explanation: Обзор задаёт рамку, и слушатель видит, сколько частей будет в рассказе.
+      - id: q2
+        prompt: Вы переходите от обзора к пути запроса. Какая фраза подходит?
+        options:
+          - Let me trace a request through the system.
+          - That covers the main flow.
+          - I can draw it if that helps.
+        answer: Let me trace a request through the system.
+        explanation: Фраза называет следующий шаг рассказа.
+      - id: q3
+        prompt: Вы описали путь запроса и хотите закончить. Какая фраза подходит?
+        options:
+          - That covers the main flow.
+          - The system consists of three main parts.
+          - Let me describe the architecture at a high level.
+        answer: That covers the main flow.
+      - id: q4
+        prompt: Схема сложна, и слова не передают её целиком. Какая фраза подходит?
+        options:
+          - I can draw it if that helps.
+          - Please wait.
+          - The payment service was built.
+        answer: I can draw it if that helps.
+      - id: q5
+        prompt: Вы называете сервис, от которого зависит остальное. Какая фраза подходит?
+        options:
+          - The most critical part is the payment service.
+          - It's a fairly standard setup.
+          - After that, an event is published to the queue.
+        answer: The most critical part is the payment service.
+  - type: exercise
+    id: passive-fix
+    title: Passive и связки в описании
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Какое предложение верно?
+        options:
+          - After that, an event is published to the queue.
+          - After that, an event published to the queue.
+        answer: After that, an event is published to the queue.
+        explanation: Нужны is и V3.
+      - id: q2
+        prompt: "The system ___ of three main parts. (состоит)"
+        options: [consists, is consisted, consist]
+        answer: consists
+        explanation: Consist — глагол без passive, поэтому consists of.
+      - id: q3
+        prompt: "The first version ___ by two engineers. (была построена)"
+        options: [was built, built, was build]
+        answer: was built
+        explanation: Исполнитель введён словом by, значит нужен passive — was built.
+      - id: q4
+        prompt: "___, the response is sent back to the client. (последний шаг)"
+        options: [Finally, First, After]
+        answer: Finally
+      - id: q5
+        prompt: "I would like to know how the request ___. (направляется)"
+        options: [is routed, is it routed, does it route]
+        answer: is routed
+        explanation: В косвенном вопросе порядок слов как в утверждении, поэтому is routed.
+  - type: explanation
+    id: writing-how
+    title: Описание устройства проекта
+    body: |-
+      Письменная задача — короткое описание архитектуры вашего проекта, 80–120 слов, в формальном стиле. Менеджер по найму просит прислать его перед техническим собеседованием.
+
+      Схема: 1) обращение (**Dear Mr Weber,**); 2) обзор — **consists of** и число частей; 3) путь запроса — **First, … After that, … Finally, …** с глаголами в passive; 4) ответственная часть и как она защищена; 5) подпись (**Kind regards**).
+
+      В формальном тексте сокращения (*it's, I'd*) не используются, поэтому пишите **it is, I would**. Проверьте себя: в описании есть не меньше трёх глаголов в passive, у каждого есть **is / are / was / were** и V3, а связки идут по порядку.
+  - type: exercise
+    id: sentences
+    title: Предложения для письма
+    instruction: Переведите на английский. Пишите сокращения полностью (it is, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Система состоит из трёх основных частей.
+        answer:
+          - "The system consists of three main parts"
+          - "The system consists of three main components"
+          - "The system consists of three key parts"
+          - "The system consists of three key components"
+          - "The system consists of three major parts"
+          - "The system consists of three major components"
+          - "The system consists of three primary parts"
+          - "The system consists of three primary components"
+          - "The system comprises three main parts"
+          - "The system comprises three main components"
+          - "The system comprises three key parts"
+          - "The system comprises three key components"
+          - "The system comprises three major parts"
+          - "The system comprises three major components"
+          - "The system comprises three primary parts"
+          - "The system comprises three primary components"
+          - "The system has three main parts"
+          - "The system has three main components"
+          - "The system has three key parts"
+          - "The system has three key components"
+          - "The system has three major parts"
+          - "The system has three major components"
+          - "The system has three primary parts"
+          - "The system has three primary components"
+          - "The system is made up of three main parts"
+          - "The system is made up of three main components"
+          - "The system is made up of three key parts"
+          - "The system is made up of three key components"
+          - "The system is made up of three major parts"
+          - "The system is made up of three major components"
+          - "The system is made up of three primary parts"
+          - "The system is made up of three primary components"
+          - "The system is composed of three main parts"
+          - "The system is composed of three main components"
+          - "The system is composed of three key parts"
+          - "The system is composed of three key components"
+          - "The system is composed of three major parts"
+          - "The system is composed of three major components"
+          - "The system is composed of three primary parts"
+          - "The system is composed of three primary components"
+        explanation: "Глагол consist стоит в active: consists of. Формы is made up of и is composed of передают то же значение."
+      - id: q2
+        prompt: Сначала запрос отправляется на шлюз.
+        answer:
+          - "First the request is sent to the gateway"
+          - "First the request is sent to the API gateway"
+          - "First the request is passed to the gateway"
+          - "First the request is passed to the API gateway"
+          - "First the request is forwarded to the gateway"
+          - "First the request is forwarded to the API gateway"
+          - "First, the request is sent to the gateway"
+          - "First, the request is sent to the API gateway"
+          - "First, the request is passed to the gateway"
+          - "First, the request is passed to the API gateway"
+          - "First, the request is forwarded to the gateway"
+          - "First, the request is forwarded to the API gateway"
+          - "Firstly the request is sent to the gateway"
+          - "Firstly the request is sent to the API gateway"
+          - "Firstly the request is passed to the gateway"
+          - "Firstly the request is passed to the API gateway"
+          - "Firstly the request is forwarded to the gateway"
+          - "Firstly the request is forwarded to the API gateway"
+          - "Firstly, the request is sent to the gateway"
+          - "Firstly, the request is sent to the API gateway"
+          - "Firstly, the request is passed to the gateway"
+          - "Firstly, the request is passed to the API gateway"
+          - "Firstly, the request is forwarded to the gateway"
+          - "Firstly, the request is forwarded to the API gateway"
+          - "First of all the request is sent to the gateway"
+          - "First of all the request is sent to the API gateway"
+          - "First of all the request is passed to the gateway"
+          - "First of all the request is passed to the API gateway"
+          - "First of all the request is forwarded to the gateway"
+          - "First of all the request is forwarded to the API gateway"
+          - "First of all, the request is sent to the gateway"
+          - "First of all, the request is sent to the API gateway"
+          - "First of all, the request is passed to the gateway"
+          - "First of all, the request is passed to the API gateway"
+          - "First of all, the request is forwarded to the gateway"
+          - "First of all, the request is forwarded to the API gateway"
+          - "The request is first sent to the gateway"
+          - "The request is first sent to the API gateway"
+          - "The request is sent to the gateway first"
+          - "The request is sent to the API gateway first"
+        explanation: Связка First, затем is и V3.
+      - id: q3
+        prompt: После этого событие публикуется в очередь.
+        answer:
+          - "After that an event is published to the queue"
+          - "After that an event is published to the message queue"
+          - "After that an event is published in the queue"
+          - "After that an event is published in the message queue"
+          - "After that an event is published into the queue"
+          - "After that an event is published into the message queue"
+          - "After that the event is published to the queue"
+          - "After that the event is published to the message queue"
+          - "After that the event is published in the queue"
+          - "After that the event is published in the message queue"
+          - "After that the event is published into the queue"
+          - "After that the event is published into the message queue"
+          - "After that, an event is published to the queue"
+          - "After that, an event is published to the message queue"
+          - "After that, an event is published in the queue"
+          - "After that, an event is published in the message queue"
+          - "After that, an event is published into the queue"
+          - "After that, an event is published into the message queue"
+          - "After that, the event is published to the queue"
+          - "After that, the event is published to the message queue"
+          - "After that, the event is published in the queue"
+          - "After that, the event is published in the message queue"
+          - "After that, the event is published into the queue"
+          - "After that, the event is published into the message queue"
+          - "Next an event is published to the queue"
+          - "Next an event is published to the message queue"
+          - "Next an event is published in the queue"
+          - "Next an event is published in the message queue"
+          - "Next an event is published into the queue"
+          - "Next an event is published into the message queue"
+          - "Next the event is published to the queue"
+          - "Next the event is published to the message queue"
+          - "Next the event is published in the queue"
+          - "Next the event is published in the message queue"
+          - "Next the event is published into the queue"
+          - "Next the event is published into the message queue"
+          - "Next, an event is published to the queue"
+          - "Next, an event is published to the message queue"
+          - "Next, an event is published in the queue"
+          - "Next, an event is published in the message queue"
+          - "Next, an event is published into the queue"
+          - "Next, an event is published into the message queue"
+          - "Next, the event is published to the queue"
+          - "Next, the event is published to the message queue"
+          - "Next, the event is published in the queue"
+          - "Next, the event is published in the message queue"
+          - "Next, the event is published into the queue"
+          - "Next, the event is published into the message queue"
+          - "Then an event is published to the queue"
+          - "Then an event is published to the message queue"
+          - "Then an event is published in the queue"
+          - "Then an event is published in the message queue"
+          - "Then an event is published into the queue"
+          - "Then an event is published into the message queue"
+          - "Then the event is published to the queue"
+          - "Then the event is published to the message queue"
+          - "Then the event is published in the queue"
+          - "Then the event is published in the message queue"
+          - "Then the event is published into the queue"
+          - "Then the event is published into the message queue"
+          - "Afterwards an event is published to the queue"
+          - "Afterwards an event is published to the message queue"
+          - "Afterwards an event is published in the queue"
+          - "Afterwards an event is published in the message queue"
+          - "Afterwards an event is published into the queue"
+          - "Afterwards an event is published into the message queue"
+          - "Afterwards the event is published to the queue"
+          - "Afterwards the event is published to the message queue"
+          - "Afterwards the event is published in the queue"
+          - "Afterwards the event is published in the message queue"
+          - "Afterwards the event is published into the queue"
+          - "Afterwards the event is published into the message queue"
+          - "Afterwards, an event is published to the queue"
+          - "Afterwards, an event is published to the message queue"
+          - "Afterwards, an event is published in the queue"
+          - "Afterwards, an event is published in the message queue"
+          - "Afterwards, an event is published into the queue"
+          - "Afterwards, an event is published into the message queue"
+          - "Afterwards, the event is published to the queue"
+          - "Afterwards, the event is published to the message queue"
+          - "Afterwards, the event is published in the queue"
+          - "Afterwards, the event is published in the message queue"
+          - "Afterwards, the event is published into the queue"
+          - "Afterwards, the event is published into the message queue"
+          - "After that the event is sent to the queue"
+          - "After that the event is sent into the queue"
+          - "After that the event is pushed to the queue"
+          - "After that the event is pushed into the queue"
+          - "After that the event is put to the queue"
+          - "After that the event is put into the queue"
+          - "After that, the event is sent to the queue"
+          - "After that, the event is sent into the queue"
+          - "After that, the event is pushed to the queue"
+          - "After that, the event is pushed into the queue"
+          - "After that, the event is put to the queue"
+          - "After that, the event is put into the queue"
+          - "Next the event is sent to the queue"
+          - "Next the event is sent into the queue"
+          - "Next the event is pushed to the queue"
+          - "Next the event is pushed into the queue"
+          - "Next the event is put to the queue"
+          - "Next the event is put into the queue"
+          - "Next, the event is sent to the queue"
+          - "Next, the event is sent into the queue"
+          - "Next, the event is pushed to the queue"
+          - "Next, the event is pushed into the queue"
+          - "Next, the event is put to the queue"
+          - "Next, the event is put into the queue"
+          - "Then the event is sent to the queue"
+          - "Then the event is sent into the queue"
+          - "Then the event is pushed to the queue"
+          - "Then the event is pushed into the queue"
+          - "Then the event is put to the queue"
+          - "Then the event is put into the queue"
+          - "After that an event is published to a queue"
+          - "After that an event is published to a message queue"
+          - "After that, an event is published to a queue"
+          - "After that, an event is published to a message queue"
+          - "Next an event is published to a queue"
+          - "Next an event is published to a message queue"
+          - "Next, an event is published to a queue"
+          - "Next, an event is published to a message queue"
+          - "Then an event is published to a queue"
+          - "Then an event is published to a message queue"
+        explanation: After that вводит следующий шаг, затем is и V3.
+      - id: q4
+        prompt: Наконец, ответ отправляется клиенту.
+        answer:
+          - "Finally the response is sent to the client"
+          - "Finally the response is sent back to the client"
+          - "Finally the response is returned to the client"
+          - "Finally the response is returned back to the client"
+          - "Finally the response is delivered to the client"
+          - "Finally the response is delivered back to the client"
+          - "Finally the reply is sent to the client"
+          - "Finally the reply is sent back to the client"
+          - "Finally the reply is returned to the client"
+          - "Finally the reply is returned back to the client"
+          - "Finally the reply is delivered to the client"
+          - "Finally the reply is delivered back to the client"
+          - "Finally the answer is sent to the client"
+          - "Finally the answer is sent back to the client"
+          - "Finally the answer is returned to the client"
+          - "Finally the answer is returned back to the client"
+          - "Finally the answer is delivered to the client"
+          - "Finally the answer is delivered back to the client"
+          - "Finally, the response is sent to the client"
+          - "Finally, the response is sent back to the client"
+          - "Finally, the response is returned to the client"
+          - "Finally, the response is returned back to the client"
+          - "Finally, the response is delivered to the client"
+          - "Finally, the response is delivered back to the client"
+          - "Finally, the reply is sent to the client"
+          - "Finally, the reply is sent back to the client"
+          - "Finally, the reply is returned to the client"
+          - "Finally, the reply is returned back to the client"
+          - "Finally, the reply is delivered to the client"
+          - "Finally, the reply is delivered back to the client"
+          - "Finally, the answer is sent to the client"
+          - "Finally, the answer is sent back to the client"
+          - "Finally, the answer is returned to the client"
+          - "Finally, the answer is returned back to the client"
+          - "Finally, the answer is delivered to the client"
+          - "Finally, the answer is delivered back to the client"
+          - "Lastly the response is sent to the client"
+          - "Lastly the response is sent back to the client"
+          - "Lastly the response is returned to the client"
+          - "Lastly the response is returned back to the client"
+          - "Lastly the response is delivered to the client"
+          - "Lastly the response is delivered back to the client"
+          - "Lastly the reply is sent to the client"
+          - "Lastly the reply is sent back to the client"
+          - "Lastly the reply is returned to the client"
+          - "Lastly the reply is returned back to the client"
+          - "Lastly the reply is delivered to the client"
+          - "Lastly the reply is delivered back to the client"
+          - "Lastly the answer is sent to the client"
+          - "Lastly the answer is sent back to the client"
+          - "Lastly the answer is returned to the client"
+          - "Lastly the answer is returned back to the client"
+          - "Lastly the answer is delivered to the client"
+          - "Lastly the answer is delivered back to the client"
+          - "Lastly, the response is sent to the client"
+          - "Lastly, the response is sent back to the client"
+          - "Lastly, the response is returned to the client"
+          - "Lastly, the response is returned back to the client"
+          - "Lastly, the response is delivered to the client"
+          - "Lastly, the response is delivered back to the client"
+          - "Lastly, the reply is sent to the client"
+          - "Lastly, the reply is sent back to the client"
+          - "Lastly, the reply is returned to the client"
+          - "Lastly, the reply is returned back to the client"
+          - "Lastly, the reply is delivered to the client"
+          - "Lastly, the reply is delivered back to the client"
+          - "Lastly, the answer is sent to the client"
+          - "Lastly, the answer is sent back to the client"
+          - "Lastly, the answer is returned to the client"
+          - "Lastly, the answer is returned back to the client"
+          - "Lastly, the answer is delivered to the client"
+          - "Lastly, the answer is delivered back to the client"
+          - "Finally the client is sent the response"
+          - "Finally the client is sent the reply"
+          - "Finally, the client is sent the response"
+          - "Finally, the client is sent the reply"
+          - "Lastly the client is sent the response"
+          - "Lastly the client is sent the reply"
+          - "Lastly, the client is sent the response"
+          - "Lastly, the client is sent the reply"
+        explanation: Finally вводит последний шаг цепочки.
+      - id: q5
+        prompt: Я могу нарисовать схему, если это поможет.
+        answer:
+          - "I can draw it if that helps"
+          - "I can draw it if that would help"
+          - "I can draw it if that is helpful"
+          - "I can draw it if this helps"
+          - "I can draw it if this would help"
+          - "I can draw it if this is helpful"
+          - "I can draw a diagram if that helps"
+          - "I can draw a diagram if that would help"
+          - "I can draw a diagram if that is helpful"
+          - "I can draw a diagram if this helps"
+          - "I can draw a diagram if this would help"
+          - "I can draw a diagram if this is helpful"
+          - "I can draw the diagram if that helps"
+          - "I can draw the diagram if that would help"
+          - "I can draw the diagram if that is helpful"
+          - "I can draw the diagram if this helps"
+          - "I can draw the diagram if this would help"
+          - "I can draw the diagram if this is helpful"
+          - "I can sketch it if that helps"
+          - "I can sketch it if that would help"
+          - "I can sketch it if that is helpful"
+          - "I can sketch it if this helps"
+          - "I can sketch it if this would help"
+          - "I can sketch it if this is helpful"
+          - "I can sketch a diagram if that helps"
+          - "I can sketch a diagram if that would help"
+          - "I can sketch a diagram if that is helpful"
+          - "I can sketch a diagram if this helps"
+          - "I can sketch a diagram if this would help"
+          - "I can sketch a diagram if this is helpful"
+          - "I can sketch the diagram if that helps"
+          - "I can sketch the diagram if that would help"
+          - "I can sketch the diagram if that is helpful"
+          - "I can sketch the diagram if this helps"
+          - "I can sketch the diagram if this would help"
+          - "I can sketch the diagram if this is helpful"
+          - "I could draw it if that helps"
+          - "I could draw it if that would help"
+          - "I could draw it if that is helpful"
+          - "I could draw it if this helps"
+          - "I could draw it if this would help"
+          - "I could draw it if this is helpful"
+          - "I could draw a diagram if that helps"
+          - "I could draw a diagram if that would help"
+          - "I could draw a diagram if that is helpful"
+          - "I could draw a diagram if this helps"
+          - "I could draw a diagram if this would help"
+          - "I could draw a diagram if this is helpful"
+          - "I could draw the diagram if that helps"
+          - "I could draw the diagram if that would help"
+          - "I could draw the diagram if that is helpful"
+          - "I could draw the diagram if this helps"
+          - "I could draw the diagram if this would help"
+          - "I could draw the diagram if this is helpful"
+          - "I could sketch it if that helps"
+          - "I could sketch it if that would help"
+          - "I could sketch it if that is helpful"
+          - "I could sketch it if this helps"
+          - "I could sketch it if this would help"
+          - "I could sketch it if this is helpful"
+          - "I could sketch a diagram if that helps"
+          - "I could sketch a diagram if that would help"
+          - "I could sketch a diagram if that is helpful"
+          - "I could sketch a diagram if this helps"
+          - "I could sketch a diagram if this would help"
+          - "I could sketch a diagram if this is helpful"
+          - "I could sketch the diagram if that helps"
+          - "I could sketch the diagram if that would help"
+          - "I could sketch the diagram if that is helpful"
+          - "I could sketch the diagram if this helps"
+          - "I could sketch the diagram if this would help"
+          - "I could sketch the diagram if this is helpful"
+        explanation: Can и начальная форма глагола; в условии — if that helps.
+  - type: writing
+    id: architecture
+    register: formal
+    prompt: "Менеджер по найму Mr Weber просит прислать до технического собеседования короткое описание архитектуры вашего проекта. Напишите ему (80–120 слов): обзор с числом частей, путь запроса со связками First, After that, Finally и глаголами в passive, ответственная часть, подпись."
+    words: { min: 80, max: 120 }
+    model: |-
+      Dear Mr Weber,
+
+      Thank you for your request about my current project. It is an online booking platform that consists of three main parts: an API gateway, a booking service and a notification service. First, every request is sent to the gateway, where the user is authenticated and the payload is validated. After that, the booking is saved in PostgreSQL, and an event is published to a message queue. Finally, a confirmation email is sent by the notification service. The most critical part is the booking service, so it runs in three containers and is monitored around the clock.
+
+      Kind regards,
+      Anna Petrova
+    criteria:
+      - 80–120 слов, есть обращение, обзор и подпись
+      - Назван масштаб — число частей, например consists of three main parts
+      - Путь запроса описан связками First, After that, Finally в правильном порядке
+      - Не меньше трёх глаголов в passive, у каждого есть is / are / was / were и V3
+      - Названа ответственная часть и сказано, как она защищена
+      - Формальный стиль без сокращений и разговорных слов
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответ
+    body: |-
+      Шестой ответ вашего **банка ответов** — Describe the architecture of your project. Вопрос проверяет, можете ли вы вести слушателя по системе и называть границы частей.
+
+      1) Начните с обзора: **at a high level, consists of**. 2) Проведите запрос по системе с тремя-четырьмя шагами и связками, глаголы — в passive. 3) Назовите ответственную часть и объясните, почему она важна для системы. 4) Предложите нарисовать схему и закончите итогом. 5) Запишите ответ, переслушайте, сверьте с образцом и критериями.
+
+      Сцена в конце урока повторяет системный раздел собеседования: интервьюер просит нарисовать систему и задаёт уточняющие вопросы. Реплики интервьюера записаны на предыдущей странице; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: describe
+    part: monologue
+    prompt: "Интервьюер: «Describe the architecture of your project. Could you start with the big picture?» Ответьте за 90 секунд: обзор, путь запроса в три-четыре шага со связками, ответственная часть, итог."
+    seconds: 90
+    model: "Sure. Let me describe the architecture at a high level. It is a fairly standard setup, and the system consists of three main parts: an API gateway, an orders service and a notification service. Let me trace a request through the system. First, the request is sent to the gateway, where the user is authenticated and the payload is validated. After that, the request is routed to the orders service, and the order is saved in PostgreSQL. Then an event is published to the message queue, and the response is returned to the client. Finally, the notification service reads the event and sends a confirmation email. The most critical part is the orders service, because everything else depends on it. It is stateless, so it runs in several containers, and a load balancer distributes the traffic. I can draw it if that helps. That covers the main flow."
+    criteria:
+      - "Ответ начинается с обзора: at a high level, consists of и число частей"
+      - Путь запроса — три-четыре шага со связками First, After that, Finally в порядке
+      - Не меньше трёх глаголов в passive с is / are
+      - Названа ответственная часть и причина
+      - Около 90 секунд, без долгих пауз
+  - type: speaking
+    id: critical-part
+    part: interview
+    prompt: "Интервьюер уточняет: «Which part of the system is the most critical, and why?» Ответьте за 30 секунд: назовите часть, причину и как она защищена."
+    seconds: 30
+    model: "The most critical part is the orders service, because every request goes through it. It is stateless, so it runs in three containers, and the traffic is distributed by a load balancer. If one container fails, the others keep working, and an alert is sent to the on-call engineer."
+    criteria:
+      - Названа одна часть системы и причина
+      - Есть способ защиты, например несколько контейнеров или оповещение
+      - Есть passive с is / are
+      - Ответ укладывается в 30 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Mark, text: "Let's move to system design. Could you draw the architecture of the last system you worked on and walk me through how a request is handled?" }
+      - { speaker: Mark, text: "Okay, I can see the gateway and the service. Where is the data stored?" }
+      - { speaker: Mark, text: "And what happens if the database is not available?" }
+      - { speaker: Mark, text: "I see. Why did you add a queue between the services?" }
+      - { speaker: Mark, text: "Thank you, that is clear. Do you have any questions about our system?" }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на техническом собеседовании. Интервьюер — Mark. Прослушайте его реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику опишите систему в общих чертах и проведите запрос по шагам. На вторую назовите хранилище. На третью объясните, что происходит при сбое базы. На четвёртую назовите причину очереди. В конце задайте вопрос о системе компании. Вся ваша часть — 90 секунд, каждая реплика — две-четыре фразы.
+    seconds: 90
+    model: |-
+      Mark: Let's move to system design. Could you draw the architecture of the last system you worked on and walk me through how a request is handled?
+      You: Sure. Let me describe it at a high level. The system consists of three main parts: a gateway, an orders service and a notification service. First, the request is sent to the gateway, where the user is authenticated. After that, it is routed to the orders service. Finally, the response is sent back to the client.
+      Mark: Okay, I can see the gateway and the service. Where is the data stored?
+      You: The data is stored in PostgreSQL, and product data is cached in Redis for ten minutes.
+      Mark: And what happens if the database is not available?
+      You: The service fails over to a replica, which is used for reading. Writes are retried three times, and an alert is sent to the on-call engineer.
+      Mark: I see. Why did you add a queue between the services?
+      You: Because the email provider is slow. With a queue, the order is confirmed immediately, and the email is sent later by a consumer.
+      Mark: Thank you, that is clear. Do you have any questions about our system?
+      You: Yes. Could you tell me how requests are distributed between your services?
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — две-четыре фразы
+      - "Описание системы: обзор и три шага со связками First, After that, Finally"
+      - "Не меньше трёх глаголов в passive: is stored, is sent, is routed"
+      - "Ответ о сбое называет конкретное действие: переключение, повтор или оповещение"
+      - Вопрос о системе компании построен косвенно
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I ___ with this system since 2021."
+        options: [have worked, worked, am working]
+        answer: have worked
+        explanation: Since 2021 — период до сих пор, нужен present perfect.
+      - id: q2
+        prompt: "The more we scaled, ___ more we needed monitoring."
+        options: [the, a, that]
+        answer: the
+        explanation: В конструкции the … the … нужны оба the.
+      - id: q3
+        prompt: "Could you tell me where the data ___?"
+        options: [is stored, is it stored, does it store]
+        answer: is stored
+        explanation: В косвенном вопросе порядок слов как в утверждении, а passive требует is и V3.
+      - id: q4
+        prompt: "We were working on the migration when the requirements ___."
+        options: [changed, have changed, were change]
+        answer: changed
+        explanation: Короткое действие внутри длительного — past simple.
+      - id: q5
+        prompt: "Go is ___ than Java at startup. (быстрее)"
+        options: [faster, more fast, fastest]
+        answer: faster
+      - id: q6
+        prompt: "The data ___ without downtime last month. (была перенесена)"
+        options: [was migrated, migrated, is migrated]
+        answer: was migrated
+        explanation: Last month — прошедшее время, исполнитель не назван, поэтому was и V3.

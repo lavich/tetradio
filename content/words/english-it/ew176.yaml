@@ -1,0 +1,6 @@
+id: ew176
+greek: "a load balancer"
+russian: "балансировщик нагрузки"
+ipa: /ə ˈləʊd ˌbælənsə/
+note: "распределяет запросы между одинаковыми серверами"
+source: "Лексикон курса «Английский для IT», модуль e06 (docs/curriculum-english-it.md)"

@@ -1,0 +1,6 @@
+id: ew195
+greek: "a consumer"
+russian: "потребитель, обработчик сообщений"
+ipa: /ə kənˈsjuːmə/
+note: "часть системы, которая читает сообщения из очереди"
+source: "Лексикон курса «Английский для IT», модуль e06 (docs/curriculum-english-it.md)"

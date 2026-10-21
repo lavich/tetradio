@@ -1,0 +1,6 @@
+id: ew208
+greek: "idempotent"
+russian: "идемпотентный"
+ipa: /ˌaɪdemˈpəʊtənt/
+note: "повторный вызов даёт тот же результат"
+source: "Лексикон курса «Английский для IT», модуль e06 (docs/curriculum-english-it.md)"

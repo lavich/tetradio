@@ -1,8 +1,22 @@
 number: 6
 title: How it works
 subtitle: Как устроен мой проект
-status: draft
+status: published
 goal: объяснить устройство своего проекта и путь запроса по системе
 grammar:
   - passive (present, past), связки последовательности
 sessions: 3
+crib:
+  title: как устроена система
+  rows:
+    - [passive сейчас, "The data is stored in PostgreSQL. Messages are processed asynchronously."]
+    - [passive раньше, "The service was designed to handle peak traffic. The data was migrated."]
+    - [последовательность, "First, … After that, … Finally, …"]
+    - [обзор, "Let me describe the architecture at a high level. The system consists of three main parts."]
+    - [путь запроса, "Let me trace a request through the system."]
+  note: "после is, are, was, were — третья форма глагола; исполнитель с by называется, только если он нужен"
+lessons:
+  - e06-1
+  - e06-2
+  - e06-3
+  - e06-test

@@ -1,0 +1,7 @@
+id: ep138
+text: "The payload is validated before it's saved."
+translation: "Тело запроса проверяется до сохранения."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
+  operation: requested-generation
+  request: Фразы модуля e06 по программе docs/curriculum-english-it.md

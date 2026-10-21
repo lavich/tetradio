@@ -1,0 +1,7 @@
+id: ep134
+text: "The service was designed to handle peak traffic."
+translation: "Сервис разработан для пиковой нагрузки."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
+  operation: requested-generation
+  request: Фразы модуля e06 по программе docs/curriculum-english-it.md

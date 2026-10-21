@@ -1,0 +1,6 @@
+id: ew190
+greek: "a webhook"
+russian: "вебхук"
+ipa: /ə ˈwebhʊk/
+note: "внешний сервис вызывает ваш адрес, когда происходит событие"
+source: "Лексикон курса «Английский для IT», модуль e06 (docs/curriculum-english-it.md)"

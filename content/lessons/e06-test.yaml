@@ -1,0 +1,389 @@
+title: Контрольная модуля e06
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, passive и связки, слова модуля и перевод фраз. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: blog
+    title: Why we added a queue
+    text: |-
+      Why we added a queue
+
+      Last year, our order service was a bottleneck. Every order was processed synchronously: the request was validated, the data was saved, and the confirmation email was sent before the client got a response. When the email provider was slow, the latency grew to several seconds, and the timeout was often reached.
+
+      First, we moved the email to a message queue. After that, the service only had to publish an event, and a separate consumer sent the email. The response time dropped from four seconds to under two hundred milliseconds.
+
+      The change brought a new problem: when a consumer failed, the same message was sometimes processed twice. Finally, we made the handlers idempotent, and the duplicates disappeared.
+
+      Today, the queue is monitored on a dashboard, and an alert is sent when many messages are waiting.
+    glosses:
+      - { text: confirmation, russian: подтверждение }
+      - { text: the same, russian: "тот же" }
+      - { text: duplicates, russian: дубли }
+      - { text: disappeared, russian: исчезли }
+      - { text: dashboard, russian: "панель мониторинга" }
+      - { text: waiting, russian: ожидающих }
+      - { text: handlers, russian: обработчики }
+      - { text: synchronously, russian: синхронно }
+  - type: exercise
+    id: blog-tf
+    about: blog
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The order service was a bottleneck last year.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: In the old version, the confirmation email was sent after the client got a response.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The email was sent before the client got a response — письмо уходило до ответа клиенту.
+      - id: q3
+        prompt: The response time dropped to under two hundred milliseconds.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: Duplicate messages appeared because the queue was too small.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: When a consumer failed, the same message was sometimes processed twice — причина в сбое потребителя.
+      - id: q5
+        prompt: An alert is sent when many messages are waiting in the queue.
+        options: ["True", "False"]
+        answer: "True"
+  - type: listening
+    id: call
+    title: Describe the architecture
+    plays: 2
+    transcript:
+      - { speaker: Mark, text: "Elena, thanks for joining. Could you describe the architecture of the system you maintain?" }
+      - { speaker: Elena, text: "Of course. At a high level, it is a fairly standard setup. The system consists of three main parts: a gateway, a search service and a database." }
+      - { speaker: Mark, text: "Let's trace a search request through the system." }
+      - { speaker: Elena, text: "First, the request is sent to the gateway, where the user is authenticated. After that, it is routed to the search service. The results are cached for five minutes, so repeated searches are fast. Finally, the response is returned to the client." }
+      - { speaker: Mark, text: "What happens when the cache is empty?" }
+      - { speaker: Elena, text: "Then the data is retrieved from the database, and the result is saved in the cache for the next request." }
+      - { speaker: Mark, text: "Which part is the most critical?" }
+      - { speaker: Elena, text: "The search service. It is stateless, so it runs in five containers, and a load balancer distributes the traffic." }
+      - { speaker: Mark, text: "Thank you. And what would you change?" }
+      - { speaker: Elena, text: "I would add rate limiting at the gateway, because some clients send too many requests." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How many main parts does the system have?
+        options: [three, five, two]
+        answer: three
+      - id: q2
+        prompt: What happens to a request first?
+        options:
+          - The user is authenticated at the gateway.
+          - The result is cached.
+          - The request is routed to the search service.
+        answer: The user is authenticated at the gateway.
+        explanation: First, the request is sent to the gateway, where the user is authenticated — сначала запрос попадает на шлюз.
+      - id: q3
+        prompt: How long are the results cached?
+        options: [five minutes, ten minutes, one hour]
+        answer: five minutes
+      - id: q4
+        prompt: What happens when the cache is empty?
+        options:
+          - The data is retrieved from the database.
+          - The request is rejected.
+          - The request is sent to a queue.
+        answer: The data is retrieved from the database.
+      - id: q6
+        prompt: Why can the search service run in several containers?
+        options:
+          - It is stateless.
+          - It uses a queue.
+          - It is small.
+        answer: It is stateless.
+        explanation: Stateless — сервис не хранит данные между запросами, поэтому любой контейнер обработает запрос.
+      - id: q7
+        prompt: What would Elena change?
+        options:
+          - add rate limiting at the gateway
+          - add a second database
+          - replace the load balancer
+        answer: add rate limiting at the gateway
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Passive и связки
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Logs ___ in one place. (собираются)"
+        options: [are collected, is collected, collect]
+        answer: are collected
+        explanation: Logs — множественное число, поэтому are и V3.
+      - id: q2
+        prompt: "The old system ___ two years ago. (была заменена)"
+        options: [was replaced, is replaced, were replaced]
+        answer: was replaced
+        explanation: Two years ago — прошедшее время, system — единственное число.
+      - id: q3
+        prompt: "The response is sent back. ___ (последний шаг цепочки)"
+        options: [Finally, First, At first]
+        answer: Finally
+      - id: q4
+        prompt: Какое предложение верно?
+        options:
+          - The result is not cached.
+          - The result not is cached.
+        answer: The result is not cached.
+        explanation: Not стоит после is.
+      - id: q5
+        prompt: "Could you tell me how the request ___?"
+        options: [is routed, is it routed, does it route]
+        answer: is routed
+        explanation: В косвенном вопросе порядок слов как в утверждении.
+      - id: q6
+        prompt: "The first version ___ by two engineers. (была построена)"
+        options: [was built, was build, built]
+        answer: was built
+        explanation: V3 от build — built.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - latency
+      - schema
+      - validate
+      - persist
+      - cache
+      - timeout
+      - retrieve
+      - webhook
+    items:
+      - id: g1
+        prompt: The service must ___ the data to disk, so that it survives a restart. (сохранить надолго)
+        answer: persist
+      - id: g2
+        prompt: The request takes two seconds, so the ___ is too high. (задержка)
+        answer: latency
+      - id: g3
+        prompt: The service will ___ every field before saving the order. (проверить корректность)
+        answer: validate
+      - id: g4
+        prompt: Product data is kept in a ___ for ten minutes. (кеш)
+        answer: cache
+      - id: g5
+        prompt: The call failed because the ___ was reached after thirty seconds. (время ожидания)
+        answer: timeout
+      - id: g6
+        prompt: A ___ describes the tables and fields of the database. (схема)
+        answer: schema
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (it is, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Данные хранятся в базе данных и кешируются на десять минут.
+        answer:
+          - "The data is stored in the database and is cached for ten minutes"
+          - "The data is stored in the database and is cached for 10 minutes"
+          - "The data is stored in the database and cached for ten minutes"
+          - "The data is stored in the database and cached for 10 minutes"
+          - "The data is stored in a database and is cached for ten minutes"
+          - "The data is stored in a database and is cached for 10 minutes"
+          - "The data is stored in a database and cached for ten minutes"
+          - "The data is stored in a database and cached for 10 minutes"
+          - "The data is saved in the database and is cached for ten minutes"
+          - "The data is saved in the database and is cached for 10 minutes"
+          - "The data is saved in the database and cached for ten minutes"
+          - "The data is saved in the database and cached for 10 minutes"
+          - "The data is saved in a database and is cached for ten minutes"
+          - "The data is saved in a database and is cached for 10 minutes"
+          - "The data is saved in a database and cached for ten minutes"
+          - "The data is saved in a database and cached for 10 minutes"
+          - "The data is kept in the database and is cached for ten minutes"
+          - "The data is kept in the database and is cached for 10 minutes"
+          - "The data is kept in the database and cached for ten minutes"
+          - "The data is kept in the database and cached for 10 minutes"
+          - "The data is kept in a database and is cached for ten minutes"
+          - "The data is kept in a database and is cached for 10 minutes"
+          - "The data is kept in a database and cached for ten minutes"
+          - "The data is kept in a database and cached for 10 minutes"
+          - "Data is stored in the database and is cached for ten minutes"
+          - "Data is stored in the database and is cached for 10 minutes"
+          - "Data is stored in the database and cached for ten minutes"
+          - "Data is stored in the database and cached for 10 minutes"
+          - "Data is stored in a database and is cached for ten minutes"
+          - "Data is stored in a database and is cached for 10 minutes"
+          - "Data is stored in a database and cached for ten minutes"
+          - "Data is stored in a database and cached for 10 minutes"
+          - "Data is saved in the database and is cached for ten minutes"
+          - "Data is saved in the database and is cached for 10 minutes"
+          - "Data is saved in the database and cached for ten minutes"
+          - "Data is saved in the database and cached for 10 minutes"
+          - "Data is saved in a database and is cached for ten minutes"
+          - "Data is saved in a database and is cached for 10 minutes"
+          - "Data is saved in a database and cached for ten minutes"
+          - "Data is saved in a database and cached for 10 minutes"
+          - "Data is kept in the database and is cached for ten minutes"
+          - "Data is kept in the database and is cached for 10 minutes"
+          - "Data is kept in the database and cached for ten minutes"
+          - "Data is kept in the database and cached for 10 minutes"
+          - "Data is kept in a database and is cached for ten minutes"
+          - "Data is kept in a database and is cached for 10 minutes"
+          - "Data is kept in a database and cached for ten minutes"
+          - "Data is kept in a database and cached for 10 minutes"
+        explanation: Is и V3 для обеих частей, срок — for ten minutes.
+      - id: q2
+        prompt: Запрос отправляется на шлюз, а затем направляется в нужный сервис.
+        answer:
+          - "The request is sent to the gateway and then routed to the right service"
+          - "The request is sent to the gateway and then routed to the correct service"
+          - "The request is sent to the gateway and then routed to the relevant service"
+          - "The request is sent to the gateway and then routed to the proper service"
+          - "The request is sent to the gateway and then forwarded to the right service"
+          - "The request is sent to the gateway and then forwarded to the correct service"
+          - "The request is sent to the gateway and then forwarded to the relevant service"
+          - "The request is sent to the gateway and then forwarded to the proper service"
+          - "The request is sent to the gateway and is then routed to the right service"
+          - "The request is sent to the gateway and is then routed to the correct service"
+          - "The request is sent to the gateway and is then routed to the relevant service"
+          - "The request is sent to the gateway and is then routed to the proper service"
+          - "The request is sent to the gateway and is then forwarded to the right service"
+          - "The request is sent to the gateway and is then forwarded to the correct service"
+          - "The request is sent to the gateway and is then forwarded to the relevant service"
+          - "The request is sent to the gateway and is then forwarded to the proper service"
+          - "The request is sent to the gateway and routed to the right service"
+          - "The request is sent to the gateway and routed to the correct service"
+          - "The request is sent to the gateway and routed to the relevant service"
+          - "The request is sent to the gateway and routed to the proper service"
+          - "The request is sent to the gateway and forwarded to the right service"
+          - "The request is sent to the gateway and forwarded to the correct service"
+          - "The request is sent to the gateway and forwarded to the relevant service"
+          - "The request is sent to the gateway and forwarded to the proper service"
+          - "The request is sent to the gateway, and then routed to the right service"
+          - "The request is sent to the gateway, and then routed to the correct service"
+          - "The request is sent to the gateway, and then routed to the relevant service"
+          - "The request is sent to the gateway, and then routed to the proper service"
+          - "The request is sent to the gateway, and then forwarded to the right service"
+          - "The request is sent to the gateway, and then forwarded to the correct service"
+          - "The request is sent to the gateway, and then forwarded to the relevant service"
+          - "The request is sent to the gateway, and then forwarded to the proper service"
+          - "The request is sent to the gateway, and is then routed to the right service"
+          - "The request is sent to the gateway, and is then routed to the correct service"
+          - "The request is sent to the gateway, and is then routed to the relevant service"
+          - "The request is sent to the gateway, and is then routed to the proper service"
+          - "The request is sent to the gateway, and is then forwarded to the right service"
+          - "The request is sent to the gateway, and is then forwarded to the correct service"
+          - "The request is sent to the gateway, and is then forwarded to the relevant service"
+          - "The request is sent to the gateway, and is then forwarded to the proper service"
+          - "The request is sent to the gateway, and routed to the right service"
+          - "The request is sent to the gateway, and routed to the correct service"
+          - "The request is sent to the gateway, and routed to the relevant service"
+          - "The request is sent to the gateway, and routed to the proper service"
+          - "The request is sent to the gateway, and forwarded to the right service"
+          - "The request is sent to the gateway, and forwarded to the correct service"
+          - "The request is sent to the gateway, and forwarded to the relevant service"
+          - "The request is sent to the gateway, and forwarded to the proper service"
+          - "The request is sent to the API gateway and then routed to the right service"
+          - "The request is sent to the API gateway and then routed to the correct service"
+          - "The request is sent to the API gateway and then routed to the relevant service"
+          - "The request is sent to the API gateway and then routed to the proper service"
+          - "The request is sent to the API gateway and then forwarded to the right service"
+          - "The request is sent to the API gateway and then forwarded to the correct service"
+          - "The request is sent to the API gateway and then forwarded to the relevant service"
+          - "The request is sent to the API gateway and then forwarded to the proper service"
+          - "The request is sent to the API gateway and is then routed to the right service"
+          - "The request is sent to the API gateway and is then routed to the correct service"
+          - "The request is sent to the API gateway and is then routed to the relevant service"
+          - "The request is sent to the API gateway and is then routed to the proper service"
+          - "The request is sent to the API gateway and is then forwarded to the right service"
+          - "The request is sent to the API gateway and is then forwarded to the correct service"
+          - "The request is sent to the API gateway and is then forwarded to the relevant service"
+          - "The request is sent to the API gateway and is then forwarded to the proper service"
+          - "The request is sent to the API gateway and routed to the right service"
+          - "The request is sent to the API gateway and routed to the correct service"
+          - "The request is sent to the API gateway and routed to the relevant service"
+          - "The request is sent to the API gateway and routed to the proper service"
+          - "The request is sent to the API gateway and forwarded to the right service"
+          - "The request is sent to the API gateway and forwarded to the correct service"
+          - "The request is sent to the API gateway and forwarded to the relevant service"
+          - "The request is sent to the API gateway and forwarded to the proper service"
+          - "The request is sent to the API gateway, and then routed to the right service"
+          - "The request is sent to the API gateway, and then routed to the correct service"
+          - "The request is sent to the API gateway, and then routed to the relevant service"
+          - "The request is sent to the API gateway, and then routed to the proper service"
+          - "The request is sent to the API gateway, and then forwarded to the right service"
+          - "The request is sent to the API gateway, and then forwarded to the correct service"
+          - "The request is sent to the API gateway, and then forwarded to the relevant service"
+          - "The request is sent to the API gateway, and then forwarded to the proper service"
+          - "The request is sent to the API gateway, and is then routed to the right service"
+          - "The request is sent to the API gateway, and is then routed to the correct service"
+          - "The request is sent to the API gateway, and is then routed to the relevant service"
+          - "The request is sent to the API gateway, and is then routed to the proper service"
+          - "The request is sent to the API gateway, and is then forwarded to the right service"
+          - "The request is sent to the API gateway, and is then forwarded to the correct service"
+          - "The request is sent to the API gateway, and is then forwarded to the relevant service"
+          - "The request is sent to the API gateway, and is then forwarded to the proper service"
+          - "The request is sent to the API gateway, and routed to the right service"
+          - "The request is sent to the API gateway, and routed to the correct service"
+          - "The request is sent to the API gateway, and routed to the relevant service"
+          - "The request is sent to the API gateway, and routed to the proper service"
+          - "The request is sent to the API gateway, and forwarded to the right service"
+          - "The request is sent to the API gateway, and forwarded to the correct service"
+          - "The request is sent to the API gateway, and forwarded to the relevant service"
+          - "The request is sent to the API gateway, and forwarded to the proper service"
+          - "The request is sent to the gateway, then routed to the right service"
+          - "The request is sent to the gateway, then routed to the correct service"
+          - "The request is sent to the gateway, then routed to the relevant service"
+          - "The request is sent to the gateway, then forwarded to the right service"
+          - "The request is sent to the gateway, then forwarded to the correct service"
+          - "The request is sent to the gateway, then forwarded to the relevant service"
+          - "The request is sent to the API gateway, then routed to the right service"
+          - "The request is sent to the API gateway, then routed to the correct service"
+          - "The request is sent to the API gateway, then routed to the relevant service"
+          - "The request is sent to the API gateway, then forwarded to the right service"
+          - "The request is sent to the API gateway, then forwarded to the correct service"
+          - "The request is sent to the API gateway, then forwarded to the relevant service"
+        explanation: Is sent и V3 второго глагола после and then.
+      - id: q3
+        prompt: Событие обрабатывается асинхронно.
+        answer:
+          - "The event is processed asynchronously"
+          - "The event is processed in an asynchronous way"
+          - "The event is handled asynchronously"
+          - "The event is handled in an asynchronous way"
+          - "Event is processed asynchronously"
+          - "Event is processed in an asynchronous way"
+          - "Event is handled asynchronously"
+          - "Event is handled in an asynchronous way"
+          - "Events are processed asynchronously"
+          - "Events are processed in an asynchronous way"
+          - "Events are handled asynchronously"
+          - "Events are handled in an asynchronous way"
+          - "The events are processed asynchronously"
+          - "The events are processed in an asynchronous way"
+          - "The events are handled asynchronously"
+          - "The events are handled in an asynchronous way"
+          - "Asynchronously, the event is processed"
+          - "Asynchronously, the event is handled"
+        explanation: Is и V3, наречие после глагола.

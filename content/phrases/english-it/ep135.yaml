@@ -1,0 +1,7 @@
+id: ep135
+text: "The old system was replaced last year."
+translation: "Старую систему заменили в прошлом году."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
+  operation: requested-generation
+  request: Фразы модуля e06 по программе docs/curriculum-english-it.md
