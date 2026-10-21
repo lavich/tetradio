@@ -1,0 +1,8 @@
+id: tp075
+text: "I'll pay in the local currency, thanks."
+translation: "Я заплачу в местной валюте, спасибо."
+note: "терминал за границей может предложить оплату в валюте вашей карты (евро, доллары) — курс почти всегда хуже"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

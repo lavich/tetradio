@@ -1,0 +1,8 @@
+id: tp074
+text: "Can you do it for twenty?"
+translation: "Отдадите за двадцать?"
+note: "на рынке; ответ может быть Twenty-five, and it's yours."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

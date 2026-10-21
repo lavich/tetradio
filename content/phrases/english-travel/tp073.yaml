@@ -1,0 +1,8 @@
+id: tp073
+text: "Could you check if the payment went through?"
+translation: "Проверьте, пожалуйста, прошёл ли платёж."
+note: "go through — пройти (о платеже)"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

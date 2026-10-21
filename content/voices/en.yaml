@@ -45,3 +45,6 @@ characters:
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }
   Inês: { gender: female, voice: Gacrux }
+  Jonas: { gender: male, voice: Alnilam }
+  Grace: { gender: female, voice: Laomedeia }
+  Callum: { gender: male, voice: Sadachbia }

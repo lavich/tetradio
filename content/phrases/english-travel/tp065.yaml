@@ -1,0 +1,8 @@
+id: tp065
+text: "I'd like to return this."
+translation: "Я хотел бы это вернуть."
+note: "return — вернуть в магазин; обменять — exchange"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md
