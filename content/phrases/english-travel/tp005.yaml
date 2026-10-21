@@ -1,0 +1,7 @@
+id: tp005
+text: "How much is it for an extra bag?"
+translation: "Сколько стоит ещё одно место багажа?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md

@@ -246,6 +246,161 @@ describe("запрет публикации неполного модуля", ()
   });
 });
 
+describe("частично опубликованный модуль", () => {
+  const partial = (module: Record<string, unknown> = {}): Files => {
+    const files: Files = withLesson((b) => b.filter((x) => x.type !== "writing" && x.type !== "speaking"));
+    files["modules/m01.yaml"] = {
+      ...(files["modules/m01.yaml"] as Record<string, unknown>),
+      lessons: ["m01-1"],
+      partial: true,
+      ...module,
+    };
+    delete files["lessons/m01-test.yaml"];
+    return files;
+  };
+  it("поставляет уроки без письма, речи и контрольной и называет недостающее в отчёте", () => {
+    const content = build(partial());
+    expect(content.packages.map((p) => p.id)).toEqual(["m01-1"]);
+    expect(content.partial).toEqual([
+      { id: "m01", gaps: ["нет письменного задания", "нет устного задания", "нет контрольной (урок с kind: test)"] },
+    ]);
+    const catalog = JSON.parse(content.files.find((f) => f.path === "content/catalog.json")!.body as string);
+    expect(catalog.modules[0]).toMatchObject({ id: "m01", status: "published", lessonIds: ["m01-1"] });
+    expect(catalog.modules[0]).not.toHaveProperty("partial");
+    parseCatalog(catalog);
+  });
+  it("без поля — прежний отказ", () => {
+    const files = partial();
+    delete (files["modules/m01.yaml"] as Record<string, unknown>).partial;
+    expect(failure(files)).toContain("модуль m01 нельзя опубликовать");
+  });
+  it("у полного модуля отчёт пуст", () => {
+    expect(build(base()).partial).toEqual([]);
+  });
+  it.each([
+    ["черновик", { status: "draft" }],
+    ["false", { partial: false }],
+    ["строка", { partial: "yes" }],
+  ])("%s — ошибка с файлом модуля и полем", (_name, module) => {
+    expect(failure(partial(module))).toContain("modules/m01.yaml.partial");
+  });
+  it("урок без блоков в частичном модуле — отказ с уроком", () => {
+    const files = partial();
+    (files["modules/m01.yaml"] as { lessons: string[] }).lessons = ["m01-1", "m01-2"];
+    files["lessons/m01-2.yaml"] = { title: "Пустой", kind: "lesson", items: [{ kind: "word", id: "geia" }] };
+    expect(failure(files)).toContain("урок m01-2: нет блоков");
+  });
+  it("контрольная без оцениваемых заданий в частичном модуле — отказ", () => {
+    const files = partial({ lessons: ["m01-1", "m01-test"] });
+    files["lessons/m01-test.yaml"] = { ...test, blocks: [{ ...test.blocks[0], graded: false }] };
+    expect(failure(files)).toContain("контрольная m01-test: нет оцениваемых заданий");
+  });
+});
+
+describe("карточки курсов одного языка", () => {
+  const englishCourse = (id: string, module: string, cards: Files, language = "en"): Files => {
+    const items = Object.keys(cards).map((path) => ({
+      kind: path.startsWith("words/") ? "word" : "phrase",
+      id: path.split("/").pop()!.replace(".yaml", ""),
+    }));
+    return {
+      [`courses/${id}.yaml`]: { title: id, language, modules: [module] },
+      [`modules/${module}.yaml`]: {
+        number: 1,
+        title: "Start",
+        subtitle: "Начало",
+        status: "draft",
+        goal: "Начать",
+        sessions: 3,
+        lessons: [`${module}-1`],
+      },
+      [`lessons/${module}-1.yaml`]: {
+        title: "Начало",
+        kind: "lesson",
+        items,
+        blocks: [{ type: "vocabulary", id: "words" }],
+      },
+      ...cards,
+    };
+  };
+  const phrase = (text: string, translation: string) => ({
+    text,
+    translation,
+    provenance: { sourceLabel: "Тест", operation: "requested-generation", request: "Тест" },
+  });
+  const twoCourses = (it: Files, travel: Files): Files => ({
+    ...base(),
+    ...englishCourse("english-it", "e01", it),
+    ...englishCourse("english-travel", "t01", travel),
+  });
+  it("слово с артиклем и без в двух курсах одного языка — ошибка с обоими файлами", () => {
+    const message = failure(
+      twoCourses(
+        { "words/english-it/ew001.yaml": { greek: "a stakeholder", russian: "заинтересованная сторона" } },
+        { "words/english-travel/tw001.yaml": { greek: "Stakeholder", russian: "участник" } },
+      ),
+    );
+    expect(message).toContain("words/english-it/ew001.yaml");
+    expect(message).toContain("words/english-travel/tw001.yaml");
+  });
+  it("фраза с другим регистром и без знаков в двух курсах одного языка — ошибка с обоими файлами", () => {
+    const message = failure(
+      twoCourses(
+        { "phrases/english-it/ep001.yaml": phrase("Does that answer your question?", "Это ответ на ваш вопрос?") },
+        { "phrases/english-travel/tp001.yaml": phrase("does that answer your  question", "Я ответил?") },
+      ),
+    );
+    expect(message).toContain("phrases/english-it/ep001.yaml");
+    expect(message).toContain("phrases/english-travel/tp001.yaml");
+  });
+  it("фразовый глагол и существительное через дефис — разные карточки", () => {
+    const files = twoCourses(
+      { "words/english-it/ew001.yaml": { greek: "check in", russian: "зарегистрироваться" } },
+      { "words/english-travel/tw001.yaml": { greek: "a check-in", russian: "регистрация" } },
+    );
+    expect(() => build(files)).not.toThrow();
+  });
+  it("существительное с артиклем и глагол с to в двух курсах — разные карточки", () => {
+    const files = twoCourses(
+      { "words/english-it/ew001.yaml": { greek: "a book", russian: "книга" } },
+      { "words/english-travel/tw001.yaml": { greek: "to book", russian: "бронировать" } },
+    );
+    expect(() => build(files)).not.toThrow();
+  });
+  it("греческое слово с артиклем и без в двух курсах — разные карточки", () => {
+    const files = {
+      ...base(),
+      ...englishCourse(
+        "greek-travel",
+        "g01",
+        { "words/greek-travel/gw001.yaml": { greek: "χώρα", russian: "страна", forms: "мн. χώρες" } },
+        "el",
+      ),
+    };
+    expect(() => build(files)).not.toThrow();
+  });
+  it("слово с разными апострофами в двух курсах одного языка — ошибка", () => {
+    expect(
+      failure(
+        twoCourses(
+          { "words/english-it/ew001.yaml": { greek: "o'clock", russian: "час (о времени)" } },
+          { "words/english-travel/tw001.yaml": { greek: "o’clock", russian: "ровно (о времени)" } },
+        ),
+      ),
+    ).toContain("words/english-it/ew001.yaml");
+  });
+  it("слово с артиклем и без внутри одного курса с разными переводами — разные карточки", () => {
+    const files = twoCourses(
+      {
+        "words/english-it/ew001.yaml": { greek: "a light", russian: "лампа" },
+        "words/english-it/ew002.yaml": { greek: "light", russian: "лёгкий" },
+      },
+      {},
+    );
+    expect(() => build(files)).not.toThrow();
+  });
+});
+
 describe("задания и ключи ответов", () => {
   const exercise = (patch: Record<string, unknown>) =>
     withLesson((b) => b.map((x) => (x.id === "text-tf" ? { ...x, ...patch } : x)));

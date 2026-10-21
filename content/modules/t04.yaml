@@ -1,0 +1,8 @@
+number: 4
+title: Eating out
+subtitle: Кафе и ресторан
+status: draft
+goal: заказать столик и еду, спросить о составе и аллергенах, попросить счёт и разделить его
+grammar:
+  - "I'd like / I'll have / Could we get…, исчисляемые и неисчисляемые, too / enough"
+sessions: 3

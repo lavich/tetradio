@@ -1,0 +1,8 @@
+number: 5
+title: Shopping and money
+subtitle: Покупки и деньги
+status: draft
+goal: спросить размер и цену, сравнить, вернуть или обменять, разобраться с проблемой оплаты
+grammar:
+  - "сравнения (cheaper than, not as… as, the same as), one / ones, have to / don't have to"
+sessions: 3

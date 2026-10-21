@@ -1,0 +1,7 @@
+id: tp004
+text: "Is this OK as a carry-on?"
+translation: "Это можно взять как ручную кладь?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md

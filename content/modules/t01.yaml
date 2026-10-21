@@ -1,0 +1,22 @@
+number: 1
+title: At the airport
+subtitle: В аэропорту
+status: published
+goal: зарегистрироваться на рейс, сдать багаж, пройти паспортный контроль, понять объявление о задержке или смене гейта
+grammar:
+  - вежливые просьбы (Could I…, Would it be possible to…, Do you mind if…), present simple для расписания
+sessions: 3
+partial: true
+lessons:
+  - t01-1
+  - t01-2
+crib:
+  title: просьбы и расписание
+  rows:
+    - [просьба, "Could I…?"]
+    - [необычная просьба, "Would it be possible to…?"]
+    - [разрешение, "Do you mind if I…?"]
+    - [ответ «можно», "No, go ahead."]
+    - [расписание, It leaves at 6.]
+    - [вопрос, "When does it land?"]
+  note: "Do you mind if…? — ответ No значит «можно»"

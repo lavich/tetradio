@@ -1,0 +1,339 @@
+title: Табло, объявления и стойка регистрации
+kind: lesson
+items:
+  - { kind: word, id: tw009 }
+  - { kind: word, id: tw010 }
+  - { kind: word, id: tw011 }
+  - { kind: word, id: tw012 }
+  - { kind: word, id: tw013 }
+  - { kind: word, id: tw014 }
+  - { kind: word, id: tw015 }
+  - { kind: phrase, id: tp009 }
+  - { kind: phrase, id: tp010 }
+  - { kind: phrase, id: tp011 }
+  - { kind: phrase, id: tp012 }
+  - { kind: phrase, id: tp013 }
+  - { kind: phrase, id: tp014 }
+  - { kind: phrase, id: tp015 }
+blocks:
+  - type: explanation
+    id: route
+    title: Пересадка и прилёт
+    body: |-
+      Если летите с пересадкой, у вас **a connecting flight** — стыковочный рейс, а время между рейсами — **a layover**. Главный вопрос на пересадке: **Do I need to collect my bags before my connection?** Если багаж сдан сразу до конечного пункта (checked through), забирать его не нужно.
+
+      После прилёта путь такой: паспортный контроль (passport control) → **baggage reclaim**, выдача багажа → **customs**, таможня. На таможне спрашивают **Anything to declare?** — есть ли у вас что-то, что нужно **declare** — декларировать. Обычный ответ: **I've got nothing to declare.** Если сумка не приехала: **My bag didn't come out on the belt.**
+
+      На паспортном контроле задают короткие вопросы, и отвечать лучше так же коротко: **What's the purpose of your visit?** — **I'm here on holiday for a week.** **Where are you staying?** — **I'm staying at a hotel near the centre.** Здесь present continuous: вы живёте там сейчас, временно, на время поездки.
+
+      В объявлениях язык официальный: **Please proceed to gate 12** — «пройдите к выходу 12», **This is the final call for…** — последнее приглашение на посадку. Не расслышали объявление — спросите у сотрудника: **Has the gate changed?**
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a layover
+      - a connecting flight
+      - customs
+      - declare
+      - baggage reclaim
+      - proceed to
+      - a final call
+      - a delay
+      - departures
+    items:
+      - { id: m1, prompt: "пересадка, ожидание между рейсами", answer: a layover }
+      - { id: m2, prompt: стыковочный рейс, answer: a connecting flight }
+      - { id: m3, prompt: таможня, answer: customs }
+      - { id: m4, prompt: декларировать, answer: declare }
+      - { id: m5, prompt: выдача багажа, answer: baggage reclaim }
+      - { id: m6, prompt: проследовать к, answer: proceed to }
+      - { id: m7, prompt: последнее приглашение на посадку, answer: a final call }
+  - type: exercise
+    id: border
+    title: Паспортный контроль
+    instruction: Переведите ответы на английский. Сокращения (I'm, I've) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: — What's the purpose of your visit? — Я здесь в отпуске на неделю.
+        answer:
+          - I'm here on holiday for a week.
+          - I'm on holiday for a week.
+          - I'm here on holiday for one week.
+          - I'm here on vacation for a week.
+          - I'm on vacation for a week.
+          - I'm here for a week on holiday.
+          - I'm on holiday here for a week.
+        explanation: On holiday — «в отпуске», американский вариант — on vacation.
+      - id: q2
+        prompt: — Where are you staying? — Я живу в отеле недалеко от центра.
+        answer:
+          - I'm staying at a hotel near the centre.
+          - I'm staying in a hotel near the centre.
+          - I'm staying at a hotel near the center.
+          - I'm staying in a hotel near the center.
+          - I'm staying at a hotel not far from the centre.
+          - I'm staying in a hotel not far from the centre.
+          - I'm staying at a hotel near the city centre.
+          - I'm staying at a hotel close to the centre.
+          - I'm staying in a hotel close to the centre.
+        explanation: Временное, на время поездки, — present continuous.
+      - id: q3
+        prompt: — Anything to declare? — Мне нечего декларировать.
+        answer:
+          - I've got nothing to declare.
+          - I have nothing to declare.
+          - Nothing to declare.
+          - I don't have anything to declare.
+          - I haven't got anything to declare.
+          - No, nothing to declare.
+          - No, I've got nothing to declare.
+      - id: q4
+        prompt: Мне нужно забирать багаж перед стыковкой?
+        answer:
+          - Do I need to collect my bags before my connection?
+          - Do I need to collect my bags before my connecting flight?
+          - Do I need to collect my luggage before my connection?
+          - Do I have to collect my bags before my connection?
+          - Do I need to pick up my bags before my connection?
+          - Do I need to collect my baggage before my connection?
+          - Do I have to collect my luggage before my connection?
+          - Do I need to collect my bag before my connection?
+  - type: explanation
+    id: board-how
+    title: Табло и посадочный талон
+    body: |-
+      Ниже — табло вылетов в аэропорту Лондон-Гатвик и посадочный талон Ольги, которая летит в Лиссабон. Читайте их как в аэропорту: ищите свой рейс, время, выход и статус. Переводить каждое слово не нужно.
+
+      На табло **Gate** — выход на посадку, **Boarding** — идёт посадка, **Go to gate** — пора идти к выходу, **Delayed** — задержан, **Cancelled** — отменён. На посадочном талоне **Gate closes** — время, когда выход закрывается: после него на рейс не пустят.
+  - type: reading
+    id: board
+    title: London Gatwick — Departures
+    text: |-
+      DEPARTURES — 14:05
+      14:25 BA 2550 Rome — Gate 4 — Final call
+      14:35 TP 1331 Lisbon — Gate 12 — Boarding
+      15:05 EZY 8031 Berlin — Delayed, new time 16:20
+      15:10 EZY 8371 Munich — Go to gate 31
+      15:25 TK 1980 Istanbul — Cancelled, please contact the airline desk
+
+      BOARDING PASS
+      Passenger: IVANOVA / OLGA MS
+      From: London Gatwick (LGW) · To: Lisbon (LIS)
+      Flight: TP 1331 · Date: 14 MAY
+      Boarding: 14:00 · Gate closes: 14:15 · Departs: 14:35
+      Seat: 23C · Group: 3
+      Baggage: 1 cabin bag, 1 hold bag (23 kg)
+    glosses:
+      - { text: contact, russian: обратиться к }
+      - { text: airline desk, russian: стойка авиакомпании }
+  - type: exercise
+    id: board-q
+    about: board
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does the board say about Olga's flight?
+        options:
+          - Boarding has started at gate 12.
+          - It is delayed.
+          - It leaves from gate 4.
+        answer: Boarding has started at gate 12.
+        explanation: "Lisbon — Gate 12 — Boarding: посадка уже идёт."
+      - id: q2
+        prompt: What is the latest time Olga can get to the gate?
+        options: ["14:00", "14:15", "14:35"]
+        answer: "14:15"
+        explanation: "Gate closes: 14:15 — после этого на рейс не пустят."
+      - id: q3
+        prompt: Where is Olga's seat?
+        options:
+          - next to the aisle
+          - next to the window
+          - in the middle
+        answer: next to the aisle
+        explanation: В ряду из шести мест буквы C и D — у прохода, A и F — у окна.
+      - id: q4
+        prompt: What happened to the flight to Berlin?
+        options:
+          - It leaves later than planned.
+          - It was cancelled.
+          - It is boarding now.
+        answer: It leaves later than planned.
+        explanation: "Delayed, new time 16:20 — рейс задержан."
+      - id: q5
+        prompt: What should passengers to Istanbul do?
+        options:
+          - talk to the airline
+          - go to gate 31
+          - wait for a new time
+        answer: talk to the airline
+        explanation: "Cancelled, please contact the airline desk — обратитесь к авиакомпании."
+  - type: explanation
+    id: announcements-how
+    title: Объявления
+    body: |-
+      Объявления в аэропорту короткие, но звучат быстро и с эхом. Почти все строятся по одной схеме: какой рейс → что случилось → что делать. Ловите номер рейса, город, выход и время — остальное обычно вежливые слова.
+
+      Послушайте четыре объявления в том же аэропорту, где Ольга. Сначала целиком, потом ответьте на вопросы и при втором прослушивании проверьте ответы. Транскрипт откроется после ответа.
+  - type: listening
+    id: announcements
+    title: Announcements at Gatwick
+    plays: 2
+    transcript:
+      - { text: "Good afternoon. This is a gate change for passengers on flight TP 1331 to Lisbon. This flight will now depart from gate 16, not gate 12. Please proceed to gate 16." }
+      - { text: "This is the final call for passenger Tomasz Nowak, travelling to Rome on flight BA 2550. Please proceed immediately to gate 4, where your flight is now closing." }
+      - { text: "We are sorry to announce that flight EZY 8031 to Berlin is delayed by about one hour and fifteen minutes. The new departure time is 16:20. Passengers can collect a food voucher from the information desk." }
+      - { text: "Passengers arriving from Istanbul on flight TK 1979 can collect their bags from baggage reclaim, belt 5." }
+  - type: exercise
+    id: announcements-q
+    about: announcements
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where does the flight to Lisbon leave from now?
+        options: [gate 16, gate 12, gate 6]
+        answer: gate 16
+        explanation: This flight will now depart from gate 16, not gate 12.
+      - id: q2
+        prompt: Why do they call Tomasz Nowak?
+        options:
+          - His flight is closing soon.
+          - His bag is too big.
+          - His flight is cancelled.
+        answer: His flight is closing soon.
+        explanation: This is the final call… your flight is now closing.
+      - id: q3
+        prompt: How long is the delay of the Berlin flight?
+        options:
+          - about an hour and a quarter
+          - about fifteen minutes
+          - about two hours
+        answer: about an hour and a quarter
+        explanation: Delayed by about one hour and fifteen minutes.
+      - id: q4
+        prompt: What can passengers to Berlin get at the information desk?
+        options:
+          - a voucher for food
+          - a new ticket
+          - a hotel room
+        answer: a voucher for food
+      - id: q5
+        prompt: Where can passengers from Istanbul get their bags?
+        options:
+          - at baggage reclaim, belt 5
+          - at gate 5
+          - at the information desk
+        answer: at baggage reclaim, belt 5
+  - type: explanation
+    id: desk-how
+    title: Разговор у стойки
+    body: |-
+      Марко из Италии летит в Торонто с пересадкой в Лиссабоне. Послушайте его разговор с Аишей у стойки регистрации: что он просит, что не так с багажом и когда посадка.
+
+      Марко говорит по-английски уверенно, но с ошибками, как многие неносители: How much it is? вместо How much is it?, I take out… вместо I'll take out… Понимать такую речь — тоже навык поездки: Аиша его понимает, и вы поймёте.
+  - type: listening
+    id: desk
+    title: At the check-in desk
+    plays: 2
+    transcript:
+      - { speaker: Aisha, text: "Good morning. Where are you flying to today?" }
+      - { speaker: Marco, text: "Good morning. To Toronto, but I have a connection in Lisbon." }
+      - { speaker: Aisha, text: "Can I see your passport, please?" }
+      - { speaker: Marco, text: "Yes, here it is." }
+      - { speaker: Aisha, text: "Thank you. Are you checking any bags today?" }
+      - { speaker: Marco, text: "Yes, this one. Would it be possible to check it through to Toronto? I don't want to collect it in Lisbon." }
+      - { speaker: Aisha, text: "Yes, it goes all the way to Toronto. You pick it up at baggage reclaim there. Can you put it on the scale, please?" }
+      - { speaker: Aisha, text: "Hmm, it's twenty-six kilos. Your baggage allowance is twenty-three, so there's a charge for excess baggage." }
+      - { speaker: Marco, text: "Oh no. How much it is?" }
+      - { speaker: Aisha, text: "Forty-five pounds. Or you can take some things out and put them in your hand luggage." }
+      - { speaker: Marco, text: "OK, I take out my shoes and a jacket. One moment… Is it OK now?" }
+      - { speaker: Aisha, text: "Twenty-two and a half. That's fine. Do you have a seat preference?" }
+      - { speaker: Marco, text: "Could I have an aisle seat, please? The flight to Toronto is long, and I like to walk a bit." }
+      - { speaker: Aisha, text: "Let me check… Yes, 31C, that's an aisle seat. Here are your boarding passes, one for Lisbon and one for Toronto. Your layover in Lisbon is two hours." }
+      - { speaker: Marco, text: "Great. What time does boarding start?" }
+      - { speaker: Aisha, text: "Boarding starts at ten forty at gate 22. The gate closes twenty minutes before departure." }
+      - { speaker: Marco, text: "Thank you very much." }
+      - { speaker: Aisha, text: "You're welcome. Have a good flight." }
+  - type: exercise
+    id: desk-q
+    about: desk
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where is Marco flying to?
+        options: [Toronto, Lisbon, London]
+        answer: Toronto
+        explanation: To Toronto, but I have a connection in Lisbon.
+      - id: q2
+        prompt: Does Marco need to collect his bag in Lisbon?
+        options:
+          - No, it goes to Toronto.
+          - Yes, at baggage reclaim.
+          - Yes, at the transfer desk.
+        answer: No, it goes to Toronto.
+        explanation: Yes, it goes all the way to Toronto.
+      - id: q3
+        prompt: What is the problem with his bag at first?
+        options:
+          - It is too heavy.
+          - It is oversized.
+          - It has no label.
+        answer: It is too heavy.
+        explanation: Twenty-six kilos при норме twenty-three.
+      - id: q4
+        prompt: What does Marco do about it?
+        options:
+          - He moves some things to his hand luggage.
+          - He pays forty-five pounds.
+          - He leaves the shoes at the desk.
+        answer: He moves some things to his hand luggage.
+        explanation: Марко вынимает обувь и куртку (правильно — I'll take out…), и сумка весит 22,5 кг.
+      - id: q5
+        prompt: Why does he want an aisle seat?
+        options:
+          - The flight is long and he likes to walk.
+          - He wants to see the view.
+          - He has a lot of hand luggage.
+        answer: The flight is long and he likes to walk.
+      - id: q6
+        prompt: When does the gate close?
+        options:
+          - twenty minutes before departure
+          - at ten forty
+          - two hours before departure
+        answer: twenty minutes before departure
+        explanation: В 10:40 посадка начинается; выход закрывается за двадцать минут до вылета.
+  - type: exercise
+    id: desk-phrases
+    about: desk
+    title: Фразы из диалога
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - through
+      - scale
+      - allowance
+      - preference
+      - aisle
+      - layover
+      - declare
+      - reclaim
+    items:
+      - { id: g1, prompt: "Would it be possible to check it ___ to Toronto?", answer: through }
+      - { id: g2, prompt: "Can you put it on the ___, please?", answer: scale }
+      - { id: g3, prompt: "Your baggage ___ is twenty-three kilos.", answer: allowance }
+      - { id: g4, prompt: "Do you have a seat ___?", answer: preference }
+      - { id: g5, prompt: "Could I have an ___ seat, please?", answer: aisle }
+      - { id: g6, prompt: "Your ___ in Lisbon is two hours.", answer: layover }

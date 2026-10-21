@@ -261,6 +261,7 @@ export interface CoverageInput {
   reviews: Map<string, string>;
   lessonsForModule: Map<string, { id: string; kind: LessonKind; blocks: LessonBlock[] }>;
   modules: CatalogModule[];
+  partial: Set<string>;
 }
 export function checkCoverage({
   sources,
@@ -271,7 +272,8 @@ export function checkCoverage({
   reviews,
   lessonsForModule,
   modules,
-}: CoverageInput) {
+  partial,
+}: CoverageInput): { id: string; gaps: string[] }[] {
   for (const id of words.keys())
     if (!used.word.has(id))
       fail(`words/${sources.words.get(id)!.file} не входит ни в один урок и не будет опубликовано`);
@@ -288,12 +290,17 @@ export function checkCoverage({
     if (lessonsForModule.get(lessonId)!.kind !== "lesson")
       fail(`${at}.review: занятие ${lessonId} после точки — урок (kind: lesson), а не контрольная`);
   // Модуль публикуется только полным: без чтения, аудио, письма, речи или контрольной он остаётся черновиком.
+  // Частичному модулю прощается только недостающее; пустой урок и контрольная без оценки — брак, а не пробел.
+  const reported: { id: string; gaps: string[] }[] = [];
   for (const module of modules) {
     if (module.status !== "published") continue;
     const gaps = publicationGaps(module.lessonIds.map((lessonId) => lessonsForModule.get(lessonId)!));
-    if (gaps.length)
+    const blocking = partial.has(module.id) ? gaps.filter((gap) => /^(урок|контрольная) /.test(gap)) : gaps;
+    if (blocking.length)
       fail(
-        `modules/${sources.modules.get(module.id)!.file}: модуль ${module.id} нельзя опубликовать — ${gaps.join("; ")}`,
+        `modules/${sources.modules.get(module.id)!.file}: модуль ${module.id} нельзя опубликовать — ${blocking.join("; ")}`,
       );
+    if (partial.has(module.id)) reported.push({ id: module.id, gaps });
   }
+  return reported;
 }

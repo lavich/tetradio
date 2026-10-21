@@ -56,6 +56,8 @@ export interface BuiltContent {
   sparseReadings: string[];
   /** Вопросы к текстам с непройденными словами: «урок: задание.вопрос: слова». */
   unfamiliar: string[];
+  /** Модули, опубликованные частично, и чего в них не хватает до полного. */
+  partial: { id: string; gaps: string[] }[];
 }
 
 /**
@@ -70,8 +72,18 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const sources = readSources(root);
   checkSources(sources);
   // Письменность карточки проверяется по языку курса её папки, поэтому курсы разбираются до карточек.
-  const { courseOf, courses, modules, moduleOf, checkpoints, reviews, languages, moduleLanguages, courseLanguages } =
-    buildCourses(sources);
+  const {
+    courseOf,
+    courses,
+    modules,
+    moduleOf,
+    checkpoints,
+    reviews,
+    partial,
+    languages,
+    moduleLanguages,
+    courseLanguages,
+  } = buildCourses(sources);
   checkSourceScripts(sources, courseLanguages, languages, moduleLanguages);
   const { voicing: cardVoicing, sources: voiced } = checkCardAudio(sources, courseLanguages);
   const { words, phrases } = buildCards(voiced, courseLanguages);
@@ -92,7 +104,17 @@ export function buildContent(root = defaultRoot()): BuiltContent {
   const readings = buildReadings({ sources, courses, modules, moduleOf, drafts, words, phrases, media, legacy, art });
   const unfamiliar = checkQuestions({ courses, modules, moduleOf, drafts, words, phrases });
   const { packages, entries, files } = packLessons(drafts, marks, readings.byLesson, readings.mediaOf);
-  checkCoverage({ sources, words, phrases, used, checkpoints, reviews, lessonsForModule, modules });
+  const partialModules = checkCoverage({
+    sources,
+    words,
+    phrases,
+    used,
+    checkpoints,
+    reviews,
+    lessonsForModule,
+    modules,
+    partial,
+  });
   for (const { item, body } of media.values()) files.push({ path: item.url, body, mimeType: item.mimeType });
   const catalog: Catalog = {
     schemaVersion: SCHEMA_VERSION,
@@ -118,6 +140,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     readings: readings.report,
     sparseReadings: readings.sparse,
     unfamiliar,
+    partial: partialModules,
   };
 }
 
@@ -190,6 +213,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
         (reading.unknown.length ? `; не нашлись: ${[...new Set(reading.unknown)].join(", ")}` : "") +
         (reading.unvoiced ? `; без записи ${reading.unvoiced} предложений — озвучка: npm run voices -- readings` : ""),
     );
+  for (const module of built.partial) console.log(`Частично опубликованы: ${module.id} — ${module.gaps.join("; ")}`);
   if (built.sparseReadings.length)
     console.log(`Чтение: меньше двух текстов в модулях ${built.sparseReadings.join(", ")}`);
   if (built.unfamiliar.length) {

@@ -1,0 +1,8 @@
+id: tp010
+text: "I'm here on holiday for a week."
+translation: "Я здесь в отпуске на неделю."
+note: "в США — on vacation"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01
+  operation: requested-generation
+  request: Фразы модуля t01 по программе docs/curriculum-english-travel.md
