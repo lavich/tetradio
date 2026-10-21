@@ -1,0 +1,11 @@
+id: r-c01-party
+title: The party
+after: c01-1
+text: |-
+  Tom: a neighbour, the weather, to chat.
+glosses: []
+names: [Tom]
+provenance:
+  operation: requested-generation
+  request: Текст фикстуры двух курсов из слов урока c01-1
+  review: none

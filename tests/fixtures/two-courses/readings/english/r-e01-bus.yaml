@@ -1,0 +1,11 @@
+id: r-e01-bus
+title: On the bus
+after: e01-1
+text: |-
+  Anna: to go, the bus, to read, the coffee, to write.
+glosses: []
+names: [Anna]
+provenance:
+  operation: requested-generation
+  request: Текст фикстуры двух курсов из слов урока e01-1
+  review: none

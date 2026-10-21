@@ -29,7 +29,7 @@ async function install(...lessonIds: string[]) {
 describe("порядок установки курсов", () => {
   it("курс запоминается первым установленным уроком, не дожидаясь следующего каталога", async () => {
     await install("m01-1", "e01-1");
-    expect((await courses(db)).map((course) => course.id)).toEqual(["greek-a2", "english"]);
+    expect((await courses(db)).map((course) => course.id)).toEqual(["greek-a2", "english", "talk"]);
     expect(await primaryCourse(db)).toBe("greek-a2");
   });
   it("английский, поставленный первым, становится основным", async () => {

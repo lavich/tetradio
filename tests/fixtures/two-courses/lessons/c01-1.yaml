@@ -1,0 +1,19 @@
+title: Знакомство
+kind: lesson
+items:
+  - { kind: word, id: c0001 }
+  - { kind: word, id: c0002 }
+  - { kind: word, id: c0003 }
+blocks:
+  - { type: vocabulary, id: words }
+  - type: reading
+    id: text
+    title: At the party
+    text: Tom meets a neighbour at the party. They talk about the weather.
+  - type: exercise
+    id: text-tf
+    about: text
+    instruction: Верно или неверно?
+    format: choice
+    items:
+      - { id: q1, prompt: Tom meets a neighbour., options: ["True", "False"], answer: "True" }
