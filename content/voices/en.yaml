@@ -46,6 +46,8 @@ characters:
   Elena: { gender: female, voice: Despina }
   Nadia: { gender: female, voice: Sulafat }
   Viktor: { gender: male, voice: Algieba }
+  Isabel: { gender: female, voice: Laomedeia }
+  Samir: { gender: male, voice: Schedar }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

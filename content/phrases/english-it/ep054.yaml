@@ -1,0 +1,7 @@
+id: ep054
+text: "We were running behind schedule, so we cut the scope."
+translation: "Мы отставали от графика, поэтому сократили объём работ."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md

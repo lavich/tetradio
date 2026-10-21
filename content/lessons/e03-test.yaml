@@ -1,0 +1,271 @@
+title: Контрольная модуля e03
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, времена, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: retro
+    title: Project retrospective
+    text: |-
+      Last year our team replaced the payment provider in the mobile app. At first, we were planning a two-month project. By the time we finished the prototype, we had found three problems with the new provider's API, so the scope grew. We fell three weeks behind schedule, and for a while the release was blocked by a security review.
+
+      We found a workaround for the biggest problem and released the app to five percent of users behind a feature flag. When we saw no regressions, we rolled it out to everyone. The failed-payment rate went down from four percent to one and a half.
+
+      What we would do differently: write down the KPIs before the kick-off. We had measured only the failed-payment rate, so we could not show the effect on conversion.
+    glosses:
+      - { text: payment provider, russian: платёжный провайдер }
+      - { text: security review, russian: проверка безопасности }
+      - { text: rolled it out, russian: выкатили на всех пользователей }
+      - { text: failed-payment rate, russian: доля неудачных платежей }
+  - type: exercise
+    id: retro-tf
+    about: retro
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The project took two months, as planned.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We fell three weeks behind schedule — отставание на три недели.
+      - id: q2
+        prompt: The team found three problems with the new API during the prototype stage.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: The new version was released to all users at once.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Сначала запуск для пяти процентов пользователей за feature flag.
+      - id: q4
+        prompt: The failed-payment rate fell from four percent to one and a half.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: Before the project, the team had measured the effect on conversion.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We had measured only the failed-payment rate — измеряли только долю неудачных платежей.
+  - type: listening
+    id: call
+    title: A project story
+    plays: 2
+    transcript:
+      - { speaker: Sarah, text: "Samir, tell me about a project you're proud of." }
+      - { speaker: Samir, text: "I'd choose our notification service. When I joined the company, the emails were sent by a script that someone had written years before." }
+      - { speaker: Sarah, text: "What was the problem?" }
+      - { speaker: Samir, text: "The script was failing every night while it was processing the biggest customers. Customers were getting their invoices a day late." }
+      - { speaker: Sarah, text: "What did you do first?" }
+      - { speaker: Samir, text: "First, I wrote a prototype with a message queue. After that, we ran a dry run on a copy of the production data." }
+      - { speaker: Sarah, text: "Was there a setback?" }
+      - { speaker: Samir, text: "Yes. A week before the launch, we found a regression in the email templates, so we postponed the release by three days." }
+      - { speaker: Sarah, text: "And the result?" }
+      - { speaker: Samir, text: "Eventually, we went live on a Sunday night, with a rollback plan ready. Delivery time dropped from twelve hours to ten minutes." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What was wrong with the old script?
+        options:
+          - It failed every night on the biggest customers.
+          - It sent emails to the wrong people.
+          - It was too expensive to run.
+        answer: It failed every night on the biggest customers.
+      - id: q2
+        prompt: What did Samir build first?
+        options:
+          - a prototype with a message queue
+          - a new database
+          - a mobile app
+        answer: a prototype with a message queue
+      - id: q3
+        prompt: What did the team use for the dry run?
+        options:
+          - a copy of the production data
+          - ten real customers
+          - an empty test database
+        answer: a copy of the production data
+      - id: q4
+        prompt: Why was the release postponed?
+        options:
+          - a regression in the email templates
+          - a server failure
+          - a public holiday
+        answer: a regression in the email templates
+        explanation: A week before the launch, we found a regression — за неделю до запуска нашли поломку в шаблонах.
+      - id: q5
+        prompt: How long did delivery take after the change?
+        options:
+          - about ten minutes
+          - about twelve hours
+          - about three days
+        answer: about ten minutes
+  - type: exercise
+    id: tenses
+    graded: true
+    title: Времена и связки
+    instruction: Выберите правильную форму. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - { id: q1, prompt: "I ___ on the API when the client called. (работа шла, когда позвонили)", options: [was working, worked], answer: was working }
+      - id: q2
+        prompt: By the time we launched, the team ___ every critical bug.
+        options: [had fixed, fixed]
+        answer: had fixed
+        explanation: Исправление закончилось раньше запуска — past perfect.
+      - id: q3
+        prompt: "While Samir ___ the script, I was preparing the test data. (одновременно)"
+        options: [was rewriting, rewrote]
+        answer: was rewriting
+      - { id: q4, prompt: "___, we talked to the users. Then we built a prototype.", options: [First, Eventually], answer: First }
+      - id: q5
+        prompt: "She ___ the project in 2022 and moved on to the next one. (одно за другим)"
+        options: [finished, was finishing]
+        answer: finished
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [kick-off, rollback, hotfix, baseline, freeze, sign, scope, retrospective]
+    items:
+      - { id: g1, prompt: "Before the ___ meeting, nobody had agreed on the goals. (первая встреча проекта)", answer: kick-off }
+      - { id: g2, prompt: "We need a ___ plan: if the release fails, we go back to the old version.", answer: rollback }
+      - { id: g3, prompt: "The bug is in production, so we're preparing a ___. (срочное исправление)", answer: hotfix }
+      - { id: g4, prompt: "I measured the page load time first to have a ___ for comparison.", answer: baseline }
+      - { id: g5, prompt: There was a code ___ the day before the release., answer: freeze }
+      - { id: g6, prompt: The manager needs to ___ off on the plan before we start., answer: sign }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (we had, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: К моменту запуска мы уже исправили все ошибки.
+        answer:
+          - By the time we launched, we had already fixed all the bugs.
+          - By the time we launched, we had fixed all the bugs.
+          - By the time we went live, we had already fixed all the bugs.
+          - By the time we went live, we had fixed all the bugs.
+          - By the time we launched, we had already fixed every bug.
+          - By the time we launched, we had fixed every bug.
+          - By the time of the launch, we had already fixed all the bugs.
+          - By the time of the launch, we had fixed all the bugs.
+          - By the time we launched, we had already fixed all the errors.
+          - By the time we launched, we had fixed all the errors.
+          - By the launch, we had already fixed all the bugs.
+          - By the launch, we had fixed all the bugs.
+          - By the time we launched it, we had already fixed all the bugs.
+          - By the time we launched it, we had fixed all the bugs.
+          - By the time we went live, we had already fixed every bug.
+          - By the time we went live, we had fixed every bug.
+          - By the time we launched, we had already fixed all bugs.
+          - By the time we launched, we had fixed all bugs.
+          - By the time we released it, we had already fixed all the bugs.
+          - By the time we released, we had already fixed all the bugs.
+          - By the time we launched, all the bugs had already been fixed.
+          - By the time we launched, all the bugs had been fixed.
+          - By the time we launched, we had already fixed all of the bugs.
+          - By the time we launched we had already fixed all the bugs.
+          - By the time we launched we had fixed all the bugs.
+          - By the time we went live we had already fixed all the bugs.
+          - By the time we went live we had fixed all the bugs.
+          - By the time we launched we had already fixed every bug.
+          - By the time we launched we had fixed every bug.
+          - By the time of the launch we had already fixed all the bugs.
+          - By the time of the launch we had fixed all the bugs.
+          - By the time we launched we had already fixed all the errors.
+          - By the time we launched we had fixed all the errors.
+          - By the launch we had already fixed all the bugs.
+          - By the launch we had fixed all the bugs.
+          - By the time we launched it we had already fixed all the bugs.
+          - By the time we launched it we had fixed all the bugs.
+          - By the time we went live we had already fixed every bug.
+          - By the time we went live we had fixed every bug.
+          - By the time we launched we had already fixed all bugs.
+          - By the time we launched we had fixed all bugs.
+          - By the time we released it we had already fixed all the bugs.
+          - By the time we released we had already fixed all the bugs.
+          - By the time we launched all the bugs had already been fixed.
+          - By the time we launched all the bugs had been fixed.
+          - By the time we launched we had already fixed all of the bugs.
+      - id: q2
+        prompt: Я работал над сервисом, когда позвонил менеджер.
+        answer:
+          - I was working on the service when my manager called.
+          - I was working on the service when the manager called.
+          - I was working on a service when my manager called.
+          - I was working on a service when the manager called.
+          - When my manager called, I was working on the service.
+          - When the manager called, I was working on the service.
+          - When my manager called I was working on the service.
+          - I was working on the service when my manager phoned.
+          - I was working on the service when my manager rang.
+          - I was working on the service when my manager called me.
+          - I was working on the service when my boss called.
+          - My manager called while I was working on the service.
+          - The manager called while I was working on the service.
+          - I was working on the service when the manager called me.
+          - I was working on the service when the manager rang me.
+          - My manager called me while I was working on the service.
+          - When the manager called I was working on the service.
+      - id: q3
+        prompt: Сначала мы сделали прототип, потом провели пробный прогон.
+        answer:
+          - First, we built a prototype, then we ran a dry run.
+          - First we built a prototype, then we ran a dry run.
+          - First, we built a prototype. Then we ran a dry run.
+          - First, we built a prototype, and then we ran a dry run.
+          - First we built a prototype and then we ran a dry run.
+          - First, we built a prototype, then we did a dry run.
+          - First, we built a prototype. Then we did a dry run.
+          - First, we built a prototype, and then we did a dry run.
+          - First we built a prototype. Then we ran a dry run.
+          - First, we made a prototype, then we ran a dry run.
+          - First, we made a prototype. Then we ran a dry run.
+          - First, we made a prototype, and then we ran a dry run.
+          - First, we built a prototype and then ran a dry run.
+          - First, we built a prototype, then ran a dry run.
+          - First, we built a prototype, then we did a trial run.
+          - First, we built a prototype. Then we did a trial run.
+          - First, we built a prototype, and then we did a trial run.
+          - First, we built a prototype, then we ran a trial run.
+          - We first built a prototype and then ran a dry run.
+          - We first built a prototype, and then we ran a dry run.
+          - First, we built a prototype, and then ran a dry run.
+          - First we built a prototype, and then we ran a dry run.
+          - First we built a prototype, then we did a dry run.
+          - First, we built a prototype, and then we conducted a dry run.
+          - First, we built a prototype. After that, we ran a dry run.
+          - First we built a prototype then we ran a dry run.
+          - First we built a prototype then we did a dry run.
+          - First we built a prototype. Then we did a dry run.
+          - First we built a prototype and then we did a dry run.
+          - First we made a prototype then we ran a dry run.
+          - First we made a prototype. Then we ran a dry run.
+          - First we made a prototype and then we ran a dry run.
+          - First we built a prototype and then ran a dry run.
+          - First we built a prototype then ran a dry run.
+          - First we built a prototype then we did a trial run.
+          - First we built a prototype. Then we did a trial run.
+          - First we built a prototype and then we did a trial run.
+          - First we built a prototype then we ran a trial run.
+          - We first built a prototype and then we ran a dry run.
+          - First we built a prototype and then we conducted a dry run.
+          - First we built a prototype. After that we ran a dry run.

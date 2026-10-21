@@ -1,0 +1,7 @@
+id: ep062
+text: "By the end, the team was shipping every week."
+translation: "К концу команда выпускала релиз каждую неделю."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md

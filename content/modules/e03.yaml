@@ -1,8 +1,22 @@
 number: 3
 title: A project I'm proud of
 subtitle: Проект, которым горжусь
-status: draft
+status: published
 goal: рассказать историю проекта — задача, что сделал сам, результат
 grammar:
   - past continuous и past perfect, связки рассказа
 sessions: 3
+crib:
+  title: рассказ о проекте
+  rows:
+    - [процесс шёл, "I was working on… when…"]
+    - [раньше другого события, "By the time…, we had already…"]
+    - [порядок шагов, "First, … then, … eventually…"]
+    - [трудность, "We ran into…"]
+    - [результат, "by 40 percent; from … to …"]
+  note: "фон — past continuous и past perfect, шаги — past simple"
+lessons:
+  - e03-1
+  - e03-2
+  - e03-3
+  - e03-test

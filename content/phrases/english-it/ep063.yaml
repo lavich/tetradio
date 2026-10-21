@@ -1,0 +1,7 @@
+id: ep063
+text: "I was the only backend developer on the project."
+translation: "Я был единственным бэкенд-разработчиком в проекте."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md

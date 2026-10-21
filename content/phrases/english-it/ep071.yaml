@@ -1,0 +1,7 @@
+id: ep071
+text: "We ran into a problem with the database."
+translation: "Мы столкнулись с проблемой в базе данных."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md

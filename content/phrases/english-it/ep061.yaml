@@ -1,0 +1,7 @@
+id: ep061
+text: "Conversion went up by fifteen percent."
+translation: "Конверсия выросла на пятнадцать процентов."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md
