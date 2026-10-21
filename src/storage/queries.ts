@@ -2,7 +2,15 @@ import Dexie from "dexie";
 import { readPauses } from "./pauses";
 import { State } from "ts-fsrs";
 import { db, distinctKeys, searchTokens, type AppDatabase, type StoredWord } from "./db";
-import { cardLanguages, cardsInCourse, courseCardIds, courseLessonIds, lessonItemsOf } from "./courses";
+import {
+  cardCourses,
+  cardLanguages,
+  cardsInCourse,
+  courseCardIds,
+  courseLanguage,
+  courseLessonIds,
+  lessonItemsOf,
+} from "./courses";
 import { STORED_KINDS } from "./kinds";
 import { cardKey, cardLabel, KINDS } from "../domain/kinds";
 import {
@@ -202,6 +210,8 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
         : database.phrases.count(),
     ),
     languagesOf: (refs) => cardLanguages(refs, database),
+    coursesOf: (refs) => cardCourses(refs.map(unitKey), database),
+    courseLanguage: (courseId) => courseLanguage(courseId, database),
     cardsOf: (refs) => cardsOf(refs, database),
     skillsOf: zoned(async (card) => {
       const key = cardKey(card);
