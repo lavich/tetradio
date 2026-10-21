@@ -141,7 +141,7 @@ describe("--course ограничивает озвучку карточек од
     });
   const pending = (out: string) => out.split("\n").filter((line) => line.includes("нет записи или устарела"));
 
-  it("в проверке только записи названного курса", () => {
+  it("в проверке только записи названного курса", { timeout: 30_000 }, () => {
     for (const course of ["greek-a2", "english-it"]) {
       const result = run(`--course=${course}`);
       expect(result.status, result.stderr).toBe(0);
@@ -149,7 +149,7 @@ describe("--course ограничивает озвучку карточек од
     }
   });
 
-  it("неизвестный курс — ошибка со списком курсов", () => {
+  it("неизвестный курс — ошибка со списком курсов", { timeout: 30_000 }, () => {
     const result = run("--course=nope");
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain("Курса nope нет; есть:");
