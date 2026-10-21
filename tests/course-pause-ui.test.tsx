@@ -102,10 +102,15 @@ describe("выбор основного с курсом на паузе", () => 
   });
 });
 
-describe("адрес занятия курса «Сегодня»", () => {
-  it("курс, ставший основным на «Сегодня» из-за паузы, открывается по /session", async () => {
+describe("адрес занятия языка «Сегодня»", () => {
+  it("язык следующего по кругу курса, ставший основным на «Сегодня» из-за паузы, открывается по /session", async () => {
     for (const [index, id] of ["greek", "english"].entries()) {
-      await db.courses.add({ id, title: id, updatedAt: "2026-10-01T09:00:00Z" });
+      await db.courses.add({
+        id,
+        title: id,
+        language: id === "greek" ? "el" : "en",
+        updatedAt: "2026-10-01T09:00:00Z",
+      });
       await db.lessons.add({
         id: `${id}-1`,
         courseId: id,
@@ -116,9 +121,9 @@ describe("адрес занятия курса «Сегодня»", () => {
       await rememberCourses(db);
     }
     await setPrimaryCourse("greek", db);
-    expect(await sessionPath("english")).toBe("/session?course=english");
+    expect(await sessionPath({ courseId: "english" })).toBe("/session?language=en");
     await pauseCourse("greek", new Date("2026-10-12T09:00:00Z"), db);
-    expect(await sessionPath("english")).toBe("/session");
-    expect(await sessionPath("greek")).toBe("/session?course=greek");
+    expect(await sessionPath({ courseId: "english" })).toBe("/session");
+    expect(await sessionPath({ courseId: "greek" })).toBe("/session?language=el");
   });
 });

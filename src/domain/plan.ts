@@ -37,10 +37,23 @@ export interface WordOrigin {
  * `unavailable` — карточки без доступного объективного упражнения, новые и со сроком: видны отдельно.
  * Карточка со сроком, содержимого которой на устройстве нет, в план не входит вовсе; её состояние остаётся.
  */
+export interface PlanReview {
+  ref: LearningRef;
+  state: LearningState;
+  /** Вероятность вспомнить на момент плана — только у повторения долга паузы. */
+  debt?: number;
+}
+const queueOf = (review: PlanReview) => (review.debt !== undefined ? 2 : stateRank(review.state.card));
+/** Порядок повторений: переучиваемые, разучиваемые, долг паузы от самых забытых, остальные по сроку. */
+export const compareReviews = (a: PlanReview, b: PlanReview) =>
+  queueOf(a) - queueOf(b) ||
+  (a.debt ?? 0) - (b.debt ?? 0) ||
+  new Date(a.state.card.due).getTime() - new Date(b.state.card.due).getTime() ||
+  a.state.unitKey.localeCompare(b.state.unitKey);
 export interface DailyPlan {
   today: string;
   newRefs: LearningRef[];
-  reviews: { ref: LearningRef; state: LearningState }[];
+  reviews: PlanReview[];
   origins: Map<string, WordOrigin>;
   unavailable: LearningRef[];
   /** Когда план может измениться сам: срок ближайшей карточки обучения или конец учебного дня. */
@@ -90,6 +103,8 @@ export interface PlanSource {
   liveKeys(refs: LearningRef[]): Promise<Set<string>>;
   /** Состояния со сроком не позже `until`; с курсом — только карточки этого курса. */
   dueStates(until: Date, courseId?: string): Promise<LearningState[]>;
+  /** То же для нескольких курсов одним проходом по сроку: план языка не читает индекс срока на каждый курс. */
+  dueStatesOf?(until: Date, courseIds: string[]): Promise<Map<string, LearningState[]>>;
   /** Признаки доступности упражнения для перечисленных карточек; тексты при этом не нужны. */
   factsOf(refs: LearningRef[]): Promise<Map<string, CardFacts>>;
   /** Число живых фраз курса: достаточность пула вариантов для аудирования фраз. */
@@ -183,18 +198,92 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     for (const state of askable)
       if (state.card.state === State.Review && new Date(state.card.due).getTime() < debtBefore)
         debt.set(state.unitKey, retrievability(state.card, now));
-  const queue = (state: LearningState) => (debt.has(state.unitKey) ? 2 : stateRank(state.card));
   const reviews = askable
     .filter((state) => checkable(state.ref))
-    .sort(
-      (a, b) =>
-        queue(a) - queue(b) ||
-        (debt.get(a.unitKey) ?? 0) - (debt.get(b.unitKey) ?? 0) ||
-        new Date(a.card.due).getTime() - new Date(b.card.due).getTime() ||
-        a.unitKey.localeCompare(b.unitKey),
-    )
-    .map((s) => ({ ref: s.ref, state: s }));
-  const pauseDebt = reviews.filter((review) => debt.has(review.state.unitKey)).length;
+    .map((state): PlanReview => {
+      const forgotten = debt.get(state.unitKey);
+      return { ref: state.ref, state, ...(forgotten === undefined ? {} : { debt: forgotten }) };
+    })
+    .sort(compareReviews);
+  const pauseDebt = reviews.filter((review) => review.debt !== undefined).length;
 
   return { today, newRefs, reviews, origins, unavailable, wakeAt, ...(pauseDebt ? { pauseDebt } : {}) };
+}
+
+export interface LanguagePlanOptions {
+  hasVoice?: Voices;
+  /** Курсы языка; первый начинает очередь новых карточек. */
+  courseIds: string[];
+}
+/**
+ * План языка — планы его курсов, слитые в один: пауза, долг, программа и доступность упражнений остаются правилами
+ * курса. Повторения — в общем порядке, новые — по одной карточке каждого курса по очереди.
+ */
+export async function makeLanguagePlan(
+  source: PlanSource,
+  now: Date,
+  { hasVoice, courseIds }: LanguagePlanOptions,
+): Promise<DailyPlan> {
+  if (courseIds.length === 1) return makePlan(source, now, { hasVoice, courseId: courseIds[0] });
+  const shared = sharedDue(source, courseIds);
+  const plans = await Promise.all(courseIds.map((courseId) => makePlan(shared, now, { hasVoice, courseId })));
+  const timezone = source.timezone();
+  const seen = new Set<string>();
+  const once = (ref: LearningRef) => !seen.has(unitKey(ref)) && !!seen.add(unitKey(ref));
+  const newRefs: LearningRef[] = [];
+  for (let index = 0; plans.some((plan) => index < plan.newRefs.length); index++)
+    for (const plan of plans)
+      if (index < plan.newRefs.length && once(plan.newRefs[index])) newRefs.push(plan.newRefs[index]);
+  const reviews = plans
+    .flatMap((plan) => plan.reviews)
+    .sort(compareReviews)
+    .filter((review) => once(review.ref));
+  const pauseDebt = reviews.filter((review) => review.debt !== undefined).length;
+  return {
+    today: studyDay(now, timezone),
+    newRefs,
+    reviews,
+    origins: new Map(plans.flatMap((plan) => [...plan.origins])),
+    unavailable: plans.flatMap((plan) => plan.unavailable).filter(once),
+    wakeAt: new Date(Math.min(reviewCutoff(now, timezone).getTime(), ...plans.map((plan) => plan.wakeAt.getTime()))),
+    ...(pauseDebt ? { pauseDebt } : {}),
+  };
+}
+function sharedDue(source: PlanSource, courseIds: string[]): PlanSource {
+  if (!source.dueStatesOf) return source;
+  const read = new Map<number, Promise<Map<string, LearningState[]>>>();
+  return {
+    ...source,
+    dueStates: async (until, courseId) => {
+      if (!courseId) return source.dueStates(until);
+      if (!read.has(until.getTime())) read.set(until.getTime(), source.dueStatesOf!(until, courseIds));
+      return (await read.get(until.getTime())!).get(courseId) ?? [];
+    },
+  };
+}
+
+/** Источники новых карточек из выбранных: первый пройденный урок карточки в порядке программы её курса. */
+export async function originsOf(
+  source: PlanSource,
+  refs: LearningRef[],
+  courseIds: (string | undefined)[],
+): Promise<Map<string, WordOrigin>> {
+  const wanted = new Set(refs.map(unitKey));
+  const origins = new Map<string, WordOrigin>();
+  for (const lessons of await Promise.all(courseIds.map((courseId) => source.studiedLessons(courseId)))) {
+    const rank = new Map(lessons.map((lesson, index) => [lesson.id, index]));
+    const titles = new Map(lessons.map((lesson) => [lesson.id, lesson.title]));
+    const items = (await source.itemsOf(lessons.map((lesson) => lesson.id)))
+      .filter((item) => wanted.has(item.unitKey))
+      .sort(
+        (a, b) =>
+          rank.get(a.lessonId)! - rank.get(b.lessonId)! ||
+          a.position - b.position ||
+          a.unitKey.localeCompare(b.unitKey),
+      );
+    for (const item of items)
+      if (!origins.has(item.unitKey))
+        origins.set(item.unitKey, { lessonId: item.lessonId, title: titles.get(item.lessonId)! });
+  }
+  return origins;
 }

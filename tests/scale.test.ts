@@ -3,7 +3,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createEmptyCard, State } from "ts-fsrs";
 import { indexWord, AppDatabase } from "../src/storage/db";
 import { dexieSource, lessonViews, searchWordIds } from "../src/storage/queries";
-import { makePlan, makeSession } from "../src/domain/learning";
+import { LESSON_MATES_RADIUS, makeLanguagePlan, makePlan, makeSession } from "../src/domain/learning";
+import { HOME_COURSE_KEY } from "../src/storage/courses";
 import { progress } from "../src/domain/stats";
 import { parseCatalog, SCHEMA_VERSION, type CatalogEntry } from "../src/content/schema";
 import { refreshCatalog } from "../src/content/client";
@@ -275,5 +276,65 @@ describe("ограниченные выборки на большой базе",
     expect(await db.catalog.count()).toBe(3000);
     expect(await db.words.count()).toBe(before);
     expect(await db.packages.count()).toBe(0);
+  }, 60_000);
+});
+
+describe("план и занятие языка из двух курсов на большой базе", () => {
+  const SECOND = 30;
+  beforeAll(async () => {
+    await db.meta.put({ key: HOME_COURSE_KEY, value: "a2" });
+    await db.courses.put({ id: "b2", title: "B2", updatedAt: iso });
+    await db.lessons.bulkAdd(
+      Array.from({ length: SECOND }, (_, i) => ({
+        id: `b-lesson-${pad(i)}`,
+        courseId: "b2",
+        title: `Урок B ${i}`,
+        completed: true,
+        updatedAt: iso,
+      })),
+    );
+    const wordId = (i: number) => `w${pad(60_000 + i * 5 + 1)}`;
+    await db.lessonItems.bulkAdd(
+      Array.from({ length: SECOND * 35 }, (_, i) =>
+        itemOfLink({ lessonId: `b-lesson-${pad(Math.floor(i / 35))}`, wordId: wordId(i), position: i % 35 }),
+      ),
+    );
+    await db.cardStates.bulkAdd(
+      Array.from({ length: 500 }, (_, i) =>
+        wordState(wordId(i * 2), {
+          introducedAt: "2026-09-01T09:00:00Z",
+          version: 1,
+          card: {
+            ...createEmptyCard(new Date("2026-09-01")),
+            due: new Date("2026-09-13T08:00:00Z"),
+            state: State.Review,
+            scheduled_days: 3,
+            reps: 2,
+          },
+        }),
+      ),
+    );
+  }, 60_000);
+  const courseIds = ["a2", "b2"];
+  it("план языка не читает слова, события и сессии, а индекс срока проходит один раз на все курсы", async () => {
+    const cutoff = new Date("2026-09-15T21:00:00Z");
+    const due = await db.cardStates.where("card.due").belowOrEqual(cutoff).count();
+    track();
+    const plan = await makeLanguagePlan(dexieSource(db), now, { courseIds });
+    expect(plan.reviews.some((review) => review.ref.id >= "w060000")).toBe(true);
+    expect(plan.reviews.some((review) => review.ref.id < "w060000")).toBe(true);
+    expect(reads.words).toBe(0);
+    expect(reads.events).toBe(0);
+    expect(reads.sessions).toBe(0);
+    expect(reads.cardStates).toBeLessThanOrEqual(due + (LESSONS + SECOND) * 35);
+  }, 60_000);
+  it("занятие языка читает слова только своих карточек и пулов курсов среди них", async () => {
+    track();
+    const session = await makeSession({ source: dexieSource(db), now, courseIds, random: () => 0.37 });
+    expect(session.items).toHaveLength(20);
+    expect(session.language).toBe("el");
+    const owners = new Set(session.items.map((item) => (item.ref.id >= "w060000" ? "b2" : "a2")));
+    expect(reads.words).toBeLessThanOrEqual(20 * (1 + 2 * LESSON_MATES_RADIUS) + 48 * owners.size);
+    expect(reads.sessions).toBe(0);
   }, 60_000);
 });

@@ -5,7 +5,7 @@ import { useAllCourses, useCurrentLanguage } from "../../shared/courses";
 import { resumeCourse } from "../../storage/pause-actions";
 import { pausedSince } from "../../shared/format";
 import type { CourseEntry } from "../../storage/courses";
-import { titleFocus } from "./CourseToday";
+import { titleFocus } from "./LanguageToday";
 import css from "./today.module.css";
 
 /** «Сегодня», когда все начатые курсы на паузе: вернуть любой из них или начать другой. */

@@ -6,7 +6,7 @@ import { MemoryRouter } from "react-router-dom";
 import { PALETTES } from "../src/content/palettes";
 import { ModuleCover } from "../src/features/course/ModuleCover";
 import { Path } from "../src/features/progress/ProgressScreen";
-import { LessonNext } from "../src/features/today/CourseToday";
+import { LessonNext } from "../src/features/today/LanguageToday";
 import type { ModuleLessonView, ModuleView } from "../src/storage/course";
 import { db, type StoredCatalogEntry } from "../src/storage/db";
 import type { CourseProgress } from "../src/storage/progress";

@@ -17,6 +17,7 @@ import type {
   LessonKind,
 } from "../content/course";
 import type { CardKind, Example, Paradigm, Segment } from "./card-fields.ts";
+import type { Language } from "./language";
 
 // Значение загружает и Node при сборке контента, поэтому путь с расширением.
 export { CARD_KINDS, LESSON_CARD_KINDS } from "./card-fields.ts";
@@ -250,6 +251,11 @@ export interface Session {
   introducedKeys?: string[];
   /** Курс занятия; у занятий прежних версий его нет — это занятия основного курса. */
   courseId?: string;
+  /**
+   * Язык занятия; есть у каждого занятия новой версии. У занятия языка `courseId` — его основной курс на момент
+   * начала: прежняя версия при откате открывает его занятием курса того же языка.
+   */
+  language?: Language;
 }
 /** `errorReports` — отправка отчётов о сбоях во внешний сервис; включена по умолчанию, в компактный снимок синхронизации не входит. */
 export interface Settings {

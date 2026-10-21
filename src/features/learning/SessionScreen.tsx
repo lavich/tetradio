@@ -6,12 +6,13 @@ import { useAction } from "../../shared/action";
 import { stopAudio } from "../../shared/audio";
 import { useSettings } from "../../shared/store";
 import { ProfileContext } from "../../shared/language";
-import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
+import { isLanguage, PROFILES } from "../../domain/language";
 import { deviceTimezone } from "../../domain/time";
 import { Skeleton } from "@/components/ui/skeleton";
 import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
-import { activeSession, sessionDefaultCourse, profileOfCourse, sessionCourse } from "../../storage/courses";
+import { anyActiveSession, courses, languageSession, sessionLanguage } from "../../storage/courses";
+import { sessionHomeLanguage } from "../../storage/today";
 import { db } from "../../storage/db";
 import { endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
 import { ExerciseView, Introduction, type Answer } from "./exercises";
@@ -22,23 +23,30 @@ import { useFold } from "./useFold";
 import ui from "../../shared/ui.module.css";
 import s from "./session.module.css";
 
+/** Занятие по адресу: язык из адреса, язык курса прежнего `?course=`, иначе язык «Сегодня». */
+async function addressedSession(asked: string | null, course: string | null) {
+  if (isLanguage(asked)) return languageSession(asked);
+  if (!course) return languageSession(await sessionHomeLanguage());
+  const known = (await courses()).find((entry) => entry.id === course);
+  return known ? languageSession(known.language) : null;
+}
+
 export function SessionScreen() {
   const navigate = useNavigate();
   const { settings, ready: settingsReady } = useSettings();
-  const course = useSearchParams()[0].get("course");
-  const other = useLiveQuery(() => activeSession(), []);
+  const [params] = useSearchParams();
+  const asked = params.get("language");
+  const course = params.get("course");
+  const other = useLiveQuery(() => anyActiveSession(), []);
   const [sessionId, setSessionId] = useState<string | null>(null);
   // Сессию держим по id: последний ответ переводит её в done, но экран должен дорисовать обратную связь.
   // `undefined` — ещё читается, `null` — активного занятия нет.
   // Язык курса читается вместе с занятием: первая озвучка не должна прозвучать голосом другого языка.
   const loaded = useLiveQuery(async () => {
-    const found = sessionId
-      ? await db.sessions.get(sessionId)
-      : await activeSession(course ?? (await sessionDefaultCourse()));
+    const found = sessionId ? await db.sessions.get(sessionId) : await addressedSession(asked, course);
     if (!found) return { session: null, profile: undefined };
-    const courseId = await sessionCourse(found);
-    return { session: found, profile: courseId ? await profileOfCourse(courseId) : PROFILES[DEFAULT_LANGUAGE] };
-  }, [sessionId, course]);
+    return { session: found, profile: PROFILES[await sessionLanguage(found)] };
+  }, [sessionId, asked, course]);
   const session = loaded?.session;
   const profile = loaded?.profile;
   const events = useLiveQuery(
@@ -141,7 +149,7 @@ export function SessionScreen() {
         ) : (
           <div className="flex flex-col gap-3 py-6">
             <p className={ui.muted}>Активного занятия нет.</p>
-            <Button size="xl" onClick={async () => navigate(other ? await sessionPath(other.courseId) : "/")}>
+            <Button size="xl" onClick={async () => navigate(other ? await sessionPath(other) : "/")}>
               На главную
             </Button>
           </div>

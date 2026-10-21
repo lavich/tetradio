@@ -11,11 +11,13 @@ import {
   subscribeInstall,
 } from "../content/client";
 import type { ContentPackage } from "../content/schema";
-import { deviceTimezone, makePlan, studyDay } from "../domain/learning";
+import { deviceTimezone, studyDay } from "../domain/learning";
 import { progress } from "../domain/stats";
 import { defaultSettings } from "../domain/types";
 import { db } from "../storage/db";
 import { dexieSource, loadSettings } from "../storage/queries";
+import { languagePlan } from "../storage/today";
+import type { Language } from "../domain/language";
 
 /**
  * Каждый экран подписывается только на свою выборку. Общего реактивного снимка базы больше нет:
@@ -32,15 +34,14 @@ export const useWord = (id: string | undefined) => useLiveQuery(() => (id ? db.w
 export const usePhrase = (id: string | undefined) =>
   useLiveQuery(async () => (id ? ((await db.phrases.get(id)) ?? null) : undefined), [id]);
 /**
- * План курса; `null` — по всем курсам (курсов в каталоге нет), `undefined` — курс ещё читается.
+ * План языка «Сегодня»; `null` — курсов в каталоге нет, план по всем урокам; `undefined` — язык ещё читается.
  * Время запрос берёт сам: перечитывается по сроку `wakeAt` и при возврате в приложение, а не каждую минуту.
  */
-export function usePlan(courseId: string | null | undefined) {
+export function useLanguagePlan(language: Language | null | undefined) {
   const [tick, setTick] = useState(0);
   const plan = useLiveQuery(
-    () =>
-      courseId === undefined ? undefined : makePlan(dexieSource(), new Date(), { courseId: courseId ?? undefined }),
-    [courseId, tick],
+    () => (language === undefined ? undefined : languagePlan(new Date(), language)),
+    [language, tick],
   );
   const wakeAt = plan?.wakeAt.getTime();
   useEffect(() => {

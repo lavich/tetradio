@@ -2,10 +2,12 @@ export { addDays, deviceTimezone, formatDay, localDay, mondayOf, studyDay, zoned
 export {
   DAY_STARTS_AT,
   isDue,
+  makeLanguagePlan,
   makePlan,
   reviewCutoff,
   programmeOrder,
   type DailyPlan,
+  type LanguagePlanOptions,
   type PlanLesson,
   type PlanOptions,
   type PlanSource,

@@ -274,11 +274,11 @@ export const nextCourseLesson = zoned(async function nextCourseLesson(
   return step && { module: step.view.module, lesson: step.lesson };
 });
 
-/** Дни с выполненными заданиями уроков с `from` включительно — занятия курса на этой неделе; без курса — всех. */
+/** Дни с выполненными заданиями уроков с `from` включительно — занятия курса или курсов на этой неделе; без курса — всех. */
 export const lessonDays = zoned(async function lessonDays(
   from: string,
   timezone: string,
-  courseId?: string,
+  courseId?: string | string[],
   database: AppDatabase = db,
 ): Promise<string[]> {
   const since = zonedStart(from, timezone, DAY_STARTS_AT).getTime();
@@ -291,16 +291,17 @@ export const lessonDays = zoned(async function lessonDays(
       rows.map((row) => row.lessonId),
       database,
     );
-    rows = rows.filter((row) => owners.get(row.lessonId) === courseId);
+    const wanted = new Set(typeof courseId === "string" ? [courseId] : courseId);
+    rows = rows.filter((row) => wanted.has(owners.get(row.lessonId) ?? ""));
   }
   const days = new Set(rows.map((row) => studyDay(new Date(row.updatedAt), timezone)));
   return [...days].sort();
 });
 
-/** Сколько карточек повторено в этот день по плану; тренировка не в счёт. С курсом — только карточки курса. */
+/** Сколько карточек повторено в этот день по плану; тренировка не в счёт. С курсом — только карточки курса или курсов. */
 export const reviewedOn = zoned(async function reviewedOn(
   day: string,
-  courseId?: string,
+  courseId?: string | string[],
   database: AppDatabase = db,
 ): Promise<number> {
   const events = await database.events.where("localDate").equals(day).toArray();

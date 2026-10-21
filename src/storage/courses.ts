@@ -6,7 +6,14 @@ import Dexie from "dexie";
 import { DEFAULT_PALETTE, isPalette, type PaletteName } from "../content/palettes";
 import { DEFAULT_LANGUAGE, isLanguage, profileOf, type Language, type LanguageProfile } from "../domain/language";
 import { tryParseUnitKey, unitKey } from "../domain/refs";
-import { CARD_KINDS, type CardKind, type LearningRef, type LessonItem, type Session } from "../domain/types";
+import {
+  CARD_KINDS,
+  type CardKind,
+  type LearningRef,
+  type Lesson,
+  type LessonItem,
+  type Session,
+} from "../domain/types";
 import { db, distinctKeys, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
 import { lessonCourses } from "./lesson-courses";
@@ -53,13 +60,15 @@ export interface LanguageEntry {
   courses: CourseEntry[];
 }
 
-// Курс в базе язык не хранит: он есть у записей каталога его уроков.
+// Язык курса — у записей каталога его уроков; без них — у записи курса.
 export const courseLanguage = zoned(async function courseLanguage(
   courseId: string,
   database: AppDatabase = db,
 ): Promise<Language> {
   const language = (await database.catalog.where("courseId").equals(courseId).first())?.language;
-  return isLanguage(language) ? language : DEFAULT_LANGUAGE;
+  if (isLanguage(language)) return language;
+  const own = (await database.courses.get(courseId))?.language;
+  return isLanguage(own) ? own : DEFAULT_LANGUAGE;
 });
 export const profileOfCourse = zoned(async (courseId: string, database: AppDatabase = db) =>
   profileOf(await courseLanguage(courseId, database)),
@@ -200,11 +209,6 @@ export const todayCourse = zoned(async function todayCourse(database: AppDatabas
   }
   return undefined;
 });
-/** Курс занятия «Сегодня» без курса в адресе; все курсы на паузе — основной, как раньше. */
-export const sessionDefaultCourse = zoned(
-  async (database: AppDatabase = db): Promise<string | undefined> =>
-    (await todayCourse(database)) ?? primaryCourse(database),
-);
 export const setPrimaryCourse = (courseId: string, database: AppDatabase = db) =>
   database.meta.put({ key: PRIMARY_COURSE_KEY, value: courseId }).then(() => undefined);
 
@@ -389,12 +393,31 @@ export const cardLanguages = zoned(async function cardLanguages(
   return new Map(keys.map((key) => [key, languages.get(owners.get(key) ?? "") ?? DEFAULT_LANGUAGE]));
 });
 
+/** Чтения уроков и связей целиком; источник плана берёт их один раз на всё построение, а не на каждый курс. */
+export interface LessonReads {
+  lessons(): Promise<Lesson[]>;
+  items(): Promise<LessonItem[]>;
+}
+export const tableReads = (database: AppDatabase): LessonReads => ({
+  lessons: () => database.lessons.toArray(),
+  items: () => database.lessonItems.toArray(),
+});
+export function sharedReads(database: AppDatabase): LessonReads {
+  let lessons: Promise<Lesson[]> | undefined;
+  let items: Promise<LessonItem[]> | undefined;
+  return {
+    lessons: () => (lessons ??= database.lessons.toArray()),
+    items: () => (items ??= database.lessonItems.toArray()),
+  };
+}
+
 /** Уроки курса на устройстве; урок без курса (старый профиль) — у домашнего курса. */
 export const courseLessonIds = zoned(async function courseLessonIds(
   courseId: string,
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<string[]> {
-  const lessons = await database.lessons.toArray();
+  const lessons = await reads.lessons();
   const owners = await lessonCourses(
     lessons.filter((lesson) => !lesson.courseId).map((lesson) => lesson.id),
     database,
@@ -410,10 +433,11 @@ export const courseLessonIds = zoned(async function courseLessonIds(
 export const lessonItemsOf = zoned(async function lessonItemsOf(
   lessonIds: string[],
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<LessonItem[]> {
   if (!lessonIds.length) return [];
   const wanted = new Set(lessonIds);
-  return (await database.lessonItems.toArray()).filter((item) => wanted.has(item.lessonId));
+  return (await reads.items()).filter((item) => wanted.has(item.lessonId));
 });
 
 /** Идентификаторы карточек вида в уроках курса, по порядку id. */
@@ -421,10 +445,11 @@ export const courseCardIds = zoned(async function courseCardIds(
   courseId: string,
   kind: CardKind,
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<string[]> {
-  const lessonIds = await courseLessonIds(courseId, database);
+  const lessonIds = await courseLessonIds(courseId, database, reads);
   if (!lessonIds.length) return [];
-  const items = await lessonItemsOf(lessonIds, database);
+  const items = await lessonItemsOf(lessonIds, database, reads);
   return [...new Set(items.filter((item) => item.ref.kind === kind).map((item) => item.ref.id))].sort();
 });
 
@@ -433,17 +458,65 @@ export const sessionCourse = zoned(
   async (session: Pick<Session, "courseId">, database: AppDatabase = db) => session.courseId ?? homeCourse(database),
 );
 
-/** Незавершённое занятие курса, последнее по времени; без курса — любое, как до двух курсов. */
-export const activeSession = zoned(async function activeSession(
-  courseId?: string,
+/** Язык занятия: записанный новой версией, иначе язык его курса; занятие без курса — домашнего курса. */
+export const sessionLanguage = zoned(async function sessionLanguage(
+  session: Pick<Session, "courseId" | "language">,
   database: AppDatabase = db,
-): Promise<Session | null> {
+): Promise<Language> {
+  if (session.language) return session.language;
+  const courseId = await sessionCourse(session, database);
+  return courseId ? courseLanguage(courseId, database) : DEFAULT_LANGUAGE;
+});
+const isPracticeSession = (session: Session) => session.items.every((item) => item.mode === "practice");
+
+/**
+ * Какие незавершённые занятия предлагаются: тренировка — всегда; прежнее занятие повторения курса на паузе ждёт
+ * возврата курса; занятие новой версии — пока у его языка есть начатый курс не на паузе.
+ */
+const offeredSessions = zoned(async function offeredSessions(
+  database: AppDatabase,
+): Promise<{ session: Session; language: Language }[]> {
   const active = await database.sessions
     .where("[status+createdAt]")
     .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
     .reverse()
     .toArray();
-  if (!courseId) return active[0] ?? null;
-  const home = active.some((session) => !session.courseId) ? await homeCourse(database) : undefined;
-  return active.find((session) => (session.courseId ?? home) === courseId) ?? null;
+  if (!active.length) return [];
+  const [list, home] = await Promise.all([courses(database), homeCourse(database)]);
+  const byId = new Map(list.map((course) => [course.id, course]));
+  const going = new Set(list.filter((course) => course.started && !course.pausedAt).map((course) => course.language));
+  return active.flatMap((session) => {
+    const course = byId.get(session.courseId ?? home ?? "");
+    const language = session.language ?? course?.language ?? DEFAULT_LANGUAGE;
+    const waits = !isPracticeSession(session) && (session.language ? !going.has(language) : !!course?.pausedAt);
+    return waits ? [] : [{ session, language }];
+  });
 });
+
+/** Незавершённое занятие языка, последнее по времени, в том числе тренировка курса. */
+export const languageSession = zoned(
+  async (language: Language, database: AppDatabase = db): Promise<Session | null> =>
+    (await offeredSessions(database)).find((entry) => entry.language === language)?.session ?? null,
+);
+
+/**
+ * Курсы «Повторить ошибки»: все начатые курсы языка занятия, в том числе на паузе, курс занятия первым. Так курс,
+ * поставленный на паузу посреди занятия, сохраняет свои варианты, а занятие получает язык и курс.
+ */
+export const languageCourses = zoned(async function languageCourses(
+  session: Pick<Session, "courseId" | "language">,
+  database: AppDatabase = db,
+): Promise<string[]> {
+  const [language, own, list] = await Promise.all([
+    sessionLanguage(session, database),
+    sessionCourse(session, database),
+    courses(database),
+  ]);
+  const started = list.filter((course) => course.started && course.language === language).map((course) => course.id);
+  return own && started.includes(own) ? [own, ...started.filter((id) => id !== own)] : started;
+});
+
+/** Последнее незавершённое занятие любого языка: к нему ведёт «На главную» с адреса без занятия. */
+export const anyActiveSession = zoned(
+  async (database: AppDatabase = db): Promise<Session | null> => (await offeredSessions(database))[0]?.session ?? null,
+);

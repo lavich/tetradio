@@ -159,7 +159,7 @@ function Practice({ ref_, courseId, label }: { ref_: LearningRef; courseId?: str
     run(async () => {
       const session = await startSession(now, { refs: [ref_], mode: "practice", courseId });
       if (!session) return setProblem("Не удалось собрать тренировку.");
-      void navigate(await sessionPath(session.courseId));
+      void navigate(await sessionPath(session));
     });
   return (
     <>

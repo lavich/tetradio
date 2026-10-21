@@ -73,6 +73,9 @@ describe("выбор основного курса", () => {
     const radios = () => [...host.querySelectorAll('[data-testid="primary-course-choice"] [role="radio"]')];
     await until(() => radios().length === 2, "выбор основного");
     expect(radios().map((radio) => radio.textContent)).toEqual(["Греческий", "Английский для IT"]);
+    expect(host.textContent).toContain(
+      "Пока он идёт, его язык — первым и целиком на «Сегодня», его урок — первой строкой. Другие языки — компактно ниже.",
+    );
   });
 });
 
