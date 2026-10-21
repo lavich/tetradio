@@ -11,7 +11,7 @@ import {
   LessonIncompleteError,
   type ModuleLessonView,
   type ModuleView,
-  courseEnd,
+  courseFinished,
   moduleViews,
   nextCourseLesson,
   nextStep,
@@ -187,18 +187,17 @@ describe("прогресс курса в базе", () => {
     await db.lessons.update("m01-r1", { completed: true });
     expect(await nextCourseLesson("greek-a2", db)).toBeNull();
     expect(await step()).toBeNull();
-    expect(courseEnd(await moduleViews("greek-a2", db), null)).toBe("waiting");
+    expect(courseFinished(await moduleViews("greek-a2", db), null)).toBe(true);
     expect((await moduleViews("greek-a2", db))[0].completed).toBe(true);
   });
 
-  it("конец курса: черновики впереди — ждём, без черновиков — пройден, из одних черновиков — ничего", () => {
+  it("курс из одних черновиков не считается пройденным", () => {
     const draft = { module: { status: "draft" } } as ModuleView;
     const published = { module: { status: "published" } } as ModuleView;
-    expect(courseEnd([draft, published], null)).toBe("waiting");
-    expect(courseEnd([published], null)).toBe("finished");
-    expect(courseEnd([draft], null)).toBeNull();
-    expect(courseEnd([], null)).toBeNull();
-    expect(courseEnd([published], { view: published, lesson: {} as ModuleLessonView })).toBeNull();
+    expect(courseFinished([draft], null)).toBe(false);
+    expect(courseFinished([], null)).toBe(false);
+    expect(courseFinished([draft, published], null)).toBe(true);
+    expect(courseFinished([published], { view: published, lesson: {} as ModuleLessonView })).toBe(false);
   });
 });
 

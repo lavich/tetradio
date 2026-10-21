@@ -298,17 +298,14 @@ test("«Сегодня»: «Читать» вторичная, пока есть
   await expect(primary(page)).toHaveAttribute("data-primary", "false");
 });
 
-test("«Сегодня»: когда опубликованное пройдено и повторено, «Читать» главная рядом с текстом о готовящихся модулях", async ({
+test("«Сегодня»: когда всё пройдено и повторено, «Читать» главная рядом с текстом о пройденном курсе", async ({
   page,
 }) => {
   await startCourse(page);
   for (const id of ["m01-1", "m01-test", "m01-k1", "m01-r1"]) await complete(page, id);
   await page.evaluate(introduceAllCards);
   await page.goto("/app/");
-  await expect(page.getByTestId("course-waiting")).toHaveText(
-    "Опубликованные уроки пройдены. Следующие модули курса готовятся — пока повторяйте карточки.",
-  );
-  await expect(page.getByTestId("course-finished")).toHaveCount(0);
+  await expect(page.getByTestId("course-finished")).toBeVisible();
   await expect(primary(page)).toHaveAttribute("data-primary", "true");
   await expect(page.getByTestId("course-next")).toHaveCount(0);
 });
