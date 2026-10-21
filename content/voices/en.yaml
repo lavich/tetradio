@@ -80,6 +80,8 @@ characters:
   Ingrid: { gender: female, voice: Erinome }
   Camille: { gender: female, voice: Vindemiatrix }
   Tobias: { gender: male, voice: Sadachbia }
+  Anders: { gender: male, voice: Fenrir }
+  Lukas: { gender: male, voice: Enceladus }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

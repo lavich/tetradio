@@ -1,0 +1,685 @@
+title: план действий при инциденте, вопрос What would you do if the release broke production?
+kind: lesson
+items:
+  - { kind: phrase, id: ep267 }
+  - { kind: phrase, id: ep268 }
+  - { kind: phrase, id: ep269 }
+  - { kind: phrase, id: ep270 }
+  - { kind: phrase, id: ep271 }
+  - { kind: phrase, id: ep272 }
+  - { kind: phrase, id: ep273 }
+  - { kind: phrase, id: ep274 }
+  - { kind: phrase, id: ep275 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Ответ на «а если…» в пяти шагах
+    body: |-
+      Вопрос **What would you do if the release broke production?** проверяет, как вы рассуждаете в нештатной ситуации. Единого верного ответа у него нет: интервьюер слушает порядок действий, оценку риска и то, с кем вы согласуете решение. Ответ укладывается примерно в две минуты и идёт по шагам, на каждом хватает одной-трёх фраз.
+
+      **1. Вступление.** Скажите, что пойдёте по шагам: **I'd take it one step at a time.** Если нужны данные, назовите их: **Let me check one thing before I decide.**
+
+      **2. Масштаб.** Сначала выясните, что произошло: **First, I'd make sure I understand the impact.** Затем назовите первый приоритет: **My first priority would be to limit the damage.**
+
+      **3. Варианты и риск.** Назовите два-три варианта и сопоставьте их: **I'd weigh the risk against the deadline.** Назовите наихудший исход: **Worst case, we'd lose an hour of data.** Условия задайте через **as long as**, **unless** и **in case**: **As long as the data is correct, I'd go ahead.**
+
+      **4. Решение и люди.** Скажите, с кем вы согласуете решение: **I'd ask for a second opinion before deciding.** Если решение не за вами, назовите, кому вы его передадите: **If I can't fix it quickly, I'll escalate it.**
+
+      **5. Что потом.** Назовите, как вы закрываете тему: **I'd do a proper review once things calmed down.** Завершите открытым вопросом: **That's my plan, but I'm open to other ideas.**
+    table:
+      columns:
+        - шаг
+        - примерное время
+        - язык
+      rows:
+        - - вступление
+          - 5–10 секунд
+          - I'd take it one step at a time.
+        - - масштаб
+          - 20–25 секунд
+          - First, I'd make sure I understand the impact.
+        - - варианты и риск
+          - 30–40 секунд
+          - I'd weigh the risk against the deadline.
+        - - решение и люди
+          - 20–25 секунд
+          - I'd ask for a second opinion before deciding.
+        - - что потом
+          - 15–20 секунд
+          - I'd do a proper review once things calmed down.
+  - type: explanation
+    id: safe-decision
+    title: Какое решение называть и как о нём говорить
+    body: |-
+      В вопросах «а если…» интервьюер проверяет, можно ли доверить вам решение в нештатной ситуации. Для этого в ответе есть действия, которые видны и проверяемы: вы сообщаете о проблеме, не скрываете её, согласуете решение с теми, кого оно касается, и оставляете запись о том, что решили. Ответ «я бы всё исправил тихо» таких действий не содержит.
+
+      Говорите о процессе: сначала причина и масштаб, затем действия; вопрос о том, кто допустил сбой, не обсуждайте. Не обещайте невозможного (*I'd fix everything in five minutes*) и не описывайте героические ночи в одиночку. Если решение влияет на других, скажите, что вы вовлечёте дежурного и руководителя. Если данных не хватает, скажите об этом и назовите, что проверите.
+    table:
+      columns:
+        - вместо
+        - скажите
+        - почему
+      rows:
+        - - I'd fix it quietly and hope nobody notices
+          - I'd tell my manager and the team what happened
+          - проблему не скрывают
+        - - I'd find out who broke it
+          - I'd find out what allowed it to happen
+          - говорят о процессе
+        - - I'd stay up all night and do it alone
+          - I'd ask the on-call engineer to help
+          - решение разделяют с командой
+        - - I'd just ship it, it will be fine
+          - I'd weigh the risk and ask for a second opinion
+          - риск оценивают до решения
+        - - I'd skip the tests to save time
+          - I'd cut back the scope and keep the tests
+          - срок защищают сокращением объёма
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: phrase-choice
+    title: Подходящая фраза
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы начинаете отвечать на вопрос «а если…» и говорите, что пойдёте по шагам. Какая фраза подходит?
+        options:
+          - I'd take it one step at a time.
+          - That's my plan, but I'm open to other ideas.
+          - Worst case, we'd lose an hour of data.
+        answer: I'd take it one step at a time.
+        explanation: Ответ открывает фраза о порядке действий.
+      - id: q2
+        prompt: Вы называете первое действие — выяснить, как велик сбой. Какая фраза подходит?
+        options:
+          - First, I'd make sure I understand the impact.
+          - As long as the data is correct, I'd go ahead.
+          - It's a judgement call, but here's what I'd do.
+        answer: First, I'd make sure I understand the impact.
+        explanation: Первый шаг — выяснить масштаб последствий.
+      - id: q3
+        prompt: Вы называете наихудший исход. Какая фраза подходит?
+        options:
+          - Worst case, we'd lose an hour of data.
+          - If it were up to me, I'd wait a day.
+          - Let me check one thing before I decide.
+        answer: Worst case, we'd lose an hour of data.
+        explanation: Worst case с запятой вводит наихудший исход.
+      - id: q4
+        prompt: Вы говорите, что продолжили бы работу при условии, что данные верны. Какая фраза подходит?
+        options:
+          - As long as the data is correct, I'd go ahead.
+          - I'd ask for a second opinion before deciding.
+          - That's my plan, but I'm open to other ideas.
+        answer: As long as the data is correct, I'd go ahead.
+        explanation: As long as значит «при условии, что».
+      - id: q5
+        prompt: Вы говорите, что решение не только ваше, и просите мнение коллеги. Какая фраза подходит?
+        options:
+          - I'd ask for a second opinion before deciding.
+          - It's a judgement call, but here's what I'd do.
+          - If it were up to me, I'd wait a day.
+        answer: I'd ask for a second opinion before deciding.
+        explanation: Фраза называет действие до решения; в остальных вы уже называете своё решение.
+      - id: q6
+        prompt: Вы заканчиваете ответ и приглашаете к обсуждению. Какая фраза подходит?
+        options:
+          - That's my plan, but I'm open to other ideas.
+          - Let me check one thing before I decide.
+          - I'd take it one step at a time.
+        answer: That's my plan, but I'm open to other ideas.
+        explanation: Завершающая фраза — отдельный шаг ответа.
+  - type: exercise
+    id: decision-choice
+    title: Формулировка для собеседования
+    instruction: Выберите формулировку, которая подходит для ответа на собеседовании.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы описываете первый шаг при сбое после релиза.
+        options:
+          - I'd fix it quietly, and I'd hope nobody notices.
+          - I'd tell my manager and the team what happened, and I'd limit the damage first.
+          - I'd find out who made the change and ask them to fix it.
+        answer: I'd tell my manager and the team what happened, and I'd limit the damage first.
+        explanation: Образец называет сообщение о проблеме и первое действие; в остальных вариантах проблему скрывают или ищут виноватого.
+      - id: q2
+        prompt: Вы описываете, как вы принимаете рискованное решение.
+        options:
+          - I'd just ship it, because it will be fine.
+          - I'd weigh the risk and ask for a second opinion.
+          - I'd decide on my own, because asking takes too long.
+        answer: I'd weigh the risk and ask for a second opinion.
+        explanation: Образец показывает оценку риска и согласование; остальные варианты обходят оба шага.
+      - id: q3
+        prompt: Вы описываете, как защитите срок.
+        options:
+          - I'd skip the tests to save time.
+          - I'd cut back the scope and keep the tests.
+          - I'd work all night and do everything alone.
+        answer: I'd cut back the scope and keep the tests.
+        explanation: Образец сокращает объём работ и сохраняет проверки; в остальных вариантах страдает качество или здоровье команды.
+      - id: q4
+        prompt: Вы описываете, как закроете тему после инцидента.
+        options:
+          - I'd write a postmortem and add a check to the pipeline.
+          - I'd forget about it, because the service works again.
+          - I'd explain to everyone who caused it.
+        answer: I'd write a postmortem and add a check to the pipeline.
+        explanation: Образец называет разбор и изменение процесса; в остальных вариантах нет вывода или есть поиск виноватого.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Сначала я убедился бы, что понимаю масштаб последствий.
+        answer:
+          - "First, I would make sure that I understand the impact"
+          - "First, I would make sure that I understand the scale of the impact"
+          - "First, I would make sure that I understand the extent of the impact"
+          - "First, I would make sure that I understand the scope of the impact"
+          - "First, I would make sure that I understand the scale of the problem"
+          - "First, I would make sure that I understand the scale of the consequences"
+          - "First, I would make sure I understand the impact"
+          - "First, I would make sure I understand the scale of the impact"
+          - "First, I would make sure I understand the extent of the impact"
+          - "First, I would make sure I understand the scope of the impact"
+          - "First, I would make sure I understand the scale of the problem"
+          - "First, I would make sure I understand the scale of the consequences"
+          - "First I would make sure that I understand the impact"
+          - "First I would make sure that I understand the scale of the impact"
+          - "First I would make sure that I understand the extent of the impact"
+          - "First I would make sure that I understand the scope of the impact"
+          - "First I would make sure that I understand the scale of the problem"
+          - "First I would make sure that I understand the scale of the consequences"
+          - "First I would make sure I understand the impact"
+          - "First I would make sure I understand the scale of the impact"
+          - "First I would make sure I understand the extent of the impact"
+          - "First I would make sure I understand the scope of the impact"
+          - "First I would make sure I understand the scale of the problem"
+          - "First I would make sure I understand the scale of the consequences"
+          - "First of all, I would make sure that I understand the impact"
+          - "First of all, I would make sure that I understand the scale of the impact"
+          - "First of all, I would make sure that I understand the extent of the impact"
+          - "First of all, I would make sure that I understand the scope of the impact"
+          - "First of all, I would make sure that I understand the scale of the problem"
+          - "First of all, I would make sure that I understand the scale of the consequences"
+          - "First of all, I would make sure I understand the impact"
+          - "First of all, I would make sure I understand the scale of the impact"
+          - "First of all, I would make sure I understand the extent of the impact"
+          - "First of all, I would make sure I understand the scope of the impact"
+          - "First of all, I would make sure I understand the scale of the problem"
+          - "First of all, I would make sure I understand the scale of the consequences"
+          - "First of all I would make sure that I understand the impact"
+          - "First of all I would make sure that I understand the scale of the impact"
+          - "First of all I would make sure that I understand the extent of the impact"
+          - "First of all I would make sure that I understand the scope of the impact"
+          - "First of all I would make sure that I understand the scale of the problem"
+          - "First of all I would make sure that I understand the scale of the consequences"
+          - "First of all I would make sure I understand the impact"
+          - "First of all I would make sure I understand the scale of the impact"
+          - "First of all I would make sure I understand the extent of the impact"
+          - "First of all I would make sure I understand the scope of the impact"
+          - "First of all I would make sure I understand the scale of the problem"
+          - "First of all I would make sure I understand the scale of the consequences"
+          - "I would first make sure that I understand the impact"
+          - "I would first make sure that I understand the scale of the impact"
+          - "I would first make sure that I understand the extent of the impact"
+          - "I would first make sure that I understand the scope of the impact"
+          - "I would first make sure that I understand the scale of the problem"
+          - "I would first make sure that I understand the scale of the consequences"
+          - "I would first make sure I understand the impact"
+          - "I would first make sure I understand the scale of the impact"
+          - "I would first make sure I understand the extent of the impact"
+          - "I would first make sure I understand the scope of the impact"
+          - "I would first make sure I understand the scale of the problem"
+          - "I would first make sure I understand the scale of the consequences"
+          - "I would make sure that I understand the impact first"
+          - "I would make sure that I understand the scale of the impact first"
+          - "I would make sure that I understand the extent of the impact first"
+          - "I would make sure that I understand the scope of the impact first"
+          - "I would make sure that I understand the scale of the problem first"
+          - "I would make sure that I understand the scale of the consequences first"
+          - "I would make sure I understand the impact first"
+          - "I would make sure I understand the scale of the impact first"
+          - "I would make sure I understand the extent of the impact first"
+          - "I would make sure I understand the scope of the impact first"
+          - "I would make sure I understand the scale of the problem first"
+          - "I would make sure I understand the scale of the consequences first"
+        explanation: Would и базовая форма глагола; make sure — «убедиться».
+      - id: q2
+        prompt: Если бы решение зависело от меня, я бы подождал день.
+        answer:
+          - "If it were up to me, I would wait a day"
+          - "If it were up to me, I would wait one day"
+          - "If it were up to me, I would wait for a day"
+          - "If it were up to me, I would wait until tomorrow"
+          - "If it were up to me I would wait a day"
+          - "If it were up to me I would wait one day"
+          - "If it were up to me I would wait for a day"
+          - "If it were up to me I would wait until tomorrow"
+          - "If the decision were up to me, I would wait a day"
+          - "If the decision were up to me, I would wait one day"
+          - "If the decision were up to me, I would wait for a day"
+          - "If the decision were up to me, I would wait until tomorrow"
+          - "If the decision were up to me I would wait a day"
+          - "If the decision were up to me I would wait one day"
+          - "If the decision were up to me I would wait for a day"
+          - "If the decision were up to me I would wait until tomorrow"
+          - "If it were my decision, I would wait a day"
+          - "If it were my decision, I would wait one day"
+          - "If it were my decision, I would wait for a day"
+          - "If it were my decision, I would wait until tomorrow"
+          - "If it were my decision I would wait a day"
+          - "If it were my decision I would wait one day"
+          - "If it were my decision I would wait for a day"
+          - "If it were my decision I would wait until tomorrow"
+          - "If it depended on me, I would wait a day"
+          - "If it depended on me, I would wait one day"
+          - "If it depended on me, I would wait for a day"
+          - "If it depended on me, I would wait until tomorrow"
+          - "If it depended on me I would wait a day"
+          - "If it depended on me I would wait one day"
+          - "If it depended on me I would wait for a day"
+          - "If it depended on me I would wait until tomorrow"
+          - "If the decision depended on me, I would wait a day"
+          - "If the decision depended on me, I would wait one day"
+          - "If the decision depended on me, I would wait for a day"
+          - "If the decision depended on me, I would wait until tomorrow"
+          - "If the decision depended on me I would wait a day"
+          - "If the decision depended on me I would wait one day"
+          - "If the decision depended on me I would wait for a day"
+          - "If the decision depended on me I would wait until tomorrow"
+        explanation: После second conditional у be стоит were; would стоит в главной части.
+      - id: q3
+        prompt: Прежде чем решать, я бы попросил второе мнение.
+        answer:
+          - "I would ask for a second opinion before deciding"
+          - "I would ask for a second opinion before I decide"
+          - "I would ask for a second opinion before I make a decision"
+          - "I would ask for a second opinion before making a decision"
+          - "I would ask for a second opinion before making the decision"
+          - "I would get a second opinion before deciding"
+          - "I would get a second opinion before I decide"
+          - "I would get a second opinion before I make a decision"
+          - "I would get a second opinion before making a decision"
+          - "I would get a second opinion before making the decision"
+          - "I would ask someone for a second opinion before deciding"
+          - "I would ask someone for a second opinion before I decide"
+          - "I would ask someone for a second opinion before I make a decision"
+          - "I would ask someone for a second opinion before making a decision"
+          - "I would ask someone for a second opinion before making the decision"
+          - "Before deciding, I would ask for a second opinion"
+          - "Before deciding, I would get a second opinion"
+          - "Before deciding, I would ask someone for a second opinion"
+          - "Before deciding I would ask for a second opinion"
+          - "Before deciding I would get a second opinion"
+          - "Before deciding I would ask someone for a second opinion"
+          - "Before I decide, I would ask for a second opinion"
+          - "Before I decide, I would get a second opinion"
+          - "Before I decide, I would ask someone for a second opinion"
+          - "Before I decide I would ask for a second opinion"
+          - "Before I decide I would get a second opinion"
+          - "Before I decide I would ask someone for a second opinion"
+          - "Before I make a decision, I would ask for a second opinion"
+          - "Before I make a decision, I would get a second opinion"
+          - "Before I make a decision, I would ask someone for a second opinion"
+          - "Before I make a decision I would ask for a second opinion"
+          - "Before I make a decision I would get a second opinion"
+          - "Before I make a decision I would ask someone for a second opinion"
+          - "Before making a decision, I would ask for a second opinion"
+          - "Before making a decision, I would get a second opinion"
+          - "Before making a decision, I would ask someone for a second opinion"
+          - "Before making a decision I would ask for a second opinion"
+          - "Before making a decision I would get a second opinion"
+          - "Before making a decision I would ask someone for a second opinion"
+          - "Before making the decision, I would ask for a second opinion"
+          - "Before making the decision, I would get a second opinion"
+          - "Before making the decision, I would ask someone for a second opinion"
+          - "Before making the decision I would ask for a second opinion"
+          - "Before making the decision I would get a second opinion"
+          - "Before making the decision I would ask someone for a second opinion"
+        explanation: Before и герундий или before I decide; ask for — «попросить».
+      - id: q4
+        prompt: Это вопрос суждения, но вот что я бы сделал.
+        answer:
+          - "It is a judgement call, but here is what I would do"
+          - "It is a judgement call, but this is what I would do"
+          - "It is a judgement call but here is what I would do"
+          - "It is a judgement call but this is what I would do"
+          - "It is a judgment call, but here is what I would do"
+          - "It is a judgment call, but this is what I would do"
+          - "It is a judgment call but here is what I would do"
+          - "It is a judgment call but this is what I would do"
+          - "This is a judgement call, but here is what I would do"
+          - "This is a judgement call, but this is what I would do"
+          - "This is a judgement call but here is what I would do"
+          - "This is a judgement call but this is what I would do"
+          - "This is a judgment call, but here is what I would do"
+          - "This is a judgment call, but this is what I would do"
+          - "This is a judgment call but here is what I would do"
+          - "This is a judgment call but this is what I would do"
+          - "That is a judgement call, but here is what I would do"
+          - "That is a judgement call, but this is what I would do"
+          - "That is a judgement call but here is what I would do"
+          - "That is a judgement call but this is what I would do"
+          - "That is a judgment call, but here is what I would do"
+          - "That is a judgment call, but this is what I would do"
+          - "That is a judgment call but here is what I would do"
+          - "That is a judgment call but this is what I would do"
+        explanation: A judgement call — решение, которое зависит от оценки ситуации.
+      - id: q5
+        prompt: Если данные верны, я продолжил бы работу.
+        answer:
+          - "As long as the data is correct, I would go ahead"
+          - "As long as the data is correct, I would proceed"
+          - "As long as the data is correct, I would continue"
+          - "As long as the data is correct, I would go ahead with it"
+          - "As long as the data is correct, I would proceed with it"
+          - "As long as the data is correct I would go ahead"
+          - "As long as the data is correct I would proceed"
+          - "As long as the data is correct I would continue"
+          - "As long as the data is correct I would go ahead with it"
+          - "As long as the data is correct I would proceed with it"
+          - "As long as the data is accurate, I would go ahead"
+          - "As long as the data is accurate, I would proceed"
+          - "As long as the data is accurate, I would continue"
+          - "As long as the data is accurate, I would go ahead with it"
+          - "As long as the data is accurate, I would proceed with it"
+          - "As long as the data is accurate I would go ahead"
+          - "As long as the data is accurate I would proceed"
+          - "As long as the data is accurate I would continue"
+          - "As long as the data is accurate I would go ahead with it"
+          - "As long as the data is accurate I would proceed with it"
+          - "As long as the data is right, I would go ahead"
+          - "As long as the data is right, I would proceed"
+          - "As long as the data is right, I would continue"
+          - "As long as the data is right, I would go ahead with it"
+          - "As long as the data is right, I would proceed with it"
+          - "As long as the data is right I would go ahead"
+          - "As long as the data is right I would proceed"
+          - "As long as the data is right I would continue"
+          - "As long as the data is right I would go ahead with it"
+          - "As long as the data is right I would proceed with it"
+          - "As long as the data are correct, I would go ahead"
+          - "As long as the data are correct, I would proceed"
+          - "As long as the data are correct, I would continue"
+          - "As long as the data are correct, I would go ahead with it"
+          - "As long as the data are correct, I would proceed with it"
+          - "As long as the data are correct I would go ahead"
+          - "As long as the data are correct I would proceed"
+          - "As long as the data are correct I would continue"
+          - "As long as the data are correct I would go ahead with it"
+          - "As long as the data are correct I would proceed with it"
+          - "As long as the data are accurate, I would go ahead"
+          - "As long as the data are accurate, I would proceed"
+          - "As long as the data are accurate, I would continue"
+          - "As long as the data are accurate, I would go ahead with it"
+          - "As long as the data are accurate, I would proceed with it"
+          - "As long as the data are accurate I would go ahead"
+          - "As long as the data are accurate I would proceed"
+          - "As long as the data are accurate I would continue"
+          - "As long as the data are accurate I would go ahead with it"
+          - "As long as the data are accurate I would proceed with it"
+          - "As long as the data are right, I would go ahead"
+          - "As long as the data are right, I would proceed"
+          - "As long as the data are right, I would continue"
+          - "As long as the data are right, I would go ahead with it"
+          - "As long as the data are right, I would proceed with it"
+          - "As long as the data are right I would go ahead"
+          - "As long as the data are right I would proceed"
+          - "As long as the data are right I would continue"
+          - "As long as the data are right I would go ahead with it"
+          - "As long as the data are right I would proceed with it"
+          - "If the data is correct, I would go ahead"
+          - "If the data is correct, I would proceed"
+          - "If the data is correct, I would continue"
+          - "If the data is correct, I would go ahead with it"
+          - "If the data is correct, I would proceed with it"
+          - "If the data is correct I would go ahead"
+          - "If the data is correct I would proceed"
+          - "If the data is correct I would continue"
+          - "If the data is correct I would go ahead with it"
+          - "If the data is correct I would proceed with it"
+          - "If the data is accurate, I would go ahead"
+          - "If the data is accurate, I would proceed"
+          - "If the data is accurate, I would continue"
+          - "If the data is accurate, I would go ahead with it"
+          - "If the data is accurate, I would proceed with it"
+          - "If the data is accurate I would go ahead"
+          - "If the data is accurate I would proceed"
+          - "If the data is accurate I would continue"
+          - "If the data is accurate I would go ahead with it"
+          - "If the data is accurate I would proceed with it"
+          - "If the data is right, I would go ahead"
+          - "If the data is right, I would proceed"
+          - "If the data is right, I would continue"
+          - "If the data is right, I would go ahead with it"
+          - "If the data is right, I would proceed with it"
+          - "If the data is right I would go ahead"
+          - "If the data is right I would proceed"
+          - "If the data is right I would continue"
+          - "If the data is right I would go ahead with it"
+          - "If the data is right I would proceed with it"
+          - "If the data are correct, I would go ahead"
+          - "If the data are correct, I would proceed"
+          - "If the data are correct, I would continue"
+          - "If the data are correct, I would go ahead with it"
+          - "If the data are correct, I would proceed with it"
+          - "If the data are correct I would go ahead"
+          - "If the data are correct I would proceed"
+          - "If the data are correct I would continue"
+          - "If the data are correct I would go ahead with it"
+          - "If the data are correct I would proceed with it"
+          - "If the data are accurate, I would go ahead"
+          - "If the data are accurate, I would proceed"
+          - "If the data are accurate, I would continue"
+          - "If the data are accurate, I would go ahead with it"
+          - "If the data are accurate, I would proceed with it"
+          - "If the data are accurate I would go ahead"
+          - "If the data are accurate I would proceed"
+          - "If the data are accurate I would continue"
+          - "If the data are accurate I would go ahead with it"
+          - "If the data are accurate I would proceed with it"
+          - "If the data are right, I would go ahead"
+          - "If the data are right, I would proceed"
+          - "If the data are right, I would continue"
+          - "If the data are right, I would go ahead with it"
+          - "If the data are right, I would proceed with it"
+          - "If the data are right I would go ahead"
+          - "If the data are right I would proceed"
+          - "If the data are right I would continue"
+          - "If the data are right I would go ahead with it"
+          - "If the data are right I would proceed with it"
+          - "I would go ahead as long as the data is correct"
+          - "I would go ahead as long as the data is accurate"
+          - "I would go ahead as long as the data is right"
+          - "I would go ahead as long as the data are correct"
+          - "I would go ahead as long as the data are accurate"
+          - "I would go ahead as long as the data are right"
+          - "I would go ahead if the data is correct"
+          - "I would go ahead if the data is accurate"
+          - "I would go ahead if the data is right"
+          - "I would go ahead if the data are correct"
+          - "I would go ahead if the data are accurate"
+          - "I would go ahead if the data are right"
+          - "I would proceed as long as the data is correct"
+          - "I would proceed as long as the data is accurate"
+          - "I would proceed as long as the data is right"
+          - "I would proceed as long as the data are correct"
+          - "I would proceed as long as the data are accurate"
+          - "I would proceed as long as the data are right"
+          - "I would proceed if the data is correct"
+          - "I would proceed if the data is accurate"
+          - "I would proceed if the data is right"
+          - "I would proceed if the data are correct"
+          - "I would proceed if the data are accurate"
+          - "I would proceed if the data are right"
+          - "I would continue as long as the data is correct"
+          - "I would continue as long as the data is accurate"
+          - "I would continue as long as the data is right"
+          - "I would continue as long as the data are correct"
+          - "I would continue as long as the data are accurate"
+          - "I would continue as long as the data are right"
+          - "I would continue if the data is correct"
+          - "I would continue if the data is accurate"
+          - "I would continue if the data is right"
+          - "I would continue if the data are correct"
+          - "I would continue if the data are accurate"
+          - "I would continue if the data are right"
+          - "I would go ahead with it as long as the data is correct"
+          - "I would go ahead with it as long as the data is accurate"
+          - "I would go ahead with it as long as the data is right"
+          - "I would go ahead with it as long as the data are correct"
+          - "I would go ahead with it as long as the data are accurate"
+          - "I would go ahead with it as long as the data are right"
+          - "I would go ahead with it if the data is correct"
+          - "I would go ahead with it if the data is accurate"
+          - "I would go ahead with it if the data is right"
+          - "I would go ahead with it if the data are correct"
+          - "I would go ahead with it if the data are accurate"
+          - "I would go ahead with it if the data are right"
+          - "I would proceed with it as long as the data is correct"
+          - "I would proceed with it as long as the data is accurate"
+          - "I would proceed with it as long as the data is right"
+          - "I would proceed with it as long as the data are correct"
+          - "I would proceed with it as long as the data are accurate"
+          - "I would proceed with it as long as the data are right"
+          - "I would proceed with it if the data is correct"
+          - "I would proceed with it if the data is accurate"
+          - "I would proceed with it if the data is right"
+          - "I would proceed with it if the data are correct"
+          - "I would proceed with it if the data are accurate"
+          - "I would proceed with it if the data are right"
+        explanation: As long as значит «при условии, что»; после него стоит настоящее время.
+  - type: writing
+    id: plan
+    register: formal
+    prompt: "Напишите план действий при вымышленном инциденте (80–120 слов): когда его открывают, первые шаги, кто и когда эскалирует, как сообщают заинтересованным сторонам, что делают после. Используйте if, unless и in case. Описывайте процесс, не называйте людей и компании."
+    words: { min: 80, max: 120 }
+    model: |-
+      Incident plan: payment errors after a release. If the error rate rises above two percent after a release, the on-call engineer will open an incident and inform the team lead. First, the team will check the alerts and decide whether the change caused the problem. If it did, the team will roll it back or switch off the new feature with the kill switch. Unless the cause is clear within thirty minutes, the team lead will escalate the incident to the engineering manager. Stakeholders will receive an update every thirty minutes, in case the problem lasts longer. Afterwards, the team will write a postmortem and add a check to the pipeline.
+    criteria:
+      - 80–120 слов, есть условие открытия инцидента, первые шаги, эскалация, сообщение заинтересованным сторонам и шаги после
+      - Использованы if с настоящим временем и will, unless и in case
+      - Названы сроки или пороги (минуты, процент ошибок)
+      - План описывает роли и процесс, без имён и обвинений
+      - Формальный стиль без сокращений
+      - Цифры вымышленные, названий компаний нет
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Одиннадцатый ответ вашего **банка ответов** — вопрос **What would you do if the release broke production?** К нему добавляется второй вопрос: **What would you do if two deadlines clashed?** Первый ответ занимает до двух минут, второй — до минуты.
+
+      1) Разложите первый ответ по пяти шагам: вступление, масштаб, варианты и риск, решение и люди, что потом. 2) Запишите ответ вслух и уложитесь во время. 3) Переслушайте и сверьте с образцом и критериями: названо первое действие, есть оценка риска, решение согласовано, нет поиска виноватого. 4) Для второго вопроса назовите, что вы уточните, как сопоставите риск и срок и с кем обсудите решение; используйте would и хотя бы одно из unless, in case, as long as.
+
+      Сцена в конце урока строится на серии вопросов «а если…». Реплики записаны ниже, перед сценой; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: release
+    part: interview
+    prompt: "Интервьюер спрашивает: «What would you do if the release broke production?» Ответьте за 120 секунд: первое действие, масштаб, варианты и риск, с кем вы согласуете решение, что вы сделаете потом."
+    seconds: 120
+    model: "I'd take it one step at a time. First, I'd make sure I understand the impact: how many users are affected, and how severe the problem is. My first priority would be to limit the damage. If the release caused it, I would roll it back first, because that is the fastest way to restore the service. If I couldn't roll it back, I would turn the feature off with a kill switch or fix forward, but I wouldn't make that decision on my own. I'd let my manager and the stakeholders know what was happening, and I'd ask for a second opinion before I changed production again. Worst case, some users would see errors for an hour, so I would also keep a backup plan in case the first fix failed. Once things calmed down, I'd do a proper review: I'd write a postmortem and add a check to the pipeline so that it couldn't happen again. That's my plan, but I'm open to other ideas."
+    criteria:
+      - Назван первый шаг — выяснить масштаб и ограничить ущерб
+      - Есть second conditional с would в главных частях
+      - Названо наихудшее последствие или риск
+      - Названо, с кем согласуется решение, кому и когда сообщают
+      - Использована одна конструкция с unless, in case или as long as
+      - Названо, что делают после, — разбор и изменение процесса
+      - Использованы не меньше трёх фраз урока
+      - Нет поиска виноватого, названий компаний и людей
+      - Ответ укладывается в 120 секунд
+  - type: speaking
+    id: deadlines
+    part: monologue
+    prompt: "Интервьюер уточняет: «What would you do if two deadlines clashed?» Ответьте за 60 секунд: что вы уточните, как сопоставите риск и срок, с кем обсудите решение."
+    seconds: 60
+    model: "If two deadlines clashed, I'd ask which one matters more to the business and what would happen if the other one slipped. It would depend on how many users were affected. I'd weigh the risk against the deadline, and I'd explain the trade-off to my manager, so that the team could decide together. Unless both were equally urgent, I would start with the more important one and tell the other stakeholders early. If I couldn't deliver both, I'd cut back the scope instead of cutting corners."
+    criteria:
+      - Названо, что уточняется до решения
+      - Есть second conditional и would
+      - Названо, как сопоставляются риск и срок
+      - Решение обсуждается с руководителем или командой
+      - Есть unless, in case или as long as
+      - Нет обвинения коллег
+      - Ответ укладывается в 60 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Anders, text: "Thanks for joining. Let's try some what-if questions. What would you do if the release broke production?" }
+      - { speaker: Anders, text: "Mm-hm. And what would you do if you couldn't roll it back?" }
+      - { speaker: Anders, text: "I see. What would you do if two deadlines clashed?" }
+      - { speaker: Anders, text: "Okay. And what would you do if you weren't sure which option was safer?" }
+      - { speaker: Anders, text: "Thank you. That was a clear way of thinking it through." }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на техническом собеседовании, вопросы задаёт Anders, старший инженер. Прослушайте его реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику назовите первые шаги при сбое после релиза. На вторую скажите, что вы сделали бы, если откат невозможен. На третью — как выбрали бы между двумя сроками. На четвёртую — как вы действуете, когда не уверены в безопасном варианте. На последнюю поблагодарите. Вся ваша часть — 120 секунд, каждая реплика — две-четыре фразы.
+    seconds: 120
+    model: |-
+      Anders: Thanks for joining. Let's try some what-if questions. What would you do if the release broke production?
+      You: I'd make sure I understand the impact first. My first priority would be to limit the damage, so if the release caused it, I would roll it back. I'd also let my manager know what was happening.
+      Anders: Mm-hm. And what would you do if you couldn't roll it back?
+      You: I'd look for a safer option, like turning the feature off with a kill switch or fixing forward. If I couldn't fix it within an hour, I would escalate it. I wouldn't make that decision on my own.
+      Anders: I see. What would you do if two deadlines clashed?
+      You: I'd ask which one matters more to the business. It would depend on how many users were affected. Then I'd explain the trade-off to my manager and let the team decide.
+      Anders: Okay. And what would you do if you weren't sure which option was safer?
+      You: I'd ask for a second opinion and test the option on a small group of users first, in case something went wrong. As long as I could switch it off quickly, I would feel comfortable.
+      Anders: Thank you. That was a clear way of thinking it through.
+      You: Thank you for the questions. That's my plan, but I'm open to other ideas.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — две-четыре фразы
+      - В первой реплике названы масштаб, первый приоритет и сообщение руководителю
+      - Во второй реплике названо альтернативное действие и эскалация
+      - В третьей реплике решение сопоставлено с риском и согласовано с командой
+      - В четвёртой реплике есть второе мнение или осторожный выпуск
+      - Использованы would и одна конструкция с unless, in case или as long as
+      - В конце есть благодарность
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модулей
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If I had asked for a review, we ___ the bug. (прошлое, которое не случилось)"
+        options: [would have found, would find, will find]
+        answer: would have found
+        explanation: Conditional 3 — would have и третья форма глагола.
+      - id: q2
+        prompt: "We ___ on the migration for three weeks when the problem appeared. (процесс шёл до момента)"
+        options: [had been working, have been working, will be working]
+        answer: had been working
+        explanation: Длительное действие до момента в прошлом — past perfect continuous.
+      - id: q3
+        prompt: "The incident ___ by the on-call engineer. (был замечен)"
+        options: [was noticed, noticed, was noticing]
+        answer: was noticed
+        explanation: Действие совершается над инцидентом, поэтому нужен passive.
+      - id: q4
+        prompt: "I ___ at this company since 2022. (до сих пор)"
+        options: [have worked, worked, am working]
+        answer: have worked
+        explanation: Since и связь с настоящим — present perfect.
+      - id: q5
+        prompt: "By the time I joined the call, the team ___ the cause. (уже нашла)"
+        options: [had found, finds, was find]
+        answer: had found
+        explanation: Более раннее событие в прошлом стоит в past perfect — had и третья форма глагола.
+      - id: q6
+        prompt: "Could you tell me when ___ start? (вежливый вопрос)"
+        options: [I could, could I, I can to]
+        answer: I could
+        explanation: В косвенном вопросе порядок слов как в утверждении.

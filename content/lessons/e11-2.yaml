@@ -1,0 +1,395 @@
+title: кейс сорвавшегося релиза и гипотетические вопросы на интервью
+kind: lesson
+items:
+  - { kind: word, id: ew369 }
+  - { kind: word, id: ew370 }
+  - { kind: word, id: ew371 }
+  - { kind: word, id: ew372 }
+  - { kind: word, id: ew373 }
+  - { kind: word, id: ew374 }
+  - { kind: word, id: ew375 }
+  - { kind: word, id: ew376 }
+  - { kind: word, id: ew377 }
+  - { kind: word, id: ew378 }
+  - { kind: word, id: ew379 }
+  - { kind: word, id: ew380 }
+  - { kind: word, id: ew381 }
+  - { kind: word, id: ew382 }
+  - { kind: word, id: ew383 }
+  - { kind: word, id: ew384 }
+  - { kind: word, id: ew385 }
+  - { kind: phrase, id: ep259 }
+  - { kind: phrase, id: ep260 }
+  - { kind: phrase, id: ep261 }
+  - { kind: phrase, id: ep262 }
+  - { kind: phrase, id: ep263 }
+  - { kind: phrase, id: ep264 }
+  - { kind: phrase, id: ep265 }
+  - { kind: phrase, id: ep266 }
+blocks:
+  - type: explanation
+    id: decision-words
+    title: Слова о риске, выпуске и инциденте
+    body: |-
+      Тексты урока описывают, как команда решает, выпускать ли изменение и что делать при сбое. Слова урока образуют три группы.
+
+      **Оценка и решение.** **A risk assessment** — оценка рисков: что может пойти не так, насколько вероятно и насколько тяжело. **Likelihood** — вероятность. **A cost-benefit analysis** — сопоставление затрат и выгод варианта. **A rule of thumb** — практическое правило, которое работает в большинстве случаев. **A tie-breaker** — довод, который решает выбор между равными вариантами. **The bottom line** — главный итог, сказанный одной фразой.
+
+      **Выпуск и сроки.** **A phased rollout** — постепенный выпуск: сначала часть пользователей, затем остальные. **A go/no-go decision** — решение «выпускаем или нет» перед релизом. **A release window** — время, в которое разрешено выпускать изменения. **A change request** — оформленный запрос на изменение. **An error budget** — допустимый объём сбоев за период. **An SLA** — соглашение об уровне сервиса, обещание клиенту, например по доступности. **Cut back** — сократить объём.
+
+      **Инцидент.** **A war room** — временная группа или канал, где команда решает серьёзный инцидент. **Page someone** — вызвать дежурного инженера через систему оповещений. **Stand down** — завершить режим тревоги и вернуться к обычной работе. **A game day** — учения, на которых команда намеренно моделирует сбой.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: assess-match
+    title: Оценка и решение
+    instruction: Соедините определение с английским словом или выражением. Три варианта лишние.
+    format: match
+    bank:
+      - likelihood
+      - a phased rollout
+      - an error budget
+      - a go/no-go decision
+      - a tie-breaker
+      - a cost-benefit analysis
+      - the bottom line
+      - a risk assessment
+      - an SLA
+      - a rule of thumb
+    items:
+      - { id: m1, prompt: "вероятность того, что событие произойдёт", answer: likelihood }
+      - { id: m2, prompt: "выпуск, при котором новую версию сначала получает небольшая часть пользователей", answer: a phased rollout }
+      - { id: m3, prompt: "допустимый объём сбоев за период", answer: an error budget }
+      - { id: m4, prompt: "решение «выпускаем или нет», которое принимают перед релизом", answer: a go/no-go decision }
+      - { id: m5, prompt: "довод, который решает выбор между равными вариантами", answer: a tie-breaker }
+      - { id: m6, prompt: "сопоставление затрат и выгод каждого варианта", answer: a cost-benefit analysis }
+      - { id: m7, prompt: "главный итог разговора, сказанный одной фразой", answer: the bottom line }
+  - type: exercise
+    id: release-gap
+    title: Выпуск и сроки
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a risk assessment
+      - a change request
+      - a release window
+      - an SLA
+      - cut back
+      - a rule of thumb
+      - a phased rollout
+      - likelihood
+    items:
+      - id: g1
+        prompt: Before a large change, the team writes ___ that lists what can go wrong and how severe it would be. (оценка рисков)
+        answer: a risk assessment
+      - id: g2
+        prompt: A new requirement arrived late, so the product owner filed ___ and the team decided when to fit it in. (запрос на изменение)
+        answer: a change request
+      - id: g3
+        prompt: Releases are allowed only on weekdays before four o'clock; that period is ___. (время для выпуска)
+        answer: a release window
+      - id: g4
+        prompt: The contract promises 99.9 percent availability, so the team must meet ___. (соглашение об уровне сервиса)
+        answer: an SLA
+      - id: g5
+        prompt: We cannot do everything this month, so we will ___ the scope. (сократить)
+        answer: cut back
+      - id: g6
+        prompt: As ___, we do not release on Fridays if the change touches payments. (практическое правило)
+        answer: a rule of thumb
+  - type: exercise
+    id: incident-gap
+    title: Инцидент
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a war room
+      - page someone
+      - stand down
+      - a game day
+      - an error budget
+      - a phased rollout
+      - the bottom line
+      - a go/no-go decision
+    items:
+      - id: g1
+        prompt: The database stopped answering at night, so the engineer decided to ___ from the storage team. (вызвать дежурного)
+        answer: page someone
+      - id: g2
+        prompt: For a serious outage, the team opens ___, one channel where everyone who works on it can talk. (временная группа)
+        answer: a war room
+      - id: g3
+        prompt: When the service was stable again, the incident lead told everyone to ___. (завершить режим тревоги)
+        answer: stand down
+      - id: g4
+        prompt: "Every quarter we run ___: we switch off a test database on purpose and watch how the team reacts. (учения)"
+        answer: a game day
+      - id: g5
+        prompt: Only five percent of users got the new version on the first day. This is ___. (постепенный выпуск)
+        answer: a phased rollout
+      - id: g6
+        prompt: The team has used up ___ for this quarter, so new features wait until the service is stable. (допустимый объём сбоев)
+        answer: an error budget
+  - type: explanation
+    id: reading-how
+    title: Как читать кейс
+    body: |-
+      Кейс описывает ситуацию, которую нужно решить, и проверяет, как вы рассуждаете. Обычно в нём четыре части. **Situation** — что произошло и когда. **What the team knows** — факты и то, чего команда ещё не знает. **Options** — варианты действий. **Constraints** — ограничения по времени, договорам и рискам. Решение в конце называет выбранный вариант и причину.
+
+      В тексте условные конструкции показывают последствия: **If the team stays below that level for another hour, the company will owe credits** — реальная возможность, first conditional. **Unless the problem is contained before 18:00, the busiest hours will be affected** — условие «если не». **…in case a problem remains** — подготовка на случай, если проблема останется. Слова вне списков переведены под текстом.
+  - type: reading
+    id: case
+    title: "Case: a release that broke checkout"
+    text: |-
+      Case: a release that broke checkout
+      Northmere Payments · internal training case · example
+
+      Situation
+      It is Thursday, 16:40. At 16:00 the team released version 4.2 of the web shop. Since then, about one in six card payments has failed with an error. Checkout is the main source of revenue, and the busiest hours start at 18:00. The on-call engineer has opened an incident and paged the team lead.
+
+      What the team knows
+      The errors started with the release. The release contained a new payment feature and an unrelated change to the search page. The new feature is behind a kill switch, and the old payment form still works. A rollback takes about ten minutes, but it also removes a security fix that was released together with the feature. A fix for the payment bug is probably small, but it has not been tested yet. The release window for the day closes at 17:00.
+
+      Options
+      A. Roll back the whole release now.
+      B. Fix forward: write a patch, test it and deploy it before 17:00.
+      C. Turn off the new payment feature with the kill switch and keep the rest of the release.
+
+      Constraints
+      The service level agreement promises 99.9 percent availability for payments. If the team stays below that level for another hour, the company will owe credits to its customers. Unless the problem is contained before 18:00, the busiest hours will be affected.
+
+      Recommendation
+      The team chooses option C: the kill switch takes one minute, removes the failing feature and keeps the security fix. The team will then fix the bug properly and will use a phased rollout in case a problem remains. The decision and its reasons are written down in the incident ticket.
+    glosses:
+      - { text: revenue, russian: выручка }
+      - { text: unrelated, russian: "не связанный с этим" }
+      - { text: patch, russian: "небольшое исправление кода" }
+      - { text: "service level agreement", russian: "соглашение об уровне сервиса" }
+      - { text: availability, russian: "доступность сервиса" }
+      - { text: credits, russian: "компенсация клиентам" }
+      - { text: contained, russian: "ограничена, не распространяется дальше" }
+      - { text: ticket, russian: "обращение, тикет" }
+  - type: exercise
+    id: case-tf
+    about: case
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The release was deployed at 16:00.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: About half of the card payments failed.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "About one in six — примерно каждый шестой платёж."
+      - id: q3
+        prompt: A rollback would also remove a security fix.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: The fix for the payment bug has already been tested.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "It has not been tested yet — исправление ещё не проверено."
+      - id: q5
+        prompt: Turning off the new feature with the kill switch takes about ten minutes.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "The kill switch takes one minute; десять минут занимает откат."
+      - id: q6
+        prompt: The team decides to roll back the whole release.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "The team chooses option C — команда выбирает вариант C, выключение функции."
+  - type: exercise
+    id: case-find
+    about: case
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why is 18:00 important?
+        options:
+          - The busiest hours start.
+          - The release window opens.
+          - The security fix expires.
+        answer: The busiest hours start.
+      - id: q2
+        prompt: What does option C keep?
+        options:
+          - the rest of the release, including the security fix
+          - only the new payment feature
+          - nothing from the release
+        answer: the rest of the release, including the security fix
+      - id: q3
+        prompt: What happens if the team stays below 99.9 percent for another hour?
+        options:
+          - The company will owe credits to its customers.
+          - The release will be rolled back automatically.
+          - The on-call engineer will stand down.
+        answer: The company will owe credits to its customers.
+      - id: q4
+        prompt: When does the release window close?
+        options: ["17:00", "16:00", "18:00"]
+        answer: "17:00"
+      - id: q5
+        prompt: Why will the team use a phased rollout for the fix?
+        options:
+          - in case a problem remains
+          - because the contract requires it
+          - because the security fix needs it
+        answer: in case a problem remains
+  - type: exercise
+    id: case-grammar
+    about: case
+    title: Конструкции в тексте
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«Unless the problem is contained before 18:00, the busiest hours will be affected.» Что значит unless?"
+        options: [если не, пока не, потому что]
+        answer: если не
+        explanation: Unless значит «если не»; глагол после него стоит в утвердительной форме.
+      - id: q2
+        prompt: "«The team will use a phased rollout in case a problem remains.» Что значит in case?"
+        options:
+          - на случай, если проблема останется
+          - потому что проблема уже осталась
+          - если проблема останется, команда сразу начнёт выпуск
+        answer: на случай, если проблема останется
+        explanation: In case описывает подготовку заранее, до того как проблема подтвердилась.
+      - id: q3
+        prompt: "«If the team stays below that level for another hour, the company will owe credits.» Почему после if стоит present simple?"
+        options:
+          - это реальная возможность в будущем, first conditional
+          - это воображаемая ситуация, second conditional
+          - это событие в прошлом
+        answer: это реальная возможность в будущем, first conditional
+        explanation: Условие может наступить, поэтому в части с if настоящее время, а в главной — will.
+      - id: q4
+        prompt: "«Fix forward» в варианте B означает…"
+        options:
+          - исправить новым изменением вместо отката
+          - вернуть предыдущую версию
+          - отложить исправление
+        answer: исправить новым изменением вместо отката
+        explanation: "Fix forward противоположно откату: команда пишет и выпускает исправление."
+  - type: explanation
+    id: listening-how
+    title: Гипотетические вопросы на слух
+    body: |-
+      Интервьюер задаёт вопросы **What would you do if…?** и оценивает ход мысли кандидата. Ответ строится в определённом порядке: первое действие, оценка масштаба, с кем вы говорите, как вы взвешиваете риск, что делаете потом. Слушайте, где кандидат использует **would** и где называет, с кем согласует решение: **I wouldn't make that decision on my own.**
+
+      Послушайте, как Anders задаёт вопросы Lukas. Сначала целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: questions
+    title: What-if questions in a technical interview
+    plays: 2
+    transcript:
+      - { speaker: Anders, text: "Thanks for joining, Lukas. I'd like to try something different. I'll describe a few situations, and you tell me what you would do. Ready?" }
+      - { speaker: Lukas, text: "Yes, I'm ready." }
+      - { speaker: Anders, text: "First one. What would you do if the release you shipped this afternoon broke production?" }
+      - { speaker: Lukas, text: "My first priority would be to limit the damage. I'd check the alerts to see how many users are affected. If the change caused it, I would roll it back first, and I'd let my manager and the support team know what was happening." }
+      - { speaker: Anders, text: "What if you couldn't roll it back, because the database had already changed?" }
+      - { speaker: Lukas, text: "Then I would look for a safer option, like turning the feature off or fixing forward. If I couldn't fix it within an hour, I would escalate it to the on-call lead. I wouldn't make that decision on my own." }
+      - { speaker: Anders, text: "Next one. What would you do if two deadlines clashed, and both were urgent?" }
+      - { speaker: Lukas, text: "I'd ask which one matters more to the business, and what would happen if the other one slipped. It would depend on how many users were affected. Then I'd explain the trade-off to my manager and let the team decide." }
+      - { speaker: Anders, text: "And if your manager were away that day?" }
+      - { speaker: Lukas, text: "I would write a short summary of the options and send it to the team lead, so that the decision wouldn't fall through the cracks." }
+      - { speaker: Anders, text: "Last one. A teammate wants to ship a change on Friday afternoon. What would you say?" }
+      - { speaker: Lukas, text: "I'd ask what the plan is in case something goes wrong. Unless the change is very small, I'd suggest waiting until Monday. As long as there's a rollback plan and someone on call, I would be comfortable with a small change." }
+      - { speaker: Anders, text: "Thank you, Lukas. You explained your reasoning clearly." }
+  - type: exercise
+    id: questions-q
+    about: questions
+    title: Что сказали в разговоре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Anders ask Lukas to do?
+        options:
+          - say what he would do in several situations
+          - solve a coding task on the board
+          - describe his last project
+        answer: say what he would do in several situations
+      - id: q2
+        prompt: What would be Lukas's first priority if the release broke production?
+        options:
+          - to limit the damage
+          - to write a postmortem
+          - to find who made the change
+        answer: to limit the damage
+      - id: q3
+        prompt: Why can't the team simply roll back in Anders's second question?
+        options:
+          - The database had already changed.
+          - The release window had closed.
+          - The manager was away.
+        answer: The database had already changed.
+      - id: q4
+        prompt: What would Lukas ask first about two clashing deadlines?
+        options:
+          - which one matters more to the business
+          - which one was assigned first
+          - whether he could work at the weekend
+        answer: which one matters more to the business
+      - id: q5
+        prompt: What would Lukas do if his manager were away?
+        options:
+          - send a short summary of the options to the team lead
+          - make the decision alone
+          - wait until the manager returned
+        answer: send a short summary of the options to the team lead
+      - id: q6
+        prompt: When would Lukas accept a change on Friday afternoon?
+        options:
+          - if it is small, there is a rollback plan and someone is on call
+          - if the manager approves it by phone
+          - if the tests ran earlier in the week
+        answer: if it is small, there is a rollback plan and someone is on call
+  - type: exercise
+    id: questions-parts
+    about: questions
+    title: Части ответа на «а если…»
+    instruction: Выберите фразу из записи, которая подходит к описанию.
+    format: choice
+    items:
+      - id: q1
+        prompt: Какая фраза называет первый приоритет?
+        options:
+          - My first priority would be to limit the damage.
+          - I'd ask which one matters more to the business.
+          - I would write a short summary of the options.
+        answer: My first priority would be to limit the damage.
+        explanation: Ответ открывает фраза о первом шаге; остальные описывают другие ситуации.
+      - id: q2
+        prompt: Какая фраза показывает, что решение не принимается в одиночку?
+        options:
+          - I wouldn't make that decision on my own.
+          - I'd check the alerts to see how many users are affected.
+          - I would look for a safer option.
+        answer: I wouldn't make that decision on my own.
+        explanation: Кандидат называет, что согласует решение с другими.
+      - id: q3
+        prompt: Какая фраза вводит подготовку на случай сбоя?
+        options:
+          - I'd ask what the plan is in case something goes wrong.
+          - If I couldn't fix it within an hour, I would escalate it.
+          - Unless the change is very small, I'd suggest waiting until Monday.
+        answer: I'd ask what the plan is in case something goes wrong.
+        explanation: In case описывает действие заранее; остальные фразы вводят условия после события.
+      - id: q4
+        prompt: Какая фраза называет условие, при котором кандидат согласился бы на изменение?
+        options:
+          - As long as there's a rollback plan and someone on call, I would be comfortable with a small change.
+          - It would depend on how many users were affected.
+          - I'd explain the trade-off to my manager and let the team decide.
+        answer: As long as there's a rollback plan and someone on call, I would be comfortable with a small change.
+        explanation: As long as значит «при условии, что».

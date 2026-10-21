@@ -1,0 +1,7 @@
+id: ep255
+text: "I'd keep a backup plan in case something went wrong."
+translation: "Я бы держал запасной план на случай, если что-то пойдёт не так."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11
+  operation: requested-generation
+  request: Фразы модуля e11 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep268
+text: "First, I'd make sure I understand the impact."
+translation: "Сначала я убедился бы, что понимаю масштаб последствий."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11
+  operation: requested-generation
+  request: Фразы модуля e11 по программе docs/curriculum-english-it.md

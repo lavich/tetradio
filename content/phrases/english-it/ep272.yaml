@@ -1,0 +1,7 @@
+id: ep272
+text: "I'd ask for a second opinion before deciding."
+translation: "Прежде чем решать, я бы попросил второе мнение."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11
+  operation: requested-generation
+  request: Фразы модуля e11 по программе docs/curriculum-english-it.md

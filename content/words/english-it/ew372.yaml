@@ -1,0 +1,6 @@
+id: ew372
+greek: "an error budget"
+russian: "допустимый объём сбоев за период"
+ipa: /ən ˈerə ˌbʌdʒɪt/
+note: "понятие из SRE; после его исчерпания выпуск изменений, как правило, замедляют"
+source: "Лексикон курса «Английский для IT», модуль e11 (docs/curriculum-english-it.md)"

@@ -1,0 +1,702 @@
+title: conditionals 1–2, unless, in case — вопросы «а если…»
+kind: lesson
+items:
+  - { kind: word, id: ew351 }
+  - { kind: word, id: ew352 }
+  - { kind: word, id: ew353 }
+  - { kind: word, id: ew354 }
+  - { kind: word, id: ew355 }
+  - { kind: word, id: ew356 }
+  - { kind: word, id: ew357 }
+  - { kind: word, id: ew358 }
+  - { kind: word, id: ew359 }
+  - { kind: word, id: ew360 }
+  - { kind: word, id: ew361 }
+  - { kind: word, id: ew362 }
+  - { kind: word, id: ew363 }
+  - { kind: word, id: ew364 }
+  - { kind: word, id: ew365 }
+  - { kind: word, id: ew366 }
+  - { kind: word, id: ew367 }
+  - { kind: word, id: ew368 }
+  - { kind: phrase, id: ep251 }
+  - { kind: phrase, id: ep252 }
+  - { kind: phrase, id: ep253 }
+  - { kind: phrase, id: ep254 }
+  - { kind: phrase, id: ep255 }
+  - { kind: phrase, id: ep256 }
+  - { kind: phrase, id: ep257 }
+  - { kind: phrase, id: ep258 }
+blocks:
+  - type: explanation
+    id: cond12
+    title: First и second conditional — реальная возможность и воображаемая ситуация
+    body: |-
+      На собеседовании вопрос **What would you do if the release broke production?** предлагает воображаемую ситуацию. Для неё нужен second conditional: **if + past simple, would + базовая форма глагола.** Past simple здесь показывает, что ситуация воображаемая. **If the release broke production, I would roll it back first.**
+
+      Когда вы говорите о реальной возможности и плане на неё, нужен first conditional: **if + present simple, will + базовая форма глагола.** **If I can't fix it quickly, I'll escalate it.** Часть с if называет условие, которое может наступить, главная часть — решение на этот случай.
+
+      У глагола **be** в части с if после second conditional стоит **were** для всех лиц: **If I were in that position, I'd tell my manager straight away.** **If it were up to me, I'd wait a day.** Вместо **would** возможны **could** («смог бы») и **might** («возможно»): **If we had an alert, we could notice it earlier.**
+
+      Части можно менять местами. Запятая нужна, когда часть с if стоит первой: **I would roll it back first if the release broke production.**
+    table:
+      columns:
+        - тип
+        - форма
+        - пример
+      rows:
+        - - first conditional
+          - if + present simple, will + базовая форма
+          - If I can't fix it quickly, I'll escalate it.
+        - - second conditional
+          - if + past simple, would + базовая форма
+          - If two deadlines clashed, I'd ask which one matters more.
+        - - be в части с if
+          - were для всех лиц
+          - If I were in that position, I'd tell my manager.
+        - - возможность
+          - could или might вместо would
+          - I might ask for a second opinion.
+        - - вопрос интервьюера
+          - What would you do if + past simple?
+          - What would you do if the release broke production?
+  - type: explanation
+    id: unless-incase
+    title: Unless, in case, as long as
+    body: |-
+      **Unless** значит «если не». Глагол после **unless** стоит в утвердительной форме: **Unless the fix is trivial, I wouldn't ship it on a Friday.** Это то же самое, что **If the fix isn't trivial, I wouldn't ship it on a Friday.** Отрицание в части с unless не добавляют.
+
+      **In case** значит «на случай, если»: действие выполняется заранее, до того как что-то случилось. **I'd keep a backup plan in case something went wrong.** Резервный план нужен ещё до сбоя. Сравните с **if**: **If something went wrong, I'd use the backup plan** — план используют после сбоя.
+
+      **As long as** значит «при условии, что»: **As long as the data is correct, I'd go ahead.** Действие допустимо, пока условие выполняется.
+
+      После **unless**, **in case** и **as long as** будущее выражают формой настоящего времени (о ситуации в настоящем и будущем) или past simple (в воображаемой ситуации), без **will** и без **would** в этой же части.
+    table:
+      columns:
+        - слово
+        - смысл
+        - пример
+      rows:
+        - - unless
+          - если не
+          - Unless the fix is trivial, I wouldn't ship it on a Friday.
+        - - in case
+          - на случай, если; действие заранее
+          - I'd take a snapshot first, in case the rollback fails.
+        - - as long as
+          - при условии, что
+          - As long as the data is correct, I'd go ahead.
+        - - if
+          - если; действие после события
+          - If the rollback fails, I'd restore from the snapshot.
+  - type: explanation
+    id: cond-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **Would после if.** По-русски «бы» стоит в обеих частях: «Если бы релиз сломал продакшен, я бы откатил его». В английском **would** стоит только в главной части. Форма *If the release would break production* ошибочна: **If the release broke production, I would roll it back.**
+
+      **Will после if, unless и in case.** *If I will see a problem, I will tell the team* и *in case something will go wrong* ошибочны: после этих слов стоит настоящее время. **If I see a problem, I will tell the team.** **In case something goes wrong…**
+
+      **Отрицание после unless.** Форма *Unless the fix isn't trivial* содержит двойное отрицание и звучит неясно. Верно: **Unless the fix is trivial…**
+
+      **In case вместо if.** Русское «в случае, если» подсказывает перевод *in case*, но **in case** описывает подготовку заранее. Для действия после события нужен **if**.
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - If the release would break production, I would roll it back.
+          - If the release broke production, I would roll it back.
+          - would стоит только в главной части
+        - - If I will see a problem, I will tell the team.
+          - If I see a problem, I will tell the team.
+          - после if — настоящее время
+        - - Unless the fix isn't trivial, I won't ship it.
+          - Unless the fix is trivial, I won't ship it.
+          - unless уже содержит отрицание
+        - - I'll keep a backup in case something will go wrong.
+          - I'll keep a backup in case something goes wrong.
+          - после in case — настоящее время
+  - type: explanation
+    id: terms-words
+    title: Слова урока о риске, решении и сбое
+    body: |-
+      Слова урока образуют три группы.
+
+      **Риск и решение.** **A worst case** — наихудший вариант, **severity** — тяжесть последствий, **a gut feeling** — интуиция без обоснования. **Weigh up** — сопоставить варианты и риски, **come down to** — свестись к главному условию: **It comes down to how many users are affected.** **Feasible** — выполнимый при имеющихся сроках и ресурсах, **a decision-maker** — человек, который принимает решение, **escalate** — передать вопрос выше.
+
+      **Действия при сбое.** **A contingency plan** — план на случай, если основной не сработает, он готовится заранее. **A kill switch** — выключатель, который отключает функцию за минуту. **Fix forward** — исправить сбой новым изменением вместо отката. **Rule out** — исключить версию причины. **Call off** — отменить запланированное, например релиз. **Firefighting** — работа над срочными проблемами вместо плановых задач.
+
+      **Время и приоритеты.** **Park** — отложить вопрос, не обсуждая его сейчас. **Buy time** — выиграть время действием, которое откладывает проблему. **Fall through the cracks** — выпасть из поля зрения: о задаче, о которой никто не вспомнил. **A critical path** — цепочка зависимых задач, которая определяет срок.
+
+      В ответе на «а если…» нужно показать порядок мысли: сначала масштаб, затем риск, затем решение и с кем оно согласовано.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: cond-choice
+    title: First и second conditional
+    instruction: Выберите вариант. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If the release ___ production, I would roll it back first. (воображаемая ситуация)"
+        options: [broke, has broken, would break]
+        answer: broke
+        explanation: В части с if после would стоит past simple.
+      - id: q2
+        prompt: "If the alert fires tonight, the on-call engineer ___ an incident. (реальная возможность)"
+        options: [will open, opening, opened]
+        answer: will open
+        explanation: После if с настоящим временем в главной части стоит will; формы opening и opened здесь ошибочны.
+      - id: q3
+        prompt: "If I ___ the manager, I would tell the team straight away. (воображаемая ситуация)"
+        options: [were, am, would be]
+        answer: were
+        explanation: После second conditional у глагола be стоит were для всех лиц.
+      - id: q4
+        prompt: "We ___ the release unless the fix passes the tests. (план)"
+        options: [will not ship, would not shipped, did not ship]
+        answer: will not ship
+        explanation: Unless с настоящим временем соединяется с will в главной части.
+      - id: q5
+        prompt: "I would take a snapshot first ___ the rollback fails. (на всякий случай)"
+        options: [in case, unless, as long as]
+        answer: in case
+        explanation: In case показывает подготовку заранее; unless и as long as по смыслу не подходят.
+      - id: q6
+        prompt: "I would go ahead ___ the data is correct. (при условии)"
+        options: [as long as, in case, unless]
+        answer: as long as
+        explanation: As long as значит «при условии, что»; unless изменило бы смысл на обратный.
+  - type: exercise
+    id: forms-choice
+    title: Какое предложение верно
+    instruction: Выберите верное предложение.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы описываете воображаемую ситуацию.
+        options:
+          - If I would see a problem, I would tell the team.
+          - If I saw a problem, I would tell the team.
+          - If I saw a problem, I will tell the team.
+        answer: If I saw a problem, I would tell the team.
+        explanation: Second conditional — past simple в части с if и would в главной части.
+      - id: q2
+        prompt: Вы объясняете правило выпуска.
+        options:
+          - Unless the fix is trivial, I won't ship it.
+          - Unless the fix isn't trivial, I won't ship it.
+          - Unless the fix will be trivial, I won't ship it.
+        answer: Unless the fix is trivial, I won't ship it.
+        explanation: После unless стоит утвердительная форма настоящего времени.
+      - id: q3
+        prompt: Вы готовите запасной план.
+        options:
+          - I'll keep a backup in case something goes wrong.
+          - I'll keep a backup in case something will go wrong.
+          - I'll keep a backup in case of something goes wrong.
+        answer: I'll keep a backup in case something goes wrong.
+        explanation: После in case стоит настоящее время; will и of здесь лишние.
+      - id: q4
+        prompt: Вы отвечаете на вопрос интервьюера.
+        options:
+          - If I were in charge, I would wait a day.
+          - If I would be in charge, I would wait a day.
+          - If I will be in charge, I would wait a day.
+        answer: If I were in charge, I would wait a day.
+        explanation: В воображаемой ситуации у be стоит were; would остаётся в главной части.
+      - id: q5
+        prompt: Какой вопрос интервьюера построен верно?
+        options:
+          - What would you do if the release broke production?
+          - What will you do if the release would break production?
+          - What would you do if the release would break production?
+        answer: What would you do if the release broke production?
+        explanation: В вопросе would стоит один раз, а в части с if — past simple.
+      - id: q6
+        prompt: Вы называете условие, при котором продолжили бы работу.
+        options:
+          - As long as the data is correct, I'd go ahead.
+          - As long as the data will be correct, I'd go ahead.
+          - As long as the data would be correct, I'd go ahead.
+        answer: As long as the data is correct, I'd go ahead.
+        explanation: После as long as стоит настоящее время, без will и would.
+  - type: exercise
+    id: risk-match
+    title: Риск и решение
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - escalate
+      - a contingency plan
+      - a worst case
+      - weigh up
+      - come down to
+      - severity
+      - a gut feeling
+      - feasible
+      - a decision-maker
+    items:
+      - { id: m1, prompt: "наихудший вариант развития событий", answer: a worst case }
+      - { id: m2, prompt: "запасной план на случай, если основной не сработает", answer: a contingency plan }
+      - { id: m3, prompt: "передать вопрос руководителю или более опытному специалисту", answer: escalate }
+      - { id: m4, prompt: "тяжесть последствий проблемы", answer: severity }
+      - { id: m5, prompt: "интуитивное ощущение, которое не подкреплено доводами", answer: a gut feeling }
+      - { id: m6, prompt: "человек, который принимает решение", answer: a decision-maker }
+      - { id: m7, prompt: "осуществимый при имеющихся сроках и ресурсах", answer: feasible }
+  - type: exercise
+    id: action-gap
+    title: Действия при сбое
+    instruction: Вставьте слово или выражение. Один вариант лишний.
+    format: gap
+    bank:
+      - a kill switch
+      - fix forward
+      - rule out
+      - firefighting
+      - call off
+      - fall through the cracks
+    items:
+      - id: g1
+        prompt: The new feature broke checkout, so we flipped ___ and turned it off for everyone within a minute. (аварийный выключатель)
+        answer: a kill switch
+      - id: g2
+        prompt: Rolling back would take an hour, so the team chose to ___ and deployed a new change that repaired the bug. (исправить новым изменением)
+        answer: fix forward
+      - id: g3
+        prompt: The error started after the deploy, but we needed to ___ a network problem before we blamed the code. (исключить)
+        answer: rule out
+      - id: g4
+        prompt: Our team spent the whole week on ___ instead of planned work. (аврал)
+        answer: firefighting
+      - id: g5
+        prompt: The risk was too high, so the manager decided to ___ the release. (отменить)
+        answer: call off
+  - type: exercise
+    id: time-gap
+    title: Время и приоритеты
+    instruction: Вставьте слово или выражение. Один вариант лишний.
+    format: gap
+    bank:
+      - park
+      - buy time
+      - fall through the cracks
+      - a critical path
+      - come down to
+      - weigh up
+      - escalate
+    items:
+      - id: g1
+        prompt: We have ten minutes left, so let's ___ the naming discussion and come back to it next week. (отложить)
+        answer: park
+      - id: g2
+        prompt: A quick workaround can ___ while the team prepares a proper fix. (выиграть время)
+        answer: buy time
+      - id: g3
+        prompt: Without an owner, a small task can easily ___. (выпасть из поля зрения)
+        answer: fall through the cracks
+      - id: g4
+        prompt: "This task has no slack: a delay here moves the whole date, so it is part of ___. (критический путь)"
+        answer: a critical path
+      - id: g5
+        prompt: In the end, the decision will ___ how many users are affected. (свестись к)
+        answer: come down to
+      - id: g6
+        prompt: Before choosing, the team will ___ the cost of each option against the risk. (взвесить)
+        answer: weigh up
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Если бы релиз сломал продакшен, я бы сначала откатил его.
+        answer:
+          - "If the release broke production, I would roll it back first"
+          - "If the release broke production, I would first roll it back"
+          - "If the release broke production, I would roll the release back first"
+          - "If the release broke production, I would first roll the release back"
+          - "If the release broke production, I would roll back the release first"
+          - "If the release broke production, I would first roll back the release"
+          - "If the release broke production, I would roll back first"
+          - "If the release broke production, I would start by rolling it back"
+          - "If the release broke production I would roll it back first"
+          - "If the release broke production I would first roll it back"
+          - "If the release broke production I would roll the release back first"
+          - "If the release broke production I would first roll the release back"
+          - "If the release broke production I would roll back the release first"
+          - "If the release broke production I would first roll back the release"
+          - "If the release broke production I would roll back first"
+          - "If the release broke production I would start by rolling it back"
+          - "I would roll it back first if the release broke production"
+          - "I would roll the release back first if the release broke production"
+          - "I would roll back the release first if the release broke production"
+          - "I would roll back first if the release broke production"
+        explanation: Second conditional — if + past simple, would + базовая форма.
+      - id: q2
+        prompt: Если я не смогу быстро это исправить, я передам вопрос выше.
+        answer:
+          - "If I cannot fix it quickly, I will escalate it"
+          - "If I cannot fix it quickly, I will escalate this"
+          - "If I cannot fix it quickly, I will escalate the problem"
+          - "If I cannot fix it quickly, I will escalate the issue"
+          - "If I cannot fix it quickly I will escalate it"
+          - "If I cannot fix it quickly I will escalate this"
+          - "If I cannot fix it quickly I will escalate the problem"
+          - "If I cannot fix it quickly I will escalate the issue"
+          - "If I cannot fix this quickly, I will escalate it"
+          - "If I cannot fix this quickly, I will escalate this"
+          - "If I cannot fix this quickly, I will escalate the problem"
+          - "If I cannot fix this quickly, I will escalate the issue"
+          - "If I cannot fix this quickly I will escalate it"
+          - "If I cannot fix this quickly I will escalate this"
+          - "If I cannot fix this quickly I will escalate the problem"
+          - "If I cannot fix this quickly I will escalate the issue"
+          - "If I cannot fix the problem quickly, I will escalate it"
+          - "If I cannot fix the problem quickly, I will escalate this"
+          - "If I cannot fix the problem quickly, I will escalate the problem"
+          - "If I cannot fix the problem quickly, I will escalate the issue"
+          - "If I cannot fix the problem quickly I will escalate it"
+          - "If I cannot fix the problem quickly I will escalate this"
+          - "If I cannot fix the problem quickly I will escalate the problem"
+          - "If I cannot fix the problem quickly I will escalate the issue"
+          - "If I cannot fix the issue quickly, I will escalate it"
+          - "If I cannot fix the issue quickly, I will escalate this"
+          - "If I cannot fix the issue quickly, I will escalate the problem"
+          - "If I cannot fix the issue quickly, I will escalate the issue"
+          - "If I cannot fix the issue quickly I will escalate it"
+          - "If I cannot fix the issue quickly I will escalate this"
+          - "If I cannot fix the issue quickly I will escalate the problem"
+          - "If I cannot fix the issue quickly I will escalate the issue"
+          - "If I am not able to fix it quickly, I will escalate it"
+          - "If I am not able to fix it quickly, I will escalate this"
+          - "If I am not able to fix it quickly, I will escalate the problem"
+          - "If I am not able to fix it quickly, I will escalate the issue"
+          - "If I am not able to fix it quickly I will escalate it"
+          - "If I am not able to fix it quickly I will escalate this"
+          - "If I am not able to fix it quickly I will escalate the problem"
+          - "If I am not able to fix it quickly I will escalate the issue"
+          - "If I am not able to fix this quickly, I will escalate it"
+          - "If I am not able to fix this quickly, I will escalate this"
+          - "If I am not able to fix this quickly, I will escalate the problem"
+          - "If I am not able to fix this quickly, I will escalate the issue"
+          - "If I am not able to fix this quickly I will escalate it"
+          - "If I am not able to fix this quickly I will escalate this"
+          - "If I am not able to fix this quickly I will escalate the problem"
+          - "If I am not able to fix this quickly I will escalate the issue"
+          - "If I am not able to fix the problem quickly, I will escalate it"
+          - "If I am not able to fix the problem quickly, I will escalate this"
+          - "If I am not able to fix the problem quickly, I will escalate the problem"
+          - "If I am not able to fix the problem quickly, I will escalate the issue"
+          - "If I am not able to fix the problem quickly I will escalate it"
+          - "If I am not able to fix the problem quickly I will escalate this"
+          - "If I am not able to fix the problem quickly I will escalate the problem"
+          - "If I am not able to fix the problem quickly I will escalate the issue"
+          - "If I am not able to fix the issue quickly, I will escalate it"
+          - "If I am not able to fix the issue quickly, I will escalate this"
+          - "If I am not able to fix the issue quickly, I will escalate the problem"
+          - "If I am not able to fix the issue quickly, I will escalate the issue"
+          - "If I am not able to fix the issue quickly I will escalate it"
+          - "If I am not able to fix the issue quickly I will escalate this"
+          - "If I am not able to fix the issue quickly I will escalate the problem"
+          - "If I am not able to fix the issue quickly I will escalate the issue"
+          - "If I am unable to fix it quickly, I will escalate it"
+          - "If I am unable to fix it quickly, I will escalate this"
+          - "If I am unable to fix it quickly, I will escalate the problem"
+          - "If I am unable to fix it quickly, I will escalate the issue"
+          - "If I am unable to fix it quickly I will escalate it"
+          - "If I am unable to fix it quickly I will escalate this"
+          - "If I am unable to fix it quickly I will escalate the problem"
+          - "If I am unable to fix it quickly I will escalate the issue"
+          - "If I am unable to fix this quickly, I will escalate it"
+          - "If I am unable to fix this quickly, I will escalate this"
+          - "If I am unable to fix this quickly, I will escalate the problem"
+          - "If I am unable to fix this quickly, I will escalate the issue"
+          - "If I am unable to fix this quickly I will escalate it"
+          - "If I am unable to fix this quickly I will escalate this"
+          - "If I am unable to fix this quickly I will escalate the problem"
+          - "If I am unable to fix this quickly I will escalate the issue"
+          - "If I am unable to fix the problem quickly, I will escalate it"
+          - "If I am unable to fix the problem quickly, I will escalate this"
+          - "If I am unable to fix the problem quickly, I will escalate the problem"
+          - "If I am unable to fix the problem quickly, I will escalate the issue"
+          - "If I am unable to fix the problem quickly I will escalate it"
+          - "If I am unable to fix the problem quickly I will escalate this"
+          - "If I am unable to fix the problem quickly I will escalate the problem"
+          - "If I am unable to fix the problem quickly I will escalate the issue"
+          - "If I am unable to fix the issue quickly, I will escalate it"
+          - "If I am unable to fix the issue quickly, I will escalate this"
+          - "If I am unable to fix the issue quickly, I will escalate the problem"
+          - "If I am unable to fix the issue quickly, I will escalate the issue"
+          - "If I am unable to fix the issue quickly I will escalate it"
+          - "If I am unable to fix the issue quickly I will escalate this"
+          - "If I am unable to fix the issue quickly I will escalate the problem"
+          - "If I am unable to fix the issue quickly I will escalate the issue"
+          - "I will escalate it if I cannot fix it quickly"
+          - "I will escalate it if I cannot fix this quickly"
+          - "I will escalate it if I cannot fix the problem quickly"
+          - "I will escalate it if I cannot fix the issue quickly"
+          - "I will escalate it if I am not able to fix it quickly"
+          - "I will escalate it if I am not able to fix this quickly"
+          - "I will escalate it if I am not able to fix the problem quickly"
+          - "I will escalate it if I am not able to fix the issue quickly"
+          - "I will escalate it if I am unable to fix it quickly"
+          - "I will escalate it if I am unable to fix this quickly"
+          - "I will escalate it if I am unable to fix the problem quickly"
+          - "I will escalate it if I am unable to fix the issue quickly"
+          - "I will escalate this if I cannot fix it quickly"
+          - "I will escalate this if I cannot fix this quickly"
+          - "I will escalate this if I cannot fix the problem quickly"
+          - "I will escalate this if I cannot fix the issue quickly"
+          - "I will escalate this if I am not able to fix it quickly"
+          - "I will escalate this if I am not able to fix this quickly"
+          - "I will escalate this if I am not able to fix the problem quickly"
+          - "I will escalate this if I am not able to fix the issue quickly"
+          - "I will escalate this if I am unable to fix it quickly"
+          - "I will escalate this if I am unable to fix this quickly"
+          - "I will escalate this if I am unable to fix the problem quickly"
+          - "I will escalate this if I am unable to fix the issue quickly"
+          - "I will escalate the problem if I cannot fix it quickly"
+          - "I will escalate the problem if I cannot fix this quickly"
+          - "I will escalate the problem if I cannot fix the problem quickly"
+          - "I will escalate the problem if I cannot fix the issue quickly"
+          - "I will escalate the problem if I am not able to fix it quickly"
+          - "I will escalate the problem if I am not able to fix this quickly"
+          - "I will escalate the problem if I am not able to fix the problem quickly"
+          - "I will escalate the problem if I am not able to fix the issue quickly"
+          - "I will escalate the problem if I am unable to fix it quickly"
+          - "I will escalate the problem if I am unable to fix this quickly"
+          - "I will escalate the problem if I am unable to fix the problem quickly"
+          - "I will escalate the problem if I am unable to fix the issue quickly"
+          - "I will escalate the issue if I cannot fix it quickly"
+          - "I will escalate the issue if I cannot fix this quickly"
+          - "I will escalate the issue if I cannot fix the problem quickly"
+          - "I will escalate the issue if I cannot fix the issue quickly"
+          - "I will escalate the issue if I am not able to fix it quickly"
+          - "I will escalate the issue if I am not able to fix this quickly"
+          - "I will escalate the issue if I am not able to fix the problem quickly"
+          - "I will escalate the issue if I am not able to fix the issue quickly"
+          - "I will escalate the issue if I am unable to fix it quickly"
+          - "I will escalate the issue if I am unable to fix this quickly"
+          - "I will escalate the issue if I am unable to fix the problem quickly"
+          - "I will escalate the issue if I am unable to fix the issue quickly"
+        explanation: First conditional — if + present simple, will + базовая форма.
+      - id: q3
+        prompt: Если исправление не тривиально, я не стал бы выпускать его в пятницу.
+        answer:
+          - "Unless the fix is trivial, I would not ship it on a Friday"
+          - "Unless the fix is trivial, I would not ship it on Friday"
+          - "Unless the fix is trivial, I would not release it on a Friday"
+          - "Unless the fix is trivial, I would not release it on Friday"
+          - "Unless the fix is trivial, I would not deploy it on a Friday"
+          - "Unless the fix is trivial, I would not deploy it on Friday"
+          - "Unless the fix is trivial I would not ship it on a Friday"
+          - "Unless the fix is trivial I would not ship it on Friday"
+          - "Unless the fix is trivial I would not release it on a Friday"
+          - "Unless the fix is trivial I would not release it on Friday"
+          - "Unless the fix is trivial I would not deploy it on a Friday"
+          - "Unless the fix is trivial I would not deploy it on Friday"
+          - "Unless the patch is trivial, I would not ship it on a Friday"
+          - "Unless the patch is trivial, I would not ship it on Friday"
+          - "Unless the patch is trivial, I would not release it on a Friday"
+          - "Unless the patch is trivial, I would not release it on Friday"
+          - "Unless the patch is trivial, I would not deploy it on a Friday"
+          - "Unless the patch is trivial, I would not deploy it on Friday"
+          - "Unless the patch is trivial I would not ship it on a Friday"
+          - "Unless the patch is trivial I would not ship it on Friday"
+          - "Unless the patch is trivial I would not release it on a Friday"
+          - "Unless the patch is trivial I would not release it on Friday"
+          - "Unless the patch is trivial I would not deploy it on a Friday"
+          - "Unless the patch is trivial I would not deploy it on Friday"
+          - "If the fix is not trivial, I would not ship it on a Friday"
+          - "If the fix is not trivial, I would not ship it on Friday"
+          - "If the fix is not trivial, I would not release it on a Friday"
+          - "If the fix is not trivial, I would not release it on Friday"
+          - "If the fix is not trivial, I would not deploy it on a Friday"
+          - "If the fix is not trivial, I would not deploy it on Friday"
+          - "If the fix is not trivial I would not ship it on a Friday"
+          - "If the fix is not trivial I would not ship it on Friday"
+          - "If the fix is not trivial I would not release it on a Friday"
+          - "If the fix is not trivial I would not release it on Friday"
+          - "If the fix is not trivial I would not deploy it on a Friday"
+          - "If the fix is not trivial I would not deploy it on Friday"
+          - "If the patch is not trivial, I would not ship it on a Friday"
+          - "If the patch is not trivial, I would not ship it on Friday"
+          - "If the patch is not trivial, I would not release it on a Friday"
+          - "If the patch is not trivial, I would not release it on Friday"
+          - "If the patch is not trivial, I would not deploy it on a Friday"
+          - "If the patch is not trivial, I would not deploy it on Friday"
+          - "If the patch is not trivial I would not ship it on a Friday"
+          - "If the patch is not trivial I would not ship it on Friday"
+          - "If the patch is not trivial I would not release it on a Friday"
+          - "If the patch is not trivial I would not release it on Friday"
+          - "If the patch is not trivial I would not deploy it on a Friday"
+          - "If the patch is not trivial I would not deploy it on Friday"
+          - "I would not ship it on a Friday unless the fix is trivial"
+          - "I would not ship it on a Friday unless the patch is trivial"
+          - "I would not ship it on Friday unless the fix is trivial"
+          - "I would not ship it on Friday unless the patch is trivial"
+          - "I would not release it on a Friday unless the fix is trivial"
+          - "I would not release it on a Friday unless the patch is trivial"
+          - "I would not release it on Friday unless the fix is trivial"
+          - "I would not release it on Friday unless the patch is trivial"
+          - "I would not deploy it on a Friday unless the fix is trivial"
+          - "I would not deploy it on a Friday unless the patch is trivial"
+          - "I would not deploy it on Friday unless the fix is trivial"
+          - "I would not deploy it on Friday unless the patch is trivial"
+          - "I would not ship it on a Friday if the fix is not trivial"
+          - "I would not ship it on a Friday if the patch is not trivial"
+          - "I would not ship it on Friday if the fix is not trivial"
+          - "I would not ship it on Friday if the patch is not trivial"
+          - "I would not release it on a Friday if the fix is not trivial"
+          - "I would not release it on a Friday if the patch is not trivial"
+          - "I would not release it on Friday if the fix is not trivial"
+          - "I would not release it on Friday if the patch is not trivial"
+          - "I would not deploy it on a Friday if the fix is not trivial"
+          - "I would not deploy it on a Friday if the patch is not trivial"
+          - "I would not deploy it on Friday if the fix is not trivial"
+          - "I would not deploy it on Friday if the patch is not trivial"
+        explanation: Unless значит «если не»; после него стоит утвердительная форма.
+      - id: q4
+        prompt: Я бы держал запасной план на случай, если что-то пойдёт не так.
+        answer:
+          - "I would keep a backup plan in case something went wrong"
+          - "I would keep a backup plan in case something goes wrong"
+          - "I would keep a backup plan in case anything went wrong"
+          - "I would keep a backup plan in case anything goes wrong"
+          - "I would keep a backup plan just in case something went wrong"
+          - "I would keep a backup plan just in case something goes wrong"
+          - "I would keep a backup plan just in case anything went wrong"
+          - "I would keep a backup plan just in case anything goes wrong"
+          - "I would keep a contingency plan in case something went wrong"
+          - "I would keep a contingency plan in case something goes wrong"
+          - "I would keep a contingency plan in case anything went wrong"
+          - "I would keep a contingency plan in case anything goes wrong"
+          - "I would keep a contingency plan just in case something went wrong"
+          - "I would keep a contingency plan just in case something goes wrong"
+          - "I would keep a contingency plan just in case anything went wrong"
+          - "I would keep a contingency plan just in case anything goes wrong"
+          - "I would keep a plan B in case something went wrong"
+          - "I would keep a plan B in case something goes wrong"
+          - "I would keep a plan B in case anything went wrong"
+          - "I would keep a plan B in case anything goes wrong"
+          - "I would keep a plan B just in case something went wrong"
+          - "I would keep a plan B just in case something goes wrong"
+          - "I would keep a plan B just in case anything went wrong"
+          - "I would keep a plan B just in case anything goes wrong"
+          - "I would keep a fallback plan in case something went wrong"
+          - "I would keep a fallback plan in case something goes wrong"
+          - "I would keep a fallback plan in case anything went wrong"
+          - "I would keep a fallback plan in case anything goes wrong"
+          - "I would keep a fallback plan just in case something went wrong"
+          - "I would keep a fallback plan just in case something goes wrong"
+          - "I would keep a fallback plan just in case anything went wrong"
+          - "I would keep a fallback plan just in case anything goes wrong"
+          - "I would have a backup plan in case something went wrong"
+          - "I would have a backup plan in case something goes wrong"
+          - "I would have a backup plan in case anything went wrong"
+          - "I would have a backup plan in case anything goes wrong"
+          - "I would have a backup plan just in case something went wrong"
+          - "I would have a backup plan just in case something goes wrong"
+          - "I would have a backup plan just in case anything went wrong"
+          - "I would have a backup plan just in case anything goes wrong"
+          - "I would have a contingency plan in case something went wrong"
+          - "I would have a contingency plan in case something goes wrong"
+          - "I would have a contingency plan in case anything went wrong"
+          - "I would have a contingency plan in case anything goes wrong"
+          - "I would have a contingency plan just in case something went wrong"
+          - "I would have a contingency plan just in case something goes wrong"
+          - "I would have a contingency plan just in case anything went wrong"
+          - "I would have a contingency plan just in case anything goes wrong"
+          - "I would have a plan B in case something went wrong"
+          - "I would have a plan B in case something goes wrong"
+          - "I would have a plan B in case anything went wrong"
+          - "I would have a plan B in case anything goes wrong"
+          - "I would have a plan B just in case something went wrong"
+          - "I would have a plan B just in case something goes wrong"
+          - "I would have a plan B just in case anything went wrong"
+          - "I would have a plan B just in case anything goes wrong"
+          - "I would have a fallback plan in case something went wrong"
+          - "I would have a fallback plan in case something goes wrong"
+          - "I would have a fallback plan in case anything went wrong"
+          - "I would have a fallback plan in case anything goes wrong"
+          - "I would have a fallback plan just in case something went wrong"
+          - "I would have a fallback plan just in case something goes wrong"
+          - "I would have a fallback plan just in case anything went wrong"
+          - "I would have a fallback plan just in case anything goes wrong"
+        explanation: In case описывает подготовку заранее.
+      - id: q5
+        prompt: В худшем случае мы потеряли бы час данных.
+        answer:
+          - "In the worst case, we would lose an hour of data"
+          - "In the worst case, we would lose an hour's worth of data"
+          - "In the worst case, we would lose one hour of data"
+          - "In the worst case we would lose an hour of data"
+          - "In the worst case we would lose an hour's worth of data"
+          - "In the worst case we would lose one hour of data"
+          - "At worst, we would lose an hour of data"
+          - "At worst, we would lose an hour's worth of data"
+          - "At worst, we would lose one hour of data"
+          - "At worst we would lose an hour of data"
+          - "At worst we would lose an hour's worth of data"
+          - "At worst we would lose one hour of data"
+          - "Worst case, we would lose an hour of data"
+          - "Worst case, we would lose an hour's worth of data"
+          - "Worst case, we would lose one hour of data"
+          - "Worst case we would lose an hour of data"
+          - "Worst case we would lose an hour's worth of data"
+          - "Worst case we would lose one hour of data"
+          - "In a worst-case scenario, we would lose an hour of data"
+          - "In a worst-case scenario, we would lose an hour's worth of data"
+          - "In a worst-case scenario, we would lose one hour of data"
+          - "In a worst-case scenario we would lose an hour of data"
+          - "In a worst-case scenario we would lose an hour's worth of data"
+          - "In a worst-case scenario we would lose one hour of data"
+          - "In the worst case scenario, we would lose an hour of data"
+          - "In the worst case scenario, we would lose an hour's worth of data"
+          - "In the worst case scenario, we would lose one hour of data"
+          - "In the worst case scenario we would lose an hour of data"
+          - "In the worst case scenario we would lose an hour's worth of data"
+          - "In the worst case scenario we would lose one hour of data"
+          - "We would lose an hour of data in the worst case"
+          - "We would lose an hour of data at worst"
+          - "We would lose an hour's worth of data in the worst case"
+          - "We would lose an hour's worth of data at worst"
+          - "We would lose one hour of data in the worst case"
+          - "We would lose one hour of data at worst"
+        explanation: Worst case с запятой — разговорная вводная конструкция; would показывает воображаемую ситуацию.
+      - id: q6
+        prompt: Я бы не стал принимать решение в одиночку.
+        answer:
+          - "I would not make the decision on my own"
+          - "I would not make the decision by myself"
+          - "I would not make the decision alone"
+          - "I would not make this decision on my own"
+          - "I would not make this decision by myself"
+          - "I would not make this decision alone"
+          - "I would not make that decision on my own"
+          - "I would not make that decision by myself"
+          - "I would not make that decision alone"
+          - "I would not make a decision on my own"
+          - "I would not make a decision by myself"
+          - "I would not make a decision alone"
+          - "I would not take the decision on my own"
+          - "I would not take the decision by myself"
+          - "I would not take the decision alone"
+          - "I would not take this decision on my own"
+          - "I would not take this decision by myself"
+          - "I would not take this decision alone"
+          - "I would not take that decision on my own"
+          - "I would not take that decision by myself"
+          - "I would not take that decision alone"
+          - "I would not take a decision on my own"
+          - "I would not take a decision by myself"
+          - "I would not take a decision alone"
+          - "I would not decide on my own"
+          - "I would not decide by myself"
+          - "I would not decide alone"
+        explanation: Would not и базовая форма глагола; on my own — «самостоятельно».

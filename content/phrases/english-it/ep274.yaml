@@ -1,0 +1,7 @@
+id: ep274
+text: "Let me check one thing before I decide."
+translation: "Дайте проверить одну вещь, прежде чем я решу."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11
+  operation: requested-generation
+  request: Фразы модуля e11 по программе docs/curriculum-english-it.md
