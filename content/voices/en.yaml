@@ -45,3 +45,6 @@ characters:
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }
   Inês: { gender: female, voice: Gacrux }
+  Chloe: { gender: female, voice: Erinome }
+  Diego: { gender: male, voice: Rasalgethi }
+  Lucía: { gender: female, voice: Achernar }

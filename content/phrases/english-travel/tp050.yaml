@@ -1,0 +1,8 @@
+id: tp050
+text: "Is it very spicy?"
+translation: "Это очень острое?"
+note: "spicy — острое, с перцем; hot тоже бывает «острое», но чаще «горячее»"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

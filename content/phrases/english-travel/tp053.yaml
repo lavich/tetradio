@@ -1,0 +1,8 @@
+id: tp053
+text: "Could we have a few more minutes?"
+translation: "Можно нам ещё пару минут (подумать)?"
+note: "официанту, когда вы ещё не выбрали"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

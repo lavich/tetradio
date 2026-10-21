@@ -1,0 +1,8 @@
+id: tp046
+text: "I'll have the fish of the day."
+translation: "Мне рыбу дня."
+note: "I'll have… — решение прямо при заказе; I'd like… — тоже вежливо и чуть официальнее"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

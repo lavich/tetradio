@@ -1,0 +1,7 @@
+id: tp051
+text: "Could I have it without onions?"
+translation: "Можно мне это без лука?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

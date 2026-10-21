@@ -1,0 +1,287 @@
+title: Контрольная модуля t04
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: счёт из ресторана, звонок с бронью столика, жалоба на заказ, обороты заказа, some / any и too / enough, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором ответа верен один вариант. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: receipt
+    title: The Old Bridge Kitchen — your bill
+    text: |-
+      THE OLD BRIDGE KITCHEN · BATH
+      Table 12 · Guests: 3 · 19 May · 20:47
+
+      2 × Set menu, two courses @ £22.00 — £44.00
+      1 × Sirloin steak, medium rare — £27.00
+      1 × Side: garlic bread — £4.50
+      1 × Bottle of house white — £21.00
+      3 × Tap water — £0.00
+
+      Subtotal — £96.50
+      Discretionary service charge 12.5% — £12.06
+      TOTAL — £108.56
+
+      Split equally: 3 × £36.19
+
+      Service is optional. If you would like it removed, please ask your server.
+      All service charges go directly to our kitchen and floor staff.
+      Thank you for dining with us!
+    glosses:
+      - { text: Sirloin steak, russian: стейк сирлойн (из толстого края говядины) }
+      - { text: Subtotal, russian: промежуточный итог (без обслуживания) }
+      - { text: Discretionary, russian: добровольный }
+      - { text: removed, russian: убран }
+      - { text: directly, russian: напрямую }
+      - { text: floor staff, russian: персонал зала }
+      - { text: dining, russian: что поужинали (у нас) }
+  - type: exercise
+    id: receipt-q
+    about: receipt
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How many people had dinner at table 12?
+        options: [three, two, twelve]
+        answer: three
+        explanation: "Guests: 3."
+      - id: q2
+        prompt: How much did they pay for the wine?
+        options: ["£21.00", "£4.50", "£27.00"]
+        answer: "£21.00"
+        explanation: "1 × Bottle of house white — £21.00."
+      - id: q3
+        prompt: How much did they pay for the water?
+        options: [nothing, "£3.00", "£12.06"]
+        answer: nothing
+        explanation: "3 × Tap water — £0.00: вода из-под крана бесплатна."
+      - id: q4
+        prompt: How much is the service charge?
+        options: ["£12.06", "£12.50", "£96.50"]
+        answer: "£12.06"
+        explanation: "Discretionary service charge 12.5% — £12.06: 12,5 % от £96.50."
+      - id: q5
+        prompt: What can the guests do if they weren't happy with the service?
+        options:
+          - ask the server to remove the service charge
+          - pay only for the main courses
+          - get a free dessert
+        answer: ask the server to remove the service charge
+        explanation: "If you would like it removed, please ask your server."
+      - id: q6
+        prompt: If they split the bill equally, how much does each person pay?
+        options: ["£36.19", "£32.17", "£108.56"]
+        answer: "£36.19"
+        explanation: "Split equally: 3 × £36.19."
+  - type: listening
+    id: booking
+    title: Booking a table
+    plays: 2
+    transcript:
+      - { speaker: Chloe, text: "Good afternoon, The Fig Tree, Chloe speaking. How can I help?" }
+      - { speaker: Lucía, text: "Hi. I'd like to book a table for this evening, please. For four people, at eight." }
+      - { speaker: Chloe, text: "Let me have a look… I'm sorry, we're fully booked at eight. I can do half past seven or quarter to nine." }
+      - { speaker: Lucía, text: "Quarter to nine is fine." }
+      - { speaker: Chloe, text: "Lovely. Can I take a name, please?" }
+      - { speaker: Lucía, text: "Lucía Ferreira. That's F-E-R-R-E-I-R-A." }
+      - { speaker: Chloe, text: "Thank you. Any allergies we should know about?" }
+      - { speaker: Lucía, text: "Yes, I've got a nut allergy, and one of my friends is vegan." }
+      - { speaker: Chloe, text: "No problem, I'll put that on the booking. We've got a few vegan dishes in the evening, and the chef can tell you about nuts on the night." }
+      - { speaker: Lucía, text: "Great. Do you have a set menu in the evening?" }
+      - { speaker: Chloe, text: "Not in the evening, I'm afraid — only at lunchtime, Monday to Friday. But we've got sharing plates, and they're good for a group." }
+      - { speaker: Lucía, text: "Perfect, thank you." }
+      - { speaker: Chloe, text: "So that's a table for four at quarter to nine tonight. If you're running late, please give us a call — we keep the table for fifteen minutes." }
+      - { speaker: Lucía, text: "OK, thanks. Bye!" }
+  - type: exercise
+    id: booking-q
+    about: booking
+    graded: true
+    title: Аудирование — бронь
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What time is the table for?
+        options: ["8:45", "8:00", "7:30"]
+        answer: "8:45"
+        explanation: "На восемь мест нет; Лусия выбирает quarter to nine — 8:45."
+      - id: q2
+        prompt: What does Lucía tell Chloe about her group?
+        options:
+          - She has a nut allergy and one friend is vegan.
+          - Two of her friends are vegan.
+          - One friend has a nut allergy and she is vegan.
+        answer: She has a nut allergy and one friend is vegan.
+        explanation: "I've got a nut allergy, and one of my friends is vegan."
+      - id: q3
+        prompt: Can they have the set menu tonight?
+        options:
+          - "No, it's only at lunchtime on weekdays."
+          - Yes, for groups of four.
+          - Yes, but only from the specials board.
+        answer: "No, it's only at lunchtime on weekdays."
+        explanation: "Not in the evening, I'm afraid — only at lunchtime, Monday to Friday."
+      - id: q4
+        prompt: What does Chloe suggest for a group?
+        options: [sharing plates, the set menu, a takeaway]
+        answer: sharing plates
+        explanation: "We've got sharing plates, and they're good for a group."
+      - id: q5
+        prompt: What should they do if they are going to be late?
+        options:
+          - phone the restaurant
+          - book a new table online
+          - order a takeaway instead
+        answer: phone the restaurant
+        explanation: "If you're running late, please give us a call — стол держат пятнадцать минут."
+  - type: listening
+    id: problem
+    title: A problem with the order
+    plays: 2
+    transcript:
+      - { speaker: Diego, text: "Excuse me, sorry. This isn't what I ordered. I ordered the bean burger, not the chicken." }
+      - { speaker: Chloe, text: "Oh, I'm so sorry. You're right — the chicken is for the next table. I'll bring your burger straight away." }
+      - { speaker: Diego, text: "Thank you. And the chips are a bit cold. Not hot enough." }
+      - { speaker: Chloe, text: "Sorry about that. I'll ask the kitchen for fresh ones. Is everything else all right?" }
+      - { speaker: Lucía, text: "Yes, mine is lovely, thanks. Could we get some more tap water, please?" }
+      - { speaker: Chloe, text: "Of course. I'll bring a jug for the table." }
+  - type: exercise
+    id: problem-q
+    about: problem
+    graded: true
+    title: Аудирование — жалоба
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the problem with Diego's food?
+        options:
+          - "He got the wrong dish."
+          - "His burger is too spicy."
+          - "His steak is well done."
+        answer: "He got the wrong dish."
+        explanation: "This isn't what I ordered."
+      - id: q2
+        prompt: Who is the chicken for?
+        options: [the next table, Lucía, nobody]
+        answer: the next table
+        explanation: "The chicken is for the next table."
+      - id: q3
+        prompt: What is wrong with the chips?
+        options: ["They aren't hot enough.", "They're too salty.", "There aren't any."]
+        answer: "They aren't hot enough."
+        explanation: "The chips are a bit cold. Not hot enough."
+      - id: q4
+        prompt: What does Lucía ask for?
+        options: [more tap water, the bill, a bottle of wine]
+        answer: more tap water
+        explanation: "Could we get some more tap water, please? — I'll bring a jug: кувшин."
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Заказ, some / any, too / enough
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "— What would you like? — ___ the pie, please."
+        options: ["I'll have", "I take", "I have"]
+        answer: "I'll have"
+        explanation: "Решение прямо при заказе — I'll have."
+      - id: q2
+        prompt: ___ we get some more bread, please?
+        options: [Could, Would, Do]
+        answer: Could
+        explanation: "Просьба — Could we get…?; would we и do we здесь не просьба."
+      - id: q3
+        prompt: Does the cake have ___ nuts in it?
+        options: [any, some, a]
+        answer: any
+        explanation: Вопрос о составе — any.
+      - id: q4
+        prompt: "There's ___ garlic in the sauce, so it's quite strong."
+        options: [some, any, a]
+        answer: some
+        explanation: Утверждение — some; garlic неисчисляемое.
+      - id: q5
+        prompt: The steak isn't cooked ___. Could you put it back for a few minutes?
+        options: [enough, too, too much]
+        answer: enough
+        explanation: Enough — после прилагательного или причастия.
+      - id: q6
+        prompt: "There's ___ sugar in this coffee."
+        options: [too much, too, enough much]
+        answer: too much
+        explanation: Too much — перед неисчисляемым существительным.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [starter, side, rare, gluten-free, dairy, allergy, set, split, specials, service, tap, takeaway]
+    items:
+      - { id: g1, prompt: "For a ___, I'll have the soup, and then the chicken pie.", answer: starter }
+      - { id: g2, prompt: "The steak comes with a ___ salad.", answer: side }
+      - { id: g3, prompt: "How would you like your steak? — Medium ___, please.", answer: rare }
+      - { id: g4, prompt: "I can't eat wheat. Have you got any ___ dishes?", answer: gluten-free }
+      - { id: g5, prompt: "She doesn't eat cheese or milk, so she needs dishes without ___.", answer: dairy }
+      - { id: g6, prompt: "I've got a nut ___, so please check the sauce.", answer: allergy }
+      - { id: g7, prompt: "There are four of us. Shall we ___ the bill equally?", answer: split }
+      - { id: g8, prompt: "What are today's ___? — There's lamb and a fish curry.", answer: specials }
+      - { id: g9, prompt: "Is ___ included, or should we leave a tip?", answer: service }
+      - { id: g10, prompt: "Just ___ water, thanks.", answer: tap }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'm, isn't) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Принесите, пожалуйста, счёт.
+        answer:
+          - Could we have the bill, please?
+          - Could we have the bill?
+          - Can we have the bill, please?
+          - Can we have the bill?
+          - Could I have the bill, please?
+          - Could I have the bill?
+          - Can I have the bill, please?
+          - Can I have the bill?
+          - Could we get the bill, please?
+          - Can we get the bill, please?
+          - Could we have the check, please?
+          - Could we get the bill?
+          - Could I get the bill, please?
+          - Can I get the bill, please?
+          - Can we get the bill?
+          - The bill, please.
+      - id: q2
+        prompt: Извините, я заказывал не это.
+        answer:
+          - "Excuse me, this isn't what I ordered."
+          - Excuse me, this is not what I ordered.
+          - "Sorry, this isn't what I ordered."
+          - Sorry, this is not what I ordered.
+          - "Excuse me, I didn't order this."
+          - "Sorry, I didn't order this."
+          - "Excuse me, that isn't what I ordered."
+          - "This isn't what I ordered."
+      - id: q3
+        prompt: Для меня это немного пересолено.
+        answer:
+          - "It's a bit too salty for me."
+          - It is a bit too salty for me.
+          - "This is a bit too salty for me."
+          - "It's a little too salty for me."
+          - "It's slightly too salty for me."
+          - "It's a bit salty for me."
+        explanation: A bit too… — мягкая жалоба; too + прилагательное.
