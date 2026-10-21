@@ -11,15 +11,14 @@ import {
   cardCourses,
   cardLanguages,
   courses,
-  currentCourse,
+  currentLanguage,
   followCourse,
   primaryCourse,
   profileOfCourse,
   rememberCourses,
-  selectedCourse,
   sessionCourse,
-  setCurrentCourse,
-  shelfCourse,
+  setCurrentLanguage,
+  shelfLanguage,
   setPrimaryCourse,
 } from "../src/storage/courses";
 import { dexieSource, optionPool, studiedLessons } from "../src/storage/queries";
@@ -191,7 +190,7 @@ describe("порядок курсов", () => {
     await setPrimaryCourse(ENGLISH, db);
     expect((await courses(db)).map((course) => course.id)).toEqual([GREEK, ENGLISH]);
     expect(await primaryCourse(db)).toBe(ENGLISH);
-    expect(await currentCourse(db)).toBe(ENGLISH);
+    expect(await currentLanguage(db)).toBe("en");
     // Основным не становится курс, которого нет на устройстве.
     await db.lessons.where("courseId").equals(ENGLISH).delete();
     expect(await primaryCourse(db)).toBe(GREEK);
@@ -210,19 +209,17 @@ describe("порядок курсов", () => {
     expect((await fresh.meta.get("coursesOrder"))?.value).toBe(JSON.stringify([GREEK]));
     fresh.close();
   });
-  it("выбранный курс — основной, пока не выбран другой; курс, которого нет, не сбивает выбор начатого", async () => {
-    expect(await currentCourse(db)).toBe(GREEK);
-    await setCurrentCourse(ENGLISH, db);
-    expect(await currentCourse(db)).toBe(ENGLISH);
-    await setCurrentCourse("gone", db);
-    expect(await currentCourse(db)).toBe(ENGLISH);
-    await db.meta.delete("currentStartedCourse");
-    expect(await currentCourse(db)).toBe(GREEK);
+  it("выбранный язык — язык основного курса, пока не выбран другой", async () => {
+    expect(await currentLanguage(db)).toBe("el");
+    await setCurrentLanguage("en", db);
+    expect(await currentLanguage(db)).toBe("en");
+    await db.meta.bulkDelete(["currentLanguage", "currentStartedLanguage"]);
+    expect(await currentLanguage(db)).toBe("el");
   });
-  it("выбранный, но не установленный курс не выбран: переключатель и экран показывают один курс", async () => {
+  it("выбранный язык без уроков на устройстве не выбран: «Слова» показывают язык основного курса", async () => {
     await db.lessons.where("courseId").equals(ENGLISH).delete();
-    await setCurrentCourse(ENGLISH, db);
-    expect(await currentCourse(db)).toBe(GREEK);
+    await setCurrentLanguage("en", db);
+    expect(await currentLanguage(db)).toBe("el");
   });
   it("курса нет ни в каталоге, ни на устройстве — его нет в списке", async () => {
     await db.courses.put({ id: "english-b2", title: "Английский B2", updatedAt: iso });
@@ -475,48 +472,28 @@ describe("место курса", () => {
     await fresh.catalog.bulkAdd(catalog);
     expect((await courses(fresh)).map((course) => course.id)).toEqual([GREEK, ENGLISH]);
     expect(await primaryCourse(fresh)).toBe(GREEK);
-    expect(await currentCourse(fresh)).toBe(GREEK);
+    expect(await currentLanguage(fresh)).toBe("el");
     fresh.close();
   });
 });
 
-describe("выбор неначатого курса на «Курсе»", () => {
+describe("выбор языка без начатых курсов на «Курсе»", () => {
   const THIRD = "third";
-  const FOURTH = "fourth";
   beforeEach(async () => {
-    await db.courses.bulkAdd([
-      { id: THIRD, title: "Третий", updatedAt: iso },
-      { id: FOURTH, title: "Четвёртый", updatedAt: iso },
-    ]);
-    await db.catalog.bulkAdd([entry("t1", THIRD, "en", 3), entry("f1", FOURTH, "en", 4)]);
+    await db.courses.add({ id: THIRD, title: "Третий", updatedAt: iso });
+    await db.catalog.add(entry("t1", THIRD, "en", 3));
+    await db.lessons.where("courseId").equals(ENGLISH).delete();
   });
-  const start = (courseId: string) =>
-    db.lessons.add({ id: `${courseId}-1`, courseId, title: courseId, completed: false, updatedAt: iso });
 
-  it("полка показывает неначатый, остальные экраны — последний выбранный начатый", async () => {
-    await setCurrentCourse(ENGLISH, db);
-    await setCurrentCourse(THIRD, db);
-    expect(await shelfCourse(db)).toBe(THIRD);
-    expect(await currentCourse(db)).toBe(ENGLISH);
-    await start(THIRD);
-    expect(await shelfCourse(db)).toBe(THIRD);
-    expect(await currentCourse(db)).toBe(THIRD);
+  it("полка показывает язык без начатых курсов, остальные экраны — последний выбранный начатый", async () => {
+    await setCurrentLanguage("en", db);
+    expect(await shelfLanguage(db)).toBe("en");
+    expect(await currentLanguage(db)).toBe("el");
+    await db.lessons.add({ id: `${THIRD}-1`, courseId: THIRD, title: THIRD, completed: false, updatedAt: iso });
+    expect(await shelfLanguage(db)).toBe("en");
+    expect(await currentLanguage(db)).toBe("en");
   });
-  it("начатый → неначатый → начат → неначатый: экраны помнят последний начатый", async () => {
-    await setCurrentCourse(ENGLISH, db);
-    await setCurrentCourse(THIRD, db);
-    await start(THIRD);
-    await setCurrentCourse(FOURTH, db);
-    expect(await currentCourse(db)).toBe(THIRD);
-    expect(await shelfCourse(db)).toBe(FOURTH);
-  });
-  it("выбор прежней версии сохраняется при первом выборе неначатого", async () => {
-    await db.meta.put({ key: "currentCourse", value: ENGLISH });
-    await setCurrentCourse(THIRD, db);
-    expect(await currentCourse(db)).toBe(ENGLISH);
-    expect(await selectedCourse(db)).toBe(THIRD);
-  });
-  it("без начатых курсов полка — первый курс по месту", async () => {
+  it("без начатых курсов полка — язык первого курса по месту", async () => {
     await new AppDatabase("tetradio-shelf-empty").delete();
     const fresh = new AppDatabase("tetradio-shelf-empty");
     await fresh.courses.bulkAdd([
@@ -524,7 +501,7 @@ describe("выбор неначатого курса на «Курсе»", () =>
       { ...courseRows[1], order: 2 },
     ]);
     await fresh.catalog.bulkAdd(catalog);
-    expect(await shelfCourse(fresh)).toBe(GREEK);
+    expect(await shelfLanguage(fresh)).toBe("el");
     fresh.close();
   });
 });
@@ -554,12 +531,12 @@ describe("каталог с неверным полем выбора курса"
 });
 
 describe("выбор после обновления и ссылки", () => {
-  it("первый запуск новой версии: сохранённый ранее неначатый выбор не открывает карточку вместо полки", async () => {
+  it("первый запуск новой версии: сохранённый ранее неначатый выбор не открывает карточки вместо полки", async () => {
     await db.lessons.where("courseId").equals(ENGLISH).delete();
     await db.meta.put({ key: "currentCourse", value: ENGLISH });
-    expect(await shelfCourse(db)).toBe(GREEK);
-    await setCurrentCourse(ENGLISH, db);
-    expect(await shelfCourse(db)).toBe(ENGLISH);
+    expect(await shelfLanguage(db)).toBe("el");
+    await setCurrentLanguage("en", db);
+    expect(await shelfLanguage(db)).toBe("en");
   });
   it("без начатых курсов выбор неначатого на «Курсе» действует", async () => {
     await new AppDatabase("tetradio-shelf-fresh").delete();
@@ -569,20 +546,20 @@ describe("выбор после обновления и ссылки", () => {
       { ...courseRows[1], order: 2 },
     ]);
     await fresh.catalog.bulkAdd(catalog);
-    await setCurrentCourse(ENGLISH, fresh);
-    expect(await shelfCourse(fresh)).toBe(ENGLISH);
+    await setCurrentLanguage("en", fresh);
+    expect(await shelfLanguage(fresh)).toBe("en");
     fresh.close();
   });
-  it("ссылка на курс, совпадающий с показанным, не закрепляет выбор: смена основного снова переводит экраны", async () => {
+  it("ссылка на курс показанного языка не закрепляет выбор: смена основного снова переводит экраны", async () => {
     await followCourse(GREEK, db);
     await setPrimaryCourse(ENGLISH, db);
-    expect(await currentCourse(db)).toBe(ENGLISH);
+    expect(await currentLanguage(db)).toBe("en");
   });
-  it("ссылка на показанный курс при выбранном неначатом возвращает полку", async () => {
+  it("ссылка на курс начатого языка при выбранном языке без начатых курсов возвращает полку", async () => {
     await db.lessons.where("courseId").equals(ENGLISH).delete();
-    await setCurrentCourse(ENGLISH, db);
+    await setCurrentLanguage("en", db);
     await followCourse(GREEK, db);
-    expect(await shelfCourse(db)).toBe(GREEK);
+    expect(await shelfLanguage(db)).toBe("el");
   });
   it("курс, начатый на другом устройстве и ещё не скачанный, — начат", async () => {
     await db.lessons.where("courseId").equals(ENGLISH).delete();

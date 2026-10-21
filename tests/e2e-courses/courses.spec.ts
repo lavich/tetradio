@@ -20,6 +20,16 @@ async function installBoth(page: Page) {
   await openModule(page, "e01");
 }
 
+const rgbOf = (hex: string) => `rgb(${[1, 3, 5].map((index) => parseInt(hex.slice(index, index + 2), 16)).join(", ")})`;
+const shelves = (page: Page) => page.getByTestId("course-shelf");
+async function chooseLanguage(page: Page, name: string) {
+  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name, exact: true }).click();
+}
+async function installEnglishPair(page: Page) {
+  await installBoth(page);
+  await openModule(page, "c01");
+}
+
 /** Урок листается страницами: вперёд, пока нужный блок не окажется на открытой странице. */
 async function turnTo(page: Page, name: string) {
   const target = page.getByRole("region", { name });
@@ -117,12 +127,12 @@ test("строки текста для чтения в уроке не слив�
   expect(text).toContain("bus.\nShe");
 });
 
-test("переключатель на «Словах» меняет курс «Слов», «Курса» и «Прогресса» и переживает перезапуск", async ({
+test("переключатель на «Словах» меняет язык «Слов», «Курса» и «Прогресса» и переживает перезапуск", async ({
   page,
 }) => {
   await installBoth(page);
   await page.goto("/app/words");
-  const switcher = page.getByRole("radiogroup", { name: "Курс" });
+  const switcher = page.getByRole("radiogroup", { name: "Язык" });
   await switcher.getByRole("radio", { name: "Греческий" }).click();
   await expect(switcher.getByRole("radio", { name: "Греческий" })).toHaveAttribute("aria-checked", "true");
   await expect(page.getByText("γεια", { exact: true })).toBeVisible();
@@ -134,7 +144,7 @@ test("переключатель на «Словах» меняет курс «�
 
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
   await expect(
-    page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский" }),
+    page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский" }),
   ).toHaveAttribute("aria-checked", "true");
   await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /Знакомство/ })).toHaveCount(0);
@@ -144,11 +154,11 @@ test("переключатель на «Словах» меняет курс «�
 
   await page.reload();
   await expect(
-    page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский" }),
+    page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский" }),
   ).toHaveAttribute("aria-checked", "true");
   await expect(page.getByTestId("pace")).toContainText("До A2 (Ступень A2");
 
-  // Стрелка переводит выбор на соседний курс.
+  // Стрелка переводит выбор на соседний язык.
   await page.getByRole("radio", { name: "Английский" }).focus();
   await page.keyboard.press("ArrowLeft");
   await expect(page.getByRole("radio", { name: "Греческий" })).toHaveAttribute("aria-checked", "true");
@@ -210,13 +220,12 @@ test("один начатый курс — без переключателя и 
   for (const path of ["/app/words", "/app/reading", "/app/progress"]) {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByRole("radiogroup", { name: "Курс" })).toHaveCount(0);
+    await expect(page.getByRole("radiogroup", { name: "Язык" })).toHaveCount(0);
   }
   await page.goto("/app/course");
-  await expect(page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio")).toHaveText([
+  await expect(page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio")).toHaveText([
     "Греческий",
     "+ Английский",
-    "+ Для общения",
   ]);
   await expect(page.getByRole("radio", { name: "Английский, не начат" })).toBeVisible();
   await page.goto("/app/progress/settings");
@@ -247,18 +256,18 @@ test("«Все тексты» открывает раздел основного
   await installBoth(page);
   await completeLesson(page, "m01-1");
   await page.goto("/app/words");
-  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский" }).click();
+  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский" }).click();
   await expect(page.getByText("the bus", { exact: true })).toBeVisible();
 
   await page.goto("/app/");
   await page.getByTestId("reading-all").click();
   await expect(page).toHaveURL(/\/app\/reading$/);
   await expect(
-    page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Греческий" }),
+    page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Греческий" }),
   ).toHaveAttribute("aria-checked", "true");
   await expect(page.getByRole("link", { name: /Η Άννα/ })).toBeVisible();
 
-  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский" }).click();
+  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский" }).click();
   await expect(page.getByText("Ещё 1 текст откроется после урока.")).toBeVisible();
   await expect(page.getByRole("link", { name: /Η Άννα/ })).toHaveCount(0);
 });
@@ -304,8 +313,8 @@ const rows = <T>(page: Page, store: string, key?: string) =>
     },
     { store, key },
   ) as Promise<T>;
-const savedCourse = async (page: Page) =>
-  (await rows<{ value?: string } | undefined>(page, "meta", "currentCourse"))?.value;
+const savedLanguage = async (page: Page) =>
+  (await rows<{ value?: string } | undefined>(page, "meta", "currentLanguage"))?.value;
 const lessonsOf = async (page: Page, courseId: string) =>
   (await rows<{ courseId?: string }[]>(page, "lessons")).filter((lesson) => lesson.courseId === courseId).length;
 
@@ -332,15 +341,16 @@ async function watchPackages(page: Page, prefix: string) {
 test("второй курс с полки: карточка неначатого курса, «Учить курс», затем его обложки", async ({ page }) => {
   await openModule(page, "m01");
   await page.goto("/app/course");
-  const switcher = page.getByRole("radiogroup", { name: "Курс" });
+  const switcher = page.getByRole("radiogroup", { name: "Язык" });
   await expect(switcher.getByRole("radio", { name: "Греческий" })).toHaveAttribute("aria-checked", "true");
   await page.goto("/app/words");
-  await expect(page.getByRole("radiogroup", { name: "Курс" })).toHaveCount(0);
+  await expect(page.getByRole("radiogroup", { name: "Язык" })).toHaveCount(0);
 
   await page.goto("/app/course");
   await switcher.getByRole("radio", { name: "Английский, не начат" }).click();
-  const offer = page.getByTestId("course-offer");
-  await expect(offer.getByRole("heading", { name: "Английский · B1 → B2" })).toBeVisible();
+  await expect(page.getByTestId("course-offer")).toHaveCount(2);
+  const offer = page.getByTestId("course-offer").first();
+  await expect(offer.getByRole("heading", { level: 2, name: "Английский · B1 → B2" })).toBeVisible();
   await expect(offer.getByTestId("first-course")).toHaveText("Английский · B1 → B21 модуль");
   await expect(page.getByRole("link", { name: /Модуль 1: Знакомство/ })).toHaveCount(0);
 
@@ -353,9 +363,10 @@ test("второй курс с полки: карточка неначатого
   release();
   await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
   await expect(switcher.getByRole("radio", { name: "Английский" })).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByTestId("course-offer").getByRole("heading")).toHaveText("Английский для общения · B1");
 
   await page.goto("/app/words");
-  const words = page.getByRole("radiogroup", { name: "Курс" });
+  const words = page.getByRole("radiogroup", { name: "Язык" });
   await expect(words.getByRole("radio")).toHaveText(["Греческий", "Английский"]);
   await expect(words.getByRole("radio", { name: "Английский" })).toHaveAttribute("aria-checked", "true");
 
@@ -364,15 +375,15 @@ test("второй курс с полки: карточка неначатого
   await expect(page.getByTestId("other-course").getByRole("heading", { name: "Английский" })).toBeVisible();
 });
 
-test("ссылка на модуль начатого курса возвращает полку к нему", async ({ page }) => {
+test("ссылка на модуль начатого курса возвращает «Курс» к его языку", async ({ page }) => {
   await openModule(page, "m01");
   await page.goto("/app/course");
   await page.getByRole("radio", { name: "Английский, не начат" }).click();
-  await expect(page.getByTestId("course-offer")).toBeVisible();
+  await expect(page.getByTestId("course-offer")).toHaveCount(2);
   await page.goto("/app/");
   await page.getByTestId("course-next").click();
   await expect(page).toHaveURL(/\/course\/m01\//);
-  await expect.poll(() => savedCourse(page)).toBe("greek-a2");
+  await expect.poll(() => savedLanguage(page)).toBe("el");
   await page.goto("/app/course");
   await expect(page.getByRole("radio", { name: "Греческий" })).toHaveAttribute("aria-checked", "true");
   await expect(page.getByRole("link", { name: /Модуль 1: Знакомство/ })).toBeVisible();
@@ -448,17 +459,18 @@ test("курс, начатый на другом устройстве и не с
     database.close();
   });
   await page.goto("/app/course");
-  await expect(page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio")).toHaveText([
+  await expect(page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio")).toHaveText([
     "Греческий",
     "Английский",
-    "+ Для общения",
   ]);
   await page.goto("/app/course/e01");
   await expect(page.getByRole("heading", { name: "Содержание" })).toBeVisible();
   await expect.poll(() => lessonsOf(page, "english")).toBeGreaterThan(0);
 });
 
-test("четыре курса в переключателе на 360 px — имена целиком, лента прокручивается", async ({ page }) => {
+test("переключатель языков при четырёх курсах на 360 px — два языка целиком, лента не прокручивается", async ({
+  page,
+}) => {
   await page.route("**/content/catalog.json", async (route) => {
     const catalog = await (await route.fetch()).json();
     const lesson = catalog.lessons.find((entry: { id: string }) => entry.id === "e01-1");
@@ -476,21 +488,36 @@ test("четыре курса в переключателе на 360 px — им
   await page.setViewportSize({ width: 360, height: 800 });
   await openModule(page, "m01");
   await page.goto("/app/course");
-  const radios = page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio");
-  await expect(radios).toHaveText(["Греческий", "+ Английский", "+ Для общения", "+ Английский 2"]);
+  const switcher = page.getByRole("radiogroup", { name: "Язык" });
+  const radios = switcher.getByRole("radio");
+  await expect(radios).toHaveText(["Греческий", "+ Английский"]);
   const clipped = await radios.evaluateAll(
     (items) => items.filter((item) => item.scrollWidth > item.clientWidth + 1).length,
   );
   expect(clipped).toBe(0);
+  expect(await switcher.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  await radios.nth(1).click();
+  await expect(page.getByTestId("course-offer").getByRole("heading", { level: 2 })).toHaveText([
+    "Английский · B1 → B2",
+    "Английский для общения · B1",
+    "Английский 2",
+  ]);
 });
 
-async function toggleFromShelf(page: Page, course: string, action: "Приостановить курс" | "Продолжить курс") {
+/** Пауза с полки курса: язык полки выбирается переключателем, полка находится по своему заголовку. */
+async function toggleFromShelf(
+  page: Page,
+  language: string,
+  shelf: string,
+  action: "Приостановить курс" | "Продолжить курс",
+) {
   await page.goto("/app/course");
-  const switcher = page.getByRole("radiogroup", { name: "Курс" });
-  if (await switcher.count()) await switcher.getByRole("radio", { name: course, exact: true }).click();
-  await page.getByRole("button", { name: `Действия с курсом «${course}»` }).click();
+  const switcher = page.getByRole("radiogroup", { name: "Язык" });
+  if (await switcher.count()) await switcher.getByRole("radio", { name: language, exact: true }).click();
+  const own = shelves(page).filter({ has: page.getByRole("heading", { level: 2, name: shelf }) });
+  await own.getByRole("button", { name: /^Действия с курсом/ }).click();
   await page.getByRole("menuitem", { name: action }).click();
-  const paused = page.getByTestId("shelf-paused");
+  const paused = own.getByTestId("shelf-paused");
   if (action === "Приостановить курс") await expect(paused).toBeVisible();
   else await expect(paused).toHaveCount(0);
 }
@@ -559,7 +586,7 @@ const contrastOfCovers = (page: Page) =>
 
 test("пауза с полки убирает английский с «Сегодня», возврат возвращает", async ({ page }) => {
   await installBoth(page);
-  await toggleFromShelf(page, "Английский", "Приостановить курс");
+  await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Приостановить курс");
   const status = page.getByTestId("shelf-status");
   await expect(status).toHaveText("Курс «Английский» на паузе. Вернуть его можно на полке или в настройках.");
   await expect(status).toHaveClass(/sr-only/);
@@ -572,7 +599,7 @@ test("пауза с полки убирает английский с «Сего
   await expect(page.getByTestId("other-course")).toHaveCount(0);
 
   await page.goto("/app/course");
-  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Английский", exact: true }).click();
+  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский", exact: true }).click();
   await paused.getByRole("button", { name: "Продолжить курс" }).click();
   await expect(paused).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Действия с курсом «Английский»" })).toBeFocused();
@@ -582,9 +609,9 @@ test("пауза с полки убирает английский с «Сего
 
 test("строка статуса паузы не переходит на полку другого курса", async ({ page }) => {
   await installBoth(page);
-  await toggleFromShelf(page, "Английский", "Приостановить курс");
+  await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Приостановить курс");
   await expect(page.getByTestId("shelf-status")).toHaveText(/на паузе/);
-  await page.getByRole("radiogroup", { name: "Курс" }).getByRole("radio", { name: "Греческий" }).click();
+  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Греческий" }).click();
   await expect(page.getByRole("button", { name: "Действия с курсом «Греческий»" })).toBeVisible();
   await expect(page.getByTestId("shelf-status")).toHaveText("");
 });
@@ -612,7 +639,7 @@ test("основной на паузе из настроек — на «Сего
   await expect(page.getByTestId("course-next")).toContainText("Дорога на работу");
   await expect(page.getByTestId("other-course")).toHaveCount(0);
   await page.goto("/app/words");
-  const words = page.getByRole("radiogroup", { name: "Курс" });
+  const words = page.getByRole("radiogroup", { name: "Язык" });
   await words.getByRole("radio", { name: "Греческий" }).click();
   await expect(words.getByRole("radio", { name: "Греческий" })).toHaveAttribute("aria-checked", "true");
   await expect(page.getByText("γεια").first()).toBeVisible();
@@ -670,7 +697,7 @@ test("все курсы на паузе — «Все курсы на паузе�
   page,
 }) => {
   await openModule(page, "m01");
-  await toggleFromShelf(page, "Греческий", "Приостановить курс");
+  await toggleFromShelf(page, "Греческий", "Греческий · A0 → A2", "Приостановить курс");
   await page.goto("/app/progress");
   await expect(page.getByTestId("progress-paused")).toContainText(
     /^Курс на паузе с \d+ [а-я]+\. Календарь курса не сдвигается\.$/,
@@ -700,11 +727,11 @@ test("после паузы — полное число и строка «сна
   await installBoth(page);
   await startLesson(page, "/app/course/e01/e01-1", "Верно или неверно?", "False");
   await overdueEnglish(page, 3, -20);
-  await toggleFromShelf(page, "Английский", "Приостановить курс");
+  await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Приостановить курс");
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
   await expect(page.getByTestId("other-course")).toHaveCount(0);
-  await toggleFromShelf(page, "Английский", "Продолжить курс");
+  await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Продолжить курс");
   await page.goto("/app/");
   const other = page.getByTestId("other-course");
   await expect(other.getByRole("button", { name: "Повторить 5" })).toBeVisible();
@@ -780,16 +807,6 @@ test("меню «⋯»: клавиатура, щелчок вне, Tab, 44 px, �
   await page.keyboard.press("Enter");
   await expect(trigger).toBeFocused();
 });
-
-const rgbOf = (hex: string) => `rgb(${[1, 3, 5].map((index) => parseInt(hex.slice(index, index + 2), 16)).join(", ")})`;
-const shelves = (page: Page) => page.getByTestId("course-shelf");
-async function chooseLanguage(page: Page, name: string) {
-  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name, exact: true }).click();
-}
-async function installEnglishPair(page: Page) {
-  await installBoth(page);
-  await openModule(page, "c01");
-}
 
 test("две полки английского: заголовки, счётчики, свои гаммы, пауза одной полки не трогает другую", async ({
   page,

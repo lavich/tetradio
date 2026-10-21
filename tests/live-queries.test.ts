@@ -20,7 +20,6 @@ import {
   cardsInCourse,
   courseOfCard,
   courses,
-  currentCourse,
   currentLanguage,
   languages,
   lessonCourses,
@@ -111,7 +110,7 @@ describe("живые запросы отслеживают чтения посл
     "«Сегодня»: дни уроков": () => lessonDays("2026-09-14", tz, COURSE),
     "«Сегодня»: повторено": () => reviewedOn("2026-09-15", COURSE),
     "«Сегодня»: «Чтение»": async () => courseReadings(COURSE),
-    "«Курс»": async () => moduleViews(await currentCourse()),
+    "«Курс»: полка курса": () => moduleViews(COURSE),
     "«Курс»: язык и его курсы": async () => {
       const code = await shelfLanguage();
       return (await languages()).find((language) => language.code === code) ?? null;

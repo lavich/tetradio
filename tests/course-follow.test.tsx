@@ -9,13 +9,7 @@ import { installLesson, refreshCatalog } from "../src/content/client";
 import { MemoryRouter } from "react-router-dom";
 import { ReadingSheet } from "../src/features/today/ReadingSheet";
 import { useFollowCourse } from "../src/shared/courses";
-import {
-  currentLanguage,
-  setCurrentCourse,
-  setCurrentLanguage,
-  shelfCourse,
-  shelfLanguage,
-} from "../src/storage/courses";
+import { currentLanguage, setCurrentLanguage, shelfLanguage } from "../src/storage/courses";
 import type { CourseReadings, ReadingView } from "../src/storage/readings";
 import { db } from "../src/storage/db";
 import { memoryFetcher } from "./helpers/content";
@@ -39,16 +33,6 @@ beforeEach(async () => {
 afterEach(() => {
   act(() => root?.unmount());
   root = null;
-});
-
-describe("модуль, открытый по ссылке", () => {
-  it("возвращает полку к своему курсу, когда на «Курсе» выбран неначатый", async () => {
-    await setCurrentCourse("english", db);
-    expect(await shelfCourse(db)).toBe("english");
-    root = createRoot(document.createElement("div"));
-    await act(async () => root!.render(<Follow courseId="greek-a2" />));
-    await vi.waitFor(async () => expect(await shelfCourse(db)).toBe("greek-a2"));
-  });
 });
 
 describe("ссылка выбирает язык курса", () => {

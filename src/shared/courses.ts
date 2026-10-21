@@ -9,16 +9,13 @@ import {
   activeSession,
   courseOfCard,
   courses,
-  currentCourse,
   currentLanguage,
   languages,
   primaryCourse,
   followCourse,
   profileOfCourse,
-  setCurrentCourse,
   setCurrentLanguage,
   setPrimaryCourse,
-  shelfCourse,
   shelfLanguage,
   todayCourse,
   type CourseEntry,
@@ -28,10 +25,8 @@ import {
 /** Установленные курсы по порядку установки. `undefined` — ещё читается. */
 export const useCourses = (): CourseEntry[] | undefined =>
   useLiveQuery(async () => (await courses()).filter((course) => course.installed), []);
-/** Начатые курсы, затем неначатые курсы каталога с уроками — варианты переключателя «Курса». */
+/** Начатые курсы, затем неначатые курсы каталога с уроками. */
 export const useAllCourses = (): CourseEntry[] | undefined => useLiveQuery(() => courses(), []);
-/** Курс «Курса»: бывает и неначатым. */
-export const useShelfCourse = (): string | undefined => useLiveQuery(() => shelfCourse(), []);
 
 /** Основной курс: `null` — курсов в каталоге нет, `undefined` — ещё читается. */
 export const usePrimaryCourse = (): string | null | undefined =>
@@ -44,12 +39,6 @@ export const useTodayCourse = (): string | null | undefined =>
 /** Начатые курсы, в том числе ещё не скачанные. */
 export const useStartedCourses = (): CourseEntry[] | undefined =>
   useLiveQuery(async () => (await courses()).filter((course) => course.started), []);
-
-/** Курс «Слов», «Чтения» и «Прогресса» и смена выбора; выбор переживает перезапуск, неначатый курс выбирает только «Курс». */
-export const useCurrentCourse = (): [string | undefined, (courseId: string) => Promise<void>] => [
-  useLiveQuery(() => currentCourse(), []),
-  setCurrentCourse,
-];
 
 /** Языки курсов по порядку их первого курса. `undefined` — ещё читается. */
 export const useLanguages = (): LanguageEntry[] | undefined => useLiveQuery(() => languages(), []);
