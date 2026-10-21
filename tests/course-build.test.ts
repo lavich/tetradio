@@ -841,6 +841,24 @@ describe("смешанные алфавиты", () => {
     expect(failure(withBody("Γεια σoυ"))).toContain("смешаны алфавиты");
     expect(() => build(withBody("θ читается как [θ]: [аθи́на]. Уровень Α2."))).not.toThrow();
   });
+  it("в тексте для чтения — по языку его курса: латиница в греческом слове и кириллица в английском — ошибка", () => {
+    const reading = (text: string) => ({
+      title: "Текст",
+      after: "m01-1",
+      text,
+      provenance: { operation: "requested-generation", request: "Тест", review: "none" },
+    });
+    expect(failure({ ...base(), "readings/greek-a2/r-m01-x.yaml": reading("Γεια σoυ, Άννα.") })).toMatch(
+      /readings\/greek-a2\/r-m01-x\.yaml.*смешаны алфавиты/,
+    );
+    const english = {
+      ...base(),
+      "courses/english-it.yaml": { title: "Английский", language: "en", palette: "ink", modules: ["e01"] },
+      "modules/e01.yaml": { number: 1, title: "Work", subtitle: "Работа", status: "draft", goal: "Цель", sessions: 3 },
+      "readings/english-it/r-e01-x.yaml": { ...reading("The bus іs late."), after: "e01-1" },
+    };
+    expect(failure(english)).toContain("смешаны алфавиты");
+  });
 });
 
 describe("стабильность идентификаторов", () => {

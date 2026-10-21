@@ -263,6 +263,8 @@ export function checkSourceScripts(
     checkScripts(src, `phrases/${src.file}`, courses.get(src.course) ?? LANGUAGE);
   for (const [id, src] of sources.modules) checkScripts(src, `modules/${src.file}`, modules.get(id) ?? LANGUAGE);
   for (const [id, src] of sources.lessons) checkScripts(src, `lessons/${id}.yaml`, lessons.get(id) ?? LANGUAGE);
+  for (const src of sources.readings.values())
+    checkScripts(src, `readings/${src.file}`, courses.get(src.course) ?? LANGUAGE);
 }
 
 const WORD_FIELDS = {
