@@ -1,8 +1,25 @@
 number: 6
 title: Health
 subtitle: Здоровье и аптека
-status: draft
+status: published
 goal: описать симптомы в аптеке или у врача, понять назначение, вызвать помощь
 grammar:
   - present perfect continuous и for / since, should / had better
 sessions: 3
+lessons:
+  - t06-1
+  - t06-2
+  - t06-3
+  - t06-test
+crib:
+  title: симптомы и совет
+  rows:
+    - [длится до сих пор, "I've been feeling…"]
+    - [состояние, "I've had a cough."]
+    - [отрезок, for two days]
+    - [с момента, since Monday]
+    - [совет, "You should…"]
+    - [настойчиво, "You'd better…"]
+    - [спросить совета, "Should I…?"]
+    - [лучше не, "You'd better not…"]
+  note: "had better + глагол без to; вопрос — Should I…?"

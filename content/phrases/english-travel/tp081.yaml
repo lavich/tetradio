@@ -1,0 +1,8 @@
+id: tp081
+text: "You should drink plenty of water."
+translation: "Вам стоит пить побольше воды."
+note: "совет врача или фармацевта"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t06
+  operation: requested-generation
+  request: Фразы модуля t06 программы docs/curriculum-english-travel.md

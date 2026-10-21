@@ -1,0 +1,311 @@
+title: Инструкция, аптека и врач
+kind: lesson
+items:
+  - { kind: word, id: tw084 }
+  - { kind: word, id: tw085 }
+  - { kind: word, id: tw086 }
+  - { kind: word, id: tw087 }
+  - { kind: word, id: tw088 }
+  - { kind: word, id: tw089 }
+  - { kind: word, id: tw090 }
+  - { kind: phrase, id: tp084 }
+  - { kind: phrase, id: tp085 }
+  - { kind: phrase, id: tp086 }
+  - { kind: phrase, id: tp087 }
+  - { kind: phrase, id: tp088 }
+  - { kind: phrase, id: tp089 }
+  - { kind: phrase, id: tp090 }
+blocks:
+  - type: explanation
+    id: medicine-words
+    title: Лекарства и дозировка
+    body: |-
+      В Британии лекарства без рецепта — **over-the-counter medicine** — продают в аптеке (**a chemist's** или a pharmacy) и частично в супермаркете. Фармацевт (a pharmacist) сам даёт совет при простуде, боли в горле или растяжении, поэтому к врачу идут не сразу. Обезболивающее — **a painkiller**: paracetamol (в США его называют acetaminophen) или ibuprofen.
+
+      Главное в инструкции — дозировка. **A dose** — один приём: например, one or two tablets. **Twice a day** — два раза в день, **three times a day** — три раза, **every four hours** — каждые четыре часа. **Take with food** — во время еды, **on an empty stomach** — натощак. **A side effect** — побочный эффект: **Are there any side effects?**
+
+      Переспросить дозировку — нормально, так делают и носители: **How often should I take it?** **Can I take it with food?** **Is it safe to drink alcohol with this?** Если что-то болит и распухло — **swollen**: My ankle is swollen.
+
+      Если лечение платное, за врача и лекарства платите сами, а потом подаёте страховой компании **an insurance claim** — заявление на выплату. Для этого просите у врача и в аптеке документы: **Could I have a receipt for my insurance?**
+  - type: explanation
+    id: emergency
+    title: Экстренная помощь
+    body: |-
+      Номер экстренных служб в Британии — **999**, в странах ЕС — **112**; 112 работает и в Британии. Если человеку плохо прямо сейчас, скажите людям рядом: **Please call an ambulance!** — не просто Ambulance! и не Call ambulance без an.
+
+      Приёмный покой больницы — **A&E** (Accident and Emergency), в США — the ER. Туда идут сами, если нужна срочная помощь, но не скорая: **Where's the nearest A&E?** Если не срочно, в Британии звонят 111 — там подскажут, куда обратиться.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: leaflet-how
+    title: Как читать инструкцию
+    body: |-
+      Ниже — инструкция к обезболивающему из британской аптеки. Целиком её никто не читает: ищите три вещи — сколько и как часто принимать, кому нельзя и когда срочно остановиться. Это разделы **How to take**, **Do not take if you…** и **Possible side effects**. Слова в инструкции официальные: **avoid** — избегать, **unless** — если только не.
+  - type: reading
+    id: leaflet
+    title: Patient information leaflet
+    text: |-
+      IBUPROFEN 200 mg TABLETS
+      A painkiller for headache, toothache, back pain, muscle pain, colds and flu. Over-the-counter medicine. Read all of this leaflet carefully before you start taking this medicine.
+
+      HOW TO TAKE
+      Adults and children over 12: one or two tablets with water, up to three times a day.
+      Leave at least 4 hours between doses. Do not take more than 6 tablets in 24 hours.
+      Take with or after food. Do not take on an empty stomach.
+      If you forget a dose, take it when you remember, but never take two doses at once.
+      Do not take for longer than 10 days unless your doctor tells you to.
+
+      DO NOT TAKE IF YOU:
+      • are allergic to ibuprofen or aspirin
+      • have asthma, unless your doctor says it is safe for you
+      • are taking any other medicines that contain ibuprofen — ask a pharmacist
+
+      POSSIBLE SIDE EFFECTS
+      Common: stomach pain, feeling sick.
+      Stop taking the tablets and get medical help immediately if you have a rash, swelling of the face or throat, or difficulty breathing.
+
+      Avoid alcohol while you are taking this medicine.
+    glosses:
+      - { text: toothache, russian: зубная боль }
+      - { text: leaflet, russian: листок-вкладыш }
+      - { text: swelling, russian: отёк }
+      - { text: difficulty breathing, russian: затруднённое дыхание }
+  - type: exercise
+    id: leaflet-q
+    about: leaflet
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the most you can take in one day?
+        options: [six tablets, three tablets, two tablets]
+        answer: six tablets
+        explanation: "Do not take more than 6 tablets in 24 hours. Up to three times a day по одной-две — тоже максимум шесть."
+      - id: q2
+        prompt: You took two tablets at 9 am. When can you take the next dose?
+        options: [at 1 pm or later, at 10 am, only the next day]
+        answer: at 1 pm or later
+        explanation: Leave at least 4 hours between doses.
+      - id: q3
+        prompt: What does the leaflet say about food?
+        options:
+          - Take the tablets with or after food.
+          - Take the tablets before breakfast.
+          - Wait four hours after a meal.
+        answer: Take the tablets with or after food.
+        explanation: "Take with or after food. Do not take on an empty stomach."
+      - id: q4
+        prompt: You forgot your morning dose. What does the leaflet say?
+        options:
+          - Take it when you remember, but not two at once.
+          - Take two doses at lunch.
+          - Wait until tomorrow morning.
+        answer: Take it when you remember, but not two at once.
+      - id: q5
+        prompt: Who should talk to a doctor before taking these tablets?
+        options:
+          - someone with asthma
+          - someone with a cold
+          - a child of fourteen
+        answer: someone with asthma
+        explanation: "Have asthma, unless your doctor says it is safe — при астме только с разрешения врача."
+      - id: q6
+        prompt: Your face is swollen after the tablets. What should you do?
+        options:
+          - Stop taking them and get medical help at once.
+          - Take them with food next time.
+          - Take one tablet instead of two.
+        answer: Stop taking them and get medical help at once.
+        explanation: Swelling of the face — повод сразу прекратить приём и обратиться за помощью.
+  - type: explanation
+    id: chemist-how
+    title: В аптеке
+    body: |-
+      Марко, которого вы слышали в аэропорту, теперь в Эдинбурге. Вчера он подвернул ногу на прогулке и пришёл в аптеку. Послушайте разговор с фармацевтом Бриджет: что с ногой, что она советует и как принимать лекарство.
+
+      Марко говорит просто и иногда ошибается во временах: Yesterday I walk… вместо I walked… I twisted. Бриджет его понимает — ловите смысл, а не ошибки.
+  - type: listening
+    id: chemist
+    title: At the chemist's
+    plays: 2
+    transcript:
+      - { speaker: Bridget, text: "Hello, what can I do for you?" }
+      - { speaker: Marco, text: "Hello. My ankle hurts. Yesterday I walk up Arthur's Seat, and on the way down I twist it." }
+      - { speaker: Bridget, text: "Oh dear. Can I have a look? Hmm, it's quite swollen. Can you walk on it?" }
+      - { speaker: Marco, text: "Yes, but slowly. It hurts more in the morning." }
+      - { speaker: Bridget, text: "It sounds like a sprain, not a break. You should rest it, put some ice on it and keep your foot up when you sit. And I'd recommend some ibuprofen — it helps with the pain and the swelling." }
+      - { speaker: Bridget, text: "Do you have asthma, or are you taking any other medicines?" }
+      - { speaker: Marco, text: "No, nothing." }
+      - { speaker: Marco, text: "OK. How often should I take it?" }
+      - { speaker: Bridget, text: "One or two tablets three times a day, but leave at least four hours between doses." }
+      - { speaker: Marco, text: "Can I take it with food?" }
+      - { speaker: Bridget, text: "You should take it with food, actually. Don't take it on an empty stomach — it can upset your stomach." }
+      - { speaker: Marco, text: "And tonight we go to a pub with friends. Is it safe to drink alcohol with this?" }
+      - { speaker: Bridget, text: "It's better to avoid alcohol while you're taking it. Have a soft drink tonight." }
+      - { speaker: Marco, text: "OK, no beer. Are there any side effects?" }
+      - { speaker: Bridget, text: "Some people get a bit of stomach pain. If you get a rash or any swelling of your face, stop taking it and see a doctor straight away. And if your ankle is still very swollen in three or four days, you'd better get it checked." }
+      - { speaker: Marco, text: "Thank you. How much is it?" }
+      - { speaker: Bridget, text: "Two pounds fifty, please." }
+  - type: exercise
+    id: chemist-q
+    about: chemist
+    title: Аудирование — аптека
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What happened to Marco?
+        options:
+          - He hurt his ankle on a walk.
+          - He fell in the pub.
+          - He hurt his knee at the airport.
+        answer: He hurt his ankle on a walk.
+        explanation: On the way down I twist it — подвернул ногу, спускаясь с холма.
+      - id: q2
+        prompt: What does Bridget think the problem is?
+        options: [a sprain, a break, an allergy]
+        answer: a sprain
+        explanation: "It sounds like a sprain, not a break."
+      - id: q3
+        prompt: How should Marco take the tablets?
+        options:
+          - with food
+          - on an empty stomach
+          - before he goes to bed
+        answer: with food
+        explanation: "You should take it with food… Don't take it on an empty stomach."
+      - id: q4
+        prompt: What does Bridget say about alcohol?
+        options:
+          - It's better not to drink while taking the tablets.
+          - One beer is fine.
+          - He can drink after the second dose.
+        answer: It's better not to drink while taking the tablets.
+        explanation: "It's better to avoid alcohol while you're taking it."
+      - id: q5
+        prompt: When should Marco see a doctor?
+        options:
+          - if his ankle is still very swollen in a few days
+          - tomorrow morning
+          - only if he can't walk tonight
+        answer: if his ankle is still very swollen in a few days
+        explanation: If your ankle is still very swollen in three or four days, you'd better get it checked.
+  - type: explanation
+    id: doctor-how
+    title: У врача
+    body: |-
+      Инеш, которая в первом модуле искала свой чемодан, всё ещё в Эдинбурге. У неё третий день болит горло, и она пришла в частную клинику к врачу общей практики (a GP — general practitioner) доктору Окафору. Ловите, что у неё, что выписывает врач, как принимать и что Инеш просит для страховой.
+  - type: listening
+    id: doctor
+    title: At a private GP clinic
+    plays: 2
+    transcript:
+      - { speaker: Okafor, text: "Good afternoon. Have a seat. What seems to be the problem?" }
+      - { speaker: Inês, text: "I've had a really sore throat for three days, and since last night I've had a temperature too. It hurts when I swallow." }
+      - { speaker: Okafor, text: "Let me have a look. Open wide, please… Yes, your tonsils are very red and swollen. It's tonsillitis, and it looks like a bacterial infection, so I'm going to give you antibiotics. Are you allergic to anything?" }
+      - { speaker: Inês, text: "Yes, I'm allergic to penicillin." }
+      - { speaker: Okafor, text: "Good thing you told me. Then I'll prescribe something different. Take one tablet twice a day, morning and evening, for seven days." }
+      - { speaker: Inês, text: "Sorry, how many days?" }
+      - { speaker: Okafor, text: "Seven. And please finish the whole course, even if you feel better after three or four days." }
+      - { speaker: Inês, text: "OK. And for the pain?" }
+      - { speaker: Okafor, text: "Paracetamol is fine — it's over the counter, any chemist's will have it. Drink plenty of water, and you'd better stay in and rest for a couple of days." }
+      - { speaker: Inês, text: "I've got travel insurance. Could I have a receipt and a copy of the prescription for my insurance claim?" }
+      - { speaker: Okafor, text: "Of course. Reception will print them for you on the way out." }
+      - { speaker: Inês, text: "And if it gets worse at night? Where's the nearest A&E?" }
+      - { speaker: Okafor, text: "At the Royal Infirmary, about fifteen minutes by taxi. But if you have any trouble breathing, don't wait — call 999." }
+  - type: exercise
+    id: doctor-q
+    about: doctor
+    title: Аудирование — у врача
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How long has Inês had a sore throat?
+        options: [for three days, since last night, for a week]
+        answer: for three days
+        explanation: "I've had a really sore throat for three days; since last night — это о температуре."
+      - id: q2
+        prompt: Why doesn't the doctor give her penicillin?
+        options:
+          - She is allergic to it.
+          - It has side effects.
+          - The chemist's doesn't have it.
+        answer: She is allergic to it.
+      - id: q3
+        prompt: What should Inês do if she feels better after four days?
+        options:
+          - keep taking the tablets until the end
+          - stop the antibiotics
+          - take only paracetamol
+        answer: keep taking the tablets until the end
+        explanation: "Please finish the whole course, even if you feel better."
+      - id: q4
+        prompt: Why does she ask for a receipt?
+        options:
+          - for her travel insurance
+          - to buy paracetamol
+          - to show it at the chemist's
+        answer: for her travel insurance
+        explanation: "…for my insurance claim — чтобы получить деньги от страховой."
+      - id: q5
+        prompt: When should she call 999?
+        options:
+          - if she has trouble breathing
+          - if her throat still hurts tomorrow
+          - if she can't find the Royal Infirmary
+        answer: if she has trouble breathing
+  - type: exercise
+    id: doctor-dose
+    about: doctor
+    title: Дозировка
+    instruction: Ответьте одним словом или числом.
+    format: text
+    items:
+      - id: q1
+        prompt: How many times a day should Inês take the antibiotics?
+        answer: [twice, two, "2", two times, twice a day, 2 times, two times a day, 2 times a day]
+        explanation: Take one tablet twice a day, morning and evening.
+      - id: q2
+        prompt: For how many days?
+        answer: [seven, "7", seven days, 7 days]
+        explanation: "Инеш переспросила — Sorry, how many days? — и врач повторил: seven."
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - swollen
+      - over-the-counter
+      - on an empty stomach
+      - a side effect
+      - a dose
+      - a painkiller
+      - an insurance claim
+      - a prescription
+      - twice a day
+    items:
+      - { id: m1, prompt: опухший, answer: swollen }
+      - { id: m2, prompt: безрецептурный, answer: over-the-counter }
+      - { id: m3, prompt: натощак, answer: on an empty stomach }
+      - { id: m4, prompt: побочный эффект, answer: a side effect }
+      - { id: m5, prompt: "доза, приём лекарства", answer: a dose }
+      - { id: m6, prompt: обезболивающее, answer: a painkiller }
+      - { id: m7, prompt: заявление на страховую выплату, answer: an insurance claim }
+  - type: exercise
+    id: phrases-gap
+    title: Фразы урока
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [often, food, safe, side, allergic, ambulance, nearest, much, empty]
+    items:
+      - { id: g1, prompt: "How ___ should I take it?", answer: often }
+      - { id: g2, prompt: "Can I take it with ___?", answer: food }
+      - { id: g3, prompt: "Is it ___ to drink alcohol with this?", answer: safe }
+      - { id: g4, prompt: "Are there any ___ effects?", answer: side }
+      - { id: g5, prompt: "I'm ___ to penicillin.", answer: allergic }
+      - { id: g6, prompt: "Please call an ___!", answer: ambulance }
+      - { id: g7, prompt: "Where's the ___ A&E?", answer: nearest }

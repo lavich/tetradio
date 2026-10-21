@@ -1,0 +1,7 @@
+id: tp080
+text: "I feel dizzy when I stand up."
+translation: "Когда встаю, кружится голова."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t06
+  operation: requested-generation
+  request: Фразы модуля t06 программы docs/curriculum-english-travel.md

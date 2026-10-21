@@ -1,0 +1,283 @@
+title: Симптомы и совет
+kind: lesson
+items:
+  - { kind: word, id: tw076 }
+  - { kind: word, id: tw077 }
+  - { kind: word, id: tw078 }
+  - { kind: word, id: tw079 }
+  - { kind: word, id: tw080 }
+  - { kind: word, id: tw081 }
+  - { kind: word, id: tw082 }
+  - { kind: word, id: tw083 }
+  - { kind: phrase, id: tp076 }
+  - { kind: phrase, id: tp077 }
+  - { kind: phrase, id: tp078 }
+  - { kind: phrase, id: tp079 }
+  - { kind: phrase, id: tp080 }
+  - { kind: phrase, id: tp081 }
+  - { kind: phrase, id: tp082 }
+  - { kind: phrase, id: tp083 }
+blocks:
+  - type: explanation
+    id: how-long
+    title: Сколько это длится — present perfect continuous
+    body: |-
+      Первый вопрос фармацевта или врача — **How long have you had it?** или **How long have you been feeling like this?** Русское «у меня второй день болит голова» стоит в настоящем времени, а по-английски так нельзя: **I have a headache for two days** — ошибка. Состояние началось в прошлом и длится до сих пор, поэтому нужен present perfect.
+
+      **I've been + глагол с -ing** — present perfect continuous: действие или ощущение идёт с какого-то момента до сейчас. **I've been feeling sick since yesterday.** **I've been coughing all night.** **My ankle has been hurting since this morning.**
+
+      Глаголы состояния — **have** (в значении «иметь»), **be**, **know** — в continuous не ставят. С ними — обычный present perfect: **I've had a headache for two days.** **I've had this rash since Monday.** **I've been ill for a week.** Feel и hurt можно и так и так: I've felt dizzy since lunch тоже правильно, но в разговоре чаще I've been feeling.
+
+      **for** + отрезок времени: for two days, for an hour, for a week. **since** + начальная точка: since Monday, since yesterday, since the flight, since 3 o'clock. Ловушка: «уже три дня» — **for three days**, а не since three days.
+    table:
+      columns:
+        - как сказать
+        - пример
+      rows:
+        - - I've been + -ing + for…
+          - I've been coughing for three days.
+        - - I've been + -ing + since…
+          - I've been feeling sick since yesterday.
+        - - I've had + симптом
+          - I've had a sore throat since Monday.
+        - - вопрос
+          - How long have you had it?
+        - - вопрос
+          - How long have you been feeling like this?
+        - - for / since
+          - for two days · since Sunday
+  - type: explanation
+    id: advice
+    title: Совет — should и had better
+    body: |-
+      **You should + глагол** — обычный совет: **You should drink plenty of water.** **You should rest for a couple of days.** Отрицание — **You shouldn't** go swimming with that rash. Спросить совета — **Should I** see a doctor? **What should I** take for a sore throat?
+
+      **You'd better + глагол** (= you had better) — совет сильнее: если не сделать, будет плохо. **You'd better see a doctor.** **You'd better not walk on that ankle.** Несмотря на had, речь о настоящем и будущем. После had better — глагол без to: you'd better go, не you'd better to go. Отрицание — **'d better not**, не hadn't better.
+
+      Had better звучит настойчиво, почти как предупреждение. Фармацевт так скажет о серьёзном, а вы о себе — **I'd better go to A&E** («пожалуй, мне лучше…»). Просить совета через had better не принято: вопрос — с should.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - should + глагол
+          - You should take a painkiller.
+        - - shouldn't + глагол
+          - You shouldn't drive if you feel dizzy.
+        - - Should I…?
+          - Should I see a doctor?
+        - - "'d better + глагол"
+          - You'd better see a doctor today.
+        - - "'d better not + глагол"
+          - You'd better not walk on it.
+  - type: explanation
+    id: symptoms-words
+    title: Симптомы
+    body: |-
+      В аптеке описывают то, что чувствуют, а не диагноз. Болит горло — **a sore throat**, заложен нос — **a blocked nose** (в США a stuffy nose), насморк — a runny nose. **A rash** — сыпь на коже. **Dizzy** — когда кружится голова: I feel dizzy. **Nauseous** — когда тошнит; в британском разговоре чаще говорят **I feel sick**, а «я болею» — I'm ill или I'm not well.
+
+      Подвернули ногу на лестнице — **I think I've sprained my ankle**, это **a sprained ankle**: растяжение. Болит при движении — **It hurts when I walk**, болит при глотании — **It hurts when I swallow**.
+
+      Лекарства по рецепту выписывает врач: **a prescription** (не путайте с a recipe — рецептом блюда). **An inhaler** — ингалятор, например от астмы; в Британии многие такие лекарства продают только по рецепту, поэтому спрашивают **Do I need a prescription for this?**
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: for-since
+    title: for или since
+    instruction: Вставьте for или since.
+    format: gap
+    bank: [for, since]
+    items:
+      - id: g1
+        prompt: I've had this cough ___ Tuesday.
+        answer: since
+        explanation: Tuesday — начальная точка, поэтому since.
+      - id: g2
+        prompt: She's been feeling dizzy ___ about an hour.
+        answer: for
+        explanation: About an hour — отрезок времени, поэтому for.
+      - id: g3
+        prompt: My throat has been hurting ___ we landed.
+        answer: since
+        explanation: После since может стоять целое событие в past simple — since we landed.
+      - id: g4
+        prompt: I've had a blocked nose ___ three days.
+        answer: for
+        explanation: «Уже три дня» — for three days; since three days — калька.
+      - id: g5
+        prompt: He's been ill ___ the start of the holiday.
+        answer: since
+      - id: g6
+        prompt: I've been taking these tablets ___ a week, but it's not getting better.
+        answer: for
+  - type: exercise
+    id: tense-choice
+    title: Какое время
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы говорите фармацевту, что у вас второй день болит голова.
+        options:
+          - I've had a headache for two days.
+          - I have a headache for two days.
+          - I've been having a headache since two days.
+        answer: I've had a headache for two days.
+        explanation: Длится до сих пор — present perfect; have a headache — состояние, без -ing; отрезок — for.
+      - id: q2
+        prompt: Вас тошнит со вчерашнего вечера.
+        options:
+          - I've been feeling sick since last night.
+          - I'm feeling sick since last night.
+          - I've been feeling sick for last night.
+        answer: I've been feeling sick since last night.
+        explanation: С какого-то момента до сейчас — I've been + -ing; last night — начальная точка, поэтому since.
+      - id: q3
+        prompt: Фармацевт спрашивает, как долго у вас сыпь.
+        options:
+          - How long have you had the rash?
+          - How long do you have the rash?
+          - How long are you having the rash?
+        answer: How long have you had the rash?
+        explanation: Вопрос «сколько уже длится» — How long have you had…?; How long do you have… спрашивает о будущем сроке.
+      - id: q4
+        prompt: Вы рассказываете, что кашляете всю ночь и до сих пор.
+        options:
+          - I've been coughing all night.
+          - I'm coughing all night.
+          - I cough all night.
+        answer: I've been coughing all night.
+        explanation: Действие шло всю ночь и ещё идёт — present perfect continuous; present simple и present continuous о времени «до сейчас» не говорят.
+  - type: exercise
+    id: advice-choice
+    title: Совет
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: You ___ see a doctor about that ankle — it looks bad.
+        options: ["'d better", "'d better to", had better not]
+        answer: "'d better"
+        explanation: После had better — глагол без to; not здесь меняет смысл на «лучше не».
+      - id: q2
+        prompt: You ___ drive if you feel dizzy.
+        options: [shouldn't, should, "'d better"]
+        answer: shouldn't
+        explanation: Совет не делать — shouldn't + глагол.
+      - id: q3
+        prompt: Вы спрашиваете фармацевта, стоит ли идти к врачу.
+        options:
+          - Should I see a doctor?
+          - Had I better see a doctor?
+          - Do I should see a doctor?
+        answer: Should I see a doctor?
+        explanation: Совета спрашивают через Should I…? Вопрос с had better почти не употребляется, а should не сочетается с do.
+      - id: q4
+        prompt: You'd better ___ on it for a few days.
+        options: [not walk, don't walk, not to walk]
+        answer: not walk
+        explanation: Отрицание — 'd better not + глагол без to.
+      - id: q5
+        prompt: Фармацевт советует пить больше воды, ничего срочного.
+        options:
+          - You should drink plenty of water.
+          - You'd better drink plenty of water, or you'll have a problem.
+          - You must to drink plenty of water.
+        answer: You should drink plenty of water.
+        explanation: Обычный совет — should. Had better с угрозой звучит слишком резко, а после must to не ставят.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a sore throat
+      - a rash
+      - dizzy
+      - a sprained ankle
+      - a blocked nose
+      - an inhaler
+      - nauseous
+      - a prescription
+      - a recipe
+      - a runny nose
+    items:
+      - { id: m1, prompt: больное горло, answer: a sore throat }
+      - { id: m2, prompt: сыпь, answer: a rash }
+      - { id: m3, prompt: «кружится голова», answer: dizzy }
+      - { id: m4, prompt: растяжение связок голеностопа, answer: a sprained ankle }
+      - { id: m5, prompt: заложенный нос, answer: a blocked nose }
+      - { id: m6, prompt: ингалятор, answer: an inhaler }
+      - { id: m7, prompt: «тошнит», answer: nauseous }
+      - { id: m8, prompt: рецепт врача, answer: a prescription }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, you'd) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: У меня два дня болит голова.
+        answer:
+          - I've had a headache for two days.
+          - I have had a headache for two days.
+          - I've had a headache for two days now.
+          - I've had a headache for the last two days.
+          - I've had a headache for the past two days.
+          - My head has been hurting for two days.
+          - My head has been aching for two days.
+        explanation: Have a headache — состояние, поэтому I've had, без -ing; отрезок — for.
+      - id: q2
+        prompt: Меня тошнит со вчерашнего дня.
+        answer:
+          - I've been feeling sick since yesterday.
+          - I've felt sick since yesterday.
+          - I've been feeling nauseous since yesterday.
+          - I've felt nauseous since yesterday.
+          - I have been feeling sick since yesterday.
+        explanation: Feel можно и в continuous, и в простом present perfect; «со вчерашнего дня» — since yesterday.
+      - id: q3
+        prompt: Когда встаю, кружится голова.
+        answer:
+          - I feel dizzy when I stand up.
+          - I get dizzy when I stand up.
+          - I feel dizzy when I get up.
+          - I get dizzy when I get up.
+          - When I stand up, I feel dizzy.
+          - When I stand up I feel dizzy.
+          - When I get up, I feel dizzy.
+          - I feel dizzy whenever I stand up.
+          - I get dizzy whenever I stand up.
+      - id: q4
+        prompt: Кажется, я растянул лодыжку.
+        answer:
+          - I think I've sprained my ankle.
+          - I think I sprained my ankle.
+          - I think I have sprained my ankle.
+        explanation: В британском английском чаще present perfect — травма свежая, важна сейчас.
+      - id: q5
+        prompt: Вам лучше сходить к врачу.
+        answer:
+          - You'd better see a doctor.
+          - You had better see a doctor.
+          - You'd better go to a doctor.
+          - You'd better go and see a doctor.
+          - You'd better go to the doctor.
+          - You'd better see the doctor.
+          - You should see a doctor.
+          - You should go to a doctor.
+          - You should go to the doctor.
+          - You had better go to a doctor.
+          - You had better go to the doctor.
+          - You had better see the doctor.
+          - You had better go and see a doctor.
+        explanation: «Лучше» как настойчивый совет — 'd better + глагол без to; should — мягче, тоже верно.
+      - id: q6
+        prompt: Для этого нужен рецепт?
+        answer:
+          - Do I need a prescription for this?
+          - Do I need a prescription for it?
+          - Is a prescription needed for this?
+          - Do you need a prescription for this?
+          - Does this need a prescription?
