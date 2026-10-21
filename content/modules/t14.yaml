@@ -1,8 +1,25 @@
 number: 14
 title: Staying in touch
 subtitle: Оставаться на связи
-status: draft
+status: published
 goal: переписываться и созваниваться с друзьями из других стран, понять голосовое и шутку, договориться о встрече
 grammar:
   - past simple и present perfect в новостях, разговорный пересказ (She was like…), будущее в планах
 sessions: 3
+lessons:
+  - t14-1
+  - t14-2
+  - t14-3
+  - t14-test
+crib:
+  title: на связи
+  rows:
+    - [спросить о новостях, "What have you been up to?"]
+    - [рассказать новость, "I've just got back from Portugal."]
+    - [назвать время, "I moved to Leeds in May."]
+    - [передать слова, "She was like, \"No way!\""]
+    - [сказать о плохой связи, "You're breaking up."]
+    - [перезвонить, "Let me call you back."]
+    - [пошутить без обиды, "I'm kidding!"]
+    - [договориться о встрече, "Let me know when you're next in town."]
+  note: "Время названо — past simple, не названо или важен результат — present perfect (just, already, since). Was like и goes — разговорный пересказ, в письме — said. Планы: present continuous — договорённость, going to — намерение, thinking of — идея"

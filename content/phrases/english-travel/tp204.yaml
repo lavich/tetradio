@@ -1,0 +1,8 @@
+id: tp204
+text: "You're breaking up."
+translation: "Тебя плохо слышно: связь прерывается."
+note: "говорят собеседнику, чей звук или картинка пропадают"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

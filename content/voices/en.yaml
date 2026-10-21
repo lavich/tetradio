@@ -90,3 +90,5 @@ characters:
   Will: { gender: male, voice: Achird }
   Theo: { gender: male, voice: Sadaltager }
   Lena: { gender: female, voice: Pulcherrima }
+  Hugo: { gender: male, voice: Alnilam }
+  Anika: { gender: female, voice: Vindemiatrix }

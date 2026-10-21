@@ -1,0 +1,8 @@
+id: tp208
+text: "Let me know when you're next in town."
+translation: "Дай знать, когда снова будешь в городе."
+note: "приглашение увидеться; после when стоит present simple (when you are), без will"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

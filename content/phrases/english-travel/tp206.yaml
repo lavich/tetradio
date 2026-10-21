@@ -1,0 +1,8 @@
+id: tp206
+text: "I'm kidding!"
+translation: "Я шучу."
+note: "после шутки, которую можно принять всерьёз; короче — just kidding; близкое — I'm joking"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

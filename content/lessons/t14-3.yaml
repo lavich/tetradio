@@ -1,0 +1,161 @@
+title: Переписка после поездки, голосовое с новостями и видеозвонок
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: touch-bank
+    title: Банк фраз — на связи
+    body: |-
+      Для связи с друзьями после поездки нужны шесть умений: спросить о новостях, рассказать их, передать чужие слова, пошутить, справиться с плохой связью и договориться о следующей встрече.
+
+      **Спросить:** **What have you been up to?** / **It's been ages!** **Рассказать:** **I've just got back from Portugal.** / **A lot has happened since we last spoke.** **Передать слова:** **She was like, "No way!"** / **He goes, "I'm not joking."** **Пошутить:** **I'm kidding!** / **No offence meant.** **Связь:** **You're breaking up.** / **Let me call you back.** **Договориться:** **Let's catch up properly soon.** / **Let me know when you're next in town.** / **Miss you already.**
+
+      Новости в переписке строят так: общая новость в present perfect, подробности и даты в past simple, планы — с present continuous, going to или thinking of.
+    table:
+      columns:
+        - умение
+        - фраза
+      rows:
+        - - спросить о новостях
+          - What have you been up to?
+        - - рассказать новость
+          - I've just got back from Portugal.
+        - - рассказать подробности
+          - I arrived in Lisbon on the third.
+        - - передать чужие слова
+          - She was like, "No way!"
+        - - пошутить без обиды
+          - I'm kidding!
+        - - сказать о плохой связи
+          - You're breaking up.
+        - - договориться о встрече
+          - Let me know when you're next in town.
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - Sure. Talk in five minutes.
+      - Not much, I've just been working.
+      - Of course. I'll send them tonight.
+      - I'll be there from Friday.
+      - Two coffees, please.
+      - The signal is good here.
+    items:
+      - { id: m1, prompt: "Sorry, you're breaking up. Let me call you back.", answer: "Sure. Talk in five minutes." }
+      - { id: m2, prompt: "Send me the photos from the trip.", answer: "Of course. I'll send them tonight." }
+      - { id: m3, prompt: "When will you be in Leeds?", answer: "I'll be there from Friday." }
+      - { id: m4, prompt: "Have you done anything exciting recently?", answer: "Not much, I've just been working." }
+  - type: explanation
+    id: message-how
+    title: Переписка после поездки
+    body: |-
+      Через несколько дней после поездки пишут другу, с которым познакомились или которого давно не видели. Объём — 60–100 слов, регистр дружеский: короткие предложения и сокращения (I've, I'm).
+
+      В сообщении четыре части. **Новость:** что вы сделали и вернулись ли (**I've just got back from Portugal**). **Подробности:** одно-два события с датой в past simple (**I arrived in Lisbon on the third**). **Пересказ:** одна реплика собеседника с **was like** или **said**. **Договорённость:** план или предложение созвониться (**Let's catch up properly soon**), один вопрос в конце.
+
+      Шутку пишут так, чтобы её нельзя было принять всерьёз: после неё ставят **I'm kidding** или смайлик. В переписке интонации нет, поэтому сарказм читают буквально.
+  - type: writing
+    id: message
+    register: friendly
+    prompt: "Напишите другу сообщение после поездки (60–100 слов): новость в present perfect, одно-два события с датой в past simple, одна реплика собеседника (was like или said), план и один вопрос в конце."
+    words: { min: 60, max: 100 }
+    model: |-
+      Hi Hugo, I've just got back from Portugal, and a lot has happened since we last spoke. I arrived in Lisbon on the third and stayed in a hostel near the river. On the first evening I met two travellers, and we made a joke about the lift that never worked. A local was like, "Follow the tram," when I got lost, so I did. I'm already nostalgic, and I miss you. Let's catch up properly soon: are you free on Sunday evening?
+    criteria:
+      - "60–100 слов; есть новость, подробности, пересказ, план и один вопрос в конце"
+      - "Present perfect для общей новости (I've just got back), past simple для событий с датой (I arrived on the third)"
+      - "Пересказ с was like или said; в письме допустим и тот, и другой"
+      - "Дружеский регистр: короткие предложения, сокращения (I've, I'm), фразы модуля"
+      - "Шутка, если она есть, понятна без интонации (I'm kidding)"
+  - type: explanation
+    id: voice-how
+    title: Голосовое сообщение с новостями — 1–2 минуты
+    body: |-
+      Вы отправляете другу голосовое сообщение с новостями. За 1–2 минуты скажите четыре вещи: что с вами произошло (present perfect), две-три подробности с датами (past simple), один пересказ (**She was like…**) и план (**going to** или **thinking of**). Закончите предложением созвониться. Говорите спокойно, короткими предложениями. Запишите, переслушайте, сверьте с критериями, запишите второй дубль.
+  - type: speaking
+    id: voice-note
+    part: monologue
+    prompt: "Вы записываете другу голосовое сообщение с новостями (1–2 минуты): общая новость в present perfect, две-три подробности с датами в past simple, один пересказ (was like или goes) и план (going to или thinking of). Закончите предложением созвониться. Запишите свою часть."
+    seconds: 120
+    model: "Hi Anika, it's me. I've just got back from Scotland, and a lot has happened. I flew to Edinburgh on the second of June. The first night I stayed in a hostel and met a guy from Leeds. His name is Ben, and he's really funny. We went on a walking tour on the third, and the guide was like, \"Please don't fall off the castle!\" We laughed for ten minutes. On Saturday I climbed Arthur's Seat, and it was freezing, but the view was great. I've also started a new project at work, so I'm busy this month. I'm thinking of going back to Scotland in the autumn, and I'm going to ask Ben to come with me. Let's catch up properly soon. Are you free on Sunday evening? Call me when you can. Bye!"
+    criteria:
+      - "Около 1–2 минут; четыре части — новость, подробности, пересказ, план — и предложение созвониться"
+      - "Present perfect для общей новости, past simple для событий с датами"
+      - "Один пересказ с was like или goes"
+      - "План с going to или thinking of"
+      - "Спокойный темп, короткие предложения; на втором дубле — меньше пауз и повторов"
+  - type: explanation
+    id: call-how
+    title: Сцена — видеозвонок с плохой связью
+    body: |-
+      Теперь сцена: вам звонит Аника, и связь плохая. Сначала звучат только реплики Аники, подряд, два раза. Затем откройте текст реплик кнопкой «Открыть текст» и держите его перед глазами.
+
+      В задании речи включите запись и отвечайте по порядку: подтвердите, что слышите, расскажите новости в present perfect, повторите их, когда связь прервалась, предложите время для встречи и договоритесь о перезвоне. Если не расслышали, не гадайте: **Sorry, you're breaking up. Could you say that again?** Если связь не налаживается, предложите **Let me call you back.**
+  - type: listening
+    id: call-lines
+    title: Реплики собеседника — Аника
+    plays: 2
+    transcript:
+      - { speaker: Anika, text: "Hi! Can you hear me? The signal here is patchy." }
+      - { speaker: Anika, text: "It's been ages! What have you been up to?" }
+      - { speaker: Anika, text: "Sorry, you're breaking up. Could you say that again?" }
+      - { speaker: Anika, text: "That's good news. You're a busy person! I'm kidding. When can we catch up properly?" }
+      - { speaker: Anika, text: "Sunday works. The line is terrible, so let me call you back in five minutes." }
+  - type: speaking
+    id: call
+    part: roleplay
+    prompt: |-
+      Вам звонит Аника по видеосвязи, связь плохая. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Подтвердите, что слышите, расскажите новости (вы только что вернулись из Португалии и начали новую работу), повторите их, предложите воскресенье и согласитесь на перезвон. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Anika: Hi! Can you hear me? The signal here is patchy.
+      You: Yes, I can hear you, but you're a bit quiet.
+      Anika: It's been ages! What have you been up to?
+      You: I've just got back from Portugal, and I started a new job on Tuesday.
+      Anika: Sorry, you're breaking up. Could you say that again?
+      You: I've just got back from Portugal, and I've started a new job.
+      Anika: That's good news. You're a busy person! I'm kidding. When can we catch up properly?
+      You: How about Sunday evening? Let's catch up properly then.
+      Anika: Sunday works. The line is terrible, so let me call you back in five minutes.
+      You: No problem. Talk soon.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна-две фразы
+      - "Новость в present perfect (I've just got back), подробность в past simple (I started a new job on Tuesday)"
+      - "При обрыве связи попросили повторить или повторили сами (Could you say that again?)"
+      - "Предложили время для встречи (How about Sunday evening?) и согласились на перезвон"
+      - Спокойный дружеский тон, без извинений на каждую фразу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Last week I ___ in Lisbon on the third."
+        options: [arrived, have arrived, am arriving]
+        answer: arrived
+        explanation: Время названо — on the third, поэтому past simple.
+      - id: q2
+        prompt: "She ___ already left, so call her tomorrow."
+        options: [has, did, was]
+        answer: has
+        explanation: С already ставят present perfect.
+      - id: q3
+        prompt: "The call keeps cutting out. What do you say?"
+        options:
+          - Sorry, you're breaking up. Let me call you back.
+          - I'm kidding.
+          - It's been ages.
+        answer: Sorry, you're breaking up. Let me call you back.
+        explanation: При плохой связи говорят You're breaking up и предлагают перезвонить.
+      - id: q4
+        prompt: "You make a joke that a friend may take seriously. What do you add?"
+        options:
+          - I'm kidding!
+          - Miss you already.
+          - You're breaking up.
+        answer: I'm kidding!
+        explanation: После шутки, которую могут понять всерьёз, говорят I'm kidding.

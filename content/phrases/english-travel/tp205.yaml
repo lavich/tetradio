@@ -1,0 +1,8 @@
+id: tp205
+text: "Let me call you back."
+translation: "Я тебе перезвоню."
+note: "когда связь плохая или нет времени говорить"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md
