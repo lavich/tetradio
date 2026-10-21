@@ -1,0 +1,6 @@
+id: ew198
+greek: "a circuit breaker"
+russian: "автоматический выключатель, предохранитель"
+ipa: /ə ˈsɜːkɪt ˌbreɪkə/
+note: "прекращает вызовы к сервису, который сбоит"
+source: "Лексикон курса «Английский для IT», модуль e06 (docs/curriculum-english-it.md)"

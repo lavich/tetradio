@@ -1,0 +1,7 @@
+id: ep141
+text: "The data was migrated without downtime."
+translation: "Данные перенесли без простоя."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
+  operation: requested-generation
+  request: Фразы модуля e06 по программе docs/curriculum-english-it.md

@@ -1,0 +1,6 @@
+id: ew200
+greek: "rate limiting"
+russian: "ограничение частоты запросов"
+ipa: /ˈreɪt ˌlɪmɪtɪŋ/
+note: "число запросов от одного клиента за период ограничено"
+source: "Лексикон курса «Английский для IT», модуль e06 (docs/curriculum-english-it.md)"

@@ -1,0 +1,7 @@
+id: ep129
+text: "The data is stored in PostgreSQL."
+translation: "Данные хранятся в PostgreSQL."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
+  operation: requested-generation
+  request: Фразы модуля e06 по программе docs/curriculum-english-it.md

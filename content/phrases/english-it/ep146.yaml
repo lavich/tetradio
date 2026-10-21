@@ -1,0 +1,7 @@
+id: ep146
+text: "After that, an event is published to the queue."
+translation: "После этого событие публикуется в очередь."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
+  operation: requested-generation
+  request: Фразы модуля e06 по программе docs/curriculum-english-it.md

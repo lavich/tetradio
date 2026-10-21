@@ -1,0 +1,6 @@
+id: ew209
+greek: "stateless"
+russian: "не хранящий состояние"
+ipa: /ˈsteɪtləs/
+note: "любой экземпляр сервиса может обработать следующий запрос"
+source: "Лексикон курса «Английский для IT», модуль e06 (docs/curriculum-english-it.md)"

@@ -1,0 +1,7 @@
+id: ep127
+text: "The user is authenticated first."
+translation: "Сначала пользователь проходит аутентификацию."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
+  operation: requested-generation
+  request: Фразы модуля e06 по программе docs/curriculum-english-it.md

@@ -10,13 +10,14 @@ const modulesOf = (courseId: string) => catalog.modules!.filter((module) => modu
 const packagesOf = (courseId: string) => content.packages.filter((pack) => pack.courseId === courseId);
 
 describe("английский для IT: ступень B1+", () => {
-  const STAGE = ["e01", "e02", "e03", "e04", "e05"];
+  const STAGE = ["e01", "e02", "e03", "e04", "e05", "e06"];
   const WRITING: Record<string, { register: string; min: number; max: number }> = {
     e01: { register: "formal", min: 60, max: 90 },
     e02: { register: "formal", min: 60, max: 90 },
     e03: { register: "formal", min: 60, max: 100 },
     e04: { register: "formal", min: 60, max: 100 },
     e05: { register: "formal", min: 80, max: 120 },
+    e06: { register: "formal", min: 80, max: 120 },
   };
   const WORDS = [18, 17];
   const PHRASES = [8, 8, 9];
@@ -147,6 +148,7 @@ describe("английский для IT: ступень B1+", () => {
       const skills = new Set(graded.map((block) => (block.type === "exercise" ? kindOf(block.about) : undefined)));
       expect(skills.has("reading")).toBe(true);
       expect(skills.has("listening")).toBe(true);
+      for (const block of blocks) if (block.type === "listening") expect(block.plays, block.id).toBe(2);
     });
 
     it("говорящие — в карте голосов en и не из курса для путешествий", () => {

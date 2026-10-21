@@ -1,0 +1,7 @@
+id: ep139
+text: "The response is returned in under two hundred milliseconds."
+translation: "Ответ возвращается менее чем за двести миллисекунд."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
+  operation: requested-generation
+  request: Фразы модуля e06 по программе docs/curriculum-english-it.md
