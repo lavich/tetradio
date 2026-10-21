@@ -948,3 +948,54 @@ test("словарь английского: подписи курсов, фил
   expect(await label.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test("тексты двух курсов языка: сводка «Прочитано 1 из 2 открытых», группы курсов со своими модулями", async ({
+  page,
+}) => {
+  await installEnglishPair(page);
+  await completeLesson(page, "e01-1");
+  await completeLesson(page, "c01-1");
+  await page.goto("/app/reading");
+  await chooseLanguage(page, "Английский");
+  await expect(page.getByTestId("reading-summary")).toHaveText("Прочитано 0 из 2 открытых");
+  await page.getByRole("link", { name: /The party/ }).click();
+  await page.getByRole("button", { name: "Прочитано", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Снять отметку" })).toBeVisible();
+  await page.goto("/app/reading");
+  await expect(page.getByTestId("reading-summary")).toHaveText("Прочитано 1 из 2 открытых");
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { level: 2 })).toHaveText(["Для IT · B1 → B2", "Для общения · B1"]);
+  await expect(main.getByRole("heading", { level: 3, name: /^Модуль/ })).toHaveText([
+    "Модуль 1 · Work",
+    "Модуль 1 · Small talk",
+  ]);
+  await expect(page.getByRole("link", { name: /Η Άννα/ })).toHaveCount(0);
+});
+
+test("прогресс английского: сумма и два блока курса, «% по языку» без выделения слабого, курс на паузе в своём блоке", async ({
+  page,
+}) => {
+  await installEnglishPair(page);
+  await startLesson(page, "/app/course/e01/e01-1", "Верно или неверно?", "True");
+  await page.goto("/app/course");
+  await chooseLanguage(page, "Английский");
+  await page.getByRole("button", { name: "Действия с курсом «Английский для общения»" }).click();
+  await page.getByRole("menuitem", { name: "Приостановить курс" }).click();
+  await expect(shelves(page).nth(1).getByTestId("shelf-paused")).toBeVisible();
+  await page.goto("/app/progress");
+  const total = page.getByTestId("language-total");
+  await expect(total.getByRole("heading", { level: 2 })).toHaveText("Всего по английскому");
+  await expect(total.getByRole("heading", { level: 3, name: "Навыки по языку" })).toBeVisible();
+  await expect(total).toContainText("Доля всех начатых курсов языка по навыку, выполненная верно.");
+  await expect(total.getByRole("img", { name: /^\d+ % по языку$/ })).toHaveCount(4);
+  await expect(total.locator('[data-testid^="skill-"][class*="weak"]')).toHaveCount(0);
+  await expect(page.getByTestId("week")).toContainText("по курсам языка");
+  const blocks = page.getByTestId("progress-course");
+  await expect(blocks.getByRole("heading", { level: 2 })).toHaveText(["Для IT · B1 → B2", "Для общения · B1"]);
+  await expect(blocks.nth(0).getByRole("heading", { level: 3, name: "Навыки по курсу" })).toBeVisible();
+  await expect(blocks.nth(0).getByRole("img", { name: /^\d+ % курса$/ })).toHaveCount(4);
+  await expect(blocks.nth(1).getByTestId("progress-paused")).toContainText(
+    /^Курс на паузе с \d+ [а-я]+\. Календарь курса не сдвигается\.$/,
+  );
+  await expect(blocks.nth(0).getByTestId("progress-paused")).toHaveCount(0);
+});

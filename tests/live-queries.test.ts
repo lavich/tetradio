@@ -32,9 +32,9 @@ import {
 import { db, type StoredWord } from "../src/storage/db";
 import { dictionary, languageDictionary } from "../src/storage/dictionary";
 import { submitAnswer } from "./helpers/ops";
-import { courseProgress } from "../src/storage/progress";
+import { courseProgress, languageProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
-import { markRead, moduleReadings, courseReadings, readingPage } from "../src/storage/readings";
+import { markRead, moduleReadings, courseReadings, languageReadings, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 
 const demo = buildContent("tests/fixtures/course-demo");
@@ -130,6 +130,7 @@ describe("живые запросы отслеживают чтения посл
       return courseId ? profileOfCourse(courseId) : null;
     },
     "модуль: тексты": () => moduleReadings("m01"),
+    "«Чтение»": async () => languageReadings(await currentLanguage()),
     текст: async () => (await readingPage("r-m01-anna")) ?? null,
     "«Слова»": async () => {
       const language = await currentLanguage();
@@ -137,9 +138,10 @@ describe("живые запросы отслеживают чтения посл
     },
     "«Прогресс»: словарь": async () => languageDictionary(await currentLanguage()),
     "«Прогресс»": () => courseProgress(now, tz, COURSE),
+    "«Прогресс»: язык": async () => languageProgress(now, tz, await currentLanguage()),
     "«Прогресс»: статистика": () => progress(dexieSource(), now),
-    "«Прогресс»: ошибки": () => mistakeCount(COURSE),
-    "«Прогресс»: трудные": async () => (await cardsInCourse([key()], COURSE)).size,
+    "«Прогресс»: ошибки": () => mistakeCount([COURSE]),
+    "«Прогресс»: трудные": async () => (await cardsInCourse([key()], [COURSE])).size,
     "слово: упражнения": () => wordSources(wordId),
     "слово: навыки": () => dexieSource().skillsOf({ kind: "word", word }),
     "слово: язык": async () => profileOfCourse((await courseOfCard(key()))!),

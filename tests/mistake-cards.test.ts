@@ -241,6 +241,8 @@ describe("карточки ошибок в базе", () => {
     );
     expect(await mistakeCount(owner, db)).toBe(1);
     expect(await mistakeCount("other-course", db)).toBe(0);
+    expect(await mistakeCount([owner, "other-course"], db)).toBe(1);
+    expect(await mistakeCount(["other-course"], db)).toBe(0);
   });
 });
 

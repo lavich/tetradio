@@ -18,6 +18,7 @@ import {
   saveBlockProgress,
 } from "../src/storage/course";
 import { AppDatabase } from "../src/storage/db";
+import { courseProgress, languageProgress } from "../src/storage/progress";
 import { installLessons, memoryFetcher } from "./helpers/content";
 
 /** Демонстрационный курс: модуль m01 (урок и контрольная) и черновик m02. */
@@ -197,5 +198,48 @@ describe("прогресс курса в базе", () => {
     expect(courseFinished([], null)).toBe(false);
     expect(courseFinished([draft, published], null)).toBe(true);
     expect(courseFinished([published], { view: published, lesson: {} as ModuleLessonView })).toBe(false);
+  });
+});
+
+describe("прогресс языка", () => {
+  const two = buildContent("tests/fixtures/two-courses");
+  const now = new Date("2026-10-21T09:00:00Z");
+  const tz = "UTC";
+  let db: AppDatabase;
+  beforeEach(async () => {
+    await new AppDatabase("tetradio-language-progress").delete();
+    db = new AppDatabase("tetradio-language-progress");
+    await installLessons(db, ["m01-1", "e01-1", "e01-test", "c01-1"], memoryFetcher(two));
+  });
+  afterEach(() => db.close());
+  const reading = (skills: { skill: string; earned: number; total: number; attempted: number }[]) =>
+    skills.find((item) => item.skill === "reading")!;
+
+  it("навыки суммы — по заданиям обоих курсов языка, а не среднее долей; греческие задания не входят", async () => {
+    await saveBlockProgress("e01-1", "text-tf", { done: true, score: { correct: 1, almost: 0, total: 1 } }, db);
+    await saveBlockProgress("m01-1", "anna-tf", { done: true, score: { correct: 2, almost: 0, total: 2 } }, db);
+    const english = await languageProgress(now, tz, "en", db);
+    expect(english.courses.map((course) => course.course.id)).toEqual(["english", "talk"]);
+    const [it, talk] = english.courses.map((course) => reading(course.skills));
+    const total = reading(english.total.skills);
+    expect(total.total).toBe(it.total + talk.total);
+    expect(total.earned).toBe(it.earned + talk.earned);
+    expect(total.attempted).toBe(it.attempted + talk.attempted);
+    expect(total.earned).toBe(1);
+  });
+  it("итог недели — занятия всех курсов языка и дни повторения их карточек", async () => {
+    const done = (lessonId: string, updatedAt: string) =>
+      db.blockProgress.put({ key: `${lessonId}/text-tf`, lessonId, blockId: "text-tf", done: true, updatedAt });
+    await done("e01-1", "2026-10-19T09:00:00.000Z");
+    await done("c01-1", "2026-10-20T09:00:00.000Z");
+    await done("m01-1", "2026-10-21T08:00:00.000Z");
+    const week = (await languageProgress(now, tz, "en", db)).total.week;
+    expect(week.lessonDays).toEqual(["2026-10-19", "2026-10-20"]);
+    expect(week.monday).toBe("2026-10-19");
+  });
+  it("у языка с одним курсом блок курса — прежний прогресс курса", async () => {
+    const greek = await languageProgress(now, tz, "el", db);
+    expect(greek.courses).toHaveLength(1);
+    expect(greek.courses[0]).toMatchObject(await courseProgress(now, tz, "greek-a2", db));
   });
 });

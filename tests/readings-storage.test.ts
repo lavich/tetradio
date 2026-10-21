@@ -7,12 +7,20 @@ import { AppDatabase } from "../src/storage/db";
 import { lessonDays } from "../src/storage/course";
 import { courseLessonIds } from "../src/storage/courses";
 import { studiedLessons } from "../src/storage/queries";
-import { courseReadings, markRead, moduleReadings, nextUnreadReading, readingPage } from "../src/storage/readings";
+import {
+  courseReadings,
+  languageReadings,
+  markRead,
+  moduleReadings,
+  nextUnreadReading,
+  readingPage,
+} from "../src/storage/readings";
 import { lessonOutlines } from "../src/storage/outlines";
 import type { InstalledPackage } from "../src/domain/types";
 import { applySnapshot, describeSnapshot, readSnapshot } from "../src/sync/snapshot";
 import { exportFull, restoreBackup } from "../src/features/backup/backup";
-import { installLessons, memoryFetcher } from "./helpers/content";
+import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
+import { refreshCatalog } from "../src/content/client";
 import { installLesson } from "../src/content/client";
 
 const demo = buildContent("tests/fixtures/course-demo");
@@ -387,5 +395,47 @@ describe("порядок и счёт текстов по программе", ()
     expect(await after("b")).toBe("d");
     expect(await after("d")).toBeUndefined();
     expect(await after("нет-такого")).toBeUndefined();
+  });
+});
+
+describe("тексты языка", () => {
+  const two = buildContent("tests/fixtures/two-courses");
+  let db: AppDatabase;
+  beforeEach(async () => {
+    db = await fresh("tetradio-language-readings");
+    const fetcher = memoryFetcher(two);
+    await refreshCatalog(db, fetcher);
+    await installLessons(db, ["m01-1", "e01-1", "e01-test", "c01-1"], fetcher);
+  });
+  afterEach(async () => {
+    db.close();
+    await db.delete();
+  });
+  const ids = (readings: Awaited<ReturnType<typeof languageReadings>>) =>
+    readings.groups.map(({ course, readings }) => [course.id, readings.open.map((view) => view.reading.id)]);
+
+  it("группы начатых курсов языка по порядку курсов, сумма открытых и прочитанных по языку", async () => {
+    await completeLessons(db, ["e01-1", "c01-1", "m01-1"]);
+    await markRead("r-c01-party", true, db);
+    const english = await languageReadings("en", db);
+    expect(ids(english)).toEqual([
+      ["english", ["r-e01-bus"]],
+      ["talk", ["r-c01-party"]],
+    ]);
+    expect(english).toMatchObject({ open: 2, unread: 1, pending: 0 });
+  });
+  it("закрытые — по курсу; тексты другого языка не входят", async () => {
+    await completeLessons(db, ["e01-1"]);
+    const english = await languageReadings("en", db);
+    expect(english.groups.map(({ course, readings }) => [course.id, readings.closed])).toEqual([
+      ["english", 0],
+      ["talk", 1],
+    ]);
+    expect(english.open).toBe(1);
+    expect(ids(await languageReadings("el", db))).toEqual([["greek-a2", []]]);
+  });
+  it("курс без текстов группой не показывается", async () => {
+    await db.catalog.update("c01-1", { readings: 0 });
+    expect((await languageReadings("en", db)).groups.map(({ course }) => course.id)).toEqual(["english"]);
   });
 });

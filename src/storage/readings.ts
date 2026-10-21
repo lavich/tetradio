@@ -1,7 +1,9 @@
 import type { CatalogModule } from "../content/course";
 import { decodeMarks, type BlockMarks, type PackageReading } from "../content/schema";
 import type { InstalledPackage, StoredModule } from "../domain/types";
+import type { Language } from "../domain/language";
 import { blockKey, saveBlockProgress, type TapCard } from "./course";
+import { courses, type CourseEntry } from "./courses";
 import { db, type AppDatabase } from "./db";
 import { lessonOutlines, type LessonOutline } from "./outlines";
 import { zoned } from "./zone";
@@ -162,6 +164,34 @@ export const courseReadings = zoned(async function courseReadings(
     closed,
     ...(closedAfter ? { closedAfter } : {}),
     pending,
+  };
+});
+
+export interface LanguageReadings {
+  /** Начатые курсы языка с текстами — открытыми, закрытыми или ждущими скачивания — по порядку курсов. */
+  groups: { course: CourseEntry; readings: CourseReadings }[];
+  open: number;
+  unread: number;
+  pending: number;
+}
+
+/** Тексты начатых курсов языка для раздела «Чтение»: сводка — по всему языку, закрытые — у курса. */
+export const languageReadings = zoned(async function languageReadings(
+  language: Language | undefined,
+  database: AppDatabase = db,
+): Promise<LanguageReadings> {
+  const own = (await courses(database)).filter((course) => course.language === language && course.started);
+  const all = await Promise.all(
+    own.map(async (course) => ({ course, readings: await courseReadings(course.id, database) })),
+  );
+  const groups = all.filter(({ readings }) => readings.open.length || readings.closed || readings.pending);
+  const sum = (count: (readings: CourseReadings) => number) =>
+    groups.reduce((total, { readings }) => total + count(readings), 0);
+  return {
+    groups,
+    open: sum((readings) => readings.open.length),
+    unread: sum((readings) => readings.unread.length),
+    pending: sum((readings) => readings.pending),
   };
 });
 

@@ -434,11 +434,12 @@ export const courseOfCard = zoned(async (unitKey: string, database: AppDatabase 
 
 export const cardsInCourse = zoned(async function cardsInCourse(
   unitKeys: string[],
-  courseId: string,
+  courseId: string | string[],
   database: AppDatabase = db,
 ): Promise<Set<string>> {
   const owners = await cardCourses(unitKeys, database);
-  return new Set(unitKeys.filter((key) => owners.get(key) === courseId));
+  const wanted = new Set(typeof courseId === "string" ? [courseId] : courseId);
+  return new Set(unitKeys.filter((key) => wanted.has(owners.get(key) ?? "")));
 });
 
 export const cardLanguages = zoned(async function cardLanguages(

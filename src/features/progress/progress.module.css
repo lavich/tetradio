@@ -169,3 +169,13 @@
     color: var(--primary);
   }
 }
+.total {
+  margin: calc(var(--cell) * 2) 0 0;
+  font-family: var(--font-print);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.courseBlock {
+  margin-top: var(--cell);
+}
