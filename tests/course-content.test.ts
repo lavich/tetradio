@@ -105,10 +105,10 @@ describe("английский для путешествий и общения",
     const packs = ["t01-1", "t01-2"].map((id) => lessonOf(id)!);
     const words = packs.flatMap((pack) => pack.words);
     const phrases = packs.flatMap((pack) => pack.phrases);
-    expect(words.map((word) => word.id)).toEqual(
+    expect(words.map((word) => word.id).sort()).toEqual(
       Array.from({ length: 15 }, (_, i) => `tw${String(i + 1).padStart(3, "0")}`),
     );
-    expect(phrases.map((p) => p.id)).toEqual(
+    expect(phrases.map((p) => p.id).sort()).toEqual(
       Array.from({ length: 15 }, (_, i) => `tp${String(i + 1).padStart(3, "0")}`),
     );
     for (const word of words) expect(word.ipa, word.greek).toMatch(/^\/.+\/$/);

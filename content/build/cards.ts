@@ -169,9 +169,9 @@ function describePhrase(id: string, src: Sourced<PhraseSource>): PackagePhrase {
   }
 }
 
-const LEADING_ARTICLE = /^(a|an|the|to|ο|η|το|οι|τα)\s+/;
+const LEADING_ARTICLE = /^(a|an|the)\s+/;
 const sameWord = (text: string) =>
-  text.normalize("NFC").toLowerCase().replace(/\s+/g, " ").trim().replace(LEADING_ARTICLE, "");
+  text.normalize("NFC").toLowerCase().replace(/[’ʼ]/g, "'").replace(/\s+/g, " ").trim().replace(LEADING_ARTICLE, "");
 const samePhrase = (text: string) =>
   text
     .normalize("NFC")

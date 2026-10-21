@@ -290,16 +290,21 @@ describe("частично опубликованный модуль", () => {
     files["lessons/m01-2.yaml"] = { title: "Пустой", kind: "lesson", items: [{ kind: "word", id: "geia" }] };
     expect(failure(files)).toContain("урок m01-2: нет блоков");
   });
+  it("контрольная без оцениваемых заданий в частичном модуле — отказ", () => {
+    const files = partial({ lessons: ["m01-1", "m01-test"] });
+    files["lessons/m01-test.yaml"] = { ...test, blocks: [{ ...test.blocks[0], graded: false }] };
+    expect(failure(files)).toContain("контрольная m01-test: нет оцениваемых заданий");
+  });
 });
 
 describe("карточки курсов одного языка", () => {
-  const englishCourse = (id: string, module: string, cards: Files): Files => {
+  const englishCourse = (id: string, module: string, cards: Files, language = "en"): Files => {
     const items = Object.keys(cards).map((path) => ({
       kind: path.startsWith("words/") ? "word" : "phrase",
       id: path.split("/").pop()!.replace(".yaml", ""),
     }));
     return {
-      [`courses/${id}.yaml`]: { title: id, language: "en", modules: [module] },
+      [`courses/${id}.yaml`]: { title: id, language, modules: [module] },
       [`modules/${module}.yaml`]: {
         number: 1,
         title: "Start",
@@ -352,6 +357,45 @@ describe("карточки курсов одного языка", () => {
     const files = twoCourses(
       { "words/english-it/ew001.yaml": { greek: "check in", russian: "зарегистрироваться" } },
       { "words/english-travel/tw001.yaml": { greek: "a check-in", russian: "регистрация" } },
+    );
+    expect(() => build(files)).not.toThrow();
+  });
+  it("существительное с артиклем и глагол с to в двух курсах — разные карточки", () => {
+    const files = twoCourses(
+      { "words/english-it/ew001.yaml": { greek: "a book", russian: "книга" } },
+      { "words/english-travel/tw001.yaml": { greek: "to book", russian: "бронировать" } },
+    );
+    expect(() => build(files)).not.toThrow();
+  });
+  it("греческое слово с артиклем и без в двух курсах — разные карточки", () => {
+    const files = {
+      ...base(),
+      ...englishCourse(
+        "greek-travel",
+        "g01",
+        { "words/greek-travel/gw001.yaml": { greek: "χώρα", russian: "страна", forms: "мн. χώρες" } },
+        "el",
+      ),
+    };
+    expect(() => build(files)).not.toThrow();
+  });
+  it("слово с разными апострофами в двух курсах одного языка — ошибка", () => {
+    expect(
+      failure(
+        twoCourses(
+          { "words/english-it/ew001.yaml": { greek: "o'clock", russian: "час (о времени)" } },
+          { "words/english-travel/tw001.yaml": { greek: "o’clock", russian: "ровно (о времени)" } },
+        ),
+      ),
+    ).toContain("words/english-it/ew001.yaml");
+  });
+  it("слово с артиклем и без внутри одного курса с разными переводами — разные карточки", () => {
+    const files = twoCourses(
+      {
+        "words/english-it/ew001.yaml": { greek: "a light", russian: "лампа" },
+        "words/english-it/ew002.yaml": { greek: "light", russian: "лёгкий" },
+      },
+      {},
     );
     expect(() => build(files)).not.toThrow();
   });
