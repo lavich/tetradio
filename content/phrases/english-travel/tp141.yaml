@@ -1,0 +1,8 @@
+id: tp141
+text: "I'm good, thanks."
+translation: "Мне ничего не нужно, спасибо."
+note: "вежливый отказ от предложения"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10
+  operation: requested-generation
+  request: Фразы модуля t10 по программе docs/curriculum-english-travel.md

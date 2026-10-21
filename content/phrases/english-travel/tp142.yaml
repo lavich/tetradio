@@ -1,0 +1,7 @@
+id: tp142
+text: "Can I open a tab?"
+translation: "Можно открыть счёт?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10
+  operation: requested-generation
+  request: Фразы модуля t10 по программе docs/curriculum-english-travel.md

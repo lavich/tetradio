@@ -1,0 +1,8 @@
+id: tp144
+text: "Are you being served?"
+translation: "Вас уже обслуживают?"
+note: "вопрос бармена, который подходит к стойке"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10
+  operation: requested-generation
+  request: Фразы модуля t10 по программе docs/curriculum-english-travel.md

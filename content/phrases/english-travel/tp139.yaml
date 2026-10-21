@@ -1,0 +1,8 @@
+id: tp139
+text: "Shall I get you another?"
+translation: "Взять вам ещё один?"
+note: "предложение, от которого можно отказаться"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10
+  operation: requested-generation
+  request: Фразы модуля t10 по программе docs/curriculum-english-travel.md

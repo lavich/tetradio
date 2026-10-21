@@ -1,8 +1,24 @@
 number: 10
 title: At the bar
 subtitle: В баре
-status: draft
+status: published
 goal: заказать на себя и на компанию, договориться, кто платит, заговорить у стойки, отказаться от ещё одного раунда
 grammar:
   - "решения на месте (I'll get this, Shall I…?, Let me…), would rather / prefer"
 sessions: 3
+lessons:
+  - t10-1
+  - t10-2
+  - t10-3
+  - t10-test
+crib:
+  title: бар
+  rows:
+    - [спросить заказ, What are you having?]
+    - [моя очередь, It's my round.]
+    - [заплатить, I'll get this.]
+    - [предложить ещё, Shall I get you another?]
+    - [отказаться, "I'm good, thanks."]
+    - [пропустить круг, I'll pass on the next round.]
+    - [открыть счёт, Can I open a tab?]
+  note: "После would rather — глагол без to; shall — предложение с I и we, will — решение на месте"

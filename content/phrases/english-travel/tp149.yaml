@@ -1,0 +1,8 @@
+id: tp149
+text: "I'll pass on the next round."
+translation: "В следующем заказе я не участвую."
+note: "спокойный отказ без объяснений"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10
+  operation: requested-generation
+  request: Фразы модуля t10 по программе docs/curriculum-english-travel.md

@@ -1,0 +1,301 @@
+title: Контрольная модуля t10
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чат друзей в баре, разговор перед закрытием, решения на месте, would rather и prefer, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: anchor-chat
+    title: Friday at The Anchor — group chat
+    text: |-
+      FRIDAY AT THE ANCHOR — GROUP CHAT
+
+      Zoe: I'm at the bar. what's everyone having?
+      Jack: pint of pale ale please. on tap if they have it
+      Ravi: alcohol-free lager for me, I'm up early tomorrow
+      Zoe: ok. it's my round, so I'll get this
+      Jack: cheers Zoe. next one's mine
+      Ravi: I'll pass on the next round, mate. I'd rather stick to alcohol-free. gonna get a snack though
+      Zoe: no worries. last orders are at midnight
+      Jack: shall I get the snacks? my turn
+    glosses:
+      - { text: pale ale, russian: светлый эль }
+      - { text: a snack, russian: закуска }
+  - type: exercise
+    id: anchor-chat-q
+    about: anchor-chat
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Zoe ask the group?
+        options:
+          - what everyone wants to drink
+          - where to sit
+          - when the bar closes
+        answer: what everyone wants to drink
+        explanation: What's everyone having?
+      - id: q2
+        prompt: What does Jack want?
+        options:
+          - a pint of pale ale
+          - an alcohol-free lager
+          - a cider
+        answer: a pint of pale ale
+        explanation: Pint of pale ale, on tap if they have it.
+      - id: q3
+        prompt: Why does Ravi choose an alcohol-free lager?
+        options:
+          - He is up early tomorrow.
+          - He is driving home.
+          - He does not like pale ale.
+        answer: He is up early tomorrow.
+        explanation: I'm up early tomorrow.
+      - id: q4
+        prompt: Who pays for this round?
+        options:
+          - Zoe
+          - Jack
+          - Ravi
+        answer: Zoe
+        explanation: Zoe says it's her round and she'll get this.
+      - id: q5
+        prompt: What does Ravi say about the next round?
+        options:
+          - He will skip it.
+          - He will pay for it.
+          - He will order a pint.
+        answer: He will skip it.
+        explanation: I'll pass on the next round.
+      - id: q6
+        prompt: What does Jack offer to do?
+        options:
+          - get the snacks
+          - pay for Ravi's snack
+          - open a tab
+        answer: get the snacks
+        explanation: Shall I get the snacks? my turn.
+      - id: q7
+        prompt: What time are last orders?
+        options:
+          - at midnight
+          - at 11 pm
+          - at 10 pm
+        answer: at midnight
+        explanation: Last orders are at midnight.
+  - type: listening
+    id: closing
+    title: Closing time at The Anchor
+    plays: 2
+    transcript:
+      - { speaker: Dave, text: "Last orders, everyone. The bar closes at midnight." }
+      - { speaker: Zoe, text: "Thanks, Dave. Jack, shall I get you another?" }
+      - { speaker: Jack, text: "I'll pass on the next round, thanks. I'm a bit tipsy, and I've got a train in the morning." }
+      - { speaker: Zoe, text: "Fair enough. A water, then?" }
+      - { speaker: Jack, text: "A water would be great, yes." }
+      - { speaker: Zoe, text: "Dave, one pint of cider and one water, please. Can I put it on the tab?" }
+      - { speaker: Dave, text: "Of course. Your tab is forty-two pounds." }
+      - { speaker: Zoe, text: "Forty-two? That's more than I thought. Here's my card." }
+      - { speaker: Dave, text: "Thanks. And the water is on the house." }
+      - { speaker: Jack, text: "Cheers, Dave. Is the cloakroom still open?" }
+      - { speaker: Dave, text: "Yes, it's by the door, and it's open until midnight." }
+  - type: exercise
+    id: closing-q
+    about: closing
+    graded: true
+    title: Аудирование — перед закрытием
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Dave announce?
+        options:
+          - last orders
+          - a quiz night
+          - a cover charge
+        answer: last orders
+        explanation: Last orders, everyone.
+      - id: q2
+        prompt: Why does Jack say no to another round?
+        options:
+          - He feels a bit tipsy and has an early train.
+          - He has no money.
+          - He does not like cider.
+        answer: He feels a bit tipsy and has an early train.
+        explanation: I'm a bit tipsy, and I've got a train in the morning.
+      - id: q3
+        prompt: What does Zoe offer Jack instead?
+        options:
+          - a water
+          - a mocktail
+          - a pint of lager
+        answer: a water
+        explanation: A water, then?
+      - id: q4
+        prompt: What does Zoe order for herself?
+        options:
+          - a pint of cider
+          - a pint of lager
+          - a glass of wine
+        answer: a pint of cider
+        explanation: One pint of cider and one water.
+      - id: q5
+        prompt: How much is the tab?
+        options:
+          - £42
+          - £24
+          - £14
+        answer: £42
+        explanation: Your tab is forty-two pounds.
+      - id: q6
+        prompt: What is free?
+        options:
+          - the water
+          - the cider
+          - the cloakroom
+        answer: the water
+        explanation: The water is on the house.
+      - id: q7
+        prompt: Where is the cloakroom?
+        options:
+          - by the door
+          - upstairs
+          - behind the bar
+        answer: by the door
+        explanation: It's by the door.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Решения на месте, would rather и prefer
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "It's my round. ___ get this."
+        options: [I'll, I do, I've]
+        answer: I'll
+        explanation: Решение в момент речи — I'll get this.
+      - id: q2
+        prompt: "___ I carry that tray for you?"
+        options: [Shall, Will, Do]
+        answer: Shall
+        explanation: Предложение с I — Shall I…?
+      - id: q3
+        prompt: "I'd rather ___ home early tonight."
+        options: [go, to go, going]
+        answer: go
+        explanation: После would rather — глагол без to.
+      - id: q4
+        prompt: "I'd rather have tea ___ coffee at night."
+        options: [than, to, from]
+        answer: than
+        explanation: В сравнении с would rather — than.
+      - id: q5
+        prompt: "Would you like another drink? — ___"
+        options:
+          - I'm good, thanks.
+          - It's my round.
+          - Last orders at eleven.
+        answer: I'm good, thanks.
+        explanation: I'm good, thanks — вежливый отказ.
+      - id: q6
+        prompt: "I'm tired, so I'd rather ___ out tonight."
+        options: [not go, don't go, not to go]
+        answer: not go
+        explanation: Would rather not + глагол без to.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово или оборот. Четыре варианта лишние.
+    format: gap
+    bank: [pint, on tap, round, last orders, tab, bouncer, soft drink, alcohol-free, tipsy, hangover, on the house, designated driver]
+    items:
+      - { id: g1, prompt: "The bar closes soon, so ___ are at eleven.", answer: last orders }
+      - { id: g2, prompt: "I'll have a ___ of pale ale, please.", answer: pint }
+      - { id: g3, prompt: "This beer is ___: the barman pours it from the pump.", answer: on tap }
+      - { id: g4, prompt: "Let's open a ___ and pay at the end of the night.", answer: tab }
+      - { id: g5, prompt: "I'm driving, so I'll order an ___ beer.", answer: alcohol-free }
+      - { id: g6, prompt: "The ___ at the door checked our IDs.", answer: bouncer }
+      - { id: g7, prompt: "The waiter said the dessert was ___, so we did not pay.", answer: on the house }
+      - { id: g8, prompt: "Each of us buys drinks for the whole table in turn, so this is called a ___.", answer: round }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'll, it's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Сейчас моя очередь. Я заплачу. (за круг напитков)"
+        answer:
+          - It's my round. I'll get this.
+          - It is my round. I'll get this.
+          - It's my round, I'll get this.
+          - It's my round. I'll get these.
+          - It's my round, so I'll get this.
+          - It's my round, so I'll get these.
+          - It's my round. I will get this.
+          - It's my turn. I'll get this.
+          - It's my round. I'll pay.
+          - It's my round. I'll get this one.
+          - It's my round. I'll get the drinks.
+          - It's my turn. I'll pay.
+          - My round. I'll get this.
+        explanation: It's my round — моя очередь, I'll get this — решение на месте.
+      - id: q2
+        prompt: "В следующем заказе я не участвую. (вежливый отказ от круга)"
+        answer:
+          - I'll pass on the next round.
+          - I'll pass on the next round, thanks.
+          - I'll pass on the next one.
+          - I'll pass on the next one, thanks.
+          - I will pass on the next round.
+          - I'm going to pass on the next round.
+          - I'll skip the next round.
+          - I'll pass on the next one, thank you.
+          - I'll sit this round out.
+        explanation: I'll pass on the next round — спокойный отказ.
+      - id: q3
+        prompt: "Присмотрите, пожалуйста, за моим напитком одну минуту."
+        answer:
+          - Could you keep an eye on my drink for a second, please?
+          - Could you keep an eye on my drink for a second?
+          - Could you keep an eye on my drink for a minute, please?
+          - Could you keep an eye on my drink for a minute?
+          - Can you keep an eye on my drink for a second, please?
+          - Can you keep an eye on my drink for a second?
+          - Can you keep an eye on my drink for a minute?
+          - Would you mind keeping an eye on my drink for a second?
+          - Would you mind keeping an eye on my drink for a minute?
+          - Could you watch my drink for a second, please?
+          - Could you watch my drink for a second?
+          - Could you watch my drink for a minute?
+          - Could you please keep an eye on my drink for a second?
+          - Could you please keep an eye on my drink for a minute?
+          - Could you keep an eye on my drink for a moment, please?
+          - Could you keep an eye on my drink for a moment?
+          - Could you keep an eye on my drink for a sec?
+          - Can you watch my drink for a second?
+          - Can you watch my drink for a minute?
+        explanation: Keep an eye on — присмотреть.
+      - id: q4
+        prompt: "Последние заказы принимаются в одиннадцать."
+        answer:
+          - Last orders at eleven.
+          - Last orders are at eleven.
+          - Last orders at 11.
+          - Last orders are at 11.
+          - Last orders at eleven o'clock.
+          - Last orders are at eleven o'clock.
+          - Last orders are at eleven pm.
+          - Last orders are at 11 pm.
+          - Last orders at 11 pm.
+        explanation: Last orders at eleven — устойчивая фраза бара.
