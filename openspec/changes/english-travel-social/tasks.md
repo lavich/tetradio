@@ -2,9 +2,9 @@
 
 ## 0. Подготовка
 
-- [ ] 0.1 `openspec archive english-travel-trip --yes` в отдельном PR (только `openspec/`): требование «Первая ступень курса для путешествий» попадает в `openspec/specs/course-content/spec.md`. Проверка: `npm run spec` зелёный, `openspec/changes/english-travel-trip` перенесён в `openspec/changes/archive/`, `npx prettier --check openspec` проходит.
-- [ ] 0.2 После 0.1: в `specs/course-content/spec.md` этого изменения добавляется `## MODIFIED Requirements` с требованием «Первая ступень курса для путешествий» полным текстом без фразы «Модули `t08`–`t14` после этого изменения — черновики» и со сценарием «Ступень на настоящем контенте» про модули 1–7 ступени (design.md, решение 12). Проверка: `openspec validate english-travel-social --strict` и `npm run spec` зелёные; в тексте нет слов «черновики» о `t08`–`t14`.
-- [ ] 0.3 Базовый прогон на свежем `main`: `npm run content` (строка «Бюджеты»: каталог 23 590 из 25 000, пакет max 32 973) и `npm test`. Проверка: числа записаны в «Реализация» design.md как исходные для решения 4.
+- [x] 0.1 `openspec archive english-travel-trip --yes` в отдельном PR (только `openspec/`): требование «Первая ступень курса для путешествий» попадает в `openspec/specs/course-content/spec.md`. Проверка: `npm run spec` зелёный, `openspec/changes/english-travel-trip` перенесён в `openspec/changes/archive/`, `npx prettier --check openspec` проходит.
+- [x] 0.2 После 0.1: в `specs/course-content/spec.md` этого изменения добавляется `## MODIFIED Requirements` с требованием «Первая ступень курса для путешествий» полным текстом без фразы «Модули `t08`–`t14` после этого изменения — черновики» и со сценарием «Ступень на настоящем контенте» про модули 1–7 ступени (design.md, решение 12). Проверка: `openspec validate english-travel-social --strict` и `npm run spec` зелёные; в тексте нет слов «черновики» о `t08`–`t14`.
+- [x] 0.3 Базовый прогон на свежем `main`: `npm run content` (строка «Бюджеты»: каталог 23 590 из 25 000, пакет max 32 973) и `npm test`. Проверка: числа записаны в «Реализация» design.md как исходные для решения 4.
 
 ## 1. Модуль t08 · Small talk
 
