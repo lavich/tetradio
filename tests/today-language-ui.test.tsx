@@ -7,6 +7,9 @@ import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { deviceTimezone, studyDay } from "../src/domain/learning";
 import { wordKeyOf, wordRef } from "../src/domain/refs";
 import { lessonLines } from "../src/features/today/lessons";
+import { MoreCourses } from "../src/features/today/CourseLessonLine";
+import { PROFILES } from "../src/domain/language";
+import type { CourseEntry } from "../src/storage/courses";
 import { TodayScreen } from "../src/features/today/TodayScreen";
 import { setPrimaryCourse } from "../src/storage/courses";
 import { db } from "../src/storage/db";
@@ -249,10 +252,53 @@ describe("компактный блок языка", () => {
   it("язык, все курсы которого на паузе, — без блока", async () => {
     await start([["greek", { ahead: true }], ["it"], ["travel"]]);
     await pauseCourse("it", new Date(), db);
-    await pauseCourse("travel", new Date(), db);
     mount();
     await loaded();
-    await act(() => new Promise((resolve) => setTimeout(resolve, 100)));
-    expect(block()).toBeNull();
+    await shown();
+    await act(() => pauseCourse("travel", new Date(), db));
+    await until(() => !block(), "блок английского ушёл");
+  });
+  it("«Ещё N курсов →» в компактном блоке открывает «Курс»", async () => {
+    await start([["greek", { ahead: true }], ["it"], ["travel"], ["talk"], ["four"]]);
+    mount();
+    await loaded();
+    await shown();
+    await until(() => blockLines().length === 3, "три строки");
+    const more = block()!.querySelector<HTMLAnchorElement>('[data-testid="more-courses"]')!;
+    expect(more.textContent).toBe("Ещё 1 курс →");
+    expect(more.getAttribute("aria-label")).toBe("Английский: ещё 1 курс на «Курсе»");
+    await act(async () => more.click());
+    await until(() => location === "/course", "переход на «Курс»");
+  });
+});
+
+describe("«Ещё N курсов →»", () => {
+  const course = (index: number): CourseEntry => ({
+    id: `c${index}`,
+    title: `Курс ${index}`,
+    language: "en",
+    profile: PROFILES.en,
+    installed: true,
+    started: true,
+    palette: "ink",
+  });
+  it.each([
+    [1, "Ещё 1 курс →", "Английский: ещё 1 курс на «Курсе»"],
+    [2, "Ещё 2 курса →", "Английский: ещё 2 курса на «Курсе»"],
+    [5, "Ещё 5 курсов →", "Английский: ещё 5 курсов на «Курсе»"],
+    [11, "Ещё 11 курсов →", "Английский: ещё 11 курсов на «Курсе»"],
+    [21, "Ещё 21 курс →", "Английский: ещё 21 курс на «Курсе»"],
+  ])("%i — «%s»", (count, text, name) => {
+    root = createRoot(host);
+    act(() =>
+      root!.render(
+        <MemoryRouter>
+          <MoreCourses language="Английский" courses={Array.from({ length: count }, (_, index) => course(index))} />
+        </MemoryRouter>,
+      ),
+    );
+    const link = host.querySelector('[data-testid="more-courses"]')!;
+    expect(link.textContent).toBe(text);
+    expect(link.getAttribute("aria-label")).toBe(name);
   });
 });

@@ -314,6 +314,10 @@ test("прежний адрес /session?course=english открывает за�
     .getByRole("button", { name: /^Повторить/ })
     .click();
   await expect(page).toHaveURL(/\/session\?language=en$/);
+  const count = page.getByLabel(/^(Упражнение|Знакомство) \d+ из \d+$/);
+  const before = await count.getAttribute("aria-label");
+  const english = (await activeSession(page)).filter((session) => session.language === "en");
+  expect(english).toHaveLength(1);
   await page.goto("/app/");
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await expect(page).toHaveURL(/\/session$/);
@@ -321,6 +325,9 @@ test("прежний адрес /session?course=english открывает за�
   await page.goto("/app/session?course=english");
   await expect(page.getByRole("heading", { name: "Повторение", level: 1 })).toBeVisible();
   await expect(page.locator('header p[lang="en"]')).toBeVisible();
+  await expect(count).toHaveAttribute("aria-label", before!);
+  const after = (await activeSession(page)).filter((session) => session.language === "en");
+  expect(after).toEqual(english);
 });
 
 test("тренировка урока курса на паузе открывается, а после ухода со страницы «Продолжить» возвращает то же задание", async ({
@@ -359,6 +366,72 @@ test("360 px: строки уроков с подписями и длинным 
   expect(overflow).toBeLessThanOrEqual(0);
   for (const line of await other.getByTestId("course-line").all())
     expect((await line.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await expect(other.getByRole("link", { name: "Для общения. Урок: Знакомство", exact: true })).toBeVisible();
+});
+
+/** Ещё английские курсы в каталоге: урок каждого — копия `c01-1` со своими словами. */
+async function extraEnglish(page: Page, ids: string[]) {
+  let source = "";
+  await page.route("**/content/catalog.json", async (route) => {
+    const catalog = await (await route.fetch()).json();
+    const lesson = catalog.lessons.find((entry: { id: string }) => entry.id === "c01-1");
+    const module = catalog.modules.find((entry: { id: string }) => entry.id === "c01");
+    source = lesson.url.split("/").pop();
+    ids.forEach((id, index) => {
+      catalog.courses.push({
+        id: `extra-${id}`,
+        title: `Английский ${id}`,
+        language: "en",
+        short: `Курс ${id}`,
+        order: 10 + index,
+        lessonIds: [`${id}-1`],
+      });
+      catalog.lessons.push({
+        ...lesson,
+        id: `${id}-1`,
+        courseId: `extra-${id}`,
+        title: `Урок курса ${id}`,
+        wordIds: lesson.wordIds.map((word: string) => `${id}${word}`),
+        url: `content/packages/${id}-1@1.json`,
+      });
+      catalog.modules.push({ ...module, id, courseId: `extra-${id}`, lessonIds: [`${id}-1`] });
+    });
+    await route.fulfill({ json: catalog });
+  });
+  for (const id of ids)
+    await page.route(`**/content/packages/${id}-1@1.json`, async (route) => {
+      const pack = await (await route.fetch({ url: route.request().url().replace(`${id}-1@1.json`, source) })).json();
+      pack.id = `${id}-1`;
+      pack.courseId = `extra-${id}`;
+      pack.lesson.title = `Урок курса ${id}`;
+      pack.module = { id, position: 0 };
+      pack.words = pack.words.map((word: { id: string }) => ({ ...word, id: `${id}${word.id}` }));
+      pack.items = pack.items.map((item: { id: string }) => ({ ...item, id: `${id}${item.id}` }));
+      delete pack.marks;
+      delete pack.readings;
+      await route.fulfill({ json: pack });
+    });
+}
+
+test("360 px: в блоке основного языка три строки уроков и «Ещё 1 курс →» не ниже 44 px, ссылка открывает «Курс»", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await extraEnglish(page, ["x02", "x03"]);
+  await installEnglishPair(page);
+  await openModule(page, "x02");
+  await openModule(page, "x03");
+  await makePrimary(page, "Английский");
+  await page.goto("/app/");
+  const lines = mainLines(page);
+  await expect(lines).toHaveCount(2);
+  for (const line of await lines.all()) expect((await line.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  const more = page.getByRole("link", { name: "Английский: ещё 1 курс на «Курсе»", exact: true });
+  await expect(more).toHaveText("Ещё 1 курс →");
+  expect((await more.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
+  await more.click();
+  await expect(page).toHaveURL(/\/app\/course$/);
 });
 
 test("один начатый курс — без переключателя и строки второго курса; на «Курсе» — неначатый английский", async ({

@@ -11,7 +11,7 @@ import { deviceTimezone } from "../../domain/time";
 import { Skeleton } from "@/components/ui/skeleton";
 import { hapticsEnabled } from "../../platform/haptics";
 import { useBackHandler, useHaptics, usePlatform } from "../../platform/platform";
-import { anyActiveSession, courseLanguage, languageSession, sessionLanguage } from "../../storage/courses";
+import { anyActiveSession, courses, languageSession, sessionLanguage } from "../../storage/courses";
 import { sessionHomeLanguage } from "../../storage/today";
 import { db } from "../../storage/db";
 import { endSession, recordAnswer, markIntroduced, skipItem } from "../../storage/ops";
@@ -22,6 +22,14 @@ import { sessionPath } from "./session-actions";
 import { useFold } from "./useFold";
 import ui from "../../shared/ui.module.css";
 import s from "./session.module.css";
+
+/** Занятие по адресу: язык из адреса, язык курса прежнего `?course=`, иначе язык «Сегодня». */
+async function addressedSession(asked: string | null, course: string | null) {
+  if (isLanguage(asked)) return languageSession(asked);
+  if (!course) return languageSession(await sessionHomeLanguage());
+  const known = (await courses()).find((entry) => entry.id === course);
+  return known ? languageSession(known.language) : null;
+}
 
 export function SessionScreen() {
   const navigate = useNavigate();
@@ -35,8 +43,7 @@ export function SessionScreen() {
   // `undefined` — ещё читается, `null` — активного занятия нет.
   // Язык курса читается вместе с занятием: первая озвучка не должна прозвучать голосом другого языка.
   const loaded = useLiveQuery(async () => {
-    const language = isLanguage(asked) ? asked : course ? await courseLanguage(course) : await sessionHomeLanguage();
-    const found = sessionId ? await db.sessions.get(sessionId) : await languageSession(language);
+    const found = sessionId ? await db.sessions.get(sessionId) : await addressedSession(asked, course);
     if (!found) return { session: null, profile: undefined };
     return { session: found, profile: PROFILES[await sessionLanguage(found)] };
   }, [sessionId, asked, course]);

@@ -84,6 +84,11 @@ describe("адрес занятия языка", () => {
     mount("/session?course=it");
     await until(() => shows("it"), "английское занятие");
   });
+  it("прежний адрес удалённого курса — «Активного занятия нет», а не занятие другого языка", async () => {
+    mount("/session?course=nope");
+    await until(() => host.textContent!.includes("Активного занятия нет."), "нет занятия");
+    expect(shows("greek")).toBe(false);
+  });
   it("/session — занятие языка «Сегодня»", async () => {
     mount("/session");
     await until(() => shows("greek"), "греческое занятие");

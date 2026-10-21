@@ -8,17 +8,18 @@ import {
   useTodayLanguage,
 } from "../../shared/courses";
 import { useInstalledCount, useLanguagePlan } from "../../shared/store";
-import { LanguageToday } from "./CourseToday";
-import { CourseStart, OFFLINE_HINT } from "./FirstRun";
 import { LanguageLine } from "./LanguageLine";
+import { LanguageToday } from "./LanguageToday";
+import { CourseStart, OFFLINE_HINT } from "./FirstRun";
 
 const AllPaused = lazy(() => import("./AllPaused").then((module) => ({ default: module.AllPaused })));
 
 export function TodayScreen() {
-  const language = useTodayLanguage();
+  const today = useTodayLanguage();
+  const language = today === "paused" ? undefined : today;
   const started = useStartedCourses();
   const allPaused = !!started?.length && started.every((course) => course.pausedAt);
-  const plan = useLanguagePlan(started === undefined || allPaused ? undefined : language);
+  const plan = useLanguagePlan(started === undefined || allPaused || today === "paused" ? undefined : language);
   const installed = useInstalledCount();
   const unfinished = useLanguageSession(language ?? undefined);
   const courses = useTodayCourses(language ?? undefined);

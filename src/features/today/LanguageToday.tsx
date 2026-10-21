@@ -30,7 +30,7 @@ import {
 import { dexieSource } from "../../storage/queries";
 import { courseReadings } from "../../storage/readings";
 import { sessionPath, startSession } from "../learning/session-actions";
-import { CourseLessonLine, courseCaption, MoreCourses } from "./CourseLessonLine";
+import { CourseCaption, CourseLessonLine, courseCaption, MoreCourses } from "./CourseLessonLine";
 import { DayNotes } from "./DayNotes";
 import { lessonLines } from "./lessons";
 import { ReadingSheet } from "./ReadingSheet";
@@ -101,11 +101,11 @@ export function LanguageToday({
   if (!views || reviewed === undefined || !week || readings === undefined)
     return <div aria-busy="true" aria-label="План дня загружается" />;
 
-  const caption = courses.length > 1 && main ? courseCaption(main) : undefined;
   const { shown: rows, more: hidden } = lessonLines([
     ...(main ? [main] : []),
     ...courses.slice(1).filter((course) => course.installed),
   ]);
+  const caption = rows.length > 1 && main ? courseCaption(main) : undefined;
   const page = (
     <section className={cx(nb.page, css.page)}>
       <p className={nb.date} lang={profile.code}>
@@ -286,7 +286,6 @@ export function LessonNext({
   lesson: ModuleLessonView;
   primary: boolean;
   week?: number;
-  /** Короткое имя курса, когда у языка на «Сегодня» два курса и больше. */
   caption?: string;
 }) {
   const { module } = view;
@@ -302,11 +301,7 @@ export function LessonNext({
         <i className={css.ribbon} />
       </span>
       <span className={css.lessonBody}>
-        {caption && (
-          <span className={css.courseCaption} data-testid="course-caption">
-            {caption}
-          </span>
-        )}
+        {caption && <CourseCaption>{caption}</CourseCaption>}
         <span className="sr-only">Модуль {module.number}. </span>
         <span className={css.lessonTitle}>
           {test ? "Контрольная · " : ""}

@@ -33,9 +33,14 @@ export const usePrimaryCourse = (): string | null | undefined =>
   useLiveQuery(async () => (await primaryCourse()) ?? null, []);
 export { setPrimaryCourse };
 
-/** Язык «Сегодня»: `null` — все начатые курсы на паузе или курсов нет, `undefined` — ещё читается. */
-export const useTodayLanguage = (): Language | null | undefined =>
-  useLiveQuery(async () => (await todayLanguage()) ?? null, []);
+/**
+ * Язык «Сегодня»: `null` — курсов в каталоге нет, `paused` — все начатые курсы на паузе, `undefined` — ещё читается.
+ */
+export const useTodayLanguage = (): Language | null | "paused" | undefined =>
+  useLiveQuery(async () => {
+    const language = await todayLanguage();
+    return language === undefined ? "paused" : language;
+  }, []);
 /** Начатые курсы языка не на паузе, основной курс языка первым. */
 export const useTodayCourses = (language: Language | undefined): CourseEntry[] | undefined =>
   useLiveQuery(async () => (language ? todayCourses(language) : []), [language]);
