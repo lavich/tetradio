@@ -1,0 +1,7 @@
+id: ep112
+text: "Let me rephrase that."
+translation: "Позвольте, я переформулирую."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

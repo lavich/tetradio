@@ -1,0 +1,7 @@
+id: ep122
+text: "That's a bit outside my experience, but here's how I'd approach it."
+translation: "Это немного за пределами моего опыта, но вот как я бы к этому подошёл."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

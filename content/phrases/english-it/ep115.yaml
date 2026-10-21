@@ -1,0 +1,7 @@
+id: ep115
+text: "Did you say Kubernetes or Kafka?"
+translation: "Вы сказали Kubernetes или Kafka?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

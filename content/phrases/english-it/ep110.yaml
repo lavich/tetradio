@@ -1,0 +1,7 @@
+id: ep110
+text: "That's a good question."
+translation: "Хороший вопрос."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

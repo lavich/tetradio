@@ -1,0 +1,7 @@
+id: ep104
+text: "Do you mean the frontend or the backend?"
+translation: "Вы имеете в виду фронтенд или бэкенд?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

@@ -51,6 +51,7 @@ characters:
   Yuki: { gender: female, voice: Autonoe }
   Ethan: { gender: male, voice: Umbriel }
   Katarina: { gender: female, voice: Zephyr }
+  Gregor: { gender: male, voice: Rasalgethi }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

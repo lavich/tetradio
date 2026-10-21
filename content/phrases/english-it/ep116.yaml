@@ -1,0 +1,7 @@
+id: ep116
+text: "Let me start with the main point."
+translation: "Начну с главного."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

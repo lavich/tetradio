@@ -1,0 +1,7 @@
+id: ep113
+text: "Could you elaborate on that?"
+translation: "Не могли бы вы рассказать об этом подробнее?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep117
+text: "Please let me know if you need more detail."
+translation: "Пожалуйста, сообщите, если нужны подробности."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

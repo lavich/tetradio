@@ -1,8 +1,22 @@
 number: 5
 title: Could you say that again?
 subtitle: Понять вопрос и переспросить
-status: draft
+status: published
 goal: понять вопрос интервьюера, переспросить и уточнить, выиграть время на ответ
 grammar:
   - вопросы, косвенные вопросы
 sessions: 3
+crib:
+  title: переспросить и уточнить
+  rows:
+    - [повторить, "Could you repeat the question, please? Could you speak a little more slowly?"]
+    - [уточнить, "Could you clarify the question? Could you tell me what you mean by…?"]
+    - [проверить понимание, "If I understand correctly, you're asking about… Do you mean…?"]
+    - [выиграть время, "Let me think about it for a second. Could I come back to that?"]
+    - [косвенный вопрос, "Could you tell me what you mean? Do you know if…?"]
+  note: "в косвенном вопросе порядок слов как в утверждении, без do, does, did"
+lessons:
+  - e05-1
+  - e05-2
+  - e05-3
+  - e05-test
