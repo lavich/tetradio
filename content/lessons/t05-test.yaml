@@ -87,9 +87,9 @@ blocks:
     title: Announcements at Coppergate Centre
     plays: 2
     transcript:
-      - { text: "Good afternoon, shoppers. The bureau de change on the first floor is closed today. The nearest one is at the railway station, a ten-minute walk from here." }
-      - { text: "This weekend only, all winter coats at Hartley & Webb are thirty per cent off. Sale items can be exchanged within fourteen days, but they can't be refunded." }
-      - { text: "Please note that the car park closes at eight pm. You don't have to pay at the machine — the barrier reads your number plate, and you can pay online until midnight." }
+      - { text: "Good afternoon, shoppers. The bureau de change on the first floor is closed today. The nearest one is at the railway station, a ten-minute walk from here.", audio: t05-test/announcements-1.mp3 }
+      - { text: "This weekend only, all winter coats at Hartley & Webb are thirty per cent off. Sale items can be exchanged within fourteen days, but they can't be refunded.", audio: t05-test/announcements-2.mp3 }
+      - { text: "Please note that the car park closes at eight pm. You don't have to pay at the machine — the barrier reads your number plate, and you can pay online until midnight.", audio: t05-test/announcements-3.mp3 }
   - type: exercise
     id: announcements-q
     about: announcements
@@ -127,17 +127,17 @@ blocks:
     title: Back at the shop
     plays: 2
     transcript:
-      - { speaker: Grace, text: "Hello again! The jacket — is everything OK with it?" }
-      - { speaker: Jonas, text: "The jacket is fine, but my wife doesn't like the colour. Have you got the same one in green?" }
-      - { speaker: Grace, text: "Let me check… We've got it in green, but only in a small. That would be much tighter than the medium." }
-      - { speaker: Jonas, text: "Hmm. And the medium in green — you can order it?" }
-      - { speaker: Grace, text: "Yes, but it takes four or five days to arrive from our other shop." }
-      - { speaker: Jonas, text: "Four days is too long. We fly home on Saturday. Then I would like a refund, please." }
-      - { speaker: Grace, text: "No problem. It's unworn, and the tags are on, so that's fine. Have you got the receipt?" }
-      - { speaker: Jonas, text: "Yes, here. I paid with my second card, because the first card was declined." }
-      - { speaker: Grace, text: "The refund goes back to the card you paid with, so it's the second card. It can take three to five working days." }
-      - { speaker: Jonas, text: "And my first card? In the app I still see a pending payment." }
-      - { speaker: Grace, text: "That payment didn't go through, so you don't have to do anything. The money will come back on its own." }
+      - { speaker: Grace, text: "Hello again! The jacket — is everything OK with it?", audio: t05-test/return-1.mp3 }
+      - { speaker: Jonas, text: "The jacket is fine, but my wife doesn't like the colour. Have you got the same one in green?", audio: t05-test/return-2.mp3 }
+      - { speaker: Grace, text: "Let me check… We've got it in green, but only in a small. That would be much tighter than the medium.", audio: t05-test/return-3.mp3 }
+      - { speaker: Jonas, text: "Hmm. And the medium in green — you can order it?", audio: t05-test/return-4.mp3 }
+      - { speaker: Grace, text: "Yes, but it takes four or five days to arrive from our other shop.", audio: t05-test/return-5.mp3 }
+      - { speaker: Jonas, text: "Four days is too long. We fly home on Saturday. Then I would like a refund, please.", audio: t05-test/return-6.mp3 }
+      - { speaker: Grace, text: "No problem. It's unworn, and the tags are on, so that's fine. Have you got the receipt?", audio: t05-test/return-7.mp3 }
+      - { speaker: Jonas, text: "Yes, here. I paid with my second card, because the first card was declined.", audio: t05-test/return-8.mp3 }
+      - { speaker: Grace, text: "The refund goes back to the card you paid with, so it's the second card. It can take three to five working days.", audio: t05-test/return-9.mp3 }
+      - { speaker: Jonas, text: "And my first card? In the app I still see a pending payment.", audio: t05-test/return-10.mp3 }
+      - { speaker: Grace, text: "That payment didn't go through, so you don't have to do anything. The money will come back on its own.", audio: t05-test/return-11.mp3 }
   - type: exercise
     id: return-q
     about: return

@@ -140,21 +140,21 @@ blocks:
     title: At the reception desk
     plays: 2
     transcript:
-      - { speaker: Hannah, text: "Good morning, welcome to the Abbey Hotel. How can I help?" }
-      - { speaker: Marco, text: "Good morning. I have a booking — Rossi, Marco Rossi. A double room for three nights." }
-      - { speaker: Hannah, text: "Let me see… Yes, Mr Rossi, a double room, en suite, three nights with breakfast." }
-      - { speaker: Marco, text: "Yes. I know check-in is at three, but our train was early. I was wondering if early check-in is possible." }
-      - { speaker: Hannah, text: "I'm afraid your room isn't ready yet. Housekeeping are still cleaning it. It should be ready around one." }
-      - { speaker: Marco, text: "OK, no problem. Can we leave the luggage here? We want to walk around the city." }
-      - { speaker: Hannah, text: "Of course. I'll put your bags in the luggage room. Here's a ticket for them." }
-      - { speaker: Marco, text: "Thank you. And we have a small daughter, she is two. Is it possible to have a cot in the room?" }
-      - { speaker: Hannah, text: "Yes, of course, and there's no extra charge. I'll ask housekeeping to put one in before you come back." }
-      - { speaker: Marco, text: "Perfect. And breakfast — what time is it?" }
-      - { speaker: Hannah, text: "From seven to ten in the restaurant on the ground floor. At the weekend it's until half past ten." }
-      - { speaker: Marco, text: "Great. One more thing. Our flight on Sunday is in the evening. Late check-out is possible?" }
-      - { speaker: Hannah, text: "Check-out is at eleven. Late check-out until two is twenty pounds, but you can also leave your bags here after check-out for free." }
-      - { speaker: Marco, text: "Then I think we leave the bags. Thank you very much!" }
-      - { speaker: Hannah, text: "You're welcome. When you come back, I'll give you your key cards. Enjoy Bath!" }
+      - { speaker: Hannah, text: "Good morning, welcome to the Abbey Hotel. How can I help?", audio: t03-2/reception-1.mp3 }
+      - { speaker: Marco, text: "Good morning. I have a booking — Rossi, Marco Rossi. A double room for three nights.", audio: t03-2/reception-2.mp3 }
+      - { speaker: Hannah, text: "Let me see… Yes, Mr Rossi, a double room, en suite, three nights with breakfast.", audio: t03-2/reception-3.mp3 }
+      - { speaker: Marco, text: "Yes. I know check-in is at three, but our train was early. I was wondering if early check-in is possible.", audio: t03-2/reception-4.mp3 }
+      - { speaker: Hannah, text: "I'm afraid your room isn't ready yet. Housekeeping are still cleaning it. It should be ready around one.", audio: t03-2/reception-5.mp3 }
+      - { speaker: Marco, text: "OK, no problem. Can we leave the luggage here? We want to walk around the city.", audio: t03-2/reception-6.mp3 }
+      - { speaker: Hannah, text: "Of course. I'll put your bags in the luggage room. Here's a ticket for them.", audio: t03-2/reception-7.mp3 }
+      - { speaker: Marco, text: "Thank you. And we have a small daughter, she is two. Is it possible to have a cot in the room?", audio: t03-2/reception-8.mp3 }
+      - { speaker: Hannah, text: "Yes, of course, and there's no extra charge. I'll ask housekeeping to put one in before you come back.", audio: t03-2/reception-9.mp3 }
+      - { speaker: Marco, text: "Perfect. And breakfast — what time is it?", audio: t03-2/reception-10.mp3 }
+      - { speaker: Hannah, text: "From seven to ten in the restaurant on the ground floor. At the weekend it's until half past ten.", audio: t03-2/reception-11.mp3 }
+      - { speaker: Marco, text: "Great. One more thing. Our flight on Sunday is in the evening. Late check-out is possible?", audio: t03-2/reception-12.mp3 }
+      - { speaker: Hannah, text: "Check-out is at eleven. Late check-out until two is twenty pounds, but you can also leave your bags here after check-out for free.", audio: t03-2/reception-13.mp3 }
+      - { speaker: Marco, text: "Then I think we leave the bags. Thank you very much!", audio: t03-2/reception-14.mp3 }
+      - { speaker: Hannah, text: "You're welcome. When you come back, I'll give you your key cards. Enjoy Bath!", audio: t03-2/reception-15.mp3 }
   - type: exercise
     id: reception-q
     about: reception
@@ -210,11 +210,11 @@ blocks:
     title: A voice message from Oliver
     plays: 2
     transcript:
-      - { speaker: Oliver, text: "Hi Olga, it's Oliver. Thanks for your message, and sorry about the shower." }
-      - { speaker: Oliver, text: "I've spoken to my plumber, and someone's coming to fix it this afternoon, between two and four. His name's Steve. He's got his own key, so you don't need to wait in if you want to go out." }
-      - { speaker: Oliver, text: "Until then, please don't use the shower — the water's leaking into the flat downstairs. You can have a bath instead, the bath's fine." }
-      - { speaker: Oliver, text: "Oh, and you asked about extra blankets. There are two in the hall cupboard, on the top shelf, next to the spare pillows." }
-      - { speaker: Oliver, text: "And if the hot water stops again, it's the boiler — just press the red button. Sorry again, and have a lovely evening!" }
+      - { speaker: Oliver, text: "Hi Olga, it's Oliver. Thanks for your message, and sorry about the shower.", audio: t03-2/voice-1.mp3 }
+      - { speaker: Oliver, text: "I've spoken to my plumber, and someone's coming to fix it this afternoon, between two and four. His name's Steve. He's got his own key, so you don't need to wait in if you want to go out.", audio: t03-2/voice-2.mp3 }
+      - { speaker: Oliver, text: "Until then, please don't use the shower — the water's leaking into the flat downstairs. You can have a bath instead, the bath's fine.", audio: t03-2/voice-3.mp3 }
+      - { speaker: Oliver, text: "Oh, and you asked about extra blankets. There are two in the hall cupboard, on the top shelf, next to the spare pillows.", audio: t03-2/voice-4.mp3 }
+      - { speaker: Oliver, text: "And if the hot water stops again, it's the boiler — just press the red button. Sorry again, and have a lovely evening!", audio: t03-2/voice-5.mp3 }
   - type: exercise
     id: voice-q
     about: voice

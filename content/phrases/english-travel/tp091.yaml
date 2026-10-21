@@ -1,5 +1,6 @@
 id: tp091
 text: "My wallet was stolen on the bus."
+audio: phrases/tp091.mp3
 translation: "У меня украли кошелёк в автобусе."
 note: "passive: важно, что украли, а не кто; on the bus — в автобусе, не in the bus"
 provenance:

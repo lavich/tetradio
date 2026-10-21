@@ -1,5 +1,6 @@
 id: tp007
 text: "Boarding starts forty minutes before departure."
+audio: phrases/tp007.mp3
 translation: "Посадка начинается за сорок минут до вылета."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01

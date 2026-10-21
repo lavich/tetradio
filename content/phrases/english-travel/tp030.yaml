@@ -1,5 +1,6 @@
 id: tp030
 text: "Where's the nearest taxi rank?"
+audio: phrases/tp030.mp3
 translation: "Где ближайшая стоянка такси?"
 note: "в США — a taxi stand"
 provenance:

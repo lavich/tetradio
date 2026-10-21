@@ -188,10 +188,10 @@ blocks:
     title: Announcements at Gatwick
     plays: 2
     transcript:
-      - { text: "Good afternoon. This is a gate change for passengers on flight TP 1331 to Lisbon. This flight will now depart from gate 16, not gate 12. Please proceed to gate 16." }
-      - { text: "This is the final call for passenger Tomasz Nowak, travelling to Rome on flight BA 2550. Please proceed immediately to gate 4, where your flight is now closing." }
-      - { text: "We are sorry to announce that flight EZY 8031 to Berlin is delayed by about one hour and fifteen minutes. The new departure time is 16:20. Passengers can collect a food voucher from the information desk." }
-      - { text: "Passengers arriving from Istanbul on flight TK 1979 can collect their bags from baggage reclaim, belt 5." }
+      - { text: "Good afternoon. This is a gate change for passengers on flight TP 1331 to Lisbon. This flight will now depart from gate 16, not gate 12. Please proceed to gate 16.", audio: t01-2/announcements-1.mp3 }
+      - { text: "This is the final call for passenger Tomasz Nowak, travelling to Rome on flight BA 2550. Please proceed immediately to gate 4, where your flight is now closing.", audio: t01-2/announcements-2.mp3 }
+      - { text: "We are sorry to announce that flight EZY 8031 to Berlin is delayed by about one hour and fifteen minutes. The new departure time is 16:20. Passengers can collect a food voucher from the information desk.", audio: t01-2/announcements-3.mp3 }
+      - { text: "Passengers arriving from Istanbul on flight TK 1979 can collect their bags from baggage reclaim, belt 5.", audio: t01-2/announcements-4.mp3 }
   - type: exercise
     id: announcements-q
     about: announcements
@@ -246,24 +246,24 @@ blocks:
     title: At the check-in desk
     plays: 2
     transcript:
-      - { speaker: Aisha, text: "Good morning. Where are you flying to today?" }
-      - { speaker: Marco, text: "Good morning. To Toronto, but I have a connection in Lisbon." }
-      - { speaker: Aisha, text: "Can I see your passport, please?" }
-      - { speaker: Marco, text: "Yes, here it is." }
-      - { speaker: Aisha, text: "Thank you. Are you checking any bags today?" }
-      - { speaker: Marco, text: "Yes, this one. Would it be possible to check it through to Toronto? I don't want to collect it in Lisbon." }
-      - { speaker: Aisha, text: "Yes, it goes all the way to Toronto. You pick it up at baggage reclaim there. Can you put it on the scale, please?" }
-      - { speaker: Aisha, text: "Hmm, it's twenty-six kilos. Your baggage allowance is twenty-three, so there's a charge for excess baggage." }
-      - { speaker: Marco, text: "Oh no. How much it is?" }
-      - { speaker: Aisha, text: "Forty-five pounds. Or you can take some things out and put them in your hand luggage." }
-      - { speaker: Marco, text: "OK, I take out my shoes and a jacket. One moment… Is it OK now?" }
-      - { speaker: Aisha, text: "Twenty-two and a half. That's fine. Do you have a seat preference?" }
-      - { speaker: Marco, text: "Could I have an aisle seat, please? The flight to Toronto is long, and I like to walk a bit." }
-      - { speaker: Aisha, text: "Let me check… Yes, 31C, that's an aisle seat. Here are your boarding passes, one for Lisbon and one for Toronto. Your layover in Lisbon is two hours." }
-      - { speaker: Marco, text: "Great. What time does boarding start?" }
-      - { speaker: Aisha, text: "Boarding starts at ten forty at gate 22. The gate closes twenty minutes before departure." }
-      - { speaker: Marco, text: "Thank you very much." }
-      - { speaker: Aisha, text: "You're welcome. Have a good flight." }
+      - { speaker: Aisha, text: "Good morning. Where are you flying to today?", audio: t01-2/desk-1.mp3 }
+      - { speaker: Marco, text: "Good morning. To Toronto, but I have a connection in Lisbon.", audio: t01-2/desk-2.mp3 }
+      - { speaker: Aisha, text: "Can I see your passport, please?", audio: t01-2/desk-3.mp3 }
+      - { speaker: Marco, text: "Yes, here it is.", audio: t01-2/desk-4.mp3 }
+      - { speaker: Aisha, text: "Thank you. Are you checking any bags today?", audio: t01-2/desk-5.mp3 }
+      - { speaker: Marco, text: "Yes, this one. Would it be possible to check it through to Toronto? I don't want to collect it in Lisbon.", audio: t01-2/desk-6.mp3 }
+      - { speaker: Aisha, text: "Yes, it goes all the way to Toronto. You pick it up at baggage reclaim there. Can you put it on the scale, please?", audio: t01-2/desk-7.mp3 }
+      - { speaker: Aisha, text: "Hmm, it's twenty-six kilos. Your baggage allowance is twenty-three, so there's a charge for excess baggage.", audio: t01-2/desk-8.mp3 }
+      - { speaker: Marco, text: "Oh no. How much it is?", audio: t01-2/desk-9.mp3 }
+      - { speaker: Aisha, text: "Forty-five pounds. Or you can take some things out and put them in your hand luggage.", audio: t01-2/desk-10.mp3 }
+      - { speaker: Marco, text: "OK, I take out my shoes and a jacket. One moment… Is it OK now?", audio: t01-2/desk-11.mp3 }
+      - { speaker: Aisha, text: "Twenty-two and a half. That's fine. Do you have a seat preference?", audio: t01-2/desk-12.mp3 }
+      - { speaker: Marco, text: "Could I have an aisle seat, please? The flight to Toronto is long, and I like to walk a bit.", audio: t01-2/desk-13.mp3 }
+      - { speaker: Aisha, text: "Let me check… Yes, 31C, that's an aisle seat. Here are your boarding passes, one for Lisbon and one for Toronto. Your layover in Lisbon is two hours.", audio: t01-2/desk-14.mp3 }
+      - { speaker: Marco, text: "Great. What time does boarding start?", audio: t01-2/desk-15.mp3 }
+      - { speaker: Aisha, text: "Boarding starts at ten forty at gate 22. The gate closes twenty minutes before departure.", audio: t01-2/desk-16.mp3 }
+      - { speaker: Marco, text: "Thank you very much.", audio: t01-2/desk-17.mp3 }
+      - { speaker: Aisha, text: "You're welcome. Have a good flight.", audio: t01-2/desk-18.mp3 }
   - type: exercise
     id: desk-q
     about: desk

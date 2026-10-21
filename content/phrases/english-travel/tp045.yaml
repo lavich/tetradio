@@ -1,5 +1,6 @@
 id: tp045
 text: "We've locked ourselves out."
+audio: phrases/tp045.mp3
 translation: "Мы захлопнули дверь, а ключи остались внутри."
 note: "lock yourself out — остаться за дверью без ключа"
 provenance:

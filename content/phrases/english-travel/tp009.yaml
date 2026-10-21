@@ -1,5 +1,6 @@
 id: tp009
 text: "What's the purpose of your visit?"
+audio: phrases/tp009.mp3
 translation: "Какова цель вашего визита?"
 note: "вопрос на паспортном контроле"
 provenance:

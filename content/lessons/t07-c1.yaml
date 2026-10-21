@@ -46,10 +46,10 @@ blocks:
     title: Сцена 1 · Прилёт — объявления в аэропорту
     plays: 2
     transcript:
-      - { text: "Welcome to Edinburgh Airport. Baggage from the Istanbul flight will arrive on belt 4. Baggage from the Amsterdam flight is now on belt 2." }
-      - { text: "We are sorry to inform you that, because of a power failure, trams between the airport and the city centre are not running this morning. The Airlink 100 bus to Waverley Bridge is running as normal from stop A, directly outside the terminal." }
-      - { text: "If you have left something on your plane, please go to your airline's desk in the arrivals hall before you leave the airport." }
-      - { text: "The 11:45 coach to Glasgow is running twenty minutes late. It will now leave at 12:05 from stand 3." }
+      - { text: "Welcome to Edinburgh Airport. Baggage from the Istanbul flight will arrive on belt 4. Baggage from the Amsterdam flight is now on belt 2.", audio: t07-c1/arrival-1.mp3 }
+      - { text: "We are sorry to inform you that, because of a power failure, trams between the airport and the city centre are not running this morning. The Airlink 100 bus to Waverley Bridge is running as normal from stop A, directly outside the terminal.", audio: t07-c1/arrival-2.mp3 }
+      - { text: "If you have left something on your plane, please go to your airline's desk in the arrivals hall before you leave the airport.", audio: t07-c1/arrival-3.mp3 }
+      - { text: "The 11:45 coach to Glasgow is running twenty minutes late. It will now leave at 12:05 from stand 3.", audio: t07-c1/arrival-4.mp3 }
   - type: exercise
     id: arrival-q
     about: arrival
@@ -89,12 +89,12 @@ blocks:
     title: Сцена 1 · Реплики собеседника — паспортный контроль
     plays: 2
     transcript:
-      - { speaker: Joanne, text: "Good morning. Can I see your passport, please?" }
-      - { speaker: Joanne, text: "Thank you. What's the purpose of your visit?" }
-      - { speaker: Joanne, text: "And how long are you staying?" }
-      - { speaker: Joanne, text: "Where are you staying?" }
-      - { speaker: Joanne, text: "Is anyone travelling with you?" }
-      - { speaker: Joanne, text: "Have you got a return ticket?" }
+      - { speaker: Joanne, text: "Good morning. Can I see your passport, please?", audio: t07-c1/border-lines-1.mp3 }
+      - { speaker: Joanne, text: "Thank you. What's the purpose of your visit?", audio: t07-c1/border-lines-2.mp3 }
+      - { speaker: Joanne, text: "And how long are you staying?", audio: t07-c1/border-lines-3.mp3 }
+      - { speaker: Joanne, text: "Where are you staying?", audio: t07-c1/border-lines-4.mp3 }
+      - { speaker: Joanne, text: "Is anyone travelling with you?", audio: t07-c1/border-lines-5.mp3 }
+      - { speaker: Joanne, text: "Have you got a return ticket?", audio: t07-c1/border-lines-6.mp3 }
   - type: speaking
     id: border
     part: roleplay
@@ -190,12 +190,12 @@ blocks:
     title: Сцена 2 · Реплики собеседника — такси
     plays: 2
     transcript:
-      - { speaker: Kwame, text: "Hello there. Where to?" }
-      - { speaker: Kwame, text: "Marchmont, no problem. Let me give you a hand with your case." }
-      - { speaker: Kwame, text: "About thirty-five minutes. The trams aren't running this morning, so the roads are busy." }
-      - { speaker: Kwame, text: "It's on the meter — usually about thirty pounds to Marchmont. Card or cash is fine." }
-      - { speaker: Kwame, text: "Right, this is Warrender Park Road. What number is it?" }
-      - { speaker: Kwame, text: "Here you go. That's thirty-two eighty, please." }
+      - { speaker: Kwame, text: "Hello there. Where to?", audio: t07-c1/taxi-lines-1.mp3 }
+      - { speaker: Kwame, text: "Marchmont, no problem. Let me give you a hand with your case.", audio: t07-c1/taxi-lines-2.mp3 }
+      - { speaker: Kwame, text: "About thirty-five minutes. The trams aren't running this morning, so the roads are busy.", audio: t07-c1/taxi-lines-3.mp3 }
+      - { speaker: Kwame, text: "It's on the meter — usually about thirty pounds to Marchmont. Card or cash is fine.", audio: t07-c1/taxi-lines-4.mp3 }
+      - { speaker: Kwame, text: "Right, this is Warrender Park Road. What number is it?", audio: t07-c1/taxi-lines-5.mp3 }
+      - { speaker: Kwame, text: "Here you go. That's thirty-two eighty, please.", audio: t07-c1/taxi-lines-6.mp3 }
   - type: speaking
     id: taxi
     part: roleplay
@@ -290,9 +290,9 @@ blocks:
     title: Сцена 3 · Голосовое хоста
     plays: 2
     transcript:
-      - { speaker: Oliver, text: "Hi Olga, it's Oliver, your host. Sorry, change of plan: the lockbox is broken — it won't open. So this morning the cleaner left your keys at the café on the corner. Just ask at the counter and give them your name." }
-      - { speaker: Oliver, text: "And the main door downstairs is a bit stiff: turn the key, then push the door hard. The flat's on the second floor, and I'm afraid there's no lift." }
-      - { speaker: Oliver, text: "I'm in Glasgow until tomorrow, so I can't come over, but text me if there's a problem and I'll reply quickly. Enjoy Edinburgh!" }
+      - { speaker: Oliver, text: "Hi Olga, it's Oliver, your host. Sorry, change of plan: the lockbox is broken — it won't open. So this morning the cleaner left your keys at the café on the corner. Just ask at the counter and give them your name.", audio: t07-c1/lock-voice-1.mp3 }
+      - { speaker: Oliver, text: "And the main door downstairs is a bit stiff: turn the key, then push the door hard. The flat's on the second floor, and I'm afraid there's no lift.", audio: t07-c1/lock-voice-2.mp3 }
+      - { speaker: Oliver, text: "I'm in Glasgow until tomorrow, so I can't come over, but text me if there's a problem and I'll reply quickly. Enjoy Edinburgh!", audio: t07-c1/lock-voice-3.mp3 }
   - type: exercise
     id: lock-voice-q
     about: lock-voice
@@ -354,12 +354,12 @@ blocks:
     title: Сцена 3 · Реплики собеседника — звонок хоста
     plays: 2
     transcript:
-      - { speaker: Oliver, text: "Hi Olga, it's Oliver. I've just seen your message — I'm so sorry! So the window won't close at all?" }
-      - { speaker: Oliver, text: "Right. Can you see anything in the way? Sometimes the curtain gets caught at the bottom." }
-      - { speaker: Oliver, text: "OK, I'll call the man who does my repairs. I'm afraid he can't come until tomorrow afternoon." }
-      - { speaker: Oliver, text: "I'll try, but it's very short notice. In the meantime, there's an electric heater and some earplugs in the hall cupboard." }
-      - { speaker: Oliver, text: "I'm afraid I can't change the price myself — you'd need to contact the booking platform about that. Is there anything else?" }
-      - { speaker: Oliver, text: "Of course. I'll text you as soon as I hear from him. Sorry again!" }
+      - { speaker: Oliver, text: "Hi Olga, it's Oliver. I've just seen your message — I'm so sorry! So the window won't close at all?", audio: t07-c1/call-lines-1.mp3 }
+      - { speaker: Oliver, text: "Right. Can you see anything in the way? Sometimes the curtain gets caught at the bottom.", audio: t07-c1/call-lines-2.mp3 }
+      - { speaker: Oliver, text: "OK, I'll call the man who does my repairs. I'm afraid he can't come until tomorrow afternoon.", audio: t07-c1/call-lines-3.mp3 }
+      - { speaker: Oliver, text: "I'll try, but it's very short notice. In the meantime, there's an electric heater and some earplugs in the hall cupboard.", audio: t07-c1/call-lines-4.mp3 }
+      - { speaker: Oliver, text: "I'm afraid I can't change the price myself — you'd need to contact the booking platform about that. Is there anything else?", audio: t07-c1/call-lines-5.mp3 }
+      - { speaker: Oliver, text: "Of course. I'll text you as soon as I hear from him. Sorry again!", audio: t07-c1/call-lines-6.mp3 }
   - type: speaking
     id: call
     part: roleplay
@@ -391,16 +391,16 @@ blocks:
     title: Сцена 4 · Ужин — за столом
     plays: 2
     transcript:
-      - { speaker: Chloe, text: "Hi there, I'm Chloe, I'll be looking after you tonight. Can I tell you about the specials?" }
-      - { speaker: Lúcia, text: "Yes, please." }
-      - { speaker: Chloe, text: "So, to start, we've got Shetland mussels in a white wine sauce. And for the main, there's a venison stew with mashed potato and red cabbage." }
-      - { speaker: Lúcia, text: "The stew sounds good. Is very spicy?" }
-      - { speaker: Chloe, text: "Not at all, it's quite mild." }
-      - { speaker: Lúcia, text: "Then I'll have the stew. Does it have any nuts in it? I have allergy to nuts." }
-      - { speaker: Chloe, text: "No nuts in the stew. Just so you know, the apple crumble on the dessert menu has nuts on top, but the sticky toffee pudding is nut-free." }
-      - { speaker: Lúcia, text: "Good to know, thank you. And a glass of the house red, please." }
-      - { speaker: Chloe, text: "Lovely. The kitchen's quite busy tonight, so the mains will be about twenty-five minutes. Is that OK?" }
-      - { speaker: Lúcia, text: "That's fine, we're not in a hurry." }
+      - { speaker: Chloe, text: "Hi there, I'm Chloe, I'll be looking after you tonight. Can I tell you about the specials?", audio: t07-c1/dinner-1.mp3 }
+      - { speaker: Lúcia, text: "Yes, please.", audio: t07-c1/dinner-2.mp3 }
+      - { speaker: Chloe, text: "So, to start, we've got Shetland mussels in a white wine sauce. And for the main, there's a venison stew with mashed potato and red cabbage.", audio: t07-c1/dinner-3.mp3 }
+      - { speaker: Lúcia, text: "The stew sounds good. Is very spicy?", audio: t07-c1/dinner-4.mp3 }
+      - { speaker: Chloe, text: "Not at all, it's quite mild.", audio: t07-c1/dinner-5.mp3 }
+      - { speaker: Lúcia, text: "Then I'll have the stew. Does it have any nuts in it? I have allergy to nuts.", audio: t07-c1/dinner-6.mp3 }
+      - { speaker: Chloe, text: "No nuts in the stew. Just so you know, the apple crumble on the dessert menu has nuts on top, but the sticky toffee pudding is nut-free.", audio: t07-c1/dinner-7.mp3 }
+      - { speaker: Lúcia, text: "Good to know, thank you. And a glass of the house red, please.", audio: t07-c1/dinner-8.mp3 }
+      - { speaker: Chloe, text: "Lovely. The kitchen's quite busy tonight, so the mains will be about twenty-five minutes. Is that OK?", audio: t07-c1/dinner-9.mp3 }
+      - { speaker: Lúcia, text: "That's fine, we're not in a hurry.", audio: t07-c1/dinner-10.mp3 }
   - type: exercise
     id: dinner-q
     about: dinner
@@ -437,12 +437,12 @@ blocks:
     title: Сцена 4 · Реплики собеседника — заказ и счёт
     plays: 2
     transcript:
-      - { speaker: Chloe, text: "And what can I get for you?" }
-      - { speaker: Chloe, text: "Let me check with the kitchen. … Yes, I'm afraid there are prawns in the fish pie. The venison stew would be fine, though." }
-      - { speaker: Chloe, text: "Of course. Anything to drink?" }
-      - { speaker: Chloe, text: "How was everything?" }
-      - { speaker: Chloe, text: "Sure. One bill, or would you like to pay separately?" }
-      - { speaker: Chloe, text: "No problem. Yours comes to eighteen ninety-five. Service isn't included." }
+      - { speaker: Chloe, text: "And what can I get for you?", audio: t07-c1/order-lines-1.mp3 }
+      - { speaker: Chloe, text: "Let me check with the kitchen. … Yes, I'm afraid there are prawns in the fish pie. The venison stew would be fine, though.", audio: t07-c1/order-lines-2.mp3 }
+      - { speaker: Chloe, text: "Of course. Anything to drink?", audio: t07-c1/order-lines-3.mp3 }
+      - { speaker: Chloe, text: "How was everything?", audio: t07-c1/order-lines-4.mp3 }
+      - { speaker: Chloe, text: "Sure. One bill, or would you like to pay separately?", audio: t07-c1/order-lines-5.mp3 }
+      - { speaker: Chloe, text: "No problem. Yours comes to eighteen ninety-five. Service isn't included.", audio: t07-c1/order-lines-6.mp3 }
   - type: speaking
     id: order
     part: roleplay
@@ -474,12 +474,12 @@ blocks:
     title: Сцена 5 · Реплики собеседника — аптека
     plays: 2
     transcript:
-      - { speaker: Bridget, text: "Hello, what can I do for you?" }
-      - { speaker: Bridget, text: "Oh dear. How long have you had it?" }
-      - { speaker: Bridget, text: "Have you got any swelling around your lips or eyes? Any trouble breathing?" }
-      - { speaker: Bridget, text: "That's good. I'd recommend these antihistamine tablets — one a day — and this cream for the rash." }
-      - { speaker: Bridget, text: "Put a thin layer on the rash twice a day, but not on your face, and not for more than a week." }
-      - { speaker: Bridget, text: "They can make some people a bit sleepy, so don't drive if they do. And if your lips or face start to swell, call 999 straight away." }
+      - { speaker: Bridget, text: "Hello, what can I do for you?", audio: t07-c1/pharmacy-lines-1.mp3 }
+      - { speaker: Bridget, text: "Oh dear. How long have you had it?", audio: t07-c1/pharmacy-lines-2.mp3 }
+      - { speaker: Bridget, text: "Have you got any swelling around your lips or eyes? Any trouble breathing?", audio: t07-c1/pharmacy-lines-3.mp3 }
+      - { speaker: Bridget, text: "That's good. I'd recommend these antihistamine tablets — one a day — and this cream for the rash.", audio: t07-c1/pharmacy-lines-4.mp3 }
+      - { speaker: Bridget, text: "Put a thin layer on the rash twice a day, but not on your face, and not for more than a week.", audio: t07-c1/pharmacy-lines-5.mp3 }
+      - { speaker: Bridget, text: "They can make some people a bit sleepy, so don't drive if they do. And if your lips or face start to swell, call 999 straight away.", audio: t07-c1/pharmacy-lines-6.mp3 }
   - type: speaking
     id: pharmacy
     part: roleplay

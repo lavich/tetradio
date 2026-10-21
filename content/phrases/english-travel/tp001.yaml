@@ -1,5 +1,6 @@
 id: tp001
 text: "Could I have an aisle seat, please?"
+audio: phrases/tp001.mp3
 translation: "Можно мне место у прохода?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01

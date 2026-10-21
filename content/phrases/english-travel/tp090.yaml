@@ -1,5 +1,6 @@
 id: tp090
 text: "Where's the nearest A&E?"
+audio: phrases/tp090.mp3
 translation: "Где ближайшее отделение неотложной помощи?"
 note: "A&E — Accident and Emergency, приёмный покой больницы; в США — the ER (emergency room)"
 provenance:

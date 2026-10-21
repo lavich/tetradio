@@ -85,20 +85,20 @@ blocks:
     title: Booking a table
     plays: 2
     transcript:
-      - { speaker: Chloe, text: "Good afternoon, The Fig Tree, Chloe speaking. How can I help?" }
-      - { speaker: Lúcia, text: "Hi. I'd like to book a table for this evening, please. For four people, at eight." }
-      - { speaker: Chloe, text: "Let me have a look… I'm sorry, we're fully booked at eight. I can do half past seven or quarter to nine." }
-      - { speaker: Lúcia, text: "Quarter to nine is fine." }
-      - { speaker: Chloe, text: "Lovely. Can I take a name, please?" }
-      - { speaker: Lúcia, text: "Lúcia Ferreira. That's F-E-R-R-E-I-R-A." }
-      - { speaker: Chloe, text: "Thank you. Any allergies we should know about?" }
-      - { speaker: Lúcia, text: "Yes, I've got a nut allergy, and one of my friends is vegan." }
-      - { speaker: Chloe, text: "No problem, I'll put that on the booking. We've got a few vegan dishes in the evening, and the chef can tell you about nuts on the night." }
-      - { speaker: Lúcia, text: "Great. And in the evening you have a set menu?" }
-      - { speaker: Chloe, text: "Not in the evening, I'm afraid — only at lunchtime, Monday to Friday. But we've got sharing plates, and they're good for a group." }
-      - { speaker: Lúcia, text: "Perfect, thank you." }
-      - { speaker: Chloe, text: "So that's a table for four at quarter to nine tonight. If you're running late, please give us a call — we keep the table for fifteen minutes." }
-      - { speaker: Lúcia, text: "OK, thanks. Bye!" }
+      - { speaker: Chloe, text: "Good afternoon, The Fig Tree, Chloe speaking. How can I help?", audio: t04-test/booking-1.mp3 }
+      - { speaker: Lúcia, text: "Hi. I'd like to book a table for this evening, please. For four people, at eight.", audio: t04-test/booking-2.mp3 }
+      - { speaker: Chloe, text: "Let me have a look… I'm sorry, we're fully booked at eight. I can do half past seven or quarter to nine.", audio: t04-test/booking-3.mp3 }
+      - { speaker: Lúcia, text: "Quarter to nine is fine.", audio: t04-test/booking-4.mp3 }
+      - { speaker: Chloe, text: "Lovely. Can I take a name, please?", audio: t04-test/booking-5.mp3 }
+      - { speaker: Lúcia, text: "Lúcia Ferreira. That's F-E-R-R-E-I-R-A.", audio: t04-test/booking-6.mp3 }
+      - { speaker: Chloe, text: "Thank you. Any allergies we should know about?", audio: t04-test/booking-7.mp3 }
+      - { speaker: Lúcia, text: "Yes, I've got a nut allergy, and one of my friends is vegan.", audio: t04-test/booking-8.mp3 }
+      - { speaker: Chloe, text: "No problem, I'll put that on the booking. We've got a few vegan dishes in the evening, and the chef can tell you about nuts on the night.", audio: t04-test/booking-9.mp3 }
+      - { speaker: Lúcia, text: "Great. And in the evening you have a set menu?", audio: t04-test/booking-10.mp3 }
+      - { speaker: Chloe, text: "Not in the evening, I'm afraid — only at lunchtime, Monday to Friday. But we've got sharing plates, and they're good for a group.", audio: t04-test/booking-11.mp3 }
+      - { speaker: Lúcia, text: "Perfect, thank you.", audio: t04-test/booking-12.mp3 }
+      - { speaker: Chloe, text: "So that's a table for four at quarter to nine tonight. If you're running late, please give us a call — we keep the table for fifteen minutes.", audio: t04-test/booking-13.mp3 }
+      - { speaker: Lúcia, text: "OK, thanks. Bye!", audio: t04-test/booking-14.mp3 }
   - type: exercise
     id: booking-q
     about: booking
@@ -146,12 +146,12 @@ blocks:
     title: A problem with the order
     plays: 2
     transcript:
-      - { speaker: Diego, text: "Excuse me, sorry. This isn't what I ordered. I ordered the bean burger, not the chicken." }
-      - { speaker: Chloe, text: "Oh, I'm so sorry. You're right — the chicken is for the next table. I'll bring your burger straight away." }
-      - { speaker: Diego, text: "Thank you. And the chips are a bit cold. Not hot enough." }
-      - { speaker: Chloe, text: "Sorry about that. I'll ask the kitchen for fresh ones. Is everything else all right?" }
-      - { speaker: Lúcia, text: "Yes, mine is lovely, thanks. Could we get some more tap water, please?" }
-      - { speaker: Chloe, text: "Of course. I'll bring a jug for the table." }
+      - { speaker: Diego, text: "Excuse me, sorry. This isn't what I ordered. I ordered the bean burger, not the chicken.", audio: t04-test/problem-1.mp3 }
+      - { speaker: Chloe, text: "Oh, I'm so sorry. You're right — the chicken is for the next table. I'll bring your burger straight away.", audio: t04-test/problem-2.mp3 }
+      - { speaker: Diego, text: "Thank you. And the chips are a bit cold. Not hot enough.", audio: t04-test/problem-3.mp3 }
+      - { speaker: Chloe, text: "Sorry about that. I'll ask the kitchen for fresh ones. Is everything else all right?", audio: t04-test/problem-4.mp3 }
+      - { speaker: Lúcia, text: "Yes, mine is lovely, thanks. Could we get some more tap water, please?", audio: t04-test/problem-5.mp3 }
+      - { speaker: Chloe, text: "Of course. I'll bring a jug for the table.", audio: t04-test/problem-6.mp3 }
   - type: exercise
     id: problem-q
     about: problem

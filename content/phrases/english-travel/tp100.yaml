@@ -1,5 +1,6 @@
 id: tp100
 text: "Can you rebook me on the next flight?"
+audio: phrases/tp100.mp3
 translation: "Можете переоформить меня на следующий рейс?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07

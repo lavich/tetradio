@@ -81,10 +81,10 @@ blocks:
     title: Announcements at Edinburgh Airport
     plays: 2
     transcript:
-      - { text: "Ladies and gentlemen, flight NL 214 to Amsterdam is overbooked. We are looking for two volunteers to travel on the next flight at 16:30. Volunteers will receive a two-hundred-pound travel voucher and a meal voucher. Please speak to staff at gate 9." }
-      - { text: "Passengers who have missed their connection because of the late arrival of flight NL 338 from Paris should go to the transfer desk in Zone B, where staff will rebook them." }
-      - { text: "Please keep your bags with you at all times. Bags left unattended anywhere in the terminal may be removed by security." }
-      - { text: "This is a message for passenger Ana Silva. Your passport has been handed in at the information desk on the ground floor. Please come and collect it." }
+      - { text: "Ladies and gentlemen, flight NL 214 to Amsterdam is overbooked. We are looking for two volunteers to travel on the next flight at 16:30. Volunteers will receive a two-hundred-pound travel voucher and a meal voucher. Please speak to staff at gate 9.", audio: t07-test/announcements-1.mp3 }
+      - { text: "Passengers who have missed their connection because of the late arrival of flight NL 338 from Paris should go to the transfer desk in Zone B, where staff will rebook them.", audio: t07-test/announcements-2.mp3 }
+      - { text: "Please keep your bags with you at all times. Bags left unattended anywhere in the terminal may be removed by security.", audio: t07-test/announcements-3.mp3 }
+      - { text: "This is a message for passenger Ana Silva. Your passport has been handed in at the information desk on the ground floor. Please come and collect it.", audio: t07-test/announcements-4.mp3 }
   - type: exercise
     id: announcements-q
     about: announcements
@@ -126,20 +126,20 @@ blocks:
     title: A stolen passport
     plays: 2
     transcript:
-      - { speaker: Hughes, text: "Good evening. What can I do for you?" }
-      - { speaker: Inês, text: "Hi. I think my passport was stolen. I need to report it." }
-      - { speaker: Hughes, text: "OK. When did you last have it?" }
-      - { speaker: Inês, text: "This afternoon, at about three. I was sitting in a café at Paddington station, and my bag was on the back of my chair. When I wanted to pay, I opened the bag, and my passport wasn't there. My purse was still there." }
-      - { speaker: Hughes, text: "So someone took only the passport?" }
-      - { speaker: Inês, text: "Yes. It was in the small pocket on the outside of the bag." }
-      - { speaker: Hughes, text: "I'm afraid pickpockets often do that. Did anybody see anything?" }
-      - { speaker: Inês, text: "The waitress said a man was standing behind my chair for quite a long time, but she didn't see his face." }
-      - { speaker: Hughes, text: "Right. There are cameras all over the station, so we'll check the CCTV footage. Have you called lost property, just in case?" }
-      - { speaker: Inês, text: "Yes, I phoned the café and the lost property office. Nothing." }
-      - { speaker: Hughes, text: "OK. I'll take your statement and give you a crime reference number. After that, you need to contact the Portuguese embassy. They can give you an emergency travel document." }
-      - { speaker: Inês, text: "My flight home is on Friday. Is that enough time?" }
-      - { speaker: Hughes, text: "It usually takes two or three working days, so you should call them first thing tomorrow morning." }
-      - { speaker: Inês, text: "I will. Thank you so much." }
+      - { speaker: Hughes, text: "Good evening. What can I do for you?", audio: t07-test/passport-1.mp3 }
+      - { speaker: Inês, text: "Hi. I think my passport was stolen. I need to report it.", audio: t07-test/passport-2.mp3 }
+      - { speaker: Hughes, text: "OK. When did you last have it?", audio: t07-test/passport-3.mp3 }
+      - { speaker: Inês, text: "This afternoon, at about three. I was sitting in a café at Paddington station, and my bag was on the back of my chair. When I wanted to pay, I opened the bag, and my passport wasn't there. My purse was still there.", audio: t07-test/passport-4.mp3 }
+      - { speaker: Hughes, text: "So someone took only the passport?", audio: t07-test/passport-5.mp3 }
+      - { speaker: Inês, text: "Yes. It was in the small pocket on the outside of the bag.", audio: t07-test/passport-6.mp3 }
+      - { speaker: Hughes, text: "I'm afraid pickpockets often do that. Did anybody see anything?", audio: t07-test/passport-7.mp3 }
+      - { speaker: Inês, text: "The waitress said a man was standing behind my chair for quite a long time, but she didn't see his face.", audio: t07-test/passport-8.mp3 }
+      - { speaker: Hughes, text: "Right. There are cameras all over the station, so we'll check the CCTV footage. Have you called lost property, just in case?", audio: t07-test/passport-9.mp3 }
+      - { speaker: Inês, text: "Yes, I phoned the café and the lost property office. Nothing.", audio: t07-test/passport-10.mp3 }
+      - { speaker: Hughes, text: "OK. I'll take your statement and give you a crime reference number. After that, you need to contact the Portuguese embassy. They can give you an emergency travel document.", audio: t07-test/passport-11.mp3 }
+      - { speaker: Inês, text: "My flight home is on Friday. Is that enough time?", audio: t07-test/passport-12.mp3 }
+      - { speaker: Hughes, text: "It usually takes two or three working days, so you should call them first thing tomorrow morning.", audio: t07-test/passport-13.mp3 }
+      - { speaker: Inês, text: "I will. Thank you so much.", audio: t07-test/passport-14.mp3 }
   - type: exercise
     id: passport-q
     about: passport

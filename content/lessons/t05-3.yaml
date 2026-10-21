@@ -94,12 +94,12 @@ blocks:
     title: Реплики собеседника — возврат
     plays: 2
     transcript:
-      - { speaker: Grace, text: "Hi there. How can I help?" }
-      - { speaker: Grace, text: "Oh, I'm sorry to hear that. What's wrong with it?" }
-      - { speaker: Grace, text: "Have you got the receipt?" }
-      - { speaker: Grace, text: "Thanks. We've got the same jumper in a large in stock. Would you like to exchange it?" }
-      - { speaker: Grace, text: "No problem. The refund goes back to your card, and it can take three to five working days." }
-      - { speaker: Grace, text: "That's all done. Is there anything else I can help with?" }
+      - { speaker: Grace, text: "Hi there. How can I help?", audio: t05-3/return-lines-1.mp3 }
+      - { speaker: Grace, text: "Oh, I'm sorry to hear that. What's wrong with it?", audio: t05-3/return-lines-2.mp3 }
+      - { speaker: Grace, text: "Have you got the receipt?", audio: t05-3/return-lines-3.mp3 }
+      - { speaker: Grace, text: "Thanks. We've got the same jumper in a large in stock. Would you like to exchange it?", audio: t05-3/return-lines-4.mp3 }
+      - { speaker: Grace, text: "No problem. The refund goes back to your card, and it can take three to five working days.", audio: t05-3/return-lines-5.mp3 }
+      - { speaker: Grace, text: "That's all done. Is there anything else I can help with?", audio: t05-3/return-lines-6.mp3 }
   - type: speaking
     id: return
     part: roleplay
@@ -131,12 +131,12 @@ blocks:
     title: Реплики собеседника — рынок
     plays: 2
     transcript:
-      - { speaker: Callum, text: "Morning! That bag's real leather. It's made here in Yorkshire." }
-      - { speaker: Callum, text: "That one's forty pounds." }
-      - { speaker: Callum, text: "Forty's a fair price for real leather. But all right — thirty-five?" }
-      - { speaker: Callum, text: "Thirty's a bit low, I'm afraid. Thirty-two, and it's yours." }
-      - { speaker: Callum, text: "Cash or card?" }
-      - { speaker: Callum, text: "Contactless is fine — just tap here. Lovely, there you go. Enjoy it!" }
+      - { speaker: Callum, text: "Morning! That bag's real leather. It's made here in Yorkshire.", audio: t05-3/haggle-lines-1.mp3 }
+      - { speaker: Callum, text: "That one's forty pounds.", audio: t05-3/haggle-lines-2.mp3 }
+      - { speaker: Callum, text: "Forty's a fair price for real leather. But all right — thirty-five?", audio: t05-3/haggle-lines-3.mp3 }
+      - { speaker: Callum, text: "Thirty's a bit low, I'm afraid. Thirty-two, and it's yours.", audio: t05-3/haggle-lines-4.mp3 }
+      - { speaker: Callum, text: "Cash or card?", audio: t05-3/haggle-lines-5.mp3 }
+      - { speaker: Callum, text: "Contactless is fine — just tap here. Lovely, there you go. Enjoy it!", audio: t05-3/haggle-lines-6.mp3 }
   - type: speaking
     id: haggle
     part: roleplay

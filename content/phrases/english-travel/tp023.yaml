@@ -1,5 +1,6 @@
 id: tp023
 text: "Does this train stop at Reading?"
+audio: phrases/tp023.mp3
 translation: "Этот поезд останавливается в Рединге?"
 note: "Reading читается [рэдинг]"
 provenance:

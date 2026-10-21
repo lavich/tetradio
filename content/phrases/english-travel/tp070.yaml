@@ -1,5 +1,6 @@
 id: tp070
 text: "Do you take contactless?"
+audio: phrases/tp070.mp3
 translation: "У вас можно бесконтактно?"
 note: "take — принимать к оплате: Do you take cards?"
 provenance:

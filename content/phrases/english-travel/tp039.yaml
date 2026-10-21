@@ -1,5 +1,6 @@
 id: tp039
 text: "Could you send me the check-in instructions?"
+audio: phrases/tp039.mp3
 translation: "Пришлёте инструкцию по заселению?"
 note: "у хоста: где ключи, код замка, как попасть в дом"
 provenance:

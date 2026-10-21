@@ -1,5 +1,6 @@
 id: tp034
 text: "The Wi-Fi has stopped working."
+audio: phrases/tp034.mp3
 translation: "Вайфай перестал работать."
 note: "present perfect: сломалось, и сейчас не работает"
 provenance:
