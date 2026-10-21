@@ -1,0 +1,6 @@
+id: ew452
+greek: "backward compatible"
+russian: "обратно совместимый: новая версия работает с тем, что создано для старой"
+ipa: /ˌbækwəd kəmˈpætəbəl/
+note: "допустимо и backwards compatible; The new API must stay backward compatible."
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

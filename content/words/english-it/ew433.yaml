@@ -1,0 +1,6 @@
+id: ew433
+greek: "write-heavy"
+russian: "с преобладанием записи: данные записывают очень часто"
+ipa: /ˈraɪt ˌhevi/
+note: "a write-heavy workload, например журнал событий или данные датчиков"
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

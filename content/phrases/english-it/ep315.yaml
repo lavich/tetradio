@@ -1,0 +1,7 @@
+id: ep315
+text: "Let me confirm that I've understood the requirements."
+translation: "Позвольте уточнить, правильно ли я понял требования."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

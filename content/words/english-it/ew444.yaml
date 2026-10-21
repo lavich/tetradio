@@ -1,0 +1,6 @@
+id: ew444
+greek: "multi-tenant"
+russian: "многоарендный: один экземпляр сервиса обслуживает многих клиентов, а их данные разделены"
+ipa: /ˌmʌlti ˈtenənt/
+note: "A multi-tenant service shares servers between customers but keeps their data separate."
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

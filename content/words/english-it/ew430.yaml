@@ -1,0 +1,6 @@
+id: ew430
+greek: "concurrent users"
+russian: "одновременные пользователи: те, кто работает с системой в один и тот же момент"
+ipa: /kənˈkʌrənt ˈjuːzəz/
+note: "число зарегистрированных пользователей обычно намного больше числа concurrent users"
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

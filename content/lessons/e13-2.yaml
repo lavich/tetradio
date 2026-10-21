@@ -1,0 +1,382 @@
+title: техническое задание сервиса уведомлений и постановка задачи с уточняющими вопросами
+kind: lesson
+items:
+  - { kind: word, id: ew439 }
+  - { kind: word, id: ew440 }
+  - { kind: word, id: ew441 }
+  - { kind: word, id: ew442 }
+  - { kind: word, id: ew443 }
+  - { kind: word, id: ew444 }
+  - { kind: word, id: ew445 }
+  - { kind: word, id: ew446 }
+  - { kind: word, id: ew447 }
+  - { kind: word, id: ew448 }
+  - { kind: word, id: ew449 }
+  - { kind: word, id: ew450 }
+  - { kind: word, id: ew451 }
+  - { kind: word, id: ew452 }
+  - { kind: word, id: ew453 }
+  - { kind: word, id: ew454 }
+  - { kind: word, id: ew455 }
+  - { kind: phrase, id: ep309 }
+  - { kind: phrase, id: ep310 }
+  - { kind: phrase, id: ep311 }
+  - { kind: phrase, id: ep312 }
+  - { kind: phrase, id: ep313 }
+  - { kind: phrase, id: ep314 }
+  - { kind: phrase, id: ep315 }
+  - { kind: phrase, id: ep316 }
+blocks:
+  - type: explanation
+    id: quality-words
+    title: Слова урока — качества системы, ограничения, данные
+    body: |-
+      Тексты урока описывают сервис уведомлений и разговор, в котором техническому специалисту ставят задачу. Слова урока образуют три группы.
+
+      **Качества системы.** **Availability** — доступность: доля времени, когда система работает и отвечает. **Consistency** — согласованность: все читающие видят одни и те же актуальные данные. **Durability** — сохранность: записанные данные не пропадают при сбое. **Fault tolerance** — отказоустойчивость: система продолжает работать, когда отказала её часть. **Stale data** — устаревшие данные: значение уже изменилось, а пользователь видит прежнее.
+
+      **Нагрузка и данные.** **Capacity planning** — расчёт ресурсов под ожидаемый рост нагрузки. **Real-time** — с задержкой в секунды или меньше; **batch processing** — данные накапливают и обрабатывают порциями. **Multi-tenant** — один экземпляр сервиса обслуживает многих клиентов, а их данные разделены. **A user base** — все, кто пользуется продуктом. **A source of truth** — одно место, данные которого считают верными. **Resource-intensive** — ресурсоёмкий.
+
+      **Ограничения и обязательное.** **A hard limit** — число, которое нельзя превысить. **Table stakes** — обязательный минимум, без которого продукт не рассматривают. **A turnaround time** — время от начала до результата. **Backward compatible** — новая версия работает с тем, что создано для старой. **Compliance** — соответствие требованиям закона и стандартов.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: quality-match
+    title: Качества системы
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - availability
+      - consistency
+      - durability
+      - fault tolerance
+      - stale data
+      - batch processing
+      - multi-tenant
+      - capacity planning
+      - table stakes
+    items:
+      - { id: m1, prompt: "доля времени, когда система работает и отвечает", answer: availability }
+      - { id: m2, prompt: "все читающие видят одни и те же актуальные данные", answer: consistency }
+      - { id: m3, prompt: "данные, записанные в систему, не пропадают при сбое", answer: durability }
+      - { id: m4, prompt: "система продолжает работать, когда отказала её часть", answer: fault tolerance }
+      - { id: m5, prompt: "значения, которые уже изменились, а пользователь видит прежние", answer: stale data }
+      - { id: m6, prompt: "данные накапливают и обрабатывают порциями по расписанию", answer: batch processing }
+      - { id: m7, prompt: "один экземпляр сервиса обслуживает многих клиентов, а их данные разделены", answer: multi-tenant }
+  - type: exercise
+    id: limits-gap
+    title: Ограничения и обязательное
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a hard limit
+      - table stakes
+      - a turnaround time
+      - backward compatible
+      - compliance
+      - resource-intensive
+      - a source of truth
+      - capacity planning
+      - a user base
+    items:
+      - id: g1
+        prompt: Users can upload a file of up to ten megabytes. This size is ___, and the system rejects larger files. (жёсткий предел)
+        answer: a hard limit
+      - id: g2
+        prompt: A login page that works, is secure and opens in a few seconds is ___; users do not even notice it. (обязательный минимум)
+        answer: table stakes
+      - id: g3
+        prompt: Customers expect an answer within one working day, so we need ___ of one working day. (время выполнения)
+        answer: a turnaround time
+      - id: g4
+        prompt: Mobile apps with the old version are still in use, so the new API must be ___. (обратно совместимый)
+        answer: backward compatible
+      - id: g5
+        prompt: The service handles personal data, so ___ with data protection rules is mandatory. (соответствие требованиям)
+        answer: compliance
+      - id: g6
+        prompt: Converting video takes a lot of memory and processor time, so the job is ___. (ресурсоёмкий)
+        answer: resource-intensive
+      - id: g7
+        prompt: Billing, support and reports all copy customer data from one place, which is ___. (источник истины)
+        answer: a source of truth
+  - type: explanation
+    id: reading-how
+    title: Как читать техническое задание
+    body: |-
+      Техническое задание описывает, что нужно построить, и редко говорит, как. Обычно в нём есть цель, пользователи, функциональные требования (что система делает), нефункциональные (как быстро, как надёжно, сколько данных), ограничения, раздел «вне объёма» (out of scope) и открытые вопросы.
+
+      Сначала найдите числа: сколько пользователей, сколько запросов, какой срок. Затем отметьте слова **must** (обязательно), **should** (желательно) и **may** (допустимо): они показывают вес требования. Раздел «вне объёма» говорит, чего делать не нужно; открытые вопросы — то, что нужно уточнить до начала работы.
+
+      В тексте много определительных придаточных: они сужают требование до нужной группы пользователей или случаев. Слова вне списков переведены под текстом.
+  - type: reading
+    id: brief
+    title: "Technical brief: notification service"
+    text: |-
+      Technical brief: notification service
+      Fernbrook Cloud · example
+
+      Goal
+      Fernbrook Cloud, which sells project-planning software to small teams, needs a service that sends notifications to its users. The service should replace three separate scripts that the team maintains today.
+
+      Users
+      About forty thousand people use the product, and up to four thousand of them are online at the same time. Users who have turned notifications off must not receive any messages.
+
+      Requirements
+      1. The service sends email and push notifications. Both types must reach users within thirty seconds.
+      2. Every message is stored for ninety days, which is the retention period that the support team asked for.
+      3. Customers whose accounts are suspended receive no notifications.
+      4. Each team is a separate tenant, and the data of one tenant must never be visible to another.
+
+      Load and quality
+      The service must handle ten thousand messages a minute at peak. Availability must be at least 99.9%, and a failed message must be retried three times. Notifications may arrive a few seconds late, but none may be lost.
+
+      Constraints
+      The service runs in the region where the main database is located, because customer data must stay there. The first version is due in eight weeks. The API must stay backward compatible with the mobile apps that people already use.
+
+      Out of scope
+      Text messages and a settings page for notifications are not part of this version. They will be considered for version two.
+
+      Open questions
+      Should failed messages be shown to the user? How long should the service keep retrying?
+    glosses:
+      - { text: "push notifications", russian: "уведомления на экран телефона" }
+      - { text: tenant, russian: "клиент, чьи данные хранятся отдельно в общей системе" }
+      - { text: suspended, russian: приостановлены }
+      - { text: region, russian: "регион: группа серверов в одной стране или области" }
+      - { text: retried, russian: "отправлено повторно" }
+      - { text: replace, russian: заменить }
+  - type: exercise
+    id: brief-tf
+    about: brief
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: About four thousand users can be online at the same time.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: Users who have turned notifications off still receive important messages.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "Must not receive any messages — таким пользователям сообщения не отправляют вовсе."
+      - id: q3
+        prompt: Messages are stored for ninety days.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: The service must handle ten thousand messages a second at peak.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "Ten thousand messages a minute — десять тысяч сообщений в минуту."
+      - id: q5
+        prompt: Text messages are part of the first version.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "They will be considered for version two — их рассмотрят для второй версии."
+      - id: q6
+        prompt: The first version is due in eight weeks.
+        options: ["True", "False"]
+        answer: "True"
+  - type: exercise
+    id: brief-find
+    about: brief
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does the service replace?
+        options:
+          - three separate scripts
+          - the main database
+          - the mobile apps
+        answer: three separate scripts
+      - id: q2
+        prompt: Why does the service run in the region of the main database?
+        options:
+          - Customer data must stay there.
+          - It is cheaper there.
+          - The support team asked for it.
+        answer: Customer data must stay there.
+      - id: q3
+        prompt: What must happen to a failed message?
+        options:
+          - It must be retried three times.
+          - It must be deleted at once.
+          - It must be shown to the support team.
+        answer: It must be retried three times.
+      - id: q4
+        prompt: What is the minimum availability?
+        options:
+          - at least 99.9%
+          - exactly 100%
+          - at least 90%
+        answer: at least 99.9%
+      - id: q5
+        prompt: How may notifications behave?
+        options:
+          - They may arrive a few seconds late, but none may be lost.
+          - They may be lost, but never late.
+          - They must arrive within one second.
+        answer: They may arrive a few seconds late, but none may be lost.
+  - type: exercise
+    id: brief-grammar
+    about: brief
+    title: Придаточные в тексте
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: "In «Users who have turned notifications off must not receive any messages», why are there no commas around the clause?"
+        options:
+          - The clause tells us which users are meant.
+          - The clause only adds extra information about all users.
+          - The clause can be removed without changing the meaning.
+        answer: The clause tells us which users are meant.
+        explanation: Придаточное defining сужает группу до тех, кто отключил уведомления, поэтому запятых нет.
+      - id: q2
+        prompt: "In «Fernbrook Cloud, which sells project-planning software to small teams, needs a service», what does the clause between the commas do?"
+        options:
+          - It adds extra information about the company.
+          - It says which company is meant among several.
+          - It states a requirement.
+        answer: It adds extra information about the company.
+        explanation: Придаточное non-defining в запятых добавляет сведение; компания и так названа.
+      - id: q3
+        prompt: "In «the region where the main database is located», what does where refer to?"
+        options:
+          - the region
+          - the database
+          - the service
+        answer: the region
+        explanation: Where относится к существительному перед ним — к региону.
+      - id: q4
+        prompt: "In «Customers whose accounts are suspended receive no notifications», whose refers to ..."
+        options:
+          - customers
+          - accounts
+          - notifications
+        answer: customers
+        explanation: Whose показывает, чьи аккаунты, — они принадлежат клиентам.
+      - id: q5
+        prompt: "Which word can replace that in «the mobile apps that people already use»?"
+        options: [which, whose, where]
+        answer: which
+        explanation: В придаточном defining о вещах that можно заменить на which; whose и where не подходят по смыслу.
+  - type: explanation
+    id: listening-how
+    title: Как слушать постановку задачи
+    body: |-
+      Anders, старший инженер, ставит задачу Fatima, и она задаёт уточняющие вопросы. На собеседовании так проверяют, умеете ли вы выяснять условия, прежде чем решать. Слушайте числа (пользователи, запросы, срок), ограничения и то, что находится вне объёма.
+
+      Сначала послушайте запись целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: task
+    title: Anders gives Fatima a task
+    plays: 2
+    transcript:
+      - { speaker: Anders, text: "Thanks for joining, Fatima. Here is the task. I'd like you to design a service that sends order updates to the customers of an online shop. Please ask me any questions that you need." }
+      - { speaker: Fatima, text: "Thank you. Let me start with the users. Who are the people that will receive the updates?" }
+      - { speaker: Anders, text: "Mostly shoppers in Europe, and some business customers whose orders are larger. About two hundred thousand people have an account." }
+      - { speaker: Fatima, text: "And how many messages do we expect? What does the traffic look like at peak?" }
+      - { speaker: Anders, text: "On a normal day, about ten messages a second. During a sale, which happens twice a year, it can reach two hundred a second." }
+      - { speaker: Fatima, text: "I see. Are there any constraints that I should know about?" }
+      - { speaker: Anders, text: "Yes. Customer data must stay in Europe, and the first version is due in six weeks. We also already have a message queue, so please use it." }
+      - { speaker: Fatima, text: "Understood. Is it okay if a message arrives a minute late?" }
+      - { speaker: Anders, text: "A minute is fine, but no message may be lost. If the service is down, the messages should wait in the queue." }
+      - { speaker: Fatima, text: "Good. One more thing: do we need to support text messages, or only email and push?" }
+      - { speaker: Anders, text: "Only email and push for now. Text messages are out of scope." }
+      - { speaker: Fatima, text: "Let me confirm that I've understood the requirements. We need a service that handles up to two hundred messages a second, keeps the data in Europe, loses no messages and is ready in six weeks." }
+      - { speaker: Anders, text: "That's right. Thank you, that was a clear summary." }
+  - type: exercise
+    id: task-q
+    about: task
+    title: Что сказали в разговоре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Anders ask Fatima to design?
+        options:
+          - a service that sends order updates
+          - a booking app
+          - a payment gateway
+        answer: a service that sends order updates
+      - id: q2
+        prompt: How many messages a second can the service need during a sale?
+        options:
+          - two hundred
+          - ten
+          - two thousand
+        answer: two hundred
+      - id: q3
+        prompt: When is the first version due?
+        options:
+          - in six weeks
+          - in six months
+          - in two weeks
+        answer: in six weeks
+      - id: q4
+        prompt: What must the service never do?
+        options:
+          - lose a message
+          - send an email
+          - use the message queue
+        answer: lose a message
+      - id: q5
+        prompt: Which channels are in the first version?
+        options:
+          - email and push only
+          - email, push and text messages
+          - push only
+        answer: email and push only
+      - id: q6
+        prompt: What does Fatima do at the end?
+        options:
+          - She summarises the requirements.
+          - She asks for a longer deadline.
+          - She refuses the task.
+        answer: She summarises the requirements.
+  - type: exercise
+    id: task-relative
+    about: task
+    title: Придаточные в записи
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Which sentence from the recording contains a non-defining clause?
+        options:
+          - "During a sale, which happens twice a year, it can reach two hundred a second."
+          - "Who are the people that will receive the updates?"
+          - "Customer data must stay in Europe."
+        answer: "During a sale, which happens twice a year, it can reach two hundred a second."
+        explanation: Придаточное в запятых добавляет сведение о распродаже; в вопросе придаточное определительное, в третьей фразе его нет.
+      - id: q2
+        prompt: "Anders mentions «business customers whose orders are larger». Which customers does the clause describe?"
+        options:
+          - only the customers with larger orders
+          - all customers of the shop
+          - nobody
+        answer: only the customers with larger orders
+        explanation: Придаточное без запятых называет, о каких клиентах идёт речь.
+      - id: q3
+        prompt: "In «Are there any constraints that I should know about?», which word can be left out?"
+        options:
+          - that
+          - should
+          - about
+        answer: that
+        explanation: Слово that — дополнение придаточного, поэтому его можно опустить; предлог about остаётся.
+      - id: q4
+        prompt: "Which question helps Fatima to find out the size of the user base?"
+        options:
+          - Who are the people that will receive the updates?
+          - Is it okay if a message arrives a minute late?
+          - Do we need to support text messages?
+        answer: Who are the people that will receive the updates?
+        explanation: Вопрос о получателях приводит к ответу «двести тысяч аккаунтов».

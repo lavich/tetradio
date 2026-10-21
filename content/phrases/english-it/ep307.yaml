@@ -1,0 +1,7 @@
+id: ep307
+text: "Can I assume that the users are mostly in Europe?"
+translation: "Могу ли я считать, что пользователи в основном в Европе?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

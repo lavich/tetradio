@@ -1,0 +1,6 @@
+id: ew429
+greek: "peak load"
+russian: "пиковая нагрузка: наибольший поток запросов за короткий период"
+ipa: /ˈpiːk ləʊd/
+note: "The system must work at peak load, not only on average."
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

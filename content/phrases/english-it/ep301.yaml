@@ -1,0 +1,7 @@
+id: ep301
+text: "Who are the people that will use this system?"
+translation: "Кто те люди, которые будут пользоваться этой системой?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

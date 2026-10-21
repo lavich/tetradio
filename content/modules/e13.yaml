@@ -1,8 +1,23 @@
 number: 13
 title: Clarifying requirements
 subtitle: Уточнить требования задачи
-status: draft
+status: published
 goal: уточнить условия технической задачи и описать будущую систему
 grammar:
   - придаточные определительные (defining и non-defining)
 sessions: 3
+crib:
+  title: Определительные
+  rows:
+    - [defining — кто или что именно, "A user who forgets the password can reset it. The requirement we agreed on is fixed."]
+    - [non-defining — добавочное сведение, "The service, which sends emails, runs on two servers."]
+    - [whose и where, "a team whose service is slow · a system where consistency matters more than speed"]
+    - [вопросы о задаче, "Who are the people that will use this system? · Are there any constraints that I should know about?"]
+    - [нагрузка и данные, "How many requests do we expect per second? · How much data are we talking about?"]
+    - [итог и допущения, "So, to summarise, we need a service that handles… · I'm assuming that we don't need to handle payments."]
+  note: "в defining нет запятых, who, which и that, слово-дополнение можно опустить; в non-defining запятые с двух сторон, who или which, that нельзя; whose передаёт «чей»; местоимение внутри придаточного не повторяют; вопросы идут от пользователей к нагрузке, данным и ограничениям и заканчиваются итогом"
+lessons:
+  - e13-1
+  - e13-2
+  - e13-3
+  - e13-test
