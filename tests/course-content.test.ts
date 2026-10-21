@@ -53,13 +53,17 @@ describe("курс в продукте", () => {
     expect(greek.passShare).toBe(0.6);
     expect(greek.exam).not.toHaveProperty("passShare");
   });
+  it("греческий называется в языке «Греческий» и рисуется гаммой по умолчанию", () => {
+    expect(greek.short).toBe("Греческий");
+    expect(greek).not.toHaveProperty("palette");
+  });
   it("контента Tavelori в продукте нет", () => {
     expect(content.words.some((word) => /^w\d{2}-\d{2}$/.test(word.id))).toBe(false);
     expect(catalog.courses.map((c) => c.id)).toEqual(["greek-a2", "english-it", "english-travel"]);
   });
   it("английский для IT: 16 модулей программы без календаря, опубликованы модули с первого", () => {
     const english = catalog.courses.find((course) => course.id === "english-it")!;
-    expect(english).toMatchObject({ title: "Английский для IT", language: "en" });
+    expect(english).toMatchObject({ title: "Английский для IT", language: "en", short: "Для IT", palette: "ink" });
     expect(english).not.toHaveProperty("calendar");
     expect(modulesOf("english-it").map((m) => m.number)).toEqual(Array.from({ length: 16 }, (_, i) => i + 1));
     // Опубликованные модули идут подряд с первого: новый английский модуль тест не ломает.
@@ -85,7 +89,8 @@ describe("английский для путешествий и общения",
       language: "en",
       level: "B1 → B1+",
       goal: "Поездка и разговор с новыми людьми на английском",
-      short: "Путешествия",
+      short: "Для путешествий",
+      palette: "coast",
       order: 3,
       passShare: 0.6,
     });

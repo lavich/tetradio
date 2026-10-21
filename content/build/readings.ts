@@ -12,7 +12,7 @@ import {
 } from "../../src/content/schema.ts";
 import type { CatalogModule } from "../../src/content/course.ts";
 import type { LessonCardKind } from "../../src/domain/types.ts";
-import { profileOf } from "../../src/domain/language.ts";
+import { isLanguage, profileOf } from "../../src/domain/language.ts";
 import { coverer, share } from "../coverage.ts";
 import { buildMatcher, encodeMarks, lessonMarks, type MatchCard } from "../marks.ts";
 import { cardDescriber } from "./mark-courses.ts";
@@ -225,9 +225,8 @@ export function buildReadings({
     if (!REVIEWS.includes(review as ReadingReview)) fail(`${where}: provenance.review — ${REVIEWS.join(", ")}`);
     const course = courses.find((entry) => entry.id === src.course)!;
     shelved.add(course.id);
-    // Полка живёт в модуле, а служебные слова и приставки подсчёта — греческие.
+    // Полка текстов живёт в модуле.
     if (!course.moduleIds) fail(`${where}: тексты для чтения бывают только у курса из модулей`);
-    if (course.language !== "el") fail(`${where}: тексты для чтения пока только для греческого курса`);
     const text = src.text.normalize("NFC");
     if (text.includes("..")) fail(`${where}: многоточие — знаком «…», а не точками: точка делит текст на предложения`);
     if (src.names !== undefined && (!Array.isArray(src.names) || src.names.some((name) => typeof name !== "string")))
@@ -289,7 +288,7 @@ export function buildReadings({
     };
     if (src.series) reading.series = src.series;
     // Без карты голосов языка текст звучит синтезом устройства.
-    const voices = sources.voices.get(course.language);
+    const voices = isLanguage(course.language) ? sources.voices.get(course.language) : undefined;
     let unvoiced = 0;
     if (voices) {
       const sentences = readingVoicing(

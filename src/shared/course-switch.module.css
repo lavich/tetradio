@@ -58,3 +58,56 @@
 .optionNote {
   font-weight: 500;
 }
+.list {
+  grid-auto-flow: row;
+  width: auto;
+  overflow: visible;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.list .option {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 10px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--foreground);
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  box-shadow: none;
+}
+.list .option:last-child {
+  border-bottom: 0;
+}
+.list .option::before {
+  content: "";
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  border: 2px solid var(--input);
+  border-radius: 50%;
+}
+.list .selected {
+  background: none;
+  color: var(--foreground);
+}
+.list .selected::before {
+  border-color: var(--primary);
+  background: radial-gradient(var(--primary) 0 4px, transparent 5px);
+}
+.list .option[aria-disabled="true"] {
+  color: var(--muted-foreground);
+}
+.list .optionNote {
+  margin-left: 0.25em;
+  white-space: pre;
+}

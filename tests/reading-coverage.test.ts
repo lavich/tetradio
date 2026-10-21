@@ -3,6 +3,7 @@ import { parse } from "yaml";
 import { describe, expect, it } from "vitest";
 import type { MatchCard } from "../content/marks";
 import { coverage, share } from "../content/coverage";
+import { PROFILES } from "../src/domain/language";
 
 /** Снимок словаря уроков m01–m03 и пилотных текстов: ожидания не плывут вместе с курсом (`tests/fixtures/reading-pilot`). */
 const { cards, lessonGlosses } = JSON.parse(readFileSync("tests/fixtures/reading-pilot/vocabulary.json", "utf8")) as {
@@ -48,5 +49,20 @@ describe("мягкий подсчёт знакомых слов на пилот�
   });
   it("слово будущего модуля без общей основы незнакомо", () => {
     expect(measure({ id: "x", text: "Το νοσοκομείο είναι εδώ.", expected: {} }).unknown).toContain("νοσοκομείο");
+  });
+});
+
+describe("подсчёт знакомых слов английского текста", () => {
+  const card = (text: string): MatchCard => ({ ref: `w:${text}`, text, phrase: false });
+  const measureEnglish = (text: string, cards: MatchCard[]) =>
+    coverage({ text, glosses: [], names: [], cards, lessonGlosses: [], profile: PROFILES.en });
+
+  it("общее начало с карточкой и греческие служебные слова английское слово знакомым не делают", () => {
+    const result = measureEnglish("Internet interest underwear went the is", [card("interview"), card("understand")]);
+    expect(result.known).toBe(0);
+    expect(result.unknown).toEqual(["Internet", "interest", "underwear", "went", "the", "is"]);
+  });
+  it("слово карточки и её части знакомы", () => {
+    expect(measureEnglish("the bus", [card("the bus")]).known).toBe(2);
   });
 });

@@ -1,4 +1,5 @@
 import { launchContext } from "../../platform/launch";
+import { useCoursePalette } from "../../shared/courses";
 import { useCourseProfile } from "../../shared/language";
 import { coverColor } from "../../shared/notebook";
 import type { ModuleView } from "../../storage/course";
@@ -14,6 +15,7 @@ export function ModuleCover({ view, open }: { view: ModuleView; open: boolean })
   const draft = module.status === "draft";
   const name = launchContext().user?.firstName;
   const profile = useCourseProfile(module.courseId);
+  const palette = useCoursePalette(module.courseId);
   const { code } = profile;
   const crib = module.crib ? (
     <>
@@ -41,7 +43,7 @@ export function ModuleCover({ view, open }: { view: ModuleView; open: boolean })
   return (
     <section
       className={[open ? css.inside : css.flap, draft ? css.flapDraft : ""].join(" ")}
-      style={draft ? undefined : ({ "--cover": coverColor(module.number) } as React.CSSProperties)}
+      style={draft ? undefined : ({ "--cover": coverColor(module.number, palette) } as React.CSSProperties)}
       aria-label={`Обложка модуля ${module.number}`}
     >
       <p className={css.coverNum}>{String(module.number).padStart(2, "0")}</p>

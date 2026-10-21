@@ -1,22 +1,24 @@
 import { useLiveQuery } from "dexie-react-hooks";
+import { useId } from "react";
 import { Link } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { SKILL_LABEL } from "../../content/course";
 import type { SkillProgress } from "../../domain/progress";
 import { SOLID_DAYS, type Leech } from "../../domain/stats";
 import { useNow } from "../../shared/clock";
-import { CourseSwitch } from "../../shared/CourseSwitch";
+import { LanguageSwitch } from "../../shared/CourseSwitch";
 import { cx } from "../../shared/cx";
-import { useCourseProfile } from "../../shared/language";
 import { dayMonth, pausedSince, withCount } from "../../shared/format";
+import { courseName, useCoursePalette } from "../../shared/courses";
+import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { deviceTimezone, studyDay } from "../../domain/time";
-import { cardsInCourse, courses, currentCourse } from "../../storage/courses";
-import { courseProgress, type CourseProgress } from "../../storage/progress";
+import { cardsInCourse, currentLanguage, primaryCourse } from "../../storage/courses";
+import { courseProgress, languageProgress, type CourseProgress, type LanguageProgress } from "../../storage/progress";
 import { useStats } from "../../shared/store";
-import { dictionary, type DictionaryLesson } from "../../storage/dictionary";
+import { languageDictionary, type DictionaryLesson } from "../../storage/dictionary";
 import { mistakeCount } from "../../storage/queries";
 import { entryPath } from "../words/WordsScreen";
 import { SyncLine } from "./SyncLine";
@@ -28,54 +30,56 @@ const LESSONS: [string, string, string] = ["урок", "урока", "уроко
 export function ProgressScreen() {
   const now = useNow();
   const spread = useSpread();
-  const course = useLiveQuery(async () => (await currentCourse()) ?? null, []);
-  const courseId = course ?? undefined;
-  const data = useLiveQuery(
-    async () =>
-      course === undefined
-        ? undefined
-        : {
-            ...(await courseProgress(now, deviceTimezone(), courseId)),
-            pausedAt: courseId ? (await courses()).find((entry) => entry.id === courseId)?.pausedAt : undefined,
-          },
-    [studyDay(now, deviceTimezone()), deviceTimezone(), course],
-  );
-  const words = useLiveQuery(() => (course === undefined ? undefined : dictionary(courseId)), [course]);
+  const data = useLiveQuery(async () => {
+    const language = await currentLanguage();
+    const progress = await languageProgress(now, deviceTimezone(), language);
+    const started = progress.courses.map((item) => item.course.id);
+    const primary = started.length ? undefined : await primaryCourse();
+    const ids = primary ? [primary] : started;
+    return {
+      language,
+      progress,
+      alone: started.length ? undefined : await courseProgress(now, deviceTimezone(), primary),
+      words: await languageDictionary(language),
+      mistakes: await mistakeCount(ids),
+      ids,
+    };
+  }, [studyDay(now, deviceTimezone()), deviceTimezone()]);
   const stats = useStats(now);
-  const mistakes = useLiveQuery(() => (course === undefined ? undefined : mistakeCount(courseId)), [course]);
+  const ids = data?.ids;
   const leeches = useLiveQuery(async () => {
     // Список ведёт на страницы слов и фраз; у задания урока такой страницы нет.
     const all = (stats?.leeches ?? []).filter((leech) => leech.ref.kind !== "mistake");
-    if (!courseId) return all;
+    if (!ids) return all;
     const own = await cardsInCourse(
       all.map((leech) => leech.unitKey),
-      courseId,
+      ids,
     );
     return all.filter((leech) => own.has(leech.unitKey));
-  }, [stats, courseId]);
-  const profile = useCourseProfile(courseId);
+  }, [stats, ids?.join()]);
   if (!data) return <Screen wide />;
+  const profile = PROFILES[data.language ?? DEFAULT_LANGUAGE];
+  const { courses, total } = data.progress;
   const head = (
     <>
-      <CourseSwitch />
+      <LanguageSwitch />
       <h1 className={nb.title}>Прогресс</h1>
     </>
   );
-  const path = <Path data={data} pausedAt={data.pausedAt} />;
-  const ready = <Skills skills={data.skills} complete={data.complete} passShare={data.passShare} />;
-  const cards = (
+  const cards = (level: 2 | 3) => (
     <Cards
-      words={words}
+      level={level}
+      words={data.words}
       leeches={leeches ?? []}
-      mistakes={mistakes ?? 0}
+      mistakes={data.mistakes}
       lang={profile.code}
-      started={data.pace.done > 0}
+      started={courses.some((course) => course.pace.done > 0)}
     />
   );
-  const tail = (
+  const tail = (week: CourseProgress["week"], several: boolean) => (
     <>
       <p className={css.weekLine} data-testid="week">
-        {weekLine(data.week)}
+        {weekLine(week, several)}
       </p>
       <div className={css.foot}>
         <SyncLine />
@@ -85,37 +89,95 @@ export function ProgressScreen() {
       </div>
     </>
   );
+  if (courses.length > 1) {
+    const summary = (
+      <section aria-labelledby="language-total" data-testid="language-total">
+        <h2 id="language-total" className={css.total}>
+          Всего {profile.names.by}
+        </h2>
+        <Skills skills={total.skills} complete level={3} />
+        {cards(3)}
+      </section>
+    );
+    const blocks = courses.map((item) => <CourseBlock key={item.course.id} data={item} />);
+    return (
+      <Screen wide>
+        {spread ? (
+          <div className={nb.spread}>
+            <div className={cx(nb.page, css.page)}>
+              {head}
+              {summary}
+              {tail(total.week, true)}
+            </div>
+            <div className={cx(nb.page, css.page)}>{blocks}</div>
+          </div>
+        ) : (
+          <div className={css.page}>
+            {head}
+            {summary}
+            {blocks}
+            {tail(total.week, true)}
+          </div>
+        )}
+      </Screen>
+    );
+  }
+  const one = courses[0] ?? data.alone!;
+  const title = courses[0] && (
+    <h2 className={css.total} data-testid="progress-course">
+      {courseName(courses[0].course)}
+    </h2>
+  );
+  const path = <Path data={one} pausedAt={courses[0]?.course.pausedAt} />;
+  const ready = <Skills skills={one.skills} complete={one.complete} passShare={one.passShare} />;
   return (
     <Screen wide>
       {spread ? (
         <div className={nb.spread}>
           <div className={cx(nb.page, css.page)}>
             {head}
+            {title}
             {path}
             {ready}
           </div>
           <div className={cx(nb.page, css.page)}>
-            {cards}
-            {tail}
+            {cards(2)}
+            {tail(one.week, false)}
           </div>
         </div>
       ) : (
         <div className={css.page}>
           {head}
+          {title}
           {path}
           {ready}
-          {cards}
-          {tail}
+          {cards(2)}
+          {tail(one.week, false)}
         </div>
       )}
     </Screen>
   );
 }
 
-const weekLine = ({ lessonDays, reviewDays }: CourseProgress["week"]) => {
+function CourseBlock({ data }: { data: LanguageProgress["courses"][number] }) {
+  const heading = useId();
+  return (
+    <section aria-labelledby={heading} className={css.courseBlock} data-testid="progress-course">
+      <h2 id={heading} className={css.total}>
+        {courseName(data.course)}
+      </h2>
+      <Path data={data} pausedAt={data.course.pausedAt} level={3} />
+      <Skills skills={data.skills} complete={data.complete} passShare={data.passShare} level={3} course />
+    </section>
+  );
+}
+
+const weekLine = ({ lessonDays, reviewDays }: CourseProgress["week"], language: boolean) => {
   if (!lessonDays.length && !reviewDays.length) return "На этой неделе занятий ещё не было.";
   const parts = [
-    lessonDays.length ? withCount(lessonDays.length, ["занятие", "занятия", "занятий"]) + " курса" : "",
+    lessonDays.length
+      ? withCount(lessonDays.length, ["занятие", "занятия", "занятий"]) + (language ? " по курсам языка" : " курса")
+      : "",
     reviewDays.length ? `повторение ${withCount(reviewDays.length, ["день", "дня", "дней"])}` : "",
   ].filter(Boolean);
   return `На этой неделе: ${parts.join(", ")}.`;
@@ -125,18 +187,26 @@ function Skills({
   skills,
   complete,
   passShare,
+  level = 2,
+  course = level === 2,
 }: {
   skills: SkillProgress[];
   complete: boolean;
-  passShare: number | undefined;
+  passShare?: number;
+  level?: 2 | 3;
+  course?: boolean;
 }) {
+  const heading = useId();
+  const Heading = level === 2 ? "h2" : "h3";
   return (
-    <section aria-labelledby="skills">
-      <h2 id="skills" className={css.heading}>
-        Навыки по курсу
-      </h2>
+    <section aria-labelledby={heading}>
+      <Heading id={heading} className={css.heading}>
+        {course ? "Навыки по курсу" : "Навыки по языку"}
+      </Heading>
       <p className={css.note}>
-        Доля всего курса по навыку, выполненная верно. Письмо и речь — по вашей самопроверке.
+        {course
+          ? "Доля всего курса по навыку, выполненная верно. Письмо и речь — по вашей самопроверке."
+          : "Доля всех начатых курсов языка по навыку, выполненная верно. Письмо и речь — по вашей самопроверке."}
         {complete ? "" : " Курс ещё скачивается: доли считаются по скачанным урокам."}
       </p>
       <ul className={css.skills}>
@@ -145,12 +215,12 @@ function Skills({
           const share = item?.total ? item.earned / item.total : 0;
           const percent = Math.round(share * 100);
           const quality = item?.attempted ? item.earned / item.attempted : null;
-          const weak = quality !== null && passShare !== undefined && quality < passShare;
+          const weak = course && quality !== null && passShare !== undefined && quality < passShare;
           const label = SKILL_LABEL[skill];
           return (
             <li key={skill} className={cx(weak && css.weak)} data-testid={`skill-${skill}`}>
               <span className={css.skill}>{label.charAt(0).toUpperCase() + label.slice(1)}</span>
-              <span className={css.bar} role="img" aria-label={`${percent} % курса`}>
+              <span className={css.bar} role="img" aria-label={`${percent} % ${course ? "курса" : "по языку"}`}>
                 {Array.from({ length: 10 }, (_, index) => (
                   <i key={index}>
                     <span
@@ -180,21 +250,25 @@ function Cards({
   mistakes,
   lang,
   started,
+  level,
 }: {
   words: DictionaryLesson[] | undefined;
   leeches: Leech[];
   mistakes: number;
   lang: string;
   started: boolean;
+  level: 2 | 3;
 }) {
   const entries = words?.flatMap((lesson) => lesson.entries) ?? [];
   const learning = entries.filter((entry) => entry.mark === "learning").length;
   const solid = entries.filter((entry) => entry.mark === "solid").length;
+  const heading = useId();
+  const Heading = level === 2 ? "h2" : "h3";
   return (
-    <section aria-labelledby="cards">
-      <h2 id="cards" className={css.heading}>
+    <section aria-labelledby={heading}>
+      <Heading id={heading} className={css.heading}>
         Слова и фразы
-      </h2>
+      </Heading>
       <p className={css.plan} data-testid="cards-line">
         {learning || solid ? (
           <>
@@ -230,13 +304,16 @@ function Cards({
   );
 }
 
-function Path({ data, pausedAt }: { data: CourseProgress; pausedAt?: string }) {
+export function Path({ data, pausedAt, level = 2 }: { data: CourseProgress; pausedAt?: string; level?: 2 | 3 }) {
   const { pace, views, current, calendar } = data;
+  const palette = useCoursePalette(views[0]?.module.courseId);
+  const heading = useId();
+  const Heading = level === 2 ? "h2" : "h3";
   return (
-    <section aria-labelledby="path">
-      <h2 id="path" className={css.heading}>
+    <section aria-labelledby={heading}>
+      <Heading id={heading} className={css.heading}>
         Путь по курсу
-      </h2>
+      </Heading>
       <p className={css.module}>
         Модуль {String(current).padStart(2, "0")} <span>из {views.length || 24}</span>
       </p>
@@ -248,7 +325,9 @@ function Path({ data, pausedAt }: { data: CourseProgress; pausedAt?: string }) {
             <span key={view.module.id} className={css.spineSlot}>
               <i
                 className={cx(css.spine, view.module.number === current && !done && css.current)}
-                style={done ? { background: coverColor(view.module.number), borderColor: "transparent" } : undefined}
+                style={
+                  done ? { background: coverColor(view.module.number, palette), borderColor: "transparent" } : undefined
+                }
               />
               {point && <b className={css.point}>{point.label}</b>}
             </span>

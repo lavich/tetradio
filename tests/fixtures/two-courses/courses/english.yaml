@@ -1,6 +1,8 @@
 title: Английский
+short: Для IT
 level: B1 → B2
 order: 2
+palette: ink
 language: en
 modules:
   - e01

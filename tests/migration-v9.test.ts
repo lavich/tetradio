@@ -269,6 +269,7 @@ describe("обновление копии v8", () => {
         },
         "dictionary": [
           {
+            "courseId": "greek-a2",
             "entries": [
               {
                 "greek": "γεια",
@@ -303,6 +304,7 @@ describe("обновление копии v8", () => {
             "title": "Знакомство и είμαι",
           },
           {
+            "courseId": "greek-a2",
             "entries": [],
             "id": "m01-test",
             "moduleId": "m01",
@@ -312,6 +314,7 @@ describe("обновление копии v8", () => {
             "title": "Контрольная модуля 01",
           },
           {
+            "courseId": "greek-a2",
             "entries": [],
             "id": "m01-k1",
             "moduleId": "m01",
@@ -321,6 +324,7 @@ describe("обновление копии v8", () => {
             "title": "Контрольная точка (пример)",
           },
           {
+            "courseId": "greek-a2",
             "entries": [],
             "id": "m01-r1",
             "moduleId": "m01",

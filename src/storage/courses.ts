@@ -1,8 +1,9 @@
 /**
- * Несколько курсов на устройстве: порядок курсов, основной и домашний курс, курс «Курса» и курс «Слов», «Чтения»,
- * «Прогресса», курс карточки и язык курса. Порядок и выбор — настройки устройства в `meta`: в облако не идут.
+ * Несколько курсов на устройстве: порядок курсов, основной и домашний курс, языки курсов, язык «Курса» и язык «Слов»,
+ * «Чтения», «Прогресса», курс карточки и язык курса. Порядок и выбор — настройки устройства в `meta`: в облако не идут.
  */
 import Dexie from "dexie";
+import { DEFAULT_PALETTE, isPalette, type PaletteName } from "../content/palettes";
 import { DEFAULT_LANGUAGE, isLanguage, profileOf, type Language, type LanguageProfile } from "../domain/language";
 import { tryParseUnitKey, unitKey } from "../domain/refs";
 import { CARD_KINDS, type CardKind, type LearningRef, type LessonItem, type Session } from "../domain/types";
@@ -16,8 +17,11 @@ import { isPaused, readPauses } from "./pauses";
 export { lessonCourses };
 
 export const COURSES_ORDER_KEY = "coursesOrder";
+/** Выбор курса прежней версии: из него выводится выбор языка, пока язык не выбран; откат читает его сам. */
 export const CURRENT_COURSE_KEY = "currentCourse";
 export const CURRENT_STARTED_COURSE_KEY = "currentStartedCourse";
+export const CURRENT_LANGUAGE_KEY = "currentLanguage";
+export const CURRENT_STARTED_LANGUAGE_KEY = "currentStartedLanguage";
 export const HOME_COURSE_KEY = "homeCourse";
 export const PRIMARY_COURSE_KEY = "primaryCourse";
 
@@ -30,10 +34,23 @@ export interface CourseEntry {
   installed: boolean;
   /** Курс начат: его уроки на устройстве или ждут установки из снимка другого устройства. */
   started: boolean;
-  /** Имя в переключателе курса. */
+  /** Имя курса внутри языка. */
   short?: string;
+  level?: string;
+  palette: PaletteName;
   /** Курс на паузе с этого момента. */
   pausedAt?: string;
+}
+
+export interface LanguageEntry {
+  code: Language;
+  title: string;
+  /** Есть начатый курс, в том числе ждущий установки из снимка. */
+  started: boolean;
+  /** Уроки хотя бы одного курса языка на устройстве. */
+  installed: boolean;
+  /** Курсы языка по порядку курсов. */
+  courses: CourseEntry[];
 }
 
 // Курс в базе язык не хранит: он есть у записей каталога его уроков.
@@ -104,6 +121,8 @@ export const courses = zoned(async function courses(database: AppDatabase = db):
       installed: installed.has(course.id),
       started,
       ...(course.short ? { short: course.short } : {}),
+      ...(course.level ? { level: course.level } : {}),
+      palette: isPalette(course.palette) ? course.palette : DEFAULT_PALETTE,
       ...(started && isPaused(pause) ? { pausedAt: pause.pausedAt } : {}),
     };
   });
@@ -197,78 +216,103 @@ export const homeCourse = zoned(async function homeCourse(database: AppDatabase 
   return (await database.meta.get(HOME_COURSE_KEY))?.value ?? primaryCourse(database);
 });
 
-/** Сохранённый выбор курса как есть: на «Курсе» он бывает и неначатым. */
-export const selectedCourse = zoned(
-  async (database: AppDatabase = db): Promise<string | undefined> =>
-    (await database.meta.get(CURRENT_COURSE_KEY))?.value,
-);
+/**
+ * Модуль, урок, слово или текст, открытые по ссылке, делают язык своего курса выбранным. Если он и так показан, а на
+ * «Курсе» не выбран язык без установленных курсов, выбор не записывается: без явного выбора экраны следуют за языком
+ * основного курса.
+ */
+export async function followCourse(courseId: string, database: AppDatabase = db): Promise<void> {
+  const list = await courses(database);
+  const language = list.find((course) => course.id === courseId)?.language;
+  if (!language) return;
+  const [current, { chosen }] = await Promise.all([currentLanguage(database), readLanguageChoice(list, database)]);
+  const unstartedChosen =
+    !!chosen && chosen !== language && !list.some((course) => course.language === chosen && course.installed);
+  if (current !== language || unstartedChosen) await setCurrentLanguage(language, database);
+}
+
+/** Языки курсов по порядку их первого курса: курс решает, есть ли язык в переключателях. */
+export const languages = zoned(async function languages(database: AppDatabase = db): Promise<LanguageEntry[]> {
+  const grouped = new Map<Language, CourseEntry[]>();
+  for (const course of await courses(database))
+    grouped.set(course.language, [...(grouped.get(course.language) ?? []), course]);
+  return [...grouped].map(([code, list]) => ({
+    code,
+    title: profileOf(code).names.title,
+    started: list.some((course) => course.started),
+    installed: list.some((course) => course.installed),
+    courses: list,
+  }));
+});
+
+interface LanguageChoice {
+  /** Выбор «Курса», бывает языком без начатых курсов. */
+  chosen?: string;
+  /** Последний выбранный язык с начатым курсом; пустая строка — такого выбора не было. */
+  started?: string;
+}
+/**
+ * Выбор языка; до первого выбора в новой версии — из прежнего выбора курса. Неначатый курс прежней версии без
+ * начатого выбора значил «показать основной», поэтому выбора языка не даёт.
+ */
+const readLanguageChoice = zoned(async function readLanguageChoice(
+  list: CourseEntry[],
+  database: AppDatabase,
+): Promise<LanguageChoice> {
+  const [chosen, started, oldChosen, oldStarted] = await database.meta.bulkGet([
+    CURRENT_LANGUAGE_KEY,
+    CURRENT_STARTED_LANGUAGE_KEY,
+    CURRENT_COURSE_KEY,
+    CURRENT_STARTED_COURSE_KEY,
+  ]);
+  if (chosen) return { chosen: chosen.value, started: started?.value ?? "" };
+  const languageOf = (id: string | undefined) => list.find((course) => course.id === id)?.language;
+  const course = list.find((item) => item.id === oldChosen?.value);
+  const shown = course && (course.started || oldStarted || !list.some((item) => item.started));
+  return { chosen: shown ? course.language : undefined, started: languageOf(oldStarted?.value) };
+});
 
 /**
- * Курс экранов «Слова», «Чтение» и «Прогресс»: выбранный, если он начат; иначе последний выбранный начатый; иначе
- * основной. Пока ничего не начато — выбранный из каталога.
+ * Язык «Слов», «Чтения» и «Прогресса»: выбранный, если уроки его курса на устройстве; иначе последний выбранный
+ * такой; иначе язык основного курса. Пока ничего не начато — выбранный язык каталога.
  */
-export const currentCourse = zoned(async function currentCourse(
+export const currentLanguage = zoned(async function currentLanguage(
   database: AppDatabase = db,
-): Promise<string | undefined> {
-  const [chosen, started, list] = await Promise.all([
-    database.meta.get(CURRENT_COURSE_KEY),
-    database.meta.get(CURRENT_STARTED_COURSE_KEY),
-    courses(database),
-  ]);
+): Promise<Language | undefined> {
+  const list = await courses(database);
+  const [choice, primary] = await Promise.all([readLanguageChoice(list, database), primaryCourse(database)]);
   const installed = list.filter((course) => course.installed);
   const pool = installed.length ? installed : list;
   return (
-    pool.find((course) => course.id === chosen?.value)?.id ??
-    installed.find((course) => course.id === started?.value)?.id ??
-    primaryCourse(database)
+    pool.find((course) => course.language === choice.chosen)?.language ??
+    installed.find((course) => course.language === choice.started)?.language ??
+    list.find((course) => course.id === primary)?.language
   );
 });
 
-/**
- * Курс «Курса»: выбранный, в том числе неначатый курс каталога, иначе курс остальных экранов. Неначатый выбор,
- * сохранённый прежней версией (без ключа начатого выбора), полку не открывает: прежде он значил «показать основной».
- */
-export const shelfCourse = zoned(async function shelfCourse(database: AppDatabase = db): Promise<string | undefined> {
-  const [chosen, marked, list] = await Promise.all([
-    selectedCourse(database),
-    database.meta.get(CURRENT_STARTED_COURSE_KEY),
-    courses(database),
-  ]);
-  const course = list.find((item) => item.id === chosen);
-  return (
-    (course && (course.started || marked || !list.some((item) => item.started)) ? course.id : undefined) ??
-    currentCourse(database)
-  );
+/** Язык «Курса»: выбранный, в том числе без начатых курсов, иначе язык остальных экранов. */
+export const shelfLanguage = zoned(async function shelfLanguage(
+  database: AppDatabase = db,
+): Promise<Language | undefined> {
+  const list = await courses(database);
+  const { chosen } = await readLanguageChoice(list, database);
+  return list.find((course) => course.language === chosen)?.language ?? currentLanguage(database);
 });
 
 /**
- * Неначатый курс выбирают только на «Курсе»; прежде чем выбор уйдёт на него, начатый выбор запоминается отдельно —
- * его показывают «Слова», «Чтение» и «Прогресс». Пустое значение — выбор новой версии без начатого курса.
+ * Язык без начатых курсов выбирают только на «Курсе»; прежде чем выбор уйдёт на него, начатый выбор запоминается
+ * отдельно — его показывают «Слова», «Чтение» и «Прогресс».
  */
-export async function setCurrentCourse(courseId: string, database: AppDatabase = db): Promise<void> {
-  const [list, chosen, marked] = await Promise.all([
-    courses(database),
-    selectedCourse(database),
-    database.meta.get(CURRENT_STARTED_COURSE_KEY),
+export async function setCurrentLanguage(code: Language, database: AppDatabase = db): Promise<void> {
+  const list = await courses(database);
+  const { chosen, started } = await readLanguageChoice(list, database);
+  const installed = (language: string | undefined) =>
+    list.some((course) => course.language === language && course.installed);
+  const remember = installed(code) ? code : installed(chosen) ? chosen! : (started ?? "");
+  await database.meta.bulkPut([
+    { key: CURRENT_STARTED_LANGUAGE_KEY, value: remember },
+    { key: CURRENT_LANGUAGE_KEY, value: code },
   ]);
-  const started = (id: string | undefined) => list.some((course) => course.id === id && course.installed);
-  const remember = started(courseId) ? courseId : (started(chosen) && chosen) || marked?.value || "";
-  await database.meta.put({ key: CURRENT_STARTED_COURSE_KEY, value: remember });
-  await database.meta.put({ key: CURRENT_COURSE_KEY, value: courseId });
-}
-
-/**
- * Модуль, урок или текст, открытые по ссылке, делают свой курс выбранным. Если он и так показан, а на «Курсе» не
- * выбран неначатый курс, выбор не записывается: без явного выбора экраны следуют за основным курсом.
- */
-export async function followCourse(courseId: string, database: AppDatabase = db): Promise<void> {
-  const [current, chosen, list] = await Promise.all([
-    currentCourse(database),
-    selectedCourse(database),
-    courses(database),
-  ]);
-  const unstartedChosen = !!chosen && chosen !== courseId && !list.some((c) => c.id === chosen && c.installed);
-  if (current !== courseId || unstartedChosen) await setCurrentCourse(courseId, database);
 }
 
 /** Курс карточки — курс урока, в котором она стоит: сборка не пускает карточку в уроки двух курсов. */
@@ -323,11 +367,12 @@ export const courseOfCard = zoned(async (unitKey: string, database: AppDatabase 
 
 export const cardsInCourse = zoned(async function cardsInCourse(
   unitKeys: string[],
-  courseId: string,
+  courseId: string | string[],
   database: AppDatabase = db,
 ): Promise<Set<string>> {
   const owners = await cardCourses(unitKeys, database);
-  return new Set(unitKeys.filter((key) => owners.get(key) === courseId));
+  const wanted = new Set(typeof courseId === "string" ? [courseId] : courseId);
+  return new Set(unitKeys.filter((key) => wanted.has(owners.get(key) ?? "")));
 });
 
 export const cardLanguages = zoned(async function cardLanguages(

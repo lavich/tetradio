@@ -1,0 +1,9 @@
+number: 1
+title: Small talk
+subtitle: Разговор
+status: published
+goal: Познакомиться и поговорить о погоде
+sessions: 1
+lessons:
+  - c01-1
+partial: true

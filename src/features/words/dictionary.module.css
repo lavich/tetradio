@@ -29,8 +29,8 @@
   color: var(--muted-foreground);
 }
 .filters button {
-  min-height: 32px;
-  padding: 0 2px;
+  min-height: 44px;
+  padding: 0 6px;
   border: 0;
   background: none;
   font: inherit;
@@ -302,4 +302,15 @@
 :global([data-restoring]) .section {
   content-visibility: visible;
   contain: layout style paint;
+}
+.meaning {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.course {
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--muted-foreground);
+  overflow-wrap: anywhere;
 }

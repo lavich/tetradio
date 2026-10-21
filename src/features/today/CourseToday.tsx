@@ -10,6 +10,7 @@ import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
 import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
+import { useCoursePalette } from "../../shared/courses";
 import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
@@ -235,7 +236,7 @@ function Cells({ done, total }: { done: number; total: number }) {
   );
 }
 
-function LessonNext({
+export function LessonNext({
   view,
   lesson,
   primary,
@@ -248,11 +249,12 @@ function LessonNext({
 }) {
   const { module } = view;
   const { code } = useProfile();
+  const palette = useCoursePalette(module.courseId);
   const started = lesson.tally.done > 0;
   const test = lesson.kind === "test" && !/контрольн/i.test(lesson.title);
   return (
     <Link to={`/course/${module.id}/${lesson.id}`} className={css.lesson} data-testid="course-next">
-      <span className={css.cover} style={{ background: coverColor(module.number) }} aria-hidden="true">
+      <span className={css.cover} style={{ background: coverColor(module.number, palette) }} aria-hidden="true">
         <b>{String(module.number).padStart(2, "0")}</b>
         <em lang={code}>{module.title}</em>
         <i className={css.ribbon} />

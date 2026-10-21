@@ -143,9 +143,9 @@ const vanishedKeys = zoned(async function vanishedKeys(database: AppDatabase): P
   }
   return gone;
 });
-/** Карточки ошибок уроков курса, которые можно спросить: убранный обновлением пункт не считается. */
+/** Карточки ошибок уроков курса или курсов языка, которые можно спросить: убранный обновлением пункт не считается. */
 export const mistakeCount = zoned(async function mistakeCount(
-  courseId?: string,
+  courseId?: string | string[],
   database: AppDatabase = db,
 ): Promise<number> {
   const states = await database.cardStates.where("ref.kind").equals("mistake").toArray();

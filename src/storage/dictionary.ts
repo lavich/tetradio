@@ -2,7 +2,8 @@ import Dexie from "dexie";
 import { unitKey } from "../domain/refs";
 import type { LearningRef, LearningState, LessonItem, Phrase } from "../domain/types";
 import { moduleViews } from "./course";
-import { courseLessonIds, primaryCourse } from "./courses";
+import type { Language } from "../domain/language";
+import { courseLessonIds, courses, primaryCourse } from "./courses";
 import { db, searchTokens, type AppDatabase, type StoredWord } from "./db";
 import { stateGroup } from "./queries";
 import { rowCache } from "./row-cache";
@@ -21,6 +22,8 @@ export interface DictionaryEntry {
 }
 export interface DictionaryLesson {
   id: string;
+  /** Курс урока: в словаре языка — подпись строки и фильтр «Курс». */
+  courseId: string | undefined;
   moduleId: string;
   moduleNumber: number;
   moduleTitle: string;
@@ -116,6 +119,7 @@ export const dictionary = zoned(async function dictionary(
     }
     const next: DictionaryLesson = {
       id: lesson.id,
+      courseId,
       moduleId: view.module.id,
       moduleNumber: view.module.number,
       moduleTitle: view.module.title,
@@ -132,6 +136,15 @@ export const dictionary = zoned(async function dictionary(
     shown.set(database, byCourse);
   }
   return result;
+});
+
+/** Словарь языка: словари его начатых курсов по порядку курсов; карточка принадлежит одному курсу, дублей нет. */
+export const languageDictionary = zoned(async function languageDictionary(
+  language: Language | undefined,
+  database: AppDatabase = db,
+): Promise<DictionaryLesson[]> {
+  const own = (await courses(database)).filter((course) => course.language === language && course.started);
+  return (await Promise.all(own.map((course) => dictionary(course.id, database)))).flat();
 });
 
 const links = rowCache<LessonItem[]>("lessonItems", (key) =>
@@ -155,6 +168,7 @@ const stateRows = rowCache<LearningState>("cardStates");
 const shown = new WeakMap<AppDatabase, Map<string | undefined, Map<string, DictionaryLesson>>>();
 
 const sameLesson = (a: DictionaryLesson, b: DictionaryLesson) =>
+  a.courseId === b.courseId &&
   a.moduleId === b.moduleId &&
   a.moduleNumber === b.moduleNumber &&
   a.moduleTitle === b.moduleTitle &&
@@ -165,14 +179,19 @@ const sameLesson = (a: DictionaryLesson, b: DictionaryLesson) =>
 
 export type MarkFilter = CardMark | "all";
 
-/** Урок, где подошло всё, возвращается тем же объектом, чтобы его строки не перерисовывались. */
-export function filterDictionary(lessons: DictionaryLesson[], filter: MarkFilter, query: string) {
+/**
+ * Урок, где подошло всё, возвращается тем же объектом, чтобы его строки не перерисовывались. Курс, которого в
+ * словаре нет (из адреса другого языка), не фильтрует.
+ */
+export function filterDictionary(lessons: DictionaryLesson[], filter: MarkFilter, query: string, course?: string) {
   const wanted = searchTokens(query);
-  if (filter === "all" && !wanted.length) return lessons;
+  const byCourse = !!course && lessons.some((lesson) => lesson.courseId === course);
+  if (filter === "all" && !wanted.length && !byCourse) return lessons;
   const fits = (entry: DictionaryEntry) =>
     (filter === "all" || entry.mark === filter) &&
     wanted.every((token) => entry.tokens.some((own) => own.startsWith(token)));
   return lessons.flatMap((lesson) => {
+    if (byCourse && lesson.courseId !== course) return [];
     const entries = lesson.entries.filter(fits);
     if (!entries.length) return [];
     return entries.length === lesson.entries.length ? [lesson] : [{ ...lesson, entries }];

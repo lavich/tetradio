@@ -54,7 +54,7 @@ export function ModuleScreen() {
     return (
       <Screen back="Модуль">
         <h1>{view.module.subtitle}</h1>
-        <CourseStart courseId={view.module.courseId} />
+        <CourseStart courseIds={[view.module.courseId]} />
       </Screen>
     );
   const { module } = view;

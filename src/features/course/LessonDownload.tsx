@@ -43,7 +43,7 @@ export function LessonDownload({ lessonId, moduleId }: { lessonId: string; modul
   if (state.courseId)
     return (
       <Screen back="Урок">
-        <CourseStart courseId={state.courseId} />
+        <CourseStart courseIds={[state.courseId]} />
       </Screen>
     );
   return (

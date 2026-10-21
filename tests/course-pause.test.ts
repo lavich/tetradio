@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import {
   courses,
-  currentCourse,
+  currentLanguage,
   homeCourse,
   primaryCourse,
   rememberCourses,
@@ -105,7 +105,7 @@ describe("курс «Сегодня»", () => {
     expect(await todayCourse(db)).toBe(B);
     expect(await primaryCourse(db)).toBe(A);
     expect(await homeCourse(db)).toBe(A);
-    expect(await currentCourse(db)).toBe(A);
+    expect(await currentLanguage(db)).toBe("el");
   });
   it("по кругу: основной — последний по порядку", async () => {
     await setPrimaryCourse(C, db);

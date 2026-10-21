@@ -23,11 +23,13 @@ const common = (a: string, b: string) => {
   while (at < a.length && at < b.length && a[at] === b[at]) at++;
   return at;
 };
-/** Основа засчитывается, если общее начало не короче пяти букв и выходит за приставку хотя бы на три. */
+/**
+ * Основа засчитывается, если общее начало не короче пяти букв и выходит за приставку хотя бы на три. Правило выведено
+ * из греческой морфологии: в английском общее начало из пяти букв даёт ложные совпадения (interview → internet).
+ */
 function sharesStem(word: string, stems: readonly string[], profile: LanguageProfile) {
-  if (word.length < STEM) return false;
-  const prefix =
-    profile.code === "el" ? Math.max(0, ...PREFIXES.filter((p) => word.startsWith(p)).map((p) => p.length)) : 0;
+  if (profile.code !== "el" || word.length < STEM) return false;
+  const prefix = Math.max(0, ...PREFIXES.filter((p) => word.startsWith(p)).map((p) => p.length));
   const need = Math.max(STEM, prefix ? prefix + BEYOND_PREFIX : 0);
   return stems.some((stem) => common(word, stem) >= need);
 }
@@ -117,7 +119,7 @@ export function coverer(
     for (const token of tokens) {
       const word = bare(token.norm);
       if (glossed.has(token.start)) result.glossed++;
-      if (covered.has(token.start) || GRAMMAR.has(token.norm)) {
+      if (covered.has(token.start) || (profile.code === "el" && GRAMMAR.has(token.norm))) {
         result.known++;
         result.strict++;
       } else if (nameSet.has(token.norm)) {

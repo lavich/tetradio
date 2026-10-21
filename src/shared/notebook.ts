@@ -1,3 +1,4 @@
+import { DEFAULT_PALETTE, PALETTES, type PaletteName } from "../content/palettes.ts";
 import { PROFILES, type LanguageProfile } from "../domain/language.ts";
 
 /** «Πέμπτη, 1 Οκτωβρίου» или «Thursday, 1 October»: день плана занятия, а не момент открытия экрана. */
@@ -15,15 +16,15 @@ export function pageDate(day: string, profile: LanguageProfile = PROFILES.el) {
   return `${head}, ${get("day")} ${get("month")}`;
 }
 
-/** Цвета обложек: греческие школьные тетради яркие; цвет повторяется по номеру модуля. */
-const COVERS = ["#2f6d4f", "#b8452b", "#2c4f9e", "#936c15", "#7b3f74", "#1f6f7a"];
-export const coverColor = (number: number) => COVERS[(number - 1) % COVERS.length];
+/** Цвет обложки по номеру модуля; греческие школьные тетради яркие — это гамма по умолчанию. */
+export const coverColor = (number: number, palette: PaletteName = DEFAULT_PALETTE) =>
+  PALETTES[palette][(number - 1) % PALETTES[palette].length];
 /**
  * Приглушённый цвет обложки курса на паузе: матрица CSS `grayscale(0.85)`, применённая только к фону, — яркость почти
  * та же, белые подписи читаются, а рамка фокуса и метка текущего модуля не теряют цвет, как под фильтром всей обложки.
  */
-export function mutedCover(number: number): string {
-  const hex = coverColor(number);
+export function mutedCover(number: number, palette: PaletteName = DEFAULT_PALETTE): string {
+  const hex = coverColor(number, palette);
   const [r, g, b] = [1, 3, 5].map((index) => parseInt(hex.slice(index, index + 2), 16));
   const k = 0.15;
   const channel = (wr: number, wg: number, wb: number) => Math.round(wr * r + wg * g + wb * b);

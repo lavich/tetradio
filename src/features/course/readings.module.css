@@ -12,3 +12,9 @@
   line-height: var(--cell);
   color: var(--muted-foreground);
 }
+.course {
+  margin: calc(var(--cell) * 2) 0 0;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: var(--cell);
+}

@@ -19,18 +19,21 @@ import {
   activeSession,
   cardsInCourse,
   courseOfCard,
-  currentCourse,
+  courses,
+  currentLanguage,
+  languages,
   lessonCourses,
   primaryCourse,
   profileOfCourse,
   sessionCourse,
+  shelfLanguage,
 } from "../src/storage/courses";
 import { db, type StoredWord } from "../src/storage/db";
-import { dictionary } from "../src/storage/dictionary";
+import { dictionary, languageDictionary } from "../src/storage/dictionary";
 import { submitAnswer } from "./helpers/ops";
-import { courseProgress } from "../src/storage/progress";
+import { courseProgress, languageProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
-import { markRead, moduleReadings, courseReadings, readingPage } from "../src/storage/readings";
+import { markRead, moduleReadings, courseReadings, languageReadings, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 
 const demo = buildContent("tests/fixtures/course-demo");
@@ -107,7 +110,13 @@ describe("живые запросы отслеживают чтения посл
     "«Сегодня»: дни уроков": () => lessonDays("2026-09-14", tz, COURSE),
     "«Сегодня»: повторено": () => reviewedOn("2026-09-15", COURSE),
     "«Сегодня»: «Чтение»": async () => courseReadings(COURSE),
-    "«Курс»": async () => moduleViews(await currentCourse()),
+    "«Курс»: полка курса": () => moduleViews(COURSE),
+    "«Курс»: язык и его курсы": async () => {
+      const code = await shelfLanguage();
+      return (await languages()).find((language) => language.code === code) ?? null;
+    },
+    "«Слова»: язык": async () => (await currentLanguage()) ?? null,
+    "обложка: гамма курса": async () => (await courses()).find((course) => course.id === COURSE)?.palette ?? null,
     модуль: async () => {
       const own = await db.modules.get("m01");
       return (await moduleViews(own?.courseId)).find((item) => item.module.id === "m01") ?? null;
@@ -120,16 +129,18 @@ describe("живые запросы отслеживают чтения посл
       return courseId ? profileOfCourse(courseId) : null;
     },
     "модуль: тексты": () => moduleReadings("m01"),
+    "«Чтение»": async () => languageReadings(await currentLanguage()),
     текст: async () => (await readingPage("r-m01-anna")) ?? null,
     "«Слова»": async () => {
-      const courseId = await currentCourse();
-      return { courseId, lessons: await dictionary(courseId) };
+      const language = await currentLanguage();
+      return { language, lessons: await languageDictionary(language) };
     },
-    "«Прогресс»: словарь": () => dictionary(COURSE),
+    "«Прогресс»: словарь": async () => languageDictionary(await currentLanguage()),
     "«Прогресс»": () => courseProgress(now, tz, COURSE),
+    "«Прогресс»: язык": async () => languageProgress(now, tz, await currentLanguage()),
     "«Прогресс»: статистика": () => progress(dexieSource(), now),
-    "«Прогресс»: ошибки": () => mistakeCount(COURSE),
-    "«Прогресс»: трудные": async () => (await cardsInCourse([key()], COURSE)).size,
+    "«Прогресс»: ошибки": () => mistakeCount([COURSE]),
+    "«Прогресс»: трудные": async () => (await cardsInCourse([key()], [COURSE])).size,
     "слово: упражнения": () => wordSources(wordId),
     "слово: навыки": () => dexieSource().skillsOf({ kind: "word", word }),
     "слово: язык": async () => profileOfCourse((await courseOfCard(key()))!),

@@ -298,13 +298,20 @@ describe("частично опубликованный модуль", () => {
 });
 
 describe("карточки курсов одного языка", () => {
-  const englishCourse = (id: string, module: string, cards: Files, language = "en"): Files => {
+  const englishCourse = (
+    id: string,
+    module: string,
+    cards: Files,
+    palette: string,
+    language = "en",
+    blocks: Record<string, unknown>[] = [{ type: "vocabulary", id: "words" }],
+  ): Files => {
     const items = Object.keys(cards).map((path) => ({
       kind: path.startsWith("words/") ? "word" : "phrase",
       id: path.split("/").pop()!.replace(".yaml", ""),
     }));
     return {
-      [`courses/${id}.yaml`]: { title: id, language, modules: [module] },
+      [`courses/${id}.yaml`]: { title: id, language, modules: [module], palette },
       [`modules/${module}.yaml`]: {
         number: 1,
         title: "Start",
@@ -318,7 +325,7 @@ describe("карточки курсов одного языка", () => {
         title: "Начало",
         kind: "lesson",
         items,
-        blocks: [{ type: "vocabulary", id: "words" }],
+        blocks,
       },
       ...cards,
     };
@@ -330,8 +337,8 @@ describe("карточки курсов одного языка", () => {
   });
   const twoCourses = (it: Files, travel: Files): Files => ({
     ...base(),
-    ...englishCourse("english-it", "e01", it),
-    ...englishCourse("english-travel", "t01", travel),
+    ...englishCourse("english-it", "e01", it, "ink"),
+    ...englishCourse("english-travel", "t01", travel, "coast"),
   });
   it("слово с артиклем и без в двух курсах одного языка — ошибка с обоими файлами", () => {
     const message = failure(
@@ -374,6 +381,7 @@ describe("карточки курсов одного языка", () => {
         "greek-travel",
         "g01",
         { "words/greek-travel/gw001.yaml": { greek: "χώρα", russian: "страна", forms: "мн. χώρες" } },
+        "ink",
         "el",
       ),
     };
@@ -397,6 +405,29 @@ describe("карточки курсов одного языка", () => {
       },
       {},
     );
+    expect(() => build(files)).not.toThrow();
+  });
+  it("слово карточки курса для путешествий в тексте урока IT-курса без своей карточки — сборка проходит", () => {
+    const files = {
+      ...base(),
+      ...englishCourse(
+        "english-it",
+        "e01",
+        { "words/english-it/ew001.yaml": { greek: "a deadline", russian: "срок" } },
+        "ink",
+        "en",
+        [
+          { type: "vocabulary", id: "words" },
+          { type: "reading", id: "text", title: "A trip", text: "The deadline is after my layover in Dubai." },
+        ],
+      ),
+      ...englishCourse(
+        "english-travel",
+        "t01",
+        { "words/english-travel/tw001.yaml": { greek: "a layover", russian: "пересадка" } },
+        "coast",
+      ),
+    };
     expect(() => build(files)).not.toThrow();
   });
 });
@@ -708,7 +739,7 @@ describe("данные курса для выбора", () => {
     expect(failure(withCourse({ goal: "Первая строка\nвторая" }))).toMatch(/courses\/greek-a2\.yaml\.goal/);
     expect(failure(withCourse({ goal: "а".repeat(91) }))).toMatch(/courses\/greek-a2\.yaml\.goal/);
     expect(() => build(withCourse({ goal: "а".repeat(90) }))).not.toThrow();
-    expect(failure(withCourse({ short: "Английский для IT" }))).toMatch(/courses\/greek-a2\.yaml\.short/);
+    expect(failure(withCourse({ short: "Английский для поездок" }))).toMatch(/courses\/greek-a2\.yaml\.short/);
     for (const order of [0, 1.5, "1"]) expect(failure(withCourse({ order }))).toMatch(/courses\/greek-a2\.yaml\.order/);
   });
   it("одно место у двух курсов — ошибка с обоими файлами", () => {
@@ -722,11 +753,73 @@ describe("данные курса для выбора", () => {
     const course = parseCatalog({
       ...catalog,
       courses: [
-        { ...catalog.courses[0], order: 0, level: "Pre-A1 → A1", short: "а".repeat(20), goal: "Цель", future: 1 },
+        {
+          ...catalog.courses[0],
+          order: 0,
+          level: "Pre-A1 → A1",
+          short: "а".repeat(30),
+          palette: "rainbow",
+          goal: "Цель",
+          future: 1,
+        },
       ],
     }).courses[0];
-    for (const field of ["order", "level", "short", "future"]) expect(course).not.toHaveProperty(field);
+    for (const field of ["order", "level", "short", "palette", "future"]) expect(course).not.toHaveProperty(field);
     expect(course.goal).toBe("Цель");
+  });
+  const travelCourse = (fields: Record<string, unknown>): Files => ({
+    "courses/english-travel.yaml": { title: "Для путешествий", language: "en", modules: ["t01"], ...fields },
+    "modules/t01.yaml": {
+      number: 1,
+      title: "Trip",
+      subtitle: "Поездка",
+      status: "draft",
+      goal: "Собраться",
+      sessions: 3,
+    },
+  });
+  it("короткое имя «Для путешествий» проходит, из 21 символа — отказ с файлом и полем", () => {
+    expect(catalogOf(withCourse({ short: "Для путешествий" })).courses[0].short).toBe("Для путешествий");
+    expect(() => build(withCourse({ short: "а".repeat(20) }))).not.toThrow();
+    expect(failure(withCourse({ short: "а".repeat(21) }))).toMatch(/courses\/greek-a2\.yaml\.short/);
+  });
+  it("одно короткое имя у двух курсов языка без учёта регистра — ошибка с обоими файлами", () => {
+    const message = failure({
+      ...base(),
+      ...englishCourse({ short: "Для IT", palette: "ink" }),
+      ...travelCourse({ short: "для it", palette: "coast" }),
+    });
+    expect(message).toContain("short");
+    expect(message).toContain("courses/english-it.yaml");
+    expect(message).toContain("courses/english-travel.yaml");
+  });
+  it("одно короткое имя у курсов разных языков проходит", () => {
+    expect(() =>
+      build({ ...withCourse({ short: "Основной" }), ...englishCourse({ short: "Основной" }) }),
+    ).not.toThrow();
+  });
+  it("гамма едет в каталоге, без поля её нет", () => {
+    const catalog = catalogOf({ ...base(), ...englishCourse({ palette: "ink" }) });
+    expect(catalog.courses.find((course) => course.id === "english-it")?.palette).toBe("ink");
+    expect(catalog.courses.find((course) => course.id === "greek-a2")).not.toHaveProperty("palette");
+  });
+  it("неизвестная гамма — отказ с файлом и полем", () => {
+    expect(failure(withCourse({ palette: "rainbow" }))).toMatch(/courses\/greek-a2\.yaml\.palette/);
+  });
+  it("одна гамма у двух курсов языка, в том числе по умолчанию, — ошибка с обоими файлами", () => {
+    for (const [it, travel] of [
+      [{ palette: "ink" }, { palette: "ink" }],
+      [{}, {}],
+      [{ palette: "school" }, {}],
+    ]) {
+      const message = failure({ ...base(), ...englishCourse(it), ...travelCourse(travel) });
+      expect(message).toContain("palette");
+      expect(message).toContain("courses/english-it.yaml");
+      expect(message).toContain("courses/english-travel.yaml");
+    }
+  });
+  it("гамма по умолчанию у курсов разных языков проходит", () => {
+    expect(() => build({ ...base(), ...englishCourse({}) })).not.toThrow();
   });
 });
 
@@ -747,6 +840,24 @@ describe("смешанные алфавиты", () => {
     expect(failure(withBody("Экзамен КΕΓ: ..."))).toContain("смешаны алфавиты");
     expect(failure(withBody("Γεια σoυ"))).toContain("смешаны алфавиты");
     expect(() => build(withBody("θ читается как [θ]: [аθи́на]. Уровень Α2."))).not.toThrow();
+  });
+  it("в тексте для чтения — по языку его курса: латиница в греческом слове и кириллица в английском — ошибка", () => {
+    const reading = (text: string) => ({
+      title: "Текст",
+      after: "m01-1",
+      text,
+      provenance: { operation: "requested-generation", request: "Тест", review: "none" },
+    });
+    expect(failure({ ...base(), "readings/greek-a2/r-m01-x.yaml": reading("Γεια σoυ, Άννα.") })).toMatch(
+      /readings\/greek-a2\/r-m01-x\.yaml.*смешаны алфавиты/,
+    );
+    const english = {
+      ...base(),
+      "courses/english-it.yaml": { title: "Английский", language: "en", palette: "ink", modules: ["e01"] },
+      "modules/e01.yaml": { number: 1, title: "Work", subtitle: "Работа", status: "draft", goal: "Цель", sessions: 3 },
+      "readings/english-it/r-e01-x.yaml": { ...reading("The bus іs late."), after: "e01-1" },
+    };
+    expect(failure(english)).toContain("смешаны алфавиты");
   });
 });
 

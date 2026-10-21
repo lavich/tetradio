@@ -58,6 +58,24 @@ describe("настройки", () => {
   });
 });
 
+describe("выбор основного курса", () => {
+  it("называет курсы полными названиями: «Греческий» и «Английский для IT»", async () => {
+    const iso = "2026-10-20T09:00:00.000Z";
+    await db.courses.bulkAdd([
+      { id: "greek-a2", title: "Греческий", short: "Греческий", order: 1, updatedAt: iso },
+      { id: "english-it", title: "Английский для IT", short: "Для IT", language: "en", order: 2, updatedAt: iso },
+    ]);
+    await db.lessons.bulkAdd([
+      { id: "g-1", courseId: "greek-a2", title: "g", completed: false, updatedAt: iso },
+      { id: "e-1", courseId: "english-it", title: "e", completed: false, updatedAt: iso },
+    ]);
+    mount(<SettingsScreen />);
+    const radios = () => [...host.querySelectorAll('[data-testid="primary-course-choice"] [role="radio"]')];
+    await until(() => radios().length === 2, "выбор основного");
+    expect(radios().map((radio) => radio.textContent)).toEqual(["Греческий", "Английский для IT"]);
+  });
+});
+
 describe("занятие без активной сессии", () => {
   it("показывает «Активного занятия нет», а не вечный скелет", async () => {
     mount(<SessionScreen />);

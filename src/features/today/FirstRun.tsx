@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { GraduationCap, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
@@ -22,12 +22,20 @@ export function FirstRun({
   entries,
   modules,
   hint = true,
+  grouped = true,
+  focus,
+  onFocused,
 }: {
   courses: Course[];
   entries: StoredCatalogEntry[];
   modules: StoredModule[];
   /** Подсказка под кнопкой; стартовый экран пишет её один раз под подзаголовком. */
   hint?: boolean;
+  /** Карточки под заголовком языка; на «Курсе» язык уже выбран — карточки без группы. */
+  grouped?: boolean;
+  /** Курс, карточку которого показать и сфокусировать. */
+  focus?: string;
+  onFocused?: () => void;
 }) {
   const offers = courseOffers(courses, entries, modules);
   const loading = useSyncExternalStore(
@@ -53,8 +61,11 @@ export function FirstRun({
       main={offer === first}
       hint={hint}
       waitFor={busy !== offer ? busy : undefined}
+      focused={offer.course.id === focus}
+      onFocused={onFocused}
     />
   );
+  if (!grouped) return <>{offers.map((offer) => card(offer, 2))}</>;
   return (
     <>
       {groupByLanguage(offers).map((group) =>
@@ -96,14 +107,25 @@ function CourseOffer({
   main,
   hint,
   waitFor,
+  focused,
+  onFocused,
 }: {
   offer: CourseOfferView;
   level: 2 | 3;
   main: boolean;
   hint: boolean;
   waitFor?: CourseOfferView;
+  focused: boolean;
+  onFocused?: () => void;
 }) {
   const { course } = offer;
+  const article = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!focused) return;
+    article.current?.scrollIntoView({ block: "center" });
+    article.current?.focus({ preventScroll: true });
+    onFocused?.();
+  }, [focused, onFocused]);
   const phase = useCoursePhase(course.id);
   const loading = phase.phase === "loading";
   const blocked = loading || !!waitFor;
@@ -113,7 +135,13 @@ function CourseOffer({
   };
   const Heading = level === 2 ? "h2" : "h3";
   return (
-    <article className="mb-6" data-testid="course-offer" aria-labelledby={`offer-${course.id}`}>
+    <article
+      ref={article}
+      tabIndex={-1}
+      className="mb-6"
+      data-testid="course-offer"
+      aria-labelledby={`offer-${course.id}`}
+    >
       <Card className="mb-3 bg-soft ring-0" data-testid="first-course">
         <CardHeader>
           <Heading id={`offer-${course.id}`} className="m-0 text-xl leading-snug font-bold [overflow-wrap:anywhere]">
@@ -167,10 +195,32 @@ function CourseOffer({
   );
 }
 
-/** Начало курса там, где каталог есть, а уроков курса на устройстве ещё нет: на полке и в модуле — одного курса. */
-export function CourseStart({ courseId, hint = true }: { courseId?: string; hint?: boolean }) {
+/** Начало курса там, где каталог есть, а уроков курса на устройстве ещё нет: на полке — курсов языка, в модуле — одного. */
+export function CourseStart({
+  courseIds,
+  hint = true,
+  grouped,
+  focus,
+  onFocused,
+}: {
+  courseIds?: string[];
+  hint?: boolean;
+  grouped?: boolean;
+  focus?: string;
+  onFocused?: () => void;
+}) {
   const courses = useCourses();
   const catalog = useCatalog();
-  const offered = (courses ?? []).filter((course) => !courseId || course.id === courseId);
-  return <FirstRun courses={offered} entries={catalog?.entries ?? []} modules={catalog?.modules ?? []} hint={hint} />;
+  const offered = (courses ?? []).filter((course) => !courseIds || courseIds.includes(course.id));
+  return (
+    <FirstRun
+      courses={offered}
+      entries={catalog?.entries ?? []}
+      modules={catalog?.modules ?? []}
+      hint={hint}
+      grouped={grouped}
+      focus={focus}
+      onFocused={onFocused}
+    />
+  );
 }
