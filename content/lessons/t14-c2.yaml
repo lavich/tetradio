@@ -46,15 +46,15 @@ blocks:
     title: Бар — заказ для компании
     plays: 2
     transcript:
-      - { speaker: Nina, text: "Dave, hi! Gonna need a minute. Jack, what are you having?" }
-      - { speaker: Jack, text: "Dunno. A pint, I guess. Whatever's on tap." }
-      - { speaker: Dave, text: "Pale ale's on tap tonight. Pint or half?" }
-      - { speaker: Jack, text: "A pint, cheers. And Zoe's on the red, right?" }
-      - { speaker: Zoe, text: "Hang on, I'm driving. Just a soft drink for me. A lime and soda." }
-      - { speaker: Nina, text: "Then I'll have a glass of red. Can we open a tab?" }
-      - { speaker: Dave, text: "Sure, a tab it is. So that's a pint, a red and a lime and soda. Anything else?" }
-      - { speaker: Jack, text: "That's it for now. Oh, and when are last orders?" }
-      - { speaker: Dave, text: "Eleven. Shout before then, and I'll bring the drinks over to your table." }
+      - { speaker: Nina, text: "Dave, hi! Gonna need a minute. Jack, what are you having?", audio: t14-c2/bar-1.mp3 }
+      - { speaker: Jack, text: "Dunno. A pint, I guess. Whatever's on tap.", audio: t14-c2/bar-2.mp3 }
+      - { speaker: Dave, text: "Pale ale's on tap tonight. Pint or half?", audio: t14-c2/bar-3.mp3 }
+      - { speaker: Jack, text: "A pint, cheers. And Zoe's on the red, right?", audio: t14-c2/bar-4.mp3 }
+      - { speaker: Zoe, text: "Hang on, I'm driving. Just a soft drink for me. A lime and soda.", audio: t14-c2/bar-5.mp3 }
+      - { speaker: Nina, text: "Then I'll have a glass of red. Can we open a tab?", audio: t14-c2/bar-6.mp3 }
+      - { speaker: Dave, text: "Sure, a tab it is. So that's a pint, a red and a lime and soda. Anything else?", audio: t14-c2/bar-7.mp3 }
+      - { speaker: Jack, text: "That's it for now. Oh, and when are last orders?", audio: t14-c2/bar-8.mp3 }
+      - { speaker: Dave, text: "Eleven. Shout before then, and I'll bring the drinks over to your table.", audio: t14-c2/bar-9.mp3 }
   - type: exercise
     id: bar-q
     about: bar
@@ -97,12 +97,12 @@ blocks:
     title: Сцена 1 · Реплики собеседника — бармен
     plays: 2
     transcript:
-      - { speaker: Dave, text: "Hi there. What can I get you?" }
-      - { speaker: Dave, text: "Sure. Anything for yourself?" }
-      - { speaker: Dave, text: "Lime and soda, no problem. Are you paying now, or shall I open a tab?" }
-      - { speaker: Dave, text: "A tab it is. It's busy tonight, so the drinks might take a few minutes." }
-      - { speaker: Dave, text: "Here you go. By the way, last orders are at eleven. Shall I get you another round later?" }
-      - { speaker: Dave, text: "Fair enough. Just shout if you change your mind." }
+      - { speaker: Dave, text: "Hi there. What can I get you?", audio: t14-c2/bar-lines-1.mp3 }
+      - { speaker: Dave, text: "Sure. Anything for yourself?", audio: t14-c2/bar-lines-2.mp3 }
+      - { speaker: Dave, text: "Lime and soda, no problem. Are you paying now, or shall I open a tab?", audio: t14-c2/bar-lines-3.mp3 }
+      - { speaker: Dave, text: "A tab it is. It's busy tonight, so the drinks might take a few minutes.", audio: t14-c2/bar-lines-4.mp3 }
+      - { speaker: Dave, text: "Here you go. By the way, last orders are at eleven. Shall I get you another round later?", audio: t14-c2/bar-lines-5.mp3 }
+      - { speaker: Dave, text: "Fair enough. Just shout if you change your mind.", audio: t14-c2/bar-lines-6.mp3 }
   - type: speaking
     id: bar-scene
     part: roleplay
@@ -199,12 +199,12 @@ blocks:
     title: Сцена 2 · Реплики собеседников — Бен и Мэй
     plays: 2
     transcript:
-      - { speaker: Ben, text: "Hi, there's a free seat here. I'm Ben, and this is Mei." }
-      - { speaker: Mei, text: "Hi! Where are you from originally?" }
-      - { speaker: Ben, text: "Nice. Have you ever been to Scotland before?" }
-      - { speaker: Mei, text: "We're gonna do the, er, the Arthur's Seat thing tomorrow, up at six, if you're up for it." }
-      - { speaker: Mei, text: "Sure. We're going up Arthur's Seat tomorrow at six in the morning. Are you up for it?" }
-      - { speaker: Ben, text: "Eight works for us. See you in the lobby, then." }
+      - { speaker: Ben, text: "Hi, there's a free seat here. I'm Ben, and this is Mei.", audio: t14-c2/meet-lines-1.mp3 }
+      - { speaker: Mei, text: "Hi! Where are you from originally?", audio: t14-c2/meet-lines-2.mp3 }
+      - { speaker: Ben, text: "Nice. Have you ever been to Scotland before?", audio: t14-c2/meet-lines-3.mp3 }
+      - { speaker: Mei, text: "We're gonna do the, er, the Arthur's Seat thing tomorrow, up at six, if you're up for it.", audio: t14-c2/meet-lines-4.mp3 }
+      - { speaker: Mei, text: "Sure. We're going up Arthur's Seat tomorrow at six in the morning. Are you up for it?", audio: t14-c2/meet-lines-5.mp3 }
+      - { speaker: Ben, text: "Eight works for us. See you in the lobby, then.", audio: t14-c2/meet-lines-6.mp3 }
   - type: speaking
     id: meet-scene
     part: roleplay
@@ -236,10 +236,10 @@ blocks:
     title: Приглашение — голосовые Лео и Тесс
     plays: 2
     transcript:
-      - { speaker: Leo, text: "Hi Tess, it's Leo. We're having a few people over on Saturday, a housewarming, nothing fancy. It kicks off at eight, but come whenever." }
-      - { speaker: Leo, text: "Oh, and it's BYOB, so bring something to drink. If you're not drinking, juice is fine. Let me know by Thursday, yeah?" }
-      - { speaker: Tess, text: "Hey Leo, got your message, thanks. I'm up for it, honestly, but I dunno about eight. I'm at a friend's birthday dinner until nine, so I'll be running a bit late." }
-      - { speaker: Tess, text: "Is it OK if I bring a plus-one? My cousin's in town. Anyway, count me in. Send me the address again, and I'll text you when I get there." }
+      - { speaker: Leo, text: "Hi Tess, it's Leo. We're having a few people over on Saturday, a housewarming, nothing fancy. It kicks off at eight, but come whenever.", audio: t14-c2/invite-1.mp3 }
+      - { speaker: Leo, text: "Oh, and it's BYOB, so bring something to drink. If you're not drinking, juice is fine. Let me know by Thursday, yeah?", audio: t14-c2/invite-2.mp3 }
+      - { speaker: Tess, text: "Hey Leo, got your message, thanks. I'm up for it, honestly, but I dunno about eight. I'm at a friend's birthday dinner until nine, so I'll be running a bit late.", audio: t14-c2/invite-3.mp3 }
+      - { speaker: Tess, text: "Is it OK if I bring a plus-one? My cousin's in town. Anyway, count me in. Send me the address again, and I'll text you when I get there.", audio: t14-c2/invite-4.mp3 }
   - type: exercise
     id: invite-q
     about: invite
@@ -290,12 +290,12 @@ blocks:
     title: Сцена 3 · Реплики собеседницы — Тесс
     plays: 2
     transcript:
-      - { speaker: Tess, text: "Hi! Good to see you again. How's your week going?" }
-      - { speaker: Tess, text: "A gig on Friday? Sounds good. Who's playing?" }
-      - { speaker: Tess, text: "I'm up for it. What time does it kick off?" }
-      - { speaker: Tess, text: "Nine's a bit tricky. I'm seeing a friend until half past eight, so I might be running a bit late. Is that OK?" }
-      - { speaker: Tess, text: "Great. Shall we swap contacts? Are you on Instagram?" }
-      - { speaker: Tess, text: "Found you. I'll add you. Text me the address, and I'll text you when I get there." }
+      - { speaker: Tess, text: "Hi! Good to see you again. How's your week going?", audio: t14-c2/invite-lines-1.mp3 }
+      - { speaker: Tess, text: "A gig on Friday? Sounds good. Who's playing?", audio: t14-c2/invite-lines-2.mp3 }
+      - { speaker: Tess, text: "I'm up for it. What time does it kick off?", audio: t14-c2/invite-lines-3.mp3 }
+      - { speaker: Tess, text: "Nine's a bit tricky. I'm seeing a friend until half past eight, so I might be running a bit late. Is that OK?", audio: t14-c2/invite-lines-4.mp3 }
+      - { speaker: Tess, text: "Great. Shall we swap contacts? Are you on Instagram?", audio: t14-c2/invite-lines-5.mp3 }
+      - { speaker: Tess, text: "Found you. I'll add you. Text me the address, and I'll text you when I get there.", audio: t14-c2/invite-lines-6.mp3 }
   - type: speaking
     id: invite-scene
     part: roleplay
@@ -397,13 +397,13 @@ blocks:
     title: Свидание — разговор в кафе
     plays: 2
     transcript:
-      - { speaker: Noah, text: "So that's how I got lost in Lisbon for three hours. I've never been so happy to see a tram." }
-      - { speaker: Isla, text: "That's wild. I'd have panicked. Anyway, I've had a really nice time tonight." }
-      - { speaker: Noah, text: "Me too. Can I walk you to the station?" }
-      - { speaker: Isla, text: "Thanks, but I'll make my own way." }
-      - { speaker: Noah, text: "No worries, totally fine. Would you like to see me again?" }
-      - { speaker: Isla, text: "I'd rather not, to be honest. I don't think we're a match, but I'm glad we met." }
-      - { speaker: Noah, text: "Thanks for telling me. I hope you get home safe." }
+      - { speaker: Noah, text: "So that's how I got lost in Lisbon for three hours. I've never been so happy to see a tram.", audio: t14-c2/date-1.mp3 }
+      - { speaker: Isla, text: "That's wild. I'd have panicked. Anyway, I've had a really nice time tonight.", audio: t14-c2/date-2.mp3 }
+      - { speaker: Noah, text: "Me too. Can I walk you to the station?", audio: t14-c2/date-3.mp3 }
+      - { speaker: Isla, text: "Thanks, but I'll make my own way.", audio: t14-c2/date-4.mp3 }
+      - { speaker: Noah, text: "No worries, totally fine. Would you like to see me again?", audio: t14-c2/date-5.mp3 }
+      - { speaker: Isla, text: "I'd rather not, to be honest. I don't think we're a match, but I'm glad we met.", audio: t14-c2/date-6.mp3 }
+      - { speaker: Noah, text: "Thanks for telling me. I hope you get home safe.", audio: t14-c2/date-7.mp3 }
   - type: exercise
     id: date-q
     about: date
@@ -449,11 +449,11 @@ blocks:
     title: Сцена 4 · Реплики собеседника — Ноа (отказ)
     plays: 2
     transcript:
-      - { speaker: Noah, text: "I've had a really nice evening. Can I walk you to the station?" }
-      - { speaker: Noah, text: "No worries, totally fine. Would you like another drink before you go?" }
-      - { speaker: Noah, text: "Fair enough. Can I ask you something? Would you like to see me again?" }
-      - { speaker: Noah, text: "Thanks for telling me. I hope you get home safe." }
-      - { speaker: Noah, text: "Take care." }
+      - { speaker: Noah, text: "I've had a really nice evening. Can I walk you to the station?", audio: t14-c2/no-lines-1.mp3 }
+      - { speaker: Noah, text: "No worries, totally fine. Would you like another drink before you go?", audio: t14-c2/no-lines-2.mp3 }
+      - { speaker: Noah, text: "Fair enough. Can I ask you something? Would you like to see me again?", audio: t14-c2/no-lines-3.mp3 }
+      - { speaker: Noah, text: "Thanks for telling me. I hope you get home safe.", audio: t14-c2/no-lines-4.mp3 }
+      - { speaker: Noah, text: "Take care.", audio: t14-c2/no-lines-5.mp3 }
   - type: speaking
     id: no-scene
     part: roleplay
@@ -483,11 +483,11 @@ blocks:
     title: Сцена 5 · Реплики собеседницы — Айла (ответ на отказ)
     plays: 2
     transcript:
-      - { speaker: Isla, text: "I've had a nice evening, thank you. Before you say anything, I need to be honest with you." }
-      - { speaker: Isla, text: "I'm not feeling a spark, sorry. I don't think we're a match. I hope that's okay." }
-      - { speaker: Isla, text: "Thank you for understanding. I really liked talking to you about Lisbon." }
-      - { speaker: Isla, text: "I'm going to get a taxi now, thanks. I'll make my own way home." }
-      - { speaker: Isla, text: "You too. Take care." }
+      - { speaker: Isla, text: "I've had a nice evening, thank you. Before you say anything, I need to be honest with you.", audio: t14-c2/answer-lines-1.mp3 }
+      - { speaker: Isla, text: "I'm not feeling a spark, sorry. I don't think we're a match. I hope that's okay.", audio: t14-c2/answer-lines-2.mp3 }
+      - { speaker: Isla, text: "Thank you for understanding. I really liked talking to you about Lisbon.", audio: t14-c2/answer-lines-3.mp3 }
+      - { speaker: Isla, text: "I'm going to get a taxi now, thanks. I'll make my own way home.", audio: t14-c2/answer-lines-4.mp3 }
+      - { speaker: Isla, text: "You too. Take care.", audio: t14-c2/answer-lines-5.mp3 }
   - type: speaking
     id: answer-scene
     part: roleplay

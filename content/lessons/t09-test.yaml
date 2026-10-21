@@ -80,15 +80,15 @@ blocks:
     title: After the gig
     plays: 2
     transcript:
-      - { speaker: Zoe, text: "That was amazing, wasn't it?" }
-      - { speaker: Jack, text: "The second band was legit. The first one was a bit random, though." }
-      - { speaker: Zoe, text: "Random? They were funny!" }
-      - { speaker: Ben, text: "I dunno. I was too knackered to listen. I'd better get going soon." }
-      - { speaker: Jack, text: "Already? It's only eleven!" }
-      - { speaker: Ben, text: "I know, but my train is at seven tomorrow. I'm heading to Glasgow." }
-      - { speaker: Zoe, text: "You're leaving, aren't you? You didn't tell us!" }
-      - { speaker: Ben, text: "Sorry, I forgot. Anyway, I'm gonna find a taxi. Cheers for tonight, mate. Catch you later." }
-      - { speaker: Jack, text: "Safe journey, Ben." }
+      - { speaker: Zoe, text: "That was amazing, wasn't it?", audio: t09-test/after-gig-1.mp3 }
+      - { speaker: Jack, text: "The second band was legit. The first one was a bit random, though.", audio: t09-test/after-gig-2.mp3 }
+      - { speaker: Zoe, text: "Random? They were funny!", audio: t09-test/after-gig-3.mp3 }
+      - { speaker: Ben, text: "I dunno. I was too knackered to listen. I'd better get going soon.", audio: t09-test/after-gig-4.mp3 }
+      - { speaker: Jack, text: "Already? It's only eleven!", audio: t09-test/after-gig-5.mp3 }
+      - { speaker: Ben, text: "I know, but my train is at seven tomorrow. I'm heading to Glasgow.", audio: t09-test/after-gig-6.mp3 }
+      - { speaker: Zoe, text: "You're leaving, aren't you? You didn't tell us!", audio: t09-test/after-gig-7.mp3 }
+      - { speaker: Ben, text: "Sorry, I forgot. Anyway, I'm gonna find a taxi. Cheers for tonight, mate. Catch you later.", audio: t09-test/after-gig-8.mp3 }
+      - { speaker: Jack, text: "Safe journey, Ben.", audio: t09-test/after-gig-9.mp3 }
   - type: exercise
     id: after-gig-q
     about: after-gig

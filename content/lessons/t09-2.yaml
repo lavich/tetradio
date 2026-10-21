@@ -120,19 +120,19 @@ blocks:
     title: In the hostel kitchen
     plays: 2
     transcript:
-      - { speaker: Jack, text: "So I'm walking down the Royal Mile yesterday, and this guy comes up to me and says —" }
-      - { speaker: Zoe, text: "Wait, was this before or after the rain?" }
-      - { speaker: Jack, text: "After. Anyway, he says the castle is closed, and I say, no way, it's Tuesday —" }
-      - { speaker: Ben, text: "Hang on, it's open on Tuesdays, isn't it?" }
-      - { speaker: Jack, text: "That's what I said! So I go up there, and it's open. The guy was just dodgy. He wanted to sell me a tour." }
-      - { speaker: Zoe, text: "Been there. Someone tried the same thing on me in Rome." }
-      - { speaker: Sofia, text: "Sorry, what does 'dodgy' mean? I don't know this word." }
-      - { speaker: Jack, text: "It means not honest. You can't trust him." }
-      - { speaker: Sofia, text: "Ah, okay. Dodgy. And did you buy the tour?" }
-      - { speaker: Jack, text: "No way. I went in by myself. Actually, I'm gonna go back on Thursday. There's a lot to see." }
-      - { speaker: Zoe, text: "I wanna come! But I'm so knackered today, I dunno." }
-      - { speaker: Ben, text: "Fair enough. I'm gonna make some tea. Anyone want one?" }
-      - { speaker: Sofia, text: "Yes, please. Cheers, Ben." }
+      - { speaker: Jack, text: "So I'm walking down the Royal Mile yesterday, and this guy comes up to me and says —", audio: t09-2/kitchen-1.mp3 }
+      - { speaker: Zoe, text: "Wait, was this before or after the rain?", audio: t09-2/kitchen-2.mp3 }
+      - { speaker: Jack, text: "After. Anyway, he says the castle is closed, and I say, no way, it's Tuesday —", audio: t09-2/kitchen-3.mp3 }
+      - { speaker: Ben, text: "Hang on, it's open on Tuesdays, isn't it?", audio: t09-2/kitchen-4.mp3 }
+      - { speaker: Jack, text: "That's what I said! So I go up there, and it's open. The guy was just dodgy. He wanted to sell me a tour.", audio: t09-2/kitchen-5.mp3 }
+      - { speaker: Zoe, text: "Been there. Someone tried the same thing on me in Rome.", audio: t09-2/kitchen-6.mp3 }
+      - { speaker: Sofia, text: "Sorry, what does 'dodgy' mean? I don't know this word.", audio: t09-2/kitchen-7.mp3 }
+      - { speaker: Jack, text: "It means not honest. You can't trust him.", audio: t09-2/kitchen-8.mp3 }
+      - { speaker: Sofia, text: "Ah, okay. Dodgy. And did you buy the tour?", audio: t09-2/kitchen-9.mp3 }
+      - { speaker: Jack, text: "No way. I went in by myself. Actually, I'm gonna go back on Thursday. There's a lot to see.", audio: t09-2/kitchen-10.mp3 }
+      - { speaker: Zoe, text: "I wanna come! But I'm so knackered today, I dunno.", audio: t09-2/kitchen-11.mp3 }
+      - { speaker: Ben, text: "Fair enough. I'm gonna make some tea. Anyone want one?", audio: t09-2/kitchen-12.mp3 }
+      - { speaker: Sofia, text: "Yes, please. Cheers, Ben.", audio: t09-2/kitchen-13.mp3 }
   - type: exercise
     id: kitchen-q
     about: kitchen
@@ -198,12 +198,12 @@ blocks:
     title: What did they mean?
     plays: 2
     transcript:
-      - { speaker: Jack, text: "Been there. It took me two hours to find the hostel as well." }
-      - { speaker: Zoe, text: "Sorry, you lost me. Can you start again from the beginning?" }
-      - { speaker: Ben, text: "Fair enough. I won't ask again." }
-      - { speaker: Sofia, text: "Sounds good. I'm in. Which time?" }
-      - { speaker: Jack, text: "Hang on a second. I think that's my phone." }
-      - { speaker: Zoe, text: "Come again? I didn't catch the last word." }
+      - { speaker: Jack, text: "Been there. It took me two hours to find the hostel as well.", audio: t09-2/meaning-1.mp3 }
+      - { speaker: Zoe, text: "Sorry, you lost me. Can you start again from the beginning?", audio: t09-2/meaning-2.mp3 }
+      - { speaker: Ben, text: "Fair enough. I won't ask again.", audio: t09-2/meaning-3.mp3 }
+      - { speaker: Sofia, text: "Sounds good. I'm in. Which time?", audio: t09-2/meaning-4.mp3 }
+      - { speaker: Jack, text: "Hang on a second. I think that's my phone.", audio: t09-2/meaning-5.mp3 }
+      - { speaker: Zoe, text: "Come again? I didn't catch the last word.", audio: t09-2/meaning-6.mp3 }
   - type: exercise
     id: meaning-q
     about: meaning

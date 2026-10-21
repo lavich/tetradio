@@ -138,10 +138,10 @@ blocks:
     title: Two voice notes — Anika and Hugo
     plays: 2
     transcript:
-      - { speaker: Anika, text: "Hi Hugo, it's Anika. I've just got back from Berlin, and I had a great weekend, but the flight back was bloody late. My sister was like, \"Come and stay for a month!\" and I was like, \"I'd love to, but I've got work.\" So I'm going to visit in August instead." }
-      - { speaker: Anika, text: "I saw the photo of your new flat. Is that a window or a painting? I'm joking. It looks nice. Call me when you're free, and we can have a proper catch-up." }
-      - { speaker: Hugo, text: "Hi Anika, thanks for the voice note. I'm on the train, so the signal might be patchy. I've started a new job at a bank in Lyon, and it's not bad. The first week was very exhausting, to be honest." }
-      - { speaker: Hugo, text: "I'm free on Sunday evening. Shall I call you at eight? If the line cuts out, I'll call you back." }
+      - { speaker: Anika, text: "Hi Hugo, it's Anika. I've just got back from Berlin, and I had a great weekend, but the flight back was bloody late. My sister was like, \"Come and stay for a month!\" and I was like, \"I'd love to, but I've got work.\" So I'm going to visit in August instead.", audio: t14-2/notes-1.mp3 }
+      - { speaker: Anika, text: "I saw the photo of your new flat. Is that a window or a painting? I'm joking. It looks nice. Call me when you're free, and we can have a proper catch-up.", audio: t14-2/notes-2.mp3 }
+      - { speaker: Hugo, text: "Hi Anika, thanks for the voice note. I'm on the train, so the signal might be patchy. I've started a new job at a bank in Lyon, and it's not bad. The first week was very exhausting, to be honest.", audio: t14-2/notes-3.mp3 }
+      - { speaker: Hugo, text: "I'm free on Sunday evening. Shall I call you at eight? If the line cuts out, I'll call you back.", audio: t14-2/notes-4.mp3 }
   - type: exercise
     id: notes-q
     about: notes
@@ -218,16 +218,16 @@ blocks:
     title: A video call with a bad connection — Mei and Ben
     plays: 2
     transcript:
-      - { speaker: Mei, text: "Hello? Ben, can you hear me?" }
-      - { speaker: Ben, text: "Mei! Yes, but you're breaking up. Your picture's frozen too." }
-      - { speaker: Mei, text: "Sorry, the Wi-Fi in this hotel is patchy. Is that better?" }
-      - { speaker: Ben, text: "A bit. There's a lag, though. I see your lips move, and your voice comes two seconds later." }
-      - { speaker: Mei, text: "That's the signal. Anyway, I've got news. I've booked my flight to Leeds for September." }
-      - { speaker: Ben, text: "Sorry, the sound keeps cutting out. You've booked what?" }
-      - { speaker: Mei, text: "My flight. I land on the fourth." }
-      - { speaker: Ben, text: "Brilliant. I'll take the Friday off. Send me the details when you have them." }
-      - { speaker: Mei, text: "I will. Let me call you back from my room, the line is terrible here." }
-      - { speaker: Ben, text: "Good idea. Talk in five minutes." }
+      - { speaker: Mei, text: "Hello? Ben, can you hear me?", audio: t14-2/call-1.mp3 }
+      - { speaker: Ben, text: "Mei! Yes, but you're breaking up. Your picture's frozen too.", audio: t14-2/call-2.mp3 }
+      - { speaker: Mei, text: "Sorry, the Wi-Fi in this hotel is patchy. Is that better?", audio: t14-2/call-3.mp3 }
+      - { speaker: Ben, text: "A bit. There's a lag, though. I see your lips move, and your voice comes two seconds later.", audio: t14-2/call-4.mp3 }
+      - { speaker: Mei, text: "That's the signal. Anyway, I've got news. I've booked my flight to Leeds for September.", audio: t14-2/call-5.mp3 }
+      - { speaker: Ben, text: "Sorry, the sound keeps cutting out. You've booked what?", audio: t14-2/call-6.mp3 }
+      - { speaker: Mei, text: "My flight. I land on the fourth.", audio: t14-2/call-7.mp3 }
+      - { speaker: Ben, text: "Brilliant. I'll take the Friday off. Send me the details when you have them.", audio: t14-2/call-8.mp3 }
+      - { speaker: Mei, text: "I will. Let me call you back from my room, the line is terrible here.", audio: t14-2/call-9.mp3 }
+      - { speaker: Ben, text: "Good idea. Talk in five minutes.", audio: t14-2/call-10.mp3 }
   - type: exercise
     id: call-q
     about: call

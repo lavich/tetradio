@@ -108,12 +108,12 @@ blocks:
     title: Voice messages — Will and Alex
     plays: 2
     transcript:
-      - { speaker: Will, text: "Hi Alex, it's Will. I had a really nice time on Saturday, and the coffee was better than my pasta. Fancy a second round? There's a climbing wall near my work, and I'd love to try it, but I'm a complete beginner. Are you up for that on Thursday?" }
-      - { speaker: Alex, text: "Hi Will, it's Alex. I had a nice time too. Thursday is good, I finish at half past four. I'd rather start with the beginners' session at six. Is that okay?" }
-      - { speaker: Will, text: "Six works for me. Do I need to bring anything?" }
-      - { speaker: Alex, text: "Just trainers and a water bottle. You can borrow climbing shoes there. I'll meet you at the front desk. It's always busy on Thursdays." }
-      - { speaker: Will, text: "Perfect. I'll text my sister where I'll be, because she worries. Is that okay?" }
-      - { speaker: Alex, text: "Of course. I'll make my own way there from school, and you can come from work. See you on Thursday." }
+      - { speaker: Will, text: "Hi Alex, it's Will. I had a really nice time on Saturday, and the coffee was better than my pasta. Fancy a second round? There's a climbing wall near my work, and I'd love to try it, but I'm a complete beginner. Are you up for that on Thursday?", audio: t12-test/climbing-voice-1.mp3 }
+      - { speaker: Alex, text: "Hi Will, it's Alex. I had a nice time too. Thursday is good, I finish at half past four. I'd rather start with the beginners' session at six. Is that okay?", audio: t12-test/climbing-voice-2.mp3 }
+      - { speaker: Will, text: "Six works for me. Do I need to bring anything?", audio: t12-test/climbing-voice-3.mp3 }
+      - { speaker: Alex, text: "Just trainers and a water bottle. You can borrow climbing shoes there. I'll meet you at the front desk. It's always busy on Thursdays.", audio: t12-test/climbing-voice-4.mp3 }
+      - { speaker: Will, text: "Perfect. I'll text my sister where I'll be, because she worries. Is that okay?", audio: t12-test/climbing-voice-5.mp3 }
+      - { speaker: Alex, text: "Of course. I'll make my own way there from school, and you can come from work. See you on Thursday.", audio: t12-test/climbing-voice-6.mp3 }
   - type: exercise
     id: climbing-voice-q
     about: climbing-voice

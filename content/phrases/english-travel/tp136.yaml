@@ -1,5 +1,6 @@
 id: tp136
 text: "What are you having?"
+audio: phrases/tp136.mp3
 translation: "Что будете пить? Что тебе взять?"
 note: "вопрос друга или бармена перед заказом"
 provenance:

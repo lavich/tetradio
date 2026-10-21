@@ -1,5 +1,6 @@
 id: tp205
 text: "Let me call you back."
+audio: phrases/tp205.mp3
 translation: "Я тебе перезвоню."
 note: "когда связь плохая или нет времени говорить"
 provenance:

@@ -1,5 +1,6 @@
 id: tp125
 text: "You lost me."
+audio: phrases/tp125.mp3
 translation: "Не успеваю за вашей мыслью."
 note: "не понял объяснение; не про звук"
 provenance:

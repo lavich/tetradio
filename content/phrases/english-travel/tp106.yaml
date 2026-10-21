@@ -1,5 +1,6 @@
 id: tp106
 text: "Is this seat taken?"
+audio: phrases/tp106.mp3
 translation: "Это место занято?"
 note: "в ответ: No, go ahead — нет, садитесь"
 provenance:

@@ -1,5 +1,6 @@
 id: tp150
 text: "Excuse me, can I get past?"
+audio: phrases/tp150.mp3
 translation: "Извините, можно пройти?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10

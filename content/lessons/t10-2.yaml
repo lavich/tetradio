@@ -130,18 +130,18 @@ blocks:
     title: Ordering in a noisy bar
     plays: 2
     transcript:
-      - { speaker: Dave, text: "Hi there. Are you being served?" }
-      - { speaker: Nina, text: "Not yet. Two pints of lager for my friends, please, and a lemonade for me. I'm the driver tonight." }
-      - { speaker: Dave, text: "Sorry, what was that? It's really loud in here." }
-      - { speaker: Nina, text: "Two pints of lager and one lemonade." }
-      - { speaker: Dave, text: "Got it. Anything to eat? We have bar snacks." }
-      - { speaker: Sam, text: "Just a bowl of olives, please." }
-      - { speaker: Dave, text: "Paying now, or shall I open a tab?" }
-      - { speaker: Nina, text: "Paying now. It's my round, so I'll get this." }
-      - { speaker: Dave, text: "Thanks. The lemonade is on the house, by the way. Thanks for driving." }
-      - { speaker: Nina, text: "That's kind. Where's the cloakroom?" }
-      - { speaker: Dave, text: "By the door, on the left. And last orders are at eleven." }
-      - { speaker: Sam, text: "Cheers, Dave." }
+      - { speaker: Dave, text: "Hi there. Are you being served?", audio: t10-2/noisy-1.mp3 }
+      - { speaker: Nina, text: "Not yet. Two pints of lager for my friends, please, and a lemonade for me. I'm the driver tonight.", audio: t10-2/noisy-2.mp3 }
+      - { speaker: Dave, text: "Sorry, what was that? It's really loud in here.", audio: t10-2/noisy-3.mp3 }
+      - { speaker: Nina, text: "Two pints of lager and one lemonade.", audio: t10-2/noisy-4.mp3 }
+      - { speaker: Dave, text: "Got it. Anything to eat? We have bar snacks.", audio: t10-2/noisy-5.mp3 }
+      - { speaker: Sam, text: "Just a bowl of olives, please.", audio: t10-2/noisy-6.mp3 }
+      - { speaker: Dave, text: "Paying now, or shall I open a tab?", audio: t10-2/noisy-7.mp3 }
+      - { speaker: Nina, text: "Paying now. It's my round, so I'll get this.", audio: t10-2/noisy-8.mp3 }
+      - { speaker: Dave, text: "Thanks. The lemonade is on the house, by the way. Thanks for driving.", audio: t10-2/noisy-9.mp3 }
+      - { speaker: Nina, text: "That's kind. Where's the cloakroom?", audio: t10-2/noisy-10.mp3 }
+      - { speaker: Dave, text: "By the door, on the left. And last orders are at eleven.", audio: t10-2/noisy-11.mp3 }
+      - { speaker: Sam, text: "Cheers, Dave.", audio: t10-2/noisy-12.mp3 }
   - type: exercise
     id: noisy-q
     about: noisy
@@ -207,16 +207,16 @@ blocks:
     title: At the counter
     plays: 2
     transcript:
-      - { speaker: Ravi, text: "Busy tonight, isn't it? I'm Ravi, by the way." }
-      - { speaker: Ellie, text: "I'm Ellie. Yes, it's packed. Are you here with friends?" }
-      - { speaker: Ravi, text: "Yes, they're over by the window. I'm getting a round in. What are you having?" }
-      - { speaker: Ellie, text: "Thanks, but I'm good. I still have half of this one, and after it I'd rather stick to water tonight." }
-      - { speaker: Ravi, text: "Fair enough. Are you travelling, or do you live here?" }
-      - { speaker: Ellie, text: "I'm here for a long weekend. I'm heading to Glasgow on Monday." }
-      - { speaker: Ravi, text: "Brilliant. Do you have plans for tomorrow?" }
-      - { speaker: Ellie, text: "Maybe the walking tour. Anyway, I'll take my drink with me and find my friends. I never leave it on the bar." }
-      - { speaker: Ravi, text: "Sensible. Enjoy your weekend, Ellie." }
-      - { speaker: Ellie, text: "You too. It was nice meeting you." }
+      - { speaker: Ravi, text: "Busy tonight, isn't it? I'm Ravi, by the way.", audio: t10-2/counter-1.mp3 }
+      - { speaker: Ellie, text: "I'm Ellie. Yes, it's packed. Are you here with friends?", audio: t10-2/counter-2.mp3 }
+      - { speaker: Ravi, text: "Yes, they're over by the window. I'm getting a round in. What are you having?", audio: t10-2/counter-3.mp3 }
+      - { speaker: Ellie, text: "Thanks, but I'm good. I still have half of this one, and after it I'd rather stick to water tonight.", audio: t10-2/counter-4.mp3 }
+      - { speaker: Ravi, text: "Fair enough. Are you travelling, or do you live here?", audio: t10-2/counter-5.mp3 }
+      - { speaker: Ellie, text: "I'm here for a long weekend. I'm heading to Glasgow on Monday.", audio: t10-2/counter-6.mp3 }
+      - { speaker: Ravi, text: "Brilliant. Do you have plans for tomorrow?", audio: t10-2/counter-7.mp3 }
+      - { speaker: Ellie, text: "Maybe the walking tour. Anyway, I'll take my drink with me and find my friends. I never leave it on the bar.", audio: t10-2/counter-8.mp3 }
+      - { speaker: Ravi, text: "Sensible. Enjoy your weekend, Ellie.", audio: t10-2/counter-9.mp3 }
+      - { speaker: Ellie, text: "You too. It was nice meeting you.", audio: t10-2/counter-10.mp3 }
   - type: exercise
     id: counter-q
     about: counter

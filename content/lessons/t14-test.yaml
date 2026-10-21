@@ -107,16 +107,16 @@ blocks:
     title: A video call — Hugo and Zoe
     plays: 2
     transcript:
-      - { speaker: Hugo, text: "Zoe? Hello? Can you hear me?" }
-      - { speaker: Zoe, text: "Hugo! I can see you, but you're breaking up. Your picture has frozen." }
-      - { speaker: Hugo, text: "Sorry, it's the train Wi-Fi. It's really patchy. Can you hear me now?" }
-      - { speaker: Zoe, text: "Yes, but there's a lag. I hear you a second after your lips move." }
-      - { speaker: Hugo, text: "Okay, I'll be quick. I've got a new team at the bank. My boss told me yesterday." }
-      - { speaker: Zoe, text: "Sorry? The sound cut out. You've got what?" }
-      - { speaker: Hugo, text: "A new team! My boss was like, \"You've earned it.\" I'm taking the team to Madrid in June." }
-      - { speaker: Zoe, text: "That's wonderful news. Call me properly on Sunday and tell me everything." }
-      - { speaker: Hugo, text: "I will. Let me call you back from the station." }
-      - { speaker: Zoe, text: "Good idea. Miss you already." }
+      - { speaker: Hugo, text: "Zoe? Hello? Can you hear me?", audio: t14-test/call-1.mp3 }
+      - { speaker: Zoe, text: "Hugo! I can see you, but you're breaking up. Your picture has frozen.", audio: t14-test/call-2.mp3 }
+      - { speaker: Hugo, text: "Sorry, it's the train Wi-Fi. It's really patchy. Can you hear me now?", audio: t14-test/call-3.mp3 }
+      - { speaker: Zoe, text: "Yes, but there's a lag. I hear you a second after your lips move.", audio: t14-test/call-4.mp3 }
+      - { speaker: Hugo, text: "Okay, I'll be quick. I've got a new team at the bank. My boss told me yesterday.", audio: t14-test/call-5.mp3 }
+      - { speaker: Zoe, text: "Sorry? The sound cut out. You've got what?", audio: t14-test/call-6.mp3 }
+      - { speaker: Hugo, text: "A new team! My boss was like, \"You've earned it.\" I'm taking the team to Madrid in June.", audio: t14-test/call-7.mp3 }
+      - { speaker: Zoe, text: "That's wonderful news. Call me properly on Sunday and tell me everything.", audio: t14-test/call-8.mp3 }
+      - { speaker: Hugo, text: "I will. Let me call you back from the station.", audio: t14-test/call-9.mp3 }
+      - { speaker: Zoe, text: "Good idea. Miss you already.", audio: t14-test/call-10.mp3 }
   - type: exercise
     id: call-q
     about: call

@@ -588,11 +588,11 @@ blocks:
     title: Реплики собеседника — голосовые сообщения Майи
     plays: 2
     transcript:
-      - { speaker: Maya, text: "Hi, it's Maya. Thanks for your message. I liked your bio. What do you do for fun?" }
-      - { speaker: Maya, text: "Hiking sounds great. I love trying new places too. What's the best trail you've done?" }
-      - { speaker: Maya, text: "I'd love to hear more about that one. Fancy a coffee on Saturday?" }
-      - { speaker: Maya, text: "Wonderful. Shall we say eleven, at the café in the market? It's always busy, and I like meeting somewhere busy the first time." }
-      - { speaker: Maya, text: "Great. I'll text a friend where I am, as I always do. See you on Saturday." }
+      - { speaker: Maya, text: "Hi, it's Maya. Thanks for your message. I liked your bio. What do you do for fun?", audio: t12-3/reply-lines-1.mp3 }
+      - { speaker: Maya, text: "Hiking sounds great. I love trying new places too. What's the best trail you've done?", audio: t12-3/reply-lines-2.mp3 }
+      - { speaker: Maya, text: "I'd love to hear more about that one. Fancy a coffee on Saturday?", audio: t12-3/reply-lines-3.mp3 }
+      - { speaker: Maya, text: "Wonderful. Shall we say eleven, at the café in the market? It's always busy, and I like meeting somewhere busy the first time.", audio: t12-3/reply-lines-4.mp3 }
+      - { speaker: Maya, text: "Great. I'll text a friend where I am, as I always do. See you on Saturday.", audio: t12-3/reply-lines-5.mp3 }
   - type: speaking
     id: reply
     part: roleplay

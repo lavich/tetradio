@@ -109,27 +109,27 @@ blocks:
     title: In the hostel common room
     plays: 2
     transcript:
-      - { speaker: Ben, text: "Hi, is this seat taken?" }
-      - { speaker: Sofia, text: "No, no, go ahead. I am just waiting for my friend." }
-      - { speaker: Ben, text: "Thanks. I'm Ben. Where are you from originally?" }
-      - { speaker: Sofia, text: "I am from Italy, from Bologna. And you?" }
-      - { speaker: Ben, text: "Leeds. I'm still based there. I'm here for a long weekend, a little getaway before work gets busy." }
-      - { speaker: Sofia, text: "Nice. I am here since Monday. I do a trip around Scotland for two weeks." }
-      - { speaker: Ben, text: "Have you ever been to Scotland before?" }
-      - { speaker: Sofia, text: "No, never. And you?" }
-      - { speaker: Ben, text: "Twice. Edinburgh is a bit touristy, so I'd go to Glasgow or the Highlands. Is that your friend?" }
-      - { speaker: Sofia, text: "Yes! Mei, come. This is Ben." }
-      - { speaker: Mei, text: "Hi Ben, nice to meet you. Are you travelling on your own?" }
-      - { speaker: Ben, text: "Yes, just me. What brings you to Scotland?" }
-      - { speaker: Mei, text: "I'm on a gap year. I left Singapore in March, and I'm travelling around for a few months. We're off to Glasgow on Saturday." }
-      - { speaker: Ben, text: "Nice. Have you got a plan?" }
-      - { speaker: Mei, text: "Not really. I'm quite laid-back about it. Do you have any recommendations?" }
-      - { speaker: Ben, text: "The Kelvingrove museum is a must-see, and it's free. And the cafés in the West End are great." }
-      - { speaker: Mei, text: "Perfect. Are you doing the walking tour tomorrow? It starts at ten." }
-      - { speaker: Ben, text: "I haven't booked yet. Mind if I join you?" }
-      - { speaker: Sofia, text: "Is no problem. Meet us at the front desk, at half past nine." }
-      - { speaker: Ben, text: "Great, thanks. It was nice meeting you both." }
-      - { speaker: Mei, text: "You too. See you tomorrow." }
+      - { speaker: Ben, text: "Hi, is this seat taken?", audio: t08-2/hostel-1.mp3 }
+      - { speaker: Sofia, text: "No, no, go ahead. I am just waiting for my friend.", audio: t08-2/hostel-2.mp3 }
+      - { speaker: Ben, text: "Thanks. I'm Ben. Where are you from originally?", audio: t08-2/hostel-3.mp3 }
+      - { speaker: Sofia, text: "I am from Italy, from Bologna. And you?", audio: t08-2/hostel-4.mp3 }
+      - { speaker: Ben, text: "Leeds. I'm still based there. I'm here for a long weekend, a little getaway before work gets busy.", audio: t08-2/hostel-5.mp3 }
+      - { speaker: Sofia, text: "Nice. I am here since Monday. I do a trip around Scotland for two weeks.", audio: t08-2/hostel-6.mp3 }
+      - { speaker: Ben, text: "Have you ever been to Scotland before?", audio: t08-2/hostel-7.mp3 }
+      - { speaker: Sofia, text: "No, never. And you?", audio: t08-2/hostel-8.mp3 }
+      - { speaker: Ben, text: "Twice. Edinburgh is a bit touristy, so I'd go to Glasgow or the Highlands. Is that your friend?", audio: t08-2/hostel-9.mp3 }
+      - { speaker: Sofia, text: "Yes! Mei, come. This is Ben.", audio: t08-2/hostel-10.mp3 }
+      - { speaker: Mei, text: "Hi Ben, nice to meet you. Are you travelling on your own?", audio: t08-2/hostel-11.mp3 }
+      - { speaker: Ben, text: "Yes, just me. What brings you to Scotland?", audio: t08-2/hostel-12.mp3 }
+      - { speaker: Mei, text: "I'm on a gap year. I left Singapore in March, and I'm travelling around for a few months. We're off to Glasgow on Saturday.", audio: t08-2/hostel-13.mp3 }
+      - { speaker: Ben, text: "Nice. Have you got a plan?", audio: t08-2/hostel-14.mp3 }
+      - { speaker: Mei, text: "Not really. I'm quite laid-back about it. Do you have any recommendations?", audio: t08-2/hostel-15.mp3 }
+      - { speaker: Ben, text: "The Kelvingrove museum is a must-see, and it's free. And the cafés in the West End are great.", audio: t08-2/hostel-16.mp3 }
+      - { speaker: Mei, text: "Perfect. Are you doing the walking tour tomorrow? It starts at ten.", audio: t08-2/hostel-17.mp3 }
+      - { speaker: Ben, text: "I haven't booked yet. Mind if I join you?", audio: t08-2/hostel-18.mp3 }
+      - { speaker: Sofia, text: "Is no problem. Meet us at the front desk, at half past nine.", audio: t08-2/hostel-19.mp3 }
+      - { speaker: Ben, text: "Great, thanks. It was nice meeting you both.", audio: t08-2/hostel-20.mp3 }
+      - { speaker: Mei, text: "You too. See you tomorrow.", audio: t08-2/hostel-21.mp3 }
   - type: exercise
     id: hostel-q
     about: hostel
