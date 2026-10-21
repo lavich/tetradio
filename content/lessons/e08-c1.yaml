@@ -168,10 +168,10 @@ blocks:
     title: Голосовое сообщение рекрутера
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. Thank you for your reply and for the updated CV." }
-      - { speaker: Katarina, text: "I'd like to confirm our call for Thursday at three in the afternoon, your time. It will take about fifteen minutes." }
-      - { speaker: Katarina, text: "First, I'll ask you to tell me a little about yourself. Then we'll talk about your experience, a project you're proud of and your motivation. At the end, I'll tell you more about the conditions." }
-      - { speaker: Katarina, text: "Please find a quiet place with a good connection. If the time doesn't suit you, call me back or send me an email. Speak to you on Thursday." }
+      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. Thank you for your reply and for the updated CV.", audio: e08-c1/voicemail-1.mp3 }
+      - { speaker: Katarina, text: "I'd like to confirm our call for Thursday at three in the afternoon, your time. It will take about fifteen minutes.", audio: e08-c1/voicemail-2.mp3 }
+      - { speaker: Katarina, text: "First, I'll ask you to tell me a little about yourself. Then we'll talk about your experience, a project you're proud of and your motivation. At the end, I'll tell you more about the conditions.", audio: e08-c1/voicemail-3.mp3 }
+      - { speaker: Katarina, text: "Please find a quiet place with a good connection. If the time doesn't suit you, call me back or send me an email. Speak to you on Thursday.", audio: e08-c1/voicemail-4.mp3 }
   - type: exercise
     id: voicemail-q
     about: voicemail
@@ -217,12 +217,12 @@ blocks:
     title: Сцена 1 · Реплики рекрутера — начало звонка
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. Thanks for making time. Is now a good time to talk?" }
-      - { speaker: Katarina, text: "Perfect. The call will take about fifteen minutes. To start, could you tell me a little about yourself?" }
-      - { speaker: Katarina, text: "Thanks. And what are you working on at the moment?" }
-      - { speaker: Katarina, text: "That sounds interesting. What made you reply to my message?" }
-      - { speaker: Katarina, text: "I see. Did you have a chance to read the job description?" }
-      - { speaker: Katarina, text: "Good. Let's talk about your experience in more detail." }
+      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. Thanks for making time. Is now a good time to talk?", audio: e08-c1/start-lines-1.mp3 }
+      - { speaker: Katarina, text: "Perfect. The call will take about fifteen minutes. To start, could you tell me a little about yourself?", audio: e08-c1/start-lines-2.mp3 }
+      - { speaker: Katarina, text: "Thanks. And what are you working on at the moment?", audio: e08-c1/start-lines-3.mp3 }
+      - { speaker: Katarina, text: "That sounds interesting. What made you reply to my message?", audio: e08-c1/start-lines-4.mp3 }
+      - { speaker: Katarina, text: "I see. Did you have a chance to read the job description?", audio: e08-c1/start-lines-5.mp3 }
+      - { speaker: Katarina, text: "Good. Let's talk about your experience in more detail.", audio: e08-c1/start-lines-6.mp3 }
   - type: speaking
     id: start
     part: roleplay
@@ -254,12 +254,12 @@ blocks:
     title: Вопросы об опыте и проекте
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Let's start with your experience. Could you walk me through your CV, starting with your current role?" }
-      - { speaker: Mark, text: "Hi Nadia, I'm Mark, the engineering manager. How long have you been the tech lead, and what has changed in that time?" }
-      - { speaker: Katarina, text: "You mentioned a migration project. What was your personal contribution to it?" }
-      - { speaker: Mark, text: "Which part was the hardest, and how did you deal with it?" }
-      - { speaker: Mark, text: "So, why'd you pick Postgres over Mongo — was it the team, or the data?" }
-      - { speaker: Katarina, text: "Thank you. One last thing: if you could do it again, what would you change?" }
+      - { speaker: Katarina, text: "Let's start with your experience. Could you walk me through your CV, starting with your current role?", audio: e08-c1/questions-1.mp3 }
+      - { speaker: Mark, text: "Hi Nadia, I'm Mark, the engineering manager. How long have you been the tech lead, and what has changed in that time?", audio: e08-c1/questions-2.mp3 }
+      - { speaker: Katarina, text: "You mentioned a migration project. What was your personal contribution to it?", audio: e08-c1/questions-3.mp3 }
+      - { speaker: Mark, text: "Which part was the hardest, and how did you deal with it?", audio: e08-c1/questions-4.mp3 }
+      - { speaker: Mark, text: "So, why'd you pick Postgres over Mongo — was it the team, or the data?", audio: e08-c1/questions-5.mp3 }
+      - { speaker: Katarina, text: "Thank you. One last thing: if you could do it again, what would you change?", audio: e08-c1/questions-6.mp3 }
   - type: exercise
     id: questions-q
     about: questions
@@ -313,12 +313,12 @@ blocks:
     title: Сцена 2 · Реплики рекрутера — опыт и проект
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Let's go through your experience. Could you walk me through your CV, starting with your current role?" }
-      - { speaker: Katarina, text: "You said you joined as a developer. How long have you been in your current role, and what has changed since you started?" }
-      - { speaker: Katarina, text: "Thank you. Now, tell me about a project you're proud of." }
-      - { speaker: Katarina, text: "And what was your personal contribution to it?" }
-      - { speaker: Katarina, text: "What was the result? Do you have any numbers?" }
-      - { speaker: Katarina, text: "Thanks, that's clear." }
+      - { speaker: Katarina, text: "Let's go through your experience. Could you walk me through your CV, starting with your current role?", audio: e08-c1/experience-lines-1.mp3 }
+      - { speaker: Katarina, text: "You said you joined as a developer. How long have you been in your current role, and what has changed since you started?", audio: e08-c1/experience-lines-2.mp3 }
+      - { speaker: Katarina, text: "Thank you. Now, tell me about a project you're proud of.", audio: e08-c1/experience-lines-3.mp3 }
+      - { speaker: Katarina, text: "And what was your personal contribution to it?", audio: e08-c1/experience-lines-4.mp3 }
+      - { speaker: Katarina, text: "What was the result? Do you have any numbers?", audio: e08-c1/experience-lines-5.mp3 }
+      - { speaker: Katarina, text: "Thanks, that's clear.", audio: e08-c1/experience-lines-6.mp3 }
   - type: speaking
     id: experience
     part: roleplay
@@ -414,12 +414,12 @@ blocks:
     title: Сцена 3 · Реплики рекрутера — стек и быстрый вопрос
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Right, let's talk about your stack. Which technologies do you use day to day?" }
-      - { speaker: Katarina, text: "Got it. So, why'd you go for PostgreSQL over Mongo — was it the team, or the data, or both?" }
-      - { speaker: Katarina, text: "Sure. I asked if you picked PostgreSQL because of the team, because of the data, or for both reasons." }
-      - { speaker: Katarina, text: "Interesting. And what are the downsides of that choice?" }
-      - { speaker: Katarina, text: "OK. Do you have any experience with Kafka or other message queues?" }
-      - { speaker: Katarina, text: "That's fine, we can teach that. Thanks." }
+      - { speaker: Katarina, text: "Right, let's talk about your stack. Which technologies do you use day to day?", audio: e08-c1/stack-lines-1.mp3 }
+      - { speaker: Katarina, text: "Got it. So, why'd you go for PostgreSQL over Mongo — was it the team, or the data, or both?", audio: e08-c1/stack-lines-2.mp3 }
+      - { speaker: Katarina, text: "Sure. I asked if you picked PostgreSQL because of the team, because of the data, or for both reasons.", audio: e08-c1/stack-lines-3.mp3 }
+      - { speaker: Katarina, text: "Interesting. And what are the downsides of that choice?", audio: e08-c1/stack-lines-4.mp3 }
+      - { speaker: Katarina, text: "OK. Do you have any experience with Kafka or other message queues?", audio: e08-c1/stack-lines-5.mp3 }
+      - { speaker: Katarina, text: "That's fine, we can teach that. Thanks.", audio: e08-c1/stack-lines-6.mp3 }
   - type: speaking
     id: stack
     part: roleplay
@@ -451,12 +451,12 @@ blocks:
     title: Сцена 4 · Реплики рекрутера — мотивация
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Let's talk about motivation. Why do you want to join Tidewell?" }
-      - { speaker: Katarina, text: "Thanks. What do you know about our product?" }
-      - { speaker: Katarina, text: "Good. And where do you see yourself in five years?" }
-      - { speaker: Katarina, text: "What would you like to learn in this role?" }
-      - { speaker: Katarina, text: "This is a senior engineer role, not a team lead role. Is that OK for you?" }
-      - { speaker: Katarina, text: "Great. Thank you." }
+      - { speaker: Katarina, text: "Let's talk about motivation. Why do you want to join Tidewell?", audio: e08-c1/motivation-lines-1.mp3 }
+      - { speaker: Katarina, text: "Thanks. What do you know about our product?", audio: e08-c1/motivation-lines-2.mp3 }
+      - { speaker: Katarina, text: "Good. And where do you see yourself in five years?", audio: e08-c1/motivation-lines-3.mp3 }
+      - { speaker: Katarina, text: "What would you like to learn in this role?", audio: e08-c1/motivation-lines-4.mp3 }
+      - { speaker: Katarina, text: "This is a senior engineer role, not a team lead role. Is that OK for you?", audio: e08-c1/motivation-lines-5.mp3 }
+      - { speaker: Katarina, text: "Great. Thank you.", audio: e08-c1/motivation-lines-6.mp3 }
   - type: speaking
     id: motivation
     part: roleplay
@@ -499,10 +499,10 @@ blocks:
     title: Голосовое сообщение об условиях
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Hi Nadia, it's Katarina again. Thank you for the conversation today. Before our next call, here are the conditions in short." }
-      - { speaker: Katarina, text: "The salary range is eighty to ninety-five thousand euros gross per year, plus stock options. The final figure is decided by the hiring manager after the technical round." }
-      - { speaker: Katarina, text: "The role is remote-first. We only ask you to be online during core hours, from ten to two, Central European time, and to come to Lisbon once a quarter." }
-      - { speaker: Katarina, text: "On the next call, I'll ask about your salary expectations and your notice period, so please think about them. Speak soon." }
+      - { speaker: Katarina, text: "Hi Nadia, it's Katarina again. Thank you for the conversation today. Before our next call, here are the conditions in short.", audio: e08-c1/after-call-1.mp3 }
+      - { speaker: Katarina, text: "The salary range is eighty to ninety-five thousand euros gross per year, plus stock options. The final figure is decided by the hiring manager after the technical round.", audio: e08-c1/after-call-2.mp3 }
+      - { speaker: Katarina, text: "The role is remote-first. We only ask you to be online during core hours, from ten to two, Central European time, and to come to Lisbon once a quarter.", audio: e08-c1/after-call-3.mp3 }
+      - { speaker: Katarina, text: "On the next call, I'll ask about your salary expectations and your notice period, so please think about them. Speak soon.", audio: e08-c1/after-call-4.mp3 }
   - type: exercise
     id: after-call-q
     about: after-call
@@ -548,12 +548,12 @@ blocks:
     title: Сцена 5 · Реплики рекрутера — условия
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Hello Nadia, thanks for calling back. As I said in my message, the range is eighty to ninety-five thousand euros gross, plus stock options. Is that in line with your expectations?" }
-      - { speaker: Katarina, text: "Good. What is your notice period, and when could you start?" }
-      - { speaker: Katarina, text: "Understood. The role is remote-first, with core hours from ten to two Central European time. Would that work for you?" }
-      - { speaker: Katarina, text: "Great. Do you have any questions about the role or the process?" }
-      - { speaker: Katarina, text: "The process has three more steps: a take-home task, a technical round and a final interview. It usually takes three weeks. Anything else?" }
-      - { speaker: Katarina, text: "Of course. I'll send you a summary and the next steps by email today. Thank you for your time." }
+      - { speaker: Katarina, text: "Hello Nadia, thanks for calling back. As I said in my message, the range is eighty to ninety-five thousand euros gross, plus stock options. Is that in line with your expectations?", audio: e08-c1/terms-lines-1.mp3 }
+      - { speaker: Katarina, text: "Good. What is your notice period, and when could you start?", audio: e08-c1/terms-lines-2.mp3 }
+      - { speaker: Katarina, text: "Understood. The role is remote-first, with core hours from ten to two Central European time. Would that work for you?", audio: e08-c1/terms-lines-3.mp3 }
+      - { speaker: Katarina, text: "Great. Do you have any questions about the role or the process?", audio: e08-c1/terms-lines-4.mp3 }
+      - { speaker: Katarina, text: "The process has three more steps: a take-home task, a technical round and a final interview. It usually takes three weeks. Anything else?", audio: e08-c1/terms-lines-5.mp3 }
+      - { speaker: Katarina, text: "Of course. I'll send you a summary and the next steps by email today. Thank you for your time.", audio: e08-c1/terms-lines-6.mp3 }
   - type: speaking
     id: terms
     part: roleplay

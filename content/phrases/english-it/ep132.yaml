@@ -1,5 +1,6 @@
 id: ep132
 text: "If the call fails, it's retried three times."
+audio: phrases/ep132.mp3
 translation: "Если вызов не удаётся, его повторяют три раза."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

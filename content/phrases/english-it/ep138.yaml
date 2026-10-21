@@ -1,5 +1,6 @@
 id: ep138
 text: "The payload is validated before it's saved."
+audio: phrases/ep138.mp3
 translation: "Тело запроса проверяется до сохранения."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

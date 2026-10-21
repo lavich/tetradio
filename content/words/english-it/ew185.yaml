@@ -1,5 +1,6 @@
 id: ew185
 greek: "persist"
+audio: words/ew185.mp3
 russian: "сохранять данные надолго"
 ipa: /pəˈsɪst/
 note: "Data is persisted to disk. — данные записываются на диск"

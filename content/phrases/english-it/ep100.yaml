@@ -1,5 +1,6 @@
 id: ep100
 text: "I'm more of a backend person than a full-stack developer."
+audio: phrases/ep100.mp3
 translation: "Я скорее бэкенд-разработчик, чем фулстек."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04

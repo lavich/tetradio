@@ -1,5 +1,6 @@
 id: ew187
 greek: "validate"
+audio: words/ew187.mp3
 russian: "проверять корректность"
 ipa: /ˈvælɪdeɪt/
 note: "проверка формата и полей данных; личность пользователя проверяет authenticate"

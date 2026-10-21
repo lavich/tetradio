@@ -1,5 +1,6 @@
 id: ew180
 greek: "latency"
+audio: words/ew180.mp3
 russian: "задержка"
 ipa: /ˈleɪtənsi/
 note: "время между запросом и ответом"

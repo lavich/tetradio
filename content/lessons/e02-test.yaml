@@ -60,16 +60,16 @@ blocks:
     title: Experience questions
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Welcome, Viktor. Let's begin with your experience. How long have you worked in tech?" }
-      - { speaker: Viktor, text: "For about eight years. I started as a QA engineer, and I switched to development in 2019." }
-      - { speaker: Sarah, text: "And where do you work now?" }
-      - { speaker: Viktor, text: "At an online marketplace in Prague. I joined five years ago, and I was promoted to senior developer last year." }
-      - { speaker: Sarah, text: "Have you ever led a team?" }
-      - { speaker: Viktor, text: "Not officially yet. I've mentored two juniors, and I took over the search project when my manager left." }
-      - { speaker: Sarah, text: "What did you deliver there?" }
-      - { speaker: Viktor, text: "We overhauled the search service. It took us eight months, and we launched it without any downtime." }
-      - { speaker: Sarah, text: "Why are you looking for a new job?" }
-      - { speaker: Viktor, text: "I'd like to join a bigger team and work on a product used in several countries." }
+      - { speaker: Sarah, text: "Welcome, Viktor. Let's begin with your experience. How long have you worked in tech?", audio: e02-test/call-1.mp3 }
+      - { speaker: Viktor, text: "For about eight years. I started as a QA engineer, and I switched to development in 2019.", audio: e02-test/call-2.mp3 }
+      - { speaker: Sarah, text: "And where do you work now?", audio: e02-test/call-3.mp3 }
+      - { speaker: Viktor, text: "At an online marketplace in Prague. I joined five years ago, and I was promoted to senior developer last year.", audio: e02-test/call-4.mp3 }
+      - { speaker: Sarah, text: "Have you ever led a team?", audio: e02-test/call-5.mp3 }
+      - { speaker: Viktor, text: "Not officially yet. I've mentored two juniors, and I took over the search project when my manager left.", audio: e02-test/call-6.mp3 }
+      - { speaker: Sarah, text: "What did you deliver there?", audio: e02-test/call-7.mp3 }
+      - { speaker: Viktor, text: "We overhauled the search service. It took us eight months, and we launched it without any downtime.", audio: e02-test/call-8.mp3 }
+      - { speaker: Sarah, text: "Why are you looking for a new job?", audio: e02-test/call-9.mp3 }
+      - { speaker: Viktor, text: "I'd like to join a bigger team and work on a product used in several countries.", audio: e02-test/call-10.mp3 }
   - type: exercise
     id: call-q
     about: call

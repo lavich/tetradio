@@ -1,5 +1,6 @@
 id: ew097
 greek: "a feature flag"
+audio: words/ew097.mp3
 russian: "флаг функциональности"
 ipa: /ə ˈfiːtʃə flæɡ/
 note: "включает и выключает функцию без нового релиза"

@@ -1,5 +1,6 @@
 id: ew125
 greek: "dynamically typed"
+audio: words/ew125.mp3
 russian: "с динамической типизацией"
 ipa: /daɪˌnæmɪkli ˈtaɪpt/
 note: "типы проверяются при выполнении: Python, JavaScript"

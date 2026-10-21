@@ -1,5 +1,6 @@
 id: ew124
 greek: "statically typed"
+audio: words/ew124.mp3
 russian: "со статической типизацией"
 ipa: /ˌstætɪkli ˈtaɪpt/
 note: "типы проверяются до запуска: Java, Go, TypeScript"

@@ -1,5 +1,6 @@
 id: ep082
 text: "We went with PostgreSQL because it's battle-tested."
+audio: phrases/ep082.mp3
 translation: "Мы взяли PostgreSQL, потому что он проверен временем."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04

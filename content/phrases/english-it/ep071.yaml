@@ -1,5 +1,6 @@
 id: ep071
 text: "We ran into a problem with the database."
+audio: phrases/ep071.mp3
 translation: "Мы столкнулись с проблемой в базе данных."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03

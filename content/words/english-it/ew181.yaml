@@ -1,5 +1,6 @@
 id: ew181
 greek: "a message queue"
+audio: words/ew181.mp3
 russian: "очередь сообщений"
 ipa: /ə ˈmesɪdʒ kjuː/
 note: "сообщения ждут в очереди, пока их обработает потребитель"

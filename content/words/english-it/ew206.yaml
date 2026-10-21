@@ -1,5 +1,6 @@
 id: ew206
 greek: "observability"
+audio: words/ew206.mp3
 russian: "наблюдаемость"
 ipa: /əbˌzɜːvəˈbɪləti/
 note: "логи, метрики и трассировки показывают, что происходит в системе"

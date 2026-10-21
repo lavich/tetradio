@@ -1,5 +1,6 @@
 id: ep123
 text: "Could you split the question into two parts?"
+audio: phrases/ep123.mp3
 translation: "Не могли бы вы разбить вопрос на две части?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05

@@ -1,5 +1,6 @@
 id: ew196
 greek: "a producer"
+audio: words/ew196.mp3
 russian: "производитель сообщений"
 ipa: /ə prəˈdjuːsə/
 note: "часть системы, которая отправляет сообщения в очередь"

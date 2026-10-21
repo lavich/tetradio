@@ -266,18 +266,18 @@ blocks:
     title: A walk through the system
     plays: 2
     transcript:
-      - { speaker: Samir, text: "Welcome to the team, Isabel. Let me describe how an order moves through the system." }
-      - { speaker: Samir, text: "First, the request is sent to the API gateway. There, the user is authenticated and the payload is validated." }
-      - { speaker: Isabel, text: "And what happens if the validation fails?" }
-      - { speaker: Samir, text: "Then the request is rejected, and the client gets an error right away. If everything is fine, the request is routed to the orders service." }
-      - { speaker: Isabel, text: "Is the data stored there?" }
-      - { speaker: Samir, text: "Yes. The order is saved in PostgreSQL. After that, an event is published to the queue." }
-      - { speaker: Isabel, text: "Why do you use a queue here?" }
-      - { speaker: Samir, text: "The email provider is a third-party service, and it can be slow. With the queue, the order is confirmed in under two hundred milliseconds, and the email is sent later by a consumer." }
-      - { speaker: Isabel, text: "What happens if the provider is down?" }
-      - { speaker: Samir, text: "The consumer retries the message three times. If it still fails, the message is moved to a separate queue, and an alert is sent to the on-call engineer." }
-      - { speaker: Isabel, text: "Can the same email be sent twice?" }
-      - { speaker: Samir, text: "No. The handler is idempotent, so a retry does not create a duplicate." }
+      - { speaker: Samir, text: "Welcome to the team, Isabel. Let me describe how an order moves through the system.", audio: e06-2/walkthrough-1.mp3 }
+      - { speaker: Samir, text: "First, the request is sent to the API gateway. There, the user is authenticated and the payload is validated.", audio: e06-2/walkthrough-2.mp3 }
+      - { speaker: Isabel, text: "And what happens if the validation fails?", audio: e06-2/walkthrough-3.mp3 }
+      - { speaker: Samir, text: "Then the request is rejected, and the client gets an error right away. If everything is fine, the request is routed to the orders service.", audio: e06-2/walkthrough-4.mp3 }
+      - { speaker: Isabel, text: "Is the data stored there?", audio: e06-2/walkthrough-5.mp3 }
+      - { speaker: Samir, text: "Yes. The order is saved in PostgreSQL. After that, an event is published to the queue.", audio: e06-2/walkthrough-6.mp3 }
+      - { speaker: Isabel, text: "Why do you use a queue here?", audio: e06-2/walkthrough-7.mp3 }
+      - { speaker: Samir, text: "The email provider is a third-party service, and it can be slow. With the queue, the order is confirmed in under two hundred milliseconds, and the email is sent later by a consumer.", audio: e06-2/walkthrough-8.mp3 }
+      - { speaker: Isabel, text: "What happens if the provider is down?", audio: e06-2/walkthrough-9.mp3 }
+      - { speaker: Samir, text: "The consumer retries the message three times. If it still fails, the message is moved to a separate queue, and an alert is sent to the on-call engineer.", audio: e06-2/walkthrough-10.mp3 }
+      - { speaker: Isabel, text: "Can the same email be sent twice?", audio: e06-2/walkthrough-11.mp3 }
+      - { speaker: Samir, text: "No. The handler is idempotent, so a retry does not create a duplicate.", audio: e06-2/walkthrough-12.mp3 }
   - type: exercise
     id: walkthrough-q
     about: walkthrough

@@ -1,5 +1,6 @@
 id: ep139
 text: "The response is returned in under two hundred milliseconds."
+audio: phrases/ep139.mp3
 translation: "Ответ возвращается менее чем за двести миллисекунд."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

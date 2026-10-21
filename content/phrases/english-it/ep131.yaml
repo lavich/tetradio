@@ -1,5 +1,6 @@
 id: ep131
 text: "Messages are processed asynchronously."
+audio: phrases/ep131.mp3
 translation: "Сообщения обрабатываются асинхронно."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

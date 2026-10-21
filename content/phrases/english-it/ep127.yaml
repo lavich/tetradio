@@ -1,5 +1,6 @@
 id: ep127
 text: "The user is authenticated first."
+audio: phrases/ep127.mp3
 translation: "Сначала пользователь проходит аутентификацию."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

@@ -1,5 +1,6 @@
 id: ew209
 greek: "stateless"
+audio: words/ew209.mp3
 russian: "не хранящий состояние"
 ipa: /ˈsteɪtləs/
 note: "любой экземпляр сервиса может обработать следующий запрос"

@@ -59,16 +59,16 @@ blocks:
     title: Why Python over Go?
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Daniel, your CV says you built a data service in Python. Why did you choose Python over Go?" }
-      - { speaker: Daniel, text: "Mostly because of the team. Everyone knew Python, and the learning curve for Go would have cost us a month." }
-      - { speaker: Katarina, text: "Did you compare them in any way?" }
-      - { speaker: Daniel, text: "Yes, we ran a benchmark on a real workload. Go was twice as fast, but Python was fast enough for our traffic." }
-      - { speaker: Katarina, text: "So performance wasn't the main factor?" }
-      - { speaker: Daniel, text: "Not at that stage. We cared more about the ecosystem. For data work, Python has better libraries out of the box." }
-      - { speaker: Katarina, text: "And the drawbacks?" }
-      - { speaker: Daniel, text: "Python is dynamically typed, so we needed a linter and a lot of tests. The bigger the codebase became, the more we relied on them." }
-      - { speaker: Katarina, text: "Would you make the same choice today?" }
-      - { speaker: Daniel, text: "For that team, yes. For a new service with high traffic, I would look at Go." }
+      - { speaker: Katarina, text: "Daniel, your CV says you built a data service in Python. Why did you choose Python over Go?", audio: e04-test/call-1.mp3 }
+      - { speaker: Daniel, text: "Mostly because of the team. Everyone knew Python, and the learning curve for Go would have cost us a month.", audio: e04-test/call-2.mp3 }
+      - { speaker: Katarina, text: "Did you compare them in any way?", audio: e04-test/call-3.mp3 }
+      - { speaker: Daniel, text: "Yes, we ran a benchmark on a real workload. Go was twice as fast, but Python was fast enough for our traffic.", audio: e04-test/call-4.mp3 }
+      - { speaker: Katarina, text: "So performance wasn't the main factor?", audio: e04-test/call-5.mp3 }
+      - { speaker: Daniel, text: "Not at that stage. We cared more about the ecosystem. For data work, Python has better libraries out of the box.", audio: e04-test/call-6.mp3 }
+      - { speaker: Katarina, text: "And the drawbacks?", audio: e04-test/call-7.mp3 }
+      - { speaker: Daniel, text: "Python is dynamically typed, so we needed a linter and a lot of tests. The bigger the codebase became, the more we relied on them.", audio: e04-test/call-8.mp3 }
+      - { speaker: Katarina, text: "Would you make the same choice today?", audio: e04-test/call-9.mp3 }
+      - { speaker: Daniel, text: "For that team, yes. For a new service with high traffic, I would look at Go.", audio: e04-test/call-10.mp3 }
   - type: exercise
     id: call-q
     about: call

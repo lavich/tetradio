@@ -215,18 +215,18 @@ blocks:
     title: Tell me about a project you're proud of
     plays: 2
     transcript:
-      - { speaker: Mark, text: "Isabel, tell me about a project you're proud of." }
-      - { speaker: Isabel, text: "I'd like to talk about our search rewrite. I was working on the product catalogue when the search started to fail under heavy load, and we decided to rebuild it." }
-      - { speaker: Mark, text: "What was your role?" }
-      - { speaker: Isabel, text: "I was the only backend developer on the project. My part was designing the data model and the API." }
-      - { speaker: Mark, text: "How did you start?" }
-      - { speaker: Isabel, text: "First, we talked to the support team, because they were hearing the complaints. Then we built a proof of concept in two weeks. By the time we showed it to the managers, we had already tested it on real data." }
-      - { speaker: Mark, text: "Did everything go smoothly?" }
-      - { speaker: Isabel, text: "No. We ran into a problem with the size of the search index, and we were running behind schedule for a month. We found a workaround, and then we solved it properly by splitting the index." }
-      - { speaker: Mark, text: "And how did it end?" }
-      - { speaker: Isabel, text: "Eventually, we launched in March, two weeks ahead of the revised schedule. Search got twice as fast, and conversion went up by fifteen percent." }
-      - { speaker: Mark, text: "What would you do differently?" }
-      - { speaker: Isabel, text: "Looking back, I'd do the discovery phase differently. We had spent too little time on the requirements." }
+      - { speaker: Mark, text: "Isabel, tell me about a project you're proud of.", audio: e03-2/project-story-1.mp3 }
+      - { speaker: Isabel, text: "I'd like to talk about our search rewrite. I was working on the product catalogue when the search started to fail under heavy load, and we decided to rebuild it.", audio: e03-2/project-story-2.mp3 }
+      - { speaker: Mark, text: "What was your role?", audio: e03-2/project-story-3.mp3 }
+      - { speaker: Isabel, text: "I was the only backend developer on the project. My part was designing the data model and the API.", audio: e03-2/project-story-4.mp3 }
+      - { speaker: Mark, text: "How did you start?", audio: e03-2/project-story-5.mp3 }
+      - { speaker: Isabel, text: "First, we talked to the support team, because they were hearing the complaints. Then we built a proof of concept in two weeks. By the time we showed it to the managers, we had already tested it on real data.", audio: e03-2/project-story-6.mp3 }
+      - { speaker: Mark, text: "Did everything go smoothly?", audio: e03-2/project-story-7.mp3 }
+      - { speaker: Isabel, text: "No. We ran into a problem with the size of the search index, and we were running behind schedule for a month. We found a workaround, and then we solved it properly by splitting the index.", audio: e03-2/project-story-8.mp3 }
+      - { speaker: Mark, text: "And how did it end?", audio: e03-2/project-story-9.mp3 }
+      - { speaker: Isabel, text: "Eventually, we launched in March, two weeks ahead of the revised schedule. Search got twice as fast, and conversion went up by fifteen percent.", audio: e03-2/project-story-10.mp3 }
+      - { speaker: Mark, text: "What would you do differently?", audio: e03-2/project-story-11.mp3 }
+      - { speaker: Isabel, text: "Looking back, I'd do the discovery phase differently. We had spent too little time on the requirements.", audio: e03-2/project-story-12.mp3 }
   - type: exercise
     id: project-story-q
     about: project-story

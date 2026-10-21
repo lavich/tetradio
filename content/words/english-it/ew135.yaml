@@ -1,5 +1,6 @@
 id: ew135
 greek: "deprecated"
+audio: words/ew135.mp3
 russian: "устаревший, не рекомендуемый к использованию"
 ipa: /ˈdeprəkeɪtɪd/
 note: "deprecated API — пока работает, но будет удалён"

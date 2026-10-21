@@ -1,5 +1,6 @@
 id: ep130
 text: "The result is cached for ten minutes."
+audio: phrases/ep130.mp3
 translation: "Результат кешируется на десять минут."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

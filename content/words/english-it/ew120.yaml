@@ -1,5 +1,6 @@
 id: ew120
 greek: "type-safe"
+audio: words/ew120.mp3
 russian: "типобезопасный"
 ipa: /ˌtaɪp ˈseɪf/
 note: "компилятор находит ошибки типов до запуска"

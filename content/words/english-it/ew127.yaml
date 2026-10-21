@@ -1,5 +1,6 @@
 id: ew127
 greek: "out of the box"
+audio: words/ew127.mp3
 russian: "из коробки, без дополнительной настройки"
 ipa: /ˌaʊt əv ðə ˈbɒks/
 note: "the framework supports caching out of the box"

@@ -1,5 +1,6 @@
 id: ew208
 greek: "idempotent"
+audio: words/ew208.mp3
 russian: "идемпотентный"
 ipa: /ˌaɪdemˈpəʊtənt/
 note: "повторный вызов даёт тот же результат"

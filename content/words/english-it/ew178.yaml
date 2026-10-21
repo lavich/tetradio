@@ -1,5 +1,6 @@
 id: ew178
 greek: "an endpoint"
+audio: words/ew178.mp3
 russian: "конечная точка API"
 ipa: /ən ˈendpɔɪnt/
 note: "адрес, по которому API принимает запросы"
