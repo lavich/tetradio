@@ -1,8 +1,24 @@
 number: 11
 title: Parties and plans
 subtitle: Вечеринки и планы
-status: draft
+status: published
 goal: принять и сделать приглашение, договориться о времени и месте, перенести и отменить, обменяться контактами
 grammar:
   - present continuous для договорённостей, going to, will, Are you up for…?, How about…?
 sessions: 3
+lessons:
+  - t11-1
+  - t11-2
+  - t11-3
+  - t11-test
+crib:
+  title: планы
+  rows:
+    - [пригласить, Are you up for it?]
+    - [согласиться, Count me in.]
+    - [предложить время, Shall we say eight?]
+    - [ответить без обещания, I'll try to make it.]
+    - [отказаться, I can't make it on Saturday.]
+    - [перенести, Could we move it to Sunday?]
+    - [обменяться контактами, I'll add you.]
+  note: "Договорённость с временем — present continuous (I'm meeting Zoe at eight), решённый заранее план — going to, решение сейчас и обещание — will"

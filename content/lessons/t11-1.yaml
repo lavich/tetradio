@@ -1,0 +1,278 @@
+title: Планы и приглашения — будущее и Are you up for…?
+kind: lesson
+items:
+  - { kind: word, id: tw151 }
+  - { kind: word, id: tw152 }
+  - { kind: word, id: tw153 }
+  - { kind: word, id: tw154 }
+  - { kind: word, id: tw155 }
+  - { kind: word, id: tw156 }
+  - { kind: word, id: tw157 }
+  - { kind: word, id: tw158 }
+  - { kind: phrase, id: tp151 }
+  - { kind: phrase, id: tp152 }
+  - { kind: phrase, id: tp153 }
+  - { kind: phrase, id: tp154 }
+  - { kind: phrase, id: tp155 }
+  - { kind: phrase, id: tp156 }
+  - { kind: phrase, id: tp157 }
+  - { kind: phrase, id: tp158 }
+blocks:
+  - type: explanation
+    id: future-forms
+    title: Три способа говорить о будущем
+    body: |-
+      В разговоре о планах выбор формы зависит от того, когда принято решение. **Present continuous** описывает договорённость: известны день, время и люди. **I'm meeting Zoe at eight.** Часто в предложении есть слово времени: tonight, on Saturday, at eight.
+
+      **Going to** говорит о намерении, которое появилось до разговора: **We're going to throw a housewarming in June.** Эта форма подходит и для прогноза по признакам, которые видны сейчас: Look at those clouds. **It's going to rain.**
+
+      **Will** выбирается для решения в момент речи и для обещания: **I'll get some ice from the shop. I'll text you when I get there.** Если решение принято раньше, will звучит как неожиданное.
+
+      Две частые ошибки. Первая — present simple для договорённости с человеком: I meet Zoe tomorrow at eight. Нужно **I'm meeting Zoe tomorrow at eight.** Вторая — will для плана, который уже есть: Last week I decided to learn guitar, so I'll buy one on Friday. Нужно **I'm going to buy one on Friday** или **I'm buying one on Friday**, если день и магазин уже выбраны.
+    table:
+      columns:
+        - ситуация
+        - форма
+        - пример
+      rows:
+        - - договорённость с временем и людьми
+          - present continuous
+          - I'm meeting Zoe at eight.
+        - - намерение, решённое раньше
+          - going to
+          - We're going to throw a housewarming.
+        - - прогноз по признакам
+          - going to
+          - Look at those clouds. It's going to rain.
+        - - решение в момент речи
+          - will
+          - I'll get some ice from the shop.
+        - - обещание
+          - will
+          - I'll text you when I get there.
+  - type: explanation
+    id: invite-forms
+    title: Are you up for…? и How about…?
+    body: |-
+      **Are you up for…?** — вопрос, готов ли человек к предложению: **Are you up for a gig on Friday?** После for идёт существительное или форма на -ing: **Are you up for going to a gig?** **Are you up for it?** — короткий вариант, когда предложение уже названо.
+
+      **How about…?** предлагает день, время или занятие: **How about Friday?** **How about meeting at eight?** После about идёт существительное или форма на -ing, инфинитив с to здесь не нужен.
+
+      Ответов три. Согласие: **Count me in.** Колебание: **I'll try to make it.** Отказ: **I can't make it on Saturday.** Отказываться можно без объяснений, собеседник отвечает вроде *No worries* или *Another time, then*.
+
+      Две частые ошибки. Первая — глагол с to после about: How about to meet at eight? Нужно **How about meeting at eight?** Вторая — лишний глагол после up for: Are you up for go to a gig? Нужно **Are you up for going to a gig?**
+    table:
+      columns:
+        - что сказать
+        - пример
+      rows:
+        - - пригласить
+          - Are you up for a gig on Friday?
+        - - предложить день
+          - How about Friday?
+        - - предложить занятие
+          - How about meeting at eight?
+        - - согласиться
+          - Count me in.
+        - - ответить без обещания
+          - I'll try to make it.
+        - - отказаться
+          - I can't make it on Saturday.
+  - type: explanation
+    id: party-words
+    title: Слова приглашений и планов
+    body: |-
+      **Come along** — пойти вместе с кем-то: Do you want to come along? **Swing by** — зайти ненадолго по пути; в Британии так же говорят pop round. **A plus-one** — гость, которого приглашённый приводит с собой. **A rain check** — перенос приглашения на другой раз: Can I take a rain check? Слово пришло из США, в Британии его понимают.
+
+      **Bail** — разговорное слово: в последний момент отказаться от встречи, bail on someone. **A house party** — вечеринка дома. **A gig** — концерт небольшой группы. **Turn up** — прийти, появиться.
+
+      Если опаздываете, сообщите заранее: **I'm running a bit late.** Время договаривается так: **Shall we say eight?** Сообщение о вечеринке звучит так: **We're having a few people over on Saturday.**
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: future-choice
+    title: Формы будущего
+    instruction: Выберите вариант, который подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Tess and I ___ to a gig on Friday. We've already bought the tickets."
+        options: [are going, were going, have gone]
+        answer: are going
+        explanation: Договорённость с билетами и днём — present continuous.
+      - id: q2
+        prompt: "— We've run out of ice. — I ___ get some from the shop."
+        options: [will, did, have]
+        answer: will
+        explanation: Решение в момент речи — will.
+      - id: q3
+        prompt: "Last week Leo decided: he ___ a housewarming in June."
+        options: [is going to throw, threw, has thrown]
+        answer: is going to throw
+        explanation: Решение принято раньше, событие в будущем — going to.
+      - id: q4
+        prompt: "Look at those clouds. It ___ rain on the terrace."
+        options: [is going to, was going to, has gone to]
+        answer: is going to
+        explanation: Прогноз по признакам, которые видны сейчас, — going to.
+      - id: q5
+        prompt: "Don't worry, I ___ text you when I get there."
+        options: [will, did, have]
+        answer: will
+        explanation: Обещание — will.
+      - id: q6
+        prompt: "— What are your plans for tonight? — I ___ dinner with my sister. We booked a table."
+        options: [am having, was having, had]
+        answer: am having
+        explanation: Столик заказан, договорённость есть — present continuous.
+  - type: exercise
+    id: invite-choice
+    title: Are you up for…? и How about…?
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "___ you up for a gig on Friday?"
+        options: [Are, Do, Will]
+        answer: Are
+        explanation: Вопрос строится с are — Are you up for…?
+      - id: q2
+        prompt: "How ___ Saturday at eight?"
+        options: [about, if, to]
+        answer: about
+        explanation: Предложение — How about…?
+      - id: q3
+        prompt: "Are you up for ___ to the gig?"
+        options: [going, go, to go]
+        answer: going
+        explanation: После for — форма на -ing.
+      - id: q4
+        prompt: "How about ___ at eight outside the station?"
+        options: [meeting, meet, to meet]
+        answer: meeting
+        explanation: После about — форма на -ing.
+      - id: q5
+        prompt: "Leo asks: Are you up for a house party on Saturday? You want to say yes."
+        options:
+          - Count me in.
+          - I can't make it on Saturday.
+          - I'm running a bit late.
+        answer: Count me in.
+        explanation: Count me in — согласие.
+      - id: q6
+        prompt: "You would like to come, but you do not know yet if you can."
+        options:
+          - I'll try to make it.
+          - Count me in.
+          - I can't make it on Saturday.
+        answer: I'll try to make it.
+        explanation: I'll try to make it — ответ без твёрдого обещания.
+  - type: exercise
+    id: words-match
+    title: Слова приглашений
+    instruction: Соедините русское слово или оборот с английским. Два английских варианта лишние.
+    format: match
+    bank:
+      - come along
+      - swing by
+      - a plus-one
+      - a rain check
+      - bail
+      - a house party
+      - a gig
+      - turn up
+      - a round
+      - a heads-up
+    items:
+      - { id: m1, prompt: "пойти вместе с кем-то, присоединиться к компании", answer: come along }
+      - { id: m2, prompt: "заглянуть ненадолго, зайти по пути", answer: swing by }
+      - { id: m3, prompt: "гость, которого приглашённый приводит с собой", answer: a plus-one }
+      - { id: m4, prompt: "перенос приглашения на другой раз", answer: a rain check }
+      - { id: m5, prompt: "в последний момент отказаться от встречи", answer: bail }
+      - { id: m6, prompt: "вечеринка дома у кого-то", answer: a house party }
+      - { id: m7, prompt: "концерт небольшой группы", answer: a gig }
+      - { id: m8, prompt: "появиться, прийти (о госте)", answer: turn up }
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - Count me in. Which band is playing?
+      - Saturday is good. See you at eight.
+      - No worries. We're in the garden.
+      - Thanks. Should I bring a dessert for the party?
+      - The doors open at seven.
+      - Take the second left.
+    items:
+      - { id: m1, prompt: "Are you up for a gig on Friday?", answer: "Count me in. Which band is playing?" }
+      - { id: m2, prompt: "How about Saturday at eight?", answer: "Saturday is good. See you at eight." }
+      - { id: m3, prompt: "I'm running a bit late.", answer: "No worries. We're in the garden." }
+      - { id: m4, prompt: "We're having a few people over on Sunday.", answer: "Thanks. Should I bring a dessert for the party?" }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'll, can't) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Как насчёт пятницы? (предложение дня)"
+        answer:
+          - How about Friday?
+          - How about on Friday?
+          - What about Friday?
+          - What about on Friday?
+          - How about this Friday?
+          - How about Friday, then?
+          - How's Friday?
+          - How does Friday sound?
+          - What about this Friday?
+        explanation: Предложение дня — How about Friday?
+      - id: q2
+        prompt: "Хочешь пойти на концерт в субботу? (с Are you up for…)"
+        answer:
+          - Are you up for a gig on Saturday?
+          - Are you up for a concert on Saturday?
+          - Are you up for going to a gig on Saturday?
+          - Are you up for going to a concert on Saturday?
+          - Are you up for a gig this Saturday?
+          - Are you up for a concert this Saturday?
+          - Are you up for going to a gig this Saturday?
+          - Are you up for going to a concert this Saturday?
+          - Are you up for a gig on Saturday night?
+          - Are you up for a concert on Saturday night?
+          - Are you up for going to a gig on Saturday night?
+          - Are you up for going to a concert on Saturday night?
+        explanation: Are you up for + существительное или форма на -ing.
+      - id: q3
+        prompt: "Скажем, в восемь? (предложение времени)"
+        answer:
+          - Shall we say eight?
+          - Shall we say eight o'clock?
+          - Shall we say at eight?
+          - Shall we say 8?
+          - Shall we say 8 o'clock?
+          - Let's say eight.
+          - Let's say eight?
+          - Let's say eight o'clock.
+          - Shall we say 8 pm?
+          - Shall we say eight pm?
+          - How about eight?
+          - How about eight o'clock?
+          - How about at eight?
+          - What about eight?
+          - What about eight o'clock?
+        explanation: Shall we say eight? — предложение времени.
+      - id: q4
+        prompt: "Я постараюсь прийти. (ответ без твёрдого обещания)"
+        answer:
+          - I'll try to make it.
+          - I will try to make it.
+          - I'll try and make it.
+          - I'll try to come.
+          - I'll try to be there.
+          - I'll try to come along.
+          - I'll try my best to make it.
+          - I'll do my best to make it.
+        explanation: I'll try to make it — ответ без твёрдого обещания.

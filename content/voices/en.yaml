@@ -77,3 +77,5 @@ characters:
   Ravi: { gender: male, voice: Umbriel }
   Ellie: { gender: female, voice: Pulcherrima }
   Sam: { gender: male, voice: Achird }
+  Leo: { gender: male, voice: Iapetus }
+  Tess: { gender: female, voice: Callirrhoe }

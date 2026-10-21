@@ -1,0 +1,178 @@
+title: Переписка о планах, приглашение с обменом контактами и перенос встречи
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: plans-bank
+    title: Банк фраз — планы
+    body: |-
+      Для разговора о планах нужны пять умений: пригласить, ответить, договориться, перенести и обменяться контактами.
+
+      **Пригласить:** **Are you up for a gig on Friday?** / **How about Friday?** / **We're having a few people over on Saturday.** **Ответить:** **Count me in.** / **I'll try to make it.** / **I can't make it on Saturday.** **Договориться:** **Shall we say eight?** / **What time does it kick off?** / **Could you send me the address?** **Перенести:** **Something has come up. Could we move it to Sunday?** / **Can I take a rain check?** **Обменяться контактами:** **Are you on Instagram?** / **I'll add you.** / **Can I get your number?**
+
+      Перенос звучит коротко: извинение, причина или её отсутствие, новое предложение. **I'm sorry, but something has come up. Could we move it to Sunday?** Собеседник отвечает **No worries** и называет, подходит ли новый день. Причину рассказывать подробно необязательно.
+    table:
+      columns:
+        - умение
+        - фраза
+      rows:
+        - - пригласить
+          - Are you up for a gig on Friday? / How about Friday?
+        - - ответить
+          - Count me in. / I'll try to make it. / I can't make it on Saturday.
+        - - договориться
+          - Shall we say eight? / What time does it kick off?
+        - - перенести
+          - Something has come up. Could we move it to Sunday?
+        - - обменяться контактами
+          - Are you on Instagram? / I'll add you.
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - Count me in. What time does it start?
+      - No worries. Sunday works for me.
+      - Yes, I'm on Instagram. I'll add you.
+      - Sure, I'll send it now.
+      - The doors open at seven.
+      - Take the second left.
+    items:
+      - { id: m1, prompt: "Are you up for a gig on Friday?", answer: "Count me in. What time does it start?" }
+      - { id: m2, prompt: "Something has come up. Could we move it to Sunday?", answer: "No worries. Sunday works for me." }
+      - { id: m3, prompt: "Are you on Instagram?", answer: "Yes, I'm on Instagram. I'll add you." }
+      - { id: m4, prompt: "Could you send me the address?", answer: "Sure, I'll send it now." }
+  - type: explanation
+    id: writing-how
+    title: Переписка — пригласить, договориться, перенести
+    body: |-
+      Вы зовёте друга на вечеринку у себя дома, договариваетесь о времени и в конце сообщаете, что встречу нужно перенести. Объём — 60–100 слов, регистр дружеский: короткие предложения, сокращения (we're, I'll, can't), несколько слов и фраз из модуля.
+
+      Порядок: приглашение (**We're having a few people over on Saturday. Are you up for it?**) → время (**Shall we say eight?**) → перенос с новым днём (**Something has come up. Could we move it to Sunday?**) → срок ответа (**Let me know by Thursday.**).
+  - type: writing
+    id: plans-message
+    register: friendly
+    prompt: "Вы приглашаете подругу Zoe на вечеринку у себя дома в субботу, предлагаете время и в конце сообщаете, что из-за ремонта встречу нужно перенести на воскресенье. Напишите несколько сообщений подряд (60–100 слов): приглашение, время, перенос на тот же час в воскресенье и срок ответа."
+    words: { min: 60, max: 100 }
+    model: |-
+      Hi Zoe, we're having a few people over on Saturday. Are you up for it? Plus-ones are welcome.
+      Shall we say eight? I'll send you the address. Text me when you get there.
+      Sorry, one change. Something has come up: the plumber is coming on Saturday. Could we move it to Sunday at the same time? I know it's short notice, so no worries if you can't make it.
+      Let me know by Thursday if that works for you.
+    criteria:
+      - 60–100 слов; есть приглашение, время, перенос на другой день и срок ответа
+      - "Дружеский регистр: короткие предложения, сокращения (we're, I'll), фразы из модуля (Are you up for it?, Shall we say eight?, Could we move it to Sunday?)"
+      - Перенос начинается с извинения; причина названа одной фразой, новый день и время указаны
+      - Собеседнику оставлено право отказаться (no worries if you can't make it) и назван срок ответа
+  - type: explanation
+    id: invite-how
+    title: Сцена — пригласить и обменяться контактами
+    body: |-
+      Первая сцена: вы на вечеринке у Лео и знакомитесь с Тесс. Вы приглашаете её на концерт в пятницу и договариваетесь о контактах. Сначала звучат только реплики Тесс, подряд, два раза. Затем откройте текст реплик кнопкой «Открыть текст» и держите его перед глазами.
+
+      В задании речи включите запись и отвечайте на каждую реплику по порядку: представьтесь, пригласите Тесс, договоритесь о времени и предложите контакты. Собеседница выбирает способ, и её выбор принимается как есть.
+  - type: listening
+    id: invite-lines
+    title: Реплики собеседника — приглашение
+    plays: 2
+    transcript:
+      - { speaker: Tess, text: "Hi, I'm Tess. Are you a friend of Leo's?" }
+      - { speaker: Tess, text: "Nice to meet you. What are you up to this week?" }
+      - { speaker: Tess, text: "A gig sounds good. What time does it kick off?" }
+      - { speaker: Tess, text: "Half past eight works for me. Shall we swap contacts, so we can sort out the details?" }
+      - { speaker: Tess, text: "Instagram is fine. I'll message you on Thursday. See you on Friday." }
+  - type: speaking
+    id: invite
+    part: roleplay
+    prompt: |-
+      Вы на вечеринке у Лео, рядом Тесс. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Назовите имя и скажите, откуда знаете Лео. На вопрос о планах пригласите Тесс на концерт в пятницу. Назовите время начала концерта и предложите встретиться у входа в полдевятого. Предложите обменяться контактами: Instagram или номер. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Tess: Hi, I'm Tess. Are you a friend of Leo's?
+      You: Yes, I'm Alex. We work together.
+      Tess: Nice to meet you. What are you up to this week?
+      You: Not much. Are you up for a gig on Friday?
+      Tess: A gig sounds good. What time does it kick off?
+      You: It kicks off at nine. Shall we say half past eight outside?
+      Tess: Half past eight works for me. Shall we swap contacts, so we can sort out the details?
+      You: Sure. Are you on Instagram? I can also give you my number.
+      Tess: Instagram is fine. I'll message you on Thursday. See you on Friday.
+      You: Great, see you on Friday.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна-две фразы
+      - "Приглашение: Are you up for a gig on Friday? Время и место: Shall we say half past eight outside?"
+      - "Обмен контактами: назван Instagram и предложен номер как второй вариант (I can also give you my number.)"
+      - Выбор Тесс принят без повторного предложения
+      - Дружеский тон, без восклицаний и спешки
+  - type: explanation
+    id: move-how
+    title: Сцена — перенести встречу
+    body: |-
+      Вторая сцена: вы договорились с Лео встретиться в субботу в шесть, но у вас изменились планы. Вы звоните ему. Лео отвечает спокойно и предлагает другой день. Сначала звучат только его реплики, подряд, два раза. Затем откройте текст реплик и держите его перед глазами.
+
+      В задании речи извинитесь, скажите, что встреча в субботу невозможна, и ответьте на вопросы Лео. Причину можно назвать одной фразой. Новый день предлагает Лео, вы соглашаетесь и договариваетесь, как сообщить о приходе.
+  - type: listening
+    id: move-lines
+    title: Реплики собеседника — перенос встречи
+    plays: 2
+    transcript:
+      - { speaker: Leo, text: "Hello, Leo speaking. Are we still on for Saturday?" }
+      - { speaker: Leo, text: "Oh, that's a shame. Is everything OK?" }
+      - { speaker: Leo, text: "No worries. Could you make Sunday instead?" }
+      - { speaker: Leo, text: "Sunday works. Shall we say six, the same time?" }
+      - { speaker: Leo, text: "Perfect. Text me when you leave, and I'll put the kettle on." }
+  - type: speaking
+    id: move
+    part: roleplay
+    prompt: |-
+      Вы звоните Лео: встреча в субботу в шесть не получается. Прослушайте его реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Скажите, что что-то случилось и в субботу вы не сможете прийти. Ответьте, что всё в порядке, и назовите причину одной фразой. Согласитесь на воскресенье и на шесть часов, поблагодарите за понимание. Пообещайте написать, когда выйдете. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Leo: Hello, Leo speaking. Are we still on for Saturday?
+      You: Hi Leo. I'm sorry, but something has come up and I can't make it on Saturday.
+      Leo: Oh, that's a shame. Is everything OK?
+      You: Yes, everything is fine. I have to help a friend move.
+      Leo: No worries. Could you make Sunday instead?
+      You: Yes, Sunday is good for me.
+      Leo: Sunday works. Shall we say six, the same time?
+      You: Six is fine. Thanks for understanding.
+      Leo: Perfect. Text me when you leave, and I'll put the kettle on.
+      You: Will do. See you on Sunday.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна-две фразы
+      - "Извинение и перенос: I'm sorry, but something has come up and I can't make it on Saturday."
+      - Причина названа одной фразой или опущена; подробный рассказ не нужен
+      - Согласие на воскресенье и на шесть часов, благодарность за понимание
+      - Обещание написать при выходе (I'll text you when I leave. / Will do.)
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "We ___ Leo at six on Sunday. We agreed it yesterday."
+        options: [are meeting, were meeting, have met]
+        answer: are meeting
+        explanation: Договорённость с человеком, днём и временем — present continuous.
+      - id: q2
+        prompt: "The phone is ringing. — I ___ get it."
+        options: [will, did, have]
+        answer: will
+        explanation: Решение в момент речи — will.
+      - id: q3
+        prompt: "How about ___ at the station at eight?"
+        options: [meeting, meet, to meet]
+        answer: meeting
+        explanation: После about — форма на -ing.
+      - id: q4
+        prompt: "You cannot come on Saturday and want to move the meeting."
+        options:
+          - Something has come up. Could we move it to Sunday?
+          - Count me in.
+          - Are you up for it?
+        answer: Something has come up. Could we move it to Sunday?
+        explanation: Извинение и новое предложение — вежливый перенос.

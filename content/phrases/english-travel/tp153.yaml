@@ -1,0 +1,7 @@
+id: tp153
+text: "How about Friday?"
+translation: "Как насчёт пятницы?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t11
+  operation: requested-generation
+  request: Фразы модуля t11 по программе docs/curriculum-english-travel.md

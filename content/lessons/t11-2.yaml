@@ -1,0 +1,355 @@
+title: Приглашение, чат вечеринки и голосовое сообщение
+kind: lesson
+items:
+  - { kind: word, id: tw159 }
+  - { kind: word, id: tw160 }
+  - { kind: word, id: tw161 }
+  - { kind: word, id: tw162 }
+  - { kind: word, id: tw163 }
+  - { kind: word, id: tw164 }
+  - { kind: word, id: tw165 }
+  - { kind: phrase, id: tp159 }
+  - { kind: phrase, id: tp160 }
+  - { kind: phrase, id: tp161 }
+  - { kind: phrase, id: tp162 }
+  - { kind: phrase, id: tp163 }
+  - { kind: phrase, id: tp164 }
+  - { kind: phrase, id: tp165 }
+blocks:
+  - type: explanation
+    id: invite-more
+    title: Ещё слова и фразы приглашений
+    body: |-
+      В письменном приглашении обычно указаны день, время, адрес и условия. **RSVP** — просьба подтвердить, придёте ли: **RSVP to Leo by Thursday.** **BYOB** — приносите напитки с собой, в том числе безалкогольные. **A dress code** — требования к одежде: smart casual означает аккуратную одежду без костюма. **A housewarming** — вечеринка по случаю новоселья.
+
+      **Pre-drinks** — встреча у друзей перед выходом на вечеринку или в бар, **a nightcap** — последний напиток вечера, им может быть и чай. **A no-show** — человек, который обещал прийти и не пришёл. Американская пара к pre-drinks — pregame.
+
+      Организация встречи: **Could you send me the address?** **What time does it kick off?** **I'll let you know by Thursday.** — не позже четверга. **Text me when you get there.** — сообщение, что вы на месте.
+
+      Обмен контактами идёт по желанию обеих сторон. **Are you on Instagram?** — **I'll add you.** Номер телефона можно попросить: **Can I get your number?** Собеседник вправе предложить другой способ, например *I'd rather stick to Instagram*, и такой ответ принимается как есть.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: invitation-how
+    title: Приглашение и чат вечеринки
+    body: |-
+      Сначала прочитайте приглашение и чат целиком: найдите день, время, условия (еда, напитки, одежда) и срок ответа. Затем отвечайте на вопросы. В чате люди пишут коротко, часто без точки в конце.
+  - type: reading
+    id: invitation
+    title: Leo's housewarming — invitation and chat
+    text: |-
+      LEO'S HOUSEWARMING
+      Saturday 13 June, from 7 pm
+      Flat 3, 18 Mill Lane, Bristol
+      Food is provided. BYOB: bring a bottle or a soft drink.
+      Dress code: smart casual.
+      Plus-ones are welcome, but tell me first.
+      RSVP to Leo by Thursday.
+
+      HOUSEWARMING — GROUP CHAT
+
+      Tess: Are you up for Leo's housewarming on Saturday?
+      Zoe: Count me in. Can I bring a plus-one?
+      Tess: Ask Leo. He wants to know by Thursday
+      Zoe: OK, I'll text him. What time does it kick off?
+      Tess: Seven. I'll text you when I get there
+      Zoe: Great. I'll bring lemonade
+      Jack: I'll try to make it. I'm at a gig until nine, so I'll turn up late
+      Tess: No problem. Text me when you get there
+    glosses:
+      - { text: housewarming, russian: новоселье }
+      - { text: provided, russian: "обеспечена, за счёт хозяев" }
+      - { text: tell me first, russian: "сначала сообщите мне" }
+  - type: exercise
+    id: invitation-q
+    about: invitation
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the party for?
+        options:
+          - a new flat
+          - a birthday
+          - a concert
+        answer: a new flat
+        explanation: Housewarming — вечеринка по случаю новоселья.
+      - id: q2
+        prompt: What should guests bring?
+        options:
+          - a bottle or a soft drink
+          - only food
+          - nothing
+        answer: a bottle or a soft drink
+        explanation: "BYOB: bring a bottle or a soft drink. Еда у хозяев."
+      - id: q3
+        prompt: When must guests reply to Leo?
+        options:
+          - by Thursday
+          - on Saturday
+          - by Friday
+        answer: by Thursday
+        explanation: RSVP to Leo by Thursday.
+      - id: q4
+        prompt: What does Zoe ask about bringing a guest?
+        options:
+          - if she can bring a plus-one
+          - if there is a dress code
+          - if she can stay the night
+        answer: if she can bring a plus-one
+        explanation: Can I bring a plus-one?
+      - id: q5
+        prompt: What time does the party start?
+        options:
+          - at seven
+          - at eight
+          - at nine
+        answer: at seven
+        explanation: Seven.
+      - id: q6
+        prompt: What does Zoe say she will bring?
+        options:
+          - lemonade
+          - a cake
+          - sparkling water
+        answer: lemonade
+        explanation: I'll bring lemonade.
+      - id: q7
+        prompt: Why will Jack be late?
+        options:
+          - He is at a gig until nine.
+          - He is working.
+          - He has no invitation.
+        answer: He is at a gig until nine.
+        explanation: I'm at a gig until nine, so I'll turn up late.
+  - type: explanation
+    id: voice-how
+    title: Голосовое сообщение с приглашением
+    body: |-
+      Теперь два голосовых сообщения: Лео приглашает Тесс на концерт, Тесс отвечает. Слушайте дни, время, число билетов и срок ответа. Звучит два раза, транскрипт откроется после ответа.
+
+      В записи **a venue** — место проведения, **doors open** — двери открываются, **on at nine** — группа выходит на сцену в девять.
+  - type: listening
+    id: voice
+    title: Voice messages — a gig on Friday
+    plays: 2
+    transcript:
+      - { speaker: Leo, text: "Hi Tess, it's Leo. Are you up for a gig on Friday? My cousin's band is playing at the Fleece, on Park Street. Doors open at eight, and the band is on at nine." }
+      - { speaker: Leo, text: "I've got two spare tickets, so you can bring a plus-one. Let me know by Wednesday, because I collect the tickets on Thursday." }
+      - { speaker: Tess, text: "Hi Leo, thanks for asking. Count me in, and I'll bring Zoe. Shall we say half past eight outside the venue?" }
+      - { speaker: Leo, text: "Half past eight is fine. It might be loud inside, so text me when you get there." }
+      - { speaker: Tess, text: "Will do. Could you send me the address?" }
+      - { speaker: Leo, text: "Sure, I'll send it now. See you on Friday." }
+  - type: exercise
+    id: voice-q
+    about: voice
+    title: Аудирование — голосовое с приглашением
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is Leo inviting Tess to?
+        options:
+          - a gig
+          - a housewarming
+          - a quiz night
+        answer: a gig
+        explanation: Are you up for a gig on Friday?
+      - id: q2
+        prompt: Whose band is playing?
+        options:
+          - Leo's cousin's
+          - Tess's
+          - Zoe's
+        answer: Leo's cousin's
+        explanation: My cousin's band is playing at the Fleece.
+      - id: q3
+        prompt: How many spare tickets does Leo have?
+        options:
+          - two
+          - one
+          - three
+        answer: two
+        explanation: I've got two spare tickets.
+      - id: q4
+        prompt: When must Tess answer?
+        options:
+          - by Wednesday
+          - by Thursday
+          - on Friday
+        answer: by Wednesday
+        explanation: "Let me know by Wednesday. В четверг Лео забирает билеты."
+      - id: q5
+        prompt: Who will Tess bring?
+        options:
+          - Zoe
+          - Jack
+          - Leo's cousin
+        answer: Zoe
+        explanation: I'll bring Zoe.
+      - id: q6
+        prompt: Where will they meet, and when?
+        options:
+          - outside the venue at half past eight
+          - at the bar at nine
+          - at Leo's flat at eight
+        answer: outside the venue at half past eight
+        explanation: Shall we say half past eight outside the venue? — Half past eight is fine.
+      - id: q7
+        prompt: What does Leo ask Tess to do when she arrives?
+        options:
+          - text him
+          - call him
+          - wait for Zoe
+        answer: text him
+        explanation: Text me when you get there.
+  - type: explanation
+    id: party-how
+    title: Разговор на вечеринке
+    body: |-
+      Второй диалог — в прихожей на новоселье. Лео встречает Тесс, потом приходит Зоя. Говорят быстро, на ходу. Слушайте, почему Зои нет, что принесла Тесс и какой на вечере дресс-код. Звучит два раза, транскрипт откроется после ответа.
+
+      Слова **bailed on me** означают, что человек отменил встречу в последний момент.
+  - type: listening
+    id: party
+    title: At the housewarming
+    plays: 2
+    transcript:
+      - { speaker: Leo, text: "Tess! You made it. Come in. Is Zoe with you?" }
+      - { speaker: Tess, text: "Not yet. She's running a bit late, but she'll turn up around eight." }
+      - { speaker: Leo, text: "No problem. There are soft drinks in the kitchen, and tea if you'd like some." }
+      - { speaker: Tess, text: "Thanks. I brought sparkling water, since it's BYOB. Where shall I put it?" }
+      - { speaker: Leo, text: "In the fridge, please. Jack bailed on me this afternoon, so we're one person short." }
+      - { speaker: Tess, text: "That's a shame. Is it smart casual, like the invitation says? I wasn't sure about these shoes." }
+      - { speaker: Leo, text: "Yes, smart casual, and your shoes are fine." }
+      - { speaker: Zoe, text: "Hi, sorry I'm late. Leo, this is for the new flat." }
+      - { speaker: Leo, text: "Thank you, Zoe. You didn't have to." }
+  - type: exercise
+    id: party-q
+    about: party
+    title: Аудирование — на вечеринке
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why is Zoe not at the party yet?
+        options:
+          - She is running late.
+          - She has no invitation.
+          - She is ill.
+        answer: She is running late.
+        explanation: She's running a bit late.
+      - id: q2
+        prompt: What does Tess bring?
+        options:
+          - sparkling water
+          - a cake
+          - flowers
+        answer: sparkling water
+        explanation: I brought sparkling water, since it's BYOB.
+      - id: q3
+        prompt: Where does Leo ask Tess to put it?
+        options:
+          - in the fridge
+          - on the table
+          - in the kitchen cupboard
+        answer: in the fridge
+        explanation: In the fridge, please.
+      - id: q4
+        prompt: Why is there one person fewer than Leo expected?
+        options:
+          - Jack cancelled at the last moment.
+          - Jack is running late.
+          - Jack is ill.
+        answer: Jack cancelled at the last moment.
+        explanation: Jack bailed on me this afternoon.
+      - id: q5
+        prompt: What is the dress code?
+        options:
+          - smart casual
+          - formal
+          - fancy dress
+        answer: smart casual
+        explanation: Yes, smart casual.
+      - id: q6
+        prompt: When does Tess think Zoe will arrive?
+        options:
+          - around eight
+          - around seven
+          - around nine
+        answer: around eight
+        explanation: She'll turn up around eight.
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank: [RSVP, BYOB, pre-drinks, a nightcap, a dress code, a no-show, a housewarming, a plus-one, a rain check]
+    items:
+      - { id: g1, prompt: "Please ___ to Leo by Thursday, so he knows how many people are coming.", answer: RSVP }
+      - { id: g2, prompt: "The invitation says ___, so I'll bring my own bottle of juice.", answer: BYOB }
+      - { id: g3, prompt: "Come to mine at six for ___ before we go out: a few drinks at home, and then we'll walk to the concert together.", answer: pre-drinks }
+      - { id: g4, prompt: "Before the guests left, Leo made everyone a cup of tea as ___.", answer: a nightcap }
+      - { id: g5, prompt: "Smart casual is ___ for this party: nobody wears sportswear.", answer: a dress code }
+      - { id: g6, prompt: "He said he'd come, but he was ___: he never even called.", answer: a no-show }
+      - { id: g7, prompt: "We're throwing ___ on Saturday to celebrate our new flat.", answer: a housewarming }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'll, you're) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Ты есть в Instagram? (вопрос при обмене контактами)"
+        answer:
+          - Are you on Instagram?
+          - Are you on Insta?
+          - Have you got Instagram?
+          - Do you have Instagram?
+          - Are you on Instagram too?
+          - Do you have an Instagram account?
+          - Have you got an Instagram account?
+          - Have you got an Instagram?
+        explanation: Are you on Instagram? — вопрос при обмене контактами.
+      - id: q2
+        prompt: "Во сколько это начинается? (о вечеринке)"
+        answer:
+          - What time does it kick off?
+          - What time does it start?
+          - What time does it begin?
+          - What time does the party kick off?
+          - What time does the party start?
+          - What time does the party begin?
+          - What time does it start at?
+          - What time is the start?
+          - When does it kick off?
+          - When does it start?
+          - When does it begin?
+        explanation: What time does it kick off? — kick off значит начаться.
+      - id: q3
+        prompt: "Я дам знать не позже четверга."
+        answer:
+          - I'll let you know by Thursday.
+          - I will let you know by Thursday.
+          - I'll tell you by Thursday.
+          - I'll let you know by Thursday at the latest.
+          - I'll let you know no later than Thursday.
+          - I'll let you know on Thursday at the latest.
+        explanation: By Thursday — не позже четверга.
+      - id: q4
+        prompt: "Не могли бы вы прислать мне адрес?"
+        answer:
+          - Could you send me the address?
+          - Could you send me the address, please?
+          - Could you send me the address please?
+          - Can you send me the address please?
+          - Could you please send me the address?
+          - Can you send me the address?
+          - Can you send me the address, please?
+          - Would you send me the address?
+          - Would you mind sending me the address?
+          - Could you text me the address?
+          - Could you message me the address?
+        explanation: Could you send me the address? — вежливая просьба.

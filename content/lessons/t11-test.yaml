@@ -1,0 +1,311 @@
+title: Контрольная модуля t11
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чат о планах на субботу, телефонный разговор о концерте, формы будущего, Are you up for…? и How about…?, слова и фразы модуля. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: plans-chat
+    title: Saturday plans — group chat
+    text: |-
+      SATURDAY PLANS — GROUP CHAT
+
+      Tess: Are you two up for the gig on Saturday? The band is on at nine.
+      Jack: Count me in. Can I bring a plus-one? My cousin is visiting
+      Tess: Of course. Zoe, what about you?
+      Zoe: I'd love to, but I'm helping my sister move on Saturday. I'll try to make it for the end of the gig
+      Jack: How about food at mine first? I'm making pasta at seven
+      Zoe: Can I take a rain check on the pasta? I'll still be at my sister's
+      Tess: No problem. Jack, I'll swing by yours at half past seven
+      Jack: Great. Zoe, text me when you get to the venue, and I'll come and find you
+      Zoe: Will do. I'll meet you at the venue
+    glosses:
+      - { text: the venue, russian: место проведения }
+      - { text: move, russian: переезжать }
+      - { text: at mine, russian: "у меня дома" }
+  - type: exercise
+    id: plans-chat-q
+    about: plans-chat
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What time is the band on?
+        options:
+          - at nine
+          - at seven
+          - at half past seven
+        answer: at nine
+        explanation: The band is on at nine.
+      - id: q2
+        prompt: Who does Jack want to bring to the gig?
+        options:
+          - his cousin
+          - Zoe's sister
+          - Tess's friend
+        answer: his cousin
+        explanation: Can I bring a plus-one? My cousin is visiting.
+      - id: q3
+        prompt: What is Zoe doing on Saturday?
+        options:
+          - helping her sister move
+          - working late
+          - visiting her cousin
+        answer: helping her sister move
+        explanation: I'm helping my sister move on Saturday.
+      - id: q4
+        prompt: What does Zoe say about the pasta?
+        options:
+          - She asks for another time.
+          - She will bring dessert.
+          - She will cook it.
+        answer: She asks for another time.
+        explanation: Can I take a rain check on the pasta?
+      - id: q5
+        prompt: Where will Zoe meet the others?
+        options:
+          - at the venue
+          - at Jack's flat
+          - outside the station
+        answer: at the venue
+        explanation: I'll meet you at the venue.
+      - id: q6
+        prompt: When will Tess go to Jack's flat?
+        options:
+          - at half past seven
+          - at seven
+          - at nine
+        answer: at half past seven
+        explanation: I'll swing by yours at half past seven.
+      - id: q7
+        prompt: What should Zoe do when she gets to the venue?
+        options:
+          - text Jack
+          - call Tess
+          - wait outside
+        answer: text Jack
+        explanation: Zoe, text me when you get to the venue.
+  - type: listening
+    id: gig-call
+    title: A phone call about the gig
+    plays: 2
+    transcript:
+      - { speaker: Jack, text: "Hi Tess, it's Jack. Are you still coming to the gig tonight?" }
+      - { speaker: Tess, text: "I'm so sorry, Jack, I'm running late. I'm stuck at work until half past eight." }
+      - { speaker: Jack, text: "No worries. The band is on at nine, so you can still make it. Shall I wait for you outside?" }
+      - { speaker: Tess, text: "Please don't wait. I'll be there as soon as I can. Which entrance is it?" }
+      - { speaker: Jack, text: "The side entrance on Park Street. The main door has a long queue." }
+      - { speaker: Tess, text: "Got it. Is there a dress code?" }
+      - { speaker: Jack, text: "No, it's very casual. Zoe is turning up around ten, so you can sit with her." }
+      - { speaker: Tess, text: "Great. Can I bring a plus-one? My brother would love it." }
+      - { speaker: Jack, text: "Sure, but he needs a ticket. They cost twelve pounds at the door." }
+      - { speaker: Tess, text: "That's fine. I'll text you when I get there." }
+      - { speaker: Jack, text: "Perfect. See you later." }
+  - type: exercise
+    id: gig-call-q
+    about: gig-call
+    graded: true
+    title: Аудирование — разговор о концерте
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why is Tess late?
+        options:
+          - She is stuck at work until half past eight.
+          - She missed her bus.
+          - She is helping her brother.
+        answer: She is stuck at work until half past eight.
+        explanation: I'm stuck at work until half past eight.
+      - id: q2
+        prompt: What time is the band on?
+        options:
+          - at nine
+          - at half past eight
+          - at ten
+        answer: at nine
+        explanation: The band is on at nine.
+      - id: q3
+        prompt: Which entrance does Jack suggest?
+        options:
+          - the side entrance on Park Street
+          - the main door
+          - the back door on Mill Lane
+        answer: the side entrance on Park Street
+        explanation: The side entrance on Park Street.
+      - id: q4
+        prompt: Why does Jack suggest the side entrance?
+        options:
+          - The main door has a long queue.
+          - The main door is closed.
+          - The side entrance is cheaper.
+        answer: The main door has a long queue.
+        explanation: The main door has a long queue.
+      - id: q5
+        prompt: When does Zoe arrive?
+        options:
+          - around ten
+          - at nine
+          - at half past eight
+        answer: around ten
+        explanation: Zoe is turning up around ten.
+      - id: q6
+        prompt: Who does Tess want to bring?
+        options:
+          - her brother
+          - her sister
+          - a colleague
+        answer: her brother
+        explanation: My brother would love it.
+      - id: q7
+        prompt: How much is a ticket at the door?
+        options:
+          - £12
+          - £15
+          - £20
+        answer: £12
+        explanation: They cost twelve pounds at the door.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Формы будущего, Are you up for…? и How about…?
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I can't talk now. I ___ Jack at eight, and I'm late."
+        options: [am meeting, was meeting, have met]
+        answer: am meeting
+        explanation: Договорённость с человеком и временем — present continuous.
+      - id: q2
+        prompt: "— I forgot to buy milk. — Don't worry, I ___ some on the way."
+        options: [will get, got, have got]
+        answer: will get
+        explanation: Решение в момент речи — will.
+      - id: q3
+        prompt: "Look at those clouds! It ___ rain at the gig."
+        options: [is going to, was going to, has gone to]
+        answer: is going to
+        explanation: Прогноз по признакам, которые видны сейчас, — going to.
+      - id: q4
+        prompt: "How ___ meeting outside at eight?"
+        options: [about, if, to]
+        answer: about
+        explanation: Предложение — How about…?
+      - id: q5
+        prompt: "I'd love to come, but I can't ___ it tonight."
+        options: [make, have, go]
+        answer: make
+        explanation: Make it — суметь прийти.
+      - id: q6
+        prompt: "Which reply politely moves the plan to another day?"
+        options:
+          - Could we move it to Sunday?
+          - Count me in.
+          - Are you up for it?
+        answer: Could we move it to Sunday?
+        explanation: Could we move it to…? — предложение перенести.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово или оборот. Четыре варианта лишние.
+    format: gap
+    bank: [RSVP, BYOB, come along, swing by, a rain check, a dress code, bail, a no-show, a plus-one, turn up, a gig, a house party]
+    items:
+      - { id: g1, prompt: "Please ___ by Friday, so we know how many guests to expect.", answer: RSVP }
+      - { id: g2, prompt: "The flyer says ___: guests bring their own drinks.", answer: BYOB }
+      - { id: g3, prompt: "Would you like to ___ with us to the concert?", answer: come along }
+      - { id: g4, prompt: "I'll ___ your flat on my way home to drop off the book.", answer: swing by }
+      - { id: g5, prompt: "Can I take ___ on dinner? I'm very tired tonight.", answer: a rain check }
+      - { id: g6, prompt: "The invitation mentions ___: smart casual.", answer: a dress code }
+      - { id: g7, prompt: "At the last moment he decided to ___ on us, and we went without him.", answer: bail }
+      - { id: g8, prompt: "The host kept a chair for him, but he was ___ and the chair stayed empty.", answer: a no-show }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'll, you're) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Ты не против сходить на концерт в пятницу? (с Are you up for…)"
+        answer:
+          - Are you up for a gig on Friday?
+          - Are you up for a concert on Friday?
+          - Are you up for going to a gig on Friday?
+          - Are you up for going to a concert on Friday?
+          - Are you up for a gig this Friday?
+          - Are you up for a concert this Friday?
+          - Are you up for going to a gig this Friday?
+          - Are you up for going to a concert this Friday?
+          - Are you up for a gig on Friday night?
+          - Are you up for a concert on Friday night?
+          - Are you up for going to a gig on Friday night?
+          - Are you up for going to a concert on Friday night?
+        explanation: Are you up for + существительное или форма на -ing.
+      - id: q2
+        prompt: "Скажем, в девять? (предложение времени)"
+        answer:
+          - Shall we say nine?
+          - Shall we say nine o'clock?
+          - Shall we say at nine?
+          - Shall we say 9?
+          - Shall we say 9 pm?
+          - Shall we say nine pm?
+          - How about nine?
+          - How about nine o'clock?
+          - How about at nine?
+          - What about nine?
+          - What about nine o'clock?
+          - Let's say nine.
+          - Let's say nine o'clock.
+        explanation: Shall we say nine? — предложение времени.
+      - id: q3
+        prompt: "Напиши мне, когда доберёшься. (сообщение на месте встречи)"
+        answer:
+          - Text me when you get there.
+          - Let me know when you get there.
+          - Let me know when you arrive.
+          - Let me know when you're there.
+          - Text me when you get here.
+          - Text me when you arrive.
+          - Text me once you get there.
+          - Text me once you get here.
+          - Text me once you arrive.
+          - Text me when you've got there.
+          - Text me when you're there.
+          - Text me as soon as you get there.
+          - Text me as soon as you arrive.
+          - Message me when you get there.
+          - Message me when you arrive.
+          - Send me a text when you get there.
+          - Send me a text when you arrive.
+          - Send me a message when you get there.
+          - Send me a message when you arrive.
+          - Drop me a text when you get there.
+          - Drop me a message when you get there.
+        explanation: Text me when you get there — сообщение, что вы на месте.
+      - id: q4
+        prompt: "В субботу я не смогу прийти. (отказ)"
+        answer:
+          - I can't make it on Saturday.
+          - I can't make it this Saturday.
+          - I can't come on Saturday.
+          - I can't come this Saturday.
+          - I won't be able to make it on Saturday.
+          - I won't be able to come on Saturday.
+          - I'm afraid I can't make it on Saturday.
+          - I'm afraid I can't come on Saturday.
+          - Sorry, I can't make it on Saturday.
+          - Sorry, I can't come on Saturday.
+          - I'm not able to make it on Saturday.
+          - I cannot make it on Saturday.
+        explanation: I can't make it on Saturday — отказ.

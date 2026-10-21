@@ -1,0 +1,8 @@
+id: tp151
+text: "Are you up for it?"
+translation: "Тебе подходит? Ты не против?"
+note: "приглашение; up for — готов, не против; ответы: Count me in. / I'll try to make it."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t11
+  operation: requested-generation
+  request: Фразы модуля t11 по программе docs/curriculum-english-travel.md
