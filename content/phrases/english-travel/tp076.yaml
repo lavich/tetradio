@@ -1,0 +1,8 @@
+id: tp076
+text: "I've been feeling sick since yesterday."
+translation: "Меня тошнит со вчерашнего дня."
+note: "в британском английском feel sick — «тошнит»; «болею» — I've been ill / I've been unwell"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t06
+  operation: requested-generation
+  request: Фразы модуля t06 программы docs/curriculum-english-travel.md

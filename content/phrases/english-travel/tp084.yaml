@@ -1,0 +1,7 @@
+id: tp084
+text: "How often should I take it?"
+translation: "Как часто его принимать?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t06
+  operation: requested-generation
+  request: Фразы модуля t06 программы docs/curriculum-english-travel.md

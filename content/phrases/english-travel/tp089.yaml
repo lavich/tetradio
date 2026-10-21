@@ -1,0 +1,8 @@
+id: tp089
+text: "Please call an ambulance!"
+translation: "Пожалуйста, вызовите скорую!"
+note: "номер экстренных служб в Британии — 999, в ЕС — 112"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t06
+  operation: requested-generation
+  request: Фразы модуля t06 программы docs/curriculum-english-travel.md

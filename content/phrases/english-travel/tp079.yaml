@@ -1,0 +1,7 @@
+id: tp079
+text: "I think I've sprained my ankle."
+translation: "Кажется, я растянул лодыжку."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t06
+  operation: requested-generation
+  request: Фразы модуля t06 программы docs/curriculum-english-travel.md

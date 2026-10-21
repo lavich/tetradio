@@ -55,3 +55,5 @@ characters:
   Diego: { gender: male, voice: Rasalgethi }
   Grace: { gender: female, voice: Laomedeia }
   Callum: { gender: male, voice: Sadachbia }
+  Bridget: { gender: female, voice: Sulafat }
+  Okafor: { gender: male, voice: Schedar }
