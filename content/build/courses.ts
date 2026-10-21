@@ -7,6 +7,7 @@ import {
   parsePassShare,
   type CatalogModule,
 } from "../../src/content/course.ts";
+import { DEFAULT_PALETTE } from "../../src/content/palettes.ts";
 import type { Language } from "../../src/domain/language.ts";
 import { fail, LANGUAGE, languageOf, nfc, text } from "./common.ts";
 import type { ContentRoot, CourseSource } from "./sources.ts";
@@ -166,6 +167,20 @@ export function buildCourses(sources: ContentRoot) {
     if (twin) fail(`courses/${twin}.order и courses/${src.file}.order: место ${order} у двух курсов`);
     places.set(order, src.file);
   }
+  const fileOf = (courseId: string) => sources.courses.get(courseId)!.file;
+  const unique = (field: string, key: (course: CatalogCourse) => string | undefined) => {
+    const seen = new Map<string, string>();
+    for (const course of courses) {
+      const value = key(course);
+      if (value === undefined) continue;
+      const twin = seen.get(`${course.language}\n${value}`);
+      if (twin)
+        fail(`courses/${fileOf(twin)}.${field} и courses/${fileOf(course.id)}.${field}: одно значение у курсов языка`);
+      seen.set(`${course.language}\n${value}`, course.id);
+    }
+  };
+  unique("short", (course) => course.short?.toLocaleLowerCase());
+  unique("palette", (course) => course.palette ?? DEFAULT_PALETTE);
   const place = (course: CatalogCourse) => course.order ?? Number.MAX_SAFE_INTEGER;
   courses.sort((a, b) => place(a) - place(b) || a.id.localeCompare(b.id));
   return {

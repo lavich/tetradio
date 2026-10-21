@@ -538,13 +538,17 @@ describe("каталог с неверным полем выбора курса"
     await refreshCatalog(
       fresh,
       memoryFetcher(content, {
-        "content/catalog.json": { ...catalog, courses: [{ ...first, level: "Pre-A1 → A1", short: "а".repeat(20) }] },
+        "content/catalog.json": {
+          ...catalog,
+          courses: [{ ...first, level: "Pre-A1 → A1", short: "а".repeat(30), palette: "rainbow" }],
+        },
       }),
     );
     const stored = await fresh.courses.get(first.id);
     expect(stored).toBeDefined();
     expect(stored).not.toHaveProperty("level");
     expect(stored).not.toHaveProperty("short");
+    expect(stored).not.toHaveProperty("palette");
     fresh.close();
   });
 });

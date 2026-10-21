@@ -4,6 +4,7 @@
  * не примет. Карточки слов и фраз остаются частью урока как раньше; блоки добавляют объяснение, задания с ключом,
  * чтение, аудирование, письмо и речь.
  */
+import { isPalette, PALETTES, type PaletteName } from "./palettes.ts";
 import { ContentError } from "./schema-errors.ts";
 
 export const SKILLS = ["reading", "listening", "writing", "speaking"] as const;
@@ -178,14 +179,16 @@ export interface CourseChoice {
   /** Ступени: «A0 → A2», «B1 → B1+». */
   level?: string;
   goal?: string;
-  /** Имя в переключателе курса. */
+  /** Имя курса внутри его языка: заголовок полки, подпись в «Словах». */
   short?: string;
+  /** Гамма обложек; без поля — гамма по умолчанию. */
+  palette?: PaletteName;
   /** Место среди курсов: стартовый экран, переключатель и основной курс, пока ничего не начато. */
   order?: number;
 }
 const LEVEL = /^(A0|A1|A2|B1|B2|C1|C2)\+?( → (A1|A2|B1|B2|C1|C2)\+?)?$/;
 export const GOAL_MAX = 90;
-export const SHORT_MAX = 14;
+export const SHORT_MAX = 20;
 const line = (value: unknown, path: string, max: number) => {
   const text = str(value, path).normalize("NFC");
   if (/[\r\n]/.test(text)) throw new ContentError(`${path}: одна строка без перевода строки`);
@@ -198,7 +201,7 @@ const line = (value: unknown, path: string, max: number) => {
  */
 export function readCourseChoice(input: Record<string, unknown>): CourseChoice {
   const choice: CourseChoice = {};
-  for (const field of ["level", "goal", "short", "order"] as const)
+  for (const field of ["level", "goal", "short", "palette", "order"] as const)
     try {
       Object.assign(choice, parseCourseChoice({ [field]: input[field] }, "каталог"));
     } catch (error) {
@@ -216,6 +219,11 @@ export function parseCourseChoice(input: Record<string, unknown>, path: string):
   }
   if (input.goal !== undefined) choice.goal = line(input.goal, `${path}.goal`, GOAL_MAX);
   if (input.short !== undefined) choice.short = line(input.short, `${path}.short`, SHORT_MAX);
+  if (input.palette !== undefined) {
+    if (!isPalette(input.palette))
+      throw new ContentError(`${path}.palette: ожидалась одна из гамм ${Object.keys(PALETTES).join(", ")}`);
+    choice.palette = input.palette;
+  }
   if (input.order !== undefined) choice.order = int(input.order, `${path}.order`, 1);
   return choice;
 }

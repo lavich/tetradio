@@ -63,6 +63,7 @@ export interface CourseSource {
   level?: unknown;
   goal?: unknown;
   short?: unknown;
+  palette?: unknown;
   order?: unknown;
 }
 /** Текст для беглого чтения: `readings/<курс>/<id>.yaml`; открывается после урока `after`. */
@@ -324,6 +325,7 @@ const COURSE_FIELDS = {
   level: true,
   goal: true,
   short: true,
+  palette: true,
   order: true,
 } satisfies Record<keyof CourseSource, true>;
 
