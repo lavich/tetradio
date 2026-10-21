@@ -1,0 +1,7 @@
+id: ep265
+text: "Given more time, I would test it properly."
+translation: "Будь у меня больше времени, я бы нормально это протестировал."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11
+  operation: requested-generation
+  request: Фразы модуля e11 по программе docs/curriculum-english-it.md

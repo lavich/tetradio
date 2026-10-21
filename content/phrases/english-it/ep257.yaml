@@ -1,0 +1,7 @@
+id: ep257
+text: "If two deadlines clashed, I'd ask which one matters more."
+translation: "Если бы два срока совпали, я бы спросил, какой из них важнее."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11
+  operation: requested-generation
+  request: Фразы модуля e11 по программе docs/curriculum-english-it.md

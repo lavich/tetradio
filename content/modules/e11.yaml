@@ -1,8 +1,24 @@
 number: 11
 title: What would you do if…
 subtitle: Гипотетические вопросы
-status: draft
+status: published
 goal: рассуждать о гипотетической ситуации и обосновать решение
 grammar:
   - conditionals 1–2, unless, in case
 sessions: 3
+crib:
+  title: А если…
+  rows:
+    - [реальная возможность, "If I can't fix it quickly, I'll escalate it."]
+    - [воображаемая ситуация, "If the release broke production, I would roll it back first. If I were in that position, I'd tell my manager straight away."]
+    - [если не, "Unless the fix is trivial, I wouldn't ship it on a Friday."]
+    - [на случай, "I'd keep a backup plan in case something went wrong. I'd take a snapshot first, in case the rollback fails."]
+    - [при условии, "As long as the data is correct, I'd go ahead."]
+    - [приоритет и риск, "My first priority would be to limit the damage. I'd weigh the risk against the deadline."]
+    - [решение, "I wouldn't make the decision on my own. I'd ask for a second opinion before deciding."]
+  note: "после if в первом условном — present simple и will, во втором — past simple и would; после unless, in case и as long as will не ставят; в ответе названы первый шаг, риск, с кем согласовано решение и что будет потом"
+lessons:
+  - e11-1
+  - e11-2
+  - e11-3
+  - e11-test

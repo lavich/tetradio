@@ -1,0 +1,7 @@
+id: ep266
+text: "I'd do a proper review once things calmed down."
+translation: "Когда всё успокоится, я бы провёл полноценный разбор."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11
+  operation: requested-generation
+  request: Фразы модуля e11 по программе docs/curriculum-english-it.md

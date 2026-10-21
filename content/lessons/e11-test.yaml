@@ -1,0 +1,479 @@
+title: Контрольная модуля e11
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, first и second conditional, unless, in case и as long as, слова модуля и перевод фраз. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: guide
+    title: "Release rules at Dunmore Cloud"
+    text: |-
+      Release rules at Dunmore Cloud
+
+      Every team at Dunmore Cloud follows the same rules for risky changes.
+
+      Before a release, the team writes a short risk assessment. It lists what could go wrong, how likely it is and how severe the effect would be. If both the likelihood and the severity are high, the engineering manager makes a go/no-go decision. Otherwise, the team lead decides.
+
+      Releases go out only in the release window, from Monday to Thursday, before four o'clock. Unless a change is urgent, it waits for the next window. Changes to payments always use a phased rollout: five percent of users first, then fifty percent, then everyone.
+
+      Every release has a rollback plan, in case the change causes problems. As long as the error rate stays below one percent, the team continues the rollout. If it rises above one percent, the on-call engineer stops the rollout and informs the team lead.
+
+      The team keeps a decision log, so everyone can see why a release was approved or stopped.
+    glosses:
+      - { text: urgent, russian: срочный }
+      - { text: "error rate", russian: "доля ошибок" }
+      - { text: continues, russian: продолжает }
+      - { text: "decision log", russian: "журнал решений" }
+      - { text: approved, russian: одобрен }
+  - type: exercise
+    id: guide-tf
+    about: guide
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The team writes a risk assessment before a release.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: The engineering manager makes a go/no-go decision when only the likelihood is high.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "If both are high, the manager decides; otherwise, the team lead decides — если высока только вероятность, решает руководитель команды."
+      - id: q3
+        prompt: Releases can go out on Fridays.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "From Monday to Thursday — релизы выпускают с понедельника по четверг."
+      - id: q4
+        prompt: Changes to payments use a phased rollout.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: The rollout continues as long as the error rate stays below one percent.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q6
+        prompt: The decision log is kept only by the engineering manager.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "The team keeps a decision log — журнал ведёт команда, и его видят все."
+  - type: listening
+    id: call
+    title: What-if questions in an interview
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Thanks for coming, Nadia. I'd like to ask a few what-if questions. What would you do if a customer reported that exports were failing the day before a big release?" }
+      - { speaker: Nadia, text: "First, I'd make sure I understand the impact. I'd ask how many customers are affected and since when. If it were only one customer with a rare setting, I would note it in a ticket and look at it after the release. If many customers were affected, I would tell my team lead straight away." }
+      - { speaker: Ingrid, text: "And if the team lead couldn't decide?" }
+      - { speaker: Nadia, text: "I would explain the trade-off: we either delay the release by a day, or we release with a known problem and a workaround. It would come down to the risk for customers. I wouldn't make that decision on my own, so I would ask the product owner too." }
+      - { speaker: Ingrid, text: "What would you do if you had no time to test a fix properly?" }
+      - { speaker: Nadia, text: "I would test the part that is most likely to break and ask a colleague for a second opinion. I'd release the fix to a small group of users first, and I would keep a rollback plan ready in case something went wrong." }
+      - { speaker: Ingrid, text: "Last question. What would you do if you realised after a release that you had made a mistake?" }
+      - { speaker: Nadia, text: "I would tell the team at once and roll the change back. Then I would write down what happened, so that we could learn from it." }
+      - { speaker: Ingrid, text: "Thank you, Nadia. That was very clear." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What problem does Ingrid describe?
+        options:
+          - exports are failing the day before a release
+          - the website is slow after a release
+          - a customer cannot log in
+        answer: exports are failing the day before a release
+      - id: q2
+        prompt: What would Nadia ask first?
+        options:
+          - how many customers are affected and since when
+          - which developer wrote the export code
+          - whether the customer has a contract
+        answer: how many customers are affected and since when
+      - id: q3
+        prompt: What would Nadia do if only one customer with a rare setting were affected?
+        options:
+          - note it in a ticket and look at it after the release
+          - cancel the release
+          - fix it immediately at night
+        answer: note it in a ticket and look at it after the release
+      - id: q4
+        prompt: What are the two options in the trade-off Nadia describes?
+        options:
+          - delay the release by a day, or release with a known problem and a workaround
+          - roll back the release, or ask the customer to wait
+          - add more servers, or reduce the number of customers
+        answer: delay the release by a day, or release with a known problem and a workaround
+      - id: q5
+        prompt: How would Nadia release a fix that she had little time to test?
+        options:
+          - to a small group of users first
+          - to all users at once
+          - only after a week of tests
+        answer: to a small group of users first
+      - id: q6
+        prompt: What would Nadia do after she realised that she had made a mistake?
+        options:
+          - tell the team at once and roll the change back
+          - wait to see whether anyone noticed
+          - fix it quietly and mention it later
+        answer: tell the team at once and roll the change back
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Conditionals, unless, in case, as long as
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If the alert ___ at night, the on-call engineer will open an incident. (реальная возможность)"
+        options: [fires, would fire, fired]
+        answer: fires
+        explanation: После if с реальной возможностью стоит настоящее время, в главной части — will.
+      - id: q2
+        prompt: "If I ___ the manager, I would delay the release. (воображаемая ситуация)"
+        options: [were, am, would be]
+        answer: were
+        explanation: После second conditional у глагола be стоит were.
+      - id: q3
+        prompt: "The team will not ship ___ the tests pass. (только если тесты пройдены)"
+        options: [unless, in case, as long as]
+        answer: unless
+        explanation: "Unless значит «если не»: без прошедших тестов команда не выпускает."
+      - id: q4
+        prompt: "Keep a rollback plan ___ the release causes problems. (на случай)"
+        options: [in case, unless, as long as]
+        answer: in case
+        explanation: In case описывает подготовку заранее.
+      - id: q5
+        prompt: Какое предложение верно?
+        options:
+          - If we had more time, we would test it properly.
+          - If we would have more time, we would test it properly.
+          - If we had more time, we will test it properly.
+        answer: If we had more time, we would test it properly.
+        explanation: Second conditional — past simple в части с if и would в главной части.
+      - id: q6
+        prompt: Какое предложение верно?
+        options:
+          - Unless the patch is small, I won't deploy it today.
+          - Unless the patch isn't small, I won't deploy it today.
+          - Unless the patch will be small, I won't deploy it today.
+        answer: Unless the patch is small, I won't deploy it today.
+        explanation: После unless стоит утвердительная форма настоящего времени.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - escalate
+      - a worst case
+      - severity
+      - a kill switch
+      - a phased rollout
+      - a war room
+      - stand down
+      - a tie-breaker
+    items:
+      - id: g1
+        prompt: "I cannot fix this alone, so I will ___ the issue to my manager. (передать выше)"
+        answer: escalate
+      - id: g2
+        prompt: "Imagine ___ for this change: every payment fails for an hour. (наихудший вариант)"
+        answer: a worst case
+      - id: g3
+        prompt: An incident that affects every customer has high ___. (тяжесть)
+        answer: severity
+      - id: g4
+        prompt: Something went wrong in the new feature, so we turned it off with ___. (аварийный выключатель)
+        answer: a kill switch
+      - id: g5
+        prompt: Only a few users got the new version first. It was ___. (постепенный выпуск)
+        answer: a phased rollout
+      - id: g6
+        prompt: When the incident was over, the lead told the team to ___. (завершить режим тревоги)
+        answer: stand down
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Если я не смогу это исправить, я передам вопрос руководителю.
+        answer:
+          - "If I cannot fix it, I will escalate it to my manager"
+          - "If I cannot fix it, I will escalate it to my line manager"
+          - "If I cannot fix it, I will escalate it to my team lead"
+          - "If I cannot fix it, I will escalate this to my manager"
+          - "If I cannot fix it, I will escalate this to my line manager"
+          - "If I cannot fix it, I will escalate this to my team lead"
+          - "If I cannot fix it, I will escalate the issue to my manager"
+          - "If I cannot fix it, I will escalate the issue to my line manager"
+          - "If I cannot fix it, I will escalate the issue to my team lead"
+          - "If I cannot fix it I will escalate it to my manager"
+          - "If I cannot fix it I will escalate it to my line manager"
+          - "If I cannot fix it I will escalate it to my team lead"
+          - "If I cannot fix it I will escalate this to my manager"
+          - "If I cannot fix it I will escalate this to my line manager"
+          - "If I cannot fix it I will escalate this to my team lead"
+          - "If I cannot fix it I will escalate the issue to my manager"
+          - "If I cannot fix it I will escalate the issue to my line manager"
+          - "If I cannot fix it I will escalate the issue to my team lead"
+          - "If I cannot fix this, I will escalate it to my manager"
+          - "If I cannot fix this, I will escalate it to my line manager"
+          - "If I cannot fix this, I will escalate it to my team lead"
+          - "If I cannot fix this, I will escalate this to my manager"
+          - "If I cannot fix this, I will escalate this to my line manager"
+          - "If I cannot fix this, I will escalate this to my team lead"
+          - "If I cannot fix this, I will escalate the issue to my manager"
+          - "If I cannot fix this, I will escalate the issue to my line manager"
+          - "If I cannot fix this, I will escalate the issue to my team lead"
+          - "If I cannot fix this I will escalate it to my manager"
+          - "If I cannot fix this I will escalate it to my line manager"
+          - "If I cannot fix this I will escalate it to my team lead"
+          - "If I cannot fix this I will escalate this to my manager"
+          - "If I cannot fix this I will escalate this to my line manager"
+          - "If I cannot fix this I will escalate this to my team lead"
+          - "If I cannot fix this I will escalate the issue to my manager"
+          - "If I cannot fix this I will escalate the issue to my line manager"
+          - "If I cannot fix this I will escalate the issue to my team lead"
+          - "If I am not able to fix it, I will escalate it to my manager"
+          - "If I am not able to fix it, I will escalate it to my line manager"
+          - "If I am not able to fix it, I will escalate it to my team lead"
+          - "If I am not able to fix it, I will escalate this to my manager"
+          - "If I am not able to fix it, I will escalate this to my line manager"
+          - "If I am not able to fix it, I will escalate this to my team lead"
+          - "If I am not able to fix it, I will escalate the issue to my manager"
+          - "If I am not able to fix it, I will escalate the issue to my line manager"
+          - "If I am not able to fix it, I will escalate the issue to my team lead"
+          - "If I am not able to fix it I will escalate it to my manager"
+          - "If I am not able to fix it I will escalate it to my line manager"
+          - "If I am not able to fix it I will escalate it to my team lead"
+          - "If I am not able to fix it I will escalate this to my manager"
+          - "If I am not able to fix it I will escalate this to my line manager"
+          - "If I am not able to fix it I will escalate this to my team lead"
+          - "If I am not able to fix it I will escalate the issue to my manager"
+          - "If I am not able to fix it I will escalate the issue to my line manager"
+          - "If I am not able to fix it I will escalate the issue to my team lead"
+          - "If I am not able to fix this, I will escalate it to my manager"
+          - "If I am not able to fix this, I will escalate it to my line manager"
+          - "If I am not able to fix this, I will escalate it to my team lead"
+          - "If I am not able to fix this, I will escalate this to my manager"
+          - "If I am not able to fix this, I will escalate this to my line manager"
+          - "If I am not able to fix this, I will escalate this to my team lead"
+          - "If I am not able to fix this, I will escalate the issue to my manager"
+          - "If I am not able to fix this, I will escalate the issue to my line manager"
+          - "If I am not able to fix this, I will escalate the issue to my team lead"
+          - "If I am not able to fix this I will escalate it to my manager"
+          - "If I am not able to fix this I will escalate it to my line manager"
+          - "If I am not able to fix this I will escalate it to my team lead"
+          - "If I am not able to fix this I will escalate this to my manager"
+          - "If I am not able to fix this I will escalate this to my line manager"
+          - "If I am not able to fix this I will escalate this to my team lead"
+          - "If I am not able to fix this I will escalate the issue to my manager"
+          - "If I am not able to fix this I will escalate the issue to my line manager"
+          - "If I am not able to fix this I will escalate the issue to my team lead"
+          - "If I am unable to fix it, I will escalate it to my manager"
+          - "If I am unable to fix it, I will escalate it to my line manager"
+          - "If I am unable to fix it, I will escalate it to my team lead"
+          - "If I am unable to fix it, I will escalate this to my manager"
+          - "If I am unable to fix it, I will escalate this to my line manager"
+          - "If I am unable to fix it, I will escalate this to my team lead"
+          - "If I am unable to fix it, I will escalate the issue to my manager"
+          - "If I am unable to fix it, I will escalate the issue to my line manager"
+          - "If I am unable to fix it, I will escalate the issue to my team lead"
+          - "If I am unable to fix it I will escalate it to my manager"
+          - "If I am unable to fix it I will escalate it to my line manager"
+          - "If I am unable to fix it I will escalate it to my team lead"
+          - "If I am unable to fix it I will escalate this to my manager"
+          - "If I am unable to fix it I will escalate this to my line manager"
+          - "If I am unable to fix it I will escalate this to my team lead"
+          - "If I am unable to fix it I will escalate the issue to my manager"
+          - "If I am unable to fix it I will escalate the issue to my line manager"
+          - "If I am unable to fix it I will escalate the issue to my team lead"
+          - "If I am unable to fix this, I will escalate it to my manager"
+          - "If I am unable to fix this, I will escalate it to my line manager"
+          - "If I am unable to fix this, I will escalate it to my team lead"
+          - "If I am unable to fix this, I will escalate this to my manager"
+          - "If I am unable to fix this, I will escalate this to my line manager"
+          - "If I am unable to fix this, I will escalate this to my team lead"
+          - "If I am unable to fix this, I will escalate the issue to my manager"
+          - "If I am unable to fix this, I will escalate the issue to my line manager"
+          - "If I am unable to fix this, I will escalate the issue to my team lead"
+          - "If I am unable to fix this I will escalate it to my manager"
+          - "If I am unable to fix this I will escalate it to my line manager"
+          - "If I am unable to fix this I will escalate it to my team lead"
+          - "If I am unable to fix this I will escalate this to my manager"
+          - "If I am unable to fix this I will escalate this to my line manager"
+          - "If I am unable to fix this I will escalate this to my team lead"
+          - "If I am unable to fix this I will escalate the issue to my manager"
+          - "If I am unable to fix this I will escalate the issue to my line manager"
+          - "If I am unable to fix this I will escalate the issue to my team lead"
+          - "I will escalate it to my manager if I cannot fix it"
+          - "I will escalate it to my manager if I cannot fix this"
+          - "I will escalate it to my manager if I am not able to fix it"
+          - "I will escalate it to my manager if I am not able to fix this"
+          - "I will escalate it to my manager if I am unable to fix it"
+          - "I will escalate it to my manager if I am unable to fix this"
+          - "I will escalate it to my line manager if I cannot fix it"
+          - "I will escalate it to my line manager if I cannot fix this"
+          - "I will escalate it to my line manager if I am not able to fix it"
+          - "I will escalate it to my line manager if I am not able to fix this"
+          - "I will escalate it to my line manager if I am unable to fix it"
+          - "I will escalate it to my line manager if I am unable to fix this"
+          - "I will escalate it to my team lead if I cannot fix it"
+          - "I will escalate it to my team lead if I cannot fix this"
+          - "I will escalate it to my team lead if I am not able to fix it"
+          - "I will escalate it to my team lead if I am not able to fix this"
+          - "I will escalate it to my team lead if I am unable to fix it"
+          - "I will escalate it to my team lead if I am unable to fix this"
+          - "I will escalate this to my manager if I cannot fix it"
+          - "I will escalate this to my manager if I cannot fix this"
+          - "I will escalate this to my manager if I am not able to fix it"
+          - "I will escalate this to my manager if I am not able to fix this"
+          - "I will escalate this to my manager if I am unable to fix it"
+          - "I will escalate this to my manager if I am unable to fix this"
+          - "I will escalate this to my line manager if I cannot fix it"
+          - "I will escalate this to my line manager if I cannot fix this"
+          - "I will escalate this to my line manager if I am not able to fix it"
+          - "I will escalate this to my line manager if I am not able to fix this"
+          - "I will escalate this to my line manager if I am unable to fix it"
+          - "I will escalate this to my line manager if I am unable to fix this"
+          - "I will escalate this to my team lead if I cannot fix it"
+          - "I will escalate this to my team lead if I cannot fix this"
+          - "I will escalate this to my team lead if I am not able to fix it"
+          - "I will escalate this to my team lead if I am not able to fix this"
+          - "I will escalate this to my team lead if I am unable to fix it"
+          - "I will escalate this to my team lead if I am unable to fix this"
+          - "I will escalate the issue to my manager if I cannot fix it"
+          - "I will escalate the issue to my manager if I cannot fix this"
+          - "I will escalate the issue to my manager if I am not able to fix it"
+          - "I will escalate the issue to my manager if I am not able to fix this"
+          - "I will escalate the issue to my manager if I am unable to fix it"
+          - "I will escalate the issue to my manager if I am unable to fix this"
+          - "I will escalate the issue to my line manager if I cannot fix it"
+          - "I will escalate the issue to my line manager if I cannot fix this"
+          - "I will escalate the issue to my line manager if I am not able to fix it"
+          - "I will escalate the issue to my line manager if I am not able to fix this"
+          - "I will escalate the issue to my line manager if I am unable to fix it"
+          - "I will escalate the issue to my line manager if I am unable to fix this"
+          - "I will escalate the issue to my team lead if I cannot fix it"
+          - "I will escalate the issue to my team lead if I cannot fix this"
+          - "I will escalate the issue to my team lead if I am not able to fix it"
+          - "I will escalate the issue to my team lead if I am not able to fix this"
+          - "I will escalate the issue to my team lead if I am unable to fix it"
+          - "I will escalate the issue to my team lead if I am unable to fix this"
+        explanation: First conditional — if + present simple, will + базовая форма.
+      - id: q2
+        prompt: Я сделал бы резервную копию на случай, если откат не удастся.
+        answer:
+          - "I would make a backup in case the rollback fails"
+          - "I would make a backup in case the rollback failed"
+          - "I would make a backup in case the rollback does not work"
+          - "I would make a backup just in case the rollback fails"
+          - "I would make a backup just in case the rollback failed"
+          - "I would make a backup just in case the rollback does not work"
+          - "I would make a backup copy in case the rollback fails"
+          - "I would make a backup copy in case the rollback failed"
+          - "I would make a backup copy in case the rollback does not work"
+          - "I would make a backup copy just in case the rollback fails"
+          - "I would make a backup copy just in case the rollback failed"
+          - "I would make a backup copy just in case the rollback does not work"
+          - "I would make a back-up in case the rollback fails"
+          - "I would make a back-up in case the rollback failed"
+          - "I would make a back-up in case the rollback does not work"
+          - "I would make a back-up just in case the rollback fails"
+          - "I would make a back-up just in case the rollback failed"
+          - "I would make a back-up just in case the rollback does not work"
+          - "I would take a backup in case the rollback fails"
+          - "I would take a backup in case the rollback failed"
+          - "I would take a backup in case the rollback does not work"
+          - "I would take a backup just in case the rollback fails"
+          - "I would take a backup just in case the rollback failed"
+          - "I would take a backup just in case the rollback does not work"
+          - "I would take a backup copy in case the rollback fails"
+          - "I would take a backup copy in case the rollback failed"
+          - "I would take a backup copy in case the rollback does not work"
+          - "I would take a backup copy just in case the rollback fails"
+          - "I would take a backup copy just in case the rollback failed"
+          - "I would take a backup copy just in case the rollback does not work"
+          - "I would take a back-up in case the rollback fails"
+          - "I would take a back-up in case the rollback failed"
+          - "I would take a back-up in case the rollback does not work"
+          - "I would take a back-up just in case the rollback fails"
+          - "I would take a back-up just in case the rollback failed"
+          - "I would take a back-up just in case the rollback does not work"
+          - "I would create a backup in case the rollback fails"
+          - "I would create a backup in case the rollback failed"
+          - "I would create a backup in case the rollback does not work"
+          - "I would create a backup just in case the rollback fails"
+          - "I would create a backup just in case the rollback failed"
+          - "I would create a backup just in case the rollback does not work"
+          - "I would create a backup copy in case the rollback fails"
+          - "I would create a backup copy in case the rollback failed"
+          - "I would create a backup copy in case the rollback does not work"
+          - "I would create a backup copy just in case the rollback fails"
+          - "I would create a backup copy just in case the rollback failed"
+          - "I would create a backup copy just in case the rollback does not work"
+          - "I would create a back-up in case the rollback fails"
+          - "I would create a back-up in case the rollback failed"
+          - "I would create a back-up in case the rollback does not work"
+          - "I would create a back-up just in case the rollback fails"
+          - "I would create a back-up just in case the rollback failed"
+          - "I would create a back-up just in case the rollback does not work"
+        explanation: In case описывает подготовку заранее.
+      - id: q3
+        prompt: Если бы у меня было больше времени, я бы нормально это протестировал.
+        answer:
+          - "If I had more time, I would test it properly"
+          - "If I had more time, I would test it thoroughly"
+          - "If I had more time, I would test it carefully"
+          - "If I had more time, I would test it well"
+          - "If I had more time, I would test this properly"
+          - "If I had more time, I would test this thoroughly"
+          - "If I had more time, I would test this carefully"
+          - "If I had more time, I would test this well"
+          - "If I had more time, I would test the change properly"
+          - "If I had more time, I would test the change thoroughly"
+          - "If I had more time, I would test the change carefully"
+          - "If I had more time, I would test the change well"
+          - "If I had more time I would test it properly"
+          - "If I had more time I would test it thoroughly"
+          - "If I had more time I would test it carefully"
+          - "If I had more time I would test it well"
+          - "If I had more time I would test this properly"
+          - "If I had more time I would test this thoroughly"
+          - "If I had more time I would test this carefully"
+          - "If I had more time I would test this well"
+          - "If I had more time I would test the change properly"
+          - "If I had more time I would test the change thoroughly"
+          - "If I had more time I would test the change carefully"
+          - "If I had more time I would test the change well"
+          - "I would test it properly if I had more time"
+          - "I would test it thoroughly if I had more time"
+          - "I would test it carefully if I had more time"
+          - "I would test it well if I had more time"
+          - "I would test this properly if I had more time"
+          - "I would test this thoroughly if I had more time"
+          - "I would test this carefully if I had more time"
+          - "I would test this well if I had more time"
+          - "I would test the change properly if I had more time"
+          - "I would test the change thoroughly if I had more time"
+          - "I would test the change carefully if I had more time"
+          - "I would test the change well if I had more time"
+        explanation: Second conditional — past simple в части с if и would в главной части.

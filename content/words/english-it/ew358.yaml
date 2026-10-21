@@ -1,0 +1,6 @@
+id: ew358
+greek: "a kill switch"
+russian: "переключатель, который быстро отключает функцию или сервис"
+ipa: /ə ˈkɪl swɪtʃ/
+note: "часто реализуется через feature flag"
+source: "Лексикон курса «Английский для IT», модуль e11 (docs/curriculum-english-it.md)"

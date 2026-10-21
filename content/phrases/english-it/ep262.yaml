@@ -1,0 +1,7 @@
+id: ep262
+text: "I'd weigh the risk against the deadline."
+translation: "Я бы сопоставил риск со сроком."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11
+  operation: requested-generation
+  request: Фразы модуля e11 по программе docs/curriculum-english-it.md
