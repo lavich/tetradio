@@ -57,3 +57,6 @@ characters:
   Callum: { gender: male, voice: Sadachbia }
   Bridget: { gender: female, voice: Sulafat }
   Okafor: { gender: male, voice: Schedar }
+  Hughes: { gender: male, voice: Sadaltager }
+  Megan: { gender: female, voice: Vindemiatrix }
+  Piotr: { gender: male, voice: Umbriel }

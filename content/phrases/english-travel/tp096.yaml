@@ -1,0 +1,8 @@
+id: tp096
+text: "I didn't see their face."
+translation: "Я не разглядел(а) лица."
+note: "their — когда неизвестно, мужчина это или женщина"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

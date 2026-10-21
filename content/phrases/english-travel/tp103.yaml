@@ -1,0 +1,8 @@
+id: tp103
+text: "Could I speak to the manager, please?"
+translation: "Можно поговорить с руководителем?"
+note: "the duty manager — дежурный руководитель (в аэропорту, отеле)"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md
