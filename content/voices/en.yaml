@@ -92,3 +92,5 @@ characters:
   Lena: { gender: female, voice: Pulcherrima }
   Hugo: { gender: male, voice: Alnilam }
   Anika: { gender: female, voice: Vindemiatrix }
+  Isla: { gender: female, voice: Pulcherrima }
+  Noah: { gender: male, voice: Achird }

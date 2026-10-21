@@ -352,4 +352,119 @@ describe("английский для путешествий и общения",
       }
     });
   });
+
+  describe("контрольная точка «Вечер»", () => {
+    const blocks = () => blocksOf("t14-c2");
+    const stageLessons = STAGE.flatMap((moduleId) => ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`));
+    let db: AppDatabase;
+    beforeEach(async () => {
+      await new AppDatabase("tetradio-travel-evening").delete();
+      db = new AppDatabase("tetradio-travel-evening");
+      await installLessons(db, [...stageLessons, "t07-c1", "t14-c2"], memoryFetcher(content));
+    });
+    afterEach(() => db.close());
+    const step = async () => nextStep(await moduleViews("english-travel", db));
+    const kindOf = (id?: string) => blocks().find((block) => block.id === id)?.type;
+    const itemsOf = (skill: string) =>
+      blocks()
+        .filter((block) => block.type === "exercise" && block.graded && kindOf(block.about) === skill)
+        .reduce((sum, block) => sum + (block.type === "exercise" ? block.items.length : 0), 0);
+
+    it("уроки t01–t14 и «День поездки» пройдены — следующий шаг «Вечер»", async () => {
+      await completeLessons(db, [...stageLessons, "t07-c1"]);
+      expect((await step())!.lesson).toMatchObject({ id: "t14-c2", title: "Вечер", kind: "test" });
+    });
+    it("без «Дня поездки» следующий шаг он, а не «Вечер»", async () => {
+      await completeLessons(db, stageLessons);
+      expect((await step())!.lesson.id).toBe("t07-c1");
+    });
+    it("контрольная t10-test не пройдена — следующий шаг она, а не «Вечер»", async () => {
+      await completeLessons(db, [...stageLessons.filter((id) => id !== "t10-test"), "t07-c1"]);
+      expect((await step())!.lesson.id).toBe("t10-test");
+    });
+
+    it("стоит после t14, контрольная без карточек с заголовком без «C2» и «CEFR»", () => {
+      expect(modulesOf("english-travel").find((m) => m.id === "t14")!.checkpointId).toBe("t14-c2");
+      const pack = lessonOf("t14-c2")!;
+      expect(pack.lesson.kind).toBe("test");
+      expect(pack.lesson.title).toBe("Вечер");
+      expect(pack.lesson.title).not.toMatch(/C2|CEFR/i);
+      expect(pack.items).toEqual([]);
+      expect(pack.words).toEqual([]);
+      expect(pack.phrases).toEqual([]);
+    });
+    it("чтение и аудирование — не меньше 10 оцениваемых пунктов на навык", () => {
+      expect(itemsOf("reading")).toBeGreaterThanOrEqual(10);
+      expect(itemsOf("listening")).toBeGreaterThanOrEqual(10);
+    });
+    it("не меньше пяти ролевых сцен, перед каждой — реплики собеседника без задания", () => {
+      const all = blocks();
+      const scenes = all.filter((block) => block.type === "speaking" && block.part === "roleplay");
+      expect(scenes.length).toBeGreaterThanOrEqual(5);
+      all.forEach((block, i) => {
+        if (block.type !== "speaking" || block.part !== "roleplay") return;
+        const before = all[i - 1];
+        expect(before?.type, block.id).toBe("listening");
+        expect(
+          all.some((other) => other.type === "exercise" && other.about === before?.id),
+          block.id,
+        ).toBe(false);
+        expect(block.model, block.id).toBeTruthy();
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      });
+    });
+    it("беседа по банку ответов с образцом и критериями", () => {
+      const interviews = blocks().flatMap((block) =>
+        block.type === "speaking" && block.part === "interview" ? [block] : [],
+      );
+      expect(interviews).toHaveLength(1);
+      for (const block of interviews) {
+        expect(block.model).toBeTruthy();
+        expect(block.criteria.length).toBeGreaterThan(0);
+      }
+    });
+    it("письмо дружеское, 60–100 слов, с образцом и критериями", () => {
+      const writing = blocks().filter((block) => block.type === "writing");
+      expect(writing).toHaveLength(1);
+      for (const block of writing) {
+        expect(block.register).toBe("friendly");
+        expect(block.words).toEqual({ min: 60, max: 100 });
+        expect(wordCount(block.model), block.id).toBeGreaterThanOrEqual(60);
+        expect(wordCount(block.model), block.id).toBeLessThanOrEqual(100);
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      }
+    });
+    it("сцены отказа: собеседник принимает отказ без повторной просьбы", () => {
+      const transcriptOf = (id: string) => {
+        const block = blocks().find((item) => item.type === "listening" && item.id === id);
+        return block?.type === "listening" ? block.transcript : [];
+      };
+      const answer = transcriptOf("answer-lines");
+      expect(answer.length).toBeGreaterThan(0);
+      expect(answer.every((line) => line.speaker === "Isla")).toBe(true);
+      expect(answer.some((line) => /don't think we're a match/.test(line.text))).toBe(true);
+      expect(answer.filter((line) => line.text.includes("?"))).toEqual([]);
+      const no = transcriptOf("no-lines");
+      expect(no.length).toBeGreaterThan(3);
+      expect(no.every((line) => line.speaker === "Noah")).toBe(true);
+      expect(no.slice(-2).filter((line) => line.text.includes("?"))).toEqual([]);
+      expect(no.at(-2)?.text).toMatch(/thanks for telling me/i);
+    });
+    it("в точке нет персонажей Lena и Will из t13", () => {
+      expect(JSON.stringify(blocks())).not.toMatch(/\bLena\b|\bWill\b(?! do)/);
+    });
+    it("говорящие — в карте голосов en и не из IT-курса, голоса в диалоге разные", () => {
+      const cast = content.sources.voices.get("en")!.characters;
+      const dialogues = blocks().flatMap((block) => (block.type === "listening" ? [block.transcript] : []));
+      for (const transcript of dialogues) {
+        const speakers = new Set(transcript.flatMap((line) => (line.speaker ? [line.speaker] : [])));
+        for (const speaker of speakers) {
+          expect(cast.has(speaker), speaker).toBe(true);
+          expect(IT_NAMES.has(speaker), speaker).toBe(false);
+        }
+        const voices = [...speakers].map((speaker) => cast.get(speaker)!.voice);
+        expect(new Set(voices).size).toBe(voices.length);
+      }
+    });
+  });
 });

@@ -1,0 +1,647 @@
+title: Вечер
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Как устроена контрольная точка
+    body: |-
+      Это контрольная точка второй ступени курса — модули t08–t14. Один вечер подряд: бар с компанией, знакомство в хостеле, приглашение на вечеринку, свидание, а на следующий день — переписка. Около 70 минут. Делайте её за один раз, без словаря, таблиц и карточек: результат показывает, что уже усвоено. Новых карточек здесь нет — только пройденное в модулях; редкие слова в текстах подписаны.
+
+      **Чтение и аудирование** проверяются автоматически. Для каждого навыка считается доля правильных ответов и сравнивается с порогом **60 %** — по нему курс считает навык сданным. Каждое аудио звучит два раза. Говорят быстро, с сокращениями (gonna, dunno) и разговорными оборотами; ловите главное, каждое слово понимать не нужно. В заданиях на аудирование открывайте текст кнопкой «Открыть текст» только после ответов, иначе результат ничего не покажет; реплики перед ролевыми сценами, наоборот, открывайте после двух прослушиваний и держите перед глазами. В вопросах с выбором верен один вариант.
+
+      **Ролевые сцены.** Сцен пять, в каждой сначала звучат только реплики собеседника, по порядку. Послушайте их два раза, откройте текст и держите перед глазами. Затем запишите свою часть: прочитайте реплику, ответьте на неё одной-двумя фразами, переходите к следующей. В трёх сценах нужно отказать (от следующего круга, от провожания, от новой встречи), в одной — принять отказ. Отказ короткий, причину называть не нужно; ответ на отказ тоже короткий и без уговоров.
+
+      **Письмо и речь** — самопроверка: в итог они не входят. Сначала напишите текст и запишите ответ сами, только потом откройте образец и отметьте, какие критерии выполнены. Если выполнено меньше 60 % критериев, считайте навык пока не сданным.
+
+      **Навык ниже порога** — повод повторить модули, которые названы в пояснениях к ошибкам: чтение — t08, t09, t12 и t14 (хостел, анкеты, переписка), аудирование — t10, t11 и t13 (бар, голосовые, свидание), письмо — t11, t13 и t14 (переписка), речь — сцены из t10–t13 и банки фраз третьих уроков. После повторения пройдите точку ещё раз.
+
+      **Темп.** Это последняя точка курса. Если все навыки не ниже порога, курс закончен; быструю речь в шумном баре помогает понимать практика вживую; к карточкам и голосовым сообщениям можно возвращаться понемногу. Если навык ниже порога, сначала повторите его модули в прежнем темпе.
+    table:
+      columns:
+        - часть
+        - задания
+        - время
+      rows:
+        - - Бар
+          - разговор в баре, заказ на компанию и отказ от раунда
+          - 12 мин
+        - - Знакомство
+          - пост и чат хостела, small talk с переспросом
+          - 12 мин
+        - - Приглашение
+          - голосовые Лео и Тесс, пригласить и обменяться контактами
+          - 12 мин
+        - - Свидание
+          - анкета и переписка, разговор в кафе, сказать «нет», ответить на «нет»
+          - 18 мин
+        - - Беседа
+          - пять вопросов по банку ответов ступени
+          - 3 мин
+        - - Следующий день
+          - переписка, сообщение 60–100 слов, грамматика ступени
+          - 15 мин
+  - type: listening
+    id: bar
+    title: Бар — заказ для компании
+    plays: 2
+    transcript:
+      - { speaker: Nina, text: "Dave, hi! Gonna need a minute. Jack, what are you having?" }
+      - { speaker: Jack, text: "Dunno. A pint, I guess. Whatever's on tap." }
+      - { speaker: Dave, text: "Pale ale's on tap tonight. Pint or half?" }
+      - { speaker: Jack, text: "A pint, cheers. And Zoe's on the red, right?" }
+      - { speaker: Zoe, text: "Hang on, I'm driving. Just a soft drink for me. A lime and soda." }
+      - { speaker: Nina, text: "Then I'll have a glass of red. Can we open a tab?" }
+      - { speaker: Dave, text: "Sure, a tab it is. So that's a pint, a red and a lime and soda. Anything else?" }
+      - { speaker: Jack, text: "That's it for now. Oh, and when are last orders?" }
+      - { speaker: Dave, text: "Eleven. Shout before then, and I'll bring the drinks over to your table." }
+  - type: exercise
+    id: bar-q
+    about: bar
+    graded: true
+    title: Аудирование — бар
+    instruction: Прослушайте разговор два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why is Zoe having a soft drink?
+        options:
+          - She is driving.
+          - She doesn't like wine.
+          - She has a headache.
+        answer: She is driving.
+        explanation: "Hang on, I'm driving — за рулём: поэтому лимонад с лаймом (модуль t10)."
+      - id: q2
+        prompt: What does Jack order?
+        options:
+          - a pint of pale ale
+          - a half of pale ale
+          - a glass of red wine
+        answer: a pint of pale ale
+        explanation: "Dave называет pale ale на кране (on tap), Jack отвечает A pint, cheers — пинту (a pint) (модуль t10)."
+      - id: q3
+        prompt: How will the group pay?
+        options:
+          - on a tab
+          - by card at the bar
+          - separately, one by one
+        answer: on a tab
+        explanation: "Can we open a tab? — Sure, a tab it is: заказ записывают на счёт, платят в конце (модуль t10)."
+      - id: q4
+        prompt: When are last orders?
+        options: [at eleven, at ten, at midnight]
+        answer: at eleven
+        explanation: "Eleven — последний заказ в одиннадцать; Dave принесёт напитки к столику (модуль t10)."
+  - type: listening
+    id: bar-lines
+    title: Сцена 1 · Реплики собеседника — бармен
+    plays: 2
+    transcript:
+      - { speaker: Dave, text: "Hi there. What can I get you?" }
+      - { speaker: Dave, text: "Sure. Anything for yourself?" }
+      - { speaker: Dave, text: "Lime and soda, no problem. Are you paying now, or shall I open a tab?" }
+      - { speaker: Dave, text: "A tab it is. It's busy tonight, so the drinks might take a few minutes." }
+      - { speaker: Dave, text: "Here you go. By the way, last orders are at eleven. Shall I get you another round later?" }
+      - { speaker: Dave, text: "Fair enough. Just shout if you change your mind." }
+  - type: speaking
+    id: bar-scene
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы пришли в бар с тремя друзьями и заказываете первый круг. Бармен — Дейв. Друзьям: две пинты pale ale и бокал красного вина. Себе — безалкогольный напиток, лимонад с лаймом (a lime and soda). Попросите открыть счёт (a tab), скажите, что столик у окна. В конце спокойно откажитесь от следующего круга: вы предпочитаете воду. 6 реплик, вся ваша часть — 40–60 секунд.
+    seconds: 60
+    model: |-
+      Dave: Hi there. What can I get you?
+      You: Hi. Two pints of pale ale and a glass of red wine, please.
+      Dave: Sure. Anything for yourself?
+      You: Just a soft drink for me, please. A lime and soda.
+      Dave: Lime and soda, no problem. Are you paying now, or shall I open a tab?
+      You: Could you open a tab, please?
+      Dave: A tab it is. It's busy tonight, so the drinks might take a few minutes.
+      You: No problem. We're at the table by the window.
+      Dave: Here you go. By the way, last orders are at eleven. Shall I get you another round later?
+      You: I'm good, thanks. I'll pass on the next round. I'd rather stick to water.
+      Dave: Fair enough. Just shout if you change your mind.
+      You: Thanks, I will. Cheers!
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Заказ — вежливо, с please: Two pints of pale ale and a glass of red wine, please"
+      - "Себе — безалкогольное: Just a soft drink for me; счёт — Could you open a tab, please?"
+      - "Отказ от следующего круга — коротко и без извинений: I'm good, thanks / I'll pass on the next round / I'd rather stick to water"
+      - Спокойный дружелюбный тон, без долгих пауз
+  - type: reading
+    id: hostel
+    title: Знакомство — пост и чат хостела
+    text: |-
+      NOTICEBOARD — THE BUNK HOUSE, EDINBURGH
+
+      Saturday: free walking tour at 10:00 from the lobby. Back by 12:30.
+      Sunday: day trip to the Highlands, £35. Book at reception by 6 pm tonight.
+      Every night at 8: social evening in the common room. Quiet hours start at 11 pm: please keep the noise down in the dorms.
+
+      CHAT: DORM 4
+
+      Ben: Anyone up for the walking tour tomorrow? I'm heading there at ten.
+      Mei: Count me in. It's my first time in Edinburgh, and I've never done a walking tour.
+      Sofia: I'm out, sorry. I'm doing the Highlands trip on Sunday, so I'm having a lazy day tomorrow.
+      Ben: Fair enough. Are you two around tonight? There's a quiz in the common room.
+      Mei: I'll be there. I've just got back from the shop, so I've got snacks.
+      Sofia: Save me a seat. I'll come down after dinner.
+      Ben: Will do. It starts at eight.
+    glosses:
+      - { text: the Highlands, russian: "горная часть Шотландии" }
+      - { text: the lobby, russian: холл }
+      - { text: Quiet hours, russian: "часы тишины" }
+      - { text: keep the noise down, russian: "не шуметь" }
+      - { text: I'm out, russian: "я не иду" }
+      - { text: a lazy day, russian: "день без планов, отдых" }
+      - { text: a quiz, russian: "викторина" }
+      - { text: Will do, russian: "хорошо, сделаю" }
+  - type: exercise
+    id: hostel-q
+    about: hostel
+    graded: true
+    title: Чтение — пост и чат хостела
+    instruction: Прочитайте пост и чат и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What time does the free walking tour start?
+        options: ["at 10:00", "at 12:30", "at 8:00"]
+        answer: "at 10:00"
+        explanation: "Free walking tour at 10:00 from the lobby; 12:30 — когда тур заканчивается, 8 — вечер в общей комнате (модуль t08)."
+      - id: q2
+        prompt: What does Mei say she has never done?
+        options:
+          - the walking tour
+          - a trip to the Highlands
+          - a quiz
+        answer: the walking tour
+        explanation: "It's my first time in Edinburgh, and I've never done a walking tour — в городе впервые, на экскурсии ещё не была: present perfect для опыта (модуль t08)."
+      - id: q3
+        prompt: Why is Sofia not joining the walking tour?
+        options:
+          - She wants a lazy day before her trip on Sunday.
+          - She has already done the tour.
+          - She has to work tomorrow.
+        answer: She wants a lazy day before her trip on Sunday.
+        explanation: "I'm out, sorry — я не иду; на воскресенье у неё поездка в Хайленды, поэтому завтра день без планов (модуль t09)."
+      - id: q4
+        prompt: When must you book the day trip to the Highlands?
+        options:
+          - by 6 pm tonight
+          - by 10 am tomorrow
+          - on Sunday morning
+        answer: by 6 pm tonight
+        explanation: "Book at reception by 6 pm tonight — на ресепшене до шести вечера сегодня (модуль t08)."
+  - type: listening
+    id: meet-lines
+    title: Сцена 2 · Реплики собеседников — Бен и Мэй
+    plays: 2
+    transcript:
+      - { speaker: Ben, text: "Hi, there's a free seat here. I'm Ben, and this is Mei." }
+      - { speaker: Mei, text: "Hi! Where are you from originally?" }
+      - { speaker: Ben, text: "Nice. Have you ever been to Scotland before?" }
+      - { speaker: Mei, text: "We're gonna do the, er, the Arthur's Seat thing tomorrow, up at six, if you're up for it." }
+      - { speaker: Mei, text: "Sure. We're going up Arthur's Seat tomorrow at six in the morning. Are you up for it?" }
+      - { speaker: Ben, text: "Eight works for us. See you in the lobby, then." }
+  - type: speaking
+    id: meet-scene
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы вечером в общей комнате хостела. За столом сидят Бен и Мэй, которых вы видите впервые. Поблагодарите за место, представьтесь и спросите, можно ли присоединиться, затем скажите, откуда вы родом. В Шотландии вы ещё не были, но давно хотели. Первую реплику Мэй про Arthur's Seat вы не успели понять — вежливо переспросите. Подъём в шесть утра для вас рано: предложите восемь. В конце попрощайтесь. 6 реплик, вся ваша часть — 40–60 секунд.
+    seconds: 60
+    model: |-
+      Ben: Hi, there's a free seat here. I'm Ben, and this is Mei.
+      You: Hi, nice to meet you. Mind if I join you?
+      Mei: Hi! Where are you from originally?
+      You: I'm from Kazan, in Russia. I'm travelling on my own for a week.
+      Ben: Nice. Have you ever been to Scotland before?
+      You: No, I've never been, but I've always wanted to come.
+      Mei: We're gonna do the, er, the Arthur's Seat thing tomorrow, up at six, if you're up for it.
+      You: Sorry, what? Could you say that again?
+      Mei: Sure. We're going up Arthur's Seat tomorrow at six in the morning. Are you up for it?
+      You: I'd love to, but six is a bit early for me. Could we say eight?
+      Ben: Eight works for us. See you in the lobby, then.
+      You: Great, see you then. It was nice meeting you.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Просьба сесть и знакомство — Mind if I join you?; откуда — I'm from…"
+      - "Опыт — present perfect: I've never been, but I've always wanted to…"
+      - "Переспросили вежливо — Sorry, what? / Could you say that again? — и не стали гадать"
+      - "Предложили другое время — Could we say eight? — и тепло попрощались: It was nice meeting you"
+  - type: listening
+    id: invite
+    title: Приглашение — голосовые Лео и Тесс
+    plays: 2
+    transcript:
+      - { speaker: Leo, text: "Hi Tess, it's Leo. We're having a few people over on Saturday, a housewarming, nothing fancy. It kicks off at eight, but come whenever." }
+      - { speaker: Leo, text: "Oh, and it's BYOB, so bring something to drink. If you're not drinking, juice is fine. Let me know by Thursday, yeah?" }
+      - { speaker: Tess, text: "Hey Leo, got your message, thanks. I'm up for it, honestly, but I dunno about eight. I'm at a friend's birthday dinner until nine, so I'll be running a bit late." }
+      - { speaker: Tess, text: "Is it OK if I bring a plus-one? My cousin's in town. Anyway, count me in. Send me the address again, and I'll text you when I get there." }
+  - type: exercise
+    id: invite-q
+    about: invite
+    graded: true
+    title: Аудирование — голосовые сообщения
+    instruction: Прослушайте голосовые сообщения два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What kind of party is it?
+        options:
+          - a housewarming
+          - a farewell party
+          - a gig
+        answer: a housewarming
+        explanation: "A housewarming, nothing fancy — новоселье без пышности; gig — концерт (модуль t11)."
+      - id: q2
+        prompt: What does Leo say about drinks?
+        options:
+          - Guests bring their own, and juice is fine.
+          - Leo provides all the drinks.
+          - There are no drinks at the party.
+        answer: Guests bring their own, and juice is fine.
+        explanation: "It's BYOB, so bring something to drink. If you're not drinking, juice is fine: каждый приносит своё, безалкогольное тоже подходит (модуль t11)."
+      - id: q3
+        prompt: Why will Tess be late?
+        options:
+          - She is at a friend's birthday dinner until nine.
+          - She is at work until nine.
+          - She is meeting her cousin at the station.
+        answer: She is at a friend's birthday dinner until nine.
+        explanation: "I'm at a friend's birthday dinner until nine, so I'll be running a bit late — до девяти она на дне рождения друга (модуль t11)."
+      - id: q4
+        prompt: Who does Tess want to bring?
+        options: [her cousin, her flatmate, her boss]
+        answer: her cousin
+        explanation: "Is it OK if I bring a plus-one? My cousin's in town — приходит с двоюродным братом или сестрой (модуль t11)."
+      - id: q5
+        prompt: What does Tess ask Leo to send?
+        options:
+          - the address again
+          - a photo of the flat
+          - a list of guests
+        answer: the address again
+        explanation: "Send me the address again, and I'll text you when I get there — адрес ещё раз, а сообщение она пришлёт сама (модуль t11)."
+  - type: listening
+    id: invite-lines
+    title: Сцена 3 · Реплики собеседницы — Тесс
+    plays: 2
+    transcript:
+      - { speaker: Tess, text: "Hi! Good to see you again. How's your week going?" }
+      - { speaker: Tess, text: "A gig on Friday? Sounds good. Who's playing?" }
+      - { speaker: Tess, text: "I'm up for it. What time does it kick off?" }
+      - { speaker: Tess, text: "Nine's a bit tricky. I'm seeing a friend until half past eight, so I might be running a bit late. Is that OK?" }
+      - { speaker: Tess, text: "Great. Shall we swap contacts? Are you on Instagram?" }
+      - { speaker: Tess, text: "Found you. I'll add you. Text me the address, and I'll text you when I get there." }
+  - type: speaking
+    id: invite-scene
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы встретили Тесс, с которой познакомились на новоселье у Лео. Ответьте, как дела, и пригласите её на концерт в пятницу: играет группа вашего знакомого, начало в девять, зал рядом с вокзалом. Скажите, что вам подходит и опоздание. Согласитесь обменяться контактами: у вас есть Instagram, номер телефона можно прислать позже. В конце пообещайте прислать адрес. 6 реплик, вся ваша часть — 40–60 секунд.
+    seconds: 60
+    model: |-
+      Tess: Hi! Good to see you again. How's your week going?
+      You: Good, thanks. Are you up for a gig on Friday? A friend of mine is in the band.
+      Tess: A gig on Friday? Sounds good. Who's playing?
+      You: A local band called The Lanterns. It's a small place near the station.
+      Tess: I'm up for it. What time does it kick off?
+      You: At nine. The first band starts a bit later, so there's no rush.
+      Tess: Nine's a bit tricky. I'm seeing a friend until half past eight, so I might be running a bit late. Is that OK?
+      You: That's fine. Just text me when you get there.
+      Tess: Great. Shall we swap contacts? Are you on Instagram?
+      You: Yes, I am. I'll send you my username now, and I can send you my number later.
+      Tess: Found you. I'll add you. Text me the address, and I'll text you when I get there.
+      You: I'll send it tonight. See you on Friday.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Приглашение — Are you up for a gig on Friday?; время — At nine"
+      - "На возможное опоздание ответили спокойно: That's fine. Just text me when you get there"
+      - "Обмен контактами — Yes, I am; назвали ровно то, что готовы дать (имя в Instagram, номер позже)"
+      - "Договорённость — I'll send it tonight; тон дружеский, без нажима"
+  - type: reading
+    id: profile
+    title: Свидание — анкета и переписка
+    text: |-
+      ISLA, 29 — EDINBURGH
+      Bio: I work in a bookshop. I love hiking and trying new food. Bad at karaoke, but I keep trying. Looking for someone genuine who can make me laugh. tbh I'm not sure what I'm looking for, so no pressure.
+      Ask me about: my trip to Portugal.
+      Profile verified.
+
+      CHAT: ISLA AND NOAH
+
+      Noah: Hi Isla! Your bio made me laugh. What's your go-to karaoke song?
+      Isla: Ha, thanks. Anything by ABBA. hbu?
+      Noah: Anything slow, so nobody can tell I can't sing. Fancy a drink sometime?
+      Isla: I'd love to. Let's meet somewhere busy, and I'll text a friend where I am, if that's OK.
+      Noah: Of course, that makes sense. How about the café by the station on Thursday at six?
+      Isla: Thursday works. I'll make my own way there. See you at six.
+    glosses:
+      - { text: Bio, russian: "краткое описание о себе в анкете" }
+      - { text: a bookshop, russian: "книжный магазин" }
+      - { text: go-to, russian: "любимый, привычный" }
+      - { text: verified, russian: "подтверждённый" }
+  - type: exercise
+    id: profile-q
+    about: profile
+    graded: true
+    title: Чтение — анкета и переписка
+    instruction: Прочитайте анкету и переписку и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where does Isla work?
+        options:
+          - in a bookshop
+          - in a café
+          - in a bank
+        answer: in a bookshop
+        explanation: "I work in a bookshop — в книжном магазине; кафе на вокзале — место встречи (модуль t12)."
+      - id: q2
+        prompt: Which karaoke songs does Isla like?
+        options:
+          - songs by ABBA
+          - slow songs
+          - none, she never sings
+        answer: songs by ABBA
+        explanation: "Anything by ABBA — любые песни ABBA; медленные песни предпочитает Noah; она пишет, что поёт плохо, но продолжает пробовать (модуль t12)."
+      - id: q3
+        prompt: What will Isla do before the date?
+        options:
+          - text a friend where she is
+          - ask Noah for his address
+          - bring a friend to the café
+        answer: text a friend where she is
+        explanation: "Let's meet somewhere busy, and I'll text a friend where I am — написать подруге или другу, где она (модуль t12)."
+      - id: q4
+        prompt: How will Isla get to the café?
+        options:
+          - on her own
+          - with Noah
+          - with her friend
+        answer: on her own
+        explanation: "I'll make my own way there — доберётся сама: так принято, дорога до встречи и домой своя (модуль t12)."
+      - id: q5
+        prompt: When and where do they meet?
+        options:
+          - on Thursday at six, at the café by the station
+          - on Thursday at eight, at a bar
+          - on Friday at six, at the station
+        answer: on Thursday at six, at the café by the station
+        explanation: "How about the café by the station on Thursday at six? — Thursday works: договорились на четверг, шесть вечера (модуль t12)."
+  - type: listening
+    id: date
+    title: Свидание — разговор в кафе
+    plays: 2
+    transcript:
+      - { speaker: Noah, text: "So that's how I got lost in Lisbon for three hours. I've never been so happy to see a tram." }
+      - { speaker: Isla, text: "That's wild. I'd have panicked. Anyway, I've had a really nice time tonight." }
+      - { speaker: Noah, text: "Me too. Can I walk you to the station?" }
+      - { speaker: Isla, text: "Thanks, but I'll make my own way." }
+      - { speaker: Noah, text: "No worries, totally fine. Would you like to see me again?" }
+      - { speaker: Isla, text: "I'd rather not, to be honest. I don't think we're a match, but I'm glad we met." }
+      - { speaker: Noah, text: "Thanks for telling me. I hope you get home safe." }
+  - type: exercise
+    id: date-q
+    about: date
+    graded: true
+    title: Аудирование — разговор в кафе
+    instruction: Прослушайте разговор два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Isla say about the evening?
+        options:
+          - She had a really nice time.
+          - She was bored.
+          - She was too tired to talk.
+        answer: She had a really nice time.
+        explanation: "I've had a really nice time tonight — вечер ей понравился; решение о следующей встрече отдельное (модуль t13)."
+      - id: q2
+        prompt: What does Isla say about the walk to the station?
+        options:
+          - She will make her own way.
+          - She would like Noah to walk with her.
+          - She wants to take a taxi.
+        answer: She will make her own way.
+        explanation: "Thanks, but I'll make my own way — вежливый отказ от провожания, причина не нужна (модуль t13)."
+      - id: q3
+        prompt: What does Isla say when Noah asks to see her again?
+        options:
+          - She would rather not, and she doesn't think they're a match.
+          - She would like to meet on Friday.
+          - She needs more time to think.
+        answer: She would rather not, and she doesn't think they're a match.
+        explanation: "I'd rather not… I don't think we're a match — короткий и ясный отказ без уговоров (модуль t13)."
+      - id: q4
+        prompt: How does Noah react?
+        options:
+          - He accepts it and hopes she gets home safe.
+          - He asks her to explain.
+          - He asks again.
+        answer: He accepts it and hopes she gets home safe.
+        explanation: "Thanks for telling me. I hope you get home safe — принял отказ, не спрашивая «почему» и не повторяя просьбу (модуль t13)."
+  - type: listening
+    id: no-lines
+    title: Сцена 4 · Реплики собеседника — Ноа (отказ)
+    plays: 2
+    transcript:
+      - { speaker: Noah, text: "I've had a really nice evening. Can I walk you to the station?" }
+      - { speaker: Noah, text: "No worries, totally fine. Would you like another drink before you go?" }
+      - { speaker: Noah, text: "Fair enough. Can I ask you something? Would you like to see me again?" }
+      - { speaker: Noah, text: "Thanks for telling me. I hope you get home safe." }
+      - { speaker: Noah, text: "Take care." }
+  - type: speaking
+    id: no-scene
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы на свидании с Ноа, вечер подходит к концу. Откажитесь от провожания до вокзала: вы доберётесь сами. Откажитесь ещё от одного напитка. На вопрос, хотите ли вы увидеться снова, ответьте «нет» коротко и доброжелательно, без подробных причин. Ответьте на пожелание Ноа и тепло попрощайтесь. 5 реплик, вся ваша часть — 30–50 секунд.
+    seconds: 50
+    model: |-
+      Noah: I've had a really nice evening. Can I walk you to the station?
+      You: Thanks, but I'll make my own way home.
+      Noah: No worries, totally fine. Would you like another drink before you go?
+      You: No, thanks, I'm good.
+      Noah: Fair enough. Can I ask you something? Would you like to see me again?
+      You: I had a really nice time, but I don't think we're a match. I hope that's OK.
+      Noah: Thanks for telling me. I hope you get home safe.
+      You: Thanks, you too. Thank you for the evening.
+      Noah: Take care.
+      You: Take care.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна фраза или две
+      - "Отказ от провожания — коротко: Thanks, but I'll make my own way home; причину не называли"
+      - "Отказ от встречи — прямо и доброжелательно: I don't think we're a match / I'd rather not"
+      - "Не извинялись многократно и не придумывали отговорок; тон спокойный"
+      - "Закончили тепло: Thank you for the evening / Take care"
+  - type: listening
+    id: answer-lines
+    title: Сцена 5 · Реплики собеседницы — Айла (ответ на отказ)
+    plays: 2
+    transcript:
+      - { speaker: Isla, text: "I've had a nice evening, thank you. Before you say anything, I need to be honest with you." }
+      - { speaker: Isla, text: "I'm not feeling a spark, sorry. I don't think we're a match. I hope that's okay." }
+      - { speaker: Isla, text: "Thank you for understanding. I really liked talking to you about Lisbon." }
+      - { speaker: Isla, text: "I'm going to get a taxi now, thanks. I'll make my own way home." }
+      - { speaker: Isla, text: "You too. Take care." }
+  - type: speaking
+    id: answer-scene
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы на свидании с Айлой и хотели предложить встретиться снова, но она говорит первой. Ваша задача — принять отказ спокойно: коротко, без «почему», без уговоров и без предложения «давай хотя бы…». Поблагодарите за то, что она сказала прямо, и за вечер, не настаивайте на проводах и пожелайте ей хорошо добраться. 5 реплик, вся ваша часть — 30–50 секунд.
+    seconds: 50
+    model: |-
+      Isla: I've had a nice evening, thank you. Before you say anything, I need to be honest with you.
+      You: Of course. Go ahead.
+      Isla: I'm not feeling a spark, sorry. I don't think we're a match. I hope that's okay.
+      You: No worries, totally fine. Thanks for telling me.
+      Isla: Thank you for understanding. I really liked talking to you about Lisbon.
+      You: Me too. I had a really nice time.
+      Isla: I'm going to get a taxi now, thanks. I'll make my own way home.
+      You: Sure. I hope you get home safe.
+      Isla: You too. Take care.
+      You: Take care. It was good to meet you.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна фраза или две
+      - "Отказ принят сразу: No worries, totally fine; без нажима, без «почему» и без повторной просьбы"
+      - "Поблагодарили за сказанное прямо и за вечер: Thanks for telling me / I had a really nice time"
+      - "Не настаивали на проводах: после её реплики про такси — только пожелание добраться"
+      - Тон спокойный и дружелюбный, без обиды и без шуток про отказ
+  - type: explanation
+    id: talk-how
+    title: Беседа по банку ответов
+    body: |-
+      Теперь беседа 2–3 минуты. Вам задают пять вопросов из банка ответов ступени; в третьих уроках модулей вы уже готовили свои версии. Отвечайте своими словами: открыть можно только опорные фразы. На каждый вопрос — одна-три фразы.
+
+      В ответах пригодятся пять приёмов ступени: present perfect для опыта (**I've never been to…**), present continuous для планов (**I'm meeting… on Saturday**), **would rather**, second conditional (**If I could…, I'd…**) и готовые фразы связи (**Let's catch up properly soon**). Отвечайте о себе: если вопрос неудобен, скажите **I'd rather not say** и переходите к следующему.
+  - type: speaking
+    id: talk
+    part: interview
+    prompt: "Вам задают пять вопросов: «What have you been up to lately?», «Have you ever been to Scotland?», «What are you doing next weekend?», «Would you rather stay in or go out on a Friday?», «If you could live anywhere, where would it be?» Ответьте на каждый одной-тремя фразами: опыт — в present perfect, планы — в present continuous, выбор — с would rather, мечта — в second conditional. Весь ответ — 2–3 минуты."
+    seconds: 180
+    model: "I've been working a lot lately, but I've also started learning to play the guitar. No, I've never been to Scotland, but I'd love to go. Next weekend I'm meeting a friend on Saturday, and we're going for a walk by the river. On a Friday I'd rather stay in: I'm usually tired after the week, so I cook and watch a film. If I could live anywhere, I'd choose Lisbon. I'd have coffee by the sea every morning, and I'd still stay in touch with my friends by voice notes."
+    criteria:
+      - Ответили на все пять вопросов, каждый — одной-тремя фразами
+      - "Опыт — present perfect: I've been working…, I've never been to…"
+      - "План — present continuous: I'm meeting… on Saturday"
+      - "Выбор — would rather + инфинитив без to; мечта — If I could…, I'd…"
+      - Спокойный темп, без долгих пауз; на втором дубле — меньше повторов
+  - type: reading
+    id: morning
+    title: Следующий день — переписка
+    text: |-
+      CHAT: LEO AND TESS, THE MORNING AFTER
+
+      Leo: Morning! Thanks for coming last night. Did you get home OK?
+      Tess: Yes, I got a taxi at midnight. I had a really nice time. Sorry I was late.
+      Leo: No worries. You missed the karaoke, though. Zoe sang for ten minutes.
+      Tess: Ha! I'm gutted. Next time I'll come early. What are you doing on Sunday? I'm free after two.
+      Leo: I'm helping my sister move in the morning, but I'm free in the evening. Shall we say seven?
+      Tess: Seven works. I'll bring the photos from the party.
+      Leo: Great. Text me when you leave.
+    glosses:
+      - { text: move, russian: "переехать в другую квартиру" }
+  - type: exercise
+    id: morning-q
+    about: morning
+    graded: true
+    title: Чтение — переписка
+    instruction: Прочитайте переписку и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How did Tess get home?
+        options: [by taxi, on foot, by bus]
+        answer: by taxi
+        explanation: "I got a taxi at midnight — на такси в полночь (модуль t14)."
+      - id: q2
+        prompt: What did Tess miss at the party?
+        options: [the karaoke, the dinner, the speeches]
+        answer: the karaoke
+        explanation: "You missed the karaoke, though — она пропустила караоке, потому что опоздала (модуль t14)."
+      - id: q3
+        prompt: Why is Leo free only in the evening on Sunday?
+        options:
+          - He is helping his sister move in the morning.
+          - He works until six.
+          - He is going to a gig.
+        answer: He is helping his sister move in the morning.
+        explanation: "I'm helping my sister move in the morning — present continuous для договорённости; вечером он свободен (модуль t14)."
+      - id: q4
+        prompt: What time do they agree to meet on Sunday?
+        options: [at seven, at two, at eight]
+        answer: at seven
+        explanation: "Shall we say seven? — Seven works: два часа — когда свободна Тесс, а договорились на семь (модуль t14)."
+  - type: explanation
+    id: next-how
+    title: Сообщение на следующий день
+    body: |-
+      Назавтра после вечера пишут короткое сообщение. Объём — 60–100 слов, регистр дружеский: короткие предложения и сокращения (I'm, I'd).
+
+      Что нужно: поблагодарить за вечер (**I had a really nice time**), вспомнить одну подробность в past simple (**I got home after midnight**), предложить встречу и время (**I'm thinking of trying the new Thai place on Saturday at half past seven**), задать один вопрос (**Are you free?**) и оставить место для другого ответа (**If you'd rather do something else, just let me know**). Собеседник может сказать «нет».
+  - type: writing
+    id: next-day
+    register: friendly
+    prompt: "Вы ходили на концерт с Тесс (сцена 3) и обменялись контактами. Напишите ей на следующий день после концерта (60–100 слов): поблагодарите за вечер, вспомните одну подробность в past simple, предложите встретиться в субботу и назовите время, задайте один вопрос и оставьте ей возможность выбрать другое."
+    words: { min: 60, max: 100 }
+    model: |-
+      Hi Tess, thanks for coming to the gig last night. I had a really nice time, and I'm glad you liked the band. The first act started late, so I got home after midnight, but it was fun. I'm thinking of trying the new Thai place near the station on Saturday at half past seven. Are you free? If you'd rather do something else, just let me know. I'll book a table once I hear from you. Text me when you can.
+    criteria:
+      - "60–100 слов; есть благодарность, подробность, предложение, время и один вопрос"
+      - "Подробность вчерашнего вечера — past simple: I got home after midnight"
+      - "Предложение с временем (I'm thinking of… on Saturday at half past seven), один вопрос (Are you free?) и место для другого ответа: If you'd rather…, just let me know"
+      - "Дружеский регистр: короткие предложения, сокращения (I'm, I'd), фразы ступени"
+      - "Без нажима: не просят ответить немедленно и не повторяют просьбу"
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Язык ступени
+    instruction: Вставьте слово. Три слова лишние.
+    format: gap
+    bank: [ever, do, have, isn't, gonna, rather, up, had, since, just, am, about, has]
+    items:
+      - id: g1
+        prompt: "Have you ___ been to Lisbon? — No, never."
+        answer: ever
+        explanation: "Вопрос об опыте — Have you ever been…? (модуль t08)."
+      - id: g2
+        prompt: "I love live music. — So ___ I."
+        answer: do
+        explanation: "Согласие с утверждением — So do I; вспомогательный глагол повторяет время: love — present simple, поэтому do (модуль t08)."
+      - id: g3
+        prompt: "I've never tried haggis. — Neither ___ I."
+        answer: have
+        explanation: "Согласие с отрицанием — Neither have I: вспомогательный глагол из реплики, present perfect (модуль t08)."
+      - id: g4
+        prompt: "It's a great band, ___ it?"
+        answer: isn't
+        explanation: "Разделительный вопрос к утверждению с is — isn't it? (модуль t09)."
+      - id: g5
+        prompt: "We're ___ grab a drink. Do you want one?"
+        answer: gonna
+        explanation: "Gonna — разговорное going to; в письме и на работе — going to (модуль t09)."
+      - id: g6
+        prompt: "I'd ___ stay in than go out tonight."
+        answer: rather
+        explanation: "Would rather + глагол без to: I'd rather stay in (модули t10 и t13)."
+      - id: g7
+        prompt: "Are you ___ for a walk after dinner?"
+        answer: up
+        explanation: "Are you up for…? — приглашение: хотите, не против (модуль t11)."
+      - id: g8
+        prompt: "If I ___ more time, I'd stay another week."
+        answer: had
+        explanation: "Second conditional — if + past simple, would + инфинитив: If I had more time, I'd stay (модуль t13)."
+      - id: g9
+        prompt: "We haven't spoken ___ March."
+        answer: since
+        explanation: "Since называет начало периода: since March; for — его длину (модуль t14)."
+      - id: g10
+        prompt: "I landed an hour ago. I've ___ got back from Portugal."
+        answer: just
+        explanation: "Только что — just с present perfect: I've just got back (модуль t14)."
