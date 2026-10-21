@@ -1,5 +1,6 @@
 id: ep002
 text: "I'm currently working on a payment service."
+audio: phrases/ep002.mp3
 translation: Сейчас я работаю над платёжным сервисом.
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01

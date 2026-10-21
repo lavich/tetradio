@@ -1,5 +1,6 @@
 id: ep001
 text: "I'm a backend developer with five years of experience."
+audio: phrases/ep001.mp3
 translation: "Я бэкенд-разработчик с пятилетним опытом."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
