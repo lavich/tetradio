@@ -1,6 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect } from "react";
-import { DEFAULT_LANGUAGE, PROFILES, type LanguageProfile } from "../domain/language";
+import { DEFAULT_PALETTE, type PaletteName } from "../content/palettes";
+import { DEFAULT_LANGUAGE, PROFILES, type Language, type LanguageProfile } from "../domain/language";
 import { unitKey } from "../domain/refs";
 import { reportError } from "../reporting/reporting";
 import type { LearningRef, Session } from "../domain/types";
@@ -9,14 +10,19 @@ import {
   courseOfCard,
   courses,
   currentCourse,
+  currentLanguage,
+  languages,
   primaryCourse,
   followCourse,
   profileOfCourse,
   setCurrentCourse,
+  setCurrentLanguage,
   setPrimaryCourse,
   shelfCourse,
+  shelfLanguage,
   todayCourse,
   type CourseEntry,
+  type LanguageEntry,
 } from "../storage/courses";
 
 /** Установленные курсы по порядку установки. `undefined` — ещё читается. */
@@ -44,6 +50,25 @@ export const useCurrentCourse = (): [string | undefined, (courseId: string) => P
   useLiveQuery(() => currentCourse(), []),
   setCurrentCourse,
 ];
+
+/** Языки курсов по порядку их первого курса. `undefined` — ещё читается. */
+export const useLanguages = (): LanguageEntry[] | undefined => useLiveQuery(() => languages(), []);
+/** Язык «Слов», «Чтения» и «Прогресса» и смена выбора; язык без начатых курсов выбирает только «Курс». */
+export const useCurrentLanguage = (): [Language | undefined, (code: Language) => Promise<void>] => [
+  useLiveQuery(() => currentLanguage(), []),
+  setCurrentLanguage,
+];
+/** Язык «Курса»: бывает и языком без начатых курсов. */
+export const useShelfLanguage = (): Language | undefined => useLiveQuery(() => shelfLanguage(), []);
+/** Гамма обложек курса; пока читается — гамма по умолчанию, у греческого курса она и есть. */
+export function useCoursePalette(courseId: string | undefined): PaletteName {
+  return (
+    useLiveQuery(
+      async () => (await courses()).find((course) => course.id === courseId)?.palette ?? DEFAULT_PALETTE,
+      [courseId],
+    ) ?? DEFAULT_PALETTE
+  );
+}
 
 /** Незавершённое занятие курса: `undefined` — ещё читается, `null` — нет. */
 export const useCourseSession = (courseId: string | undefined): Session | null | undefined =>

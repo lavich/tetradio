@@ -19,11 +19,15 @@ import {
   activeSession,
   cardsInCourse,
   courseOfCard,
+  courses,
   currentCourse,
+  currentLanguage,
+  languages,
   lessonCourses,
   primaryCourse,
   profileOfCourse,
   sessionCourse,
+  shelfLanguage,
 } from "../src/storage/courses";
 import { db, type StoredWord } from "../src/storage/db";
 import { dictionary } from "../src/storage/dictionary";
@@ -108,6 +112,12 @@ describe("живые запросы отслеживают чтения посл
     "«Сегодня»: повторено": () => reviewedOn("2026-09-15", COURSE),
     "«Сегодня»: «Чтение»": async () => courseReadings(COURSE),
     "«Курс»": async () => moduleViews(await currentCourse()),
+    "«Курс»: язык и его курсы": async () => {
+      const code = await shelfLanguage();
+      return (await languages()).find((language) => language.code === code) ?? null;
+    },
+    "«Слова»: язык": async () => (await currentLanguage()) ?? null,
+    "обложка: гамма курса": async () => (await courses()).find((course) => course.id === COURSE)?.palette ?? null,
     модуль: async () => {
       const own = await db.modules.get("m01");
       return (await moduleViews(own?.courseId)).find((item) => item.module.id === "m01") ?? null;
