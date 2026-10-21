@@ -1,0 +1,7 @@
+id: ep249
+text: "Since then, I haven't made the same mistake."
+translation: "С тех пор я не повторял эту ошибку."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

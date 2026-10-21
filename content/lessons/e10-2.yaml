@@ -1,0 +1,388 @@
+title: постмортем без обвинения и рассказ об ошибке на интервью
+kind: lesson
+items:
+  - { kind: word, id: ew334 }
+  - { kind: word, id: ew335 }
+  - { kind: word, id: ew336 }
+  - { kind: word, id: ew337 }
+  - { kind: word, id: ew338 }
+  - { kind: word, id: ew339 }
+  - { kind: word, id: ew340 }
+  - { kind: word, id: ew341 }
+  - { kind: word, id: ew342 }
+  - { kind: word, id: ew343 }
+  - { kind: word, id: ew344 }
+  - { kind: word, id: ew345 }
+  - { kind: word, id: ew346 }
+  - { kind: word, id: ew347 }
+  - { kind: word, id: ew348 }
+  - { kind: word, id: ew349 }
+  - { kind: word, id: ew350 }
+  - { kind: phrase, id: ep234 }
+  - { kind: phrase, id: ep235 }
+  - { kind: phrase, id: ep236 }
+  - { kind: phrase, id: ep237 }
+  - { kind: phrase, id: ep238 }
+  - { kind: phrase, id: ep239 }
+  - { kind: phrase, id: ep240 }
+  - { kind: phrase, id: ep241 }
+blocks:
+  - type: explanation
+    id: postmortem-words
+    title: Слова о разборе инцидента
+    body: |-
+      Тексты урока описывают, как команда разбирает сбой. Слова урока образуют три группы.
+
+      **Структура разбора.** **A timeline** — хронология: что произошло и когда, по минутам. **A contributing factor** — условие, которое усилило проблему, но не было её основной причиной (основная причина — a root cause из прошлого урока). **A corrective action** — шаг, который устраняет причину. **A recurrence** — повторное появление той же проблемы: **to prevent a recurrence**. **A lesson learned** — вывод, записанный для команды. **A paper trail** — записи, по которым видно, кто и что решил: тикеты, коммиты, переписка. **Hindsight** — понимание, которое приходит после события.
+
+      **Системы и защита.** **A runbook** — пошаговая инструкция для дежурного. **An on-call rotation** — график, по которому инженеры по очереди отвечают на оповещения. **A degraded service** — сервис работает, но медленнее или не полностью; если он недоступен совсем, это an outage. **A blast radius** — какая часть системы и пользователей задета сбоем. **A sanity check** — быстрая проверка перед действием. **A staging environment** — копия продакшена для проверки изменений. **A misleading metric** — число выглядит нормальным и скрывает проблему. **A single point of failure** — компонент, отказ которого останавливает всю систему.
+
+      **Отношение к ошибке.** **Humbling** — опыт, который показал пределы ваших знаний. **Regret** — сожаление: **I regret not asking for help.** После **regret** о прошлом идёт форма на -ing.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: structure-match
+    title: Структура разбора
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - a timeline
+      - a corrective action
+      - a recurrence
+      - a contributing factor
+      - a paper trail
+      - a lesson learned
+      - hindsight
+    items:
+      - { id: m1, prompt: "список событий инцидента с точным временем каждого", answer: a timeline }
+      - { id: m2, prompt: "шаг, который устраняет причину сбоя, чтобы он не повторился", answer: a corrective action }
+      - { id: m3, prompt: "повторное появление той же проблемы", answer: a recurrence }
+      - { id: m4, prompt: "условие, которое усилило проблему, но не было её главной причиной", answer: a contributing factor }
+      - { id: m5, prompt: "записи, по которым можно восстановить, кто и что решил", answer: a paper trail }
+  - type: exercise
+    id: systems-gap
+    title: Системы и защита
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a runbook
+      - an on-call rotation
+      - a degraded service
+      - a blast radius
+      - a sanity check
+      - a staging environment
+      - a misleading metric
+      - a single point of failure
+      - humbling
+      - regret
+    items:
+      - id: g1
+        prompt: The alert fired at night, so the engineer opened ___ and followed the steps to restart the queue. (инструкция для дежурного)
+        answer: a runbook
+      - id: g2
+        prompt: Our team has ___, so each engineer is on call one week a month. (график дежурств)
+        answer: an on-call rotation
+      - id: g3
+        prompt: Search was slow but still answering, so users had ___ rather than a full outage. (сервис с ухудшенной работой)
+        answer: a degraded service
+      - id: g4
+        prompt: Each change goes to one region first, so it has ___ of one region at most. (масштаб последствий)
+        answer: a blast radius
+      - id: g5
+        prompt: Before I run the command on production, I do ___ on a small sample. (быстрая проверка)
+        answer: a sanity check
+      - id: g6
+        prompt: We deploy to ___ first, a copy of production, and test the change there. (тестовая среда)
+        answer: a staging environment
+      - id: g7
+        prompt: The average looked normal and hid the slow requests, so the team had ___ on the dashboard. (вводящий в заблуждение показатель)
+        answer: a misleading metric
+      - id: g8
+        prompt: Only one server held the data, so the system had ___. (единственная точка отказа)
+        answer: a single point of failure
+  - type: exercise
+    id: attitude-gap
+    title: Вывод и отношение к ошибке
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - humbling
+      - regret
+      - hindsight
+      - a lesson learned
+      - a recurrence
+      - a paper trail
+    items:
+      - id: g1
+        prompt: Breaking production in my first month was a ___ experience. (отрезвляющий)
+        answer: humbling
+      - id: g2
+        prompt: I ___ not asking for help earlier. (сожалею)
+        answer: regret
+      - id: g3
+        prompt: In ___, I should have asked the team the same day. (задним числом)
+        answer: hindsight
+      - id: g4
+        prompt: After every incident, we add ___ to the team wiki. (извлечённый урок)
+        answer: a lesson learned
+  - type: explanation
+    id: reading-how
+    title: Как читать постмортем
+    body: |-
+      Постмортем без обвинения (blameless) делится на части, и у каждой своя задача. **Summary** — что произошло, в двух-трёх предложениях. **Impact** — кого и что задело. **Root cause** и **contributing factors** — основная причина и условия, которые её усилили. **Timeline** — события по времени. **Lessons learned** — выводы. **Corrective actions** — шаги, которые меняют процесс.
+
+      В тексте действуют процессы и системы: **The change was deployed**, **The alert used the average**. Имён людей нет: разбор описывает, что в процессе позволило ошибке дойти до пользователей. Прошедшие события стоят в past simple и в passive, выводы о другом ходе событий — в conditional 3: **If the alert had used…, we would have noticed…** Слова вне списков переведены под текстом.
+  - type: reading
+    id: postmortem
+    title: "Postmortem: search slow or unavailable for forty minutes"
+    text: |-
+      Postmortem: search slow or unavailable for forty minutes
+      Ferngate Systems · blameless format · example document
+
+      Summary
+      On a Tuesday afternoon, search in our web app was slow or unavailable for about forty minutes. The cause was a configuration change that removed a replica setting from the search service. The change was rolled back, and the service recovered.
+
+      Impact
+      About a fifth of our users saw an error page when they searched. The blast radius was limited to search: checkout and login worked normally, and there was no data loss. Support received nineteen tickets.
+
+      Root cause
+      The change was meant to reduce hosting costs. It removed the second copy of the search index, so one server had to handle all the traffic. At peak load, that server could not cope, and search became a single point of failure.
+
+      Contributing factors
+      The change was tested in the staging environment, which receives only a small part of production traffic, so the problem did not appear there. Our alert used the average response time, which stayed normal for twelve minutes: it was a misleading metric. The review checked the code but not the effect on capacity, because the checklist had no item for it.
+
+      Timeline (local time)
+      14:05 The change was deployed. Search became slow: a degraded service.
+      14:17 Search stopped answering to many requests, and the first reports arrived in the support channel.
+      14:21 The on-call engineer opened an incident and started to investigate.
+      14:35 The team found the missing replica setting and decided to roll back.
+      14:45 The rollback finished, and search recovered.
+
+      Lessons learned
+      If the alert had used the slowest responses instead of the average, we would have noticed in two minutes. If staging had received a copy of production traffic, we would have found the problem before the release. In hindsight, one more question in the review would have been enough. Nobody was blamed: the postmortem looked at the process, and every decision is in the incident ticket, so there is a paper trail.
+
+      Corrective actions
+      1. Add a sanity check to the pipeline that blocks changes removing replicas.
+      2. Alert on the slowest responses and on the error rate.
+      3. Add a capacity item to the review checklist and update the runbook to prevent a recurrence.
+    glosses:
+      - { text: replica, russian: "копия базы или индекса" }
+      - { text: "hosting costs", russian: "расходы на хостинг" }
+      - { text: cope, russian: справиться }
+      - { text: "peak load", russian: "пиковая нагрузка" }
+      - { text: capacity, russian: "запас мощности" }
+      - { text: checklist, russian: "контрольный список" }
+      - { text: "error rate", russian: "доля ошибок" }
+      - { text: "ticket", russian: "обращение, тикет" }
+  - type: exercise
+    id: postmortem-tf
+    about: postmortem
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The change was meant to reduce hosting costs.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: Checkout and login stopped working during the incident.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "Checkout and login worked normally — оформление заказа и вход работали, сбой касался только поиска."
+      - id: q3
+        prompt: The change removed the second copy of the search index.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: The problem appeared in the staging environment before the release.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "In staging the problem did not appear — в тестовой среде трафика было мало."
+      - id: q5
+        prompt: The alert used the average response time.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q6
+        prompt: The postmortem blames the reviewer for missing the problem.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "Nobody was blamed — разбор описывает процесс и не называет виноватого."
+  - type: exercise
+    id: postmortem-find
+    about: postmortem
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What did the change remove?
+        options:
+          - the second copy of the search index
+          - the login service
+          - the error page
+        answer: the second copy of the search index
+      - id: q2
+        prompt: How many support tickets did the team receive?
+        options: [nineteen, twelve, forty]
+        answer: nineteen
+      - id: q3
+        prompt: When did the on-call engineer open an incident?
+        options: ["14:21", "14:05", "14:35"]
+        answer: "14:21"
+      - id: q4
+        prompt: Why did the alert stay quiet for twelve minutes?
+        options:
+          - It used the average response time, which stayed normal.
+          - The on-call engineer was not available.
+          - The alert was switched off for the release.
+        answer: It used the average response time, which stayed normal.
+      - id: q5
+        prompt: What is the first corrective action?
+        options:
+          - a check in the pipeline that blocks changes removing replicas
+          - a new on-call rotation
+          - a second search service
+        answer: a check in the pipeline that blocks changes removing replicas
+  - type: exercise
+    id: postmortem-grammar
+    about: postmortem
+    title: Конструкции в тексте
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«If the alert had used the slowest responses, we would have noticed in two minutes.» Почему здесь would have noticed?"
+        options:
+          - результат относится к прошлому и не наступил
+          - это план на будущее
+          - это привычное действие
+        answer: результат относится к прошлому и не наступил
+        explanation: Conditional 3 описывает прошлое, которое уже нельзя изменить.
+      - id: q2
+        prompt: "«If staging had received a copy of production traffic, we would have found the problem.» Что произошло на самом деле?"
+        options:
+          - в staging не было копии трафика, и проблему не нашли до релиза
+          - в staging была копия трафика, и проблему нашли
+          - проблему нашли до релиза
+        answer: в staging не было копии трафика, и проблему не нашли до релиза
+        explanation: Часть с if и would have называют то, чего не было.
+      - id: q3
+        prompt: "«The change was deployed.» Какая это форма?"
+        options: [past simple passive, past perfect, present perfect]
+        answer: past simple passive
+        explanation: Was deployed — past simple passive; действие совершили над изменением.
+      - id: q4
+        prompt: Which section lists steps to prevent a recurrence?
+        options: [Corrective actions, Impact, Timeline]
+        answer: Corrective actions
+        explanation: Corrective actions — шаги, которые меняют процесс.
+  - type: explanation
+    id: listening-how
+    title: Рассказ об ошибке на слух
+    body: |-
+      В рассказе об ошибке кандидат называет факты, свою долю ответственности, действия и вывод. Слушайте, где звучат слова **I assumed**, **I skipped**, **my part was** — так кандидат называет свою роль, — и где причина описана через процесс: **nothing forced a review**.
+
+      Послушайте, как Ingrid просит Tobias рассказать об ошибке. Сначала целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: story
+    title: A mistake in a job interview
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Thanks for coming in, Tobias. Let's talk about mistakes. Tell me about a mistake you made at work." }
+      - { speaker: Tobias, text: "Of course. At my previous company, I broke a billing job on a Friday afternoon. I was working on a small change to a discount rule, and I merged it without asking for a review. I assumed it was safe, and I was wrong." }
+      - { speaker: Ingrid, text: "Mm-hm. What happened?" }
+      - { speaker: Tobias, text: "The job ran that evening and applied the discount twice. About two hundred customers received an invoice with the wrong total. I noticed it from a support message at six o'clock, and I informed the team straight away." }
+      - { speaker: Ingrid, text: "What did you do next?" }
+      - { speaker: Tobias, text: "First, we stopped the job and rolled the change back. Then support wrote to the customers, and my lead and I corrected the invoices the same night. The next day, we wrote a postmortem together." }
+      - { speaker: Ingrid, text: "What was the root cause?" }
+      - { speaker: Tobias, text: "The root cause was the process: nothing forced a review for changes to billing code. My part was that I skipped it. If I had asked for a review, a colleague would have seen the problem in five minutes." }
+      - { speaker: Ingrid, text: "What did you change afterwards?" }
+      - { speaker: Tobias, text: "We made a review mandatory for billing code, and we added a check to the pipeline. I never merge on a Friday afternoon now. I'm not proud of it, but I'm glad it happened early in my career." }
+      - { speaker: Ingrid, text: "Thank you, Tobias. It's useful to hear how you handled it." }
+  - type: exercise
+    id: story-q
+    about: story
+    title: Что сказали в разговоре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Ingrid ask Tobias to talk about?
+        options:
+          - a mistake he made at work
+          - a deadline he missed
+          - a colleague he disagreed with
+        answer: a mistake he made at work
+      - id: q2
+        prompt: What did Tobias skip?
+        options: [a review, a test environment, a meeting]
+        answer: a review
+      - id: q3
+        prompt: What went wrong with the billing job?
+        options:
+          - It applied a discount twice.
+          - It sent no invoices.
+          - It deleted old invoices.
+        answer: It applied a discount twice.
+      - id: q4
+        prompt: How did Tobias find out about the problem?
+        options:
+          - from a support message
+          - from an automatic alert
+          - from his lead
+        answer: from a support message
+      - id: q5
+        prompt: What was the root cause, according to Tobias?
+        options:
+          - Nothing forced a review for changes to billing code.
+          - A server ran out of memory.
+          - A colleague merged the change by mistake.
+        answer: Nothing forced a review for changes to billing code.
+      - id: q6
+        prompt: What does Tobias do now?
+        options:
+          - He never merges on a Friday afternoon.
+          - He reviews all billing code himself.
+          - He avoids working on billing code.
+        answer: He never merges on a Friday afternoon.
+  - type: exercise
+    id: story-parts
+    about: story
+    title: Части ответа об ошибке
+    instruction: Выберите фразу из записи, которая подходит к описанию.
+    format: choice
+    items:
+      - id: q1
+        prompt: Какая фраза называет собственную долю ответственности?
+        options:
+          - I assumed it was safe, and I was wrong.
+          - The job ran that evening and applied the discount twice.
+          - Then support wrote to the customers.
+        answer: I assumed it was safe, and I was wrong.
+        explanation: Кандидат прямо называет своё решение и его результат.
+      - id: q2
+        prompt: Какая фраза описывает причину через процесс?
+        options:
+          - Nothing forced a review for changes to billing code.
+          - I merged it without asking for a review.
+          - I informed the team straight away.
+        answer: Nothing forced a review for changes to billing code.
+        explanation: Причина названа как отсутствие правила, без обвинения человека.
+      - id: q3
+        prompt: Какая фраза называет изменение практики?
+        options:
+          - We made a review mandatory for billing code.
+          - We stopped the job and rolled the change back.
+          - We wrote a postmortem together.
+        answer: We made a review mandatory for billing code.
+        explanation: Фраза описывает постоянное изменение процесса; остановка задания и откат были действиями в момент сбоя.
+      - id: q4
+        prompt: Какая фраза выражает прошлое, которое нельзя изменить, через conditional 3?
+        options:
+          - If I had asked for a review, a colleague would have seen the problem in five minutes.
+          - I never merge on a Friday afternoon now.
+          - I'm not proud of it, but I'm glad it happened early in my career.
+        answer: If I had asked for a review, a colleague would have seen the problem in five minutes.
+        explanation: Часть с if и would have называют то, чего не было.

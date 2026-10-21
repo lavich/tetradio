@@ -1,0 +1,7 @@
+id: ep241
+text: "We made sure it couldn't happen again."
+translation: "Мы сделали так, чтобы это не повторилось."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

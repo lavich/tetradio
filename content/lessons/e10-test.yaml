@@ -1,0 +1,372 @@
+title: Контрольная модуля e10
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, conditional 3, should have и wish, слова модуля и перевод фраз. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: guide
+    title: "How we review incidents at Alderwick Systems"
+    text: |-
+      How we review incidents at Alderwick Systems
+
+      After every incident that affects users, the on-call engineer writes a short timeline on the same day. Within two working days, the team holds a review meeting of about forty-five minutes and writes a postmortem.
+
+      The postmortem has five parts: a summary, the impact, the root cause, a timeline and corrective actions. It describes what happened in the process, and it never names the person who made a change. The question we ask is "What allowed this to happen?", not "Who did it?"
+
+      Every corrective action has an owner and a date. Thirty days later, the team checks which actions are finished. A near miss gets a review too, because it shows a weak point before users feel it.
+
+      We keep all postmortems in one place, so every new engineer can read them. If a similar incident happens again, the team looks at the earlier postmortem first.
+    glosses:
+      - { text: holds, russian: проводит }
+      - { text: owner, russian: ответственный }
+      - { text: "weak point", russian: "слабое место" }
+      - { text: similar, russian: похожий }
+  - type: exercise
+    id: guide-tf
+    about: guide
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The on-call engineer writes a short timeline on the same day as the incident.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: The review meeting is held within two working days.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: The postmortem names the person who made the change.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "It never names the person — разбор описывает процесс и не называет человека."
+      - id: q4
+        prompt: Every corrective action has an owner and a date.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: A near miss is not reviewed.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "A near miss gets a review too — случай на грани тоже разбирают."
+      - id: q6
+        prompt: New engineers cannot read earlier postmortems.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "We keep all postmortems in one place, so every new engineer can read them — разборы хранятся в одном месте и доступны новичкам."
+  - type: listening
+    id: call
+    title: A behavioral question about a mistake
+    plays: 2
+    transcript:
+      - { speaker: Sarah, text: "Welcome, Viktor. I'd like to ask about a mistake. Can you tell me about a time something went wrong because of a decision you made?" }
+      - { speaker: Viktor, text: "Yes. Last year, I led a data migration to a new database over a weekend. I estimated four hours, and I did not test the migration on a full copy of the data. That was a misjudgement on my part." }
+      - { speaker: Sarah, text: "What happened?" }
+      - { speaker: Viktor, text: "The migration took almost two days. On Monday morning, the system was still in read-only mode, and some customers could not save changes for two hours. I told my manager on Saturday, as soon as I saw that the job would run long." }
+      - { speaker: Sarah, text: "What did you do to limit the damage?" }
+      - { speaker: Viktor, text: "We extended the maintenance window, and I wrote a short message for customers with a new time. I also stayed on call until the migration finished." }
+      - { speaker: Sarah, text: "What did you find out afterwards?" }
+      - { speaker: Viktor, text: "We held a postmortem the same week. The root cause was that we had tested with a small sample, and nobody had reviewed my estimate. If I had run the migration on a full copy, I would have seen the real time." }
+      - { speaker: Sarah, text: "What did you learn?" }
+      - { speaker: Viktor, text: "I should have asked a colleague to review the plan. Now I always do a dry run on a full copy, and I add extra time to every estimate. It was humbling, but I plan better now." }
+      - { speaker: Sarah, text: "Thank you, Viktor. That was clear." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What did Viktor lead?
+        options:
+          - a data migration to a new database
+          - a new mobile app
+          - a security review
+        answer: a data migration to a new database
+      - id: q2
+        prompt: How long did he estimate the migration would take?
+        options: [four hours, eleven hours, two weeks]
+        answer: four hours
+      - id: q3
+        prompt: What was missing in his preparation?
+        options:
+          - a test on a full copy of the data
+          - a backup of the old database
+          - an approval from the customers
+        answer: a test on a full copy of the data
+      - id: q4
+        prompt: When did Viktor tell his manager?
+        options:
+          - on Saturday, when he saw that the job would run long
+          - on Monday, after the migration finished
+          - after the postmortem
+        answer: on Saturday, when he saw that the job would run long
+      - id: q5
+        prompt: What did the team do to limit the damage?
+        options:
+          - They extended the maintenance window and told the customers.
+          - They cancelled the migration.
+          - They asked the customers to wait without a message.
+        answer: They extended the maintenance window and told the customers.
+      - id: q6
+        prompt: What does Viktor do now?
+        options:
+          - He does a dry run on a full copy and adds extra time to estimates.
+          - He avoids data migrations.
+          - He asks his manager to write every estimate.
+        answer: He does a dry run on a full copy and adds extra time to estimates.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Conditional 3, should have, wish
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If I ___ a dry run, I would have found the problem. (в прошлом не сделал)"
+        options: [had done, would have done, have done]
+        answer: had done
+        explanation: В части с if стоит had и третья форма глагола.
+      - id: q2
+        prompt: "I ___ my manager earlier. (нужно было сказать, но не сказал)"
+        options: [should have told, should told, should have tell]
+        answer: should have told
+        explanation: Упущенное действие передаёт should have и третья форма глагола.
+      - id: q3
+        prompt: "I wish I ___ the estimate more carefully. (сожаление о прошлом)"
+        options: [had checked, would have checked, have checked]
+        answer: had checked
+        explanation: Сожаление о прошлом случае — wish и had с третьей формой глагола.
+      - id: q4
+        prompt: "If we hadn't skipped the review, the error ___ the customers. (в прошлом, возможно, не дошла бы)"
+        options: [might not have reached, might not have reach, might not reached]
+        answer: might not have reached
+        explanation: Возможный результат в прошлом — might not have и третья форма глагола.
+      - id: q5
+        prompt: Какое предложение верно?
+        options:
+          - If I would have asked, I would have known.
+          - If I had asked, I would have known.
+          - If I asked, I would have known.
+        answer: If I had asked, I would have known.
+        explanation: В части с if нужен had и третья форма глагола, would там не ставят.
+      - id: q6
+        prompt: "I shouldn't ___ it without a review. (не следовало вливать)"
+        options: [have merged, merged, have merge]
+        answer: have merged
+        explanation: После shouldn't стоит have и третья форма глагола.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - an outage
+      - a postmortem
+      - mitigate
+      - overlook
+      - underestimate
+      - a safeguard
+      - humbling
+      - hindsight
+    items:
+      - id: g1
+        prompt: "Users could not open the app for an hour: the team had ___. (отказ сервиса)"
+        answer: an outage
+      - id: g2
+        prompt: The team wrote ___ to explain what happened and what to change. (разбор инцидента)
+        answer: a postmortem
+      - id: g3
+        prompt: The failure was already happening, so we focused on how to ___ the damage to users. (смягчить)
+        answer: mitigate
+      - id: g4
+        prompt: A tired person can easily ___ one small warning in a long report. (не заметить)
+        answer: overlook
+      - id: g5
+        prompt: "My estimate was too low: I tend to ___ how long a migration takes. (недооценивать)"
+        answer: underestimate
+      - id: g6
+        prompt: A required review is ___ against careless changes. (защитная мера)
+        answer: a safeguard
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Если бы я попросил ревью, мы заметили бы проблему раньше.
+        answer:
+          - "If I had asked for a review, we would have noticed the problem earlier"
+          - "If I had asked for a review, we would have noticed the problem sooner"
+          - "If I had asked for a review, we would have noticed the issue earlier"
+          - "If I had asked for a review, we would have noticed the issue sooner"
+          - "If I had asked for a review, we would have noticed it earlier"
+          - "If I had asked for a review, we would have noticed it sooner"
+          - "If I had asked for a review we would have noticed the problem earlier"
+          - "If I had asked for a review we would have noticed the problem sooner"
+          - "If I had asked for a review we would have noticed the issue earlier"
+          - "If I had asked for a review we would have noticed the issue sooner"
+          - "If I had asked for a review we would have noticed it earlier"
+          - "If I had asked for a review we would have noticed it sooner"
+          - "If I had asked for a code review, we would have noticed the problem earlier"
+          - "If I had asked for a code review, we would have noticed the problem sooner"
+          - "If I had asked for a code review, we would have noticed the issue earlier"
+          - "If I had asked for a code review, we would have noticed the issue sooner"
+          - "If I had asked for a code review, we would have noticed it earlier"
+          - "If I had asked for a code review, we would have noticed it sooner"
+          - "If I had asked for a code review we would have noticed the problem earlier"
+          - "If I had asked for a code review we would have noticed the problem sooner"
+          - "If I had asked for a code review we would have noticed the issue earlier"
+          - "If I had asked for a code review we would have noticed the issue sooner"
+          - "If I had asked for a code review we would have noticed it earlier"
+          - "If I had asked for a code review we would have noticed it sooner"
+          - "If I had requested a review, we would have noticed the problem earlier"
+          - "If I had requested a review, we would have noticed the problem sooner"
+          - "If I had requested a review, we would have noticed the issue earlier"
+          - "If I had requested a review, we would have noticed the issue sooner"
+          - "If I had requested a review, we would have noticed it earlier"
+          - "If I had requested a review, we would have noticed it sooner"
+          - "If I had requested a review we would have noticed the problem earlier"
+          - "If I had requested a review we would have noticed the problem sooner"
+          - "If I had requested a review we would have noticed the issue earlier"
+          - "If I had requested a review we would have noticed the issue sooner"
+          - "If I had requested a review we would have noticed it earlier"
+          - "If I had requested a review we would have noticed it sooner"
+          - "If I had requested a code review, we would have noticed the problem earlier"
+          - "If I had requested a code review, we would have noticed the problem sooner"
+          - "If I had requested a code review, we would have noticed the issue earlier"
+          - "If I had requested a code review, we would have noticed the issue sooner"
+          - "If I had requested a code review, we would have noticed it earlier"
+          - "If I had requested a code review, we would have noticed it sooner"
+          - "If I had requested a code review we would have noticed the problem earlier"
+          - "If I had requested a code review we would have noticed the problem sooner"
+          - "If I had requested a code review we would have noticed the issue earlier"
+          - "If I had requested a code review we would have noticed the issue sooner"
+          - "If I had requested a code review we would have noticed it earlier"
+          - "If I had requested a code review we would have noticed it sooner"
+          - "We would have noticed the problem earlier if I had asked for a review"
+          - "We would have noticed the problem earlier if I had asked for a code review"
+          - "We would have noticed the problem earlier if I had requested a review"
+          - "We would have noticed the problem earlier if I had requested a code review"
+          - "We would have noticed the problem sooner if I had asked for a review"
+          - "We would have noticed the problem sooner if I had asked for a code review"
+          - "We would have noticed the problem sooner if I had requested a review"
+          - "We would have noticed the problem sooner if I had requested a code review"
+          - "We would have noticed the issue earlier if I had asked for a review"
+          - "We would have noticed the issue earlier if I had asked for a code review"
+          - "We would have noticed the issue earlier if I had requested a review"
+          - "We would have noticed the issue earlier if I had requested a code review"
+          - "We would have noticed the issue sooner if I had asked for a review"
+          - "We would have noticed the issue sooner if I had asked for a code review"
+          - "We would have noticed the issue sooner if I had requested a review"
+          - "We would have noticed the issue sooner if I had requested a code review"
+          - "We would have noticed it earlier if I had asked for a review"
+          - "We would have noticed it earlier if I had asked for a code review"
+          - "We would have noticed it earlier if I had requested a review"
+          - "We would have noticed it earlier if I had requested a code review"
+          - "We would have noticed it sooner if I had asked for a review"
+          - "We would have noticed it sooner if I had asked for a code review"
+          - "We would have noticed it sooner if I had requested a review"
+          - "We would have noticed it sooner if I had requested a code review"
+        explanation: Conditional 3 — if + had + третья форма, would have + третья форма.
+      - id: q2
+        prompt: Мне следовало сказать руководителю раньше.
+        answer:
+          - "I should have told my manager earlier"
+          - "I should have told my manager sooner"
+          - "I should have told my boss earlier"
+          - "I should have told my boss sooner"
+          - "I should have told my lead earlier"
+          - "I should have told my lead sooner"
+          - "I should have told my line manager earlier"
+          - "I should have told my line manager sooner"
+          - "I should have told my team lead earlier"
+          - "I should have told my team lead sooner"
+          - "I should have told my supervisor earlier"
+          - "I should have told my supervisor sooner"
+          - "I should have told the manager earlier"
+          - "I should have told the manager sooner"
+          - "I should have told the boss earlier"
+          - "I should have told the boss sooner"
+          - "I should have told the lead earlier"
+          - "I should have told the lead sooner"
+          - "I should have told the line manager earlier"
+          - "I should have told the line manager sooner"
+          - "I should have told the team lead earlier"
+          - "I should have told the team lead sooner"
+          - "I should have told the supervisor earlier"
+          - "I should have told the supervisor sooner"
+          - "I should have informed my manager earlier"
+          - "I should have informed my manager sooner"
+          - "I should have informed my boss earlier"
+          - "I should have informed my boss sooner"
+          - "I should have informed my lead earlier"
+          - "I should have informed my lead sooner"
+          - "I should have informed my line manager earlier"
+          - "I should have informed my line manager sooner"
+          - "I should have informed my team lead earlier"
+          - "I should have informed my team lead sooner"
+          - "I should have informed my supervisor earlier"
+          - "I should have informed my supervisor sooner"
+          - "I should have informed the manager earlier"
+          - "I should have informed the manager sooner"
+          - "I should have informed the boss earlier"
+          - "I should have informed the boss sooner"
+          - "I should have informed the lead earlier"
+          - "I should have informed the lead sooner"
+          - "I should have informed the line manager earlier"
+          - "I should have informed the line manager sooner"
+          - "I should have informed the team lead earlier"
+          - "I should have informed the team lead sooner"
+          - "I should have informed the supervisor earlier"
+          - "I should have informed the supervisor sooner"
+          - "I should have let my manager know earlier"
+          - "I should have let my manager know sooner"
+          - "I should have let my boss know earlier"
+          - "I should have let my boss know sooner"
+          - "I should have let my lead know earlier"
+          - "I should have let my lead know sooner"
+          - "I should have let my line manager know earlier"
+          - "I should have let my line manager know sooner"
+          - "I should have let my team lead know earlier"
+          - "I should have let my team lead know sooner"
+          - "I should have let the manager know earlier"
+          - "I should have let the manager know sooner"
+          - "I should have let the boss know earlier"
+          - "I should have let the boss know sooner"
+          - "I should have let the lead know earlier"
+          - "I should have let the lead know sooner"
+          - "I should have let the line manager know earlier"
+          - "I should have let the line manager know sooner"
+          - "I should have let the team lead know earlier"
+          - "I should have let the team lead know sooner"
+        explanation: Should have и третья форма глагола.
+      - id: q3
+        prompt: Жаль, что я не сделал пробный запуск.
+        answer:
+          - "I wish I had done a dry run"
+          - "I wish I had done a dry run first"
+          - "I wish I had done a test run"
+          - "I wish I had done a test run first"
+          - "I wish I had done a trial run"
+          - "I wish I had done a trial run first"
+          - "I wish I had carried out a dry run"
+          - "I wish I had carried out a dry run first"
+          - "I wish I had carried out a test run"
+          - "I wish I had carried out a test run first"
+          - "I wish I had carried out a trial run"
+          - "I wish I had carried out a trial run first"
+        explanation: Сожаление о прошлом — wish + had + третья форма.

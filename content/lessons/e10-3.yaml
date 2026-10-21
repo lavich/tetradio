@@ -1,0 +1,502 @@
+title: краткий постмортем, ответ об ошибке вслух, вопрос Tell me about a mistake you made
+kind: lesson
+items:
+  - { kind: phrase, id: ep242 }
+  - { kind: phrase, id: ep243 }
+  - { kind: phrase, id: ep244 }
+  - { kind: phrase, id: ep245 }
+  - { kind: phrase, id: ep246 }
+  - { kind: phrase, id: ep247 }
+  - { kind: phrase, id: ep248 }
+  - { kind: phrase, id: ep249 }
+  - { kind: phrase, id: ep250 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Ответ об ошибке в шести шагах
+    body: |-
+      Вопрос **Tell me about a mistake you made** проверяет, как вы относитесь к ошибке: называете ли свою долю, что делаете, чтобы исправить, и что меняете. Ответ укладывается примерно в две минуты и идёт по шагам, на каждом хватает одной-трёх фраз.
+
+      **1. Вступление.** Назовите случай одной фразой: **I'd like to talk about a time I broke production.** Можно начать с итога: **The biggest mistake I made was not asking for a review.**
+
+      **2. Что произошло.** Факты в past simple: **I changed a query and merged it without a review.** Решение, которое оказалось неверным, называют прямо: **I assumed it was safe, and I was wrong.**
+
+      **3. Ваша доля.** Скажите прямо, что решение было вашим: **It was my mistake, and I take full responsibility.** Одной фразы достаточно.
+
+      **4. Что вы сделали.** Действия по порядку: **I informed the team as soon as I noticed. We rolled the change back within ten minutes.**
+
+      **5. Что изменилось.** Конкретное изменение процесса: **We added a check to the deployment pipeline. These days, I never deploy without a rollback plan.**
+
+      **6. Вывод.** Что вы вынесли: **It taught me to slow down when I'm under pressure.** Если уместно, добавьте, что сделали бы иначе: **Knowing what I know now, I would have called a meeting sooner.** Завершите тем, что изменилось с тех пор: **Since then, I haven't made the same mistake.**
+    table:
+      columns:
+        - шаг
+        - примерное время
+        - язык
+      rows:
+        - - вступление
+          - 5 секунд
+          - I'd like to talk about a time I broke production.
+        - - что произошло
+          - 30 секунд
+          - I assumed it was safe, and I was wrong.
+        - - ваша доля
+          - 10–15 секунд
+          - It was my mistake, and I take full responsibility.
+        - - что вы сделали
+          - 30 секунд
+          - I informed the team as soon as I noticed.
+        - - что изменилось
+          - 25 секунд
+          - We added a check to the deployment pipeline.
+        - - вывод
+          - 15–20 секунд
+          - It taught me to slow down when I'm under pressure.
+  - type: explanation
+    id: safe-mistake
+    title: Какую ошибку выбрать и как о ней говорить
+    body: |-
+      Для ответа подходит ошибка, которую можно исправить и разобрать: пропущенная проверка, неверная оценка срока, сбой после релиза. Случаи, в которых пострадали люди, нарушены закон, безопасность данных или соглашение о неразглашении, для собеседования не выбирают.
+
+      Говорите о процессе. Свою долю называйте прямо, действия коллег по имени не оценивайте, названия клиентов и внутренние цифры не приводите. Критерий ответа — вывод и изменение практики. Самоуничижение и рассказ о подвиге («я всю ночь спасал компанию») в ответ не входят; интервьюеру нужны факты и то, что вы изменили.
+    table:
+      columns:
+        - вместо
+        - скажите
+        - почему
+      rows:
+        - - my colleague forgot to review it
+          - the review was skipped
+          - говорят о процессе
+        - - I'm terrible at deployments
+          - I misjudged the risk of the change
+          - называют решение
+        - - it was nobody's fault
+          - it was my mistake, and we added a check
+          - доля названа прямо, процесс изменён
+        - - I worked all night and saved the project
+          - We rolled the change back within ten minutes
+          - факты без героизации
+        - - a named client lost a large sum
+          - a large customer was affected for about an hour
+          - без названий и внутренних цифр
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: phrase-choice
+    title: Подходящая фраза
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Вы начинаете ответ на вопрос «Tell me about a mistake you made». Какая фраза подходит?"
+        options:
+          - I'd like to talk about a time I broke production.
+          - We rolled the change back within ten minutes.
+          - Since then, I haven't made the same mistake.
+        answer: I'd like to talk about a time I broke production.
+        explanation: Рассказ открывает фраза-вступление.
+      - id: q2
+        prompt: Вы называете свою долю ответственности. Какая фраза подходит?
+        options:
+          - It was my mistake, and I take full responsibility.
+          - We added a check to the deployment pipeline.
+          - The outage lasted about forty minutes.
+        answer: It was my mistake, and I take full responsibility.
+        explanation: Прямое признание решения вашим — отдельный шаг ответа.
+      - id: q3
+        prompt: Вы называете вывод — не торопиться под давлением. Какая фраза подходит?
+        options:
+          - It taught me to slow down when I'm under pressure.
+          - I assumed it was safe, and I was wrong.
+          - We made sure it couldn't happen again.
+        answer: It taught me to slow down when I'm under pressure.
+        explanation: Вывод из случая вводят словами It taught me…
+      - id: q4
+        prompt: Вы говорите, что с того случая вы не повторяли эту ошибку. Какая фраза подходит?
+        options:
+          - Since then, I haven't made the same mistake.
+          - Let me give you an example.
+          - The root cause turned out to be a missing index.
+        answer: Since then, I haven't made the same mistake.
+        explanation: Связь прошлого случая с настоящим передаёт since then и present perfect.
+      - id: q5
+        prompt: Вы говорите, что теперь перепроверяете изменения перед развёртыванием. Какая фраза подходит?
+        options:
+          - I've learned to double-check before I deploy.
+          - If I had tested it first, I would have caught the bug.
+          - I wish I had read the logs more carefully.
+        answer: I've learned to double-check before I deploy.
+        explanation: Привычка, появившаяся после случая, — I've learned to…
+      - id: q6
+        prompt: Вы говорите, что сегодня, зная больше, созвали бы встречу раньше. Какая фраза подходит?
+        options:
+          - Knowing what I know now, I would have called a meeting sooner.
+          - It's better to admit a mistake than to hide it.
+          - I informed the team as soon as I noticed.
+        answer: Knowing what I know now, I would have called a meeting sooner.
+        explanation: Фраза Knowing what I know now… вводит оценку прошлого решения.
+  - type: exercise
+    id: blame-choice
+    title: Формулировка для собеседования
+    instruction: Выберите формулировку, которая подходит для ответа на собеседовании.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы описываете причину сбоя.
+        options:
+          - My manager never listened, so the outage was his fault.
+          - The review was skipped, and I merged the change without a second check.
+          - My teammate forgot to test it, so I had to fix everything.
+        answer: The review was skipped, and I merged the change without a second check.
+        explanation: Образец говорит о процессе и называет свою долю; в двух других вариантах виноват другой человек.
+      - id: q2
+        prompt: Вы оцениваете своё решение.
+        options:
+          - I am terrible at deployments.
+          - I misjudged the risk of the change.
+          - Everyone makes mistakes, so it does not matter.
+        answer: I misjudged the risk of the change.
+        explanation: Фраза называет конкретное решение; оценка себя в целом и отказ от разбора не показывают вывода.
+      - id: q3
+        prompt: Вы описываете последствия.
+        options:
+          - The client lost a very large sum because of it.
+          - A large customer was affected for about an hour.
+          - The customer was careless and caused it.
+        answer: A large customer was affected for about an hour.
+        explanation: Последствия названы фактом, без внутренних цифр и без обвинения клиента.
+      - id: q4
+        prompt: Вы заканчиваете рассказ.
+        options:
+          - It was nobody's fault, so nothing changed.
+          - It was my mistake, and we added a check to the pipeline.
+          - I worked all night and saved the whole project.
+        answer: It was my mistake, and we added a check to the pipeline.
+        explanation: Окончание называет вашу долю и изменение процесса; в остальных нет вывода или есть рассказ о подвиге.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Хочу рассказать о случае, когда я сломал продакшен.
+        answer:
+          - "I would like to talk about a time when I broke production"
+          - "I would like to talk about a time I broke production"
+          - "I would like to talk about the time when I broke production"
+          - "I would like to talk about the time I broke production"
+          - "I would like to tell you about a time when I broke production"
+          - "I would like to tell you about a time I broke production"
+          - "I would like to tell you about the time when I broke production"
+          - "I would like to tell you about the time I broke production"
+          - "I would like to share a time when I broke production"
+          - "I would like to share a time I broke production"
+          - "I would like to share the time when I broke production"
+          - "I would like to share the time I broke production"
+          - "I want to talk about a time when I broke production"
+          - "I want to talk about a time I broke production"
+          - "I want to talk about the time when I broke production"
+          - "I want to talk about the time I broke production"
+          - "I want to tell you about a time when I broke production"
+          - "I want to tell you about a time I broke production"
+          - "I want to tell you about the time when I broke production"
+          - "I want to tell you about the time I broke production"
+          - "I want to share a time when I broke production"
+          - "I want to share a time I broke production"
+          - "I want to share the time when I broke production"
+          - "I want to share the time I broke production"
+        explanation: Вступление — I would like to talk about a time I broke production.
+      - id: q2
+        prompt: Это была моя ошибка, и я полностью отвечаю за неё.
+        answer:
+          - "It was my mistake, and I take full responsibility"
+          - "It was my mistake, and I take full responsibility for it"
+          - "It was my mistake, and I take complete responsibility"
+          - "It was my mistake, and I take complete responsibility for it"
+          - "It was my mistake and I take full responsibility"
+          - "It was my mistake and I take full responsibility for it"
+          - "It was my mistake and I take complete responsibility"
+          - "It was my mistake and I take complete responsibility for it"
+          - "It was my mistake, and I am fully responsible"
+          - "It was my mistake, and I accept full responsibility"
+          - "It was my mistake, and I accept full responsibility for it"
+          - "It was my mistake, and I accept complete responsibility"
+          - "It was my mistake, and I accept complete responsibility for it"
+          - "It was my mistake, and I am fully responsible for it"
+          - "It was my mistake and I am fully responsible"
+          - "It was my mistake and I accept full responsibility"
+          - "It was my mistake and I accept full responsibility for it"
+          - "It was my mistake and I accept complete responsibility"
+          - "It was my mistake and I accept complete responsibility for it"
+          - "It was my mistake and I am fully responsible for it"
+        explanation: Доля названа прямо — I take full responsibility.
+      - id: q3
+        prompt: Я научился перепроверять перед развёртыванием.
+        answer:
+          - "I have learned to double-check everything before I deploy"
+          - "I have learned to double-check everything before deploying"
+          - "I have learned to double-check everything before a deployment"
+          - "I have learned to double-check everything before deployment"
+          - "I have learned to double-check everything before the deployment"
+          - "I have learned to double-check before I deploy"
+          - "I have learned to double-check before deploying"
+          - "I have learned to double-check before a deployment"
+          - "I have learned to double-check before deployment"
+          - "I have learned to double-check before the deployment"
+          - "I have learned to double check everything before I deploy"
+          - "I have learned to double check everything before deploying"
+          - "I have learned to double check everything before a deployment"
+          - "I have learned to double check everything before deployment"
+          - "I have learned to double check everything before the deployment"
+          - "I have learned to double check before I deploy"
+          - "I have learned to double check before deploying"
+          - "I have learned to double check before a deployment"
+          - "I have learned to double check before deployment"
+          - "I have learned to double check before the deployment"
+          - "I learned to double-check everything before I deploy"
+          - "I learned to double-check everything before deploying"
+          - "I learned to double-check everything before a deployment"
+          - "I learned to double-check everything before deployment"
+          - "I learned to double-check everything before the deployment"
+          - "I learned to double-check before I deploy"
+          - "I learned to double-check before deploying"
+          - "I learned to double-check before a deployment"
+          - "I learned to double-check before deployment"
+          - "I learned to double-check before the deployment"
+          - "I learned to double check everything before I deploy"
+          - "I learned to double check everything before deploying"
+          - "I learned to double check everything before a deployment"
+          - "I learned to double check everything before deployment"
+          - "I learned to double check everything before the deployment"
+          - "I learned to double check before I deploy"
+          - "I learned to double check before deploying"
+          - "I learned to double check before a deployment"
+          - "I learned to double check before deployment"
+          - "I learned to double check before the deployment"
+          - "I have learned to double-check before deploying anything"
+          - "I have learned to double check before deploying anything"
+          - "I learned to double-check before deploying anything"
+          - "I learned to double check before deploying anything"
+        explanation: Привычка после случая — I have learned to double-check…
+      - id: q4
+        prompt: С тех пор я не повторял эту ошибку.
+        answer:
+          - "Since then, I have not made the same mistake"
+          - "Since then, I have not repeated that mistake"
+          - "Since then, I have not repeated this mistake"
+          - "Since then, I have not repeated the mistake"
+          - "Since then, I have not made the same mistake again"
+          - "Since then, I have not made that mistake"
+          - "Since then, I have not made that mistake again"
+          - "Since then, I have not made this mistake"
+          - "Since then, I have not made this mistake again"
+          - "Since then, I have never made the same mistake"
+          - "Since then, I have never repeated that mistake"
+          - "Since then, I have never repeated this mistake"
+          - "Since then, I have never repeated the mistake"
+          - "Since then, I have never made the same mistake again"
+          - "Since then, I have never made that mistake"
+          - "Since then, I have never made that mistake again"
+          - "Since then, I have never made this mistake"
+          - "Since then, I have never made this mistake again"
+          - "Since then I have not made the same mistake"
+          - "Since then I have not repeated that mistake"
+          - "Since then I have not repeated this mistake"
+          - "Since then I have not repeated the mistake"
+          - "Since then I have not made the same mistake again"
+          - "Since then I have not made that mistake"
+          - "Since then I have not made that mistake again"
+          - "Since then I have not made this mistake"
+          - "Since then I have not made this mistake again"
+          - "Since then I have never made the same mistake"
+          - "Since then I have never repeated that mistake"
+          - "Since then I have never repeated this mistake"
+          - "Since then I have never repeated the mistake"
+          - "Since then I have never made the same mistake again"
+          - "Since then I have never made that mistake"
+          - "Since then I have never made that mistake again"
+          - "Since then I have never made this mistake"
+          - "Since then I have never made this mistake again"
+          - "I have not made the same mistake since"
+          - "I have not made the same mistake since then"
+          - "I have not repeated that mistake since"
+          - "I have not repeated that mistake since then"
+          - "I have not repeated this mistake since"
+          - "I have not repeated this mistake since then"
+          - "I have not repeated the mistake since"
+          - "I have not repeated the mistake since then"
+          - "I have not made the same mistake again since"
+          - "I have not made the same mistake again since then"
+          - "I have not made that mistake since"
+          - "I have not made that mistake since then"
+          - "I have not made that mistake again since"
+          - "I have not made that mistake again since then"
+          - "I have not made this mistake since"
+          - "I have not made this mistake since then"
+          - "I have not made this mistake again since"
+          - "I have not made this mistake again since then"
+          - "I have never made the same mistake since"
+          - "I have never made the same mistake since then"
+          - "I have never repeated that mistake since"
+          - "I have never repeated that mistake since then"
+          - "I have never repeated this mistake since"
+          - "I have never repeated this mistake since then"
+          - "I have never repeated the mistake since"
+          - "I have never repeated the mistake since then"
+          - "I have never made the same mistake again since"
+          - "I have never made the same mistake again since then"
+          - "I have never made that mistake since"
+          - "I have never made that mistake since then"
+          - "I have never made that mistake again since"
+          - "I have never made that mistake again since then"
+          - "I have never made this mistake since"
+          - "I have never made this mistake since then"
+          - "I have never made this mistake again since"
+          - "I have never made this mistake again since then"
+        explanation: "Связь с настоящим — present perfect: I have not made the same mistake."
+      - id: q5
+        prompt: Лучше признать ошибку, чем скрывать её.
+        answer:
+          - "It is better to admit a mistake than to hide it"
+          - "It is better to admit a mistake than hide it"
+          - "It is better to admit your mistake than to hide it"
+          - "It is better to admit your mistake than hide it"
+          - "It is better to admit the mistake than to hide it"
+          - "It is better to admit the mistake than hide it"
+          - "It is better to own up to a mistake than to hide it"
+          - "It is better to own up to a mistake than hide it"
+          - "It is better to own up to your mistake than to hide it"
+          - "It is better to own up to your mistake than hide it"
+          - "It is better to own up to the mistake than to hide it"
+          - "It is better to own up to the mistake than hide it"
+          - "It is better to admit mistakes than to hide them"
+          - "It is better to admit mistakes than hide them"
+          - "It is better to own up to mistakes than to hide them"
+          - "It is better to own up to mistakes than hide them"
+        explanation: Сравнение — better to… than (to)…
+  - type: writing
+    id: postmortem
+    register: formal
+    prompt: "Напишите краткий постмортем вымышленного сбоя (80–120 слов): что произошло, влияние, причина, шаги исправления. Описывайте процесс, не называйте людей и компании."
+    words: { min: 80, max: 120 }
+    model: |-
+      Summary: On Thursday evening, our notification service sent duplicate emails to about three thousand users for twenty minutes. Impact: no data was lost, and support received eleven tickets. Root cause: a retry setting was changed without a review, so many messages were sent twice. Timeline: the change was deployed at 18:10, the alert fired at 18:22, and the team rolled the change back at 18:30. Corrective actions: we added a review requirement for configuration changes and a check that blocks duplicate retries. If the alert had been stricter, we would have noticed sooner. Nobody was blamed; the process allowed the change to reach users.
+    criteria:
+      - 80–120 слов, есть итог, влияние, причина, хронология и шаги исправления
+      - События описаны в past simple, действия над системой — в passive
+      - Есть одна конструкция conditional 3 или should have
+      - Причина названа через процесс, без имён и обвинений
+      - Формальный стиль без сокращений
+      - Цифры вымышленные, названий клиентов и компаний нет
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Десятый ответ вашего **банка ответов** — вопрос об ошибке: **Tell me about a mistake you made.** К нему добавляется уточнение интервьюера: **What would you do differently?** Первый ответ занимает до двух минут, второй — до 45 секунд.
+
+      1) Выберите одну поправимую ошибку и разложите её по шести шагам: вступление, что произошло, ваша доля, действия, изменение, вывод. 2) Запишите ответ вслух и уложитесь во время. 3) Переслушайте и сверьте с образцом и критериями: ваша доля названа прямо, причина описана через процесс, есть изменение практики. 4) Для второго вопроса назовите один-два шага, которые вы сделали бы иначе, с конструкцией would или would have.
+
+      Сцена в конце урока повторяет вопросы интервьюера. Реплики записаны ниже, перед сценой; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: mistake
+    part: interview
+    prompt: "Интервьюер спрашивает: «Tell me about a mistake you made.» Ответьте за 120 секунд: что произошло, ваша доля, действия, что изменилось и вывод."
+    seconds: 120
+    model: "I'd like to talk about a time I broke production. At my previous company, I was working on a reporting service when I changed a database query late on a Friday afternoon. I assumed it was safe, and I merged it without asking for a review. That was my mistake, and I take full responsibility. The query was slow on real data, so the service responded slowly for about forty minutes. An alert fired, and I informed the team as soon as I noticed. We rolled the change back within ten minutes of the decision, and I wrote the first draft of the postmortem the next day. The root cause was the process: nothing required a review for database changes, and the staging environment had much less data than production. If I had asked for a review, a colleague would have seen the problem. We added a check to the deployment pipeline, and we made a review mandatory for queries on large tables. It taught me to slow down when I'm under pressure. These days, I never deploy without a rollback plan, and I haven't made the same mistake since then."
+    criteria:
+      - Назван случай, факты в past simple
+      - Своя доля названа прямо, с I
+      - Причина описана через процесс, без обвинения коллег
+      - Действия идут по порядку, названо, кого и когда известили
+      - Есть изменение практики и вывод
+      - Использована одна конструкция conditional 3, should have или wish
+      - Использованы не меньше трёх фраз урока
+      - Нет названий клиентов и компаний, выручки и внутренних цифр
+      - Ответ укладывается в 120 секунд
+  - type: speaking
+    id: differently
+    part: monologue
+    prompt: "Интервьюер уточняет: «What would you do differently?» Ответьте за 45 секунд: один-два шага, которые вы сделали бы иначе."
+    seconds: 45
+    model: "In hindsight, I would ask for a review before merging, and I would not merge late on a Friday. I would also add a sanity check to the pipeline from the start, so the process would not depend on me remembering it. If I had known how little data the staging environment had, I would have tested on a larger copy."
+    criteria:
+      - Названы один-два конкретных шага
+      - Есть конструкция would или would have
+      - Шаги касаются процесса и своих действий
+      - Нет обвинения коллег
+      - Ответ укладывается в 45 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Thanks for joining. Let's talk about mistakes. Tell me about a mistake you made at work." }
+      - { speaker: Ingrid, text: "Mm-hm. What was the impact?" }
+      - { speaker: Ingrid, text: "I see. What did you change afterwards, and what did you learn?" }
+      - { speaker: Ingrid, text: "Thank you. Last question: what would you do differently?" }
+      - { speaker: Ingrid, text: "Thank you. That was a clear answer." }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на собеседовании, вопросы задаёт Ingrid, руководитель разработки. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику назовите случай и расскажите, что произошло и какова ваша доля. На вторую назовите последствия. На третью скажите, что изменилось и что вы вынесли. На четвёртую назовите, что сделали бы иначе. На последнюю поблагодарите. Вся ваша часть — 120 секунд, каждая реплика — две-четыре фразы.
+    seconds: 120
+    model: |-
+      Ingrid: Thanks for joining. Let's talk about mistakes. Tell me about a mistake you made at work.
+      You: I'd like to talk about a time I broke production. I changed a database query late on a Friday and merged it without a review. I assumed it was safe, and I was wrong. It was my mistake, and I take full responsibility.
+      Ingrid: Mm-hm. What was the impact?
+      You: The service was slow for about forty minutes, and some users saw errors. No data was lost. I informed the team as soon as I noticed, and we rolled the change back.
+      Ingrid: I see. What did you change afterwards, and what did you learn?
+      You: We made a review mandatory for database changes and added a check to the pipeline. It taught me to slow down when I'm under pressure.
+      Ingrid: Thank you. Last question: what would you do differently?
+      You: I would ask for a review first, and I would not merge on a Friday afternoon. If I had asked, a colleague would have seen the problem.
+      Ingrid: Thank you. That was a clear answer.
+      You: Thank you for the questions. It was useful to talk it through.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — две-четыре фразы
+      - В первой реплике названы случай, факты и своя доля
+      - Последствия названы фактом, без внутренних цифр и обвинений
+      - Названо изменение процесса и вывод
+      - В четвёртой реплике есть конструкция would или would have
+      - В конце есть благодарность
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модулей
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "The incident ___ by the on-call engineer within ten minutes. (был замечен)"
+        options: [was noticed, noticed, was noticing]
+        answer: was noticed
+        explanation: Действие совершается над инцидентом, поэтому нужен passive.
+      - id: q2
+        prompt: "I ___ in this team since 2022. (до сих пор)"
+        options: [have been, was, am]
+        answer: have been
+        explanation: Since и связь с настоящим — present perfect.
+      - id: q3
+        prompt: "You ___ ask for a review before you merge. (совет)"
+        options: [should, to should, would to]
+        answer: should
+        explanation: Совет выражается глаголом should; после него нет to.
+      - id: q4
+        prompt: "By the time I noticed the problem, the job ___ twice. (запустилась раньше)"
+        options: [had run, will run, runs]
+        answer: had run
+        explanation: Более раннее событие стоит в past perfect — had и третья форма глагола.
+      - id: q5
+        prompt: "Could you tell me what ___ after the rollback?"
+        options: [happened, did happen, it happened]
+        answer: happened
+        explanation: В косвенном вопросе порядок слов как в утверждении, без did.
+      - id: q6
+        prompt: "Next quarter we ___ the on-call rotation. (уже решено)"
+        options: [are changing, might to change, will to change]
+        answer: are changing
+        explanation: План с решением — present continuous.

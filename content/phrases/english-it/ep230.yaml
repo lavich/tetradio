@@ -1,0 +1,7 @@
+id: ep230
+text: "I wish I had read the logs more carefully."
+translation: "Жаль, что я не прочитал логи внимательнее."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10
+  operation: requested-generation
+  request: Фразы модуля e10 по программе docs/curriculum-english-it.md

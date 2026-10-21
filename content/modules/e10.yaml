@@ -1,8 +1,24 @@
 number: 10
 title: Tell me about a failure
 subtitle: Ошибки и выводы
-status: draft
+status: published
 goal: рассказать о своей ошибке и о том, что из неё вынес
 grammar:
   - conditional 3, should have / could have, wish
 sessions: 3
+crib:
+  title: Ошибка и вывод
+  rows:
+    - ["если бы…", "If I had tested it, I would have caught the bug. If we had set up an alert, we would have noticed sooner."]
+    - [нужно было и не следовало, "I should have asked for help earlier. I shouldn't have merged it on a Friday."]
+    - [была возможность, "I could have avoided it with a simple check."]
+    - [сожаление, "I wish I had read the logs more carefully."]
+    - [ответственность, "It was my mistake, and I take full responsibility."]
+    - [действия, "I informed the team as soon as I noticed. We rolled the change back within ten minutes."]
+    - [изменение и вывод, "We added a check to the deployment pipeline. It taught me to slow down when I'm under pressure."]
+  note: "после if стоит had и третья форма глагола, в главной части — would have и третья форма; в рассказе об ошибке своя доля названа прямо, причина описана через процесс"
+lessons:
+  - e10-1
+  - e10-2
+  - e10-3
+  - e10-test
