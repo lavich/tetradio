@@ -6,7 +6,6 @@ import { unitKey } from "../domain/refs";
 import { reportError } from "../reporting/reporting";
 import type { LearningRef, Session } from "../domain/types";
 import {
-  activeSession,
   courseOfCard,
   courses,
   currentLanguage,
@@ -18,7 +17,6 @@ import {
   setCurrentLanguage,
   setPrimaryCourse,
   shelfLanguage,
-  todayCourse,
   type CourseEntry,
   type LanguageEntry,
 } from "../storage/courses";
@@ -35,9 +33,6 @@ export const usePrimaryCourse = (): string | null | undefined =>
   useLiveQuery(async () => (await primaryCourse()) ?? null, []);
 export { setPrimaryCourse };
 
-/** Курс «Сегодня» — основной или следующий не на паузе: `null` — все начатые курсы на паузе или курсов нет. */
-export const useTodayCourse = (): string | null | undefined =>
-  useLiveQuery(async () => (await todayCourse()) ?? null, []);
 /** Язык «Сегодня»: `null` — все начатые курсы на паузе или курсов нет, `undefined` — ещё читается. */
 export const useTodayLanguage = (): Language | null | undefined =>
   useLiveQuery(async () => (await todayLanguage()) ?? null, []);
@@ -71,10 +66,6 @@ export function useCoursePalette(courseId: string | undefined): PaletteName {
 
 export const courseName = (course: Pick<CourseEntry, "short" | "title" | "level">) =>
   [course.short ?? course.title, course.level].filter(Boolean).join(" · ");
-
-/** Незавершённое занятие курса: `undefined` — ещё читается, `null` — нет. */
-export const useCourseSession = (courseId: string | undefined): Session | null | undefined =>
-  useLiveQuery(() => (courseId ? activeSession(courseId) : null), [courseId]);
 
 /** Модуль, урок или слово другого курса, открытые по ссылке, делают свой курс выбранным. */
 export function useFollowCourse(courseId: string | undefined) {

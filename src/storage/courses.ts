@@ -202,11 +202,6 @@ export const todayCourse = zoned(async function todayCourse(database: AppDatabas
   }
   return undefined;
 });
-/** Курс занятия «Сегодня» без курса в адресе; все курсы на паузе — основной, как раньше. */
-export const sessionDefaultCourse = zoned(
-  async (database: AppDatabase = db): Promise<string | undefined> =>
-    (await todayCourse(database)) ?? primaryCourse(database),
-);
 export const setPrimaryCourse = (courseId: string, database: AppDatabase = db) =>
   database.meta.put({ key: PRIMARY_COURSE_KEY, value: courseId }).then(() => undefined);
 
@@ -494,18 +489,3 @@ export const anyActiveSession = zoned(
       .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
       .last()) ?? null,
 );
-
-/** Незавершённое занятие курса, последнее по времени; без курса — любое, как до двух курсов. */
-export const activeSession = zoned(async function activeSession(
-  courseId?: string,
-  database: AppDatabase = db,
-): Promise<Session | null> {
-  const active = await database.sessions
-    .where("[status+createdAt]")
-    .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
-    .reverse()
-    .toArray();
-  if (!courseId) return active[0] ?? null;
-  const home = active.some((session) => !session.courseId) ? await homeCourse(database) : undefined;
-  return active.find((session) => (session.courseId ?? home) === courseId) ?? null;
-});

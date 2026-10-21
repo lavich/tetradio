@@ -16,7 +16,6 @@ import {
   reviewedOn,
 } from "../src/storage/course";
 import {
-  activeSession,
   cardsInCourse,
   languageSession,
   courseOfCard,
@@ -24,9 +23,8 @@ import {
   currentLanguage,
   languages,
   lessonCourses,
-  primaryCourse,
   profileOfCourse,
-  sessionCourse,
+  sessionLanguage,
   shelfLanguage,
 } from "../src/storage/courses";
 import { db, type StoredWord } from "../src/storage/db";
@@ -34,7 +32,8 @@ import { dictionary, languageDictionary } from "../src/storage/dictionary";
 import { submitAnswer } from "./helpers/ops";
 import { courseProgress, languageProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
-import { languagePlan, todayCourses, todayLanguage } from "../src/storage/today";
+import { languagePlan, sessionHomeLanguage, todayCourses, todayLanguage } from "../src/storage/today";
+import { PROFILES } from "../src/domain/language";
 import { markRead, moduleReadings, courseReadings, languageReadings, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 
@@ -153,10 +152,9 @@ describe("живые запросы отслеживают чтения посл
     "слово: навыки": () => dexieSource().skillsOf({ kind: "word", word }),
     "слово: язык": async () => profileOfCourse((await courseOfCard(key()))!),
     занятие: async () => {
-      const found = await activeSession(await primaryCourse());
+      const found = await languageSession(await sessionHomeLanguage());
       if (!found) return { session: null, profile: undefined };
-      const courseId = await sessionCourse(found);
-      return { session: found, profile: courseId ? await profileOfCourse(courseId) : undefined };
+      return { session: found, profile: PROFILES[await sessionLanguage(found)] };
     },
   };
 

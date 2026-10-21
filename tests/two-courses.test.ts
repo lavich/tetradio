@@ -7,12 +7,12 @@ import { unitKey, wordKeyOf, wordRef } from "../src/domain/refs";
 import type { Course, Lesson, LessonItem, Phrase, ReviewEvent, Session, StoredModule, Word } from "../src/domain/types";
 import { AppDatabase, indexWord, type StoredCatalogEntry } from "../src/storage/db";
 import {
-  activeSession,
   cardCourses,
   cardLanguages,
   courses,
   currentLanguage,
   followCourse,
+  languageSession,
   primaryCourse,
   profileOfCourse,
   rememberCourses,
@@ -312,21 +312,22 @@ describe("план и занятие по курсу", () => {
       expect(fromMemory.reviews.map((review) => review.ref)).toEqual(fromDb.reviews.map((review) => review.ref));
     }
   });
-  it("прежнее занятие без курса — занятие курса, установленного первым, и после смены основного", async () => {
+  it("прежнее занятие без курса — занятие языка курса, установленного первым, и после смены основного", async () => {
     const old: Session = {
       ...(await makeSession({ source: dexieSource(db), now, courseId: GREEK, random: () => 0.3 })),
       id: "s-old",
     };
     delete old.courseId;
+    delete old.language;
     await db.sessions.add(old);
-    expect((await activeSession(GREEK, db))?.id).toBe("s-old");
-    expect(await activeSession(ENGLISH, db)).toBeNull();
+    expect((await languageSession("el", db))?.id).toBe("s-old");
+    expect(await languageSession("en", db)).toBeNull();
     const english = await makeSession({ source: dexieSource(db), now, courseId: ENGLISH, random: () => 0.3 });
     await db.sessions.add({ ...english, createdAt: new Date(now.getTime() + 1000).toISOString() });
-    expect((await activeSession(ENGLISH, db))?.id).toBe(english.id);
-    expect((await activeSession(GREEK, db))?.id).toBe("s-old");
+    expect((await languageSession("en", db))?.id).toBe(english.id);
+    expect((await languageSession("el", db))?.id).toBe("s-old");
     await setPrimaryCourse(ENGLISH, db);
-    expect((await activeSession(GREEK, db))?.id).toBe("s-old");
+    expect((await languageSession("el", db))?.id).toBe("s-old");
     expect(await sessionCourse(old, db)).toBe(GREEK);
   });
   it("дополнительная попытка прежнего занятия берёт варианты из слов его курса", async () => {
