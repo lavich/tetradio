@@ -1,0 +1,7 @@
+id: ep047
+text: "I got up to speed on the codebase within a month."
+translation: "Я разобрался в кодовой базе за месяц."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

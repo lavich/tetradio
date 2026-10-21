@@ -1,0 +1,7 @@
+id: ep032
+text: "I've already led two migrations."
+translation: "Я уже руководил двумя миграциями."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

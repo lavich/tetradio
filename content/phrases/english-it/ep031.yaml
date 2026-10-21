@@ -1,0 +1,7 @@
+id: ep031
+text: "I've just been promoted to team lead."
+translation: "Меня только что повысили до тимлида."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

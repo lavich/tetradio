@@ -1,0 +1,7 @@
+id: ep042
+text: "Let me walk you through my CV."
+translation: "Позвольте пройтись по моему резюме."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

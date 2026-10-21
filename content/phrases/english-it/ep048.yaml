@@ -1,0 +1,7 @@
+id: ep048
+text: "I decided to move on after the acquisition."
+translation: "После поглощения я решил двигаться дальше."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

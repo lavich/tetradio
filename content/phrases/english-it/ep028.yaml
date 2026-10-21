@@ -1,0 +1,7 @@
+id: ep028
+text: "I joined the company in 2021."
+translation: "Я пришёл в компанию в 2021 году."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

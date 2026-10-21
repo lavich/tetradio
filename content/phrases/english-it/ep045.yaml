@@ -1,0 +1,7 @@
+id: ep045
+text: "My biggest accomplishment so far is the checkout rewrite."
+translation: "Моё главное достижение на сегодня — переписывание чекаута."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

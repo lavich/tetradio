@@ -1,0 +1,7 @@
+id: ep046
+text: "I took a career break to study."
+translation: "Я взял перерыв в карьере, чтобы учиться."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

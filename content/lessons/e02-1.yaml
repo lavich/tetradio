@@ -1,0 +1,386 @@
+title: Present perfect и past simple — опыт и сроки
+kind: lesson
+items:
+  - { kind: word, id: ew036 }
+  - { kind: word, id: ew037 }
+  - { kind: word, id: ew038 }
+  - { kind: word, id: ew039 }
+  - { kind: word, id: ew040 }
+  - { kind: word, id: ew041 }
+  - { kind: word, id: ew042 }
+  - { kind: word, id: ew043 }
+  - { kind: word, id: ew044 }
+  - { kind: word, id: ew045 }
+  - { kind: word, id: ew046 }
+  - { kind: word, id: ew047 }
+  - { kind: word, id: ew048 }
+  - { kind: word, id: ew049 }
+  - { kind: word, id: ew050 }
+  - { kind: word, id: ew051 }
+  - { kind: word, id: ew052 }
+  - { kind: word, id: ew053 }
+  - { kind: phrase, id: ep026 }
+  - { kind: phrase, id: ep027 }
+  - { kind: phrase, id: ep028 }
+  - { kind: phrase, id: ep029 }
+  - { kind: phrase, id: ep030 }
+  - { kind: phrase, id: ep031 }
+  - { kind: phrase, id: ep032 }
+  - { kind: phrase, id: ep033 }
+blocks:
+  - type: explanation
+    id: pp-ps
+    title: Present perfect и past simple
+    body: |-
+      Рассказ об опыте держится на выборе между двумя временами. **Past simple** — действие закончилось, и время названо или понятно из вопроса: **I joined** the company in 2021. **I left** my previous job last year. **When did you move** to backend?
+
+      **Present perfect** (have / has + третья форма глагола) связывает прошлое с настоящим: период ещё идёт, у опыта нет даты или результат виден сейчас. **I've worked** here for three years — я там до сих пор. **I've worked** with Kubernetes — опыт есть, когда именно, неважно. **I've just been promoted** — результат сейчас.
+
+      Проверка по маркеру времени. Конкретный закончившийся момент — *in 2021, last year, three years ago, yesterday, when* — требует past simple. Период до сегодняшнего дня и опыт без даты — *since, so far, ever, never, already, yet, just* — обычно идут с present perfect; *for* встречается с обоими временами (см. следующий блок).
+
+      Две частые ошибки русскоговорящих. Первая: настоящее время вместо present perfect — «I work here since 2019» и «I'm working here for three years»; правильно **I've worked here since 2019**. Вторая: present perfect с датой — «I have joined the company in 2021»; правильно **I joined the company in 2021**.
+
+      Британский вариант предпочитает present perfect с *just, already, yet*; в американском допустим и past simple (*Did you finish yet?*). На собеседовании безопаснее present perfect.
+    table:
+      columns:
+        - present perfect — до сих пор, опыт, результат
+        - past simple — закончилось, есть момент
+      rows:
+        - - I've worked at three companies so far.
+          - I worked at a bank in 2019.
+        - - I've been a developer for six years.
+          - I became a developer in 2018.
+        - - Have you ever used Terraform?
+          - When did you start using Terraform?
+        - - She has led the team since March.
+          - She led the team for two years, then left.
+  - type: explanation
+    id: for-since
+    title: For, since и ago
+    body: |-
+      **For** + длительность: *for six years, for a few months, for a long time*. **Since** + точка начала: *since 2019, since March, since I joined the team*. Обе конструкции идут с present perfect, когда ситуация не закончилась: **I've been** a developer **for six years**. **I've been** with the company **since 2019**.
+
+      Вопрос о длительности — **How long have you…?** Ответ — с for или since. Вопрос о моменте — **When did you…?** Ответ — past simple с датой или с **ago**: **I switched** to backend **three years ago**.
+
+      **For** бывает и с past simple, когда период закончился: **I worked** at a bank **for two years**, then I moved to IT — в банке я уже не работаю. Сравните: **I've worked** at a bank **for two years** — я там до сих пор.
+
+      В вопросе **How long have you been working there?** стоит present perfect continuous — тема модуля e16. Пока запоминайте его как готовую фразу; ответ строится на простом present perfect: **I've worked there for two years.**
+    table:
+      columns:
+        - конструкция
+        - пример
+      rows:
+        - - have + V3 + for + длительность
+          - I've used Python for eight years.
+        - - have + V3 + since + начало
+          - I've used Python since 2018.
+        - - past simple + for (период закончился)
+          - I used Java for three years.
+        - - past simple + ago
+          - I left that job two years ago.
+  - type: explanation
+    id: already-yet-just
+    title: Already, yet, just
+    body: |-
+      Три слова показывают время относительно «сейчас» и идут с present perfect. **Just** — совсем недавно: **I've just been promoted to team lead.** **Already** — уже, к этому моменту; часто с оттенком «раньше, чем ожидалось»: **I've already led two migrations.** **Yet** — в отрицаниях и вопросах, обычно в конце: **I haven't worked with Kubernetes yet. Have you used it yet?**
+
+      Места слов в предложении. *Just* и *already* обычно стоят между have и третьей формой глагола; *already* допустимо и в конце. *Yet* ставят в конец. В утвердительном предложении *yet* обычно не употребляется: там ставят *already*.
+
+      На собеседовании *not yet* можно сразу связать с близким опытом: **I haven't worked with Kubernetes yet, but I've used Docker for five years** — отсутствие опыта сразу связано с близким опытом.
+    table:
+      columns:
+        - слово
+        - значение и место
+        - пример
+      rows:
+        - - just
+          - только что, перед V3
+          - I've just finished the handover.
+        - - already
+          - уже, перед V3
+          - We've already deployed the fix.
+        - - yet
+          - ещё, в конце отрицания и вопроса
+          - Have you met the team yet?
+  - type: explanation
+    id: career-words
+    title: Как говорят о карьерных шагах
+    body: |-
+      Пришли в компанию — **join** a company, ушли — **leave** a job. Формальный вариант ухода по своей инициативе — **resign**. Если уволила компания без вины работника, это **be laid off**: **I was laid off when the company downsized.** Повышение — **be promoted to** + должность: **I was promoted to senior developer.**
+
+      Переходы между направлениями: **switch to** backend, **move into** management, **relocate to** Berlin. Если нужно сказать, что принял дела у коллеги, подойдёт **take over** a project; передал — **hand over**, существительное — **a handover**.
+
+      Результат работы описывают глаголы **deliver** a project, **overhaul** a process, **spearhead** a migration. *Spearhead* говорит о роли инициатора, *deliver* — о доведении результата до конца.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: tense-choice
+    title: Present perfect или past simple
+    instruction: Выберите правильную форму.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ the company in 2021.
+        options: [joined, "'ve joined"]
+        answer: joined
+        explanation: In 2021 — конкретный закончившийся момент, поэтому past simple.
+      - id: q2
+        prompt: I'm still at the same company. I ___ here for three years.
+        options: ["'ve worked", worked]
+        answer: "'ve worked"
+        explanation: Период продолжается до сегодняшнего дня — present perfect с for.
+      - id: q3
+        prompt: "— When ___ you move to Berlin? — Two years ago."
+        options: [did, have]
+        answer: did
+        explanation: When спрашивает о моменте, ответ с ago — past simple.
+      - id: q4
+        prompt: She ___ at three companies so far.
+        options: [has worked, worked]
+        answer: has worked
+        explanation: So far означает «до сих пор» — present perfect.
+      - id: q5
+        prompt: We ___ the old system last March.
+        options: [replaced, "'ve replaced"]
+        answer: replaced
+        explanation: Last March — закончившийся момент.
+      - id: q6
+        prompt: "— ___ you ever worked in a start-up? — No, never."
+        options: [Did, Have]
+        answer: Have
+        explanation: Ever и never с опытом без даты — present perfect, а после Did глагол стоял бы в начальной форме.
+      - id: q7
+        prompt: I ___ to Poland in 2019 and I still live there.
+        options: [moved, "'ve moved"]
+        answer: moved
+        explanation: In 2019 — момент в прошлом, поэтому past simple, хотя ситуация продолжается.
+  - type: exercise
+    id: for-since-choice
+    title: For, since или ago
+    instruction: Выберите слово.
+    format: choice
+    items:
+      - id: q1
+        prompt: I've been a developer ___ six years.
+        options: [for, since]
+        answer: for
+        explanation: Six years — длительность.
+      - id: q2
+        prompt: I've worked here ___ 2019.
+        options: [for, since]
+        answer: since
+        explanation: 2019 — точка начала.
+      - id: q3
+        prompt: We've used PostgreSQL ___ the project started.
+        options: [for, since]
+        answer: since
+        explanation: После since может стоять целое предложение с началом периода.
+      - id: q4
+        prompt: She's led the team ___ a few months.
+        options: [for, since]
+        answer: for
+      - id: q5
+        prompt: I haven't taken a day off ___ March.
+        options: [for, since]
+        answer: since
+      - id: q6
+        prompt: I worked at a bank ___ two years, then I switched to IT.
+        options: [for, since, ago]
+        answer: for
+        explanation: Период закончился, поэтому past simple с for. Ago называет момент.
+      - id: q7
+        prompt: I left that job two years ___.
+        options: [for, since, ago]
+        answer: ago
+        explanation: Ago отсчитывает назад от сегодняшнего дня и стоит в конце предложения с past simple.
+  - type: exercise
+    id: adverbs-choice
+    title: Already, yet или just
+    instruction: Выберите слово.
+    format: choice
+    items:
+      - id: q1
+        prompt: I haven't worked with Terraform ___.
+        options: [already, yet, just]
+        answer: yet
+        explanation: В конце отрицания стоит yet.
+      - id: q2
+        prompt: I've ___ finished the migration — it ended an hour ago.
+        options: [yet, just]
+        answer: just
+        explanation: Just — совсем недавно.
+      - id: q3
+        prompt: I'm not new to this — I've ___ led two migrations.
+        options: [already, yet]
+        answer: already
+        explanation: Already подчёркивает, что опыт есть до сегодняшнего дня; yet стоит в отрицаниях и вопросах.
+      - id: q4
+        prompt: Have you passed the security training ___?
+        options: [yet, just]
+        answer: yet
+        explanation: В вопросе о том, что должно произойти, стоит yet.
+      - id: q5
+        prompt: The offer has ___ arrived — I'm reading it right now.
+        options: [yet, just]
+        answer: just
+        explanation: В утвердительном предложении yet не употребляется.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - resign
+      - be laid off
+      - an internship
+      - a contractor
+      - relocate
+      - a handover
+      - an accomplishment
+      - a tech lead
+      - a stint
+      - a career change
+    items:
+      - { id: m1, prompt: уволиться по собственному желанию, answer: resign }
+      - { id: m2, prompt: попасть под сокращение, answer: be laid off }
+      - { id: m3, prompt: стажировка, answer: an internship }
+      - { id: m4, prompt: "подрядчик, работающий по договору", answer: a contractor }
+      - { id: m5, prompt: переехать в другую страну по работе, answer: relocate }
+      - { id: m6, prompt: передача дел, answer: a handover }
+      - { id: m7, prompt: достижение, answer: an accomplishment }
+      - { id: m8, prompt: технический лидер команды, answer: a tech lead }
+  - type: exercise
+    id: career-gap
+    title: Карьерные шаги
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - promoted
+      - resign
+      - laid
+      - break
+      - freelance
+      - take
+      - overhaul
+      - deliver
+      - relocate
+      - stint
+    items:
+      - id: g1
+        prompt: In 2022 I was ___ to senior developer.
+        answer: promoted
+      - id: g2
+        prompt: I decided to ___ from my job because I wanted to study full-time.
+        answer: resign
+      - id: g3
+        prompt: When the company closed the office, I was ___ off.
+        answer: laid
+        explanation: Be laid off — попасть под сокращение.
+      - id: g4
+        prompt: After my daughter was born, I took a career ___ for a year.
+        answer: break
+      - id: g5
+        prompt: For two years I worked ___ for several clients.
+        answer: freelance
+      - id: g6
+        prompt: In March I'll ___ over the payments team from Anna.
+        answer: take
+      - id: g7
+        prompt: Our onboarding process is too slow, so we need to ___ it completely.
+        answer: overhaul
+      - id: g8
+        prompt: I always ___ the project to the client on time.
+        answer: deliver
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, haven't) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Я работаю здесь с 2019 года.
+        answer:
+          - I've worked here since 2019.
+          - I have worked here since 2019.
+          - I've been working here since 2019.
+          - I have been working here since 2019.
+          - I've worked at this company since 2019.
+          - I have worked at this company since 2019.
+          - I've worked at the company since 2019.
+          - I have worked at the company since 2019.
+          - I've worked for this company since 2019.
+          - I have worked for this company since 2019.
+          - I've been here since 2019.
+          - I've been at this company since 2019.
+          - I have been at this company since 2019.
+          - I've been with this company since 2019.
+          - I've been with the company since 2019.
+          - I've been working at this company since 2019.
+        explanation: Ситуация продолжается, поэтому present perfect с since.
+      - id: q2
+        prompt: Я пришёл в компанию в 2021 году.
+        answer:
+          - I joined the company in 2021.
+          - I joined this company in 2021.
+          - In 2021 I joined the company.
+          - In 2021, I joined the company.
+          - I joined our company in 2021.
+          - I started working at the company in 2021.
+          - I came to the company in 2021.
+        explanation: Названа дата, поэтому past simple.
+      - id: q3
+        prompt: Меня только что повысили до тимлида.
+        answer:
+          - I've just been promoted to team lead.
+          - I have just been promoted to team lead.
+          - I've just been promoted to team leader.
+          - I have just been promoted to team leader.
+          - I've just been promoted to tech lead.
+          - I have just been promoted to tech lead.
+          - I've just been promoted to a team lead.
+          - I've just been promoted to a tech lead.
+          - I've just got promoted to team lead.
+          - I was just promoted to team lead.
+      - id: q4
+        prompt: Я ещё не работал с Kubernetes.
+        answer:
+          - I haven't worked with Kubernetes yet.
+          - I have not worked with Kubernetes yet.
+          - I've not worked with Kubernetes yet.
+          - I haven't used Kubernetes yet.
+          - I have not used Kubernetes yet.
+          - I haven't yet worked with Kubernetes.
+          - I have not yet worked with Kubernetes.
+          - I've not yet worked with Kubernetes.
+          - I've not used Kubernetes yet.
+          - I haven't yet used Kubernetes.
+          - I haven't worked on Kubernetes yet.
+      - id: q5
+        prompt: Три года назад я перешёл в бэкенд.
+        answer:
+          - I switched to backend three years ago.
+          - Three years ago I switched to backend.
+          - Three years ago, I switched to backend.
+          - I moved to backend three years ago.
+          - I switched to back-end three years ago.
+          - Three years ago I moved to backend.
+          - Three years ago, I moved to backend.
+          - I moved into backend three years ago.
+          - I changed to backend three years ago.
+          - I switched to backend development three years ago.
+          - I switched to the backend three years ago.
+          - I moved to back-end three years ago.
+      - id: q6
+        prompt: Я уже руководил двумя миграциями.
+        answer:
+          - I've already led two migrations.
+          - I have already led two migrations.
+          - I've led two migrations already.
+          - I have led two migrations already.
+          - I've already managed two migrations.
+          - I have already managed two migrations.
+          - I've managed two migrations already.
+          - I already led two migrations.
+          - I've already headed two migrations.
+        explanation: Lead — неправильный глагол, третья форма led.
