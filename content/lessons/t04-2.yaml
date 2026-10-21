@@ -166,23 +166,23 @@ blocks:
     plays: 2
     transcript:
       - { speaker: Chloe, text: "Hi there, sorry about the wait — it's really busy today. Are you ready to order, or do you need a few more minutes?" }
-      - { speaker: Lucía, text: "I think we're ready. Diego?" }
+      - { speaker: Lúcia, text: "I think we're ready. Diego?" }
       - { speaker: Diego, text: "Yes, ready." }
       - { speaker: Chloe, text: "Lovely. Can I get you any drinks first?" }
-      - { speaker: Lucía, text: "Just tap water, thanks." }
+      - { speaker: Lúcia, text: "Just tap water, thanks." }
       - { speaker: Diego, text: "For me, a glass of the house red, please." }
       - { speaker: Chloe, text: "Sorry, it's so loud in here — did you say the house red?" }
       - { speaker: Diego, text: "Yes, the red wine. Thank you." }
       - { speaker: Chloe, text: "And what would you like to eat?" }
-      - { speaker: Lucía, text: "Before I order — I've got a nut allergy. Does the soup have any nuts in it?" }
+      - { speaker: Lúcia, text: "Before I order — I've got a nut allergy. Does the soup have any nuts in it?" }
       - { speaker: Chloe, text: "Today it's tomato and red pepper, and there aren't any nuts in it. But our kitchen uses nuts, so I can't promise a hundred per cent." }
-      - { speaker: Lucía, text: "That's fine — it's only a mild allergy. I'll have the soup, and then the fish of the day." }
+      - { speaker: Lúcia, text: "That's fine — it's only a mild allergy. I'll have the soup, and then the fish of the day." }
       - { speaker: Chloe, text: "Two courses — so that's the set menu. And for you?" }
       - { speaker: Diego, text: "The steak, please. Not well done… how do you say… medium rare." }
       - { speaker: Chloe, text: "Medium rare, no problem. It comes with chips and a side salad." }
       - { speaker: Diego, text: "Is it possible without the salad? And more chips instead?" }
       - { speaker: Chloe, text: "Sure, I'll ask the kitchen for extra chips instead of the salad." }
-      - { speaker: Lucía, text: "Oh, and could we get some bread for the table?" }
+      - { speaker: Lúcia, text: "Oh, and could we get some bread for the table?" }
       - { speaker: Chloe, text: "Of course. I'll bring some bread and butter. Anything else?" }
       - { speaker: Diego, text: "No, that's all. Thank you." }
   - type: exercise
@@ -193,7 +193,7 @@ blocks:
     format: choice
     items:
       - id: q1
-        prompt: What does Lucía want to drink?
+        prompt: What does Lúcia want to drink?
         options: [tap water, a glass of red wine, sparkling water]
         answer: tap water
         explanation: "Just tap water, thanks."
@@ -214,7 +214,7 @@ blocks:
         answer: "There aren't any, but she can't be completely sure."
         explanation: "There aren't any nuts in it. But our kitchen uses nuts, so I can't promise a hundred per cent."
       - id: q4
-        prompt: Why is Lucía's lunch the set menu?
+        prompt: Why is Lúcia's lunch the set menu?
         options:
           - She orders two courses.
           - She has a nut allergy.
@@ -237,16 +237,16 @@ blocks:
     plays: 2
     transcript:
       - { speaker: Chloe, text: "How was everything?" }
-      - { speaker: Lucía, text: "Lovely, thank you. The fish was delicious." }
+      - { speaker: Lúcia, text: "Lovely, thank you. The fish was delicious." }
       - { speaker: Diego, text: "The steak was very good, but it's too big for me. I can't finish. Can I take it with me?" }
       - { speaker: Chloe, text: "Of course — I'll get the rest boxed up for you. Would you like to see the dessert menu?" }
-      - { speaker: Lucía, text: "No, thanks, we're full. Could we have the bill, please?" }
+      - { speaker: Lúcia, text: "No, thanks, we're full. Could we have the bill, please?" }
       - { speaker: Chloe, text: "Sure. Is it one bill, or would you like to pay separately?" }
       - { speaker: Diego, text: "Separately, please. She had the set menu, I had the steak." }
       - { speaker: Chloe, text: "No problem. So for you, the set menu and the tap water — that's nineteen pounds. And for you, the steak and the glass of wine — thirty-one pounds fifty. The extra chips are on us." }
-      - { speaker: Lucía, text: "Is service included?" }
+      - { speaker: Lúcia, text: "Is service included?" }
       - { speaker: Chloe, text: "It isn't in those prices — there's a twelve and a half per cent service charge on top. It's optional, so if you weren't happy with anything, just let me know." }
-      - { speaker: Lucía, text: "No, no, everything was great." }
+      - { speaker: Lúcia, text: "No, no, everything was great." }
       - { speaker: Diego, text: "Can I pay by card?" }
       - { speaker: Chloe, text: "Of course. I'll bring the card machine." }
   - type: exercise
@@ -272,15 +272,15 @@ blocks:
           - Yes, one to share.
         answer: "No, they're full."
       - id: q3
-        prompt: How do Lucía and Diego pay?
+        prompt: How do Lúcia and Diego pay?
         options:
           - Each of them pays for their own food.
           - They split the bill equally.
-          - Lucía pays for both of them.
+          - Lúcia pays for both of them.
         answer: Each of them pays for their own food.
         explanation: "Separately, please — каждый платит за своё; split equally значило бы поровну."
       - id: q4
-        prompt: How much is Lucía's part before the service charge?
+        prompt: How much is Lúcia's part before the service charge?
         options: ["£19", "£31.50", "£24"]
         answer: "£19"
         explanation: "The set menu and the tap water — that's nineteen pounds; вода бесплатная."

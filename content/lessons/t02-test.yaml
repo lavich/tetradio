@@ -113,17 +113,17 @@ blocks:
     title: At the bus stop
     plays: 2
     transcript:
-      - { speaker: Lucía, text: "Excuse me, sorry. Which bus goes to the airport?" }
+      - { speaker: Lúcia, text: "Excuse me, sorry. Which bus goes to the airport?" }
       - { speaker: Fiona, text: "The 100. But not from here — you need stop C. It's across the road, opposite the hotel." }
-      - { speaker: Lucía, text: "Opposite the hotel, OK. And how often it comes?" }
+      - { speaker: Lúcia, text: "Opposite the hotel, OK. And how often it comes?" }
       - { speaker: Fiona, text: "Every ten minutes or so. It takes about half an hour, depending on the traffic." }
-      - { speaker: Lucía, text: "I have only cash. Is it a problem?" }
+      - { speaker: Lúcia, text: "I have only cash. Is it a problem?" }
       - { speaker: Fiona, text: "No, you can pay in cash, but the driver doesn't give change, so have the right money ready. Or just tap your card." }
-      - { speaker: Lucía, text: "I fly on Sunday, but I come back to the city in two weeks. Is a return better?" }
+      - { speaker: Lúcia, text: "I fly on Sunday, but I come back to the city in two weeks. Is a return better?" }
       - { speaker: Fiona, text: "Yes, get a return — it's cheaper than two singles, and it's valid for a month." }
-      - { speaker: Lucía, text: "And at the airport, do I need to change?" }
+      - { speaker: Lúcia, text: "And at the airport, do I need to change?" }
       - { speaker: Fiona, text: "No, it goes straight to the terminal. It's the last stop, so you can't miss it." }
-      - { speaker: Lucía, text: "Perfect. Thank you so much!" }
+      - { speaker: Lúcia, text: "Perfect. Thank you so much!" }
       - { speaker: Fiona, text: "No problem. Safe travels!" }
   - type: exercise
     id: bus-stop-q
@@ -154,7 +154,7 @@ blocks:
           - It's cheaper than paying by card.
         answer: It's possible, but the driver doesn't give change.
       - id: q4
-        prompt: Why does Fiona say a return is a good idea for Lucía?
+        prompt: Why does Fiona say a return is a good idea for Lúcia?
         options:
           - It's cheaper than two singles.
           - It's the only ticket on this bus.
@@ -162,7 +162,7 @@ blocks:
         answer: It's cheaper than two singles.
         explanation: Return дешевле двух single (£9 против £11) и действует месяц — Лусия вернётся через две недели.
       - id: q5
-        prompt: Does Lucía need to change buses?
+        prompt: Does Lúcia need to change buses?
         options:
           - No, the bus goes to the terminal.
           - Yes, at the last stop.

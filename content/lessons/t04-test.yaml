@@ -86,19 +86,19 @@ blocks:
     plays: 2
     transcript:
       - { speaker: Chloe, text: "Good afternoon, The Fig Tree, Chloe speaking. How can I help?" }
-      - { speaker: Lucía, text: "Hi. I'd like to book a table for this evening, please. For four people, at eight." }
+      - { speaker: Lúcia, text: "Hi. I'd like to book a table for this evening, please. For four people, at eight." }
       - { speaker: Chloe, text: "Let me have a look… I'm sorry, we're fully booked at eight. I can do half past seven or quarter to nine." }
-      - { speaker: Lucía, text: "Quarter to nine is fine." }
+      - { speaker: Lúcia, text: "Quarter to nine is fine." }
       - { speaker: Chloe, text: "Lovely. Can I take a name, please?" }
-      - { speaker: Lucía, text: "Lucía Ferreira. That's F-E-R-R-E-I-R-A." }
+      - { speaker: Lúcia, text: "Lúcia Ferreira. That's F-E-R-R-E-I-R-A." }
       - { speaker: Chloe, text: "Thank you. Any allergies we should know about?" }
-      - { speaker: Lucía, text: "Yes, I've got a nut allergy, and one of my friends is vegan." }
+      - { speaker: Lúcia, text: "Yes, I've got a nut allergy, and one of my friends is vegan." }
       - { speaker: Chloe, text: "No problem, I'll put that on the booking. We've got a few vegan dishes in the evening, and the chef can tell you about nuts on the night." }
-      - { speaker: Lucía, text: "Great. Do you have a set menu in the evening?" }
+      - { speaker: Lúcia, text: "Great. Do you have a set menu in the evening?" }
       - { speaker: Chloe, text: "Not in the evening, I'm afraid — only at lunchtime, Monday to Friday. But we've got sharing plates, and they're good for a group." }
-      - { speaker: Lucía, text: "Perfect, thank you." }
+      - { speaker: Lúcia, text: "Perfect, thank you." }
       - { speaker: Chloe, text: "So that's a table for four at quarter to nine tonight. If you're running late, please give us a call — we keep the table for fifteen minutes." }
-      - { speaker: Lucía, text: "OK, thanks. Bye!" }
+      - { speaker: Lúcia, text: "OK, thanks. Bye!" }
   - type: exercise
     id: booking-q
     about: booking
@@ -113,7 +113,7 @@ blocks:
         answer: "8:45"
         explanation: "На восемь мест нет; Лусия выбирает quarter to nine — 8:45."
       - id: q2
-        prompt: What does Lucía tell Chloe about her group?
+        prompt: What does Lúcia tell Chloe about her group?
         options:
           - She has a nut allergy and one friend is vegan.
           - Two of her friends are vegan.
@@ -150,7 +150,7 @@ blocks:
       - { speaker: Chloe, text: "Oh, I'm so sorry. You're right — the chicken is for the next table. I'll bring your burger straight away." }
       - { speaker: Diego, text: "Thank you. And the chips are a bit cold. Not hot enough." }
       - { speaker: Chloe, text: "Sorry about that. I'll ask the kitchen for fresh ones. Is everything else all right?" }
-      - { speaker: Lucía, text: "Yes, mine is lovely, thanks. Could we get some more tap water, please?" }
+      - { speaker: Lúcia, text: "Yes, mine is lovely, thanks. Could we get some more tap water, please?" }
       - { speaker: Chloe, text: "Of course. I'll bring a jug for the table." }
   - type: exercise
     id: problem-q
@@ -170,7 +170,7 @@ blocks:
         explanation: "This isn't what I ordered."
       - id: q2
         prompt: Who is the chicken for?
-        options: [the next table, Lucía, nobody]
+        options: [the next table, Lúcia, nobody]
         answer: the next table
         explanation: "The chicken is for the next table."
       - id: q3
@@ -179,7 +179,7 @@ blocks:
         answer: "They aren't hot enough."
         explanation: "The chips are a bit cold. Not hot enough."
       - id: q4
-        prompt: What does Lucía ask for?
+        prompt: What does Lúcia ask for?
         options: [more tap water, the bill, a bottle of wine]
         answer: more tap water
         explanation: "Could we get some more tap water, please? — I'll bring a jug: кувшин."

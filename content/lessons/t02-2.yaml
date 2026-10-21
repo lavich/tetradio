@@ -246,16 +246,16 @@ blocks:
     plays: 2
     transcript:
       - { speaker: Kwame, text: "Evening! Where to?" }
-      - { speaker: Lucía, text: "Hello. Forty-two Marchmont Road, please. It's near a big park, I think." }
+      - { speaker: Lúcia, text: "Hello. Forty-two Marchmont Road, please. It's near a big park, I think." }
       - { speaker: Kwame, text: "Marchmont Road, no problem. Put your bag on the seat next to you." }
-      - { speaker: Lucía, text: "Thank you. I wanted to take a car from the app, but there is surge pricing now. Almost forty pounds!" }
+      - { speaker: Lúcia, text: "Thank you. I wanted to take a car from the app, but there is surge pricing now. Almost forty pounds!" }
       - { speaker: Kwame, text: "Yeah, it's Friday night, it's raining, and there's a football match. Everybody wants a car. We don't do surge pricing — it's always the meter. From here it's about fifteen pounds." }
-      - { speaker: Lucía, text: "Good. Is it far, the address?" }
+      - { speaker: Lúcia, text: "Good. Is it far, the address?" }
       - { speaker: Kwame, text: "About ten minutes, if the traffic's OK. We go up the hill, past the university and along the park." }
       - { speaker: Kwame, text: "Right, this is Marchmont Road. Number forty-two is right on the junction, and I can't stop there. Can I drop you off a bit further on, outside the café?" }
-      - { speaker: Lucía, text: "Yes, of course. That's fine." }
+      - { speaker: Lúcia, text: "Yes, of course. That's fine." }
       - { speaker: Kwame, text: "That's fourteen eighty, please." }
-      - { speaker: Lucía, text: "Here's sixteen. Keep the change." }
+      - { speaker: Lúcia, text: "Here's sixteen. Keep the change." }
       - { speaker: Kwame, text: "Thanks very much. Mind the puddles — and have a good stay!" }
   - type: exercise
     id: taxi-q
@@ -265,7 +265,7 @@ blocks:
     format: choice
     items:
       - id: q1
-        prompt: Why didn't Lucía book a car in the app?
+        prompt: Why didn't Lúcia book a car in the app?
         options:
           - The price was very high.
           - There were no cars.
@@ -285,11 +285,11 @@ blocks:
         options:
           - He can't stop at the junction.
           - The road is closed.
-          - Lucía wants to walk.
+          - Lúcia wants to walk.
         answer: He can't stop at the junction.
         explanation: Number forty-two is right on the junction, and I can't stop there.
       - id: q4
-        prompt: How much does Lucía give Kwame?
+        prompt: How much does Lúcia give Kwame?
         options: ["£16", "£14.80", "£15"]
         answer: "£16"
         explanation: "Поездка — £14.80, Лусия даёт £16: Keep the change — «сдачи не надо»."
