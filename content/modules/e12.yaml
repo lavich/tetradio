@@ -1,8 +1,24 @@
 number: 12
 title: Teamwork and feedback
 subtitle: Команда и фидбек
-status: draft
+status: published
 goal: рассказать, как работала команда, какой фидбек получал и давал
 grammar:
   - reported speech, глаголы пересказа
 sessions: 3
+crib:
+  title: Пересказ
+  rows:
+    - [утверждение, "She said she would review it the next day. My manager told me that I was too quiet in meetings."]
+    - [вопрос «да или нет», "He asked me whether I had tested the change."]
+    - [вопрос с вопросительным словом, "She asked where I had put the design doc."]
+    - [просьба и указание, "He asked me to review his pull request. She told us not to merge it before the tests passed."]
+    - [предложение и рекомендация, "They suggested splitting the task. He recommended that I speak up more."]
+    - [признание и замечание, "He admitted that he had missed a case. The reviewer pointed out that the function was too long."]
+    - [отзыв, "At first I was defensive, but then I took it on board."]
+  note: "после said, told и asked времена сдвигаются на шаг в прошлое, tomorrow становится the next day; tell называет адресата сразу, say — только с to; в косвенном вопросе порядок слов прямой; в ответе о фидбеке названы замечание, реакция, изменение и вывод, без оценки людей"
+lessons:
+  - e12-1
+  - e12-2
+  - e12-3
+  - e12-test

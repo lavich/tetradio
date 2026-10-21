@@ -1,0 +1,7 @@
+id: ep281
+text: "He admitted that he had missed a case."
+translation: "Он признал, что не учёл один случай."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

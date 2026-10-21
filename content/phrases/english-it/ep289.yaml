@@ -1,0 +1,7 @@
+id: ep289
+text: "The feedback was fair, and I started working on it."
+translation: "Отзыв был справедливым, и я начал над ним работать."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

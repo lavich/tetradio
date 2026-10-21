@@ -1,0 +1,565 @@
+title: пересказ обсуждения отсутствующему коллеге, вопрос Tell me about feedback you received
+kind: lesson
+items:
+  - { kind: phrase, id: ep292 }
+  - { kind: phrase, id: ep293 }
+  - { kind: phrase, id: ep294 }
+  - { kind: phrase, id: ep295 }
+  - { kind: phrase, id: ep296 }
+  - { kind: phrase, id: ep297 }
+  - { kind: phrase, id: ep298 }
+  - { kind: phrase, id: ep299 }
+  - { kind: phrase, id: ep300 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Ответ о фидбеке в пяти шагах
+    body: |-
+      Вопрос **Tell me about feedback you received** проверяет, как вы работаете с замечаниями. Единого верного ответа у него нет: интервьюер слушает, какое замечание вы выбрали, как отреагировали и что изменили. Ответ укладывается примерно в две минуты и идёт по шагам, на каждом хватает одной-трёх фраз.
+
+      **1. Вступление.** Назовите замечание одной фразой: **One piece of feedback changed how I work.** Скажите, когда оно прозвучало и по какой работе.
+
+      **2. Что сказали.** Перескажите замечание глаголом пересказа и со сдвигом времён: **One teammate once told me that I explained things too quickly.**
+
+      **3. Реакция.** Опишите первую реакцию и решение: **At first I was defensive, but then I took it on board.** Сообщите, что вы уточнили: пример, причину.
+
+      **4. Что изменили.** Назовите конкретное действие и результат: **Now I ask for feedback early.**
+
+      **5. Вывод.** Свяжите опыт с тем, как вы работаете и даёте фидбек сами: **In code reviews, I focus on the code, not the person.**
+    table:
+      columns:
+        - шаг
+        - примерное время
+        - язык
+      rows:
+        - - вступление
+          - 10–15 секунд
+          - One piece of feedback changed how I work.
+        - - что сказали
+          - 20–25 секунд
+          - One teammate once told me that I explained things too quickly.
+        - - реакция
+          - 20–25 секунд
+          - At first I was defensive, but then I took it on board.
+        - - что изменили
+          - 30–35 секунд
+          - Now I ask for feedback early.
+        - - вывод
+          - 15–20 секунд
+          - I value direct feedback because it saves time.
+  - type: explanation
+    id: safe-feedback
+    title: Как говорить о фидбеке и коллегах
+    body: |-
+      Рассказ о фидбеке показывает, как вы относитесь к работе с людьми. Интервьюер слушает, называете ли вы замечание по существу, принимаете ли свою долю и меняете ли что-то после него. Выбирайте замечание о работе или коде, называйте действие и результат.
+
+      Коллег и руководителей по имени не называйте и их характер не оценивайте: говорите о том, что было сказано и что вы сделали. Если вы не согласны с отзывом, скажите, как выяснили причину: попросили пример, обсудили с командой. Отзыв, который вы проигнорировали, примером не служит. Фидбек, который даёте вы, тоже касается работы: что вы заметили, почему это важно, что предлагаете.
+    table:
+      columns:
+        - вместо
+        - скажите
+        - почему
+      rows:
+        - - My teammate was rude about my code.
+          - A teammate pointed out that my pull request was too large.
+          - называют слова коллеги по существу
+        - - My manager never gave me feedback, so it wasn't my fault.
+          - I asked for feedback after every release.
+          - называют свои действия
+        - - I disagreed with the comment, so I ignored it.
+          - I asked for an example and decided what to change.
+          - согласие или несогласие проверяют
+        - - The reviewer was wrong about everything.
+          - The feedback was fair, and I started working on it.
+          - отзыв оценивают по существу
+        - - I told him his code was terrible.
+          - I explain the reason behind my comments.
+          - фидбек о работе и с причиной
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: phrase-choice
+    title: Подходящая фраза
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы начинаете рассказ о фидбеке и называете замечание одной фразой. Какая фраза подходит?
+        options:
+          - One piece of feedback changed how I work.
+          - We review how the sprint went at the end of each cycle.
+          - Our team agreed to review every pull request within a day.
+        answer: One piece of feedback changed how I work.
+        explanation: Рассказ открывает фраза о замечании; остальные описывают практики команды.
+      - id: q2
+        prompt: Вы пересказываете замечание коллеги о том, что вы быстро объясняете. Какая фраза подходит?
+        options:
+          - One teammate once told me that I explained things too quickly.
+          - I work well with people who disagree with me.
+          - Now I ask for feedback early.
+        answer: One teammate once told me that I explained things too quickly.
+        explanation: Told me that и past simple пересказывают чужие слова; в остальных вариантах говорит сам рассказчик.
+      - id: q3
+        prompt: Вы говорите, что раньше принимали критику на свой счёт. Какая фраза подходит?
+        options:
+          - I used to take criticism personally.
+          - I value direct feedback because it saves time.
+          - Now I ask for feedback early.
+        answer: I used to take criticism personally.
+        explanation: Used to описывает прежнюю привычку.
+      - id: q4
+        prompt: Вы говорите, что теперь просите обратную связь раньше. Какая фраза подходит?
+        options:
+          - Now I ask for feedback early.
+          - I used to take criticism personally.
+          - In code reviews, I focus on the code, not the person.
+        answer: Now I ask for feedback early.
+        explanation: Now называет изменение после замечания.
+      - id: q5
+        prompt: Вы называете ритуал команды в конце спринта. Какая фраза подходит?
+        options:
+          - We review how the sprint went at the end of each cycle.
+          - One teammate once told me that I explained things too quickly.
+          - I value direct feedback because it saves time.
+        answer: We review how the sprint went at the end of each cycle.
+        explanation: Фраза описывает регулярный разбор спринта.
+      - id: q6
+        prompt: Вы объясняете, как даёте фидбек на код-ревью. Какая фраза подходит?
+        options:
+          - In code reviews, I focus on the code, not the person.
+          - I work well with people who disagree with me.
+          - Our team agreed to review every pull request within a day.
+        answer: In code reviews, I focus on the code, not the person.
+        explanation: Фраза говорит о предмете комментариев на ревью.
+  - type: exercise
+    id: feedback-choice
+    title: Формулировка для собеседования
+    instruction: Выберите формулировку, которая подходит для ответа на собеседовании.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы рассказываете, как отреагировали на жёсткий отзыв.
+        options:
+          - I was defensive at first, then I asked for an example and took the comments on board.
+          - I decided that the reviewer was wrong and ignored the comments.
+          - I complained to my manager about the reviewer.
+        answer: I was defensive at first, then I asked for an example and took the comments on board.
+        explanation: Образец называет свою реакцию и действие; остальные варианты игнорируют отзыв или переносят вину.
+      - id: q2
+        prompt: Вы описываете, как даёте фидбек коллеге.
+        options:
+          - I describe what I noticed, explain why it matters and suggest a change.
+          - I tell people exactly what I think of them.
+          - I mention problems only in front of the whole team.
+        answer: I describe what I noticed, explain why it matters and suggest a change.
+        explanation: Образец говорит о работе и содержит причину и предложение; остальные варианты оценивают человека или ставят его в неловкое положение.
+      - id: q3
+        prompt: Вы рассказываете о коллеге, который указал на проблему в вашей работе.
+        options:
+          - A teammate pointed out that my change was too large, and I split it.
+          - A teammate was rude about my change, so I stopped talking to him.
+          - A teammate always criticises my work.
+        answer: A teammate pointed out that my change was too large, and I split it.
+        explanation: Образец называет замечание по существу и действие; в остальных вариантах нет изменения или есть оценка человека.
+      - id: q4
+        prompt: Вы говорите о правилах команды.
+        options:
+          - Our team agreed to review every pull request within a day.
+          - Nobody follows the rules in my team.
+          - My manager decides who is right.
+        answer: Our team agreed to review every pull request within a day.
+        explanation: Образец называет общее правило; остальные варианты жалуются на команду или руководителя.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Один отзыв изменил то, как я работаю.
+        answer:
+          - "One piece of feedback changed the way I work"
+          - "One piece of feedback changed how I work"
+          - "One piece of feedback changed the way that I work"
+          - "One piece of feedback changed the way I do my job"
+          - "One piece of feedback has changed the way I work"
+          - "One piece of feedback has changed how I work"
+          - "One piece of feedback has changed the way that I work"
+          - "One piece of feedback has changed the way I do my job"
+          - "One comment changed the way I work"
+          - "One comment changed how I work"
+          - "One comment changed the way that I work"
+          - "One comment changed the way I do my job"
+          - "One comment has changed the way I work"
+          - "One comment has changed how I work"
+          - "One comment has changed the way that I work"
+          - "One comment has changed the way I do my job"
+        explanation: One piece of feedback — «один отзыв»; слово feedback неисчисляемое.
+      - id: q2
+        prompt: Однажды коллега сказал мне, что я слишком быстро объясняю.
+        answer:
+          - "A colleague once told me that I explained things too quickly"
+          - "A colleague once told me that I explained too quickly"
+          - "A colleague once told me that I explain things too quickly"
+          - "A colleague once told me that I explain too quickly"
+          - "A colleague once told me I explained things too quickly"
+          - "A colleague once told me I explained too quickly"
+          - "A colleague once told me I explain things too quickly"
+          - "A colleague once told me I explain too quickly"
+          - "A colleague told me that I explained things too quickly"
+          - "A colleague told me that I explained too quickly"
+          - "A colleague told me that I explain things too quickly"
+          - "A colleague told me that I explain too quickly"
+          - "A colleague told me I explained things too quickly"
+          - "A colleague told me I explained too quickly"
+          - "A colleague told me I explain things too quickly"
+          - "A colleague told me I explain too quickly"
+          - "A teammate once told me that I explained things too quickly"
+          - "A teammate once told me that I explained too quickly"
+          - "A teammate once told me that I explain things too quickly"
+          - "A teammate once told me that I explain too quickly"
+          - "A teammate once told me I explained things too quickly"
+          - "A teammate once told me I explained too quickly"
+          - "A teammate once told me I explain things too quickly"
+          - "A teammate once told me I explain too quickly"
+          - "A teammate told me that I explained things too quickly"
+          - "A teammate told me that I explained too quickly"
+          - "A teammate told me that I explain things too quickly"
+          - "A teammate told me that I explain too quickly"
+          - "A teammate told me I explained things too quickly"
+          - "A teammate told me I explained too quickly"
+          - "A teammate told me I explain things too quickly"
+          - "A teammate told me I explain too quickly"
+          - "A coworker once told me that I explained things too quickly"
+          - "A coworker once told me that I explained too quickly"
+          - "A coworker once told me that I explain things too quickly"
+          - "A coworker once told me that I explain too quickly"
+          - "A coworker once told me I explained things too quickly"
+          - "A coworker once told me I explained too quickly"
+          - "A coworker once told me I explain things too quickly"
+          - "A coworker once told me I explain too quickly"
+          - "A coworker told me that I explained things too quickly"
+          - "A coworker told me that I explained too quickly"
+          - "A coworker told me that I explain things too quickly"
+          - "A coworker told me that I explain too quickly"
+          - "A coworker told me I explained things too quickly"
+          - "A coworker told me I explained too quickly"
+          - "A coworker told me I explain things too quickly"
+          - "A coworker told me I explain too quickly"
+          - "Once, a colleague told me that I explained things too quickly"
+          - "Once, a colleague told me that I explained too quickly"
+          - "Once, a colleague told me that I explain things too quickly"
+          - "Once, a colleague told me that I explain too quickly"
+          - "Once, a colleague told me I explained things too quickly"
+          - "Once, a colleague told me I explained too quickly"
+          - "Once, a colleague told me I explain things too quickly"
+          - "Once, a colleague told me I explain too quickly"
+          - "Once, a teammate told me that I explained things too quickly"
+          - "Once, a teammate told me that I explained too quickly"
+          - "Once, a teammate told me that I explain things too quickly"
+          - "Once, a teammate told me that I explain too quickly"
+          - "Once, a teammate told me I explained things too quickly"
+          - "Once, a teammate told me I explained too quickly"
+          - "Once, a teammate told me I explain things too quickly"
+          - "Once, a teammate told me I explain too quickly"
+          - "Once, a coworker told me that I explained things too quickly"
+          - "Once, a coworker told me that I explained too quickly"
+          - "Once, a coworker told me that I explain things too quickly"
+          - "Once, a coworker told me that I explain too quickly"
+          - "Once, a coworker told me I explained things too quickly"
+          - "Once, a coworker told me I explained too quickly"
+          - "Once, a coworker told me I explain things too quickly"
+          - "Once, a coworker told me I explain too quickly"
+          - "Once a colleague told me that I explained things too quickly"
+          - "Once a colleague told me that I explained too quickly"
+          - "Once a colleague told me that I explain things too quickly"
+          - "Once a colleague told me that I explain too quickly"
+          - "Once a colleague told me I explained things too quickly"
+          - "Once a colleague told me I explained too quickly"
+          - "Once a colleague told me I explain things too quickly"
+          - "Once a colleague told me I explain too quickly"
+          - "Once a teammate told me that I explained things too quickly"
+          - "Once a teammate told me that I explained too quickly"
+          - "Once a teammate told me that I explain things too quickly"
+          - "Once a teammate told me that I explain too quickly"
+          - "Once a teammate told me I explained things too quickly"
+          - "Once a teammate told me I explained too quickly"
+          - "Once a teammate told me I explain things too quickly"
+          - "Once a teammate told me I explain too quickly"
+          - "Once a coworker told me that I explained things too quickly"
+          - "Once a coworker told me that I explained too quickly"
+          - "Once a coworker told me that I explain things too quickly"
+          - "Once a coworker told me that I explain too quickly"
+          - "Once a coworker told me I explained things too quickly"
+          - "Once a coworker told me I explained too quickly"
+          - "Once a coworker told me I explain things too quickly"
+          - "Once a coworker told me I explain too quickly"
+        explanation: "Told me и сдвиг времён: I explain → I explained."
+      - id: q3
+        prompt: Раньше я принимал критику на свой счёт.
+        answer:
+          - "I used to take criticism personally"
+          - "I used to take feedback personally"
+          - "I used to take comments personally"
+          - "I took criticism personally"
+          - "I took feedback personally"
+          - "I took comments personally"
+        explanation: Used to описывает прежнюю привычку; take criticism personally — «принимать критику на свой счёт».
+      - id: q4
+        prompt: Теперь я прошу обратную связь на раннем этапе.
+        answer:
+          - "Now, I ask for feedback early"
+          - "Now, I ask for feedback early on"
+          - "Now, I ask for feedback at an early stage"
+          - "Now, I ask for feedback in the early stages"
+          - "Now I ask for feedback early"
+          - "Now I ask for feedback early on"
+          - "Now I ask for feedback at an early stage"
+          - "Now I ask for feedback in the early stages"
+          - "Nowadays, I ask for feedback early"
+          - "Nowadays, I ask for feedback early on"
+          - "Nowadays, I ask for feedback at an early stage"
+          - "Nowadays, I ask for feedback in the early stages"
+          - "Nowadays I ask for feedback early"
+          - "Nowadays I ask for feedback early on"
+          - "Nowadays I ask for feedback at an early stage"
+          - "Nowadays I ask for feedback in the early stages"
+          - "These days, I ask for feedback early"
+          - "These days, I ask for feedback early on"
+          - "These days, I ask for feedback at an early stage"
+          - "These days, I ask for feedback in the early stages"
+          - "These days I ask for feedback early"
+          - "These days I ask for feedback early on"
+          - "These days I ask for feedback at an early stage"
+          - "These days I ask for feedback in the early stages"
+          - "I now ask for feedback early"
+          - "I now ask for feedback early on"
+          - "I now ask for feedback at an early stage"
+          - "I now ask for feedback in the early stages"
+          - "I ask for feedback early now"
+          - "I ask for feedback early on now"
+          - "I ask for feedback at an early stage now"
+          - "I ask for feedback in the early stages now"
+        explanation: Present simple описывает привычку, early — «заранее».
+      - id: q5
+        prompt: В конце каждого цикла мы разбираем, как прошёл спринт.
+        answer:
+          - "At the end of each cycle, we review how the sprint went"
+          - "At the end of each cycle, we go over how the sprint went"
+          - "At the end of each cycle, we discuss how the sprint went"
+          - "At the end of each cycle, we look at how the sprint went"
+          - "At the end of each cycle, we analyse how the sprint went"
+          - "At the end of each cycle, we talk about how the sprint went"
+          - "At the end of each cycle we review how the sprint went"
+          - "At the end of each cycle we go over how the sprint went"
+          - "At the end of each cycle we discuss how the sprint went"
+          - "At the end of each cycle we look at how the sprint went"
+          - "At the end of each cycle we analyse how the sprint went"
+          - "At the end of each cycle we talk about how the sprint went"
+          - "At the end of every cycle, we review how the sprint went"
+          - "At the end of every cycle, we go over how the sprint went"
+          - "At the end of every cycle, we discuss how the sprint went"
+          - "At the end of every cycle, we look at how the sprint went"
+          - "At the end of every cycle, we analyse how the sprint went"
+          - "At the end of every cycle, we talk about how the sprint went"
+          - "At the end of every cycle we review how the sprint went"
+          - "At the end of every cycle we go over how the sprint went"
+          - "At the end of every cycle we discuss how the sprint went"
+          - "At the end of every cycle we look at how the sprint went"
+          - "At the end of every cycle we analyse how the sprint went"
+          - "At the end of every cycle we talk about how the sprint went"
+          - "We review how the sprint went at the end of each cycle"
+          - "We review how the sprint went at the end of every cycle"
+          - "We go over how the sprint went at the end of each cycle"
+          - "We go over how the sprint went at the end of every cycle"
+          - "We discuss how the sprint went at the end of each cycle"
+          - "We discuss how the sprint went at the end of every cycle"
+          - "We look at how the sprint went at the end of each cycle"
+          - "We look at how the sprint went at the end of every cycle"
+          - "We analyse how the sprint went at the end of each cycle"
+          - "We analyse how the sprint went at the end of every cycle"
+          - "We talk about how the sprint went at the end of each cycle"
+          - "We talk about how the sprint went at the end of every cycle"
+        explanation: How the sprint went — косвенный вопрос с прямым порядком слов.
+      - id: q6
+        prompt: Наша команда договорилась проверять каждый pull request в течение дня.
+        answer:
+          - "Our team agreed to review every pull request within a day"
+          - "Our team agreed to review every pull request within one day"
+          - "Our team agreed to review every pull request within twenty-four hours"
+          - "Our team agreed to review every pull request within 24 hours"
+          - "Our team agreed to review each pull request within a day"
+          - "Our team agreed to review each pull request within one day"
+          - "Our team agreed to review each pull request within twenty-four hours"
+          - "Our team agreed to review each pull request within 24 hours"
+          - "Our team agreed to review all pull requests within a day"
+          - "Our team agreed to review all pull requests within one day"
+          - "Our team agreed to review all pull requests within twenty-four hours"
+          - "Our team agreed to review all pull requests within 24 hours"
+          - "Our team agreed to check every pull request within a day"
+          - "Our team agreed to check every pull request within one day"
+          - "Our team agreed to check every pull request within twenty-four hours"
+          - "Our team agreed to check every pull request within 24 hours"
+          - "Our team agreed to check each pull request within a day"
+          - "Our team agreed to check each pull request within one day"
+          - "Our team agreed to check each pull request within twenty-four hours"
+          - "Our team agreed to check each pull request within 24 hours"
+          - "Our team agreed to check all pull requests within a day"
+          - "Our team agreed to check all pull requests within one day"
+          - "Our team agreed to check all pull requests within twenty-four hours"
+          - "Our team agreed to check all pull requests within 24 hours"
+          - "Our team has agreed to review every pull request within a day"
+          - "Our team has agreed to review every pull request within one day"
+          - "Our team has agreed to review every pull request within twenty-four hours"
+          - "Our team has agreed to review every pull request within 24 hours"
+          - "Our team has agreed to review each pull request within a day"
+          - "Our team has agreed to review each pull request within one day"
+          - "Our team has agreed to review each pull request within twenty-four hours"
+          - "Our team has agreed to review each pull request within 24 hours"
+          - "Our team has agreed to review all pull requests within a day"
+          - "Our team has agreed to review all pull requests within one day"
+          - "Our team has agreed to review all pull requests within twenty-four hours"
+          - "Our team has agreed to review all pull requests within 24 hours"
+          - "Our team has agreed to check every pull request within a day"
+          - "Our team has agreed to check every pull request within one day"
+          - "Our team has agreed to check every pull request within twenty-four hours"
+          - "Our team has agreed to check every pull request within 24 hours"
+          - "Our team has agreed to check each pull request within a day"
+          - "Our team has agreed to check each pull request within one day"
+          - "Our team has agreed to check each pull request within twenty-four hours"
+          - "Our team has agreed to check each pull request within 24 hours"
+          - "Our team has agreed to check all pull requests within a day"
+          - "Our team has agreed to check all pull requests within one day"
+          - "Our team has agreed to check all pull requests within twenty-four hours"
+          - "Our team has agreed to check all pull requests within 24 hours"
+        explanation: Agree to + глагол; within a day — «в течение дня».
+  - type: writing
+    id: summary
+    register: formal
+    prompt: "Напишите пересказ обсуждения для коллеги, который не пришёл на встречу (80–120 слов): что предложили, что объяснили, что признали, о чём договорились и что нужно сделать. Используйте не меньше четырёх глаголов пересказа и сдвиг времён. Пересказывайте обсуждение по существу, без оценки людей."
+    words: { min: 80, max: 120 }
+    model: |-
+      Subject: Summary of the design review
+
+      Dear colleague,
+
+      I am writing to summarise yesterday's design review, since you could not attend. The team lead explained that the release had moved to the end of the month. The reviewers pointed out that the API documentation was incomplete, and they recommended adding examples. One engineer suggested splitting the migration into two stages, and everyone agreed. The product owner admitted that the requirements had changed twice, and she said that she would send a clear list by Friday. We asked you to review the migration plan by Wednesday.
+
+      Please let me know if you have any questions.
+
+      Kind regards
+    criteria:
+      - 80–120 слов, есть тема письма, обращение, пересказ обсуждения, просьба к коллеге и вежливое завершение
+      - Использованы не меньше четырёх глаголов пересказа (explained, pointed out, suggested, admitted, recommended, said)
+      - Времена сдвинуты (had moved, would send); если в обсуждении звучало tomorrow, вместо него стоит the next day
+      - Названо, что решено и что нужно сделать коллеге, со сроком
+      - Пересказ идёт по существу, без оценки и имён участников
+      - Формальный стиль без сокращений
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Двенадцатый ответ вашего **банка ответов** — вопрос **Tell me about feedback you received**. К нему добавляется второй вопрос: **How do you give feedback?** Первый ответ занимает до двух минут, второй — до 45 секунд.
+
+      1) Разложите первый ответ по пяти шагам: вступление, что сказали, реакция, что изменили, вывод. 2) Запишите ответ вслух и уложитесь во время. 3) Переслушайте и сверьте с образцом и критериями: замечание названо по существу, есть пересказ с told или pointed out, названо, что вы изменили, нет оценки людей. 4) Для второго вопроса назовите, как вы строите комментарий, как отмечаете мелочи и как говорите прямо и деликатно.
+
+      Сцена в конце урока строится на вопросах о команде и фидбеке. Реплики записаны ниже, перед сценой; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: feedback
+    part: interview
+    prompt: "Интервьюер спрашивает: «Tell me about feedback you received.» Ответьте за 120 секунд: какое замечание вы получили, что вам сказали, как вы отреагировали, что изменили."
+    seconds: 120
+    model: "One piece of feedback changed how I work. I'd like to talk about it. On my first big project, I was building an export feature. After the first code review, my line manager told me that my pull requests were too large and hard to review. She also pointed out that I explained my decisions too quickly in design reviews. At first I was a little defensive, because I had worked hard on the code. But she gave me two clear examples, and I realised that the feedback was fair. I took it on board. I started splitting my changes into smaller pull requests and wrote a short description for each one. Before every design review, I prepared one slide with the reasons behind my decision. As a result, my pull requests were approved much faster, and the team told me that the reviews had become easier. Since then, I have asked for feedback early, after every release."
+    criteria:
+      - Замечание названо по существу, о работе, без имён и оценки человека
+      - Есть пересказ со сдвигом времён и глаголом told или pointed out
+      - Названа первая реакция и то, как вы уточнили или учли замечание
+      - Названо конкретное изменение и его результат
+      - Использованы не меньше трёх фраз урока
+      - Нет обвинения коллег и руководства
+      - Ответ укладывается в 120 секунд
+  - type: speaking
+    id: give
+    part: monologue
+    prompt: "Интервьюер уточняет: «How do you give feedback?» Ответьте за 45 секунд: как вы строите комментарий, что отмечаете и как говорите."
+    seconds: 45
+    model: "When I give feedback, I focus on the code, not the person. I describe what I noticed, explain the reason behind my comment and suggest a change. I mark small comments as nitpicks, so that nobody thinks they are blockers. If a discussion needs more than a few comments, I suggest a short call. I try to be candid but tactful, and I always mention what works well."
+    criteria:
+      - Названо, что комментарий о коде и содержит причину и предложение
+      - Есть способ отметить мелочь или сложность
+      - Названо, как сочетаются прямота и деликатность
+      - Нет оценки людей и примеров с именами
+      - Ответ укладывается в 45 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Thanks for joining. I'd like to ask about teamwork. How would you describe the team you worked in?" }
+      - { speaker: Ingrid, text: "Mm-hm. Tell me about a piece of feedback you received." }
+      - { speaker: Ingrid, text: "I see. And what did you do after that?" }
+      - { speaker: Ingrid, text: "Okay. How do you give feedback to a colleague?" }
+      - { speaker: Ingrid, text: "Thank you. That was a clear picture of how you work with others." }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на собеседовании, вопросы задаёт Ingrid, руководитель разработки. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику опишите команду, в которой вы работали. На вторую перескажите полученный отзыв. На третью скажите, что вы сделали после него. На четвёртую — как вы даёте фидбек. На последнюю поблагодарите. Вся ваша часть — 120 секунд, каждая реплика — две-четыре фразы.
+    seconds: 120
+    model: |-
+      Ingrid: Thanks for joining. I'd like to ask about teamwork. How would you describe the team you worked in?
+      You: It was a team of six engineers with a product owner and a scrum master. We had a stand-up every morning and a demo at the end of each sprint. Our working agreement said that we would review every pull request within a day.
+      Ingrid: Mm-hm. Tell me about a piece of feedback you received.
+      You: One teammate once told me that I explained things too quickly. He pointed out that people in the design review had needed more time to follow my reasoning.
+      Ingrid: I see. And what did you do after that?
+      You: At first I was a little defensive, but I asked for an example and took it on board. Now I add a short summary to every design doc, and I ask for feedback early.
+      Ingrid: Okay. How do you give feedback to a colleague?
+      You: I focus on the code, not the person. I describe what I noticed, explain the reason and suggest a change. I mark small comments as nitpicks.
+      Ingrid: Thank you. That was a clear picture of how you work with others.
+      You: Thank you for the questions. I value direct feedback, so I'm happy to hear any follow-up.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — две-четыре фразы
+      - В первой реплике названы состав команды и её практики
+      - Во второй реплике есть пересказ со сдвигом времён и глаголом told, pointed out или suggested
+      - В третьей реплике названы реакция и действие после отзыва
+      - В четвёртой реплике названо, как строится фидбек о коде
+      - В конце есть благодарность
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модулей
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I wish I ___ the logs more carefully. (сожаление о прошлом)"
+        options: [had read, read, have read]
+        answer: had read
+        explanation: Wish о прошлом требует past perfect.
+      - id: q2
+        prompt: "If the release broke production, I ___ it back first. (воображаемая ситуация)"
+        options: [would roll, will roll, rolled]
+        answer: would roll
+        explanation: Second conditional — if + past simple, would + базовая форма.
+      - id: q3
+        prompt: "If we had set up an alert, we ___ the problem sooner. (прошлое, которого не было)"
+        options: [would have noticed, would notice, will notice]
+        answer: would have noticed
+        explanation: Conditional 3 — would have и третья форма глагола.
+      - id: q4
+        prompt: "The incident happened when we ___ on the migration for three weeks. (процесс шёл до момента)"
+        options: [had been working, have been working, will be working]
+        answer: had been working
+        explanation: Длительное действие до момента в прошлом — past perfect continuous.
+      - id: q5
+        prompt: "I ___ on the payment service when the requirements changed. (фон рассказа)"
+        options: [was working, have worked, will work]
+        answer: was working
+        explanation: Длительное действие на фоне события в прошлом — past continuous.
+      - id: q6
+        prompt: "Unless the fix ___ trivial, I wouldn't ship it on a Friday."
+        options: [is, will be, isn't]
+        answer: is
+        explanation: После unless стоит утвердительная форма настоящего времени.

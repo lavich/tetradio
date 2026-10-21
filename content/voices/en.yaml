@@ -82,6 +82,7 @@ characters:
   Tobias: { gender: male, voice: Sadachbia }
   Anders: { gender: male, voice: Fenrir }
   Lukas: { gender: male, voice: Enceladus }
+  Hassan: { gender: male, voice: Orus }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

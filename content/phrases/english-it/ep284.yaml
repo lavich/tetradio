@@ -1,0 +1,7 @@
+id: ep284
+text: "I got some tough feedback on my first project."
+translation: "Я получил жёсткий отзыв по своему первому проекту."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

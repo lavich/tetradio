@@ -1,0 +1,308 @@
+title: Контрольная модуля e12
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, косвенная речь и глаголы пересказа, слова модуля и перевод фраз. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: guide
+    title: "Feedback guide at Pinewick Labs"
+    text: |-
+      Feedback guide at Pinewick Labs
+
+      Feedback is part of everyone's job at Pinewick Labs. This guide explains how engineers give and receive it.
+
+      When you review a pull request, comment on the code, not on the person. Say what you noticed, why it matters and what you suggest. A small comment about style is a nitpick: mark it with "nit", so that the author knows it is not a blocker. Reviewers answer within one working day. If a discussion needs more than three comments, the reviewer and the author talk on a short call.
+
+      Every engineer has a one-to-one with their line manager every two weeks. The manager asks what went well, what was difficult and what the engineer wants to learn. Once a year, the team collects a 360 review: feedback from peers, from the manager and from anyone the engineer leads.
+
+      When you receive feedback, thank the person first. If a comment is unclear, ask for an example. Decide later what to take on board. If you disagree, explain your reasons calmly; the team lead can help to find a decision.
+    glosses:
+      - { text: "went well", russian: "прошло хорошо" }
+      - { text: leads, russian: "руководит" }
+      - { text: calmly, russian: спокойно }
+  - type: exercise
+    id: guide-tf
+    about: guide
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Reviewers answer a pull request within one working day.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: A small comment about style should be marked "nit".
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: If a discussion needs more than three comments, the reviewer writes a longer comment.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "The reviewer and the author talk on a short call — они обсуждают вопрос по телефону или видеосвязи."
+      - id: q4
+        prompt: Every engineer has a one-to-one with the line manager every week.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "Every two weeks — раз в две недели."
+      - id: q5
+        prompt: The team collects a 360 review twice a year.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "Once a year — раз в год."
+      - id: q6
+        prompt: The team lead can help when an engineer disagrees with feedback.
+        options: ["True", "False"]
+        answer: "True"
+  - type: listening
+    id: call
+    title: Samir talks about feedback
+    plays: 2
+    transcript:
+      - { speaker: Hassan, text: "Thanks for coming, Samir. I'd like to ask about feedback. When did a colleague last give you a comment that changed your work?" }
+      - { speaker: Samir, text: "Last year, a reviewer pointed out that my tests only covered the normal case. I admitted that I had skipped the edge cases because I was in a hurry. She suggested writing the tests first for the next feature, and I took that on board." }
+      - { speaker: Hassan, text: "How did that go?" }
+      - { speaker: Samir, text: "It was slower at the start. My line manager asked me whether the extra time was worth it. After two months, I could say yes: we had found three bugs before the release, and the reviews were shorter." }
+      - { speaker: Hassan, text: "And how do you give feedback to colleagues?" }
+      - { speaker: Samir, text: "I start with what works well, and then I describe one thing to change. I explain the reason and suggest a solution. I also ask a question, because the author often knows something that I don't. Last month, I recommended that a new colleague use pair programming for a hard task, and she said that it had saved her a day." }
+      - { speaker: Hassan, text: "What do you do when you disagree with a comment?" }
+      - { speaker: Samir, text: "I ask for an example first. If I still disagree, I explain my reasons calmly and suggest that we ask the tech lead. I try not to get defensive." }
+      - { speaker: Hassan, text: "Thank you, Samir. That gave me a clear picture." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What did the reviewer point out?
+        options:
+          - that the tests only covered the normal case
+          - that the code was too long
+          - that the deadline was too close
+        answer: that the tests only covered the normal case
+      - id: q2
+        prompt: Why had Samir skipped the edge cases?
+        options:
+          - He was in a hurry.
+          - He did not know about them.
+          - The reviewer told him to.
+        answer: He was in a hurry.
+      - id: q3
+        prompt: What did the reviewer suggest?
+        options:
+          - writing the tests first for the next feature
+          - adding more comments to the code
+          - asking the line manager for help
+        answer: writing the tests first for the next feature
+      - id: q4
+        prompt: What did Samir's line manager ask?
+        options:
+          - whether the extra time was worth it
+          - when the feature would be ready
+          - who had reviewed the code
+        answer: whether the extra time was worth it
+      - id: q5
+        prompt: What happened after two months?
+        options:
+          - The team found three bugs before the release, and the reviews were shorter.
+          - The tests slowed down the release.
+          - The reviewer left the team.
+        answer: The team found three bugs before the release, and the reviews were shorter.
+      - id: q6
+        prompt: What does Samir do first when he disagrees with a comment?
+        options:
+          - He asks for an example.
+          - He asks the tech lead to decide.
+          - He rewrites the code.
+        answer: He asks for an example.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Косвенная речь и глаголы пересказа
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«I will send the report tomorrow.» → She said she ___ the report the next day."
+        options: [would send, will send, sends]
+        answer: would send
+        explanation: Will в пересказе в прошлом становится would.
+      - id: q2
+        prompt: "«Did you read the design doc?» → He asked me ___."
+        options:
+          - if I had read the design doc
+          - did I read the design doc
+          - had I read the design doc
+        answer: if I had read the design doc
+        explanation: В косвенном вопросе порядок слов прямой, вопрос вводит if или whether.
+      - id: q3
+        prompt: "«Please update the ticket.» → She asked me ___ the ticket."
+        options: [to update, update, updating]
+        answer: to update
+        explanation: После asked + кому стоит to и базовая форма глагола.
+      - id: q4
+        prompt: Какое предложение верно?
+        options:
+          - They suggested splitting the task.
+          - They suggested me to split the task.
+          - They suggested to split the task.
+        answer: They suggested splitting the task.
+        explanation: После suggest стоит форма на -ing или часть с that; схемы suggest + to нет.
+      - id: q5
+        prompt: Какое предложение верно?
+        options:
+          - She told me that the deadline had moved.
+          - She said me that the deadline had moved.
+          - She told that the deadline had moved.
+        answer: She told me that the deadline had moved.
+        explanation: После tell нужен адресат; say без предлога его не принимает.
+      - id: q6
+        prompt: "He admitted ___ a mistake in the test."
+        options: [making, to make, make]
+        answer: making
+        explanation: После admit стоит форма на -ing или часть с that.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a stand-up
+      - a pull request
+      - a nitpick
+      - technical debt
+      - a blind spot
+      - take on board
+      - actionable
+      - defensive
+    items:
+      - id: g1
+        prompt: The team meets every morning for fifteen minutes. This short meeting is called ___. (ежедневная встреча)
+        answer: a stand-up
+      - id: g2
+        prompt: The comment only asked me to rename a variable. It was ___, so I fixed it in a minute. (придирка)
+        answer: a nitpick
+      - id: g3
+        prompt: "We spend part of every sprint on ___: old shortcuts that now slow us down. (технический долг)"
+        answer: technical debt
+      - id: g4
+        prompt: I did not see the problem until a colleague showed me. It was ___ for me. (слепое пятно)
+        answer: a blind spot
+      - id: g5
+        prompt: I will ___ your comments and update the design doc tomorrow. (принять к сведению и учесть)
+        answer: take on board
+      - id: g6
+        prompt: "Feedback such as “be better” is not ___, because it does not say what to do. (применимый на практике)"
+        answer: actionable
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Он спросил, прочитала ли я дизайн-документ.
+        answer:
+          - "He asked me if I had read the design doc"
+          - "He asked me if I had read the design document"
+          - "He asked me if I read the design doc"
+          - "He asked me if I read the design document"
+          - "He asked me whether I had read the design doc"
+          - "He asked me whether I had read the design document"
+          - "He asked me whether I read the design doc"
+          - "He asked me whether I read the design document"
+          - "He asked if I had read the design doc"
+          - "He asked if I had read the design document"
+          - "He asked if I read the design doc"
+          - "He asked if I read the design document"
+          - "He asked whether I had read the design doc"
+          - "He asked whether I had read the design document"
+          - "He asked whether I read the design doc"
+          - "He asked whether I read the design document"
+        explanation: Вопрос «да или нет» вводят if или whether, порядок слов прямой.
+      - id: q2
+        prompt: Она сказала, что объяснит причину на следующий день.
+        answer:
+          - "She said that she would explain the reason the next day"
+          - "She said that she would explain the reason the following day"
+          - "She said that she would explain the reason the day after"
+          - "She said she would explain the reason the next day"
+          - "She said she would explain the reason the following day"
+          - "She said she would explain the reason the day after"
+        explanation: Will в пересказе в прошлом становится would.
+      - id: q3
+        prompt: Коллега порекомендовал мне добавить больше тестов.
+        answer:
+          - "A colleague recommended adding more tests"
+          - "A colleague recommended adding extra tests"
+          - "A colleague recommended adding additional tests"
+          - "A colleague recommended writing more tests"
+          - "A colleague recommended writing extra tests"
+          - "A colleague recommended writing additional tests"
+          - "A colleague recommended that I add more tests"
+          - "A colleague recommended that I add extra tests"
+          - "A colleague recommended that I add additional tests"
+          - "A colleague recommended I add more tests"
+          - "A colleague recommended I add extra tests"
+          - "A colleague recommended I add additional tests"
+          - "A colleague recommended I write more tests"
+          - "A colleague recommended I write extra tests"
+          - "A colleague recommended I write additional tests"
+          - "A colleague recommended I should add more tests"
+          - "A colleague recommended I should add extra tests"
+          - "A colleague recommended I should add additional tests"
+          - "A colleague recommended I should write more tests"
+          - "A colleague recommended I should write extra tests"
+          - "A colleague recommended I should write additional tests"
+          - "A colleague recommended that I write more tests"
+          - "A colleague recommended that I write extra tests"
+          - "A colleague recommended that I write additional tests"
+          - "A colleague recommended that I should add more tests"
+          - "A colleague recommended that I should add extra tests"
+          - "A colleague recommended that I should add additional tests"
+          - "A colleague recommended that I should write more tests"
+          - "A colleague recommended that I should write extra tests"
+          - "A colleague recommended that I should write additional tests"
+          - "A teammate recommended adding more tests"
+          - "A teammate recommended adding extra tests"
+          - "A teammate recommended adding additional tests"
+          - "A teammate recommended writing more tests"
+          - "A teammate recommended writing extra tests"
+          - "A teammate recommended writing additional tests"
+          - "A teammate recommended that I add more tests"
+          - "A teammate recommended that I add extra tests"
+          - "A teammate recommended that I add additional tests"
+          - "A teammate recommended I add more tests"
+          - "A teammate recommended I add extra tests"
+          - "A teammate recommended I add additional tests"
+          - "A teammate recommended I write more tests"
+          - "A teammate recommended I write extra tests"
+          - "A teammate recommended I write additional tests"
+          - "A teammate recommended I should add more tests"
+          - "A teammate recommended I should add extra tests"
+          - "A teammate recommended I should add additional tests"
+          - "A teammate recommended I should write more tests"
+          - "A teammate recommended I should write extra tests"
+          - "A teammate recommended I should write additional tests"
+          - "A teammate recommended that I write more tests"
+          - "A teammate recommended that I write extra tests"
+          - "A teammate recommended that I write additional tests"
+          - "A teammate recommended that I should add more tests"
+          - "A teammate recommended that I should add extra tests"
+          - "A teammate recommended that I should add additional tests"
+          - "A teammate recommended that I should write more tests"
+          - "A teammate recommended that I should write extra tests"
+          - "A teammate recommended that I should write additional tests"
+        explanation: После recommend стоит форма на -ing или часть с that.

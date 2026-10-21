@@ -1,0 +1,7 @@
+id: ep287
+text: "She said the API documentation had saved the team a lot of time."
+translation: "Она сказала, что документация API сэкономила команде много времени."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

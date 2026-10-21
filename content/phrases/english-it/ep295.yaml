@@ -1,0 +1,7 @@
+id: ep295
+text: "Now I ask for feedback early."
+translation: "Теперь я прошу обратную связь на раннем этапе."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md
