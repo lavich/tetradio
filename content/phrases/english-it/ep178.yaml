@@ -1,0 +1,7 @@
+id: ep178
+text: "What salary range are you looking for?"
+translation: "На какую вилку зарплаты вы рассчитываете?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md

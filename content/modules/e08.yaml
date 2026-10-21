@@ -1,8 +1,23 @@
 number: 8
 title: The recruiter call
 subtitle: Условия работы
-status: draft
+status: published
 goal: обсудить с рекрутером зарплату, срок выхода, удалёнку и следующий этап
 grammar:
   - модальные глаголы, вежливые просьбы
 sessions: 3
+crib:
+  title: условия и звонок рекрутера
+  rows:
+    - [вежливая просьба, "Could you send me the job description? Would you mind sharing the salary range?"]
+    - [обязанность из договора, "I have to give two months' notice. You don't have to relocate."]
+    - [необходимость, "I need to check my calendar first. I'd need to discuss it with my partner."]
+    - [возможность и совет, "I could start in early March. You should ask about the probation period."]
+    - [деньги, "I'm looking for something in the range of… gross. Is the salary negotiable?"]
+    - [следующий шаг, "How long does the process usually take? Could you please confirm the details by email?"]
+  note: "после would you mind — форма на -ing; после could, would, should — глагол без to; don't have to значит «не обязаны», mustn't — «нельзя»"
+lessons:
+  - e08-1
+  - e08-2
+  - e08-3
+  - e08-test

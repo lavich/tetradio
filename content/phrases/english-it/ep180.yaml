@@ -1,0 +1,7 @@
+id: ep180
+text: "My notice period is two months."
+translation: "Мой срок предупреждения об увольнении — два месяца."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md

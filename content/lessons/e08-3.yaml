@@ -1,0 +1,594 @@
+title: звонок рекрутера, ответ рекрутеру и вопрос о зарплате
+kind: lesson
+items:
+  - { kind: phrase, id: ep192 }
+  - { kind: phrase, id: ep193 }
+  - { kind: phrase, id: ep194 }
+  - { kind: phrase, id: ep195 }
+  - { kind: phrase, id: ep196 }
+  - { kind: phrase, id: ep197 }
+  - { kind: phrase, id: ep198 }
+  - { kind: phrase, id: ep199 }
+  - { kind: phrase, id: ep200 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Звонок рекрутера в шести шагах
+    body: |-
+      Рекрутер звонит, чтобы выяснить три вещи: интересна ли вам должность, подходят ли ваши условия и когда вы можете двигаться дальше. Разговор идёт по шагам, и на каждом хватает одной-двух фраз.
+
+      **1. Начало.** Рекрутер спрашивает, удобно ли говорить: **Is now a good time to talk?** Поблагодарите и ответьте: **Thanks for reaching out. Yes, I have about twenty minutes.**
+
+      **2. Интерес.** Скажите, что вам интересно, и спросите о роли: **I'm open to new opportunities. Could you tell me more about the role?**
+
+      **3. Деньги.** На вопрос **What salary range are you looking for?** назовите вилку и уточните, gross это или net: **I'm looking for something in the range of ninety to a hundred thousand gross.** Если не готовы называть цифру, попросите отложить: **Could we discuss compensation at a later stage?**
+
+      **4. Сроки.** Назовите срок предупреждения и возможную дату выхода: **My notice period is two months. I can negotiate an earlier start with my employer.**
+
+      **5. Формат.** Спросите о формате и часовом поясе: **Is the role remote or hybrid? Would I be working with a team in a different time zone?**
+
+      **6. Следующий шаг.** Узнайте, как идёт процесс, и попросите детали письменно: **How long does the process usually take? Could you please confirm the details by email?** В конце: **Thank you for your time. I look forward to hearing from you.**
+    table:
+      columns:
+        - шаг
+        - язык
+        - пример
+      rows:
+        - - начало
+          - Thanks for…; Yes, I have…
+          - Thanks for reaching out. Yes, I have about twenty minutes.
+        - - интерес
+          - I'm open to…; Could you tell me…?
+          - I'm open to new opportunities.
+        - - деньги
+          - I'm looking for something in the range of…
+          - I'm looking for something in the range of ninety to a hundred thousand.
+        - - сроки
+          - My notice period is…; I could start…
+          - I could start in early March.
+        - - формат
+          - Is the role…?; Would I be working…?
+          - Is the role remote or hybrid?
+        - - следующий шаг
+          - How long…?; Should I prepare…?
+          - Should I prepare anything for the next round?
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: good-structure
+    title: Подходящая реакция
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Рекрутер звонит и спрашивает: «Is now a good time to talk?» Какой ответ подходит?"
+        options:
+          - Yes, I have about twenty minutes.
+          - My notice period is two months.
+          - How long does the process usually take?
+        answer: Yes, I have about twenty minutes.
+        explanation: На вопрос о времени отвечают о времени.
+      - id: q2
+        prompt: Вы отвечаете рекрутеру, который написал вам первым. Какая фраза подходит для благодарности?
+        options:
+          - Thanks for reaching out.
+          - I'd be happy to do a technical interview.
+          - I'd like some time to review the details.
+        answer: Thanks for reaching out.
+        explanation: Reach out — написать или позвонить первым.
+      - id: q3
+        prompt: Вы хотите отложить разговор о деньгах. Какая фраза подходит?
+        options:
+          - Could we discuss compensation at a later stage?
+          - What salary range are you looking for?
+          - My notice period is two months.
+        answer: Could we discuss compensation at a later stage?
+      - id: q4
+        prompt: Вы хотите сказать, что можете выйти на работу раньше срока. Какая фраза подходит?
+        options:
+          - I can negotiate an earlier start with my employer.
+          - Should I prepare anything for the next round?
+          - Is now a good time to talk?
+        answer: I can negotiate an earlier start with my employer.
+      - id: q5
+        prompt: Вы хотите узнать, нужно ли готовиться к следующему этапу. Какая фраза подходит?
+        options:
+          - Should I prepare anything for the next round?
+          - How long does the process usually take?
+          - Could you please confirm the details by email?
+        answer: Should I prepare anything for the next round?
+      - id: q6
+        prompt: Вы хотите получить условия в письменном виде. Какая фраза подходит?
+        options:
+          - Could you please confirm the details by email?
+          - I'd like some time to review the details.
+          - I'm open to new opportunities.
+        answer: Could you please confirm the details by email?
+        explanation: Просьба подтвердить условия по почте фиксирует их письменно.
+  - type: exercise
+    id: modals-fix
+    title: Модальные глаголы в разговоре
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "By my contract, I ___ give two months' notice. (обязанность)"
+        options: [have to, has to, must to]
+        answer: have to
+        explanation: Обязанность из договора выражается глаголом have to.
+      - id: q2
+        prompt: "___ you mind sending me the offer letter?"
+        options: [Would, Could, Should]
+        answer: Would
+        explanation: Устойчивая вежливая просьба — Would you mind + форма на -ing; Could you mind и Should you mind ошибочны.
+      - id: q3
+        prompt: "I'm sorry, I ___ to check my calendar first."
+        options: [have, has, to have]
+        answer: have
+        explanation: После I стоит have, затем to; формы I has to и I to have to ошибочны.
+      - id: q4
+        prompt: "You ___ to relocate if you work remotely. (не обязаны)"
+        options: [don't have, haven't, mustn't have]
+        answer: don't have
+        explanation: "Отрицание строится с do: don't have to."
+      - id: q5
+        prompt: "I'd ___ to discuss it with my manager first. (мне понадобится)"
+        options: [need, needing, needed]
+        answer: need
+        explanation: После I'd (I would) стоит начальная форма need.
+      - id: q6
+        prompt: "Could you ___ me the details by email?"
+        options: [send, to send, sending]
+        answer: send
+        explanation: После could стоит начальная форма глагола без to.
+  - type: explanation
+    id: writing-how
+    title: Ответ рекрутеру
+    body: |-
+      Письменная задача — ответ на письмо Katarina Lind из предыдущего урока, 80–120 слов, в формальном стиле.
+
+      Схема: 1) обращение (**Dear Ms Lind,**) и благодарность (**Thank you for reaching out**); 2) интерес к должности; 3) ожидания по зарплате: вилка и **gross** или **net**; 4) срок предупреждения и возможная дата выхода; 5) удобное время для звонка и просьба подтвердить его (**Could you please confirm…**); 6) завершение и подпись (**Kind regards**).
+
+      В формальном письме сокращения (*I'd, don't*) не используются: пишите **I would, do not**. Проверьте себя: названа вилка с пометкой gross или net, указан срок предупреждения, есть вежливая просьба с **could**, письмо укладывается в 80–120 слов.
+  - type: exercise
+    id: sentences
+    title: Предложения для письма
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Спасибо, что написали мне.
+        answer:
+          - "Thank you for reaching out."
+          - "Thank you for reaching out to me."
+          - "Thank you for contacting me."
+          - "Thank you for getting in touch."
+          - "Thank you for writing to me."
+          - "Thanks for reaching out."
+          - "Thanks for reaching out to me."
+          - "Thanks for contacting me."
+          - "Thanks for getting in touch."
+          - "Thanks for writing to me."
+        explanation: Reach out — написать первым; допустимы также contact и get in touch.
+      - id: q2
+        prompt: Мне интересна эта должность.
+        answer:
+          - "I am very interested in the role."
+          - "I am very interested in the position."
+          - "I am very interested in the job."
+          - "I am very interested in this role."
+          - "I am very interested in this position."
+          - "I am very interested in this job."
+          - "I am really interested in the role."
+          - "I am really interested in the position."
+          - "I am really interested in the job."
+          - "I am really interested in this role."
+          - "I am really interested in this position."
+          - "I am really interested in this job."
+          - "I am interested in the role."
+          - "I am interested in the position."
+          - "I am interested in the job."
+          - "I am interested in this role."
+          - "I am interested in this position."
+          - "I am interested in this job."
+          - "The role interests me."
+          - "The role is interesting to me."
+          - "The position interests me."
+          - "The position is interesting to me."
+          - "The job interests me."
+          - "The job is interesting to me."
+          - "This role interests me."
+          - "This role is interesting to me."
+          - "This position interests me."
+          - "This position is interesting to me."
+          - "This job interests me."
+          - "This job is interesting to me."
+          - "I find the role very interesting."
+          - "I find the role really interesting."
+          - "I find the role interesting."
+          - "I find the position very interesting."
+          - "I find the position really interesting."
+          - "I find the position interesting."
+          - "I find the job very interesting."
+          - "I find the job really interesting."
+          - "I find the job interesting."
+          - "I find this role very interesting."
+          - "I find this role really interesting."
+          - "I find this role interesting."
+          - "I find this position very interesting."
+          - "I find this position really interesting."
+          - "I find this position interesting."
+          - "I find this job very interesting."
+          - "I find this job really interesting."
+          - "I find this job interesting."
+        explanation: Фраза I am interested in…
+      - id: q3
+        prompt: Мои ожидания по зарплате — от девяноста до ста тысяч евро брутто.
+        answer:
+          - "My salary expectations are between ninety and a hundred thousand euros gross."
+          - "My salary expectations are between ninety and one hundred thousand euros gross."
+          - "My salary expectations are from ninety to a hundred thousand euros gross."
+          - "My salary expectations are from ninety to one hundred thousand euros gross."
+          - "My salary expectations are in the range of ninety to a hundred thousand euros gross."
+          - "My salary expectations are in the range of ninety to one hundred thousand euros gross."
+          - "My expected salary is between ninety and a hundred thousand euros gross."
+          - "My expected salary is between ninety and one hundred thousand euros gross."
+          - "My expected salary is from ninety to a hundred thousand euros gross."
+          - "My expected salary is from ninety to one hundred thousand euros gross."
+          - "My expected salary is in the range of ninety to a hundred thousand euros gross."
+          - "My expected salary is in the range of ninety to one hundred thousand euros gross."
+          - "My salary expectation is between ninety and a hundred thousand euros gross."
+          - "My salary expectation is between ninety and one hundred thousand euros gross."
+          - "My salary expectation is from ninety to a hundred thousand euros gross."
+          - "My salary expectation is from ninety to one hundred thousand euros gross."
+          - "My salary expectation is in the range of ninety to a hundred thousand euros gross."
+          - "My salary expectation is in the range of ninety to one hundred thousand euros gross."
+          - "I expect between ninety and a hundred thousand euros gross."
+          - "I expect between ninety and one hundred thousand euros gross."
+          - "I expect from ninety to a hundred thousand euros gross."
+          - "I expect from ninety to one hundred thousand euros gross."
+          - "I am expecting between ninety and a hundred thousand euros gross."
+          - "I am expecting between ninety and one hundred thousand euros gross."
+          - "I am expecting from ninety to a hundred thousand euros gross."
+          - "I am expecting from ninety to one hundred thousand euros gross."
+        explanation: Вилка — between … and или from … to; «брутто» — gross.
+      - id: q4
+        prompt: Не могли бы вы подтвердить детали по электронной почте?
+        answer:
+          - "Could you please confirm the details by email?"
+          - "Could you please confirm the details by e-mail?"
+          - "Could you please confirm the details via email?"
+          - "Could you confirm the details by email?"
+          - "Could you confirm the details by e-mail?"
+          - "Could you confirm the details via email?"
+          - "Would you please confirm the details by email?"
+          - "Would you please confirm the details by e-mail?"
+          - "Would you please confirm the details via email?"
+          - "Would you confirm the details by email?"
+          - "Would you confirm the details by e-mail?"
+          - "Would you confirm the details via email?"
+          - "Would you mind confirming the details by email?"
+          - "Would you mind confirming the details by e-mail?"
+          - "Would you mind confirming the details via email?"
+        explanation: Вежливая просьба с could; допустим и вариант Would you mind confirming…
+      - id: q5
+        prompt: Мне нужно время, чтобы изучить детали.
+        answer:
+          - "I need some time to review the details."
+          - "I need some time to review all the details."
+          - "I need some time to study the details."
+          - "I need some time to study all the details."
+          - "I need some time to go over the details."
+          - "I need some time to go over all the details."
+          - "I need some time to consider the details."
+          - "I need some time to consider all the details."
+          - "I need some time to look over the details."
+          - "I need some time to look over all the details."
+          - "I need some time to look through the details."
+          - "I need some time to look through all the details."
+          - "I need some time to read through the details."
+          - "I need some time to read through all the details."
+          - "I need some time to think about the details."
+          - "I need some time to think about all the details."
+          - "I need a bit of time to review the details."
+          - "I need a bit of time to review all the details."
+          - "I need a bit of time to study the details."
+          - "I need a bit of time to study all the details."
+          - "I need a bit of time to go over the details."
+          - "I need a bit of time to go over all the details."
+          - "I need a bit of time to consider the details."
+          - "I need a bit of time to consider all the details."
+          - "I need a bit of time to look over the details."
+          - "I need a bit of time to look over all the details."
+          - "I need a bit of time to look through the details."
+          - "I need a bit of time to look through all the details."
+          - "I need a bit of time to read through the details."
+          - "I need a bit of time to read through all the details."
+          - "I need a bit of time to think about the details."
+          - "I need a bit of time to think about all the details."
+          - "I need a little time to review the details."
+          - "I need a little time to review all the details."
+          - "I need a little time to study the details."
+          - "I need a little time to study all the details."
+          - "I need a little time to go over the details."
+          - "I need a little time to go over all the details."
+          - "I need a little time to consider the details."
+          - "I need a little time to consider all the details."
+          - "I need a little time to look over the details."
+          - "I need a little time to look over all the details."
+          - "I need a little time to look through the details."
+          - "I need a little time to look through all the details."
+          - "I need a little time to read through the details."
+          - "I need a little time to read through all the details."
+          - "I need a little time to think about the details."
+          - "I need a little time to think about all the details."
+          - "I need time to review the details."
+          - "I need time to review all the details."
+          - "I need time to study the details."
+          - "I need time to study all the details."
+          - "I need time to go over the details."
+          - "I need time to go over all the details."
+          - "I need time to consider the details."
+          - "I need time to consider all the details."
+          - "I need time to look over the details."
+          - "I need time to look over all the details."
+          - "I need time to look through the details."
+          - "I need time to look through all the details."
+          - "I need time to read through the details."
+          - "I need time to read through all the details."
+          - "I need time to think about the details."
+          - "I need time to think about all the details."
+          - "I would like some time to review the details."
+          - "I would like some time to review all the details."
+          - "I would like some time to study the details."
+          - "I would like some time to study all the details."
+          - "I would like some time to go over the details."
+          - "I would like some time to go over all the details."
+          - "I would like some time to consider the details."
+          - "I would like some time to consider all the details."
+          - "I would like some time to look over the details."
+          - "I would like some time to look over all the details."
+          - "I would like some time to look through the details."
+          - "I would like some time to look through all the details."
+          - "I would like some time to read through the details."
+          - "I would like some time to read through all the details."
+          - "I would like some time to think about the details."
+          - "I would like some time to think about all the details."
+          - "I would like a bit of time to review the details."
+          - "I would like a bit of time to review all the details."
+          - "I would like a bit of time to study the details."
+          - "I would like a bit of time to study all the details."
+          - "I would like a bit of time to go over the details."
+          - "I would like a bit of time to go over all the details."
+          - "I would like a bit of time to consider the details."
+          - "I would like a bit of time to consider all the details."
+          - "I would like a bit of time to look over the details."
+          - "I would like a bit of time to look over all the details."
+          - "I would like a bit of time to look through the details."
+          - "I would like a bit of time to look through all the details."
+          - "I would like a bit of time to read through the details."
+          - "I would like a bit of time to read through all the details."
+          - "I would like a bit of time to think about the details."
+          - "I would like a bit of time to think about all the details."
+          - "I would like a little time to review the details."
+          - "I would like a little time to review all the details."
+          - "I would like a little time to study the details."
+          - "I would like a little time to study all the details."
+          - "I would like a little time to go over the details."
+          - "I would like a little time to go over all the details."
+          - "I would like a little time to consider the details."
+          - "I would like a little time to consider all the details."
+          - "I would like a little time to look over the details."
+          - "I would like a little time to look over all the details."
+          - "I would like a little time to look through the details."
+          - "I would like a little time to look through all the details."
+          - "I would like a little time to read through the details."
+          - "I would like a little time to read through all the details."
+          - "I would like a little time to think about the details."
+          - "I would like a little time to think about all the details."
+          - "I would like time to review the details."
+          - "I would like time to review all the details."
+          - "I would like time to study the details."
+          - "I would like time to study all the details."
+          - "I would like time to go over the details."
+          - "I would like time to go over all the details."
+          - "I would like time to consider the details."
+          - "I would like time to consider all the details."
+          - "I would like time to look over the details."
+          - "I would like time to look over all the details."
+          - "I would like time to look through the details."
+          - "I would like time to look through all the details."
+          - "I would like time to read through the details."
+          - "I would like time to read through all the details."
+          - "I would like time to think about the details."
+          - "I would like time to think about all the details."
+          - "I will need some time to review the details."
+          - "I will need some time to review all the details."
+          - "I will need some time to study the details."
+          - "I will need some time to study all the details."
+          - "I will need some time to go over the details."
+          - "I will need some time to go over all the details."
+          - "I will need some time to consider the details."
+          - "I will need some time to consider all the details."
+          - "I will need some time to look over the details."
+          - "I will need some time to look over all the details."
+          - "I will need some time to look through the details."
+          - "I will need some time to look through all the details."
+          - "I will need some time to read through the details."
+          - "I will need some time to read through all the details."
+          - "I will need some time to think about the details."
+          - "I will need some time to think about all the details."
+          - "I will need a bit of time to review the details."
+          - "I will need a bit of time to review all the details."
+          - "I will need a bit of time to study the details."
+          - "I will need a bit of time to study all the details."
+          - "I will need a bit of time to go over the details."
+          - "I will need a bit of time to go over all the details."
+          - "I will need a bit of time to consider the details."
+          - "I will need a bit of time to consider all the details."
+          - "I will need a bit of time to look over the details."
+          - "I will need a bit of time to look over all the details."
+          - "I will need a bit of time to look through the details."
+          - "I will need a bit of time to look through all the details."
+          - "I will need a bit of time to read through the details."
+          - "I will need a bit of time to read through all the details."
+          - "I will need a bit of time to think about the details."
+          - "I will need a bit of time to think about all the details."
+          - "I will need a little time to review the details."
+          - "I will need a little time to review all the details."
+          - "I will need a little time to study the details."
+          - "I will need a little time to study all the details."
+          - "I will need a little time to go over the details."
+          - "I will need a little time to go over all the details."
+          - "I will need a little time to consider the details."
+          - "I will need a little time to consider all the details."
+          - "I will need a little time to look over the details."
+          - "I will need a little time to look over all the details."
+          - "I will need a little time to look through the details."
+          - "I will need a little time to look through all the details."
+          - "I will need a little time to read through the details."
+          - "I will need a little time to read through all the details."
+          - "I will need a little time to think about the details."
+          - "I will need a little time to think about all the details."
+          - "I will need time to review the details."
+          - "I will need time to review all the details."
+          - "I will need time to study the details."
+          - "I will need time to study all the details."
+          - "I will need time to go over the details."
+          - "I will need time to go over all the details."
+          - "I will need time to consider the details."
+          - "I will need time to consider all the details."
+          - "I will need time to look over the details."
+          - "I will need time to look over all the details."
+          - "I will need time to look through the details."
+          - "I will need time to look through all the details."
+          - "I will need time to read through the details."
+          - "I will need time to read through all the details."
+          - "I will need time to think about the details."
+          - "I will need time to think about all the details."
+        explanation: Фраза some time to review the details.
+  - type: writing
+    id: reply
+    register: formal
+    prompt: "Вы получили письмо Katarina Lind из предыдущего урока. Напишите ответ рекрутеру (80–120 слов): благодарность, интерес к должности, ожидания по зарплате (вилка и gross или net), срок предупреждения, удобное время для звонка, вежливая просьба подтвердить его, подпись."
+    words: { min: 80, max: 120 }
+    model: |-
+      Dear Ms Lind,
+
+      Thank you for reaching out and for sharing the conditions. I am very interested in the Senior Backend Engineer role at Fennel Systems. My salary expectations are between ninety and a hundred thousand euros gross per year, and I am open to discussing the details. My notice period is two months, but I can negotiate an earlier start with my employer, so I could start in early March. I would be available for a call on Thursday or Friday afternoon. Could you please confirm the time by email? Thank you for your time. I look forward to hearing from you.
+
+      Kind regards,
+      Daniel Brooks
+    criteria:
+      - 80–120 слов, есть обращение, благодарность и подпись
+      - Названа вилка зарплаты с пометкой gross или net
+      - Указан срок предупреждения и возможная дата выхода
+      - Есть вежливая просьба с could или would you mind
+      - Названо удобное время для звонка
+      - Формальный стиль без сокращений и разговорных слов
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Восьмой ответ вашего **банка ответов** — вопрос о зарплате: **What are your salary expectations?** Его задают на звонках рекрутера, и ответ состоит из трёх частей: вилка с пометкой gross или net, готовность обсуждать всё вознаграждение и просьба рассказать о роли подробнее. К нему добавляется второй вопрос о сроках и формате: **Could you tell me about your notice period and how you like to work?**
+
+      1) Назовите вилку и сумму до вычета налогов или после. 2) Скажите, что обсуждаете всё вознаграждение: оклад, опционы и льготы. 3) Для второго вопроса назовите срок предупреждения, возможную дату выхода и желаемый формат работы. 4) Запишите ответ, переслушайте, сверьте с образцом и критериями.
+
+      Сцена в конце урока повторяет звонок рекрутера целиком. Реплики рекрутера записаны на следующей странице; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: salary
+    part: interview
+    prompt: "Рекрутер спрашивает: «What are your salary expectations?» Ответьте за 60 секунд: вилка с пометкой gross или net, готовность обсуждать всё вознаграждение, вопрос о роли."
+    seconds: 60
+    model: "I'm looking for something in the range of ninety to a hundred thousand euros gross per year. That is based on six years of experience and on what I see for senior backend roles. I'm open to discussing the whole compensation, including stock options, so the base salary is negotiable. I'd also like to understand the role better before we agree on a final number."
+    criteria:
+      - Названа вилка с пометкой gross или net
+      - Сказано, что обсуждается всё вознаграждение
+      - Есть не меньше двух устойчивых фраз урока
+      - Ответ укладывается в 60 секунд
+  - type: speaking
+    id: terms
+    part: monologue
+    prompt: "Рекрутер продолжает: «Could you tell me about your notice period and how you like to work?» Ответьте за 60 секунд: срок предупреждения, возможная дата выхода, формат работы и часовой пояс."
+    seconds: 60
+    model: "My notice period is two months, but I can negotiate an earlier start with my employer, so I could start in early March. I like a hybrid setup, with a couple of days in the office and the rest from home. I live in Manchester, so the time difference with Berlin is only one hour, and the overlap is not a problem."
+    criteria:
+      - Назван срок предупреждения и возможная дата выхода
+      - Назван желаемый формат работы
+      - Упомянут часовой пояс или пересечение рабочих часов
+      - Ответ укладывается в 60 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hello, this is Katarina from Fennel Systems. Thanks for taking my call. Is now a good time to talk?" }
+      - { speaker: Katarina, text: "Great. Could you tell me what you are looking for in your next role?" }
+      - { speaker: Katarina, text: "I see. What salary range are you looking for?" }
+      - { speaker: Katarina, text: "Thank you. What is your notice period, and when could you start?" }
+      - { speaker: Katarina, text: "Would you be comfortable with a hybrid setup, with two days a week in our Berlin office?" }
+      - { speaker: Katarina, text: "Good. The next steps are a take-home task and two interviews. Would you like to ask anything about the process?" }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вам звонит рекрутер Katarina из Fennel Systems. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику поблагодарите и подтвердите, что можно говорить. На вторую скажите, что ищете в новой роли. На третью назовите вилку и пометку gross или net. На четвёртую назовите срок предупреждения и дату выхода. На пятую ответьте о формате и часовом поясе. В конце задайте вопрос о процессе. Вся ваша часть — 120 секунд, каждая реплика — одна-три фразы.
+    seconds: 120
+    model: |-
+      Katarina: Hello, this is Katarina from Fennel Systems. Thanks for taking my call. Is now a good time to talk?
+      You: Hello Katarina, thanks for reaching out. Yes, I have about twenty minutes.
+      Katarina: Great. Could you tell me what you are looking for in your next role?
+      You: I'm open to new opportunities, and I would like to take more responsibility for system design. Could you tell me more about the role?
+      Katarina: I see. What salary range are you looking for?
+      You: I'm looking for something in the range of ninety to a hundred thousand euros gross, and I'm open to discussing the whole compensation.
+      Katarina: Thank you. What is your notice period, and when could you start?
+      You: My notice period is two months. I can negotiate an earlier start with my employer, so I could start in early March.
+      Katarina: Would you be comfortable with a hybrid setup, with two days a week in our Berlin office?
+      You: Yes, that works for me. I live in Manchester, so the time difference is only one hour, and the overlap is not a problem.
+      Katarina: Good. The next steps are a take-home task and two interviews. Would you like to ask anything about the process?
+      You: Yes. How long does the process usually take, and should I prepare anything for the next round?
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-три фразы
+      - Вилка названа с пометкой gross или net
+      - Назван срок предупреждения и возможная дата выхода
+      - Ответ о формате работы и часовом поясе дан по смыслу
+      - Вопрос о процессе задан в конце с вежливой формой
+      - Реплики рекрутера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Could you tell me what the salary ___?"
+        options: [is, is it, does it be]
+        answer: is
+        explanation: В косвенном вопросе порядок слов как в утверждении.
+      - id: q2
+        prompt: "The offer letter ___ to every candidate by the HR team. (отправляется)"
+        options: [is sent, sends, is sending]
+        answer: is sent
+        explanation: Действие совершается над письмом, поэтому нужен passive.
+      - id: q3
+        prompt: "I was preparing for the interview when the recruiter ___."
+        options: [called, has called, was call]
+        answer: called
+        explanation: Короткое действие внутри длительного — past simple.
+      - id: q4
+        prompt: "Our new service is ___ than the old one. (быстрее)"
+        options: [faster, more fast, fastest]
+        answer: faster
+        explanation: Односложное прилагательное образует сравнительную степень с -er.
+      - id: q5
+        prompt: "I ___ a part-time master's degree in September. (договорённость)"
+        options: [am starting, might to start, will to start]
+        answer: am starting
+        explanation: План с датой — present continuous.
+      - id: q6
+        prompt: "I ___ in this role for two years. (до сих пор)"
+        options: [have been, am, was]
+        answer: have been
+        explanation: Срок for two years и связь с настоящим — present perfect.

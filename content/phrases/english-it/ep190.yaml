@@ -1,0 +1,7 @@
+id: ep190
+text: "Could you send me the job description?"
+translation: "Не могли бы вы прислать мне описание вакансии?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md

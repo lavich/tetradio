@@ -1,0 +1,268 @@
+title: Контрольная модуля e08
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, модальные глаголы и вежливые просьбы, слова модуля и перевод фраз. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: offer
+    title: "Data Engineer at Orrin Data"
+    text: |-
+      Subject: Data Engineer at Orrin Data
+
+      Dear Elena,
+
+      Thank you for completing the take-home task. The team liked your solution, and you have been shortlisted for the technical round.
+
+      The role is a fixed-term contract of twelve months, with a possible move to a permanent role afterwards. The base salary is 78,000 euros gross per year, and we can discuss it after the technical round. The contract starts with a probation period of three months. Our perks include a learning budget and private health insurance.
+
+      Orrin Data is remote-first, and the team works in Dublin and Warsaw. Everyone has to be online during core hours, 11:00 to 15:00 Dublin time, but you do not have to come to the office.
+
+      Could you let me know your notice period? Would you be available for the technical round next Wednesday at 14:00?
+
+      Kind regards,
+      Katarina Lind
+      Recruiter, Orrin Data
+    glosses:
+      - { text: completing, russian: выполнение }
+      - { text: solution, russian: решение }
+      - { text: learning budget, russian: "бюджет на обучение" }
+      - { text: private health insurance, russian: "частная медицинская страховка" }
+      - { text: afterwards, russian: потом }
+  - type: exercise
+    id: offer-tf
+    about: offer
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Elena has been shortlisted for the technical round.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: The role is a permanent position from the first day.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The role is a fixed-term contract of twelve months — срочный договор на двенадцать месяцев.
+      - id: q3
+        prompt: The base salary is 78,000 euros gross per year.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: Orrin Data is a remote-first company.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: Elena has to be online from nine to five.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Everyone has to be online during core hours, 11:00 to 15:00 — обязательные часы с одиннадцати до трёх.
+      - id: q6
+        prompt: The probation period lasts six months.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The contract starts with a probation period of three months — испытательный срок три месяца.
+  - type: listening
+    id: call
+    title: A call about the offer
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hello Elena, this is Katarina from Orrin Data. After your technical round, we would like to talk about the offer. Do you have a few minutes?" }
+      - { speaker: Elena, text: "Yes, of course. Thank you for calling." }
+      - { speaker: Katarina, text: "We would like to offer you the Data Engineer role. The base salary is seventy-eight thousand euros gross, with a bonus of up to eight percent." }
+      - { speaker: Elena, text: "Thank you. I was wondering if the salary is negotiable. I was hoping for something closer to eighty-five thousand." }
+      - { speaker: Katarina, text: "I will talk to the hiring manager about it. The role is remote-first. You would have to be online during core hours, eleven to three, Dublin time. Where are you based?" }
+      - { speaker: Elena, text: "In Warsaw, one hour ahead of Dublin, so the overlap is comfortable. My notice period is one month, so I could start in early May." }
+      - { speaker: Katarina, text: "Good. You would also have to pass a background check before the contract starts." }
+      - { speaker: Elena, text: "That is fine. I'd like some time to review the details. Could you please confirm everything by email?" }
+      - { speaker: Katarina, text: "Of course. I will send the offer letter tomorrow. Please reply by Friday." }
+      - { speaker: Elena, text: "Thank you. I look forward to it." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What base salary does Katarina offer?
+        options:
+          - seventy-eight thousand euros gross
+          - eighty-five thousand euros gross
+          - seventy-eight thousand euros net
+        answer: seventy-eight thousand euros gross
+      - id: q2
+        prompt: What does Elena ask about the salary?
+        options:
+          - whether it is negotiable
+          - whether it is gross or net
+          - whether there is a bonus
+        answer: whether it is negotiable
+      - id: q3
+        prompt: What does Katarina say she will do about the salary?
+        options:
+          - talk to the hiring manager
+          - raise it at once
+          - send a counteroffer
+        answer: talk to the hiring manager
+      - id: q4
+        prompt: What does Katarina say about the work format?
+        options:
+          - It is remote-first, with core hours.
+          - It is fully on-site.
+          - It is hybrid, with three days in the office.
+        answer: It is remote-first, with core hours.
+      - id: q5
+        prompt: When could Elena start?
+        options: [in early May, on the first of April, in September]
+        answer: in early May
+        explanation: My notice period is one month, so I could start in early May — срок один месяц.
+      - id: q6
+        prompt: What does Elena ask Katarina to do?
+        options:
+          - confirm the details by email
+          - move the start date
+          - call her back on Friday
+        answer: confirm the details by email
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Модальные глаголы и вежливые просьбы
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "___ you mind sending me the job description?"
+        options: [Would, Could, Should]
+        answer: Would
+        explanation: Устойчивая вежливая просьба — Would you mind + форма на -ing.
+      - id: q2
+        prompt: "My contract says I ___ give two months' notice. (по договору)"
+        options: [have to, has to, must to]
+        answer: have to
+        explanation: Обязанность из договора выражается глаголом have to; после I стоит have.
+      - id: q3
+        prompt: "You ___ bring a laptop: the company will give you one. (не обязаны)"
+        options: [don't have to, mustn't, don't to]
+        answer: don't have to
+        explanation: Don't have to означает «не обязаны», mustn't — «нельзя».
+      - id: q4
+        prompt: "I am free on Thursday, so I ___ join the call at ten. (возможность)"
+        options: [could, should to, have]
+        answer: could
+        explanation: Возможность выражается словом could; после него нет to.
+      - id: q5
+        prompt: "You ___ read the offer letter carefully before you sign. (совет)"
+        options: [should, to should, would to]
+        answer: should
+        explanation: Совет выражается глаголом should; после него нет to.
+      - id: q6
+        prompt: "I was wondering ___ you could send me the details."
+        options: [if, that, what]
+        answer: if
+        explanation: Мягкая просьба строится как I was wondering if you could…
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - gross
+      - net
+      - a notice period
+      - a start date
+      - core hours
+      - hybrid
+      - a counteroffer
+      - an overlap
+    items:
+      - id: g1
+        prompt: The ad says 90,000 euros ___, so this is the amount before taxes. (до налогов)
+        answer: gross
+      - id: g2
+        prompt: After taxes, the ___ salary is lower, about 60,000 euros. (после налогов)
+        answer: net
+      - id: g3
+        prompt: My contract includes ___ of two months. (срок предупреждения)
+        answer: a notice period
+      - id: g4
+        prompt: Please tell me ___ that is convenient for you. (дата выхода)
+        answer: a start date
+      - id: g5
+        prompt: Everyone has to be online from 11:00 to 15:00. These are our ___. (обязательные часы)
+        answer: core hours
+      - id: g6
+        prompt: "The job is ___: two days in the office and three at home. (гибридный)"
+        answer: hybrid
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Не могли бы вы отправить мне письмо с предложением?
+        answer:
+          - "Could you please send me the offer letter?"
+          - "Could you please send me an offer letter?"
+          - "Could you send me the offer letter?"
+          - "Could you send me an offer letter?"
+          - "Would you please send me the offer letter?"
+          - "Would you please send me an offer letter?"
+          - "Would you send me the offer letter?"
+          - "Would you send me an offer letter?"
+          - "Could you send me the offer letter, please?"
+          - "Could you send me an offer letter, please?"
+          - "Would you send me the offer letter, please?"
+          - "Would you send me an offer letter, please?"
+          - "Could you please send the offer letter to me?"
+          - "Could you please send an offer letter to me?"
+          - "Could you send the offer letter to me?"
+          - "Could you send an offer letter to me?"
+          - "Would you please send the offer letter to me?"
+          - "Would you please send an offer letter to me?"
+          - "Would you send the offer letter to me?"
+          - "Would you send an offer letter to me?"
+          - "Would you mind please sending me the offer letter?"
+          - "Would you mind please sending me an offer letter?"
+          - "Would you mind sending me the offer letter?"
+          - "Would you mind sending me an offer letter?"
+        explanation: Вежливая просьба с could; допустим и вариант Would you mind sending me…
+      - id: q2
+        prompt: Мне нужно проверить календарь.
+        answer:
+          - "I need to check my calendar."
+          - "I need to check my diary."
+          - "I have to check my calendar."
+          - "I have to check my diary."
+        explanation: Необходимость выражается словами need to или have to.
+      - id: q3
+        prompt: Зарплата обсуждаема.
+        answer:
+          - "The salary is negotiable."
+          - "My salary is negotiable."
+          - "The base salary is negotiable."
+          - "Salary is negotiable."
+          - "The salary can be negotiated."
+          - "My salary can be negotiated."
+          - "The base salary can be negotiated."
+          - "The salary is open to negotiation."
+          - "The salary is up for negotiation."
+          - "My salary is open to negotiation."
+          - "My salary is up for negotiation."
+          - "The base salary is open to negotiation."
+          - "The base salary is up for negotiation."
+          - "The salary can be discussed."
+          - "My salary can be discussed."
+          - "The base salary can be discussed."
+        explanation: Слово negotiable — «подлежащий обсуждению».

@@ -1,0 +1,444 @@
+title: письмо рекрутера с условиями и звонок рекрутера
+kind: lesson
+items:
+  - { kind: word, id: ew264 }
+  - { kind: word, id: ew265 }
+  - { kind: word, id: ew266 }
+  - { kind: word, id: ew267 }
+  - { kind: word, id: ew268 }
+  - { kind: word, id: ew269 }
+  - { kind: word, id: ew270 }
+  - { kind: word, id: ew271 }
+  - { kind: word, id: ew272 }
+  - { kind: word, id: ew273 }
+  - { kind: word, id: ew274 }
+  - { kind: word, id: ew275 }
+  - { kind: word, id: ew276 }
+  - { kind: word, id: ew277 }
+  - { kind: word, id: ew278 }
+  - { kind: word, id: ew279 }
+  - { kind: word, id: ew280 }
+  - { kind: phrase, id: ep184 }
+  - { kind: phrase, id: ep185 }
+  - { kind: phrase, id: ep186 }
+  - { kind: phrase, id: ep187 }
+  - { kind: phrase, id: ep188 }
+  - { kind: phrase, id: ep189 }
+  - { kind: phrase, id: ep190 }
+  - { kind: phrase, id: ep191 }
+blocks:
+  - type: explanation
+    id: process-words
+    title: Слова о найме и предложении
+    body: |-
+      Письмо рекрутера и страница о найме описывают один и тот же путь кандидата. Слова урока образуют три группы.
+
+      **Этапы.** **A hiring process** — все этапы от отклика до предложения, **a screening call** — первый короткий звонок, **a take-home task** — тестовое задание, которое выполняют дома, **a technical round** — разговор с инженерами о коде и проектировании, **a panel interview** — собеседование с несколькими интервьюерами сразу, **a background check** — проверка биографии, **be shortlisted** — остаться среди кандидатов, которых зовут дальше.
+
+      **Люди.** **A hiring manager** — руководитель, для чьей команды ищут сотрудника, **a headhunter** — специалист, который сам ищет кандидатов для компаний, **a referral** — рекомендация сотрудника, **headcount** — число штатных мест, утверждённое компанией. Глагол **reach out** — написать или позвонить первым: **A recruiter reached out to me.**
+
+      **Предложение.** **An offer letter** — письмо с предложением работы, **a counteroffer** — ответ с вашими условиями, **a probation period** — первые месяцы работы с оценкой обеих сторон, **a perk** — льгота сверх зарплаты, **a competitive salary** — зарплата не ниже рыночной.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Этапы и люди
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - a screening call
+      - a take-home task
+      - a technical round
+      - a panel interview
+      - a hiring manager
+      - be shortlisted
+      - a background check
+      - a headhunter
+      - a referral
+      - headcount
+    items:
+      - { id: m1, prompt: "первый короткий разговор с рекрутером до технических этапов", answer: a screening call }
+      - { id: m2, prompt: "задание, которое кандидат выполняет у себя дома и присылает решение", answer: a take-home task }
+      - { id: m3, prompt: "этап, на котором проверяют технические навыки: код и проектирование системы", answer: a technical round }
+      - { id: m4, prompt: "собеседование, на котором с кандидатом одновременно беседуют несколько интервьюеров: менеджер, инженер и продакт-менеджер", answer: a panel interview }
+      - { id: m5, prompt: "руководитель, в чью команду ищут нового сотрудника", answer: a hiring manager }
+      - { id: m6, prompt: "остаться среди кандидатов, которых приглашают на следующий этап", answer: be shortlisted }
+      - { id: m7, prompt: "специалист, который сам ищет кандидатов для компаний", answer: a headhunter }
+      - { id: m8, prompt: "число штатных мест, которое утвердила компания", answer: headcount }
+  - type: exercise
+    id: words-gap
+    title: Предложение и условия
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - an offer letter
+      - a counteroffer
+      - a probation period
+      - a perk
+      - a competitive salary
+      - a background check
+      - a hiring process
+      - a referral
+      - reach out
+      - a work permit
+    items:
+      - id: g1
+        prompt: The company sent me ___ with the salary, the title and the start date. (письмо с предложением)
+        answer: an offer letter
+      - id: g2
+        prompt: I asked for more stock options and sent ___. (встречное предложение)
+        answer: a counteroffer
+      - id: g3
+        prompt: The first three months are ___, and then the contract becomes permanent. (испытательный срок)
+        answer: a probation period
+      - id: g4
+        prompt: Private health insurance is ___ that the company gives to every employee. (льгота)
+        answer: a perk
+      - id: g5
+        prompt: The ad promises ___, which means it is not lower than the market average. (конкурентная зарплата)
+        answer: a competitive salary
+      - id: g6
+        prompt: Before the first day, the company checks my employment history. This is ___. (проверка биографии)
+        answer: a background check
+      - id: g7
+        prompt: The company has four steps from the first call to the offer. That is ___. (процесс найма)
+        answer: a hiring process
+      - id: g8
+        prompt: Thank you for choosing to ___ to me about this role. (написать первым)
+        answer: reach out
+  - type: explanation
+    id: reading-how
+    title: Как читать письмо рекрутера
+    body: |-
+      Письмо рекрутера состоит из трёх частей: цель письма и роль, условия (деньги, договор, формат работы) и следующий шаг с просьбой. В конце письма обычно стоит вопрос, на который нужно ответить: **Could you let me know your notice period? Would you be available for a short call?**
+
+      В условиях часто встречаются модальные глаголы. **You would need a work permit** — необходимое условие, если случится определённая ситуация. **You would have to relocate** — обязанность, которую ставит работодатель. **You do not have to move before you sign** — переезд не обязателен. **The salary would be reviewed once a year** — условие, которое действует при выходе на работу. Форма **would** делает формулировку осторожнее: предложение ещё не стало договором.
+
+      Суммы часто даны вилкой и с пометкой **gross** или **net**. Читая, проверяйте, о какой сумме идёт речь: до вычета налогов или после. Слова вне списков переведены под текстом.
+  - type: reading
+    id: email
+    title: "Senior Backend Engineer at Fennel Systems"
+    text: |-
+      Subject: Senior Backend Engineer at Fennel Systems
+
+      Dear Daniel,
+
+      Thank you for your interest in the Senior Backend Engineer role at Fennel Systems. I work on the hiring team, and I would like to share the main conditions before we speak.
+
+      The role is a permanent position in the Platform team. The salary range is 85,000 to 100,000 euros gross per year, depending on experience, and the base salary is reviewed once a year. You would also receive stock options and a learning budget.
+
+      We work in a hybrid format: two days a week in our Berlin office and the rest from home. Core hours are 10:00 to 15:00 Berlin time, so the whole team has an overlap of at least five hours. If you do not live in Berlin, you would have to relocate within three months of your start date. If you live outside the European Union, you would also need a valid work permit.
+
+      The hiring process has four steps: a screening call with me, a take-home task, a technical round and a panel interview with the hiring manager and two engineers. After the last step, we run a background check. The first three months of the contract are a probation period.
+
+      Could you let me know your notice period and your salary expectations? Would you be available for a short call on Thursday or Friday?
+
+      Kind regards,
+      Katarina Lind
+      Recruiter, Fennel Systems
+    glosses:
+      - { text: depending on, russian: "в зависимости от" }
+      - { text: reviewed, russian: пересматривается }
+      - { text: learning budget, russian: "бюджет на обучение" }
+      - { text: the European Union, russian: "Европейский союз" }
+      - { text: valid, russian: действующее }
+      - { text: expectations, russian: ожидания }
+  - type: exercise
+    id: email-tf
+    about: email
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The salary range is 85,000 to 100,000 euros gross per year.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: The role is fully remote.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We work in a hybrid format — гибридный формат, два дня в неделю в офисе.
+      - id: q3
+        prompt: Core hours are 10:00 to 15:00 Berlin time.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: A candidate who lives outside the European Union would need a work permit.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: Every candidate would have to relocate to Berlin within three months.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Переезд нужен кандидатам, которые не живут в Берлине.
+      - id: q6
+        prompt: The probation period lasts six months.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The first three months of the contract are a probation period — испытательный срок три месяца.
+  - type: exercise
+    id: email-find
+    about: email
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How many steps does the hiring process have?
+        options: [three, four, five]
+        answer: four
+      - id: q2
+        prompt: Who takes part in the panel interview?
+        options:
+          - the hiring manager and two engineers
+          - the recruiter and the CEO
+          - three engineers from another team
+        answer: the hiring manager and two engineers
+      - id: q3
+        prompt: What does the company offer besides the salary?
+        options:
+          - stock options and a learning budget
+          - a company car and a gym
+          - a four-day week
+        answer: stock options and a learning budget
+      - id: q4
+        prompt: How often is the base salary reviewed?
+        options: [once a year, every six months, every month]
+        answer: once a year
+      - id: q5
+        prompt: What does Katarina ask Daniel to tell her?
+        options:
+          - his notice period and his salary expectations
+          - the name of his current employer
+          - his favourite programming language
+        answer: his notice period and his salary expectations
+      - id: q6
+        prompt: When does Katarina propose a short call?
+        options: [on Thursday or Friday, on Monday morning, next month]
+        answer: on Thursday or Friday
+  - type: exercise
+    id: email-grammar
+    about: email
+    title: Модальные глаголы в письме
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«You would need a valid work permit.» Что выражает would need?"
+        options:
+          - необходимое условие в определённой ситуации
+          - совет
+          - возможность в прошлом
+        answer: необходимое условие в определённой ситуации
+        explanation: Would need передаёт условие, которое действует, если кандидат живёт вне Европейского союза.
+      - id: q2
+        prompt: "«You would have to relocate within three months of your start date.» Что выражает have to?"
+        options:
+          - обязанность, которую ставит работодатель
+          - вежливую просьбу
+          - случайную возможность
+        answer: обязанность, которую ставит работодатель
+        explanation: Have to передаёт обязанность из условий работы.
+      - id: q3
+        prompt: "«Could you let me know your notice period?» Что это?"
+        options:
+          - вежливая просьба
+          - обязанность
+          - прогноз
+        answer: вежливая просьба
+        explanation: Could you… — вежливая просьба.
+      - id: q4
+        prompt: Какая фраза близка по смыслу к «You would have to relocate»?
+        options:
+          - You would need to relocate.
+          - You would mind relocating.
+          - You would could relocate.
+        answer: You would need to relocate.
+        explanation: Would need to и would have to передают необходимость; две другие формы ошибочны.
+  - type: reading
+    id: process
+    title: "How we hire at Halden Labs"
+    text: |-
+      How we hire at Halden Labs
+
+      Step 1. Screening call (30 minutes)
+      A recruiter asks about your experience, when you could start and what salary you expect. You do not need to prepare anything.
+
+      Step 2. Take-home task (3 hours)
+      You receive a small task and three days to send us your solution. Candidates who are shortlisted after this step are invited to the technical round.
+
+      Step 3. Technical round (90 minutes)
+      You discuss your solution with two engineers and work on a short design problem.
+
+      Step 4. Panel interview (60 minutes)
+      You meet the hiring manager, an engineer from another team and a product manager. They ask about teamwork and motivation.
+
+      After the interview
+      We call every candidate within five working days. If we make an offer, we send an offer letter. You can reply with a counteroffer, and we are open to talking about the salary and the start date. The last step is a background check, and the contract starts with a probation period of six months.
+
+      Good to know
+      Every open role has approved headcount, so we only post vacancies that we can fill. Our perks include a learning budget, private health insurance and 28 days of holiday.
+    glosses:
+      - { text: expect, russian: ожидаете }
+      - { text: solution, russian: решение }
+      - { text: working days, russian: рабочих дней }
+      - { text: approved, russian: утверждённые }
+      - { text: vacancies, russian: вакансии }
+      - { text: post, russian: публиковать }
+      - { text: fill, russian: закрыть }
+      - { text: private health insurance, russian: "частная медицинская страховка" }
+  - type: exercise
+    id: process-tf
+    about: process
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The screening call lasts thirty minutes.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: Candidates have to prepare a presentation for the screening call.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: You do not need to prepare anything — готовиться не нужно.
+      - id: q3
+        prompt: A product manager takes part in the panel interview.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: Candidates wait about a month for an answer.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We call every candidate within five working days — ответ приходит в течение пяти рабочих дней.
+      - id: q5
+        prompt: The probation period lasts six months.
+        options: ["True", "False"]
+        answer: "True"
+  - type: exercise
+    id: process-find
+    about: process
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Who is invited to the technical round?
+        options:
+          - candidates who are shortlisted after the take-home task
+          - every applicant
+          - only candidates with a referral
+        answer: candidates who are shortlisted after the take-home task
+      - id: q2
+        prompt: What can a candidate send after an offer?
+        options: [a counteroffer, a referral, a take-home task]
+        answer: a counteroffer
+      - id: q3
+        prompt: How long is the technical round?
+        options: [ninety minutes, sixty minutes, three hours]
+        answer: ninety minutes
+      - id: q4
+        prompt: Why does the company post only the roles it can fill?
+        options:
+          - Every open role has approved headcount.
+          - The recruiters have no time.
+          - The roles are for referrals only.
+        answer: Every open role has approved headcount.
+  - type: explanation
+    id: listening-how
+    title: Звонок рекрутера на слух
+    body: |-
+      В звонке рекрутер идёт по плану: проверяет, удобно ли говорить, спрашивает о сроках и деньгах, рассказывает об условиях и назначает следующий шаг. Числа и сроки звучат быстро, поэтому слушайте, к чему относится число: к вилке, сроку предупреждения или часам доступности.
+
+      Послушайте, как Katarina звонит кандидату Daniel. Сначала целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: call
+    title: A call from a recruiter
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hello Daniel, this is Katarina Lind from Fennel Systems. Thanks for taking my call. Is now a good time to talk?" }
+      - { speaker: Daniel, text: "Hello Katarina. Yes, I have about twenty minutes before my next meeting." }
+      - { speaker: Katarina, text: "Great. Would you mind telling me about your notice period?" }
+      - { speaker: Daniel, text: "Not at all. My notice period is two months, but I think I can negotiate an earlier start with my employer. I could start in early March." }
+      - { speaker: Katarina, text: "That works well for us. Now, the salary. What salary range are you looking for?" }
+      - { speaker: Daniel, text: "I'm looking for something in the range of ninety to a hundred thousand euros gross. Is that realistic for this role?" }
+      - { speaker: Katarina, text: "It is. Our range is eighty-five to a hundred thousand, and the base salary is negotiable, depending on experience. You would also receive stock options. The role is hybrid, with two days a week in our Berlin office. Our core hours are ten to three, Berlin time. Where do you live now?" }
+      - { speaker: Daniel, text: "In Manchester, so we are one hour apart and the overlap is not a problem. I suppose I would need a work permit?" }
+      - { speaker: Katarina, text: "Yes, and we would help you with it. You would also have to relocate to Berlin within three months of your start date." }
+      - { speaker: Daniel, text: "That is fine. I have to discuss it with my partner first, though." }
+      - { speaker: Katarina, text: "Of course. The next steps are a take-home task and two interviews. Could we schedule a call for early next week to talk about them?" }
+      - { speaker: Daniel, text: "I should be available on Tuesday afternoon. I have to check my calendar first, and then I'll confirm by email." }
+  - type: exercise
+    id: call-q
+    about: call
+    title: Что сказали в разговоре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Daniel say about his notice period?
+        options:
+          - It is two months, but he may be able to start earlier.
+          - It is one month.
+          - He has no notice period.
+        answer: It is two months, but he may be able to start earlier.
+      - id: q2
+        prompt: When could Daniel probably start?
+        options: [in early March, in September, in early January]
+        answer: in early March
+      - id: q3
+        prompt: What salary range is Daniel looking for?
+        options:
+          - ninety to a hundred thousand euros gross
+          - eighty-five to a hundred thousand euros net
+          - a hundred to a hundred and ten thousand euros gross
+        answer: ninety to a hundred thousand euros gross
+      - id: q4
+        prompt: What does Katarina say about the base salary?
+        options:
+          - It is negotiable, depending on experience.
+          - It is fixed.
+          - It is paid only in stock options.
+        answer: It is negotiable, depending on experience.
+        explanation: The base salary is negotiable, depending on experience — оклад обсуждается с учётом опыта.
+      - id: q5
+        prompt: Where does Daniel live?
+        options: [in Manchester, in Lisbon, in Berlin]
+        answer: in Manchester
+      - id: q6
+        prompt: What would Daniel have to do if he joins the company?
+        options:
+          - relocate to Berlin within three months
+          - work only from home
+          - move to Lisbon
+        answer: relocate to Berlin within three months
+        explanation: You would also have to relocate to Berlin within three months of your start date.
+      - id: q7
+        prompt: When should Daniel be available for the next call?
+        options: [on Tuesday afternoon, on Friday morning, on Monday evening]
+        answer: on Tuesday afternoon
+  - type: exercise
+    id: call-phrases
+    about: call
+    title: Фразы из разговора
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - notice
+      - negotiate
+      - range
+      - negotiable
+      - relocate
+      - schedule
+      - overlap
+      - shortlisted
+    items:
+      - { id: g1, prompt: "My ___ period is two months. (предупреждения)", answer: notice }
+      - { id: g2, prompt: "I can ___ an earlier start with my employer. (договориться)", answer: negotiate }
+      - { id: g3, prompt: "What salary ___ are you looking for? (вилка)", answer: range }
+      - { id: g4, prompt: "The base salary is ___, depending on experience. (обсуждаемый)", answer: negotiable }
+      - { id: g5, prompt: "You would have to ___ to Berlin within three months. (переехать)", answer: relocate }
+      - { id: g6, prompt: "Could we ___ a call for early next week? (назначить)", answer: schedule }

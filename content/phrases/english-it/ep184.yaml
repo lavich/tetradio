@@ -1,0 +1,7 @@
+id: ep184
+text: "Is the role remote or hybrid?"
+translation: "Эта должность удалённая или гибридная?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md
