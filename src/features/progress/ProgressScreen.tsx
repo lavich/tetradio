@@ -5,10 +5,11 @@ import { SKILL_LABEL } from "../../content/course";
 import type { SkillProgress } from "../../domain/progress";
 import { SOLID_DAYS, type Leech } from "../../domain/stats";
 import { useNow } from "../../shared/clock";
-import { CourseSwitch } from "../../shared/CourseSwitch";
+import { LanguageSwitch } from "../../shared/CourseSwitch";
 import { cx } from "../../shared/cx";
 import { useCourseProfile } from "../../shared/language";
 import { dayMonth, pausedSince, withCount } from "../../shared/format";
+import { useCoursePalette } from "../../shared/courses";
 import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
@@ -57,7 +58,7 @@ export function ProgressScreen() {
   if (!data) return <Screen wide />;
   const head = (
     <>
-      <CourseSwitch />
+      <LanguageSwitch />
       <h1 className={nb.title}>Прогресс</h1>
     </>
   );
@@ -230,8 +231,9 @@ function Cards({
   );
 }
 
-function Path({ data, pausedAt }: { data: CourseProgress; pausedAt?: string }) {
+export function Path({ data, pausedAt }: { data: CourseProgress; pausedAt?: string }) {
   const { pace, views, current, calendar } = data;
+  const palette = useCoursePalette(views[0]?.module.courseId);
   return (
     <section aria-labelledby="path">
       <h2 id="path" className={css.heading}>
@@ -248,7 +250,9 @@ function Path({ data, pausedAt }: { data: CourseProgress; pausedAt?: string }) {
             <span key={view.module.id} className={css.spineSlot}>
               <i
                 className={cx(css.spine, view.module.number === current && !done && css.current)}
-                style={done ? { background: coverColor(view.module.number), borderColor: "transparent" } : undefined}
+                style={
+                  done ? { background: coverColor(view.module.number, palette), borderColor: "transparent" } : undefined
+                }
               />
               {point && <b className={css.point}>{point.label}</b>}
             </span>

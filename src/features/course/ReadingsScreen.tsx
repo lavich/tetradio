@@ -1,7 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useId } from "react";
 import { Screen } from "../../app/Screen";
-import { CourseSwitch } from "../../shared/CourseSwitch";
+import { LanguageSwitch } from "../../shared/CourseSwitch";
 import { useCourseProfile } from "../../shared/language";
 import { currentCourse } from "../../storage/courses";
 import { courseReadings } from "../../storage/readings";
@@ -23,7 +23,7 @@ export function ReadingsScreen() {
   const { open, unread, closed, pending } = data.readings;
   return (
     <Screen>
-      <CourseSwitch />
+      <LanguageSwitch />
       <h1>Чтение</h1>
       {open.length ? (
         <>

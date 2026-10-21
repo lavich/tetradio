@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAction } from "../../shared/action";
-import { useAllCourses, useCurrentCourse } from "../../shared/courses";
+import { useAllCourses, useCurrentLanguage } from "../../shared/courses";
 import { resumeCourse } from "../../storage/pause-actions";
 import { pausedSince } from "../../shared/format";
 import type { CourseEntry } from "../../storage/courses";
@@ -11,7 +11,7 @@ import css from "./today.module.css";
 /** «Сегодня», когда все начатые курсы на паузе: вернуть любой из них или начать другой. */
 export function AllPaused({ started }: { started: CourseEntry[] }) {
   const navigate = useNavigate();
-  const [, choose] = useCurrentCourse();
+  const [, choose] = useCurrentLanguage();
   const next = useAllCourses()?.find((course) => !course.started);
   const { busy, problem, run } = useAction("Не удалось продолжить курс");
   const start = useAction("Не удалось открыть курс");
@@ -68,8 +68,8 @@ export function AllPaused({ started }: { started: CourseEntry[] }) {
           onClick={() =>
             !start.busy &&
             void start.run(async () => {
-              await choose(next.id);
-              void navigate("/course");
+              await choose(next.language);
+              void navigate("/course", { state: { course: next.id } });
             })
           }
         >

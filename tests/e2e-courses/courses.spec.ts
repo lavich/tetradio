@@ -1,5 +1,6 @@
 import { expect, test } from "../playwright-test";
 import { type Page } from "@playwright/test";
+import { PALETTES } from "../../src/content/palettes";
 
 const GREEK_WORDS = ["γεια", "καλημέρα", "είμαι", "από", "η χώρα"];
 const ENGLISH_WORDS = ["to go", "the bus", "to read", "the coffee", "to write"];
@@ -682,7 +683,10 @@ test("все курсы на паузе — «Все курсы на паузе�
   await expect(page.getByRole("heading", { level: 1, name: "Все курсы на паузе" })).toBeVisible();
   await page.getByRole("button", { name: "Начать другой курс" }).click();
   await expect(page).toHaveURL(/\/course$/);
-  await expect(page.getByTestId("course-offer").getByRole("button", { name: "Учить курс «Английский»" })).toBeVisible();
+  const offer = page.getByTestId("course-offer").filter({ hasText: "Английский · B1 → B2" });
+  await expect(offer.getByRole("button", { name: "Учить курс «Английский»" })).toBeVisible();
+  await expect(offer).toBeInViewport();
+  await expect(offer).toBeFocused();
 
   await page.goto("/app/");
   await page.getByRole("button", { name: /^Продолжить курс/ }).click();
@@ -775,4 +779,129 @@ test("меню «⋯»: клавиатура, щелчок вне, Tab, 44 px, �
   expect(text).toBeGreaterThanOrEqual(4.5);
   await page.keyboard.press("Enter");
   await expect(trigger).toBeFocused();
+});
+
+const rgbOf = (hex: string) => `rgb(${[1, 3, 5].map((index) => parseInt(hex.slice(index, index + 2), 16)).join(", ")})`;
+const shelves = (page: Page) => page.getByTestId("course-shelf");
+async function chooseLanguage(page: Page, name: string) {
+  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name, exact: true }).click();
+}
+async function installEnglishPair(page: Page) {
+  await installBoth(page);
+  await openModule(page, "c01");
+}
+
+test("две полки английского: заголовки, счётчики, свои гаммы, пауза одной полки не трогает другую", async ({
+  page,
+}) => {
+  await installEnglishPair(page);
+  await page.goto("/app/course");
+  await chooseLanguage(page, "Английский");
+  await expect(shelves(page).getByRole("heading", { level: 2 })).toHaveText(["Для IT · B1 → B2", "Для общения · B1"]);
+  await expect(shelves(page).nth(0)).toContainText("0 из 1 заполнено");
+  await expect(shelves(page).nth(1)).toContainText("0 из 1 заполнено");
+  const cover = (index: number) =>
+    shelves(page)
+      .nth(index)
+      .getByRole("link", { name: /^Модуль 1:/ });
+  await expect(cover(0)).toHaveCSS("background-color", rgbOf(PALETTES.ink[0]));
+  await expect(cover(1)).toHaveCSS("background-color", rgbOf(PALETTES.coast[0]));
+
+  await page.getByRole("button", { name: "Действия с курсом «Английский для общения»" }).click();
+  await page.getByRole("menuitem", { name: "Приостановить курс" }).click();
+  await expect(shelves(page).nth(1).getByTestId("shelf-paused")).toContainText(/^На паузе с \d+ [а-я]+/);
+  await expect(shelves(page).nth(0).getByTestId("shelf-paused")).toHaveCount(0);
+  await expect(page.getByTestId("shelf-status")).toHaveText(
+    "Курс «Английский для общения» на паузе. Вернуть его можно на полке или в настройках.",
+  );
+  await expect(cover(0)).toHaveCSS("background-color", rgbOf(PALETTES.ink[0]));
+  await expect(page.getByRole("button", { name: "Действия с курсом «Английский»" })).toBeVisible();
+});
+
+test("неначатый курс языка — карточка под полкой, «Учить курс» превращает её в полку", async ({ page }) => {
+  await installBoth(page);
+  await page.goto("/app/course");
+  await chooseLanguage(page, "Английский");
+  await expect(shelves(page)).toHaveCount(1);
+  const offer = page.getByTestId("course-offer");
+  await expect(offer.getByRole("heading", { level: 2 })).toHaveText("Английский для общения · B1");
+  await expect(offer.getByRole("link")).toHaveCount(0);
+  const [shelf, card] = await Promise.all([shelves(page).boundingBox(), offer.boundingBox()]);
+  expect(card!.y).toBeGreaterThan(shelf!.y + shelf!.height - 1);
+  await offer.getByRole("button", { name: "Учить курс «Английский для общения»" }).click();
+  await expect(shelves(page).getByRole("heading", { level: 2 })).toHaveText(["Для IT · B1 → B2", "Для общения · B1"]);
+  await expect(page.getByTestId("course-offer")).toHaveCount(0);
+});
+
+test("+ Английский — карточки курсов, без полок; пока ставится первый, «Учить курс» у второго недоступна", async ({
+  page,
+}) => {
+  await openModule(page, "m01");
+  await page.goto("/app/course");
+  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский, не начат" }).click();
+  const offers = page.getByTestId("course-offer");
+  await expect(offers.getByRole("heading", { level: 2 })).toHaveText([
+    "Английский · B1 → B2",
+    "Английский для общения · B1",
+  ]);
+  await expect(shelves(page)).toHaveCount(0);
+  const first = offers.nth(0).getByRole("button", { name: "Учить курс «Английский»" });
+  const second = offers.nth(1).getByRole("button", { name: "Учить курс «Английский для общения»" });
+  const background = (button: typeof first) => button.evaluate((node) => getComputedStyle(node).backgroundColor);
+  expect(await background(first)).not.toBe(await background(second));
+  const release = await holdPackages(page, "e01-");
+  await first.click();
+  await expect(second).toHaveAttribute("aria-disabled", "true");
+  await expect(second).toHaveAccessibleDescription("Сначала загрузится «Английский»");
+  release();
+  await expect(shelves(page).getByRole("heading", { level: 2 })).toHaveText(["Для IT · B1 → B2"]);
+  await expect(offers).toHaveCount(1);
+});
+
+test("360 px: заголовок полки на паузе целиком, счётчик и «⋯» видны, без горизонтальной прокрутки", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await installEnglishPair(page);
+  await page.goto("/app/course");
+  await chooseLanguage(page, "Английский");
+  await page.getByRole("button", { name: "Действия с курсом «Английский для общения»" }).click();
+  await page.getByRole("menuitem", { name: "Приостановить курс" }).click();
+  const shelf = shelves(page).nth(1);
+  await expect(shelf.getByTestId("shelf-paused")).toBeVisible();
+  for (const part of [
+    shelf.getByRole("heading", { level: 2 }),
+    shelf.getByText("0 из 1 заполнено"),
+    shelf.getByRole("button", { name: /^Действия с курсом/ }),
+    shelf.getByTestId("shelf-paused").getByText(/^На паузе с/),
+    shelf.getByRole("button", { name: "Продолжить курс" }),
+  ]) {
+    const box = (await part.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(360);
+    expect(await part.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test("1280 px — полки одна под другой", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await installEnglishPair(page);
+  await page.goto("/app/course");
+  await chooseLanguage(page, "Английский");
+  await expect(shelves(page)).toHaveCount(2);
+  const [top, bottom] = await Promise.all([shelves(page).nth(0).boundingBox(), shelves(page).nth(1).boundingBox()]);
+  expect(Math.abs(top!.x - bottom!.x)).toBeLessThan(1);
+  expect(bottom!.y).toBeGreaterThanOrEqual(top!.y + top!.height - 1);
+});
+
+test("заголовки: «Полка» — h1, полки и карточки «+ Английский» — h2, заголовка языка нет", async ({ page }) => {
+  await installBoth(page);
+  await page.goto("/app/course");
+  await chooseLanguage(page, "Английский");
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { level: 1 })).toHaveText(["Полка"]);
+  await expect(main.getByRole("heading", { level: 2 })).toHaveText(["Для IT · B1 → B2", "Английский для общения · B1"]);
+  await expect(main.getByRole("heading", { name: "Английский", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Действия с курсом «Английский»" })).toBeVisible();
 });

@@ -198,3 +198,28 @@
   color: var(--accent-foreground);
   outline: none;
 }
+.course + .course {
+  margin-top: calc(var(--cell) * 1.5);
+}
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 12px;
+  margin-top: var(--cell);
+}
+.title {
+  flex: 1 1 12rem;
+  min-width: 0;
+  margin: 0;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.tools {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}

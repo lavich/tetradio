@@ -70,6 +70,10 @@ export function useCoursePalette(courseId: string | undefined): PaletteName {
   );
 }
 
+/** Имя курса на экранах его языка: «Для IT · B1 → B2». */
+export const courseName = (course: Pick<CourseEntry, "short" | "title" | "level">) =>
+  [course.short ?? course.title, course.level].filter(Boolean).join(" · ");
+
 /** Незавершённое занятие курса: `undefined` — ещё читается, `null` — нет. */
 export const useCourseSession = (courseId: string | undefined): Session | null | undefined =>
   useLiveQuery(() => (courseId ? activeSession(courseId) : null), [courseId]);

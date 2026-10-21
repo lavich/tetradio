@@ -1,12 +1,13 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { moduleViews, type ModuleView } from "../../storage/course";
-import { courses, shelfCourse } from "../../storage/courses";
+import { languages, shelfLanguage, type CourseEntry } from "../../storage/courses";
 import { db } from "../../storage/db";
-import { CourseSwitch } from "../../shared/CourseSwitch";
+import { LanguageSwitch } from "../../shared/CourseSwitch";
+import { courseName, useCoursePalette } from "../../shared/courses";
 import { useAction } from "../../shared/action";
 import { pausedSince } from "../../shared/format";
 import { pauseCourse, resumeCourse } from "../../storage/pause-actions";
@@ -28,78 +29,85 @@ function coverLabel(view: ModuleView) {
 }
 
 export function CourseScreen() {
-  const data = useLiveQuery(async () => {
-    const courseId = await shelfCourse();
-    const entry = (await courses()).find((course) => course.id === courseId && course.started);
-    return { courseId, pausedAt: entry?.pausedAt, views: entry ? await moduleViews(courseId) : [] };
+  const language = useLiveQuery(async () => {
+    const code = await shelfLanguage();
+    return (await languages()).find((entry) => entry.code === code) ?? null;
   }, []);
   const [status, setStatus] = useState("");
-  const { busy, problem, setProblem, run } = useAction("Не удалось изменить курс");
-  const courseId = data?.courseId;
+  const { state } = useLocation() as { state: { course?: string } | null };
+  const code = language?.code;
+  useEffect(() => setStatus(""), [code]);
+  if (language === undefined) return <Screen />;
+  const list = language?.courses ?? [];
+  const started = list.filter((course) => course.started);
+  const unstarted = list.filter((course) => !course.started).map((course) => course.id);
+  return (
+    <Screen>
+      <LanguageSwitch shelf />
+      <h1>Полка</h1>
+      <p className="sr-only" role="status" data-testid="shelf-status">
+        {status}
+      </p>
+      {started.map((course) => (
+        <CourseShelf key={course.id} course={course} onStatus={setStatus} />
+      ))}
+      {unstarted.length || !language ? (
+        <CourseStart courseIds={unstarted} grouped={false} focus={state?.course} />
+      ) : null}
+    </Screen>
+  );
+}
+
+/** Полка одного курса языка: заголовок со счётчиком и «⋯», экзамен, пауза, обложки и контрольные точки. */
+function CourseShelf({ course, onStatus }: { course: CourseEntry; onStatus: (text: string) => void }) {
+  const { id: courseId, pausedAt, title } = course;
+  const views = useLiveQuery(() => moduleViews(courseId), [courseId]);
+  const calendar = useLiveQuery(async () => (await db.courses.get(courseId))?.calendar, [courseId]);
+  const { busy, problem, run } = useAction("Не удалось изменить курс");
   const trigger = useRef<HTMLButtonElement>(null);
   const resume = useRef<HTMLButtonElement>(null);
   // Кнопка, нажатая для паузы или возврата, исчезает: фокус переходит на ту, что её заменила, а не на body.
   const focusAfter = useRef<"resume" | "menu" | null>(null);
-  const pausedNow = data?.pausedAt;
   useEffect(() => {
-    if (focusAfter.current === "resume" && pausedNow) resume.current?.focus();
-    else if (focusAfter.current === "menu" && !pausedNow) trigger.current?.focus();
+    if (focusAfter.current === "resume" && pausedAt) resume.current?.focus();
+    else if (focusAfter.current === "menu" && !pausedAt) trigger.current?.focus();
     else return;
     focusAfter.current = null;
-  }, [pausedNow]);
-  useEffect(() => {
-    setStatus("");
-    setProblem("");
-  }, [courseId, setProblem]);
-  const course = useLiveQuery(async () => (courseId ? await db.courses.get(courseId) : undefined), [courseId]);
+  }, [pausedAt]);
   const profile = useCourseProfile(courseId);
-  if (data === undefined) return <Screen />;
-  const { views, pausedAt } = data;
-  const title = course?.short ?? course?.title ?? "";
+  const palette = useCoursePalette(courseId);
+  const heading = useId();
+  if (!views?.length) return null;
   const toggle = () => {
-    if (busy || !courseId) return;
+    if (busy) return;
     focusAfter.current = pausedAt ? "menu" : "resume";
     return run(async () => {
       if (pausedAt) {
         await resumeCourse(courseId);
-        setStatus(`Курс «${title}» продолжается.`);
+        onStatus(`Курс «${title}» продолжается.`);
       } else {
         await pauseCourse(courseId);
-        setStatus(`Курс «${title}» на паузе. Вернуть его можно на полке или в настройках.`);
+        onStatus(`Курс «${title}» на паузе. Вернуть его можно на полке или в настройках.`);
       }
     });
   };
-  const statusLine = (
-    <p className="sr-only" role="status" data-testid="shelf-status">
-      {status}
-    </p>
-  );
-  if (!views.length)
-    return (
-      <Screen>
-        <CourseSwitch shelf />
-        <h1>Полка</h1>
-        <CourseStart courseId={courseId} />
-        {statusLine}
-      </Screen>
-    );
   const filled = views.filter((view) => view.completed).length;
   const current = views.find((view) => view.module.status === "published" && !view.completed)?.module.id;
-  const labels = checkpointLabels(course?.calendar);
+  const labels = checkpointLabels(calendar);
   return (
-    <Screen>
-      <CourseSwitch shelf />
-      <div className="flex items-center justify-between gap-3">
-        <h1>Полка</h1>
-        <span className="flex items-center gap-1">
+    <section className={css.course} aria-labelledby={heading} data-testid="course-shelf">
+      <div className={css.head}>
+        <h2 id={heading} className={css.title}>
+          {courseName(course)}
+        </h2>
+        <span className={css.tools}>
           <span className={base.meta}>
             {filled} из {views.length} заполнено
           </span>
           <CourseMenu title={title} paused={!!pausedAt} onToggle={() => void toggle()} trigger={trigger} />
         </span>
       </div>
-      <ExamLine courseId={views[0].module.courseId} />
-      {statusLine}
+      <ExamLine courseId={courseId} />
       {problem && (
         <p className={css.problem} role="alert">
           {problem}
@@ -124,7 +132,11 @@ export function CourseScreen() {
                 to={`/course/${module.id}`}
                 className={classes}
                 style={
-                  draft ? undefined : { background: pausedAt ? mutedCover(module.number) : coverColor(module.number) }
+                  draft
+                    ? undefined
+                    : {
+                        background: pausedAt ? mutedCover(module.number, palette) : coverColor(module.number, palette),
+                      }
                 }
                 aria-label={`Модуль ${module.number}: ${module.subtitle}. ${coverLabel(view)}`}
               >
@@ -139,7 +151,7 @@ export function CourseScreen() {
           );
         })}
       </div>
-    </Screen>
+    </section>
   );
 }
 /** Метка контрольной точки после модуля; когда точка опубликована — ссылка на неё, после прохождения — с галочкой. */

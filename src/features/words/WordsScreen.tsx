@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 import { useHref, useLocation, useNavigate, useNavigationType, useParams, useSearchParams } from "react-router-dom";
 import { KEEP_SCROLL, rememberScroll } from "../../app/scroll";
 import { Screen } from "../../app/Screen";
-import { CourseSwitch } from "../../shared/CourseSwitch";
+import { LanguageSwitch } from "../../shared/CourseSwitch";
 import { useCardCourse, useFollowCourse } from "../../shared/courses";
 import { cx } from "../../shared/cx";
 import { withCount, WORDS } from "../../shared/format";
@@ -197,7 +197,7 @@ function Dictionary({
   );
   return (
     <section className={cx(nb.page, css.page)} aria-label="Словарь" onClick={open}>
-      {switcher && <CourseSwitch />}
+      {switcher && <LanguageSwitch />}
       <h1 className={nb.title}>Словарь</h1>
       <p className={nb.meta} data-testid="word-count">
         {[withCount(found.words, WORDS), found.phrases && withCount(found.phrases, ["фраза", "фразы", "фраз"])]

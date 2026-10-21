@@ -143,7 +143,7 @@ function Courses() {
             testId="primary-course-choice"
             options={courses.map((course) => ({
               id: course.id,
-              title: course.short ?? course.title,
+              title: course.title,
               ...(course.pausedAt ? { disabled: "на паузе" } : {}),
             }))}
             value={primary}
