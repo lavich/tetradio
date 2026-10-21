@@ -1,0 +1,8 @@
+id: tp173
+text: "I'd love to hear about it."
+translation: "Мне было бы интересно об этом послушать."
+note: "would love + to: вежливый интерес к рассказу собеседника"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

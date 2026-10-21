@@ -1,0 +1,8 @@
+id: tp180
+text: "Could you send me a voice message?"
+translation: "Не могли бы вы прислать мне голосовое сообщение?"
+note: "вежливая просьба; голосовое сообщение — voice message или voice note"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

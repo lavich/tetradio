@@ -1,0 +1,8 @@
+id: tp170
+text: "tbh I'm not sure what I'm looking for."
+translation: "Если честно, я пока не знаю, что ищу."
+note: "tbh — to be honest; фраза об ожиданиях"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

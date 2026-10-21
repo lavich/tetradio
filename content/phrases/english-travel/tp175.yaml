@@ -1,0 +1,8 @@
+id: tp175
+text: "I don't think we're a match, but good luck."
+translation: "Кажется, мы не подходим друг другу, но удачи."
+note: "вежливо закончить общение без объяснений и упрёков; match здесь — подходящий друг другу, не пара в приложении"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

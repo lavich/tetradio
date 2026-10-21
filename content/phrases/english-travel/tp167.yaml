@@ -1,0 +1,8 @@
+id: tp167
+text: "What do you do for fun?"
+translation: "Чем ты занимаешься в свободное время?"
+note: "вопрос, который продолжает переписку; ответ — о хобби"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md
