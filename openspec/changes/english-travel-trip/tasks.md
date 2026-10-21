@@ -58,9 +58,9 @@
 
 ## 9. «Сегодня» в конце опубликованных уроков
 
-- [ ] 9.1 Тесты в `tests/course-progress.test.ts` (рядом со строками 190-200): `courseEnd([draft, published], null)` — `"waiting"`, `courseEnd([published], null)` — `"finished"`, `courseEnd([draft], null)` и `courseEnd([], null)` — `null`, со следующим шагом — `null`; прежние проверки `courseFinished` заменяются, проверка у строки 190 (в фикстуре `m02` — черновик, строка 145) теперь ждёт `"waiting"`. Проверка: `npx vitest run tests/course-progress.test.ts` — красный на `main` (`courseEnd` нет).
-- [ ] 9.2 e2e `tests/e2e-course/reading.spec.ts:301-311` (демо-курс, `m02` — черновик): ждёт `course-waiting` с текстом «Опубликованные уроки пройдены. Следующие модули курса готовятся — пока повторяйте карточки.», `course-finished` нет, «Читать» по-прежнему главная. Проверка: `npm run test:e2e:course -- reading` — красный до 9.3.
-- [ ] 9.3 Реализация по design.md, решение 11: `courseEnd` в `src/storage/course.ts` вместо `courseFinished`; `src/features/today/CourseToday.tsx` — три текста по состоянию и `exam` курса из `db.courses`, `data-testid` `course-waiting` / `course-finished`. Проверка: 9.1 и 9.2 зелёные; `npm run typecheck`, `npm run lint`; `rg -n courseFinished src tests` — пусто.
+- [x] 9.1 Тесты в `tests/course-progress.test.ts` (рядом со строками 190-200): `courseEnd([draft, published], null)` — `"waiting"`, `courseEnd([published], null)` — `"finished"`, `courseEnd([draft], null)` и `courseEnd([], null)` — `null`, со следующим шагом — `null`; прежние проверки `courseFinished` заменяются, проверка у строки 190 (в фикстуре `m02` — черновик, строка 145) теперь ждёт `"waiting"`. Проверка: `npx vitest run tests/course-progress.test.ts` — красный на `main` (`courseEnd` нет).
+- [x] 9.2 e2e `tests/e2e-course/reading.spec.ts:301-311` (демо-курс, `m02` — черновик): ждёт `course-waiting` с текстом «Опубликованные уроки пройдены. Следующие модули курса готовятся — пока повторяйте карточки.», `course-finished` нет, «Читать» по-прежнему главная. Проверка: `npm run test:e2e:course -- reading` — красный до 9.3.
+- [x] 9.3 Реализация по design.md, решение 11: `courseEnd` в `src/storage/course.ts` вместо `courseFinished`; `src/features/today/CourseToday.tsx` — три текста по состоянию и `exam` курса из `db.courses`, `data-testid` `course-waiting` / `course-finished`. Проверка: 9.1 и 9.2 зелёные; `npm run typecheck`, `npm run lint`; `rg -n courseFinished src tests` — пусто.
 
 ## 10. Документы и полная проверка
 

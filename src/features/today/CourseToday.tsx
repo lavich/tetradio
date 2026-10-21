@@ -17,7 +17,7 @@ import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
 import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import {
-  courseFinished,
+  courseEnd,
   lessonDays,
   moduleViews,
   nextStep,
@@ -25,6 +25,7 @@ import {
   type ModuleLessonView,
   type ModuleView,
 } from "../../storage/course";
+import { db } from "../../storage/db";
 import { dexieSource } from "../../storage/queries";
 import { courseReadings } from "../../storage/readings";
 import { sessionPath, startSession } from "../learning/session-actions";
@@ -65,6 +66,7 @@ export function CourseToday({
     title.current?.focus();
   }, [shown]);
   const readings = useLiveQuery(async () => (courseId ? await courseReadings(courseId) : null), [courseId]);
+  const exam = useLiveQuery(async () => !!(courseId && (await db.courses.get(courseId))?.exam), [courseId]);
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,
@@ -73,10 +75,10 @@ export function CourseToday({
   ]);
   const last = lessons.filter((lesson) => lesson.completed).at(-1);
   const next = nextStep(views ?? []);
-  const finished = courseFinished(views ?? [], next);
+  const end = courseEnd(views ?? [], next);
   const due = plan.newRefs.length + plan.reviews.length;
   const reviewFirst = !!unfinished || due > 0;
-  if (!views || reviewed === undefined || !week || readings === undefined)
+  if (!views || reviewed === undefined || !week || readings === undefined || exam === undefined)
     return <div aria-busy="true" aria-label="План дня загружается" />;
 
   const page = (
@@ -99,9 +101,15 @@ export function CourseToday({
         <ReadingSheet courseId={courseId} readings={readings} primary={!reviewFirst && next === null} />
       )}
       <DayNotes plan={plan} />
-      {finished ? (
+      {end === "waiting" ? (
+        <p className={css.finished} data-testid="course-waiting">
+          Опубликованные уроки пройдены. Следующие модули курса готовятся — пока повторяйте карточки.
+        </p>
+      ) : end === "finished" ? (
         <p className={css.finished} data-testid="course-finished">
-          Все модули и пробники пройдены. До экзамена — повторение карточек и слабый навык по итогам M3.
+          {exam
+            ? "Все модули и пробники пройдены. До экзамена — повторение карточек и слабый навык по итогам M3."
+            : "Все модули курса пройдены. Дальше — повторение карточек."}
         </p>
       ) : next ? (
         <LessonNext

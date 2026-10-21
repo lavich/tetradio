@@ -262,9 +262,11 @@ export function nextStep(views: ModuleView[]): { view: ModuleView; lesson: Modul
   return null;
 }
 
-/** У курса из одних черновиков шага нет, но он не пройден. */
-export const courseFinished = (views: ModuleView[], next: ReturnType<typeof nextStep>) =>
-  next === null && views.some((view) => view.module.status === "published");
+/** У курса из одних черновиков шага нет, но и конца нет. */
+export function courseEnd(views: ModuleView[], next: ReturnType<typeof nextStep>): "waiting" | "finished" | null {
+  if (next !== null || !views.some((view) => view.module.status === "published")) return null;
+  return views.some((view) => view.module.status === "draft") ? "waiting" : "finished";
+}
 
 export const nextCourseLesson = zoned(async function nextCourseLesson(
   courseId?: string,
