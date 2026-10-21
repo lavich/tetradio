@@ -1,0 +1,708 @@
+title: Пробный звонок рекрутера
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Как устроена контрольная точка
+    body: |-
+      Это контрольная точка первой ступени курса — модули e01–e08. Один отклик на вакансию от письма рекрутера до обсуждения условий: письмо и описание вакансии, голосовое сообщение, звонок по частям (начало, опыт и проект, стек, мотивация, условия) и ответ рекрутеру. Около 60 минут. Делайте точку за один раз, без словаря, таблиц и карточек: результат покажет то, что уже усвоено. Новых карточек здесь нет — только пройденное в модулях; редкие слова в текстах подписаны, а в аудио для ответа они не нужны.
+
+      **Чтение и аудирование** проверяются автоматически. Для каждого навыка считается доля правильных ответов и сравнивается с порогом **60 %** — по нему курс считает навык сданным. Каждое аудио звучит два раза. В заданиях на аудирование открывайте текст кнопкой «Открыть текст» только после ответов, иначе результат ничего не покажет; реплики перед ролевыми сценами открывайте после двух прослушиваний и держите перед глазами. В вопросах с выбором верен один вариант.
+
+      **Звонок.** Сцен пять, в каждой сначала звучат только реплики рекрутера, по порядку. Послушайте их два раза, откройте текст и держите перед глазами. Затем запишите свою часть: ответьте на каждую реплику одной-тремя фразами и переходите к следующей. Ваша роль — Nadia Volkova, факты для ответов даны в каждом задании; можно говорить по ним или заменить своими. Все пять сцен вместе — звонок минут на пятнадцать с записью, как в программе.
+
+      **Письмо и речь** — самопроверка: в итог они не входят. Сначала напишите текст и запишите ответ сами, только потом откройте образец и отметьте, какие критерии выполнены. Если выполнено меньше 60 % критериев, считайте навык пока не сданным.
+
+      **Навык ниже порога** — повод повторить модули, названные в пояснениях к ошибкам: чтение — e02, e04, e05, e06 и e08 (письмо рекрутера, вакансия, тред о стеке и устройстве проекта), аудирование — e01, e02, e03, e05 и e08 (голосовое сообщение, вопросы в разных формулировках, условия), письмо — e07 и e08, речь — сцены из e05–e08 и банк ответов третьих уроков. Повторите их до второй ступени.
+
+      **Темп.** Программа рассчитана на одно занятие в неделю: на весь курс уходит около года. Если все навыки не ниже порога и занятия даются легко, вторую ступень (e09–e16) можно проходить по два занятия в неделю — программа допускает это после экзамена по греческому, в мае 2027. Если навык ниже порога, сначала повторите его модули и оставьте прежний темп.
+    table:
+      columns:
+        - часть
+        - задания
+        - время
+      rows:
+        - - Письмо и вакансия
+          - письмо рекрутера, описание вакансии
+          - 8 мин
+        - - Начало звонка
+          - голосовое сообщение, сцена 1
+          - 8 мин
+        - - Опыт и проект
+          - вопросы в разных формулировках, сцена 2
+          - 10 мин
+        - - Стек
+          - тред с вопросами, сцена 3
+          - 10 мин
+        - - Мотивация
+          - сцена 4, вопрос из банка ответов
+          - 8 мин
+        - - Условия
+          - голосовое сообщение, сцена 5
+          - 8 мин
+        - - Ответ рекрутеру и язык
+          - письмо с предложением, ответ 80–120 слов, грамматика ступени
+          - 12 мин
+  - type: reading
+    id: email
+    title: "Senior Backend Engineer at Tidewell Software"
+    text: |-
+      Subject: Senior Backend Engineer at Tidewell Software
+
+      Dear Nadia,
+
+      I came across your profile on LinkedIn, and I am writing about a Senior Backend Engineer role in the Payments Platform team at Tidewell Software. Your experience with payment systems and your work as a tech lead look like a very good match.
+
+      Tidewell builds software that helps online shops accept payments in thirty countries. The team has nine engineers and is hiring a tenth person to own the transaction service. The role is permanent, and the team is remote-first: you work from home, and everyone meets in Lisbon once a quarter.
+
+      I would like to tell you more about the conditions and hear about your experience. Would you be available for a short call on Thursday or Friday afternoon? If you are interested, could you send me your updated CV before the call?
+
+      Kind regards,
+      Katarina Lind
+      Recruiter, Tidewell Software
+    glosses:
+      - { text: came across, russian: наткнулась на }
+      - { text: a very good match, russian: вы очень подходите }
+      - { text: accept payments, russian: принимать платежи }
+      - { text: own, russian: отвечать за }
+      - { text: transaction, russian: платёжная операция }
+      - { text: once a quarter, russian: раз в квартал }
+  - type: exercise
+    id: email-q
+    about: email
+    graded: true
+    title: Чтение — письмо рекрутера
+    instruction: Прочитайте письмо и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why is Katarina writing to Nadia?
+        options:
+          - to tell her about a role and ask for a short call
+          - to offer her a job
+          - to answer her application
+        answer: to tell her about a role and ask for a short call
+        explanation: "I am writing about a Senior Backend Engineer role… Would you be available for a short call? Katarina нашла профиль сама: предложения работы в письме нет, и на отклик оно не отвечает (модуль e08)."
+      - id: q2
+        prompt: How often does the whole team meet in Lisbon?
+        options:
+          - once a quarter
+          - once a week
+          - once a year
+        answer: once a quarter
+        explanation: "Everyone meets in Lisbon once a quarter — раз в квартал; в остальное время команда работает из дома (модуль e08)."
+      - id: q3
+        prompt: What does Katarina ask Nadia to send before the call?
+        options:
+          - her updated CV
+          - a code sample
+          - a list of references
+        answer: her updated CV
+        explanation: "Could you send me your updated CV before the call? Примера кода и рекомендаций в письме нет (модуль e08)."
+  - type: reading
+    id: vacancy
+    title: "Senior Backend Engineer — Payments Platform"
+    text: |-
+      Senior Backend Engineer — Payments Platform
+      Tidewell Software · remote-first, Europe · permanent role
+
+      ABOUT THE ROLE
+      You will own the transaction service, which processes about two million payments a day. You will design APIs, review code and mentor two mid-level engineers. You will work closely with the product manager and the security team.
+
+      WHAT WE EXPECT
+      - At least five years of backend experience, preferably with payments or other systems where a failure is costly.
+      - Strong Python; Go is a plus.
+      - Experience with PostgreSQL and message queues (we use Kafka).
+      - Clear written and spoken English: you will present technical decisions to the team.
+
+      WHAT WE OFFER
+      - A salary of 80,000 to 95,000 euros gross per year, depending on experience.
+      - Stock options and a learning budget of 1,500 euros a year.
+      - Work from home anywhere in Europe. Core hours: 10:00 to 14:00 Central European Time.
+      - 27 days of holiday.
+
+      HIRING PROCESS
+      Screening call, take-home task (about three hours), technical round, final interview.
+    glosses:
+      - { text: processes, russian: обрабатывает }
+      - { text: mid-level, russian: среднего уровня }
+      - { text: a failure, russian: сбой }
+      - { text: costly, russian: дорогостоящий }
+      - { text: a plus, russian: преимущество }
+      - { text: message queues, russian: очереди сообщений }
+  - type: exercise
+    id: vacancy-q
+    about: vacancy
+    graded: true
+    title: Чтение — описание вакансии
+    instruction: Прочитайте описание вакансии и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What will the engineer do in this role?
+        options:
+          - own the transaction service and mentor two engineers
+          - lead the security team
+          - manage all nine engineers of the team
+        answer: own the transaction service and mentor two engineers
+        explanation: "You will own the transaction service… and mentor two mid-level engineers. С безопасностью работают рядом, но не руководят ею (модуль e06)."
+      - id: q2
+        prompt: Which of these does the company require?
+        options:
+          - at least five years of backend experience
+          - a degree in computer science
+          - experience of managing a team
+        answer: at least five years of backend experience
+        explanation: "At least five years of backend experience. Диплом и управление командой в требованиях не названы; Go is a plus, то есть преимущество (модуль e02)."
+      - id: q3
+        prompt: What does the description say about the salary?
+        options:
+          - It is 80,000 to 95,000 euros gross, depending on experience.
+          - It is 80,000 to 95,000 euros net, and it is fixed.
+          - It will be decided after the technical round.
+        answer: It is 80,000 to 95,000 euros gross, depending on experience.
+        explanation: "80,000 to 95,000 euros gross per year, depending on experience — до налогов и в зависимости от опыта; net означало бы сумму после налогов (модуль e08)."
+  - type: listening
+    id: voicemail
+    title: Голосовое сообщение рекрутера
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. Thank you for your reply and for the updated CV." }
+      - { speaker: Katarina, text: "I'd like to confirm our call for Thursday at three in the afternoon, your time. It will take about fifteen minutes." }
+      - { speaker: Katarina, text: "First, I'll ask you to tell me a little about yourself. Then we'll talk about your experience, a project you're proud of and your motivation. At the end, I'll tell you more about the conditions." }
+      - { speaker: Katarina, text: "Please find a quiet place with a good connection. If the time doesn't suit you, call me back or send me an email. Speak to you on Thursday." }
+  - type: exercise
+    id: voicemail-q
+    about: voicemail
+    graded: true
+    title: Аудирование — голосовое сообщение
+    instruction: Прослушайте сообщение два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: When will the call be?
+        options:
+          - on Thursday at three in the afternoon
+          - on Friday at three in the afternoon
+          - on Thursday at ten in the morning
+        answer: on Thursday at three in the afternoon
+        explanation: "I'd like to confirm our call for Thursday at three in the afternoon — в четверг в три часа дня (модуль e08)."
+      - id: q2
+        prompt: How long will the call take?
+        options:
+          - about fifteen minutes
+          - about an hour
+          - about thirty minutes
+        answer: about fifteen minutes
+        explanation: "It will take about fifteen minutes — пятнадцать минут (модуль e08)."
+      - id: q3
+        prompt: What will Katarina ask first?
+        options:
+          - to tell her a little about herself
+          - about the salary
+          - about the notice period
+        answer: to tell her a little about herself
+        explanation: "First, I'll ask you to tell me a little about yourself. Условия обсудят в конце, At the end (модуль e01)."
+      - id: q4
+        prompt: What should Nadia do if the time doesn't suit her?
+        options:
+          - call Katarina back or send an email
+          - wait for another message
+          - come to the office
+        answer: call Katarina back or send an email
+        explanation: "If the time doesn't suit you, call me back or send me an email — перезвонить или написать (модуль e08)."
+  - type: listening
+    id: start-lines
+    title: Сцена 1 · Реплики рекрутера — начало звонка
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. Thanks for making time. Is now a good time to talk?" }
+      - { speaker: Katarina, text: "Perfect. The call will take about fifteen minutes. To start, could you tell me a little about yourself?" }
+      - { speaker: Katarina, text: "Thanks. And what are you working on at the moment?" }
+      - { speaker: Katarina, text: "That sounds interesting. What made you reply to my message?" }
+      - { speaker: Katarina, text: "I see. Did you have a chance to read the job description?" }
+      - { speaker: Katarina, text: "Good. Let's talk about your experience in more detail." }
+  - type: speaking
+    id: start
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia Volkova, бэкенд-разработчик из Варшавы. Звонит Katarina Lind, рекрутер Tidewell Software. У вас шесть лет опыта, четыре из них в платёжной компании; с прошлой весны вы тимлид команды карт: отвечаете за архитектуру и наставляете трёх разработчиков. Сейчас вы делаете сервис для карточных платежей: отвечаете за API, в этом квартале переносите его на новую базу данных. Вы ищете роль с большей ответственностью за архитектуру и уже прочитали описание вакансии. Для разговора у вас двадцать минут. 6 реплик, вся ваша часть — 60–90 секунд.
+    seconds: 90
+    model: |-
+      Katarina: Hello Nadia, this is Katarina Lind from Tidewell Software. Thanks for making time. Is now a good time to talk?
+      You: Hello Katarina, thanks for reaching out. Yes, I have about twenty minutes.
+      Katarina: Perfect. The call will take about fifteen minutes. To start, could you tell me a little about yourself?
+      You: Sure. I'm a backend developer with six years of experience, four of them in payments. Since last spring I've been the tech lead of the cards team, and I'm responsible for the architecture and for mentoring three developers.
+      Katarina: Thanks. And what are you working on at the moment?
+      You: I'm working on a service for card payments. I'm responsible for the API, and we're moving it to a new database this quarter.
+      Katarina: That sounds interesting. What made you reply to my message?
+      You: I'm looking for a role with more responsibility for the architecture, and your focus on payments matches my background.
+      Katarina: I see. Did you have a chance to read the job description?
+      You: Yes, I did. The transaction service is the part that interests me most.
+      Katarina: Good. Let's talk about your experience in more detail.
+      You: Of course, I'm ready.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-три фразы
+      - "Рассказ о себе — настоящее и прошлое: I'm a backend developer with… years of experience; Since last spring I've been…"
+      - "Текущая работа — present continuous: I'm working on…, we're moving…"
+      - "Причина отклика — конкретная: I'm looking for a role with more responsibility…"
+      - Вежливо и спокойно, без долгих пауз
+  - type: listening
+    id: questions
+    title: Вопросы об опыте и проекте
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Let's start with your experience. Could you walk me through your CV, starting with your current role?" }
+      - { speaker: Mark, text: "Hi Nadia, I'm Mark, the engineering manager. How long have you been the tech lead, and what has changed in that time?" }
+      - { speaker: Katarina, text: "You mentioned a migration project. What was your personal contribution to it?" }
+      - { speaker: Mark, text: "Which part was the hardest, and how did you deal with it?" }
+      - { speaker: Mark, text: "So, why'd you pick Postgres over Mongo — was it the team, or the data?" }
+      - { speaker: Katarina, text: "Thank you. One last thing: if you could do it again, what would you change?" }
+  - type: exercise
+    id: questions-q
+    about: questions
+    graded: true
+    title: Аудирование — вопросы об опыте
+    instruction: Прослушайте вопросы два раза и выберите правильный ответ. Ответы кандидата в записи не звучат.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Katarina ask in her first question?
+        options:
+          - to describe her career, starting with her current job
+          - to explain why she wants to leave her job
+          - to list all the technologies she knows
+        answer: to describe her career, starting with her current job
+        explanation: "Walk me through your CV, starting with your current role — пройтись по резюме, начиная с нынешней роли (модуль e02)."
+      - id: q2
+        prompt: What does Mark want to know about Nadia's role as tech lead?
+        options:
+          - how long she has been in the role and what has changed
+          - how many people she manages
+          - how much she earns
+        answer: how long she has been in the role and what has changed
+        explanation: "How long have you been the tech lead, and what has changed in that time? Срок и перемены — present perfect (модуль e02)."
+      - id: q3
+        prompt: What does Katarina ask about the migration?
+        options:
+          - what Nadia did herself
+          - how much the project cost
+          - who started the project
+        answer: what Nadia did herself
+        explanation: "What was your personal contribution to it? — личный вклад, то есть что сделали вы сами (модуль e03)."
+      - id: q4
+        prompt: What does Mark ask next?
+        options:
+          - which part was the hardest and how she dealt with it
+          - why the project was late
+          - who helped her with the project
+        answer: which part was the hardest and how she dealt with it
+        explanation: "Which part was the hardest, and how did you deal with it? Трудность и способ справиться с ней (модуль e03)."
+      - id: q5
+        prompt: What does Mark want to know in his last question?
+        options:
+          - whether the team or the data was the reason for choosing PostgreSQL
+          - why Nadia prefers MongoDB
+          - how much PostgreSQL costs
+        answer: whether the team or the data was the reason for choosing PostgreSQL
+        explanation: "Why'd you pick Postgres over Mongo — was it the team, or the data? Быстрая форма why did you choose X over Y: причина выбора — команда или данные (модуль e04)."
+  - type: listening
+    id: experience-lines
+    title: Сцена 2 · Реплики рекрутера — опыт и проект
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Let's go through your experience. Could you walk me through your CV, starting with your current role?" }
+      - { speaker: Katarina, text: "You said you joined as a developer. How long have you been in your current role, and what has changed since you started?" }
+      - { speaker: Katarina, text: "Thank you. Now, tell me about a project you're proud of." }
+      - { speaker: Katarina, text: "And what was your personal contribution to it?" }
+      - { speaker: Katarina, text: "What was the result? Do you have any numbers?" }
+      - { speaker: Katarina, text: "Thanks, that's clear." }
+  - type: speaking
+    id: experience
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Четыре года в платёжной компании: пришли разработчиком, с прошлой весны — тимлид команды карт; до этого два года в стартапе. За год команда выросла с пяти до семи человек, запустили два новых продукта. Проект, которым вы гордитесь: перенос карточных платежей на новую платформу без простоя. Вы тогда работали в команде карт, когда CTO попросил начать проект. Вы спроектировали модель данных, разбили релиз на небольшие шаги и вели еженедельные встречи команды. Закончили на две недели раньше срока, без простоя, среднее время платежа снизилось на тридцать процентов. 6 реплик, вся ваша часть — 90–120 секунд.
+    seconds: 120
+    model: |-
+      Katarina: Let's go through your experience. Could you walk me through your CV, starting with your current role?
+      You: Sure. I've worked at a payments company for four years. I joined as a backend developer, and last spring I became the tech lead of the cards team. Before that, I spent two years at a start-up.
+      Katarina: You said you joined as a developer. How long have you been in your current role, and what has changed since you started?
+      You: I've been the tech lead for a year. The team has grown from five to seven developers, and we've launched two new products.
+      Katarina: Thank you. Now, tell me about a project you're proud of.
+      You: Let me tell you about a migration. The goal was to move our card payments to a new platform without downtime. I was working on the cards team when the CTO asked us to start the project.
+      Katarina: And what was your personal contribution to it?
+      You: I was responsible for the design. I designed the data model, planned the release in small steps and led the weekly check-ins with the team.
+      Katarina: What was the result? Do you have any numbers?
+      You: We finished two weeks early, with no downtime. Since the migration, the average payment time has dropped by thirty percent.
+      Katarina: Thanks, that's clear.
+      You: Thank you. I'd be happy to go into more detail.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-три фразы
+      - "Опыт — present perfect со сроком: I've worked… for four years; I've been the tech lead for a year"
+      - "Проект — past simple и past continuous со связкой when: I was working on… when the CTO asked…"
+      - "Личный вклад — I was responsible for…, I designed… (что сделали именно вы)"
+      - "Результат — с числом и сроком: two weeks early, by thirty percent"
+  - type: reading
+    id: thread
+    title: "Тред с менеджером команды"
+    text: |-
+      Mark Reed (engineering manager): Hi Nadia, Mark again, from the call. Before the technical round, could you tell me which databases you have used in production?
+
+      Nadia Volkova: Hi Mark. I've used PostgreSQL for four years and Redis for caching. I haven't worked with Kafka in production, but I've used it in a side project for a year.
+
+      Mark Reed: Thanks. Could you also describe how a payment goes through your service? We'll talk about it in more detail in the technical round.
+
+      Nadia Volkova: Sure. First, a request is sent to the gateway, where the user is authenticated. After that, it is passed to the payment service, which writes to the database and sends an event to a queue. Finally, a notification is sent to the user.
+
+      Mark Reed: Clear, thanks. One more question: why did you choose PostgreSQL over MongoDB?
+
+      Nadia Volkova: Our data is relational, and we needed strict transactions. MongoDB was faster to start with, but we would need to write the consistency checks ourselves.
+
+      Mark Reed: That's what I wanted to know. Speak soon.
+    glosses:
+      - { text: caching, russian: кеширование }
+      - { text: a side project, russian: личный проект вне работы }
+      - { text: authenticated, russian: проходит аутентификацию }
+      - { text: an event, russian: событие }
+      - { text: strict, russian: строгий }
+      - { text: consistency, russian: согласованность данных }
+  - type: exercise
+    id: thread-q
+    about: thread
+    graded: true
+    title: Чтение — тред о стеке
+    instruction: Прочитайте тред и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Mark ask first?
+        options:
+          - which databases Nadia has used in production
+          - how many engineers are in Nadia's team
+          - why Nadia wants to leave her job
+        answer: which databases Nadia has used in production
+        explanation: "Could you tell me which databases you have used in production? Вопрос о базах в продакшене (модуль e05)."
+      - id: q2
+        prompt: Has Nadia used Kafka in production?
+        options:
+          - No, only in a side project.
+          - Yes, for a year.
+          - Yes, for four years.
+        answer: No, only in a side project.
+        explanation: "I haven't worked with Kafka in production, but I've used it in a side project for a year. Год — это личный проект, а четыре года — PostgreSQL (модуль e02)."
+      - id: q3
+        prompt: What happens after the gateway?
+        options:
+          - It is passed to the payment service.
+          - A notification is sent to the user.
+          - It is written to the database.
+        answer: It is passed to the payment service.
+        explanation: "First… the gateway… After that, it is passed to the payment service. Запись в базу делает уже платёжный сервис, а уведомление уходит в конце (модуль e06)."
+      - id: q4
+        prompt: Why did Nadia choose PostgreSQL over MongoDB?
+        options:
+          - Her data is relational and she needed strict transactions.
+          - MongoDB was slower to start with.
+          - The whole team asked for it.
+        answer: Her data is relational and she needed strict transactions.
+        explanation: "Our data is relational, and we needed strict transactions. MongoDB как раз быстрее для старта, но проверки согласованности пришлось бы писать самим (модуль e04)."
+  - type: listening
+    id: stack-lines
+    title: Сцена 3 · Реплики рекрутера — стек и быстрый вопрос
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Right, let's talk about your stack. Which technologies do you use day to day?" }
+      - { speaker: Katarina, text: "Got it. So, why'd you go for PostgreSQL over Mongo — was it the team, or the data, or both?" }
+      - { speaker: Katarina, text: "Sure. I asked if you picked PostgreSQL because of the team, because of the data, or for both reasons." }
+      - { speaker: Katarina, text: "Interesting. And what are the downsides of that choice?" }
+      - { speaker: Katarina, text: "OK. Do you have any experience with Kafka or other message queues?" }
+      - { speaker: Katarina, text: "That's fine, we can teach that. Thanks." }
+  - type: speaking
+    id: stack
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Стек: Python, PostgreSQL, Redis, Docker и AWS. PostgreSQL выбрали из-за данных (реляционные, нужны строгие транзакции), команда его тоже знала. Недостаток: запись плохо масштабируется — добавили реплику, и проблем с тех пор не было. Kafka в продакшене не использовали, но год работали с ним в личном проекте; на работе — RabbitMQ. Вторая реплика звучит быстро, с сокращениями: переспросите по-деловому (Could you repeat the question?), затем ответьте. 6 реплик, вся ваша часть — 90–120 секунд.
+    seconds: 120
+    model: |-
+      Katarina: Right, let's talk about your stack. Which technologies do you use day to day?
+      You: Mostly Python, with PostgreSQL and Redis. I've also used Docker and AWS.
+      Katarina: Got it. So, why'd you go for PostgreSQL over Mongo — was it the team, or the data, or both?
+      You: Sorry, could you repeat the question? I missed the second part.
+      Katarina: Sure. I asked if you picked PostgreSQL because of the team, because of the data, or for both reasons.
+      You: Thanks. We chose PostgreSQL mainly because of the data: it is relational, and we needed strict transactions. The team knew it well, too.
+      Katarina: Interesting. And what are the downsides of that choice?
+      You: The main downside is scaling the writes. We added a replica, and it hasn't caused problems since.
+      Katarina: OK. Do you have any experience with Kafka or other message queues?
+      You: I haven't used Kafka in production, but I've used it in a side project for a year. At work, I've used RabbitMQ.
+      Katarina: That's fine, we can teach that. Thanks.
+      You: Thank you. I'm happy to learn it.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-три фразы
+      - "Быструю реплику не пропустили, переспросили по-деловому: Could you repeat the question? / Do you mean…?"
+      - "Выбор технологии — критерий и довод: We chose PostgreSQL because of the data; один недостаток и что с ним сделали"
+      - "Опыт — present perfect с not… in production: I haven't used Kafka in production, but I've used it in…"
+      - Без пересказа вопросов рекрутера, каждый ответ отвечает на заданный вопрос и не повторяет его
+  - type: listening
+    id: motivation-lines
+    title: Сцена 4 · Реплики рекрутера — мотивация
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Let's talk about motivation. Why do you want to join Tidewell?" }
+      - { speaker: Katarina, text: "Thanks. What do you know about our product?" }
+      - { speaker: Katarina, text: "Good. And where do you see yourself in five years?" }
+      - { speaker: Katarina, text: "What would you like to learn in this role?" }
+      - { speaker: Katarina, text: "This is a senior engineer role, not a team lead role. Is that OK for you?" }
+      - { speaker: Katarina, text: "Great. Thank you." }
+  - type: speaking
+    id: motivation
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Почему Tidewell: продукт и инженерная культура; вы давно читаете их инженерный блог и разборы инцидентов, хотите работать над тем, что даёт реальный результат. О продукте вы знаете из письма: платежи для интернет-магазинов в тридцати странах, команда Payments Platform отвечает за сервис транзакций. Через пять лет вы видите себя ведущим инженером (staff engineer); в следующем году собираетесь заняться проектированием систем, а переход к управлению людьми не исключаете, но пока не уверены. Хотите узнать больше о высоконагруженных системах и Go и делиться с коллегами опытом в платежах. Роль не тимлида вас устраивает: вас интересуют архитектура и наставничество. 6 реплик, вся ваша часть — 90–120 секунд.
+    seconds: 120
+    model: |-
+      Katarina: Let's talk about motivation. Why do you want to join Tidewell?
+      You: Honestly, it's the product and the engineering culture. I've followed your engineering blog for a while, and I liked your public postmortems. I'd like to work on something with real impact.
+      Katarina: Thanks. What do you know about our product?
+      You: I know that you help online shops accept payments in thirty countries, and that the Payments Platform team owns the transaction service.
+      Katarina: Good. And where do you see yourself in five years?
+      You: In five years, I see myself as a staff engineer. Next year I'm going to focus on system design. I might consider a management track later, but I'm not sure yet.
+      Katarina: What would you like to learn in this role?
+      You: I'd like to learn more about high-load systems and Go. I'd also like to share what I know about payments with my colleagues.
+      Katarina: This is a senior engineer role, not a team lead role. Is that OK for you?
+      You: Yes, that's fine. I'd like to focus on the architecture and on mentoring, and I don't have to manage people to do that.
+      Katarina: Great. Thank you.
+      You: Thank you. I'm looking forward to the next steps.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-три фразы
+      - "Причина — конкретная, не общие слова: the product, the engineering culture, их блог"
+      - "Планы — формы going to и might: I'm going to focus on…; I might consider…; через пять лет — I see myself as…"
+      - "Вклад и желание учиться — I'd like to learn…, I'd like to share…"
+      - "Согласие с условием роли — Yes, that's fine + короткая причина"
+  - type: speaking
+    id: bank
+    part: interview
+    prompt: "Менеджер команды Mark спрашивает: «How do you handle a task when the requirements are unclear?» Ответьте за 90 секунд на своём материале: сначала проверьте, что поняли вопрос, затем назовите подход, приведите случай из практики и закончите итогом."
+    seconds: 90
+    model: "If I understand correctly, you're asking about a task where the requirements are unclear. In that case, I do three things. First, I list what I know and what I don't know. Then I ask the product owner a few specific questions to narrow the task down, for example, which users it affects and what success looks like. Finally, I share a short summary in writing, so that everyone agrees. Last year, a manager asked me to make a dashboard faster. That was vague, so I asked which page was slow. It turned out to be the monthly report, and we made it open in two seconds instead of twenty."
+    criteria:
+      - Начало с проверки вопроса — If I understand correctly, you're asking…
+      - Назван подход по шагам со связками First, Then, Finally
+      - Есть случай из практики с числом
+      - Ответ укладывается в 90 секунд
+  - type: listening
+    id: after-call
+    title: Голосовое сообщение об условиях
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hi Nadia, it's Katarina again. Thank you for the conversation today. Before our next call, here are the conditions in short." }
+      - { speaker: Katarina, text: "The salary range is eighty to ninety-five thousand euros gross per year, plus stock options. The final figure is decided by the hiring manager after the technical round." }
+      - { speaker: Katarina, text: "The role is remote-first. We only ask you to be online during core hours, from ten to two, Central European time, and to come to Lisbon once a quarter." }
+      - { speaker: Katarina, text: "On the next call, I'll ask about your salary expectations and your notice period, so please think about them. Speak soon." }
+  - type: exercise
+    id: after-call-q
+    about: after-call
+    graded: true
+    title: Аудирование — условия
+    instruction: Прослушайте сообщение два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What salary range does Katarina mention?
+        options:
+          - eighty to ninety-five thousand euros gross
+          - ninety to ninety-five thousand euros gross
+          - eighty to ninety-five thousand euros net
+        answer: eighty to ninety-five thousand euros gross
+        explanation: "Eighty to ninety-five thousand euros gross per year — до налогов; net означало бы сумму после налогов (модуль e08)."
+      - id: q2
+        prompt: Who decides the final figure, and when?
+        options:
+          - the hiring manager, after the technical round
+          - Katarina, during the next call
+          - the CEO, after the final interview
+        answer: the hiring manager, after the technical round
+        explanation: "The final figure is decided by the hiring manager after the technical round — решает менеджер по найму после технического раунда (модуль e08)."
+      - id: q3
+        prompt: What does Katarina say about the work format?
+        options:
+          - It is remote-first, with core hours and a meeting in Lisbon once a quarter.
+          - It is hybrid, with two days a week in Lisbon.
+          - It is fully remote, with no meetings in person.
+        answer: It is remote-first, with core hours and a meeting in Lisbon once a quarter.
+        explanation: "Remote-first… core hours… to come to Lisbon once a quarter — удалёнка с обязательными часами и поездкой раз в квартал (модуль e08)."
+      - id: q4
+        prompt: What does Katarina ask Nadia to think about before the next call?
+        options:
+          - her salary expectations and her notice period
+          - her start date and her holiday plans
+          - her references and her portfolio
+        answer: her salary expectations and her notice period
+        explanation: "I'll ask about your salary expectations and your notice period, so please think about them (модуль e08)."
+  - type: listening
+    id: terms-lines
+    title: Сцена 5 · Реплики рекрутера — условия
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hello Nadia, thanks for calling back. As I said in my message, the range is eighty to ninety-five thousand euros gross, plus stock options. Is that in line with your expectations?" }
+      - { speaker: Katarina, text: "Good. What is your notice period, and when could you start?" }
+      - { speaker: Katarina, text: "Understood. The role is remote-first, with core hours from ten to two Central European time. Would that work for you?" }
+      - { speaker: Katarina, text: "Great. Do you have any questions about the role or the process?" }
+      - { speaker: Katarina, text: "The process has three more steps: a take-home task, a technical round and a final interview. It usually takes three weeks. Anything else?" }
+      - { speaker: Katarina, text: "Of course. I'll send you a summary and the next steps by email today. Thank you for your time." }
+  - type: speaking
+    id: terms
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Вилка 80–95 тысяч евро gross вам подходит, ваше ожидание — 90–95 тысяч gross, вы готовы обсуждать всё вознаграждение, включая опционы. Срок предупреждения — два месяца, но вы можете договориться с работодателем о более раннем выходе, поэтому могли бы начать в начале апреля. Вы живёте в Варшаве: часовой пояс совпадает с обязательными часами, переезжать не нужно, поездки в Лисбон раз в квартал вас устраивают. В конце задайте вопрос о команде и о первых трёх месяцах, затем попросите подтвердить детали письмом. 6 реплик, вся ваша часть — 90–120 секунд.
+    seconds: 120
+    model: |-
+      Katarina: Hello Nadia, thanks for calling back. As I said in my message, the range is eighty to ninety-five thousand euros gross, plus stock options. Is that in line with your expectations?
+      You: Thank you. That's roughly in line. I'm looking for something in the range of ninety to ninety-five thousand euros gross, and I'm open to discussing the whole compensation, including stock options.
+      Katarina: Good. What is your notice period, and when could you start?
+      You: My notice period is two months, but I can negotiate an earlier start with my employer, so I could start in early April.
+      Katarina: Understood. The role is remote-first, with core hours from ten to two Central European time. Would that work for you?
+      You: Yes, that works for me. I live in Warsaw, so there is no time difference, and I don't have to relocate. I'd be happy to come to Lisbon every quarter.
+      Katarina: Great. Do you have any questions about the role or the process?
+      You: Yes. Could you tell me more about the team and what the first three months would look like?
+      Katarina: The process has three more steps: a take-home task, a technical round and a final interview. It usually takes three weeks. Anything else?
+      You: No, that's clear. Could you please confirm the details by email?
+      Katarina: Of course. I'll send you a summary and the next steps by email today. Thank you for your time.
+      You: Thank you, Katarina. I look forward to hearing from you.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-три фразы
+      - "Вилка названа с пометкой gross или net и готовность обсуждать всё вознаграждение: I'm looking for something in the range of…"
+      - "Срок предупреждения и дата выхода: My notice period is…; I could start in…"
+      - "Формат работы и часовой пояс — ответ по смыслу; вопрос в конце вежливой формой: Could you tell me more about…?"
+      - "Просьба подтвердить письменно — Could you please confirm the details by email?"
+  - type: reading
+    id: next-letter
+    title: "Next steps at Tidewell Software"
+    text: |-
+      Subject: Next steps at Tidewell Software
+
+      Dear Nadia,
+
+      Thank you for the conversation today. The team liked your answers and would like to move you to the next stage.
+
+      The next step is a take-home task. It should take about three hours, and you have five days to send us your solution. After that, we will invite you to a technical round with two engineers: it takes ninety minutes and is held by video call.
+
+      Please let me know by Friday if this plan works for you, and which days next week suit you for the technical round. If you have any questions, I will be glad to help.
+
+      Kind regards,
+      Katarina Lind
+      Recruiter, Tidewell Software
+    glosses:
+      - { text: a take-home task, russian: домашнее задание }
+      - { text: solution, russian: решение }
+      - { text: is held by video call, russian: проходит по видеосвязи }
+      - { text: suit, russian: подходят }
+  - type: exercise
+    id: next-letter-q
+    about: next-letter
+    graded: true
+    title: Чтение — письмо с предложением
+    instruction: Прочитайте письмо и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the next step in the process?
+        options:
+          - a take-home task
+          - a technical round
+          - a final interview
+        answer: a take-home task
+        explanation: "The next step is a take-home task. Технический раунд — после него, After that (модуль e08)."
+      - id: q2
+        prompt: How long does Nadia have to send her solution?
+        options:
+          - five days
+          - three hours
+          - ten days
+        answer: five days
+        explanation: "It should take about three hours, and you have five days to send us your solution. Три часа — время на работу над заданием (модуль e08)."
+      - id: q3
+        prompt: What does Katarina ask Nadia to do by Friday?
+        options:
+          - confirm the plan and suggest days for the technical round
+          - send the finished take-home task
+          - accept an offer
+        answer: confirm the plan and suggest days for the technical round
+        explanation: "Please let me know by Friday if this plan works for you, and which days next week suit you. Готовое задание нужно через пять дней (модуль e08)."
+  - type: explanation
+    id: reply-how
+    title: Ответ рекрутеру
+    body: |-
+      Ответьте на письмо Katarina так, как отвечают на письмо рекрутера: **Dear Ms Lind,** → благодарность и согласие продолжить → срок задания → два удобных дня для технического раунда → вежливый вопрос в косвенной форме (**Could you tell me where I should send the solution?**) → просьба подтвердить письменно (**I would be grateful if you could confirm…**) → **I look forward to hearing from you.** → **Kind regards,** и имя. Формальный стиль: полные формы, без сокращений и восклицаний.
+  - type: writing
+    id: reply
+    register: formal
+    prompt: "Вы получили письмо Katarina Lind с предложением следующего этапа (чтение выше). Напишите ответ рекрутеру (80–120 слов): благодарность за разговор и письмо, согласие выполнить задание за пять дней, два дня следующей недели для технического раунда — среда или четверг после 14:00, вежливый вопрос о том, куда отправить решение и можно ли пользоваться своими инструментами, просьба подтвердить детали письмом, подпись — Nadia Volkova."
+    words: { min: 80, max: 120 }
+    model: |-
+      Dear Ms Lind,
+
+      Thank you for the conversation and for your email. I am glad to continue the process, and I would like to confirm that I will send you the solution to the take-home task within five days. For the technical round, I would be available on Wednesday or Thursday after two in the afternoon. Could you tell me where I should send the solution and whether I may use my own tools? I would also be grateful if you could confirm the details by email, so that I can plan my week. Thank you for your time. I look forward to hearing from you.
+
+      Kind regards,
+      Nadia Volkova
+    criteria:
+      - 80–120 слов, есть обращение, благодарность и подпись
+      - Подтверждены задание и срок в пять дней
+      - Названы два дня и время для технического раунда
+      - "Вопрос в косвенной форме: Could you tell me where I should send the solution…? (порядок слов как в утверждении)"
+      - "Вежливая просьба подтвердить письмом: I would be grateful if you could confirm…"
+      - Формальный стиль без сокращений и разговорных слов
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Язык ступени
+    instruction: Вставьте слово или выражение. Три варианта лишние.
+    format: gap
+    bank: [am working, have worked, was working, is reviewed, than, going to, don't have to, whether, wondering, more, ago, since, were]
+    items:
+      - id: g1
+        prompt: "Sorry, I can't talk for long: I ___ on a release right now."
+        answer: am working
+        explanation: "Действие происходит сейчас, right now, — present continuous: I am working (модуль e01)."
+      - id: g2
+        prompt: "I ___ as a backend developer since 2020."
+        answer: have worked
+        explanation: "Началось в прошлом и продолжается, since 2020, — present perfect: have worked (модуль e02)."
+      - id: g3
+        prompt: "I ___ on the cards team when the CTO asked me to lead the migration."
+        answer: was working
+        explanation: "Фон — past continuous, событие — past simple, связка when: was working… asked (модуль e03)."
+      - id: g4
+        prompt: "Our code ___ by two engineers before every release."
+        answer: is reviewed
+        explanation: "Код — то, что проверяют; кто проверяет, называет by: is reviewed by two engineers (модуль e06)."
+      - id: g5
+        prompt: "In our tests, Go used less memory ___ Java."
+        answer: than
+        explanation: "После сравнительной степени — than: less memory than (модуль e04)."
+      - id: g6
+        prompt: "Next year I'm ___ focus on system design."
+        answer: going to
+        explanation: "Намерение — be going to + глагол: I'm going to focus (модуль e07)."
+      - id: g7
+        prompt: "You ___ come to the office: the team is remote-first."
+        answer: don't have to
+        explanation: "Don't have to — «не обязаны»; после него глагол без to (модуль e08)."
+      - id: g8
+        prompt: "Could you tell me ___ the salary is negotiable?"
+        answer: whether
+        explanation: "Вопрос да/нет внутри вежливой просьбы — whether (if) и порядок слов как в утверждении (модуль e05)."
+      - id: g9
+        prompt: "I was ___ if I could start in early April."
+        answer: wondering
+        explanation: "I was wondering if… — мягкая просьба или вопрос (модуль e08)."
+      - id: g10
+        prompt: "The Go service is ___ reliable than the old one."
+        answer: more
+        explanation: "Длинное прилагательное — more + прилагательное + than: more reliable than (модуль e04)."
