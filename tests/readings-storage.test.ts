@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { liveQuery } from "dexie";
 import "./helpers/self";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildContent } from "../content/build";
 import { AppDatabase } from "../src/storage/db";
 import { lessonDays } from "../src/storage/course";
@@ -121,15 +121,11 @@ describe("тексты для чтения на устройстве", () => {
     const subscription = liveQuery(() => courseReadings(course, db)).subscribe({
       next: ({ open, closed }) => seen.push({ open: open.length, closed }),
     });
-    const settle = () => new Promise((resolve) => setTimeout(resolve, 50));
-    await settle();
-    expect(seen.at(-1)).toEqual({ open: 0, closed: 2 });
+    await vi.waitFor(() => expect(seen.at(-1)).toEqual({ open: 0, closed: 2 }));
     await db.catalog.update("m01-test", { readings: 3 });
-    await settle();
-    expect(seen.at(-1)).toEqual({ open: 0, closed: 4 });
+    await vi.waitFor(() => expect(seen.at(-1)).toEqual({ open: 0, closed: 4 }));
     await db.lessons.update("m01-1", { completed: true });
-    await settle();
-    expect(seen.at(-1)).toEqual({ open: 1, closed: 3 });
+    await vi.waitFor(() => expect(seen.at(-1)).toEqual({ open: 1, closed: 3 }));
     subscription.unsubscribe();
   });
 
