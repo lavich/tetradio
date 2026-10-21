@@ -1,0 +1,8 @@
+id: tp177
+text: "Let's meet somewhere busy."
+translation: "Давай встретимся в людном месте."
+note: "первое правило безопасной встречи; busy — многолюдный: a busy café"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

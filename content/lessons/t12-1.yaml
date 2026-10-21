@@ -1,0 +1,351 @@
+title: Анкета и переписка — герундий, инфинитив и вопросы
+kind: lesson
+items:
+  - { kind: word, id: tw166 }
+  - { kind: word, id: tw167 }
+  - { kind: word, id: tw168 }
+  - { kind: word, id: tw169 }
+  - { kind: word, id: tw170 }
+  - { kind: word, id: tw171 }
+  - { kind: word, id: tw172 }
+  - { kind: word, id: tw173 }
+  - { kind: phrase, id: tp166 }
+  - { kind: phrase, id: tp167 }
+  - { kind: phrase, id: tp168 }
+  - { kind: phrase, id: tp169 }
+  - { kind: phrase, id: tp170 }
+  - { kind: phrase, id: tp171 }
+  - { kind: phrase, id: tp172 }
+  - { kind: phrase, id: tp173 }
+blocks:
+  - type: explanation
+    id: gerund-infinitive
+    title: Герундий и инфинитив в анкете
+    body: |-
+      В анкете и в переписке человек говорит о том, что ему нравится и чего он хочет. После глагола идёт либо форма на **-ing**, либо **to** и инфинитив, и выбор зависит от глагола.
+
+      О том, что нравится вообще, говорят с формой на -ing: **I love hiking.** **I'm into cooking.** **I enjoy trying new food.** После enjoy, be into и don't mind инфинитив с to не ставится. Love и like допускают обе формы, в анкете чаще пишут -ing.
+
+      О желании и планах говорят с to: **I want to travel more.** **I hope to visit Lisbon.** Вежливое предложение или готовность построены на would: **I'd love to hear about it.** **I'd like to try that place.** После would love и would like идёт to и инфинитив, в этом значении обычно ставят to и инфинитив.
+
+      Две частые ошибки. Первая — инфинитив после enjoy: I enjoy to cook. Нужно **I enjoy cooking.** Вторая — форма на -ing после would love: I'd love going to a concert. Нужно **I'd love to go to a concert.**
+    table:
+      columns:
+        - что сказать
+        - форма
+        - пример
+      rows:
+        - - что нравится вообще
+          - love, like, enjoy, be into + -ing
+          - I love hiking.
+        - - что терпимо или не нравится
+          - don't mind, enjoy + -ing
+          - I don't mind waiting.
+        - - желание и план
+          - want, hope, plan + to
+          - I hope to visit Lisbon.
+        - - вежливое предложение
+          - would love, would like + to
+          - I'd love to hear about it.
+  - type: explanation
+    id: follow-up
+    title: Вопросы, которые продолжают переписку
+    body: |-
+      Ответ «yes» или «cool» разговор не продолжает: собеседнику нечего ответить. Поэтому после своего ответа задают открытый вопрос с **what, where, how, which** на тему, которую собеседник уже назвал.
+
+      Он пишет: *I love hiking.* Вы отвечаете одной фразой о себе и задаёте вопрос по теме: **Me too. What's the best trail you've done?** Вопрос про общее, из анкеты, тоже подходит: **What do you do for fun?** Шутливый вопрос тоже годится как начало: **What's your go-to karaoke song?** Такие вопросы называют **conversation starters**.
+
+      Встречный вопрос из трёх букв — **hbu?** (how about you?). Он ставится после своего ответа: **I love hiking and trying new food. hbu?**
+
+      Один вопрос в сообщении оставляет собеседнику время ответить. Два-три вопроса подряд похожи на анкету для опроса.
+    table:
+      columns:
+        - собеседник пишет
+        - как продолжить
+      rows:
+        - - I love hiking.
+          - Me too. What's the best trail you've done?
+        - - I just got back from Portugal.
+          - I'd love to hear about it. Where did you go?
+        - - I'm a teacher.
+          - Which age group do you teach?
+        - - I'm bad at karaoke.
+          - What's your go-to song, then?
+  - type: explanation
+    id: chat-abbreviations
+    title: Сокращения переписки
+    body: |-
+      В переписке в приложениях пишут короткими словами. **tbh** — to be honest, «если честно». **ngl** — not gonna lie, «не буду врать», перед откровенным замечанием. **hbu** — how about you, «а ты?». **wyd** — what are you doing, «что делаешь?». **lol** — laughing out loud; обычно смягчает тон сообщения: *I'm terrible at karaoke, lol.*
+
+      Сокращения пишут строчными буквами и без точки. В первом сообщении незнакомому человеку лучше писать слова целиком, а сокращения оставить для середины переписки. В официальных письмах их нет совсем.
+
+      Фразу **wyd tonight?** друг понимает как вопрос о планах на вечер. Приглашением она становится только вместе с предложением: *wyd tonight? Fancy a coffee?*
+    table:
+      columns:
+        - сокращение
+        - как читается
+        - значение
+      rows:
+        - - tbh
+          - to be honest
+          - если честно
+        - - ngl
+          - not gonna lie
+          - не буду врать
+        - - hbu
+          - how about you
+          - а ты?
+        - - wyd
+          - what are you doing
+          - что делаешь?
+        - - lol
+          - laughing out loud
+          - смех или смягчение тона
+  - type: explanation
+    id: app-words
+    title: Слова приложений знакомств
+    body: |-
+      **A match** — пара в приложении: оба пользователя выбрали друг друга. Анкеты листают движением пальца: **swipe right** — выбрать, **swipe left** — пропустить. В **a bio** — коротком тексте о себе — пишут работу, увлечения и то, что человек ищет. **A conversation starter** — вопрос в анкете или в первом сообщении, с которого начинается разговор.
+
+      **Ghost** — перестать отвечать без объяснений: *He ghosted me after two messages.* Если не хотите продолжать общение, достаточно короткой вежливой фразы, о ней речь в следующем уроке.
+
+      **A red flag** — признак, который заставляет насторожиться: человек сразу просит деньги или торопит встречу. **A dealbreaker** — условие, после которого вы заканчиваете знакомство: *Rudeness is a dealbreaker for me.* **A catfish** — человек, который использует чужие фотографии и выдуманный профиль.
+
+      Фразы урока. **Fancy a drink sometime?** — британское приглашение, drink может быть кофе, чаем или лимонадом. **tbh I'm not sure what I'm looking for** — ответ о своих ожиданиях. **I'd love to hear about it** — вежливый интерес к рассказу.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: gerund-choice
+    title: Герундий и инфинитив
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I enjoy ___ new food on holiday."
+        options: [trying, to try, try]
+        answer: trying
+        explanation: После enjoy идёт форма на -ing.
+      - id: q2
+        prompt: "I'd love ___ more about your trip."
+        options: [to hear, hearing, hear]
+        answer: to hear
+        explanation: После would love идёт to и инфинитив.
+      - id: q3
+        prompt: "I'm really into ___ at weekends."
+        options: [cooking, to cook, cook]
+        answer: cooking
+        explanation: После be into идёт форма на -ing.
+      - id: q4
+        prompt: "I hope ___ Lisbon next year."
+        options: [to visit, visiting, visit]
+        answer: to visit
+        explanation: После hope идёт to и инфинитив.
+      - id: q5
+        prompt: "I don't mind ___ for a reply."
+        options: [waiting, to wait, wait]
+        answer: waiting
+        explanation: После don't mind идёт форма на -ing.
+      - id: q6
+        prompt: "I'd like ___ a coffee with you on Saturday."
+        options: [to have, having, have]
+        answer: to have
+        explanation: После would like идёт to и инфинитив.
+  - type: exercise
+    id: follow-choice
+    title: Как продолжить переписку
+    instruction: Выберите сообщение, которое продолжает разговор по теме.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Maya writes: I love hiking, and I just did a trail in Wales."
+        options:
+          - Which trail did you do in Wales?
+          - Cool.
+          - Do you have a car?
+        answer: Which trail did you do in Wales?
+        explanation: Открытый вопрос по теме, которую назвала Майя.
+      - id: q2
+        prompt: "Alex writes: I'm a primary school teacher."
+        options:
+          - Which age group do you teach?
+          - OK.
+          - Is it Monday today?
+        answer: Which age group do you teach?
+        explanation: Вопрос продолжает тему работы.
+      - id: q3
+        prompt: "Will writes: I'm not great at karaoke, lol."
+        options:
+          - What's your go-to song, then?
+          - Yes.
+          - I have a brother.
+        answer: What's your go-to song, then?
+        explanation: Шутливый вопрос по теме karaoke.
+      - id: q4
+        prompt: "You answered a question about your weekend and want to hand the conversation back."
+        options:
+          - hbu?
+          - lol
+          - Bye.
+        answer: hbu?
+        explanation: Hbu? — встречный вопрос после своего ответа.
+  - type: exercise
+    id: abbreviations-match
+    title: Сокращения
+    instruction: Соедините значение с сокращением. Два сокращения лишние.
+    format: match
+    bank:
+      - tbh
+      - ngl
+      - hbu
+      - wyd
+      - lol
+      - idk
+      - brb
+    items:
+      - { id: m1, prompt: "«если честно» — to be honest", answer: tbh }
+      - { id: m2, prompt: "«не буду врать» — not gonna lie", answer: ngl }
+      - { id: m3, prompt: "встречный вопрос «а ты?» — how about you", answer: hbu }
+      - { id: m4, prompt: "вопрос «что делаешь?» — what are you doing", answer: wyd }
+      - { id: m5, prompt: "смех или смягчение тона — laughing out loud", answer: lol }
+  - type: exercise
+    id: words-match
+    title: Слова приложения
+    instruction: Соедините русское описание с английским словом. Два английских варианта лишние.
+    format: match
+    bank:
+      - a match
+      - swipe
+      - a bio
+      - ghost
+      - a red flag
+      - a catfish
+      - a dealbreaker
+      - a conversation starter
+      - a round
+      - a heads-up
+    items:
+      - { id: m1, prompt: "пара в приложении: оба пользователя выбрали друг друга", answer: a match }
+      - { id: m2, prompt: "листать анкеты движением пальца по экрану", answer: swipe }
+      - { id: m3, prompt: "короткий текст о себе в профиле", answer: a bio }
+      - { id: m4, prompt: "перестать отвечать без объяснений", answer: ghost }
+      - { id: m5, prompt: "признак, который заставляет насторожиться", answer: a red flag }
+      - { id: m6, prompt: "человек с чужими фотографиями и выдуманным профилем", answer: a catfish }
+      - { id: m7, prompt: "условие, при котором вы сразу заканчиваете знакомство", answer: a dealbreaker }
+      - { id: m8, prompt: "вопрос, с которого начинают разговор", answer: a conversation starter }
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - I love hiking and trying new food. hbu?
+      - Anything by Abba, even if I can't sing it.
+      - Sounds good. Is Saturday afternoon OK?
+      - Fair enough. I'm taking it slowly too.
+      - The next train leaves at ten.
+      - Two pints of lager, please.
+    items:
+      - { id: m1, prompt: "What do you do for fun?", answer: "I love hiking and trying new food. hbu?" }
+      - { id: m2, prompt: "What's your go-to karaoke song?", answer: "Anything by Abba, even if I can't sing it." }
+      - { id: m3, prompt: "Fancy a drink sometime?", answer: "Sounds good. Is Saturday afternoon OK?" }
+      - { id: m4, prompt: "tbh I'm not sure what I'm looking for.", answer: "Fair enough. I'm taking it slowly too." }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'd, what's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Я люблю готовить и ходить в походы. (с love)"
+        answer:
+          - "I really love cooking and hiking."
+          - "I really love cooking and going hiking."
+          - "I really love cooking and going on hikes."
+          - "I really love to cook and hike."
+          - "I really love to cook and to hike."
+          - "I really love to cook and go hiking."
+          - "I really love to cook and go on hikes."
+          - "I really love hiking and cooking."
+          - "I love cooking and hiking."
+          - "I love cooking and going hiking."
+          - "I love cooking and going on hikes."
+          - "I love to cook and hike."
+          - "I love to cook and to hike."
+          - "I love to cook and go hiking."
+          - "I love to cook and go on hikes."
+          - "I love hiking and cooking."
+          - "I really love to hike and cook."
+          - "I really love to hike and to cook."
+          - "I really love cooking and going for hikes."
+          - "I really love to cook and go for hikes."
+          - "I really love hiking and to cook."
+          - "I really love to cook and to go hiking."
+          - "I love to hike and cook."
+          - "I love to hike and to cook."
+          - "I love cooking and going for hikes."
+          - "I love to cook and go for hikes."
+          - "I love hiking and to cook."
+          - "I love to cook and to go hiking."
+        explanation: После love — форма на -ing или to и инфинитив; в анкете чаще -ing.
+      - id: q2
+        prompt: "Мне было бы интересно об этом послушать. (с would love)"
+        answer:
+          - "I'd love to hear about it."
+          - "I'd love to hear more about it."
+          - "I'd love to hear about that."
+          - "I'd love to hear more about that."
+          - "I would love to hear about it."
+          - "I would love to hear more about it."
+          - "I would love to hear about that."
+          - "I would love to hear more about that."
+          - "I'd love to hear more."
+          - "I'd love to hear all about it."
+          - "I'd love to hear all about that."
+          - "I would love to hear more."
+          - "I would love to hear all about it."
+          - "I would love to hear all about that."
+        explanation: После would love идёт to и инфинитив.
+      - id: q3
+        prompt: "А ты? (встречный вопрос, три буквы или словами)"
+        answer:
+          - "hbu?"
+          - "how about you?"
+          - "what about you?"
+          - "and you?"
+        explanation: Hbu — сокращение от how about you.
+      - id: q4
+        prompt: "Чем ты занимаешься для удовольствия? (вопрос из анкеты)"
+        answer:
+          - "What do you do for fun?"
+          - "What do you like doing for fun?"
+          - "What do you like to do for fun?"
+          - "What do you enjoy doing for fun?"
+          - "What do you do for fun in your free time?"
+        explanation: What do you do for fun? — вопрос, который продолжает переписку.
+      - id: q5
+        prompt: "Какие у тебя планы на вечер? (словами, не сокращением)"
+        answer:
+          - "What are you doing tonight?"
+          - "What are you doing this evening?"
+          - "What are you up to tonight?"
+          - "What are you up to this evening?"
+          - "What are your plans for tonight?"
+          - "What are your plans for this evening?"
+          - "What are your plans tonight?"
+          - "What are your plans this evening?"
+          - "Do you have any plans for tonight?"
+          - "Do you have any plans for this evening?"
+          - "Do you have any plans tonight?"
+          - "Do you have any plans this evening?"
+          - "Have you got any plans for tonight?"
+          - "Have you got any plans for this evening?"
+          - "Have you got any plans tonight?"
+          - "Have you got any plans this evening?"
+          - "Any plans for tonight?"
+          - "Any plans for this evening?"
+          - "Any plans tonight?"
+          - "Any plans this evening?"
+          - "What are your plans for the evening?"
+          - "What are you doing in the evening?"
+        explanation: Wyd tonight? читается как What are you doing tonight?

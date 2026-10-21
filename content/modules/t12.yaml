@@ -1,8 +1,25 @@
 number: 12
 title: Dating apps
 subtitle: Приложения знакомств
-status: draft
+status: published
 goal: написать анкету, начать и поддерживать переписку, позвать на свидание и вежливо отказать
 grammar:
   - герундий и инфинитив, вопросы, которые продолжают переписку
 sessions: 3
+lessons:
+  - t12-1
+  - t12-2
+  - t12-3
+  - t12-test
+crib:
+  title: переписка
+  rows:
+    - ["о том, что нравится", I love hiking.]
+    - [вежливое желание, "I'd love to hear about it."]
+    - [продолжить разговор, What do you do for fun?]
+    - [встречный вопрос, hbu?]
+    - [честно, tbh / ngl]
+    - [пригласить, Fancy a coffee sometime?]
+    - [отказать вежливо, "Thanks, but I'm not ready to meet yet."]
+    - [безопасность, Let's meet somewhere busy.]
+  note: "После love, enjoy, be into — форма на -ing, после would love и hope — to и инфинитив. Первая встреча: людное место, дорога домой своя, друг знает, где вы"

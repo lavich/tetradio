@@ -1,0 +1,8 @@
+id: tp178
+text: "I'll text a friend where I am."
+translation: "Я напишу другу, где нахожусь."
+note: "второе правило: кто-то из друзей знает место и время встречи"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

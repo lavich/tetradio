@@ -1,0 +1,8 @@
+id: tp166
+text: "I love hiking and trying new food."
+translation: "Я люблю ходить в походы и пробовать новую еду."
+note: "love + форма на -ing: о том, что нравится вообще"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

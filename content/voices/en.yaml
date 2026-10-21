@@ -81,3 +81,7 @@ characters:
   Sam: { gender: male, voice: Achird }
   Leo: { gender: male, voice: Iapetus }
   Tess: { gender: female, voice: Callirrhoe }
+  Maya: { gender: female, voice: Achernar }
+  Alex: { gender: male, voice: Algenib }
+  Will: { gender: male, voice: Achird }
+  Theo: { gender: male, voice: Sadaltager }

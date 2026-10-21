@@ -1,0 +1,312 @@
+title: Контрольная модуля t12
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: анкета и переписка с новым знакомым, голосовые сообщения, герундий и инфинитив, вопросы, продолжающие переписку, слова и фразы модуля, правила безопасной первой встречи. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: match-chat
+    title: Maya's profile and a chat with Ollie
+    text: |-
+      MAYA, 29 — Bristol
+      Bio: Nurse. I love baking and hiking. I'm looking for someone kind who is upfront about what he wants. Dealbreaker: rudeness.
+
+      CHAT WITH OLLIE — NEW MATCH
+
+      Ollie: Hey Maya, I loved your bio. What's your best bake?
+      Maya: Thanks! ngl, it's lemon cake. It's the only one that never goes wrong. hbu?
+      Ollie: I'm into running and quiz nights, lol
+      Maya: Ha. What's the worst quiz question you've had?
+      Ollie: One about cheese. I knew nothing. Fancy a drink sometime? My flat is near the station, and it's quieter there
+      Maya: Thanks, but I'd rather meet somewhere busy the first time. How about the café by the river on Sunday at two?
+      Ollie: Sure, Sunday at two works. Shall I walk you home after?
+      Maya: Thanks, I'll make my own way home. I'll text a friend where I am, too
+      Ollie: Fair enough. See you at two
+    glosses:
+      - { text: best bake, russian: "лучшая выпечка" }
+      - { text: never goes wrong, russian: "никогда не подводит" }
+      - { text: quiz nights, russian: "вечера викторин (в пабе)" }
+  - type: exercise
+    id: match-chat-q
+    about: match-chat
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is Maya's job?
+        options:
+          - a nurse
+          - a baker
+          - a teacher
+        answer: a nurse
+        explanation: Bio — Nurse.
+      - id: q2
+        prompt: What is Maya's best bake?
+        options:
+          - lemon cake
+          - apple pie
+          - chocolate cake
+        answer: lemon cake
+        explanation: ngl, it's lemon cake.
+      - id: q3
+        prompt: What is Ollie into?
+        options:
+          - running and quiz nights
+          - baking and hiking
+          - cheese and cooking
+        answer: running and quiz nights
+        explanation: I'm into running and quiz nights.
+      - id: q4
+        prompt: What does Maya say when Ollie mentions his flat?
+        options:
+          - She suggests a busy café.
+          - She agrees to come.
+          - She stops the chat.
+        answer: She suggests a busy café.
+        explanation: I'd rather meet somewhere busy the first time. How about the café by the river?
+      - id: q5
+        prompt: Where and when do they agree to meet?
+        options:
+          - at the café by the river on Sunday
+          - at Ollie's flat on Sunday
+          - at the station on Saturday
+        answer: at the café by the river on Sunday
+        explanation: How about the café by the river on Sunday at two? — Sunday at two works.
+      - id: q6
+        prompt: What time will they meet?
+        options:
+          - at two
+          - at three
+          - at noon
+        answer: at two
+        explanation: Sunday at two works. See you at two.
+      - id: q7
+        prompt: How does Ollie answer when Maya refuses the walk home?
+        options:
+          - He accepts it.
+          - He asks again.
+          - He cancels the meeting.
+        answer: He accepts it.
+        explanation: Fair enough — отказ принят без повторной просьбы.
+      - id: q8
+        prompt: What does Maya do for her safety?
+        options:
+          - She texts a friend where she is.
+          - She brings a friend along.
+          - She asks Ollie for his address.
+        answer: She texts a friend where she is.
+        explanation: I'll text a friend where I am.
+  - type: listening
+    id: climbing-voice
+    title: Voice messages — Will and Alex
+    plays: 2
+    transcript:
+      - { speaker: Will, text: "Hi Alex, it's Will. I had a really nice time on Saturday, and the coffee was better than my pasta. Fancy a second round? There's a climbing wall near my work, and I'd love to try it, but I'm a complete beginner. Are you up for that on Thursday?" }
+      - { speaker: Alex, text: "Hi Will, it's Alex. I had a nice time too. Thursday is good, I finish at half past four. I'd rather start with the beginners' session at six. Is that okay?" }
+      - { speaker: Will, text: "Six works for me. Do I need to bring anything?" }
+      - { speaker: Alex, text: "Just trainers and a water bottle. You can borrow climbing shoes there. I'll meet you at the front desk. It's always busy on Thursdays." }
+      - { speaker: Will, text: "Perfect. I'll text my sister where I'll be, because she worries. Is that okay?" }
+      - { speaker: Alex, text: "Of course. I'll make my own way there from school, and you can come from work. See you on Thursday." }
+  - type: exercise
+    id: climbing-voice-q
+    about: climbing-voice
+    graded: true
+    title: Аудирование — голосовые Уилла и Алекса
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Will invite Alex to do?
+        options:
+          - go climbing
+          - have dinner
+          - see a film
+        answer: go climbing
+        explanation: There's a climbing wall near my work.
+      - id: q2
+        prompt: What does Will say about his climbing?
+        options:
+          - He is a complete beginner.
+          - He climbs every week.
+          - He teaches climbing.
+        answer: He is a complete beginner.
+        explanation: I'm a complete beginner.
+      - id: q3
+        prompt: Which day do they plan to go?
+        options:
+          - Thursday
+          - Saturday
+          - Sunday
+        answer: Thursday
+        explanation: Thursday is good.
+      - id: q4
+        prompt: What time does Alex suggest?
+        options:
+          - six
+          - half past four
+          - seven
+        answer: six
+        explanation: The beginners' session at six.
+      - id: q5
+        prompt: What should Will bring?
+        options:
+          - trainers and a water bottle
+          - climbing shoes and a rope
+          - nothing at all
+        answer: trainers and a water bottle
+        explanation: Just trainers and a water bottle.
+      - id: q6
+        prompt: Where will they meet?
+        options:
+          - at the front desk
+          - outside the station
+          - at Will's work
+        answer: at the front desk
+        explanation: I'll meet you at the front desk.
+      - id: q7
+        prompt: Why will Will text his sister?
+        options:
+          - She worries.
+          - She wants to come.
+          - She works there.
+        answer: She worries.
+        explanation: I'll text my sister where I'll be, because she worries.
+      - id: q8
+        prompt: How will Alex get to the climbing wall?
+        options:
+          - He will make his own way there from school.
+          - Will will pick him up.
+          - They will go together by bus.
+        answer: He will make his own way there from school.
+        explanation: I'll make my own way there from school.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Герундий, инфинитив, вопросы и сокращения
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "She's really into ___ photos of old buildings."
+        options: [taking, to take, take]
+        answer: taking
+        explanation: После be into идёт форма на -ing.
+      - id: q2
+        prompt: "I'd like ___ you at the café on Sunday."
+        options: [to see, seeing, see]
+        answer: to see
+        explanation: После would like идёт to и инфинитив.
+      - id: q3
+        prompt: "I hope ___ my brother in Spain this summer."
+        options: [to visit, visiting, visit]
+        answer: to visit
+        explanation: После hope идёт to и инфинитив.
+      - id: q4
+        prompt: "Will writes: I just got back from Peru. Which reply continues the chat?"
+        options:
+          - I'd love to hear about it. Where did you go?
+          - OK.
+          - Bye.
+        answer: I'd love to hear about it. Where did you go?
+        explanation: Вежливый интерес и открытый вопрос продолжают разговор.
+      - id: q5
+        prompt: "What does ngl mean in a message?"
+        options:
+          - not gonna lie
+          - no good luck
+          - next game later
+        answer: not gonna lie
+        explanation: Ngl — not gonna lie, «не буду врать».
+      - id: q6
+        prompt: "You are not ready to meet yet. Which reply is polite?"
+        options:
+          - Thanks, but I'm not ready to meet yet.
+          - Fancy a coffee sometime?
+          - I'm up for coffee.
+        answer: Thanks, but I'm not ready to meet yet.
+        explanation: Благодарность и отказ без объяснений.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово или оборот. Четыре варианта лишние.
+    format: gap
+    bank: [a match, a bio, swipe, ghost, a catfish, a dealbreaker, upfront, verified, a spark, genuine, come across as, a first move]
+    items:
+      - { id: g1, prompt: "If you both swipe right, the app shows ___ and you can start a chat.", answer: a match }
+      - { id: g2, prompt: "He wrote three words about himself, so there was nothing in his ___ to ask about.", answer: a bio }
+      - { id: g3, prompt: "You can ___ left on any profile you are not interested in.", answer: swipe }
+      - { id: g4, prompt: "He never explained why he stopped writing. Some people decide to ___ and say nothing at all.", answer: ghost }
+      - { id: g5, prompt: "Her photos came from a model's page, so she was ___, not the person she claimed to be.", answer: a catfish }
+      - { id: g6, prompt: "Smoking is ___ for me: I end the chat if someone says they smoke.", answer: a dealbreaker }
+      - { id: g7, prompt: "Tell him ___ that you only meet in busy places.", answer: upfront }
+      - { id: g8, prompt: "The blue tick means the profile has been ___ by the app.", answer: verified }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'd, what's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Я люблю читать и путешествовать. (с love)"
+        answer:
+          - "I really love reading and travelling."
+          - "I really love reading and traveling."
+          - "I really love reading and to travel."
+          - "I really love to read and travel."
+          - "I really love to read and to travel."
+          - "I love reading and travelling."
+          - "I love reading and traveling."
+          - "I love reading and to travel."
+          - "I love to read and travel."
+          - "I love to read and to travel."
+        explanation: После love — форма на -ing или to и инфинитив.
+      - id: q2
+        prompt: "Мне бы хотелось услышать о твоей поездке. (с would love)"
+        answer:
+          - "I'd love to hear about your trip."
+          - "I'd love to hear about your journey."
+          - "I'd love to hear about your holiday."
+          - "I'd love to hear about your travels."
+          - "I'd love to hear more about your trip."
+          - "I'd love to hear more about your journey."
+          - "I'd love to hear more about your holiday."
+          - "I'd love to hear more about your travels."
+          - "I would love to hear about your trip."
+          - "I would love to hear about your journey."
+          - "I would love to hear about your holiday."
+          - "I would love to hear about your travels."
+          - "I would love to hear more about your trip."
+          - "I would love to hear more about your journey."
+          - "I would love to hear more about your holiday."
+          - "I would love to hear more about your travels."
+        explanation: После would love идёт to и инфинитив.
+      - id: q3
+        prompt: "Я не против встретиться в субботу. (с up for)"
+        answer:
+          - "I'm up for meeting on Saturday."
+          - "I'm up for meeting up on Saturday."
+          - "I'm up for seeing you on Saturday."
+          - "I'm up for a meet-up on Saturday."
+          - "I am up for meeting on Saturday."
+          - "I am up for meeting up on Saturday."
+          - "I am up for seeing you on Saturday."
+          - "I am up for a meet-up on Saturday."
+        explanation: I'm up for + форма на -ing или существительное — согласие.
+      - id: q4
+        prompt: "Что ты любишь делать после работы? (вопрос, который продолжает переписку)"
+        answer:
+          - "What do you like doing after work?"
+          - "What do you like to do after work?"
+          - "What do you love doing after work?"
+          - "What do you love to do after work?"
+          - "What do you do after work?"
+        explanation: Открытый вопрос с what продолжает переписку.

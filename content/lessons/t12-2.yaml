@@ -1,0 +1,460 @@
+title: Анкеты, переписка, безопасность первой встречи и голосовое сообщение
+kind: lesson
+items:
+  - { kind: word, id: tw174 }
+  - { kind: word, id: tw175 }
+  - { kind: word, id: tw176 }
+  - { kind: word, id: tw177 }
+  - { kind: word, id: tw178 }
+  - { kind: word, id: tw179 }
+  - { kind: word, id: tw180 }
+  - { kind: phrase, id: tp174 }
+  - { kind: phrase, id: tp175 }
+  - { kind: phrase, id: tp176 }
+  - { kind: phrase, id: tp177 }
+  - { kind: phrase, id: tp178 }
+  - { kind: phrase, id: tp179 }
+  - { kind: phrase, id: tp180 }
+blocks:
+  - type: explanation
+    id: words-more
+    title: Ещё слова и фразы для знакомств
+    body: |-
+      **A spark** — ощущение взаимного интереса: *I didn't feel a spark.* **Unmatch** — удалить пару в приложении и закончить общение. **A first move** — первый шаг; **make the first move** значит написать первым или предложить встречу.
+
+      Четыре слова описывают впечатление и прямоту. **Genuine** — искренний, настоящий: *She showed genuine interest.* **Come across as** — производить впечатление: *You come across as friendly.* **Upfront** — прямо и заранее: *Say it upfront, before you meet.* **Verified** — подтверждённый: у профиля с отметкой *verified* приложение проверило личность.
+
+      Фразы. **Let's see how it goes.** — не торопить события и не обещать лишнего. **Thanks, but I'm not ready to meet yet.** — вежливый отказ от приглашения, причину называть не нужно. **I don't think we're a match, but good luck.** — спокойное окончание переписки. Собеседник отвечает коротко: *Fair enough. Good luck to you too.* Повторять просьбу после отказа не принято.
+
+      Фразы о безопасности и голосовом сообщении разобраны ниже: **Let's meet somewhere busy.** **I'll text a friend where I am.** **I'll make my own way home, thanks.** **Could you send me a voice message?**
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: profiles-how
+    title: Как читать анкеты и переписки
+    body: |-
+      В анкете ищите четыре вещи: чем человек занимается, что любит (после love, enjoy, be into идёт форма на -ing), что ищет и что для него dealbreaker. В переписке читайте сообщения подряд: вопрос, ответ, встречный вопрос.
+
+      Затем отвечайте на вопросы. Внимание на время и день встречи, на место и на то, что каждый из собеседников делает для безопасности.
+  - type: reading
+    id: profiles
+    title: Alex's profile and a chat with Will
+    text: |-
+      ALEX, 31 — Leeds
+      Bio: Primary school teacher. I'm into climbing, cooking and quiz nights. I'd love to meet someone genuine who laughs easily. I'm upfront about one thing: I take things slowly.
+
+      CHAT WITH WILL — NEW MATCH
+
+      Alex: Hi Will! Your bio says you love cooking for friends. What's your signature dish?
+      Will: lol, ngl, it's just pasta. tbh I'm better at eating than cooking. hbu?
+      Alex: I'm into climbing and trying new food
+      Will: Sounds fun. Fancy a coffee sometime? There's a café by the river
+      Alex: I'm up for coffee. Saturday afternoon?
+      Will: Sounds good. Shall we say three?
+      Alex: Three is fine. The café is always busy, and I like meeting somewhere busy the first time. I'll text a friend where I am, as I always do
+      Will: Good idea, I do the same. See you on Saturday
+    glosses:
+      - { text: quiz nights, russian: "вечера викторин (в пабе)" }
+      - { text: take things slowly, russian: "не торопить события" }
+      - { text: signature dish, russian: "фирменное блюдо" }
+  - type: exercise
+    id: profiles-q
+    about: profiles
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is Alex's job?
+        options:
+          - a teacher
+          - a nurse
+          - a climbing instructor
+        answer: a teacher
+        explanation: Primary school teacher.
+      - id: q2
+        prompt: What does Will say about his cooking?
+        options:
+          - He is better at eating than cooking.
+          - He is a professional cook.
+          - He never cooks.
+        answer: He is better at eating than cooking.
+        explanation: I'm better at eating than cooking.
+      - id: q3
+        prompt: What does "hbu?" mean in Will's message?
+        options:
+          - how about you?
+          - how are you?
+          - how big is it?
+        answer: how about you?
+        explanation: Hbu — how about you, встречный вопрос.
+      - id: q4
+        prompt: What does Will suggest?
+        options:
+          - a coffee sometime
+          - dinner on Friday
+          - a walk in the park
+        answer: a coffee sometime
+        explanation: Fancy a coffee sometime?
+      - id: q5
+        prompt: When do they agree to meet?
+        options:
+          - on Saturday at three
+          - on Sunday at three
+          - on Saturday at five
+        answer: on Saturday at three
+        explanation: Saturday afternoon — Shall we say three?
+      - id: q6
+        prompt: What does Alex like about the café?
+        options:
+          - It is always busy.
+          - It is cheap.
+          - It is near his flat.
+        answer: It is always busy.
+        explanation: The café is always busy, and I like meeting somewhere busy the first time.
+      - id: q7
+        prompt: What does Alex do to feel safe?
+        options:
+          - He texts a friend where he is.
+          - He brings a friend with him.
+          - He takes a taxi home.
+        answer: He texts a friend where he is.
+        explanation: I'll text a friend where I am.
+  - type: explanation
+    id: safe-meeting
+    title: Первая встреча — три правила безопасности
+    body: |-
+      Многие знакомства начинаются в приложении, и первую встречу с человеком, которого вы знаете только по переписке, строят по трём правилам.
+
+      **Первое — людное место.** Выберите кафе, рынок или площадь, где вокруг много людей: **Let's meet somewhere busy.** Квартира и безлюдный парк для первой встречи не подходят.
+
+      **Второе — дорога домой своя.** Приезжайте и уезжайте самостоятельно. Если собеседник предлагает подвезти или проводить, можно вежливо отказаться: **I'll make my own way home, thanks.** Причину называть не нужно, отказ принимается как есть.
+
+      **Третье — кто-то из друзей знает, где вы.** Напишите другу, где вы будете, с кем и во сколько, и договоритесь, когда сообщите, что всё в порядке: **I'll text a friend where I am.**
+
+      Обычно собеседник соглашается с этими правилами без споров: *Good idea, I do the same.* Если он возражает, торопит или настаивает, это red flag. Отказаться от встречи или закончить переписку можно в любой момент, причину называть необязательно.
+    table:
+      columns:
+        - правило
+        - что сказать
+      rows:
+        - - людное место
+          - Let's meet somewhere busy.
+        - - дорога домой своя
+          - I'll make my own way home, thanks.
+        - - друг знает, где вы
+          - I'll text a friend where I am.
+  - type: exercise
+    id: safe-q
+    title: Безопасная первая встреча
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Maya and a new match agree to meet for the first time. Which place follows the first rule?"
+        options:
+          - a busy café in the town centre
+          - his flat
+          - a quiet park after dark
+        answer: a busy café in the town centre
+        explanation: Первое правило — людное место.
+      - id: q2
+        prompt: "After the coffee your match says: Let me drive you home. You want to get home on your own. What do you say?"
+        options:
+          - I'll make my own way home, thanks.
+          - Count me in.
+          - Let's meet somewhere busy.
+        answer: I'll make my own way home, thanks.
+        explanation: Второе правило — дорога домой своя; вежливый отказ без объяснений.
+      - id: q3
+        prompt: "Which message to a friend follows the third rule?"
+        options:
+          - I'm meeting a new match at the café by the river at three. I'll text you at five.
+          - I'm running a bit late.
+          - Count me in for Saturday.
+        answer: I'm meeting a new match at the café by the river at three. I'll text you at five.
+        explanation: Третье правило — друг знает, где вы, с кем и во сколько, и когда придёт сообщение.
+      - id: q4
+        prompt: "A match refuses to meet in a public place and says: Come to my flat, it's quieter. What does it tell you?"
+        options:
+          - It is a red flag. You can suggest another place or stop the chat.
+          - It is a normal plan for a first meeting.
+          - You should accept to be polite.
+        answer: It is a red flag. You can suggest another place or stop the chat.
+        explanation: Отказ от людного места — тревожный признак; предложить другое место или закончить переписку можно без объяснений.
+  - type: explanation
+    id: voice-how
+    title: Голосовое сообщение в приложении
+    body: |-
+      Теперь голосовые сообщения Майи и Тео. Слушайте, кем работает Майя, в какой день она свободна, где и во сколько они договариваются встретиться и что она делает для безопасности. Звучит два раза, транскрипт откроется после ответа.
+
+      В записи **on nights** — работать в ночную смену, **tricky** — неудобный, **a market** — рынок. **Wonderwall** — название песни.
+  - type: listening
+    id: voice
+    title: Voice messages — Maya and Theo
+    plays: 2
+    transcript:
+      - { speaker: Maya, text: "Hi Theo, it's Maya. Thanks for your voice message, it was nice to hear a real voice. Your bio made me laugh, by the way. I'm a nurse, and I'm on nights this week, so evenings are tricky for me. I'm free on Saturday, though." }
+      - { speaker: Maya, text: "I'd love to hear more about your trip to Peru. And what's your go-to karaoke song? Mine is terrible, so no pressure. Fancy a coffee on Saturday morning? I know a café in the market. It's always busy, and I like that for a first meeting." }
+      - { speaker: Theo, text: "Hi Maya, thanks for the message. Not gonna lie, my karaoke song is Wonderwall, and I'm sorry about that. Peru was amazing, I'll tell you more over coffee. Saturday morning works for me." }
+      - { speaker: Theo, text: "Shall we say half past eleven, at the café in the market?" }
+      - { speaker: Maya, text: "Half past eleven is fine. I'll text a friend where I am, as I always do for a first meeting." }
+      - { speaker: Theo, text: "Of course, that makes sense. I'll do the same. See you on Saturday." }
+  - type: exercise
+    id: voice-q
+    about: voice
+    title: Аудирование — голосовые Майи и Тео
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why does Maya mention Theo's bio?
+        options:
+          - It made her laugh.
+          - It was too long.
+          - It had no photos.
+        answer: It made her laugh.
+        explanation: Your bio made me laugh.
+      - id: q2
+        prompt: What is Maya's job?
+        options:
+          - a nurse
+          - a teacher
+          - a chef
+        answer: a nurse
+        explanation: I'm a nurse.
+      - id: q3
+        prompt: Why are evenings tricky for Maya this week?
+        options:
+          - She works nights.
+          - She has a second job.
+          - She is travelling.
+        answer: She works nights.
+        explanation: I'm on nights this week.
+      - id: q4
+        prompt: Which day is Maya free?
+        options:
+          - Saturday
+          - Friday
+          - Sunday
+        answer: Saturday
+        explanation: I'm free on Saturday.
+      - id: q5
+        prompt: Where does Maya suggest meeting?
+        options:
+          - at a café in the market
+          - at her flat
+          - at the station
+        answer: at a café in the market
+        explanation: I know a café in the market.
+      - id: q6
+        prompt: What is Theo's karaoke song?
+        options:
+          - Wonderwall
+          - Hallelujah
+          - Dancing Queen
+        answer: Wonderwall
+        explanation: My karaoke song is Wonderwall.
+      - id: q7
+        prompt: What time do they agree on?
+        options:
+          - half past eleven
+          - eleven
+          - half past twelve
+        answer: half past eleven
+        explanation: Shall we say half past eleven? — Half past eleven is fine.
+      - id: q8
+        prompt: What does Maya do for a first meeting?
+        options:
+          - She texts a friend where she is.
+          - She brings a friend along.
+          - She asks Theo to pick her up.
+        answer: She texts a friend where she is.
+        explanation: I'll text a friend where I am, as I always do.
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank: [a spark, unmatch, a first move, genuine, come across as, upfront, verified, a catfish, a bio]
+    items:
+      - { id: g1, prompt: "We chatted for two hours, but I didn't feel ___: we are better as friends.", answer: a spark }
+      - { id: g2, prompt: "He sent three rude messages in a row, so I decided to ___ him and stop the chat.", answer: unmatch }
+      - { id: g3, prompt: "Don't wait for the other person to write. It's fine to make ___ and send the first message.", answer: a first move }
+      - { id: g4, prompt: "She showed ___ interest in my job and asked a lot of follow-up questions.", answer: genuine }
+      - { id: g5, prompt: "You smile in all your photos, so you ___ friendly.", answer: come across as }
+      - { id: g6, prompt: "Say it ___, before you meet: I only have an hour on weekdays.", answer: upfront }
+      - { id: g7, prompt: "The badge on his profile says '___', which means the app has checked his ID.", answer: verified }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'll, let's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Давай встретимся в людном месте. (первое правило безопасности)"
+        answer:
+          - "Let's meet somewhere busy."
+          - "Let's meet somewhere crowded."
+          - "Let's meet somewhere public."
+          - "Let's meet in a public place."
+          - "Let's meet at a public place."
+          - "Let's meet in a busy place."
+          - "Let's meet in a busy café."
+          - "Let's meet in a busy spot."
+          - "Let's meet in a busy area."
+          - "Let's meet at a busy place."
+          - "Let's meet at a busy café."
+          - "Let's meet at a busy spot."
+          - "Let's meet in a crowded place."
+          - "Let's meet in a crowded café."
+          - "Let's meet in a crowded spot."
+          - "Let's meet up somewhere busy."
+          - "Let us meet somewhere busy."
+          - "Let us meet in a busy place."
+          - "Let us meet in a public place."
+          - "Let's meet up in a public place."
+          - "Let's meet up somewhere public."
+          - "Let's meet up in a busy cafe."
+          - "Let's meet up in a busy place."
+          - "Let's meet in a busy cafe."
+          - "Let's meet in a crowded cafe."
+          - "Let's meet in a public cafe."
+          - "Let's meet at a busy cafe."
+          - "Let's meet at a crowded cafe."
+          - "Let's meet at a public cafe."
+        explanation: Let's meet somewhere busy — первое правило безопасной встречи.
+      - id: q2
+        prompt: "Я напишу подруге, где я. (с text)"
+        answer:
+          - "I'll text a friend where I am."
+          - "I'll text a friend to say where I am."
+          - "I'll text a friend to tell her where I am."
+          - "I'll text a friend to let her know where I am."
+          - "I'll text a friend and tell her where I am."
+          - "I'll text a friend and say where I am."
+          - "I'll text a friend and let her know where I am."
+          - "I'll text my friend where I am."
+          - "I'll text my friend to say where I am."
+          - "I'll text my friend to tell her where I am."
+          - "I'll text my friend to let her know where I am."
+          - "I'll text my friend and tell her where I am."
+          - "I'll text my friend and say where I am."
+          - "I'll text my friend and let her know where I am."
+          - "I will text a friend where I am."
+          - "I will text a friend to say where I am."
+          - "I will text a friend to tell her where I am."
+          - "I will text a friend to let her know where I am."
+          - "I will text a friend and tell her where I am."
+          - "I will text a friend and say where I am."
+          - "I will text a friend and let her know where I am."
+          - "I will text my friend where I am."
+          - "I will text my friend to say where I am."
+          - "I will text my friend to tell her where I am."
+          - "I will text my friend to let her know where I am."
+          - "I will text my friend and tell her where I am."
+          - "I will text my friend and say where I am."
+          - "I will text my friend and let her know where I am."
+          - "I'll text a friend to let them know where I am."
+          - "I'll text a friend and tell them where I am."
+          - "I'll text a friend to tell them where I am."
+          - "I'll text a friend and let them know where I am."
+          - "I'll text my friend to let them know where I am."
+          - "I'll text my friend and tell them where I am."
+          - "I'll text my friend to tell them where I am."
+          - "I'll text my friend and let them know where I am."
+          - "I will text a friend to let them know where I am."
+          - "I will text a friend and tell them where I am."
+          - "I will text a friend to tell them where I am."
+          - "I will text a friend and let them know where I am."
+          - "I will text my friend to let them know where I am."
+          - "I will text my friend and tell them where I am."
+          - "I will text my friend to tell them where I am."
+          - "I will text my friend and let them know where I am."
+        explanation: I'll text a friend where I am — третье правило.
+      - id: q3
+        prompt: "Спасибо, домой я доберусь сама. (вежливый отказ)"
+        answer:
+          - "Thanks, I'll make my own way home."
+          - "Thanks, I'll get home on my own."
+          - "Thanks, I'll get myself home."
+          - "Thanks, I'll find my own way home."
+          - "Thanks, I'll make my own way back."
+          - "Thanks, I'll get home by myself."
+          - "Thank you, I'll make my own way home."
+          - "Thank you, I'll get home on my own."
+          - "Thank you, I'll get myself home."
+          - "Thank you, I'll find my own way home."
+          - "Thank you, I'll make my own way back."
+          - "Thank you, I'll get home by myself."
+          - "I'll make my own way home, thanks."
+          - "I'll make my own way home, thank you."
+          - "I'll get home on my own, thanks."
+          - "I'll get home on my own, thank you."
+          - "I'll get myself home, thanks."
+          - "I'll get myself home, thank you."
+          - "I'll find my own way home, thanks."
+          - "I'll find my own way home, thank you."
+          - "I'll make my own way back, thanks."
+          - "I'll make my own way back, thank you."
+          - "I'll get home by myself, thanks."
+          - "I'll get home by myself, thank you."
+          - "Thanks, I can make my own way home."
+          - "Thanks, I can get home on my own."
+          - "Thanks, I can get home by myself."
+          - "Thank you, I can make my own way home."
+          - "Thank you, I can get home on my own."
+          - "Thank you, I can get home by myself."
+          - "I can make my own way home, thanks."
+          - "I can make my own way home, thank you."
+          - "I can get home on my own, thanks."
+          - "I can get home on my own, thank you."
+          - "I can get home by myself, thanks."
+          - "I can get home by myself, thank you."
+          - "Thanks, I'll get home myself."
+          - "Thanks, I'll go home on my own."
+          - "Thanks, I'll go home by myself."
+          - "Thank you, I'll get home myself."
+          - "Thank you, I'll go home on my own."
+          - "Thank you, I'll go home by myself."
+          - "Thanks, I can get myself home."
+          - "Thank you, I can get myself home."
+          - "I'll get home myself, thanks."
+          - "I'll get home myself, thank you."
+          - "I'll go home on my own, thanks."
+          - "I'll go home on my own, thank you."
+          - "I'll go home by myself, thanks."
+          - "I'll go home by myself, thank you."
+        explanation: I'll make my own way home, thanks — второе правило, вежливый отказ без объяснений.
+      - id: q4
+        prompt: "Не могли бы вы прислать мне голосовое сообщение? (вежливая просьба)"
+        answer:
+          - "Could you please send me a voice message?"
+          - "Could you please send me a voice note?"
+          - "Could you send me a voice message?"
+          - "Could you send me a voice message, please?"
+          - "Could you send me a voice message please?"
+          - "Could you send me a voice note?"
+          - "Could you send me a voice note, please?"
+          - "Could you send me a voice note please?"
+          - "Can you please send me a voice message?"
+          - "Can you please send me a voice note?"
+          - "Can you send me a voice message?"
+          - "Can you send me a voice message, please?"
+          - "Can you send me a voice message please?"
+          - "Can you send me a voice note?"
+          - "Can you send me a voice note, please?"
+          - "Can you send me a voice note please?"
+          - "Would you please send me a voice message?"
+          - "Would you please send me a voice note?"
+          - "Would you send me a voice message?"
+          - "Would you send me a voice message, please?"
+          - "Would you send me a voice message please?"
+          - "Would you send me a voice note?"
+          - "Would you send me a voice note, please?"
+          - "Would you send me a voice note please?"
+          - "Would you mind sending me a voice message?"
+          - "Would you mind sending me a voice note?"
+          - "Please could you send me a voice message?"
+        explanation: Could you send me a voice message? — вежливая просьба.

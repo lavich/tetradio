@@ -1,0 +1,8 @@
+id: tp174
+text: "Let's see how it goes."
+translation: "Посмотрим, как пойдёт."
+note: "ответ, который не торопит события и ничего не обещает"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

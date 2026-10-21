@@ -1,0 +1,8 @@
+id: tp171
+text: "hbu?"
+translation: "А ты? А у тебя?"
+note: "hbu — how about you?; встречный вопрос после своего ответа"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md

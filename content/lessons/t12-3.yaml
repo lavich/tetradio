@@ -1,0 +1,651 @@
+title: Анкета, переписка до приглашения, отказ и голосовое сообщение
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: dating-bank
+    title: Банк фраз — знакомство в приложении
+    body: |-
+      Для переписки в приложении нужны пять умений: начать, продолжить, пригласить, отказать вежливо и позаботиться о безопасности.
+
+      **Начать:** **Hi! I liked your bio.** **What do you do for fun?** **Продолжить:** **I love hiking and trying new food. hbu?** / **I'd love to hear about it.** **Пригласить:** **Fancy a coffee sometime?** / **I'm up for coffee.** **Отказать:** **Thanks, but I'm not ready to meet yet.** / **I don't think we're a match, but good luck.** **Безопасность:** **Let's meet somewhere busy.** / **I'll text a friend where I am.** / **I'll make my own way home, thanks.**
+
+      Отказ звучит коротко: благодарность, отказ, пожелание. Причину называть необязательно, повторять просьбу после отказа не принято. Ответ на отказ тоже короткий: *Fair enough. Good luck to you too.*
+    table:
+      columns:
+        - умение
+        - фраза
+      rows:
+        - - начать
+          - Hi! I liked your bio. What do you do for fun?
+        - - продолжить
+          - I love hiking and trying new food. hbu?
+        - - пригласить
+          - Fancy a coffee sometime?
+        - - отказать
+          - Thanks, but I'm not ready to meet yet.
+        - - закончить переписку
+          - I don't think we're a match, but good luck.
+        - - безопасность
+          - Let's meet somewhere busy. I'll text a friend where I am.
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - I'm up for coffee. Shall we say three?
+      - Thanks, but I'd rather meet somewhere busy.
+      - Thanks, I'll make my own way home.
+      - Fair enough. Good luck to you too.
+      - Doors open at eight.
+      - Two pints, please.
+    items:
+      - { id: m1, prompt: "Fancy a coffee on Saturday?", answer: "I'm up for coffee. Shall we say three?" }
+      - { id: m2, prompt: "Come to my place, it's quieter.", answer: "Thanks, but I'd rather meet somewhere busy." }
+      - { id: m3, prompt: "Let me walk you home after the coffee.", answer: "Thanks, I'll make my own way home." }
+      - { id: m4, prompt: "I don't think we're a match, but good luck.", answer: "Fair enough. Good luck to you too." }
+  - type: explanation
+    id: profile-how
+    title: Анкета — кто вы, что любите, что ищете
+    body: |-
+      Вы пишете анкету для приложения знакомств. Объём — 60–100 слов, регистр дружеский: короткие предложения, сокращения (I'm, I'd), слова и фразы из модуля.
+
+      Порядок: кто вы (работа и город) → два-три увлечения с формой на -ing (**I love hiking, I'm into cooking**) → одна фраза с to (**I'd love to travel more**) → что вы ищете, прямо и заранее (**tbh I'm upfront about…**) → вопрос для начала разговора (**Conversation starter: …**).
+
+      Адрес, телефон, фамилию и место работы в анкету не пишут: достаточно города и профессии.
+  - type: writing
+    id: profile
+    register: friendly
+    prompt: "Вы пишете анкету для приложения знакомств (60–100 слов): кто вы, чем занимаетесь, два-три увлечения, что ищете и вопрос для начала разговора. Адрес, телефон и фамилию в анкете не указывайте."
+    words: { min: 60, max: 100 }
+    model: |-
+      Hi, I'm Robin, a graphic designer from Leeds. I love hiking, and I'm really into trying new food, so I'm always looking for a good ramen place. I'd love to travel more this year, and Portugal is next on my list. I'm upfront about what I want: good conversation and a coffee somewhere busy to start with. I'm not great at karaoke, but I'm brave. Conversation starter: what's the best meal you've ever had?
+    criteria:
+      - 60–100 слов; есть кто вы, увлечения, что вы ищете и вопрос для начала разговора
+      - "Дружеский регистр: короткие предложения, сокращения (I'm, I'd), фразы из модуля (I love hiking, I'd love to…, Conversation starter)"
+      - "Герундий и инфинитив: love, be into, enjoy + -ing; would love + to; нет ошибок вроде I enjoy to cook"
+      - Нет адреса, телефона, фамилии и места работы; назван только город и профессия
+      - Один вопрос в конце, открытый, с what, where, how или which
+  - type: explanation
+    id: chat-text-how
+    title: Переписка — от первого сообщения до приглашения и отказа
+    body: |-
+      Теперь переписка по шагам: первое сообщение, вопрос, приглашение, вежливый отказ и окончание переписки. Каждый шаг — одно предложение, регистр дружеский. Сокращения (I'm, it's) можно писать и полностью.
+  - type: exercise
+    id: chat-text
+    title: Переписка по шагам
+    instruction: Переведите каждое сообщение на английский.
+    format: text
+    items:
+      - id: q1
+        prompt: "Привет! Мне понравилась твоя анкета. (первое сообщение)"
+        answer:
+          - "Hi! I really liked your bio."
+          - "Hi! I really liked your profile."
+          - "Hi! I really enjoyed your bio."
+          - "Hi! I really enjoyed your profile."
+          - "Hi! I really loved your bio."
+          - "Hi! I really loved your profile."
+          - "Hi! I liked your bio."
+          - "Hi! I liked your profile."
+          - "Hi! I enjoyed your bio."
+          - "Hi! I enjoyed your profile."
+          - "Hi! I loved your bio."
+          - "Hi! I loved your profile."
+          - "Hi, I really liked your bio."
+          - "Hi, I really liked your profile."
+          - "Hi, I really enjoyed your bio."
+          - "Hi, I really enjoyed your profile."
+          - "Hi, I really loved your bio."
+          - "Hi, I really loved your profile."
+          - "Hi, I liked your bio."
+          - "Hi, I liked your profile."
+          - "Hi, I enjoyed your bio."
+          - "Hi, I enjoyed your profile."
+          - "Hi, I loved your bio."
+          - "Hi, I loved your profile."
+          - "Hi. I really liked your bio."
+          - "Hi. I really liked your profile."
+          - "Hi. I really enjoyed your bio."
+          - "Hi. I really enjoyed your profile."
+          - "Hi. I really loved your bio."
+          - "Hi. I really loved your profile."
+          - "Hi. I liked your bio."
+          - "Hi. I liked your profile."
+          - "Hi. I enjoyed your bio."
+          - "Hi. I enjoyed your profile."
+          - "Hi. I loved your bio."
+          - "Hi. I loved your profile."
+          - "Hello! I really liked your bio."
+          - "Hello! I really liked your profile."
+          - "Hello! I really enjoyed your bio."
+          - "Hello! I really enjoyed your profile."
+          - "Hello! I really loved your bio."
+          - "Hello! I really loved your profile."
+          - "Hello! I liked your bio."
+          - "Hello! I liked your profile."
+          - "Hello! I enjoyed your bio."
+          - "Hello! I enjoyed your profile."
+          - "Hello! I loved your bio."
+          - "Hello! I loved your profile."
+          - "Hello, I really liked your bio."
+          - "Hello, I really liked your profile."
+          - "Hello, I really enjoyed your bio."
+          - "Hello, I really enjoyed your profile."
+          - "Hello, I really loved your bio."
+          - "Hello, I really loved your profile."
+          - "Hello, I liked your bio."
+          - "Hello, I liked your profile."
+          - "Hello, I enjoyed your bio."
+          - "Hello, I enjoyed your profile."
+          - "Hello, I loved your bio."
+          - "Hello, I loved your profile."
+          - "Hello. I really liked your bio."
+          - "Hello. I really liked your profile."
+          - "Hello. I really enjoyed your bio."
+          - "Hello. I really enjoyed your profile."
+          - "Hello. I really loved your bio."
+          - "Hello. I really loved your profile."
+          - "Hello. I liked your bio."
+          - "Hello. I liked your profile."
+          - "Hello. I enjoyed your bio."
+          - "Hello. I enjoyed your profile."
+          - "Hello. I loved your bio."
+          - "Hello. I loved your profile."
+          - "Hey! I really liked your bio."
+          - "Hey! I really liked your profile."
+          - "Hey! I really enjoyed your bio."
+          - "Hey! I really enjoyed your profile."
+          - "Hey! I really loved your bio."
+          - "Hey! I really loved your profile."
+          - "Hey! I liked your bio."
+          - "Hey! I liked your profile."
+          - "Hey! I enjoyed your bio."
+          - "Hey! I enjoyed your profile."
+          - "Hey! I loved your bio."
+          - "Hey! I loved your profile."
+          - "Hey, I really liked your bio."
+          - "Hey, I really liked your profile."
+          - "Hey, I really enjoyed your bio."
+          - "Hey, I really enjoyed your profile."
+          - "Hey, I really loved your bio."
+          - "Hey, I really loved your profile."
+          - "Hey, I liked your bio."
+          - "Hey, I liked your profile."
+          - "Hey, I enjoyed your bio."
+          - "Hey, I enjoyed your profile."
+          - "Hey, I loved your bio."
+          - "Hey, I loved your profile."
+          - "Hey. I really liked your bio."
+          - "Hey. I really liked your profile."
+          - "Hey. I really enjoyed your bio."
+          - "Hey. I really enjoyed your profile."
+          - "Hey. I really loved your bio."
+          - "Hey. I really loved your profile."
+          - "Hey. I liked your bio."
+          - "Hey. I liked your profile."
+          - "Hey. I enjoyed your bio."
+          - "Hey. I enjoyed your profile."
+          - "Hey. I loved your bio."
+          - "Hey. I loved your profile."
+          - "Hi! I really like your bio."
+          - "Hi! I really like your profile."
+          - "Hi! I like your bio."
+          - "Hi! I like your profile."
+          - "Hi, I really like your bio."
+          - "Hi, I really like your profile."
+          - "Hi, I like your bio."
+          - "Hi, I like your profile."
+          - "Hi. I really like your bio."
+          - "Hi. I really like your profile."
+          - "Hi. I like your bio."
+          - "Hi. I like your profile."
+          - "Hello! I really like your bio."
+          - "Hello! I really like your profile."
+          - "Hello! I like your bio."
+          - "Hello! I like your profile."
+          - "Hello, I really like your bio."
+          - "Hello, I really like your profile."
+          - "Hello, I like your bio."
+          - "Hello, I like your profile."
+          - "Hello. I really like your bio."
+          - "Hello. I really like your profile."
+          - "Hello. I like your bio."
+          - "Hello. I like your profile."
+          - "Hey! I really like your bio."
+          - "Hey! I really like your profile."
+          - "Hey! I like your bio."
+          - "Hey! I like your profile."
+          - "Hey, I really like your bio."
+          - "Hey, I really like your profile."
+          - "Hey, I like your bio."
+          - "Hey, I like your profile."
+          - "Hey. I really like your bio."
+          - "Hey. I really like your profile."
+          - "Hey. I like your bio."
+          - "Hey. I like your profile."
+          - "Hi! I enjoyed reading your bio."
+          - "Hi! I enjoyed reading your profile."
+          - "Hi, I enjoyed reading your bio."
+          - "Hi, I enjoyed reading your profile."
+          - "Hi. I enjoyed reading your bio."
+          - "Hi. I enjoyed reading your profile."
+          - "Hello! I enjoyed reading your bio."
+          - "Hello! I enjoyed reading your profile."
+          - "Hello, I enjoyed reading your bio."
+          - "Hello, I enjoyed reading your profile."
+          - "Hello. I enjoyed reading your bio."
+          - "Hello. I enjoyed reading your profile."
+          - "Hey! I enjoyed reading your bio."
+          - "Hey! I enjoyed reading your profile."
+          - "Hey, I enjoyed reading your bio."
+          - "Hey, I enjoyed reading your profile."
+          - "Hey. I enjoyed reading your bio."
+          - "Hey. I enjoyed reading your profile."
+          - "Hi! I really liked reading your bio."
+          - "Hi! I really liked reading your profile."
+          - "Hi! I liked reading your bio."
+          - "Hi! I liked reading your profile."
+          - "Hi, I really liked reading your bio."
+          - "Hi, I really liked reading your profile."
+          - "Hi, I liked reading your bio."
+          - "Hi, I liked reading your profile."
+          - "Hi. I really liked reading your bio."
+          - "Hi. I really liked reading your profile."
+          - "Hi. I liked reading your bio."
+          - "Hi. I liked reading your profile."
+          - "Hello! I really liked reading your bio."
+          - "Hello! I really liked reading your profile."
+          - "Hello! I liked reading your bio."
+          - "Hello! I liked reading your profile."
+          - "Hello, I really liked reading your bio."
+          - "Hello, I really liked reading your profile."
+          - "Hello, I liked reading your bio."
+          - "Hello, I liked reading your profile."
+          - "Hello. I really liked reading your bio."
+          - "Hello. I really liked reading your profile."
+          - "Hello. I liked reading your bio."
+          - "Hello. I liked reading your profile."
+          - "Hey! I really liked reading your bio."
+          - "Hey! I really liked reading your profile."
+          - "Hey! I liked reading your bio."
+          - "Hey! I liked reading your profile."
+          - "Hey, I really liked reading your bio."
+          - "Hey, I really liked reading your profile."
+          - "Hey, I liked reading your bio."
+          - "Hey, I liked reading your profile."
+          - "Hey. I really liked reading your bio."
+          - "Hey. I really liked reading your profile."
+          - "Hey. I liked reading your bio."
+          - "Hey. I liked reading your profile."
+        explanation: Hi! I liked your bio — короткое первое сообщение без сокращений переписки.
+      - id: q2
+        prompt: "Что ты любишь делать в выходные? (вопрос, который продолжает переписку)"
+        answer:
+          - "What do you like doing at the weekend?"
+          - "What do you like doing at weekends?"
+          - "What do you like doing at the weekends?"
+          - "What do you like doing on the weekend?"
+          - "What do you like doing on weekends?"
+          - "What do you like doing on the weekends?"
+          - "What do you like to do at the weekend?"
+          - "What do you like to do at weekends?"
+          - "What do you like to do at the weekends?"
+          - "What do you like to do on the weekend?"
+          - "What do you like to do on weekends?"
+          - "What do you like to do on the weekends?"
+          - "What do you love doing at the weekend?"
+          - "What do you love doing at weekends?"
+          - "What do you love doing at the weekends?"
+          - "What do you love doing on the weekend?"
+          - "What do you love doing on weekends?"
+          - "What do you love doing on the weekends?"
+          - "What do you love to do at the weekend?"
+          - "What do you love to do at weekends?"
+          - "What do you love to do at the weekends?"
+          - "What do you love to do on the weekend?"
+          - "What do you love to do on weekends?"
+          - "What do you love to do on the weekends?"
+          - "What do you do at the weekend?"
+          - "What do you do at weekends?"
+          - "What do you do at the weekends?"
+          - "What do you do on the weekend?"
+          - "What do you do on weekends?"
+          - "What do you do on the weekends?"
+          - "What do you enjoy doing at the weekend?"
+          - "What do you enjoy doing at weekends?"
+          - "What do you enjoy doing at the weekends?"
+          - "What do you enjoy doing on the weekend?"
+          - "What do you enjoy doing on weekends?"
+          - "What do you enjoy doing on the weekends?"
+          - "What do you enjoy at the weekend?"
+          - "What do you enjoy at weekends?"
+          - "What do you enjoy at the weekends?"
+          - "What do you enjoy on the weekend?"
+          - "What do you enjoy on weekends?"
+          - "What do you enjoy on the weekends?"
+          - "What do you usually do doing at the weekend?"
+          - "What do you usually do doing at weekends?"
+          - "What do you usually do doing at the weekends?"
+          - "What do you usually do doing on the weekend?"
+          - "What do you usually do doing on weekends?"
+          - "What do you usually do doing on the weekends?"
+          - "What do you usually do at the weekend?"
+          - "What do you usually do at weekends?"
+          - "What do you usually do at the weekends?"
+          - "What do you usually do on the weekend?"
+          - "What do you usually do on weekends?"
+          - "What do you usually do on the weekends?"
+          - "What do you usually like to do doing at the weekend?"
+          - "What do you usually like to do doing at weekends?"
+          - "What do you usually like to do doing at the weekends?"
+          - "What do you usually like to do doing on the weekend?"
+          - "What do you usually like to do doing on weekends?"
+          - "What do you usually like to do doing on the weekends?"
+          - "What do you usually like to do at the weekend?"
+          - "What do you usually like to do at weekends?"
+          - "What do you usually like to do at the weekends?"
+          - "What do you usually like to do on the weekend?"
+          - "What do you usually like to do on weekends?"
+          - "What do you usually like to do on the weekends?"
+          - "What do you usually like doing doing at the weekend?"
+          - "What do you usually like doing doing at weekends?"
+          - "What do you usually like doing doing at the weekends?"
+          - "What do you usually like doing doing on the weekend?"
+          - "What do you usually like doing doing on weekends?"
+          - "What do you usually like doing doing on the weekends?"
+          - "What do you usually like doing at the weekend?"
+          - "What do you usually like doing at weekends?"
+          - "What do you usually like doing at the weekends?"
+          - "What do you usually like doing on the weekend?"
+          - "What do you usually like doing on weekends?"
+          - "What do you usually like doing on the weekends?"
+        explanation: Открытый вопрос с what продолжает разговор.
+      - id: q3
+        prompt: "Не хочешь как-нибудь выпить кофе? (приглашение, с fancy)"
+        answer:
+          - "Fancy a coffee sometime?"
+          - "Fancy a coffee some time?"
+          - "Fancy a coffee one day?"
+          - "Fancy a cup of coffee sometime?"
+          - "Fancy a cup of coffee some time?"
+          - "Fancy a cup of coffee one day?"
+          - "Fancy coffee sometime?"
+          - "Fancy coffee some time?"
+          - "Fancy coffee one day?"
+          - "Fancy going for a coffee sometime?"
+          - "Fancy going for a coffee some time?"
+          - "Fancy going for a coffee one day?"
+          - "Fancy grabbing a coffee sometime?"
+          - "Fancy grabbing a coffee some time?"
+          - "Fancy grabbing a coffee one day?"
+          - "Fancy a coffee together sometime?"
+          - "Fancy a coffee together some time?"
+          - "Fancy a coffee together one day?"
+          - "Do you fancy a coffee sometime?"
+          - "Do you fancy a coffee some time?"
+          - "Do you fancy a coffee one day?"
+          - "Do you fancy a cup of coffee sometime?"
+          - "Do you fancy a cup of coffee some time?"
+          - "Do you fancy a cup of coffee one day?"
+          - "Do you fancy coffee sometime?"
+          - "Do you fancy coffee some time?"
+          - "Do you fancy coffee one day?"
+          - "Do you fancy going for a coffee sometime?"
+          - "Do you fancy going for a coffee some time?"
+          - "Do you fancy going for a coffee one day?"
+          - "Do you fancy grabbing a coffee sometime?"
+          - "Do you fancy grabbing a coffee some time?"
+          - "Do you fancy grabbing a coffee one day?"
+          - "Fancy getting a coffee sometime?"
+          - "Fancy getting a coffee some time?"
+          - "Fancy getting a coffee one day?"
+          - "Fancy getting coffee sometime?"
+          - "Fancy getting coffee some time?"
+          - "Fancy getting coffee one day?"
+          - "Fancy going for coffee sometime?"
+          - "Fancy going for coffee some time?"
+          - "Fancy going for coffee one day?"
+          - "Fancy grabbing coffee sometime?"
+          - "Fancy grabbing coffee some time?"
+          - "Fancy grabbing coffee one day?"
+          - "Fancy meeting for a coffee sometime?"
+          - "Fancy meeting for a coffee some time?"
+          - "Fancy meeting for a coffee one day?"
+          - "Fancy meeting for coffee sometime?"
+          - "Fancy meeting for coffee some time?"
+          - "Fancy meeting for coffee one day?"
+        explanation: Fancy a coffee sometime? — британское приглашение.
+      - id: q4
+        prompt: "Спасибо, но для встречи пока рано. (вежливый отказ)"
+        answer:
+          - "Thanks, but I'm not ready to meet up yet."
+          - "Thanks, but I'm not ready to meet yet."
+          - "Thank you, but I'm not ready to meet up yet."
+          - "Thank you, but I'm not ready to meet yet."
+          - "Thanks, but it's too early to meet."
+          - "Thanks, but it's too early to meet up."
+          - "Thanks, but it's too early for me to meet."
+          - "Thanks, but it's too soon to meet."
+          - "Thanks, but it's too soon to meet up."
+          - "Thanks, but it's too soon for me to meet."
+          - "Thanks, but it's a bit early to meet."
+          - "Thanks, but it's a bit early to meet up."
+          - "Thanks, but it's a bit early for me to meet."
+          - "Thanks, but it's a bit soon to meet."
+          - "Thanks, but it's a bit soon to meet up."
+          - "Thanks, but it's a bit soon for me to meet."
+          - "Thank you, but it's too early to meet."
+          - "Thank you, but it's too early to meet up."
+          - "Thank you, but it's too early for me to meet."
+          - "Thank you, but it's too soon to meet."
+          - "Thank you, but it's too soon to meet up."
+          - "Thank you, but it's too soon for me to meet."
+          - "Thank you, but it's a bit early to meet."
+          - "Thank you, but it's a bit early to meet up."
+          - "Thank you, but it's a bit early for me to meet."
+          - "Thank you, but it's a bit soon to meet."
+          - "Thank you, but it's a bit soon to meet up."
+          - "Thank you, but it's a bit soon for me to meet."
+          - "Thanks but I'm not ready to meet up yet."
+          - "Thanks but I'm not ready to meet yet."
+          - "Thank you but I'm not ready to meet up yet."
+          - "Thank you but I'm not ready to meet yet."
+          - "Thanks, but it's a bit too early to meet."
+          - "Thanks, but it's a bit too early to meet up."
+          - "Thanks, but it's a bit too early for me to meet."
+          - "Thanks, but it's a bit too early for me to meet up."
+          - "Thanks, but it's a bit too soon to meet."
+          - "Thanks, but it's a bit too soon to meet up."
+          - "Thanks, but it's a bit too soon for me to meet."
+          - "Thanks, but it's a bit too soon for me to meet up."
+          - "Thanks, but it's a little too early to meet."
+          - "Thanks, but it's a little too early to meet up."
+          - "Thanks, but it's a little too early for me to meet."
+          - "Thanks, but it's a little too early for me to meet up."
+          - "Thanks, but it's a little too soon to meet."
+          - "Thanks, but it's a little too soon to meet up."
+          - "Thanks, but it's a little too soon for me to meet."
+          - "Thanks, but it's a little too soon for me to meet up."
+          - "Thanks, but it's too early for me to meet up."
+          - "Thanks, but it's too soon for me to meet up."
+          - "Thank you, but it's a bit too early to meet."
+          - "Thank you, but it's a bit too early to meet up."
+          - "Thank you, but it's a bit too early for me to meet."
+          - "Thank you, but it's a bit too early for me to meet up."
+          - "Thank you, but it's a bit too soon to meet."
+          - "Thank you, but it's a bit too soon to meet up."
+          - "Thank you, but it's a bit too soon for me to meet."
+          - "Thank you, but it's a bit too soon for me to meet up."
+          - "Thank you, but it's a little too early to meet."
+          - "Thank you, but it's a little too early to meet up."
+          - "Thank you, but it's a little too early for me to meet."
+          - "Thank you, but it's a little too early for me to meet up."
+          - "Thank you, but it's a little too soon to meet."
+          - "Thank you, but it's a little too soon to meet up."
+          - "Thank you, but it's a little too soon for me to meet."
+          - "Thank you, but it's a little too soon for me to meet up."
+          - "Thank you, but it's too early for me to meet up."
+          - "Thank you, but it's too soon for me to meet up."
+          - "Thanks, but I'm not quite ready to meet up just yet."
+          - "Thanks, but I'm not quite ready to meet up yet."
+          - "Thanks, but I'm not quite ready to meet just yet."
+          - "Thanks, but I'm not quite ready to meet yet."
+          - "Thanks, but I'm not ready to meet up just yet."
+          - "Thanks, but I'm not ready to meet just yet."
+          - "Thank you, but I'm not quite ready to meet up just yet."
+          - "Thank you, but I'm not quite ready to meet up yet."
+          - "Thank you, but I'm not quite ready to meet just yet."
+          - "Thank you, but I'm not quite ready to meet yet."
+          - "Thank you, but I'm not ready to meet up just yet."
+          - "Thank you, but I'm not ready to meet just yet."
+          - "Thanks, but I'm not ready to meet in person yet."
+          - "Thank you, but I'm not ready to meet in person yet."
+        explanation: Благодарность, отказ, причина не называется.
+      - id: q5
+        prompt: "Кажется, мы не подходим друг другу, но удачи. (закончить переписку)"
+        answer:
+          - "I don't think we're a match, but good luck."
+          - "I don't think we're a match, but good luck to you."
+          - "I don't think we're a match, but I wish you luck."
+          - "I don't think we're a match, but all the best."
+          - "I don't think we're a good match, but good luck."
+          - "I don't think we're a good match, but good luck to you."
+          - "I don't think we're a good match, but I wish you luck."
+          - "I don't think we're a good match, but all the best."
+          - "I don't think we are a match, but good luck."
+          - "I don't think we are a match, but good luck to you."
+          - "I don't think we are a match, but I wish you luck."
+          - "I don't think we are a match, but all the best."
+          - "I don't think we are a good match, but good luck."
+          - "I don't think we are a good match, but good luck to you."
+          - "I don't think we are a good match, but I wish you luck."
+          - "I don't think we are a good match, but all the best."
+          - "I don't think we match, but good luck."
+          - "I don't think we match, but good luck to you."
+          - "I don't think we match, but I wish you luck."
+          - "I don't think we match, but all the best."
+          - "I don't think we're right for each other, but good luck."
+          - "I don't think we're right for each other, but good luck to you."
+          - "I don't think we're right for each other, but I wish you luck."
+          - "I don't think we're right for each other, but all the best."
+          - "I don't think we're right for each other, but I wish you all the best."
+          - "I don't think we're a good fit, but good luck."
+          - "I don't think we're a good fit, but good luck to you."
+          - "I don't think we're a good fit, but I wish you luck."
+          - "I don't think we're a good fit, but all the best."
+          - "I don't think we're a good fit, but I wish you all the best."
+          - "I don't think we're the right match, but good luck."
+          - "I don't think we're the right match, but good luck to you."
+          - "I don't think we're the right match, but I wish you luck."
+          - "I don't think we're the right match, but all the best."
+          - "I don't think we're the right match, but I wish you all the best."
+          - "I don't think we are right for each other, but good luck."
+          - "I don't think we are right for each other, but good luck to you."
+          - "I don't think we are right for each other, but I wish you luck."
+          - "I don't think we are right for each other, but all the best."
+          - "I don't think we are right for each other, but I wish you all the best."
+          - "I don't think we are a good fit, but good luck."
+          - "I don't think we are a good fit, but good luck to you."
+          - "I don't think we are a good fit, but I wish you luck."
+          - "I don't think we are a good fit, but all the best."
+          - "I don't think we are a good fit, but I wish you all the best."
+          - "I don't think we are the right match, but good luck."
+          - "I don't think we are the right match, but good luck to you."
+          - "I don't think we are the right match, but I wish you luck."
+          - "I don't think we are the right match, but all the best."
+          - "I don't think we are the right match, but I wish you all the best."
+          - "I don't think we're a match, but I wish you all the best."
+          - "I don't think we are a match, but I wish you all the best."
+        explanation: I don't think we're a match, but good luck — спокойное окончание без упрёков.
+  - type: explanation
+    id: voice-write-how
+    title: Голосовое сообщение — 30 секунд
+    body: |-
+      Вы отвечаете новому знакомому голосовым сообщением. За 30 секунд скажите три вещи: кто вы, что любите (две формы на -ing) и чего хотели бы (**I'd love to…**). Закончите одним вопросом. Говорите спокойно, короткими предложениями. Запишите, переслушайте, сверьте с критериями, запишите второй дубль.
+  - type: speaking
+    id: voice-message
+    part: monologue
+    prompt: "Вы отвечаете в приложении голосовым сообщением (около 30 секунд): назовите имя, скажите, что вы любите делать (две формы на -ing), что хотели бы сделать (I'd love to…), и задайте один вопрос. Запишите свою часть."
+    seconds: 45
+    model: "Hi Maya, it's Chris. Thanks for your message, it was nice to hear from you. I love hiking, and I'm really into trying new food, so I'm always looking for a new trail or a new restaurant. I'd love to see Portugal this year, and I'd love to hear about the places you like. What do you do for fun when you're not working?"
+    criteria:
+      - Около 30 секунд, три части — кто вы, что любите и хотели бы, вопрос
+      - "Две формы на -ing (I love hiking, I'm into trying) и одна с to (I'd love to…)"
+      - Один открытый вопрос в конце
+      - Спокойный темп, короткие предложения
+      - На втором дубле — меньше пауз и повторов
+  - type: explanation
+    id: reply-how
+    title: Сцена — ответ на голосовые сообщения
+    body: |-
+      Теперь сцена: Майя отвечает вам голосовыми сообщениями. Сначала звучат только её сообщения, подряд, два раза. Затем откройте текст реплик кнопкой «Открыть текст» и держите его перед глазами.
+
+      В задании речи включите запись и отвечайте на каждое сообщение по порядку: расскажите о себе, поддержите её предложение, согласитесь на время и место и отнеситесь к её правилу безопасности спокойно.
+  - type: listening
+    id: reply-lines
+    title: Реплики собеседника — голосовые сообщения Майи
+    plays: 2
+    transcript:
+      - { speaker: Maya, text: "Hi, it's Maya. Thanks for your message. I liked your bio. What do you do for fun?" }
+      - { speaker: Maya, text: "Hiking sounds great. I love trying new places too. What's the best trail you've done?" }
+      - { speaker: Maya, text: "I'd love to hear more about that one. Fancy a coffee on Saturday?" }
+      - { speaker: Maya, text: "Wonderful. Shall we say eleven, at the café in the market? It's always busy, and I like meeting somewhere busy the first time." }
+      - { speaker: Maya, text: "Great. I'll text a friend where I am, as I always do. See you on Saturday." }
+  - type: speaking
+    id: reply
+    part: roleplay
+    prompt: |-
+      Вы отвечаете Майе голосовыми сообщениями. Прослушайте её сообщения на предыдущей странице; отвечайте на каждое по порядку и записывайте свою часть.
+      Скажите, что любите ходить в походы и пробовать новую еду, и назовите любимую тропу. Согласитесь на кофе в субботу, на одиннадцать и на людное место. Отнеситесь к её правилу безопасности спокойно и попрощайтесь. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Maya: Hi, it's Maya. Thanks for your message. I liked your bio. What do you do for fun?
+      You: Hi Maya. I love hiking and trying new food. What about you?
+      Maya: Hiking sounds great. I love trying new places too. What's the best trail you've done?
+      You: The coast path in Wales. It took three days.
+      Maya: I'd love to hear more about that one. Fancy a coffee on Saturday?
+      You: I'm up for coffee. Saturday is good for me.
+      Maya: Wonderful. Shall we say eleven, at the café in the market? It's always busy, and I like meeting somewhere busy the first time.
+      You: Eleven is fine, and the market is a good idea.
+      Maya: Great. I'll text a friend where I am, as I always do. See you on Saturday.
+      You: Of course, that makes sense. See you on Saturday.
+    criteria:
+      - Ответили на все пять сообщений по порядку, каждая реплика — одна-две фразы
+      - "Рассказали о себе формами на -ing (I love hiking and trying new food) и задали встречный вопрос"
+      - "Согласие на кофе, время и место: I'm up for coffee. Eleven is fine."
+      - Правило безопасности принято спокойно, без вопросов и возражений
+      - Дружеский тон, без восклицаний и спешки
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I really enjoy ___ my friends."
+        options: [cooking for, to cook for, cook for]
+        answer: cooking for
+        explanation: После enjoy идёт форма на -ing.
+      - id: q2
+        prompt: "I'd love ___ you at the café on Saturday."
+        options: [to meet, meeting, meet]
+        answer: to meet
+        explanation: После would love идёт to и инфинитив.
+      - id: q3
+        prompt: "A new match says: Come to my flat, it's quieter. You want to follow the first rule."
+        options:
+          - Thanks, but I'd rather meet somewhere busy.
+          - Count me in.
+          - I'm running a bit late.
+        answer: Thanks, but I'd rather meet somewhere busy.
+        explanation: Первое правило — людное место; отказ вежливый и без объяснений.
+      - id: q4
+        prompt: "You do not want to continue the chat. Which message ends it politely?"
+        options:
+          - I don't think we're a match, but good luck.
+          - Fancy a coffee sometime?
+          - I'm up for coffee.
+        answer: I don't think we're a match, but good luck.
+        explanation: Спокойное окончание переписки без упрёков.

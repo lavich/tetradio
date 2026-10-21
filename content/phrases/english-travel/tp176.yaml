@@ -1,0 +1,8 @@
+id: tp176
+text: "Thanks, but I'm not ready to meet yet."
+translation: "Спасибо, но для встречи пока рано."
+note: "вежливый отказ от приглашения; причину называть не нужно"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t12
+  operation: requested-generation
+  request: Фразы модуля t12 по программе docs/curriculum-english-travel.md
