@@ -1,0 +1,8 @@
+id: tp123
+text: "That's wild."
+translation: "Ничего себе."
+note: "о рассказе или новости, которая удивляет"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md

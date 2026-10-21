@@ -1,0 +1,278 @@
+title: Быстрая речь — вопросы-хвостики и сокращения
+kind: lesson
+items:
+  - { kind: word, id: tw121 }
+  - { kind: word, id: tw122 }
+  - { kind: word, id: tw123 }
+  - { kind: word, id: tw124 }
+  - { kind: word, id: tw125 }
+  - { kind: word, id: tw126 }
+  - { kind: word, id: tw127 }
+  - { kind: word, id: tw128 }
+  - { kind: phrase, id: tp121 }
+  - { kind: phrase, id: tp122 }
+  - { kind: phrase, id: tp123 }
+  - { kind: phrase, id: tp124 }
+  - { kind: phrase, id: tp125 }
+  - { kind: phrase, id: tp126 }
+  - { kind: phrase, id: tp127 }
+  - { kind: phrase, id: tp128 }
+blocks:
+  - type: explanation
+    id: tags-echo
+    title: Вопросы-хвостики и эхо-вопросы
+    body: |-
+      В быстром разговоре мало вопросов в полной форме. Чаще человек говорит утверждение и просит с ним согласиться: **It's a great hostel, isn't it?** Это **разделительный вопрос**: утверждение, запятая и короткий хвостик из вспомогательного глагола и местоимения. Правило одно: **утверждение — хвостик с отрицанием, отрицание — хвостик без него**. You like hiking, **don't you**? You haven't been to Skye, **have you**? She went to Porto, **didn't she**? Вспомогательный глагол берут из фразы: is, have, do, did, can, will. Особая форма — **I'm right, aren't I?**
+
+      Интонация меняет смысл. С падающей интонацией хвостик ищет согласия: так поддерживают small talk. С растущей интонацией человек действительно не уверен и ждёт ответа.
+
+      **Эхо-вопрос** — реакция слушателя: он повторяет вспомогательный глагол из реплики собеседника и показывает интерес. I went to Skye last week. — **Did you?** I'm a vegetarian. — **Are you?** I've never been to Wales. — **Haven't you?** Знак эха тот же, что у реплики: после утверждения — утвердительный, после отрицания — отрицательный. Вместо эха подходит и короткое **Really?**
+
+      Две частые ошибки. Первая — один хвостик на все случаи, как русское «не так ли»: You like it, isn't it? Нужно **don't you**. Вторая — эхо с другим глаголом: I went to Skye. — Do you? Нужно **Did you?**
+    table:
+      columns:
+        - реплика
+        - хвостик или эхо
+      rows:
+        - - It's a great hostel
+          - isn't it?
+        - - You like hiking
+          - don't you?
+        - - You haven't been to Skye
+          - have you?
+        - - She went to Porto
+          - didn't she?
+        - - I went to Skye last week.
+          - Did you?
+        - - I've never been to Wales.
+          - Haven't you?
+  - type: explanation
+    id: fast-speech
+    title: Опущения и редукции
+    body: |-
+      В живой речи слова выпадают и сливаются. **Опущения**: Sounds good вместо That sounds good, **Been there** вместо I've been there, Want a drink? вместо Do you want a drink? Выпадает подлежащее и вспомогательный глагол, смысл остаётся ясным из ситуации.
+
+      **Редукции** — слитные формы, которые слышны в речи и встречаются в чатах: **gonna** = going to (I'm gonna grab a drink), **wanna** = want to (Do you wanna come?), **dunno** = don't know (I dunno), **gotta** = have got to (I gotta go). Эти формы нужно узнавать на слух в любом разговоре. Писать их стоит друзьям в чате и в сообщениях, а в письмах хозяину жилья и в службу поддержки — полные формы.
+
+      Чтобы вернуть разговор или переспросить, в быстром разговоре хватает короткой фразы. **Sorry, what?** — вы не расслышали. **You lost me** — вы не поняли объяснения. **Sorry, you were saying?** — вы отвлеклись или перебили собеседника и просите его продолжить. Каждая фраза отвечает на свою причину, поэтому их не смешивают.
+    table:
+      columns:
+        - в речи
+        - полная форма
+      rows:
+        - - gonna
+          - going to
+        - - wanna
+          - want to
+        - - dunno
+          - don't know
+        - - gotta
+          - have got to
+        - - Sounds good.
+          - That sounds good.
+        - - Been there.
+          - I've been there.
+  - type: explanation
+    id: slang-words
+    title: Реакции и слова для друзей
+    body: |-
+      Для разговора с ровесниками подходят слова мягкого разговорного регистра. **Mate** — приятель, **cheers** — «спасибо» и тост, **keen** — увлечённый (I'm keen on hiking), **banter** — шутливая пикировка. Про состояние: **knackered** — вымотан, **gutted** — расстроен из-за неудачи, **chuffed** — очень доволен. **Dodgy** — сомнительный: a dodgy seller, a dodgy hostel.
+
+      Реакции на новость: **No way!** — не может быть (или «ни за что», по интонации), **That's wild** — ничего себе, **Fair enough** — принимаю ваш довод, **Sounds good** — договорились. На чужой рассказ про трудную поездку можно ответить **Been there** — «знаю, самому знакомо».
+
+      Британские слова и их американские пары записаны в примечаниях карточек: mate — dude, knackered — beat, dodgy — sketchy.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: tags-choice
+    title: Вопросы-хвостики
+    instruction: Выберите хвостик, который ждёт согласия.
+    format: choice
+    items:
+      - id: q1
+        prompt: "It's a great hostel, ___?"
+        options: [isn't it, isn't there, doesn't it]
+        answer: isn't it
+        explanation: После утверждения с is — хвостик isn't it.
+      - id: q2
+        prompt: "You haven't been to Skye, ___?"
+        options: [have you, haven't you, do you]
+        answer: have you
+        explanation: После отрицания хвостик утвердительный, глагол тот же — have.
+      - id: q3
+        prompt: "You like hiking, ___?"
+        options: [don't you, aren't you, do I]
+        answer: don't you
+        explanation: Вспомогательный глагол present simple — do; после утверждения — don't you.
+      - id: q4
+        prompt: "They're from Spain, ___?"
+        options: [aren't they, don't they, isn't it]
+        answer: aren't they
+        explanation: Глагол to be и подлежащее they — aren't they.
+      - id: q5
+        prompt: "I'm right, ___?"
+        options: [aren't I, don't I, isn't I]
+        answer: aren't I
+        explanation: После I'm хвостик — aren't I.
+      - id: q6
+        prompt: "She went to Porto last year, ___?"
+        options: [didn't she, wasn't she, hasn't she]
+        answer: didn't she
+        explanation: Past simple — вспомогательный глагол did, хвостик didn't she.
+  - type: exercise
+    id: echo-choice
+    title: Эхо-вопросы
+    instruction: Выберите эхо-вопрос, который показывает интерес к реплике.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I went to Skye last week. — ___"
+        options: [Did you?, Do you?, Have you?]
+        answer: Did you?
+        explanation: Реплика в past simple — эхо с did.
+      - id: q2
+        prompt: "I'm a vegetarian. — ___"
+        options: [Are you?, Do you?, Is it?]
+        answer: Are you?
+        explanation: Во фразе am, эхо — are you.
+      - id: q3
+        prompt: "I love this place. — ___"
+        options: [Do you?, Are you?, Did you?]
+        answer: Do you?
+        explanation: Реплика в present simple — эхо с do.
+      - id: q4
+        prompt: "We missed the last bus. — ___"
+        options: [Did you?, Were you?, Have you?]
+        answer: Did you?
+        explanation: Missed — past simple, эхо — did you.
+      - id: q5
+        prompt: "My brother can't swim. — ___"
+        options: [Can't he?, Does he?, Isn't he?]
+        answer: Can't he?
+        explanation: После отрицания эхо тоже отрицательное, глагол тот же — can.
+      - id: q6
+        prompt: "I've never been to Wales. — ___"
+        options: [Haven't you?, Did you?, Aren't you?]
+        answer: Haven't you?
+        explanation: Во фразе have been — эхо с have, знак тот же, что в реплике.
+  - type: exercise
+    id: reductions-match
+    title: Речь и полная форма
+    instruction: Соедините форму из быстрой речи с полной формой. Два варианта лишние.
+    format: match
+    bank:
+      - going to
+      - want to
+      - don't know
+      - have got to
+      - That sounds good.
+      - I've been there.
+      - go to
+      - don't want to
+    items:
+      - { id: m1, prompt: gonna, answer: going to }
+      - { id: m2, prompt: wanna, answer: want to }
+      - { id: m3, prompt: dunno, answer: don't know }
+      - { id: m4, prompt: gotta, answer: have got to }
+      - { id: m5, prompt: Sounds good., answer: That sounds good. }
+      - { id: m6, prompt: Been there., answer: I've been there. }
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово или оборот с английским. Два английских варианта лишние.
+    format: match
+    bank:
+      - mate
+      - cheers
+      - keen
+      - knackered
+      - gutted
+      - chuffed
+      - dodgy
+      - banter
+      - a backpacker
+      - touristy
+    items:
+      - { id: m1, prompt: "приятель, дружище (обращение)", answer: mate }
+      - { id: m2, prompt: "спасибо (разговорное) и тост «за здоровье»", answer: cheers }
+      - { id: m3, prompt: "увлечённый, с большим желанием", answer: keen }
+      - { id: m4, prompt: "вымотанный, без сил", answer: knackered }
+      - { id: m5, prompt: "сильно расстроенный из-за неудачи", answer: gutted }
+      - { id: m6, prompt: "очень довольный", answer: chuffed }
+      - { id: m7, prompt: "сомнительный, ненадёжный", answer: dodgy }
+      - { id: m8, prompt: "шутливая пикировка между друзьями", answer: banter }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'm, it's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Это отличный хостел, правда? (хвостик, который ждёт согласия)"
+        answer:
+          - It's a great hostel, isn't it?
+          - It is a great hostel, isn't it?
+          - This is a great hostel, isn't it?
+          - It's an excellent hostel, isn't it?
+          - It's a brilliant hostel, isn't it?
+          - It's a fantastic hostel, isn't it?
+          - This hostel is great, isn't it?
+          - The hostel is great, isn't it?
+          - It's a lovely hostel, isn't it?
+          - It's an awesome hostel, isn't it?
+          - It's a superb hostel, isn't it?
+          - It's a very good hostel, isn't it?
+          - It's a wonderful hostel, isn't it?
+          - It's an amazing hostel, isn't it?
+          - It's a really great hostel, isn't it?
+          - This is an excellent hostel, isn't it?
+          - This is a brilliant hostel, isn't it?
+          - This is a fantastic hostel, isn't it?
+          - This is an amazing hostel, isn't it?
+          - This is a wonderful hostel, isn't it?
+          - It's a good hostel, isn't it?
+          - It's a nice hostel, isn't it?
+        explanation: После утверждения с is — хвостик isn't it.
+      - id: q2
+        prompt: "Вы не были в Лиссабоне, да? (хвостик к отрицанию)"
+        answer:
+          - You haven't been to Lisbon, have you?
+          - You have not been to Lisbon, have you?
+          - You've never been to Lisbon, have you?
+          - You have never been to Lisbon, have you?
+          - You haven't been to Lisbon before, have you?
+          - You've never been to Lisbon before, have you?
+          - You haven't been to Lisbon yet, have you?
+          - You've not been to Lisbon, have you?
+          - You've not been to Lisbon before, have you?
+        explanation: После отрицания хвостик утвердительный, глагол тот же — have.
+      - id: q3
+        prompt: "Простите, вы что-то говорили? (вернуть разговор после паузы)"
+        answer:
+          - Sorry, you were saying?
+          - Sorry, what were you saying?
+          - Sorry, what were you saying again?
+          - Sorry, you were saying something?
+          - Sorry, were you saying something?
+          - Sorry, did you say something?
+          - Excuse me, you were saying?
+        explanation: Sorry, you were saying? возвращает собеседника к прерванной мысли.
+      - id: q4
+        prompt: "Не знаю, если честно. (разговорная форма)"
+        answer:
+          - I dunno, to be honest.
+          - I dunno, honestly.
+          - I dunno, to be honest with you.
+          - To be honest, I dunno.
+          - Honestly, I dunno.
+          - Dunno, to be honest.
+          - I don't know, to be honest.
+          - I don't know, honestly.
+          - To be honest, I don't know.
+          - Honestly, I don't know.
+          - I dunno, if I'm honest.
+          - I dunno, if I'm being honest.
+          - Dunno, honestly.
+          - I dunno, to tell the truth.
+        explanation: Dunno — разговорная форма от don't know; перед to be honest ставят запятую.

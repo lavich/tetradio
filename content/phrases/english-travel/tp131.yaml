@@ -1,0 +1,8 @@
+id: tp131
+text: "I'm gonna grab a drink."
+translation: "Пойду возьму что-нибудь выпить."
+note: "gonna — I'm going to"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md

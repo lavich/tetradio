@@ -1,0 +1,292 @@
+title: Групповой чат и быстрый разговор
+kind: lesson
+items:
+  - { kind: word, id: tw129 }
+  - { kind: word, id: tw130 }
+  - { kind: word, id: tw131 }
+  - { kind: word, id: tw132 }
+  - { kind: word, id: tw133 }
+  - { kind: word, id: tw134 }
+  - { kind: word, id: tw135 }
+  - { kind: phrase, id: tp129 }
+  - { kind: phrase, id: tp130 }
+  - { kind: phrase, id: tp131 }
+  - { kind: phrase, id: tp132 }
+  - { kind: phrase, id: tp133 }
+  - { kind: phrase, id: tp134 }
+  - { kind: phrase, id: tp135 }
+blocks:
+  - type: explanation
+    id: chat-words
+    title: Разговор с друзьями — слова и фразы
+    body: |-
+      Когда в компании сложился разговор, к нему добавляют короткие слова. **Random** — случайный или неожиданный: a random question, вопрос ни к селу ни к городу. **Sorted** — улажено: Tickets? All sorted. **A heads-up** — заблаговременное предупреждение: Thanks for the heads-up. **Legit** — надёжный, без подвоха: Is this site legit? **A nightmare** — неприятная ситуация, из которой трудно выбраться: What a nightmare!
+
+      Про встречи и время: **bump into** — случайно встретить (I might bump into Ben at the station), **hang out** — проводить время вместе (Do you wanna hang out after the tour?).
+
+      Закончить разговор можно в три шага: признак, что вы уходите, — **Anyway, I'd better get going**; комплимент — **It was great chatting to you**; прощание — **Catch you later**. Если кто-то извиняется, ответ — **Don't worry about it**. Когда нужно секунду подождать, скажите **Hang on a second**. Сами вы тоже можете сказать **I'm gonna grab a drink** — «пойду возьму что-нибудь выпить», или **I dunno, to be honest**, когда не уверены.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: chat-how
+    title: Групповой чат
+    body: |-
+      Группа друзей из хостела договаривается о субботе в групповом чате. Люди пишут быстро и коротко: без заглавных букв, без точек, с сокращениями (gonna, dunno) и с разговорными словами из этого урока. Прочитайте чат целиком, чтобы понять план, и только потом отвечайте на вопросы.
+
+      Одна реплика содержит смягчённое грубое восклицание (груб.): **bloody hell** — «ничего себе», с оттенком раздражения. С незнакомыми людьми лучше его не повторять: слово стоит узнавать на слух и употреблять осторожно. Карточки для него нет.
+
+      София не носитель английского и пишет коротко, иногда опускает **will** (maybe I come later вместо maybe I'll come later). Понять её можно, повторять эту форму не нужно.
+  - type: reading
+    id: chat
+    title: Edinburgh crew — group chat
+    text: |-
+      EDINBURGH CREW — GROUP CHAT
+
+      Zoe: guys, who's up for the gig on saturday? the one in leith
+      Jack: keen! what time does it start?
+      Zoe: doors at 8, music at 9. tickets are £12
+      Ben: bloody hell, £12? that's a bit much for a pub gig
+      Jack: it's a legit band though, mate. they were on the radio
+      Ben: fair enough. I'm in
+      Sofia: I dunno, I'm knackered after the hike. maybe I come later?
+      Zoe: no worries sofia, just text me. everyone else, heads-up: the bar gets really busy, so let's meet outside at 8.30
+      Jack: sorted
+      Ben: sounds good, cheers
+    glosses:
+      - { text: gig, russian: концерт }
+      - { text: doors, russian: "открытие дверей, начало впуска" }
+      - { text: a pub gig, russian: концерт в пабе }
+      - { text: the hike, russian: поход }
+      - { text: "who's up for", russian: кто за }
+      - { text: "I'm in", russian: я с вами }
+      - { text: a bit much, russian: дороговато }
+  - type: exercise
+    id: chat-q
+    about: chat
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the plan?
+        options:
+          - to go to a gig on Saturday
+          - to go on a hike on Saturday
+          - to meet at the hostel for dinner
+        answer: to go to a gig on Saturday
+        explanation: Zoe asks who is up for the gig on Saturday.
+      - id: q2
+        prompt: How much is a ticket?
+        options:
+          - £12
+          - £9
+          - £8
+        answer: £12
+        explanation: Tickets are £12; 8 и 9 — время.
+      - id: q3
+        prompt: Why does Jack think the price is fine?
+        options:
+          - The band has been on the radio.
+          - The bar is free.
+          - It is the last gig of the year.
+        answer: The band has been on the radio.
+        explanation: It's a legit band, they were on the radio.
+      - id: q4
+        prompt: Why might Sofia come later?
+        options:
+          - She is tired after the hike.
+          - She does not like the band.
+          - She has no ticket.
+        answer: She is tired after the hike.
+        explanation: I'm knackered after the hike.
+      - id: q5
+        prompt: Where and when do they meet?
+        options:
+          - outside the bar at 8.30
+          - inside the bar at 9
+          - at the hostel at 8
+        answer: outside the bar at 8.30
+        explanation: Let's meet outside at 8.30.
+  - type: explanation
+    id: fast-how
+    title: Быстрый разговор с перебиваниями
+    body: |-
+      Теперь живой разговор в кухне хостела: Джек, Зои, Бен и София. Люди перебивают друг друга (знак «—» в транскрипте: фраза оборвана), реагируют короткими словами и говорят редуцированными формами. Не пытайтесь понять каждое слово: ищите, кто о чём говорит и чем кончилась история. Звучит два раза, транскрипт откроется после ответа.
+
+      София не знает слово **dodgy** и спрашивает, что оно значит. Джек объясняет, и разговор идёт дальше.
+  - type: listening
+    id: kitchen
+    title: In the hostel kitchen
+    plays: 2
+    transcript:
+      - { speaker: Jack, text: "So I'm walking down the Royal Mile yesterday, and this guy comes up to me and says —" }
+      - { speaker: Zoe, text: "Wait, was this before or after the rain?" }
+      - { speaker: Jack, text: "After. Anyway, he says the castle is closed, and I say, no way, it's Tuesday —" }
+      - { speaker: Ben, text: "Hang on, it's open on Tuesdays, isn't it?" }
+      - { speaker: Jack, text: "That's what I said! So I go up there, and it's open. The guy was just dodgy. He wanted to sell me a tour." }
+      - { speaker: Zoe, text: "Been there. Someone tried the same thing on me in Rome." }
+      - { speaker: Sofia, text: "Sorry, what does 'dodgy' mean? I don't know this word." }
+      - { speaker: Jack, text: "It means not honest. You can't trust him." }
+      - { speaker: Sofia, text: "Ah, okay. Dodgy. And did you buy the tour?" }
+      - { speaker: Jack, text: "No way. I went in by myself. Actually, I'm gonna go back on Thursday. There's a lot to see." }
+      - { speaker: Zoe, text: "I wanna come! But I'm so knackered today, I dunno." }
+      - { speaker: Ben, text: "Fair enough. I'm gonna make some tea. Anyone want one?" }
+      - { speaker: Sofia, text: "Yes, please. Cheers, Ben." }
+  - type: exercise
+    id: kitchen-q
+    about: kitchen
+    title: Аудирование — в кухне
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Who tried to sell Jack a tour?
+        options:
+          - a man on the street
+          - a guide at the castle
+          - a receptionist at the hostel
+        answer: a man on the street
+        explanation: This guy comes up to me… He wanted to sell me a tour.
+      - id: q2
+        prompt: What did the man say about the castle?
+        options:
+          - It was closed.
+          - It was free.
+          - It was far away.
+        answer: It was closed.
+        explanation: He says the castle is closed.
+      - id: q3
+        prompt: Was the man right?
+        options:
+          - No, the castle was open.
+          - Yes, it was closed on Tuesday.
+          - Yes, but only in the rain.
+        answer: No, the castle was open.
+        explanation: Jack goes up there, and it's open.
+      - id: q4
+        prompt: What does Sofia not understand?
+        options:
+          - She does not know the word "dodgy".
+          - She cannot hear Jack.
+          - She does not know the castle.
+        answer: She does not know the word "dodgy".
+        explanation: I don't know this word, dodgy.
+      - id: q5
+        prompt: What is Ben going to do?
+        options:
+          - make tea
+          - buy tickets
+          - go to the castle
+        answer: make tea
+        explanation: I'm gonna make some tea.
+      - id: q6
+        prompt: When is Jack going back to the castle?
+        options:
+          - on Thursday
+          - on Tuesday
+          - tomorrow
+        answer: on Thursday
+        explanation: I'm gonna go back on Thursday.
+  - type: explanation
+    id: meaning-how
+    title: Что имели в виду
+    body: |-
+      Короткие реплики в разговоре значат больше, чем в словаре. Прослушайте шесть коротких реплик друзей. В каждой есть фраза-реакция: **Been there**, **You lost me**, **Fair enough**, **Sounds good**, **Hang on a second**, **Come again?** Выберите, что человек имел в виду. Опирайтесь на ситуацию вокруг фразы. **Come again?** — «повторите, пожалуйста» (разговорное).
+  - type: listening
+    id: meaning
+    title: What did they mean?
+    plays: 2
+    transcript:
+      - { speaker: Jack, text: "Been there. It took me two hours to find the hostel as well." }
+      - { speaker: Zoe, text: "Sorry, you lost me. Can you start again from the beginning?" }
+      - { speaker: Ben, text: "Fair enough. I won't ask again." }
+      - { speaker: Sofia, text: "Sounds good. I'm in. Which time?" }
+      - { speaker: Jack, text: "Hang on a second. I think that's my phone." }
+      - { speaker: Zoe, text: "Come again? I didn't catch the last word." }
+  - type: exercise
+    id: meaning-q
+    about: meaning
+    title: Аудирование — что имели в виду
+    instruction: Выберите, что человек имел в виду.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Jack mean by "Been there"?
+        options:
+          - He has had the same experience.
+          - He wants to go there.
+          - He is there now.
+        answer: He has had the same experience.
+        explanation: Been there — сокращение от I've been there; потом он рассказывает, как искал хостел.
+      - id: q2
+        prompt: What does Zoe mean by "You lost me"?
+        options:
+          - She did not follow the explanation.
+          - She is lost in the city.
+          - She is losing the game.
+        answer: She did not follow the explanation.
+        explanation: Следом она просит начать сначала.
+      - id: q3
+        prompt: What does Ben mean by "Fair enough"?
+        options:
+          - He accepts the other person's point.
+          - He thinks it is fair to pay.
+          - He is angry.
+        answer: He accepts the other person's point.
+        explanation: Fair enough — принимаю довод; дальше он обещает не спрашивать снова.
+      - id: q4
+        prompt: What does Sofia mean by "Sounds good. I'm in."?
+        options:
+          - She agrees and will join.
+          - She asks for a repeat.
+          - She is leaving.
+        answer: She agrees and will join.
+        explanation: I'm in — «я с вами».
+      - id: q5
+        prompt: What does Jack mean by "Hang on a second"?
+        options:
+          - He asks the others to wait.
+          - He is ending a phone call.
+          - He wants to hang out.
+        answer: He asks the others to wait.
+        explanation: Hang on a second — «подождите секунду».
+      - id: q6
+        prompt: What does Zoe mean by "Come again?"
+        options:
+          - She asks him to repeat.
+          - She wants him to return.
+          - She agrees with him.
+        answer: She asks him to repeat.
+        explanation: Come again? — просьба повторить; она не расслышала последнее слово.
+  - type: exercise
+    id: phrases-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - Don't worry about it.
+      - You too. Catch you later.
+      - Sure, take your time.
+      - Yes, I'm gonna grab a drink.
+      - It costs ten pounds.
+      - I live in London.
+    items:
+      - { id: m1, prompt: "Sorry I'm late. The bus never came.", answer: "Don't worry about it." }
+      - { id: m2, prompt: "It was great chatting to you.", answer: "You too. Catch you later." }
+      - { id: m3, prompt: "Hang on a second.", answer: "Sure, take your time." }
+      - { id: m4, prompt: "Are you going to the bar?", answer: "Yes, I'm gonna grab a drink." }
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank: [random, sorted, heads-up, bump into, hang out, nightmare, legit, gutted, chuffed]
+    items:
+      - { id: g1, prompt: "I might ___ Tom at the station — he lives near there.", answer: bump into }
+      - { id: g2, prompt: "Do you wanna ___ at my place after the tour?", answer: hang out }
+      - { id: g3, prompt: "Thanks for the ___: I would have missed the last bus.", answer: heads-up }
+      - { id: g4, prompt: "Right, that's the taxi ___. Who's got the tickets?", answer: sorted }
+      - { id: g5, prompt: "What a ___! Our train was cancelled and the hotel lost our booking.", answer: nightmare }
+      - { id: g6, prompt: "It was a really ___ question — nobody knew why he asked it.", answer: random }
+      - { id: g7, prompt: "Is this website ___? I've never heard of the company.", answer: legit }

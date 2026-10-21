@@ -1,0 +1,164 @@
+title: Ответы в чате, история из поездки и сцена с переспросом
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: talk-bank
+    title: Банк фраз — поддержать разговор
+    body: |-
+      В быстром разговоре нужны четыре умения: отреагировать, переспросить, вернуть собеседника к мысли и закончить разговор. Для каждого хватает одной короткой фразы.
+
+      **Реакция:** **No way!** / **That's wild.** / **Been there.** / **Did you?** **Согласие:** **Sounds good.** / **Fair enough.** **Переспросить:** **Sorry, what?** (не расслышали) / **You lost me.** (не поняли). **Пауза:** **Hang on a second.** **Вернуть разговор:** **Sorry, you were saying?** **Закончить:** **Anyway, I'd better get going.** → **It was great chatting to you.** → **Catch you later.**
+
+      История из поездки на 1–2 минуты строится из четырёх частей: где вы были и когда, что произошло, как вы отреагировали, чем кончилось. Части открывают связки вроде **So…**, **Anyway…**, **In the end…**. Рассказывайте в past simple, редуцированные формы допустимы (I was gonna go, but…).
+
+      Составьте свой банк: запишите по одной фразе на каждое умение и проговорите вслух.
+    table:
+      columns:
+        - умение
+        - фраза
+      rows:
+        - - отреагировать
+          - No way! / That's wild.
+        - - согласиться
+          - Sounds good. / Fair enough.
+        - - переспросить
+          - Sorry, what? / You lost me.
+        - - вернуть разговор
+          - Sorry, you were saying?
+        - - закончить
+          - Anyway, I'd better get going.
+        - - попрощаться
+          - It was great chatting to you. Catch you later.
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - Did you? What happened?
+      - Fair enough. Let's go on Friday.
+      - Sorry, I talk too fast. I said we're off at nine.
+      - Sure. It was great chatting to you.
+      - It costs ten pounds.
+      - I live in London.
+    items:
+      - { id: m1, prompt: "I missed the last train and walked home.", answer: "Did you? What happened?" }
+      - { id: m2, prompt: "I'd rather not go on Saturday. It's too busy.", answer: "Fair enough. Let's go on Friday." }
+      - { id: m3, prompt: "Sorry, what? I didn't catch the time.", answer: "Sorry, I talk too fast. I said we're off at nine." }
+      - { id: m4, prompt: "Anyway, I'd better get going.", answer: "Sure. It was great chatting to you." }
+  - type: explanation
+    id: writing-how
+    title: Ответы в групповом чате
+    body: |-
+      В чате друзей отвечают быстро, но не односложно: реакция, ответ на вопрос, свой вопрос или предложение. Вам нужно написать несколько сообщений подряд, 40–80 слов вместе. Регистр дружеский: короткие предложения, сокращения (I'm, it's, I'll), допустимы gonna, dunno и слова из урока (keen, heads-up, sorted), один-два восклицательных знака.
+
+      Порядок: реакция на новость (**Nice, I'm in!**) → ответ на вопрос (**I'm keen, but I dunno if I can make the first act.**) → встречный вопрос или время (**Could we meet outside at 7.30?**) → благодарность (**Cheers for the heads-up.**). Если сообщение к нескольким людям, обращайтесь по имени: **Zoe, …** **Jack, …**
+  - type: writing
+    id: chat-replies
+    register: friendly
+    prompt: "В групповом чате Зои пишет: «guys, I got tickets for the comedy night on Friday. It's £10 each. Who's in? We're meeting outside at 7.30.» Ответьте в чат (40–80 слов): отреагируйте, скажите, что вы идёте, но можете немного опоздать из-за экскурсии до шести, задайте один вопрос и поблагодарите за предупреждение о цене."
+    words: { min: 40, max: 80 }
+    model: |-
+      Nice one, Zoe, I'm in! I'm keen, but my walking tour finishes at six, so I might be a few minutes late. Is the show on in the bar, or do we need to go somewhere else? Seven thirty outside sounds good, so I'll try to be there. Cheers for the heads-up about the price, Zoe. Ten pounds is fine for a night out.
+    criteria:
+      - 40–80 слов; есть реакция, ответ, один вопрос и благодарность
+      - "Дружеский регистр: короткие предложения, сокращения, слова из урока (keen, heads-up, Fair enough, Sounds good)"
+      - Названо время и место встречи; причина возможного опоздания объяснена одной фразой
+      - Обращение к Зои по имени
+      - Один вопрос с понятным ответом
+  - type: explanation
+    id: speaking-how
+    title: История из поездки
+    body: |-
+      Первое устное задание — рассказ на 1–2 минуты о случае из поездки: неудачный день, неожиданная встреча, ошибка с маршрутом. Вы рассказываете в хостеле людям, которых только что узнали. Они иногда вставляют **Did you?**, **No way!**, **That's wild** — эти реакции в записи вы не слышите, поэтому сделайте небольшие паузы в тех местах, где собеседник отреагировал бы.
+
+      Структура: когда и где → что случилось → ваша реакция → чем кончилось. Не заучивайте образец: возьмите свой случай. Запишите, переслушайте, сверьте с критериями, запишите второй дубль.
+  - type: speaking
+    id: trip-story
+    part: monologue
+    prompt: "Вы в хостеле рассказываете новым знакомым о случае из поездки (1–2 минуты): когда и где это было, что произошло, как вы отреагировали, чем всё кончилось. Используйте слова-связки So… / Anyway… / In the end… и хотя бы одну реакцию вроде That's wild или Been there. Запишите свою часть."
+    seconds: 90
+    model: "So last year I was in Porto, and I was gonna take the train to Lisbon. I got to the station at eight, and the board said the train was cancelled. I was gutted, honestly. A man next to me said there was another one at ten, so I went for a coffee. Anyway, I came back at ten, and that one was cancelled too. What a nightmare! In the end, I took a bus. It took about three and a half hours, and I was knackered, but I met a really nice woman from Brazil on the way. We still chat. So, yeah, that's my story. Have you ever had a trip like that?"
+    criteria:
+      - 1–2 минуты, четыре части — когда и где, что случилось, реакция, чем кончилось
+      - Слова-связки So / Anyway / In the end и слова урока (gutted, knackered, a nightmare)
+      - Рассказ в past simple, одна-две редуцированные формы (gonna, dunno) к месту
+      - Короткие паузы там, где собеседник мог бы вставить реакцию
+      - На втором дубле — меньше пауз и повторов
+  - type: explanation
+    id: scene-how
+    title: Сцена — вечер в хостеле
+    body: |-
+      Теперь сцена: вы в общей комнате хостела, и к вам подходит Зои. Она говорит быстро и с редукциями, поэтому в одной из реплик вы можете не успеть. Сначала звучат только её реплики, подряд, два раза. Затем откройте текст реплик кнопкой «Открыть текст» и держите его перед глазами.
+
+      В задании речи включите запись. Отвечайте на каждую реплику Зои по порядку: на быструю реплику переспросите (**Sorry, what?** или **You lost me**), потом ответьте по существу. В конце скажите, что вам пора, и попрощайтесь.
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника — в общей комнате
+    plays: 2
+    transcript:
+      - { speaker: Zoe, text: "Hey, you were on the Skye tour yesterday, weren't you?" }
+      - { speaker: Zoe, text: "I thought so! I'm Zoe. Right, so we're gonna do the ghost tour tonight, it's at nine, and then Jack's mate is gonna drive us to a gig, you wanna come?" }
+      - { speaker: Zoe, text: "Sorry, I talk too fast. We're doing the ghost tour tonight at nine. Do you wanna come?" }
+      - { speaker: Zoe, text: "Outside the cathedral at ten to nine. Bring a jacket, it gets cold." }
+      - { speaker: Zoe, text: "No worries. See you tonight!" }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы в общей комнате хостела в Эдинбурге. К вам подходит Зои, которая была с вами на экскурсии. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Подтвердите, что были на экскурсии, и назовите имя. На быструю вторую реплику переспросите. Ответьте, что идёте, спросите, где встреча, поблагодарите за предупреждение, скажите, что вам пора, и попрощайтесь. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Zoe: Hey, you were on the Skye tour yesterday, weren't you?
+      You: Yes, I was. Hi, I'm Alex.
+      Zoe: I thought so! I'm Zoe. Right, so we're gonna do the ghost tour tonight, it's at nine, and then Jack's mate is gonna drive us to a gig, you wanna come?
+      You: Sorry, what? You lost me a bit.
+      Zoe: Sorry, I talk too fast. We're doing the ghost tour tonight at nine. Do you wanna come?
+      You: Sounds good. I'm keen. Where do we meet?
+      Zoe: Outside the cathedral at ten to nine. Bring a jacket, it gets cold.
+      You: Thanks for the heads-up. Anyway, I'd better get going. I need to book my train.
+      Zoe: No worries. See you tonight!
+      You: It was great chatting to you. Catch you later.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна-две фразы
+      - "Переспросили на быструю реплику: Sorry, what? / You lost me"
+      - "Согласие и вопрос о месте: Sounds good. Where do we meet?"
+      - "Выход из разговора: Anyway, I'd better get going → It was great chatting to you → Catch you later"
+      - Благодарность за предупреждение (heads-up) уместна и стоит до прощания
+      - "Можно и мягко отказаться (I'd better not tonight, thanks): реплики Зои те же, отвечайте по смыслу"
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "You live in Leeds, ___?"
+        options: [don't you, aren't you, do you]
+        answer: don't you
+        explanation: После утверждения в present simple — don't you.
+      - id: q2
+        prompt: "I went to the gig last night. — ___"
+        options: [Did you?, Do you?, Were you?]
+        answer: Did you?
+        explanation: Past simple — эхо с did.
+      - id: q3
+        prompt: "I'm ___ get a drink. Want anything?"
+        options: [gonna, going, gone]
+        answer: gonna
+        explanation: Gonna — разговорная форма going to.
+      - id: q4
+        prompt: "I didn't understand the explanation. What do I say?"
+        options: [You lost me., Been there., Sounds good.]
+        answer: You lost me.
+        explanation: You lost me — вы не поняли объяснения.
+      - id: q5
+        prompt: "Which phrase starts to leave a conversation?"
+        options:
+          - Anyway, I'd better get going.
+          - Sorry, you were saying?
+          - Fair enough.
+        answer: Anyway, I'd better get going.
+        explanation: Anyway, I'd better get going — первый шаг выхода из разговора.

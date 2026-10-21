@@ -1,8 +1,24 @@
 number: 9
 title: Keep the conversation going
 subtitle: Поддержать разговор
-status: draft
+status: published
 goal: понимать быструю разговорную речь, реагировать, переспросить и вежливо закончить разговор
 grammar:
   - разделительные и эхо-вопросы, опущенные слова в речи, редукции (gonna, wanna, dunno)
 sessions: 3
+lessons:
+  - t09-1
+  - t09-2
+  - t09-3
+  - t09-test
+crib:
+  title: разговор
+  rows:
+    - [не может быть, No way!]
+    - [принимаю довод, Fair enough.]
+    - [не расслышал, "Sorry, what?"]
+    - [не понял объяснение, You lost me.]
+    - [вернуть разговор, "Sorry, you were saying?"]
+    - [мне пора, "Anyway, I'd better get going."]
+    - [прощание, Catch you later.]
+  note: "Хвостик после утверждения отрицательный, после отрицания — утвердительный; эхо повторяет вспомогательный глагол"
