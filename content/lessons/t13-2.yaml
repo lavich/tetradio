@@ -1,0 +1,375 @@
+title: Статья о первых свиданиях, согласие и разговор на свидании
+kind: lesson
+items:
+  - { kind: word, id: tw189 }
+  - { kind: word, id: tw190 }
+  - { kind: word, id: tw191 }
+  - { kind: word, id: tw192 }
+  - { kind: word, id: tw193 }
+  - { kind: word, id: tw194 }
+  - { kind: word, id: tw195 }
+  - { kind: phrase, id: tp189 }
+  - { kind: phrase, id: tp190 }
+  - { kind: phrase, id: tp191 }
+  - { kind: phrase, id: tp192 }
+  - { kind: phrase, id: tp193 }
+  - { kind: phrase, id: tp194 }
+  - { kind: phrase, id: tp195 }
+blocks:
+  - type: explanation
+    id: words-more
+    title: Согласие и границы — слова и фразы
+    body: |-
+      **Consent** — согласие: ясное «да» от человека, который сам этого хочет. Согласие спрашивают, его не предполагают, и ответ «нет» тоже ответ. **Boundaries** — личные границы: то, что человеку комфортно, и то, что нет. **Respectful** — уважительный: человек считается с чувствами и решениями другого. **Pushy** — навязчивый: продолжает настаивать, когда ответ уже дан. **Overstep** — зайти слишком далеко: *Asking about her salary on a first date might overstep.*
+
+      **Mutual** — взаимный, общий для двоих: *It was a mutual decision.* **Flirt** — флиртовать, показывать лёгкий романтический интерес: *She likes to flirt a little.* Флирт строится на взаимности: если вы видите, что собеседнику неловко, остановитесь.
+
+      Фразы урока. **Is this okay?** — вопрос о согласии: его задают до действия и слушают ответ. **I'd rather not.** — вежливый отказ, причину называть не нужно. **No worries, totally fine.** — спокойный ответ на отказ. **Let's take it slow.** — о темпе знакомства. **I had a really nice time.** — сказать на прощание. **I'd like to see you again.** — прямое пожелание, на которое можно ответить «да» или «нет». **Can I walk you to the station?** — предложение, от которого можно отказаться: *Thanks, I'll make my own way.*
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: consent-how
+    title: Согласие — вопрос, ответ, уважение ответа
+    body: |-
+      Согласие на свидании строится в три шага: **вопрос → ответ → уважение ответа**. Вопрос задают до действия и так, чтобы можно было сказать и «да», и «нет»: **Is this okay?** **Is it okay if I text you tomorrow?** Ответ принимают как есть: *Yes, that's fine.* или **I'd rather not.**
+
+      Ответ «нет» объяснять не нужно. Не повторяйте просьбу и не спрашивайте «почему»: нормальная реакция — **No worries, totally fine.** Так же принимают **Let's take it slow**: темп определяют оба.
+
+      Сказать «нет» можно так: **I'd rather not.** — коротко; **Thanks, I'll make my own way.** — отказ от предложения проводить; **I'm not comfortable with that.** — «мне это неудобно», когда нужно обозначить границу яснее. Последняя фраза в уроке дана для узнавания.
+
+      Ответ «да» тоже можно изменить: человек, который согласился, вправе передумать. Если ответа нет или он неуверенный, это не «да».
+    table:
+      columns:
+        - шаг
+        - что сказать
+      rows:
+        - - спросить
+          - Is this okay?
+        - - сказать «нет»
+          - I'd rather not.
+        - - принять «нет»
+          - No worries, totally fine.
+        - - не торопить
+          - Let's take it slow.
+        - - закончить вечер
+          - I had a really nice time.
+  - type: exercise
+    id: consent-q
+    title: Согласие и отказ
+    instruction: Выберите подходящий ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: "You ask: Can I walk you to the station? She answers: Thanks, I'll make my own way. What do you say?"
+        options:
+          - No worries, totally fine.
+          - Come on, it's late.
+          - Why not?
+        answer: No worries, totally fine.
+        explanation: Отказ принимают спокойно, без уговоров и вопроса «почему».
+      - id: q2
+        prompt: "You say: I'd like to see you again. He answers: Let's take it slow. Which reply respects his answer?"
+        options:
+          - Sounds good to me. There's no hurry.
+          - How slow? A week?
+          - Everyone says that.
+        answer: Sounds good to me. There's no hurry.
+        explanation: Темп определяют оба, ответ принимают без допроса.
+      - id: q3
+        prompt: "A personal question makes you uneasy and you do not want to answer. Which reply is short and polite?"
+        options:
+          - I'd rather not.
+          - None of your business.
+          - Everyone asks me that.
+        answer: I'd rather not.
+        explanation: I'd rather not — вежливый отказ без объяснения причин.
+      - id: q4
+        prompt: "Which question gives the other person a real choice?"
+        options:
+          - Is it okay if I text you tomorrow?
+          - I'll text you tomorrow, right?
+          - You will text me back, won't you?
+        answer: Is it okay if I text you tomorrow?
+        explanation: Вопрос открыт для ответа «да» и «нет»; остальные ждут «да».
+  - type: explanation
+    id: article-how
+    title: Как читать статью и слушать разговор
+    body: |-
+      Сначала статья о первых свиданиях. Прочитайте её целиком, затем отвечайте на вопросы: в статье нужно найти, что советуют делать, что отвечать на «нет» и что говорят три пары.
+
+      Затем разговор Лены и Уилла в конце вечера. Слушайте, о чём они говорят, как Лена выбирает темп и как Уилл принимает её ответ. Звучит два раза, транскрипт откроется после ответа.
+
+      В статье **move on to** — перейти к другой теме, **a year off** — свободный год. В заданиях встретится *overstep the mark*: слово **mark** здесь значит «граница приличий».
+  - type: reading
+    id: article
+    title: First dates — a short guide
+    text: |-
+      FIRST DATES: A SHORT GUIDE
+
+      Meeting someone for the first time can feel a bit awkward, and that is normal. Most people are nervous, and many are glad when the other person is honest about it.
+
+      Choose a place that is easy to talk in, such as a café or a walk by the river. Ask open questions and listen. If you like the person, a compliment about their laugh or their stories is nicer than a cheesy line.
+
+      Flirting works best when it is mutual. Watch how the other person answers, and ask before you do anything beyond talking. A simple question such as "Is this okay?" gives them a real choice. If they say "I'd rather not", the right answer is "No worries, totally fine." Do not ask again and do not ask for a reason. Pushy behaviour is the quickest way to end a date.
+
+      Consent means a clear yes from someone who wants it. Everyone has boundaries, and respecting them is part of a good evening. If you want to go slowly, say so: "Let's take it slow."
+
+      THREE COUPLES, ONE RULE
+
+      Meera, 28: "Nora and I asked each other what we'd do with a year off. That made talking easy."
+      Dan, 34: "On our first date Joe asked if he could ask about my family. I said I'd rather not yet, so he moved on to football. That is when I knew I liked him."
+      Maria, 41: "I said I'd rather get a taxi home. Ken said no worries, totally fine, and texted me later to say he'd had a nice time."
+    glosses:
+      - { text: moved on to, russian: "перешёл к" }
+      - { text: a year off, russian: "свободный год" }
+  - type: exercise
+    id: article-q
+    about: article
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does the article say about nerves on a first date?
+        options:
+          - Most people feel nervous.
+          - Only one person feels nervous.
+          - Nervous people should cancel.
+        answer: Most people feel nervous.
+        explanation: Most people are nervous.
+      - id: q2
+        prompt: Which place does the article suggest?
+        options:
+          - a café or a walk by the river
+          - a busy club
+          - the other person's home
+        answer: a café or a walk by the river
+        explanation: Such as a café or a walk by the river.
+      - id: q3
+        prompt: What is nicer than a cheesy line?
+        options:
+          - a compliment about their laugh or stories
+          - a joke about their job
+          - a long silence
+        answer: a compliment about their laugh or stories
+        explanation: A compliment about their laugh or their stories.
+      - id: q4
+        prompt: When does flirting work best?
+        options:
+          - when it is mutual
+          - when one person leads
+          - when it is a surprise
+        answer: when it is mutual
+        explanation: Flirting works best when it is mutual.
+      - id: q5
+        prompt: What does the question "Is this okay?" give the other person?
+        options:
+          - a real choice
+          - a time limit
+          - a reason to wait
+        answer: a real choice
+        explanation: It gives them a real choice.
+      - id: q6
+        prompt: What should you do after "I'd rather not"?
+        options:
+          - Say no worries and not ask again.
+          - Ask for a reason.
+          - Ask again later in the evening.
+        answer: Say no worries and not ask again.
+        explanation: Do not ask again and do not ask for a reason.
+      - id: q7
+        prompt: What did Joe do when Dan said he would rather not talk about his family yet?
+        options:
+          - He moved on to football.
+          - He asked again.
+          - He ended the date.
+        answer: He moved on to football.
+        explanation: He moved on to football.
+      - id: q8
+        prompt: What did Ken do after Maria chose a taxi?
+        options:
+          - He said no worries and texted her later.
+          - He rode in the taxi with her.
+          - He asked her to stay.
+        answer: He said no worries and texted her later.
+        explanation: Ken said no worries, totally fine, and texted me later.
+  - type: listening
+    id: date
+    title: At the end of the evening — Lena and Will
+    plays: 2
+    transcript:
+      - { speaker: Will, text: "I'm glad we came here. If you could live anywhere, where would it be?" }
+      - { speaker: Lena, text: "Lisbon, I think. I'm kind of a morning person, and I'd love to have coffee by the sea. What about you?" }
+      - { speaker: Will, text: "I'd rather stay in the north, honestly. I'd miss the hills. Is it okay if I ask what you do at the weekend?" }
+      - { speaker: Lena, text: "Sure. I climb on Saturdays, and on Sundays I'd rather stay in and read." }
+      - { speaker: Will, text: "That sounds good to me. I'm a bit nervous to say this, but I'd like to see you again." }
+      - { speaker: Lena, text: "I'd like that too. Let's take it slow, though. I'd rather not plan the whole month tonight." }
+      - { speaker: Will, text: "No worries, totally fine. We can just text on Monday. It's getting late. Can I walk you to the station?" }
+      - { speaker: Lena, text: "Thanks, but I'll make my own way. I had a really nice time, though." }
+      - { speaker: Will, text: "No worries, totally fine. Safe journey home." }
+      - { speaker: Lena, text: "Goodnight, Will." }
+  - type: exercise
+    id: date-q
+    about: date
+    title: Аудирование — Лена и Уилл
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where would Lena live if she could live anywhere?
+        options:
+          - in Lisbon
+          - in the north
+          - by the hills
+        answer: in Lisbon
+        explanation: Lisbon, I think.
+      - id: q2
+        prompt: What does Lena say about herself?
+        options:
+          - She is kind of a morning person.
+          - She never drinks coffee.
+          - She is afraid of the sea.
+        answer: She is kind of a morning person.
+        explanation: I'm kind of a morning person.
+      - id: q3
+        prompt: Where would Will rather stay?
+        options:
+          - in the north
+          - in Lisbon
+          - in the city centre
+        answer: in the north
+        explanation: I'd rather stay in the north.
+      - id: q4
+        prompt: What does Lena do on Sundays?
+        options:
+          - She stays in and reads.
+          - She goes climbing.
+          - She visits friends.
+        answer: She stays in and reads.
+        explanation: On Sundays I'd rather stay in and read.
+      - id: q5
+        prompt: How does Will feel when he says he would like to see her again?
+        options:
+          - a bit nervous
+          - very tired
+          - angry
+        answer: a bit nervous
+        explanation: I'm a bit nervous to say this.
+      - id: q6
+        prompt: What does Lena ask for?
+        options:
+          - to take it slow
+          - to plan the whole month
+          - to end the evening
+        answer: to take it slow
+        explanation: Let's take it slow, though.
+      - id: q7
+        prompt: How do they plan to keep in touch?
+        options:
+          - They will text on Monday.
+          - They will meet on Sunday.
+          - They will call tonight.
+        answer: They will text on Monday.
+        explanation: We can just text on Monday.
+      - id: q8
+        prompt: How does Will react when Lena says she will make her own way?
+        options:
+          - He accepts it and says safe journey home.
+          - He asks her to change her mind.
+          - He walks with her anyway.
+        answer: He accepts it and says safe journey home.
+        explanation: No worries, totally fine. Safe journey home.
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово. Два варианта лишние.
+    format: gap
+    bank: [consent, boundaries, pushy, respectful, mutual, overstep, flirt, a compliment, awkward]
+    items:
+      - { id: g1, prompt: "He kept asking after I had said no. People who do that are ___.", answer: pushy }
+      - { id: g2, prompt: "A polite yes is easy to say, but real ___ means a clear yes from someone who wants it.", answer: consent }
+      - { id: g3, prompt: "Everyone has ___: things they are happy to talk about and things they would rather not.", answer: boundaries }
+      - { id: g4, prompt: "He listened, asked first and accepted my answer. He was very ___ of my decision.", answer: respectful }
+      - { id: g5, prompt: "We both wanted to take it slowly. It was a ___ decision.", answer: mutual }
+      - { id: g6, prompt: "A question about her salary on a first date might ___ the mark.", answer: overstep }
+      - { id: g7, prompt: "She likes to ___ a little, but only when she can see that the other person enjoys it too.", answer: flirt }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'd, let's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Можно проводить тебя до станции?"
+        answer:
+          - "Can I walk you to the station?"
+          - "Could I walk you to the station?"
+          - "May I walk you to the station?"
+          - "Shall I walk you to the station?"
+          - "Would you like me to walk you to the station?"
+        explanation: Can I walk you to the station? — предложение, от которого можно отказаться.
+      - id: q2
+        prompt: "Так нормально? Ты не против? (спросить согласие)"
+        answer:
+          - "Is this okay?"
+          - "Is this OK?"
+          - "Is this all right?"
+          - "Is this alright?"
+          - "Is that okay?"
+          - "Is that OK?"
+          - "Is that all right?"
+          - "Is that alright?"
+          - "Is it okay?"
+          - "Is it OK?"
+          - "Is it all right?"
+          - "Is it alright?"
+          - "Are you okay with this?"
+          - "Are you okay with that?"
+          - "Are you OK with this?"
+          - "Are you OK with that?"
+          - "Are you all right with this?"
+          - "Are you all right with that?"
+          - "Are you alright with this?"
+          - "Are you alright with that?"
+        explanation: Is this okay? — вопрос о согласии до действия.
+      - id: q3
+        prompt: "Давай не будем торопиться. (со словом slow)"
+        answer:
+          - "Let's take it slow."
+          - "Let's take it slowly."
+          - "Let us take it slow."
+          - "Let us take it slowly."
+          - "Let's go slow."
+          - "Let's go slowly."
+          - "Let us go slow."
+          - "Let us go slowly."
+        explanation: Let's take it slow — о темпе знакомства.
+      - id: q4
+        prompt: "Не переживай, всё в порядке. (принять отказ)"
+        answer:
+          - "No worries, totally fine."
+          - "No worries, completely fine."
+          - "No problem, totally fine."
+          - "No problem, completely fine."
+          - "No worries at all, totally fine."
+          - "No worries at all, completely fine."
+          - "No worries, that's fine."
+          - "No worries, that's okay."
+          - "No worries, that's OK."
+          - "No problem, that's fine."
+          - "No problem, that's okay."
+          - "No problem, that's OK."
+          - "That's totally fine, no worries."
+          - "That's completely fine, no worries."
+        explanation: No worries, totally fine — спокойный ответ на отказ.
+      - id: q5
+        prompt: "Я бы хотел(а) увидеться снова."
+        answer:
+          - "I'd like to see you again."
+          - "I'd love to see you again."
+          - "I would like to see you again."
+          - "I would love to see you again."
+          - "I'd like to meet again."
+          - "I would like to meet again."
+        explanation: I'd like to see you again — прямое пожелание.

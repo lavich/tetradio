@@ -1,0 +1,8 @@
+id: tp189
+text: "Is this okay?"
+translation: "Так нормально? Ты не против?"
+note: "вопрос о согласии задают до действия и принимают ответ как есть"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

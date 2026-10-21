@@ -1,0 +1,8 @@
+id: tp183
+text: "I reckon it's worth a try."
+translation: "Думаю, попробовать стоит."
+note: "reckon — британское разговорное «думаю»; в США чаще I think"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

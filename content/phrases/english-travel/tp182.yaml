@@ -1,0 +1,8 @@
+id: tp182
+text: "You've got a great laugh."
+translation: "У тебя очень приятный смех."
+note: "комплимент о том, как человек смеётся или держится"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

@@ -1,0 +1,8 @@
+id: tp181
+text: "If you could live anywhere, where would it be?"
+translation: "Если бы вы могли жить где угодно, где бы это было?"
+note: "second conditional: гипотетический вопрос для разговора; после if стоит past simple, в главной части — would"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

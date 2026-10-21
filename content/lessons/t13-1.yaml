@@ -1,0 +1,299 @@
+title: Свидание — second conditional, смягчение и would rather
+kind: lesson
+items:
+  - { kind: word, id: tw181 }
+  - { kind: word, id: tw182 }
+  - { kind: word, id: tw183 }
+  - { kind: word, id: tw184 }
+  - { kind: word, id: tw185 }
+  - { kind: word, id: tw186 }
+  - { kind: word, id: tw187 }
+  - { kind: word, id: tw188 }
+  - { kind: phrase, id: tp181 }
+  - { kind: phrase, id: tp182 }
+  - { kind: phrase, id: tp183 }
+  - { kind: phrase, id: tp184 }
+  - { kind: phrase, id: tp185 }
+  - { kind: phrase, id: tp186 }
+  - { kind: phrase, id: tp187 }
+  - { kind: phrase, id: tp188 }
+blocks:
+  - type: explanation
+    id: second-conditional
+    title: Second conditional — вопросы о воображаемом
+    body: |-
+      На свидании часто спрашивают о воображаемой ситуации: что бы вы сделали, если бы… Для этого служит **second conditional**: в части с **if** стоит past simple, в главной части — **would** и инфинитив без to.
+
+      **If you could live anywhere, where would it be?** Прошедшее время здесь не говорит о прошлом: оно показывает, что ситуация воображаемая. Ответ строят так же: **If I had more time, I'd travel more.** I'd — сокращение would.
+
+      С глаголом to be в части с if для всех лиц говорят **were**: **If I were you, I'd try it.** В разговоре слышно и was, но were считается правильным вариантом.
+
+      Две частые ошибки. Первая — would в части с if: If I would have more time. Нужно **If I had more time.** Вторая — will в главной части: If I had more time, I will travel. Нужно **I'd travel** или **I would travel.**
+    table:
+      columns:
+        - часть
+        - форма
+        - пример
+      rows:
+        - - часть с if
+          - if + past simple
+          - If you could live anywhere
+        - - главная часть
+          - would + инфинитив
+          - where would it be?
+        - - ответ о себе
+          - if + past simple, I'd + инфинитив
+          - If I had more time, I'd travel more.
+        - - с глаголом to be
+          - if I were
+          - If I were you, I'd try it.
+  - type: explanation
+    id: softening
+    title: Смягчение — kind of, a bit, I guess
+    body: |-
+      Слова **kind of**, **a bit** и **I guess** делают высказывание мягче. Они оставляют собеседнику место для своего мнения и подходят там, где прямое «да» или «нет» прозвучало бы резко.
+
+      **I'm kind of a morning person.** — скорее жаворонок. **I'm a bit nervous, to be honest.** — немного волнуюсь. **I guess it's worth a try.** — наверное, попробовать стоит. Британский вариант последней фразы — **I reckon it's worth a try**: reckon значит «думаю».
+
+      Kind of и a bit ставят перед прилагательным или существительным, I guess — в начале или в конце фразы. Одно смягчение в предложении достаточно: три подряд (I guess I'm kind of a bit nervous) звучат неуверенно.
+    table:
+      columns:
+        - слово
+        - значение
+        - пример
+      rows:
+        - - kind of
+          - в некоторой степени
+          - I'm kind of a morning person.
+        - - a bit
+          - немного
+          - I'm a bit nervous, to be honest.
+        - - I guess
+          - наверное
+          - I guess it's worth a try.
+        - - I reckon
+          - думаю (британский вариант)
+          - I reckon it's worth a try.
+  - type: explanation
+    id: would-rather
+    title: Would rather — что вы предпочитаете
+    body: |-
+      **Would rather** выражает предпочтение. После него стоит инфинитив без to: **I'd rather stay in than go out.** Для сравнения используют **than** и снова инфинитив без to.
+
+      Фраза **I'd rather not.** — вежливый отказ без объяснения причин. После неё можно сказать, что вы готовы к другому: *I'd rather not talk about it. What about you?*
+
+      В вопросе слова меняются местами: **Would you rather go for a walk or sit in a café?** Ответ: **I'd rather go for a walk.**
+
+      Две частые ошибки. Первая — to после rather: I'd rather to stay. Нужно **I'd rather stay.** Вторая — форма на -ing: I'd rather staying in. Нужно **I'd rather stay in.**
+    table:
+      columns:
+        - что сказать
+        - форма
+        - пример
+      rows:
+        - - предпочтение
+          - would rather + инфинитив
+          - I'd rather stay in.
+        - - сравнение
+          - would rather A than B
+          - I'd rather stay in than go out.
+        - - отказ
+          - would rather not
+          - I'd rather not.
+        - - вопрос
+          - Would you rather A or B?
+          - Would you rather walk or take a taxi?
+  - type: explanation
+    id: date-words
+    title: Слова для разговора на свидании
+    body: |-
+      **A compliment** — приятные слова о человеке. Лучше хвалить то, как человек смеётся, говорит или что выбирает: **You've got a great laugh.** **Cheesy** — слащавый и заезженный: *a cheesy line* — заготовленная фраза для знакомства. **Awkward** — неловкий: *an awkward silence* — пауза, когда не знаешь, что сказать.
+
+      **Open up** — начать говорить о себе откровеннее, в своём темпе. **A pet peeve** — мелочь, которая особенно раздражает: *My pet peeve is people who are late.* **A bucket list** — список того, что хочется успеть в жизни: *Seeing the northern lights is on my bucket list.*
+
+      **Attentive** — внимательный: человек слушает и замечает, что говорит собеседник. **Down-to-earth** — простой и естественный, без позы.
+
+      Фразы урока. **I hadn't thought of it that way.** — спокойно принять другой взгляд; коротко согласиться с доводом можно словами **Fair point.** **I'd rather stay in than go out.** — предпочтение. **I'm a bit nervous, to be honest.** — сказать о волнении коротко и спокойно.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: conditional-choice
+    title: Second conditional
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If you ___ live anywhere, where would you go?"
+        options: [could, can, will]
+        answer: could
+        explanation: В части с if стоит past simple; could — прошедшая форма can.
+      - id: q2
+        prompt: "If I ___ more time, I'd travel more."
+        options: [had, have, would have]
+        answer: had
+        explanation: В части с if — past simple, would здесь не ставят.
+      - id: q3
+        prompt: "Where ___ you go if you won a free flight?"
+        options: [would, will, did]
+        answer: would
+        explanation: В главной части second conditional — would и инфинитив.
+      - id: q4
+        prompt: "If I ___ you, I'd try it."
+        options: [were, am, will be]
+        answer: were
+        explanation: С глаголом to be в части с if говорят were.
+      - id: q5
+        prompt: "If he asked me out, I ___ yes."
+        options: [would say, will say, said]
+        answer: would say
+        explanation: В главной части — would и инфинитив без to.
+      - id: q6
+        prompt: "I'd learn Italian if I ___ the time."
+        options: [had, would have, have]
+        answer: had
+        explanation: После if — past simple.
+  - type: exercise
+    id: rather-choice
+    title: Would rather и смягчение
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I'd rather ___ at home tonight."
+        options: [stay, to stay, staying]
+        answer: stay
+        explanation: После would rather идёт инфинитив без to.
+      - id: q2
+        prompt: "I'd rather walk ___ take the bus."
+        options: [than, to, from]
+        answer: than
+        explanation: Для сравнения после would rather ставят than.
+      - id: q3
+        prompt: "Someone asks about your last relationship, and you prefer not to answer. What do you say?"
+        options:
+          - I'd rather not.
+          - I rather not.
+          - I'm rather not.
+        answer: I'd rather not.
+        explanation: Вежливый отказ — would rather not.
+      - id: q4
+        prompt: "You want to say softly that you feel a little nervous."
+        options:
+          - I'm a bit nervous.
+          - I'm a bit of nervous.
+          - I'm a kind nervous.
+        answer: I'm a bit nervous.
+        explanation: A bit ставят перед прилагательным.
+  - type: exercise
+    id: words-match
+    title: Слова для свидания
+    instruction: Соедините русское описание с английским словом. Два английских варианта лишние.
+    format: match
+    bank:
+      - a compliment
+      - awkward
+      - cheesy
+      - open up
+      - a pet peeve
+      - a bucket list
+      - attentive
+      - down-to-earth
+      - a red flag
+      - a bio
+    items:
+      - { id: m1, prompt: "приятные слова о человеке", answer: a compliment }
+      - { id: m2, prompt: "о ситуации, в которой неловко и не знаешь, что сказать", answer: awkward }
+      - { id: m3, prompt: "о шутке или фразе: слащавая и заезженная", answer: cheesy }
+      - { id: m4, prompt: "начать говорить о себе откровеннее", answer: open up }
+      - { id: m5, prompt: "мелочь, которая особенно раздражает человека", answer: a pet peeve }
+      - { id: m6, prompt: "список того, что человек хочет успеть в жизни", answer: a bucket list }
+      - { id: m7, prompt: "слушает и замечает, что говорит собеседник", answer: attentive }
+      - { id: m8, prompt: "ведёт себя естественно, без позы и важности", answer: down-to-earth }
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - Lisbon, I think. If I could, I'd go tomorrow.
+      - Thanks, that's kind of you.
+      - I'd rather stay in, to be honest.
+      - That's okay. Me too, a bit.
+      - The next bus is at nine.
+      - Two coffees, please.
+    items:
+      - { id: m1, prompt: "If you could live anywhere, where would it be?", answer: "Lisbon, I think. If I could, I'd go tomorrow." }
+      - { id: m2, prompt: "You've got a great laugh.", answer: "Thanks, that's kind of you." }
+      - { id: m3, prompt: "Would you rather go out or stay in tonight?", answer: "I'd rather stay in, to be honest." }
+      - { id: m4, prompt: "I'm a bit nervous, to be honest.", answer: "That's okay. Me too, a bit." }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'd, I'm) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Если бы я мог(ла) жить где угодно, я бы выбрал(а) Лиссабон. (second conditional)"
+        answer:
+          - "If I could live anywhere, I'd choose Lisbon."
+          - "If I could live anywhere, I'd pick Lisbon."
+          - "If I could live anywhere, I'd live in Lisbon."
+          - "If I could live anywhere, I'd move to Lisbon."
+          - "If I could live anywhere, I would choose Lisbon."
+          - "If I could live anywhere, I would pick Lisbon."
+          - "If I could live anywhere, I would live in Lisbon."
+          - "If I could live anywhere, I would move to Lisbon."
+          - "If I could live anywhere in the world, I'd choose Lisbon."
+          - "If I could live anywhere in the world, I'd pick Lisbon."
+          - "If I could live anywhere in the world, I'd live in Lisbon."
+          - "If I could live anywhere in the world, I'd move to Lisbon."
+          - "If I could live anywhere in the world, I would choose Lisbon."
+          - "If I could live anywhere in the world, I would pick Lisbon."
+          - "If I could live anywhere in the world, I would live in Lisbon."
+          - "If I could live anywhere in the world, I would move to Lisbon."
+        explanation: If + past simple, would + инфинитив.
+      - id: q2
+        prompt: "Я скорее жаворонок. (с kind of)"
+        answer:
+          - "I'm kind of a morning person."
+          - "I'm kind of an early bird."
+          - "I am kind of a morning person."
+          - "I am kind of an early bird."
+        explanation: Kind of смягчает утверждение.
+      - id: q3
+        prompt: "Я лучше останусь дома. (с would rather)"
+        answer:
+          - "I'd rather stay in."
+          - "I'd rather stay at home."
+          - "I'd rather stay home."
+          - "I would rather stay in."
+          - "I would rather stay at home."
+          - "I would rather stay home."
+        explanation: После would rather — инфинитив без to.
+      - id: q4
+        prompt: "Если честно, я немного волнуюсь. (с a bit)"
+        answer:
+          - "To be honest, I'm a bit nervous."
+          - "To be honest, I am a bit nervous."
+          - "Honestly, I'm a bit nervous."
+          - "Honestly, I am a bit nervous."
+          - "If I'm honest, I'm a bit nervous."
+          - "If I'm honest, I am a bit nervous."
+          - "If I am honest, I'm a bit nervous."
+          - "If I am honest, I am a bit nervous."
+          - "I'm a bit nervous, to be honest."
+          - "I'm a bit nervous, honestly."
+          - "I'm a bit nervous, if I'm honest."
+          - "I'm a bit nervous, if I am honest."
+          - "I am a bit nervous, to be honest."
+          - "I am a bit nervous, honestly."
+          - "I am a bit nervous, if I'm honest."
+          - "I am a bit nervous, if I am honest."
+        explanation: A bit ставят перед прилагательным.
+      - id: q5
+        prompt: "Что бы ты сделал(а), если бы у тебя был свободный год? (second conditional)"
+        answer:
+          - "What would you do if you had a free year?"
+          - "What would you do if you had a year off?"
+        explanation: What would you do if you had…? — гипотетический вопрос.

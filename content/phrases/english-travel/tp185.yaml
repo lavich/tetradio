@@ -1,0 +1,8 @@
+id: tp185
+text: "I'm kind of a morning person."
+translation: "Я скорее жаворонок."
+note: "kind of смягчает утверждение; sort of — вариант с тем же смыслом"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

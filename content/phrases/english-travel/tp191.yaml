@@ -1,0 +1,8 @@
+id: tp191
+text: "Let's take it slow."
+translation: "Давай не будем торопиться."
+note: "о темпе знакомства; можно сказать в любой момент"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

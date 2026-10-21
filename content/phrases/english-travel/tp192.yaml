@@ -1,0 +1,8 @@
+id: tp192
+text: "No worries, totally fine."
+translation: "Не переживай, всё в порядке."
+note: "спокойно принять отказ, без обиды и уговоров; также No problem, totally fine"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

@@ -1,0 +1,8 @@
+id: tp187
+text: "If I had more time, I'd travel more."
+translation: "Будь у меня больше времени, я бы больше путешествовал(а)."
+note: "second conditional: if + past simple, would + инфинитив; I'd — сокращение would"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

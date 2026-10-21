@@ -85,7 +85,7 @@ describe("курс в продукте", () => {
 });
 
 describe("английский для путешествий и общения", () => {
-  const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07", "t08", "t09", "t10", "t11", "t12"];
+  const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07", "t08", "t09", "t10", "t11", "t12", "t13"];
   const TRIP = STAGE.slice(0, 7);
   const RUDE =
     /\b(fuck\w*|shit\w*|bitch\w*|bastard\w*|arse(hole|s)?|wank\w*|piss\w*|twat\w*|cunt\w*|prick(s)?|slut\w*|whore\w*|bollocks|crap\w*|dick\w*|\bass(hole)?\b)\b/i;
@@ -107,6 +107,7 @@ describe("английский для путешествий и общения",
     t10: { register: "friendly", min: 20, max: 40 },
     t11: { register: "friendly", min: 60, max: 100 },
     t12: { register: "friendly", min: 60, max: 100 },
+    t13: { register: "friendly", min: 40, max: 80 },
   };
   const travel = () => catalog.courses.find((course) => course.id === "english-travel");
   const lessonOf = (id: string) => packagesOf("english-travel").find((pack) => pack.id === id);
@@ -249,6 +250,26 @@ describe("английский для путешествий и общения",
     expect(body).toMatch(/text a friend where I am/);
     const exercises = blocksOf("t12-2").filter((item) => item.type === "exercise" && item.id === "safe-q");
     expect(exercises).toHaveLength(1);
+  });
+
+  it("t13-test: оцениваемое задание к аудио, где после отказа собеседник принимает его без повторной просьбы", () => {
+    const blocks = blocksOf("t13-test");
+    const listening = blocks.find((item) => item.type === "listening" && item.id === "refusal");
+    expect(listening?.type).toBe("listening");
+    const lines = listening?.type === "listening" ? listening.transcript : [];
+    const at = lines.findIndex((line) => /\bI'd rather not\b|\bno thanks\b|\bno,/i.test(line.text));
+    expect(at).toBeGreaterThan(0);
+    const asker = lines[at - 1].speaker;
+    expect(lines[at - 1].text).toContain("?");
+    expect(lines[at].speaker).not.toBe(asker);
+    expect(lines[at + 1]?.speaker).toBe(asker);
+    expect(lines[at + 1].text).toMatch(/no worries|fair enough|of course|totally fine|that's fine/i);
+    const after = lines.slice(at + 1).filter((line) => line.speaker === asker);
+    expect(after.filter((line) => line.text.includes("?"))).toHaveLength(0);
+    const graded = blocks.filter(
+      (item) => item.type === "exercise" && item.graded === true && item.about === "refusal",
+    );
+    expect(graded.length).toBeGreaterThan(0);
   });
 
   describe("контрольная точка «День поездки»", () => {

@@ -1,0 +1,8 @@
+id: tp195
+text: "Can I walk you to the station?"
+translation: "Можно проводить тебя до станции?"
+note: "предложение, от которого можно отказаться: I'll make my own way, thanks; в США также Can I walk you to the subway?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

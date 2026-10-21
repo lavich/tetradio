@@ -1,0 +1,8 @@
+id: tp193
+text: "I had a really nice time."
+translation: "Я очень приятно провёл(а) время."
+note: "сказать на прощание в конце вечера"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md
