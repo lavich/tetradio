@@ -1,0 +1,8 @@
+id: tp138
+text: "I'll get this."
+translation: "Я заплачу. Я возьму это на себя."
+note: "в баре — о напитках или счёте, который платите вы"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10
+  operation: requested-generation
+  request: Фразы модуля t10 по программе docs/curriculum-english-travel.md

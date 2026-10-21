@@ -1,0 +1,264 @@
+title: В баре — решения на месте и would rather
+kind: lesson
+items:
+  - { kind: word, id: tw136 }
+  - { kind: word, id: tw137 }
+  - { kind: word, id: tw138 }
+  - { kind: word, id: tw139 }
+  - { kind: word, id: tw140 }
+  - { kind: word, id: tw141 }
+  - { kind: word, id: tw142 }
+  - { kind: word, id: tw143 }
+  - { kind: phrase, id: tp136 }
+  - { kind: phrase, id: tp137 }
+  - { kind: phrase, id: tp138 }
+  - { kind: phrase, id: tp139 }
+  - { kind: phrase, id: tp140 }
+  - { kind: phrase, id: tp141 }
+  - { kind: phrase, id: tp142 }
+  - { kind: phrase, id: tp143 }
+blocks:
+  - type: explanation
+    id: on-the-spot
+    title: Решения на месте — I'll, Shall I, Let me
+    body: |-
+      В баре решения принимаются на ходу, поэтому для них есть короткие формулы. **I'll get this** — вы решили заплатить или принести заказ: It's my round, **I'll get this**. Здесь **will**: решение принято в момент речи, заранее вы его не планировали.
+
+      **Shall I…?** с местоимениями I и we предлагает что-то сделать для собеседника: **Shall I get you another?** **Let me…** — вы вызываетесь помочь или заплатить: **Let me get that.** **What are you having?** — вопрос перед заказом, его часто задаёт тот, кто собирается платить. Ответ: A pint of cider, please. Или: **Just a soft drink for me.**
+
+      В британских барах компания часто платит по кругу: каждый по очереди покупает напитки на всех. **It's my round** — сейчас моя очередь. Тот, кто не хочет участвовать, говорит об этом заранее: **I'll pass on the next round.**
+
+      Предложение можно принять (Yes, please, that'd be great) или отказаться: **I'm good, thanks.** Объяснять причину необязательно. Две частые ошибки. Первая — настоящее время вместо решения на месте: I get this. Нужно **I'll get this**. Вторая — will вместо shall в предложении: Will I get you another? Нужно **Shall I get you another?**
+    table:
+      columns:
+        - ситуация
+        - что сказать
+      rows:
+        - - вы платите за всех
+          - It's my round. I'll get this.
+        - - вы предлагаете напиток
+          - Shall I get you another?
+        - - вы помогаете
+          - Let me get that.
+        - - вас спрашивают, что заказать
+          - What are you having?
+        - - вы отказываетесь
+          - I'm good, thanks.
+  - type: explanation
+    id: would-rather
+    title: Would rather и prefer
+    body: |-
+      **Would rather** говорит о том, что вы выбираете: **I'd rather stick to water** — я лучше буду пить воду. После would rather идёт **глагол без to**: I'd rather **stay** in. Отрицание — **would rather not** + глагол: I'd rather **not go**. Для сравнения нужен **than**: I'd rather have tea **than** coffee.
+
+      **Prefer** звучит чуть формальнее. Он стоит с существительным: I **prefer** tap water. Или с инфинитивом: I'd **prefer to** sit outside. Для сравнения нужен **to**: I prefer tea **to** coffee. В официальной просьбе обычно **I'd prefer**: I'd prefer a table by the window.
+
+      Безалкогольное в баре — обычный заказ. В меню есть **alcohol-free** пиво, коктейли без алкоголя и **soft drinks**, и никто не ждёт объяснений. Причина может быть любой: ранний поезд, дорога за рулём или нежелание пить. Достаточно сказать **Just a soft drink for me** или **I'd rather stick to water.**
+
+      Две частые ошибки с would rather. Первая — to после rather: I'd rather to stay. Нужно **I'd rather stay**. Вторая — форма на -ing: I'd rather staying. Нужно **I'd rather stay**.
+    table:
+      columns:
+        - конструкция
+        - пример
+      rows:
+        - - would rather + глагол
+          - I'd rather stay in.
+        - - would rather not + глагол
+          - I'd rather not go.
+        - - would rather … than …
+          - I'd rather have tea than coffee.
+        - - prefer + существительное
+          - I prefer tap water.
+        - - would prefer to + глагол
+          - I'd prefer to sit outside.
+        - - prefer … to …
+          - I prefer tea to coffee.
+  - type: explanation
+    id: bar-words
+    title: Слова бара
+    body: |-
+      **A pint** — пинта, обычная кружка пива в Британии (около 568 мл). Слова в меню: **on tap** — разливное, из крана. **A round** — заказ на всю компанию по очереди. **Last orders** — последний приём заказов, бармен объявляет его перед закрытием. **A tab** — счёт, который открывают в начале вечера и оплачивают в конце. **A bouncer** — охранник на входе.
+
+      Про безалкогольное: **a soft drink** — лимонад, сок или другой напиток без спирта, **alcohol-free** — о пиве или вине без алкоголя. Американские пары записаны в примечаниях карточек: last orders — last call, a soft drink — soda, alcohol-free — non-alcoholic.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: decisions-choice
+    title: Решения на месте
+    instruction: Выберите вариант, который подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: "It's my round. ___ get this."
+        options: [I'll, I do, I've]
+        answer: I'll
+        explanation: Решение принято в момент речи — I'll get this.
+      - id: q2
+        prompt: "___ I get you another?"
+        options: [Shall, Will, Do]
+        answer: Shall
+        explanation: Предложение с I — Shall I…?
+      - id: q3
+        prompt: "That bag looks heavy. ___ me carry it."
+        options: [Let, Make, Shall]
+        answer: Let
+        explanation: Let me + глагол — вы вызываетесь помочь.
+      - id: q4
+        prompt: "What ___ you having?"
+        options: [are, do, will]
+        answer: are
+        explanation: What are you having? — устойчивый вопрос перед заказом.
+      - id: q5
+        prompt: "A friend asks if you want another drink. You decline politely."
+        options:
+          - I'm good, thanks.
+          - It's my round.
+          - What are you having?
+        answer: I'm good, thanks.
+        explanation: I'm good, thanks — вежливый отказ от предложения.
+      - id: q6
+        prompt: "You decide on the spot to pay for everyone."
+        options:
+          - I'll get this.
+          - I get this.
+          - Will I get this?
+        answer: I'll get this.
+        explanation: Will — решение в момент речи.
+  - type: exercise
+    id: rather-choice
+    title: Would rather и prefer
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I'd rather ___ water tonight."
+        options: [drink, to drink, drinking]
+        answer: drink
+        explanation: После would rather — глагол без to.
+      - id: q2
+        prompt: "It's too loud. I'd rather ___ go there."
+        options: [not, no, don't]
+        answer: not
+        explanation: Отрицание — would rather not + глагол.
+      - id: q3
+        prompt: "I'd rather have tea ___ coffee."
+        options: [than, to, from]
+        answer: than
+        explanation: В сравнении с would rather — than.
+      - id: q4
+        prompt: "Would you ___ stay in or go out?"
+        options: [rather, prefer, like]
+        answer: rather
+        explanation: Would you rather + глагол — вопрос о выборе.
+      - id: q5
+        prompt: "I'd rather ___ to a loud bar."
+        options: [not go, don't go, not to go]
+        answer: not go
+        explanation: Would rather not + глагол без to.
+      - id: q6
+        prompt: "I ___ sparkling water to still."
+        options: [prefer, rather, better]
+        answer: prefer
+        explanation: Prefer … to … — сравнение двух существительных.
+  - type: exercise
+    id: words-match
+    title: Слова бара
+    instruction: Соедините русское слово или оборот с английским. Два английских варианта лишние.
+    format: match
+    bank:
+      - on tap
+      - a pint
+      - a round
+      - last orders
+      - a tab
+      - a bouncer
+      - a soft drink
+      - alcohol-free
+      - touristy
+      - a heads-up
+    items:
+      - { id: m1, prompt: "разливное, из крана", answer: on tap }
+      - { id: m2, prompt: "кружка пива, около полулитра", answer: a pint }
+      - { id: m3, prompt: "заказ напитков на всю компанию по очереди", answer: a round }
+      - { id: m4, prompt: "последний приём заказов в баре", answer: last orders }
+      - { id: m5, prompt: "счёт, который открывают в начале вечера", answer: a tab }
+      - { id: m6, prompt: "охранник на входе", answer: a bouncer }
+      - { id: m7, prompt: "лимонад или сок вместо алкоголя", answer: a soft drink }
+      - { id: m8, prompt: "без спирта (о пиве или вине)", answer: alcohol-free }
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - A pint of cider, please.
+      - Thanks. I'll get the next one.
+      - Sure. Can I take a card to start it?
+      - Not yet. Could we see the menu?
+      - The cloakroom is on the left.
+      - It was nice meeting you.
+    items:
+      - { id: m1, prompt: "What are you having?", answer: "A pint of cider, please." }
+      - { id: m2, prompt: "I'll get this.", answer: "Thanks. I'll get the next one." }
+      - { id: m3, prompt: "Can I open a tab?", answer: "Sure. Can I take a card to start it?" }
+      - { id: m4, prompt: "Are you being served?", answer: "Not yet. Could we see the menu?" }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'll, I'd) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Взять вам ещё один? (предложение с shall)"
+        answer:
+          - Shall I get you another?
+          - Shall I get you another one?
+          - Shall I get you another drink?
+          - Shall I get you another round?
+          - Shall I get you one more?
+          - Shall I get another for you?
+          - Shall I buy you another?
+          - Shall I buy you another one?
+          - Shall I buy you another drink?
+        explanation: Предложение с I — Shall I get you another?
+      - id: q2
+        prompt: "Мне только безалкогольный напиток. (заказ в баре)"
+        answer:
+          - Just a soft drink for me.
+          - Just a soft drink for me, please.
+          - Just a soft drink for me, thanks.
+          - Just an alcohol-free drink for me.
+          - Just a soft drink, please.
+          - Just a soft drink, thanks.
+          - A soft drink for me, please.
+          - I'll just have a soft drink.
+          - I'll just have a soft drink, please.
+          - I'll just have a soft drink, thanks.
+          - I'll have a soft drink, please.
+        explanation: Just a soft drink for me — короткий заказ.
+      - id: q3
+        prompt: "Я лучше буду пить воду. (would rather)"
+        answer:
+          - I'd rather stick to water.
+          - I would rather stick to water.
+          - I'd rather stick with water.
+          - I'd rather just stick to water.
+          - I'd rather drink water.
+          - I would rather drink water.
+          - I'd rather just drink water.
+          - I'd rather have water.
+          - I would rather have water.
+          - I'd rather just have water.
+          - I'd rather stay on water.
+        explanation: Would rather + глагол без to.
+      - id: q4
+        prompt: "Мне ничего не нужно, спасибо. (вежливый разговорный отказ со словом good)"
+        answer:
+          - I'm good, thanks.
+          - I'm good, thank you.
+          - No, I'm good, thanks.
+          - No, thanks, I'm good.
+          - No thanks, I'm good.
+          - I'm good.
+          - I'm all good, thanks.
+        explanation: I'm good, thanks — вежливый отказ от предложения.

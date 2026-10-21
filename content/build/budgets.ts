@@ -5,6 +5,7 @@ import type { BuiltFile } from "./output.ts";
 /**
  * Пределы из issue #160 над замером 17.10.2026: пакет max 32 724 gzip, каталог 18 526, греческий курс 1 406 076,
  * mp3 — 32 кбит/с моно, самый большой файл 186 624 байта. Растут только явным решением.
+ * Каталог 28 000: после t10 замер 24 969, ступень 2 английского курса растит его на 400–500 байт за модуль (21.10.2026).
  */
 export interface ContentBudgets {
   packageGzip: number;
@@ -16,7 +17,7 @@ export interface ContentBudgets {
 
 export const BUDGETS: ContentBudgets = {
   packageGzip: 40_000,
-  catalogGzip: 25_000,
+  catalogGzip: 28_000,
   courseGzip: 1_600_000,
   audioBitrate: 32_000,
   audioBytes: 250_000,

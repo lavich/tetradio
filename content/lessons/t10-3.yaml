@@ -1,0 +1,183 @@
+title: Сообщение друзьям, заказ на компанию и отказ от раунда
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: bar-bank
+    title: Банк фраз — в баре
+    body: |-
+      В баре нужны пять умений: заказать, предложить, отказаться, попросить и начать разговор. Для каждого хватает одной короткой фразы.
+
+      **Заказать:** **Two pints of lager, please.** / **Just a soft drink for me.** **Предложить:** **Shall I get you another?** / **It's my round.** / **I'll get this.** **Отказаться:** **I'm good, thanks.** / **I'll pass on the next round.** / **I'd rather stick to water.** **Попросить:** **Excuse me, can I get past?** / **Could you keep an eye on my drink for a second?** / **Can I open a tab?** **Начать разговор:** **Busy tonight, isn't it?** / **I'm Alex, by the way.**
+
+      Отказ от следующего раунда говорится спокойно и коротко. Причину можно назвать (I'm driving, I've got an early train), но она не обязательна. Собеседник отвечает **Fair enough** или **No problem**, и разговор идёт дальше.
+    table:
+      columns:
+        - умение
+        - фраза
+      rows:
+        - - заказать
+          - Two pints of lager, please. / Just a soft drink for me.
+        - - предложить
+          - Shall I get you another? / It's my round. / I'll get this.
+        - - отказаться
+          - I'm good, thanks. / I'll pass on the next round.
+        - - попросить
+          - Could you keep an eye on my drink for a second?
+        - - начать разговор
+          - Busy tonight, isn't it?
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - Fair enough. No problem.
+      - Of course. Take your time.
+      - Sorry, what was that? It's loud.
+      - Yes, it is. I'm Alex, by the way.
+      - The cloakroom costs a pound.
+      - It's by the door.
+    items:
+      - { id: m1, prompt: "I'll pass on the next round, thanks.", answer: "Fair enough. No problem." }
+      - { id: m2, prompt: "Could you keep an eye on my drink for a second?", answer: "Of course. Take your time." }
+      - { id: m3, prompt: "Two pints of lager and a lemonade, please.", answer: "Sorry, what was that? It's loud." }
+      - { id: m4, prompt: "Busy tonight, isn't it?", answer: "Yes, it is. I'm Alex, by the way." }
+  - type: explanation
+    id: writing-how
+    title: Сообщение друзьям
+    body: |-
+      Вы пришли в бар раньше друзей и заняли столик. В чате нужно сообщить, где вы, спросить, что взять им, и сказать, что закажете себе. Объём — 20–40 слов, регистр дружеский: короткие предложения, сокращения (I'm, it's, I'll), одно-два слова из урока.
+
+      Порядок: где вы (**I'm at the table by the window.**) → что вы заказываете (**I'll have a lemonade.**) → вопрос друзьям (**What are you having?**) → чей круг (**It's my round, so I'll get this.**).
+  - type: writing
+    id: bar-message
+    register: friendly
+    prompt: "Вы пришли в бар The Anchor раньше друзей и заняли столик у окна. Напишите им в чат (20–40 слов): где вы сидите, что закажете себе из безалкогольного, спросите, что взять им, и скажите, что этот круг ваш."
+    words: { min: 20, max: 40 }
+    model: |-
+      Hi all, I'm at the table by the window. I'll have a lemonade, as I'm driving. What are you having? It's my round, so I'll get this. Last orders are at eleven, so there's no rush.
+    criteria:
+      - 20–40 слов; названо место, свой заказ, вопрос друзьям и чей круг
+      - "Дружеский регистр: короткие предложения, сокращения (I'm, I'll), слова из урока (round, I'll get this)"
+      - Свой заказ безалкогольный, причина названа одной фразой или опущена
+      - Один вопрос к друзьям — What are you having?
+  - type: explanation
+    id: order-how
+    title: Сцена — заказ на компанию
+    body: |-
+      Первая сцена: вы пришли в бар с друзьями и заказываете на всех. Бармен Дейв говорит быстро, в баре шумно. Сначала звучат только его реплики, подряд, два раза. Затем откройте текст реплик кнопкой «Открыть текст» и держите его перед глазами.
+
+      В задании речи включите запись. Отвечайте на каждую реплику по порядку: закажите напитки на друзей, себе — безалкогольное, на вопрос об оплате скажите, чей круг. Если не расслышали, переспросите.
+  - type: listening
+    id: order-lines
+    title: Реплики собеседника — в баре
+    plays: 2
+    transcript:
+      - { speaker: Dave, text: "Hi there. Are you being served?" }
+      - { speaker: Dave, text: "Sorry, it's loud in here. What would you like?" }
+      - { speaker: Dave, text: "Anything to eat with that?" }
+      - { speaker: Dave, text: "Paying now, or shall I open a tab?" }
+      - { speaker: Dave, text: "Thanks. Last orders are at eleven." }
+  - type: speaking
+    id: order
+    part: roleplay
+    prompt: |-
+      Вы в баре с двумя друзьями. Прослушайте реплики Дейва на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Скажите, что вас ещё не обслужили. Когда Дейв спросит, что вы хотите, закажите два напитка для друзей и безалкогольный для себя. Ответьте про еду, скажите, как платите и чей круг. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Dave: Hi there. Are you being served?
+      You: Not yet.
+      Dave: Sorry, it's loud in here. What would you like?
+      You: Two pints of lager, please, and a soft drink for me.
+      Dave: Anything to eat with that?
+      You: No, thanks, we're fine.
+      Dave: Paying now, or shall I open a tab?
+      You: Paying now. It's my round, so I'll get this.
+      Dave: Thanks. Last orders are at eleven.
+      You: Great, thank you.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна-две фразы
+      - "Заказ на компанию: Two pints of lager, please. Для себя — безалкогольное: Just a soft drink for me."
+      - Заказ назван после вопроса What would you like? и при необходимости повторён отчётливее
+      - "Оплата и круг: Paying now. It's my round, so I'll get this."
+      - Вежливый тон, без восклицаний и спешки
+  - type: explanation
+    id: counter-how
+    title: Сцена — у стойки
+    body: |-
+      Вторая сцена: вы ждёте у стойки, рядом стоит Бен. Он заговаривает с вами и спрашивает, закажете ли вы ещё один напиток. Отказ звучит спокойно и принимается без объяснений: Рави отвечает и продолжает разговор. Сначала звучат только его реплики, подряд, два раза. Затем откройте текст реплик и держите его перед глазами.
+
+      В задании речи ответьте на каждую реплику Рави по порядку: поддержите разговор, назовите своё имя, откажитесь от ещё одного напитка и спросите его о чём-нибудь. Причину отказа называть не нужно.
+  - type: listening
+    id: counter-lines
+    title: Реплики собеседника — у стойки
+    plays: 2
+    transcript:
+      - { speaker: Ravi, text: "Hi. Are you waiting to be served too?" }
+      - { speaker: Ravi, text: "I'm Ravi, by the way. Are you here with friends?" }
+      - { speaker: Ravi, text: "I'm getting a round in for my table. Are you having another drink yourself?" }
+      - { speaker: Ravi, text: "Fair enough. I'd rather stick to water myself after a long day. Do you have plans for tomorrow?" }
+      - { speaker: Ravi, text: "Not sure yet. Enjoy your evening." }
+  - type: speaking
+    id: counter
+    part: roleplay
+    prompt: |-
+      Вы стоите у стойки в шумном баре, рядом Бен. Прослушайте его реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Ответьте на приветствие и скажите, что в баре людно. Назовите имя, скажите, что вы с друзьями. Откажитесь от ещё одного напитка, спросите про планы Рави и попрощайтесь. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Ravi: Hi. Are you waiting to be served too?
+      You: Yes, I am. Busy tonight, isn't it?
+      Ravi: I'm Ravi, by the way. Are you here with friends?
+      You: I'm Alex. Yes, they're at the table by the window.
+      Ravi: I'm getting a round in for my table. Are you having another drink yourself?
+      You: Thanks, but I'm good. I'll pass on another one tonight.
+      Ravi: Fair enough. I'd rather stick to water myself after a long day. Do you have plans for tomorrow?
+      You: I'm doing the walking tour. What about you?
+      Ravi: Not sure yet. Enjoy your evening.
+      You: You too. It was nice meeting you.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна-две фразы
+      - "Начало разговора: Busy tonight, isn't it? и имя (I'm Alex.)"
+      - "Отказ без объяснений: I'm good, thanks. / I'll pass on another one tonight."
+      - Один встречный вопрос Рави, прощание в конце
+      - Спокойный тон; отказ звучит коротко и не требует оправданий
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "It's my turn to buy drinks for everyone. ___ get this."
+        options: [I'll, I do, I've]
+        answer: I'll
+        explanation: Решение в момент речи — I'll get this.
+      - id: q2
+        prompt: "___ I get you another?"
+        options: [Shall, Will, Must]
+        answer: Shall
+        explanation: Предложение с I — Shall I…?
+      - id: q3
+        prompt: "I'd rather ___ the lift than the stairs."
+        options: [take, to take, taking]
+        answer: take
+        explanation: После would rather — глагол без to.
+      - id: q4
+        prompt: "Which phrase politely declines the next round?"
+        options:
+          - I'll pass on the next round.
+          - It's my round.
+          - Last orders at eleven.
+        answer: I'll pass on the next round.
+        explanation: I'll pass on the next round — спокойный отказ.
+      - id: q5
+        prompt: "You want to ask someone to watch your drink for a moment."
+        options:
+          - Could you keep an eye on my drink for a second?
+          - Can I open a tab?
+          - Are you being served?
+        answer: Could you keep an eye on my drink for a second?
+        explanation: Keep an eye on — присмотреть.

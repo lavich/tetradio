@@ -1,0 +1,288 @@
+title: Меню бара, афиша и разговор у стойки
+kind: lesson
+items:
+  - { kind: word, id: tw144 }
+  - { kind: word, id: tw145 }
+  - { kind: word, id: tw146 }
+  - { kind: word, id: tw147 }
+  - { kind: word, id: tw148 }
+  - { kind: word, id: tw149 }
+  - { kind: word, id: tw150 }
+  - { kind: phrase, id: tp144 }
+  - { kind: phrase, id: tp145 }
+  - { kind: phrase, id: tp146 }
+  - { kind: phrase, id: tp147 }
+  - { kind: phrase, id: tp148 }
+  - { kind: phrase, id: tp149 }
+  - { kind: phrase, id: tp150 }
+blocks:
+  - type: explanation
+    id: bar-more
+    title: Ещё слова и фразы бара
+    body: |-
+      Бармен подходит с вопросом **Are you being served?** — вас уже обслуживают? Ответ «Not yet» или «Yes, thanks, I'm being served» занимает секунду. Если в баре шумно, фразу можно не расслышать, поэтому можно переспросить: **Sorry, what was that?**
+
+      **Tipsy** — слегка подвыпивший, мягкое разговорное слово. **A hangover** — похмелье. **A mocktail** — коктейль без алкоголя. **A bar snack** — закуска к напиткам: орехи, оливки, картофель фри. **A designated driver** — человек, который не пьёт и отвезёт компанию. **The cloakroom** — гардероб, **on the house** — за счёт заведения. Американские пары: the cloakroom — the coat check.
+
+      Фразы: **Is there a cover charge?** — вход платный? **Last orders at eleven** — после одиннадцати заказы не принимаются. **Excuse me, can I get past?** — вы проходите через толпу. **I'd rather stick to water** и **I'll pass on the next round** — спокойный отказ, без объяснений.
+
+      Напиток, который остался без присмотра, лучше не допивать и заказать новый. Это обычная осторожность в любом баре. Если нужно отойти, можно попросить рядом стоящего знакомого: **Could you keep an eye on my drink for a second?**
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: menu-how
+    title: Меню бара и афиша
+    body: |-
+      Меню бара делится на разделы: **On tap** — разливное, обычно в двух размерах: **pint** и **half** (полпинты); **Alcohol-free** — пиво, коктейли без алкоголя и безалкогольные напитки; **Bar snacks** — закуски. Цена стоит рядом с названием, у разливного — две цены.
+
+      Афиша рассказывает о вечере: какие вечера и во сколько, платный ли вход и когда закрывается бар. Прочитайте афишу целиком и найдите цены, время и условия входа, а затем отвечайте на вопросы.
+  - type: reading
+    id: menu
+    title: The Anchor — menu and what's on
+    text: |-
+      THE ANCHOR · bar and kitchen · Leith, Edinburgh
+
+      ON TAP (pint / half)
+      Lager £5.20 / £2.70
+      Pale ale £5.50 / £2.90
+      Cider £5.40 / £2.80
+
+      ALCOHOL-FREE
+      Alcohol-free lager (bottle) £4.00
+      Mocktail of the day £5.00
+      Soft drinks (cola, lemonade, orange juice) £2.50
+      Tap water — free, ask at the bar
+
+      BAR SNACKS
+      Salted nuts £2.50 · Olives £3.00 · Chips with cheese £5.00
+
+      WHAT'S ON
+      Thursday: quiz night, 8 pm, free entry
+      Friday and Saturday: live music from 9 pm, cover charge £5 after 8.30
+      Last orders: 11 pm Sunday to Thursday, midnight Friday and Saturday
+      Cloakroom: £1 per coat
+      The door team may ask for ID.
+    glosses:
+      - { text: Pale ale, russian: светлый эль }
+      - { text: half, russian: полпинты }
+      - { text: quiz night, russian: вечер викторины }
+      - { text: live music, russian: живая музыка }
+      - { text: entry, russian: вход }
+      - { text: ID, russian: "документ, удостоверяющий личность" }
+      - { text: The door team, russian: охрана на входе }
+  - type: exercise
+    id: menu-q
+    about: menu
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How much is a pint of lager?
+        options:
+          - £5.20
+          - £2.70
+          - £4.00
+        answer: £5.20
+        explanation: Lager £5.20 / £2.70 — первая цена за пинту, вторая за полпинты.
+      - id: q2
+        prompt: Which drink is free?
+        options:
+          - tap water
+          - the mocktail of the day
+          - alcohol-free lager
+        answer: tap water
+        explanation: Tap water — free, ask at the bar.
+      - id: q3
+        prompt: When is the quiz night?
+        options:
+          - on Thursday at 8 pm
+          - on Friday at 9 pm
+          - on Sunday at 11 pm
+        answer: on Thursday at 8 pm
+        explanation: "Thursday: quiz night, 8 pm."
+      - id: q4
+        prompt: When do you pay a cover charge?
+        options:
+          - on Friday and Saturday after 8.30
+          - on Thursday after 8
+          - every night
+        answer: on Friday and Saturday after 8.30
+        explanation: Cover charge £5 after 8.30 в дни с живой музыкой; на викторину вход бесплатный.
+      - id: q5
+        prompt: What time are last orders on Saturday?
+        options:
+          - at midnight
+          - at 11 pm
+          - at 9 pm
+        answer: at midnight
+        explanation: Last orders — 11 pm с воскресенья по четверг, midnight в пятницу и субботу.
+  - type: explanation
+    id: noisy-how
+    title: Заказ в шумном баре
+    body: |-
+      Теперь заказ в шумном баре: Нина заказывает напитки на компанию, бармен Дейв переспрашивает, к разговору присоединяется Сэм. Слова слышны не все, поэтому слушайте цифры, названия напитков и место гардероба. Звучит два раза, транскрипт откроется после ответа.
+
+      В диалоге слова **on the house** означают, что напиток за счёт бара.
+  - type: listening
+    id: noisy
+    title: Ordering in a noisy bar
+    plays: 2
+    transcript:
+      - { speaker: Dave, text: "Hi there. Are you being served?" }
+      - { speaker: Nina, text: "Not yet. Two pints of lager for my friends, please, and a lemonade for me. I'm the driver tonight." }
+      - { speaker: Dave, text: "Sorry, what was that? It's really loud in here." }
+      - { speaker: Nina, text: "Two pints of lager and one lemonade." }
+      - { speaker: Dave, text: "Got it. Anything to eat? We have bar snacks." }
+      - { speaker: Sam, text: "Just a bowl of olives, please." }
+      - { speaker: Dave, text: "Paying now, or shall I open a tab?" }
+      - { speaker: Nina, text: "Paying now. It's my round, so I'll get this." }
+      - { speaker: Dave, text: "Thanks. The lemonade is on the house, by the way. Thanks for driving." }
+      - { speaker: Nina, text: "That's kind. Where's the cloakroom?" }
+      - { speaker: Dave, text: "By the door, on the left. And last orders are at eleven." }
+      - { speaker: Sam, text: "Cheers, Dave." }
+  - type: exercise
+    id: noisy-q
+    about: noisy
+    title: Аудирование — заказ в шумном баре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why does Dave ask Nina to repeat her order?
+        options:
+          - The bar is very loud.
+          - He does not like lager.
+          - The glasses are dirty.
+        answer: The bar is very loud.
+        explanation: Sorry, what was that? It's really loud in here.
+      - id: q2
+        prompt: What does Nina order for herself?
+        options:
+          - a lemonade
+          - a pint of lager
+          - a mocktail
+        answer: a lemonade
+        explanation: Two pints for her friends and a lemonade for her.
+      - id: q3
+        prompt: Why does Nina order a lemonade?
+        options:
+          - She is driving tonight.
+          - She does not like beer.
+          - She is on a diet.
+        answer: She is driving tonight.
+        explanation: I'm the driver tonight.
+      - id: q4
+        prompt: How does Nina pay?
+        options:
+          - at once, for the whole round
+          - on a tab
+          - Sam pays
+        answer: at once, for the whole round
+        explanation: Paying now. It's my round, so I'll get this.
+      - id: q5
+        prompt: What is free?
+        options:
+          - the lemonade
+          - the olives
+          - the lager
+        answer: the lemonade
+        explanation: The lemonade is on the house.
+      - id: q6
+        prompt: Where is the cloakroom?
+        options:
+          - by the door, on the left
+          - by the door, on the right
+          - upstairs
+        answer: by the door, on the left
+        explanation: By the door, on the left.
+  - type: explanation
+    id: counter-how
+    title: Разговор у стойки
+    body: |-
+      Второй диалог — у стойки. Рави ждёт заказ и заговаривает с Элли. Он предлагает ей напиток, она отвечает спокойно, и разговор идёт дальше. Слушайте, как Элли отказывается и что Рави отвечает на отказ. Звучит два раза, транскрипт откроется после ответа.
+  - type: listening
+    id: counter
+    title: At the counter
+    plays: 2
+    transcript:
+      - { speaker: Ravi, text: "Busy tonight, isn't it? I'm Ravi, by the way." }
+      - { speaker: Ellie, text: "I'm Ellie. Yes, it's packed. Are you here with friends?" }
+      - { speaker: Ravi, text: "Yes, they're over by the window. I'm getting a round in. What are you having?" }
+      - { speaker: Ellie, text: "Thanks, but I'm good. I still have half of this one, and after it I'd rather stick to water tonight." }
+      - { speaker: Ravi, text: "Fair enough. Are you travelling, or do you live here?" }
+      - { speaker: Ellie, text: "I'm here for a long weekend. I'm heading to Glasgow on Monday." }
+      - { speaker: Ravi, text: "Brilliant. Do you have plans for tomorrow?" }
+      - { speaker: Ellie, text: "Maybe the walking tour. Anyway, I'll take my drink with me and find my friends. I never leave it on the bar." }
+      - { speaker: Ravi, text: "Sensible. Enjoy your weekend, Ellie." }
+      - { speaker: Ellie, text: "You too. It was nice meeting you." }
+  - type: exercise
+    id: counter-q
+    about: counter
+    title: Аудирование — у стойки
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where are Ravi's friends?
+        options:
+          - by the window
+          - at the bar
+          - outside
+        answer: by the window
+        explanation: They're over by the window.
+      - id: q2
+        prompt: What does Ellie say to the first offer?
+        options:
+          - She still has half of her drink.
+          - She wants a cocktail.
+          - She does not like the bar.
+        answer: She still has half of her drink.
+        explanation: Thanks, but I'm good. I still have half of this one.
+      - id: q3
+        prompt: What does Ravi say after Ellie says no?
+        options:
+          - He accepts it and asks something else.
+          - He asks her again.
+          - He walks away.
+        answer: He accepts it and asks something else.
+        explanation: Fair enough, then another question — отказ принят без повторной просьбы.
+      - id: q4
+        prompt: How long is Ellie staying?
+        options:
+          - for a long weekend
+          - for a month
+          - for one night
+        answer: for a long weekend
+        explanation: I'm here for a long weekend.
+      - id: q5
+        prompt: Where is Ellie going on Monday?
+        options:
+          - to Glasgow
+          - to Lisbon
+          - to Leeds
+        answer: to Glasgow
+        explanation: I'm heading to Glasgow on Monday.
+      - id: q6
+        prompt: Why does Ellie take her drink with her?
+        options:
+          - She never leaves it on the bar.
+          - The bar is closing.
+          - Ravi asks her to.
+        answer: She never leaves it on the bar.
+        explanation: I never leave it on the bar.
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank: [tipsy, hangover, mocktail, bar snack, designated driver, cloakroom, on the house, round, tab]
+    items:
+      - { id: g1, prompt: "My friend isn't drinking tonight, because she's the ___.", answer: designated driver }
+      - { id: g2, prompt: "I had two glasses of wine and I'm a bit ___ now.", answer: tipsy }
+      - { id: g3, prompt: "You can leave your coat in the ___: it costs a pound.", answer: cloakroom }
+      - { id: g4, prompt: "The bar is new, so the first drink is ___.", answer: on the house }
+      - { id: g5, prompt: "I'll have a ___: it looks like a cocktail, but it has no alcohol.", answer: mocktail }
+      - { id: g6, prompt: "We were hungry, so we ordered a ___: olives and nuts.", answer: bar snack }
+      - { id: g7, prompt: "He woke up with a terrible ___ and drank water all morning.", answer: hangover }

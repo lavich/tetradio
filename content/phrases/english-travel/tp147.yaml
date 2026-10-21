@@ -1,0 +1,7 @@
+id: tp147
+text: "Is there a cover charge?"
+translation: "Вход платный?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10
+  operation: requested-generation
+  request: Фразы модуля t10 по программе docs/curriculum-english-travel.md

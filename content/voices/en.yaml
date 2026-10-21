@@ -70,3 +70,8 @@ characters:
   Tom: { gender: male, voice: Achird }
   Jack: { gender: male, voice: Zubenelgenubi }
   Zoe: { gender: female, voice: Gacrux }
+  Dave: { gender: male, voice: Orus }
+  Nina: { gender: female, voice: Aoede }
+  Ravi: { gender: male, voice: Umbriel }
+  Ellie: { gender: female, voice: Pulcherrima }
+  Sam: { gender: male, voice: Achird }

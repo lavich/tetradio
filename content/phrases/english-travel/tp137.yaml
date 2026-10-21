@@ -1,0 +1,7 @@
+id: tp137
+text: "It's my round."
+translation: "Сейчас моя очередь платить за всех."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t10
+  operation: requested-generation
+  request: Фразы модуля t10 по программе docs/curriculum-english-travel.md
