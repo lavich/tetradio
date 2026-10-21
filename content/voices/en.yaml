@@ -45,3 +45,5 @@ characters:
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }
   Inês: { gender: female, voice: Gacrux }
+  Hannah: { gender: female, voice: Autonoe }
+  Oliver: { gender: male, voice: Enceladus }

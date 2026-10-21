@@ -81,7 +81,7 @@ describe("курс в продукте", () => {
 });
 
 describe("английский для путешествий и общения", () => {
-  const STAGE = ["t01"];
+  const STAGE = ["t01", "t03"];
   const IT_NAMES = ["Sarah", "Daniel", "Mark", "Elena", "Tom", "Priya", "Sharma", "Fischer", "Andrei"];
   const WRITING: Record<string, { register: string; min: number; max: number }> = {
     t01: { register: "formal", min: 20, max: 40 },

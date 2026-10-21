@@ -1,0 +1,202 @@
+title: Переписка с хостом и проблема в номере
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: bank
+    title: Банк фраз — жильё
+    body: |-
+      С жильём почти всё укладывается в три ситуации: вопрос до брони, заезд и проблема на месте. Соберите для каждой свои две-три фразы — на свою поездку, настоящую или задуманную, — и проговорите их вслух.
+
+      **До брони** — вопрос хосту или отелю: **Is there a cot?** **Is parking included?** Мягче — **I was wondering if…**: **I was wondering if late check-in would be possible.**
+
+      **Заезд** — когда приедете и что вам нужно: **Our flight lands late, so we'll arrive around midnight.** **Could you send me the check-in instructions?** У стойки отеля: **I've booked a double room for three nights.** **Could I leave my luggage here?**
+
+      **Проблема** — что не так сейчас (present perfect или there's no), когда это случилось (past simple) и просьба: **The Wi-Fi has stopped working. It stopped about an hour ago. Could you send someone to have a look?** Начать можно с **Sorry to bother you, but…** — «простите, что беспокою…».
+
+      Без извинений и объяснений просьба звучит резко: **Fix the shower.** — приказ. **The shower is leaking. Could you send someone to have a look?** — вежливо и ясно.
+    table:
+      columns:
+        - ситуация
+        - фраза
+      rows:
+        - - вопрос до брони
+          - I was wondering if there's a cot.
+        - - время приезда
+          - We'll arrive around midnight.
+        - - ключи
+          - Could you send me the check-in instructions?
+        - - проблема
+          - There's no hot water.
+        - - что уже сделали
+          - I've pressed the button on the boiler.
+        - - просьба
+          - Could you send someone to have a look?
+  - type: exercise
+    id: bank-match
+    title: Что сказать
+    instruction: Подберите фразу к ситуации. Две фразы лишние.
+    format: match
+    bank:
+      - I was wondering if late check-in would be possible.
+      - Could you send me the check-in instructions?
+      - We've locked ourselves out.
+      - The code for the lockbox doesn't work.
+      - Could I leave my luggage here after check-out?
+      - The sink is blocked.
+      - Is breakfast included?
+      - Could we have a late check-out?
+    items:
+      - { id: m1, prompt: "До брони: вы прилетаете ночью и хотите заехать после полуночи.", answer: I was wondering if late check-in would be possible. }
+      - { id: m2, prompt: "Завтра заезд, а вы ещё не знаете, где ключи.", answer: Could you send me the check-in instructions? }
+      - { id: m3, prompt: "Вы вышли на минуту, дверь захлопнулась, ключи внутри.", answer: We've locked ourselves out. }
+      - { id: m4, prompt: "Вы у двери, вводите код, а ящик с ключами не открывается.", answer: The code for the lockbox doesn't work. }
+      - { id: m5, prompt: "Выезд в 11, поезд в 17:00, поздний выезд платный, а вы хотите погулять без чемоданов.", answer: Could I leave my luggage here after check-out? }
+      - { id: m6, prompt: "Вода в раковине не уходит.", answer: The sink is blocked. }
+  - type: exercise
+    id: polite
+    title: Вежливо и ясно
+    instruction: Выберите лучшее сообщение хосту.
+    format: choice
+    items:
+      - id: q1
+        prompt: Нет горячей воды.
+        options:
+          - "Hi Oliver, sorry to bother you, but there's no hot water. Could you have a look?"
+          - "Hi Oliver, there isn't no hot water. Fix it, please."
+          - "Hi Oliver, hot water is not. Could you have a look?"
+        answer: "Hi Oliver, sorry to bother you, but there's no hot water. Could you have a look?"
+        explanation: There's no — одно отрицание; Fix it звучит как приказ даже с please.
+      - id: q2
+        prompt: Вайфай перестал работать вчера вечером.
+        options:
+          - "The Wi-Fi stopped working last night. Could you check the router?"
+          - "The Wi-Fi doesn't work since last night. Could you check the router?"
+          - "The Wi-Fi has stopped working last night. Could you check the router?"
+        answer: "The Wi-Fi stopped working last night. Could you check the router?"
+        explanation: С last night — past simple; doesn't work since — калька с русского.
+      - id: q3
+        prompt: Вопрос до брони — можно ли заехать в 10 утра.
+        options:
+          - "Hi! I was wondering if we could check in at 10 am. Our train arrives early."
+          - "Hi! I was wondering if could we check in at 10 am? Our train arrives early."
+          - "Hi! We check in at 10 am. Our train arrives early."
+        answer: "Hi! I was wondering if we could check in at 10 am. Our train arrives early."
+        explanation: После if — порядок утверждения; We check in at 10 — не просьба, а сообщение о факте.
+  - type: explanation
+    id: writing-how
+    title: Переписка с хостом
+    body: |-
+      Хост — частное лицо, поэтому тон дружелюбный (**friendly**): **Hi Oliver**, сокращения (there's, we'll, I've), **Thanks!** или **Thanks so much!** в конце, подпись — только имя. Но дружелюбный не значит небрежный: без сленга, с вежливыми просьбами — **Could you…?**, **I was wondering if…**
+
+      Каждое сообщение короткое, две-четыре фразы, и о чём-то одном: вопрос, время приезда, проблема. В сообщении о проблеме — что не так, что вы уже попробовали и о чём просите. Хост получает много сообщений — ему должно быть ясно, что делать.
+  - type: writing
+    id: host-chat
+    register: friendly
+    prompt: "Напишите хосту квартиры три коротких сообщения, всего 60–100 слов: (1) до брони — вопрос о квартире (детская кроватка, парковка, поздний заезд); (2) в день заезда — когда приедете и просьба прислать инструкцию; (3) во время поездки — что не так, что вы уже попробовали, и просьба. Имя хоста и детали придумайте или возьмите из своей поездки."
+    words: { min: 60, max: 100 }
+    model: |-
+      Hi Oliver, your flat looks lovely! I was wondering if you have a cot we could use. We're travelling with our one-year-old son. Thanks!
+
+      Hi Oliver, our flight lands late, so we'll arrive around midnight. Could you send me the check-in instructions?
+
+      Hi Oliver, sorry to bother you, but there's no hot water. I've pressed the red button on the boiler, but it hasn't helped. Could you send someone to have a look? Thanks so much!
+      Olga
+    criteria:
+      - 60–100 слов; три сообщения — вопрос до брони, заезд, проблема
+      - "Дружелюбно и вежливо: Hi + имя, сокращения, Thanks!, просьбы с Could you… или I was wondering if…, без сленга и приказов"
+      - "Проблема сейчас — present perfect или there's no; с указанием времени — past simple"
+      - "После I was wondering if — порядок утверждения: if we could…, без вопросительного знака"
+      - "В сообщении о проблеме — что случилось, что вы уже сделали и о чём просите"
+  - type: explanation
+    id: speaking-how
+    title: Как сообщить о проблеме
+    body: |-
+      Устные задания — короткие реплики, 15–30 секунд. Схема та же, что в сообщении: кто вы (номер комнаты или имя), что не так, когда это случилось, что уже попробовали и просьба. Сначала проговорите реплику про себя по банку фраз, потом запишите один дубль, переслушайте и сверьте с образцом и критериями.
+
+      Не заучивайте образец: придумайте свою проблему — из списка или из своей поездки — и скажите о ней своими словами из банка.
+  - type: speaking
+    id: reception-call
+    part: monologue
+    prompt: "Вы в отеле, комната 214. Позвоните на ресепшен и сообщите о проблеме: например, не работает вайфай, засорилась раковина или нет полотенец. Скажите, что не так и когда это случилось, и попросите помочь. Ответ — 15–30 секунд."
+    seconds: 30
+    model: "Hello, this is room two-one-four. Sorry to bother you, but the Wi-Fi has stopped working. It stopped about an hour ago, and I've already restarted my phone. Also, there aren't any towels in the bathroom. Could you send someone to have a look at the Wi-Fi, and could you ask housekeeping for some towels? Thank you."
+    criteria:
+      - "Назвали номер комнаты; сказали, что не так, и попросили помочь"
+      - "Проблема сейчас — present perfect (has stopped working), с указанием времени — past simple (stopped an hour ago)"
+      - "Нет чего-то — there's no / there aren't any, одно отрицание"
+      - "Просьба — Could you send someone…? / Could you ask housekeeping…?, без Fix it"
+      - 15–30 секунд, без долгих пауз
+  - type: speaking
+    id: host-voice
+    part: monologue
+    prompt: "Вы приехали в квартиру поздно вечером, а код от ящика с ключами не подходит. Хост не отвечает на сообщения. Запишите ему голосовое: кто вы, что случилось, что уже попробовали, о чём просите. 15–30 секунд."
+    seconds: 30
+    model: "Hi Oliver, it's Olga — I'm staying at your flat from tonight. I'm at the front door now, but the code for the lockbox doesn't work. I've tried it three times. Could you check the code and send it to me again? Or could you call me, please? Thanks, and sorry to bother you so late."
+    criteria:
+      - "Назвали себя; сказали, где вы и что случилось"
+      - "The code for the lockbox doesn't work; что уже сделали — present perfect: I've tried…"
+      - "Одна-две просьбы с Could you…?"
+      - Тон дружелюбный, но вежливый; 15–30 секунд
+  - type: speaking
+    id: check-in
+    part: roleplay
+    prompt: |-
+      Вы приехали в отель в 11 утра, заезд с 15:00. Поздоровайтесь, назовите бронь, мягко спросите о раннем заезде, попросите оставить багаж, спросите про завтрак и, если едете с маленьким ребёнком, попросите детскую кроватку.
+      Попросите кого-нибудь прочитать реплики администратора из образца или прочитайте их сами, а свои скажите по памяти и запишите. Вся ваша часть — 30–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Receptionist: Good morning. How can I help?
+      You: Good morning. I've booked a double room for three nights. The name's Ivanova.
+      Receptionist: Yes, I can see it here.
+      You: I know it's early, but I was wondering if early check-in would be possible.
+      Receptionist: I'm afraid the room isn't ready yet. It should be ready around one.
+      You: No problem. Could I leave my luggage here until then?
+      Receptionist: Of course. Here's your ticket.
+      You: Thank you. Is breakfast included?
+      Receptionist: Yes, from seven to ten in the restaurant.
+      You: Great. And could we have a cot in the room? We're travelling with a baby.
+      Receptionist: Of course, I'll ask housekeeping.
+      You: Thank you very much.
+    criteria:
+      - Поздоровались, назвали бронь и поблагодарили
+      - "Бронь — I've booked a double room for… nights"
+      - "Ранний заезд — I was wondering if early check-in would be possible, порядок утверждения после if"
+      - "Просьбы — Could I…? / Could we…?, без I want…"
+      - Каждая реплика короткая, одна-две фразы
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Sorry, the kettle ___. Could you bring a new one?
+        options: [has broken, has broke, is broken yesterday]
+        answer: has broken
+        explanation: Проблема сейчас — present perfect; третья форма break — broken.
+      - id: q2
+        prompt: There ___ any towels in the bathroom.
+        options: [aren't, isn't, are]
+        answer: aren't
+        explanation: Towels — мн. ч.; с any — отрицание.
+      - id: q3
+        prompt: I was wondering if ___ leave our bags here.
+        options: [we could, could we, we can to]
+        answer: we could
+        explanation: После if — порядок утверждения.
+      - id: q4
+        prompt: The lift is ___, so please use the stairs.
+        options: [out of order, blocked, leaking]
+        answer: out of order
+        explanation: Out of order — об устройстве, которое не работает; blocked — о засоре.
+      - id: q5
+        prompt: The Wi-Fi ___ working at about nine last night.
+        options: [stopped, has stopped, stops]
+        answer: stopped
+        explanation: Указано время — past simple.
+      - id: q6
+        prompt: Our flight ___ at 23:10, so we'll arrive around midnight.
+        options: [lands, will landing, landing]
+        answer: lands
+        explanation: Рейс по расписанию — present simple.

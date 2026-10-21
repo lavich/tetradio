@@ -1,0 +1,7 @@
+id: tp041
+text: "The shower is leaking."
+translation: "Душ протекает."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md
