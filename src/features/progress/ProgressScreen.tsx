@@ -15,7 +15,7 @@ import { coverColor } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { deviceTimezone, studyDay } from "../../domain/time";
-import { cardsInCourse, currentLanguage } from "../../storage/courses";
+import { cardsInCourse, currentLanguage, primaryCourse } from "../../storage/courses";
 import { courseProgress, languageProgress, type CourseProgress, type LanguageProgress } from "../../storage/progress";
 import { useStats } from "../../shared/store";
 import { languageDictionary, type DictionaryLesson } from "../../storage/dictionary";
@@ -33,12 +33,13 @@ export function ProgressScreen() {
   const data = useLiveQuery(async () => {
     const language = await currentLanguage();
     const progress = await languageProgress(now, deviceTimezone(), language);
-    const ids = progress.courses.map((item) => item.course.id);
+    const started = progress.courses.map((item) => item.course.id);
+    const primary = started.length ? undefined : await primaryCourse();
+    const ids = primary ? [primary] : started;
     return {
       language,
       progress,
-      // Пока курс языка не начат, страница показывает основной курс, как раньше.
-      alone: ids.length ? undefined : await courseProgress(now, deviceTimezone()),
+      alone: started.length ? undefined : await courseProgress(now, deviceTimezone(), primary),
       words: await languageDictionary(language),
       mistakes: await mistakeCount(ids),
       ids,
@@ -49,7 +50,7 @@ export function ProgressScreen() {
   const leeches = useLiveQuery(async () => {
     // Список ведёт на страницы слов и фраз; у задания урока такой страницы нет.
     const all = (stats?.leeches ?? []).filter((leech) => leech.ref.kind !== "mistake");
-    if (!ids?.length) return all;
+    if (!ids) return all;
     const own = await cardsInCourse(
       all.map((leech) => leech.unitKey),
       ids,
@@ -158,7 +159,6 @@ export function ProgressScreen() {
   );
 }
 
-/** Блок курса среди курсов языка: путь, положение, темп, контрольные и навыки с порогом этого курса. */
 function CourseBlock({ data }: { data: LanguageProgress["courses"][number] }) {
   const heading = useId();
   return (
@@ -183,7 +183,6 @@ const weekLine = ({ lessonDays, reviewDays }: CourseProgress["week"], language: 
   return `На этой неделе: ${parts.join(", ")}.`;
 };
 
-/** Навыки курса с выделением слабого по его порогу; без `course` на уровне 3 — сумма по языку, без выделения. */
 function Skills({
   skills,
   complete,

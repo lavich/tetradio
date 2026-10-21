@@ -24,6 +24,7 @@ export function FirstRun({
   hint = true,
   grouped = true,
   focus,
+  onFocused,
 }: {
   courses: Course[];
   entries: StoredCatalogEntry[];
@@ -34,6 +35,7 @@ export function FirstRun({
   grouped?: boolean;
   /** Курс, карточку которого показать и сфокусировать. */
   focus?: string;
+  onFocused?: () => void;
 }) {
   const offers = courseOffers(courses, entries, modules);
   const loading = useSyncExternalStore(
@@ -60,6 +62,7 @@ export function FirstRun({
       hint={hint}
       waitFor={busy !== offer ? busy : undefined}
       focused={offer.course.id === focus}
+      onFocused={onFocused}
     />
   );
   if (!grouped) return <>{offers.map((offer) => card(offer, 2))}</>;
@@ -105,6 +108,7 @@ function CourseOffer({
   hint,
   waitFor,
   focused,
+  onFocused,
 }: {
   offer: CourseOfferView;
   level: 2 | 3;
@@ -112,6 +116,7 @@ function CourseOffer({
   hint: boolean;
   waitFor?: CourseOfferView;
   focused: boolean;
+  onFocused?: () => void;
 }) {
   const { course } = offer;
   const article = useRef<HTMLElement>(null);
@@ -119,7 +124,8 @@ function CourseOffer({
     if (!focused) return;
     article.current?.scrollIntoView({ block: "center" });
     article.current?.focus({ preventScroll: true });
-  }, [focused]);
+    onFocused?.();
+  }, [focused, onFocused]);
   const phase = useCoursePhase(course.id);
   const loading = phase.phase === "loading";
   const blocked = loading || !!waitFor;
@@ -131,7 +137,7 @@ function CourseOffer({
   return (
     <article
       ref={article}
-      tabIndex={focused ? -1 : undefined}
+      tabIndex={-1}
       className="mb-6"
       data-testid="course-offer"
       aria-labelledby={`offer-${course.id}`}
@@ -195,11 +201,13 @@ export function CourseStart({
   hint = true,
   grouped,
   focus,
+  onFocused,
 }: {
   courseIds?: string[];
   hint?: boolean;
   grouped?: boolean;
   focus?: string;
+  onFocused?: () => void;
 }) {
   const courses = useCourses();
   const catalog = useCatalog();
@@ -212,6 +220,7 @@ export function CourseStart({
       hint={hint}
       grouped={grouped}
       focus={focus}
+      onFocused={onFocused}
     />
   );
 }

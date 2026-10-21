@@ -223,11 +223,9 @@ export const homeCourse = zoned(async function homeCourse(database: AppDatabase 
  */
 export async function followCourse(courseId: string, database: AppDatabase = db): Promise<void> {
   const list = await courses(database);
-  const [current, { chosen }, language] = await Promise.all([
-    currentLanguage(database),
-    readLanguageChoice(list, database),
-    list.find((course) => course.id === courseId)?.language ?? courseLanguage(courseId, database),
-  ]);
+  const language = list.find((course) => course.id === courseId)?.language;
+  if (!language) return;
+  const [current, { chosen }] = await Promise.all([currentLanguage(database), readLanguageChoice(list, database)]);
   const unstartedChosen =
     !!chosen && chosen !== language && !list.some((course) => course.language === chosen && course.installed);
   if (current !== language || unstartedChosen) await setCurrentLanguage(language, database);

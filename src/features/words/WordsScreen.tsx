@@ -43,7 +43,6 @@ export const entryPath = (entry: Pick<DictionaryEntry, "ref">) =>
     ? `/words/${encodeURIComponent(entry.ref.id)}`
     : `/words/phrase/${encodeURIComponent(entry.ref.id)}`;
 
-/** Словарь языка и имена его курсов для подписей; у языка с одним курсом подписей нет. */
 const languageWords = async (language: Language | undefined) => {
   const own = (await courses()).filter((course) => course.language === language && course.started);
   return {
@@ -127,7 +126,6 @@ function Dictionary({
   switcher,
 }: {
   lessons: DictionaryLesson[];
-  /** Курсы языка, когда их два и больше: подпись строки и фильтр «Курс». */
   names: CourseName[];
   current?: string;
   switcher?: boolean;
@@ -314,7 +312,6 @@ const LessonSection = memo(function LessonSection({
   code: string;
   current?: string;
   base: string;
-  /** Подпись курса у строки в словаре языка. */
   label?: string;
 }) {
   const heading = newModule && !!lesson.moduleId;

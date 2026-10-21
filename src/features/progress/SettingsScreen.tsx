@@ -141,6 +141,7 @@ function Courses() {
           <Segmented
             label="Основной курс"
             testId="primary-course-choice"
+            list
             options={courses.map((course) => ({
               id: course.id,
               title: course.title,

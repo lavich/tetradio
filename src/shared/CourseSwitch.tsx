@@ -20,12 +20,15 @@ export function Segmented({
   value,
   onChange,
   testId,
+  list = false,
 }: {
   label: string;
   options: Option[];
   value: string | null | undefined;
   onChange: (id: string) => void;
   testId: string;
+  /** Варианты списком с переносом длинных названий, а не лентой. */
+  list?: boolean;
 }) {
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const selected = Math.max(
@@ -47,7 +50,7 @@ export function Segmented({
     onChange(options[next].id);
   };
   return (
-    <div className={css.switch} role="radiogroup" aria-label={label} data-testid={testId}>
+    <div className={cx(css.switch, list && css.list)} role="radiogroup" aria-label={label} data-testid={testId}>
       {options.map((option, index) => (
         <button
           key={option.id}

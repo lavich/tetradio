@@ -1,7 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { languages, shelfLanguage, type CourseEntry } from "../../storage/courses";
@@ -35,6 +35,12 @@ export function CourseScreen() {
   }, []);
   const [status, setStatus] = useState("");
   const { state } = useLocation() as { state: { course?: string } | null };
+  const navigate = useNavigate();
+  const [focus, setFocus] = useState(state?.course);
+  // Адрес без состояния: перезагрузка и «Назад» не возвращают фокус и прокрутку к карточке.
+  useEffect(() => {
+    if (state?.course) void navigate(".", { replace: true, state: null });
+  }, [state, navigate]);
   const code = language?.code;
   useEffect(() => setStatus(""), [code]);
   if (language === undefined) return <Screen />;
@@ -52,13 +58,12 @@ export function CourseScreen() {
         <CourseShelf key={course.id} course={course} onStatus={setStatus} />
       ))}
       {unstarted.length || !language ? (
-        <CourseStart courseIds={unstarted} grouped={false} focus={state?.course} />
+        <CourseStart courseIds={unstarted} grouped={false} focus={focus} onFocused={() => setFocus(undefined)} />
       ) : null}
     </Screen>
   );
 }
 
-/** Полка одного курса языка: заголовок со счётчиком и «⋯», экзамен, пауза, обложки и контрольные точки. */
 function CourseShelf({ course, onStatus }: { course: CourseEntry; onStatus: (text: string) => void }) {
   const { id: courseId, pausedAt, title } = course;
   const views = useLiveQuery(() => moduleViews(courseId), [courseId]);

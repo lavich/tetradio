@@ -57,7 +57,6 @@ export function ReadingsScreen() {
   );
 }
 
-/** Тексты одного курса среди курсов языка: заголовок курса, модули и строка о закрытых текстах курса. */
 function CourseGroup({
   title,
   readings,

@@ -202,6 +202,13 @@ describe("ссылка на курс", () => {
     await followCourse(IT, db);
     expect(await currentLanguage(db)).toBe("en");
   });
+  it("ссылка на курс, которого нет ни в каталоге, ни на устройстве, выбор не пишет", async () => {
+    await start(IT);
+    await setCurrentLanguage("en", db);
+    await followCourse("removed-course", db);
+    expect(await currentLanguage(db)).toBe("en");
+    expect((await db.meta.get("currentLanguage"))?.value).toBe("en");
+  });
   it("ссылка на курс показанного языка выбор не пишет", async () => {
     await start(IT);
     await followCourse(GREEK, db);

@@ -40,7 +40,6 @@ export const useTodayCourse = (): string | null | undefined =>
 export const useStartedCourses = (): CourseEntry[] | undefined =>
   useLiveQuery(async () => (await courses()).filter((course) => course.started), []);
 
-/** Языки курсов по порядку их первого курса. `undefined` — ещё читается. */
 export const useLanguages = (): LanguageEntry[] | undefined => useLiveQuery(() => languages(), []);
 /** Язык «Слов», «Чтения» и «Прогресса» и смена выбора; язык без начатых курсов выбирает только «Курс». */
 export const useCurrentLanguage = (): [Language | undefined, (code: Language) => Promise<void>] => [
@@ -59,7 +58,6 @@ export function useCoursePalette(courseId: string | undefined): PaletteName {
   );
 }
 
-/** Имя курса на экранах его языка: «Для IT · B1 → B2». */
 export const courseName = (course: Pick<CourseEntry, "short" | "title" | "level">) =>
   [course.short ?? course.title, course.level].filter(Boolean).join(" · ");
 
