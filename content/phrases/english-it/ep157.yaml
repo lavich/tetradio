@@ -1,0 +1,7 @@
+id: ep157
+text: "I'm taking a course on distributed systems this autumn."
+translation: "Этой осенью я прохожу курс по распределённым системам."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e07
+  operation: requested-generation
+  request: Фразы модуля e07 по программе docs/curriculum-english-it.md

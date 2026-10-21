@@ -1,0 +1,458 @@
+title: Вакансия, страница о компании и ответы кандидатов о мотивации
+kind: lesson
+items:
+  - { kind: word, id: ew229 }
+  - { kind: word, id: ew230 }
+  - { kind: word, id: ew231 }
+  - { kind: word, id: ew232 }
+  - { kind: word, id: ew233 }
+  - { kind: word, id: ew234 }
+  - { kind: word, id: ew235 }
+  - { kind: word, id: ew236 }
+  - { kind: word, id: ew237 }
+  - { kind: word, id: ew238 }
+  - { kind: word, id: ew239 }
+  - { kind: word, id: ew240 }
+  - { kind: word, id: ew241 }
+  - { kind: word, id: ew242 }
+  - { kind: word, id: ew243 }
+  - { kind: word, id: ew244 }
+  - { kind: word, id: ew245 }
+  - { kind: phrase, id: ep159 }
+  - { kind: phrase, id: ep160 }
+  - { kind: phrase, id: ep161 }
+  - { kind: phrase, id: ep162 }
+  - { kind: phrase, id: ep163 }
+  - { kind: phrase, id: ep164 }
+  - { kind: phrase, id: ep165 }
+  - { kind: phrase, id: ep166 }
+blocks:
+  - type: explanation
+    id: company-words
+    title: Слова о культуре и продукте компании
+    body: |-
+      Страница о компании и вакансия описывают одно и то же с разных сторон. Слова урока образуют три группы.
+
+      **Культура.** **Transparent** — компания делится информацией и решениями, **inclusive** — людям с разным опытом комфортно работать, **supportive** — руководитель и команда помогают, **a flat hierarchy** — между сотрудником и руководством мало уровней, **bureaucratic** — много согласований и формальностей, **a blameless culture** — после сбоя разбирают причины и не ищут виновного, **a core value** — принцип, на котором компания строит решения, **work-life balance** — хватает времени и на работу, и на личную жизнь.
+
+      **Продукт и роль.** **Product-led** — решения исходят из продукта и его пользователей, **customer-facing** — роль с прямым общением с клиентами, **greenfield** — новый проект без старого кода, **a nice-to-have** — желательное, но не обязательное требование, **hands-on** — практический опыт, **well-established** — компания с долгой историей, **mission-driven** — компания работает ради миссии.
+
+      **Ваша мотивация.** **Make an impact** — давать заметный результат, **resonate with** — идеи компании находят у вас отклик, **be drawn to** — компания вас привлекает.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините определение с английским словом. Два английских слова лишние.
+    format: match
+    bank:
+      - a flat hierarchy
+      - work-life balance
+      - product-led
+      - customer-facing
+      - greenfield
+      - a core value
+      - a nice-to-have
+      - a blameless culture
+      - well-established
+      - bureaucratic
+    items:
+      - { id: m1, prompt: "мало уровней управления между инженером и руководством компании", answer: a flat hierarchy }
+      - { id: m2, prompt: "возможность уделять время и работе, и личной жизни", answer: work-life balance }
+      - { id: m3, prompt: "компания, в которой решения исходят из продукта и его пользователей", answer: product-led }
+      - { id: m4, prompt: "роль, в которой вы напрямую общаетесь с клиентами", answer: customer-facing }
+      - { id: m5, prompt: "проект, который начинают с нуля, без старого кода", answer: greenfield }
+      - { id: m6, prompt: "принцип, на котором компания строит свои решения", answer: a core value }
+      - { id: m7, prompt: "в вакансии: навык, который желателен, но не обязателен", answer: a nice-to-have }
+      - { id: m8, prompt: "после сбоя разбирают причины и не ищут виновного", answer: a blameless culture }
+  - type: exercise
+    id: words-gap
+    title: Компания и мотивация
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - transparent
+      - inclusive
+      - supportive
+      - bureaucratic
+      - well-established
+      - mission-driven
+      - make an impact
+      - resonate with
+      - be drawn to
+      - work-life balance
+    items:
+      - id: g1
+        prompt: The company shares salaries and decisions openly, so it is very ___. (открытый)
+        answer: transparent
+      - id: g2
+        prompt: An ___ team welcomes people of different ages, backgrounds and abilities. (инклюзивный)
+        answer: inclusive
+      - id: g3
+        prompt: A ___ manager helps you when you make a mistake. (поддерживающий)
+        answer: supportive
+      - id: g4
+        prompt: Slow approvals and many forms make a company ___. (бюрократичный)
+        answer: bureaucratic
+      - id: g5
+        prompt: We are a ___ company that has worked in the market for twenty years. (давно работающий)
+        answer: well-established
+      - id: g6
+        prompt: Our work helps small shops get paid, so we are a ___ company with a clear goal. (работающий ради миссии)
+        answer: mission-driven
+      - id: g7
+        prompt: I want to ___ with software that people use every day. (давать заметный результат)
+        answer: make an impact
+      - id: g8
+        prompt: Your values really ___ me. (находят отклик)
+        answer: resonate with
+  - type: explanation
+    id: reading-how
+    title: Как читать вакансию и страницу о компании
+    body: |-
+      Вакансия отвечает на три вопроса: чем вы будете заниматься, что нужно уметь и что компания предлагает. Страница о компании отвечает на другие: зачем она существует, как работает команда и куда движется. Читая, отмечайте слова, которые повторяются в обоих текстах, потому что на собеседовании по ним проверяют, совпадают ли ваши цели с целями компании.
+
+      Планы компании записывают теми же формами, что и ваши: **We are starting a new service in September** (договорённость со временем), **We are going to hire twenty engineers** (решённый план), **We will invite selected candidates to a call** (обещание). Требования часто идут списком без глаголов: **Five or more years of backend experience.** Слово **preferably** означает «желательно».
+
+      Названия технологий (*Go, Kotlin*) не переводятся. Слова вне списков переведены под текстом.
+  - type: reading
+    id: job
+    title: "Senior Backend Engineer, Brightlane"
+    text: |-
+      Senior Backend Engineer, Brightlane
+
+      About us
+
+      Brightlane builds payment software for small online shops. Our product is used by more than 20,000 merchants in Europe. We are a product-led company with a flat hierarchy, and our engineers talk to customers every month.
+
+      The role
+
+      You will join the Payments team of eight engineers. You are going to design and build new features for our API and work closely with product managers. This is a greenfield project: we are starting a new service for recurring payments in September.
+
+      What we are looking for
+
+      - Five or more years of backend experience, preferably in Go or Kotlin
+      - Hands-on experience with distributed systems and message queues
+      - Clear communication in English
+      - Nice-to-have: experience with payment providers
+
+      What we offer
+
+      - A growth path from senior engineer to tech lead or staff engineer, with a performance review every six months
+      - Internal mobility: you can move to another team after two years
+      - Hybrid work: two days a week in the office in Lisbon
+      - 25 days of holiday and a learning budget of 1,500 euros a year
+
+      How to apply
+
+      Send your CV and a short cover letter by 15 June. We will invite selected candidates to a first call in the following week.
+    glosses:
+      - { text: merchants, russian: "продавцы, владельцы магазинов" }
+      - { text: recurring payments, russian: "регулярные платежи по подписке" }
+      - { text: preferably, russian: желательно }
+      - { text: staff engineer, russian: "инженер уровня выше senior" }
+      - { text: Hybrid, russian: "гибридный график: часть дней в офисе" }
+      - { text: holiday, russian: отпуск }
+      - { text: learning budget, russian: "бюджет на обучение" }
+      - { text: selected, russian: отобранных }
+  - type: exercise
+    id: job-tf
+    about: job
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The product is used by more than twenty thousand merchants.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: The Payments team has twelve engineers.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: You will join the Payments team of eight engineers — в команде восемь инженеров.
+      - id: q3
+        prompt: The new service for recurring payments is a greenfield project.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: Experience with payment providers is required.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Nice-to-have — желательное, но не обязательное требование.
+      - id: q5
+        prompt: There is a performance review every year.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: A performance review every six months — оценка раз в полгода.
+      - id: q6
+        prompt: Engineers can move to another team after two years.
+        options: ["True", "False"]
+        answer: "True"
+  - type: exercise
+    id: job-find
+    about: job
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What will the engineer work on?
+        options:
+          - a new service for recurring payments
+          - the mobile app
+          - the office network
+        answer: a new service for recurring payments
+      - id: q2
+        prompt: Which programming languages does the ad prefer?
+        options: [Go or Kotlin, Python or Ruby, Java or C#]
+        answer: Go or Kotlin
+        explanation: Слово preferably означает «желательно».
+      - id: q3
+        prompt: How many days a week do employees work in the office?
+        options: [two, three, five]
+        answer: two
+      - id: q4
+        prompt: How big is the learning budget?
+        options: ["1,500 euros a year", "25 euros a day", "1,500 euros a month"]
+        answer: 1,500 euros a year
+      - id: q5
+        prompt: What is the deadline to send the CV?
+        options: [15 June, 15 September, the following week]
+        answer: 15 June
+      - id: q6
+        prompt: What should candidates send?
+        options:
+          - a CV and a short cover letter
+          - a CV and a code sample
+          - a portfolio only
+        answer: a CV and a short cover letter
+  - type: exercise
+    id: job-grammar
+    about: job
+    title: Будущее в тексте
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«We are starting a new service for recurring payments in September.» Какой формой выражено будущее?"
+        options: [present continuous, will, might]
+        answer: present continuous
+        explanation: Are starting и время in September — договорённость со временем.
+      - id: q2
+        prompt: "«You are going to design and build new features.» Что выражает going to?"
+        options:
+          - запланированную работу
+          - возможность
+          - обещание кандидату
+        answer: запланированную работу
+        explanation: Going to передаёт решённый план.
+      - id: q3
+        prompt: Какое предложение из вакансии говорит о будущем?
+        options:
+          - We are starting a new service in September.
+          - Brightlane builds payment software for small online shops.
+          - Our product is used by more than 20,000 merchants in Europe.
+        answer: We are starting a new service in September.
+        explanation: Остальные предложения описывают настоящее.
+      - id: q4
+        prompt: Как переписать «You will join the Payments team» с going to?
+        options:
+          - You are going to join the Payments team.
+          - You are going join the Payments team.
+          - You will going to join the Payments team.
+        answer: You are going to join the Payments team.
+        explanation: Нужны форма be и to после going.
+  - type: reading
+    id: about
+    title: "Why Brightlane"
+    text: |-
+      Why Brightlane
+
+      Our mission
+
+      We help small shops get paid without friction. Every decision starts with one question: does this make life easier for a shopkeeper?
+
+      How we work
+
+      We are transparent: salaries, the roadmap and incident reports are open to everybody in the company. Our team is inclusive and supportive, and when something goes wrong, we hold a blameless review. Releases are small and frequent, so most engineers ship to production in their first week.
+
+      Where we are going
+
+      Brightlane is a well-established company with 120 employees. Next year, we are going to open a second office and start a new product for invoices. Our staff turnover is below 8%, which says a lot about how people feel here.
+
+      What people say
+
+      "I joined Brightlane because I wanted to see the result of my work every day." — Paulo, backend engineer
+
+      "The work is demanding, but I have a lot of autonomy." — Hanna, platform engineer
+    glosses:
+      - { text: without friction, russian: "без лишних сложностей" }
+      - { text: shopkeeper, russian: "владелец магазина" }
+      - { text: incident reports, russian: "отчёты о сбоях" }
+      - { text: a blameless review, russian: "разбор без поиска виноватых" }
+      - { text: ship to production, russian: "выпускать изменения в рабочую систему" }
+      - { text: invoices, russian: счета }
+  - type: exercise
+    id: about-tf
+    about: about
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Salaries and incident reports are open to everybody in the company.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: "We are transparent: salaries, the roadmap and incident reports are open to everybody."
+      - id: q2
+        prompt: After a failure, the team looks for the person responsible.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: When something goes wrong, we hold a blameless review — разбор идёт без поиска виноватого.
+      - id: q3
+        prompt: Most engineers ship to production in their first week.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: Brightlane has four hundred employees.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Brightlane is a well-established company with 120 employees — в компании 120 сотрудников.
+      - id: q5
+        prompt: Brightlane is going to open a second office next year.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q6
+        prompt: Staff turnover is above 8%.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Our staff turnover is below 8% — текучесть ниже 8 %.
+  - type: exercise
+    id: about-find
+    about: about
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What question starts every decision at Brightlane?
+        options:
+          - Does this make life easier for a shopkeeper?
+          - Does this increase our profit?
+          - Does this save time for engineers?
+        answer: Does this make life easier for a shopkeeper?
+      - id: q2
+        prompt: Why did Paulo join Brightlane?
+        options:
+          - He wanted to see the result of his work every day.
+          - He wanted to work remotely.
+          - He wanted to change his role.
+        answer: He wanted to see the result of his work every day.
+      - id: q3
+        prompt: How does Hanna describe her work?
+        options:
+          - demanding, with a lot of autonomy
+          - easy and relaxed
+          - slow and bureaucratic
+        answer: demanding, with a lot of autonomy
+      - id: q4
+        prompt: What new product is the company going to start next year?
+        options: [a product for invoices, a mobile bank, a hosting platform]
+        answer: a product for invoices
+  - type: explanation
+    id: listening-how
+    title: Ответы о мотивации на слух
+    body: |-
+      Когда кандидатов спрашивают о мотивации, они называют причину, а затем планы. Причины звучат после слов вроде **What drew me to you is…**, **Your mission resonates with me**, **because**; планы — после **I'm going to…**, **I'm starting… in…**, **I might…**. Слушайте, какую форму выбирает говорящий: она показывает, насколько план твёрдый.
+
+      Послушайте, как Sarah разговаривает с двумя кандидатами, Nadia и Ethan, в конце дня собеседований. Сначала целиком, затем ответьте на вопросы, проверяя себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: motivation
+    title: Two candidates, one question
+    plays: 2
+    transcript:
+      - { speaker: Sarah, text: "Thank you both for staying until the end of the day. I have a few questions for each of you. Nadia, why do you want to join Brightlane?" }
+      - { speaker: Nadia, text: "Honestly, the product is what drew me to you. I've used it for two years in my brother's shop, and I'd like to work on something with real impact. I'm also looking for a team that invests in its engineers." }
+      - { speaker: Sarah, text: "Thank you. Ethan, the same question." }
+      - { speaker: Ethan, text: "Your mission resonates with me. I'm leaving my current company because I've outgrown my role, but I'm leaving on good terms. At Brightlane, I'm going to learn a lot from the senior engineers, and I think I'd be a good fit for the team." }
+      - { speaker: Sarah, text: "Nadia, where do you see yourself in five years?" }
+      - { speaker: Nadia, text: "In five years, I see myself as a tech lead. Next year, I'm going to focus on system design, and I'm starting a part-time master's degree in September. I might consider a management track later, but I'm not sure yet." }
+      - { speaker: Sarah, text: "And you, Ethan?" }
+      - { speaker: Ethan, text: "I'm planning to move into a lead role too, but I might also try data engineering. It depends on the projects. This autumn, I'm taking a course on distributed systems, so I'll have a good base." }
+      - { speaker: Sarah, text: "What are you going to do in your first month?" }
+      - { speaker: Nadia, text: "I'll read the code and ask a lot of questions. I'll also try to ship a small change in my first week." }
+      - { speaker: Ethan, text: "I'm going to meet the whole team first. After that, I'll choose a small task together with my manager." }
+      - { speaker: Sarah, text: "Thank you both. We will send you our decision by Friday." }
+  - type: exercise
+    id: motivation-q
+    about: motivation
+    title: Что рассказали кандидаты
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What drew Nadia to Brightlane?
+        options: [the product, the salary, the office]
+        answer: the product
+      - id: q2
+        prompt: Why is Ethan leaving his current company?
+        options:
+          - He has outgrown his role.
+          - The company is closing.
+          - He was laid off.
+        answer: He has outgrown his role.
+        explanation: I've outgrown my role — Ethan перерос свою роль и уходит в хороших отношениях.
+      - id: q3
+        prompt: What is Nadia starting in September?
+        options:
+          - a part-time master's degree
+          - a new job at Brightlane
+          - a course on distributed systems
+        answer: a part-time master's degree
+      - id: q4
+        prompt: What is Ethan taking this autumn?
+        options:
+          - a course on distributed systems
+          - a part-time master's degree
+          - a course on management
+        answer: a course on distributed systems
+      - id: q5
+        prompt: What does Nadia say about a management track?
+        options:
+          - She might consider it later.
+          - She is going to start it next year.
+          - She has already decided against it.
+        answer: She might consider it later.
+        explanation: I might consider a management track later, but I'm not sure yet — решение не принято.
+      - id: q6
+        prompt: What is Ethan going to do first at Brightlane?
+        options: [meet the whole team, read the code, ship a small change]
+        answer: meet the whole team
+      - id: q7
+        prompt: When will the candidates get the decision?
+        options: [by Friday, on Monday, in September]
+        answer: by Friday
+  - type: exercise
+    id: motivation-phrases
+    about: motivation
+    title: Фразы из разговора
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - drew
+      - resonates
+      - outgrown
+      - might
+      - planning
+      - taking
+      - applied
+      - leaving
+    items:
+      - { id: g1, prompt: "The product is what ___ me to you. (привлёк)", answer: drew }
+      - { id: g2, prompt: "Your mission ___ with me. (находит отклик)", answer: resonates }
+      - { id: g3, prompt: "I've ___ my role, but I'm leaving on good terms. (перерос)", answer: outgrown }
+      - { id: g4, prompt: "I ___ consider a management track later. (возможно)", answer: might }
+      - { id: g5, prompt: "I'm ___ to move into a lead role. (планирую)", answer: planning }
+      - { id: g6, prompt: "This autumn, I'm ___ a course on distributed systems. (прохожу)", answer: taking }

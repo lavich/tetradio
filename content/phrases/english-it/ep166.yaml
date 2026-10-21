@@ -1,0 +1,7 @@
+id: ep166
+text: "I like that your team ships small changes often."
+translation: "Мне нравится, что ваша команда часто выпускает небольшие изменения."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e07
+  operation: requested-generation
+  request: Фразы модуля e07 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep168
+text: "Where do you see yourself in five years?"
+translation: "Кем вы видите себя через пять лет?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e07
+  operation: requested-generation
+  request: Фразы модуля e07 по программе docs/curriculum-english-it.md

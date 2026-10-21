@@ -1,0 +1,7 @@
+id: ep165
+text: "I'm leaving on good terms."
+translation: "Я ухожу в хороших отношениях."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e07
+  operation: requested-generation
+  request: Фразы модуля e07 по программе docs/curriculum-english-it.md

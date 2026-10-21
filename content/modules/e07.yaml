@@ -1,8 +1,23 @@
 number: 7
 title: Why this company?
 subtitle: Мотивация и планы
-status: draft
+status: published
 goal: объяснить, почему ищешь работу, почему эта компания и что дальше
 grammar:
   - will, going to, present continuous о будущем, might
 sessions: 3
+crib:
+  title: планы и мотивация
+  rows:
+    - [договорённость, "I'm starting a new job in September. I'm taking a course this autumn."]
+    - [решённое намерение, "I'm going to focus on system design. I'm planning to switch to full-stack."]
+    - [решение сейчас, "I'll send you my CV today."]
+    - [возможность, "I might consider a management track later."]
+    - [пять лет, "In five years, I see myself as a tech lead."]
+    - [почему компания, "Honestly, the culture is what drew me to you. My goals line up with where the company is heading."]
+  note: "после if и when — present simple, will остаётся в главной части; после might и will нет to"
+lessons:
+  - e07-1
+  - e07-2
+  - e07-3
+  - e07-test

@@ -1,0 +1,7 @@
+id: ep151
+text: "I'm planning to switch from frontend to full-stack."
+translation: "Я собираюсь перейти с фронтенда на фулстек."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e07
+  operation: requested-generation
+  request: Фразы модуля e07 по программе docs/curriculum-english-it.md
