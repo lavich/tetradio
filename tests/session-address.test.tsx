@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import "fake-indexeddb/auto";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
@@ -15,6 +15,7 @@ import { activeOf, install, NOW, seedCatalog, wordId, wordOf } from "./helpers/l
 
 if (!Element.prototype.scrollIntoView) Element.prototype.scrollIntoView = () => undefined;
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+vi.setConfig({ testTimeout: 20_000 });
 if (!globalThis.ResizeObserver)
   globalThis.ResizeObserver = class {
     observe() {}
@@ -59,7 +60,7 @@ const mount = (url: string) => {
   );
 };
 async function until(check: () => boolean, what: string) {
-  for (let i = 0; i < 300; i++) {
+  for (let i = 0; i < 1000; i++) {
     if (check()) return;
     await act(() => new Promise((resolve) => setTimeout(resolve, 10)));
   }

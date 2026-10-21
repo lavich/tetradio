@@ -5,12 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { deviceTimezone, mondayOf, type DailyPlan } from "../../domain/learning";
+import { PROFILES, type Language } from "../../domain/language";
 import type { Session } from "../../domain/types";
 import { useAction } from "../../shared/action";
 import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
 import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
-import { useCoursePalette } from "../../shared/courses";
+import { useCoursePalette, useStartedCourses } from "../../shared/courses";
+import type { CourseEntry } from "../../storage/courses";
 import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
@@ -28,7 +30,9 @@ import {
 import { dexieSource } from "../../storage/queries";
 import { courseReadings } from "../../storage/readings";
 import { sessionPath, startSession } from "../learning/session-actions";
+import { CourseLessonLine, courseCaption, MoreCourses } from "./CourseLessonLine";
 import { DayNotes } from "./DayNotes";
+import { lessonLines } from "./lessons";
 import { ReadingSheet } from "./ReadingSheet";
 import css from "./today.module.css";
 
@@ -36,16 +40,21 @@ import css from "./today.module.css";
 export const titleFocus = { pending: false };
 
 /**
- * «Сегодня» курса — страница тетради с двумя ритмами: повторение каждый день, урок 2–3 раза в неделю.
- * Главная кнопка одна: у повторения, пока оно ждёт, потом у урока. На широком окне справа — тетрадь модуля.
+ * «Сегодня» основного языка — страница тетради с двумя ритмами: повторение каждый день, урок 2–3 раза в неделю.
+ * Повторение общее для курсов языка, крупный урок, «Чтение» и разворот — основного курса языка, под ним — строки
+ * уроков других его курсов. Главная кнопка одна: у повторения, пока оно ждёт, потом у урока.
  */
-export function CourseToday({
-  courseId,
+export function LanguageToday({
+  language,
+  courses,
   plan,
   unfinished,
   more,
 }: {
-  courseId: string | undefined;
+  /** `null` — курсов в каталоге нет: план по всем урокам, как до курсов. */
+  language: Language | null;
+  /** Курсы языка на «Сегодня», основной первым. */
+  courses: CourseEntry[];
   plan: DailyPlan;
   unfinished: Session | null;
   more?: React.ReactNode;
@@ -53,10 +62,23 @@ export function CourseToday({
   const spread = useSpread();
   const today = plan.today;
   const monday = mondayOf(today);
+  const main = courses[0];
+  const courseId = main?.id;
+  const started = useStartedCourses();
+  // Неделя и счёт — по всем начатым курсам языка, в том числе на паузе: занятие, начатое до паузы, засчитывается.
+  const counted =
+    started && language ? started.filter((course) => course.language === language).map((course) => course.id) : [];
+  const scope = !language ? undefined : counted.length ? counted : courseId;
+  const scopeKey = typeof scope === "string" ? scope : scope?.join(" ");
+  const ready = started !== undefined;
   const views = useLiveQuery(() => moduleViews(courseId), [courseId]);
-  const reviewed = useLiveQuery(() => reviewedOn(today, courseId), [today, courseId]);
-  const week = useLiveQuery(() => lessonDays(monday, deviceTimezone(), courseId), [monday, deviceTimezone(), courseId]);
-  const profile = useCourseProfile(courseId);
+  const reviewed = useLiveQuery(async () => (ready ? reviewedOn(today, scope) : undefined), [today, ready, scopeKey]);
+  const week = useLiveQuery(
+    async () => (ready ? lessonDays(monday, deviceTimezone(), scope) : undefined),
+    [monday, deviceTimezone(), ready, scopeKey],
+  );
+  const courseProfile = useCourseProfile(courseId);
+  const profile = language ? PROFILES[language] : courseProfile;
   const title = useRef<HTMLHeadingElement>(null);
   const shown = !!views && reviewed !== undefined;
   useEffect(() => {
@@ -79,6 +101,11 @@ export function CourseToday({
   if (!views || reviewed === undefined || !week || readings === undefined)
     return <div aria-busy="true" aria-label="План дня загружается" />;
 
+  const caption = courses.length > 1 && main ? courseCaption(main) : undefined;
+  const { shown: rows, more: hidden } = lessonLines([
+    ...(main ? [main] : []),
+    ...courses.slice(1).filter((course) => course.installed),
+  ]);
   const page = (
     <section className={cx(nb.page, css.page)}>
       <p className={nb.date} lang={profile.code}>
@@ -89,6 +116,7 @@ export function CourseToday({
       </h1>
       <Review
         courseId={courseId}
+        courseIds={courses.map((course) => course.id)}
         plan={plan}
         unfinished={unfinished}
         reviewed={reviewed ?? 0}
@@ -109,8 +137,17 @@ export function CourseToday({
           lesson={next.lesson}
           primary={!reviewFirst}
           week={spread ? undefined : (week?.length ?? 0)}
+          caption={caption}
         />
       ) : null}
+      {rows.length > 1 && (
+        <div className={css.courseLines}>
+          {rows.slice(1).map((course) => (
+            <CourseLessonLine key={course.id} course={course} caption />
+          ))}
+          {language && <MoreCourses language={PROFILES[language].names.title} courses={hidden} />}
+        </div>
+      )}
       {more}
     </section>
   );
@@ -130,6 +167,7 @@ export function CourseToday({
 
 function Review({
   courseId,
+  courseIds,
   plan,
   unfinished,
   reviewed,
@@ -137,6 +175,7 @@ function Review({
   primary,
 }: {
   courseId: string | undefined;
+  courseIds: string[];
   plan: DailyPlan;
   unfinished: Session | null;
   reviewed: number;
@@ -149,7 +188,7 @@ function Review({
   const reviews = plan.reviews.length;
   const review = () =>
     run(async () => {
-      const session = unfinished ?? (await startSession(new Date(), { courseId }));
+      const session = unfinished ?? (await startSession(new Date(), courseIds.length ? { courseIds } : {}));
       if (!session) return setProblem("На сегодня карточек нет.");
       void navigate(await sessionPath(session));
     });
@@ -241,11 +280,14 @@ export function LessonNext({
   lesson,
   primary,
   week,
+  caption,
 }: {
   view: ModuleView;
   lesson: ModuleLessonView;
   primary: boolean;
   week?: number;
+  /** Короткое имя курса, когда у языка на «Сегодня» два курса и больше. */
+  caption?: string;
 }) {
   const { module } = view;
   const { code } = useProfile();
@@ -260,6 +302,11 @@ export function LessonNext({
         <i className={css.ribbon} />
       </span>
       <span className={css.lessonBody}>
+        {caption && (
+          <span className={css.courseCaption} data-testid="course-caption">
+            {caption}
+          </span>
+        )}
         <span className="sr-only">Модуль {module.number}. </span>
         <span className={css.lessonTitle}>
           {test ? "Контрольная · " : ""}

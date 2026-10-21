@@ -1,21 +1,31 @@
 import { lazy, Suspense } from "react";
 import { Screen } from "../../app/Screen";
-import { useCourses, useCourseSession, useStartedCourses, useTodayCourse } from "../../shared/courses";
-import { useInstalledCount, usePlan } from "../../shared/store";
-import { CourseToday } from "./CourseToday";
+import {
+  useLanguages,
+  useLanguageSession,
+  useStartedCourses,
+  useTodayCourses,
+  useTodayLanguage,
+} from "../../shared/courses";
+import { useInstalledCount, useLanguagePlan } from "../../shared/store";
+import { LanguageToday } from "./CourseToday";
 import { CourseStart, OFFLINE_HINT } from "./FirstRun";
-import { OtherCourse } from "./OtherCourse";
+import { LanguageLine } from "./LanguageLine";
 
 const AllPaused = lazy(() => import("./AllPaused").then((module) => ({ default: module.AllPaused })));
 
 export function TodayScreen() {
-  const primary = useTodayCourse();
+  const language = useTodayLanguage();
   const started = useStartedCourses();
   const allPaused = !!started?.length && started.every((course) => course.pausedAt);
-  const plan = usePlan(started === undefined || allPaused ? undefined : primary);
+  const plan = useLanguagePlan(started === undefined || allPaused ? undefined : language);
   const installed = useInstalledCount();
-  const unfinished = useCourseSession(primary ?? undefined);
-  const others = useCourses()?.filter((course) => course.id !== primary && !course.pausedAt);
+  const unfinished = useLanguageSession(language ?? undefined);
+  const courses = useTodayCourses(language ?? undefined);
+  const others = useLanguages()?.filter(
+    (entry) =>
+      entry.code !== language && entry.courses.some((course) => course.installed && course.started && !course.pausedAt),
+  );
 
   // План читается из локальной базы за доли секунды: пустая клетка без заголовка и заглушек, чтобы ничего не мелькало.
   if (installed === 0)
@@ -37,7 +47,7 @@ export function TodayScreen() {
         </Suspense>
       </Screen>
     );
-  if (!plan || installed === undefined || unfinished === undefined || started === undefined)
+  if (!plan || installed === undefined || unfinished === undefined || started === undefined || !courses)
     return (
       <Screen wide>
         <div aria-busy="true" aria-label="План дня загружается" />
@@ -45,12 +55,13 @@ export function TodayScreen() {
     );
   return (
     <Screen wide>
-      <CourseToday
-        courseId={primary ?? undefined}
+      <LanguageToday
+        language={language ?? null}
+        courses={courses}
         plan={plan}
         unfinished={unfinished}
-        more={others?.map((course) => (
-          <OtherCourse key={course.id} course={course} />
+        more={others?.map((entry) => (
+          <LanguageLine key={entry.code} language={entry} />
         ))}
       />
     </Screen>

@@ -13,9 +13,9 @@ vi.mock("../src/shared/store", async (original) => {
   const actual = await original<typeof import("../src/shared/store")>();
   return {
     ...actual,
-    usePlan: (courseId: string | null | undefined) => {
-      planned.push(courseId);
-      return actual.usePlan(courseId);
+    useLanguagePlan: (language: Parameters<typeof actual.useLanguagePlan>[0]) => {
+      planned.push(language);
+      return actual.useLanguagePlan(language);
     },
   };
 });
@@ -69,5 +69,6 @@ it("все курсы на паузе — общий план по всем ку
   for (let i = 0; i < 100 && !host.textContent?.includes("Все курсы на паузе"); i++)
     await act(() => new Promise((resolve) => setTimeout(resolve, 10)));
   expect(host.textContent).toContain("Все курсы на паузе");
+  expect(planned.length).toBeGreaterThan(0);
   expect(planned).not.toContain(null);
 });

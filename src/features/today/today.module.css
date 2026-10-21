@@ -314,3 +314,29 @@
     color: var(--primary);
   }
 }
+
+.courseCaption {
+  font-family: var(--font-print);
+  font-size: 13px;
+  line-height: 16px;
+  color: var(--muted-foreground);
+}
+.courseLines {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: var(--cell);
+}
+.otherDone {
+  display: grid;
+  align-content: center;
+  min-height: 44px;
+  margin: 0;
+}
+.moreCourses {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+  color: var(--primary);
+  text-decoration: none;
+}

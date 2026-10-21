@@ -74,7 +74,11 @@ export async function seedCatalog(database: AppDatabase, ids = Object.keys(COURS
 }
 
 /** Курс начат: пройденный урок `-1` с четырьмя словами на устройстве; `due` слов — к повторению вчера. */
-export async function install(database: AppDatabase, courseId: string, { due = 0, at = iso, phrases = 0 } = {}) {
+export async function install(
+  database: AppDatabase,
+  courseId: string,
+  { due = 0, at = iso, phrases = 0, ahead = false } = {},
+) {
   const lessonId = `${courseId}-1`;
   const words = Array.from({ length: WORDS }, (_, index) => wordOf(courseId, index));
   const texts = Array.from({ length: phrases }, (_, index) => ({
@@ -116,7 +120,9 @@ export async function install(database: AppDatabase, courseId: string, { due = 0
     );
     await database.words.bulkAdd(words.map(indexWord));
     await database.phrases.bulkAdd(texts);
-    await database.cardStates.bulkAdd(words.slice(0, due).map((word) => dueState(word.id)));
+    await database.cardStates.bulkAdd(
+      words.flatMap((word, index) => (index < due ? [dueState(word.id)] : ahead ? [aheadState(word.id)] : [])),
+    );
   });
   await rememberCourses(database);
 }
@@ -132,6 +138,11 @@ export const dueState = (id: string): LearningState => ({
     scheduled_days: 3,
     reps: 2,
   },
+});
+/** Карточка, срок которой ещё не скоро: с ней «Сегодня» без повторений. */
+export const aheadState = (id: string): LearningState => ({
+  ...dueState(id),
+  card: { ...dueState(id).card, due: new Date("2099-01-01T09:00:00Z") },
 });
 /** Незаконченное занятие из одного слова курса. */
 export const activeOf = (id: string, courseId: string | undefined, extra: Partial<Session> = {}): Session => {

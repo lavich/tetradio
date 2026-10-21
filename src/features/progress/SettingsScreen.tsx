@@ -136,7 +136,10 @@ function Courses() {
         <div className={css.choice} data-testid="primary-course">
           <span className={css.toggleText}>
             <span className={css.toggleLabel}>Основной курс</span>
-            <span className={css.note}>Он первым и целиком на «Сегодня», остальные — строкой ниже.</span>
+            <span className={css.note}>
+              Пока он идёт, его язык — первым и целиком на «Сегодня», его урок — первой строкой. Другие языки —
+              компактно ниже.
+            </span>
           </span>
           <Segmented
             label="Основной курс"
