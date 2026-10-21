@@ -11,11 +11,13 @@ import {
   subscribeInstall,
 } from "../content/client";
 import type { ContentPackage } from "../content/schema";
-import { deviceTimezone, makePlan, studyDay } from "../domain/learning";
+import { deviceTimezone, makePlan, studyDay, type DailyPlan } from "../domain/learning";
 import { progress } from "../domain/stats";
 import { defaultSettings } from "../domain/types";
 import { db } from "../storage/db";
 import { dexieSource, loadSettings } from "../storage/queries";
+import { languagePlan } from "../storage/today";
+import type { Language } from "../domain/language";
 
 /**
  * Каждый экран подписывается только на свою выборку. Общего реактивного снимка базы больше нет:
@@ -31,17 +33,10 @@ export const useInstalledCount = () => useLiveQuery(() => db.packages.count(), [
 export const useWord = (id: string | undefined) => useLiveQuery(() => (id ? db.words.get(id) : undefined), [id]);
 export const usePhrase = (id: string | undefined) =>
   useLiveQuery(async () => (id ? ((await db.phrases.get(id)) ?? null) : undefined), [id]);
-/**
- * План курса; `null` — по всем курсам (курсов в каталоге нет), `undefined` — курс ещё читается.
- * Время запрос берёт сам: перечитывается по сроку `wakeAt` и при возврате в приложение, а не каждую минуту.
- */
-export function usePlan(courseId: string | null | undefined) {
+/** Время запрос плана берёт сам: перечитывается по сроку `wakeAt` и при возврате в приложение, а не каждую минуту. */
+function useWakingPlan(read: () => Promise<DailyPlan> | undefined, deps: unknown[]) {
   const [tick, setTick] = useState(0);
-  const plan = useLiveQuery(
-    () =>
-      courseId === undefined ? undefined : makePlan(dexieSource(), new Date(), { courseId: courseId ?? undefined }),
-    [courseId, tick],
-  );
+  const plan = useLiveQuery(read, [...deps, tick]);
   const wakeAt = plan?.wakeAt.getTime();
   useEffect(() => {
     if (wakeAt === undefined) return;
@@ -55,6 +50,16 @@ export function usePlan(courseId: string | null | undefined) {
   }, []);
   return plan;
 }
+/** План курса; `null` — по всем курсам (курсов в каталоге нет), `undefined` — курс ещё читается. */
+export const usePlan = (courseId: string | null | undefined) =>
+  useWakingPlan(
+    () =>
+      courseId === undefined ? undefined : makePlan(dexieSource(), new Date(), { courseId: courseId ?? undefined }),
+    [courseId],
+  );
+/** План языка «Сегодня»; `null` — курсов в каталоге нет, план по всем урокам; `undefined` — язык ещё читается. */
+export const useLanguagePlan = (language: Language | null | undefined) =>
+  useWakingPlan(() => (language === undefined ? undefined : languagePlan(new Date(), language)), [language]);
 /** Статистика зависит от учебного дня, а не от минуты. */
 export const useStats = (now: Date) =>
   useLiveQuery(() => progress(dexieSource(), now), [studyDay(now, deviceTimezone())]);

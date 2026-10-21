@@ -14,7 +14,7 @@ const isPractice = (session: Session) => session.items.every((item) => item.mode
  */
 export async function startSession(
   now: Date,
-  options: { refs?: LearningRef[]; mode?: "scheduled" | "practice"; courseId?: string } = {},
+  options: { refs?: LearningRef[]; mode?: "scheduled" | "practice"; courseId?: string; courseIds?: string[] } = {},
   database: AppDatabase = db,
 ): Promise<Session | null> {
   const session = await makeSession({ source: dexieSource(database), now, hasVoice: hasVoiceFor, ...options });

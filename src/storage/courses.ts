@@ -433,6 +433,40 @@ export const sessionCourse = zoned(
   async (session: Pick<Session, "courseId">, database: AppDatabase = db) => session.courseId ?? homeCourse(database),
 );
 
+/** Язык занятия: записанный новой версией, иначе язык его курса; занятие без курса — домашнего курса. */
+export const sessionLanguage = zoned(async function sessionLanguage(
+  session: Pick<Session, "courseId" | "language">,
+  database: AppDatabase = db,
+): Promise<Language> {
+  if (session.language) return session.language;
+  const courseId = await sessionCourse(session, database);
+  return courseId ? courseLanguage(courseId, database) : DEFAULT_LANGUAGE;
+});
+const isPracticeSession = (session: Session) => session.items.every((item) => item.mode === "practice");
+
+/**
+ * Незавершённое занятие языка, последнее по времени, в том числе тренировка курса. Прежнее занятие повторения
+ * курса на паузе ждёт возврата курса; занятия новой версии с явно выбранными карточками открываются и на паузе.
+ */
+export const languageSession = zoned(async function languageSession(
+  language: Language,
+  database: AppDatabase = db,
+): Promise<Session | null> {
+  const active = await database.sessions
+    .where("[status+createdAt]")
+    .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
+    .reverse()
+    .toArray();
+  if (!active.length) return null;
+  const [list, home] = await Promise.all([courses(database), homeCourse(database)]);
+  const byId = new Map(list.map((course) => [course.id, course]));
+  const languageOf = (session: Session) =>
+    session.language ?? byId.get(session.courseId ?? home ?? "")?.language ?? DEFAULT_LANGUAGE;
+  const waits = (session: Session) =>
+    !session.language && !isPracticeSession(session) && !!byId.get(session.courseId ?? home ?? "")?.pausedAt;
+  return active.find((session) => languageOf(session) === language && !waits(session)) ?? null;
+});
+
 /** Незавершённое занятие курса, последнее по времени; без курса — любое, как до двух курсов. */
 export const activeSession = zoned(async function activeSession(
   courseId?: string,

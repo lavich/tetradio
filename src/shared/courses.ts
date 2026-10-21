@@ -10,6 +10,7 @@ import {
   courseOfCard,
   courses,
   currentLanguage,
+  languageSession,
   languages,
   primaryCourse,
   followCourse,
@@ -21,6 +22,7 @@ import {
   type CourseEntry,
   type LanguageEntry,
 } from "../storage/courses";
+import { todayCourses, todayLanguage } from "../storage/today";
 
 /** Установленные курсы по порядку установки. `undefined` — ещё читается. */
 export const useCourses = (): CourseEntry[] | undefined =>
@@ -36,6 +38,15 @@ export { setPrimaryCourse };
 /** Курс «Сегодня» — основной или следующий не на паузе: `null` — все начатые курсы на паузе или курсов нет. */
 export const useTodayCourse = (): string | null | undefined =>
   useLiveQuery(async () => (await todayCourse()) ?? null, []);
+/** Язык «Сегодня»: `null` — все начатые курсы на паузе или курсов нет, `undefined` — ещё читается. */
+export const useTodayLanguage = (): Language | null | undefined =>
+  useLiveQuery(async () => (await todayLanguage()) ?? null, []);
+/** Начатые курсы языка не на паузе, основной курс языка первым. */
+export const useTodayCourses = (language: Language | undefined): CourseEntry[] | undefined =>
+  useLiveQuery(async () => (language ? todayCourses(language) : []), [language]);
+/** Незавершённое занятие языка: `undefined` — ещё читается, `null` — нет. */
+export const useLanguageSession = (language: Language | undefined): Session | null | undefined =>
+  useLiveQuery(async () => (language ? languageSession(language) : null), [language]);
 /** Начатые курсы, в том числе ещё не скачанные. */
 export const useStartedCourses = (): CourseEntry[] | undefined =>
   useLiveQuery(async () => (await courses()).filter((course) => course.started), []);

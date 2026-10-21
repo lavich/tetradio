@@ -1,6 +1,6 @@
 import { State } from "ts-fsrs";
 import { db, type AppDatabase } from "./db";
-import { profileOfCourse, sessionCourse } from "./courses";
+import { cardCourses, courseLanguage, sessionCourse, sessionLanguage } from "./courses";
 import { lessonMates, optionPool, phrasePool } from "./queries";
 import {
   closeSources,
@@ -154,8 +154,7 @@ async function gapRetry(
   database: AppDatabase,
 ): Promise<Pick<SessionItem, "type" | "options" | "gap"> | null> {
   if (item.type !== "spelling" || item.card.kind !== "phrase") return null;
-  const courseId = await sessionCourse(session, database);
-  const profile = courseId ? await profileOfCourse(courseId, database) : PROFILES.el;
+  const profile = PROFILES[await sessionLanguage(session, database)];
   const gap = gapOf(answer, item.card.phrase.text, profile);
   return gap === null ? null : { type: "wordGap", options: [], gap };
 }
@@ -170,31 +169,70 @@ async function easierRetry(
 ): Promise<Pick<SessionItem, "type" | "options"> | null> {
   if (!hasEasierStep(item.type)) return null;
   const card = item.card;
-  const courseId = await sessionCourse(session, database);
+  const [courseOf, language] = await Promise.all([
+    sessionCourses(session, database),
+    sessionLanguage(session, database),
+  ]);
+  const courseId = courseOf(item.unitKey);
   const pools =
     card.kind === "word"
       ? {
-          words: await wordSourcesOf(card.word.id, session, database),
+          words: await wordSourcesOf(card.word.id, courseId, session, courseOf, database),
           phrases: [],
         }
       : { words: NO_WORDS, phrases: await phrasePool(OPTION_POOL, courseId, database) };
-  const profile = courseId ? await profileOfCourse(courseId, database) : undefined;
-  return easierExercise(card, item.type, pools, Math.random, profile);
+  return easierExercise(card, item.type, pools, Math.random, PROFILES[language]);
+}
+/**
+ * Курс карточек занятия: в занятии новой версии — курс карточки, если она того же языка, иначе курс занятия
+ * (карточка вне уроков бывает у домашнего курса другого языка); в занятии прежней версии — курс занятия.
+ */
+async function sessionCourses(
+  session: Session,
+  database: AppDatabase,
+): Promise<(unitKey: string) => string | undefined> {
+  const fallback = await sessionCourse(session, database);
+  if (!session.language) return () => fallback;
+  const keys = [...new Set(session.items.map((entry) => entry.unitKey))];
+  const owners = await cardCourses(keys, database);
+  const languages = new Map(
+    await Promise.all(
+      [...new Set(owners.values())].map(async (id) => [id, await courseLanguage(id, database)] as const),
+    ),
+  );
+  return (key) => {
+    const own = owners.get(key);
+    return own && languages.get(own) === session.language ? own : fallback;
+  };
 }
 /**
  * Живые слова занятия: в элементах лежат снимки на момент сборки, поэтому слова перечитываются по id,
  * а убранные обновлением пакета с тех пор отбрасываются.
  */
-async function liveSessionWords(session: Session, database: AppDatabase): Promise<Word[]> {
-  const ids = [...new Set(session.items.flatMap((item) => (item.card.kind === "word" ? [item.card.word.id] : [])))];
+async function liveSessionWords(
+  session: Session,
+  database: AppDatabase,
+  own: (unitKey: string) => boolean,
+): Promise<Word[]> {
+  const ids = [
+    ...new Set(
+      session.items.flatMap((item) => (item.card.kind === "word" && own(item.unitKey) ? [item.card.word.id] : [])),
+    ),
+  ];
   return (await database.words.bulkGet(ids)).flatMap((word) => (word ? [word] : []));
 }
-/** Источники вариантов слова в занятии: соседи по урокам, живые слова занятия и пул словаря курса занятия. */
-async function wordSourcesOf(wordId: string, session: Session, database: AppDatabase) {
+/** Источники вариантов слова в занятии: соседи по урокам, живые слова занятия его курса и пул словаря его курса. */
+async function wordSourcesOf(
+  wordId: string,
+  courseId: string | undefined,
+  session: Session,
+  courseOf: (unitKey: string) => string | undefined,
+  database: AppDatabase,
+) {
   const [mates, sessionWords, pool] = await Promise.all([
     lessonMates([wordId], database),
-    liveSessionWords(session, database),
-    sessionCourse(session, database).then((courseId) => optionPool(OPTION_POOL, courseId, database)),
+    liveSessionWords(session, database, (key) => courseOf(key) === courseId),
+    optionPool(OPTION_POOL, courseId, database),
   ]);
   return closeSources(wordId, mates, sessionWords, pool);
 }

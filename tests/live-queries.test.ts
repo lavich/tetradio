@@ -18,6 +18,7 @@ import {
 import {
   activeSession,
   cardsInCourse,
+  languageSession,
   courseOfCard,
   courses,
   currentLanguage,
@@ -33,6 +34,7 @@ import { dictionary, languageDictionary } from "../src/storage/dictionary";
 import { submitAnswer } from "./helpers/ops";
 import { courseProgress, languageProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
+import { languagePlan, todayCourses, todayLanguage } from "../src/storage/today";
 import { markRead, moduleReadings, courseReadings, languageReadings, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 
@@ -107,6 +109,12 @@ describe("живые запросы отслеживают чтения посл
   // Форма запроса (стрелка или async) — как в экране: от неё зависит, удержит ли Dexie зону.
   const screens: Record<string, () => unknown> = {
     "«Сегодня»: план": () => makePlan(dexieSource(), now, { courseId: COURSE }),
+    "«Сегодня»: язык": async () => (await todayLanguage()) ?? null,
+    "«Сегодня»: курсы языка": async () => todayCourses((await todayLanguage())!),
+    "«Сегодня»: план языка": async () => languagePlan(now, (await todayLanguage()) ?? null),
+    "«Сегодня»: занятие языка": async () => languageSession((await todayLanguage())!),
+    "«Сегодня»: дни уроков языка": () => lessonDays("2026-09-14", tz, [COURSE]),
+    "«Сегодня»: повторено по языку": () => reviewedOn("2026-09-15", [COURSE]),
     "«Сегодня»: дни уроков": () => lessonDays("2026-09-14", tz, COURSE),
     "«Сегодня»: повторено": () => reviewedOn("2026-09-15", COURSE),
     "«Сегодня»: «Чтение»": async () => courseReadings(COURSE),
