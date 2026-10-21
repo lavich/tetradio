@@ -1,0 +1,8 @@
+id: tp132
+text: "I dunno, to be honest."
+translation: "Не знаю, если честно."
+note: "dunno — I don't know"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md

@@ -68,3 +68,5 @@ characters:
   Sofia: { gender: female, voice: Despina }
   Mei: { gender: female, voice: Leda }
   Tom: { gender: male, voice: Achird }
+  Jack: { gender: male, voice: Zubenelgenubi }
+  Zoe: { gender: female, voice: Gacrux }

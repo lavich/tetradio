@@ -1,0 +1,8 @@
+id: tp135
+text: "Catch you later."
+translation: "Увидимся позже."
+note: "прощание с тем, кого скоро увидишь"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md

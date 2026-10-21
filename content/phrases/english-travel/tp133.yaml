@@ -1,0 +1,8 @@
+id: tp133
+text: "Hang on a second."
+translation: "Подождите секунду."
+note: "в США также Hold on a second"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md

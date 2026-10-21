@@ -1,0 +1,297 @@
+title: Контрольная модуля t09
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чат друзей, быстрый разговор после концерта, вопросы-хвостики и эхо-вопросы, редукции, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: lisbon-chat
+    title: Lisbon trip — group chat
+    text: |-
+      LISBON TRIP — GROUP CHAT
+
+      Rosa: hey all, quick update. the tour on friday is cancelled, the guide is ill
+      Nick: gutted! I was really keen. any plan B?
+      Rosa: there's a free walking tour at 11. it's a bit touristy but sorted, no booking needed
+      Paul: I dunno, mate. I'm knackered after the flight. maybe I'll join you at lunch?
+      Nick: fair enough. heads-up: the lunch place near the market is a bit dodgy, bad reviews
+      Rosa: no worries, I'll find something legit. meet at the fountain at 1?
+      Paul: sounds good, cheers
+    glosses:
+      - { text: ill, russian: больной }
+      - { text: plan B, russian: запасной план }
+      - { text: reviews, russian: отзывы }
+      - { text: the fountain, russian: фонтан }
+  - type: exercise
+    id: lisbon-chat-q
+    about: lisbon-chat
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why is the Friday tour cancelled?
+        options:
+          - The guide is ill.
+          - It is raining.
+          - There are no tickets.
+        answer: The guide is ill.
+        explanation: The guide is ill.
+      - id: q2
+        prompt: How does Nick feel about the news?
+        options:
+          - very disappointed
+          - very happy
+          - very tired
+        answer: very disappointed
+        explanation: Gutted — сильно расстроен.
+      - id: q3
+        prompt: Why can't Paul come in the morning?
+        options:
+          - He is tired after the flight.
+          - He has no ticket.
+          - He is meeting a friend.
+        answer: He is tired after the flight.
+        explanation: I'm knackered after the flight.
+      - id: q4
+        prompt: What is the problem with the lunch place near the market?
+        options:
+          - It has bad reviews.
+          - It is too expensive.
+          - It is closed on Friday.
+        answer: It has bad reviews.
+        explanation: A bit dodgy, bad reviews.
+      - id: q5
+        prompt: Where and when do they meet for lunch?
+        options:
+          - at the fountain at one
+          - at the market at one
+          - at the fountain at eleven
+        answer: at the fountain at one
+        explanation: Meet at the fountain at 1?
+  - type: listening
+    id: after-gig
+    title: After the gig
+    plays: 2
+    transcript:
+      - { speaker: Zoe, text: "That was amazing, wasn't it?" }
+      - { speaker: Jack, text: "The second band was legit. The first one was a bit random, though." }
+      - { speaker: Zoe, text: "Random? They were funny!" }
+      - { speaker: Ben, text: "I dunno. I was too knackered to listen. I'd better get going soon." }
+      - { speaker: Jack, text: "Already? It's only eleven!" }
+      - { speaker: Ben, text: "I know, but my train is at seven tomorrow. I'm heading to Glasgow." }
+      - { speaker: Zoe, text: "You're leaving, aren't you? You didn't tell us!" }
+      - { speaker: Ben, text: "Sorry, I forgot. Anyway, I'm gonna find a taxi. Cheers for tonight, mate. Catch you later." }
+      - { speaker: Jack, text: "Safe journey, Ben." }
+  - type: exercise
+    id: after-gig-q
+    about: after-gig
+    graded: true
+    title: Аудирование — после концерта
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Jack think of the second band?
+        options:
+          - It was good.
+          - It was a nightmare.
+          - It was too loud.
+        answer: It was good.
+        explanation: The second band was legit — надёжная, хорошая.
+      - id: q2
+        prompt: What does Jack say about the first band?
+        options:
+          - It was strange and unexpected.
+          - It was very good.
+          - It was too long.
+        answer: It was strange and unexpected.
+        explanation: A bit random — неожиданная, ни к селу ни к городу.
+      - id: q3
+        prompt: Why does Ben want to leave?
+        options:
+          - He has an early train.
+          - He does not like the band.
+          - He is meeting a friend.
+        answer: He has an early train.
+        explanation: My train is at seven tomorrow.
+      - id: q4
+        prompt: Where is Ben going?
+        options:
+          - to Glasgow
+          - to Edinburgh
+          - to the airport
+        answer: to Glasgow
+        explanation: I'm heading to Glasgow.
+      - id: q5
+        prompt: What time is Ben's train?
+        options:
+          - at seven tomorrow
+          - at eleven tonight
+          - at seven tonight
+        answer: at seven tomorrow
+        explanation: My train is at seven tomorrow.
+      - id: q6
+        prompt: What is Ben going to do now?
+        options:
+          - find a taxi
+          - stay for another drink
+          - go back to the stage
+        answer: find a taxi
+        explanation: I'm gonna find a taxi.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Хвостики, эхо и редукции
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "It's a great city, ___?"
+        options: [isn't it, doesn't it, isn't there]
+        answer: isn't it
+        explanation: После утверждения с is — isn't it.
+      - id: q2
+        prompt: "You don't eat meat, ___?"
+        options: [do you, don't you, are you]
+        answer: do you
+        explanation: После отрицания хвостик утвердительный, do you.
+      - id: q3
+        prompt: "She lived in Rome for a year, ___?"
+        options: [didn't she, wasn't she, hasn't she]
+        answer: didn't she
+        explanation: Past simple — didn't she.
+      - id: q4
+        prompt: "I've been to Lisbon twice. — ___"
+        options: [Have you?, Did you?, Are you?]
+        answer: Have you?
+        explanation: Во фразе have been — эхо с have.
+      - id: q5
+        prompt: "I'm ___ buy a ticket. Do you want one?"
+        options: [gonna, going, gone]
+        answer: gonna
+        explanation: Gonna — разговорная форма going to.
+      - id: q6
+        prompt: "I'm so sorry I'm late! — ___"
+        options: [Don't worry about it., Catch you later., Fair enough.]
+        answer: Don't worry about it.
+        explanation: Не переживайте, ничего страшного — ответ на извинение.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank: [knackered, gutted, chuffed, dodgy, keen, banter, heads-up, random, nightmare, hang out]
+    items:
+      - { id: g1, prompt: "I'm absolutely ___ — I walked for ten hours today.", answer: knackered }
+      - { id: g2, prompt: "We lost the final in the last minute. I'm so ___ — we were so close.", answer: gutted }
+      - { id: g3, prompt: "She passed her driving test first time and she's really ___.", answer: chuffed }
+      - { id: g4, prompt: "That seller looks ___: he won't show a receipt.", answer: dodgy }
+      - { id: g5, prompt: "I'm really ___ on old castles — I visit one every month.", answer: keen }
+      - { id: g6, prompt: "There's a lot of friendly ___ between the two brothers — they tease each other all the time.", answer: banter }
+      - { id: g7, prompt: "Thanks for the ___ about the strike — I'll leave early.", answer: heads-up }
+      - { id: g8, prompt: "That was a ___ question — it had nothing to do with the topic.", answer: random }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'd, it's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Это было здорово, правда? (хвостик, который ждёт согласия)"
+        answer:
+          - That was great, wasn't it?
+          - It was great, wasn't it?
+          - That was amazing, wasn't it?
+          - It was amazing, wasn't it?
+          - That was brilliant, wasn't it?
+          - It was brilliant, wasn't it?
+          - That was fantastic, wasn't it?
+          - It was fantastic, wasn't it?
+          - That was wonderful, wasn't it?
+          - It was wonderful, wasn't it?
+          - That was excellent, wasn't it?
+          - It was excellent, wasn't it?
+          - That was good, wasn't it?
+          - It was good, wasn't it?
+          - This was great, wasn't it?
+          - This was amazing, wasn't it?
+          - This was brilliant, wasn't it?
+          - This was fantastic, wasn't it?
+          - This was wonderful, wasn't it?
+          - This was excellent, wasn't it?
+          - This was good, wasn't it?
+          - That was fun, wasn't it?
+          - It was fun, wasn't it?
+          - That was awesome, wasn't it?
+          - It was awesome, wasn't it?
+          - That was lovely, wasn't it?
+          - It was lovely, wasn't it?
+          - That was really great, wasn't it?
+          - It was really great, wasn't it?
+        explanation: После утверждения с was — хвостик wasn't it.
+      - id: q2
+        prompt: "Ладно, справедливо. (принимаю ваш довод)"
+        answer:
+          - Fair enough.
+          - That's fair enough.
+          - Fair enough, then.
+          - Fair point.
+          - That's a fair point.
+          - That's fair.
+          - OK, fair enough.
+          - Okay, fair enough.
+          - All right, fair enough.
+          - Right, fair enough.
+          - Fair enough, mate.
+        explanation: Fair enough — принимаю довод собеседника.
+      - id: q3
+        prompt: "Ладно, мне пора идти. (начать выход из разговора)"
+        answer:
+          - Anyway, I'd better get going.
+          - Anyway, I had better get going.
+          - Anyway, I'd better go.
+          - Anyway, I should get going.
+          - Anyway, I should go.
+          - I'd better get going.
+          - I'd better go.
+          - I should get going.
+          - Anyway, I have to go.
+          - Anyway, I've got to go.
+          - Anyway, I need to get going.
+          - Anyway, I need to go.
+          - Anyway, I have to get going.
+          - Anyway, I've got to get going.
+          - Anyway, I should be going.
+          - Anyway, I'd better be going.
+          - OK, I'd better get going.
+          - Okay, I'd better get going.
+          - Right, I'd better get going.
+          - Well, I'd better get going.
+          - OK, I'd better go.
+          - Okay, I'd better go.
+          - Right, I'd better go.
+          - Well, I'd better go.
+        explanation: Anyway, I'd better get going — разговорный выход из разговора.
+      - id: q4
+        prompt: "Увидимся позже. (прощание с тем, кого скоро увидите)"
+        answer:
+          - Catch you later.
+          - Catch you later, mate.
+          - See you later.
+          - See you.
+          - See you soon.
+          - Talk to you later.
+          - I'll see you later.
+          - See you later, mate.
+          - See you later, then.
+          - Catch you later, then.
+        explanation: Catch you later — разговорное прощание.

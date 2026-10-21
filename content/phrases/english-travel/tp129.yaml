@@ -1,0 +1,7 @@
+id: tp129
+text: "Anyway, I'd better get going."
+translation: "Ладно, мне пора идти."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md

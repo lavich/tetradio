@@ -1,0 +1,8 @@
+id: tp127
+text: "Been there."
+translation: "Знакомо, и со мной такое было."
+note: "сокращение от I've been there"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md

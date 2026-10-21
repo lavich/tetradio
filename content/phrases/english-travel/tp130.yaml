@@ -1,0 +1,7 @@
+id: tp130
+text: "Don't worry about it."
+translation: "Не переживайте, ничего страшного."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md

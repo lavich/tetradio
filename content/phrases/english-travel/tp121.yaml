@@ -1,0 +1,8 @@
+id: tp121
+text: "No way!"
+translation: "Не может быть! Ни за что!"
+note: "удивление или решительный отказ — по интонации"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t09
+  operation: requested-generation
+  request: Фразы модуля t09 по программе docs/curriculum-english-travel.md
