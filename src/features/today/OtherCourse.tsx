@@ -23,9 +23,9 @@ export function OtherCourse({ course }: { course: CourseEntry }) {
   const due = plan.newRefs.length + plan.reviews.length;
   const review = () =>
     run(async () => {
-      if (!unfinished && !(await startSession(new Date(), { courseId: course.id })))
-        return setProblem("На сегодня карточек нет.");
-      void navigate(await sessionPath(course.id));
+      const session = unfinished ?? (await startSession(new Date(), { courseId: course.id }));
+      if (!session) return setProblem("На сегодня карточек нет.");
+      void navigate(await sessionPath(session));
     });
   const titleId = `course-${course.id}`;
   return (

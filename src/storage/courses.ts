@@ -53,13 +53,15 @@ export interface LanguageEntry {
   courses: CourseEntry[];
 }
 
-// Курс в базе язык не хранит: он есть у записей каталога его уроков.
+// Язык курса — у записей каталога его уроков; без них — у записи курса.
 export const courseLanguage = zoned(async function courseLanguage(
   courseId: string,
   database: AppDatabase = db,
 ): Promise<Language> {
   const language = (await database.catalog.where("courseId").equals(courseId).first())?.language;
-  return isLanguage(language) ? language : DEFAULT_LANGUAGE;
+  if (isLanguage(language)) return language;
+  const own = (await database.courses.get(courseId))?.language;
+  return isLanguage(own) ? own : DEFAULT_LANGUAGE;
 });
 export const profileOfCourse = zoned(async (courseId: string, database: AppDatabase = db) =>
   profileOf(await courseLanguage(courseId, database)),
@@ -466,6 +468,32 @@ export const languageSession = zoned(async function languageSession(
     !session.language && !isPracticeSession(session) && !!byId.get(session.courseId ?? home ?? "")?.pausedAt;
   return active.find((session) => languageOf(session) === language && !waits(session)) ?? null;
 });
+
+/**
+ * Курсы «Повторить ошибки»: все начатые курсы языка занятия, в том числе на паузе, курс занятия первым. Так курс,
+ * поставленный на паузу посреди занятия, сохраняет свои варианты, а занятие получает язык и курс.
+ */
+export const languageCourses = zoned(async function languageCourses(
+  session: Pick<Session, "courseId" | "language">,
+  database: AppDatabase = db,
+): Promise<string[]> {
+  const [language, own, list] = await Promise.all([
+    sessionLanguage(session, database),
+    sessionCourse(session, database),
+    courses(database),
+  ]);
+  const started = list.filter((course) => course.started && course.language === language).map((course) => course.id);
+  return own && started.includes(own) ? [own, ...started.filter((id) => id !== own)] : started;
+});
+
+/** Последнее незавершённое занятие любого языка: к нему ведёт «На главную» с адреса без занятия. */
+export const anyActiveSession = zoned(
+  async (database: AppDatabase = db): Promise<Session | null> =>
+    (await database.sessions
+      .where("[status+createdAt]")
+      .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
+      .last()) ?? null,
+);
 
 /** Незавершённое занятие курса, последнее по времени; без курса — любое, как до двух курсов. */
 export const activeSession = zoned(async function activeSession(

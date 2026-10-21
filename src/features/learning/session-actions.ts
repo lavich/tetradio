@@ -2,7 +2,8 @@ import Dexie from "dexie";
 import { makeSession } from "../../domain/learning";
 import { hasVoiceFor } from "../../shared/audio";
 import type { LearningRef, Session } from "../../domain/types";
-import { homeCourse, sessionDefaultCourse } from "../../storage/courses";
+import { homeCourse, sessionLanguage } from "../../storage/courses";
+import { sessionHomeLanguage } from "../../storage/today";
 import { db, type AppDatabase } from "../../storage/db";
 import { dexieSource } from "../../storage/queries";
 
@@ -34,8 +35,8 @@ export async function startSession(
   return session;
 }
 
-/** Адрес занятия курса: у курса «Сегодня» — прежний `/session`, у остальных — с курсом в адресе. */
-export async function sessionPath(courseId: string | undefined): Promise<string> {
-  if (!courseId || courseId === (await sessionDefaultCourse())) return "/session";
-  return `/session?course=${encodeURIComponent(courseId)}`;
+/** Адрес занятия: у языка «Сегодня» — прежний `/session`, у других языков — с языком в адресе. */
+export async function sessionPath(session: Pick<Session, "courseId" | "language">): Promise<string> {
+  const [language, home] = await Promise.all([sessionLanguage(session), sessionHomeLanguage()]);
+  return language === home ? "/session" : `/session?language=${language}`;
 }

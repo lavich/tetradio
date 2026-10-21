@@ -8,7 +8,7 @@ import type { LearningRef, ReviewEvent } from "../../domain/types";
 import { useNow } from "../../shared/clock";
 import { CARDS, withCount } from "../../shared/format";
 import { statesOf } from "../../storage/queries";
-import { profileOfCourse, sessionCourse } from "../../storage/courses";
+import { languageCourses, sessionLanguage } from "../../storage/courses";
 import { db } from "../../storage/db";
 import { ProfileContext } from "../../shared/language";
 import { sessionPath, startSession } from "./session-actions";
@@ -47,10 +47,8 @@ export function ResultScreen() {
   const [cleanFolded, setCleanFolded] = useState(true);
   const session = useLiveQuery(() => (id ? db.sessions.get(id) : undefined), [id]);
   const profile =
-    useLiveQuery(async () => {
-      const courseId = session && (await sessionCourse(session));
-      return courseId ? profileOfCourse(courseId) : undefined;
-    }, [session?.id]) ?? PROFILES[DEFAULT_LANGUAGE];
+    useLiveQuery(async () => (session ? PROFILES[await sessionLanguage(session)] : undefined), [session?.id]) ??
+    PROFILES[DEFAULT_LANGUAGE];
   const result = useLiveQuery(async () => {
     const events = id ? await db.events.where("sessionId").equals(id).toArray() : [];
     const mistakes = events.filter(isMistake);
@@ -80,9 +78,11 @@ export function ResultScreen() {
   const groups = splitRows(rows, corrected);
 
   const repeat = async () => {
-    const courseId = session ? await sessionCourse(session) : undefined;
-    const created = await startSession(now, { refs: readyAgain, courseId });
-    void navigate(created ? await sessionPath(created.courseId) : "/", { replace: true });
+    const created = await startSession(now, {
+      refs: readyAgain,
+      courseIds: session ? await languageCourses(session) : undefined,
+    });
+    void navigate(created ? await sessionPath(created) : "/", { replace: true });
   };
   return (
     <ProfileContext value={profile}>

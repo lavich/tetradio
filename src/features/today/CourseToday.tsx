@@ -149,9 +149,9 @@ function Review({
   const reviews = plan.reviews.length;
   const review = () =>
     run(async () => {
-      if (unfinished) return navigate(await sessionPath(courseId));
-      if (!(await startSession(new Date(), { courseId }))) return setProblem("На сегодня карточек нет.");
-      void navigate(await sessionPath(courseId));
+      const session = unfinished ?? (await startSession(new Date(), { courseId }));
+      if (!session) return setProblem("На сегодня карточек нет.");
+      void navigate(await sessionPath(session));
     });
   // Тренировка не сдвигает интервалы: навык фиксируется, расписание повторений остаётся прежним.
   const practice = () =>
@@ -160,7 +160,7 @@ function Review({
       const refs = await dexieSource().lessonRefs(last.id);
       const session = refs.length ? await startSession(new Date(), { refs, mode: "practice", courseId }) : null;
       if (!session) return setProblem("В уроке нет карточек для тренировки.");
-      void navigate(await sessionPath(courseId));
+      void navigate(await sessionPath(session));
     });
   const error = problem && (
     <p className={css.problem} role="alert">

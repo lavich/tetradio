@@ -39,14 +39,15 @@ describe("порядок установки курсов", () => {
 });
 
 describe("адрес занятия", () => {
-  it("у основного курса — прежний /session, у второго — с курсом", async () => {
+  it("у основного языка — прежний /session, у другого — с языком", async () => {
     await install("m01-1", "e01-1");
-    expect(await sessionPath("greek-a2")).toBe("/session");
-    expect(await sessionPath(undefined)).toBe("/session");
-    expect(await sessionPath("english")).toBe("/session?course=english");
+    expect(await sessionPath({ courseId: "greek-a2" })).toBe("/session");
+    expect(await sessionPath({})).toBe("/session");
+    expect(await sessionPath({ courseId: "english" })).toBe("/session?language=en");
+    expect(await sessionPath({ courseId: "talk", language: "en" })).toBe("/session?language=en");
     await setPrimaryCourse("english", db);
-    expect(await sessionPath("english")).toBe("/session");
-    expect(await sessionPath("greek-a2")).toBe("/session?course=greek-a2");
+    expect(await sessionPath({ courseId: "english" })).toBe("/session");
+    expect(await sessionPath({ courseId: "greek-a2" })).toBe("/session?language=el");
   });
 });
 

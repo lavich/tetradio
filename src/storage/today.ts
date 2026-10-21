@@ -1,5 +1,5 @@
 /** «Сегодня» по языкам: язык «Сегодня», курсы языка на «Сегодня» и общий план языка. */
-import type { Language } from "../domain/language";
+import { DEFAULT_LANGUAGE, type Language } from "../domain/language";
 import { makeLanguagePlan, makePlan, type DailyPlan } from "../domain/learning";
 import { courses, primaryCourse, todayCourse, type CourseEntry } from "./courses";
 import { db, type AppDatabase } from "./db";
@@ -62,4 +62,14 @@ export const languagePlan = zoned(async function languagePlan(
   if (language === null) return makePlan(source, now);
   const courseIds = (await todayCourses(language, database)).map((course) => course.id);
   return makeLanguagePlan(source, now, { courseIds });
+});
+
+/** Язык занятия по адресу `/session`: язык «Сегодня»; все курсы на паузе или курсов нет — язык основного курса. */
+export const sessionHomeLanguage = zoned(async function sessionHomeLanguage(
+  database: AppDatabase = db,
+): Promise<Language> {
+  const shown = await todayLanguage(database);
+  if (shown) return shown;
+  const [list, primary] = await Promise.all([courses(database), primaryCourse(database)]);
+  return list.find((course) => course.id === primary)?.language ?? DEFAULT_LANGUAGE;
 });

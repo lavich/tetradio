@@ -109,7 +109,7 @@ export function CourseLessonScreen() {
           ? await startSession(new Date(), { refs: items.map((item) => item.ref), mode: "practice", courseId })
           : null;
       if (!created) return setProblem("В уроке нет доступных карточек.");
-      void navigate(await sessionPath(created.courseId));
+      void navigate(await sessionPath(created));
     } catch (error) {
       setProblem(error instanceof Error ? error.message : "Не удалось начать тренировку.");
     } finally {
