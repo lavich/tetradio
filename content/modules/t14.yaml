@@ -11,6 +11,7 @@ lessons:
   - t14-2
   - t14-3
   - t14-test
+checkpoint: t14-c2
 crib:
   title: на связи
   rows:
