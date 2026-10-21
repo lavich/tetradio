@@ -373,18 +373,18 @@ blocks:
     title: Two candidates, one question
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Thank you both for staying until the end of the day. I have a few questions for each of you. Nadia, why do you want to join Brightlane?" }
-      - { speaker: Nadia, text: "Honestly, the product is what drew me to you. I've used it for two years in my brother's shop, and I'd like to work on something with real impact. I'm also looking for a team that invests in its engineers." }
-      - { speaker: Sarah, text: "Thank you. Ethan, the same question." }
-      - { speaker: Ethan, text: "Your mission resonates with me. I'm leaving my current company because I've outgrown my role, but I'm leaving on good terms. At Brightlane, I'm going to learn a lot from the senior engineers, and I think I'd be a good fit for the team." }
-      - { speaker: Sarah, text: "Nadia, where do you see yourself in five years?" }
-      - { speaker: Nadia, text: "In five years, I see myself as a tech lead. Next year, I'm going to focus on system design, and I'm starting a part-time master's degree in September. I might consider a management track later, but I'm not sure yet." }
-      - { speaker: Sarah, text: "And you, Ethan?" }
-      - { speaker: Ethan, text: "I'm planning to move into a lead role too, but I might also try data engineering. It depends on the projects. This autumn, I'm taking a course on distributed systems, so I'll have a good base." }
-      - { speaker: Sarah, text: "What are you going to do in your first month?" }
-      - { speaker: Nadia, text: "I'll read the code and ask a lot of questions. I'll also try to ship a small change in my first week." }
-      - { speaker: Ethan, text: "I'm going to meet the whole team first. After that, I'll choose a small task together with my manager." }
-      - { speaker: Sarah, text: "Thank you both. We will send you our decision by Friday." }
+      - { speaker: Sarah, text: "Thank you both for staying until the end of the day. I have a few questions for each of you. Nadia, why do you want to join Brightlane?", audio: e07-2/motivation-1.mp3 }
+      - { speaker: Nadia, text: "Honestly, the product is what drew me to you. I've used it for two years in my brother's shop, and I'd like to work on something with real impact. I'm also looking for a team that invests in its engineers.", audio: e07-2/motivation-2.mp3 }
+      - { speaker: Sarah, text: "Thank you. Ethan, the same question.", audio: e07-2/motivation-3.mp3 }
+      - { speaker: Ethan, text: "Your mission resonates with me. I'm leaving my current company because I've outgrown my role, but I'm leaving on good terms. At Brightlane, I'm going to learn a lot from the senior engineers, and I think I'd be a good fit for the team.", audio: e07-2/motivation-4.mp3 }
+      - { speaker: Sarah, text: "Nadia, where do you see yourself in five years?", audio: e07-2/motivation-5.mp3 }
+      - { speaker: Nadia, text: "In five years, I see myself as a tech lead. Next year, I'm going to focus on system design, and I'm starting a part-time master's degree in September. I might consider a management track later, but I'm not sure yet.", audio: e07-2/motivation-6.mp3 }
+      - { speaker: Sarah, text: "And you, Ethan?", audio: e07-2/motivation-7.mp3 }
+      - { speaker: Ethan, text: "I'm planning to move into a lead role too, but I might also try data engineering. It depends on the projects. This autumn, I'm taking a course on distributed systems, so I'll have a good base.", audio: e07-2/motivation-8.mp3 }
+      - { speaker: Sarah, text: "What are you going to do in your first month?", audio: e07-2/motivation-9.mp3 }
+      - { speaker: Nadia, text: "I'll read the code and ask a lot of questions. I'll also try to ship a small change in my first week.", audio: e07-2/motivation-10.mp3 }
+      - { speaker: Ethan, text: "I'm going to meet the whole team first. After that, I'll choose a small task together with my manager.", audio: e07-2/motivation-11.mp3 }
+      - { speaker: Sarah, text: "Thank you both. We will send you our decision by Friday.", audio: e07-2/motivation-12.mp3 }
   - type: exercise
     id: motivation-q
     about: motivation

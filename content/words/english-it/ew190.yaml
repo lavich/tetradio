@@ -1,5 +1,6 @@
 id: ew190
 greek: "a webhook"
+audio: words/ew190.mp3
 russian: "вебхук"
 ipa: /ə ˈwebhʊk/
 note: "внешний сервис вызывает ваш адрес, когда происходит событие"

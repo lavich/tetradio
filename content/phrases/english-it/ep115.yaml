@@ -1,5 +1,6 @@
 id: ep115
 text: "Did you say Kubernetes or Kafka?"
+audio: phrases/ep115.mp3
 translation: "Вы сказали Kubernetes или Kafka?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05

@@ -208,16 +208,16 @@ blocks:
     title: Plain JavaScript or TypeScript?
     plays: 2
     transcript:
-      - { speaker: Ethan, text: "Yuki, have you decided about the admin dashboard? Plain JavaScript or TypeScript?" }
-      - { speaker: Yuki, text: "I'm leaning towards TypeScript. JavaScript is dynamically typed, so a lot of mistakes show up only when a user clicks the button." }
-      - { speaker: Ethan, text: "True, but TypeScript is not as flexible, and it takes longer to set up. For a small dashboard it feels like overkill." }
-      - { speaker: Yuki, text: "It takes a bit of work at first, but the editor catches mistakes out of the box. And the bigger the codebase gets, the more we'll need the types." }
-      - { speaker: Ethan, text: "What about the learning curve? Two of us have never used it." }
-      - { speaker: Yuki, text: "It's steeper for about a week. After that, most people write code almost as fast as before, and the code is easier to maintain." }
-      - { speaker: Ethan, text: "Fine. And the build? I don't want a bloated setup with a hundred dependencies." }
-      - { speaker: Yuki, text: "We can use a lightweight tool. I tested one yesterday, and it was much faster than our old build." }
-      - { speaker: Ethan, text: "Good. Then let's write a short comparison for the team and decide on Friday." }
-      - { speaker: Yuki, text: "Agreed. I'll add a benchmark of both build times." }
+      - { speaker: Ethan, text: "Yuki, have you decided about the admin dashboard? Plain JavaScript or TypeScript?", audio: e04-2/stack-talk-1.mp3 }
+      - { speaker: Yuki, text: "I'm leaning towards TypeScript. JavaScript is dynamically typed, so a lot of mistakes show up only when a user clicks the button.", audio: e04-2/stack-talk-2.mp3 }
+      - { speaker: Ethan, text: "True, but TypeScript is not as flexible, and it takes longer to set up. For a small dashboard it feels like overkill.", audio: e04-2/stack-talk-3.mp3 }
+      - { speaker: Yuki, text: "It takes a bit of work at first, but the editor catches mistakes out of the box. And the bigger the codebase gets, the more we'll need the types.", audio: e04-2/stack-talk-4.mp3 }
+      - { speaker: Ethan, text: "What about the learning curve? Two of us have never used it.", audio: e04-2/stack-talk-5.mp3 }
+      - { speaker: Yuki, text: "It's steeper for about a week. After that, most people write code almost as fast as before, and the code is easier to maintain.", audio: e04-2/stack-talk-6.mp3 }
+      - { speaker: Ethan, text: "Fine. And the build? I don't want a bloated setup with a hundred dependencies.", audio: e04-2/stack-talk-7.mp3 }
+      - { speaker: Yuki, text: "We can use a lightweight tool. I tested one yesterday, and it was much faster than our old build.", audio: e04-2/stack-talk-8.mp3 }
+      - { speaker: Ethan, text: "Good. Then let's write a short comparison for the team and decide on Friday.", audio: e04-2/stack-talk-9.mp3 }
+      - { speaker: Yuki, text: "Agreed. I'll add a benchmark of both build times.", audio: e04-2/stack-talk-10.mp3 }
   - type: exercise
     id: stack-talk-q
     about: stack-talk

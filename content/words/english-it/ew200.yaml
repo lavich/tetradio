@@ -1,5 +1,6 @@
 id: ew200
 greek: "rate limiting"
+audio: words/ew200.mp3
 russian: "ограничение частоты запросов"
 ipa: /ˈreɪt ˌlɪmɪtɪŋ/
 note: "число запросов от одного клиента за период ограничено"

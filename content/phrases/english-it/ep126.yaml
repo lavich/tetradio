@@ -1,5 +1,6 @@
 id: ep126
 text: "The request is sent to the API gateway."
+audio: phrases/ep126.mp3
 translation: "Запрос отправляется на шлюз API."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

@@ -1,5 +1,6 @@
 id: ew138
 greek: "a runtime"
+audio: words/ew138.mp3
 russian: "среда выполнения"
 ipa: /ə ˈrʌntaɪm/
 note: "Node.js — a JavaScript runtime"

@@ -1,5 +1,6 @@
 id: ep137
 text: "Alerts are sent to the on-call engineer."
+audio: phrases/ep137.mp3
 translation: "Оповещения уходят дежурному инженеру."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

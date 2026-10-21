@@ -59,16 +59,16 @@ blocks:
     title: A project story
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Samir, tell me about a project you're proud of." }
-      - { speaker: Samir, text: "I'd choose our notification service. When I joined the company, the emails were sent by a script that someone had written years before." }
-      - { speaker: Sarah, text: "What was the problem?" }
-      - { speaker: Samir, text: "The script was failing every night while it was processing the biggest customers. Customers were getting their invoices a day late." }
-      - { speaker: Sarah, text: "What did you do first?" }
-      - { speaker: Samir, text: "First, I wrote a prototype with a message queue. After that, we ran a dry run on a copy of the production data." }
-      - { speaker: Sarah, text: "Was there a setback?" }
-      - { speaker: Samir, text: "Yes. A week before the launch, we found a regression in the email templates, so we postponed the release by three days." }
-      - { speaker: Sarah, text: "And the result?" }
-      - { speaker: Samir, text: "Eventually, we went live on a Sunday night, with a rollback plan ready. Delivery time dropped from twelve hours to ten minutes." }
+      - { speaker: Sarah, text: "Samir, tell me about a project you're proud of.", audio: e03-test/call-1.mp3 }
+      - { speaker: Samir, text: "I'd choose our notification service. When I joined the company, the emails were sent by a script that someone had written years before.", audio: e03-test/call-2.mp3 }
+      - { speaker: Sarah, text: "What was the problem?", audio: e03-test/call-3.mp3 }
+      - { speaker: Samir, text: "The script was failing every night while it was processing the biggest customers. Customers were getting their invoices a day late.", audio: e03-test/call-4.mp3 }
+      - { speaker: Sarah, text: "What did you do first?", audio: e03-test/call-5.mp3 }
+      - { speaker: Samir, text: "First, I wrote a prototype with a message queue. After that, we ran a dry run on a copy of the production data.", audio: e03-test/call-6.mp3 }
+      - { speaker: Sarah, text: "Was there a setback?", audio: e03-test/call-7.mp3 }
+      - { speaker: Samir, text: "Yes. A week before the launch, we found a regression in the email templates, so we postponed the release by three days.", audio: e03-test/call-8.mp3 }
+      - { speaker: Sarah, text: "And the result?", audio: e03-test/call-9.mp3 }
+      - { speaker: Samir, text: "Eventually, we went live on a Sunday night, with a rollback plan ready. Delivery time dropped from twelve hours to ten minutes.", audio: e03-test/call-10.mp3 }
   - type: exercise
     id: call-q
     about: call

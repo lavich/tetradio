@@ -1,5 +1,6 @@
 id: ew195
 greek: "a consumer"
+audio: words/ew195.mp3
 russian: "потребитель, обработчик сообщений"
 ipa: /ə kənˈsjuːmə/
 note: "часть системы, которая читает сообщения из очереди"

@@ -343,11 +343,11 @@ blocks:
     title: Реплики собеседника
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Thank you for coming in. Why do you want to join us?" }
-      - { speaker: Sarah, text: "That is interesting. What do you know about our product?" }
-      - { speaker: Sarah, text: "And where do you see yourself in five years?" }
-      - { speaker: Sarah, text: "What are you looking for in your next team?" }
-      - { speaker: Sarah, text: "Thank you. Do you have any questions for us?" }
+      - { speaker: Sarah, text: "Thank you for coming in. Why do you want to join us?", audio: e07-3/scene-lines-1.mp3 }
+      - { speaker: Sarah, text: "That is interesting. What do you know about our product?", audio: e07-3/scene-lines-2.mp3 }
+      - { speaker: Sarah, text: "And where do you see yourself in five years?", audio: e07-3/scene-lines-3.mp3 }
+      - { speaker: Sarah, text: "What are you looking for in your next team?", audio: e07-3/scene-lines-4.mp3 }
+      - { speaker: Sarah, text: "Thank you. Do you have any questions for us?", audio: e07-3/scene-lines-5.mp3 }
   - type: speaking
     id: scene
     part: roleplay

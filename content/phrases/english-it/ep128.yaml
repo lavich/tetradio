@@ -1,5 +1,6 @@
 id: ep128
 text: "Then the request is routed to the right service."
+audio: phrases/ep128.mp3
 translation: "Затем запрос направляется в нужный сервис."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

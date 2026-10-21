@@ -1,5 +1,6 @@
 id: ew207
 greek: "throughput"
+audio: words/ew207.mp3
 russian: "пропускная способность"
 ipa: /ˈθruːpʊt/
 note: "число запросов, которое система обрабатывает за секунду"

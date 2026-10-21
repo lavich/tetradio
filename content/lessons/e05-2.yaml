@@ -251,17 +251,17 @@ blocks:
     title: Four quick questions
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Thanks for joining, Nadia. Quick one to start: do you prefer working on the frontend or the backend?" }
-      - { speaker: Nadia, text: "The backend, mostly. I have worked on APIs and databases for four years, and I can do some frontend as well." }
-      - { speaker: Mark, text: "Could you tell me what you would check first if an API suddenly became slow?" }
-      - { speaker: Nadia, text: "I would look at the logs and the response times first. Then I would narrow it down to one endpoint." }
-      - { speaker: Katarina, text: "Great. Now, how big is the team you work with, and who do you report to?" }
-      - { speaker: Nadia, text: "Sorry, could you repeat the question, please? I missed the second part." }
-      - { speaker: Katarina, text: "Of course. How big is your team, and who do you report to?" }
-      - { speaker: Nadia, text: "Seven developers. I report to the engineering manager." }
-      - { speaker: Gregor, text: "Last one from me. Imagine we have to move the database over one weekend. How would you keep the downtime short?" }
-      - { speaker: Nadia, text: "Presumably, the database is not huge, so I would start with a replica and switch the traffic at the end. If I understand correctly, you want the downtime to be as short as possible?" }
-      - { speaker: Gregor, text: "Exactly. Thank you, Nadia." }
+      - { speaker: Sarah, text: "Thanks for joining, Nadia. Quick one to start: do you prefer working on the frontend or the backend?", audio: e05-2/quick-questions-1.mp3 }
+      - { speaker: Nadia, text: "The backend, mostly. I have worked on APIs and databases for four years, and I can do some frontend as well.", audio: e05-2/quick-questions-2.mp3 }
+      - { speaker: Mark, text: "Could you tell me what you would check first if an API suddenly became slow?", audio: e05-2/quick-questions-3.mp3 }
+      - { speaker: Nadia, text: "I would look at the logs and the response times first. Then I would narrow it down to one endpoint.", audio: e05-2/quick-questions-4.mp3 }
+      - { speaker: Katarina, text: "Great. Now, how big is the team you work with, and who do you report to?", audio: e05-2/quick-questions-5.mp3 }
+      - { speaker: Nadia, text: "Sorry, could you repeat the question, please? I missed the second part.", audio: e05-2/quick-questions-6.mp3 }
+      - { speaker: Katarina, text: "Of course. How big is your team, and who do you report to?", audio: e05-2/quick-questions-7.mp3 }
+      - { speaker: Nadia, text: "Seven developers. I report to the engineering manager.", audio: e05-2/quick-questions-8.mp3 }
+      - { speaker: Gregor, text: "Last one from me. Imagine we have to move the database over one weekend. How would you keep the downtime short?", audio: e05-2/quick-questions-9.mp3 }
+      - { speaker: Nadia, text: "Presumably, the database is not huge, so I would start with a replica and switch the traffic at the end. If I understand correctly, you want the downtime to be as short as possible?", audio: e05-2/quick-questions-10.mp3 }
+      - { speaker: Gregor, text: "Exactly. Thank you, Nadia.", audio: e05-2/quick-questions-11.mp3 }
   - type: exercise
     id: quick-questions-q
     about: quick-questions

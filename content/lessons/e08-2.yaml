@@ -359,18 +359,18 @@ blocks:
     title: A call from a recruiter
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Hello Daniel, this is Katarina Lind from Fennel Systems. Thanks for taking my call. Is now a good time to talk?" }
-      - { speaker: Daniel, text: "Hello Katarina. Yes, I have about twenty minutes before my next meeting." }
-      - { speaker: Katarina, text: "Great. Would you mind telling me about your notice period?" }
-      - { speaker: Daniel, text: "Not at all. My notice period is two months, but I think I can negotiate an earlier start with my employer. I could start in early March." }
-      - { speaker: Katarina, text: "That works well for us. Now, the salary. What salary range are you looking for?" }
-      - { speaker: Daniel, text: "I'm looking for something in the range of ninety to a hundred thousand euros gross. Is that realistic for this role?" }
-      - { speaker: Katarina, text: "It is. Our range is eighty-five to a hundred thousand, and the base salary is negotiable, depending on experience. You would also receive stock options. The role is hybrid, with two days a week in our Berlin office. Our core hours are ten to three, Berlin time. Where do you live now?" }
-      - { speaker: Daniel, text: "In Manchester, so we are one hour apart and the overlap is not a problem. I suppose I would need a work permit?" }
-      - { speaker: Katarina, text: "Yes, and we would help you with it. You would also have to relocate to Berlin within three months of your start date." }
-      - { speaker: Daniel, text: "That is fine. I have to discuss it with my partner first, though." }
-      - { speaker: Katarina, text: "Of course. The next steps are a take-home task and two interviews. Could we schedule a call for early next week to talk about them?" }
-      - { speaker: Daniel, text: "I should be available on Tuesday afternoon. I have to check my calendar first, and then I'll confirm by email." }
+      - { speaker: Katarina, text: "Hello Daniel, this is Katarina Lind from Fennel Systems. Thanks for taking my call. Is now a good time to talk?", audio: e08-2/call-1.mp3 }
+      - { speaker: Daniel, text: "Hello Katarina. Yes, I have about twenty minutes before my next meeting.", audio: e08-2/call-2.mp3 }
+      - { speaker: Katarina, text: "Great. Would you mind telling me about your notice period?", audio: e08-2/call-3.mp3 }
+      - { speaker: Daniel, text: "Not at all. My notice period is two months, but I think I can negotiate an earlier start with my employer. I could start in early March.", audio: e08-2/call-4.mp3 }
+      - { speaker: Katarina, text: "That works well for us. Now, the salary. What salary range are you looking for?", audio: e08-2/call-5.mp3 }
+      - { speaker: Daniel, text: "I'm looking for something in the range of ninety to a hundred thousand euros gross. Is that realistic for this role?", audio: e08-2/call-6.mp3 }
+      - { speaker: Katarina, text: "It is. Our range is eighty-five to a hundred thousand, and the base salary is negotiable, depending on experience. You would also receive stock options. The role is hybrid, with two days a week in our Berlin office. Our core hours are ten to three, Berlin time. Where do you live now?", audio: e08-2/call-7.mp3 }
+      - { speaker: Daniel, text: "In Manchester, so we are one hour apart and the overlap is not a problem. I suppose I would need a work permit?", audio: e08-2/call-8.mp3 }
+      - { speaker: Katarina, text: "Yes, and we would help you with it. You would also have to relocate to Berlin within three months of your start date.", audio: e08-2/call-9.mp3 }
+      - { speaker: Daniel, text: "That is fine. I have to discuss it with my partner first, though.", audio: e08-2/call-10.mp3 }
+      - { speaker: Katarina, text: "Of course. The next steps are a take-home task and two interviews. Could we schedule a call for early next week to talk about them?", audio: e08-2/call-11.mp3 }
+      - { speaker: Daniel, text: "I should be available on Tuesday afternoon. I have to check my calendar first, and then I'll confirm by email.", audio: e08-2/call-12.mp3 }
   - type: exercise
     id: call-q
     about: call

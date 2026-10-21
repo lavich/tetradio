@@ -1,5 +1,6 @@
 id: ep141
 text: "The data was migrated without downtime."
+audio: phrases/ep141.mp3
 translation: "Данные перенесли без простоя."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

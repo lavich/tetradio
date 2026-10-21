@@ -1,5 +1,6 @@
 id: ew205
 greek: "an orchestrator"
+audio: words/ew205.mp3
 russian: "оркестратор"
 ipa: /ən ˈɔːkɪstreɪtə/
 note: "запускает и перезапускает контейнеры на многих серверах"

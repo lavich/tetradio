@@ -1,5 +1,6 @@
 id: ep129
 text: "The data is stored in PostgreSQL."
+audio: phrases/ep129.mp3
 translation: "Данные хранятся в PostgreSQL."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

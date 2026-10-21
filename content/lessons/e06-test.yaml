@@ -66,16 +66,16 @@ blocks:
     title: Describe the architecture
     plays: 2
     transcript:
-      - { speaker: Mark, text: "Elena, thanks for joining. Could you describe the architecture of the system you maintain?" }
-      - { speaker: Elena, text: "Of course. At a high level, it is a fairly standard setup. The system consists of three main parts: a gateway, a search service and a database." }
-      - { speaker: Mark, text: "Let's trace a search request through the system." }
-      - { speaker: Elena, text: "First, the request is sent to the gateway, where the user is authenticated. After that, it is routed to the search service. The results are cached for five minutes, so repeated searches are fast. Finally, the response is returned to the client." }
-      - { speaker: Mark, text: "What happens when the cache is empty?" }
-      - { speaker: Elena, text: "Then the data is retrieved from the database, and the result is saved in the cache for the next request." }
-      - { speaker: Mark, text: "Which part is the most critical?" }
-      - { speaker: Elena, text: "The search service. It is stateless, so it runs in five containers, and a load balancer distributes the traffic." }
-      - { speaker: Mark, text: "Thank you. And what would you change?" }
-      - { speaker: Elena, text: "I would add rate limiting at the gateway, because some clients send too many requests." }
+      - { speaker: Mark, text: "Elena, thanks for joining. Could you describe the architecture of the system you maintain?", audio: e06-test/call-1.mp3 }
+      - { speaker: Elena, text: "Of course. At a high level, it is a fairly standard setup. The system consists of three main parts: a gateway, a search service and a database.", audio: e06-test/call-2.mp3 }
+      - { speaker: Mark, text: "Let's trace a search request through the system.", audio: e06-test/call-3.mp3 }
+      - { speaker: Elena, text: "First, the request is sent to the gateway, where the user is authenticated. After that, it is routed to the search service. The results are cached for five minutes, so repeated searches are fast. Finally, the response is returned to the client.", audio: e06-test/call-4.mp3 }
+      - { speaker: Mark, text: "What happens when the cache is empty?", audio: e06-test/call-5.mp3 }
+      - { speaker: Elena, text: "Then the data is retrieved from the database, and the result is saved in the cache for the next request.", audio: e06-test/call-6.mp3 }
+      - { speaker: Mark, text: "Which part is the most critical?", audio: e06-test/call-7.mp3 }
+      - { speaker: Elena, text: "The search service. It is stateless, so it runs in five containers, and a load balancer distributes the traffic.", audio: e06-test/call-8.mp3 }
+      - { speaker: Mark, text: "Thank you. And what would you change?", audio: e06-test/call-9.mp3 }
+      - { speaker: Elena, text: "I would add rate limiting at the gateway, because some clients send too many requests.", audio: e06-test/call-10.mp3 }
   - type: exercise
     id: call-q
     about: call

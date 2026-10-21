@@ -572,11 +572,11 @@ blocks:
     title: Реплики собеседника
     plays: 2
     transcript:
-      - { speaker: Mark, text: "Let's move to system design. Could you draw the architecture of the last system you worked on and walk me through how a request is handled?" }
-      - { speaker: Mark, text: "Okay, I can see the gateway and the service. Where is the data stored?" }
-      - { speaker: Mark, text: "And what happens if the database is not available?" }
-      - { speaker: Mark, text: "I see. Why did you add a queue between the services?" }
-      - { speaker: Mark, text: "Thank you, that is clear. Do you have any questions about our system?" }
+      - { speaker: Mark, text: "Let's move to system design. Could you draw the architecture of the last system you worked on and walk me through how a request is handled?", audio: e06-3/scene-lines-1.mp3 }
+      - { speaker: Mark, text: "Okay, I can see the gateway and the service. Where is the data stored?", audio: e06-3/scene-lines-2.mp3 }
+      - { speaker: Mark, text: "And what happens if the database is not available?", audio: e06-3/scene-lines-3.mp3 }
+      - { speaker: Mark, text: "I see. Why did you add a queue between the services?", audio: e06-3/scene-lines-4.mp3 }
+      - { speaker: Mark, text: "Thank you, that is clear. Do you have any questions about our system?", audio: e06-3/scene-lines-5.mp3 }
   - type: speaking
     id: scene
     part: roleplay

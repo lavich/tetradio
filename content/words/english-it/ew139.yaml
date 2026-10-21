@@ -1,5 +1,6 @@
 id: ew139
 greek: "a linter"
+audio: words/ew139.mp3
 russian: "линтер"
 ipa: /ə ˈlɪntə/
 note: "программа, которая находит ошибки и нарушения стиля до запуска кода"

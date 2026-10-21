@@ -1,5 +1,6 @@
 id: ew177
 greek: "a gateway"
+audio: words/ew177.mp3
 russian: "шлюз, единая точка входа"
 ipa: /ə ˈɡeɪtweɪ/
 note: "принимает запросы извне и направляет их в сервисы"

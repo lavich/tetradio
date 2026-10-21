@@ -66,16 +66,16 @@ blocks:
     title: How do you split a service?
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Viktor, thanks for joining. I'll start with an open-ended one: how do you decide when a service should be split into smaller services?" }
-      - { speaker: Viktor, text: "Sorry, could you repeat the question, please?" }
-      - { speaker: Sarah, text: "Of course. How do you decide when a service should be split into smaller services?" }
-      - { speaker: Viktor, text: "That's a good question. Let me think about it for a second. Do you mean a split in the code, or in the deployment?" }
-      - { speaker: Sarah, text: "Both, really. Let's say the team is growing and the releases are getting slower." }
-      - { speaker: Viktor, text: "I see. In other words, the main problem is the release speed. In that case, a service is ready to be split when two teams keep changing it at the same time." }
-      - { speaker: Sarah, text: "Good. Could you give me an example from your own work?" }
-      - { speaker: Viktor, text: "Last year we separated the payment module. Off the top of my head, the release time dropped from two weeks to three days." }
-      - { speaker: Sarah, text: "Thanks. One last thing: could you tell me what you would do differently?" }
-      - { speaker: Viktor, text: "I would involve the other teams earlier. We had a misunderstanding about the API, and it cost us a week." }
+      - { speaker: Sarah, text: "Viktor, thanks for joining. I'll start with an open-ended one: how do you decide when a service should be split into smaller services?", audio: e05-test/call-1.mp3 }
+      - { speaker: Viktor, text: "Sorry, could you repeat the question, please?", audio: e05-test/call-2.mp3 }
+      - { speaker: Sarah, text: "Of course. How do you decide when a service should be split into smaller services?", audio: e05-test/call-3.mp3 }
+      - { speaker: Viktor, text: "That's a good question. Let me think about it for a second. Do you mean a split in the code, or in the deployment?", audio: e05-test/call-4.mp3 }
+      - { speaker: Sarah, text: "Both, really. Let's say the team is growing and the releases are getting slower.", audio: e05-test/call-5.mp3 }
+      - { speaker: Viktor, text: "I see. In other words, the main problem is the release speed. In that case, a service is ready to be split when two teams keep changing it at the same time.", audio: e05-test/call-6.mp3 }
+      - { speaker: Sarah, text: "Good. Could you give me an example from your own work?", audio: e05-test/call-7.mp3 }
+      - { speaker: Viktor, text: "Last year we separated the payment module. Off the top of my head, the release time dropped from two weeks to three days.", audio: e05-test/call-8.mp3 }
+      - { speaker: Sarah, text: "Thanks. One last thing: could you tell me what you would do differently?", audio: e05-test/call-9.mp3 }
+      - { speaker: Viktor, text: "I would involve the other teams earlier. We had a misunderstanding about the API, and it cost us a week.", audio: e05-test/call-10.mp3 }
   - type: exercise
     id: call-q
     about: call

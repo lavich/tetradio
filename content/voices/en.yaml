@@ -37,7 +37,7 @@ pools:
     - Schedar
     - Umbriel
     - Zubenelgenubi
-# Сокращения переписки читаются побуквенно: заглавные через пробел (проверка на слух — за пользователем)
+# Сокращения переписки и IT читаются побуквенно: заглавные через пробел (проверка на слух — за пользователем)
 respell:
   tbh: T B H
   hbu: H B U
@@ -46,6 +46,22 @@ respell:
   lol: L O L
   idk: I D K
   brb: B R B
+  sql: S Q L
+  poc: P O C
+  bsc: B S C
+  asap: A S A P
+  ic: I C
+  ci: C I
+  hr: H R
+  qa: Q A
+  cv: C V
+  cto: C T O
+  ceo: C E O
+  kpi: K P I
+  kpis: K P Is
+  api: A P I
+  apis: A P Is
+  aws: A W S
 # Реплика без говорящего
 narrator: Kore
 characters:

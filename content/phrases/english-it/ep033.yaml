@@ -1,5 +1,6 @@
 id: ep033
 text: "I haven't worked with Kubernetes yet."
+audio: phrases/ep033.mp3
 translation: "С Kubernetes я пока не работал."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02

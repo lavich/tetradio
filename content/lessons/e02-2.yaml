@@ -229,19 +229,19 @@ blocks:
     title: Walk me through your CV
     plays: 2
     transcript:
-      - { speaker: Mark, text: "Thanks for coming in, Nadia. Could you walk me through your CV?" }
-      - { speaker: Nadia, text: "Sure. I'll start with my current role. I've been a backend developer at a payments company for four years, and since last spring I've been the tech lead of the cards team." }
-      - { speaker: Mark, text: "And before that?" }
-      - { speaker: Nadia, text: "Before that, I worked at a small start-up for two years. I joined as a junior, and the company scaled up fast. When I left, there were forty of us." }
-      - { speaker: Mark, text: "Why did you leave the start-up?" }
-      - { speaker: Nadia, text: "It was acquired by a bigger company, and there was a reorganisation. My team was moved to another product, so I decided to move on." }
-      - { speaker: Mark, text: "I see. How did you get into tech?" }
-      - { speaker: Nadia, text: "I'm mostly self-taught. I did a coding bootcamp in 2016 and then an internship at a bank. I haven't got a computer science degree, but I've completed two cloud certifications." }
-      - { speaker: Mark, text: "Have you ever worked with Kubernetes?" }
-      - { speaker: Nadia, text: "Not in production yet, but I've used it in a side project for a year." }
-      - { speaker: Mark, text: "What's your biggest accomplishment to date?" }
-      - { speaker: Nadia, text: "I spearheaded the migration of our card payments to a new platform. We delivered it without downtime, two weeks early." }
-      - { speaker: Mark, text: "Thanks, that's clear. Let's move on to the technical part." }
+      - { speaker: Mark, text: "Thanks for coming in, Nadia. Could you walk me through your CV?", audio: e02-2/walkthrough-1.mp3 }
+      - { speaker: Nadia, text: "Sure. I'll start with my current role. I've been a backend developer at a payments company for four years, and since last spring I've been the tech lead of the cards team.", audio: e02-2/walkthrough-2.mp3 }
+      - { speaker: Mark, text: "And before that?", audio: e02-2/walkthrough-3.mp3 }
+      - { speaker: Nadia, text: "Before that, I worked at a small start-up for two years. I joined as a junior, and the company scaled up fast. When I left, there were forty of us.", audio: e02-2/walkthrough-4.mp3 }
+      - { speaker: Mark, text: "Why did you leave the start-up?", audio: e02-2/walkthrough-5.mp3 }
+      - { speaker: Nadia, text: "It was acquired by a bigger company, and there was a reorganisation. My team was moved to another product, so I decided to move on.", audio: e02-2/walkthrough-6.mp3 }
+      - { speaker: Mark, text: "I see. How did you get into tech?", audio: e02-2/walkthrough-7.mp3 }
+      - { speaker: Nadia, text: "I'm mostly self-taught. I did a coding bootcamp in 2016 and then an internship at a bank. I haven't got a computer science degree, but I've completed two cloud certifications.", audio: e02-2/walkthrough-8.mp3 }
+      - { speaker: Mark, text: "Have you ever worked with Kubernetes?", audio: e02-2/walkthrough-9.mp3 }
+      - { speaker: Nadia, text: "Not in production yet, but I've used it in a side project for a year.", audio: e02-2/walkthrough-10.mp3 }
+      - { speaker: Mark, text: "What's your biggest accomplishment to date?", audio: e02-2/walkthrough-11.mp3 }
+      - { speaker: Nadia, text: "I spearheaded the migration of our card payments to a new platform. We delivered it without downtime, two weeks early.", audio: e02-2/walkthrough-12.mp3 }
+      - { speaker: Mark, text: "Thanks, that's clear. Let's move on to the technical part.", audio: e02-2/walkthrough-13.mp3 }
   - type: exercise
     id: walkthrough-q
     about: walkthrough

@@ -1,5 +1,6 @@
 id: ew179
 greek: "a payload"
+audio: words/ew179.mp3
 russian: "полезная нагрузка, тело запроса"
 ipa: /ə ˈpeɪləʊd/
 note: "данные, которые запрос передаёт серверу"

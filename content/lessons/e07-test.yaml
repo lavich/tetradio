@@ -76,16 +76,16 @@ blocks:
     title: Why Kestrel Labs?
     plays: 2
     transcript:
-      - { speaker: Mark, text: "Samir, thanks for coming. Why do you want to join Kestrel Labs?" }
-      - { speaker: Samir, text: "Your mission is what drew me to you. I worked in a hospital IT department for two years, and I saw how much time good software can save. I'd like to work on something with real impact." }
-      - { speaker: Mark, text: "Where do you see yourself in five years?" }
-      - { speaker: Samir, text: "In five years, I see myself as a tech lead. Next year, I'm going to focus on system design, and I'm starting a part-time master's degree in January. I might also try data engineering, but I haven't decided yet." }
-      - { speaker: Mark, text: "How do you work in a team that moves fast?" }
-      - { speaker: Samir, text: "I thrive in a fast-paced environment, but I always write down my decisions. If a change is risky, I'll ask for a review before I deploy it." }
-      - { speaker: Mark, text: "Is there anything you want to ask us?" }
-      - { speaker: Samir, text: "Yes. What are you going to build in the next year, and how will the team grow?" }
-      - { speaker: Mark, text: "We are starting the patient reminders project next month, and we will hire three engineers. You will meet the team on Friday." }
-      - { speaker: Samir, text: "Thank you. I'm looking forward to it." }
+      - { speaker: Mark, text: "Samir, thanks for coming. Why do you want to join Kestrel Labs?", audio: e07-test/interview-1.mp3 }
+      - { speaker: Samir, text: "Your mission is what drew me to you. I worked in a hospital IT department for two years, and I saw how much time good software can save. I'd like to work on something with real impact.", audio: e07-test/interview-2.mp3 }
+      - { speaker: Mark, text: "Where do you see yourself in five years?", audio: e07-test/interview-3.mp3 }
+      - { speaker: Samir, text: "In five years, I see myself as a tech lead. Next year, I'm going to focus on system design, and I'm starting a part-time master's degree in January. I might also try data engineering, but I haven't decided yet.", audio: e07-test/interview-4.mp3 }
+      - { speaker: Mark, text: "How do you work in a team that moves fast?", audio: e07-test/interview-5.mp3 }
+      - { speaker: Samir, text: "I thrive in a fast-paced environment, but I always write down my decisions. If a change is risky, I'll ask for a review before I deploy it.", audio: e07-test/interview-6.mp3 }
+      - { speaker: Mark, text: "Is there anything you want to ask us?", audio: e07-test/interview-7.mp3 }
+      - { speaker: Samir, text: "Yes. What are you going to build in the next year, and how will the team grow?", audio: e07-test/interview-8.mp3 }
+      - { speaker: Mark, text: "We are starting the patient reminders project next month, and we will hire three engineers. You will meet the team on Friday.", audio: e07-test/interview-9.mp3 }
+      - { speaker: Samir, text: "Thank you. I'm looking forward to it.", audio: e07-test/interview-10.mp3 }
   - type: exercise
     id: interview-q
     about: interview

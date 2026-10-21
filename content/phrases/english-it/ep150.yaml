@@ -1,5 +1,6 @@
 id: ep150
 text: "That covers the main flow."
+audio: phrases/ep150.mp3
 translation: "На этом основной путь запроса описан."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06

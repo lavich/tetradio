@@ -1,5 +1,6 @@
 id: ew198
 greek: "a circuit breaker"
+audio: words/ew198.mp3
 russian: "автоматический выключатель, предохранитель"
 ipa: /ə ˈsɜːkɪt ˌbreɪkə/
 note: "прекращает вызовы к сервису, который сбоит"

@@ -1547,12 +1547,12 @@ blocks:
     title: Реплики собеседника
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Right, so, quick question: how would you roll out a breaking API change that three other teams depend on, and how would you tell them about it?" }
-      - { speaker: Sarah, text: "Of course. How would you release a breaking API change when three other teams depend on that API?" }
-      - { speaker: Sarah, text: "Okay. And could you tell me what you would do if one of those teams could not migrate on time?" }
-      - { speaker: Sarah, text: "Right. Take your time." }
-      - { speaker: Sarah, text: "Thank you, that is all from me. Do you have any questions about the next steps?" }
-      - { speaker: Sarah, text: "Next you will speak with Mark, the engineering manager. Thank you for your time." }
+      - { speaker: Sarah, text: "Right, so, quick question: how would you roll out a breaking API change that three other teams depend on, and how would you tell them about it?", audio: e05-3/scene-lines-1.mp3 }
+      - { speaker: Sarah, text: "Of course. How would you release a breaking API change when three other teams depend on that API?", audio: e05-3/scene-lines-2.mp3 }
+      - { speaker: Sarah, text: "Okay. And could you tell me what you would do if one of those teams could not migrate on time?", audio: e05-3/scene-lines-3.mp3 }
+      - { speaker: Sarah, text: "Right. Take your time.", audio: e05-3/scene-lines-4.mp3 }
+      - { speaker: Sarah, text: "Thank you, that is all from me. Do you have any questions about the next steps?", audio: e05-3/scene-lines-5.mp3 }
+      - { speaker: Sarah, text: "Next you will speak with Mark, the engineering manager. Thank you for your time.", audio: e05-3/scene-lines-6.mp3 }
   - type: speaking
     id: scene
     part: roleplay

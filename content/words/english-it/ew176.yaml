@@ -1,5 +1,6 @@
 id: ew176
 greek: "a load balancer"
+audio: words/ew176.mp3
 russian: "балансировщик нагрузки"
 ipa: /ə ˈləʊd ˌbælənsə/
 note: "распределяет запросы между одинаковыми серверами"

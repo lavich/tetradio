@@ -1,5 +1,6 @@
 id: ep133
 text: "Everything is deployed in containers."
+audio: phrases/ep133.mp3
 translation: "Всё развёрнуто в контейнерах."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e06
