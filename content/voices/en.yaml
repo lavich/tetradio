@@ -53,3 +53,5 @@ characters:
   Oliver: { gender: male, voice: Enceladus }
   Chloe: { gender: female, voice: Erinome }
   Diego: { gender: male, voice: Rasalgethi }
+  Grace: { gender: female, voice: Laomedeia }
+  Callum: { gender: male, voice: Sadachbia }

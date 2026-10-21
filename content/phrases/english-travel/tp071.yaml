@@ -1,0 +1,8 @@
+id: tp071
+text: "Would you like cashback?"
+translation: "Снять наличные с карты?"
+note: "вопрос кассира; не нужно — No, thanks"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

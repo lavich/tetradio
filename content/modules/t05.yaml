@@ -1,8 +1,25 @@
 number: 5
 title: Shopping and money
 subtitle: Покупки и деньги
-status: draft
+status: published
 goal: спросить размер и цену, сравнить, вернуть или обменять, разобраться с проблемой оплаты
 grammar:
   - "сравнения (cheaper than, not as… as, the same as), one / ones, have to / don't have to"
 sessions: 3
+lessons:
+  - t05-1
+  - t05-2
+  - t05-3
+  - t05-test
+crib:
+  title: сравнение и правила
+  rows:
+    - [дешевле, cheaper than]
+    - [дороже, more expensive than]
+    - [не такой… как, not as big as]
+    - ["такой же, как", the same as]
+    - [вместо слова, "the black one / ones"]
+    - [надо, You have to…]
+    - [не обязательно, "You don't have to…"]
+    - [нельзя, "You mustn't…"]
+  note: "don't have to — «не обязательно», а не «нельзя»"

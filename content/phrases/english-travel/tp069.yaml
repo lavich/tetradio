@@ -1,0 +1,8 @@
+id: tp069
+text: "My card has been declined."
+translation: "Мою карту отклонили."
+note: "the machine says «Declined» / «Card not accepted»"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

@@ -1,0 +1,8 @@
+id: tp066
+text: "Can I get a refund?"
+translation: "Можно вернуть деньги?"
+note: "вернут ли на карту — Can I get a refund on my card?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md
