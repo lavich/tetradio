@@ -1,0 +1,8 @@
+id: tp207
+text: "No offence meant."
+translation: "Я не хотел(а) никого обидеть."
+note: "смягчает резкую или шутливую фразу; в США No offense meant"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

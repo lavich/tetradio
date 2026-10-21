@@ -1,0 +1,8 @@
+id: tp210
+text: "Miss you already."
+translation: "Уже скучаю."
+note: "сокращение от I miss you already; в конце сообщения или звонка"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

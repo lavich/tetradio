@@ -1,0 +1,265 @@
+title: Новости — past simple, present perfect и разговорный пересказ
+kind: lesson
+items:
+  - { kind: word, id: tw196 }
+  - { kind: word, id: tw197 }
+  - { kind: word, id: tw198 }
+  - { kind: word, id: tw199 }
+  - { kind: word, id: tw200 }
+  - { kind: word, id: tw201 }
+  - { kind: word, id: tw202 }
+  - { kind: word, id: tw203 }
+  - { kind: phrase, id: tp196 }
+  - { kind: phrase, id: tp197 }
+  - { kind: phrase, id: tp198 }
+  - { kind: phrase, id: tp199 }
+  - { kind: phrase, id: tp200 }
+  - { kind: phrase, id: tp201 }
+  - { kind: phrase, id: tp202 }
+  - { kind: phrase, id: tp203 }
+blocks:
+  - type: explanation
+    id: news-tenses
+    title: Новости — past simple и present perfect
+    body: |-
+      Когда друзья давно не виделись, они рассказывают новости. Время глагола зависит от того, названо ли время события.
+
+      **Past simple** — событие в названный момент прошлого: **I moved to Leeds in May.** **We met two years ago.** Маркеры: **yesterday, last week, in May, two years ago, when**.
+
+      **Present perfect** (have или has + третья форма глагола) — событие без названного времени, результат которого важен сейчас: **I've started a new job.** **I've just got back from Portugal.** Маркеры: **just, already, yet, ever, never, recently, so far**. С **since** и **for** present perfect говорит о том, что продолжается до сих пор: **I've lived here since March.**
+
+      На вопрос **What have you been up to?** отвечают двумя шагами: общая новость в present perfect, затем подробности в past simple: **I've moved to Leeds. I found a flat in May, and I started work in June.**
+
+      Две частые ошибки. Первая — present perfect с названным временем: I've moved in May. Нужно **I moved in May.** Вторая — past simple с since: I lived here since March. Нужно **I've lived here since March.**
+    table:
+      columns:
+        - что рассказать
+        - время
+        - пример
+      rows:
+        - - событие в названный момент
+          - past simple
+          - I moved to Leeds in May.
+        - - событие без названного времени
+          - present perfect
+          - I've started a new job.
+        - - только что
+          - just + present perfect
+          - I've just got back from Portugal.
+        - - продолжается до сих пор
+          - since / for + present perfect
+          - I've lived here since March.
+  - type: explanation
+    id: retelling
+    title: Разговорный пересказ и планы
+    body: |-
+      В разговоре друзья пересказывают, что кто сказал, и передают реакцию. Вместо **said** часто говорят **was like** и **goes**: **She was like, "No way!"** **He goes, "I'm not joking."** Обе формы передают реакцию и интонацию. **Was like** — прошедшее время, **goes** ставят в рассказе, который ведут как будто на глазах: *So I show him the photo, and he goes, "Is that real?"* В письме, на работе и в официальных ситуациях используют **said**, **replied**, **told me**.
+
+      Планы рассказывают тремя способами. **Present continuous** — договорённость, билет уже куплен: **I'm flying out on the third.** **Going to** — намерение: **I'm going to visit Ben.** **Thinking of + -ing** — идея, решение не принято: **I'm thinking of coming over in the spring.**
+
+      Две частые ошибки. Первая — was like в письме клиенту или преподавателю. Вместо неё **She said that she could not come.** Вторая — will для договорённости с билетом: I will fly out on the third. Нужно **I'm flying out on the third.**
+    table:
+      columns:
+        - что сказать
+        - форма
+        - пример
+      rows:
+        - - реакция в пересказе
+          - was like / goes
+          - She was like, "No way!"
+        - - пересказ в письме
+          - said / replied
+          - She said that she could not come.
+        - - договорённость
+          - present continuous
+          - I'm flying out on the third.
+        - - намерение
+          - going to
+          - I'm going to visit Ben.
+        - - идея
+          - thinking of + -ing
+          - I'm thinking of coming over in the spring.
+  - type: explanation
+    id: touch-words
+    title: Слова для связи с друзьями
+    body: |-
+      **Stay in touch** — поддерживать связь: переписываться и звонить. **Drift apart** — отдалиться: перестать общаться постепенно, без ссоры. **A catch-up** — встреча или разговор, чтобы узнать новости: *We had a long catch-up on Sunday.* **A voice note** — голосовое сообщение, которое записывают и отправляют в чат.
+
+      **A reunion** — встреча людей, которые давно не виделись: *a school reunion*. **A throwback** — напоминание о прошлом, чаще старое фото: *a throwback photo*. **Nostalgic** — вспоминающий прошлое с тёплой грустью. **Patchy** — прерывистый; так говорят о связи: *patchy signal*.
+
+      Фразы урока. **What have you been up to?** — вопрос при встрече после перерыва. **It's been ages!** — мы давно не виделись. **I've just got back from Portugal.** — новость о возвращении. **A lot has happened since we last spoke.** — начало рассказа о новостях. **You'll never guess what happened.** — начало истории. **Let's catch up properly soon.** — предложение встретиться или созвониться.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: news-choice
+    title: Past simple и present perfect
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Last year I ___ my new job in March."
+        options: [started, have started, am starting]
+        answer: started
+        explanation: Время названо — in March, поэтому past simple.
+      - id: q2
+        prompt: "I ___ just moved to Leeds."
+        options: [have, did, was]
+        answer: have
+        explanation: С just ставят present perfect — have и третью форму глагола.
+      - id: q3
+        prompt: "She ___ here since March."
+        options: [has lived, lived, lives]
+        answer: has lived
+        explanation: С since говорят present perfect, действие продолжается до сих пор.
+      - id: q4
+        prompt: "When ___ you get back?"
+        options: [did, have, were]
+        answer: did
+        explanation: Вопрос о названном моменте — past simple, вопрос с did.
+      - id: q5
+        prompt: "___ you ever lived abroad?"
+        options: [Have, Did, Do]
+        answer: Have
+        explanation: С ever спрашивают в present perfect.
+      - id: q6
+        prompt: "We ___ each other two years ago at a hostel."
+        options: [met, have met, meet]
+        answer: met
+        explanation: Со словом ago говорят past simple.
+  - type: exercise
+    id: retell-choice
+    title: Пересказ и планы
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I told her about the trip, and she ___, \"No way!\""
+        options: [was like, were like, like]
+        answer: was like
+        explanation: После she ставят was like — разговорный пересказ реакции.
+      - id: q2
+        prompt: "So I show him the photo, and he ___, \"Is that real?\""
+        options: [goes, go, going]
+        answer: goes
+        explanation: С he глагол goes; он вводит слова собеседника в пересказе.
+      - id: q3
+        prompt: "You are writing a formal email. Which sentence fits best?"
+        options:
+          - She said that she could not come.
+          - She was like, "I can't come."
+          - She goes, "I can't come."
+        answer: She said that she could not come.
+        explanation: В письме и в официальной речи используют said; was like и goes разговорные.
+      - id: q4
+        prompt: "Your ticket is already bought. Which sentence describes this plan?"
+        options:
+          - I'm flying out on the third.
+          - I'm thinking of flying out.
+          - I will fly out maybe.
+        answer: I'm flying out on the third.
+        explanation: Договорённость с названной датой — present continuous.
+  - type: exercise
+    id: words-match
+    title: Слова для связи
+    instruction: Соедините русское описание с английским словом. Два английских варианта лишние.
+    format: match
+    bank:
+      - stay in touch
+      - drift apart
+      - a catch-up
+      - a voice note
+      - a reunion
+      - a throwback
+      - nostalgic
+      - patchy
+      - banter
+      - a heads-up
+    items:
+      - { id: m1, prompt: "переписываться и звонить, чтобы не потерять друг друга", answer: stay in touch }
+      - { id: m2, prompt: "постепенно перестать общаться, без ссоры", answer: drift apart }
+      - { id: m3, prompt: "разговор или встреча двух-трёх друзей, чтобы узнать новости друг друга", answer: a catch-up }
+      - { id: m4, prompt: "сообщение, которое записывают голосом и отправляют в чат", answer: a voice note }
+      - { id: m5, prompt: "встреча людей, которые давно не виделись, например бывших одноклассников, выпускников одной школы", answer: a reunion }
+      - { id: m6, prompt: "старое фото, которое напоминает о прошлом", answer: a throwback }
+      - { id: m7, prompt: "с тёплой грустью вспоминающий прошлое", answer: nostalgic }
+      - { id: m8, prompt: "о связи: то есть, то пропадает", answer: patchy }
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - I've started a new job, and I moved to Leeds in May.
+      - I know, too long. How are you?
+      - Ha, you almost had me.
+      - Yes, let's. Are you free on Sunday?
+      - The next train leaves at nine.
+      - No, I haven't been there.
+    items:
+      - { id: m1, prompt: "What have you been up to?", answer: "I've started a new job, and I moved to Leeds in May." }
+      - { id: m2, prompt: "It's been ages!", answer: "I know, too long. How are you?" }
+      - { id: m3, prompt: "I'm kidding!", answer: "Ha, you almost had me." }
+      - { id: m4, prompt: "Let's catch up properly soon.", answer: "Yes, let's. Are you free on Sunday?" }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, you're) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Я только что вернулся(лась) из Португалии."
+        answer:
+          - "I've just got back from Portugal."
+          - "I have just got back from Portugal."
+          - "I've just come back from Portugal."
+          - "I have just come back from Portugal."
+          - "I've just returned from Portugal."
+          - "I have just returned from Portugal."
+          - "I just got back from Portugal."
+          - "I just came back from Portugal."
+        explanation: Just с present perfect — недавнее событие.
+      - id: q2
+        prompt: "Я переехал(а) в Лидс в мае."
+        answer:
+          - "I moved to Leeds in May."
+          - "In May I moved to Leeds."
+          - "In May, I moved to Leeds."
+        explanation: Время названо — past simple.
+      - id: q3
+        prompt: "С нашего последнего разговора многое произошло."
+        answer:
+          - "A lot has happened since we last spoke."
+          - "A lot has happened since we last talked."
+          - "A lot has happened since we spoke last."
+          - "A lot has happened since we talked last."
+          - "Since we last spoke, a lot has happened."
+          - "Since we last talked, a lot has happened."
+          - "Lots has happened since we last spoke."
+          - "Lots has happened since we last talked."
+          - "Much has happened since we last spoke."
+          - "Much has happened since we last talked."
+          - "Many things have happened since we last spoke."
+          - "Many things have happened since we last talked."
+        explanation: Present perfect для результата, since + past simple.
+      - id: q4
+        prompt: "Ты когда-нибудь жил(а) за границей?"
+        answer:
+          - "Have you ever lived abroad?"
+          - "Have you ever lived overseas?"
+          - "Have you ever lived in another country?"
+          - "Have you ever lived in a different country?"
+          - "Have you ever lived in a foreign country?"
+        explanation: С ever спрашивают в present perfect.
+      - id: q5
+        prompt: "Дай знать, когда снова будешь в городе."
+        answer:
+          - "Let me know when you're next in town."
+          - "Let me know when you are next in town."
+          - "Let me know when you're in town again."
+          - "Let me know when you are in town again."
+          - "Let me know when you're back in town."
+          - "Let me know when you are back in town."
+          - "Let me know when you're in town next."
+          - "Let me know when you are in town next."
+        explanation: После when стоит present simple, без will.

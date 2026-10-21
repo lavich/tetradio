@@ -1,0 +1,8 @@
+id: tp197
+text: "It's been ages!"
+translation: "Мы так давно не виделись."
+note: "ages — очень долгое время, разговорное; в США также It's been forever"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

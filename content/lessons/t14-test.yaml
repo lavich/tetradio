@@ -1,0 +1,357 @@
+title: Контрольная модуля t14
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: переписка двух друзей, видеозвонок с плохой связью, past simple и present perfect в новостях, разговорный пересказ, планы, слова и фразы модуля. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: after-trip
+    title: Zoe and Jack — after the trip
+    text: |-
+      CHAT: ZOE AND JACK
+
+      Zoe: Jack! You're back. What have you been up to?
+      Jack: Hi Zoe. I've just got back from Lisbon. I flew out on the ninth, and I stayed with my cousin for a week.
+      Zoe: Lucky you. Did you take any photos?
+      Jack: Loads. I've sent you a throwback one too, from our school reunion in 2019.
+      Zoe: Ha, I look so young in that photo.
+      Jack: My cousin was like, "Who is that?" and I said, "That's my friend Zoe. She still owes me a coffee."
+      Zoe: Deadpan as ever. I'm paying next time, I promise.
+      Jack: I'm kidding. It's been ages, so the coffee is on me.
+      Zoe: Deal. I'm going to Bristol for work on the twentieth, so I'm free after that. Shall we catch up properly on Saturday?
+      Jack: Saturday works. I'll call you from the station, but the signal there is patchy.
+      Zoe: Then send a voice note if the call cuts out.
+    glosses:
+      - { text: Loads, russian: "много, целая куча" }
+      - { text: owes me, russian: "должна мне" }
+      - { text: the coffee is on me, russian: "кофе за мой счёт" }
+  - type: exercise
+    id: after-trip-q
+    about: after-trip
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What has Jack just done?
+        options:
+          - He has come back from Lisbon.
+          - He has started a new job.
+          - He has moved to Bristol.
+        answer: He has come back from Lisbon.
+        explanation: I've just got back from Lisbon.
+      - id: q2
+        prompt: When did Jack fly out?
+        options:
+          - on the ninth
+          - on the twentieth
+          - on Saturday
+        answer: on the ninth
+        explanation: I flew out on the ninth.
+      - id: q3
+        prompt: What is the throwback photo from?
+        options:
+          - a school reunion in 2019
+          - a trip to Bristol
+          - a hostel in Lisbon
+        answer: a school reunion in 2019
+        explanation: A throwback one, from our school reunion in 2019.
+      - id: q4
+        prompt: What did Jack's cousin ask?
+        options:
+          - who was in the photo
+          - where Zoe lives
+          - when Jack was going home
+        answer: who was in the photo
+        explanation: My cousin was like, "Who is that?"
+      - id: q5
+        prompt: What does Zoe mean by "Deadpan as ever"?
+        options:
+          - Jack made a joke in a serious tone.
+          - Jack was angry.
+          - Jack was silent.
+        answer: Jack made a joke in a serious tone.
+        explanation: Deadpan — шутка серьёзным тоном.
+      - id: q6
+        prompt: Who pays for the coffee this time?
+        options:
+          - Jack
+          - Zoe
+          - They share it.
+        answer: Jack
+        explanation: I'm kidding. The coffee is on me.
+      - id: q7
+        prompt: Where is Zoe going on the twentieth?
+        options:
+          - to Bristol
+          - to Lisbon
+          - to the station
+        answer: to Bristol
+        explanation: I'm going to Bristol for work on the twentieth.
+      - id: q8
+        prompt: Why does Zoe suggest a voice note?
+        options:
+          - The call may cut out at the station.
+          - Jack has no phone.
+          - Zoe is busy on Saturday.
+        answer: The call may cut out at the station.
+        explanation: The signal at the station is patchy, so the call may cut out.
+  - type: listening
+    id: call
+    title: A video call — Hugo and Zoe
+    plays: 2
+    transcript:
+      - { speaker: Hugo, text: "Zoe? Hello? Can you hear me?" }
+      - { speaker: Zoe, text: "Hugo! I can see you, but you're breaking up. Your picture has frozen." }
+      - { speaker: Hugo, text: "Sorry, it's the train Wi-Fi. It's really patchy. Can you hear me now?" }
+      - { speaker: Zoe, text: "Yes, but there's a lag. I hear you a second after your lips move." }
+      - { speaker: Hugo, text: "Okay, I'll be quick. I've got a new team at the bank. My boss told me yesterday." }
+      - { speaker: Zoe, text: "Sorry? The sound cut out. You've got what?" }
+      - { speaker: Hugo, text: "A new team! My boss was like, \"You've earned it.\" I'm taking the team to Madrid in June." }
+      - { speaker: Zoe, text: "That's wonderful news. Call me properly on Sunday and tell me everything." }
+      - { speaker: Hugo, text: "I will. Let me call you back from the station." }
+      - { speaker: Zoe, text: "Good idea. Miss you already." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование — видеозвонок
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the problem with Hugo's connection?
+        options:
+          - The train Wi-Fi is patchy.
+          - Zoe's phone is switched off.
+          - Hugo is in a tunnel.
+        answer: The train Wi-Fi is patchy.
+        explanation: It's the train Wi-Fi. It's really patchy.
+      - id: q2
+        prompt: What does Zoe mean by "a lag"?
+        options:
+          - She hears Hugo a second after his lips move.
+          - She cannot see Hugo at all.
+          - She hears Hugo twice.
+        answer: She hears Hugo a second after his lips move.
+        explanation: I hear you a second after your lips move.
+      - id: q3
+        prompt: What has Hugo got?
+        options:
+          - a new team at the bank
+          - a new flat in Lyon
+          - a new job in Madrid
+        answer: a new team at the bank
+        explanation: I've got a new team at the bank.
+      - id: q4
+        prompt: When did Hugo's boss tell him?
+        options:
+          - yesterday
+          - this morning
+          - last month
+        answer: yesterday
+        explanation: My boss told me yesterday.
+      - id: q5
+        prompt: What did Hugo's boss say?
+        options:
+          - that Hugo had earned the new team
+          - that Hugo must work harder
+          - that Hugo was late
+        answer: that Hugo had earned the new team
+        explanation: My boss was like, "You've earned it."
+      - id: q6
+        prompt: Where is Hugo taking the team in June?
+        options:
+          - to Madrid
+          - to Lyon
+          - to Bristol
+        answer: to Madrid
+        explanation: I'm taking the team to Madrid in June.
+      - id: q7
+        prompt: What does Zoe ask Hugo to do on Sunday?
+        options:
+          - call her and tell her everything
+          - visit her in Bristol
+          - send a voice note
+        answer: call her and tell her everything
+        explanation: Call me properly on Sunday and tell me everything.
+      - id: q8
+        prompt: How does the call end?
+        options:
+          - Hugo will call back from the station.
+          - Zoe will call Hugo tomorrow.
+          - They will meet in Madrid.
+        answer: Hugo will call back from the station.
+        explanation: I will. Let me call you back from the station.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Past simple, present perfect, пересказ и планы
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I ___ my keys at the airport yesterday."
+        options: [lost, have lost, am losing]
+        answer: lost
+        explanation: Время названо — yesterday, поэтому past simple.
+      - id: q2
+        prompt: "She ___ already booked her flight."
+        options: [has, did, was]
+        answer: has
+        explanation: С already ставят present perfect — has и третью форму.
+      - id: q3
+        prompt: "We haven't spoken ___ March."
+        options: [since, for, ago]
+        answer: since
+        explanation: Since называет начало периода; for называет его длину.
+      - id: q4
+        prompt: "So I show him the video, and he ___, \"Is that real?\""
+        options: [goes, go, going]
+        answer: goes
+        explanation: С he глагол goes; он вводит слова собеседника в пересказе.
+      - id: q5
+        prompt: "Which sentence fits a message to your manager?"
+        options:
+          - He said that he would call us tomorrow.
+          - He was like, "I'll call tomorrow."
+          - He goes, "I'll call tomorrow."
+        answer: He said that he would call us tomorrow.
+        explanation: В письме и на работе используют said; was like и goes разговорные.
+      - id: q6
+        prompt: "The tickets are bought. I ___ to Madrid on the third."
+        options: [am flying, flew, have flown]
+        answer: am flying
+        explanation: Договорённость с названной датой — present continuous.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово или оборот. Четыре варианта лишние.
+    format: gap
+    bank: [drift apart, a catch-up, a voice note, a reunion, nostalgic, patchy, deadpan, understatement, sarcasm, a wind-up, lag, a throwback]
+    items:
+      - { id: g1, prompt: "We were best friends at school, but when I moved abroad we began to ___, and now we only send cards.", answer: drift apart }
+      - { id: g2, prompt: "Twenty years after leaving school, 120 former classmates came to the school's annual ___ and sat at the same desks.", answer: a reunion }
+      - { id: g3, prompt: "She sent me an old photo of us at the beach, and I felt very ___.", answer: nostalgic }
+      - { id: g4, prompt: "I was driving, so I sent her ___ instead of typing a message.", answer: a voice note }
+      - { id: g5, prompt: "The picture is fine, but the Wi-Fi in this café is ___: it keeps disappearing.", answer: patchy }
+      - { id: g6, prompt: "He answered in a flat, ___ voice, and only his smile showed that it was a joke.", answer: deadpan }
+      - { id: g7, prompt: "We had ___ on the phone on Sunday, and it lasted two hours: I told her about the move, and she told me about her job.", answer: a catch-up }
+      - { id: g8, prompt: "She described a huge heatwave as \"quite warm\". She used very mild words for a big thing: a typical British case of ___.", answer: understatement }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'm, you're) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Чем ты занимался(лась) всё это время?"
+        answer:
+          - "What have you been up to?"
+          - "What have you been up to lately?"
+          - "What have you been up to recently?"
+          - "What have you been doing?"
+          - "What have you been doing lately?"
+          - "What have you been doing recently?"
+          - "What have you been up to all this time?"
+          - "What have you been up to since we last spoke?"
+          - "What have you been doing since we last spoke?"
+        explanation: Вопрос о новостях — present perfect (have been up to).
+      - id: q2
+        prompt: "Мы так давно не виделись."
+        answer:
+          - "It's been ages."
+          - "It has been ages."
+          - "It's been a long time."
+          - "It has been a long time."
+          - "We haven't seen each other in ages."
+          - "We have not seen each other in ages."
+          - "We haven't seen each other for ages."
+          - "We have not seen each other for ages."
+          - "We haven't seen each other for a long time."
+          - "We have not seen each other for a long time."
+          - "It's been so long."
+          - "It has been so long."
+          - "It's been ages since we last met."
+          - "It's been ages since we last saw each other."
+          - "We haven't seen each other for so long."
+          - "Long time no see."
+          - "It has been ages since we last met."
+          - "It has been ages since we last saw each other."
+          - "We have not seen each other for so long."
+        explanation: Ages — очень долгое время; present perfect для периода до сих пор.
+      - id: q3
+        prompt: "Когда ты в следующий раз будешь в Лондоне, дай мне знать."
+        answer:
+          - "Let me know when you're next in London."
+          - "Let me know when you're in London again."
+          - "Let me know when you're back in London."
+          - "Let me know when you are next in London."
+          - "Let me know when you are in London again."
+          - "Let me know when you are back in London."
+          - "Tell me when you're next in London."
+          - "Tell me when you're in London again."
+          - "Tell me when you're back in London."
+          - "Tell me when you are next in London."
+          - "Tell me when you are in London again."
+          - "Tell me when you are back in London."
+          - "Let me know the next time you're in London."
+          - "Let me know the next time you are in London."
+          - "Next time you're in London, let me know."
+          - "Next time you are in London, let me know."
+          - "When you're next in London, let me know."
+          - "When you are next in London, let me know."
+          - "Let me know next time you're in London."
+          - "Let me know next time you are in London."
+        explanation: После when стоит present simple, без will.
+      - id: q4
+        prompt: "Я думаю приехать к вам весной. (thinking of)"
+        answer:
+          - "I'm thinking of coming over in the spring."
+          - "I'm thinking of coming over in spring."
+          - "I'm thinking of coming to see you in the spring."
+          - "I'm thinking of coming to see you in spring."
+          - "I'm thinking of coming to visit in the spring."
+          - "I'm thinking of coming to visit in spring."
+          - "I'm thinking of visiting you in the spring."
+          - "I'm thinking of visiting you in spring."
+          - "I am thinking of coming over in the spring."
+          - "I am thinking of coming over in spring."
+          - "I am thinking of coming to see you in the spring."
+          - "I am thinking of coming to see you in spring."
+          - "I am thinking of coming to visit in the spring."
+          - "I am thinking of coming to visit in spring."
+          - "I am thinking of visiting you in the spring."
+          - "I am thinking of visiting you in spring."
+          - "I'm thinking of coming to visit you in the spring."
+          - "I'm thinking of coming to visit you in spring."
+          - "I'm thinking of coming over to see you in the spring."
+          - "I'm thinking of visiting in the spring."
+          - "I am thinking of coming to visit you in the spring."
+          - "I am thinking of coming to visit you in spring."
+          - "I am thinking of coming over to see you in the spring."
+          - "I am thinking of visiting in the spring."
+        explanation: Thinking of + -ing — идея, решение не принято.
+      - id: q5
+        prompt: "Я купил(а) билеты вчера."
+        answer:
+          - "I bought the tickets yesterday."
+          - "I bought my tickets yesterday."
+          - "I bought our tickets yesterday."
+          - "I bought tickets yesterday."
+          - "I got the tickets yesterday."
+          - "I got my tickets yesterday."
+          - "I got our tickets yesterday."
+          - "I got tickets yesterday."
+          - "Yesterday I bought the tickets."
+          - "Yesterday I bought my tickets."
+          - "Yesterday I bought tickets."
+        explanation: Время названо — yesterday, поэтому past simple.

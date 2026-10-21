@@ -1,0 +1,8 @@
+id: tp203
+text: "Let's catch up properly soon."
+translation: "Давай как следует обсудим новости в ближайшее время."
+note: "предложение созвониться или встретиться; properly — как следует, без спешки"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

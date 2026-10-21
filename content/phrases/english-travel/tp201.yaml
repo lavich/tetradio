@@ -1,0 +1,8 @@
+id: tp201
+text: "He goes, \"I'm not joking.\""
+translation: "Он такой: «Я не шучу»."
+note: "goes — разговорный пересказ в рассказах о прошлом; в письме — he said"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

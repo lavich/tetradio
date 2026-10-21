@@ -1,0 +1,8 @@
+id: tp202
+text: "You'll never guess what happened."
+translation: "Ни за что не угадаешь, что случилось."
+note: "начало рассказа; после неё — past simple"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

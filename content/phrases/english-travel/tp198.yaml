@@ -1,0 +1,8 @@
+id: tp198
+text: "I've just got back from Portugal."
+translation: "Я только что вернулся(лась) из Португалии."
+note: "just с present perfect: действие закончилось недавно; в США чаще I just got back"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t14
+  operation: requested-generation
+  request: Фразы модуля t14 по программе docs/curriculum-english-travel.md

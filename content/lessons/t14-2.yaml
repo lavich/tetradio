@@ -1,0 +1,385 @@
+title: Дружеская переписка, голосовые сообщения и видеозвонок с плохой связью
+kind: lesson
+items:
+  - { kind: word, id: tw204 }
+  - { kind: word, id: tw205 }
+  - { kind: word, id: tw206 }
+  - { kind: word, id: tw207 }
+  - { kind: word, id: tw208 }
+  - { kind: word, id: tw209 }
+  - { kind: word, id: tw210 }
+  - { kind: phrase, id: tp204 }
+  - { kind: phrase, id: tp205 }
+  - { kind: phrase, id: tp206 }
+  - { kind: phrase, id: tp207 }
+  - { kind: phrase, id: tp208 }
+  - { kind: phrase, id: tp209 }
+  - { kind: phrase, id: tp210 }
+blocks:
+  - type: explanation
+    id: words-more
+    title: Юмор, ирония и связь — слова и фразы
+    body: |-
+      **Sarcasm** — сарказм: человек говорит противоположное тому, что думает. *Great weather!* под проливным дождём — сарказм; смысл обычно слышен по интонации, а в переписке его можно принять всерьёз. **Deadpan** — шутка с каменным лицом, серьёзным тоном: слушатель не сразу понимает, что это шутка. **Understatement** — преуменьшение: о важном говорят гораздо слабее, чем есть на самом деле. *It was a bit chilly* при минус десяти — британская манера; **That's an understatement** значит «мягко сказано».
+
+      **A wind-up** — розыгрыш, шутка, в которой человека заставляют поверить в неправду. **A running joke** — шутка, к которой друзья возвращаются снова и снова. После шутки, которую могут понять всерьёз, говорят **I'm kidding!** или **No offence meant.**
+
+      Для плохой связи: **lag** — задержка, звук и картинка приходят с опозданием; **cut out** — пропадать, о звуке; **You're breaking up** — собеседнику говорят, что его плохо слышно. Если разговор не получается, предлагают **Let me call you back.**
+
+      Фразы для переписки и прощания. **Let me know when you're next in town.** — пригласить на новую встречу. **I'm thinking of coming over in the spring.** — рассказать о плане. **Miss you already.** — коротко сказать, что будете скучать.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: slang-note
+    title: Как читать и слушать
+    body: |-
+      Сначала дружеская переписка Мэй и Бена. Прочитайте её целиком, затем отвечайте на вопросы: нужно найти новости каждого, понять шутки и увидеть, о чём они договорились.
+
+      Затем два голосовых сообщения Аники и Уго и видеозвонок Мэй и Бена. Голосовые звучат два раза. В сообщении Аники есть слово **bloody** — усиление в британской речи, примерно «чертовски»; оно считается грубым, его понимают, но в письме и в деловой речи не используют. Смысл фразы от него не меняется. В звонке связь плохая: слушайте, какие слова слышны, и опирайтесь на соседние реплики.
+
+      В переписке **heating** — отопление, **a heater** — обогреватель, **snoring** — храп. Транскрипт аудио откроется после ответа.
+  - type: reading
+    id: chat
+    title: Mei and Ben — a year later
+    text: |-
+      CHAT: MEI AND BEN
+
+      Ben: Mei! It's been ages. What have you been up to?
+      Mei: Hi Ben! A lot has happened. I got back to Singapore in March, and I've just started a new job at a travel company.
+      Ben: So you've found a way to travel without leaving your desk.
+      Mei: Very funny. I'm going to Tokyo in May for work, actually.
+      Ben: Not bad at all. I've been busy too. I moved to a new flat in Leeds in January, and it has no heating. It's an interesting start to the year.
+      Mei: No heating in January? That's an understatement!
+      Ben: I know. It's better now, there's a heater. Remember the hostel in Edinburgh? Our dorm had a running joke about the snoring bunk.
+      Mei: I do! I've just sent you a throwback photo from the walking tour.
+      Ben: Got it. I'm feeling nostalgic already. When are you next in Europe?
+      Mei: I'm thinking of coming over in September. Are you around?
+      Ben: Let me know the dates, and I'll take a few days off. Let's catch up properly then.
+      Mei: Deal. Say hi to your flatmate.
+    glosses:
+      - { text: heating, russian: "отопление" }
+      - { text: a heater, russian: "обогреватель" }
+      - { text: snoring, russian: "храпящий, тот, кто храпит" }
+      - { text: Are you around, russian: "ты будешь на месте, не уехал" }
+  - type: exercise
+    id: chat-q
+    about: chat
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: When did Mei get back to Singapore?
+        options:
+          - in March
+          - in May
+          - in January
+        answer: in March
+        explanation: I got back to Singapore in March.
+      - id: q2
+        prompt: What has Mei just started?
+        options:
+          - a new job at a travel company
+          - a language course
+          - a trip to Tokyo
+        answer: a new job at a travel company
+        explanation: I've just started a new job at a travel company.
+      - id: q3
+        prompt: What is Ben's joke about Mei's new job?
+        options:
+          - She can travel without leaving her desk.
+          - She will move to Leeds.
+          - She works too little.
+        answer: She can travel without leaving her desk.
+        explanation: So you've found a way to travel without leaving your desk.
+      - id: q4
+        prompt: Where is Mei going in May?
+        options:
+          - to Tokyo
+          - to Leeds
+          - to Edinburgh
+        answer: to Tokyo
+        explanation: I'm going to Tokyo in May for work.
+      - id: q5
+        prompt: Why does Mei say "That's an understatement"?
+        options:
+          - Ben describes a big problem in very mild words.
+          - Ben speaks too quietly.
+          - Ben says the flat is too small.
+        answer: Ben describes a big problem in very mild words.
+        explanation: "Ben называет отсутствие отопления в январе «an interesting start to the year»: это преуменьшение."
+      - id: q6
+        prompt: What has changed in Ben's flat?
+        options:
+          - It has a heater now.
+          - It has a new kitchen.
+          - It has no windows.
+        answer: It has a heater now.
+        explanation: It's better now, there's a heater.
+      - id: q7
+        prompt: What has Mei sent to Ben?
+        options:
+          - a throwback photo from the walking tour
+          - a voice note
+          - a plane ticket
+        answer: a throwback photo from the walking tour
+        explanation: I've just sent you a throwback photo from the walking tour.
+      - id: q8
+        prompt: When is Mei thinking of coming to see Ben?
+        options:
+          - in September
+          - in May
+          - in January
+        answer: in September
+        explanation: I'm thinking of coming over in September.
+  - type: listening
+    id: notes
+    title: Two voice notes — Anika and Hugo
+    plays: 2
+    transcript:
+      - { speaker: Anika, text: "Hi Hugo, it's Anika. I've just got back from Berlin, and I had a great weekend, but the flight back was bloody late. My sister was like, \"Come and stay for a month!\" and I was like, \"I'd love to, but I've got work.\" So I'm going to visit in August instead." }
+      - { speaker: Anika, text: "I saw the photo of your new flat. Is that a window or a painting? I'm joking. It looks nice. Call me when you're free, and we can have a proper catch-up." }
+      - { speaker: Hugo, text: "Hi Anika, thanks for the voice note. I'm on the train, so the signal might be patchy. I've started a new job at a bank in Lyon, and it's not bad. The first week was very exhausting, to be honest." }
+      - { speaker: Hugo, text: "I'm free on Sunday evening. Shall I call you at eight? If the line cuts out, I'll call you back." }
+  - type: exercise
+    id: notes-q
+    about: notes
+    title: Аудирование — голосовые сообщения
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What has Anika just done?
+        options:
+          - She has come back from Berlin.
+          - She has started a new job.
+          - She has moved to Lyon.
+        answer: She has come back from Berlin.
+        explanation: I've just got back from Berlin.
+      - id: q2
+        prompt: What did Anika's sister ask her to do?
+        options:
+          - to stay for a month
+          - to move to Berlin
+          - to bring a friend
+        answer: to stay for a month
+        explanation: Her sister was like, "Come and stay for a month!"
+      - id: q3
+        prompt: When is Anika going to visit her sister?
+        options:
+          - in August
+          - in May
+          - at Christmas
+        answer: in August
+        explanation: I'm going to visit in August instead.
+      - id: q4
+        prompt: What does Anika say after "Is that a window or a painting?"
+        options:
+          - She says she is joking.
+          - She asks for a new photo.
+          - She asks Hugo to move.
+        answer: She says she is joking.
+        explanation: I'm joking. It looks nice.
+      - id: q5
+        prompt: What does Hugo say about the signal?
+        options:
+          - It might be patchy.
+          - It is perfect.
+          - There is no signal at all.
+        answer: It might be patchy.
+        explanation: I'm on the train, so the signal might be patchy.
+      - id: q6
+        prompt: Where is Hugo's new job?
+        options:
+          - at a bank in Lyon
+          - at a hotel in Berlin
+          - at a school in Lyon
+        answer: at a bank in Lyon
+        explanation: I've started a new job at a bank in Lyon.
+      - id: q7
+        prompt: How was Hugo's first week?
+        options:
+          - very tiring
+          - very easy
+          - boring
+        answer: very tiring
+        explanation: The first week was very exhausting.
+      - id: q8
+        prompt: What does Hugo suggest?
+        options:
+          - a call on Sunday at eight
+          - a call on Monday morning
+          - a meeting in Berlin
+        answer: a call on Sunday at eight
+        explanation: I'm free on Sunday evening. Shall I call you at eight?
+  - type: listening
+    id: call
+    title: A video call with a bad connection — Mei and Ben
+    plays: 2
+    transcript:
+      - { speaker: Mei, text: "Hello? Ben, can you hear me?" }
+      - { speaker: Ben, text: "Mei! Yes, but you're breaking up. Your picture's frozen too." }
+      - { speaker: Mei, text: "Sorry, the Wi-Fi in this hotel is patchy. Is that better?" }
+      - { speaker: Ben, text: "A bit. There's a lag, though. I see your lips move, and your voice comes two seconds later." }
+      - { speaker: Mei, text: "That's the signal. Anyway, I've got news. I've booked my flight to Leeds for September." }
+      - { speaker: Ben, text: "Sorry, the sound keeps cutting out. You've booked what?" }
+      - { speaker: Mei, text: "My flight. I land on the fourth." }
+      - { speaker: Ben, text: "Brilliant. I'll take the Friday off. Send me the details when you have them." }
+      - { speaker: Mei, text: "I will. Let me call you back from my room, the line is terrible here." }
+      - { speaker: Ben, text: "Good idea. Talk in five minutes." }
+  - type: exercise
+    id: call-q
+    about: call
+    title: Аудирование — видеозвонок
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is wrong with Mei's connection?
+        options:
+          - The hotel Wi-Fi is patchy.
+          - Her phone has no battery.
+          - Ben's phone is broken.
+        answer: The hotel Wi-Fi is patchy.
+        explanation: The Wi-Fi in this hotel is patchy.
+      - id: q2
+        prompt: How does the lag show?
+        options:
+          - Ben hears Mei's voice two seconds after he sees her lips move.
+          - Ben cannot see Mei at all.
+          - Mei hears Ben's voice twice.
+        answer: Ben hears Mei's voice two seconds after he sees her lips move.
+        explanation: I see your lips move, and your voice comes two seconds later.
+      - id: q3
+        prompt: What is Mei's news?
+        options:
+          - She has booked a flight to Leeds.
+          - She has moved to Leeds.
+          - She has lost her ticket.
+        answer: She has booked a flight to Leeds.
+        explanation: I've booked my flight to Leeds for September.
+      - id: q4
+        prompt: When does Mei land?
+        options:
+          - on the fourth
+          - on the first
+          - on the fifth
+        answer: on the fourth
+        explanation: I land on the fourth.
+      - id: q5
+        prompt: What will Ben do?
+        options:
+          - take the Friday off
+          - fly to Singapore
+          - change his flat
+        answer: take the Friday off
+        explanation: I'll take the Friday off.
+      - id: q6
+        prompt: What does Mei suggest at the end?
+        options:
+          - to call him back from her room
+          - to send a voice note
+          - to meet at the hotel
+        answer: to call him back from her room
+        explanation: Let me call you back from my room.
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank: [lag, sarcasm, a wind-up, deadpan, understatement, a running joke, cut out, patchy, nostalgic]
+    items:
+      - { id: g1, prompt: "On a video call, a ___ of two seconds means you see her lips move before you hear the words.", answer: lag }
+      - { id: g2, prompt: "He said \"Great weather!\" in the pouring rain. It was pure ___: he meant the opposite of his words.", answer: sarcasm }
+      - { id: g3, prompt: "I told him the exam was cancelled, but it was only ___: I wanted to see his face.", answer: a wind-up }
+      - { id: g4, prompt: "He told the joke with a ___ face, so nobody knew he was joking.", answer: deadpan }
+      - { id: g5, prompt: "She said it was \"a bit chilly\" at minus ten. She meant it was freezing and said much less than she thought: a typical British case of ___.", answer: understatement }
+      - { id: g6, prompt: "Every Christmas somebody mentions the burnt turkey from 2019. It is ___ in our family.", answer: a running joke }
+      - { id: g7, prompt: "If the line is bad, the sound may suddenly ___, and I only hear half of your words.", answer: cut out }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'll, you're) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Тебя плохо слышно: связь прерывается."
+        answer:
+          - "You're breaking up."
+          - "You are breaking up."
+          - "You're cutting out."
+          - "You are cutting out."
+          - "You keep breaking up."
+          - "You keep cutting out."
+        explanation: You're breaking up — так говорят собеседнику, чей звук пропадает.
+      - id: q2
+        prompt: "Я тебе перезвоню."
+        answer:
+          - "I'll call you back."
+          - "I will call you back."
+          - "Let me call you back."
+          - "I'll ring you back."
+          - "I will ring you back."
+          - "Let me ring you back."
+          - "I'll phone you back."
+          - "I will phone you back."
+          - "Let me phone you back."
+          - "I'll call you back later."
+          - "I'll call you right back."
+          - "I'll give you a call back."
+          - "I'll ring you back later."
+          - "I will call you back later."
+          - "I will call you right back."
+          - "I will give you a call back."
+          - "I will ring you back later."
+        explanation: Call you back — перезвонить.
+      - id: q3
+        prompt: "Я шучу."
+        answer:
+          - "I'm kidding."
+          - "I am kidding."
+          - "I'm joking."
+          - "I am joking."
+          - "Just kidding."
+          - "Just joking."
+          - "I was kidding."
+          - "I was joking."
+          - "I'm just kidding."
+          - "I'm just joking."
+          - "I'm only kidding."
+          - "I'm only joking."
+          - "I am just kidding."
+          - "I am just joking."
+          - "I am only kidding."
+          - "I am only joking."
+        explanation: I'm kidding — после шутки, которую можно принять всерьёз.
+      - id: q4
+        prompt: "Я не хотел(а) никого обидеть."
+        answer:
+          - "No offence meant."
+          - "No offense meant."
+          - "I meant no offence."
+          - "I meant no offense."
+          - "No offence intended."
+          - "No offense intended."
+          - "I didn't mean to offend anyone."
+          - "I did not mean to offend anyone."
+          - "I didn't mean to offend anybody."
+          - "I didn't mean any offence."
+          - "I didn't mean any offense."
+          - "I did not mean to offend anybody."
+          - "I did not mean any offence."
+          - "I did not mean any offense."
+        explanation: No offence meant смягчает резкую фразу.
+      - id: q5
+        prompt: "Уже скучаю."
+        answer:
+          - "Miss you already."
+          - "I miss you already."
+          - "I already miss you."
+          - "Missing you already."
+          - "I'm already missing you."
+          - "Already missing you."
+          - "I am already missing you."
+        explanation: Miss you already — коротко, в конце сообщения.

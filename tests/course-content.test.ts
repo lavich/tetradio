@@ -85,7 +85,7 @@ describe("курс в продукте", () => {
 });
 
 describe("английский для путешествий и общения", () => {
-  const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07", "t08", "t09", "t10", "t11", "t12", "t13"];
+  const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07", "t08", "t09", "t10", "t11", "t12", "t13", "t14"];
   const TRIP = STAGE.slice(0, 7);
   const RUDE =
     /\b(fuck\w*|shit\w*|bitch\w*|bastard\w*|arse(hole|s)?|wank\w*|piss\w*|twat\w*|cunt\w*|prick(s)?|slut\w*|whore\w*|bollocks|crap\w*|dick\w*|\bass(hole)?\b)\b/i;
@@ -108,6 +108,7 @@ describe("английский для путешествий и общения",
     t11: { register: "friendly", min: 60, max: 100 },
     t12: { register: "friendly", min: 60, max: 100 },
     t13: { register: "friendly", min: 40, max: 80 },
+    t14: { register: "friendly", min: 60, max: 100 },
   };
   const travel = () => catalog.courses.find((course) => course.id === "english-travel");
   const lessonOf = (id: string) => packagesOf("english-travel").find((pack) => pack.id === id);
