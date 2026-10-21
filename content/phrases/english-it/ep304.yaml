@@ -1,0 +1,7 @@
+id: ep304
+text: "Are there any constraints that I should know about?"
+translation: "Есть ли ограничения, о которых мне нужно знать?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

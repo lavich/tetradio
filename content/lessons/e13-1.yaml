@@ -1,0 +1,500 @@
+title: придаточные определительные — описание пользователей, системы и требований
+kind: lesson
+items:
+  - { kind: word, id: ew421 }
+  - { kind: word, id: ew422 }
+  - { kind: word, id: ew423 }
+  - { kind: word, id: ew424 }
+  - { kind: word, id: ew425 }
+  - { kind: word, id: ew426 }
+  - { kind: word, id: ew427 }
+  - { kind: word, id: ew428 }
+  - { kind: word, id: ew429 }
+  - { kind: word, id: ew430 }
+  - { kind: word, id: ew431 }
+  - { kind: word, id: ew432 }
+  - { kind: word, id: ew433 }
+  - { kind: word, id: ew434 }
+  - { kind: word, id: ew435 }
+  - { kind: word, id: ew436 }
+  - { kind: word, id: ew437 }
+  - { kind: word, id: ew438 }
+  - { kind: phrase, id: ep301 }
+  - { kind: phrase, id: ep302 }
+  - { kind: phrase, id: ep303 }
+  - { kind: phrase, id: ep304 }
+  - { kind: phrase, id: ep305 }
+  - { kind: phrase, id: ep306 }
+  - { kind: phrase, id: ep307 }
+  - { kind: phrase, id: ep308 }
+blocks:
+  - type: explanation
+    id: defining
+    title: Определительные придаточные — кто или что именно
+    body: |-
+      Когда вам ставят задачу, вы уточняете, о каких пользователях, сервисах и ограничениях идёт речь. Для этого нужны придаточные определительные (relative clauses): они описывают существительное и начинаются со слов **who**, **which**, **that**, **whose**, **where**.
+
+      **Defining relative clause** отвечает на вопрос «какой именно?». Без него неясно, о ком или о чём речь, поэтому его не отделяют запятыми: **Users who forget their password can reset it by email.** Речь только о тех пользователях, которые забыли пароль.
+
+      **Who** — для людей, **which** — для вещей, **that** — и для людей, и для вещей (в определительных придаточных). **Whose** показывает принадлежность: **a team whose service is slow**. **Where** относится к месту или системе: **a system where consistency matters more than speed**.
+
+      **Опущение.** Если слово who, which или that — дополнение внутри придаточного, его можно опустить: **The requirement (that) we agreed on is fixed.** Если оно подлежащее, его опустить нельзя: **a service that sends emails** (в *a service sends emails* придаточного нет, и смысл другой).
+    table:
+      columns:
+        - слово
+        - к чему относится
+        - пример
+      rows:
+        - - who
+          - человек
+          - "a user who forgets the password"
+        - - which
+          - вещь, сервис, система
+          - "a service which stores the data"
+        - - that
+          - человек или вещь
+          - "a service that sends emails"
+        - - whose
+          - принадлежность
+          - "a team whose service is slow"
+        - - where
+          - место, система, ситуация
+          - "a system where consistency matters more than speed"
+        - - "опущено"
+          - слово — дополнение придаточного
+          - "The requirement we agreed on is fixed."
+  - type: explanation
+    id: non-defining
+    title: Дополнительные сведения — non-defining и запятые
+    body: |-
+      **Non-defining relative clause** добавляет сведения о существительном, которое и без них понятно. Придаточное отделяют запятыми с двух сторон; если оно стоит в конце, запятая стоит перед ним. Из предложения его можно убрать, смысл основной части сохранится: **The notification service, which sends about ten thousand emails a day, must stay online.**
+
+      В non-defining используют **who** (люди) и **which** (вещи), **whose** и **where**. **That** здесь не ставят, и опустить слово нельзя: *The service, that sends emails, is slow* — ошибка, верно **The service, which sends emails, is slow.**
+
+      **Which** может относиться ко всей главной части: **The files are stored twice, which is why they are safe.** Запятая перед ним обязательна.
+
+      Запятые меняют смысл. **The engineers who work on the API are in Berlin.** — в Берлине только те инженеры, которые работают над API. **The engineers, who work on the API, are in Berlin.** — все инженеры (о которых речь) в Берлине, а работа над API — дополнительное сведение.
+    table:
+      columns:
+        - признак
+        - defining
+        - non-defining
+      rows:
+        - - запятые
+          - нет
+          - "есть: с двух сторон или перед придаточным в конце"
+        - - слова
+          - who, which, that, whose, where
+          - "who, which, whose, where; that нельзя"
+        - - опустить слово
+          - можно, если оно дополнение
+          - нельзя
+        - - роль
+          - называет, о ком или о чём речь
+          - добавляет сведение
+        - - пример
+          - "A user who forgets the password can reset it."
+          - "The service, which runs on two servers, is stable."
+  - type: explanation
+    id: relative-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **Запятая перед придаточным.** По-русски запятая перед «который» обязательна, в английском определительное придаточное без запятых: *Users, who forget the password, can reset it* означает, что все пользователи забывают пароль. Если речь о части пользователей, запятых нет: **Users who forget the password can reset it.**
+
+      **That с запятыми.** В non-defining вместо **that** нужно **which** или **who**: **The report, which Anders wrote, is short.**
+
+      **Повторное местоимение.** Русское «сервис, который он отправляет» не переносится: слово who или which уже заменяет существительное. *The service that it sends emails* и *the user who he forgot the password* — ошибки. Верно: **the service that sends emails**, **the user who forgot the password**.
+
+      **What вместо that.** **What** не вводит определительное придаточное: *the requirements what we agreed* ошибочно, верно **the requirements that we agreed on** или **the requirements we agreed on.**
+
+      **Which о человеке.** Для людей используют **who** или **that**: *a user which forgets the password* ошибочно.
+
+      **Whose.** Русское «чей» передаёт **whose**: *a team that its service is slow* — ошибка, верно **a team whose service is slow.**
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - "Users, who forget the password, can reset it. (речь о части пользователей)"
+          - Users who forget the password can reset it.
+          - defining — без запятых
+        - - "The service, that sends emails, is slow."
+          - "The service, which sends emails, is slow."
+          - в non-defining нет that
+        - - The service that it sends emails is slow.
+          - The service that sends emails is slow.
+          - местоимение не повторяют
+        - - The requirements what we agreed are fixed.
+          - The requirements that we agreed on are fixed.
+          - what не вводит определительное придаточное
+        - - A user which forgets the password can reset it.
+          - A user who forgets the password can reset it.
+          - для людей — who или that
+        - - A team that its service is slow needs help.
+          - A team whose service is slow needs help.
+          - принадлежность — whose
+  - type: explanation
+    id: requirements-words
+    title: Слова урока — требования, нагрузка, данные
+    body: |-
+      Слова урока образуют три группы.
+
+      **Требования и ограничения.** **A requirement** — требование: условие, которому должна отвечать система. **A constraint** — ограничение извне: срок, бюджет, технология, закон. **A non-goal** — то, что проект сознательно не делает. **A user story** — пользовательская история, **acceptance criteria** — критерии приёмки. **An assumption** — допущение, которое записывают, пока оно не подтверждено. **An API contract** — договорённость о формате запросов и ответов.
+
+      **Сценарии.** **A happy path** — основной сценарий без ошибок, **an edge case** — крайний случай: пустой список, очень длинное имя, одновременные запросы. **A stress test** проверяет систему под нагрузкой выше ожидаемой.
+
+      **Нагрузка и данные.** **Peak load** — пиковая нагрузка, **concurrent users** — те, кто работает с системой в один и тот же момент. **Load shedding** — сознательный отказ от части запросов при перегрузке. **Read-heavy** и **write-heavy** — системы, где данные чаще читают или чаще записывают. **Data volume** — объём данных, **a retention period** — срок их хранения. **A ballpark figure** — прикидочное число без точного расчёта.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: pronoun-choice
+    title: Who, which, that, whose, where
+    instruction: Выберите слово для пропуска.
+    format: choice
+    items:
+      - id: q1
+        prompt: A user ___ forgets the password can reset it by email.
+        options: [who, whose, where]
+        answer: who
+        explanation: Для человека в определительном придаточном стоит who; whose показывает принадлежность, where — место.
+      - id: q2
+        prompt: The service ___ stores the data runs on two servers.
+        options: [which, who, whose]
+        answer: which
+        explanation: Для вещи стоит which (или that); who относится к людям.
+      - id: q3
+        prompt: We need a system ___ users can work offline.
+        options: [where, who, which]
+        answer: where
+        explanation: Where относится к системе как к месту, в котором что-то происходит.
+      - id: q4
+        prompt: The team ___ service is slow needs help.
+        options: [whose, who, which]
+        answer: whose
+        explanation: Whose показывает принадлежность — «чей сервис».
+      - id: q5
+        prompt: The requirement ___ we agreed on is fixed.
+        options: [that, who, whose]
+        answer: that
+        explanation: Для вещи в defining подходит that (который можно опустить); who относится к людям, whose — к принадлежности.
+      - id: q6
+        prompt: Users ___ phone is offline can still read their messages.
+        options: [whose, who, that]
+        answer: whose
+        explanation: Whose показывает принадлежность — «чей телефон».
+  - type: exercise
+    id: commas-choice
+    title: Запятые и смысл
+    instruction: Выберите предложение, которое подходит к описанию.
+    format: choice
+    items:
+      - id: q1
+        prompt: Только часть пользователей работает без сети, и локальная копия нужна именно им.
+        options:
+          - The users who work offline need a local copy.
+          - The users, who work offline need a local copy.
+          - The users, who work offline, need a local copy.
+        answer: The users who work offline need a local copy.
+        explanation: Defining — без запятых; одна запятая ошибочна, две запятые превращают придаточное в дополнительное сведение.
+      - id: q2
+        prompt: Все пользователи этого приложения работают без сети; это дополнительное сведение.
+        options:
+          - The users, who work offline, need a local copy.
+          - The users who work offline need a local copy.
+          - The users, that work offline, need a local copy.
+        answer: The users, who work offline, need a local copy.
+        explanation: Non-defining — запятые с двух сторон, и that здесь не ставят.
+      - id: q3
+        prompt: "Выберите верное предложение: придаточное добавляет сведение о сервисе."
+        options:
+          - The notification service, which sends emails and push messages, is stable.
+          - The notification service, that sends emails and push messages, is stable.
+          - The notification service, sends emails and push messages, is stable.
+        answer: The notification service, which sends emails and push messages, is stable.
+        explanation: В non-defining нужны запятые и слово which; that здесь не ставят, нужно which.
+      - id: q4
+        prompt: "Выберите верное предложение: придаточное называет, о каком ограничении идёт речь."
+        options:
+          - The constraint we discussed is the deadline.
+          - The constraint what we discussed is the deadline.
+          - The constraint it we discussed is the deadline.
+        answer: The constraint we discussed is the deadline.
+        explanation: Слово that можно опустить, потому что оно дополнение; what не вводит определительное придаточное, повтор местоимения it ошибочен.
+      - id: q5
+        prompt: Клиент один, придаточное добавляет сведение о его системе.
+        options:
+          - Our client, whose system handles payments, wants a report.
+          - Our client whose system handles payments, wants a report.
+          - Our client, who system handles payments, wants a report.
+        answer: Our client, whose system handles payments, wants a report.
+        explanation: Whose показывает принадлежность, запятые стоят с двух сторон; who не принимает существительное после себя.
+      - id: q6
+        prompt: Письмо получает только тот пользователь, который забыл пароль.
+        options:
+          - A user who forgets the password gets an email.
+          - A user, who forgets the password, gets an email.
+          - A user who he forgets the password gets an email.
+        answer: A user who forgets the password gets an email.
+        explanation: Defining — без запятых; повтор местоимения he ошибочен.
+  - type: exercise
+    id: scenarios-match
+    title: Сценарии и нагрузка
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - an edge case
+      - a happy path
+      - acceptance criteria
+      - a non-goal
+      - a user story
+      - peak load
+      - concurrent users
+      - a stress test
+      - a retention period
+    items:
+      - { id: m1, prompt: "редкая или предельная ситуация, в которой система может повести себя неожиданно", answer: an edge case }
+      - { id: m2, prompt: "основной сценарий, в котором всё идёт как задумано", answer: a happy path }
+      - { id: m3, prompt: "условия, по которым проверяют, что задача выполнена", answer: acceptance criteria }
+      - { id: m4, prompt: "то, что проект сознательно не делает и что записано в документе", answer: a non-goal }
+      - { id: m5, prompt: "короткое описание нужной возможности от лица пользователя", answer: a user story }
+      - { id: m6, prompt: "наибольший поток запросов за короткий период", answer: peak load }
+      - { id: m7, prompt: "те, кто работает с системой в один и тот же момент", answer: concurrent users }
+  - type: exercise
+    id: load-gap
+    title: Нагрузка и данные
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - read-heavy
+      - write-heavy
+      - data volume
+      - a retention period
+      - a ballpark figure
+      - load shedding
+      - an assumption
+      - a stress test
+      - a non-goal
+    items:
+      - id: g1
+        prompt: Millions of people read the articles on the news site, but editors publish only a few a day, so the site is ___. (с преобладанием чтения)
+        answer: read-heavy
+      - id: g2
+        prompt: A logging service receives thousands of events every second and rarely reads them back, so it is ___. (с преобладанием записи)
+        answer: write-heavy
+      - id: g3
+        prompt: The system stores ten gigabytes of new data every day, so the ___ grows quickly. (объём данных)
+        answer: data volume
+      - id: g4
+        prompt: "Server logs are deleted after thirty days: that is ___ for logs. (срок хранения)"
+        answer: a retention period
+      - id: g5
+        prompt: "I do not know the exact traffic, but I can give you ___: about five thousand requests a second. (прикидочное число)"
+        answer: a ballpark figure
+      - id: g6
+        prompt: When the servers are overloaded, the system refuses some requests on purpose so that the rest can be served. This is called ___. (сброс нагрузки)
+        answer: load shedding
+      - id: g7
+        prompt: "The team recorded ___: the users are mostly in Europe, although nobody has checked it yet. (допущение)"
+        answer: an assumption
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Пользователи, которые работают без сети, получают локальную копию.
+        answer:
+          - "Users who work offline get a local copy"
+          - "Users who work offline receive a local copy"
+          - "Users who work offline are given a local copy"
+          - "Users who work offline have a local copy"
+          - "Users who are offline get a local copy"
+          - "Users who are offline receive a local copy"
+          - "Users who are offline are given a local copy"
+          - "Users who are offline have a local copy"
+          - "Users that work offline get a local copy"
+          - "Users that work offline receive a local copy"
+          - "Users that work offline are given a local copy"
+          - "Users that work offline have a local copy"
+          - "Users that are offline get a local copy"
+          - "Users that are offline receive a local copy"
+          - "Users that are offline are given a local copy"
+          - "Users that are offline have a local copy"
+          - "The users who work offline get a local copy"
+          - "The users who work offline receive a local copy"
+          - "The users who work offline are given a local copy"
+          - "The users who work offline have a local copy"
+          - "The users who are offline get a local copy"
+          - "The users who are offline receive a local copy"
+          - "The users who are offline are given a local copy"
+          - "The users who are offline have a local copy"
+          - "The users that work offline get a local copy"
+          - "The users that work offline receive a local copy"
+          - "The users that work offline are given a local copy"
+          - "The users that work offline have a local copy"
+          - "The users that are offline get a local copy"
+          - "The users that are offline receive a local copy"
+          - "The users that are offline are given a local copy"
+          - "The users that are offline have a local copy"
+          - "Users, who work offline, get a local copy"
+          - "Users, who work offline, receive a local copy"
+          - "Users, who work offline, are given a local copy"
+          - "Users, who work offline, have a local copy"
+          - "Users, who are offline, get a local copy"
+          - "Users, who are offline, receive a local copy"
+          - "Users, who are offline, are given a local copy"
+          - "Users, who are offline, have a local copy"
+          - "The users, who work offline, get a local copy"
+          - "The users, who work offline, receive a local copy"
+          - "The users, who work offline, are given a local copy"
+          - "The users, who work offline, have a local copy"
+          - "The users, who are offline, get a local copy"
+          - "The users, who are offline, receive a local copy"
+          - "The users, who are offline, are given a local copy"
+          - "The users, who are offline, have a local copy"
+        explanation: Defining — без запятых; who или that.
+      - id: q2
+        prompt: Сервис, который отправляет уведомления, работает на двух серверах.
+        answer:
+          - "The service that sends the notifications runs on two servers"
+          - "The service that sends the notifications works on two servers"
+          - "The service that sends the notifications is running on two servers"
+          - "The service that sends notifications runs on two servers"
+          - "The service that sends notifications works on two servers"
+          - "The service that sends notifications is running on two servers"
+          - "The service which sends the notifications runs on two servers"
+          - "The service which sends the notifications works on two servers"
+          - "The service which sends the notifications is running on two servers"
+          - "The service which sends notifications runs on two servers"
+          - "The service which sends notifications works on two servers"
+          - "The service which sends notifications is running on two servers"
+          - "The service, which sends the notifications, runs on two servers"
+          - "The service, which sends the notifications, works on two servers"
+          - "The service, which sends the notifications, is running on two servers"
+          - "The service, which sends notifications, runs on two servers"
+          - "The service, which sends notifications, works on two servers"
+          - "The service, which sends notifications, is running on two servers"
+        explanation: Запятые ставят только при which в non-defining; that запятых не допускает.
+      - id: q3
+        prompt: Это система, в которой согласованность важнее скорости.
+        answer:
+          - "This is a system where consistency matters more than speed"
+          - "This is a system where consistency is more important than speed"
+          - "This is a system in which consistency matters more than speed"
+          - "This is a system in which consistency is more important than speed"
+          - "It is a system where consistency matters more than speed"
+          - "It is a system where consistency is more important than speed"
+          - "It is a system in which consistency matters more than speed"
+          - "It is a system in which consistency is more important than speed"
+        explanation: Where относится к системе как к месту; допустимо и in which.
+      - id: q4
+        prompt: У нас есть клиент, чей сервис обрабатывает платежи.
+        answer:
+          - "We have a client whose service handles payments"
+          - "We have a client whose service processes payments"
+          - "We have a customer whose service handles payments"
+          - "We have a customer whose service processes payments"
+          - "We have a client, whose service handles payments"
+          - "We have a client, whose service processes payments"
+          - "We have a customer, whose service handles payments"
+          - "We have a customer, whose service processes payments"
+        explanation: Whose показывает принадлежность — «чей».
+      - id: q5
+        prompt: Требование, о котором мы договорились, нельзя менять.
+        answer:
+          - "The requirement that we have agreed on cannot be changed"
+          - "The requirement that we have agreed on cannot be modified"
+          - "The requirement that we have agreed on must not be changed"
+          - "The requirement that we have agreed on must not be modified"
+          - "The requirement that we have agreed on should not be changed"
+          - "The requirement that we have agreed on should not be modified"
+          - "The requirement that we have agreed on may not be changed"
+          - "The requirement that we have agreed on may not be modified"
+          - "The requirement that we agreed on cannot be changed"
+          - "The requirement that we agreed on cannot be modified"
+          - "The requirement that we agreed on must not be changed"
+          - "The requirement that we agreed on must not be modified"
+          - "The requirement that we agreed on should not be changed"
+          - "The requirement that we agreed on should not be modified"
+          - "The requirement that we agreed on may not be changed"
+          - "The requirement that we agreed on may not be modified"
+          - "The requirement which we have agreed on cannot be changed"
+          - "The requirement which we have agreed on cannot be modified"
+          - "The requirement which we have agreed on must not be changed"
+          - "The requirement which we have agreed on must not be modified"
+          - "The requirement which we have agreed on should not be changed"
+          - "The requirement which we have agreed on should not be modified"
+          - "The requirement which we have agreed on may not be changed"
+          - "The requirement which we have agreed on may not be modified"
+          - "The requirement which we agreed on cannot be changed"
+          - "The requirement which we agreed on cannot be modified"
+          - "The requirement which we agreed on must not be changed"
+          - "The requirement which we agreed on must not be modified"
+          - "The requirement which we agreed on should not be changed"
+          - "The requirement which we agreed on should not be modified"
+          - "The requirement which we agreed on may not be changed"
+          - "The requirement which we agreed on may not be modified"
+          - "The requirement we have agreed on cannot be changed"
+          - "The requirement we have agreed on cannot be modified"
+          - "The requirement we have agreed on must not be changed"
+          - "The requirement we have agreed on must not be modified"
+          - "The requirement we have agreed on should not be changed"
+          - "The requirement we have agreed on should not be modified"
+          - "The requirement we have agreed on may not be changed"
+          - "The requirement we have agreed on may not be modified"
+          - "The requirement we agreed on cannot be changed"
+          - "The requirement we agreed on cannot be modified"
+          - "The requirement we agreed on must not be changed"
+          - "The requirement we agreed on must not be modified"
+          - "The requirement we agreed on should not be changed"
+          - "The requirement we agreed on should not be modified"
+          - "The requirement we agreed on may not be changed"
+          - "The requirement we agreed on may not be modified"
+          - "The requirement, which we have agreed on, cannot be changed"
+          - "The requirement, which we have agreed on, cannot be modified"
+          - "The requirement, which we have agreed on, must not be changed"
+          - "The requirement, which we have agreed on, must not be modified"
+          - "The requirement, which we have agreed on, should not be changed"
+          - "The requirement, which we have agreed on, should not be modified"
+          - "The requirement, which we have agreed on, may not be changed"
+          - "The requirement, which we have agreed on, may not be modified"
+          - "The requirement, which we agreed on, cannot be changed"
+          - "The requirement, which we agreed on, cannot be modified"
+          - "The requirement, which we agreed on, must not be changed"
+          - "The requirement, which we agreed on, must not be modified"
+          - "The requirement, which we agreed on, should not be changed"
+          - "The requirement, which we agreed on, should not be modified"
+          - "The requirement, which we agreed on, may not be changed"
+          - "The requirement, which we agreed on, may not be modified"
+        explanation: Слово that или which можно опустить, потому что оно дополнение; предлог on остаётся после agreed.
+      - id: q6
+        prompt: Пользователи, чей телефон не в сети, всё равно могут читать сообщения.
+        answer:
+          - "Users whose phone is offline can still read messages"
+          - "Users whose phone is offline can still read the messages"
+          - "Users whose phone is offline can still read their messages"
+          - "Users whose phones are offline can still read messages"
+          - "Users whose phones are offline can still read the messages"
+          - "Users whose phones are offline can still read their messages"
+          - "The users whose phone is offline can still read messages"
+          - "The users whose phone is offline can still read the messages"
+          - "The users whose phone is offline can still read their messages"
+          - "The users whose phones are offline can still read messages"
+          - "The users whose phones are offline can still read the messages"
+          - "The users whose phones are offline can still read their messages"
+          - "Users, whose phone is offline, can still read messages"
+          - "Users, whose phone is offline, can still read the messages"
+          - "Users, whose phone is offline, can still read their messages"
+          - "Users, whose phones are offline, can still read messages"
+          - "Users, whose phones are offline, can still read the messages"
+          - "Users, whose phones are offline, can still read their messages"
+          - "The users, whose phone is offline, can still read messages"
+          - "The users, whose phone is offline, can still read the messages"
+          - "The users, whose phone is offline, can still read their messages"
+          - "The users, whose phones are offline, can still read messages"
+          - "The users, whose phones are offline, can still read the messages"
+          - "The users, whose phones are offline, can still read their messages"
+        explanation: Whose показывает принадлежность — «чей телефон».

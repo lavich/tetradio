@@ -1,0 +1,6 @@
+id: ew447
+greek: "stale data"
+russian: "устаревшие данные: значения, которые уже изменились, а пользователь видит прежние"
+ipa: /ˈsteɪl ˈdeɪtə/
+note: "A cache can serve stale data for a few seconds."
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

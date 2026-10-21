@@ -1,0 +1,7 @@
+id: ep324
+text: "Does that match what you had in mind?"
+translation: "Это совпадает с тем, что вы имели в виду?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

@@ -1,0 +1,6 @@
+id: ew427
+greek: "a happy path"
+russian: "основной сценарий, в котором всё идёт как задумано, без ошибок и редких случаев"
+ipa: /ə ˈhæpi pɑːθ/
+note: "The happy path works, but several edge cases still fail."
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

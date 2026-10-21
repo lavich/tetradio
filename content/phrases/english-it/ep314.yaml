@@ -1,0 +1,7 @@
+id: ep314
+text: "Should I design for the current load or for growth?"
+translation: "Проектировать под текущую нагрузку или под рост?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

@@ -1,0 +1,466 @@
+title: Контрольная модуля e13
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, придаточные определительные, слова модуля и перевод фраз. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: brief
+    title: "Requirements: parcel tracking page"
+    text: |-
+      Requirements: parcel tracking page
+      Quillon Freight · example
+
+      Quillon Freight, which delivers parcels to about two hundred towns, wants a tracking page for its customers. Customers who enter a parcel number must see where the parcel is.
+
+      Functions
+      The page shows the last known position and the expected delivery date. Customers whose parcel is delayed see a short explanation.
+
+      Load
+      Up to eight thousand customers can use the page at the same time. At peak, which is usually the week before a holiday, the page receives about fifty requests a second.
+
+      Data
+      The position data comes from the phones of the drivers, which send an update every minute. The page may show a position that is a few minutes old, but it must never show the parcel of another customer. Tracking history is kept for sixty days.
+
+      Constraints
+      The page must work on old phones that do not support the newest browsers. The first version is due in four weeks.
+
+      Out of scope
+      Changing the delivery address is not part of this version.
+    glosses:
+      - { text: parcel, russian: посылка }
+      - { text: parcels, russian: посылки }
+      - { text: tracking, russian: отслеживание }
+      - { text: delayed, russian: задержана }
+      - { text: drivers, russian: водители }
+      - { text: browsers, russian: "программы для просмотра сайтов" }
+  - type: exercise
+    id: brief-tf
+    about: brief
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Customers who enter a parcel number can see where the parcel is.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: At peak, the page receives about fifty requests a second.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: The page may show a position that is a few minutes old.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: Tracking history is kept for thirty days.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "Sixty days — шестьдесят дней."
+      - id: q5
+        prompt: Customers can change the delivery address in the first version.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "Changing the delivery address is out of scope — смена адреса в эту версию не входит."
+      - id: q6
+        prompt: The page must work only on the newest phones.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "It must work on old phones — страница должна работать на старых телефонах."
+  - type: listening
+    id: call
+    title: Anders gives Yuki a task
+    plays: 2
+    transcript:
+      - { speaker: Anders, text: "Hi Yuki. Here is the task for this round. Please design a chat feature for a small support team. Ask me anything that you need to know." }
+      - { speaker: Yuki, text: "Thanks. First, who are the people that will use it?" }
+      - { speaker: Anders, text: "Support agents, about thirty of them, and customers who write to them from a website. At most fifteen customers chat at the same time." }
+      - { speaker: Yuki, text: "Do we need to keep the history of the chats?" }
+      - { speaker: Anders, text: "Yes, for one year. The data volume is small, but the history must never be lost." }
+      - { speaker: Yuki, text: "Is it a problem if a message arrives one or two seconds late?" }
+      - { speaker: Anders, text: "Not at all. Real-time is nice to have, but a message must never disappear." }
+      - { speaker: Yuki, text: "Understood. And what is out of scope?" }
+      - { speaker: Anders, text: "Video calls and file sharing. You can leave them for version two." }
+      - { speaker: Yuki, text: "So, to summarise, we need a chat for thirty agents and fifteen customers at a time, with a one-year history and no lost messages." }
+      - { speaker: Anders, text: "Exactly. Let's start with the design." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Anders ask Yuki to design?
+        options:
+          - a chat feature for a support team
+          - a video platform
+          - a file storage service
+        answer: a chat feature for a support team
+      - id: q2
+        prompt: How many customers chat at the same time at most?
+        options:
+          - fifteen
+          - thirty
+          - fifty
+        answer: fifteen
+      - id: q3
+        prompt: How long must the chat history be kept?
+        options:
+          - one year
+          - one month
+          - ten years
+        answer: one year
+      - id: q4
+        prompt: What does Anders accept?
+        options:
+          - a message that arrives one or two seconds late
+          - a message that is lost now and then
+          - a chat without any history
+        answer: a message that arrives one or two seconds late
+      - id: q5
+        prompt: What is out of scope?
+        options:
+          - video calls and file sharing
+          - the accounts of the agents
+          - the chat history
+        answer: video calls and file sharing
+      - id: q6
+        prompt: How does Yuki end the conversation?
+        options:
+          - She summarises the requirements.
+          - She asks for a deadline.
+          - She changes the task.
+        answer: She summarises the requirements.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Придаточные определительные
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Users ___ forget the password can reset it by email.
+        options: [who, whose, where]
+        answer: who
+        explanation: Для человека в определительном придаточном стоит who.
+      - id: q2
+        prompt: The service, ___ runs on two servers, is stable.
+        options: [which, that, what]
+        answer: which
+        explanation: В non-defining нужны запятые и which; that здесь не ставят, what не вводит определительное придаточное.
+      - id: q3
+        prompt: Какое предложение верно?
+        options:
+          - The requirement we agreed on is fixed.
+          - The requirement what we agreed on is fixed.
+          - The requirement we agreed it is fixed.
+        answer: The requirement we agreed on is fixed.
+        explanation: Слово that можно опустить, потому что оно дополнение; what не вводит придаточное, повтор местоимения it ошибочен.
+      - id: q4
+        prompt: We have a client ___ system handles payments.
+        options: [whose, who, which]
+        answer: whose
+        explanation: Whose показывает принадлежность — «чей».
+      - id: q5
+        prompt: Только часть инженеров работает над API, и они сидят в Берлине. Какое предложение верно?
+        options:
+          - The engineers who work on the API are in Berlin.
+          - The engineers, who work on the API are in Berlin.
+          - The engineers, who work on the API, are in Berlin.
+        answer: The engineers who work on the API are in Berlin.
+        explanation: Defining — без запятых; одна запятая ошибочна, две запятые относятся ко всем инженерам.
+      - id: q6
+        prompt: This is a system ___ consistency matters more than speed.
+        options: [where, who, which]
+        answer: where
+        explanation: Where относится к системе как к месту, в котором что-то происходит.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - peak load
+      - an edge case
+      - acceptance criteria
+      - an assumption
+      - availability
+      - stale data
+      - a hard limit
+      - backward compatible
+    items:
+      - id: g1
+        prompt: The team lists the checks that show a task is done. These checks are called ___. (критерии приёмки)
+        answer: acceptance criteria
+      - id: g2
+        prompt: A user enters an empty name. This is ___ that the code must handle. (крайний случай)
+        answer: an edge case
+      - id: g3
+        prompt: The system receives most requests on Monday morning, so ___ is much higher than the daily average. (пиковая нагрузка)
+        answer: peak load
+      - id: g4
+        prompt: A cache showed the old price for a few seconds, so some users saw ___. (устаревшие данные)
+        answer: stale data
+      - id: g5
+        prompt: Customers cannot upload a file larger than ten megabytes. This is ___. (жёсткий предел)
+        answer: a hard limit
+      - id: g6
+        prompt: The old mobile apps must keep working, so the new API has to be ___. (обратно совместимый)
+        answer: backward compatible
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Пользователи, чей аккаунт приостановлен, не получают уведомления.
+        answer:
+          - "Users whose account is suspended do not receive any notifications"
+          - "Users whose account is suspended do not receive notifications"
+          - "Users whose account is suspended do not get any notifications"
+          - "Users whose account is suspended do not get notifications"
+          - "Users whose account is suspended will not receive any notifications"
+          - "Users whose account is suspended will not receive notifications"
+          - "Users whose account is suspended will not get any notifications"
+          - "Users whose account is suspended will not get notifications"
+          - "Users whose accounts are suspended do not receive any notifications"
+          - "Users whose accounts are suspended do not receive notifications"
+          - "Users whose accounts are suspended do not get any notifications"
+          - "Users whose accounts are suspended do not get notifications"
+          - "Users whose accounts are suspended will not receive any notifications"
+          - "Users whose accounts are suspended will not receive notifications"
+          - "Users whose accounts are suspended will not get any notifications"
+          - "Users whose accounts are suspended will not get notifications"
+          - "Users whose account has been suspended do not receive any notifications"
+          - "Users whose account has been suspended do not receive notifications"
+          - "Users whose account has been suspended do not get any notifications"
+          - "Users whose account has been suspended do not get notifications"
+          - "Users whose account has been suspended will not receive any notifications"
+          - "Users whose account has been suspended will not receive notifications"
+          - "Users whose account has been suspended will not get any notifications"
+          - "Users whose account has been suspended will not get notifications"
+          - "Users whose accounts have been suspended do not receive any notifications"
+          - "Users whose accounts have been suspended do not receive notifications"
+          - "Users whose accounts have been suspended do not get any notifications"
+          - "Users whose accounts have been suspended do not get notifications"
+          - "Users whose accounts have been suspended will not receive any notifications"
+          - "Users whose accounts have been suspended will not receive notifications"
+          - "Users whose accounts have been suspended will not get any notifications"
+          - "Users whose accounts have been suspended will not get notifications"
+          - "The users whose account is suspended do not receive any notifications"
+          - "The users whose account is suspended do not receive notifications"
+          - "The users whose account is suspended do not get any notifications"
+          - "The users whose account is suspended do not get notifications"
+          - "The users whose account is suspended will not receive any notifications"
+          - "The users whose account is suspended will not receive notifications"
+          - "The users whose account is suspended will not get any notifications"
+          - "The users whose account is suspended will not get notifications"
+          - "The users whose accounts are suspended do not receive any notifications"
+          - "The users whose accounts are suspended do not receive notifications"
+          - "The users whose accounts are suspended do not get any notifications"
+          - "The users whose accounts are suspended do not get notifications"
+          - "The users whose accounts are suspended will not receive any notifications"
+          - "The users whose accounts are suspended will not receive notifications"
+          - "The users whose accounts are suspended will not get any notifications"
+          - "The users whose accounts are suspended will not get notifications"
+          - "The users whose account has been suspended do not receive any notifications"
+          - "The users whose account has been suspended do not receive notifications"
+          - "The users whose account has been suspended do not get any notifications"
+          - "The users whose account has been suspended do not get notifications"
+          - "The users whose account has been suspended will not receive any notifications"
+          - "The users whose account has been suspended will not receive notifications"
+          - "The users whose account has been suspended will not get any notifications"
+          - "The users whose account has been suspended will not get notifications"
+          - "The users whose accounts have been suspended do not receive any notifications"
+          - "The users whose accounts have been suspended do not receive notifications"
+          - "The users whose accounts have been suspended do not get any notifications"
+          - "The users whose accounts have been suspended do not get notifications"
+          - "The users whose accounts have been suspended will not receive any notifications"
+          - "The users whose accounts have been suspended will not receive notifications"
+          - "The users whose accounts have been suspended will not get any notifications"
+          - "The users whose accounts have been suspended will not get notifications"
+          - "Users whose account is suspended receive no notifications"
+          - "Users whose account is suspended get no notifications"
+          - "Users whose accounts are suspended receive no notifications"
+          - "Users whose accounts are suspended get no notifications"
+          - "Users whose account has been suspended receive no notifications"
+          - "Users whose account has been suspended get no notifications"
+          - "Users whose accounts have been suspended receive no notifications"
+          - "Users whose accounts have been suspended get no notifications"
+          - "The users whose account is suspended receive no notifications"
+          - "The users whose account is suspended get no notifications"
+          - "The users whose accounts are suspended receive no notifications"
+          - "The users whose accounts are suspended get no notifications"
+          - "The users whose account has been suspended receive no notifications"
+          - "The users whose account has been suspended get no notifications"
+          - "The users whose accounts have been suspended receive no notifications"
+          - "The users whose accounts have been suspended get no notifications"
+          - "Users, whose account is suspended, do not receive any notifications"
+          - "Users, whose account is suspended, do not receive notifications"
+          - "Users, whose account is suspended, do not get any notifications"
+          - "Users, whose account is suspended, do not get notifications"
+          - "Users, whose account is suspended, will not receive any notifications"
+          - "Users, whose account is suspended, will not receive notifications"
+          - "Users, whose account is suspended, will not get any notifications"
+          - "Users, whose account is suspended, will not get notifications"
+          - "Users, whose accounts are suspended, do not receive any notifications"
+          - "Users, whose accounts are suspended, do not receive notifications"
+          - "Users, whose accounts are suspended, do not get any notifications"
+          - "Users, whose accounts are suspended, do not get notifications"
+          - "Users, whose accounts are suspended, will not receive any notifications"
+          - "Users, whose accounts are suspended, will not receive notifications"
+          - "Users, whose accounts are suspended, will not get any notifications"
+          - "Users, whose accounts are suspended, will not get notifications"
+          - "Users, whose account has been suspended, do not receive any notifications"
+          - "Users, whose account has been suspended, do not receive notifications"
+          - "Users, whose account has been suspended, do not get any notifications"
+          - "Users, whose account has been suspended, do not get notifications"
+          - "Users, whose account has been suspended, will not receive any notifications"
+          - "Users, whose account has been suspended, will not receive notifications"
+          - "Users, whose account has been suspended, will not get any notifications"
+          - "Users, whose account has been suspended, will not get notifications"
+          - "Users, whose accounts have been suspended, do not receive any notifications"
+          - "Users, whose accounts have been suspended, do not receive notifications"
+          - "Users, whose accounts have been suspended, do not get any notifications"
+          - "Users, whose accounts have been suspended, do not get notifications"
+          - "Users, whose accounts have been suspended, will not receive any notifications"
+          - "Users, whose accounts have been suspended, will not receive notifications"
+          - "Users, whose accounts have been suspended, will not get any notifications"
+          - "Users, whose accounts have been suspended, will not get notifications"
+          - "The users, whose account is suspended, do not receive any notifications"
+          - "The users, whose account is suspended, do not receive notifications"
+          - "The users, whose account is suspended, do not get any notifications"
+          - "The users, whose account is suspended, do not get notifications"
+          - "The users, whose account is suspended, will not receive any notifications"
+          - "The users, whose account is suspended, will not receive notifications"
+          - "The users, whose account is suspended, will not get any notifications"
+          - "The users, whose account is suspended, will not get notifications"
+          - "The users, whose accounts are suspended, do not receive any notifications"
+          - "The users, whose accounts are suspended, do not receive notifications"
+          - "The users, whose accounts are suspended, do not get any notifications"
+          - "The users, whose accounts are suspended, do not get notifications"
+          - "The users, whose accounts are suspended, will not receive any notifications"
+          - "The users, whose accounts are suspended, will not receive notifications"
+          - "The users, whose accounts are suspended, will not get any notifications"
+          - "The users, whose accounts are suspended, will not get notifications"
+          - "The users, whose account has been suspended, do not receive any notifications"
+          - "The users, whose account has been suspended, do not receive notifications"
+          - "The users, whose account has been suspended, do not get any notifications"
+          - "The users, whose account has been suspended, do not get notifications"
+          - "The users, whose account has been suspended, will not receive any notifications"
+          - "The users, whose account has been suspended, will not receive notifications"
+          - "The users, whose account has been suspended, will not get any notifications"
+          - "The users, whose account has been suspended, will not get notifications"
+          - "The users, whose accounts have been suspended, do not receive any notifications"
+          - "The users, whose accounts have been suspended, do not receive notifications"
+          - "The users, whose accounts have been suspended, do not get any notifications"
+          - "The users, whose accounts have been suspended, do not get notifications"
+          - "The users, whose accounts have been suspended, will not receive any notifications"
+          - "The users, whose accounts have been suspended, will not receive notifications"
+          - "The users, whose accounts have been suspended, will not get any notifications"
+          - "The users, whose accounts have been suspended, will not get notifications"
+          - "Users, whose account is suspended, receive no notifications"
+          - "Users, whose account is suspended, get no notifications"
+          - "Users, whose accounts are suspended, receive no notifications"
+          - "Users, whose accounts are suspended, get no notifications"
+          - "Users, whose account has been suspended, receive no notifications"
+          - "Users, whose account has been suspended, get no notifications"
+          - "Users, whose accounts have been suspended, receive no notifications"
+          - "Users, whose accounts have been suspended, get no notifications"
+          - "The users, whose account is suspended, receive no notifications"
+          - "The users, whose account is suspended, get no notifications"
+          - "The users, whose accounts are suspended, receive no notifications"
+          - "The users, whose accounts are suspended, get no notifications"
+          - "The users, whose account has been suspended, receive no notifications"
+          - "The users, whose account has been suspended, get no notifications"
+          - "The users, whose accounts have been suspended, receive no notifications"
+          - "The users, whose accounts have been suspended, get no notifications"
+        explanation: Whose показывает принадлежность — «чей аккаунт»; сказуемое с no не требует отрицания do not.
+      - id: q2
+        prompt: Нам нужна система, в которой данные могут немного устареть.
+        answer:
+          - "We need a system where the data can be slightly out of date"
+          - "We need a system where the data can be a little out of date"
+          - "We need a system where the data can be a bit out of date"
+          - "We need a system where the data can become slightly out of date"
+          - "We need a system where the data can become a little out of date"
+          - "We need a system where the data can become a bit out of date"
+          - "We need a system where the data may be slightly out of date"
+          - "We need a system where the data may be a little out of date"
+          - "We need a system where the data may be a bit out of date"
+          - "We need a system where the data may become slightly out of date"
+          - "We need a system where the data may become a little out of date"
+          - "We need a system where the data may become a bit out of date"
+          - "We need a system where data can be slightly out of date"
+          - "We need a system where data can be a little out of date"
+          - "We need a system where data can be a bit out of date"
+          - "We need a system where data can become slightly out of date"
+          - "We need a system where data can become a little out of date"
+          - "We need a system where data can become a bit out of date"
+          - "We need a system where data may be slightly out of date"
+          - "We need a system where data may be a little out of date"
+          - "We need a system where data may be a bit out of date"
+          - "We need a system where data may become slightly out of date"
+          - "We need a system where data may become a little out of date"
+          - "We need a system where data may become a bit out of date"
+          - "We need a system in which the data can be slightly out of date"
+          - "We need a system in which the data can be a little out of date"
+          - "We need a system in which the data can be a bit out of date"
+          - "We need a system in which the data can become slightly out of date"
+          - "We need a system in which the data can become a little out of date"
+          - "We need a system in which the data can become a bit out of date"
+          - "We need a system in which the data may be slightly out of date"
+          - "We need a system in which the data may be a little out of date"
+          - "We need a system in which the data may be a bit out of date"
+          - "We need a system in which the data may become slightly out of date"
+          - "We need a system in which the data may become a little out of date"
+          - "We need a system in which the data may become a bit out of date"
+          - "We need a system in which data can be slightly out of date"
+          - "We need a system in which data can be a little out of date"
+          - "We need a system in which data can be a bit out of date"
+          - "We need a system in which data can become slightly out of date"
+          - "We need a system in which data can become a little out of date"
+          - "We need a system in which data can become a bit out of date"
+          - "We need a system in which data may be slightly out of date"
+          - "We need a system in which data may be a little out of date"
+          - "We need a system in which data may be a bit out of date"
+          - "We need a system in which data may become slightly out of date"
+          - "We need a system in which data may become a little out of date"
+          - "We need a system in which data may become a bit out of date"
+          - "We need a system where the data can be slightly outdated"
+          - "We need a system where the data can become slightly outdated"
+          - "We need a system where the data may be slightly outdated"
+          - "We need a system where the data may become slightly outdated"
+          - "We need a system where data can be slightly outdated"
+          - "We need a system where data can become slightly outdated"
+          - "We need a system where data may be slightly outdated"
+          - "We need a system where data may become slightly outdated"
+          - "We need a system in which the data can be slightly outdated"
+          - "We need a system in which the data can become slightly outdated"
+          - "We need a system in which the data may be slightly outdated"
+          - "We need a system in which the data may become slightly outdated"
+          - "We need a system in which data can be slightly outdated"
+          - "We need a system in which data can become slightly outdated"
+          - "We need a system in which data may be slightly outdated"
+          - "We need a system in which data may become slightly outdated"
+        explanation: Where относится к системе как к месту; slightly out of date — «немного устарели».
+      - id: q3
+        prompt: Какие требования обязательны, а какие желательны?
+        answer:
+          - "Which requirements are must-haves, and which are nice-to-haves"
+          - "Which requirements are must-haves and which are nice-to-haves"
+          - "Which of the requirements are must-haves, and which are nice-to-haves"
+          - "Which of the requirements are must-haves and which are nice-to-haves"
+        explanation: Must-haves — обязательные, nice-to-haves — желательные.

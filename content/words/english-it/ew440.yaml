@@ -1,0 +1,6 @@
+id: ew440
+greek: "consistency"
+russian: "согласованность: все читающие видят одни и те же актуальные данные"
+ipa: /kənˈsɪstənsi/
+note: "In databases, consistency means that every reader sees the latest write."
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

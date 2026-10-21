@@ -1,0 +1,7 @@
+id: ep323
+text: "I'd leave that out of scope for now."
+translation: "Я бы пока не включал это в объём работы."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

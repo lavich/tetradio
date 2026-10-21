@@ -1,0 +1,7 @@
+id: ep306
+text: "Which parts of the system are you most concerned about?"
+translation: "Какие части системы беспокоят вас больше всего?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

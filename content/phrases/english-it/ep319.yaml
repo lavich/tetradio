@@ -1,0 +1,7 @@
+id: ep319
+text: "Let me write down the requirements we agreed on."
+translation: "Давайте запишу требования, о которых мы договорились."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

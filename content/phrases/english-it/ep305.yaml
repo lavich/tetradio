@@ -1,0 +1,7 @@
+id: ep305
+text: "Is this a system where consistency matters more than speed?"
+translation: "Это система, где согласованность важнее скорости?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md

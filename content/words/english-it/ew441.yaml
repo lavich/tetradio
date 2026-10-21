@@ -1,0 +1,6 @@
+id: ew441
+greek: "durability"
+russian: "сохранность данных: записанное не пропадает при сбое"
+ipa: /ˌdjʊərəˈbɪləti/
+note: "Durability: after the system confirms a write, the data survives a crash."
+source: "Лексикон курса «Английский для IT», модуль e13 (docs/curriculum-english-it.md)"

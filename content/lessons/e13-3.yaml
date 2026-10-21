@@ -1,0 +1,651 @@
+title: список требований к сервису, уточняющие вопросы к задаче
+kind: lesson
+items:
+  - { kind: phrase, id: ep317 }
+  - { kind: phrase, id: ep318 }
+  - { kind: phrase, id: ep319 }
+  - { kind: phrase, id: ep320 }
+  - { kind: phrase, id: ep321 }
+  - { kind: phrase, id: ep322 }
+  - { kind: phrase, id: ep323 }
+  - { kind: phrase, id: ep324 }
+  - { kind: phrase, id: ep325 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Уточняющие вопросы к задаче в пяти шагах
+    body: |-
+      На собеседовании по инженерной части вам ставят задачу, и интервьюер смотрит, как вы выясняете условия, прежде чем решать. Единого верного набора вопросов нет: важно, чтобы вопросы были конкретными, шли от общего к частному и заканчивались итогом. Ответ укладывается примерно в две с половиной минуты.
+
+      **1. Вступление.** Скажите, что сначала зададите вопросы: **Before I start, I'd like to ask a few questions.**
+
+      **2. Пользователи.** Выясните, кто пользуется системой и сколько их: **Who are the people that will use this system?**
+
+      **3. Нагрузка и данные.** Спросите про запросы, пик и объём данных: **How many requests do we expect per second?**
+
+      **4. Качества и ограничения.** Уточните, что должно происходить при сбое, насколько важна свежесть данных, какие есть сроки: **Are there any constraints that I should know about?**
+
+      **5. Итог.** Перескажите требования, назовите допущения и вынесите лишнее за рамки: **So, to summarise, we need a service that handles ten thousand requests a second.**
+    table:
+      columns:
+        - шаг
+        - примерное время
+        - язык
+      rows:
+        - - вступление
+          - 10–15 секунд
+          - Before I start, I'd like to ask a few questions.
+        - - пользователи
+          - 25–30 секунд
+          - Who are the people that will use this system?
+        - - нагрузка и данные
+          - 35–40 секунд
+          - What does the traffic look like at peak?
+        - - качества и ограничения
+          - 35–40 секунд
+          - Is it okay if the data is slightly out of date?
+        - - итог
+          - 30–35 секунд
+          - Let me confirm that I've understood the requirements.
+  - type: explanation
+    id: safe-questions
+    title: Как задавать вопросы и называть допущения
+    body: |-
+      Вопросы к задаче показывают, что вы думаете о системе и о людях, которые на ней работают. Задавайте их спокойно и по существу: вы выясняете условия задачи. Если ответа нет, назовите допущение вслух и спросите, верно ли оно. Молчаливая догадка может привести к неверному решению.
+
+      Не упрекайте постановщика за то, что чего-то не сказано, и не оценивайте задачу как неясную или плохую. Говорите о том, что вам нужно знать. Задачи на собеседовании вымышлены: используйте придуманные сервисы и числа; данные реальных систем и компаний не приводите.
+    table:
+      columns:
+        - вместо
+        - скажите
+        - почему
+      rows:
+        - - Why didn't you tell me about the deadline?
+          - Is there a deadline that I should keep in mind?
+          - вопрос без упрёка
+        - - Your requirements are unclear.
+          - Let me confirm that I've understood the requirements.
+          - называют своё понимание
+        - - I will just guess what you need.
+          - I'm assuming that we don't need to handle payments.
+          - допущение называют вслух
+        - - That feature is obviously useless.
+          - I'd leave that out of scope for now.
+          - предлагают решение о границах
+        - - I don't need to ask, I know what to build.
+          - Before I start, I'd like to ask a few questions.
+          - вопросы показывают внимание
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: phrase-choice
+    title: Подходящая фраза
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы начинаете и говорите, что сначала зададите вопросы. Какая фраза подходит?
+        options:
+          - Before I start, I'd like to ask a few questions.
+          - Let me write down the requirements we agreed on.
+          - Does that match what you had in mind?
+        answer: Before I start, I'd like to ask a few questions.
+        explanation: Фраза открывает разговор; остальные подводят итог или проверяют понимание.
+      - id: q2
+        prompt: Вы предлагаете отложить возможность, которая нужна немногим, до второй версии. Какая фраза подходит?
+        options:
+          - A feature that few people need can wait for version two.
+          - Is there anything that I haven't asked about?
+          - Does that match what you had in mind?
+        answer: A feature that few people need can wait for version two.
+        explanation: Фраза называет возможность и срок; остальные — вопросы о полноте и совпадении.
+      - id: q3
+        prompt: Вы фиксируете то, о чём договорились. Какая фраза подходит?
+        options:
+          - Let me write down the requirements we agreed on.
+          - Before I start, I'd like to ask a few questions.
+          - Does that match what you had in mind?
+        answer: Let me write down the requirements we agreed on.
+        explanation: Фраза говорит о записи договорённостей; остальные открывают разговор или проверяют итог.
+      - id: q4
+        prompt: Вы подводите итог и называете нагрузку сервиса. Какая фраза подходит?
+        options:
+          - So, to summarise, we need a service that handles ten thousand requests a second.
+          - I'll start with the simplest version, which we can improve later.
+          - Is there anything that I haven't asked about?
+        answer: So, to summarise, we need a service that handles ten thousand requests a second.
+        explanation: Фраза пересказывает требование с числом; остальные называют план или проверяют полноту.
+      - id: q5
+        prompt: Вы проверяете, не упустили ли вы вопросы. Какая фраза подходит?
+        options:
+          - Is there anything that I haven't asked about?
+          - So, to summarise, we need a service that handles ten thousand requests a second.
+          - A feature that few people need can wait for version two.
+        answer: Is there anything that I haven't asked about?
+        explanation: Фраза — вопрос о полноте; остальные подводят итог или отодвигают возможность.
+      - id: q6
+        prompt: Вы называете допущение, что платежи обрабатывать не нужно. Какая фраза подходит?
+        options:
+          - I'm assuming that we don't need to handle payments.
+          - Let me write down the requirements we agreed on.
+          - Does that match what you had in mind?
+        answer: I'm assuming that we don't need to handle payments.
+        explanation: Фраза называет допущение вслух; остальные записывают договорённости или проверяют итог.
+  - type: exercise
+    id: question-choice
+    title: Формулировка для собеседования
+    instruction: Выберите формулировку, которая подходит для уточнения задачи на собеседовании.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вам поставили задачу, и вы хотите выяснить нагрузку.
+        options:
+          - How many requests do we expect per second?
+          - I think the load will be high, so I will skip that question.
+          - Why didn't you give me the numbers?
+        answer: How many requests do we expect per second?
+        explanation: Конкретный вопрос выясняет число; остальные варианты угадывают или упрекают постановщика.
+      - id: q2
+        prompt: Вы не знаете, есть ли срок.
+        options:
+          - Is there a deadline that I should keep in mind?
+          - The deadline is probably unrealistic.
+          - You haven't mentioned the deadline.
+        answer: Is there a deadline that I should keep in mind?
+        explanation: Вопрос без упрёка выясняет срок; остальные варианты оценивают или упрекают.
+      - id: q3
+        prompt: У вас нет ответа о пользователях, и вы называете допущение.
+        options:
+          - I'm assuming that the users are mostly in Europe; is that right?
+          - The users are in Europe, I know it.
+          - Everybody knows where the users are.
+        answer: I'm assuming that the users are mostly in Europe; is that right?
+        explanation: Допущение названо и проверяется вопросом; остальные варианты утверждают без основания.
+      - id: q4
+        prompt: Вы хотите убедиться, что правильно поняли условия.
+        options:
+          - Let me confirm that I've understood the requirements.
+          - I understood everything, so I have no more questions.
+          - The requirements are unclear, so I cannot start.
+        answer: Let me confirm that I've understood the requirements.
+        explanation: Фраза предлагает проверить понимание; остальные варианты прекращают разговор.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Прежде чем начать, я хотел бы задать несколько вопросов.
+        answer:
+          - "Before I start, I would like to ask you a few questions"
+          - "Before I start, I would like to ask you some questions"
+          - "Before I start, I would like to ask you several questions"
+          - "Before I start, I would like to ask you a couple of questions"
+          - "Before I start, I would like to ask a few questions"
+          - "Before I start, I would like to ask some questions"
+          - "Before I start, I would like to ask several questions"
+          - "Before I start, I would like to ask a couple of questions"
+          - "Before I start I would like to ask you a few questions"
+          - "Before I start I would like to ask you some questions"
+          - "Before I start I would like to ask you several questions"
+          - "Before I start I would like to ask you a couple of questions"
+          - "Before I start I would like to ask a few questions"
+          - "Before I start I would like to ask some questions"
+          - "Before I start I would like to ask several questions"
+          - "Before I start I would like to ask a couple of questions"
+          - "Before I begin, I would like to ask you a few questions"
+          - "Before I begin, I would like to ask you some questions"
+          - "Before I begin, I would like to ask you several questions"
+          - "Before I begin, I would like to ask you a couple of questions"
+          - "Before I begin, I would like to ask a few questions"
+          - "Before I begin, I would like to ask some questions"
+          - "Before I begin, I would like to ask several questions"
+          - "Before I begin, I would like to ask a couple of questions"
+          - "Before I begin I would like to ask you a few questions"
+          - "Before I begin I would like to ask you some questions"
+          - "Before I begin I would like to ask you several questions"
+          - "Before I begin I would like to ask you a couple of questions"
+          - "Before I begin I would like to ask a few questions"
+          - "Before I begin I would like to ask some questions"
+          - "Before I begin I would like to ask several questions"
+          - "Before I begin I would like to ask a couple of questions"
+          - "Before starting, I would like to ask you a few questions"
+          - "Before starting, I would like to ask you some questions"
+          - "Before starting, I would like to ask you several questions"
+          - "Before starting, I would like to ask you a couple of questions"
+          - "Before starting, I would like to ask a few questions"
+          - "Before starting, I would like to ask some questions"
+          - "Before starting, I would like to ask several questions"
+          - "Before starting, I would like to ask a couple of questions"
+          - "Before starting I would like to ask you a few questions"
+          - "Before starting I would like to ask you some questions"
+          - "Before starting I would like to ask you several questions"
+          - "Before starting I would like to ask you a couple of questions"
+          - "Before starting I would like to ask a few questions"
+          - "Before starting I would like to ask some questions"
+          - "Before starting I would like to ask several questions"
+          - "Before starting I would like to ask a couple of questions"
+        explanation: Would like — вежливое «хотел бы»; перед главной частью запятая необязательна.
+      - id: q2
+        prompt: Возможность, которая нужна немногим, может подождать до второй версии.
+        answer:
+          - "A feature that few people need can wait until version two"
+          - "A feature that few people need can wait until the second version"
+          - "A feature that few people need can wait for version two"
+          - "A feature that few people need can wait for the second version"
+          - "A feature that few people need may wait until version two"
+          - "A feature that few people need may wait until the second version"
+          - "A feature that few people need may wait for version two"
+          - "A feature that few people need may wait for the second version"
+          - "A feature that only a few people need can wait until version two"
+          - "A feature that only a few people need can wait until the second version"
+          - "A feature that only a few people need can wait for version two"
+          - "A feature that only a few people need can wait for the second version"
+          - "A feature that only a few people need may wait until version two"
+          - "A feature that only a few people need may wait until the second version"
+          - "A feature that only a few people need may wait for version two"
+          - "A feature that only a few people need may wait for the second version"
+          - "A feature which few people need can wait until version two"
+          - "A feature which few people need can wait until the second version"
+          - "A feature which few people need can wait for version two"
+          - "A feature which few people need can wait for the second version"
+          - "A feature which few people need may wait until version two"
+          - "A feature which few people need may wait until the second version"
+          - "A feature which few people need may wait for version two"
+          - "A feature which few people need may wait for the second version"
+          - "A feature which only a few people need can wait until version two"
+          - "A feature which only a few people need can wait until the second version"
+          - "A feature which only a few people need can wait for version two"
+          - "A feature which only a few people need can wait for the second version"
+          - "A feature which only a few people need may wait until version two"
+          - "A feature which only a few people need may wait until the second version"
+          - "A feature which only a few people need may wait for version two"
+          - "A feature which only a few people need may wait for the second version"
+          - "A capability that few people need can wait until version two"
+          - "A capability that few people need can wait until the second version"
+          - "A capability that few people need can wait for version two"
+          - "A capability that few people need can wait for the second version"
+          - "A capability that few people need may wait until version two"
+          - "A capability that few people need may wait until the second version"
+          - "A capability that few people need may wait for version two"
+          - "A capability that few people need may wait for the second version"
+          - "A capability that only a few people need can wait until version two"
+          - "A capability that only a few people need can wait until the second version"
+          - "A capability that only a few people need can wait for version two"
+          - "A capability that only a few people need can wait for the second version"
+          - "A capability that only a few people need may wait until version two"
+          - "A capability that only a few people need may wait until the second version"
+          - "A capability that only a few people need may wait for version two"
+          - "A capability that only a few people need may wait for the second version"
+          - "A capability which few people need can wait until version two"
+          - "A capability which few people need can wait until the second version"
+          - "A capability which few people need can wait for version two"
+          - "A capability which few people need can wait for the second version"
+          - "A capability which few people need may wait until version two"
+          - "A capability which few people need may wait until the second version"
+          - "A capability which few people need may wait for version two"
+          - "A capability which few people need may wait for the second version"
+          - "A capability which only a few people need can wait until version two"
+          - "A capability which only a few people need can wait until the second version"
+          - "A capability which only a few people need can wait for version two"
+          - "A capability which only a few people need can wait for the second version"
+          - "A capability which only a few people need may wait until version two"
+          - "A capability which only a few people need may wait until the second version"
+          - "A capability which only a few people need may wait for version two"
+          - "A capability which only a few people need may wait for the second version"
+        explanation: Few people — «немногие»; wait until или wait for — «подождать до».
+      - id: q3
+        prompt: Давайте запишу требования, о которых мы договорились.
+        answer:
+          - "Let me write down the requirements that we have agreed on"
+          - "Let me write down the requirements that we have agreed upon"
+          - "Let me write down the requirements that we agreed on"
+          - "Let me write down the requirements that we agreed upon"
+          - "Let me write down the requirements which we have agreed on"
+          - "Let me write down the requirements which we have agreed upon"
+          - "Let me write down the requirements which we agreed on"
+          - "Let me write down the requirements which we agreed upon"
+          - "Let me write down the requirements we have agreed on"
+          - "Let me write down the requirements we have agreed upon"
+          - "Let me write down the requirements we agreed on"
+          - "Let me write down the requirements we agreed upon"
+          - "Let me note down the requirements that we have agreed on"
+          - "Let me note down the requirements that we have agreed upon"
+          - "Let me note down the requirements that we agreed on"
+          - "Let me note down the requirements that we agreed upon"
+          - "Let me note down the requirements which we have agreed on"
+          - "Let me note down the requirements which we have agreed upon"
+          - "Let me note down the requirements which we agreed on"
+          - "Let me note down the requirements which we agreed upon"
+          - "Let me note down the requirements we have agreed on"
+          - "Let me note down the requirements we have agreed upon"
+          - "Let me note down the requirements we agreed on"
+          - "Let me note down the requirements we agreed upon"
+        explanation: Слово that или which можно опустить, потому что оно дополнение; предлог on остаётся.
+      - id: q4
+        prompt: Итак, подводя итог, нам нужен сервис, который обрабатывает десять тысяч запросов в секунду.
+        answer:
+          - "So, to summarise, we need a service that handles ten thousand requests a second"
+          - "So, to summarise, we need a service that handles ten thousand requests per second"
+          - "So, to summarise, we need a service that handles ten thousand requests every second"
+          - "So, to summarise, we need a service that processes ten thousand requests a second"
+          - "So, to summarise, we need a service that processes ten thousand requests per second"
+          - "So, to summarise, we need a service that processes ten thousand requests every second"
+          - "So, to summarise, we need a service which handles ten thousand requests a second"
+          - "So, to summarise, we need a service which handles ten thousand requests per second"
+          - "So, to summarise, we need a service which handles ten thousand requests every second"
+          - "So, to summarise, we need a service which processes ten thousand requests a second"
+          - "So, to summarise, we need a service which processes ten thousand requests per second"
+          - "So, to summarise, we need a service which processes ten thousand requests every second"
+          - "So, to summarise we need a service that handles ten thousand requests a second"
+          - "So, to summarise we need a service that handles ten thousand requests per second"
+          - "So, to summarise we need a service that handles ten thousand requests every second"
+          - "So, to summarise we need a service that processes ten thousand requests a second"
+          - "So, to summarise we need a service that processes ten thousand requests per second"
+          - "So, to summarise we need a service that processes ten thousand requests every second"
+          - "So, to summarise we need a service which handles ten thousand requests a second"
+          - "So, to summarise we need a service which handles ten thousand requests per second"
+          - "So, to summarise we need a service which handles ten thousand requests every second"
+          - "So, to summarise we need a service which processes ten thousand requests a second"
+          - "So, to summarise we need a service which processes ten thousand requests per second"
+          - "So, to summarise we need a service which processes ten thousand requests every second"
+          - "So to summarise, we need a service that handles ten thousand requests a second"
+          - "So to summarise, we need a service that handles ten thousand requests per second"
+          - "So to summarise, we need a service that handles ten thousand requests every second"
+          - "So to summarise, we need a service that processes ten thousand requests a second"
+          - "So to summarise, we need a service that processes ten thousand requests per second"
+          - "So to summarise, we need a service that processes ten thousand requests every second"
+          - "So to summarise, we need a service which handles ten thousand requests a second"
+          - "So to summarise, we need a service which handles ten thousand requests per second"
+          - "So to summarise, we need a service which handles ten thousand requests every second"
+          - "So to summarise, we need a service which processes ten thousand requests a second"
+          - "So to summarise, we need a service which processes ten thousand requests per second"
+          - "So to summarise, we need a service which processes ten thousand requests every second"
+          - "So to summarise we need a service that handles ten thousand requests a second"
+          - "So to summarise we need a service that handles ten thousand requests per second"
+          - "So to summarise we need a service that handles ten thousand requests every second"
+          - "So to summarise we need a service that processes ten thousand requests a second"
+          - "So to summarise we need a service that processes ten thousand requests per second"
+          - "So to summarise we need a service that processes ten thousand requests every second"
+          - "So to summarise we need a service which handles ten thousand requests a second"
+          - "So to summarise we need a service which handles ten thousand requests per second"
+          - "So to summarise we need a service which handles ten thousand requests every second"
+          - "So to summarise we need a service which processes ten thousand requests a second"
+          - "So to summarise we need a service which processes ten thousand requests per second"
+          - "So to summarise we need a service which processes ten thousand requests every second"
+          - "To summarise, we need a service that handles ten thousand requests a second"
+          - "To summarise, we need a service that handles ten thousand requests per second"
+          - "To summarise, we need a service that handles ten thousand requests every second"
+          - "To summarise, we need a service that processes ten thousand requests a second"
+          - "To summarise, we need a service that processes ten thousand requests per second"
+          - "To summarise, we need a service that processes ten thousand requests every second"
+          - "To summarise, we need a service which handles ten thousand requests a second"
+          - "To summarise, we need a service which handles ten thousand requests per second"
+          - "To summarise, we need a service which handles ten thousand requests every second"
+          - "To summarise, we need a service which processes ten thousand requests a second"
+          - "To summarise, we need a service which processes ten thousand requests per second"
+          - "To summarise, we need a service which processes ten thousand requests every second"
+          - "To summarise we need a service that handles ten thousand requests a second"
+          - "To summarise we need a service that handles ten thousand requests per second"
+          - "To summarise we need a service that handles ten thousand requests every second"
+          - "To summarise we need a service that processes ten thousand requests a second"
+          - "To summarise we need a service that processes ten thousand requests per second"
+          - "To summarise we need a service that processes ten thousand requests every second"
+          - "To summarise we need a service which handles ten thousand requests a second"
+          - "To summarise we need a service which handles ten thousand requests per second"
+          - "To summarise we need a service which handles ten thousand requests every second"
+          - "To summarise we need a service which processes ten thousand requests a second"
+          - "To summarise we need a service which processes ten thousand requests per second"
+          - "To summarise we need a service which processes ten thousand requests every second"
+          - "So, to sum up, we need a service that handles ten thousand requests a second"
+          - "So, to sum up, we need a service that handles ten thousand requests per second"
+          - "So, to sum up, we need a service that handles ten thousand requests every second"
+          - "So, to sum up, we need a service that processes ten thousand requests a second"
+          - "So, to sum up, we need a service that processes ten thousand requests per second"
+          - "So, to sum up, we need a service that processes ten thousand requests every second"
+          - "So, to sum up, we need a service which handles ten thousand requests a second"
+          - "So, to sum up, we need a service which handles ten thousand requests per second"
+          - "So, to sum up, we need a service which handles ten thousand requests every second"
+          - "So, to sum up, we need a service which processes ten thousand requests a second"
+          - "So, to sum up, we need a service which processes ten thousand requests per second"
+          - "So, to sum up, we need a service which processes ten thousand requests every second"
+          - "So, to sum up we need a service that handles ten thousand requests a second"
+          - "So, to sum up we need a service that handles ten thousand requests per second"
+          - "So, to sum up we need a service that handles ten thousand requests every second"
+          - "So, to sum up we need a service that processes ten thousand requests a second"
+          - "So, to sum up we need a service that processes ten thousand requests per second"
+          - "So, to sum up we need a service that processes ten thousand requests every second"
+          - "So, to sum up we need a service which handles ten thousand requests a second"
+          - "So, to sum up we need a service which handles ten thousand requests per second"
+          - "So, to sum up we need a service which handles ten thousand requests every second"
+          - "So, to sum up we need a service which processes ten thousand requests a second"
+          - "So, to sum up we need a service which processes ten thousand requests per second"
+          - "So, to sum up we need a service which processes ten thousand requests every second"
+          - "So to sum up, we need a service that handles ten thousand requests a second"
+          - "So to sum up, we need a service that handles ten thousand requests per second"
+          - "So to sum up, we need a service that handles ten thousand requests every second"
+          - "So to sum up, we need a service that processes ten thousand requests a second"
+          - "So to sum up, we need a service that processes ten thousand requests per second"
+          - "So to sum up, we need a service that processes ten thousand requests every second"
+          - "So to sum up, we need a service which handles ten thousand requests a second"
+          - "So to sum up, we need a service which handles ten thousand requests per second"
+          - "So to sum up, we need a service which handles ten thousand requests every second"
+          - "So to sum up, we need a service which processes ten thousand requests a second"
+          - "So to sum up, we need a service which processes ten thousand requests per second"
+          - "So to sum up, we need a service which processes ten thousand requests every second"
+          - "So to sum up we need a service that handles ten thousand requests a second"
+          - "So to sum up we need a service that handles ten thousand requests per second"
+          - "So to sum up we need a service that handles ten thousand requests every second"
+          - "So to sum up we need a service that processes ten thousand requests a second"
+          - "So to sum up we need a service that processes ten thousand requests per second"
+          - "So to sum up we need a service that processes ten thousand requests every second"
+          - "So to sum up we need a service which handles ten thousand requests a second"
+          - "So to sum up we need a service which handles ten thousand requests per second"
+          - "So to sum up we need a service which handles ten thousand requests every second"
+          - "So to sum up we need a service which processes ten thousand requests a second"
+          - "So to sum up we need a service which processes ten thousand requests per second"
+          - "So to sum up we need a service which processes ten thousand requests every second"
+          - "To sum up, we need a service that handles ten thousand requests a second"
+          - "To sum up, we need a service that handles ten thousand requests per second"
+          - "To sum up, we need a service that handles ten thousand requests every second"
+          - "To sum up, we need a service that processes ten thousand requests a second"
+          - "To sum up, we need a service that processes ten thousand requests per second"
+          - "To sum up, we need a service that processes ten thousand requests every second"
+          - "To sum up, we need a service which handles ten thousand requests a second"
+          - "To sum up, we need a service which handles ten thousand requests per second"
+          - "To sum up, we need a service which handles ten thousand requests every second"
+          - "To sum up, we need a service which processes ten thousand requests a second"
+          - "To sum up, we need a service which processes ten thousand requests per second"
+          - "To sum up, we need a service which processes ten thousand requests every second"
+          - "To sum up we need a service that handles ten thousand requests a second"
+          - "To sum up we need a service that handles ten thousand requests per second"
+          - "To sum up we need a service that handles ten thousand requests every second"
+          - "To sum up we need a service that processes ten thousand requests a second"
+          - "To sum up we need a service that processes ten thousand requests per second"
+          - "To sum up we need a service that processes ten thousand requests every second"
+          - "To sum up we need a service which handles ten thousand requests a second"
+          - "To sum up we need a service which handles ten thousand requests per second"
+          - "To sum up we need a service which handles ten thousand requests every second"
+          - "To sum up we need a service which processes ten thousand requests a second"
+          - "To sum up we need a service which processes ten thousand requests per second"
+          - "To sum up we need a service which processes ten thousand requests every second"
+        explanation: To summarise — «подводя итог»; в определительном придаточном стоит that или which.
+      - id: q5
+        prompt: Я начну с самой простой версии, которую мы сможем улучшить позже.
+        answer:
+          - "I will start with the simplest version, which we can improve later"
+          - "I will start with the simplest version, which we will be able to improve later"
+          - "I will start with the simplest version which we can improve later"
+          - "I will start with the simplest version which we will be able to improve later"
+          - "I will start with the simplest version that we can improve later"
+          - "I will start with the simplest version that we will be able to improve later"
+          - "I will start with the simplest version we can improve later"
+          - "I will start with the simplest version we will be able to improve later"
+          - "I will begin with the simplest version, which we can improve later"
+          - "I will begin with the simplest version, which we will be able to improve later"
+          - "I will begin with the simplest version which we can improve later"
+          - "I will begin with the simplest version which we will be able to improve later"
+          - "I will begin with the simplest version that we can improve later"
+          - "I will begin with the simplest version that we will be able to improve later"
+          - "I will begin with the simplest version we can improve later"
+          - "I will begin with the simplest version we will be able to improve later"
+        explanation: Придаточное может быть с запятой и which или без запятой с that; слово that можно опустить.
+      - id: q6
+        prompt: Есть ли что-то, о чём я не спросил?
+        answer:
+          - "Is there anything that I have not asked about"
+          - "Is there anything that I did not ask about"
+          - "Is there anything that I forgot to ask about"
+          - "Is there anything I have not asked about"
+          - "Is there anything I did not ask about"
+          - "Is there anything I forgot to ask about"
+          - "Is there something that I have not asked about"
+          - "Is there something that I did not ask about"
+          - "Is there something that I forgot to ask about"
+          - "Is there something I have not asked about"
+          - "Is there something I did not ask about"
+          - "Is there something I forgot to ask about"
+        explanation: Предлог about стоит в конце придаточного; слово that можно опустить.
+  - type: writing
+    id: requirements
+    register: formal
+    prompt: "Напишите коллеге список требований к вымышленному сервису (130–170 слов): назначение, пользователи с числами, функции, нагрузка, качества, ограничения и то, что вне объёма. Используйте не меньше пяти определительных придаточных (who, which, that, whose, where), среди них хотя бы одно с запятыми. Сервис и числа придумайте сами."
+    words: { min: 130, max: 170 }
+    model: |-
+      Subject: Requirements for the file-sharing service
+
+      Dear Anders,
+
+      Below are the requirements for the file-sharing service that we discussed on Monday.
+
+      Users: the service is for employees who work in several offices. About three thousand people will use it, and up to three hundred of them will be online at the same time.
+
+      Functions: users can upload a file, share a link and delete it. Each team has its own storage, where members see only their own files.
+
+      Quality: availability must be at least 99.9%. Files must never be lost, which is why every file is stored twice. Uploads, which should finish within ten seconds, have a hard limit of one gigabyte.
+
+      Constraints: the first version is due in six weeks, and the data must stay in Europe. The service must work with the login system that the company already uses.
+
+      Out of scope: a mobile app and file editing. Both can wait for version two.
+
+      Please let me know if anything needs to change.
+
+      Kind regards
+    criteria:
+      - 130–170 слов, есть тема письма, обращение, список требований по разделам и вежливое завершение
+      - Не меньше пяти определительных придаточных (who, which, that, whose, where), среди них хотя бы одно non-defining с запятыми
+      - Названы пользователи с числами, функции, нагрузка, качества (доступность, сохранность данных), ограничения и то, что вне объёма
+      - "Запятые стоят верно: нет запятой перед defining, есть запятые с двух сторон у non-defining; в non-defining нет that"
+      - Сервис и числа вымышлены, реальных систем и компаний нет
+      - Формальный стиль без сокращений
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Тринадцатый ответ вашего **банка ответов** — реакция на задачу: уточняющие вопросы. К нему добавляется второй вопрос: **What would you want to know first?** Первый ответ занимает до 150 секунд, второй — до минуты.
+
+      1) Разложите первый ответ по пяти шагам: вступление, пользователи, нагрузка и данные, качества и ограничения, итог. 2) Запишите ответ вслух и уложитесь во время. 3) Переслушайте и сверьте с образцом и критериями: вопросы конкретные, есть числа и сроки, есть допущение, есть итог. 4) Для второго вопроса назовите, что вы выясняете первым, и объясните причину.
+
+      Сцена в конце урока строится на постановке задачи. Реплики Anders записаны ниже, перед сценой; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: questions
+    part: interview
+    prompt: "Интервьюер говорит: «Here is the task: design a service that sends reminders to the users of a calendar app. What questions would you ask?» Задайте уточняющие вопросы за 150 секунд: пользователи, нагрузка, данные, качество, ограничения; в конце подведите итог."
+    seconds: 150
+    model: "Before I start, I'd like to ask a few questions. First, who are the people that will use the reminders? Do we need to support users who are offline, and how many users do we expect in the first year? Next, the load. How many reminders do we expect per second, and what does the traffic look like at peak? How much data are we talking about, and how long should we keep it? Then, quality. What should happen when the service is down? Is it okay if a reminder arrives a minute late, or is the timing critical? Finally, the constraints. Is there a deadline that I should keep in mind, and are there any constraints that I should know about, for example about where the data must be stored? Which requirements are must-haves, and which are nice-to-haves? So, to summarise, we need a reminder service that is reliable, handles the expected load and fits the deadline. I'm assuming that we don't need to handle text messages. Does that match what you had in mind?"
+    criteria:
+      - Вопросы идут по шагам — пользователи, нагрузка и данные, качества, ограничения
+      - Вопросы конкретные, без упрёка и без догадок вместо вопросов
+      - Использованы не меньше четырёх определительных придаточных или фраз урока
+      - Назван итог и допущение
+      - Сервис вымышлен, реальных систем нет
+      - Ответ укладывается в 150 секунд
+  - type: speaking
+    id: first
+    part: monologue
+    prompt: "Интервьюер уточняет: «What would you want to know first?» Ответьте за 60 секунд: что вы выясните в первую очередь и почему."
+    seconds: 60
+    model: "I would want to know who the users are and how many of them there will be. Without that, I cannot estimate the load. After that, I would ask about the deadline and about any constraints, because they shape the whole design. I would also ask what is out of scope, so that I do not build a feature that nobody needs. Then I would write down the requirements and my assumptions, and confirm them before I start."
+    criteria:
+      - Названо, что выясняется первым, и причина
+      - Названы срок или ограничения и вне объёма
+      - Есть определительное придаточное
+      - Названо, что требования записываются и подтверждаются
+      - Ответ укладывается в 60 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Anders, text: "Thanks for joining. Here is the task: design a service that sends reminders to the users of a calendar app. You can ask me any questions that you need." }
+      - { speaker: Anders, text: "Good questions. About fifty thousand people use the app, mostly for work, and around five thousand are online at the same time." }
+      - { speaker: Anders, text: "At peak, we send about two hundred reminders a second. A reminder can be a minute late, but it must not be lost." }
+      - { speaker: Anders, text: "The first version is due in five weeks, and the user data must stay in Europe. Is there anything else you would like to know?" }
+      - { speaker: Anders, text: "Thank you. That was a clear summary of the requirements." }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на собеседовании, задачу ставит Anders, старший инженер. Прослушайте его реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику задайте вопросы о пользователях. На вторую — о нагрузке и задержке сообщений. На третью — о сроке и ограничениях. На четвёртую подведите итог требований и назовите допущение. На последнюю поблагодарите. Вся ваша часть — 150 секунд, каждая реплика — две-четыре фразы.
+    seconds: 150
+    model: |-
+      Anders: Thanks for joining. Here is the task: design a service that sends reminders to the users of a calendar app. You can ask me any questions that you need.
+      You: Thank you. Before I start, I'd like to ask a few questions. Who are the people that will use the reminders, and how many users do we expect in the first year?
+      Anders: Good questions. About fifty thousand people use the app, mostly for work, and around five thousand are online at the same time.
+      You: I see. How many reminders do we expect per second? And is it okay if a reminder arrives a minute late?
+      Anders: At peak, we send about two hundred reminders a second. A reminder can be a minute late, but it must not be lost.
+      You: Understood. Is there a deadline that I should keep in mind? Are there any constraints that I should know about?
+      Anders: The first version is due in five weeks, and the user data must stay in Europe. Is there anything else you would like to know?
+      You: Let me confirm that I've understood the requirements. We need a service that handles two hundred reminders a second, loses none and keeps the data in Europe, ready in five weeks. I'm assuming that we don't need to handle text messages.
+      Anders: Thank you. That was a clear summary of the requirements.
+      You: Thank you for the task. If anything changes, I'm happy to update the list.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — две-четыре фразы
+      - В первой реплике заданы вопросы о пользователях и их числе
+      - Во второй реплике есть вопросы о нагрузке и о допустимой задержке
+      - В третьей реплике есть вопросы о сроке и ограничениях
+      - В четвёртой реплике подведён итог с числами и названо допущение
+      - В конце есть благодарность
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модулей
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If I had asked about the deadline, we ___ the delay. (прошлое, которого не было)"
+        options: [would have avoided, would avoid, will avoid]
+        answer: would have avoided
+        explanation: Conditional 3 — would have и третья форма глагола.
+      - id: q2
+        prompt: "If the traffic doubled, I ___ more servers. (воображаемая ситуация)"
+        options: [would add, will add, added]
+        answer: would add
+        explanation: Second conditional — if + past simple, would + базовая форма.
+      - id: q3
+        prompt: "«Can you give me a ballpark figure?» → She asked me ___."
+        options:
+          - whether I could give her a ballpark figure
+          - could I give her a ballpark figure
+          - whether could I give her a ballpark figure
+        answer: whether I could give her a ballpark figure
+        explanation: В косвенном вопросе порядок слов прямой, вопрос вводит whether или if.
+      - id: q4
+        prompt: "He ___ us not to deploy on Friday."
+        options: [warned, said, suggested]
+        answer: warned
+        explanation: Warned + кому + not to + глагол; после said и suggested такой схемы нет.
+      - id: q5
+        prompt: "By the time I asked about the load, the team ___ the design for two weeks. (процесс шёл до момента)"
+        options: [had been writing, wrote, will write]
+        answer: had been writing
+        explanation: Длительное действие до момента в прошлом — past perfect continuous.
+      - id: q6
+        prompt: "Unless you ___ the requirements, I will start with the simplest version."
+        options: [change, don't change, changed]
+        answer: change
+        explanation: После unless стоит утвердительная форма настоящего времени.

@@ -1,0 +1,7 @@
+id: ep311
+text: "How many users do we expect in the first year?"
+translation: "Сколько пользователей мы ожидаем в первый год?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13
+  operation: requested-generation
+  request: Фразы модуля e13 по программе docs/curriculum-english-it.md
