@@ -80,7 +80,7 @@ blocks:
     body: |-
       Примерить — **try on**, примерочная — **a fitting room** (в Британии говорят и changing room). Брюки длинные — спросите про подгонку: **Do you do alterations?** Нужного размера нет на полке — спросите, есть ли он на складе: Have you got this in a medium **in stock**?
 
-      Вернуть покупку — **return** it. Магазин возвращает деньги — **a refund** — или даёт **a credit note**: купон на ту же сумму, его тратят только в этом магазине. Для возврата нужен **proof of purchase** — чек или выписка по карте.
+      Вернуть покупку — **return** it. Магазин возвращает деньги — a refund — или даёт **a credit note**: купон на ту же сумму, его тратят только в этом магазине. Для возврата нужен **proof of purchase** — чек или выписка по карте. Покупаете подарок — попросите **a gift receipt**: подарочный чек без цены: по нему вещь можно обменять или вернуть, обычно на купон.
 
       **Tax-free shopping** — возврат НДС туристам. В ЕС его оформляют туристам из стран вне ЕС: на кассе просят паспорт и выдают бланк, бланк заверяют на таможне при выезде, а деньги возвращают в аэропорту или на карту. В Великобритании такой возврат с 2021 года не действует.
 
@@ -196,7 +196,7 @@ blocks:
     bank:
       - a fitting room
       - alterations
-      - a refund
+      - a gift receipt
       - a credit note
       - proof of purchase
       - in stock
@@ -207,7 +207,7 @@ blocks:
     items:
       - { id: m1, prompt: примерочная, answer: a fitting room }
       - { id: m2, prompt: подгонка одежды по фигуре, answer: alterations }
-      - { id: m3, prompt: возврат денег за покупку, answer: a refund }
+      - { id: m3, prompt: подарочный чек без цены, answer: a gift receipt }
       - { id: m4, prompt: купон на сумму возврата, answer: a credit note }
       - { id: m5, prompt: "подтверждение покупки — чек или выписка по карте", answer: proof of purchase }
       - { id: m6, prompt: в наличии, answer: in stock }

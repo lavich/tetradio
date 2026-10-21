@@ -94,7 +94,7 @@ blocks:
       - { speaker: Chloe, text: "Thank you. Any allergies we should know about?" }
       - { speaker: Lúcia, text: "Yes, I've got a nut allergy, and one of my friends is vegan." }
       - { speaker: Chloe, text: "No problem, I'll put that on the booking. We've got a few vegan dishes in the evening, and the chef can tell you about nuts on the night." }
-      - { speaker: Lúcia, text: "Great. Do you have a set menu in the evening?" }
+      - { speaker: Lúcia, text: "Great. And in the evening you have a set menu?" }
       - { speaker: Chloe, text: "Not in the evening, I'm afraid — only at lunchtime, Monday to Friday. But we've got sharing plates, and they're good for a group." }
       - { speaker: Lúcia, text: "Perfect, thank you." }
       - { speaker: Chloe, text: "So that's a table for four at quarter to nine tonight. If you're running late, please give us a call — we keep the table for fifteen minutes." }

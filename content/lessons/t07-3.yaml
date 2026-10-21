@@ -138,7 +138,7 @@ blocks:
     words: { min: 80, max: 100 }
     model: |-
       Dear Sir or Madam,
-      I am writing to complain about my journey from Edinburgh to Lisbon on 14 May, booking reference NL7Q4K. My first flight, NL 215, was delayed by two hours, so I missed my connection. I was rebooked on the next morning's flight, but I was not given a meal voucher or a hotel, so I slept in the terminal. Staff did not explain my rights. I believe I am entitled to compensation. I would also like to be reimbursed for the £18 I spent on food.
+      I am writing to complain about my journey from Edinburgh to Lisbon on 9 April, booking reference NL7Q4K. My first flight, NL 215, was delayed by two hours, so I missed my connection. I was rebooked on the next morning's flight, but I was not given a meal voucher or a hotel, so I slept in the terminal. Staff did not explain my rights. I believe I am entitled to compensation. I would also like to be reimbursed for the £18 I spent on food.
       I look forward to your reply.
       Yours faithfully,
       Olga Ivanova
@@ -236,3 +236,39 @@ blocks:
       - "Вопрос о праве — Am I entitled to compensation? (to, не for)"
       - "Недовольство и старший — I'm not happy with how this was handled. Could I speak to the manager, please?"
       - Твёрдо и вежливо, без You must… и без крика
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ for the train when someone took my bag.
+        options: [was waiting, waited, am waiting]
+        answer: was waiting
+        explanation: Действие-фон, которое длилось, когда случилось событие, — past continuous; событие — past simple (took).
+      - id: q2
+        prompt: My passport ___ stolen from my hotel room.
+        options: [was, were, has]
+        answer: was
+        explanation: Одна вещь — was stolen; has stolen — активный залог, как будто паспорт сам что-то украл.
+      - id: q3
+        prompt: Our flight was cancelled, and we ___ on the next morning's flight.
+        options: [were rebooked, rebooked, are rebook]
+        answer: were rebooked
+        explanation: Переоформили нас, а не мы — passive, were + rebooked.
+      - id: q4
+        prompt: The flight was ___, so the airline asked for volunteers to take a later one.
+        options: [overbooked, denied boarding, a goodwill gesture]
+        answer: overbooked
+        explanation: Билетов продали больше, чем мест, — overbooked; denied boarding — отказ в посадке, следующий шаг.
+      - id: q5
+        prompt: A woman saw the man take my wallet. She's a ___, so she can give a statement too.
+        options: [witness, pickpocket, crime reference number]
+        answer: witness
+        explanation: Свидетель — witness; pickpocket — карманник, crime reference number — номер дела.
+      - id: q6
+        prompt: I'm not happy with how this ___ handled.
+        options: [was, has, did]
+        answer: was
+        explanation: С вами так обошлись — passive в прошлом, was handled.

@@ -17,6 +17,22 @@ items:
   - { kind: phrase, id: tp075 }
 blocks:
   - type: explanation
+    id: pay-words
+    title: Оплата картой и наличными
+    body: |-
+      В Британии почти везде платят картой бесконтактно — **contactless**: Do you take contactless? У бесконтактной оплаты картой предел обычно 100 фунтов (с телефона или часов — как правило, без предела); дороже — вставьте карту и введите PIN (chip and PIN).
+
+      Если терминал пишет **declined**, платёж отклонён: **My card has been declined.** Иностранный банк часто блокирует первый платёж за границей. Деньги при этом иногда видны в приложении банка как **a pending payment** — заблокированы, но не списаны; через несколько дней блок снимается. Pending бывает и у обычного прошедшего платежа: он в обработке и появится в выписке через 1–3 дня. Что именно случилось, видно по терминалу и чеку: declined или approved. Спросите продавца: **Could you check if the payment went through?** — прошёл ли платёж.
+
+      Терминал за границей может спросить, в какой валюте платить: в местной или в валюте вашей карты. Почти всегда выгоднее местная: **I'll pay in the local currency, thanks.** У терминала свой курс — exchange rate, и он обычно хуже. Обменять наличные можно в **a bureau de change**: на вывеске часто **No commission** — комиссии нет, но курс может быть хуже, чем в банке. А за снятие в банкомате иностранной картой банк берёт **a transaction fee**.
+
+      В супермаркете кассир может спросить: **Would you like cashback?** — снять наличные с карты прямо на кассе; магазин за это денег не берёт. Часто это работает только с британскими дебетовыми картами. Не нужно — No, thanks.
+
+      Если с карты списали дважды: **I've been charged twice for the same order.** А на рынке цену можно сбить: **Can you do it for twenty?** — «отдадите за двадцать?».
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
     id: returns-how
     title: Правила возврата и чек
     body: |-
@@ -108,22 +124,6 @@ blocks:
           - with a credit note
         answer: by contactless card
         explanation: "Paid: VISA CONTACTLESS."
-  - type: explanation
-    id: pay-words
-    title: Оплата картой и наличными
-    body: |-
-      В Британии почти везде платят картой бесконтактно — **contactless**: Do you take contactless? У бесконтактной оплаты картой предел обычно 100 фунтов (с телефона или часов — как правило, без предела); дороже — вставьте карту и введите PIN (chip and PIN).
-
-      Если терминал пишет **declined**, платёж отклонён: **My card has been declined.** Иностранный банк часто блокирует первый платёж за границей. Деньги при этом иногда видны в приложении банка как **a pending payment** — заблокированы, но не списаны; через несколько дней блок снимается. Pending бывает и у обычного прошедшего платежа: он в обработке и появится в выписке через 1–3 дня. Что именно случилось, видно по терминалу и чеку: declined или approved. Спросите продавца: **Could you check if the payment went through?** — прошёл ли платёж.
-
-      Терминал за границей может спросить, в какой валюте платить: в местной или в валюте вашей карты. Почти всегда выгоднее местная: **I'll pay in the local currency, thanks.** У терминала свой **exchange rate**, и он обычно хуже. Обменять наличные можно в **a bureau de change**, а за снятие в банкомате иностранной картой банк берёт **a transaction fee**.
-
-      В супермаркете кассир может спросить: **Would you like cashback?** — снять наличные с карты прямо на кассе; магазин за это денег не берёт. Часто это работает только с британскими дебетовыми картами. Не нужно — No, thanks.
-
-      Если с карты списали дважды: **I've been charged twice for the same order.** А на рынке цену можно сбить: **Can you do it for twenty?** — «отдадите за двадцать?».
-  - type: vocabulary
-    id: words
-    title: Слова и фразы урока
   - type: explanation
     id: till-how
     title: На кассе
@@ -296,7 +296,7 @@ blocks:
       - contactless
       - declined
       - cashback
-      - exchange rate
+      - commission
       - bureau de change
       - transaction fee
       - pending
@@ -306,7 +306,7 @@ blocks:
       - { id: g1, prompt: "It's over a hundred pounds, so ___ won't work. Please put your card in.", answer: contactless }
       - { id: g2, prompt: "The machine says the card was ___. Have you got another one?", answer: declined }
       - { id: g3, prompt: "The money isn't gone yet — it's a ___ payment, and the bank will release it.", answer: pending }
-      - { id: g4, prompt: "My bank charges a three-pound ___ every time I use a cash machine abroad.", answer: transaction fee }
-      - { id: g5, prompt: "The ___ today is 1.17 euros to the pound.", answer: exchange rate }
+      - { id: g4, prompt: "My bank charges a foreign ___ of three pounds every time I use a cash machine abroad.", answer: transaction fee }
+      - { id: g5, prompt: "The sign says 'No ___', but check the rate first.", answer: commission }
       - { id: g6, prompt: "There's a ___ in the station — you can change your euros there.", answer: bureau de change }
       - { id: g7, prompt: "I bought some water and asked for twenty pounds ___.", answer: cashback }

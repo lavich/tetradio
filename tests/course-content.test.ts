@@ -1,6 +1,10 @@
+import "fake-indexeddb/auto";
 import { readdirSync, readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { parseCatalog, parsePackage } from "../src/content/schema";
+import { moduleViews, nextStep } from "../src/storage/course";
+import { AppDatabase } from "../src/storage/db";
+import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 import { GREEK_CALENDAR } from "./helpers/calendar";
 import { realContent } from "./helpers/real-content";
 
@@ -82,7 +86,11 @@ describe("курс в продукте", () => {
 
 describe("английский для путешествий и общения", () => {
   const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07"];
-  const IT_NAMES = ["Sarah", "Daniel", "Mark", "Elena", "Tom", "Priya", "Sharma", "Fischer", "Andrei"];
+  const IT_NAMES = new Set(
+    packagesOf("english-it")
+      .flatMap((pack) => pack.blocks ?? [])
+      .flatMap((block) => (block.type === "listening" ? block.transcript.map((line) => line.speaker) : [])),
+  );
   const WRITING: Record<string, { register: string; min: number; max: number }> = {
     t01: { register: "formal", min: 20, max: 40 },
     t02: { register: "friendly", min: 20, max: 40 },
@@ -210,13 +218,34 @@ describe("английский для путешествий и общения",
       speakers.delete(undefined);
       for (const speaker of speakers) {
         expect(cast.has(speaker!), speaker).toBe(true);
-        expect(IT_NAMES, speaker).not.toContain(speaker);
+        expect(IT_NAMES.has(speaker), speaker).toBe(false);
       }
     });
   });
 
   describe("контрольная точка «День поездки»", () => {
     const blocks = () => blocksOf("t07-c1");
+    const stageLessons = STAGE.flatMap((moduleId) => ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`));
+    let db: AppDatabase;
+    beforeEach(async () => {
+      await new AppDatabase("tetradio-travel-checkpoint").delete();
+      db = new AppDatabase("tetradio-travel-checkpoint");
+      await installLessons(db, [...stageLessons, "t07-c1"], memoryFetcher(content));
+    });
+    afterEach(() => db.close());
+    const step = async () => nextStep(await moduleViews("english-travel", db));
+
+    it("уроки t01–t07 пройдены — следующий шаг курса «День поездки»", async () => {
+      await completeLessons(db, stageLessons);
+      expect((await step())!.lesson).toMatchObject({ id: "t07-c1", title: "День поездки", kind: "test" });
+    });
+    it("контрольная t03-test не пройдена — следующий шаг она, а не точка", async () => {
+      await completeLessons(
+        db,
+        stageLessons.filter((id) => id !== "t03-test"),
+      );
+      expect((await step())!.lesson.id).toBe("t03-test");
+    });
 
     it("стоит после t07, контрольная без карточек с заголовком без «C1»", () => {
       expect(modulesOf("english-travel").find((m) => m.id === "t07")!.checkpointId).toBe("t07-c1");
@@ -266,9 +295,10 @@ describe("английский для путешествий и общения",
       const speakers = blocks().flatMap((block) =>
         block.type === "listening" ? block.transcript.flatMap((line) => (line.speaker ? [line.speaker] : [])) : [],
       );
+      expect(IT_NAMES).toContain("Elena");
       for (const speaker of new Set(speakers)) {
         expect(cast.has(speaker), speaker).toBe(true);
-        expect(IT_NAMES, speaker).not.toContain(speaker);
+        expect(IT_NAMES.has(speaker), speaker).toBe(false);
       }
     });
   });

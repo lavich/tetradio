@@ -20,7 +20,7 @@ blocks:
     id: flight-problems
     title: Когда рейс сорвался
     body: |-
-      Если первый рейс опоздал и вы не успели на пересадку, вы **miss a connection**: **I've missed my connecting flight.** Если оба рейса в одной брони, авиакомпания должна вас **rebook** — переоформить на другой рейс: **Can you rebook me on the next flight?**
+      Если первый рейс опоздал и вы не успели на пересадку, вы **miss a connection**: I've missed my connection in London. Если оба рейса в одной брони, авиакомпания должна вас **rebook** — переоформить на другой рейс: **Can you rebook me on the next flight?** Если багаж зарегистрирован до конечного пункта, уточните: **Will my bag be transferred to the new flight?** — passive, как в рассказе о краже.
 
       Иногда авиакомпания продаёт больше билетов, чем мест в самолёте: рейс **overbooked**. Сначала ищут добровольцев полететь позже, а если их нет, кому-то отказывают в посадке — это **denied boarding**.
 

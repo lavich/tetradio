@@ -214,7 +214,7 @@ blocks:
         answer: don't have to
         explanation: Чек не обязателен, найдут по карте; mustn't — «нельзя».
       - id: q6
-        prompt: ___ I have to show my passport for tax-free shopping?
+        prompt: ___ I have to show my passport for tax-free shopping in Paris?
         options: [Do, Am, Have]
         answer: Do
         explanation: Вопрос с have to — через do.

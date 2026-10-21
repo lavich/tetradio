@@ -8,7 +8,7 @@ blocks:
     body: |-
       Это контрольная точка первой ступени курса — модули t01–t07. Один день поездки в Эдинбург подряд: прилёт и паспортный контроль, дорога до квартиры, заезд и проблема в квартире, ужин со счётом, аптека, а в конце — жалоба. Около 60 минут. Делайте её за один раз, без словаря, таблиц и карточек: результат должен показать, что уже усвоено, а не что можно найти. Новых карточек здесь нет — только пройденное в модулях; редкие слова в текстах подписаны, а в аудио для ответа они не нужны.
 
-      **Чтение и аудирование** проверяются автоматически. Для каждого навыка считается доля правильных ответов и сравнивается с порогом **60 %** — по нему курс считает навык сданным. Каждое аудио звучит два раза. В заданиях на аудирование открывайте текст кнопкой «Открыть текст» только после ответов, иначе результат ничего не покажет; реплики перед ролевыми сценами, наоборот, открывайте сразу. В вопросах с выбором верен один вариант.
+      **Чтение и аудирование** проверяются автоматически. Для каждого навыка считается доля правильных ответов и сравнивается с порогом **60 %** — по нему курс считает навык сданным. Каждое аудио звучит два раза. В заданиях на аудирование открывайте текст кнопкой «Открыть текст» только после ответов, иначе результат ничего не покажет; реплики перед ролевыми сценами, наоборот, открывайте после двух прослушиваний и держите перед глазами. В вопросах с выбором верен один вариант.
 
       **Ролевые сцены.** Сцен пять, в каждой сначала звучат только реплики собеседника, по порядку. Послушайте их два раза, откройте текст и держите перед глазами. Затем запишите свою часть: прочитайте реплику, ответьте на неё одной-двумя фразами, переходите к следующей.
 
@@ -100,7 +100,7 @@ blocks:
     part: roleplay
     prompt: |-
       Прослушайте реплики выше; отвечайте на каждую по порядку и записывайте свою часть.
-      Вы — Ольга, прилетели в Эдинбург из Стамбула. Сегодня четверг, 14 мая. Говорит Джоанн, офицер пограничной службы (Border Force). Вы в отпуске до понедельника, 18 мая. Живёте в квартире в районе Марчмонт, рядом с парком Медоуз. Летите одна, но сегодня вечером ужинаете с подругой из Бразилии. Обратный рейс — в понедельник в 18:10, билет в телефоне. Отвечайте коротко и вежливо. 6 реплик, вся ваша часть — 30–60 секунд.
+      Вы — Ольга, прилетели в Эдинбург из Стамбула. Сегодня четверг, 18 июня. Говорит Джоанн, офицер пограничной службы (Border Force). Вы в отпуске до понедельника, 22 июня. Живёте в квартире в районе Марчмонт, рядом с парком Медоуз: её сдаёт Оливер — тот же хост, у которого вы жили в Бристоле (модуль t03), теперь у него квартира и в Эдинбурге. Летите одна, но сегодня вечером ужинаете с подругой из Бразилии. Обратный рейс — в понедельник в 18:10, билет в телефоне. Отвечайте коротко и вежливо. 6 реплик, вся ваша часть — 30–60 секунд.
     seconds: 60
     model: |-
       Officer: Good morning. Can I see your passport, please?
@@ -226,7 +226,7 @@ blocks:
     id: host-message
     title: Сцена 3 · Заезд — сообщение хоста
     text: |-
-      Hi Olga, welcome to Edinburgh! Here's everything you need for your stay (14–18 May).
+      Hi Olga, great to have you back — this time in my Edinburgh flat! Here's everything you need for your stay (18–22 June).
 
       CHECK-IN: from 3 pm. If you arrive early, you can leave your bags at the café on the corner, The Meadows Kitchen — they know you're coming.
 
@@ -234,7 +234,7 @@ blocks:
 
       WI-FI: the network name and password are on the fridge.
 
-      HOT WATER: the boiler is in the kitchen cupboard. If the light on it is red, press the reset button once and wait five minutes. If it's still red, message me — please don't keep pressing the button.
+      WINDOWS: the windows are old and a bit stiff. To close the bedroom window, lift it a little, then push it down slowly. If it still won't close, message me — please don't push it hard, as the glass is old.
 
       HOUSE RULES: no smoking in the flat or on the stairs. Quiet after 10 pm, please — the neighbours have small children. Recycling goes in the green bins on the street, glass in the purple one.
 
@@ -262,21 +262,21 @@ blocks:
         answer: leave your bags at the café on the corner
         explanation: "Check-in from 3 pm, а до этого — you can leave your bags at the café on the corner (модуль t03)."
       - id: q2
-        prompt: Where are the keys when you arrive?
+        prompt: According to the message, where is the lockbox?
         options:
-          - in the lockbox next to the main door
-          - at the café on the corner
-          - on the kitchen table
-        answer: in the lockbox next to the main door
-        explanation: "The lockbox is on the wall to the left of the main door. На кухонный стол ключи кладут при выезде (check-out), а в кафе оставляют только сумки (модуль t03)."
+          - on the wall next to the main door
+          - next to the door of flat 2F1
+          - in the café on the corner
+        answer: on the wall next to the main door
+        explanation: "The lockbox is on the wall to the left of the main door — у входной двери дома; 2F1 — номер квартиры, а в кафе по сообщению оставляют только сумки (модуль t03)."
       - id: q3
-        prompt: You pressed the reset button and waited five minutes, but the boiler light is still red. What should you do?
+        prompt: You lifted the bedroom window and pushed it down slowly, but it still won't close. What should you do?
         options:
           - send Oliver a message
-          - press the button again
-          - call a plumber
+          - push it down harder
+          - call someone to fix it
         answer: send Oliver a message
-        explanation: "If it's still red, message me — please don't keep pressing the button: не нажимать снова, а написать хосту (модуль t03)."
+        explanation: "If it still won't close, message me — please don't push it hard: не давить сильнее, а написать хосту (модуль t03)."
       - id: q4
         prompt: Where do empty wine bottles go?
         options:
@@ -290,7 +290,7 @@ blocks:
     title: Сцена 3 · Голосовое хоста
     plays: 2
     transcript:
-      - { speaker: Oliver, text: "Hi Olga, it's Oliver, your host. Sorry, I've just noticed that the lockbox code in my message is wrong — the cleaner changed it this morning. The new code is seven, three, nine, one." }
+      - { speaker: Oliver, text: "Hi Olga, it's Oliver, your host. Sorry, change of plan: the lockbox is broken — it won't open. So this morning the cleaner left your keys at the café on the corner. Just ask at the counter and give them your name." }
       - { speaker: Oliver, text: "And the main door downstairs is a bit stiff: turn the key, then push the door hard. The flat's on the second floor, and I'm afraid there's no lift." }
       - { speaker: Oliver, text: "I'm in Glasgow until tomorrow, so I can't come over, but text me if there's a problem and I'll reply quickly. Enjoy Edinburgh!" }
   - type: exercise
@@ -302,18 +302,21 @@ blocks:
     format: choice
     items:
       - id: q1
-        prompt: What is the new lockbox code?
-        options: ["7391", "7931", "2580"]
-        answer: "7391"
-        explanation: "Seven, three, nine, one — 7391; 2580 — старый код из сообщения, который больше не подходит (модуль t03)."
-      - id: q2
-        prompt: Why is the code in the message wrong?
+        prompt: Where are the keys now?
         options:
-          - The cleaner changed it this morning.
-          - The last guest lost the key.
-          - The lockbox is broken.
-        answer: The cleaner changed it this morning.
-        explanation: "The cleaner changed it this morning — код сменили во время уборки (модуль t03)."
+          - at the café on the corner
+          - in the lockbox by the main door
+          - with the cleaner
+        answer: at the café on the corner
+        explanation: "The cleaner left your keys at the café on the corner — ключи в кафе, а не у уборщицы и не в ящике (модуль t03)."
+      - id: q2
+        prompt: What's the problem with the lockbox?
+        options:
+          - It won't open.
+          - The code has changed.
+          - Someone has stolen it.
+        answer: It won't open.
+        explanation: "The lockbox is broken — it won't open: ящик сломан и не открывается (модуль t03)."
       - id: q3
         prompt: How do you open the main door?
         options:
@@ -327,23 +330,23 @@ blocks:
         options:
           - He's in Glasgow until tomorrow.
           - He's working all day.
-          - He's waiting for the plumber.
+          - He's waiting for a delivery.
         answer: He's in Glasgow until tomorrow.
         explanation: "I'm in Glasgow until tomorrow, so I can't come over — до завтра его нет в городе (модуль t03)."
   - type: writing
     id: host-problem
     register: friendly
-    prompt: "Вы зашли в квартиру. Новый код подошёл, но горячей воды нет ни на кухне, ни в ванной. На бойлере горит красная лампочка: вы нажали reset один раз и подождали пять минут, как написано в сообщении, — лампочка всё ещё красная. Напишите Оливеру сообщение (60–80 слов): поблагодарите за код, опишите проблему и что вы уже сделали, попросите прислать мастера и скажите, когда вас не будет дома: в 19:00 вы уходите ужинать, вернётесь к 21:30."
+    prompt: "Вы забрали ключи в кафе и зашли в квартиру. Окно в спальне не закрывается: оно открыто сантиметров на десять, с улицы шумно и холодно. Вы приподняли раму и медленно опустили её, как написано в сообщении, — не помогло. Напишите Оливеру сообщение (60–80 слов): поблагодарите за помощь с ключами, опишите проблему и что вы уже сделали, попросите прислать мастера и скажите, когда вас не будет дома: в 19:00 вы уходите ужинать, вернётесь к 21:30."
     words: { min: 60, max: 80 }
     model: |-
       Hi Oliver,
-      Thanks for the new code — it worked, and the flat is lovely! But there's a problem: there's no hot water in the kitchen or in the bathroom. The light on the boiler is red. I've pressed the reset button once and waited five minutes, as your message says, but it's still red. Could you send someone to have a look? I'm going out for dinner at seven, but I'll be back by half past nine.
+      Thanks for sorting out the keys — the flat is lovely! But there's a problem: the bedroom window won't close. It's open about ten centimetres, so the room is noisy and cold. I've lifted it and pushed it down slowly, as your message says, but it's still stuck. Could you send someone to have a look? I'm going out for dinner at seven, but I'll be back by half past nine.
       Thanks,
       Olga
     criteria:
       - "60–80 слов; дружеское начало и конец (Hi Oliver, … Thanks, имя)"
-      - "Проблема — there's no hot water / there isn't any hot water"
-      - "Что уже сделали — present perfect: I've pressed the reset button"
+      - "Проблема — the window won't close / doesn't close, и чем это плохо"
+      - "Что уже сделали — present perfect: I've lifted it… / I've tried…"
       - "Просьба — вопросом: Could you send someone to have a look?"
       - "Когда вас нет — I'm going out at…, I'll be back by…"
   - type: listening
@@ -351,10 +354,10 @@ blocks:
     title: Сцена 3 · Реплики собеседника — звонок хоста
     plays: 2
     transcript:
-      - { speaker: Oliver, text: "Hi Olga, it's Oliver. I've just seen your message — I'm so sorry! So there's no hot water at all?" }
-      - { speaker: Oliver, text: "Right. Is there anything on the little screen on the boiler? A number, maybe?" }
-      - { speaker: Oliver, text: "OK, I'll call my plumber. I'm afraid he can't come until tomorrow afternoon." }
-      - { speaker: Oliver, text: "I'll try, but it's very short notice. In the meantime, there's an electric heater in the hall cupboard, if you're cold." }
+      - { speaker: Oliver, text: "Hi Olga, it's Oliver. I've just seen your message — I'm so sorry! So the window won't close at all?" }
+      - { speaker: Oliver, text: "Right. Can you see anything in the way? Sometimes the curtain gets caught at the bottom." }
+      - { speaker: Oliver, text: "OK, I'll call the man who does my repairs. I'm afraid he can't come until tomorrow afternoon." }
+      - { speaker: Oliver, text: "I'll try, but it's very short notice. In the meantime, there's an electric heater and some earplugs in the hall cupboard." }
       - { speaker: Oliver, text: "I'm afraid I can't change the price myself — you'd need to contact the booking platform about that. Is there anything else?" }
       - { speaker: Oliver, text: "Of course. I'll text you as soon as I hear from him. Sorry again!" }
   - type: speaking
@@ -362,24 +365,24 @@ blocks:
     part: roleplay
     prompt: |-
       Прослушайте реплики выше; отвечайте на каждую по порядку и записывайте свою часть.
-      Оливер перезванивает после вашего сообщения. Подтвердите, что горячей воды нет нигде; скажите, что на экране бойлера ошибка E28 и что вы уже нажимали reset. Мастер может прийти только завтра днём — вежливо спросите, нельзя ли сегодня вечером (I was wondering if…). Спросите о скидке за эту ночь без горячей воды. В конце попросите написать вам, когда станет известно время прихода мастера. 6 реплик, вся ваша часть — 60–90 секунд.
+      Оливер перезванивает после вашего сообщения. Подтвердите, что окно в спальне совсем не закрывается и в комнате шумно; скажите, что штора не мешает — вы проверили — и что вы уже пробовали приподнять раму. Мастер может прийти только завтра днём — вежливо спросите, нельзя ли сегодня вечером (I was wondering if…). Спросите о скидке за эту ночь с открытым окном. В конце попросите написать вам, когда станет известно время прихода мастера. 6 реплик, вся ваша часть — 60–90 секунд.
     seconds: 90
     model: |-
-      Oliver: Hi Olga, it's Oliver. I've just seen your message — I'm so sorry! So there's no hot water at all?
-      You: Hi Oliver, thanks for calling. No, there isn't any hot water — not in the kitchen, not in the bathroom.
-      Oliver: Right. Is there anything on the little screen on the boiler? A number, maybe?
-      You: Yes, it says E28, and the light is red. I've already pressed the reset button, but nothing has changed.
-      Oliver: OK, I'll call my plumber. I'm afraid he can't come until tomorrow afternoon.
+      Oliver: Hi Olga, it's Oliver. I've just seen your message — I'm so sorry! So the window won't close at all?
+      You: Hi Oliver, thanks for calling. No, it won't. It's still open about ten centimetres, and it's really noisy.
+      Oliver: Right. Can you see anything in the way? Sometimes the curtain gets caught at the bottom.
+      You: No, I've checked the curtain. I've already tried lifting the window, but it hasn't helped.
+      Oliver: OK, I'll call the man who does my repairs. I'm afraid he can't come until tomorrow afternoon.
       You: Tomorrow afternoon? That's quite late. I was wondering if someone could come this evening.
-      Oliver: I'll try, but it's very short notice. In the meantime, there's an electric heater in the hall cupboard, if you're cold.
-      You: Thank you. But I can't have a shower without hot water. Could you give me a discount for tonight?
+      Oliver: I'll try, but it's very short notice. In the meantime, there's an electric heater and some earplugs in the hall cupboard.
+      You: Thank you. But I can't sleep with the window open. Could you give me a discount for tonight?
       Oliver: I'm afraid I can't change the price myself — you'd need to contact the booking platform about that. Is there anything else?
-      You: Yes. Could you text me when you know what time the plumber is coming?
+      You: Yes. Could you text me when you know what time he's coming?
       Oliver: Of course. I'll text you as soon as I hear from him. Sorry again!
       You: Thanks, Oliver. Speak soon.
     criteria:
       - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
-      - "Проблема — there isn't any hot water / there's no hot water; что сделали — I've already pressed…"
+      - "Проблема — it won't close / it's still open; что сделали — I've checked… / I've already tried…"
       - "Мягкая просьба — I was wondering if someone could come this evening"
       - "Просьбы — Could you give me a discount…? / Could you text me when…?"
       - Вежливо и спокойно, без You must…
@@ -391,9 +394,9 @@ blocks:
       - { speaker: Chloe, text: "Hi there, I'm Chloe, I'll be looking after you tonight. Can I tell you about the specials?" }
       - { speaker: Lúcia, text: "Yes, please." }
       - { speaker: Chloe, text: "So, to start, we've got Shetland mussels in a white wine sauce. And for the main, there's a venison stew with mashed potato and red cabbage." }
-      - { speaker: Lúcia, text: "The stew sounds good. Is it very spicy?" }
+      - { speaker: Lúcia, text: "The stew sounds good. Is very spicy?" }
       - { speaker: Chloe, text: "Not at all, it's quite mild." }
-      - { speaker: Lúcia, text: "Then I'll have the stew. Does it have any nuts in it? I've got a nut allergy." }
+      - { speaker: Lúcia, text: "Then I'll have the stew. Does it have any nuts in it? I have allergy to nuts." }
       - { speaker: Chloe, text: "No nuts in the stew. Just so you know, the apple crumble on the dessert menu has nuts on top, but the sticky toffee pudding is nut-free." }
       - { speaker: Lúcia, text: "Good to know, thank you. And a glass of the house red, please." }
       - { speaker: Chloe, text: "Lovely. The kitchen's quite busy tonight, so the mains will be about twenty-five minutes. Is that OK?" }
@@ -403,7 +406,7 @@ blocks:
     about: dinner
     graded: true
     title: Аудирование — за столом
-    instruction: Прослушайте разговор два раза и выберите правильный ответ.
+    instruction: Прослушайте разговор два раза и выберите правильный ответ. Лусия по-прежнему иногда говорит как по-португальски (Is very spicy? вместо Is it very spicy?) — повторять за ней не нужно.
     format: choice
     items:
       - id: q1
@@ -445,7 +448,7 @@ blocks:
     part: roleplay
     prompt: |-
       Прослушайте реплики выше; отвечайте на каждую по порядку и записывайте свою часть.
-      Вы ужинаете с Лусией. Официантка — Хлоя. Вам понравился в меню fish pie (рыбный пирог), но у вас аллергия на моллюсков и ракообразных (shellfish) — спросите, есть ли они в пироге. Если есть — закажите тушёную оленину, но без красной капусты. Пить — только воду из-под крана. После ужина: всё понравилось, попросите счёт, заплатите каждый за себя (скажите, что ели вы), добавьте чаевые и заплатите картой. 6 реплик, вся ваша часть — 60–90 секунд.
+      Вы ужинаете с Лусией. Официантка — Хлоя: раньше она работала в кафе The Fig Tree в Йорке (модуль t04), а недавно переехала в Эдинбург. Вам понравился в меню fish pie (рыбный пирог), но у вас аллергия на моллюсков и ракообразных (shellfish) — спросите, есть ли они в пироге. Если есть — закажите тушёную оленину, но без красной капусты. Пить — только воду из-под крана. После ужина: всё понравилось, попросите счёт, заплатите каждый за себя (скажите, что ели вы), добавьте чаевые и заплатите картой. 6 реплик, вся ваша часть — 60–90 секунд.
     seconds: 90
     model: |-
       Waitress: And what can I get for you?
@@ -568,15 +571,15 @@ blocks:
     id: complaint-how
     title: Жалоба платформе бронирования
     body: |-
-      Мастер на следующий день так и не пришёл, горячая вода появилась только утром 17 мая, а хост сказал, что цену сам изменить не может. После поездки напишите жалобу платформе, через которую бронировали квартиру. Схема — как у жалобы авиакомпании в модуле t07: **I am writing to complain about…** + где, даты, номер брони → что случилось, по порядку, в past simple и passive → что вы сделали и что ответил хост → чего вы хотите → **I look forward to hearing from you.**
+      Мастер на следующий день так и не пришёл, окно починили только утром 21 июня, а хост сказал, что цену сам изменить не может. После поездки напишите жалобу платформе, через которую бронировали квартиру. Схема — как у жалобы авиакомпании в модуле t07: **I am writing to complain about…** + где, даты, номер брони → что случилось, по порядку, в past simple и passive → что вы сделали и что ответил хост → чего вы хотите → **I look forward to hearing from you.**
   - type: writing
     id: complaint
     register: formal
-    prompt: "Напишите жалобу платформе бронирования (80–100 слов). Квартира Оливера в Марчмонте, Эдинбург, 14–18 мая, номер брони HX52QT. Горячей воды не было с первого дня; вы написали хосту в тот же день, он обещал мастера на следующий день, но никто не пришёл, и проблему исправили только 17 мая. Хост сказал, что цену изменить не может. Попросите вернуть деньги за три ночи."
+    prompt: "Напишите жалобу платформе бронирования (80–100 слов). Квартира Оливера в Марчмонте, Эдинбург, 18–22 июня, номер брони HX52QT. Окно в спальне не закрывалось с первого дня; вы написали хосту в тот же день, он обещал мастера на следующий день, но никто не пришёл, и окно починили только 21 июня. Хост сказал, что цену изменить не может. Попросите вернуть деньги за три ночи."
     words: { min: 80, max: 100 }
     model: |-
       Dear Sir or Madam,
-      I am writing to complain about my stay in Oliver's flat in Edinburgh from 14 to 18 May, booking reference HX52QT. When I arrived, there was no hot water. I messaged the host that day, and he promised a plumber would come the next afternoon. However, nobody came, and the boiler was not repaired until 17 May. For three days I boiled water in the kettle. The host said he could not change the price. I would like a refund for three nights.
+      I am writing to complain about my stay in Oliver's flat in Edinburgh from 18 to 22 June, booking reference HX52QT. When I arrived, the bedroom window would not close. I messaged the host that day, and he promised someone would come the next afternoon. However, nobody came, and the window was not repaired until 21 June. For three nights the room was cold and noisy. The host said he could not change the price. I would like a refund for three nights.
       I look forward to hearing from you.
       Yours faithfully,
       Olga Ivanova
@@ -615,21 +618,21 @@ blocks:
         answer: have
         explanation: "Don't have to — «не обязательно»; после don't — have без -s (модуль t05)."
       - id: g6
-        prompt: "I've had this rash ___ yesterday afternoon."
+        prompt: "I've had this rash ___ four o'clock."
         answer: since
-        explanation: "С момента — since yesterday afternoon; for — про срок: for two days (модуль t06)."
+        explanation: "С момента — since four o'clock; for — про срок: for two hours (модуль t06)."
       - id: g7
         prompt: "You'd ___ see a doctor if it gets worse."
         answer: better
         explanation: "You'd better + глагол без to — настойчивый совет (модуль t06)."
       - id: g8
-        prompt: "I was looking at the menu ___ someone took my phone from the table."
+        prompt: "I was walking to the bus stop ___ it started to rain."
         answer: when
-        explanation: "Фон — past continuous (I was looking), событие — past simple, связка when (модуль t07)."
+        explanation: "Фон — past continuous (I was walking), событие — past simple, связка when (модуль t07)."
       - id: g9
-        prompt: "My phone ___ stolen from the table."
+        prompt: "Our flight ___ cancelled because of the storm."
         answer: was
-        explanation: "Одна вещь — was + stolen; несколько вещей — were stolen (модуль t07)."
+        explanation: "Один рейс — was + cancelled; несколько — were cancelled (модуль t07)."
       - id: g10
         prompt: "Are there ___ side effects?"
         answer: any

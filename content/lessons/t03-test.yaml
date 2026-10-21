@@ -19,7 +19,7 @@ blocks:
       The lift is out of order today because of repair work. It should be working again by 6 pm. If you need help with your luggage, please ask at reception.
 
       HOT WATER
-      On Wednesday 15 May there will be no hot water from 9 am to midday, because engineers are replacing the boiler. We apologise for the inconvenience.
+      On Friday 15 May there will be no hot water from 9 am to midday, because engineers are replacing the boiler. We apologise for the inconvenience.
 
       HOUSEKEEPING
       Housekeeping clean the rooms between 10 am and 2 pm. If you don't want your room cleaned, please hang the "Do not disturb" sign on your door. For fresh towels, leave the used ones on the bathroom floor.
@@ -55,11 +55,11 @@ blocks:
       - id: q2
         prompt: When will there be no hot water?
         options:
-          - on Wednesday morning
-          - all day on Wednesday
+          - on Friday morning
+          - all day on Friday
           - every morning this week
-        answer: on Wednesday morning
-        explanation: On Wednesday 15 May… from 9 am to 12 pm.
+        answer: on Friday morning
+        explanation: On Friday 15 May… from 9 am to 12 pm.
       - id: q3
         prompt: What should a guest do if they don't want their room cleaned?
         options:
@@ -136,7 +136,7 @@ blocks:
         prompt: What will housekeeping bring?
         options: [two blankets, one blanket, fresh towels]
         answer: two blankets
-        explanation: Инес просит одно, а Ханна обещает два — I'll ask housekeeping to bring you two.
+        explanation: Инеш просит одно, а Ханна обещает два — I'll ask housekeeping to bring you two.
       - id: q5
         prompt: Why can't Inês have a late check-out?
         options:

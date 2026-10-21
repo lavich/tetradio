@@ -159,7 +159,7 @@ blocks:
     body: |-
       В кафе шумно, официант спешит и говорит быстро. Не пытайтесь услышать каждое слово: ловите блюдо, напиток, «есть / нет» в ответе об аллергии и цену. Если не расслышали, переспросить — нормально: **Sorry, it's quite loud in here — did you say…?** Так делает и официант.
 
-      Лусия из Бразилии и Диего из Испании обедают в The Fig Tree, их обслуживает официантка Хлоя. У Лусии лёгкая аллергия на орехи; при сильной аллергии блюдо, за которое кухня не ручается, лучше не заказывать. Диего говорит по-английски просто и иногда подбирает слово — это обычная речь туриста, и Хлоя его понимает. Послушайте заказ, ответьте на вопросы и при втором прослушивании проверьте ответы. Транскрипт откроется после ответа.
+      Лусия из Бразилии и Диего из Испании обедают в The Fig Tree, их обслуживает официантка Хлоя. У Лусии лёгкая аллергия на орехи; при сильной аллергии блюдо, за которое кухня не ручается, лучше не заказывать. Диего говорит по-английски просто и иногда подбирает слово — это обычная речь туриста, и Хлоя его понимает. Лусия иногда строит фразу по-португальски, без подлежащего: is only a small allergy вместо it's only a mild allergy — повторять за ней не нужно. Послушайте заказ, ответьте на вопросы и при втором прослушивании проверьте ответы. Транскрипт откроется после ответа.
   - type: listening
     id: order
     title: Ordering at The Fig Tree
@@ -176,7 +176,7 @@ blocks:
       - { speaker: Chloe, text: "And what would you like to eat?" }
       - { speaker: Lúcia, text: "Before I order — I've got a nut allergy. Does the soup have any nuts in it?" }
       - { speaker: Chloe, text: "Today it's tomato and red pepper, and there aren't any nuts in it. But our kitchen uses nuts, so I can't promise a hundred per cent." }
-      - { speaker: Lúcia, text: "That's fine — it's only a mild allergy. I'll have the soup, and then the fish of the day." }
+      - { speaker: Lúcia, text: "That's fine — is only a small allergy. I'll have the soup, and then the fish of the day." }
       - { speaker: Chloe, text: "Two courses — so that's the set menu. And for you?" }
       - { speaker: Diego, text: "The steak, please. Not well done… how do you say… medium rare." }
       - { speaker: Chloe, text: "Medium rare, no problem. It comes with chips and a side salad." }
