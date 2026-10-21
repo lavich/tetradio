@@ -5,8 +5,8 @@
 - **Модуль публикуется только полным** (`publicationGaps`, `src/content/course.ts:583-604`): чтение и аудирование с заданиями, письмо, речь, контрольная `kind: test` с `graded`. Урок вне модулей и карточка вне уроков роняют сборку (`content/build/lessons.ts:125`, `content/build/lessons.ts:274-279`), поэтому карточки модуля, его уроки и запись в `lessons` модуля появляются в одном шаге. Модуль-черновик `t08`…`t14` сейчас — только `number`, `title`, `goal`, `grammar`, `sessions` (`content/modules/t08.yaml`).
 - **Контрольная точка не зависит от языка и календаря**: `checkpoint:` у модуля принимается сборкой (`content/build/courses.ts:94-104`), требует `kind: test` с оцениваемыми заданиями (`content/build/lessons.ts:283-288`); следующий шаг после уроков модуля — его точка, и только потом следующий модуль (`nextStep`, `src/storage/course.ts:250-258`: перебор модулей по порядку). Итог по навыкам — от `passShare` курса (`src/domain/course.ts:123-150`, `content/courses/english-travel.yaml`: `passShare: 0.6`). Образец точки — `content/lessons/t07-c1.yaml` (пять пар «аудио → `roleplay`»).
 - **Регистры письма** — только `friendly` и `formal` (`src/content/course.ts:104,523`); вся ступень 2 — `friendly`.
-- **Голоса.** Карта `content/voices/en.yaml` содержит 24 персонажа и диктора Kore. Женский пул (13 голосов) занят целиком, из мужского (14) свободны Fenrir и Zubenelgenubi. Сборка проверяет только то, что голос персонажа есть в пуле его пола и что в одном диалоге голоса разные (`content/build/voices.ts:96-98`, `content/build/voices.ts:105-123`); уникальность голоса на весь курс не требуется.
-- **Бюджет.** `npm run content` на `main`: каталог 23 429 из 25 000 байт gzip, пакет max 32 973 из 40 000, курс 1 412 024 из 1 600 000, mp3 max 183 264 из 250 000 (`content/build/budgets.ts:19-24`). Ступень 1 подняла каталог с 20,7 до 22,4 KB при шести с половиной модулях — около 0,26 KB на модуль; семь модулей и точка добавят около 1,8–2,0 KB.
+- **Голоса.** Карта `content/voices/en.yaml` содержит 24 персонажа и диктора Kore. Женский пул (13 голосов) занят целиком, из мужского (14) свободны Fenrir и Zubenelgenubi. Список голосов сервиса (`GET /v1/voices?languageCode=en-GB`, 21.10.2026) содержит 30 голосов Chirp 3 HD `en-GB`; в `pools` нет трёх: Pulcherrima (женский), Achird и Orus (мужские). Сборка проверяет только то, что голос персонажа есть в пуле его пола и что в одном диалоге голоса разные (`content/build/voices.ts:96-98`, `content/build/voices.ts:105-123`); уникальность голоса на весь курс не требуется.
+- **Бюджет.** `npm run content` на `main` после #232: каталог 23 590 из 25 000 байт gzip, пакет max 32 973 из 40 000, курс 1 412 024 из 1 600 000, mp3 max 183 264 из 250 000 (`content/build/budgets.ts:19-24`). Оценка независимого ревью плана 21.10.2026: +360–435 байт gzip каталога на модуль, ступень 2 добавит около 2,5–3,0 KB, итог около 26,5 KB. mp3 после озвучки увеличивают только размер курса (в пределах 1 600 000).
 - **Карточки.** `tw001…tw105`, `tp001…tp105` — ступень 1; формат — `content/words/english-travel/tw001.yaml`, `content/phrases/english-travel/tp001.yaml`. Сборка отклоняет текст карточки, совпавший с карточкой другого курса того же языка («Карточки курсов одного языка»).
 
 ## Goals / Non-Goals
@@ -20,7 +20,7 @@
 
 **Non-Goals:**
 
-- Правка сборки, формата каталога и пакетов, базы, облака, клиента (кроме предела `catalogGzip`, решение 4); текст «Сегодня» в конце курса (`today-by-language`).
+- Правка сборки, формата каталога и пакетов, базы, облака, клиента (кроме предела `catalogGzip`, решение 4); текст «Сегодня» в конце курса.
 - Американские и другие варианты языка у персонажа; запись живых голосов; паузы между репликами собеседника в сцене; тексты для беглого чтения.
 
 ## Decisions
@@ -32,8 +32,9 @@
 - `WRITING` (границы слов и `register`) для модулей ступени 2: `t08` 20–40, `t09` 40–80, `t10` 20–40, `t11` 60–100, `t12` 60–100, `t13` 40–80, `t14` 60–100, везде `friendly`; образец письма укладывается в свои границы.
 - В `tNN-3` не меньше двух устных заданий и хотя бы одна `roleplay`; перед каждой `roleplay` — аудирование без задания (решение 9 ступени 1).
 - Модули после `STAGE` — черновики; когда `STAGE` дошёл до `t14`, черновиков в курсе нет.
-- Точка: у `t14` `checkpointId: t14-c2`; пакет `t14-c2` — `kind: test`, не меньше 10 оцениваемых пунктов на чтение и на аудирование, не меньше пяти пар «аудирование без задания → `roleplay`», письмо `friendly`, заголовок «Вечер» без «C2».
-- Говорящие всех уроков — в карте `en` и не из имён IT-курса (тест `tests/course-content.test.ts:211`).
+- Точка: у `t14` `checkpointId: t14-c2`; пакет `t14-c2` — `kind: test`, не меньше 10 оцениваемых пунктов на чтение и на аудирование, не меньше пяти пар «аудирование без задания → `roleplay`», беседа по банку ответов (`speaking`, `part: interview`), письмо `friendly`, заголовок «Вечер» без «C2». Следующий шаг: `nextStep` (`src/storage/course.ts:250-258`) идёт по модулям по порядку и отдаёт точку модуля сразу после его уроков, поэтому тест «Вечер — следующий шаг» ставит и проходит уроки `t01`–`t14` и точку `t07-c1`. Существующий блок «День поездки» в тесте остаётся на фиксированном списке `t01`–`t07`, а не на растущем `STAGE`; заголовок теста курса не говорит «остальные — черновики», а описывает число опубликованных модулей.
+- Говорящие всех уроков — в карте `en` и не из имён IT-курса: `IT_NAMES` строится из говорящих `english-it` (Sarah, Daniel, Mark, Elena; `tests/course-content.test.ts:89-93`), проверка — строки 219-221 и 295-301.
+- Чувствительные темы проверяются тестом, а не только рецензией: в `t12-2` блок безопасной встречи с тремя правилами программы (`docs/curriculum-english-travel.md:186`); в `t13-test` оцениваемое задание к аудио, где после «no» собеседник принимает отказ без повторной просьбы; карточки `tw`/`tp` сверяются со списком грубых слов (список — в тесте). «Все персонажи — взрослые» тестом не проверяется и входит в чек-лист языковой рецензии.
 - Карточки ступени 2 нигде не повторяют карточки IT-курса и `t01`–`t07`: сборка отклоняет повтор текста между курсами одного языка (`content/build/cards.ts:198`) и повтор слова или фразы внутри курса (`content/build/cards.ts:221`, `content/build/cards.ts:243`); отдельный тест не нужен.
 
 ### 2. Порядок и нарезка PR
@@ -44,23 +45,25 @@
 
 Как в ступени 1 (`english-travel-trip`, решение 3): `tNN-1` — 1–2 объяснения грамматики с таблицей и типичной ошибкой, объяснение лексики, `vocabulary`, 4–6 заданий, 8 слов и 8 фраз; `tNN-2` — «как слушать / читать», чтение с заданием, 1–2 аудирования `plays: 2` с заданиями, 7 слов и 7 фраз; `tNN-3` — подготовка по банку фраз, сборка реплик, письмо с образцом, критериями и `register`, 2–3 устных задания, `items: []`; `tNN-test` — вступление на 10–15 минут, чтение и аудирование с `graded`, грамматика и карточки с `graded`. Объяснения и пояснения ошибок — по-русски, вопросы к текстам и аудио — по-английски, разметка `words` у своих примеров.
 
-Регистр: мягкий сленг и редукции (*gonna, wanna, dunno, mate, cheers*) — в карточках и в текстах с `t09`; в `t08` — нейтрально-дружелюбный. Грубый и бранный сленг — только в аудио и чатах для понимания, с пометкой и переводом в тексте урока, без карточек (программа, «Исходные условия»).
+Регистр: мягкий сленг и редукции (*gonna, wanna, dunno*) — в карточках и в текстах с `t09`; в `t08` — нейтрально-дружелюбный. Грубый и бранный сленг — только в аудио и чатах для понимания (`t09`, `t10`, `t12`, `t14`), без карточек; пометка и перевод стоят в объяснении перед аудио или чатом, потому что у реплики транскрипта только `speaker` и `text` (`src/content/course.ts:343`). Тон русских текстов — по `PRODUCT.md`, «Brand Commitments»: спокойный и точный, без восклицаний, без «не X, а Y», без оценочных слов; требование входит в запрос на генерацию и в чек-лист рецензии.
+
+**Чувствительные темы** (знакомства, алкоголь, флирт): все персонажи — взрослые; пары в `t12`–`t13` не только «он и она» (в `t12` есть пара Alex и Will); откровенные темы не вводятся; согласие в `t13` — вопрос «Is this okay?» без деталей, ответ принимается как есть; `Can I walk you to the station?` показывается как предложение, от которого можно отказаться (*I'm good, I'll take the tube, thanks*), и согласуется с правилом `t12` «дорога домой своя»; в `t10-2` — напиток без присмотра и отказ под давлением (*I'll pass*); *a nightcap*, *pre-drinks*, *wyd tonight?* даются в нейтральном контексте (чай, лимонад, планы на вечер).
 
 | Модуль | Грамматика (`tNN-1`) | Чтение / аудирование (`tNN-2`) | Письмо (`tNN-3`) | Речь (`tNN-3`) |
 | --- | --- | --- | --- | --- |
-| t08 | present perfect для опыта (*Have you ever been to…?*), *So do I / Neither do I*, короткие ответы | посты путешественников / знакомства в хостеле, три акцента | первое сообщение новому знакомому, 20–40 слов | о себе за 30–60 с и встречные вопросы; сцена знакомства с аудио перед ней |
-| t09 | разделительные (*It's great, isn't it?*) и эхо-вопросы (*Did you?*), опущения (*Sounds good, Been there*), редукции (*gonna, wanna, dunno*) | групповой чат / быстрый разговор с перебиваниями, задание «что имели в виду» | ответы в групповом чате, 40–80 слов | история из поездки 1–2 мин; сцена с переспросом и выходом из разговора |
+| t08 | present perfect для опыта (*Have you ever been to…?*), *So do I / Neither do I*, короткие ответы | посты путешественников / знакомства в хостеле, три говорящих, неносители отличаются текстом | первое сообщение новому знакомому, 20–40 слов | о себе за 30–60 с и встречные вопросы; сцена знакомства с аудио перед ней |
+| t09 | разделительные (*It's great, isn't it?*) и эхо-вопросы (*Did you?*), опущения (*Sounds good, Been there*), редукции (*gonna, wanna, dunno*), вернуть разговор (*Sorry, you were saying?*) | групповой чат / быстрый разговор с перебиваниями, задание «что имели в виду» | ответы в групповом чате, 40–80 слов | история из поездки 1–2 мин; сцена с переспросом и выходом из разговора |
 | t10 | решения на месте (*I'll get this, Shall I…?, Let me…*), *would rather / prefer* | меню бара и афиша / заказ в шумном баре, разговор у стойки | сообщение друзьям: где вы и что заказать, 20–40 слов | заказ на компанию; заговорить у стойки и отказаться от следующего раунда |
-| t11 | будущее: present continuous для договорённостей, *going to*, *will*; *Are you up for…?, How about…?* | приглашение и чат вечеринки / вечеринка и голосовое с приглашением | переписка: пригласить, договориться, перенести, 60–100 слов | пригласить и обменяться контактами; перенести встречу |
-| t12 | герундий и инфинитив (*I love hiking, I'd love to*), вопросы, продолжающие переписку | анкеты и переписки (включая безопасность первой встречи) / голосовое сообщение в приложении | анкета, 60–100 слов; отказ и приглашение — задания `text` | голосовое 30 с; ответ на голосовое с аудио перед сценой |
+| t11 | будущее: present continuous для договорённостей, *going to*, *will*; *Are you up for…?, How about…?* | приглашение и чат вечеринки / вечеринка и голосовое с приглашением | переписка: пригласить, договориться, перенести, 60–100 слов | две сцены «аудио → `roleplay`»: пригласить и обменяться контактами; перенести встречу |
+| t12 | герундий и инфинитив (*I love hiking, I'd love to*), вопросы, продолжающие переписку, сокращения (*tbh, ngl, hbu, wyd, lol*) | анкеты и переписки (включая блок безопасной первой встречи) / голосовое сообщение в приложении | анкета, 60–100 слов; переписка от первого сообщения до приглашения и отказ — задания `text` | голосовое 30 с; ответ на голосовое с аудио перед сценой |
 | t13 | second conditional (*If you could live anywhere…*), смягчение (*kind of, a bit, I guess*), *would rather* | статья о первых свиданиях / свидание, согласие и мягкий отказ | сообщение после свидания (продолжить или вежливо закончить), 40–80 слов | беседа 3 мин; сказать «нет» и ответить на «нет» — две сцены с аудио перед ними |
 | t14 | past simple и present perfect в новостях (*What have you been up to?*), разговорный пересказ (*She was like…*), будущее в планах | длинная дружеская переписка / голосовые и видеозвонок с плохой связью | переписка после поездки, 60–100 слов | голосовое с новостями 1–2 мин; видеозвонок с плохой связью (сцена) |
 
-Шпаргалки `crib` (черновик, уточняется с уроком): t08 «знакомство» — `Is this seat taken?`, `Have you ever been to…?`, `So do I.`, `Neither have I.`; t09 «разговор» — `No way!`, `Fair enough.`, `Sorry, what?`, `Anyway, I'd better…`; t10 «бар» — `What are you having?`, `I'll get this.`, `It's my round.`, `I'm good, thanks.`; t11 «планы» — `Are you up for…?`, `How about…?`, `I'm meeting…`, `I'll swing by…`; t12 «переписка» — `I love + -ing`, `I'd love to + inf`, `tbh`, `hbu`; t13 «свидание» — `If you could…, where would you…?`, `I'd rather not.`, `Let's take it slow.`; t14 «на связи» — `What have you been up to?`, `I've just got back…`, `She was like…`.
+Шпаргалки `crib` (черновик, уточняется с уроком): t08 «знакомство» — `Is this seat taken?`, `Have you ever been to…?`, `So do I.`, `Neither have I.`; t09 «разговор» — `No way!`, `Fair enough.`, `Sorry, what?`, `Sorry, you were saying?`, `Anyway, I'd better…`; t10 «бар» — `What are you having?`, `I'll get this.`, `It's my round.`, `I'm good, thanks.`; t11 «планы» — `Are you up for…?`, `How about…?`, `I'm meeting…`, `I'll swing by…`; t12 «переписка» — `I love + -ing`, `I'd love to + inf`, `tbh`, `ngl`, `hbu`, `lol`; t13 «свидание» — `If you could…, where would you…?`, `I'd rather not.`, `Let's take it slow.`; t14 «на связи» — `What have you been up to?`, `I've just got back…`, `She was like…`.
 
 ### 4. Бюджет каталога
 
-Каталог в 23 429 из 25 000: ступень 2 его превысит. Предел растёт «только явным решением» (`content/build/budgets.ts`, комментарий над `BUDGETS`). Решение: в PR первого модуля, на котором строка «Бюджеты» отчёта сборки перестаёт проходить (ожидается `t11`–`t12`), `catalogGzip` поднимается до 28 000; замер и причина — в «Реализация», в комментарии над `BUDGETS` — дата и замер одной строкой (он называет замер 17.10.2026 и устарел). Пакеты (max 32 973 из 40 000) и курс укладываются: пакет урока растёт только у самых больших уроков. Альтернатива — сжать каталог (убрать поля, дубли целей и шпаргалок) — правка формата, вне объёма.
+Каталог в 23 590 из 25 000: ступень 2 его превысит. Предел растёт «только явным решением» (`content/build/budgets.ts`, комментарий над `BUDGETS`). Решение: в PR первого модуля, на котором строка «Бюджеты» отчёта сборки перестаёт проходить (оценка — `t11`), `catalogGzip` поднимается до 28 000; замер и причина — в «Реализация», в комментарии над `BUDGETS` — дата и замер одной строкой (он называет замер 17.10.2026 и устарел). Пакеты (max 32 973 из 40 000) и курс укладываются: пакет урока растёт только у самых больших уроков. Альтернатива — сжать каталог (убрать поля, дубли целей и шпаргалок) — правка формата, вне объёма.
 
 ### 5. Карточки t08–t14 — черновой список
 
@@ -69,42 +72,46 @@
 | Модуль | `tNN-1` слова (8) | `tNN-1` фразы (8) | `tNN-2` слова (7) | `tNN-2` фразы (7) |
 | --- | --- | --- | --- | --- |
 | t08 `tw106–120`, `tp106–120` | a fellow traveller, a hostel dorm, a bunk, a local, off the beaten track, a hidden gem, touristy, a day trip | Is this seat taken? · Where are you from originally? · What brings you to Edinburgh? · How long have you been travelling? · Have you ever been to Lisbon? · I've never been, but I'd love to. · Neither have I. · Are you travelling on your own? | a gap year, a short break, head to, be based in, settle down, laid-back, a must-see | Do you have any recommendations? · I'm here for a long weekend. · I'm on a gap year. · We're heading to Glasgow tomorrow. · Mind if I join you? · Are you doing the walking tour tomorrow? · It was nice meeting you. |
-| t09 `tw121–135`, `tp121–135` | mate, cheers, keen, knackered, gutted, chuffed, dodgy, banter | No way! · Fair enough. · That's wild. · Sorry, what? · You lost me. · Come again? · Been there. · Sounds good. | random, sorted, a heads-up, bump into, hang out, a nightmare, sketchy | Anyway, I'd better get going. · Don't worry about it. · I'm gonna grab a drink. · I dunno, to be honest. · Hang on, say that again. · It was great chatting to you. · Catch you later. |
-| t10 `tw136–150`, `tp136–150` | a pint, on tap, a round, last orders, a tab, a bouncer, a soft drink, alcohol-free | What are you having? · It's my round. · I'll get this. · Shall I get you another? · Two pints of lager, please. · I'm good, thanks. · Can I open a tab? · Just a soft drink for me. | tipsy, a hangover, a lager, a cocktail, a bar snack, a designated driver, the cloakroom | Are you being served? · I'd rather stick to water. · Could we get some menus? · Is there a cover charge? · Last orders at eleven. · I'll pass on the next round. · Mind if I squeeze in here? |
+| t09 `tw121–135`, `tp121–135` | mate, cheers, keen, knackered, gutted, chuffed, dodgy, banter | No way! · Fair enough. · That's wild. · Sorry, what? · You lost me. · Sorry, you were saying? · Been there. · Sounds good. | random, sorted, a heads-up, bump into, hang out, a nightmare, sketchy | Anyway, I'd better get going. · Don't worry about it. · I'm gonna grab a drink. · I dunno, to be honest. · Hang on, say that again. · It was great chatting to you. · Catch you later. |
+| t10 `tw136–150`, `tp136–150` | a pint, on tap, a round, last orders, a tab, a bouncer, a soft drink, alcohol-free | What are you having? · It's my round. · I'll get this. · Shall I get you another? · Two pints of lager, please. · I'm good, thanks. · Can I open a tab? · Just a soft drink for me. | tipsy, a hangover, a lager, a cocktail, a bar snack, a designated driver, the cloakroom | Are you being served? · I'd rather stick to water. · Could we get some menus? · Is there a cover charge? · Last orders at eleven. · I'll pass on the next round. · Excuse me, can I get past? |
 | t11 `tw151–165`, `tp151–165` | come along, swing by, a plus-one, a rain check, bail, running late, a house party, a gig | Are you up for it? · How about Friday? · Do you fancy coming along? · I'll swing by around eight. · Can I bring a plus-one? · Can we take a rain check? · I'm running late. · Sorry, I have to bail. | RSVP, a guest list, BYOB, pre-drinks, a lift, a dress code, a nightcap | Are you on Instagram? · I'll add you. · What's the dress code? · Is it OK if I bring something? · Let's make a plan. · I'll let you know by Thursday. · Text me when you get there. |
 | t12 `tw166–180`, `tp166–180` | a match, swipe, a bio, ghost, a red flag, a catfish, a dealbreaker, a conversation starter | I love hiking and trying new food. · What do you do for fun? · What's your go-to karaoke song? · Fancy a drink sometime? · tbh I'm not sure what I'm looking for. · hbu? · wyd tonight? · I'd love to hear about it. | a spark, chemistry, left on read, unmatch, block, a first move, casual | I'm up for coffee. · I don't think we're a match, but good luck. · I'm not feeling a spark, sorry. · Thanks for the chat, but I'm going to pass. · Let's meet somewhere busy. · I'll text a friend where I am. · Could you send me a voice message? |
-| t13 `tw181–195`, `tp181–195` | a compliment, awkward, cheesy, open up, a pet peeve, a bucket list, a good listener, down-to-earth | If you could live anywhere, where would it be? · You've got a great laugh. · I reckon it's worth a try. · Fair point. · I'm kind of a morning person. · I'd rather stay in than go out. · What's the best trip you've ever taken? · I'm a bit nervous, to be honest. | consent, boundaries, pushy, pressure, respectful, mutual, overstep | Is this okay? · I'd rather not. · Let's take it slow. · No worries, totally fine. · I'm not comfortable with that. · I had a really nice time. · Can I walk you to the station? |
-| t14 `tw196–210`, `tp196–210` | a voice note, a catch-up, a screenshot, a group chat, patchy, a glitch, buffer, a thread | What have you been up to? · It's been ages! · You're breaking up. · I can't hear you — the signal's bad. · Let's catch up properly soon. · I've just got back from Portugal. · She was like, "No way!" · He goes, "I'm not joking." | sarcasm, a wind-up, tease, deadpan, understatement, a throwback, a reunion | I'm kidding! · Just joking. · Not bad, actually. · Send me the photos! · Let me know when you're next in town. · I'll book flights this week. · Miss you already. |
+| t13 `tw181–195`, `tp181–195` | a compliment, awkward, cheesy, open up, a pet peeve, a bucket list, a good listener, down-to-earth | If you could live anywhere, where would it be? · You've got a great laugh. · I reckon it's worth a try. · I hadn't thought of it that way. · I'm kind of a morning person. · I'd rather stay in than go out. · What's the best trip you've ever taken? · I'm a bit nervous, to be honest. | consent, boundaries, pushy, pressure, respectful, mutual, overstep | Is this okay? · I'd rather not. · Let's take it slow. · No worries, totally fine. · I'm not comfortable with that. · I had a really nice time. · Can I walk you to the station? |
+| t14 `tw196–210`, `tp196–210` | a voice note, a catch-up, a screenshot, a group chat, patchy, a glitch, buffer, a thread | What have you been up to? · It's been ages! · You're breaking up. · I can't hear you — the signal's bad. · Let's catch up properly soon. · I've just got back from Portugal. · She was like, "No way!" · He goes, "I'm not joking." | sarcasm, a wind-up, tease, deadpan, understatement, a throwback, a reunion | I'm kidding! · No offence meant. · Not bad, actually. · Send me the photos! · Let me know when you're next in town. · I'll book flights this week. · Miss you already. |
+
+Кандидаты на замену или обоснование на шаге сверки (`tNN.2`): слова ниже B2+ — *a local, a day trip, a short break, a cocktail, a pint, mate, cheers, a lift, a guest list, a group chat, a screenshot*; слова общего IT-лексикона — *a thread, buffer, a glitch, block*. Разговорные *mate, cheers, a pint* оставляются как мягкий сленг и устойчивые британские слова (обоснование — в «Реализация»); остальные заменяются словами B2+ или переходят в тексты с глоссой. Близкие по смыслу пары убраны сразу (*I'm kidding / No offence meant* — разные функции; один переспрос на функцию в `t09`: не расслышал, не понял, вернуть разговор, попросить повторить).
 
 Заметки по списку. `Neither have I.` и `So do I.` — `t08` учит парой в одном объяснении, карточка у второго; `hbu` и `wyd` — сокращения переписки, фраза-карточка читается словом целиком (*how about you?*, *what are you doing?*) в `note`. Грубые выражения — не в списке: *t09*, *t10*, *t12*, *t14* показывают их только в аудио и чатах с пометкой (решение 3). Слова одного корня со своей фразой допустимы (*a catch-up* и *Let's catch up properly soon.*): разные карточки разного вида. В `t13` слова *consent*, *boundaries*, *pressure* вместе с фразами образуют часть оцениваемого содержания: тест модуля содержит `graded`-задания на распознавание отказа и на ответ на него. Тексты `t13-2` показывают согласие как постоянное: вопрос → ответ → уважение ответа; без нажима, без «перелома» отказа.
 
 ### 6. Персонажи
 
-Все персонажи — взрослые, носители и неносители вперемешку (акцентный микс из программы): неносители говорят проще — короткие фразы, переспросы, без нарочных ошибок в каждой реплике и без акцента в написании. Имена — свободные, не из `IT_NAMES` теста (Sarah, Daniel, Mark, Elena, Tom, Priya, Sharma, Fischer, Andrei, Aisha, Marco, Rory, Inês) и не из карты ступени 1. Свободных голосов нет (Context), поэтому правило: персонажу выбирается голос своего пола, не занятый его собеседниками ни в одном диалоге; повтор голоса у персонажа другой ступени допустим. Черновик:
+Все персонажи — взрослые; носители и неносители вперемешку: синтез `en-GB` акценты не воспроизводит (программа и спека это признают), поэтому неносители отличаются текстом — короткие фразы, переспросы, без нарочных ошибок в каждой реплике и без акцента в написании; быстрая речь строится редукциями и перебиваниями. Заданий на определение акцента нет. Имена — свободные: не из `IT_NAMES` теста (Sarah, Daniel, Mark, Elena) и не из карты ступени 1 (в ней Aisha, Marco, Rory, Inês, Fiona, Lúcia, Kwame, Jonas, Hannah, Oliver, Chloe, Diego, Grace, Callum, Bridget, Okafor, Hughes, Megan, Piotr, Joanne). Свободных голосов мало (Context), поэтому правило: персонажу выбирается голос своего пола, не занятый его собеседниками ни в одном диалоге; повтор голоса у персонажа другой ступени допустим. Черновик:
 
-| Персонаж | Где | Голос (повтор у…) |
+| Персонаж | Где | Голос |
 | --- | --- | --- |
 | Ben — сосед по хостелу, британец | t08, t09, t14-c2 | Fenrir (свободный) |
-| Sofia — путешественница из Италии, неноситель | t08, t09 | Despina (Elena, IT-курс) |
-| Mei — путешественница из Сингапура | t08, t14-c2 | Leda (Aisha, IT-курс) |
-| Jack — друг в групповом чате, американец | t09 | Zubenelgenubi (свободный) |
-| Zoe — подруга, быстрая речь | t09, t11 | Gacrux (Inês) |
-| Dave — бармен | t10, t14-c2 | Charon (Daniel, IT-курс) |
-| Nina — подруга в баре | t10 | Aoede (Sarah, IT-курс) |
-| Leo — хозяин вечеринки | t11, t14-c2 | Iapetus (Mark, IT-курс) |
-| Tess — гостья вечеринки | t11, t14-c2 | Callirrhoe (Fiona) |
-| Maya — пара в приложении, голосовое | t12 | Achernar (Lúcia) |
-| Alex — пара в приложении | t12 | Algenib (Kwame) |
-| Lena — свидание | t13, t14-c2 | Laomedeia (Grace) |
-| Will — свидание | t13, t14-c2 | Sadachbia (Callum) |
-| Hugo — друг из Франции, неноситель | t14 | Alnilam (Jonas) |
-| Anika — подруга из Германии | t14 | Vindemiatrix (Megan) |
+| Sofia — путешественница из Италии, неноситель | t08, t09 | Despina (повтор: Elena, IT-курс) |
+| Mei — путешественница из Сингапура | t08, t14-c2 | Leda (повтор: Aisha, ступень 1) |
+| Jack — друг в групповом чате; американская пара — только в тексте и `note` | t09 | Zubenelgenubi (свободный) |
+| Zoe — подруга, быстрая речь | t09, t11 | Gacrux (повтор: Inês, ступень 1) |
+| Dave — бармен | t10, t14-c2 | Orus (новый в `pools`) |
+| Nina — подруга в баре | t10 | Aoede (повтор: Sarah, IT-курс) |
+| Leo — хозяин вечеринки | t11, t14-c2 | Iapetus (повтор: Mark, IT-курс) |
+| Tess — гостья вечеринки | t11, t14-c2 | Callirrhoe (повтор: Fiona, ступень 1) |
+| Maya — пара в приложении, голосовое | t12 | Achernar (повтор: Lúcia, ступень 1) |
+| Alex — пара в приложении | t12 | Algenib (повтор: Kwame, ступень 1) |
+| Lena — свидание | t13, t14-c2 | Pulcherrima (новый в `pools`) |
+| Will — свидание; пара Alex и Will в `t12` | t12, t13, t14-c2 | Achird (новый в `pools`) |
+| Hugo — друг из Франции, неноситель | t14 | Alnilam (повтор: Jonas, ступень 1) |
+| Anika — подруга из Германии | t14 | Vindemiatrix (повтор: Megan, ступень 1) |
+
+Из 15 новых персонажей 5 получают голос, которого ещё нет в карте (Fenrir, Zubenelgenubi и три добавляемых в `pools`: Pulcherrima, Achird, Orus), 10 повторяют голос чужого персонажа — 7 ступени 1 и 3 IT-курса. Голоса Pulcherrima, Achird, Orus доступны в сервисе (Context); первый шаг группы `t08` — добавить их в `pools` `content/voices/en.yaml` и убедиться пробным синтезом `npm run voices`, что они звучат; если нет — персонажи повторяют голоса по тому же правилу.
 
 Объявления и тексты без говорящего — диктор Kore. Реплики собеседника перед ролевой сценой говорит персонаж сцены. Сцены точки собираются из персонажей разных модулей; различие голосов внутри сцены проверяет сборка. Имена и голоса уточняются при подготовке модуля.
 
 ### 7. Без пересечений с IT-курсом и ступенью 1
 
-- Сборка отклоняет совпадение текста карточки между курсами одного языка и повтор внутри курса (решение 1).
+- Сборка отклоняет совпадение текста карточки между курсами одного языка и повтор пары «текст + перевод» внутри курса (решение 1). Близкие по смыслу карточки внутри `english-travel` сборка не ловит: сверка вручную охватывает и `t01`–`t07`, и модули ступени 2 между собой.
 - Ручная сверка перед карточками модуля — со `docs/curriculum-english-it.md`, где у будущих модулей IT-курса карточек ещё нет: переспрос (e05 — *Could you say that again?*, *Do you mean…*) — в `t09` только разговорные (*Sorry, what?*, *You lost me*, *Come again?*); мнение и несогласие (e15 — *I see your point, but…*) — в `t13` только разговорные (*I reckon*, *Fair point*); работа и профессия (e01) — в small talk `t08` без карточек; планы и мотивация (e07 — *going to*, *will*) — `t11` учит грамматику без карточек-рамок, фразы только приглашений; условия (e08 — модальные) — `t10`/`t13` *would rather* без карточки-рамки.
 - Совпавшее слово или фраза остаётся за курсом, где оно уже есть, здесь — текст с глоссой.
 
@@ -119,10 +126,11 @@
 | Знакомство | чтение: пост и чат хостела — `graded`; аудио реплик Ben и Mei (по очереди) → `roleplay` small talk с переспросом | чтение |
 | Приглашение | аудирование: голосовое Leo с приглашением и быстрые реплики Tess — `graded`; аудио реплик Tess → `roleplay` пригласить и обменяться контактами | аудирование |
 | Свидание | чтение: анкета и переписка с Lena — `graded`; аудирование: разговор на свидании с мягким отказом (Lena, Will) — `graded`; аудио реплик Will → `roleplay` сказать «нет» вежливо; аудио реплик Lena → `roleplay` ответить на «нет» | чтение, аудирование |
+| Беседа | устная беседа 2–3 мин по банку ответов ступени (`speaking`, `part: interview`; программа: «беседа по банку ответов»): вопросы о поездке, планах, вкусах, образец и критерии | — |
 | Следующий день | чтение: переписка — `graded`; письмо: сообщение после вечера (продолжить или вежливо закончить), 60–100 слов, `friendly` | чтение |
 | Язык | задание `gap` на грамматику ступени — `graded`, в общий итог без навыка | — |
 
-Чтение и аудирование — по 10–12 оцениваемых пунктов: один пункт меняет долю навыка не больше чем на 10 %. Персонажи и ситуации — знакомые по модулям, новых карточек нет, слова вне ступени — глоссы. Сцена свидания и отказа сохраняет правила `t13`: отказ звучит и принимается без нажима.
+Чтение и аудирование — по 10–12 оцениваемых пунктов: один пункт меняет долю навыка не больше чем на 10 %. Персонажи и ситуации — знакомые по модулям, новых карточек нет, слова вне ступени — глоссы. Сцена свидания и отказа сохраняет правила `t13`: отказ звучит и принимается без нажима. В вечер входит и правило `t12` «дорога домой своя».
 
 ### 9. Ролевая сцена — «аудио перед сценой»
 
@@ -135,9 +143,13 @@
 - Вид — временный e2e-скриншот на 390 px по настоящей сборке (приём из `english-travel-trip`, решение 10): полка с «Вечер» после `t14`, пара «аудио → сцена» в `t10-3`, итог `t14-c2`; конфиг и тест удаляются, снимки — в `/tmp`.
 - Озвучка — после ревью кода и окончательных текстов: `npm run voices -- <уроки> words phrases --course=english-travel`, затем `--check`.
 
+### 12. Правка требования ступени 1
+
+Требование «Первая ступень курса для путешествий» (из `english-travel-trip`, попадает в `openspec/specs/course-content/spec.md` при архивации, группа 0) содержит фразу «Модули `t08`–`t14` после этого изменения — черновики» и сценарий «Ступень на настоящем контенте» с модулями 1–7. После этого изменения обе неверны. Поэтому после шага 0.1 в `specs/course-content/spec.md` изменения добавляется `## MODIFIED Requirements` с требованием целиком: фраза снята, сценарий говорит «опубликованы модули 1–7 ступени, `t08`–`t14` — по требованию второй ступени». До архивации `validate --strict` такую дельту отклоняет, поэтому она добавляется в PR шага 0.2, а не сейчас.
+
 ## Risks / Trade-offs
 
-- [Объём: 29 уроков и 210 карточек сгенерированы моделью, без носителя; сленг и стиль переписки — самое рискованное] → рецензия субагентом после каждого модуля; программа просит показать сленг носителю перед публикацией второй ступени — выносится пользователю как открытый вопрос; сленг только мягкий, грубый — с пометкой и без карточек.
+- [Объём: 29 уроков и 210 карточек сгенерированы моделью, без носителя; сленг и стиль переписки — самое рискованное] → рецензия субагентом после каждого модуля; программа просит показать сленг носителю перед публикацией второй ступени — решение пользователя 21.10.2026: публикуем после рецензии моделью, носитель смотрит позже; сленг только мягкий, грубый — с пометкой и без карточек.
 - [Чувствительные темы: знакомства, алкоголь, флирт] → программа и требование спеки: уважительно, согласие и границы в `t13`, безопасность в `t12`, взрослые персонажи; тесты `t12`/`t13` содержат оцениваемые задания по этим частям.
 - [Повтор голоса у разных персонажей: учащийся может принять Sofia за Elena IT-курса] → разные курсы и диалоги; другие варианты — отдельное изменение (больше голосов или `en-US`).
 - [Каталог выходит за 25 000] → решение 4: явный подъём предела до 28 000 с записью замера.
@@ -146,12 +158,10 @@
 
 ## Migration Plan
 
-Только контент и, возможно, предел бюджета: формат каталога и пакетов, база и облако не меняются. Опубликованные уроки ступени 1 не меняются. Откат модуля — вернуть его в черновик (убрать `lessons`, `crib`, `status: published`); пройденные уроки останутся в базе учащегося, как у снятого модуля. После выпуска `courseFinished` для курса (`src/storage/course.ts:266-267`) становится правдой: в «Сегодня» текст конца курса — правка `today-by-language`.
+Только контент и, возможно, предел бюджета: формат каталога и пакетов, база и облако не меняются. Опубликованные уроки ступени 1 не меняются. Откат модуля — вернуть его в черновик (убрать `lessons`, `crib`, `status: published`); пройденные уроки останутся в базе учащегося, как у снятого модуля. После выпуска `courseFinished` (`src/storage/course.ts:266-267`) становится правдой, когда пройдены все 14 модулей и обе точки. В `main` `today-by-language` смержена (#228), но `LanguageToday` показывает в конце курса текст греческого курса «Все модули и пробники пройдены. До экзамена — повторение карточек и слабый навык по итогам M3.» (`src/features/today/LanguageToday.tsx:130`). Клиент в этом изменении не правится: группа 9 проверяет, что видит учащийся после выпуска (тест или скриншот), и выносит расхождение пользователю отдельным изменением.
 
 ## Open Questions
 
-- Показать ли сленг и переписку носителю до публикации второй ступени (программа, «Что не входит и открытые вопросы»)? По умолчанию план публикует по рецензии моделью и просит носителя после; решение — за пользователем.
-- Поднять `catalogGzip` до 28 000 или сжать каталог (решение 4)? По умолчанию — поднять.
-- Нужны ли для второй ступени американские голоса (программа обещает международный микс, голоса — только `en-GB`)? Вне объёма; остаётся отдельным изменением.
+Решено пользователем 21.10.2026: предел `catalogGzip` — поднять до 28 000 в PR модуля, где замер упадёт (решение 4); повтор голоса между диалогами допустим (решение 6); сленг публикуется после рецензии моделью, носитель смотрит позже (Risks). Открыто: текст «Сегодня» в конце курса (Migration Plan) — решение о правке клиента за пользователем; американские голоса — вне объёма.
 
 ## Реализация
