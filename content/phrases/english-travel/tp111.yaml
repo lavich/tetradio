@@ -1,0 +1,7 @@
+id: tp111
+text: "I've never been, but I'd love to."
+translation: "Я там не был, но хотел бы побывать."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md

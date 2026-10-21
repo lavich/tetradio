@@ -1,0 +1,8 @@
+id: tp113
+text: "Are you travelling on your own?"
+translation: "Вы путешествуете один?"
+note: "в США — traveling; on your own = by yourself"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md

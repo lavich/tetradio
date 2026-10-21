@@ -1,0 +1,220 @@
+title: Посты путешественников и знакомство в хостеле
+kind: lesson
+items:
+  - { kind: word, id: tw114 }
+  - { kind: word, id: tw115 }
+  - { kind: word, id: tw116 }
+  - { kind: word, id: tw117 }
+  - { kind: word, id: tw118 }
+  - { kind: word, id: tw119 }
+  - { kind: word, id: tw120 }
+  - { kind: phrase, id: tp114 }
+  - { kind: phrase, id: tp115 }
+  - { kind: phrase, id: tp116 }
+  - { kind: phrase, id: tp117 }
+  - { kind: phrase, id: tp118 }
+  - { kind: phrase, id: tp119 }
+  - { kind: phrase, id: tp120 }
+blocks:
+  - type: explanation
+    id: travel-words
+    title: Рассказ о поездке — слова для знакомства
+    body: |-
+      О себе в дороге говорят короткими блоками: откуда вы, где живёте, зачем приехали, куда дальше. **I'm based in Leeds** — я живу и работаю в Лидсе, **I'm here for a long weekend** — приехал на длинные выходные, **I'm on a gap year** — у меня год перерыва между учёбой и работой, **we're off to Glasgow tomorrow** — завтра мы едем в Глазго.
+
+      Для планов подходят **head to** (**We're heading to Porto next week**) и **a getaway** — короткая поездка, чтобы отдохнуть от обычной жизни. Про человека, который не строит жёстких планов, говорят **laid-back**. Место, которое обязательно стоит увидеть, — **a must-see**. Когда путешественник устал от дороги и хочет жить на одном месте, он хочет **settle down**.
+
+      Чтобы попросить совет, скажите **Do you have any recommendations?** — на такой вопрос охотно отвечают и в хостеле, и в очереди. Присоединиться к чужой компании вежливо так: **Mind if I join you?** Ответ **Not at all** означает согласие, **Sorry, we're just leaving** — вежливый отказ. Прощаясь, говорят **It was nice meeting you.**
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: posts-how
+    title: Доска объявлений хостела
+    body: |-
+      В хостелах и в сообществах путешественников люди пишут короткие посты: откуда они, куда едут, кого ищут. Прочитайте три поста с доски объявлений в Эдинбурге. Сначала целиком, чтобы понять, кто что хочет, потом отвечайте на вопросы. Day 3 — «третий день», am — время до полудня.
+  - type: reading
+    id: posts
+    title: Hostel notice board — Edinburgh
+    text: |-
+      HOSTEL NOTICE BOARD — EDINBURGH
+
+      Hana, Poland — Day 3 of my gap year. We're off to Glasgow on Friday. The Old Town is lovely, but it's very touristy, so I'm looking for places off the beaten track. Do you have any recommendations?
+
+      Luis, Spain — I've been on the road for six months, and I'm ready to settle down somewhere warm. I'm quite laid-back about plans. The only must-see for me is the Isle of Skye. Is anyone heading to the Highlands this month?
+
+      Ben, England — I'm based in Leeds and here for a long weekend: a little getaway before work gets busy. I'm doing the free walking tour on Saturday at 10 am. Meet at the front desk at 9.30. Everyone is welcome to join.
+    glosses:
+      - { text: Day 3, russian: третий день }
+      - { text: Old Town, russian: старый город }
+      - { text: on the road, russian: в дороге }
+      - { text: the Highlands, russian: Шотландское нагорье }
+      - { text: the front desk, russian: стойка регистрации }
+  - type: exercise
+    id: posts-q
+    about: posts
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is Hana looking for?
+        options:
+          - places off the beaten track
+          - a hostel in Glasgow
+          - people for a walking tour
+        answer: places off the beaten track
+        explanation: The Old Town is touristy, so she wants places off the beaten track.
+      - id: q2
+        prompt: How long has Luis been travelling?
+        options:
+          - six months
+          - three days
+          - a long weekend
+        answer: six months
+        explanation: I've been on the road for six months.
+      - id: q3
+        prompt: What does Luis want to do?
+        options:
+          - find a place to live
+          - start a gap year
+          - go to Glasgow on Friday
+        answer: find a place to live
+        explanation: Settle down somewhere warm — осесть в тёплом месте.
+      - id: q4
+        prompt: Where does Ben live?
+        options:
+          - in Leeds
+          - in Edinburgh
+          - in Glasgow
+        answer: in Leeds
+        explanation: I'm based in Leeds.
+      - id: q5
+        prompt: When and where should people meet Ben for the walking tour?
+        options:
+          - at the front desk at 9.30 on Saturday
+          - at the tour office at 10 on Friday
+          - at the front desk at 10 on Sunday
+        answer: at the front desk at 9.30 on Saturday
+        explanation: The tour is on Saturday at 10 am; meet at the front desk at 9.30.
+  - type: explanation
+    id: hostel-how
+    title: Знакомство в общей комнате
+    body: |-
+      Теперь живой разговор в общей комнате хостела: британец Бен, итальянка София и Мэй из Сингапура. Сначала послушайте целиком, потом ответьте на вопросы и при втором прослушивании проверьте ответы. Транскрипт откроется после ответа.
+
+      София говорит просто и иногда строит фразу по-итальянски: **I am here since Monday** вместо I've been here since Monday, **I do a trip** вместо I'm doing a trip, **is no problem** вместо it's no problem. Её понятно, но повторять эти формы не нужно. Мэй говорит ровно и быстро, Бен — в обычном британском темпе, с короткой связкой **a bit**.
+  - type: listening
+    id: hostel
+    title: In the hostel common room
+    plays: 2
+    transcript:
+      - { speaker: Ben, text: "Hi, is this seat taken?" }
+      - { speaker: Sofia, text: "No, no, go ahead. I am just waiting for my friend." }
+      - { speaker: Ben, text: "Thanks. I'm Ben. Where are you from originally?" }
+      - { speaker: Sofia, text: "I am from Italy, from Bologna. And you?" }
+      - { speaker: Ben, text: "Leeds. I'm still based there. I'm here for a long weekend, a little getaway before work gets busy." }
+      - { speaker: Sofia, text: "Nice. I am here since Monday. I do a trip around Scotland for two weeks." }
+      - { speaker: Ben, text: "Have you ever been to Scotland before?" }
+      - { speaker: Sofia, text: "No, never. And you?" }
+      - { speaker: Ben, text: "Twice. Edinburgh is a bit touristy, so I'd go to Glasgow or the Highlands. Is that your friend?" }
+      - { speaker: Sofia, text: "Yes! Mei, come. This is Ben." }
+      - { speaker: Mei, text: "Hi Ben, nice to meet you. Are you travelling on your own?" }
+      - { speaker: Ben, text: "Yes, just me. What brings you to Scotland?" }
+      - { speaker: Mei, text: "I'm on a gap year. I left Singapore in March, and I'm travelling around for a few months. We're off to Glasgow on Saturday." }
+      - { speaker: Ben, text: "Nice. Have you got a plan?" }
+      - { speaker: Mei, text: "Not really. I'm quite laid-back about it. Do you have any recommendations?" }
+      - { speaker: Ben, text: "The Kelvingrove museum is a must-see, and it's free. And the cafés in the West End are great." }
+      - { speaker: Mei, text: "Perfect. Are you doing the walking tour tomorrow? It starts at ten." }
+      - { speaker: Ben, text: "I haven't booked yet. Mind if I join you?" }
+      - { speaker: Sofia, text: "Is no problem. Meet us at the front desk, at half past nine." }
+      - { speaker: Ben, text: "Great, thanks. It was nice meeting you both." }
+      - { speaker: Mei, text: "You too. See you tomorrow." }
+  - type: exercise
+    id: hostel-q
+    about: hostel
+    title: Аудирование — в хостеле
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why is Ben in Scotland?
+        options:
+          - for a long weekend
+          - for a gap year
+          - for work
+        answer: for a long weekend
+        explanation: I'm here for a long weekend, a little getaway.
+      - id: q2
+        prompt: Has Sofia been to Scotland before?
+        options:
+          - No, never.
+          - Yes, twice.
+          - Yes, once.
+        answer: No, never.
+        explanation: Have you ever been to Scotland before? — No, never.
+      - id: q3
+        prompt: Why does Ben not recommend Edinburgh?
+        options:
+          - It's a bit touristy.
+          - It's too far from Leeds.
+          - He has never been there.
+        answer: It's a bit touristy.
+        explanation: Edinburgh is a bit touristy, so I'd go to Glasgow or the Highlands.
+      - id: q4
+        prompt: What is Mei doing?
+        options:
+          - travelling around for a few months
+          - studying in Glasgow
+          - visiting her friend for a weekend
+        answer: travelling around for a few months
+        explanation: I'm on a gap year… travelling around for a few months.
+      - id: q5
+        prompt: What does Ben recommend in Glasgow?
+        options:
+          - the Kelvingrove museum and the cafés in the West End
+          - the Highlands and a walking tour
+          - the Old Town and the castle
+        answer: the Kelvingrove museum and the cafés in the West End
+        explanation: The Kelvingrove museum is a must-see… the cafés in the West End are great.
+      - id: q6
+        prompt: What do they agree to do tomorrow?
+        options:
+          - meet at the front desk at half past nine
+          - meet at the museum at ten
+          - take the train to Glasgow together
+        answer: meet at the front desk at half past nine
+        explanation: Ben joins them for the walking tour; Sofia says to meet at the front desk at half past nine.
+  - type: exercise
+    id: phrases-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Три ответа лишние.
+    format: match
+    bank:
+      - Not at all. Meet us at nine.
+      - No, never. And you?
+      - I'm on a gap year.
+      - The Kelvingrove museum is a must-see.
+      - You too. See you tomorrow.
+      - I live in London.
+      - It costs ten pounds.
+    items:
+      - { id: m1, prompt: "What brings you to Scotland?", answer: "I'm on a gap year." }
+      - { id: m2, prompt: "Have you ever been to Scotland before?", answer: "No, never. And you?" }
+      - { id: m3, prompt: "Mind if I join you?", answer: "Not at all. Meet us at nine." }
+      - { id: m4, prompt: "Do you have any recommendations?", answer: "The Kelvingrove museum is a must-see." }
+      - { id: m5, prompt: "It was nice meeting you.", answer: "You too. See you tomorrow." }
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank: [gap year, getaway, heading to, based in, settle down, laid-back, must-see, itinerary, hidden gem]
+    items:
+      - { id: g1, prompt: "She took a ___ after school and travelled around Asia.", answer: gap year }
+      - { id: g2, prompt: "We need a quick weekend ___ — somewhere quiet by the sea.", answer: getaway }
+      - { id: g3, prompt: "We're ___ Porto on Monday. Do you know a good hostel there?", answer: heading to }
+      - { id: g4, prompt: "I'm ___ Leeds, but I travel a lot for work.", answer: based in }
+      - { id: g5, prompt: "After two years on the road, he wants to ___ and find a job.", answer: settle down }
+      - { id: g6, prompt: "Luis is very ___: he never plans more than a day ahead.", answer: laid-back }
+      - { id: g7, prompt: "Edinburgh Castle is on every list: it's a real ___.", answer: must-see }

@@ -1,0 +1,8 @@
+id: tp118
+text: "Mind if I join you?"
+translation: "Можно к вам присоединиться?"
+note: "дословно — вы не возражаете, если я присоединюсь; ответ: Not at all"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md

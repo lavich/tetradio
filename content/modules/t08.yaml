@@ -1,8 +1,25 @@
 number: 8
 title: Small talk
 subtitle: Разговор с незнакомым человеком
-status: draft
+status: published
 goal: начать разговор в хостеле, на экскурсии, в очереди; рассказать о себе и поддержать тему
 grammar:
   - present perfect для опыта, So do I / Neither do I, короткие ответы
 sessions: 3
+lessons:
+  - t08-1
+  - t08-2
+  - t08-3
+  - t08-test
+crib:
+  title: знакомство
+  rows:
+    - [занято ли место, Is this seat taken?]
+    - [опыт, Have you ever been to…?]
+    - ["ни разу", "I've never been."]
+    - [я тоже, So do I. / So have I.]
+    - [я тоже нет, Neither do I. / Neither have I.]
+    - [совет, Do you have any recommendations?]
+    - [присоединиться, Mind if I join you?]
+    - [на прощание, It was nice meeting you.]
+  note: "После отрицания — Neither + вспомогательный глагол, без второго not"

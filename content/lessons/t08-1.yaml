@@ -1,0 +1,280 @@
+title: Знакомство в хостеле — опыт и согласие
+kind: lesson
+items:
+  - { kind: word, id: tw106 }
+  - { kind: word, id: tw107 }
+  - { kind: word, id: tw108 }
+  - { kind: word, id: tw109 }
+  - { kind: word, id: tw110 }
+  - { kind: word, id: tw111 }
+  - { kind: word, id: tw112 }
+  - { kind: word, id: tw113 }
+  - { kind: phrase, id: tp106 }
+  - { kind: phrase, id: tp107 }
+  - { kind: phrase, id: tp108 }
+  - { kind: phrase, id: tp109 }
+  - { kind: phrase, id: tp110 }
+  - { kind: phrase, id: tp111 }
+  - { kind: phrase, id: tp112 }
+  - { kind: phrase, id: tp113 }
+blocks:
+  - type: explanation
+    id: experience
+    title: Have you ever been…? — опыт в present perfect
+    body: |-
+      Разговор с незнакомым человеком часто идёт через поездки: где вы бывали, что хотели бы увидеть. Для опыта без даты подходит **present perfect**: **have / has + третья форма глагола**. Have you ever **been** to Lisbon? I've **been** to Porto twice. I've **never** tried that.
+
+      Слова-спутники: **ever** — «когда-нибудь» (в вопросе), **never** — «ни разу», **once**, **twice**, **a few times** — сколько раз. Ответ короткий: **Yes, I have.** / **No, I haven't.** Если ответ «да», собеседник обычно спрашивает подробности — и тогда глагол переходит в past simple, потому что речь о конкретной поездке: Have you ever been to Lisbon? — Yes, I have. — **When did you go?** — I **went** last spring.
+
+      Про **been** и **gone**. I've **been** to Rome — я там был и вернулся. He's **gone** to Rome — он уехал и сейчас там или в пути. Для рассказа о своём опыте нужен **been**.
+
+      Две частые ошибки. Первая — ставить точную дату в present perfect: I've been to Lisbon last year; нужно I **went** to Lisbon last year. Вторая — пропускать have в вопросе: You ever been to Lisbon? Так бывает в быстрой речи, но на письме и в начале знакомства лучше полная форма.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - вопрос об опыте
+          - Have you ever been to Lisbon?
+        - - ответ «да»
+          - Yes, I have. I've been twice.
+        - - ответ «нет»
+          - No, I haven't. I've never been.
+        - - подробности — past simple
+          - When did you go? — Last spring.
+        - - been — был и вернулся
+          - I've been to Rome.
+        - - gone — уехал, ещё там
+          - He's gone to Rome.
+  - type: explanation
+    id: agree
+    title: So do I / Neither do I и короткие ответы
+    body: |-
+      Согласиться с новым знакомым можно коротко. Если собеседник сказал утверждение — отвечаете **So + вспомогательный глагол + I**: I love hiking. — **So do I.** I've been to Porto. — **So have I.** Если сказал отрицание — **Neither + вспомогательный глагол + I**: I don't like crowds. — **Neither do I.** I've never been to Rome. — **Neither have I.**
+
+      Вспомогательный глагол берут из фразы собеседника: do / does для present simple, have для present perfect, am / are / is для to be, can, will. Правило одно: **So do I** отвечает на I like…, **So am I** — на I'm tired, **So have I** — на I've been…
+
+      Если вы не согласны, скажите это коротко и мягко: I love hiking. — **Really? I'm not a big fan, actually.** Для того же ответа без повторения глагола подходят **Me too** (согласие с утверждением) и **Me neither** (согласие с отрицанием), они звучат проще и неформальнее.
+
+      Ловушка: Neither уже содержит отрицание, поэтому второго not не нужно. Neither don't I — ошибка.
+
+      Короткие ответы на вопросы с have и do повторяют вспомогательный глагол: Are you travelling alone? — **Yes, I am.** Do you like hostels? — **Yes, I do.** / **Not really.** Одно **Yes** или **No** звучит сухо, к короткому ответу можно добавить деталь: Yes, I am — for another two weeks.
+    table:
+      columns:
+        - собеседник
+        - ваш ответ
+      rows:
+        - - I love hiking.
+          - So do I. / Me too.
+        - - I've been to Porto.
+          - So have I.
+        - - I'm travelling alone.
+          - So am I.
+        - - I don't like crowds.
+          - Neither do I. / Me neither.
+        - - I've never been to Rome.
+          - Neither have I.
+        - - I can't swim well.
+          - Neither can I.
+  - type: explanation
+    id: hostel-words
+    title: Хостел и поездка
+    body: |-
+      В хостеле вы живёте в **dorm** — общем номере: ваша койка — **a bunk**, в свободное время все собираются в общей кухне и на террасе. Люди, которые ездят налегке с рюкзаком, — **backpackers**, остальных постояльцев называют **fellow travellers**.
+
+      Места бывают разные. **Touristy** — слишком туристическое: Camden Market is a bit touristy. **Off the beaten track** — вдали от привычных маршрутов, **a hidden gem** — малоизвестное, но стоящее место: that little café is a real hidden gem. Заранее составленный план поездки по дням — **an itinerary**.
+
+      В Великобритании написание **travelling** с двумя l, в США — traveling; **traveller** и traveler по тому же правилу.
+
+      Начинают разговор простыми вопросами: **Is this seat taken?**, **Where are you from originally?**, **What brings you to Edinburgh?** Ответ на последний — цель поездки: I'm here for a conference / I'm travelling around Scotland.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: experience-choice
+    title: Опыт в present perfect
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Have you ever ___ to Lisbon?
+        options: [been, went, gone]
+        answer: been
+        explanation: Опыт без даты — present perfect, глагол в третьей форме; been — «был и вернулся».
+      - id: q2
+        prompt: I ___ to Lisbon last spring.
+        options: [went, have been, have gone]
+        answer: went
+        explanation: Точная дата — past simple.
+      - id: q3
+        prompt: "Have you ever stayed in a hostel? — ___"
+        options: ["Yes, I have.", "Yes, I did.", "Yes, I stayed."]
+        answer: Yes, I have.
+        explanation: Короткий ответ повторяет вспомогательный глагол вопроса.
+      - id: q4
+        prompt: I ___ been to Rome. I'd love to go.
+        options: [have never, never have, haven't never]
+        answer: have never
+        explanation: Never стоит между have и третьей формой; haven't never — двойное отрицание.
+      - id: q5
+        prompt: Where's Tom? — He's ___ to the station to get our tickets.
+        options: [gone, been, went]
+        answer: gone
+        explanation: Он ушёл и ещё не вернулся — gone.
+      - id: q6
+        prompt: How many times have you ___ to Spain?
+        options: [been, be, was]
+        answer: been
+        explanation: После have — третья форма be, то есть been.
+  - type: exercise
+    id: agree-choice
+    title: So do I / Neither do I
+    instruction: Выберите ответ, который согласуется с репликой.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I love trying local food. — ___"
+        options: [So do I., Neither do I., So I do.]
+        answer: So do I.
+        explanation: Утверждение в present simple — So do I.
+      - id: q2
+        prompt: "I've never been to Scotland. — ___"
+        options: [Neither have I., So have I., Neither haven't I.]
+        answer: Neither have I.
+        explanation: Отрицание в present perfect — Neither have I; второго отрицания не нужно.
+      - id: q3
+        prompt: "I'm a bit tired today. — ___"
+        options: [So am I., So do I., Neither am I.]
+        answer: So am I.
+        explanation: Во фразе am — значит, am и в ответе.
+      - id: q4
+        prompt: "I don't like crowded places. — ___"
+        options: [Neither do I., So do I., Neither I do.]
+        answer: Neither do I.
+      - id: q5
+        prompt: "I've been to Porto twice. — ___"
+        options: [So have I., So did I., Neither have I.]
+        answer: So have I.
+        explanation: Во фразе have been — So have I.
+      - id: q6
+        prompt: "I can't speak Spanish. — ___"
+        options: [Neither can I., So can I., Neither do I.]
+        answer: Neither can I.
+        explanation: Вспомогательный глагол — can, как у собеседника.
+  - type: exercise
+    id: short-gap
+    title: Короткие ответы
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank:
+      - have
+      - haven't
+      - do
+      - don't
+      - am
+      - didn't
+      - are
+      - was
+    items:
+      - id: g1
+        prompt: "Have you ever been to Lisbon? — No, I ___."
+        answer: haven't
+        explanation: Вопрос с have — ответ с have или haven't.
+      - id: g2
+        prompt: "Are you travelling on your own? — Yes, I ___."
+        answer: am
+        explanation: Вопрос с are — в ответе с I нужен am.
+      - id: g3
+        prompt: "Do you like hostels? — Yes, I ___."
+        answer: do
+        explanation: Вопрос с do — ответ с do.
+      - id: g4
+        prompt: "Did you enjoy the tour? — No, I ___."
+        answer: didn't
+        explanation: Вопрос с did — ответ с did или didn't.
+      - id: g5
+        prompt: "Have you been to Edinburgh before? — Yes, I ___. Twice."
+        answer: have
+      - id: g6
+        prompt: "Do you drink coffee? — No, I ___."
+        answer: don't
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово или оборот с английским. Два английских варианта лишние.
+    format: match
+    bank:
+      - a fellow traveller
+      - a hostel dorm
+      - a bunk
+      - a backpacker
+      - off the beaten track
+      - a hidden gem
+      - touristy
+      - an itinerary
+      - a souvenir
+      - a landmark
+    items:
+      - { id: m1, prompt: "другой путешественник, попутчик", answer: a fellow traveller }
+      - { id: m2, prompt: общий номер в хостеле, answer: a hostel dorm }
+      - { id: m3, prompt: "койка, обычно двухъярусная", answer: a bunk }
+      - { id: m4, prompt: путешественник с рюкзаком, answer: a backpacker }
+      - { id: m5, prompt: вдали от привычных туристических маршрутов, answer: off the beaten track }
+      - { id: m6, prompt: малоизвестное хорошее место, answer: a hidden gem }
+      - { id: m7, prompt: рассчитанный на туристов, answer: touristy }
+      - { id: m8, prompt: план поездки по дням, answer: an itinerary }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, I'd) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Это место занято?
+        answer:
+          - Is this seat taken?
+          - Is this seat free?
+          - Is this seat taken, please?
+          - Is that seat taken?
+          - Is this chair taken?
+          - Is anyone sitting here?
+        explanation: Is this seat taken? — стандартная фраза для кафе, поезда и общей кухни.
+      - id: q2
+        prompt: Вы когда-нибудь бывали в Лиссабоне?
+        answer:
+          - Have you ever been to Lisbon?
+          - Have you been to Lisbon?
+          - Have you ever been in Lisbon?
+          - Have you been to Lisbon before?
+          - Have you ever visited Lisbon?
+          - Have you visited Lisbon?
+        explanation: Опыт без даты — Have you ever been to…?
+      - id: q3
+        prompt: Я там не был, но хотел бы побывать.
+        answer:
+          - I've never been, but I'd love to.
+          - I have never been, but I would love to.
+          - I've never been there, but I'd love to.
+          - I have never been there, but I would love to.
+          - I've never been, but I'd like to.
+          - I have never been, but I would like to.
+          - I've never been there, but I'd like to.
+          - I haven't been, but I'd love to.
+          - I haven't been there, but I'd love to.
+          - I haven't been, but I would love to.
+        explanation: Never стоит между have и been; в конце to без повторения глагола.
+      - id: q4
+        prompt: Я тоже нет. (в ответ на «I've never been to Rome»)
+        answer:
+          - Neither have I.
+          - Me neither.
+        explanation: После отрицания в present perfect — Neither have I.
+      - id: q5
+        prompt: Что привело вас в Эдинбург?
+        answer:
+          - What brings you to Edinburgh?
+          - What brought you to Edinburgh?
+          - What brings you here to Edinburgh?
+          - What brought you here to Edinburgh?
+          - What brings you to Edinburgh, then?
+        explanation: What brings you to…? — вопрос о цели приезда, в настоящем времени, пока человек ещё здесь.

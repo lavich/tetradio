@@ -1,0 +1,8 @@
+id: tp116
+text: "I'm travelling around for a few months."
+translation: "Я путешествую по разным местам несколько месяцев."
+note: "в США — traveling"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md

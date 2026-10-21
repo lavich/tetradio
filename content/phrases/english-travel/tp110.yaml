@@ -1,0 +1,8 @@
+id: tp110
+text: "Have you ever been to Lisbon?"
+translation: "Вы когда-нибудь бывали в Лиссабоне?"
+note: "ответ с been: Yes, I have / No, never"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md

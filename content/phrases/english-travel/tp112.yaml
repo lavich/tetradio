@@ -1,0 +1,8 @@
+id: tp112
+text: "Neither have I."
+translation: "Я тоже нет."
+note: "после отрицания; после утвердительного — So have I."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t08
+  operation: requested-generation
+  request: Фразы модуля t08 по программе docs/curriculum-english-travel.md
