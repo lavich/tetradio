@@ -66,7 +66,7 @@ const activeSession = (page: Page) =>
       request.onerror = () => reject(request.error);
     });
     const sessions = await new Promise<
-      { status: string; courseId?: string; items: { card: { word?: { greek: string } } }[] }[]
+      { status: string; courseId?: string; language?: string; items: { card: { word?: { greek: string } } }[] }[]
     >((resolve) => {
       const request = database.transaction("sessions").objectStore("sessions").getAll();
       request.onsuccess = () => resolve(request.result);
@@ -75,6 +75,7 @@ const activeSession = (page: Page) =>
     const active = sessions.filter((session) => session.status === "active");
     return active.map((session) => ({
       courseId: session.courseId,
+      language: session.language,
       words: session.items.flatMap((item) => (item.card.word ? [item.card.word.greek] : [])),
     }));
   });
@@ -84,7 +85,7 @@ test("«Сегодня»: основной греческий курс цели�
   await page.goto("/app/");
   const next = page.getByTestId("course-next");
   await expect(next).toContainText("Знакомство и είμαι");
-  const other = page.getByTestId("other-course");
+  const other = page.getByTestId("other-language");
   await expect(other).toHaveCount(1);
   await expect(other.getByRole("heading", { name: "Английский" })).toBeVisible();
   await expect(other.getByRole("link", { name: /Дорога на работу/ })).toBeVisible();
@@ -106,7 +107,7 @@ test("длинное название урока второго курса не 
   });
   await installBoth(page);
   await page.goto("/app/");
-  const other = page.getByTestId("other-course");
+  const other = page.getByTestId("other-language");
   await expect(other.getByRole("link", { name: /Вежливые просьбы/ })).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
@@ -176,7 +177,7 @@ test("основным становится английский — «Сего�
 
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Дорога на работу");
-  const other = page.getByTestId("other-course");
+  const other = page.getByTestId("other-language");
   await expect(other.getByRole("heading", { name: "Греческий" })).toBeVisible();
   await expect(other.getByRole("link", { name: /Знакомство и είμαι/ })).toBeVisible();
 });
@@ -188,14 +189,15 @@ test("занятие повторения английского курса — 
 
   await page.goto("/app/");
   await expect(page.getByTestId("cards-today")).toBeVisible();
-  const other = page.getByTestId("other-course");
+  const other = page.getByTestId("other-language");
   const review = other.getByRole("button", { name: "Повторить 5" });
   await expect(review).toBeVisible();
   await review.click();
-  await expect(page).toHaveURL(/\/session\?course=english$/);
+  await expect(page).toHaveURL(/\/session\?language=en$/);
   await expect(page.getByRole("heading", { name: "Повторение", level: 1 })).toBeVisible();
   const [english] = await activeSession(page);
   expect(english.courseId).toBe("english");
+  expect(english.language).toBe("en");
   expect(english.words.length).toBeGreaterThan(0);
   expect(english.words.every((word) => ENGLISH_WORDS.includes(word))).toBe(true);
 
@@ -205,8 +207,158 @@ test("занятие повторения английского курса — 
   await page.getByRole("button", { name: "Повторить карточки" }).click();
   await expect(page.getByRole("heading", { name: "Повторение", level: 1 })).toBeVisible();
   const greek = (await activeSession(page)).find((session) => session.courseId === "greek-a2")!;
+  expect(greek.language).toBe("el");
   expect(greek.words.length).toBeGreaterThan(0);
   expect(greek.words.every((word) => GREEK_WORDS.includes(word))).toBe(true);
+});
+
+const TALK_WORDS = ["a neighbour", "the weather", "to chat"];
+/** Строки уроков блока основного языка, без строк компактных блоков. */
+const mainLines = (page: Page) => page.locator('[data-testid="course-line"]:not([data-testid="other-language"] *)');
+async function makePrimary(page: Page, name: string) {
+  await page.goto("/app/progress/settings");
+  const choice = page.getByRole("radiogroup", { name: "Основной курс" });
+  await choice.getByRole("radio", { name, exact: true }).click();
+  await expect(choice.getByRole("radio", { name, exact: true })).toHaveAttribute("aria-checked", "true");
+}
+async function startEnglishLessons(page: Page) {
+  await startLesson(page, "/app/course/e01/e01-1", "Верно или неверно?", "False");
+  await startLesson(page, "/app/course/c01/c01-1", "Верно или неверно?", "True");
+}
+
+test("общее повторение английского: «Повторить N» — карточки двух курсов, /session?language=en, греческих нет", async ({
+  page,
+}) => {
+  await installEnglishPair(page);
+  await startEnglishLessons(page);
+  await page.goto("/app/");
+  const other = page.getByTestId("other-language");
+  await expect(other).toHaveCount(1);
+  await expect(other.getByRole("heading", { level: 2 })).toHaveText("Английский");
+  const review = other.getByRole("button", { name: /^Повторить \d+$/ });
+  await expect(review).toBeVisible();
+  await expect(other.getByTestId("course-line")).toHaveCount(2);
+  await review.click();
+  await expect(page).toHaveURL(/\/session\?language=en$/);
+  await expect(page.getByRole("heading", { name: "Повторение", level: 1 })).toBeVisible();
+  const [english] = await activeSession(page);
+  expect(english.language).toBe("en");
+  expect(english.words.some((word) => ENGLISH_WORDS.includes(word))).toBe(true);
+  expect(english.words.some((word) => TALK_WORDS.includes(word))).toBe(true);
+  expect(english.words.every((word) => [...ENGLISH_WORDS, ...TALK_WORDS].includes(word))).toBe(true);
+});
+
+test("основной — английский «Для IT»: крупный урок с подписью, строка «Для общения», повторение по /session", async ({
+  page,
+}) => {
+  await installEnglishPair(page);
+  await startEnglishLessons(page);
+  await makePrimary(page, "Английский");
+  await page.goto("/app/");
+  const next = page.getByTestId("course-next");
+  await expect(next.getByTestId("course-caption")).toHaveText("Для IT");
+  await expect(next).toContainText("Дорога на работу");
+  const line = mainLines(page);
+  await expect(line).toHaveCount(1);
+  await expect(line.getByTestId("course-caption")).toHaveText("Для общения");
+  await expect(line).toContainText("Все уроки пройдены");
+  await expect(page.getByTestId("other-language").getByRole("heading", { name: "Греческий" })).toBeVisible();
+  await page.getByRole("button", { name: "Повторить карточки" }).click();
+  await expect(page).toHaveURL(/\/session$/);
+  const [english] = await activeSession(page);
+  expect(english).toMatchObject({ courseId: "english", language: "en" });
+  expect(english.words.some((word) => TALK_WORDS.includes(word))).toBe(true);
+});
+
+test("долг паузы одного английского курса — строка «После паузы…» в блоке языка, после повторения долга её нет", async ({
+  page,
+}) => {
+  await installEnglishPair(page);
+  await startLesson(page, "/app/course/e01/e01-1", "Верно или неверно?", "False");
+  await overdueEnglish(page, 3, -20);
+  await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Английский", "Приостановить курс");
+  await page.goto("/app/");
+  const other = page.getByTestId("other-language");
+  await expect(other.getByTestId("course-line")).toHaveCount(1);
+  await expect(other.getByTestId("after-pause")).toHaveCount(0);
+  await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Английский", "Продолжить курс");
+  await page.goto("/app/");
+  await expect(other.getByTestId("course-line")).toHaveCount(2);
+  await expect(other.getByTestId("after-pause")).toHaveText("После паузы: сначала то, что могло забыться");
+  await overdueEnglish(page, 3, 3);
+  await page.reload();
+  await expect(other.getByTestId("course-line")).toHaveCount(2);
+  await expect(other.getByTestId("after-pause")).toHaveCount(0);
+});
+
+test("основной «Для IT» на паузе, «Для общения» идёт — «Сегодня» остаётся на английском", async ({ page }) => {
+  await installEnglishPair(page);
+  await makePrimary(page, "Английский");
+  await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Английский", "Приостановить курс");
+  await page.goto("/app/");
+  const next = page.getByTestId("course-next");
+  await expect(next).toContainText("Знакомство");
+  await expect(next).not.toContainText("είμαι");
+  await expect(next.getByTestId("course-caption")).toHaveCount(0);
+  await expect(mainLines(page)).toHaveCount(0);
+  await expect(page.getByTestId("other-language").getByRole("heading", { name: "Греческий" })).toBeVisible();
+});
+
+test("прежний адрес /session?course=english открывает занятие английского", async ({ page }) => {
+  await installBoth(page);
+  await startLesson(page, "/app/course/m01/m01-1", "Формы είμαι", "είμαι");
+  await startLesson(page, "/app/course/e01/e01-1", "Верно или неверно?", "False");
+  await page.goto("/app/");
+  await page
+    .getByTestId("other-language")
+    .getByRole("button", { name: /^Повторить/ })
+    .click();
+  await expect(page).toHaveURL(/\/session\?language=en$/);
+  await page.goto("/app/");
+  await page.getByRole("button", { name: "Повторить карточки" }).click();
+  await expect(page).toHaveURL(/\/session$/);
+  await expect(page.locator('header p[lang="el"]')).toBeVisible();
+  await page.goto("/app/session?course=english");
+  await expect(page.getByRole("heading", { name: "Повторение", level: 1 })).toBeVisible();
+  await expect(page.locator('header p[lang="en"]')).toBeVisible();
+});
+
+test("тренировка урока курса на паузе открывается, а после ухода со страницы «Продолжить» возвращает то же задание", async ({
+  page,
+}) => {
+  await installEnglishPair(page);
+  await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Английский", "Приостановить курс");
+  await page.goto("/app/course/e01/e01-1");
+  await page.getByRole("button", { name: "Тренировать слова урока" }).click();
+  await expect(page).toHaveURL(/\/session\?language=en$/);
+  await expect(page.getByRole("heading", { name: "Повторение", level: 1 })).toBeVisible();
+  await expect(page.getByText("Активного занятия нет.")).toHaveCount(0);
+  const count = page.getByLabel(/^(Упражнение|Знакомство) \d+ из \d+$/);
+  const before = await count.getAttribute("aria-label");
+  await page.goto("/app/");
+  await page.getByTestId("other-language").getByRole("button", { name: "Продолжить" }).click();
+  await expect(page).toHaveURL(/\/session\?language=en$/);
+  await expect(count).toHaveAttribute("aria-label", before!);
+  await expect(page.getByText("Активного занятия нет.")).toHaveCount(0);
+});
+
+test("360 px: строки уроков с подписями и длинным названием — без горизонтальной прокрутки", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await page.route("**/content/packages/e01-1*", async (route) => {
+    const response = await route.fetch();
+    const pack = await response.json();
+    pack.lesson.title = "Вежливые просьбы у стойки регистрации в аэропорту";
+    await route.fulfill({ response, json: pack });
+  });
+  await installEnglishPair(page);
+  await page.goto("/app/");
+  const other = page.getByTestId("other-language");
+  await expect(other.getByTestId("course-caption")).toHaveText(["Для IT", "Для общения"]);
+  await expect(other.getByRole("link", { name: /Вежливые просьбы/ })).toBeVisible();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+  for (const line of await other.getByTestId("course-line").all())
+    expect((await line.boundingBox())!.height).toBeGreaterThanOrEqual(44);
 });
 
 test("один начатый курс — без переключателя и строки второго курса; на «Курсе» — неначатый английский", async ({
@@ -215,7 +367,7 @@ test("один начатый курс — без переключателя и 
   await openModule(page, "m01");
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toBeVisible();
-  await expect(page.getByTestId("other-course")).toHaveCount(0);
+  await expect(page.getByTestId("other-language")).toHaveCount(0);
   for (const path of ["/app/words", "/app/reading", "/app/progress"]) {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -279,7 +431,7 @@ test("лист «Чтение» только у основного курса: �
   await page.goto("/app/");
   await expect(page.getByTestId("reading-today")).toHaveText("Η Άννα · 28 слов");
   await expect(page.getByTestId("reading-sheet")).toHaveCount(1);
-  await expect(page.getByTestId("other-course").getByTestId("reading-sheet")).toHaveCount(0);
+  await expect(page.getByTestId("other-language").getByTestId("reading-sheet")).toHaveCount(0);
 
   await page.goto("/app/progress/settings");
   const choice = page.getByRole("radiogroup", { name: "Основной курс" });
@@ -291,7 +443,7 @@ test("лист «Чтение» только у основного курса: �
   await expect(page.getByTestId("reading-sheet")).toContainText(
     "Следующий текст откроется после урока «Дорога на работу»",
   );
-  await expect(page.getByTestId("other-course").getByTestId("reading-sheet")).toHaveCount(0);
+  await expect(page.getByTestId("other-language").getByTestId("reading-sheet")).toHaveCount(0);
 });
 
 /** Записи хранилища из базы приложения: проверяется то, что записано, а не то, что видно. */
@@ -376,7 +528,7 @@ test("второй курс с полки: карточка неначатого
 
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
-  await expect(page.getByTestId("other-course").getByRole("heading", { name: "Английский" })).toBeVisible();
+  await expect(page.getByTestId("other-language").getByRole("heading", { name: "Английский" })).toBeVisible();
 });
 
 test("ссылка на модуль начатого курса возвращает «Курс» к его языку", async ({ page }) => {
@@ -600,7 +752,7 @@ test("пауза с полки убирает английский с «Сего
   await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
-  await expect(page.getByTestId("other-course")).toHaveCount(0);
+  await expect(page.getByTestId("other-language")).toHaveCount(0);
 
   await page.goto("/app/course");
   await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский", exact: true }).click();
@@ -608,7 +760,7 @@ test("пауза с полки убирает английский с «Сего
   await expect(paused).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Действия с курсом «Английский»" })).toBeFocused();
   await page.goto("/app/");
-  await expect(page.getByTestId("other-course").getByRole("heading", { name: "Английский" })).toBeVisible();
+  await expect(page.getByTestId("other-language").getByRole("heading", { name: "Английский" })).toBeVisible();
 });
 
 test("строка статуса паузы не переходит на полку другого курса", async ({ page }) => {
@@ -641,7 +793,7 @@ test("основной на паузе из настроек — на «Сего
 
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Дорога на работу");
-  await expect(page.getByTestId("other-course")).toHaveCount(0);
+  await expect(page.getByTestId("other-language")).toHaveCount(0);
   await page.goto("/app/words");
   const words = page.getByRole("radiogroup", { name: "Язык" });
   await words.getByRole("radio", { name: "Греческий" }).click();
@@ -741,10 +893,10 @@ test("после паузы — полное число и строка «сна
   await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Английский", "Приостановить курс");
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");
-  await expect(page.getByTestId("other-course")).toHaveCount(0);
+  await expect(page.getByTestId("other-language")).toHaveCount(0);
   await toggleFromShelf(page, "Английский", "Для IT · B1 → B2", "Английский", "Продолжить курс");
   await page.goto("/app/");
-  const other = page.getByTestId("other-course");
+  const other = page.getByTestId("other-language");
   await expect(other.getByRole("button", { name: "Повторить 5" })).toBeVisible();
   await expect(other.getByTestId("after-pause")).toHaveText("После паузы: сначала то, что могло забыться");
   await overdueEnglish(page, 3, 3);
