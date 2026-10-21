@@ -1,0 +1,7 @@
+id: tp152
+text: "Count me in."
+translation: "Рассчитывайте на меня, я с вами."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t11
+  operation: requested-generation
+  request: Фразы модуля t11 по программе docs/curriculum-english-travel.md

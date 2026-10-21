@@ -1,0 +1,8 @@
+id: tp163
+text: "What time does it kick off?"
+translation: "Во сколько это начинается?"
+note: "kick off — начаться (о вечеринке, матче, концерте)"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t11
+  operation: requested-generation
+  request: Фразы модуля t11 по программе docs/curriculum-english-travel.md

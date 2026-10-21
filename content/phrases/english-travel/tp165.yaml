@@ -1,0 +1,7 @@
+id: tp165
+text: "Text me when you get there."
+translation: "Напиши мне, когда доберёшься."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t11
+  operation: requested-generation
+  request: Фразы модуля t11 по программе docs/curriculum-english-travel.md
