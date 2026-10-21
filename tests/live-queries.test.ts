@@ -30,7 +30,7 @@ import {
   shelfLanguage,
 } from "../src/storage/courses";
 import { db, type StoredWord } from "../src/storage/db";
-import { dictionary } from "../src/storage/dictionary";
+import { dictionary, languageDictionary } from "../src/storage/dictionary";
 import { submitAnswer } from "./helpers/ops";
 import { courseProgress } from "../src/storage/progress";
 import { dexieSource, mistakeCount } from "../src/storage/queries";
@@ -132,10 +132,10 @@ describe("живые запросы отслеживают чтения посл
     "модуль: тексты": () => moduleReadings("m01"),
     текст: async () => (await readingPage("r-m01-anna")) ?? null,
     "«Слова»": async () => {
-      const courseId = await currentCourse();
-      return { courseId, lessons: await dictionary(courseId) };
+      const language = await currentLanguage();
+      return { language, lessons: await languageDictionary(language) };
     },
-    "«Прогресс»: словарь": () => dictionary(COURSE),
+    "«Прогресс»: словарь": async () => languageDictionary(await currentLanguage()),
     "«Прогресс»": () => courseProgress(now, tz, COURSE),
     "«Прогресс»: статистика": () => progress(dexieSource(), now),
     "«Прогресс»: ошибки": () => mistakeCount(COURSE),

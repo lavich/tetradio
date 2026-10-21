@@ -905,3 +905,46 @@ test("заголовки: «Полка» — h1, полки и карточки 
   await expect(main.getByRole("heading", { name: "Английский", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Действия с курсом «Английский»" })).toBeVisible();
 });
+
+test("словарь английского: подписи курсов, фильтр «Курс» с «учу» и в адресе, чужой курс в адресе, поиск, 360 px", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await installEnglishPair(page);
+  await overdueEnglish(page, 5, 3);
+  await page.goto("/app/words");
+  await chooseLanguage(page, "Английский");
+  const row = (text: string) => page.getByRole("link").filter({ hasText: text });
+  await expect(row("the bus")).toContainText("Для IT");
+  await expect(row("a neighbour")).toContainText("Для общения");
+  await expect(page.getByText("γεια", { exact: true })).toHaveCount(0);
+  const lessons = page.getByTestId("dictionary-lesson");
+  await expect(lessons.getByRole("heading", { level: 2 })).toContainText([/Дорога на работу/, /Знакомство/]);
+
+  const course = page.getByRole("group", { name: "Курс" });
+  await expect(course.getByRole("button")).toHaveText(["все курсы", "Для IT", "Для общения"]);
+  await course.getByRole("button", { name: "Для IT" }).click();
+  await page.getByRole("group", { name: "Состояние" }).getByRole("button", { name: /^учу/ }).click();
+  await expect(page).toHaveURL(/course=english/);
+  await expect(page).toHaveURL(/filter=learning/);
+  await expect(row("the bus")).toBeVisible();
+  await expect(row("a neighbour")).toHaveCount(0);
+  await page.reload();
+  await expect(course.getByRole("button", { name: "Для IT" })).toHaveAttribute("aria-pressed", "true");
+  await expect(row("a neighbour")).toHaveCount(0);
+  await course.getByRole("button", { name: "все курсы" }).click();
+  await page.getByRole("group", { name: "Состояние" }).getByRole("button", { name: /^все/ }).click();
+  await expect(row("the bus")).toBeVisible();
+
+  await page.goto("/app/words?course=greek-a2");
+  await expect(course.getByRole("button", { name: "все курсы" })).toHaveAttribute("aria-pressed", "true");
+  await expect(row("the bus")).toBeVisible();
+  await expect(row("a neighbour")).toBeVisible();
+
+  await page.getByRole("searchbox").fill("weather");
+  await expect(row("the weather")).toContainText("Для общения");
+  await expect(lessons).toHaveCount(1);
+  const label = row("the weather").getByText("Для общения");
+  expect(await label.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});

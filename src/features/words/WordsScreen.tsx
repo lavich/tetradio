@@ -6,17 +6,19 @@ import { KEEP_SCROLL, rememberScroll } from "../../app/scroll";
 import { Screen } from "../../app/Screen";
 import { LanguageSwitch } from "../../shared/CourseSwitch";
 import { useCardCourse, useFollowCourse } from "../../shared/courses";
+import { DEFAULT_LANGUAGE, PROFILES, type Language } from "../../domain/language";
 import { cx } from "../../shared/cx";
 import { withCount, WORDS } from "../../shared/format";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
 import { Tick } from "../../shared/Tick";
-import { currentCourse } from "../../storage/courses";
+import { courseLanguage, courses, currentLanguage } from "../../storage/courses";
 import {
   countMarks,
   dictionary,
   filterDictionary,
+  languageDictionary,
   type CardMark,
   type DictionaryEntry,
   type DictionaryLesson,
@@ -31,8 +33,8 @@ const FILTERS: { key: Filter; label: string }[] = [
   { key: "solid", label: "закреплены" },
 ];
 const toFilter = (value: string | null): Filter => FILTERS.find((item) => item.key === value)?.key ?? "all";
-const searchOf = (query: string, filter: Filter) =>
-  new URLSearchParams({ ...(query && { q: query }), ...(filter !== "all" && { filter }) });
+const searchOf = (query: string, filter: Filter, course: string) =>
+  new URLSearchParams({ ...(query && { q: query }), ...(filter !== "all" && { filter }), ...(course && { course }) });
 const URL_DELAY = 300;
 const MARK_LABEL: Record<CardMark, string> = { new: "не начато", learning: "учу", solid: "закреплено" };
 
@@ -41,15 +43,22 @@ export const entryPath = (entry: Pick<DictionaryEntry, "ref">) =>
     ? `/words/${encodeURIComponent(entry.ref.id)}`
     : `/words/phrase/${encodeURIComponent(entry.ref.id)}`;
 
+/** Словарь языка и имена его курсов для подписей; у языка с одним курсом подписей нет. */
+const languageWords = async (language: Language | undefined) => {
+  const own = (await courses()).filter((course) => course.language === language && course.started);
+  return {
+    language,
+    lessons: await languageDictionary(language),
+    names: own.length > 1 ? own.map((course) => ({ id: course.id, name: course.short ?? course.title })) : [],
+  };
+};
+
 export function WordsScreen() {
   const spread = useSpread();
-  const data = useLiveQuery(async () => {
-    const courseId = await currentCourse();
-    return { courseId, lessons: await dictionary(courseId) };
-  }, []);
-  const profile = useCourseProfile(data?.courseId);
+  const data = useLiveQuery(async () => languageWords(await currentLanguage()), []);
+  const profile = PROFILES[data?.language ?? DEFAULT_LANGUAGE];
   if (!data) return <Screen />;
-  const list = <Dictionary lessons={data.lessons} switcher />;
+  const list = <Dictionary lessons={data.lessons} names={data.names} switcher />;
   return (
     <ProfileContext value={profile}>
       <Screen wide={spread}>
@@ -73,9 +82,18 @@ export function EntryScreen({ kind }: { kind: "word" | "phrase" }) {
   const spread = useSpread();
   const course = useCardCourse({ kind, id });
   useFollowCourse(course ?? undefined);
-  const lessons = useLiveQuery(() => (course === undefined ? undefined : dictionary(course ?? undefined)), [course]);
+  const data = useLiveQuery(
+    async () =>
+      course === undefined
+        ? undefined
+        : course === null
+          ? { lessons: await dictionary(), names: [] }
+          : languageWords(await courseLanguage(course)),
+    [course],
+  );
   const profile = useCourseProfile(course ?? undefined);
-  if (!lessons) return <Screen back="" paper />;
+  if (!data) return <Screen back="" paper />;
+  const { lessons, names } = data;
   const sheet = <EntrySheet kind={kind} id={id} lessons={lessons} courseId={course ?? undefined} />;
   if (!spread)
     return (
@@ -89,7 +107,7 @@ export function EntryScreen({ kind }: { kind: "word" | "phrase" }) {
     <ProfileContext value={profile}>
       <Screen wide paper>
         <div className={cx(nb.spread, nb.spine, css.spread)}>
-          <Dictionary lessons={lessons} current={`${kind}:${id}`} />
+          <Dictionary lessons={lessons} names={names} current={`${kind}:${id}`} />
           <div className={cx(nb.page, css.page)}>{sheet}</div>
         </div>
       </Screen>
@@ -97,12 +115,20 @@ export function EntryScreen({ kind }: { kind: "word" | "phrase" }) {
   );
 }
 
+interface CourseName {
+  id: string;
+  name: string;
+}
+
 function Dictionary({
   lessons,
+  names,
   current,
   switcher,
 }: {
   lessons: DictionaryLesson[];
+  /** Курсы языка, когда их два и больше: подпись строки и фильтр «Курс». */
+  names: CourseName[];
   current?: string;
   switcher?: boolean;
 }) {
@@ -113,22 +139,25 @@ function Dictionary({
   // Не из адреса напрямую: обновление адреса у маршрутизатора не срочное и отставало бы от ввода.
   const [query, setQuery] = useState(() => params.get("q") ?? "");
   const [filter, setFilter] = useState(() => toFilter(params.get("filter")));
+  const [course, setCourse] = useState(() => params.get("course") ?? "");
   const [seen, setSeen] = useState(key);
   if (seen !== key) {
     setSeen(key);
     if (navigation !== "REPLACE") {
       setQuery(params.get("q") ?? "");
       setFilter(toFilter(params.get("filter")));
+      setCourse(params.get("course") ?? "");
     }
   }
+  const chosen = names.some((item) => item.id === course) ? course : "";
   const navigate = useNavigate();
   const base = useHref("/").replace(/\/$/, "");
   const timer = useRef<number | undefined>(undefined);
   // Замена, а не новая запись: «Назад» со слова возвращает тот же поиск, а история не копит буквы.
-  const write = (q: string, mark: Filter) => {
+  const write = (q: string, mark: Filter, own = chosen) => {
     clearTimeout(timer.current);
     timer.current = undefined;
-    setParams(searchOf(q, mark), { replace: true });
+    setParams(searchOf(q, mark, own), { replace: true });
     rememberScroll();
   };
   const flush = () => {
@@ -154,6 +183,10 @@ function Dictionary({
     setFilter(mark);
     write(query, mark);
   };
+  const changeCourse = (id: string) => {
+    setCourse(id);
+    write(query, filter, id);
+  };
   // Строки — обычные ссылки без подписки на адрес: иначе каждый символ поиска перерисовывал бы все ~1300.
   const open = (event: MouseEvent) => {
     if (
@@ -171,16 +204,20 @@ function Dictionary({
     flush();
     if (spread)
       void navigate(
-        { pathname: link.dataset.path, search: searchOf(query, filter).toString() },
+        { pathname: link.dataset.path, search: searchOf(query, filter, chosen).toString() },
         { state: KEEP_SCROLL },
       );
     else void navigate(link.dataset.path);
   };
   const shownQuery = useDeferredValue(query);
   const shownFilter = useDeferredValue(filter);
-  const { names, code } = useProfile();
-  const counts = useMemo(() => countMarks(lessons), [lessons]);
-  const shown = useMemo(() => filterDictionary(lessons, shownFilter, shownQuery), [lessons, shownFilter, shownQuery]);
+  const { names: language, code } = useProfile();
+  const counts = useMemo(() => countMarks(filterDictionary(lessons, "all", "", chosen)), [lessons, chosen]);
+  const shown = useMemo(
+    () => filterDictionary(lessons, shownFilter, shownQuery, chosen),
+    [lessons, shownFilter, shownQuery, chosen],
+  );
+  const labels = useMemo(() => new Map(names.map((item) => [item.id, item.name])), [names]);
   const found = useMemo(() => {
     let words = 0;
     let phrases = 0;
@@ -212,7 +249,7 @@ function Dictionary({
           onChange={(event) => changeQuery(event.target.value)}
           onBlur={flush}
           placeholder="Найти слово или фразу"
-          aria-label={`Поиск ${names.by} или русскому`}
+          aria-label={`Поиск ${language.by} или русскому`}
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}
@@ -228,6 +265,18 @@ function Dictionary({
           </span>
         ))}
       </p>
+      {names.length > 0 && (
+        <p className={css.filters} role="group" aria-label="Курс">
+          {[{ id: "", name: "все курсы" }, ...names].map((item, index) => (
+            <span key={item.id}>
+              {index > 0 && <span aria-hidden> · </span>}
+              <button type="button" aria-pressed={chosen === item.id} onClick={() => changeCourse(item.id)}>
+                {item.name}
+              </button>
+            </span>
+          ))}
+        </p>
+      )}
       {!counts.all ? (
         <p className={css.empty}>Слова и фразы появятся здесь, когда вы откроете первый урок курса.</p>
       ) : !shown.length ? (
@@ -242,6 +291,7 @@ function Dictionary({
             code={code}
             current={lesson.id === currentLesson ? current : undefined}
             base={base}
+            label={lesson.courseId && labels.get(lesson.courseId)}
           />
         ))
       )}
@@ -257,12 +307,15 @@ const LessonSection = memo(function LessonSection({
   code,
   current,
   base,
+  label,
 }: {
   lesson: DictionaryLesson;
   newModule: boolean;
   code: string;
   current?: string;
   base: string;
+  /** Подпись курса у строки в словаре языка. */
+  label?: string;
 }) {
   const heading = newModule && !!lesson.moduleId;
   const solid = lesson.entries.filter((entry) => entry.mark === "solid").length;
@@ -298,7 +351,14 @@ const LessonSection = memo(function LessonSection({
               <span className={cx(css.greek, entry.phrase && css.phrase)} lang={code}>
                 {entry.greek}
               </span>
-              <span className={css.russian}>{entry.russian}</span>
+              {label ? (
+                <span className={css.meaning}>
+                  <span className={css.russian}>{entry.russian}</span>
+                  <span className={css.course}>{label}</span>
+                </span>
+              ) : (
+                <span className={css.russian}>{entry.russian}</span>
+              )}
               <Mark mark={entry.mark} />
             </a>
           </li>
