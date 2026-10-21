@@ -214,4 +214,62 @@ describe("английский для путешествий и общения",
       }
     });
   });
+
+  describe("контрольная точка «День поездки»", () => {
+    const blocks = () => blocksOf("t07-c1");
+
+    it("стоит после t07, контрольная без карточек с заголовком без «C1»", () => {
+      expect(modulesOf("english-travel").find((m) => m.id === "t07")!.checkpointId).toBe("t07-c1");
+      const pack = lessonOf("t07-c1")!;
+      expect(pack.lesson.kind).toBe("test");
+      expect(pack.lesson.title).toBe("День поездки");
+      expect(pack.lesson.title).not.toMatch(/C1/);
+      expect(pack.words).toEqual([]);
+      expect(pack.phrases).toEqual([]);
+    });
+    it("чтение и аудирование — не меньше 10 оцениваемых пунктов на навык", () => {
+      const kindOf = (id?: string) => blocks().find((block) => block.id === id)?.type;
+      const itemsOf = (skill: string) =>
+        blocks()
+          .filter((block) => block.type === "exercise" && block.graded && kindOf(block.about) === skill)
+          .reduce((sum, block) => sum + (block.type === "exercise" ? block.items.length : 0), 0);
+      expect(itemsOf("reading")).toBeGreaterThanOrEqual(10);
+      expect(itemsOf("listening")).toBeGreaterThanOrEqual(10);
+    });
+    it("пять ролевых сцен, перед каждой — реплики собеседника без задания", () => {
+      const all = blocks();
+      const scenes = all.filter((block) => block.type === "speaking" && block.part === "roleplay");
+      expect(scenes.length).toBe(5);
+      all.forEach((block, i) => {
+        if (block.type !== "speaking" || block.part !== "roleplay") return;
+        const before = all[i - 1];
+        expect(before?.type, block.id).toBe("listening");
+        expect(
+          all.some((other) => other.type === "exercise" && other.about === before?.id),
+          block.id,
+        ).toBe(false);
+        expect(block.model, block.id).toBeTruthy();
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      });
+    });
+    it("два письма: хосту дружески и формальная жалоба, с образцом и критериями", () => {
+      const writing = blocks().filter((block) => block.type === "writing");
+      expect(writing.map((block) => block.register).sort()).toEqual(["formal", "friendly"]);
+      for (const block of writing) {
+        expect(wordCount(block.model), block.id).toBeGreaterThanOrEqual(block.words.min);
+        expect(wordCount(block.model), block.id).toBeLessThanOrEqual(block.words.max);
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      }
+    });
+    it("говорящие — в карте голосов en и не из IT-курса", () => {
+      const cast = content.sources.voices.get("en")!.characters;
+      const speakers = blocks().flatMap((block) =>
+        block.type === "listening" ? block.transcript.flatMap((line) => (line.speaker ? [line.speaker] : [])) : [],
+      );
+      for (const speaker of new Set(speakers)) {
+        expect(cast.has(speaker), speaker).toBe(true);
+        expect(IT_NAMES, speaker).not.toContain(speaker);
+      }
+    });
+  });
 });

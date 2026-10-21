@@ -11,6 +11,7 @@ lessons:
   - t07-2
   - t07-3
   - t07-test
+checkpoint: t07-c1
 crib:
   title: рассказ о происшествии
   rows:
