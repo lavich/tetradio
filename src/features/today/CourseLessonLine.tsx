@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { followCourse, type CourseEntry } from "../../storage/courses";
 import { moduleViews, nextStep } from "../../storage/course";
 import { reportError } from "../../reporting/reporting";
+import { cx } from "../../shared/cx";
 import { withCount } from "../../shared/format";
 import css from "./today.module.css";
 
@@ -23,7 +24,7 @@ export function CourseLessonLine({ course, caption }: { course: CourseEntry; cap
     return (
       <Link
         to={`/course/${next.view.module.id}/${next.lesson.id}`}
-        className={css.otherLesson}
+        className={cx(css.otherLesson, caption && css.captioned)}
         data-testid="course-line"
       >
         <span className="grid min-w-0">
@@ -37,7 +38,7 @@ export function CourseLessonLine({ course, caption }: { course: CourseEntry; cap
     );
   if (!views.length) return null;
   return (
-    <p className={css.otherDone} data-testid="course-line">
+    <p className={cx(css.otherDone, caption && css.captioned)} data-testid="course-line">
       {label}
       <span className={css.otherNone}>Все уроки пройдены</span>
     </p>

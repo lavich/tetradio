@@ -321,6 +321,10 @@
   line-height: 16px;
   color: var(--muted-foreground);
 }
+/* Подпись курса — над своей строкой: без отступа она читается подписью предыдущей. */
+.captioned {
+  padding-block: 6px;
+}
 .courseLines {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
