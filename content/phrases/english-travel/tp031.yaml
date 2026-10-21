@@ -1,0 +1,8 @@
+id: tp031
+text: "I was wondering if early check-in would be possible."
+translation: "Скажите, а можно заселиться пораньше?"
+note: "мягкая просьба в сообщении или у стойки; после I was wondering if — would или could"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md

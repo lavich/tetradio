@@ -1,0 +1,351 @@
+title: Правила квартиры, ресепшен и голосовое хоста
+kind: lesson
+items:
+  - { kind: word, id: tw039 }
+  - { kind: word, id: tw040 }
+  - { kind: word, id: tw041 }
+  - { kind: word, id: tw042 }
+  - { kind: word, id: tw043 }
+  - { kind: word, id: tw044 }
+  - { kind: word, id: tw045 }
+  - { kind: phrase, id: tp039 }
+  - { kind: phrase, id: tp040 }
+  - { kind: phrase, id: tp041 }
+  - { kind: phrase, id: tp042 }
+  - { kind: phrase, id: tp043 }
+  - { kind: phrase, id: tp044 }
+  - { kind: phrase, id: tp045 }
+blocks:
+  - type: explanation
+    id: problems
+    title: Поломки, уборка и отмена брони
+    body: |-
+      Табличка **Out of order** на лифте, автомате или стиральной машине — «не работает».
+
+      Вода там, где её быть не должно, — **a leak**, протечка: **There's a leak under the sink.** Глагол тот же: **The shower is leaking.** Раковина или унитаз засорились — **blocked**: **The sink is blocked.** (в США — clogged).
+
+      В британской квартире горячую воду и батареи обычно греет один котёл — **the boiler**. Нет горячей воды — первым делом смотрят на него, часто достаточно нажать кнопку перезапуска.
+
+      В отеле уборкой номеров занимается **housekeeping**: **Could you ask housekeeping for more towels?** В квартире хоста чистое постельное бельё (**bedding**) обычно лежит в шкафу.
+
+      До брони читайте **the cancellation policy** — условия отмены: до какого дня можно отменить бесплатно и сколько денег вернут потом.
+
+      Если ключа нет, а дверь захлопнулась: **We've locked ourselves out.** Если код от ящика с ключами не подходит: **The code for the lockbox doesn't work.** Попросить мастера: **Could you send someone to have a look?** Ответ хоста или отеля часто такой: **Someone's coming to fix it this afternoon.** — уже договорились, придут.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: rules-how
+    title: Инструкция хоста
+    body: |-
+      Ольга, которая летала в Лиссабон в первом модуле, сняла квартиру в Бристоле. За день до заезда хост Оливер прислал инструкцию по заселению и правила дома. Читайте её как настоящую: где ключи, что делать, если нет горячей воды, что нельзя и что будет при отмене брони. Каждое слово переводить не нужно.
+  - type: reading
+    id: rules
+    title: Harbourside Flat — check-in instructions and house rules
+    text: |-
+      Hi Olga, welcome to Bristol! Your stay: 16–19 May. Here's everything you need.
+
+      CHECK-IN AND CHECK-OUT
+      Check-in is from 3 pm, check-out by 11 am. If you need early check-in or late check-out, ask me the day before. It's usually possible if there's no other guest that day (£15).
+
+      KEYS
+      The keys are in a lockbox to the right of the front door. I'll send you the code on the morning of your arrival. When you leave, please put the keys back in the lockbox.
+
+      AMENITIES
+      Wi-Fi (the password is on the fridge), washing machine, hairdryer, coffee machine. Fresh bedding and towels are in the bedroom wardrobe.
+
+      HOT WATER
+      The boiler is in the kitchen cupboard. If there's no hot water, press the red button on the boiler and wait five minutes.
+
+      HOUSE RULES
+      – No smoking in the flat or on the balcony.
+      – No parties, please. Quiet hours are from 10 pm to 8 am.
+      – Please put only toilet paper down the toilet — it gets blocked very easily.
+
+      PLEASE NOTE
+      The lift in the building is out of order until 20 May. The flat is on the third floor.
+
+      CANCELLATION POLICY
+      Free cancellation up to 5 days before check-in. After that, we refund 50% of the price.
+
+      Any problems, message me any time.
+      Oliver
+    glosses:
+      - { text: wardrobe, russian: платяной шкаф }
+      - { text: refund, russian: возвращаем (деньги) }
+  - type: exercise
+    id: rules-q
+    about: rules
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How will Olga get the keys?
+        options:
+          - from a box by the front door
+          - from Oliver at the door
+          - from a neighbour on the third floor
+        answer: from a box by the front door
+        explanation: The keys are in a lockbox to the right of the front door.
+      - id: q2
+        prompt: When will Olga get the code?
+        options:
+          - on the morning she arrives
+          - the day before she arrives
+          - when she books the flat
+        answer: on the morning she arrives
+        explanation: I'll send you the code on the morning of your arrival.
+      - id: q3
+        prompt: What should Olga do if there is no hot water?
+        options:
+          - press a button on the boiler and wait
+          - call Oliver at once
+          - use the washing machine
+        answer: press a button on the boiler and wait
+        explanation: Press the red button on the boiler and wait five minutes.
+      - id: q4
+        prompt: What can't guests do?
+        options:
+          - smoke on the balcony
+          - use the hairdryer
+          - make coffee
+        answer: smoke on the balcony
+        explanation: No smoking in the flat or on the balcony.
+      - id: q5
+        prompt: How will Olga get her suitcase up to the flat?
+        options:
+          - She will carry it up the stairs.
+          - She will take the lift.
+          - Oliver will carry it.
+        answer: She will carry it up the stairs.
+        explanation: The lift is out of order — лифт не работает, а квартира на третьем этаже.
+      - id: q6
+        prompt: Olga cancels her booking three days before check-in. What happens?
+        options:
+          - She gets half of her money back.
+          - She gets all her money back.
+          - She pays £15.
+        answer: She gets half of her money back.
+        explanation: Бесплатно — не позже чем за 5 дней; потом we refund 50% of the price.
+  - type: explanation
+    id: reception-how
+    title: Разговор на ресепшене
+    body: |-
+      Марко, которого вы слышали в первом модуле, приехал в Бат с женой и двухлетней дочкой. Поезд пришёл рано, до заезда ещё несколько часов. Послушайте его разговор с администратором Ханной: что можно сделать сейчас, что потом и что он решает про день отъезда.
+
+      Марко говорит понятно, но с ошибками неносителя: **Late check-out is possible?** — вопрос порядком утверждения, правильно **Is late check-out possible?**; **I think we leave the bags** — правильно **we'll leave**: решение, принятое сейчас, — will.
+  - type: listening
+    id: reception
+    title: At the reception desk
+    plays: 2
+    transcript:
+      - { speaker: Hannah, text: "Good morning, welcome to the Abbey Hotel. How can I help?" }
+      - { speaker: Marco, text: "Good morning. I have a booking — Rossi, Marco Rossi. A double room for three nights." }
+      - { speaker: Hannah, text: "Let me see… Yes, Mr Rossi, a double room, en suite, three nights with breakfast." }
+      - { speaker: Marco, text: "Yes. I know check-in is at three, but our train was early. I was wondering if early check-in is possible." }
+      - { speaker: Hannah, text: "I'm afraid your room isn't ready yet. Housekeeping are still cleaning it. It should be ready around one." }
+      - { speaker: Marco, text: "OK, no problem. Can we leave the luggage here? We want to walk around the city." }
+      - { speaker: Hannah, text: "Of course. I'll put your bags in the luggage room. Here's a ticket for them." }
+      - { speaker: Marco, text: "Thank you. And we have a small daughter, she is two. Is it possible to have a cot in the room?" }
+      - { speaker: Hannah, text: "Yes, of course, and there's no extra charge. I'll ask housekeeping to put one in before you come back." }
+      - { speaker: Marco, text: "Perfect. And breakfast — what time is it?" }
+      - { speaker: Hannah, text: "From seven to ten in the restaurant on the ground floor. At the weekend it's until half past ten." }
+      - { speaker: Marco, text: "Great. One more thing. Our flight on Sunday is in the evening. Late check-out is possible?" }
+      - { speaker: Hannah, text: "Check-out is at eleven. Late check-out until two is twenty pounds, but you can also leave your bags here after check-out for free." }
+      - { speaker: Marco, text: "Then I think we leave the bags. Thank you very much!" }
+      - { speaker: Hannah, text: "You're welcome. When you come back, I'll give you your key cards. Enjoy Bath!" }
+  - type: exercise
+    id: reception-q
+    about: reception
+    title: Аудирование — ресепшен
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why can't Marco check in now?
+        options:
+          - His room isn't ready yet.
+          - He hasn't got a booking.
+          - The hotel is full.
+        answer: His room isn't ready yet.
+        explanation: I'm afraid your room isn't ready yet.
+      - id: q2
+        prompt: When should the room be ready?
+        options: [around one, at three, at eleven]
+        answer: around one
+        explanation: It should be ready around one; три часа — обычное время заезда.
+      - id: q3
+        prompt: Where will the family's bags be?
+        options:
+          - in the luggage room
+          - in their room
+          - in the restaurant
+        answer: in the luggage room
+      - id: q4
+        prompt: How much is the cot?
+        options: [nothing, £20, £15]
+        answer: nothing
+        explanation: There's no extra charge.
+      - id: q5
+        prompt: When does breakfast finish on Saturday?
+        options: [at half past ten, at ten, at eleven]
+        answer: at half past ten
+        explanation: At the weekend it's until half past ten.
+      - id: q6
+        prompt: What does Marco decide to do on Sunday?
+        options:
+          - leave the bags at the hotel after check-out
+          - pay for late check-out
+          - check out at two
+        answer: leave the bags at the hotel after check-out
+        explanation: Late check-out стоит £20, а оставить вещи после выезда — бесплатно.
+  - type: explanation
+    id: voice-how
+    title: Голосовое от хоста
+    body: |-
+      В квартире у Ольги протёк душ, и она написала Оливеру. Он ответил голосовым сообщением. В голосовых говорят быстрее и свободнее, чем в письме, но главное в них то же: что случилось, что будет и что делать вам. Послушайте и найдите ответы.
+  - type: listening
+    id: voice
+    title: A voice message from Oliver
+    plays: 2
+    transcript:
+      - { speaker: Oliver, text: "Hi Olga, it's Oliver. Thanks for your message, and sorry about the shower." }
+      - { speaker: Oliver, text: "I've spoken to my plumber, and someone's coming to fix it this afternoon, between two and four. His name's Steve. He's got his own key, so you don't need to wait in if you want to go out." }
+      - { speaker: Oliver, text: "Until then, please don't use the shower — the water's leaking into the flat downstairs. You can have a bath instead, the bath's fine." }
+      - { speaker: Oliver, text: "Oh, and you asked about extra blankets. There are two in the hall cupboard, on the top shelf, next to the spare pillows." }
+      - { speaker: Oliver, text: "And if the hot water stops again, it's the boiler — just press the red button. Sorry again, and have a lovely evening!" }
+  - type: exercise
+    id: voice-q
+    about: voice
+    title: Аудирование — голосовое
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Who is coming to the flat this afternoon?
+        options: [a plumber, a cleaner, Oliver]
+        answer: a plumber
+        explanation: I've spoken to my plumber… His name's Steve.
+      - id: q2
+        prompt: Does Olga need to stay in the flat?
+        options:
+          - No, because Steve has a key.
+          - Yes, to open the door for Steve.
+          - Yes, until four o'clock.
+        answer: No, because Steve has a key.
+        explanation: He's got his own key, so you don't need to wait in.
+      - id: q3
+        prompt: Why shouldn't Olga use the shower?
+        options:
+          - Water goes into the flat below.
+          - There's no hot water.
+          - The shower is blocked.
+        answer: Water goes into the flat below.
+        explanation: The water's leaking into the flat downstairs.
+      - id: q4
+        prompt: Where are the extra blankets?
+        options:
+          - in the hall cupboard
+          - in the bedroom wardrobe
+          - in the kitchen cupboard
+        answer: in the hall cupboard
+        explanation: There are two in the hall cupboard, on the top shelf. В шкафу на кухне — котёл.
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - out of order
+      - leak
+      - blocked
+      - boiler
+      - housekeeping
+      - bedding
+      - cancellation policy
+      - lockbox
+      - amenities
+    items:
+      - { id: g1, prompt: "Sorry, the lift is ___, so you'll need to take the stairs.", answer: out of order }
+      - { id: g2, prompt: "There's a ___ under the kitchen sink — the floor is all wet.", answer: leak }
+      - { id: g3, prompt: "The toilet is ___ — the water isn't going down.", answer: blocked }
+      - { id: g4, prompt: "If there's no hot water, check the ___ in the kitchen cupboard.", answer: boiler }
+      - { id: g5, prompt: "Could you ask ___ to clean our room after twelve?", answer: housekeeping }
+      - { id: g6, prompt: "Fresh ___ and towels are in the bedroom wardrobe.", answer: bedding }
+      - { id: g7, prompt: "Read the ___ before you book: not every flat gives your money back.", answer: cancellation policy }
+  - type: exercise
+    id: messages
+    title: Напишите хосту
+    instruction: Переведите на английский. Сокращения (doesn't, we've) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Пришлёте инструкцию по заселению?
+        answer:
+          - Could you send me the check-in instructions?
+          - Could you send me the check-in instructions, please?
+          - Can you send me the check-in instructions?
+          - Can you send me the check-in instructions, please?
+          - Could you send us the check-in instructions?
+          - Could you send us the check-in instructions, please?
+          - Can you send us the check-in instructions?
+          - Could you please send me the check-in instructions?
+          - Could you please send us the check-in instructions?
+          - Could you send me the instructions for check-in?
+      - id: q2
+        prompt: Код от ящика с ключами не подходит.
+        answer:
+          - The code for the lockbox doesn't work.
+          - The lockbox code doesn't work.
+          - The code for the lockbox isn't working.
+          - The lockbox code isn't working.
+          - The code to the lockbox doesn't work.
+          - The code for the key safe doesn't work.
+          - The key safe code doesn't work.
+          - The code doesn't work.
+      - id: q3
+        prompt: Душ протекает.
+        answer:
+          - The shower is leaking.
+          - The shower's leaking.
+          - The shower leaks.
+          - There's a leak in the shower.
+        explanation: Протекает сейчас — present continuous is leaking.
+      - id: q4
+        prompt: Можете прислать кого-нибудь посмотреть?
+        answer:
+          - Could you send someone to have a look?
+          - Can you send someone to have a look?
+          - Could you send somebody to have a look?
+          - Can you send somebody to have a look?
+          - Could you send someone to have a look at it?
+          - Could you send someone to take a look?
+          - Can you send someone to take a look?
+          - Could you send someone to look at it?
+      - id: q5
+        prompt: Мы захлопнули дверь, а ключи остались внутри.
+        answer:
+          - We've locked ourselves out.
+          - We have locked ourselves out.
+          - We locked ourselves out.
+          - We've locked ourselves out of the flat.
+          - We've locked ourselves out and the keys are inside.
+          - We've locked ourselves out, and the keys are inside.
+          - We locked ourselves out of the flat.
+          - We've locked our keys inside.
+          - We've locked the keys in the flat.
+        explanation: Lock yourself out — остаться за дверью без ключа; проблема сейчас — present perfect.
+      - id: q6
+        prompt: Есть ещё одеяла?
+        answer:
+          - Are there any extra blankets?
+          - Are there any more blankets?
+          - Have you got any extra blankets?
+          - Do you have any extra blankets?
+          - Are there any spare blankets?
+          - Is there an extra blanket?
+          - Have you got any more blankets?
+          - Do you have any more blankets?
+          - Have you got any spare blankets?
+          - Do you have any spare blankets?

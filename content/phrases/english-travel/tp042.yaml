@@ -1,0 +1,7 @@
+id: tp042
+text: "Could you send someone to have a look?"
+translation: "Можете прислать кого-нибудь посмотреть?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md

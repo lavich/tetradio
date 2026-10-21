@@ -1,0 +1,294 @@
+title: Контрольная модуля t03
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: объявление отеля, звонок на ресепшен, голосовое от хоста, present perfect и there's no, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: notice
+    title: Abbey Hotel — notice to guests
+    text: |-
+      NOTICE TO GUESTS
+
+      LIFT
+      The lift is out of order today because of repair work. It should be working again by 6 pm. If you need help with your luggage, please ask at reception.
+
+      HOT WATER
+      On Wednesday 15 May there will be no hot water from 9 am to midday, because engineers are replacing the boiler. We apologise for the inconvenience.
+
+      HOUSEKEEPING
+      Housekeeping clean the rooms between 10 am and 2 pm. If you don't want your room cleaned, please hang the "Do not disturb" sign on your door. For fresh towels, leave the used ones on the bathroom floor.
+
+      BREAKFAST
+      7–10 am Monday to Friday, 7.30–10.30 am at the weekend.
+
+      CHECK-OUT
+      Check-out is at 11 am. Late check-out until 2 pm costs £20 — please ask at reception the evening before.
+
+      Lost your key card? A new one costs £5 at reception.
+    glosses:
+      - { text: repair work, russian: ремонтные работы }
+      - { text: replacing, russian: заменяют }
+      - { text: inconvenience, russian: неудобство }
+      - { text: hang, russian: повесить }
+  - type: exercise
+    id: notice-q
+    about: notice
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why should guests with heavy bags ask at reception today?
+        options:
+          - The lift isn't working.
+          - The stairs are closed.
+          - Reception keeps all the luggage.
+        answer: The lift isn't working.
+        explanation: The lift is out of order today.
+      - id: q2
+        prompt: When will there be no hot water?
+        options:
+          - on Wednesday morning
+          - all day on Wednesday
+          - every morning this week
+        answer: on Wednesday morning
+        explanation: On Wednesday 15 May… from 9 am to 12 pm.
+      - id: q3
+        prompt: What should a guest do if they don't want their room cleaned?
+        options:
+          - put a sign on the door
+          - call housekeeping at 10 am
+          - leave the towels on the floor
+        answer: put a sign on the door
+        explanation: Hang the "Do not disturb" sign on your door.
+      - id: q4
+        prompt: How can a guest get fresh towels?
+        options:
+          - leave the used towels on the bathroom floor
+          - ask at reception the evening before
+          - hang a sign on the door
+        answer: leave the used towels on the bathroom floor
+      - id: q5
+        prompt: A guest wants to leave at 1 pm on Sunday. What should they do?
+        options:
+          - ask at reception on Saturday evening and pay £20
+          - nothing, check-out is at 1 pm
+          - ask housekeeping on Sunday morning
+        answer: ask at reception on Saturday evening and pay £20
+        explanation: Late check-out until 2 pm costs £20 — please ask at reception the evening before.
+      - id: q6
+        prompt: How much does a new key card cost?
+        options: [£5, £15, £20]
+        answer: £5
+  - type: listening
+    id: call
+    title: A call to reception
+    plays: 2
+    transcript:
+      - { speaker: Hannah, text: "Reception, Hannah speaking. How can I help?" }
+      - { speaker: Inês, text: "Hi, this is room three-oh-five. Sorry to bother you, but the heating has stopped working. The room is really cold." }
+      - { speaker: Hannah, text: "Oh, I'm sorry about that. When did it stop?" }
+      - { speaker: Inês, text: "About an hour ago, I think. I've tried the switch on the wall, but nothing happens." }
+      - { speaker: Hannah, text: "Right. Our engineer is in the building, so I'll send him up in about twenty minutes." }
+      - { speaker: Inês, text: "Thank you. And there aren't any extra blankets in the wardrobe. Could I have one?" }
+      - { speaker: Hannah, text: "Of course. I'll ask housekeeping to bring you two. And if the heating still doesn't work tonight, we can move you to another room." }
+      - { speaker: Inês, text: "Thank you. One more thing — I was wondering if late check-out would be possible tomorrow. My train leaves at four." }
+      - { speaker: Hannah, text: "I'm afraid we're fully booked tomorrow, so late check-out isn't possible. But you're welcome to leave your luggage at reception after check-out." }
+      - { speaker: Inês, text: "OK, that's fine. Thanks for your help." }
+      - { speaker: Hannah, text: "You're welcome. Have a good evening." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование — звонок на ресепшен
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the problem in room 305?
+        options:
+          - The heating isn't working.
+          - There's no hot water.
+          - The key card doesn't work.
+        answer: The heating isn't working.
+        explanation: The heating has stopped working. The room is really cold.
+      - id: q2
+        prompt: When did the problem start?
+        options: [about an hour ago, this morning, twenty minutes ago]
+        answer: about an hour ago
+        explanation: Через двадцать минут придёт мастер, а сломалось about an hour ago.
+      - id: q3
+        prompt: What will happen in about twenty minutes?
+        options:
+          - An engineer will come to the room.
+          - Inês will move to another room.
+          - Housekeeping will clean the room.
+        answer: An engineer will come to the room.
+        explanation: I'll send him up in about twenty minutes. Другой номер — только если вечером отопление всё ещё не заработает.
+      - id: q4
+        prompt: What will housekeeping bring?
+        options: [two blankets, one blanket, fresh towels]
+        answer: two blankets
+        explanation: Инес просит одно, а Ханна обещает два — I'll ask housekeeping to bring you two.
+      - id: q5
+        prompt: Why can't Inês have a late check-out?
+        options:
+          - The hotel is full tomorrow.
+          - Her train leaves at four.
+          - It costs too much.
+        answer: The hotel is full tomorrow.
+        explanation: We're fully booked tomorrow — все номера заняты.
+  - type: listening
+    id: voice
+    title: A voice message from Oliver
+    plays: 2
+    transcript:
+      - { speaker: Oliver, text: "Hi, it's Oliver, your host for this weekend. Just a few things before you arrive tomorrow." }
+      - { speaker: Oliver, text: "The code for the lockbox is four, seven, one, nine. The lockbox is on the wall to the left of the front door, under the light." }
+      - { speaker: Oliver, text: "I'm afraid the washing machine has stopped working, and the engineer can't come until Monday. Sorry about that. There's a launderette two minutes away, on Princess Street." }
+      - { speaker: Oliver, text: "Check-out on Sunday is at eleven, but there's no guest after you, so you can stay until one if you like." }
+      - { speaker: Oliver, text: "Enjoy your stay, and message me if you need anything!" }
+  - type: exercise
+    id: voice-code
+    about: voice
+    graded: true
+    title: Аудирование — голосовое
+    instruction: Запишите код цифрами.
+    format: text
+    items:
+      - id: q1
+        prompt: What is the code for the lockbox?
+        answer: ["4719"]
+        explanation: Four, seven, one, nine.
+  - type: exercise
+    id: voice-q
+    about: voice
+    graded: true
+    title: Аудирование — голосовое
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where is the lockbox?
+        options:
+          - to the left of the front door
+          - to the right of the front door
+          - next to the washing machine
+        answer: to the left of the front door
+        explanation: On the wall to the left of the front door, under the light.
+      - id: q2
+        prompt: What's wrong with the washing machine?
+        options:
+          - It isn't working.
+          - It's leaking.
+          - It's making a strange noise.
+        answer: It isn't working.
+        explanation: The washing machine has stopped working.
+      - id: q3
+        prompt: What's the latest time guests can check out on Sunday?
+        options: [1 pm, 11 am, 3 pm]
+        answer: 1 pm
+        explanation: Обычно выезд в 11, но после этих гостей никого нет — you can stay until one.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Проблемы и просьбы
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Sorry, I ___ my key card. Could I have a new one?
+        options: [have lost, lose, have lose]
+        answer: have lost
+        explanation: Проблема сейчас — present perfect; третья форма lose — lost.
+      - id: q2
+        prompt: The TV ___ working last night.
+        options: [stopped, has stopped, stops]
+        answer: stopped
+        explanation: Указано время (last night) — past simple.
+      - id: q3
+        prompt: There ___ toilet paper in the bathroom.
+        options: [is no, isn't no, is not]
+        answer: is no
+        explanation: There is no — одно отрицание; there isn't no — двойное, а is not без any не работает.
+      - id: q4
+        prompt: Are there ___ extra pillows?
+        options: [any, a, some of]
+        answer: any
+        explanation: В вопросе — any.
+      - id: q5
+        prompt: I was wondering if ___ check out at one.
+        options: [we could, could we, we can to]
+        answer: we could
+        explanation: После if — порядок утверждения.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [lockbox, amenities, cot, en suite, out of order, leak, blocked, boiler, housekeeping, bedding, policy]
+    items:
+      - { id: g1, prompt: "We're travelling with a baby, so could we have a ___ in the room?", answer: cot }
+      - { id: g2, prompt: "The room is ___, so you don't need to share a bathroom.", answer: en suite }
+      - { id: g3, prompt: "The keys are in a ___ by the door. I'll send you the code.", answer: lockbox }
+      - { id: g4, prompt: "There's a ___ in the ceiling — water is coming into the room.", answer: leak }
+      - { id: g5, prompt: "The sink is ___. The water isn't going down.", answer: blocked }
+      - { id: g6, prompt: "If there's no hot water, press the button on the ___.", answer: boiler }
+      - { id: g7, prompt: "Could you ask ___ for two more towels, please?", answer: housekeeping }
+      - { id: g8, prompt: "The cancellation ___ says we can cancel for free until Friday.", answer: policy }
+      - { id: g9, prompt: "Fresh ___ is in the wardrobe, so you can change the sheets.", answer: bedding }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (there's, we've) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: В ванной нет горячей воды.
+        answer:
+          - There's no hot water in the bathroom.
+          - There is no hot water in the bathroom.
+          - There isn't any hot water in the bathroom.
+          - There is not any hot water in the bathroom.
+          - There's no hot water in the shower.
+          - There is no hot water in the shower.
+          - There isn't any hot water in the shower.
+      - id: q2
+        prompt: Можете прислать кого-нибудь посмотреть?
+        answer:
+          - Could you send someone to have a look?
+          - Can you send someone to have a look?
+          - Could you send somebody to have a look?
+          - Can you send somebody to have a look?
+          - Could you send someone to take a look?
+          - Can you send someone to take a look?
+          - Could you send someone to look at it?
+          - Could you send someone to have a look at it?
+      - id: q3
+        prompt: Скажите, а можно заселиться пораньше?
+        answer:
+          - I was wondering if early check-in would be possible.
+          - I was wondering if early check-in was possible.
+          - I was wondering if early check-in is possible.
+          - I was wondering if we could check in early.
+          - I was wondering if I could check in early.
+          - Is early check-in possible?
+          - Would early check-in be possible?
+          - Could we check in early?
+          - Could I check in early?
+          - Is it possible to check in early?
+          - Can we check in early?
+          - Can I check in early?
+          - Would it be possible to check in early?
+          - Could we check in earlier?
+          - Could I check in earlier?
+          - Is it possible to check in earlier?
