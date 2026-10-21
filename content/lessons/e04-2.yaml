@@ -1,0 +1,300 @@
+title: Статья-сравнение и разговор о выборе технологии
+kind: lesson
+items:
+  - { kind: word, id: ew124 }
+  - { kind: word, id: ew125 }
+  - { kind: word, id: ew126 }
+  - { kind: word, id: ew127 }
+  - { kind: word, id: ew128 }
+  - { kind: word, id: ew129 }
+  - { kind: word, id: ew130 }
+  - { kind: word, id: ew131 }
+  - { kind: word, id: ew132 }
+  - { kind: word, id: ew133 }
+  - { kind: word, id: ew134 }
+  - { kind: word, id: ew135 }
+  - { kind: word, id: ew136 }
+  - { kind: word, id: ew137 }
+  - { kind: word, id: ew138 }
+  - { kind: word, id: ew139 }
+  - { kind: word, id: ew140 }
+  - { kind: phrase, id: ep084 }
+  - { kind: phrase, id: ep085 }
+  - { kind: phrase, id: ep086 }
+  - { kind: phrase, id: ep087 }
+  - { kind: phrase, id: ep088 }
+  - { kind: phrase, id: ep089 }
+  - { kind: phrase, id: ep090 }
+  - { kind: phrase, id: ep091 }
+blocks:
+  - type: explanation
+    id: compare-words
+    title: Язык сравнения технологий
+    body: |-
+      Статья-сравнение и обсуждение выбора технологии строятся вокруг критериев: скорость, цена поддержки, порог входа, экосистема. Для них нужны слова урока.
+
+      **Типизация.** **Statically typed** — типы проверяются до запуска (Java, Go, TypeScript), **dynamically typed** — при выполнении (Python, JavaScript). **A runtime** — среда, в которой выполняется программа, **a linter** находит ошибки и нарушения стиля до запуска, **an abstraction** скрывает детали за простым слоем.
+
+      **Зрелость и поддержка.** **Battle-tested** — давно и широко используется в продакшене, **deprecated** — пока работает, но будет удалён, **community support** — ответы на форумах и готовые пакеты. **Opinionated** — сам диктует структуру проекта, **out of the box** — работает без настройки, **interoperability** — способность систем работать вместе, **vendor lock-in** — привязка к поставщику, из которой дорого выйти.
+
+      **Сравнение.** **A benchmark** — замер на одинаковой нагрузке, **evaluate** — оценивать по критериям, **outperform** — превосходить по производительности, **a drawback** — недостаток, **a monorepo** — один репозиторий для нескольких проектов.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - statically typed
+      - dynamically typed
+      - battle-tested
+      - out of the box
+      - opinionated
+      - vendor lock-in
+      - a benchmark
+      - deprecated
+      - a linter
+      - a monorepo
+    items:
+      - { id: m1, prompt: "типы проверяются до запуска программы", answer: statically typed }
+      - { id: m2, prompt: "типы проверяются во время выполнения", answer: dynamically typed }
+      - { id: m3, prompt: "давно и широко используется в продакшене", answer: battle-tested }
+      - { id: m4, prompt: "работает без дополнительной настройки", answer: out of the box }
+      - { id: m5, prompt: "сам диктует структуру проекта", answer: opinionated }
+      - { id: m6, prompt: "привязка к поставщику, из которой дорого выйти", answer: vendor lock-in }
+      - { id: m7, prompt: "замер производительности на одинаковой нагрузке", answer: a benchmark }
+      - { id: m8, prompt: "пока работает, но будет удалён", answer: deprecated }
+  - type: exercise
+    id: words-gap
+    title: Сравнение технологий
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - evaluate
+      - outperform
+      - drawback
+      - runtime
+      - linter
+      - monorepo
+      - abstraction
+      - lock-in
+    items:
+      - id: g1
+        prompt: We want to ___ three databases before we decide. (оценить по критериям)
+        answer: evaluate
+      - id: g2
+        prompt: The new version should ___ the old one on large files. (превосходить по скорости)
+        answer: outperform
+      - id: g3
+        prompt: The main ___ of this tool is the lack of documentation. (недостаток)
+        answer: drawback
+      - id: g4
+        prompt: Node.js is a JavaScript ___ that runs code outside the browser. (среда выполнения)
+        answer: runtime
+      - id: g5
+        prompt: A ___ warns you about style problems before the code runs. (линтер)
+        answer: linter
+      - id: g6
+        prompt: All our services live in one repository, so we call it a ___. (монорепозиторий)
+        answer: monorepo
+  - type: explanation
+    id: reading-how
+    title: Статья-сравнение
+    body: |-
+      Статья-сравнение обычно устроена одинаково: задача, критерии, плюсы и минусы каждого варианта, вывод. Читайте её по этим частям и ищите слова, которые показывают сравнение: **than, as … as, the more … the more**, а также **while, whereas** («тогда как»), **however, on the other hand** («с другой стороны»). Вывод почти всегда начинается словами вроде *We chose…* или *In the end…*.
+
+      Незнакомые слова переведены под текстом. Слова урока в тексте идут без перевода.
+  - type: reading
+    id: article
+    title: "PostgreSQL or MongoDB for our orders service?"
+    text: |-
+      PostgreSQL or MongoDB for our orders service?
+
+      Our team of six is building a new orders service. We evaluated two databases for two weeks and ran a benchmark on a real workload: ten thousand orders a minute.
+
+      PostgreSQL is a relational database with a strict schema. It is battle-tested, it has strong tooling and community support, and the learning curve is gentle for anyone who knows SQL. Its main drawback is that changing a large table takes planning.
+
+      MongoDB is more flexible: documents have no fixed schema, so the first version was faster to build. However, the more the data grew, the more we needed rules, and we ended up writing validation by hand. In the benchmark, MongoDB was almost as fast as PostgreSQL for simple reads, but PostgreSQL outperformed it on queries that joined several tables.
+
+      We chose PostgreSQL over MongoDB. Our orders are related data, so a strict schema is a benefit. Both tools are good, though: for a prototype with unclear data, MongoDB may be the better choice.
+    glosses:
+      - { text: relational database, russian: реляционная база данных }
+      - { text: schema, russian: схема данных }
+      - { text: validation, russian: проверка данных }
+      - { text: reads, russian: операции чтения }
+      - { text: queries, russian: запросы к базе }
+      - { text: joined, russian: объединяли }
+      - { text: workload, russian: нагрузка }
+      - { text: related, russian: связанный }
+      - { text: strict, russian: "строгий, жёсткий" }
+      - { text: fixed, russian: фиксированный }
+      - { text: ended up writing, russian: "в итоге пришлось писать" }
+      - { text: by hand, russian: вручную }
+      - { text: unclear, russian: нечёткий }
+  - type: exercise
+    id: article-tf
+    about: article
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The team compared the two databases for two weeks.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: We evaluated two databases for two weeks — оценивали две недели.
+      - id: q2
+        prompt: The benchmark used a real workload.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: The first version was faster to build with MongoDB.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: У MongoDB нет фиксированной схемы, поэтому первую версию собрали быстрее.
+      - id: q4
+        prompt: MongoDB was much faster than PostgreSQL on queries that joined several tables.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: На таких запросах PostgreSQL outperformed MongoDB — оказался быстрее.
+      - id: q5
+        prompt: The team chose MongoDB for the orders service.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We chose PostgreSQL over MongoDB — выбрали PostgreSQL.
+      - id: q6
+        prompt: The article says MongoDB may suit a prototype with unclear data.
+        options: ["True", "False"]
+        answer: "True"
+  - type: exercise
+    id: article-grammar
+    about: article
+    title: Сравнения в тексте
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«MongoDB was almost as fast as PostgreSQL for simple reads» — какой вывод верен?"
+        options:
+          - на простых запросах чтения скорость почти одинакова
+          - MongoDB был вдвое быстрее
+        answer: на простых запросах чтения скорость почти одинакова
+        explanation: Almost as … as означает «почти так же».
+      - id: q2
+        prompt: "«The more the data grew, the more we needed rules» — что показывает эта конструкция?"
+        options:
+          - потребность в правилах росла вместе с данными
+          - данные и правила были одного размера
+        answer: потребность в правилах росла вместе с данными
+        explanation: The more … the more связывает два растущих показателя.
+      - id: q3
+        prompt: "«MongoDB is more flexible» — с чем сравнивается MongoDB?"
+        options:
+          - с PostgreSQL
+          - с другим инструментом, который в статье не назван
+        answer: с PostgreSQL
+        explanation: Сравнительная степень предполагает второй объект; в статье это PostgreSQL.
+  - type: explanation
+    id: listening-how
+    title: Два инженера обсуждают выбор
+    body: |-
+      На работе выбор технологии обсуждают так: один называет предпочтение, второй возражает слабой стороной, оба приводят факты (замер, опыт команды). Итог часто выглядит как договорённость: сравнить письменно и решить к сроку.
+
+      Послушайте разговор Юки и Итана о том, на чём писать панель администратора. Сначала целиком, потом ответьте на вопросы и проверьте их при втором прослушивании. Транскрипт открывается после ответа. Следите за сравнениями (*not as flexible, almost as fast, much faster*) и за конструкцией *the bigger…, the more…*.
+  - type: listening
+    id: stack-talk
+    title: Plain JavaScript or TypeScript?
+    plays: 2
+    transcript:
+      - { speaker: Ethan, text: "Yuki, have you decided about the admin dashboard? Plain JavaScript or TypeScript?" }
+      - { speaker: Yuki, text: "I'm leaning towards TypeScript. JavaScript is dynamically typed, so a lot of mistakes show up only when a user clicks the button." }
+      - { speaker: Ethan, text: "True, but TypeScript is not as flexible, and it takes longer to set up. For a small dashboard it feels like overkill." }
+      - { speaker: Yuki, text: "It takes a bit of work at first, but the editor catches mistakes out of the box. And the bigger the codebase gets, the more we'll need the types." }
+      - { speaker: Ethan, text: "What about the learning curve? Two of us have never used it." }
+      - { speaker: Yuki, text: "It's steeper for about a week. After that, most people write code almost as fast as before, and the code is easier to maintain." }
+      - { speaker: Ethan, text: "Fine. And the build? I don't want a bloated setup with a hundred dependencies." }
+      - { speaker: Yuki, text: "We can use a lightweight tool. I tested one yesterday, and it was much faster than our old build." }
+      - { speaker: Ethan, text: "Good. Then let's write a short comparison for the team and decide on Friday." }
+      - { speaker: Yuki, text: "Agreed. I'll add a benchmark of both build times." }
+  - type: exercise
+    id: stack-talk-q
+    about: stack-talk
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What are Yuki and Ethan choosing between?
+        options:
+          - plain JavaScript and TypeScript
+          - two databases
+          - two cloud providers
+        answer: plain JavaScript and TypeScript
+      - id: q2
+        prompt: Why does Yuki prefer TypeScript?
+        options:
+          - It catches mistakes before the code runs.
+          - It runs faster in the browser.
+          - It needs less setup.
+        answer: It catches mistakes before the code runs.
+        explanation: The editor catches mistakes out of the box — редактор находит ошибки без дополнительной настройки.
+      - id: q3
+        prompt: What is Ethan's first worry?
+        options:
+          - TypeScript is less flexible and takes longer to set up.
+          - TypeScript has no community support.
+          - TypeScript is too slow.
+        answer: TypeScript is less flexible and takes longer to set up.
+      - id: q4
+        prompt: How long is the learning curve steeper, according to Yuki?
+        options:
+          - about a week
+          - about a month
+          - about a day
+        answer: about a week
+      - id: q5
+        prompt: What does Ethan not want?
+        options:
+          - a bloated setup with many dependencies
+          - a monorepo
+          - a paid tool
+        answer: a bloated setup with many dependencies
+      - id: q6
+        prompt: What did Yuki test yesterday?
+        options:
+          - a lightweight build tool
+          - a database
+          - a linter
+        answer: a lightweight build tool
+        explanation: It was much faster than our old build — новая сборка заметно быстрее прежней.
+      - id: q7
+        prompt: What will they do before Friday?
+        options:
+          - write a short comparison for the team
+          - buy a licence
+          - start the migration
+        answer: write a short comparison for the team
+  - type: exercise
+    id: stack-talk-phrases
+    about: stack-talk
+    title: Фразы из разговора
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - more
+      - as
+      - bloated
+      - lightweight
+      - overkill
+      - box
+      - than
+      - reliable
+    items:
+      - { id: g1, prompt: "The bigger the codebase gets, the ___ we'll need the types.", answer: more }
+      - { id: g2, prompt: "Most people write code almost ___ fast as before.", answer: as }
+      - { id: g3, prompt: "I don't want a ___ setup with a hundred dependencies. (перегруженный)", answer: bloated }
+      - { id: g4, prompt: "We can use a ___ tool. (небольшой и нетребовательный)", answer: lightweight }
+      - { id: g5, prompt: "For a small dashboard it feels like ___. (слишком мощное решение)", answer: overkill }
+      - { id: g6, prompt: "The editor catches mistakes out of the ___.", answer: box }

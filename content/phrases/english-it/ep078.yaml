@@ -1,0 +1,7 @@
+id: ep078
+text: "Python is much easier to learn than C++."
+translation: "Python гораздо проще выучить, чем C++."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

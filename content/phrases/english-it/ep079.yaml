@@ -1,0 +1,7 @@
+id: ep079
+text: "TypeScript is not as flexible as plain JavaScript, but it's safer."
+translation: "TypeScript менее гибок, чем чистый JavaScript, зато безопаснее."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

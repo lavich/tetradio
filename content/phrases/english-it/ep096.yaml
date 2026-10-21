@@ -1,0 +1,7 @@
+id: ep096
+text: "I try not to follow trends blindly."
+translation: "Я стараюсь не следовать модным веяниям вслепую."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

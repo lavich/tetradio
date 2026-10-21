@@ -1,0 +1,7 @@
+id: ep081
+text: "It's almost as fast as the old version."
+translation: "Он почти так же быстр, как старая версия."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

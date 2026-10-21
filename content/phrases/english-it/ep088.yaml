@@ -1,0 +1,7 @@
+id: ep088
+text: "We compared them in terms of performance and maintenance cost."
+translation: "Мы сравнили их по производительности и стоимости поддержки."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

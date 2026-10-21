@@ -1,8 +1,22 @@
 number: 4
 title: My stack
 subtitle: Мой стек и выбор технологий
-status: draft
+status: published
 goal: описать свой стек и объяснить, почему выбрали одно, а не другое
 grammar:
   - сравнения, as … as, the more … the more
 sessions: 3
+crib:
+  title: выбор технологии
+  rows:
+    - [сравнить, "X is faster than Y; much / a bit easier"]
+    - [равенство, "as fast as; not as flexible as; twice as fast as"]
+    - [чем … тем, "The more we scaled, the more we needed…"]
+    - [выбрать, "I chose X over Y because…"]
+    - [недостаток, "The main drawback is…"]
+  note: "после as … as — исходная форма, после сравнительной степени — than"
+lessons:
+  - e04-1
+  - e04-2
+  - e04-3
+  - e04-test

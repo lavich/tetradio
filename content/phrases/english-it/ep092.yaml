@@ -1,0 +1,7 @@
+id: ep092
+text: "Why did you pick React over Vue?"
+translation: "Почему вы выбрали React вместо Vue?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

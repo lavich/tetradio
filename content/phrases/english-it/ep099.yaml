@@ -1,0 +1,7 @@
+id: ep099
+text: "I'd be open to learning your stack."
+translation: "Я готов изучить ваш стек."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md

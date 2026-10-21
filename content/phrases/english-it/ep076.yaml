@@ -1,0 +1,7 @@
+id: ep076
+text: "I chose Go over Java for the new service."
+translation: "Для нового сервиса я выбрал Go вместо Java."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e04
+  operation: requested-generation
+  request: Фразы модуля e04 по программе docs/curriculum-english-it.md
