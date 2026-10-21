@@ -1,0 +1,410 @@
+title: Контрольная модуля e09
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, прошедшие времена и схема STAR, слова модуля и перевод фраз. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: guide
+    title: "How we run behavioral interviews at Larkfield Systems"
+    text: |-
+      How we run behavioral interviews at Larkfield Systems
+
+      A behavioral interview lasts about fifty minutes. The interviewer asks three or four questions that begin with "Tell me about a time…", and the candidate answers with a real example from their work.
+
+      We listen for four things. First, the situation: was it clear what was happening and why it mattered? Second, the task: what exactly was the candidate responsible for? Third, the actions: what did the candidate do, and in which order? Fourth, the result: how did it end, and what did the candidate learn?
+
+      Candidates often say "we" all the time. We ask follow-up questions such as "What was your role in it?" to find out what the candidate did personally. A complete answer names the candidate's own steps and also credits the team.
+
+      We do not ask candidates to name clients or to share internal figures. A short description in general terms is enough.
+
+      After the interview, the panel writes short notes about the answers, not about the person. The notes use the same four parts, and every note includes one example from the interview.
+    glosses:
+      - { text: mattered, russian: "имела значение" }
+      - { text: personally, russian: лично }
+      - { text: credits, russian: "отдаёт должное" }
+      - { text: panel, russian: "группа интервьюеров" }
+      - { text: notes, russian: заметки }
+  - type: exercise
+    id: guide-tf
+    about: guide
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: A behavioral interview lasts about fifty minutes.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: Candidates answer with an example from their real work.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: The interviewers listen only for the actions of the candidate.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "We listen for four things — слушают четыре части: ситуацию, задачу, действия и результат."
+      - id: q4
+        prompt: Follow-up questions help the interviewer find out what the candidate did personally.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: Candidates must name their clients.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: We do not ask candidates to name clients — названия клиентов не нужны.
+      - id: q6
+        prompt: The panel's notes describe the personality of the candidate.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The panel writes notes about the answers, not about the person — заметки описывают ответы кандидата.
+  - type: listening
+    id: call
+    title: A behavioral interview
+    plays: 2
+    transcript:
+      - { speaker: Mark, text: "Welcome, Camille. Let's begin. Tell me about a time you had to deal with two urgent requests at once." }
+      - { speaker: Camille, text: "Last year, I was working on a payment feature when two urgent requests arrived on the same day. The product owner wanted a bug fixed before the release, and the support team needed a report for a customer meeting." }
+      - { speaker: Mark, text: "Okay. What was your task?" }
+      - { speaker: Camille, text: "My task was to decide what to do first. I was the only person who knew both parts of the system, so I was double-booked." }
+      - { speaker: Mark, text: "And what did you do?" }
+      - { speaker: Camille, text: "I asked both people for the deadline and the reason behind it. The bug could cause wrong payments, so it came first. I explained this to the support team, and I offered to send a short draft of the report by noon. I also asked a colleague to check the numbers." }
+      - { speaker: Mark, text: "How did it turn out?" }
+      - { speaker: Camille, text: "We fixed the bug before the release, and the support team received the report an hour before the meeting. Nobody was unhappy, because I had set expectations early." }
+      - { speaker: Mark, text: "Did you change anything in your process afterwards?" }
+      - { speaker: Camille, text: "Yes. Since then, I have asked for the deadline and the reason every time, and I have kept a short list of open requests for the team." }
+      - { speaker: Mark, text: "Thank you, Camille. That was clear." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What did the product owner want?
+        options:
+          - a bug fixed before the release
+          - a new feature
+          - a report for a customer
+        answer: a bug fixed before the release
+      - id: q2
+        prompt: What did the support team need?
+        options:
+          - a report for a customer meeting
+          - a bug fix
+          - a new server
+        answer: a report for a customer meeting
+      - id: q3
+        prompt: Why was Camille double-booked?
+        options:
+          - She was the only person who knew both parts of the system.
+          - She was on holiday.
+          - She had two managers.
+        answer: She was the only person who knew both parts of the system.
+      - id: q4
+        prompt: Why did the bug come first?
+        options:
+          - It could cause wrong payments.
+          - The product owner was senior.
+          - It was easier to fix.
+        answer: It could cause wrong payments.
+      - id: q5
+        prompt: When did the support team receive the report?
+        options: [an hour before the meeting, after the meeting, on the next day]
+        answer: an hour before the meeting
+      - id: q6
+        prompt: What does Camille do now?
+        options:
+          - She asks for the deadline and the reason every time.
+          - She refuses urgent requests.
+          - She works longer hours.
+        answer: She asks for the deadline and the reason every time.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Прошедшие времена и схема STAR
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I ___ on a report when the call started. (я был занят в тот момент)"
+        options: [was working, were working, was work]
+        answer: was working
+        explanation: Действие в процессе передаёт past continuous; после I нужна форма was, затем -ing.
+      - id: q2
+        prompt: "By the time the interview started, I ___ my answers. (подготовил раньше)"
+        options: [had prepared, have prepared, was prepare]
+        answer: had prepared
+        explanation: Более раннее событие стоит в past perfect — had и третья форма глагола.
+      - id: q3
+        prompt: "We ___ for an answer for two weeks when the client finally replied. (длилось до этого момента)"
+        options: [had been waiting, are waiting, was wait]
+        answer: had been waiting
+        explanation: Период до события из прошлого передаёт past perfect continuous.
+      - id: q4
+        prompt: "I opened the ticket, and then I ___ the team. (по порядку)"
+        options: [told, telling, had tell]
+        answer: told
+        explanation: События, которые идут одно за другим, стоят в past simple.
+      - id: q5
+        prompt: "When I joined, the team ___ a prototype. (прототип был готов раньше)"
+        options: [had built, has build, was build]
+        answer: had built
+        explanation: Более раннее событие стоит в past perfect; форма had built.
+      - id: q6
+        prompt: "Фраза «As a result, we shipped on time» относится к части…"
+        options: [Result, Task, Situation]
+        answer: Result
+        explanation: As a result вводит итог, то есть часть Result.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a tight deadline
+      - double-booked
+      - friction
+      - mediate
+      - compromise
+      - take the initiative
+      - delegate
+      - a status report
+    items:
+      - id: g1
+        prompt: The engineer had two meetings at ten o'clock. He was ___. (занят двумя делами)
+        answer: double-booked
+      - id: g2
+        prompt: We had only two days left, so it was ___. (жёсткий срок)
+        answer: a tight deadline
+      - id: g3
+        prompt: There was constant ___ between the two teams, but no single argument. (трения)
+        answer: friction
+      - id: g4
+        prompt: Neither side could win, so each of them gave up something. They had to ___. (уступить друг другу)
+        answer: compromise
+      - id: g5
+        prompt: Nobody asked me, but I decided to ___ and write the plan. (проявить инициативу)
+        answer: take the initiative
+      - id: g6
+        prompt: Every Friday, the lead sends ___ to the stakeholders. (отчёт о ходе работ)
+        answer: a status report
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Я попросил руководителя помочь нам расставить приоритеты.
+        answer:
+          - "I asked my manager to help us to prioritise"
+          - "I asked my manager to help us to prioritize"
+          - "I asked my manager to help us to set our priorities"
+          - "I asked my manager to help us to set priorities"
+          - "I asked my manager to help us prioritise"
+          - "I asked my manager to help us prioritize"
+          - "I asked my manager to help us set our priorities"
+          - "I asked my manager to help us set priorities"
+          - "I asked my lead to help us to prioritise"
+          - "I asked my lead to help us to prioritize"
+          - "I asked my lead to help us to set our priorities"
+          - "I asked my lead to help us to set priorities"
+          - "I asked my lead to help us prioritise"
+          - "I asked my lead to help us prioritize"
+          - "I asked my lead to help us set our priorities"
+          - "I asked my lead to help us set priorities"
+          - "I asked my boss to help us to prioritise"
+          - "I asked my boss to help us to prioritize"
+          - "I asked my boss to help us to set our priorities"
+          - "I asked my boss to help us to set priorities"
+          - "I asked my boss to help us prioritise"
+          - "I asked my boss to help us prioritize"
+          - "I asked my boss to help us set our priorities"
+          - "I asked my boss to help us set priorities"
+          - "I asked my line manager to help us to prioritise"
+          - "I asked my line manager to help us to prioritize"
+          - "I asked my line manager to help us to set our priorities"
+          - "I asked my line manager to help us to set priorities"
+          - "I asked my line manager to help us prioritise"
+          - "I asked my line manager to help us prioritize"
+          - "I asked my line manager to help us set our priorities"
+          - "I asked my line manager to help us set priorities"
+          - "I asked my manager to help us with prioritising"
+          - "I asked my manager to help us with prioritizing"
+          - "I asked my manager to help us with setting priorities"
+          - "I asked my lead to help us with prioritising"
+          - "I asked my lead to help us with prioritizing"
+          - "I asked my lead to help us with setting priorities"
+          - "I asked my boss to help us with prioritising"
+          - "I asked my boss to help us with prioritizing"
+          - "I asked my boss to help us with setting priorities"
+          - "I asked my line manager to help us with prioritising"
+          - "I asked my line manager to help us with prioritizing"
+          - "I asked my line manager to help us with setting priorities"
+        explanation: Просьба о помощи — asked… to help us…; допустимы prioritise и set priorities.
+      - id: q2
+        prompt: Когда я пришёл в команду, они уже написали план.
+        answer:
+          - "When I joined the team, they had already written a plan"
+          - "When I joined the team, they had already written the plan"
+          - "When I joined the team, they had already made a plan"
+          - "When I joined the team, they had already made the plan"
+          - "When I joined the team, they had already drawn up a plan"
+          - "When I joined the team, they had already drawn up the plan"
+          - "When I joined the team, they had already put together a plan"
+          - "When I joined the team, they had already put together the plan"
+          - "When I joined the team, they had written a plan"
+          - "When I joined the team, they had written the plan"
+          - "When I joined the team, they had made a plan"
+          - "When I joined the team, they had made the plan"
+          - "When I joined the team, they had drawn up a plan"
+          - "When I joined the team, they had drawn up the plan"
+          - "When I joined the team, they had put together a plan"
+          - "When I joined the team, they had put together the plan"
+          - "When I joined the team they had already written a plan"
+          - "When I joined the team they had already written the plan"
+          - "When I joined the team they had already made a plan"
+          - "When I joined the team they had already made the plan"
+          - "When I joined the team they had already drawn up a plan"
+          - "When I joined the team they had already drawn up the plan"
+          - "When I joined the team they had already put together a plan"
+          - "When I joined the team they had already put together the plan"
+          - "When I joined the team they had written a plan"
+          - "When I joined the team they had written the plan"
+          - "When I joined the team they had made a plan"
+          - "When I joined the team they had made the plan"
+          - "When I joined the team they had drawn up a plan"
+          - "When I joined the team they had drawn up the plan"
+          - "When I joined the team they had put together a plan"
+          - "When I joined the team they had put together the plan"
+          - "When I joined, they had already written a plan"
+          - "When I joined, they had already written the plan"
+          - "When I joined, they had already made a plan"
+          - "When I joined, they had already made the plan"
+          - "When I joined, they had already drawn up a plan"
+          - "When I joined, they had already drawn up the plan"
+          - "When I joined, they had already put together a plan"
+          - "When I joined, they had already put together the plan"
+          - "When I joined, they had written a plan"
+          - "When I joined, they had written the plan"
+          - "When I joined, they had made a plan"
+          - "When I joined, they had made the plan"
+          - "When I joined, they had drawn up a plan"
+          - "When I joined, they had drawn up the plan"
+          - "When I joined, they had put together a plan"
+          - "When I joined, they had put together the plan"
+          - "When I joined they had already written a plan"
+          - "When I joined they had already written the plan"
+          - "When I joined they had already made a plan"
+          - "When I joined they had already made the plan"
+          - "When I joined they had already drawn up a plan"
+          - "When I joined they had already drawn up the plan"
+          - "When I joined they had already put together a plan"
+          - "When I joined they had already put together the plan"
+          - "When I joined they had written a plan"
+          - "When I joined they had written the plan"
+          - "When I joined they had made a plan"
+          - "When I joined they had made the plan"
+          - "When I joined they had drawn up a plan"
+          - "When I joined they had drawn up the plan"
+          - "When I joined they had put together a plan"
+          - "When I joined they had put together the plan"
+          - "By the time I joined the team, they had already written a plan"
+          - "By the time I joined the team, they had already written the plan"
+          - "By the time I joined the team, they had already made a plan"
+          - "By the time I joined the team, they had already made the plan"
+          - "By the time I joined the team, they had already drawn up a plan"
+          - "By the time I joined the team, they had already drawn up the plan"
+          - "By the time I joined the team, they had already put together a plan"
+          - "By the time I joined the team, they had already put together the plan"
+          - "By the time I joined the team, they had written a plan"
+          - "By the time I joined the team, they had written the plan"
+          - "By the time I joined the team, they had made a plan"
+          - "By the time I joined the team, they had made the plan"
+          - "By the time I joined the team, they had drawn up a plan"
+          - "By the time I joined the team, they had drawn up the plan"
+          - "By the time I joined the team, they had put together a plan"
+          - "By the time I joined the team, they had put together the plan"
+          - "By the time I joined the team they had already written a plan"
+          - "By the time I joined the team they had already written the plan"
+          - "By the time I joined the team they had already made a plan"
+          - "By the time I joined the team they had already made the plan"
+          - "By the time I joined the team they had already drawn up a plan"
+          - "By the time I joined the team they had already drawn up the plan"
+          - "By the time I joined the team they had already put together a plan"
+          - "By the time I joined the team they had already put together the plan"
+          - "By the time I joined the team they had written a plan"
+          - "By the time I joined the team they had written the plan"
+          - "By the time I joined the team they had made a plan"
+          - "By the time I joined the team they had made the plan"
+          - "By the time I joined the team they had drawn up a plan"
+          - "By the time I joined the team they had drawn up the plan"
+          - "By the time I joined the team they had put together a plan"
+          - "By the time I joined the team they had put together the plan"
+          - "By the time I joined, they had already written a plan"
+          - "By the time I joined, they had already written the plan"
+          - "By the time I joined, they had already made a plan"
+          - "By the time I joined, they had already made the plan"
+          - "By the time I joined, they had already drawn up a plan"
+          - "By the time I joined, they had already drawn up the plan"
+          - "By the time I joined, they had already put together a plan"
+          - "By the time I joined, they had already put together the plan"
+          - "By the time I joined, they had written a plan"
+          - "By the time I joined, they had written the plan"
+          - "By the time I joined, they had made a plan"
+          - "By the time I joined, they had made the plan"
+          - "By the time I joined, they had drawn up a plan"
+          - "By the time I joined, they had drawn up the plan"
+          - "By the time I joined, they had put together a plan"
+          - "By the time I joined, they had put together the plan"
+          - "By the time I joined they had already written a plan"
+          - "By the time I joined they had already written the plan"
+          - "By the time I joined they had already made a plan"
+          - "By the time I joined they had already made the plan"
+          - "By the time I joined they had already drawn up a plan"
+          - "By the time I joined they had already drawn up the plan"
+          - "By the time I joined they had already put together a plan"
+          - "By the time I joined they had already put together the plan"
+          - "By the time I joined they had written a plan"
+          - "By the time I joined they had written the plan"
+          - "By the time I joined they had made a plan"
+          - "By the time I joined they had made the plan"
+          - "By the time I joined they had drawn up a plan"
+          - "By the time I joined they had drawn up the plan"
+          - "By the time I joined they had put together a plan"
+          - "By the time I joined they had put together the plan"
+        explanation: "Более раннее событие — past perfect: had already written."
+      - id: q3
+        prompt: Это было весной прошлого года.
+        answer:
+          - "This was in the spring of last year"
+          - "This was last spring"
+          - "This was in spring last year"
+          - "It was in the spring of last year"
+          - "It was last spring"
+          - "It was in spring last year"
+          - "That was in the spring of last year"
+          - "That was last spring"
+          - "That was in spring last year"
+          - "This happened in the spring of last year"
+          - "This happened last spring"
+          - "This happened in spring last year"
+          - "It happened in the spring of last year"
+          - "It happened last spring"
+          - "It happened in spring last year"
+          - "That happened in the spring of last year"
+          - "That happened last spring"
+          - "That happened in spring last year"
+        explanation: Время события из прошлого — last spring или in the spring of last year.

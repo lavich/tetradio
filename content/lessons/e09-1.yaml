@@ -1,0 +1,694 @@
+title: прошедшие времена в одном рассказе и схема STAR
+kind: lesson
+items:
+  - { kind: word, id: ew281 }
+  - { kind: word, id: ew282 }
+  - { kind: word, id: ew283 }
+  - { kind: word, id: ew284 }
+  - { kind: word, id: ew285 }
+  - { kind: word, id: ew286 }
+  - { kind: word, id: ew287 }
+  - { kind: word, id: ew288 }
+  - { kind: word, id: ew289 }
+  - { kind: word, id: ew290 }
+  - { kind: word, id: ew291 }
+  - { kind: word, id: ew292 }
+  - { kind: word, id: ew293 }
+  - { kind: word, id: ew294 }
+  - { kind: word, id: ew295 }
+  - { kind: word, id: ew296 }
+  - { kind: word, id: ew297 }
+  - { kind: word, id: ew298 }
+  - { kind: phrase, id: ep201 }
+  - { kind: phrase, id: ep202 }
+  - { kind: phrase, id: ep203 }
+  - { kind: phrase, id: ep204 }
+  - { kind: phrase, id: ep205 }
+  - { kind: phrase, id: ep206 }
+  - { kind: phrase, id: ep207 }
+  - { kind: phrase, id: ep208 }
+blocks:
+  - type: explanation
+    id: star
+    title: Схема STAR в четырёх частях
+    body: |-
+      Поведенческий вопрос начинается словами **Tell me about a time…**: интервьюер просит рассказать о случае из вашей работы. Ответ строится по схеме STAR, и у каждой части своя задача и своё время глагола.
+
+      **Situation** — ситуация: где и когда это было, что происходило вокруг. Здесь нужен фон: **At my previous company, we were migrating a service when the deadline moved.** Для фона подходит past continuous.
+
+      **Task** — задача: за что отвечали вы. **My task was to get the release out on time.** Обычно хватает past simple.
+
+      **Action** — действия: что сделали вы сами, по порядку. **I talked to everyone involved, and then I split the work into smaller tasks.** Это past simple: события идут одно за другим.
+
+      **Result** — результат и вывод: чем всё закончилось и что вы из этого вынесли. **As a result, we shipped on time.** Чтобы сослаться на то, что было сделано раньше, нужен past perfect: **By the end of the month, we had cut the review time from three days to one.**
+
+      В ответе на две минуты ситуация и задача занимают примерно четверть времени, действия — половину, результат и вывод — ещё четверть. Больше всего места отдаётся вашим действиям: интервьюер слушает, что сделали именно вы.
+    table:
+      columns:
+        - часть
+        - что сказать
+        - время
+        - пример
+      rows:
+        - - Situation
+          - где, когда, что происходило
+          - past continuous, past simple
+          - We were running two releases when the schedule changed.
+        - - Task
+          - ваша ответственность
+          - past simple
+          - My task was to coordinate the work.
+        - - Action
+          - ваши шаги по порядку
+          - past simple
+          - I asked my manager to help us prioritise.
+        - - Result
+          - итог и вывод
+          - past simple; past perfect для ссылки на более ранний момент
+          - We had cut the review time by the end of the month.
+  - type: explanation
+    id: tenses
+    title: Четыре прошедших времени в одном рассказе
+    body: |-
+      Рассказ о прошлом использует четыре времени, и каждое отвечает на свой вопрос.
+
+      **Past simple** — что произошло: события по порядку. **I called the team, we agreed on a plan, and we started the next day.**
+
+      **Past continuous** — что происходило в то время: фон или действие, которое ещё шло, когда случилось другое. **We were preparing the release when the client changed the requirements.** Событие, которое прервало фон, стоит в past simple. Форма — **was / were + глагол с -ing**.
+
+      **Past perfect** — что случилось раньше событий рассказа. **By the time I joined the project, the team had already chosen the database.** Из двух событий более раннее стоит в past perfect, более позднее — в past simple. Порядок подсказывают слова **by the time**, **already**, **before**, **after**. Форма — **had + третья форма глагола**.
+
+      **Past perfect continuous** — что длилось до момента рассказа и привело к результату. **We had been arguing about the design for two weeks, so I asked my manager to step in.** Форма — **had been + глагол с -ing**.
+
+      Все четыре времени в одном абзаце не нужны. Past simple ведёт рассказ, остальные три появляются там, где нужно показать фон или предысторию.
+    table:
+      columns:
+        - время
+        - форма
+        - о чём
+        - пример
+      rows:
+        - - past simple
+          - глагол во второй форме
+          - событие по порядку
+          - I wrote a short plan.
+        - - past continuous
+          - was / were + -ing
+          - фон, действие в процессе
+          - We were testing the build.
+        - - past perfect
+          - had + третья форма
+          - то, что было раньше
+          - The team had already left.
+        - - past perfect continuous
+          - had been + -ing
+          - длилось до момента события из рассказа
+          - We had been waiting for two weeks.
+  - type: explanation
+    id: tense-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **Все глаголы в past simple.** По-русски «Когда я пришёл, команда сделала прототип» понятно из контекста. В английском **When I joined, the team built a prototype** читается так, будто прототип сделали после вашего прихода. Если прототип был готов раньше, нужен past perfect: **When I joined, the team had built a prototype.**
+
+      **Past perfect там, где события идут по порядку.** Форма *Yesterday I had finished the report and sent it* избыточна, если вы просто перечисляете события. Для цепочки действий используйте past simple: **Yesterday I finished the report and sent it.**
+
+      **Was и were без -ing.** После **was** и **were** стоит форма на -ing: **We were building a service.** Формы *We were build* и *We was building* ошибочны.
+
+      **Have been вместо had been.** **We have been waiting for two weeks** относится к настоящему моменту. В рассказе о прошлом срок, который закончился до события, передаётся формой **had been**: **We had been waiting for two weeks when the answer came.**
+
+      **Рассказ без связок.** Слова **first**, **then**, **after that**, **in the end** делают порядок событий понятным и в past simple.
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - When I joined, the team built a prototype. (прототип был раньше)
+          - When I joined, the team had built a prototype.
+          - более раннее событие — past perfect
+        - - Yesterday I had finished the report and sent it.
+          - Yesterday I finished the report and sent it.
+          - цепочка событий — past simple
+        - - We were build a service.
+          - We were building a service.
+          - после was и were — форма на -ing
+        - - We have been waiting for two weeks when the answer came.
+          - We had been waiting for two weeks when the answer came.
+          - срок до события из прошлого — had been
+  - type: explanation
+    id: terms-words
+    title: Слова урока о давлении, конфликте и действиях
+    body: |-
+      Слова урока образуют три группы.
+
+      **Ситуация.** **A tight deadline** — срок, до которого остаётся мало времени. **Double-booked** — на одно время назначены две задачи или встречи: **The engineer was double-booked between two teams.** **Under pressure** — в условиях сжатых сроков и высоких ожиданий. **A disagreement** — расхождение во мнениях о конкретном решении, **friction** — повторяющееся напряжение между людьми или командами без одного спора. **A rough patch** — трудный период, **a turning point** — момент, после которого положение стало меняться.
+
+      **Действия.** **Juggle** — вести несколько дел сразу, **resolve** — найти решение, которое закрывает спор, **mediate** — помочь двум сторонам договориться, не занимая чью-либо сторону, **compromise** — каждая сторона уступает часть своих требований, **push back** — возразить против плана, **step in** — вмешаться, чтобы помочь, **take the initiative** — начать действовать, не дожидаясь просьбы, **go the extra mile** — сделать больше, чем требуется, **defuse** — снизить напряжение до конфликта.
+
+      **Результат.** **Overcome** — справиться с препятствием, **get back on track** — вернуться к плану после задержки.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: tenses-choice
+    title: Какое время подходит
+    instruction: Выберите вариант. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "We ___ the release when the client changed the requirements. (действие было в процессе)"
+        options: [were preparing, was preparing, preparing]
+        answer: were preparing
+        explanation: Фон рассказа передаёт past continuous; после we нужна форма were.
+      - id: q2
+        prompt: "By the time I joined, the team ___ the first version. (сделала раньше)"
+        options: [had released, has released, was releasing]
+        answer: had released
+        explanation: Более раннее событие стоит в past perfect — had и третья форма глагола.
+      - id: q3
+        prompt: "By the time I asked my manager to step in, we ___ for two weeks. (длилось до этого момента)"
+        options: [had been arguing, are arguing, have been arguing]
+        answer: had been arguing
+        explanation: Период, который длился до события из прошлого, передаёт past perfect continuous.
+      - id: q4
+        prompt: "I called both developers, and we ___ on a plan the same day. (событие по порядку)"
+        options: [agreed, had been agreeing, are agreeing]
+        answer: agreed
+        explanation: События, которые идут одно за другим, стоят в past simple.
+      - id: q5
+        prompt: "When I arrived at the meeting, the discussion ___. (началось до моего прихода)"
+        options: [had already started, already starts, has already started]
+        answer: had already started
+        explanation: Событие до момента рассказа стоит в past perfect; форма had already started.
+      - id: q6
+        prompt: "I ___ on the migration when the priorities changed. (я был занят в тот момент)"
+        options: [was working, were working, was work]
+        answer: was working
+        explanation: Действие в процессе передаёт past continuous; после I нужна форма was, затем -ing.
+  - type: exercise
+    id: star-parts
+    title: Какая это часть STAR
+    instruction: Выберите часть схемы, к которой относится предложение.
+    format: choice
+    items:
+      - id: q1
+        prompt: "At my previous company, we had a very tight deadline."
+        options: [Situation, Task, Action, Result]
+        answer: Situation
+        explanation: Предложение описывает обстановку, в которой всё происходило.
+      - id: q2
+        prompt: "My task was to get the release out on time."
+        options: [Situation, Task, Action, Result]
+        answer: Task
+        explanation: Фраза My task was… называет вашу ответственность.
+      - id: q3
+        prompt: "I set up a daily call so that nobody was out of sync."
+        options: [Situation, Task, Action, Result]
+        answer: Action
+        explanation: Предложение описывает шаг, который сделали вы.
+      - id: q4
+        prompt: "As a result, we shipped on time."
+        options: [Situation, Task, Action, Result]
+        answer: Result
+        explanation: As a result вводит итог.
+      - id: q5
+        prompt: "I decided to split the work into smaller tasks."
+        options: [Situation, Task, Action, Result]
+        answer: Action
+        explanation: Глагол decided и конкретное решение показывают действие.
+      - id: q6
+        prompt: "What I learned from it is to raise problems early."
+        options: [Situation, Task, Action, Result]
+        answer: Result
+        explanation: Вывод из случая завершает рассказ и входит в часть Result.
+  - type: exercise
+    id: words-match
+    title: Ситуации и состояния
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - a tight deadline
+      - double-booked
+      - a disagreement
+      - friction
+      - a rough patch
+      - a turning point
+      - under pressure
+      - resolve
+      - overcome
+    items:
+      - { id: m1, prompt: "срок сдачи, до которого остаётся очень мало времени", answer: a tight deadline }
+      - { id: m2, prompt: "человек, у которого на одно и то же время назначены две задачи или две встречи", answer: double-booked }
+      - { id: m3, prompt: "случай, когда двое высказали разные мнения о решении и не сошлись", answer: a disagreement }
+      - { id: m4, prompt: "постоянное напряжение между людьми или командами, без одного конкретного спора", answer: friction }
+      - { id: m5, prompt: "период, когда работа идёт с трудом, но положение затем меняется", answer: a rough patch }
+      - { id: m6, prompt: "момент, после которого ситуация начала меняться", answer: a turning point }
+      - { id: m7, prompt: "в условиях, когда сроки и ожидания давят на человека", answer: under pressure }
+  - type: exercise
+    id: words-gap
+    title: Действия в рассказе
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - juggle
+      - resolve
+      - mediate
+      - compromise
+      - push back
+      - step in
+      - take the initiative
+      - go the extra mile
+      - defuse
+      - get back on track
+    items:
+      - id: g1
+        prompt: Our team had to ___ three projects at once. (вести несколько дел сразу)
+        answer: juggle
+      - id: g2
+        prompt: A neutral colleague agreed to ___ between the two sides and listen to both. (посредничать)
+        answer: mediate
+      - id: g3
+        prompt: "Neither side got everything it wanted, so we had to ___. (уступить друг другу)"
+        answer: compromise
+      - id: g4
+        prompt: I did not agree with the plan, so I decided to ___ and explain my concerns. (возразить)
+        answer: push back
+      - id: g5
+        prompt: The release was at risk, so my manager had to ___ and take over the rollout. (вмешаться)
+        answer: step in
+      - id: g6
+        prompt: Nobody had assigned the task to anyone, so I decided to ___ and start it. (проявить инициативу)
+        answer: take the initiative
+      - id: g7
+        prompt: She wanted to ___ for the customer, so she tested the feature on three more devices. (сделать больше, чем требуется)
+        answer: go the extra mile
+      - id: g8
+        prompt: We could not leave the question open, so we met again to ___ it for good. (окончательно разрешить)
+        answer: resolve
+  - type: exercise
+    id: results-gap
+    title: Трудности и результат
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - defuse
+      - overcome
+      - get back on track
+      - juggle
+      - compromise
+    items:
+      - id: g1
+        prompt: The team found a way to ___ the technical difficulty together. (преодолеть)
+        answer: overcome
+      - id: g2
+        prompt: After two weeks of delays, the new plan helped the project ___. (вернуться к плану)
+        answer: get back on track
+      - id: g3
+        prompt: A short call with both teams helped us ___ the situation before the argument grew. (разрядить обстановку)
+        answer: defuse
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Мы готовили релиз, когда клиент изменил требования.
+        answer:
+          - "We were preparing the release when the client changed the requirements"
+          - "We were preparing the release when the client changed their requirements"
+          - "We were preparing the release when the customer changed the requirements"
+          - "We were preparing the release when the customer changed their requirements"
+          - "We were preparing a release when the client changed the requirements"
+          - "We were preparing a release when the client changed their requirements"
+          - "We were preparing a release when the customer changed the requirements"
+          - "We were preparing a release when the customer changed their requirements"
+          - "We were getting ready for the release when the client changed the requirements"
+          - "We were getting ready for the release when the client changed their requirements"
+          - "We were getting ready for the release when the customer changed the requirements"
+          - "We were getting ready for the release when the customer changed their requirements"
+          - "We were getting ready for a release when the client changed the requirements"
+          - "We were getting ready for a release when the client changed their requirements"
+          - "We were getting ready for a release when the customer changed the requirements"
+          - "We were getting ready for a release when the customer changed their requirements"
+          - "The client changed the requirements while we were preparing the release"
+          - "The client changed the requirements while we were preparing a release"
+          - "The client changed the requirements while we were getting ready for the release"
+          - "The client changed the requirements while we were getting ready for a release"
+          - "The client changed their requirements while we were preparing the release"
+          - "The client changed their requirements while we were preparing a release"
+          - "The client changed their requirements while we were getting ready for the release"
+          - "The client changed their requirements while we were getting ready for a release"
+          - "The customer changed the requirements while we were preparing the release"
+          - "The customer changed the requirements while we were preparing a release"
+          - "The customer changed the requirements while we were getting ready for the release"
+          - "The customer changed the requirements while we were getting ready for a release"
+          - "The customer changed their requirements while we were preparing the release"
+          - "The customer changed their requirements while we were preparing a release"
+          - "The customer changed their requirements while we were getting ready for the release"
+          - "The customer changed their requirements while we were getting ready for a release"
+        explanation: Фон — past continuous, прервавшее его событие — past simple.
+      - id: q2
+        prompt: К тому моменту, как я пришёл в проект, команда уже выбрала базу данных.
+        answer:
+          - "By the time I joined the project, the team had already chosen the database"
+          - "By the time I joined the project, the team had already chosen a database"
+          - "By the time I joined the project, the team had already picked the database"
+          - "By the time I joined the project, the team had already picked a database"
+          - "By the time I joined the project, the team had already selected the database"
+          - "By the time I joined the project, the team had already selected a database"
+          - "By the time I joined the project, the team had already decided on the database"
+          - "By the time I joined the project, the team had already decided on a database"
+          - "By the time I joined the project, the team had chosen the database"
+          - "By the time I joined the project, the team had chosen a database"
+          - "By the time I joined the project, the team had picked the database"
+          - "By the time I joined the project, the team had picked a database"
+          - "By the time I joined the project, the team had selected the database"
+          - "By the time I joined the project, the team had selected a database"
+          - "By the time I joined the project, the team had decided on the database"
+          - "By the time I joined the project, the team had decided on a database"
+          - "By the time I joined the project the team had already chosen the database"
+          - "By the time I joined the project the team had already chosen a database"
+          - "By the time I joined the project the team had already picked the database"
+          - "By the time I joined the project the team had already picked a database"
+          - "By the time I joined the project the team had already selected the database"
+          - "By the time I joined the project the team had already selected a database"
+          - "By the time I joined the project the team had already decided on the database"
+          - "By the time I joined the project the team had already decided on a database"
+          - "By the time I joined the project the team had chosen the database"
+          - "By the time I joined the project the team had chosen a database"
+          - "By the time I joined the project the team had picked the database"
+          - "By the time I joined the project the team had picked a database"
+          - "By the time I joined the project the team had selected the database"
+          - "By the time I joined the project the team had selected a database"
+          - "By the time I joined the project the team had decided on the database"
+          - "By the time I joined the project the team had decided on a database"
+          - "By the time I joined, the team had already chosen the database"
+          - "By the time I joined, the team had already chosen a database"
+          - "By the time I joined, the team had already picked the database"
+          - "By the time I joined, the team had already picked a database"
+          - "By the time I joined, the team had already selected the database"
+          - "By the time I joined, the team had already selected a database"
+          - "By the time I joined, the team had already decided on the database"
+          - "By the time I joined, the team had already decided on a database"
+          - "By the time I joined, the team had chosen the database"
+          - "By the time I joined, the team had chosen a database"
+          - "By the time I joined, the team had picked the database"
+          - "By the time I joined, the team had picked a database"
+          - "By the time I joined, the team had selected the database"
+          - "By the time I joined, the team had selected a database"
+          - "By the time I joined, the team had decided on the database"
+          - "By the time I joined, the team had decided on a database"
+          - "By the time I joined the team had already chosen the database"
+          - "By the time I joined the team had already chosen a database"
+          - "By the time I joined the team had already picked the database"
+          - "By the time I joined the team had already picked a database"
+          - "By the time I joined the team had already selected the database"
+          - "By the time I joined the team had already selected a database"
+          - "By the time I joined the team had already decided on the database"
+          - "By the time I joined the team had already decided on a database"
+          - "By the time I joined the team had chosen the database"
+          - "By the time I joined the team had chosen a database"
+          - "By the time I joined the team had picked the database"
+          - "By the time I joined the team had picked a database"
+          - "By the time I joined the team had selected the database"
+          - "By the time I joined the team had selected a database"
+          - "By the time I joined the team had decided on the database"
+          - "By the time I joined the team had decided on a database"
+          - "When I joined the project, the team had already chosen the database"
+          - "When I joined the project, the team had already chosen a database"
+          - "When I joined the project, the team had already picked the database"
+          - "When I joined the project, the team had already picked a database"
+          - "When I joined the project, the team had already selected the database"
+          - "When I joined the project, the team had already selected a database"
+          - "When I joined the project, the team had already decided on the database"
+          - "When I joined the project, the team had already decided on a database"
+          - "When I joined the project, the team had chosen the database"
+          - "When I joined the project, the team had chosen a database"
+          - "When I joined the project, the team had picked the database"
+          - "When I joined the project, the team had picked a database"
+          - "When I joined the project, the team had selected the database"
+          - "When I joined the project, the team had selected a database"
+          - "When I joined the project, the team had decided on the database"
+          - "When I joined the project, the team had decided on a database"
+          - "When I joined the project the team had already chosen the database"
+          - "When I joined the project the team had already chosen a database"
+          - "When I joined the project the team had already picked the database"
+          - "When I joined the project the team had already picked a database"
+          - "When I joined the project the team had already selected the database"
+          - "When I joined the project the team had already selected a database"
+          - "When I joined the project the team had already decided on the database"
+          - "When I joined the project the team had already decided on a database"
+          - "When I joined the project the team had chosen the database"
+          - "When I joined the project the team had chosen a database"
+          - "When I joined the project the team had picked the database"
+          - "When I joined the project the team had picked a database"
+          - "When I joined the project the team had selected the database"
+          - "When I joined the project the team had selected a database"
+          - "When I joined the project the team had decided on the database"
+          - "When I joined the project the team had decided on a database"
+          - "When I joined, the team had already chosen the database"
+          - "When I joined, the team had already chosen a database"
+          - "When I joined, the team had already picked the database"
+          - "When I joined, the team had already picked a database"
+          - "When I joined, the team had already selected the database"
+          - "When I joined, the team had already selected a database"
+          - "When I joined, the team had already decided on the database"
+          - "When I joined, the team had already decided on a database"
+          - "When I joined, the team had chosen the database"
+          - "When I joined, the team had chosen a database"
+          - "When I joined, the team had picked the database"
+          - "When I joined, the team had picked a database"
+          - "When I joined, the team had selected the database"
+          - "When I joined, the team had selected a database"
+          - "When I joined, the team had decided on the database"
+          - "When I joined, the team had decided on a database"
+          - "When I joined the team had already chosen the database"
+          - "When I joined the team had already chosen a database"
+          - "When I joined the team had already picked the database"
+          - "When I joined the team had already picked a database"
+          - "When I joined the team had already selected the database"
+          - "When I joined the team had already selected a database"
+          - "When I joined the team had already decided on the database"
+          - "When I joined the team had already decided on a database"
+          - "When I joined the team had chosen the database"
+          - "When I joined the team had chosen a database"
+          - "When I joined the team had picked the database"
+          - "When I joined the team had picked a database"
+          - "When I joined the team had selected the database"
+          - "When I joined the team had selected a database"
+          - "When I joined the team had decided on the database"
+          - "When I joined the team had decided on a database"
+        explanation: Более раннее событие — past perfect; допустимы chosen, picked, selected и decided on.
+      - id: q3
+        prompt: Мы две недели спорили о дизайне, и я попросил руководителя вмешаться. (past perfect continuous)
+        answer:
+          - "We had been arguing about the design for two weeks, so I asked my manager to step in"
+          - "We had been arguing about the design for two weeks, so I asked my lead to step in"
+          - "We had been arguing about the design for two weeks, so I asked my boss to step in"
+          - "We had been arguing about the design for two weeks, so I asked my line manager to step in"
+          - "We had been arguing about the design for two weeks so I asked my manager to step in"
+          - "We had been arguing about the design for two weeks so I asked my lead to step in"
+          - "We had been arguing about the design for two weeks so I asked my boss to step in"
+          - "We had been arguing about the design for two weeks so I asked my line manager to step in"
+          - "We had been arguing about the design for two weeks, and I asked my manager to step in"
+          - "We had been arguing about the design for two weeks, and I asked my lead to step in"
+          - "We had been arguing about the design for two weeks, and I asked my boss to step in"
+          - "We had been arguing about the design for two weeks, and I asked my line manager to step in"
+          - "We had been arguing about the design for two weeks and I asked my manager to step in"
+          - "We had been arguing about the design for two weeks and I asked my lead to step in"
+          - "We had been arguing about the design for two weeks and I asked my boss to step in"
+          - "We had been arguing about the design for two weeks and I asked my line manager to step in"
+          - "We had been arguing over the design for two weeks, so I asked my manager to step in"
+          - "We had been arguing over the design for two weeks, so I asked my lead to step in"
+          - "We had been arguing over the design for two weeks, so I asked my boss to step in"
+          - "We had been arguing over the design for two weeks, so I asked my line manager to step in"
+          - "We had been arguing over the design for two weeks so I asked my manager to step in"
+          - "We had been arguing over the design for two weeks so I asked my lead to step in"
+          - "We had been arguing over the design for two weeks so I asked my boss to step in"
+          - "We had been arguing over the design for two weeks so I asked my line manager to step in"
+          - "We had been arguing over the design for two weeks, and I asked my manager to step in"
+          - "We had been arguing over the design for two weeks, and I asked my lead to step in"
+          - "We had been arguing over the design for two weeks, and I asked my boss to step in"
+          - "We had been arguing over the design for two weeks, and I asked my line manager to step in"
+          - "We had been arguing over the design for two weeks and I asked my manager to step in"
+          - "We had been arguing over the design for two weeks and I asked my lead to step in"
+          - "We had been arguing over the design for two weeks and I asked my boss to step in"
+          - "We had been arguing over the design for two weeks and I asked my line manager to step in"
+          - "We had been disagreeing about the design for two weeks, so I asked my manager to step in"
+          - "We had been disagreeing about the design for two weeks, so I asked my lead to step in"
+          - "We had been disagreeing about the design for two weeks, so I asked my boss to step in"
+          - "We had been disagreeing about the design for two weeks, so I asked my line manager to step in"
+          - "We had been disagreeing about the design for two weeks so I asked my manager to step in"
+          - "We had been disagreeing about the design for two weeks so I asked my lead to step in"
+          - "We had been disagreeing about the design for two weeks so I asked my boss to step in"
+          - "We had been disagreeing about the design for two weeks so I asked my line manager to step in"
+          - "We had been disagreeing about the design for two weeks, and I asked my manager to step in"
+          - "We had been disagreeing about the design for two weeks, and I asked my lead to step in"
+          - "We had been disagreeing about the design for two weeks, and I asked my boss to step in"
+          - "We had been disagreeing about the design for two weeks, and I asked my line manager to step in"
+          - "We had been disagreeing about the design for two weeks and I asked my manager to step in"
+          - "We had been disagreeing about the design for two weeks and I asked my lead to step in"
+          - "We had been disagreeing about the design for two weeks and I asked my boss to step in"
+          - "We had been disagreeing about the design for two weeks and I asked my line manager to step in"
+          - "We had been disagreeing over the design for two weeks, so I asked my manager to step in"
+          - "We had been disagreeing over the design for two weeks, so I asked my lead to step in"
+          - "We had been disagreeing over the design for two weeks, so I asked my boss to step in"
+          - "We had been disagreeing over the design for two weeks, so I asked my line manager to step in"
+          - "We had been disagreeing over the design for two weeks so I asked my manager to step in"
+          - "We had been disagreeing over the design for two weeks so I asked my lead to step in"
+          - "We had been disagreeing over the design for two weeks so I asked my boss to step in"
+          - "We had been disagreeing over the design for two weeks so I asked my line manager to step in"
+          - "We had been disagreeing over the design for two weeks, and I asked my manager to step in"
+          - "We had been disagreeing over the design for two weeks, and I asked my lead to step in"
+          - "We had been disagreeing over the design for two weeks, and I asked my boss to step in"
+          - "We had been disagreeing over the design for two weeks, and I asked my line manager to step in"
+          - "We had been disagreeing over the design for two weeks and I asked my manager to step in"
+          - "We had been disagreeing over the design for two weeks and I asked my lead to step in"
+          - "We had been disagreeing over the design for two weeks and I asked my boss to step in"
+          - "We had been disagreeing over the design for two weeks and I asked my line manager to step in"
+          - "By the time I asked my manager to step in, we had been arguing about the design for two weeks"
+          - "By the time I asked my manager to step in, we had been arguing over the design for two weeks"
+          - "By the time I asked my manager to step in, we had been disagreeing about the design for two weeks"
+          - "By the time I asked my manager to step in, we had been disagreeing over the design for two weeks"
+          - "By the time I asked my manager to step in we had been arguing about the design for two weeks"
+          - "By the time I asked my manager to step in we had been arguing over the design for two weeks"
+          - "By the time I asked my manager to step in we had been disagreeing about the design for two weeks"
+          - "By the time I asked my manager to step in we had been disagreeing over the design for two weeks"
+          - "By the time I asked my lead to step in, we had been arguing about the design for two weeks"
+          - "By the time I asked my lead to step in, we had been arguing over the design for two weeks"
+          - "By the time I asked my lead to step in, we had been disagreeing about the design for two weeks"
+          - "By the time I asked my lead to step in, we had been disagreeing over the design for two weeks"
+          - "By the time I asked my lead to step in we had been arguing about the design for two weeks"
+          - "By the time I asked my lead to step in we had been arguing over the design for two weeks"
+          - "By the time I asked my lead to step in we had been disagreeing about the design for two weeks"
+          - "By the time I asked my lead to step in we had been disagreeing over the design for two weeks"
+          - "By the time I asked my boss to step in, we had been arguing about the design for two weeks"
+          - "By the time I asked my boss to step in, we had been arguing over the design for two weeks"
+          - "By the time I asked my boss to step in, we had been disagreeing about the design for two weeks"
+          - "By the time I asked my boss to step in, we had been disagreeing over the design for two weeks"
+          - "By the time I asked my boss to step in we had been arguing about the design for two weeks"
+          - "By the time I asked my boss to step in we had been arguing over the design for two weeks"
+          - "By the time I asked my boss to step in we had been disagreeing about the design for two weeks"
+          - "By the time I asked my boss to step in we had been disagreeing over the design for two weeks"
+          - "By the time I asked my line manager to step in, we had been arguing about the design for two weeks"
+          - "By the time I asked my line manager to step in, we had been arguing over the design for two weeks"
+          - "By the time I asked my line manager to step in, we had been disagreeing about the design for two weeks"
+          - "By the time I asked my line manager to step in, we had been disagreeing over the design for two weeks"
+          - "By the time I asked my line manager to step in we had been arguing about the design for two weeks"
+          - "By the time I asked my line manager to step in we had been arguing over the design for two weeks"
+          - "By the time I asked my line manager to step in we had been disagreeing about the design for two weeks"
+          - "By the time I asked my line manager to step in we had been disagreeing over the design for two weeks"
+        explanation: Период до события из прошлого — had been и форма на -ing.
+      - id: q4
+        prompt: Моя задача — выпустить релиз вовремя.
+        answer:
+          - "My task was to get the release out on time"
+          - "My task was to get the release out on schedule"
+          - "My task was to deliver the release on time"
+          - "My task was to deliver the release on schedule"
+          - "My task was to ship the release on time"
+          - "My task was to ship the release on schedule"
+          - "My task was to release it on time"
+          - "My task was to release it on schedule"
+          - "My task was to release the product on time"
+          - "My task was to release the product on schedule"
+          - "My job was to get the release out on time"
+          - "My job was to get the release out on schedule"
+          - "My job was to deliver the release on time"
+          - "My job was to deliver the release on schedule"
+          - "My job was to ship the release on time"
+          - "My job was to ship the release on schedule"
+          - "My job was to release it on time"
+          - "My job was to release it on schedule"
+          - "My job was to release the product on time"
+          - "My job was to release the product on schedule"
+        explanation: Часть Task начинается словами My task was to…
+      - id: q5
+        prompt: Я решил разбить работу на небольшие задачи.
+        answer:
+          - "I decided to split the work up into smaller tasks"
+          - "I decided to split the work up into smaller parts"
+          - "I decided to split the work up into smaller pieces"
+          - "I decided to split the work up into smaller chunks"
+          - "I decided to split the work up into small tasks"
+          - "I decided to split the work up into small parts"
+          - "I decided to split the work up into small pieces"
+          - "I decided to split the work up into small chunks"
+          - "I decided to split the work up into several smaller tasks"
+          - "I decided to split the work up into several smaller parts"
+          - "I decided to split the work up into several smaller pieces"
+          - "I decided to split the work up into several smaller chunks"
+          - "I decided to split the work into smaller tasks"
+          - "I decided to split the work into smaller parts"
+          - "I decided to split the work into smaller pieces"
+          - "I decided to split the work into smaller chunks"
+          - "I decided to split the work into small tasks"
+          - "I decided to split the work into small parts"
+          - "I decided to split the work into small pieces"
+          - "I decided to split the work into small chunks"
+          - "I decided to split the work into several smaller tasks"
+          - "I decided to split the work into several smaller parts"
+          - "I decided to split the work into several smaller pieces"
+          - "I decided to split the work into several smaller chunks"
+          - "I decided to divide the work up into smaller tasks"
+          - "I decided to divide the work up into smaller parts"
+          - "I decided to divide the work up into smaller pieces"
+          - "I decided to divide the work up into smaller chunks"
+          - "I decided to divide the work up into small tasks"
+          - "I decided to divide the work up into small parts"
+          - "I decided to divide the work up into small pieces"
+          - "I decided to divide the work up into small chunks"
+          - "I decided to divide the work up into several smaller tasks"
+          - "I decided to divide the work up into several smaller parts"
+          - "I decided to divide the work up into several smaller pieces"
+          - "I decided to divide the work up into several smaller chunks"
+          - "I decided to divide the work into smaller tasks"
+          - "I decided to divide the work into smaller parts"
+          - "I decided to divide the work into smaller pieces"
+          - "I decided to divide the work into smaller chunks"
+          - "I decided to divide the work into small tasks"
+          - "I decided to divide the work into small parts"
+          - "I decided to divide the work into small pieces"
+          - "I decided to divide the work into small chunks"
+          - "I decided to divide the work into several smaller tasks"
+          - "I decided to divide the work into several smaller parts"
+          - "I decided to divide the work into several smaller pieces"
+          - "I decided to divide the work into several smaller chunks"
+          - "I decided to break the work up into smaller tasks"
+          - "I decided to break the work up into smaller parts"
+          - "I decided to break the work up into smaller pieces"
+          - "I decided to break the work up into smaller chunks"
+          - "I decided to break the work up into small tasks"
+          - "I decided to break the work up into small parts"
+          - "I decided to break the work up into small pieces"
+          - "I decided to break the work up into small chunks"
+          - "I decided to break the work up into several smaller tasks"
+          - "I decided to break the work up into several smaller parts"
+          - "I decided to break the work up into several smaller pieces"
+          - "I decided to break the work up into several smaller chunks"
+          - "I decided to break the work into smaller tasks"
+          - "I decided to break the work into smaller parts"
+          - "I decided to break the work into smaller pieces"
+          - "I decided to break the work into smaller chunks"
+          - "I decided to break the work into small tasks"
+          - "I decided to break the work into small parts"
+          - "I decided to break the work into small pieces"
+          - "I decided to break the work into small chunks"
+          - "I decided to break the work into several smaller tasks"
+          - "I decided to break the work into several smaller parts"
+          - "I decided to break the work into several smaller pieces"
+          - "I decided to break the work into several smaller chunks"
+          - "I decided to break the work down into smaller tasks"
+          - "I decided to break the work down into smaller parts"
+          - "I decided to break the work down into smaller pieces"
+          - "I decided to break the work down into smaller chunks"
+          - "I decided to break the work down into small tasks"
+          - "I decided to break the work down into small parts"
+          - "I decided to break the work down into small pieces"
+          - "I decided to break the work down into small chunks"
+          - "I decided to break the work down into several smaller tasks"
+          - "I decided to break the work down into several smaller parts"
+          - "I decided to break the work down into several smaller pieces"
+          - "I decided to break the work down into several smaller chunks"
+        explanation: После decided стоит инфинитив с to; допустимы split, divide и break.

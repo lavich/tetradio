@@ -1,0 +1,7 @@
+id: ep213
+text: "I took the initiative and wrote a short plan."
+translation: "Я проявил инициативу и написал короткий план."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md

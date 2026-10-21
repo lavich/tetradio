@@ -1,0 +1,7 @@
+id: ep220
+text: "In the end, both teams agreed on a plan."
+translation: "В конце концов обе команды согласовали план."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md

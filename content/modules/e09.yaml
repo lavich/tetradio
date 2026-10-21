@@ -1,8 +1,23 @@
 number: 9
 title: Behavioral questions
 subtitle: Поведенческие вопросы по STAR
-status: draft
+status: published
 goal: ответить на вопрос о трудности или конфликте по схеме STAR
 grammar:
   - прошедшие времена в одном рассказе
 sessions: 3
+crib:
+  title: STAR и прошедшие времена
+  rows:
+    - [ситуация и фон, "At my previous company, we were migrating a service when the deadline moved."]
+    - [задача, "My task was to get the release out on time. I had to coordinate the work."]
+    - [действия по порядку, "The first thing I did was talk to everyone involved. I decided to split the work into smaller tasks."]
+    - ["то, что было раньше", "By the time I joined, the team had already chosen the database. We had been arguing for two weeks."]
+    - [результат, "As a result, we shipped on time. We cut the review time from three days to one."]
+    - [вывод, "What I learned from it is to raise problems early."]
+  note: "past simple ведёт рассказ, past continuous даёт фон, past perfect показывает то, что было раньше; I называет ваши действия, we — результат команды"
+lessons:
+  - e09-1
+  - e09-2
+  - e09-3
+  - e09-test

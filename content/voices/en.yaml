@@ -77,6 +77,8 @@ characters:
   Ethan: { gender: male, voice: Umbriel }
   Katarina: { gender: female, voice: Zephyr }
   Gregor: { gender: male, voice: Rasalgethi }
+  Ingrid: { gender: female, voice: Erinome }
+  Camille: { gender: female, voice: Vindemiatrix }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

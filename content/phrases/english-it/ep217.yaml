@@ -1,0 +1,7 @@
+id: ep217
+text: "As a result, we shipped on time."
+translation: "В итоге мы выпустили релиз вовремя."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md

@@ -1,0 +1,399 @@
+title: история по схеме STAR в письме и вслух, вопрос Tell me about a time you faced a challenge
+kind: lesson
+items:
+  - { kind: phrase, id: ep217 }
+  - { kind: phrase, id: ep218 }
+  - { kind: phrase, id: ep219 }
+  - { kind: phrase, id: ep220 }
+  - { kind: phrase, id: ep221 }
+  - { kind: phrase, id: ep222 }
+  - { kind: phrase, id: ep223 }
+  - { kind: phrase, id: ep224 }
+  - { kind: phrase, id: ep225 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Ответ на поведенческий вопрос в шести шагах
+    body: |-
+      На поведенческий вопрос отвечают по схеме STAR и укладываются примерно в две минуты. Рассказ идёт по шагам, и на каждом хватает одной-трёх фраз.
+
+      **1. Вступление.** Скажите, что приведёте пример: **Let me give you an example.** Если случай связан с конкретной темой, назовите её: **I'd like to share a time when we faced a tight deadline.**
+
+      **2. Ситуация.** Назовите место и время и опишите обстановку одним-двумя предложениями: **At my previous company, we had a very tight deadline. This was in the spring of last year.** Для фона подходит past continuous, для предыстории — past perfect.
+
+      **3. Задача.** Скажите, за что отвечали вы: **My task was to get the release out on time. I had to coordinate the work across both teams.**
+
+      **4. Действия.** Это самая длинная часть, примерно половина ответа. Описывайте шаги по порядку и говорите **I**: **The first thing I did was talk to everyone involved. Then I decided to split the work into smaller tasks.**
+
+      **5. Результат.** Назовите итог одной фразой, с числом или фактом, и скажите, что вы вынесли. Числа задачи и срока допустимы, выручка, потери и объёмы компании не называются: **As a result, we shipped on time. What I learned from it is to raise problems early.** Результат команды передаёт **we**.
+
+      **6. Завершение.** Предложите продолжить, если интервьюеру нужно больше: **I have another example if that would help. I can give you more background on the team if you like.**
+    table:
+      columns:
+        - шаг
+        - примерное время
+        - язык
+      rows:
+        - - вступление
+          - 5 секунд
+          - Let me give you an example.
+        - - ситуация и задача
+          - 25–30 секунд
+          - At my previous company, we had a very tight deadline. My task was to…
+        - - действия
+          - 60 секунд
+          - The first thing I did was… I decided to…
+        - - результат и вывод
+          - 25–30 секунд
+          - As a result, we shipped on time. What I learned from it is…
+        - - завершение
+          - 5 секунд
+          - I have another example if that would help.
+  - type: explanation
+    id: safe-story
+    title: Что оставить за скобками
+    body: |-
+      Пример для собеседования описывает работу в общих чертах. В нём нет названий клиентов и прежних работодателей, внутренних цифр и сведений, которые вы обязались не раскрывать. Интервьюеру достаточно размера задачи и результата: **a large retail client**, **a team of six**, **three weeks to one**.
+
+      Вместо людей в рассказе действуют процессы: **Nobody owned the problem** вместо обвинения в адрес руководителя или коллеги. Свою долю ответственности называйте прямо, а решения команды приписывайте **we**.
+    table:
+      columns:
+        - вместо
+        - скажите
+        - почему
+      rows:
+        - - название клиента
+          - a large retail client
+          - название принадлежит клиенту
+        - - внутренняя цифра выручки или потерь
+          - it affected a large part of our users
+          - цифры компании не раскрывают
+        - - «my manager ignored the problem»
+          - nobody owned the problem
+          - говорят о процессе
+        - - «I did everything myself»
+          - I led the plan, and the team built it
+          - вклад команды виден в рассказе
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: good-structure
+    title: Подходящая фраза
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Вы начинаете ответ на вопрос «Tell me about a time you faced a challenge». Какая фраза подходит?"
+        options:
+          - Let me give you an example.
+          - As a result, we shipped on time.
+          - Since then, we've used the same process for every release.
+        answer: Let me give you an example.
+        explanation: Рассказ открывает фраза-вступление.
+      - id: q2
+        prompt: Вы называете свою задачу в рассказе. Какая фраза подходит?
+        options:
+          - My task was to get the release out on time.
+          - It turned out better than we expected.
+          - This was in the spring of last year.
+        answer: My task was to get the release out on time.
+        explanation: Часть Task начинается словами My task was…
+      - id: q3
+        prompt: Вы заканчиваете историю выводом. Какая фраза подходит?
+        options:
+          - What I learned from it is to raise problems early.
+          - I stepped in and offered to take the hardest part.
+          - At my previous company, we had a very tight deadline.
+        answer: What I learned from it is to raise problems early.
+        explanation: Вывод из случая вводит фраза What I learned from it is…
+      - id: q4
+        prompt: Вы хотите предложить второй пример из другого проекта. Какая фраза подходит?
+        options:
+          - I have another example if that would help.
+          - I decided to split the work into smaller tasks.
+          - I can give you more background on the team if you like.
+        answer: I have another example if that would help.
+        explanation: Второй пример предлагает фраза I have another example…
+      - id: q5
+        prompt: Вы хотите предложить рассказать подробнее о команде. Какая фраза подходит?
+        options:
+          - I can give you more background on the team if you like.
+          - I have another example if that would help.
+          - This was in the spring of last year.
+        answer: I can give you more background on the team if you like.
+        explanation: Предложение рассказать больше о команде — I can give you more background…
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: В итоге мы выпустили релиз вовремя.
+        answer:
+          - "As a result, we shipped on time"
+          - "As a result, we released on time"
+          - "As a result, we delivered on time"
+          - "As a result we shipped on time"
+          - "As a result we released on time"
+          - "As a result we delivered on time"
+          - "In the end, we shipped on time"
+          - "In the end, we released on time"
+          - "In the end, we delivered on time"
+          - "In the end we shipped on time"
+          - "In the end we released on time"
+          - "In the end we delivered on time"
+          - "As a result, we shipped the release on time"
+          - "As a result, we delivered the release on time"
+          - "As a result we shipped the release on time"
+          - "As a result we delivered the release on time"
+          - "In the end, we shipped the release on time"
+          - "In the end, we delivered the release on time"
+          - "In the end we shipped the release on time"
+          - "In the end we delivered the release on time"
+          - "As a result, we released it on time"
+          - "As a result, we shipped it on time"
+          - "As a result, we delivered it on time"
+          - "As a result we released it on time"
+          - "As a result we shipped it on time"
+          - "As a result we delivered it on time"
+          - "In the end, we released it on time"
+          - "In the end, we shipped it on time"
+          - "In the end, we delivered it on time"
+          - "In the end we released it on time"
+          - "In the end we shipped it on time"
+          - "In the end we delivered it on time"
+          - "As a result, we got the release out on time"
+          - "As a result we got the release out on time"
+          - "In the end, we got the release out on time"
+          - "In the end we got the release out on time"
+        explanation: Итог вводят As a result и In the end.
+      - id: q2
+        prompt: Мы сократили время ревью с трёх дней до одного.
+        answer:
+          - "We cut the review time from three days down to one"
+          - "We cut the review time from three days down to one day"
+          - "We cut the review time from three days to one"
+          - "We cut the review time from three days to one day"
+          - "We cut review time from three days down to one"
+          - "We cut review time from three days down to one day"
+          - "We cut review time from three days to one"
+          - "We cut review time from three days to one day"
+          - "We reduced the review time from three days down to one"
+          - "We reduced the review time from three days down to one day"
+          - "We reduced the review time from three days to one"
+          - "We reduced the review time from three days to one day"
+          - "We reduced review time from three days down to one"
+          - "We reduced review time from three days down to one day"
+          - "We reduced review time from three days to one"
+          - "We reduced review time from three days to one day"
+          - "We shortened the review time from three days down to one"
+          - "We shortened the review time from three days down to one day"
+          - "We shortened the review time from three days to one"
+          - "We shortened the review time from three days to one day"
+          - "We shortened review time from three days down to one"
+          - "We shortened review time from three days down to one day"
+          - "We shortened review time from three days to one"
+          - "We shortened review time from three days to one day"
+          - "We brought the review time down from three days to one"
+          - "We brought the review time down from three days to one day"
+        explanation: Из трёх дней до одного — from three days to one.
+      - id: q3
+        prompt: Я вынес из этого, что о проблемах нужно сообщать заранее.
+        answer:
+          - "What I learned from it is to raise problems early"
+          - "What I learned from it is to raise problems in advance"
+          - "What I learned from it is that I should raise problems early"
+          - "What I learned from it is that I should raise problems in advance"
+          - "What I learned from it is that we should raise problems early"
+          - "What I learned from it is that we should raise problems in advance"
+          - "What I learned from this is to raise problems early"
+          - "What I learned from this is to raise problems in advance"
+          - "What I learned from this is that I should raise problems early"
+          - "What I learned from this is that I should raise problems in advance"
+          - "What I learned from this is that we should raise problems early"
+          - "What I learned from this is that we should raise problems in advance"
+          - "What I took away from it is to raise problems early"
+          - "What I took away from it is to raise problems in advance"
+          - "What I took away from it is that I should raise problems early"
+          - "What I took away from it is that I should raise problems in advance"
+          - "What I took away from it is that we should raise problems early"
+          - "What I took away from it is that we should raise problems in advance"
+          - "What I took away from this is to raise problems early"
+          - "What I took away from this is to raise problems in advance"
+          - "What I took away from this is that I should raise problems early"
+          - "What I took away from this is that I should raise problems in advance"
+          - "What I took away from this is that we should raise problems early"
+          - "What I took away from this is that we should raise problems in advance"
+          - "I learned to raise problems early"
+          - "I learned to raise problems in advance"
+          - "I learned that problems should be raised early"
+          - "I learned that I should raise problems early"
+          - "I learned from it that I should raise problems early"
+          - "I learned from it that problems should be raised early"
+          - "I learned from it that we should raise problems early"
+          - "I learned from this that I should raise problems early"
+          - "I learned from this that problems should be raised early"
+          - "I learned from this that we should raise problems early"
+        explanation: Вывод — What I learned from it is… или I learned…
+      - id: q4
+        prompt: С тех пор мы используем один и тот же процесс для каждого релиза.
+        answer:
+          - "Since then, we have used the same process for every release"
+          - "Since then, we have used the same process for each release"
+          - "Since then, we have followed the same process for every release"
+          - "Since then, we have followed the same process for each release"
+          - "Since then we have used the same process for every release"
+          - "Since then we have used the same process for each release"
+          - "Since then we have followed the same process for every release"
+          - "Since then we have followed the same process for each release"
+          - "Since then, we have been using the same process for every release"
+          - "Since then, we have been using the same process for each release"
+          - "Since then we have been using the same process for every release"
+          - "Since then we have been using the same process for each release"
+          - "We have used the same process for every release since then"
+          - "We have used the same process for each release since then"
+          - "We have followed the same process for every release since then"
+          - "We have followed the same process for each release since then"
+        explanation: "С тех пор до сих пор — present perfect: we have used."
+      - id: q5
+        prompt: Могу рассказать подробнее о команде, если вам интересно.
+        answer:
+          - "I can give you more background on the team if you like"
+          - "I can give you more background on the team if you want"
+          - "I can give you more background on the team if you would like"
+          - "I can give you more background on the team if you are interested"
+          - "I can tell you more about the team if you like"
+          - "I can tell you more about the team if you want"
+          - "I can tell you more about the team if you would like"
+          - "I can tell you more about the team if you are interested"
+          - "If you like, I can give you more background on the team"
+          - "If you like, I can tell you more about the team"
+          - "If you like I can give you more background on the team"
+          - "If you like I can tell you more about the team"
+          - "If you want, I can give you more background on the team"
+          - "If you want, I can tell you more about the team"
+          - "If you want I can give you more background on the team"
+          - "If you want I can tell you more about the team"
+          - "If you would like, I can give you more background on the team"
+          - "If you would like, I can tell you more about the team"
+          - "If you would like I can give you more background on the team"
+          - "If you would like I can tell you more about the team"
+        explanation: Предложение рассказать больше — I can give you more background…
+  - type: writing
+    id: story
+    register: formal
+    prompt: "Подготовьте письменную версию истории по схеме STAR для собеседования (80–120 слов): ситуация, задача, действия, результат и вывод. Опишите работу в общих чертах, без названий клиентов и внутренних цифр."
+    words: { min: 80, max: 120 }
+    model: |-
+      Last spring, my team was preparing a release when a large client asked for an extra feature. We had already planned the work for the whole sprint, and nobody was sure who should decide. My task was to keep the release on schedule and to coordinate the work with the product team. I talked to everyone involved, and I asked the product owner to rank the requests. Then I split the new feature into two parts and offered to take the smaller one. As a result, we shipped the main release on time, and the client received the extra feature two weeks later. What I learned from it is to ask about priorities early.
+    criteria:
+      - 80–120 слов, есть все четыре части STAR
+      - Ситуация описана в past continuous или past perfect, действия — в past simple
+      - Свои действия названы с I, результат команды — с we
+      - Нет названий клиентов, внутренних цифр и обвинений коллег
+      - Формальный стиль без сокращений
+      - В конце есть вывод
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Девятый ответ вашего **банка ответов** — вопрос о трудности: **Tell me about a time you faced a challenge.** К нему добавляется уточнение интервьюера: **What was your role in it?** Первый ответ занимает до двух минут, второй — до 30 секунд.
+
+      1) Выберите один случай и разложите его по частям STAR: две-три фразы на ситуацию и задачу, четыре-пять на действия, две на результат. 2) Запишите ответ вслух и уложитесь в время. 3) Переслушайте и сверьте с образцом и критериями: порядок частей, время глаголов, местоимения I и we. 4) Для второго вопроса назовите свою роль и вклад команды, не пересказывая всю историю.
+
+      Сцена в конце урока повторяет начало интервью. Реплики интервьюера записаны ниже, перед сценой; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: challenge
+    part: interview
+    prompt: "Интервьюер спрашивает: «Tell me about a time you faced a challenge.» Ответьте за 120 секунд по схеме STAR: ситуация, задача, действия, результат и вывод."
+    seconds: 120
+    model: "Let me give you an example. At my previous company, I was working on a reporting feature when the requirements changed twice in one week. The situation was that the product owner and the customer's team wanted different things, and the deadline was close. My task was to deliver the feature on time. The first thing I did was talk to both sides, and I wrote a one-page summary of what each of them needed. Then I took the initiative and set up a short call to agree on the scope. I explained the trade-offs, and I suggested a smaller first version, so both sides could compromise. I also kept the team in the loop, because they had already started the work. In the end, both sides agreed on a plan. As a result, we shipped on time, and the customer asked for the rest in the next release. What I learned from it is to confirm requirements in writing. Since then, I have done that at the start of every project."
+    criteria:
+      - Есть все четыре части STAR в правильном порядке
+      - Фон и предыстория переданы в past continuous или past perfect
+      - Свои действия названы с I, результат команды — с we
+      - Использованы не меньше трёх фраз урока
+      - В конце есть вывод
+      - Нет названий клиентов и внутренних цифр
+      - Ответ укладывается в 120 секунд
+  - type: speaking
+    id: role
+    part: monologue
+    prompt: "Интервьюер уточняет: «What was your role in it?» Ответьте за 30 секунд: ваш вклад и то, что сделала команда."
+    seconds: 30
+    model: "My role was to coordinate the work between the two sides. I did not write all the code myself. I wrote the summary, set up the call and tracked the open questions, and two colleagues built the feature. I was responsible for keeping everyone informed."
+    criteria:
+      - Назван собственный вклад с I
+      - Названо, что сделали коллеги
+      - Нет пересказа всей истории
+      - Ответ укладывается в 30 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Thanks for joining. Let's start with a behavioral question. Tell me about a time you faced a challenge at work." }
+      - { speaker: Ingrid, text: "Mm-hm. What was your role in it?" }
+      - { speaker: Ingrid, text: "I see. How did it end, and what did you learn from it?" }
+      - { speaker: Ingrid, text: "Thank you. That was a clear example." }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на собеседовании, вопросы задаёт Ingrid, руководитель разработки. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику расскажите о ситуации и задаче. На вторую назовите свою роль и действия. На третью скажите, чем всё закончилось и что вы вынесли. На последнюю поблагодарите и предложите второй пример. Вся ваша часть — 120 секунд, каждая реплика — две-четыре фразы.
+    seconds: 120
+    model: |-
+      Ingrid: Thanks for joining. Let's start with a behavioral question. Tell me about a time you faced a challenge at work.
+      You: Let me give you an example. At my previous company, we were running two releases when the schedule changed, and two teams needed the same engineer. My task was to get the release out on time.
+      Ingrid: Mm-hm. What was your role in it?
+      You: I had to coordinate the work across both teams. The first thing I did was talk to everyone involved. Then I wrote a short plan and set up a daily call so that nobody was out of sync.
+      Ingrid: I see. How did it end, and what did you learn from it?
+      You: As a result, we shipped on time. What I learned from it is to raise problems early. Since then, we have used the same process for every release.
+      Ingrid: Thank you. That was a clear example.
+      You: Thank you. I have another example if that would help.
+    criteria:
+      - Ответили на все четыре реплики по порядку, каждая — две-четыре фразы
+      - Ситуация и задача названы в первой реплике
+      - Роль названа с I, действия идут по порядку
+      - Результат и вывод названы в третьей реплике
+      - В конце есть благодарность и предложение второго примера
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модулей
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Could you tell me where the interview ___?"
+        options: [is, is it, does it be]
+        answer: is
+        explanation: В косвенном вопросе порядок слов как в утверждении.
+      - id: q2
+        prompt: "The offer letter ___ to every candidate by the HR team. (отправляется)"
+        options: [is sent, sends, is sending]
+        answer: is sent
+        explanation: Действие совершается над письмом, поэтому нужен passive.
+      - id: q3
+        prompt: "I ___ in this role for two years. (до сих пор)"
+        options: [have been, am, was]
+        answer: have been
+        explanation: Срок for two years и связь с настоящим — present perfect.
+      - id: q4
+        prompt: "Our new service is ___ than the old one. (быстрее)"
+        options: [faster, more fast, fastest]
+        answer: faster
+        explanation: Односложное прилагательное образует сравнительную степень с -er.
+      - id: q5
+        prompt: "You ___ read the offer letter carefully before you sign. (совет)"
+        options: [should, to should, would to]
+        answer: should
+        explanation: Совет выражается глаголом should; после него нет to.
+      - id: q6
+        prompt: "I ___ a course on distributed systems in October. (договорённость)"
+        options: [am starting, might to start, will to start]
+        answer: am starting
+        explanation: План с датой — present continuous.

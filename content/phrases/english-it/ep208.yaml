@@ -1,0 +1,7 @@
+id: ep208
+text: "This was in the spring of last year."
+translation: "Это было весной прошлого года."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep211
+text: "I set up a daily call so that nobody was out of sync."
+translation: "Я назначил ежедневный созвон, чтобы никто не отставал от остальных."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md

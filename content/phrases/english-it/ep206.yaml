@@ -1,0 +1,7 @@
+id: ep206
+text: "I had to coordinate the work across both teams."
+translation: "Мне нужно было согласовать работу двух команд."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e09
+  operation: requested-generation
+  request: Фразы модуля e09 по программе docs/curriculum-english-it.md
