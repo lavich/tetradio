@@ -1,0 +1,7 @@
+id: tp028
+text: "Is insurance included in the price?"
+translation: "Страховка входит в стоимость?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

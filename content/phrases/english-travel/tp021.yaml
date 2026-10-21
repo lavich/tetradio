@@ -1,0 +1,8 @@
+id: tp021
+text: "Could I have a return to Brighton, please?"
+translation: "Можно билет до Брайтона туда и обратно?"
+note: "в кассе ticket часто опускают: a single / a return to…"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

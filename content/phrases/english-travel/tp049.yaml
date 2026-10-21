@@ -1,0 +1,8 @@
+id: tp049
+text: "I'm allergic to shellfish."
+translation: "У меня аллергия на моллюсков и ракообразных."
+note: "shellfish — креветки, мидии, крабы; allergic to, не allergic on"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

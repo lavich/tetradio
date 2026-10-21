@@ -1,0 +1,8 @@
+id: tp024
+text: "Could you let me know when we get to my stop?"
+translation: "Скажите, пожалуйста, когда будет моя остановка."
+note: "просьба к водителю автобуса; после when — present simple, не will"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

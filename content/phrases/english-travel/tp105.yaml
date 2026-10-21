@@ -1,0 +1,8 @@
+id: tp105
+text: "What can you do to put this right?"
+translation: "Что вы можете сделать, чтобы это исправить?"
+note: "put something right — исправить ситуацию; спокойнее, чем What are you going to do about it?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

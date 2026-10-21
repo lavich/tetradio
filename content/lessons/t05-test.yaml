@@ -1,0 +1,294 @@
+title: Контрольная модуля t05
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: правила рынка и сообщения банка, объявления в торговом центре, возврат в магазине, сравнения и правила, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: market-bank
+    title: Riverside Market and a bank app
+    text: |-
+      RIVERSIDE MARKET — INFORMATION FOR VISITORS
+      Open Thursday to Sunday, 9 am – 5 pm.
+      Most stalls take cards and contactless. Some stalls are cash only — look for the sign.
+      Cash machine: next to the main entrance (£2 fee for non-UK cards).
+      The Co-op on Bridge Street gives free cashback with any purchase (UK debit cards only).
+      Prices at the food stalls are fixed. At the antiques and vintage stalls, you can ask for a better price.
+
+      BANK APP
+      14:02 Payment declined — York Vintage Cameras, £60.00. For your security, we blocked this payment abroad. Was it you? Reply YES and try again.
+      14:09 Payment pending — York Vintage Cameras, £60.00. It will appear on your statement in 1–3 days.
+      14:09 Foreign transaction fee — £1.20.
+    glosses:
+      - { text: purchase, russian: покупка }
+      - { text: fixed, russian: фиксированные }
+      - { text: For your security, russian: в целях безопасности }
+      - { text: statement, russian: выписка }
+  - type: exercise
+    id: market-bank-q
+    about: market-bank
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Can a visitor with a foreign card get cashback at the Co-op?
+        options:
+          - No, cashback there is only for UK debit cards.
+          - Yes, with any purchase.
+          - Yes, but there's a £2 fee.
+        answer: No, cashback there is only for UK debit cards.
+        explanation: "Free cashback… (UK debit cards only); комиссия £2 — у банкомата для иностранных карт."
+      - id: q2
+        prompt: Where can you haggle?
+        options:
+          - at the antiques and vintage stalls
+          - at the food stalls
+          - at every stall
+        answer: at the antiques and vintage stalls
+        explanation: Prices at the food stalls are fixed.
+      - id: q3
+        prompt: How do you know that a stall doesn't take cards?
+        options:
+          - There's a sign at the stall.
+          - The information point tells you.
+          - The prices are fixed.
+        answer: There's a sign at the stall.
+        explanation: Some stalls are cash only — look for the sign.
+      - id: q4
+        prompt: Why was the payment at 14:02 declined?
+        options:
+          - The bank blocked a payment abroad.
+          - There wasn't enough money on the card.
+          - The stall doesn't take cards.
+        answer: The bank blocked a payment abroad.
+        explanation: For your security, we blocked this payment abroad.
+      - id: q5
+        prompt: What does the message at 14:09 mean?
+        options:
+          - It is being processed and will appear on the statement in 1–3 days.
+          - The payment was declined again.
+          - The customer has been charged twice.
+        answer: It is being processed and will appear on the statement in 1–3 days.
+        explanation: "Pending — платёж в обработке, в выписке появится через 1–3 дня; первый платёж отклонён, двойного списания нет."
+      - id: q6
+        prompt: How much does the camera cost the customer in total?
+        options: ["£61.20", "£60.00", "£121.20"]
+        answer: "£61.20"
+        explanation: "£60 за камеру и £1.20 — комиссия за операцию иностранной картой; отклонённый платёж не списан."
+  - type: listening
+    id: announcements
+    title: Announcements at Coppergate Centre
+    plays: 2
+    transcript:
+      - { text: "Good afternoon, shoppers. The bureau de change on the first floor is closed today. The nearest one is at the railway station, a ten-minute walk from here." }
+      - { text: "This weekend only, all winter coats at Hartley & Webb are thirty per cent off. Sale items can be exchanged within fourteen days, but they can't be refunded." }
+      - { text: "Please note that the car park closes at eight pm. You don't have to pay at the machine — the barrier reads your number plate, and you can pay online until midnight." }
+  - type: exercise
+    id: announcements-q
+    about: announcements
+    graded: true
+    title: Аудирование — объявления
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where can shoppers change money today?
+        options:
+          - at the railway station
+          - on the first floor
+          - at Hartley & Webb
+        answer: at the railway station
+        explanation: The bureau de change on the first floor is closed today. The nearest one is at the railway station.
+      - id: q2
+        prompt: What can you do with a winter coat from the sale?
+        options:
+          - exchange it within fourteen days
+          - get a refund within fourteen days
+          - return it within twenty-eight days
+        answer: exchange it within fourteen days
+        explanation: Sale items can be exchanged within fourteen days, but they can't be refunded.
+      - id: q3
+        prompt: How can drivers pay for the car park?
+        options:
+          - online, until midnight
+          - only at the machine
+          - only before eight pm
+        answer: online, until midnight
+        explanation: You don't have to pay at the machine… you can pay online until midnight.
+  - type: listening
+    id: return
+    title: Back at the shop
+    plays: 2
+    transcript:
+      - { speaker: Grace, text: "Hello again! The jacket — is everything OK with it?" }
+      - { speaker: Jonas, text: "The jacket is fine, but my wife doesn't like the colour. Have you got the same one in green?" }
+      - { speaker: Grace, text: "Let me check… We've got it in green, but only in a small. That would be much tighter than the medium." }
+      - { speaker: Jonas, text: "Hmm. And the medium in green — you can order it?" }
+      - { speaker: Grace, text: "Yes, but it takes four or five days to arrive from our other shop." }
+      - { speaker: Jonas, text: "Four days is too long. We fly home on Saturday. Then I would like a refund, please." }
+      - { speaker: Grace, text: "No problem. It's unworn, and the tags are on, so that's fine. Have you got the receipt?" }
+      - { speaker: Jonas, text: "Yes, here. I paid with my second card, because the first card was declined." }
+      - { speaker: Grace, text: "The refund goes back to the card you paid with, so it's the second card. It can take three to five working days." }
+      - { speaker: Jonas, text: "And my first card? In the app I still see a pending payment." }
+      - { speaker: Grace, text: "That payment didn't go through, so you don't have to do anything. The money will come back on its own." }
+  - type: exercise
+    id: return-q
+    about: return
+    graded: true
+    title: Аудирование — возврат
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why does Jonas bring the jacket back?
+        options:
+          - His wife doesn't like the colour.
+          - It's too small for him.
+          - The zip doesn't work.
+        answer: His wife doesn't like the colour.
+      - id: q2
+        prompt: What's the problem with the green jacket in the shop?
+        options:
+          - It's only in a small, and that's too tight for him.
+          - It's more expensive than the black one.
+          - It's not the same as the one in the window.
+        answer: It's only in a small, and that's too tight for him.
+        explanation: We've got it in green, but only in a small. That would be much tighter than the medium.
+      - id: q3
+        prompt: Why doesn't Jonas order a green one in a medium?
+        options:
+          - It takes too long, and he flies home on Saturday.
+          - The shop can't order it.
+          - It costs more to order.
+        answer: It takes too long, and he flies home on Saturday.
+        explanation: Four days is too long. We fly home on Saturday.
+      - id: q4
+        prompt: Where will the money go?
+        options:
+          - to his second card
+          - to his first card
+          - to a credit note
+        answer: to his second card
+        explanation: The refund goes back to the card you paid with, so it's the second card.
+      - id: q5
+        prompt: What does Jonas have to do about the pending payment on his first card?
+        options:
+          - nothing
+          - call his bank
+          - show the receipt
+        answer: nothing
+        explanation: That payment didn't go through, so you don't have to do anything.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Сравнения и правила
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: The market is much ___ than the shops in the centre.
+        options: [cheaper, more cheaper, cheap]
+        answer: cheaper
+      - id: q2
+        prompt: This coat isn't ___ the wool one.
+        options: [as warm as, as warmer as, warm than]
+        answer: as warm as
+      - id: q3
+        prompt: Are these trainers the same ___ the ones online?
+        options: [as, like, that]
+        answer: as
+      - id: q4
+        prompt: I don't want the red bag. I'll take the brown ___.
+        options: [one, ones, it]
+        answer: one
+      - id: q5
+        prompt: You ___ bring the receipt — we can find the payment on your card.
+        options: [don't have to, mustn't, has to]
+        answer: don't have to
+        explanation: Чек не обязателен, найдут по карте; mustn't — «нельзя».
+      - id: q6
+        prompt: ___ I have to show my passport for tax-free shopping in Paris?
+        options: [Do, Am, Have]
+        answer: Do
+        explanation: Вопрос с have to — через do.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [fitting room, alterations, refund, credit note, proof of purchase, in stock, haggle, declined, cashback, pending, bureau de change, exchange rate]
+    items:
+      - { id: g1, prompt: "Can I try these jeans on? Where's the ___?", answer: fitting room }
+      - { id: g2, prompt: "The trousers are too long. Do you do ___?", answer: alterations }
+      - { id: g3, prompt: "It was a sale item, so I couldn't get my money back — they gave me a ___ for the shop.", answer: credit note }
+      - { id: g4, prompt: "I haven't got the receipt. Is my bank statement OK as ___?", answer: proof of purchase }
+      - { id: g5, prompt: "We haven't got your size on the shelf, but let me check if it's ___.", answer: in stock }
+      - { id: g6, prompt: "At the flea market you can ___, but not in the supermarket.", answer: haggle }
+      - { id: g7, prompt: "The terminal says my card has been ___. Can I try another one?", answer: declined }
+      - { id: g8, prompt: "The money isn't gone yet — it's still a ___ payment.", answer: pending }
+      - { id: g9, prompt: "Could I have twenty pounds ___, please? I need cash for the market.", answer: cashback }
+      - { id: g10, prompt: "The ___ at the airport was only 1.05 euros to the pound, so I changed just fifty pounds.", answer: exchange rate }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, I'd) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Можно вернуть деньги?
+        answer:
+          - Can I get a refund?
+          - Could I get a refund?
+          - Can I have a refund?
+          - Could I have a refund?
+          - Can I get my money back?
+          - Could I get my money back?
+          - Can I have my money back?
+          - Could I have my money back?
+          - Can I get a refund, please?
+          - Could I get a refund, please?
+          - Can I get a refund please?
+          - Could I get a refund please?
+          - Can I have a refund, please?
+          - Could I have a refund, please?
+          - Can I get my money back, please?
+          - Could I get my money back, please?
+      - id: q2
+        prompt: С меня дважды списали деньги за один заказ.
+        answer:
+          - I've been charged twice for the same order.
+          - I've been charged twice for one order.
+          - I was charged twice for the same order.
+          - I was charged twice for one order.
+          - I've been charged twice for this order.
+          - I was charged twice for this order.
+          - They've charged me twice for the same order.
+          - They charged me twice for the same order.
+          - You've charged me twice for the same order.
+          - You charged me twice for the same order.
+          - I've been charged twice for my order.
+          - I've been charged twice for the order.
+          - I was charged twice for my order.
+        explanation: Списали меня — пассив, I've been charged…
+      - id: q3
+        prompt: Это ваша последняя цена?
+        answer:
+          - Is that your best price?
+          - Is this your best price?
+          - Is that your final price?
+          - Is this your final price?
+          - Is that your lowest price?
+          - Is this your lowest price?
+          - Is that the best price?
+          - Is that the best you can do?
+          - Is this the best you can do?
+          - Is that the lowest you can go?

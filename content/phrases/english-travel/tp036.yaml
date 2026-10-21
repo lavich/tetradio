@@ -1,0 +1,7 @@
+id: tp036
+text: "Could I leave my luggage here after check-out?"
+translation: "Можно оставить у вас багаж после выезда?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md

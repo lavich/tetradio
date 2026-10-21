@@ -1,0 +1,8 @@
+id: tp061
+text: "Have you got this in a medium?"
+translation: "У вас есть это в размере M?"
+note: "в США — Do you have this in a medium?; размеры: small, medium, large"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

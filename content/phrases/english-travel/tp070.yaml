@@ -1,0 +1,8 @@
+id: tp070
+text: "Do you take contactless?"
+translation: "У вас можно бесконтактно?"
+note: "take — принимать к оплате: Do you take cards?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

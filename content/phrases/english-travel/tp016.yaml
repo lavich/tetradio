@@ -1,0 +1,8 @@
+id: tp016
+text: "How do I get to the old town from here?"
+translation: "Как отсюда добраться до старого города?"
+note: "прямой вопрос звучит нормально; How to get to…? без do I — ошибка"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

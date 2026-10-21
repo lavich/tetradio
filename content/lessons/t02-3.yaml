@@ -1,0 +1,187 @@
+title: Спросить дорогу, пересказать её и написать водителю
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: bank
+    title: Банк фраз — дорога
+    body: |-
+      Разговор о дороге почти всегда идёт по одной схеме: вежливое начало → вопрос → указания → вы повторяете маршрут → благодарите. Повторить маршрут вслух — лучший способ проверить, что вы всё поняли: собеседник сразу поправит ошибку.
+
+      **Начать:** **Excuse me, sorry to bother you.** Затем прямой вопрос: **How do I get to the old town from here?** / **Which bus goes to the airport?** / **Is it far?**
+
+      **Переспросить и повторить:** **Sorry, was that the second left or the third?** / **So, I go straight on, take the second left, and it's opposite the church?** В пересказе — present simple: I go, I turn, it's.
+
+      **Пересказать другу** (голосовое или сообщение): **The woman at the station said it's about a ten-minute walk.** Шаги связывают словами **first — then — after that — when you get to… — until you see…**: First we go up the steps, then we turn left. When we get to the monument, we cross the road.
+
+      Соберите свой банк: напишите, как спросить дорогу до места, куда вы хотите поехать, и как пересказать маршрут спутнику. Проговорите оба варианта вслух.
+    table:
+      columns:
+        - что сделать
+        - фраза
+      rows:
+        - - начать
+          - Excuse me, sorry to bother you.
+        - - спросить
+          - How do I get to the old town from here?
+        - - про транспорт
+          - Which bus goes to the old town?
+        - - переспросить
+          - Sorry, was that the second left or the third?
+        - - повторить маршрут
+          - So, I go straight on and take the second left?
+        - - пересказать
+          - She said it's about a ten-minute walk.
+        - - связать шаги
+          - First… then… when you get to… until you see…
+        - - поблагодарить
+          - Thanks, that's really helpful.
+  - type: exercise
+    id: retell-gap
+    title: Пересказ маршрута
+    instruction: "Вы пересказываете другу дорогу к хостелу. Вставьте слово. Два слова лишние."
+    format: gap
+    bank: [first, then, when, until, opposite, past, on, between]
+    items:
+      - { id: g1, prompt: "So, ___, we go out of the station and turn right.", answer: first }
+      - { id: g2, prompt: "We walk along the river, and ___ we cross the bridge.", answer: then }
+      - { id: g3, prompt: "And ___ we get to the roundabout, we take the second exit.", answer: when }
+      - { id: g4, prompt: "We keep going ___ we see a big supermarket.", answer: until }
+      - { id: g5, prompt: "We go ___ the supermarket and take the first left.", answer: past }
+      - { id: g6, prompt: "The hostel is ___ a small park, on the other side of the road.", answer: opposite }
+  - type: exercise
+    id: dialogue-choice
+    title: Что ответить
+    instruction: Выберите реплику, которая лучше всего подходит.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы хотите заговорить с прохожим.
+        options:
+          - Excuse me, sorry to bother you.
+          - Hey, you!
+          - Listen, please.
+        answer: Excuse me, sorry to bother you.
+        explanation: Вежливое начало — Excuse me; Hey, you! и Listen звучат резко.
+      - id: q2
+        prompt: "Прохожий сказал: Take the third left. Вы не уверены, что расслышали."
+        options:
+          - Sorry, was that the second left or the third?
+          - What? Say again.
+          - Third? Why third?
+        answer: Sorry, was that the second left or the third?
+        explanation: Переспрашивают вежливо и называют, что именно не расслышали.
+      - id: q3
+        prompt: Вы проверяете, правильно ли поняли маршрут.
+        options:
+          - So, I go straight on and turn left at the lights?
+          - So, I will going straight on and turn left at the lights?
+          - So, I going straight on and turn left on the lights?
+        answer: So, I go straight on and turn left at the lights?
+        explanation: Пересказ маршрута — present simple; у светофора — at the lights.
+      - id: q4
+        prompt: Вы пересказываете другу, что сказала женщина на вокзале.
+        options:
+          - She said it's about a ten-minute walk.
+          - She said it's about a ten-minutes walk.
+          - She said it's about ten-minute walk.
+        answer: She said it's about a ten-minute walk.
+        explanation: A ten-minute walk — с артиклем и без -s у minute.
+  - type: explanation
+    id: speaking-how
+    title: Как записывать
+    body: |-
+      Два устных задания. Первое — разговор с прохожим: вы спрашиваете дорогу, переспрашиваете и повторяете маршрут. Реплики прохожего — в образце: попросите кого-нибудь их прочитать или прочитайте сами, а свои скажите по памяти и запишите. Каждая ваша реплика — одна-две фразы.
+
+      Второе — голосовое сообщение другу на 15–30 секунд: перескажите маршрут, который вы узнали. Говорите о своём городе или о месте, куда хотите поехать; не заучивайте образец. Запишите, переслушайте, сверьте с критериями и запишите второй дубль.
+  - type: speaking
+    id: ask
+    part: roleplay
+    prompt: |-
+      Вы вышли из вокзала в незнакомом городе и ищете музей. Остановите прохожего, вежливо спросите, как дойти, уточните, далеко ли это, переспросите одну деталь, повторите маршрут и поблагодарите.
+      Запишите свою часть разговора — 20–40 секунд, каждая реплика — одна-две фразы.
+    seconds: 45
+    model: |-
+      You: Excuse me, sorry to bother you. How do I get to the City Museum from here?
+      Passer-by: Go straight on along this road, turn left at the lights and take the third right. Then go past the cinema, and the museum is opposite the park.
+      You: Sorry, was that the second right or the third?
+      Passer-by: The third, by the bank.
+      You: Thanks. Is it far?
+      Passer-by: No, it's about a ten-minute walk.
+      You: So, I go straight on, turn left at the lights, take the third right, go past the cinema, and it's opposite the park?
+      Passer-by: That's it.
+      You: Great, thanks, that's really helpful.
+    criteria:
+      - Начали с Excuse me, закончили благодарностью
+      - "Вопрос — прямой: How do I get to…? (не How to get to…?)"
+      - Переспросили одну деталь вежливо, без What?
+      - "Повторили маршрут в present simple: I go, I take, it's…"
+      - Предлоги — past, opposite, at the lights / at the junction
+  - type: speaking
+    id: retell
+    part: monologue
+    prompt: "Вы узнали дорогу от вокзала до своего жилья. Запишите голосовое сообщение другу, который приедет позже: как дойти, сколько идти, что увидеть по пути. 15–30 секунд."
+    seconds: 30
+    model: "Hi! So, here's how to get to the flat from the station. First, go out of the main entrance and turn right. Walk along the river and cross the bridge. When you get to the roundabout, take the second exit. Keep going until you see a big supermarket — the flat is opposite it, number twelve. It's about a ten-minute walk. See you soon!"
+    criteria:
+      - "Шаги связаны: first, then, when you get to…, until you see…"
+      - "Указания — повелительное (go, turn, cross) или present simple (you go, you turn)"
+      - "Предлоги: along, past, opposite, at the roundabout"
+      - "Сказали, сколько идти: about a ten-minute walk"
+      - 15–30 секунд, без долгих пауз; на второй попытке — меньше заминок
+  - type: explanation
+    id: writing-how
+    title: Сообщение водителю
+    body: |-
+      Водитель из приложения такси часто пишет: **I'm here, where are you?** Ответ короткий, 20–40 слов, и дружелюбный: вы пишете человеку, а не компании. Можно **Hi** и сокращения (I'm, I'll), подпись — одно имя.
+
+      Что написать: где вы стоите (**I'm by the main entrance / at the pick-up point / opposite the café**), как вас узнать (**in a blue jacket, with a big green suitcase** — сначала размер, потом цвет), и просьбу (**Could you call me if you can't see me?**). Чего не писать: долгих извинений и рассказа о рейсе.
+  - type: writing
+    id: driver
+    register: friendly
+    prompt: "Вы прилетели и заказали такси в приложении. Водитель пишет: «I'm here, where are you?» Ответьте ему (20–40 слов): где именно вы стоите, как вас узнать и о чём вы его просите."
+    words: { min: 20, max: 40 }
+    model: |-
+      Hi! I'm at the taxi pick-up point outside Arrivals, by the main entrance. I'm in a blue jacket, with a big green suitcase. Could you call me if you can't see me?
+      Thanks, Anna
+    criteria:
+      - 20–40 слов; есть место, приметы и просьба
+      - "Место — с предлогом: by the main entrance, at the pick-up point, opposite the café"
+      - "Приметы — in a blue jacket, with a suitcase; размер перед цветом: a big green suitcase"
+      - Дружелюбно и коротко — Hi, сокращения, подпись одним именем
+      - Просьба — вопросом с Could you…?
+  - type: exercise
+    id: review
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Which bus ___ to the station?
+        options: [goes, does go, go]
+        answer: goes
+        explanation: Which bus — подлежащее, поэтому без does.
+      - id: q2
+        prompt: Turn right ___ the junction.
+        options: [at, on, in]
+        answer: at
+      - id: q3
+        prompt: Could I have a ___ to York, please? I'm coming back on Sunday.
+        options: [return, single, change]
+        answer: return
+        explanation: Туда и обратно — a return; a single — в одну сторону.
+      - id: q4
+        prompt: The café is ___ the bank and the post office.
+        options: [between, next, opposite of]
+        answer: between
+        explanation: Между двумя местами — between; next требует to, opposite — без of.
+      - id: q5
+        prompt: Don't forget to ___ when you get on the bus.
+        options: [tap in, tap out, change at]
+        answer: tap in
+        explanation: В лондонском автобусе карту прикладывают только на входе.
+      - id: q6
+        prompt: "Could you let me know when we ___ to my stop?"
+        options: [get, will get, getting]
+        answer: get
+        explanation: После when о будущем — present simple, без will.

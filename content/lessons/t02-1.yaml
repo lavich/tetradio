@@ -1,0 +1,276 @@
+title: Как добраться — билеты, предлоги и указания
+kind: lesson
+items:
+  - { kind: word, id: tw016 }
+  - { kind: word, id: tw017 }
+  - { kind: word, id: tw018 }
+  - { kind: word, id: tw019 }
+  - { kind: word, id: tw020 }
+  - { kind: word, id: tw021 }
+  - { kind: word, id: tw022 }
+  - { kind: word, id: tw023 }
+  - { kind: phrase, id: tp016 }
+  - { kind: phrase, id: tp017 }
+  - { kind: phrase, id: tp018 }
+  - { kind: phrase, id: tp019 }
+  - { kind: phrase, id: tp020 }
+  - { kind: phrase, id: tp021 }
+  - { kind: phrase, id: tp022 }
+  - { kind: phrase, id: tp023 }
+blocks:
+  - type: explanation
+    id: prepositions
+    title: Предлоги места и движения
+    body: |-
+      В указаниях дороги два вида предлогов. Одни говорят, **где** что-то находится: The bus stop is **opposite** the museum. Другие — **куда и как** идти: Go **past** the church and **across** the bridge.
+
+      **Где:** **opposite** — напротив, без of: opposite the station (opposite of the station — ошибка). **Next to** — рядом, всегда с to: next to the café. **Between** — между двумя: between the bank and the chemist's. На углу улиц — **on** the corner of King Street (можно и at the corner); in the corner — «в углу» комнаты. В конце улицы — **at the end of** the road.
+
+      **Куда и как:** **along** — вдоль, по улице или реке; **past** — мимо; **across** — через дорогу, площадь, мост; **through** — сквозь, через парк или вокзал; **up / down** — вверх / вниз по улице или холму; **into / out of** — в здание / из здания.
+
+      Где повернуть — **at**: turn left **at** the traffic lights, **at** the junction, **at** the roundabout. Русское «на светофоре» тянет к on — это ошибка.
+    table:
+      columns:
+        - предлог
+        - пример
+      rows:
+        - - opposite — напротив
+          - The bus stop is opposite the museum.
+        - - next to — рядом с
+          - The ticket office is next to the café.
+        - - between — между
+          - It's between the bank and the chemist's.
+        - - on the corner of — на углу
+          - It's on the corner of King Street.
+        - - along — вдоль, по
+          - Walk along the river.
+        - - past — мимо
+          - Go past the church.
+        - - across — через
+          - Go across the bridge.
+        - - at — где повернуть
+          - Turn right at the traffic lights.
+  - type: explanation
+    id: directions
+    title: Указания и вопросы о дороге
+    body: |-
+      Дорогу объясняют повелительным наклонением: **Go straight on. Turn left. Take the second left. Cross the road at the pedestrian crossing.** Это не грубо: так звучит любая инструкция, и please здесь не нужно. Take the second left — «сверните на второй поворот налево»: first, second, third считают повороты. Конец указаний — где цель: **It's on your left. You can't miss it.**
+
+      Спросить дорогу можно прямо: **How do I get to the old town from here?** Вопрос **How to get to…?** без do I — заголовок статьи, а не вопрос человеку. Вежливость даёт начало: **Excuse me, sorry to bother you…**
+
+      **Which bus goes to the airport?** — без does: which bus здесь подлежащее, как who в Who lives here? Сравните: **Which bus do I take?** — тут подлежащее I, поэтому do нужно. Про поезд спрашивают **Does this train stop at Reading?** и **Do I need to change?**
+    table:
+      columns:
+        - вопрос
+        - ответ
+      rows:
+        - - How do I get to the castle?
+          - Go straight on and take the second left.
+        - - Which bus goes to the airport?
+          - The number 100, from stop C.
+        - - Which bus do I take to the beach?
+          - Take the 12.
+        - - Does this train stop at Reading?
+          - Yes, it's the next stop.
+        - - Do I need to change?
+          - Yes, change at Oxford.
+        - - Is it far?
+          - It's about a ten-minute walk.
+  - type: explanation
+    id: tickets
+    title: Билеты и дорога
+    body: |-
+      В британской кассе билет в одну сторону — **a single**, туда и обратно — **a return** (**a return ticket**). Русскому уху return кажется «обратным», но это оба конца. Американцы говорят one-way и round-trip. Короткая просьба: **Could I have a return to Brighton, please?**
+
+      Поезда и метро дороже в час пик (peak time). **Off-peak** — время вне пика и тариф, который тогда действует: an off-peak return. Если прямого поезда нет, **change at** — пересадка на станции: Change at Oxford for Worcester.
+
+      В лондонском метро (the Tube) и во многих городах платят картой или телефоном: **tap in** на входе и tap out на выходе. В автобусе на остановке по требованию — **a request stop** — поднимите руку, а в салоне нажмите кнопку, иначе автобус проедет.
+
+      На дороге: **a junction** — перекрёсток, где сходятся дороги; **a roundabout** — круговой перекрёсток; **a pedestrian crossing** — пешеходный переход.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: prepositions-choice
+    title: Где и куда
+    instruction: Выберите предлог.
+    format: choice
+    items:
+      - id: q1
+        prompt: The bus stop is ___ the museum, on the other side of the road.
+        options: [opposite, opposite of, in front]
+        answer: opposite
+        explanation: Opposite — без of; in front без of не говорят, нужно in front of.
+      - id: q2
+        prompt: The ticket office is ___ the café.
+        options: [next to, next, near of]
+        answer: next to
+        explanation: Next to — всегда с to; near — без of.
+      - id: q3
+        prompt: Turn left ___ the traffic lights.
+        options: [at, on, in]
+        answer: at
+        explanation: Место, где повернуть, — at the lights, at the junction, at the roundabout.
+      - id: q4
+        prompt: Go ___ the church and you'll see the station.
+        options: [past, through, between]
+        answer: past
+        explanation: Мимо чего-то — past; through — сквозь, через что-то внутри.
+      - id: q5
+        prompt: The hostel is ___ the corner of Hill Street and Bank Street.
+        options: ["on", "in", "between"]
+        answer: "on"
+        explanation: На углу улиц — on the corner of (реже at the corner of); in the corner — в углу комнаты.
+      - id: q6
+        prompt: Walk ___ the river for about five minutes.
+        options: [along, across, between]
+        answer: along
+        explanation: Вдоль реки — along; across — на другой берег.
+  - type: exercise
+    id: directions-gap
+    title: Объясните дорогу
+    instruction: "Прохожий объясняет, как пройти к музею. Вставьте слово. Два слова лишние."
+    format: gap
+    bank: [straight, second, at, across, past, opposite, until, between, on]
+    items:
+      - { id: g1, prompt: "Go ___ on along this road.", answer: straight }
+      - { id: g2, prompt: "Turn left ___ the roundabout.", answer: at }
+      - { id: g3, prompt: "Take the ___ right, by the bank.", answer: second }
+      - { id: g4, prompt: "Go ___ the road at the pedestrian crossing.", answer: across }
+      - { id: g5, prompt: "Walk ___ the cinema, and keep going.", answer: past }
+      - { id: g6, prompt: "Keep going ___ you see a big church.", answer: until }
+      - { id: g7, prompt: "The museum is ___ the church, on the other side of the street.", answer: opposite }
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a return ticket
+      - off-peak
+      - change at
+      - tap in
+      - a request stop
+      - a roundabout
+      - a pedestrian crossing
+      - a junction
+      - a single
+      - a platform
+    items:
+      - { id: m1, prompt: билет туда и обратно, answer: a return ticket }
+      - { id: m2, prompt: непиковый (о тарифе), answer: off-peak }
+      - { id: m3, prompt: сделать пересадку на (станции), answer: change at }
+      - { id: m4, prompt: приложить карту на входе, answer: tap in }
+      - { id: m5, prompt: остановка по требованию, answer: a request stop }
+      - { id: m6, prompt: круговой перекрёсток, answer: a roundabout }
+      - { id: m7, prompt: пешеходный переход, answer: a pedestrian crossing }
+      - { id: m8, prompt: перекрёсток, answer: a junction }
+  - type: exercise
+    id: questions-choice
+    title: Вопрос о дороге
+    instruction: Выберите правильный вопрос.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы хотите узнать, какой автобус идёт в аэропорт.
+        options:
+          - Which bus goes to the airport?
+          - Which bus does go to the airport?
+          - Which bus go to the airport?
+        answer: Which bus goes to the airport?
+        explanation: Which bus — подлежащее, поэтому без does; у bus = it окончание -s.
+      - id: q2
+        prompt: Вы спрашиваете прохожего, как дойти до старого города.
+        options:
+          - How do I get to the old town from here?
+          - How to get to the old town from here?
+          - How I get to the old town from here?
+        answer: How do I get to the old town from here?
+        explanation: Вопрос человеку — с do I; How to get to…? звучит как заголовок.
+      - id: q3
+        prompt: Вы уже в поезде и хотите узнать, будет ли остановка в Рединге.
+        options:
+          - Does this train stop at Reading?
+          - Is this train stop at Reading?
+          - Does this train stops at Reading?
+        answer: Does this train stop at Reading?
+        explanation: Вопрос с does, глагол без -s.
+      - id: q4
+        prompt: Вы спрашиваете, какой автобус вам взять до пляжа.
+        options:
+          - Which bus do I take to the beach?
+          - Which bus I take to the beach?
+          - Which bus takes I to the beach?
+        answer: Which bus do I take to the beach?
+        explanation: Здесь подлежащее — I, поэтому нужен do.
+      - id: q5
+        prompt: В кассе вокзала вы просите билет до Брайтона туда и обратно.
+        options:
+          - Could I have a return to Brighton, please?
+          - Could I have a back ticket to Brighton, please?
+          - Could I have a round to Brighton, please?
+        answer: Could I have a return to Brighton, please?
+        explanation: Туда и обратно — a return (ticket); в США — round-trip.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (it's, I'm) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Как отсюда добраться до вокзала?
+        answer:
+          - How do I get to the station from here?
+          - How do I get to the train station from here?
+          - How do I get to the railway station from here?
+          - How can I get to the station from here?
+          - How can I get to the train station from here?
+          - How do I get from here to the station?
+          - How do I get to the station?
+          - How can I get to the station?
+          - How do I get to the train station?
+          - How can I get from here to the station?
+        explanation: Прямой вопрос — How do I get to…?
+      - id: q2
+        prompt: Мне нужно делать пересадку?
+        answer:
+          - Do I need to change?
+          - Do I have to change?
+          - Do I need to change trains?
+          - Do I have to change trains?
+          - Do I need to make a change?
+      - id: q3
+        prompt: Идите прямо и сверните на второй поворот налево.
+        answer:
+          - Go straight on and take the second left.
+          - Go straight ahead and take the second left.
+          - Go straight and take the second left.
+          - Go straight on and take the second turning on the left.
+          - Go straight on, then take the second left.
+          - Go straight ahead, then take the second left.
+          - Go straight on and take the second road on the left.
+          - Go straight on and turn left at the second turning.
+          - Go straight on, then take the second turning on the left.
+      - id: q4
+        prompt: Это примерно десять минут пешком.
+        answer:
+          - It's about a ten-minute walk.
+          - It's around a ten-minute walk.
+          - It's about ten minutes on foot.
+          - It's about ten minutes' walk.
+          - It's about a 10-minute walk.
+          - It's roughly a ten-minute walk.
+          - It's about ten minutes away on foot.
+          - It's about 10 minutes on foot.
+        explanation: Ten-minute — через дефис и без -s, потому что стоит перед существительным walk.
+      - id: q5
+        prompt: Поезд на Оксфорд отходит с этой платформы?
+        answer:
+          - Is this the right platform for Oxford?
+          - Is this the platform for Oxford?
+          - Is this the right platform for the Oxford train?
+          - Is this the platform for the Oxford train?
+          - Does the Oxford train leave from this platform?
+          - Does the train to Oxford leave from this platform?
+          - Is this the right platform for the train to Oxford?
+          - Is this the platform for the train to Oxford?

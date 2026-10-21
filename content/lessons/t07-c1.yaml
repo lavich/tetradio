@@ -1,0 +1,639 @@
+title: День поездки
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Как устроена контрольная точка
+    body: |-
+      Это контрольная точка первой ступени курса — модули t01–t07. Один день поездки в Эдинбург подряд: прилёт и паспортный контроль, дорога до квартиры, заезд и проблема в квартире, ужин со счётом, аптека, а в конце — жалоба. Около 60 минут. Делайте её за один раз, без словаря, таблиц и карточек: результат должен показать, что уже усвоено, а не что можно найти. Новых карточек здесь нет — только пройденное в модулях; редкие слова в текстах подписаны, а в аудио для ответа они не нужны.
+
+      **Чтение и аудирование** проверяются автоматически. Для каждого навыка считается доля правильных ответов и сравнивается с порогом **60 %** — по нему курс считает навык сданным. Каждое аудио звучит два раза. В заданиях на аудирование открывайте текст кнопкой «Открыть текст» только после ответов, иначе результат ничего не покажет; реплики перед ролевыми сценами, наоборот, открывайте после двух прослушиваний и держите перед глазами. В вопросах с выбором верен один вариант.
+
+      **Ролевые сцены.** Сцен пять, в каждой сначала звучат только реплики собеседника, по порядку. Послушайте их два раза, откройте текст и держите перед глазами. Затем запишите свою часть: прочитайте реплику, ответьте на неё одной-двумя фразами, переходите к следующей.
+
+      **Письмо и речь** — самопроверка: в итог они не входят. Сначала напишите текст и запишите ответ сами, только потом откройте образец и честно отметьте, какие критерии выполнены. Если выполнено меньше 60 % критериев, считайте навык пока не сданным.
+
+      **Навык ниже порога** — повод повторить модули, которые названы в пояснениях к ошибкам: чтение — t02, t03 и t06 (указатели, сообщение хоста, инструкция к лекарству), аудирование — t01, t03 и t04 (объявления, голосовое хоста, разговор в ресторане), письмо — t03 и t07, речь — сцены из t05–t07 и банки фраз третьих уроков. Повторите их до второй ступени.
+
+      **Темп.** Программа рассчитана на одно занятие в неделю. Если все навыки не ниже порога и занятия даются легко, вторую ступень можно проходить быстрее — по два занятия в неделю (программа предлагает это после экзамена по греческому, в мае 2027). Если навык ниже порога, сначала повторите его модули и оставьте прежний темп.
+    table:
+      columns:
+        - часть
+        - задания
+        - время
+      rows:
+        - - Прилёт
+          - объявления в аэропорту, паспортный контроль
+          - 8 мин
+        - - Дорога
+          - указатель в аэропорту, такси
+          - 8 мин
+        - - Заезд
+          - сообщение и голосовое хоста, письмо хосту, звонок
+          - 15 мин
+        - - Ужин
+          - разговор за столом, заказ и счёт
+          - 10 мин
+        - - Аптека
+          - разговор с фармацевтом, инструкция к лекарству
+          - 8 мин
+        - - Жалоба и язык
+          - жалоба 80–100 слов, грамматика ступени
+          - 11 мин
+  - type: listening
+    id: arrival
+    title: Сцена 1 · Прилёт — объявления в аэропорту
+    plays: 2
+    transcript:
+      - { text: "Welcome to Edinburgh Airport. Baggage from the Istanbul flight will arrive on belt 4. Baggage from the Amsterdam flight is now on belt 2." }
+      - { text: "We are sorry to inform you that, because of a power failure, trams between the airport and the city centre are not running this morning. The Airlink 100 bus to Waverley Bridge is running as normal from stop A, directly outside the terminal." }
+      - { text: "If you have left something on your plane, please go to your airline's desk in the arrivals hall before you leave the airport." }
+      - { text: "The 11:45 coach to Glasgow is running twenty minutes late. It will now leave at 12:05 from stand 3." }
+  - type: exercise
+    id: arrival-q
+    about: arrival
+    graded: true
+    title: Аудирование — объявления
+    instruction: Прослушайте объявления два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where will the bags from the Istanbul flight arrive?
+        options: [on belt 4, on belt 2, on belt 3]
+        answer: on belt 4
+        explanation: "Baggage from the Istanbul flight will arrive on belt 4; belt 2 — у рейса из Амстердама, 3 — номер платформы автобуса. Объявления в зале прилёта — модуль t01."
+      - id: q2
+        prompt: How can passengers get to the city centre this morning?
+        options:
+          - by bus from stop A
+          - by tram from the tram stop
+          - by coach from stand 3
+        answer: by bus from stop A
+        explanation: "Trams… are not running this morning (не ходят), а автобус Airlink 100 is running as normal from stop A. С платформы 3 уходит автобус в Глазго (модули t01–t02)."
+      - id: q3
+        prompt: You have left your scarf on the plane. What should you do?
+        options:
+          - go to your airline's desk before you leave the airport
+          - call the airport's lost property office tomorrow
+          - go back to the gate
+        answer: go to your airline's desk before you leave the airport
+        explanation: "Please go to your airline's desk in the arrivals hall before you leave the airport — к стойке авиакомпании, пока вы ещё в аэропорту (модуль t01)."
+      - id: q4
+        prompt: When does the coach to Glasgow leave now?
+        options: ["at 12:05", "at 11:45", "at 12:25"]
+        answer: "at 12:05"
+        explanation: "The 11:45 coach… is running twenty minutes late. It will now leave at 12:05: 11:45 — время по расписанию, will now leave — новое (модуль t01)."
+  - type: listening
+    id: border-lines
+    title: Сцена 1 · Реплики собеседника — паспортный контроль
+    plays: 2
+    transcript:
+      - { speaker: Joanne, text: "Good morning. Can I see your passport, please?" }
+      - { speaker: Joanne, text: "Thank you. What's the purpose of your visit?" }
+      - { speaker: Joanne, text: "And how long are you staying?" }
+      - { speaker: Joanne, text: "Where are you staying?" }
+      - { speaker: Joanne, text: "Is anyone travelling with you?" }
+      - { speaker: Joanne, text: "Have you got a return ticket?" }
+  - type: speaking
+    id: border
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Ольга, прилетели в Эдинбург из Стамбула. Сегодня четверг, 18 июня. Говорит Джоанн, офицер пограничной службы (Border Force). Вы в отпуске до понедельника, 22 июня. Живёте в квартире в районе Марчмонт, рядом с парком Медоуз: её сдаёт Оливер — тот же хост, у которого вы жили в Бристоле (модуль t03), теперь у него квартира и в Эдинбурге. Летите одна, но сегодня вечером ужинаете с подругой из Бразилии. Обратный рейс — в понедельник в 18:10, билет в телефоне. Отвечайте коротко и вежливо. 6 реплик, вся ваша часть — 30–60 секунд.
+    seconds: 60
+    model: |-
+      Officer: Good morning. Can I see your passport, please?
+      You: Good morning. Yes, here you are.
+      Officer: Thank you. What's the purpose of your visit?
+      You: I'm here on holiday.
+      Officer: And how long are you staying?
+      You: For four nights, until Monday.
+      Officer: Where are you staying?
+      You: In a flat in Marchmont, near the Meadows. I've got the booking on my phone.
+      Officer: Is anyone travelling with you?
+      You: No, I'm travelling alone. But I'm meeting a friend from Brazil for dinner tonight.
+      Officer: Have you got a return ticket?
+      You: Yes, it's on my phone. My flight back leaves on Monday at ten past six in the evening.
+    criteria:
+      - Ответили на все шесть вопросов по порядку, коротко — одна-две фразы
+      - "Цель — on holiday (не for holiday); срок — for four nights / until Monday (не on four nights)"
+      - "Где живёте — in a flat / at a hotel + где; один — I'm travelling alone"
+      - "Рейс по расписанию — present simple: My flight back leaves on Monday at…"
+      - Вежливо и спокойно, без долгих пауз
+  - type: reading
+    id: transport
+    title: Сцена 2 · Дорога — указатель в аэропорту
+    text: |-
+      EDINBURGH AIRPORT — GETTING INTO THE CITY
+
+      TRAM — follow the signs to the tram stop, 2 minutes' walk.
+      Every 7 minutes, 05:30–23:30. To Princes Street: about 35 minutes.
+      Buy your ticket from the machine at the stop or in the app, or tap your contactless card on the reader at the stop, before you get on. Airport single £7.90. Tickets are checked on board: passengers without a valid ticket pay a £10 penalty fare.
+
+      AIRLINK 100 BUS — stop A, directly outside the terminal.
+      Every 10 minutes during the day, every 30 minutes at night. To Waverley Bridge: about 30 minutes. Single £6.00, return £8.50.
+      Tap your contactless card on the reader when you get on, or pay the driver in cash. If you pay in cash, please have the exact fare ready: drivers may not have change.
+
+      TAXIS — official taxi rank outside the arrivals hall, turn right. All taxis use a meter.
+      App taxis and pre-booked cars: the pick-up point is on the ground floor of the multi-storey car park, 5 minutes' walk.
+    glosses:
+      - { text: on board, russian: в вагоне }
+      - { text: valid, russian: действительный }
+      - { text: penalty fare, russian: штраф за проезд без билета }
+      - { text: the exact fare, russian: точная сумма за проезд }
+      - { text: a meter, russian: счётчик }
+      - { text: pre-booked, russian: заказанный заранее }
+      - { text: multi-storey car park, russian: многоэтажная парковка }
+  - type: exercise
+    id: transport-q
+    about: transport
+    graded: true
+    title: Чтение — указатель
+    instruction: Прочитайте указатель и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where can you buy a tram ticket?
+        options:
+          - at the stop or in the app, before you get on
+          - from the driver when you get on
+          - from the inspector on the tram
+        answer: at the stop or in the app, before you get on
+        explanation: "Билет покупают до посадки: в автомате или приложении, или прикладывают карту к валидатору на остановке; on board билеты только проверяют (модуль t02)."
+      - id: q2
+        prompt: What happens if you travel on the tram without a ticket?
+        options:
+          - You have to pay £10.
+          - You have to get off at the next stop.
+          - You can buy a single on board for £7.90.
+        answer: You have to pay £10.
+        explanation: "Passengers without a valid ticket pay a £10 penalty fare — штраф 10 фунтов (модуль t02)."
+      - id: q3
+        prompt: You want to pay for the bus with a £20 note. What is the problem?
+        options:
+          - The driver may not have change.
+          - The bus does not take cash.
+          - You can only buy a return.
+        answer: The driver may not have change.
+        explanation: "Наличными можно, но have the exact fare ready: drivers may not have change — сдачи может не быть (модуль t02)."
+      - id: q4
+        prompt: You have booked a car in an app. Where do you meet it?
+        options:
+          - in the multi-storey car park
+          - at the taxi rank outside arrivals
+          - at stop A outside the terminal
+        answer: in the multi-storey car park
+        explanation: "App taxis and pre-booked cars: the pick-up point is on the ground floor of the multi-storey car park; у зала прилёта — стоянка обычных такси со счётчиком (модуль t02)."
+  - type: listening
+    id: taxi-lines
+    title: Сцена 2 · Реплики собеседника — такси
+    plays: 2
+    transcript:
+      - { speaker: Kwame, text: "Hello there. Where to?" }
+      - { speaker: Kwame, text: "Marchmont, no problem. Let me give you a hand with your case." }
+      - { speaker: Kwame, text: "About thirty-five minutes. The trams aren't running this morning, so the roads are busy." }
+      - { speaker: Kwame, text: "It's on the meter — usually about thirty pounds to Marchmont. Card or cash is fine." }
+      - { speaker: Kwame, text: "Right, this is Warrender Park Road. What number is it?" }
+      - { speaker: Kwame, text: "Here you go. That's thirty-two eighty, please." }
+  - type: speaking
+    id: taxi
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Трамваи не ходят, чемодан тяжёлый — вы берёте такси на стоянке у зала прилёта. Водитель — Кваме. Адрес: 12 Warrender Park Road, район Марчмонт. Спросите, сколько ехать и сколько это будет стоить; попросите сказать, когда подъедете к улице, — района вы не знаете; попросите высадить вас у синей двери; заплатите наличными 35 фунтов и оставьте сдачу. 6 реплик, вся ваша часть — 30–60 секунд.
+    seconds: 60
+    model: |-
+      Driver: Hello there. Where to?
+      You: Hello. Twelve Warrender Park Road, in Marchmont, please.
+      Driver: Marchmont, no problem. Let me give you a hand with your case.
+      You: Yes, please, it's quite heavy. How long does it take to get there?
+      Driver: About thirty-five minutes. The trams aren't running this morning, so the roads are busy.
+      You: OK. Roughly how much will it be?
+      Driver: It's on the meter — usually about thirty pounds to Marchmont. Card or cash is fine.
+      You: Great. Could you let me know when we get to Warrender Park Road? I don't know the area.
+      Driver: Right, this is Warrender Park Road. What number is it?
+      You: Number twelve. Can you drop me off by the blue door, please?
+      Driver: Here you go. That's thirty-two eighty, please.
+      You: Here's thirty-five. Keep the change. Thanks for your help!
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Адрес — номер дома, улица, район и please"
+      - "Вопросы — How long does it take…? / How much will it be?"
+      - "Просьбы — Could you let me know when…? / Can you drop me off…?"
+      - "Оплата — Here's… Keep the change; спасибо в конце"
+  - type: reading
+    id: host-message
+    title: Сцена 3 · Заезд — сообщение хоста
+    text: |-
+      Hi Olga, great to have you back — this time in my Edinburgh flat! Here's everything you need for your stay (18–22 June).
+
+      CHECK-IN: from 3 pm. If you arrive early, you can leave your bags at the café on the corner, The Meadows Kitchen — they know you're coming.
+
+      KEYS: the lockbox is on the wall to the left of the main door. Code: 2580. The flat is 2F1 — second floor, first door on the left.
+
+      WI-FI: the network name and password are on the fridge.
+
+      WINDOWS: the windows are old and a bit stiff. To close the bedroom window, lift it a little, then push it down slowly. If it still won't close, message me — please don't push it hard, as the glass is old.
+
+      HOUSE RULES: no smoking in the flat or on the stairs. Quiet after 10 pm, please — the neighbours have small children. Recycling goes in the green bins on the street, glass in the purple one.
+
+      CHECK-OUT: by 11 am. Leave the keys on the kitchen table and close the door behind you.
+
+      Oliver
+    glosses:
+      - { text: neighbours, russian: соседи }
+      - { text: Recycling, russian: "вторсырьё (бумага, пластик, банки)" }
+      - { text: bins, russian: мусорные баки }
+  - type: exercise
+    id: host-message-q
+    about: host-message
+    graded: true
+    title: Чтение — сообщение хоста
+    instruction: Прочитайте сообщение и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: You get to Marchmont at 12:30. What can you do?
+        options:
+          - leave your bags at the café on the corner
+          - check in early with the lockbox code
+          - leave your bags by the door of the flat
+        answer: leave your bags at the café on the corner
+        explanation: "Check-in from 3 pm, а до этого — you can leave your bags at the café on the corner (модуль t03)."
+      - id: q2
+        prompt: According to the message, where is the lockbox?
+        options:
+          - on the wall next to the main door
+          - next to the door of flat 2F1
+          - in the café on the corner
+        answer: on the wall next to the main door
+        explanation: "The lockbox is on the wall to the left of the main door — у входной двери дома; 2F1 — номер квартиры, а в кафе по сообщению оставляют только сумки (модуль t03)."
+      - id: q3
+        prompt: You lifted the bedroom window and pushed it down slowly, but it still won't close. What should you do?
+        options:
+          - send Oliver a message
+          - push it down harder
+          - call someone to fix it
+        answer: send Oliver a message
+        explanation: "If it still won't close, message me — please don't push it hard: не давить сильнее, а написать хосту (модуль t03)."
+      - id: q4
+        prompt: Where do empty wine bottles go?
+        options:
+          - in the purple bin on the street
+          - in the green bins on the street
+          - in the bin in the kitchen
+        answer: in the purple bin on the street
+        explanation: "Recycling goes in the green bins…, glass in the purple one: бутылки — стекло, значит в фиолетовый бак (модуль t03)."
+  - type: listening
+    id: lock-voice
+    title: Сцена 3 · Голосовое хоста
+    plays: 2
+    transcript:
+      - { speaker: Oliver, text: "Hi Olga, it's Oliver, your host. Sorry, change of plan: the lockbox is broken — it won't open. So this morning the cleaner left your keys at the café on the corner. Just ask at the counter and give them your name." }
+      - { speaker: Oliver, text: "And the main door downstairs is a bit stiff: turn the key, then push the door hard. The flat's on the second floor, and I'm afraid there's no lift." }
+      - { speaker: Oliver, text: "I'm in Glasgow until tomorrow, so I can't come over, but text me if there's a problem and I'll reply quickly. Enjoy Edinburgh!" }
+  - type: exercise
+    id: lock-voice-q
+    about: lock-voice
+    graded: true
+    title: Аудирование — голосовое хоста
+    instruction: Прослушайте голосовое сообщение два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where are the keys now?
+        options:
+          - at the café on the corner
+          - in the lockbox by the main door
+          - with the cleaner
+        answer: at the café on the corner
+        explanation: "The cleaner left your keys at the café on the corner — ключи в кафе, а не у уборщицы и не в ящике (модуль t03)."
+      - id: q2
+        prompt: What's the problem with the lockbox?
+        options:
+          - It won't open.
+          - The code has changed.
+          - Someone has stolen it.
+        answer: It won't open.
+        explanation: "The lockbox is broken — it won't open: ящик сломан и не открывается (модуль t03)."
+      - id: q3
+        prompt: How do you open the main door?
+        options:
+          - Turn the key and push the door hard.
+          - Pull the door towards you and turn the key.
+          - Ring the bell for flat 2F1.
+        answer: Turn the key and push the door hard.
+        explanation: "The main door is a bit stiff (туго открывается): turn the key, then push the door hard (модуль t03)."
+      - id: q4
+        prompt: Why can't Oliver come to the flat today?
+        options:
+          - He's in Glasgow until tomorrow.
+          - He's working all day.
+          - He's waiting for a delivery.
+        answer: He's in Glasgow until tomorrow.
+        explanation: "I'm in Glasgow until tomorrow, so I can't come over — до завтра его нет в городе (модуль t03)."
+  - type: writing
+    id: host-problem
+    register: friendly
+    prompt: "Вы забрали ключи в кафе и зашли в квартиру. Окно в спальне не закрывается: оно открыто сантиметров на десять, с улицы шумно и холодно. Вы приподняли раму и медленно опустили её, как написано в сообщении, — не помогло. Напишите Оливеру сообщение (60–80 слов): поблагодарите за помощь с ключами, опишите проблему и что вы уже сделали, попросите прислать мастера и скажите, когда вас не будет дома: в 19:00 вы уходите ужинать, вернётесь к 21:30."
+    words: { min: 60, max: 80 }
+    model: |-
+      Hi Oliver,
+      Thanks for sorting out the keys — the flat is lovely! But there's a problem: the bedroom window won't close. It's open about ten centimetres, so the room is noisy and cold. I've lifted it and pushed it down slowly, as your message says, but it's still stuck. Could you send someone to have a look? I'm going out for dinner at seven, but I'll be back by half past nine.
+      Thanks,
+      Olga
+    criteria:
+      - "60–80 слов; дружеское начало и конец (Hi Oliver, … Thanks, имя)"
+      - "Проблема — the window won't close / doesn't close, и чем это плохо"
+      - "Что уже сделали — present perfect: I've lifted it… / I've tried…"
+      - "Просьба — вопросом: Could you send someone to have a look?"
+      - "Когда вас нет — I'm going out at…, I'll be back by…"
+  - type: listening
+    id: call-lines
+    title: Сцена 3 · Реплики собеседника — звонок хоста
+    plays: 2
+    transcript:
+      - { speaker: Oliver, text: "Hi Olga, it's Oliver. I've just seen your message — I'm so sorry! So the window won't close at all?" }
+      - { speaker: Oliver, text: "Right. Can you see anything in the way? Sometimes the curtain gets caught at the bottom." }
+      - { speaker: Oliver, text: "OK, I'll call the man who does my repairs. I'm afraid he can't come until tomorrow afternoon." }
+      - { speaker: Oliver, text: "I'll try, but it's very short notice. In the meantime, there's an electric heater and some earplugs in the hall cupboard." }
+      - { speaker: Oliver, text: "I'm afraid I can't change the price myself — you'd need to contact the booking platform about that. Is there anything else?" }
+      - { speaker: Oliver, text: "Of course. I'll text you as soon as I hear from him. Sorry again!" }
+  - type: speaking
+    id: call
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Оливер перезванивает после вашего сообщения. Подтвердите, что окно в спальне совсем не закрывается и в комнате шумно; скажите, что штора не мешает — вы проверили — и что вы уже пробовали приподнять раму. Мастер может прийти только завтра днём — вежливо спросите, нельзя ли сегодня вечером (I was wondering if…). Спросите о скидке за эту ночь с открытым окном. В конце попросите написать вам, когда станет известно время прихода мастера. 6 реплик, вся ваша часть — 60–90 секунд.
+    seconds: 90
+    model: |-
+      Oliver: Hi Olga, it's Oliver. I've just seen your message — I'm so sorry! So the window won't close at all?
+      You: Hi Oliver, thanks for calling. No, it won't. It's still open about ten centimetres, and it's really noisy.
+      Oliver: Right. Can you see anything in the way? Sometimes the curtain gets caught at the bottom.
+      You: No, I've checked the curtain. I've already tried lifting the window, but it hasn't helped.
+      Oliver: OK, I'll call the man who does my repairs. I'm afraid he can't come until tomorrow afternoon.
+      You: Tomorrow afternoon? That's quite late. I was wondering if someone could come this evening.
+      Oliver: I'll try, but it's very short notice. In the meantime, there's an electric heater and some earplugs in the hall cupboard.
+      You: Thank you. But I can't sleep with the window open. Could you give me a discount for tonight?
+      Oliver: I'm afraid I can't change the price myself — you'd need to contact the booking platform about that. Is there anything else?
+      You: Yes. Could you text me when you know what time he's coming?
+      Oliver: Of course. I'll text you as soon as I hear from him. Sorry again!
+      You: Thanks, Oliver. Speak soon.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Проблема — it won't close / it's still open; что сделали — I've checked… / I've already tried…"
+      - "Мягкая просьба — I was wondering if someone could come this evening"
+      - "Просьбы — Could you give me a discount…? / Could you text me when…?"
+      - Вежливо и спокойно, без You must…
+  - type: listening
+    id: dinner
+    title: Сцена 4 · Ужин — за столом
+    plays: 2
+    transcript:
+      - { speaker: Chloe, text: "Hi there, I'm Chloe, I'll be looking after you tonight. Can I tell you about the specials?" }
+      - { speaker: Lúcia, text: "Yes, please." }
+      - { speaker: Chloe, text: "So, to start, we've got Shetland mussels in a white wine sauce. And for the main, there's a venison stew with mashed potato and red cabbage." }
+      - { speaker: Lúcia, text: "The stew sounds good. Is very spicy?" }
+      - { speaker: Chloe, text: "Not at all, it's quite mild." }
+      - { speaker: Lúcia, text: "Then I'll have the stew. Does it have any nuts in it? I have allergy to nuts." }
+      - { speaker: Chloe, text: "No nuts in the stew. Just so you know, the apple crumble on the dessert menu has nuts on top, but the sticky toffee pudding is nut-free." }
+      - { speaker: Lúcia, text: "Good to know, thank you. And a glass of the house red, please." }
+      - { speaker: Chloe, text: "Lovely. The kitchen's quite busy tonight, so the mains will be about twenty-five minutes. Is that OK?" }
+      - { speaker: Lúcia, text: "That's fine, we're not in a hurry." }
+  - type: exercise
+    id: dinner-q
+    about: dinner
+    graded: true
+    title: Аудирование — за столом
+    instruction: Прослушайте разговор два раза и выберите правильный ответ. Лусия по-прежнему иногда говорит как по-португальски (Is very spicy? вместо Is it very spicy?) — повторять за ней не нужно.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the special starter tonight?
+        options: [mussels, venison stew, apple crumble]
+        answer: mussels
+        explanation: "To start, we've got Shetland mussels — мидии на закуску; оленина (venison stew) — основное блюдо, crumble — десерт (модуль t04)."
+      - id: q2
+        prompt: What does Chloe say about the stew?
+        options:
+          - It isn't spicy.
+          - It has nuts in it.
+          - It comes with chips.
+        answer: It isn't spicy.
+        explanation: "Not at all, it's quite mild — совсем не острое; орехов в нём нет, подают с пюре (mashed potato) (модуль t04)."
+      - id: q3
+        prompt: Which dessert is not safe for Lúcia?
+        options: [the apple crumble, the sticky toffee pudding, the cheese board]
+        answer: the apple crumble
+        explanation: "The apple crumble… has nuts on top — сверху орехи, а у Лусии аллергия на орехи; sticky toffee pudding is nut-free (модуль t04)."
+      - id: q4
+        prompt: How long will the main courses take?
+        options: [about 25 minutes, about 15 minutes, about 45 minutes]
+        answer: about 25 minutes
+        explanation: "The mains will be about twenty-five minutes — кухня сегодня загружена (модуль t04)."
+  - type: listening
+    id: order-lines
+    title: Сцена 4 · Реплики собеседника — заказ и счёт
+    plays: 2
+    transcript:
+      - { speaker: Chloe, text: "And what can I get for you?" }
+      - { speaker: Chloe, text: "Let me check with the kitchen. … Yes, I'm afraid there are prawns in the fish pie. The venison stew would be fine, though." }
+      - { speaker: Chloe, text: "Of course. Anything to drink?" }
+      - { speaker: Chloe, text: "How was everything?" }
+      - { speaker: Chloe, text: "Sure. One bill, or would you like to pay separately?" }
+      - { speaker: Chloe, text: "No problem. Yours comes to eighteen ninety-five. Service isn't included." }
+  - type: speaking
+    id: order
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы ужинаете с Лусией. Официантка — Хлоя: раньше она работала в кафе The Fig Tree в Йорке (модуль t04), а недавно переехала в Эдинбург. Вам понравился в меню fish pie (рыбный пирог), но у вас аллергия на моллюсков и ракообразных (shellfish) — спросите, есть ли они в пироге. Если есть — закажите тушёную оленину, но без красной капусты. Пить — только воду из-под крана. После ужина: всё понравилось, попросите счёт, заплатите каждый за себя (скажите, что ели вы), добавьте чаевые и заплатите картой. 6 реплик, вся ваша часть — 60–90 секунд.
+    seconds: 90
+    model: |-
+      Waitress: And what can I get for you?
+      You: I'd like the fish pie, but I'm allergic to shellfish. Is there any shellfish in it?
+      Waitress: Let me check with the kitchen. … Yes, I'm afraid there are prawns in the fish pie. The venison stew would be fine, though.
+      You: Then I'll have the stew, please. Could I have it without the red cabbage?
+      Waitress: Of course. Anything to drink?
+      You: Just tap water, thanks.
+      Waitress: How was everything?
+      You: It was lovely, thank you. Could we have the bill, please?
+      Waitress: Sure. One bill, or would you like to pay separately?
+      You: Can we pay separately, please? I had the stew and tap water.
+      Waitress: No problem. Yours comes to eighteen ninety-five. Service isn't included.
+      You: OK, I'll add a tip on the card machine. Can I pay by contactless?
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Аллергия — I'm allergic to shellfish; вопрос — Is there any shellfish in it? / Does it have any…?"
+      - "Заказ — I'd like… / I'll have…; без чего-то — Could I have it without…?"
+      - "Счёт — Could we have the bill, please? / Can we pay separately?"
+      - "Чаевые и оплата — вежливо, с please и thank you"
+  - type: listening
+    id: pharmacy-lines
+    title: Сцена 5 · Реплики собеседника — аптека
+    plays: 2
+    transcript:
+      - { speaker: Bridget, text: "Hello, what can I do for you?" }
+      - { speaker: Bridget, text: "Oh dear. How long have you had it?" }
+      - { speaker: Bridget, text: "Have you got any swelling around your lips or eyes? Any trouble breathing?" }
+      - { speaker: Bridget, text: "That's good. I'd recommend these antihistamine tablets — one a day — and this cream for the rash." }
+      - { speaker: Bridget, text: "Put a thin layer on the rash twice a day, but not on your face, and not for more than a week." }
+      - { speaker: Bridget, text: "They can make some people a bit sleepy, so don't drive if they do. And if your lips or face start to swell, call 999 straight away." }
+  - type: speaking
+    id: pharmacy
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      После ужина вы заходите в аптеку, которая работает допоздна. Фармацевт — Бриджет. С четырёх часов дня у вас сыпь на руках и шее, она чешется (itchy). Вы думаете, что это из-за постельного белья в квартире. Отёка и проблем с дыханием нет. Переспросите, как часто наносить крем; спросите о побочных эффектах таблеток; в конце поблагодарите и попросите чек для страховой. 6 реплик, вся ваша часть — 60–90 секунд.
+    seconds: 90
+    model: |-
+      Pharmacist: Hello, what can I do for you?
+      You: Hello. I've got a rash on my arms and my neck, and it's really itchy.
+      Pharmacist: Oh dear. How long have you had it?
+      You: Since about four o'clock this afternoon. I think it's the bedding in my flat.
+      Pharmacist: Have you got any swelling around your lips or eyes? Any trouble breathing?
+      You: No, nothing like that. Just the rash.
+      Pharmacist: That's good. I'd recommend these antihistamine tablets — one a day — and this cream for the rash.
+      You: Sorry, how often should I use the cream?
+      Pharmacist: Put a thin layer on the rash twice a day, but not on your face, and not for more than a week.
+      You: OK, twice a day, not on my face. Are there any side effects with the tablets?
+      Pharmacist: They can make some people a bit sleepy, so don't drive if they do. And if your lips or face start to swell, call 999 straight away.
+      You: I see. Thank you very much. Could I have a receipt, please? It's for my insurance.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Симптом — I've got a rash on…; как давно — since + время (не from four o'clock)"
+      - "Переспросили дозировку — Sorry, how often should I use…? — и повторили ответ"
+      - "Вопрос о побочных эффектах — Are there any side effects?"
+      - "В конце — спасибо и просьба о чеке: Could I have a receipt, please?"
+  - type: reading
+    id: leaflet
+    title: Сцена 5 · Инструкция к таблеткам
+    text: |-
+      CETIRIZINE 10 MG TABLETS — antihistamine
+      For hay fever, itchy skin rashes and other allergies.
+
+      HOW TO TAKE: adults and children over 12 — one tablet once a day. Do not take more than one tablet in 24 hours. Swallow the tablet whole with a glass of water. You can take it with or without food.
+
+      BEFORE YOU TAKE IT: talk to your pharmacist or doctor if you are pregnant or breastfeeding, or if you have kidney problems.
+
+      WHILE YOU TAKE IT: some people feel drowsy. If this happens, do not drive or use machines. Avoid alcohol.
+
+      POSSIBLE SIDE EFFECTS: tiredness, a dry mouth, a headache. These are usually mild.
+
+      GET HELP: stop taking the tablets and call 999 or go to A&E straight away if your face, lips or tongue start to swell, or if you find it hard to breathe.
+
+      If your rash is not better after 3 days, talk to a pharmacist or a doctor.
+    glosses:
+      - { text: hay fever, russian: аллергия на пыльцу }
+      - { text: itchy, russian: зудящий }
+      - { text: Swallow, russian: проглотите }
+      - { text: whole, russian: целиком }
+      - { text: pregnant or breastfeeding, russian: беременны или кормите грудью }
+      - { text: kidney, russian: почки }
+      - { text: drowsy, russian: сонный }
+      - { text: tongue, russian: язык }
+  - type: exercise
+    id: leaflet-q
+    about: leaflet
+    graded: true
+    title: Чтение — инструкция
+    instruction: Прочитайте инструкцию и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How many tablets can an adult take in 24 hours?
+        options: [one, two, three]
+        answer: one
+        explanation: "One tablet once a day. Do not take more than one tablet in 24 hours (модуль t06)."
+      - id: q2
+        prompt: Do you need to take the tablet with food?
+        options:
+          - No, you can take it with or without food.
+          - Yes, always with a meal.
+          - No, only on an empty stomach.
+        answer: No, you can take it with or without food.
+        explanation: "You can take it with or without food — и с едой, и без; on an empty stomach в инструкции нет (модуль t06)."
+      - id: q3
+        prompt: The tablets make you sleepy. What should you not do?
+        options: [drive, drink water, take them with food]
+        answer: drive
+        explanation: "Some people feel drowsy. If this happens, do not drive or use machines (модуль t06)."
+      - id: q4
+        prompt: When should you call 999?
+        options:
+          - if your lips or face start to swell
+          - if you feel tired or have a dry mouth
+          - if your rash is not better after 3 days
+        answer: if your lips or face start to swell
+        explanation: "Call 999 or go to A&E straight away if your face, lips or tongue start to swell. Усталость и сухость во рту — обычные побочные эффекты, а если сыпь не прошла за три дня — к фармацевту или врачу (модуль t06)."
+  - type: explanation
+    id: complaint-how
+    title: Жалоба платформе бронирования
+    body: |-
+      Мастер на следующий день так и не пришёл, окно починили только утром 21 июня, а хост сказал, что цену сам изменить не может. После поездки напишите жалобу платформе, через которую бронировали квартиру. Схема — как у жалобы авиакомпании в модуле t07: **I am writing to complain about…** + где, даты, номер брони → что случилось, по порядку, в past simple и passive → что вы сделали и что ответил хост → чего вы хотите → **I look forward to hearing from you.**
+  - type: writing
+    id: complaint
+    register: formal
+    prompt: "Напишите жалобу платформе бронирования (80–100 слов). Квартира Оливера в Марчмонте, Эдинбург, 18–22 июня, номер брони HX52QT. Окно в спальне не закрывалось с первого дня; вы написали хосту в тот же день, он обещал мастера на следующий день, но никто не пришёл, и окно починили только 21 июня. Хост сказал, что цену изменить не может. Попросите вернуть деньги за три ночи."
+    words: { min: 80, max: 100 }
+    model: |-
+      Dear Sir or Madam,
+      I am writing to complain about my stay in Oliver's flat in Edinburgh from 18 to 22 June, booking reference HX52QT. When I arrived, the bedroom window would not close. I messaged the host that day, and he promised someone would come the next afternoon. However, nobody came, and the window was not repaired until 21 June. For three nights the room was cold and noisy. The host said he could not change the price. I would like a refund for three nights.
+      I look forward to hearing from you.
+      Yours faithfully,
+      Olga Ivanova
+    criteria:
+      - 80–100 слов; есть место, даты, номер брони, что случилось и чего вы хотите
+      - "Формально: Dear Sir or Madam, Yours faithfully, полные формы (I am, was not), без восклицаний"
+      - "События по порядку — past simple и passive: I messaged, he promised, nobody came, was not repaired"
+      - "Требование — спокойно: I would like a refund for…"
+      - "В конце — I look forward to hearing from you и имя с фамилией"
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Язык ступени
+    instruction: Вставьте слово. Три слова лишние.
+    format: gap
+    bank: [has, any, wondering, enough, than, have, since, better, when, was, for, were, too]
+    items:
+      - id: g1
+        prompt: "The Wi-Fi ___ stopped working, so I can't check my email."
+        answer: has
+        explanation: "Сломалось и не работает сейчас — present perfect: has stopped (модуль t03)."
+      - id: g2
+        prompt: "I was ___ if I could leave my case here until three."
+        answer: wondering
+        explanation: "I was wondering if… — мягкая просьба (модуль t03)."
+      - id: g3
+        prompt: "Sorry, this soup isn't hot ___. Could you warm it up?"
+        answer: enough
+        explanation: "Недостаточно — not + прилагательное + enough: not hot enough; too — «слишком», too hot (модуль t04)."
+      - id: g4
+        prompt: "The bus is cheaper ___ the tram, but it's a bit slower."
+        answer: than
+        explanation: "Сравнение — cheaper than: после сравнительной степени всегда than (модуль t05)."
+      - id: g5
+        prompt: "You don't ___ to print your ticket — you can show it on your phone."
+        answer: have
+        explanation: "Don't have to — «не обязательно»; после don't — have без -s (модуль t05)."
+      - id: g6
+        prompt: "I've had this rash ___ four o'clock."
+        answer: since
+        explanation: "С момента — since four o'clock; for — про срок: for two hours (модуль t06)."
+      - id: g7
+        prompt: "You'd ___ see a doctor if it gets worse."
+        answer: better
+        explanation: "You'd better + глагол без to — настойчивый совет (модуль t06)."
+      - id: g8
+        prompt: "I was walking to the bus stop ___ it started to rain."
+        answer: when
+        explanation: "Фон — past continuous (I was walking), событие — past simple, связка when (модуль t07)."
+      - id: g9
+        prompt: "Our flight ___ cancelled because of the storm."
+        answer: was
+        explanation: "Один рейс — was + cancelled; несколько — were cancelled (модуль t07)."
+      - id: g10
+        prompt: "Are there ___ side effects?"
+        answer: any
+        explanation: "В вопросе — any: Are there any side effects? (модули t03 и t06)."

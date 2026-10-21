@@ -1,0 +1,286 @@
+title: Паспортный контроль и потерянный багаж
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: border-bank
+    title: Банк фраз — паспортный контроль
+    body: |-
+      На паспортном контроле (passport control; в Британии проверяют офицеры Border Force) задают три-четыре коротких вопроса. Отвечать нужно так же коротко: одна-две фразы, правда и без лишних подробностей. Длинный рассказ о планах только вызывает новые вопросы. Бронь отеля и обратный билет держите в телефоне — их могут попросить показать.
+
+      **What's the purpose of your visit?** — **I'm here on holiday.** / **I'm visiting a friend.** / **I'm here for a conference.** Отпуск — **on** holiday, не for holiday и не in holiday.
+
+      **How long are you staying?** — **For ten days.** / **Until the twenty-first.** Срок — **for**: for a week, for ten days. Русское «на неделю» тянет к on a week — это ошибка. Не подходят и during — «во время чего-то» (during the flight), и since — «с какого-то момента» (since Monday).
+
+      **Where are you staying?** — **At a hotel near the centre.** / **With a friend in Leeds.** «У друга» — **with** a friend; by a friend значит «рядом с другом».
+
+      **Have you got a return ticket?** — **Yes, my flight back leaves on Sunday.** Рейс по расписанию — present simple, как в первом уроке модуля.
+
+      Не расслышали вопрос — переспросите вежливо: **Sorry, could you repeat that, please?** Короткое **What?** звучит грубо.
+
+      Соберите свой банк: запишите ответы на эти вопросы о своей поездке — настоящей или задуманной — и проговорите их вслух. Они пригодятся в каждой поездке.
+    table:
+      columns:
+        - вопрос
+        - короткий ответ
+      rows:
+        - - What's the purpose of your visit?
+          - I'm here on holiday.
+        - - How long are you staying?
+          - For ten days.
+        - - Where are you staying?
+          - At a hotel near the centre.
+        - - Have you got a return ticket?
+          - Yes, my flight back leaves on Sunday.
+        - - Is this your first visit?
+          - No, I was here two years ago.
+        - - Anything to declare?
+          - No, I've got nothing to declare.
+  - type: exercise
+    id: border-match
+    title: Вопрос и ответ
+    instruction: Подберите ответ к вопросу пограничника или таможенника. Два ответа лишние.
+    format: match
+    bank:
+      - I'm here on holiday.
+      - For ten days.
+      - At a hotel near the centre.
+      - Yes, my flight back leaves on Sunday.
+      - No, I was here two years ago.
+      - No, I've got nothing to declare.
+      - By taxi, I think.
+      - At nine fifteen.
+    items:
+      - { id: m1, prompt: What's the purpose of your visit?, answer: I'm here on holiday. }
+      - { id: m2, prompt: How long are you staying?, answer: For ten days. }
+      - { id: m3, prompt: Where are you staying?, answer: At a hotel near the centre. }
+      - { id: m4, prompt: Have you got a return ticket?, answer: "Yes, my flight back leaves on Sunday." }
+      - { id: m5, prompt: Is this your first visit?, answer: "No, I was here two years ago." }
+      - { id: m6, prompt: Anything to declare?, answer: "No, I've got nothing to declare." }
+  - type: exercise
+    id: border-choice
+    title: Какой ответ правильный
+    instruction: Выберите правильный ответ на вопрос.
+    format: choice
+    items:
+      - id: q1
+        prompt: How long are you staying?
+        options:
+          - For two weeks.
+          - On two weeks.
+          - During two weeks.
+        answer: For two weeks.
+        explanation: Срок — for; on two weeks — калька с «на две недели», during — «во время чего-то».
+      - id: q2
+        prompt: What's the purpose of your visit?
+        options:
+          - I'm here on holiday.
+          - I'm here for holiday.
+          - I'm here in holiday.
+        answer: I'm here on holiday.
+        explanation: «В отпуске» — on holiday, без артикля.
+      - id: q3
+        prompt: Where are you staying?
+        options:
+          - I'm staying with a friend in Manchester.
+          - I'm staying by a friend in Manchester.
+          - I'm staying at a friend in Manchester.
+        answer: I'm staying with a friend in Manchester.
+        explanation: «У друга» — with a friend; by — «рядом с». Можно и at a friend's (house), но не at a friend.
+      - id: q4
+        prompt: When is your flight back?
+        options:
+          - It leaves on the twenty-first.
+          - It leave on the twenty-first.
+          - It leaving on the twenty-first.
+        answer: It leaves on the twenty-first.
+        explanation: Расписание — present simple, у it окончание -s.
+      - id: q5
+        prompt: Вы не расслышали вопрос пограничника. Что сказать?
+        options:
+          - Sorry, could you repeat that, please?
+          - What?
+          - Repeat, please.
+        answer: Sorry, could you repeat that, please?
+        explanation: Просьба — вопросом с could you; What? и повелительное звучат грубо.
+  - type: exercise
+    id: my-answers
+    title: Ответы для банка
+    instruction: Переведите на английский. Сокращения (I'm, didn't) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Я здесь в отпуске на десять дней.
+        answer:
+          - I'm here on holiday for ten days.
+          - I'm on holiday for ten days.
+          - I'm here for ten days on holiday.
+          - I'm here on vacation for ten days.
+          - I'm on holiday here for ten days.
+          - I'm on vacation for ten days.
+          - I'm here on a ten-day holiday.
+      - id: q2
+        prompt: Я живу у подруги в Эдинбурге.
+        answer:
+          - I'm staying with a friend in Edinburgh.
+          - I'm staying with my friend in Edinburgh.
+          - I'm staying with a friend of mine in Edinburgh.
+          - I'm staying at a friend's in Edinburgh.
+          - I'm staying at my friend's in Edinburgh.
+          - I'm staying at a friend's place in Edinburgh.
+          - I'm staying at my friend's place in Edinburgh.
+          - I'm staying at a friend's house in Edinburgh.
+          - I'm staying at my friend's house in Edinburgh.
+          - I'm staying at a friend's flat in Edinburgh.
+          - I'm staying at my friend's flat in Edinburgh.
+        explanation: Временно, на время поездки, — present continuous; «у подруги» — with a friend.
+      - id: q3
+        prompt: Мой обратный рейс вылетает в воскресенье.
+        answer:
+          - My flight back leaves on Sunday.
+          - My return flight leaves on Sunday.
+          - My flight back departs on Sunday.
+          - My return flight departs on Sunday.
+          - My flight home leaves on Sunday.
+          - My flight home departs on Sunday.
+          - My flight back is on Sunday.
+          - My return flight is on Sunday.
+        explanation: Рейс по расписанию — present simple, а не will.
+      - id: q4
+        prompt: Моя сумка не появилась на ленте.
+        answer:
+          - My bag didn't come out on the belt.
+          - My bag hasn't come out on the belt.
+          - My suitcase didn't come out on the belt.
+          - My suitcase hasn't come out on the belt.
+          - My bag didn't come out on the carousel.
+          - My bag didn't arrive on the belt.
+          - My luggage didn't come out on the belt.
+          - My luggage hasn't come out on the belt.
+          - My bag hasn't come out on the carousel.
+          - My suitcase didn't come out on the carousel.
+          - My bag didn't appear on the belt.
+          - My suitcase didn't arrive on the belt.
+      - id: q5
+        prompt: Извините, не могли бы вы повторить?
+        answer:
+          - Sorry, could you repeat that, please?
+          - Sorry, could you repeat that?
+          - Sorry, could you say that again, please?
+          - Sorry, could you say that again?
+          - Excuse me, could you repeat that, please?
+          - Excuse me, could you repeat that?
+          - Sorry, can you repeat that, please?
+          - Sorry, can you say that again, please?
+          - Sorry, can you repeat that?
+          - Sorry, could you repeat the question, please?
+          - Sorry, could you repeat the question?
+          - Excuse me, could you say that again, please?
+  - type: explanation
+    id: border-how
+    title: Как записывать ответ
+    body: |-
+      Первая запись в ваш банк устных ответов — паспортный контроль. Сначала проговорите ответы про себя по таблице выше, потом запишите один дубль на 15–30 секунд, переслушайте и сверьте с образцом и критериями. Вторая попытка почти всегда звучит увереннее.
+
+      Говорите о своей поездке: куда вы едете или хотели бы поехать, на сколько, где живёте. Не заучивайте образец — пограничник задаёт вопросы в любом порядке, поэтому важны короткие готовые ответы, а не текст целиком.
+  - type: speaking
+    id: border
+    part: interview
+    prompt: "Пограничник в аэропорту Эдинбурга спрашивает: «What's the purpose of your visit?», «How long are you staying?», «Where are you staying?» Ответьте на каждый вопрос одной-двумя фразами о своей поездке. Весь ответ — 15–30 секунд."
+    seconds: 30
+    model: "I'm here on holiday. I want to see the old town and the castle. I'm staying for ten days — my flight back leaves on the twenty-first. I'm staying at a small hotel near the centre. I've got the booking on my phone, if you need it."
+    criteria:
+      - Ответили на все три вопроса, на каждый — одной-двумя фразами
+      - On holiday, for ten days, at a hotel / with a friend — без for holiday, during и by a friend
+      - "Где вы живёте во время поездки — present continuous: I'm staying…"
+      - "Обратный рейс — present simple: my flight back leaves on…"
+      - Не больше одной детали сверх вопроса; в конце можно предложить показать бронь
+  - type: explanation
+    id: writing-how
+    title: Сообщение о потерянном багаже
+    body: |-
+      Если сумка не появилась на ленте, сначала идите на стойку **baggage services** в зале выдачи багажа (baggage reclaim), не выходя за таможню. Там оформят заявку и дадут номер — **a reference number**. Потом обычно пишут авиакомпании через форму на сайте. Сообщение короткое, 20–40 слов, и формальное: вы пишете компании, а не знакомому.
+
+      Что указать: рейс и дату, что случилось (**My bag did not arrive on flight…**), номер заявки, как выглядит сумка (**a large black suitcase with a red ribbon** — сначала размер, потом цвет), куда доставить, и просьбу (**Could you deliver it to…?**). Формальный регистр — это **Dear Sir or Madam** вместо Hi, полные формы (did not вместо didn't), без смайликов, в конце имя и фамилия.
+  - type: writing
+    id: lost-bag
+    register: formal
+    prompt: "Ваш чемодан не прилетел. Напишите сообщение авиакомпании через форму на сайте (20–40 слов): рейс и дата, что случилось, номер заявки, как выглядит сумка и куда её доставить. Детали придумайте или возьмите из своей поездки."
+    words: { min: 20, max: 40 }
+    model: |-
+      Dear Sir or Madam,
+      My bag did not arrive on flight TP 1331 on 14 May. Reference number: LIS40517. It is a large black suitcase with a red ribbon. Could you deliver it to Hotel Avenida, Lisbon?
+      Olga Ivanova
+    criteria:
+      - 20–40 слов; есть рейс, дата, номер заявки, описание сумки и адрес доставки
+      - "Формально: Dear Sir or Madam, полные формы (did not), без Hi и смайликов, подпись — имя и фамилия"
+      - "Что случилось — past simple: did not arrive / did not come out on the belt"
+      - "Описание: сначала размер, потом цвет — a large black suitcase"
+      - Просьба — вопросом с Could you… или с Please
+  - type: explanation
+    id: desk-how
+    title: Разговор у стойки регистрации
+    body: |-
+      Второе устное задание — разговор у стойки регистрации, как у Марко во втором уроке. Сотрудник ведёт разговор вопросами, а вы просите о своём: место у прохода, сколько стоит ещё одна сумка, наклейка «хрупкое». Все нужные просьбы — из первого урока модуля: **Could I…?**, **Could you…?**, **How much is it for an extra bag?**
+
+      Попросите кого-нибудь прочитать реплики сотрудника из образца или прочитайте их сами, а свои скажите по памяти и запишите. На каждую реплику — одна-две фразы.
+  - type: speaking
+    id: desk
+    part: roleplay
+    prompt: |-
+      Вы летите в Лиссабон. У вас две сумки, а в билет входит одна. Поздоровайтесь с сотрудником, скажите, куда летите, спросите, сколько стоит вторая сумка, попросите место у прохода, попросите наклейку «хрупкое» — во второй сумке стеклянные банки — и спросите, когда закрывается выход на посадку.
+      Запишите свою часть разговора целиком — 30–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Agent: Good morning. Where are you flying to today?
+      You: Good morning. To Lisbon.
+      Agent: Can I see your passport, please? … Thank you. Are you checking any bags?
+      You: Yes, two. How much is it for an extra bag?
+      Agent: Your allowance is one bag, so the second one is forty pounds.
+      You: OK, that's fine. Could I have an aisle seat, please?
+      Agent: Let me check… Yes, 18C.
+      You: Thank you. And could you put a fragile sticker on this one? There are some glass jars inside.
+      Agent: Of course. Here's your boarding pass. Boarding starts at ten fifteen at gate 9.
+      You: Thanks. What time does the gate close?
+      Agent: At ten forty, twenty minutes before departure.
+      You: Great, thank you very much.
+    criteria:
+      - Поздоровались и поблагодарили; к каждой просьбе — please или thank you
+      - "Просьбы — вопросом: Could I have…? Could you put…?, без Give me…"
+      - "Цена — How much is it for an extra bag? (is перед it)"
+      - "Вопрос о расписании — с does: What time does the gate close?"
+      - Каждая реплика короткая, одна-две фразы, без долгих пауз
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Would it be possible ___ my seat?
+        options: [to change, change, changing]
+        answer: to change
+        explanation: Would it be possible + to + глагол.
+      - id: q2
+        prompt: — Do you mind if I sit here? — No, go ahead. Можно сесть?
+        options: [можно, нельзя]
+        answer: можно
+        explanation: "No, go ahead — «нет, я не против, садитесь»."
+      - id: q3
+        prompt: Boarding ___ at 10:15.
+        options: [starts, start, is start]
+        answer: starts
+      - id: q4
+        prompt: My bag ___ on the belt.
+        options: [didn't come out, didn't came out, not came out]
+        answer: didn't come out
+        explanation: После didn't — глагол в начальной форме.
+      - id: q5
+        prompt: I'm here ___ holiday for a week.
+        options: ["on", "for", "in"]
+        answer: "on"
+      - id: q6
+        prompt: — Anything to declare? — No, I've got ___ to declare.
+        options: [nothing, anything, something]
+        answer: nothing
+        explanation: I've got nothing — одно отрицание; с anything нужно not — I haven't got anything.

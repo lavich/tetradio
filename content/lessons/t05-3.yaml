@@ -1,0 +1,202 @@
+title: Возврат, торг и запрос в поддержку
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: shop-bank
+    title: Банк фраз — возврат и торг
+    body: |-
+      Возврат в магазине идёт по одной схеме: что хотите → что не так → чек → обмен или деньги. Продавец ведёт разговор вопросами, ваша задача — коротко ответить и не дать уговорить себя на то, что вам не нужно.
+
+      **Что хотите:** **I'd like to return this.** I bought it on Monday. **Что не так:** **It's a bit tight.** / It's not the same as the one online. / The zip doesn't work. **Чек:** Here's the receipt. The tags are still on. **Обмен или деньги:** Could I exchange it for a bigger size? / I'd prefer a refund, please. **Can I get a refund** on my card? Отказаться от обмена — **No, thanks. I'd prefer a refund.**
+
+      На рынке торг тоже короткий: спросить цену → **Is that your best price?** → сравнить с соседним прилавком (**The one at the next stall is cheaper**) → назвать свою цену (**Can you do it for thirty?**) → согласиться: **OK, deal.** Торгуйтесь спокойно и с улыбкой; если цена не подходит — **Thanks, I'll think about it.**
+
+      Соберите свой банк: запишите эти фразы о вещи, которую вы купили бы в поездке, и проговорите их вслух.
+    table:
+      columns:
+        - шаг
+        - фраза
+      rows:
+        - - что хотите
+          - I'd like to return this.
+        - - что не так
+          - It's a bit tight.
+        - - деньги, а не обмен
+          - I'd prefer a refund, please.
+        - - начать торг
+          - Is that your best price?
+        - - сравнить
+          - The one at the next stall is cheaper.
+        - - своя цена
+          - Can you do it for thirty?
+        - - согласиться
+          - OK, deal.
+        - - отказаться
+          - Thanks, I'll think about it.
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику продавца. Два ответа лишние.
+    format: match
+    bank:
+      - I'd like to return this jumper.
+      - It's a bit tight.
+      - Yes, here it is. The tags are still on.
+      - No, thanks. I'd prefer a refund.
+      - It's a bit more than I wanted to pay. Is that your best price?
+      - OK, deal.
+      - I'll take this one, please.
+      - I'll take the black ones.
+    items:
+      - { id: m1, prompt: "Hi there. How can I help?", answer: "I'd like to return this jumper." }
+      - { id: m2, prompt: "Oh, what's wrong with it?", answer: "It's a bit tight." }
+      - { id: m3, prompt: "Have you got the receipt?", answer: "Yes, here it is. The tags are still on." }
+      - { id: m4, prompt: "Would you like to exchange it for a bigger size?", answer: "No, thanks. I'd prefer a refund." }
+      - { id: m5, prompt: "It's forty pounds.", answer: "It's a bit more than I wanted to pay. Is that your best price?" }
+      - { id: m6, prompt: "Thirty-two, and it's yours.", answer: "OK, deal." }
+  - type: explanation
+    id: writing-how
+    title: Запрос в поддержку о двойном списании
+    body: |-
+      Если деньги за один заказ списали дважды, напишите в поддержку компании — через форму на сайте или письмом. Это формальное письмо, 60–100 слов: вы пишете компании, а не знакомому.
+
+      Порядок: зачем пишете (**I am writing about order…**) → что случилось (**I have been charged twice for this order**) → доказательство (**my bank statement shows two payments of…**, **I have attached a screenshot**) → просьба (**Could you please refund the second payment?**) → вежливое окончание (**I would be grateful if you could reply by Friday.**).
+
+      Что случилось и важно сейчас (результат на сегодня, без точной даты) — present perfect: I **have been charged** twice, I **have** only **received** one email. Точная дата в прошлом — past simple: I **placed** the order on 3 June.
+
+      Формальный регистр: обращение **Dear Customer Support** или **Dear Sir or Madam**, полные формы (I am, I have), без Hi, смайликов и восклицательных знаков, в конце **Yours faithfully** или **Kind regards** и имя с фамилией. Номер заказа, дата и сумма — обязательно: без них поддержка ответит вопросом.
+  - type: writing
+    id: double-charge
+    register: formal
+    prompt: "С вашей карты дважды списали деньги за один онлайн-заказ — билеты, бронь или покупку в поездке. Напишите в поддержку компании (60–100 слов): номер заказа и дата, что случилось, что видно в выписке, что вы прикладываете, о чём просите и к какому сроку. Детали придумайте или возьмите из своей поездки."
+    words: { min: 60, max: 100 }
+    model: |-
+      Dear Customer Support,
+      I am writing about order 58213, which I placed on 3 June for two train tickets from London to York. I have been charged twice for this order: my bank statement shows two payments of £84.50 on the same day, but I have only received one confirmation email. I have attached a screenshot of the statement. Could you please check this and refund the second payment to my card? I would be grateful if you could reply by Friday.
+      Yours faithfully,
+      Anna Petrova
+    criteria:
+      - 60–100 слов; есть номер заказа, дата, сумма, что прикладываете и чёткая просьба
+      - "Формально: Dear Customer Support / Dear Sir or Madam, полные формы (I am, I have), без Hi и смайликов, Yours faithfully или Kind regards и имя с фамилией"
+      - "Проблема сейчас — present perfect: I have been charged twice; дата заказа — past simple: I placed the order on…"
+      - "Просьба — вопросом с Could you please…? или I would be grateful if you could…"
+      - Спокойный тон, без обвинений и лишних подробностей
+  - type: explanation
+    id: scenes-how
+    title: Ролевые сцены
+    body: |-
+      Дальше две сцены: возврат в магазине и торг на рынке. В каждой сначала звучат реплики собеседника — только его часть, подряд, два раза. Послушайте и поймите, о чём спросят. Потом откройте текст реплик кнопкой «Открыть текст» и держите его перед глазами.
+
+      В задании речи включите запись и ведите разговор: прочитайте про себя реплику собеседника и отвечайте на неё, затем следующую — и так до конца. На каждую реплику — одна-две фразы. Переслушайте запись и сверьте с образцом и критериями; вторая попытка обычно звучит увереннее.
+  - type: listening
+    id: return-lines
+    title: Реплики собеседника — возврат
+    plays: 2
+    transcript:
+      - { speaker: Grace, text: "Hi there. How can I help?" }
+      - { speaker: Grace, text: "Oh, I'm sorry to hear that. What's wrong with it?" }
+      - { speaker: Grace, text: "Have you got the receipt?" }
+      - { speaker: Grace, text: "Thanks. We've got the same jumper in a large in stock. Would you like to exchange it?" }
+      - { speaker: Grace, text: "No problem. The refund goes back to your card, and it can take three to five working days." }
+      - { speaker: Grace, text: "That's all done. Is there anything else I can help with?" }
+  - type: speaking
+    id: return
+    part: roleplay
+    prompt: |-
+      Вы в магазине Hartley & Webb в Йорке. В понедельник вы купили свитер, дома он оказался тесноват. Ярлыки на месте, чек у вас. Вы хотите вернуть деньги, а не обменять. Прослушайте реплики Грейс на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Скажите, что хотите вернуть свитер, объясните, что не так, отдайте чек, откажитесь от обмена и попросите вернуть деньги на карту, спросите, нужно ли что-то подписать (Do I have to…?), в конце поблагодарите. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Grace: Hi there. How can I help?
+      You: Hi. I'd like to return this jumper. I bought it here on Monday.
+      Grace: Oh, I'm sorry to hear that. What's wrong with it?
+      You: It's a bit tight. I tried it on at home, and it isn't as comfortable as I thought.
+      Grace: Have you got the receipt?
+      You: Yes, here it is. The tags are still on.
+      Grace: Thanks. We've got the same jumper in a large in stock. Would you like to exchange it?
+      You: No, thanks. I'd prefer a refund — can I get it on my card?
+      Grace: No problem. The refund goes back to your card, and it can take three to five working days.
+      You: That's fine. Do I have to sign anything?
+      Grace: That's all done. Is there anything else I can help with?
+      You: No, that's all. Thank you very much.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Начали с цели: I'd like to return this… и когда купили — past simple"
+      - "Причина — It's a bit tight / It isn't as comfortable as… (as… as, без more comfortable as)"
+      - "Отказались от обмена вежливо и твёрдо: No, thanks. I'd prefer a refund."
+      - "Вопрос с have to — через do: Do I have to…?"
+  - type: listening
+    id: haggle-lines
+    title: Реплики собеседника — рынок
+    plays: 2
+    transcript:
+      - { speaker: Callum, text: "Morning! That bag's real leather. It's made here in Yorkshire." }
+      - { speaker: Callum, text: "That one's forty pounds." }
+      - { speaker: Callum, text: "Forty's a fair price for real leather. But all right — thirty-five?" }
+      - { speaker: Callum, text: "Thirty's a bit low, I'm afraid. Thirty-two, and it's yours." }
+      - { speaker: Callum, text: "Cash or card?" }
+      - { speaker: Callum, text: "Contactless is fine — just tap here. Lovely, there you go. Enjoy it!" }
+  - type: speaking
+    id: haggle
+    part: roleplay
+    prompt: |-
+      Вы на рынке в Йорке, вам понравилась кожаная сумка у прилавка Каллума. У входа на рынок вы видели похожую дешевле. Хотите заплатить около тридцати фунтов, картой. Прослушайте реплики Каллума на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Поздоровайтесь и спросите цену, скажите, что дороговато, и спросите про лучшую цену, сравните с сумкой у входа и назовите свою цену, согласитесь на цену Каллума, спросите про бесконтактную оплату и попрощайтесь. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Callum: Morning! That bag's real leather. It's made here in Yorkshire.
+      You: Morning. It's really nice. How much is it?
+      Callum: That one's forty pounds.
+      You: Hmm, that's a bit more than I wanted to pay. Is that your best price?
+      Callum: Forty's a fair price for real leather. But all right — thirty-five?
+      You: I saw a similar bag by the entrance, and it was cheaper than this one. Can you do it for thirty?
+      Callum: Thirty's a bit low, I'm afraid. Thirty-two, and it's yours.
+      You: OK, thirty-two. Deal.
+      Callum: Cash or card?
+      You: Card, please. Do you take contactless?
+      Callum: Contactless is fine — just tap here. Lovely, there you go. Enjoy it!
+      You: Thanks very much. Have a good day!
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Торг вежливый: Is that your best price?, без «It's too expensive, give me…»"
+      - "Сравнение — cheaper than / not as… as, без more cheaper"
+      - "Своя цена — Can you do it for…?; согласие — OK, deal."
+      - "Вопрос об оплате — Do you take contactless?"
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: This one is a bit ___ than the one online.
+        options: [cheaper, more cheap, cheap]
+        answer: cheaper
+      - id: q2
+        prompt: These jeans are too long. Have you got shorter ___?
+        options: [ones, one, them]
+        answer: ones
+        explanation: Jeans — мн. ч., поэтому ones.
+      - id: q3
+        prompt: You ___ pay now — we can keep it for you until six.
+        options: [don't have to, mustn't, have to]
+        answer: don't have to
+        explanation: Не обязательно, вещь отложат; mustn't — «нельзя».
+      - id: q4
+        prompt: Is this the same ___ the one in the window?
+        options: [as, like, than]
+        answer: as
+      - id: q5
+        prompt: I ___ twice for the same order.
+        options: [have been charged, have charged, am charged]
+        answer: have been charged
+        explanation: Списали меня — пассив, have been + charged; I have charged значит «я списал».
+      - id: q6
+        prompt: The terminal asks if you want to pay in euros. What do you say?
+        options:
+          - "I'll pay in the local currency, thanks."
+          - "Would you like cashback?"
+          - "My card has been declined."
+        answer: "I'll pay in the local currency, thanks."
+        explanation: Местная валюта почти всегда выгоднее курса терминала.

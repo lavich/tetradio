@@ -1,0 +1,8 @@
+id: tp035
+text: "There's no hot water in the bathroom."
+translation: "В ванной нет горячей воды."
+note: "то же — There isn't any hot water"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md

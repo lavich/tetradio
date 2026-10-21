@@ -1,0 +1,8 @@
+id: tp034
+text: "The Wi-Fi has stopped working."
+translation: "Вайфай перестал работать."
+note: "present perfect: сломалось, и сейчас не работает"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md

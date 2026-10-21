@@ -1,0 +1,305 @@
+title: Размер, сравнение и возврат
+kind: lesson
+items:
+  - { kind: word, id: tw061 }
+  - { kind: word, id: tw062 }
+  - { kind: word, id: tw063 }
+  - { kind: word, id: tw064 }
+  - { kind: word, id: tw065 }
+  - { kind: word, id: tw066 }
+  - { kind: word, id: tw067 }
+  - { kind: word, id: tw068 }
+  - { kind: phrase, id: tp061 }
+  - { kind: phrase, id: tp062 }
+  - { kind: phrase, id: tp063 }
+  - { kind: phrase, id: tp064 }
+  - { kind: phrase, id: tp065 }
+  - { kind: phrase, id: tp066 }
+  - { kind: phrase, id: tp067 }
+  - { kind: phrase, id: tp068 }
+blocks:
+  - type: explanation
+    id: compare
+    title: Сравнение — cheaper than, not as… as, the same as
+    body: |-
+      В магазине и на рынке всё время сравнивают: размер, цену, качество. Короткие прилагательные (cheap, big, tight, long) получают **-er** и **than**: This one is **cheaper than** that one. Длинные (expensive, comfortable) — **more** и **than**: The wool coat is **more expensive than** the black one. Неправильные формы: good → **better**, bad → **worse**.
+
+      Две частые ошибки. Первая — два сравнения сразу: more cheaper, more bigger; нужно что-то одно — cheaper или more expensive. Вторая — that вместо than: после сравнения всегда **than**.
+
+      **not as … as** — «не такой… как»: The medium **isn't as tight as** the small. Так говорят мягче, чем smaller или worse: This bag **isn't as nice as** the one in the window.
+
+      **the same as** — «такой же, как»: Are these **the same as** the ones online? После same — **as**; the same like — ошибка. Совсем одинаковые — exactly the same.
+
+      Разницу уточняют **a bit** и **much**: **a bit** cheaper — чуть дешевле, **much** more comfortable — гораздо удобнее. Very с сравнением не ставят: very cheaper — ошибка.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - короткое + -er than
+          - It's cheaper than the one online.
+        - - more + длинное + than
+          - This coat is more expensive than that one.
+        - - good → better, bad → worse
+          - The quality is better here.
+        - - not as … as
+          - It isn't as warm as the wool one.
+        - - the same as
+          - Is it the same as the one in the window?
+        - - a bit / much + сравнение
+          - The market is a bit cheaper.
+  - type: explanation
+    id: ones-rules
+    title: one / ones и have to / don't have to
+    body: |-
+      Чтобы не повторять существительное, говорят **one** — об одной вещи и **ones** — о нескольких: I like the blue jacket, but the black **one** is cheaper. These shoes are tight — have you got bigger **ones**? По-русски «возьму чёрную», а по-английски прилагательное одно не стоит: **I'll take the black one**. Без прилагательного — **this one, that one**: I'll take **this one**.
+
+      **have to** — так требуют правила: You **have to** show the receipt. **Do I have to** pay now? У he / she / it — **has to**: He **has to** fill in a form.
+
+      **don't have to** — «не обязательно»: You **don't have to** pay in cash — cards are fine. Ловушка: don't have to не значит «нельзя». «Нельзя» — **can't** или строже, в правилах, **must not / mustn't**: You **can't** return earrings. Customers **mustn't** take food into the fitting rooms.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - this one / that one
+          - I'll take this one.
+        - - the + прилагательное + one
+          - The black one is cheaper.
+        - - ones — о нескольких
+          - Have you got bigger ones?
+        - - have to — обязательно
+          - You have to keep the receipt.
+        - - don't have to — не обязательно
+          - You don't have to pay now.
+        - - can't / mustn't — нельзя
+          - You can't return earrings.
+  - type: explanation
+    id: shop-words
+    title: В магазине одежды
+    body: |-
+      Примерить — **try on**, примерочная — **a fitting room** (в Британии говорят и changing room). Брюки длинные — спросите про подгонку: **Do you do alterations?** Нужного размера нет на полке — спросите, есть ли он на складе: Have you got this in a medium **in stock**?
+
+      Вернуть покупку — **return** it. Магазин возвращает деньги — a refund — или даёт **a credit note**: купон на ту же сумму, его тратят только в этом магазине. Для возврата нужен **proof of purchase** — чек или выписка по карте. Покупаете подарок — попросите **a gift receipt**: подарочный чек без цены: по нему вещь можно обменять или вернуть, обычно на купон.
+
+      **Tax-free shopping** — возврат НДС туристам. В ЕС его оформляют туристам из стран вне ЕС: на кассе просят паспорт и выдают бланк, бланк заверяют на таможне при выезде, а деньги возвращают в аэропорту или на карту. В Великобритании такой возврат с 2021 года не действует.
+
+      На рынке и у антиквара можно **haggle** — торговаться: **Is that your best price?** В магазине с ценниками не торгуются.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: compare-choice
+    title: Сравнение
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: This jacket is ___ the blue one.
+        options: [cheaper than, more cheaper than, cheaper that]
+        answer: cheaper than
+        explanation: Короткое прилагательное — -er + than; more и -er вместе не ставят, после сравнения — than, не that.
+      - id: q2
+        prompt: These boots are ___ the ones I tried on yesterday.
+        options: [more comfortable than, comfortabler than, more comfortable as]
+        answer: more comfortable than
+        explanation: Длинное прилагательное — more + than.
+      - id: q3
+        prompt: The medium isn't ___ the large.
+        options: [as long as, long as, as longer as]
+        answer: as long as
+        explanation: not as + начальная форма + as.
+      - id: q4
+        prompt: Is this bag the same ___ the one in the window?
+        options: [as, like, than]
+        answer: as
+        explanation: the same as; the same like — ошибка.
+      - id: q5
+        prompt: The quality here is much ___ than at the market.
+        options: [better, gooder, more good]
+        answer: better
+        explanation: good → better, форма неправильная.
+      - id: q6
+        prompt: This is a bit too expensive. Have you got anything ___?
+        options: [cheaper, more cheap, very cheaper]
+        answer: cheaper
+        explanation: cheap → cheaper; very со сравнением не ставят, нужно a bit или much.
+  - type: exercise
+    id: ones-gap
+    title: one / ones и правила
+    instruction: Вставьте слово или оборот. Два варианта лишние.
+    format: gap
+    bank:
+      - one
+      - ones
+      - have to
+      - don't have to
+      - has to
+      - mustn't
+      - the one
+      - must to
+    items:
+      - id: g1
+        prompt: I don't like the grey jumper, but the green ___ is nice.
+        answer: one
+        explanation: Одна вещь — one; the уже стоит перед green.
+      - id: g2
+        prompt: These sandals are too small. Have you got bigger ___?
+        answer: ones
+        explanation: Sandals — мн. ч., поэтому ones.
+      - id: g3
+        prompt: If you want to exchange it, you ___ bring the receipt or the card you paid with.
+        answer: have to
+        explanation: Так требуют правила — have to.
+      - id: g4
+        prompt: You ___ pay in cash — we take cards too.
+        answer: don't have to
+        explanation: Не обязательно, можно и картой.
+      - id: g5
+        prompt: To get the tax refund, he ___ show his passport and fill in a form.
+        answer: has to
+        explanation: He — has to.
+      - id: g6
+        prompt: Customers ___ take food or drinks into the fitting rooms.
+        answer: mustn't
+        explanation: Запрет на табличке — mustn't.
+  - type: exercise
+    id: rules-meaning
+    title: Обязательно или нельзя
+    instruction: Что значит табличка или фраза продавца?
+    format: choice
+    items:
+      - id: q1
+        prompt: You don't have to buy anything to use the fitting rooms.
+        options: [обязательно, не обязательно, нельзя]
+        answer: не обязательно
+        explanation: "Don't have to — «не обязательно»: мерить можно и без покупки."
+      - id: q2
+        prompt: You have to show proof of purchase for a refund.
+        options: [обязательно, не обязательно, нельзя]
+        answer: обязательно
+      - id: q3
+        prompt: You can't take more than four items into the fitting room.
+        options: [обязательно, не обязательно, нельзя]
+        answer: нельзя
+        explanation: "Can't — «нельзя»: больше четырёх вещей не берут."
+      - id: q4
+        prompt: You don't have to pay now — we can keep it for you until six.
+        options: [обязательно, не обязательно, нельзя]
+        answer: не обязательно
+        explanation: Вещь отложат до шести, платить сейчас не нужно.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a fitting room
+      - alterations
+      - a gift receipt
+      - a credit note
+      - proof of purchase
+      - in stock
+      - tax-free shopping
+      - haggle
+      - a receipt
+      - a discount
+    items:
+      - { id: m1, prompt: примерочная, answer: a fitting room }
+      - { id: m2, prompt: подгонка одежды по фигуре, answer: alterations }
+      - { id: m3, prompt: подарочный чек без цены, answer: a gift receipt }
+      - { id: m4, prompt: купон на сумму возврата, answer: a credit note }
+      - { id: m5, prompt: "подтверждение покупки — чек или выписка по карте", answer: proof of purchase }
+      - { id: m6, prompt: в наличии, answer: in stock }
+      - { id: m7, prompt: покупки с возвратом НДС, answer: tax-free shopping }
+      - { id: m8, prompt: торговаться, answer: haggle }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'd, it's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: У вас есть это в размере M?
+        answer:
+          - Have you got this in a medium?
+          - Have you got this in medium?
+          - Do you have this in a medium?
+          - Do you have this in medium?
+          - Have you got it in a medium?
+          - Do you have it in a medium?
+          - Have you got this in M?
+          - Do you have this in M?
+          - Have you got this in size M?
+          - Do you have this in size M?
+          - Have you got this in a size M?
+          - Do you have this in a size M?
+          - Have you got it in medium?
+          - Do you have it in medium?
+          - Have you got one in a medium?
+          - Do you have one in a medium?
+          - Have you got this in a medium, please?
+          - Do you have this in a medium, please?
+          - Do you have this in a size medium?
+          - Have you got this in a size medium?
+        explanation: В Британии чаще Have you got…?, в США — Do you have…?
+      - id: q2
+        prompt: Можно это примерить?
+        answer:
+          - Can I try this on?
+          - Could I try this on?
+          - Can I try it on?
+          - Could I try it on?
+          - May I try this on?
+          - May I try it on?
+          - Can I try this on, please?
+          - Could I try this on, please?
+          - Can I try this on please?
+          - Could I try this on please?
+          - Can I try it on, please?
+          - Could I try it on, please?
+          - Can I try this one on?
+          - Could I try this one on?
+        explanation: Местоимение стоит между try и on — try this on, не try on this.
+      - id: q3
+        prompt: Это такие же, как на витрине?
+        answer:
+          - Are these the same as the ones in the window?
+          - Are they the same as the ones in the window?
+          - Are these the same as the ones in the shop window?
+          - Are these the same ones as in the window?
+          - Are these the same as in the window?
+          - Are they the same as in the window?
+          - Are these the same as those in the window?
+          - Are they the same as the ones in the shop window?
+        explanation: the same as + the ones — чтобы не повторять существительное.
+      - id: q4
+        prompt: Я хотел бы это вернуть.
+        answer:
+          - I'd like to return this.
+          - I would like to return this.
+          - I'd like to return it.
+          - I'd like to return this, please.
+          - I'd like to return this please.
+          - I want to return this.
+          - I'd like to bring this back.
+          - I'd like to take this back.
+          - I'd like to return it, please.
+          - I'd like to take it back.
+          - I'd like to bring it back.
+          - I want to return it.
+      - id: q5
+        prompt: Мне обязательно показывать чек?
+        answer:
+          - Do I have to show the receipt?
+          - Do I have to show my receipt?
+          - Do I have to show a receipt?
+          - Do I need to show the receipt?
+          - Do I need to show my receipt?
+          - Do I need to show a receipt?
+          - Do I have to show you the receipt?
+          - Do I need to show you the receipt?
+          - Do I have to show the receipt to you?
+          - Do I have to show you my receipt?
+          - Do I need to show you my receipt?
+        explanation: "Вопрос с have to — через do: Do I have to…?"

@@ -1,0 +1,8 @@
+id: tp072
+text: "I've been charged twice for the same order."
+translation: "С меня дважды списали деньги за один заказ."
+note: "charge — списать (деньги); a double charge — двойное списание"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

@@ -1,0 +1,260 @@
+title: Контрольная модуля t01
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: табло и сообщение авиакомпании, объявления, разговор у стойки розыска багажа, просьбы и расписание, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: update
+    title: Edinburgh Airport — Departures
+    text: |-
+      DEPARTURES — 07:40
+      08:05 FR 812 Kraków — Gate 3 — Gate closed
+      08:20 BA 1441 London Heathrow — Gate 7 — Boarding
+      08:45 KL 1286 Amsterdam — Delayed, new time 10:10
+      09:00 U2 6942 Paris CDG — Go to gate 11
+      09:15 LH 965 Frankfurt — Cancelled
+
+      TEXT MESSAGE, 07:32
+      Flight update: KL 1286 Edinburgh–Amsterdam is delayed by 1 hour 25 minutes. New departure time: 10:10. Your connecting flight to Oslo leaves Amsterdam at 14:20, so you will not miss your connection. Your bag is checked through to Oslo: you do not need to collect it in Amsterdam. Show this message at the information desk to get a £10 food voucher.
+    glosses:
+      - { text: miss, russian: опоздать на }
+      - { text: food voucher, russian: талон на еду }
+  - type: exercise
+    id: update-q
+    about: update
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is happening with the flight to London?
+        options:
+          - Boarding has started.
+          - It is delayed.
+          - The gate is closed.
+        answer: Boarding has started.
+        explanation: "London Heathrow — Gate 7 — Boarding: посадка идёт."
+      - id: q2
+        prompt: Which flight is it too late to board?
+        options: [the flight to Kraków, the flight to Paris, the flight to London]
+        answer: the flight to Kraków
+        explanation: "Gate closed — выход закрыт, на рейс уже не пустят."
+      - id: q3
+        prompt: How long is the Amsterdam flight delayed?
+        options: [1 hour 25 minutes, 25 minutes, 2 hours 10 minutes]
+        answer: 1 hour 25 minutes
+        explanation: "Delayed by 1 hour 25 minutes: вместо 08:45 рейс вылетает в 10:10."
+      - id: q4
+        prompt: Does the passenger need to collect the bag in Amsterdam?
+        options:
+          - No, it goes all the way to Oslo.
+          - Yes, at baggage reclaim.
+          - Yes, before the connecting flight.
+        answer: No, it goes all the way to Oslo.
+        explanation: "Your bag is checked through to Oslo — сумка сдана сразу до Осло."
+      - id: q5
+        prompt: How can the passenger get a food voucher?
+        options:
+          - by showing the message at the information desk
+          - by showing the boarding pass at the gate
+          - by calling the airline
+        answer: by showing the message at the information desk
+        explanation: Show this message at the information desk.
+  - type: listening
+    id: announcements
+    title: Announcements at Edinburgh
+    plays: 2
+    transcript:
+      - { text: "Ladies and gentlemen, this is a gate change. Flight U2 6942 to Paris Charles de Gaulle will now depart from gate 14, not gate 11. Please proceed to gate 14." }
+      - { text: "We regret to announce that flight LH 965 to Frankfurt has been cancelled. Passengers on this flight should go to the Lufthansa desk in the check-in hall, where staff will help them with a new booking." }
+      - { text: "This is the final call for passengers on flight BA 1441 to London Heathrow. The gate will close in five minutes." }
+      - { text: "Passengers arriving from Amsterdam on flight KL 1285 can collect their bags from baggage reclaim, belt 3, not belt 5." }
+  - type: exercise
+    id: announcements-q
+    about: announcements
+    graded: true
+    title: Аудирование — объявления
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where does the flight to Paris leave from now?
+        options: [gate 14, gate 11, gate 4]
+        answer: gate 14
+        explanation: Will now depart from gate 14, not gate 11.
+      - id: q2
+        prompt: Where should passengers to Frankfurt go?
+        options:
+          - to the Lufthansa desk in the check-in hall
+          - to gate 14
+          - to the information desk
+        answer: to the Lufthansa desk in the check-in hall
+        explanation: Should go to the Lufthansa desk in the check-in hall — рейс отменён, помогут с новым билетом.
+      - id: q3
+        prompt: When does the gate for the London flight close?
+        options: [in five minutes, in fifteen minutes, in fifty minutes]
+        answer: in five minutes
+      - id: q4
+        prompt: Where can passengers from Amsterdam get their bags?
+        options: [belt 3, belt 5, belt 13]
+        answer: belt 3
+        explanation: "Belt 3, not belt 5: лента поменялась."
+  - type: listening
+    id: lost-bag
+    title: At the baggage services desk
+    plays: 2
+    transcript:
+      - { speaker: Rory, text: "Hello, baggage services. How can I help?" }
+      - { speaker: Inês, text: "Hi. My bag didn't come out on the belt. I was on the flight from London." }
+      - { speaker: Rory, text: "I'm sorry about that. Can I see your boarding pass and your baggage tag, please? It's the little sticker they gave you at check-in." }
+      - { speaker: Inês, text: "Yes, here. I started in Lisbon, and I had a layover in London. Only fifty minutes." }
+      - { speaker: Rory, text: "Right, that's probably the problem. With a short connection, bags sometimes miss the flight. Let me check… Yes, your bag is still at Heathrow. It's coming on the next flight, which lands at six fifteen this evening." }
+      - { speaker: Inês, text: "Oh, good. Do I need to come back to the airport to collect it?" }
+      - { speaker: Rory, text: "No, we'll deliver it to you. Where are you staying?" }
+      - { speaker: Inês, text: "At a hotel near the centre, the Grassmarket Hotel." }
+      - { speaker: Rory, text: "Fine. We usually deliver bags the same evening, before eleven. Can you describe the bag, please?" }
+      - { speaker: Inês, text: "It's a large blue suitcase, with a yellow ribbon on the handle." }
+      - { speaker: Rory, text: "Great. Here's your reference number. Please keep it — you'll need it if you call us." }
+      - { speaker: Inês, text: "Do you mind if I take a photo of it?" }
+      - { speaker: Rory, text: "No, go ahead. And if you need to buy a toothbrush or a T-shirt tonight, keep the receipts. The airline pays for things like that." }
+      - { speaker: Inês, text: "That's very helpful. Thank you." }
+  - type: exercise
+    id: lost-bag-q
+    about: lost-bag
+    graded: true
+    title: Аудирование — розыск багажа
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where did Inês start her journey?
+        options: [in Lisbon, in London, in Edinburgh]
+        answer: in Lisbon
+        explanation: I started in Lisbon, and I had a layover in London.
+      - id: q2
+        prompt: Why didn't her bag arrive?
+        options:
+          - Her connection in London was too short.
+          - Her bag was too heavy.
+          - She forgot to check it in.
+        answer: Her connection in London was too short.
+        explanation: With a short connection, bags sometimes miss the flight.
+      - id: q3
+        prompt: When does the flight with her bag land in Edinburgh?
+        options: [at 6:15 this evening, at 11 tonight, tomorrow morning]
+        answer: at 6:15 this evening
+        explanation: The next flight lands at six fifteen this evening; до одиннадцати сумку привезут в отель.
+      - id: q4
+        prompt: How will Inês get her bag?
+        options:
+          - Baggage services will deliver it to her hotel.
+          - She will collect it at the airport.
+          - She will collect it at Heathrow.
+        answer: Baggage services will deliver it to her hotel.
+        explanation: No, we'll deliver it to you.
+      - id: q5
+        prompt: 'Inês asks: "Do you mind if I take a photo of it?" What does Rory mean by "No, go ahead"?'
+        options:
+          - She can take a photo.
+          - She can't take a photo.
+          - She should go to another desk.
+        answer: She can take a photo.
+        explanation: "На Do you mind if…? ответ No, go ahead значит «можно»."
+      - id: q6
+        prompt: What should she keep if she buys things tonight?
+        options: [the receipts, the boarding pass, the baggage tag]
+        answer: the receipts
+        explanation: Keep the receipts. The airline pays for things like that.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Просьбы и расписание
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: ___ I have a window seat, please?
+        options: [Could, Would it, Do you mind]
+        answer: Could
+        explanation: Обычная вежливая просьба — Could I… + глагол.
+      - id: q2
+        prompt: Would it be possible ___ this bag through to Oslo?
+        options: [to check, check, checking]
+        answer: to check
+      - id: q3
+        prompt: Do you mind if I ___ my coat here?
+        options: [leave, will leave, to leave]
+        answer: leave
+        explanation: После if — present simple без will.
+      - id: q4
+        prompt: The last tram to the city centre ___ at 23:40.
+        options: [leaves, leave, is leave]
+        answer: leaves
+        explanation: Расписание — present simple; the tram = it, окончание -s.
+      - id: q5
+        prompt: What time ___ boarding start?
+        options: [does, is, do]
+        answer: does
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [aisle, allowance, oversized, excess, layover, reclaim, declare, final, proceed, connecting, carry-on]
+    items:
+      - { id: g1, prompt: "Could I have an ___ seat, please? I like to walk on long flights.", answer: aisle }
+      - { id: g2, prompt: "Your baggage ___ is one bag of 23 kilos.", answer: allowance }
+      - { id: g3, prompt: "Your bag is 27 kilos, so there's a charge for ___ baggage.", answer: excess }
+      - { id: g4, prompt: "Bikes and skis are ___, so please take them to the special desk at the end of the hall.", answer: oversized }
+      - { id: g5, prompt: "Our ___ in Frankfurt is only fifty minutes, so we need to hurry.", answer: layover }
+      - { id: g6, prompt: "We collected our bags at baggage ___ and went through customs.", answer: reclaim }
+      - { id: g7, prompt: "— Anything to ___? — No, nothing.", answer: declare }
+      - { id: g8, prompt: "This is the ___ call for flight BA 2550 to Rome.", answer: final }
+      - { id: g9, prompt: "Please ___ to gate 4 immediately.", answer: proceed }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, didn't) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Мне нечего декларировать.
+        answer:
+          - I've got nothing to declare.
+          - I have nothing to declare.
+          - Nothing to declare.
+          - I don't have anything to declare.
+          - I haven't got anything to declare.
+      - id: q2
+        prompt: Выход на посадку поменялся?
+        answer:
+          - Has the gate changed?
+          - Has my gate changed?
+          - Has our gate changed?
+          - Did the gate change?
+          - Has the gate been changed?
+          - Was the gate changed?
+          - Is there a gate change?
+      - id: q3
+        prompt: Сколько стоит ещё одно место багажа?
+        answer:
+          - How much is it for an extra bag?
+          - How much is an extra bag?
+          - How much does an extra bag cost?
+          - How much is it for one more bag?
+          - How much is another bag?
+          - How much for an extra bag?
+          - How much does it cost for an extra bag?
+          - How much does another bag cost?
+          - How much is it for another bag?
+          - How much is one more bag?
+          - How much does one more bag cost?

@@ -1,0 +1,8 @@
+id: tp094
+text: "I need a police report for my insurance."
+translation: "Мне нужна справка из полиции для страховой."
+note: "в Британии вместо справки часто дают crime reference number"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

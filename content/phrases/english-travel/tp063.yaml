@@ -1,0 +1,8 @@
+id: tp063
+text: "It's a bit tight — have you got a bigger size?"
+translation: "Немного тесновато — есть размер побольше?"
+note: "велико — It's a bit loose / too big"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

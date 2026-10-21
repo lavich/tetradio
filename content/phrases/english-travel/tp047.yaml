@@ -1,0 +1,8 @@
+id: tp047
+text: "Could we get some more bread?"
+translation: "Можно нам ещё хлеба?"
+note: "bread неисчисляемое: some more bread, не more breads"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

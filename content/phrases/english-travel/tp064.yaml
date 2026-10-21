@@ -1,0 +1,8 @@
+id: tp064
+text: "Are these the same as the ones in the window?"
+translation: "Это такие же, как на витрине?"
+note: "the ones — вместо повтора существительного во мн. ч."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

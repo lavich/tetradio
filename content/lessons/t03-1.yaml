@@ -1,0 +1,305 @@
+title: Заселение, просьбы и проблемы в номере
+kind: lesson
+items:
+  - { kind: word, id: tw031 }
+  - { kind: word, id: tw032 }
+  - { kind: word, id: tw033 }
+  - { kind: word, id: tw034 }
+  - { kind: word, id: tw035 }
+  - { kind: word, id: tw036 }
+  - { kind: word, id: tw037 }
+  - { kind: word, id: tw038 }
+  - { kind: phrase, id: tp031 }
+  - { kind: phrase, id: tp032 }
+  - { kind: phrase, id: tp033 }
+  - { kind: phrase, id: tp034 }
+  - { kind: phrase, id: tp035 }
+  - { kind: phrase, id: tp036 }
+  - { kind: phrase, id: tp037 }
+  - { kind: phrase, id: tp038 }
+blocks:
+  - type: explanation
+    id: problem-now
+    title: Проблема сейчас — present perfect
+    body: |-
+      Когда что-то сломалось и не работает прямо сейчас, британцы говорят в **present perfect**: важен не момент поломки, а результат. **The Wi-Fi has stopped working.** — вайфай перестал работать и сейчас не работает. **I've lost my key card.** — я потерял ключ-карту, и её у меня нет. **The bulb in the bathroom has blown.** — лампочка в ванной перегорела.
+
+      Форма: **have / has + третья форма глагола**: stop → stopped, break → broken, lose → lost, blow → blown. В речи — сокращения: I've, it's (= it has), the Wi-Fi's stopped working.
+
+      Если называете время в прошлом, нужен **past simple**: **It stopped working last night.** **I lost it at breakfast.** С last night, yesterday, at 8 present perfect не ставят.
+
+      Частая ошибка — русское «не работает с утра» как **It doesn't work since this morning**. С since нужен present perfect: **It hasn't worked since this morning** — или проще: **It stopped working at eight.**
+    table:
+      columns:
+        - что случилось
+        - как сказать
+      rows:
+        - - перестало работать
+          - The Wi-Fi has stopped working.
+        - - сломалось
+          - The kettle has broken.
+        - - потерял(а)
+          - I've lost my key card.
+        - - с указанием времени
+          - It stopped working last night.
+        - - с since
+          - It hasn't worked since this morning.
+  - type: explanation
+    id: there-is-no
+    title: Чего-то нет — there's no / there isn't any
+    body: |-
+      «Нет горячей воды» по-английски говорят через **there is / there are** с отрицанием. Два равных способа:
+
+      **There's no** + существительное: **There's no hot water.** **There are no towels in the bathroom.** После no артикля нет.
+
+      **There isn't any / There aren't any** + существительное: **There isn't any hot water.** **There aren't any towels.** Any — с неисчисляемыми (water, soap, toilet paper) и множественным числом (towels, pillows).
+
+      Отрицание одно: либо no, либо not + any. **There isn't no hot water** — ошибка, двойное отрицание. И не **There is not hot water**: без any или no фраза не работает.
+
+      В вопросе — any: **Are there any extra blankets?** **Is there any milk for the coffee?**
+    table:
+      columns:
+        - конструкция
+        - пример
+      rows:
+        - - There's no + неисч.
+          - There's no hot water.
+        - - There are no + мн. ч.
+          - There are no towels.
+        - - There isn't any + неисч.
+          - There isn't any soap.
+        - - There aren't any + мн. ч.
+          - There aren't any pillows.
+        - - вопрос
+          - Are there any extra blankets?
+  - type: explanation
+    id: wondering
+    title: Мягкая просьба — I was wondering if…
+    body: |-
+      **I was wondering if…** — «я хотел(а) узнать, нельзя ли…». Так мягко просят о том, на что у отеля или хоста нет обязанности: заселиться раньше, выехать позже, оставить вещи. Прошедшее время здесь не про прошлое — оно смягчает просьбу. Оборот звучит и в разговоре, и в сообщении хосту.
+
+      Дальше — обычный порядок слов, как в утверждении: **I was wondering if we could check in early.** **I was wondering if early check-in would be possible.** Чаще всего после if — **could** или **would**.
+
+      Ошибка — порядок слов вопроса: **I was wondering if could we check in early?** Это не вопрос, а утверждение, и вопросительного знака в конце нет.
+
+      Короче и проще — **Could I…? / Is it possible to…?**: **Is it possible to leave our bags here?** I was wondering if… вежливее, особенно в первом сообщении человеку, которого вы не знаете.
+    table:
+      columns:
+        - просьба
+        - мягче
+      rows:
+        - - Can we check in early?
+          - I was wondering if we could check in early.
+        - - Is late check-out possible?
+          - I was wondering if late check-out would be possible.
+        - - Can I leave my bags here?
+          - I was wondering if I could leave my bags here.
+  - type: explanation
+    id: stay-words
+    title: Бронь, заезд и квартира
+    body: |-
+      Заезд в отель — **check-in** (обычно с 14:00 или 15:00), выезд — **check-out** (обычно до 11:00). Если хотите раньше или позже, просите **early check-in** или **late check-out** — часто за доплату. Глагол пишется раздельно: we **check in** at three, we **check out** at eleven.
+
+      В отеле дверь открывает **a key card**. В номере с собственной ванной (**an en suite room**) не придётся идти в общую ванную в коридоре — в недорогих британских гостиницах и хостелах такое бывает. Если едете с маленьким ребёнком, заранее попросите **a cot** — детскую кроватку.
+
+      В съёмной квартире хоста может не быть: ключ лежит в **a lockbox** у двери, код присылают в день заезда. До брони прочитайте **house rules** — правила дома (тишина после 22:00, не курить, без вечеринок) и список **amenities** — удобств: Wi-Fi, кухня, стиральная машина, парковка.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: tense-choice
+    title: Что случилось
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы звоните на ресепшен — вайфай не работает.
+        options:
+          - The Wi-Fi has stopped working.
+          - The Wi-Fi has stopped working last night.
+          - The Wi-Fi is stopped working.
+        answer: The Wi-Fi has stopped working.
+        explanation: Проблема сейчас — present perfect; с last night нужен был бы past simple.
+      - id: q2
+        prompt: Вы объясняете, когда сломался чайник.
+        options:
+          - It broke yesterday.
+          - It has broken yesterday.
+          - It has broke yesterday.
+        answer: It broke yesterday.
+        explanation: Есть время в прошлом — yesterday, поэтому past simple.
+      - id: q3
+        prompt: Ключ-карты у вас нет — потеряли.
+        options:
+          - I've lost my key card.
+          - I lose my key card.
+          - I have lose my key card.
+        answer: I've lost my key card.
+        explanation: Have + третья форма; lose → lost.
+      - id: q4
+        prompt: Телевизор не работает с вечера.
+        options:
+          - It hasn't worked since last night.
+          - It doesn't work since last night.
+          - It isn't working since last night.
+        answer: It hasn't worked since last night.
+        explanation: С since — present perfect; «не работает с…» не переводится настоящим временем.
+      - id: q5
+        prompt: Лампочка в ванной перегорела.
+        options:
+          - The bulb in the bathroom has blown.
+          - The bulb in the bathroom has blew.
+          - The bulb in the bathroom blows.
+        answer: The bulb in the bathroom has blown.
+        explanation: Третья форма blow — blown; blew — вторая форма.
+  - type: exercise
+    id: no-any
+    title: Чего нет в номере
+    instruction: Вставьте слово. Одно слово лишнее.
+    format: gap
+    bank: ["no", any, isn't, aren't, not]
+    items:
+      - id: g1
+        prompt: There's ___ hot water in the bathroom.
+        answer: "no"
+        explanation: There's no + существительное, без артикля.
+      - id: g2
+        prompt: There ___ any towels in our room.
+        answer: aren't
+        explanation: Towels — мн. ч., поэтому aren't.
+      - id: g3
+        prompt: There ___ any soap by the sink.
+        answer: isn't
+        explanation: Soap — неисчисляемое, поэтому isn't.
+      - id: g4
+        prompt: Are there ___ extra blankets?
+        answer: any
+        explanation: В вопросе — any.
+  - type: exercise
+    id: wondering-choice
+    title: Мягкая просьба
+    instruction: Выберите правильную фразу.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы пишете хосту, что хотели бы заселиться раньше.
+        options:
+          - I was wondering if we could check in early.
+          - I was wondering if could we check in early?
+          - I was wondering we could check in early.
+        answer: I was wondering if we could check in early.
+        explanation: После if — порядок утверждения, if не пропускается.
+      - id: q2
+        prompt: Вы просите поздний выезд.
+        options:
+          - I was wondering if late check-out would be possible.
+          - I was wondering if late check-out will possible.
+          - I wonder if is late check-out possible.
+        answer: I was wondering if late check-out would be possible.
+        explanation: После if — would be possible; в will possible пропущено be, а в I wonder if is… — порядок вопроса.
+      - id: q3
+        prompt: Какая просьба звучит мягче всего?
+        options:
+          - I was wondering if I could leave my bags here.
+          - Can I leave my bags here?
+          - I want to leave my bags here.
+        answer: I was wondering if I could leave my bags here.
+        explanation: Can I…? тоже вежливо, но короче и прямее; I want… звучит как требование.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - early check-in
+      - late check-out
+      - a lockbox
+      - house rules
+      - amenities
+      - a key card
+      - en suite
+      - a cot
+      - a boarding pass
+      - a layover
+    items:
+      - { id: m1, prompt: ранний заезд, answer: early check-in }
+      - { id: m2, prompt: поздний выезд, answer: late check-out }
+      - { id: m3, prompt: ящик с кодовым замком для ключей, answer: a lockbox }
+      - { id: m4, prompt: правила дома, answer: house rules }
+      - { id: m5, prompt: удобства, answer: amenities }
+      - { id: m6, prompt: ключ-карта, answer: a key card }
+      - { id: m7, prompt: с собственной ванной, answer: en suite }
+      - { id: m8, prompt: детская кроватка, answer: a cot }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, there's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Вайфай перестал работать.
+        answer:
+          - The Wi-Fi has stopped working.
+          - The Wi-Fi's stopped working.
+          - The WiFi has stopped working.
+          - The wifi has stopped working.
+          - Wi-Fi has stopped working.
+          - The Wi-Fi stopped working.
+          - The wifi's stopped working.
+          - The Wi-Fi's stopped working.
+        explanation: Обычнее всего — present perfect has stopped working.
+      - id: q2
+        prompt: В ванной нет горячей воды.
+        answer:
+          - There's no hot water in the bathroom.
+          - There isn't any hot water in the bathroom.
+          - There is no hot water in the bathroom.
+          - There's no hot water in the shower.
+          - There is no hot water in the shower.
+          - There isn't any hot water in the shower.
+        explanation: Одно отрицание — no или not + any.
+      - id: q3
+        prompt: Я забронировал двухместный номер на три ночи.
+        answer:
+          - I've booked a double room for three nights.
+          - I have booked a double room for three nights.
+          - I booked a double room for three nights.
+          - I've got a double room booked for three nights.
+          - I've reserved a double room for three nights.
+          - I reserved a double room for three nights.
+          - I've booked a twin room for three nights.
+          - I've booked a double for three nights.
+        explanation: «На три ночи» — for three nights; у стойки обычно говорят I've booked…
+      - id: q4
+        prompt: Можно оставить у вас багаж после выезда?
+        answer:
+          - Could I leave my luggage here after check-out?
+          - Can I leave my luggage here after check-out?
+          - Could I leave my bags here after check-out?
+          - Can I leave my bags here after check-out?
+          - Could I leave my luggage here after I check out?
+          - Could we leave our luggage here after check-out?
+          - Can we leave our luggage here after check-out?
+          - Could we leave our bags here after check-out?
+          - Is it possible to leave my luggage here after check-out?
+          - Is it OK if I leave my luggage here after check-out?
+          - Could I leave my luggage with you after check-out?
+          - Can I leave my luggage with you after check-out?
+          - Can I leave my luggage here after I check out?
+          - Is it possible to leave my bags here after check-out?
+      - id: q5
+        prompt: Наш рейс прилетает поздно, так что мы приедем около полуночи.
+        answer:
+          - Our flight lands late, so we'll arrive around midnight.
+          - Our flight lands late, so we'll arrive at around midnight.
+          - Our flight lands late, so we will arrive around midnight.
+          - Our flight arrives late, so we'll arrive around midnight.
+          - Our flight lands late, so we'll get there around midnight.
+          - Our flight lands late, so we'll be there around midnight.
+          - Our flight lands late, so we'll arrive at about midnight.
+          - Our flight lands late, so we'll arrive about midnight.
+          - Our flight lands late so we'll arrive around midnight.
+          - Our flight lands late so we will arrive around midnight.
+          - Our flight gets in late, so we'll arrive around midnight.
+          - Our flight gets in late so we'll arrive around midnight.
+        explanation: Рейс по расписанию — present simple (lands), ваш приезд — will.

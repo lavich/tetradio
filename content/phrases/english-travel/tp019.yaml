@@ -1,0 +1,8 @@
+id: tp019
+text: "Go straight on and take the second left."
+translation: "Идите прямо и сверните на второй поворот налево."
+note: "go straight on — британское; в США — go straight (ahead); straight ahead говорят везде"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

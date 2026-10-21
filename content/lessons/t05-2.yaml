@@ -1,0 +1,312 @@
+title: Правила возврата, касса и рынок
+kind: lesson
+items:
+  - { kind: word, id: tw069 }
+  - { kind: word, id: tw070 }
+  - { kind: word, id: tw071 }
+  - { kind: word, id: tw072 }
+  - { kind: word, id: tw073 }
+  - { kind: word, id: tw074 }
+  - { kind: word, id: tw075 }
+  - { kind: phrase, id: tp069 }
+  - { kind: phrase, id: tp070 }
+  - { kind: phrase, id: tp071 }
+  - { kind: phrase, id: tp072 }
+  - { kind: phrase, id: tp073 }
+  - { kind: phrase, id: tp074 }
+  - { kind: phrase, id: tp075 }
+blocks:
+  - type: explanation
+    id: pay-words
+    title: Оплата картой и наличными
+    body: |-
+      В Британии почти везде платят картой бесконтактно — **contactless**: Do you take contactless? У бесконтактной оплаты картой предел обычно 100 фунтов (с телефона или часов — как правило, без предела); дороже — вставьте карту и введите PIN (chip and PIN).
+
+      Если терминал пишет **declined**, платёж отклонён: **My card has been declined.** Иностранный банк часто блокирует первый платёж за границей. Деньги при этом иногда видны в приложении банка как **a pending payment** — заблокированы, но не списаны; через несколько дней блок снимается. Pending бывает и у обычного прошедшего платежа: он в обработке и появится в выписке через 1–3 дня. Что именно случилось, видно по терминалу и чеку: declined или approved. Спросите продавца: **Could you check if the payment went through?** — прошёл ли платёж.
+
+      Терминал за границей может спросить, в какой валюте платить: в местной или в валюте вашей карты. Почти всегда выгоднее местная: **I'll pay in the local currency, thanks.** У терминала свой курс — exchange rate, и он обычно хуже. Обменять наличные можно в **a bureau de change**: на вывеске часто **No commission** — комиссии нет, но курс может быть хуже, чем в банке. А за снятие в банкомате иностранной картой банк берёт **a transaction fee**.
+
+      В супермаркете кассир может спросить: **Would you like cashback?** — снять наличные с карты прямо на кассе; магазин за это денег не берёт. Часто это работает только с британскими дебетовыми картами. Не нужно — No, thanks.
+
+      Если с карты списали дважды: **I've been charged twice for the same order.** А на рынке цену можно сбить: **Can you do it for twenty?** — «отдадите за двадцать?».
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: returns-how
+    title: Правила возврата и чек
+    body: |-
+      Ниже — правила возврата магазина одежды в Йорке и чек покупательницы. Такие правила висят у кассы и печатаются на обороте чека. Читайте их как список условий: что вернуть можно, в какой срок, что нужно принести и что получите — деньги, обмен или credit note.
+
+      Слова правил: **unworn** — не ношенный, **with the tags on** — с ярлыками, **faulty** — бракованный, **working days** — рабочие дни. В чеке **VAT** — НДС: в Британии он уже входит в цену на ценнике.
+  - type: reading
+    id: returns
+    title: Hartley & Webb — Returns policy
+    text: |-
+      RETURNS POLICY
+      Changed your mind? Return unworn items with the tags on within 28 days for a full refund.
+      You have to show proof of purchase: your receipt or the card you paid with.
+      Refunds go back to the card you paid with and can take 3–5 working days.
+      Sale items: exchange or credit note only, within 14 days.
+      We can't accept returns of items that we have altered.
+      Earrings and swimwear can't be returned unless they are faulty.
+      Faulty items: you don't have to keep the tags on. Bring the item back and we will repair, replace or refund it.
+
+      RECEIPT
+      Hartley & Webb, 14 Coney Street, York
+      12 June, 15:42 · Till 3
+      Wool jumper, navy, M — £39.00
+      Linen shirt, white, L (SALE) — £15.00
+      Trousers, black, 32R — £30.00
+      Alterations: shorten trousers — £12.00
+      TOTAL — £96.00
+      Paid: VISA CONTACTLESS **** 4417 — £96.00
+      VAT included (20%): £16.00
+    glosses:
+      - { text: unworn, russian: не ношенный }
+      - { text: tags, russian: ярлыки }
+      - { text: working days, russian: рабочие дни }
+      - { text: swimwear, russian: купальники и плавки }
+      - { text: faulty, russian: бракованный }
+      - { text: shorten, russian: укоротить }
+  - type: exercise
+    id: returns-q
+    about: returns
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Ten days later, the customer wants to return the jumper. She hasn't worn it, and the tags are on. What can she get?
+        options:
+          - a full refund
+          - only a credit note
+          - only an exchange
+        answer: a full refund
+        explanation: Unworn items with the tags on within 28 days — full refund.
+      - id: q2
+        prompt: What can she get for the linen shirt?
+        options:
+          - an exchange or a credit note
+          - a full refund to her card
+          - nothing, because it was in the sale
+        answer: an exchange or a credit note
+        explanation: "Рубашка куплена на распродаже (SALE): exchange or credit note only."
+      - id: q3
+        prompt: She can't find the receipt. What else can she show?
+        options:
+          - the card she paid with
+          - her passport
+          - a photo of the jumper
+        answer: the card she paid with
+        explanation: "Proof of purchase: your receipt or the card you paid with."
+      - id: q4
+        prompt: The shop shortened her trousers. Can she return them?
+        options:
+          - No, the shop doesn't take back altered items.
+          - Yes, within 28 days.
+          - Yes, but only for a credit note.
+        answer: No, the shop doesn't take back altered items.
+        explanation: We can't accept returns of items that we have altered.
+      - id: q5
+        prompt: The zip on the jumper breaks after a week, and she has cut the tags off. What can she do?
+        options:
+          - bring it back for a repair, a new one or a refund
+          - nothing, because the tags are off
+          - only exchange it within 14 days
+        answer: bring it back for a repair, a new one or a refund
+        explanation: "Faulty items: you don't have to keep the tags on — repair, replace or refund."
+      - id: q6
+        prompt: How did she pay?
+        options:
+          - by contactless card
+          - in cash
+          - with a credit note
+        answer: by contactless card
+        explanation: "Paid: VISA CONTACTLESS."
+  - type: explanation
+    id: till-how
+    title: На кассе
+    body: |-
+      Йонас из Германии покупает куртку в том же магазине. Послушайте, что случается с оплатой и что советует продавщица Грейс. Сначала целиком, потом ответьте на вопросы и при втором прослушивании проверьте ответы.
+
+      Йонас говорит просто и иногда строит фразу по-немецки: Is possible to pay with card? вместо Is it possible to pay by card?, I have here another card вместо I've got another card here, I try this one вместо I'll try this one. Понять его легко, но повторять за ним эти фразы не нужно.
+  - type: listening
+    id: till
+    title: At the till
+    plays: 2
+    transcript:
+      - { speaker: Grace, text: "Hi there. Just the jacket today?" }
+      - { speaker: Jonas, text: "Yes, just the jacket. Is possible to pay with card?" }
+      - { speaker: Grace, text: "Of course. That's a hundred and nineteen pounds, please." }
+      - { speaker: Jonas, text: "OK. Contactless?" }
+      - { speaker: Grace, text: "Sorry, it's over a hundred, so contactless won't work. Can you put your card in and enter your PIN?" }
+      - { speaker: Jonas, text: "Hmm. It says declined. But I have money on this card." }
+      - { speaker: Grace, text: "That happens a lot with foreign cards. Your bank sometimes blocks the first payment in a new country." }
+      - { speaker: Jonas, text: "But my bank app shows the payment. Could you check if the payment went through?" }
+      - { speaker: Grace, text: "Let me see… No, it didn't go through. In your app it's just a pending payment. The money will be back in your account in a few days." }
+      - { speaker: Jonas, text: "OK. I have here another card. I try this one." }
+      - { speaker: Grace, text: "Go ahead. Now the machine is asking if you want to pay in pounds or in euros." }
+      - { speaker: Jonas, text: "Which one is better?" }
+      - { speaker: Grace, text: "Pounds, usually. The exchange rate on the machine isn't as good as your bank's." }
+      - { speaker: Jonas, text: "Then pounds. … It's working." }
+      - { speaker: Grace, text: "Lovely, that's gone through. Would you like the receipt in the bag?" }
+      - { speaker: Jonas, text: "Yes, please. Maybe I have to return it, if my wife doesn't like the colour." }
+      - { speaker: Grace, text: "No problem — you've got twenty-eight days. Have a nice day." }
+  - type: exercise
+    id: till-q
+    about: till
+    title: Аудирование — касса
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why can't Jonas pay by contactless?
+        options:
+          - The jacket costs more than the contactless limit.
+          - The shop doesn't take contactless.
+          - His card is not a contactless card.
+        answer: The jacket costs more than the contactless limit.
+        explanation: "It's over a hundred, so contactless won't work: куртка стоит 119 фунтов."
+      - id: q2
+        prompt: What happens with his first card?
+        options:
+          - The payment is declined.
+          - He pays twice.
+          - The machine doesn't accept his PIN.
+        answer: The payment is declined.
+        explanation: It says declined.
+      - id: q3
+        prompt: What does Grace say about the payment in his bank app?
+        options:
+          - It's pending, and the money will come back in a few days.
+          - The shop has his money, and she will refund it.
+          - He has paid twice and needs to call his bank.
+        answer: It's pending, and the money will come back in a few days.
+        explanation: It's just a pending payment. The money will be back in your account in a few days.
+      - id: q4
+        prompt: Why does Grace tell him to pay in pounds?
+        options:
+          - The machine's exchange rate is worse than his bank's.
+          - The shop only takes pounds.
+          - There is a fee for paying in pounds.
+        answer: The machine's exchange rate is worse than his bank's.
+        explanation: The exchange rate on the machine isn't as good as your bank's.
+      - id: q5
+        prompt: Why does Jonas want the receipt?
+        options:
+          - He may need to return the jacket.
+          - He needs it for tax-free shopping.
+          - He wants to check the exchange rate.
+        answer: He may need to return the jacket.
+        explanation: Maybe I have to return it, if my wife doesn't like the colour (правильно — I might have to return it).
+  - type: explanation
+    id: market-how
+    title: На рынке
+    body: |-
+      На следующий день Йонас на рынке в Йорке. У продавца Каллума подержанные фотоаппараты, и цена на них не окончательная. Послушайте, как идёт торг: какую цену называет каждый, на чём сходятся и как Йонас платит. Йонас снова строит фразу по-немецки: Ten minutes, I come back — правильно I'll be back in ten minutes.
+  - type: listening
+    id: market
+    title: At the market
+    plays: 2
+    transcript:
+      - { speaker: Jonas, text: "Excuse me, how much is this camera?" }
+      - { speaker: Callum, text: "That one's thirty pounds. It's a lovely old camera, and it works perfectly." }
+      - { speaker: Jonas, text: "Thirty… Is that your best price? The one at the next stall is cheaper." }
+      - { speaker: Callum, text: "It is cheaper, but it isn't as good as this one. Have a look at the lens on that one — it's scratched." }
+      - { speaker: Jonas, text: "Hmm. Can you do it for twenty?" }
+      - { speaker: Callum, text: "Twenty's a bit low, I'm afraid. Twenty-five, and it's yours." }
+      - { speaker: Jonas, text: "Twenty-five. OK, deal. Do you take contactless?" }
+      - { speaker: Callum, text: "Normally, yes, but the signal's terrible here today. Cash only, sorry." }
+      - { speaker: Jonas, text: "I don't have pounds in cash. And my bank charges a transaction fee every time I use a cash machine abroad." }
+      - { speaker: Callum, text: "Then try the supermarket over the road. Buy something small and ask for cashback at the till. The shop doesn't charge for it." }
+      - { speaker: Jonas, text: "Cashback? Ah, they give me cash from my card. With a German card also?" }
+      - { speaker: Callum, text: "Some shops only do it with British cards, but it's worth asking. If not, there's a bureau de change at the station. Just don't change money at the airport — the rates there are terrible." }
+      - { speaker: Jonas, text: "OK. Ten minutes, I come back. Please keep the camera for me." }
+      - { speaker: Callum, text: "No problem. It's yours for twenty-five." }
+  - type: exercise
+    id: market-q
+    about: market
+    title: Аудирование — рынок
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What price does Callum ask for at first?
+        options: [thirty pounds, twenty pounds, twenty-five pounds]
+        answer: thirty pounds
+      - id: q2
+        prompt: What does Callum say about the camera at the next stall?
+        options:
+          - It's cheaper, but it's not as good.
+          - It's the same as his camera.
+          - It's more expensive.
+        answer: It's cheaper, but it's not as good.
+        explanation: It is cheaper, but it isn't as good as this one — у той камеры поцарапан объектив.
+      - id: q3
+        prompt: What price do they agree on?
+        options: [twenty-five pounds, twenty pounds, thirty pounds]
+        answer: twenty-five pounds
+        explanation: Twenty-five, and it's yours. — OK, deal.
+      - id: q4
+        prompt: Why can't Jonas pay by card?
+        options:
+          - The card reader has no signal today.
+          - Callum never takes cards.
+          - His card was declined.
+        answer: The card reader has no signal today.
+        explanation: Normally, yes, but the signal's terrible here today.
+      - id: q5
+        prompt: What does Callum tell Jonas to try first?
+        options:
+          - asking for cashback at the supermarket
+          - the cash machine at the airport
+          - the bureau de change at the airport
+        answer: asking for cashback at the supermarket
+        explanation: "Buy something small and ask for cashback at the till; обменник — только если не выйдет, и не в аэропорту."
+  - type: exercise
+    id: phrases-match
+    title: Что сказать
+    instruction: Подберите фразу к ситуации. Две фразы лишние.
+    format: match
+    bank:
+      - My card has been declined.
+      - Do you take contactless?
+      - Would you like cashback?
+      - I've been charged twice for the same order.
+      - Could you check if the payment went through?
+      - Can you do it for twenty?
+      - I'll pay in the local currency, thanks.
+      - Is service included?
+      - Can I try this on?
+    items:
+      - { id: m1, prompt: "Терминал показал «Declined». Вы объясняете продавцу.", answer: "My card has been declined." }
+      - { id: m2, prompt: "Вы хотите заплатить, приложив карту.", answer: "Do you take contactless?" }
+      - { id: m3, prompt: "Кассир в супермаркете предлагает снять наличные.", answer: "Would you like cashback?" }
+      - { id: m4, prompt: "В выписке два одинаковых списания за один заказ.", answer: "I've been charged twice for the same order." }
+      - { id: m5, prompt: "Вы не уверены, прошла ли оплата.", answer: "Could you check if the payment went through?" }
+      - { id: m6, prompt: "На рынке просят тридцать фунтов. Вы торгуетесь.", answer: "Can you do it for twenty?" }
+      - { id: m7, prompt: "Терминал за границей предлагает оплату в евро.", answer: "I'll pay in the local currency, thanks." }
+  - type: exercise
+    id: words-gap
+    title: Слова урока
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - contactless
+      - declined
+      - cashback
+      - commission
+      - bureau de change
+      - transaction fee
+      - pending
+      - refund
+      - receipt
+    items:
+      - { id: g1, prompt: "It's over a hundred pounds, so ___ won't work. Please put your card in.", answer: contactless }
+      - { id: g2, prompt: "The machine says the card was ___. Have you got another one?", answer: declined }
+      - { id: g3, prompt: "The money isn't gone yet — it's a ___ payment, and the bank will release it.", answer: pending }
+      - { id: g4, prompt: "My bank charges a foreign ___ of three pounds every time I use a cash machine abroad.", answer: transaction fee }
+      - { id: g5, prompt: "The sign says 'No ___', but check the rate first.", answer: commission }
+      - { id: g6, prompt: "There's a ___ in the station — you can change your euros there.", answer: bureau de change }
+      - { id: g7, prompt: "I bought some water and asked for twenty pounds ___.", answer: cashback }

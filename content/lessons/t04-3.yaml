@@ -1,0 +1,204 @@
+title: Заказ на компанию и отзыв о ресторане
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: order-bank
+    title: Банк фраз — в ресторане
+    body: |-
+      Ужин в ресторане — это несколько коротких реплик в предсказуемом порядке: бронь или столик у входа → напитки → аллергии и вопросы о блюдах → заказ → просьбы по ходу ужина → счёт. Если у вас есть готовая фраза на каждый шаг, остаётся только подставить блюдо.
+
+      Когда заказываете на компанию, говорите по очереди и называйте, кому что: **For my friend, the soup, and I'll have the pie.** **We'll both have the set menu.** Об аллергии — до заказа и за всех сразу: **One of us has a nut allergy. Which dishes are safe for her?** Безопасно ли блюдо, спрашивают с any: **Does the curry have any dairy in it?**
+
+      Поменять блюдо просят с Could I have… / Is it possible…: **Could I have the salad instead of the chips?** Instead of — «вместо».
+
+      Соберите свой банк: выпишите по фразе на каждый шаг ужина. Если у вас или ваших друзей есть аллергия или вы не едите мясо — запишите, как сказать об этом своими словами.
+    table:
+      columns:
+        - шаг
+        - фраза
+      rows:
+        - - столик
+          - "Have you got a table for three?"
+        - - напитки
+          - "Just tap water for me, thanks."
+        - - аллергия
+          - "One of us has a nut allergy."
+        - - вопрос о блюде
+          - "Does this have any dairy in it?"
+        - - заказ на компанию
+          - "For my friend, the soup, and I'll have the pie."
+        - - замена
+          - "Could I have salad instead of chips?"
+        - - жалоба
+          - "Excuse me, this isn't what I ordered."
+        - - счёт
+          - "Could we have the bill, please? Can we pay separately?"
+  - type: exercise
+    id: waiter-match
+    title: Реплика официанта и ответ
+    instruction: Подберите ответ к реплике официанта. Два ответа лишние.
+    format: match
+    bank:
+      - "No, we haven't. Have you got a table for three?"
+      - "Just tap water for all of us, thanks."
+      - "Could we have a few more minutes?"
+      - "Medium rare, please."
+      - "Yes, one of us has a nut allergy."
+      - "Lovely, thank you. We're full."
+      - "Separately, please."
+      - "It's a bit too spicy, thanks."
+      - "By card, please."
+    items:
+      - { id: m1, prompt: "Hi, have you booked?", answer: "No, we haven't. Have you got a table for three?" }
+      - { id: m2, prompt: "Can I get you any drinks?", answer: "Just tap water for all of us, thanks." }
+      - { id: m3, prompt: "Are you ready to order?", answer: "Could we have a few more minutes?" }
+      - { id: m4, prompt: "How would you like your steak?", answer: "Medium rare, please." }
+      - { id: m5, prompt: "Any allergies I should know about?", answer: "Yes, one of us has a nut allergy." }
+      - { id: m6, prompt: "How was everything? Any dessert?", answer: "Lovely, thank you. We're full." }
+      - { id: m7, prompt: "One bill or separate?", answer: "Separately, please." }
+  - type: exercise
+    id: group-phrases
+    title: Заказ на компанию
+    instruction: Переведите на английский. Сокращения (I'll, we'll) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: У одного из нас аллергия на орехи.
+        answer:
+          - One of us has a nut allergy.
+          - One of us has got a nut allergy.
+          - One of us is allergic to nuts.
+          - One of us has an allergy to nuts.
+        explanation: One of us — «один из нас», глагол в единственном числе — has.
+      - id: q2
+        prompt: Мы оба возьмём комплексное меню.
+        answer:
+          - "We'll both have the set menu."
+          - We will both have the set menu.
+          - "We'd both like the set menu."
+          - "We'll both have the set menu, please."
+          - "We'd both like the set menu, please."
+          - Both of us will have the set menu.
+          - "We're both having the set menu."
+          - We would both like the set menu.
+          - We would both like the set menu, please.
+        explanation: "Both — перед смысловым глаголом, но после will: we'll both have."
+      - id: q3
+        prompt: Можно мне салат вместо картошки фри?
+        answer:
+          - Could I have salad instead of chips?
+          - Could I have the salad instead of the chips?
+          - Could I have a salad instead of chips?
+          - Can I have salad instead of chips?
+          - Can I have the salad instead of the chips?
+          - Could I have salad instead of fries?
+          - Can I have salad instead of fries?
+          - Could I get salad instead of chips?
+          - Can I get salad instead of chips?
+          - Could I have a side salad instead of chips?
+          - Is it possible to have salad instead of chips?
+          - Is it possible to have the salad instead of the chips?
+          - Could I get the salad instead of the chips?
+          - Can I have a salad instead of chips?
+          - Could I have the salad instead of the fries?
+        explanation: Картошка фри в Британии — chips, в США — fries.
+      - id: q4
+        prompt: В карри есть что-нибудь молочное?
+        answer:
+          - Does the curry have any dairy in it?
+          - Is there any dairy in the curry?
+          - Does the curry contain any dairy?
+          - Does the curry contain dairy?
+          - Does the curry have dairy in it?
+          - Is there dairy in the curry?
+        explanation: Вопрос о составе — any; dairy неисчисляемое.
+  - type: explanation
+    id: speaking-how
+    title: Как записывать заказ
+    body: |-
+      Первое устное задание — заказ на компанию из трёх человек: вы говорите за всех, официант слушает. Это одна реплика 15–30 секунд: аллергия, вопрос о блюде, заказ на каждого, напитки. Сначала посмотрите на меню The Fig Tree из второго урока и выберите блюда, потом проговорите про себя, запишите, переслушайте и сверьте с образцом.
+
+      Второе — ответы официанту в конце ужина. Он задаёт три вопроса подряд, а вы отвечаете на каждый одной-двумя фразами. Не заучивайте образец: говорите о своих блюдах и своём счёте.
+  - type: speaking
+    id: group-order
+    part: monologue
+    prompt: "Вы обедаете в The Fig Tree с двумя друзьями. У одного из них аллергия на орехи, другая не ест мясо. Официант спрашивает: «Are you ready to order?» Скажите об аллергии, спросите, есть ли орехи в одном из блюд, закажите блюда на всех и напитки. Вся реплика — 15–30 секунд."
+    seconds: 30
+    model: "Yes, I think so. Before we order — one of us has a nut allergy. Does the soup have any nuts in it? … Great. Then for my friend, the soup and the fish of the day. My other friend doesn't eat meat, so she'll have the bean burger. And I'll have the steak, medium rare, please. Could I have salad instead of chips? And just tap water for all of us, thanks."
+    criteria:
+      - Об аллергии сказали до заказа; вопрос о составе — с any
+      - "Заказ — I'll have / she'll have / for my friend…, без I want и Give me"
+      - "Сказали, кому какое блюдо; если заказали стейк — назвали прожарку"
+      - "Замена — Could I have… instead of…?"
+      - Вся реплика — 15–30 секунд, без долгих пауз
+  - type: speaking
+    id: end-of-meal
+    part: interview
+    prompt: "Ужин закончился. Официант спрашивает: «How was everything?», «Would you like to see the dessert menu?», «Is it one bill or separate?» Ответьте на каждый вопрос одной-двумя фразами: похвалите или вежливо скажите, что было не так, откажитесь от десерта, попросите заплатить по отдельности и спросите, включено ли обслуживание. Весь ответ — 15–30 секунд."
+    seconds: 30
+    model: "It was lovely, thank you. The fish was delicious, but the soup was a bit too salty for me. No dessert, thanks — we're full. Could we pay separately, please? And is service included?"
+    criteria:
+      - Ответили на все три вопроса, каждый — одной-двумя фразами
+      - "Недовольство — мягко: a bit too salty, not hot enough"
+      - "Счёт — Could we pay separately? / Can we pay separately?; про плату — Is service included?"
+      - Отказ от десерта — вежливо, с thanks
+  - type: explanation
+    id: writing-how
+    title: Отзыв о ресторане
+    body: |-
+      Отзыв на сайте бронирования или на карте пишут для незнакомых людей и для владельца ресторана, поэтому регистр — нейтрально-формальный: без сленга, смайликов и восклицательных знаков подряд, полные предложения. Сокращения (wasn't, we'd) в отзыве допустимы, но писать полностью — тоже нормально.
+
+      Хороший отзыв в 60–100 слов строится так: когда и с кем были → что заказали и как это было → обслуживание и цена → итог и совет. Что было — **past simple**: We **had** the set menu. The steak **was** perfect. Мягкая критика — с **a bit too** и **not… enough**: the soup was **a bit too salty**, the chips were**n't hot enough**. Хорошо закончить рекомендацией: **I would recommend it for…** — «рекомендую для…».
+  - type: writing
+    id: review
+    register: formal
+    prompt: "Напишите отзыв о кафе или ресторане, где вы были в поездке или дома (60–100 слов): когда и с кем были, что заказали, что понравилось и что нет, обслуживание, цена, итог. Если подходящего места нет, напишите об обеде Лусии и Диего в The Fig Tree."
+    words: { min: 60, max: 100 }
+    model: |-
+      We had lunch at The Fig Tree with a friend last Tuesday. We ordered the set menu: two courses for £19, which is good value for York. The fish of the day was excellent, but the tomato soup was a bit too salty for me. I have a nut allergy, and our server checked every dish with the kitchen. The service was friendly and quick, even though the café was very busy. I would recommend it for a relaxed lunch in the centre.
+    criteria:
+      - "60–100 слов; есть когда, что заказали, плюсы и минусы, обслуживание, цена и итог"
+      - "Что было — past simple: we had, we ordered, it was"
+      - "Критика — мягко: a bit too…, not… enough; без грубых слов"
+      - "Нейтрально-формально: без сленга и смайликов, полные предложения"
+      - "В конце — итог или рекомендация: I would recommend it for…"
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "— Are you ready to order? — Yes. ___ the chicken pie, please."
+        options: ["I'll have", "I take", "I want"]
+        answer: "I'll have"
+        explanation: Решение прямо при заказе — I'll have.
+      - id: q2
+        prompt: Could we get ___ more water, please?
+        options: [some, any, a]
+        answer: some
+        explanation: В просьбе — some, хотя это вопрос; water неисчисляемое, без a.
+      - id: q3
+        prompt: Is there ___ gluten in the sauce?
+        options: [any, some, a]
+        answer: any
+        explanation: Вопрос о составе — any.
+      - id: q4
+        prompt: The coffee isn't ___. Could I have another one?
+        options: [hot enough, enough hot, too hot]
+        answer: hot enough
+        explanation: Enough — после прилагательного.
+      - id: q5
+        prompt: "I'm sorry, it's ___ salty for me."
+        options: [a bit too, too much, a bit enough]
+        answer: a bit too
+        explanation: Too + прилагательное; a bit смягчает жалобу. Too much — только перед существительным.
+      - id: q6
+        prompt: "Вы хотите, чтобы каждый заплатил за своё. Что сказать?"
+        options:
+          - Can we pay separately?
+          - Can we split the bill equally?
+          - Is service included?
+        answer: Can we pay separately?
+        explanation: Pay separately — каждый за своё; split equally — поровну.

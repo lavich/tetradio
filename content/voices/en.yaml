@@ -43,3 +43,21 @@ characters:
   Elena: { gender: female, voice: Despina }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
+  Rory: { gender: male, voice: Algieba }
+  Inês: { gender: female, voice: Gacrux }
+  Fiona: { gender: female, voice: Callirrhoe }
+  Lúcia: { gender: female, voice: Achernar }
+  Kwame: { gender: male, voice: Algenib }
+  Jonas: { gender: male, voice: Alnilam }
+  Hannah: { gender: female, voice: Autonoe }
+  Oliver: { gender: male, voice: Enceladus }
+  Chloe: { gender: female, voice: Erinome }
+  Diego: { gender: male, voice: Rasalgethi }
+  Grace: { gender: female, voice: Laomedeia }
+  Callum: { gender: male, voice: Sadachbia }
+  Bridget: { gender: female, voice: Sulafat }
+  Okafor: { gender: male, voice: Schedar }
+  Hughes: { gender: male, voice: Sadaltager }
+  Megan: { gender: female, voice: Vindemiatrix }
+  Piotr: { gender: male, voice: Umbriel }
+  Joanne: { gender: female, voice: Zephyr }

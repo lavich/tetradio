@@ -1,0 +1,8 @@
+id: tp052
+text: "We'd like a table for four at eight."
+translation: "Нам нужен столик на четверых на восемь часов."
+note: "бронь по телефону или у входа; for four — на сколько человек, at eight — на какое время"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

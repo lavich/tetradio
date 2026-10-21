@@ -1,0 +1,318 @@
+title: Заказ, состав блюда и аллергии
+kind: lesson
+items:
+  - { kind: word, id: tw046 }
+  - { kind: word, id: tw047 }
+  - { kind: word, id: tw048 }
+  - { kind: word, id: tw049 }
+  - { kind: word, id: tw050 }
+  - { kind: word, id: tw051 }
+  - { kind: word, id: tw052 }
+  - { kind: word, id: tw053 }
+  - { kind: phrase, id: tp046 }
+  - { kind: phrase, id: tp047 }
+  - { kind: phrase, id: tp048 }
+  - { kind: phrase, id: tp049 }
+  - { kind: phrase, id: tp050 }
+  - { kind: phrase, id: tp051 }
+  - { kind: phrase, id: tp052 }
+  - { kind: phrase, id: tp053 }
+blocks:
+  - type: explanation
+    id: ordering
+    title: Как заказать — I'd like, I'll have, Could we get
+    body: |-
+      В кафе по-русски говорят «Мне суп» или «Дайте, пожалуйста, суп», и это нормально. По-английски **I want the soup** или **Give me the soup** звучит резко, как требование. Заказ строят тремя оборотами.
+
+      **I'd like…** (= I would like) — вежливо и чуть официально: **I'd like** the soup, please. Так же бронируют столик: **We'd like** a table for four at eight.
+
+      **I'll have…** — так говорят, когда решили прямо сейчас, глядя в меню: **I'll have** the fish of the day. Will здесь — решение в момент речи, а не план. Калька «возьму» — **I take the fish** — ошибка. **I'll take…** встречается, особенно в США, но привычнее **I'll have…**. Часто говорят и **Can I get…?** — это разговорно, но не грубо; в Британии некоторые считают его американизмом, надёжнее **Could I have…?**
+
+      **Could we get…? / Could I have…?** — просьба по ходу ужина: **Could we get** some more bread? **Could I have** it without onions? Это те же вежливые вопросы, что на стойке регистрации в первом модуле.
+
+      Официант обычно спрашивает **Are you ready to order?** Если ещё не выбрали: **Could we have a few more minutes?** А когда заказывает вся компания, официант часто спрашивает **And for you?** — отвечают коротко: **The same for me, please.**
+    table:
+      columns:
+        - когда
+        - пример
+      rows:
+        - - заказ, вежливо
+          - "I'd like the soup, please."
+        - - решили прямо сейчас
+          - "I'll have the fish of the day."
+        - - просьба по ходу ужина
+          - Could we get some more bread?
+        - - просьба изменить блюдо
+          - Could I have it without onions?
+        - - бронь столика
+          - "We'd like a table for four at eight."
+        - - ещё не выбрали
+          - Could we have a few more minutes?
+  - type: explanation
+    id: some-too
+    title: some, any, a bit of; too и enough
+    body: |-
+      **Исчисляемое и неисчисляемое.** Bread, rice, salt, water — неисчисляемые: у них нет a и множественного числа. Нельзя **a bread** или **more breads** — говорят **some bread**, **some more bread**, **a piece of bread**, **a glass of water**. Немного — **a bit of**: Could I have **a bit of** sauce on the side? (Cheese, wine, sauce в значении «сорт» бывают исчисляемыми: two French cheeses.)
+
+      **some и any.** В утверждении — **some**: There's **some** garlic in the sauce. В вопросе о составе и в отрицании — **any**: Does this have **any** nuts in it? There aren't **any** nuts in it. Но в просьбе и предложении — **some**, хотя это вопрос: Could we get **some** more bread? Would you like **some** water? Вы ждёте ответа «да», поэтому some.
+
+      **too и enough.** **Too** + прилагательное — «слишком», то есть хуже, чем нужно: It's **too salty**. It's **a bit too** spicy for me — «немного слишком» звучит мягче. **Enough** ставят после прилагательного: The soup isn't **hot enough** — недостаточно горячий. Перед существительным enough стоит впереди: We haven't got **enough** chairs.
+
+      Типичные ошибки: **enough hot** вместо hot enough; **too much salty** вместо too salty — перед неисчисляемым существительным ставят too much: There's **too much** salt in it.
+    table:
+      columns:
+        - правило
+        - пример
+      rows:
+        - - неисчисляемое — some, a bit of
+          - Could we get some more bread?
+        - - вопрос о составе — any
+          - Does this have any nuts in it?
+        - - отрицание — any
+          - There isn't any dairy in it.
+        - - too + прилагательное
+          - "It's a bit too salty for me."
+        - - прилагательное + enough
+          - "The soup isn't hot enough."
+        - - too much + неисчисляемое
+          - "There's too much sauce."
+  - type: explanation
+    id: menu-words
+    title: Меню и аллергии
+    body: |-
+      Британское меню обычно делится на **starters** (закуски; в США — appetizers), **mains** (основные блюда) и **desserts**. К основному блюду можно заказать **a side dish** или просто a side — гарнир: chips, salad, vegetables. Chips в Британии — картошка фри, а чипсы из пакета — crisps.
+
+      **A sharing plate** — большое блюдо на компанию: его ставят в центр стола, и едят все. **A set menu** — комплексное меню: два или три блюда по одной цене, часто в обед дешевле, чем по отдельности.
+
+      Стейк заказывают с прожаркой: rare — с кровью, **medium rare** — слабой прожарки, розовый с красной серединой, medium — средней, well done — полной. Официант спросит **How would you like your steak?**
+
+      В Британии ресторан обязан сказать, есть ли в блюде один из 14 главных аллергенов. В меню их отмечают буквами или значками: **GF** — **gluten-free**, без глютена; **DF** — dairy-free, без **dairy** (молочного); **N** — contains nuts, есть орехи. Об аллергии говорят до заказа: **I've got a nut allergy** или **I'm allergic to shellfish**, а о блюде спрашивают **Does this have any nuts in it?** Allergic — **to**, не on.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: order-choice
+    title: Как заказать
+    instruction: Выберите вариант, который звучит вежливо и правильно.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы решили, что возьмёте рыбу дня, и говорите официанту.
+        options:
+          - "I'll have the fish of the day, please."
+          - I take the fish of the day.
+          - Give me the fish of the day.
+        answer: "I'll have the fish of the day, please."
+        explanation: I'll have — решение прямо сейчас; I take — калька с «возьму» без will. Give me звучит как приказ.
+      - id: q2
+        prompt: Вы просите ещё хлеба.
+        options:
+          - Could we get some more bread?
+          - Could we get more breads?
+          - Could we get a more bread?
+        answer: Could we get some more bread?
+        explanation: Bread неисчисляемое — без a и без -s; в просьбе — some.
+      - id: q3
+        prompt: Вы спрашиваете, есть ли в блюде орехи.
+        options:
+          - Does this have any nuts in it?
+          - Does this have some nut in it?
+          - Is this have any nuts in it?
+        answer: Does this have any nuts in it?
+        explanation: Вопрос о составе — any и множественное nuts; вопрос с have — через does.
+      - id: q4
+        prompt: Вы говорите официанту о своей аллергии.
+        options:
+          - "I'm allergic to shellfish."
+          - "I'm allergic on shellfish."
+          - I have allergic to shellfish.
+        answer: "I'm allergic to shellfish."
+        explanation: Allergic to; I have a… allergy — с существительным, I'm allergic — с прилагательным.
+      - id: q5
+        prompt: Вы просите приготовить блюдо без лука.
+        options:
+          - Could I have it without onions?
+          - Could I have it with no any onions?
+          - Could I have it without some onions?
+        answer: Could I have it without onions?
+        explanation: Without уже значит «без» — some и any не нужны.
+      - id: q6
+        prompt: Официант спрашивает, готовы ли вы заказать, а вы ещё не выбрали.
+        options:
+          - Could we have a few more minutes?
+          - Wait, please.
+          - We need more minute.
+        answer: Could we have a few more minutes?
+        explanation: Просьба — вопросом с could; a few more minutes — «ещё несколько минут».
+  - type: exercise
+    id: some-too-gap
+    title: some, any, too, enough
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - some
+      - any
+      - too
+      - enough
+      - bit
+      - much
+      - many
+      - more
+    items:
+      - id: g1
+        prompt: "Could we get ___ more water, please? — Of course."
+        answer: some
+        explanation: В просьбе ждём «да» — some, хотя это вопрос.
+      - id: g2
+        prompt: Is there ___ dairy in the sauce? My friend can't eat it.
+        answer: any
+        explanation: Вопрос о составе — any.
+      - id: g3
+        prompt: "I'm sorry, but it's ___ spicy for me. Could I have something milder?"
+        answer: too
+        explanation: Too + прилагательное — «слишком».
+      - id: g4
+        prompt: The soup isn't hot ___. Could you warm it up, please?
+        answer: enough
+        explanation: "Enough — после прилагательного: hot enough."
+      - id: g5
+        prompt: Could I have a ___ of sauce on the side, please? Just a little.
+        answer: bit
+        explanation: Немного неисчисляемого — a bit of.
+      - id: g6
+        prompt: "There's too ___ salt in this. I can't eat it."
+        answer: much
+        explanation: Too much + неисчисляемое существительное; перед прилагательным — просто too.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a starter
+      - a side dish
+      - medium rare
+      - gluten-free
+      - dairy
+      - a nut allergy
+      - a sharing plate
+      - a set menu
+      - well done
+      - a dessert
+    items:
+      - { id: m1, prompt: "закуска перед основным блюдом", answer: a starter }
+      - { id: m2, prompt: гарнир, answer: a side dish }
+      - { id: m3, prompt: "слабой прожарки, розовый с красной серединой", answer: medium rare }
+      - { id: m4, prompt: без глютена, answer: gluten-free }
+      - { id: m5, prompt: молочные продукты, answer: dairy }
+      - { id: m6, prompt: аллергия на орехи, answer: a nut allergy }
+      - { id: m7, prompt: блюдо на компанию, answer: a sharing plate }
+      - { id: m8, prompt: комплексное меню, answer: a set menu }
+  - type: exercise
+    id: menu-choice
+    title: Что выбрать
+    instruction: Выберите блюдо или ответ, который подходит гостю.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Гость не ест пшеницу. Какая пометка в меню ему нужна?"
+        options: [GF, DF, N]
+        answer: GF
+        explanation: GF — gluten-free, без глютена; глютен — в пшенице.
+      - id: q2
+        prompt: "Официант спрашивает: How would you like your steak? Вы хотите розовый стейк с красной серединой."
+        options: ["Medium rare, please.", "Medium well, please.", "Rare done, please."]
+        answer: "Medium rare, please."
+        explanation: "Medium rare — розовый с красной серединой; medium well — почти полная прожарка; rare done не говорят."
+      - id: q3
+        prompt: "Вы хотите заказать большую тарелку закусок на всех за столом. Что искать в меню?"
+        options: [sharing plates, side dishes, a set menu]
+        answer: sharing plates
+        explanation: A sharing plate — блюдо на компанию; a side dish — гарнир к своему блюду.
+      - id: q4
+        prompt: "Вы хотите два блюда по одной цене в обед. Что спросить?"
+        options:
+          - Do you have a set menu at lunchtime?
+          - Do you have a side dish at lunchtime?
+          - Do you have a starter at lunchtime?
+        answer: Do you have a set menu at lunchtime?
+        explanation: A set menu — несколько блюд по одной цене.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'll, I'm, we'd) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Мне рыбу дня.
+        answer:
+          - "I'll have the fish of the day."
+          - "I'll have the fish of the day, please."
+          - "I'd like the fish of the day."
+          - "I'd like the fish of the day, please."
+          - I would like the fish of the day.
+          - I would like the fish of the day, please.
+          - Can I have the fish of the day?
+          - Can I have the fish of the day, please?
+          - Could I have the fish of the day?
+          - Could I have the fish of the day, please?
+          - Can I get the fish of the day?
+          - Can I get the fish of the day, please?
+          - The fish of the day, please.
+        explanation: "I'll have… — решение прямо при заказе; I want и Give me звучат резко."
+      - id: q2
+        prompt: У меня аллергия на моллюсков и ракообразных.
+        answer:
+          - "I'm allergic to shellfish."
+          - "I've got a shellfish allergy."
+          - I have a shellfish allergy.
+          - I have an allergy to shellfish.
+          - "I've got an allergy to shellfish."
+        explanation: Shellfish — одним словом обо всех; allergic to.
+      - id: q3
+        prompt: Можно мне это без лука?
+        answer:
+          - Could I have it without onions?
+          - Could I have it without onions, please?
+          - Can I have it without onions?
+          - Can I have it without onions, please?
+          - Could I have it without onion?
+          - Can I have it without onion?
+          - Could I get it without onions?
+          - Can I get it without onions?
+          - Could I have this without onions?
+          - Can I have this without onions?
+      - id: q4
+        prompt: Нам нужен столик на четверых на восемь часов.
+        answer:
+          - "We'd like a table for four at eight."
+          - "We'd like a table for four at eight, please."
+          - "We'd like a table for four at 8."
+          - "We'd like a table for four people at eight."
+          - "We'd like to book a table for four at eight."
+          - Could we have a table for four at eight?
+          - Could we book a table for four at eight?
+          - Can we have a table for four at eight?
+          - Can we book a table for four at eight?
+          - "I'd like a table for four at eight."
+          - "I'd like to book a table for four at eight."
+          - A table for four at eight, please.
+          - We would like a table for four at eight.
+          - We would like a table for four at eight, please.
+          - We would like to book a table for four at eight.
+          - I would like a table for four at eight.
+          - I would like to book a table for four at eight.
+          - "We'd like a table for four at eight o'clock."
+          - "Could we have a table for four at eight o'clock?"
+          - We need a table for four at eight.
+        explanation: For four — на сколько человек, at eight — на какое время.
+      - id: q5
+        prompt: Это очень острое?
+        answer:
+          - Is it very spicy?
+          - Is this very spicy?
+          - Is it very hot?
+          - Is this very hot?
+          - Is it really spicy?
+          - Is this really spicy?
+        explanation: Spicy — острое; hot тоже можно, но его могут понять как «горячее».

@@ -1,0 +1,8 @@
+id: tp101
+text: "Am I entitled to compensation?"
+translation: "Мне положена компенсация?"
+note: "compensation — денежная компенсация за задержку или отмену"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

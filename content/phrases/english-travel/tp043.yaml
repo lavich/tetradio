@@ -1,0 +1,8 @@
+id: tp043
+text: "Someone's coming to fix it this afternoon."
+translation: "Сегодня днём придут починить."
+note: "present continuous — уже договорились"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md

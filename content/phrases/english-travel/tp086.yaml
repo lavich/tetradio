@@ -1,0 +1,7 @@
+id: tp086
+text: "Is it safe to drink alcohol with this?"
+translation: "С ним можно пить алкоголь?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t06
+  operation: requested-generation
+  request: Фразы модуля t06 программы docs/curriculum-english-travel.md

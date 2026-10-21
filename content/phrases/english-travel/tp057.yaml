@@ -1,0 +1,8 @@
+id: tp057
+text: "Just tap water, thanks."
+translation: "Просто воду из-под крана, спасибо."
+note: "ответ на What would you like to drink?; в заведении с лицензией на алкоголь такая вода по закону бесплатна по просьбе"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

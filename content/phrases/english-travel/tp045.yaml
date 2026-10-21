@@ -1,0 +1,8 @@
+id: tp045
+text: "We've locked ourselves out."
+translation: "Мы захлопнули дверь, а ключи остались внутри."
+note: "lock yourself out — остаться за дверью без ключа"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md

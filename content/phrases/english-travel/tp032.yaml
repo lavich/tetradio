@@ -1,0 +1,8 @@
+id: tp032
+text: "I've booked a double room for three nights."
+translation: "Я забронировал(а) двухместный номер на три ночи."
+note: "double — одна большая кровать, twin — две отдельные"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03
+  operation: requested-generation
+  request: Фразы модуля t03 по программе docs/curriculum-english-travel.md

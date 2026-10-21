@@ -1,0 +1,225 @@
+title: В аптеке и письмо в страховую
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: bank
+    title: Банк фраз — симптомы и дозировка
+    body: |-
+      В аптеке и у врача разговор идёт по одной схеме: что беспокоит → как давно → аллергия и другие лекарства → что принимать и как. Ваша часть — короткие точные ответы и переспрос, если не поняли дозировку. Переспрашивать — не стыдно: ошибиться с дозой хуже.
+
+      **Что беспокоит.** **I've got a sore throat.** **My nose is blocked.** **My ankle is swollen.** **It hurts when I swallow / walk.** **I feel dizzy when I stand up.** **I've been feeling sick since…**
+
+      **Как давно.** На **How long have you had it?** отвечают коротко: **For two days.** / **Since Sunday.** / **Since the flight.** Полный ответ — present perfect: **I've had it for two days**, а не I have it for two days.
+
+      **Аллергия и лекарства.** **I'm allergic to penicillin / aspirin.** **I'm not allergic to anything.** **I'm taking… for my blood pressure.** **I've taken two paracetamol, but they haven't helped.**
+
+      **Переспрос дозировки.** **Sorry, how often should I take it?** **How many a day?** **Can I take it with food?** **Is it safe to drink alcohol with this?** **Sorry, did you say twice a day or three times?** Повторите дозу своими словами — **So, one tablet twice a day, with food?** — и фармацевт подтвердит или поправит.
+
+      Соберите свой банк: запишите, что сказали бы о своей настоящей аллергии или лекарствах, которые принимаете, — это пригодится в любой поездке.
+    table:
+      columns:
+        - вопрос фармацевта или врача
+        - ваш ответ
+      rows:
+        - - What can I do for you?
+          - I've got a sore throat and a blocked nose.
+        - - How long have you had it?
+          - For two days. / Since Sunday.
+        - - Are you allergic to anything?
+          - Yes, to penicillin. / No, nothing.
+        - - Are you taking any other medicine?
+          - Just paracetamol. / No, nothing.
+        - - Take one twice a day.
+          - Sorry, did you say twice a day?
+        - - Anything else?
+          - Could I have a receipt for my insurance?
+  - type: exercise
+    id: replies-match
+    title: Вопрос и ответ
+    instruction: Подберите ответ к вопросу фармацевта. Два ответа лишние.
+    format: match
+    bank:
+      - I've got a sore throat and a blocked nose.
+      - For two days.
+      - Yes, I'm allergic to penicillin.
+      - Just paracetamol, twice a day.
+      - "So, one tablet twice a day, with food?"
+      - Could I have a receipt for my insurance?
+      - I'll have the fish of the day.
+      - At a hotel near the centre.
+    items:
+      - { id: m1, prompt: What can I do for you?, answer: I've got a sore throat and a blocked nose. }
+      - { id: m2, prompt: How long have you had it?, answer: For two days. }
+      - { id: m3, prompt: Are you allergic to anything?, answer: "Yes, I'm allergic to penicillin." }
+      - { id: m4, prompt: Are you taking any other medicine?, answer: "Just paracetamol, twice a day." }
+      - { id: m5, prompt: "Take one tablet twice a day, with food.", answer: "So, one tablet twice a day, with food?" }
+      - { id: m6, prompt: Anything else?, answer: Could I have a receipt for my insurance? }
+  - type: exercise
+    id: replies-choice
+    title: Как ответить
+    instruction: Выберите правильный и вежливый вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: — How long have you had the cough? —
+        options:
+          - I've had it since Saturday.
+          - I have it since Saturday.
+          - I've had it for Saturday.
+        answer: I've had it since Saturday.
+        explanation: Длится до сих пор — present perfect; Saturday — начальная точка, поэтому since.
+      - id: q2
+        prompt: Вы не расслышали, сколько раз в день принимать лекарство.
+        options:
+          - Sorry, how often should I take it?
+          - How often I should take it?
+          - Repeat the dose.
+        answer: Sorry, how often should I take it?
+        explanation: В вопросе should стоит перед I; повелительное звучит грубо.
+      - id: q3
+        prompt: Вы хотите проверить, что поняли дозировку.
+        options:
+          - So, two tablets three times a day?
+          - So, two tablets three times in day?
+          - So, two tablets three time a day?
+        answer: So, two tablets three times a day?
+        explanation: "Сколько раз в день — three times a day: times во множественном, a day без in."
+      - id: q4
+        prompt: Фармацевт советует показаться врачу, если через три дня не станет лучше.
+        options:
+          - If it's not better in three days, you'd better see a doctor.
+          - If it's not better in three days, you'd better to see a doctor.
+          - If it's not better in three days, you better seeing a doctor.
+        answer: If it's not better in three days, you'd better see a doctor.
+        explanation: "'d better + глагол без to."
+      - id: q5
+        prompt: Рядом человеку стало плохо, он не отвечает. Что сказать прохожим?
+        options:
+          - Please call an ambulance!
+          - Please call ambulance!
+          - Please call to an ambulance!
+        answer: Please call an ambulance!
+        explanation: Call an ambulance — с артиклем и без to.
+  - type: explanation
+    id: phone-how
+    title: Описать симптомы по телефону
+    body: |-
+      Первое устное задание — короткое описание самочувствия, как по телефону в клинику или на линию 111: что беспокоит, как давно, что уже принимали, есть ли аллергия, и вопрос в конце. Говорите 30–45 секунд, о симптомах, которые бывали у вас самих, или придумайте простые.
+
+      Сначала проговорите ответ по банку фраз, потом запишите, переслушайте и сверьте с критериями. Особенно проверьте время: **I've had… for…**, **I've been feeling… since…**
+  - type: speaking
+    id: symptoms
+    part: monologue
+    prompt: "Вы в поездке, вам нехорошо. Позвоните в клинику и опишите своё состояние: что болит, с какого времени или как давно, что уже принимали и помогло ли, есть ли аллергия. В конце спросите, нужно ли прийти к врачу сегодня. Говорите 30–45 секунд."
+    seconds: 45
+    model: "Hello, I'm on holiday here, and I'm not feeling well. I've had a bad headache for two days, and I've been feeling sick since last night. I also feel dizzy when I stand up. I've taken paracetamol twice, but it hasn't really helped. I'm not allergic to anything, and I'm not taking any other medicine. Should I see a doctor today?"
+    criteria:
+      - "Назвали симптомы, как давно, что принимали, аллергию и задали вопрос"
+      - "Как давно — present perfect: I've had… for…, I've been feeling… since…, без I have… for"
+      - "for + отрезок (for two days), since + начальная точка (since last night)"
+      - "Вопрос — Should I…?, а не Had I better…?"
+      - "30–45 секунд, без длинных пауз"
+  - type: explanation
+    id: writing-how
+    title: Сообщение в страховую
+    body: |-
+      Если за врача и лекарства вы заплатили сами, страховая компания вернёт деньги по заявлению — **an insurance claim**. Обычно пишут через форму на сайте или по электронной почте, 60–100 слов. Это письмо организации, поэтому регистр формальный: **Dear Sir or Madam**, полные формы (I would like, а не I'd like), в конце **Yours faithfully** и имя с фамилией. Yours faithfully — после Dear Sir or Madam; если знаете имя адресата (Dear Ms Clark) — Yours sincerely.
+
+      Что указать по порядку: номер полиса (**policy number**), что случилось и когда (**On 12 March I became ill in Edinburgh…**), что сделал врач (**The doctor prescribed…**), сколько вы заплатили, какие документы прикладываете (**I attach the receipts and a copy of the prescription**) и вопрос в конце (**Could you please tell me…?**). Что случилось — past simple; дата — on 12 March.
+  - type: writing
+    id: insurance
+    register: formal
+    prompt: "В поездке вы заболели и заплатили за приём врача и лекарства. Напишите в страховую компанию (60–100 слов): номер полиса, что и когда случилось, что назначил врач, сколько вы заплатили, какие документы прикладываете, и спросите, когда вернут деньги. Детали придумайте или возьмите из своей поездки."
+    words: { min: 60, max: 100 }
+    model: |-
+      Dear Sir or Madam,
+      I would like to make a claim under my travel insurance, policy number TR558201. On 12 March I became ill in Edinburgh and saw a doctor at a private clinic. The doctor said I had tonsillitis and prescribed antibiotics. I paid £85 for the appointment and £12.40 for the medicine. I attach the receipts and a copy of the prescription. Could you please tell me when I can expect the payment? I look forward to hearing from you.
+      Yours faithfully,
+      Olga Ivanova
+    criteria:
+      - "60–100 слов; есть номер полиса, дата и место, назначение врача, суммы, документы и вопрос"
+      - "Формально: Dear Sir or Madam… Yours faithfully, полные формы (I would like), без Hi и смайликов"
+      - "Что случилось — past simple: became ill, saw a doctor, prescribed, paid"
+      - "Дата — On 12 March; суммы — £85, £12.40"
+      - "Вопрос в конце — вежливо: Could you please tell me…?"
+  - type: explanation
+    id: chemist-scene-how
+    title: Ролевая сцена в аптеке
+    body: |-
+      Сцена: вы пришли в аптеку с больным горлом и заложенным носом. Фармацевт Бриджет задаёт вопросы и называет дозировку, а вы отвечаете и переспрашиваете то, что не поймали с первого раза. **Lozenges** — леденцы от горла, **a nasal spray** — спрей для носа.
+
+      Ниже — реплики Бриджет по порядку. Прослушайте их дважды, затем откройте текст кнопкой «Открыть текст» и держите перед глазами. Отвечайте на каждую реплику по очереди и записывайте свою часть.
+  - type: listening
+    id: chemist-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Bridget, text: "Hello, what can I do for you?" }
+      - { speaker: Bridget, text: "Oh dear. How long have you had it?" }
+      - { speaker: Bridget, text: "Have you got a temperature? And are you allergic to anything?" }
+      - { speaker: Bridget, text: "Right, so nothing with aspirin or ibuprofen in it. These lozenges will help your throat, and this spray is for your nose. Use the spray twice a day, morning and evening." }
+      - { speaker: Bridget, text: "One every three hours, but not more than six a day. And don't use the spray for more than a week." }
+      - { speaker: Bridget, text: "No, they're both over the counter. If you're not feeling better in four or five days, you'd better see a doctor. Anything else?" }
+  - type: speaking
+    id: chemist
+    part: roleplay
+    prompt: |-
+      Вы в аптеке: два дня болит горло, больно глотать, заложен нос. Температуры нет, но у вас аллергия на аспирин. Прослушайте реплики Бриджет на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      1) Скажите, что вас беспокоит. 2) Ответьте, как давно. 3) Ответьте про температуру и аллергию. 4) Бриджет не сказала, как часто сосать леденцы, — переспросите. 5) Спросите, нужен ли рецепт. 6) Поблагодарите и попросите чек для страховой.
+      Каждая реплика — одна-две фразы, всего 60–90 секунд.
+    seconds: 90
+    model: |-
+      Bridget: Hello, what can I do for you?
+      You: Hello. I've got a really sore throat, and my nose is blocked.
+      Bridget: Oh dear. How long have you had it?
+      You: For two days. It hurts when I swallow.
+      Bridget: Have you got a temperature? And are you allergic to anything?
+      You: No, I haven't got a temperature. But I'm allergic to aspirin.
+      Bridget: Right, so nothing with aspirin or ibuprofen in it. These lozenges will help your throat, and this spray is for your nose. Use the spray twice a day, morning and evening.
+      You: Sorry, how often should I take the lozenges?
+      Bridget: One every three hours, but not more than six a day. And don't use the spray for more than a week.
+      You: OK, one every three hours. Do I need a prescription for these?
+      Bridget: No, they're both over the counter. If you're not feeling better in four or five days, you'd better see a doctor. Anything else?
+      You: No, that's all, thank you. Could I have a receipt, please? It's for my insurance.
+    criteria:
+      - "Ответили на все шесть реплик по порядку, каждая — одна-две фразы"
+      - "Как давно — For two days / I've had it for two days, без I have it for two days"
+      - "Сказали об аллергии: I'm allergic to aspirin"
+      - "Переспросили дозировку вопросом: Sorry, how often should I take…? и повторили ответ своими словами"
+      - "Вопрос о рецепте — Do I need a prescription for…?; в конце — please и thank you"
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I've been feeling dizzy ___ this morning.
+        options: [since, for, from]
+        answer: since
+        explanation: This morning — начальная точка; since.
+      - id: q2
+        prompt: She ___ a rash on her arm for two days.
+        options: ["'s had", "'s having", has been having]
+        answer: "'s had"
+        explanation: Have a rash — состояние, поэтому present perfect без -ing.
+      - id: q3
+        prompt: You ___ take ibuprofen on an empty stomach.
+        options: [shouldn't, should, "'d better"]
+        answer: shouldn't
+        explanation: Натощак принимать не советуют — shouldn't.
+      - id: q4
+        prompt: My ankle is very ___. I can't put my shoe on.
+        options: [swollen, dizzy, blocked]
+        answer: swollen
+      - id: q5
+        prompt: You can buy paracetamol without a prescription — it's sold ___.
+        options: [over the counter, as a side effect, as a dose]
+        answer: over the counter
+        explanation: После глагола — over the counter без дефисов; перед существительным — over-the-counter medicine.
+      - id: q6
+        prompt: — Do I need a prescription for this? — No, but you'd better ___ more than six a day.
+        options: [not take, not to take, don't take]
+        answer: not take
+        explanation: "'d better not + глагол без to."

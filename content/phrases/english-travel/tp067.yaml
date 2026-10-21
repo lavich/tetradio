@@ -1,0 +1,8 @@
+id: tp067
+text: "Do I have to show the receipt?"
+translation: "Мне обязательно показывать чек?"
+note: "have to — обязательность по правилам"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t05
+  operation: requested-generation
+  request: Фразы модуля t05 по программе docs/curriculum-english-travel.md

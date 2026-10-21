@@ -6,10 +6,11 @@ goal: зарегистрироваться на рейс, сдать багаж,
 grammar:
   - вежливые просьбы (Could I…, Would it be possible to…, Do you mind if…), present simple для расписания
 sessions: 3
-partial: true
 lessons:
   - t01-1
   - t01-2
+  - t01-3
+  - t01-test
 crib:
   title: просьбы и расписание
   rows:

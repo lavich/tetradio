@@ -1,8 +1,24 @@
 number: 7
 title: When things go wrong
 subtitle: Если что-то пошло не так
-status: draft
+status: published
 goal: сообщить о краже или потере, о пропущенном рейсе, пожаловаться и добиться решения
 grammar:
   - past simple и past continuous в рассказе, passive в прошедшем, need to / have to
 sessions: 3
+lessons:
+  - t07-1
+  - t07-2
+  - t07-3
+  - t07-test
+checkpoint: t07-c1
+crib:
+  title: рассказ о происшествии
+  rows:
+    - [фон, "I was waiting…"]
+    - [событие, "…when someone took…"]
+    - [что пропало, It was stolen.]
+    - [несколько вещей, They were stolen.]
+    - [что нужно мне, "I need to…"]
+    - [правило, "You have to…"]
+  note: "steal — вещь, rob — человека: I was robbed"

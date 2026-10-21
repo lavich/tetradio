@@ -1,0 +1,8 @@
+id: tp091
+text: "My wallet was stolen on the bus."
+translation: "У меня украли кошелёк в автобусе."
+note: "passive: важно, что украли, а не кто; on the bus — в автобусе, не in the bus"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

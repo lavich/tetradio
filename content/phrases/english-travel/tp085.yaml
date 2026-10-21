@@ -1,0 +1,7 @@
+id: tp085
+text: "Can I take it with food?"
+translation: "Его можно принимать во время еды?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t06
+  operation: requested-generation
+  request: Фразы модуля t06 программы docs/curriculum-english-travel.md

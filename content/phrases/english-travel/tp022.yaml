@@ -1,0 +1,7 @@
+id: tp022
+text: "Is this the right platform for Oxford?"
+translation: "Поезд на Оксфорд отходит с этой платформы?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

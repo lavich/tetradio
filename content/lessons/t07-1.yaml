@@ -1,0 +1,305 @@
+title: Что случилось — кража и потеря
+kind: lesson
+items:
+  - { kind: word, id: tw091 }
+  - { kind: word, id: tw092 }
+  - { kind: word, id: tw093 }
+  - { kind: word, id: tw094 }
+  - { kind: word, id: tw095 }
+  - { kind: word, id: tw096 }
+  - { kind: word, id: tw097 }
+  - { kind: word, id: tw098 }
+  - { kind: phrase, id: tp091 }
+  - { kind: phrase, id: tp092 }
+  - { kind: phrase, id: tp093 }
+  - { kind: phrase, id: tp094 }
+  - { kind: phrase, id: tp095 }
+  - { kind: phrase, id: tp096 }
+  - { kind: phrase, id: tp097 }
+  - { kind: phrase, id: tp098 }
+blocks:
+  - type: explanation
+    id: story-tenses
+    title: Рассказ о происшествии — past continuous и past simple
+    body: |-
+      Когда что-то случилось — украли телефон, потерялась сумка, — вас попросят рассказать, как это было. В таком рассказе почти всегда два прошедших времени.
+
+      **Past continuous** (was / were + -ing) — фон, то, что длилось в тот момент: **I was waiting for the train.** **We were having lunch on a terrace.** **Past simple** — короткое событие на этом фоне: **…when someone took my bag.** **…and a man snatched my phone.** Связки: **when** перед событием, **while** перед фоном: **While I was looking at the map, someone opened my bag.**
+
+      Цепочка событий подряд — только past simple: **He grabbed the bag, jumped off the bus and ran.** Если поставить здесь was grabbing, was jumping, рассказ рассыпается: непонятно, что за чем шло.
+
+      Типичная ошибка — фон в past simple: «I waited for the train when someone took my bag» звучит как «я дождался поезда, и тогда…». Вторая — забыть was: «I waiting…» без was — ошибка. И третья — continuous у глаголов состояния: **I didn't know** him, а не I wasn't knowing; **I had** my phone in my pocket, а не I was having my phone.
+    table:
+      columns:
+        - фон — past continuous
+        - событие — past simple
+      rows:
+        - - I was waiting for the bus…
+          - …when someone took my bag.
+        - - We were having dinner…
+          - …when our car was broken into.
+        - - While I was paying for the coffee,…
+          - …a man snatched my phone.
+        - - It was raining and the station was busy.
+          - I didn't see their face.
+  - type: explanation
+    id: passive
+    title: Что у вас украли — passive в прошедшем
+    body: |-
+      В полиции и в заявлении важно, что случилось с вещью, а кто это сделал, вы обычно не знаете. Поэтому говорят в **passive**: **was / were + третья форма глагола**. **My wallet was stolen.** **Our car was broken into.** **Two bags were taken.**
+
+      Was — для одной вещи, were — для нескольких: my passport **was** stolen, my cards **were** stolen. Место и время — в конце: **My wallet was stolen on the bus this morning.**
+
+      Ловушка русского «у меня украли»: «I was stolen my wallet» значит почти «меня украли». Подлежащее — вещь: **My wallet was stolen.** Можно и активно, с неизвестным вором: **Someone stole my wallet.** И не путайте **steal** и **rob**: steal — вещь (they stole my phone), rob — человека или место (I was robbed — меня ограбили; the bank was robbed).
+    table:
+      columns:
+        - активно
+        - passive
+      rows:
+        - - Someone stole my wallet.
+          - My wallet was stolen.
+        - - Someone broke into our car.
+          - Our car was broken into.
+        - - Someone took two bags.
+          - Two bags were taken.
+        - - Did someone steal it?
+          - Was it stolen?
+  - type: explanation
+    id: need-have
+    title: need to и have to
+    body: |-
+      **Need to** — что нужно вам: **I need to report a theft.** **I need to cancel my cards.** Существительное — без to: **I need a police report for my insurance.**
+
+      **Have to** — что требует правило или кто-то другой: **You have to fill in this form.** **You have to show your passport.** Отрицание **don't have to** — «не обязательно»: **You don't have to come back to the station — we'll email you.** В прошедшем — **had to**: **I had to wait two hours.**
+
+      В разговоре need to и have to часто взаимозаменяемы, но в полиции и у стойки удобно так: про себя — I need to…, правила — You have to… Ошибки: «I need report» без to и «I must to…» — после must to не ставится.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - I need to + глагол
+          - I need to report a theft.
+        - - I need + существительное
+          - I need a police report for my insurance.
+        - - You have to + глагол
+          - You have to fill in this form.
+        - - You don't have to…
+          - You don't have to come back.
+        - - I had to…
+          - I had to cancel all my cards.
+  - type: explanation
+    id: police-words
+    title: В полиции
+    body: |-
+      В толпе и в транспорте работают карманники — **a pickpocket**. Если вещь вырвали из рук, говорят **snatch**: **A man snatched my phone and ran off.** Если залезли в машину или квартиру — **break into**: **Someone broke into our car.**
+
+      В полиции вы даёте **a statement** — заявление, рассказ о том, что случилось. Спросят, были ли **witnesses** — свидетели, и где это было: на станциях и в магазинах есть камеры, и полиция может проверить **CCTV footage** — запись камер. В Британии после заявления дают **a crime reference number** — номер заявления; его просит страховая, поэтому сфотографируйте его.
+
+      Если вещь просто потерялась, её ищут в **lost property** — бюро находок на вокзале, в аэропорту или у транспортной компании. Украденный паспорт — сначала в полицию за crime reference number, потом в посольство или консульство; потерянный — сразу в посольство или консульство за временным документом.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: tenses
+    title: Фон или событие
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ for the train when someone took my bag.
+        options: [was waiting, waited, am waiting]
+        answer: was waiting
+        explanation: Ожидание длилось, когда случилось событие, — past continuous.
+      - id: q2
+        prompt: We were having lunch on the terrace when a man ___ my phone from the table.
+        options: [snatched, was snatching, snatches]
+        answer: snatched
+        explanation: Короткое событие на фоне — past simple.
+      - id: q3
+        prompt: While I ___ at the map, someone opened my backpack.
+        options: [was looking, looked, look]
+        answer: was looking
+        explanation: После while — фон, past continuous.
+      - id: q4
+        prompt: "The man grabbed my bag, ___ off the bus and ran towards the station."
+        options: [jumped, was jumping, jumping]
+        answer: jumped
+        explanation: События идут одно за другим — все в past simple.
+      - id: q5
+        prompt: I ___ the man. I had never seen him before.
+        options: ["didn't know", "wasn't knowing", "not knew"]
+        answer: "didn't know"
+        explanation: Know — глагол состояния, в continuous не ставится.
+      - id: q6
+        prompt: It ___ and the platform was very busy.
+        options: [was raining, rained, is raining]
+        answer: was raining
+        explanation: Погода в тот момент — фон рассказа, past continuous.
+  - type: exercise
+    id: passive-gap
+    title: Что случилось с вещами
+    instruction: Вставьте глагол в passive. Два варианта лишние.
+    format: gap
+    bank:
+      - was stolen
+      - were stolen
+      - was broken into
+      - was snatched
+      - were left
+      - stole
+      - was stealing
+    items:
+      - id: g1
+        prompt: My wallet ___ from my pocket on the bus this morning.
+        answer: was stolen
+        explanation: Одна вещь — was + stolen.
+      - id: g2
+        prompt: All my cards ___ too, so I had to cancel them.
+        answer: were stolen
+        explanation: Cards — несколько вещей, поэтому were.
+      - id: g3
+        prompt: Our hire car ___ while we were having dinner.
+        answer: was broken into
+        explanation: Break into в passive — was broken into, предлог остаётся.
+      - id: g4
+        prompt: My phone ___ out of my hand on the street.
+        answer: was snatched
+      - id: g5
+        prompt: Two suitcases ___ on the platform without their owners, so the station was closed for an hour.
+        answer: were left
+  - type: exercise
+    id: need-have-choice
+    title: need to или have to
+    instruction: Выберите вариант, который звучит правильно.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы пришли в полицию. Что сказать первым?
+        options:
+          - I need to report a theft.
+          - I need report a theft.
+          - I must to report a theft.
+        answer: I need to report a theft.
+        explanation: Need to + глагол; после must to не ставится.
+      - id: q2
+        prompt: "Полицейский: «Нужно заполнить эту форму — таковы правила»."
+        options:
+          - You have to fill in this form.
+          - You need fill in this form.
+          - You don't have to fill in this form.
+        answer: You have to fill in this form.
+        explanation: Правило — have to; don't have to значит «не обязательно».
+      - id: q3
+        prompt: "Полицейский: «Приходить ещё раз не нужно, мы пришлём письмо»."
+        options:
+          - You don't have to come back. We'll email you.
+          - You have to come back. We'll email you.
+          - You mustn't come back. We'll email you.
+        answer: You don't have to come back. We'll email you.
+        explanation: "Don't have to — «не обязательно»; mustn't — «нельзя»."
+      - id: q4
+        prompt: Вам нужна справка для страховой.
+        options:
+          - I need a police report for my insurance.
+          - I need to a police report for my insurance.
+          - I have a police report for my insurance.
+        answer: I need a police report for my insurance.
+        explanation: Перед существительным — need без to.
+      - id: q5
+        prompt: Вы рассказываете, что вчера пришлось два часа ждать в участке.
+        options:
+          - I had to wait for two hours.
+          - I have to wait for two hours.
+          - I must waited for two hours.
+        answer: I had to wait for two hours.
+        explanation: В прошедшем — had to + глагол.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a pickpocket
+      - a crime reference number
+      - a witness
+      - lost property
+      - snatch
+      - break into
+      - a statement
+      - CCTV footage
+      - a baggage allowance
+      - a layover
+    items:
+      - { id: m1, prompt: карманник, answer: a pickpocket }
+      - { id: m2, prompt: номер заявления о преступлении, answer: a crime reference number }
+      - { id: m3, prompt: свидетель, answer: a witness }
+      - { id: m4, prompt: бюро находок, answer: lost property }
+      - { id: m5, prompt: выхватить из рук, answer: snatch }
+      - { id: m6, prompt: взломать машину или квартиру, answer: break into }
+      - { id: m7, prompt: заявление в полиции, answer: a statement }
+      - { id: m8, prompt: запись камер видеонаблюдения, answer: CCTV footage }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, didn't) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: У меня украли кошелёк в автобусе.
+        answer:
+          - My wallet was stolen on the bus.
+          - Someone stole my wallet on the bus.
+          - My purse was stolen on the bus.
+          - Someone stole my purse on the bus.
+          - I had my wallet stolen on the bus.
+          - I had my purse stolen on the bus.
+          - My wallet got stolen on the bus.
+          - My purse got stolen on the bus.
+          - My wallet has been stolen on the bus.
+          - I've had my wallet stolen on the bus.
+        explanation: Важна вещь, а не вор, — passive; «в автобусе» — on the bus.
+      - id: q2
+        prompt: Я ждал поезд, когда кто-то взял мою сумку.
+        answer:
+          - I was waiting for the train when someone took my bag.
+          - I was waiting for the train when somebody took my bag.
+          - I was waiting for my train when someone took my bag.
+          - I was waiting for the train when someone stole my bag.
+          - I was waiting for the train when somebody stole my bag.
+          - I was waiting for the train when someone grabbed my bag.
+          - I was waiting for a train when someone took my bag.
+          - I was waiting for a train when someone stole my bag.
+          - I was waiting for a train when someone grabbed my bag.
+        explanation: Фон — was waiting, событие — took.
+      - id: q3
+        prompt: Мне нужно заявить о краже.
+        answer:
+          - I need to report a theft.
+          - I need to report the theft.
+          - I'd like to report a theft.
+          - I want to report a theft.
+          - I have to report a theft.
+      - id: q4
+        prompt: Это случилось около часа назад.
+        answer:
+          - It happened about an hour ago.
+          - It happened around an hour ago.
+          - It happened about one hour ago.
+          - It happened an hour ago.
+          - It was about an hour ago.
+          - It happened approximately an hour ago.
+          - It happened roughly an hour ago.
+        explanation: Ago — после срока, глагол в past simple.
+      - id: q5
+        prompt: Я потерял паспорт. Что мне делать?
+        answer:
+          - I've lost my passport. What should I do?
+          - I have lost my passport. What should I do?
+          - I've lost my passport. What do I do?
+          - I've lost my passport. What do I need to do?
+          - I've lost my passport. What shall I do?
+          - I lost my passport. What should I do?
+          - I've lost my passport. What can I do?
+          - I lost my passport. What do I do?
+        explanation: Паспорта нет сейчас — present perfect; I lost тоже понятно, особенно в американском английском.

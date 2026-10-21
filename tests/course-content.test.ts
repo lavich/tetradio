@@ -1,6 +1,10 @@
+import "fake-indexeddb/auto";
 import { readdirSync, readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { parseCatalog, parsePackage } from "../src/content/schema";
+import { moduleViews, nextStep } from "../src/storage/course";
+import { AppDatabase } from "../src/storage/db";
+import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 import { GREEK_CALENDAR } from "./helpers/calendar";
 import { realContent } from "./helpers/real-content";
 
@@ -81,9 +85,29 @@ describe("курс в продукте", () => {
 });
 
 describe("английский для путешествий и общения", () => {
+  const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07"];
+  const IT_NAMES = new Set(
+    packagesOf("english-it")
+      .flatMap((pack) => pack.blocks ?? [])
+      .flatMap((block) => (block.type === "listening" ? block.transcript.map((line) => line.speaker) : [])),
+  );
+  const WRITING: Record<string, { register: string; min: number; max: number }> = {
+    t01: { register: "formal", min: 20, max: 40 },
+    t02: { register: "friendly", min: 20, max: 40 },
+    t03: { register: "friendly", min: 60, max: 100 },
+    t04: { register: "formal", min: 60, max: 100 },
+    t05: { register: "formal", min: 60, max: 100 },
+    t06: { register: "formal", min: 60, max: 100 },
+    t07: { register: "formal", min: 80, max: 100 },
+  };
   const travel = () => catalog.courses.find((course) => course.id === "english-travel");
   const lessonOf = (id: string) => packagesOf("english-travel").find((pack) => pack.id === id);
-  it("курс по программе: поля выбора, без календаря, 14 модулей, t01 опубликован частично двумя уроками", () => {
+  const blocksOf = (id: string) => lessonOf(id)!.blocks!;
+  const cardIds = (prefix: string, number: number) =>
+    Array.from({ length: 15 }, (_, i) => `${prefix}${String(15 * (number - 1) + i + 1).padStart(3, "0")}`);
+  const wordCount = (text: string) => text.split(/\s+/).filter(Boolean).length;
+
+  it("курс по программе: поля выбора, без календаря, 14 модулей, ступень опубликована, остальные — черновики", () => {
     expect(travel()).toMatchObject({
       title: "Английский для путешествий и общения",
       language: "en",
@@ -100,48 +124,182 @@ describe("английский для путешествий и общения",
       Array.from({ length: 14 }, (_, i) => `t${String(i + 1).padStart(2, "0")}`),
     );
     expect(modules.map((m) => m.number)).toEqual(Array.from({ length: 14 }, (_, i) => i + 1));
-    expect(modules[0]).toMatchObject({ status: "published", lessonIds: ["t01-1", "t01-2"] });
-    for (const module of modules.slice(1)) expect(module.status, module.id).toBe("draft");
-    expect(content.partial).toEqual([expect.objectContaining({ id: "t01" })]);
-    for (const [id, module] of content.sources.modules)
-      if (/^m\d+$/.test(id)) expect(module.partial, id).toBeUndefined();
+    for (const module of modules.filter((m) => !STAGE.includes(m.id))) expect(module.status, module.id).toBe("draft");
+    expect(content.partial).toEqual([]);
   });
-  it("карточки t01: 15 слов tw… и 15 фраз tp…, каждая в одном уроке, у фраз перевод и происхождение", () => {
-    const packs = ["t01-1", "t01-2"].map((id) => lessonOf(id)!);
-    const words = packs.flatMap((pack) => pack.words);
-    const phrases = packs.flatMap((pack) => pack.phrases);
-    expect(words.map((word) => word.id).sort()).toEqual(
-      Array.from({ length: 15 }, (_, i) => `tw${String(i + 1).padStart(3, "0")}`),
-    );
-    expect(phrases.map((p) => p.id).sort()).toEqual(
-      Array.from({ length: 15 }, (_, i) => `tp${String(i + 1).padStart(3, "0")}`),
-    );
-    for (const word of words) expect(word.ipa, word.greek).toMatch(/^\/.+\/$/);
-    for (const phrase of phrases) {
-      expect(phrase.translation, phrase.text).toBeTruthy();
-      expect(content.sources.phrases.get(phrase.id)!.provenance).toMatchObject({ operation: "requested-generation" });
-    }
+
+  describe.each(STAGE)("модуль %s", (moduleId) => {
+    const module = () => modulesOf("english-travel").find((m) => m.id === moduleId)!;
+    const lessonIds = ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`);
+    const [first, second, third, test] = lessonIds;
+
+    it("опубликован полностью: три урока и контрольная, шпаргалка", () => {
+      expect(module()).toMatchObject({ status: "published", lessonIds });
+      expect(module().crib, moduleId).toBeDefined();
+      expect(lessonOf(test)!.lesson.kind).toBe("test");
+    });
+    it("15 слов и 15 фраз модуля — только в двух первых уроках, каждая в одном; IPA, перевод, происхождение", () => {
+      const packs = [first, second].map((id) => lessonOf(id)!);
+      const words = packs.flatMap((pack) => pack.words);
+      const phrases = packs.flatMap((pack) => pack.phrases);
+      expect(words.map((word) => word.id).sort()).toEqual(cardIds("tw", module().number));
+      expect(phrases.map((phrase) => phrase.id).sort()).toEqual(cardIds("tp", module().number));
+      for (const id of [third, test]) {
+        expect(lessonOf(id)!.words, id).toEqual([]);
+        expect(lessonOf(id)!.phrases, id).toEqual([]);
+      }
+      for (const word of words) expect(word.ipa, word.greek).toMatch(/^\/.+\/$/);
+      for (const phrase of phrases) {
+        expect(phrase.translation, phrase.text).toBeTruthy();
+        expect(content.sources.phrases.get(phrase.id)!.provenance).toMatchObject({ operation: "requested-generation" });
+      }
+    });
+    it("первый урок: объяснение с таблицей, слова урока, не меньше четырёх заданий", () => {
+      const blocks = blocksOf(first);
+      expect(blocks.some((block) => block.type === "explanation" && block.table)).toBe(true);
+      expect(blocks.some((block) => block.type === "vocabulary")).toBe(true);
+      expect(blocks.filter((block) => block.type === "exercise").length).toBeGreaterThanOrEqual(4);
+    });
+    it("второй урок: чтение и аудирование с заданиями, аудио звучит дважды", () => {
+      const blocks = blocksOf(second);
+      const about = (id: string) => blocks.some((block) => block.type === "exercise" && block.about === id);
+      const sources = blocks.filter((block) => block.type === "reading" || block.type === "listening");
+      expect(sources.some((block) => block.type === "reading")).toBe(true);
+      expect(sources.some((block) => block.type === "listening")).toBe(true);
+      for (const block of sources) expect(about(block.id), block.id).toBe(true);
+      for (const block of blocks) if (block.type === "listening") expect(block.plays, block.id).toBe(2);
+    });
+    it("третий урок: письмо в границах программы с образцом и критериями, не меньше двух устных заданий", () => {
+      const blocks = blocksOf(third);
+      const expected = WRITING[moduleId]!;
+      const writing = blocks.filter((block) => block.type === "writing");
+      expect(writing.length).toBeGreaterThanOrEqual(1);
+      for (const block of writing) {
+        expect(block.register, block.id).toBe(expected.register);
+        expect(block.words.min, block.id).toBeGreaterThanOrEqual(expected.min);
+        expect(block.words.max, block.id).toBeLessThanOrEqual(expected.max);
+        expect(wordCount(block.model), block.id).toBeGreaterThanOrEqual(block.words.min);
+        expect(wordCount(block.model), block.id).toBeLessThanOrEqual(block.words.max);
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      }
+      const speaking = blocks.filter((block) => block.type === "speaking");
+      expect(speaking.length).toBeGreaterThanOrEqual(2);
+      for (const block of speaking) {
+        expect(block.model, block.id).toBeTruthy();
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      }
+      if (module().number < 5) return;
+      expect(speaking.some((block) => block.part === "roleplay")).toBe(true);
+      blocks.forEach((block, i) => {
+        if (block.type !== "speaking" || block.part !== "roleplay") return;
+        const before = blocks[i - 1];
+        expect(before?.type, block.id).toBe("listening");
+        expect(
+          blocks.some((other) => other.type === "exercise" && other.about === before?.id),
+          block.id,
+        ).toBe(false);
+      });
+    });
+    it("контрольная: оцениваемые задания к чтению и к аудированию", () => {
+      const blocks = blocksOf(test);
+      const kindOf = (id?: string) => blocks.find((block) => block.id === id)?.type;
+      const graded = blocks.filter((block) => block.type === "exercise" && block.graded);
+      const skills = new Set(graded.map((block) => (block.type === "exercise" ? kindOf(block.about) : undefined)));
+      expect(skills.has("reading")).toBe(true);
+      expect(skills.has("listening")).toBe(true);
+    });
+    it("говорящие — в карте голосов en и не из IT-курса", () => {
+      const cast = content.sources.voices.get("en")!.characters;
+      const speakers = new Set(
+        lessonIds
+          .flatMap((id) => blocksOf(id))
+          .flatMap((block) => (block.type === "listening" ? block.transcript.map((line) => line.speaker) : [])),
+      );
+      speakers.delete(undefined);
+      for (const speaker of speakers) {
+        expect(cast.has(speaker!), speaker).toBe(true);
+        expect(IT_NAMES.has(speaker), speaker).toBe(false);
+      }
+    });
   });
-  it("уроки t01: грамматика с лексикой и заданиями; чтение и два аудирования с заданиями; новые персонажи", () => {
-    const first = lessonOf("t01-1")!.blocks!;
-    expect(first.some((block) => block.type === "explanation" && block.table)).toBe(true);
-    expect(first.some((block) => block.type === "vocabulary")).toBe(true);
-    expect(first.filter((block) => block.type === "exercise").length).toBeGreaterThanOrEqual(4);
-    const second = lessonOf("t01-2")!.blocks!;
-    const about = (id: string) => second.some((block) => block.type === "exercise" && block.about === id);
-    const readings = second.filter((block) => block.type === "reading");
-    const listenings = second.filter((block) => block.type === "listening");
-    expect(readings.length).toBeGreaterThanOrEqual(1);
-    expect(listenings).toHaveLength(2);
-    for (const block of [...readings, ...listenings]) expect(about(block.id), block.id).toBe(true);
-    for (const block of listenings) if (block.type === "listening") expect(block.plays).toBe(2);
-    const speakers = new Set(
-      listenings.flatMap((block) => (block.type === "listening" ? block.transcript.map((line) => line.speaker) : [])),
-    );
-    speakers.delete(undefined);
-    expect(speakers.size).toBeGreaterThanOrEqual(2);
-    for (const name of ["Sarah", "Daniel", "Mark", "Elena"]) expect(speakers.has(name), name).toBe(false);
-    const cast = content.sources.voices.get("en")!.characters;
-    for (const speaker of speakers) expect(cast.has(speaker!), speaker).toBe(true);
+
+  describe("контрольная точка «День поездки»", () => {
+    const blocks = () => blocksOf("t07-c1");
+    const stageLessons = STAGE.flatMap((moduleId) => ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`));
+    let db: AppDatabase;
+    beforeEach(async () => {
+      await new AppDatabase("tetradio-travel-checkpoint").delete();
+      db = new AppDatabase("tetradio-travel-checkpoint");
+      await installLessons(db, [...stageLessons, "t07-c1"], memoryFetcher(content));
+    });
+    afterEach(() => db.close());
+    const step = async () => nextStep(await moduleViews("english-travel", db));
+
+    it("уроки t01–t07 пройдены — следующий шаг курса «День поездки»", async () => {
+      await completeLessons(db, stageLessons);
+      expect((await step())!.lesson).toMatchObject({ id: "t07-c1", title: "День поездки", kind: "test" });
+    });
+    it("контрольная t03-test не пройдена — следующий шаг она, а не точка", async () => {
+      await completeLessons(
+        db,
+        stageLessons.filter((id) => id !== "t03-test"),
+      );
+      expect((await step())!.lesson.id).toBe("t03-test");
+    });
+
+    it("стоит после t07, контрольная без карточек с заголовком без «C1»", () => {
+      expect(modulesOf("english-travel").find((m) => m.id === "t07")!.checkpointId).toBe("t07-c1");
+      const pack = lessonOf("t07-c1")!;
+      expect(pack.lesson.kind).toBe("test");
+      expect(pack.lesson.title).toBe("День поездки");
+      expect(pack.lesson.title).not.toMatch(/C1/);
+      expect(pack.words).toEqual([]);
+      expect(pack.phrases).toEqual([]);
+    });
+    it("чтение и аудирование — не меньше 10 оцениваемых пунктов на навык", () => {
+      const kindOf = (id?: string) => blocks().find((block) => block.id === id)?.type;
+      const itemsOf = (skill: string) =>
+        blocks()
+          .filter((block) => block.type === "exercise" && block.graded && kindOf(block.about) === skill)
+          .reduce((sum, block) => sum + (block.type === "exercise" ? block.items.length : 0), 0);
+      expect(itemsOf("reading")).toBeGreaterThanOrEqual(10);
+      expect(itemsOf("listening")).toBeGreaterThanOrEqual(10);
+    });
+    it("пять ролевых сцен, перед каждой — реплики собеседника без задания", () => {
+      const all = blocks();
+      const scenes = all.filter((block) => block.type === "speaking" && block.part === "roleplay");
+      expect(scenes.length).toBe(5);
+      all.forEach((block, i) => {
+        if (block.type !== "speaking" || block.part !== "roleplay") return;
+        const before = all[i - 1];
+        expect(before?.type, block.id).toBe("listening");
+        expect(
+          all.some((other) => other.type === "exercise" && other.about === before?.id),
+          block.id,
+        ).toBe(false);
+        expect(block.model, block.id).toBeTruthy();
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      });
+    });
+    it("два письма: хосту дружески и формальная жалоба, с образцом и критериями", () => {
+      const writing = blocks().filter((block) => block.type === "writing");
+      expect(writing.map((block) => block.register).sort()).toEqual(["formal", "friendly"]);
+      for (const block of writing) {
+        expect(wordCount(block.model), block.id).toBeGreaterThanOrEqual(block.words.min);
+        expect(wordCount(block.model), block.id).toBeLessThanOrEqual(block.words.max);
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      }
+    });
+    it("говорящие — в карте голосов en и не из IT-курса", () => {
+      const cast = content.sources.voices.get("en")!.characters;
+      const speakers = blocks().flatMap((block) =>
+        block.type === "listening" ? block.transcript.flatMap((line) => (line.speaker ? [line.speaker] : [])) : [],
+      );
+      expect(IT_NAMES).toContain("Elena");
+      for (const speaker of new Set(speakers)) {
+        expect(cast.has(speaker), speaker).toBe(true);
+        expect(IT_NAMES.has(speaker), speaker).toBe(false);
+      }
+    });
   });
 });
