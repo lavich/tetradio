@@ -1,0 +1,6 @@
+id: ew403
+greek: "technical debt"
+russian: "технический долг: упрощённые решения, за которые команда платит временем позже"
+ipa: /ˈteknɪkl det/
+note: "We set aside one day a sprint for technical debt."
+source: "Лексикон курса «Английский для IT», модуль e12 (docs/curriculum-english-it.md)"

@@ -1,0 +1,7 @@
+id: ep280
+text: "She explained that the deadline had moved."
+translation: "Она объяснила, что срок сдвинулся."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

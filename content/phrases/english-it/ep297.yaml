@@ -1,0 +1,7 @@
+id: ep297
+text: "In code reviews, I focus on the code, not the person."
+translation: "На код-ревью я обсуждаю код и не обсуждаю человека."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

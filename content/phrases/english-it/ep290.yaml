@@ -1,0 +1,7 @@
+id: ep290
+text: "I try to give feedback that is specific and kind."
+translation: "Я стараюсь давать обратную связь, которая конкретна и доброжелательна."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

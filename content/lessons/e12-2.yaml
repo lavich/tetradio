@@ -1,0 +1,403 @@
+title: тред код-ревью и разговор о том, как работала команда
+kind: lesson
+items:
+  - { kind: word, id: ew404 }
+  - { kind: word, id: ew405 }
+  - { kind: word, id: ew406 }
+  - { kind: word, id: ew407 }
+  - { kind: word, id: ew408 }
+  - { kind: word, id: ew409 }
+  - { kind: word, id: ew410 }
+  - { kind: word, id: ew411 }
+  - { kind: word, id: ew412 }
+  - { kind: word, id: ew413 }
+  - { kind: word, id: ew414 }
+  - { kind: word, id: ew415 }
+  - { kind: word, id: ew416 }
+  - { kind: word, id: ew417 }
+  - { kind: word, id: ew418 }
+  - { kind: word, id: ew419 }
+  - { kind: word, id: ew420 }
+  - { kind: phrase, id: ep284 }
+  - { kind: phrase, id: ep285 }
+  - { kind: phrase, id: ep286 }
+  - { kind: phrase, id: ep287 }
+  - { kind: phrase, id: ep288 }
+  - { kind: phrase, id: ep289 }
+  - { kind: phrase, id: ep290 }
+  - { kind: phrase, id: ep291 }
+blocks:
+  - type: explanation
+    id: feedback-words
+    title: Слова урока о фидбеке и развитии
+    body: |-
+      Тексты урока описывают код-ревью и рассказ кандидата о команде. Слова урока образуют три группы.
+
+      **Манера фидбека.** **Constructive** — конструктивный: замечание помогает улучшить работу. **Candid** — откровенный: человек говорит прямо о том, что думает. **Tactful** — тактичный: человек говорит деликатно, с учётом чувств собеседника. **Sugar-coat** — смягчать неприятную правду так, что она искажается. **Actionable** — применимый: из замечания понятно, что делать. **Criticism** — критика; слово неисчисляемое: *some criticism*.
+
+      **Реакция и отношения.** **Defensive** — защищающийся: человек оправдывается в ответ на замечание. **Take on board** — принять к сведению и учесть. **Acknowledge** — признать: согласиться, что что-то верно или произошло. **Commend** — отметить похвалой, дать положительную оценку. **Approachable** — доступный: к такому человеку легко обратиться. **Rapport** — взаимопонимание, тёплые рабочие отношения.
+
+      **Развитие.** **A blind spot** — слепое пятно: то, чего человек не замечает в своей работе. **A growth area** — зона роста: навык, который стоит развивать. **A sounding board** — собеседник, на котором проверяют идею. **Step on someone's toes** — задеть чужую зону ответственности. **A 360 review** — оценка 360: отзывы от руководителя, коллег и подчинённых.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: manner-match
+    title: Манера фидбека
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - constructive
+      - candid
+      - sugar-coat
+      - tactful
+      - defensive
+      - approachable
+      - criticism
+      - rapport
+    items:
+      - { id: m1, prompt: "о замечании, которое помогает улучшить работу", answer: constructive }
+      - { id: m2, prompt: "говорящий прямо о том, что думает", answer: candid }
+      - { id: m3, prompt: "смягчать неприятную правду так, что она искажается", answer: sugar-coat }
+      - { id: m4, prompt: "говорящий деликатно, с учётом чувств собеседника", answer: tactful }
+      - { id: m5, prompt: "реагирующий на замечания так, будто нужно оправдываться", answer: defensive }
+      - { id: m6, prompt: "о человеке, с которым легко заговорить", answer: approachable }
+  - type: exercise
+    id: development-gap
+    title: Развитие и признание
+    instruction: Вставьте слово или выражение. Один вариант лишний.
+    format: gap
+    bank:
+      - a blind spot
+      - a growth area
+      - take on board
+      - actionable
+      - a sounding board
+      - step on someone's toes
+      - commend
+      - criticism
+    items:
+      - id: g1
+        prompt: I never noticed the risk in my own design until a colleague pointed it out. It was ___ for me. (слепое пятно)
+        answer: a blind spot
+      - id: g2
+        prompt: My manager and I agreed that estimating tasks is ___ that I will work on this year. (зона роста)
+        answer: a growth area
+      - id: g3
+        prompt: She read all the comments, decided to ___ most of them and rewrote the tests. (принять к сведению и учесть)
+        answer: take on board
+      - id: g4
+        prompt: "“Make this better” is not ___ feedback, because it does not say what to change. (применимый на практике)"
+        answer: actionable
+      - id: g5
+        prompt: Before the meeting, I tried my idea on a colleague who is ___ for new ideas. (собеседник для проверки идей)
+        answer: a sounding board
+      - id: g6
+        prompt: I wanted to improve the build script, but I asked its owner first because I did not want to ___. (задеть чужую зону ответственности)
+        answer: step on someone's toes
+      - id: g7
+        prompt: The director decided to ___ the team in front of the whole company for how calmly it handled the outage. (отметить похвалой)
+        answer: commend
+  - type: exercise
+    id: reaction-gap
+    title: Реакция на фидбек
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - acknowledge
+      - a 360 review
+      - rapport
+      - criticism
+      - defensive
+      - approachable
+      - a sounding board
+    items:
+      - id: g1
+        prompt: At the retrospective, she was the first to ___ her own mistake. (признать)
+        answer: acknowledge
+      - id: g2
+        prompt: Once a year, colleagues, managers and direct reports each write a short opinion about me. The process is called ___. (оценка 360)
+        answer: a 360 review
+      - id: g3
+        prompt: After six months in the team, I had built good ___ with everyone. (взаимопонимание)
+        answer: rapport
+      - id: g4
+        prompt: She accepts ___ calmly and always asks for an example. (критика)
+        answer: criticism
+      - id: g5
+        prompt: When he hears a comment about his code, he does not get ___; he asks questions. (оборонительный)
+        answer: defensive
+  - type: explanation
+    id: reading-how
+    title: Как читать тред код-ревью
+    body: |-
+      Тред код-ревью — переписка вокруг pull request. Сначала идёт описание изменения, затем комментарии с указанием файла и строки, ответы автора и решение: одобрить изменения или попросить правки. Начало комментария показывает его вес: **Nitpick** — мелочь, **I suggest** — предложение, **I recommend** — рекомендация, **Please** — просьба.
+
+      В конце треда часто стоит сводка. Она пересказывает, кто что предложил, объяснил и признал, поэтому в ней сдвиг времён и глаголы пересказа: **Ilse said that she would update the design doc the next day.** Слова вне списков переведены под текстом.
+  - type: reading
+    id: thread
+    title: "Code review: retry logic in the notification service"
+    text: |-
+      Code review: retry logic in the notification service
+      Pull request 482 · example
+
+      Ilse Moreau opened the pull request “Retry failed emails with backoff”
+      Emails that fail to send are retried three times, with a longer pause after each attempt.
+
+      Bram Keller commented on retry.ts, line 42
+      Nitpick: please rename tmp to delayMs. It is not a blocker.
+
+      Ilse Moreau replied
+      Done, thanks. I renamed it in the next commit.
+
+      Bram Keller commented on retry.ts, line 57
+      I suggest moving the delay values into the config. At the moment they are hard-coded, and we will probably change them after the first week. Also, what will happen if the queue is full?
+
+      Ilse Moreau replied
+      Good point about the config; I will move the values. About the queue: I admit that I have not tested that case. I will add a test.
+
+      Teodor Vance, tech lead, commented
+      I recommend splitting the pull request in two: the retry logic first, the config change later. That makes the review easier, and we can release the first part sooner. Please also add a short note to the design doc.
+
+      Ilse Moreau replied
+      Agreed. I will split it today and update the design doc tomorrow.
+
+      Bram Keller approved the plan
+
+      Summary by Bram Keller
+      In my first comment I pointed out that the delay values were hard-coded. I asked what would happen if the queue was full. Ilse admitted that she had not tested that case, and Teodor recommended splitting the pull request. Ilse said that she would update the design doc the next day.
+    glosses:
+      - { text: backoff, russian: "увеличение паузы между попытками" }
+      - { text: attempt, russian: попытка }
+      - { text: commit, russian: "сохранённый набор изменений" }
+      - { text: config, russian: "файл настроек" }
+      - { text: hard-coded, russian: "жёстко записаны в коде" }
+      - { text: queue, russian: очередь }
+      - { text: approved, russian: одобрил }
+  - type: exercise
+    id: thread-tf
+    about: thread
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Emails that fail to send are retried three times.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: Bram's first comment is a blocker.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "It is not a blocker — это мелкое замечание, nitpick."
+      - id: q3
+        prompt: The delay values are already in the config.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "They are hard-coded — значения записаны прямо в коде."
+      - id: q4
+        prompt: Ilse tested the case with a full queue before the review.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "She admits that she has not tested that case — она признаёт, что не проверила этот случай."
+      - id: q5
+        prompt: Teodor recommends splitting the pull request in two.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q6
+        prompt: Ilse will update the design doc today.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: "She will split the pull request today and update the design doc tomorrow."
+  - type: exercise
+    id: thread-find
+    about: thread
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why does Bram suggest moving the delay values into the config?
+        options:
+          - The team will probably change them after the first week.
+          - The queue is often full.
+          - The tech lead asked for it.
+        answer: The team will probably change them after the first week.
+      - id: q2
+        prompt: What does Bram ask about the queue?
+        options:
+          - what will happen if it is full
+          - how long messages wait in it
+          - who is responsible for it
+        answer: what will happen if it is full
+      - id: q3
+        prompt: What will Ilse add?
+        options:
+          - a test for the case with a full queue
+          - a new library for retries
+          - a second reviewer
+        answer: a test for the case with a full queue
+      - id: q4
+        prompt: Why does Teodor recommend splitting the pull request?
+        options:
+          - The review will be easier, and the first part can be released sooner.
+          - The tests have failed.
+          - The design doc is missing.
+        answer: The review will be easier, and the first part can be released sooner.
+      - id: q5
+        prompt: What does Bram do at the end of the thread?
+        options:
+          - He approves the plan.
+          - He closes the pull request.
+          - He asks for a new review.
+        answer: He approves the plan.
+  - type: exercise
+    id: thread-grammar
+    about: thread
+    title: Косвенная речь в сводке
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: "В сводке: «Ilse admitted that she had not tested that case.» Какие слова она написала в комментарии?"
+        options:
+          - "I have not tested that case."
+          - "I will not test that case."
+          - "I am not testing that case."
+        answer: "I have not tested that case."
+        explanation: Present perfect в пересказе сдвигается в past perfect.
+      - id: q2
+        prompt: "В сводке: «Ilse said that she would update the design doc the next day.» Что она написала в треде?"
+        options:
+          - "I will update the design doc tomorrow."
+          - "I updated the design doc yesterday."
+          - "I update the design doc every day."
+        answer: "I will update the design doc tomorrow."
+        explanation: Will сдвигается в would, tomorrow заменяется на the next day.
+      - id: q3
+        prompt: "«Teodor recommended splitting the pull request.» Какая конструкция стоит после recommended?"
+        options:
+          - "форма на -ing"
+          - "to + глагол"
+          - "кому + to + глагол"
+        answer: "форма на -ing"
+        explanation: После recommend стоит форма на -ing или часть с that; схемы recommend + to нет.
+      - id: q4
+        prompt: "В сводке: «I asked what would happen if the queue was full.» Какой вопрос стоит в комментарии?"
+        options:
+          - "What will happen if the queue is full?"
+          - "What did happen if the queue was full?"
+          - "What would happen if the queue is full?"
+        answer: "What will happen if the queue is full?"
+        explanation: Will сдвигается в would, is — в was, порядок слов в пересказе прямой.
+  - type: explanation
+    id: listening-how
+    title: Рассказ о команде на слух
+    body: |-
+      Hassan, нанимающий менеджер, расспрашивает Camille о команде, в которой она работала. В рассказе о команде и фидбеке кандидат часто пересказывает чужие слова. Слушайте глаголы пересказа: **told**, **suggested**, **pointed out**, **admitted**, **said**, и слова, которые за ними следуют.
+
+      Сначала послушайте запись целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: team
+    title: Camille talks about her team
+    plays: 2
+    transcript:
+      - { speaker: Hassan, text: "Thanks for coming in, Camille. I'd like to hear about the team you worked in. How was it organised?" }
+      - { speaker: Camille, text: "I worked in a team of seven: four developers, a tester, a product owner and a scrum master. We had a stand-up every morning for fifteen minutes, and we planned the work in two-week sprints. Every sprint ended with a demo for the other teams." }
+      - { speaker: Hassan, text: "And how did you handle code reviews?" }
+      - { speaker: Camille, text: "Every pull request needed two approvals, and our working agreement said that reviewers would answer within one working day. In reviews, we marked small comments as nitpicks, so that nobody thought they were blockers." }
+      - { speaker: Hassan, text: "Tell me about the feedback you got there." }
+      - { speaker: Camille, text: "In my first year, my line manager told me that I was too quiet in design reviews. At first I was a little defensive, but she gave me a clear example. She suggested that I prepare one question before each meeting. I took it on board, and after three months I was leading the review of a design doc." }
+      - { speaker: Hassan, text: "How did your team deal with feedback on a large change?" }
+      - { speaker: Camille, text: "Once a teammate pointed out that my pull request was too large. I admitted that I had tried to do too much at once. We agreed to keep every pull request under three hundred lines, and we added that to the working agreement." }
+      - { speaker: Hassan, text: "And did you give feedback as well?" }
+      - { speaker: Camille, text: "Yes. I try to be specific and kind, and I explain the reason behind my comments. For example, I once suggested pair programming to a new colleague who was stuck, and she said that it had helped her a lot." }
+      - { speaker: Hassan, text: "Thank you, Camille. That gives me a good picture of how you work with a team." }
+  - type: exercise
+    id: team-q
+    about: team
+    title: Что сказали в разговоре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Hassan ask Camille about first?
+        options:
+          - the team she worked in
+          - her last project
+          - her salary expectations
+        answer: the team she worked in
+      - id: q2
+        prompt: How often did the team have a stand-up?
+        options:
+          - every morning
+          - once a week
+          - at the end of each sprint
+        answer: every morning
+      - id: q3
+        prompt: What did the working agreement say about pull requests?
+        options:
+          - Reviewers would answer within one working day.
+          - Authors would merge their own changes.
+          - Pull requests would be reviewed only after the sprint.
+        answer: Reviewers would answer within one working day.
+      - id: q4
+        prompt: What did Camille's line manager tell her?
+        options:
+          - that she was too quiet in design reviews
+          - that her pull requests were too large
+          - that she was late for the stand-up
+        answer: that she was too quiet in design reviews
+      - id: q5
+        prompt: What did the line manager suggest?
+        options:
+          - to prepare one question before each meeting
+          - to join a pair programming group
+          - to ask for a one-to-one every week
+        answer: to prepare one question before each meeting
+      - id: q6
+        prompt: What did the team agree after the comment about the large pull request?
+        options:
+          - to keep every pull request under three hundred lines
+          - to stop using pull requests
+          - to review pull requests only on Mondays
+        answer: to keep every pull request under three hundred lines
+  - type: exercise
+    id: team-reported
+    about: team
+    title: Пересказ в записи
+    instruction: Выберите фразу из записи, которая подходит к описанию.
+    format: choice
+    items:
+      - id: q1
+        prompt: Какая фраза пересказывает совет руководителя?
+        options:
+          - She suggested that I prepare one question before each meeting.
+          - I explain the reason behind my comments.
+          - We had a stand-up every morning.
+        answer: She suggested that I prepare one question before each meeting.
+        explanation: Suggested вводит совет, а часть с that называет, что именно посоветовали.
+      - id: q2
+        prompt: Какая фраза показывает, что Camille признала свою ошибку?
+        options:
+          - I admitted that I had tried to do too much at once.
+          - Once a teammate pointed out that my pull request was too large.
+          - We agreed to keep every pull request under three hundred lines.
+        answer: I admitted that I had tried to do too much at once.
+        explanation: Admitted вводит признание; pointed out — слова коллеги, agreed — общее решение.
+      - id: q3
+        prompt: Какая фраза передаёт слова коллеги, которой помогло парное программирование?
+        options:
+          - She said that it had helped her a lot.
+          - I took it on board.
+          - I try to be specific and kind.
+        answer: She said that it had helped her a lot.
+        explanation: Said that и past perfect передают чужие слова об уже случившемся.
+      - id: q4
+        prompt: Какая фраза говорит, что Camille учла замечание?
+        options:
+          - I took it on board.
+          - At first I was a little defensive.
+          - I try to be specific and kind.
+        answer: I took it on board.
+        explanation: Take on board — принять к сведению и учесть; defensive описывает первую реакцию.

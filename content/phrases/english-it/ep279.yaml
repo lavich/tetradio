@@ -1,0 +1,7 @@
+id: ep279
+text: "They suggested splitting the task into two parts."
+translation: "Они предложили разделить задачу на две части."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

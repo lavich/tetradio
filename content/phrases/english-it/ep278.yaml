@@ -1,0 +1,7 @@
+id: ep278
+text: "He asked me whether I had tested the change."
+translation: "Он спросил меня, протестировал ли я это изменение."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

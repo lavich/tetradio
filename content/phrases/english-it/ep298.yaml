@@ -1,0 +1,7 @@
+id: ep298
+text: "I value direct feedback because it saves time."
+translation: "Я ценю прямую обратную связь: она экономит время."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e12
+  operation: requested-generation
+  request: Фразы модуля e12 по программе docs/curriculum-english-it.md

@@ -1,0 +1,579 @@
+title: reported speech — пересказ слов коллег, фидбека и решений
+kind: lesson
+items:
+  - { kind: word, id: ew386 }
+  - { kind: word, id: ew387 }
+  - { kind: word, id: ew388 }
+  - { kind: word, id: ew389 }
+  - { kind: word, id: ew390 }
+  - { kind: word, id: ew391 }
+  - { kind: word, id: ew392 }
+  - { kind: word, id: ew393 }
+  - { kind: word, id: ew394 }
+  - { kind: word, id: ew395 }
+  - { kind: word, id: ew396 }
+  - { kind: word, id: ew397 }
+  - { kind: word, id: ew398 }
+  - { kind: word, id: ew399 }
+  - { kind: word, id: ew400 }
+  - { kind: word, id: ew401 }
+  - { kind: word, id: ew402 }
+  - { kind: word, id: ew403 }
+  - { kind: phrase, id: ep276 }
+  - { kind: phrase, id: ep277 }
+  - { kind: phrase, id: ep278 }
+  - { kind: phrase, id: ep279 }
+  - { kind: phrase, id: ep280 }
+  - { kind: phrase, id: ep281 }
+  - { kind: phrase, id: ep282 }
+  - { kind: phrase, id: ep283 }
+blocks:
+  - type: explanation
+    id: reported-statements
+    title: Пересказ утверждений — сдвиг времён
+    body: |-
+      На собеседовании вы часто пересказываете чужие слова: что сказал руководитель, что написал ревьюер, о чём договорилась команда. Для этого нужна косвенная речь (reported speech). Если глагол пересказа стоит в прошедшем времени (**said**, **told**, **asked**), времена в пересказанной части сдвигаются на шаг в прошлое: **«I will review it tomorrow.»** → **She said she would review it the next day.**
+
+      Слова-указатели меняются вместе с временами: **tomorrow** → **the next day**, **yesterday** → **the day before**, **today** → **that day**, **now** → **then**, **this** → **that**. Меняется и лицо: **I** → **she**, **my** → **her**, если говорила она.
+
+      **Say и tell.** После **tell** сразу называют того, кому сказали: **She told me that the deadline had moved.** После **say** адресата нет: **She said that the deadline had moved.** С адресатом нужен предлог: **She said to me…** Слово **that** в пересказе можно опустить.
+
+      Сдвиг времён необязателен, если сказанное остаётся верным и вы пересказываете его сразу: **She said the deadline is Friday.** В упражнениях урока разговор пересказывают спустя время, поэтому сдвиг в них нужен всегда.
+    table:
+      columns:
+        - прямая речь
+        - косвенная речь
+        - пример
+      rows:
+        - - present simple
+          - past simple
+          - "«I work on the API.» → She said she worked on the API."
+        - - present continuous
+          - past continuous
+          - "«I am testing it.» → He said he was testing it."
+        - - past simple, present perfect
+          - past perfect
+          - "«I have finished the review.» → She said she had finished the review."
+        - - will
+          - would
+          - "«I will send the notes.» → He said he would send the notes."
+        - - can
+          - could
+          - "«We can't merge it today.» → They said they couldn't merge it that day."
+        - - must
+          - had to
+          - "«I must fix the test.» → He said he had to fix the test."
+        - - tomorrow, yesterday
+          - the next day, the day before
+          - "«I will call you tomorrow.» → She said she would call me the next day."
+  - type: explanation
+    id: reported-questions
+    title: Вопросы и просьбы в косвенной речи
+    body: |-
+      **Вопрос, на который отвечают «да» или «нет»,** пересказывают с **if** или **whether**. Порядок слов прямой, как в утверждении, вспомогательного глагола **do** нет, знака вопроса нет: **«Did you test the change?»** → **He asked me whether I had tested the change.**
+
+      **Вопрос с вопросительным словом** сохраняет это слово, порядок слов тоже прямой: **«Where did you put the design doc?»** → **She asked where I had put the design doc.**
+
+      **Просьба и указание** строятся по схеме **asked / told + кому + to + глагол**. Отрицание ставится перед **to**: **not to**. **«Please review my pull request.»** → **He asked me to review his pull request.** **«Don't merge it before the tests pass.»** → **She told us not to merge it before the tests passed.** Для просьбы подходит **ask**, для указания — **tell**.
+    table:
+      columns:
+        - прямая речь
+        - косвенная речь
+        - схема
+      rows:
+        - - "«Did you test the change?»"
+          - He asked me whether I had tested the change.
+          - ask + if или whether + прямой порядок слов
+        - - "«Where did you put the design doc?»"
+          - She asked where I had put the design doc.
+          - ask + вопросительное слово + прямой порядок слов
+        - - "«Please review my pull request.»"
+          - He asked me to review his pull request.
+          - ask + кому + to + глагол
+        - - "«Don't merge it before the tests pass.»"
+          - She told us not to merge it before the tests passed.
+          - tell + кому + not to + глагол
+  - type: explanation
+    id: reporting-verbs
+    title: Глаголы пересказа вместо say
+    body: |-
+      Глагол **say** передаёт только факт, что слова прозвучали. Другие глаголы показывают, что именно сделал говоривший: предложил, объяснил, признал, предупредил. В рассказе о команде они точнее и звучат естественнее, чем повторяющееся **said**. У каждого глагола своя конструкция.
+
+      **Suggest** — предложить: **suggested splitting the task** или **suggested that we split the task**. После **suggest** нет схемы «кому + to».
+
+      **Explain** — объяснить: **explained that the deadline had moved**. Адресат вводится через **to**: **explained to me that…**
+
+      **Admit** — признать свою ошибку или факт: **admitted that he had missed a case** или **admitted missing a case**.
+
+      **Point out** — обратить внимание на факт: **pointed out that the function was too long**.
+
+      **Recommend** — рекомендовать: **recommended adding more tests** или **recommended that I speak up more**.
+
+      **Warn** — предупредить: **warned us not to deploy on Friday** или **warned that the release was risky**.
+    table:
+      columns:
+        - глагол
+        - конструкция
+        - пример
+      rows:
+        - - suggest
+          - "-ing или that + подлежащее + глагол"
+          - They suggested splitting the task.
+        - - explain
+          - that, кому — через to
+          - She explained that the deadline had moved.
+        - - admit
+          - that или -ing
+          - He admitted that he had missed a case.
+        - - point out
+          - that
+          - The reviewer pointed out that the function was too long.
+        - - recommend
+          - -ing или that + подлежащее + глагол
+          - He recommended that I speak up more.
+        - - warn
+          - кому + (not) to + глагол или that
+          - She warned us not to deploy on Friday.
+  - type: explanation
+    id: reported-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **Say с адресатом.** По-русски «сказал мне» — одна конструкция. В английском **say** не принимает адресата без предлога, поэтому *She said me that she was late* ошибочно. Верно: **She told me that she was late** или **She said that she was late.**
+
+      **Порядок слов в вопросе.** После **asked** сохраняют порядок слов утверждения: *He asked me did I test it* ошибочно, верно **He asked me whether I had tested it.** То же с вопросительным словом: *She asked where was the design doc* → **She asked where the design doc was.**
+
+      **Suggest и explain с адресатом.** Русские «предложил мне сделать» и «объяснил мне причину» подсказывают кальки. *They suggested me to split the task* и *She explained me the reason* ошибочны: **They suggested splitting the task. She explained the reason to me.**
+
+      **Tell без адресата.** *I told that I needed more time* ошибочно: после **tell** нужен тот, кому сказали. **I told the team that I needed more time.**
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - She said me that she was late.
+          - She told me that she was late.
+          - say без адресата, tell с адресатом
+        - - He asked me did I test it.
+          - He asked me whether I had tested it.
+          - в косвенном вопросе порядок слов прямой
+        - - They suggested me to split the task.
+          - They suggested splitting the task.
+          - после suggest нет схемы «кому + to»
+        - - She explained me the reason.
+          - She explained the reason to me.
+          - адресат explain вводится через to
+        - - I told that I needed more time.
+          - I told the team that I needed more time.
+          - после tell нужен адресат
+  - type: explanation
+    id: team-words
+    title: Слова урока о команде и ревью
+    body: |-
+      Слова урока образуют три группы.
+
+      **Роли и встречи.** **A product owner** определяет приоритеты задач, **a scrum master** помогает команде следовать процессу, **a line manager** отвечает за вашу работу и развитие, **a peer** — коллега того же уровня. **A sprint** — отрезок работы фиксированной длины, **a backlog** — список задач, которые ещё не взяты в работу, **a stand-up** — короткая ежедневная встреча, **a demo** — показ готовой работы, **a one-to-one** — личная встреча с руководителем.
+
+      **Код и документы.** **A pull request** — предложенные изменения кода, **a code review** — их проверка коллегами. **A nitpick** — мелкая придирка, **a style guide** — договорённости об оформлении кода. **A design doc** — описание решения, которое пишут до реализации. **A working agreement** — правила, о которых команда договорилась.
+
+      **Практики.** **Pair programming** — парное программирование, **knowledge sharing** — обмен знаниями в команде, **technical debt** — упрощённые решения, за которые команда платит временем позже.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: backshift-choice
+    title: Сдвиг времён
+    instruction: Выберите вариант. Разговор пересказывают спустя время.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«I will review the pull request tomorrow.» → She said she ___ the pull request the next day."
+        options: [would review, will review, reviews]
+        answer: would review
+        explanation: Will в пересказе в прошлом становится would.
+      - id: q2
+        prompt: "Через неделю вы пересказываете: «I am testing the change.» → He said he ___ the change."
+        options: [was testing, is testing, has tested]
+        answer: was testing
+        explanation: Present continuous сдвигается в past continuous.
+      - id: q3
+        prompt: "Через неделю вы пересказываете: «I have finished the review.» → She said she ___ the review."
+        options: [had finished, has finished, finishes]
+        answer: had finished
+        explanation: Present perfect сдвигается в past perfect.
+      - id: q4
+        prompt: "Через неделю вы пересказываете: «We can't merge it today.» → They said they ___ merge it that day."
+        options: [couldn't, can't, haven't]
+        answer: couldn't
+        explanation: Can в пересказе в прошлом становится could.
+      - id: q5
+        prompt: "Через неделю вы пересказываете: «I will send the notes tomorrow.» → He said he would send the notes ___."
+        options: [the next day, tomorrow, the day before]
+        answer: the next day
+        explanation: Через неделю tomorrow заменяется на the next day.
+      - id: q6
+        prompt: "Через неделю вы пересказываете: «I must fix the test.» → He said he ___ fix the test."
+        options: [had to, must to, has to]
+        answer: had to
+        explanation: Must в пересказе в прошлом становится had to.
+  - type: exercise
+    id: question-choice
+    title: Вопросы и просьбы
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«Did you test the change?» → He asked me ___."
+        options:
+          - whether I had tested the change
+          - did I test the change
+          - if had I tested the change
+        answer: whether I had tested the change
+        explanation: В косвенном вопросе порядок слов прямой, вопрос вводит whether или if.
+      - id: q2
+        prompt: "«Where did you put the design doc?» → She asked ___."
+        options:
+          - where I had put the design doc
+          - where had I put the design doc
+          - where did I put the design doc
+        answer: where I had put the design doc
+        explanation: После вопросительного слова порядок слов прямой, вспомогательного do нет.
+      - id: q3
+        prompt: "«Please review my pull request.» → He asked me ___."
+        options:
+          - to review his pull request
+          - review his pull request
+          - reviewing his pull request
+        answer: to review his pull request
+        explanation: После asked + кому стоит to и базовая форма глагола.
+      - id: q4
+        prompt: "«Don't merge it before the tests pass.» → She told us ___."
+        options:
+          - not to merge it before the tests passed
+          - didn't merge it before the tests passed
+          - not merge it before the tests passed
+        answer: not to merge it before the tests passed
+        explanation: Запрет передаёт схема tell + кому + not to + глагол.
+      - id: q5
+        prompt: "«Let's split the task.» → They suggested ___."
+        options:
+          - splitting the task
+          - to split the task
+          - us to split the task
+        answer: splitting the task
+        explanation: После suggest стоит форма на -ing или часть с that; схемы suggest + to нет.
+      - id: q6
+        prompt: "She ___ me that the deadline had moved."
+        options: [told, said, explained]
+        answer: told
+        explanation: Tell называет адресата сразу; после say и explain адресат вводится через to.
+  - type: exercise
+    id: verbs-choice
+    title: Глагол пересказа и его конструкция
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: He admitted ___ a case in the tests.
+        options: [missing, to miss, miss]
+        answer: missing
+        explanation: После admit стоит форма на -ing или часть с that.
+      - id: q2
+        prompt: The reviewer pointed out ___ the function was too long.
+        options: [that, to, for]
+        answer: that
+        explanation: После point out факт вводит that.
+      - id: q3
+        prompt: She recommended ___ more tests before the release.
+        options: [adding, to add, for adding]
+        answer: adding
+        explanation: После recommend стоит форма на -ing или часть с that.
+      - id: q4
+        prompt: He warned ___ not to deploy on Friday.
+        options: [us, to us, for us]
+        answer: us
+        explanation: После warn адресат стоит сразу, без предлога.
+      - id: q5
+        prompt: She ___ that the deadline had moved.
+        options: [explained, explained me, told]
+        answer: explained
+        explanation: Explain принимает часть с that; после told нужен адресат, а explained me ошибочно.
+      - id: q6
+        prompt: They suggested ___ .
+        options:
+          - we split the task
+          - us to split the task
+          - to us split the task
+        answer: we split the task
+        explanation: После suggest стоит часть с that (that можно опустить) или форма на -ing; схемы suggest + кому + to нет.
+  - type: exercise
+    id: roles-match
+    title: Роли и встречи
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - a stand-up
+      - a one-to-one
+      - a demo
+      - a sprint
+      - a backlog
+      - a product owner
+      - a scrum master
+      - a line manager
+      - a peer
+    items:
+      - { id: m1, prompt: "короткая ежедневная встреча команды", answer: a stand-up }
+      - { id: m2, prompt: "личная регулярная встреча с руководителем", answer: a one-to-one }
+      - { id: m3, prompt: "показ готовой работы команды коллегам", answer: a demo }
+      - { id: m4, prompt: "человек, который определяет приоритеты задач для команды", answer: a product owner }
+      - { id: m5, prompt: "человек, который помогает команде следовать процессу и убирает помехи", answer: a scrum master }
+      - { id: m6, prompt: "непосредственный руководитель", answer: a line manager }
+      - { id: m7, prompt: "коллега того же уровня", answer: a peer }
+  - type: exercise
+    id: code-gap
+    title: Код и документы
+    instruction: Вставьте слово или выражение. Один вариант лишний.
+    format: gap
+    bank:
+      - a pull request
+      - a style guide
+      - a nitpick
+      - a design doc
+      - technical debt
+      - pair programming
+      - knowledge sharing
+    items:
+      - id: g1
+        prompt: I pushed my branch and opened ___ so that colleagues could comment on the changes. (запрос на слияние)
+        answer: a pull request
+      - id: g2
+        prompt: The names of variables follow ___, so a tool can check them automatically. (руководство по стилю)
+        answer: a style guide
+      - id: g3
+        prompt: The comment only asked for a space before a bracket. It was ___, not a real problem. (придирка)
+        answer: a nitpick
+      - id: g4
+        prompt: Before building the new service, she wrote ___ that explains the options and the reasons for her choice. (дизайн-документ)
+        answer: a design doc
+      - id: g5
+        prompt: We shipped a quick solution last year, and now we spend a day of every sprint paying back our ___. (технический долг)
+        answer: technical debt
+      - id: g6
+        prompt: Two engineers wrote the module together at one screen. This way of working is called ___. (парное программирование)
+        answer: pair programming
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Она сказала, что проверит pull request на следующий день.
+        answer:
+          - "She said that she would review the pull request the next day"
+          - "She said that she would review the pull request the following day"
+          - "She said that she would review the pull request the day after"
+          - "She said that she would check the pull request the next day"
+          - "She said that she would check the pull request the following day"
+          - "She said that she would check the pull request the day after"
+          - "She said that she would look at the pull request the next day"
+          - "She said that she would look at the pull request the following day"
+          - "She said that she would look at the pull request the day after"
+          - "She said she would review the pull request the next day"
+          - "She said she would review the pull request the following day"
+          - "She said she would review the pull request the day after"
+          - "She said she would check the pull request the next day"
+          - "She said she would check the pull request the following day"
+          - "She said she would check the pull request the day after"
+          - "She said she would look at the pull request the next day"
+          - "She said she would look at the pull request the following day"
+          - "She said she would look at the pull request the day after"
+          - "She said that she was going to review the pull request the next day"
+          - "She said that she was going to review the pull request the following day"
+          - "She said that she was going to review the pull request the day after"
+          - "She said that she was going to check the pull request the next day"
+          - "She said that she was going to check the pull request the following day"
+          - "She said that she was going to check the pull request the day after"
+          - "She said that she was going to look at the pull request the next day"
+          - "She said that she was going to look at the pull request the following day"
+          - "She said that she was going to look at the pull request the day after"
+          - "She said she was going to review the pull request the next day"
+          - "She said she was going to review the pull request the following day"
+          - "She said she was going to review the pull request the day after"
+          - "She said she was going to check the pull request the next day"
+          - "She said she was going to check the pull request the following day"
+          - "She said she was going to check the pull request the day after"
+          - "She said she was going to look at the pull request the next day"
+          - "She said she was going to look at the pull request the following day"
+          - "She said she was going to look at the pull request the day after"
+        explanation: Will в пересказе в прошлом становится would; tomorrow — the next day.
+      - id: q2
+        prompt: Он спросил меня, проверил ли я это изменение.
+        answer:
+          - "He asked me if I had tested the change"
+          - "He asked me if I had tested this change"
+          - "He asked me if I had tested that change"
+          - "He asked me if I had checked the change"
+          - "He asked me if I had checked this change"
+          - "He asked me if I had checked that change"
+          - "He asked me if I tested the change"
+          - "He asked me if I tested this change"
+          - "He asked me if I tested that change"
+          - "He asked me if I checked the change"
+          - "He asked me if I checked this change"
+          - "He asked me if I checked that change"
+          - "He asked me whether I had tested the change"
+          - "He asked me whether I had tested this change"
+          - "He asked me whether I had tested that change"
+          - "He asked me whether I had checked the change"
+          - "He asked me whether I had checked this change"
+          - "He asked me whether I had checked that change"
+          - "He asked me whether I tested the change"
+          - "He asked me whether I tested this change"
+          - "He asked me whether I tested that change"
+          - "He asked me whether I checked the change"
+          - "He asked me whether I checked this change"
+          - "He asked me whether I checked that change"
+          - "He asked if I had tested the change"
+          - "He asked if I had tested this change"
+          - "He asked if I had tested that change"
+          - "He asked if I had checked the change"
+          - "He asked if I had checked this change"
+          - "He asked if I had checked that change"
+          - "He asked if I tested the change"
+          - "He asked if I tested this change"
+          - "He asked if I tested that change"
+          - "He asked if I checked the change"
+          - "He asked if I checked this change"
+          - "He asked if I checked that change"
+          - "He asked whether I had tested the change"
+          - "He asked whether I had tested this change"
+          - "He asked whether I had tested that change"
+          - "He asked whether I had checked the change"
+          - "He asked whether I had checked this change"
+          - "He asked whether I had checked that change"
+          - "He asked whether I tested the change"
+          - "He asked whether I tested this change"
+          - "He asked whether I tested that change"
+          - "He asked whether I checked the change"
+          - "He asked whether I checked this change"
+          - "He asked whether I checked that change"
+        explanation: Вопрос «да или нет» вводят if или whether, порядок слов прямой.
+      - id: q3
+        prompt: Они предложили разделить задачу на две части.
+        answer:
+          - "They suggested splitting the task into two parts"
+          - "They suggested splitting the task into two pieces"
+          - "They suggested splitting the task in two parts"
+          - "They suggested splitting the task in two pieces"
+          - "They suggested dividing the task into two parts"
+          - "They suggested dividing the task into two pieces"
+          - "They suggested dividing the task in two parts"
+          - "They suggested dividing the task in two pieces"
+          - "They suggested that we split the task into two parts"
+          - "They suggested that we split the task into two pieces"
+          - "They suggested that we split the task in two parts"
+          - "They suggested that we split the task in two pieces"
+          - "They suggested that we divide the task into two parts"
+          - "They suggested that we divide the task into two pieces"
+          - "They suggested that we divide the task in two parts"
+          - "They suggested that we divide the task in two pieces"
+          - "They suggested that we should split the task into two parts"
+          - "They suggested that we should split the task into two pieces"
+          - "They suggested that we should split the task in two parts"
+          - "They suggested that we should split the task in two pieces"
+          - "They suggested that we should divide the task into two parts"
+          - "They suggested that we should divide the task into two pieces"
+          - "They suggested that we should divide the task in two parts"
+          - "They suggested that we should divide the task in two pieces"
+          - "They suggested we split the task into two parts"
+          - "They suggested we split the task into two pieces"
+          - "They suggested we split the task in two parts"
+          - "They suggested we split the task in two pieces"
+          - "They suggested we divide the task into two parts"
+          - "They suggested we divide the task into two pieces"
+          - "They suggested we divide the task in two parts"
+          - "They suggested we divide the task in two pieces"
+          - "They suggested we should split the task into two parts"
+          - "They suggested we should split the task into two pieces"
+          - "They suggested we should split the task in two parts"
+          - "They suggested we should split the task in two pieces"
+          - "They suggested we should divide the task into two parts"
+          - "They suggested we should divide the task into two pieces"
+          - "They suggested we should divide the task in two parts"
+          - "They suggested we should divide the task in two pieces"
+          - "They suggested splitting the task in two"
+          - "They suggested dividing the task in two"
+          - "They suggested that we split the task in two"
+          - "They suggested that we divide the task in two"
+          - "They suggested that we should split the task in two"
+          - "They suggested that we should divide the task in two"
+          - "They suggested we split the task in two"
+          - "They suggested we divide the task in two"
+          - "They suggested we should split the task in two"
+          - "They suggested we should divide the task in two"
+        explanation: После suggest стоит форма на -ing или часть с that.
+      - id: q4
+        prompt: Он признал, что пропустил один случай.
+        answer:
+          - "He admitted that he had missed a case"
+          - "He admitted that he had missed one case"
+          - "He admitted that he missed a case"
+          - "He admitted that he missed one case"
+          - "He admitted that he had overlooked a case"
+          - "He admitted that he had overlooked one case"
+          - "He admitted that he overlooked a case"
+          - "He admitted that he overlooked one case"
+          - "He admitted he had missed a case"
+          - "He admitted he had missed one case"
+          - "He admitted he missed a case"
+          - "He admitted he missed one case"
+          - "He admitted he had overlooked a case"
+          - "He admitted he had overlooked one case"
+          - "He admitted he overlooked a case"
+          - "He admitted he overlooked one case"
+          - "He admitted missing a case"
+          - "He admitted missing one case"
+          - "He admitted overlooking a case"
+          - "He admitted overlooking one case"
+        explanation: После admit стоит часть с that или форма на -ing.
+      - id: q5
+        prompt: Ревьюер указал, что функция слишком длинная.
+        answer:
+          - "The reviewer pointed out that the function was too long"
+          - "The reviewer pointed out that the function is too long"
+          - "The reviewer pointed out that this function was too long"
+          - "The reviewer pointed out that this function is too long"
+          - "The reviewer pointed out the function was too long"
+          - "The reviewer pointed out the function is too long"
+          - "The reviewer pointed out this function was too long"
+          - "The reviewer pointed out this function is too long"
+        explanation: После point out факт вводит that (его можно опустить).
+      - id: q6
+        prompt: Я сказал команде, что мне нужно больше времени.
+        answer:
+          - "I told the team that I needed more time"
+          - "I told the team that I need more time"
+          - "I told the team I needed more time"
+          - "I told the team I need more time"
+          - "I told my team that I needed more time"
+          - "I told my team that I need more time"
+          - "I told my team I needed more time"
+          - "I told my team I need more time"
+          - "I told our team that I needed more time"
+          - "I told our team that I need more time"
+          - "I told our team I needed more time"
+          - "I told our team I need more time"
+          - "I said to the team that I needed more time"
+          - "I said to the team that I need more time"
+          - "I said to the team I needed more time"
+          - "I said to the team I need more time"
+          - "I said to my team that I needed more time"
+          - "I said to my team that I need more time"
+          - "I said to my team I needed more time"
+          - "I said to my team I need more time"
+          - "I said to our team that I needed more time"
+          - "I said to our team that I need more time"
+          - "I said to our team I needed more time"
+          - "I said to our team I need more time"
+        explanation: После tell нужен адресат; после say адресат вводится через to.
