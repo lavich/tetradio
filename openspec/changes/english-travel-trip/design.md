@@ -1,0 +1,200 @@
+## Context
+
+Мотивация — proposal.md, «Why». Состояние кода и контента, на которое опирается план:
+
+- **Модуль публикуется только полным** (`publicationGaps`, `src/content/course.ts:583-604`): чтение и аудирование с заданиями, письмо, речь, контрольная `kind: test` с `graded`. `t01` сейчас проходит проверку только благодаря `partial: true` (`content/build/lessons.ts:290-298`, `content/modules/t01.yaml:9`); снять поле можно, только когда в модуле есть `t01-3` и `t01-test`. Урок, которого нет ни в одном модуле, сборка отклоняет («урок не входит ни в один курс», `content/build/lessons.ts:125`), поэтому новый урок попадает в `lessons` модуля вместе со своим файлом. Карточка, которой нет ни в одном уроке, тоже роняет сборку (`content/build/lessons.ts:274-279`): карточки модуля и его первые уроки появляются в одном шаге.
+- **Контрольная точка не зависит от языка и календаря.** Сборка принимает `checkpoint:` у любого модуля курса из модулей (`content/build/courses.ts:94-104`) и требует от точки `kind: test` с оцениваемыми заданиями (`content/build/lessons.ts:283-288`); каталог несёт `checkpointId` (`src/content/course.ts:616-629`). Клиент без календаря подписывает точку на полке заголовком урока (`src/features/course/ShelfScreen.tsx:172-173`), на экране модуля — «контрольная точка» (`src/features/course/ModuleScreen.tsx:111-117`), следующий шаг после уроков модуля — точка (`src/storage/course.ts:250-258`). Календарь нужен только для дат и меток на «Прогрессе» (`src/features/course/checkpoints.ts`, `src/features/progress/ProgressScreen.tsx:322`). Итог контрольной по навыкам — от `passShare` курса (`src/domain/course.ts:123-150`, `src/features/course/LessonSummary.tsx:69,112-124`): оцениваются задания `graded` к чтению и аудированию, задания без навыка входят в общий итог, письмо и речь — самопроверка. У `english-travel` `passShare: 0.6` (`content/courses/english-travel.yaml:9`). Правка сборки не нужна.
+- **Вопросы к текстам и аудио** по-русски обязаны быть только в греческом курсе модулей 1–8 (`content/build/questions.ts:20,88`); в t01-2 вопросы по-английски — так и дальше.
+- **Ролевая сцена** — блок `speaking` с `part: roleplay` (`src/content/course.ts:114,534`): поля `prompt`, `seconds`, `model`, `criteria` (`src/content/course.ts:341`). Реплик собеседника со звуком у блока нет: в греческом курсе их читают из образца (`content/lessons/m10-3.yaml:270-290`).
+- **Аудирование без задания допустимо.** Модулю нужно хотя бы одно аудирование с заданием (`src/content/course.ts:593-595`), отдельное аудирование без `about` сборка пропускает; урок завершается по заданиям, письму и речи — аудирование в них не входит (`isTask`, `src/domain/course.ts:90-91`). Плеер проигрывает реплики подряд `plays` раз, после этого открывает текст кнопкой «Открыть текст» (`src/features/course/blocks/Listening.tsx:27,53-55,90-100`); подпись плеера — «Прослушайте дважды… затем ответьте».
+- **Письмо** требует `register: friendly | formal` (`src/content/course.ts:522`).
+- **Голоса.** Карта `content/voices/en.yaml` общая для двух английских курсов: `en-GB`, пулы 13 женских и 14 мужских голосов, диктор Kore; заняты Sarah (Aoede), Daniel (Charon), Mark (Iapetus), Elena (Despina), Aisha (Leda), Marco (Puck). Сборка падает, если у говорящего нет голоса или двое в диалоге звучат одним (`content/build/voices.ts:113-123`). Имена IT-курса — говорящие Sarah, Daniel, Mark, Elena и имена в текстах `e01` (Tom, Priya, Sharma, Fischer, Andrei) — в этом курсе не берём; свои персонажи t01 (Aisha, Marco, в текстах Olga, Tomasz Nowak) можно звать снова.
+- **Карточки.** 15 + 15 на модуль, первая половина — в первом уроке, вторая — во втором (программа, «Устройство модуля»); формат — как `content/words/english-travel/tw001.yaml`, `content/phrases/english-travel/tp001.yaml`. Сборка отклоняет карточку с текстом карточки IT-курса (требование «Карточки курсов одного языка»), но сверяет только с существующими карточками: у IT-курса опубликован один `e01` (35 слов, 25 фраз), модули `e02`–`e16` — черновики без карточек.
+- **Урок без карточек** допустим, если у урока модуля есть блоки (`content/build/lessons.ts:132-135`): `tNN-3` и контрольные — `items: []`.
+- **Настоящий контент проверяет** `tests/course-content.test.ts:84-147`; сейчас он закрепляет `t01` частичным с двумя уроками и `t02`–`t14` черновиками (строки 103-105), говорящих t01 сверяет с именами IT-курса (строка 143).
+- **«Сегодня» в конце курса.** `courseFinished` — «следующего шага нет и есть опубликованный модуль» (`src/storage/course.ts:266-267`), черновики не учитываются; `CourseToday` показывает при этом текст греческого курса о пробниках и M3 (`src/features/today/CourseToday.tsx:76,102-105`). Требование «Лист «Чтение» на «Сегодня»» закрепляет этот текст безусловно (`openspec/specs/app-sections/spec.md:416,432`). Тесты: `tests/course-progress.test.ts:190-200` (в том числе `[draft, published]` → пройден), e2e `tests/e2e-course/reading.spec.ts:301-311` на демо-курсе, где `m02` — черновик (`tests/fixtures/course-demo/modules/m02.yaml`), у курса есть экзамен.
+- **Бюджет каталога** — 25 KB gzip (`content/build/budgets.ts:19`); сейчас около 20,7 KB, после изменения около 22,4 KB (7 модулей становятся опубликованными с уроками и шпаргалками, точка).
+
+## Goals / Non-Goals
+
+**Goals:**
+
+- Каждый модуль `t01`–`t07` проходится целиком, четыре навыка и контрольная, как модуль IT-курса.
+- «День поездки» после `t07` собирает ступень в одну проверку с итогом по навыкам.
+- Каждый модуль — законченный шаг реализации: тест, карточки, уроки, персонажи, сборка; работу можно остановить после любого модуля без сломанного `main`.
+- «Сегодня» после последнего опубликованного урока говорит правду о курсе с черновиками.
+
+**Non-Goals:**
+
+- Правка сборки, формата каталога и пакетов, базы и облака; клиент — только текст конца курса на «Сегодня» (решение 11).
+- Паузы между репликами собеседника внутри сцены, новый вид блока для ролевой сцены.
+- Озвучка голосами (нет ключа), американские голоса, тексты для беглого чтения курса.
+
+## Decisions
+
+### 1. Контент; проверки — тестами на настоящем контенте
+
+Код сборки не меняется: всё нужное для полного модуля и точки без календаря уже есть (Context). Поведение закрепляется в `tests/course-content.test.ts`. Один параметризованный тест на модуль ступени вместо копий:
+
+- `STAGE` — список модулей ступени, опубликованных к текущей задаче; каждая группа задач добавляет свой модуль первой строкой и делает тест красным до контента.
+- Для каждого `tNN` из `STAGE`: `status: published`, `lessonIds` `[tNN-1, tNN-2, tNN-3, tNN-test]`, `crib`; в `tNN-1` и `tNN-2` вместе ровно `tw` и `tp` своего диапазона (`tw016 + 15·(n−2)` …), каждая в одном уроке; в `tNN-3` и `tNN-test` карточек нет; в `tNN-1` объяснение с таблицей, `vocabulary`, не меньше четырёх заданий; в `tNN-2` чтение и аудирование с заданиями `about`, `plays: 2`; в `tNN-3` письмо с образцом, критериями и `register` по решению 3, границы слов по программе (≤ 40 в t01–t02, 60–100 в t03–t07), не меньше двух устных заданий, в t05–t07 — хотя бы одна `roleplay`, и перед каждой `roleplay` этих модулей — аудирование без задания (пара «аудио перед сценой», решение 9); в `tNN-test` — `kind: test` и оцениваемые задания к чтению и аудированию; говорящие всех уроков модуля — в карте `en` и не из имён IT-курса (Context), как `tests/course-content.test.ts:143`.
+- Модули после `STAGE` — черновики; `content.partial` пуст, когда `t01` закрыт (до этого — `[t01]`).
+- Точка: у `t07` `checkpointId: t07-c1`; пакет `t07-c1` — `kind: test`, оцениваемые задания к чтению и аудированию, пять пар «аудирование — `roleplay`», два письма (`friendly` хосту, `formal` жалоба), заголовок «День поездки».
+
+Итог «сдано / не сдано» по навыкам считает `testResult` (`src/domain/course.ts:123`), его уже покрывают тесты домена; здесь проверяется, что у точки есть оцениваемые задания обоих навыков. Вид полки — временным скриншотом (решение 10).
+
+Альтернатива — отдельный тест на модуль: 7 почти одинаковых блоков, правка правила — в семи местах.
+
+### 2. Порядок: модуль за модулем
+
+`t01` → `t02` → … → `t07` → `t07-c1` → документы и полная проверка. Внутри модуля: тест (красный) → карточки, уроки и персонажи в карте одним шагом → `npm run content` и `npm test` → языковая рецензия модуля субагентом (только чтение). Карточки без уроков и урок без модуля сборка не пропускает (Context), поэтому промежуточные проверки внутри шага — только `npm run content` в конце шага; список карточек сверяется с IT-курсом до того, как они написаны. Новый урок вписывается в `lessons` модуля в том же шаге, что и файл урока. Каждая следующая группа опирается на пройденную лексику и грамматику предыдущих: тексты модуля используют карточки прошлых модулей без глосс, глоссы — для нового.
+
+### 3. Устройство уроков модуля
+
+По программе («Устройство модуля», «Модули», «Матрица покрытия») и образцу `t01-1`, `t01-2`, `e01-3`, `e01-test`; режим `generate` из `docs/lesson-authoring.md` в границах модуля программы. Объяснения и пояснения ошибок — по-русски, вопросы к текстам и аудио — по-английски, разметка `words` у своих примеров. Регистр — нейтрально-вежливый (программа, «Регистр → модуль»: сленг — с t09).
+
+| Урок | Блоки |
+| --- | --- |
+| `tNN-1` «грамматика и лексика» | 1–2 объяснения грамматики модуля с таблицей и типичной ошибкой, объяснение лексики, `vocabulary`, 4–6 заданий (`choice`, `gap`, `match`, `text`) с ключами и пояснениями; 8 слов и 8 фраз |
+| `tNN-2` «аудирование и чтение» | объяснение «как читать / слушать», чтение (табличка, правила, меню, чек, инструкция) с заданием, 1–2 аудирования `plays: 2` с заданиями, `vocabulary`; 7 слов и 7 фраз |
+| `tNN-3` «речь, письмо и проверка» | объяснение-подготовка (банк фраз модуля: свои версии готовых фраз), задание на сборку реплик, письмо с образцом, критериями и `register`, 2–3 устных задания с образцом и критериями (ответ из банка; в t05–t07 ролевая сцена — парой «аудирование реплик собеседника → `roleplay`»); `items: []` |
+| `tNN-test` | вступление (10–15 минут, без словаря), чтение и аудирование с `graded`, задания на грамматику и карточки модуля с `graded`; `items: []` |
+
+Навыки, грамматика и рост продуктивных навыков по модулям:
+
+| Модуль | Грамматика (`tNN-1`) | Чтение / аудирование (`tNN-2`) | Письмо (`tNN-3`), `register` | Речь (`tNN-3`) |
+| --- | --- | --- | --- | --- |
+| t01 | уже в `t01-1` | уже в `t01-2` | сообщение авиакомпании о потерянном багаже, 20–40 слов, `formal` | ответы на паспортном контроле; просьба у стойки — реплики 15–30 с |
+| t02 | предлоги места и движения, повелительное в указаниях, *How do I get to…?*, *Which… goes to…?* | схема и правила проезда / дорога от прохожего и водителя | сообщение водителю, 20–40 слов, `friendly` | спросить дорогу и пересказать её — реплики 15–30 с |
+| t03 | present perfect для текущей проблемы, *there's no / there isn't any*, *I was wondering if…* | объявление и правила квартиры / ресепшен, голосовое хоста | переписка с хостом: вопрос до брони, заезд, проблема, 60–100 слов, `friendly` | сообщить о проблеме в номере — реплики 15–30 с |
+| t04 | *I'd like / I'll have / Could we get…*, *some, any, a bit of*, *too / enough* | меню / заказ в шумном кафе | отзыв о ресторане, 60–100 слов, `formal` | заказ на компанию с вопросом об аллергенах — реплики 15–30 с |
+| t05 | сравнения (*cheaper than, not as… as, the same as*), *one / ones*, *have to / don't have to* | правила возврата, чек / касса, рынок | запрос в поддержку о двойном списании, 60–100 слов, `formal` | ролевые сцены 4–6 реплик с аудио перед сценой: возврат, торг |
+| t06 | present perfect continuous, *for / since*, *should / had better* | инструкция к лекарству / фармацевт, врач | сообщение страховой, 60–100 слов, `formal` | ролевая сцена с аудио перед ней: симптомы и переспрос дозировки |
+| t07 | past simple и past continuous в рассказе, passive в прошедшем, *need to / have to* | правила компенсации / полиция, стойка авиакомпании | жалоба, 80–100 слов, `formal` | ролевая сцена с аудио перед ней: что произошло и какое решение нужно |
+
+Регистр письма: близкому по ситуации частному лицу (водитель, хост) — `friendly`; компании и организации (авиакомпания, поддержка, страховая, отзыв на сайте, жалоба) — `formal`.
+
+Шпаргалки `crib` (черновик, уточняется с уроком): t02 «дорога» — `How do I get to…?`, `Which bus goes to…?`, `Go straight on.`, `Take the second left.`, `It's opposite the…`, `next to / between`; t03 «проблема и просьба» — `It has stopped working.`, `There's no hot water.`, `There isn't any…`, `I was wondering if…`; t04 «заказ» — `I'd like…`, `I'll have…`, `Could we get…?`, `some / any`, `too salty`, `not hot enough`; t05 «сравнение» — `cheaper than`, `not as big as`, `the same as`, `this one / these ones`, `You have to…`, `You don't have to…`; t06 «симптомы и совет» — `I've been feeling…`, `for two days`, `since Monday`, `You should…`, `You'd better…`; t07 «рассказ о происшествии» — `I was waiting…`, `…when someone took…`, `It was stolen.`, `I need to…`.
+
+### 4. Модуль t01 — `t01-3` и `t01-test`, без новых карточек
+
+- `t01-3` «Паспортный контроль и потерянный багаж»: подготовка ответов на вопросы пограничника (*What's the purpose of your visit? How long are you staying? Where are you staying?* — `tp009`–`tp012` уже есть), задание на подбор ответа к вопросу, устное `interview` (вопросы пограничника, ответы 15–30 секунд), устная `roleplay` у стойки регистрации (место у прохода, лишняя сумка — `tp001`, `tp005`), письмо авиакомпании о сумке, которая не вышла на ленту, 20–40 слов (`tp015`, `baggage reclaim`).
+- `t01-test`: посадочный талон или табло с `graded`, объявление (диктор) и разговор у стойки с `graded`, задания на вежливые просьбы и present simple расписания и на карточки t01 с `graded`. По образцу `e01-test`.
+- Порядок: `t01-3` вписывается в `lessons` модуля вместе с файлом урока (`partial` остаётся, иначе сборка падает на недостающей контрольной); затем `t01-test` так же; `partial` снимается отдельным шагом, когда модуль полный. Учащийся, прошедший `t01-1` и `t01-2`, увидит «2 из 4 пройдено»: id уроков не меняются, прогресс сохраняется.
+
+### 5. Карточки t02–t07 — черновой список
+
+Отбор — по программе: B2+ по EVP / Oxford 5000, термины поездки и устойчивые сочетания; базовые слова (*ticket, room, bill, doctor*) — в текстах без карточек; базовые для B1 слова (*a fare, a host, a tip, a receipt, a temperature, a description, a complaint*) тоже не берём; британское написание, американская пара — в `note` (*return / round-trip*, *a cot / a crib*, *a credit note / store credit*, *a doggy bag / a to-go box*, *the underground / the subway*, *a starter / an appetizer*, *the bill / the check*, *a fitting room / a dressing room*, *a cash machine / an ATM*, *A&E / the ER*, *lost property / lost and found*). Перед лексиконом модуля список сверяется с карточками IT-курса и программой его модулей (решение 7). Список уточняется при подготовке урока; число и диапазоны id — нет.
+
+| Модуль | `tNN-1` слова (8) | `tNN-1` фразы (8) | `tNN-2` слова (7) | `tNN-2` фразы (7) |
+| --- | --- | --- | --- | --- |
+| t02 `tw016–030`, `tp016–030` | a return ticket, off-peak, change at, tap in, the underground, a roundabout, a pedestrian crossing, a junction | How do I get to the old town from here? · Which bus goes to the airport? · Do I need to change? · Go straight on and take the second left. · It's about a ten-minute walk. · Could I have a return to Brighton, please? · Is this the right platform for Oxford? · Does this train stop at Reading? | a hire car, a deposit, an excess, a full tank, a pick-up point, a ticket barrier, surge pricing | Could you let me know when we get to my stop? · Can you drop me off here, please? · Keep the change. · I'm by the main entrance, in a blue jacket. · Is insurance included in the price? · Do I have to return it with a full tank? · Where's the nearest taxi rank? |
+| t03 `tw031–045`, `tp031–045` | early check-in, late check-out, a lockbox, house rules, amenities, a key card, en suite, a cot | I was wondering if early check-in is possible. · I've booked a double room for three nights. · Is breakfast included? · The Wi-Fi has stopped working. · There's no hot water in the bathroom. · Could I leave my luggage here after check-out? · What time do we need to check out? · Our flight lands late, so we'll arrive around midnight. | out of order, a leak, blocked, the boiler, housekeeping, bedding, a cancellation policy | Where can I find the key? · The code for the lockbox doesn't work. · The shower is leaking. · Could you send someone to have a look? · Someone's coming to fix it this afternoon. · Are there any extra blankets? · Is it OK if we leave the bags by the door? |
+| t04 `tw046–060`, `tp046–060` | a starter, a side dish, medium rare, gluten-free, dairy, a nut allergy, a sharing plate, a set menu | I'll have the fish of the day. · Could we get some more bread? · Does this have any nuts in it? · I'm allergic to shellfish. · Is it very spicy? · Could I have it without onions? · We'd like a table for four at eight. · Could we have a few more minutes? | split the bill, a service charge, a doggy bag, the specials, a takeaway, tap water, the house wine | Could we have the bill, please? · Can we pay separately? · Is service included? · Just tap water, thanks. · Excuse me, this isn't what I ordered. · It's a bit too salty for me. · Could we get this to take away? |
+| t05 `tw061–075`, `tp061–075` | a fitting room, alterations, a refund, a credit note, proof of purchase, in stock, tax-free shopping, haggle | Have you got this in a medium? · Can I try this on? · It's a bit tight — have you got a bigger size? · Are these the same as the ones in the window? · I'd like to return this. · Can I get a refund? · Do I have to show the receipt? · Is that your best price? | contactless, declined, cashback, an exchange rate, a cash machine, a transaction fee, a pending payment | My card has been declined. · Do you take contactless? · Would you like cashback? · I've been charged twice for the same order. · Could you check if the payment went through? · Can you do it for twenty? · What's the exchange rate today? |
+| t06 `tw076–090`, `tp076–090` | a sore throat, a rash, dizzy, a sprained ankle, a blocked nose, an inhaler, nauseous, a prescription | I've been feeling sick since yesterday. · I've had a headache for two days. · It hurts when I swallow. · I think I've sprained my ankle. · I feel dizzy when I stand up. · You should drink plenty of water. · You'd better see a doctor. · Do I need a prescription for this? | swollen, over-the-counter, twice a day, a side effect, a dose, a painkiller, an insurance claim | How often should I take it? · Can I take it with food? · Is it safe to drink alcohol with this? · Are there any side effects? · I'm allergic to penicillin. · Please call an ambulance! · Where's the nearest A&E? |
+| t07 `tw091–105`, `tp091–105` | a pickpocket, a crime reference number, a witness, lost property, snatch, break into, a statement, CCTV footage | My wallet was stolen on the bus. · I was waiting for the train when someone took my bag. · I need to report a theft. · I need a police report for my insurance. · It happened about an hour ago. · I didn't see their face. · When can I get a copy of the report? · I've lost my passport. What should I do? | miss a connection, rebook, denied boarding, a meal voucher, a goodwill gesture, overbooked, be entitled to | I've missed my connecting flight. · Can you rebook me on the next flight? · Am I entitled to compensation? · I'd like to make a complaint. · Could I speak to the manager, please? · I'm not happy with how this was handled. · What are you going to do about it? |
+
+Слово и фраза одного модуля с общим корнем (*a refund* и *Can I get a refund?*) допустимы: разные карточки разного вида, как `customs`/`I've got nothing to declare` в t01. `a prescription` — в `t06-1`, потому что на него опирается фраза `t06-1` *Do I need a prescription for this?*. *compensation* — только во фразе *Am I entitled to compensation?*, не словом: в IT-курсе это слово условий оффера (e08, e16). Внутри курса один текст дважды не повторяется: `deposit` — только t02, `connecting flight` — только t01 (`tw010`), в t07 — *miss a connection*.
+
+### 6. Персонажи
+
+Новые имена с голосами `en-GB` из пулов, у каждого персонажа свой голос, не занятый в карте, — тогда персонаж узнаётся во всех уроках и в точке, а запрет «один голос в диалоге» не мешает собирать сцены точки из персонажей разных модулей. Свободно 9 женских и 11 мужских голосов; нужно около 16.
+
+| Персонаж | Где | Голос |
+| --- | --- | --- |
+| Fiona — прохожая в Эдинбурге | t02 | Callirrhoe |
+| Lucía — путешественница из Бразилии, неноситель | t02, t04, t07-c1 | Achernar |
+| Kwame — водитель такси | t02, t07-c1 | Algenib |
+| Jonas — турист из Германии, неноситель | t02, t05 | Alnilam |
+| Hannah — администратор отеля | t03 | Autonoe |
+| Oliver — хост квартиры, голосовое | t03, t07-c1 | Enceladus |
+| Chloe — официантка | t04, t07-c1 | Erinome |
+| Diego — друг из Испании, неноситель | t04 | Rasalgethi |
+| Grace — продавец в магазине | t05 | Laomedeia |
+| Callum — продавец на рынке | t05 | Sadachbia |
+| Bridget — фармацевт | t06, t07-c1 | Sulafat |
+| Okafor — врач общей практики | t06 | Schedar |
+| Hughes — полицейский | t07 | Sadaltager |
+| Megan — сотрудница авиакомпании | t07 | Vindemiatrix |
+| Piotr — пассажир из Польши, неноситель | t07 | Umbriel |
+| Joanne — пограничница, реплики в аудио перед сценой паспортного контроля | t07-c1 | Zephyr |
+
+Объявления — диктор карты. Реплики собеседника перед ролевой сценой говорит персонаж сцены (Callum, Bridget, Hughes, Joanne, Kwame, Oliver, Chloe). Неносители говорят проще: короткие фразы, другой порядок слов, переспросы — без нарочных ошибок в каждой реплике и без акцента в написании. Имена уточняются при подготовке; правило — свободное имя и свободный голос своего пола.
+
+### 7. Без пересечений с IT-курсом
+
+- Сборка уже отклоняет совпадение текста с карточкой `english-it` (требование «Карточки курсов одного языка»).
+- Ручная сверка перед карточками модуля — с программой IT-курса (`docs/curriculum-english-it.md`), где у будущих модулей ещё нет карточек: переспрос и косвенные вопросы (e05 и e16: *Could you tell me…*, *Do you mean…*) — в t02 дорогу спрашивают прямым вопросом (*How do I get to…?*), без карточек косвенного вопроса; модальные и вежливые просьбы, условия работы (e08: *have to, need to*, компенсация) — у нас грамматика без отдельных карточек-рамок, *compensation* только во фразе; мнение и несогласие (e15) — в t07 жалоба без *I see your point*; работа и профессия (e01) — не входят.
+- Если совпадение всё же нашлось — карточка остаётся у курса, где она есть, здесь — текст с глоссой (программа, «Место среди курсов»).
+
+### 8. Контрольная точка «День поездки»
+
+Модуль `t07`: `checkpoint: t07-c1`. Урок `t07-c1`, `kind: test`, заголовок «День поездки», одно занятие около 60 минут, по образцу `m08-k1`:
+
+| Часть | Блоки | Навык в итоге |
+| --- | --- | --- |
+| Вступление | как устроена точка: сцены подряд, без словаря, порог 60 % по чтению и аудированию, письмо и речь — самопроверка по критериям; навык ниже порога — какие модули повторить; решение о темпе (одно или два занятия в неделю, программа «Объём и темп») | — |
+| Прилёт | аудирование: объявления в зале прилёта (диктор) — `graded`; аудио реплик Joanne → `roleplay` паспортный контроль | аудирование |
+| Дорога | чтение: указатели и правила проезда из аэропорта — `graded`; аудио реплик Kwame → `roleplay` такси | чтение |
+| Заезд | чтение: сообщение хоста с инструкцией и правилами — `graded`; аудирование: голосовое Oliver о проблеме с замком — `graded`; письмо хосту о проблеме, 60–80 слов, `friendly`; аудио реплик Oliver → `roleplay` сообщить о проблеме | чтение, аудирование |
+| Ужин | аудирование: разговор за столом, заказ и счёт (Chloe, Lucía) — `graded`; аудио реплик Chloe → `roleplay` заказ с аллергией и разделить счёт | аудирование |
+| Аптека | чтение: инструкция к лекарству — `graded`; аудио реплик Bridget → `roleplay` симптомы и дозировка | чтение |
+| Жалоба | письмо: жалоба платформе бронирования на неисправленную проблему, 80–100 слов, `formal` | — |
+| Язык | задание `gap` на грамматику ступени — `graded`, в общий итог без навыка | — |
+
+Чтение и аудирование — по 10–12 оцениваемых пунктов: один пункт меняет долю навыка не больше чем на 10 %. Персонажи и ситуации — уже знакомые по модулям, новых карточек нет, слова вне ступени — глоссы. «Слабый навык и решение о темпе» из программы — текстом вступления: итог по навыкам показывает экран итога контрольной (`LessonSummary.tsx:112-124`); отдельного экрана решения нет, и календаря у курса нет.
+
+Альтернатива — две точки (чтение и аудирование отдельно от сцен): программа говорит об одном занятии.
+
+### 9. Ролевая сцена — «аудио перед сценой» (решение 21.10.2026)
+
+В t05–t07 и `t07-c1` сцена — пара блоков без правки клиента:
+
+1. `listening` с `id` вида `<сцена>-lines`, заголовок «Реплики собеседника», `plays: 2`, в `transcript` — только реплики собеседника по порядку, говорящий — персонаж сцены. Задания `about` к нему нет: аудирование без задания сборка пропускает, урок завершается без него (Context). Учащийся слушает реплики дважды, затем открывает их текст кнопкой «Открыть текст» и держит перед глазами.
+2. `speaking` с `part: roleplay`: в `prompt` — карточка роли по-русски и указание «прослушайте реплики выше; отвечайте на каждую по порядку и записывайте свою часть», в `model` — весь диалог, в `criteria` — что проверить, `seconds` — по числу реплик.
+
+Подпись плеера «…затем ответьте. Текст откроется после ответа» к этой паре подходит не дословно: текст открывается кнопкой после двух прослушиваний. Это объясняет `prompt` сцены; правка подписи плеера — вне объёма.
+
+Альтернативы: реплики только в тексте задания, как в `m10-3`, — программа обещает, что они звучат; новый вид блока с паузами между репликами — правка формата и клиента. Лёгкое задание `about` к аудио сцены не нужно: сборка его не требует, а лишнее задание удлиняет урок и смешивает аудирование с речью.
+
+В t01–t04 речь — реплики 15–30 секунд (программа, «Речь растёт к цели»): `interview` и `monologue` без аудио перед ними, как в t01.
+
+### 10. Проверки сверх тестов
+
+- `npm run content` после каждой группы: модуль без пробелов публикации, отчёт печатает неозвученные реплики, бюджеты контента в пределах.
+- `npm run voices -- --check <уроки модуля>` перечисляет реплики без записи и не падает.
+- Языковая рецензия модуля независимым субагентом (только чтение): английский, регистр, однозначность ключей, перевод карточек, уровень отбора, пересечения по смыслу с `english-it`. Замечания и решения — в раздел «Реализация» этого файла.
+- Вид — временный e2e-скриншот по настоящей сборке на 390 px. Временный конфиг `playwright.shots.config.ts` по образцу `playwright.perf.config.ts`: `testDir: "tests/shots"`, `viewport` 390 × 844, `webServer.command` — `node scripts/e2e-server.ts shots content <порт>` (собирает настоящий `content/` в `.e2e/shots`, `scripts/e2e-server.ts:7-14`). Прогресс готовит тест: начать курс `english-travel` как в `tests/e2e-courses/courses.spec.ts`, поставить уроки `installLessons` и отметить пройденными `completeLessons` (`tests/e2e/helpers.ts:143,170`) — все уроки `t01`–`t07`, чтобы точка стала следующим шагом; итог `t07-c1` — после ответа на задания точки в браузере. Снимки: `t02-1`, пара «аудио → сцена» в `t05-3`, `t07-test`, полка с «День поездки» после t07, итог `t07-c1`, «Сегодня» с текстом «Следующие модули курса готовятся». Конфиг, тест и `.e2e/shots` удаляются; снимки — в `/tmp/travel-trip-shots`.
+
+### 11. «Сегодня» в конце опубликованных уроков (решение 21.10.2026)
+
+В `src/storage/course.ts` вместо `courseFinished` — `courseEnd(views, next): "waiting" | "finished" | null`: `null`, если следующий шаг есть или опубликованных модулей нет; `"waiting"`, если шага нет и есть модуль-черновик; `"finished"` — шага нет и черновиков нет. `CourseToday` (`src/features/today/CourseToday.tsx:76,102-105`) показывает:
+
+- `"waiting"` — «Опубликованные уроки пройдены. Следующие модули курса готовятся — пока повторяйте карточки.», `data-testid="course-waiting"`;
+- `"finished"` у курса с `exam` — прежний текст о пробниках и M3, `data-testid="course-finished"`;
+- `"finished"` без `exam` — «Все модули курса пройдены. Дальше — повторение карточек.», `data-testid="course-finished"`.
+
+Экзамен курса берётся из записи курса в базе (`db.courses`, поле `exam`), как `passShare` в `LessonScreen.tsx:61-62`. Признак — `exam`, а не календарь: текст говорит об экзамене и пробнике M3, которые есть только у курса с экзаменом. Лист «Чтение» и главная кнопка ведут себя как прежде: условие «следующего шага нет» не меняется (`next === null`).
+
+Тесты, красные до правки: `tests/course-progress.test.ts` — `courseEnd([draft, published], null)` = `"waiting"`, `[published]` → `"finished"`, `[draft]` → `null`, со следующим шагом → `null` (строка 199 сейчас ждёт «пройден»); e2e `tests/e2e-course/reading.spec.ts:301-311` на демо-курсе с черновиком `m02` — ждёт `course-waiting` и текст «готовятся», `course-finished` нет. Спека — `app-sections`: ADDED «Конец опубликованных уроков на «Сегодня»», MODIFIED «Лист «Чтение» на «Сегодня»» (ссылка на новое требование вместо безусловного текста).
+
+Альтернатива — не показывать ничего при черновиках: у курса не останется ни шага, ни объяснения, почему его нет.
+
+## Risks / Trade-offs
+
+- [Объём: 27 уроков и 180 карточек сгенерированы моделью, без носителя] → регистр первой ступени нейтральный, рецензия субагентом после каждого модуля, носитель — до второй ступени (программа, «Что не входит»).
+- [Пересечение с будущими карточками IT-курса не ловится сборкой сейчас] → ручная сверка с программой IT-курса (решение 7); когда IT-курс добавит модули, сборка поймает совпадение уже с нашими карточками.
+- [Синтез устройства без записей: голос неносителя и разных людей звучит одинаково ровно] → так уже у t01 и e01; разные голоса — когда будет ключ (`npm run voices`).
+- [t01 «2 из 2» станет «2 из 4»] → ожидаемо: пользователь знает о частичном модуле (решение 20.10.2026).
+- [Аудио перед сценой звучит целиком, без пауз на ответ; подпись плеера говорит «затем ответьте»] → `prompt` сцены объясняет порядок, текст реплик открыт после двух прослушиваний; паузы — отдельное изменение, если неудобно.
+- [Демо-курс e2e меняет текст «Сегодня» с «пройдены» на «готовятся»] → e2e `reading.spec.ts:301-311` правится в той же задаче; греческий курс в продукте опубликован целиком, у него текст прежний.
+- [Каталог около 22,4 из 25 KB gzip] → строка «Бюджеты» отчёта сборки после каждой группы; вторая ступень потребует пересмотра бюджета или каталога (отдельно).
+
+## Migration Plan
+
+Контент и текст «Сегодня»: формат каталога и пакетов, база и облако не меняются. Опубликованные уроки получают новые версии пакетов только если менялись (t01 — модуль, а не уроки). Откат — вернуть модули в черновики и `t01` в `partial`; пройденные уроки останутся в базе учащегося, как у снятого модуля.
+
+## Open Questions
+
+Вопросы плана решены пользователем 21.10.2026 (proposal.md, «Решения пользователя»): ролевые сцены — «Аудио перед сценой» (решение 9), «Сегодня» — в этом изменении (решение 11), имя точки — «День поездки» (решение 8).
