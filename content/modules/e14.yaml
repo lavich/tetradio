@@ -1,8 +1,23 @@
 number: 14
 title: Thinking out loud
 subtitle: Думать вслух
-status: draft
-goal: проговаривать решение на live coding и system design
+status: published
+goal: проговаривать решение алгоритмической задачи на собеседовании
 grammar:
   - let me …, I'm going to …, hedging
 sessions: 3
+crib:
+  title: Думать вслух
+  rows:
+    - [let me + глагол, "Let me take a small example first. · Let me draw this on the board."]
+    - [I'm going to + глагол, "I'm going to start with a brute-force solution. · I'm going to sort the input first."]
+    - [осторожные оценки, "I think this runs in linear time. · I'd say the worst case is quadratic. · I'd probably use a hash map. · It depends on…"]
+    - [сложность словами, "constant · linear · logarithmic · quadratic; time и space называют отдельно"]
+    - [ход решения, "условие → пример → простое решение → сложность → улучшение → крайние случаи и итог"]
+    - [проверка и итог, "Let me look at the edge cases. · In summary, it runs in linear time and uses constant space."]
+  note: "после let me — глагол без to; I'm going to объявляет план; не больше двух смягчителей подряд, факт называют прямо; сложность и формулы читают словами; с think отрицание переносят: I don't think…; depends on (depends of — ошибка)"
+lessons:
+  - e14-1
+  - e14-2
+  - e14-3
+  - e14-test

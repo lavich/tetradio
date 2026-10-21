@@ -1,0 +1,570 @@
+title: let me…, I'm going to…, hedging — решение задачи вслух, структуры данных и сложность
+kind: lesson
+items:
+  - { kind: word, id: ew456 }
+  - { kind: word, id: ew457 }
+  - { kind: word, id: ew458 }
+  - { kind: word, id: ew459 }
+  - { kind: word, id: ew460 }
+  - { kind: word, id: ew461 }
+  - { kind: word, id: ew462 }
+  - { kind: word, id: ew463 }
+  - { kind: word, id: ew464 }
+  - { kind: word, id: ew465 }
+  - { kind: word, id: ew466 }
+  - { kind: word, id: ew467 }
+  - { kind: word, id: ew468 }
+  - { kind: word, id: ew469 }
+  - { kind: word, id: ew470 }
+  - { kind: word, id: ew471 }
+  - { kind: word, id: ew472 }
+  - { kind: word, id: ew473 }
+  - { kind: phrase, id: ep326 }
+  - { kind: phrase, id: ep327 }
+  - { kind: phrase, id: ep328 }
+  - { kind: phrase, id: ep329 }
+  - { kind: phrase, id: ep330 }
+  - { kind: phrase, id: ep331 }
+  - { kind: phrase, id: ep332 }
+  - { kind: phrase, id: ep333 }
+blocks:
+  - type: explanation
+    id: think-aloud
+    title: Let me и I'm going to — проговаривать решение
+    body: |-
+      На собеседовании по алгоритмам и структурам данных интервьюер оценивает и ход мысли, и ответ. Поэтому решение проговаривают: повторяют условие, разбирают пример, начинают с простого варианта, называют сложность, улучшают решение и проверяют его. Молчание оставляет интервьюера без сведений о том, как вы думаете, а проговаривание позволяет ему вовремя подсказать.
+
+      **Let me + глагол** (без to) — «позвольте мне» или «дайте я»: вы предупреждаете о действии, которое выполняете прямо сейчас: **Let me draw this on the board.** **Let me take a small example first.**
+
+      **I'm going to + глагол** — вы объявляете план, который уже решили выполнить: **I'm going to start with a brute-force solution.** **I'm going to sort the input first.**
+
+      **I'll + глагол** — решение в момент речи: **I'll think out loud, so please stop me if you need to.** **I'd + глагол** — осторожное предложение: **I'd probably use a hash map here.**
+
+      Эти конструкции звучат коротко и вежливо. Они помогают интервьюеру идти за вами и показывают, что вы управляете ходом решения.
+    table:
+      columns:
+        - конструкция
+        - когда
+        - пример
+      rows:
+        - - let me + глагол
+          - действие, которое вы делаете сейчас
+          - Let me draw this on the board.
+        - - I'm going to + глагол
+          - план, который вы объявляете
+          - I'm going to sort the input first.
+        - - I'll + глагол
+          - решение в момент речи
+          - I'll think out loud, so please stop me if you need to.
+        - - I'd + глагол
+          - осторожное предложение
+          - I'd probably use a hash map here.
+  - type: explanation
+    id: hedging
+    title: Hedging — как показать степень уверенности
+    body: |-
+      Hedging — смягчение: слова и обороты, которые показывают, насколько вы уверены. На собеседовании они нужны, чтобы называть догадку догадкой. Интервьюер слышит, что вы отличаете проверенное от предположения.
+
+      Три ступени. Когда вы уверены, говорите прямо: **The loop visits each element once.** Когда вы скорее уверены, чем нет, добавляйте **I think**, **I'd say**, **probably**, **as far as I can tell**: **I think this runs in linear time.** Когда сомневаетесь, говорите об этом: **I'm not sure that's optimal, but it works.** **It depends on how large the input can get.**
+
+      **Probably** ставят после вспомогательного глагола и перед смысловым: **I'd probably use**, **It's probably linear.** **I think** и **I'd say** стоят в начале. Два смягчителя подряд допустимы (*I think it's probably linear*), три и больше сбивают слушателя: *I think maybe it could probably work*. Понятны **I think it works** и **It probably works**.
+
+      Факты смягчать не нужно: размер примера, условие задачи и результат, который вы только что проверили, называют прямо. После осторожной оценки полезно проверить её примером: **I think this runs in linear time. Let me test this with an example.**
+    table:
+      columns:
+        - уверенность
+        - выражения
+        - пример
+      rows:
+        - - высокая
+          - прямое утверждение, I'm sure
+          - I'm sure that the loop runs once for each element.
+        - - средняя
+          - I think, I'd say, probably, as far as I can tell
+          - I'd say the worst case is quadratic.
+        - - низкая
+          - I'm not sure, it depends on, I'd guess
+          - I'd guess it's somewhere between linear and quadratic.
+  - type: explanation
+    id: aloud-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **Let me to.** По-русски «позвольте мне объяснить» содержит инфинитив, и в английский переносят to: *Let me to explain.* После let me стоит глагол без to: **Let me explain.**
+
+      **Go to вместо going to.** Русское «я иду делать» превращается в *I go to sort the input.* План объявляют с оборотом to be going to: **I'm going to sort the input.** После него глагол стоит в базовой форме, без второго to: *I'm going to to start* — ошибка.
+
+      **Лишние смягчители.** Русская речь легко складывает «наверное, мне кажется, как бы». В английском смягчителей подряд не больше двух, чаще хватает одного: **I think this runs in linear time.**
+
+      **Отрицание при think.** По-русски «я думаю, это не оптимально». В английском отрицание переносят в главную часть: **I don't think this is optimal.** Вариант *I think this is not optimal* допустим, но реже звучит в речи, а *I think not this is optimal* ошибочен.
+
+      **Depends.** Русское «зависит от» передаёт **depends on**: *depends of* и *depends from* — ошибки. **It depends on the size of the input.**
+
+      **Maybe и probably.** **Maybe** — «возможно», шансы примерно равны. **Probably** — «скорее всего», вы склоняетесь к варианту. Для выбора, к которому вы склоняетесь, нужен **probably**: **I'd probably use a hash map here.**
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - Let me to draw this.
+          - Let me draw this.
+          - после let me — глагол без to
+        - - I go to sort the input.
+          - I'm going to sort the input.
+          - план — to be going to
+        - - I'm going to to start with a brute-force solution.
+          - I'm going to start with a brute-force solution.
+          - after going to — один to
+        - - I think maybe it probably works.
+          - I think it works.
+          - не больше двух смягчителей подряд
+        - - It depends of the size.
+          - It depends on the size.
+          - depends on
+        - - I think not this is optimal.
+          - I don't think this is optimal.
+          - отрицание переносят в главную часть
+  - type: explanation
+    id: algorithm-words
+    title: Слова урока — подходы, структуры, сложность
+    body: |-
+      Слова урока образуют три группы.
+
+      **Подходы.** **A brute-force solution** — решение «в лоб»: перебор всех вариантов. **A greedy approach** — на каждом шаге берут наиболее выгодный на вид вариант. **Recursion** — функция вызывает саму себя, **a base case** — условие, при котором вызовы прекращаются. **Backtracking** — перебор с откатом назад. **Memoisation** — хранение уже посчитанных результатов. **Optimise** — ускорить решение или сократить память.
+
+      **Структуры и приёмы.** **A hash map** — значение находят по ключу, такой поиск называют **a lookup**. **A linked list** — элементы связаны ссылками. **A heap** — структура, из которой быстро берут наименьший или наибольший элемент. **A pointer** — позиция или адрес элемента. **A sliding window** — диапазон, который сдвигают по данным. **Traverse** — обойти структуру. **A binary search** — поиск в отсортированных данных с делением диапазона пополам.
+
+      **Сложность и ошибки.** **Time complexity** — как растёт время с ростом входа, **auxiliary space** — дополнительная память. **An off-by-one error** — цикл выполняется на один раз больше или меньше. Формулы сложности вслух читают словами: *linear time*, *quadratic time*, *constant space*.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: construction-choice
+    title: Let me, I'm going to, I'll
+    instruction: Выберите слово или фразу для пропуска.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Вы объявляете план: сначала отсортируете входные данные."
+        options:
+          - I'm going to sort the input first.
+          - I go to sort the input first.
+          - I'm going to to sort the input first.
+        answer: I'm going to sort the input first.
+        explanation: План объявляют оборотом to be going to и глаголом в базовой форме; I go to — калька с русского, второе to лишнее.
+      - id: q2
+        prompt: ___ draw this on the board. (позвольте мне нарисовать)
+        options:
+          - Let me
+          - Let me to
+          - Let I
+        answer: Let me
+        explanation: После let стоит me и глагол без to.
+      - id: q3
+        prompt: I'm going to ___ with a brute-force solution.
+        options:
+          - start
+          - to start
+          - starting
+        answer: start
+        explanation: После going to стоит глагол в базовой форме.
+      - id: q4
+        prompt: ___ say the problem back in my own words. (позвольте мне пересказать)
+        options:
+          - Let me
+          - I let
+          - Let to me
+        answer: Let me
+        explanation: Let me + глагол — вежливое предупреждение о действии.
+      - id: q5
+        prompt: I'll think ___, so please stop me if you need to. (вслух)
+        options:
+          - out loud
+          - on loud
+          - loud out
+        answer: out loud
+        explanation: Устойчивое выражение think out loud — «думать вслух».
+      - id: q6
+        prompt: Let me ___ this with a small example. (проверить)
+        options:
+          - test
+          - to test
+          - testing
+        answer: test
+        explanation: После let me стоит глагол без to.
+  - type: exercise
+    id: hedge-choice
+    title: Осторожные формулировки
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы не вполне уверены в сложности и говорите осторожно.
+        options:
+          - I think this runs in linear time.
+          - This definitely runs in linear time.
+          - I am completely sure that this runs in linear time.
+        answer: I think this runs in linear time.
+        explanation: I think смягчает утверждение; остальные варианты звучат как полная уверенность.
+      - id: q2
+        prompt: Вы точно знаете, что цикл проходит по каждому элементу один раз.
+        options:
+          - The loop visits each element once.
+          - I think maybe the loop probably visits each element once.
+          - The loop visits each element once or twice, I think.
+        answer: The loop visits each element once.
+        explanation: Известный факт называют прямо; остальные варианты смягчают то, в чём вы уверены.
+      - id: q3
+        prompt: Вы склоняетесь к хеш-таблице, но можете передумать.
+        options:
+          - I'd probably use a hash map here.
+          - I'd probably to use a hash map here.
+          - I probably would to use a hash map here.
+        answer: I'd probably use a hash map here.
+        explanation: Probably стоит между I'd и глаголом, после would глагол без to.
+      - id: q4
+        prompt: Вы думаете, что решение не оптимально.
+        options:
+          - I don't think this is optimal.
+          - I think not this is optimal.
+          - I not think this is optimal.
+        answer: I don't think this is optimal.
+        explanation: Отрицание переносят в главную часть; остальные варианты нарушают порядок слов.
+      - id: q5
+        prompt: Ответ зависит от размера данных.
+        options:
+          - It depends on the size of the input.
+          - It depends of the size of the input.
+          - It depends from the size of the input.
+        answer: It depends on the size of the input.
+        explanation: Depends сочетается с предлогом on.
+      - id: q6
+        prompt: Вы хотите, чтобы интервьюер мог вас остановить.
+        options:
+          - I'll think out loud, so please stop me if you need to.
+          - I'll think out loud, so please don't stop me.
+          - I'll think out loud, so you never stop me.
+        answer: I'll think out loud, so please stop me if you need to.
+        explanation: Фраза приглашает интервьюера вмешаться; остальные варианты запрещают это.
+  - type: exercise
+    id: approaches-match
+    title: Подходы и структуры
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - a brute-force solution
+      - a greedy approach
+      - a hash map
+      - a linked list
+      - a binary search
+      - recursion
+      - a base case
+      - a sliding window
+      - a heap
+    items:
+      - { id: m1, prompt: "решение, которое перебирает все варианты без оптимизации", answer: a brute-force solution }
+      - { id: m2, prompt: "на каждом шаге выбирают наиболее выгодный на вид вариант и не пересматривают выбор", answer: a greedy approach }
+      - { id: m3, prompt: "структура, в которой значение находят по ключу почти мгновенно", answer: a hash map }
+      - { id: m4, prompt: "последовательность элементов, в которой каждый хранит ссылку на следующий", answer: a linked list }
+      - { id: m5, prompt: "поиск в отсортированных данных, при котором диапазон каждый раз делят пополам", answer: a binary search }
+      - { id: m6, prompt: "приём, при котором функция решает задачу, вызывая саму себя", answer: recursion }
+      - { id: m7, prompt: "условие, при котором такие вызовы прекращаются", answer: a base case }
+  - type: exercise
+    id: techniques-gap
+    title: Приёмы и ошибки
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - traverse
+      - optimise
+      - memoisation
+      - backtracking
+      - a pointer
+      - a lookup
+      - an off-by-one error
+      - time complexity
+      - auxiliary space
+    items:
+      - id: g1
+        prompt: To print every element of a linked list, you have to ___ it from the first node to the last. (обойти)
+        answer: traverse
+      - id: g2
+        prompt: The first version is slow, so I'm going to ___ it. (ускорить)
+        answer: optimise
+      - id: g3
+        prompt: The function computes the same value many times, so ___ will save the results and make it faster. (мемоизация)
+        answer: memoisation
+      - id: g4
+        prompt: The program tries a move and, if it leads nowhere, undoes it and tries the next one. This technique is called ___. (перебор с откатом)
+        answer: backtracking
+      - id: g5
+        prompt: The loop runs from zero up to and including the length, so it runs one time too many. That is ___. (ошибка на единицу)
+        answer: an off-by-one error
+      - id: g6
+        prompt: One variable holds the start of the range and another holds the end; each of them is ___. (указатель)
+        answer: a pointer
+      - id: g7
+        prompt: Checking whether a word is already in the hash map is ___, and it takes about the same time for any size. (поиск по ключу)
+        answer: a lookup
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Я начну с решения в лоб.
+        answer:
+          - I am going to start with a brute-force solution
+          - I am going to start with a brute force solution
+          - I am going to start with the brute-force solution
+          - I am going to start with the brute force solution
+          - I am going to begin with a brute-force solution
+          - I am going to begin with a brute force solution
+          - I am going to begin with the brute-force solution
+          - I am going to begin with the brute force solution
+          - I will start with a brute-force solution
+          - I will start with a brute force solution
+          - I will start with the brute-force solution
+          - I will start with the brute force solution
+          - I will begin with a brute-force solution
+          - I will begin with a brute force solution
+          - I will begin with the brute-force solution
+          - I will begin with the brute force solution
+        explanation: I am going to — план, I will — решение в момент речи; после start with стоит существительное с артиклем.
+      - id: q2
+        prompt: Позвольте мне сначала разобрать небольшой пример.
+        answer:
+          - Let me take a small example first
+          - Let me go through a small example first
+          - Let me work through a small example first
+          - Let me look at a small example first
+          - Let me first take a small example
+          - Let me first go through a small example
+          - Let me first work through a small example
+          - Let me first look at a small example
+          - First, let me take a small example
+          - First, let me go through a small example
+          - First, let me work through a small example
+          - First, let me look at a small example
+          - First let me take a small example
+          - First let me go through a small example
+          - First let me work through a small example
+          - First let me look at a small example
+        explanation: После let me стоит глагол без to; first можно поставить в начале или в конце.
+      - id: q3
+        prompt: Сначала я отсортирую входные данные.
+        answer:
+          - I am going to sort the input first
+          - I am going to sort the input data first
+          - I will sort the input first
+          - I will sort the input data first
+          - First, I am going to sort the input
+          - First, I am going to sort the input data
+          - First, I will sort the input
+          - First, I will sort the input data
+          - First I am going to sort the input
+          - First I am going to sort the input data
+          - First I will sort the input
+          - First I will sort the input data
+          - I am going to first sort the input
+          - I am going to first sort the input data
+          - I will first sort the input
+          - I will first sort the input data
+          - I am going to sort the data first
+          - I will sort the data first
+        explanation: Sort the input — «отсортировать вход»; first стоит в конце или в начале.
+      - id: q4
+        prompt: Здесь я, наверное, использовал бы хеш-таблицу.
+        answer:
+          - I would probably use a hash map here
+          - I would probably use a hash table here
+          - Here, I would probably use a hash map
+          - Here, I would probably use a hash table
+          - Here I would probably use a hash map
+          - Here I would probably use a hash table
+        explanation: Probably стоит между would и глаголом; hash table — синоним hash map.
+      - id: q5
+        prompt: Всё зависит от того, насколько большим может быть вход.
+        answer:
+          - It all depends on how large the input can get
+          - It all depends on how large the input can be
+          - It all depends on how large the input may get
+          - It all depends on how large the input may be
+          - It all depends on how big the input can get
+          - It all depends on how big the input can be
+          - It all depends on how big the input may get
+          - It all depends on how big the input may be
+          - It depends on how large the input can get
+          - It depends on how large the input can be
+          - It depends on how large the input may get
+          - It depends on how large the input may be
+          - It depends on how big the input can get
+          - It depends on how big the input can be
+          - It depends on how big the input may get
+          - It depends on how big the input may be
+        explanation: Depends on — «зависит от»; после depends нужен предлог on.
+      - id: q6
+        prompt: Я буду думать вслух, поэтому останавливайте меня, если нужно.
+        answer:
+          - I will think out loud, so please stop me if necessary
+          - I will think out loud, so please stop me if needed
+          - I will think out loud, so please stop me if you need to
+          - I will think out loud, so please stop me if you want to
+          - I will think out loud, so please stop me if you have to
+          - I will think out loud, so please interrupt me if necessary
+          - I will think out loud, so please interrupt me if needed
+          - I will think out loud, so please interrupt me if you need to
+          - I will think out loud, so please interrupt me if you want to
+          - I will think out loud, so please interrupt me if you have to
+          - I will think out loud, so stop me if necessary
+          - I will think out loud, so stop me if needed
+          - I will think out loud, so stop me if you need to
+          - I will think out loud, so stop me if you want to
+          - I will think out loud, so stop me if you have to
+          - I will think out loud, so interrupt me if necessary
+          - I will think out loud, so interrupt me if needed
+          - I will think out loud, so interrupt me if you need to
+          - I will think out loud, so interrupt me if you want to
+          - I will think out loud, so interrupt me if you have to
+          - I will think out loud so please stop me if necessary
+          - I will think out loud so please stop me if needed
+          - I will think out loud so please stop me if you need to
+          - I will think out loud so please stop me if you want to
+          - I will think out loud so please stop me if you have to
+          - I will think out loud so please interrupt me if necessary
+          - I will think out loud so please interrupt me if needed
+          - I will think out loud so please interrupt me if you need to
+          - I will think out loud so please interrupt me if you want to
+          - I will think out loud so please interrupt me if you have to
+          - I will think out loud so stop me if necessary
+          - I will think out loud so stop me if needed
+          - I will think out loud so stop me if you need to
+          - I will think out loud so stop me if you want to
+          - I will think out loud so stop me if you have to
+          - I will think out loud so interrupt me if necessary
+          - I will think out loud so interrupt me if needed
+          - I will think out loud so interrupt me if you need to
+          - I will think out loud so interrupt me if you want to
+          - I will think out loud so interrupt me if you have to
+          - I will think aloud, so please stop me if necessary
+          - I will think aloud, so please stop me if needed
+          - I will think aloud, so please stop me if you need to
+          - I will think aloud, so please stop me if you want to
+          - I will think aloud, so please stop me if you have to
+          - I will think aloud, so please interrupt me if necessary
+          - I will think aloud, so please interrupt me if needed
+          - I will think aloud, so please interrupt me if you need to
+          - I will think aloud, so please interrupt me if you want to
+          - I will think aloud, so please interrupt me if you have to
+          - I will think aloud, so stop me if necessary
+          - I will think aloud, so stop me if needed
+          - I will think aloud, so stop me if you need to
+          - I will think aloud, so stop me if you want to
+          - I will think aloud, so stop me if you have to
+          - I will think aloud, so interrupt me if necessary
+          - I will think aloud, so interrupt me if needed
+          - I will think aloud, so interrupt me if you need to
+          - I will think aloud, so interrupt me if you want to
+          - I will think aloud, so interrupt me if you have to
+          - I will think aloud so please stop me if necessary
+          - I will think aloud so please stop me if needed
+          - I will think aloud so please stop me if you need to
+          - I will think aloud so please stop me if you want to
+          - I will think aloud so please stop me if you have to
+          - I will think aloud so please interrupt me if necessary
+          - I will think aloud so please interrupt me if needed
+          - I will think aloud so please interrupt me if you need to
+          - I will think aloud so please interrupt me if you want to
+          - I will think aloud so please interrupt me if you have to
+          - I will think aloud so stop me if necessary
+          - I will think aloud so stop me if needed
+          - I will think aloud so stop me if you need to
+          - I will think aloud so stop me if you want to
+          - I will think aloud so stop me if you have to
+          - I will think aloud so interrupt me if necessary
+          - I will think aloud so interrupt me if needed
+          - I will think aloud so interrupt me if you need to
+          - I will think aloud so interrupt me if you want to
+          - I will think aloud so interrupt me if you have to
+          - I am going to think out loud, so please stop me if necessary
+          - I am going to think out loud, so please stop me if needed
+          - I am going to think out loud, so please stop me if you need to
+          - I am going to think out loud, so please stop me if you want to
+          - I am going to think out loud, so please stop me if you have to
+          - I am going to think out loud, so please interrupt me if necessary
+          - I am going to think out loud, so please interrupt me if needed
+          - I am going to think out loud, so please interrupt me if you need to
+          - I am going to think out loud, so please interrupt me if you want to
+          - I am going to think out loud, so please interrupt me if you have to
+          - I am going to think out loud, so stop me if necessary
+          - I am going to think out loud, so stop me if needed
+          - I am going to think out loud, so stop me if you need to
+          - I am going to think out loud, so stop me if you want to
+          - I am going to think out loud, so stop me if you have to
+          - I am going to think out loud, so interrupt me if necessary
+          - I am going to think out loud, so interrupt me if needed
+          - I am going to think out loud, so interrupt me if you need to
+          - I am going to think out loud, so interrupt me if you want to
+          - I am going to think out loud, so interrupt me if you have to
+          - I am going to think out loud so please stop me if necessary
+          - I am going to think out loud so please stop me if needed
+          - I am going to think out loud so please stop me if you need to
+          - I am going to think out loud so please stop me if you want to
+          - I am going to think out loud so please stop me if you have to
+          - I am going to think out loud so please interrupt me if necessary
+          - I am going to think out loud so please interrupt me if needed
+          - I am going to think out loud so please interrupt me if you need to
+          - I am going to think out loud so please interrupt me if you want to
+          - I am going to think out loud so please interrupt me if you have to
+          - I am going to think out loud so stop me if necessary
+          - I am going to think out loud so stop me if needed
+          - I am going to think out loud so stop me if you need to
+          - I am going to think out loud so stop me if you want to
+          - I am going to think out loud so stop me if you have to
+          - I am going to think out loud so interrupt me if necessary
+          - I am going to think out loud so interrupt me if needed
+          - I am going to think out loud so interrupt me if you need to
+          - I am going to think out loud so interrupt me if you want to
+          - I am going to think out loud so interrupt me if you have to
+          - I am going to think aloud, so please stop me if necessary
+          - I am going to think aloud, so please stop me if needed
+          - I am going to think aloud, so please stop me if you need to
+          - I am going to think aloud, so please stop me if you want to
+          - I am going to think aloud, so please stop me if you have to
+          - I am going to think aloud, so please interrupt me if necessary
+          - I am going to think aloud, so please interrupt me if needed
+          - I am going to think aloud, so please interrupt me if you need to
+          - I am going to think aloud, so please interrupt me if you want to
+          - I am going to think aloud, so please interrupt me if you have to
+          - I am going to think aloud, so stop me if necessary
+          - I am going to think aloud, so stop me if needed
+          - I am going to think aloud, so stop me if you need to
+          - I am going to think aloud, so stop me if you want to
+          - I am going to think aloud, so stop me if you have to
+          - I am going to think aloud, so interrupt me if necessary
+          - I am going to think aloud, so interrupt me if needed
+          - I am going to think aloud, so interrupt me if you need to
+          - I am going to think aloud, so interrupt me if you want to
+          - I am going to think aloud, so interrupt me if you have to
+          - I am going to think aloud so please stop me if necessary
+          - I am going to think aloud so please stop me if needed
+          - I am going to think aloud so please stop me if you need to
+          - I am going to think aloud so please stop me if you want to
+          - I am going to think aloud so please stop me if you have to
+          - I am going to think aloud so please interrupt me if necessary
+          - I am going to think aloud so please interrupt me if needed
+          - I am going to think aloud so please interrupt me if you need to
+          - I am going to think aloud so please interrupt me if you want to
+          - I am going to think aloud so please interrupt me if you have to
+          - I am going to think aloud so stop me if necessary
+          - I am going to think aloud so stop me if needed
+          - I am going to think aloud so stop me if you need to
+          - I am going to think aloud so stop me if you want to
+          - I am going to think aloud so stop me if you have to
+          - I am going to think aloud so interrupt me if necessary
+          - I am going to think aloud so interrupt me if needed
+          - I am going to think aloud so interrupt me if you need to
+          - I am going to think aloud so interrupt me if you want to
+          - I am going to think aloud so interrupt me if you have to
+        explanation: Think out loud — «думать вслух»; запятая перед so необязательна.

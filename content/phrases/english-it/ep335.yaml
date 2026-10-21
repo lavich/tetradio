@@ -1,0 +1,7 @@
+id: ep335
+text: "I think this runs in linear time."
+translation: "Думаю, это работает за линейное время."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md

@@ -1,0 +1,627 @@
+title: описание решения и сложности, решение задачи вслух
+kind: lesson
+items:
+  - { kind: phrase, id: ep342 }
+  - { kind: phrase, id: ep343 }
+  - { kind: phrase, id: ep344 }
+  - { kind: phrase, id: ep345 }
+  - { kind: phrase, id: ep346 }
+  - { kind: phrase, id: ep347 }
+  - { kind: phrase, id: ep348 }
+  - { kind: phrase, id: ep349 }
+  - { kind: phrase, id: ep350 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Решение задачи вслух в шести шагах
+    body: |-
+      На собеседовании по алгоритмам вы решаете задачу и говорите, что делаете. Единого верного порядка нет, но интервьюеру проще идти за вами, когда шаги повторяются от задачи к задаче. Ответ укладывается примерно в три минуты.
+
+      **1. Условие.** Перескажите задачу своими словами и задайте вопрос: **Let me say the problem back in my own words.**
+
+      **2. Пример.** Разберите небольшой пример и назовите ответ на нём: **Let me take a small example first.**
+
+      **3. Простое решение.** Начните с решения «в лоб»: **I'm going to start with a brute-force solution.**
+
+      **4. Сложность.** Назовите время и память словами и отметьте, насколько вы уверены: **I think this runs in linear time.**
+
+      **5. Улучшение.** Предложите вариант быстрее и назовите его цену: **Let me see if I can do better. That would take extra memory, though.**
+
+      **6. Проверка и итог.** Пройдите крайние случаи и подведите итог: **Let me look at the edge cases. In summary, it runs in linear time and uses constant space.**
+    table:
+      columns:
+        - шаг
+        - примерное время
+        - язык
+      rows:
+        - - условие
+          - 20 секунд
+          - Let me say the problem back in my own words.
+        - - пример
+          - 25 секунд
+          - Let me take a small example first.
+        - - простое решение
+          - 40 секунд
+          - I'm going to start with a brute-force solution.
+        - - сложность
+          - 25 секунд
+          - I think this runs in linear time.
+        - - улучшение
+          - 45 секунд
+          - Let me see if I can do better.
+        - - проверка и итог
+          - 25 секунд
+          - In summary, it runs in linear time and uses constant space.
+  - type: explanation
+    id: safe-aloud
+    title: Как говорить, когда решение не складывается
+    body: |-
+      Задачу на собеседовании можно решить не сразу. Важно, как вы себя ведёте: называете, что вам неясно, проверяете догадки примером и используете подсказки интервьюера. Если вы застряли, скажите, на каком шаге, и вернитесь к простому решению. Если нашли ошибку, назовите её и исправьте вслух: **I think I've found the bug.**
+
+      Подсказку интервьюера принимают спокойно: **That's a helpful hint; let me try it.** Не оценивайте условие как неясное или плохое, говорите о том, что вам нужно уточнить. Задачи урока придуманы для курса; в своих ответах используйте придуманные примеры и данные, код и данные реальных систем и компаний не приводите.
+    table:
+      columns:
+        - вместо
+        - скажите
+        - почему
+      rows:
+        - - This is obvious.
+          - Let me test this with an example.
+          - догадку проверяют примером
+        - - I have no idea.
+          - I'm not sure yet, but I'm going to start with a brute-force solution.
+          - называют шаг, с которого начнёте
+        - - (молчание)
+          - I'll think out loud, so please stop me if you need to.
+          - интервьюер видит ход мысли
+        - - Your problem is confusing.
+          - Let me say the problem back in my own words.
+          - называют своё понимание условия
+        - - It is linear, definitely.
+          - I think this runs in linear time, but let me check it with an example.
+          - оценку подают как оценку
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: phrase-choice
+    title: Подходящая фраза
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы хотите проверить пустой список и список из одного элемента. Какая фраза подходит?
+        options:
+          - Let me look at the edge cases.
+          - In summary, it runs in linear time and uses constant space.
+          - Does this approach make sense to you?
+        answer: Let me look at the edge cases.
+        explanation: Фраза переходит к крайним случаям; остальные подводят итог или проверяют понимание.
+      - id: q2
+        prompt: Вы нашли ошибку в своём коде. Какая фраза подходит?
+        options:
+          - I think I've found the bug.
+          - I'm going to refactor this to make it cleaner.
+          - So the idea is to keep two pointers.
+        answer: I think I've found the bug.
+        explanation: Фраза называет найденную ошибку; остальные говорят о переработке или об идее решения.
+      - id: q3
+        prompt: "Вы объясняете идею решения: две позиции в списке. Какая фраза подходит?"
+        options:
+          - So the idea is to keep two pointers.
+          - Let me go through the loop one iteration at a time.
+          - I'm slightly unsure about this part, so I'll test it.
+        answer: So the idea is to keep two pointers.
+        explanation: Фраза называет идею; остальные описывают проверку цикла или сомнение.
+      - id: q4
+        prompt: Вы не вполне уверены в одной части и хотите проверить её. Какая фраза подходит?
+        options:
+          - I'm slightly unsure about this part, so I'll test it.
+          - Let me look at the edge cases.
+          - With more time, I'd add tests for the edge cases.
+        answer: I'm slightly unsure about this part, so I'll test it.
+        explanation: Фраза называет сомнение и действие; остальные переходят к крайним случаям или к тестам на будущее.
+      - id: q5
+        prompt: Вы подводите итог по времени и памяти. Какая фраза подходит?
+        options:
+          - In summary, it runs in linear time and uses constant space.
+          - Does this approach make sense to you?
+          - I'm going to refactor this to make it cleaner.
+        answer: In summary, it runs in linear time and uses constant space.
+        explanation: Фраза называет время и память; остальные проверяют понимание или говорят о переработке.
+      - id: q6
+        prompt: Вы проверяете, понятен ли ход мысли интервьюеру. Какая фраза подходит?
+        options:
+          - Does this approach make sense to you?
+          - I think I've found the bug.
+          - Let me go through the loop one iteration at a time.
+        answer: Does this approach make sense to you?
+        explanation: Фраза — вопрос интервьюеру; остальные говорят об ошибке и о проверке цикла.
+  - type: exercise
+    id: aloud-choice
+    title: Формулировка для решения вслух
+    instruction: Выберите формулировку, которая подходит для собеседования по алгоритмам.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вам дали задачу, и вы хотите, чтобы интервьюер видел ход мысли.
+        options:
+          - I'll think out loud, so please stop me if you need to.
+          - I'll solve it in silence and show you the result.
+          - Please do not interrupt me.
+        answer: I'll think out loud, so please stop me if you need to.
+        explanation: Фраза предлагает следить за мыслью и вмешиваться; остальные закрывают разговор.
+      - id: q2
+        prompt: Вы не знаете, оптимальное ли у вас решение.
+        options:
+          - I'm not sure that's optimal, but it works.
+          - This is the best possible solution, I know it.
+          - There is no better solution.
+        answer: I'm not sure that's optimal, but it works.
+        explanation: Фраза называет сомнение и результат; остальные утверждают без проверки.
+      - id: q3
+        prompt: Интервьюер подсказал идею.
+        options:
+          - That's a helpful hint; let me try it.
+          - I already knew that.
+          - That hint does not matter.
+        answer: That's a helpful hint; let me try it.
+        explanation: Подсказку принимают и сразу пробуют; остальные ответы отвергают помощь.
+      - id: q4
+        prompt: Вы выбираете структуру данных и осторожно называете причину.
+        options:
+          - I'd probably use a hash map, because a lookup is fast.
+          - A hash map is the only possible choice.
+          - A hash map, and there is nothing to discuss.
+        answer: I'd probably use a hash map, because a lookup is fast.
+        explanation: Выбор назван осторожно и с причиной; остальные закрывают обсуждение.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Давайте я посмотрю крайние случаи.
+        answer:
+          - Let me look at the edge cases
+          - Let me look at the corner cases
+          - Let me look at edge cases
+          - Let me look at corner cases
+          - Let me check the edge cases
+          - Let me check the corner cases
+          - Let me check edge cases
+          - Let me check corner cases
+          - Let me go through the edge cases
+          - Let me go through the corner cases
+          - Let me go through edge cases
+          - Let me go through corner cases
+          - Let me have a look at the edge cases
+          - Let me have a look at the corner cases
+          - Let me have a look at edge cases
+          - Let me have a look at corner cases
+          - Let me take a look at the edge cases
+          - Let me take a look at the corner cases
+          - Let me take a look at edge cases
+          - Let me take a look at corner cases
+        explanation: Let me + глагол без to; corner cases — синоним edge cases.
+      - id: q2
+        prompt: Кажется, я нашёл ошибку.
+        answer:
+          - I think that I have found the bug
+          - I think that I have found a bug
+          - I think that I have found the error
+          - I think that I have found an error
+          - I think that I have found the mistake
+          - I think that I have found a mistake
+          - I think that I found the bug
+          - I think that I found a bug
+          - I think that I found the error
+          - I think that I found an error
+          - I think that I found the mistake
+          - I think that I found a mistake
+          - I think I have found the bug
+          - I think I have found a bug
+          - I think I have found the error
+          - I think I have found an error
+          - I think I have found the mistake
+          - I think I have found a mistake
+          - I think I found the bug
+          - I think I found a bug
+          - I think I found the error
+          - I think I found an error
+          - I think I found the mistake
+          - I think I found a mistake
+          - I believe that I have found the bug
+          - I believe that I have found a bug
+          - I believe that I have found the error
+          - I believe that I have found an error
+          - I believe that I have found the mistake
+          - I believe that I have found a mistake
+          - I believe that I found the bug
+          - I believe that I found a bug
+          - I believe that I found the error
+          - I believe that I found an error
+          - I believe that I found the mistake
+          - I believe that I found a mistake
+          - I believe I have found the bug
+          - I believe I have found a bug
+          - I believe I have found the error
+          - I believe I have found an error
+          - I believe I have found the mistake
+          - I believe I have found a mistake
+          - I believe I found the bug
+          - I believe I found a bug
+          - I believe I found the error
+          - I believe I found an error
+          - I believe I found the mistake
+          - I believe I found a mistake
+          - It seems that I have found the bug
+          - It seems that I have found a bug
+          - It seems that I have found the error
+          - It seems that I have found an error
+          - It seems that I have found the mistake
+          - It seems that I have found a mistake
+          - It seems that I found the bug
+          - It seems that I found a bug
+          - It seems that I found the error
+          - It seems that I found an error
+          - It seems that I found the mistake
+          - It seems that I found a mistake
+          - It seems I have found the bug
+          - It seems I have found a bug
+          - It seems I have found the error
+          - It seems I have found an error
+          - It seems I have found the mistake
+          - It seems I have found a mistake
+          - It seems I found the bug
+          - It seems I found a bug
+          - It seems I found the error
+          - It seems I found an error
+          - It seems I found the mistake
+          - It seems I found a mistake
+          - It looks like I have found the bug
+          - It looks like I have found a bug
+          - It looks like I have found the error
+          - It looks like I have found an error
+          - It looks like I have found the mistake
+          - It looks like I have found a mistake
+          - It looks like I found the bug
+          - It looks like I found a bug
+          - It looks like I found the error
+          - It looks like I found an error
+          - It looks like I found the mistake
+          - It looks like I found a mistake
+        explanation: I think смягчает утверждение; ошибку в коде называют bug, error или mistake.
+      - id: q3
+        prompt: Идея в том, чтобы держать два указателя.
+        answer:
+          - So, the idea is to keep two pointers
+          - So, the idea is to use two pointers
+          - So, the idea is to maintain two pointers
+          - So, the idea is to have two pointers
+          - The idea is to keep two pointers
+          - The idea is to use two pointers
+          - The idea is to maintain two pointers
+          - The idea is to have two pointers
+          - So the idea is to keep two pointers
+          - So the idea is to use two pointers
+          - So the idea is to maintain two pointers
+          - So the idea is to have two pointers
+        explanation: The idea is to + глагол; so в начале необязательно.
+      - id: q4
+        prompt: Вам понятен этот подход?
+        answer:
+          - Does this approach make sense to you
+          - Does this approach make sense
+          - Does this solution make sense to you
+          - Does this solution make sense
+          - Is this approach clear to you
+          - Is this approach clear
+          - Is this solution clear to you
+          - Is this solution clear
+          - Do you understand this approach
+          - Do you understand this solution
+        explanation: Make sense — «иметь смысл, быть понятным»; to you можно опустить.
+      - id: q5
+        prompt: "Итого: решение работает за линейное время и использует константную память."
+        answer:
+          - In summary, it runs in linear time and uses constant space
+          - In summary, it runs in linear time and uses constant memory
+          - In summary, it runs in linear time and needs constant space
+          - In summary, it runs in linear time and needs constant memory
+          - In summary, it works in linear time and uses constant space
+          - In summary, it works in linear time and uses constant memory
+          - In summary, it works in linear time and needs constant space
+          - In summary, it works in linear time and needs constant memory
+          - In summary, the solution runs in linear time and uses constant space
+          - In summary, the solution runs in linear time and uses constant memory
+          - In summary, the solution runs in linear time and needs constant space
+          - In summary, the solution runs in linear time and needs constant memory
+          - In summary, the solution works in linear time and uses constant space
+          - In summary, the solution works in linear time and uses constant memory
+          - In summary, the solution works in linear time and needs constant space
+          - In summary, the solution works in linear time and needs constant memory
+          - In summary it runs in linear time and uses constant space
+          - In summary it runs in linear time and uses constant memory
+          - In summary it runs in linear time and needs constant space
+          - In summary it runs in linear time and needs constant memory
+          - In summary it works in linear time and uses constant space
+          - In summary it works in linear time and uses constant memory
+          - In summary it works in linear time and needs constant space
+          - In summary it works in linear time and needs constant memory
+          - In summary the solution runs in linear time and uses constant space
+          - In summary the solution runs in linear time and uses constant memory
+          - In summary the solution runs in linear time and needs constant space
+          - In summary the solution runs in linear time and needs constant memory
+          - In summary the solution works in linear time and uses constant space
+          - In summary the solution works in linear time and uses constant memory
+          - In summary the solution works in linear time and needs constant space
+          - In summary the solution works in linear time and needs constant memory
+          - To summarise, it runs in linear time and uses constant space
+          - To summarise, it runs in linear time and uses constant memory
+          - To summarise, it runs in linear time and needs constant space
+          - To summarise, it runs in linear time and needs constant memory
+          - To summarise, it works in linear time and uses constant space
+          - To summarise, it works in linear time and uses constant memory
+          - To summarise, it works in linear time and needs constant space
+          - To summarise, it works in linear time and needs constant memory
+          - To summarise, the solution runs in linear time and uses constant space
+          - To summarise, the solution runs in linear time and uses constant memory
+          - To summarise, the solution runs in linear time and needs constant space
+          - To summarise, the solution runs in linear time and needs constant memory
+          - To summarise, the solution works in linear time and uses constant space
+          - To summarise, the solution works in linear time and uses constant memory
+          - To summarise, the solution works in linear time and needs constant space
+          - To summarise, the solution works in linear time and needs constant memory
+          - To summarise it runs in linear time and uses constant space
+          - To summarise it runs in linear time and uses constant memory
+          - To summarise it runs in linear time and needs constant space
+          - To summarise it runs in linear time and needs constant memory
+          - To summarise it works in linear time and uses constant space
+          - To summarise it works in linear time and uses constant memory
+          - To summarise it works in linear time and needs constant space
+          - To summarise it works in linear time and needs constant memory
+          - To summarise the solution runs in linear time and uses constant space
+          - To summarise the solution runs in linear time and uses constant memory
+          - To summarise the solution runs in linear time and needs constant space
+          - To summarise the solution runs in linear time and needs constant memory
+          - To summarise the solution works in linear time and uses constant space
+          - To summarise the solution works in linear time and uses constant memory
+          - To summarise the solution works in linear time and needs constant space
+          - To summarise the solution works in linear time and needs constant memory
+          - Overall, it runs in linear time and uses constant space
+          - Overall, it runs in linear time and uses constant memory
+          - Overall, it runs in linear time and needs constant space
+          - Overall, it runs in linear time and needs constant memory
+          - Overall, it works in linear time and uses constant space
+          - Overall, it works in linear time and uses constant memory
+          - Overall, it works in linear time and needs constant space
+          - Overall, it works in linear time and needs constant memory
+          - Overall, the solution runs in linear time and uses constant space
+          - Overall, the solution runs in linear time and uses constant memory
+          - Overall, the solution runs in linear time and needs constant space
+          - Overall, the solution runs in linear time and needs constant memory
+          - Overall, the solution works in linear time and uses constant space
+          - Overall, the solution works in linear time and uses constant memory
+          - Overall, the solution works in linear time and needs constant space
+          - Overall, the solution works in linear time and needs constant memory
+          - Overall it runs in linear time and uses constant space
+          - Overall it runs in linear time and uses constant memory
+          - Overall it runs in linear time and needs constant space
+          - Overall it runs in linear time and needs constant memory
+          - Overall it works in linear time and uses constant space
+          - Overall it works in linear time and uses constant memory
+          - Overall it works in linear time and needs constant space
+          - Overall it works in linear time and needs constant memory
+          - Overall the solution runs in linear time and uses constant space
+          - Overall the solution runs in linear time and uses constant memory
+          - Overall the solution runs in linear time and needs constant space
+          - Overall the solution runs in linear time and needs constant memory
+          - Overall the solution works in linear time and uses constant space
+          - Overall the solution works in linear time and uses constant memory
+          - Overall the solution works in linear time and needs constant space
+          - Overall the solution works in linear time and needs constant memory
+        explanation: In linear time — «за линейное время»; uses constant space — «использует константную память».
+      - id: q6
+        prompt: В этой части я не совсем уверен, поэтому проверю её.
+        answer:
+          - I am slightly unsure about this part, so I will test it
+          - I am slightly unsure about this part, so I will check it
+          - I am slightly unsure about this part so I will test it
+          - I am slightly unsure about this part so I will check it
+          - I am a little unsure about this part, so I will test it
+          - I am a little unsure about this part, so I will check it
+          - I am a little unsure about this part so I will test it
+          - I am a little unsure about this part so I will check it
+          - I am a bit unsure about this part, so I will test it
+          - I am a bit unsure about this part, so I will check it
+          - I am a bit unsure about this part so I will test it
+          - I am a bit unsure about this part so I will check it
+          - I am not quite sure about this part, so I will test it
+          - I am not quite sure about this part, so I will check it
+          - I am not quite sure about this part so I will test it
+          - I am not quite sure about this part so I will check it
+          - I am not completely sure about this part, so I will test it
+          - I am not completely sure about this part, so I will check it
+          - I am not completely sure about this part so I will test it
+          - I am not completely sure about this part so I will check it
+          - I am not fully sure about this part, so I will test it
+          - I am not fully sure about this part, so I will check it
+          - I am not fully sure about this part so I will test it
+          - I am not fully sure about this part so I will check it
+          - I am not entirely sure about this part, so I will test it
+          - I am not entirely sure about this part, so I will check it
+          - I am not entirely sure about this part so I will test it
+          - I am not entirely sure about this part so I will check it
+          - I am not totally sure about this part, so I will test it
+          - I am not totally sure about this part, so I will check it
+          - I am not totally sure about this part so I will test it
+          - I am not totally sure about this part so I will check it
+        explanation: Slightly unsure — «не совсем уверен»; запятая перед so необязательна.
+  - type: writing
+    id: solution
+    register: formal
+    prompt: "Напишите коллеге описание решения вымышленной задачи (130–170 слов): задача, простое решение, улучшенное решение, сложность по времени и памяти словами, проверка. Назовите не меньше трёх слов урока (например, a binary search, linear, constant, a test case). Задачу придумайте сами."
+    words:
+      min: 130
+      max: 170
+    model: |-
+      Subject: Search in a sorted list
+
+      Dear Anders,
+
+      Below is a description of my solution to the search task from Tuesday.
+
+      The task is to check whether a number is in a sorted list. The first version, a brute-force solution, reads the list from the start and compares each number with the target. It is simple, but it runs in linear time.
+
+      The second version uses a binary search. It keeps two pointers, which mark the part of the list that can still contain the number, and it compares the target with the middle element. Each step removes half of the list, so the solution runs in logarithmic time. It needs only constant extra space.
+
+      My first version contained an off-by-one error. I found it with test cases for an empty list, a list with one number and a number at the end. After the fix, all the test cases passed.
+
+      Please let me know if you have any questions.
+
+      Kind regards
+    criteria:
+      - 130–170 слов, есть тема письма, обращение, описание по частям и вежливое завершение
+      - Названы задача, простое решение и улучшенное решение
+      - Время и память названы словами (linear, logarithmic, quadratic, constant), без формул и сокращений вроде O
+      - Описана проверка — тестовые примеры и крайние случаи
+      - Использованы не меньше трёх слов урока
+      - Задача вымышлена, реальных систем и компаний нет
+      - Формальный стиль без сокращений
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Четырнадцатый ответ вашего **банка ответов** — решение задачи вслух. К нему добавляется второй вопрос: **What is the time complexity of your solution, and could it be faster?** Первый ответ занимает до 180 секунд, второй — до минуты.
+
+      1) Разложите первый ответ по шести шагам: условие, пример, простое решение, сложность, улучшение, проверка и итог. 2) Запишите ответ вслух и уложитесь во время. 3) Переслушайте и сверьте с образцом и критериями: шаги идут по порядку, сложность названа словами, есть осторожные оценки и проверка. 4) Для второго вопроса назовите время и память, цену решения и то, что можно улучшить.
+
+      Сцена в конце урока строится на задаче, которую ставит Anders и прерывает вопросами. Реплики Anders записаны ниже, перед сценой; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: aloud
+    part: interview
+    prompt: "Интервьюер говорит: «Given a list of numbers, how would you check whether it contains a duplicate?» Решите задачу вслух за 180 секунд: условие своими словами, пример, простое решение, сложность, улучшение, крайние случаи; в конце подведите итог."
+    seconds: 180
+    model: I'll think out loud, so please stop me if you need to. Let me say the problem back in my own words. I get a list of numbers, and I need to return true if any number appears twice. Let me ask one question. Can the list be empty? I will assume that it can, and I return false in that case. Let me take a small example first. Three, one, three. The answer is true. I'm going to start with a brute-force solution. I compare every number with every number after it. I think this runs in quadratic time, because of the two nested loops, and it uses constant extra space. Let me see if I can do better. I'd probably use a hash map that stores the numbers that I have already seen. I go through the list once, and for each number I do a lookup. If the number is there, I return true. A lookup takes constant time on average, so as far as I can tell this runs in linear time. It needs auxiliary space that grows with the list. It depends on how large the list can get. For a short list, the first version is arguably fine and easier to read. Now, let me look at the edge cases, an empty list, a list with one number, and a list where the duplicate is at the very end. With more time, I'd add tests for these cases. In summary, the hash map solution runs in linear time and uses linear extra space. Does this approach make sense to you?
+    criteria:
+      - Шаги идут по порядку — условие, пример, простое решение, сложность, улучшение, крайние случаи, итог
+      - Использованы let me и I'm going to не меньше трёх раз
+      - Сложность названа словами (linear, quadratic, constant), без формул
+      - Есть осторожные оценки — I think, probably, as far as I can tell или it depends on
+      - Названы цена улучшения (дополнительная память) и крайние случаи
+      - Задача вымышлена, реальных систем нет
+      - Ответ укладывается в 180 секунд
+  - type: speaking
+    id: complexity
+    part: monologue
+    prompt: "Интервьюер уточняет: «What is the time complexity of your solution, and could it be faster?» Ответьте за 60 секунд: назовите время и память словами и скажите, что можно улучшить."
+    seconds: 60
+    model: I think the hash map solution runs in linear time, because I go through the list once and each lookup takes constant time on average. It needs linear auxiliary space. I'd say it cannot be much faster, because every number has to be read at least once. If memory were limited, I would use the brute-force version. It needs only constant extra space, but it runs in quadratic time. So it depends on the size of the list and on the memory that we have.
+    criteria:
+      - Названы время и память словами, без формул
+      - Есть осторожная оценка — I think, I'd say или it depends on
+      - Названа цена решения и альтернатива
+      - Есть условное предложение или it depends on
+      - Ответ укладывается в 60 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - speaker: Anders
+        text: Thanks for joining. Here is the problem. Given a text, return the first letter that appears only once. Please think out loud. I may ask questions along the way.
+      - speaker: Anders
+        text: Return nothing if there is no such letter. Please go ahead with a first solution.
+      - speaker: Anders
+        text: What is the time complexity of that, and how much extra space does it need?
+      - speaker: Anders
+        text: Can you do better? Here is a hint. Think about counting the letters.
+      - speaker: Anders
+        text: Which edge case would you test first?
+      - speaker: Anders
+        text: Thank you. That was a clear explanation of your thinking.
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на собеседовании по алгоритмам, задачу ставит Anders, старший инженер. Прослушайте его реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику перескажите условие своими словами и задайте уточняющий вопрос. На вторую разберите небольшой пример и предложите решение в лоб. На третью назовите время и память словами. На четвёртую примите подсказку и улучшите решение. На пятую назовите крайний случай. На последнюю поблагодарите. Вся ваша часть — 180 секунд, каждая реплика — две-четыре фразы.
+    seconds: 180
+    model: |-
+      Anders: Thanks for joining. Here is the problem. Given a text, return the first letter that appears only once. Please think out loud. I may ask questions along the way.
+      You: Thank you. Let me say the problem back in my own words. I get a text, and I return the first letter that appears exactly once. What should I return if there is no such letter?
+      Anders: Return nothing if there is no such letter. Please go ahead with a first solution.
+      You: Let me take a small example first. In "aabcb", the answer is c. I'm going to start with a brute-force solution. For each letter, I count how many times it appears in the text, and I return the first letter with a count of one.
+      Anders: What is the time complexity of that, and how much extra space does it need?
+      You: I think it runs in quadratic time, because for each letter I scan the whole text. As far as I can tell, the extra space is constant.
+      Anders: Can you do better? Here is a hint. Think about counting the letters.
+      You: That's a helpful hint; let me try it. I'd probably use a hash map from each letter to its count. I go through the text once to count, and once more to find the first letter with a count of one. This runs in linear time and needs auxiliary space for the map.
+      Anders: Which edge case would you test first?
+      You: Let me look at the edge cases. I would start with an empty text, and then a text where every letter appears twice.
+      Anders: Thank you. That was a clear explanation of your thinking.
+      You: Thank you for the problem. With more time, I'd add tests for these cases.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — две-четыре фразы
+      - В первой реплике условие пересказано и задан уточняющий вопрос, например о тексте без таких букв
+      - Во второй реплике есть пример и простое решение
+      - В третьей реплике время и память названы словами
+      - В четвёртой реплике принята подсказка и предложено улучшение
+      - В пятой реплике назван крайний случай
+      - В конце есть благодарность
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модулей
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: If the input were sorted, I ___ a binary search. (воображаемая ситуация)
+        options:
+          - would use
+          - will use
+          - used
+        answer: would use
+        explanation: Second conditional — if + past simple, would + базовая форма.
+      - id: q2
+        prompt: Unless the list ___ sorted, a binary search will not work.
+        options:
+          - is
+          - is not
+          - was
+        answer: is
+        explanation: После unless стоит утвердительная форма настоящего времени; unless уже содержит отрицание.
+      - id: q3
+        prompt: «Is the list sorted?» → He asked me ___.
+        options:
+          - whether the list was sorted
+          - was the list sorted
+          - whether was the list sorted
+        answer: whether the list was sorted
+        explanation: В косвенном вопросе порядок слов прямой, вопрос вводит whether или if.
+      - id: q4
+        prompt: She advised me ___ the problem aloud.
+        options:
+          - to repeat
+          - repeat
+          - repeating
+        answer: to repeat
+        explanation: Advised + кому + to + глагол.
+      - id: q5
+        prompt: If I had traced the loop, I ___ the bug earlier. (прошлое, которого не было)
+        options:
+          - would have found
+          - would find
+          - will find
+        answer: would have found
+        explanation: Conditional 3 — would have и третья форма глагола.
+      - id: q6
+        prompt: The function ___ I wrote yesterday has a bug.
+        options:
+          - that
+          - what
+          - who
+        answer: that
+        explanation: Для вещи в определительном придаточном стоит that или which; what не вводит определительное придаточное, who относится к людям.

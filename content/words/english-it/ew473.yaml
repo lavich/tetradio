@@ -1,0 +1,6 @@
+id: ew473
+greek: "a lookup"
+russian: "поиск значения по ключу"
+ipa: /ə ˈlʊkʌp/
+note: "a lookup in a hash map takes constant time on average"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

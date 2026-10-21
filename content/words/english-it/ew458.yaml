@@ -1,0 +1,6 @@
+id: ew458
+greek: "time complexity"
+russian: "временная сложность: как растёт время работы при росте входных данных"
+ipa: /ˈtaɪm kəmˈpleksəti/
+note: "формулы читают словами: linear time, quadratic time"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

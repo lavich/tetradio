@@ -1,0 +1,7 @@
+id: ep332
+text: "I'd probably use a hash map here."
+translation: "Здесь я, скорее всего, использовал бы хеш-таблицу."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md

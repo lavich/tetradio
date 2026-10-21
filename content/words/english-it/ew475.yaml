@@ -1,0 +1,6 @@
+id: ew475
+greek: "logarithmic"
+russian: "логарифмический: время растёт очень медленно, при удвоении входа добавляется один шаг"
+ipa: /ˌlɒɡəˈrɪðmɪk/
+note: "a binary search runs in logarithmic time"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

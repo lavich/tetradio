@@ -1,0 +1,7 @@
+id: ep334
+text: "Let me test this with an example."
+translation: "Проверю это на примере."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md

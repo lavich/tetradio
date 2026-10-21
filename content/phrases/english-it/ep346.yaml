@@ -1,0 +1,7 @@
+id: ep346
+text: "I'm going to refactor this to make it cleaner."
+translation: "Переработаю этот код, чтобы он стал чище."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md

@@ -1,0 +1,6 @@
+id: ew478
+greek: "a test case"
+russian: "тестовый пример: вход и ожидаемый результат для проверки кода"
+ipa: /ə ˈtest keɪs/
+note: "a test case for an empty list; an edge case (слово модуля e13) — сама ситуация, a test case — её проверка"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

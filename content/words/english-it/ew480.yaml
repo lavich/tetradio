@@ -1,0 +1,6 @@
+id: ew480
+greek: "an infinite loop"
+russian: "бесконечный цикл: условие выхода никогда не выполняется"
+ipa: /ən ˌɪnfɪnət ˈluːp/
+note: "an infinite loop often comes from a counter that is never changed"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

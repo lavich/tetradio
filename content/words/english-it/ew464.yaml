@@ -1,0 +1,6 @@
+id: ew464
+greek: "a base case"
+russian: "базовый случай: условие, при котором рекурсия останавливается"
+ipa: /ə ˈbeɪs keɪs/
+note: "the base case is usually an empty list or zero"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

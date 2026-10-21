@@ -1,0 +1,7 @@
+id: ep341
+text: "I'm going to write the helper function first."
+translation: "Сначала напишу вспомогательную функцию."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md
