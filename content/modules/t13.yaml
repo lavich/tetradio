@@ -1,8 +1,25 @@
 number: 13
 title: On a date
 subtitle: На свидании
-status: draft
+status: published
 goal: вести разговор на свидании, уважительно флиртовать, сказать «нет» и спокойно услышать «нет»
 grammar:
   - second conditional для гипотетических вопросов, смягчение (kind of, a bit, I guess), would rather
 sessions: 3
+lessons:
+  - t13-1
+  - t13-2
+  - t13-3
+  - t13-test
+crib:
+  title: свидание
+  rows:
+    - [гипотетический вопрос, "If you could live anywhere, where would it be?"]
+    - [смягчить, "I'm kind of a morning person."]
+    - [выбрать, "I'd rather stay in than go out."]
+    - [спросить согласие, Is this okay?]
+    - [отказаться, "I'd rather not."]
+    - [принять отказ, "No worries, totally fine."]
+    - [не торопить, "Let's take it slow."]
+    - [закончить вечер, "I had a really nice time."]
+  note: "Second conditional: if + past simple, would + инфинитив. Согласие спрашивают до действия, ответ принимают как есть и повторно не просят"

@@ -1,0 +1,331 @@
+title: Контрольная модуля t13
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: переписка двух людей после первого свидания, разговор в конце вечера с отказом, second conditional, would rather и смягчение, слова и фразы модуля, согласие и ответ на «нет». Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: after-date
+    title: Meera and Nora — the day after
+    text: |-
+      CHAT: PRIYA AND NORA, THE DAY AFTER
+
+      Meera: Hi Nora, thanks for last night. I had a really nice time.
+      Nora: So did I. You've got a great laugh, by the way. I'm a bit awkward with compliments, so sorry if that sounded cheesy.
+      Meera: It didn't. Thank you. I'm kind of a morning person, so I'm still smiling over my coffee.
+      Nora: Ha. If you could take a week off, where would you go?
+      Meera: Japan, I think. It's on my bucket list. What about you?
+      Nora: I'd rather stay in Scotland and hike. Fancy a walk on Sunday?
+      Meera: I'd rather not make plans for the weekend. I'm seeing my sister. How about next Wednesday after work?
+      Nora: Wednesday works for me. Is it okay if I choose the café?
+      Meera: Of course. See you then.
+    glosses:
+      - { text: sounded cheesy, russian: "прозвучало слащаво" }
+      - { text: hike, russian: "ходить в походы" }
+  - type: exercise
+    id: after-date-q
+    about: after-date
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Nora say Meera has?
+        options:
+          - a great laugh
+          - a great job
+          - a great voice
+        answer: a great laugh
+        explanation: You've got a great laugh.
+      - id: q2
+        prompt: Why does Nora say sorry?
+        options:
+          - She is afraid the compliment sounded cheesy.
+          - She arrived late.
+          - She forgot to write.
+        answer: She is afraid the compliment sounded cheesy.
+        explanation: Sorry if that sounded cheesy.
+      - id: q3
+        prompt: What does Meera say about mornings?
+        options:
+          - She is kind of a morning person.
+          - She never wakes up early.
+          - She hates coffee.
+        answer: She is kind of a morning person.
+        explanation: I'm kind of a morning person.
+      - id: q4
+        prompt: Where would Meera go if she could take a week off?
+        options:
+          - Japan
+          - Scotland
+          - Portugal
+        answer: Japan
+        explanation: Japan, I think.
+      - id: q5
+        prompt: What would Nora rather do?
+        options:
+          - stay in Scotland and hike
+          - travel to Japan
+          - stay in and read
+        answer: stay in Scotland and hike
+        explanation: I'd rather stay in Scotland and hike.
+      - id: q6
+        prompt: Why does Meera not want to make plans for the weekend?
+        options:
+          - She is seeing her sister.
+          - She is working.
+          - She is ill.
+        answer: She is seeing her sister.
+        explanation: I'm seeing my sister.
+      - id: q7
+        prompt: When do they agree to meet?
+        options:
+          - next Wednesday after work
+          - on Sunday
+          - next Friday
+        answer: next Wednesday after work
+        explanation: How about next Wednesday after work? — Wednesday works for me.
+      - id: q8
+        prompt: What does Nora ask permission for?
+        options:
+          - to choose the café
+          - to text on Sunday
+          - to bring a friend
+        answer: to choose the café
+        explanation: Is it okay if I choose the café?
+  - type: listening
+    id: refusal
+    title: At the end of the evening — Sam and Ravi
+    plays: 2
+    transcript:
+      - { speaker: Sam, text: "I've really enjoyed tonight, Ravi. Would you like to go for one more drink somewhere?" }
+      - { speaker: Ravi, text: "Thanks, but I'd rather not. I have an early start tomorrow." }
+      - { speaker: Sam, text: "No worries, totally fine. It was a lovely evening anyway." }
+      - { speaker: Ravi, text: "It was. I'd like to see you again, though. If you could pick any place for next time, where would it be?" }
+      - { speaker: Sam, text: "That's easy. There's a tiny jazz bar I know. If I could, I'd go every Friday." }
+      - { speaker: Ravi, text: "Jazz sounds good. Let's take it slow and see how the week goes. Is it okay if I text you on Wednesday?" }
+      - { speaker: Sam, text: "Of course. Wednesday is perfect. Goodnight, Ravi." }
+      - { speaker: Ravi, text: "Goodnight, Sam. I had a really nice time." }
+  - type: exercise
+    id: refusal-q
+    about: refusal
+    graded: true
+    title: Аудирование — Тео и Алекс
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Sam ask at the start?
+        options:
+          - whether Ravi wants one more drink somewhere
+          - whether Ravi wants to go home
+          - whether Ravi wants dinner
+        answer: whether Ravi wants one more drink somewhere
+        explanation: Would you like to go for one more drink somewhere?
+      - id: q2
+        prompt: How does Ravi answer?
+        options:
+          - He says he would rather not.
+          - He says yes at once.
+          - He does not answer.
+        answer: He says he would rather not.
+        explanation: Thanks, but I'd rather not.
+      - id: q3
+        prompt: What reason does Ravi give?
+        options:
+          - He has an early start tomorrow.
+          - He is hungry.
+          - He has no money.
+        answer: He has an early start tomorrow.
+        explanation: I have an early start tomorrow. Причину называть необязательно, Рави называет её по желанию.
+      - id: q4
+        prompt: How does Sam react to Ravi's answer?
+        options:
+          - He accepts it and does not ask again.
+          - He asks again.
+          - He asks for another reason.
+        answer: He accepts it and does not ask again.
+        explanation: No worries, totally fine — отказ принят без повторной просьбы.
+      - id: q5
+        prompt: What does Ravi say after the refusal?
+        options:
+          - He would like to see Sam again.
+          - He does not want to meet again.
+          - He wants to leave at once.
+        answer: He would like to see Sam again.
+        explanation: I'd like to see you again, though.
+      - id: q6
+        prompt: What place does Sam choose for next time?
+        options:
+          - a jazz bar
+          - a climbing wall
+          - a café by the river
+        answer: a jazz bar
+        explanation: There's a tiny jazz bar I know.
+      - id: q7
+        prompt: How does Ravi describe the pace?
+        options:
+          - He wants to take it slow.
+          - He wants to plan every week.
+          - He wants to meet tomorrow.
+        answer: He wants to take it slow.
+        explanation: Let's take it slow and see how the week goes.
+      - id: q8
+        prompt: What does Ravi ask permission for?
+        options:
+          - to text Sam on Wednesday
+          - to call Sam tonight
+          - to bring a friend
+        answer: to text Sam on Wednesday
+        explanation: Is it okay if I text you on Wednesday?
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Second conditional, would rather и смягчение
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If she ___ a bigger flat, she'd invite everyone round."
+        options: [had, has, would have]
+        answer: had
+        explanation: В части с if — past simple.
+      - id: q2
+        prompt: "What ___ you do if you won a year off?"
+        options: [would, will, do]
+        answer: would
+        explanation: В главной части second conditional — would и инфинитив.
+      - id: q3
+        prompt: "I'd rather ___ the stairs than wait for the lift."
+        options: [take, to take, taking]
+        answer: take
+        explanation: После would rather — инфинитив без to.
+      - id: q4
+        prompt: "Someone asks a personal question, and you prefer not to answer. Which reply is polite?"
+        options:
+          - I'd rather not.
+          - That is rude.
+          - Everyone asks me that.
+        answer: I'd rather not.
+        explanation: I'd rather not — вежливый отказ без объяснения причин.
+      - id: q5
+        prompt: "You want to say softly that you are tired. Which sentence is softest?"
+        options:
+          - I'm kind of tired.
+          - I'm tired.
+          - I'm too tired.
+        answer: I'm kind of tired.
+        explanation: Kind of смягчает утверждение.
+      - id: q6
+        prompt: "He says: Let's take it slow. Which reply accepts it?"
+        options:
+          - Sounds good. There's no hurry.
+          - Why so slowly?
+          - Come on, just once.
+        answer: Sounds good. There's no hurry.
+        explanation: Темп определяют оба, ответ принимают без допроса.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово или оборот. Четыре варианта лишние.
+    format: gap
+    bank: [a compliment, cheesy, open up, a bucket list, a pet peeve, attentive, down-to-earth, respectful, awkward, pushy, mutual, flirt]
+    items:
+      - { id: g1, prompt: "She said something kind about my cooking. It was ___, and it made me smile.", answer: a compliment }
+      - { id: g2, prompt: "The line about falling from heaven sounds sweet and silly: it is really ___.", answer: cheesy }
+      - { id: g3, prompt: "It took him a few dates to ___ and talk about his family.", answer: open up }
+      - { id: g4, prompt: "I keep ___ with trips I want to take before I am forty.", answer: a bucket list }
+      - { id: g5, prompt: "Loud chewing is ___ of mine: it really annoys me.", answer: a pet peeve }
+      - { id: g6, prompt: "He listens carefully and notices every detail I mention. He is an ___ listener.", answer: attentive }
+      - { id: g7, prompt: "I am not interested in fancy places. I like people who are ___: they never show off and are easy to talk to.", answer: down-to-earth }
+      - { id: g8, prompt: "He stayed ___ of my decision and never argued with it.", answer: respectful }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I'd, you're) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: "Если бы у меня был свободный вечер, я бы остался(лась) дома. (second conditional)"
+        answer:
+          - "If I had a free evening, I'd stay in."
+          - "If I had a free evening, I'd stay at home."
+          - "If I had a free evening, I'd stay home."
+          - "If I had a free evening, I would stay in."
+          - "If I had a free evening, I would stay at home."
+          - "If I had a free evening, I would stay home."
+          - "If I had an evening free, I'd stay in."
+          - "If I had an evening free, I'd stay at home."
+          - "If I had an evening free, I'd stay home."
+          - "If I had an evening free, I would stay in."
+          - "If I had an evening free, I would stay at home."
+          - "If I had an evening free, I would stay home."
+          - "If I had an evening off, I'd stay in."
+          - "If I had an evening off, I'd stay at home."
+          - "If I had an evening off, I'd stay home."
+          - "If I had an evening off, I would stay in."
+          - "If I had an evening off, I would stay at home."
+          - "If I had an evening off, I would stay home."
+        explanation: If + past simple, would + инфинитив.
+      - id: q2
+        prompt: "Я бы лучше не отвечал(а) на этот вопрос. (вежливый отказ)"
+        answer:
+          - "I'd rather not answer that question."
+          - "I'd rather not answer that."
+          - "I'd rather not answer this question."
+          - "I'd rather not answer this."
+          - "I would rather not answer that question."
+          - "I would rather not answer that."
+          - "I would rather not answer this question."
+          - "I would rather not answer this."
+          - "I'd rather not talk about that."
+          - "I'd rather not talk about it."
+          - "I'd rather not talk about this."
+          - "I would rather not talk about that."
+          - "I would rather not talk about it."
+          - "I would rather not talk about this."
+          - "I'd rather not."
+          - "I would rather not."
+        explanation: I'd rather not — вежливый отказ без объяснения причин.
+      - id: q3
+        prompt: "Спасибо за вечер. Я очень приятно провёл(а) время."
+        answer:
+          - "Thanks for tonight. I had a really nice time."
+          - "Thanks for the evening. I had a really nice time."
+          - "Thanks for this evening. I had a really nice time."
+          - "Thank you for tonight. I had a really nice time."
+          - "Thank you for the evening. I had a really nice time."
+          - "Thank you for this evening. I had a really nice time."
+          - "I had a really nice time. Thanks for tonight."
+          - "I had a really nice time. Thanks for the evening."
+          - "I had a really nice time. Thanks for this evening."
+          - "I had a really nice time. Thank you for tonight."
+          - "I had a really nice time. Thank you for the evening."
+          - "I had a really nice time. Thank you for this evening."
+        explanation: I had a really nice time — слова на прощание в конце вечера.
+      - id: q4
+        prompt: "Если бы ты мог(ла) жить где угодно, где бы это было?"
+        answer:
+          - "If you could live anywhere, where would it be?"
+          - "If you could live wherever you wanted, where would it be?"
+          - "If you could live anywhere, where would you live?"
+          - "If you could live anywhere, where would you choose to live?"
+          - "If you could live anywhere, where would you want to live?"
+          - "If you could live wherever you wanted, where would you live?"
+          - "If you could live wherever you wanted, where would you choose to live?"
+          - "If you could live wherever you wanted, where would you want to live?"
+          - "Where would you live if you could live anywhere?"
+          - "Where would you live if you could live wherever you wanted?"
+          - "Where would you choose to live if you could live anywhere?"
+          - "Where would you choose to live if you could live wherever you wanted?"
+          - "Where would you want to live if you could live anywhere?"
+          - "Where would you want to live if you could live wherever you wanted?"
+        explanation: If + past simple, would + инфинитив.

@@ -1,0 +1,8 @@
+id: tp194
+text: "I'd like to see you again."
+translation: "Я бы хотел(а) увидеться снова."
+note: "прямое пожелание, на которое можно ответить «да» или «нет»"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md

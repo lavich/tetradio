@@ -1,0 +1,201 @@
+title: Сообщение после свидания, беседа и сцены с отказом
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: date-bank
+    title: Банк фраз — свидание
+    body: |-
+      Для разговора на свидании нужны пять умений: поддержать беседу, смягчить, выбрать, обозначить границу и закончить вечер.
+
+      **Беседа:** **If you could live anywhere, where would it be?** / **What would you do if you had a year off?** **Смягчение:** **I'm kind of a morning person.** / **I'm a bit nervous, to be honest.** **Выбор:** **I'd rather stay in than go out.** **Граница:** **Is this okay?** / **I'd rather not.** / **Let's take it slow.** **Ответ на отказ:** **No worries, totally fine.** **Конец вечера:** **I had a really nice time.** / **I'd like to see you again.**
+
+      Отказ звучит коротко и без объяснений. Ответ на отказ тоже короткий: принимают, не уговаривают и не спрашивают «почему».
+    table:
+      columns:
+        - умение
+        - фраза
+      rows:
+        - - вопрос для беседы
+          - If you could live anywhere, where would it be?
+        - - смягчить
+          - I'm a bit nervous, to be honest.
+        - - выбрать
+          - I'd rather stay in than go out.
+        - - спросить согласие
+          - Is it okay if I text you tomorrow?
+        - - отказать
+          - I'd rather not.
+        - - принять отказ
+          - No worries, totally fine.
+        - - закончить вечер
+          - I had a really nice time.
+  - type: exercise
+    id: lines-match
+    title: Реплика и ответ
+    instruction: Подберите ответ на реплику. Два ответа лишние.
+    format: match
+    bank:
+      - Yes, I'd like that. Let's take it slow.
+      - Thanks, but I'll make my own way.
+      - No worries, totally fine.
+      - I'd rather stay in and read, honestly.
+      - Two pints of lager, please.
+      - The next train leaves at ten.
+    items:
+      - { id: m1, prompt: "Would you like to see me again?", answer: "Yes, I'd like that. Let's take it slow." }
+      - { id: m2, prompt: "Can I walk you to the station?", answer: "Thanks, but I'll make my own way." }
+      - { id: m3, prompt: "Thanks, but I'd rather not talk about it tonight.", answer: "No worries, totally fine." }
+      - { id: m4, prompt: "Would you rather go out or stay in on a Sunday?", answer: "I'd rather stay in and read, honestly." }
+  - type: explanation
+    id: message-how
+    title: Сообщение после свидания
+    body: |-
+      Через день после свидания пишут короткое сообщение. Объём — 40–80 слов, регистр дружеский: короткие предложения и сокращения (I'm, I'd).
+
+      Есть два варианта. **Продолжить:** поблагодарить за вечер (**I had a really nice time**), сказать, что хотите увидеться снова (**I'd like to see you again**), предложить два варианта на выбор и оставить собеседнику место для ответа (**Would you rather have coffee or go for a walk?**). **Закончить вежливо:** поблагодарить и сказать прямо и коротко, что продолжения не будет: *I had a nice time, but I don't think we're a match. I wish you all the best.* Причину называть не нужно.
+
+      В обоих вариантах пишите о себе и о своём решении, без упрёков и без вопросов, на которые собеседник обязан ответить.
+  - type: writing
+    id: message
+    register: friendly
+    prompt: "Напишите сообщение после свидания (40–80 слов): поблагодарите за вечер и либо предложите увидеться снова, либо вежливо закончите знакомство. Если свидания не было, напишите от лица Лены Уиллу."
+    words: { min: 40, max: 80 }
+    model: |-
+      Hi Will, thanks for last night. I had a really nice time, and I laughed more than I expected. I'd like to see you again, but let's take it slow, if that's okay with you. Would you rather have coffee on Wednesday after work or go for a walk on Thursday? There's no pressure, just tell me what suits you. Have a good week. Lena
+    criteria:
+      - "40–80 слов; есть благодарность за вечер и либо предложение увидеться, либо вежливое окончание"
+      - "Дружеский регистр: короткие предложения, сокращения (I'm, I'd), фразы модуля (I had a really nice time, I'd like to see you again, let's take it slow)"
+      - "Выбор для собеседника — would you rather… или похожий вопрос; ответ остаётся за ним"
+      - "Если знакомство заканчивается: коротко, без объяснений причин и без упрёков (I don't think we're a match)"
+      - Нет давления и нескольких вопросов подряд
+  - type: explanation
+    id: interview-how
+    title: Беседа на свидании — около 3 минут
+    body: |-
+      Вам задают пять вопросов, как это бывает на свидании: **If you could live anywhere, where would it be?** **Would you rather stay in or go out on a Friday?** **What's on your bucket list?** **What's your pet peeve?** **Are you a morning person?**
+
+      Отвечайте на каждый одной-тремя фразами. Хотя бы в одном ответе нужен second conditional, в одном — смягчение (kind of, a bit, I guess), в одном — would rather. Запишите ответ, переслушайте, сверьте с критериями.
+  - type: speaking
+    id: interview
+    part: interview
+    prompt: "Вам задают пять вопросов: «If you could live anywhere, where would it be?», «Would you rather stay in or go out on a Friday?», «What's on your bucket list?», «What's your pet peeve?», «Are you a morning person?» Ответьте на каждый одной-тремя фразами: в одном ответе second conditional, в одном смягчение (kind of, a bit, I guess), в одном would rather. Весь ответ — около 3 минут."
+    seconds: 180
+    model: "If I could live anywhere, I'd choose Lisbon. I'd have coffee by the sea every morning. On a Friday I'd rather stay in: I'm kind of tired after the week, so I'd cook and watch a film. On my bucket list there's seeing the northern lights. I reckon it would be an amazing trip. My pet peeve is people who are always late, although I'm a bit late myself sometimes. And I'm not a morning person: I'm slow until I've had my first coffee."
+    criteria:
+      - Ответили на все пять вопросов, каждый — одной-тремя фразами
+      - "Second conditional: If I could…, I'd… (if + past simple, would + инфинитив)"
+      - "Смягчение: kind of, a bit, I guess или I reckon"
+      - "Would rather + инфинитив без to"
+      - Спокойный темп, без долгих пауз; на втором дубле — меньше повторов
+  - type: explanation
+    id: no-how
+    title: Сцена — сказать «нет»
+    body: |-
+      Теперь сцена: вы на свидании, и Уилл задаёт вопросы, на два из которых вы отвечаете «нет». Сначала звучат только реплики Уилла, подряд, два раза. Затем откройте текст реплик кнопкой «Открыть текст» и держите его перед глазами.
+
+      В задании речи включите запись и отвечайте по порядку: поблагодарите за предложение проводить и откажитесь, ответьте на воображаемый вопрос, откажитесь отвечать на личный вопрос и согласитесь на сообщение. Отказ — одна короткая фраза: **Thanks, but I'll make my own way.** **I'd rather not talk about it.** Причину называть не нужно.
+  - type: listening
+    id: no-lines
+    title: Реплики собеседника — Уилл
+    plays: 2
+    transcript:
+      - { speaker: Will, text: "I had a really nice time tonight. Can I walk you to the station?" }
+      - { speaker: Will, text: "No worries, totally fine. If you could take a year off, what would you do?" }
+      - { speaker: Will, text: "That sounds great. Is it okay if I ask why you left your last job?" }
+      - { speaker: Will, text: "Of course, no problem. Is it okay if I text you tomorrow?" }
+      - { speaker: Will, text: "Good. Safe journey home." }
+  - type: speaking
+    id: no
+    part: roleplay
+    prompt: |-
+      Вы на свидании, Уилл задаёт вопросы. Прослушайте его реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Откажитесь от предложения проводить, расскажите, что бы вы делали в свободный год, откажитесь отвечать на личный вопрос и согласитесь на сообщение. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Will: I had a really nice time tonight. Can I walk you to the station?
+      You: Thanks, but I'll make my own way. I had a really nice time too.
+      Will: No worries, totally fine. If you could take a year off, what would you do?
+      You: I'd travel around Portugal, and I'd learn to surf.
+      Will: That sounds great. Is it okay if I ask why you left your last job?
+      You: I'd rather not talk about it tonight, if that's okay.
+      Will: Of course, no problem. Is it okay if I text you tomorrow?
+      You: Yes, that's fine. I'd like to see you again.
+      Will: Good. Safe journey home.
+      You: Thanks. Goodnight.
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — одна-две фразы
+      - "Отказ короткий и вежливый, без длинных объяснений: Thanks, but I'll make my own way. / I'd rather not talk about it."
+      - "Ответ о свободном годе — second conditional: I'd travel…, I'd learn…"
+      - "Согласие на сообщение — ясное «да»: Yes, that's fine."
+      - Спокойный тон, без извинений на каждую фразу
+  - type: explanation
+    id: answer-how
+    title: Сцена — ответить на «нет»
+    body: |-
+      Теперь наоборот: «нет» говорит Лена, и вы его принимаете. Сначала звучат только реплики Лены, подряд, два раза. Затем откройте текст реплик и держите его перед глазами.
+
+      В задании речи отвечайте по порядку: ответьте на её слова о вечере, предложите проводить, спросите разрешения написать на следующий день, примите её отказы одной фразой. Не уговаривайте и не спрашивайте «почему»: **No worries, totally fine.** **Of course. No problem at all.**
+  - type: listening
+    id: answer-lines
+    title: Реплики собеседника — Лена
+    plays: 2
+    transcript:
+      - { speaker: Lena, text: "Thanks for tonight. I had a really nice time." }
+      - { speaker: Lena, text: "Thanks, but I'll make my own way. I'm used to the walk." }
+      - { speaker: Lena, text: "Yes, please do. But I'd rather not plan the weekend yet. Let's take it slow." }
+      - { speaker: Lena, text: "Thank you for understanding. Goodnight." }
+  - type: speaking
+    id: answer
+    part: roleplay
+    prompt: |-
+      Вы на свидании с Леной. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Ответьте на её слова о вечере, предложите проводить до станции, примите отказ, спросите, можно ли написать завтра, и примите, что выходные она пока не планирует. Вся ваша часть — 40–60 секунд, каждая реплика — одна-две фразы.
+    seconds: 60
+    model: |-
+      Lena: Thanks for tonight. I had a really nice time.
+      You: So did I. Can I walk you to the station?
+      Lena: Thanks, but I'll make my own way. I'm used to the walk.
+      You: No worries, totally fine. Is it okay if I text you tomorrow?
+      Lena: Yes, please do. But I'd rather not plan the weekend yet. Let's take it slow.
+      You: Of course. No problem at all.
+      Lena: Thank you for understanding. Goodnight.
+      You: Goodnight. Safe journey home.
+    criteria:
+      - Ответили на все четыре реплики по порядку, каждая — одна-две фразы
+      - "Отказ принят одной фразой: No worries, totally fine. / Of course. No problem at all."
+      - Не уговаривали, не спрашивали «почему» и не повторяли просьбу
+      - "Вопрос о сообщении — открытый для ответа: Is it okay if I text you tomorrow?"
+      - Спокойный дружеский тон
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "If you ___ a free year, where would you go?"
+        options: [had, have, would have]
+        answer: had
+        explanation: В части с if — past simple.
+      - id: q2
+        prompt: "I'd rather ___ for a walk than sit in a café."
+        options: [go, to go, going]
+        answer: go
+        explanation: После would rather — инфинитив без to.
+      - id: q3
+        prompt: "She says: I'd rather not. What do you answer?"
+        options:
+          - No worries, totally fine.
+          - Why not?
+          - Come on, just once.
+        answer: No worries, totally fine.
+        explanation: Отказ принимают без вопросов и уговоров.
+      - id: q4
+        prompt: "You want to say softly that you are slightly nervous."
+        options:
+          - I'm a bit nervous.
+          - I'm nervous bit.
+          - I'm a kind nervous.
+        answer: I'm a bit nervous.
+        explanation: A bit ставят перед прилагательным.

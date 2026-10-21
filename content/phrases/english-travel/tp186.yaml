@@ -1,0 +1,8 @@
+id: tp186
+text: "I'd rather stay in than go out."
+translation: "Я лучше останусь дома, чем куда-то пойду."
+note: "would rather + инфинитив без to; после than тоже инфинитив без to"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t13
+  operation: requested-generation
+  request: Фразы модуля t13 по программе docs/curriculum-english-travel.md
