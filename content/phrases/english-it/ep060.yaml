@@ -1,0 +1,7 @@
+id: ep060
+text: "It reduced the page load time by forty percent."
+translation: "Время загрузки страницы сократилось на сорок процентов."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md

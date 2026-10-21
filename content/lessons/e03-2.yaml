@@ -1,0 +1,309 @@
+title: Описание проекта и рассказ кандидата
+kind: lesson
+items:
+  - { kind: word, id: ew089 }
+  - { kind: word, id: ew090 }
+  - { kind: word, id: ew091 }
+  - { kind: word, id: ew092 }
+  - { kind: word, id: ew093 }
+  - { kind: word, id: ew094 }
+  - { kind: word, id: ew095 }
+  - { kind: word, id: ew096 }
+  - { kind: word, id: ew097 }
+  - { kind: word, id: ew098 }
+  - { kind: word, id: ew099 }
+  - { kind: word, id: ew100 }
+  - { kind: word, id: ew101 }
+  - { kind: word, id: ew102 }
+  - { kind: word, id: ew103 }
+  - { kind: word, id: ew104 }
+  - { kind: word, id: ew105 }
+  - { kind: phrase, id: ep059 }
+  - { kind: phrase, id: ep060 }
+  - { kind: phrase, id: ep061 }
+  - { kind: phrase, id: ep062 }
+  - { kind: phrase, id: ep063 }
+  - { kind: phrase, id: ep064 }
+  - { kind: phrase, id: ep065 }
+  - { kind: phrase, id: ep066 }
+blocks:
+  - type: explanation
+    id: results-words
+    title: Язык результатов
+    body: |-
+      Описание проекта в портфолио и ответ кандидата строятся вокруг результата, который можно проверить. Для этого нужны несколько слов и три оборота с числами.
+
+      **Метрики.** **A KPI** — ключевой показатель, по которому оценивают работу. **A conversion rate** — доля пользователей, дошедших до цели, например до оплаты. **Adoption** — как быстро продуктом начинают пользоваться. **A baseline** — исходный уровень, с которым сравнивают результат. **Measurable** — то, что можно выразить числом. **An outcome** — итог для бизнеса или пользователей, в отличие от выпущенной функции: функция — *output*, изменение — *outcome*. **Boost** — повысить показатель, **a quick win** — быстрый результат малыми усилиями, **a pain point** — то, что мешает пользователям.
+
+      **Процесс.** **A code freeze** — период перед релизом, когда в основную ветку идут только срочные исправления. **A feature flag** включает и выключает функцию без нового релиза. **A regression** — поломка того, что работало. **Sign off on** — утвердить, **iterate** — улучшать шагами, **refactor** — перерабатывать код без смены поведения, **decommission** — выводить из эксплуатации, **a spike** — короткое исследование задачи.
+
+      Три оборота с числами: **reduce X by 40 percent** (на сколько), **from X to Y** (с какого значения до какого), **go up / down by** (рост и снижение на величину). Предлог **by** показывает величину изменения, **to** — итоговое значение: *went up by 15 percent* — выросло на 15 процентов, *went up to 15 percent* — стало равно 15 процентам.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - reduce … by …
+          - It reduced the page load time by forty percent.
+        - - from … to …
+          - Return time went from two days to four hours.
+        - - go up / down by …
+          - Conversion went up by fifteen percent.
+        - - boost … by …
+          - The change boosted adoption by twenty percent.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a KPI
+      - a baseline
+      - a quick win
+      - a code freeze
+      - a feature flag
+      - a regression
+      - decommission
+      - a pain point
+      - adoption
+      - a spike
+    items:
+      - { id: m1, prompt: ключевой показатель эффективности, answer: a KPI }
+      - { id: m2, prompt: исходный уровень для сравнения, answer: a baseline }
+      - { id: m3, prompt: быстрый результат малыми усилиями, answer: a quick win }
+      - { id: m4, prompt: "период перед релизом, когда код почти не меняют", answer: a code freeze }
+      - { id: m5, prompt: "переключатель, который включает функцию без нового релиза", answer: a feature flag }
+      - { id: m6, prompt: "поломка того, что раньше работало", answer: a regression }
+      - { id: m7, prompt: выводить из эксплуатации, answer: decommission }
+      - { id: m8, prompt: "то, что больше всего раздражает пользователей", answer: a pain point }
+  - type: exercise
+    id: numbers-choice
+    title: By, from и to
+    instruction: Выберите вариант. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "It reduced the page load time ___ forty percent. (на сорок процентов)"
+        options: [by, to, for]
+        answer: by
+        explanation: By называет величину изменения.
+      - id: q2
+        prompt: The portal cut the return time from two days ___ four hours.
+        options: [to, by, at]
+        answer: to
+        explanation: From … to … показывает начальное и конечное значения.
+      - id: q3
+        prompt: "Conversion went up ___ fifteen percent. (рост на пятнадцать процентов)"
+        options: [by, to]
+        answer: by
+        explanation: Рост на величину — by; to означало бы итоговое значение.
+      - id: q4
+        prompt: "The failed-payment rate went down ___ one percent. (стало равно одному проценту)"
+        options: [to, by]
+        answer: to
+        explanation: Итоговое значение вводится предлогом to.
+      - id: q5
+        prompt: Adoption rose from twenty percent ___ seventy percent in two months.
+        options: [to, by, for]
+        answer: to
+      - id: q6
+        prompt: "The new cache boosted the speed ___ half. (ускорили на половину)"
+        options: [by, to]
+        answer: by
+        explanation: To называет итоговое значение, by — величину изменения.
+  - type: explanation
+    id: reading-how
+    title: Описание проекта в портфолио
+    body: |-
+      Страница проекта в портфолио короче рассказа на собеседовании: проблема, что сделали, результат. Читайте её по этим трём частям, и тогда незнакомые слова можно пропускать.
+
+      Времена те же, что в уроке 1. Фон описан в past continuous (*were handling*), порядок событий — в past simple (*we built, we went live*), то, что случилось раньше точки отсчёта, — в past perfect (*we had agreed*). Результат — числа с *by* и *from … to*. Незнакомые слова переведены под текстом.
+  - type: reading
+    id: portfolio
+    title: "Portfolio: Self-service returns portal"
+    text: |-
+      Self-service returns portal
+      Role: backend developer, team of four · 2023
+
+      Problem
+      Customers of an online shop returned items by email. Support agents were handling about 300 return requests a week, and each request took two days.
+
+      What we did
+      At the kick-off meeting we set the scope: one portal, no changes to the warehouse system. We built a prototype in two weeks and tested it with ten customers. They told us that the main pain point was the form, which had asked for the order number twice. We fixed it and went live in April behind a feature flag, with five percent of users first. A week before the release we had agreed on a code freeze, and we caught one regression in the final test.
+
+      Result
+      The portal cut the average return time from two days to four hours. Support requests about returns went down by 60 percent, and adoption reached 70 percent within two months. The next step is to decommission the old email process.
+    glosses:
+      - { text: Self-service, russian: самообслуживание }
+      - { text: return, russian: возврат товара }
+      - { text: warehouse system, russian: складская система }
+      - { text: release, russian: "релиз, выпуск версии" }
+      - { text: caught, russian: нашли }
+  - type: exercise
+    id: portfolio-tf
+    about: portfolio
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Before the portal, customers returned items by email.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: Customers returned items by email — возвраты шли по почте.
+      - id: q2
+        prompt: The team changed the warehouse system.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: В объём вошёл один портал, без изменений складской системы.
+      - id: q3
+        prompt: Ten customers tested the prototype.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: The portal was released to all users at once.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Went live behind a feature flag, with five percent of users first — сначала запуск для пяти процентов пользователей.
+      - id: q5
+        prompt: The average return time fell from two days to four hours.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q6
+        prompt: Support requests about returns went down by 30 percent.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Went down by 60 percent — снижение на 60 процентов.
+  - type: exercise
+    id: portfolio-tense
+    about: portfolio
+    title: Времена в тексте
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«The form had asked for the order number twice» — почему здесь past perfect?"
+        options:
+          - форма запрашивала номер раньше, чем пользователи об этом сказали
+          - форма запрашивает номер и сейчас
+        answer: форма запрашивала номер раньше, чем пользователи об этом сказали
+      - id: q2
+        prompt: "«Support agents were handling about 300 return requests a week» — почему здесь past continuous?"
+        options:
+          - "описан фон: что происходило в тот период"
+          - названо одно законченное событие
+        answer: "описан фон: что происходило в тот период"
+      - id: q3
+        prompt: "«A week before the release we had agreed on a code freeze» — что произошло раньше?"
+        options:
+          - договорились о заморозке кода
+          - состоялся релиз
+        answer: договорились о заморозке кода
+        explanation: Past perfect показывает действие, которое случилось до названной точки.
+  - type: explanation
+    id: listening-how
+    title: Рассказ о проекте на собеседовании
+    body: |-
+      Интервьюер просит **Tell me about a project you're proud of**. Кандидат отвечает связным рассказом: что за проект, какая у него роль, что сделал по шагам, где возникла трудность, чем всё закончилось. Рассказ растёт из тех же времён: фон и то, что было раньше, — past continuous и past perfect, шаги — past simple со связками.
+
+      Послушайте начало собеседования Марка с Изабель. Сначала целиком, потом ответьте на вопросы и проверьте их при втором прослушивании. Транскрипт открывается после ответа. Следите за связками *first, then, by the time, eventually* и за тем, как Изабель называет результат числом.
+  - type: listening
+    id: project-story
+    title: Tell me about a project you're proud of
+    plays: 2
+    transcript:
+      - { speaker: Mark, text: "Isabel, tell me about a project you're proud of." }
+      - { speaker: Isabel, text: "I'd like to talk about our search rewrite. I was working on the product catalogue when the search started to fail under heavy load, and we decided to rebuild it." }
+      - { speaker: Mark, text: "What was your role?" }
+      - { speaker: Isabel, text: "I was the only backend developer on the project. My part was designing the data model and the API." }
+      - { speaker: Mark, text: "How did you start?" }
+      - { speaker: Isabel, text: "First, we talked to the support team, because they were hearing the complaints. Then we built a proof of concept in two weeks. By the time we showed it to the managers, we had already tested it on real data." }
+      - { speaker: Mark, text: "Did everything go smoothly?" }
+      - { speaker: Isabel, text: "No. We ran into a problem with the size of the search index, and we were running behind schedule for a month. We found a workaround, and then we solved it properly by splitting the index." }
+      - { speaker: Mark, text: "And how did it end?" }
+      - { speaker: Isabel, text: "Eventually, we launched in March, two weeks ahead of the revised schedule. Search got twice as fast, and conversion went up by fifteen percent." }
+      - { speaker: Mark, text: "What would you do differently?" }
+      - { speaker: Isabel, text: "Looking back, I'd do the discovery phase differently. We had spent too little time on the requirements." }
+  - type: exercise
+    id: project-story-q
+    about: project-story
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What was wrong with the old search?
+        options:
+          - It failed under heavy load.
+          - It showed old results.
+          - It had too many features.
+        answer: It failed under heavy load.
+      - id: q2
+        prompt: What was Isabel's role?
+        options:
+          - the only backend developer
+          - the team lead of five engineers
+          - a product manager
+        answer: the only backend developer
+      - id: q3
+        prompt: What did the team build in two weeks?
+        options:
+          - a proof of concept
+          - the final release
+          - a mobile app
+        answer: a proof of concept
+      - id: q4
+        prompt: What caused the delay?
+        options:
+          - the size of the search index
+          - a change of managers
+          - a security review
+        answer: the size of the search index
+        explanation: We ran into a problem with the size of the search index — задержка в месяц связана с индексом.
+      - id: q5
+        prompt: How did the team solve the problem properly?
+        options:
+          - by splitting the index
+          - by buying a bigger server
+          - by removing features
+        answer: by splitting the index
+        explanation: Сначала нашли workaround — временное решение, окончательное — разделение индекса.
+      - id: q6
+        prompt: What happened to conversion?
+        options:
+          - It went up by fifteen percent.
+          - It doubled.
+          - It dropped slightly.
+        answer: It went up by fifteen percent.
+      - id: q7
+        prompt: What would Isabel change?
+        options:
+          - the discovery phase
+          - the programming language
+          - the size of the team
+        answer: the discovery phase
+  - type: exercise
+    id: project-story-phrases
+    about: project-story
+    title: Фразы из рассказа
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - when
+      - part
+      - running
+      - workaround
+      - ahead
+      - by
+      - eventually
+      - differently
+    items:
+      - { id: g1, prompt: "I was working on the catalogue ___ the search started to fail.", answer: when }
+      - { id: g2, prompt: "My ___ was designing the data model and the API.", answer: part }
+      - { id: g3, prompt: "We were ___ behind schedule for a month.", answer: running }
+      - { id: g4, prompt: "We found a ___, and then we solved it properly.", answer: workaround }
+      - { id: g5, prompt: "We launched in March, two weeks ___ of the revised schedule.", answer: ahead }
+      - { id: g6, prompt: "Conversion went up ___ fifteen percent.", answer: by }

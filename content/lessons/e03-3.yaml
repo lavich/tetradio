@@ -1,0 +1,351 @@
+title: Tell me about a project you're proud of — письмо и речь
+kind: lesson
+items:
+  - { kind: phrase, id: ep067 }
+  - { kind: phrase, id: ep068 }
+  - { kind: phrase, id: ep069 }
+  - { kind: phrase, id: ep070 }
+  - { kind: phrase, id: ep071 }
+  - { kind: phrase, id: ep072 }
+  - { kind: phrase, id: ep073 }
+  - { kind: phrase, id: ep074 }
+  - { kind: phrase, id: ep075 }
+blocks:
+  - type: explanation
+    id: formula
+    title: "Схема ответа: ситуация, роль, шаги, трудность, результат"
+    body: |-
+      **Tell me about a project you're proud of** — вопрос, на котором интервьюер проверяет сразу три вещи: можете ли вы объяснить сложное просто, что именно сделали сами и как справляетесь с трудностями. Ответ длится около минуты и идёт по пяти шагам.
+
+      **1. Ситуация и цель** — одно-два предложения: **Let me tell you about a project I'm really proud of. The goal was to cut the checkout time in half.** Фон — past continuous или past perfect: *I was working on the payment team when…*
+
+      **2. Ваша роль** — что сделали лично вы: **I took ownership of the whole migration. My part was designing the data model and the API.** «Мы» и «я» разделяйте: интервьюера интересует ваш вклад.
+
+      **3. Шаги** — past simple со связками: **First, we talked to the users. Then we built a prototype.**
+
+      **4. Трудность и решение** — одна: **We ran into a problem with the database. We solved it by splitting the table.** Трудность показывает, как вы думаете, поэтому её не скрывают.
+
+      **5. Результат и вывод** — число и одна мысль о том, что вы изменили бы: **The result was a faster, more stable product. Looking back, I'd do the discovery phase differently.**
+    table:
+      columns:
+        - шаг
+        - время и связки
+        - пример
+      rows:
+        - - ситуация и цель
+          - past simple, past continuous для фона
+          - The goal was to cut the checkout time in half.
+        - - роль
+          - past simple, I took, my part was
+          - I took ownership of the whole migration.
+        - - шаги
+          - past simple, first, then, after that
+          - First, we talked to the users.
+        - - трудность
+          - past simple, ran into, solved it by
+          - We ran into a problem with the database.
+        - - результат
+          - past simple, числа, looking back
+          - The result was a faster, more stable product.
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: good-answer
+    title: Подходящий ответ
+    instruction: Выберите вариант, который подходит для собеседования.
+    format: choice
+    items:
+      - id: q1
+        prompt: С чего начать ответ на «Tell me about a project you're proud of»?
+        options:
+          - Let me tell you about a project I'm really proud of.
+          - I have worked on many projects, and all of them were fine.
+          - Which project do you mean?
+        answer: Let me tell you about a project I'm really proud of.
+        explanation: Начало называет, о чём пойдёт рассказ. Общий ответ про все проекты не конкретен, встречный вопрос откладывает ответ.
+      - id: q2
+        prompt: Как назвать свой вклад в командном проекте?
+        options:
+          - My part was designing the data model and the API.
+          - We did everything together.
+          - The manager decided everything.
+        answer: My part was designing the data model and the API.
+        explanation: Интервьюеру нужен ваш конкретный вклад.
+      - id: q3
+        prompt: Как рассказать о трудности?
+        options:
+          - We ran into a problem with the database. We solved it by splitting the table.
+          - There were no problems at all.
+          - The database was terrible.
+        answer: We ran into a problem with the database. We solved it by splitting the table.
+        explanation: Трудность и способ её решения вместе показывают, как вы работаете.
+      - id: q4
+        prompt: Чем закончить ответ?
+        options:
+          - Looking back, I'd do the discovery phase differently.
+          - And that's all, thank you.
+          - I don't know what else to say.
+        answer: Looking back, I'd do the discovery phase differently.
+        explanation: Вывод о том, что вы бы изменили, показывает, что вы умеете учиться на проектах.
+  - type: exercise
+    id: tense-fix
+    title: Какое предложение верно
+    instruction: Выберите верный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы работали над платёжным сервисом, когда изменились требования.
+        options:
+          - I was working on the payment service when the requirements changed.
+          - I have worked on the payment service when the requirements changed.
+          - I work on the payment service when the requirements changed.
+        answer: I was working on the payment service when the requirements changed.
+        explanation: Процесс шёл, когда случилось событие, — past continuous и past simple.
+      - id: q2
+        prompt: Команда уже сделала прототип до вашего прихода.
+        options:
+          - By the time I joined, the team had already built a prototype.
+          - By the time I joined, the team already builds a prototype.
+          - By the time I joined, the team has already built a prototype.
+        answer: By the time I joined, the team had already built a prototype.
+        explanation: С by the time раньше случившееся действие стоит в past perfect.
+      - id: q3
+        prompt: Вы запустили проект в марте после долгих трудностей.
+        options:
+          - Eventually, we launched in March.
+          - Eventually, we have launched in March.
+          - Eventually, we were launching in March.
+        answer: Eventually, we launched in March.
+        explanation: Шаг сюжета — past simple, а March называет момент.
+      - id: q4
+        prompt: Вы рассказываете, что решили проблему, разделив таблицу.
+        options:
+          - We solved it by splitting the table.
+          - We solved it by split the table.
+          - We solved it for splitting the table.
+        answer: We solved it by splitting the table.
+        explanation: После предлога by глагол принимает форму с -ing.
+  - type: explanation
+    id: writing-how
+    title: Описание проекта для резюме
+    body: |-
+      Письменная задача — описание одного проекта, 60–100 слов, для раздела Experience или для письма рекрутеру. Схема та же, что в ответе, но плотнее: задача, роль, что сделано, результат с числом.
+
+      Пишите от первого лица, без приветствия. Формулы: 1) что за проект и когда — **I led the backend of a returns portal in 2023**; 2) фон и ваша роль — **Support agents were handling… I designed…**; 3) шаги и порядок — **By the time we launched, we had tested it with…**; 4) результат — **cut… from… to…, reduced… by…**; 5) вывод — **I learned…**.
+
+      Для формального текста подходят нейтральные слова: *delivered, reduced, led*. Оценочные слова вроде *amazing* и *great* в резюме не нужны: результат убедительнее выражается числом.
+
+      Проверьте себя: past continuous только для фона, past perfect — для того, что было раньше точки отсчёта, остальное — past simple; у результата есть число и предлог *by* или *from … to*.
+  - type: exercise
+    id: sentences
+    title: Предложения для резюме
+    instruction: Переведите на английский. Пишите сокращения полностью (we had, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Я возглавил бэкенд портала возвратов в 2023 году.
+        answer:
+          - I led the backend of a returns portal in 2023.
+          - In 2023 I led the backend of a returns portal.
+          - In 2023, I led the backend of a returns portal.
+          - I led the backend of the returns portal in 2023.
+          - I led the backend for a returns portal in 2023.
+          - I led the back-end of a returns portal in 2023.
+          - I led the backend development of a returns portal in 2023.
+          - I headed the backend of a returns portal in 2023.
+          - I led the backend of a portal for returns in 2023.
+          - I led the backend of a return portal in 2023.
+        explanation: Год называет момент — past simple.
+      - id: q2
+        prompt: Портал сократил среднее время возврата с двух дней до четырёх часов.
+        answer:
+          - The portal cut the average return time from two days to four hours.
+          - The portal reduced the average return time from two days to four hours.
+          - The portal cut the average returns time from two days to four hours.
+          - The portal reduced the average returns time from two days to four hours.
+          - The portal cut the average time of a return from two days to four hours.
+          - The portal shortened the average return time from two days to four hours.
+          - The portal reduced the average return time from 2 days to 4 hours.
+          - The portal cut the average return time from 2 days to 4 hours.
+          - The portal cut the average time for returns from two days to four hours.
+          - The portal reduced the average time for returns from two days to four hours.
+          - The portal brought the average return time down from two days to four hours.
+          - The portal cut average return time from two days to four hours.
+          - The portal cut the average return time from two days down to four hours.
+          - The portal reduced average return time from two days to four hours.
+      - id: q3
+        prompt: К моменту запуска мы уже проверили его с десятью клиентами.
+        answer:
+          - By the time we launched, we had already tested it with ten customers.
+          - By the time we launched, we had tested it with ten customers.
+          - By the time we went live, we had already tested it with ten customers.
+          - By the time we went live, we had tested it with ten customers.
+          - By the time of the launch, we had already tested it with ten customers.
+          - By the time of the launch, we had tested it with ten customers.
+          - By the time we launched, we had already tested it with ten clients.
+          - By the time we launched, we had tested it with ten clients.
+          - By the launch, we had already tested it with ten customers.
+          - By the launch, we had tested it with ten customers.
+          - By the time we launched it, we had already tested it with ten customers.
+          - By the time we launched it, we had tested it with ten customers.
+          - By the time we launched, we had already tested it with ten users.
+          - By the time we launched, we had tested it with ten users.
+          - By the time we went live, we had already tested it with ten users.
+          - By the time we launched, we had already tested it with 10 customers.
+          - By the time we went live, we had tested it with ten users.
+          - By the time we launched we had already tested it with ten customers.
+          - By the time we launched we had tested it with ten customers.
+          - By the time we went live we had already tested it with ten customers.
+          - By the time we went live we had tested it with ten customers.
+          - By the time of the launch we had already tested it with ten customers.
+          - By the time of the launch we had tested it with ten customers.
+          - By the time we launched we had already tested it with ten clients.
+          - By the time we launched we had tested it with ten clients.
+          - By the launch we had already tested it with ten customers.
+          - By the launch we had tested it with ten customers.
+          - By the time we launched it we had already tested it with ten customers.
+          - By the time we launched it we had tested it with ten customers.
+          - By the time we launched we had already tested it with ten users.
+          - By the time we launched we had tested it with ten users.
+          - By the time we went live we had already tested it with ten users.
+          - By the time we launched we had already tested it with 10 customers.
+          - By the time we went live we had tested it with ten users.
+      - id: q4
+        prompt: Служба поддержки обрабатывала около трёхсот запросов в неделю.
+        answer:
+          - Support agents were handling about 300 requests a week.
+          - Support was handling about 300 requests a week.
+          - The support team was handling about 300 requests a week.
+          - Support agents were handling around 300 requests a week.
+          - Support agents were handling about three hundred requests a week.
+          - Support was handling about three hundred requests a week.
+          - The support team was handling about three hundred requests a week.
+          - Support was handling around 300 requests a week.
+          - Support was handling approximately 300 requests a week.
+          - The support team was handling around 300 requests a week.
+          - Support agents were processing about 300 requests a week.
+          - Support was processing about 300 requests a week.
+          - The support team was processing about 300 requests a week.
+          - Support agents handled about 300 requests a week.
+          - Support handled about 300 requests a week.
+          - The support team handled about 300 requests a week.
+          - Support agents were handling about 300 requests per week.
+          - Support was handling about 300 requests per week.
+          - Support agents were handling about 300 requests weekly.
+          - The support team handled around 300 requests a week.
+          - The support team was handling about 300 requests per week.
+          - Support handled around 300 requests a week.
+          - Support agents handled around 300 requests a week.
+          - The support team handled about 300 requests per week.
+      - id: q5
+        prompt: Конверсия выросла на пятнадцать процентов.
+        answer:
+          - Conversion went up by fifteen percent.
+          - Conversion went up by 15 percent.
+          - Conversion went up by 15%.
+          - Conversion rose by fifteen percent.
+          - Conversion rose by 15 percent.
+          - Conversion increased by fifteen percent.
+          - Conversion increased by 15 percent.
+          - The conversion rate went up by fifteen percent.
+          - The conversion rate went up by 15 percent.
+          - The conversion rate rose by fifteen percent.
+          - The conversion rate rose by 15 percent.
+          - The conversion rate increased by fifteen percent.
+          - The conversion rate increased by 15 percent.
+          - Conversion went up by 15 per cent.
+          - Conversion grew by fifteen percent.
+          - Conversion grew by 15 percent.
+          - Conversion has gone up by fifteen percent.
+        explanation: Рост на величину — предлог by.
+      - id: q6
+        prompt: Я понял, как важна обратная связь от пользователей на раннем этапе.
+        answer:
+          - I learned how important early user feedback is.
+          - I learned how important early feedback from users is.
+          - I learned how important it is to get user feedback early.
+          - I learned how important user feedback is at an early stage.
+          - I realised how important early user feedback is.
+          - I realized how important early user feedback is.
+          - I realised how important early feedback from users is.
+          - I realized how important early feedback from users is.
+          - I understood how important early user feedback is.
+          - I learned how important it is to get feedback from users early.
+          - I understood how important early feedback from users is.
+  - type: writing
+    id: project
+    register: formal
+    prompt: "Опишите один проект для резюме или письма рекрутеру (60–100 слов): что за проект, ваша роль, что сделали по шагам, результат с числом и вывод."
+    words: { min: 60, max: 100 }
+    model: I led the backend of a returns portal for an online shop in 2023. Support agents were handling about 300 return requests a week, and each request took two days. I designed the API and the data model, and we built a prototype in two weeks. By the time we went live in April, we had already tested it with ten customers. The portal cut the average return time from two days to four hours and reduced support requests by 60 percent. I learned how important early user feedback is.
+    criteria:
+      - 60–100 слов, от первого лица, без приветствия и подписи
+      - "Есть части: что за проект и когда, ваша роль, шаги, результат с числом, вывод"
+      - "Past continuous только для фона (were handling), past perfect — для того, что было раньше точки отсчёта (had tested), остальное — past simple"
+      - "Результат выражен числом с предлогом by или from … to …; оценочных слов вроде amazing и great нет"
+      - Хотя бы три слова или оборота модуля (scope, prototype, go live, hotfix, adoption, baseline, by the time, eventually…)
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответ
+    body: |-
+      Третий ответ вашего **банка ответов** — Tell me about a project you're proud of. Его просят почти на каждом собеседовании, а хорошо выбранный проект годится и для других вопросов.
+
+      1) Выберите проект, где ваша роль ясна и есть результат с числом. 2) Выпишите ключевые слова по пяти шагам схемы, не целый текст. 3) Запишите ответ и уложитесь в 60 секунд. 4) Переслушайте и сверьте с образцом и критериями. 5) Запишите ещё раз.
+
+      Если потеряли мысль, используйте связку: **Let me think… / So, to go back…**. Исправленная на ходу ошибка во времени допустима, долгая пауза мешает слушателю.
+  - type: speaking
+    id: proud-project
+    part: monologue
+    prompt: "Интервьюер: «Tell me about a project you're proud of.» Ответьте за 60 секунд на примере своего проекта: цель, ваша роль, шаги со связками, трудность и решение, результат с числом."
+    seconds: 60
+    model: "Let me tell you about a project I'm really proud of. The goal was to cut the checkout time in half. I was working on the payment team when the product manager asked us to redesign the checkout. I took ownership of the whole migration. First, we talked to the users and found the main pain point. Then we built a prototype. By the time we showed it to the managers, we had already tested it with ten customers. We ran into a problem with the database, and we were running behind schedule for two weeks. We solved it by splitting the table. Eventually, we launched in March. The result was a faster, more stable product: checkout time went from six minutes to three. Looking back, I'd do the discovery phase differently. I'm proud of it because real users benefit from it every day."
+    criteria:
+      - "Порядок: цель — роль — шаги — трудность и решение — результат — вывод"
+      - Около 60 секунд, без долгих пауз; связки First, Then, Eventually, Looking back
+      - Past continuous для фона, past perfect для того, что было раньше, past simple для шагов
+      - Названа ваша личная роль и один результат с числом
+      - Трудность названа спокойно, без обвинений коллег и компании
+  - type: speaking
+    id: your-role
+    part: interview
+    prompt: "Интервьюер уточняет: «What was your personal contribution to that project?» Ответьте за 30 секунд: ваша роль, одна задача, которую вы сделали сами, и что это изменило."
+    seconds: 30
+    model: "I was the only backend developer on the project. My part was designing the data model and the API. I also set up the migration and led the weekly check-ins. Thanks to that, I could ship changes every week, and nobody was blocked for more than a day."
+    criteria:
+      - Роль названа одной фразой (I was…, My part was…)
+      - Есть конкретная задача, сделанная лично, и её влияние на проект
+      - Вклад отделён от командной работы — «я» и «мы» не смешаны
+      - Названо, что изменила ваша работа
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "While I ___ the API, my colleague was writing the tests. (одновременно)"
+        options: [was designing, designed]
+        answer: was designing
+        explanation: Параллельный процесс после while — past continuous.
+      - id: q2
+        prompt: By the time the client called, we ___ the bug.
+        options: [had fixed, fixed]
+        answer: had fixed
+        explanation: Исправление закончилось раньше звонка — past perfect.
+      - id: q3
+        prompt: It's only a ___ until we release the real fix.
+        options: [workaround, retrospective, kick-off]
+        answer: workaround
+      - id: q4
+        prompt: After the failure, we held a ___ to understand what went wrong.
+        options: [retrospective, roadmap, workaround]
+        answer: retrospective
+      - id: q5
+        prompt: "Conversion went up ___ fifteen percent. (рост на пятнадцать процентов)"
+        options: [by, to, for]
+        answer: by
+      - id: q6
+        prompt: "___, we launched in March, after several delays. (в конце концов)"
+        options: [Eventually, Meanwhile, At first]
+        answer: Eventually

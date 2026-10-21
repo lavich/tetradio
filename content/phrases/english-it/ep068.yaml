@@ -1,0 +1,7 @@
+id: ep068
+text: "The goal was to cut the checkout time in half."
+translation: "Цель была — сократить время оформления заказа вдвое."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md

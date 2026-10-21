@@ -1,0 +1,7 @@
+id: ep069
+text: "I took ownership of the whole migration."
+translation: "Я взял на себя ответственность за всю миграцию."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md

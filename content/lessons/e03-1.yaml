@@ -1,0 +1,458 @@
+title: Past continuous и past perfect — рассказ о проекте
+kind: lesson
+items:
+  - { kind: word, id: ew071 }
+  - { kind: word, id: ew072 }
+  - { kind: word, id: ew073 }
+  - { kind: word, id: ew074 }
+  - { kind: word, id: ew075 }
+  - { kind: word, id: ew076 }
+  - { kind: word, id: ew077 }
+  - { kind: word, id: ew078 }
+  - { kind: word, id: ew079 }
+  - { kind: word, id: ew080 }
+  - { kind: word, id: ew081 }
+  - { kind: word, id: ew082 }
+  - { kind: word, id: ew083 }
+  - { kind: word, id: ew084 }
+  - { kind: word, id: ew085 }
+  - { kind: word, id: ew086 }
+  - { kind: word, id: ew087 }
+  - { kind: word, id: ew088 }
+  - { kind: phrase, id: ep051 }
+  - { kind: phrase, id: ep052 }
+  - { kind: phrase, id: ep053 }
+  - { kind: phrase, id: ep054 }
+  - { kind: phrase, id: ep055 }
+  - { kind: phrase, id: ep056 }
+  - { kind: phrase, id: ep057 }
+  - { kind: phrase, id: ep058 }
+blocks:
+  - type: explanation
+    id: past-continuous
+    title: Past continuous — фон рассказа
+    body: |-
+      Рассказ о проекте опирается на три времени. **Past simple** двигает сюжет: **We launched** in March. **Past continuous** (was / were + глагол с -ing) задаёт фон: что шло в тот момент или какое действие продолжалось, когда случилось другое. **I was working** on the payment service when the requirements changed — работа шла, и в неё вмешалось событие.
+
+      Короткое событие стоит в past simple и идёт после **when**, длительный процесс — в past continuous. Два процесса, которые шли одновременно, соединяет **while**: **While I was designing the API, Anna was writing the tests.** Если оба глагола в past simple, события идут одно за другим: *When the requirements changed, I stopped* — сначала требования изменились, потом я остановился.
+
+      Частая ошибка русскоговорящих — past simple для процесса. *I worked on the service when the requirements changed* читается как «я начал работать, когда требования изменились»; для процесса, который уже шёл, нужно **I was working**. Глаголы состояния (*know, want, belong*) в continuous обычно не стоят: *We knew the risks*.
+    table:
+      columns:
+        - ситуация
+        - форма
+        - пример
+      rows:
+        - - процесс шёл в названный момент
+          - past continuous
+          - At ten o'clock we were testing the release.
+        - - процесс и прервавшее его событие
+          - was / were + -ing, when + past simple
+          - I was working on the service when the requirements changed.
+        - - два процесса одновременно
+          - while + past continuous
+          - While I was designing the API, Anna was writing the tests.
+        - - события одно за другим
+          - past simple и past simple
+          - When the requirements changed, I stopped.
+  - type: explanation
+    id: past-perfect
+    title: Past perfect — что было раньше
+    body: |-
+      **Past perfect** (had + третья форма глагола) показывает действие, которое закончилось раньше другого действия в прошлом. Рассказчик сначала называет момент отсчёта, потом то, что к нему уже случилось: **By the time I joined, the team had already built a prototype.** Прототип готов до моего прихода.
+
+      Сравните: **When I joined, the team built a prototype** — прототип сделали после моего прихода. Разницу создаёт время глагола, поэтому в рассказе о проекте её нужно слышать и ставить правильно.
+
+      Типичные спутники past perfect — **by the time, before, already, never, just, after**. Отрицание — **hadn't**: *We hadn't tested it on real data.* Past perfect не открывает рассказ сам по себе: ему нужна точка отсчёта в past simple. Если порядок событий ясен из связки *first, then, after that*, достаточно past simple.
+
+      Ошибка русскоговорящих — past simple с *by the time*: «By the time I joined, the team already built a prototype». Правильно **had already built**. Русский глагол не меняет форму, поэтому форму приходится выбирать сознательно.
+    table:
+      columns:
+        - порядок событий
+        - пример
+      rows:
+        - - прототип готов до прихода
+          - By the time I joined, the team had already built a prototype.
+        - - прототип сделан после прихода
+          - When I joined, the team built a prototype.
+        - - планировали до начала работы
+          - We had planned the migration for months before we started.
+        - - чего-то ещё не было к тому моменту
+          - We hadn't tested it on real data by then.
+  - type: explanation
+    id: story-links
+    title: Связки рассказа
+    body: |-
+      Рассказ о проекте похож на отчёт в четырёх частях: ситуация, шаги, трудность, результат. Времена распределяются так: фон — past continuous и past perfect, шаги — past simple. Связки показывают порядок без лишних слов.
+
+      **First** открывает цепочку шагов: *First, we talked to the users.* **At first** противопоставляет первый план тому, что вышло потом: *At first, we planned to launch in May.* **Then**, **next** и **after that** ведут к следующему шагу. **Meanwhile** — в то же время, в параллельной ветке: *Meanwhile, the designers prepared the interface.* **By the time** — к тому моменту, с past perfect. **Eventually** — в итоге, после долгого пути с трудностями; **finally** — последний шаг в списке; **in the end** — итог после всего сказанного.
+
+      Обычно хватает четырёх-пяти связок на рассказ. Связка стоит в начале предложения, после неё запятая; *eventually* и *finally* допустимы и перед глаголом: *We eventually launched in March.*
+    table:
+      columns:
+        - связка
+        - роль
+        - пример
+      rows:
+        - - first
+          - начало цепочки шагов
+          - First, we talked to the users.
+        - - at first
+          - первый план, потом иначе
+          - At first, we planned to launch in May.
+        - - then, after that
+          - следующий шаг
+          - After that, we ran a pilot with ten customers.
+        - - meanwhile
+          - параллельный шаг
+          - Meanwhile, the designers prepared the interface.
+        - - by the time
+          - к моменту, с past perfect
+          - By the time we launched, we had fixed every critical bug.
+        - - eventually, in the end
+          - итог после трудностей
+          - Eventually, we launched in March.
+  - type: explanation
+    id: project-words
+    title: Слова проекта
+    body: |-
+      Слова урока сгруппированы по тому, о чём вы рассказываете.
+
+      **Этапы.** **A kick-off** — первая встреча проекта; **scope** — объём работ, а **scope creep** — его разрастание без решения; **a roadmap** — план развития продукта. **A prototype** показывает, как продукт будет выглядеть, **a proof of concept** проверяет, что идея технически осуществима, **a dry run** — пробный прогон перед запуском. **Go live** — запуститься. **A retrospective** — разбор итогов после проекта, **a trade-off** — компромисс, на который пришлось пойти.
+
+      **Когда что-то идёт не так.** **A blocker** не даёт двигаться дальше, **a setback** отнимает время, **a workaround** обходит проблему временно, **a hotfix** исправляет срочную ошибку в продакшене, **a rollback** возвращает прежнюю версию. Сроки **slip** — сдвигаются.
+
+      **Сроки.** **Ahead of schedule** — раньше срока, **behind schedule** — с отставанием: *We're two weeks behind schedule.*
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: continuous-choice
+    title: Past continuous или past simple
+    instruction: Выберите форму. Пояснение в скобках показывает, что происходило.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I ___ a hotfix when my manager called. (работа шла, когда позвонили)"
+        options: [was writing, wrote]
+        answer: was writing
+        explanation: Процесс шёл, и его прервало короткое событие.
+      - id: q2
+        prompt: "When the client called, I ___ the call and joined the meeting. (одно действие за другим)"
+        options: [answered, was answering]
+        answer: answered
+        explanation: Действия идут по очереди — оба глагола в past simple.
+      - id: q3
+        prompt: "While I ___ the API, Anna was writing the tests. (два процесса одновременно)"
+        options: [was designing, designed]
+        answer: was designing
+        explanation: После while параллельный процесс стоит в past continuous.
+      - id: q4
+        prompt: "At ten o'clock yesterday we ___ the release candidate. (в тот момент шла проверка)"
+        options: [were testing, tested]
+        answer: were testing
+      - id: q5
+        prompt: Anna and I ___ the prototype when the requirements changed.
+        options: [were building, was building]
+        answer: were building
+        explanation: Подлежащее во множественном числе — were.
+      - id: q6
+        prompt: "I ___ the ticket yesterday and moved on to the next one. (закончил, потом перешёл)"
+        options: [closed, was closing]
+        answer: closed
+      - id: q7
+        prompt: What ___ you doing when the server went down?
+        options: [were, did]
+        answer: were
+        explanation: После were глагол принимает форму с -ing; did требовал бы начальную форму.
+  - type: exercise
+    id: perfect-choice
+    title: Past perfect или past simple
+    instruction: Выберите форму.
+    format: choice
+    items:
+      - id: q1
+        prompt: By the time I joined, the team ___ a prototype.
+        options: [had built, built]
+        answer: had built
+        explanation: С by the time действие, которое закончилось раньше, стоит в past perfect.
+      - id: q2
+        prompt: By the end of March, we ___ already shipped the first version.
+        options: [had, were, have]
+        answer: had
+        explanation: Had + shipped — past perfect; have относится к настоящему.
+      - id: q3
+        prompt: The deploy failed because someone ___ the config file.
+        options: [had changed, has changed]
+        answer: had changed
+        explanation: Рассказ идёт в прошлом, а has changed относится к настоящему.
+      - id: q4
+        prompt: She ___ never used a load balancer before that project.
+        options: [had, has]
+        answer: had
+      - id: q5
+        prompt: I arrived late, and the kick-off meeting ___ already started.
+        options: [had, was]
+        answer: had
+        explanation: Встреча началась до моего прихода; was already started в таком значении не употребляется.
+      - id: q6
+        prompt: "Сначала команда построила прототип, потом я пришёл. Какое предложение подходит?"
+        options:
+          - By the time I joined, the team had built a prototype.
+          - By the time I had joined, the team built a prototype.
+        answer: By the time I joined, the team had built a prototype.
+        explanation: Раньше случилось то, что стоит в past perfect.
+      - id: q7
+        prompt: "Прототип появился после моего прихода. Какое предложение подходит?"
+        options:
+          - When I joined, the team built a prototype.
+          - When I joined, the team had already built a prototype.
+        answer: When I joined, the team built a prototype.
+        explanation: Past simple после when ставит события по очереди; past perfect означал бы «уже сделали».
+  - type: exercise
+    id: links-choice
+    title: Связки рассказа
+    instruction: Выберите связку.
+    format: choice
+    items:
+      - id: q1
+        prompt: "___, we talked to the users. Then we built a prototype."
+        options: [First, Eventually, Meanwhile]
+        answer: First
+        explanation: Then в следующем предложении продолжает последовательность, начатую словом first.
+      - id: q2
+        prompt: "We rewrote the module three times. ___, we found a design that worked."
+        options: [Eventually, First, By the time]
+        answer: Eventually
+        explanation: Eventually — итог после долгого пути.
+      - id: q3
+        prompt: "The backend team built the API. ___, the designers prepared the interface. (в то же самое время)"
+        options: [Meanwhile, Eventually, At first]
+        answer: Meanwhile
+      - id: q4
+        prompt: "___ we launched, the team had fixed every critical bug."
+        options: [By the time, Meanwhile, First]
+        answer: By the time
+        explanation: By the time с past perfect даёт точку отсчёта.
+      - id: q5
+        prompt: "We shipped the first version and collected feedback. ___, we released version two. (следующий шаг)"
+        options: [After that, Meanwhile, At first]
+        answer: After that
+      - id: q6
+        prompt: "___, we planned to launch in May, but the date slipped."
+        options: [At first, Finally, Eventually]
+        answer: At first
+        explanation: At first противопоставляет первоначальный план тому, что получилось потом.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a dry run
+      - scope creep
+      - a workaround
+      - a hotfix
+      - a rollback
+      - a blocker
+      - a retrospective
+      - a trade-off
+      - a proof of concept
+      - a roadmap
+    items:
+      - { id: m1, prompt: пробный прогон перед запуском, answer: a dry run }
+      - { id: m2, prompt: неконтролируемый рост объёма работ, answer: scope creep }
+      - { id: m3, prompt: временное обходное решение, answer: a workaround }
+      - { id: m4, prompt: срочное исправление ошибки в продакшене, answer: a hotfix }
+      - { id: m5, prompt: возврат к прежней версии, answer: a rollback }
+      - { id: m6, prompt: "проблема, которая не даёт двигаться дальше", answer: a blocker }
+      - { id: m7, prompt: разбор итогов после проекта, answer: a retrospective }
+      - { id: m8, prompt: компромисс между двумя желаемыми вещами, answer: a trade-off }
+  - type: exercise
+    id: project-gap
+    title: Рассказ о проекте
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - kick-off
+      - roadmap
+      - scope
+      - slipped
+      - behind
+      - ahead
+      - live
+      - setback
+      - prototype
+      - dry
+    items:
+      - id: g1
+        prompt: At the ___ meeting, we agreed on the goals and the team. (первая встреча проекта)
+        answer: kick-off
+      - id: g2
+        prompt: Our ___ shows the features we plan for the next two quarters.
+        answer: roadmap
+      - id: g3
+        prompt: Two more features were out of ___, so we postponed them.
+        answer: scope
+      - id: g4
+        prompt: The release ___ by a week because of a security review.
+        answer: slipped
+      - id: g5
+        prompt: We were two weeks ___ schedule, so we worked overtime.
+        answer: behind
+      - id: g6
+        prompt: We finished everything ___ of schedule and shipped on Monday.
+        answer: ahead
+      - id: g7
+        prompt: The system will go ___ on Monday morning.
+        answer: live
+      - id: g8
+        prompt: The failed load test was a ___, but we fixed it within a week.
+        answer: setback
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (we had, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Я работал над платёжным сервисом, когда изменились требования.
+        answer:
+          - I was working on the payment service when the requirements changed.
+          - I was working on the payments service when the requirements changed.
+          - I was working on a payment service when the requirements changed.
+          - I was working on the payment service when the requirements were changed.
+          - When the requirements changed, I was working on the payment service.
+          - When the requirements changed I was working on the payment service.
+          - I was working on the payment service when requirements changed.
+          - I was working on the payment system when the requirements changed.
+          - The requirements changed while I was working on the payment service.
+          - The requirements changed while I was working on a payment service.
+          - I was working on the payment service when the requirement changed.
+        explanation: Процесс шёл, когда случилось событие — past continuous и past simple.
+      - id: q2
+        prompt: К тому моменту, как я пришёл, команда уже сделала прототип.
+        answer:
+          - By the time I joined, the team had already built a prototype.
+          - By the time I joined, the team had built a prototype.
+          - By the time I joined, the team had already made a prototype.
+          - By the time I joined, the team had made a prototype.
+          - By the time I joined, the team had already built the prototype.
+          - By the time I came, the team had already built a prototype.
+          - By the time I arrived, the team had already built a prototype.
+          - By the time I joined, the team had already created a prototype.
+          - By the time I joined the team, they had already built a prototype.
+          - By the time I joined the team, they had built a prototype.
+          - By the time I joined, they had already built a prototype.
+          - By the time I joined, the team had already developed a prototype.
+          - By the time I joined, the team had already put together a prototype.
+          - By the time I joined, the team had built a prototype already.
+          - By the time I joined, the team had already built a first prototype.
+          - By the time I joined the team had already built a prototype.
+          - By the time I joined the team had built a prototype.
+          - By the time I joined the team had already made a prototype.
+          - By the time I joined the team had made a prototype.
+          - By the time I joined the team had already built the prototype.
+          - By the time I came the team had already built a prototype.
+          - By the time I arrived the team had already built a prototype.
+          - By the time I joined the team had already created a prototype.
+          - By the time I joined the team they had already built a prototype.
+          - By the time I joined the team they had built a prototype.
+          - By the time I joined they had already built a prototype.
+          - By the time I joined the team had already developed a prototype.
+          - By the time I joined the team had already put together a prototype.
+          - By the time I joined the team had built a prototype already.
+          - By the time I joined the team had already built a first prototype.
+        explanation: С by the time раньше случившееся действие стоит в past perfect.
+      - id: q3
+        prompt: Мы отставали от графика, поэтому сократили объём работ.
+        answer:
+          - We were running behind schedule, so we cut the scope.
+          - We were behind schedule, so we cut the scope.
+          - We were running behind schedule, so we reduced the scope.
+          - We were behind schedule, so we reduced the scope.
+          - We were running behind schedule, so we cut the scope of work.
+          - We were behind schedule, so we cut the scope of work.
+          - We were running behind schedule, so we cut back the scope.
+          - We were running behind schedule so we cut the scope.
+          - We were behind schedule so we cut the scope.
+          - We fell behind schedule, so we cut the scope.
+          - We were falling behind schedule, so we cut the scope.
+          - We were running late, so we cut the scope.
+          - We were running behind schedule so we reduced the scope.
+          - We were behind schedule so we reduced the scope.
+          - We were running behind schedule so we cut the scope of work.
+          - We were behind schedule so we cut the scope of work.
+          - We were running behind schedule so we cut back the scope.
+          - We fell behind schedule so we cut the scope.
+          - We were falling behind schedule so we cut the scope.
+          - We were running late so we cut the scope.
+      - id: q4
+        prompt: Сначала мы поговорили с пользователями, потом сделали прототип.
+        answer:
+          - First, we talked to the users, then we built a prototype.
+          - First we talked to the users, then we built a prototype.
+          - First, we talked to the users. Then we built a prototype.
+          - First, we talked to the users, and then we built a prototype.
+          - First we talked to the users and then we built a prototype.
+          - First, we spoke to the users, then we built a prototype.
+          - First, we spoke to the users. Then we built a prototype.
+          - First, we talked to users, then we built a prototype.
+          - First, we talked to users. Then we built a prototype.
+          - First, we talked to the users, and then we made a prototype.
+          - First, we talked to the users. Then we made a prototype.
+          - First, we talked to the users, then we made a prototype.
+          - First, we talked to the users, and then built a prototype.
+          - First, we talked to the users and then built a prototype.
+          - First we talked to the users. Then we built a prototype.
+          - First, we spoke to the users, and then we built a prototype.
+          - First we spoke to the users and then we built a prototype.
+          - First we talked to the users then we built a prototype.
+          - First we spoke to the users then we built a prototype.
+          - First we spoke to the users. Then we built a prototype.
+          - First we talked to users then we built a prototype.
+          - First we talked to users. Then we built a prototype.
+          - First we talked to the users and then we made a prototype.
+          - First we talked to the users. Then we made a prototype.
+          - First we talked to the users then we made a prototype.
+          - First we talked to the users and then built a prototype.
+      - id: q5
+        prompt: Мы планировали миграцию несколько месяцев, прежде чем начали.
+        answer:
+          - We had planned the migration for months before we started.
+          - We planned the migration for months before we started.
+          - We had planned the migration for several months before we started.
+          - We planned the migration for several months before we started.
+          - We had been planning the migration for months before we started.
+          - We had planned the migration for months before we began.
+          - We planned the migration for months before we began.
+          - We had planned the migration for a few months before we started.
+          - We planned the migration for a few months before we started.
+          - We had planned the migration for months before starting.
+          - We planned the migration for months before starting.
+          - We had planned the migration for several months before we began.
+          - We spent months planning the migration before we started.
+          - We spent several months planning the migration before we started.
+          - We had spent months planning the migration before we started.
+          - We had planned the migration for months before we began working.
+        explanation: Названа длительность до начала — естественен past perfect, допустим и past simple.
+      - id: q6
+        prompt: В итоге мы запустились в марте.
+        answer:
+          - Eventually, we launched in March.
+          - Eventually we launched in March.
+          - In the end, we launched in March.
+          - In the end we launched in March.
+          - Finally, we launched in March.
+          - Finally we launched in March.
+          - Eventually, we went live in March.
+          - Eventually we went live in March.
+          - In the end, we went live in March.
+          - In the end we went live in March.
+          - Finally, we went live in March.
+          - Finally we went live in March.
+          - We launched in March in the end.
+          - We eventually launched in March.
+          - We finally launched in March.
+          - We eventually went live in March.
+          - We finally went live in March.

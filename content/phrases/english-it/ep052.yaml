@@ -1,0 +1,7 @@
+id: ep052
+text: "By the time I joined, the team had already built a prototype."
+translation: "К моменту моего прихода команда уже сделала прототип."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e03
+  operation: requested-generation
+  request: Фразы модуля e03 по программе docs/curriculum-english-it.md
