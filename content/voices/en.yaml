@@ -45,3 +45,7 @@ characters:
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }
   Inês: { gender: female, voice: Gacrux }
+  Fiona: { gender: female, voice: Callirrhoe }
+  Lucía: { gender: female, voice: Achernar }
+  Kwame: { gender: male, voice: Algenib }
+  Jonas: { gender: male, voice: Alnilam }

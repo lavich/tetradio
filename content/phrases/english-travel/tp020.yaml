@@ -1,0 +1,8 @@
+id: tp020
+text: "It's about a ten-minute walk."
+translation: "Это примерно десять минут пешком."
+note: "ten-minute без -s: число через дефис перед существительным"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

@@ -1,8 +1,23 @@
 number: 2
 title: Getting around
 subtitle: Транспорт и дорога
-status: draft
+status: published
 goal: купить билет, спросить дорогу, взять такси или машину напрокат, понять, где выходить
 grammar:
   - предлоги места и движения, повелительное наклонение в указаниях, How do I get to…?, Which… goes to…?
 sessions: 3
+lessons:
+  - t02-1
+  - t02-2
+  - t02-3
+  - t02-test
+crib:
+  title: дорога
+  rows:
+    - [как добраться, "How do I get to…?"]
+    - [какой автобус, "Which bus goes to…?"]
+    - [прямо, Go straight on.]
+    - [второй налево, Take the second left.]
+    - [напротив, It's opposite the…]
+    - [рядом / между, next to / between]
+  note: "Which bus goes…? — без does: which bus — подлежащее"

@@ -1,0 +1,325 @@
+title: Схема метро, прокат машины и дорога от прохожего
+kind: lesson
+items:
+  - { kind: word, id: tw024 }
+  - { kind: word, id: tw025 }
+  - { kind: word, id: tw026 }
+  - { kind: word, id: tw027 }
+  - { kind: word, id: tw028 }
+  - { kind: word, id: tw029 }
+  - { kind: word, id: tw030 }
+  - { kind: phrase, id: tp024 }
+  - { kind: phrase, id: tp025 }
+  - { kind: phrase, id: tp026 }
+  - { kind: phrase, id: tp027 }
+  - { kind: phrase, id: tp028 }
+  - { kind: phrase, id: tp029 }
+  - { kind: phrase, id: tp030 }
+blocks:
+  - type: explanation
+    id: taxi-car
+    title: Такси, автобус и прокат
+    body: |-
+      В метро и на вокзале вход и выход закрывают турникеты — **ticket barriers**. Карту прикладывают к жёлтому кругу на турникете.
+
+      Такси в Британии берут на стоянке — **a taxi rank** (**Where's the nearest taxi rank?**), останавливают на улице поднятой рукой (чёрные кэбы в Лондоне) или вызывают в приложении. Приложение в часы спроса включает **surge pricing**: та же поездка вдруг стоит вдвое дороже. Водителю приложения напишите, где вы: **I'm by the main entrance, in a blue jacket.** Место, где забирают пассажиров, — **a pick-up point**. Выйти раньше: **Can you drop me off here, please?** Сдачу оставить: **Keep the change.** В автобусе попросите водителя: **Could you let me know when we get to my stop?**
+
+      Машина напрокат — **a hire car**. При аренде на кредитной карте блокируют залог — **a deposit**. В цену обычно входит базовая страховка, но с **excess** — франшизой: при повреждении машины вы платите её сами. Топливо — чаще по правилу full to full: машину дают с **a full tank** и так же её возвращают. У стойки проката спросите: **Is insurance included in the price?** и **Do I have to return it with a full tank?**
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: explanation
+    id: tube-how
+    title: Схема и правила проезда
+    body: |-
+      Ниже — маршрут из приложения лондонского метро и правила оплаты. Читайте как на станции: сначала маршрут — линия, направление, где пересадка; потом правила — что делать на входе, на выходе и в автобусе. Каждое слово переводить не нужно.
+
+      Направление поезда указывают по сторонам света — **southbound** — на юг, northbound — на север — или по конечной станции: **towards Stratford** — в сторону Стратфорда. Час пик — **peak**, всё остальное — **off-peak**.
+  - type: reading
+    id: tube
+    title: London — Journey planner and fares
+    text: |-
+      JOURNEY PLANNER
+      From: King's Cross St Pancras · To: Westminster
+      Victoria line southbound, 4 stops → change at Green Park → Jubilee line towards Stratford, 1 stop
+      Journey time: about 15 minutes
+
+      HOW TO PAY ON THE TUBE AND BUSES
+      • Use a contactless bank card or your phone. Tap in on the yellow card reader at the ticket barrier when you start your journey, and tap out at the end.
+      • If you forget to tap out, you may pay the maximum fare.
+      • One person, one card: each person needs their own card or phone.
+      • On buses, tap in when you get on. Do not tap out. Buses do not take cash.
+      • Off-peak fares: Monday to Friday before 06:30, from 09:30 to 16:00 and after 19:00; all day at weekends and on bank holidays.
+      • There is a daily cap: when you reach it, the rest of your journeys that day are free.
+    glosses:
+      - { text: contactless, russian: бесконтактная }
+      - { text: maximum fare, russian: максимальный тариф }
+      - { text: bank holidays, russian: государственные праздники }
+      - { text: daily cap, russian: дневной предел оплаты }
+  - type: exercise
+    id: tube-q
+    about: tube
+    title: Чтение — метро
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where does the passenger need to change trains?
+        options: [at Green Park, at Westminster, at King's Cross St Pancras]
+        answer: at Green Park
+        explanation: Change at Green Park → Jubilee line.
+      - id: q2
+        prompt: What can happen if you forget to tap out?
+        options:
+          - You may pay the maximum fare.
+          - The ticket barrier won't open.
+          - You travel for free.
+        answer: You may pay the maximum fare.
+        explanation: If you forget to tap out, you may pay the maximum fare.
+      - id: q3
+        prompt: What do you do on a bus?
+        options:
+          - tap in when you get on
+          - tap in and tap out
+          - pay the driver in cash
+        answer: tap in when you get on
+        explanation: On buses, tap in when you get on. Do not tap out. Buses do not take cash.
+      - id: q4
+        prompt: Which journey is at an off-peak fare?
+        options:
+          - Tuesday at 10:15
+          - Tuesday at 08:30
+          - Tuesday at 17:45
+        answer: Tuesday at 10:15
+        explanation: По будням off-peak — с 09:30 до 16:00; 08:30 и 17:45 — час пик.
+      - id: q5
+        prompt: Two friends want to travel together. What should they do?
+        options:
+          - Each friend taps their own card or phone.
+          - One friend taps the same card twice.
+          - They buy one ticket on the bus.
+        answer: Each friend taps their own card or phone.
+        explanation: "One person, one card: each person needs their own card."
+  - type: explanation
+    id: hire-how
+    title: Подтверждение проката
+    body: |-
+      Йонас из Германии взял машину напрокат в аэропорту Эдинбурга и получил письмо-подтверждение. В таком письме важны пять вещей: где забрать машину, когда вернуть, что входит в цену, какой залог и какое правило топлива. Найдите их.
+  - type: reading
+    id: hire
+    title: Your booking with Highland Car Hire
+    text: |-
+      Dear Mr Weber,
+
+      Your booking HC-48213 is confirmed.
+
+      Pick-up: Friday 10 July, 10:00, Edinburgh Airport. Our pick-up point is in the Car Rental Centre, a five-minute walk from the terminal. Follow the signs for "Car Rental".
+      Return: Monday 13 July, 10:00, at the same place.
+      Car: Ford Focus or similar.
+      Price: £186 for three days. Basic insurance is included in the price. The excess is £1,200: if the car is damaged, you pay the first £1,200. At the desk, you can reduce the excess to £0 for £15 a day.
+      Deposit: we hold a £300 deposit on your credit card when you pick up the car. We cannot accept debit cards. The money comes back to your card within seven days after you return the car.
+      Fuel: full to full. You get the car with a full tank and must return it with a full tank. If you don't, we charge £2.10 per litre and a £25 refuelling fee.
+
+      Please bring your driving licence and passport.
+      Highland Car Hire
+    glosses:
+      - { text: damaged, russian: повреждена }
+      - { text: reduce, russian: уменьшить }
+      - { text: hold, russian: блокируем }
+      - { text: refuelling fee, russian: плата за заправку }
+      - { text: driving licence, russian: водительские права }
+  - type: exercise
+    id: hire-q
+    about: hire
+    title: Чтение — прокат
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where does Jonas pick up the car?
+        options:
+          - in the Car Rental Centre near the terminal
+          - inside the terminal, at the arrivals desk
+          - in the city centre
+        answer: in the Car Rental Centre near the terminal
+        explanation: Our pick-up point is in the Car Rental Centre, a five-minute walk from the terminal.
+      - id: q2
+        prompt: Jonas has only the basic insurance. Someone damages the car, and the repair costs £2,000. How much does Jonas pay?
+        options: ["£1,200", "£2,000", "nothing"]
+        answer: "£1,200"
+        explanation: "The excess is £1,200: you pay the first £1,200 — остальное платит страховка."
+      - id: q3
+        prompt: How can Jonas pay the deposit?
+        options:
+          - only with a credit card
+          - with a credit card or a debit card
+          - in cash at the desk
+        answer: only with a credit card
+        explanation: We hold a £300 deposit on your credit card… We cannot accept debit cards.
+      - id: q4
+        prompt: What must Jonas do before he returns the car?
+        options:
+          - fill the tank
+          - pay a £25 fee
+          - clean the car
+        answer: fill the tank
+        explanation: "Full to full: return it with a full tank; иначе — £2.10 за литр и £25."
+      - id: q5
+        prompt: When does the £300 come back to his card?
+        options:
+          - within seven days after he returns the car
+          - when he picks up the car
+          - after three days
+        answer: within seven days after he returns the car
+  - type: explanation
+    id: listen-how
+    title: Дорога от прохожего и водителя
+    body: |-
+      Первое аудио — Йонас спрашивает у Фионы дорогу к замку в Эдинбурге. Указания идут цепочкой: глагол → ориентир → следующий шаг. Ловите глаголы (go up, turn left, go past, cross, go through) и ориентиры (steps, monument, gardens). Йонас повторяет маршрут — так проверяют, всё ли поняли, и так стоит делать и вам.
+
+      Йонас говорит просто и иногда с ошибкой: **How long it takes?** вместо How long does it take? Фиона его понимает — смысл важнее.
+
+      Второе аудио — Лусия едет на такси от вокзала до квартиры. Послушайте, почему она не взяла машину в приложении и где водитель её высадит.
+  - type: listening
+    id: directions
+    title: The way to the castle
+    plays: 2
+    transcript:
+      - { speaker: Jonas, text: "Excuse me, sorry to bother you. How do I get to the castle from here?" }
+      - { speaker: Fiona, text: "The castle? Sure. It's not far — about a fifteen-minute walk, but it's uphill." }
+      - { speaker: Jonas, text: "Uphill, OK. No problem. Which way?" }
+      - { speaker: Fiona, text: "Go out of the station on this side and go up the steps. At the top, you're on Princes Street." }
+      - { speaker: Jonas, text: "Up the steps, Princes Street. Yes." }
+      - { speaker: Fiona, text: "Then turn left and walk along Princes Street, past a big dark monument. It looks like a church tower — you can't miss it." }
+      - { speaker: Jonas, text: "Past the monument. And then?" }
+      - { speaker: Fiona, text: "Then cross the road at the pedestrian crossing by the Mound and go into the gardens. There's a path up the hill, and the castle is at the top." }
+      - { speaker: Jonas, text: "So: up the steps, turn left, past the monument, cross the road, and up through the gardens." }
+      - { speaker: Fiona, text: "Exactly. And if you get lost, just look up — you can see the castle from almost everywhere." }
+      - { speaker: Jonas, text: "Ha, that's true. And is there a bus? How long it takes?" }
+      - { speaker: Fiona, text: "There are buses, but honestly, walking is quicker. The traffic in the centre is terrible at this time of day." }
+      - { speaker: Jonas, text: "OK, I walk. Thank you very much, very helpful." }
+      - { speaker: Fiona, text: "No problem. Enjoy the castle!" }
+  - type: exercise
+    id: directions-q
+    about: directions
+    title: Аудирование — дорога к замку
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How long is the walk to the castle?
+        options: [about fifteen minutes, about five minutes, about fifty minutes]
+        answer: about fifteen minutes
+        explanation: About a fifteen-minute walk, but it's uphill.
+      - id: q2
+        prompt: What should Jonas do at the top of the steps?
+        options: [turn left, turn right, cross the road]
+        answer: turn left
+        explanation: Then turn left and walk along Princes Street.
+      - id: q3
+        prompt: What does the monument look like?
+        options:
+          - a dark church tower
+          - a white modern building
+          - a small statue next to the station
+        answer: a dark church tower
+        explanation: A big dark monument. It looks like a church tower.
+      - id: q4
+        prompt: Where is the path up to the castle?
+        options:
+          - in the gardens
+          - next to the monument
+          - behind the station
+        answer: in the gardens
+        explanation: Go into the gardens. There's a path up the hill.
+      - id: q5
+        prompt: Why does Fiona say that walking is better than the bus?
+        options:
+          - The traffic is very bad.
+          - The bus is expensive.
+          - There are no buses to the castle.
+        answer: The traffic is very bad.
+        explanation: Walking is quicker. The traffic in the centre is terrible at this time of day.
+  - type: listening
+    id: taxi
+    title: A taxi from the station
+    plays: 2
+    transcript:
+      - { speaker: Kwame, text: "Evening! Where to?" }
+      - { speaker: Lucía, text: "Hello. Forty-two Marchmont Road, please. It's near a big park, I think." }
+      - { speaker: Kwame, text: "Marchmont Road, no problem. Put your bag on the seat next to you." }
+      - { speaker: Lucía, text: "Thank you. I wanted to take a car from the app, but there is surge pricing now. Almost forty pounds!" }
+      - { speaker: Kwame, text: "Yeah, it's Friday night, it's raining, and there's a football match. Everybody wants a car. We don't do surge pricing — it's always the meter. From here it's about fifteen pounds." }
+      - { speaker: Lucía, text: "Good. Is it far, the address?" }
+      - { speaker: Kwame, text: "About ten minutes, if the traffic's OK. We go up the hill, past the university and along the park." }
+      - { speaker: Kwame, text: "Right, this is Marchmont Road. Number forty-two is right on the junction, and I can't stop there. Can I drop you off a bit further on, outside the café?" }
+      - { speaker: Lucía, text: "Yes, of course. That's fine." }
+      - { speaker: Kwame, text: "That's fourteen eighty, please." }
+      - { speaker: Lucía, text: "Here's sixteen. Keep the change." }
+      - { speaker: Kwame, text: "Thanks very much. Mind the puddles — and have a good stay!" }
+  - type: exercise
+    id: taxi-q
+    about: taxi
+    title: Аудирование — такси
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why didn't Lucía book a car in the app?
+        options:
+          - The price was very high.
+          - There were no cars.
+          - Her phone was dead.
+        answer: The price was very high.
+        explanation: There is surge pricing now. Almost forty pounds!
+      - id: q2
+        prompt: How does Kwame's taxi charge?
+        options:
+          - by the meter
+          - a fixed price of forty pounds
+          - with surge pricing on Friday nights
+        answer: by the meter
+        explanation: We don't do surge pricing — it's always the meter.
+      - id: q3
+        prompt: Why doesn't Kwame stop outside number forty-two?
+        options:
+          - He can't stop at the junction.
+          - The road is closed.
+          - Lucía wants to walk.
+        answer: He can't stop at the junction.
+        explanation: Number forty-two is right on the junction, and I can't stop there.
+      - id: q4
+        prompt: How much does Lucía give Kwame?
+        options: ["£16", "£14.80", "£15"]
+        answer: "£16"
+        explanation: "Поездка — £14.80, Лусия даёт £16: Keep the change — «сдачи не надо»."
+      - id: q5
+        prompt: Where does Kwame drop her off?
+        options:
+          - a bit further on, outside a café
+          - at the entrance to the park
+          - outside the university
+        answer: a bit further on, outside a café
+  - type: exercise
+    id: phrases-match
+    title: Что сказать
+    instruction: Подберите фразу к ситуации. Две фразы лишние.
+    format: match
+    bank:
+      - Could you let me know when we get to my stop?
+      - Can you drop me off here, please?
+      - Keep the change.
+      - "I'm by the main entrance, in a blue jacket."
+      - Is insurance included in the price?
+      - Do I have to return it with a full tank?
+      - "Where's the nearest taxi rank?"
+      - Which bus goes to the airport?
+      - Does this train stop at Reading?
+    items:
+      - { id: m1, prompt: "Вы в автобусе в незнакомом городе и боитесь проехать свою остановку.", answer: Could you let me know when we get to my stop? }
+      - { id: m2, prompt: "Такси почти доехало, и вы хотите выйти прямо сейчас.", answer: "Can you drop me off here, please?" }
+      - { id: m3, prompt: "Поездка стоит £9.50, вы даёте водителю £10 и сдачу не ждёте.", answer: Keep the change. }
+      - { id: m4, prompt: "Водитель из приложения пишет, что не видит вас у вокзала.", answer: "I'm by the main entrance, in a blue jacket." }
+      - { id: m5, prompt: "У стойки проката вы уточняете, нужно ли платить за страховку отдельно.", answer: Is insurance included in the price? }
+      - { id: m6, prompt: "Вы уточняете правило топлива при возврате машины.", answer: Do I have to return it with a full tank? }
+      - { id: m7, prompt: "Вы вышли из вокзала и ищете, где стоят такси.", answer: "Where's the nearest taxi rank?" }

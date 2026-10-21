@@ -1,0 +1,8 @@
+id: tp023
+text: "Does this train stop at Reading?"
+translation: "Этот поезд останавливается в Рединге?"
+note: "Reading читается [рэдинг]"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

@@ -1,0 +1,8 @@
+id: tp017
+text: "Which bus goes to the airport?"
+translation: "Какой автобус идёт в аэропорт?"
+note: "без does: which bus здесь подлежащее"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

@@ -1,0 +1,8 @@
+id: tp030
+text: "Where's the nearest taxi rank?"
+translation: "Где ближайшая стоянка такси?"
+note: "в США — a taxi stand"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02
+  operation: requested-generation
+  request: Фразы модуля t02 по программе docs/curriculum-english-travel.md

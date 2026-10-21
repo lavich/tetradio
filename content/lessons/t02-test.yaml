@@ -1,0 +1,270 @@
+title: Контрольная модуля t02
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: табло вокзала и автобусная остановка, объявления, разговор на остановке, предлоги и вопросы о дороге, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: station
+    title: Edinburgh Waverley — Departures and airport bus
+    text: |-
+      DEPARTURES — 16:40
+      16:52 Glasgow Queen Street — Platform 13 — On time
+      17:00 London King's Cross, calling at Newcastle and York — Platform 2 — Delayed, expected 17:10
+      17:08 North Berwick — Cancelled. Rail replacement bus from Market Street
+      17:15 Inverness — Platform 4 — On time
+
+      AIRPORT BUS 100 — STOP C (opposite the station hotel)
+      To Edinburgh Airport every 10 minutes. Journey time: about 30 minutes.
+      Single £5.50 · Return £9.00 (valid for one month)
+      Pay by contactless on the bus, in the app or in cash. Drivers do not give change.
+    glosses:
+      - { text: calling at, russian: с остановками в }
+      - { text: expected, russian: ожидается }
+      - { text: Rail replacement bus, russian: автобус вместо поезда }
+      - { text: valid, russian: действителен }
+  - type: exercise
+    id: station-q
+    about: station
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: You need to get to York. Which train do you take?
+        options: [the 17:00 to London, the 16:52 to Glasgow, the 17:15 to Inverness]
+        answer: the 17:00 to London
+        explanation: "London King's Cross, calling at Newcastle and York — поезд останавливается в Йорке."
+      - id: q2
+        prompt: What is the problem with the London train?
+        options:
+          - It leaves about ten minutes late.
+          - It is cancelled.
+          - It leaves from a different platform.
+        answer: It leaves about ten minutes late.
+        explanation: "Delayed, expected 17:10 — вместо 17:00."
+      - id: q3
+        prompt: How can passengers get to North Berwick this evening?
+        options:
+          - by bus from Market Street
+          - by train from platform 4
+          - by the airport bus
+        answer: by bus from Market Street
+        explanation: "Cancelled. Rail replacement bus from Market Street."
+      - id: q4
+        prompt: How much is a return ticket to the airport?
+        options: ["£9.00", "£5.50", "£11.00"]
+        answer: "£9.00"
+        explanation: "Return £9.00 — дешевле, чем два билета в одну сторону по £5.50."
+      - id: q5
+        prompt: You buy a single from the driver and pay with a £10 note. What happens?
+        options:
+          - You don't get any change.
+          - You get £4.50 back.
+          - The driver can't take cash.
+        answer: You don't get any change.
+        explanation: "Drivers do not give change — водитель сдачу не даёт."
+  - type: listening
+    id: announcements
+    title: Announcements at Waverley
+    plays: 2
+    transcript:
+      - { text: "Platform 2 for the 17:00 service to London King's Cross, calling at Newcastle, York and London King's Cross. This train is delayed by about ten minutes. We apologise for the delay." }
+      - { text: "Passengers for Leeds and Sheffield should change at York." }
+      - { text: "Because of engineering works, there are no trains to North Berwick this evening. A rail replacement bus leaves from Market Street, outside the station, every thirty minutes." }
+      - { text: "Please keep your luggage with you at all times. Unattended bags may be removed." }
+  - type: exercise
+    id: announcements-q
+    about: announcements
+    graded: true
+    title: Аудирование — объявления
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How late is the London train?
+        options: [about ten minutes, about thirty minutes, about an hour]
+        answer: about ten minutes
+        explanation: This train is delayed by about ten minutes.
+      - id: q2
+        prompt: Where should passengers for Leeds change?
+        options: [at York, at Newcastle, at London King's Cross]
+        answer: at York
+        explanation: Passengers for Leeds and Sheffield should change at York.
+      - id: q3
+        prompt: Why are there no trains to North Berwick?
+        options:
+          - because of engineering works
+          - because of bad weather
+          - because of a football match
+        answer: because of engineering works
+      - id: q4
+        prompt: How often does the replacement bus leave?
+        options: [every thirty minutes, every ten minutes, every hour]
+        answer: every thirty minutes
+  - type: listening
+    id: bus-stop
+    title: At the bus stop
+    plays: 2
+    transcript:
+      - { speaker: Lucía, text: "Excuse me, sorry. Which bus goes to the airport?" }
+      - { speaker: Fiona, text: "The 100. But not from here — you need stop C. It's across the road, opposite the hotel." }
+      - { speaker: Lucía, text: "Opposite the hotel, OK. And how often it comes?" }
+      - { speaker: Fiona, text: "Every ten minutes or so. It takes about half an hour, depending on the traffic." }
+      - { speaker: Lucía, text: "I have only cash. Is it a problem?" }
+      - { speaker: Fiona, text: "No, you can pay in cash, but the driver doesn't give change, so have the right money ready. Or just tap your card." }
+      - { speaker: Lucía, text: "I fly on Sunday, but I come back to the city in two weeks. Is a return better?" }
+      - { speaker: Fiona, text: "Yes, get a return — it's cheaper than two singles, and it's valid for a month." }
+      - { speaker: Lucía, text: "And at the airport, do I need to change?" }
+      - { speaker: Fiona, text: "No, it goes straight to the terminal. It's the last stop, so you can't miss it." }
+      - { speaker: Lucía, text: "Perfect. Thank you so much!" }
+      - { speaker: Fiona, text: "No problem. Safe travels!" }
+  - type: exercise
+    id: bus-stop-q
+    about: bus-stop
+    graded: true
+    title: Аудирование — на остановке
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where is stop C?
+        options:
+          - across the road, opposite the hotel
+          - next to the hotel, on the same side
+          - inside the station
+        answer: across the road, opposite the hotel
+        explanation: It's across the road, opposite the hotel.
+      - id: q2
+        prompt: How often does the airport bus come?
+        options: [about every ten minutes, every half an hour, every hour]
+        answer: about every ten minutes
+        explanation: Every ten minutes or so; half an hour — время в пути.
+      - id: q3
+        prompt: What does Fiona say about paying in cash?
+        options:
+          - It's possible, but the driver doesn't give change.
+          - It's not possible on this bus.
+          - It's cheaper than paying by card.
+        answer: It's possible, but the driver doesn't give change.
+      - id: q4
+        prompt: Why does Fiona say a return is a good idea for Lucía?
+        options:
+          - It's cheaper than two singles.
+          - It's the only ticket on this bus.
+          - It includes a seat.
+        answer: It's cheaper than two singles.
+        explanation: Return дешевле двух single (£9 против £11) и действует месяц — Лусия вернётся через две недели.
+      - id: q5
+        prompt: Does Lucía need to change buses?
+        options:
+          - No, the bus goes to the terminal.
+          - Yes, at the last stop.
+          - Yes, opposite the hotel.
+        answer: No, the bus goes to the terminal.
+        explanation: It goes straight to the terminal. It's the last stop.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Предлоги и вопросы о дороге
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Which train ___ to Glasgow?
+        options: [goes, does go, go]
+        answer: goes
+        explanation: Which train — подлежащее, поэтому без does.
+      - id: q2
+        prompt: How ___ get to the castle from here?
+        options: [do I, I, to]
+        answer: do I
+      - id: q3
+        prompt: The chemist's is ___ the bank, on the other side of the street.
+        options: [opposite, opposite of, next]
+        answer: opposite
+        explanation: Opposite — без of.
+      - id: q4
+        prompt: Turn left ___ the roundabout.
+        options: [at, on, in]
+        answer: at
+      - id: q5
+        prompt: Go ___ the bridge and you'll see the hotel.
+        options: [across, along, between]
+        answer: across
+        explanation: Через мост на другую сторону — across; along — вдоль.
+      - id: q6
+        prompt: ___ this train stop at Durham?
+        options: [Does, Is, Do]
+        answer: Does
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [return, off-peak, change, request, junction, deposit, excess, tank, rank, surge, barrier, drop]
+    items:
+      - { id: g1, prompt: "A single to York is £40, and a ___ is £55.", answer: return }
+      - { id: g2, prompt: "Let's take the train after 9:30 — ___ fares are much cheaper.", answer: off-peak }
+      - { id: g3, prompt: "There's no direct train, so you need to ___ at Leeds.", answer: change }
+      - { id: g4, prompt: "This is a ___ stop, so put your hand out when you see the bus.", answer: request }
+      - { id: g5, prompt: "When you hire a car, they hold a ___ of £300 on your credit card.", answer: deposit }
+      - { id: g6, prompt: "If the car is damaged, you pay the ___ — the first £1,000.", answer: excess }
+      - { id: g7, prompt: "Please return the car with a full ___.", answer: tank }
+      - { id: g8, prompt: "There's always a queue at the taxi ___ outside the station.", answer: rank }
+      - { id: g9, prompt: "It's rush hour, so the app shows ___ pricing — £35 instead of £15.", answer: surge }
+      - { id: g10, prompt: "Tap your card on the yellow reader to open the ticket ___.", answer: barrier }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (it's, I'm) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Какой автобус идёт в аэропорт?
+        answer:
+          - Which bus goes to the airport?
+          - What bus goes to the airport?
+          - Which bus goes to the airport, please?
+          - Which bus do I take to the airport?
+      - id: q2
+        prompt: Высадите меня здесь, пожалуйста.
+        answer:
+          - Can you drop me off here, please?
+          - Could you drop me off here, please?
+          - Can you drop me here, please?
+          - Could you drop me here, please?
+          - Can you drop me off here?
+          - Could you drop me off here?
+          - Drop me off here, please.
+          - Please drop me off here.
+          - Can you let me out here, please?
+          - Could you let me out here, please?
+          - Can you stop here, please?
+          - Could you stop here, please?
+          - Can I get out here, please?
+      - id: q3
+        prompt: Скажите, пожалуйста, когда будет моя остановка.
+        answer:
+          - Could you let me know when we get to my stop?
+          - Could you let me know when we get to my stop, please?
+          - Can you let me know when we get to my stop?
+          - Can you let me know when we get to my stop, please?
+          - Could you tell me when we get to my stop?
+          - Could you tell me when we get to my stop, please?
+          - Can you tell me when we get to my stop?
+          - Can you tell me when we get to my stop, please?
+          - Could you let me know when we reach my stop?
+          - Could you tell me when we reach my stop?
+          - Please let me know when we get to my stop.
+          - Please tell me when we get to my stop.
+          - Could you please let me know when we get to my stop?
+        explanation: После when — present simple (we get), не will.
