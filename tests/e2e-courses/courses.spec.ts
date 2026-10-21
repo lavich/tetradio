@@ -363,6 +363,11 @@ test("второй курс с полки: карточка неначатого
   await expect(page.getByRole("link", { name: /Модуль 1: Работа/ })).toBeVisible();
   await expect(switcher.getByRole("radio", { name: "Английский" })).toHaveAttribute("aria-checked", "true");
   await expect(page.getByTestId("course-offer").getByRole("heading")).toHaveText("Английский для общения · B1");
+  const shelfBottom = await shelves(page)
+    .last()
+    .evaluate((node) => node.getBoundingClientRect().bottom);
+  const offerTop = await page.getByTestId("course-offer").evaluate((node) => node.getBoundingClientRect().top);
+  expect(offerTop - shelfBottom).toBeGreaterThanOrEqual(36);
 
   await page.goto("/app/words");
   const words = page.getByRole("radiogroup", { name: "Язык" });
