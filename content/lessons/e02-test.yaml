@@ -1,0 +1,190 @@
+title: Контрольная модуля e02
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, времена, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в каждом вопросе три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: bio
+    title: Speaker bio
+    text: |-
+      Leila Haddad is a data engineer at a fintech company in Berlin. She has worked there since 2021, and since last year she has been the lead of the data platform team.
+
+      Before that, she spent two years at a start-up that was acquired by a larger company in 2020. She began her career as a freelance consultant and also did an internship at a bank.
+
+      Leila is self-taught: she hasn't studied computer science, but she holds two cloud certifications. To date, her biggest accomplishment is a new reporting platform, which her team delivered in 2023. She hasn't worked in a large corporation yet, and that is what she wants to try next.
+    glosses:
+      - { text: fintech, russian: финансовые технологии }
+      - { text: consultant, russian: консультант }
+      - { text: reporting platform, russian: платформа отчётности }
+      - { text: corporation, russian: крупная корпорация }
+  - type: exercise
+    id: bio-tf
+    about: bio
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Leila has worked at her current company since 2021.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: She leads the data platform team.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: Last year she became the lead — она стала руководителем и остаётся им.
+      - id: q3
+        prompt: The start-up was acquired in 2023.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Acquired … in 2020 — поглощение произошло в 2020 году.
+      - id: q4
+        prompt: Leila has a computer science degree.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: She hasn't studied computer science — самоучка.
+      - id: q5
+        prompt: She has already worked in a large corporation.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: She hasn't worked in a large corporation yet — пока не работала.
+  - type: listening
+    id: call
+    title: Experience questions
+    plays: 2
+    transcript:
+      - { speaker: Sarah, text: "Welcome, Viktor. Let's begin with your experience. How long have you worked in tech?" }
+      - { speaker: Viktor, text: "For about eight years. I started as a QA engineer, and I switched to development in 2019." }
+      - { speaker: Sarah, text: "And where do you work now?" }
+      - { speaker: Viktor, text: "At an online marketplace in Prague. I joined five years ago, and I was promoted to senior developer last year." }
+      - { speaker: Sarah, text: "Have you ever led a team?" }
+      - { speaker: Viktor, text: "Not officially yet. I've mentored two juniors, and I took over the search project when my manager left." }
+      - { speaker: Sarah, text: "What did you deliver there?" }
+      - { speaker: Viktor, text: "We overhauled the search service. It took us eight months, and we launched it without any downtime." }
+      - { speaker: Sarah, text: "Why are you looking for a new job?" }
+      - { speaker: Viktor, text: "I'd like to join a bigger team and work on a product used in several countries." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How long has Viktor worked in tech?
+        options: [about eight years, five years, two years]
+        answer: about eight years
+      - id: q2
+        prompt: What was his first job in tech?
+        options: [a QA engineer, a developer, a project manager]
+        answer: a QA engineer
+      - id: q3
+        prompt: When was he promoted to senior developer?
+        options: [last year, five years ago, in 2019]
+        answer: last year
+      - id: q4
+        prompt: Has he officially led a team?
+        options:
+          - No, not yet.
+          - Yes, for two years.
+          - Yes, but only a small one.
+        answer: No, not yet.
+        explanation: Not officially yet — официально пока нет, он наставлял двух джуниоров.
+      - id: q5
+        prompt: What did the team deliver in eight months?
+        options:
+          - a completely rebuilt search service
+          - a new mobile app
+          - a new data platform
+        answer: a completely rebuilt search service
+  - type: exercise
+    id: tenses
+    graded: true
+    title: Времена
+    instruction: Выберите правильную форму.
+    format: choice
+    items:
+      - { id: q1, prompt: She ___ the team in 2022., options: [joined, "'s joined"], answer: joined }
+      - { id: q2, prompt: We've used Python ___ 2017., options: [for, since], answer: since }
+      - { id: q3, prompt: Have you finished the handover ___?, options: [yet, just], answer: yet }
+      - id: q4
+        prompt: I ___ at three companies so far.
+        options: ["'ve worked", worked]
+        answer: "'ve worked"
+        explanation: So far — период до сегодняшнего дня.
+      - id: q5
+        prompt: "— When ___ you switch to backend? — Four years ago."
+        options: [did, have]
+        answer: did
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [promoted, acquired, self-taught, contractor, break, take, stint, retire]
+    items:
+      - { id: g1, prompt: She was ___ to team lead last month., answer: promoted }
+      - { id: g2, prompt: The start-up was ___ by a bigger company in 2020., answer: acquired }
+      - { id: g3, prompt: "I'm ___: I learned to code from online courses.", answer: self-taught }
+      - { id: g4, prompt: "He works as a ___, so he isn't an employee of one company.", answer: contractor }
+      - { id: g5, prompt: She took a career ___ to travel., answer: break }
+      - { id: g6, prompt: I will ___ over the project from Tom next week., answer: take }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Я работаю здесь три года.
+        answer:
+          - I've worked here for three years.
+          - I have worked here for three years.
+          - I've been working here for three years.
+          - I have been working here for three years.
+          - I've been here for three years.
+          - I've worked at this company for three years.
+          - I have worked at this company for three years.
+          - I've worked at the company for three years.
+          - I have worked at the company for three years.
+          - I've been with the company for three years.
+          - I have been with the company for three years.
+          - I've been working at this company for three years.
+          - I have been working at this company for three years.
+      - id: q2
+        prompt: В прошлом году я перешёл в менеджмент.
+        answer:
+          - I moved into management last year.
+          - Last year I moved into management.
+          - Last year, I moved into management.
+          - I switched to management last year.
+          - I moved to management last year.
+          - Last year I switched to management.
+          - Last year, I switched to management.
+          - Last year I moved to management.
+          - I switched into management last year.
+          - I moved into a management role last year.
+          - I went into management last year.
+          - I changed to management last year.
+      - id: q3
+        prompt: Меня ещё не повысили.
+        answer:
+          - I haven't been promoted yet.
+          - I have not been promoted yet.
+          - I've not been promoted yet.
+          - I haven't yet been promoted.
+          - I have not yet been promoted.
+          - I've not yet been promoted.
+          - I haven't had a promotion yet.
+          - I haven't got a promotion yet.
+          - I haven't received a promotion yet.

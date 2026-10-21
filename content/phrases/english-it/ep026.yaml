@@ -1,0 +1,7 @@
+id: ep026
+text: "I've been a team lead for two years."
+translation: "Я работаю тимлидом два года."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

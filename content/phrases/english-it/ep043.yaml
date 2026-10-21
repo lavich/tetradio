@@ -1,0 +1,7 @@
+id: ep043
+text: "I'll start with my current role."
+translation: "Начну с нынешней должности."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

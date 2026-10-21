@@ -44,6 +44,8 @@ characters:
   Daniel: { gender: male, voice: Charon }
   Mark: { gender: male, voice: Iapetus }
   Elena: { gender: female, voice: Despina }
+  Nadia: { gender: female, voice: Sulafat }
+  Viktor: { gender: male, voice: Algieba }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

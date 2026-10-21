@@ -1,0 +1,7 @@
+id: ep050
+text: "I've learned a lot in that role."
+translation: "На этой должности я многому научился."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

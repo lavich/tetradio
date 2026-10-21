@@ -1,0 +1,317 @@
+title: Резюме и рассказ об опыте
+kind: lesson
+items:
+  - { kind: word, id: ew054 }
+  - { kind: word, id: ew055 }
+  - { kind: word, id: ew056 }
+  - { kind: word, id: ew057 }
+  - { kind: word, id: ew058 }
+  - { kind: word, id: ew059 }
+  - { kind: word, id: ew060 }
+  - { kind: word, id: ew061 }
+  - { kind: word, id: ew062 }
+  - { kind: word, id: ew063 }
+  - { kind: word, id: ew064 }
+  - { kind: word, id: ew065 }
+  - { kind: word, id: ew066 }
+  - { kind: word, id: ew067 }
+  - { kind: word, id: ew068 }
+  - { kind: word, id: ew069 }
+  - { kind: word, id: ew070 }
+  - { kind: phrase, id: ep034 }
+  - { kind: phrase, id: ep035 }
+  - { kind: phrase, id: ep036 }
+  - { kind: phrase, id: ep037 }
+  - { kind: phrase, id: ep038 }
+  - { kind: phrase, id: ep039 }
+  - { kind: phrase, id: ep040 }
+  - { kind: phrase, id: ep041 }
+blocks:
+  - type: explanation
+    id: cv-words
+    title: Язык раздела Experience
+    body: |-
+      Раздел **Experience** в резюме и рассказ об опыте на собеседовании используют один набор слов. Их стоит узнавать в тексте и в речи интервьюера.
+
+      **Компания и её история.** **A start-up** — молодая компания; **scale up** — быстро расти; **an acquisition** — поглощение, а **be acquired (by)** — быть купленным: *The start-up was acquired by a bank.* **A merger** — слияние двух компаний, **downsize** — сократить штат, **a reorganisation** — смена структуры (в разговоре — *reorg*). Эти слова объясняют, почему вы сменили работу, и не требуют подробностей.
+
+      **Срок и этапы.** **Tenure** — срок работы в компании или должности: *during my tenure at ParcelGo*. **A milestone** — важный этап, веха. **To date** — на сегодняшний день: *my biggest project to date*.
+
+      **Откуда взялись знания.** **Self-taught** — научился сам. **A bootcamp** — интенсивные курсы. **A qualification** — диплом или другой документ об образовании, **a certification** — профессиональный сертификат, например по облаку. **Major in** — специализироваться в вузе: *I majored in physics*; в британском английском чаще *I studied* или *I read*. **A side project** — проект для себя вне основной работы. **A reference** — рекомендация или человек, который её даёт.
+    table:
+      columns:
+        - оборот
+        - пример
+      rows:
+        - - be acquired by
+          - Our start-up was acquired by a retail group.
+        - - during my tenure at
+          - During my tenure at the bank I led three projects.
+        - - a certification in
+          - I have a certification in cloud architecture.
+        - - major in
+          - She majored in mathematics.
+        - - to date
+          - It's the biggest release to date.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a start-up
+      - scale up
+      - an acquisition
+      - a merger
+      - downsize
+      - tenure
+      - a side project
+      - self-taught
+      - a bootcamp
+      - a milestone
+    items:
+      - { id: m1, prompt: молодая технологическая компания, answer: a start-up }
+      - { id: m2, prompt: "быстро расти, наращивать масштаб", answer: scale up }
+      - { id: m3, prompt: поглощение компании, answer: an acquisition }
+      - { id: m4, prompt: сократить штат, answer: downsize }
+      - { id: m5, prompt: срок работы в должности, answer: tenure }
+      - { id: m6, prompt: проект для себя вне основной работы, answer: a side project }
+      - { id: m7, prompt: научившийся самостоятельно, answer: self-taught }
+      - { id: m8, prompt: интенсивные курсы программирования, answer: a bootcamp }
+  - type: exercise
+    id: prep-choice
+    title: Предлог и форма
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: She majored ___ physics.
+        options: [in, at, on]
+        answer: in
+      - id: q2
+        prompt: The start-up was acquired ___ a bank.
+        options: [by, from, with]
+        answer: by
+        explanation: После пассива с acquire исполнитель вводится предлогом by.
+      - id: q3
+        prompt: He has a certification ___ cloud architecture.
+        options: [in, of, about]
+        answer: in
+      - id: q4
+        prompt: During my ___ at the company I led three projects.
+        options: [tenure, tenures, a tenure]
+        answer: tenure
+        explanation: После my артикль не нужен, слово стоит в единственном числе.
+      - id: q5
+        prompt: When Anna left, I ___ over her project.
+        options: [took, taken, take]
+        answer: took
+        explanation: "Take — took — taken. В рассказе о закончившемся событии — past simple."
+  - type: explanation
+    id: cv-how
+    title: Резюме кандидата
+    body: |-
+      Сейчас текст — резюме разработчицы. Резюме на английском строится кратко: должности идут от последней к первой, у каждой — даты, компания и две-три строки о том, что сделано. Подлежащее обычно опускают.
+
+      Времена в резюме подчиняются простому правилу. Текущая работа — present simple: *Lead a team of five engineers.* Закончившийся период — past simple: *Built the checkout service.* Достижения на текущей должности тоже в past simple: *Spearheaded the move…*. Чтобы связать это с устным рассказом, замечайте, как даты определяют время: *2019 – 2022* закончилось, *2022 – present* продолжается.
+
+      Читайте дважды: сначала только должности и даты — как развивалась карьера, потом детали. Незнакомые слова переведены под текстом.
+  - type: reading
+    id: cv
+    title: "CV: Marta Novak"
+    text: |-
+      Marta Novak — Senior Backend Engineer
+
+      Summary
+      Backend engineer with nine years of experience in e-commerce and logistics. Self-taught developer who learned to code in the evenings while working as a warehouse analyst.
+
+      Experience
+      2022 – present · ParcelGo, Warsaw — Tech Lead. Lead a team of five engineers. Spearheaded the move from a monolith to separate services; cut the delivery-time calculation from twelve seconds to two.
+
+      2019 – 2022 · ShopLine, Kraków — Backend Developer. Joined as the third engineer. Built the checkout service and scaled it up from 200 to 20,000 orders a day. The start-up was acquired by a retail group in 2021.
+
+      2018 – 2019 · Freelance. Worked as a contractor for three small online shops.
+
+      2017 – 2018 · Coding bootcamp, then an internship at a logistics company.
+
+      Education
+      BSc in Economics. Cloud architecture certification, 2023.
+
+      References available on request.
+    glosses:
+      - { text: warehouse analyst, russian: аналитик склада }
+      - { text: monolith, russian: монолит (одно большое приложение) }
+      - { text: delivery-time calculation, russian: расчёт времени доставки }
+      - { text: BSc, russian: степень бакалавра естественных наук }
+      - { text: on request, russian: по запросу }
+  - type: exercise
+    id: cv-tf
+    about: cv
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Marta has been a tech lead since 2022.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: 2022 – present — должность продолжается, поэтому present perfect с since.
+      - id: q2
+        prompt: ShopLine was bought by another company.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: The start-up was acquired by a retail group in 2021.
+      - id: q3
+        prompt: Marta was the first engineer at ShopLine.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Joined as the third engineer — третьим по счёту.
+      - id: q4
+        prompt: She worked as a freelancer before ShopLine.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: 2018 – 2019 · Freelance.
+      - id: q5
+        prompt: She has a degree in computer science.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: BSc in Economics — степень по экономике.
+      - id: q6
+        prompt: The checkout service now handles about 200 orders a day.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Scaled it up from 200 to 20,000 orders — выросло с 200 до 20 000 заказов.
+  - type: exercise
+    id: cv-tense
+    about: cv
+    title: Времена в резюме
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«Joined as the third engineer» — почему здесь past simple?"
+        options:
+          - период 2019 – 2022 закончился, у него есть даты
+          - опыт без даты, важный сегодня
+        answer: период 2019 – 2022 закончился, у него есть даты
+      - id: q2
+        prompt: "«Lead a team of five engineers» — это работа…"
+        options:
+          - которую Marta делает сейчас
+          - которую Marta закончила
+        answer: которую Marta делает сейчас
+        explanation: Для текущей должности в резюме используют present simple без подлежащего.
+      - id: q3
+        prompt: Какое предложение о Marta верно?
+        options:
+          - She has been at ParcelGo since 2022.
+          - She has been at ParcelGo in 2022.
+          - She was at ParcelGo since 2022.
+        answer: She has been at ParcelGo since 2022.
+        explanation: Since + начало периода, который продолжается, требует present perfect.
+      - id: q4
+        prompt: Marta ___ at ShopLine for three years, then she moved to ParcelGo.
+        options: [worked, has worked]
+        answer: worked
+        explanation: Период закончился и рассказ идёт в хронологии — past simple с for.
+  - type: explanation
+    id: listening-how
+    title: Рассказ об опыте на собеседовании
+    body: |-
+      Интервьюер просит **Walk me through your CV** или **Could you walk me through your background?** Нужен связный рассказ: нынешняя роль, затем что было раньше, почему менялась работа и чем вы гордитесь. Перескакивать по должностям не стоит.
+
+      Послушайте начало собеседования Марка с Надей. Сначала целиком, не останавливая запись, потом ответьте на вопросы и проверьте их при втором прослушивании. Транскрипт открывается после ответа. Следите за временами: present perfect звучит там, где период идёт до сегодняшнего дня или нужен опыт без даты, past simple — там, где названо время.
+  - type: listening
+    id: walkthrough
+    title: Walk me through your CV
+    plays: 2
+    transcript:
+      - { speaker: Mark, text: "Thanks for coming in, Nadia. Could you walk me through your CV?" }
+      - { speaker: Nadia, text: "Sure. I'll start with my current role. I've been a backend developer at a payments company for four years, and since last spring I've been the tech lead of the cards team." }
+      - { speaker: Mark, text: "And before that?" }
+      - { speaker: Nadia, text: "Before that, I worked at a small start-up for two years. I joined as a junior, and the company scaled up fast. When I left, there were forty of us." }
+      - { speaker: Mark, text: "Why did you leave the start-up?" }
+      - { speaker: Nadia, text: "It was acquired by a bigger company, and there was a reorganisation. My team was moved to another product, so I decided to move on." }
+      - { speaker: Mark, text: "I see. How did you get into tech?" }
+      - { speaker: Nadia, text: "I'm mostly self-taught. I did a coding bootcamp in 2016 and then an internship at a bank. I haven't got a computer science degree, but I've completed two cloud certifications." }
+      - { speaker: Mark, text: "Have you ever worked with Kubernetes?" }
+      - { speaker: Nadia, text: "Not in production yet, but I've used it in a side project for a year." }
+      - { speaker: Mark, text: "What's your biggest accomplishment to date?" }
+      - { speaker: Nadia, text: "I spearheaded the migration of our card payments to a new platform. We delivered it without downtime, two weeks early." }
+      - { speaker: Mark, text: "Thanks, that's clear. Let's move on to the technical part." }
+  - type: exercise
+    id: walkthrough-q
+    about: walkthrough
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How long has Nadia worked at her current company?
+        options:
+          - four years
+          - two years
+          - since last spring
+        answer: four years
+        explanation: I've been a backend developer at a payments company for four years — since last spring только её роль техлида.
+      - id: q2
+        prompt: What is her role in the cards team?
+        options:
+          - tech lead
+          - junior developer
+          - a manager of the payments team
+        answer: tech lead
+      - id: q3
+        prompt: Why did she leave the start-up?
+        options:
+          - It was acquired and her team was moved to another product.
+          - She was laid off.
+          - She wanted to work freelance.
+        answer: It was acquired and her team was moved to another product.
+      - id: q4
+        prompt: How did she get into tech?
+        options:
+          - a coding bootcamp and an internship
+          - a computer science degree
+          - a transfer inside her bank
+        answer: a coding bootcamp and an internship
+        explanation: I'm self-taught … a coding bootcamp in 2016 and then an internship.
+      - id: q5
+        prompt: Has she used Kubernetes in production?
+        options:
+          - Not yet; she has used it in a side project.
+          - Yes, for four years.
+          - No, and she doesn't want to.
+        answer: Not yet; she has used it in a side project.
+      - id: q6
+        prompt: What did she spearhead?
+        options:
+          - the migration of card payments to a new platform
+          - a merger of two companies
+          - a reorganisation of the start-up
+        answer: the migration of card payments to a new platform
+  - type: exercise
+    id: walkthrough-phrases
+    about: walkthrough
+    title: Фразы из диалога
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - walk
+      - current
+      - joined
+      - acquired
+      - on
+      - yet
+      - milestone
+      - tenure
+    items:
+      - { id: g1, prompt: "Could you ___ me through your CV?", answer: walk }
+      - { id: g2, prompt: "I'll start with my ___ role.", answer: current }
+      - { id: g3, prompt: "I ___ as a junior, and the company scaled up fast.", answer: joined }
+      - { id: g4, prompt: It was ___ by a bigger company., answer: acquired }
+      - { id: g5, prompt: So I decided to move ___., answer: on }
+      - { id: g6, prompt: "Not in production ___, but I've used it in a side project.", answer: yet }

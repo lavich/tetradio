@@ -1,8 +1,23 @@
 number: 2
 title: My experience
 subtitle: Опыт и карьера
-status: draft
+status: published
 goal: пройтись по своему опыту — компании, роли, сроки, что изменилось
 grammar:
   - present perfect и past simple, for / since, already / yet / just
 sessions: 3
+crib:
+  title: present perfect или past simple
+  rows:
+    - [до сих пор, I've worked here for three years]
+    - [с какого времени, since 2019]
+    - [закончилось, I joined in 2021]
+    - [назад, three years ago]
+    - [только что, "I've just…"]
+    - [пока нет, "I haven't… yet"]
+  note: "when, ago, in + год — past simple; since, so far, ever, never — present perfect"
+lessons:
+  - e02-1
+  - e02-2
+  - e02-3
+  - e02-test

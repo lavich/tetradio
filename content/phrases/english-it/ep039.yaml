@@ -1,0 +1,7 @@
+id: ep039
+text: "When did you start working with Go?"
+translation: "Когда вы начали работать с Go?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

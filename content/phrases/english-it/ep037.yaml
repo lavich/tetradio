@@ -1,0 +1,7 @@
+id: ep037
+text: "I was hired straight out of university."
+translation: "Меня взяли сразу после университета."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

@@ -1,0 +1,306 @@
+title: Walk me through your CV — письмо и речь
+kind: lesson
+items:
+  - { kind: phrase, id: ep042 }
+  - { kind: phrase, id: ep043 }
+  - { kind: phrase, id: ep044 }
+  - { kind: phrase, id: ep045 }
+  - { kind: phrase, id: ep046 }
+  - { kind: phrase, id: ep047 }
+  - { kind: phrase, id: ep048 }
+  - { kind: phrase, id: ep049 }
+  - { kind: phrase, id: ep050 }
+blocks:
+  - type: explanation
+    id: formula
+    title: "Схема ответа: от нынешней должности назад"
+    body: |-
+      **Walk me through your CV** — второй вопрос почти любого собеседования, после *Tell me about yourself*. Интервьюер уже видит резюме и хочет услышать, как вы сами объясняете свой путь: что вы выбирали, почему меняли работу и чего достигли. Ответ длится около минуты и идёт по четырём шагам.
+
+      **1. Нынешняя роль** — present perfect с for или since: **I'll start with my current role. I've worked at a payments company for four years.**
+
+      **2. Предыдущие шаги** — два или три, каждый в past simple с датой или сроком: **Before that, I spent two years at a start-up. I joined as a junior.** Для каждого — компания, должность, один результат.
+
+      **3. Причина перехода** — одна нейтральная фраза без критики прежней компании: **I decided to move on after the acquisition. I left because I wanted more responsibility.**
+
+      **4. Итог** — связка с целью: **That's the path that brought me here.**
+
+      Для связок между шагами подходят *Before that, After that, Then, Over the years*; рассказ идёт от нынешней роли назад, поэтому итог связывает путь с целью. Все места работы подряд не перечисляют: два-три последних шага и то, что важно для позиции.
+    table:
+      columns:
+        - шаг
+        - время
+        - пример
+      rows:
+        - - нынешняя роль
+          - present perfect, for / since
+          - I've been a developer for six years.
+        - - предыдущие шаги
+          - past simple, даты и ago
+          - I switched to backend three years ago.
+        - - причина
+          - past simple
+          - I decided to move on after the acquisition.
+        - - итог
+          - present simple
+          - That's the path that brought me here.
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: good-answer
+    title: Подходящий ответ
+    instruction: Выберите вариант, который подходит для собеседования.
+    format: choice
+    items:
+      - id: q1
+        prompt: С чего начать ответ на «Walk me through your CV»?
+        options:
+          - I'll start with my current role.
+          - I was born in 1992 in Kazan.
+          - It's all in my CV, you can read it.
+        answer: I'll start with my current role.
+        explanation: Начинают с нынешней роли. Биография и ссылка на резюме не отвечают на вопрос.
+      - id: q2
+        prompt: Как завершить рассказ о пути?
+        options:
+          - That's the path that brought me here.
+          - And so on.
+          - That's all.
+        answer: That's the path that brought me here.
+      - id: q3
+        prompt: Как объяснить уход из компании?
+        options:
+          - I decided to move on after the acquisition.
+          - I didn't like my manager.
+          - It was a terrible company.
+        answer: I decided to move on after the acquisition.
+        explanation: Причина называется нейтрально и коротко, прежняя компания не критикуется.
+      - id: q4
+        prompt: Сколько прошлых мест работы описывать за минуту?
+        options:
+          - два или три последних
+          - все, начиная с первого
+          - только нынешнее
+        answer: два или три последних
+  - type: exercise
+    id: tense-fix
+    title: Какое предложение верно
+    instruction: Выберите верный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы работали в банке с 2018 по 2020 год и больше там не работаете.
+        options:
+          - I've worked at the bank from 2018 to 2020.
+          - I worked at the bank from 2018 to 2020.
+          - I work at the bank from 2018 to 2020.
+        answer: I worked at the bank from 2018 to 2020.
+        explanation: Период закончился и назван полностью — past simple.
+      - id: q2
+        prompt: Вы пришли в компанию в 2019 году и работаете там до сих пор.
+        options:
+          - I've been with the company since 2019.
+          - I'm with the company since 2019.
+          - I was with the company since 2019.
+        answer: I've been with the company since 2019.
+        explanation: Since с продолжающимся периодом требует present perfect.
+      - id: q3
+        prompt: Вы перешли в бэкенд в 2021 году.
+        options:
+          - I've moved to backend in 2021.
+          - I moved to backend in 2021.
+          - I have been moving to backend in 2021.
+        answer: I moved to backend in 2021.
+        explanation: Год называет момент — past simple.
+      - id: q4
+        prompt: Вы рассказываете, что она пришла в команду в прошлом году.
+        options:
+          - She has joined the team last year.
+          - She joined the team last year.
+          - She has been joining the team last year.
+        answer: She joined the team last year.
+  - type: explanation
+    id: writing-how
+    title: Краткое резюме опыта
+    body: |-
+      Письменная задача — короткий текст об опыте, 60–90 слов: его вставляют в письмо рекрутеру или в раздел профиля. Это та же схема, что и в устном ответе, только плотнее: рекрутер читает такой текст за полминуты.
+
+      Пишите от первого лица, без приветствия: 1) кто вы и сколько у вас опыта; 2) нынешняя роль — **Since 2022, I have worked…** или **I've been… for…**; 3) предыдущий шаг с датой или сроком — **Before that, I spent three years at…**; 4) одно достижение — **I spearheaded…, I delivered…**; 5) что ищете.
+
+      Проверьте себя: present perfect с for и since только для продолжающегося, past simple — для закончившегося и с датами; рядом с *ago* и годом-моментом (*in 2022*) present perfect не стоит, *since 2022* допустимо; после предлогов — существительное или -ing.
+  - type: exercise
+    id: sentences
+    title: Предложения для резюме
+    instruction: Переведите на английский. Сокращения можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Я работаю в этой компании с 2020 года.
+        answer:
+          - I've worked at this company since 2020.
+          - I have worked at this company since 2020.
+          - I've worked for this company since 2020.
+          - I have worked for this company since 2020.
+          - I've been working at this company since 2020.
+          - I have been working at this company since 2020.
+          - I've worked at the company since 2020.
+          - I have worked at the company since 2020.
+          - I've worked in this company since 2020.
+          - I've been at this company since 2020.
+          - I have been at this company since 2020.
+          - I've been with this company since 2020.
+          - I have been with this company since 2020.
+          - I've been working for this company since 2020.
+      - id: q2
+        prompt: До этого я два года работал в стартапе.
+        answer:
+          - Before that, I worked at a start-up for two years.
+          - Before that I worked at a start-up for two years.
+          - Before that, I worked for a start-up for two years.
+          - Before that I worked for a start-up for two years.
+          - Before that, I worked in a start-up for two years.
+          - Before that I worked in a start-up for two years.
+          - Before that, I spent two years at a start-up.
+          - Before that I spent two years at a start-up.
+          - Before that, I worked at a startup for two years.
+          - Before that I worked at a startup for two years.
+          - Before that, I spent two years at a startup.
+          - Before that I spent two years at a startup.
+          - I worked at a start-up for two years before that.
+          - I spent two years at a start-up before that.
+          - Previously, I worked at a start-up for two years.
+      - id: q3
+        prompt: В 2022 году меня повысили до старшего разработчика.
+        answer:
+          - In 2022 I was promoted to senior developer.
+          - In 2022, I was promoted to senior developer.
+          - I was promoted to senior developer in 2022.
+          - In 2022 I was promoted to a senior developer.
+          - In 2022, I was promoted to a senior developer.
+          - I was promoted to a senior developer in 2022.
+          - In 2022 I got promoted to senior developer.
+          - I got promoted to senior developer in 2022.
+          - In 2022 I was promoted to senior software developer.
+          - In 2022 I was promoted to senior software engineer.
+        explanation: Год называет момент — past simple, пассив was promoted.
+      - id: q4
+        prompt: Я возглавил переход на новую платформу.
+        answer:
+          - I spearheaded the migration to a new platform.
+          - I spearheaded the migration to the new platform.
+          - I spearheaded the move to a new platform.
+          - I spearheaded the move to the new platform.
+          - I led the migration to a new platform.
+          - I led the migration to the new platform.
+          - I led the move to a new platform.
+          - I led the move to the new platform.
+          - I led the transition to a new platform.
+          - I spearheaded the transition to a new platform.
+          - I headed the migration to a new platform.
+          - I led the switch to a new platform.
+      - id: q5
+        prompt: Я пока не работал в агентстве.
+        answer:
+          - I haven't worked in an agency yet.
+          - I have not worked in an agency yet.
+          - I've not worked in an agency yet.
+          - I haven't worked at an agency yet.
+          - I haven't worked for an agency yet.
+          - I have not worked at an agency yet.
+          - I have not worked for an agency yet.
+          - I've not worked at an agency yet.
+          - I haven't yet worked in an agency.
+          - I have not yet worked in an agency.
+          - I haven't worked in an agency so far.
+      - id: q6
+        prompt: Я ушёл после поглощения компании.
+        answer:
+          - I left after the acquisition.
+          - I left after the company's acquisition.
+          - I left after the acquisition of the company.
+          - I left after the company was acquired.
+          - I left the company after the acquisition.
+          - I left after the company got acquired.
+          - I moved on after the acquisition.
+          - I resigned after the acquisition.
+          - I left following the acquisition.
+  - type: writing
+    id: experience
+    register: formal
+    prompt: "Напишите краткое резюме своего опыта для письма рекрутеру или профиля (60–90 слов): кто вы и сколько у вас опыта, нынешняя роль, предыдущий шаг, одно достижение и какую роль ищете."
+    words: { min: 60, max: 90 }
+    model: I'm a backend developer with seven years of experience. Since 2022, I have worked at a logistics company in Gdańsk, where I lead a team of four. Before that, I spent three years at a start-up that was acquired in 2021. I spearheaded the migration to a new platform and delivered it without downtime. I'm self-taught and hold a cloud certification. I'm now looking for a senior role in a product company.
+    criteria:
+      - 60–90 слов, от первого лица, без приветствия и подписи
+      - "Есть части: кто вы и опыт, нынешняя роль, предыдущий шаг, достижение, какую роль ищете"
+      - "Present perfect с for или since — только для продолжающегося (I've worked… for, since 2022); past simple — для закончившегося и с датами"
+      - Рядом с ago и годом-моментом (in 2022) нет present perfect; since 2022 и for допустимы с продолжающимся периодом
+      - "Названы даты или сроки; слов «давно» и «недавно» нет"
+      - Хотя бы три слова или оборота модуля (promoted, acquired, spearhead, deliver, self-taught, tenure…)
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответ
+    body: |-
+      Второй ответ вашего **банка ответов** — Walk me through your CV. Он повторяется почти на каждом собеседовании, поэтому его полезно закрепить.
+
+      1) Выпишите ключевые слова для каждого шага — нынешняя роль, два прошлых места, причина, итог. Целый текст лучше не зачитывать: зачитанный ответ звучит как зачитанный. 2) Запишите ответ и уложитесь в 60 секунд. 3) Переслушайте и сверьте с образцом и критериями. 4) Запишите ещё раз.
+
+      Если застряли, используйте связку: **Let me think… / So, going back to…**. Ошибка во времени, исправленная на ходу, допустима, а долгая пауза мешает слушателю.
+  - type: speaking
+    id: walk-through
+    part: monologue
+    prompt: "Интервьюер: «Could you walk me through your CV?» Ответьте за 60 секунд на своём материале: нынешняя роль, два прошлых шага с датами или сроками, причина перехода, итог."
+    seconds: 60
+    model: "Sure. I'll start with my current role. I've worked at a payments company for four years, and since last spring I've been the tech lead of the cards team. My role involves designing the architecture and mentoring three developers. Before that, I spent two years at a small start-up, where I joined as a junior and helped to scale up the platform. When the company was acquired, I decided to move on. Over the years, I've worked on every part of the stack. My biggest accomplishment so far is the migration of our card payments to a new platform, which we delivered without downtime. That's the path that brought me here, and that's why I'm interested in this role."
+    criteria:
+      - "Порядок: нынешняя роль — прошлые шаги — причина — итог с целью"
+      - Около 60 секунд, без долгих пауз; связки Before that, Over the years, That's the path that brought me here
+      - Present perfect для продолжающегося (for, since), past simple для закончившегося и с датами
+      - Названы сроки и одно достижение, не больше трёх мест работы
+      - Причина ухода нейтральная, без критики прежней компании
+  - type: speaking
+    id: how-long
+    part: interview
+    prompt: "Интервьюер уточняет: «How long have you been working there, and what has changed in that time?» Ответьте за 30 секунд: срок, что изменилось в команде или продукте и ваша роль."
+    seconds: 30
+    model: "I've worked there for four years. When I joined, we were a team of six with one product. Since then, we've grown to thirty people, and I've moved from developer to tech lead. What has changed most is the scale: we've launched two new products."
+    criteria:
+      - Срок назван с for или since и present perfect (I've worked there for…)
+      - Изменения описаны present perfect (we've grown, I've moved), момент прихода — past simple (When I joined…)
+      - Есть одна конкретная деталь — число людей, продуктов или должностей
+      - Ответ закончен
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ in this team since January.
+        options: ["'ve worked", worked, work]
+        answer: "'ve worked"
+        explanation: Since с продолжающимся периодом — present perfect.
+      - id: q2
+        prompt: We ___ the product two years ago.
+        options: [launched, "'ve launched", launch]
+        answer: launched
+        explanation: Ago называет момент — past simple.
+      - id: q3
+        prompt: I haven't met the new tech lead ___.
+        options: [yet, already, just]
+        answer: yet
+      - id: q4
+        prompt: She was ___ off when the start-up ran out of money.
+        options: [laid, lay, laying]
+        answer: laid
+        explanation: Be laid off — пассив, третья форма lay — laid — laid.
+      - id: q5
+        prompt: I have a certification ___ cloud architecture.
+        options: [in, at, by]
+        answer: in
+      - id: q6
+        prompt: The company ___ by a bigger firm last year.
+        options: [was acquired, has been acquired, acquired]
+        answer: was acquired
+        explanation: Last year называет момент — past simple, а пассив требует was acquired.

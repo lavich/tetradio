@@ -1,0 +1,7 @@
+id: ep044
+text: "Over the years, I've worked on every part of the stack."
+translation: "За эти годы я работал над каждой частью стека."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

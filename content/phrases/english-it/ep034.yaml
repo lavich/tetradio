@@ -1,0 +1,7 @@
+id: ep034
+text: "I switched to backend three years ago."
+translation: "Три года назад я перешёл в бэкенд."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

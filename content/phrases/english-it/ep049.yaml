@@ -1,0 +1,7 @@
+id: ep049
+text: "That's the path that brought me here."
+translation: "Таков мой путь до этой позиции."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md

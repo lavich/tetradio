@@ -1,0 +1,7 @@
+id: ep030
+text: "I've worked at three companies so far."
+translation: "К сегодняшнему дню я работал в трёх компаниях."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e02
+  operation: requested-generation
+  request: Фразы модуля e02 по программе docs/curriculum-english-it.md
