@@ -1,0 +1,321 @@
+title: Меню, заказ в шумном кафе и счёт
+kind: lesson
+items:
+  - { kind: word, id: tw054 }
+  - { kind: word, id: tw055 }
+  - { kind: word, id: tw056 }
+  - { kind: word, id: tw057 }
+  - { kind: word, id: tw058 }
+  - { kind: word, id: tw059 }
+  - { kind: word, id: tw060 }
+  - { kind: phrase, id: tp054 }
+  - { kind: phrase, id: tp055 }
+  - { kind: phrase, id: tp056 }
+  - { kind: phrase, id: tp057 }
+  - { kind: phrase, id: tp058 }
+  - { kind: phrase, id: tp059 }
+  - { kind: phrase, id: tp060 }
+blocks:
+  - type: explanation
+    id: bill
+    title: Напитки, счёт и чаевые
+    body: |-
+      Первым делом официант спрашивает о напитках: **Can I get you any drinks?** Вода из-под крана, **tap water**, в Британии бесплатна: заведение с лицензией на алкоголь обязано дать её по закону, а в кафе её почти всегда дают и так. Просить её — обычное дело: **Just tap water, thanks.** Самое простое и недорогое вино в карте — **the house wine**: a glass of the house red.
+
+      Кроме меню, почти везде есть **the specials** — блюда дня, их пишут на доске или называет официант. А **a takeaway** — еда навынос: Let's get a takeaway tonight.
+
+      Счёт просят так: **Could we have the bill, please?** (в США — the check). Если каждый платит за своё — **Can we pay separately?** Если делите поровну — **split the bill**: Shall we split the bill? Не доели — **Could we get the rest boxed up?** Остатки упакуют в контейнер; разговорно его называют **a doggy bag**.
+
+      Чаевые в Британии зависят от того, есть ли в счёте плата за обслуживание. Часто в нём уже есть **a service charge** — плата за обслуживание, обычно 12,5 %. Тогда сверху ничего не оставляют. Она добровольная (discretionary): если обслуживание не понравилось, её можно попросить убрать. Не уверены — спросите: **Is service included?** Если её нет, обычно оставляют около 10 %.
+
+      Если что-то не так, говорят спокойно и коротко: **Excuse me, this isn't what I ordered.** **It's a bit too salty for me.** A bit too… смягчает жалобу.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - split the bill
+      - a service charge
+      - a doggy bag
+      - the specials
+      - a takeaway
+      - tap water
+      - the house wine
+      - a tip
+      - a starter
+    items:
+      - { id: m1, prompt: разделить счёт, answer: split the bill }
+      - { id: m2, prompt: плата за обслуживание, answer: a service charge }
+      - { id: m3, prompt: контейнер с остатками еды навынос, answer: a doggy bag }
+      - { id: m4, prompt: "блюда дня, вне основного меню", answer: the specials }
+      - { id: m5, prompt: еда навынос, answer: a takeaway }
+      - { id: m6, prompt: водопроводная вода, answer: tap water }
+      - { id: m7, prompt: вино заведения, answer: the house wine }
+  - type: explanation
+    id: menu-how
+    title: Как читать меню
+    body: |-
+      Ниже — обеденное меню кафе The Fig Tree в Йорке. Читайте его как гость: сначала разделы и цены, потом пометки и мелкий текст внизу — там правила об аллергенах, воде и плате за обслуживание. Переводить каждое блюдо не нужно.
+
+      Пометки у блюд: **V** — вегетарианское, **VG** — веганское, **GF** — без глютена, **N** — есть орехи. Not on set menu — блюда нет в комплексном меню.
+  - type: reading
+    id: menu
+    title: The Fig Tree, York — Lunch menu
+    text: |-
+      THE FIG TREE · YORK
+      Lunch menu · 12:00–15:00
+
+      SET MENU (Monday to Friday): two courses £19 · three courses £24
+
+      STARTERS
+      Soup of the day, served with bread (V) — £6.50
+      Grilled halloumi with honey and walnuts (V, GF, N) — £8.00
+      Prawn cocktail (GF) — £8.50
+
+      MAINS
+      Fish of the day with new potatoes and green beans (GF) — £17.00
+      Chicken and mushroom pie with mash — £16.00
+      Spicy bean burger with chips (VG) — £14.50
+      Sirloin steak with chips and a side salad (GF) — £26.00 (not on set menu)
+
+      SIDES — £4.00
+      Chips (VG, GF) · Green salad (VG, GF) · Garlic bread (V)
+
+      TO SHARE
+      Yorkshire cheese board for two, with crackers and chutney (V) — £15.00
+
+      Ask about today's specials — see the board by the bar.
+
+      V vegetarian · VG vegan · GF gluten-free · N contains nuts
+      Please tell your server about any allergies before you order. Our kitchen uses nuts, so we cannot guarantee that any dish is completely nut-free.
+      Tap water is always free.
+      A discretionary service charge of 12.5% will be added to your bill.
+    glosses:
+      - { text: served with, russian: подаётся с }
+      - { text: halloumi, russian: халлуми (сыр для жарки) }
+      - { text: walnuts, russian: грецкие орехи }
+      - { text: Prawn cocktail, russian: коктейль из креветок (закуска) }
+      - { text: mash, russian: картофельное пюре }
+      - { text: Sirloin steak, russian: стейк сирлойн (из толстого края говядины) }
+      - { text: chutney, russian: чатни (густой фруктовый соус) }
+      - { text: guarantee, russian: гарантировать }
+      - { text: discretionary, russian: добровольный }
+  - type: exercise
+    id: menu-q
+    about: menu
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How much is a three-course lunch on a Tuesday?
+        options: ["£24", "£19", "£26"]
+        answer: "£24"
+        explanation: "SET MENU (Monday to Friday): three courses £24."
+      - id: q2
+        prompt: Which main course is good for a vegan?
+        options:
+          - the spicy bean burger
+          - the chicken and mushroom pie
+          - the fish of the day
+        answer: the spicy bean burger
+        explanation: VG — vegan, веганское.
+      - id: q3
+        prompt: Which starter should a guest with a nut allergy not order?
+        options: [the grilled halloumi, the soup of the day, the prawn cocktail]
+        answer: the grilled halloumi
+        explanation: "У халлуми пометка N и walnuts — грецкие орехи."
+      - id: q4
+        prompt: Why can't the café promise that a dish has no nuts at all?
+        options:
+          - Nuts are used in the kitchen.
+          - The menu changes every day.
+          - The specials are not on the menu.
+        answer: Nuts are used in the kitchen.
+        explanation: "Our kitchen uses nuts, so we cannot guarantee that any dish is completely nut-free."
+      - id: q5
+        prompt: Can you have the sirloin steak as one of your set menu courses?
+        options:
+          - "No, it isn't on the set menu."
+          - Yes, it is.
+          - Only at the weekend.
+        answer: "No, it isn't on the set menu."
+        explanation: "Sirloin steak… (not on set menu)."
+      - id: q6
+        prompt: What will be on the bill even if you don't ask for it?
+        options:
+          - a 12.5% service charge
+          - tap water
+          - garlic bread
+        answer: a 12.5% service charge
+        explanation: "A discretionary service charge of 12.5% will be added to your bill; tap water is always free."
+  - type: explanation
+    id: noise-how
+    title: Как слушать в шумном кафе
+    body: |-
+      В кафе шумно, официант спешит и говорит быстро. Не пытайтесь услышать каждое слово: ловите блюдо, напиток, «есть / нет» в ответе об аллергии и цену. Если не расслышали, переспросить — нормально: **Sorry, it's quite loud in here — did you say…?** Так делает и официант.
+
+      Лусия из Бразилии и Диего из Испании обедают в The Fig Tree, их обслуживает официантка Хлоя. У Лусии лёгкая аллергия на орехи; при сильной аллергии блюдо, за которое кухня не ручается, лучше не заказывать. Диего говорит по-английски просто и иногда подбирает слово — это обычная речь туриста, и Хлоя его понимает. Послушайте заказ, ответьте на вопросы и при втором прослушивании проверьте ответы. Транскрипт откроется после ответа.
+  - type: listening
+    id: order
+    title: Ordering at The Fig Tree
+    plays: 2
+    transcript:
+      - { speaker: Chloe, text: "Hi there, sorry about the wait — it's really busy today. Are you ready to order, or do you need a few more minutes?" }
+      - { speaker: Lucía, text: "I think we're ready. Diego?" }
+      - { speaker: Diego, text: "Yes, ready." }
+      - { speaker: Chloe, text: "Lovely. Can I get you any drinks first?" }
+      - { speaker: Lucía, text: "Just tap water, thanks." }
+      - { speaker: Diego, text: "For me, a glass of the house red, please." }
+      - { speaker: Chloe, text: "Sorry, it's so loud in here — did you say the house red?" }
+      - { speaker: Diego, text: "Yes, the red wine. Thank you." }
+      - { speaker: Chloe, text: "And what would you like to eat?" }
+      - { speaker: Lucía, text: "Before I order — I've got a nut allergy. Does the soup have any nuts in it?" }
+      - { speaker: Chloe, text: "Today it's tomato and red pepper, and there aren't any nuts in it. But our kitchen uses nuts, so I can't promise a hundred per cent." }
+      - { speaker: Lucía, text: "That's fine — it's only a mild allergy. I'll have the soup, and then the fish of the day." }
+      - { speaker: Chloe, text: "Two courses — so that's the set menu. And for you?" }
+      - { speaker: Diego, text: "The steak, please. Not well done… how do you say… medium rare." }
+      - { speaker: Chloe, text: "Medium rare, no problem. It comes with chips and a side salad." }
+      - { speaker: Diego, text: "Is it possible without the salad? And more chips instead?" }
+      - { speaker: Chloe, text: "Sure, I'll ask the kitchen for extra chips instead of the salad." }
+      - { speaker: Lucía, text: "Oh, and could we get some bread for the table?" }
+      - { speaker: Chloe, text: "Of course. I'll bring some bread and butter. Anything else?" }
+      - { speaker: Diego, text: "No, that's all. Thank you." }
+  - type: exercise
+    id: order-q
+    about: order
+    title: Аудирование — заказ
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Lucía want to drink?
+        options: [tap water, a glass of red wine, sparkling water]
+        answer: tap water
+        explanation: "Just tap water, thanks."
+      - id: q2
+        prompt: Why does Chloe ask Diego to repeat his order?
+        options:
+          - The café is very noisy.
+          - He orders in Spanish.
+          - The house red is finished.
+        answer: The café is very noisy.
+        explanation: "Sorry, it's so loud in here — did you say the house red?"
+      - id: q3
+        prompt: What does Chloe say about nuts in the soup?
+        options:
+          - There aren't any, but she can't be completely sure.
+          - There are some walnuts in it.
+          - She needs to ask the kitchen.
+        answer: "There aren't any, but she can't be completely sure."
+        explanation: "There aren't any nuts in it. But our kitchen uses nuts, so I can't promise a hundred per cent."
+      - id: q4
+        prompt: Why is Lucía's lunch the set menu?
+        options:
+          - She orders two courses.
+          - She has a nut allergy.
+          - She only drinks water.
+        answer: She orders two courses.
+        explanation: "Суп и рыба дня — два блюда: Two courses — so that's the set menu."
+      - id: q5
+        prompt: How does Diego want his steak?
+        options: [medium rare, well done, rare]
+        answer: medium rare
+        explanation: "Not well done… medium rare."
+      - id: q6
+        prompt: What does Diego get instead of the salad?
+        options: [extra chips, garlic bread, more bread and butter]
+        answer: extra chips
+        explanation: "I'll ask the kitchen for extra chips instead of the salad. Хлеб с маслом — для всего стола."
+  - type: listening
+    id: paying
+    title: Paying the bill
+    plays: 2
+    transcript:
+      - { speaker: Chloe, text: "How was everything?" }
+      - { speaker: Lucía, text: "Lovely, thank you. The fish was delicious." }
+      - { speaker: Diego, text: "The steak was very good, but it's too big for me. I can't finish. Can I take it with me?" }
+      - { speaker: Chloe, text: "Of course — I'll get the rest boxed up for you. Would you like to see the dessert menu?" }
+      - { speaker: Lucía, text: "No, thanks, we're full. Could we have the bill, please?" }
+      - { speaker: Chloe, text: "Sure. Is it one bill, or would you like to pay separately?" }
+      - { speaker: Diego, text: "Separately, please. She had the set menu, I had the steak." }
+      - { speaker: Chloe, text: "No problem. So for you, the set menu and the tap water — that's nineteen pounds. And for you, the steak and the glass of wine — thirty-one pounds fifty. The extra chips are on us." }
+      - { speaker: Lucía, text: "Is service included?" }
+      - { speaker: Chloe, text: "It isn't in those prices — there's a twelve and a half per cent service charge on top. It's optional, so if you weren't happy with anything, just let me know." }
+      - { speaker: Lucía, text: "No, no, everything was great." }
+      - { speaker: Diego, text: "Can I pay by card?" }
+      - { speaker: Chloe, text: "Of course. I'll bring the card machine." }
+  - type: exercise
+    id: paying-q
+    about: paying
+    title: Аудирование — счёт
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why does Diego ask to take his food with him?
+        options:
+          - He can't finish the steak.
+          - He wants to eat it on the train.
+          - He doesn't like the steak.
+        answer: "He can't finish the steak."
+        explanation: "It's too big for me. I can't finish."
+      - id: q2
+        prompt: Do they order dessert?
+        options:
+          - No, they're full.
+          - Yes, one for each of them.
+          - Yes, one to share.
+        answer: "No, they're full."
+      - id: q3
+        prompt: How do Lucía and Diego pay?
+        options:
+          - Each of them pays for their own food.
+          - They split the bill equally.
+          - Lucía pays for both of them.
+        answer: Each of them pays for their own food.
+        explanation: "Separately, please — каждый платит за своё; split equally значило бы поровну."
+      - id: q4
+        prompt: How much is Lucía's part before the service charge?
+        options: ["£19", "£31.50", "£24"]
+        answer: "£19"
+        explanation: "The set menu and the tap water — that's nineteen pounds; вода бесплатная."
+      - id: q5
+        prompt: How much do they pay for the extra chips?
+        options: [nothing, "£4", "£1.50"]
+        answer: nothing
+        explanation: "The extra chips are on us — за счёт заведения."
+      - id: q6
+        prompt: What does Chloe say about the service charge?
+        options:
+          - "It's added to the bill, but it's optional."
+          - "It isn't on the bill, so they should leave a tip."
+          - "It's only for groups."
+        answer: "It's added to the bill, but it's optional."
+        explanation: "There's a twelve and a half per cent service charge on top. It's optional…"
+  - type: exercise
+    id: paying-phrases
+    about: paying
+    title: Фразы из диалога
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - boxed
+      - bill
+      - separately
+      - included
+      - charge
+      - machine
+      - split
+      - tip
+    items:
+      - { id: g1, prompt: "I'll get the rest ___ up for you.", answer: boxed }
+      - { id: g2, prompt: "Could we have the ___, please?", answer: bill }
+      - { id: g3, prompt: "Is it one bill, or would you like to pay ___?", answer: separately }
+      - { id: g4, prompt: "Is service ___?", answer: included }
+      - { id: g5, prompt: "There's a twelve and a half per cent service ___ on top.", answer: charge }
+      - { id: g6, prompt: "I'll bring the card ___.", answer: machine }

@@ -1,0 +1,8 @@
+id: tp056
+text: "Is service included?"
+translation: "Обслуживание включено в счёт?"
+note: "если service charge уже в счёте, чаевые сверху не нужны"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

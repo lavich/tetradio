@@ -1,0 +1,8 @@
+id: tp055
+text: "Can we pay separately?"
+translation: "Можно мы заплатим по отдельности?"
+note: "каждый за своё; поровну — Can we split it equally?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

@@ -1,0 +1,8 @@
+id: tp059
+text: "It's a bit too salty for me."
+translation: "Для меня это немного пересолено."
+note: "a bit too… смягчает жалобу; так же a bit too spicy, not hot enough"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

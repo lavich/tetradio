@@ -1,0 +1,8 @@
+id: tp060
+text: "Could we get the rest boxed up?"
+translation: "Можно упаковать нам остальное с собой?"
+note: "box up — упаковать в контейнер; в США — Can we get a to-go box?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t04
+  operation: requested-generation
+  request: Фразы модуля t04 программы docs/curriculum-english-travel.md

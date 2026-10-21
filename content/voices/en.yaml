@@ -51,3 +51,5 @@ characters:
   Jonas: { gender: male, voice: Alnilam }
   Hannah: { gender: female, voice: Autonoe }
   Oliver: { gender: male, voice: Enceladus }
+  Chloe: { gender: female, voice: Erinome }
+  Diego: { gender: male, voice: Rasalgethi }

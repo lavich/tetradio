@@ -1,8 +1,25 @@
 number: 4
 title: Eating out
 subtitle: Кафе и ресторан
-status: draft
+status: published
 goal: заказать столик и еду, спросить о составе и аллергенах, попросить счёт и разделить его
 grammar:
   - "I'd like / I'll have / Could we get…, исчисляемые и неисчисляемые, too / enough"
 sessions: 3
+lessons:
+  - t04-1
+  - t04-2
+  - t04-3
+  - t04-test
+crib:
+  title: заказ
+  rows:
+    - [заказ, "I'd like…"]
+    - [решил сейчас, "I'll have…"]
+    - [просьба, "Could we get…?"]
+    - [о составе — any, "Any nuts in it?"]
+    - [неисчисляемое, some / a bit of]
+    - [слишком, too salty]
+    - [недостаточно, not hot enough]
+    - [каждый за своё, "Pay separately?"]
+  note: "в просьбе — some: Could we get some bread?"
