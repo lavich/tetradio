@@ -223,17 +223,17 @@ blocks:
     title: First interview
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Hi Daniel, thanks for joining. I'm Sarah, I lead the platform team here. We have about forty-five minutes today." }
-      - { speaker: Daniel, text: "Hi Sarah, nice to meet you. Thanks for having me." }
-      - { speaker: Sarah, text: "So, to start, could you tell me a bit about yourself?" }
-      - { speaker: Daniel, text: "Sure. I'm a backend developer with five years of experience. I work at a logistics company in Warsaw, and I'm responsible for the routing service." }
-      - { speaker: Sarah, text: "What does the routing service do?" }
-      - { speaker: Daniel, text: "It calculates delivery routes for our drivers. My role involves designing the APIs, handling incidents, and working closely with the data team." }
-      - { speaker: Sarah, text: "And what are you working on at the moment?" }
-      - { speaker: Daniel, text: "These days I'm focusing on performance. We're migrating the service from Python to Go, because it needs to be more scalable." }
-      - { speaker: Sarah, text: "Interesting. And why are you looking for a new role?" }
-      - { speaker: Daniel, text: "I enjoy my job, but I'm looking for a new challenge. I'm passionate about developer tools, and your platform team builds exactly that." }
-      - { speaker: Sarah, text: "Great, that's a good start. Let's talk about the migration in more detail." }
+      - { speaker: Sarah, text: "Hi Daniel, thanks for joining. I'm Sarah, I lead the platform team here. We have about forty-five minutes today.", audio: e01-2/interview-1.mp3 }
+      - { speaker: Daniel, text: "Hi Sarah, nice to meet you. Thanks for having me.", audio: e01-2/interview-2.mp3 }
+      - { speaker: Sarah, text: "So, to start, could you tell me a bit about yourself?", audio: e01-2/interview-3.mp3 }
+      - { speaker: Daniel, text: "Sure. I'm a backend developer with five years of experience. I work at a logistics company in Warsaw, and I'm responsible for the routing service.", audio: e01-2/interview-4.mp3 }
+      - { speaker: Sarah, text: "What does the routing service do?", audio: e01-2/interview-5.mp3 }
+      - { speaker: Daniel, text: "It calculates delivery routes for our drivers. My role involves designing the APIs, handling incidents, and working closely with the data team.", audio: e01-2/interview-6.mp3 }
+      - { speaker: Sarah, text: "And what are you working on at the moment?", audio: e01-2/interview-7.mp3 }
+      - { speaker: Daniel, text: "These days I'm focusing on performance. We're migrating the service from Python to Go, because it needs to be more scalable.", audio: e01-2/interview-8.mp3 }
+      - { speaker: Sarah, text: "Interesting. And why are you looking for a new role?", audio: e01-2/interview-9.mp3 }
+      - { speaker: Daniel, text: "I enjoy my job, but I'm looking for a new challenge. I'm passionate about developer tools, and your platform team builds exactly that.", audio: e01-2/interview-10.mp3 }
+      - { speaker: Sarah, text: "Great, that's a good start. Let's talk about the migration in more detail.", audio: e01-2/interview-11.mp3 }
   - type: exercise
     id: interview-q
     about: interview

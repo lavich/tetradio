@@ -52,14 +52,14 @@ blocks:
     title: A quick intro
     plays: 2
     transcript:
-      - { speaker: Mark, text: "Thanks for taking the time, Elena. Let's start with a quick intro. Could you tell me about yourself?" }
-      - { speaker: Elena, text: "Of course. I'm a data engineer. I've been in the industry for six years, mostly in e-commerce." }
-      - { speaker: Mark, text: "And what do you do in your current role?" }
-      - { speaker: Elena, text: "I'm responsible for our data pipelines. My role involves building them, monitoring them, and helping analysts with their queries." }
-      - { speaker: Mark, text: "What are you working on right now?" }
-      - { speaker: Elena, text: "Right now we're migrating everything to the cloud. It's a big project, and I'm driving it together with one other engineer." }
-      - { speaker: Mark, text: "Sounds busy! So why are you looking for a new job?" }
-      - { speaker: Elena, text: "I'd like to work closer to the product. In a nutshell, I want my data to change real decisions. That's why I'm interested in this role." }
+      - { speaker: Mark, text: "Thanks for taking the time, Elena. Let's start with a quick intro. Could you tell me about yourself?", audio: e01-test/call-1.mp3 }
+      - { speaker: Elena, text: "Of course. I'm a data engineer. I've been in the industry for six years, mostly in e-commerce.", audio: e01-test/call-2.mp3 }
+      - { speaker: Mark, text: "And what do you do in your current role?", audio: e01-test/call-3.mp3 }
+      - { speaker: Elena, text: "I'm responsible for our data pipelines. My role involves building them, monitoring them, and helping analysts with their queries.", audio: e01-test/call-4.mp3 }
+      - { speaker: Mark, text: "What are you working on right now?", audio: e01-test/call-5.mp3 }
+      - { speaker: Elena, text: "Right now we're migrating everything to the cloud. It's a big project, and I'm driving it together with one other engineer.", audio: e01-test/call-6.mp3 }
+      - { speaker: Mark, text: "Sounds busy! So why are you looking for a new job?", audio: e01-test/call-7.mp3 }
+      - { speaker: Elena, text: "I'd like to work closer to the product. In a nutshell, I want my data to change real decisions. That's why I'm interested in this role.", audio: e01-test/call-8.mp3 }
   - type: exercise
     id: call-q
     about: call

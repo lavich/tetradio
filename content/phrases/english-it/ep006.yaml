@@ -1,5 +1,6 @@
 id: ep006
 text: "We're migrating our monolith to microservices."
+audio: phrases/ep006.mp3
 translation: Мы переводим монолит на микросервисы.
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e01
