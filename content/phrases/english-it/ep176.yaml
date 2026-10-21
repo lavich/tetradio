@@ -1,0 +1,7 @@
+id: ep176
+text: "Could you tell me more about the role?"
+translation: "Расскажите, пожалуйста, подробнее о должности."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep193
+text: "Is now a good time to talk?"
+translation: "Сейчас удобно разговаривать?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md

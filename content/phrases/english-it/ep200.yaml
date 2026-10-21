@@ -1,0 +1,7 @@
+id: ep200
+text: "Thank you for your time. I look forward to hearing from you."
+translation: "Спасибо, что уделили время. Буду ждать вашего ответа."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md

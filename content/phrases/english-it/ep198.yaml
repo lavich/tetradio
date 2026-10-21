@@ -1,0 +1,7 @@
+id: ep198
+text: "I'd like some time to review the details."
+translation: "Мне хотелось бы получить время, чтобы изучить детали."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md

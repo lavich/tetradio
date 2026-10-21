@@ -1,0 +1,7 @@
+id: ep192
+text: "Thanks for reaching out."
+translation: "Спасибо, что написали."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e08
+  operation: requested-generation
+  request: Фразы модуля e08 по программе docs/curriculum-english-it.md

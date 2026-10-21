@@ -1,0 +1,657 @@
+title: could, would, should, have to, need to — вежливые просьбы и условия работы
+kind: lesson
+items:
+  - { kind: word, id: ew246 }
+  - { kind: word, id: ew247 }
+  - { kind: word, id: ew248 }
+  - { kind: word, id: ew249 }
+  - { kind: word, id: ew250 }
+  - { kind: word, id: ew251 }
+  - { kind: word, id: ew252 }
+  - { kind: word, id: ew253 }
+  - { kind: word, id: ew254 }
+  - { kind: word, id: ew255 }
+  - { kind: word, id: ew256 }
+  - { kind: word, id: ew257 }
+  - { kind: word, id: ew258 }
+  - { kind: word, id: ew259 }
+  - { kind: word, id: ew260 }
+  - { kind: word, id: ew261 }
+  - { kind: word, id: ew262 }
+  - { kind: word, id: ew263 }
+  - { kind: phrase, id: ep176 }
+  - { kind: phrase, id: ep177 }
+  - { kind: phrase, id: ep178 }
+  - { kind: phrase, id: ep179 }
+  - { kind: phrase, id: ep180 }
+  - { kind: phrase, id: ep181 }
+  - { kind: phrase, id: ep182 }
+  - { kind: phrase, id: ep183 }
+blocks:
+  - type: explanation
+    id: modals
+    title: Пять глаголов для разговора об условиях
+    body: |-
+      Рекрутер спрашивает о сроках, деньгах и формате работы, и вы отвечаете одними и теми же пятью глаголами. Каждый показывает, просите вы, соглашаетесь, советуете или говорите об обязательном.
+
+      **Could** — вежливая просьба и возможность: **Could you tell me more about the role? I could start in early March.** В просьбе could звучит мягче, чем can.
+
+      **Would** — вежливая просьба, предложение и условие: **Would you mind sharing the salary range? I would prefer a hybrid setup.** С would связаны фразы **I'd be happy to…** и **I'd like…**.
+
+      **Should** — совет и ожидание: **You should ask about the probation period. I should be available for a call on Thursday.** Во втором примере should значит «скорее всего, смогу».
+
+      **Have to** — обязанность, которая идёт извне: договор, правила компании, закон. **I have to give two months' notice. You will have to complete a background check.** В прошедшем времени — **had to**. Отрицание **don't have to** означает «не обязаны»: **You don't have to relocate.**
+
+      **Need to** — необходимость, которая идёт от ваших целей и обстоятельств: **I need to check my calendar. I'd need to discuss it with my partner.** Вопрос строится с do: **Do I need to prepare anything?**
+
+      После could, would и should стоит начальная форма глагола без **to**. После **have to** и **need to** **to** остаётся.
+    table:
+      columns:
+        - глагол
+        - смысл
+        - пример
+      rows:
+        - - could
+          - вежливая просьба, возможность
+          - Could you send me the job description?
+        - - would
+          - просьба, предложение, условие
+          - I'd be happy to do a technical interview.
+        - - should
+          - совет, ожидание
+          - You should read the offer letter carefully.
+        - - have to
+          - обязанность из договора или правил
+          - I have to give two months' notice.
+        - - need to
+          - необходимость
+          - I need to check my calendar first.
+        - - don't have to
+          - не обязаны
+          - You don't have to relocate.
+  - type: explanation
+    id: polite-requests
+    title: Лестница вежливых просьб
+    body: |-
+      Рекрутеру и менеджеру по найму пишут и говорят чуть вежливее, чем коллеге. Просьбы идут по ступеням от разговорных к самым мягким.
+
+      **Can you send me the details?** — разговорно, с коллегой.
+
+      **Could you send me the details?** — нейтрально, подходит для рекрутера.
+
+      **Would you mind sending me the details?** — мягче; после **mind** стоит форма на **-ing**. Согласие: **Not at all.** или **Of course not.**
+
+      **I was wondering if you could send me the details.** — самая мягкая форма; после **if** стоит **could**.
+
+      Вежливый отказ или перенос строится так же: **I'm afraid I'd need some time to think about it. Could we discuss compensation at a later stage?** В просьбе по почте добавляйте **please** и пишите **Could you please confirm…**.
+    table:
+      columns:
+        - ступень
+        - форма
+        - пример
+      rows:
+        - - разговорная
+          - Can you…?
+          - Can you send me the details?
+        - - нейтральная
+          - Could you…?
+          - Could you tell me more about the role?
+        - - мягкая
+          - Would you mind + -ing?
+          - Would you mind sharing the salary range?
+        - - самая мягкая
+          - I was wondering if you could…
+          - I was wondering if you could move the call.
+  - type: explanation
+    id: modal-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **Would you mind to send.** По-русски после «не возражаете» стоит инфинитив, а в английском после **mind** нужна форма на **-ing**: **Would you mind sending me the offer letter?** Формы *Would you mind to send* и *Would you mind send* ошибочны.
+
+      **To после could, would, should.** Эти глаголы не берут **to**: **I could start**, **you should ask**. Формы *I could to start* и *you should to ask* ошибочны.
+
+      **He have to.** В третьем лице формы have to и need to меняются: **She has to relocate. He needs to check the contract.** После could, would и should окончания нет.
+
+      **Don't have to и mustn't.** **You don't have to relocate** — переезд не обязателен. **You mustn't share the code** — делиться нельзя. Для условий договора и правил компании используйте **have to**: **I have to give two months' notice.**
+
+      **Вопросы и отрицания.** С have to и need to нужен вспомогательный глагол do: **Do I have to be in the office? Do you need to relocate?** Формы *Have I to be…* и *Need I to…* в разговоре не встречаются.
+
+      В формальном письме сокращения (*I'd, don't*) не используются: пишите **I would, do not**.
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - Would you mind to send it?
+          - Would you mind sending it?
+          - после mind — форма на -ing
+        - - I could to start in March.
+          - I could start in March.
+          - после could нет to
+        - - She have to relocate.
+          - She has to relocate.
+          - в третьем лице — has to
+        - - Have I to be in the office?
+          - Do I have to be in the office?
+          - вопрос строится с do
+        - - You mustn't relocate. (не обязаны)
+          - You don't have to relocate.
+          - mustn't значит «нельзя»
+  - type: explanation
+    id: terms-words
+    title: Слова о деньгах, договоре и формате работы
+    body: |-
+      Слова урока образуют три группы.
+
+      **Деньги.** **A salary range** — вилка от минимума до максимума, **a base salary** — оклад без бонусов и опционов, **gross** — до вычета налогов, **net** — после вычета налогов, **stock options** — право купить акции компании по оговорённой цене, **compensation** — всё вознаграждение вместе, **negotiable** — условие, которое ещё можно обсуждать.
+
+      **Договор и сроки.** **A notice period** — срок, который сотрудник отрабатывает после заявления об уходе, **a start date** — дата выхода на новую работу, **a permanent role** — должность без даты окончания договора, **a fixed-term contract** — договор на оговорённый срок, **a work permit** — разрешение на работу в другой стране.
+
+      **Формат и часовые пояса.** **Hybrid** — часть дней в офисе, **on-site** — только в офисе, **remote-first** — офис необязателен, **a time zone** — часовой пояс, **core hours** — часы, когда на связи вся команда, **an overlap** — время, когда рабочие дни коллег совпадают.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: modals-choice
+    title: Какой глагол подходит
+    instruction: Выберите глагол. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "___ you tell me more about the notice period? (вежливая просьба)"
+        options: [Could, Have, Are]
+        answer: Could
+        explanation: Вежливая просьба строится с could; формы Have you tell и Are you tell ошибочны.
+      - id: q2
+        prompt: "My contract says I ___ stay until the end of May. (обязанность по договору)"
+        options: [have to, should to, would to]
+        answer: have to
+        explanation: Обязанность, которая идёт из договора, выражается глаголом have to.
+      - id: q3
+        prompt: "You ___ ask about the probation period before you sign. (совет)"
+        options: [should, to should, would to]
+        answer: should
+        explanation: Совет выражается глаголом should.
+      - id: q4
+        prompt: "I ___ check my calendar before I confirm the time. (мне необходимо)"
+        options: [need to, would to, could to]
+        answer: need to
+        explanation: Необходимость, которая идёт от ваших обстоятельств, — need to.
+      - id: q5
+        prompt: "I am free in March, so I ___ start earlier if you need me. (возможность)"
+        options: [could, should to, need]
+        answer: could
+        explanation: Возможность выражается словом could; формы should to и I need start ошибочны.
+      - id: q6
+        prompt: "You ___ relocate: the role is fully remote. (не обязаны)"
+        options: [don't have to, mustn't, don't to]
+        answer: don't have to
+        explanation: Don't have to означает «не обязаны», mustn't — «нельзя».
+  - type: exercise
+    id: requests-check
+    title: Вежливая просьба
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Какая просьба построена верно?
+        options:
+          - Would you mind sending me the offer letter?
+          - Would you mind to send me the offer letter?
+          - Would you mind send me the offer letter?
+        answer: Would you mind sending me the offer letter?
+        explanation: После mind стоит форма на -ing.
+      - id: q2
+        prompt: "Could you ___ me the job description?"
+        options: [send, to send, sending]
+        answer: send
+        explanation: После could стоит начальная форма глагола без to.
+      - id: q3
+        prompt: "Would you mind ___ the salary range?"
+        options: [sharing, to share, share]
+        answer: sharing
+        explanation: После mind стоит форма на -ing.
+      - id: q4
+        prompt: "I was wondering ___ you could move the call to Friday."
+        options: [if, that, to]
+        answer: if
+        explanation: Мягкая просьба строится как I was wondering if you could…
+      - id: q5
+        prompt: Какое предложение звучит вежливее всего?
+        options:
+          - I was wondering if you could send the details by email.
+          - Send the details by email.
+          - You must send the details by email.
+        answer: I was wondering if you could send the details by email.
+        explanation: Форма I was wondering if you could… — самая мягкая из трёх.
+      - id: q6
+        prompt: "Do you ___ to be in the office on Mondays?"
+        options: [have, has, had]
+        answer: have
+        explanation: После do стоит начальная форма have, затем to.
+  - type: exercise
+    id: words-match
+    title: Деньги и договор
+    instruction: Соедините определение с английским словом. Два английских слова лишние.
+    format: match
+    bank:
+      - a salary range
+      - a base salary
+      - gross
+      - net
+      - compensation
+      - a notice period
+      - a start date
+      - a work permit
+      - a permanent role
+      - a fixed-term contract
+    items:
+      - { id: m1, prompt: "сумма от минимума до максимума, которую компания готова платить за эту должность", answer: a salary range }
+      - { id: m2, prompt: "фиксированная часть оплаты без бонусов и опционов", answer: a base salary }
+      - { id: m3, prompt: "сумма зарплаты до вычета налогов", answer: gross }
+      - { id: m4, prompt: "сумма зарплаты, которую сотрудник получает после вычета налогов", answer: net }
+      - { id: m5, prompt: "время, которое сотрудник продолжает работать после заявления об уходе", answer: a notice period }
+      - { id: m6, prompt: "дата, с которой человек выходит на новую работу", answer: a start date }
+      - { id: m7, prompt: "документ, который разрешает иностранцу работать в стране", answer: a work permit }
+      - { id: m8, prompt: "договор, у которого есть дата окончания", answer: a fixed-term contract }
+  - type: exercise
+    id: words-gap
+    title: Формат работы и условия
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - hybrid
+      - on-site
+      - remote-first
+      - core hours
+      - an overlap
+      - negotiable
+      - stock options
+      - a salary range
+      - a start date
+      - a notice period
+    items:
+      - id: g1
+        prompt: The team works in the office five days a week, so the role is fully ___. (только в офисе)
+        answer: on-site
+      - id: g2
+        prompt: We are ___. Nobody has to come to the office, and our processes assume remote work. (удалёнка по умолчанию)
+        answer: remote-first
+      - id: g3
+        prompt: The job is ___. You spend three days at home and two in the office. (гибридный)
+        answer: hybrid
+      - id: g4
+        prompt: We must all be online between ten and three. These are our ___. (обязательные часы)
+        answer: core hours
+      - id: g5
+        prompt: Our offices are in Berlin and Singapore, so there is ___ of only two hours between our working days. (пересечение)
+        answer: an overlap
+      - id: g6
+        prompt: "The offer is not final: the salary is ___. (обсуждаемая)"
+        answer: negotiable
+      - id: g7
+        prompt: Besides the salary, you receive ___, so you can buy company shares at a fixed price. (опционы)
+        answer: stock options
+      - id: g8
+        prompt: The ad names ___ of 85,000 to 100,000 euros a year. (вилка)
+        answer: a salary range
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Не могли бы вы рассказать подробнее о должности?
+        answer:
+          - "Could you please tell me a bit more about the role?"
+          - "Could you please tell me a bit more about the position?"
+          - "Could you please tell me a bit more about the job?"
+          - "Could you please tell me a little more about the role?"
+          - "Could you please tell me a little more about the position?"
+          - "Could you please tell me a little more about the job?"
+          - "Could you please tell me some more about the role?"
+          - "Could you please tell me some more about the position?"
+          - "Could you please tell me some more about the job?"
+          - "Could you please tell me more about the role?"
+          - "Could you please tell me more about the position?"
+          - "Could you please tell me more about the job?"
+          - "Could you tell me a bit more about the role?"
+          - "Could you tell me a bit more about the position?"
+          - "Could you tell me a bit more about the job?"
+          - "Could you tell me a little more about the role?"
+          - "Could you tell me a little more about the position?"
+          - "Could you tell me a little more about the job?"
+          - "Could you tell me some more about the role?"
+          - "Could you tell me some more about the position?"
+          - "Could you tell me some more about the job?"
+          - "Could you tell me more about the role?"
+          - "Could you tell me more about the position?"
+          - "Could you tell me more about the job?"
+          - "Would you please tell me a bit more about the role?"
+          - "Would you please tell me a bit more about the position?"
+          - "Would you please tell me a bit more about the job?"
+          - "Would you please tell me a little more about the role?"
+          - "Would you please tell me a little more about the position?"
+          - "Would you please tell me a little more about the job?"
+          - "Would you please tell me some more about the role?"
+          - "Would you please tell me some more about the position?"
+          - "Would you please tell me some more about the job?"
+          - "Would you please tell me more about the role?"
+          - "Would you please tell me more about the position?"
+          - "Would you please tell me more about the job?"
+          - "Would you tell me a bit more about the role?"
+          - "Would you tell me a bit more about the position?"
+          - "Would you tell me a bit more about the job?"
+          - "Would you tell me a little more about the role?"
+          - "Would you tell me a little more about the position?"
+          - "Would you tell me a little more about the job?"
+          - "Would you tell me some more about the role?"
+          - "Would you tell me some more about the position?"
+          - "Would you tell me some more about the job?"
+          - "Would you tell me more about the role?"
+          - "Would you tell me more about the position?"
+          - "Would you tell me more about the job?"
+          - "Could you please tell me about the role in more detail?"
+          - "Could you please tell me about the position in more detail?"
+          - "Could you please tell me about the job in more detail?"
+          - "Could you tell me about the role in more detail?"
+          - "Could you tell me about the position in more detail?"
+          - "Could you tell me about the job in more detail?"
+          - "Would you please tell me about the role in more detail?"
+          - "Would you please tell me about the position in more detail?"
+          - "Would you please tell me about the job in more detail?"
+          - "Would you tell me about the role in more detail?"
+          - "Would you tell me about the position in more detail?"
+          - "Would you tell me about the job in more detail?"
+          - "Could you please explain the role in more detail?"
+          - "Could you please explain the position in more detail?"
+          - "Could you please explain the job in more detail?"
+          - "Could you explain the role in more detail?"
+          - "Could you explain the position in more detail?"
+          - "Could you explain the job in more detail?"
+          - "Would you please explain the role in more detail?"
+          - "Would you please explain the position in more detail?"
+          - "Would you please explain the job in more detail?"
+          - "Would you explain the role in more detail?"
+          - "Would you explain the position in more detail?"
+          - "Would you explain the job in more detail?"
+          - "Could you please give me a bit more information about the role?"
+          - "Could you please give me a bit more information about the position?"
+          - "Could you please give me a bit more information about the job?"
+          - "Could you please give me a little more information about the role?"
+          - "Could you please give me a little more information about the position?"
+          - "Could you please give me a little more information about the job?"
+          - "Could you please give me more information about the role?"
+          - "Could you please give me more information about the position?"
+          - "Could you please give me more information about the job?"
+          - "Could you please share with me a bit more information about the role?"
+          - "Could you please share with me a bit more information about the position?"
+          - "Could you please share with me a bit more information about the job?"
+          - "Could you please share with me a little more information about the role?"
+          - "Could you please share with me a little more information about the position?"
+          - "Could you please share with me a little more information about the job?"
+          - "Could you please share with me more information about the role?"
+          - "Could you please share with me more information about the position?"
+          - "Could you please share with me more information about the job?"
+          - "Could you give me a bit more information about the role?"
+          - "Could you give me a bit more information about the position?"
+          - "Could you give me a bit more information about the job?"
+          - "Could you give me a little more information about the role?"
+          - "Could you give me a little more information about the position?"
+          - "Could you give me a little more information about the job?"
+          - "Could you give me more information about the role?"
+          - "Could you give me more information about the position?"
+          - "Could you give me more information about the job?"
+          - "Could you share with me a bit more information about the role?"
+          - "Could you share with me a bit more information about the position?"
+          - "Could you share with me a bit more information about the job?"
+          - "Could you share with me a little more information about the role?"
+          - "Could you share with me a little more information about the position?"
+          - "Could you share with me a little more information about the job?"
+          - "Could you share with me more information about the role?"
+          - "Could you share with me more information about the position?"
+          - "Could you share with me more information about the job?"
+          - "Would you please give me a bit more information about the role?"
+          - "Would you please give me a bit more information about the position?"
+          - "Would you please give me a bit more information about the job?"
+          - "Would you please give me a little more information about the role?"
+          - "Would you please give me a little more information about the position?"
+          - "Would you please give me a little more information about the job?"
+          - "Would you please give me more information about the role?"
+          - "Would you please give me more information about the position?"
+          - "Would you please give me more information about the job?"
+          - "Would you please share with me a bit more information about the role?"
+          - "Would you please share with me a bit more information about the position?"
+          - "Would you please share with me a bit more information about the job?"
+          - "Would you please share with me a little more information about the role?"
+          - "Would you please share with me a little more information about the position?"
+          - "Would you please share with me a little more information about the job?"
+          - "Would you please share with me more information about the role?"
+          - "Would you please share with me more information about the position?"
+          - "Would you please share with me more information about the job?"
+          - "Would you give me a bit more information about the role?"
+          - "Would you give me a bit more information about the position?"
+          - "Would you give me a bit more information about the job?"
+          - "Would you give me a little more information about the role?"
+          - "Would you give me a little more information about the position?"
+          - "Would you give me a little more information about the job?"
+          - "Would you give me more information about the role?"
+          - "Would you give me more information about the position?"
+          - "Would you give me more information about the job?"
+          - "Would you share with me a bit more information about the role?"
+          - "Would you share with me a bit more information about the position?"
+          - "Would you share with me a bit more information about the job?"
+          - "Would you share with me a little more information about the role?"
+          - "Would you share with me a little more information about the position?"
+          - "Would you share with me a little more information about the job?"
+          - "Would you share with me more information about the role?"
+          - "Would you share with me more information about the position?"
+          - "Would you share with me more information about the job?"
+          - "Could you please give me more details about the role?"
+          - "Could you please give me more details about the position?"
+          - "Could you please give me more details about the job?"
+          - "Could you please share with me more details about the role?"
+          - "Could you please share with me more details about the position?"
+          - "Could you please share with me more details about the job?"
+          - "Could you give me more details about the role?"
+          - "Could you give me more details about the position?"
+          - "Could you give me more details about the job?"
+          - "Could you share with me more details about the role?"
+          - "Could you share with me more details about the position?"
+          - "Could you share with me more details about the job?"
+          - "Would you please give me more details about the role?"
+          - "Would you please give me more details about the position?"
+          - "Would you please give me more details about the job?"
+          - "Would you please share with me more details about the role?"
+          - "Would you please share with me more details about the position?"
+          - "Would you please share with me more details about the job?"
+          - "Would you give me more details about the role?"
+          - "Would you give me more details about the position?"
+          - "Would you give me more details about the job?"
+          - "Would you share with me more details about the role?"
+          - "Would you share with me more details about the position?"
+          - "Would you share with me more details about the job?"
+          - "Would you mind telling me a bit more about the role?"
+          - "Would you mind telling me a bit more about the position?"
+          - "Would you mind telling me a bit more about the job?"
+          - "Would you mind telling me a little more about the role?"
+          - "Would you mind telling me a little more about the position?"
+          - "Would you mind telling me a little more about the job?"
+          - "Would you mind telling me some more about the role?"
+          - "Would you mind telling me some more about the position?"
+          - "Would you mind telling me some more about the job?"
+          - "Would you mind telling me more about the role?"
+          - "Would you mind telling me more about the position?"
+          - "Would you mind telling me more about the job?"
+          - "Would you mind giving me a bit more information about the role?"
+          - "Would you mind giving me a bit more information about the position?"
+          - "Would you mind giving me a bit more information about the job?"
+          - "Would you mind giving me a little more information about the role?"
+          - "Would you mind giving me a little more information about the position?"
+          - "Would you mind giving me a little more information about the job?"
+          - "Would you mind giving me more information about the role?"
+          - "Would you mind giving me more information about the position?"
+          - "Would you mind giving me more information about the job?"
+        explanation: Вежливая просьба с could; допустим и вариант Would you mind telling me…
+      - id: q2
+        prompt: Мой срок предупреждения об увольнении — два месяца.
+        answer:
+          - "My notice period is two months long."
+          - "My notice period is two months."
+          - "My notice is two months long."
+          - "My notice is two months."
+          - "I have a notice period of two months."
+          - "I have a two-month notice period."
+          - "I have to give two months' notice."
+        explanation: Срок предупреждения — notice period; допустим и вариант с have to give.
+      - id: q3
+        prompt: Я мог бы выйти на работу в начале марта.
+        answer:
+          - "I could start work in early March."
+          - "I could start work at the beginning of March."
+          - "I could start work in the beginning of March."
+          - "I could start working in early March."
+          - "I could start working at the beginning of March."
+          - "I could start working in the beginning of March."
+          - "I could start in early March."
+          - "I could start at the beginning of March."
+          - "I could start in the beginning of March."
+          - "I could begin work in early March."
+          - "I could begin work at the beginning of March."
+          - "I could begin work in the beginning of March."
+          - "I could begin working in early March."
+          - "I could begin working at the beginning of March."
+          - "I could begin working in the beginning of March."
+          - "I could begin in early March."
+          - "I could begin at the beginning of March."
+          - "I could begin in the beginning of March."
+          - "I would be able to start work in early March."
+          - "I would be able to start work at the beginning of March."
+          - "I would be able to start work in the beginning of March."
+          - "I would be able to start working in early March."
+          - "I would be able to start working at the beginning of March."
+          - "I would be able to start working in the beginning of March."
+          - "I would be able to start in early March."
+          - "I would be able to start at the beginning of March."
+          - "I would be able to start in the beginning of March."
+          - "I would be able to begin work in early March."
+          - "I would be able to begin work at the beginning of March."
+          - "I would be able to begin work in the beginning of March."
+          - "I would be able to begin working in early March."
+          - "I would be able to begin working at the beginning of March."
+          - "I would be able to begin working in the beginning of March."
+          - "I would be able to begin in early March."
+          - "I would be able to begin at the beginning of March."
+          - "I would be able to begin in the beginning of March."
+          - "I could join the company in early March."
+          - "I could join the company at the beginning of March."
+          - "I could join the team in early March."
+          - "I could join the team at the beginning of March."
+          - "I could join you in early March."
+          - "I could join you at the beginning of March."
+          - "I could join in early March."
+          - "I could join at the beginning of March."
+          - "I would be able to join the company in early March."
+          - "I would be able to join the company at the beginning of March."
+          - "I would be able to join the team in early March."
+          - "I would be able to join the team at the beginning of March."
+          - "I would be able to join you in early March."
+          - "I would be able to join you at the beginning of March."
+          - "I would be able to join in early March."
+          - "I would be able to join at the beginning of March."
+          - "I could start the job in early March."
+          - "I could start the job at the beginning of March."
+          - "I could start the role in early March."
+          - "I could start the role at the beginning of March."
+          - "I could begin the job in early March."
+          - "I could begin the job at the beginning of March."
+          - "I could begin the role in early March."
+          - "I could begin the role at the beginning of March."
+          - "I would be able to start the job in early March."
+          - "I would be able to start the job at the beginning of March."
+          - "I would be able to start the role in early March."
+          - "I would be able to start the role at the beginning of March."
+          - "I would be able to begin the job in early March."
+          - "I would be able to begin the job at the beginning of March."
+          - "I would be able to begin the role in early March."
+          - "I would be able to begin the role at the beginning of March."
+        explanation: Возможность выражается словом could; «в начале марта» — in early March.
+      - id: q4
+        prompt: Мне сначала нужно проверить календарь.
+        answer:
+          - "I need to check my calendar first."
+          - "I need to check my diary first."
+          - "I need to check my schedule first."
+          - "I have to check my calendar first."
+          - "I have to check my diary first."
+          - "I have to check my schedule first."
+          - "I first need to check my calendar first."
+          - "I first need to check my calendar."
+          - "I first need to check my diary first."
+          - "I first need to check my diary."
+          - "I first need to check my schedule first."
+          - "I first need to check my schedule."
+          - "I first have to check my calendar first."
+          - "I first have to check my calendar."
+          - "I first have to check my diary first."
+          - "I first have to check my diary."
+          - "I first have to check my schedule first."
+          - "I first have to check my schedule."
+          - "I need to check my calendar."
+          - "I need to check my diary."
+          - "I need to check my schedule."
+          - "I have to check my calendar."
+          - "I have to check my diary."
+          - "I have to check my schedule."
+          - "I must check my calendar first."
+          - "I must check my diary first."
+          - "I must check my schedule first."
+          - "First, I need to check my calendar."
+          - "First, I need to check my diary."
+          - "First, I need to check my schedule."
+          - "First, I have to check my calendar."
+          - "First, I have to check my diary."
+          - "First, I have to check my schedule."
+          - "First I need to check my calendar."
+          - "First I need to check my diary."
+          - "First I need to check my schedule."
+          - "First I have to check my calendar."
+          - "First I have to check my diary."
+          - "First I have to check my schedule."
+        explanation: Необходимость выражается словами need to или have to.
+      - id: q5
+        prompt: Вам не нужно переезжать.
+        answer:
+          - "You will not have to relocate."
+          - "You will not have to move."
+          - "You won't have to relocate."
+          - "You won't have to move."
+          - "You do not have to relocate."
+          - "You do not have to move."
+          - "You do not need to relocate."
+          - "You do not need to move."
+          - "You don't have to relocate."
+          - "You don't have to move."
+          - "You don't need to relocate."
+          - "You don't need to move."
+          - "You do not have to relocate to another city."
+          - "You do not have to relocate anywhere."
+          - "You do not have to move to another city."
+          - "You do not have to move anywhere."
+          - "You do not need to relocate to another city."
+          - "You do not need to relocate anywhere."
+          - "You do not need to move to another city."
+          - "You do not need to move anywhere."
+          - "You don't have to relocate to another city."
+          - "You don't have to relocate anywhere."
+          - "You don't have to move to another city."
+          - "You don't have to move anywhere."
+          - "You don't need to relocate to another city."
+          - "You don't need to relocate anywhere."
+          - "You don't need to move to another city."
+          - "You don't need to move anywhere."
+          - "You needn't relocate."
+          - "You needn't move."
+        explanation: Don't have to и don't need to означают «не обязаны, не нужно».
