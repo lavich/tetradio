@@ -1,0 +1,346 @@
+title: Формулировки вопросов собеседования и быстрые вопросы
+kind: lesson
+items:
+  - { kind: word, id: ew159 }
+  - { kind: word, id: ew160 }
+  - { kind: word, id: ew161 }
+  - { kind: word, id: ew162 }
+  - { kind: word, id: ew163 }
+  - { kind: word, id: ew164 }
+  - { kind: word, id: ew165 }
+  - { kind: word, id: ew166 }
+  - { kind: word, id: ew167 }
+  - { kind: word, id: ew168 }
+  - { kind: word, id: ew169 }
+  - { kind: word, id: ew170 }
+  - { kind: word, id: ew171 }
+  - { kind: word, id: ew172 }
+  - { kind: word, id: ew173 }
+  - { kind: word, id: ew174 }
+  - { kind: word, id: ew175 }
+  - { kind: phrase, id: ep109 }
+  - { kind: phrase, id: ep110 }
+  - { kind: phrase, id: ep111 }
+  - { kind: phrase, id: ep112 }
+  - { kind: phrase, id: ep113 }
+  - { kind: phrase, id: ep114 }
+  - { kind: phrase, id: ep115 }
+  - { kind: phrase, id: ep116 }
+blocks:
+  - type: explanation
+    id: interview-words
+    title: Язык вопросов собеседования
+    body: |-
+      Интервьюер задаёт один и тот же вопрос по-разному, и слова урока описывают эти формы и реакцию на них.
+
+      **Виды вопросов.** **Open-ended** — вопрос, на который отвечают развёрнуто, **a scenario** — описанная ситуация, в которой нужно решить задачу, **a case study** — разбор конкретного случая из практики, **a trick question** — вопрос с подвохом, **a curveball** — неожиданный вопрос, **a prompt** — исходная формулировка задания (в IT — ещё и запрос к языковой модели).
+
+      **Ход разговора.** **Probe** — расспрашивать глубже, **a steer** — подсказка, куда двигаться (британское слово), **a tangent** — уход в побочную тему, **interrupt** — перебить, **put on the spot** — застать врасплох, **hesitate** — колебаться, **articulate** — чётко выразить мысль, **the gist** — общий смысл без деталей.
+
+      **Связь и слух.** **A screen share** — показ экрана в видеозвонке, **inaudible** — неразборчивый, **mishear** — ослышаться (*misheard* — форма прошедшего времени и причастия).
+  - type: explanation
+    id: buy-time
+    title: Выиграть время и уточнить задачу
+    body: |-
+      Пауза перед ответом принята, если её объяснить: **Let me think about it for a second. That's a good question.** Если ответ потребует времени, можно отложить его: **Could I come back to that in a moment?** Слова **Let me rephrase that** показывают, что вы поправляете свою формулировку.
+
+      Прежде чем отвечать на широкий вопрос, уточните задачу: **Should I focus on the technical side?** Если вы могли ослышаться, проверьте слово: **Did you say Kubernetes or Kafka?** Ответ начинается с главного: **Let me start with the main point.** Если подробностей не хватает вам, попросите: **Could you elaborate on that?**
+
+      Фразы идут в порядке разговора: сначала время, затем уточнение задачи, затем ответ. Одна фраза из списка занимает три секунды и оставляет время подумать.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - a scenario
+      - a case study
+      - a trick question
+      - a curveball
+      - a tangent
+      - the gist
+      - mishear
+      - open-ended
+      - a steer
+      - a prompt
+    items:
+      - { id: m1, prompt: "вопрос, на который не отвечают «да» или «нет» и который не описывает ситуацию", answer: open-ended }
+      - { id: m2, prompt: "вымышленная ситуация, которую интервьюер описывает словами «Imagine that…»", answer: a scenario }
+      - { id: m3, prompt: "разбор случая из практики компании или проекта", answer: a case study }
+      - { id: m4, prompt: "вопрос с подвохом, где очевидный ответ может быть неверным", answer: a trick question }
+      - { id: m5, prompt: "неожиданный вопрос на тему, которой вы не касались", answer: a curveball }
+      - { id: m6, prompt: "уход в побочную тему", answer: a tangent }
+      - { id: m7, prompt: "общий смысл без деталей", answer: the gist }
+      - { id: m8, prompt: "ослышаться", answer: mishear }
+  - type: exercise
+    id: words-gap
+    title: Вопросы и реакции
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - probe
+      - articulate
+      - interrupt
+      - hesitate
+      - inaudible
+      - gist
+      - spot
+      - steer
+      - scenario
+      - tangent
+    items:
+      - id: g1
+        prompt: The interviewer will ___ into your answer with questions about details. (расспрашивать глубже)
+        answer: probe
+      - id: g2
+        prompt: It is hard to ___ an idea clearly when you are nervous. (чётко выразить)
+        answer: articulate
+      - id: g3
+        prompt: Sorry to ___, but could I add one thing? (перебить)
+        answer: interrupt
+      - id: g4
+        prompt: Don't ___ to ask for a moment to think. (колебаться)
+        answer: hesitate
+      - id: g5
+        prompt: The last sentence was ___, so I did not catch it. (неразборчивый)
+        answer: inaudible
+      - id: g6
+        prompt: The question came without warning, and I felt put on the ___. (в неловком положении)
+        answer: spot
+      - id: g7
+        prompt: "Imagine this ___: the database is down and the release is tomorrow. (ситуация для решения)"
+        answer: scenario
+      - id: g8
+        prompt: I went off on a ___, so the interviewer brought me back to the topic. (в побочную тему)
+        answer: tangent
+  - type: explanation
+    id: reading-how
+    title: Как устроены вопросы собеседования
+    body: |-
+      Один и тот же вопрос приходит в разных формулировках, и общий смысл (**the gist**) сохраняется. Читая текст, находите в нём, какая форма вопроса описана и что она проверяет: факт, опыт, мышление или спокойствие.
+
+      Вопросы из текста записаны в «». В них встречаются прямые вопросы и косвенные: у косвенных после вопросительного слова порядок слов как в утверждении. Незнакомые слова переведены под текстом, слова урока идут без перевода.
+  - type: reading
+    id: formulations
+    title: "One question, four ways"
+    text: |-
+      One question, four ways
+
+      Interviewers rarely ask questions the way a textbook does. The same topic can come in four forms, and the gist is usually the same.
+
+      A direct question asks for a fact: "Have you worked with Kubernetes?" An open-ended question gives you room: "Could you tell me about your experience with containers?" A scenario describes a situation: "Imagine that a deployment fails on Friday evening. What would you do?" A case study goes further and asks you to solve a real problem step by step.
+
+      Candidates often feel put on the spot by a scenario, but it usually has no single correct answer. The interviewer wants to hear how you think. If the prompt is vague, ask a question before you start. Narrowing the task down shows that you work carefully. If you go off on a tangent, the interviewer may give you a steer, for example: "Let's go back to the deployment."
+
+      After your answer, expect a follow-up. The interviewer may probe a detail: "Why did you choose that tool?" A trick question is rare. A curveball, such as an unexpected question about a topic you did not mention, is a chance to show that you can stay calm.
+
+      If you need time, say so. Do not hesitate to ask for a moment to think.
+    glosses:
+      - { text: rarely, russian: редко }
+      - { text: textbook, russian: учебник }
+      - { text: room, russian: "место, простор" }
+      - { text: deployment, russian: развёртывание }
+      - { text: step by step, russian: шаг за шагом }
+      - { text: carefully, russian: тщательно }
+      - { text: stay calm, russian: сохранять спокойствие }
+  - type: exercise
+    id: formulations-tf
+    about: formulations
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The same topic can be asked in several forms.
+        options: ["True", "False"]
+        answer: "True"
+        explanation: The same topic can come in four forms — одна тема приходит в четырёх формах.
+      - id: q2
+        prompt: A direct question asks for a fact.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: A scenario usually has one correct answer.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: It usually has no single correct answer — единственного верного ответа обычно нет, интервьюер оценивает ход мысли.
+      - id: q4
+        prompt: The text advises asking a question when the prompt is vague.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q5
+        prompt: A trick question is very common in interviews.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: A trick question is rare — вопрос с подвохом встречается редко.
+      - id: q6
+        prompt: The text advises staying silent when you need time to think.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: If you need time, say so — если нужно время, скажите об этом вслух.
+  - type: exercise
+    id: formulations-type
+    about: formulations
+    title: Форма вопроса
+    instruction: Какая форма вопроса описана в тексте?
+    format: choice
+    items:
+      - id: q1
+        prompt: "«Have you worked with Kubernetes?»"
+        options: [a direct question, an open-ended question, a scenario]
+        answer: a direct question
+        explanation: Вопрос просит факт и допускает ответ «да или нет».
+      - id: q2
+        prompt: "«Could you tell me about your experience with containers?»"
+        options: [a direct question, an open-ended question, a scenario]
+        answer: an open-ended question
+        explanation: Вопрос оставляет простор для развёрнутого ответа.
+      - id: q3
+        prompt: "«Imagine that a deployment fails on Friday evening. What would you do?»"
+        options: [a direct question, an open-ended question, a scenario]
+        answer: a scenario
+        explanation: Интервьюер описывает ситуацию и просит действовать в ней.
+      - id: q4
+        prompt: "«Why did you choose that tool?» — после ответа о проекте"
+        options: [a follow-up, a scenario, a curveball]
+        answer: a follow-up
+        explanation: Такой вопрос уточняет деталь сказанного.
+      - id: q5
+        prompt: "«Let's go back to the deployment.» — когда вы ушли в сторону"
+        options: [a steer, a case study, a trick question]
+        answer: a steer
+        explanation: Интервьюер возвращает разговор к теме.
+  - type: exercise
+    id: formulations-grammar
+    about: formulations
+    title: Вопросы в тексте
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "«What would you do?» — какое слово стоит перед подлежащим you?"
+        options: [would, do]
+        answer: would
+        explanation: Вспомогательный глагол would стоит перед подлежащим, а do остаётся в начальной форме после него.
+      - id: q2
+        prompt: "«Why did you choose that tool?» — в какой форме стоит глагол choose?"
+        options:
+          - в начальной форме, прошедшее время передаёт did
+          - в форме прошедшего времени chose
+        answer: в начальной форме, прошедшее время передаёт did
+        explanation: После did глагол всегда в начальной форме.
+      - id: q3
+        prompt: Какое предложение верно?
+        options:
+          - Could you tell me how you chose that tool?
+          - Could you tell me how did you choose that tool?
+        answer: Could you tell me how you chose that tool?
+        explanation: Внутри косвенного вопроса did не нужен, глагол стоит в прошедшем времени.
+  - type: explanation
+    id: listening-how
+    title: Четыре быстрых вопроса
+    body: |-
+      На панельном собеседовании вопросы задают разные люди, подряд и быстро. Кандидат успевает поймать суть, если слушает вопросительное слово, глагол и тему. Одна ошибка при слухе меняет вопрос целиком, поэтому переспрос в таких разговорах принят.
+
+      Послушайте собеседование Нади: четыре интервьюера по очереди задают ей вопросы. Сначала целиком, затем ответьте на вопросы к записи, проверяя себя при втором прослушивании. Транскрипт открывается после ответа. Задача — определить, что именно спросил каждый.
+  - type: listening
+    id: quick-questions
+    title: Four quick questions
+    plays: 2
+    transcript:
+      - { speaker: Sarah, text: "Thanks for joining, Nadia. Quick one to start: do you prefer working on the frontend or the backend?" }
+      - { speaker: Nadia, text: "The backend, mostly. I have worked on APIs and databases for four years, and I can do some frontend as well." }
+      - { speaker: Mark, text: "Could you tell me what you would check first if an API suddenly became slow?" }
+      - { speaker: Nadia, text: "I would look at the logs and the response times first. Then I would narrow it down to one endpoint." }
+      - { speaker: Katarina, text: "Great. Now, how big is the team you work with, and who do you report to?" }
+      - { speaker: Nadia, text: "Sorry, could you repeat the question, please? I missed the second part." }
+      - { speaker: Katarina, text: "Of course. How big is your team, and who do you report to?" }
+      - { speaker: Nadia, text: "Seven developers. I report to the engineering manager." }
+      - { speaker: Gregor, text: "Last one from me. Imagine we have to move the database over one weekend. How would you keep the downtime short?" }
+      - { speaker: Nadia, text: "Presumably, the database is not huge, so I would start with a replica and switch the traffic at the end. If I understand correctly, you want the downtime to be as short as possible?" }
+      - { speaker: Gregor, text: "Exactly. Thank you, Nadia." }
+  - type: exercise
+    id: quick-questions-q
+    about: quick-questions
+    title: Что спросили
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What did Sarah ask?
+        options:
+          - whether Nadia prefers the frontend or the backend
+          - how long Nadia has used Python
+          - how big Nadia's team is
+        answer: whether Nadia prefers the frontend or the backend
+      - id: q2
+        prompt: What did Mark ask?
+        options:
+          - what Nadia would check first if an API became slow
+          - which database Nadia uses
+          - how Nadia tests an API
+        answer: what Nadia would check first if an API became slow
+        explanation: Could you tell me what you would check first — косвенный вопрос о первом шаге при замедлении API.
+      - id: q3
+        prompt: What did Katarina ask?
+        options:
+          - how big the team is and who Nadia reports to
+          - how long Nadia has worked at the company
+          - which tools the team uses
+        answer: how big the team is and who Nadia reports to
+        explanation: В вопросе две части — размер команды и руководитель.
+      - id: q4
+        prompt: What did Gregor ask?
+        options:
+          - how Nadia would keep the downtime short during a database move
+          - how many weekends Nadia works
+          - which database is the fastest
+        answer: how Nadia would keep the downtime short during a database move
+      - id: q5
+        prompt: Why did Nadia ask Katarina to repeat the question?
+        options:
+          - She missed the second part.
+          - She did not know the word team.
+          - She wanted more time to think.
+        answer: She missed the second part.
+        explanation: I missed the second part — вторую часть вопроса она пропустила.
+      - id: q6
+        prompt: How did Nadia check that she understood Gregor?
+        options:
+          - She said what she understood and asked him to confirm.
+          - She asked him to speak more slowly.
+          - She asked for an example.
+        answer: She said what she understood and asked him to confirm.
+        explanation: If I understand correctly, … — проверка понимания.
+      - id: q7
+        prompt: How many developers are in Nadia's team?
+        options:
+          - seven
+          - four
+          - eleven
+        answer: seven
+  - type: exercise
+    id: quick-questions-phrases
+    about: quick-questions
+    title: Фразы из разговора
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - repeat
+      - missed
+      - understand
+      - narrow
+      - report
+      - presumably
+      - colleague
+      - elaborate
+    items:
+      - { id: g1, prompt: "Sorry, could you ___ the question, please? (повторить)", answer: repeat }
+      - { id: g2, prompt: "I ___ the second part. (пропустила)", answer: missed }
+      - { id: g3, prompt: "If I ___ correctly, you want the downtime to be short.", answer: understand }
+      - { id: g4, prompt: "Then I would ___ it down to one endpoint. (сузить круг)", answer: narrow }
+      - { id: g5, prompt: "Who do you ___ to? (подчиняться)", answer: report }
+      - { id: g6, prompt: "___, the vendor will keep the old API for another year. (предположительно)", answer: presumably }

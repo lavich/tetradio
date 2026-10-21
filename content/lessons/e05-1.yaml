@@ -1,0 +1,1264 @@
+title: Вопросы и косвенные вопросы — переспросить и уточнить
+kind: lesson
+items:
+  - { kind: word, id: ew141 }
+  - { kind: word, id: ew142 }
+  - { kind: word, id: ew143 }
+  - { kind: word, id: ew144 }
+  - { kind: word, id: ew145 }
+  - { kind: word, id: ew146 }
+  - { kind: word, id: ew147 }
+  - { kind: word, id: ew148 }
+  - { kind: word, id: ew149 }
+  - { kind: word, id: ew150 }
+  - { kind: word, id: ew151 }
+  - { kind: word, id: ew152 }
+  - { kind: word, id: ew153 }
+  - { kind: word, id: ew154 }
+  - { kind: word, id: ew155 }
+  - { kind: word, id: ew156 }
+  - { kind: word, id: ew157 }
+  - { kind: word, id: ew158 }
+  - { kind: phrase, id: ep101 }
+  - { kind: phrase, id: ep102 }
+  - { kind: phrase, id: ep103 }
+  - { kind: phrase, id: ep104 }
+  - { kind: phrase, id: ep105 }
+  - { kind: phrase, id: ep106 }
+  - { kind: phrase, id: ep107 }
+  - { kind: phrase, id: ep108 }
+blocks:
+  - type: explanation
+    id: questions
+    title: Прямые вопросы — порядок слов
+    body: |-
+      На собеседовании вопросы звучат быстро, и понять их помогает структура. В прямом вопросе вспомогательный глагол стоит перед подлежащим: **Do you use Docker? Have you worked with Kafka? Can you explain it?** В present simple и past simple вспомогательный глагол — **do, does, did**, а основной остаётся в начальной форме: **Did you design the API?**
+
+      Вопрос с вопросительным словом строится по схеме «вопросительное слово + вспомогательный глагол + подлежащее + глагол»: **What do you mean? Why did you choose Go? How long have you worked there?** Предлог остаётся в конце: **Which team did you work with?**
+
+      Если вопросительное слово само является подлежащим, вспомогательного глагола нет: **Who owns the service? What caused the error?** Сравните: *What did you cause?* — здесь *what* дополнение, и вспомогательный глагол нужен.
+
+      Типичные ошибки русскоговорящих — пропустить вспомогательный глагол (*What you mean?*) и добавить лишний в вопросе к подлежащему (*Who did own the service?*).
+    table:
+      columns:
+        - тип вопроса
+        - схема
+        - пример
+      rows:
+        - - общий (да или нет)
+          - вспомогательный + подлежащее + глагол
+          - Did you design the API?
+        - - с вопросительным словом
+          - вопросительное слово + вспомогательный + подлежащее + глагол
+          - Why did you choose Go?
+        - - к подлежащему
+          - вопросительное слово + глагол
+          - Who owns the service?
+        - - с предлогом
+          - вопросительное слово + вспомогательный + подлежащее + глагол + предлог
+          - Which team did you work with?
+  - type: explanation
+    id: indirect
+    title: Косвенные вопросы
+    body: |-
+      Вежливый вопрос встраивается во вводную фразу: **Could you tell me…, Do you know…, I'd like to know…** Внутри такого вопроса порядок слов как в утверждении: подлежащее, затем глагол, без **do, does, did**. Сравните: *What do you mean?* — **Could you tell me what you mean?**
+
+      Для вопроса «да или нет» используются **if** или **whether**: **Do you know if the interview will be online?** Время глагола сохраняется, а окончание **-s** в третьем лице возвращается: *How does it scale?* — **I'd like to know how it scales.** Вопросительное слово остаётся: **where, when, who, how long**.
+
+      Знак вопроса зависит от вводной фразы. После вопроса (**Could you tell me…? Do you know…?**) он стоит, после утверждения (**I'd like to know…, I was wondering…**) нет.
+
+      Типичная ошибка русскоговорящих — повторить вопросительный порядок слов внутри: *Could you tell me what do you mean?* Подлежащее после вопросительного слова идёт перед глаголом: **what you mean**.
+    table:
+      columns:
+        - прямой вопрос
+        - косвенный вопрос
+      rows:
+        - - What do you mean by scale?
+          - Could you tell me what you mean by scale?
+        - - Where is the office?
+          - Do you know where the office is?
+        - - Did you receive my CV?
+          - Could you tell me if you received my CV?
+        - - How does it scale?
+          - I'd like to know how it scales.
+  - type: explanation
+    id: clarify-moves
+    title: Переспросить, уточнить, пересказать
+    body: |-
+      На собеседовании вопрос бывает непонятен по трём причинам: его не расслышали, слова незнакомы или смысл допускает два толкования. Для каждой причины есть своя фраза.
+
+      **Повторить.** Вопрос не расслышали: **Could you repeat the question, please? Could you speak a little more slowly?**
+
+      **Уточнить.** Слова понятны, смысл нет: **Could you clarify the question? Could you tell me what you mean by "scale"? Could you give me an example?**
+
+      **Перефразировать.** Нужны другие слова: **Could you put that another way?**
+
+      **Проверить понимание.** Вы называете, как поняли вопрос: **If I understand correctly, you're asking about caching. Do you mean the frontend or the backend?** Интервьюер подтверждает или поправляет, и вы отвечаете на нужный вопрос.
+
+      Слова урока образуют три группы. **Действия.** **Clarify** — уточнить, **elaborate on** — рассказать подробнее, **rephrase** — переформулировать, **refer to** — иметь в виду, **narrow down** — сузить круг вариантов, **go over** — пройтись по пунктам. **Вопрос и ответ.** **A follow-up** — уточняющий вопрос по ответу, **a nuance** — тонкое различие, **a misunderstanding** — недоразумение, **ambiguous** — допускает два толкования, **vague** — расплывчатый. **Связки и оговорки.** **In other words** — другими словами, **straightforward** — простой, без подвоха, **specifically** — именно, **to be precise** — если быть точным, **presumably** — предположительно, **off the top of my head** — навскидку, **to the best of my knowledge** — насколько мне известно.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: direct-choice
+    title: Прямые вопросы
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "___ you work with Kafka at your last company?"
+        options: [Did, Does, Are]
+        answer: Did
+        explanation: Вопрос о прошлом в past simple начинается с did, основной глагол остаётся в начальной форме.
+      - id: q2
+        prompt: "What ___ the deployment to fail yesterday? (вопрос к подлежащему)"
+        options: [caused, did caused, does caused]
+        answer: caused
+        explanation: Вопросительное слово what — подлежащее, поэтому вспомогательного глагола нет.
+      - id: q3
+        prompt: "Why ___ you choose this framework last year?"
+        options: [did, do, are]
+        answer: did
+        explanation: Прошлое время требует did.
+      - id: q4
+        prompt: "How long ___ you been working there?"
+        options: [have, did, do]
+        answer: have
+        explanation: Have you been working — present perfect continuous, вопрос о периоде до сих пор.
+      - id: q5
+        prompt: "Who ___ the deployment pipeline? (вопрос к подлежащему)"
+        options: [owns, does owns, do own]
+        answer: owns
+        explanation: В вопросе к подлежащему глагол стоит сразу после who и принимает окончание -s.
+      - id: q6
+        prompt: "Which team ___ you work with?"
+        options: [did, were, have]
+        answer: did
+        explanation: "Вопрос с предлогом строится как обычный: вспомогательный did, подлежащее, глагол, предлог в конце."
+  - type: exercise
+    id: indirect-choice
+    title: Косвенные вопросы
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Could you tell me what ___?"
+        options: [you mean, do you mean, you do mean]
+        answer: you mean
+        explanation: В косвенном вопросе порядок слов как в утверждении, без do.
+      - id: q2
+        prompt: "Do you know ___ the interview starts? (когда)"
+        options: [when, when does, does when]
+        answer: when
+        explanation: После when идёт подлежащее и глагол в обычном порядке.
+      - id: q3
+        prompt: "Could you tell me ___ you received my CV? (получили ли)"
+        options: [if, that, what]
+        answer: if
+        explanation: Вопрос «да или нет» во вложенной части вводится словом if или whether.
+      - id: q4
+        prompt: "I'd like to know how long the process ___."
+        options: [takes, does it take, take]
+        answer: takes
+        explanation: Глагол остаётся в обычном порядке, и в третьем лице возвращается -s.
+      - id: q5
+        prompt: Какое предложение верно?
+        options:
+          - Could you tell me where the office is?
+          - Could you tell me where is the office?
+        answer: Could you tell me where the office is?
+        explanation: Внутри косвенного вопроса подлежащее стоит перед глаголом.
+      - id: q6
+        prompt: В какой записи знак вопроса поставлен верно?
+        options:
+          - I'd like to know what you mean.
+          - I'd like to know what you mean?
+        answer: I'd like to know what you mean.
+        explanation: Вводная фраза — утверждение, поэтому точка.
+  - type: exercise
+    id: moves-choice
+    title: Что сказать
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы не расслышали последнюю часть вопроса.
+        options:
+          - Could you repeat the question, please?
+          - Could you give me an example?
+          - Do you mean the frontend or the backend?
+        answer: Could you repeat the question, please?
+      - id: q2
+        prompt: Вы поняли все слова, но не знаете, что интервьюер вкладывает в слово scale.
+        options:
+          - Could you tell me what you mean by "scale"?
+          - Could you speak a little more slowly?
+          - Could you repeat the question, please?
+        answer: Could you tell me what you mean by "scale"?
+        explanation: Повтор не поможет, если неясен смысл слова.
+      - id: q3
+        prompt: Интервьюер говорит быстро, слова знакомы, но вы не успеваете за ним.
+        options:
+          - Could you speak a little more slowly?
+          - If I understand correctly, you're asking about caching.
+          - Could you give me an example?
+        answer: Could you speak a little more slowly?
+      - id: q4
+        prompt: Вопрос можно отнести и к фронтенду, и к бэкенду, и вы хотите выбрать одно.
+        options:
+          - Do you mean the frontend or the backend?
+          - Could you speak a little more slowly?
+          - Could you repeat the question, please?
+        answer: Do you mean the frontend or the backend?
+      - id: q5
+        prompt: Вы называете своими словами, как поняли вопрос, и просите подтвердить.
+        options:
+          - If I understand correctly, you're asking about caching.
+          - Could you repeat the question, please?
+          - Could you speak a little more slowly?
+        answer: If I understand correctly, you're asking about caching.
+      - id: q6
+        prompt: Вопрос звучит абстрактно, и вам нужна конкретная ситуация, чтобы ответить.
+        options:
+          - Could you give me an example?
+          - Could you speak a little more slowly?
+          - Could you repeat the question, please?
+        answer: Could you give me an example?
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - vague
+      - ambiguous
+      - rephrase
+      - elaborate on
+      - to the best of my knowledge
+      - off the top of my head
+      - narrow down
+      - in other words
+      - a nuance
+      - presumably
+    items:
+      - { id: m1, prompt: "расплывчатый, без конкретики", answer: vague }
+      - { id: m2, prompt: "допускающий два толкования", answer: ambiguous }
+      - { id: m3, prompt: "переформулировать вопрос", answer: rephrase }
+      - { id: m4, prompt: "рассказать подробнее, развить мысль", answer: elaborate on }
+      - { id: m5, prompt: "насколько мне известно", answer: to the best of my knowledge }
+      - { id: m6, prompt: "навскидку, без проверки данных", answer: off the top of my head }
+      - { id: m7, prompt: "сузить круг вариантов", answer: narrow down }
+      - { id: m8, prompt: "вводная фраза: за ней идёт та же мысль, сказанная проще", answer: in other words }
+  - type: exercise
+    id: words-gap
+    title: Уточнение и пересказ
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - elaborate
+      - ambiguous
+      - vague
+      - rephrase
+      - knowledge
+      - misunderstanding
+      - presumably
+      - nuance
+      - specifically
+      - follow-up
+    items:
+      - id: g1
+        prompt: Could you ___ on that point? I would like to hear more detail. (рассказать подробнее)
+        answer: elaborate
+      - id: g2
+        prompt: The requirement is ___, because it can mean two different things. (двусмысленное)
+        answer: ambiguous
+      - id: g3
+        prompt: The answer was ___, with no numbers and no examples. (расплывчатый)
+        answer: vague
+      - id: g4
+        prompt: Let me ___ the question so that it is easier to answer. (переформулировать)
+        answer: rephrase
+      - id: g5
+        prompt: To the best of my ___, the server runs in Frankfurt. (насколько мне известно)
+        answer: knowledge
+      - id: g6
+        prompt: Sorry, I think there was a ___. We understood the task in different ways. (недоразумение)
+        answer: misunderstanding
+      - id: g7
+        prompt: ___, the old service is still running, but nobody has checked yet. (предположительно)
+        answer: presumably
+      - id: g8
+        prompt: There is one important ___ in the contract, so read it carefully. (тонкое различие)
+        answer: nuance
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Не могли бы вы повторить вопрос?
+        answer:
+          - "Could you repeat the question"
+          - "Could you repeat the question, please"
+          - "Could you repeat the question please"
+          - "Could you repeat the question again"
+          - "Could you repeat the question again, please"
+          - "Could you repeat the question again please"
+          - "Could you repeat the question one more time"
+          - "Could you repeat the question one more time, please"
+          - "Could you repeat the question one more time please"
+          - "Could you repeat that question"
+          - "Could you repeat that question, please"
+          - "Could you repeat that question please"
+          - "Could you repeat that question again"
+          - "Could you repeat that question again, please"
+          - "Could you repeat that question again please"
+          - "Could you repeat that question one more time"
+          - "Could you repeat that question one more time, please"
+          - "Could you repeat that question one more time please"
+          - "Could you repeat your question"
+          - "Could you repeat your question, please"
+          - "Could you repeat your question please"
+          - "Could you repeat your question again"
+          - "Could you repeat your question again, please"
+          - "Could you repeat your question again please"
+          - "Could you repeat your question one more time"
+          - "Could you repeat your question one more time, please"
+          - "Could you repeat your question one more time please"
+          - "Could you please repeat the question"
+          - "Could you please repeat the question, please"
+          - "Could you please repeat the question please"
+          - "Could you please repeat the question again"
+          - "Could you please repeat the question again, please"
+          - "Could you please repeat the question again please"
+          - "Could you please repeat the question one more time"
+          - "Could you please repeat the question one more time, please"
+          - "Could you please repeat the question one more time please"
+          - "Could you please repeat that question"
+          - "Could you please repeat that question, please"
+          - "Could you please repeat that question please"
+          - "Could you please repeat that question again"
+          - "Could you please repeat that question again, please"
+          - "Could you please repeat that question again please"
+          - "Could you please repeat that question one more time"
+          - "Could you please repeat that question one more time, please"
+          - "Could you please repeat that question one more time please"
+          - "Could you please repeat your question"
+          - "Could you please repeat your question, please"
+          - "Could you please repeat your question please"
+          - "Could you please repeat your question again"
+          - "Could you please repeat your question again, please"
+          - "Could you please repeat your question again please"
+          - "Could you please repeat your question one more time"
+          - "Could you please repeat your question one more time, please"
+          - "Could you please repeat your question one more time please"
+          - "Can you repeat the question"
+          - "Can you repeat the question, please"
+          - "Can you repeat the question please"
+          - "Can you repeat the question again"
+          - "Can you repeat the question again, please"
+          - "Can you repeat the question again please"
+          - "Can you repeat the question one more time"
+          - "Can you repeat the question one more time, please"
+          - "Can you repeat the question one more time please"
+          - "Can you repeat that question"
+          - "Can you repeat that question, please"
+          - "Can you repeat that question please"
+          - "Can you repeat that question again"
+          - "Can you repeat that question again, please"
+          - "Can you repeat that question again please"
+          - "Can you repeat that question one more time"
+          - "Can you repeat that question one more time, please"
+          - "Can you repeat that question one more time please"
+          - "Can you repeat your question"
+          - "Can you repeat your question, please"
+          - "Can you repeat your question please"
+          - "Can you repeat your question again"
+          - "Can you repeat your question again, please"
+          - "Can you repeat your question again please"
+          - "Can you repeat your question one more time"
+          - "Can you repeat your question one more time, please"
+          - "Can you repeat your question one more time please"
+          - "Can you please repeat the question"
+          - "Can you please repeat the question, please"
+          - "Can you please repeat the question please"
+          - "Can you please repeat the question again"
+          - "Can you please repeat the question again, please"
+          - "Can you please repeat the question again please"
+          - "Can you please repeat the question one more time"
+          - "Can you please repeat the question one more time, please"
+          - "Can you please repeat the question one more time please"
+          - "Can you please repeat that question"
+          - "Can you please repeat that question, please"
+          - "Can you please repeat that question please"
+          - "Can you please repeat that question again"
+          - "Can you please repeat that question again, please"
+          - "Can you please repeat that question again please"
+          - "Can you please repeat that question one more time"
+          - "Can you please repeat that question one more time, please"
+          - "Can you please repeat that question one more time please"
+          - "Can you please repeat your question"
+          - "Can you please repeat your question, please"
+          - "Can you please repeat your question please"
+          - "Can you please repeat your question again"
+          - "Can you please repeat your question again, please"
+          - "Can you please repeat your question again please"
+          - "Can you please repeat your question one more time"
+          - "Can you please repeat your question one more time, please"
+          - "Can you please repeat your question one more time please"
+          - "Would you repeat the question"
+          - "Would you repeat the question, please"
+          - "Would you repeat the question please"
+          - "Would you repeat the question again"
+          - "Would you repeat the question again, please"
+          - "Would you repeat the question again please"
+          - "Would you repeat the question one more time"
+          - "Would you repeat the question one more time, please"
+          - "Would you repeat the question one more time please"
+          - "Would you repeat that question"
+          - "Would you repeat that question, please"
+          - "Would you repeat that question please"
+          - "Would you repeat that question again"
+          - "Would you repeat that question again, please"
+          - "Would you repeat that question again please"
+          - "Would you repeat that question one more time"
+          - "Would you repeat that question one more time, please"
+          - "Would you repeat that question one more time please"
+          - "Would you repeat your question"
+          - "Would you repeat your question, please"
+          - "Would you repeat your question please"
+          - "Would you repeat your question again"
+          - "Would you repeat your question again, please"
+          - "Would you repeat your question again please"
+          - "Would you repeat your question one more time"
+          - "Would you repeat your question one more time, please"
+          - "Would you repeat your question one more time please"
+          - "Would you please repeat the question"
+          - "Would you please repeat the question, please"
+          - "Would you please repeat the question please"
+          - "Would you please repeat the question again"
+          - "Would you please repeat the question again, please"
+          - "Would you please repeat the question again please"
+          - "Would you please repeat the question one more time"
+          - "Would you please repeat the question one more time, please"
+          - "Would you please repeat the question one more time please"
+          - "Would you please repeat that question"
+          - "Would you please repeat that question, please"
+          - "Would you please repeat that question please"
+          - "Would you please repeat that question again"
+          - "Would you please repeat that question again, please"
+          - "Would you please repeat that question again please"
+          - "Would you please repeat that question one more time"
+          - "Would you please repeat that question one more time, please"
+          - "Would you please repeat that question one more time please"
+          - "Would you please repeat your question"
+          - "Would you please repeat your question, please"
+          - "Would you please repeat your question please"
+          - "Would you please repeat your question again"
+          - "Would you please repeat your question again, please"
+          - "Would you please repeat your question again please"
+          - "Would you please repeat your question one more time"
+          - "Would you please repeat your question one more time, please"
+          - "Would you please repeat your question one more time please"
+          - "Would you mind repeating the question"
+          - "Would you mind repeating the question, please"
+          - "Would you mind repeating the question please"
+          - "Would you mind repeating that question"
+          - "Would you mind repeating that question, please"
+          - "Would you mind repeating that question please"
+          - "Would you mind repeating your question"
+          - "Would you mind repeating your question, please"
+          - "Would you mind repeating your question please"
+          - "Please, could you repeat the question"
+          - "Please, could you repeat that question"
+          - "Please, could you repeat your question"
+          - "Please, can you repeat the question"
+          - "Please, can you repeat that question"
+          - "Please, can you repeat your question"
+          - "Please, would you repeat the question"
+          - "Please, would you repeat that question"
+          - "Please, would you repeat your question"
+        explanation: Вежливая просьба начинается с could you, глагол repeat в начальной форме.
+      - id: q2
+        prompt: Не могли бы вы сказать, что вы имеете в виду под масштабом?
+        answer:
+          - "Could you tell me what you mean by scale"
+          - "Could you tell me what you mean by \"scale\""
+          - "Could you tell me what you mean by 'scale'"
+          - "Could you tell me what you mean by the word scale"
+          - "Could you tell me what you mean by the word \"scale\""
+          - "Could you tell me what you mean by the term scale"
+          - "Could you say what you mean by scale"
+          - "Could you say what you mean by \"scale\""
+          - "Could you say what you mean by 'scale'"
+          - "Could you say what you mean by the word scale"
+          - "Could you say what you mean by the word \"scale\""
+          - "Could you say what you mean by the term scale"
+          - "Could you explain what you mean by scale"
+          - "Could you explain what you mean by \"scale\""
+          - "Could you explain what you mean by 'scale'"
+          - "Could you explain what you mean by the word scale"
+          - "Could you explain what you mean by the word \"scale\""
+          - "Could you explain what you mean by the term scale"
+          - "Could you please tell me what you mean by scale"
+          - "Could you please tell me what you mean by \"scale\""
+          - "Could you please tell me what you mean by 'scale'"
+          - "Could you please tell me what you mean by the word scale"
+          - "Could you please tell me what you mean by the word \"scale\""
+          - "Could you please tell me what you mean by the term scale"
+          - "Could you please say what you mean by scale"
+          - "Could you please say what you mean by \"scale\""
+          - "Could you please say what you mean by 'scale'"
+          - "Could you please say what you mean by the word scale"
+          - "Could you please say what you mean by the word \"scale\""
+          - "Could you please say what you mean by the term scale"
+          - "Could you please explain what you mean by scale"
+          - "Could you please explain what you mean by \"scale\""
+          - "Could you please explain what you mean by 'scale'"
+          - "Could you please explain what you mean by the word scale"
+          - "Could you please explain what you mean by the word \"scale\""
+          - "Could you please explain what you mean by the term scale"
+          - "Can you tell me what you mean by scale"
+          - "Can you tell me what you mean by \"scale\""
+          - "Can you tell me what you mean by 'scale'"
+          - "Can you tell me what you mean by the word scale"
+          - "Can you tell me what you mean by the word \"scale\""
+          - "Can you tell me what you mean by the term scale"
+          - "Can you say what you mean by scale"
+          - "Can you say what you mean by \"scale\""
+          - "Can you say what you mean by 'scale'"
+          - "Can you say what you mean by the word scale"
+          - "Can you say what you mean by the word \"scale\""
+          - "Can you say what you mean by the term scale"
+          - "Can you explain what you mean by scale"
+          - "Can you explain what you mean by \"scale\""
+          - "Can you explain what you mean by 'scale'"
+          - "Can you explain what you mean by the word scale"
+          - "Can you explain what you mean by the word \"scale\""
+          - "Can you explain what you mean by the term scale"
+          - "Can you please tell me what you mean by scale"
+          - "Can you please tell me what you mean by \"scale\""
+          - "Can you please tell me what you mean by 'scale'"
+          - "Can you please tell me what you mean by the word scale"
+          - "Can you please tell me what you mean by the word \"scale\""
+          - "Can you please tell me what you mean by the term scale"
+          - "Can you please say what you mean by scale"
+          - "Can you please say what you mean by \"scale\""
+          - "Can you please say what you mean by 'scale'"
+          - "Can you please say what you mean by the word scale"
+          - "Can you please say what you mean by the word \"scale\""
+          - "Can you please say what you mean by the term scale"
+          - "Can you please explain what you mean by scale"
+          - "Can you please explain what you mean by \"scale\""
+          - "Can you please explain what you mean by 'scale'"
+          - "Can you please explain what you mean by the word scale"
+          - "Can you please explain what you mean by the word \"scale\""
+          - "Can you please explain what you mean by the term scale"
+          - "Would you tell me what you mean by scale"
+          - "Would you tell me what you mean by \"scale\""
+          - "Would you tell me what you mean by 'scale'"
+          - "Would you tell me what you mean by the word scale"
+          - "Would you tell me what you mean by the word \"scale\""
+          - "Would you tell me what you mean by the term scale"
+          - "Would you say what you mean by scale"
+          - "Would you say what you mean by \"scale\""
+          - "Would you say what you mean by 'scale'"
+          - "Would you say what you mean by the word scale"
+          - "Would you say what you mean by the word \"scale\""
+          - "Would you say what you mean by the term scale"
+          - "Would you explain what you mean by scale"
+          - "Would you explain what you mean by \"scale\""
+          - "Would you explain what you mean by 'scale'"
+          - "Would you explain what you mean by the word scale"
+          - "Would you explain what you mean by the word \"scale\""
+          - "Would you explain what you mean by the term scale"
+          - "Would you please tell me what you mean by scale"
+          - "Would you please tell me what you mean by \"scale\""
+          - "Would you please tell me what you mean by 'scale'"
+          - "Would you please tell me what you mean by the word scale"
+          - "Would you please tell me what you mean by the word \"scale\""
+          - "Would you please tell me what you mean by the term scale"
+          - "Would you please say what you mean by scale"
+          - "Would you please say what you mean by \"scale\""
+          - "Would you please say what you mean by 'scale'"
+          - "Would you please say what you mean by the word scale"
+          - "Would you please say what you mean by the word \"scale\""
+          - "Would you please say what you mean by the term scale"
+          - "Would you please explain what you mean by scale"
+          - "Would you please explain what you mean by \"scale\""
+          - "Would you please explain what you mean by 'scale'"
+          - "Would you please explain what you mean by the word scale"
+          - "Would you please explain what you mean by the word \"scale\""
+          - "Would you please explain what you mean by the term scale"
+        explanation: В косвенном вопросе порядок слов как в утверждении, поэтому what you mean без do.
+      - id: q3
+        prompt: Вы не знаете, будет ли собеседование онлайн?
+        answer:
+          - "Do you know if the interview is online"
+          - "Do you know if the interview will be online"
+          - "Do you know if the interview is going to be online"
+          - "Do you know if the interview will take place online"
+          - "Do you know if the interview is going to take place online"
+          - "Do you know if the interview will be held online"
+          - "Do you know if the interview is going to be held online"
+          - "Do you know if the interview will be conducted online"
+          - "Do you know if the interview is going to be conducted online"
+          - "Do you know whether the interview is online"
+          - "Do you know whether the interview will be online"
+          - "Do you know whether the interview is going to be online"
+          - "Do you know whether the interview will take place online"
+          - "Do you know whether the interview is going to take place online"
+          - "Do you know whether the interview will be held online"
+          - "Do you know whether the interview is going to be held online"
+          - "Do you know whether the interview will be conducted online"
+          - "Do you know whether the interview is going to be conducted online"
+          - "Do you happen to know if the interview is online"
+          - "Do you happen to know if the interview will be online"
+          - "Do you happen to know if the interview is going to be online"
+          - "Do you happen to know if the interview will take place online"
+          - "Do you happen to know if the interview is going to take place online"
+          - "Do you happen to know if the interview will be held online"
+          - "Do you happen to know if the interview is going to be held online"
+          - "Do you happen to know if the interview will be conducted online"
+          - "Do you happen to know if the interview is going to be conducted online"
+          - "Do you happen to know whether the interview is online"
+          - "Do you happen to know whether the interview will be online"
+          - "Do you happen to know whether the interview is going to be online"
+          - "Do you happen to know whether the interview will take place online"
+          - "Do you happen to know whether the interview is going to take place online"
+          - "Do you happen to know whether the interview will be held online"
+          - "Do you happen to know whether the interview is going to be held online"
+          - "Do you happen to know whether the interview will be conducted online"
+          - "Do you happen to know whether the interview is going to be conducted online"
+        explanation: После if или whether порядок слов как в утверждении, будущее время сохраняется.
+      - id: q4
+        prompt: Если я правильно понимаю, вы спрашиваете о кэшировании.
+        answer:
+          - "{If I understand correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand it correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand it correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understand you correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understand you correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood it correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood it correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I understood you correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I understood you correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood it correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood it correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understand it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understand it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understand it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understand it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understand you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understand you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understand you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understand you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understand right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understand right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understand right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understand right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understood it right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understood it right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understood it right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understood it right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understood you right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understood you right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understood you right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understood you right|If I am understanding you correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understood right|If I am understanding correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understood right|If I am understanding correctly}  you are asking about caching"
+          - "{If I have understood you correctly|If I understood right|If I am understanding you correctly}, you are asking about caching"
+          - "{If I have understood you correctly|If I understood right|If I am understanding you correctly}  you are asking about caching"
+        explanation: Вводная часть отделяется запятой, затем прямой порядок слов.
+      - id: q5
+        prompt: Не могли бы вы привести пример?
+        answer:
+          - "Could you give me an example"
+          - "Could you give me an example, please"
+          - "Could you give me an example please"
+          - "Could you give me an example of that"
+          - "Could you give me an example of that, please"
+          - "Could you give me an example of that please"
+          - "Could you give me one example"
+          - "Could you give me one example, please"
+          - "Could you give me one example please"
+          - "Could you give me one example of that"
+          - "Could you give me one example of that, please"
+          - "Could you give me one example of that please"
+          - "Could you give an example"
+          - "Could you give an example, please"
+          - "Could you give an example please"
+          - "Could you give an example of that"
+          - "Could you give an example of that, please"
+          - "Could you give an example of that please"
+          - "Could you give one example"
+          - "Could you give one example, please"
+          - "Could you give one example please"
+          - "Could you give one example of that"
+          - "Could you give one example of that, please"
+          - "Could you give one example of that please"
+          - "Could you provide an example"
+          - "Could you provide an example, please"
+          - "Could you provide an example please"
+          - "Could you provide an example of that"
+          - "Could you provide an example of that, please"
+          - "Could you provide an example of that please"
+          - "Could you provide one example"
+          - "Could you provide one example, please"
+          - "Could you provide one example please"
+          - "Could you provide one example of that"
+          - "Could you provide one example of that, please"
+          - "Could you provide one example of that please"
+          - "Could you show me an example"
+          - "Could you show me an example, please"
+          - "Could you show me an example please"
+          - "Could you show me an example of that"
+          - "Could you show me an example of that, please"
+          - "Could you show me an example of that please"
+          - "Could you show me one example"
+          - "Could you show me one example, please"
+          - "Could you show me one example please"
+          - "Could you show me one example of that"
+          - "Could you show me one example of that, please"
+          - "Could you show me one example of that please"
+          - "Could you give us an example"
+          - "Could you give us an example, please"
+          - "Could you give us an example please"
+          - "Could you give us an example of that"
+          - "Could you give us an example of that, please"
+          - "Could you give us an example of that please"
+          - "Could you give us one example"
+          - "Could you give us one example, please"
+          - "Could you give us one example please"
+          - "Could you give us one example of that"
+          - "Could you give us one example of that, please"
+          - "Could you give us one example of that please"
+          - "Could you please give me an example"
+          - "Could you please give me an example, please"
+          - "Could you please give me an example please"
+          - "Could you please give me an example of that"
+          - "Could you please give me an example of that, please"
+          - "Could you please give me an example of that please"
+          - "Could you please give me one example"
+          - "Could you please give me one example, please"
+          - "Could you please give me one example please"
+          - "Could you please give me one example of that"
+          - "Could you please give me one example of that, please"
+          - "Could you please give me one example of that please"
+          - "Could you please give an example"
+          - "Could you please give an example, please"
+          - "Could you please give an example please"
+          - "Could you please give an example of that"
+          - "Could you please give an example of that, please"
+          - "Could you please give an example of that please"
+          - "Could you please give one example"
+          - "Could you please give one example, please"
+          - "Could you please give one example please"
+          - "Could you please give one example of that"
+          - "Could you please give one example of that, please"
+          - "Could you please give one example of that please"
+          - "Could you please provide an example"
+          - "Could you please provide an example, please"
+          - "Could you please provide an example please"
+          - "Could you please provide an example of that"
+          - "Could you please provide an example of that, please"
+          - "Could you please provide an example of that please"
+          - "Could you please provide one example"
+          - "Could you please provide one example, please"
+          - "Could you please provide one example please"
+          - "Could you please provide one example of that"
+          - "Could you please provide one example of that, please"
+          - "Could you please provide one example of that please"
+          - "Could you please show me an example"
+          - "Could you please show me an example, please"
+          - "Could you please show me an example please"
+          - "Could you please show me an example of that"
+          - "Could you please show me an example of that, please"
+          - "Could you please show me an example of that please"
+          - "Could you please show me one example"
+          - "Could you please show me one example, please"
+          - "Could you please show me one example please"
+          - "Could you please show me one example of that"
+          - "Could you please show me one example of that, please"
+          - "Could you please show me one example of that please"
+          - "Could you please give us an example"
+          - "Could you please give us an example, please"
+          - "Could you please give us an example please"
+          - "Could you please give us an example of that"
+          - "Could you please give us an example of that, please"
+          - "Could you please give us an example of that please"
+          - "Could you please give us one example"
+          - "Could you please give us one example, please"
+          - "Could you please give us one example please"
+          - "Could you please give us one example of that"
+          - "Could you please give us one example of that, please"
+          - "Could you please give us one example of that please"
+          - "Can you give me an example"
+          - "Can you give me an example, please"
+          - "Can you give me an example please"
+          - "Can you give me an example of that"
+          - "Can you give me an example of that, please"
+          - "Can you give me an example of that please"
+          - "Can you give me one example"
+          - "Can you give me one example, please"
+          - "Can you give me one example please"
+          - "Can you give me one example of that"
+          - "Can you give me one example of that, please"
+          - "Can you give me one example of that please"
+          - "Can you give an example"
+          - "Can you give an example, please"
+          - "Can you give an example please"
+          - "Can you give an example of that"
+          - "Can you give an example of that, please"
+          - "Can you give an example of that please"
+          - "Can you give one example"
+          - "Can you give one example, please"
+          - "Can you give one example please"
+          - "Can you give one example of that"
+          - "Can you give one example of that, please"
+          - "Can you give one example of that please"
+          - "Can you provide an example"
+          - "Can you provide an example, please"
+          - "Can you provide an example please"
+          - "Can you provide an example of that"
+          - "Can you provide an example of that, please"
+          - "Can you provide an example of that please"
+          - "Can you provide one example"
+          - "Can you provide one example, please"
+          - "Can you provide one example please"
+          - "Can you provide one example of that"
+          - "Can you provide one example of that, please"
+          - "Can you provide one example of that please"
+          - "Can you show me an example"
+          - "Can you show me an example, please"
+          - "Can you show me an example please"
+          - "Can you show me an example of that"
+          - "Can you show me an example of that, please"
+          - "Can you show me an example of that please"
+          - "Can you show me one example"
+          - "Can you show me one example, please"
+          - "Can you show me one example please"
+          - "Can you show me one example of that"
+          - "Can you show me one example of that, please"
+          - "Can you show me one example of that please"
+          - "Can you give us an example"
+          - "Can you give us an example, please"
+          - "Can you give us an example please"
+          - "Can you give us an example of that"
+          - "Can you give us an example of that, please"
+          - "Can you give us an example of that please"
+          - "Can you give us one example"
+          - "Can you give us one example, please"
+          - "Can you give us one example please"
+          - "Can you give us one example of that"
+          - "Can you give us one example of that, please"
+          - "Can you give us one example of that please"
+          - "Can you please give me an example"
+          - "Can you please give me an example, please"
+          - "Can you please give me an example please"
+          - "Can you please give me an example of that"
+          - "Can you please give me an example of that, please"
+          - "Can you please give me an example of that please"
+          - "Can you please give me one example"
+          - "Can you please give me one example, please"
+          - "Can you please give me one example please"
+          - "Can you please give me one example of that"
+          - "Can you please give me one example of that, please"
+          - "Can you please give me one example of that please"
+          - "Can you please give an example"
+          - "Can you please give an example, please"
+          - "Can you please give an example please"
+          - "Can you please give an example of that"
+          - "Can you please give an example of that, please"
+          - "Can you please give an example of that please"
+          - "Can you please give one example"
+          - "Can you please give one example, please"
+          - "Can you please give one example please"
+          - "Can you please give one example of that"
+          - "Can you please give one example of that, please"
+          - "Can you please give one example of that please"
+          - "Can you please provide an example"
+          - "Can you please provide an example, please"
+          - "Can you please provide an example please"
+          - "Can you please provide an example of that"
+          - "Can you please provide an example of that, please"
+          - "Can you please provide an example of that please"
+          - "Can you please provide one example"
+          - "Can you please provide one example, please"
+          - "Can you please provide one example please"
+          - "Can you please provide one example of that"
+          - "Can you please provide one example of that, please"
+          - "Can you please provide one example of that please"
+          - "Can you please show me an example"
+          - "Can you please show me an example, please"
+          - "Can you please show me an example please"
+          - "Can you please show me an example of that"
+          - "Can you please show me an example of that, please"
+          - "Can you please show me an example of that please"
+          - "Can you please show me one example"
+          - "Can you please show me one example, please"
+          - "Can you please show me one example please"
+          - "Can you please show me one example of that"
+          - "Can you please show me one example of that, please"
+          - "Can you please show me one example of that please"
+          - "Can you please give us an example"
+          - "Can you please give us an example, please"
+          - "Can you please give us an example please"
+          - "Can you please give us an example of that"
+          - "Can you please give us an example of that, please"
+          - "Can you please give us an example of that please"
+          - "Can you please give us one example"
+          - "Can you please give us one example, please"
+          - "Can you please give us one example please"
+          - "Can you please give us one example of that"
+          - "Can you please give us one example of that, please"
+          - "Can you please give us one example of that please"
+          - "Would you give me an example"
+          - "Would you give me an example, please"
+          - "Would you give me an example please"
+          - "Would you give me an example of that"
+          - "Would you give me an example of that, please"
+          - "Would you give me an example of that please"
+          - "Would you give me one example"
+          - "Would you give me one example, please"
+          - "Would you give me one example please"
+          - "Would you give me one example of that"
+          - "Would you give me one example of that, please"
+          - "Would you give me one example of that please"
+          - "Would you give an example"
+          - "Would you give an example, please"
+          - "Would you give an example please"
+          - "Would you give an example of that"
+          - "Would you give an example of that, please"
+          - "Would you give an example of that please"
+          - "Would you give one example"
+          - "Would you give one example, please"
+          - "Would you give one example please"
+          - "Would you give one example of that"
+          - "Would you give one example of that, please"
+          - "Would you give one example of that please"
+          - "Would you provide an example"
+          - "Would you provide an example, please"
+          - "Would you provide an example please"
+          - "Would you provide an example of that"
+          - "Would you provide an example of that, please"
+          - "Would you provide an example of that please"
+          - "Would you provide one example"
+          - "Would you provide one example, please"
+          - "Would you provide one example please"
+          - "Would you provide one example of that"
+          - "Would you provide one example of that, please"
+          - "Would you provide one example of that please"
+          - "Would you show me an example"
+          - "Would you show me an example, please"
+          - "Would you show me an example please"
+          - "Would you show me an example of that"
+          - "Would you show me an example of that, please"
+          - "Would you show me an example of that please"
+          - "Would you show me one example"
+          - "Would you show me one example, please"
+          - "Would you show me one example please"
+          - "Would you show me one example of that"
+          - "Would you show me one example of that, please"
+          - "Would you show me one example of that please"
+          - "Would you give us an example"
+          - "Would you give us an example, please"
+          - "Would you give us an example please"
+          - "Would you give us an example of that"
+          - "Would you give us an example of that, please"
+          - "Would you give us an example of that please"
+          - "Would you give us one example"
+          - "Would you give us one example, please"
+          - "Would you give us one example please"
+          - "Would you give us one example of that"
+          - "Would you give us one example of that, please"
+          - "Would you give us one example of that please"
+          - "Would you please give me an example"
+          - "Would you please give me an example, please"
+          - "Would you please give me an example please"
+          - "Would you please give me an example of that"
+          - "Would you please give me an example of that, please"
+          - "Would you please give me an example of that please"
+          - "Would you please give me one example"
+          - "Would you please give me one example, please"
+          - "Would you please give me one example please"
+          - "Would you please give me one example of that"
+          - "Would you please give me one example of that, please"
+          - "Would you please give me one example of that please"
+          - "Would you please give an example"
+          - "Would you please give an example, please"
+          - "Would you please give an example please"
+          - "Would you please give an example of that"
+          - "Would you please give an example of that, please"
+          - "Would you please give an example of that please"
+          - "Would you please give one example"
+          - "Would you please give one example, please"
+          - "Would you please give one example please"
+          - "Would you please give one example of that"
+          - "Would you please give one example of that, please"
+          - "Would you please give one example of that please"
+          - "Would you please provide an example"
+          - "Would you please provide an example, please"
+          - "Would you please provide an example please"
+          - "Would you please provide an example of that"
+          - "Would you please provide an example of that, please"
+          - "Would you please provide an example of that please"
+          - "Would you please provide one example"
+          - "Would you please provide one example, please"
+          - "Would you please provide one example please"
+          - "Would you please provide one example of that"
+          - "Would you please provide one example of that, please"
+          - "Would you please provide one example of that please"
+          - "Would you please show me an example"
+          - "Would you please show me an example, please"
+          - "Would you please show me an example please"
+          - "Would you please show me an example of that"
+          - "Would you please show me an example of that, please"
+          - "Would you please show me an example of that please"
+          - "Would you please show me one example"
+          - "Would you please show me one example, please"
+          - "Would you please show me one example please"
+          - "Would you please show me one example of that"
+          - "Would you please show me one example of that, please"
+          - "Would you please show me one example of that please"
+          - "Would you please give us an example"
+          - "Would you please give us an example, please"
+          - "Would you please give us an example please"
+          - "Would you please give us an example of that"
+          - "Would you please give us an example of that, please"
+          - "Would you please give us an example of that please"
+          - "Would you please give us one example"
+          - "Would you please give us one example, please"
+          - "Would you please give us one example please"
+          - "Would you please give us one example of that"
+          - "Would you please give us one example of that, please"
+          - "Would you please give us one example of that please"
+          - "Would you mind giving me an example"
+          - "Would you mind giving me an example of that"
+          - "Would you mind providing me an example"
+          - "Would you mind providing me an example of that"
+          - "Would you mind showing me an example"
+          - "Would you mind showing me an example of that"
+        explanation: Фраза give an example — устойчивое сочетание для «привести пример».
+      - id: q6
+        prompt: Позвольте, я переформулирую.
+        answer:
+          - "Let me rephrase that"
+          - "Let me rephrase it"
+          - "Let me rephrase the question"
+          - "Let me rephrase my question"
+          - "Let me rephrase this"
+          - "Let me reword that"
+          - "Let me reword it"
+          - "Let me reword the question"
+          - "Let me reword my question"
+          - "Let me reword this"
+          - "Allow me to rephrase that"
+          - "Allow me to rephrase it"
+          - "Allow me to rephrase the question"
+          - "Allow me to rephrase my question"
+          - "Allow me to rephrase this"
+          - "Allow me to reword that"
+          - "Allow me to reword it"
+          - "Allow me to reword the question"
+          - "Allow me to reword my question"
+          - "Allow me to reword this"
+          - "Let me rephrase"
+          - "Let me reword"
+          - "Allow me to rephrase"
+          - "Allow me to reword"
+          - "Let me put that another way"
+          - "Let me put that differently"
+          - "Let me put it another way"
+          - "Let me put it differently"
+          - "Let me put this another way"
+          - "Let me put this differently"
+          - "Let me say that another way"
+          - "Let me say that differently"
+          - "Let me say it another way"
+          - "Let me say it differently"
+          - "Let me say this another way"
+          - "Let me say this differently"
+        explanation: Let me и начальная форма глагола; rephrase означает «сказать другими словами».

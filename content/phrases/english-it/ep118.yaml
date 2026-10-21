@@ -1,0 +1,7 @@
+id: ep118
+text: "Could you type the question in the chat?"
+translation: "Не могли бы вы написать вопрос в чат?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

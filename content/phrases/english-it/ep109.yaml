@@ -1,0 +1,7 @@
+id: ep109
+text: "Let me think about it for a second."
+translation: "Дайте мне секунду подумать."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

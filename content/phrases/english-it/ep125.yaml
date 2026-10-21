@@ -1,0 +1,7 @@
+id: ep125
+text: "Do you know if the interview will be online?"
+translation: "Вы не знаете, пройдёт ли собеседование онлайн?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

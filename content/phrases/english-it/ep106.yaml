@@ -1,0 +1,7 @@
+id: ep106
+text: "Could you tell me what you mean by \"scale\"?"
+translation: "Не могли бы вы сказать, что вы понимаете под «масштабом»?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep108
+text: "Could you put that another way?"
+translation: "Не могли бы вы сказать то же самое другими словами?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

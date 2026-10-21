@@ -1,0 +1,7 @@
+id: ep119
+text: "Let me share my screen to show it."
+translation: "Я покажу это, включив показ экрана."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

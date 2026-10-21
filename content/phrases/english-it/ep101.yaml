@@ -1,0 +1,7 @@
+id: ep101
+text: "Could you repeat the question, please?"
+translation: "Повторите, пожалуйста, вопрос."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep103
+text: "Could you speak a little more slowly?"
+translation: "Не могли бы вы говорить немного медленнее?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

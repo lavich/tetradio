@@ -1,0 +1,7 @@
+id: ep102
+text: "Could you clarify the question?"
+translation: "Не могли бы вы уточнить вопрос?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

@@ -1,0 +1,7 @@
+id: ep105
+text: "If I understand correctly, you're asking about caching."
+translation: "Если я правильно понимаю, вы спрашиваете о кэшировании."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md

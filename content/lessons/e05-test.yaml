@@ -1,0 +1,446 @@
+title: Контрольная модуля e05
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, вопросы и косвенные вопросы, слова модуля и перевод фраз. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: blog
+    title: My first video interview
+    text: |-
+      My first video interview
+
+      Last month I had my first video interview for a backend position. The interviewer spoke fast, and my first reaction was to nod and hope for the best. Then I remembered the advice from my course and asked her to repeat the question.
+
+      The next question was ambiguous: she asked how I would improve performance. I asked whether she meant the database or the API. She said the API, and the task became clear.
+
+      Later she asked about the size of our user base. I did not remember the exact number, so I said, "Off the top of my head, about fifty thousand, but I can check."
+
+      One question was a curveball: she asked how I would explain a database index to a child. I needed a moment, so I said, "That's a good question. Let me think about it for a second." The answer came easily after the pause.
+
+      After the interview, I sent a short email with a follow-up on two details. The recruiter replied the next day.
+    glosses:
+      - { text: nod, russian: кивать }
+      - { text: hope for the best, russian: надеяться на лучшее }
+      - { text: user base, russian: число пользователей }
+      - { text: index, russian: индекс базы данных }
+      - { text: replied, russian: ответил }
+  - type: exercise
+    id: blog-tf
+    about: blog
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The interviewer spoke slowly.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The interviewer spoke fast — интервьюер говорила быстро.
+      - id: q2
+        prompt: The writer asked the interviewer to repeat a question.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: The question about performance was clear from the start.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: The question was ambiguous — вопрос допускал два толкования, и автор уточнил.
+      - id: q4
+        prompt: The writer gave the exact number of users.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Off the top of my head, about fifty thousand — число названо навскидку.
+      - id: q5
+        prompt: The curveball question was about explaining a database index.
+        options: ["True", "False"]
+        answer: "True"
+  - type: listening
+    id: call
+    title: How do you split a service?
+    plays: 2
+    transcript:
+      - { speaker: Sarah, text: "Viktor, thanks for joining. I'll start with an open-ended one: how do you decide when a service should be split into smaller services?" }
+      - { speaker: Viktor, text: "Sorry, could you repeat the question, please?" }
+      - { speaker: Sarah, text: "Of course. How do you decide when a service should be split into smaller services?" }
+      - { speaker: Viktor, text: "That's a good question. Let me think about it for a second. Do you mean a split in the code, or in the deployment?" }
+      - { speaker: Sarah, text: "Both, really. Let's say the team is growing and the releases are getting slower." }
+      - { speaker: Viktor, text: "I see. In other words, the main problem is the release speed. In that case, a service is ready to be split when two teams keep changing it at the same time." }
+      - { speaker: Sarah, text: "Good. Could you give me an example from your own work?" }
+      - { speaker: Viktor, text: "Last year we separated the payment module. Off the top of my head, the release time dropped from two weeks to three days." }
+      - { speaker: Sarah, text: "Thanks. One last thing: could you tell me what you would do differently?" }
+      - { speaker: Viktor, text: "I would involve the other teams earlier. We had a misunderstanding about the API, and it cost us a week." }
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Sarah ask first?
+        options:
+          - when a service should be split into smaller services
+          - which language the team uses
+          - how many teams the company has
+        answer: when a service should be split into smaller services
+      - id: q2
+        prompt: What does Viktor ask after he thinks for a second?
+        options:
+          - whether the split is in the code or in the deployment
+          - how big the team is
+          - which service Sarah means
+        answer: whether the split is in the code or in the deployment
+        explanation: Do you mean a split in the code, or in the deployment — вопрос с двумя вариантами.
+      - id: q3
+        prompt: What situation does Sarah describe?
+        options:
+          - a growing team and slower releases
+          - a shrinking team and faster releases
+          - a new team and no releases
+        answer: a growing team and slower releases
+      - id: q4
+        prompt: When is a service ready to be split, according to Viktor?
+        options:
+          - when two teams keep changing it at the same time
+          - when it has more than ten endpoints
+          - when it is older than two years
+        answer: when two teams keep changing it at the same time
+      - id: q5
+        prompt: How did the release time change after the payment module was separated?
+        options:
+          - from two weeks to three days
+          - from three days to two weeks
+          - from two days to three weeks
+        answer: from two weeks to three days
+      - id: q6
+        prompt: What would Viktor do differently?
+        options:
+          - involve the other teams earlier
+          - skip the payment module
+          - start with a larger team
+        answer: involve the other teams earlier
+        explanation: I would involve the other teams earlier — вовлёк бы другие команды раньше.
+  - type: exercise
+    id: questions
+    graded: true
+    title: Вопросы и косвенные вопросы
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "How long ___ you been working there?"
+        options: [have, did, do]
+        answer: have
+        explanation: Вопрос о периоде до сих пор — present perfect continuous.
+      - id: q2
+        prompt: "Who ___ the release last week? (вопрос к подлежащему)"
+        options: [approved, did approved, did approve]
+        answer: approved
+        explanation: В вопросе к подлежащему вспомогательного глагола нет.
+      - id: q3
+        prompt: "Could you tell me what ___?"
+        options: [you mean, do you mean, you do mean]
+        answer: you mean
+        explanation: В косвенном вопросе порядок слов как в утверждении.
+      - id: q4
+        prompt: "Do you know ___ the interview will be online? (ли)"
+        options: [if, that, what]
+        answer: if
+        explanation: Вопрос «да или нет» вводится словом if или whether.
+      - id: q5
+        prompt: Какое предложение верно?
+        options:
+          - I would like to know how long the process takes.
+          - I would like to know how long does the process take.
+        answer: I would like to know how long the process takes.
+      - id: q6
+        prompt: Вы услышали все слова, но вопрос можно понять двумя способами. Какая фраза подходит?
+        options:
+          - Do you mean the frontend or the backend?
+          - Could you speak a little more slowly?
+          - Let me share my screen to show it.
+        answer: Do you mean the frontend or the backend?
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - clarify
+      - nuance
+      - vague
+      - elaborate
+      - follow-up
+      - curveball
+      - presumably
+      - tangent
+    items:
+      - id: g1
+        prompt: I did not understand the task, so I asked the manager to ___ the requirements. (уточнить)
+        answer: clarify
+      - id: g2
+        prompt: "The answer was too ___: it had no numbers and no examples. (расплывчатый)"
+        answer: vague
+      - id: g3
+        prompt: The interviewer asked a ___ question about my last project. (уточняющий)
+        answer: follow-up
+      - id: g4
+        prompt: An unexpected question about a topic I did not mention was a ___. (неожиданный вопрос)
+        answer: curveball
+      - id: g5
+        prompt: I went off on a ___, and the interviewer brought me back to the topic. (в побочную тему)
+        answer: tangent
+      - id: g6
+        prompt: Could you ___ on that point? I would like more detail. (рассказать подробнее)
+        answer: elaborate
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (it is, we would).
+    format: text
+    items:
+      - id: q1
+        prompt: Не могли бы вы говорить немного медленнее?
+        answer:
+          - "Could you speak a little more slowly"
+          - "Could you speak a little more slowly, please"
+          - "Could you speak a little more slowly please"
+          - "Could you speak a little slower"
+          - "Could you speak a little slower, please"
+          - "Could you speak a little slower please"
+          - "Could you speak a bit more slowly"
+          - "Could you speak a bit more slowly, please"
+          - "Could you speak a bit more slowly please"
+          - "Could you speak a bit slower"
+          - "Could you speak a bit slower, please"
+          - "Could you speak a bit slower please"
+          - "Could you speak a little bit more slowly"
+          - "Could you speak a little bit more slowly, please"
+          - "Could you speak a little bit more slowly please"
+          - "Could you speak a little bit slower"
+          - "Could you speak a little bit slower, please"
+          - "Could you speak a little bit slower please"
+          - "Could you please speak a little more slowly"
+          - "Could you please speak a little more slowly, please"
+          - "Could you please speak a little more slowly please"
+          - "Could you please speak a little slower"
+          - "Could you please speak a little slower, please"
+          - "Could you please speak a little slower please"
+          - "Could you please speak a bit more slowly"
+          - "Could you please speak a bit more slowly, please"
+          - "Could you please speak a bit more slowly please"
+          - "Could you please speak a bit slower"
+          - "Could you please speak a bit slower, please"
+          - "Could you please speak a bit slower please"
+          - "Could you please speak a little bit more slowly"
+          - "Could you please speak a little bit more slowly, please"
+          - "Could you please speak a little bit more slowly please"
+          - "Could you please speak a little bit slower"
+          - "Could you please speak a little bit slower, please"
+          - "Could you please speak a little bit slower please"
+          - "Can you speak a little more slowly"
+          - "Can you speak a little more slowly, please"
+          - "Can you speak a little more slowly please"
+          - "Can you speak a little slower"
+          - "Can you speak a little slower, please"
+          - "Can you speak a little slower please"
+          - "Can you speak a bit more slowly"
+          - "Can you speak a bit more slowly, please"
+          - "Can you speak a bit more slowly please"
+          - "Can you speak a bit slower"
+          - "Can you speak a bit slower, please"
+          - "Can you speak a bit slower please"
+          - "Can you speak a little bit more slowly"
+          - "Can you speak a little bit more slowly, please"
+          - "Can you speak a little bit more slowly please"
+          - "Can you speak a little bit slower"
+          - "Can you speak a little bit slower, please"
+          - "Can you speak a little bit slower please"
+          - "Can you please speak a little more slowly"
+          - "Can you please speak a little more slowly, please"
+          - "Can you please speak a little more slowly please"
+          - "Can you please speak a little slower"
+          - "Can you please speak a little slower, please"
+          - "Can you please speak a little slower please"
+          - "Can you please speak a bit more slowly"
+          - "Can you please speak a bit more slowly, please"
+          - "Can you please speak a bit more slowly please"
+          - "Can you please speak a bit slower"
+          - "Can you please speak a bit slower, please"
+          - "Can you please speak a bit slower please"
+          - "Can you please speak a little bit more slowly"
+          - "Can you please speak a little bit more slowly, please"
+          - "Can you please speak a little bit more slowly please"
+          - "Can you please speak a little bit slower"
+          - "Can you please speak a little bit slower, please"
+          - "Can you please speak a little bit slower please"
+          - "Would you speak a little more slowly"
+          - "Would you speak a little more slowly, please"
+          - "Would you speak a little more slowly please"
+          - "Would you speak a little slower"
+          - "Would you speak a little slower, please"
+          - "Would you speak a little slower please"
+          - "Would you speak a bit more slowly"
+          - "Would you speak a bit more slowly, please"
+          - "Would you speak a bit more slowly please"
+          - "Would you speak a bit slower"
+          - "Would you speak a bit slower, please"
+          - "Would you speak a bit slower please"
+          - "Would you speak a little bit more slowly"
+          - "Would you speak a little bit more slowly, please"
+          - "Would you speak a little bit more slowly please"
+          - "Would you speak a little bit slower"
+          - "Would you speak a little bit slower, please"
+          - "Would you speak a little bit slower please"
+          - "Would you please speak a little more slowly"
+          - "Would you please speak a little more slowly, please"
+          - "Would you please speak a little more slowly please"
+          - "Would you please speak a little slower"
+          - "Would you please speak a little slower, please"
+          - "Would you please speak a little slower please"
+          - "Would you please speak a bit more slowly"
+          - "Would you please speak a bit more slowly, please"
+          - "Would you please speak a bit more slowly please"
+          - "Would you please speak a bit slower"
+          - "Would you please speak a bit slower, please"
+          - "Would you please speak a bit slower please"
+          - "Would you please speak a little bit more slowly"
+          - "Would you please speak a little bit more slowly, please"
+          - "Would you please speak a little bit more slowly please"
+          - "Would you please speak a little bit slower"
+          - "Would you please speak a little bit slower, please"
+          - "Would you please speak a little bit slower please"
+          - "Could you slow down a little"
+          - "Could you slow down a little, please"
+          - "Could you slow down a little please"
+          - "Could you slow down a bit"
+          - "Could you slow down a bit, please"
+          - "Could you slow down a bit please"
+          - "Could you slow down a little bit"
+          - "Could you slow down a little bit, please"
+          - "Could you slow down a little bit please"
+          - "Could you please slow down a little"
+          - "Could you please slow down a little, please"
+          - "Could you please slow down a little please"
+          - "Could you please slow down a bit"
+          - "Could you please slow down a bit, please"
+          - "Could you please slow down a bit please"
+          - "Could you please slow down a little bit"
+          - "Could you please slow down a little bit, please"
+          - "Could you please slow down a little bit please"
+          - "Can you slow down a little"
+          - "Can you slow down a little, please"
+          - "Can you slow down a little please"
+          - "Can you slow down a bit"
+          - "Can you slow down a bit, please"
+          - "Can you slow down a bit please"
+          - "Can you slow down a little bit"
+          - "Can you slow down a little bit, please"
+          - "Can you slow down a little bit please"
+          - "Can you please slow down a little"
+          - "Can you please slow down a little, please"
+          - "Can you please slow down a little please"
+          - "Can you please slow down a bit"
+          - "Can you please slow down a bit, please"
+          - "Can you please slow down a bit please"
+          - "Can you please slow down a little bit"
+          - "Can you please slow down a little bit, please"
+          - "Can you please slow down a little bit please"
+          - "Would you slow down a little"
+          - "Would you slow down a little, please"
+          - "Would you slow down a little please"
+          - "Would you slow down a bit"
+          - "Would you slow down a bit, please"
+          - "Would you slow down a bit please"
+          - "Would you slow down a little bit"
+          - "Would you slow down a little bit, please"
+          - "Would you slow down a little bit please"
+          - "Would you please slow down a little"
+          - "Would you please slow down a little, please"
+          - "Would you please slow down a little please"
+          - "Would you please slow down a bit"
+          - "Would you please slow down a bit, please"
+          - "Would you please slow down a bit please"
+          - "Would you please slow down a little bit"
+          - "Would you please slow down a little bit, please"
+          - "Would you please slow down a little bit please"
+          - "Would you mind speaking a little more slowly"
+          - "Would you mind speaking a little slower"
+          - "Would you mind speaking a bit more slowly"
+          - "Would you mind speaking a bit slower"
+          - "Would you mind speaking a little bit more slowly"
+          - "Would you mind speaking a little bit slower"
+        explanation: Вежливая просьба начинается с could you, глагол speak в начальной форме.
+      - id: q2
+        prompt: Не могли бы вы сказать, что вы имеете в виду?
+        answer:
+          - "Could you tell me what you mean"
+          - "Could you say what you mean"
+          - "Could you let me know what you mean"
+          - "Could you inform me what you mean"
+          - "Could you please tell me what you mean"
+          - "Could you please say what you mean"
+          - "Could you please let me know what you mean"
+          - "Could you please inform me what you mean"
+          - "Can you tell me what you mean"
+          - "Can you say what you mean"
+          - "Can you let me know what you mean"
+          - "Can you inform me what you mean"
+          - "Can you please tell me what you mean"
+          - "Can you please say what you mean"
+          - "Can you please let me know what you mean"
+          - "Can you please inform me what you mean"
+          - "Would you tell me what you mean"
+          - "Would you say what you mean"
+          - "Would you let me know what you mean"
+          - "Would you inform me what you mean"
+          - "Would you please tell me what you mean"
+          - "Would you please say what you mean"
+          - "Would you please let me know what you mean"
+          - "Would you please inform me what you mean"
+          - "Could you explain what you mean"
+          - "Could you please explain what you mean"
+          - "Can you explain what you mean"
+          - "Can you please explain what you mean"
+          - "Would you explain what you mean"
+          - "Would you please explain what you mean"
+        explanation: В косвенном вопросе порядок слов как в утверждении, без do.
+      - id: q3
+        prompt: Вы не знаете, кто будет на собеседовании?
+        answer:
+          - "Do you know who will be at the interview"
+          - "Do you know who will be at the panel"
+          - "Do you know who will be in the interview"
+          - "Do you know who will be in the panel"
+          - "Do you know who will be on the interview"
+          - "Do you know who will be on the panel"
+          - "Do you know who is going to be at the interview"
+          - "Do you know who is going to be at the panel"
+          - "Do you know who is going to be in the interview"
+          - "Do you know who is going to be in the panel"
+          - "Do you know who is going to be on the interview"
+          - "Do you know who is going to be on the panel"
+          - "Do you know who will conduct the interview"
+          - "Do you know who will run the interview"
+          - "Do you know who will attend the interview"
+          - "Do you know who is going to conduct the interview"
+          - "Do you know who is going to run the interview"
+          - "Do you know who is going to attend the interview"
+          - "Do you know who will be interviewing me"
+          - "Do you know who will be meeting me"
+          - "Do you know who is going to be interviewing me"
+          - "Do you know who is going to be meeting me"
+          - "Do you know who will interview me"
+          - "Do you know who is going to interview me"
+          - "Do you know who will be there"
+        explanation: После who порядок слов как в утверждении, будущее время сохраняется.

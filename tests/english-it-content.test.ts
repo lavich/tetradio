@@ -10,12 +10,13 @@ const modulesOf = (courseId: string) => catalog.modules!.filter((module) => modu
 const packagesOf = (courseId: string) => content.packages.filter((pack) => pack.courseId === courseId);
 
 describe("английский для IT: ступень B1+", () => {
-  const STAGE = ["e01", "e02", "e03", "e04"];
+  const STAGE = ["e01", "e02", "e03", "e04", "e05"];
   const WRITING: Record<string, { register: string; min: number; max: number }> = {
     e01: { register: "formal", min: 60, max: 90 },
     e02: { register: "formal", min: 60, max: 90 },
     e03: { register: "formal", min: 60, max: 100 },
     e04: { register: "formal", min: 60, max: 100 },
+    e05: { register: "formal", min: 80, max: 120 },
   };
   const WORDS = [18, 17];
   const PHRASES = [8, 8, 9];
@@ -109,6 +110,7 @@ describe("английский для IT: ступень B1+", () => {
         expect(wordCount(block.model), block.id).toBeLessThanOrEqual(block.words.max);
         expect(block.criteria.length, block.id).toBeGreaterThan(0);
       }
+      for (const block of blocks) if (block.type === "listening") expect(block.plays, block.id).toBe(2);
       const speaking = blocks.filter((block) => block.type === "speaking");
       expect(speaking.length).toBeGreaterThanOrEqual(2);
       for (const block of speaking) {

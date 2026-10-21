@@ -1,0 +1,7 @@
+id: ep114
+text: "Should I focus on the technical side?"
+translation: "Мне сосредоточиться на технической стороне?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e05
+  operation: requested-generation
+  request: Фразы модуля e05 по программе docs/curriculum-english-it.md
