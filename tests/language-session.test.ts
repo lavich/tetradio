@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { makeSession } from "../src/domain/learning";
+import { makeLanguagePlan, makeSession } from "../src/domain/learning";
 import { SESSION_SIZE } from "../src/domain/session";
 import { wordRef } from "../src/domain/refs";
 import type { SessionItem, Word } from "../src/domain/types";
@@ -198,16 +198,60 @@ describe("занятие языка — карточки его курсов в 
     const data = languageSnapshot({ it: { words: 6 }, travel: { words: 6 }, greek: { words: 6 } });
     const orphan = { ...wordOf("it", 99), id: "orphan" };
     data.words.push(orphan);
+    const voices: string[] = [];
     const session = await makeSession({
       source: fromSnapshot(data),
       now: NOW,
       courseIds: english,
       refs: [wordRef("orphan"), wordRef("t0")],
       random: seeded(14),
+      hasVoice: (language) => (voices.push(language), true),
     });
+    expect(new Set(voices)).toEqual(new Set(["en"]));
     const item = session.items.find((entry) => entry.ref.id === "orphan")!;
     expect(item.options.length).toBeGreaterThan(0);
     const own = new Set([...textsOf(data, "i"), orphan.greek, orphan.russian]);
     expect(item.options.every((option) => own.has(option))).toBe(true);
+  });
+  it("выбранные карточки — без плана: состояния со сроком не читаются, источники новых — прежние", async () => {
+    const data = languageSnapshot({ it: { words: 6, states: lastDue(2) }, travel: { words: 6, states: lastDue(2) } });
+    const source = fromSnapshot(data);
+    const due: unknown[] = [];
+    const counted = {
+      ...source,
+      dueStates: (...args: Parameters<typeof source.dueStates>) => (due.push(args), source.dueStates(...args)),
+      dueStatesOf: undefined,
+    };
+    const session = await makeSession({
+      source: counted,
+      now: NOW,
+      courseIds: english,
+      refs: [wordRef("i0"), wordRef("t0"), wordRef("t5")],
+      random: seeded(15),
+    });
+    expect(due).toEqual([]);
+    expect(session.planDate).toBe("2026-09-15");
+    expect(session.items.find((item) => item.ref.id === "i0")?.lessonTitle).toBe("it урок");
+    expect(session.items.find((item) => item.ref.id === "t5")?.lessonTitle).toBeUndefined();
+  });
+  it("план языка читает срок одним проходом на все курсы и не повторяет карточки", async () => {
+    const data = languageSnapshot({ it: { words: 4, states: lastDue(2) }, travel: { words: 4, states: lastDue(2) } });
+    const source = fromSnapshot(data);
+    const passes: unknown[] = [];
+    const counted = {
+      ...source,
+      dueStates: async () => {
+        throw new Error("срок по курсу");
+      },
+      dueStatesOf: (...args: Parameters<NonNullable<typeof source.dueStatesOf>>) => (
+        passes.push(args),
+        source.dueStatesOf!(...args)
+      ),
+    };
+    const plan = await makeLanguagePlan(counted, NOW, { courseIds: english });
+    expect(passes).toHaveLength(1);
+    expect(plan.reviews).toHaveLength(4);
+    const keys = [...plan.newRefs, ...plan.reviews.map((review) => review.ref)].map((ref) => ref.id);
+    expect(new Set(keys).size).toBe(keys.length);
   });
 });

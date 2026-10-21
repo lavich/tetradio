@@ -12,6 +12,7 @@ import { setPrimaryCourse } from "../src/storage/courses";
 import { db } from "../src/storage/db";
 import { activeOf, install, lessonTitle, NOW, seedCatalog, wordId } from "./helpers/language-db";
 import { pauseCourse, resumeCourse } from "../src/storage/pause-actions";
+import { PENDING_LESSONS_KEY } from "../src/storage/pending";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 vi.setConfig({ testTimeout: 20_000 });
@@ -48,6 +49,7 @@ const mount = () => {
         <Routes>
           <Route path="/" element={<TodayScreen />} />
           <Route path="/course" element={<p>полка</p>} />
+          <Route path="/session" element={<p>занятие</p>} />
         </Routes>
       </MemoryRouter>,
     ),
@@ -221,6 +223,28 @@ describe("компактный блок языка", () => {
     await until(() => block()!.querySelector("button")?.textContent === "Повторить 3", "счёт без курса на паузе");
     expect(blockLines()).toHaveLength(1);
     expect(block()!.querySelector('[data-testid="course-caption"]')).toBeNull();
+  });
+  it("«Повторить N» собирает занятие из тех же курсов, что посчитали N, в том числе ещё не скачанного", async () => {
+    await start([
+      ["greek", { ahead: true }],
+      ["it", { due: 3, ahead: true }],
+      ["travel", { due: 2, ahead: true }],
+    ]);
+    await db.lessons.delete("travel-1");
+    await db.packages.delete("travel-1");
+    await db.meta.put({
+      key: PENDING_LESSONS_KEY,
+      value: JSON.stringify({ "travel-1": { id: "travel-1", completed: true, updatedAt: NOW.toISOString() } }),
+    });
+    mount();
+    await loaded();
+    await shown();
+    await until(() => block()!.querySelector("button")?.textContent === "Повторить 5", "счёт двух курсов");
+    expect(blockLines()).toHaveLength(1);
+    await act(async () => block()!.querySelector("button")!.click());
+    await until(() => location === "/session", "переход в занятие");
+    const [session] = await db.sessions.toArray();
+    expect(session.items).toHaveLength(5);
   });
   it("язык, все курсы которого на паузе, — без блока", async () => {
     await start([["greek", { ahead: true }], ["it"], ["travel"]]);

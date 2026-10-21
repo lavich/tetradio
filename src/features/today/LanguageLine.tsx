@@ -18,13 +18,14 @@ export function LanguageLine({ language }: { language: LanguageEntry }) {
   const navigate = useNavigate();
   const plan = useLanguagePlan(language.code);
   const unfinished = useLanguageSession(language.code);
-  const courses = useTodayCourses(language.code)?.filter((course) => course.installed);
+  const planned = useTodayCourses(language.code);
+  const courses = planned?.filter((course) => course.installed);
   const { busy, problem, setProblem, run } = useAction("Не удалось начать повторение");
-  if (!plan || unfinished === undefined || !courses?.length) return null;
+  if (!plan || unfinished === undefined || !planned || !courses?.length) return null;
   const due = plan.newRefs.length + plan.reviews.length;
   const review = () =>
     run(async () => {
-      const session = unfinished ?? (await startSession(new Date(), { courseIds: courses.map((course) => course.id) }));
+      const session = unfinished ?? (await startSession(new Date(), { courseIds: planned.map((course) => course.id) }));
       if (!session) return setProblem("На сегодня карточек нет.");
       void navigate(await sessionPath(session));
     });

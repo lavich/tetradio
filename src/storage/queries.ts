@@ -9,7 +9,12 @@ import {
   courseCardIds,
   courseLanguage,
   courseLessonIds,
+  homeCourse,
+  lessonCourses,
   lessonItemsOf,
+  sharedReads,
+  tableReads,
+  type LessonReads,
 } from "./courses";
 import { STORED_KINDS } from "./kinds";
 import { cardKey, cardLabel, KINDS } from "../domain/kinds";
@@ -63,12 +68,13 @@ export const loadLessons = (database: AppDatabase = db) => database.lessons.toAr
 export const studiedLessons = zoned(async function studiedLessons(
   courseId?: string,
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<PlanLesson[]> {
   // Булево поле IndexedDB не индексирует, а уроков — десятки.
   const [all, rows, own] = await Promise.all([
-    database.lessons.toArray(),
+    reads.lessons(),
     database.blockProgress.filter((row) => row.done).toArray(),
-    courseId ? courseLessonIds(courseId, database) : undefined,
+    courseId ? courseLessonIds(courseId, database, reads) : undefined,
   ]);
   const mine = own && new Set(own);
   const lessons = mine ? all.filter((lesson) => mine.has(lesson.id)) : all;
@@ -168,10 +174,11 @@ export const mistakeCount = zoned(async function mistakeCount(
 });
 
 export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
+  const reads = sharedReads(database);
   return {
     timezone: deviceTimezone,
-    studiedLessons: (courseId) => studiedLessons(courseId, database),
-    itemsOf: (lessonIds) => lessonItemsOf(lessonIds, database),
+    studiedLessons: (courseId) => studiedLessons(courseId, database, reads),
+    itemsOf: (lessonIds) => lessonItemsOf(lessonIds, database, reads),
     lessonRefs: zoned(async (lessonId) => (await lessonItems(lessonId, database)).map((item) => item.ref)),
     statesOf: (refs) => statesOf(refs, database),
     liveKeys: (refs) => liveKeys(refs, database),
@@ -184,6 +191,34 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
         database,
       );
       return due.filter((state) => own.has(state.unitKey));
+    }),
+    dueStatesOf: zoned(async (until, courseIds) => {
+      const [due, items] = await Promise.all([
+        database.cardStates.where("card.due").belowOrEqual(until).toArray(),
+        reads.items(),
+      ]);
+      // Связи уже прочитаны планом: курс по ним дешевле, чем `anyOf` по тысячам ключей срока.
+      const lessonOf = new Map<string, string>();
+      for (const item of items) if (!lessonOf.has(item.unitKey)) lessonOf.set(item.unitKey, item.lessonId);
+      const keys = due.map((state) => state.unitKey);
+      const byLesson = await lessonCourses(
+        keys.flatMap((key) => lessonOf.get(key) ?? []),
+        database,
+      );
+      const owners = new Map<string, string>();
+      for (const key of keys) {
+        const course = byLesson.get(lessonOf.get(key) ?? "");
+        if (course) owners.set(key, course);
+      }
+      // Карточка без связей — у своего курса, если вид его знает (ошибка урока), иначе у домашнего, как в `cardCourses`.
+      const rest = keys.filter((key) => !owners.has(key));
+      const own = rest.filter((key) => !!STORED_KINDS[tryParseUnitKey(key)?.kind ?? "word"]?.coursesOf);
+      for (const [key, course] of await cardCourses(own, database)) owners.set(key, course);
+      const home = rest.length > own.length ? await homeCourse(database) : undefined;
+      if (home) for (const key of rest) if (!owners.has(key)) owners.set(key, home);
+      const byCourse = new Map(courseIds.map((courseId) => [courseId, [] as LearningState[]]));
+      for (const state of due) byCourse.get(owners.get(state.unitKey) ?? "")?.push(state);
+      return byCourse;
     }),
     factsOf: zoned(async (refs) => {
       const facts = new Map<string, CardFacts>();
@@ -204,7 +239,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
         ? (
             await database.phrases
               .where("id")
-              .anyOf(await courseCardIds(courseId, "phrase", database))
+              .anyOf(await courseCardIds(courseId, "phrase", database, reads))
               .primaryKeys()
           ).length
         : database.phrases.count(),
@@ -228,9 +263,9 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       const row = await database.cardSkills.get(key);
       return summarizeEvents(key, await eventsAfter(database, key, base.asOf), row?.skills ?? emptySkills());
     }),
-    optionPool: (want, courseId) => optionPool(want, courseId, database),
+    optionPool: (want, courseId) => optionPool(want, courseId, database, reads),
     lessonMatesOf: (wordIds) => lessonMates(wordIds, database),
-    phrasePool: (want, courseId) => phrasePool(want, courseId, database),
+    phrasePool: (want, courseId) => phrasePool(want, courseId, database, reads),
     daysBetween: zoned(async (from, to) => {
       const base = await database.baseSummary.get("base");
       const local = await database.events.where("localDate").between(from, to, true, true).toArray();
@@ -317,8 +352,9 @@ export const optionPool = zoned(async function optionPool(
   want: number,
   courseId?: string,
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<Word[]> {
-  if (courseId) return liveWords(sample(await courseCardIds(courseId, "word", database), want), database);
+  if (courseId) return liveWords(sample(await courseCardIds(courseId, "word", database, reads), want), database);
   const total = await database.words.count();
   if (total <= want) return database.words.toArray();
   const chunk = Math.ceil(want / 4);
@@ -373,8 +409,9 @@ export const phrasePool = zoned(async function phrasePool(
   want: number,
   courseId?: string,
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<Phrase[]> {
-  if (courseId) return livePhrases(sample(await courseCardIds(courseId, "phrase", database), want), database);
+  if (courseId) return livePhrases(sample(await courseCardIds(courseId, "phrase", database, reads), want), database);
   const total = await database.phrases.count();
   if (total <= want) return database.phrases.toArray();
   const chunk = Math.ceil(want / 4);

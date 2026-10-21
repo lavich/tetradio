@@ -316,7 +316,7 @@ describe("план и занятие языка из двух курсов на 
     );
   }, 60_000);
   const courseIds = ["a2", "b2"];
-  it("план языка не читает слова, события и сессии, а индекс срока — не больше двух раз", async () => {
+  it("план языка не читает слова, события и сессии, а индекс срока проходит один раз на все курсы", async () => {
     const cutoff = new Date("2026-09-15T21:00:00Z");
     const due = await db.cardStates.where("card.due").belowOrEqual(cutoff).count();
     track();
@@ -326,8 +326,8 @@ describe("план и занятие языка из двух курсов на 
     expect(reads.words).toBe(0);
     expect(reads.events).toBe(0);
     expect(reads.sessions).toBe(0);
-    expect(reads.cardStates).toBeLessThanOrEqual(2 * due + (LESSONS + SECOND) * 35);
-  }, 120_000);
+    expect(reads.cardStates).toBeLessThanOrEqual(due + (LESSONS + SECOND) * 35);
+  }, 60_000);
   it("занятие языка читает слова только своих карточек и пулов курсов среди них", async () => {
     track();
     const session = await makeSession({ source: dexieSource(db), now, courseIds, random: () => 0.37 });
@@ -336,5 +336,5 @@ describe("план и занятие языка из двух курсов на 
     const owners = new Set(session.items.map((item) => (item.ref.id >= "w060000" ? "b2" : "a2")));
     expect(reads.words).toBeLessThanOrEqual(20 * (1 + 2 * LESSON_MATES_RADIUS) + 48 * owners.size);
     expect(reads.sessions).toBe(0);
-  }, 120_000);
+  }, 60_000);
 });

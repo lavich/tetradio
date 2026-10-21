@@ -134,6 +134,15 @@ export function fromSnapshot(data: Snapshot): SessionSource & StatsSource {
       data.states.filter(
         (state) => new Date(state.card.due).getTime() <= until.getTime() && inCourse(courseId)(state.unitKey),
       ),
+    dueStatesOf: async (until, courseIds) =>
+      new Map(
+        courseIds.map((courseId) => [
+          courseId,
+          data.states.filter(
+            (state) => new Date(state.card.due).getTime() <= until.getTime() && inCourse(courseId)(state.unitKey),
+          ),
+        ]),
+      ),
     factsOf: async (refs) =>
       new Map(
         refs.filter(isLive).map((ref) => {

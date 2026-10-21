@@ -2,9 +2,16 @@ import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { makePlan } from "../src/domain/learning";
 import { AppDatabase } from "../src/storage/db";
-import { homeCourse, languageSession, sessionLanguage, setPrimaryCourse, todayCourse } from "../src/storage/courses";
+import {
+  anyActiveSession,
+  homeCourse,
+  languageSession,
+  sessionLanguage,
+  setPrimaryCourse,
+  todayCourse,
+} from "../src/storage/courses";
 import { languagePlan, todayCourses, todayLanguage } from "../src/storage/today";
-import { pauseCourse } from "../src/storage/pause-actions";
+import { pauseCourse, resumeCourse } from "../src/storage/pause-actions";
 import { dexieSource } from "../src/storage/queries";
 import { lessonDays, reviewedOn } from "../src/storage/course";
 import { PENDING_LESSONS_KEY } from "../src/storage/pending";
@@ -142,6 +149,30 @@ describe("незаконченное занятие языка", () => {
     expect(session.items.some((item) => item.ref.id.startsWith("travel-"))).toBe(true);
     await pauseCourse("travel", NOW, db);
     expect((await languageSession("en", db))?.id).toBe(session.id);
+  });
+  it("все курсы языка на паузе — занятие языка ждёт возврата любого, тренировка — нет", async () => {
+    const session = (await startSession(NOW, { courseIds: ["it", "travel"] }, db))!;
+    const practice = activeOf("practice", "it", { language: "en", createdAt: later(-10) });
+    practice.items = practice.items.map((item) => ({ ...item, mode: "practice" }));
+    await db.sessions.add(practice);
+    await pauseCourse("it", NOW, db);
+    await pauseCourse("travel", NOW, db);
+    expect((await languageSession("en", db))?.id).toBe("practice");
+    expect((await anyActiveSession(db))?.id).toBe("practice");
+    await db.sessions.delete("practice");
+    expect(await languageSession("en", db)).toBeNull();
+    expect(await anyActiveSession(db)).toBeNull();
+    await resumeCourse("travel", NOW, db);
+    expect((await languageSession("en", db))?.id).toBe(session.id);
+    expect((await anyActiveSession(db))?.id).toBe(session.id);
+  });
+  it("два одновременных занятия языка — одно активное", async () => {
+    const [first, second] = await Promise.all([
+      startSession(NOW, { courseIds: ["it", "travel"] }, db),
+      startSession(NOW, { courseIds: ["it", "travel"] }, db),
+    ]);
+    expect(first!.id).toBe(second!.id);
+    expect(await db.sessions.where("status").equals("active").count()).toBe(1);
   });
   it("startSession с курсами языка пишет язык и первый курс", async () => {
     const session = (await startSession(NOW, { courseIds: ["travel", "it"] }, db))!;

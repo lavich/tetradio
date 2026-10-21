@@ -6,7 +6,14 @@ import Dexie from "dexie";
 import { DEFAULT_PALETTE, isPalette, type PaletteName } from "../content/palettes";
 import { DEFAULT_LANGUAGE, isLanguage, profileOf, type Language, type LanguageProfile } from "../domain/language";
 import { tryParseUnitKey, unitKey } from "../domain/refs";
-import { CARD_KINDS, type CardKind, type LearningRef, type LessonItem, type Session } from "../domain/types";
+import {
+  CARD_KINDS,
+  type CardKind,
+  type LearningRef,
+  type Lesson,
+  type LessonItem,
+  type Session,
+} from "../domain/types";
 import { db, distinctKeys, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
 import { lessonCourses } from "./lesson-courses";
@@ -386,12 +393,31 @@ export const cardLanguages = zoned(async function cardLanguages(
   return new Map(keys.map((key) => [key, languages.get(owners.get(key) ?? "") ?? DEFAULT_LANGUAGE]));
 });
 
+/** Чтения уроков и связей целиком; источник плана берёт их один раз на всё построение, а не на каждый курс. */
+export interface LessonReads {
+  lessons(): Promise<Lesson[]>;
+  items(): Promise<LessonItem[]>;
+}
+export const tableReads = (database: AppDatabase): LessonReads => ({
+  lessons: () => database.lessons.toArray(),
+  items: () => database.lessonItems.toArray(),
+});
+export function sharedReads(database: AppDatabase): LessonReads {
+  let lessons: Promise<Lesson[]> | undefined;
+  let items: Promise<LessonItem[]> | undefined;
+  return {
+    lessons: () => (lessons ??= database.lessons.toArray()),
+    items: () => (items ??= database.lessonItems.toArray()),
+  };
+}
+
 /** Уроки курса на устройстве; урок без курса (старый профиль) — у домашнего курса. */
 export const courseLessonIds = zoned(async function courseLessonIds(
   courseId: string,
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<string[]> {
-  const lessons = await database.lessons.toArray();
+  const lessons = await reads.lessons();
   const owners = await lessonCourses(
     lessons.filter((lesson) => !lesson.courseId).map((lesson) => lesson.id),
     database,
@@ -407,10 +433,11 @@ export const courseLessonIds = zoned(async function courseLessonIds(
 export const lessonItemsOf = zoned(async function lessonItemsOf(
   lessonIds: string[],
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<LessonItem[]> {
   if (!lessonIds.length) return [];
   const wanted = new Set(lessonIds);
-  return (await database.lessonItems.toArray()).filter((item) => wanted.has(item.lessonId));
+  return (await reads.items()).filter((item) => wanted.has(item.lessonId));
 });
 
 /** Идентификаторы карточек вида в уроках курса, по порядку id. */
@@ -418,10 +445,11 @@ export const courseCardIds = zoned(async function courseCardIds(
   courseId: string,
   kind: CardKind,
   database: AppDatabase = db,
+  reads: LessonReads = tableReads(database),
 ): Promise<string[]> {
-  const lessonIds = await courseLessonIds(courseId, database);
+  const lessonIds = await courseLessonIds(courseId, database, reads);
   if (!lessonIds.length) return [];
-  const items = await lessonItemsOf(lessonIds, database);
+  const items = await lessonItemsOf(lessonIds, database, reads);
   return [...new Set(items.filter((item) => item.ref.kind === kind).map((item) => item.ref.id))].sort();
 });
 
@@ -442,27 +470,34 @@ export const sessionLanguage = zoned(async function sessionLanguage(
 const isPracticeSession = (session: Session) => session.items.every((item) => item.mode === "practice");
 
 /**
- * Незавершённое занятие языка, последнее по времени, в том числе тренировка курса. Прежнее занятие повторения
- * курса на паузе ждёт возврата курса; занятия новой версии с явно выбранными карточками открываются и на паузе.
+ * Какие незавершённые занятия предлагаются: тренировка — всегда; прежнее занятие повторения курса на паузе ждёт
+ * возврата курса; занятие новой версии — пока у его языка есть начатый курс не на паузе.
  */
-export const languageSession = zoned(async function languageSession(
-  language: Language,
-  database: AppDatabase = db,
-): Promise<Session | null> {
+const offeredSessions = zoned(async function offeredSessions(
+  database: AppDatabase,
+): Promise<{ session: Session; language: Language }[]> {
   const active = await database.sessions
     .where("[status+createdAt]")
     .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
     .reverse()
     .toArray();
-  if (!active.length) return null;
+  if (!active.length) return [];
   const [list, home] = await Promise.all([courses(database), homeCourse(database)]);
   const byId = new Map(list.map((course) => [course.id, course]));
-  const languageOf = (session: Session) =>
-    session.language ?? byId.get(session.courseId ?? home ?? "")?.language ?? DEFAULT_LANGUAGE;
-  const waits = (session: Session) =>
-    !session.language && !isPracticeSession(session) && !!byId.get(session.courseId ?? home ?? "")?.pausedAt;
-  return active.find((session) => languageOf(session) === language && !waits(session)) ?? null;
+  const going = new Set(list.filter((course) => course.started && !course.pausedAt).map((course) => course.language));
+  return active.flatMap((session) => {
+    const course = byId.get(session.courseId ?? home ?? "");
+    const language = session.language ?? course?.language ?? DEFAULT_LANGUAGE;
+    const waits = !isPracticeSession(session) && (session.language ? !going.has(language) : !!course?.pausedAt);
+    return waits ? [] : [{ session, language }];
+  });
 });
+
+/** Незавершённое занятие языка, последнее по времени, в том числе тренировка курса. */
+export const languageSession = zoned(
+  async (language: Language, database: AppDatabase = db): Promise<Session | null> =>
+    (await offeredSessions(database)).find((entry) => entry.language === language)?.session ?? null,
+);
 
 /**
  * Курсы «Повторить ошибки»: все начатые курсы языка занятия, в том числе на паузе, курс занятия первым. Так курс,
@@ -483,9 +518,5 @@ export const languageCourses = zoned(async function languageCourses(
 
 /** Последнее незавершённое занятие любого языка: к нему ведёт «На главную» с адреса без занятия. */
 export const anyActiveSession = zoned(
-  async (database: AppDatabase = db): Promise<Session | null> =>
-    (await database.sessions
-      .where("[status+createdAt]")
-      .between(["active", Dexie.minKey], ["active", Dexie.maxKey])
-      .last()) ?? null,
+  async (database: AppDatabase = db): Promise<Session | null> => (await offeredSessions(database))[0]?.session ?? null,
 );

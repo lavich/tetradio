@@ -3,7 +3,8 @@ import { emptySkills, type SkillSummary } from "./skills";
 import { exerciseFor } from "./card-exercise";
 import { KINDS } from "./kinds";
 import { closeSources, NO_WORDS, shuffle } from "./options";
-import { makeLanguagePlan, makePlan, type PlanSource } from "./plan";
+import { makeLanguagePlan, makePlan, originsOf, type PlanSource, type WordOrigin } from "./plan";
+import { studyDay } from "./time";
 import { unitKey } from "./refs";
 import type { LearningRef, Phrase, Session, SessionCard, SessionItem, Word } from "./types";
 
@@ -53,17 +54,25 @@ export async function makeSession({
   courseIds,
 }: SessionInput): Promise<Session> {
   const scope = courseIds ?? (courseId ? [courseId] : undefined);
-  const plan = scope
-    ? await makeLanguagePlan(source, now, { hasVoice, courseIds: scope })
-    : await makePlan(source, now, { hasVoice });
   const size = SESSION_SIZE;
   let chosen: { ref: LearningRef; isNew: boolean }[];
+  let origins: Map<string, WordOrigin>;
   if (refs) {
+    // Выбранным карточкам план не нужен: только источники новых, а состояния со сроком не читаются.
     const live = await source.liveKeys(refs);
     const kept = refs.filter((ref) => live.has(unitKey(ref)));
     const states = await source.statesOf(kept);
     chosen = kept.map((ref) => ({ ref, isNew: !states.has(unitKey(ref)) }));
+    origins = await originsOf(
+      source,
+      chosen.filter((entry) => entry.isNew).map((entry) => entry.ref),
+      scope ?? [undefined],
+    );
   } else {
+    const plan = scope
+      ? await makeLanguagePlan(source, now, { hasVoice, courseIds: scope })
+      : await makePlan(source, now, { hasVoice });
+    origins = plan.origins;
     // Пока есть долг паузы, новые карточки занимают только места, оставшиеся после повторений.
     const reserve = plan.pauseDebt ? 0 : Math.ceil(size / 2);
     const newOnes = plan.newRefs.slice(0, reserve);
@@ -91,7 +100,8 @@ export async function makeSession({
     first ? source.coursesOf(wanted) : new Map<string, string>(),
     first ? source.courseLanguage(first) : undefined,
   ]);
-  // Карточка вне уроков бывает у домашнего курса другого языка: варианты ей — из основного курса занятия.
+  // Карточка вне уроков бывает у домашнего курса другого языка: варианты ей — из основного курса занятия, голос и
+  // проверка — по языку занятия.
   const courseOf = (key: string) => {
     const own = owners.get(key);
     return own && languages.get(key) === sessionLanguage ? own : first;
@@ -130,7 +140,7 @@ export async function makeSession({
     const skills = entry.isNew ? emptySkills() : await source.skillsOf(card);
     const { words: pool, phrases, sessionWords } = pools.get(courseOf(key))!;
     const words = card.kind === "word" ? closeSources(card.word.id, mates, sessionWords, pool) : NO_WORDS;
-    const language = languages.get(key) ?? DEFAULT_LANGUAGE;
+    const language = sessionLanguage ?? languages.get(key) ?? DEFAULT_LANGUAGE;
     const exercise = exerciseFor(
       card,
       { words, phrases },
@@ -140,7 +150,7 @@ export async function makeSession({
       PROFILES[language],
     );
     if (!exercise) continue; // объективного упражнения нет: карточка остаётся для просмотра
-    const origin = entry.isNew ? plan.origins.get(key) : undefined;
+    const origin = entry.isNew ? origins.get(key) : undefined;
     items.push({
       id: `${id}-${items.length}`,
       ref: entry.ref,
@@ -156,7 +166,7 @@ export async function makeSession({
   return {
     id,
     createdAt: now.toISOString(),
-    planDate: plan.today,
+    planDate: studyDay(now, source.timezone()),
     items: spaceSingleIntroduction(items),
     index: 0,
     status: "active",
