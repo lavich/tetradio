@@ -88,7 +88,7 @@ blocks:
     title: Old Town Private Clinic — phone message
     plays: 2
     transcript:
-      - { text: "Thank you for calling the Old Town Private Clinic. We are open from eight in the morning to six in the evening, Monday to Friday. If you are visiting Edinburgh and need to see a doctor, please press 2 to book an appointment. Appointments for visitors cost sixty-five pounds. For repeat prescriptions, please use our website. If you need medical advice when we are closed, call 111. If someone is seriously ill or injured, call 999 or go to A&E at the Royal Infirmary." }
+      - { text: "Thank you for calling the Old Town Private Clinic. We are open from eight in the morning to six in the evening, Monday to Friday. If you are visiting Edinburgh and need to see a doctor, please press 2 to book an appointment. Appointments for visitors cost sixty-five pounds. For repeat prescriptions, please use our website. If you need medical advice when we are closed, call 111. If someone is seriously ill or injured, call 999 or go to A&E at the Royal Infirmary.", audio: t06-test/practice-1.mp3 }
   - type: exercise
     id: practice-q
     about: practice
@@ -119,17 +119,17 @@ blocks:
     title: At the doctor's
     plays: 2
     transcript:
-      - { speaker: Okafor, text: "Good morning. What can I do for you today?" }
-      - { speaker: Marco, text: "Hello. My ankle is still swollen. The pharmacist says, if it's not better in three or four days, I should see a doctor." }
-      - { speaker: Okafor, text: "Right. How long have you had the problem?" }
-      - { speaker: Marco, text: "Since last Sunday. So, five days now. I twisted it on a walk." }
-      - { speaker: Okafor, text: "And have you been resting it?" }
-      - { speaker: Marco, text: "Not really. I'm on holiday, so I walk a lot. Every day maybe ten kilometres." }
-      - { speaker: Okafor, text: "Ah, that's why it isn't getting better. Let me have a look… Good news — I don't think it's broken. But it's a bad sprain. You'd better not walk long distances for a week. Take the bus or a taxi." }
-      - { speaker: Marco, text: "OK. And the tablets from the chemist's? Ibuprofen." }
-      - { speaker: Okafor, text: "You can keep taking them, three times a day after meals. But don't take them for more than another five days. Put ice on it twice a day, and keep your foot up in the evening." }
-      - { speaker: Marco, text: "Sorry, how often the ice?" }
-      - { speaker: Okafor, text: "Twice a day, about fifteen minutes each time. If it still hurts in a week, you should get an X-ray." }
+      - { speaker: Okafor, text: "Good morning. What can I do for you today?", audio: t06-test/doctor-1.mp3 }
+      - { speaker: Marco, text: "Hello. My ankle is still swollen. The pharmacist says, if it's not better in three or four days, I should see a doctor.", audio: t06-test/doctor-2.mp3 }
+      - { speaker: Okafor, text: "Right. How long have you had the problem?", audio: t06-test/doctor-3.mp3 }
+      - { speaker: Marco, text: "Since last Sunday. So, five days now. I twisted it on a walk.", audio: t06-test/doctor-4.mp3 }
+      - { speaker: Okafor, text: "And have you been resting it?", audio: t06-test/doctor-5.mp3 }
+      - { speaker: Marco, text: "Not really. I'm on holiday, so I walk a lot. Every day maybe ten kilometres.", audio: t06-test/doctor-6.mp3 }
+      - { speaker: Okafor, text: "Ah, that's why it isn't getting better. Let me have a look… Good news — I don't think it's broken. But it's a bad sprain. You'd better not walk long distances for a week. Take the bus or a taxi.", audio: t06-test/doctor-7.mp3 }
+      - { speaker: Marco, text: "OK. And the tablets from the chemist's? Ibuprofen.", audio: t06-test/doctor-8.mp3 }
+      - { speaker: Okafor, text: "You can keep taking them, three times a day after meals. But don't take them for more than another five days. Put ice on it twice a day, and keep your foot up in the evening.", audio: t06-test/doctor-9.mp3 }
+      - { speaker: Marco, text: "Sorry, how often the ice?", audio: t06-test/doctor-10.mp3 }
+      - { speaker: Okafor, text: "Twice a day, about fifteen minutes each time. If it still hurts in a week, you should get an X-ray.", audio: t06-test/doctor-11.mp3 }
   - type: exercise
     id: doctor-q
     about: doctor

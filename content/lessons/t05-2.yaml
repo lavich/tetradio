@@ -136,23 +136,23 @@ blocks:
     title: At the till
     plays: 2
     transcript:
-      - { speaker: Grace, text: "Hi there. Just the jacket today?" }
-      - { speaker: Jonas, text: "Yes, just the jacket. Is possible to pay with card?" }
-      - { speaker: Grace, text: "Of course. That's a hundred and nineteen pounds, please." }
-      - { speaker: Jonas, text: "OK. Contactless?" }
-      - { speaker: Grace, text: "Sorry, it's over a hundred, so contactless won't work. Can you put your card in and enter your PIN?" }
-      - { speaker: Jonas, text: "Hmm. It says declined. But I have money on this card." }
-      - { speaker: Grace, text: "That happens a lot with foreign cards. Your bank sometimes blocks the first payment in a new country." }
-      - { speaker: Jonas, text: "But my bank app shows the payment. Could you check if the payment went through?" }
-      - { speaker: Grace, text: "Let me see… No, it didn't go through. In your app it's just a pending payment. The money will be back in your account in a few days." }
-      - { speaker: Jonas, text: "OK. I have here another card. I try this one." }
-      - { speaker: Grace, text: "Go ahead. Now the machine is asking if you want to pay in pounds or in euros." }
-      - { speaker: Jonas, text: "Which one is better?" }
-      - { speaker: Grace, text: "Pounds, usually. The exchange rate on the machine isn't as good as your bank's." }
-      - { speaker: Jonas, text: "Then pounds. … It's working." }
-      - { speaker: Grace, text: "Lovely, that's gone through. Would you like the receipt in the bag?" }
-      - { speaker: Jonas, text: "Yes, please. Maybe I have to return it, if my wife doesn't like the colour." }
-      - { speaker: Grace, text: "No problem — you've got twenty-eight days. Have a nice day." }
+      - { speaker: Grace, text: "Hi there. Just the jacket today?", audio: t05-2/till-1.mp3 }
+      - { speaker: Jonas, text: "Yes, just the jacket. Is possible to pay with card?", audio: t05-2/till-2.mp3 }
+      - { speaker: Grace, text: "Of course. That's a hundred and nineteen pounds, please.", audio: t05-2/till-3.mp3 }
+      - { speaker: Jonas, text: "OK. Contactless?", audio: t05-2/till-4.mp3 }
+      - { speaker: Grace, text: "Sorry, it's over a hundred, so contactless won't work. Can you put your card in and enter your PIN?", audio: t05-2/till-5.mp3 }
+      - { speaker: Jonas, text: "Hmm. It says declined. But I have money on this card.", audio: t05-2/till-6.mp3 }
+      - { speaker: Grace, text: "That happens a lot with foreign cards. Your bank sometimes blocks the first payment in a new country.", audio: t05-2/till-7.mp3 }
+      - { speaker: Jonas, text: "But my bank app shows the payment. Could you check if the payment went through?", audio: t05-2/till-8.mp3 }
+      - { speaker: Grace, text: "Let me see… No, it didn't go through. In your app it's just a pending payment. The money will be back in your account in a few days.", audio: t05-2/till-9.mp3 }
+      - { speaker: Jonas, text: "OK. I have here another card. I try this one.", audio: t05-2/till-10.mp3 }
+      - { speaker: Grace, text: "Go ahead. Now the machine is asking if you want to pay in pounds or in euros.", audio: t05-2/till-11.mp3 }
+      - { speaker: Jonas, text: "Which one is better?", audio: t05-2/till-12.mp3 }
+      - { speaker: Grace, text: "Pounds, usually. The exchange rate on the machine isn't as good as your bank's.", audio: t05-2/till-13.mp3 }
+      - { speaker: Jonas, text: "Then pounds. … It's working.", audio: t05-2/till-14.mp3 }
+      - { speaker: Grace, text: "Lovely, that's gone through. Would you like the receipt in the bag?", audio: t05-2/till-15.mp3 }
+      - { speaker: Jonas, text: "Yes, please. Maybe I have to return it, if my wife doesn't like the colour.", audio: t05-2/till-16.mp3 }
+      - { speaker: Grace, text: "No problem — you've got twenty-eight days. Have a nice day.", audio: t05-2/till-17.mp3 }
   - type: exercise
     id: till-q
     about: till
@@ -210,20 +210,20 @@ blocks:
     title: At the market
     plays: 2
     transcript:
-      - { speaker: Jonas, text: "Excuse me, how much is this camera?" }
-      - { speaker: Callum, text: "That one's thirty pounds. It's a lovely old camera, and it works perfectly." }
-      - { speaker: Jonas, text: "Thirty… Is that your best price? The one at the next stall is cheaper." }
-      - { speaker: Callum, text: "It is cheaper, but it isn't as good as this one. Have a look at the lens on that one — it's scratched." }
-      - { speaker: Jonas, text: "Hmm. Can you do it for twenty?" }
-      - { speaker: Callum, text: "Twenty's a bit low, I'm afraid. Twenty-five, and it's yours." }
-      - { speaker: Jonas, text: "Twenty-five. OK, deal. Do you take contactless?" }
-      - { speaker: Callum, text: "Normally, yes, but the signal's terrible here today. Cash only, sorry." }
-      - { speaker: Jonas, text: "I don't have pounds in cash. And my bank charges a transaction fee every time I use a cash machine abroad." }
-      - { speaker: Callum, text: "Then try the supermarket over the road. Buy something small and ask for cashback at the till. The shop doesn't charge for it." }
-      - { speaker: Jonas, text: "Cashback? Ah, they give me cash from my card. With a German card also?" }
-      - { speaker: Callum, text: "Some shops only do it with British cards, but it's worth asking. If not, there's a bureau de change at the station. Just don't change money at the airport — the rates there are terrible." }
-      - { speaker: Jonas, text: "OK. Ten minutes, I come back. Please keep the camera for me." }
-      - { speaker: Callum, text: "No problem. It's yours for twenty-five." }
+      - { speaker: Jonas, text: "Excuse me, how much is this camera?", audio: t05-2/market-1.mp3 }
+      - { speaker: Callum, text: "That one's thirty pounds. It's a lovely old camera, and it works perfectly.", audio: t05-2/market-2.mp3 }
+      - { speaker: Jonas, text: "Thirty… Is that your best price? The one at the next stall is cheaper.", audio: t05-2/market-3.mp3 }
+      - { speaker: Callum, text: "It is cheaper, but it isn't as good as this one. Have a look at the lens on that one — it's scratched.", audio: t05-2/market-4.mp3 }
+      - { speaker: Jonas, text: "Hmm. Can you do it for twenty?", audio: t05-2/market-5.mp3 }
+      - { speaker: Callum, text: "Twenty's a bit low, I'm afraid. Twenty-five, and it's yours.", audio: t05-2/market-6.mp3 }
+      - { speaker: Jonas, text: "Twenty-five. OK, deal. Do you take contactless?", audio: t05-2/market-7.mp3 }
+      - { speaker: Callum, text: "Normally, yes, but the signal's terrible here today. Cash only, sorry.", audio: t05-2/market-8.mp3 }
+      - { speaker: Jonas, text: "I don't have pounds in cash. And my bank charges a transaction fee every time I use a cash machine abroad.", audio: t05-2/market-9.mp3 }
+      - { speaker: Callum, text: "Then try the supermarket over the road. Buy something small and ask for cashback at the till. The shop doesn't charge for it.", audio: t05-2/market-10.mp3 }
+      - { speaker: Jonas, text: "Cashback? Ah, they give me cash from my card. With a German card also?", audio: t05-2/market-11.mp3 }
+      - { speaker: Callum, text: "Some shops only do it with British cards, but it's worth asking. If not, there's a bureau de change at the station. Just don't change money at the airport — the rates there are terrible.", audio: t05-2/market-12.mp3 }
+      - { speaker: Jonas, text: "OK. Ten minutes, I come back. Please keep the camera for me.", audio: t05-2/market-13.mp3 }
+      - { speaker: Callum, text: "No problem. It's yours for twenty-five.", audio: t05-2/market-14.mp3 }
   - type: exercise
     id: market-q
     about: market

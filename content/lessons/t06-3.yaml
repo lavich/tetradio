@@ -155,12 +155,12 @@ blocks:
     title: Реплики собеседника
     plays: 2
     transcript:
-      - { speaker: Bridget, text: "Hello, what can I do for you?" }
-      - { speaker: Bridget, text: "Oh dear. How long have you had it?" }
-      - { speaker: Bridget, text: "Have you got a temperature? And are you allergic to anything?" }
-      - { speaker: Bridget, text: "Right, so nothing with aspirin or ibuprofen in it. These lozenges will help your throat, and this spray is for your nose. Use the spray twice a day, morning and evening." }
-      - { speaker: Bridget, text: "One every three hours, but not more than six a day. And don't use the spray for more than a week." }
-      - { speaker: Bridget, text: "No, they're both over the counter. If you're not feeling better in four or five days, you'd better see a doctor. Anything else?" }
+      - { speaker: Bridget, text: "Hello, what can I do for you?", audio: t06-3/chemist-lines-1.mp3 }
+      - { speaker: Bridget, text: "Oh dear. How long have you had it?", audio: t06-3/chemist-lines-2.mp3 }
+      - { speaker: Bridget, text: "Have you got a temperature? And are you allergic to anything?", audio: t06-3/chemist-lines-3.mp3 }
+      - { speaker: Bridget, text: "Right, so nothing with aspirin or ibuprofen in it. These lozenges will help your throat, and this spray is for your nose. Use the spray twice a day, morning and evening.", audio: t06-3/chemist-lines-4.mp3 }
+      - { speaker: Bridget, text: "One every three hours, but not more than six a day. And don't use the spray for more than a week.", audio: t06-3/chemist-lines-5.mp3 }
+      - { speaker: Bridget, text: "No, they're both over the counter. If you're not feeling better in four or five days, you'd better see a doctor. Anything else?", audio: t06-3/chemist-lines-6.mp3 }
   - type: speaking
     id: chemist
     part: roleplay

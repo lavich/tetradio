@@ -185,20 +185,20 @@ blocks:
     title: The way to the castle
     plays: 2
     transcript:
-      - { speaker: Jonas, text: "Excuse me, sorry to bother you. How do I get to the castle from here?" }
-      - { speaker: Fiona, text: "The castle? Sure. It's not far — about a fifteen-minute walk, but it's uphill." }
-      - { speaker: Jonas, text: "Uphill, OK. No problem. Which way?" }
-      - { speaker: Fiona, text: "Go out of the station on this side and go up the steps. At the top, you're on Princes Street." }
-      - { speaker: Jonas, text: "Up the steps, Princes Street. Yes." }
-      - { speaker: Fiona, text: "Then turn left and walk along Princes Street, past a big dark monument. It looks like a church tower — you can't miss it." }
-      - { speaker: Jonas, text: "Past the monument. And then?" }
-      - { speaker: Fiona, text: "Then cross the road at the pedestrian crossing by the Mound and go into the gardens. There's a path up the hill, and the castle is at the top." }
-      - { speaker: Jonas, text: "So: up the steps, turn left, past the monument, cross the road, and up through the gardens." }
-      - { speaker: Fiona, text: "Exactly. And if you get lost, just look up — you can see the castle from almost everywhere." }
-      - { speaker: Jonas, text: "Ha, that's true. And is there a bus? How long it takes?" }
-      - { speaker: Fiona, text: "There are buses, but honestly, walking is quicker. The traffic in the centre is terrible at this time of day." }
-      - { speaker: Jonas, text: "OK, I walk. Thank you very much, very helpful." }
-      - { speaker: Fiona, text: "No problem. Enjoy the castle!" }
+      - { speaker: Jonas, text: "Excuse me, sorry to bother you. How do I get to the castle from here?", audio: t02-2/directions-1.mp3 }
+      - { speaker: Fiona, text: "The castle? Sure. It's not far — about a fifteen-minute walk, but it's uphill.", audio: t02-2/directions-2.mp3 }
+      - { speaker: Jonas, text: "Uphill, OK. No problem. Which way?", audio: t02-2/directions-3.mp3 }
+      - { speaker: Fiona, text: "Go out of the station on this side and go up the steps. At the top, you're on Princes Street.", audio: t02-2/directions-4.mp3 }
+      - { speaker: Jonas, text: "Up the steps, Princes Street. Yes.", audio: t02-2/directions-5.mp3 }
+      - { speaker: Fiona, text: "Then turn left and walk along Princes Street, past a big dark monument. It looks like a church tower — you can't miss it.", audio: t02-2/directions-6.mp3 }
+      - { speaker: Jonas, text: "Past the monument. And then?", audio: t02-2/directions-7.mp3 }
+      - { speaker: Fiona, text: "Then cross the road at the pedestrian crossing by the Mound and go into the gardens. There's a path up the hill, and the castle is at the top.", audio: t02-2/directions-8.mp3 }
+      - { speaker: Jonas, text: "So: up the steps, turn left, past the monument, cross the road, and up through the gardens.", audio: t02-2/directions-9.mp3 }
+      - { speaker: Fiona, text: "Exactly. And if you get lost, just look up — you can see the castle from almost everywhere.", audio: t02-2/directions-10.mp3 }
+      - { speaker: Jonas, text: "Ha, that's true. And is there a bus? How long it takes?", audio: t02-2/directions-11.mp3 }
+      - { speaker: Fiona, text: "There are buses, but honestly, walking is quicker. The traffic in the centre is terrible at this time of day.", audio: t02-2/directions-12.mp3 }
+      - { speaker: Jonas, text: "OK, I walk. Thank you very much, very helpful.", audio: t02-2/directions-13.mp3 }
+      - { speaker: Fiona, text: "No problem. Enjoy the castle!", audio: t02-2/directions-14.mp3 }
   - type: exercise
     id: directions-q
     about: directions
@@ -245,18 +245,18 @@ blocks:
     title: A taxi from the station
     plays: 2
     transcript:
-      - { speaker: Kwame, text: "Evening! Where to?" }
-      - { speaker: Lúcia, text: "Hello. Forty-two Marchmont Road, please. It's near a big park, I think." }
-      - { speaker: Kwame, text: "Marchmont Road, no problem. Put your bag on the seat next to you." }
-      - { speaker: Lúcia, text: "Thank you. I wanted to take a car from the app, but there is surge pricing now. Almost forty pounds!" }
-      - { speaker: Kwame, text: "Yeah, it's Friday night, it's raining, and there's a football match. Everybody wants a car. We don't do surge pricing — it's always the meter. From here it's about fifteen pounds." }
-      - { speaker: Lúcia, text: "Good. Is it far, the address?" }
-      - { speaker: Kwame, text: "About ten minutes, if the traffic's OK. We go up the hill, past the university and along the park." }
-      - { speaker: Kwame, text: "Right, this is Marchmont Road. Number forty-two is right on the junction, and I can't stop there. Can I drop you off a bit further on, outside the café?" }
-      - { speaker: Lúcia, text: "Yes, of course. That's fine." }
-      - { speaker: Kwame, text: "That's fourteen eighty, please." }
-      - { speaker: Lúcia, text: "Here's sixteen. Keep the change." }
-      - { speaker: Kwame, text: "Thanks very much. Mind the puddles — and have a good stay!" }
+      - { speaker: Kwame, text: "Evening! Where to?", audio: t02-2/taxi-1.mp3 }
+      - { speaker: Lúcia, text: "Hello. Forty-two Marchmont Road, please. It's near a big park, I think.", audio: t02-2/taxi-2.mp3 }
+      - { speaker: Kwame, text: "Marchmont Road, no problem. Put your bag on the seat next to you.", audio: t02-2/taxi-3.mp3 }
+      - { speaker: Lúcia, text: "Thank you. I wanted to take a car from the app, but there is surge pricing now. Almost forty pounds!", audio: t02-2/taxi-4.mp3 }
+      - { speaker: Kwame, text: "Yeah, it's Friday night, it's raining, and there's a football match. Everybody wants a car. We don't do surge pricing — it's always the meter. From here it's about fifteen pounds.", audio: t02-2/taxi-5.mp3 }
+      - { speaker: Lúcia, text: "Good. Is it far, the address?", audio: t02-2/taxi-6.mp3 }
+      - { speaker: Kwame, text: "About ten minutes, if the traffic's OK. We go up the hill, past the university and along the park.", audio: t02-2/taxi-7.mp3 }
+      - { speaker: Kwame, text: "Right, this is Marchmont Road. Number forty-two is right on the junction, and I can't stop there. Can I drop you off a bit further on, outside the café?", audio: t02-2/taxi-8.mp3 }
+      - { speaker: Lúcia, text: "Yes, of course. That's fine.", audio: t02-2/taxi-9.mp3 }
+      - { speaker: Kwame, text: "That's fourteen eighty, please.", audio: t02-2/taxi-10.mp3 }
+      - { speaker: Lúcia, text: "Here's sixteen. Keep the change.", audio: t02-2/taxi-11.mp3 }
+      - { speaker: Kwame, text: "Thanks very much. Mind the puddles — and have a good stay!", audio: t02-2/taxi-12.mp3 }
   - type: exercise
     id: taxi-q
     about: taxi

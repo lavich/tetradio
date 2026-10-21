@@ -1,5 +1,6 @@
 id: tp041
 text: "The shower is leaking."
+audio: phrases/tp041.mp3
 translation: "Душ протекает."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03

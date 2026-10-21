@@ -1,5 +1,6 @@
 id: tp089
 text: "Please call an ambulance!"
+audio: phrases/tp089.mp3
 translation: "Пожалуйста, вызовите скорую!"
 note: "номер экстренных служб в Британии — 999, в ЕС — 112"
 provenance:

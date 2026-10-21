@@ -75,10 +75,10 @@ blocks:
     title: Announcements at Waverley
     plays: 2
     transcript:
-      - { text: "Platform 2 for the 17:00 service to London King's Cross, calling at Newcastle, York and London King's Cross. This train is delayed by about ten minutes. We apologise for the delay." }
-      - { text: "Passengers for Leeds and Sheffield should change at York." }
-      - { text: "Because of engineering works, there are no trains to North Berwick this evening. A rail replacement bus leaves from Market Street, outside the station, every thirty minutes." }
-      - { text: "Please keep your luggage with you at all times. Unattended bags may be removed." }
+      - { text: "Platform 2 for the 17:00 service to London King's Cross, calling at Newcastle, York and London King's Cross. This train is delayed by about ten minutes. We apologise for the delay.", audio: t02-test/announcements-1.mp3 }
+      - { text: "Passengers for Leeds and Sheffield should change at York.", audio: t02-test/announcements-2.mp3 }
+      - { text: "Because of engineering works, there are no trains to North Berwick this evening. A rail replacement bus leaves from Market Street, outside the station, every thirty minutes.", audio: t02-test/announcements-3.mp3 }
+      - { text: "Please keep your luggage with you at all times. Unattended bags may be removed.", audio: t02-test/announcements-4.mp3 }
   - type: exercise
     id: announcements-q
     about: announcements
@@ -113,18 +113,18 @@ blocks:
     title: At the bus stop
     plays: 2
     transcript:
-      - { speaker: Lúcia, text: "Excuse me, sorry. Which bus goes to the airport?" }
-      - { speaker: Fiona, text: "The 100. But not from here — you need stop C. It's across the road, opposite the hotel." }
-      - { speaker: Lúcia, text: "Opposite the hotel, OK. And how often it comes?" }
-      - { speaker: Fiona, text: "Every ten minutes or so. It takes about half an hour, depending on the traffic." }
-      - { speaker: Lúcia, text: "I have only cash. Is it a problem?" }
-      - { speaker: Fiona, text: "No, you can pay in cash, but the driver doesn't give change, so have the right money ready. Or just tap your card." }
-      - { speaker: Lúcia, text: "I fly on Sunday, but I come back to the city in two weeks. Is a return better?" }
-      - { speaker: Fiona, text: "Yes, get a return — it's cheaper than two singles, and it's valid for a month." }
-      - { speaker: Lúcia, text: "And at the airport, do I need to change?" }
-      - { speaker: Fiona, text: "No, it goes straight to the terminal. It's the last stop, so you can't miss it." }
-      - { speaker: Lúcia, text: "Perfect. Thank you so much!" }
-      - { speaker: Fiona, text: "No problem. Safe travels!" }
+      - { speaker: Lúcia, text: "Excuse me, sorry. Which bus goes to the airport?", audio: t02-test/bus-stop-1.mp3 }
+      - { speaker: Fiona, text: "The 100. But not from here — you need stop C. It's across the road, opposite the hotel.", audio: t02-test/bus-stop-2.mp3 }
+      - { speaker: Lúcia, text: "Opposite the hotel, OK. And how often it comes?", audio: t02-test/bus-stop-3.mp3 }
+      - { speaker: Fiona, text: "Every ten minutes or so. It takes about half an hour, depending on the traffic.", audio: t02-test/bus-stop-4.mp3 }
+      - { speaker: Lúcia, text: "I have only cash. Is it a problem?", audio: t02-test/bus-stop-5.mp3 }
+      - { speaker: Fiona, text: "No, you can pay in cash, but the driver doesn't give change, so have the right money ready. Or just tap your card.", audio: t02-test/bus-stop-6.mp3 }
+      - { speaker: Lúcia, text: "I fly on Sunday, but I come back to the city in two weeks. Is a return better?", audio: t02-test/bus-stop-7.mp3 }
+      - { speaker: Fiona, text: "Yes, get a return — it's cheaper than two singles, and it's valid for a month.", audio: t02-test/bus-stop-8.mp3 }
+      - { speaker: Lúcia, text: "And at the airport, do I need to change?", audio: t02-test/bus-stop-9.mp3 }
+      - { speaker: Fiona, text: "No, it goes straight to the terminal. It's the last stop, so you can't miss it.", audio: t02-test/bus-stop-10.mp3 }
+      - { speaker: Lúcia, text: "Perfect. Thank you so much!", audio: t02-test/bus-stop-11.mp3 }
+      - { speaker: Fiona, text: "No problem. Safe travels!", audio: t02-test/bus-stop-12.mp3 }
   - type: exercise
     id: bus-stop-q
     about: bus-stop

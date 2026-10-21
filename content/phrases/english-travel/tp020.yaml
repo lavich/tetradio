@@ -1,5 +1,6 @@
 id: tp020
 text: "It's about a ten-minute walk."
+audio: phrases/tp020.mp3
 translation: "Это примерно десять минут пешком."
 note: "ten-minute без -s: число через дефис перед существительным"
 provenance:

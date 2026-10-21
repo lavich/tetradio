@@ -1,5 +1,6 @@
 id: tp069
 text: "My card has been declined."
+audio: phrases/tp069.mp3
 translation: "Мою карту отклонили."
 note: "the machine says «Declined» / «Card not accepted»"
 provenance:

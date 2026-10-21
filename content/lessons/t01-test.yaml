@@ -72,10 +72,10 @@ blocks:
     title: Announcements at Edinburgh
     plays: 2
     transcript:
-      - { text: "Ladies and gentlemen, this is a gate change. Flight U2 6942 to Paris Charles de Gaulle will now depart from gate 14, not gate 11. Please proceed to gate 14." }
-      - { text: "We regret to announce that flight LH 965 to Frankfurt has been cancelled. Passengers on this flight should go to the Lufthansa desk in the check-in hall, where staff will help them with a new booking." }
-      - { text: "This is the final call for passengers on flight BA 1441 to London Heathrow. The gate will close in five minutes." }
-      - { text: "Passengers arriving from Amsterdam on flight KL 1285 can collect their bags from baggage reclaim, belt 3, not belt 5." }
+      - { text: "Ladies and gentlemen, this is a gate change. Flight U2 6942 to Paris Charles de Gaulle will now depart from gate 14, not gate 11. Please proceed to gate 14.", audio: t01-test/announcements-1.mp3 }
+      - { text: "We regret to announce that flight LH 965 to Frankfurt has been cancelled. Passengers on this flight should go to the Lufthansa desk in the check-in hall, where staff will help them with a new booking.", audio: t01-test/announcements-2.mp3 }
+      - { text: "This is the final call for passengers on flight BA 1441 to London Heathrow. The gate will close in five minutes.", audio: t01-test/announcements-3.mp3 }
+      - { text: "Passengers arriving from Amsterdam on flight KL 1285 can collect their bags from baggage reclaim, belt 3, not belt 5.", audio: t01-test/announcements-4.mp3 }
   - type: exercise
     id: announcements-q
     about: announcements
@@ -111,20 +111,20 @@ blocks:
     title: At the baggage services desk
     plays: 2
     transcript:
-      - { speaker: Rory, text: "Hello, baggage services. How can I help?" }
-      - { speaker: Inês, text: "Hi. My bag didn't come out on the belt. I was on the flight from London." }
-      - { speaker: Rory, text: "I'm sorry about that. Can I see your boarding pass and your baggage tag, please? It's the little sticker they gave you at check-in." }
-      - { speaker: Inês, text: "Yes, here. I started in Lisbon, and I had a layover in London. Only fifty minutes." }
-      - { speaker: Rory, text: "Right, that's probably the problem. With a short connection, bags sometimes miss the flight. Let me check… Yes, your bag is still at Heathrow. It's coming on the next flight, which lands at six fifteen this evening." }
-      - { speaker: Inês, text: "Oh, good. Do I need to come back to the airport to collect it?" }
-      - { speaker: Rory, text: "No, we'll deliver it to you. Where are you staying?" }
-      - { speaker: Inês, text: "At a hotel near the centre, the Grassmarket Hotel." }
-      - { speaker: Rory, text: "Fine. We usually deliver bags the same evening, before eleven. Can you describe the bag, please?" }
-      - { speaker: Inês, text: "It's a large blue suitcase, with a yellow ribbon on the handle." }
-      - { speaker: Rory, text: "Great. Here's your reference number. Please keep it — you'll need it if you call us." }
-      - { speaker: Inês, text: "Do you mind if I take a photo of it?" }
-      - { speaker: Rory, text: "No, go ahead. And if you need to buy a toothbrush or a T-shirt tonight, keep the receipts. The airline pays for things like that." }
-      - { speaker: Inês, text: "That's very helpful. Thank you." }
+      - { speaker: Rory, text: "Hello, baggage services. How can I help?", audio: t01-test/lost-bag-1.mp3 }
+      - { speaker: Inês, text: "Hi. My bag didn't come out on the belt. I was on the flight from London.", audio: t01-test/lost-bag-2.mp3 }
+      - { speaker: Rory, text: "I'm sorry about that. Can I see your boarding pass and your baggage tag, please? It's the little sticker they gave you at check-in.", audio: t01-test/lost-bag-3.mp3 }
+      - { speaker: Inês, text: "Yes, here. I started in Lisbon, and I had a layover in London. Only fifty minutes.", audio: t01-test/lost-bag-4.mp3 }
+      - { speaker: Rory, text: "Right, that's probably the problem. With a short connection, bags sometimes miss the flight. Let me check… Yes, your bag is still at Heathrow. It's coming on the next flight, which lands at six fifteen this evening.", audio: t01-test/lost-bag-5.mp3 }
+      - { speaker: Inês, text: "Oh, good. Do I need to come back to the airport to collect it?", audio: t01-test/lost-bag-6.mp3 }
+      - { speaker: Rory, text: "No, we'll deliver it to you. Where are you staying?", audio: t01-test/lost-bag-7.mp3 }
+      - { speaker: Inês, text: "At a hotel near the centre, the Grassmarket Hotel.", audio: t01-test/lost-bag-8.mp3 }
+      - { speaker: Rory, text: "Fine. We usually deliver bags the same evening, before eleven. Can you describe the bag, please?", audio: t01-test/lost-bag-9.mp3 }
+      - { speaker: Inês, text: "It's a large blue suitcase, with a yellow ribbon on the handle.", audio: t01-test/lost-bag-10.mp3 }
+      - { speaker: Rory, text: "Great. Here's your reference number. Please keep it — you'll need it if you call us.", audio: t01-test/lost-bag-11.mp3 }
+      - { speaker: Inês, text: "Do you mind if I take a photo of it?", audio: t01-test/lost-bag-12.mp3 }
+      - { speaker: Rory, text: "No, go ahead. And if you need to buy a toothbrush or a T-shirt tonight, keep the receipts. The airline pays for things like that.", audio: t01-test/lost-bag-13.mp3 }
+      - { speaker: Inês, text: "That's very helpful. Thank you.", audio: t01-test/lost-bag-14.mp3 }
   - type: exercise
     id: lost-bag-q
     about: lost-bag

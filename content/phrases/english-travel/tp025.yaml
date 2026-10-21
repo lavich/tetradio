@@ -1,5 +1,6 @@
 id: tp025
 text: "Can you drop me off here, please?"
+audio: phrases/tp025.mp3
 translation: "Высадите меня здесь, пожалуйста."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t02

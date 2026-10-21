@@ -1,5 +1,6 @@
 id: tp073
 text: "Could you check if the payment went through?"
+audio: phrases/tp073.mp3
 translation: "Проверьте, пожалуйста, прошёл ли платёж."
 note: "go through — пройти (о платеже)"
 provenance:

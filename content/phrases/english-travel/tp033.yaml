@@ -1,5 +1,6 @@
 id: tp033
 text: "Is breakfast included?"
+audio: phrases/tp033.mp3
 translation: "Завтрак включён?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03

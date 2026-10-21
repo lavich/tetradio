@@ -1,5 +1,6 @@
 id: tp057
 text: "Just tap water, thanks."
+audio: phrases/tp057.mp3
 translation: "Просто воду из-под крана, спасибо."
 note: "ответ на What would you like to drink?; в заведении с лицензией на алкоголь такая вода по закону бесплатна по просьбе"
 provenance:

@@ -1,5 +1,6 @@
 id: tp056
 text: "Is service included?"
+audio: phrases/tp056.mp3
 translation: "Обслуживание включено в счёт?"
 note: "если service charge уже в счёте, чаевые сверху не нужны"
 provenance:

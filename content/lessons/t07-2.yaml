@@ -161,28 +161,28 @@ blocks:
     title: At the police station
     plays: 2
     transcript:
-      - { speaker: Hughes, text: "Good afternoon. How can I help?" }
-      - { speaker: Marco, text: "Hello. I need to report a theft. My wallet was stolen." }
-      - { speaker: Hughes, text: "I'm sorry to hear that. When did it happen?" }
-      - { speaker: Marco, text: "About one hour ago. On the underground, the Piccadilly line, near Piccadilly Circus." }
-      - { speaker: Hughes, text: "And what happened, exactly?" }
-      - { speaker: Marco, text: "The train was very full. I was standing near the door, and I was looking at my phone. Two men pushed me a little and got off at the next station. After that I see — I saw — my pocket was open." }
-      - { speaker: Hughes, text: "So you didn't feel anything at the time?" }
-      - { speaker: Marco, text: "No, nothing. I think they were pickpockets." }
-      - { speaker: Hughes, text: "It sounds like it. It happens a lot on busy trains. Did you see their faces?" }
-      - { speaker: Marco, text: "Not really. One was tall, in a grey hoodie. The other one, I didn't see his face." }
-      - { speaker: Hughes, text: "Were there any witnesses?" }
-      - { speaker: Marco, text: "A woman told me to check my pocket, but I don't know her name." }
-      - { speaker: Hughes, text: "That's all right. Underground stations have cameras, so we can ask for the CCTV footage. What was in the wallet?" }
-      - { speaker: Marco, text: "About sixty pounds, my bank cards and my driving licence. Not my passport — it's at the hotel." }
-      - { speaker: Hughes, text: "Good. Have you cancelled your cards?" }
-      - { speaker: Marco, text: "Yes, I've already called my bank." }
-      - { speaker: Hughes, text: "Well done. Right, I'll take a short statement now, and at the end I'll give you a crime reference number." }
-      - { speaker: Marco, text: "I need a police report for my insurance. Is it the same thing?" }
-      - { speaker: Hughes, text: "In the UK, your insurer usually just needs the crime reference number. If they want a copy of the report, you have to request it online. That usually takes about ten days." }
-      - { speaker: Marco, text: "OK. And if somebody finds the wallet?" }
-      - { speaker: Hughes, text: "Then it usually goes to TfL's lost property office, and they'll contact you." }
-      - { speaker: Marco, text: "Thank you very much." }
+      - { speaker: Hughes, text: "Good afternoon. How can I help?", audio: t07-2/police-1.mp3 }
+      - { speaker: Marco, text: "Hello. I need to report a theft. My wallet was stolen.", audio: t07-2/police-2.mp3 }
+      - { speaker: Hughes, text: "I'm sorry to hear that. When did it happen?", audio: t07-2/police-3.mp3 }
+      - { speaker: Marco, text: "About one hour ago. On the underground, the Piccadilly line, near Piccadilly Circus.", audio: t07-2/police-4.mp3 }
+      - { speaker: Hughes, text: "And what happened, exactly?", audio: t07-2/police-5.mp3 }
+      - { speaker: Marco, text: "The train was very full. I was standing near the door, and I was looking at my phone. Two men pushed me a little and got off at the next station. After that I see — I saw — my pocket was open.", audio: t07-2/police-6.mp3 }
+      - { speaker: Hughes, text: "So you didn't feel anything at the time?", audio: t07-2/police-7.mp3 }
+      - { speaker: Marco, text: "No, nothing. I think they were pickpockets.", audio: t07-2/police-8.mp3 }
+      - { speaker: Hughes, text: "It sounds like it. It happens a lot on busy trains. Did you see their faces?", audio: t07-2/police-9.mp3 }
+      - { speaker: Marco, text: "Not really. One was tall, in a grey hoodie. The other one, I didn't see his face.", audio: t07-2/police-10.mp3 }
+      - { speaker: Hughes, text: "Were there any witnesses?", audio: t07-2/police-11.mp3 }
+      - { speaker: Marco, text: "A woman told me to check my pocket, but I don't know her name.", audio: t07-2/police-12.mp3 }
+      - { speaker: Hughes, text: "That's all right. Underground stations have cameras, so we can ask for the CCTV footage. What was in the wallet?", audio: t07-2/police-13.mp3 }
+      - { speaker: Marco, text: "About sixty pounds, my bank cards and my driving licence. Not my passport — it's at the hotel.", audio: t07-2/police-14.mp3 }
+      - { speaker: Hughes, text: "Good. Have you cancelled your cards?", audio: t07-2/police-15.mp3 }
+      - { speaker: Marco, text: "Yes, I've already called my bank.", audio: t07-2/police-16.mp3 }
+      - { speaker: Hughes, text: "Well done. Right, I'll take a short statement now, and at the end I'll give you a crime reference number.", audio: t07-2/police-17.mp3 }
+      - { speaker: Marco, text: "I need a police report for my insurance. Is it the same thing?", audio: t07-2/police-18.mp3 }
+      - { speaker: Hughes, text: "In the UK, your insurer usually just needs the crime reference number. If they want a copy of the report, you have to request it online. That usually takes about ten days.", audio: t07-2/police-19.mp3 }
+      - { speaker: Marco, text: "OK. And if somebody finds the wallet?", audio: t07-2/police-20.mp3 }
+      - { speaker: Hughes, text: "Then it usually goes to TfL's lost property office, and they'll contact you.", audio: t07-2/police-21.mp3 }
+      - { speaker: Marco, text: "Thank you very much.", audio: t07-2/police-22.mp3 }
   - type: exercise
     id: police-q
     about: police
@@ -240,25 +240,25 @@ blocks:
     title: At the transfer desk
     plays: 2
     transcript:
-      - { speaker: Megan, text: "Good evening, Northline transfer desk. How can I help?" }
-      - { speaker: Piotr, text: "Good evening. I've missed my connecting flight to Toronto. The flight from Kraków was late, one and a half hours." }
-      - { speaker: Megan, text: "I'm sorry about that. Can I see your boarding pass? … Yes, I can see the delay. Were both flights on one booking?" }
-      - { speaker: Piotr, text: "Yes, one booking. Both with Northline." }
-      - { speaker: Megan, text: "Good, then you don't have to buy a new ticket. I'll rebook you on the next flight." }
-      - { speaker: Piotr, text: "When is next flight?" }
-      - { speaker: Megan, text: "There's one at eight tonight, but I'm afraid it's overbooked, so I can't put you on it. The next one is tomorrow morning at nine fifty." }
-      - { speaker: Piotr, text: "Tomorrow? My sister is waiting for me in Toronto tonight. There is no other way?" }
-      - { speaker: Megan, text: "I've checked the other airlines too, but everything tonight is full. I'm really sorry." }
-      - { speaker: Piotr, text: "OK. And where do I sleep?" }
-      - { speaker: Megan, text: "We'll book you a hotel near the airport and pay for the bus there. And here's a meal voucher for fifteen pounds — you can use it in any café in the terminal." }
-      - { speaker: Piotr, text: "Thank you. And my suitcase? It is checked to Toronto." }
-      - { speaker: Megan, text: "It'll stay at the airport and go on the same flight as you tomorrow, so you don't need to collect it. Do you need anything from it tonight?" }
-      - { speaker: Piotr, text: "No, I have everything in my backpack. One more question. Am I entitled to compensation?" }
-      - { speaker: Megan, text: "Yes, I think so. You'll arrive in Toronto more than three hours late, so you can make a claim on our website. For a flight that long, it's five hundred and twenty pounds." }
-      - { speaker: Piotr, text: "That's good to know." }
-      - { speaker: Megan, text: "And as a goodwill gesture, I can give you a fifty-pound voucher for your next flight with us." }
-      - { speaker: Piotr, text: "That's kind. Thank you, Megan." }
-      - { speaker: Megan, text: "You're welcome. Here's your new boarding pass. The hotel bus leaves from stop twelve, just outside the terminal." }
+      - { speaker: Megan, text: "Good evening, Northline transfer desk. How can I help?", audio: t07-2/desk-1.mp3 }
+      - { speaker: Piotr, text: "Good evening. I've missed my connecting flight to Toronto. The flight from Kraków was late, one and a half hours.", audio: t07-2/desk-2.mp3 }
+      - { speaker: Megan, text: "I'm sorry about that. Can I see your boarding pass? … Yes, I can see the delay. Were both flights on one booking?", audio: t07-2/desk-3.mp3 }
+      - { speaker: Piotr, text: "Yes, one booking. Both with Northline.", audio: t07-2/desk-4.mp3 }
+      - { speaker: Megan, text: "Good, then you don't have to buy a new ticket. I'll rebook you on the next flight.", audio: t07-2/desk-5.mp3 }
+      - { speaker: Piotr, text: "When is next flight?", audio: t07-2/desk-6.mp3 }
+      - { speaker: Megan, text: "There's one at eight tonight, but I'm afraid it's overbooked, so I can't put you on it. The next one is tomorrow morning at nine fifty.", audio: t07-2/desk-7.mp3 }
+      - { speaker: Piotr, text: "Tomorrow? My sister is waiting for me in Toronto tonight. There is no other way?", audio: t07-2/desk-8.mp3 }
+      - { speaker: Megan, text: "I've checked the other airlines too, but everything tonight is full. I'm really sorry.", audio: t07-2/desk-9.mp3 }
+      - { speaker: Piotr, text: "OK. And where do I sleep?", audio: t07-2/desk-10.mp3 }
+      - { speaker: Megan, text: "We'll book you a hotel near the airport and pay for the bus there. And here's a meal voucher for fifteen pounds — you can use it in any café in the terminal.", audio: t07-2/desk-11.mp3 }
+      - { speaker: Piotr, text: "Thank you. And my suitcase? It is checked to Toronto.", audio: t07-2/desk-12.mp3 }
+      - { speaker: Megan, text: "It'll stay at the airport and go on the same flight as you tomorrow, so you don't need to collect it. Do you need anything from it tonight?", audio: t07-2/desk-13.mp3 }
+      - { speaker: Piotr, text: "No, I have everything in my backpack. One more question. Am I entitled to compensation?", audio: t07-2/desk-14.mp3 }
+      - { speaker: Megan, text: "Yes, I think so. You'll arrive in Toronto more than three hours late, so you can make a claim on our website. For a flight that long, it's five hundred and twenty pounds.", audio: t07-2/desk-15.mp3 }
+      - { speaker: Piotr, text: "That's good to know.", audio: t07-2/desk-16.mp3 }
+      - { speaker: Megan, text: "And as a goodwill gesture, I can give you a fifty-pound voucher for your next flight with us.", audio: t07-2/desk-17.mp3 }
+      - { speaker: Piotr, text: "That's kind. Thank you, Megan.", audio: t07-2/desk-18.mp3 }
+      - { speaker: Megan, text: "You're welcome. Here's your new boarding pass. The hotel bus leaves from stop twelve, just outside the terminal.", audio: t07-2/desk-19.mp3 }
   - type: exercise
     id: desk-q
     about: desk

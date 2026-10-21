@@ -1,5 +1,6 @@
 id: tp071
 text: "Would you like cashback?"
+audio: phrases/tp071.mp3
 translation: "Снять наличные с карты?"
 note: "вопрос кассира; не нужно — No, thanks"
 provenance:

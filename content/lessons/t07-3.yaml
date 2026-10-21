@@ -162,12 +162,12 @@ blocks:
     title: Реплики собеседника — в полиции
     plays: 2
     transcript:
-      - { speaker: Hughes, text: "Good morning. How can I help?" }
-      - { speaker: Hughes, text: "I'm sorry to hear that. When and where did it happen?" }
-      - { speaker: Hughes, text: "And what happened, exactly?" }
-      - { speaker: Hughes, text: "Did you see the person? Were there any witnesses?" }
-      - { speaker: Hughes, text: "What was in the bag?" }
-      - { speaker: Hughes, text: "Right, I'll take a short statement now. Is there anything else you need from us?" }
+      - { speaker: Hughes, text: "Good morning. How can I help?", audio: t07-3/police-lines-1.mp3 }
+      - { speaker: Hughes, text: "I'm sorry to hear that. When and where did it happen?", audio: t07-3/police-lines-2.mp3 }
+      - { speaker: Hughes, text: "And what happened, exactly?", audio: t07-3/police-lines-3.mp3 }
+      - { speaker: Hughes, text: "Did you see the person? Were there any witnesses?", audio: t07-3/police-lines-4.mp3 }
+      - { speaker: Hughes, text: "What was in the bag?", audio: t07-3/police-lines-5.mp3 }
+      - { speaker: Hughes, text: "Right, I'll take a short statement now. Is there anything else you need from us?", audio: t07-3/police-lines-6.mp3 }
   - type: speaking
     id: police
     part: roleplay
@@ -204,12 +204,12 @@ blocks:
     title: Реплики собеседника — у выхода на посадку
     plays: 2
     transcript:
-      - { speaker: Megan, text: "Good afternoon. How can I help you?" }
-      - { speaker: Megan, text: "I'm sorry, the flight is overbooked. I can rebook you on tomorrow's flight at seven in the morning." }
-      - { speaker: Megan, text: "I'm afraid that's the earliest flight we can offer." }
-      - { speaker: Megan, text: "Yes, of course. We'll book a hotel for you, and here's a meal voucher." }
-      - { speaker: Megan, text: "Well, I'm not sure about that. You can make a claim on our website." }
-      - { speaker: Megan, text: "I understand. Let me call the duty manager — she'll be here in five minutes." }
+      - { speaker: Megan, text: "Good afternoon. How can I help you?", audio: t07-3/desk-lines-1.mp3 }
+      - { speaker: Megan, text: "I'm sorry, the flight is overbooked. I can rebook you on tomorrow's flight at seven in the morning.", audio: t07-3/desk-lines-2.mp3 }
+      - { speaker: Megan, text: "I'm afraid that's the earliest flight we can offer.", audio: t07-3/desk-lines-3.mp3 }
+      - { speaker: Megan, text: "Yes, of course. We'll book a hotel for you, and here's a meal voucher.", audio: t07-3/desk-lines-4.mp3 }
+      - { speaker: Megan, text: "Well, I'm not sure about that. You can make a claim on our website.", audio: t07-3/desk-lines-5.mp3 }
+      - { speaker: Megan, text: "I understand. Let me call the duty manager — she'll be here in five minutes.", audio: t07-3/desk-lines-6.mp3 }
   - type: speaking
     id: desk
     part: roleplay

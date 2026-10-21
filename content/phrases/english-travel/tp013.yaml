@@ -1,5 +1,6 @@
 id: tp013
 text: "Has the gate changed?"
+audio: phrases/tp013.mp3
 translation: "Выход на посадку поменялся?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01

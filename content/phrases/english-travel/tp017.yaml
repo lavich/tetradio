@@ -1,5 +1,6 @@
 id: tp017
 text: "Which bus goes to the airport?"
+audio: phrases/tp017.mp3
 translation: "Какой автобус идёт в аэропорт?"
 note: "без does: which bus здесь подлежащее"
 provenance:

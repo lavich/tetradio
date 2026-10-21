@@ -1,5 +1,6 @@
 id: tp099
 text: "Will my bag be transferred to the new flight?"
+audio: phrases/tp099.mp3
 translation: "Мой багаж перегрузят на новый рейс?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07

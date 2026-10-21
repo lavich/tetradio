@@ -1,5 +1,6 @@
 id: tp075
 text: "I'll pay in the local currency, thanks."
+audio: phrases/tp075.mp3
 translation: "Я заплачу в местной валюте, спасибо."
 note: "терминал за границей может предложить оплату в валюте вашей карты (евро, доллары) — курс почти всегда хуже"
 provenance:

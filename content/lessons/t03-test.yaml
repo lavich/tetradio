@@ -92,17 +92,17 @@ blocks:
     title: A call to reception
     plays: 2
     transcript:
-      - { speaker: Hannah, text: "Reception, Hannah speaking. How can I help?" }
-      - { speaker: Inês, text: "Hi, this is room three-oh-five. Sorry to bother you, but the heating has stopped working. The room is really cold." }
-      - { speaker: Hannah, text: "Oh, I'm sorry about that. When did it stop?" }
-      - { speaker: Inês, text: "About an hour ago, I think. I've tried the switch on the wall, but nothing happens." }
-      - { speaker: Hannah, text: "Right. Our engineer is in the building, so I'll send him up in about twenty minutes." }
-      - { speaker: Inês, text: "Thank you. And there aren't any extra blankets in the wardrobe. Could I have one?" }
-      - { speaker: Hannah, text: "Of course. I'll ask housekeeping to bring you two. And if the heating still doesn't work tonight, we can move you to another room." }
-      - { speaker: Inês, text: "Thank you. One more thing — I was wondering if late check-out would be possible tomorrow. My train leaves at four." }
-      - { speaker: Hannah, text: "I'm afraid we're fully booked tomorrow, so late check-out isn't possible. But you're welcome to leave your luggage at reception after check-out." }
-      - { speaker: Inês, text: "OK, that's fine. Thanks for your help." }
-      - { speaker: Hannah, text: "You're welcome. Have a good evening." }
+      - { speaker: Hannah, text: "Reception, Hannah speaking. How can I help?", audio: t03-test/call-1.mp3 }
+      - { speaker: Inês, text: "Hi, this is room three-oh-five. Sorry to bother you, but the heating has stopped working. The room is really cold.", audio: t03-test/call-2.mp3 }
+      - { speaker: Hannah, text: "Oh, I'm sorry about that. When did it stop?", audio: t03-test/call-3.mp3 }
+      - { speaker: Inês, text: "About an hour ago, I think. I've tried the switch on the wall, but nothing happens.", audio: t03-test/call-4.mp3 }
+      - { speaker: Hannah, text: "Right. Our engineer is in the building, so I'll send him up in about twenty minutes.", audio: t03-test/call-5.mp3 }
+      - { speaker: Inês, text: "Thank you. And there aren't any extra blankets in the wardrobe. Could I have one?", audio: t03-test/call-6.mp3 }
+      - { speaker: Hannah, text: "Of course. I'll ask housekeeping to bring you two. And if the heating still doesn't work tonight, we can move you to another room.", audio: t03-test/call-7.mp3 }
+      - { speaker: Inês, text: "Thank you. One more thing — I was wondering if late check-out would be possible tomorrow. My train leaves at four.", audio: t03-test/call-8.mp3 }
+      - { speaker: Hannah, text: "I'm afraid we're fully booked tomorrow, so late check-out isn't possible. But you're welcome to leave your luggage at reception after check-out.", audio: t03-test/call-9.mp3 }
+      - { speaker: Inês, text: "OK, that's fine. Thanks for your help.", audio: t03-test/call-10.mp3 }
+      - { speaker: Hannah, text: "You're welcome. Have a good evening.", audio: t03-test/call-11.mp3 }
   - type: exercise
     id: call-q
     about: call
@@ -150,11 +150,11 @@ blocks:
     title: A voice message from Oliver
     plays: 2
     transcript:
-      - { speaker: Oliver, text: "Hi, it's Oliver, your host for this weekend. Just a few things before you arrive tomorrow." }
-      - { speaker: Oliver, text: "The code for the lockbox is four, seven, one, nine. The lockbox is on the wall to the left of the front door, under the light." }
-      - { speaker: Oliver, text: "I'm afraid the washing machine has stopped working, and the engineer can't come until Monday. Sorry about that. There's a launderette two minutes away, on Princess Street." }
-      - { speaker: Oliver, text: "Check-out on Sunday is at eleven, but there's no guest after you, so you can stay until one if you like." }
-      - { speaker: Oliver, text: "Enjoy your stay, and message me if you need anything!" }
+      - { speaker: Oliver, text: "Hi, it's Oliver, your host for this weekend. Just a few things before you arrive tomorrow.", audio: t03-test/voice-1.mp3 }
+      - { speaker: Oliver, text: "The code for the lockbox is four, seven, one, nine. The lockbox is on the wall to the left of the front door, under the light.", audio: t03-test/voice-2.mp3 }
+      - { speaker: Oliver, text: "I'm afraid the washing machine has stopped working, and the engineer can't come until Monday. Sorry about that. There's a launderette two minutes away, on Princess Street.", audio: t03-test/voice-3.mp3 }
+      - { speaker: Oliver, text: "Check-out on Sunday is at eleven, but there's no guest after you, so you can stay until one if you like.", audio: t03-test/voice-4.mp3 }
+      - { speaker: Oliver, text: "Enjoy your stay, and message me if you need anything!", audio: t03-test/voice-5.mp3 }
   - type: exercise
     id: voice-code
     about: voice

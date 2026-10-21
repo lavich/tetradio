@@ -1,5 +1,6 @@
 id: tp005
 text: "How much is it for an extra bag?"
+audio: phrases/tp005.mp3
 translation: "Сколько стоит ещё одно место багажа?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t01

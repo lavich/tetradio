@@ -1,5 +1,6 @@
 id: tp040
 text: "The code for the lockbox doesn't work."
+audio: phrases/tp040.mp3
 translation: "Код от ящика с ключами не подходит."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t03

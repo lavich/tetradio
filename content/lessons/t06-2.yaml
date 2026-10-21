@@ -131,23 +131,23 @@ blocks:
     title: At the chemist's
     plays: 2
     transcript:
-      - { speaker: Bridget, text: "Hello, what can I do for you?" }
-      - { speaker: Marco, text: "Hello. My ankle hurts. Yesterday I walk up Arthur's Seat, and on the way down I twist it." }
-      - { speaker: Bridget, text: "Oh dear. Can I have a look? Hmm, it's quite swollen. Can you walk on it?" }
-      - { speaker: Marco, text: "Yes, but slowly. It hurts more in the morning." }
-      - { speaker: Bridget, text: "It sounds like a sprain, not a break. You should rest it, put some ice on it and keep your foot up when you sit. And I'd recommend some ibuprofen — it helps with the pain and the swelling." }
-      - { speaker: Bridget, text: "Do you have asthma, or are you taking any other medicines?" }
-      - { speaker: Marco, text: "No, nothing." }
-      - { speaker: Marco, text: "OK. How often should I take it?" }
-      - { speaker: Bridget, text: "One or two tablets three times a day, but leave at least four hours between doses." }
-      - { speaker: Marco, text: "Can I take it with food?" }
-      - { speaker: Bridget, text: "You should take it with food, actually. Don't take it on an empty stomach — it can upset your stomach." }
-      - { speaker: Marco, text: "And tonight we go to a pub with friends. Is it safe to drink alcohol with this?" }
-      - { speaker: Bridget, text: "It's better to avoid alcohol while you're taking it. Have a soft drink tonight." }
-      - { speaker: Marco, text: "OK, no beer. Are there any side effects?" }
-      - { speaker: Bridget, text: "Some people get a bit of stomach pain. If you get a rash or any swelling of your face, stop taking it and see a doctor straight away. And if your ankle is still very swollen in three or four days, you'd better get it checked." }
-      - { speaker: Marco, text: "Thank you. How much is it?" }
-      - { speaker: Bridget, text: "Two pounds fifty, please." }
+      - { speaker: Bridget, text: "Hello, what can I do for you?", audio: t06-2/chemist-1.mp3 }
+      - { speaker: Marco, text: "Hello. My ankle hurts. Yesterday I walk up Arthur's Seat, and on the way down I twist it.", audio: t06-2/chemist-2.mp3 }
+      - { speaker: Bridget, text: "Oh dear. Can I have a look? Hmm, it's quite swollen. Can you walk on it?", audio: t06-2/chemist-3.mp3 }
+      - { speaker: Marco, text: "Yes, but slowly. It hurts more in the morning.", audio: t06-2/chemist-4.mp3 }
+      - { speaker: Bridget, text: "It sounds like a sprain, not a break. You should rest it, put some ice on it and keep your foot up when you sit. And I'd recommend some ibuprofen — it helps with the pain and the swelling.", audio: t06-2/chemist-5.mp3 }
+      - { speaker: Bridget, text: "Do you have asthma, or are you taking any other medicines?", audio: t06-2/chemist-6.mp3 }
+      - { speaker: Marco, text: "No, nothing.", audio: t06-2/chemist-7.mp3 }
+      - { speaker: Marco, text: "OK. How often should I take it?", audio: t06-2/chemist-8.mp3 }
+      - { speaker: Bridget, text: "One or two tablets three times a day, but leave at least four hours between doses.", audio: t06-2/chemist-9.mp3 }
+      - { speaker: Marco, text: "Can I take it with food?", audio: t06-2/chemist-10.mp3 }
+      - { speaker: Bridget, text: "You should take it with food, actually. Don't take it on an empty stomach — it can upset your stomach.", audio: t06-2/chemist-11.mp3 }
+      - { speaker: Marco, text: "And tonight we go to a pub with friends. Is it safe to drink alcohol with this?", audio: t06-2/chemist-12.mp3 }
+      - { speaker: Bridget, text: "It's better to avoid alcohol while you're taking it. Have a soft drink tonight.", audio: t06-2/chemist-13.mp3 }
+      - { speaker: Marco, text: "OK, no beer. Are there any side effects?", audio: t06-2/chemist-14.mp3 }
+      - { speaker: Bridget, text: "Some people get a bit of stomach pain. If you get a rash or any swelling of your face, stop taking it and see a doctor straight away. And if your ankle is still very swollen in three or four days, you'd better get it checked.", audio: t06-2/chemist-15.mp3 }
+      - { speaker: Marco, text: "Thank you. How much is it?", audio: t06-2/chemist-16.mp3 }
+      - { speaker: Bridget, text: "Two pounds fifty, please.", audio: t06-2/chemist-17.mp3 }
   - type: exercise
     id: chemist-q
     about: chemist
@@ -202,19 +202,19 @@ blocks:
     title: At a private GP clinic
     plays: 2
     transcript:
-      - { speaker: Okafor, text: "Good afternoon. Have a seat. What seems to be the problem?" }
-      - { speaker: Inês, text: "I've had a really sore throat for three days, and since last night I've had a temperature too. It hurts when I swallow." }
-      - { speaker: Okafor, text: "Let me have a look. Open wide, please… Yes, your tonsils are very red and swollen. It's tonsillitis, and it looks like a bacterial infection, so I'm going to give you antibiotics. Are you allergic to anything?" }
-      - { speaker: Inês, text: "Yes, I'm allergic to penicillin." }
-      - { speaker: Okafor, text: "Good thing you told me. Then I'll prescribe something different. Take one tablet twice a day, morning and evening, for seven days." }
-      - { speaker: Inês, text: "Sorry, how many days?" }
-      - { speaker: Okafor, text: "Seven. And please finish the whole course, even if you feel better after three or four days." }
-      - { speaker: Inês, text: "OK. And for the pain?" }
-      - { speaker: Okafor, text: "Paracetamol is fine — it's over the counter, any chemist's will have it. Drink plenty of water, and you'd better stay in and rest for a couple of days." }
-      - { speaker: Inês, text: "I've got travel insurance. Could I have a receipt and a copy of the prescription for my insurance claim?" }
-      - { speaker: Okafor, text: "Of course. Reception will print them for you on the way out." }
-      - { speaker: Inês, text: "And if it gets worse at night? Where's the nearest A&E?" }
-      - { speaker: Okafor, text: "At the Royal Infirmary, about fifteen minutes by taxi. But if you have any trouble breathing, don't wait — call 999." }
+      - { speaker: Okafor, text: "Good afternoon. Have a seat. What seems to be the problem?", audio: t06-2/doctor-1.mp3 }
+      - { speaker: Inês, text: "I've had a really sore throat for three days, and since last night I've had a temperature too. It hurts when I swallow.", audio: t06-2/doctor-2.mp3 }
+      - { speaker: Okafor, text: "Let me have a look. Open wide, please… Yes, your tonsils are very red and swollen. It's tonsillitis, and it looks like a bacterial infection, so I'm going to give you antibiotics. Are you allergic to anything?", audio: t06-2/doctor-3.mp3 }
+      - { speaker: Inês, text: "Yes, I'm allergic to penicillin.", audio: t06-2/doctor-4.mp3 }
+      - { speaker: Okafor, text: "Good thing you told me. Then I'll prescribe something different. Take one tablet twice a day, morning and evening, for seven days.", audio: t06-2/doctor-5.mp3 }
+      - { speaker: Inês, text: "Sorry, how many days?", audio: t06-2/doctor-6.mp3 }
+      - { speaker: Okafor, text: "Seven. And please finish the whole course, even if you feel better after three or four days.", audio: t06-2/doctor-7.mp3 }
+      - { speaker: Inês, text: "OK. And for the pain?", audio: t06-2/doctor-8.mp3 }
+      - { speaker: Okafor, text: "Paracetamol is fine — it's over the counter, any chemist's will have it. Drink plenty of water, and you'd better stay in and rest for a couple of days.", audio: t06-2/doctor-9.mp3 }
+      - { speaker: Inês, text: "I've got travel insurance. Could I have a receipt and a copy of the prescription for my insurance claim?", audio: t06-2/doctor-10.mp3 }
+      - { speaker: Okafor, text: "Of course. Reception will print them for you on the way out.", audio: t06-2/doctor-11.mp3 }
+      - { speaker: Inês, text: "And if it gets worse at night? Where's the nearest A&E?", audio: t06-2/doctor-12.mp3 }
+      - { speaker: Okafor, text: "At the Royal Infirmary, about fifteen minutes by taxi. But if you have any trouble breathing, don't wait — call 999.", audio: t06-2/doctor-13.mp3 }
   - type: exercise
     id: doctor-q
     about: doctor
