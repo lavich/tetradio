@@ -1,0 +1,8 @@
+id: tp098
+text: "I've lost my passport. What should I do?"
+translation: "Я потерял(а) паспорт. Что мне делать?"
+note: "паспорт пропал и сейчас его нет — present perfect"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

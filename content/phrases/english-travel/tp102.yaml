@@ -1,0 +1,8 @@
+id: tp102
+text: "I'd like to make a complaint."
+translation: "Я хотел(а) бы подать жалобу."
+note: "make a complaint, не do a complaint"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

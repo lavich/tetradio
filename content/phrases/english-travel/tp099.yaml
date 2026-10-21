@@ -1,0 +1,7 @@
+id: tp099
+text: "I've missed my connecting flight."
+translation: "Я опоздал(а) на стыковочный рейс."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

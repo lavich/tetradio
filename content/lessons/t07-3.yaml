@@ -1,0 +1,238 @@
+title: Рассказать, что случилось, и добиться решения
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: bank
+    title: Банк фраз — что случилось и что нужно
+    body: |-
+      В полиции, у стойки авиакомпании или на ресепшене разговор о проблеме идёт по одной схеме: что случилось → что вам нужно → что делать, если решения нет. Готовые фразы для каждого шага — из двух первых уроков модуля.
+
+      **Что случилось.** Сначала когда и где: **It happened about an hour ago, on the bus.** Потом фон и событие: **I was waiting for the train when someone took my bag.** Что пропало — passive: **My wallet was stolen.** Два-три предложения, без длинной предыстории.
+
+      **Что нужно.** Про себя — **I need to…** / **I need…**: **I need to report a theft.** **I need a police report for my insurance.** Просьба — вопросом: **Can you rebook me on the next flight?** **When can I get a copy of the report?**
+
+      **Если решения нет.** Спокойно, по ступеням: вопрос о праве (**Am I entitled to compensation?**) → недовольство (**I'm not happy with how this was handled.**) → старший (**Could I speak to the manager, please?**) → решение (**What can you do to put this right?**). Не нужны **You must…**, **This is terrible service!** и повышенный тон: твёрдость — в том, что вы повторяете свою просьбу, а не в громкости.
+
+      Соберите свой банк: запишите по одной фразе на каждый шаг для случая, который мог бы случиться в вашей поездке, — кража, потерянный паспорт, сорванная пересадка.
+    table:
+      columns:
+        - шаг
+        - фраза
+      rows:
+        - - когда и где
+          - It happened about an hour ago, on the bus.
+        - - фон и событие
+          - I was looking at my phone when someone took my bag.
+        - - что пропало
+          - My wallet was stolen.
+        - - что нужно
+          - I need a police report for my insurance.
+        - - право
+          - Am I entitled to compensation?
+        - - недовольство
+          - I'm not happy with how this was handled.
+        - - старший
+          - Could I speak to the manager, please?
+        - - решение
+          - What can you do to put this right?
+  - type: exercise
+    id: bank-match
+    title: Какую фразу сказать
+    instruction: Подберите фразу к ситуации. Две фразы лишние.
+    format: match
+    bank:
+      - I need to report a theft.
+      - My wallet was stolen on the bus.
+      - It happened about an hour ago.
+      - I didn't see their face.
+      - Can you rebook me on the next flight?
+      - Am I entitled to compensation?
+      - Could I speak to the manager, please?
+      - Keep the change.
+      - I'd like a window seat.
+    items:
+      - { id: m1, prompt: "Вы входите в полицейский участок и объясняете, зачем пришли.", answer: I need to report a theft. }
+      - { id: m2, prompt: "Полицейский: What was stolen, and where?", answer: My wallet was stolen on the bus. }
+      - { id: m3, prompt: "Полицейский: When did it happen?", answer: It happened about an hour ago. }
+      - { id: m4, prompt: "Полицейский: Can you describe the person?", answer: "I didn't see their face." }
+      - { id: m5, prompt: Вы опоздали на стыковку и хотите улететь как можно скорее., answer: Can you rebook me on the next flight? }
+      - { id: m6, prompt: Рейс прилетел на пять часов позже. Вы спрашиваете о деньгах., answer: Am I entitled to compensation? }
+      - { id: m7, prompt: "Сотрудник ничего не решает, и вы хотите поговорить со старшим.", answer: "Could I speak to the manager, please?" }
+  - type: exercise
+    id: calm-firm
+    title: Спокойно и твёрдо
+    instruction: Выберите реплику, которая звучит твёрдо, но вежливо.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вам второй раз отвечают, что ничего сделать нельзя.
+        options:
+          - I'm not happy with how this was handled. What can you do to put this right?
+          - This is terrible! You must do something now!
+          - OK, never mind, it doesn't matter.
+        answer: I'm not happy with how this was handled. What can you do to put this right?
+        explanation: Недовольство и просьба о решении — без крика и без отказа от своей просьбы.
+      - id: q2
+        prompt: Вы хотите поговорить со старшим.
+        options:
+          - Could I speak to the manager, please?
+          - Give me your manager.
+          - I want the manager now.
+        answer: Could I speak to the manager, please?
+        explanation: Просьба — вопросом с could; повелительное и I want… звучат как приказ.
+      - id: q3
+        prompt: Вы хотите подать жалобу.
+        options:
+          - "I'd like to make a complaint."
+          - "I'd like to do a complaint."
+          - "I want to complain you."
+        answer: "I'd like to make a complaint."
+        explanation: "Make a complaint; глагол — complain about something, не complain you."
+      - id: q4
+        prompt: Вы спрашиваете о компенсации за задержку.
+        options:
+          - Am I entitled to compensation?
+          - Am I entitled for compensation?
+          - Do I entitle to compensation?
+        answer: Am I entitled to compensation?
+        explanation: Be entitled to — с предлогом to и с am / are.
+      - id: q5
+        prompt: Вы объясняете, что случилось с машиной.
+        options:
+          - Our car was broken into last night.
+          - Our car broke into last night.
+          - Our car was broke into last night.
+        answer: Our car was broken into last night.
+        explanation: Машину взломали — passive, was + broken into.
+  - type: explanation
+    id: story-how
+    title: Рассказ о происшествии
+    body: |-
+      Первое устное задание — короткий рассказ другу или в полиции о том, что случилось. Это ответ для банка: история из поездки понадобится и в следующих модулях, когда будете рассказывать о себе.
+
+      Порядок: когда и где → что вы делали (past continuous) → что случилось (past simple) → что пропало (passive) → что вы сделали потом и что нужно сейчас. Запишите один дубль на 30–60 секунд, переслушайте и сверьте с критериями.
+  - type: speaking
+    id: story
+    part: monologue
+    prompt: "Расскажите, как у вас что-то украли или потерялось в поездке, — случай настоящий или придуманный. Когда и где, что вы делали, что случилось, что пропало, что вы сделали потом. 30–60 секунд."
+    seconds: 60
+    model: "It happened last summer in Edinburgh. I was having lunch on a terrace on the Royal Mile, and my phone was on the table. While I was looking at the menu, a man walked past and snatched it, so my phone was stolen in seconds. He ran off very fast, and I didn't see his face. Luckily, a waiter saw everything, so he was a witness. I had to go to the police station and make a statement, and I got a crime reference number for my insurance. Now I never put my phone on the table."
+    criteria:
+      - "Есть когда и где, фон, событие, что пропало и что вы сделали потом"
+      - "Фон — past continuous (I was having…), событие — past simple (he snatched…)"
+      - "Что пропало — passive или активно с someone: my phone was stolen / someone took my phone"
+      - "Цепочка действий подряд — past simple: he walked past, snatched it and ran off"
+      - 30–60 секунд, без долгих пауз; можно один раз поправить себя
+  - type: explanation
+    id: writing-how
+    title: Жалоба авиакомпании
+    body: |-
+      Если у стойки проблему не решили, пишут жалобу через форму на сайте. Это формальное письмо компании, 80–100 слов. Оно короткое, спокойное и с фактами: компания отвечает быстрее, когда видно, что случилось и чего вы хотите.
+
+      Схема: **I am writing to complain about…** + рейс, дата, номер брони → что случилось, по порядку, в past simple и passive (**I was rebooked…**, **I was not given…**) → почему это плохо → чего вы хотите (**I believe I am entitled to…**, **I would also like to be reimbursed for…**) → **I look forward to your reply.** Формальный регистр — **Dear Sir or Madam** и **Yours faithfully**, полные формы (I am, was not), без восклицаний и без You must.
+  - type: writing
+    id: complaint
+    register: formal
+    prompt: "Ваш рейс опоздал, вы не успели на пересадку, а у стойки вам не помогли. Напишите жалобу авиакомпании через форму на сайте (80–100 слов): рейс, дата и номер брони, что случилось, что было не так, чего вы хотите — компенсацию и возврат расходов. Детали придумайте или возьмите из своей поездки."
+    words: { min: 80, max: 100 }
+    model: |-
+      Dear Sir or Madam,
+      I am writing to complain about my journey from Edinburgh to Lisbon on 14 May, booking reference NL7Q4K. My first flight, NL 215, was delayed by two hours, so I missed my connection. I was rebooked on the next morning's flight, but I was not given a meal voucher or a hotel, so I slept in the terminal. Staff did not explain my rights. I believe I am entitled to compensation. I would also like to be reimbursed for the £18 I spent on food.
+      I look forward to your reply.
+      Yours faithfully,
+      Olga Ivanova
+    criteria:
+      - 80–100 слов; есть рейс, дата, номер брони, что случилось и чего вы хотите
+      - "Формально: Dear Sir or Madam, Yours faithfully, полные формы (I am, was not), без восклицаний"
+      - "События — past simple и passive: was delayed, missed, was rebooked, was not given"
+      - "Требование — спокойно: I believe I am entitled to…, I would also like to be reimbursed for…"
+      - "В конце — I look forward to your reply и имя с фамилией"
+  - type: explanation
+    id: police-scene-how
+    title: Ролевая сцена в полиции
+    body: |-
+      Дальше две ролевые сцены. В каждой сначала звучат реплики собеседника — только его часть разговора, по порядку. Послушайте их два раза, потом откройте текст кнопкой «Открыть текст» и держите перед глазами.
+
+      Затем запишите свою часть: прочитайте реплику собеседника, ответьте на неё одной-двумя фразами, перейдите к следующей. Отвечать сразу после звука не нужно — паузы для ответа в записи нет.
+
+      Первая сцена — на вокзале Кингс-Кросс, в отделении транспортной полиции (British Transport Police — полиция на вокзалах, в поездах и метро). Говорит констебль Хьюз. Вы пришли заявить о краже сумки.
+  - type: listening
+    id: police-lines
+    title: Реплики собеседника — в полиции
+    plays: 2
+    transcript:
+      - { speaker: Hughes, text: "Good morning. How can I help?" }
+      - { speaker: Hughes, text: "I'm sorry to hear that. When and where did it happen?" }
+      - { speaker: Hughes, text: "And what happened, exactly?" }
+      - { speaker: Hughes, text: "Did you see the person? Were there any witnesses?" }
+      - { speaker: Hughes, text: "What was in the bag?" }
+      - { speaker: Hughes, text: "Right, I'll take a short statement now. Is there anything else you need from us?" }
+  - type: speaking
+    id: police
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики выше; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы в Лондоне. Сегодня около двух часов назад на вокзале Кингс-Кросс у вас украли сумку: вы покупали билет в автомате, сумка стояла у ног. Вора вы не видели, но рядом был охранник. В сумке были ноутбук, зарядка и книга, паспорт — при вас. Скажите, зачем пришли, расскажите, что случилось, и попросите документ для страховой. 6 реплик, вся ваша часть — 60–90 секунд.
+    seconds: 90
+    model: |-
+      Officer: Good morning. How can I help?
+      You: Good morning. I need to report a theft. My bag was stolen.
+      Officer: I'm sorry to hear that. When and where did it happen?
+      You: It happened about two hours ago, at King's Cross station.
+      Officer: And what happened, exactly?
+      You: I was buying a ticket from the machine, and my bag was on the floor next to me. When I turned round, it wasn't there.
+      Officer: Did you see the person? Were there any witnesses?
+      You: No, I didn't see their face. But there was a security guard near the machines. Maybe there's CCTV footage too.
+      Officer: What was in the bag?
+      You: My laptop, a charger and a book. Luckily, I've still got my passport.
+      Officer: Right, I'll take a short statement now. Is there anything else you need from us?
+      You: Yes. Will I get a crime reference number for my insurance? And when can I get a copy of the report?
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Начало — I need to report a theft; что пропало — passive: my bag was stolen"
+      - "Фон — past continuous (I was buying…), событие — past simple"
+      - "Попросили документ: Will I get a crime reference number…? / When can I get a copy…?"
+      - Спокойный тон, без долгих пауз
+  - type: explanation
+    id: desk-scene-how
+    title: Ролевая сцена у выхода на посадку
+    body: |-
+      Вторая сцена — у выхода на посадку, говорит Меган из авиакомпании. Рейс overbooked, и вам отказали в посадке. Добейтесь решения по ступеням из банка: что случилось → что нужно → право на компенсацию → недовольство → старший. Порядок тот же: два прослушивания, текст перед глазами, ответ на каждую реплику.
+  - type: listening
+    id: desk-lines
+    title: Реплики собеседника — у выхода на посадку
+    plays: 2
+    transcript:
+      - { speaker: Megan, text: "Good afternoon. How can I help you?" }
+      - { speaker: Megan, text: "I'm sorry, the flight is overbooked. I can rebook you on tomorrow's flight at seven in the morning." }
+      - { speaker: Megan, text: "I'm afraid that's the earliest flight we can offer." }
+      - { speaker: Megan, text: "Yes, of course. We'll book a hotel for you, and here's a meal voucher." }
+      - { speaker: Megan, text: "Well, I'm not sure about that. You can make a claim on our website." }
+      - { speaker: Megan, text: "I understand. Let me call the duty manager — she'll be here in five minutes." }
+  - type: speaking
+    id: desk
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики выше; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы летите домой сегодня вечером. На выходе на посадку вам сказали, что мест нет: рейс overbooked. Объясните, что случилось, попросите улететь сегодня, спросите про отель, спросите о компенсации, а когда ответа нет — скажите, что вы недовольны, и попросите старшего. 6 реплик, вся ваша часть — 60–90 секунд.
+    seconds: 90
+    model: |-
+      Agent: Good afternoon. How can I help you?
+      You: Hello. I was denied boarding on the flight to Riga. They told me there were no seats left.
+      Agent: I'm sorry, the flight is overbooked. I can rebook you on tomorrow's flight at seven in the morning.
+      You: Tomorrow? I need to be home tonight. Is there anything earlier, maybe with another airline?
+      Agent: I'm afraid that's the earliest flight we can offer.
+      You: OK. I need somewhere to stay tonight. Will you pay for a hotel?
+      Agent: Yes, of course. We'll book a hotel for you, and here's a meal voucher.
+      You: Thank you. Am I entitled to compensation? I didn't give up my seat — I was denied boarding.
+      Agent: Well, I'm not sure about that. You can make a claim on our website.
+      You: I'm not happy with how this was handled. Nobody explained my rights. Could I speak to the manager, please?
+      Agent: I understand. Let me call the duty manager — she'll be here in five minutes.
+      You: Thank you. I'll wait here.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Что случилось — I was denied boarding; что нужно — I need to…"
+      - "Вопрос о праве — Am I entitled to compensation? (to, не for)"
+      - "Недовольство и старший — I'm not happy with how this was handled. Could I speak to the manager, please?"
+      - Твёрдо и вежливо, без You must… и без крика

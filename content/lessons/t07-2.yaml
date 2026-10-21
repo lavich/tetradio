@@ -1,0 +1,330 @@
+title: Полиция, стойка авиакомпании и правила компенсации
+kind: lesson
+items:
+  - { kind: word, id: tw099 }
+  - { kind: word, id: tw100 }
+  - { kind: word, id: tw101 }
+  - { kind: word, id: tw102 }
+  - { kind: word, id: tw103 }
+  - { kind: word, id: tw104 }
+  - { kind: word, id: tw105 }
+  - { kind: phrase, id: tp099 }
+  - { kind: phrase, id: tp100 }
+  - { kind: phrase, id: tp101 }
+  - { kind: phrase, id: tp102 }
+  - { kind: phrase, id: tp103 }
+  - { kind: phrase, id: tp104 }
+  - { kind: phrase, id: tp105 }
+blocks:
+  - type: explanation
+    id: flight-problems
+    title: Когда рейс сорвался
+    body: |-
+      Если первый рейс опоздал и вы не успели на пересадку, вы **miss a connection**: **I've missed my connecting flight.** Если оба рейса в одной брони, авиакомпания должна вас **rebook** — переоформить на другой рейс: **Can you rebook me on the next flight?**
+
+      Иногда авиакомпания продаёт больше билетов, чем мест в самолёте: рейс **overbooked**. Сначала ищут добровольцев полететь позже, а если их нет, кому-то отказывают в посадке — это **denied boarding**.
+
+      При долгой задержке выдают **a meal voucher** — талон на еду в кафе терминала. А главный вопрос — **Am I entitled to compensation?**: **be entitled to** — «иметь право на» то, что положено по правилам. Всё, что компания даёт сверх правил, — **a goodwill gesture**, жест доброй воли: ваучер, бесплатный ужин, место получше.
+
+      Если с вами обошлись плохо, говорите спокойно и твёрдо: **I'd like to make a complaint.** **Could I speak to the manager, please?** **I'm not happy with how this was handled.** **What can you do to put this right?** Повышать голос не нужно — твёрдость в словах, а не в тоне.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - miss a connection
+      - rebook
+      - denied boarding
+      - a meal voucher
+      - a goodwill gesture
+      - overbooked
+      - be entitled to
+      - a witness
+      - a layover
+    items:
+      - { id: m1, prompt: опоздать на стыковку, answer: miss a connection }
+      - { id: m2, prompt: переоформить на другой рейс, answer: rebook }
+      - { id: m3, prompt: отказ в посадке, answer: denied boarding }
+      - { id: m4, prompt: талон на питание, answer: a meal voucher }
+      - { id: m5, prompt: жест доброй воли, answer: a goodwill gesture }
+      - { id: m6, prompt: перепроданный (о рейсе), answer: overbooked }
+      - { id: m7, prompt: иметь право на, answer: be entitled to }
+  - type: explanation
+    id: rights-how
+    title: Правила компенсации
+    body: |-
+      Ниже — памятка авиакомпании о правах пассажиров на рейсах из Великобритании. Такие тексты длинные и официальные, но читать их целиком не нужно. Ищите свой случай — задержка, пересадка, отмена — и в нём три вещи: что положено сразу (еда, отель), какие деньги и при каком условии, куда и до какого срока подать заявку.
+
+      Цифры и условия — главное: **2 hours or more**, **3 hours or more**, **up to 1,500 km**. Слово **may** (may be entitled) значит «возможно»: право есть не всегда, дальше в тексте — когда его нет.
+  - type: reading
+    id: rights
+    title: Northline Airways — Your rights
+    text: |-
+      YOUR RIGHTS IF YOUR FLIGHT IS DELAYED OR CANCELLED
+      Flights from UK airports and Northline flights to the UK
+
+      Delays
+      If your flight is delayed by 2 hours or more (3–4 hours on longer flights), you can collect a meal voucher from our information desk. If you have to wait overnight, we will book a hotel for you and pay for transport to it.
+      If you arrive at your final destination 3 hours or more late, you may be entitled to compensation:
+      — flights up to 1,500 km: £220
+      — flights of 1,500 to 3,500 km: £350
+      — flights over 3,500 km: £520
+      If your flight is delayed by 5 hours or more and you decide not to travel, you can ask for a full refund instead.
+
+      Missed connections
+      If you miss a connection because your first flight with us was late, we will rebook you on the next available flight at no extra cost. This applies only when both flights are on one booking.
+
+      Cancellations and overbooked flights
+      If we cancel your flight, you can choose a full refund or a new flight. If a flight is overbooked, we first ask for volunteers to take a later flight. Passengers who are denied boarding against their will are entitled to compensation, as above.
+
+      When we do not pay compensation
+      We do not pay compensation when the delay is caused by extraordinary circumstances, for example bad weather or an air traffic control strike. You still get meals and, if necessary, a hotel.
+      Any payment we make outside these rules, for example a travel voucher, is a goodwill gesture.
+
+      How to claim
+      Claim online at northline.co.uk/claim as soon as possible. You will need your booking reference.
+    glosses:
+      - { text: overnight, russian: на ночь }
+      - { text: destination, russian: пункт назначения }
+      - { text: applies, russian: действует }
+      - { text: volunteers, russian: добровольцы }
+      - { text: against their will, russian: против своей воли }
+      - { text: extraordinary circumstances, russian: чрезвычайные обстоятельства }
+      - { text: air traffic control strike, russian: забастовка авиадиспетчеров }
+      - { text: claim, russian: подать заявку на выплату }
+      - { text: booking reference, russian: номер брони }
+  - type: exercise
+    id: rights-q
+    about: rights
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Your flight from London to Paris is two and a half hours late. What can you get?
+        options:
+          - a meal voucher
+          - £220 in compensation
+          - a full refund
+        answer: a meal voucher
+        explanation: Delayed by 2 hours or more — талон на еду; деньги — только при опоздании в пункт назначения на 3 часа или больше.
+      - id: q2
+        prompt: Your flight from London to Athens (about 2,400 km) lands 4 hours late. How much compensation may you get?
+        options: ["£350", "£220", "£520"]
+        answer: "£350"
+        explanation: "Flights of 1,500 to 3,500 km: £350."
+      - id: q3
+        prompt: Your flight is delayed by 6 hours, and you don't want to travel any more. What can you ask for?
+        options:
+          - your money back
+          - a hotel for the night
+          - a seat on another airline
+        answer: your money back
+        explanation: More than 5 hours… you can ask for a full refund — вернуть деньги за билет.
+      - id: q4
+        prompt: When does the airline rebook you for free after a missed connection?
+        options:
+          - when both flights are on one booking
+          - when you have travel insurance
+          - when the second flight is overbooked
+        answer: when both flights are on one booking
+        explanation: This applies only when both flights are on one booking.
+      - id: q5
+        prompt: Your flight is delayed for 8 hours because of a heavy snowstorm. What do you get?
+        options:
+          - meals and a hotel, but no compensation
+          - compensation, but no meals
+          - nothing at all
+        answer: meals and a hotel, but no compensation
+        explanation: "Плохая погода — extraordinary circumstances: денег нет, а еда и отель положены (You still get meals…)."
+      - id: q6
+        prompt: The airline gives you a £50 travel voucher, but the rules don't require it. What is it?
+        options:
+          - a goodwill gesture
+          - compensation
+          - a refund
+        answer: a goodwill gesture
+        explanation: Any payment we make outside these rules… is a goodwill gesture.
+  - type: explanation
+    id: police-how
+    title: В полиции
+    body: |-
+      Марко из Италии — тот, что в первом модуле летел в Торонто, — теперь в Лондоне. У него украли кошелёк в метро, и он пришёл в транспортную полицию (British Transport Police — полиция на вокзалах, в поездах и метро). Послушайте разговор с констеблем Хьюзом: где и как это случилось, что было в кошельке и что Марко получит.
+
+      Полицейский задаёт вопросы по порядку: когда, где, что случилось, кто видел, что пропало. Марко отвечает просто и один раз поправляет себя: After that I see — I saw… Так говорят многие, когда волнуются; правильно — past simple. TfL (Transport for London) — городской транспорт Лондона.
+  - type: listening
+    id: police
+    title: At the police station
+    plays: 2
+    transcript:
+      - { speaker: Hughes, text: "Good afternoon. How can I help?" }
+      - { speaker: Marco, text: "Hello. I need to report a theft. My wallet was stolen." }
+      - { speaker: Hughes, text: "I'm sorry to hear that. When did it happen?" }
+      - { speaker: Marco, text: "About one hour ago. On the underground, the Piccadilly line, near Piccadilly Circus." }
+      - { speaker: Hughes, text: "And what happened, exactly?" }
+      - { speaker: Marco, text: "The train was very full. I was standing near the door, and I was looking at my phone. Two men pushed me a little and got off at the next station. After that I see — I saw — my pocket was open." }
+      - { speaker: Hughes, text: "So you didn't feel anything at the time?" }
+      - { speaker: Marco, text: "No, nothing. I think they were pickpockets." }
+      - { speaker: Hughes, text: "It sounds like it. It happens a lot on busy trains. Did you see their faces?" }
+      - { speaker: Marco, text: "Not really. One was tall, in a grey hoodie. The other one, I didn't see his face." }
+      - { speaker: Hughes, text: "Were there any witnesses?" }
+      - { speaker: Marco, text: "A woman told me to check my pocket, but I don't know her name." }
+      - { speaker: Hughes, text: "That's all right. Underground stations have cameras, so we can ask for the CCTV footage. What was in the wallet?" }
+      - { speaker: Marco, text: "About sixty pounds, my bank cards and my driving licence. Not my passport — it's at the hotel." }
+      - { speaker: Hughes, text: "Good. Have you cancelled your cards?" }
+      - { speaker: Marco, text: "Yes, I've already called my bank." }
+      - { speaker: Hughes, text: "Well done. Right, I'll take a short statement now, and at the end I'll give you a crime reference number." }
+      - { speaker: Marco, text: "I need a police report for my insurance. Is it the same thing?" }
+      - { speaker: Hughes, text: "In the UK, your insurer usually just needs the crime reference number. If they want a copy of the report, you have to request it online. That usually takes about ten days." }
+      - { speaker: Marco, text: "OK. And if somebody finds the wallet?" }
+      - { speaker: Hughes, text: "Then it usually goes to TfL's lost property office, and they'll contact you." }
+      - { speaker: Marco, text: "Thank you very much." }
+  - type: exercise
+    id: police-q
+    about: police
+    title: Аудирование — полиция
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where was Marco's wallet stolen?
+        options: [on the underground, on a bus, at his hotel]
+        answer: on the underground
+        explanation: On the underground, the Piccadilly line.
+      - id: q2
+        prompt: What was Marco doing when it happened?
+        options:
+          - He was looking at his phone.
+          - He was paying for his ticket.
+          - He was getting off the train.
+        answer: He was looking at his phone.
+        explanation: "I was standing near the door, and I was looking at my phone — фон рассказа, past continuous."
+      - id: q3
+        prompt: How can the police find out more about the thieves?
+        options:
+          - from the station cameras
+          - from the woman on the train
+          - from Marco's bank
+        answer: from the station cameras
+        explanation: Underground stations have cameras, so we can ask for the CCTV footage. Имени женщины Марко не знает.
+      - id: q4
+        prompt: What was NOT in the wallet?
+        options: [his passport, his bank cards, his driving licence]
+        answer: his passport
+        explanation: Not my passport — it's at the hotel.
+      - id: q5
+        prompt: What will Marco get at the police station today?
+        options:
+          - a crime reference number
+          - a copy of the report
+          - his wallet
+        answer: a crime reference number
+        explanation: At the end I'll give you a crime reference number; копию заявления запрашивают онлайн.
+      - id: q6
+        prompt: How long does it usually take to get a copy of the report?
+        options: [about ten days, about a day, about a month]
+        answer: about ten days
+  - type: explanation
+    id: desk-how
+    title: У стойки пересадок
+    body: |-
+      Пётр из Польши летит из Кракова в Торонто с пересадкой в Лондоне. Первый рейс опоздал, и самолёт в Торонто улетел без него. Послушайте его разговор с Меган у стойки пересадок (transfer desk): почему не нужно покупать новый билет, когда следующий рейс, что ему дадут и положена ли компенсация.
+
+      Пётр говорит коротко и иногда пропускает артикль — When is next flight? вместо When is the next flight? Его легко понять, и Меган отвечает ему так же вежливо, как любому пассажиру.
+  - type: listening
+    id: desk
+    title: At the transfer desk
+    plays: 2
+    transcript:
+      - { speaker: Megan, text: "Good evening, Northline transfer desk. How can I help?" }
+      - { speaker: Piotr, text: "Good evening. I've missed my connecting flight to Toronto. The flight from Kraków was late, one and a half hours." }
+      - { speaker: Megan, text: "I'm sorry about that. Can I see your boarding pass? … Yes, I can see the delay. Were both flights on one booking?" }
+      - { speaker: Piotr, text: "Yes, one booking. Both with Northline." }
+      - { speaker: Megan, text: "Good, then you don't have to buy a new ticket. I'll rebook you on the next flight." }
+      - { speaker: Piotr, text: "When is next flight?" }
+      - { speaker: Megan, text: "There's one at eight tonight, but I'm afraid it's overbooked, so I can't put you on it. The next one is tomorrow morning at nine fifty." }
+      - { speaker: Piotr, text: "Tomorrow? My sister is waiting for me in Toronto tonight. There is no other way?" }
+      - { speaker: Megan, text: "I've checked the other airlines too, but everything tonight is full. I'm really sorry." }
+      - { speaker: Piotr, text: "OK. And where do I sleep?" }
+      - { speaker: Megan, text: "We'll book you a hotel near the airport and pay for the bus there. And here's a meal voucher for fifteen pounds — you can use it in any café in the terminal." }
+      - { speaker: Piotr, text: "Thank you. And my suitcase? It is checked to Toronto." }
+      - { speaker: Megan, text: "It'll stay at the airport and go on the same flight as you tomorrow, so you don't need to collect it. Do you need anything from it tonight?" }
+      - { speaker: Piotr, text: "No, I have everything in my backpack. One more question. Am I entitled to compensation?" }
+      - { speaker: Megan, text: "Yes, I think so. You'll arrive in Toronto more than three hours late, so you can make a claim on our website. For a flight that long, it's five hundred and twenty pounds." }
+      - { speaker: Piotr, text: "That's good to know." }
+      - { speaker: Megan, text: "And as a goodwill gesture, I can give you a fifty-pound voucher for your next flight with us." }
+      - { speaker: Piotr, text: "That's kind. Thank you, Megan." }
+      - { speaker: Megan, text: "You're welcome. Here's your new boarding pass. The hotel bus leaves from stop twelve, just outside the terminal." }
+  - type: exercise
+    id: desk-q
+    about: desk
+    title: Аудирование — стойка пересадок
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why did Piotr miss his flight to Toronto?
+        options:
+          - His flight from Kraków was late.
+          - He went to the wrong gate.
+          - He was denied boarding.
+        answer: His flight from Kraków was late.
+        explanation: The flight from Kraków was late, one and a half hours.
+      - id: q2
+        prompt: Why doesn't Piotr have to buy a new ticket?
+        options:
+          - Both flights are on one booking.
+          - He has travel insurance.
+          - His sister paid for it.
+        answer: Both flights are on one booking.
+        explanation: Were both flights on one booking? — Yes… Good, then you don't have to buy a new ticket.
+      - id: q3
+        prompt: Why can't Piotr fly at eight tonight?
+        options:
+          - The flight is overbooked.
+          - The flight is cancelled.
+          - The flight is delayed.
+        answer: The flight is overbooked.
+        explanation: I'm afraid it's overbooked, so I can't put you on it.
+      - id: q4
+        prompt: What does the airline give Piotr tonight?
+        options:
+          - a hotel and a meal voucher
+          - a meal voucher only
+          - a taxi to the city centre
+        answer: a hotel and a meal voucher
+      - id: q5
+        prompt: What happens to his suitcase?
+        options:
+          - It goes on his flight tomorrow.
+          - He collects it tonight.
+          - It goes to his hotel.
+        answer: It goes on his flight tomorrow.
+        explanation: It'll stay at the airport and go on the same flight as you tomorrow.
+      - id: q6
+        prompt: What is the fifty-pound voucher?
+        options:
+          - a goodwill gesture
+          - his compensation
+          - a meal voucher
+        answer: a goodwill gesture
+        explanation: Компенсацию, 520 фунтов, Пётр запросит на сайте; ваучер — сверх правил.
+  - type: exercise
+    id: desk-phrases
+    about: desk
+    title: Фразы из диалога
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [missed, rebook, overbooked, entitled, claim, goodwill, booking, witness, statement]
+    items:
+      - { id: g1, prompt: "I've ___ my connecting flight to Toronto.", answer: missed }
+      - { id: g2, prompt: "Were both flights on one ___?", answer: booking }
+      - { id: g3, prompt: "I'll ___ you on the next flight.", answer: rebook }
+      - { id: g4, prompt: "I'm afraid it's ___, so I can't put you on it.", answer: overbooked }
+      - { id: g5, prompt: "Am I ___ to compensation?", answer: entitled }
+      - { id: g6, prompt: "You can make a ___ on our website.", answer: claim }
+      - { id: g7, prompt: "As a ___ gesture, I can give you a voucher.", answer: goodwill }

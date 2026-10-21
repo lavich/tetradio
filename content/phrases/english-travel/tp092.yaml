@@ -1,0 +1,8 @@
+id: tp092
+text: "I was waiting for the train when someone took my bag."
+translation: "Я ждал(а) поезд, когда кто-то взял мою сумку."
+note: "past continuous — фон, past simple — событие"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

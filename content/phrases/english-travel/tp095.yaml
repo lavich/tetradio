@@ -1,0 +1,8 @@
+id: tp095
+text: "It happened about an hour ago."
+translation: "Это случилось около часа назад."
+note: "ago — после срока: two days ago"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t07
+  operation: requested-generation
+  request: Фразы модуля t07 по программе docs/curriculum-english-travel.md

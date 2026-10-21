@@ -45,3 +45,6 @@ characters:
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }
   Inês: { gender: female, voice: Gacrux }
+  Hughes: { gender: male, voice: Sadaltager }
+  Megan: { gender: female, voice: Vindemiatrix }
+  Piotr: { gender: male, voice: Umbriel }

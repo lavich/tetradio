@@ -1,0 +1,280 @@
+title: Контрольная модуля t07
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: объявление на вокзале и письмо авиакомпании, объявления в аэропорту, разговор в полиции, времена рассказа и passive, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором верен один вариант. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: notices
+    title: A station notice and an airline email
+    text: |-
+      EDINBURGH WAVERLEY — PLEASE READ
+      Pickpockets operate in this area. Keep your bag closed and do not carry your phone in your back pocket.
+      Lost something? The lost property office is next to platform 2. Open Monday to Saturday, 8:00–18:00. We keep items for 30 days. To collect an item, please bring photo ID.
+      If you think something was stolen, report it to British Transport Police: text 61016.
+
+      EMAIL — Northline Airways
+      Subject: Your flight NL 482 to Rome has been cancelled
+      Dear Ms Ivanova,
+      We are sorry to inform you that your flight NL 482 from Edinburgh to Rome on 3 June has been cancelled because of a technical problem with the aircraft. We have rebooked you on flight NL 486 on the same day. It leaves at 18:40, seven hours later than your original flight. If the new flight is not suitable, you can ask for a full refund in Manage my booking.
+      You may be entitled to compensation: please use the form at northline.co.uk/claim. On the day of travel, collect a meal voucher from the Northline desk at the airport. As a goodwill gesture, we have added 10 kg of extra baggage to your booking at no cost.
+    glosses:
+      - { text: operate, russian: действуют }
+      - { text: photo ID, russian: документ с фотографией }
+      - { text: aircraft, russian: самолёт }
+      - { text: original, russian: первоначальный }
+      - { text: suitable, russian: подходящий }
+      - { text: Manage my booking, russian: раздел «Моё бронирование» на сайте }
+  - type: exercise
+    id: notices-q
+    about: notices
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where is the lost property office?
+        options: [next to platform 2, next to the ticket office, at the police station]
+        answer: next to platform 2
+      - id: q2
+        prompt: How long does the office keep lost items?
+        options: [30 days, 8 days, 6 months]
+        answer: 30 days
+        explanation: We keep items for 30 days.
+      - id: q3
+        prompt: What do you need to collect an item?
+        options:
+          - a document with your photo
+          - a crime reference number
+          - your train ticket
+        answer: a document with your photo
+        explanation: Please bring photo ID — паспорт или права.
+      - id: q4
+        prompt: Why was the flight to Rome cancelled?
+        options:
+          - There was a problem with the plane.
+          - The weather was bad.
+          - The flight was overbooked.
+        answer: There was a problem with the plane.
+        explanation: Because of a technical problem with the aircraft.
+      - id: q5
+        prompt: What has the airline already done for Ms Ivanova?
+        options:
+          - It has rebooked her on a later flight.
+          - It has given her a full refund.
+          - It has paid her compensation.
+        answer: It has rebooked her on a later flight.
+        explanation: We have rebooked you on flight NL 486; возврат денег — только если она попросит, компенсацию — по заявке.
+      - id: q6
+        prompt: What does she get as a goodwill gesture?
+        options: [extra baggage, a meal voucher, a hotel room]
+        answer: extra baggage
+        explanation: As a goodwill gesture, we have added 10 kg of extra baggage; талон на еду положен по правилам.
+  - type: listening
+    id: announcements
+    title: Announcements at Edinburgh Airport
+    plays: 2
+    transcript:
+      - { text: "Ladies and gentlemen, flight NL 214 to Amsterdam is overbooked. We are looking for two volunteers to travel on the next flight at 16:30. Volunteers will receive a two-hundred-pound travel voucher and a meal voucher. Please speak to staff at gate 9." }
+      - { text: "Passengers who have missed their connection because of the late arrival of flight NL 338 from Paris should go to the transfer desk in Zone B, where staff will rebook them." }
+      - { text: "Please keep your bags with you at all times. Bags left unattended anywhere in the terminal may be removed by security." }
+      - { text: "This is a message for passenger Ana Silva. Your passport has been handed in at the information desk on the ground floor. Please come and collect it." }
+  - type: exercise
+    id: announcements-q
+    about: announcements
+    graded: true
+    title: Аудирование — объявления
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What will volunteers for the Amsterdam flight get?
+        options:
+          - a travel voucher and a meal voucher
+          - a refund and a hotel room
+          - a seat on an earlier flight
+        answer: a travel voucher and a meal voucher
+        explanation: A two-hundred-pound travel voucher and a meal voucher.
+      - id: q2
+        prompt: Where should passengers from Paris who missed their connection go?
+        options: [to the transfer desk in Zone B, to gate 9, to the information desk]
+        answer: to the transfer desk in Zone B
+      - id: q3
+        prompt: What can happen to bags that nobody is looking after?
+        options:
+          - Security may take them away.
+          - They go to lost property.
+          - They are sent to the gate.
+        answer: Security may take them away.
+        explanation: Bags left unattended (без присмотра) may be removed by security — охрана может их убрать.
+      - id: q4
+        prompt: Where can Ana Silva get her passport?
+        options:
+          - at the information desk on the ground floor
+          - at the police station
+          - at the lost property office
+        answer: at the information desk on the ground floor
+        explanation: Has been handed in at the information desk — паспорт сдали на стойку информации.
+  - type: listening
+    id: passport
+    title: A stolen passport
+    plays: 2
+    transcript:
+      - { speaker: Hughes, text: "Good evening. What can I do for you?" }
+      - { speaker: Inês, text: "Hi. I think my passport was stolen. I need to report it." }
+      - { speaker: Hughes, text: "OK. When did you last have it?" }
+      - { speaker: Inês, text: "This afternoon, at about three. I was sitting in a café at Paddington station, and my bag was on the back of my chair. When I wanted to pay, I opened the bag, and my passport wasn't there. My purse was still there." }
+      - { speaker: Hughes, text: "So someone took only the passport?" }
+      - { speaker: Inês, text: "Yes. It was in the small pocket on the outside of the bag." }
+      - { speaker: Hughes, text: "I'm afraid pickpockets often do that. Did anybody see anything?" }
+      - { speaker: Inês, text: "The waitress said a man was standing behind my chair for quite a long time, but she didn't see his face." }
+      - { speaker: Hughes, text: "Right. There are cameras all over the station, so we'll check the CCTV footage. Have you called lost property, just in case?" }
+      - { speaker: Inês, text: "Yes, I phoned the café and the lost property office. Nothing." }
+      - { speaker: Hughes, text: "OK. I'll take your statement and give you a crime reference number. After that, you need to contact the Portuguese embassy. They can give you an emergency travel document." }
+      - { speaker: Inês, text: "My flight home is on Friday. Is that enough time?" }
+      - { speaker: Hughes, text: "It usually takes two or three working days, so you should call them first thing tomorrow morning." }
+      - { speaker: Inês, text: "I will. Thank you so much." }
+  - type: exercise
+    id: passport-q
+    about: passport
+    graded: true
+    title: Аудирование — полиция
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where was Inês when her passport was stolen?
+        options: [in a café, on the underground, in her hotel]
+        answer: in a café
+        explanation: I was sitting in a café at Paddington station.
+      - id: q2
+        prompt: Where was her bag?
+        options:
+          - on the back of her chair
+          - on the table
+          - under the table
+        answer: on the back of her chair
+      - id: q3
+        prompt: What did the thief take?
+        options:
+          - only her passport
+          - her passport and her purse
+          - the whole bag
+        answer: only her passport
+        explanation: My purse was still there. — So someone took only the passport?
+      - id: q4
+        prompt: What did the waitress notice?
+        options:
+          - A man was standing behind Inês for a long time.
+          - A man ran out of the café.
+          - A man opened Inês's bag.
+        answer: A man was standing behind Inês for a long time.
+        explanation: A man was standing behind my chair for quite a long time; лица официантка не видела.
+      - id: q5
+        prompt: What does Inês need to do after the police station?
+        options:
+          - contact her embassy
+          - go to lost property
+          - change her flight
+        answer: contact her embassy
+        explanation: You need to contact the Portuguese embassy… an emergency travel document.
+      - id: q6
+        prompt: When should she call them?
+        options: [tomorrow morning, on Friday, in two or three days]
+        answer: tomorrow morning
+        explanation: Call them first thing tomorrow morning — документ делают два-три рабочих дня.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Рассказ и passive
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ for a taxi when a man snatched my phone.
+        options: [was waiting, waited, am waiting]
+        answer: was waiting
+        explanation: Фон — past continuous, событие — past simple.
+      - id: q2
+        prompt: While we ___ dinner, someone broke into our car.
+        options: [were having, had, have]
+        answer: were having
+      - id: q3
+        prompt: He grabbed my bag and ___ towards the exit.
+        options: [ran, was running, runs]
+        answer: ran
+        explanation: Действия подряд — past simple.
+      - id: q4
+        prompt: My passport and my cards ___ from my hotel room.
+        options: [were stolen, was stolen, stole]
+        answer: were stolen
+        explanation: Несколько вещей — were + stolen.
+      - id: q5
+        prompt: "You ___ come back tomorrow — we'll send you the report by email."
+        options: ["don't have to", "have to", "mustn't"]
+        answer: "don't have to"
+        explanation: "Don't have to — «не обязательно»."
+      - id: q6
+        prompt: I need ___ a theft.
+        options: [to report, report, reporting]
+        answer: to report
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [pickpockets, witness, statement, footage, property, rebook, overbooked, entitled, voucher, layover]
+    items:
+      - { id: g1, prompt: "Be careful on the underground — there are a lot of ___ at rush hour.", answer: pickpockets }
+      - { id: g2, prompt: "Did anyone see it happen? We need a ___.", answer: witness }
+      - { id: g3, prompt: "Please sit down. I'll take your ___ now.", answer: statement }
+      - { id: g4, prompt: "The shop has cameras, so we'll check the CCTV ___.", answer: footage }
+      - { id: g5, prompt: "I left my umbrella on the train. Where's the lost ___ office?", answer: property }
+      - { id: g6, prompt: "Your flight is cancelled, but we can ___ you on the next one.", answer: rebook }
+      - { id: g7, prompt: "The flight was ___, so two passengers couldn't get on.", answer: overbooked }
+      - { id: g8, prompt: "Your flight arrived five hours late, so you may be ___ to compensation.", answer: entitled }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (I've, I'd) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Я опоздал на стыковочный рейс.
+        answer:
+          - I've missed my connecting flight.
+          - I have missed my connecting flight.
+          - I missed my connecting flight.
+          - I've missed my connection.
+          - I missed my connection.
+          - I have missed my connection.
+          - I missed the connecting flight.
+          - I've missed the connection.
+      - id: q2
+        prompt: Я хотел бы подать жалобу.
+        answer:
+          - I'd like to make a complaint.
+          - I would like to make a complaint.
+          - I'd like to complain.
+          - I would like to complain.
+          - I want to make a complaint.
+          - I'd like to lodge a complaint.
+          - I want to complain.
+      - id: q3
+        prompt: Мне нужна справка из полиции для страховой.
+        answer:
+          - I need a police report for my insurance.
+          - I need a police report for the insurance.
+          - I need a police report for my insurance company.
+          - I need a police report for my insurer.
+          - I need a report from the police for my insurance.
+          - I need a police report for insurance.
+          - I need a police report for the insurance company.
