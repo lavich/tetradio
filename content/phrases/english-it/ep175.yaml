@@ -1,0 +1,7 @@
+id: ep175
+text: "I'd like to understand the team's roadmap."
+translation: "Хочу понять планы команды по развитию продукта."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e07
+  operation: requested-generation
+  request: Фразы модуля e07 по программе docs/curriculum-english-it.md

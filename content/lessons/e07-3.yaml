@@ -1,0 +1,411 @@
+title: Why this company? — письмо и речь
+kind: lesson
+items:
+  - { kind: phrase, id: ep167 }
+  - { kind: phrase, id: ep168 }
+  - { kind: phrase, id: ep169 }
+  - { kind: phrase, id: ep170 }
+  - { kind: phrase, id: ep171 }
+  - { kind: phrase, id: ep172 }
+  - { kind: phrase, id: ep173 }
+  - { kind: phrase, id: ep174 }
+  - { kind: phrase, id: ep175 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Ответ о мотивации и планах в пяти шагах
+    body: |-
+      На вопросы **Why do you want to join us?** и **Where do you see yourself in five years?** интервьюер ищет причину, которая относится именно к этой компании, и план, который с ней связан. Ответ строится как короткий маршрут, и каждый шаг занимает одну-две фразы.
+
+      **1. Причина.** Назовите конкретное: продукт, культуру, технологию. **Honestly, the culture is what drew me to you. I've used your product for two years.**
+
+      **2. Что вы даёте.** Скажите, как будете полезны: **I think I'd be a good fit for the team. I'll do my best to contribute from day one.**
+
+      **3. Что хотите получить.** Назовите рост, который соответствует компании: **In the short term, I want to learn your domain. I'm excited about the chance to work on a larger scale.**
+
+      **4. Направление на пять лет.** Используйте **I see myself as…**, твёрдые планы выражайте формами **going to** и present continuous, открытые — **might**: **In five years, I see myself as a tech lead. I might consider a management track later.**
+
+      **5. Связь с компанией.** **My goals line up with where the company is heading.** В конце можно задать вопрос: **I'd like to understand the team's roadmap.**
+    table:
+      columns:
+        - шаг
+        - язык
+        - пример
+      rows:
+        - - причина
+          - the … is what drew me to you
+          - Honestly, the culture is what drew me to you.
+        - - вклад
+          - I think I'd be a good fit; I'll do my best to…
+          - I'll do my best to contribute from day one.
+        - - рост
+          - In the short term, I want to…
+          - In the short term, I want to learn your domain.
+        - - пять лет
+          - I see myself as…; I might…
+          - In five years, I see myself as a tech lead.
+        - - связь
+          - My goals line up with…
+          - My goals line up with where the company is heading.
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: good-structure
+    title: Подходящая реакция
+    instruction: Выберите вариант, который подходит для собеседования.
+    format: choice
+    items:
+      - id: q1
+        prompt: Интервьюер спрашивает «Why do you want to join us?». Какой ответ начинается с конкретной причины?
+        options:
+          - Honestly, the culture is what drew me to you.
+          - I need a job.
+          - Because you pay well.
+        answer: Honestly, the culture is what drew me to you.
+        explanation: Первая фраза называет причину, которая относится именно к этой компании.
+      - id: q2
+        prompt: Вы хотите сказать, что сможете приносить пользу сразу. Какая фраза подходит?
+        options:
+          - I'll do my best to contribute from day one.
+          - I'd like to understand the team's roadmap.
+          - In five years, I see myself as a tech lead.
+        answer: I'll do my best to contribute from day one.
+      - id: q3
+        prompt: Вы объясняете, как ваши цели связаны с планами компании. Какая фраза подходит?
+        options:
+          - My goals line up with where the company is heading.
+          - I'm going to focus on system design.
+          - Why do you want to join us?
+        answer: My goals line up with where the company is heading.
+      - id: q4
+        prompt: Вы хотите сказать, что подойдёте команде. Какая фраза подходит?
+        options:
+          - I think I'd be a good fit for the team.
+          - In the short term, I want to learn your domain.
+          - I'm leaving on good terms.
+        answer: I think I'd be a good fit for the team.
+      - id: q5
+        prompt: В конце разговора вы хотите спросить о планах команды. Какая фраза подходит?
+        options:
+          - I'd like to understand the team's roadmap.
+          - I'm excited about the chance to work on a larger scale.
+          - Where do you see yourself in five years?
+        answer: I'd like to understand the team's roadmap.
+      - id: q6
+        prompt: Вы говорите о том, чего хотите достичь в ближайшее время. Какая фраза подходит?
+        options:
+          - In the short term, I want to learn your domain.
+          - In five years, I see myself as a tech lead.
+          - I might consider a management track later.
+        answer: In the short term, I want to learn your domain.
+  - type: exercise
+    id: future-fix
+    title: Будущее в ответах
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "In five years, I ___ myself as a tech lead."
+        options: [see, will see, am seeing]
+        answer: see
+        explanation: Фраза I see myself as… стоит в present simple.
+      - id: q2
+        prompt: "Next year, I ___ focus on system design. (решённый план)"
+        options: [am going to, might to, will to]
+        answer: am going to
+        explanation: После am going нужен to; после might и will to не нужен.
+      - id: q3
+        prompt: "When I ___ the team, I will read the documentation first."
+        options: [join, will join, would join]
+        answer: join
+        explanation: После when будущее выражается present simple.
+      - id: q4
+        prompt: "I'm not sure yet, so I ___ stay in backend. (возможно)"
+        options: [might, am going to, will to]
+        answer: might
+        explanation: Решение не принято, поэтому might.
+      - id: q5
+        prompt: "If the offer ___ good, I will accept it."
+        options: [is, will be, would be]
+        answer: is
+        explanation: После if будущее выражается present simple.
+      - id: q6
+        prompt: "I ___ a certification exam on 12 June. (дата назначена)"
+        options: [am taking, might taking, will to take]
+        answer: am taking
+        explanation: План с датой — present continuous.
+  - type: explanation
+    id: writing-how
+    title: Сопроводительное письмо
+    body: |-
+      Письменная задача — сопроводительное письмо к отклику на вакансию Senior Backend Engineer в Brightlane из предыдущего урока, 80–120 слов, в формальном стиле.
+
+      Схема: 1) обращение (**Dear Ms Hall,**) и цель письма (**I am writing to apply for…**); 2) опыт в одном-двух предложениях; 3) причина выбора компании; 4) планы с формами **going to** и **might**; 5) завершение и подпись (**Kind regards**).
+
+      В формальном письме сокращения (*I'm, I'll*) не используются: пишите **I am, I will**. Проверьте себя: названа конкретная причина, есть не меньше двух форм будущего, письмо укладывается в 80–120 слов.
+  - type: exercise
+    id: sentences
+    title: Предложения для письма
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Я пользуюсь вашим продуктом уже два года.
+        answer:
+          - "I have used your product for two years now"
+          - "I have used your product for two years"
+          - "I have used your product for 2 years now"
+          - "I have used your product for 2 years"
+          - "I have used your service for two years now"
+          - "I have used your service for two years"
+          - "I have used your service for 2 years now"
+          - "I have used your service for 2 years"
+          - "I have been using your product for two years now"
+          - "I have been using your product for two years"
+          - "I have been using your product for 2 years now"
+          - "I have been using your product for 2 years"
+          - "I have been using your service for two years now"
+          - "I have been using your service for two years"
+          - "I have been using your service for 2 years now"
+          - "I have been using your service for 2 years"
+        explanation: Срок for two years и present perfect.
+      - id: q2
+        prompt: Ваша миссия мне очень близка.
+        answer:
+          - "Your mission really resonates with me"
+          - "Your mission truly resonates with me"
+          - "Your mission very much resonates with me"
+          - "Your mission resonates with me"
+          - "Your mission resonates with me a lot"
+          - "Your mission resonates with me strongly"
+          - "Your mission resonates with me deeply"
+          - "Your mission really means a lot to me"
+          - "Your mission truly means a lot to me"
+          - "Your mission means a lot to me"
+          - "I really relate to your mission"
+          - "I truly relate to your mission"
+          - "I relate to your mission"
+        explanation: Resonates with me — находит отклик у меня.
+      - id: q3
+        prompt: Я хочу работать над тем, что даёт реальный результат.
+        answer:
+          - "I would like to work on something with a real impact"
+          - "I would like to work on something with real impact"
+          - "I would like to work on something that has a real impact"
+          - "I would like to work on something that has real impact"
+          - "I would like to work on something that makes a real impact"
+          - "I would like to work on something that makes real impact"
+          - "I want to work on something with a real impact"
+          - "I want to work on something with real impact"
+          - "I want to work on something that has a real impact"
+          - "I want to work on something that has real impact"
+          - "I want to work on something that makes a real impact"
+          - "I want to work on something that makes real impact"
+          - "I would like to work on something that delivers real results"
+          - "I would like to work on something that produces real results"
+          - "I would like to work on something that brings real results"
+          - "I want to work on something that delivers real results"
+          - "I want to work on something that produces real results"
+          - "I want to work on something that brings real results"
+          - "I would like to work on something that makes a real difference"
+          - "I want to work on something that makes a real difference"
+        explanation: Фраза something with real impact.
+      - id: q4
+        prompt: Постараюсь приносить пользу с первого дня.
+        answer:
+          - "I will do my best to contribute from day one"
+          - "I will do my best to contribute from the first day"
+          - "I will do my best to contribute from my first day"
+          - "I will do my best to contribute from the very first day"
+          - "I will do my best to be useful from day one"
+          - "I will do my best to be useful from the first day"
+          - "I will do my best to be useful from my first day"
+          - "I will do my best to be useful from the very first day"
+          - "I will do my best to be helpful from day one"
+          - "I will do my best to be helpful from the first day"
+          - "I will do my best to be helpful from my first day"
+          - "I will do my best to be helpful from the very first day"
+          - "I will do my best to add value from day one"
+          - "I will do my best to add value from the first day"
+          - "I will do my best to add value from my first day"
+          - "I will do my best to add value from the very first day"
+          - "I will try my best to contribute from day one"
+          - "I will try my best to contribute from the first day"
+          - "I will try my best to contribute from my first day"
+          - "I will try my best to contribute from the very first day"
+          - "I will try my best to be useful from day one"
+          - "I will try my best to be useful from the first day"
+          - "I will try my best to be useful from my first day"
+          - "I will try my best to be useful from the very first day"
+          - "I will try my best to be helpful from day one"
+          - "I will try my best to be helpful from the first day"
+          - "I will try my best to be helpful from my first day"
+          - "I will try my best to be helpful from the very first day"
+          - "I will try my best to add value from day one"
+          - "I will try my best to add value from the first day"
+          - "I will try my best to add value from my first day"
+          - "I will try my best to add value from the very first day"
+          - "I will try to contribute from day one"
+          - "I will try to contribute from the first day"
+          - "I will try to contribute from my first day"
+          - "I will try to contribute from the very first day"
+          - "I will try to be useful from day one"
+          - "I will try to be useful from the first day"
+          - "I will try to be useful from my first day"
+          - "I will try to be useful from the very first day"
+          - "I will try to be helpful from day one"
+          - "I will try to be helpful from the first day"
+          - "I will try to be helpful from my first day"
+          - "I will try to be helpful from the very first day"
+          - "I will try to add value from day one"
+          - "I will try to add value from the first day"
+          - "I will try to add value from my first day"
+          - "I will try to add value from the very first day"
+        explanation: Фраза contribute from day one.
+      - id: q5
+        prompt: Мои цели совпадают с тем, куда движется компания.
+        answer:
+          - "My goals line up with where the company is heading"
+          - "My goals line up with where the company is going"
+          - "My goals line up with where the company is moving"
+          - "My goals match where the company is heading"
+          - "My goals match where the company is going"
+          - "My goals match where the company is moving"
+          - "My goals align with where the company is heading"
+          - "My goals align with where the company is going"
+          - "My goals align with where the company is moving"
+          - "My goals are aligned with where the company is heading"
+          - "My goals are aligned with where the company is going"
+          - "My goals are aligned with where the company is moving"
+          - "My goals are in line with where the company is heading"
+          - "My goals are in line with where the company is going"
+          - "My goals are in line with where the company is moving"
+          - "My goals coincide with where the company is heading"
+          - "My goals coincide with where the company is going"
+          - "My goals coincide with where the company is moving"
+          - "My goals correspond to where the company is heading"
+          - "My goals correspond to where the company is going"
+          - "My goals correspond to where the company is moving"
+        explanation: Фраза line up with where the company is heading.
+  - type: writing
+    id: cover-letter
+    register: formal
+    prompt: "Вы откликаетесь на вакансию Senior Backend Engineer в Brightlane (тексты предыдущего урока). Напишите сопроводительное письмо менеджеру по найму Ms Hall (80–120 слов): цель письма, опыт, конкретная причина выбора компании, планы с формами going to и might, подпись."
+    words: { min: 80, max: 120 }
+    model: |-
+      Dear Ms Hall,
+
+      I am writing to apply for the Senior Backend Engineer position at Brightlane. I have worked on payment systems for six years, and I have led two migrations. What attracted me to your company is the product: I have used your payment pages for two years. Your mission resonates with me, and I would like to work on something with real impact. Next year, I am going to focus on system design, and I might move into a lead role later. I will do my best to contribute from day one.
+
+      Kind regards,
+      Anna Petrova
+    criteria:
+      - 80–120 слов, есть обращение, цель письма и подпись
+      - Названа конкретная причина выбора компании, например продукт или миссия
+      - Есть не меньше двух форм будущего, например going to и might
+      - Описан опыт в одном-двух предложениях
+      - Формальный стиль без сокращений и разговорных слов
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответ
+    body: |-
+      Седьмой ответ вашего **банка ответов** — Why do you want to join us? К нему добавляется второй вопрос: Where do you see yourself in five years? Они задаются подряд и проверяют, связаны ли ваши планы с компанией.
+
+      1) Начните с причины, относящейся именно к этой компании. 2) Скажите, что вы даёте команде. 3) Назовите рост, который хотите получить. 4) Для вопроса о пяти годах назовите направление через **I see myself as…** и добавьте **might** для открытых планов. 5) Запишите ответ, переслушайте, сверьте с образцом и критериями.
+
+      Сцена в конце урока повторяет эту часть собеседования: интервьюер задаёт вопросы о мотивации и планах. Реплики интервьюера записаны на предыдущей странице; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: why-join
+    part: monologue
+    prompt: "Интервьюер: «Why do you want to join us?» Ответьте за 90 секунд: конкретная причина, ваш вклад, чего вы хотите достичь, связь целей с компанией."
+    seconds: 90
+    model: "Honestly, the culture is what drew me to you. I have been following your engineering blog for a while, and I read your public postmortems. I liked how open they were. I have also used your product for two years, so I would like to work on something with real impact. I think I would be a good fit for the team, and I will do my best to contribute from day one. In the short term, I want to learn your domain. I am also excited about the chance to work on a larger scale. My goals line up with where the company is heading, and that is the main reason I want to join you."
+    criteria:
+      - Ответ начинается с конкретной причины, которая относится именно к этой компании
+      - Назван вклад в команду и ближайшая цель
+      - Цели связаны с планами компании
+      - Есть не меньше двух устойчивых фраз урока
+      - Около 90 секунд, без долгих пауз
+  - type: speaking
+    id: five-years
+    part: interview
+    prompt: "Интервьюер продолжает: «Where do you see yourself in five years?» Ответьте за 60 секунд: направление, ближайший шаг, открытый вариант."
+    seconds: 60
+    model: "In five years, I see myself as a tech lead. Next year, I am going to focus on system design, and I am starting a part-time master's degree in September. I might consider a management track later, but I am not sure yet. Whatever I choose, I would like to grow inside a team like yours."
+    criteria:
+      - Названо направление через I see myself as
+      - Есть твёрдый план с going to или present continuous
+      - Есть открытый вариант с might
+      - Ответ укладывается в 60 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - { speaker: Sarah, text: "Thank you for coming in. Why do you want to join us?" }
+      - { speaker: Sarah, text: "That is interesting. What do you know about our product?" }
+      - { speaker: Sarah, text: "And where do you see yourself in five years?" }
+      - { speaker: Sarah, text: "What are you looking for in your next team?" }
+      - { speaker: Sarah, text: "Thank you. Do you have any questions for us?" }
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на собеседовании в Brightlane. Интервьюер — Sarah. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику назовите причину, на вторую расскажите, как знаете продукт. На третью опишите, кем видите себя через пять лет. На четвёртую скажите, какую команду ищете. В конце задайте вопрос о планах команды. Вся ваша часть — 120 секунд, каждая реплика — две-четыре фразы.
+    seconds: 120
+    model: |-
+      Sarah: Thank you for coming in. Why do you want to join us?
+      You: Honestly, the culture is what drew me to you. I have been following your engineering blog for a while, and I liked how open your postmortems were. I think I would be a good fit for the team, and I will do my best to contribute from day one.
+      Sarah: That is interesting. What do you know about our product?
+      You: I have used it for two years as a customer, so I know the payment pages well. It is built for small shops, and I would like to work on something with real impact.
+      Sarah: And where do you see yourself in five years?
+      You: In five years, I see myself as a tech lead. Next year, I am going to focus on system design, and I might consider a management track later. My goals line up with where the company is heading.
+      Sarah: What are you looking for in your next team?
+      You: I am looking for a team that invests in its engineers. In the short term, I want to learn your domain, and I am excited about the chance to work on a larger scale.
+      Sarah: Thank you. Do you have any questions for us?
+      You: Yes. I would like to understand the team's roadmap. What is the team going to build over the next year?
+    criteria:
+      - Ответили на все пять реплик по порядку, каждая — две-четыре фразы
+      - Первая причина конкретная и относится к компании
+      - Планы на пять лет — направление через I see myself as и открытый вариант с might
+      - Есть твёрдый план с going to или present continuous
+      - Вопрос о планах команды задан в конце
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I ___ at this company since 2021."
+        options: [have worked, worked, am working]
+        answer: have worked
+        explanation: Since 2021 — период до сих пор, нужен present perfect.
+      - id: q2
+        prompt: "Could you tell me what the team ___ next year?"
+        options: [is going to build, is it going to build, does it build]
+        answer: is going to build
+        explanation: В косвенном вопросе порядок слов как в утверждении; план — going to.
+      - id: q3
+        prompt: "The system ___ by two engineers in 2022. (была построена)"
+        options: [was built, is built, built]
+        answer: was built
+        explanation: Прошедшее время и исполнитель после by — passive в past.
+      - id: q4
+        prompt: "I was working on the migration when the requirements ___."
+        options: [changed, have changed, were change]
+        answer: changed
+        explanation: Короткое действие внутри длительного — past simple.
+      - id: q5
+        prompt: "TypeScript is ___ than plain JavaScript. (безопаснее)"
+        options: [safer, more safe, safest]
+        answer: safer
+        explanation: Односложное прилагательное образует сравнительную степень с -er.
+      - id: q6
+        prompt: "I'm leaving because I ___ my role. (перерос; результат важен сейчас)"
+        options: [have outgrown, will outgrow, outgrowing]
+        answer: have outgrown
+        explanation: Результат до настоящего момента — present perfect.

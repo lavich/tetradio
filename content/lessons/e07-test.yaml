@@ -1,0 +1,359 @@
+title: Контрольная модуля e07
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, формы будущего, слова модуля и перевод фраз. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: careers
+    title: Why people join Kestrel Labs
+    text: |-
+      Why people join Kestrel Labs
+
+      Kestrel Labs builds tools that help hospitals plan their work. We are a mission-driven company: every feature has to save time for a nurse or a doctor.
+
+      What the work looks like
+
+      The work is fast-paced and demanding, but engineers have a lot of autonomy. Each team owns its service from the first idea to production. Next month, we are starting a greenfield project for patient reminders, and we are going to need three more backend engineers.
+
+      Growth
+
+      Every engineer has a performance review twice a year. After that, you agree on a growth path with your manager. Last year, six people moved to other teams through internal mobility, and two of them became tech leads. We also give every engineer a learning budget, so people can upskill during working hours.
+
+      What we expect
+
+      We are looking for people who are curious and who explain their decisions clearly. Experience in healthcare is a nice-to-have.
+    glosses:
+      - { text: hospitals, russian: больницы }
+      - { text: nurse, russian: медсестра }
+      - { text: owns, russian: "отвечает за" }
+      - { text: patient reminders, russian: "напоминания пациентам" }
+      - { text: learning budget, russian: "бюджет на обучение" }
+      - { text: curious, russian: любознательных }
+      - { text: healthcare, russian: здравоохранение }
+  - type: exercise
+    id: careers-tf
+    about: careers
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Kestrel Labs builds tools for hospitals.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q2
+        prompt: Each team owns its service from the first idea to production.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q3
+        prompt: The company is starting a greenfield project next month.
+        options: ["True", "False"]
+        answer: "True"
+      - id: q4
+        prompt: Every engineer has a performance review once a year.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: A performance review twice a year — оценка проходит дважды в год.
+      - id: q5
+        prompt: Experience in healthcare is required.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: A nice-to-have — желательное, но не обязательное требование.
+      - id: q6
+        prompt: Six people became tech leads last year.
+        options: ["True", "False"]
+        answer: "False"
+        explanation: Six people moved to other teams, and two of them became tech leads — тимлидами стали двое.
+  - type: listening
+    id: interview
+    title: Why Kestrel Labs?
+    plays: 2
+    transcript:
+      - { speaker: Mark, text: "Samir, thanks for coming. Why do you want to join Kestrel Labs?" }
+      - { speaker: Samir, text: "Your mission is what drew me to you. I worked in a hospital IT department for two years, and I saw how much time good software can save. I'd like to work on something with real impact." }
+      - { speaker: Mark, text: "Where do you see yourself in five years?" }
+      - { speaker: Samir, text: "In five years, I see myself as a tech lead. Next year, I'm going to focus on system design, and I'm starting a part-time master's degree in January. I might also try data engineering, but I haven't decided yet." }
+      - { speaker: Mark, text: "How do you work in a team that moves fast?" }
+      - { speaker: Samir, text: "I thrive in a fast-paced environment, but I always write down my decisions. If a change is risky, I'll ask for a review before I deploy it." }
+      - { speaker: Mark, text: "Is there anything you want to ask us?" }
+      - { speaker: Samir, text: "Yes. What are you going to build in the next year, and how will the team grow?" }
+      - { speaker: Mark, text: "We are starting the patient reminders project next month, and we will hire three engineers. You will meet the team on Friday." }
+      - { speaker: Samir, text: "Thank you. I'm looking forward to it." }
+  - type: exercise
+    id: interview-q
+    about: interview
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What drew Samir to Kestrel Labs?
+        options: [the mission, the salary, the technology]
+        answer: the mission
+      - id: q2
+        prompt: What did Samir see in his previous job?
+        options:
+          - how much time good software can save
+          - how slow hospitals are
+          - how complicated the law is
+        answer: how much time good software can save
+      - id: q3
+        prompt: When is Samir starting a part-time master's degree?
+        options: [in January, in September, next autumn]
+        answer: in January
+      - id: q4
+        prompt: What might Samir also try?
+        options: [data engineering, management, design]
+        answer: data engineering
+        explanation: I might also try data engineering, but I haven't decided yet — решение не принято.
+      - id: q5
+        prompt: What does Samir do in a fast-paced team?
+        options:
+          - He writes down his decisions.
+          - He works late.
+          - He avoids changes.
+        answer: He writes down his decisions.
+      - id: q6
+        prompt: What is the team starting next month?
+        options:
+          - the patient reminders project
+          - a second office
+          - a hiring programme
+        answer: the patient reminders project
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Формы будущего
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I've already booked the flight, so I ___ to Berlin on Friday. (договорённость)"
+        options: [am flying, might to fly, will flying]
+        answer: am flying
+        explanation: План с датой и билетом — present continuous.
+      - id: q2
+        prompt: "I haven't decided yet, so I ___ accept the offer. (возможно)"
+        options: [might, am going to, will to]
+        answer: might
+        explanation: Решение не принято, поэтому might.
+      - id: q3
+        prompt: "If she ___ the interview, she will start in May."
+        options: [passes, will pass, would pass]
+        answer: passes
+        explanation: После if будущее выражается present simple.
+      - id: q4
+        prompt: "Look at the dashboard: the disk ___ full soon. (по признакам)"
+        options: [is going to be, might to be, will to be]
+        answer: is going to be
+        explanation: Прогноз по видимым признакам — going to.
+      - id: q5
+        prompt: "I ___ send you the report today, I promise."
+        options: [will, am going, might to]
+        answer: will
+        explanation: Обещание — will.
+      - id: q6
+        prompt: "What ___ you doing in September?"
+        options: [are, do, will]
+        answer: are
+        explanation: Present continuous строится как be и форма с -ing.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - autonomy
+      - transparent
+      - upskill
+      - bureaucratic
+      - ambitious
+      - a growth path
+      - a mission
+      - fast-paced
+    items:
+      - id: g1
+        prompt: The team has a lot of ___ and decides how to do its work. (самостоятельность)
+        answer: autonomy
+      - id: g2
+        prompt: The company shares its salaries and plans openly, so it is ___. (открытая)
+        answer: transparent
+      - id: g3
+        prompt: Every week we learn new tools, so people can ___ during working hours. (повышать квалификацию)
+        answer: upskill
+      - id: g4
+        prompt: Many forms and approvals make the company ___. (бюрократичная)
+        answer: bureaucratic
+      - id: g5
+        prompt: She is ___ and wants to run the department one day. (амбициозная)
+        answer: ambitious
+      - id: g6
+        prompt: Every engineer agrees on ___ with the manager. (траектория роста)
+        answer: a growth path
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Через пять лет я вижу себя руководителем команды.
+        answer:
+          - "In five years, I see myself as a team lead"
+          - "In five years, I see myself as a team leader"
+          - "In five years, I see myself as a team manager"
+          - "In five years, I see myself as the head of a team"
+          - "In five years, I see myself as a head of a team"
+          - "In five years I see myself as a team lead"
+          - "In five years I see myself as a team leader"
+          - "In five years I see myself as a team manager"
+          - "In five years I see myself as the head of a team"
+          - "In five years I see myself as a head of a team"
+          - "In five years' time, I see myself as a team lead"
+          - "In five years' time, I see myself as a team leader"
+          - "In five years' time, I see myself as a team manager"
+          - "In five years' time, I see myself as the head of a team"
+          - "In five years' time, I see myself as a head of a team"
+          - "In five years' time I see myself as a team lead"
+          - "In five years' time I see myself as a team leader"
+          - "In five years' time I see myself as a team manager"
+          - "In five years' time I see myself as the head of a team"
+          - "In five years' time I see myself as a head of a team"
+          - "Five years from now, I see myself as a team lead"
+          - "Five years from now, I see myself as a team leader"
+          - "Five years from now, I see myself as a team manager"
+          - "Five years from now, I see myself as the head of a team"
+          - "Five years from now, I see myself as a head of a team"
+          - "Five years from now I see myself as a team lead"
+          - "Five years from now I see myself as a team leader"
+          - "Five years from now I see myself as a team manager"
+          - "Five years from now I see myself as the head of a team"
+          - "Five years from now I see myself as a head of a team"
+          - "I see myself as a team lead in five years"
+          - "I see myself as a team leader in five years"
+          - "I see myself as a team manager in five years"
+          - "I see myself as the head of a team in five years"
+          - "I see myself as a head of a team in five years"
+          - "I see myself as a team lead in five years' time"
+          - "I see myself as a team leader in five years' time"
+          - "I see myself as a team manager in five years' time"
+          - "I see myself as the head of a team in five years' time"
+          - "I see myself as a head of a team in five years' time"
+          - "I see myself leading a team in five years"
+          - "In five years, I see myself leading a team"
+          - "In five years I see myself leading a team"
+        explanation: Фраза I see myself as и срок in five years.
+      - id: q2
+        prompt: Если я получу предложение, я сообщу вам.
+        answer:
+          - "If I get the offer, I will let you know"
+          - "If I get the offer, I will tell you"
+          - "If I get the offer, I will inform you"
+          - "If I get the offer I will let you know"
+          - "If I get the offer I will tell you"
+          - "If I get the offer I will inform you"
+          - "If I get an offer, I will let you know"
+          - "If I get an offer, I will tell you"
+          - "If I get an offer, I will inform you"
+          - "If I get an offer I will let you know"
+          - "If I get an offer I will tell you"
+          - "If I get an offer I will inform you"
+          - "If I receive the offer, I will let you know"
+          - "If I receive the offer, I will tell you"
+          - "If I receive the offer, I will inform you"
+          - "If I receive the offer I will let you know"
+          - "If I receive the offer I will tell you"
+          - "If I receive the offer I will inform you"
+          - "If I receive an offer, I will let you know"
+          - "If I receive an offer, I will tell you"
+          - "If I receive an offer, I will inform you"
+          - "If I receive an offer I will let you know"
+          - "If I receive an offer I will tell you"
+          - "If I receive an offer I will inform you"
+          - "I will let you know if I get the offer"
+          - "I will let you know if I get an offer"
+          - "I will let you know if I receive the offer"
+          - "I will let you know if I receive an offer"
+          - "I will tell you if I get the offer"
+          - "I will tell you if I get an offer"
+          - "I will tell you if I receive the offer"
+          - "I will tell you if I receive an offer"
+          - "I will inform you if I get the offer"
+          - "I will inform you if I get an offer"
+          - "I will inform you if I receive the offer"
+          - "I will inform you if I receive an offer"
+        explanation: После if стоит present simple, will остаётся в главной части.
+      - id: q3
+        prompt: Возможно, я начну новую работу в сентябре.
+        answer:
+          - "I might start a new job in September"
+          - "I might start a new role in September"
+          - "I might start a new position in September"
+          - "I might start my new job in September"
+          - "I might start my new role in September"
+          - "I might start my new position in September"
+          - "I may start a new job in September"
+          - "I may start a new role in September"
+          - "I may start a new position in September"
+          - "I may start my new job in September"
+          - "I may start my new role in September"
+          - "I may start my new position in September"
+          - "In September, I might start a new job"
+          - "In September, I might start a new role"
+          - "In September, I might start a new position"
+          - "In September, I might start my new job"
+          - "In September, I might start my new role"
+          - "In September, I might start my new position"
+          - "In September, I may start a new job"
+          - "In September, I may start a new role"
+          - "In September, I may start a new position"
+          - "In September, I may start my new job"
+          - "In September, I may start my new role"
+          - "In September, I may start my new position"
+          - "In September I might start a new job"
+          - "In September I might start a new role"
+          - "In September I might start a new position"
+          - "In September I might start my new job"
+          - "In September I might start my new role"
+          - "In September I might start my new position"
+          - "In September I may start a new job"
+          - "In September I may start a new role"
+          - "In September I may start a new position"
+          - "In September I may start my new job"
+          - "In September I may start my new role"
+          - "In September I may start my new position"
+          - "Maybe, I will start a new job in September"
+          - "Maybe, I will start a new role in September"
+          - "Maybe, I will start a new position in September"
+          - "Maybe, I will start my new job in September"
+          - "Maybe, I will start my new role in September"
+          - "Maybe, I will start my new position in September"
+          - "Maybe I will start a new job in September"
+          - "Maybe I will start a new role in September"
+          - "Maybe I will start a new position in September"
+          - "Maybe I will start my new job in September"
+          - "Maybe I will start my new role in September"
+          - "Maybe I will start my new position in September"
+          - "Perhaps, I will start a new job in September"
+          - "Perhaps, I will start a new role in September"
+          - "Perhaps, I will start a new position in September"
+          - "Perhaps, I will start my new job in September"
+          - "Perhaps, I will start my new role in September"
+          - "Perhaps, I will start my new position in September"
+          - "Perhaps I will start a new job in September"
+          - "Perhaps I will start a new role in September"
+          - "Perhaps I will start a new position in September"
+          - "Perhaps I will start my new job in September"
+          - "Perhaps I will start my new role in September"
+          - "Perhaps I will start my new position in September"
+        explanation: Возможность выражается словами might или may, после них идёт начальная форма без to.

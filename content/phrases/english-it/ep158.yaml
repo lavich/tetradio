@@ -1,0 +1,7 @@
+id: ep158
+text: "I'm not sure yet, but I might move into data engineering."
+translation: "Пока не уверен, но, возможно, перейду в дата-инжиниринг."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e07
+  operation: requested-generation
+  request: Фразы модуля e07 по программе docs/curriculum-english-it.md

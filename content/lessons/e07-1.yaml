@@ -1,0 +1,533 @@
+title: will, going to, present continuous о будущем, might — планы и мотивация
+kind: lesson
+items:
+  - { kind: word, id: ew211 }
+  - { kind: word, id: ew212 }
+  - { kind: word, id: ew213 }
+  - { kind: word, id: ew214 }
+  - { kind: word, id: ew215 }
+  - { kind: word, id: ew216 }
+  - { kind: word, id: ew217 }
+  - { kind: word, id: ew218 }
+  - { kind: word, id: ew219 }
+  - { kind: word, id: ew220 }
+  - { kind: word, id: ew221 }
+  - { kind: word, id: ew222 }
+  - { kind: word, id: ew223 }
+  - { kind: word, id: ew224 }
+  - { kind: word, id: ew225 }
+  - { kind: word, id: ew226 }
+  - { kind: word, id: ew227 }
+  - { kind: word, id: ew228 }
+  - { kind: phrase, id: ep151 }
+  - { kind: phrase, id: ep152 }
+  - { kind: phrase, id: ep153 }
+  - { kind: phrase, id: ep154 }
+  - { kind: phrase, id: ep155 }
+  - { kind: phrase, id: ep156 }
+  - { kind: phrase, id: ep157 }
+  - { kind: phrase, id: ep158 }
+blocks:
+  - type: explanation
+    id: future-forms
+    title: Четыре способа говорить о будущем
+    body: |-
+      На вопросы о планах отвечают разными формами, и каждая показывает, насколько вы уверены и как давно решили.
+
+      **Present continuous** — договорённость, у которой есть время: **I'm starting a part-time master's degree in September. I'm taking a course on distributed systems this autumn.** Контракт подписан или место записано, и слушатель понимает, что план уже запущен.
+
+      **Going to** — намерение или план, решение уже принято: **I'm going to focus on system design next year. I'm planning to move into a lead role.** Форма подходит и для прогноза по видимым признакам: *The queue is full, so the service is going to crash.*
+
+      **Will** — решение в момент разговора, обещание и мнение о будущем: **I'll send you my CV today. I think the company will grow quickly.** Для плана, который вы обдумывали заранее, will звучит как решение «на ходу».
+
+      **Might** — возможность, решение пока не принято: **I might consider a management track later. I'm not sure yet, but I might move into data engineering.** После **might** стоит начальная форма глагола без **to**. Форма **might not** выражает возможность отрицательного исхода: **I might not stay.**
+    table:
+      columns:
+        - форма
+        - когда
+        - пример
+      rows:
+        - - present continuous
+          - договорённость со временем
+          - I'm starting a new job in September.
+        - - going to
+          - решённое намерение, прогноз по признакам
+          - I'm going to focus on system design.
+        - - will
+          - решение сейчас, обещание, мнение
+          - I'll send you the CV today.
+        - - might
+          - возможность
+          - I might move into data engineering.
+        - - вопрос о плане
+          - Are you going to…? / What are you doing…?
+          - Are you going to accept the offer?
+  - type: explanation
+    id: future-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **Will после if и when.** По-русски в придаточной части стоит будущее («если я получу»), а в английском после **if** и **when** глагол стоит в настоящем времени: **If I get the offer, I will tell you on Monday. When she joins the team, she will meet everyone.** Фраза *If I will get the offer* ошибочна: после **if** и **when** будущее выражается формой present simple, а **will** остаётся в главной части.
+
+      **To после might и will.** Модальные глаголы не берут **to**: **I might move**, **I will join**. Формы *I might to move* и *I will to join* ошибочны. Форма **going to** сохраняет **to**: **I am going to move**.
+
+      **Пропуск связки.** Для present continuous и **going to** нужна форма **be**: **I am starting, you are going to join**. Фразы *I going to start* и *I starting in May* пропускают **am**.
+
+      **Отрицание.** Отрицание строится с **not**: **I am not going to leave, We will not release on Friday**. Фраза *I don't going to leave* смешивает вспомогательные глаголы.
+
+      В формальном письме сокращения (*I'm, I'll*) не используются: пишите **I am, I will**.
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - If I will get the offer, …
+          - If I get the offer, …
+          - после if и when — present simple
+        - - I might to move.
+          - I might move.
+          - после might нет to
+        - - I going to apply.
+          - I am going to apply.
+          - нужна форма be
+        - - I don't going to leave.
+          - I am not going to leave.
+          - отрицание — be + not
+  - type: explanation
+    id: career-words
+    title: Слова о росте и мотивации
+    body: |-
+      Слова урока образуют три группы.
+
+      **Компания и цель.** **A mission** — зачем существует компания, **a sense of purpose** — ощущение, что работа нужна, **cutting-edge** — передовой, **long-term** — рассчитанный на годы, **staff turnover** — доля сотрудников, которые уходят за период, **fast-paced** — динамичный, **demanding** — требующий много сил.
+
+      **Рост.** **A growth path** — последовательность ролей и навыков внутри компании, **seniority** — уровень в иерархии, **internal mobility** — переход в другую команду той же компании, **a performance review** — регулярная оценка работы, **upskill** — учиться новому, чтобы справляться с более сложной работой, **a stretch goal** — цель, которую трудно достичь, но можно.
+
+      **Вы сами.** **Ambitious** — с высокими целями, **thrive** — хорошо чувствовать себя в какой-то среде, **autonomy** — право самому решать, как работать, **outgrow** — перерасти роль, **a career move** — решение сменить роль или работу.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: future-choice
+    title: Какая форма подходит
+    instruction: Выберите форму. Пояснение в скобках показывает смысл.
+    format: choice
+    items:
+      - id: q1
+        prompt: "I haven't decided yet, but I ___ apply to the start-up. (возможно)"
+        options: [might, am going to, am applying]
+        answer: might
+        explanation: Решение не принято, поэтому нужна возможность — might.
+      - id: q2
+        prompt: "I have already decided: I ___ focus on system design next year. (решённое намерение)"
+        options: [am going to, might, won't]
+        answer: am going to
+        explanation: Решение принято заранее, поэтому going to.
+      - id: q3
+        prompt: "I signed the contract yesterday, so I ___ my new job on Monday. (договорённость со временем)"
+        options: [am starting, might start, will to start]
+        answer: am starting
+        explanation: План с датой и подписанным контрактом — present continuous.
+      - id: q4
+        prompt: "Sure, send me the draft. I ___ review it tonight. (обещание)"
+        options: [will, might, am going]
+        answer: will
+        explanation: Обещание в момент разговора — will.
+      - id: q5
+        prompt: "I'm sorry, I ___ be able to join the call tomorrow. (точно не смогу)"
+        options: [won't, might to, am not going]
+        answer: won't
+        explanation: Won't — отрицание от will; после might нет to, а после am not going нужна форма to.
+      - id: q6
+        prompt: "I think this company ___ grow quickly. (мнение о будущем)"
+        options: [will, goes to, is go to]
+        answer: will
+        explanation: Мнение о будущем после I think выражается формой will.
+  - type: exercise
+    id: future-forms-check
+    title: Формы, вопросы, отрицания
+    instruction: Выберите вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: Какое предложение верно?
+        options:
+          - I'm going to start a new job in May.
+          - I'm going start a new job in May.
+          - I going to start a new job in May.
+        answer: I'm going to start a new job in May.
+        explanation: После going нужно to, перед going — форма be.
+      - id: q2
+        prompt: "I might ___ to a new team next year."
+        options: [move, to move, moving]
+        answer: move
+        explanation: После might стоит начальная форма глагола без to.
+      - id: q3
+        prompt: "If I ___ the offer, I will tell you on Monday."
+        options: [get, will get, would get]
+        answer: get
+        explanation: После if будущее выражается present simple.
+      - id: q4
+        prompt: "When she ___ the team, she will meet everyone."
+        options: [joins, will join, would join]
+        answer: joins
+        explanation: После when будущее выражается present simple.
+      - id: q5
+        prompt: Какой вопрос построен верно?
+        options:
+          - Are you going to accept the offer?
+          - Do you going to accept the offer?
+          - Are you go to accept the offer?
+        answer: Are you going to accept the offer?
+        explanation: В вопросе be стоит перед подлежащим, затем going to.
+      - id: q6
+        prompt: "We ___ release on Friday. (не собираемся)"
+        options: [are not going to, do not going to, will not to]
+        answer: are not going to
+        explanation: Отрицание строится как be + not + going to.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините определение с английским словом. Два английских слова лишние.
+    format: match
+    bank:
+      - a mission
+      - autonomy
+      - upskill
+      - a growth path
+      - internal mobility
+      - outgrow
+      - a stretch goal
+      - staff turnover
+      - seniority
+      - a performance review
+    items:
+      - { id: m1, prompt: "причина, по которой существует компания, и то, чего она хочет достичь", answer: a mission }
+      - { id: m2, prompt: "возможность самому решать, как выполнять свою работу", answer: autonomy }
+      - { id: m3, prompt: "учиться новому, чтобы справляться с более сложной работой", answer: upskill }
+      - { id: m4, prompt: "последовательность ролей и навыков, по которой сотрудник растёт в компании", answer: a growth path }
+      - { id: m5, prompt: "переход сотрудника в другую команду той же компании", answer: internal mobility }
+      - { id: m6, prompt: "стать слишком опытным для своей нынешней роли", answer: outgrow }
+      - { id: m7, prompt: "цель, которую трудно достичь, но можно", answer: a stretch goal }
+      - { id: m8, prompt: "доля сотрудников, которые уходят из компании за год", answer: staff turnover }
+  - type: exercise
+    id: words-gap
+    title: Среда и цели
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank:
+      - fast-paced
+      - ambitious
+      - cutting-edge
+      - long-term
+      - thrive
+      - a sense of purpose
+      - a career move
+      - a performance review
+      - seniority
+      - demanding
+    items:
+      - id: g1
+        prompt: I like a ___ environment where priorities change every week. (динамичный)
+        answer: fast-paced
+      - id: g2
+        prompt: She is very ___ and wants to lead the whole department in five years. (амбициозный)
+        answer: ambitious
+      - id: g3
+        prompt: The team works with ___ technology, such as new database engines. (передовой)
+        answer: cutting-edge
+      - id: g4
+        prompt: I want to build a ___ career in this company. (на долгие годы)
+        answer: long-term
+      - id: g5
+        prompt: Some engineers ___ under pressure, and others need a calmer pace. (чувствуют себя в своей стихии)
+        answer: thrive
+      - id: g6
+        prompt: Mentoring junior developers gives me ___ at work. (ощущение смысла)
+        answer: a sense of purpose
+      - id: g7
+        prompt: Leaving a stable job for a start-up is ___ that needs careful thought. (смена работы)
+        answer: a career move
+      - id: g8
+        prompt: Every six months we have ___ to discuss goals and feedback. (оценка работы)
+        answer: a performance review
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Через пять лет я вижу себя техлидом.
+        answer:
+          - "In five years, I see myself as a tech lead"
+          - "In five years, I see myself as a technical lead"
+          - "In five years I see myself as a tech lead"
+          - "In five years I see myself as a technical lead"
+          - "In five years' time, I see myself as a tech lead"
+          - "In five years' time, I see myself as a technical lead"
+          - "In five years' time I see myself as a tech lead"
+          - "In five years' time I see myself as a technical lead"
+          - "I see myself as a tech lead in five years"
+          - "I see myself as a technical lead in five years"
+          - "I see myself as a tech lead in five years' time"
+          - "I see myself as a technical lead in five years' time"
+          - "Five years from now, I see myself as a tech lead"
+          - "Five years from now, I see myself as a technical lead"
+          - "Five years from now I see myself as a tech lead"
+          - "Five years from now I see myself as a technical lead"
+        explanation: Фраза I see myself as и срок in five years.
+      - id: q2
+        prompt: В сентябре я начинаю новую работу.
+        answer:
+          - "In September, I start a new job"
+          - "In September, I start a new role"
+          - "In September, I start a new position"
+          - "In September, I start my new job"
+          - "In September, I start my new role"
+          - "In September, I start my new position"
+          - "In September, I begin a new job"
+          - "In September, I begin a new role"
+          - "In September, I begin a new position"
+          - "In September, I begin my new job"
+          - "In September, I begin my new role"
+          - "In September, I begin my new position"
+          - "In September, I am starting a new job"
+          - "In September, I am starting a new role"
+          - "In September, I am starting a new position"
+          - "In September, I am starting my new job"
+          - "In September, I am starting my new role"
+          - "In September, I am starting my new position"
+          - "In September, I am beginning a new job"
+          - "In September, I am beginning a new role"
+          - "In September, I am beginning a new position"
+          - "In September, I am beginning my new job"
+          - "In September, I am beginning my new role"
+          - "In September, I am beginning my new position"
+          - "In September, I am going to start a new job"
+          - "In September, I am going to start a new role"
+          - "In September, I am going to start a new position"
+          - "In September, I am going to start my new job"
+          - "In September, I am going to start my new role"
+          - "In September, I am going to start my new position"
+          - "In September, I will start a new job"
+          - "In September, I will start a new role"
+          - "In September, I will start a new position"
+          - "In September, I will start my new job"
+          - "In September, I will start my new role"
+          - "In September, I will start my new position"
+          - "In September, I will be starting a new job"
+          - "In September, I will be starting a new role"
+          - "In September, I will be starting a new position"
+          - "In September, I will be starting my new job"
+          - "In September, I will be starting my new role"
+          - "In September, I will be starting my new position"
+          - "In September I start a new job"
+          - "In September I start a new role"
+          - "In September I start a new position"
+          - "In September I start my new job"
+          - "In September I start my new role"
+          - "In September I start my new position"
+          - "In September I begin a new job"
+          - "In September I begin a new role"
+          - "In September I begin a new position"
+          - "In September I begin my new job"
+          - "In September I begin my new role"
+          - "In September I begin my new position"
+          - "In September I am starting a new job"
+          - "In September I am starting a new role"
+          - "In September I am starting a new position"
+          - "In September I am starting my new job"
+          - "In September I am starting my new role"
+          - "In September I am starting my new position"
+          - "In September I am beginning a new job"
+          - "In September I am beginning a new role"
+          - "In September I am beginning a new position"
+          - "In September I am beginning my new job"
+          - "In September I am beginning my new role"
+          - "In September I am beginning my new position"
+          - "In September I am going to start a new job"
+          - "In September I am going to start a new role"
+          - "In September I am going to start a new position"
+          - "In September I am going to start my new job"
+          - "In September I am going to start my new role"
+          - "In September I am going to start my new position"
+          - "In September I will start a new job"
+          - "In September I will start a new role"
+          - "In September I will start a new position"
+          - "In September I will start my new job"
+          - "In September I will start my new role"
+          - "In September I will start my new position"
+          - "In September I will be starting a new job"
+          - "In September I will be starting a new role"
+          - "In September I will be starting a new position"
+          - "In September I will be starting my new job"
+          - "In September I will be starting my new role"
+          - "In September I will be starting my new position"
+          - "I start a new job in September"
+          - "I start a new role in September"
+          - "I start a new position in September"
+          - "I start my new job in September"
+          - "I start my new role in September"
+          - "I start my new position in September"
+          - "I begin a new job in September"
+          - "I begin a new role in September"
+          - "I begin a new position in September"
+          - "I begin my new job in September"
+          - "I begin my new role in September"
+          - "I begin my new position in September"
+          - "I am starting a new job in September"
+          - "I am starting a new role in September"
+          - "I am starting a new position in September"
+          - "I am starting my new job in September"
+          - "I am starting my new role in September"
+          - "I am starting my new position in September"
+          - "I am beginning a new job in September"
+          - "I am beginning a new role in September"
+          - "I am beginning a new position in September"
+          - "I am beginning my new job in September"
+          - "I am beginning my new role in September"
+          - "I am beginning my new position in September"
+          - "I am going to start a new job in September"
+          - "I am going to start a new role in September"
+          - "I am going to start a new position in September"
+          - "I am going to start my new job in September"
+          - "I am going to start my new role in September"
+          - "I am going to start my new position in September"
+          - "I will start a new job in September"
+          - "I will start a new role in September"
+          - "I will start a new position in September"
+          - "I will start my new job in September"
+          - "I will start my new role in September"
+          - "I will start my new position in September"
+          - "I will be starting a new job in September"
+          - "I will be starting a new role in September"
+          - "I will be starting a new position in September"
+          - "I will be starting my new job in September"
+          - "I will be starting my new role in September"
+          - "I will be starting my new position in September"
+        explanation: Договорённость со временем — present continuous; в речи встречаются также going to, will и present simple.
+      - id: q3
+        prompt: Возможно, я перейду в дата-инжиниринг.
+        answer:
+          - "I might move into data engineering"
+          - "I might move to data engineering"
+          - "I might switch into data engineering"
+          - "I might switch to data engineering"
+          - "I may move into data engineering"
+          - "I may move to data engineering"
+          - "I may switch into data engineering"
+          - "I may switch to data engineering"
+          - "Maybe I will move into data engineering"
+          - "Maybe I will move to data engineering"
+          - "Maybe I will switch into data engineering"
+          - "Maybe I will switch to data engineering"
+          - "Perhaps I will move into data engineering"
+          - "Perhaps I will move to data engineering"
+          - "Perhaps I will switch into data engineering"
+          - "Perhaps I will switch to data engineering"
+          - "Maybe, I might move into data engineering"
+          - "Maybe, I might move to data engineering"
+          - "Maybe, I might switch into data engineering"
+          - "Maybe, I might switch to data engineering"
+          - "Maybe, I may move into data engineering"
+          - "Maybe, I may move to data engineering"
+          - "Maybe, I may switch into data engineering"
+          - "Maybe, I may switch to data engineering"
+          - "Maybe I might move into data engineering"
+          - "Maybe I might move to data engineering"
+          - "Maybe I might switch into data engineering"
+          - "Maybe I might switch to data engineering"
+          - "Maybe I may move into data engineering"
+          - "Maybe I may move to data engineering"
+          - "Maybe I may switch into data engineering"
+          - "Maybe I may switch to data engineering"
+          - "Perhaps, I might move into data engineering"
+          - "Perhaps, I might move to data engineering"
+          - "Perhaps, I might switch into data engineering"
+          - "Perhaps, I might switch to data engineering"
+          - "Perhaps, I may move into data engineering"
+          - "Perhaps, I may move to data engineering"
+          - "Perhaps, I may switch into data engineering"
+          - "Perhaps, I may switch to data engineering"
+          - "Perhaps I might move into data engineering"
+          - "Perhaps I might move to data engineering"
+          - "Perhaps I might switch into data engineering"
+          - "Perhaps I might switch to data engineering"
+          - "Perhaps I may move into data engineering"
+          - "Perhaps I may move to data engineering"
+          - "Perhaps I may switch into data engineering"
+          - "Perhaps I may switch to data engineering"
+        explanation: Возможность выражается словами might или may (после них начальная форма без to) либо Maybe или Perhaps с will.
+      - id: q4
+        prompt: Если я получу предложение, я сообщу вам в понедельник.
+        answer:
+          - "If I get the offer, I will let you know on Monday"
+          - "If I get the offer, I will tell you on Monday"
+          - "If I get the offer, I will inform you on Monday"
+          - "If I get the offer I will let you know on Monday"
+          - "If I get the offer I will tell you on Monday"
+          - "If I get the offer I will inform you on Monday"
+          - "If I get an offer, I will let you know on Monday"
+          - "If I get an offer, I will tell you on Monday"
+          - "If I get an offer, I will inform you on Monday"
+          - "If I get an offer I will let you know on Monday"
+          - "If I get an offer I will tell you on Monday"
+          - "If I get an offer I will inform you on Monday"
+          - "If I receive the offer, I will let you know on Monday"
+          - "If I receive the offer, I will tell you on Monday"
+          - "If I receive the offer, I will inform you on Monday"
+          - "If I receive the offer I will let you know on Monday"
+          - "If I receive the offer I will tell you on Monday"
+          - "If I receive the offer I will inform you on Monday"
+          - "If I receive an offer, I will let you know on Monday"
+          - "If I receive an offer, I will tell you on Monday"
+          - "If I receive an offer, I will inform you on Monday"
+          - "If I receive an offer I will let you know on Monday"
+          - "If I receive an offer I will tell you on Monday"
+          - "If I receive an offer I will inform you on Monday"
+          - "I will let you know on Monday if I get the offer"
+          - "I will let you know on Monday if I get an offer"
+          - "I will let you know on Monday if I receive the offer"
+          - "I will let you know on Monday if I receive an offer"
+          - "I will tell you on Monday if I get the offer"
+          - "I will tell you on Monday if I get an offer"
+          - "I will tell you on Monday if I receive the offer"
+          - "I will tell you on Monday if I receive an offer"
+          - "I will inform you on Monday if I get the offer"
+          - "I will inform you on Monday if I get an offer"
+          - "I will inform you on Monday if I receive the offer"
+          - "I will inform you on Monday if I receive an offer"
+        explanation: После if стоит present simple, will остаётся в главной части.
+      - id: q5
+        prompt: Мы не собираемся выпускать релиз в пятницу.
+        answer:
+          - "We are not going to release it on Friday"
+          - "We are not going to release on Friday"
+          - "We are not going to ship it on Friday"
+          - "We are not going to ship on Friday"
+          - "We are not going to deploy it on Friday"
+          - "We are not going to deploy on Friday"
+          - "We are not planning to release it on Friday"
+          - "We are not planning to release on Friday"
+          - "We are not planning to ship it on Friday"
+          - "We are not planning to ship on Friday"
+          - "We are not planning to deploy it on Friday"
+          - "We are not planning to deploy on Friday"
+          - "We are not going to do a release on Friday"
+          - "We are not going to push a release on Friday"
+          - "We are not planning to do a release on Friday"
+          - "We are not planning to push a release on Friday"
+          - "We will not release it on Friday"
+          - "We will not release on Friday"
+          - "We will not ship it on Friday"
+          - "We will not ship on Friday"
+          - "We will not deploy it on Friday"
+          - "We will not deploy on Friday"
+          - "We do not plan to release it on Friday"
+          - "We do not plan to release on Friday"
+          - "We do not plan to ship it on Friday"
+          - "We do not plan to ship on Friday"
+          - "We do not plan to deploy it on Friday"
+          - "We do not plan to deploy on Friday"
+        explanation: Отрицание строится как be + not + going to; will not и do not plan to тоже подходят.
