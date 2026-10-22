@@ -302,3 +302,49 @@ describe("«Ещё N курсов →»", () => {
     expect(link.getAttribute("aria-label")).toBe(name);
   });
 });
+
+describe("конец курса", () => {
+  const finish = (id: string) =>
+    db.lessons.add({
+      id: `${id}-2`,
+      courseId: id,
+      title: lessonTitle(id, 2),
+      completed: true,
+      updatedAt: NOW.toISOString(),
+    });
+  const text = () => host.querySelector('[data-testid="course-finished"]')?.textContent;
+  const settled = () => until(() => !!host.querySelector('[data-testid="today-title"]'), "заголовок");
+  it("греческий курс — прежний текст про экзамен и M3", async () => {
+    await start([["greek"]]);
+    await finish("greek");
+    mount();
+    await until(() => !!text(), "текст конца курса");
+    expect(text()).toBe(PROFILES.el.finished);
+    expect(text()).toContain("M3");
+    expect(host.querySelector('[data-testid="course-next"]')).toBeNull();
+  });
+  it("английский курс — текст без экзамена, срока и M3", async () => {
+    await start([["it"]]);
+    await finish("it");
+    mount();
+    await until(() => !!text(), "текст конца курса");
+    expect(text()).toBe(PROFILES.en.finished);
+    expect(text()).not.toMatch(/экзамен|M3|пробник/);
+    expect(host.querySelector('[data-testid="course-next"]')).toBeNull();
+  });
+  it("следующий урок есть — текста конца курса нет", async () => {
+    await start([["it"]]);
+    mount();
+    await loaded();
+    expect(text()).toBeUndefined();
+  });
+  it("курс на паузе — текста конца курса нет", async () => {
+    await start([["it"], ["travel"]]);
+    await finish("it");
+    await pauseCourse("it", new Date(), db);
+    mount();
+    await settled();
+    await loaded();
+    expect(text()).toBeUndefined();
+  });
+});

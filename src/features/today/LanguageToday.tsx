@@ -129,7 +129,7 @@ export function LanguageToday({
       <DayNotes plan={plan} />
       {finished ? (
         <p className={css.finished} data-testid="course-finished">
-          Все модули и пробники пройдены. До экзамена — повторение карточек и слабый навык по итогам M3.
+          {profile.finished}
         </p>
       ) : next ? (
         <LessonNext
