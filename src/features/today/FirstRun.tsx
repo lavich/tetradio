@@ -8,6 +8,7 @@ import { coursePhase, installCourse, subscribeInstall } from "../../content/clie
 import { holdUpdate } from "../../app/auto-update";
 import { useCatalog, useCoursePhase, useCourses } from "../../shared/store";
 import type { StoredCatalogEntry } from "../../storage/db";
+import { ShareCourseButton } from "../../shared/ShareCourseButton";
 import ui from "../../shared/ui.module.css";
 import { courseOffers, groupByLanguage, type CourseOfferView } from "./course-offers";
 
@@ -193,6 +194,9 @@ function CourseOffer({
           ) : hint ? (
             <p className={ui.hint}>{OFFLINE_HINT}</p>
           ) : null}
+          <div className="flex justify-center">
+            <ShareCourseButton course={course} />
+          </div>
         </>
       )}
     </article>

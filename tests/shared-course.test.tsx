@@ -174,7 +174,7 @@ describe("кнопка «Поделиться курсом» на полке", (
       (b) => b.textContent?.trim() === "Поделиться курсом",
     );
 
-  it("есть у начатого и приостановленного курса, нет у карточки неначатого", async () => {
+  it("есть у полки начатого и приостановленного курса, по одной", async () => {
     await seedCatalog(db, ["greek", "it", "travel"]);
     await install(db, "it");
     await install(db, "travel");
@@ -193,14 +193,14 @@ describe("кнопка «Поделиться курсом» на полке", (
     expect(shelves()).toHaveLength(1);
   });
 
-  it("нет у карточки неначатого курса", async () => {
+  it("у карточки неначатого курса одна, со своим названием", async () => {
     await seedCatalog(db, ["greek", "it", "travel"]);
     await install(db, "greek");
     await db.meta.put({ key: "currentLanguage", value: "en" });
     setCatalogPhase("ready");
     open("/course");
     await vi.waitFor(() => expect(offers()).toHaveLength(1));
-    expect(buttons()).toHaveLength(0);
+    expect(buttons().map((b) => b.getAttribute("aria-label"))).toEqual(["Поделиться курсом «Английский для IT»"]);
   });
 
   it("в браузере без системного меню копирует ссылку на курс", async () => {

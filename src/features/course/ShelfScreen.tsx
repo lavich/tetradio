@@ -1,10 +1,9 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useId, useRef, useState } from "react";
-import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Screen } from "../../app/Screen";
-import { shareCourse } from "../../platform/share";
+import { ShareCourseButton } from "../../shared/ShareCourseButton";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { chooseShelfCourse, languages, shelfCourse, shelfLanguage, type CourseEntry } from "../../storage/courses";
 import { db } from "../../storage/db";
@@ -164,14 +163,7 @@ function CourseShelf({
           </Button>
         </div>
       )}
-      <button
-        type="button"
-        className={css.share}
-        aria-label={`Поделиться курсом «${title}»`}
-        onClick={() => void shareCourse(course)}
-      >
-        <Share2 aria-hidden size={16} /> Поделиться курсом
-      </button>
+      <ShareCourseButton course={course} />
       <div className={css.shelf}>
         {views.map((view) => {
           const { module } = view;
