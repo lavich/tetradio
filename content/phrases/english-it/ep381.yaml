@@ -1,6 +1,6 @@
 id: ep381
 text: "I've been learning Rust in my spare time."
-translation: "В свободное время я учу Rust."
+translation: "В свободное время я уже какое-то время учу Rust."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
   operation: requested-generation

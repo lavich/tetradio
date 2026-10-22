@@ -204,14 +204,6 @@ blocks:
           - It was great speaking to you
           - It was great talking with you
           - It was great talking to you
-          - It was lovely speaking with you
-          - It was lovely speaking to you
-          - It was lovely talking with you
-          - It was lovely talking to you
-          - It was good speaking with you
-          - It was good speaking to you
-          - It was good talking with you
-          - It was good talking to you
           - It has been a pleasure speaking with you
           - It has been a pleasure speaking to you
           - It has been a pleasure talking with you
@@ -224,14 +216,6 @@ blocks:
           - It has been great speaking to you
           - It has been great talking with you
           - It has been great talking to you
-          - It has been lovely speaking with you
-          - It has been lovely speaking to you
-          - It has been lovely talking with you
-          - It has been lovely talking to you
-          - It has been good speaking with you
-          - It has been good speaking to you
-          - It has been good talking with you
-          - It has been good talking to you
           - It was a pleasure to speak with you
           - It was a pleasure to speak to you
           - It was a pleasure to talk with you
@@ -244,14 +228,6 @@ blocks:
           - It was great to speak to you
           - It was great to talk with you
           - It was great to talk to you
-          - It was lovely to speak with you
-          - It was lovely to speak to you
-          - It was lovely to talk with you
-          - It was lovely to talk to you
-          - It was good to speak with you
-          - It was good to speak to you
-          - It was good to talk with you
-          - It was good to talk to you
           - It has been a pleasure to speak with you
           - It has been a pleasure to speak to you
           - It has been a pleasure to talk with you
@@ -264,14 +240,18 @@ blocks:
           - It has been great to speak to you
           - It has been great to talk with you
           - It has been great to talk to you
-          - It has been lovely to speak with you
-          - It has been lovely to speak to you
-          - It has been lovely to talk with you
-          - It has been lovely to talk to you
-          - It has been good to speak with you
-          - It has been good to speak to you
-          - It has been good to talk with you
-          - It has been good to talk to you
+          - Nice speaking with you
+          - Nice speaking to you
+          - Nice talking with you
+          - Nice talking to you
+          - Nice to speak with you
+          - Nice to speak to you
+          - Nice to talk with you
+          - Nice to talk to you
+          - I really enjoyed speaking with you
+          - I really enjoyed speaking to you
+          - I really enjoyed talking with you
+          - I really enjoyed talking to you
           - I enjoyed speaking with you
           - I enjoyed speaking to you
           - I enjoyed talking with you
@@ -308,6 +288,44 @@ blocks:
           - What are the next steps and when should I expect to receive an answer
           - What are the next steps and when should I expect to get a response
           - What are the next steps and when should I expect to receive a reply
+          - What are the next steps, and when can I expect an answer
+          - What are the next steps, and when can I expect a reply
+          - What are the next steps, and when can I expect a response
+          - What are the next steps, and when can I expect your answer
+          - What are the next steps, and when can I expect your reply
+          - What are the next steps, and when can I expect your response
+          - What are the next steps, and when can I expect feedback
+          - What are the next steps, and when should I expect an answer
+          - What are the next steps, and when should I expect a reply
+          - What are the next steps, and when should I expect a response
+          - What are the next steps, and when should I expect your answer
+          - What are the next steps, and when should I expect your reply
+          - What are the next steps, and when should I expect your response
+          - What are the next steps, and when should I expect feedback
+          - What are the next steps and when can I expect an answer
+          - What are the next steps and when can I expect a reply
+          - What are the next steps and when can I expect a response
+          - What are the next steps and when can I expect your answer
+          - What are the next steps and when can I expect your reply
+          - What are the next steps and when can I expect your response
+          - What are the next steps and when can I expect feedback
+          - What are the next steps and when should I expect an answer
+          - What are the next steps and when should I expect a reply
+          - What are the next steps and when should I expect a response
+          - What are the next steps and when should I expect your answer
+          - What are the next steps and when should I expect your reply
+          - What are the next steps and when should I expect your response
+          - What are the next steps and when should I expect feedback
+          - What are the next steps, and when will I hear back
+          - What are the next steps, and when will I hear from you
+          - What are the next steps, and when will I get an answer
+          - What are the next steps, and when will I get a reply
+          - What are the next steps, and when will I get a response
+          - What are the next steps and when will I hear back
+          - What are the next steps and when will I hear from you
+          - What are the next steps and when will I get an answer
+          - What are the next steps and when will I get a reply
+          - What are the next steps and when will I get a response
         explanation: Next steps — следующие этапы; hear back — получить ответ.
       - id: q3
         prompt: Могу ли я сообщить своё решение до конца следующей недели?
@@ -328,10 +346,6 @@ blocks:
           - Could I let you know my decision before the end of next week
           - Could I let you know my answer by the end of next week
           - Could I let you know my answer before the end of next week
-          - Could I send you my decision by the end of next week
-          - Could I send you my decision before the end of next week
-          - Could I send you my answer by the end of next week
-          - Could I send you my answer before the end of next week
           - Can I confirm my decision by the end of next week
           - Can I confirm my decision before the end of next week
           - Can I confirm my answer by the end of next week
@@ -348,30 +362,6 @@ blocks:
           - Can I let you know my decision before the end of next week
           - Can I let you know my answer by the end of next week
           - Can I let you know my answer before the end of next week
-          - Can I send you my decision by the end of next week
-          - Can I send you my decision before the end of next week
-          - Can I send you my answer by the end of next week
-          - Can I send you my answer before the end of next week
-          - May I confirm my decision by the end of next week
-          - May I confirm my decision before the end of next week
-          - May I confirm my answer by the end of next week
-          - May I confirm my answer before the end of next week
-          - May I give you my decision by the end of next week
-          - May I give you my decision before the end of next week
-          - May I give you my answer by the end of next week
-          - May I give you my answer before the end of next week
-          - May I tell you my decision by the end of next week
-          - May I tell you my decision before the end of next week
-          - May I tell you my answer by the end of next week
-          - May I tell you my answer before the end of next week
-          - May I let you know my decision by the end of next week
-          - May I let you know my decision before the end of next week
-          - May I let you know my answer by the end of next week
-          - May I let you know my answer before the end of next week
-          - May I send you my decision by the end of next week
-          - May I send you my decision before the end of next week
-          - May I send you my answer by the end of next week
-          - May I send you my answer before the end of next week
           - Would it be possible to confirm my decision by the end of next week
           - Would it be possible to confirm my decision before the end of next week
           - Would it be possible to confirm my answer by the end of next week
@@ -388,102 +378,162 @@ blocks:
           - Would it be possible to let you know my decision before the end of next week
           - Would it be possible to let you know my answer by the end of next week
           - Would it be possible to let you know my answer before the end of next week
-          - Would it be possible to send you my decision by the end of next week
-          - Would it be possible to send you my decision before the end of next week
-          - Would it be possible to send you my answer by the end of next week
-          - Would it be possible to send you my answer before the end of next week
           - Could I get back to you with my decision by the end of next week
-          - Could I get back to you with my decision before the end of next week
           - Could I get back to you with my answer by the end of next week
-          - Could I get back to you with my answer before the end of next week
           - Can I get back to you with my decision by the end of next week
-          - Can I get back to you with my decision before the end of next week
           - Can I get back to you with my answer by the end of next week
-          - Can I get back to you with my answer before the end of next week
-          - May I get back to you with my decision by the end of next week
-          - May I get back to you with my decision before the end of next week
-          - May I get back to you with my answer by the end of next week
-          - May I get back to you with my answer before the end of next week
+          - Could I inform you of my decision by the end of next week
+          - Could I inform you of my answer by the end of next week
+          - Can I inform you of my decision by the end of next week
+          - Can I inform you of my answer by the end of next week
+          - Is it okay if I confirm my decision by the end of next week
+          - Is it okay if I confirm my decision before the end of next week
+          - Is it okay if I confirm my answer by the end of next week
+          - Is it okay if I confirm my answer before the end of next week
+          - Is it okay if I give you my decision by the end of next week
+          - Is it okay if I give you my decision before the end of next week
+          - Is it okay if I give you my answer by the end of next week
+          - Is it okay if I give you my answer before the end of next week
+          - Is it okay if I tell you my decision by the end of next week
+          - Is it okay if I tell you my decision before the end of next week
+          - Is it okay if I tell you my answer by the end of next week
+          - Is it okay if I tell you my answer before the end of next week
+          - Is it okay if I let you know my decision by the end of next week
+          - Is it okay if I let you know my decision before the end of next week
+          - Is it okay if I let you know my answer by the end of next week
+          - Is it okay if I let you know my answer before the end of next week
         explanation: Confirm my decision — «сообщить решение»; by the end of next week — «до конца следующей недели».
       - id: q4
-        prompt: Есть ли возможность обсудить базовую зарплату?
+        prompt: Есть ли гибкость по базовой зарплате?
         answer:
           - Would there be any flexibility on the base salary
           - Would there be any flexibility on the basic salary
+          - Would there be any flexibility on base salary
+          - Would there be any flexibility on basic salary
           - Would there be any flexibility with the base salary
           - Would there be any flexibility with the basic salary
-          - Would there be any flexibility regarding the base salary
-          - Would there be any flexibility regarding the basic salary
-          - Would there be any flexibility around the base salary
-          - Would there be any flexibility around the basic salary
+          - Would there be any flexibility with base salary
+          - Would there be any flexibility with basic salary
           - Would there be any flexibility in the base salary
           - Would there be any flexibility in the basic salary
+          - Would there be any flexibility in base salary
+          - Would there be any flexibility in basic salary
+          - Would there be any flexibility regarding the base salary
+          - Would there be any flexibility regarding the basic salary
+          - Would there be any flexibility regarding base salary
+          - Would there be any flexibility regarding basic salary
           - Would there be some flexibility on the base salary
           - Would there be some flexibility on the basic salary
+          - Would there be some flexibility on base salary
+          - Would there be some flexibility on basic salary
           - Would there be some flexibility with the base salary
           - Would there be some flexibility with the basic salary
-          - Would there be some flexibility regarding the base salary
-          - Would there be some flexibility regarding the basic salary
-          - Would there be some flexibility around the base salary
-          - Would there be some flexibility around the basic salary
+          - Would there be some flexibility with base salary
+          - Would there be some flexibility with basic salary
           - Would there be some flexibility in the base salary
           - Would there be some flexibility in the basic salary
+          - Would there be some flexibility in base salary
+          - Would there be some flexibility in basic salary
+          - Would there be some flexibility regarding the base salary
+          - Would there be some flexibility regarding the basic salary
+          - Would there be some flexibility regarding base salary
+          - Would there be some flexibility regarding basic salary
           - Is there any flexibility on the base salary
           - Is there any flexibility on the basic salary
+          - Is there any flexibility on base salary
+          - Is there any flexibility on basic salary
           - Is there any flexibility with the base salary
           - Is there any flexibility with the basic salary
-          - Is there any flexibility regarding the base salary
-          - Is there any flexibility regarding the basic salary
-          - Is there any flexibility around the base salary
-          - Is there any flexibility around the basic salary
+          - Is there any flexibility with base salary
+          - Is there any flexibility with basic salary
           - Is there any flexibility in the base salary
           - Is there any flexibility in the basic salary
+          - Is there any flexibility in base salary
+          - Is there any flexibility in basic salary
+          - Is there any flexibility regarding the base salary
+          - Is there any flexibility regarding the basic salary
+          - Is there any flexibility regarding base salary
+          - Is there any flexibility regarding basic salary
           - Is there some flexibility on the base salary
           - Is there some flexibility on the basic salary
+          - Is there some flexibility on base salary
+          - Is there some flexibility on basic salary
           - Is there some flexibility with the base salary
           - Is there some flexibility with the basic salary
-          - Is there some flexibility regarding the base salary
-          - Is there some flexibility regarding the basic salary
-          - Is there some flexibility around the base salary
-          - Is there some flexibility around the basic salary
+          - Is there some flexibility with base salary
+          - Is there some flexibility with basic salary
           - Is there some flexibility in the base salary
           - Is there some flexibility in the basic salary
+          - Is there some flexibility in base salary
+          - Is there some flexibility in basic salary
+          - Is there some flexibility regarding the base salary
+          - Is there some flexibility regarding the basic salary
+          - Is there some flexibility regarding base salary
+          - Is there some flexibility regarding basic salary
         explanation: Flexibility on — «гибкость в вопросе»; вопрос задают как просьбу, без давления.
       - id: q5
         prompt: Я рад принять предложение в таком виде.
         answer:
           - I am happy to accept the offer as it stands
           - I am happy to accept the offer as it is
+          - I am happy to accept the offer as is
           - I am happy to accept the offer in its current form
           - I am happy to accept the offer in this form
           - I am happy to accept this offer as it stands
           - I am happy to accept this offer as it is
+          - I am happy to accept this offer as is
           - I am happy to accept this offer in its current form
           - I am happy to accept this offer in this form
           - I am glad to accept the offer as it stands
           - I am glad to accept the offer as it is
+          - I am glad to accept the offer as is
           - I am glad to accept the offer in its current form
           - I am glad to accept the offer in this form
           - I am glad to accept this offer as it stands
           - I am glad to accept this offer as it is
+          - I am glad to accept this offer as is
           - I am glad to accept this offer in its current form
           - I am glad to accept this offer in this form
           - I am pleased to accept the offer as it stands
           - I am pleased to accept the offer as it is
+          - I am pleased to accept the offer as is
           - I am pleased to accept the offer in its current form
           - I am pleased to accept the offer in this form
           - I am pleased to accept this offer as it stands
           - I am pleased to accept this offer as it is
+          - I am pleased to accept this offer as is
           - I am pleased to accept this offer in its current form
           - I am pleased to accept this offer in this form
-          - I am delighted to accept the offer as it stands
-          - I am delighted to accept the offer as it is
-          - I am delighted to accept the offer in its current form
-          - I am delighted to accept the offer in this form
-          - I am delighted to accept this offer as it stands
-          - I am delighted to accept this offer as it is
-          - I am delighted to accept this offer in its current form
-          - I am delighted to accept this offer in this form
+          - I would be happy to accept the offer as it stands
+          - I would be happy to accept the offer as it is
+          - I would be happy to accept the offer as is
+          - I would be happy to accept the offer in its current form
+          - I would be happy to accept the offer in this form
+          - I would be happy to accept this offer as it stands
+          - I would be happy to accept this offer as it is
+          - I would be happy to accept this offer as is
+          - I would be happy to accept this offer in its current form
+          - I would be happy to accept this offer in this form
+          - I would be glad to accept the offer as it stands
+          - I would be glad to accept the offer as it is
+          - I would be glad to accept the offer as is
+          - I would be glad to accept the offer in its current form
+          - I would be glad to accept the offer in this form
+          - I would be glad to accept this offer as it stands
+          - I would be glad to accept this offer as it is
+          - I would be glad to accept this offer as is
+          - I would be glad to accept this offer in its current form
+          - I would be glad to accept this offer in this form
+          - I would be pleased to accept the offer as it stands
+          - I would be pleased to accept the offer as it is
+          - I would be pleased to accept the offer as is
+          - I would be pleased to accept the offer in its current form
+          - I would be pleased to accept the offer in this form
+          - I would be pleased to accept this offer as it stands
+          - I would be pleased to accept this offer as it is
+          - I would be pleased to accept this offer as is
+          - I would be pleased to accept this offer in its current form
+          - I would be pleased to accept this offer in this form
         explanation: Accept the offer as it stands — принять условия без изменений.
       - id: q6
         prompt: Тщательно обдумав, я решил отказаться.
@@ -492,66 +542,102 @@ blocks:
           - After careful consideration, I have decided to decline the offer
           - After careful consideration, I have decided to turn it down
           - After careful consideration, I have decided to turn the offer down
+          - After careful consideration, I have decided to refuse the offer
           - After careful consideration, I decided to decline
           - After careful consideration, I decided to decline the offer
           - After careful consideration, I decided to turn it down
           - After careful consideration, I decided to turn the offer down
+          - After careful consideration, I decided to refuse the offer
           - After careful consideration I have decided to decline
           - After careful consideration I have decided to decline the offer
           - After careful consideration I have decided to turn it down
           - After careful consideration I have decided to turn the offer down
+          - After careful consideration I have decided to refuse the offer
           - After careful consideration I decided to decline
           - After careful consideration I decided to decline the offer
           - After careful consideration I decided to turn it down
           - After careful consideration I decided to turn the offer down
+          - After careful consideration I decided to refuse the offer
           - After careful thought, I have decided to decline
           - After careful thought, I have decided to decline the offer
           - After careful thought, I have decided to turn it down
           - After careful thought, I have decided to turn the offer down
+          - After careful thought, I have decided to refuse the offer
           - After careful thought, I decided to decline
           - After careful thought, I decided to decline the offer
           - After careful thought, I decided to turn it down
           - After careful thought, I decided to turn the offer down
+          - After careful thought, I decided to refuse the offer
           - After careful thought I have decided to decline
           - After careful thought I have decided to decline the offer
           - After careful thought I have decided to turn it down
           - After careful thought I have decided to turn the offer down
+          - After careful thought I have decided to refuse the offer
           - After careful thought I decided to decline
           - After careful thought I decided to decline the offer
           - After careful thought I decided to turn it down
           - After careful thought I decided to turn the offer down
+          - After careful thought I decided to refuse the offer
           - After serious consideration, I have decided to decline
           - After serious consideration, I have decided to decline the offer
           - After serious consideration, I have decided to turn it down
           - After serious consideration, I have decided to turn the offer down
+          - After serious consideration, I have decided to refuse the offer
           - After serious consideration, I decided to decline
           - After serious consideration, I decided to decline the offer
           - After serious consideration, I decided to turn it down
           - After serious consideration, I decided to turn the offer down
+          - After serious consideration, I decided to refuse the offer
           - After serious consideration I have decided to decline
           - After serious consideration I have decided to decline the offer
           - After serious consideration I have decided to turn it down
           - After serious consideration I have decided to turn the offer down
+          - After serious consideration I have decided to refuse the offer
           - After serious consideration I decided to decline
           - After serious consideration I decided to decline the offer
           - After serious consideration I decided to turn it down
           - After serious consideration I decided to turn the offer down
-          - After serious thought, I have decided to decline
-          - After serious thought, I have decided to decline the offer
-          - After serious thought, I have decided to turn it down
-          - After serious thought, I have decided to turn the offer down
-          - After serious thought, I decided to decline
-          - After serious thought, I decided to decline the offer
-          - After serious thought, I decided to turn it down
-          - After serious thought, I decided to turn the offer down
-          - After serious thought I have decided to decline
-          - After serious thought I have decided to decline the offer
-          - After serious thought I have decided to turn it down
-          - After serious thought I have decided to turn the offer down
-          - After serious thought I decided to decline
-          - After serious thought I decided to decline the offer
-          - After serious thought I decided to turn it down
-          - After serious thought I decided to turn the offer down
+          - After serious consideration I decided to refuse the offer
+          - Having considered it carefully, I have decided to decline
+          - Having considered it carefully, I have decided to decline the offer
+          - Having considered it carefully, I have decided to turn it down
+          - Having considered it carefully, I have decided to turn the offer down
+          - Having considered it carefully, I decided to decline
+          - Having considered it carefully, I decided to decline the offer
+          - Having considered it carefully, I decided to turn it down
+          - Having considered it carefully, I decided to turn the offer down
+          - Having considered it carefully I have decided to decline
+          - Having considered it carefully I have decided to decline the offer
+          - Having considered it carefully I have decided to turn it down
+          - Having considered it carefully I have decided to turn the offer down
+          - Having considered it carefully I decided to decline
+          - Having considered it carefully I decided to decline the offer
+          - Having considered it carefully I decided to turn it down
+          - Having considered it carefully I decided to turn the offer down
+          - After careful consideration, I have decided not to accept the offer
+          - After careful consideration, I have decided not to accept this offer
+          - After careful consideration, I decided not to accept the offer
+          - After careful consideration, I decided not to accept this offer
+          - After careful consideration I have decided not to accept the offer
+          - After careful consideration I have decided not to accept this offer
+          - After careful consideration I decided not to accept the offer
+          - After careful consideration I decided not to accept this offer
+          - After careful thought, I have decided not to accept the offer
+          - After careful thought, I have decided not to accept this offer
+          - After careful thought, I decided not to accept the offer
+          - After careful thought, I decided not to accept this offer
+          - After careful thought I have decided not to accept the offer
+          - After careful thought I have decided not to accept this offer
+          - After careful thought I decided not to accept the offer
+          - After careful thought I decided not to accept this offer
+          - After serious consideration, I have decided not to accept the offer
+          - After serious consideration, I have decided not to accept this offer
+          - After serious consideration, I decided not to accept the offer
+          - After serious consideration, I decided not to accept this offer
+          - After serious consideration I have decided not to accept the offer
+          - After serious consideration I have decided not to accept this offer
+          - After serious consideration I decided not to accept the offer
+          - After serious consideration I decided not to accept this offer
         explanation: After careful consideration — «после тщательного обдумывания»; decline — вежливо отказаться.
   - type: writing
     id: reply
@@ -631,7 +717,7 @@ blocks:
       - speaker: Katarina
         text: Let me also mention the start date. We would like you to begin on the first of April. Does that work for you?
       - speaker: Katarina
-        text: Thank you. The offer is open until next Friday. When would you like to give us your answer?
+        text: Thank you. The offer is open until next Wednesday. When would you like to give us your answer?
       - speaker: Katarina
         text: I'll send the full details in writing today, so you can read them calmly. Is there anything else you would like to ask?
       - speaker: Katarina
@@ -650,7 +736,7 @@ blocks:
       You: Yes, thank you. Could we go through the pension scheme together? I'd like to understand how the six percent works and when it starts.
       Katarina: Let me also mention the start date. We would like you to begin on the first of April. Does that work for you?
       You: My notice period is two months, so the first of April is close. Would there be any flexibility on the start date?
-      Katarina: Thank you. The offer is open until next Friday. When would you like to give us your answer?
+      Katarina: Thank you. The offer is open until next Wednesday. When would you like to give us your answer?
       You: Could I confirm my decision by the end of next week? I'd like to read everything carefully.
       Katarina: I'll send the full details in writing today, so you can read them calmly. Is there anything else you would like to ask?
       You: Thank you. I'd be grateful for a written confirmation of the terms, including the start date. That is all for now.
