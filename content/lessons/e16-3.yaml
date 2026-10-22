@@ -1,0 +1,672 @@
+title: вопросы интервьюеру, ответ на оффер и обсуждение условий
+kind: lesson
+items:
+  - kind: phrase
+    id: ep392
+  - kind: phrase
+    id: ep393
+  - kind: phrase
+    id: ep394
+  - kind: phrase
+    id: ep395
+  - kind: phrase
+    id: ep396
+  - kind: phrase
+    id: ep397
+  - kind: phrase
+    id: ep398
+  - kind: phrase
+    id: ep399
+  - kind: phrase
+    id: ep400
+blocks:
+  - type: explanation
+    id: scheme
+    title: Вопросы интервьюеру в пяти шагах
+    body: |-
+      Вопрос **Do you have any questions for us?** задают почти на каждом собеседовании. Интервьюер смотрит, насколько вам интересна работа и умеете ли вы слушать. Ответ укладывается примерно в две минуты.
+
+      **1. Благодарность.** **Thank you. Yes, I have a few questions.**
+
+      **2. Вопрос о работе команды.** **What does a typical day look like for the team?**
+
+      **3. Вопрос об успехе и росте.** **How is success measured in this role?** **How do you support engineers' growth?**
+
+      **4. Вопрос о трудностях или процессе.** **What are the biggest challenges the team is facing?** **How often do you release to production?**
+
+      **5. Следующие шаги и завершение.** **What are the next steps, and when can I expect to hear back?** **It was a pleasure speaking with you.**
+
+      Три–четыре вопроса достаточно. Выбирайте вопросы, ответы на которые вы не нашли в описании вакансии и на сайте компании.
+    table:
+      columns:
+        - шаг
+        - примерное время
+        - язык
+      rows:
+        - - благодарность
+          - 10 секунд
+          - Thank you. Yes, I have a few questions.
+        - - работа команды
+          - 20 секунд
+          - What does a typical day look like for the team?
+        - - успех и рост
+          - 30 секунд
+          - How is success measured in this role?
+        - - трудности и процесс
+          - 30 секунд
+          - What are the biggest challenges the team is facing?
+        - - следующие шаги и завершение
+          - 20 секунд
+          - What are the next steps, and when can I expect to hear back?
+  - type: explanation
+    id: offer-reply
+    title: "Ответ на предложение: принять, попросить время или отказаться"
+    body: |-
+      После предложения есть три спокойных ответа. **Принять:** **I'm happy to accept the offer as it stands.** **Попросить время или уточнить условия:** **Could I confirm my decision by the end of next week?** **Could we go through the full package together?** **Отказаться:** **After careful consideration, I've decided to decline.** Во всех трёх случаях начинайте с благодарности: **Thank you for the offer; I'm very pleased to receive it.**
+
+      Вопрос об условиях задают как вопрос, без требований: **Would there be any flexibility on the base salary?** Фраза не обещает ничего взамен и не сравнивает предложение с другими, поэтому разговор остаётся ровным. Ссылки на предложения других компаний, ультиматумы и сроки для работодателя в такой разговор не входят.
+
+      Курс учит английскому языку. Он не заменяет юридическую и финансовую консультацию: условия договора проверяет специалист. Цифры в уроке придуманы.
+    table:
+      columns:
+        - вместо
+        - скажите
+        - почему
+      rows:
+        - - I have to decide today.
+          - Could I confirm my decision by the end of next week?
+          - просьба о сроке
+        - - Is this the best you can do?
+          - Could we go through the full package together?
+          - вопрос о подробностях
+        - - Pay more, or I will say no.
+          - Would there be any flexibility on the base salary?
+          - вопрос без давления
+        - - No.
+          - After careful consideration, I've decided to decline.
+          - отказ с благодарностью и объяснением
+        - - I accept, but I will not read the contract.
+          - I'm happy to accept the offer as it stands.
+          - согласие по существу
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: phrase-choice
+    title: Подходящая фраза
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы прощаетесь и благодарите интервьюера за разговор.
+        options:
+          - It was a pleasure speaking with you.
+          - After careful consideration, I've decided to decline.
+          - Would there be any flexibility on the base salary?
+        answer: It was a pleasure speaking with you.
+        explanation: Фраза благодарит за разговор; остальные отказываются или спрашивают об условиях.
+      - id: q2
+        prompt: Вы хотите узнать, что происходит после собеседования и когда ждать ответа.
+        options:
+          - Is there anything else you'd like to know about me?
+          - Thank you for the offer; I'm very pleased to receive it.
+          - What are the next steps, and when can I expect to hear back?
+        answer: What are the next steps, and when can I expect to hear back?
+        explanation: Фраза спрашивает о следующих этапах и сроке; остальные предлагают задать вопрос о вас и благодарят за оффер.
+      - id: q3
+        prompt: Вы благодарите за полученное предложение.
+        options:
+          - I'm happy to accept the offer as it stands.
+          - Thank you for the offer; I'm very pleased to receive it.
+          - It was a pleasure speaking with you.
+        answer: Thank you for the offer; I'm very pleased to receive it.
+        explanation: Первая фраза благодарит именно за предложение; вторая завершает разговор, третья принимает условия.
+      - id: q4
+        prompt: Вы просите время, чтобы сообщить решение.
+        options:
+          - Could I confirm my decision by the end of next week?
+          - I'm happy to accept the offer as it stands.
+          - After careful consideration, I've decided to decline.
+        answer: Could I confirm my decision by the end of next week?
+        explanation: Фраза просит срок; остальные уже содержат решение.
+      - id: q5
+        prompt: Вы хотите вместе разобрать все условия предложения.
+        options:
+          - Would there be any flexibility on the base salary?
+          - What are the next steps, and when can I expect to hear back?
+          - Could we go through the full package together?
+        answer: Could we go through the full package together?
+        explanation: Go through the full package — разобрать все условия; вторая фраза касается одного условия, третья — этапов.
+      - id: q6
+        prompt: Вы спокойно отказываетесь после раздумий.
+        options:
+          - Could I confirm my decision by the end of next week?
+          - After careful consideration, I've decided to decline.
+          - I'm happy to accept the offer as it stands.
+        answer: After careful consideration, I've decided to decline.
+        explanation: Фраза сообщает об отказе; остальные принимают предложение или просят срок.
+  - type: exercise
+    id: answer-choice
+    title: Формулировка для разговора об оффере
+    instruction: Выберите формулировку, которая подходит для спокойного разговора.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы просите обсудить базовую зарплату без давления.
+        options:
+          - Raise the salary, or I will refuse.
+          - Other companies pay me more, so you must pay more.
+          - Would there be any flexibility on the base salary?
+        answer: Would there be any flexibility on the base salary?
+        explanation: Первая фраза задаёт вопрос; остальные ставят условие и ссылаются на других работодателей.
+      - id: q2
+        prompt: Вы просите время на решение.
+        options:
+          - You must wait until I decide.
+          - Could I confirm my decision by the end of next week?
+          - I will answer today or never.
+        answer: Could I confirm my decision by the end of next week?
+        explanation: Фраза просит срок вежливо; остальные ставят ультиматум.
+      - id: q3
+        prompt: Вы отказываетесь вежливо.
+        options:
+          - After careful consideration, I've decided to decline. Thank you for your time.
+          - No. This offer is bad.
+          - I will never work for you.
+        answer: After careful consideration, I've decided to decline. Thank you for your time.
+        explanation: Первая фраза объясняет решение и благодарит; остальные грубы.
+      - id: q4
+        prompt: Вы принимаете предложение и просите письменные детали.
+        options:
+          - I accept, but I will not read the contract.
+          - I accept if you add more money by tomorrow.
+          - I'm happy to accept the offer as it stands; could you send the details in writing?
+        answer: I'm happy to accept the offer as it stands; could you send the details in writing?
+        explanation: Первая фраза принимает условия и просит письмо; остальные пренебрегают договором или ставят условие.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Мне было приятно с вами поговорить.
+        answer:
+          - It was a pleasure speaking with you
+          - It was a pleasure speaking to you
+          - It was a pleasure talking with you
+          - It was a pleasure talking to you
+          - It was nice speaking with you
+          - It was nice speaking to you
+          - It was nice talking with you
+          - It was nice talking to you
+          - It was great speaking with you
+          - It was great speaking to you
+          - It was great talking with you
+          - It was great talking to you
+          - It was lovely speaking with you
+          - It was lovely speaking to you
+          - It was lovely talking with you
+          - It was lovely talking to you
+          - It was a pleasure to speak with you
+          - It was a pleasure to speak to you
+          - It was a pleasure to talk with you
+          - It was a pleasure to talk to you
+          - It was nice to speak with you
+          - It was nice to speak to you
+          - It was nice to talk with you
+          - It was nice to talk to you
+          - It was great to speak with you
+          - It was great to speak to you
+          - It was great to talk with you
+          - It was great to talk to you
+          - It was lovely to speak with you
+          - It was lovely to speak to you
+          - It was lovely to talk with you
+          - It was lovely to talk to you
+        explanation: It was a pleasure speaking with you — вежливое завершение разговора.
+      - id: q2
+        prompt: Каковы следующие шаги, и когда мне ждать ответа?
+        answer:
+          - What are the next steps, and when can I expect to hear back
+          - What are the next steps, and when can I expect to hear from you
+          - What are the next steps, and when can I expect to get a reply
+          - What are the next steps, and when can I expect to get an answer
+          - What are the next steps, and when can I expect to receive an answer
+          - What are the next steps and when can I expect to hear back
+          - What are the next steps and when can I expect to hear from you
+          - What are the next steps and when can I expect to get a reply
+          - What are the next steps and when can I expect to get an answer
+          - What are the next steps and when can I expect to receive an answer
+        explanation: Next steps — следующие этапы; hear back — получить ответ.
+      - id: q3
+        prompt: Могу ли я сообщить своё решение до конца следующей недели?
+        answer:
+          - Could I confirm my decision by the end of next week
+          - Could I confirm my decision before the end of next week
+          - Could I confirm my answer by the end of next week
+          - Could I confirm my answer before the end of next week
+          - Could I give you my decision by the end of next week
+          - Could I give you my decision before the end of next week
+          - Could I give you my answer by the end of next week
+          - Could I give you my answer before the end of next week
+          - Could I tell you my decision by the end of next week
+          - Could I tell you my decision before the end of next week
+          - Could I tell you my answer by the end of next week
+          - Could I tell you my answer before the end of next week
+          - Could I let you know my decision by the end of next week
+          - Could I let you know my decision before the end of next week
+          - Could I let you know my answer by the end of next week
+          - Could I let you know my answer before the end of next week
+          - Could I send you my decision by the end of next week
+          - Could I send you my decision before the end of next week
+          - Could I send you my answer by the end of next week
+          - Could I send you my answer before the end of next week
+          - Can I confirm my decision by the end of next week
+          - Can I confirm my decision before the end of next week
+          - Can I confirm my answer by the end of next week
+          - Can I confirm my answer before the end of next week
+          - Can I give you my decision by the end of next week
+          - Can I give you my decision before the end of next week
+          - Can I give you my answer by the end of next week
+          - Can I give you my answer before the end of next week
+          - Can I tell you my decision by the end of next week
+          - Can I tell you my decision before the end of next week
+          - Can I tell you my answer by the end of next week
+          - Can I tell you my answer before the end of next week
+          - Can I let you know my decision by the end of next week
+          - Can I let you know my decision before the end of next week
+          - Can I let you know my answer by the end of next week
+          - Can I let you know my answer before the end of next week
+          - Can I send you my decision by the end of next week
+          - Can I send you my decision before the end of next week
+          - Can I send you my answer by the end of next week
+          - Can I send you my answer before the end of next week
+          - May I confirm my decision by the end of next week
+          - May I confirm my decision before the end of next week
+          - May I confirm my answer by the end of next week
+          - May I confirm my answer before the end of next week
+          - May I give you my decision by the end of next week
+          - May I give you my decision before the end of next week
+          - May I give you my answer by the end of next week
+          - May I give you my answer before the end of next week
+          - May I tell you my decision by the end of next week
+          - May I tell you my decision before the end of next week
+          - May I tell you my answer by the end of next week
+          - May I tell you my answer before the end of next week
+          - May I let you know my decision by the end of next week
+          - May I let you know my decision before the end of next week
+          - May I let you know my answer by the end of next week
+          - May I let you know my answer before the end of next week
+          - May I send you my decision by the end of next week
+          - May I send you my decision before the end of next week
+          - May I send you my answer by the end of next week
+          - May I send you my answer before the end of next week
+        explanation: Confirm my decision — «сообщить решение»; by the end of next week — «до конца следующей недели».
+      - id: q4
+        prompt: Есть ли возможность обсудить базовую зарплату?
+        answer:
+          - Would there be any flexibility on the base salary
+          - Would there be any flexibility on the basic salary
+          - Would there be any flexibility with the base salary
+          - Would there be any flexibility with the basic salary
+          - Would there be any flexibility regarding the base salary
+          - Would there be any flexibility regarding the basic salary
+          - Would there be any flexibility around the base salary
+          - Would there be any flexibility around the basic salary
+          - Would there be some flexibility on the base salary
+          - Would there be some flexibility on the basic salary
+          - Would there be some flexibility with the base salary
+          - Would there be some flexibility with the basic salary
+          - Would there be some flexibility regarding the base salary
+          - Would there be some flexibility regarding the basic salary
+          - Would there be some flexibility around the base salary
+          - Would there be some flexibility around the basic salary
+          - Is there any flexibility on the base salary
+          - Is there any flexibility on the basic salary
+          - Is there any flexibility with the base salary
+          - Is there any flexibility with the basic salary
+          - Is there any flexibility regarding the base salary
+          - Is there any flexibility regarding the basic salary
+          - Is there any flexibility around the base salary
+          - Is there any flexibility around the basic salary
+          - Is there some flexibility on the base salary
+          - Is there some flexibility on the basic salary
+          - Is there some flexibility with the base salary
+          - Is there some flexibility with the basic salary
+          - Is there some flexibility regarding the base salary
+          - Is there some flexibility regarding the basic salary
+          - Is there some flexibility around the base salary
+          - Is there some flexibility around the basic salary
+          - Is it possible to discuss the base salary
+          - Is it possible to discuss the basic salary
+          - Is it possible to talk about the base salary
+          - Is it possible to talk about the basic salary
+          - Could we discuss the base salary
+          - Could we discuss the basic salary
+          - Could we talk about the base salary
+          - Could we talk about the basic salary
+          - Can we discuss the base salary
+          - Can we discuss the basic salary
+          - Can we talk about the base salary
+          - Can we talk about the basic salary
+        explanation: Flexibility on — «гибкость в вопросе»; вопрос задают как просьбу, без давления.
+      - id: q5
+        prompt: Я рад принять предложение в таком виде.
+        answer:
+          - I am happy to accept the offer as it stands
+          - I am happy to accept the offer as it is
+          - I am happy to accept the offer in its current form
+          - I am happy to accept the offer in this form
+          - I am happy to accept the offer as offered
+          - I am happy to accept the proposal as it stands
+          - I am happy to accept the proposal as it is
+          - I am happy to accept the proposal in its current form
+          - I am happy to accept the proposal in this form
+          - I am happy to accept the proposal as offered
+          - I am happy to accept this offer as it stands
+          - I am happy to accept this offer as it is
+          - I am happy to accept this offer in its current form
+          - I am happy to accept this offer in this form
+          - I am happy to accept this offer as offered
+          - I am happy to accept this proposal as it stands
+          - I am happy to accept this proposal as it is
+          - I am happy to accept this proposal in its current form
+          - I am happy to accept this proposal in this form
+          - I am happy to accept this proposal as offered
+          - I am glad to accept the offer as it stands
+          - I am glad to accept the offer as it is
+          - I am glad to accept the offer in its current form
+          - I am glad to accept the offer in this form
+          - I am glad to accept the offer as offered
+          - I am glad to accept the proposal as it stands
+          - I am glad to accept the proposal as it is
+          - I am glad to accept the proposal in its current form
+          - I am glad to accept the proposal in this form
+          - I am glad to accept the proposal as offered
+          - I am glad to accept this offer as it stands
+          - I am glad to accept this offer as it is
+          - I am glad to accept this offer in its current form
+          - I am glad to accept this offer in this form
+          - I am glad to accept this offer as offered
+          - I am glad to accept this proposal as it stands
+          - I am glad to accept this proposal as it is
+          - I am glad to accept this proposal in its current form
+          - I am glad to accept this proposal in this form
+          - I am glad to accept this proposal as offered
+          - I am pleased to accept the offer as it stands
+          - I am pleased to accept the offer as it is
+          - I am pleased to accept the offer in its current form
+          - I am pleased to accept the offer in this form
+          - I am pleased to accept the offer as offered
+          - I am pleased to accept the proposal as it stands
+          - I am pleased to accept the proposal as it is
+          - I am pleased to accept the proposal in its current form
+          - I am pleased to accept the proposal in this form
+          - I am pleased to accept the proposal as offered
+          - I am pleased to accept this offer as it stands
+          - I am pleased to accept this offer as it is
+          - I am pleased to accept this offer in its current form
+          - I am pleased to accept this offer in this form
+          - I am pleased to accept this offer as offered
+          - I am pleased to accept this proposal as it stands
+          - I am pleased to accept this proposal as it is
+          - I am pleased to accept this proposal in its current form
+          - I am pleased to accept this proposal in this form
+          - I am pleased to accept this proposal as offered
+          - I am delighted to accept the offer as it stands
+          - I am delighted to accept the offer as it is
+          - I am delighted to accept the offer in its current form
+          - I am delighted to accept the offer in this form
+          - I am delighted to accept the offer as offered
+          - I am delighted to accept the proposal as it stands
+          - I am delighted to accept the proposal as it is
+          - I am delighted to accept the proposal in its current form
+          - I am delighted to accept the proposal in this form
+          - I am delighted to accept the proposal as offered
+          - I am delighted to accept this offer as it stands
+          - I am delighted to accept this offer as it is
+          - I am delighted to accept this offer in its current form
+          - I am delighted to accept this offer in this form
+          - I am delighted to accept this offer as offered
+          - I am delighted to accept this proposal as it stands
+          - I am delighted to accept this proposal as it is
+          - I am delighted to accept this proposal in its current form
+          - I am delighted to accept this proposal in this form
+          - I am delighted to accept this proposal as offered
+        explanation: Accept the offer as it stands — принять условия без изменений.
+      - id: q6
+        prompt: Тщательно обдумав, я решил отказаться.
+        answer:
+          - After careful consideration, I have decided to decline
+          - After careful consideration, I have decided to decline the offer
+          - After careful consideration, I have decided to turn it down
+          - After careful consideration, I have decided to turn the offer down
+          - After careful consideration, I decided to decline
+          - After careful consideration, I decided to decline the offer
+          - After careful consideration, I decided to turn it down
+          - After careful consideration, I decided to turn the offer down
+          - After careful consideration I have decided to decline
+          - After careful consideration I have decided to decline the offer
+          - After careful consideration I have decided to turn it down
+          - After careful consideration I have decided to turn the offer down
+          - After careful consideration I decided to decline
+          - After careful consideration I decided to decline the offer
+          - After careful consideration I decided to turn it down
+          - After careful consideration I decided to turn the offer down
+          - After careful thought, I have decided to decline
+          - After careful thought, I have decided to decline the offer
+          - After careful thought, I have decided to turn it down
+          - After careful thought, I have decided to turn the offer down
+          - After careful thought, I decided to decline
+          - After careful thought, I decided to decline the offer
+          - After careful thought, I decided to turn it down
+          - After careful thought, I decided to turn the offer down
+          - After careful thought I have decided to decline
+          - After careful thought I have decided to decline the offer
+          - After careful thought I have decided to turn it down
+          - After careful thought I have decided to turn the offer down
+          - After careful thought I decided to decline
+          - After careful thought I decided to decline the offer
+          - After careful thought I decided to turn it down
+          - After careful thought I decided to turn the offer down
+          - After serious consideration, I have decided to decline
+          - After serious consideration, I have decided to decline the offer
+          - After serious consideration, I have decided to turn it down
+          - After serious consideration, I have decided to turn the offer down
+          - After serious consideration, I decided to decline
+          - After serious consideration, I decided to decline the offer
+          - After serious consideration, I decided to turn it down
+          - After serious consideration, I decided to turn the offer down
+          - After serious consideration I have decided to decline
+          - After serious consideration I have decided to decline the offer
+          - After serious consideration I have decided to turn it down
+          - After serious consideration I have decided to turn the offer down
+          - After serious consideration I decided to decline
+          - After serious consideration I decided to decline the offer
+          - After serious consideration I decided to turn it down
+          - After serious consideration I decided to turn the offer down
+          - After serious thought, I have decided to decline
+          - After serious thought, I have decided to decline the offer
+          - After serious thought, I have decided to turn it down
+          - After serious thought, I have decided to turn the offer down
+          - After serious thought, I decided to decline
+          - After serious thought, I decided to decline the offer
+          - After serious thought, I decided to turn it down
+          - After serious thought, I decided to turn the offer down
+          - After serious thought I have decided to decline
+          - After serious thought I have decided to decline the offer
+          - After serious thought I have decided to turn it down
+          - After serious thought I have decided to turn the offer down
+          - After serious thought I decided to decline
+          - After serious thought I decided to decline the offer
+          - After serious thought I decided to turn it down
+          - After serious thought I decided to turn the offer down
+        explanation: After careful consideration — «после тщательного обдумывания»; decline — вежливо отказаться.
+  - type: writing
+    id: reply
+    register: formal
+    prompt: "Напишите письмо с ответом на предложение (130–170 слов): поблагодарите, задайте вопрос об одном из условий, попросите срок для ответа и письменное подтверждение условий. Предложение и цифры придумайте сами; давления и ссылок на другие предложения в письме нет. Используйте не меньше трёх выражений урока (например, Thank you for the offer, Could we go through, Could I confirm my decision, written confirmation)."
+    words:
+      min: 130
+      max: 170
+    model: |-
+      Subject: Reply to the offer for the Data Engineer role
+
+      Dear Ms Larsen,
+
+      Thank you very much for the offer. I am very pleased to receive it, and I enjoyed meeting the team during the interviews.
+
+      I have read the details carefully, and I have one question about the package. Could we go through the pension scheme together? I would like to understand how the company's contribution works and when it starts.
+
+      I would also like to ask about the start date. My notice period is two months, so I would like to know whether there is any flexibility on the date in your letter.
+
+      Could I confirm my decision by the end of next week? I would like to read the contract carefully, and I would be grateful for a written confirmation of the terms before I reply.
+
+      Thank you for your time and for the clear information. I look forward to hearing from you.
+
+      Kind regards
+    criteria:
+      - 130–170 слов, есть тема письма, обращение, благодарность, вопрос об условии, просьба о сроке и вежливое завершение
+      - Благодарность стоит в начале письма
+      - Вопрос об условии задан спокойно (Could we go through…, Would there be any flexibility…)
+      - Срок ответа и письменное подтверждение запрошены вежливо (Could I confirm my decision…, written confirmation)
+      - Нет ультиматумов, давления и ссылок на предложения других компаний
+      - Использованы не меньше трёх выражений урока
+      - Предложение и цифры придуманы, реальных компаний нет
+      - Формальный стиль без сокращений
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Шестнадцатый ответ вашего **банка ответов** — **Do you have any questions for us?** К нему добавляется второй вопрос — ответ на предложение: **We would like to offer you the role. What do you think?** Первый ответ занимает до двух минут, второй — до минуты.
+
+      1) Разложите первый ответ по пяти шагам: благодарность, вопрос о работе команды, вопрос об успехе и росте, вопрос о трудностях или процессе, следующие шаги. 2) Запишите ответ вслух и уложитесь во время. 3) Переслушайте и сверьте с образцом и критериями: вопросы о работе команды, без вопросов об отпуске и деньгах на этом этапе. 4) Для второго ответа назовите благодарность, просьбу пройтись по условиям и срок решения.
+
+      Сцена в конце урока проходит по телефону: Katarina звонит с предложением и спрашивает, что вы думаете. Реплики Katarina записаны ниже, перед сценой; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: questions
+    part: interview
+    prompt: "Интервьюер заканчивает собеседование словами: «Thank you for your answers. Do you have any questions for us?» Ответьте за 2 минуты: поблагодарите, задайте три–четыре вопроса о работе команды, об успехе в роли, о трудностях и о следующих шагах, завершите разговор."
+    seconds: 120
+    model: "Thank you. Yes, I have a few questions. First, what does a typical day look like for the team? I would like to understand how the work is organised. Second, how is success measured in this role? I am interested in what you would expect from me in the first three months. Third, what have you been focusing on this quarter, and what are the biggest challenges the team is facing at the moment? I have been working on similar services for three years, so I would like to know where I could help most. My last question is about growth: how do you support engineers' growth, for example through courses or mentoring? Finally, what are the next steps, and when can I expect to hear back? Thank you very much. It was a pleasure speaking with you."
+    criteria:
+      - "Шаги идут по порядку: благодарность, три–четыре вопроса, следующие шаги, завершение"
+      - Вопросы касаются работы команды, успеха в роли, трудностей или роста
+      - "Нет вопросов об отпуске и деньгах: они относятся к разговору о предложении"
+      - Есть не меньше одного вопроса с present perfect continuous или с вводной частью Could you tell me…
+      - Ответ укладывается в 2 минуты
+  - type: speaking
+    id: offer
+    part: monologue
+    prompt: "Рекрутер говорит: «We would like to offer you the role. What do you think?» Ответьте за 60 секунд: поблагодарите, попросите пройтись по условиям, назовите срок решения и попросите детали письменно."
+    seconds: 60
+    model: Thank you very much. I am very pleased to receive the offer, and I enjoyed meeting the team. Could we go through the full package together, especially the pension scheme and the start date? I would also like to sleep on it. Could I confirm my decision by the end of next week? And could you send the details in writing? Thank you again for the offer.
+    criteria:
+      - Есть благодарность за предложение
+      - Просьба пройтись по условиям сформулирована вопросом
+      - Назван срок решения (Could I confirm my decision by…)
+      - Есть просьба о письменных деталях
+      - Нет давления и ссылок на предложения других компаний
+      - Ответ укладывается в 60 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - speaker: Katarina
+        text: Hello, this is Katarina from Brindle Analytics. Thank you for your time during the interviews. I'm pleased to tell you that we'd like to offer you the role of backend engineer. What do you think?
+      - speaker: Katarina
+        text: The package is a base salary of seventy-five thousand a year, a signing bonus of five thousand, twenty-five days of annual leave, and a pension scheme with six percent from the company. Is there anything you would like me to go through again?
+      - speaker: Katarina
+        text: Let me also mention the start date. We would like you to begin on the first of April. Does that work for you?
+      - speaker: Katarina
+        text: Thank you. The offer is open until next Friday. When would you like to give us your answer?
+      - speaker: Katarina
+        text: I'll send the full details in writing today, so you can read them calmly. Is there anything else you would like to ask?
+      - speaker: Katarina
+        text: Thank you. It was a pleasure speaking with you, and I look forward to your reply.
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы получаете по телефону предложение от Katarina из Brindle Analytics. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику поблагодарите и скажите, что рады предложению. На вторую попросите пройтись по условиям (например, по пенсионной программе). На третью спросите, есть ли гибкость в дате выхода. На четвёртую попросите время до конца следующей недели. На пятую поблагодарите и скажите, что хотите получить условия письменно. На последнюю поблагодарите и вежливо завершите разговор. Вся ваша часть — 150 секунд, каждая реплика — две-четыре фразы.
+    seconds: 150
+    model: |-
+      Katarina: Hello, this is Katarina from Brindle Analytics. Thank you for your time during the interviews. I'm pleased to tell you that we would like to offer you the role of backend engineer. What do you think?
+      You: Thank you very much for the offer; I'm very pleased to receive it. I enjoyed meeting the team, and I'm glad to hear this.
+      Katarina: The package is a base salary of seventy-five thousand a year, a signing bonus of five thousand, twenty-five days of annual leave, and a pension scheme with six percent from the company. Is there anything you would like me to go through again?
+      You: Yes, thank you. Could we go through the pension scheme together? I'd like to understand how the six percent works and when it starts.
+      Katarina: Let me also mention the start date. We would like you to begin on the first of April. Does that work for you?
+      You: My notice period is two months, so the first of April is close. Would there be any flexibility on the start date?
+      Katarina: Thank you. The offer is open until next Friday. When would you like to give us your answer?
+      You: Could I confirm my decision by the end of next week? I'd like to read everything carefully.
+      Katarina: I will send the full details in writing today, so you can read them calmly. Is there anything else you would like to ask?
+      You: Thank you. I'd be grateful for a written confirmation of the terms, including the start date. That is all for now.
+      Katarina: Thank you. It was a pleasure speaking with you, and I look forward to your reply.
+      You: Thank you, Katarina. It was a pleasure speaking with you too.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — две-четыре фразы
+      - В первой реплике есть благодарность за предложение
+      - Во второй реплике есть просьба пройтись по условиям (Could we go through…)
+      - В третьей реплике есть вежливый вопрос о гибкости даты (Would there be any flexibility…)
+      - В четвёртой реплике названа просьба о сроке (Could I confirm my decision by…)
+      - В пятой реплике есть просьба о письменных деталях
+      - В конце есть благодарность и вежливое завершение
+      - Нет давления и ссылок на предложения других компаний
+      - Реплики собеседника не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модулей
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: If I had read the contract more carefully, I ___ the clause earlier. (прошлое, которого не было)
+        options:
+          - would have noticed
+          - would notice
+          - had noticed
+        answer: would have noticed
+        explanation: Conditional 3 — would have и третья форма глагола.
+      - id: q2
+        prompt: «Have you read the offer letter?» → He asked me ___ I had read the offer letter.
+        options:
+          - that
+          - what
+          - whether
+        answer: whether
+        explanation: В косвенном вопросе без вопросительного слова стоит whether или if.
+      - id: q3
+        prompt: The recruiter ___ called me yesterday sent the offer.
+        options:
+          - whose
+          - who
+          - which
+        answer: who
+        explanation: Для человека в определительном придаточном стоит who; which относится к вещам, whose требует существительного.
+      - id: q4
+        prompt: I have been working in this team ___ 2021.
+        options:
+          - since
+          - for
+          - during
+        answer: since
+        explanation: После since называют момент начала; for требует периода, а during не сочетается с have been.
+      - id: q5
+        prompt: If I were you, I ___ ask for the details in writing.
+        options:
+          - will
+          - had
+          - would
+        answer: would
+        explanation: Second conditional — if + past simple, would + базовая форма.
+      - id: q6
+        prompt: Let me ___ you a few questions before I decide.
+        options:
+          - asking
+          - ask
+          - to ask
+        answer: ask
+        explanation: После let me стоит глагол без to.

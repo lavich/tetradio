@@ -1,0 +1,489 @@
+title: present perfect continuous, вопросы интервьюеру и процессы компании
+kind: lesson
+items:
+  - kind: word
+    id: ew526
+  - kind: word
+    id: ew527
+  - kind: word
+    id: ew528
+  - kind: word
+    id: ew529
+  - kind: word
+    id: ew530
+  - kind: word
+    id: ew531
+  - kind: word
+    id: ew532
+  - kind: word
+    id: ew533
+  - kind: word
+    id: ew534
+  - kind: word
+    id: ew535
+  - kind: word
+    id: ew536
+  - kind: word
+    id: ew537
+  - kind: word
+    id: ew538
+  - kind: word
+    id: ew539
+  - kind: word
+    id: ew540
+  - kind: word
+    id: ew541
+  - kind: word
+    id: ew542
+  - kind: word
+    id: ew543
+  - kind: phrase
+    id: ep376
+  - kind: phrase
+    id: ep377
+  - kind: phrase
+    id: ep378
+  - kind: phrase
+    id: ep379
+  - kind: phrase
+    id: ep380
+  - kind: phrase
+    id: ep381
+  - kind: phrase
+    id: ep382
+  - kind: phrase
+    id: ep383
+blocks:
+  - type: explanation
+    id: ppc
+    title: "Present perfect continuous: действие, которое длится до сегодняшнего дня"
+    body: |-
+      На собеседовании вас спрашивают, чем вы занимались и как давно, а в конце предлагают задать свои вопросы. Для таких вопросов нужно время **present perfect continuous**: **I've been working on payment services for three years.** **What have you been focusing on this quarter?**
+
+      Форма: **have / has + been + глагол с -ing**. Время показывает действие, которое началось в прошлом и продолжается сейчас или только что закончилось, а его результат виден.
+
+      **Длительность.** С **for** называют период (**for six months**), с **since** — момент начала (**since March**). Вопрос о длительности — **How long have you been working there?**
+
+      **Недавнее действие с видимым результатом.** **I've been preparing for this interview, so I'm a bit tired.**
+
+      **Continuous или simple.** Continuous называет процесс и его длительность: **I've been writing tests all morning.** Simple называет результат или число: **I've written twelve tests.** Если в предложении есть **how many** или названо готовое дело, ставят simple. Глаголы состояния (**know, have** в значении «владеть», **want, understand**) не стоят в continuous: **I've known her for years.**
+    table:
+      columns:
+        - что сказать
+        - форма
+        - пример
+      rows:
+        - - как долго
+          - have been + -ing, for / since
+          - I've been working with Go for four years.
+        - - текущий период
+          - have been + -ing
+          - What have you been focusing on this quarter?
+        - - недавнее действие, виден результат
+          - have been + -ing
+          - I've been preparing all week.
+        - - результат или число
+          - have + третья форма глагола
+          - I've written twelve tests.
+  - type: explanation
+    id: questions
+    title: Вопросы интервьюеру
+    body: |-
+      В конце собеседования звучит **Do you have any questions for us?** Ответ «нет» оставляет впечатление, что роль вас мало интересует. Подготовьте три–четыре вопроса о работе команды: о рабочем дне, об измерении успеха, о релизах, о трудностях и о росте инженеров. Вопросы о деньгах и условиях чаще задают рекрутеру, как в модуле `e08`.
+
+      Прямой вопрос строится по порядку: вопросительное слово, вспомогательный глагол, подлежащее, смысловой глагол: **How does the team handle code reviews?** Вежливее звучит вопрос с вводной частью **Could you tell me…?** или **I'd like to know…?** После неё порядок слов прямой, как в утверждении: **Could you tell me how the team handles code reviews?**
+
+      Вопросы о настоящем периоде работы команды строятся в present perfect continuous: **What has the team been shipping recently?** **Have you been hiring for this role for long?**
+    table:
+      columns:
+        - тема
+        - вопрос
+      rows:
+        - - рабочий день
+          - What does a typical day look like for the team?
+        - - успех в роли
+          - How is success measured in this role?
+        - - процесс релизов
+          - How often do you release to production?
+        - - трудности
+          - What are the biggest challenges the team is facing?
+        - - рост инженеров
+          - How do you support engineers' growth?
+        - - начало работы
+          - What would my first ninety days look like?
+  - type: explanation
+    id: ppc-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **I work here for six years.** По-русски «работаю шесть лет» стоит в настоящем времени. В английском период до сегодняшнего дня выражают present perfect continuous: **I've been working here for six years.**
+
+      **For и since.** После **for** идёт длина периода, после **since** — момент начала: **for two years, since 2022.** Вариант *since two years* ошибочен.
+
+      **How long do you work there?** Вопрос о длительности строится с have been: **How long have you been working there?**
+
+      **I've been knowing.** Глаголы состояния не стоят в continuous: **I've known the team lead for a year.**
+
+      **Порядок слов после Could you tell me.** Вспомогательный глагол не выносится вперёд: *Could you tell me how does the team work?* — ошибка. Верно: **Could you tell me how the team works?**
+
+      **Been без -ing.** После been идёт форма на -ing: *I've been work here* — ошибка, верно **I've been working here.**
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - I work here for six years.
+          - I've been working here for six years.
+          - период до сегодня — have been + -ing
+        - - I've been working since two years.
+          - I've been working for two years.
+          - for + период, since + начало
+        - - How long do you work there?
+          - How long have you been working there?
+          - вопрос о длительности
+        - - I've been knowing him for years.
+          - I've known him for years.
+          - know — глагол состояния
+        - - Could you tell me how does the team work?
+          - Could you tell me how the team works?
+          - после вводной части порядок прямой
+  - type: explanation
+    id: process-words
+    title: Слова урока — команда и процессы компании
+    body: |-
+      Слова урока нужны, чтобы расспросить о компании и понять ответ. Они образуют четыре группы.
+
+      **Как устроена команда.** **An org chart** — схема, которая показывает, кто кому подчиняется. **A platform team** — команда, которая развивает общие сервисы и инструменты для других команд. **Ways of working** — принятые способы работы: ритуалы, правила, инструменты. **A code of conduct** — свод правил поведения. **Team morale** — настроение и боевой дух команды.
+
+      **Ритм и цели.** **A cadence** — регулярный ритм: релизов, планирования. **OKRs** — цели и ключевые результаты на квартал. **A 30-60-90-day plan** — план на первые три месяца в роли. **A feedback loop** — цепочка «действие, результат, вывод»: чем она короче, тем быстрее видно, сработало ли изменение. **Day-to-day** — повседневный.
+
+      **События и обучение.** **An all-hands** — общее собрание. **An offsite** — выездная встреча команды. **A hackathon** — короткое мероприятие, на котором команды делают прототип. **Shadow** — наблюдать за работой коллеги, чтобы научиться.
+
+      **Состояние компании и продукта.** **A tech stack** — технологии, на которых построен продукт; **tooling** из прежних модулей — инструменты разработчика. **A runway** — запас денег в месяцах. **Profitable** — прибыльный. **A crunch** — период напряжённой работы перед сроком; вопрос **How often does the team have crunch periods?** касается нагрузки.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: ppc-choice
+    title: Present perfect continuous
+    instruction: Выберите форму для пропуска.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ in this team since March. (я работаю с марта)
+        options:
+          - have been working
+          - work
+          - am working
+        answer: have been working
+        explanation: Период от момента в прошлом до сегодня выражает have been + -ing; после since настоящее время не ставят.
+      - id: q2
+        prompt: How long ___ for this role? (как давно вы готовитесь)
+        options:
+          - do you prepare
+          - you have been preparing
+          - have you been preparing
+        answer: have you been preparing
+        explanation: Вопрос о длительности — have you been + -ing; в вопросе вспомогательный глагол стоит перед подлежащим.
+      - id: q3
+        prompt: She ___ the API docs all morning, so they are almost ready.
+        options:
+          - has been update
+          - has been updating
+          - updates
+        answer: has been updating
+        explanation: Процесс до сегодняшнего момента — has been + -ing; после been идёт форма на -ing.
+      - id: q4
+        prompt: We ___ for this role since January. (мы ищем человека с января)
+        options:
+          - have been hiring
+          - are hiring
+          - hired
+        answer: have been hiring
+        explanation: "Действие длится с января до сейчас: have been hiring."
+      - id: q5
+        prompt: They ___ the problem for two hours, and it is still not fixed.
+        options:
+          - debug
+          - have been debug
+          - have been debugging
+        answer: have been debugging
+        explanation: Длительность до сегодня — have been + -ing.
+      - id: q6
+        prompt: I ___ the team lead for a year. (я знаком с ним)
+        options:
+          - am knowing
+          - have known
+          - have been knowing
+        answer: have known
+        explanation: "Know — глагол состояния, continuous у него нет: have known."
+  - type: exercise
+    id: question-choice
+    title: Вопросы интервьюеру
+    instruction: Выберите вопрос или фразу, которые подходят к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: "Вы вежливо просите рассказать, как команда проводит код-ревью: Could you tell me how ___?"
+        options:
+          - does the team handle code reviews
+          - handles the team code reviews
+          - the team handles code reviews
+        answer: the team handles code reviews
+        explanation: После Could you tell me порядок слов прямой, как в утверждении; вспомогательный глагол does не нужен.
+      - id: q2
+        prompt: "Вы хотите узнать, над чем команда работает сейчас: I'd like to know ___."
+        options:
+          - what the team working on
+          - what the team is working on
+          - what is the team working on
+        answer: what the team is working on
+        explanation: "В придаточной части порядок прямой: подлежащее, затем глагол; is обязателен."
+      - id: q3
+        prompt: Вы хотите узнать, как выглядит обычный рабочий день команды.
+        options:
+          - What does a typical day look like for the team?
+          - How many days of holiday will I get?
+          - Who will interview me next?
+        answer: What does a typical day look like for the team?
+        explanation: Только первый вопрос о рабочем дне; остальные об отпуске и об этапах собеседования.
+      - id: q4
+        prompt: Вы хотите узнать, как измеряют успех в роли.
+        options:
+          - How long is the interview?
+          - How big is the office?
+          - How is success measured in this role?
+        answer: How is success measured in this role?
+        explanation: Success measured — успех измеряют; остальные вопросы о другом.
+      - id: q5
+        prompt: Вы спрашиваете, чем команда занималась в последние недели и занимается сейчас.
+        options:
+          - What does the team been working on?
+          - What has the team been working on recently?
+          - What did the team work on tomorrow?
+        answer: What has the team been working on recently?
+        explanation: Недавний период до сейчас — present perfect continuous; в остальных вариантах время или форма неверны.
+      - id: q6
+        prompt: Вы спрашиваете, как давно компания ищет человека на эту роль.
+        options:
+          - Have you been hiring for this role for long?
+          - Do you hire for this role since long?
+          - Are you hiring for this role since a long time?
+        answer: Have you been hiring for this role for long?
+        explanation: Период до сегодня выражает have been + -ing; since не сочетается с длиной периода.
+  - type: exercise
+    id: process-match
+    title: Команда и процессы
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - an org chart
+      - a platform team
+      - ways of working
+      - a cadence
+      - a feedback loop
+      - an offsite
+      - a hackathon
+      - a runway
+      - a tech stack
+    items:
+      - id: m1
+        prompt: схема, которая показывает, кто кому подчиняется
+        answer: an org chart
+      - id: m2
+        prompt: команда, которая делает общие сервисы и инструменты для других команд
+        answer: a platform team
+      - id: m3
+        prompt: ритуалы, правила и инструменты, принятые в команде
+        answer: ways of working
+      - id: m4
+        prompt: "регулярный ритм: например, релиз раз в две недели"
+        answer: a cadence
+      - id: m5
+        prompt: цепочка «действие, результат, вывод», по которой быстро видно, сработало ли изменение
+        answer: a feedback loop
+      - id: m6
+        prompt: мероприятие, на котором команды за день-два делают прототип
+        answer: a hackathon
+      - id: m7
+        prompt: сколько месяцев компания работает без новых вложений
+        answer: a runway
+  - type: exercise
+    id: process-gap
+    title: Слова в предложениях
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - shadow
+      - day-to-day
+      - team morale
+      - a crunch
+      - a code of conduct
+      - an all-hands
+      - profitable
+      - OKRs
+      - a 30-60-90-day plan
+    items:
+      - id: g1
+        prompt: In the first week, new engineers ___ a colleague to learn how the team works. (наблюдать за работой)
+        answer: shadow
+      - id: g2
+        prompt: My ___ work is mostly code review, planning and answering questions from other teams. (повседневная)
+        answer: day-to-day
+      - id: g3
+        prompt: After three weeks of late nights, ___ was low. (настроение команды)
+        answer: team morale
+      - id: g4
+        prompt: The release is on Friday, so the next two weeks will be ___. (напряжённый период)
+        answer: a crunch
+      - id: g5
+        prompt: The company has ___ that describes respectful behaviour in every discussion. (свод правил)
+        answer: a code of conduct
+      - id: g6
+        prompt: The whole company meets once a month at ___, where the CEO shares news. (общее собрание)
+        answer: an all-hands
+      - id: g7
+        prompt: "The company is ___: it has made a profit for three years. (прибыльная)"
+        answer: profitable
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I have, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Я уже три года работаю над платёжными сервисами. (present perfect continuous)
+        answer:
+          - I have been working on payment services for three years
+          - I have been working on payment services for the last three years
+          - I have been working on payment services for three years now
+          - I have been working on payment systems for three years
+          - I have been working on payment systems for the last three years
+          - I have been working on payment systems for three years now
+        explanation: Период до сегодняшнего дня — have been working + for; on — «над».
+      - id: q2
+        prompt: Как давно вы ищете человека на эту роль?
+        answer:
+          - How long have you been hiring for this role
+          - How long have you been hiring for this position
+          - How long have you been recruiting for this role
+          - How long have you been recruiting for this position
+          - How long have you been looking for someone for this role
+          - How long have you been looking for someone for this position
+          - How long have you been searching for someone for this role
+          - How long have you been searching for someone for this position
+          - How long have you been looking for a person for this role
+          - How long have you been looking for a person for this position
+          - How long have you been looking for somebody for this role
+          - How long have you been looking for somebody for this position
+        explanation: How long have you been + -ing — вопрос о длительности.
+      - id: q3
+        prompt: Я готовлюсь к этому собеседованию всю неделю.
+        answer:
+          - I have been preparing for this interview all week
+          - I have been preparing for this interview all this week
+          - I have been preparing for this interview all week long
+          - I have been preparing for this interview the whole week
+          - I have been preparing for this interview the entire week
+          - I have been preparing for this interview for the whole week
+          - I have been preparing for this interview for the entire week
+        explanation: "Действие длится всю неделю до сегодняшнего дня: have been preparing."
+      - id: q4
+        prompt: Что команда выпускала в последнее время? (present perfect continuous)
+        answer:
+          - What has the team been shipping recently
+          - What has the team been shipping lately
+          - What has the team been shipping in recent weeks
+          - What has the team been shipping over the last few weeks
+          - What has the team been shipping in the last few weeks
+          - What has the team been shipping in the past few weeks
+          - What has the team been releasing recently
+          - What has the team been releasing lately
+          - What has the team been releasing in recent weeks
+          - What has the team been releasing over the last few weeks
+          - What has the team been releasing in the last few weeks
+          - What has the team been releasing in the past few weeks
+          - What has the team been delivering recently
+          - What has the team been delivering lately
+          - What has the team been delivering in recent weeks
+          - What has the team been delivering over the last few weeks
+          - What has the team been delivering in the last few weeks
+          - What has the team been delivering in the past few weeks
+        explanation: Has the team been + -ing; shipping — «выпускать».
+      - id: q5
+        prompt: Как вы поддерживаете профессиональный рост инженеров?
+        answer:
+          - How do you support engineers' growth
+          - How do you support engineers' professional growth
+          - How do you support engineers' development
+          - How do you support engineers' career growth
+          - How do you support the growth of engineers
+          - How do you support the professional growth of engineers
+          - How do you support the development of engineers
+          - How do you support the growth of your engineers
+          - How do you support the professional growth of your engineers
+          - How do you help your engineers grow
+          - How do you help your engineers develop
+          - How do you help your engineers to grow
+          - How do you help your engineers to develop
+          - How do you help your engineers grow professionally
+          - How do you help your engineers develop professionally
+          - How do you help engineers grow
+          - How do you help engineers develop
+          - How do you help engineers to grow
+          - How do you help engineers to develop
+          - How do you help engineers grow professionally
+          - How do you help engineers develop professionally
+        explanation: Support growth — «поддерживать рост»; допустим и оборот help + глагол.
+      - id: q6
+        prompt: Не могли бы вы рассказать, как команда проводит код-ревью?
+        answer:
+          - Could you tell me how the team handles code reviews
+          - Could you tell me how the team handles code review
+          - Could you tell me how the team does code reviews
+          - Could you tell me how the team does code review
+          - Could you tell me how the team runs code reviews
+          - Could you tell me how the team runs code review
+          - Could you tell me how the team conducts code reviews
+          - Could you tell me how the team conducts code review
+          - Could you explain to me how the team handles code reviews
+          - Could you explain to me how the team handles code review
+          - Could you explain to me how the team does code reviews
+          - Could you explain to me how the team does code review
+          - Could you explain to me how the team runs code reviews
+          - Could you explain to me how the team runs code review
+          - Could you explain to me how the team conducts code reviews
+          - Could you explain to me how the team conducts code review
+          - Could you explain how the team handles code reviews
+          - Could you explain how the team handles code review
+          - Could you explain how the team does code reviews
+          - Could you explain how the team does code review
+          - Could you explain how the team runs code reviews
+          - Could you explain how the team runs code review
+          - Could you explain how the team conducts code reviews
+          - Could you explain how the team conducts code review
+          - Would you tell me how the team handles code reviews
+          - Would you tell me how the team handles code review
+          - Would you tell me how the team does code reviews
+          - Would you tell me how the team does code review
+          - Would you tell me how the team runs code reviews
+          - Would you tell me how the team runs code review
+          - Would you tell me how the team conducts code reviews
+          - Would you tell me how the team conducts code review
+          - Would you explain to me how the team handles code reviews
+          - Would you explain to me how the team handles code review
+          - Would you explain to me how the team does code reviews
+          - Would you explain to me how the team does code review
+          - Would you explain to me how the team runs code reviews
+          - Would you explain to me how the team runs code review
+          - Would you explain to me how the team conducts code reviews
+          - Would you explain to me how the team conducts code review
+          - Would you explain how the team handles code reviews
+          - Would you explain how the team handles code review
+          - Would you explain how the team does code reviews
+          - Would you explain how the team does code review
+          - Would you explain how the team runs code reviews
+          - Would you explain how the team runs code review
+          - Would you explain how the team conducts code reviews
+          - Would you explain how the team conducts code review
+        explanation: "После Could you tell me порядок слов прямой: how the team handles."

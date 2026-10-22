@@ -1,0 +1,7 @@
+id: ep379
+text: "What has the team been shipping recently?"
+translation: "Что команда выпускала в последнее время?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md

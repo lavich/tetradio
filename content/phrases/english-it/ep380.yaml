@@ -1,0 +1,7 @@
+id: ep380
+text: "What have you been focusing on this quarter?"
+translation: "На чём вы сосредоточены в этом квартале?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md

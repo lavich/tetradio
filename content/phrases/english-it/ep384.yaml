@@ -1,0 +1,7 @@
+id: ep384
+text: "What does a typical day look like for the team?"
+translation: "Как выглядит обычный день команды?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md
