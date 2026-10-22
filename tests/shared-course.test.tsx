@@ -12,7 +12,7 @@ import { CourseScreen } from "../src/features/course/ShelfScreen";
 import { SharedCourseScreen } from "../src/features/course/SharedCourseScreen";
 import { resetCatalogPhase, setCatalogPhase } from "../src/content/phases";
 import { db } from "../src/storage/db";
-import { primaryCourse, shelfLanguage } from "../src/storage/courses";
+import { chooseShelfCourse, primaryCourse, shelfLanguage } from "../src/storage/courses";
 import { pauseCourse } from "../src/storage/pause-actions";
 import { install, seedCatalog } from "./helpers/language-db";
 
@@ -73,7 +73,7 @@ describe("ссылка на курс", () => {
       expect(document.activeElement).toBe(offers().find((o) => o.textContent?.includes("путешествий"))),
     );
     expect(await shelfLanguage(db)).toBe("en");
-    expect(host.querySelector("h1")?.textContent).toBe("Полка");
+    expect(host.querySelector("h1")?.textContent).toBe("Курс");
     expect(shelves()).toHaveLength(0);
     expect(await rows()).toEqual(before);
     const keys = (await db.meta.toArray()).map((row) => row.key);
@@ -93,7 +93,7 @@ describe("ссылка на курс", () => {
     await vi.waitFor(() => expect(shelves()).toHaveLength(1));
     await vi.waitFor(() => expect(document.activeElement).toBe(shelves()[0]));
     expect(shelves()[0].textContent).toContain("Для IT");
-    expect(offers()).toHaveLength(1);
+    expect(offers()).toHaveLength(0);
     expect(await primaryCourse(db)).toBe(primary);
     expect(primary).toBe("greek");
   });
@@ -182,14 +182,15 @@ describe("кнопка «Поделиться курсом» на полке", (
     await db.meta.put({ key: "currentLanguage", value: "en" });
     setCatalogPhase("ready");
     open("/course");
-    await vi.waitFor(() => expect(shelves()).toHaveLength(2));
-    expect(buttons()).toHaveLength(2);
-    expect(buttons().map((b) => b.getAttribute("aria-label"))).toEqual([
-      "Поделиться курсом «Английский для IT»",
-      "Поделиться курсом «Английский для путешествий»",
-    ]);
-    for (const shelf of shelves())
-      expect(shelf.querySelectorAll("button[aria-label^='Поделиться курсом']")).toHaveLength(1);
+    await vi.waitFor(() => expect(shelves()).toHaveLength(1));
+    expect(buttons().map((b) => b.getAttribute("aria-label"))).toEqual(["Поделиться курсом «Английский для IT»"]);
+    await chooseShelfCourse("travel", db);
+    await vi.waitFor(() =>
+      expect(buttons().map((b) => b.getAttribute("aria-label"))).toEqual([
+        "Поделиться курсом «Английский для путешествий»",
+      ]),
+    );
+    expect(shelves()).toHaveLength(1);
   });
 
   it("нет у карточки неначатого курса", async () => {
@@ -198,7 +199,7 @@ describe("кнопка «Поделиться курсом» на полке", (
     await db.meta.put({ key: "currentLanguage", value: "en" });
     setCatalogPhase("ready");
     open("/course");
-    await vi.waitFor(() => expect(offers()).toHaveLength(2));
+    await vi.waitFor(() => expect(offers()).toHaveLength(1));
     expect(buttons()).toHaveLength(0);
   });
 
