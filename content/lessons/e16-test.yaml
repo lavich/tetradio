@@ -243,10 +243,10 @@ blocks:
         prompt: The company holds ___ every March, and salaries can change after it. (плановый пересмотр зарплаты)
         answer: a pay review
       - id: g2
-        prompt: You will receive ___ of two thousand with your first salary. (разовая выплата)
+        prompt: You will receive ___ of two thousand when you join the company. (премия за подписание договора)
         answer: a signing bonus
       - id: g3
-        prompt: The company gives every engineer ___ of six hundred a year for a home office. (фиксированная сумма)
+        prompt: The company gives every engineer ___ of six hundred a year for a home office, and no receipts are needed. (ежегодная фиксированная сумма)
         answer: a stipend
       - id: g4
         prompt: The offer will ___ on the first of June, so please answer before then. (истечёт)
@@ -267,41 +267,174 @@ blocks:
       - id: q1
         prompt: Я уже несколько месяцев ищу новую роль. (present perfect continuous)
         answer:
+          - I have been looking for a new role for a few months now
           - I have been looking for a new role for a few months
+          - I have been looking for a new role for several months now
           - I have been looking for a new role for several months
+          - I have been looking for a new role for some months now
+          - I have been looking for a new role for some months
+          - I have been looking for a new role for a couple of months now
+          - I have been looking for a new role for a couple of months
+          - I have been looking for new roles for a few months now
+          - I have been looking for new roles for a few months
+          - I have been looking for new roles for several months now
+          - I have been looking for new roles for several months
+          - I have been looking for new roles for some months now
+          - I have been looking for new roles for some months
+          - I have been looking for new roles for a couple of months now
+          - I have been looking for new roles for a couple of months
+          - I have been looking for a new job for a few months now
           - I have been looking for a new job for a few months
+          - I have been looking for a new job for several months now
           - I have been looking for a new job for several months
+          - I have been looking for a new job for some months now
+          - I have been looking for a new job for some months
+          - I have been looking for a new job for a couple of months now
+          - I have been looking for a new job for a couple of months
+          - I have been looking for new jobs for a few months now
+          - I have been looking for new jobs for a few months
+          - I have been looking for new jobs for several months now
+          - I have been looking for new jobs for several months
+          - I have been looking for new jobs for some months now
+          - I have been looking for new jobs for some months
+          - I have been looking for new jobs for a couple of months now
+          - I have been looking for new jobs for a couple of months
+          - I have been looking for a new position for a few months now
           - I have been looking for a new position for a few months
+          - I have been looking for a new position for several months now
           - I have been looking for a new position for several months
+          - I have been looking for a new position for some months now
+          - I have been looking for a new position for some months
+          - I have been looking for a new position for a couple of months now
+          - I have been looking for a new position for a couple of months
+          - I have been looking for new positions for a few months now
+          - I have been looking for new positions for a few months
+          - I have been looking for new positions for several months now
+          - I have been looking for new positions for several months
+          - I have been looking for new positions for some months now
+          - I have been looking for new positions for some months
+          - I have been looking for new positions for a couple of months now
+          - I have been looking for new positions for a couple of months
+          - I have been searching for a new role for a few months now
           - I have been searching for a new role for a few months
+          - I have been searching for a new role for several months now
           - I have been searching for a new role for several months
+          - I have been searching for a new role for some months now
+          - I have been searching for a new role for some months
+          - I have been searching for a new role for a couple of months now
+          - I have been searching for a new role for a couple of months
+          - I have been searching for new roles for a few months now
+          - I have been searching for new roles for a few months
+          - I have been searching for new roles for several months now
+          - I have been searching for new roles for several months
+          - I have been searching for new roles for some months now
+          - I have been searching for new roles for some months
+          - I have been searching for new roles for a couple of months now
+          - I have been searching for new roles for a couple of months
+          - I have been searching for a new job for a few months now
           - I have been searching for a new job for a few months
+          - I have been searching for a new job for several months now
           - I have been searching for a new job for several months
+          - I have been searching for a new job for some months now
+          - I have been searching for a new job for some months
+          - I have been searching for a new job for a couple of months now
+          - I have been searching for a new job for a couple of months
+          - I have been searching for new jobs for a few months now
+          - I have been searching for new jobs for a few months
+          - I have been searching for new jobs for several months now
+          - I have been searching for new jobs for several months
+          - I have been searching for new jobs for some months now
+          - I have been searching for new jobs for some months
+          - I have been searching for new jobs for a couple of months now
+          - I have been searching for new jobs for a couple of months
+          - I have been searching for a new position for a few months now
           - I have been searching for a new position for a few months
+          - I have been searching for a new position for several months now
           - I have been searching for a new position for several months
+          - I have been searching for a new position for some months now
+          - I have been searching for a new position for some months
+          - I have been searching for a new position for a couple of months now
+          - I have been searching for a new position for a couple of months
+          - I have been searching for new positions for a few months now
+          - I have been searching for new positions for a few months
+          - I have been searching for new positions for several months now
+          - I have been searching for new positions for several months
+          - I have been searching for new positions for some months now
+          - I have been searching for new positions for some months
+          - I have been searching for new positions for a couple of months now
+          - I have been searching for new positions for a couple of months
+          - I have been exploring new roles for a few months now
           - I have been exploring new roles for a few months
+          - I have been exploring new roles for several months now
           - I have been exploring new roles for several months
+          - I have been exploring new roles for some months now
+          - I have been exploring new roles for some months
+          - I have been exploring new roles for a couple of months now
+          - I have been exploring new roles for a couple of months
+          - I have been exploring new options for a few months now
           - I have been exploring new options for a few months
+          - I have been exploring new options for several months now
           - I have been exploring new options for several months
+          - I have been exploring new options for some months now
+          - I have been exploring new options for some months
+          - I have been exploring new options for a couple of months now
+          - I have been exploring new options for a couple of months
+          - I have been exploring new opportunities for a few months now
           - I have been exploring new opportunities for a few months
+          - I have been exploring new opportunities for several months now
           - I have been exploring new opportunities for several months
+          - I have been exploring new opportunities for some months now
+          - I have been exploring new opportunities for some months
+          - I have been exploring new opportunities for a couple of months now
+          - I have been exploring new opportunities for a couple of months
         explanation: Have been looking + for — период до сегодняшнего дня.
       - id: q2
         prompt: Как измеряют успех в этой роли?
         answer:
           - How is success measured in this role
+          - How is success measured in this position
+          - How is success measured for this role
+          - How is success measured for this position
           - How will success be measured in this role
+          - How will success be measured in this position
+          - How will success be measured for this role
+          - How will success be measured for this position
+          - How would success be measured in this role
+          - How would success be measured in this position
+          - How would success be measured for this role
+          - How would success be measured for this position
           - How do you measure success in this role
+          - How do you measure success in this position
+          - How do you measure success for this role
+          - How do you measure success for this position
+          - How do they measure success in this role
+          - How do they measure success in this position
+          - How do they measure success for this role
+          - How do they measure success for this position
           - How does the team measure success in this role
+          - How does the team measure success in this position
+          - How does the team measure success for this role
+          - How does the team measure success for this position
+          - How does the company measure success in this role
+          - How does the company measure success in this position
+          - How does the company measure success for this role
+          - How does the company measure success for this position
         explanation: Success is measured — «успех измеряют»; in this role — «в этой роли».
       - id: q3
         prompt: Хотите ли вы узнать обо мне что-нибудь ещё?
         answer:
+          - Is there anything else that you would like to know about me
+          - Is there anything else that you want to know about me
           - Is there anything else you would like to know about me
           - Is there anything else you want to know about me
-          - Would you like to know anything else about me
-          - Do you want to know anything else about me
+          - Is there anything more that you would like to know about me
+          - Is there anything more that you want to know about me
           - Is there anything more you would like to know about me
+          - Is there anything more you want to know about me
+          - Would you like to know anything else about me
+          - Would you like to know anything more about me
+          - Do you want to know anything else about me
+          - Do you want to know anything more about me
         explanation: Anything else — «что-нибудь ещё»; would like to know — вежливая форма.
       - id: q4
         prompt: Могу я получить подтверждение условий в письменном виде?
@@ -432,6 +565,12 @@ blocks:
           - May I have the conditions in writing
           - May I receive the terms in writing
           - May I receive the conditions in writing
+          - Could I get the terms confirmed in writing
+          - Could I get the conditions confirmed in writing
+          - Can I get the terms confirmed in writing
+          - Can I get the conditions confirmed in writing
+          - May I get the terms confirmed in writing
+          - May I get the conditions confirmed in writing
           - Could you confirm the terms in writing
           - Could you confirm the conditions in writing
         explanation: Written confirmation — подтверждение письмом; in writing — «письменно».
@@ -439,7 +578,13 @@ blocks:
         prompt: Когда истекает срок предложения?
         answer:
           - When does the offer expire
+          - When does this offer expire
           - When will the offer expire
+          - When will this offer expire
           - When is the offer going to expire
           - When is the offer due to expire
+          - When is this offer going to expire
+          - When is this offer due to expire
+          - When is the offer expiring
+          - When is this offer expiring
         explanation: Expire — «истекать»; вопрос строится с does.

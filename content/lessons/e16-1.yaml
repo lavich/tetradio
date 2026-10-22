@@ -89,7 +89,7 @@ blocks:
     id: questions
     title: Вопросы интервьюеру
     body: |-
-      В конце собеседования звучит **Do you have any questions for us?** Ответ «нет» оставляет впечатление, что роль вас мало интересует. Подготовьте три–четыре вопроса о работе команды: о рабочем дне, об измерении успеха, о релизах, о трудностях и о росте инженеров. Вопросы о деньгах и условиях чаще задают рекрутеру, как в модуле `e08`.
+      В конце собеседования звучит **Do you have any questions for us?** Ответ «нет» пропускает возможность узнать о роли и показать интерес. Подготовьте три–четыре вопроса о работе команды: о рабочем дне, об измерении успеха, о релизах, о трудностях и о росте инженеров. Вопросы о деньгах и условиях чаще задают рекрутеру, как в модуле `e08`.
 
       Прямой вопрос строится по порядку: вопросительное слово, вспомогательный глагол, подлежащее, смысловой глагол: **How does the team handle code reviews?** Вежливее звучит вопрос с вводной частью **Could you tell me…?** или **I'd like to know…?** После неё порядок слов прямой, как в утверждении: **Could you tell me how the team handles code reviews?**
 
@@ -294,7 +294,7 @@ blocks:
         prompt: команда, которая делает общие сервисы и инструменты для других команд
         answer: a platform team
       - id: m3
-        prompt: ритуалы, правила и инструменты, принятые в команде
+        prompt: ритуалы и правила работы, принятые в команде
         answer: ways of working
       - id: m4
         prompt: "регулярный ритм: например, релиз раз в две недели"
@@ -354,12 +354,38 @@ blocks:
       - id: q1
         prompt: Я уже три года работаю над платёжными сервисами. (present perfect continuous)
         answer:
+          - I have already been working on payment services for three years
+          - I have already been working on payment services for the last three years
+          - I have already been working on payment services for the past three years
+          - I have already been working on payment services for three years now
+          - I have already been working on payment systems for three years
+          - I have already been working on payment systems for the last three years
+          - I have already been working on payment systems for the past three years
+          - I have already been working on payment systems for three years now
+          - I have already been working with payment services for three years
+          - I have already been working with payment services for the last three years
+          - I have already been working with payment services for the past three years
+          - I have already been working with payment services for three years now
+          - I have already been working with payment systems for three years
+          - I have already been working with payment systems for the last three years
+          - I have already been working with payment systems for the past three years
+          - I have already been working with payment systems for three years now
           - I have been working on payment services for three years
           - I have been working on payment services for the last three years
+          - I have been working on payment services for the past three years
           - I have been working on payment services for three years now
           - I have been working on payment systems for three years
           - I have been working on payment systems for the last three years
+          - I have been working on payment systems for the past three years
           - I have been working on payment systems for three years now
+          - I have been working with payment services for three years
+          - I have been working with payment services for the last three years
+          - I have been working with payment services for the past three years
+          - I have been working with payment services for three years now
+          - I have been working with payment systems for three years
+          - I have been working with payment systems for the last three years
+          - I have been working with payment systems for the past three years
+          - I have been working with payment systems for three years now
         explanation: Период до сегодняшнего дня — have been working + for; on — «над».
       - id: q2
         prompt: Как давно вы ищете человека на эту роль?
@@ -415,13 +441,34 @@ blocks:
         answer:
           - How do you support engineers' growth
           - How do you support engineers' professional growth
-          - How do you support engineers' development
+          - How do you support engineers' professional development
           - How do you support engineers' career growth
+          - How do you support engineers' development
+          - How do you support engineers' career development
+          - How do you support your engineers' growth
+          - How do you support your engineers' professional growth
+          - How do you support your engineers' professional development
+          - How do you support your engineers' career growth
+          - How do you support your engineers' development
+          - How do you support your engineers' career development
           - How do you support the growth of engineers
-          - How do you support the professional growth of engineers
-          - How do you support the development of engineers
           - How do you support the growth of your engineers
+          - How do you support the professional growth of engineers
           - How do you support the professional growth of your engineers
+          - How do you support the professional development of engineers
+          - How do you support the professional development of your engineers
+          - How do you support the career growth of engineers
+          - How do you support the career growth of your engineers
+          - How do you support the development of engineers
+          - How do you support the development of your engineers
+          - How do you support the career development of engineers
+          - How do you support the career development of your engineers
+          - How do you support professional growth of engineers
+          - How do you support professional growth of your engineers
+          - How do you support professional development of engineers
+          - How do you support professional development of your engineers
+          - How do you support career growth of engineers
+          - How do you support career growth of your engineers
           - How do you help your engineers grow
           - How do you help your engineers develop
           - How do you help your engineers to grow
@@ -438,52 +485,164 @@ blocks:
       - id: q6
         prompt: Не могли бы вы рассказать, как команда проводит код-ревью?
         answer:
+          - Could you please tell me how the team handles code reviews
+          - Could you please tell me how the team handles code review
+          - Could you please tell me how the team does code reviews
+          - Could you please tell me how the team runs code reviews
+          - Could you please tell me how the team conducts code reviews
+          - Could you please tell me how the team approaches code review
+          - Could you please tell me how code reviews are handled in the team
+          - Could you please tell me how code reviews are done in the team
+          - Could you please explain to me how the team handles code reviews
+          - Could you please explain to me how the team handles code review
+          - Could you please explain to me how the team does code reviews
+          - Could you please explain to me how the team runs code reviews
+          - Could you please explain to me how the team conducts code reviews
+          - Could you please explain to me how the team approaches code review
+          - Could you please explain to me how code reviews are handled in the team
+          - Could you please explain to me how code reviews are done in the team
+          - Could you please explain how the team handles code reviews
+          - Could you please explain how the team handles code review
+          - Could you please explain how the team does code reviews
+          - Could you please explain how the team runs code reviews
+          - Could you please explain how the team conducts code reviews
+          - Could you please explain how the team approaches code review
+          - Could you please explain how code reviews are handled in the team
+          - Could you please explain how code reviews are done in the team
+          - Could you please describe to me how the team handles code reviews
+          - Could you please describe to me how the team handles code review
+          - Could you please describe to me how the team does code reviews
+          - Could you please describe to me how the team runs code reviews
+          - Could you please describe to me how the team conducts code reviews
+          - Could you please describe to me how the team approaches code review
+          - Could you please describe to me how code reviews are handled in the team
+          - Could you please describe to me how code reviews are done in the team
+          - Could you please describe how the team handles code reviews
+          - Could you please describe how the team handles code review
+          - Could you please describe how the team does code reviews
+          - Could you please describe how the team runs code reviews
+          - Could you please describe how the team conducts code reviews
+          - Could you please describe how the team approaches code review
+          - Could you please describe how code reviews are handled in the team
+          - Could you please describe how code reviews are done in the team
           - Could you tell me how the team handles code reviews
           - Could you tell me how the team handles code review
           - Could you tell me how the team does code reviews
-          - Could you tell me how the team does code review
           - Could you tell me how the team runs code reviews
-          - Could you tell me how the team runs code review
           - Could you tell me how the team conducts code reviews
-          - Could you tell me how the team conducts code review
+          - Could you tell me how the team approaches code review
+          - Could you tell me how code reviews are handled in the team
+          - Could you tell me how code reviews are done in the team
           - Could you explain to me how the team handles code reviews
           - Could you explain to me how the team handles code review
           - Could you explain to me how the team does code reviews
-          - Could you explain to me how the team does code review
           - Could you explain to me how the team runs code reviews
-          - Could you explain to me how the team runs code review
           - Could you explain to me how the team conducts code reviews
-          - Could you explain to me how the team conducts code review
+          - Could you explain to me how the team approaches code review
+          - Could you explain to me how code reviews are handled in the team
+          - Could you explain to me how code reviews are done in the team
           - Could you explain how the team handles code reviews
           - Could you explain how the team handles code review
           - Could you explain how the team does code reviews
-          - Could you explain how the team does code review
           - Could you explain how the team runs code reviews
-          - Could you explain how the team runs code review
           - Could you explain how the team conducts code reviews
-          - Could you explain how the team conducts code review
+          - Could you explain how the team approaches code review
+          - Could you explain how code reviews are handled in the team
+          - Could you explain how code reviews are done in the team
+          - Could you describe to me how the team handles code reviews
+          - Could you describe to me how the team handles code review
+          - Could you describe to me how the team does code reviews
+          - Could you describe to me how the team runs code reviews
+          - Could you describe to me how the team conducts code reviews
+          - Could you describe to me how the team approaches code review
+          - Could you describe to me how code reviews are handled in the team
+          - Could you describe to me how code reviews are done in the team
+          - Could you describe how the team handles code reviews
+          - Could you describe how the team handles code review
+          - Could you describe how the team does code reviews
+          - Could you describe how the team runs code reviews
+          - Could you describe how the team conducts code reviews
+          - Could you describe how the team approaches code review
+          - Could you describe how code reviews are handled in the team
+          - Could you describe how code reviews are done in the team
+          - Would you please tell me how the team handles code reviews
+          - Would you please tell me how the team handles code review
+          - Would you please tell me how the team does code reviews
+          - Would you please tell me how the team runs code reviews
+          - Would you please tell me how the team conducts code reviews
+          - Would you please tell me how the team approaches code review
+          - Would you please tell me how code reviews are handled in the team
+          - Would you please tell me how code reviews are done in the team
+          - Would you please explain to me how the team handles code reviews
+          - Would you please explain to me how the team handles code review
+          - Would you please explain to me how the team does code reviews
+          - Would you please explain to me how the team runs code reviews
+          - Would you please explain to me how the team conducts code reviews
+          - Would you please explain to me how the team approaches code review
+          - Would you please explain to me how code reviews are handled in the team
+          - Would you please explain to me how code reviews are done in the team
+          - Would you please explain how the team handles code reviews
+          - Would you please explain how the team handles code review
+          - Would you please explain how the team does code reviews
+          - Would you please explain how the team runs code reviews
+          - Would you please explain how the team conducts code reviews
+          - Would you please explain how the team approaches code review
+          - Would you please explain how code reviews are handled in the team
+          - Would you please explain how code reviews are done in the team
+          - Would you please describe to me how the team handles code reviews
+          - Would you please describe to me how the team handles code review
+          - Would you please describe to me how the team does code reviews
+          - Would you please describe to me how the team runs code reviews
+          - Would you please describe to me how the team conducts code reviews
+          - Would you please describe to me how the team approaches code review
+          - Would you please describe to me how code reviews are handled in the team
+          - Would you please describe to me how code reviews are done in the team
+          - Would you please describe how the team handles code reviews
+          - Would you please describe how the team handles code review
+          - Would you please describe how the team does code reviews
+          - Would you please describe how the team runs code reviews
+          - Would you please describe how the team conducts code reviews
+          - Would you please describe how the team approaches code review
+          - Would you please describe how code reviews are handled in the team
+          - Would you please describe how code reviews are done in the team
           - Would you tell me how the team handles code reviews
           - Would you tell me how the team handles code review
           - Would you tell me how the team does code reviews
-          - Would you tell me how the team does code review
           - Would you tell me how the team runs code reviews
-          - Would you tell me how the team runs code review
           - Would you tell me how the team conducts code reviews
-          - Would you tell me how the team conducts code review
+          - Would you tell me how the team approaches code review
+          - Would you tell me how code reviews are handled in the team
+          - Would you tell me how code reviews are done in the team
           - Would you explain to me how the team handles code reviews
           - Would you explain to me how the team handles code review
           - Would you explain to me how the team does code reviews
-          - Would you explain to me how the team does code review
           - Would you explain to me how the team runs code reviews
-          - Would you explain to me how the team runs code review
           - Would you explain to me how the team conducts code reviews
-          - Would you explain to me how the team conducts code review
+          - Would you explain to me how the team approaches code review
+          - Would you explain to me how code reviews are handled in the team
+          - Would you explain to me how code reviews are done in the team
           - Would you explain how the team handles code reviews
           - Would you explain how the team handles code review
           - Would you explain how the team does code reviews
-          - Would you explain how the team does code review
           - Would you explain how the team runs code reviews
-          - Would you explain how the team runs code review
           - Would you explain how the team conducts code reviews
-          - Would you explain how the team conducts code review
+          - Would you explain how the team approaches code review
+          - Would you explain how code reviews are handled in the team
+          - Would you explain how code reviews are done in the team
+          - Would you describe to me how the team handles code reviews
+          - Would you describe to me how the team handles code review
+          - Would you describe to me how the team does code reviews
+          - Would you describe to me how the team runs code reviews
+          - Would you describe to me how the team conducts code reviews
+          - Would you describe to me how the team approaches code review
+          - Would you describe to me how code reviews are handled in the team
+          - Would you describe to me how code reviews are done in the team
+          - Would you describe how the team handles code reviews
+          - Would you describe how the team handles code review
+          - Would you describe how the team does code reviews
+          - Would you describe how the team runs code reviews
+          - Would you describe how the team conducts code reviews
+          - Would you describe how the team approaches code review
+          - Would you describe how code reviews are handled in the team
+          - Would you describe how code reviews are done in the team
         explanation: "После Could you tell me порядок слов прямой: how the team handles."

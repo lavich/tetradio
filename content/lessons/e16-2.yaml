@@ -62,7 +62,7 @@ blocks:
 
       **Срок и письменные условия.** **A written confirmation** — подтверждение условий письмом. **Expire** — истекать: **The offer expires on Friday.** **An extension** — продление срока. **Be subject to** — зависеть от выполнения условия: **The offer is subject to two references.** **A clause** — пункт договора.
 
-      **Решение.** **Turn down** — отклонить предложение. **Sleep on it** — обдумать до завтра. **A sticking point** — спорный пункт, который мешает договориться.
+      **Решение.** **Turn down** — отклонить предложение. **Sleep on it** — взять паузу на размышление. **A sticking point** — спорный пункт, который мешает договориться.
   - type: explanation
     id: offer-safety
     title: О чём этот урок и о чём нет
@@ -145,7 +145,7 @@ blocks:
         prompt: Thank you, but the role is not right for me now, so I have to ___ the offer. (отклонить)
         answer: turn down
       - id: g7
-        prompt: I do not want to answer today. I would like to ___ and reply tomorrow. (обдумать до завтра)
+        prompt: I do not want to answer today. I would like to ___ and reply tomorrow. (взять паузу на размышление)
         answer: sleep on it
   - type: explanation
     id: reading-how
@@ -414,7 +414,7 @@ blocks:
     format: choice
     items:
       - id: q1
-        prompt: Astrid says «We have been working on a new billing service.» What does the tense show?
+        prompt: Astrid says «We've been working on a new billing service.» What does the tense show?
         options:
           - The work finished last year.
           - The work will start next quarter.
@@ -539,13 +539,13 @@ blocks:
         answer: He politely asks whether the date can change.
         explanation: Would there be any flexibility — вежливый вопрос о возможности изменить условие.
       - id: q3
-        prompt: Daniel says «I would like to sleep on it.» What does he mean?
+        prompt: Daniel says «I'd like to sleep on it.» What does he mean?
         options:
           - He has already refused.
           - He is tired and wants to end the call.
-          - He wants time to think until the next day.
-        answer: He wants time to think until the next day.
-        explanation: Sleep on it — «обдумать до завтра».
+          - He wants some time to think before he decides.
+        answer: He wants some time to think before he decides.
+        explanation: Sleep on it — взять паузу и обдумать, не решая сразу.
       - id: q4
         prompt: Katarina says «The offer is subject to a background check.» What does it mean?
         options:
