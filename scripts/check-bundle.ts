@@ -16,6 +16,7 @@ import { inDistOf, measure, overLimits, type BundleLimits } from "./bundle-metri
  * Текущий предел — этот замер плюс запас на лёгкий модуль и экран сбоя.
  * Замер 17.10.2026 бандла deploy (#160): gzip 202 122, brotli 177 271, CSS первого экрана 93 975 (gzip 19 085),
  * precache 1 479 087 из 87 файлов, шрифты в precache 250 952. Пределы — этот замер плюс 4–5% (CSS gzip +10%).
+ * Замер 22.10.2026 бандла deploy с BASE_PATH=/ (#272, #273, #275): precache 1 555 725 из 107 файлов, предел 1 625 000 (+4,5%).
  */
 const INITIAL_LIMIT = 620_000;
 const LIMITS: Partial<BundleLimits> = {
@@ -23,7 +24,7 @@ const LIMITS: Partial<BundleLimits> = {
   initialBrotli: 185_000,
   cssRaw: 100_000,
   cssGzip: 21_000,
-  precacheBytes: 1_550_000,
+  precacheBytes: 1_625_000,
   fontBytes: 265_000,
 };
 /** Лендинг — статичный HTML со скриптом без React: 18 502 байта при переходе на статичную страницу. */
