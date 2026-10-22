@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { readdirSync, readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { parseCatalog, parsePackage } from "../src/content/schema";
-import { moduleViews, nextStep } from "../src/storage/course";
+import { courseFinished, moduleViews, nextStep } from "../src/storage/course";
 import { AppDatabase } from "../src/storage/db";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
 import { GREEK_CALENDAR } from "./helpers/calendar";
@@ -85,7 +85,23 @@ describe("курс в продукте", () => {
 });
 
 describe("английский для путешествий и общения", () => {
-  const STAGE = ["t01", "t02", "t03", "t04", "t05", "t06", "t07", "t08", "t09", "t10", "t11", "t12", "t13", "t14"];
+  const STAGE = [
+    "t01",
+    "t02",
+    "t03",
+    "t04",
+    "t05",
+    "t06",
+    "t07",
+    "t15",
+    "t08",
+    "t09",
+    "t10",
+    "t11",
+    "t12",
+    "t13",
+    "t14",
+  ];
   const TRIP = STAGE.slice(0, 7);
   const RUDE =
     /\b(fuck\w*|shit\w*|bitch\w*|bastard\w*|arse(hole|s)?|wank\w*|piss\w*|twat\w*|cunt\w*|prick(s)?|slut\w*|whore\w*|bollocks|crap\w*|dick\w*|\bass(hole)?\b)\b/i;
@@ -109,15 +125,19 @@ describe("английский для путешествий и общения",
     t12: { register: "friendly", min: 60, max: 100 },
     t13: { register: "friendly", min: 40, max: 80 },
     t14: { register: "friendly", min: 60, max: 100 },
+    t15: { register: "formal", min: 60, max: 100 },
   };
   const travel = () => catalog.courses.find((course) => course.id === "english-travel");
   const lessonOf = (id: string) => packagesOf("english-travel").find((pack) => pack.id === id);
   const blocksOf = (id: string) => lessonOf(id)!.blocks!;
-  const cardIds = (prefix: string, number: number) =>
-    Array.from({ length: 15 }, (_, i) => `${prefix}${String(15 * (number - 1) + i + 1).padStart(3, "0")}`);
+  const cardIds = (prefix: string, moduleId: string) =>
+    Array.from(
+      { length: 15 },
+      (_, i) => `${prefix}${String(15 * (Number(moduleId.slice(1)) - 1) + i + 1).padStart(3, "0")}`,
+    );
   const wordCount = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
-  it("курс по программе: поля выбора, без календаря, 14 модулей, опубликованные модули", () => {
+  it("курс по программе: поля выбора, без календаря, 15 модулей, опубликованные модули", () => {
     expect(travel()).toMatchObject({
       title: "Английский для путешествий и общения",
       language: "en",
@@ -130,10 +150,12 @@ describe("английский для путешествий и общения",
     });
     expect(travel()).not.toHaveProperty("calendar");
     const modules = modulesOf("english-travel");
-    expect(modules.map((m) => m.id)).toEqual(
-      Array.from({ length: 14 }, (_, i) => `t${String(i + 1).padStart(2, "0")}`),
-    );
-    expect(modules.map((m) => m.number)).toEqual(Array.from({ length: 14 }, (_, i) => i + 1));
+    expect(modules.map((m) => m.id)).toEqual(STAGE);
+    expect(modules.map((m) => m.number)).toEqual(Array.from({ length: 15 }, (_, i) => i + 1));
+    const numberOf = (id: string) => modules.find((m) => m.id === id)!.number;
+    expect(numberOf("t15")).toBe(8);
+    expect(STAGE.slice(0, 7).map(numberOf)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(STAGE.slice(8).map(numberOf)).toEqual([9, 10, 11, 12, 13, 14, 15]);
     for (const module of modules.filter((m) => !STAGE.includes(m.id))) expect(module.status, module.id).toBe("draft");
     expect(content.partial).toEqual([]);
   });
@@ -161,8 +183,8 @@ describe("английский для путешествий и общения",
       const packs = [first, second].map((id) => lessonOf(id)!);
       const words = packs.flatMap((pack) => pack.words);
       const phrases = packs.flatMap((pack) => pack.phrases);
-      expect(words.map((word) => word.id).sort()).toEqual(cardIds("tw", module().number));
-      expect(phrases.map((phrase) => phrase.id).sort()).toEqual(cardIds("tp", module().number));
+      expect(words.map((word) => word.id).sort()).toEqual(cardIds("tw", moduleId));
+      expect(phrases.map((phrase) => phrase.id).sort()).toEqual(cardIds("tp", moduleId));
       for (const id of [third, test]) {
         expect(lessonOf(id)!.words, id).toEqual([]);
         expect(lessonOf(id)!.phrases, id).toEqual([]);
@@ -207,7 +229,7 @@ describe("английский для путешествий и общения",
         expect(block.model, block.id).toBeTruthy();
         expect(block.criteria.length, block.id).toBeGreaterThan(0);
       }
-      if (module().number < 5) return;
+      if (["t01", "t02", "t03", "t04"].includes(moduleId)) return;
       expect(speaking.some((block) => block.part === "roleplay")).toBe(true);
       blocks.forEach((block, i) => {
         if (block.type !== "speaking" || block.part !== "roleplay") return;
@@ -271,6 +293,160 @@ describe("английский для путешествий и общения",
       (item) => item.type === "exercise" && item.graded === true && item.about === "refusal",
     );
     expect(graded.length).toBeGreaterThan(0);
+  });
+
+  it("t15-1: блок о флагах и течении, спокойно и с оговоркой о странах", () => {
+    const block = blocksOf("t15-1").find((item) => item.type === "explanation" && item.id === "water-safety");
+    expect(block?.type).toBe("explanation");
+    const body = block?.type === "explanation" ? block.body : "";
+    expect(body).toMatch(/red and yellow/i);
+    expect(body).toMatch(/red flag/i);
+    expect(body).toMatch(/along the beach|parallel/i);
+    expect(body).toMatch(/raise your arm|wave/i);
+    expect(body).toMatch(/lifeguard/i);
+    expect(body).toMatch(/RNLI/);
+    expect(body).toMatch(/различа/);
+    expect(body).toMatch(/\b112\b/);
+    expect(body).toMatch(/\b999\b/);
+    expect(body).not.toMatch(/!/);
+    const exercises = blocksOf("t15-1").filter((item) => item.type === "exercise" && item.id === "water-safety-q");
+    expect(exercises).toHaveLength(1);
+  });
+
+  it("t15: без контрольной точки, исходник урока до 60 000 байт, до 200 вариантов ответа на пункт", () => {
+    expect(modulesOf("english-travel").find((m) => m.id === "t15")!.checkpointId).toBeUndefined();
+    for (const id of ["t15-1", "t15-2", "t15-3", "t15-test"]) {
+      expect(readFileSync(`content/lessons/${id}.yaml`).length, id).toBeLessThanOrEqual(60000);
+      for (const block of blocksOf(id))
+        if (block.type === "exercise" && block.format === "text")
+          for (const item of block.items) expect(item.answer.length, `${id} ${item.id}`).toBeLessThanOrEqual(200);
+    }
+  });
+
+  it("русские объяснения t15 без восклицательных знаков", () => {
+    for (const id of ["t15-1", "t15-2", "t15-3", "t15-test"])
+      for (const block of blocksOf(id))
+        if (block.type === "explanation") expect(block.body, `${id} ${block.id}`).not.toMatch(/!/);
+  });
+
+  describe("карточки t15 и соседних модулей не встречаются в чужих текстах", () => {
+    const SKIP_KEYS = new Set([
+      "id",
+      "type",
+      "format",
+      "about",
+      "kind",
+      "part",
+      "register",
+      "audio",
+      "plays",
+      "speaker",
+    ]);
+    const strings = (value: unknown): string[] =>
+      typeof value === "string"
+        ? [value]
+        : Array.isArray(value)
+          ? value.flatMap(strings)
+          : value && typeof value === "object"
+            ? Object.entries(value).flatMap(([key, item]) => (SKIP_KEYS.has(key) ? [] : strings(item)))
+            : [];
+    const stem = (card: string) =>
+      card
+        .replace(/[.?!]+$/, "")
+        .replace(/^(a|an|the|to)\s+/i, "")
+        .toLowerCase();
+    const found = (stems: string[], texts: string[]) => {
+      const hits: string[] = [];
+      const haystack = texts.join("\n").toLowerCase();
+      for (const word of new Set(stems))
+        if (new RegExp(`(?<![\\w'-])${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:s|es)?(?![\\w'-])`).test(haystack))
+          hits.push(word);
+      return hits;
+    };
+    const hitsIn = (id: string, stems: string[], glossExempt: boolean) =>
+      ((lessonOf(id)!.blocks ?? []) as Array<{ type: string; glosses?: Array<{ text: string }> }>)
+        .flatMap((block) => {
+          const hits = found(stems, strings(block));
+          if (!glossExempt || block.type !== "reading") return hits;
+          const glossed = (block.glosses ?? []).map((gloss) => gloss.text.toLowerCase());
+          return hits.filter((hit) => !glossed.some((text) => text.includes(hit)));
+        })
+        .filter((hit) => !ALLOWED.some((item) => item.lesson === id && item.stem === hit));
+    const cardsOf = (moduleIds: string[]) =>
+      moduleIds
+        .flatMap((id) => ["1", "2"].map((suffix) => lessonOf(`${id}-${suffix}`)!))
+        .flatMap((pack) => [...pack.words.map((word) => word.greek), ...pack.phrases.map((phrase) => phrase.text)])
+        .map(stem);
+    const lessonsOf = (moduleIds: string[], extra: string[] = []) => [
+      ...moduleIds.flatMap((id) => ["1", "2", "3", "test"].map((suffix) => `${id}-${suffix}`)),
+      ...extra,
+    ];
+    const LATER = ["t08", "t09", "t10", "t11", "t12", "t13", "t14"];
+    const EARLIER = ["t01", "t02", "t03", "t04", "t05", "t06", "t07"];
+    const ALLOWED: Array<{ lesson: string; stem: string; reason: string }> = ["t15-1", "t15-test"].map((lesson) => ({
+      lesson,
+      stem: "red flag",
+      reason: "флаг на пляже, а не тревожный признак",
+    }));
+
+    it("карточки t08–t14 не используются в текстах t15 вне глосс чтения", () => {
+      const cards = cardsOf(LATER);
+      for (const id of lessonsOf(["t15"])) expect(hitsIn(id, cards, true), id).toEqual([]);
+    });
+    it("карточки t15 не используются в текстах t01–t07, «Дня поездки» и t08–t14", () => {
+      const cards = cardsOf(["t15"]);
+      for (const id of lessonsOf([...EARLIER, ...LATER], ["t07-c1", "t14-c2"]))
+        expect(hitsIn(id, cards, false), id).toEqual([]);
+    });
+  });
+
+  describe("порядок полки и следующий шаг", () => {
+    const lessonsOfModule = (id: string) => ["1", "2", "3", "test"].map((suffix) => `${id}-${suffix}`);
+    const all = [...STAGE.flatMap(lessonsOfModule), "t07-c1", "t14-c2"];
+    let db: AppDatabase;
+    beforeEach(async () => {
+      await new AppDatabase("tetradio-travel-shelf").delete();
+      db = new AppDatabase("tetradio-travel-shelf");
+      await installLessons(db, all, memoryFetcher(content));
+    });
+    afterEach(() => db.close());
+    const views = () => moduleViews("english-travel", db);
+    const step = async () => nextStep(await views());
+    const done = (modules: string[], extra: string[] = []) =>
+      completeLessons(db, [...modules.flatMap(lessonsOfModule), ...extra]);
+
+    it("полка идёт по номерам: t07, t15, t08", async () => {
+      expect((await views()).map((view) => view.module.id)).toEqual(STAGE);
+    });
+    it("t01–t07 пройдены без точки — следующий шаг «День поездки»", async () => {
+      await done(STAGE.slice(0, 7));
+      expect((await step())!.lesson.id).toBe("t07-c1");
+    });
+    it("t01–t07 и «День поездки» пройдены — следующий шаг t15-1", async () => {
+      await done(STAGE.slice(0, 7), ["t07-c1"]);
+      expect((await step())!.lesson.id).toBe("t15-1");
+    });
+    it("пройдены t15 и t08–t09 — следующий шаг t10-1", async () => {
+      await done([...STAGE.slice(0, 8), "t08", "t09"], ["t07-c1"]);
+      expect((await step())!.lesson.id).toBe("t10-1");
+    });
+    it("пройдены t08–t14, но не t15 — следующий шаг t15-1", async () => {
+      await done([...STAGE.slice(0, 7), ...STAGE.slice(8)], ["t07-c1"]);
+      expect((await step())!.lesson.id).toBe("t15-1");
+    });
+    it("пройдено всё, кроме t15: курс не пройден, после t15 — пройден", async () => {
+      await done([...STAGE.slice(0, 7), ...STAGE.slice(8)], ["t07-c1", "t14-c2"]);
+      expect(courseFinished(await views(), await step())).toBe(false);
+      expect((await step())!.lesson.id).toBe("t15-1");
+      await done(["t15"]);
+      expect(courseFinished(await views(), await step())).toBe(true);
+    });
+    it("прогресс хранится по урокам, а не по номеру модуля", async () => {
+      await done(["t08", "t09", "t10"]);
+      const rows = await db.lessons.filter((lesson) => lesson.completed).toArray();
+      expect(rows.map((row) => row.id).sort()).toEqual(["t08", "t09", "t10"].flatMap(lessonsOfModule).sort());
+      expect((await views()).filter((view) => view.completed).map((view) => view.module.number)).toEqual([9, 10, 11]);
+    });
   });
 
   describe("контрольная точка «День поездки»", () => {

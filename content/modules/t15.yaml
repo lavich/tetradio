@@ -1,0 +1,25 @@
+number: 8
+title: Beach and holiday
+subtitle: Пляж и отпуск
+status: published
+goal: спросить, безопасно ли купаться, арендовать лежак или лодку, пользоваться курортом «всё включено», выбрать занятие по прогнозу
+grammar:
+  - there is / there are, can / could для разрешения, Is it safe to…?, should, going to и will для прогноза, сравнения
+sessions: 3
+lessons:
+  - t15-1
+  - t15-2
+  - t15-3
+  - t15-test
+crib:
+  title: пляж и отпуск
+  rows:
+    - [безопасно ли, Is it safe to swim here?]
+    - [что значат флаги, What do the flags mean?]
+    - [есть ли, "There's a lifeguard on duty."]
+    - [просьба, Could we get two loungers and a parasol?]
+    - [цена и время, What's the rate for a full day?]
+    - [прогноз, It's supposed to clear up by noon.]
+    - [условие, "If it rains, we'll…"]
+    - [предложить, How about a boat trip?]
+  note: "После if — настоящее время (If it rains); после can, could, should — глагол без to"

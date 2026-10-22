@@ -1,0 +1,7 @@
+id: tp224
+text: "What's the forecast for tomorrow?"
+translation: "Какой прогноз на завтра?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t15
+  operation: requested-generation
+  request: Фразы модуля t15 по программе docs/curriculum-english-travel.md
