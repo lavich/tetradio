@@ -1,0 +1,880 @@
+title: Полное пробное собеседование
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Как устроена контрольная точка
+    body: |-
+      Это контрольная точка второй ступени курса — модулей e09–e16, она же последняя в курсе. Один отклик на вакансию в Tidewell Software: от приглашения на финальные собеседования до ответа на оффер. Письма и голосовые сообщения, восемь сцен собеседования и письмо после него. Около 90 минут; перерыв удобнее делать между частями из таблицы. Выполняйте точку без словаря, таблиц и карточек. Новых карточек здесь нет, редкие слова в текстах подписаны.
+
+      **Чтение и аудирование** проверяются автоматически. Для каждого навыка считается доля правильных ответов и сравнивается с порогом **60 %** — по нему курс считает навык сданным. Каждое аудио звучит два раза. В заданиях на аудирование открывайте текст кнопкой «Открыть текст» только после ответов, иначе результат ничего не покажет; реплики перед сценами открывайте после двух прослушиваний и держите перед глазами. В вопросах с выбором верен один вариант.
+
+      **Сцены.** В каждой сначала звучат только реплики интервьюера, по порядку. Послушайте их два раза, откройте текст, затем запишите свою часть и отвечайте на каждую реплику по порядку. На вопросы о случае из работы отвечайте историей по схеме STAR. Ваша роль — Nadia Volkova: факты даны в каждом задании, можно говорить по ним или заменить своими. О коллегах и клиентах говорите без имён.
+
+      **Письмо и речь** — самопроверка: в итог они не входят. Сначала напишите текст и запишите ответ сами, только потом откройте образец и отметьте, какие критерии выполнены. Если выполнено меньше 60 % критериев, считайте навык пока не сданным.
+
+      **Навык ниже порога** — повод повторить модули, названные в пояснениях к ошибкам: чтение — e08–e11 и e16 (приглашение, кейс об инциденте, оффер), аудирование — e09–e14 и e16 (устройство раунда, постановка задачи, оффер), письмо — e13–e16, речь — сцены из e09–e16 и банк ответов третьих уроков. После повторения пройдите точку ещё раз.
+
+      **Что дальше.** Если все навыки не ниже порога, программа пройдена. Материалы курса созданы и проверены моделями, без участия носителя: перед собеседованием в компании проведите пробное с носителем или преподавателем.
+    table:
+      columns:
+        - часть
+        - задания
+        - время
+      rows:
+        - - Приглашение и HR
+          - письмо с приглашением, голосовое сообщение Astrid, сцена 1
+          - 12 мин
+        - - Поведенческие вопросы
+          - устройство раунда, сцены 2 и 3
+          - 16 мин
+        - - «А если…»
+          - кейс об инциденте, сцена 4
+          - 10 мин
+        - - Техническое обсуждение
+          - постановка задачи, сцены 5 и 6
+          - 16 мин
+        - - Мнение и вопросы
+          - сцена 7, вопрос из банка ответов
+          - 8 мин
+        - - Оффер
+          - голосовое сообщение, письмо, сцена 8
+          - 16 мин
+        - - Письмо и язык
+          - письмо после собеседования 130–170 слов, грамматика ступени
+          - 14 мин
+  - type: explanation
+    id: bank-map
+    title: Банк ответов ступени
+    body: |-
+      Шестнадцать вопросов курса, по одному на модуль. Сцены и беседа точки берут вопросы из этого списка; вопросы без сцены повторяйте по образцам третьих уроков модулей.
+    table:
+      columns:
+        - вопрос
+        - модуль
+        - в точке
+      rows:
+        - - Tell me about yourself.
+          - e01
+          - сцена 1
+        - - Walk me through your CV.
+          - e02
+          - —
+        - - Tell me about a project you're proud of.
+          - e03
+          - —
+        - - Why did you choose X over Y?
+          - e04
+          - —
+        - - How do you handle a task when the requirements are unclear?
+          - e05
+          - —
+        - - Describe the architecture of your project.
+          - e06
+          - беседа
+        - - Why do you want to join us?
+          - e07
+          - сцена 1
+        - - What are your salary expectations?
+          - e08
+          - —
+        - - Tell me about a time you faced a challenge.
+          - e09
+          - сцена 2
+        - - Tell me about a mistake you made.
+          - e10
+          - сцена 3
+        - - What would you do if the release broke production?
+          - e11
+          - сцена 4
+        - - Tell me about feedback you received.
+          - e12
+          - сцена 3
+        - - What would you want to know first about this task?
+          - e13
+          - сцена 5
+        - - Solve this task out loud.
+          - e14
+          - сцена 6
+        - - What are your strengths and weaknesses?
+          - e15
+          - сцены 1 и 7
+        - - Do you have any questions for us?
+          - e16
+          - сцены 7 и 8
+  - type: reading
+    id: invite
+    title: "Final interviews at Tidewell Software"
+    text: |-
+      Subject: Final interviews at Tidewell Software
+
+      Dear Nadia,
+
+      Thank you for sending your solution to the take-home task. The team has reviewed it and would like to invite you to the final interviews, which will take place by video call on Thursday of next week.
+
+      The day has four parts, all in Central European Time:
+
+      10:00–10:30 · a conversation with me about you and your motivation
+      10:45–11:30 · a behavioural interview with Ingrid Larsen, Head of Engineering
+      12:00–13:00 · a technical discussion with Anders, a senior engineer, in a shared code editor
+      13:30–14:00 · a final conversation with Hassan Karimi, the hiring manager, where you can ask your own questions
+
+      Please prepare two examples from your work, one about a challenge and one about a mistake, and a few questions for the team. There is also a short case study attached; Ingrid may ask you about it.
+
+      Could you confirm by Tuesday that the schedule works for you?
+
+      Kind regards,
+      Astrid Berg
+      People team, Tidewell Software
+    glosses:
+      - { text: take-home task, russian: домашнее задание }
+      - { text: reviewed, russian: просмотрела }
+      - { text: a behavioural interview, russian: поведенческое интервью }
+      - { text: a shared code editor, russian: общий редактор кода }
+      - { text: case study, russian: разбор случая }
+  - type: exercise
+    id: invite-q
+    about: invite
+    graded: true
+    title: Чтение — приглашение
+    instruction: Прочитайте письмо и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Who will Nadia talk to first?
+        options:
+          - Astrid
+          - Ingrid
+          - Hassan
+        answer: Astrid
+        explanation: "10:00–10:30 · a conversation with me — первой идёт Astrid, автор письма; Ingrid во второй части, Hassan в последней."
+      - id: q2
+        prompt: Which part of the day is the longest?
+        options:
+          - the technical discussion
+          - the behavioural interview
+          - the final conversation
+        answer: the technical discussion
+        explanation: "12:00–13:00 — час; поведенческое интервью идёт 45 минут, разговор с Astrid и финальный — по 30."
+      - id: q3
+        prompt: What does Astrid ask Nadia to prepare?
+        options:
+          - two examples from her work and a few questions
+          - a presentation about her last project
+          - a solution to the technical task in advance
+        answer: two examples from her work and a few questions
+        explanation: "Please prepare two examples from your work… and a few questions for the team. Код и презентация в письме не названы (модуль e09)."
+      - id: q4
+        prompt: In which part can Nadia ask her own questions?
+        options:
+          - the final conversation with Hassan
+          - the conversation with Astrid
+          - the technical discussion
+        answer: the final conversation with Hassan
+        explanation: "A final conversation with Hassan Karimi… where you can ask your own questions — вопросы команде задают в последней части (модуль e16)."
+  - type: listening
+    id: briefing
+    title: Голосовое сообщение Astrid
+    plays: 2
+    transcript:
+      - { speaker: Astrid, text: "Hello Nadia, it's Astrid from Tidewell Software. I'm calling about tomorrow's interviews, and there is one change." }
+      - { speaker: Astrid, text: "Anders asked to start the technical discussion half an hour later, at half past twelve. It will finish at half past one, and your final conversation with Hassan moves to two o'clock." }
+      - { speaker: Astrid, text: "The link to the shared editor is in the calendar invitation. Please open it before the call and check your microphone and camera." }
+      - { speaker: Astrid, text: "If your connection fails, call me on the number in the invitation, and we'll find a solution. Speak to you tomorrow." }
+  - type: exercise
+    id: briefing-q
+    about: briefing
+    graded: true
+    title: Аудирование — изменение расписания
+    instruction: Прослушайте сообщение два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What has changed?
+        options:
+          - The technical discussion starts half an hour later.
+          - The technical discussion starts half an hour earlier.
+          - The conversation with Hassan is cancelled.
+        answer: The technical discussion starts half an hour later.
+        explanation: "Start the technical discussion half an hour later, at half past twelve — на полчаса позже, в 12:30; разговор с Hassan остаётся в плане и переносится на 14:00."
+      - id: q2
+        prompt: Where is the link to the shared editor?
+        options:
+          - in the calendar invitation
+          - in a separate email tomorrow morning
+          - on the Tidewell careers page
+        answer: in the calendar invitation
+        explanation: "The link to the shared editor is in the calendar invitation — ссылка в приглашении календаря."
+      - id: q3
+        prompt: What should Nadia do if her connection fails?
+        options:
+          - call Astrid on the number in the invitation
+          - wait for Astrid to call her
+          - write to Anders
+        answer: call Astrid on the number in the invitation
+        explanation: "Call me on the number in my email — позвонить Astrid по номеру из приглашения."
+  - type: listening
+    id: hr-lines
+    title: Сцена 1 · Реплики Astrid — разговор с HR
+    plays: 2
+    transcript:
+      - { speaker: Astrid, text: "Hello Nadia, this is Astrid from the People team. Thank you for joining. To start, could you tell me about yourself?" }
+      - { speaker: Astrid, text: "Thank you. And what have you been working on lately?" }
+      - { speaker: Astrid, text: "I see. Why Tidewell? What attracted you to the role?" }
+      - { speaker: Astrid, text: "What would you say are your main strengths?" }
+      - { speaker: Astrid, text: "And is there something you're working on improving?" }
+      - { speaker: Astrid, text: "Thank you, that's clear. Do you have any questions about the process?" }
+  - type: speaking
+    id: hr
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia Volkova, бэкенд-разработчик из Варшавы: шесть лет опыта, четыре из них в платёжной компании, с прошлой весны тимлид команды карт. Два месяца вы тестируете перенос платёжного сервиса на новую базу данных, запуск в следующем квартале. Почему Tidewell: публичные разборы инцидентов и сервис транзакций. Сильная сторона: разбиваете большие задачи на шаги (рискованный релиз разделили на пять небольших). Над чем работаете: делегирование. Вопросов о процессе нет. 6 реплик, вся ваша часть — 90–120 секунд.
+    seconds: 120
+    model: |-
+      Astrid: Hello Nadia, this is Astrid from the People team. Thank you for joining. To start, could you tell me about yourself?
+      You: Hello Astrid, thank you for having me. I'm a backend developer with six years of experience, four of them in payments. I've been the tech lead of the cards team since last spring, and I'm looking for a role with more responsibility for the architecture.
+      Astrid: Thank you. And what have you been working on lately?
+      You: I've been preparing the move of our payment service to a new database. We've been testing it for two months, and it goes live next quarter.
+      Astrid: I see. Why Tidewell? What attracted you to the role?
+      You: Two things. Your public postmortems show how the team learns from incidents, and I'd like to keep designing a service like the transaction service.
+      Astrid: What would you say are your main strengths?
+      You: My biggest strength is that I break problems down. Last year I split a risky release into five small ones, and we didn't roll back any of them.
+      Astrid: And is there something you're working on improving?
+      You: I'm working on delegating more. I used to take on too much, so now I ask a teammate to own each part, and we check in once a week.
+      Astrid: Thank you, that's clear. Do you have any questions about the process?
+      You: No, the letter was clear. Thank you.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-три фразы
+      - "О себе — настоящее и прошлое, срок через present perfect: I've been the tech lead since last spring"
+      - "Причина выбора компании — конкретная, два довода: Your public postmortems…"
+      - "Сильная сторона с примером и слабая сторона с тем, что вы делаете: I'm working on delegating more"
+      - Вежливо и спокойно, без долгих пауз
+  - type: listening
+    id: round
+    title: Как Ingrid проводит поведенческий раунд
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Hello Nadia, I'm Ingrid Larsen, Head of Engineering. Let me explain how this part works. I'll ask about three things: a challenge you faced, a mistake you made and feedback you received." }
+      - { speaker: Ingrid, text: "For each one, I'd like a short story: what the situation was, what you had to do, what you did and what happened in the end." }
+      - { speaker: Ingrid, text: "Please keep each story to about two minutes. If I interrupt, it's only to ask for more detail, for example, what your own role was." }
+      - { speaker: Ingrid, text: "One request: please don't mention the names of clients or internal numbers. Describe the situation in general terms." }
+      - { speaker: Ingrid, text: "In the second half, I'll ask a few questions that begin with 'what would you do if'. I'm interested in how you think, so there are no trick questions." }
+      - { speaker: Ingrid, text: "Do you have any questions before we start? If not, let's begin." }
+  - type: exercise
+    id: round-q
+    about: round
+    graded: true
+    title: Аудирование — устройство раунда
+    instruction: Прослушайте запись два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What three things will Ingrid ask about?
+        options:
+          - a challenge, a mistake and feedback
+          - salary, notice period and start date
+          - experience, stack and motivation
+        answer: a challenge, a mistake and feedback
+        explanation: "A challenge you faced, a mistake you made and feedback you received — три темы поведенческого раунда (модули e09, e10, e12)."
+      - id: q2
+        prompt: How long should each story be?
+        options:
+          - about two minutes
+          - about ten minutes
+          - about thirty seconds
+        answer: about two minutes
+        explanation: "Please keep each story to about two minutes — около двух минут, как в образцах e09 и e10."
+      - id: q3
+        prompt: What should Nadia not mention?
+        options:
+          - the names of clients and internal numbers
+          - her own role in the story
+          - the result of the story
+        answer: the names of clients and internal numbers
+        explanation: "Please don't mention the names of clients or internal numbers — это правило из e09 и e10: ситуацию описывают в общих чертах; о своей роли и результате Ingrid как раз спрашивает."
+      - id: q4
+        prompt: What kind of questions will Ingrid ask in the second half?
+        options:
+          - questions that begin with "what would you do if"
+          - questions about the salary
+          - questions about the code Nadia has written
+        answer: questions that begin with "what would you do if"
+        explanation: "Questions that begin with 'what would you do if' — гипотетические вопросы, которые разбирает e11."
+  - type: listening
+    id: challenge-lines
+    title: Сцена 2 · Реплики Ingrid — трудность
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Thanks for joining. Let's start with a situation from your work. Tell me about a time you faced a challenge." }
+      - { speaker: Ingrid, text: "Mm-hm. What was your role in it?" }
+      - { speaker: Ingrid, text: "What did you do first?" }
+      - { speaker: Ingrid, text: "And what was the result? Do you have any numbers?" }
+      - { speaker: Ingrid, text: "What did you learn from it?" }
+      - { speaker: Ingrid, text: "Thank you. That's a clear example." }
+  - type: speaking
+    id: challenge
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Случай: в прошлом году партнёрский банк попросил запустить новый способ оплаты за шесть недель, а команда в это время исправляла надёжность сервиса карт. Задача: запустить способ оплаты и не ухудшить стабильность. Вы тимлид: спланировали работу, проверяли изменения, сами написали интеграцию с банком. Сначала выписали задачи и спросили, что важнее, две второстепенные функции отложили. Результат: запуск в срок, неудачных платежей на сорок процентов меньше. Вывод: поднимать конфликт целей сразу. 6 реплик, вся ваша часть — 2 минуты.
+    seconds: 120
+    model: |-
+      Ingrid: Thanks for joining. Let's start with a situation from your work. Tell me about a time you faced a challenge.
+      You: Last year, a partner bank asked us to launch a new payment method in six weeks. At the same time, we were fixing reliability problems in the card service, and nobody had time for both. My task was to deliver the launch without making the service less stable.
+      Ingrid: Mm-hm. What was your role in it?
+      You: I was the tech lead, so I planned the work and reviewed every change. I also wrote the integration with the bank myself.
+      Ingrid: What did you do first?
+      You: The first thing I did was list everything we had to do and ask which items mattered most. After that, I asked the product manager to help us prioritise, and we postponed two minor features.
+      Ingrid: And what was the result? Do you have any numbers?
+      You: We launched on schedule, and the number of failed payments dropped by forty percent.
+      Ingrid: What did you learn from it?
+      You: I learned to raise a conflict between goals early. Since then, I've asked for a priority decision as soon as two goals compete.
+      Ingrid: Thank you. That's a clear example.
+      You: Thank you. I have another example if that would help.
+    criteria:
+      - Ответили на все шесть реплик по порядку
+      - "Ситуация и задача — past simple и past continuous: we were fixing…; My task was to…"
+      - "Свой вклад и первые шаги: I was the tech lead…; The first thing I did was…"
+      - Результат с числом
+      - "Вывод с present perfect: Since then, I've asked…"
+      - Без имён клиентов, внутренних цифр и оценок коллег
+  - type: listening
+    id: mistake-lines
+    title: Сцена 3 · Реплики Ingrid — ошибка и фидбек
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Now a different kind of question. Tell me about a mistake you made." }
+      - { speaker: Ingrid, text: "How did you find out about it?" }
+      - { speaker: Ingrid, text: "What would you do differently?" }
+      - { speaker: Ingrid, text: "Thank you. And tell me about feedback you received that changed how you work." }
+      - { speaker: Ingrid, text: "How did you react at first?" }
+      - { speaker: Ingrid, text: "Thanks, that's helpful." }
+  - type: speaking
+    id: mistake
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Ошибка: год назад вы запустили миграцию базы данных, не проверив её на копии рабочих данных; таблица платежей была заблокирована десять минут, платежи шли медленно пятнадцать. Оповещение о медленных платежах сработало через две минуты. Ответственность ваша: вы сообщили команде и откатили изменение. Теперь миграции проверяют на копии и просматривают вдвоём. Фидбек: двое коллег на 360-оценке сказали, что ваши комментарии в код-ревью иногда слишком короткие. Сначала вы защищались, потом попросили пример и приняли замечание; теперь к комментарию пишете причину и ссылку. 6 реплик, вся ваша часть — 2 минуты.
+    seconds: 120
+    model: |-
+      Ingrid: Now a different kind of question. Tell me about a mistake you made.
+      You: A year ago, I ran a database migration without testing it on a copy of the production data. It locked the payments table for ten minutes, and payments were slow for fifteen. It was my mistake, and I take full responsibility.
+      Ingrid: How did you find out about it?
+      You: An alert about slow payments fired within two minutes. I informed the team straight away and rolled the change back.
+      Ingrid: What would you do differently?
+      You: If I had tested it on a copy first, I would have noticed the problem. I should have asked for a second review, too. Now every migration is tested on a copy and reviewed by a colleague.
+      Ingrid: Thank you. And tell me about feedback you received that changed how you work.
+      You: In a 360 review, two colleagues told me that my comments in code reviews were sometimes too short, and the authors didn't understand the reason.
+      Ingrid: How did you react at first?
+      You: At first I was a little defensive, but I asked for an example and took it on board. Since then, I explain the reason behind each comment and add a link to the documentation.
+      Ingrid: Thanks, that's helpful.
+      You: Thank you. It taught me to slow down when I'm under pressure.
+    criteria:
+      - Ответили на все шесть реплик по порядку
+      - Ошибка названа прямо, своя доля ясна, коллеги не обвиняются
+      - "Вывод и изменение практики: If I had tested it…, I would have noticed…; I should have asked…"
+      - "Фидбек в косвенной речи: two colleagues told me that my comments were…"
+      - Реакция и что изменилось после неё
+  - type: reading
+    id: case
+    title: "Case study: the invoice release"
+    text: |-
+      Case study: the invoice release
+      An example from Tidewell's interview pack. The company and the numbers are invented.
+
+      On Friday at 15:00, the team released a new version of the invoice service. By 15:20, the error rate had risen from 0.5 to 12 percent, and about 2,000 customers could not download their invoices.
+
+      The on-call engineer saw the alert at 15:25 and checked the logs. The release had renamed a column in the database, but the old code on two of the six servers still used the old name.
+
+      A rollback was possible, but it would also have removed a security fix that was part of the same release. A small fix to the code would take about an hour. The engineering manager was on a flight and would land at 18:00.
+
+      The engineer paused the release on the other servers, told the support team what to say to customers and wrote the fix. The invoices worked again at 16:30. On Monday, the team wrote a postmortem.
+
+      Questions for discussion: What would you do first? Whom would you inform? Would you roll back or fix forward?
+    glosses:
+      - { text: error rate, russian: доля ошибок }
+      - { text: on-call, russian: дежурный }
+      - { text: a column, russian: столбец таблицы }
+      - { text: rollback, russian: откат }
+      - { text: a security fix, russian: исправление уязвимости }
+      - { text: fix forward, russian: исправлять новой версией вместо отката }
+  - type: exercise
+    id: case-q
+    about: case
+    graded: true
+    title: Чтение — кейс об инциденте
+    instruction: Прочитайте текст и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What caused the problem?
+        options:
+          - a database change that the old code on two servers did not support
+          - an attack on the servers
+          - a wrong password in the configuration
+        answer: a database change that the old code on two servers did not support
+        explanation: "The release had renamed a column, but the old code on two of the six servers still used the old name — причина в переименованном столбце; об атаке и пароле в тексте нет (модуль e10)."
+      - id: q2
+        prompt: How many customers could not download their invoices?
+        options:
+          - about 2,000
+          - about 200
+          - about 12,000
+        answer: about 2,000
+        explanation: "About 2,000 customers — около двух тысяч; 12 percent — доля ошибок, число клиентов названо отдельно (модуль e10)."
+      - id: q3
+        prompt: Why did the engineer not roll back?
+        options:
+          - A rollback would also have removed a security fix.
+          - The engineering manager did not allow it.
+          - The old version of the code was lost.
+        answer: A rollback would also have removed a security fix.
+        explanation: "A rollback… would also have removed a security fix that was part of the same release. Руководитель был в полёте и ничего не запрещал (модуль e11)."
+      - id: q4
+        prompt: When did the invoices work again?
+        options:
+          - at 16:30
+          - at 15:25
+          - at 18:00
+        answer: at 16:30
+        explanation: "The invoices worked again at 16:30. В 15:25 инженер увидел оповещение, в 18:00 приземлялся руководитель (модуль e11)."
+  - type: listening
+    id: hypo-lines
+    title: Сцена 4 · Реплики Ingrid — «а если…»
+    plays: 2
+    transcript:
+      - { speaker: Ingrid, text: "Let's move on to some situations that could happen on the team. What would you do if you found a serious bug the day before a release?" }
+      - { speaker: Ingrid, text: "And what if the product manager wanted to ship anyway?" }
+      - { speaker: Ingrid, text: "Now imagine two deadlines clashed in the same week. What would you do?" }
+      - { speaker: Ingrid, text: "Suppose you had to decide something urgent and couldn't reach your manager. What would you do?" }
+      - { speaker: Ingrid, text: "Would you ship a fix on a Friday afternoon?" }
+      - { speaker: Ingrid, text: "Thank you. That gives me a clear picture of how you think." }
+  - type: speaking
+    id: hypo
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Отвечайте условными предложениями и называйте, с кем согласуете решение. Ошибка перед релизом: сказать руководителю, оценить масштаб, малое исправление проверить, иначе перенести релиз. Продакт-менеджер настаивает: риск фактами, меньший релиз, решение инженерного менеджера. Два срока: что важнее, риск и срок, не решать в одиночку. Руководитель недоступен: безопасное действие и сообщение ему. Исправление в пятницу вечером: без крайней необходимости не выпускать, сначала снимок данных. 6 реплик, вся ваша часть — 2 минуты.
+    seconds: 120
+    model: |-
+      Ingrid: Let's move on to some situations that could happen on the team. What would you do if you found a serious bug the day before a release?
+      You: I'd tell my manager straight away and check how many users it would affect. If the fix were small, I'd make it and ask for a quick review. Otherwise, I'd suggest moving the release.
+      Ingrid: And what if the product manager wanted to ship anyway?
+      You: I'd explain the risk with facts, such as how many users it would affect, and suggest a smaller release. If we still disagreed, I'd ask the engineering manager to decide, and I'd support the decision.
+      Ingrid: Now imagine two deadlines clashed in the same week. What would you do?
+      You: I'd ask which one matters more and what happens if each one is late. I'd weigh the risk against the deadline and explain the trade-off to both teams. I wouldn't decide on my own.
+      Ingrid: Suppose you had to decide something urgent and couldn't reach your manager. What would you do?
+      You: I'd follow the runbook and take the safest action, for example, pause the release. Then I'd message my manager to say what I did and why.
+      Ingrid: Would you ship a fix on a Friday afternoon?
+      You: Unless the fix were trivial, I wouldn't. If I had to, I'd take a snapshot first, in case the rollback fails.
+      Ingrid: Thank you. That gives me a clear picture of how you think.
+      You: Thank you. I'm happy to go through another situation.
+    criteria:
+      - Ответили на все шесть реплик по порядку
+      - "Условные предложения второго типа: If the fix were small, I'd make it…; I'd ask…"
+      - "Первое действие и масштаб: I'd tell… straight away; check how many users it would affect"
+      - "Риск и срок взвешены, решение согласовано: I wouldn't decide on my own; I'd ask the engineering manager to decide"
+      - "Unless или in case в одном из ответов"
+  - type: listening
+    id: task
+    title: Anders ставит задачу
+    plays: 2
+    transcript:
+      - { speaker: Anders, text: "Hi Nadia, I'm Anders, a senior engineer on the team. This is a technical discussion, not an exam. Please think out loud, and ask questions at any time." }
+      - { speaker: Anders, text: "Here is the task. You get a list of orders. Each order has a customer ID and an amount. Return the three customers with the highest total amount." }
+      - { speaker: Anders, text: "Some details. There can be up to a million orders, and all amounts are positive numbers. If two customers have the same total, either of them can come first." }
+      - { speaker: Anders, text: "Start with the simplest solution you can think of. Then tell me its time complexity, and only after that think about how to make it faster." }
+      - { speaker: Anders, text: "You can write in any language in the shared editor. I won't judge the syntax, but I'd like the code to run at the end." }
+  - type: exercise
+    id: task-q
+    about: task
+    graded: true
+    title: Аудирование — постановка задачи
+    instruction: Прослушайте запись два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does the function return?
+        options:
+          - the three customers with the highest total amount
+          - the three largest single orders
+          - the total amount of all orders
+        answer: the three customers with the highest total amount
+        explanation: "Return the three customers with the highest total amount — три клиента с наибольшей суммой всех заказов; три самых крупных заказа были бы другим ответом (модуль e14)."
+      - id: q2
+        prompt: What does Anders say about customers with the same total?
+        options:
+          - Either of them can come first.
+          - The one with the smaller ID must come first.
+          - The function should return all of them.
+        answer: Either of them can come first.
+        explanation: "If two customers have the same total, either of them can come first — порядок при равенстве не важен (модуль e13)."
+      - id: q3
+        prompt: What does Anders ask Nadia to do first?
+        options:
+          - give the simplest solution and its time complexity
+          - write the fastest solution straight away
+          - write tests before the code
+        answer: give the simplest solution and its time complexity
+        explanation: "Start with the simplest solution… Then tell me its time complexity — сначала простое решение и его сложность, ускорение потом (модуль e14)."
+  - type: listening
+    id: req-lines
+    title: Сцена 5 · Реплики Anders — требования
+    plays: 2
+    transcript:
+      - { speaker: Anders, text: "Let's try a design task. Design a service that shows customers the status of their payments in the app. Before you start, what would you like to know?" }
+      - { speaker: Anders, text: "The users are customers of online shops. We expect about two hundred thousand requests a day, and about two hundred a second at peak." }
+      - { speaker: Anders, text: "A status that is a few seconds old is fine, but not more than one minute." }
+      - { speaker: Anders, text: "The app shows the last known status and a short message. Anything else?" }
+      - { speaker: Anders, text: "Design for twice the current load. Refunds are out of scope for the first version." }
+      - { speaker: Anders, text: "That's right. Please start with the simplest design, which we can improve later." }
+  - type: speaking
+    id: req
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Задача: сервис статуса платежей. Задайте вопросы по порядку: пользователи и число запросов; насколько свежим должен быть статус; что делать при сбое; на какую нагрузку проектировать и входят ли возвраты. После пятой реплики подтвердите требования. Реплики Anders отвечают на вопросы в том же порядке. 6 реплик, вся ваша часть — 2–3 минуты.
+    seconds: 150
+    model: |-
+      Anders: Let's try a design task. Design a service that shows customers the status of their payments in the app. Before you start, what would you like to know?
+      You: Thank you. Who are the people that will use this service, and how many requests do we expect?
+      Anders: The users are customers of online shops. We expect about two hundred thousand requests a day, and about two hundred a second at peak.
+      You: How fresh should the status be? Is it okay if the data is slightly out of date?
+      Anders: A status that is a few seconds old is fine, but not more than one minute.
+      You: What should happen when the service is down?
+      Anders: The app shows the last known status and a short message. Anything else?
+      You: Should I design for the current load or for growth? And are refunds in scope?
+      Anders: Design for twice the current load. Refunds are out of scope for the first version.
+      You: Let me confirm that I've understood the requirements. The service shows payment status to customers, handles about two hundred requests a second at peak, accepts data that is up to one minute old, and shows the last known status when it is down.
+      Anders: That's right. Please start with the simplest design, which we can improve later.
+      You: Thank you. I'll start with the simplest version.
+    criteria:
+      - Ответили на все шесть реплик по порядку
+      - "Вопросы о пользователях и нагрузке: Who are the people that will use this service…? How many requests…?"
+      - "Вопросы о свежести данных, сбое и границах: How fresh…? What should happen when…? Are refunds in scope?"
+      - "Итог требований перед началом: Let me confirm that I've understood the requirements"
+      - Вопросы вежливые, один вопрос — одна мысль
+  - type: listening
+    id: aloud-lines
+    title: Сцена 6 · Реплики Anders — решение вслух
+    plays: 2
+    transcript:
+      - { speaker: Anders, text: "Now a coding task. Given a list of words, return the word that appears most often. Please think out loud." }
+      - { speaker: Anders, text: "Right. You can assume the list is not empty. What is your first idea?" }
+      - { speaker: Anders, text: "OK. What is the time complexity of that?" }
+      - { speaker: Anders, text: "Could it be faster?" }
+      - { speaker: Anders, text: "What happens if two words appear equally often?" }
+      - { speaker: Anders, text: "Thank you, that's clear." }
+  - type: speaking
+    id: aloud
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Решайте вслух: повторите условие и разберите пример; назовите простое решение (для каждого слова посчитать повторы по списку) и его сложность словами; предложите хеш-таблицу (один проход); скажите, какое слово вернёт код при равенстве, и проверьте примером. Формулы произносите словами. 6 реплик, вся ваша часть — 3 минуты.
+    seconds: 180
+    model: |-
+      Anders: Now a coding task. Given a list of words, return the word that appears most often. Please think out loud.
+      You: Let me say the problem back in my own words. I get a list of words, and I need to return the most frequent one. Let me take a small example first: a, b, a returns a.
+      Anders: Right. You can assume the list is not empty. What is your first idea?
+      You: I'm going to start with a brute-force solution. For each word, I count how many times it appears in the whole list and keep the best one.
+      Anders: OK. What is the time complexity of that?
+      You: I think it runs in quadratic time, because for each word I go through the whole list. It uses constant extra memory.
+      Anders: Could it be faster?
+      You: I'd use a hash map. I go through the list once, count each word in the map and then pick the word with the highest count. That runs in linear time and uses linear extra memory.
+      Anders: What happens if two words appear equally often?
+      You: My code goes through the list in order and returns the first word with the highest count. Let me check with a, b, b, a: both appear twice, so it returns a.
+      Anders: Thank you, that's clear.
+      You: Thank you. In summary, it runs in linear time and uses linear extra memory. Does this approach make sense to you?
+    criteria:
+      - Ответили на все шесть реплик по порядку
+      - "Условие своими словами и пример: Let me say the problem back…; Let me take a small example first"
+      - "Простое решение, затем сложность словами: I'm going to start with a brute-force solution…; quadratic time"
+      - "Улучшение с названной структурой: I'd use a hash map…; linear time"
+      - "Крайний случай и итог: What happens if…; In summary…"
+  - type: listening
+    id: opinion-lines
+    title: Сцена 7 · Реплики Hassan — мнение и вопросы
+    plays: 2
+    transcript:
+      - { speaker: Hassan, text: "Hello Nadia, I'm Hassan Karimi, the hiring manager. Let me ask for your opinion. Next year we're thinking of rewriting the payment service from Python to Go. What do you think?" }
+      - { speaker: Hassan, text: "That's a fair point. The team expects the rewrite to pay off in two years. What would change your mind?" }
+      - { speaker: Hassan, text: "Interesting. We could start with a small pilot. Would you support that?" }
+      - { speaker: Hassan, text: "Good. We try to decide together. Now, what questions would you like to ask us?" }
+      - { speaker: Hassan, text: "Success in the first six months means you've shipped one project and the team trusts your reviews. What else?" }
+      - { speaker: Hassan, text: "We release twice a week, and the team meets for a short stand-up every morning. I'll let you go now. Thank you for your time." }
+  - type: speaking
+    id: opinion
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia. Переписывание сервиса вызывает сомнение: признайте довод, назовите риск (платежи критичны, переписывание долгое). Мнение изменили бы данные нагрузочной проверки. Пилот поддержите и скажите, что примете решение команды. Затем спросите, как измеряется успех в роли и как выглядит обычный день команды. 6 реплик, вся ваша часть — 2 минуты.
+    seconds: 120
+    model: |-
+      Hassan: Hello Nadia, I'm Hassan Karimi, the hiring manager. Let me ask for your opinion. Next year we're thinking of rewriting the payment service from Python to Go. What do you think?
+      You: I see your point about performance, but I'm not sure a full rewrite is the right option. I'd put more weight on the risk: payments are critical, and a rewrite takes a long time.
+      Hassan: That's a fair point. The team expects the rewrite to pay off in two years. What would change your mind?
+      You: Evidence. If a load test showed that the Python service can't handle the load we expect, I'd support a rewrite.
+      Hassan: Interesting. We could start with a small pilot. Would you support that?
+      You: Yes, I'd be happy to. I'd suggest rewriting one small part first and measuring the difference. Either way, I'll support the team's decision.
+      Hassan: Good. We try to decide together. Now, what questions would you like to ask us?
+      You: Thank you. How is success measured in this role?
+      Hassan: Success in the first six months means you've shipped one project and the team trusts your reviews. What else?
+      You: What does a typical day look like for the team?
+      Hassan: We release twice a week, and the team meets for a short stand-up every morning. I'll let you go now. Thank you for your time.
+      You: Thank you, Hassan. It was a pleasure speaking with you.
+    criteria:
+      - Ответили на все шесть реплик по порядку
+      - "Несогласие смягчено: I see your point, but…; I'm not sure that…"
+      - "Довод вместо мнения о людях: I'd put more weight on the risk; Evidence…"
+      - "Готовность поддержать решение: Either way, I'll support the team's decision"
+      - "Два вопроса интервьюеру и вежливое завершение: How is success measured…? What does a typical day look like…?"
+  - type: speaking
+    id: bank
+    part: interview
+    prompt: "Hassan спрашивает: «Describe the architecture of a system you work on. Which part is the most critical, and why?» Ответьте за 2 минуты на своём материале: обзор, путь запроса в три-четыре шага со связками, самая ответственная часть и причина, как она защищена."
+    seconds: 120
+    model: "Let me describe our card payment service. At a high level, a request is sent to the gateway, where the user is authenticated. After that, it is passed to the payment service, which writes to the database and sends an event to a queue. Finally, a notification is sent to the user. The most critical part is the payment service, because a failure there means lost or duplicated payments. It is protected in two ways. First, every change to it is reviewed by two engineers before a release. Second, an alert is sent to the on-call engineer as soon as the error rate rises."
+    criteria:
+      - "Начало с обзора: Let me describe… At a high level…"
+      - Путь запроса в три-четыре шага со связками First, After that, Finally и страдательным залогом
+      - Названа самая ответственная часть и причина
+      - Названы меры защиты
+      - Ответ укладывается в 2 минуты
+  - type: explanation
+    id: offer-note
+    title: Оффер
+    body: |-
+      Следующая часть — оффер: голосовое сообщение рекрутера, письмо с условиями и ответный звонок. Цифры и компания вымышлены. Курс учит языку и не заменяет юридическую и финансовую консультацию: условия контракта проверяет специалист. В ответе на оффер просят время и уточнение, давление и ссылки на другие предложения в сцене не нужны.
+  - type: listening
+    id: offer-msg
+    title: Голосовое сообщение Katarina с предложением
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. I have good news. After the final interviews, the team would like to offer you the role of Senior Backend Engineer." }
+      - { speaker: Katarina, text: "The base salary is ninety thousand euros gross per year. You'll also receive stock options that vest over four years, twenty-seven days of holiday and a learning budget of fifteen hundred euros a year." }
+      - { speaker: Katarina, text: "I'll send the written offer by email today. It includes the start date and the other details, so please read it carefully." }
+      - { speaker: Katarina, text: "The offer is open until next Wednesday at five in the afternoon. If you have any questions, call me, and I'll gladly go through everything with you." }
+  - type: exercise
+    id: offer-msg-q
+    about: offer-msg
+    graded: true
+    title: Аудирование — предложение
+    instruction: Прослушайте сообщение два раза и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What base salary does Katarina mention?
+        options:
+          - ninety thousand euros gross a year
+          - ninety thousand euros net a year
+          - eighty thousand euros gross a year
+        answer: ninety thousand euros gross a year
+        explanation: "Ninety thousand euros gross per year — до налогов; net означало бы сумму после налогов, а восемьдесят тысяч — нижняя граница вилки из описания вакансии (модуль e16)."
+      - id: q2
+        prompt: Over how many years do the stock options vest?
+        options:
+          - four years
+          - two years
+          - one year
+        answer: four years
+        explanation: "Stock options that vest over four years — опционы переходят в собственность постепенно, за четыре года (модуль e16)."
+      - id: q3
+        prompt: Until when is the offer open?
+        options:
+          - until next Wednesday at five in the afternoon
+          - until this Friday at five in the afternoon
+          - until next Wednesday at five in the morning
+        answer: until next Wednesday at five in the afternoon
+        explanation: "Open until next Wednesday at five in the afternoon — до следующей среды, до пяти часов дня (модуль e16)."
+  - type: reading
+    id: offer-letter
+    title: "Offer of employment: Senior Backend Engineer"
+    text: |-
+      Subject: Offer of employment: Senior Backend Engineer
+
+      Dear Nadia,
+
+      Following my voice message, I am pleased to confirm our offer for the position of Senior Backend Engineer in the Payments Platform team at Tidewell Software.
+
+      Your base salary will be 90,000 euros gross per year, paid in twelve equal monthly instalments. You will receive stock options, which vest over four years, 27 days of paid holiday and a learning budget of 1,500 euros a year. The role is remote-first, with core hours from 10:00 to 14:00 Central European Time. Your start date will be Monday, 5 April. The first six months are a probation period.
+
+      This offer is subject to two professional references.
+
+      If you accept, please sign and return the attached contract by Wednesday at 17:00. Please read the contract carefully before you sign it. If you have questions about any part of the offer, please contact me, and I will go through it with you.
+
+      Kind regards,
+      Katarina Lind
+      Recruiter, Tidewell Software
+    glosses:
+      - { text: instalments, russian: часть выплаты }
+      - { text: vest, russian: переходят в собственность постепенно }
+      - { text: a probation period, russian: испытательный срок }
+      - { text: is subject to, russian: действует при условии }
+      - { text: references, russian: рекомендация }
+  - type: exercise
+    id: offer-letter-q
+    about: offer-letter
+    graded: true
+    title: Чтение — письмо с оффером
+    instruction: Прочитайте письмо и выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How is the salary paid?
+        options:
+          - in twelve equal monthly instalments
+          - in one payment each quarter
+          - in two parts, a base and a bonus
+        answer: in twelve equal monthly instalments
+        explanation: "Paid in twelve equal monthly instalments — двенадцать равных выплат по месяцам; премия в письме не названа (модуль e16)."
+      - id: q2
+        prompt: How long is the probation period?
+        options:
+          - six months
+          - three months
+          - twelve months
+        answer: six months
+        explanation: "The first six months are a probation period — испытательный срок шесть месяцев (модуль e16)."
+      - id: q3
+        prompt: What is the offer subject to?
+        options:
+          - two professional references
+          - a medical check
+          - an extra technical interview
+        answer: two professional references
+        explanation: "This offer is subject to two professional references — оффер действует при условии двух рекомендаций (модуль e16)."
+      - id: q4
+        prompt: What should Nadia do if she accepts?
+        options:
+          - sign and return the contract by Wednesday at 17:00
+          - call Katarina on Friday
+          - send the take-home task again
+        answer: sign and return the contract by Wednesday at 17:00
+        explanation: "Please sign and return the attached contract by Wednesday at 17:00. Звонок нужен только при вопросах (модуль e16)."
+      - id: q5
+        prompt: What does the letter say about the work format?
+        options:
+          - It is remote-first, with core hours from 10:00 to 14:00.
+          - It is hybrid, with two days a week in an office.
+          - It is fully remote, with no fixed hours.
+        answer: It is remote-first, with core hours from 10:00 to 14:00.
+        explanation: "Remote-first, with core hours from 10:00 to 14:00 Central European Time — удалённая работа с обязательными часами (модуль e08)."
+  - type: listening
+    id: offer-lines
+    title: Сцена 8 · Реплики Katarina — ответ на оффер
+    plays: 2
+    transcript:
+      - { speaker: Katarina, text: "Hello Nadia, thanks for calling back. Did you have a chance to read the written offer?" }
+      - { speaker: Katarina, text: "I'm glad to hear that. Is there anything you would like me to go through again?" }
+      - { speaker: Katarina, text: "Of course. The options vest in four equal parts, one at the end of each year. Does the start date, the fifth of April, work for you?" }
+      - { speaker: Katarina, text: "Good. The offer is open until next Wednesday at five. When would you like to give us your answer?" }
+      - { speaker: Katarina, text: "That's fine. Is there anything else you'd like to ask?" }
+      - { speaker: Katarina, text: "Yes, conference tickets are covered, and I'll confirm it by email today. I look forward to your reply on Tuesday. Thank you for your time." }
+  - type: speaking
+    id: offer
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы — Nadia, вы прочитали письмо с оффером. Поблагодарите за предложение и попросите пройтись по опционам. Срок предупреждения два месяца, дата начала 5 апреля подходит. Попросите время до вечера вторника, чтобы прочитать контракт. В конце спросите, можно ли тратить бюджет на обучение на билеты на конференции, и попросите подтвердить письменно. Без давления и ссылок на другие предложения. 6 реплик, вся ваша часть — 2 минуты.
+    seconds: 120
+    model: |-
+      Katarina: Hello Nadia, thanks for calling back. Did you have a chance to read the written offer?
+      You: Yes, thank you. I'm very pleased to receive it, and I enjoyed meeting the team.
+      Katarina: I'm glad to hear that. Is there anything you would like me to go through again?
+      You: Yes. Could we go through the stock options together? I'd like to understand how the four years work.
+      Katarina: Of course. The options vest in four equal parts, one at the end of each year. Does the start date, the fifth of April, work for you?
+      You: That's clear, thank you. My notice period is two months, so the fifth of April works for me.
+      Katarina: Good. The offer is open until next Wednesday at five. When would you like to give us your answer?
+      You: Could I confirm my decision by Tuesday evening? I'd like to read the contract carefully.
+      Katarina: That's fine. Is there anything else you'd like to ask?
+      You: Yes. Could the learning budget also cover conference tickets? I'd be grateful if you could confirm that in writing.
+      Katarina: Yes, conference tickets are covered, and I'll confirm it by email today. I look forward to your reply on Tuesday. Thank you for your time.
+      You: Thank you, Katarina. I look forward to speaking again.
+    criteria:
+      - Ответили на все шесть реплик по порядку
+      - "Благодарность за предложение: Thank you, I'm very pleased to receive it"
+      - "Просьба пройтись по условиям: Could we go through… together?"
+      - "Срок решения назван вежливо: Could I confirm my decision by…?"
+      - "Просьба подтвердить письменно: I'd be grateful if you could confirm that in writing"
+      - Нет давления и ссылок на другие предложения
+  - type: explanation
+    id: thanks-how
+    title: Письмо после собеседования
+    body: |-
+      Напишите письмо нанимающему менеджеру на следующий день после собеседования: Письмо пишут на следующий день после собеседования, до оффера: **Dear Mr Karimi,** → благодарность за разговор → один запомнившийся момент (пилот вместо полного переписывания) → уточнение к своему ответу (**If I had had more time, I would have…**) → интерес к роли → вопрос о следующих шагах в косвенной форме (**Could you tell me what the next steps are?**) → **I look forward to hearing from you.** → **Kind regards,** и имя. Формальный стиль: полные формы, без сокращений и восклицаний.
+  - type: writing
+    id: thanks
+    register: formal
+    prompt: "Через день после собеседования напишите письмо Hassan Karimi (130–170 слов): благодарность за разговор в четверг, момент, который вам запомнился (пилот вместо полного переписывания сервиса), уточнение к ответу в техническом обсуждении (при большем времени вы добавили бы проверку на очень длинный список и можете прислать короткое решение), интерес к роли, вопрос о следующих шагах и сроке ответа, подпись — Nadia Volkova."
+    words: { min: 130, max: 170 }
+    model: |-
+      Dear Mr Karimi,
+
+      Thank you for the conversation on Thursday. I enjoyed learning more about the Payments Platform team, and I was glad to hear that the team prefers to make decisions together.
+
+      One part of our discussion has stayed with me. You suggested starting with a small pilot instead of rewriting the whole payment service, and I think this is a sensible way to reduce the risk.
+
+      I would also like to add one point to my answer in the technical discussion. If I had had more time, I would have added a test for a very long list. I have been thinking about it since then, and I can send you the short solution if you would like to see it.
+
+      I remain very interested in the role. Could you tell me what the next steps are and when I can expect to hear from you?
+
+      I look forward to hearing from you.
+
+      Kind regards,
+      Nadia Volkova
+    criteria:
+      - 130–170 слов, есть обращение, благодарность и подпись
+      - Назван один момент разговора, который запомнился
+      - "Уточнение к ответу с третьим условным: If I had had more time, I would have added…"
+      - "Вопрос о следующих шагах в косвенной форме: Could you tell me what the next steps are…? (порядок слов как в утверждении)"
+      - Формальный стиль без сокращений и разговорных слов
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Язык ступени
+    instruction: Вставьте слово или выражение. Три варианта лишние.
+    format: gap
+    bank: [had risen, had asked, had read, would roll, will escalate, told, whether, whose, which, have been preparing, that, who, said]
+    items:
+      - id: g1
+        prompt: "By the time the on-call engineer saw the alert, the error rate ___ to twelve percent."
+        answer: had risen
+        explanation: "Событие раньше другого прошлого — past perfect: had risen (модули e09, e10)."
+      - id: g2
+        prompt: "If I ___ for a second review, we would have caught the error."
+        answer: had asked
+        explanation: "Нереальное прошлое — третий тип условных: If I had asked…, we would have caught (модуль e10)."
+      - id: g3
+        prompt: "I wish I ___ the logs more carefully."
+        answer: had read
+        explanation: "Сожаление о прошлом — wish + past perfect: I wish I had read (модуль e10)."
+      - id: g4
+        prompt: "If the release broke production, I ___ it back first."
+        answer: would roll
+        explanation: "Воображаемая ситуация — второй тип условных: If the release broke…, I would roll it back (модуль e11)."
+      - id: g5
+        prompt: "If I can't fix it quickly, I ___ it to my manager."
+        answer: will escalate
+        explanation: "Реальное условие — первый тип: If I can't fix it…, I will escalate it (модуль e11)."
+      - id: g6
+        prompt: "My manager ___ me that I was too quiet in meetings."
+        answer: told
+        explanation: "Глагол пересказа с адресатом — told me that…; said с адресатом без to не употребляется (модуль e12)."
+      - id: g7
+        prompt: "He asked me ___ I had tested the change."
+        answer: whether
+        explanation: "Вопрос да или нет в косвенной речи — whether (или if), порядок слов как в утверждении (модуль e12)."
+      - id: g8
+        prompt: "A user ___ account is locked cannot make a payment."
+        answer: whose
+        explanation: "Принадлежность — whose: a user whose account (модуль e13)."
+      - id: g9
+        prompt: "The payment service, ___ processes two million payments a day, is written in Python."
+        answer: which
+        explanation: "Уточнение о предмете между запятыми — which; that после запятой не ставят (модуль e13)."
+      - id: g10
+        prompt: "I ___ for this interview all week, so I feel ready."
+        answer: have been preparing
+        explanation: "Действие шло всю неделю и продолжается — present perfect continuous: have been preparing (модуль e16)."
