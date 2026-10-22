@@ -1,0 +1,7 @@
+id: ep399
+text: "I'm happy to accept the offer as it stands."
+translation: "Я рад принять предложение в таком виде."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md

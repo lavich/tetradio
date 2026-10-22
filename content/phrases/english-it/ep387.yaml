@@ -1,0 +1,7 @@
+id: ep387
+text: "What are the biggest challenges the team is facing?"
+translation: "С какими главными трудностями сейчас сталкивается команда?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md

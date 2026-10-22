@@ -1,0 +1,7 @@
+id: ep400
+text: "After careful consideration, I've decided to decline."
+translation: "Тщательно обдумав, я решил отказаться."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md

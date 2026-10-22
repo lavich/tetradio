@@ -1,0 +1,7 @@
+id: ep386
+text: "How does the team handle code reviews?"
+translation: "Как команда проводит код-ревью?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md

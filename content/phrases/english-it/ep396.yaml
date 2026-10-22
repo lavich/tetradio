@@ -1,0 +1,7 @@
+id: ep396
+text: "Could I confirm my decision by the end of next week?"
+translation: "Могу ли я сообщить решение до конца следующей недели?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md

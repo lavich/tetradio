@@ -1,8 +1,24 @@
 number: 16
 title: Do you have any questions?
 subtitle: Вопросы интервьюеру и оффер
-status: draft
+status: published
 goal: задать свои вопросы интервьюеру, завершить собеседование, обсудить оффер
 grammar:
   - present perfect continuous, вопросы
 sessions: 3
+crib:
+  title: Вопросы интервьюеру и оффер
+  rows:
+    - [как давно, "I've been working… · for + период, since + начало · How long have you been…?"]
+    - [вопросы о работе, "What does a typical day look like…? · How is success measured…? · How often do you release…?"]
+    - [вежливый вопрос, "Could you tell me how the team…? (порядок прямой) · What has the team been shipping…?"]
+    - [конец собеседования, "It was a pleasure speaking with you. · What are the next steps, and when can I expect to hear back?"]
+    - [оффер, "Thank you for the offer; I'm very pleased to receive it. · Could we go through the full package together?"]
+    - [срок и условия, "Could I confirm my decision by the end of next week? · Would there be any flexibility on…?"]
+    - [решение, "I'm happy to accept the offer as it stands. · After careful consideration, I've decided to decline."]
+  note: "have been + -ing; for + период, since + начало; I've known (know без continuous); после Could you tell me порядок слов прямой; вопросы о деньгах чаще задают рекрутеру; срок и условия просят вопросом, без давления; курс учит языку и не заменяет юридическую и финансовую консультацию"
+lessons:
+  - e16-1
+  - e16-2
+  - e16-3
+  - e16-test

@@ -1,0 +1,7 @@
+id: ep382
+text: "Have you been hiring for this role for long?"
+translation: "Вы давно ищете человека на эту роль?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
+  operation: requested-generation
+  request: Фразы модуля e16 по программе docs/curriculum-english-it.md

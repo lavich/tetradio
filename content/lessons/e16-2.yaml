@@ -1,0 +1,556 @@
+title: "оффер: письмо с условиями, конец собеседования и звонок с оффером"
+kind: lesson
+items:
+  - kind: word
+    id: ew544
+  - kind: word
+    id: ew545
+  - kind: word
+    id: ew546
+  - kind: word
+    id: ew547
+  - kind: word
+    id: ew548
+  - kind: word
+    id: ew549
+  - kind: word
+    id: ew550
+  - kind: word
+    id: ew551
+  - kind: word
+    id: ew552
+  - kind: word
+    id: ew553
+  - kind: word
+    id: ew554
+  - kind: word
+    id: ew555
+  - kind: word
+    id: ew556
+  - kind: word
+    id: ew557
+  - kind: word
+    id: ew558
+  - kind: word
+    id: ew559
+  - kind: word
+    id: ew560
+  - kind: phrase
+    id: ep384
+  - kind: phrase
+    id: ep385
+  - kind: phrase
+    id: ep386
+  - kind: phrase
+    id: ep387
+  - kind: phrase
+    id: ep388
+  - kind: phrase
+    id: ep389
+  - kind: phrase
+    id: ep390
+  - kind: phrase
+    id: ep391
+blocks:
+  - type: explanation
+    id: offer-words
+    title: Слова урока — условия оффера
+    body: |-
+      Тексты урока — письмо с предложением работы, конец собеседования и звонок рекрутера. Слова урока образуют три группы.
+
+      **Деньги и условия.** **A pay review** — плановый пересмотр зарплаты; **performance review** из прежних модулей оценивает работу. **An annual increment** — ежегодное повышение оклада на оговорённый процент. **A signing bonus** — разовая выплата при выходе на работу. **A pension scheme** — пенсионная программа с взносами работодателя. **Annual leave** — оплачиваемый отпуск. **Private healthcare** — частная медицинская страховка. **A stipend** — фиксированная сумма на назначенную цель, например на домашний офис; сумма назначена заранее и не зависит от чеков. **Reimburse** — возместить траты по чекам. **A vesting schedule** — график, по которому сотрудник получает права на опционы; **stock options** из модуля `e08` — сам инструмент.
+
+      **Срок и письменные условия.** **A written confirmation** — подтверждение условий письмом. **Expire** — истекать: **The offer expires on Friday.** **An extension** — продление срока. **Be subject to** — зависеть от выполнения условия: **The offer is subject to two references.** **A clause** — пункт договора.
+
+      **Решение.** **Turn down** — отклонить предложение. **Sleep on it** — взять паузу на размышление. **A sticking point** — спорный пункт, который мешает договориться.
+  - type: explanation
+    id: offer-safety
+    title: О чём этот урок и о чём нет
+    body: |-
+      Курс учит английскому языку. Он не заменяет юридическую и финансовую консультацию: условия договора, налоги и опционы проверяет специалист. Компании, цифры и условия в уроке придуманы и не описывают реальные предложения.
+
+      Просьба о времени на решение и о письменном подтверждении условий — обычная часть разговора об оффере. Её формулируют спокойно, как вопрос, без ультиматумов и сравнения с другими предложениями.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: terms-match
+    title: Условия оффера
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - a pay review
+      - a signing bonus
+      - an annual increment
+      - a pension scheme
+      - annual leave
+      - private healthcare
+      - a stipend
+      - a vesting schedule
+      - a clause
+    items:
+      - id: m1
+        prompt: разовая выплата, которую получают при выходе на работу
+        answer: a signing bonus
+      - id: m2
+        prompt: плановая встреча раз в год, после которой оклад может измениться
+        answer: a pay review
+      - id: m3
+        prompt: ежегодное повышение оклада на заранее оговорённый процент
+        answer: an annual increment
+      - id: m4
+        prompt: программа накоплений на старость, в которую вносят и работодатель, и работник
+        answer: a pension scheme
+      - id: m5
+        prompt: оплачиваемые дни отдыха в году
+        answer: annual leave
+      - id: m6
+        prompt: график, по которому сотрудник получает права на опционы
+        answer: a vesting schedule
+      - id: m7
+        prompt: фиксированная сумма на домашний офис или обучение
+        answer: a stipend
+  - type: exercise
+    id: conditions-gap
+    title: Срок и условия в предложениях
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - reimburse
+      - expire
+      - an extension
+      - be subject to
+      - a written confirmation
+      - turn down
+      - sleep on it
+      - a sticking point
+      - a clause
+    items:
+      - id: g1
+        prompt: The company will ___ your travel costs if you send the receipts. (возместить)
+        answer: reimburse
+      - id: g2
+        prompt: The offer will ___ on Friday, so please reply before then. (истечёт)
+        answer: expire
+      - id: g3
+        prompt: I need one more week, so I would like to ask for ___ of the deadline. (продление)
+        answer: an extension
+      - id: g4
+        prompt: The offer will ___ a background check and two references. (зависеть от)
+        answer: be subject to
+      - id: g5
+        prompt: Before I accept, I would like ___ of all the terms. (письменное подтверждение)
+        answer: a written confirmation
+      - id: g6
+        prompt: Thank you, but the role is not right for me now, so I have to ___ the offer. (отклонить)
+        answer: turn down
+      - id: g7
+        prompt: I do not want to answer today. I would like to ___ and reply tomorrow. (взять паузу на размышление)
+        answer: sleep on it
+  - type: explanation
+    id: reading-how
+    title: Как читать письмо с оффером
+    body: |-
+      Письмо с предложением обычно делится на разделы: должность и дата выхода, зарплата и премии, дополнительные условия, срок и условия вступления в силу. Сначала найдите срок ответа и условия, от которых зависит предложение (**subject to**), затем прочитайте разделы о деньгах и о дополнительных условиях. Цифры сравнивайте с тем, что вы обсуждали с рекрутером.
+
+      Письмо вымышленное и служит примером. Слова вне списков переведены под текстом.
+  - type: reading
+    id: offer
+    title: "Offer of employment: Senior Backend Engineer"
+    text: |-
+      Subject: Offer of employment: Senior Backend Engineer
+      Pellmore Software · example
+
+      Dear Ms Varga,
+
+      We are pleased to offer you the position of Senior Backend Engineer in the Platform team. You will report to the Engineering Manager, and your start date is 1 April.
+
+      Salary and bonus
+      Your base salary is 78,000 a year, paid monthly. You will receive a signing bonus of 4,000 with your first salary. Your pay will be considered at the pay review in March each year, and a fixed annual increment of 3 percent applies from the second year.
+
+      Benefits
+      You will have 25 days of annual leave, a pension scheme to which the company adds 6 percent of your salary, private healthcare, and a home-office stipend of 600 a year. The company will reimburse your travel costs for the interview process within 30 days of receiving the receipts. You will also receive 4,000 options, with a four-year vesting schedule.
+
+      Conditions
+      This offer is subject to two references. It will expire on 14 March; if you need an extension, please write to us. The attached contract includes a clause about the notice period, and we will send a written confirmation of any detail that is unclear.
+
+      Kind regards
+      Pellmore Software, People Team
+    glosses:
+      - text: report to
+        russian: подчиняться
+      - text: paid monthly
+        russian: выплачивается раз в месяц
+      - text: considered
+        russian: рассматривается
+      - text: applies
+        russian: действует
+      - text: options
+        russian: опционы на акции
+      - text: references
+        russian: рекомендации прежних работодателей
+      - text: attached
+        russian: приложенный
+      - text: unclear
+        russian: неясный
+  - type: exercise
+    id: offer-tf
+    about: offer
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The base salary is 78,000 a year.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q2
+        prompt: The signing bonus is paid with the first salary.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q3
+        prompt: The pay review takes place every September.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: The pay review is in March — пересмотр проходит в марте.
+      - id: q4
+        prompt: The company adds money to the pension scheme.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q5
+        prompt: The company refuses to reimburse the travel costs for the interviews.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: The company will reimburse your travel costs — расходы на дорогу возместят.
+      - id: q6
+        prompt: The offer expires on 14 March.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+  - type: exercise
+    id: offer-find
+    about: offer
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Who will Ms Varga report to?
+        options:
+          - the People Team
+          - the Platform team
+          - the Engineering Manager
+        answer: the Engineering Manager
+      - id: q2
+        prompt: When does the annual increment start to apply?
+        options:
+          - from the signing date
+          - from the second year
+          - from the first month
+        answer: from the second year
+      - id: q3
+        prompt: What is the home-office stipend?
+        options:
+          - 600 a year
+          - 4,000 once
+          - 78,000 a year
+        answer: 600 a year
+      - id: q4
+        prompt: What does the vesting schedule cover?
+        options:
+          - the signing bonus
+          - the annual leave
+          - the 4,000 options
+        answer: the 4,000 options
+      - id: q5
+        prompt: What should Ms Varga do if she needs an extension?
+        options:
+          - send two references
+          - write to the company
+          - sign the contract
+        answer: write to the company
+  - type: exercise
+    id: offer-language
+    about: offer
+    title: Слова письма
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: «This offer is subject to two references.» What does it mean?
+        options:
+          - Two references are optional.
+          - The offer depends on receiving two references.
+          - The offer already includes two references.
+        answer: The offer depends on receiving two references.
+        explanation: "Subject to — «зависит от»: предложение вступает в силу при выполнении условия."
+      - id: q2
+        prompt: «It will expire on 14 March.» What happens on 14 March?
+        options:
+          - The offer stops being valid.
+          - The contract starts.
+          - The pay review takes place.
+        answer: The offer stops being valid.
+        explanation: "Expire — «истекать»: после этой даты предложение недействительно."
+      - id: q3
+        prompt: «The company will reimburse your travel costs.» What will the company do?
+        options:
+          - Pay a fixed amount in advance.
+          - Book the tickets for you.
+          - Pay back the money you spent.
+        answer: Pay back the money you spent.
+        explanation: Reimburse — возместить потраченное по чекам.
+      - id: q4
+        prompt: «A four-year vesting schedule.» What does the schedule describe?
+        options:
+          - How often the salary is paid.
+          - When the employee gets the right to the options.
+          - How many days of leave there are.
+        answer: When the employee gets the right to the options.
+        explanation: Vesting schedule — график получения прав на опционы.
+  - type: explanation
+    id: listening-how
+    title: Как слушать конец собеседования и звонок с оффером
+    body: |-
+      В первой записи Astrid заканчивает собеседование, а Nadia задаёт свои вопросы. Слушайте, о чём она спрашивает и как формулирует вопросы: **What have you been focusing on…?**, **How is success measured…?**, **What are the next steps…?** Во второй записи Katarina звонит Daniel с предложением: слушайте цифры, срок и условия, а также то, как Daniel просит время.
+
+      Сначала послушайте запись целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: end
+    title: Nadia asks questions at the end of the interview
+    plays: 2
+    transcript:
+      - speaker: Astrid
+        text: That's everything from my side. Do you have any questions for us?
+      - speaker: Nadia
+        text: Yes, a few, thank you. What does a typical day look like for the team?
+      - speaker: Astrid
+        text: Mornings are usually quiet, so people can focus. We have a short stand-up at ten, and then most people work on their own tasks. Pairing and code reviews happen in the afternoon.
+      - speaker: Nadia
+        text: Mm-hm. And what have you been focusing on this quarter?
+      - speaker: Astrid
+        text: We've been working on a new billing service. We've also been reducing the time it takes to release, from two weeks to one.
+      - speaker: Nadia
+        text: That sounds interesting. How is success measured in this role?
+      - speaker: Astrid
+        text: In the first three months, we look at how well you understand the system and the team. After that, we agree on goals for each quarter, and we review them together.
+      - speaker: Nadia
+        text: I see. And how do you support engineers' growth?
+      - speaker: Astrid
+        text: Every engineer has a yearly budget for courses and conferences, and a one-to-one with their manager every two weeks.
+      - speaker: Nadia
+        text: Thank you. One more question. What would my first ninety days look like?
+      - speaker: Astrid
+        text: You'd shadow a colleague for two weeks, and then take a small task of your own. Your manager will write a plan for the first ninety days with you.
+      - speaker: Nadia
+        text: That's helpful. It was a pleasure speaking with you. What are the next steps, and when can I expect to hear back?
+      - speaker: Astrid
+        text: We'll decide by the end of next week, and I'll email you on Friday. Thank you for coming, Nadia.
+  - type: exercise
+    id: end-q
+    about: end
+    title: Что сказали в записи
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: When does the team have its stand-up?
+        options:
+          - at ten
+          - at nine
+          - at noon
+        answer: at ten
+      - id: q2
+        prompt: What has the team been working on this quarter?
+        options:
+          - a new mobile app
+          - a data migration
+          - a new billing service
+        answer: a new billing service
+      - id: q3
+        prompt: What has the team been reducing?
+        options:
+          - the size of the team
+          - the time it takes to release
+          - the number of meetings
+        answer: the time it takes to release
+      - id: q4
+        prompt: What does the team look at in the first three months?
+        options:
+          - how well the engineer understands the system and the team
+          - how many tasks the engineer finishes
+          - how many releases the engineer makes
+        answer: how well the engineer understands the system and the team
+      - id: q5
+        prompt: What does every engineer have for growth?
+        options:
+          - a free laptop every year
+          - a private office
+          - a yearly budget for courses and conferences
+        answer: a yearly budget for courses and conferences
+      - id: q6
+        prompt: When will Astrid and the team make a decision?
+        options:
+          - in a month
+          - by the end of next week
+          - by tomorrow morning
+        answer: by the end of next week
+  - type: exercise
+    id: end-language
+    about: end
+    title: Как задают вопросы в записи
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Astrid says «We've been working on a new billing service.» What does the tense show?
+        options:
+          - The work finished last year.
+          - The work will start next quarter.
+          - The work started earlier and is still going on.
+        answer: The work started earlier and is still going on.
+        explanation: "Have been working — present perfect continuous: действие началось раньше и продолжается."
+      - id: q2
+        prompt: Nadia asks «What have you been focusing on this quarter?» What does she ask about?
+        options:
+          - What the team did five years ago.
+          - What the team has been doing since the start of the quarter.
+          - What the team will do next year.
+        answer: What the team has been doing since the start of the quarter.
+        explanation: Вопрос в present perfect continuous касается периода от начала квартала до сегодня.
+      - id: q3
+        prompt: Nadia asks «What are the next steps, and when can I expect to hear back?» What does she want to know?
+        options:
+          - What happens after the interview and when she will get an answer.
+          - Whether she should accept the job.
+          - Which questions the team will ask next.
+        answer: What happens after the interview and when she will get an answer.
+        explanation: Next steps — следующие этапы; hear back — получить ответ.
+  - type: listening
+    id: call
+    title: Katarina calls Daniel with an offer
+    plays: 2
+    transcript:
+      - speaker: Katarina
+        text: Hello, Daniel, it's Katarina from Brindle Analytics. Do you have a few minutes?
+      - speaker: Daniel
+        text: Yes, of course. Hello, Katarina.
+      - speaker: Katarina
+        text: I have good news. The team enjoyed meeting you, and we'd like to offer you the role of data engineer.
+      - speaker: Daniel
+        text: Thank you very much. I'm very pleased to receive the offer.
+      - speaker: Katarina
+        text: The base salary is eighty thousand a year. There's also a signing bonus of five thousand, twenty-five days of annual leave, and a pension scheme where the company adds six percent.
+      - speaker: Daniel
+        text: That sounds good. Could we go through the full package together? I'd like to understand the stock options.
+      - speaker: Katarina
+        text: Of course. You'd receive four thousand options with a four-year vesting schedule. That means you earn the right to them step by step, a quarter each year.
+      - speaker: Daniel
+        text: I see, thank you. Would there be any flexibility on the start date? My notice period is two months.
+      - speaker: Katarina
+        text: The start date can be as late as the first of May, so that works. The offer is subject to a background check, and it's open until next Wednesday.
+      - speaker: Daniel
+        text: Thank you. Could I confirm my decision by the end of next week? I'd like to sleep on it and read the contract carefully.
+      - speaker: Katarina
+        text: Of course. I can extend the offer by a few days if you need more time. I'll send the details in writing today.
+      - speaker: Daniel
+        text: That's perfect. Thank you for your time, Katarina.
+  - type: exercise
+    id: call-q
+    about: call
+    title: Что сказали в звонке
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What role does Katarina offer to Daniel?
+        options:
+          - backend engineer
+          - engineering manager
+          - data engineer
+        answer: data engineer
+      - id: q2
+        prompt: What is the base salary?
+        options:
+          - ninety thousand a year
+          - eighty thousand a year
+          - seventy-five thousand a year
+        answer: eighty thousand a year
+      - id: q3
+        prompt: How much is the signing bonus?
+        options:
+          - five thousand
+          - fifteen thousand
+          - fifty thousand
+        answer: five thousand
+      - id: q4
+        prompt: What does Daniel ask about the start date?
+        options:
+          - whether he can start tomorrow
+          - whether he can work from home
+          - whether there is flexibility, because of his notice period
+        answer: whether there is flexibility, because of his notice period
+      - id: q5
+        prompt: What is the offer subject to?
+        options:
+          - a second interview
+          - a background check
+          - a medical test
+        answer: a background check
+      - id: q6
+        prompt: When does Daniel ask to confirm his decision?
+        options:
+          - by the end of next week
+          - by tomorrow
+          - on the same day
+        answer: by the end of next week
+  - type: exercise
+    id: call-language
+    about: call
+    title: Как просят в звонке
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Daniel says «Could we go through the full package together?» What does he do?
+        options:
+          - He accepts the offer immediately.
+          - He asks Katarina to review all the terms with him.
+          - He refuses the offer.
+        answer: He asks Katarina to review all the terms with him.
+        explanation: Go through — разобрать по пунктам; full package — все условия вместе.
+      - id: q2
+        prompt: Daniel says «Would there be any flexibility on the start date?» What does he do?
+        options:
+          - He politely asks whether the date can change.
+          - He demands a new date.
+          - He says he cannot start.
+        answer: He politely asks whether the date can change.
+        explanation: Would there be any flexibility — вежливый вопрос о возможности изменить условие.
+      - id: q3
+        prompt: Daniel says «I'd like to sleep on it.» What does he mean?
+        options:
+          - He has already refused.
+          - He is tired and wants to end the call.
+          - He wants some time to think before he decides.
+        answer: He wants some time to think before he decides.
+        explanation: Sleep on it — взять паузу и обдумать, не решая сразу.
+      - id: q4
+        prompt: Katarina says «The offer is subject to a background check.» What does it mean?
+        options:
+          - The check has already happened.
+          - The offer depends on completing a check.
+          - The check is optional.
+        answer: The offer depends on completing a check.
+        explanation: Subject to — зависит от выполнения условия.

@@ -1,0 +1,540 @@
+title: Контрольная модуля e16
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, present perfect continuous и вопросы, слова модуля и перевод фраз. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить. Курс учит языку и не заменяет юридическую и финансовую консультацию; цифры и компании в заданиях придуманы.
+  - type: reading
+    id: offer
+    title: "Offer: Data Analyst"
+    text: |-
+      Subject: Offer: Data Analyst
+      Stoneford Data · example
+
+      Dear Mr Okoye,
+
+      Thank you for meeting our team. We are pleased to offer you the position of Data Analyst, starting on 1 September.
+
+      Salary
+      The base salary is 54,000 a year. You will receive a signing bonus of 2,000 with your first payment. Your salary will be considered at the pay review in March each year.
+
+      Benefits
+      You will have 24 days of annual leave, a pension scheme with a 5 percent contribution from the company, and a home-office stipend of 500 a year. The company will reimburse the cost of your journey to the office on your first day.
+
+      Conditions
+      The offer is subject to two references and will expire on 20 June. If you need more time, please ask for an extension. Please read the attached contract, including the clause about the notice period. We will gladly send a written confirmation of any detail that is unclear.
+
+      Kind regards
+      Stoneford Data, People Team
+    glosses:
+      - text: contribution
+        russian: взнос
+      - text: considered
+        russian: рассматривается
+      - text: journey
+        russian: поездка
+      - text: references
+        russian: рекомендации прежних работодателей
+      - text: attached
+        russian: приложенный
+      - text: unclear
+        russian: неясный
+  - type: exercise
+    id: offer-tf
+    about: offer
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The base salary is 54,000 a year.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q2
+        prompt: The signing bonus is paid with the last payment.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: You will receive a signing bonus with your first payment — премия выплачивается с первой выплатой.
+      - id: q3
+        prompt: The pay review takes place every September.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: The pay review is in March — пересмотр зарплаты проходит в марте.
+      - id: q4
+        prompt: The company adds a contribution to the pension scheme.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q5
+        prompt: The offer will expire on 20 June.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q6
+        prompt: The company refuses to give a written confirmation of unclear details.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: We will gladly send a written confirmation — письменное подтверждение пришлют.
+  - type: listening
+    id: end
+    title: Elena asks questions at the end of the interview
+    plays: 2
+    transcript:
+      - speaker: Hassan
+        text: That was my last question. Is there anything you would like to ask us?
+      - speaker: Elena
+        text: Yes, thank you. How often do you release to production?
+      - speaker: Hassan
+        text: We release twice a week. Small changes go out on Tuesdays and Thursdays, and a person from the platform team supports each release.
+      - speaker: Elena
+        text: That's good to hear. What are the biggest challenges the team is facing?
+      - speaker: Hassan
+        text: Mostly growth. The number of users has been increasing quickly, so we have been moving some services to a new database.
+      - speaker: Elena
+        text: Interesting. And who would I be working with most closely?
+      - speaker: Hassan
+        text: With two senior engineers and a product manager. You'd shadow one of them in the first week.
+      - speaker: Elena
+        text: Thank you. Is there a plan for the first ninety days?
+      - speaker: Hassan
+        text: Yes. Your manager will write a plan with you in the first week, and you will review it every month.
+      - speaker: Elena
+        text: That sounds very clear. It was a pleasure speaking with you.
+      - speaker: Hassan
+        text: Thank you, Elena. Astrid will email you about the next steps by Friday.
+  - type: exercise
+    id: end-q
+    about: end
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How often does the team release to production?
+        options:
+          - twice a week
+          - once a month
+          - every day
+        answer: twice a week
+      - id: q2
+        prompt: Who supports each release?
+        options:
+          - the product manager
+          - the whole company
+          - a person from the platform team
+        answer: a person from the platform team
+      - id: q3
+        prompt: What has been increasing quickly?
+        options:
+          - the number of meetings
+          - the number of users
+          - the number of engineers
+        answer: the number of users
+      - id: q4
+        prompt: What is the team moving to a new database?
+        options:
+          - some services
+          - all the data at once
+          - the old reports
+        answer: some services
+      - id: q5
+        prompt: Who would Elena work with most closely?
+        options:
+          - the whole platform team
+          - one junior engineer
+          - two senior engineers and a product manager
+        answer: two senior engineers and a product manager
+      - id: q6
+        prompt: What will Elena's manager write with her in the first week?
+        options:
+          - a report for the users
+          - a plan for the first ninety days
+          - a list of her mistakes
+        answer: a plan for the first ninety days
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Present perfect continuous и вопросы
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: She ___ on the migration since Monday. (она работает с понедельника)
+        options:
+          - works
+          - is working
+          - has been working
+        answer: has been working
+        explanation: Период от момента в прошлом до сегодня выражает has been + -ing.
+      - id: q2
+        prompt: How long ___ at this company? (как давно вы работаете)
+        options:
+          - are you working
+          - have you been working
+          - do you work
+        answer: have you been working
+        explanation: Вопрос о длительности — have you been + -ing.
+      - id: q3
+        prompt: Could you tell me how ___? (как команда готовит релизы)
+        options:
+          - the team prepares releases
+          - does the team prepare releases
+          - prepares the team releases
+        answer: the team prepares releases
+        explanation: После Could you tell me порядок слов прямой, как в утверждении.
+      - id: q4
+        prompt: I ___ for this role for two months, and I have two more interviews. (я готовлюсь)
+        options:
+          - prepare
+          - am prepare
+          - have been preparing
+        answer: have been preparing
+        explanation: Длительность до сегодня — have been + -ing.
+      - id: q5
+        prompt: We ___ the document all morning, so it is almost ready.
+        options:
+          - have been review
+          - have been reviewing
+          - review
+        answer: have been reviewing
+        explanation: Процесс с видимым результатом — have been + -ing; после been идёт форма на -ing.
+      - id: q6
+        prompt: Вы спрашиваете, как давно команда использует Kubernetes.
+        options:
+          - How long has the team been using Kubernetes?
+          - How long does the team use Kubernetes?
+          - How long is the team using Kubernetes?
+        answer: How long has the team been using Kubernetes?
+        explanation: Вопрос о длительности до сегодня — has the team been + -ing.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - expire
+      - reimburse
+      - a stipend
+      - a signing bonus
+      - a pay review
+      - annual leave
+      - a runway
+      - a clause
+    items:
+      - id: g1
+        prompt: The company holds ___ every March, and salaries can change after it. (плановый пересмотр зарплаты)
+        answer: a pay review
+      - id: g2
+        prompt: You will receive ___ of two thousand when you join the company. (премия за подписание договора)
+        answer: a signing bonus
+      - id: g3
+        prompt: The company gives every engineer ___ of six hundred a year for a home office, and no receipts are needed. (ежегодная фиксированная сумма)
+        answer: a stipend
+      - id: g4
+        prompt: The offer will ___ on the first of June, so please answer before then. (истечёт)
+        answer: expire
+      - id: g5
+        prompt: I have twenty-five days of ___ each year, and I can take them at any time. (отпуск)
+        answer: annual leave
+      - id: g6
+        prompt: The start-up has ___ of twelve months, so it can pay salaries without new investment. (запас денег)
+        answer: a runway
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I have, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Я уже несколько месяцев ищу новую роль. (present perfect continuous)
+        answer:
+          - I have been looking for a new role for a few months now
+          - I have been looking for a new role for a few months
+          - I have been looking for a new role for several months now
+          - I have been looking for a new role for several months
+          - I have been looking for a new role for some months now
+          - I have been looking for a new role for some months
+          - I have been looking for a new role for the last few months now
+          - I have been looking for a new role for the last few months
+          - I have been looking for new roles for a few months now
+          - I have been looking for new roles for a few months
+          - I have been looking for new roles for several months now
+          - I have been looking for new roles for several months
+          - I have been looking for new roles for some months now
+          - I have been looking for new roles for some months
+          - I have been looking for new roles for the last few months now
+          - I have been looking for new roles for the last few months
+          - I have been looking for a new job for a few months now
+          - I have been looking for a new job for a few months
+          - I have been looking for a new job for several months now
+          - I have been looking for a new job for several months
+          - I have been looking for a new job for some months now
+          - I have been looking for a new job for some months
+          - I have been looking for a new job for the last few months now
+          - I have been looking for a new job for the last few months
+          - I have been searching for a new role for a few months now
+          - I have been searching for a new role for a few months
+          - I have been searching for a new role for several months now
+          - I have been searching for a new role for several months
+          - I have been searching for a new role for some months now
+          - I have been searching for a new role for some months
+          - I have been searching for a new role for the last few months now
+          - I have been searching for a new role for the last few months
+          - I have been searching for new roles for a few months now
+          - I have been searching for new roles for a few months
+          - I have been searching for new roles for several months now
+          - I have been searching for new roles for several months
+          - I have been searching for new roles for some months now
+          - I have been searching for new roles for some months
+          - I have been searching for new roles for the last few months now
+          - I have been searching for new roles for the last few months
+          - I have been searching for a new job for a few months now
+          - I have been searching for a new job for a few months
+          - I have been searching for a new job for several months now
+          - I have been searching for a new job for several months
+          - I have been searching for a new job for some months now
+          - I have been searching for a new job for some months
+          - I have been searching for a new job for the last few months now
+          - I have been searching for a new job for the last few months
+          - I have already been looking for a new role for a few months
+          - I have already been looking for a new role for several months
+          - I have already been looking for a new role for the last few months
+          - I have already been looking for new roles for a few months
+          - I have already been looking for new roles for several months
+          - I have already been looking for new roles for the last few months
+          - I have already been looking for a new job for a few months
+          - I have already been looking for a new job for several months
+          - I have already been looking for a new job for the last few months
+          - I have already been searching for a new role for a few months
+          - I have already been searching for a new role for several months
+          - I have already been searching for a new role for the last few months
+          - I have already been searching for new roles for a few months
+          - I have already been searching for new roles for several months
+          - I have already been searching for new roles for the last few months
+          - I have already been searching for a new job for a few months
+          - I have already been searching for a new job for several months
+          - I have already been searching for a new job for the last few months
+          - I have been looking for a new role for a few months already
+          - I have been looking for a new role for several months already
+          - I have been looking for a new role for the last few months already
+          - I have been looking for new roles for a few months already
+          - I have been looking for new roles for several months already
+          - I have been looking for new roles for the last few months already
+          - I have been looking for a new job for a few months already
+          - I have been looking for a new job for several months already
+          - I have been looking for a new job for the last few months already
+          - I have been searching for a new role for a few months already
+          - I have been searching for a new role for several months already
+          - I have been searching for a new role for the last few months already
+          - I have been searching for new roles for a few months already
+          - I have been searching for new roles for several months already
+          - I have been searching for new roles for the last few months already
+          - I have been searching for a new job for a few months already
+          - I have been searching for a new job for several months already
+          - I have been searching for a new job for the last few months already
+          - I have been exploring new roles for a few months now
+          - I have been exploring new roles for a few months
+          - I have been exploring new roles for several months now
+          - I have been exploring new roles for several months
+          - I have been exploring new roles for the past few months now
+          - I have been exploring new roles for the past few months
+          - I have been exploring new opportunities for a few months now
+          - I have been exploring new opportunities for a few months
+          - I have been exploring new opportunities for several months now
+          - I have been exploring new opportunities for several months
+          - I have been exploring new opportunities for the past few months now
+          - I have been exploring new opportunities for the past few months
+        explanation: Have been looking + for — период до сегодняшнего дня.
+      - id: q2
+        prompt: Как измеряют успех в этой роли?
+        answer:
+          - How is success measured in this role
+          - How is success measured in this position
+          - How is success measured for this role
+          - How is success measured for this position
+          - How will success be measured in this role
+          - How will success be measured in this position
+          - How will success be measured for this role
+          - How will success be measured for this position
+          - How would success be measured in this role
+          - How would success be measured in this position
+          - How would success be measured for this role
+          - How would success be measured for this position
+          - How do you measure success in this role
+          - How do you measure success in this position
+          - How do you measure success for this role
+          - How do you measure success for this position
+          - How do they measure success in this role
+          - How do they measure success in this position
+          - How do they measure success for this role
+          - How do they measure success for this position
+          - How does the team measure success in this role
+          - How does the team measure success in this position
+          - How does the team measure success for this role
+          - How does the team measure success for this position
+          - How does the company measure success in this role
+          - How does the company measure success in this position
+          - How does the company measure success for this role
+          - How does the company measure success for this position
+        explanation: Success is measured — «успех измеряют»; in this role — «в этой роли».
+      - id: q3
+        prompt: Хотите ли вы узнать обо мне что-нибудь ещё?
+        answer:
+          - Is there anything else that you would like to know about me
+          - Is there anything else that you want to know about me
+          - Is there anything else you would like to know about me
+          - Is there anything else you want to know about me
+          - Is there anything more that you would like to know about me
+          - Is there anything more that you want to know about me
+          - Is there anything more you would like to know about me
+          - Is there anything more you want to know about me
+          - Would you like to know anything else about me
+          - Would you like to know anything more about me
+          - Would you like to know something else about me
+          - Would you like to know something more about me
+          - Do you want to know anything else about me
+          - Do you want to know anything more about me
+        explanation: Anything else — «что-нибудь ещё»; would like to know — вежливая форма.
+      - id: q4
+        prompt: Могу я получить подтверждение условий в письменном виде?
+        answer:
+          - Could I please get a written confirmation of the terms
+          - Could I please get a written confirmation of the conditions
+          - Could I please get the written confirmation of the terms
+          - Could I please get the written confirmation of the conditions
+          - Could I please get written confirmation of the terms
+          - Could I please get written confirmation of the conditions
+          - Could I please have a written confirmation of the terms
+          - Could I please have a written confirmation of the conditions
+          - Could I please have the written confirmation of the terms
+          - Could I please have the written confirmation of the conditions
+          - Could I please have written confirmation of the terms
+          - Could I please have written confirmation of the conditions
+          - Could I get a written confirmation of the terms
+          - Could I get a written confirmation of the conditions
+          - Could I get the written confirmation of the terms
+          - Could I get the written confirmation of the conditions
+          - Could I get written confirmation of the terms
+          - Could I get written confirmation of the conditions
+          - Could I have a written confirmation of the terms
+          - Could I have a written confirmation of the conditions
+          - Could I have the written confirmation of the terms
+          - Could I have the written confirmation of the conditions
+          - Could I have written confirmation of the terms
+          - Could I have written confirmation of the conditions
+          - Can I please get a written confirmation of the terms
+          - Can I please get a written confirmation of the conditions
+          - Can I please get the written confirmation of the terms
+          - Can I please get the written confirmation of the conditions
+          - Can I please get written confirmation of the terms
+          - Can I please get written confirmation of the conditions
+          - Can I please have a written confirmation of the terms
+          - Can I please have a written confirmation of the conditions
+          - Can I please have the written confirmation of the terms
+          - Can I please have the written confirmation of the conditions
+          - Can I please have written confirmation of the terms
+          - Can I please have written confirmation of the conditions
+          - Can I get a written confirmation of the terms
+          - Can I get a written confirmation of the conditions
+          - Can I get the written confirmation of the terms
+          - Can I get the written confirmation of the conditions
+          - Can I get written confirmation of the terms
+          - Can I get written confirmation of the conditions
+          - Can I have a written confirmation of the terms
+          - Can I have a written confirmation of the conditions
+          - Can I have the written confirmation of the terms
+          - Can I have the written confirmation of the conditions
+          - Can I have written confirmation of the terms
+          - Can I have written confirmation of the conditions
+          - Could I please get the terms in writing
+          - Could I please get the terms confirmed in writing
+          - Could I please get the conditions in writing
+          - Could I please get the conditions confirmed in writing
+          - Could I please have the terms in writing
+          - Could I please have the terms confirmed in writing
+          - Could I please have the conditions in writing
+          - Could I please have the conditions confirmed in writing
+          - Could I get the terms in writing
+          - Could I get the terms confirmed in writing
+          - Could I get the conditions in writing
+          - Could I get the conditions confirmed in writing
+          - Could I have the terms in writing
+          - Could I have the terms confirmed in writing
+          - Could I have the conditions in writing
+          - Could I have the conditions confirmed in writing
+          - Can I please get the terms in writing
+          - Can I please get the terms confirmed in writing
+          - Can I please get the conditions in writing
+          - Can I please get the conditions confirmed in writing
+          - Can I please have the terms in writing
+          - Can I please have the terms confirmed in writing
+          - Can I please have the conditions in writing
+          - Can I please have the conditions confirmed in writing
+          - Can I get the terms in writing
+          - Can I get the terms confirmed in writing
+          - Can I get the conditions in writing
+          - Can I get the conditions confirmed in writing
+          - Can I have the terms in writing
+          - Can I have the terms confirmed in writing
+          - Can I have the conditions in writing
+          - Can I have the conditions confirmed in writing
+          - Could I please get a confirmation of the terms in writing
+          - Could I please get a confirmation of the conditions in writing
+          - Could I please have a confirmation of the terms in writing
+          - Could I please have a confirmation of the conditions in writing
+          - Could I get a confirmation of the terms in writing
+          - Could I get a confirmation of the conditions in writing
+          - Could I have a confirmation of the terms in writing
+          - Could I have a confirmation of the conditions in writing
+          - Can I please get a confirmation of the terms in writing
+          - Can I please get a confirmation of the conditions in writing
+          - Can I please have a confirmation of the terms in writing
+          - Can I please have a confirmation of the conditions in writing
+          - Can I get a confirmation of the terms in writing
+          - Can I get a confirmation of the conditions in writing
+          - Can I have a confirmation of the terms in writing
+          - Can I have a confirmation of the conditions in writing
+          - Could you please confirm the terms in writing
+          - Could you please confirm the conditions in writing
+          - Could you confirm the terms in writing
+          - Could you confirm the conditions in writing
+        explanation: Written confirmation — подтверждение письмом; in writing — «письменно».
+      - id: q5
+        prompt: Когда истекает срок предложения?
+        answer:
+          - When does the offer expire
+          - When does this offer expire
+          - When will the offer expire
+          - When will this offer expire
+          - When is the offer going to expire
+          - When is the offer due to expire
+          - When is this offer going to expire
+          - When is this offer due to expire
+          - When is the offer expiring
+          - When is this offer expiring
+          - When is the deadline for the offer
+          - When is the deadline for this offer
+          - Until when is the offer valid
+          - Until when is this offer valid
+          - What is the expiry date of the offer
+          - What is the expiry date of this offer
+        explanation: Expire — «истекать»; вопрос строится с does.
