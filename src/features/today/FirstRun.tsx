@@ -25,6 +25,7 @@ export function FirstRun({
   grouped = true,
   focus,
   onFocused,
+  show,
 }: {
   courses: Course[];
   entries: StoredCatalogEntry[];
@@ -36,6 +37,8 @@ export function FirstRun({
   /** Курс, карточку которого показать и сфокусировать. */
   focus?: string;
   onFocused?: () => void;
+  /** Ожидание первого урока другого курса учитывается и для скрытых карточек. */
+  show?: string;
 }) {
   const offers = courseOffers(courses, entries, modules);
   const loading = useSyncExternalStore(
@@ -53,6 +56,7 @@ export function FirstRun({
     );
   const busy = offers.find((offer) => offer.course.id === loading);
   const first = offers.find((offer) => offer.ready);
+  const shown = show ? offers.filter((offer) => offer.course.id === show) : offers;
   const card = (offer: CourseOfferView, level: 2 | 3) => (
     <CourseOffer
       key={offer.course.id}
@@ -65,7 +69,7 @@ export function FirstRun({
       onFocused={onFocused}
     />
   );
-  if (!grouped) return <>{offers.map((offer) => card(offer, 2))}</>;
+  if (!grouped) return <>{shown.map((offer) => card(offer, 2))}</>;
   return (
     <>
       {groupByLanguage(offers).map((group) =>
@@ -202,12 +206,14 @@ export function CourseStart({
   grouped,
   focus,
   onFocused,
+  show,
 }: {
   courseIds?: string[];
   hint?: boolean;
   grouped?: boolean;
   focus?: string;
   onFocused?: () => void;
+  show?: string;
 }) {
   const courses = useCourses();
   const catalog = useCatalog();
@@ -221,6 +227,7 @@ export function CourseStart({
       grouped={grouped}
       focus={focus}
       onFocused={onFocused}
+      show={show}
     />
   );
 }

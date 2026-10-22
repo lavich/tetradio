@@ -12,7 +12,7 @@ test("оболочка открывается, разделы доступны �
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await expect(page.getByRole("heading", { name: "Словарь", level: 1 })).toBeVisible();
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
-  await expect(page.getByRole("heading", { name: "Полка", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Курс", level: 1 })).toBeVisible();
   await expect(page.getByRole("radiogroup", { name: "Язык" })).toHaveCount(0);
   await page.keyboard.press("Tab");
   const focused = await page.evaluate(() => document.activeElement?.tagName);

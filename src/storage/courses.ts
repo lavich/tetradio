@@ -31,6 +31,7 @@ export const CURRENT_LANGUAGE_KEY = "currentLanguage";
 export const CURRENT_STARTED_LANGUAGE_KEY = "currentStartedLanguage";
 export const HOME_COURSE_KEY = "homeCourse";
 export const PRIMARY_COURSE_KEY = "primaryCourse";
+export const SHELF_COURSE_KEY = "shelfCourse";
 
 export interface CourseEntry {
   id: string;
@@ -221,14 +222,17 @@ export const homeCourse = zoned(async function homeCourse(database: AppDatabase 
 });
 
 /**
- * Модуль, урок, слово или текст, открытые по ссылке, делают язык своего курса выбранным. Если он и так показан, а на
+ * Модуль, урок, слово или текст, открытые по ссылке, делают язык своего курса выбранным, а начатый курс — выбранным на «Курсе». Если он и так показан, а на
  * «Курсе» не выбран язык без установленных курсов, выбор не записывается: без явного выбора экраны следуют за языком
  * основного курса.
  */
 export async function followCourse(courseId: string, database: AppDatabase = db): Promise<void> {
   const list = await courses(database);
-  const language = list.find((course) => course.id === courseId)?.language;
-  if (!language) return;
+  const course = list.find((item) => item.id === courseId);
+  const language = course?.language;
+  if (!course || !language) return;
+  if (course.started && (await readShelfChoices(database))[language] !== courseId)
+    await rememberShelfCourse(course, database);
   const [current, { chosen }] = await Promise.all([currentLanguage(database), readLanguageChoice(list, database)]);
   const unstartedChosen =
     !!chosen && chosen !== language && !list.some((course) => course.language === chosen && course.installed);
@@ -302,6 +306,52 @@ export const shelfLanguage = zoned(async function shelfLanguage(
   const { chosen } = await readLanguageChoice(list, database);
   return list.find((course) => course.language === chosen)?.language ?? currentLanguage(database);
 });
+
+const readShelfChoices = zoned(async function readShelfChoices(database: AppDatabase): Promise<Record<string, string>> {
+  try {
+    const raw = (await database.meta.get(SHELF_COURSE_KEY))?.value;
+    const parsed: unknown = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? (parsed as Record<string, string>) : {};
+  } catch {
+    return {};
+  }
+});
+const rememberShelfCourse = (course: CourseEntry, database: AppDatabase) =>
+  database.transaction("rw", database.meta, async () =>
+    database.meta.put({
+      key: SHELF_COURSE_KEY,
+      value: JSON.stringify({ ...(await readShelfChoices(database)), [course.language]: course.id }),
+    }),
+  );
+
+/**
+ * Курс «Курса»: выбранный в языке «Курса»; иначе основной курс устройства, если он этого языка, иначе первый курс языка;
+ * из начатых предпочтён установленный: курс, ждущий установки из снимка, показать нечем.
+ */
+export const shelfCourse = zoned(async function shelfCourse(database: AppDatabase = db): Promise<string | undefined> {
+  const [language, list, primary, choices] = await Promise.all([
+    shelfLanguage(database),
+    courses(database),
+    primaryCourse(database),
+    readShelfChoices(database),
+  ]);
+  const own = list.filter((course) => course.language === language);
+  const started = own.filter((course) => course.started);
+  return (
+    own.find((course) => course.id === choices[language ?? ""]) ??
+    started.find((course) => course.id === primary && course.installed) ??
+    started.find((course) => course.installed) ??
+    started[0] ??
+    own[0]
+  )?.id;
+});
+
+export async function chooseShelfCourse(courseId: string, database: AppDatabase = db): Promise<void> {
+  const course = (await courses(database)).find((item) => item.id === courseId);
+  if (!course) return;
+  await rememberShelfCourse(course, database);
+  if ((await shelfLanguage(database)) !== course.language) await setCurrentLanguage(course.language, database);
+}
 
 /**
  * Язык без начатых курсов выбирают только на «Курсе»; прежде чем выбор уйдёт на него, начатый выбор запоминается
