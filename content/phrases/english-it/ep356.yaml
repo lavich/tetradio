@@ -1,0 +1,7 @@
+id: ep356
+text: "I'd respectfully disagree."
+translation: "Я бы вежливо не согласился."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

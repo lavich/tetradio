@@ -1,0 +1,7 @@
+id: ep365
+text: "Colleagues often ask me to review their design docs."
+translation: "Коллеги часто просят меня посмотреть их документы с описанием дизайна."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

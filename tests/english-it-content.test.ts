@@ -81,7 +81,7 @@ describe("размер источников ступени B2 (функции п
 
 describe("английский для IT: ступень B1+ и B2", () => {
   const STAGE_1 = ["e01", "e02", "e03", "e04", "e05", "e06", "e07", "e08"];
-  const STAGE_2 = ["e09", "e10", "e11", "e12", "e13", "e14"];
+  const STAGE_2 = ["e09", "e10", "e11", "e12", "e13", "e14", "e15"];
   const STAGE = [...STAGE_1, ...STAGE_2];
   const WRITING: Record<string, { register: string; min: number; max: number }> = {
     e01: { register: "formal", min: 60, max: 90 },
@@ -98,6 +98,7 @@ describe("английский для IT: ступень B1+ и B2", () => {
     e12: { register: "formal", min: 80, max: 120 },
     e13: { register: "formal", min: 130, max: 170 },
     e14: { register: "formal", min: 130, max: 170 },
+    e15: { register: "formal", min: 130, max: 170 },
   };
   const WORDS = [18, 17];
   const PHRASES = [8, 8, 9];

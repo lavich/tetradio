@@ -1,8 +1,23 @@
 number: 15
 title: Strengths and opinions
 subtitle: Сильные стороны и своё мнение
-status: draft
+status: published
 goal: назвать сильные и слабые стороны, аргументированно не согласиться
 grammar:
   - согласие и несогласие, смягчение
 sessions: 3
+crib:
+  title: Согласие и несогласие
+  rows:
+    - [согласие и сомнение, "I see your point, but… · I partly agree, but… · I'm not sure that… · That's true, although…"]
+    - [своё мнение, "In my opinion… · I'd argue that… · I tend to think that… · As far as I'm concerned…"]
+    - [вежливое несогласие, "I'd respectfully disagree. · Could we agree to disagree on this one? · What would change your mind?"]
+    - [сильные стороны, "My biggest strength is that… · I'm good at + -ing · Colleagues often ask me to…"]
+    - [слабая сторона, "One thing I'm working on is… · I used to…, so now I… · спокойно и с действием"]
+    - [ход ответа, "сильная сторона с примером → вторая → слабая → что вы делаете → итог"]
+  note: "I don't agree (agree — глагол, без be); agree with you; in my opinion; good at + -ing; tend to + глагол; говорите о решении, не о людях; слабую сторону называйте спокойно и добавляйте, что вы с ней делаете"
+lessons:
+  - e15-1
+  - e15-2
+  - e15-3
+  - e15-test

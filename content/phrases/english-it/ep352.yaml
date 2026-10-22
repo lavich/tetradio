@@ -1,0 +1,7 @@
+id: ep352
+text: "I'm not sure that's the right option."
+translation: "Я не уверен, что это подходящий вариант."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

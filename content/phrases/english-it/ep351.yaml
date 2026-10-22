@@ -1,0 +1,7 @@
+id: ep351
+text: "I see your point, but I'd approach it differently."
+translation: "Понимаю вашу мысль, но я бы подошёл к этому иначе."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

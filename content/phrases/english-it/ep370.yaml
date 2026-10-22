@@ -1,0 +1,7 @@
+id: ep370
+text: "That's a fair point, and I hadn't thought of that."
+translation: "Справедливое замечание, я об этом не подумал."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

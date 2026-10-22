@@ -1,0 +1,400 @@
+title: отзыв о кандидате и спор о техническом решении
+kind: lesson
+items:
+  - { kind: word, id: ew509 }
+  - { kind: word, id: ew510 }
+  - { kind: word, id: ew511 }
+  - { kind: word, id: ew512 }
+  - { kind: word, id: ew513 }
+  - { kind: word, id: ew514 }
+  - { kind: word, id: ew515 }
+  - { kind: word, id: ew516 }
+  - { kind: word, id: ew517 }
+  - { kind: word, id: ew518 }
+  - { kind: word, id: ew519 }
+  - { kind: word, id: ew520 }
+  - { kind: word, id: ew521 }
+  - { kind: word, id: ew522 }
+  - { kind: word, id: ew523 }
+  - { kind: word, id: ew524 }
+  - { kind: word, id: ew525 }
+  - { kind: phrase, id: ep359 }
+  - { kind: phrase, id: ep360 }
+  - { kind: phrase, id: ep361 }
+  - { kind: phrase, id: ep362 }
+  - { kind: phrase, id: ep363 }
+  - { kind: phrase, id: ep364 }
+  - { kind: phrase, id: ep365 }
+  - { kind: phrase, id: ep366 }
+blocks:
+  - type: explanation
+    id: argument-words
+    title: Слова урока — довод, возражение, оценка
+    body: |-
+      Тексты урока — вымышленный отзыв комиссии о кандидате и разговор о техническом решении. Слова урока образуют две группы.
+
+      **Довод и проверка.** **Evidence** — факты и данные, подтверждающие утверждение; слово неисчисляемое. **Back up** — подкрепить утверждение фактами: **back up your claim with data**. **Plausible** — правдоподобный, но не доказанный. **Far-fetched** — натянутый, очень маловероятный. **Sound** — обоснованный: **a sound argument**. **A rationale** — обоснование решения. **An objection** — возражение. **Play devil's advocate** — намеренно защищать противоположную точку зрения, чтобы проверить идею: фраза предупреждает собеседника, что это не ваше мнение.
+
+      **Спор и итог.** **See eye to eye** — быть единого мнения, чаще в отрицании. **Common ground** — то, с чем согласны обе стороны. **Debatable** — допускает разные мнения. **Subjective** — зависит от личного восприятия. **On balance** — взвесив всё. **Stand by** — остаться при своём решении. **Have reservations** — иметь сомнения. **Second-guess** — сомневаться в принятом решении снова и снова. **Oversimplify** — упрощать до искажения.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: argument-match
+    title: Довод и оценка
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - plausible
+      - an objection
+      - far-fetched
+      - evidence
+      - common ground
+      - subjective
+      - oversimplify
+      - back up
+      - stand by
+    items:
+      - { id: m1, prompt: "звучит правдоподобно, хотя доказательств может не хватать", answer: plausible }
+      - { id: m2, prompt: возражение против плана или довода, answer: an objection }
+      - { id: m3, prompt: "очень маловероятное, натянутое предположение", answer: far-fetched }
+      - { id: m4, prompt: "факты и данные, которые подтверждают утверждение", answer: evidence }
+      - { id: m5, prompt: "то, с чем согласны обе стороны спора", answer: common ground }
+      - { id: m6, prompt: зависит от личного восприятия, answer: subjective }
+      - { id: m7, prompt: объяснять проблему слишком просто и терять важные детали, answer: oversimplify }
+  - type: exercise
+    id: debate-gap
+    title: Выражения для спора
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - back up
+      - play devil's advocate
+      - see eye to eye
+      - stand by
+      - have reservations
+      - second-guess
+      - on balance
+      - sound
+      - debatable
+    items:
+      - id: g1
+        prompt: Please ___ your claim with data from the load test. (подкрепить)
+        answer: back up
+      - id: g2
+        prompt: Let me ___ for a moment, and ask what happens if the new library has a security problem. (выступить адвокатом дьявола)
+        answer: play devil's advocate
+      - id: g3
+        prompt: We rarely ___ on tools, but we agree on the goal. (быть единого мнения)
+        answer: see eye to eye
+      - id: g4
+        prompt: I made this decision for good reasons, and I ___ it. (остаюсь при своём решении)
+        answer: stand by
+      - id: g5
+        prompt: I ___ about the schedule, because the testing time looks short. (иметь сомнения)
+        answer: have reservations
+      - id: g6
+        prompt: Once the team has decided, it does not help to ___ every choice. (пересматривать снова и снова)
+        answer: second-guess
+      - id: g7
+        prompt: The risks are small, so I would, ___, keep the current design. (взвесив всё)
+        answer: on balance
+  - type: explanation
+    id: reading-how
+    title: Как читать отзыв комиссии
+    body: |-
+      Отзыв о кандидате (interview feedback) обычно состоит из итога, сильных сторон, опасений и рекомендации. Сначала найдите рекомендацию, затем посмотрите, на каком основании комиссия её дала: какие факты названы сильной стороной и какие опасения высказаны. Обратите внимание на осторожные слова: **plausible**, **debatable**, **have reservations** показывают, что комиссия взвешивает довод.
+
+      Отзыв вымышленный и написан о работе и о ходе интервью: возраст, пол, происхождение и другие личные признаки в таких отзывах не обсуждают. Слова вне списков переведены под текстом.
+  - type: reading
+    id: feedback
+    title: "Panel feedback: backend engineer, candidate 7"
+    text: |-
+      Panel feedback: backend engineer, candidate 7
+      Interview panel notes · example
+
+      Summary
+      The candidate worked through the design task in a systematic way and explained each step clearly. On balance, the panel recommends moving to the next round.
+
+      Strengths
+      The candidate is analytical: before proposing a cache, they asked about the read and write load and used the numbers to choose a design. They were also level-headed when the panel changed the requirements halfway through the task.
+
+      Concerns
+      Two panel members have reservations about the candidate's estimate for the migration. The estimate is plausible, but the candidate did not back it up with evidence from a similar project. One member found the answer on testing a little short; the others think this is subjective and depends on the question.
+
+      Next step
+      The panel will ask for a short written rationale for the migration plan. Whether the candidate would be comfortable leading the work is debatable and needs another conversation.
+    glosses:
+      - text: panel
+        russian: комиссия
+      - text: the read and write load
+        russian: нагрузка на чтение и запись
+      - text: halfway through
+        russian: на середине
+      - text: estimate
+        russian: оценка сроков и объёма работы
+      - text: migration
+        russian: перенос системы или данных
+      - text: comfortable
+        russian: уверенно чувствующий себя
+      - text: leading the work
+        russian: руководя работой
+  - type: exercise
+    id: feedback-tf
+    about: feedback
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The panel recommends moving to the next round.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q2
+        prompt: The candidate asked about the read and write load before proposing a cache.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q3
+        prompt: The candidate lost patience when the requirements changed.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: They were also level-headed when the panel changed the requirements — кандидат сохранил спокойствие.
+      - id: q4
+        prompt: The candidate supported the migration estimate with evidence from a similar project.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: The candidate did not back it up with evidence — оценка осталась без подтверждающих данных.
+      - id: q5
+        prompt: All panel members agree that the answer on testing was too short.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: One member found it a little short; the others think this is subjective — остальные считают оценку субъективной.
+      - id: q6
+        prompt: The panel will ask for a short written rationale for the migration plan.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+  - type: exercise
+    id: feedback-find
+    about: feedback
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Which part of the task did the candidate explain clearly?
+        options:
+          - each step
+          - only the last step
+          - the testing plan
+        answer: each step
+      - id: q2
+        prompt: What did the candidate use to choose a design?
+        options:
+          - the numbers about the load
+          - a design from a book
+          - the opinion of the panel
+        answer: the numbers about the load
+      - id: q3
+        prompt: What do two panel members have reservations about?
+        options:
+          - the candidate's estimate for the migration
+          - the candidate's answer about caches
+          - the length of the interview
+        answer: the candidate's estimate for the migration
+      - id: q4
+        prompt: What does the panel want to see in the next step?
+        options:
+          - a short written rationale
+          - a new design task
+          - a reference from a previous team
+        answer: a short written rationale
+      - id: q5
+        prompt: What needs another conversation?
+        options:
+          - whether the candidate would be comfortable leading the work
+          - whether the candidate knows caches
+          - whether the migration is needed
+        answer: whether the candidate would be comfortable leading the work
+  - type: exercise
+    id: feedback-language
+    about: feedback
+    title: Осторожные слова в тексте
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: In «The estimate is plausible», what does plausible tell us?
+        options:
+          - It sounds convincing, but it is not proved.
+          - It is proved by evidence.
+          - It is clearly wrong.
+        answer: It sounds convincing, but it is not proved.
+        explanation: "Plausible — «правдоподобный»: оценка звучит убедительно, но доказательств нет."
+      - id: q2
+        prompt: Why does the panel call the opinion on the testing answer subjective?
+        options:
+          - It depends on the question and on the person who judges.
+          - It comes from the candidate's test results.
+          - Nobody has read the answer.
+        answer: It depends on the question and on the person who judges.
+        explanation: "Subjective — «субъективный»: оценка зависит от точки зрения оценивающего."
+      - id: q3
+        prompt: What does «On balance» introduce?
+        options:
+          - the recommendation after weighing all the points
+          - a list of the candidate's weaknesses
+          - a question to the candidate
+        answer: the recommendation after weighing all the points
+        explanation: "On balance — «взвесив всё»: после него идёт вывод."
+      - id: q4
+        prompt: Which phrase shows that the panel is not sure about leading the work?
+        options:
+          - is debatable
+          - is analytical
+          - is level-headed
+        answer: is debatable
+        explanation: "Debatable — «спорный»: вывод допускает разные мнения."
+  - type: explanation
+    id: listening-how
+    title: Как слушать спор о решении
+    body: |-
+      Hassan, руководитель команды, рассказывает Fatima о решении своей команды и спрашивает, что она об этом думает. Это вопрос, на который нет единственного верного ответа: собеседник смотрит на довод и на тон. Слушайте, как Fatima признаёт довод, как называет сомнение и как собеседники находят общее: **I see your point**, **I'm not sure that…**, **That's a fair point**, **I partly agree**.
+
+      Сначала послушайте запись целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: debate
+    title: Hassan and Fatima discuss a technical decision
+    plays: 2
+    transcript:
+      - speaker: Hassan
+        text: Fatima, here is a situation from our team. Search has become slow, and we decided to add a cache instead of rewriting the search module. What do you think?
+      - speaker: Fatima
+        text: I see your point about the rewrite. It would take months, and it would be risky. But I'm not sure that a cache is enough. If most queries are different, the cache will rarely help.
+      - speaker: Hassan
+        text: That's true, although the logs show that many queries repeat. About sixty percent of them, according to last month's numbers.
+      - speaker: Fatima
+        text: That's a fair point, and I hadn't thought of that. Could I see the numbers by query type? I have reservations about the slowest queries, which are the unusual ones.
+      - speaker: Hassan
+        text: Good question. The slowest queries are indeed the unusual ones, so the cache would not help them. I'd argue that making the common queries faster still helps most users.
+      - speaker: Fatima
+        text: I partly agree. Most users would benefit. But I'd put more weight on the unusual queries, because those are the ones that make people leave the page.
+      - speaker: Hassan
+        text: That could be true. What would change your mind about the cache?
+      - speaker: Fatima
+        text: If the numbers show that the unusual queries are rare, I'd support the cache. Otherwise, I'd look at the database index first.
+      - speaker: Hassan
+        text: Then let's try the cache first, and look at the numbers by query type on Friday. Would that work for you?
+      - speaker: Fatima
+        text: Yes, that works for me. Either way, I'll support the team's decision.
+      - speaker: Hassan
+        text: Good. We both want a faster search, so let's start from that. We try the cache first, and we review the numbers on Friday as agreed.
+      - speaker: Fatima
+        text: Agreed. I'll prepare a report by query type before then.
+  - type: exercise
+    id: debate-q
+    about: debate
+    title: Что сказали в разговоре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What did the team decide to do about the slow search?
+        options:
+          - add a cache instead of a rewrite
+          - rewrite the search module
+          - buy a faster server
+        answer: add a cache instead of a rewrite
+      - id: q2
+        prompt: Why does Fatima doubt that a cache is enough?
+        options:
+          - Most queries may be different, so the cache will rarely help.
+          - The cache is too expensive.
+          - The rewrite would be faster.
+        answer: Most queries may be different, so the cache will rarely help.
+      - id: q3
+        prompt: What do the logs show, according to Hassan?
+        options:
+          - Many queries repeat.
+          - Most queries are unusual.
+          - Search is fast for everyone.
+        answer: Many queries repeat.
+      - id: q4
+        prompt: Which queries are the slowest?
+        options:
+          - the unusual ones
+          - the common ones
+          - the long ones
+        answer: the unusual ones
+      - id: q5
+        prompt: What would make Fatima support the cache?
+        options:
+          - numbers that show unusual queries are rare
+          - a longer test period
+          - a new database
+        answer: numbers that show unusual queries are rare
+      - id: q6
+        prompt: What do they agree to do at the end?
+        options:
+          - try the cache first and review the numbers on Friday
+          - start the rewrite on Friday
+          - drop the idea of a cache
+        answer: try the cache first and review the numbers on Friday
+  - type: exercise
+    id: debate-language
+    about: debate
+    title: Как спорят в записи
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Fatima says «I see your point about the rewrite. But I'm not sure that a cache is enough.» What does she do?
+        options:
+          - She accepts one argument and states a doubt about the decision.
+          - She refuses to discuss the decision.
+          - She agrees with everything Hassan says.
+        answer: She accepts one argument and states a doubt about the decision.
+        explanation: I see your point признаёт довод, I'm not sure that… называет сомнение.
+      - id: q2
+        prompt: Fatima says «That's a fair point, and I hadn't thought of that.» What does the phrase show?
+        options:
+          - She accepts a new argument.
+          - She thinks Hassan is wrong.
+          - She wants to end the talk.
+        answer: She accepts a new argument.
+        explanation: Фраза признаёт довод и то, что он новый для говорящего.
+      - id: q3
+        prompt: Fatima says «I partly agree.» What does she mean?
+        options:
+          - She agrees with one part and not with another.
+          - She does not understand the question.
+          - She agrees with every point.
+        answer: She agrees with one part and not with another.
+        explanation: Partly agree — согласие с частью довода.
+      - id: q4
+        prompt: Hassan asks «What would change your mind about the cache?» Why does he ask?
+        options:
+          - He wants to know which argument would convince Fatima.
+          - He wants Fatima to leave the decision.
+          - He thinks the cache is a mistake.
+        answer: He wants to know which argument would convince Fatima.
+        explanation: "Вопрос открывает обсуждение: собеседник выясняет, какой довод может изменить мнение."
+      - id: q5
+        prompt: How does Fatima end the discussion?
+        options:
+          - She promises to support the team's decision.
+          - She asks to cancel the cache.
+          - She says she will not take part.
+        answer: She promises to support the team's decision.
+        explanation: Either way, I'll support the team's decision — готовность работать по решению команды.

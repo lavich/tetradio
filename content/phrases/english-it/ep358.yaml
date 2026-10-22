@@ -1,0 +1,7 @@
+id: ep358
+text: "I'd put more weight on the maintenance cost."
+translation: "Я бы придал больший вес стоимости сопровождения."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md
