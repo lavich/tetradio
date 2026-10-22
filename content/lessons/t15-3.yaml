@@ -208,12 +208,12 @@ blocks:
     title: Реплики собеседника — прокат на пляже
     plays: 2
     transcript:
-      - { speaker: Tariq, text: "Good morning. How can I help you?" }
-      - { speaker: Tariq, text: "We have pedal boats and kayaks. A pedal boat is twenty-five euros an hour, and it takes up to four people. How long would you like it for?" }
-      - { speaker: Tariq, text: "Yes, the sea is calm today, and there's a lifeguard on duty. Our boats usually go out at ten. What time would you like to start?" }
-      - { speaker: Tariq, text: "Eleven is fine. We keep your ID until you bring the boat back. Please stay inside the yellow buoys." }
-      - { speaker: Tariq, text: "Of course, put them behind the counter. We also rent loungers and parasols. Would you like any?" }
-      - { speaker: Tariq, text: "A lounger is twelve euros for the full day, and a parasol is eight. How many would you like?" }
+      - { speaker: Tariq, text: "Good morning. How can I help you?", audio: t15-3/rental-lines-1.mp3 }
+      - { speaker: Tariq, text: "We have pedal boats and kayaks. A pedal boat is twenty-five euros an hour, and it takes up to four people. How long would you like it for?", audio: t15-3/rental-lines-2.mp3 }
+      - { speaker: Tariq, text: "Yes, the sea is calm today, and there's a lifeguard on duty. Our boats usually go out at ten. What time would you like to start?", audio: t15-3/rental-lines-3.mp3 }
+      - { speaker: Tariq, text: "Eleven is fine. We keep your ID until you bring the boat back. Please stay inside the yellow buoys.", audio: t15-3/rental-lines-4.mp3 }
+      - { speaker: Tariq, text: "Of course, put them behind the counter. We also rent loungers and parasols. Would you like any?", audio: t15-3/rental-lines-5.mp3 }
+      - { speaker: Tariq, text: "A lounger is twelve euros for the full day, and a parasol is eight. How many would you like?", audio: t15-3/rental-lines-6.mp3 }
   - type: speaking
     id: rental
     part: roleplay
@@ -250,12 +250,12 @@ blocks:
     title: Реплики собеседника — планы на завтра
     plays: 2
     transcript:
-      - { speaker: Selin, text: "So, what's the forecast for tomorrow?" }
-      - { speaker: Selin, text: "Oh, that's a pity. What could we do in the morning, then?" }
-      - { speaker: Selin, text: "A boat trip is a good idea. But what if it rains earlier than they say?" }
-      - { speaker: Selin, text: "Fine. And what shall we do in the afternoon if it rains?" }
-      - { speaker: Selin, text: "I like that. Should we book the boat trip now, or decide in the morning?" }
-      - { speaker: Selin, text: "Fine. And what time shall we have breakfast?" }
+      - { speaker: Selin, text: "So, what's the forecast for tomorrow?", audio: t15-3/plans-lines-1.mp3 }
+      - { speaker: Selin, text: "Oh, that's a pity. What could we do in the morning, then?", audio: t15-3/plans-lines-2.mp3 }
+      - { speaker: Selin, text: "A boat trip is a good idea. But what if it rains earlier than they say?", audio: t15-3/plans-lines-3.mp3 }
+      - { speaker: Selin, text: "Fine. And what shall we do in the afternoon if it rains?", audio: t15-3/plans-lines-4.mp3 }
+      - { speaker: Selin, text: "I like that. Should we book the boat trip now, or decide in the morning?", audio: t15-3/plans-lines-5.mp3 }
+      - { speaker: Selin, text: "Fine. And what time shall we have breakfast?", audio: t15-3/plans-lines-6.mp3 }
   - type: speaking
     id: plans
     part: roleplay

@@ -1,5 +1,6 @@
 id: tp224
 text: "What's the forecast for tomorrow?"
+audio: phrases/tp224.mp3
 translation: "Какой прогноз на завтра?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t15

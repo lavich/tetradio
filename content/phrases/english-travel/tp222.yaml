@@ -1,5 +1,6 @@
 id: tp222
 text: "Is there a shuttle from the airport?"
+audio: phrases/tp222.mp3
 translation: "Есть ли трансфер из аэропорта?"
 note: "a shuttle — автобус, который ходит по одному маршруту"
 provenance:

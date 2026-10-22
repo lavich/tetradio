@@ -93,19 +93,19 @@ blocks:
     title: A lifeguard explains the flags
     plays: 2
     transcript:
-      - { speaker: Dario, text: "Good morning. Can I help you?" }
-      - { speaker: Mila, text: "Hi. We'd like to swim this morning. Is it safe to swim here today?" }
-      - { speaker: Dario, text: "Yes, but only between the red and yellow flags. That's the area we watch." }
-      - { speaker: Mila, text: "What does the red flag at the far end mean?" }
-      - { speaker: Dario, text: "It means don't go in the water there. There's a strong current by the rocks, but not here in the middle of the beach." }
-      - { speaker: Mila, text: "I see. What should we do if a current takes us away from the beach?" }
-      - { speaker: Dario, text: "Don't swim against it. Swim along the beach until it gets weaker, then come back to the shore. If you're tired, float on your back, raise your arm and shout for help. We'll see you." }
-      - { speaker: Mila, text: "Good to know. Is it all right for our son? He's seven." }
-      - { speaker: Dario, text: "The shallow area near the jetty is good for children, but they should stay with an adult." }
-      - { speaker: Mila, text: "Until what time are you on duty?" }
-      - { speaker: Dario, text: "Until six. After six there's no lifeguard, so please stay out of the water." }
-      - { speaker: Mila, text: "Thank you very much." }
-      - { speaker: Dario, text: "You're welcome. Enjoy your swim." }
+      - { speaker: Dario, text: "Good morning. Can I help you?", audio: t15-test/flags-1.mp3 }
+      - { speaker: Mila, text: "Hi. We'd like to swim this morning. Is it safe to swim here today?", audio: t15-test/flags-2.mp3 }
+      - { speaker: Dario, text: "Yes, but only between the red and yellow flags. That's the area we watch.", audio: t15-test/flags-3.mp3 }
+      - { speaker: Mila, text: "What does the red flag at the far end mean?", audio: t15-test/flags-4.mp3 }
+      - { speaker: Dario, text: "It means don't go in the water there. There's a strong current by the rocks, but not here in the middle of the beach.", audio: t15-test/flags-5.mp3 }
+      - { speaker: Mila, text: "I see. What should we do if a current takes us away from the beach?", audio: t15-test/flags-6.mp3 }
+      - { speaker: Dario, text: "Don't swim against it. Swim along the beach until it gets weaker, then come back to the shore. If you're tired, float on your back, raise your arm and shout for help. We'll see you.", audio: t15-test/flags-7.mp3 }
+      - { speaker: Mila, text: "Good to know. Is it all right for our son? He's seven.", audio: t15-test/flags-8.mp3 }
+      - { speaker: Dario, text: "The shallow area near the jetty is good for children, but they should stay with an adult.", audio: t15-test/flags-9.mp3 }
+      - { speaker: Mila, text: "Until what time are you on duty?", audio: t15-test/flags-10.mp3 }
+      - { speaker: Dario, text: "Until six. After six there's no lifeguard, so please stay out of the water.", audio: t15-test/flags-11.mp3 }
+      - { speaker: Mila, text: "Thank you very much.", audio: t15-test/flags-12.mp3 }
+      - { speaker: Dario, text: "You're welcome. Enjoy your swim.", audio: t15-test/flags-13.mp3 }
   - type: exercise
     id: flags-q
     about: flags
@@ -158,18 +158,18 @@ blocks:
     title: The forecast and a plan for Saturday
     plays: 2
     transcript:
-      - { speaker: Henrik, text: "Have you seen the forecast for Saturday?" }
-      - { speaker: Selin, text: "Yes. It's supposed to be overcast in the morning, and it's going to clear up around noon." }
-      - { speaker: Henrik, text: "And how hot is it going to be?" }
-      - { speaker: Selin, text: "Thirty-four degrees in the afternoon. It's going to be scorching, hotter than today." }
-      - { speaker: Henrik, text: "Then we shouldn't stay on the beach all afternoon. How about the boat trip in the morning?" }
-      - { speaker: Selin, text: "The wind is stronger in the morning, so the sea is going to be choppy. It's going to be calmer in the evening." }
-      - { speaker: Henrik, text: "OK. We could go to the market in the morning, while it's cool." }
-      - { speaker: Selin, text: "Good idea. And after lunch we could go to the beach and sit in the shade." }
-      - { speaker: Henrik, text: "And if it rains?" }
-      - { speaker: Selin, text: "It isn't going to rain. But if it does, we'll go to the spa." }
-      - { speaker: Henrik, text: "Fine. Let's do the boat trip on Sunday." }
-      - { speaker: Selin, text: "Yes, Sunday is going to be calmer." }
+      - { speaker: Henrik, text: "Have you seen the forecast for Saturday?", audio: t15-test/forecast-1.mp3 }
+      - { speaker: Selin, text: "Yes. It's supposed to be overcast in the morning, and it's going to clear up around noon.", audio: t15-test/forecast-2.mp3 }
+      - { speaker: Henrik, text: "And how hot is it going to be?", audio: t15-test/forecast-3.mp3 }
+      - { speaker: Selin, text: "Thirty-four degrees in the afternoon. It's going to be scorching, hotter than today.", audio: t15-test/forecast-4.mp3 }
+      - { speaker: Henrik, text: "Then we shouldn't stay on the beach all afternoon. How about the boat trip in the morning?", audio: t15-test/forecast-5.mp3 }
+      - { speaker: Selin, text: "The wind is stronger in the morning, so the sea is going to be choppy. It's going to be calmer in the evening.", audio: t15-test/forecast-6.mp3 }
+      - { speaker: Henrik, text: "OK. We could go to the market in the morning, while it's cool.", audio: t15-test/forecast-7.mp3 }
+      - { speaker: Selin, text: "Good idea. And after lunch we could go to the beach and sit in the shade.", audio: t15-test/forecast-8.mp3 }
+      - { speaker: Henrik, text: "And if it rains?", audio: t15-test/forecast-9.mp3 }
+      - { speaker: Selin, text: "It isn't going to rain. But if it does, we'll go to the spa.", audio: t15-test/forecast-10.mp3 }
+      - { speaker: Henrik, text: "Fine. Let's do the boat trip on Sunday.", audio: t15-test/forecast-11.mp3 }
+      - { speaker: Selin, text: "Yes, Sunday is going to be calmer.", audio: t15-test/forecast-12.mp3 }
   - type: exercise
     id: forecast-q
     about: forecast
