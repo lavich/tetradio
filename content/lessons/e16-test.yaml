@@ -98,26 +98,37 @@ blocks:
     transcript:
       - speaker: Hassan
         text: That was my last question. Is there anything you would like to ask us?
+        audio: e16-test/end-1.mp3
       - speaker: Elena
         text: Yes, thank you. How often do you release to production?
+        audio: e16-test/end-2.mp3
       - speaker: Hassan
         text: We release twice a week. Small changes go out on Tuesdays and Thursdays, and a person from the platform team supports each release.
+        audio: e16-test/end-3.mp3
       - speaker: Elena
         text: That's good to hear. What are the biggest challenges the team is facing?
+        audio: e16-test/end-4.mp3
       - speaker: Hassan
         text: Mostly growth. The number of users has been increasing quickly, so we have been moving some services to a new database.
+        audio: e16-test/end-5.mp3
       - speaker: Elena
         text: Interesting. And who would I be working with most closely?
+        audio: e16-test/end-6.mp3
       - speaker: Hassan
         text: With two senior engineers and a product manager. You'd shadow one of them in the first week.
+        audio: e16-test/end-7.mp3
       - speaker: Elena
         text: Thank you. Is there a plan for the first ninety days?
+        audio: e16-test/end-8.mp3
       - speaker: Hassan
         text: Yes. Your manager will write a plan with you in the first week, and you will review it every month.
+        audio: e16-test/end-9.mp3
       - speaker: Elena
         text: That sounds very clear. It was a pleasure speaking with you.
+        audio: e16-test/end-10.mp3
       - speaker: Hassan
         text: Thank you, Elena. Astrid will email you about the next steps by Friday.
+        audio: e16-test/end-11.mp3
   - type: exercise
     id: end-q
     about: end

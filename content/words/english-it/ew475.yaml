@@ -1,5 +1,6 @@
 id: ew475
 greek: "logarithmic"
+audio: words/ew475.mp3
 russian: "логарифмический: время растёт очень медленно, при удвоении входа добавляется один шаг"
 ipa: /ˌlɒɡəˈrɪðmɪk/
 note: "a binary search runs in logarithmic time"

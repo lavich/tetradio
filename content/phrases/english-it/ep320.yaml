@@ -1,5 +1,6 @@
 id: ep320
 text: "So, to summarise, we need a service that handles ten thousand requests a second."
+audio: phrases/ep320.mp3
 translation: "Итак, подводя итог: нам нужен сервис, который обрабатывает десять тысяч запросов в секунду."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13

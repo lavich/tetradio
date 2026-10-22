@@ -1,5 +1,6 @@
 id: ew447
 greek: "stale data"
+audio: words/ew447.mp3
 russian: "устаревшие данные: значения, которые уже изменились, а пользователь видит прежние"
 ipa: /ˈsteɪl ˈdeɪtə/
 note: "A cache can serve stale data for a few seconds."

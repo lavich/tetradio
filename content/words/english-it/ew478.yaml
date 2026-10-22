@@ -1,5 +1,6 @@
 id: ew478
 greek: "a test case"
+audio: words/ew478.mp3
 russian: "тестовый пример: вход и ожидаемый результат для проверки кода"
 ipa: /ə ˈtest keɪs/
 note: "a test case for an empty list; an edge case (слово модуля e13) — сама ситуация, a test case — её проверка"

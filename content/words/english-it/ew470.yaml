@@ -1,5 +1,6 @@
 id: ew470
 greek: "backtracking"
+audio: words/ew470.mp3
 russian: "перебор с возвратом: пробуют вариант и откатываются, если он не подходит"
 ipa: /ˈbæktrækɪŋ/
 note: "backtracking часто сочетают с отсечением ветвей"

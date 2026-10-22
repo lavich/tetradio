@@ -1,5 +1,6 @@
 id: ep302
 text: "How many requests do we expect per second?"
+audio: phrases/ep302.mp3
 translation: "Сколько запросов в секунду мы ожидаем?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13

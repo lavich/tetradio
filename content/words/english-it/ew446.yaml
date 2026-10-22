@@ -1,5 +1,6 @@
 id: ew446
 greek: "batch processing"
+audio: words/ew446.mp3
 russian: "пакетная обработка: данные накапливают и обрабатывают порциями по расписанию"
 ipa: /ˈbætʃ ˌprəʊsesɪŋ/
 note: "A nightly batch job builds the reports; real-time processing answers at once."

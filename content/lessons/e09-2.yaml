@@ -346,17 +346,17 @@ blocks:
     title: A behavioral interview
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Thanks for coming in, Camille. Let's start with a behavioral question. Tell me about a time you disagreed with a colleague." }
-      - { speaker: Camille, text: "Of course. About a year ago, I was working on a notifications service with another backend developer. We were building the first version when we disagreed about the design. He wanted to use a message queue, and I wanted to start with a simple database table." }
-      - { speaker: Ingrid, text: "Mm-hm. And what was your task?" }
-      - { speaker: Camille, text: "My task was to deliver a working version in six weeks. We had already lost two weeks, because we had been arguing about the design, so we needed a decision quickly." }
-      - { speaker: Ingrid, text: "I see. What did you do?" }
-      - { speaker: Camille, text: "First, I asked him for a short call. I listened to his concerns and wrote down the risks of both options. Then I suggested a test. We built a small prototype of each version in two days, and we measured the load. I also asked our lead to join the call, so the decision was not only ours." }
-      - { speaker: Ingrid, text: "And how did it end?" }
-      - { speaker: Camille, text: "The database table handled ten times more traffic than we needed, so we agreed to start with it. We shipped on time, and we added the queue later, when the load had grown." }
-      - { speaker: Ingrid, text: "What did you learn from it?" }
-      - { speaker: Camille, text: "I learned to test an idea before I argue about it. Since then, I have suggested a small experiment first, and he and I still work well together." }
-      - { speaker: Ingrid, text: "Thank you. That was a clear example. Let's move on to the next question." }
+      - { speaker: Ingrid, text: "Thanks for coming in, Camille. Let's start with a behavioral question. Tell me about a time you disagreed with a colleague.", audio: e09-2/interview-1.mp3 }
+      - { speaker: Camille, text: "Of course. About a year ago, I was working on a notifications service with another backend developer. We were building the first version when we disagreed about the design. He wanted to use a message queue, and I wanted to start with a simple database table.", audio: e09-2/interview-2.mp3 }
+      - { speaker: Ingrid, text: "Mm-hm. And what was your task?", audio: e09-2/interview-3.mp3 }
+      - { speaker: Camille, text: "My task was to deliver a working version in six weeks. We had already lost two weeks, because we had been arguing about the design, so we needed a decision quickly.", audio: e09-2/interview-4.mp3 }
+      - { speaker: Ingrid, text: "I see. What did you do?", audio: e09-2/interview-5.mp3 }
+      - { speaker: Camille, text: "First, I asked him for a short call. I listened to his concerns and wrote down the risks of both options. Then I suggested a test. We built a small prototype of each version in two days, and we measured the load. I also asked our lead to join the call, so the decision was not only ours.", audio: e09-2/interview-6.mp3 }
+      - { speaker: Ingrid, text: "And how did it end?", audio: e09-2/interview-7.mp3 }
+      - { speaker: Camille, text: "The database table handled ten times more traffic than we needed, so we agreed to start with it. We shipped on time, and we added the queue later, when the load had grown.", audio: e09-2/interview-8.mp3 }
+      - { speaker: Ingrid, text: "What did you learn from it?", audio: e09-2/interview-9.mp3 }
+      - { speaker: Camille, text: "I learned to test an idea before I argue about it. Since then, I have suggested a small experiment first, and he and I still work well together.", audio: e09-2/interview-10.mp3 }
+      - { speaker: Ingrid, text: "Thank you. That was a clear example. Let's move on to the next question.", audio: e09-2/interview-11.mp3 }
   - type: exercise
     id: interview-q
     about: interview

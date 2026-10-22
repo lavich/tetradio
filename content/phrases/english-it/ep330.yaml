@@ -1,5 +1,6 @@
 id: ep330
 text: "I'm going to sort the input first."
+audio: phrases/ep330.mp3
 translation: "Сначала я отсортирую входные данные."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14

@@ -1,5 +1,6 @@
 id: ep325
 text: "I'm assuming that we don't need to handle payments."
+audio: phrases/ep325.mp3
 translation: "Я исхожу из того, что платежи обрабатывать не нужно."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13

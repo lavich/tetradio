@@ -1,5 +1,6 @@
 id: ew459
 greek: "auxiliary space"
+audio: words/ew459.mp3
 russian: "дополнительная память: сколько алгоритм занимает сверх входных данных"
 ipa: /ɔːɡˈzɪliəri speɪs/
 note: "the hash map needs auxiliary space; вместе с time complexity называют цену решения"

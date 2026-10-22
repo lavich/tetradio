@@ -96,26 +96,37 @@ blocks:
     transcript:
       - speaker: Astrid
         text: Daniel, thank you for coming. Let's start with a common question. What are your strengths and weaknesses?
+        audio: e15-test/call-1.mp3
       - speaker: Daniel
         text: Thank you. My biggest strength is that I'm curious. When a service fails, I want to understand the root cause, so I read the logs and ask questions until I know why.
+        audio: e15-test/call-2.mp3
       - speaker: Astrid
         text: Can you give an example?
+        audio: e15-test/call-3.mp3
       - speaker: Daniel
         text: Last spring, a report was slow every Monday. I traced it to a job that started at the same time as the backup, and we moved the job to the evening.
+        audio: e15-test/call-4.mp3
       - speaker: Astrid
         text: And a weakness?
+        audio: e15-test/call-5.mp3
       - speaker: Daniel
         text: I get impatient in long meetings. I used to interrupt people, so now I write my questions down and wait until the end.
+        audio: e15-test/call-6.mp3
       - speaker: Astrid
         text: That's useful. Now, our team decided to write documentation after the release, not before it. Do you agree with that?
+        audio: e15-test/call-7.mp3
       - speaker: Daniel
         text: I see your point, because writing before the release takes time. But I'm not sure that it works. In my experience, details are forgotten after the release. I'd prefer to write a short version before, and the full version after.
+        audio: e15-test/call-8.mp3
       - speaker: Astrid
         text: That's a fair point. What if the team still prefers to write everything after the release?
+        audio: e15-test/call-9.mp3
       - speaker: Daniel
         text: Then I'd follow the team's decision, and I'd keep my short notes for myself.
+        audio: e15-test/call-10.mp3
       - speaker: Astrid
         text: Thank you, Daniel. We'll be in touch next week.
+        audio: e15-test/call-11.mp3
   - type: exercise
     id: call-q
     about: call

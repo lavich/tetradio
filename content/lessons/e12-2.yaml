@@ -302,17 +302,17 @@ blocks:
     title: Camille talks about her team
     plays: 2
     transcript:
-      - { speaker: Hassan, text: "Thanks for coming in, Camille. I'd like to hear about the team you worked in. How was it organised?" }
-      - { speaker: Camille, text: "I worked in a team of seven: four developers, a tester, a product owner and a scrum master. We had a stand-up every morning for fifteen minutes, and we planned the work in two-week sprints. Every sprint ended with a demo for the other teams." }
-      - { speaker: Hassan, text: "And how did you handle code reviews?" }
-      - { speaker: Camille, text: "Every pull request needed two approvals, and our working agreement said that reviewers would answer within one working day. In reviews, we marked small comments as nitpicks, so that nobody thought they were blockers." }
-      - { speaker: Hassan, text: "Tell me about the feedback you got there." }
-      - { speaker: Camille, text: "In my first year, my line manager told me that I was too quiet in design reviews. At first I was a little defensive, but she gave me a clear example. She suggested that I prepare one question before each meeting. I took it on board, and after three months I was leading the review of a design doc." }
-      - { speaker: Hassan, text: "How did your team deal with feedback on a large change?" }
-      - { speaker: Camille, text: "Once a teammate pointed out that my pull request was too large. I admitted that I had tried to do too much at once. We agreed to keep every pull request under three hundred lines, and we added that to the working agreement." }
-      - { speaker: Hassan, text: "And did you give feedback as well?" }
-      - { speaker: Camille, text: "Yes. I try to be specific and kind, and I explain the reason behind my comments. For example, I once suggested pair programming to a new colleague who was stuck, and she said that it had helped her a lot." }
-      - { speaker: Hassan, text: "Thank you, Camille. That gives me a good picture of how you work with a team." }
+      - { speaker: Hassan, text: "Thanks for coming in, Camille. I'd like to hear about the team you worked in. How was it organised?", audio: e12-2/team-1.mp3 }
+      - { speaker: Camille, text: "I worked in a team of seven: four developers, a tester, a product owner and a scrum master. We had a stand-up every morning for fifteen minutes, and we planned the work in two-week sprints. Every sprint ended with a demo for the other teams.", audio: e12-2/team-2.mp3 }
+      - { speaker: Hassan, text: "And how did you handle code reviews?", audio: e12-2/team-3.mp3 }
+      - { speaker: Camille, text: "Every pull request needed two approvals, and our working agreement said that reviewers would answer within one working day. In reviews, we marked small comments as nitpicks, so that nobody thought they were blockers.", audio: e12-2/team-4.mp3 }
+      - { speaker: Hassan, text: "Tell me about the feedback you got there.", audio: e12-2/team-5.mp3 }
+      - { speaker: Camille, text: "In my first year, my line manager told me that I was too quiet in design reviews. At first I was a little defensive, but she gave me a clear example. She suggested that I prepare one question before each meeting. I took it on board, and after three months I was leading the review of a design doc.", audio: e12-2/team-6.mp3 }
+      - { speaker: Hassan, text: "How did your team deal with feedback on a large change?", audio: e12-2/team-7.mp3 }
+      - { speaker: Camille, text: "Once a teammate pointed out that my pull request was too large. I admitted that I had tried to do too much at once. We agreed to keep every pull request under three hundred lines, and we added that to the working agreement.", audio: e12-2/team-8.mp3 }
+      - { speaker: Hassan, text: "And did you give feedback as well?", audio: e12-2/team-9.mp3 }
+      - { speaker: Camille, text: "Yes. I try to be specific and kind, and I explain the reason behind my comments. For example, I once suggested pair programming to a new colleague who was stuck, and she said that it had helped her a lot.", audio: e12-2/team-10.mp3 }
+      - { speaker: Hassan, text: "Thank you, Camille. That gives me a good picture of how you work with a team.", audio: e12-2/team-11.mp3 }
   - type: exercise
     id: team-q
     about: team

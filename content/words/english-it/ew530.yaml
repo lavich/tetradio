@@ -1,5 +1,6 @@
 id: ew530
 greek: "a platform team"
+audio: words/ew530.mp3
 russian: "команда, которая развивает общие сервисы и инструменты для других команд"
 ipa: /ə ˈplætfɔːm tiːm/
 note: "the platform team maintains the deployment pipeline for all product teams"

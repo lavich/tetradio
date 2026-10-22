@@ -1,5 +1,6 @@
 id: ep226
 text: "If I had tested it first, I would have caught the bug."
+audio: phrases/ep226.mp3
 translation: "Если бы я сначала это протестировал, я бы нашёл баг."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10

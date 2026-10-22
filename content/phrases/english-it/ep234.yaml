@@ -1,5 +1,6 @@
 id: ep234
 text: "The root cause turned out to be a missing index."
+audio: phrases/ep234.mp3
 translation: "Первопричиной оказался отсутствующий индекс."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10

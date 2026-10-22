@@ -617,16 +617,22 @@ blocks:
     transcript:
       - speaker: Astrid
         text: Welcome back. Let's talk about how you work. What are your strengths and weaknesses?
+        audio: e15-3/scene-lines-1.mp3
       - speaker: Astrid
         text: Thank you. Could you give me an example of the strength you mentioned?
+        audio: e15-3/scene-lines-2.mp3
       - speaker: Astrid
         text: Now a different topic. Our engineers decided to release only on Thursdays, even though some people prefer to release every day. Do you agree with that decision?
+        audio: e15-3/scene-lines-3.mp3
       - speaker: Astrid
         text: I see. But many engineers on the team prefer Thursdays, because it gives them time to fix problems before the weekend. How would you respond to that?
+        audio: e15-3/scene-lines-4.mp3
       - speaker: Astrid
         text: That's a fair point. What would you do if the team still decided to keep Thursdays?
+        audio: e15-3/scene-lines-5.mp3
       - speaker: Astrid
         text: Thank you. That is a constructive way to talk about a disagreement. Do you have any questions for me?
+        audio: e15-3/scene-lines-6.mp3
   - type: speaking
     id: scene
     part: roleplay

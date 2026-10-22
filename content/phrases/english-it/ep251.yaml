@@ -1,5 +1,6 @@
 id: ep251
 text: "If the release broke production, I would roll it back first."
+audio: phrases/ep251.mp3
 translation: "Если бы релиз сломал продакшен, я бы сначала откатил его."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11

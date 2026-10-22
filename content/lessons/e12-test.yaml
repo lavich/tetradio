@@ -66,15 +66,15 @@ blocks:
     title: Samir talks about feedback
     plays: 2
     transcript:
-      - { speaker: Hassan, text: "Thanks for coming, Samir. I'd like to ask about feedback. When did a colleague last give you a comment that changed your work?" }
-      - { speaker: Samir, text: "Last year, a reviewer pointed out that my tests only covered the normal case. I admitted that I had skipped the edge cases because I was in a hurry. She suggested writing the tests first for the next feature, and I took that on board." }
-      - { speaker: Hassan, text: "How did that go?" }
-      - { speaker: Samir, text: "It was slower at the start. My line manager asked me whether the extra time was worth it. After two months, I could say yes: we had found three bugs before the release, and the reviews were shorter." }
-      - { speaker: Hassan, text: "And how do you give feedback to colleagues?" }
-      - { speaker: Samir, text: "I start with what works well, and then I describe one thing to change. I explain the reason and suggest a solution. I also ask a question, because the author often knows something that I don't. Last month, I recommended that a new colleague use pair programming for a hard task, and she said that it had saved her a day." }
-      - { speaker: Hassan, text: "What do you do when you disagree with a comment?" }
-      - { speaker: Samir, text: "I ask for an example first. If I still disagree, I explain my reasons calmly and suggest that we ask the tech lead. I try not to get defensive." }
-      - { speaker: Hassan, text: "Thank you, Samir. That gave me a clear picture." }
+      - { speaker: Hassan, text: "Thanks for coming, Samir. I'd like to ask about feedback. When did a colleague last give you a comment that changed your work?", audio: e12-test/call-1.mp3 }
+      - { speaker: Samir, text: "Last year, a reviewer pointed out that my tests only covered the normal case. I admitted that I had skipped the edge cases because I was in a hurry. She suggested writing the tests first for the next feature, and I took that on board.", audio: e12-test/call-2.mp3 }
+      - { speaker: Hassan, text: "How did that go?", audio: e12-test/call-3.mp3 }
+      - { speaker: Samir, text: "It was slower at the start. My line manager asked me whether the extra time was worth it. After two months, I could say yes: we had found three bugs before the release, and the reviews were shorter.", audio: e12-test/call-4.mp3 }
+      - { speaker: Hassan, text: "And how do you give feedback to colleagues?", audio: e12-test/call-5.mp3 }
+      - { speaker: Samir, text: "I start with what works well, and then I describe one thing to change. I explain the reason and suggest a solution. I also ask a question, because the author often knows something that I don't. Last month, I recommended that a new colleague use pair programming for a hard task, and she said that it had saved her a day.", audio: e12-test/call-6.mp3 }
+      - { speaker: Hassan, text: "What do you do when you disagree with a comment?", audio: e12-test/call-7.mp3 }
+      - { speaker: Samir, text: "I ask for an example first. If I still disagree, I explain my reasons calmly and suggest that we ask the tech lead. I try not to get defensive.", audio: e12-test/call-8.mp3 }
+      - { speaker: Hassan, text: "Thank you, Samir. That gave me a clear picture.", audio: e12-test/call-9.mp3 }
   - type: exercise
     id: call-q
     about: call

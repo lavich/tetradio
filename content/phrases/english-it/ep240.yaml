@@ -1,5 +1,6 @@
 id: ep240
 text: "We added a check to the deployment pipeline."
+audio: phrases/ep240.mp3
 translation: "Мы добавили проверку в конвейер развёртывания."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10

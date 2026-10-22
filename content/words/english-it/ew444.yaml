@@ -1,5 +1,6 @@
 id: ew444
 greek: "multi-tenant"
+audio: words/ew444.mp3
 russian: "многоарендный: один экземпляр сервиса обслуживает многих клиентов, а их данные разделены"
 ipa: /ˌmʌlti ˈtenənt/
 note: "A multi-tenant service shares servers between customers but keeps their data separate."

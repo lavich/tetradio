@@ -1,5 +1,6 @@
 id: ew427
 greek: "a happy path"
+audio: words/ew427.mp3
 russian: "основной сценарий, в котором всё идёт как задумано, без ошибок и редких случаев"
 ipa: /ə ˈhæpi pɑːθ/
 note: "The happy path works, but several edge cases still fail."

@@ -712,16 +712,22 @@ blocks:
     transcript:
       - speaker: Katarina
         text: Hello, this is Katarina from Brindle Analytics. Thank you for your time during the interviews. I'm pleased to tell you that we'd like to offer you the role of backend engineer. What do you think?
+        audio: e16-3/scene-lines-1.mp3
       - speaker: Katarina
         text: The package is a base salary of seventy-five thousand a year, a signing bonus of five thousand, twenty-five days of annual leave, and a pension scheme with six percent from the company. Is there anything you would like me to go through again?
+        audio: e16-3/scene-lines-2.mp3
       - speaker: Katarina
         text: Let me also mention the start date. We would like you to begin on the first of April. Does that work for you?
+        audio: e16-3/scene-lines-3.mp3
       - speaker: Katarina
         text: Thank you. The offer is open until next Wednesday. When would you like to give us your answer?
+        audio: e16-3/scene-lines-4.mp3
       - speaker: Katarina
         text: I'll send the full details in writing today, so you can read them calmly. Is there anything else you would like to ask?
+        audio: e16-3/scene-lines-5.mp3
       - speaker: Katarina
         text: Thank you. It was a pleasure speaking with you, and I look forward to your reply.
+        audio: e16-3/scene-lines-6.mp3
   - type: speaking
     id: scene
     part: roleplay

@@ -280,28 +280,40 @@ blocks:
     transcript:
       - speaker: Hassan
         text: Fatima, here is a situation from our team. Search has become slow, and we decided to add a cache instead of rewriting the search module. What do you think?
+        audio: e15-2/debate-1.mp3
       - speaker: Fatima
         text: I see your point about the rewrite. It would take months, and it would be risky. But I'm not sure that a cache is enough. If most queries are different, the cache will rarely help.
+        audio: e15-2/debate-2.mp3
       - speaker: Hassan
         text: That's true, although the logs show that many queries repeat. About sixty percent of them, according to last month's numbers.
+        audio: e15-2/debate-3.mp3
       - speaker: Fatima
         text: That's a fair point, and I hadn't thought of that. Could I see the numbers by query type? I have reservations about the slowest queries, which are the unusual ones.
+        audio: e15-2/debate-4.mp3
       - speaker: Hassan
         text: Good question. The slowest queries are indeed the unusual ones, so the cache would not help them. I'd argue that making the common queries faster still helps most users.
+        audio: e15-2/debate-5.mp3
       - speaker: Fatima
         text: I partly agree. Most users would benefit. But I'd put more weight on the unusual queries, because those are the ones that make people leave the page.
+        audio: e15-2/debate-6.mp3
       - speaker: Hassan
         text: That could be true. What would change your mind about the cache?
+        audio: e15-2/debate-7.mp3
       - speaker: Fatima
         text: If the numbers show that the unusual queries are rare, I'd support the cache. Otherwise, I'd look at the database index first.
+        audio: e15-2/debate-8.mp3
       - speaker: Hassan
         text: Then let's try the cache first, and look at the numbers by query type on Friday. Would that work for you?
+        audio: e15-2/debate-9.mp3
       - speaker: Fatima
         text: Yes, that works for me. Either way, I'll support the team's decision.
+        audio: e15-2/debate-10.mp3
       - speaker: Hassan
         text: Good. We both want a faster search, so let's start from that. We try the cache first, and we review the numbers on Friday as agreed.
+        audio: e15-2/debate-11.mp3
       - speaker: Fatima
         text: Agreed. I'll prepare a report by query type before then.
+        audio: e15-2/debate-12.mp3
   - type: exercise
     id: debate-q
     about: debate

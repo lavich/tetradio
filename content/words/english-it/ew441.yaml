@@ -1,5 +1,6 @@
 id: ew441
 greek: "durability"
+audio: words/ew441.mp3
 russian: "сохранность данных: записанное не пропадает при сбое"
 ipa: /ˌdjʊərəˈbɪləti/
 note: "Durability: after the system confirms a write, the data survives a crash."

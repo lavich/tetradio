@@ -1,5 +1,6 @@
 id: ew468
 greek: "a sliding window"
+audio: words/ew468.mp3
 russian: "скользящее окно: диапазон элементов, который сдвигают по данным"
 ipa: /ə ˌslaɪdɪŋ ˈwɪndəʊ/
 note: "a sliding window of three elements"

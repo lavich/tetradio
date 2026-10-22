@@ -279,19 +279,19 @@ blocks:
     title: Anders gives Fatima a task
     plays: 2
     transcript:
-      - { speaker: Anders, text: "Thanks for joining, Fatima. Here is the task. I'd like you to design a service that sends order updates to the customers of an online shop. Please ask me any questions that you need." }
-      - { speaker: Fatima, text: "Thank you. Let me start with the users. Who are the people that will receive the updates?" }
-      - { speaker: Anders, text: "Mostly shoppers in Europe, and some business customers whose orders are larger. About two hundred thousand people have an account." }
-      - { speaker: Fatima, text: "And how many messages do we expect? What does the traffic look like at peak?" }
-      - { speaker: Anders, text: "On a normal day, about ten messages a second. During a sale, which happens twice a year, it can reach two hundred a second." }
-      - { speaker: Fatima, text: "I see. Are there any constraints that I should know about?" }
-      - { speaker: Anders, text: "Yes. Customer data must stay in Europe, and the first version is due in six weeks. We also already have a message queue, so please use it." }
-      - { speaker: Fatima, text: "Understood. Is it okay if a message arrives a minute late?" }
-      - { speaker: Anders, text: "A minute is fine, but no message may be lost. If the service is down, the messages should wait in the queue." }
-      - { speaker: Fatima, text: "Good. One more thing: do we need to support text messages, or only email and push?" }
-      - { speaker: Anders, text: "Only email and push for now. Text messages are out of scope." }
-      - { speaker: Fatima, text: "Let me confirm that I've understood the requirements. We need a service that handles up to two hundred messages a second, keeps the data in Europe, loses no messages and is ready in six weeks." }
-      - { speaker: Anders, text: "That's right. Thank you, that was a clear summary." }
+      - { speaker: Anders, text: "Thanks for joining, Fatima. Here is the task. I'd like you to design a service that sends order updates to the customers of an online shop. Please ask me any questions that you need.", audio: e13-2/task-1.mp3 }
+      - { speaker: Fatima, text: "Thank you. Let me start with the users. Who are the people that will receive the updates?", audio: e13-2/task-2.mp3 }
+      - { speaker: Anders, text: "Mostly shoppers in Europe, and some business customers whose orders are larger. About two hundred thousand people have an account.", audio: e13-2/task-3.mp3 }
+      - { speaker: Fatima, text: "And how many messages do we expect? What does the traffic look like at peak?", audio: e13-2/task-4.mp3 }
+      - { speaker: Anders, text: "On a normal day, about ten messages a second. During a sale, which happens twice a year, it can reach two hundred a second.", audio: e13-2/task-5.mp3 }
+      - { speaker: Fatima, text: "I see. Are there any constraints that I should know about?", audio: e13-2/task-6.mp3 }
+      - { speaker: Anders, text: "Yes. Customer data must stay in Europe, and the first version is due in six weeks. We also already have a message queue, so please use it.", audio: e13-2/task-7.mp3 }
+      - { speaker: Fatima, text: "Understood. Is it okay if a message arrives a minute late?", audio: e13-2/task-8.mp3 }
+      - { speaker: Anders, text: "A minute is fine, but no message may be lost. If the service is down, the messages should wait in the queue.", audio: e13-2/task-9.mp3 }
+      - { speaker: Fatima, text: "Good. One more thing: do we need to support text messages, or only email and push?", audio: e13-2/task-10.mp3 }
+      - { speaker: Anders, text: "Only email and push for now. Text messages are out of scope.", audio: e13-2/task-11.mp3 }
+      - { speaker: Fatima, text: "Let me confirm that I've understood the requirements. We need a service that handles up to two hundred messages a second, keeps the data in Europe, loses no messages and is ready in six weeks.", audio: e13-2/task-12.mp3 }
+      - { speaker: Anders, text: "That's right. Thank you, that was a clear summary.", audio: e13-2/task-13.mp3 }
   - type: exercise
     id: task-q
     about: task

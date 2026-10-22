@@ -1,5 +1,6 @@
 id: ew403
 greek: "technical debt"
+audio: words/ew403.mp3
 russian: "технический долг: упрощённые решения, за которые команда платит временем позже"
 ipa: /ˈteknɪkl det/
 note: "We set aside one day a sprint for technical debt."

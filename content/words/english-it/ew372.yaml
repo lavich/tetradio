@@ -1,5 +1,6 @@
 id: ew372
 greek: "an error budget"
+audio: words/ew372.mp3
 russian: "допустимый объём сбоев за период"
 ipa: /ən ˈerə ˌbʌdʒɪt/
 note: "понятие из SRE; после его исчерпания выпуск изменений, как правило, замедляют"

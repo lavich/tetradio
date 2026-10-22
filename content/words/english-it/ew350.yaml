@@ -1,5 +1,6 @@
 id: ew350
 greek: "a single point of failure"
+audio: words/ew350.mp3
 russian: "единственная точка отказа"
 ipa: /ə ˌsɪŋɡl ˌpɔɪnt əv ˈfeɪljə/
 note: "компонент, отказ которого останавливает всю систему"

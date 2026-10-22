@@ -1,5 +1,6 @@
 id: ep333
 text: "It depends on how large the input can get."
+audio: phrases/ep333.mp3
 translation: "Это зависит от того, насколько большим может быть вход."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14

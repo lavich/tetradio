@@ -1,5 +1,6 @@
 id: ep335
 text: "I think this runs in linear time."
+audio: phrases/ep335.mp3
 translation: "Думаю, это работает за линейное время."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14

@@ -1,5 +1,6 @@
 id: ew438
 greek: "a stress test"
+audio: words/ew438.mp3
 russian: "стресс-тест: проверка системы под нагрузкой выше ожидаемой, чтобы найти её предел"
 ipa: /ə ˈstres test/
 note: "a stress test ищет предел системы; a benchmark сравнивает решения при одинаковой нагрузке"

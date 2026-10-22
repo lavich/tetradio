@@ -1,5 +1,6 @@
 id: ew423
 greek: "an API contract"
+audio: words/ew423.mp3
 russian: "контракт API: договорённость о формате запросов и ответов, которую нельзя менять без предупреждения клиентов"
 ipa: /ən ˌeɪ piː ˈaɪ ˈkɒntrækt/
 note: "Changing a field name breaks the API contract for every client."

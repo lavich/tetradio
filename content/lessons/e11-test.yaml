@@ -70,15 +70,15 @@ blocks:
     title: What-if questions in an interview
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Thanks for coming, Nadia. I'd like to ask a few what-if questions. What would you do if a customer reported that exports were failing the day before a big release?" }
-      - { speaker: Nadia, text: "First, I'd make sure I understand the impact. I'd ask how many customers are affected and since when. If it were only one customer with a rare setting, I would note it in a ticket and look at it after the release. If many customers were affected, I would tell my team lead straight away." }
-      - { speaker: Ingrid, text: "And if the team lead couldn't decide?" }
-      - { speaker: Nadia, text: "I would explain the trade-off: we either delay the release by a day, or we release with a known problem and a workaround. It would come down to the risk for customers. I wouldn't make that decision on my own, so I would ask the product owner too." }
-      - { speaker: Ingrid, text: "What would you do if you had no time to test a fix properly?" }
-      - { speaker: Nadia, text: "I would test the part that is most likely to break and ask a colleague for a second opinion. I'd release the fix to a small group of users first, and I would keep a rollback plan ready in case something went wrong." }
-      - { speaker: Ingrid, text: "Last question. What would you do if you realised after a release that you had made a mistake?" }
-      - { speaker: Nadia, text: "I would tell the team at once and roll the change back. Then I would write down what happened, so that we could learn from it." }
-      - { speaker: Ingrid, text: "Thank you, Nadia. That was very clear." }
+      - { speaker: Ingrid, text: "Thanks for coming, Nadia. I'd like to ask a few what-if questions. What would you do if a customer reported that exports were failing the day before a big release?", audio: e11-test/call-1.mp3 }
+      - { speaker: Nadia, text: "First, I'd make sure I understand the impact. I'd ask how many customers are affected and since when. If it were only one customer with a rare setting, I would note it in a ticket and look at it after the release. If many customers were affected, I would tell my team lead straight away.", audio: e11-test/call-2.mp3 }
+      - { speaker: Ingrid, text: "And if the team lead couldn't decide?", audio: e11-test/call-3.mp3 }
+      - { speaker: Nadia, text: "I would explain the trade-off: we either delay the release by a day, or we release with a known problem and a workaround. It would come down to the risk for customers. I wouldn't make that decision on my own, so I would ask the product owner too.", audio: e11-test/call-4.mp3 }
+      - { speaker: Ingrid, text: "What would you do if you had no time to test a fix properly?", audio: e11-test/call-5.mp3 }
+      - { speaker: Nadia, text: "I would test the part that is most likely to break and ask a colleague for a second opinion. I'd release the fix to a small group of users first, and I would keep a rollback plan ready in case something went wrong.", audio: e11-test/call-6.mp3 }
+      - { speaker: Ingrid, text: "Last question. What would you do if you realised after a release that you had made a mistake?", audio: e11-test/call-7.mp3 }
+      - { speaker: Nadia, text: "I would tell the team at once and roll the change back. Then I would write down what happened, so that we could learn from it.", audio: e11-test/call-8.mp3 }
+      - { speaker: Ingrid, text: "Thank you, Nadia. That was very clear.", audio: e11-test/call-9.mp3 }
   - type: exercise
     id: call-q
     about: call

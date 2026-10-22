@@ -333,30 +333,43 @@ blocks:
     transcript:
       - speaker: Astrid
         text: That's everything from my side. Do you have any questions for us?
+        audio: e16-2/end-1.mp3
       - speaker: Nadia
         text: Yes, a few, thank you. What does a typical day look like for the team?
+        audio: e16-2/end-2.mp3
       - speaker: Astrid
         text: Mornings are usually quiet, so people can focus. We have a short stand-up at ten, and then most people work on their own tasks. Pairing and code reviews happen in the afternoon.
+        audio: e16-2/end-3.mp3
       - speaker: Nadia
         text: Mm-hm. And what have you been focusing on this quarter?
+        audio: e16-2/end-4.mp3
       - speaker: Astrid
         text: We've been working on a new billing service. We've also been reducing the time it takes to release, from two weeks to one.
+        audio: e16-2/end-5.mp3
       - speaker: Nadia
         text: That sounds interesting. How is success measured in this role?
+        audio: e16-2/end-6.mp3
       - speaker: Astrid
         text: In the first three months, we look at how well you understand the system and the team. After that, we agree on goals for each quarter, and we review them together.
+        audio: e16-2/end-7.mp3
       - speaker: Nadia
         text: I see. And how do you support engineers' growth?
+        audio: e16-2/end-8.mp3
       - speaker: Astrid
         text: Every engineer has a yearly budget for courses and conferences, and a one-to-one with their manager every two weeks.
+        audio: e16-2/end-9.mp3
       - speaker: Nadia
         text: Thank you. One more question. What would my first ninety days look like?
+        audio: e16-2/end-10.mp3
       - speaker: Astrid
         text: You'd shadow a colleague for two weeks, and then take a small task of your own. Your manager will write a plan for the first ninety days with you.
+        audio: e16-2/end-11.mp3
       - speaker: Nadia
         text: That's helpful. It was a pleasure speaking with you. What are the next steps, and when can I expect to hear back?
+        audio: e16-2/end-12.mp3
       - speaker: Astrid
         text: We'll decide by the end of next week, and I'll email you on Friday. Thank you for coming, Nadia.
+        audio: e16-2/end-13.mp3
   - type: exercise
     id: end-q
     about: end
@@ -444,28 +457,40 @@ blocks:
     transcript:
       - speaker: Katarina
         text: Hello, Daniel, it's Katarina from Brindle Analytics. Do you have a few minutes?
+        audio: e16-2/call-1.mp3
       - speaker: Daniel
         text: Yes, of course. Hello, Katarina.
+        audio: e16-2/call-2.mp3
       - speaker: Katarina
         text: I have good news. The team enjoyed meeting you, and we'd like to offer you the role of data engineer.
+        audio: e16-2/call-3.mp3
       - speaker: Daniel
         text: Thank you very much. I'm very pleased to receive the offer.
+        audio: e16-2/call-4.mp3
       - speaker: Katarina
         text: The base salary is eighty thousand a year. There's also a signing bonus of five thousand, twenty-five days of annual leave, and a pension scheme where the company adds six percent.
+        audio: e16-2/call-5.mp3
       - speaker: Daniel
         text: That sounds good. Could we go through the full package together? I'd like to understand the stock options.
+        audio: e16-2/call-6.mp3
       - speaker: Katarina
         text: Of course. You'd receive four thousand options with a four-year vesting schedule. That means you earn the right to them step by step, a quarter each year.
+        audio: e16-2/call-7.mp3
       - speaker: Daniel
         text: I see, thank you. Would there be any flexibility on the start date? My notice period is two months.
+        audio: e16-2/call-8.mp3
       - speaker: Katarina
         text: The start date can be as late as the first of May, so that works. The offer is subject to a background check, and it's open until next Wednesday.
+        audio: e16-2/call-9.mp3
       - speaker: Daniel
         text: Thank you. Could I confirm my decision by the end of next week? I'd like to sleep on it and read the contract carefully.
+        audio: e16-2/call-10.mp3
       - speaker: Katarina
         text: Of course. I can extend the offer by a few days if you need more time. I'll send the details in writing today.
+        audio: e16-2/call-11.mp3
       - speaker: Daniel
         text: That's perfect. Thank you for your time, Katarina.
+        audio: e16-2/call-12.mp3
   - type: exercise
     id: call-q
     about: call

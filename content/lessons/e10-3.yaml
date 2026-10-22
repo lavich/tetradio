@@ -433,11 +433,11 @@ blocks:
     title: Реплики собеседника
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Thanks for joining. Let's talk about mistakes. Tell me about a mistake you made at work." }
-      - { speaker: Ingrid, text: "Mm-hm. What was the impact?" }
-      - { speaker: Ingrid, text: "I see. What did you change afterwards, and what did you learn?" }
-      - { speaker: Ingrid, text: "Thank you. Last question: what would you do differently?" }
-      - { speaker: Ingrid, text: "Thank you. That was a clear answer." }
+      - { speaker: Ingrid, text: "Thanks for joining. Let's talk about mistakes. Tell me about a mistake you made at work.", audio: e10-3/scene-lines-1.mp3 }
+      - { speaker: Ingrid, text: "Mm-hm. What was the impact?", audio: e10-3/scene-lines-2.mp3 }
+      - { speaker: Ingrid, text: "I see. What did you change afterwards, and what did you learn?", audio: e10-3/scene-lines-3.mp3 }
+      - { speaker: Ingrid, text: "Thank you. Last question: what would you do differently?", audio: e10-3/scene-lines-4.mp3 }
+      - { speaker: Ingrid, text: "Thank you. That was a clear answer.", audio: e10-3/scene-lines-5.mp3 }
   - type: speaking
     id: scene
     part: roleplay
