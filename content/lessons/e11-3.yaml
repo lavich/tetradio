@@ -615,11 +615,11 @@ blocks:
     title: Реплики собеседника
     plays: 2
     transcript:
-      - { speaker: Anders, text: "Thanks for joining. Let's try some what-if questions. What would you do if the release broke production?" }
-      - { speaker: Anders, text: "Mm-hm. And what would you do if you couldn't roll it back?" }
-      - { speaker: Anders, text: "I see. What would you do if two deadlines clashed?" }
-      - { speaker: Anders, text: "Okay. And what would you do if you weren't sure which option was safer?" }
-      - { speaker: Anders, text: "Thank you. That was a clear way of thinking it through." }
+      - { speaker: Anders, text: "Thanks for joining. Let's try some what-if questions. What would you do if the release broke production?", audio: e11-3/scene-lines-1.mp3 }
+      - { speaker: Anders, text: "Mm-hm. And what would you do if you couldn't roll it back?", audio: e11-3/scene-lines-2.mp3 }
+      - { speaker: Anders, text: "I see. What would you do if two deadlines clashed?", audio: e11-3/scene-lines-3.mp3 }
+      - { speaker: Anders, text: "Okay. And what would you do if you weren't sure which option was safer?", audio: e11-3/scene-lines-4.mp3 }
+      - { speaker: Anders, text: "Thank you. That was a clear way of thinking it through.", audio: e11-3/scene-lines-5.mp3 }
   - type: speaking
     id: scene
     part: roleplay

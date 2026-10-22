@@ -1,5 +1,6 @@
 id: ew479
 greek: "a stack overflow"
+audio: words/ew479.mp3
 russian: "переполнение стека вызовов, обычно из-за рекурсии без базового случая"
 ipa: /ə ˌstæk ˈəʊvəfləʊ/
 note: "the program crashed with a stack overflow"

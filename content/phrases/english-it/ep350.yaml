@@ -1,5 +1,6 @@
 id: ep350
 text: "In summary, it runs in linear time and uses constant space."
+audio: phrases/ep350.mp3
 translation: "Итого: решение работает за линейное время и использует константную память."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14

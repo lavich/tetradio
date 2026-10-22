@@ -1,5 +1,6 @@
 id: ew458
 greek: "time complexity"
+audio: words/ew458.mp3
 russian: "временная сложность: как растёт время работы при росте входных данных"
 ipa: /ˈtaɪm kəmˈpleksəti/
 note: "формулы читают словами: linear time, quadratic time"

@@ -532,16 +532,22 @@ blocks:
     transcript:
       - speaker: Anders
         text: Thanks for joining. Here is the problem. Given a text, return the first letter that appears only once. Please think out loud. I may ask questions along the way.
+        audio: e14-3/scene-lines-1.mp3
       - speaker: Anders
         text: Return nothing if there is no such letter. Please go ahead with a first solution.
+        audio: e14-3/scene-lines-2.mp3
       - speaker: Anders
         text: What is the time complexity of that, and how much extra space does it need?
+        audio: e14-3/scene-lines-3.mp3
       - speaker: Anders
         text: Can you do better? Here is a hint. Think about counting the letters.
+        audio: e14-3/scene-lines-4.mp3
       - speaker: Anders
         text: Which edge case would you test first?
+        audio: e14-3/scene-lines-5.mp3
       - speaker: Anders
         text: Thank you. That was a clear explanation of your thinking.
+        audio: e14-3/scene-lines-6.mp3
   - type: speaking
     id: scene
     part: roleplay

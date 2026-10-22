@@ -1,5 +1,6 @@
 id: ep360
 text: "I'm good at explaining technical ideas to non-technical people."
+audio: phrases/ep360.mp3
 translation: "Я умею объяснять технические идеи людям без технической подготовки."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15

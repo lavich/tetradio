@@ -1,5 +1,6 @@
 id: ew483
 greek: "reason about"
+audio: words/ew483.mp3
 russian: "рассуждать о коде: логически разбирать, как он работает, не запуская его"
 ipa: /ˈriːzn əˌbaʊt/
 note: "a short function is easier to reason about"

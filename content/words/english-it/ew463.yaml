@@ -1,5 +1,6 @@
 id: ew463
 greek: "recursion"
+audio: words/ew463.mp3
 russian: "рекурсия: функция решает задачу, вызывая саму себя"
 ipa: /rɪˈkɜːʃn/
 note: "recursion without a base case never stops"

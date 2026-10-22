@@ -1,5 +1,6 @@
 id: ep256
 text: "I'd take a snapshot first, in case the rollback fails."
+audio: phrases/ep256.mp3
 translation: "Сначала я сделал бы снимок системы на случай, если откат не удастся."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11

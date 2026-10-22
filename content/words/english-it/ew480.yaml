@@ -1,5 +1,6 @@
 id: ew480
 greek: "an infinite loop"
+audio: words/ew480.mp3
 russian: "бесконечный цикл: условие выхода никогда не выполняется"
 ipa: /ən ˌɪnfɪnət ˈluːp/
 note: "an infinite loop often comes from a counter that is never changed"

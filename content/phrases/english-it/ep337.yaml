@@ -1,5 +1,6 @@
 id: ep337
 text: "I'd say the worst case is quadratic."
+audio: phrases/ep337.mp3
 translation: "Я бы сказал, что в худшем случае время квадратичное."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14

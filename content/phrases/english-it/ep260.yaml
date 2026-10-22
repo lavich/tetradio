@@ -1,5 +1,6 @@
 id: ep260
 text: "I'd start by checking the logs and the alerts."
+audio: phrases/ep260.mp3
 translation: "Я бы начал с проверки логов и оповещений."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11

@@ -1,5 +1,6 @@
 id: ew437
 greek: "a retention period"
+audio: words/ew437.mp3
 russian: "срок хранения: время, в течение которого данные хранят до удаления"
 ipa: /ə rɪˈtenʃən ˌpɪərɪəd/
 note: "Logs have a retention period of thirty days."

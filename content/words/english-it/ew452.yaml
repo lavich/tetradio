@@ -1,5 +1,6 @@
 id: ew452
 greek: "backward compatible"
+audio: words/ew452.mp3
 russian: "обратно совместимый: новая версия работает с тем, что создано для старой"
 ipa: /ˌbækwəd kəmˈpætəbəl/
 note: "допустимо и backwards compatible; The new API must stay backward compatible."

@@ -1,5 +1,6 @@
 id: ep332
 text: "I'd probably use a hash map here."
+audio: phrases/ep332.mp3
 translation: "Здесь я, скорее всего, использовал бы хеш-таблицу."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14

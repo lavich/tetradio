@@ -1,5 +1,6 @@
 id: ew473
 greek: "a lookup"
+audio: words/ew473.mp3
 russian: "поиск значения по ключу"
 ipa: /ə ˈlʊkʌp/
 note: "a lookup in a hash map takes constant time on average"

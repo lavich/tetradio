@@ -285,32 +285,46 @@ blocks:
     transcript:
       - speaker: Anders
         text: Here is the problem, Lukas. Given a list of words, return the word that appears most often. Please think out loud.
+        audio: e14-2/solve-1.mp3
       - speaker: Lukas
         text: Thank you. Let me say the problem back in my own words. I get a list of words, and I need to return the one that appears most often. What should I return if two words appear equally often? And can the list be empty?
+        audio: e14-2/solve-2.mp3
       - speaker: Anders
         text: Return any one of them. And yes, the list can be empty. In that case, return nothing.
+        audio: e14-2/solve-3.mp3
       - speaker: Lukas
         text: Good. Let me take a small example first. Cat, dog, cat. The answer is cat.
+        audio: e14-2/solve-4.mp3
       - speaker: Lukas
         text: I'm going to start with a brute-force solution. For each word, I count how many times it appears in the list, and I keep the best one.
+        audio: e14-2/solve-5.mp3
       - speaker: Anders
         text: What is the time complexity of that?
+        audio: e14-2/solve-6.mp3
       - speaker: Lukas
         text: I think it is quadratic, because for every word I scan the whole list. The extra space is constant.
+        audio: e14-2/solve-7.mp3
       - speaker: Anders
         text: Can you do better?
+        audio: e14-2/solve-8.mp3
       - speaker: Lukas
         text: Let me see if I can do better. I'd probably use a hash map from each word to its count. I go through the list once, update the counts, and then take the largest one.
+        audio: e14-2/solve-9.mp3
       - speaker: Anders
         text: And how fast is that?
+        audio: e14-2/solve-10.mp3
       - speaker: Lukas
         text: As far as I can tell, linear time, because a lookup takes constant time on average. But it needs auxiliary space for the map.
+        audio: e14-2/solve-11.mp3
       - speaker: Anders
         text: Which edge case would you test first?
+        audio: e14-2/solve-12.mp3
       - speaker: Lukas
         text: The empty list. Then the example with a tie.
+        audio: e14-2/solve-13.mp3
       - speaker: Anders
         text: Good. Please go ahead and write it.
+        audio: e14-2/solve-14.mp3
   - type: exercise
     id: solve-q
     about: solve

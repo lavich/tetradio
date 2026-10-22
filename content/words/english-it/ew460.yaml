@@ -1,5 +1,6 @@
 id: ew460
 greek: "a hash map"
+audio: words/ew460.mp3
 russian: "хеш-таблица: структура, в которой значение находят по ключу почти мгновенно"
 ipa: /ə ˈhæʃ mæp/
 note: "I would count the words in a hash map; a hash table — синоним"

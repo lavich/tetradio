@@ -1,5 +1,6 @@
 id: ew462
 greek: "a binary search"
+audio: words/ew462.mp3
 russian: "бинарный поиск: в отсортированных данных диапазон каждый раз делят пополам"
 ipa: /ə ˌbaɪnəri ˈsɜːtʃ/
 note: "a binary search требует отсортированных данных"

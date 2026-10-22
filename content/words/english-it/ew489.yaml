@@ -1,5 +1,6 @@
 id: ew489
 greek: "debug"
+audio: words/ew489.mp3
 russian: "отлаживать: искать и исправлять ошибки в коде"
 ipa: /ˌdiːˈbʌɡ/
 note: "debug the code by printing the values"

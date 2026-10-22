@@ -1,5 +1,6 @@
 id: ew476
 greek: "quadratic"
+audio: words/ew476.mp3
 russian: "квадратичный: время растёт как квадрат размера входа"
 ipa: /kwɒˈdrætɪk/
 note: "два вложенных цикла дают quadratic time"

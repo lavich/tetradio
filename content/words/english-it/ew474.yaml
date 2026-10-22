@@ -1,5 +1,6 @@
 id: ew474
 greek: "linear"
+audio: words/ew474.mp3
 russian: "линейный: время или память растут пропорционально размеру входа"
 ipa: /ˈlɪniə/
 note: "linear time: вход вдвое больше — времени вдвое больше; linear space — то же для памяти"

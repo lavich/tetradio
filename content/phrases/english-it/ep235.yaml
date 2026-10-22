@@ -1,5 +1,6 @@
 id: ep235
 text: "The outage lasted about forty minutes."
+audio: phrases/ep235.mp3
 translation: "Отказ сервиса длился около сорока минут."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e10

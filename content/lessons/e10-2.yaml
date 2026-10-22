@@ -290,17 +290,17 @@ blocks:
     title: A mistake in a job interview
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Thanks for coming in, Tobias. Let's talk about mistakes. Tell me about a mistake you made at work." }
-      - { speaker: Tobias, text: "Of course. At my previous company, I broke a billing job on a Friday afternoon. I was working on a small change to a discount rule, and I merged it without asking for a review. I assumed it was safe, and I was wrong." }
-      - { speaker: Ingrid, text: "Mm-hm. What happened?" }
-      - { speaker: Tobias, text: "The job ran that evening and applied the discount twice. About two hundred customers received an invoice with the wrong total. I noticed it from a support message at six o'clock, and I informed the team straight away." }
-      - { speaker: Ingrid, text: "What did you do next?" }
-      - { speaker: Tobias, text: "First, we stopped the job and rolled the change back. Then support wrote to the customers, and my lead and I corrected the invoices the same night. The next day, we wrote a postmortem together." }
-      - { speaker: Ingrid, text: "What was the root cause?" }
-      - { speaker: Tobias, text: "The root cause was the process: nothing forced a review for changes to billing code. My part was that I skipped it. If I had asked for a review, a colleague would have seen the problem in five minutes." }
-      - { speaker: Ingrid, text: "What did you change afterwards?" }
-      - { speaker: Tobias, text: "We made a review mandatory for billing code, and we added a check to the pipeline. I never merge on a Friday afternoon now. I'm not proud of it, but I'm glad it happened early in my career." }
-      - { speaker: Ingrid, text: "Thank you, Tobias. It's useful to hear how you handled it." }
+      - { speaker: Ingrid, text: "Thanks for coming in, Tobias. Let's talk about mistakes. Tell me about a mistake you made at work.", audio: e10-2/story-1.mp3 }
+      - { speaker: Tobias, text: "Of course. At my previous company, I broke a billing job on a Friday afternoon. I was working on a small change to a discount rule, and I merged it without asking for a review. I assumed it was safe, and I was wrong.", audio: e10-2/story-2.mp3 }
+      - { speaker: Ingrid, text: "Mm-hm. What happened?", audio: e10-2/story-3.mp3 }
+      - { speaker: Tobias, text: "The job ran that evening and applied the discount twice. About two hundred customers received an invoice with the wrong total. I noticed it from a support message at six o'clock, and I informed the team straight away.", audio: e10-2/story-4.mp3 }
+      - { speaker: Ingrid, text: "What did you do next?", audio: e10-2/story-5.mp3 }
+      - { speaker: Tobias, text: "First, we stopped the job and rolled the change back. Then support wrote to the customers, and my lead and I corrected the invoices the same night. The next day, we wrote a postmortem together.", audio: e10-2/story-6.mp3 }
+      - { speaker: Ingrid, text: "What was the root cause?", audio: e10-2/story-7.mp3 }
+      - { speaker: Tobias, text: "The root cause was the process: nothing forced a review for changes to billing code. My part was that I skipped it. If I had asked for a review, a colleague would have seen the problem in five minutes.", audio: e10-2/story-8.mp3 }
+      - { speaker: Ingrid, text: "What did you change afterwards?", audio: e10-2/story-9.mp3 }
+      - { speaker: Tobias, text: "We made a review mandatory for billing code, and we added a check to the pipeline. I never merge on a Friday afternoon now. I'm not proud of it, but I'm glad it happened early in my career.", audio: e10-2/story-10.mp3 }
+      - { speaker: Ingrid, text: "Thank you, Tobias. It's useful to hear how you handled it.", audio: e10-2/story-11.mp3 }
   - type: exercise
     id: story-q
     about: story

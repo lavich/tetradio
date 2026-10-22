@@ -1,5 +1,6 @@
 id: ew358
 greek: "a kill switch"
+audio: words/ew358.mp3
 russian: "переключатель, который быстро отключает функцию или сервис"
 ipa: /ə ˈkɪl swɪtʃ/
 note: "часто реализуется через feature flag"

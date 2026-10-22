@@ -67,17 +67,17 @@ blocks:
     title: A behavioral question about a mistake
     plays: 2
     transcript:
-      - { speaker: Sarah, text: "Welcome, Viktor. I'd like to ask about a mistake. Can you tell me about a time something went wrong because of a decision you made?" }
-      - { speaker: Viktor, text: "Yes. Last year, I led a data migration to a new database over a weekend. I estimated four hours, and I did not test the migration on a full copy of the data. That was a misjudgement on my part." }
-      - { speaker: Sarah, text: "What happened?" }
-      - { speaker: Viktor, text: "The migration took almost two days. On Monday morning, the system was still in read-only mode, and some customers could not save changes for two hours. I told my manager on Saturday, as soon as I saw that the job would run long." }
-      - { speaker: Sarah, text: "What did you do to limit the damage?" }
-      - { speaker: Viktor, text: "We extended the maintenance window, and I wrote a short message for customers with a new time. I also stayed on call until the migration finished." }
-      - { speaker: Sarah, text: "What did you find out afterwards?" }
-      - { speaker: Viktor, text: "We held a postmortem the same week. The root cause was that we had tested with a small sample, and nobody had reviewed my estimate. If I had run the migration on a full copy, I would have seen the real time." }
-      - { speaker: Sarah, text: "What did you learn?" }
-      - { speaker: Viktor, text: "I should have asked a colleague to review the plan. Now I always do a dry run on a full copy, and I add extra time to every estimate. It was humbling, but I plan better now." }
-      - { speaker: Sarah, text: "Thank you, Viktor. That was clear." }
+      - { speaker: Sarah, text: "Welcome, Viktor. I'd like to ask about a mistake. Can you tell me about a time something went wrong because of a decision you made?", audio: e10-test/call-1.mp3 }
+      - { speaker: Viktor, text: "Yes. Last year, I led a data migration to a new database over a weekend. I estimated four hours, and I did not test the migration on a full copy of the data. That was a misjudgement on my part.", audio: e10-test/call-2.mp3 }
+      - { speaker: Sarah, text: "What happened?", audio: e10-test/call-3.mp3 }
+      - { speaker: Viktor, text: "The migration took almost two days. On Monday morning, the system was still in read-only mode, and some customers could not save changes for two hours. I told my manager on Saturday, as soon as I saw that the job would run long.", audio: e10-test/call-4.mp3 }
+      - { speaker: Sarah, text: "What did you do to limit the damage?", audio: e10-test/call-5.mp3 }
+      - { speaker: Viktor, text: "We extended the maintenance window, and I wrote a short message for customers with a new time. I also stayed on call until the migration finished.", audio: e10-test/call-6.mp3 }
+      - { speaker: Sarah, text: "What did you find out afterwards?", audio: e10-test/call-7.mp3 }
+      - { speaker: Viktor, text: "We held a postmortem the same week. The root cause was that we had tested with a small sample, and nobody had reviewed my estimate. If I had run the migration on a full copy, I would have seen the real time.", audio: e10-test/call-8.mp3 }
+      - { speaker: Sarah, text: "What did you learn?", audio: e10-test/call-9.mp3 }
+      - { speaker: Viktor, text: "I should have asked a colleague to review the plan. Now I always do a dry run on a full copy, and I add extra time to every estimate. It was humbling, but I plan better now.", audio: e10-test/call-10.mp3 }
+      - { speaker: Sarah, text: "Thank you, Viktor. That was clear.", audio: e10-test/call-11.mp3 }
   - type: exercise
     id: call-q
     about: call

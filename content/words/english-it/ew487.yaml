@@ -1,5 +1,6 @@
 id: ew487
 greek: "an invariant"
+audio: words/ew487.mp3
 russian: "инвариант: условие, которое остаётся верным на каждом шаге цикла"
 ipa: /ən ɪnˈveəriənt/
 note: "the invariant helps to prove that the loop is correct"

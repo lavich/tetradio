@@ -1,5 +1,6 @@
 id: ep313
 text: "What should happen when the service is down?"
+audio: phrases/ep313.mp3
 translation: "Что должно происходить, когда сервис недоступен?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e13

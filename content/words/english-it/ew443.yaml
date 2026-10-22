@@ -1,5 +1,6 @@
 id: ew443
 greek: "capacity planning"
+audio: words/ew443.mp3
 russian: "планирование ёмкости: расчёт серверов и ресурсов под ожидаемый рост нагрузки"
 ipa: /kəˈpæsəti ˌplænɪŋ/
 note: "Capacity planning starts with the expected number of users."

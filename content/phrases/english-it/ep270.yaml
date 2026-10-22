@@ -1,5 +1,6 @@
 id: ep270
 text: "Worst case, we'd lose an hour of data."
+audio: phrases/ep270.mp3
 translation: "В худшем случае мы потеряли бы час данных."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e11

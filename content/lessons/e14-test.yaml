@@ -97,24 +97,34 @@ blocks:
     transcript:
       - speaker: Mark
         text: Here is the problem, Ethan. Given a linked list, return it in reverse order. Please think out loud.
+        audio: e14-test/call-1.mp3
       - speaker: Ethan
         text: Thank you. Let me say the problem back in my own words. I get the first node of a linked list, and I need to return the first node of the reversed list. Can I change the list itself, or do I have to build a new one?
+        audio: e14-test/call-2.mp3
       - speaker: Mark
         text: You can change the list itself.
+        audio: e14-test/call-3.mp3
       - speaker: Ethan
         text: Good. Let me draw this on the board. A list of three nodes, one, two, three. After reversing, it is three, two, one.
+        audio: e14-test/call-4.mp3
       - speaker: Ethan
         text: "I'm going to traverse the list once, with three pointers: one to the previous node, one to the current node and one to the next node. At each step, I save the next node, point the current node back to the previous one and move forward."
+        audio: e14-test/call-5.mp3
       - speaker: Mark
         text: What is the time complexity?
+        audio: e14-test/call-6.mp3
       - speaker: Ethan
         text: I think it is linear, because I visit each node once. And as far as I can tell, the extra space is constant, because I only keep three pointers.
+        audio: e14-test/call-7.mp3
       - speaker: Mark
         text: Which edge case would you test first?
+        audio: e14-test/call-8.mp3
       - speaker: Ethan
         text: The empty list. Then a list with one node. In both cases, the function should return the list as it is.
+        audio: e14-test/call-9.mp3
       - speaker: Mark
         text: Good. Please go ahead and write it.
+        audio: e14-test/call-10.mp3
   - type: exercise
     id: call-q
     about: call

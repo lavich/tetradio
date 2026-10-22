@@ -178,10 +178,10 @@ blocks:
     title: Голосовое сообщение Astrid
     plays: 2
     transcript:
-      - { speaker: Astrid, text: "Hello Nadia, it's Astrid from Tidewell Software. I'm calling about tomorrow's interviews, and there is one change." }
-      - { speaker: Astrid, text: "Anders asked to start the technical discussion half an hour later, at half past twelve. It will finish at half past one, and your final conversation with Hassan moves to two o'clock." }
-      - { speaker: Astrid, text: "The link to the shared editor is in the calendar invitation. Please open it before the call and check your microphone and camera." }
-      - { speaker: Astrid, text: "If your connection fails, call me on the number in the invitation, and we'll find a solution. Speak to you tomorrow." }
+      - { speaker: Astrid, text: "Hello Nadia, it's Astrid from Tidewell Software. I'm calling about tomorrow's interviews, and there is one change.", audio: e16-c2/briefing-1.mp3 }
+      - { speaker: Astrid, text: "Anders asked to start the technical discussion half an hour later, at half past twelve. It will finish at half past one, and your final conversation with Hassan moves to two o'clock.", audio: e16-c2/briefing-2.mp3 }
+      - { speaker: Astrid, text: "The link to the shared editor is in the calendar invitation. Please open it before the call and check your microphone and camera.", audio: e16-c2/briefing-3.mp3 }
+      - { speaker: Astrid, text: "If your connection fails, call me on the number in the invitation, and we'll find a solution. Speak to you tomorrow.", audio: e16-c2/briefing-4.mp3 }
   - type: exercise
     id: briefing-q
     about: briefing
@@ -219,12 +219,12 @@ blocks:
     title: Сцена 1 · Реплики Astrid — разговор с HR
     plays: 2
     transcript:
-      - { speaker: Astrid, text: "Hello Nadia, this is Astrid from the People team. Thank you for joining. To start, could you tell me about yourself?" }
-      - { speaker: Astrid, text: "Thank you. And what have you been working on lately?" }
-      - { speaker: Astrid, text: "I see. Why Tidewell? What attracted you to the role?" }
-      - { speaker: Astrid, text: "What would you say are your main strengths?" }
-      - { speaker: Astrid, text: "And is there something you're working on improving?" }
-      - { speaker: Astrid, text: "Thank you, that's clear. Do you have any questions about the process?" }
+      - { speaker: Astrid, text: "Hello Nadia, this is Astrid from the People team. Thank you for joining. To start, could you tell me about yourself?", audio: e16-c2/hr-lines-1.mp3 }
+      - { speaker: Astrid, text: "Thank you. And what have you been working on lately?", audio: e16-c2/hr-lines-2.mp3 }
+      - { speaker: Astrid, text: "I see. Why Tidewell? What attracted you to the role?", audio: e16-c2/hr-lines-3.mp3 }
+      - { speaker: Astrid, text: "What would you say are your main strengths?", audio: e16-c2/hr-lines-4.mp3 }
+      - { speaker: Astrid, text: "And is there something you're working on improving?", audio: e16-c2/hr-lines-5.mp3 }
+      - { speaker: Astrid, text: "Thank you, that's clear. Do you have any questions about the process?", audio: e16-c2/hr-lines-6.mp3 }
   - type: speaking
     id: hr
     part: roleplay
@@ -256,12 +256,12 @@ blocks:
     title: Как Ingrid проводит поведенческий раунд
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Hello Nadia, I'm Ingrid Larsen, Head of Engineering. Let me explain how this part works. I'll ask about three things: a challenge you faced, a mistake you made and feedback you received." }
-      - { speaker: Ingrid, text: "For each one, I'd like a short story: what the situation was, what you had to do, what you did and what happened in the end." }
-      - { speaker: Ingrid, text: "Please keep each story to about two minutes. If I interrupt, it's only to ask for more detail, for example, what your own role was." }
-      - { speaker: Ingrid, text: "One request: please don't mention the names of clients or internal numbers. Describe the situation in general terms." }
-      - { speaker: Ingrid, text: "In the second half, I'll ask a few questions that begin with 'what would you do if'. I'm interested in how you think, so there are no trick questions." }
-      - { speaker: Ingrid, text: "Do you have any questions before we start? If not, let's begin." }
+      - { speaker: Ingrid, text: "Hello Nadia, I'm Ingrid Larsen, Head of Engineering. Let me explain how this part works. I'll ask about three things: a challenge you faced, a mistake you made and feedback you received.", audio: e16-c2/round-1.mp3 }
+      - { speaker: Ingrid, text: "For each one, I'd like a short story: what the situation was, what you had to do, what you did and what happened in the end.", audio: e16-c2/round-2.mp3 }
+      - { speaker: Ingrid, text: "Please keep each story to about two minutes. If I interrupt, it's only to ask for more detail, for example, what your own role was.", audio: e16-c2/round-3.mp3 }
+      - { speaker: Ingrid, text: "One request: please don't mention the names of clients or internal numbers. Describe the situation in general terms.", audio: e16-c2/round-4.mp3 }
+      - { speaker: Ingrid, text: "In the second half, I'll ask a few questions that begin with 'what would you do if'. I'm interested in how you think, so there are no trick questions.", audio: e16-c2/round-5.mp3 }
+      - { speaker: Ingrid, text: "Do you have any questions before we start? If not, let's begin.", audio: e16-c2/round-6.mp3 }
   - type: exercise
     id: round-q
     about: round
@@ -307,12 +307,12 @@ blocks:
     title: Сцена 2 · Реплики Ingrid — трудность
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Thanks for joining. Let's start with a situation from your work. Tell me about a time you faced a challenge." }
-      - { speaker: Ingrid, text: "Mm-hm. What was your role in it?" }
-      - { speaker: Ingrid, text: "What did you do first?" }
-      - { speaker: Ingrid, text: "And what was the result? Do you have any numbers?" }
-      - { speaker: Ingrid, text: "What did you learn from it?" }
-      - { speaker: Ingrid, text: "Thank you. That's a clear example." }
+      - { speaker: Ingrid, text: "Thanks for joining. Let's start with a situation from your work. Tell me about a time you faced a challenge.", audio: e16-c2/challenge-lines-1.mp3 }
+      - { speaker: Ingrid, text: "Mm-hm. What was your role in it?", audio: e16-c2/challenge-lines-2.mp3 }
+      - { speaker: Ingrid, text: "What did you do first?", audio: e16-c2/challenge-lines-3.mp3 }
+      - { speaker: Ingrid, text: "And what was the result? Do you have any numbers?", audio: e16-c2/challenge-lines-4.mp3 }
+      - { speaker: Ingrid, text: "What did you learn from it?", audio: e16-c2/challenge-lines-5.mp3 }
+      - { speaker: Ingrid, text: "Thank you. That's a clear example.", audio: e16-c2/challenge-lines-6.mp3 }
   - type: speaking
     id: challenge
     part: roleplay
@@ -345,12 +345,12 @@ blocks:
     title: Сцена 3 · Реплики Ingrid — ошибка и фидбек
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Now a different kind of question. Tell me about a mistake you made." }
-      - { speaker: Ingrid, text: "How did you find out about it?" }
-      - { speaker: Ingrid, text: "What would you do differently?" }
-      - { speaker: Ingrid, text: "Thank you. And tell me about feedback you received that changed how you work." }
-      - { speaker: Ingrid, text: "How did you react at first?" }
-      - { speaker: Ingrid, text: "Thanks, that's helpful." }
+      - { speaker: Ingrid, text: "Now a different kind of question. Tell me about a mistake you made.", audio: e16-c2/mistake-lines-1.mp3 }
+      - { speaker: Ingrid, text: "How did you find out about it?", audio: e16-c2/mistake-lines-2.mp3 }
+      - { speaker: Ingrid, text: "What would you do differently?", audio: e16-c2/mistake-lines-3.mp3 }
+      - { speaker: Ingrid, text: "Thank you. And tell me about feedback you received that changed how you work.", audio: e16-c2/mistake-lines-4.mp3 }
+      - { speaker: Ingrid, text: "How did you react at first?", audio: e16-c2/mistake-lines-5.mp3 }
+      - { speaker: Ingrid, text: "Thanks, that's helpful.", audio: e16-c2/mistake-lines-6.mp3 }
   - type: speaking
     id: mistake
     part: roleplay
@@ -445,12 +445,12 @@ blocks:
     title: Сцена 4 · Реплики Ingrid — «а если…»
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Let's move on to some situations that could happen on the team. What would you do if you found a serious bug the day before a release?" }
-      - { speaker: Ingrid, text: "And what if the product manager wanted to ship anyway?" }
-      - { speaker: Ingrid, text: "Now imagine two deadlines clashed in the same week. What would you do?" }
-      - { speaker: Ingrid, text: "Suppose you had to decide something urgent and couldn't reach your manager. What would you do?" }
-      - { speaker: Ingrid, text: "Would you ship a fix on a Friday afternoon?" }
-      - { speaker: Ingrid, text: "Thank you. That gives me a clear picture of how you think." }
+      - { speaker: Ingrid, text: "Let's move on to some situations that could happen on the team. What would you do if you found a serious bug the day before a release?", audio: e16-c2/hypo-lines-1.mp3 }
+      - { speaker: Ingrid, text: "And what if the product manager wanted to ship anyway?", audio: e16-c2/hypo-lines-2.mp3 }
+      - { speaker: Ingrid, text: "Now imagine two deadlines clashed in the same week. What would you do?", audio: e16-c2/hypo-lines-3.mp3 }
+      - { speaker: Ingrid, text: "Suppose you had to decide something urgent and couldn't reach your manager. What would you do?", audio: e16-c2/hypo-lines-4.mp3 }
+      - { speaker: Ingrid, text: "Would you ship a fix on a Friday afternoon?", audio: e16-c2/hypo-lines-5.mp3 }
+      - { speaker: Ingrid, text: "Thank you. That gives me a clear picture of how you think.", audio: e16-c2/hypo-lines-6.mp3 }
   - type: speaking
     id: hypo
     part: roleplay
@@ -482,11 +482,11 @@ blocks:
     title: Anders ставит задачу
     plays: 2
     transcript:
-      - { speaker: Anders, text: "Hi Nadia, I'm Anders, a senior engineer on the team. This is a technical discussion, not an exam. Please think out loud, and ask questions at any time." }
-      - { speaker: Anders, text: "Here is the task. You get a list of orders. Each order has a customer ID and an amount. Return the three customers with the highest total amount." }
-      - { speaker: Anders, text: "Some details. There can be up to a million orders, and all amounts are positive numbers. If two customers have the same total, either of them can come first." }
-      - { speaker: Anders, text: "Start with the simplest solution you can think of. Then tell me its time complexity, and only after that think about how to make it faster." }
-      - { speaker: Anders, text: "You can write in any language in the shared editor. I won't judge the syntax, but I'd like the code to run at the end." }
+      - { speaker: Anders, text: "Hi Nadia, I'm Anders, a senior engineer on the team. This is a technical discussion, not an exam. Please think out loud, and ask questions at any time.", audio: e16-c2/task-1.mp3 }
+      - { speaker: Anders, text: "Here is the task. You get a list of orders. Each order has a customer ID and an amount. Return the three customers with the highest total amount.", audio: e16-c2/task-2.mp3 }
+      - { speaker: Anders, text: "Some details. There can be up to a million orders, and all amounts are positive numbers. If two customers have the same total, either of them can come first.", audio: e16-c2/task-3.mp3 }
+      - { speaker: Anders, text: "Start with the simplest solution you can think of. Then tell me its time complexity, and only after that think about how to make it faster.", audio: e16-c2/task-4.mp3 }
+      - { speaker: Anders, text: "You can write in any language in the shared editor. I won't judge the syntax, but I'd like the code to run at the end.", audio: e16-c2/task-5.mp3 }
   - type: exercise
     id: task-q
     about: task
@@ -524,12 +524,12 @@ blocks:
     title: Сцена 5 · Реплики Anders — требования
     plays: 2
     transcript:
-      - { speaker: Anders, text: "Let's try a design task. Design a service that shows customers the status of their payments in the app. Before you start, what would you like to know?" }
-      - { speaker: Anders, text: "The users are customers of online shops. We expect about two hundred thousand requests a day, and about two hundred a second at peak." }
-      - { speaker: Anders, text: "A status that is a few seconds old is fine, but not more than one minute." }
-      - { speaker: Anders, text: "The app shows the last known status and a short message. Anything else?" }
-      - { speaker: Anders, text: "Design for twice the current load. Refunds are out of scope for the first version." }
-      - { speaker: Anders, text: "That's right. Please start with the simplest design, which we can improve later." }
+      - { speaker: Anders, text: "Let's try a design task. Design a service that shows customers the status of their payments in the app. Before you start, what would you like to know?", audio: e16-c2/req-lines-1.mp3 }
+      - { speaker: Anders, text: "The users are customers of online shops. We expect about two hundred thousand requests a day, and about two hundred a second at peak.", audio: e16-c2/req-lines-2.mp3 }
+      - { speaker: Anders, text: "A status that is a few seconds old is fine, but not more than one minute.", audio: e16-c2/req-lines-3.mp3 }
+      - { speaker: Anders, text: "The app shows the last known status and a short message. Anything else?", audio: e16-c2/req-lines-4.mp3 }
+      - { speaker: Anders, text: "Design for twice the current load. Refunds are out of scope for the first version.", audio: e16-c2/req-lines-5.mp3 }
+      - { speaker: Anders, text: "That's right. Please start with the simplest design, which we can improve later.", audio: e16-c2/req-lines-6.mp3 }
   - type: speaking
     id: req
     part: roleplay
@@ -561,12 +561,12 @@ blocks:
     title: Сцена 6 · Реплики Anders — решение вслух
     plays: 2
     transcript:
-      - { speaker: Anders, text: "Now a coding task. Given a list of words, return the word that appears most often. Please think out loud." }
-      - { speaker: Anders, text: "Right. You can assume the list is not empty. What is your first idea?" }
-      - { speaker: Anders, text: "OK. What is the time complexity of that?" }
-      - { speaker: Anders, text: "Could it be faster?" }
-      - { speaker: Anders, text: "What happens if two words appear equally often?" }
-      - { speaker: Anders, text: "Thank you, that's clear." }
+      - { speaker: Anders, text: "Now a coding task. Given a list of words, return the word that appears most often. Please think out loud.", audio: e16-c2/aloud-lines-1.mp3 }
+      - { speaker: Anders, text: "Right. You can assume the list is not empty. What is your first idea?", audio: e16-c2/aloud-lines-2.mp3 }
+      - { speaker: Anders, text: "OK. What is the time complexity of that?", audio: e16-c2/aloud-lines-3.mp3 }
+      - { speaker: Anders, text: "Could it be faster?", audio: e16-c2/aloud-lines-4.mp3 }
+      - { speaker: Anders, text: "What happens if two words appear equally often?", audio: e16-c2/aloud-lines-5.mp3 }
+      - { speaker: Anders, text: "Thank you, that's clear.", audio: e16-c2/aloud-lines-6.mp3 }
   - type: speaking
     id: aloud
     part: roleplay
@@ -598,12 +598,12 @@ blocks:
     title: Сцена 7 · Реплики Hassan — мнение и вопросы
     plays: 2
     transcript:
-      - { speaker: Hassan, text: "Hello Nadia, I'm Hassan Karimi, the hiring manager. Let me ask for your opinion. Next year we're thinking of rewriting the payment service from Python to Go. What do you think?" }
-      - { speaker: Hassan, text: "That's a fair point. The team expects the rewrite to pay off in two years. What would change your mind?" }
-      - { speaker: Hassan, text: "Interesting. We could start with a small pilot. Would you support that?" }
-      - { speaker: Hassan, text: "Good. We try to decide together. Now, what questions would you like to ask us?" }
-      - { speaker: Hassan, text: "Success in the first six months means you've shipped one project and the team trusts your reviews. What else?" }
-      - { speaker: Hassan, text: "We release twice a week, and the team meets for a short stand-up every morning. I'll let you go now. Thank you for your time." }
+      - { speaker: Hassan, text: "Hello Nadia, I'm Hassan Karimi, the hiring manager. Let me ask for your opinion. Next year we're thinking of rewriting the payment service from Python to Go. What do you think?", audio: e16-c2/opinion-lines-1.mp3 }
+      - { speaker: Hassan, text: "That's a fair point. The team expects the rewrite to pay off in two years. What would change your mind?", audio: e16-c2/opinion-lines-2.mp3 }
+      - { speaker: Hassan, text: "Interesting. We could start with a small pilot. Would you support that?", audio: e16-c2/opinion-lines-3.mp3 }
+      - { speaker: Hassan, text: "Good. We try to decide together. Now, what questions would you like to ask us?", audio: e16-c2/opinion-lines-4.mp3 }
+      - { speaker: Hassan, text: "Success in the first six months means you've shipped one project and the team trusts your reviews. What else?", audio: e16-c2/opinion-lines-5.mp3 }
+      - { speaker: Hassan, text: "We release twice a week, and the team meets for a short stand-up every morning. I'll let you go now. Thank you for your time.", audio: e16-c2/opinion-lines-6.mp3 }
   - type: speaking
     id: opinion
     part: roleplay
@@ -652,10 +652,10 @@ blocks:
     title: Голосовое сообщение Katarina с предложением
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. I have good news. After the final interviews, the team would like to offer you the role of Senior Backend Engineer." }
-      - { speaker: Katarina, text: "The base salary is ninety thousand euros gross per year. You'll also receive stock options that vest over four years, twenty-seven days of holiday and a learning budget of fifteen hundred euros a year." }
-      - { speaker: Katarina, text: "I'll send the written offer by email today. It includes the start date and the other details, so please read it carefully." }
-      - { speaker: Katarina, text: "The offer is open until next Wednesday at five in the afternoon. If you have any questions, call me, and I'll gladly go through everything with you." }
+      - { speaker: Katarina, text: "Hello Nadia, this is Katarina Lind from Tidewell Software. I have good news. After the final interviews, the team would like to offer you the role of Senior Backend Engineer.", audio: e16-c2/offer-msg-1.mp3 }
+      - { speaker: Katarina, text: "The base salary is ninety thousand euros gross per year. You'll also receive stock options that vest over four years, twenty-seven days of holiday and a learning budget of fifteen hundred euros a year.", audio: e16-c2/offer-msg-2.mp3 }
+      - { speaker: Katarina, text: "I'll send the written offer by email today. It includes the start date and the other details, so please read it carefully.", audio: e16-c2/offer-msg-3.mp3 }
+      - { speaker: Katarina, text: "The offer is open until next Wednesday at five in the afternoon. If you have any questions, call me, and I'll gladly go through everything with you.", audio: e16-c2/offer-msg-4.mp3 }
   - type: exercise
     id: offer-msg-q
     about: offer-msg
@@ -766,12 +766,12 @@ blocks:
     title: Сцена 8 · Реплики Katarina — ответ на оффер
     plays: 2
     transcript:
-      - { speaker: Katarina, text: "Hello Nadia, thanks for calling back. Did you have a chance to read the written offer?" }
-      - { speaker: Katarina, text: "I'm glad to hear that. Is there anything you would like me to go through again?" }
-      - { speaker: Katarina, text: "Of course. The options vest in four equal parts, one at the end of each year. Does the start date, the fifth of April, work for you?" }
-      - { speaker: Katarina, text: "Good. The offer is open until next Wednesday at five. When would you like to give us your answer?" }
-      - { speaker: Katarina, text: "That's fine. Is there anything else you'd like to ask?" }
-      - { speaker: Katarina, text: "Yes, conference tickets are covered, and I'll confirm it by email today. I look forward to your reply on Tuesday. Thank you for your time." }
+      - { speaker: Katarina, text: "Hello Nadia, thanks for calling back. Did you have a chance to read the written offer?", audio: e16-c2/offer-lines-1.mp3 }
+      - { speaker: Katarina, text: "I'm glad to hear that. Is there anything you would like me to go through again?", audio: e16-c2/offer-lines-2.mp3 }
+      - { speaker: Katarina, text: "Of course. The options vest in four equal parts, one at the end of each year. Does the start date, the fifth of April, work for you?", audio: e16-c2/offer-lines-3.mp3 }
+      - { speaker: Katarina, text: "Good. The offer is open until next Wednesday at five. When would you like to give us your answer?", audio: e16-c2/offer-lines-4.mp3 }
+      - { speaker: Katarina, text: "That's fine. Is there anything else you'd like to ask?", audio: e16-c2/offer-lines-5.mp3 }
+      - { speaker: Katarina, text: "Yes, conference tickets are covered, and I'll confirm it by email today. I look forward to your reply on Tuesday. Thank you for your time.", audio: e16-c2/offer-lines-6.mp3 }
   - type: speaking
     id: offer
     part: roleplay

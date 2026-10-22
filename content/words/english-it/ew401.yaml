@@ -1,5 +1,6 @@
 id: ew401
 greek: "a code review"
+audio: words/ew401.mp3
 russian: "ревью кода: проверка изменений коллегами до слияния"
 ipa: /ə ˈkəʊd rɪˌvjuː/
 note: "Every change goes through a code review."

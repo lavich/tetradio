@@ -1,5 +1,6 @@
 id: ew429
 greek: "peak load"
+audio: words/ew429.mp3
 russian: "пиковая нагрузка: наибольший поток запросов за короткий период"
 ipa: /ˈpiːk ləʊd/
 note: "The system must work at peak load, not only on average."

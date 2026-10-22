@@ -1,5 +1,6 @@
 id: ep346
 text: "I'm going to refactor this to make it cleaner."
+audio: phrases/ep346.mp3
 translation: "Переработаю этот код, чтобы он стал чище."
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14

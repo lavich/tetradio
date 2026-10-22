@@ -947,6 +947,1214 @@
     "voice": "Zephyr",
     "hash": "0e1d2a437c38c457"
   },
+  "e09-2/interview-1.mp3": {
+    "voice": "Erinome",
+    "hash": "afe8a5a28186a34e"
+  },
+  "e09-2/interview-10.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "46083cdcb41e65f5"
+  },
+  "e09-2/interview-11.mp3": {
+    "voice": "Erinome",
+    "hash": "c3d2e90d752e3a5e"
+  },
+  "e09-2/interview-2.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "194e3929c52b2561"
+  },
+  "e09-2/interview-3.mp3": {
+    "voice": "Erinome",
+    "hash": "2e69c95008123082"
+  },
+  "e09-2/interview-4.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "bee66043f8ce9d9f"
+  },
+  "e09-2/interview-5.mp3": {
+    "voice": "Erinome",
+    "hash": "2a3a3817141d456b"
+  },
+  "e09-2/interview-6.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "1853e2b555e4eb62"
+  },
+  "e09-2/interview-7.mp3": {
+    "voice": "Erinome",
+    "hash": "1f1c59b1a8e16636"
+  },
+  "e09-2/interview-8.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "77e57cb552bc51f7"
+  },
+  "e09-2/interview-9.mp3": {
+    "voice": "Erinome",
+    "hash": "e2746b56a6b9b764"
+  },
+  "e09-3/scene-lines-1.mp3": {
+    "voice": "Erinome",
+    "hash": "9b7949a0dd56da9d"
+  },
+  "e09-3/scene-lines-2.mp3": {
+    "voice": "Erinome",
+    "hash": "974af1c31e3a2036"
+  },
+  "e09-3/scene-lines-3.mp3": {
+    "voice": "Erinome",
+    "hash": "03ba9d45d1fc5c8d"
+  },
+  "e09-3/scene-lines-4.mp3": {
+    "voice": "Erinome",
+    "hash": "5cd49f102cbc0cd1"
+  },
+  "e09-test/call-1.mp3": {
+    "voice": "Iapetus",
+    "hash": "d169225ee065b5fa"
+  },
+  "e09-test/call-10.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "e38bf0b6f9e3de4b"
+  },
+  "e09-test/call-11.mp3": {
+    "voice": "Iapetus",
+    "hash": "79e4f939d38fae41"
+  },
+  "e09-test/call-2.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "4dc85224567d71aa"
+  },
+  "e09-test/call-3.mp3": {
+    "voice": "Iapetus",
+    "hash": "f80436e7a0fcffef"
+  },
+  "e09-test/call-4.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "3852e4d3ff81715e"
+  },
+  "e09-test/call-5.mp3": {
+    "voice": "Iapetus",
+    "hash": "5d4236862c981dab"
+  },
+  "e09-test/call-6.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "77cac3615d2ebe93"
+  },
+  "e09-test/call-7.mp3": {
+    "voice": "Iapetus",
+    "hash": "d7634b28f325f3c0"
+  },
+  "e09-test/call-8.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "f50a6c8f01e4d59d"
+  },
+  "e09-test/call-9.mp3": {
+    "voice": "Iapetus",
+    "hash": "0a86778b51715b80"
+  },
+  "e10-2/story-1.mp3": {
+    "voice": "Erinome",
+    "hash": "646de26630a14f00"
+  },
+  "e10-2/story-10.mp3": {
+    "voice": "Sadachbia",
+    "hash": "8d8de0f39b3cc3ac"
+  },
+  "e10-2/story-11.mp3": {
+    "voice": "Erinome",
+    "hash": "35b97d403754936b"
+  },
+  "e10-2/story-2.mp3": {
+    "voice": "Sadachbia",
+    "hash": "a40b654b4966fa2e"
+  },
+  "e10-2/story-3.mp3": {
+    "voice": "Erinome",
+    "hash": "f8c67746667450df"
+  },
+  "e10-2/story-4.mp3": {
+    "voice": "Sadachbia",
+    "hash": "71ea8ed10da35b3f"
+  },
+  "e10-2/story-5.mp3": {
+    "voice": "Erinome",
+    "hash": "e476d3d5596deb2a"
+  },
+  "e10-2/story-6.mp3": {
+    "voice": "Sadachbia",
+    "hash": "8616ebea75305836"
+  },
+  "e10-2/story-7.mp3": {
+    "voice": "Erinome",
+    "hash": "c40400d47829f5b6"
+  },
+  "e10-2/story-8.mp3": {
+    "voice": "Sadachbia",
+    "hash": "60c2f14975a7b9a0"
+  },
+  "e10-2/story-9.mp3": {
+    "voice": "Erinome",
+    "hash": "53580e9e0a026198"
+  },
+  "e10-3/scene-lines-1.mp3": {
+    "voice": "Erinome",
+    "hash": "71f63d6ccd0efa47"
+  },
+  "e10-3/scene-lines-2.mp3": {
+    "voice": "Erinome",
+    "hash": "f2a62dc8cb06a699"
+  },
+  "e10-3/scene-lines-3.mp3": {
+    "voice": "Erinome",
+    "hash": "74bb59b9f01c8722"
+  },
+  "e10-3/scene-lines-4.mp3": {
+    "voice": "Erinome",
+    "hash": "d33e78b8588594f7"
+  },
+  "e10-3/scene-lines-5.mp3": {
+    "voice": "Erinome",
+    "hash": "4d51c541dfd2b3e5"
+  },
+  "e10-test/call-1.mp3": {
+    "voice": "Aoede",
+    "hash": "9b8093c88f4181f1"
+  },
+  "e10-test/call-10.mp3": {
+    "voice": "Algieba",
+    "hash": "090c8166b138de37"
+  },
+  "e10-test/call-11.mp3": {
+    "voice": "Aoede",
+    "hash": "c1cc4092f28e1293"
+  },
+  "e10-test/call-2.mp3": {
+    "voice": "Algieba",
+    "hash": "928563e6b45d2fd7"
+  },
+  "e10-test/call-3.mp3": {
+    "voice": "Aoede",
+    "hash": "316e6c48a0a44832"
+  },
+  "e10-test/call-4.mp3": {
+    "voice": "Algieba",
+    "hash": "ca0233298c359347"
+  },
+  "e10-test/call-5.mp3": {
+    "voice": "Aoede",
+    "hash": "7b610e5253380388"
+  },
+  "e10-test/call-6.mp3": {
+    "voice": "Algieba",
+    "hash": "e89c2a8a7018304e"
+  },
+  "e10-test/call-7.mp3": {
+    "voice": "Aoede",
+    "hash": "38d5dd9aeba26d19"
+  },
+  "e10-test/call-8.mp3": {
+    "voice": "Algieba",
+    "hash": "99a760616c3194c0"
+  },
+  "e10-test/call-9.mp3": {
+    "voice": "Aoede",
+    "hash": "abbb438245cbc5ad"
+  },
+  "e11-2/questions-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "eff1c7907e4bdddb"
+  },
+  "e11-2/questions-10.mp3": {
+    "voice": "Enceladus",
+    "hash": "b4991b2495d5dfe7"
+  },
+  "e11-2/questions-11.mp3": {
+    "voice": "Fenrir",
+    "hash": "474ad2635289fceb"
+  },
+  "e11-2/questions-12.mp3": {
+    "voice": "Enceladus",
+    "hash": "cba90e9e33051f53"
+  },
+  "e11-2/questions-13.mp3": {
+    "voice": "Fenrir",
+    "hash": "bd3513ed2d118d74"
+  },
+  "e11-2/questions-2.mp3": {
+    "voice": "Enceladus",
+    "hash": "b05b7f69cd4b6ba2"
+  },
+  "e11-2/questions-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "b5b69c025e0f6335"
+  },
+  "e11-2/questions-4.mp3": {
+    "voice": "Enceladus",
+    "hash": "304df51ca62bb658"
+  },
+  "e11-2/questions-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "f9d32660e786802c"
+  },
+  "e11-2/questions-6.mp3": {
+    "voice": "Enceladus",
+    "hash": "918a7d747d0420ef"
+  },
+  "e11-2/questions-7.mp3": {
+    "voice": "Fenrir",
+    "hash": "6fd0ba3ae47f482c"
+  },
+  "e11-2/questions-8.mp3": {
+    "voice": "Enceladus",
+    "hash": "7fd602d36528588e"
+  },
+  "e11-2/questions-9.mp3": {
+    "voice": "Fenrir",
+    "hash": "ab6090426b44640e"
+  },
+  "e11-3/scene-lines-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "759ffe90f12a7732"
+  },
+  "e11-3/scene-lines-2.mp3": {
+    "voice": "Fenrir",
+    "hash": "6731bdc4a8be6145"
+  },
+  "e11-3/scene-lines-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "8f3d175798a81322"
+  },
+  "e11-3/scene-lines-4.mp3": {
+    "voice": "Fenrir",
+    "hash": "3777a8fd68d2b2b5"
+  },
+  "e11-3/scene-lines-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "8e176787ae455f32"
+  },
+  "e11-test/call-1.mp3": {
+    "voice": "Erinome",
+    "hash": "71f2ef7bf95a33ae"
+  },
+  "e11-test/call-2.mp3": {
+    "voice": "Sulafat",
+    "hash": "c991d2a2053dfa05"
+  },
+  "e11-test/call-3.mp3": {
+    "voice": "Erinome",
+    "hash": "c43b2641cb613177"
+  },
+  "e11-test/call-4.mp3": {
+    "voice": "Sulafat",
+    "hash": "dce26e2a7822472f"
+  },
+  "e11-test/call-5.mp3": {
+    "voice": "Erinome",
+    "hash": "1bb436739bf0efdc"
+  },
+  "e11-test/call-6.mp3": {
+    "voice": "Sulafat",
+    "hash": "356e89cac06243b5"
+  },
+  "e11-test/call-7.mp3": {
+    "voice": "Erinome",
+    "hash": "80a8be6c7c92082a"
+  },
+  "e11-test/call-8.mp3": {
+    "voice": "Sulafat",
+    "hash": "f267318a3a51d911"
+  },
+  "e11-test/call-9.mp3": {
+    "voice": "Erinome",
+    "hash": "8e4581aff00121de"
+  },
+  "e12-2/team-1.mp3": {
+    "voice": "Orus",
+    "hash": "75c4637cbdce505b"
+  },
+  "e12-2/team-10.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "3f363f94c23d2e37"
+  },
+  "e12-2/team-11.mp3": {
+    "voice": "Orus",
+    "hash": "c07618c6da13cf55"
+  },
+  "e12-2/team-2.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "39366e5897326a97"
+  },
+  "e12-2/team-3.mp3": {
+    "voice": "Orus",
+    "hash": "0ec5b5d57a747068"
+  },
+  "e12-2/team-4.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "51d6d425f2474f5e"
+  },
+  "e12-2/team-5.mp3": {
+    "voice": "Orus",
+    "hash": "ae04819866d34c9c"
+  },
+  "e12-2/team-6.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "37a081f1f639dfff"
+  },
+  "e12-2/team-7.mp3": {
+    "voice": "Orus",
+    "hash": "416a7ec175dd454e"
+  },
+  "e12-2/team-8.mp3": {
+    "voice": "Vindemiatrix",
+    "hash": "313d54ce61540769"
+  },
+  "e12-2/team-9.mp3": {
+    "voice": "Orus",
+    "hash": "54f5917a97afc5bc"
+  },
+  "e12-3/scene-lines-1.mp3": {
+    "voice": "Erinome",
+    "hash": "7a57a44d338bf30a"
+  },
+  "e12-3/scene-lines-2.mp3": {
+    "voice": "Erinome",
+    "hash": "5423d694016ae915"
+  },
+  "e12-3/scene-lines-3.mp3": {
+    "voice": "Erinome",
+    "hash": "7230ec67e64ea448"
+  },
+  "e12-3/scene-lines-4.mp3": {
+    "voice": "Erinome",
+    "hash": "0496dee81b2a72de"
+  },
+  "e12-3/scene-lines-5.mp3": {
+    "voice": "Erinome",
+    "hash": "88ef99d0641c850a"
+  },
+  "e12-test/call-1.mp3": {
+    "voice": "Orus",
+    "hash": "ea6b5a26c3299370"
+  },
+  "e12-test/call-2.mp3": {
+    "voice": "Schedar",
+    "hash": "40be11e5d7f9d19e"
+  },
+  "e12-test/call-3.mp3": {
+    "voice": "Orus",
+    "hash": "b90a41acb84c764c"
+  },
+  "e12-test/call-4.mp3": {
+    "voice": "Schedar",
+    "hash": "5369c2d0719354e1"
+  },
+  "e12-test/call-5.mp3": {
+    "voice": "Orus",
+    "hash": "d0ce27683a338428"
+  },
+  "e12-test/call-6.mp3": {
+    "voice": "Schedar",
+    "hash": "9fa565abbe9908ad"
+  },
+  "e12-test/call-7.mp3": {
+    "voice": "Orus",
+    "hash": "c08ae8e6a5e40d42"
+  },
+  "e12-test/call-8.mp3": {
+    "voice": "Schedar",
+    "hash": "f0beafa4e630300f"
+  },
+  "e12-test/call-9.mp3": {
+    "voice": "Orus",
+    "hash": "56a82c0e6d912f33"
+  },
+  "e13-2/task-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "b6d3235245e63e1d"
+  },
+  "e13-2/task-10.mp3": {
+    "voice": "Achernar",
+    "hash": "bf19b6df12c2a5d0"
+  },
+  "e13-2/task-11.mp3": {
+    "voice": "Fenrir",
+    "hash": "f7558e7840c97bbc"
+  },
+  "e13-2/task-12.mp3": {
+    "voice": "Achernar",
+    "hash": "7347e4fefe957d81"
+  },
+  "e13-2/task-13.mp3": {
+    "voice": "Fenrir",
+    "hash": "338f066b5a8b5c3b"
+  },
+  "e13-2/task-2.mp3": {
+    "voice": "Achernar",
+    "hash": "49bab39efd3d1e90"
+  },
+  "e13-2/task-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "0196ad8eecd49b11"
+  },
+  "e13-2/task-4.mp3": {
+    "voice": "Achernar",
+    "hash": "0158d54ba502fe1b"
+  },
+  "e13-2/task-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "0d31efc806edfd69"
+  },
+  "e13-2/task-6.mp3": {
+    "voice": "Achernar",
+    "hash": "be2591a9a931dc97"
+  },
+  "e13-2/task-7.mp3": {
+    "voice": "Fenrir",
+    "hash": "a46f7acb2e00d3ab"
+  },
+  "e13-2/task-8.mp3": {
+    "voice": "Achernar",
+    "hash": "d14a2e9d07376124"
+  },
+  "e13-2/task-9.mp3": {
+    "voice": "Fenrir",
+    "hash": "2218d4faced2e351"
+  },
+  "e13-3/scene-lines-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "0113de0824ba576e"
+  },
+  "e13-3/scene-lines-2.mp3": {
+    "voice": "Fenrir",
+    "hash": "ca4a9c8c3863bbb0"
+  },
+  "e13-3/scene-lines-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "b932b9c0919d3b82"
+  },
+  "e13-3/scene-lines-4.mp3": {
+    "voice": "Fenrir",
+    "hash": "5896850cecdee4a9"
+  },
+  "e13-3/scene-lines-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "470de64b24026548"
+  },
+  "e13-test/call-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "6d011749407cad7f"
+  },
+  "e13-test/call-10.mp3": {
+    "voice": "Autonoe",
+    "hash": "20775f1fcc470089"
+  },
+  "e13-test/call-11.mp3": {
+    "voice": "Fenrir",
+    "hash": "4365f5366bbf39c3"
+  },
+  "e13-test/call-2.mp3": {
+    "voice": "Autonoe",
+    "hash": "b07cac171940b404"
+  },
+  "e13-test/call-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "44d0e9708fb473e3"
+  },
+  "e13-test/call-4.mp3": {
+    "voice": "Autonoe",
+    "hash": "4eefff74944a3aa3"
+  },
+  "e13-test/call-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "64f24c51da5c6ded"
+  },
+  "e13-test/call-6.mp3": {
+    "voice": "Autonoe",
+    "hash": "dffb45b8283ae2f1"
+  },
+  "e13-test/call-7.mp3": {
+    "voice": "Fenrir",
+    "hash": "f185c34510e0529a"
+  },
+  "e13-test/call-8.mp3": {
+    "voice": "Autonoe",
+    "hash": "bb1a20de36db92a7"
+  },
+  "e13-test/call-9.mp3": {
+    "voice": "Fenrir",
+    "hash": "638da7b74772bdbf"
+  },
+  "e14-2/solve-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "a5a988b96cf060f4"
+  },
+  "e14-2/solve-10.mp3": {
+    "voice": "Fenrir",
+    "hash": "759f6fd1d324351e"
+  },
+  "e14-2/solve-11.mp3": {
+    "voice": "Enceladus",
+    "hash": "f8d199f7255ff1e5"
+  },
+  "e14-2/solve-12.mp3": {
+    "voice": "Fenrir",
+    "hash": "53e22610e5dc34ca"
+  },
+  "e14-2/solve-13.mp3": {
+    "voice": "Enceladus",
+    "hash": "fcbed57bc31c6e8f"
+  },
+  "e14-2/solve-14.mp3": {
+    "voice": "Fenrir",
+    "hash": "3a48e1504e6a4b9c"
+  },
+  "e14-2/solve-2.mp3": {
+    "voice": "Enceladus",
+    "hash": "eefba4d0c6ca806b"
+  },
+  "e14-2/solve-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "bb8203b2800a0d25"
+  },
+  "e14-2/solve-4.mp3": {
+    "voice": "Enceladus",
+    "hash": "8d3d25bbac9377b4"
+  },
+  "e14-2/solve-5.mp3": {
+    "voice": "Enceladus",
+    "hash": "799e2d5fd44fb522"
+  },
+  "e14-2/solve-6.mp3": {
+    "voice": "Fenrir",
+    "hash": "0725102427e33a14"
+  },
+  "e14-2/solve-7.mp3": {
+    "voice": "Enceladus",
+    "hash": "5f77c2cc67a30c3e"
+  },
+  "e14-2/solve-8.mp3": {
+    "voice": "Fenrir",
+    "hash": "a7a086e57eaba614"
+  },
+  "e14-2/solve-9.mp3": {
+    "voice": "Enceladus",
+    "hash": "ff6ab53b7c136fa1"
+  },
+  "e14-3/scene-lines-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "2e6fb6da628892b9"
+  },
+  "e14-3/scene-lines-2.mp3": {
+    "voice": "Fenrir",
+    "hash": "e4abaac764311cb4"
+  },
+  "e14-3/scene-lines-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "dc28694e915a895b"
+  },
+  "e14-3/scene-lines-4.mp3": {
+    "voice": "Fenrir",
+    "hash": "f216f151bc4223d4"
+  },
+  "e14-3/scene-lines-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "53e22610e5dc34ca"
+  },
+  "e14-3/scene-lines-6.mp3": {
+    "voice": "Fenrir",
+    "hash": "d4a5f090c31f3990"
+  },
+  "e14-test/call-1.mp3": {
+    "voice": "Iapetus",
+    "hash": "23e0d0e43db7eca0"
+  },
+  "e14-test/call-10.mp3": {
+    "voice": "Iapetus",
+    "hash": "d9306830ff655af1"
+  },
+  "e14-test/call-2.mp3": {
+    "voice": "Umbriel",
+    "hash": "5b99f3f1b953c8a0"
+  },
+  "e14-test/call-3.mp3": {
+    "voice": "Iapetus",
+    "hash": "6be2eef1d80b24b0"
+  },
+  "e14-test/call-4.mp3": {
+    "voice": "Umbriel",
+    "hash": "4a55924e80eefdad"
+  },
+  "e14-test/call-5.mp3": {
+    "voice": "Umbriel",
+    "hash": "a741848f87438410"
+  },
+  "e14-test/call-6.mp3": {
+    "voice": "Iapetus",
+    "hash": "164d0066fbfbf504"
+  },
+  "e14-test/call-7.mp3": {
+    "voice": "Umbriel",
+    "hash": "2f32cc7806518c37"
+  },
+  "e14-test/call-8.mp3": {
+    "voice": "Iapetus",
+    "hash": "c0c330011658ec4d"
+  },
+  "e14-test/call-9.mp3": {
+    "voice": "Umbriel",
+    "hash": "4ae6cb7221c5d846"
+  },
+  "e15-2/debate-1.mp3": {
+    "voice": "Orus",
+    "hash": "495274fd3517c47e"
+  },
+  "e15-2/debate-10.mp3": {
+    "voice": "Achernar",
+    "hash": "d1c689726ba5c327"
+  },
+  "e15-2/debate-11.mp3": {
+    "voice": "Orus",
+    "hash": "9af7066f4ffe0be8"
+  },
+  "e15-2/debate-12.mp3": {
+    "voice": "Achernar",
+    "hash": "1e2e519cd8ae0c31"
+  },
+  "e15-2/debate-2.mp3": {
+    "voice": "Achernar",
+    "hash": "2ac89b3c8652fb74"
+  },
+  "e15-2/debate-3.mp3": {
+    "voice": "Orus",
+    "hash": "955c9144bc05e092"
+  },
+  "e15-2/debate-4.mp3": {
+    "voice": "Achernar",
+    "hash": "71ea0cbff9895d2d"
+  },
+  "e15-2/debate-5.mp3": {
+    "voice": "Orus",
+    "hash": "6d14e5a5563d0fec"
+  },
+  "e15-2/debate-6.mp3": {
+    "voice": "Achernar",
+    "hash": "1f0ff7c42cad169f"
+  },
+  "e15-2/debate-7.mp3": {
+    "voice": "Orus",
+    "hash": "80fbfe6ac79e752c"
+  },
+  "e15-2/debate-8.mp3": {
+    "voice": "Achernar",
+    "hash": "68daae97b39bd58e"
+  },
+  "e15-2/debate-9.mp3": {
+    "voice": "Orus",
+    "hash": "e4c842039b7d9653"
+  },
+  "e15-3/scene-lines-1.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "052cb58576ec5de8"
+  },
+  "e15-3/scene-lines-2.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "d55d27e7724b8984"
+  },
+  "e15-3/scene-lines-3.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "4cf5c0bf5b294836"
+  },
+  "e15-3/scene-lines-4.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "e725f81d9ae15cb6"
+  },
+  "e15-3/scene-lines-5.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "31196727ddaedec5"
+  },
+  "e15-3/scene-lines-6.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "32fd70e1a494b0ed"
+  },
+  "e15-test/call-1.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "3aa9b279c5d6819d"
+  },
+  "e15-test/call-10.mp3": {
+    "voice": "Charon",
+    "hash": "eedf4dcd855ed30c"
+  },
+  "e15-test/call-11.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "129171da45d2139b"
+  },
+  "e15-test/call-2.mp3": {
+    "voice": "Charon",
+    "hash": "893852b1d684bb08"
+  },
+  "e15-test/call-3.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "8da419b2ac5e303c"
+  },
+  "e15-test/call-4.mp3": {
+    "voice": "Charon",
+    "hash": "4cfdd487b03c6b90"
+  },
+  "e15-test/call-5.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "2c8a2ad23cdf92c9"
+  },
+  "e15-test/call-6.mp3": {
+    "voice": "Charon",
+    "hash": "f57637abdfb27ba3"
+  },
+  "e15-test/call-7.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "9c4bd11b2c2a3acb"
+  },
+  "e15-test/call-8.mp3": {
+    "voice": "Charon",
+    "hash": "6e2e7a53e29ef1fa"
+  },
+  "e15-test/call-9.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "4fffb1ba07665686"
+  },
+  "e16-2/call-1.mp3": {
+    "voice": "Zephyr",
+    "hash": "b097baeec9508156"
+  },
+  "e16-2/call-10.mp3": {
+    "voice": "Charon",
+    "hash": "9a192959bd148cec"
+  },
+  "e16-2/call-11.mp3": {
+    "voice": "Zephyr",
+    "hash": "b820b1243766f079"
+  },
+  "e16-2/call-12.mp3": {
+    "voice": "Charon",
+    "hash": "2f60875c13933e08"
+  },
+  "e16-2/call-2.mp3": {
+    "voice": "Charon",
+    "hash": "6d3d310fc76238d5"
+  },
+  "e16-2/call-3.mp3": {
+    "voice": "Zephyr",
+    "hash": "b1b87228732fd2b6"
+  },
+  "e16-2/call-4.mp3": {
+    "voice": "Charon",
+    "hash": "12995bdb3fbde028"
+  },
+  "e16-2/call-5.mp3": {
+    "voice": "Zephyr",
+    "hash": "5720e05384891e41"
+  },
+  "e16-2/call-6.mp3": {
+    "voice": "Charon",
+    "hash": "6b4952b7093fd718"
+  },
+  "e16-2/call-7.mp3": {
+    "voice": "Zephyr",
+    "hash": "d7166b3d9057e50d"
+  },
+  "e16-2/call-8.mp3": {
+    "voice": "Charon",
+    "hash": "be115261bc0429a9"
+  },
+  "e16-2/call-9.mp3": {
+    "voice": "Zephyr",
+    "hash": "3714a0c6053abd15"
+  },
+  "e16-2/end-1.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "509cc3289bfdc6b0"
+  },
+  "e16-2/end-10.mp3": {
+    "voice": "Sulafat",
+    "hash": "39540accd757b810"
+  },
+  "e16-2/end-11.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "73da02e974b11004"
+  },
+  "e16-2/end-12.mp3": {
+    "voice": "Sulafat",
+    "hash": "c3e362b25f8b620a"
+  },
+  "e16-2/end-13.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "c122a8ed6458a31c"
+  },
+  "e16-2/end-2.mp3": {
+    "voice": "Sulafat",
+    "hash": "d35401cfa9ea4df4"
+  },
+  "e16-2/end-3.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "9fbb6d651a889b38"
+  },
+  "e16-2/end-4.mp3": {
+    "voice": "Sulafat",
+    "hash": "d0558f7ebe6279db"
+  },
+  "e16-2/end-5.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "1e1598796ab0faba"
+  },
+  "e16-2/end-6.mp3": {
+    "voice": "Sulafat",
+    "hash": "76711b9046dc1af0"
+  },
+  "e16-2/end-7.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "3c610ce038fa6f6c"
+  },
+  "e16-2/end-8.mp3": {
+    "voice": "Sulafat",
+    "hash": "165e21000e9b4918"
+  },
+  "e16-2/end-9.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "d7c91cb2d601845e"
+  },
+  "e16-3/scene-lines-1.mp3": {
+    "voice": "Zephyr",
+    "hash": "e29d9a4ed3224f7d"
+  },
+  "e16-3/scene-lines-2.mp3": {
+    "voice": "Zephyr",
+    "hash": "1827c111aa1b8570"
+  },
+  "e16-3/scene-lines-3.mp3": {
+    "voice": "Zephyr",
+    "hash": "3a702ca19841a56a"
+  },
+  "e16-3/scene-lines-4.mp3": {
+    "voice": "Zephyr",
+    "hash": "e64827d0dd186272"
+  },
+  "e16-3/scene-lines-5.mp3": {
+    "voice": "Zephyr",
+    "hash": "0499ae6a17d62867"
+  },
+  "e16-3/scene-lines-6.mp3": {
+    "voice": "Zephyr",
+    "hash": "99a834513edae53b"
+  },
+  "e16-c2/aloud-lines-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "d32da9a5c5ee568f"
+  },
+  "e16-c2/aloud-lines-2.mp3": {
+    "voice": "Fenrir",
+    "hash": "d551987a0fa8403d"
+  },
+  "e16-c2/aloud-lines-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "e16b0678c43d149b"
+  },
+  "e16-c2/aloud-lines-4.mp3": {
+    "voice": "Fenrir",
+    "hash": "5114814b86bc5797"
+  },
+  "e16-c2/aloud-lines-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "dba4e074433745f5"
+  },
+  "e16-c2/aloud-lines-6.mp3": {
+    "voice": "Fenrir",
+    "hash": "f86ab9fac3bc3691"
+  },
+  "e16-c2/briefing-1.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "5a8c41a4a6c9e9bf"
+  },
+  "e16-c2/briefing-2.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "f59b8857f49b0994"
+  },
+  "e16-c2/briefing-3.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "e0a0b885fdff14b4"
+  },
+  "e16-c2/briefing-4.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "0c7332c9265459f7"
+  },
+  "e16-c2/challenge-lines-1.mp3": {
+    "voice": "Erinome",
+    "hash": "06b17b983841f343"
+  },
+  "e16-c2/challenge-lines-2.mp3": {
+    "voice": "Erinome",
+    "hash": "974af1c31e3a2036"
+  },
+  "e16-c2/challenge-lines-3.mp3": {
+    "voice": "Erinome",
+    "hash": "47181463e334e95e"
+  },
+  "e16-c2/challenge-lines-4.mp3": {
+    "voice": "Erinome",
+    "hash": "39880650bafb704f"
+  },
+  "e16-c2/challenge-lines-5.mp3": {
+    "voice": "Erinome",
+    "hash": "e2746b56a6b9b764"
+  },
+  "e16-c2/challenge-lines-6.mp3": {
+    "voice": "Erinome",
+    "hash": "62a3c36b2d9cafe1"
+  },
+  "e16-c2/hr-lines-1.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "27911cea7be2be6b"
+  },
+  "e16-c2/hr-lines-2.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "37819fcb696c852b"
+  },
+  "e16-c2/hr-lines-3.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "9b9b3df964694a8f"
+  },
+  "e16-c2/hr-lines-4.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "81cf63abbd77c772"
+  },
+  "e16-c2/hr-lines-5.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "4fdfc7af8cb9c675"
+  },
+  "e16-c2/hr-lines-6.mp3": {
+    "voice": "Callirrhoe",
+    "hash": "a5e4ebf4d419fe4f"
+  },
+  "e16-c2/hypo-lines-1.mp3": {
+    "voice": "Erinome",
+    "hash": "ffcc6c708cec8321"
+  },
+  "e16-c2/hypo-lines-2.mp3": {
+    "voice": "Erinome",
+    "hash": "e90829780df42cb2"
+  },
+  "e16-c2/hypo-lines-3.mp3": {
+    "voice": "Erinome",
+    "hash": "81fe5a5c3b78882c"
+  },
+  "e16-c2/hypo-lines-4.mp3": {
+    "voice": "Erinome",
+    "hash": "1046da214a940bee"
+  },
+  "e16-c2/hypo-lines-5.mp3": {
+    "voice": "Erinome",
+    "hash": "c0b1f09c48b43b98"
+  },
+  "e16-c2/hypo-lines-6.mp3": {
+    "voice": "Erinome",
+    "hash": "1c792f08a75abd26"
+  },
+  "e16-c2/mistake-lines-1.mp3": {
+    "voice": "Erinome",
+    "hash": "3c33b35c6e8a18c6"
+  },
+  "e16-c2/mistake-lines-2.mp3": {
+    "voice": "Erinome",
+    "hash": "a1065c9c9a2a94e7"
+  },
+  "e16-c2/mistake-lines-3.mp3": {
+    "voice": "Erinome",
+    "hash": "dd490626e6eff5d5"
+  },
+  "e16-c2/mistake-lines-4.mp3": {
+    "voice": "Erinome",
+    "hash": "5008ff5de935be0b"
+  },
+  "e16-c2/mistake-lines-5.mp3": {
+    "voice": "Erinome",
+    "hash": "527b049f10253929"
+  },
+  "e16-c2/mistake-lines-6.mp3": {
+    "voice": "Erinome",
+    "hash": "6b4e5059aa47ef43"
+  },
+  "e16-c2/offer-lines-1.mp3": {
+    "voice": "Zephyr",
+    "hash": "056a9e6d69402d34"
+  },
+  "e16-c2/offer-lines-2.mp3": {
+    "voice": "Zephyr",
+    "hash": "85369db9cb7ec56b"
+  },
+  "e16-c2/offer-lines-3.mp3": {
+    "voice": "Zephyr",
+    "hash": "28bbb65c1f5874bd"
+  },
+  "e16-c2/offer-lines-4.mp3": {
+    "voice": "Zephyr",
+    "hash": "74564430a0d4db3c"
+  },
+  "e16-c2/offer-lines-5.mp3": {
+    "voice": "Zephyr",
+    "hash": "2fcf22c3b85e81cd"
+  },
+  "e16-c2/offer-lines-6.mp3": {
+    "voice": "Zephyr",
+    "hash": "2c17cd2a57a303ae"
+  },
+  "e16-c2/offer-msg-1.mp3": {
+    "voice": "Zephyr",
+    "hash": "af34c3a000d2c71a"
+  },
+  "e16-c2/offer-msg-2.mp3": {
+    "voice": "Zephyr",
+    "hash": "30342a359fb30bf3"
+  },
+  "e16-c2/offer-msg-3.mp3": {
+    "voice": "Zephyr",
+    "hash": "26aa776dbb01fc85"
+  },
+  "e16-c2/offer-msg-4.mp3": {
+    "voice": "Zephyr",
+    "hash": "adacece6e35fe9c7"
+  },
+  "e16-c2/opinion-lines-1.mp3": {
+    "voice": "Orus",
+    "hash": "a66bd409926617b7"
+  },
+  "e16-c2/opinion-lines-2.mp3": {
+    "voice": "Orus",
+    "hash": "790737044b3f945a"
+  },
+  "e16-c2/opinion-lines-3.mp3": {
+    "voice": "Orus",
+    "hash": "dab91fe0e423f52f"
+  },
+  "e16-c2/opinion-lines-4.mp3": {
+    "voice": "Orus",
+    "hash": "fad40e924eb066f2"
+  },
+  "e16-c2/opinion-lines-5.mp3": {
+    "voice": "Orus",
+    "hash": "3ac6332d592103fc"
+  },
+  "e16-c2/opinion-lines-6.mp3": {
+    "voice": "Orus",
+    "hash": "5222182d0184928e"
+  },
+  "e16-c2/req-lines-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "d62337c71585e15f"
+  },
+  "e16-c2/req-lines-2.mp3": {
+    "voice": "Fenrir",
+    "hash": "f15f62638f510824"
+  },
+  "e16-c2/req-lines-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "738f4ae0cb3639b1"
+  },
+  "e16-c2/req-lines-4.mp3": {
+    "voice": "Fenrir",
+    "hash": "a59beb487bc0e7a0"
+  },
+  "e16-c2/req-lines-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "7457f545ec940606"
+  },
+  "e16-c2/req-lines-6.mp3": {
+    "voice": "Fenrir",
+    "hash": "8d2c62c16cd85c52"
+  },
+  "e16-c2/round-1.mp3": {
+    "voice": "Erinome",
+    "hash": "c0f2d2a730694460"
+  },
+  "e16-c2/round-2.mp3": {
+    "voice": "Erinome",
+    "hash": "a0643691c2de0133"
+  },
+  "e16-c2/round-3.mp3": {
+    "voice": "Erinome",
+    "hash": "e46803a5e03a60a5"
+  },
+  "e16-c2/round-4.mp3": {
+    "voice": "Erinome",
+    "hash": "3dacf443681dce23"
+  },
+  "e16-c2/round-5.mp3": {
+    "voice": "Erinome",
+    "hash": "cacfc531b8699a10"
+  },
+  "e16-c2/round-6.mp3": {
+    "voice": "Erinome",
+    "hash": "934ed3465717d830"
+  },
+  "e16-c2/task-1.mp3": {
+    "voice": "Fenrir",
+    "hash": "cd3d1813ebb1fafc"
+  },
+  "e16-c2/task-2.mp3": {
+    "voice": "Fenrir",
+    "hash": "c1e020414bc59e1e"
+  },
+  "e16-c2/task-3.mp3": {
+    "voice": "Fenrir",
+    "hash": "7a2b0590f870fd5d"
+  },
+  "e16-c2/task-4.mp3": {
+    "voice": "Fenrir",
+    "hash": "46cc7d34ab37cce4"
+  },
+  "e16-c2/task-5.mp3": {
+    "voice": "Fenrir",
+    "hash": "97471f5e10c45774"
+  },
+  "e16-test/end-1.mp3": {
+    "voice": "Orus",
+    "hash": "5d3cb5be8c85e7c7"
+  },
+  "e16-test/end-10.mp3": {
+    "voice": "Despina",
+    "hash": "62a97002d2759a00"
+  },
+  "e16-test/end-11.mp3": {
+    "voice": "Orus",
+    "hash": "2d209c9b51a7590f"
+  },
+  "e16-test/end-2.mp3": {
+    "voice": "Despina",
+    "hash": "3ae89a98f8d6dc7f"
+  },
+  "e16-test/end-3.mp3": {
+    "voice": "Orus",
+    "hash": "69d1b2cf7caf3e96"
+  },
+  "e16-test/end-4.mp3": {
+    "voice": "Despina",
+    "hash": "13cb4184715f3662"
+  },
+  "e16-test/end-5.mp3": {
+    "voice": "Orus",
+    "hash": "26e8eed588ec9d2f"
+  },
+  "e16-test/end-6.mp3": {
+    "voice": "Despina",
+    "hash": "0c8719d8817746c0"
+  },
+  "e16-test/end-7.mp3": {
+    "voice": "Orus",
+    "hash": "1a079e028eb63145"
+  },
+  "e16-test/end-8.mp3": {
+    "voice": "Despina",
+    "hash": "93a360881ec9aad5"
+  },
+  "e16-test/end-9.mp3": {
+    "voice": "Orus",
+    "hash": "c922c73a0ee1a964"
+  },
   "m01-2/party-1.mp3": {
     "voice": "Charon",
     "hash": "d24a354219de7cef"
@@ -4750,6 +5958,806 @@
   "phrases/ep200.mp3": {
     "voice": "Kore",
     "hash": "d6e19f8b0f6a0076"
+  },
+  "phrases/ep201.mp3": {
+    "voice": "Kore",
+    "hash": "ebb25af4f0c6706e"
+  },
+  "phrases/ep202.mp3": {
+    "voice": "Kore",
+    "hash": "6eb8c8f7ed4caaac"
+  },
+  "phrases/ep203.mp3": {
+    "voice": "Kore",
+    "hash": "17200c2b3db3aa7a"
+  },
+  "phrases/ep204.mp3": {
+    "voice": "Kore",
+    "hash": "4b841d5ef4208008"
+  },
+  "phrases/ep205.mp3": {
+    "voice": "Kore",
+    "hash": "4c61ee0b2fc1fd51"
+  },
+  "phrases/ep206.mp3": {
+    "voice": "Kore",
+    "hash": "287b612de0550e59"
+  },
+  "phrases/ep207.mp3": {
+    "voice": "Kore",
+    "hash": "c13b9bd3913181d3"
+  },
+  "phrases/ep208.mp3": {
+    "voice": "Kore",
+    "hash": "fcfb04caa481310d"
+  },
+  "phrases/ep209.mp3": {
+    "voice": "Kore",
+    "hash": "fcc1b7b605a89d3d"
+  },
+  "phrases/ep210.mp3": {
+    "voice": "Kore",
+    "hash": "830eaf403016a61c"
+  },
+  "phrases/ep211.mp3": {
+    "voice": "Kore",
+    "hash": "484eb48de316df2c"
+  },
+  "phrases/ep212.mp3": {
+    "voice": "Kore",
+    "hash": "67156ef241e0352a"
+  },
+  "phrases/ep213.mp3": {
+    "voice": "Kore",
+    "hash": "9d2fababaac9cab1"
+  },
+  "phrases/ep214.mp3": {
+    "voice": "Kore",
+    "hash": "1b1f53602c3c4fb3"
+  },
+  "phrases/ep215.mp3": {
+    "voice": "Kore",
+    "hash": "9232c224f95badb9"
+  },
+  "phrases/ep216.mp3": {
+    "voice": "Kore",
+    "hash": "95563d24d115d2fe"
+  },
+  "phrases/ep217.mp3": {
+    "voice": "Kore",
+    "hash": "ac4749f1e1576191"
+  },
+  "phrases/ep218.mp3": {
+    "voice": "Kore",
+    "hash": "5120e5eb431797f0"
+  },
+  "phrases/ep219.mp3": {
+    "voice": "Kore",
+    "hash": "e0f009cd0ae11079"
+  },
+  "phrases/ep220.mp3": {
+    "voice": "Kore",
+    "hash": "3272ffa84f2920b8"
+  },
+  "phrases/ep221.mp3": {
+    "voice": "Kore",
+    "hash": "2c01ed8b3fb7c996"
+  },
+  "phrases/ep222.mp3": {
+    "voice": "Kore",
+    "hash": "a740777cb6773461"
+  },
+  "phrases/ep223.mp3": {
+    "voice": "Kore",
+    "hash": "d1d2c246f61bbb58"
+  },
+  "phrases/ep224.mp3": {
+    "voice": "Kore",
+    "hash": "bc6014282978983e"
+  },
+  "phrases/ep225.mp3": {
+    "voice": "Kore",
+    "hash": "eb2c05c108a4bb0a"
+  },
+  "phrases/ep226.mp3": {
+    "voice": "Kore",
+    "hash": "76c45d7c509f2918"
+  },
+  "phrases/ep227.mp3": {
+    "voice": "Kore",
+    "hash": "85e9e0b350afa279"
+  },
+  "phrases/ep228.mp3": {
+    "voice": "Kore",
+    "hash": "d9fee254ae8b583c"
+  },
+  "phrases/ep229.mp3": {
+    "voice": "Kore",
+    "hash": "de002872b7e8af56"
+  },
+  "phrases/ep230.mp3": {
+    "voice": "Kore",
+    "hash": "aeb3149f65de019c"
+  },
+  "phrases/ep231.mp3": {
+    "voice": "Kore",
+    "hash": "040100d357de05b6"
+  },
+  "phrases/ep232.mp3": {
+    "voice": "Kore",
+    "hash": "31b1610ea926a756"
+  },
+  "phrases/ep233.mp3": {
+    "voice": "Kore",
+    "hash": "94350a568e3171bb"
+  },
+  "phrases/ep234.mp3": {
+    "voice": "Kore",
+    "hash": "b807bc701984df7b"
+  },
+  "phrases/ep235.mp3": {
+    "voice": "Kore",
+    "hash": "c5912dbede8fb3a0"
+  },
+  "phrases/ep236.mp3": {
+    "voice": "Kore",
+    "hash": "a1086ac0c50fd7a0"
+  },
+  "phrases/ep237.mp3": {
+    "voice": "Kore",
+    "hash": "070cfea69796227a"
+  },
+  "phrases/ep238.mp3": {
+    "voice": "Kore",
+    "hash": "06e21863fea4b5ac"
+  },
+  "phrases/ep239.mp3": {
+    "voice": "Kore",
+    "hash": "ad3a85b6109934d2"
+  },
+  "phrases/ep240.mp3": {
+    "voice": "Kore",
+    "hash": "79058e8e81c1ff08"
+  },
+  "phrases/ep241.mp3": {
+    "voice": "Kore",
+    "hash": "08cfbb0765aa2aee"
+  },
+  "phrases/ep242.mp3": {
+    "voice": "Kore",
+    "hash": "71ba97af897ea5ab"
+  },
+  "phrases/ep243.mp3": {
+    "voice": "Kore",
+    "hash": "697b86d1d165f965"
+  },
+  "phrases/ep244.mp3": {
+    "voice": "Kore",
+    "hash": "b27e3f0fb5a77383"
+  },
+  "phrases/ep245.mp3": {
+    "voice": "Kore",
+    "hash": "67e3fbfb2c9403ad"
+  },
+  "phrases/ep246.mp3": {
+    "voice": "Kore",
+    "hash": "60b7caf6891ee0f6"
+  },
+  "phrases/ep247.mp3": {
+    "voice": "Kore",
+    "hash": "2cb77c141ab66eda"
+  },
+  "phrases/ep248.mp3": {
+    "voice": "Kore",
+    "hash": "47c9ad6a72d602fd"
+  },
+  "phrases/ep249.mp3": {
+    "voice": "Kore",
+    "hash": "ce5ae301032387e3"
+  },
+  "phrases/ep250.mp3": {
+    "voice": "Kore",
+    "hash": "497a51041f0be462"
+  },
+  "phrases/ep251.mp3": {
+    "voice": "Kore",
+    "hash": "f4d3d7135a441f6c"
+  },
+  "phrases/ep252.mp3": {
+    "voice": "Kore",
+    "hash": "7ba35e22064e351b"
+  },
+  "phrases/ep253.mp3": {
+    "voice": "Kore",
+    "hash": "1cbc1f36497af441"
+  },
+  "phrases/ep254.mp3": {
+    "voice": "Kore",
+    "hash": "2e44dbcdd39f8894"
+  },
+  "phrases/ep255.mp3": {
+    "voice": "Kore",
+    "hash": "08cf19a29e5b0553"
+  },
+  "phrases/ep256.mp3": {
+    "voice": "Kore",
+    "hash": "79dc663ab0b7e52c"
+  },
+  "phrases/ep257.mp3": {
+    "voice": "Kore",
+    "hash": "17ad5ee792152e4b"
+  },
+  "phrases/ep258.mp3": {
+    "voice": "Kore",
+    "hash": "c85d71b3ae041ea9"
+  },
+  "phrases/ep259.mp3": {
+    "voice": "Kore",
+    "hash": "5dfc454a55d97527"
+  },
+  "phrases/ep260.mp3": {
+    "voice": "Kore",
+    "hash": "51b7a973d2ebcd6e"
+  },
+  "phrases/ep261.mp3": {
+    "voice": "Kore",
+    "hash": "ae8eecabcd04a822"
+  },
+  "phrases/ep262.mp3": {
+    "voice": "Kore",
+    "hash": "bc40adcccff1ce5a"
+  },
+  "phrases/ep263.mp3": {
+    "voice": "Kore",
+    "hash": "5e1a699e1b28def3"
+  },
+  "phrases/ep264.mp3": {
+    "voice": "Kore",
+    "hash": "7740e1e87ad531a8"
+  },
+  "phrases/ep265.mp3": {
+    "voice": "Kore",
+    "hash": "24f7a588fd63437e"
+  },
+  "phrases/ep266.mp3": {
+    "voice": "Kore",
+    "hash": "fce65f65497f96ca"
+  },
+  "phrases/ep267.mp3": {
+    "voice": "Kore",
+    "hash": "97757398c6997287"
+  },
+  "phrases/ep268.mp3": {
+    "voice": "Kore",
+    "hash": "e1d8a2a0e64ea258"
+  },
+  "phrases/ep269.mp3": {
+    "voice": "Kore",
+    "hash": "b03d0dfbd2f2f676"
+  },
+  "phrases/ep270.mp3": {
+    "voice": "Kore",
+    "hash": "1d153ca82defcd61"
+  },
+  "phrases/ep271.mp3": {
+    "voice": "Kore",
+    "hash": "25a8d9aea9eeea5e"
+  },
+  "phrases/ep272.mp3": {
+    "voice": "Kore",
+    "hash": "786bd0635a1d648c"
+  },
+  "phrases/ep273.mp3": {
+    "voice": "Kore",
+    "hash": "f536cb1c9e3dc858"
+  },
+  "phrases/ep274.mp3": {
+    "voice": "Kore",
+    "hash": "0c3c139516f57f70"
+  },
+  "phrases/ep275.mp3": {
+    "voice": "Kore",
+    "hash": "4ade7e984f23cbb1"
+  },
+  "phrases/ep276.mp3": {
+    "voice": "Kore",
+    "hash": "cc53c86d606fbc9a"
+  },
+  "phrases/ep277.mp3": {
+    "voice": "Kore",
+    "hash": "367e66bbcfc63cf5"
+  },
+  "phrases/ep278.mp3": {
+    "voice": "Kore",
+    "hash": "98d81bf47f6e4f60"
+  },
+  "phrases/ep279.mp3": {
+    "voice": "Kore",
+    "hash": "3770d14493373308"
+  },
+  "phrases/ep280.mp3": {
+    "voice": "Kore",
+    "hash": "8f173445ee7e7b4a"
+  },
+  "phrases/ep281.mp3": {
+    "voice": "Kore",
+    "hash": "2f8cd492a2f333eb"
+  },
+  "phrases/ep282.mp3": {
+    "voice": "Kore",
+    "hash": "143f6a1308ed0a96"
+  },
+  "phrases/ep283.mp3": {
+    "voice": "Kore",
+    "hash": "8eeb6166c7110533"
+  },
+  "phrases/ep284.mp3": {
+    "voice": "Kore",
+    "hash": "eed10a8a5ab88874"
+  },
+  "phrases/ep285.mp3": {
+    "voice": "Kore",
+    "hash": "bfd82fa252e5a242"
+  },
+  "phrases/ep286.mp3": {
+    "voice": "Kore",
+    "hash": "7d6d1b785d514f10"
+  },
+  "phrases/ep287.mp3": {
+    "voice": "Kore",
+    "hash": "6daec677ad2032f1"
+  },
+  "phrases/ep288.mp3": {
+    "voice": "Kore",
+    "hash": "7f6177c01f6ec95c"
+  },
+  "phrases/ep289.mp3": {
+    "voice": "Kore",
+    "hash": "d4075025c9ed9c86"
+  },
+  "phrases/ep290.mp3": {
+    "voice": "Kore",
+    "hash": "3afcaa075e0bfd0e"
+  },
+  "phrases/ep291.mp3": {
+    "voice": "Kore",
+    "hash": "76ed2cc574914a63"
+  },
+  "phrases/ep292.mp3": {
+    "voice": "Kore",
+    "hash": "8a84a7bc36e9d0cf"
+  },
+  "phrases/ep293.mp3": {
+    "voice": "Kore",
+    "hash": "ed11a694c9170b62"
+  },
+  "phrases/ep294.mp3": {
+    "voice": "Kore",
+    "hash": "2f2724de700c7557"
+  },
+  "phrases/ep295.mp3": {
+    "voice": "Kore",
+    "hash": "f901949431d8ec29"
+  },
+  "phrases/ep296.mp3": {
+    "voice": "Kore",
+    "hash": "c43a52b2a7d165e0"
+  },
+  "phrases/ep297.mp3": {
+    "voice": "Kore",
+    "hash": "886199ba489d323b"
+  },
+  "phrases/ep298.mp3": {
+    "voice": "Kore",
+    "hash": "2fd2f08ad86c1e2a"
+  },
+  "phrases/ep299.mp3": {
+    "voice": "Kore",
+    "hash": "07ae38410bd9aaf8"
+  },
+  "phrases/ep300.mp3": {
+    "voice": "Kore",
+    "hash": "101f96e538baeb6b"
+  },
+  "phrases/ep301.mp3": {
+    "voice": "Kore",
+    "hash": "deff3584bb059a1d"
+  },
+  "phrases/ep302.mp3": {
+    "voice": "Kore",
+    "hash": "5bc8d499e8f62380"
+  },
+  "phrases/ep303.mp3": {
+    "voice": "Kore",
+    "hash": "b42cdf5c38f6cde3"
+  },
+  "phrases/ep304.mp3": {
+    "voice": "Kore",
+    "hash": "b8ea5bfeccee3aac"
+  },
+  "phrases/ep305.mp3": {
+    "voice": "Kore",
+    "hash": "1e30281ef5197d5e"
+  },
+  "phrases/ep306.mp3": {
+    "voice": "Kore",
+    "hash": "8e775a398767bd17"
+  },
+  "phrases/ep307.mp3": {
+    "voice": "Kore",
+    "hash": "12f3443db4299e29"
+  },
+  "phrases/ep308.mp3": {
+    "voice": "Kore",
+    "hash": "bca7d17894b7c7a1"
+  },
+  "phrases/ep309.mp3": {
+    "voice": "Kore",
+    "hash": "1527157c5d49ed44"
+  },
+  "phrases/ep310.mp3": {
+    "voice": "Kore",
+    "hash": "8a00b17b1c188312"
+  },
+  "phrases/ep311.mp3": {
+    "voice": "Kore",
+    "hash": "d62512b42fc568dc"
+  },
+  "phrases/ep312.mp3": {
+    "voice": "Kore",
+    "hash": "5c4b2d3a9372a049"
+  },
+  "phrases/ep313.mp3": {
+    "voice": "Kore",
+    "hash": "7bab7d7b00529360"
+  },
+  "phrases/ep314.mp3": {
+    "voice": "Kore",
+    "hash": "090803d91c2da2a9"
+  },
+  "phrases/ep315.mp3": {
+    "voice": "Kore",
+    "hash": "d9d94303b2d7b27a"
+  },
+  "phrases/ep316.mp3": {
+    "voice": "Kore",
+    "hash": "ef9af5986a510093"
+  },
+  "phrases/ep317.mp3": {
+    "voice": "Kore",
+    "hash": "ea2e9a2f975df2a3"
+  },
+  "phrases/ep318.mp3": {
+    "voice": "Kore",
+    "hash": "9aed21458218fba3"
+  },
+  "phrases/ep319.mp3": {
+    "voice": "Kore",
+    "hash": "7ee7e31c4b7f9fca"
+  },
+  "phrases/ep320.mp3": {
+    "voice": "Kore",
+    "hash": "e6a14b27eca2068c"
+  },
+  "phrases/ep321.mp3": {
+    "voice": "Kore",
+    "hash": "27b9ab9f0e137e60"
+  },
+  "phrases/ep322.mp3": {
+    "voice": "Kore",
+    "hash": "e4c61f3c3d57036a"
+  },
+  "phrases/ep323.mp3": {
+    "voice": "Kore",
+    "hash": "c79bda339142c9e7"
+  },
+  "phrases/ep324.mp3": {
+    "voice": "Kore",
+    "hash": "04daa08491314666"
+  },
+  "phrases/ep325.mp3": {
+    "voice": "Kore",
+    "hash": "ff166ce6bc0eb809"
+  },
+  "phrases/ep326.mp3": {
+    "voice": "Kore",
+    "hash": "5b3329735ee24f05"
+  },
+  "phrases/ep327.mp3": {
+    "voice": "Kore",
+    "hash": "b264a7509e46adab"
+  },
+  "phrases/ep328.mp3": {
+    "voice": "Kore",
+    "hash": "5ceff1e31edb4bd5"
+  },
+  "phrases/ep329.mp3": {
+    "voice": "Kore",
+    "hash": "fe651e2001be9594"
+  },
+  "phrases/ep330.mp3": {
+    "voice": "Kore",
+    "hash": "4f245161993583c3"
+  },
+  "phrases/ep331.mp3": {
+    "voice": "Kore",
+    "hash": "fa77be8032ae6059"
+  },
+  "phrases/ep332.mp3": {
+    "voice": "Kore",
+    "hash": "7ca2ea01ea979bf5"
+  },
+  "phrases/ep333.mp3": {
+    "voice": "Kore",
+    "hash": "5581963edf7dc32b"
+  },
+  "phrases/ep334.mp3": {
+    "voice": "Kore",
+    "hash": "2b74cfa47ea7d936"
+  },
+  "phrases/ep335.mp3": {
+    "voice": "Kore",
+    "hash": "ddbb341694307248"
+  },
+  "phrases/ep336.mp3": {
+    "voice": "Kore",
+    "hash": "89fe33f00ee9d3d6"
+  },
+  "phrases/ep337.mp3": {
+    "voice": "Kore",
+    "hash": "6a83d8ece70e68df"
+  },
+  "phrases/ep338.mp3": {
+    "voice": "Kore",
+    "hash": "676f711ee71ab948"
+  },
+  "phrases/ep339.mp3": {
+    "voice": "Kore",
+    "hash": "b5ca912a290e80fb"
+  },
+  "phrases/ep340.mp3": {
+    "voice": "Kore",
+    "hash": "a8d3367f304a0923"
+  },
+  "phrases/ep341.mp3": {
+    "voice": "Kore",
+    "hash": "aa23b482adb72898"
+  },
+  "phrases/ep342.mp3": {
+    "voice": "Kore",
+    "hash": "5450136749f1637e"
+  },
+  "phrases/ep343.mp3": {
+    "voice": "Kore",
+    "hash": "74528100fa8caa25"
+  },
+  "phrases/ep344.mp3": {
+    "voice": "Kore",
+    "hash": "0452fb97669af625"
+  },
+  "phrases/ep345.mp3": {
+    "voice": "Kore",
+    "hash": "2e6f13aa12d72b4b"
+  },
+  "phrases/ep346.mp3": {
+    "voice": "Kore",
+    "hash": "5522e4ffaf941269"
+  },
+  "phrases/ep347.mp3": {
+    "voice": "Kore",
+    "hash": "117aa59dc9a1a8e2"
+  },
+  "phrases/ep348.mp3": {
+    "voice": "Kore",
+    "hash": "a40a4cf978c03100"
+  },
+  "phrases/ep349.mp3": {
+    "voice": "Kore",
+    "hash": "b7a919043e46ae1e"
+  },
+  "phrases/ep350.mp3": {
+    "voice": "Kore",
+    "hash": "8b29f4e964923b96"
+  },
+  "phrases/ep351.mp3": {
+    "voice": "Kore",
+    "hash": "15e866b0474e5476"
+  },
+  "phrases/ep352.mp3": {
+    "voice": "Kore",
+    "hash": "12dbe70c5ca5c335"
+  },
+  "phrases/ep353.mp3": {
+    "voice": "Kore",
+    "hash": "438d66a14f911193"
+  },
+  "phrases/ep354.mp3": {
+    "voice": "Kore",
+    "hash": "08a9ec75fe0269b7"
+  },
+  "phrases/ep355.mp3": {
+    "voice": "Kore",
+    "hash": "d005b0325caf767c"
+  },
+  "phrases/ep356.mp3": {
+    "voice": "Kore",
+    "hash": "5b99462d3a95986b"
+  },
+  "phrases/ep357.mp3": {
+    "voice": "Kore",
+    "hash": "28149daeb1d373e0"
+  },
+  "phrases/ep358.mp3": {
+    "voice": "Kore",
+    "hash": "d810d1268fc2d9cb"
+  },
+  "phrases/ep359.mp3": {
+    "voice": "Kore",
+    "hash": "d304476c54c21f0e"
+  },
+  "phrases/ep360.mp3": {
+    "voice": "Kore",
+    "hash": "049ee248fe40bc6d"
+  },
+  "phrases/ep361.mp3": {
+    "voice": "Kore",
+    "hash": "be80df36109cea18"
+  },
+  "phrases/ep362.mp3": {
+    "voice": "Kore",
+    "hash": "bf596e296d2434ae"
+  },
+  "phrases/ep363.mp3": {
+    "voice": "Kore",
+    "hash": "7e62860939a78f1c"
+  },
+  "phrases/ep364.mp3": {
+    "voice": "Kore",
+    "hash": "4ad7cb7aa62e6bec"
+  },
+  "phrases/ep365.mp3": {
+    "voice": "Kore",
+    "hash": "714156249598de11"
+  },
+  "phrases/ep366.mp3": {
+    "voice": "Kore",
+    "hash": "18dce3c5d719c869"
+  },
+  "phrases/ep367.mp3": {
+    "voice": "Kore",
+    "hash": "ed5e8231cbc5c216"
+  },
+  "phrases/ep368.mp3": {
+    "voice": "Kore",
+    "hash": "09107c3a54179be8"
+  },
+  "phrases/ep369.mp3": {
+    "voice": "Kore",
+    "hash": "a9facf526b2dbac0"
+  },
+  "phrases/ep370.mp3": {
+    "voice": "Kore",
+    "hash": "b4a48fa92b70092a"
+  },
+  "phrases/ep371.mp3": {
+    "voice": "Kore",
+    "hash": "19f0d425166252c8"
+  },
+  "phrases/ep372.mp3": {
+    "voice": "Kore",
+    "hash": "95e51a8ded968db7"
+  },
+  "phrases/ep373.mp3": {
+    "voice": "Kore",
+    "hash": "16a8436ee6924fbd"
+  },
+  "phrases/ep374.mp3": {
+    "voice": "Kore",
+    "hash": "9aabebe171ac9797"
+  },
+  "phrases/ep375.mp3": {
+    "voice": "Kore",
+    "hash": "c78d2e6fbb76cc8f"
+  },
+  "phrases/ep376.mp3": {
+    "voice": "Kore",
+    "hash": "7a799f6dda0ef060"
+  },
+  "phrases/ep377.mp3": {
+    "voice": "Kore",
+    "hash": "2ac0285354152157"
+  },
+  "phrases/ep378.mp3": {
+    "voice": "Kore",
+    "hash": "9703c9b283badce8"
+  },
+  "phrases/ep379.mp3": {
+    "voice": "Kore",
+    "hash": "60c56ff2dadd1c46"
+  },
+  "phrases/ep380.mp3": {
+    "voice": "Kore",
+    "hash": "8dcbebc76a86f4d9"
+  },
+  "phrases/ep381.mp3": {
+    "voice": "Kore",
+    "hash": "822a113fd8ae8ca7"
+  },
+  "phrases/ep382.mp3": {
+    "voice": "Kore",
+    "hash": "bc99fe7b685b5d58"
+  },
+  "phrases/ep383.mp3": {
+    "voice": "Kore",
+    "hash": "c5255c8dc4c5ae5c"
+  },
+  "phrases/ep384.mp3": {
+    "voice": "Kore",
+    "hash": "f06425d0355e7481"
+  },
+  "phrases/ep385.mp3": {
+    "voice": "Kore",
+    "hash": "7488c8ddc81870d3"
+  },
+  "phrases/ep386.mp3": {
+    "voice": "Kore",
+    "hash": "1701e66dd07d0756"
+  },
+  "phrases/ep387.mp3": {
+    "voice": "Kore",
+    "hash": "582d2edd12160df7"
+  },
+  "phrases/ep388.mp3": {
+    "voice": "Kore",
+    "hash": "2646d88abe22c74d"
+  },
+  "phrases/ep389.mp3": {
+    "voice": "Kore",
+    "hash": "5584fe22878dda98"
+  },
+  "phrases/ep390.mp3": {
+    "voice": "Kore",
+    "hash": "eb7f648ab75a1380"
+  },
+  "phrases/ep391.mp3": {
+    "voice": "Kore",
+    "hash": "93f4a9af5516482b"
+  },
+  "phrases/ep392.mp3": {
+    "voice": "Kore",
+    "hash": "2698a8fb92eeb9b3"
+  },
+  "phrases/ep393.mp3": {
+    "voice": "Kore",
+    "hash": "33d5f02858a67fc5"
+  },
+  "phrases/ep394.mp3": {
+    "voice": "Kore",
+    "hash": "7b65d26ed9742b76"
+  },
+  "phrases/ep395.mp3": {
+    "voice": "Kore",
+    "hash": "1bbb89a95a439c3e"
+  },
+  "phrases/ep396.mp3": {
+    "voice": "Kore",
+    "hash": "d45c91f48fdbf266"
+  },
+  "phrases/ep397.mp3": {
+    "voice": "Kore",
+    "hash": "6a383bb2f0612bfb"
+  },
+  "phrases/ep398.mp3": {
+    "voice": "Kore",
+    "hash": "13f28c61677da55b"
+  },
+  "phrases/ep399.mp3": {
+    "voice": "Kore",
+    "hash": "fd976ac03c1d9eeb"
+  },
+  "phrases/ep400.mp3": {
+    "voice": "Kore",
+    "hash": "b520f20c069af02f"
   },
   "phrases/p001.mp3": {
     "voice": "Kore",
@@ -21250,6 +23258,1126 @@
   "words/ew280.mp3": {
     "voice": "Kore",
     "hash": "51a905a5d2a1c434"
+  },
+  "words/ew281.mp3": {
+    "voice": "Kore",
+    "hash": "c8be7b306e4ee318"
+  },
+  "words/ew282.mp3": {
+    "voice": "Kore",
+    "hash": "2787d75f0c32154d"
+  },
+  "words/ew283.mp3": {
+    "voice": "Kore",
+    "hash": "63bb719e185476f8"
+  },
+  "words/ew284.mp3": {
+    "voice": "Kore",
+    "hash": "05cc8866c4ee332b"
+  },
+  "words/ew285.mp3": {
+    "voice": "Kore",
+    "hash": "01eba25d606ca298"
+  },
+  "words/ew286.mp3": {
+    "voice": "Kore",
+    "hash": "a75c8b0f6ef94e87"
+  },
+  "words/ew287.mp3": {
+    "voice": "Kore",
+    "hash": "20a8c9b857757fe9"
+  },
+  "words/ew288.mp3": {
+    "voice": "Kore",
+    "hash": "0e3ec781c0e96079"
+  },
+  "words/ew289.mp3": {
+    "voice": "Kore",
+    "hash": "8c15849ded843e4a"
+  },
+  "words/ew290.mp3": {
+    "voice": "Kore",
+    "hash": "fa00a84bf16056d0"
+  },
+  "words/ew291.mp3": {
+    "voice": "Kore",
+    "hash": "d65f8a5d5cb7e2d9"
+  },
+  "words/ew292.mp3": {
+    "voice": "Kore",
+    "hash": "b31a67c38e97ab36"
+  },
+  "words/ew293.mp3": {
+    "voice": "Kore",
+    "hash": "e19a67b792753a15"
+  },
+  "words/ew294.mp3": {
+    "voice": "Kore",
+    "hash": "7965a7fe9b31a9a8"
+  },
+  "words/ew295.mp3": {
+    "voice": "Kore",
+    "hash": "53a99d79409cf41c"
+  },
+  "words/ew296.mp3": {
+    "voice": "Kore",
+    "hash": "37d5fcd25d63caf8"
+  },
+  "words/ew297.mp3": {
+    "voice": "Kore",
+    "hash": "8a836c4b226cd95a"
+  },
+  "words/ew298.mp3": {
+    "voice": "Kore",
+    "hash": "77060acd4b147386"
+  },
+  "words/ew299.mp3": {
+    "voice": "Kore",
+    "hash": "f78c6ff41240ae4e"
+  },
+  "words/ew300.mp3": {
+    "voice": "Kore",
+    "hash": "da3f768b9741c8ef"
+  },
+  "words/ew301.mp3": {
+    "voice": "Kore",
+    "hash": "ed3f49d0beae8be3"
+  },
+  "words/ew302.mp3": {
+    "voice": "Kore",
+    "hash": "18a0e80a20c72bd7"
+  },
+  "words/ew303.mp3": {
+    "voice": "Kore",
+    "hash": "7714d5c286947acc"
+  },
+  "words/ew304.mp3": {
+    "voice": "Kore",
+    "hash": "35ebdc97af10068a"
+  },
+  "words/ew305.mp3": {
+    "voice": "Kore",
+    "hash": "b41afd8a2ff634cc"
+  },
+  "words/ew306.mp3": {
+    "voice": "Kore",
+    "hash": "73cfef36d44375c4"
+  },
+  "words/ew307.mp3": {
+    "voice": "Kore",
+    "hash": "c203390e3a2346bd"
+  },
+  "words/ew308.mp3": {
+    "voice": "Kore",
+    "hash": "af8998e3eb1e8582"
+  },
+  "words/ew309.mp3": {
+    "voice": "Kore",
+    "hash": "95df68f93d14a966"
+  },
+  "words/ew310.mp3": {
+    "voice": "Kore",
+    "hash": "478bffb2b5d4b7a0"
+  },
+  "words/ew311.mp3": {
+    "voice": "Kore",
+    "hash": "68f5b2249fd9da6d"
+  },
+  "words/ew312.mp3": {
+    "voice": "Kore",
+    "hash": "5a67b3564652808e"
+  },
+  "words/ew313.mp3": {
+    "voice": "Kore",
+    "hash": "4a0bf1e6033b0e82"
+  },
+  "words/ew314.mp3": {
+    "voice": "Kore",
+    "hash": "345bfd1d494314c1"
+  },
+  "words/ew315.mp3": {
+    "voice": "Kore",
+    "hash": "e0da3822b43f1c81"
+  },
+  "words/ew316.mp3": {
+    "voice": "Kore",
+    "hash": "99c0a4d173d17e08"
+  },
+  "words/ew317.mp3": {
+    "voice": "Kore",
+    "hash": "b5c7bdbd8ff6d246"
+  },
+  "words/ew318.mp3": {
+    "voice": "Kore",
+    "hash": "8a31558518cdf5e6"
+  },
+  "words/ew319.mp3": {
+    "voice": "Kore",
+    "hash": "9be59b02e7f6ef25"
+  },
+  "words/ew320.mp3": {
+    "voice": "Kore",
+    "hash": "c3eae68bb103b564"
+  },
+  "words/ew321.mp3": {
+    "voice": "Kore",
+    "hash": "19282d460c2236d0"
+  },
+  "words/ew322.mp3": {
+    "voice": "Kore",
+    "hash": "f6e6061f83ed1ce8"
+  },
+  "words/ew323.mp3": {
+    "voice": "Kore",
+    "hash": "ba0be33b5dc3ef3c"
+  },
+  "words/ew324.mp3": {
+    "voice": "Kore",
+    "hash": "be14a9089730ca4b"
+  },
+  "words/ew325.mp3": {
+    "voice": "Kore",
+    "hash": "6f7bc7fb0dda320c"
+  },
+  "words/ew326.mp3": {
+    "voice": "Kore",
+    "hash": "a7088c794ca89323"
+  },
+  "words/ew327.mp3": {
+    "voice": "Kore",
+    "hash": "5ef0a37b19eb6e51"
+  },
+  "words/ew328.mp3": {
+    "voice": "Kore",
+    "hash": "7cb8d0b114c0917e"
+  },
+  "words/ew329.mp3": {
+    "voice": "Kore",
+    "hash": "89822892c9d2a79a"
+  },
+  "words/ew330.mp3": {
+    "voice": "Kore",
+    "hash": "b45acc8e09f8e911"
+  },
+  "words/ew331.mp3": {
+    "voice": "Kore",
+    "hash": "5761baf159ef6aea"
+  },
+  "words/ew332.mp3": {
+    "voice": "Kore",
+    "hash": "b0c7c0a20b86dba8"
+  },
+  "words/ew333.mp3": {
+    "voice": "Kore",
+    "hash": "eeb2fafd05cadaf5"
+  },
+  "words/ew334.mp3": {
+    "voice": "Kore",
+    "hash": "0b9bc3588545e38c"
+  },
+  "words/ew335.mp3": {
+    "voice": "Kore",
+    "hash": "64b4260b45c90aa7"
+  },
+  "words/ew336.mp3": {
+    "voice": "Kore",
+    "hash": "1bba4519387bb936"
+  },
+  "words/ew337.mp3": {
+    "voice": "Kore",
+    "hash": "e2b1ab0d1da47457"
+  },
+  "words/ew338.mp3": {
+    "voice": "Kore",
+    "hash": "2470640960f6d17c"
+  },
+  "words/ew339.mp3": {
+    "voice": "Kore",
+    "hash": "6bb86859ee6386c5"
+  },
+  "words/ew340.mp3": {
+    "voice": "Kore",
+    "hash": "2e8c44c09ca8cc89"
+  },
+  "words/ew341.mp3": {
+    "voice": "Kore",
+    "hash": "f377a1ffa0e7dd11"
+  },
+  "words/ew342.mp3": {
+    "voice": "Kore",
+    "hash": "6083fb934e8a7a13"
+  },
+  "words/ew343.mp3": {
+    "voice": "Kore",
+    "hash": "27b832307ef3dbab"
+  },
+  "words/ew344.mp3": {
+    "voice": "Kore",
+    "hash": "7014ebcffe4585c3"
+  },
+  "words/ew345.mp3": {
+    "voice": "Kore",
+    "hash": "97bd4c5a1bb95f5f"
+  },
+  "words/ew346.mp3": {
+    "voice": "Kore",
+    "hash": "0b6019a8e68625c3"
+  },
+  "words/ew347.mp3": {
+    "voice": "Kore",
+    "hash": "3c632b8a5ce753fe"
+  },
+  "words/ew348.mp3": {
+    "voice": "Kore",
+    "hash": "3b4ce0c3a2533560"
+  },
+  "words/ew349.mp3": {
+    "voice": "Kore",
+    "hash": "0193d60d97b984ab"
+  },
+  "words/ew350.mp3": {
+    "voice": "Kore",
+    "hash": "ea60e0097dee1aec"
+  },
+  "words/ew351.mp3": {
+    "voice": "Kore",
+    "hash": "6400b24e636c7e97"
+  },
+  "words/ew352.mp3": {
+    "voice": "Kore",
+    "hash": "986589871d2ee2aa"
+  },
+  "words/ew353.mp3": {
+    "voice": "Kore",
+    "hash": "9fe46fd3484d7672"
+  },
+  "words/ew354.mp3": {
+    "voice": "Kore",
+    "hash": "ad9d60800527aaa9"
+  },
+  "words/ew355.mp3": {
+    "voice": "Kore",
+    "hash": "33c4a9a87cdf56e0"
+  },
+  "words/ew356.mp3": {
+    "voice": "Kore",
+    "hash": "7157352856fed85c"
+  },
+  "words/ew357.mp3": {
+    "voice": "Kore",
+    "hash": "efced7ed0ecad529"
+  },
+  "words/ew358.mp3": {
+    "voice": "Kore",
+    "hash": "23cad878fc547909"
+  },
+  "words/ew359.mp3": {
+    "voice": "Kore",
+    "hash": "715ec507581c3584"
+  },
+  "words/ew360.mp3": {
+    "voice": "Kore",
+    "hash": "73126e255a1cb3f1"
+  },
+  "words/ew361.mp3": {
+    "voice": "Kore",
+    "hash": "f7d8853361ff7652"
+  },
+  "words/ew362.mp3": {
+    "voice": "Kore",
+    "hash": "3579c3c6500941d8"
+  },
+  "words/ew363.mp3": {
+    "voice": "Kore",
+    "hash": "df7fa2a0eb24bc81"
+  },
+  "words/ew364.mp3": {
+    "voice": "Kore",
+    "hash": "07ea0b08c78583ae"
+  },
+  "words/ew365.mp3": {
+    "voice": "Kore",
+    "hash": "cc8b119b6d81a7e2"
+  },
+  "words/ew366.mp3": {
+    "voice": "Kore",
+    "hash": "1d2b991fd316ac54"
+  },
+  "words/ew367.mp3": {
+    "voice": "Kore",
+    "hash": "263023dfdf7ab1cf"
+  },
+  "words/ew368.mp3": {
+    "voice": "Kore",
+    "hash": "a7a496e36d56f93f"
+  },
+  "words/ew369.mp3": {
+    "voice": "Kore",
+    "hash": "28d3a64230eb0b06"
+  },
+  "words/ew370.mp3": {
+    "voice": "Kore",
+    "hash": "4283c1c67033ee77"
+  },
+  "words/ew371.mp3": {
+    "voice": "Kore",
+    "hash": "5ce299781a6eb31f"
+  },
+  "words/ew372.mp3": {
+    "voice": "Kore",
+    "hash": "b19a64227bafde3d"
+  },
+  "words/ew373.mp3": {
+    "voice": "Kore",
+    "hash": "41795e9b859c7518"
+  },
+  "words/ew374.mp3": {
+    "voice": "Kore",
+    "hash": "aad232711a690065"
+  },
+  "words/ew375.mp3": {
+    "voice": "Kore",
+    "hash": "a1799b0e988a732e"
+  },
+  "words/ew376.mp3": {
+    "voice": "Kore",
+    "hash": "04818c29d29458cc"
+  },
+  "words/ew377.mp3": {
+    "voice": "Kore",
+    "hash": "a1ad15b625d6a96b"
+  },
+  "words/ew378.mp3": {
+    "voice": "Kore",
+    "hash": "4e0815df5c9989e8"
+  },
+  "words/ew379.mp3": {
+    "voice": "Kore",
+    "hash": "bf206a63a96d2071"
+  },
+  "words/ew380.mp3": {
+    "voice": "Kore",
+    "hash": "772cdfc279fdc92d"
+  },
+  "words/ew381.mp3": {
+    "voice": "Kore",
+    "hash": "b4f4c314e8d5ec28"
+  },
+  "words/ew382.mp3": {
+    "voice": "Kore",
+    "hash": "a9e0194ab6bfffa7"
+  },
+  "words/ew383.mp3": {
+    "voice": "Kore",
+    "hash": "e84ad51351a7b0e5"
+  },
+  "words/ew384.mp3": {
+    "voice": "Kore",
+    "hash": "739b97af2a6b5ad3"
+  },
+  "words/ew385.mp3": {
+    "voice": "Kore",
+    "hash": "84ec4b2e2a5ae376"
+  },
+  "words/ew386.mp3": {
+    "voice": "Kore",
+    "hash": "610eefdc3d746662"
+  },
+  "words/ew387.mp3": {
+    "voice": "Kore",
+    "hash": "7a1bf33fd27ae5da"
+  },
+  "words/ew388.mp3": {
+    "voice": "Kore",
+    "hash": "e1f29c91e8dfb2ba"
+  },
+  "words/ew389.mp3": {
+    "voice": "Kore",
+    "hash": "0854127e374dc927"
+  },
+  "words/ew390.mp3": {
+    "voice": "Kore",
+    "hash": "4a7e4e9ee44b73a9"
+  },
+  "words/ew391.mp3": {
+    "voice": "Kore",
+    "hash": "5f8a1f4bf6a50908"
+  },
+  "words/ew392.mp3": {
+    "voice": "Kore",
+    "hash": "31d35e4bb969c41e"
+  },
+  "words/ew393.mp3": {
+    "voice": "Kore",
+    "hash": "1a5989b58185de49"
+  },
+  "words/ew394.mp3": {
+    "voice": "Kore",
+    "hash": "52ade44e32d42240"
+  },
+  "words/ew395.mp3": {
+    "voice": "Kore",
+    "hash": "5b7e37c8f7f8b889"
+  },
+  "words/ew396.mp3": {
+    "voice": "Kore",
+    "hash": "f579f0f6575a4b77"
+  },
+  "words/ew397.mp3": {
+    "voice": "Kore",
+    "hash": "595239107d7e92e2"
+  },
+  "words/ew398.mp3": {
+    "voice": "Kore",
+    "hash": "a8a162bcf25d792e"
+  },
+  "words/ew399.mp3": {
+    "voice": "Kore",
+    "hash": "9ab63188e44db569"
+  },
+  "words/ew400.mp3": {
+    "voice": "Kore",
+    "hash": "a29e564f60e0fc02"
+  },
+  "words/ew401.mp3": {
+    "voice": "Kore",
+    "hash": "325735647b6af5e0"
+  },
+  "words/ew402.mp3": {
+    "voice": "Kore",
+    "hash": "3dcffdc85ae627b5"
+  },
+  "words/ew403.mp3": {
+    "voice": "Kore",
+    "hash": "5ceb17df3b53f3b8"
+  },
+  "words/ew404.mp3": {
+    "voice": "Kore",
+    "hash": "244a79a1fd60a407"
+  },
+  "words/ew405.mp3": {
+    "voice": "Kore",
+    "hash": "5b69b694ac680cc3"
+  },
+  "words/ew406.mp3": {
+    "voice": "Kore",
+    "hash": "e0861db98545c53e"
+  },
+  "words/ew407.mp3": {
+    "voice": "Kore",
+    "hash": "d5e9f552706177f3"
+  },
+  "words/ew408.mp3": {
+    "voice": "Kore",
+    "hash": "811ae9634303b345"
+  },
+  "words/ew409.mp3": {
+    "voice": "Kore",
+    "hash": "2df3dbed4e8c1e42"
+  },
+  "words/ew410.mp3": {
+    "voice": "Kore",
+    "hash": "6273eff9175e3b3d"
+  },
+  "words/ew411.mp3": {
+    "voice": "Kore",
+    "hash": "da09a55d3ecbeed7"
+  },
+  "words/ew412.mp3": {
+    "voice": "Kore",
+    "hash": "53fa7fa36e14107e"
+  },
+  "words/ew413.mp3": {
+    "voice": "Kore",
+    "hash": "ea24b550c5a470f6"
+  },
+  "words/ew414.mp3": {
+    "voice": "Kore",
+    "hash": "cfc0ec6376df9842"
+  },
+  "words/ew415.mp3": {
+    "voice": "Kore",
+    "hash": "cddb7e32225af0bf"
+  },
+  "words/ew416.mp3": {
+    "voice": "Kore",
+    "hash": "be2c8bed0a156d5f"
+  },
+  "words/ew417.mp3": {
+    "voice": "Kore",
+    "hash": "0de794ab9845d86a"
+  },
+  "words/ew418.mp3": {
+    "voice": "Kore",
+    "hash": "abca344012f78b9a"
+  },
+  "words/ew419.mp3": {
+    "voice": "Kore",
+    "hash": "9f729b8328a12839"
+  },
+  "words/ew420.mp3": {
+    "voice": "Kore",
+    "hash": "0368b2792e7e0212"
+  },
+  "words/ew421.mp3": {
+    "voice": "Kore",
+    "hash": "af21dd250426d041"
+  },
+  "words/ew422.mp3": {
+    "voice": "Kore",
+    "hash": "5a54812e769789df"
+  },
+  "words/ew423.mp3": {
+    "voice": "Kore",
+    "hash": "2e528f4b6d093aa6"
+  },
+  "words/ew424.mp3": {
+    "voice": "Kore",
+    "hash": "37ee25510c5c9cc5"
+  },
+  "words/ew425.mp3": {
+    "voice": "Kore",
+    "hash": "e157469accd10cc4"
+  },
+  "words/ew426.mp3": {
+    "voice": "Kore",
+    "hash": "aa810fa7711e73da"
+  },
+  "words/ew427.mp3": {
+    "voice": "Kore",
+    "hash": "78b4cf7987169756"
+  },
+  "words/ew428.mp3": {
+    "voice": "Kore",
+    "hash": "b9aaf241ba84b0fa"
+  },
+  "words/ew429.mp3": {
+    "voice": "Kore",
+    "hash": "c2237fae7a1a3aa6"
+  },
+  "words/ew430.mp3": {
+    "voice": "Kore",
+    "hash": "48d69baeca649643"
+  },
+  "words/ew431.mp3": {
+    "voice": "Kore",
+    "hash": "44bd16a65fc90df9"
+  },
+  "words/ew432.mp3": {
+    "voice": "Kore",
+    "hash": "519e3317c1f4d6a1"
+  },
+  "words/ew433.mp3": {
+    "voice": "Kore",
+    "hash": "ef6178607e86f174"
+  },
+  "words/ew434.mp3": {
+    "voice": "Kore",
+    "hash": "7366ddb6140bc8b5"
+  },
+  "words/ew435.mp3": {
+    "voice": "Kore",
+    "hash": "df98487ea508da80"
+  },
+  "words/ew436.mp3": {
+    "voice": "Kore",
+    "hash": "7e785ec18ed6a14b"
+  },
+  "words/ew437.mp3": {
+    "voice": "Kore",
+    "hash": "21ac83decdc18a74"
+  },
+  "words/ew438.mp3": {
+    "voice": "Kore",
+    "hash": "ba2525f6554dbcf1"
+  },
+  "words/ew439.mp3": {
+    "voice": "Kore",
+    "hash": "ee1e0ad5405f7436"
+  },
+  "words/ew440.mp3": {
+    "voice": "Kore",
+    "hash": "e68125b90fa452ae"
+  },
+  "words/ew441.mp3": {
+    "voice": "Kore",
+    "hash": "934d2953077282fc"
+  },
+  "words/ew442.mp3": {
+    "voice": "Kore",
+    "hash": "278850736f21d3da"
+  },
+  "words/ew443.mp3": {
+    "voice": "Kore",
+    "hash": "e9307ec77528fddb"
+  },
+  "words/ew444.mp3": {
+    "voice": "Kore",
+    "hash": "462708a2440f2d13"
+  },
+  "words/ew445.mp3": {
+    "voice": "Kore",
+    "hash": "c18503237e44230f"
+  },
+  "words/ew446.mp3": {
+    "voice": "Kore",
+    "hash": "182f6def3c235ee2"
+  },
+  "words/ew447.mp3": {
+    "voice": "Kore",
+    "hash": "f6d72513ff148a87"
+  },
+  "words/ew448.mp3": {
+    "voice": "Kore",
+    "hash": "2ec4c31e70a9aac8"
+  },
+  "words/ew449.mp3": {
+    "voice": "Kore",
+    "hash": "9ecbe775b804f93c"
+  },
+  "words/ew450.mp3": {
+    "voice": "Kore",
+    "hash": "c7a684e63de572e3"
+  },
+  "words/ew451.mp3": {
+    "voice": "Kore",
+    "hash": "5bbe5eaf9856c0f7"
+  },
+  "words/ew452.mp3": {
+    "voice": "Kore",
+    "hash": "28c178b0a20d9dd3"
+  },
+  "words/ew453.mp3": {
+    "voice": "Kore",
+    "hash": "50643db15815f870"
+  },
+  "words/ew454.mp3": {
+    "voice": "Kore",
+    "hash": "e1485668bdb90392"
+  },
+  "words/ew455.mp3": {
+    "voice": "Kore",
+    "hash": "f8d90cf52fcab674"
+  },
+  "words/ew456.mp3": {
+    "voice": "Kore",
+    "hash": "6fe44e11baf72ae1"
+  },
+  "words/ew457.mp3": {
+    "voice": "Kore",
+    "hash": "11811e9e44fad204"
+  },
+  "words/ew458.mp3": {
+    "voice": "Kore",
+    "hash": "b7e1a5798ab31c81"
+  },
+  "words/ew459.mp3": {
+    "voice": "Kore",
+    "hash": "ca53d5f3b3a646f4"
+  },
+  "words/ew460.mp3": {
+    "voice": "Kore",
+    "hash": "05b7d1e780c0cbe3"
+  },
+  "words/ew461.mp3": {
+    "voice": "Kore",
+    "hash": "151b9377676d888f"
+  },
+  "words/ew462.mp3": {
+    "voice": "Kore",
+    "hash": "727420c1348171b6"
+  },
+  "words/ew463.mp3": {
+    "voice": "Kore",
+    "hash": "8d43cb081a2e23f5"
+  },
+  "words/ew464.mp3": {
+    "voice": "Kore",
+    "hash": "3e8b107f2d0dedb8"
+  },
+  "words/ew465.mp3": {
+    "voice": "Kore",
+    "hash": "964fa5f3c6a4449f"
+  },
+  "words/ew466.mp3": {
+    "voice": "Kore",
+    "hash": "ff0fd890224be9dd"
+  },
+  "words/ew467.mp3": {
+    "voice": "Kore",
+    "hash": "5ee73df35c680436"
+  },
+  "words/ew468.mp3": {
+    "voice": "Kore",
+    "hash": "c4f5f9c07a459115"
+  },
+  "words/ew469.mp3": {
+    "voice": "Kore",
+    "hash": "d0ecc465b9232101"
+  },
+  "words/ew470.mp3": {
+    "voice": "Kore",
+    "hash": "fca6f45a2d745952"
+  },
+  "words/ew471.mp3": {
+    "voice": "Kore",
+    "hash": "7df8afd40561dc8e"
+  },
+  "words/ew472.mp3": {
+    "voice": "Kore",
+    "hash": "0570572f9e97ee76"
+  },
+  "words/ew473.mp3": {
+    "voice": "Kore",
+    "hash": "402948b03e0f4d67"
+  },
+  "words/ew474.mp3": {
+    "voice": "Kore",
+    "hash": "5321d69a9464c90c"
+  },
+  "words/ew475.mp3": {
+    "voice": "Kore",
+    "hash": "2c3a188dcbd732d0"
+  },
+  "words/ew476.mp3": {
+    "voice": "Kore",
+    "hash": "6b6aba0ba0ce919a"
+  },
+  "words/ew477.mp3": {
+    "voice": "Kore",
+    "hash": "203def4aff62c76d"
+  },
+  "words/ew478.mp3": {
+    "voice": "Kore",
+    "hash": "f37c5113a206ddac"
+  },
+  "words/ew479.mp3": {
+    "voice": "Kore",
+    "hash": "8d48bb36c0fa1f2b"
+  },
+  "words/ew480.mp3": {
+    "voice": "Kore",
+    "hash": "bc18fc57ccfc3ab2"
+  },
+  "words/ew481.mp3": {
+    "voice": "Kore",
+    "hash": "935b3ce9184b53de"
+  },
+  "words/ew482.mp3": {
+    "voice": "Kore",
+    "hash": "93e91b40e2a1e7c8"
+  },
+  "words/ew483.mp3": {
+    "voice": "Kore",
+    "hash": "678aeb8cd8992f98"
+  },
+  "words/ew484.mp3": {
+    "voice": "Kore",
+    "hash": "3367e6c09c3e634e"
+  },
+  "words/ew485.mp3": {
+    "voice": "Kore",
+    "hash": "86f9fbc9b59578bb"
+  },
+  "words/ew486.mp3": {
+    "voice": "Kore",
+    "hash": "afa23f80b6a0d220"
+  },
+  "words/ew487.mp3": {
+    "voice": "Kore",
+    "hash": "3bd9babdfb2c2125"
+  },
+  "words/ew488.mp3": {
+    "voice": "Kore",
+    "hash": "6e3849fcac297985"
+  },
+  "words/ew489.mp3": {
+    "voice": "Kore",
+    "hash": "a269410a91b79979"
+  },
+  "words/ew490.mp3": {
+    "voice": "Kore",
+    "hash": "c1070936190a0802"
+  },
+  "words/ew491.mp3": {
+    "voice": "Kore",
+    "hash": "34d5e69b4413dbc1"
+  },
+  "words/ew492.mp3": {
+    "voice": "Kore",
+    "hash": "65f47bff86447ec6"
+  },
+  "words/ew493.mp3": {
+    "voice": "Kore",
+    "hash": "adef6a9134e1a576"
+  },
+  "words/ew494.mp3": {
+    "voice": "Kore",
+    "hash": "d30ca28593e66ff0"
+  },
+  "words/ew495.mp3": {
+    "voice": "Kore",
+    "hash": "b9b2a328ee9f4fd8"
+  },
+  "words/ew496.mp3": {
+    "voice": "Kore",
+    "hash": "468ad5a02f6dbd11"
+  },
+  "words/ew497.mp3": {
+    "voice": "Kore",
+    "hash": "3a8da7f193a39ff1"
+  },
+  "words/ew498.mp3": {
+    "voice": "Kore",
+    "hash": "6730edb4757966b8"
+  },
+  "words/ew499.mp3": {
+    "voice": "Kore",
+    "hash": "7c10b6de7731d06c"
+  },
+  "words/ew500.mp3": {
+    "voice": "Kore",
+    "hash": "bb355aa1ede9b3b3"
+  },
+  "words/ew501.mp3": {
+    "voice": "Kore",
+    "hash": "e300364cc5720dde"
+  },
+  "words/ew502.mp3": {
+    "voice": "Kore",
+    "hash": "4905e93fd925f403"
+  },
+  "words/ew503.mp3": {
+    "voice": "Kore",
+    "hash": "126257823fa800ff"
+  },
+  "words/ew504.mp3": {
+    "voice": "Kore",
+    "hash": "f563d8250ed59ca8"
+  },
+  "words/ew505.mp3": {
+    "voice": "Kore",
+    "hash": "ed8c84afcc36e64e"
+  },
+  "words/ew506.mp3": {
+    "voice": "Kore",
+    "hash": "6c81668ff7dbb0e2"
+  },
+  "words/ew507.mp3": {
+    "voice": "Kore",
+    "hash": "4e4f277d47c13ccc"
+  },
+  "words/ew508.mp3": {
+    "voice": "Kore",
+    "hash": "c7caab5c8b62249b"
+  },
+  "words/ew509.mp3": {
+    "voice": "Kore",
+    "hash": "325bb7a174b1b1fa"
+  },
+  "words/ew510.mp3": {
+    "voice": "Kore",
+    "hash": "e09e2e872e4d04e1"
+  },
+  "words/ew511.mp3": {
+    "voice": "Kore",
+    "hash": "0652a3ad20084772"
+  },
+  "words/ew512.mp3": {
+    "voice": "Kore",
+    "hash": "13875e97229a70a1"
+  },
+  "words/ew513.mp3": {
+    "voice": "Kore",
+    "hash": "9720095575c849e9"
+  },
+  "words/ew514.mp3": {
+    "voice": "Kore",
+    "hash": "dcbf7687ec7f3bbc"
+  },
+  "words/ew515.mp3": {
+    "voice": "Kore",
+    "hash": "88f938ba3df7e027"
+  },
+  "words/ew516.mp3": {
+    "voice": "Kore",
+    "hash": "0677b7218a9068ff"
+  },
+  "words/ew517.mp3": {
+    "voice": "Kore",
+    "hash": "8f9eaa9eb62cdbbe"
+  },
+  "words/ew518.mp3": {
+    "voice": "Kore",
+    "hash": "773e6f87245f18b5"
+  },
+  "words/ew519.mp3": {
+    "voice": "Kore",
+    "hash": "482604358ec5cf53"
+  },
+  "words/ew520.mp3": {
+    "voice": "Kore",
+    "hash": "6a5647e6de84d2da"
+  },
+  "words/ew521.mp3": {
+    "voice": "Kore",
+    "hash": "ea9a41726fee29b1"
+  },
+  "words/ew522.mp3": {
+    "voice": "Kore",
+    "hash": "019a0b7a023d4bd5"
+  },
+  "words/ew523.mp3": {
+    "voice": "Kore",
+    "hash": "adb170f2e4db9be2"
+  },
+  "words/ew524.mp3": {
+    "voice": "Kore",
+    "hash": "3e53afb161657b37"
+  },
+  "words/ew525.mp3": {
+    "voice": "Kore",
+    "hash": "1d6af6f85a1d1766"
+  },
+  "words/ew526.mp3": {
+    "voice": "Kore",
+    "hash": "b41b95c367bb7abb"
+  },
+  "words/ew527.mp3": {
+    "voice": "Kore",
+    "hash": "89e4ae870363a3a8"
+  },
+  "words/ew528.mp3": {
+    "voice": "Kore",
+    "hash": "c484bb44994a4f3d"
+  },
+  "words/ew529.mp3": {
+    "voice": "Kore",
+    "hash": "7388ca3d9fbfb396"
+  },
+  "words/ew530.mp3": {
+    "voice": "Kore",
+    "hash": "2de174ff5e76718f"
+  },
+  "words/ew531.mp3": {
+    "voice": "Kore",
+    "hash": "74382ca925afa110"
+  },
+  "words/ew532.mp3": {
+    "voice": "Kore",
+    "hash": "1285bf15f08e355f"
+  },
+  "words/ew533.mp3": {
+    "voice": "Kore",
+    "hash": "cf34f6b8ce86c877"
+  },
+  "words/ew534.mp3": {
+    "voice": "Kore",
+    "hash": "414609905232479c"
+  },
+  "words/ew535.mp3": {
+    "voice": "Kore",
+    "hash": "b126badaf54bd963"
+  },
+  "words/ew536.mp3": {
+    "voice": "Kore",
+    "hash": "d09b6c9bcd92284f"
+  },
+  "words/ew537.mp3": {
+    "voice": "Kore",
+    "hash": "178a566b8546fa52"
+  },
+  "words/ew538.mp3": {
+    "voice": "Kore",
+    "hash": "342453d57ccdf554"
+  },
+  "words/ew539.mp3": {
+    "voice": "Kore",
+    "hash": "9bef6f47b5054263"
+  },
+  "words/ew540.mp3": {
+    "voice": "Kore",
+    "hash": "a339bfe781c2d730"
+  },
+  "words/ew541.mp3": {
+    "voice": "Kore",
+    "hash": "e0ec61635353c894"
+  },
+  "words/ew542.mp3": {
+    "voice": "Kore",
+    "hash": "98ca4552683e64f7"
+  },
+  "words/ew543.mp3": {
+    "voice": "Kore",
+    "hash": "b3ea52cc7693812e"
+  },
+  "words/ew544.mp3": {
+    "voice": "Kore",
+    "hash": "d46d02de82509313"
+  },
+  "words/ew545.mp3": {
+    "voice": "Kore",
+    "hash": "426590aff0e250fa"
+  },
+  "words/ew546.mp3": {
+    "voice": "Kore",
+    "hash": "1b791bc0eb7746df"
+  },
+  "words/ew547.mp3": {
+    "voice": "Kore",
+    "hash": "812c8bb8e27ba915"
+  },
+  "words/ew548.mp3": {
+    "voice": "Kore",
+    "hash": "2e7d32e9bd04c5e4"
+  },
+  "words/ew549.mp3": {
+    "voice": "Kore",
+    "hash": "b8341aa4d3abf141"
+  },
+  "words/ew550.mp3": {
+    "voice": "Kore",
+    "hash": "e7794db32e380735"
+  },
+  "words/ew551.mp3": {
+    "voice": "Kore",
+    "hash": "61fe93dec14c741d"
+  },
+  "words/ew552.mp3": {
+    "voice": "Kore",
+    "hash": "8dfa391e5069c393"
+  },
+  "words/ew553.mp3": {
+    "voice": "Kore",
+    "hash": "9223124d63359240"
+  },
+  "words/ew554.mp3": {
+    "voice": "Kore",
+    "hash": "4a4a2bd1587b4fde"
+  },
+  "words/ew555.mp3": {
+    "voice": "Kore",
+    "hash": "a7abeea85a8af73a"
+  },
+  "words/ew556.mp3": {
+    "voice": "Kore",
+    "hash": "374963212d149ea6"
+  },
+  "words/ew557.mp3": {
+    "voice": "Kore",
+    "hash": "a9113061d2eaf790"
+  },
+  "words/ew558.mp3": {
+    "voice": "Kore",
+    "hash": "1ccd065ed4154306"
+  },
+  "words/ew559.mp3": {
+    "voice": "Kore",
+    "hash": "c9199c9983c5ff82"
+  },
+  "words/ew560.mp3": {
+    "voice": "Kore",
+    "hash": "c3060484bc1b9409"
   },
   "words/tw001.mp3": {
     "voice": "Kore",

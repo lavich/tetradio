@@ -579,11 +579,11 @@ blocks:
     title: Реплики собеседника
     plays: 2
     transcript:
-      - { speaker: Anders, text: "Thanks for joining. Here is the task: design a service that sends reminders to the users of a calendar app. You can ask me any questions that you need." }
-      - { speaker: Anders, text: "Good questions. About fifty thousand people use the app, mostly for work, and around five thousand are online at the same time." }
-      - { speaker: Anders, text: "At peak, we send about two hundred reminders a second. A reminder can be a minute late, but it must not be lost." }
-      - { speaker: Anders, text: "The first version is due in five weeks, and the user data must stay in Europe. Is there anything else you would like to know?" }
-      - { speaker: Anders, text: "Thank you. That was a clear summary of the requirements." }
+      - { speaker: Anders, text: "Thanks for joining. Here is the task: design a service that sends reminders to the users of a calendar app. You can ask me any questions that you need.", audio: e13-3/scene-lines-1.mp3 }
+      - { speaker: Anders, text: "Good questions. About fifty thousand people use the app, mostly for work, and around five thousand are online at the same time.", audio: e13-3/scene-lines-2.mp3 }
+      - { speaker: Anders, text: "At peak, we send about two hundred reminders a second. A reminder can be a minute late, but it must not be lost.", audio: e13-3/scene-lines-3.mp3 }
+      - { speaker: Anders, text: "The first version is due in five weeks, and the user data must stay in Europe. Is there anything else you would like to know?", audio: e13-3/scene-lines-4.mp3 }
+      - { speaker: Anders, text: "Thank you. That was a clear summary of the requirements.", audio: e13-3/scene-lines-5.mp3 }
   - type: speaking
     id: scene
     part: roleplay

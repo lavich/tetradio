@@ -70,17 +70,17 @@ blocks:
     title: A behavioral interview
     plays: 2
     transcript:
-      - { speaker: Mark, text: "Welcome, Camille. Let's begin. Tell me about a time you had to deal with two urgent requests at once." }
-      - { speaker: Camille, text: "Last year, I was working on a payment feature when two urgent requests arrived on the same day. The product owner wanted a bug fixed before the release, and the support team needed a report for a customer meeting." }
-      - { speaker: Mark, text: "Okay. What was your task?" }
-      - { speaker: Camille, text: "My task was to decide what to do first. I was the only person who knew both parts of the system, so I was double-booked." }
-      - { speaker: Mark, text: "And what did you do?" }
-      - { speaker: Camille, text: "I asked both people for the deadline and the reason behind it. The bug could cause wrong payments, so it came first. I explained this to the support team, and I offered to send a short draft of the report by noon. I also asked a colleague to check the numbers." }
-      - { speaker: Mark, text: "How did it turn out?" }
-      - { speaker: Camille, text: "We fixed the bug before the release, and the support team received the report an hour before the meeting. Nobody was unhappy, because I had set expectations early." }
-      - { speaker: Mark, text: "Did you change anything in your process afterwards?" }
-      - { speaker: Camille, text: "Yes. Since then, I have asked for the deadline and the reason every time, and I have kept a short list of open requests for the team." }
-      - { speaker: Mark, text: "Thank you, Camille. That was clear." }
+      - { speaker: Mark, text: "Welcome, Camille. Let's begin. Tell me about a time you had to deal with two urgent requests at once.", audio: e09-test/call-1.mp3 }
+      - { speaker: Camille, text: "Last year, I was working on a payment feature when two urgent requests arrived on the same day. The product owner wanted a bug fixed before the release, and the support team needed a report for a customer meeting.", audio: e09-test/call-2.mp3 }
+      - { speaker: Mark, text: "Okay. What was your task?", audio: e09-test/call-3.mp3 }
+      - { speaker: Camille, text: "My task was to decide what to do first. I was the only person who knew both parts of the system, so I was double-booked.", audio: e09-test/call-4.mp3 }
+      - { speaker: Mark, text: "And what did you do?", audio: e09-test/call-5.mp3 }
+      - { speaker: Camille, text: "I asked both people for the deadline and the reason behind it. The bug could cause wrong payments, so it came first. I explained this to the support team, and I offered to send a short draft of the report by noon. I also asked a colleague to check the numbers.", audio: e09-test/call-6.mp3 }
+      - { speaker: Mark, text: "How did it turn out?", audio: e09-test/call-7.mp3 }
+      - { speaker: Camille, text: "We fixed the bug before the release, and the support team received the report an hour before the meeting. Nobody was unhappy, because I had set expectations early.", audio: e09-test/call-8.mp3 }
+      - { speaker: Mark, text: "Did you change anything in your process afterwards?", audio: e09-test/call-9.mp3 }
+      - { speaker: Camille, text: "Yes. Since then, I have asked for the deadline and the reason every time, and I have kept a short list of open requests for the team.", audio: e09-test/call-10.mp3 }
+      - { speaker: Mark, text: "Thank you, Camille. That was clear.", audio: e09-test/call-11.mp3 }
   - type: exercise
     id: call-q
     about: call

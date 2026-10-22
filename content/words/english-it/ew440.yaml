@@ -1,5 +1,6 @@
 id: ew440
 greek: "consistency"
+audio: words/ew440.mp3
 russian: "согласованность: все читающие видят одни и те же актуальные данные"
 ipa: /kənˈsɪstənsi/
 note: "In databases, consistency means that every reader sees the latest write."

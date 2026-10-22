@@ -1,5 +1,6 @@
 id: ew442
 greek: "fault tolerance"
+audio: words/ew442.mp3
 russian: "отказоустойчивость: способность системы работать дальше при отказе части компонентов"
 ipa: /ˈfɔːlt ˌtɒlərəns/
 note: "fault tolerance — свойство системы в целом; fail over — одно из действий, которым оно достигается"

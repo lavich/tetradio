@@ -1,5 +1,6 @@
 id: ew390
 greek: "a style guide"
+audio: words/ew390.mp3
 russian: "руководство по стилю: договорённости команды об оформлении кода"
 ipa: /ə ˈstaɪl ɡaɪd/
 note: "If the style guide covers it, a linter can check it."

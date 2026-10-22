@@ -1,5 +1,6 @@
 id: ew457
 greek: "a greedy approach"
+audio: words/ew457.mp3
 russian: "жадный подход: на каждом шаге берут наиболее выгодный на вид вариант и не пересматривают выбор"
 ipa: /ə ˈɡriːdi əˈprəʊtʃ/
 note: "a greedy approach подходит, если локальные выборы дают общий ответ"

@@ -62,6 +62,11 @@ respell:
   api: A P I
   apis: A P Is
   aws: A W S
+  sla: S L A
+  rfc: R F C
+  star: S T A R
+  okr: O K R
+  okrs: O K Rs
 # Реплика без говорящего
 narrator: Kore
 characters:

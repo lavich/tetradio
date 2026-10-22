@@ -292,19 +292,19 @@ blocks:
     title: What-if questions in a technical interview
     plays: 2
     transcript:
-      - { speaker: Anders, text: "Thanks for joining, Lukas. I'd like to try something different. I'll describe a few situations, and you tell me what you would do. Ready?" }
-      - { speaker: Lukas, text: "Yes, I'm ready." }
-      - { speaker: Anders, text: "First one. What would you do if the release you shipped this afternoon broke production?" }
-      - { speaker: Lukas, text: "My first priority would be to limit the damage. I'd check the alerts to see how many users are affected. If the change caused it, I would roll it back first, and I'd let my manager and the support team know what was happening." }
-      - { speaker: Anders, text: "What if you couldn't roll it back, because the database had already changed?" }
-      - { speaker: Lukas, text: "Then I would look for a safer option, like turning the feature off or fixing forward. If I couldn't fix it within an hour, I would escalate it to the on-call lead. I wouldn't make that decision on my own." }
-      - { speaker: Anders, text: "Next one. What would you do if two deadlines clashed, and both were urgent?" }
-      - { speaker: Lukas, text: "I'd ask which one matters more to the business, and what would happen if the other one slipped. It would depend on how many users were affected. Then I'd explain the trade-off to my manager and let the team decide." }
-      - { speaker: Anders, text: "And if your manager were away that day?" }
-      - { speaker: Lukas, text: "I would write a short summary of the options and send it to the team lead, so that the decision wouldn't fall through the cracks." }
-      - { speaker: Anders, text: "Last one. A teammate wants to ship a change on Friday afternoon. What would you say?" }
-      - { speaker: Lukas, text: "I'd ask what the plan is in case something goes wrong. Unless the change is very small, I'd suggest waiting until Monday. As long as there's a rollback plan and someone on call, I would be comfortable with a small change." }
-      - { speaker: Anders, text: "Thank you, Lukas. You explained your reasoning clearly." }
+      - { speaker: Anders, text: "Thanks for joining, Lukas. I'd like to try something different. I'll describe a few situations, and you tell me what you would do. Ready?", audio: e11-2/questions-1.mp3 }
+      - { speaker: Lukas, text: "Yes, I'm ready.", audio: e11-2/questions-2.mp3 }
+      - { speaker: Anders, text: "First one. What would you do if the release you shipped this afternoon broke production?", audio: e11-2/questions-3.mp3 }
+      - { speaker: Lukas, text: "My first priority would be to limit the damage. I'd check the alerts to see how many users are affected. If the change caused it, I would roll it back first, and I'd let my manager and the support team know what was happening.", audio: e11-2/questions-4.mp3 }
+      - { speaker: Anders, text: "What if you couldn't roll it back, because the database had already changed?", audio: e11-2/questions-5.mp3 }
+      - { speaker: Lukas, text: "Then I would look for a safer option, like turning the feature off or fixing forward. If I couldn't fix it within an hour, I would escalate it to the on-call lead. I wouldn't make that decision on my own.", audio: e11-2/questions-6.mp3 }
+      - { speaker: Anders, text: "Next one. What would you do if two deadlines clashed, and both were urgent?", audio: e11-2/questions-7.mp3 }
+      - { speaker: Lukas, text: "I'd ask which one matters more to the business, and what would happen if the other one slipped. It would depend on how many users were affected. Then I'd explain the trade-off to my manager and let the team decide.", audio: e11-2/questions-8.mp3 }
+      - { speaker: Anders, text: "And if your manager were away that day?", audio: e11-2/questions-9.mp3 }
+      - { speaker: Lukas, text: "I would write a short summary of the options and send it to the team lead, so that the decision wouldn't fall through the cracks.", audio: e11-2/questions-10.mp3 }
+      - { speaker: Anders, text: "Last one. A teammate wants to ship a change on Friday afternoon. What would you say?", audio: e11-2/questions-11.mp3 }
+      - { speaker: Lukas, text: "I'd ask what the plan is in case something goes wrong. Unless the change is very small, I'd suggest waiting until Monday. As long as there's a rollback plan and someone on call, I would be comfortable with a small change.", audio: e11-2/questions-12.mp3 }
+      - { speaker: Anders, text: "Thank you, Lukas. You explained your reasoning clearly.", audio: e11-2/questions-13.mp3 }
   - type: exercise
     id: questions-q
     about: questions

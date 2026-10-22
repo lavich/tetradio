@@ -334,10 +334,10 @@ blocks:
     title: Реплики собеседника
     plays: 2
     transcript:
-      - { speaker: Ingrid, text: "Thanks for joining. Let's start with a behavioral question. Tell me about a time you faced a challenge at work." }
-      - { speaker: Ingrid, text: "Mm-hm. What was your role in it?" }
-      - { speaker: Ingrid, text: "I see. How did it end, and what did you learn from it?" }
-      - { speaker: Ingrid, text: "Thank you. That was a clear example." }
+      - { speaker: Ingrid, text: "Thanks for joining. Let's start with a behavioral question. Tell me about a time you faced a challenge at work.", audio: e09-3/scene-lines-1.mp3 }
+      - { speaker: Ingrid, text: "Mm-hm. What was your role in it?", audio: e09-3/scene-lines-2.mp3 }
+      - { speaker: Ingrid, text: "I see. How did it end, and what did you learn from it?", audio: e09-3/scene-lines-3.mp3 }
+      - { speaker: Ingrid, text: "Thank you. That was a clear example.", audio: e09-3/scene-lines-4.mp3 }
   - type: speaking
     id: scene
     part: roleplay

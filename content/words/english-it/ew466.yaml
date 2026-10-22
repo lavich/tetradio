@@ -1,5 +1,6 @@
 id: ew466
 greek: "an off-by-one error"
+audio: words/ew466.mp3
 russian: "ошибка на единицу: цикл выполняется на один раз больше или меньше"
 ipa: /ən ˌɒf baɪ ˈwʌn ˈerə/
 note: "чаще всего возникает на границах цикла"

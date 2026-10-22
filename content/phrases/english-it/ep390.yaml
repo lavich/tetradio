@@ -1,5 +1,6 @@
 id: ep390
 text: "How often do you release to production?"
+audio: phrases/ep390.mp3
 translation: "Как часто вы выпускаете изменения в продакшен?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e16
