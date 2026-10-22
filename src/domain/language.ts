@@ -25,6 +25,8 @@ export interface LanguageProfile {
   cover: { lesson: string; name: string };
   /** «Почти»: подсказка после ответа, что проверить в упражнении и пометка в итоге урока. */
   almost: { message: string; article: string; check: string; mark: string };
+  /** «Сегодня» пройденного курса. */
+  finished: string;
   /** Ответ после регистра и пробелов — к виду для сравнения. */
   canonical: (text: string) => string;
   /** Ответ не совпал, но засчитывается как «почти». */
@@ -90,6 +92,7 @@ const el: LanguageProfile = {
     check: "ударение",
     mark: "без ударения",
   },
+  finished: "Все модули и пробники пройдены. До экзамена — повторение карточек и слабый навык по итогам M3.",
   canonical: (text) => text.replace(GREEK_ENDING, ""),
   isAlmost: (given, accepted) => stripAccent(given) === stripAccent(accepted),
   negations: ["δεν", "δε", "μην", "μη", "όχι"],
@@ -113,6 +116,7 @@ const en: LanguageProfile = {
     check: "написание",
     mark: "с опечаткой",
   },
+  finished: "Все модули и контрольные точки пройдены. Дальше — повторение карточек.",
   canonical: (text) => expand(text.replace(ENGLISH_ENDING, "")),
   isAlmost: typo,
   negations: ["not", "no", "never"],
