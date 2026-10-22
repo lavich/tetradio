@@ -1,5 +1,7 @@
-import { useRef, type KeyboardEvent } from "react";
+import { useEffect, useRef, type KeyboardEvent } from "react";
 import type { Language } from "../domain/language";
+import { reportError } from "../reporting/reporting";
+import { chooseShelfCourse, type CourseEntry } from "../storage/courses";
 import { useCurrentLanguage, useLanguages, useShelfLanguage } from "./courses";
 import { cx } from "./cx";
 import css from "./course-switch.module.css";
@@ -35,6 +37,14 @@ export function Segmented({
     0,
     options.findIndex((option) => option.id === value),
   );
+  useEffect(() => {
+    const node = buttons.current[selected];
+    const box = node?.parentElement;
+    if (!node || !box) return;
+    const [own, outer] = [node.getBoundingClientRect(), box.getBoundingClientRect()];
+    if (own.left < outer.left) box.scrollLeft += own.left - outer.left;
+    else if (own.right > outer.right) box.scrollLeft += own.right - outer.right;
+  }, [selected]);
   const move = (event: KeyboardEvent, index: number) => {
     const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
     const target =
@@ -103,6 +113,25 @@ export function LanguageSwitch({ shelf = false }: { shelf?: boolean }) {
       }))}
       value={shelf ? shelfValue : current}
       onChange={(code) => void choose(code as Language)}
+    />
+  );
+}
+
+export function ShelfCourseSwitch({ courses, value }: { courses: CourseEntry[]; value: string | undefined }) {
+  if (courses.length < 2) return null;
+  return (
+    <Segmented
+      label="Курс языка"
+      testId="course-switch"
+      options={courses.map((course) => ({
+        id: course.id,
+        title: course.short ?? course.title,
+        unstarted: !course.started,
+      }))}
+      value={value}
+      onChange={(id) =>
+        void chooseShelfCourse(id).catch((error: unknown) => void reportError(error, { category: "storage" }))
+      }
     />
   );
 }

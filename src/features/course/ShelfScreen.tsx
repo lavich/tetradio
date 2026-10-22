@@ -6,11 +6,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { shareCourse } from "../../platform/share";
 import { moduleViews, type ModuleView } from "../../storage/course";
-import { languages, shelfLanguage, type CourseEntry } from "../../storage/courses";
+import { chooseShelfCourse, languages, shelfCourse, shelfLanguage, type CourseEntry } from "../../storage/courses";
 import { db } from "../../storage/db";
-import { LanguageSwitch } from "../../shared/CourseSwitch";
+import { LanguageSwitch, ShelfCourseSwitch } from "../../shared/CourseSwitch";
 import { courseName, useCoursePalette } from "../../shared/courses";
 import { useAction } from "../../shared/action";
+import { reportError } from "../../reporting/reporting";
 import { pausedSince } from "../../shared/format";
 import { pauseCourse, resumeCourse } from "../../storage/pause-actions";
 import { CourseMenu } from "./CourseMenu";
@@ -31,42 +32,53 @@ function coverLabel(view: ModuleView) {
 }
 
 export function CourseScreen() {
-  const language = useLiveQuery(async () => {
+  const shown = useLiveQuery(async () => {
     const code = await shelfLanguage();
-    return (await languages()).find((entry) => entry.code === code) ?? null;
+    const language = (await languages()).find((entry) => entry.code === code) ?? null;
+    return { language, course: await shelfCourse() };
   }, []);
+  const language = shown?.language;
   const [status, setStatus] = useState("");
   const { state } = useLocation() as { state: { course?: string } | null };
   const navigate = useNavigate();
   const [focus, setFocus] = useState(state?.course);
   // Адрес без состояния: перезагрузка и «Назад» не возвращают фокус и прокрутку к карточке.
   useEffect(() => {
-    if (state?.course) void navigate(".", { replace: true, state: null });
+    if (!state?.course) return;
+    void chooseShelfCourse(state.course).catch((error: unknown) => void reportError(error, { category: "storage" }));
+    void navigate(".", { replace: true, state: null });
   }, [state, navigate]);
   const code = language?.code;
-  useEffect(() => setStatus(""), [code]);
-  if (language === undefined) return <Screen />;
+  const shownCourse = shown?.course;
+  useEffect(() => setStatus(""), [code, shownCourse]);
+  if (shown === undefined || language === undefined) return <Screen />;
   const list = language?.courses ?? [];
-  const started = list.filter((course) => course.started);
+  const selected = list.find((course) => course.id === shown.course);
   const unstarted = list.filter((course) => !course.started).map((course) => course.id);
   return (
     <Screen>
+      <h1 className="sr-only">Курс</h1>
       <LanguageSwitch shelf />
-      <h1>Полка</h1>
+      <ShelfCourseSwitch courses={list} value={shown.course} />
       <p className="sr-only" role="status" data-testid="shelf-status">
         {status}
       </p>
-      {started.map((course) => (
+      {selected?.started ? (
         <CourseShelf
-          key={course.id}
-          course={course}
+          key={selected.id}
+          course={selected}
           onStatus={setStatus}
-          focused={course.id === focus}
+          focused={selected.id === focus}
           onFocused={() => setFocus(undefined)}
         />
-      ))}
-      {unstarted.length || !language ? (
-        <CourseStart courseIds={unstarted} grouped={false} focus={focus} onFocused={() => setFocus(undefined)} />
+      ) : unstarted.length || !language ? (
+        <CourseStart
+          courseIds={unstarted}
+          show={selected?.id}
+          grouped={false}
+          focus={focus}
+          onFocused={() => setFocus(undefined)}
+        />
       ) : null}
     </Screen>
   );

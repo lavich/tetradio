@@ -305,7 +305,7 @@ test("урок курса: задания с ключом, чтение, ауд�
 test("полка: опубликованный модуль и черновик; черновик нельзя пройти", async ({ page }) => {
   await start(page);
   await page.getByRole("navigation").getByRole("link", { name: "Курс" }).click();
-  await expect(page.getByRole("heading", { name: "Полка", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Курс", level: 1 })).toBeVisible();
   // Дата экзамена — общая, с пометкой; обратного отсчёта нет, пока дата на Кипре не подтверждена.
   await expect(page.getByTestId("exam-line")).toContainText(
     "11 мая 2027 г. — общая дата, дата на Кипре не подтверждена",
@@ -354,7 +354,7 @@ test("урок, открытый с модуля: после завершени�
   await page.getByRole("button", { name: "К модулю" }).click();
   await expect(page.getByRole("heading", { name: "Γνωριμία", level: 1 })).toBeVisible();
   await page.goBack();
-  await expect(page.getByRole("heading", { name: "Полка", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Курс", level: 1 })).toBeVisible();
   await expect(page).toHaveURL(/\/course$/);
 });
 
