@@ -68,4 +68,30 @@ describe("переход по параметру запуска", () => {
   it("неизвестный параметр оставляет «Сегодня»", async () => {
     expect(await (await page(tgHash("promo", "Q1")))()).toBe("/");
   });
+  it("c_<id> ведёт на экран курса по ссылке, повтор того же запуска — нет", async () => {
+    const mount = await page(tgHash("c_english-travel", "Q1"));
+    expect(await mount()).toBe("/share/course/english-travel");
+    expect(await mount()).toBe("/");
+    expect(await (await page(""))()).toBe("/");
+    expect(await (await page(tgHash("c_english-travel", "Q2")))()).toBe("/share/course/english-travel");
+  });
+  it("c_ без id, с недопустимым символом и без префикса c_ оставляет «Сегодня»", async () => {
+    expect(await (await page(tgHash("c_", "Q1")))()).toBe("/");
+    expect(await (await page(tgHash("c_a%2Fb", "Q2")))()).toBe("/");
+    expect(await (await page(tgHash("course_greek-a2", "Q3")))()).toBe("/");
+  });
+  it("c_ длиннее 60 символов оставляет «Сегодня»", async () => {
+    expect(await (await page(tgHash(`c_${"a".repeat(61)}`, "Q1")))()).toBe("/");
+    expect(await (await page(tgHash(`c_${"a".repeat(60)}`, "Q2")))()).toBe(`/share/course/${"a".repeat(60)}`);
+  });
+  it("метка автообновления не даёт открыть ссылку на курс снова", async () => {
+    const mount = await page(tgHash("c_english-it", "Q1"));
+    const { skipStartRouteOnReload } = await import("../src/platform/launch");
+    skipStartRouteOnReload();
+    expect(await mount()).toBe("/");
+  });
+  it("в браузере hash с start_param не используется без данных Telegram", async () => {
+    const mount = await page("#start_param=c_english-it");
+    expect(await mount()).toBe("/");
+  });
 });

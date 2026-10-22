@@ -1,8 +1,10 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useId, useRef, useState } from "react";
+import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Screen } from "../../app/Screen";
+import { shareCourse } from "../../platform/share";
 import { moduleViews, type ModuleView } from "../../storage/course";
 import { languages, shelfLanguage, type CourseEntry } from "../../storage/courses";
 import { db } from "../../storage/db";
@@ -55,7 +57,13 @@ export function CourseScreen() {
         {status}
       </p>
       {started.map((course) => (
-        <CourseShelf key={course.id} course={course} onStatus={setStatus} />
+        <CourseShelf
+          key={course.id}
+          course={course}
+          onStatus={setStatus}
+          focused={course.id === focus}
+          onFocused={() => setFocus(undefined)}
+        />
       ))}
       {unstarted.length || !language ? (
         <CourseStart courseIds={unstarted} grouped={false} focus={focus} onFocused={() => setFocus(undefined)} />
@@ -64,7 +72,17 @@ export function CourseScreen() {
   );
 }
 
-function CourseShelf({ course, onStatus }: { course: CourseEntry; onStatus: (text: string) => void }) {
+function CourseShelf({
+  course,
+  onStatus,
+  focused,
+  onFocused,
+}: {
+  course: CourseEntry;
+  onStatus: (text: string) => void;
+  focused: boolean;
+  onFocused: () => void;
+}) {
   const { id: courseId, pausedAt, title } = course;
   const views = useLiveQuery(() => moduleViews(courseId), [courseId]);
   const calendar = useLiveQuery(async () => (await db.courses.get(courseId))?.calendar, [courseId]);
@@ -82,6 +100,14 @@ function CourseShelf({ course, onStatus }: { course: CourseEntry; onStatus: (tex
   const profile = useCourseProfile(courseId);
   const palette = useCoursePalette(courseId);
   const heading = useId();
+  const section = useRef<HTMLElement>(null);
+  const shown = !!views?.length;
+  useEffect(() => {
+    if (!focused || !shown) return;
+    section.current?.scrollIntoView?.({ block: "start" });
+    section.current?.focus({ preventScroll: true });
+    onFocused();
+  }, [focused, shown, onFocused]);
   if (!views?.length) return null;
   const toggle = () => {
     if (busy) return;
@@ -100,7 +126,7 @@ function CourseShelf({ course, onStatus }: { course: CourseEntry; onStatus: (tex
   const current = views.find((view) => view.module.status === "published" && !view.completed)?.module.id;
   const labels = checkpointLabels(calendar);
   return (
-    <section className={css.course} aria-labelledby={heading} data-testid="course-shelf">
+    <section ref={section} tabIndex={-1} className={css.course} aria-labelledby={heading} data-testid="course-shelf">
       <div className={css.head}>
         <h2 id={heading} className={css.title}>
           {courseName(course)}
@@ -126,6 +152,14 @@ function CourseShelf({ course, onStatus }: { course: CourseEntry; onStatus: (tex
           </Button>
         </div>
       )}
+      <button
+        type="button"
+        className={css.share}
+        aria-label={`Поделиться курсом «${title}»`}
+        onClick={() => void shareCourse(course)}
+      >
+        <Share2 aria-hidden size={16} /> Поделиться курсом
+      </button>
       <div className={css.shelf}>
         {views.map((view) => {
           const { module } = view;

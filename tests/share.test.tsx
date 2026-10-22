@@ -8,7 +8,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 const toast = vi.hoisted(() => ({ success: vi.fn(), error: vi.fn() }));
 vi.mock("sonner", () => ({ toast }));
 
-import { shareWord, wordLink } from "../src/platform/share";
+import { courseLink, shareCourse, shareWord, wordLink } from "../src/platform/share";
 import { launchContext, resetLaunchContext } from "../src/platform/launch";
 import type { TelegramWebApp } from "../src/platform/telegram-types";
 import { WordScreen } from "../src/features/words/WordScreen";
@@ -66,6 +66,40 @@ describe("отправка ссылки на слово", () => {
     };
     await shareWord(word, "tetradio_local", null);
     expect(copied).toEqual([wordLink("w093", "tetradio_local"), wordLink("w093", "tetradio_local")]);
+    expect(toast.success).toHaveBeenCalledWith("Ссылка скопирована");
+  });
+});
+
+describe("отправка ссылки на курс", () => {
+  const course = { id: "english-it", title: "Английский для IT" };
+  it("ссылка ведёт через бота и содержит id курса", () => {
+    expect(courseLink("english-it", "tetradio_dev")).toBe("https://t.me/tetradio_dev?startapp=c_english-it");
+  });
+  it("в Telegram открывает выбор чата с ссылкой и названием курса, ничего не копирует", async () => {
+    const opened: string[] = [];
+    const app = { openTelegramLink: (url: string) => opened.push(url) } as unknown as TelegramWebApp;
+    await shareCourse(course, "tetradio_dev", app);
+    const target = new URL(opened[0]);
+    expect(`${target.origin}${target.pathname}`).toBe("https://t.me/share/url");
+    expect(target.searchParams.get("url")).toBe("https://t.me/tetradio_dev?startapp=c_english-it");
+    expect(target.searchParams.get("text")).toBe("Английский для IT");
+    expect(copied).toEqual([]);
+  });
+  it("в браузере открывает системное меню; отмена ничего не копирует", async () => {
+    const shared: unknown[] = [];
+    nav.share = async (data: unknown) => void shared.push(data);
+    await shareCourse(course, "tetradio_local", null);
+    expect(shared).toEqual([{ url: "https://t.me/tetradio_local?startapp=c_english-it", text: "Английский для IT" }]);
+    nav.share = async () => {
+      throw Object.assign(new Error("cancel"), { name: "AbortError" });
+    };
+    await shareCourse(course, "tetradio_local", null);
+    expect(copied).toEqual([]);
+    expect(toast.success).not.toHaveBeenCalled();
+  });
+  it("без системного меню копирует ссылку и сообщает об этом", async () => {
+    await shareCourse(course, "tetradio_local", null);
+    expect(copied).toEqual([courseLink("english-it", "tetradio_local")]);
     expect(toast.success).toHaveBeenCalledWith("Ссылка скопирована");
   });
 });
