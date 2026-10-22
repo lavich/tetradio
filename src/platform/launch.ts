@@ -155,12 +155,13 @@ export const resetLaunchContext = () => {
   cached = null;
 };
 
-const WORD_START = /^w_([A-Za-z0-9-]{1,60})$/;
-/** Путь по параметру запуска Mini App: `w_<id>` — слово; остальное приложение не знает и открывает «Сегодня». */
+const START = /^([wc])_([A-Za-z0-9-]{1,60})$/;
+/** `w_<id>` — слово, `c_<id>` — полка курса; существование курса проверяет экран по каталогу, остальное — «Сегодня». */
 export function startRoute(launch: LaunchContext): string | null {
   if (launch.kind !== "telegram" || !launch.startParam) return null;
-  const match = WORD_START.exec(launch.startParam);
-  return match ? `/share/word/${match[1]}` : null;
+  const match = START.exec(launch.startParam);
+  if (!match) return null;
+  return `/share/${match[1] === "w" ? "word" : "course"}/${match[2]}`;
 }
 
 let consumedInPage = false;
