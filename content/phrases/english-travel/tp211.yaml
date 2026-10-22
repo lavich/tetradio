@@ -1,5 +1,6 @@
 id: tp211
 text: "Is it safe to swim here?"
+audio: phrases/tp211.mp3
 translation: "Здесь безопасно купаться?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t15

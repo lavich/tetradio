@@ -67,6 +67,7 @@ respell:
   star: S T A R
   okr: O K R
   okrs: O K Rs
+  id: I D
 # Реплика без говорящего
 narrator: Kore
 characters:

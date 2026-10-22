@@ -259,25 +259,25 @@ blocks:
     title: At the rental hut
     plays: 2
     transcript:
-      - { speaker: Nikos, text: "Good morning. How can I help?" }
-      - { speaker: Elif, text: "Hi. We'd like to go on the snorkelling trip tomorrow. Is there space for two adults and a child?" }
-      - { speaker: Nikos, text: "Yes, there is. How old is your daughter?" }
-      - { speaker: Elif, text: "She's nine." }
-      - { speaker: Nikos, text: "Then it's thirty-five euros for each adult and twenty for your daughter. That's ninety euros altogether." }
-      - { speaker: Elif, text: "My daughter feels the cold. Could we get a wetsuit for her?" }
-      - { speaker: Nikos, text: "Of course. It's six euros for the trip. What size does she need?" }
-      - { speaker: Elif, text: "Small, I think. Which trip is better, the ten o'clock or the two o'clock?" }
-      - { speaker: Nikos, text: "The ten o'clock. The sea is usually calmer in the morning, and the afternoon trip is busier." }
-      - { speaker: Elif, text: "Ten, then. Where do we meet?" }
-      - { speaker: Nikos, text: "At the blue hut by the pier, fifteen minutes before. We start with a short safety briefing, and our guide stays with the group the whole time." }
-      - { speaker: Elif, text: "Good. Tomorrow, could you keep an eye on our things while we are on the boat?" }
-      - { speaker: Nikos, text: "Sure. Put your bags behind the counter." }
-      - { speaker: Elif, text: "Thank you. And for today, what's the rate for a full day for loungers?" }
-      - { speaker: Nikos, text: "A lounger is twelve euros, and a parasol is eight." }
-      - { speaker: Elif, text: "Two loungers and one parasol, please." }
-      - { speaker: Nikos, text: "That's thirty-two euros for the day. You can pay at the beach bar. Can I have your name for the trip?" }
-      - { speaker: Elif, text: "Elif Demir." }
-      - { speaker: Nikos, text: "Thank you, Ms Demir. See you tomorrow at a quarter to ten." }
+      - { speaker: Nikos, text: "Good morning. How can I help?", audio: t15-2/boat-trip-1.mp3 }
+      - { speaker: Elif, text: "Hi. We'd like to go on the snorkelling trip tomorrow. Is there space for two adults and a child?", audio: t15-2/boat-trip-2.mp3 }
+      - { speaker: Nikos, text: "Yes, there is. How old is your daughter?", audio: t15-2/boat-trip-3.mp3 }
+      - { speaker: Elif, text: "She's nine.", audio: t15-2/boat-trip-4.mp3 }
+      - { speaker: Nikos, text: "Then it's thirty-five euros for each adult and twenty for your daughter. That's ninety euros altogether.", audio: t15-2/boat-trip-5.mp3 }
+      - { speaker: Elif, text: "My daughter feels the cold. Could we get a wetsuit for her?", audio: t15-2/boat-trip-6.mp3 }
+      - { speaker: Nikos, text: "Of course. It's six euros for the trip. What size does she need?", audio: t15-2/boat-trip-7.mp3 }
+      - { speaker: Elif, text: "Small, I think. Which trip is better, the ten o'clock or the two o'clock?", audio: t15-2/boat-trip-8.mp3 }
+      - { speaker: Nikos, text: "The ten o'clock. The sea is usually calmer in the morning, and the afternoon trip is busier.", audio: t15-2/boat-trip-9.mp3 }
+      - { speaker: Elif, text: "Ten, then. Where do we meet?", audio: t15-2/boat-trip-10.mp3 }
+      - { speaker: Nikos, text: "At the blue hut by the pier, fifteen minutes before. We start with a short safety briefing, and our guide stays with the group the whole time.", audio: t15-2/boat-trip-11.mp3 }
+      - { speaker: Elif, text: "Good. Tomorrow, could you keep an eye on our things while we are on the boat?", audio: t15-2/boat-trip-12.mp3 }
+      - { speaker: Nikos, text: "Sure. Put your bags behind the counter.", audio: t15-2/boat-trip-13.mp3 }
+      - { speaker: Elif, text: "Thank you. And for today, what's the rate for a full day for loungers?", audio: t15-2/boat-trip-14.mp3 }
+      - { speaker: Nikos, text: "A lounger is twelve euros, and a parasol is eight.", audio: t15-2/boat-trip-15.mp3 }
+      - { speaker: Elif, text: "Two loungers and one parasol, please.", audio: t15-2/boat-trip-16.mp3 }
+      - { speaker: Nikos, text: "That's thirty-two euros for the day. You can pay at the beach bar. Can I have your name for the trip?", audio: t15-2/boat-trip-17.mp3 }
+      - { speaker: Elif, text: "Elif Demir.", audio: t15-2/boat-trip-18.mp3 }
+      - { speaker: Nikos, text: "Thank you, Ms Demir. See you tomorrow at a quarter to ten.", audio: t15-2/boat-trip-19.mp3 }
   - type: exercise
     id: boat-q
     about: boat-trip
@@ -348,19 +348,19 @@ blocks:
     title: At the resort reception
     plays: 2
     transcript:
-      - { speaker: Yara, text: "Good evening, Mr Weber. How can I help?" }
-      - { speaker: Stefan, text: "Good evening. I have three questions. First, I lost my wristband." }
-      - { speaker: Yara, text: "No problem. Here is a new one. Please show it at the restaurants and at the pool bar." }
-      - { speaker: Stefan, text: "Thank you. Second, my brother arrives tomorrow at noon. Is there a shuttle from the airport?" }
-      - { speaker: Yara, text: "Yes, but it isn't included in all-inclusive. The shuttle runs every two hours, and it costs fifteen euros per person. Is he arriving at terminal one?" }
-      - { speaker: Stefan, text: "Yes, I think so." }
-      - { speaker: Yara, text: "Then the next shuttle after noon is at half past twelve. He should wait at the blue sign outside the arrivals hall." }
-      - { speaker: Stefan, text: "Good. And third, we fly home on Friday at nine in the morning. Could you order us a taxi for six o'clock?" }
-      - { speaker: Yara, text: "Of course. Friday at six. The restaurant opens at seven, so I'll prepare a breakfast box for you." }
-      - { speaker: Stefan, text: "That is very kind. Also, can I book a massage for tomorrow?" }
-      - { speaker: Yara, text: "The spa isn't included either. A massage is forty-five euros. I have a free slot at four o'clock." }
-      - { speaker: Stefan, text: "Four is fine. Thank you." }
-      - { speaker: Yara, text: "You're welcome. On Friday, please return your wristband to reception when you check out." }
+      - { speaker: Yara, text: "Good evening, Mr Weber. How can I help?", audio: t15-2/reception-1.mp3 }
+      - { speaker: Stefan, text: "Good evening. I have three questions. First, I lost my wristband.", audio: t15-2/reception-2.mp3 }
+      - { speaker: Yara, text: "No problem. Here is a new one. Please show it at the restaurants and at the pool bar.", audio: t15-2/reception-3.mp3 }
+      - { speaker: Stefan, text: "Thank you. Second, my brother arrives tomorrow at noon. Is there a shuttle from the airport?", audio: t15-2/reception-4.mp3 }
+      - { speaker: Yara, text: "Yes, but it isn't included in all-inclusive. The shuttle runs every two hours, and it costs fifteen euros per person. Is he arriving at terminal one?", audio: t15-2/reception-5.mp3 }
+      - { speaker: Stefan, text: "Yes, I think so.", audio: t15-2/reception-6.mp3 }
+      - { speaker: Yara, text: "Then the next shuttle after noon is at half past twelve. He should wait at the blue sign outside the arrivals hall.", audio: t15-2/reception-7.mp3 }
+      - { speaker: Stefan, text: "Good. And third, we fly home on Friday at nine in the morning. Could you order us a taxi for six o'clock?", audio: t15-2/reception-8.mp3 }
+      - { speaker: Yara, text: "Of course. Friday at six. The restaurant opens at seven, so I'll prepare a breakfast box for you.", audio: t15-2/reception-9.mp3 }
+      - { speaker: Stefan, text: "That is very kind. Also, can I book a massage for tomorrow?", audio: t15-2/reception-10.mp3 }
+      - { speaker: Yara, text: "The spa isn't included either. A massage is forty-five euros. I have a free slot at four o'clock.", audio: t15-2/reception-11.mp3 }
+      - { speaker: Stefan, text: "Four is fine. Thank you.", audio: t15-2/reception-12.mp3 }
+      - { speaker: Yara, text: "You're welcome. On Friday, please return your wristband to reception when you check out.", audio: t15-2/reception-13.mp3 }
   - type: exercise
     id: reception-q
     about: reception

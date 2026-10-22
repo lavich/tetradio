@@ -1,5 +1,6 @@
 id: tp221
 text: "When does the last boat leave?"
+audio: phrases/tp221.mp3
 translation: "Когда уходит последний катер?"
 provenance:
   sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t15
