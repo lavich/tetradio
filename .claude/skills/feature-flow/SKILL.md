@@ -32,8 +32,8 @@ description: Процесс изменения в Τετράδιο от идеи
 - Полная проверка — набор CI (`.github/workflows/ci.yml`); `npm test` заменяет `test:unit` и `test:heavy`:
   ```
   npm run format:check && npm run lint && npm run typecheck && npm run check:config && npm run spec && npm run lexicon:check && npm test
-  BASE_PATH=/tetradio/ VITE_TELEGRAM_MOCK= VITE_TELEGRAM_BOT=TetradioBot SENTRY_DEBUG_IDS=1 VITE_SENTRY_DSN=https://00000000000000000000000000000000@o0000000.ingest.de.sentry.io/0000000000000000 npm run build
-  BASE_PATH=/tetradio/ npm run check:bundle
+  BASE_PATH=/ VITE_TELEGRAM_MOCK= VITE_TELEGRAM_BOT=TetradioBot SENTRY_DEBUG_IDS=1 VITE_SENTRY_DSN=https://00000000000000000000000000000000@o0000000.ingest.de.sentry.io/0000000000000000 npm run build
+  BASE_PATH=/ npm run check:bundle
   VITE_TELEGRAM_MOCK=1 npm run build && npm run lighthouse
   npm run test:e2e && npm run test:e2e:course && npm run test:e2e:courses
   ```

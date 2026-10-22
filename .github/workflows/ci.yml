@@ -67,7 +67,7 @@ jobs:
     timeout-minutes: 15
     # Предел стартового графа мерится на бандле deploy: те же база, имя бота, адрес приёма и debug ID отчётов о сбоях.
     env:
-      BASE_PATH: /tetradio/
+      BASE_PATH: /
       VITE_TELEGRAM_MOCK: ""
       VITE_TELEGRAM_BOT: ${{ vars.VITE_TELEGRAM_BOT || 'TetradioBot' }}
       VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN || 'https://00000000000000000000000000000000@o0000000.ingest.de.sentry.io/0000000000000000' }}
