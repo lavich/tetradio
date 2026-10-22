@@ -262,6 +262,128 @@ describe("английский для IT: ступень B1+ и B2", () => {
     });
   });
 
+  describe("контрольная точка «Полное пробное собеседование»", () => {
+    const MAX_CHECKPOINT_BYTES = 70_000;
+    const blocks = () => blocksOf("e16-c2");
+    const lessonsOf = (modules: string[]) =>
+      modules.flatMap((moduleId) => ["1", "2", "3", "test"].map((suffix) => `${moduleId}-${suffix}`));
+    const allLessons = [...lessonsOf(STAGE), "e08-c1"];
+    let db: AppDatabase;
+    beforeEach(async () => {
+      await new AppDatabase("tetradio-it-final-checkpoint").delete();
+      db = new AppDatabase("tetradio-it-final-checkpoint");
+      await installLessons(db, [...allLessons, "e16-c2"], memoryFetcher(content));
+    });
+    afterEach(() => db.close());
+    const step = async () => nextStep(await moduleViews("english-it", db));
+    const gradedItems = (skill: string) => {
+      const kindOf = (id?: string) => blocks().find((block) => block.id === id)?.type;
+      return blocks()
+        .filter((block) => block.type === "exercise" && block.graded && kindOf(block.about) === skill)
+        .reduce((sum, block) => sum + (block.type === "exercise" ? block.items.length : 0), 0);
+    };
+
+    it("уроки e01–e16 и точка e08-c1 пройдены — следующий шаг «Полное пробное собеседование»", async () => {
+      await completeLessons(db, allLessons);
+      expect((await step())!.lesson).toMatchObject({
+        id: "e16-c2",
+        title: "Полное пробное собеседование",
+        kind: "test",
+      });
+    });
+
+    it("контрольная e11-test не пройдена — следующий шаг она, а не точка", async () => {
+      await completeLessons(
+        db,
+        allLessons.filter((id) => id !== "e11-test"),
+      );
+      expect((await step())!.lesson.id).toBe("e11-test");
+    });
+
+    it("e01–e08 пройдены, e08-c1 нет — следующий шаг e08-c1, а не e09-1", async () => {
+      await completeLessons(db, lessonsOf(STAGE_1));
+      expect((await step())!.lesson.id).toBe("e08-c1");
+    });
+
+    it("точка после e16 без карточек, заголовок без «C2» и «CEFR», исходник не больше 70 000 байт", () => {
+      expect(modulesOf("english-it").find((m) => m.id === "e16")!.checkpointId).toBe("e16-c2");
+      const pack = lessonOf("e16-c2")!;
+      expect(pack.lesson.kind).toBe("test");
+      expect(pack.lesson.title).toBe("Полное пробное собеседование");
+      expect(pack.lesson.title).not.toMatch(/\b(C2|CEFR)\b/i);
+      expect(pack.words).toEqual([]);
+      expect(pack.phrases).toEqual([]);
+      expect(pack.items).toEqual([]);
+      expect(
+        sourceBytes(readFileSync(new URL("../content/lessons/e16-c2.yaml", import.meta.url), "utf8")),
+      ).toBeLessThanOrEqual(MAX_CHECKPOINT_BYTES);
+      expect(longestLineWords(blocks())).toBeLessThanOrEqual(MAX_LINE_WORDS);
+      expect(maxTextVariants(blocks())).toBeLessThanOrEqual(MAX_TEXT_VARIANTS);
+    });
+
+    it("чтение и аудирование — от 12 до 14 оцениваемых пунктов на навык", () => {
+      for (const skill of ["reading", "listening"]) {
+        expect(gradedItems(skill), skill).toBeGreaterThanOrEqual(12);
+        expect(gradedItems(skill), skill).toBeLessThanOrEqual(14);
+      }
+    });
+
+    it("не меньше восьми ролевых сцен, перед каждой — реплики собеседника без задания", () => {
+      const all = blocks();
+      expect(
+        all.filter((block) => block.type === "speaking" && block.part === "roleplay").length,
+      ).toBeGreaterThanOrEqual(8);
+      all.forEach((block, i) => {
+        if (block.type !== "speaking" || block.part !== "roleplay") return;
+        const before = all[i - 1];
+        expect(before?.type, block.id).toBe("listening");
+        expect(before?.id, block.id).toBe(`${block.id}-lines`);
+        expect(
+          all.some((other) => other.type === "exercise" && other.about === before?.id),
+          block.id,
+        ).toBe(false);
+        expect(block.model, block.id).toBeTruthy();
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      });
+    });
+
+    it("каждое аудио точки звучит дважды", () => {
+      for (const block of blocks()) if (block.type === "listening") expect(block.plays, block.id).toBe(2);
+    });
+
+    it("письмо после собеседования — formal, 130–170 слов, образец и критерии; беседа по банку ответов", () => {
+      const writing = blocks().filter((block) => block.type === "writing");
+      expect(writing.length).toBeGreaterThanOrEqual(1);
+      for (const block of writing) {
+        expect(block.register, block.id).toBe("formal");
+        expect(block.words, block.id).toEqual({ min: 130, max: 170 });
+        expect(wordCount(block.model), block.id).toBeGreaterThanOrEqual(130);
+        expect(wordCount(block.model), block.id).toBeLessThanOrEqual(170);
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      }
+      const interview = blocks().flatMap((block) =>
+        block.type === "speaking" && block.part === "interview" ? [block] : [],
+      );
+      expect(interview.length).toBeGreaterThanOrEqual(1);
+      for (const block of interview) {
+        expect(block.model, block.id).toBeTruthy();
+        expect(block.criteria.length, block.id).toBeGreaterThan(0);
+      }
+    });
+
+    it("говорящие — в карте голосов en и не из курса для путешествий", () => {
+      const cast = content.sources.voices.get("en")!.characters;
+      const speakers = blocks().flatMap((block) =>
+        block.type === "listening" ? block.transcript.flatMap((line) => (line.speaker ? [line.speaker] : [])) : [],
+      );
+      expect(speakers.length).toBeGreaterThan(0);
+      for (const speaker of new Set(speakers)) {
+        expect(cast.has(speaker), speaker).toBe(true);
+        expect(TRAVEL_NAMES.has(speaker), speaker).toBe(false);
+      }
+    });
+  });
+
   describe("контрольная точка «Пробный звонок рекрутера»", () => {
     const blocks = () => blocksOf("e08-c1");
     const stageLessons = STAGE_1.flatMap((moduleId) =>
