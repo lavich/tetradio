@@ -1,0 +1,781 @@
+title: Пляж и вода — безопасность, лежаки, крем
+kind: lesson
+items:
+  - { kind: word, id: tw211 }
+  - { kind: word, id: tw212 }
+  - { kind: word, id: tw213 }
+  - { kind: word, id: tw214 }
+  - { kind: word, id: tw215 }
+  - { kind: word, id: tw216 }
+  - { kind: word, id: tw217 }
+  - { kind: word, id: tw218 }
+  - { kind: phrase, id: tp211 }
+  - { kind: phrase, id: tp212 }
+  - { kind: phrase, id: tp213 }
+  - { kind: phrase, id: tp214 }
+  - { kind: phrase, id: tp215 }
+  - { kind: phrase, id: tp216 }
+  - { kind: phrase, id: tp217 }
+  - { kind: phrase, id: tp218 }
+blocks:
+  - type: explanation
+    id: there-is
+    title: There is / there are — что есть на пляже
+    body: |-
+      Чтобы сказать, что где-то есть спасатель, тень, свободные лежаки или сильное течение, начинают с **there is** (одно или неисчисляемое) и **there are** (несколько): **There's a lifeguard on duty.** **There are two loungers left.** **There's a strong current today.** Сокращение there's звучит в речи чаще, чем there is.
+
+      Отрицание — **There isn't…** и **There aren't…**; вариант с no означает то же самое: **There are no loungers left** — «свободных лежаков не осталось». Вопрос — **Is there…?** и **Are there…?**: **Is there any shade nearby?** **Are there any lifeguards on this beach?** Короткий ответ: **Yes, there is. / No, there isn't.** С неисчисляемыми словами (shade, sand, wind) ставят any или some, глагол — is.
+
+      Типичная ошибка — «It has a lifeguard here» вместо **There's a lifeguard here**: по-английски наличие чего-то на месте передаёт there. Вторая — форма единственного числа при нескольких предметах: «There is two loungers» — нужно **There are two loungers**.
+    table:
+      columns:
+        - что сказать
+        - пример
+      rows:
+        - - одно или неисчисляемое
+          - There's a lifeguard on duty.
+        - - несколько
+          - There are two loungers left.
+        - - ничего нет
+          - There aren't any loungers left.
+        - - вопрос
+          - Is there any shade nearby?
+        - - погода и море
+          - There's a strong current today.
+  - type: explanation
+    id: can-safe
+    title: Можно ли, безопасно ли и что посоветовать
+    body: |-
+      Спросить разрешение — **Can we…?** (проще) и **Could we…?** (вежливее): **Can we swim here?** **Could we sit here?** **Could we get two loungers and a parasol?** Ответ: **Yes, of course.** или **I'm afraid not.** После can и could глагол без to.
+
+      Спросить, безопасно ли что-то, — **Is it safe to + глагол?**: **Is it safe to swim here?** **Is it safe to leave our things here?** Ответ на такой вопрос надёжен только от человека, который знает место: спасателя, работника проката, персонала пляжа. Другой отдыхающий может ошибаться.
+
+      Совет — **should**: **You should reapply sunscreen after swimming.** **You should swim between the flags.** Отрицание — **shouldn't**: **You shouldn't swim alone.** После should и shouldn't идёт глагол без to.
+
+      Типичные ошибки: «Is it safe swim here?» без to, «Can we to sit here?» и «You should to reapply» с лишним to после can и should.
+    table:
+      columns:
+        - задача
+        - фраза
+      rows:
+        - - спросить разрешение
+          - Could we sit here?
+        - - спросить, безопасно ли
+          - Is it safe to swim here?
+        - - посоветовать
+          - You should reapply sunscreen after swimming.
+        - - не советовать
+          - You shouldn't swim alone.
+  - type: explanation
+    id: water-safety
+    title: Флаги, спасатели и течение
+    body: |-
+      Описанное ниже — самое распространённое, по табличкам британской спасательной службы RNLI и международной федерации спасателей ILS. Значения флагов различаются между странами и даже между пляжами, поэтому первым делом прочитайте табличку у входа на пляж или спросите спасателя (**a lifeguard**): **What do the flags mean?**
+
+      Обычно так. Флаги **red and yellow** вместе отмечают участок под присмотром спасателей: плавают между ними — **Stay between the flags.** Один **red flag** — в воду нельзя. **Yellow flag** — осторожно, условия на воде требуют внимания. Чёрно-белый клетчатый флаг — зона досок и лодок, здесь не плавают. Если вы не уверены, спросите спасателя: **Is it safe to swim here?** Ответ надёжен от того, кто знает это место.
+
+      Течение, которое уносит от берега, — **a rip current**. Оно часто незаметно: вода выглядит спокойной, иногда с полосой пены, которая идёт в сторону моря. Если вас уносит, не боритесь с течением: плывите **along the beach**, вдоль берега, пока течение не ослабнет, и затем к берегу. Если сил не хватает, держитесь на воде на спине, поднимите руку (**raise your arm**) и позовите на помощь: **Help**.
+
+      С берега помощь вызывают по местному номеру экстренной службы: **112** в странах ЕС, **999** в Великобритании; на других курортах номер уточните на ресепшене или у спасателя. Попросите береговую охрану — **the coastguard**. Плавать лучше между флагами и не одному далеко от берега.
+    table:
+      columns:
+        - флаг
+        - что обычно значит
+      rows:
+        - - red and yellow
+          - участок под присмотром спасателей, плавают между флагами
+        - - один red
+          - в воду нельзя
+        - - yellow
+          - осторожно
+        - - чёрно-белый клетчатый
+          - зона досок и лодок, не плавают
+  - type: explanation
+    id: beach-things
+    title: Лежаки, зонт, крем и просьба присмотреть за вещами
+    body: |-
+      На платном пляже лежак — **a lounger**, зонт — **a parasol**; в США чаще говорят a beach chair и a beach umbrella. Цену и свободные места уточняют у работника пляжа: **Could we get two loungers and a parasol?** Если лежаков нет, скажут **There are no loungers left.** Тень — **shade**: **Is there any shade nearby?**
+
+      Крем от солнца — **sunscreen** (в Британии часто sun cream). После купания его наносят снова — **reapply**: **You should reapply sunscreen after swimming.**
+
+      Море описывают словами **shallow** (мелко), **choppy** (с волнами) и **the tide** (приливы и отливы: *high tide* — прилив, *low tide* — отлив). Спасатель на дежурстве — **a lifeguard on duty**.
+
+      Чтобы пойти поплавать, можно попросить соседа по пляжу или работника пляжа: **Could you keep an eye on our things?** Просьба строится как другие вежливые просьбы с Could you…; ценные вещи можно взять с собой. Эту же просьбу учит карточка модуля t10.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: there-choice
+    title: There is или there are
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "___ a lifeguard on duty today."
+        options: [There's, There are, They are]
+        answer: There's
+        explanation: Один спасатель — there's (there is).
+      - id: q2
+        prompt: "___ two loungers left, but only one parasol."
+        options: [There are, There is, They have]
+        answer: There are
+        explanation: Лежаков два — there are.
+      - id: q3
+        prompt: "___ any shade near here?"
+        options: [Is there, Are there, Has there]
+        answer: Is there
+        explanation: Shade — неисчисляемое слово, глагол is.
+      - id: q4
+        prompt: "There ___ any loungers left, so we sat on the sand."
+        options: ["aren't", "isn't", "don't"]
+        answer: "aren't"
+        explanation: Loungers — несколько, поэтому aren't; don't с there не используется.
+      - id: q5
+        prompt: Вы спрашиваете, есть ли сегодня сильное течение.
+        options:
+          - Is there a strong current today?
+          - Has it a strong current today?
+          - Is a strong current today?
+        answer: Is there a strong current today?
+        explanation: Вопрос о наличии — Is there…?
+  - type: exercise
+    id: permission-choice
+    title: Можно, безопасно, стоит
+    instruction: Выберите вариант, который звучит правильно.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы спрашиваете у спасателя, безопасно ли здесь купаться.
+        options:
+          - Is it safe to swim here?
+          - Is it safe swim here?
+          - It is safe to swim here?
+        answer: Is it safe to swim here?
+        explanation: Is it safe to + глагол; вопрос начинается с Is.
+      - id: q2
+        prompt: Вы вежливо просите два лежака.
+        options:
+          - Could we get two loungers, please?
+          - Could we to get two loungers, please?
+          - We could get two loungers, please?
+        answer: Could we get two loungers, please?
+        explanation: После could глагол без to; порядок слов вопроса — could + we.
+      - id: q3
+        prompt: Вы советуете другу снова нанести крем.
+        options:
+          - You should reapply sunscreen.
+          - You should to reapply sunscreen.
+          - You should reapplying sunscreen.
+        answer: You should reapply sunscreen.
+        explanation: После should — глагол без to.
+      - id: q4
+        prompt: Вы спрашиваете, можно ли сесть на свободный лежак.
+        options:
+          - Can we sit here?
+          - Can we sitting here?
+          - Do we can sit here?
+        answer: Can we sit here?
+        explanation: Can + we + глагол, без do.
+      - id: q5
+        prompt: Вы говорите знакомому, что не стоит плавать далеко одному.
+        options:
+          - You shouldn't swim far out on your own.
+          - You don't should swim far out on your own.
+          - You shouldn't to swim far out on your own.
+        answer: You shouldn't swim far out on your own.
+        explanation: Отрицание — shouldn't + глагол без to.
+  - type: exercise
+    id: water-safety-q
+    title: Флаги и течение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: You see red and yellow flags on the beach. Where should you swim?
+        options:
+          - between the flags
+          - anywhere on the beach
+          - behind the flags
+        answer: between the flags
+        explanation: Красно-жёлтые флаги отмечают участок под присмотром спасателей, плавают между ними.
+      - id: q2
+        prompt: There is one red flag on the beach. What does it usually mean?
+        options:
+          - Don't go in the water.
+          - Swim between the flags.
+          - This is a zone for boats.
+        answer: Don't go in the water.
+        explanation: Один красный флаг — в воду нельзя; зона досок и лодок отмечена чёрно-белым флагом.
+      - id: q3
+        prompt: A current is taking you away from the beach. What should you do first?
+        options:
+          - Swim along the beach, then back to the shore.
+          - Swim straight against the current.
+          - Swim out to sea.
+        answer: Swim along the beach, then back to the shore.
+        explanation: Не боритесь с течением — плывите вдоль берега, затем к берегу.
+      - id: q4
+        prompt: You are tired in the water and cannot swim back. What can you do?
+        options:
+          - Float on your back, raise your arm and call for help.
+          - Swim faster against the current.
+          - Dive under the waves.
+        answer: Float on your back, raise your arm and call for help.
+        explanation: Держитесь на воде на спине, поднимите руку и позовите на помощь.
+      - id: q5
+        prompt: You are not sure what the flags mean on this beach. Who is the best person to ask?
+        options:
+          - the lifeguard
+          - another tourist
+          - nobody, just go in
+        answer: the lifeguard
+        explanation: Значения различаются между пляжами; точный ответ знает спасатель.
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - sunscreen
+      - a lifeguard
+      - a lounger
+      - a parasol
+      - a rip current
+      - shallow
+      - choppy
+      - the tide
+      - a pickpocket
+      - a witness
+    items:
+      - { id: m1, prompt: "солнцезащитный крем", answer: "sunscreen" }
+      - { id: m2, prompt: "спасатель", answer: "a lifeguard" }
+      - { id: m3, prompt: "шезлонг на пляже", answer: "a lounger" }
+      - { id: m4, prompt: "пляжный зонт", answer: "a parasol" }
+      - { id: m5, prompt: "течение, которое уносит от берега", answer: "a rip current" }
+      - { id: m6, prompt: "мелкий (о воде)", answer: "shallow" }
+      - { id: m7, prompt: "неспокойный, с волнами (о море)", answer: "choppy" }
+      - { id: m8, prompt: "приливы и отливы", answer: "the tide" }
+  - type: exercise
+    id: phrases-gap
+    title: Фразы урока
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [safe, lifeguard, mean, current, loungers, sunscreen, shade, flags, shallow, choppy]
+    items:
+      - { id: g1, prompt: "Is it ___ to swim here?", answer: "safe" }
+      - { id: g2, prompt: "Is there a ___ on duty?", answer: "lifeguard" }
+      - { id: g3, prompt: "What do the flags ___?", answer: "mean" }
+      - { id: g4, prompt: "Stay between the red and yellow ___.", answer: "flags" }
+      - { id: g5, prompt: "There's a strong ___ today.", answer: "current" }
+      - { id: g6, prompt: "We'd like to lie in the sun. Could we get two ___ and a parasol?", answer: "loungers" }
+      - { id: g7, prompt: "You should reapply ___ after swimming.", answer: "sunscreen" }
+      - { id: g8, prompt: "We want to sit out of the sun. Is there any ___ nearby?", answer: "shade" }
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (there's, I'd) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Здесь безопасно купаться?
+        answer:
+          - "is it safe to swim here?"
+          - "is it safe to swim at this beach?"
+          - "is it safe to swim around here?"
+          - "is it safe to go swimming here?"
+          - "is it safe to go swimming at this beach?"
+          - "is it safe to go swimming around here?"
+          - "is it safe to go in the water here?"
+          - "is it safe to go in the water at this beach?"
+          - "is it safe to go in the water around here?"
+          - "Excuse me, is it safe to swim here?"
+          - "Excuse me, is it safe to swim at this beach?"
+          - "Excuse me, is it safe to swim around here?"
+          - "Excuse me, is it safe to go swimming here?"
+          - "Excuse me, is it safe to go swimming at this beach?"
+          - "Excuse me, is it safe to go swimming around here?"
+          - "Excuse me, is it safe to go in the water here?"
+          - "Excuse me, is it safe to go in the water at this beach?"
+          - "Excuse me, is it safe to go in the water around here?"
+          - "Excuse me is it safe to swim here?"
+          - "Excuse me is it safe to swim at this beach?"
+          - "Excuse me is it safe to swim around here?"
+          - "Excuse me is it safe to go swimming here?"
+          - "Excuse me is it safe to go swimming at this beach?"
+          - "Excuse me is it safe to go swimming around here?"
+          - "Excuse me is it safe to go in the water here?"
+          - "Excuse me is it safe to go in the water at this beach?"
+          - "Excuse me is it safe to go in the water around here?"
+          - "is it safe to swim in the sea here?"
+          - "is it safe to swim in the water here?"
+          - "Excuse me, is it safe to swim in the sea here?"
+          - "Excuse me, is it safe to swim in the water here?"
+          - "Excuse me is it safe to swim in the sea here?"
+          - "Excuse me is it safe to swim in the water here?"
+          - "is swimming safe here?"
+          - "is swimming safe at this beach?"
+          - "is swimming safe around here?"
+          - "Excuse me, is swimming safe here?"
+          - "Excuse me, is swimming safe at this beach?"
+          - "Excuse me, is swimming safe around here?"
+          - "Excuse me is swimming safe here?"
+          - "Excuse me is swimming safe at this beach?"
+          - "Excuse me is swimming safe around here?"
+        explanation: Is it safe to + глагол; «здесь» — here.
+      - id: q2
+        prompt: Что означают эти флаги?
+        answer:
+          - "what do the flags mean?"
+          - "what do the flags mean here?"
+          - "what do the flags mean on this beach?"
+          - "what do these flags mean?"
+          - "what do these flags mean here?"
+          - "what do these flags mean on this beach?"
+          - "what do those flags mean?"
+          - "what do those flags mean here?"
+          - "what do those flags mean on this beach?"
+          - "Excuse me, what do the flags mean?"
+          - "Excuse me, what do the flags mean here?"
+          - "Excuse me, what do the flags mean on this beach?"
+          - "Excuse me, what do these flags mean?"
+          - "Excuse me, what do these flags mean here?"
+          - "Excuse me, what do these flags mean on this beach?"
+          - "Excuse me, what do those flags mean?"
+          - "Excuse me, what do those flags mean here?"
+          - "Excuse me, what do those flags mean on this beach?"
+          - "Excuse me what do the flags mean?"
+          - "Excuse me what do the flags mean here?"
+          - "Excuse me what do the flags mean on this beach?"
+          - "Excuse me what do these flags mean?"
+          - "Excuse me what do these flags mean here?"
+          - "Excuse me what do these flags mean on this beach?"
+          - "Excuse me what do those flags mean?"
+          - "Excuse me what do those flags mean here?"
+          - "Excuse me what do those flags mean on this beach?"
+        explanation: Вопрос с do, глагол mean без изменения.
+      - id: q3
+        prompt: Можно нам два лежака и зонт?
+        answer:
+          - "Could we get two loungers and a parasol?"
+          - "Could we get two loungers and a parasol please?"
+          - "Could we get two loungers and a parasol, please?"
+          - "Could we get two loungers and a beach umbrella?"
+          - "Could we get two loungers and a beach umbrella please?"
+          - "Could we get two loungers and a beach umbrella, please?"
+          - "Could we get two loungers and an umbrella?"
+          - "Could we get two loungers and an umbrella please?"
+          - "Could we get two loungers and an umbrella, please?"
+          - "Could we get two sunbeds and a parasol?"
+          - "Could we get two sunbeds and a parasol please?"
+          - "Could we get two sunbeds and a parasol, please?"
+          - "Could we get two sunbeds and a beach umbrella?"
+          - "Could we get two sunbeds and a beach umbrella please?"
+          - "Could we get two sunbeds and a beach umbrella, please?"
+          - "Could we get two sunbeds and an umbrella?"
+          - "Could we get two sunbeds and an umbrella please?"
+          - "Could we get two sunbeds and an umbrella, please?"
+          - "Could we get two sun loungers and a parasol?"
+          - "Could we get two sun loungers and a parasol please?"
+          - "Could we get two sun loungers and a parasol, please?"
+          - "Could we get two sun loungers and a beach umbrella?"
+          - "Could we get two sun loungers and a beach umbrella please?"
+          - "Could we get two sun loungers and a beach umbrella, please?"
+          - "Could we get two sun loungers and an umbrella?"
+          - "Could we get two sun loungers and an umbrella please?"
+          - "Could we get two sun loungers and an umbrella, please?"
+          - "Could we have two loungers and a parasol?"
+          - "Could we have two loungers and a parasol please?"
+          - "Could we have two loungers and a parasol, please?"
+          - "Could we have two loungers and a beach umbrella?"
+          - "Could we have two loungers and a beach umbrella please?"
+          - "Could we have two loungers and a beach umbrella, please?"
+          - "Could we have two loungers and an umbrella?"
+          - "Could we have two loungers and an umbrella please?"
+          - "Could we have two loungers and an umbrella, please?"
+          - "Could we have two sunbeds and a parasol?"
+          - "Could we have two sunbeds and a parasol please?"
+          - "Could we have two sunbeds and a parasol, please?"
+          - "Could we have two sunbeds and a beach umbrella?"
+          - "Could we have two sunbeds and a beach umbrella please?"
+          - "Could we have two sunbeds and a beach umbrella, please?"
+          - "Could we have two sunbeds and an umbrella?"
+          - "Could we have two sunbeds and an umbrella please?"
+          - "Could we have two sunbeds and an umbrella, please?"
+          - "Could we have two sun loungers and a parasol?"
+          - "Could we have two sun loungers and a parasol please?"
+          - "Could we have two sun loungers and a parasol, please?"
+          - "Could we have two sun loungers and a beach umbrella?"
+          - "Could we have two sun loungers and a beach umbrella please?"
+          - "Could we have two sun loungers and a beach umbrella, please?"
+          - "Could we have two sun loungers and an umbrella?"
+          - "Could we have two sun loungers and an umbrella please?"
+          - "Could we have two sun loungers and an umbrella, please?"
+          - "Could we rent two loungers and a parasol?"
+          - "Could we rent two loungers and a parasol please?"
+          - "Could we rent two loungers and a parasol, please?"
+          - "Could we rent two loungers and a beach umbrella?"
+          - "Could we rent two loungers and a beach umbrella please?"
+          - "Could we rent two loungers and a beach umbrella, please?"
+          - "Could we rent two loungers and an umbrella?"
+          - "Could we rent two loungers and an umbrella please?"
+          - "Could we rent two loungers and an umbrella, please?"
+          - "Could we rent two sunbeds and a parasol?"
+          - "Could we rent two sunbeds and a parasol please?"
+          - "Could we rent two sunbeds and a parasol, please?"
+          - "Could we rent two sunbeds and a beach umbrella?"
+          - "Could we rent two sunbeds and a beach umbrella please?"
+          - "Could we rent two sunbeds and a beach umbrella, please?"
+          - "Could we rent two sunbeds and an umbrella?"
+          - "Could we rent two sunbeds and an umbrella please?"
+          - "Could we rent two sunbeds and an umbrella, please?"
+          - "Could we rent two sun loungers and a parasol?"
+          - "Could we rent two sun loungers and a parasol please?"
+          - "Could we rent two sun loungers and a parasol, please?"
+          - "Could we rent two sun loungers and a beach umbrella?"
+          - "Could we rent two sun loungers and a beach umbrella please?"
+          - "Could we rent two sun loungers and a beach umbrella, please?"
+          - "Could we rent two sun loungers and an umbrella?"
+          - "Could we rent two sun loungers and an umbrella please?"
+          - "Could we rent two sun loungers and an umbrella, please?"
+          - "Can we get two loungers and a parasol?"
+          - "Can we get two loungers and a parasol please?"
+          - "Can we get two loungers and a parasol, please?"
+          - "Can we get two loungers and a beach umbrella?"
+          - "Can we get two loungers and a beach umbrella please?"
+          - "Can we get two loungers and a beach umbrella, please?"
+          - "Can we get two loungers and an umbrella?"
+          - "Can we get two loungers and an umbrella please?"
+          - "Can we get two loungers and an umbrella, please?"
+          - "Can we get two sunbeds and a parasol?"
+          - "Can we get two sunbeds and a parasol please?"
+          - "Can we get two sunbeds and a parasol, please?"
+          - "Can we get two sunbeds and a beach umbrella?"
+          - "Can we get two sunbeds and a beach umbrella please?"
+          - "Can we get two sunbeds and a beach umbrella, please?"
+          - "Can we get two sunbeds and an umbrella?"
+          - "Can we get two sunbeds and an umbrella please?"
+          - "Can we get two sunbeds and an umbrella, please?"
+          - "Can we get two sun loungers and a parasol?"
+          - "Can we get two sun loungers and a parasol please?"
+          - "Can we get two sun loungers and a parasol, please?"
+          - "Can we get two sun loungers and a beach umbrella?"
+          - "Can we get two sun loungers and a beach umbrella please?"
+          - "Can we get two sun loungers and a beach umbrella, please?"
+          - "Can we get two sun loungers and an umbrella?"
+          - "Can we get two sun loungers and an umbrella please?"
+          - "Can we get two sun loungers and an umbrella, please?"
+          - "Can we have two loungers and a parasol?"
+          - "Can we have two loungers and a parasol please?"
+          - "Can we have two loungers and a parasol, please?"
+          - "Can we have two loungers and a beach umbrella?"
+          - "Can we have two loungers and a beach umbrella please?"
+          - "Can we have two loungers and a beach umbrella, please?"
+          - "Can we have two loungers and an umbrella?"
+          - "Can we have two loungers and an umbrella please?"
+          - "Can we have two loungers and an umbrella, please?"
+          - "Can we have two sunbeds and a parasol?"
+          - "Can we have two sunbeds and a parasol please?"
+          - "Can we have two sunbeds and a parasol, please?"
+          - "Can we have two sunbeds and a beach umbrella?"
+          - "Can we have two sunbeds and a beach umbrella please?"
+          - "Can we have two sunbeds and a beach umbrella, please?"
+          - "Can we have two sunbeds and an umbrella?"
+          - "Can we have two sunbeds and an umbrella please?"
+          - "Can we have two sunbeds and an umbrella, please?"
+          - "Can we have two sun loungers and a parasol?"
+          - "Can we have two sun loungers and a parasol please?"
+          - "Can we have two sun loungers and a parasol, please?"
+          - "Can we have two sun loungers and a beach umbrella?"
+          - "Can we have two sun loungers and a beach umbrella please?"
+          - "Can we have two sun loungers and a beach umbrella, please?"
+          - "Can we have two sun loungers and an umbrella?"
+          - "Can we have two sun loungers and an umbrella please?"
+          - "Can we have two sun loungers and an umbrella, please?"
+          - "Can we rent two loungers and a parasol?"
+          - "Can we rent two loungers and a parasol please?"
+          - "Can we rent two loungers and a parasol, please?"
+          - "Can we rent two loungers and a beach umbrella?"
+          - "Can we rent two loungers and a beach umbrella please?"
+          - "Can we rent two loungers and a beach umbrella, please?"
+          - "Can we rent two loungers and an umbrella?"
+          - "Can we rent two loungers and an umbrella please?"
+          - "Can we rent two loungers and an umbrella, please?"
+          - "Can we rent two sunbeds and a parasol?"
+          - "Can we rent two sunbeds and a parasol please?"
+          - "Can we rent two sunbeds and a parasol, please?"
+          - "Can we rent two sunbeds and a beach umbrella?"
+          - "Can we rent two sunbeds and a beach umbrella please?"
+          - "Can we rent two sunbeds and a beach umbrella, please?"
+          - "Can we rent two sunbeds and an umbrella?"
+          - "Can we rent two sunbeds and an umbrella please?"
+          - "Can we rent two sunbeds and an umbrella, please?"
+          - "Can we rent two sun loungers and a parasol?"
+          - "Can we rent two sun loungers and a parasol please?"
+          - "Can we rent two sun loungers and a parasol, please?"
+          - "Can we rent two sun loungers and a beach umbrella?"
+          - "Can we rent two sun loungers and a beach umbrella please?"
+          - "Can we rent two sun loungers and a beach umbrella, please?"
+          - "Can we rent two sun loungers and an umbrella?"
+          - "Can we rent two sun loungers and an umbrella please?"
+          - "Can we rent two sun loungers and an umbrella, please?"
+        explanation: Просьба — Could we get…? Артикль a перед parasol.
+      - id: q4
+        prompt: После купания крем нужно нанести снова.
+        answer:
+          - "You should reapply sunscreen after swimming."
+          - "You should reapply sunscreen after you swim."
+          - "You should reapply sunscreen after going in the water."
+          - "You should reapply sun cream after swimming."
+          - "You should reapply sun cream after you swim."
+          - "You should reapply sun cream after going in the water."
+          - "You need to reapply sunscreen after swimming."
+          - "You need to reapply sunscreen after you swim."
+          - "You need to reapply sunscreen after going in the water."
+          - "You need to reapply sun cream after swimming."
+          - "You need to reapply sun cream after you swim."
+          - "You need to reapply sun cream after going in the water."
+          - "You should apply sunscreen again after swimming."
+          - "You should apply sunscreen again after you swim."
+          - "You should apply sunscreen again after going in the water."
+          - "You should apply sun cream again after swimming."
+          - "You should apply sun cream again after you swim."
+          - "You should apply sun cream again after going in the water."
+          - "You should put on sunscreen again after swimming."
+          - "You should put on sunscreen again after you swim."
+          - "You should put on sunscreen again after going in the water."
+          - "You should put on sun cream again after swimming."
+          - "You should put on sun cream again after you swim."
+          - "You should put on sun cream again after going in the water."
+          - "You need to apply sunscreen again after swimming."
+          - "You need to apply sunscreen again after you swim."
+          - "You need to apply sunscreen again after going in the water."
+          - "You need to apply sun cream again after swimming."
+          - "You need to apply sun cream again after you swim."
+          - "You need to apply sun cream again after going in the water."
+          - "You need to put on sunscreen again after swimming."
+          - "You need to put on sunscreen again after you swim."
+          - "You need to put on sunscreen again after going in the water."
+          - "You need to put on sun cream again after swimming."
+          - "You need to put on sun cream again after you swim."
+          - "You need to put on sun cream again after going in the water."
+          - "You should put sunscreen on again after swimming."
+          - "You should put sunscreen on again after you swim."
+          - "You should put sunscreen on again after going in the water."
+          - "You should put sun cream on again after swimming."
+          - "You should put sun cream on again after you swim."
+          - "You should put sun cream on again after going in the water."
+          - "You need to put sunscreen on again after swimming."
+          - "You need to put sunscreen on again after you swim."
+          - "You need to put sunscreen on again after going in the water."
+          - "You need to put sun cream on again after swimming."
+          - "You need to put sun cream on again after you swim."
+          - "You need to put sun cream on again after going in the water."
+          - "You should put more sunscreen on after swimming."
+          - "You should put more sunscreen on after you swim."
+          - "You should put more sunscreen on after going in the water."
+          - "You should put more sun cream on after swimming."
+          - "You should put more sun cream on after you swim."
+          - "You should put more sun cream on after going in the water."
+          - "You need to put more sunscreen on after swimming."
+          - "You need to put more sunscreen on after you swim."
+          - "You need to put more sunscreen on after going in the water."
+          - "You need to put more sun cream on after swimming."
+          - "You need to put more sun cream on after you swim."
+          - "You need to put more sun cream on after going in the water."
+          - "After swimming, you should reapply sunscreen."
+          - "After swimming, you should reapply sunscreen again."
+          - "After swimming, you should reapply sun cream."
+          - "After swimming, you should reapply sun cream again."
+          - "After swimming, you should put on sunscreen."
+          - "After swimming, you should put on sunscreen again."
+          - "After swimming, you should put on sun cream."
+          - "After swimming, you should put on sun cream again."
+          - "After swimming, you need to reapply sunscreen."
+          - "After swimming, you need to reapply sunscreen again."
+          - "After swimming, you need to reapply sun cream."
+          - "After swimming, you need to reapply sun cream again."
+          - "After swimming, you need to put on sunscreen."
+          - "After swimming, you need to put on sunscreen again."
+          - "After swimming, you need to put on sun cream."
+          - "After swimming, you need to put on sun cream again."
+          - "After swimming you should reapply sunscreen."
+          - "After swimming you should reapply sunscreen again."
+          - "After swimming you should reapply sun cream."
+          - "After swimming you should reapply sun cream again."
+          - "After swimming you should put on sunscreen."
+          - "After swimming you should put on sunscreen again."
+          - "After swimming you should put on sun cream."
+          - "After swimming you should put on sun cream again."
+          - "After swimming you need to reapply sunscreen."
+          - "After swimming you need to reapply sunscreen again."
+          - "After swimming you need to reapply sun cream."
+          - "After swimming you need to reapply sun cream again."
+          - "After swimming you need to put on sunscreen."
+          - "After swimming you need to put on sunscreen again."
+          - "After swimming you need to put on sun cream."
+          - "After swimming you need to put on sun cream again."
+          - "After going in the water, you should reapply sunscreen."
+          - "After going in the water, you should reapply sunscreen again."
+          - "After going in the water, you should reapply sun cream."
+          - "After going in the water, you should reapply sun cream again."
+          - "After going in the water, you should put on sunscreen."
+          - "After going in the water, you should put on sunscreen again."
+          - "After going in the water, you should put on sun cream."
+          - "After going in the water, you should put on sun cream again."
+          - "After going in the water, you need to reapply sunscreen."
+          - "After going in the water, you need to reapply sunscreen again."
+          - "After going in the water, you need to reapply sun cream."
+          - "After going in the water, you need to reapply sun cream again."
+          - "After going in the water, you need to put on sunscreen."
+          - "After going in the water, you need to put on sunscreen again."
+          - "After going in the water, you need to put on sun cream."
+          - "After going in the water, you need to put on sun cream again."
+          - "After going in the water you should reapply sunscreen."
+          - "After going in the water you should reapply sunscreen again."
+          - "After going in the water you should reapply sun cream."
+          - "After going in the water you should reapply sun cream again."
+          - "After going in the water you should put on sunscreen."
+          - "After going in the water you should put on sunscreen again."
+          - "After going in the water you should put on sun cream."
+          - "After going in the water you should put on sun cream again."
+          - "After going in the water you need to reapply sunscreen."
+          - "After going in the water you need to reapply sunscreen again."
+          - "After going in the water you need to reapply sun cream."
+          - "After going in the water you need to reapply sun cream again."
+          - "After going in the water you need to put on sunscreen."
+          - "After going in the water you need to put on sunscreen again."
+          - "After going in the water you need to put on sun cream."
+          - "After going in the water you need to put on sun cream again."
+          - "After swimming, you should put sunscreen on."
+          - "After swimming, you should put sunscreen on again."
+          - "After swimming, you should put sun cream on."
+          - "After swimming, you should put sun cream on again."
+          - "After swimming, you need to put sunscreen on."
+          - "After swimming, you need to put sunscreen on again."
+          - "After swimming, you need to put sun cream on."
+          - "After swimming, you need to put sun cream on again."
+          - "After swimming you should put sunscreen on."
+          - "After swimming you should put sunscreen on again."
+          - "After swimming you should put sun cream on."
+          - "After swimming you should put sun cream on again."
+          - "After swimming you need to put sunscreen on."
+          - "After swimming you need to put sunscreen on again."
+          - "After swimming you need to put sun cream on."
+          - "After swimming you need to put sun cream on again."
+          - "After going in the water, you should put sunscreen on."
+          - "After going in the water, you should put sunscreen on again."
+          - "After going in the water, you should put sun cream on."
+          - "After going in the water, you should put sun cream on again."
+          - "After going in the water, you need to put sunscreen on."
+          - "After going in the water, you need to put sunscreen on again."
+          - "After going in the water, you need to put sun cream on."
+          - "After going in the water, you need to put sun cream on again."
+          - "After going in the water you should put sunscreen on."
+          - "After going in the water you should put sunscreen on again."
+          - "After going in the water you should put sun cream on."
+          - "After going in the water you should put sun cream on again."
+          - "After going in the water you need to put sunscreen on."
+          - "After going in the water you need to put sunscreen on again."
+          - "After going in the water you need to put sun cream on."
+          - "After going in the water you need to put sun cream on again."
+          - "reapply sunscreen after swimming."
+          - "reapply sunscreen after going in the water."
+          - "reapply sun cream after swimming."
+          - "reapply sun cream after going in the water."
+          - "put sunscreen on again after swimming."
+          - "put sunscreen on again after going in the water."
+          - "put sun cream on again after swimming."
+          - "put sun cream on again after going in the water."
+          - "You have to reapply sunscreen after swimming."
+          - "You have to reapply sunscreen after going in the water."
+          - "You have to reapply sun cream after swimming."
+          - "You have to reapply sun cream after going in the water."
+          - "You must reapply sunscreen after swimming."
+          - "You must reapply sunscreen after going in the water."
+          - "You must reapply sun cream after swimming."
+          - "You must reapply sun cream after going in the water."
+          - "Sunscreen needs to be reapplied after swimming."
+          - "Sunscreen needs to be reapplied after going in the water."
+          - "Sun cream needs to be reapplied after swimming."
+          - "Sun cream needs to be reapplied after going in the water."
+        explanation: Совет — should + reapply; again нужен при apply.
+      - id: q5
+        prompt: Поблизости есть тень?
+        answer:
+          - "is there any shade nearby?"
+          - "is there any shade near here?"
+          - "is there any shade around here?"
+          - "is there any shade close by?"
+          - "is there any shade close to here?"
+          - "is there shade nearby?"
+          - "is there shade near here?"
+          - "is there shade around here?"
+          - "is there shade close by?"
+          - "is there shade close to here?"
+          - "Excuse me, is there any shade nearby?"
+          - "Excuse me, is there any shade near here?"
+          - "Excuse me, is there any shade around here?"
+          - "Excuse me, is there any shade close by?"
+          - "Excuse me, is there any shade close to here?"
+          - "Excuse me, is there shade nearby?"
+          - "Excuse me, is there shade near here?"
+          - "Excuse me, is there shade around here?"
+          - "Excuse me, is there shade close by?"
+          - "Excuse me, is there shade close to here?"
+          - "Excuse me is there any shade nearby?"
+          - "Excuse me is there any shade near here?"
+          - "Excuse me is there any shade around here?"
+          - "Excuse me is there any shade close by?"
+          - "Excuse me is there any shade close to here?"
+          - "Excuse me is there shade nearby?"
+          - "Excuse me is there shade near here?"
+          - "Excuse me is there shade around here?"
+          - "Excuse me is there shade close by?"
+          - "Excuse me is there shade close to here?"
+          - "is there a shady spot nearby?"
+          - "is there a shady spot near here?"
+          - "is there a shady spot around here?"
+          - "is there a shady spot close by?"
+          - "is there a shady spot close to here?"
+          - "is there a shaded area nearby?"
+          - "is there a shaded area near here?"
+          - "is there a shaded area around here?"
+          - "is there a shaded area close by?"
+          - "is there a shaded area close to here?"
+          - "is there somewhere shady nearby?"
+          - "is there somewhere shady near here?"
+          - "is there somewhere shady around here?"
+          - "is there somewhere shady close by?"
+          - "is there somewhere shady close to here?"
+          - "Excuse me, is there a shady spot nearby?"
+          - "Excuse me, is there a shady spot near here?"
+          - "Excuse me, is there a shady spot around here?"
+          - "Excuse me, is there a shady spot close by?"
+          - "Excuse me, is there a shady spot close to here?"
+          - "Excuse me, is there a shaded area nearby?"
+          - "Excuse me, is there a shaded area near here?"
+          - "Excuse me, is there a shaded area around here?"
+          - "Excuse me, is there a shaded area close by?"
+          - "Excuse me, is there a shaded area close to here?"
+          - "Excuse me, is there somewhere shady nearby?"
+          - "Excuse me, is there somewhere shady near here?"
+          - "Excuse me, is there somewhere shady around here?"
+          - "Excuse me, is there somewhere shady close by?"
+          - "Excuse me, is there somewhere shady close to here?"
+          - "Excuse me is there a shady spot nearby?"
+          - "Excuse me is there a shady spot near here?"
+          - "Excuse me is there a shady spot around here?"
+          - "Excuse me is there a shady spot close by?"
+          - "Excuse me is there a shady spot close to here?"
+          - "Excuse me is there a shaded area nearby?"
+          - "Excuse me is there a shaded area near here?"
+          - "Excuse me is there a shaded area around here?"
+          - "Excuse me is there a shaded area close by?"
+          - "Excuse me is there a shaded area close to here?"
+          - "Excuse me is there somewhere shady nearby?"
+          - "Excuse me is there somewhere shady near here?"
+          - "Excuse me is there somewhere shady around here?"
+          - "Excuse me is there somewhere shady close by?"
+          - "Excuse me is there somewhere shady close to here?"
+        explanation: Shade неисчисляемое — is there any shade.
+

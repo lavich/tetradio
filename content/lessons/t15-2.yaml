@@ -1,0 +1,404 @@
+title: Аренда, экскурсии и отпуск на курорте
+kind: lesson
+items:
+  - { kind: word, id: tw219 }
+  - { kind: word, id: tw220 }
+  - { kind: word, id: tw221 }
+  - { kind: word, id: tw222 }
+  - { kind: word, id: tw223 }
+  - { kind: word, id: tw224 }
+  - { kind: word, id: tw225 }
+  - { kind: phrase, id: tp219 }
+  - { kind: phrase, id: tp220 }
+  - { kind: phrase, id: tp221 }
+  - { kind: phrase, id: tp222 }
+  - { kind: phrase, id: tp223 }
+  - { kind: phrase, id: tp224 }
+  - { kind: phrase, id: tp225 }
+blocks:
+  - type: explanation
+    id: rental-words
+    title: Прокат, экскурсии и курорт — что спросить
+    body: |-
+      На пляже с прокатом и экскурсиями цену называют за час, за полдня или за целый день: **What's the rate for a full day?** Узнайте, что входит в цену (маска, трубка, жилет), сколько длится экскурсия и где собираются. Для **snorkelling** — плавания с маской и трубкой — берут **a wetsuit**, если вода прохладная. Время можно сдвинуть: **Could we start a bit later?** Последний катер или автобус стоит уточнить заранее: **When does the last boat leave?**
+
+      На курорте **all-inclusive** — «всё включено»: питание и напитки входят в цену, но спа, экскурсии и трансфер обычно оплачиваются отдельно. На руку надевают **a wristband**: его показывают у ресторана и бара. Чтобы приехать из аэропорта в отель, спрашивают о трансфере: **Is there a shuttle from the airport?** Для раннего выезда просят такси заранее: **Could you order us a taxi for six o'clock?**
+
+      Погода влияет на планы: **What's the forecast for tomorrow?** Ответы — **It's overcast** (пасмурно), **It's scorching** (палящая жара), **It's supposed to clear up by noon** (по прогнозу, к полудню должно проясниться).
+
+      Снаряжение для плавания выдают с инструктажем, и дальше от берега в одиночку не заплывают: эти правила есть в табличках проката.
+    table:
+      columns:
+        - ситуация
+        - фраза
+      rows:
+        - - цена
+          - What's the rate for a full day?
+        - - время
+          - Could we start a bit later?
+        - - последний рейс
+          - When does the last boat leave?
+        - - из аэропорта
+          - Is there a shuttle from the airport?
+        - - ранний выезд
+          - Could you order us a taxi for six o'clock?
+        - - погода
+          - What's the forecast for tomorrow?
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: words-match
+    title: Слова урока
+    instruction: Соедините русское слово с английским. Два английских слова лишние.
+    format: match
+    bank:
+      - snorkelling
+      - a wetsuit
+      - all-inclusive
+      - a wristband
+      - a forecast
+      - overcast
+      - scorching
+      - a layover
+      - a pickpocket
+    items:
+      - { id: m1, prompt: "плавание с маской и трубкой", answer: "snorkelling" }
+      - { id: m2, prompt: "гидрокостюм", answer: "a wetsuit" }
+      - { id: m3, prompt: "«всё включено»", answer: "all-inclusive" }
+      - { id: m4, prompt: "браслет на руку в отеле", answer: "a wristband" }
+      - { id: m5, prompt: "прогноз погоды", answer: "a forecast" }
+      - { id: m6, prompt: "пасмурно, небо затянуто облаками", answer: "overcast" }
+      - { id: m7, prompt: "палящий, очень жаркий", answer: "scorching" }
+  - type: explanation
+    id: hut-how
+    title: Табличка пункта проката
+    body: |-
+      Ниже — табличка на пляже: цены на лежаки и лодки, экскурсия со снорклингом, катер вдоль берега и дайвинг-центр. Такие таблички читают по строкам: найдите своё занятие, затем цену, время и условия. Цифры идут через тире и двоеточие: **9:00–18:00** — с девяти до шести, **€12** — двенадцать евро.
+
+      В разделе о безопасности стоят правила проката: инструктаж перед снаряжением, плавать недалеко от берега и не одному, следовать флагам и указаниям спасателей.
+  - type: reading
+    id: beach-hut
+    title: Seaview Beach — rentals and trips
+    text: |-
+      SEAVIEW BEACH — RENTALS AND TRIPS
+      Open every day 9:00–18:00 (weather permitting). Pay at the beach bar.
+
+      Loungers and parasols
+      Lounger: €8 for half a day (until 14:00), €12 for a full day
+      Parasol: €5 for half a day, €8 for a full day
+
+      Boats and water sports
+      Pedal boat (up to 4 people): €25 per hour
+      Kayak (for 2): €10 per hour
+      Water skiing: €40 for 15 minutes, lifejacket and instructor included
+      Deposit: your ID or €50. Please stay inside the yellow buoys.
+
+      Snorkelling trip by boat
+      Daily at 10:00 and 14:00, about two hours
+      Meet at the blue hut by the pier 15 minutes before departure
+      Adult €35, child (6–12) €20. Mask and snorkel included, wetsuit €6 per trip
+      Children under 6 cannot join.
+
+      Coast boat trip
+      Every hour from 11:00 to 17:00, €18. The last boat leaves at 17:00.
+
+      Diving centre
+      Try dive for beginners (from age 12): €70, at 9:00 and 15:00. A short lesson in shallow water comes first.
+
+      Safety
+      Everyone gets a short safety briefing before using equipment. Please do not swim far from the beach on your own, and follow the flags and the lifeguards' instructions.
+    glosses:
+      - { text: weather permitting, russian: если позволит погода }
+      - { text: lifejacket, russian: спасательный жилет }
+      - { text: instructor, russian: инструктор }
+      - { text: Deposit, russian: залог }
+      - { text: buoys, russian: буи }
+      - { text: departure, russian: отправление }
+      - { text: Try dive, russian: пробное погружение }
+      - { text: briefing, russian: инструктаж }
+      - { text: equipment, russian: снаряжение }
+  - type: exercise
+    id: hut-q
+    about: beach-hut
+    title: Чтение — прокат
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How much is a parasol for half a day?
+        options: ["€5", "€8", "€12"]
+        answer: "€5"
+        explanation: "Parasol: €5 for half a day; €8 — за целый день."
+      - id: q2
+        prompt: You want a lounger until 4 p.m. Which price do you pay?
+        options: ["€12", "€8", "€5"]
+        answer: "€12"
+        explanation: Половина дня — до 14:00, а до 16:00 нужен целый день, €12.
+      - id: q3
+        prompt: What time should you be at the blue hut for the 10:00 snorkelling trip?
+        options: ["9:45", "10:15", "9:00"]
+        answer: "9:45"
+        explanation: "Meet… 15 minutes before departure — за пятнадцать минут до отправления."
+      - id: q4
+        prompt: How much does a snorkelling trip cost for an eight-year-old child?
+        options: ["€20", "€35", "€6"]
+        answer: "€20"
+        explanation: "Child (6–12) €20; €6 — только аренда гидрокостюма."
+      - id: q5
+        prompt: What is included in the price of the snorkelling trip?
+        options:
+          - a mask and a snorkel
+          - a mask, a snorkel and a wetsuit
+          - a lunch on the boat
+        answer: a mask and a snorkel
+        explanation: "Mask and snorkel included, wetsuit €6 per trip — гидрокостюм за отдельную плату."
+      - id: q6
+        prompt: When does the last coast boat leave?
+        options: ["17:00", "18:00", "14:00"]
+        answer: "17:00"
+        explanation: The last boat leaves at 17:00; в 18:00 пункт закрывается.
+  - type: explanation
+    id: hotel-how
+    title: Карточка отеля «всё включено»
+    body: |-
+      Отель на курорте оставляет в номере карточку с правилами: что входит в цену, часы работы ресторана и бара, где спа, как заказать трансфер и во сколько выезжать. Читая карточку, ищите три вещи: что включено, что оплачивается отдельно и что нужно сделать заранее.
+
+      Слово **Included** — «входит в цену», **Not included** — «оплачивается отдельно». **Local beer and wine** — местное пиво и вино.
+  - type: reading
+    id: hotel-card
+    title: Palm Bay Resort — your all-inclusive stay
+    text: |-
+      PALM BAY RESORT — YOUR ALL-INCLUSIVE STAY
+
+      Included
+      Meals: breakfast 7:00–10:30, lunch 12:30–15:00 and dinner 18:30–21:30 in the main restaurant; snacks 11:00–17:00 at the pool café
+      Drinks: water, juice, tea and coffee all day; local beer and wine at the pool bar 10:00–23:00
+      Pool and beach: loungers, parasols and towels
+      Daily activities: yoga, water polo, evening shows
+      Not included: the spa, the dive centre, boat trips, room service and the airport shuttle
+
+      Your wristband
+      Please wear your wristband at all times and show it at the restaurants and the pool bar. If you lose it, ask reception for a new one.
+
+      Pool and bar
+      The pool is open 8:00–22:00. The bar stays open until 23:00. Please do not swim after drinking alcohol.
+
+      Spa
+      Open 10:00–19:00. Book at reception. Massages from €45.
+
+      Airport shuttle
+      Tickets from reception, €15 per person. For an early departure, tell reception the day before, and we will order a taxi and prepare a breakfast box for you.
+
+      Check-out
+      Check-out is at 11:00 on the day you leave. Please return your wristband to reception.
+    glosses:
+      - { text: water polo, russian: водное поло }
+      - { text: room service, russian: еда и напитки в номер }
+      - { text: breakfast box, russian: завтрак с собой }
+      - { text: stays open, russian: работает }
+      - { text: spa, russian: спа-центр }
+      - { text: Massages, russian: массаж }
+  - type: exercise
+    id: hotel-q
+    about: hotel-card
+    title: Чтение — карточка отеля
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What do you need to show at the pool bar?
+        options: [your wristband, your passport, your room key]
+        answer: your wristband
+        explanation: Show it at the restaurants and the pool bar.
+      - id: q2
+        prompt: What is NOT included in the all-inclusive price?
+        options: [the spa, lunch, the pool café]
+        answer: the spa
+        explanation: "Not included: the spa, the dive centre, boat trips, room service and the airport shuttle."
+      - id: q3
+        prompt: What time does the pool bar close?
+        options: ["23:00", "22:00", "21:30"]
+        answer: "23:00"
+        explanation: "Бассейн закрывается в 22:00, бар работает до 23:00; 21:30 — конец ужина."
+      - id: q4
+        prompt: What should you do if you lose your wristband?
+        options:
+          - Ask reception for a new one.
+          - Pay at the pool bar.
+          - Buy a new one in the spa.
+        answer: Ask reception for a new one.
+        explanation: If you lose it, ask reception for a new one.
+      - id: q5
+        prompt: You need to leave for the airport at 6 a.m. tomorrow. What should you do?
+        options:
+          - Tell reception today.
+          - Go to the pool bar in the morning.
+          - Wait for the shuttle outside.
+        answer: Tell reception today.
+        explanation: For an early departure, tell reception the day before — в отеле закажут такси.
+      - id: q6
+        prompt: Where can you book a massage?
+        options: [at reception, at the pool bar, at the beach]
+        answer: at reception
+        explanation: Spa… Book at reception.
+      - id: q7
+        prompt: When is check-out?
+        options: ["11:00", "12:00", "10:00"]
+        answer: "11:00"
+        explanation: Check-out is at 11:00 on the day you leave.
+  - type: explanation
+    id: boat-how
+    title: Экскурсия на лодке — разговор у прокатного домика
+    body: |-
+      Элиф с мужем и дочерью девяти лет хочет поехать на экскурсию со снорклингом. В прокатном домике на пляже её встречает Никос. Послушайте разговор: сколько стоит экскурсия, что входит в цену, какую экскурсию они выбрали и где собираются.
+
+      Элиф уточняет цену и просит гидрокостюм для дочери, а в конце просит присмотреть за вещами и спрашивает о лежаках и зонте на день. Никос называет все цены по порядку.
+  - type: listening
+    id: boat-trip
+    title: At the rental hut
+    plays: 2
+    transcript:
+      - { speaker: Nikos, text: "Good morning. How can I help?" }
+      - { speaker: Elif, text: "Hi. We'd like to go on the snorkelling trip tomorrow. Is there space for two adults and a child?" }
+      - { speaker: Nikos, text: "Yes, there is. How old is your daughter?" }
+      - { speaker: Elif, text: "She's nine." }
+      - { speaker: Nikos, text: "Then it's thirty-five euros for each adult and twenty for your daughter. That's ninety euros altogether." }
+      - { speaker: Elif, text: "My daughter feels the cold. Could we get a wetsuit for her?" }
+      - { speaker: Nikos, text: "Of course. It's six euros for the trip. What size does she need?" }
+      - { speaker: Elif, text: "Small, I think. Which trip is better, the ten o'clock or the two o'clock?" }
+      - { speaker: Nikos, text: "The ten o'clock. The sea is usually calmer in the morning, and the afternoon trip is busier." }
+      - { speaker: Elif, text: "Ten, then. Where do we meet?" }
+      - { speaker: Nikos, text: "At the blue hut by the pier, fifteen minutes before. We start with a short safety briefing, and our guide stays with the group the whole time." }
+      - { speaker: Elif, text: "Good. Tomorrow, could you keep an eye on our things while we are on the boat?" }
+      - { speaker: Nikos, text: "Sure. Put your bags behind the counter." }
+      - { speaker: Elif, text: "Thank you. And for today, what's the rate for a full day for loungers?" }
+      - { speaker: Nikos, text: "A lounger is twelve euros, and a parasol is eight." }
+      - { speaker: Elif, text: "Two loungers and one parasol, please." }
+      - { speaker: Nikos, text: "That's thirty-two euros for the day. You can pay at the beach bar. Can I have your name for the trip?" }
+      - { speaker: Elif, text: "Elif Demir." }
+      - { speaker: Nikos, text: "Thank you, Ms Demir. See you tomorrow at a quarter to ten." }
+  - type: exercise
+    id: boat-q
+    about: boat-trip
+    title: Аудирование — прокатный домик
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How much is the snorkelling trip for two adults and a child, without a wetsuit?
+        options: [ninety euros, seventy euros, one hundred and five euros]
+        answer: ninety euros
+        explanation: "35 + 35 + 20 = 90; гидрокостюм — ещё шесть евро."
+      - id: q2
+        prompt: Why does Elif ask for a wetsuit?
+        options:
+          - Her daughter feels the cold.
+          - The water is very deep.
+          - The guide says it is necessary.
+        answer: Her daughter feels the cold.
+        explanation: My daughter feels the cold.
+      - id: q3
+        prompt: Which trip do they choose?
+        options: [the ten o'clock trip, the two o'clock trip, both trips]
+        answer: the ten o'clock trip
+        explanation: Утром море обычно спокойнее, а дневная экскурсия многолюднее.
+      - id: q4
+        prompt: Where do they meet before the trip?
+        options: [at the blue hut by the pier, at the beach bar, at the hotel]
+        answer: at the blue hut by the pier
+        explanation: At the blue hut by the pier, fifteen minutes before.
+      - id: q5
+        prompt: What does Elif ask Nikos to do with their things?
+        options:
+          - look after them at the hut
+          - carry them to the boat
+          - send them to the hotel
+        answer: look after them at the hut
+        explanation: Could you keep an eye on our things? Никос предлагает оставить сумки за стойкой.
+      - id: q6
+        prompt: How much does Elif pay for two loungers and a parasol for the day?
+        options: [thirty-two euros, twenty-four euros, forty euros]
+        answer: thirty-two euros
+        explanation: "12 + 12 + 8 = 32; платит она в баре на пляже."
+  - type: exercise
+    id: boat-phrases
+    about: boat-trip
+    title: Фразы из диалога
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [snorkelling, wetsuit, rate, eye, space, pier, briefing, shuttle, forecast]
+    items:
+      - { id: g1, prompt: "We'd like to go on the ___ trip tomorrow.", answer: "snorkelling" }
+      - { id: g2, prompt: "Could we get a ___ for her?", answer: "wetsuit" }
+      - { id: g3, prompt: "What's the ___ for a full day for loungers?", answer: "rate" }
+      - { id: g4, prompt: "Could you keep an ___ on our things?", answer: "eye" }
+      - { id: g5, prompt: "Is there ___ for two adults and a child?", answer: "space" }
+      - { id: g6, prompt: "We meet at the blue hut by the ___.", answer: "pier" }
+      - { id: g7, prompt: "We start with a short safety ___.", answer: "briefing" }
+  - type: explanation
+    id: reception-how
+    title: Ресепшен курорта
+    body: |-
+      Стефан отдыхает в отеле «всё включено». За несколько дней до отъезда он подходит к ресепшену: потерян браслет, завтра в аэропорт прилетает его брат, в пятницу рано утром вылет. С ним говорит Яра. Послушайте: какой трансфер у брата, во сколько заказано такси и как Стефан записывается в спа.
+
+      Стефан говорит короткими фразами. Яра отвечает по пунктам: что оплачивает отель, а что гость.
+  - type: listening
+    id: reception
+    title: At the resort reception
+    plays: 2
+    transcript:
+      - { speaker: Yara, text: "Good evening, Mr Weber. How can I help?" }
+      - { speaker: Stefan, text: "Good evening. I have three questions. First, I lost my wristband." }
+      - { speaker: Yara, text: "No problem. Here is a new one. Please show it at the restaurants and at the pool bar." }
+      - { speaker: Stefan, text: "Thank you. Second, my brother arrives tomorrow at noon. Is there a shuttle from the airport?" }
+      - { speaker: Yara, text: "Yes, but it isn't included in all-inclusive. The shuttle runs every two hours, and it costs fifteen euros per person. Is he arriving at terminal one?" }
+      - { speaker: Stefan, text: "Yes, I think so." }
+      - { speaker: Yara, text: "Then the next shuttle after noon is at half past twelve. He should wait at the blue sign outside the arrivals hall." }
+      - { speaker: Stefan, text: "Good. And third, we fly home on Friday at nine in the morning. Could you order us a taxi for six o'clock?" }
+      - { speaker: Yara, text: "Of course. Friday at six. The restaurant opens at seven, so I'll prepare a breakfast box for you." }
+      - { speaker: Stefan, text: "That is very kind. Also, can I book a massage for tomorrow?" }
+      - { speaker: Yara, text: "The spa isn't included either. A massage is forty-five euros. I have a free slot at four o'clock." }
+      - { speaker: Stefan, text: "Four is fine. Thank you." }
+      - { speaker: Yara, text: "You're welcome. On Friday, please return your wristband to reception when you check out." }
+  - type: exercise
+    id: reception-q
+    about: reception
+    title: Аудирование — ресепшен
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What did Stefan lose?
+        options: [his wristband, his passport, his room key]
+        answer: his wristband
+        explanation: I lost my wristband.
+      - id: q2
+        prompt: Where should Stefan's brother wait for the shuttle?
+        options: [at the blue sign, at the hotel bar, at terminal two]
+        answer: at the blue sign
+        explanation: He should wait at the blue sign outside the arrivals hall.
+      - id: q3
+        prompt: How much is the shuttle?
+        options: [fifteen euros per person, forty-five euros per person, nothing]
+        answer: fifteen euros per person
+        explanation: Сорок пять евро стоит массаж; трансфер в «всё включено» не входит.
+      - id: q4
+        prompt: What time is the taxi on Friday?
+        options: [six o'clock, seven o'clock, nine o'clock]
+        answer: six o'clock
+        explanation: В девять — рейс, в семь — открывается ресторан.
+      - id: q5
+        prompt: Why does Yara prepare a breakfast box?
+        options:
+          - The restaurant opens after they leave.
+          - Stefan is not hungry.
+          - The shuttle is late.
+        answer: The restaurant opens after they leave.
+        explanation: The restaurant opens at seven, а такси в шесть.
+      - id: q6
+        prompt: What time is Stefan's massage?
+        options: [four o'clock, five o'clock, noon]
+        answer: four o'clock
+        explanation: I have a free slot at four o'clock.
+

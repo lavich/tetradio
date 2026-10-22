@@ -132,3 +132,12 @@ characters:
   Anika: { gender: female, voice: Vindemiatrix }
   Isla: { gender: female, voice: Pulcherrima }
   Noah: { gender: male, voice: Achird }
+  Elif: { gender: female, voice: Autonoe }
+  Nikos: { gender: male, voice: Rasalgethi }
+  Yara: { gender: female, voice: Gacrux }
+  Stefan: { gender: male, voice: Orus }
+  Tariq: { gender: male, voice: Algenib }
+  Selin: { gender: female, voice: Despina }
+  Dario: { gender: male, voice: Fenrir }
+  Mila: { gender: female, voice: Sulafat }
+  Henrik: { gender: male, voice: Charon }

@@ -1,0 +1,321 @@
+title: Погода, планы на день и отзыв о месте отдыха
+kind: lesson
+items: []
+blocks:
+  - type: explanation
+    id: weather-plans
+    title: Погода и планы — going to, will, supposed to
+    body: |-
+      Прогноз и план на день строятся из знакомых форм. **Going to** — по признакам: **It's going to rain this afternoon.** **It's going to be scorching tomorrow.** **Will** — решение на месте или предсказание без признаков: **I'll take an umbrella.** По прогнозу, со слов других, — **be supposed to**: **It's supposed to clear up by noon.**
+
+      Условие: **If it rains, we'll go to the spa.** После if стоит настоящее время, а will — только в главной части. Сравнения знакомы по прежним модулям: **hotter than yesterday**, **calmer in the morning**, **not as hot as on Monday**.
+
+      Предложить план компании — **How about + существительное или -ing?**: **How about a boat trip?** **How about going to the market?** Или **We could + глагол**: **We could go snorkelling in the morning.** Согласиться — **Good idea.** **I like that.** Отложить решение — **Let's decide in the morning.**
+
+      Типичные ошибки: «If it will rain, we'll…» и «It supposed to clear up» без is.
+    table:
+      columns:
+        - что сказать
+        - пример
+      rows:
+        - - прогноз по признакам
+          - It's going to rain this afternoon.
+        - - по прогнозу
+          - It's supposed to clear up by noon.
+        - - решение на месте
+          - I'll take an umbrella.
+        - - условие
+          - If it rains, we'll go to the spa.
+        - - сравнение
+          - It's hotter than yesterday.
+        - - предложить
+          - How about a boat trip?
+        - - предложить иначе
+          - We could go snorkelling in the morning.
+        - - отложить решение
+          - Let's decide in the morning.
+  - type: explanation
+    id: bank
+    title: Банк фраз — пляж, прокат и планы
+    body: |-
+      На пляже и на курорте разговор идёт по трём шагам: что нужно узнать → что вы просите → что решаете. Готовые фразы — из двух первых уроков модуля.
+
+      **Что узнать.** Безопасность — у спасателя: **Is it safe to swim here?** **What do the flags mean?** Погода — **What's the forecast for tomorrow?** Цена и время — **What's the rate for a full day?** **When does the last boat leave?**
+
+      **Что попросить.** Лежаки и зонт — **Could we get two loungers and a parasol?** Другое время — **Could we start a bit later?** Присмотр за вещами — **Could you keep an eye on our things?** Такси — **Could you order us a taxi for six o'clock?**
+
+      **Что решить.** Предложить — **How about a boat trip?** **We could go snorkelling in the morning.** Условие — **If it rains, we'll go to the spa.** Отложить — **Let's decide in the morning.**
+
+      Соберите свой банк: по одной фразе на каждый шаг для места, куда вы могли бы поехать в отпуск.
+    table:
+      columns:
+        - шаг
+        - фраза
+      rows:
+        - - безопасность
+          - Is it safe to swim here?
+        - - цена
+          - What's the rate for a full day?
+        - - время
+          - Could we start a bit later?
+        - - присмотр за вещами
+          - Could you keep an eye on our things?
+        - - погода
+          - What's the forecast for tomorrow?
+        - - предложение
+          - How about a boat trip?
+        - - решение
+          - Let's decide in the morning.
+  - type: exercise
+    id: bank-match
+    title: Какую фразу сказать
+    instruction: Подберите фразу к ситуации. Две фразы лишние.
+    format: match
+    bank:
+      - Is it safe to swim here?
+      - What's the rate for a full day?
+      - Could we start a bit later?
+      - What's the forecast for tomorrow?
+      - How about a boat trip?
+      - We could go snorkelling in the morning.
+      - Let's decide in the morning.
+      - Could you keep an eye on our things?
+      - Keep the change.
+      - I'd like a window seat.
+    items:
+      - { id: m1, prompt: "Вы спрашиваете у спасателя, можно ли здесь плавать.", answer: "Is it safe to swim here?" }
+      - { id: m2, prompt: "Вы узнаёте цену лежака за весь день.", answer: "What's the rate for a full day?" }
+      - { id: m3, prompt: "Экскурсия в десять часов. Вы просите начать позже.", answer: "Could we start a bit later?" }
+      - { id: m4, prompt: "Вы хотите узнать погоду на завтра.", answer: "What's the forecast for tomorrow?" }
+      - { id: m5, prompt: "Вы предлагаете компании вопросом «как насчёт…?»: поездка на лодке.", answer: "How about a boat trip?" }
+      - { id: m6, prompt: "Вы предлагаете через «мы могли бы…»: поплавать с маской утром.", answer: "We could go snorkelling in the morning." }
+      - { id: m7, prompt: "Вы не решаете сейчас и хотите посмотреть на погоду утром.", answer: "Let's decide in the morning." }
+      - { id: m8, prompt: "Вы уходите плавать и просите соседа по пляжу.", answer: "Could you keep an eye on our things?" }
+  - type: exercise
+    id: forecast-choice
+    title: Прогноз и планы
+    instruction: Выберите вариант, который звучит правильно.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы видите тёмные тучи и говорите, что скоро пойдёт дождь.
+        options:
+          - It's going to rain.
+          - It's going rain.
+          - It will to rain.
+        answer: It's going to rain.
+        explanation: Прогноз по признакам — be going to + глагол.
+      - id: q2
+        prompt: Вы решаете прямо сейчас взять зонт.
+        options:
+          - I'll take an umbrella.
+          - I'm going to taking an umbrella.
+          - I will to take an umbrella.
+        answer: I'll take an umbrella.
+        explanation: Решение на месте — will; после will глагол без to.
+      - id: q3
+        prompt: Вы говорите, что при дожде пойдёте в спа.
+        options:
+          - If it rains, we'll go to the spa.
+          - If it will rain, we'll go to the spa.
+          - If it rain, we'll go to the spa.
+        answer: If it rains, we'll go to the spa.
+        explanation: После if — настоящее время (rains), will — в главной части.
+      - id: q4
+        prompt: В прогнозе сказано, что к полудню должно проясниться.
+        options:
+          - It's supposed to clear up by noon.
+          - It's supposing to clear up by noon.
+          - It supposes clear up by noon.
+        answer: It's supposed to clear up by noon.
+        explanation: Be supposed to — «по прогнозу, должно».
+      - id: q5
+        prompt: Вчера было 29 градусов, сегодня 33.
+        options:
+          - Today is hotter than yesterday.
+          - Today is more hot than yesterday.
+          - Today is hotter that yesterday.
+        answer: Today is hotter than yesterday.
+        explanation: Hot — короткое прилагательное; сравнение — hotter than.
+      - id: q6
+        prompt: Вы предлагаете поехать на лодке.
+        options:
+          - How about a boat trip?
+          - How about to go a boat trip?
+          - How about we a boat trip?
+        answer: How about a boat trip?
+        explanation: После how about — существительное или глагол с -ing.
+  - type: exercise
+    id: comparisons
+    title: Сравнения о погоде
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [hotter, calmer, cooler, windier, cloudier, later]
+    items:
+      - { id: g1, prompt: "Yesterday it was 29 degrees, today it is 33. Today is ___ than yesterday.", answer: "hotter" }
+      - { id: g2, prompt: "The sea is rough in the afternoon. In the morning there are almost no waves, so the sea is ___.", answer: "calmer" }
+      - { id: g3, prompt: "At noon it is 34 degrees, in the evening 27. It is ___ in the evening than at noon.", answer: "cooler" }
+      - { id: g4, prompt: "There was a light breeze on Friday. On Saturday the wind is stronger, so Saturday is ___ than Friday.", answer: "windier" }
+  - type: explanation
+    id: speak-how
+    title: Ответ о своём отдыхе
+    body: |-
+      Первое устное задание — короткий ответ на три вопроса о вашем отдыхе. Это ответ для банка: на курорте, на пляже или в компании такие вопросы задают часто.
+
+      Порядок: куда вы обычно ездите (**I usually go to…**) → что любите делать на пляже (**I like swimming in the morning**) → что делаете в дождь (**When it rains, we…**). По одной-две фразы на каждый вопрос; один дубль на 30–60 секунд, переслушайте и сверьте с критериями.
+  - type: speaking
+    id: holiday
+    part: interview
+    prompt: "Вас спрашивают: «Where do you usually go on holiday?», «What do you like doing on the beach?», «What do you do when it rains?» Ответьте на каждый вопрос одной-двумя фразами. Весь ответ — 30–60 секунд."
+    seconds: 60
+    model: "I usually go to the coast in the south for a week in summer. On the beach I like swimming in the morning and reading under a parasol. When it rains, we go to a café or a museum and wait for it to clear up."
+    criteria:
+      - Ответили на все три вопроса, каждый — одной-двумя фразами
+      - "Привычка — I usually go to…; предпочтение — I like + глагол с -ing"
+      - "Дождь — When it rains, we… (после when — настоящее время)"
+      - 30–60 секунд, без долгих пауз; можно один раз поправить себя
+  - type: explanation
+    id: writing-how
+    title: Отзыв о месте отдыха
+    body: |-
+      Отзыв о курорте или пляже пишут на сайте бронирования или на карте: для незнакомых людей и для владельца, поэтому регистр нейтрально-формальный — полные предложения, без сленга и восклицательных знаков. Объём — 60–100 слов.
+
+      Схема: когда и с кем были → что понравилось (пляж, питание, прокат, персонал) → что не понравилось, мягко: **a bit too…**, **not… enough**, **the only problem was…** → безопасность и погода, если это важно → итог: **I would recommend it for…** Что было — **past simple**: We **stayed**… The beach **was** clean. Для сравнения мест — **better than…**
+  - type: writing
+    id: review
+    register: formal
+    prompt: "Напишите отзыв о курорте, отеле или пляже, где вы отдыхали (60–100 слов): когда и с кем были, что понравилось и что нет (пляж, питание, прокат), безопасность или погода, итог. Если подходящего места нет, придумайте курорт на море."
+    words: { min: 60, max: 100 }
+    model: |-
+      We stayed at the Palm Bay Resort for a week in June with my partner. The all-inclusive package was good value, and the food in the main restaurant was fresh and varied. The beach was clean, and the lifeguards were on duty all day, which felt reassuring. However, the sea was choppy on three mornings, so we could not go snorkelling as planned. The only other problem was the queue for loungers at the pool. I would recommend the resort for a relaxed holiday.
+    criteria:
+      - "60–100 слов; есть когда и с кем, плюсы и минусы, безопасность или погода и итог"
+      - "Что было — past simple: we stayed, the beach was clean"
+      - "Мягкая критика: the only problem was…, a bit too…, not… enough"
+      - "Формально: полные предложения, без сленга и восклицательных знаков"
+      - "Итог — I would recommend it for…"
+  - type: explanation
+    id: rental-scene-how
+    title: Ролевая сцена — прокат на пляже
+    body: |-
+      Дальше две ролевые сцены. В каждой сначала звучат реплики собеседника — только его часть разговора, по порядку. Послушайте их два раза, потом откройте текст кнопкой «Открыть текст» и держите перед глазами.
+
+      Затем запишите свою часть: прочитайте реплику собеседника, ответьте на неё одной-двумя фразами, перейдите к следующей. Отвечать сразу после звука не нужно — паузы для ответа в записи нет.
+
+      Первая сцена — прокат на пляже, говорит Тарик. Вы с семьёй берёте педальную лодку и договариваетесь о лежаках.
+  - type: listening
+    id: rental-lines
+    title: Реплики собеседника — прокат на пляже
+    plays: 2
+    transcript:
+      - { speaker: Tariq, text: "Good morning. How can I help you?" }
+      - { speaker: Tariq, text: "We have pedal boats and kayaks. A pedal boat is twenty-five euros an hour, and it takes up to four people. How long would you like it for?" }
+      - { speaker: Tariq, text: "Yes, the sea is calm today, and there's a lifeguard on duty. Our boats usually go out at ten. What time would you like to start?" }
+      - { speaker: Tariq, text: "Eleven is fine. We keep your ID until you bring the boat back. Please stay inside the yellow buoys." }
+      - { speaker: Tariq, text: "Of course, put them behind the counter. We also rent loungers and parasols. Would you like any?" }
+      - { speaker: Tariq, text: "A lounger is twelve euros for the full day, and a parasol is eight. How many would you like?" }
+  - type: speaking
+    id: rental
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы на пляже с семьёй, вас четверо. Скажите, что хотите педальную лодку; ответьте, на сколько, и спросите, безопасно ли выходить на лодке сегодня; попросите начать чуть позже, в одиннадцать; оставьте документ и попросите присмотреть за сумками; узнайте цену лежака на весь день; закажите два лежака и зонт. 6 реплик, вся ваша часть — 60–90 секунд.
+    seconds: 90
+    model: |-
+      Tariq: Good morning. How can I help you?
+      You: Good morning. We'd like to rent a pedal boat, please. There are four of us.
+      Tariq: We have pedal boats and kayaks. A pedal boat is twenty-five euros an hour, and it takes up to four people. How long would you like it for?
+      You: For one hour, please. Is it safe to take a pedal boat out today?
+      Tariq: Yes, the sea is calm today, and there's a lifeguard on duty. Our boats usually go out at ten. What time would you like to start?
+      You: Thank you. Could we start a bit later, at eleven?
+      Tariq: Eleven is fine. We keep your ID until you bring the boat back. Please stay inside the yellow buoys.
+      You: Here is my ID. Could you keep an eye on our bags while we're out?
+      Tariq: Of course, put them behind the counter. We also rent loungers and parasols. Would you like any?
+      You: Yes, please. What's the rate for a full day?
+      Tariq: A lounger is twelve euros for the full day, and a parasol is eight. How many would you like?
+      You: Two loungers and a parasol, please. Can I pay at the beach bar?
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Просьба о лодке и времени — вежливо: We'd like to…, Could we start a bit later?"
+      - "Вопрос о безопасности — Is it safe to…?"
+      - "Присмотр за вещами — Could you keep an eye on our bags?; цена — What's the rate for a full day?"
+      - Спокойный тон, без долгих пауз
+  - type: explanation
+    id: plans-scene-how
+    title: Ролевая сцена — планы компании
+    body: |-
+      Вторая сцена — вечер на курорте, говорит Селин, ваша подруга. Вы смотрите прогноз на завтра и договариваетесь, что делать утром и что делать, если пойдёт дождь. Порядок тот же: два прослушивания, текст перед глазами, ответ на каждую реплику.
+  - type: listening
+    id: plans-lines
+    title: Реплики собеседника — планы на завтра
+    plays: 2
+    transcript:
+      - { speaker: Selin, text: "So, what's the forecast for tomorrow?" }
+      - { speaker: Selin, text: "Oh, that's a pity. What could we do in the morning, then?" }
+      - { speaker: Selin, text: "A boat trip is a good idea. But what if it rains earlier than they say?" }
+      - { speaker: Selin, text: "Fine. And what shall we do in the afternoon if it rains?" }
+      - { speaker: Selin, text: "I like that. Should we book the boat trip now, or decide in the morning?" }
+      - { speaker: Selin, text: "Fine. And what time shall we have breakfast?" }
+  - type: speaking
+    id: plans
+    part: roleplay
+    prompt: |-
+      Прослушайте реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      Вы на курорте с подругой, вечер. Прогноз на завтра: утром солнечно, около 26 градусов, после двух часов дня дождь. Назовите прогноз; предложите на утро поездку на лодке (How about…?); скажите, что вы сделаете, если дождь начнётся раньше; предложите план на дождливую вторую половину дня; договоритесь решить утром; назначьте время завтрака. 6 реплик, вся ваша часть — 60–90 секунд.
+    seconds: 90
+    model: |-
+      Selin: So, what's the forecast for tomorrow?
+      You: It's going to be sunny and about twenty-six degrees in the morning, but it's supposed to rain after two o'clock.
+      Selin: Oh, that's a pity. What could we do in the morning, then?
+      You: We could go snorkelling at ten. How about a boat trip? The sea is calmer in the morning.
+      Selin: A boat trip is a good idea. But what if it rains earlier than they say?
+      You: If it rains, we'll come back early and have lunch at the hotel.
+      Selin: Fine. And what shall we do in the afternoon if it rains?
+      You: We could go to the spa. If it clears up, we'll go to the beach after four.
+      Selin: I like that. Should we book the boat trip now, or decide in the morning?
+      You: Let's decide in the morning. I'll check the forecast again at eight.
+      Selin: Fine. And what time shall we have breakfast?
+      You: How about half past eight? Then we can decide together.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — одна-две фразы
+      - "Прогноз — It's going to be… / It's supposed to rain…"
+      - "Предложения — We could… и How about…?; условие — If it rains, we'll… (после if — настоящее время)"
+      - "Отложили решение — Let's decide in the morning"
+      - Спокойный тон, без долгих пауз
+  - type: exercise
+    id: review-mixed
+    title: Повторение модуля
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: "___ any shade near the rocks?"
+        options: [Is there, Are there, Has there]
+        answer: Is there
+        explanation: Shade — неисчисляемое слово, глагол is.
+      - id: q2
+        prompt: "___ safe to swim here today?"
+        options: [Is it, Does it, Are there]
+        answer: Is it
+        explanation: Is it safe to swim here? — вопрос о безопасности.
+      - id: q3
+        prompt: You ___ reapply sunscreen after swimming.
+        options: [should, should to, are should]
+        answer: should
+        explanation: После should глагол без to.
+      - id: q4
+        prompt: If it ___ tomorrow, we'll go to the spa.
+        options: [rains, will rain, is going rain]
+        answer: rains
+        explanation: После if — настоящее время.
+      - id: q5
+        prompt: The forecast says it is ___ to clear up by noon.
+        options: [supposed, supposing, supposes]
+        answer: supposed
+        explanation: Be supposed to — «по прогнозу, должно».
+      - id: q6
+        prompt: In the morning the sea is ___ than in the afternoon.
+        options: [calmer, more calmer, the calmest]
+        answer: calmer
+        explanation: Calm — короткое прилагательное; сравнение — calmer than.
+

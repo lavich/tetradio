@@ -1,0 +1,648 @@
+title: Контрольная модуля t15
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: объявление отеля о дне с дождём и расписание трансфера, разговор со спасателем о флагах и течении, прогноз и план компании, грамматика пляжа и погоды, слова и фразы модуля. Словарь и таблицы не открывайте — так результат покажет, что уже усвоено.
+
+      Аудио звучит два раза; в вопросах с выбором верен один вариант. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: notice
+    title: A hotel notice and a shuttle timetable
+    text: |-
+      PALM BAY RESORT — NOTICE FOR THURSDAY
+      The forecast says rain from 10:00 and a strong wind in the evening. It is supposed to clear up at about 15:00.
+      Boat trips: the snorkelling trip and the coast boat trip are moved to Friday at the same times. If you have a booking, you do not need to do anything.
+      Indoor programme: yoga at 9:30 in the studio, cooking class at 11:00, film at 16:00 in the bar.
+      Beach: please check the flags at the lifeguard hut before you swim. If there is a red flag, do not enter the water.
+      Spa: open as usual, 10:00–19:00. Book at reception.
+
+      SHUTTLE TO TOWN — €4 return, pay on the bus
+      Hotel to town: 9:00, 11:00, 14:00, 17:00
+      Town to hotel: 12:00, 15:00, 18:00, 21:00 (last shuttle)
+    glosses:
+      - { text: Indoor programme, russian: занятия в помещении }
+      - { text: moved to, russian: перенесены на }
+      - { text: hut, russian: домик }
+      - { text: return, russian: туда и обратно }
+  - type: exercise
+    id: notice-q
+    about: notice
+    graded: true
+    title: Чтение
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What time is it supposed to clear up on Thursday?
+        options: [at about 15:00, at about 10:00, at about 21:00]
+        answer: at about 15:00
+        explanation: It is supposed to clear up at about 15:00; в 10:00 дождь начинается.
+      - id: q2
+        prompt: What happens to the boat trips?
+        options:
+          - They move to Friday.
+          - They are cancelled.
+          - They start later on Thursday.
+        answer: They move to Friday.
+        explanation: The snorkelling trip and the coast boat trip are moved to Friday at the same times.
+      - id: q3
+        prompt: What should guests with a booking do?
+        options:
+          - Nothing.
+          - Rebook at reception.
+          - Pay again at the hut.
+        answer: Nothing.
+        explanation: If you have a booking, you do not need to do anything.
+      - id: q4
+        prompt: Which activity starts at 11:00?
+        options: [the cooking class, yoga, the film]
+        answer: the cooking class
+        explanation: Yoga в 9:30, фильм в 16:00.
+      - id: q5
+        prompt: What should you do before swimming on Thursday?
+        options:
+          - check the flags at the lifeguard hut
+          - ask reception for a wetsuit
+          - wait until 15:00
+        answer: check the flags at the lifeguard hut
+        explanation: Please check the flags at the lifeguard hut before you swim.
+      - id: q6
+        prompt: What time is the last shuttle from town to the hotel?
+        options: ["21:00", "18:00", "17:00"]
+        answer: "21:00"
+        explanation: "Town to hotel: … 21:00 (last shuttle). 17:00 — последний рейс из отеля в город."
+      - id: q7
+        prompt: How much is the shuttle to town?
+        options: [€4 for a return ticket, €4 each way, nothing]
+        answer: €4 for a return ticket
+        explanation: "€4 return — туда и обратно, платят в автобусе."
+      - id: q8
+        prompt: Is the spa open on Thursday?
+        options:
+          - Yes, as usual.
+          - No, it is closed.
+          - Only in the evening.
+        answer: Yes, as usual.
+        explanation: Spa — open as usual, 10:00–19:00.
+  - type: listening
+    id: flags
+    title: A lifeguard explains the flags
+    plays: 2
+    transcript:
+      - { speaker: Dario, text: "Good morning. Can I help you?" }
+      - { speaker: Mila, text: "Hi. We'd like to swim this morning. Is it safe to swim here today?" }
+      - { speaker: Dario, text: "Yes, but only between the red and yellow flags. That's the area we watch." }
+      - { speaker: Mila, text: "What does the red flag at the far end mean?" }
+      - { speaker: Dario, text: "It means don't go in the water there. There's a strong current by the rocks, but not here in the middle of the beach." }
+      - { speaker: Mila, text: "I see. What should we do if a current takes us away from the beach?" }
+      - { speaker: Dario, text: "Don't swim against it. Swim along the beach until it gets weaker, then come back to the shore. If you're tired, float on your back, raise your arm and shout for help. We'll see you." }
+      - { speaker: Mila, text: "Good to know. Is it all right for our son? He's seven." }
+      - { speaker: Dario, text: "The shallow area near the jetty is good for children, but they should stay with an adult." }
+      - { speaker: Mila, text: "Until what time are you on duty?" }
+      - { speaker: Dario, text: "Until six. After six there's no lifeguard, so please stay out of the water." }
+      - { speaker: Mila, text: "Thank you very much." }
+      - { speaker: Dario, text: "You're welcome. Enjoy your swim." }
+  - type: exercise
+    id: flags-q
+    about: flags
+    graded: true
+    title: Аудирование — спасатель
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Where should Mila and her family swim?
+        options: [between the red and yellow flags, anywhere on the beach, by the rocks]
+        answer: between the red and yellow flags
+        explanation: Only between the red and yellow flags — участок под присмотром.
+      - id: q2
+        prompt: What does the red flag at the far end mean?
+        options:
+          - Don't go in the water there.
+          - Swim there with a guide.
+          - It is a zone for boats.
+        answer: Don't go in the water there.
+        explanation: It means don't go in the water there.
+      - id: q3
+        prompt: Why is the area by the rocks different?
+        options:
+          - There is a strong current there.
+          - It is too shallow.
+          - There are no lifeguards.
+        answer: There is a strong current there.
+        explanation: There's a strong current by the rocks.
+      - id: q4
+        prompt: What should you do if a current takes you away from the beach?
+        options:
+          - Swim along the beach.
+          - Swim against the current.
+          - Swim out to sea.
+        answer: Swim along the beach.
+        explanation: Don't swim against it. Swim along the beach until it gets weaker.
+      - id: q5
+        prompt: Where is it good for Mila's son?
+        options: [the shallow area near the jetty, the area by the rocks, the deep water]
+        answer: the shallow area near the jetty
+        explanation: The shallow area near the jetty is good for children.
+      - id: q6
+        prompt: Until what time is the lifeguard on duty?
+        options: [six o'clock, five o'clock, seven o'clock]
+        answer: six o'clock
+        explanation: Until six. After six there's no lifeguard.
+  - type: listening
+    id: forecast
+    title: The forecast and a plan for Saturday
+    plays: 2
+    transcript:
+      - { speaker: Henrik, text: "Have you seen the forecast for Saturday?" }
+      - { speaker: Selin, text: "Yes. It's supposed to be overcast in the morning, and it's going to clear up around noon." }
+      - { speaker: Henrik, text: "And how hot is it going to be?" }
+      - { speaker: Selin, text: "Thirty-four degrees in the afternoon. It's going to be scorching, hotter than today." }
+      - { speaker: Henrik, text: "Then we shouldn't stay on the beach all afternoon. How about the boat trip in the morning?" }
+      - { speaker: Selin, text: "The wind is stronger in the morning, so the sea is going to be choppy. It's going to be calmer in the evening." }
+      - { speaker: Henrik, text: "OK. We could go to the market in the morning, while it's cool." }
+      - { speaker: Selin, text: "Good idea. And after lunch we could go to the beach and sit in the shade." }
+      - { speaker: Henrik, text: "And if it rains?" }
+      - { speaker: Selin, text: "It isn't going to rain. But if it does, we'll go to the spa." }
+      - { speaker: Henrik, text: "Fine. Let's do the boat trip on Sunday." }
+      - { speaker: Selin, text: "Yes, Sunday is going to be calmer." }
+  - type: exercise
+    id: forecast-q
+    about: forecast
+    graded: true
+    title: Аудирование — прогноз и план
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What is the weather going to be like on Saturday morning?
+        options: [overcast, sunny, rainy]
+        answer: overcast
+        explanation: It's supposed to be overcast in the morning.
+      - id: q2
+        prompt: When is it going to clear up?
+        options: [around noon, in the evening, at nine]
+        answer: around noon
+        explanation: It's going to clear up around noon.
+      - id: q3
+        prompt: How hot is it going to be in the afternoon?
+        options: [thirty-four degrees, twenty-four degrees, thirty degrees]
+        answer: thirty-four degrees
+        explanation: Thirty-four degrees in the afternoon… scorching.
+      - id: q4
+        prompt: Why don't they go on the boat trip on Saturday morning?
+        options:
+          - The sea is going to be choppy.
+          - The boat trip is fully booked.
+          - It is going to rain.
+        answer: The sea is going to be choppy.
+        explanation: The wind is stronger in the morning, so the sea is going to be choppy.
+      - id: q5
+        prompt: What do they decide to do in the morning?
+        options: [go to the market, go snorkelling, stay at the hotel]
+        answer: go to the market
+        explanation: We could go to the market in the morning, while it's cool.
+      - id: q6
+        prompt: When do they plan the boat trip?
+        options: [on Sunday, on Saturday evening, on Friday]
+        answer: on Sunday
+        explanation: Let's do the boat trip on Sunday; Sunday is going to be calmer.
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Пляж и погода
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: There ___ a lifeguard on duty today, so we can swim between the flags.
+        options: [is, are, has]
+        answer: is
+        explanation: Один спасатель — there is.
+      - id: q2
+        prompt: There ___ any loungers left, so we sat on the sand.
+        options: ["aren't", "isn't", "don't"]
+        answer: "aren't"
+        explanation: Loungers — несколько, поэтому aren't.
+      - id: q3
+        prompt: ___ it safe to swim at this beach?
+        options: [Is, Does, Are]
+        answer: Is
+        explanation: Is it safe to + глагол.
+      - id: q4
+        prompt: You ___ reapply sunscreen after swimming.
+        options: [should, should to, are should]
+        answer: should
+        explanation: После should глагол без to.
+      - id: q5
+        prompt: If it ___ tomorrow, we'll go to the spa.
+        options: [rains, will rain, rain]
+        answer: rains
+        explanation: После if — настоящее время.
+      - id: q6
+        prompt: It's ___ to clear up by noon.
+        options: [supposed, supposing, suppose]
+        answer: supposed
+        explanation: Be supposed to — «по прогнозу, должно».
+      - id: q7
+        prompt: Yesterday it was 29 degrees, and today it is 33. Today is ___ than yesterday.
+        options: [hotter, more hot, hottest]
+        answer: hotter
+        explanation: Hot — короткое прилагательное; сравнение — hotter than.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова и фразы
+    instruction: Вставьте слово. Два слова лишние.
+    format: gap
+    bank: [sunscreen, lifeguard, parasol, tide, forecast, wristband, wetsuit, shallow, snorkelling, overcast]
+    items:
+      - { id: g1, prompt: "Put on some ___ before you go out; the sun is very strong.", answer: "sunscreen" }
+      - { id: g2, prompt: "There is a ___ on duty near the red and yellow flags.", answer: "lifeguard" }
+      - { id: g3, prompt: "We sat under a ___ because there was no shade.", answer: "parasol" }
+      - { id: g4, prompt: "Is the ___ in or out? I want to walk to the rocks.", answer: "tide" }
+      - { id: g5, prompt: "The ___ says it is going to be overcast on Thursday.", answer: "forecast" }
+      - { id: g6, prompt: "Show your ___ at the restaurant and the pool bar.", answer: "wristband" }
+      - { id: g7, prompt: "The water is cold in the morning, so we rented a ___ for the child.", answer: "wetsuit" }
+      - { id: g8, prompt: "The water is ___ here, so small children can paddle.", answer: "shallow" }
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Сокращения (what's, it's) можно писать и полностью.
+    format: text
+    items:
+      - id: q1
+        prompt: Какой тариф на целый день?
+        answer:
+          - "what's the rate for a full day?"
+          - "what's the rate for the whole day?"
+          - "what's the rate for a whole day?"
+          - "what's the rate for the full day?"
+          - "what's the price for a full day?"
+          - "what's the price for the whole day?"
+          - "what's the price for a whole day?"
+          - "what's the price for the full day?"
+          - "what is the rate for a full day?"
+          - "what is the rate for the whole day?"
+          - "what is the rate for a whole day?"
+          - "what is the rate for the full day?"
+          - "what is the price for a full day?"
+          - "what is the price for the whole day?"
+          - "what is the price for a whole day?"
+          - "what is the price for the full day?"
+          - "what's the all-day rate?"
+          - "what's the all-day price?"
+          - "what's the full-day rate?"
+          - "what's the full-day price?"
+          - "what is the all-day rate?"
+          - "what is the all-day price?"
+          - "what is the full-day rate?"
+          - "what is the full-day price?"
+          - "how much is it for a full day?"
+          - "how much is it for the whole day?"
+          - "how much is it for a whole day?"
+          - "how much is it for the full day?"
+          - "how much is a full day?"
+          - "how much is a whole day?"
+          - "how much for a full day?"
+          - "how much for the whole day?"
+          - "how much does a full day cost?"
+          - "how much does the whole day cost?"
+          - "what does it cost for a full day?"
+          - "what does it cost for the whole day?"
+          - "what does it cost for a whole day?"
+          - "what does it cost for the full day?"
+        explanation: Тариф — rate; «на целый день» — for a full day.
+      - id: q2
+        prompt: Какой прогноз на завтра?
+        answer:
+          - "what's the weather forecast for tomorrow?"
+          - "what's the forecast for tomorrow?"
+          - "what is the weather forecast for tomorrow?"
+          - "what is the forecast for tomorrow?"
+          - "what's tomorrow's weather forecast?"
+          - "what's tomorrow's forecast?"
+          - "what is tomorrow's weather forecast?"
+          - "what is tomorrow's forecast?"
+          - "what's the weather forecast like for tomorrow?"
+          - "what's the forecast like for tomorrow?"
+          - "what is the weather forecast like for tomorrow?"
+          - "what is the forecast like for tomorrow?"
+          - "what's the weather going to be like tomorrow?"
+          - "what's the weather like tomorrow?"
+          - "what is the weather going to be like tomorrow?"
+          - "what is the weather like tomorrow?"
+          - what will the weather be like tomorrow?
+        explanation: Прогноз — forecast; вопрос о завтрашнем дне — for tomorrow.
+      - id: q3
+        prompt: К полудню должно проясниться.
+        answer:
+          - "it's supposed to clear up by noon."
+          - "it's supposed to clear up by midday."
+          - "it's expected to clear up by noon."
+          - "it's expected to clear up by midday."
+          - "it's meant to clear up by noon."
+          - "it's meant to clear up by midday."
+          - "it is supposed to clear up by noon."
+          - "it is supposed to clear up by midday."
+          - "it is expected to clear up by noon."
+          - "it is expected to clear up by midday."
+          - "it is meant to clear up by noon."
+          - "it is meant to clear up by midday."
+          - "the weather's supposed to clear up by noon."
+          - "the weather's supposed to clear up by midday."
+          - "the weather's expected to clear up by noon."
+          - "the weather's expected to clear up by midday."
+          - "the weather's meant to clear up by noon."
+          - "the weather's meant to clear up by midday."
+          - "the weather is supposed to clear up by noon."
+          - "the weather is supposed to clear up by midday."
+          - "the weather is expected to clear up by noon."
+          - "the weather is expected to clear up by midday."
+          - "the weather is meant to clear up by noon."
+          - "the weather is meant to clear up by midday."
+          - "it should clear up by noon."
+          - "it should clear up by midday."
+          - "the weather should clear up by noon."
+          - "the weather should clear up by midday."
+          - "it should clear by noon."
+          - "it should clear by midday."
+          - "by noon, it should clear up."
+          - "by noon it should clear up."
+          - "by midday, it should clear up."
+          - "by midday it should clear up."
+          - "by noon, it's supposed to clear up."
+          - "by noon, it is supposed to clear up."
+          - "by noon it's supposed to clear up."
+          - "by noon it is supposed to clear up."
+          - "by midday, it's supposed to clear up."
+          - "by midday, it is supposed to clear up."
+          - "by midday it's supposed to clear up."
+          - "by midday it is supposed to clear up."
+        explanation: По прогнозу — be supposed to; clear up — проясниться.
+      - id: q4
+        prompt: Можно начать чуть позже?
+        answer:
+          - "could we start a bit later?"
+          - "could we start a bit later please?"
+          - "could we start a bit later, please?"
+          - "could we start a little later?"
+          - "could we start a little later please?"
+          - "could we start a little later, please?"
+          - "could we start a little bit later?"
+          - "could we start a little bit later please?"
+          - "could we start a little bit later, please?"
+          - "could we start slightly later?"
+          - "could we start slightly later please?"
+          - "could we start slightly later, please?"
+          - "could we begin a bit later?"
+          - "could we begin a bit later please?"
+          - "could we begin a bit later, please?"
+          - "could we begin a little later?"
+          - "could we begin a little later please?"
+          - "could we begin a little later, please?"
+          - "could we begin a little bit later?"
+          - "could we begin a little bit later please?"
+          - "could we begin a little bit later, please?"
+          - "could we begin slightly later?"
+          - "could we begin slightly later please?"
+          - "could we begin slightly later, please?"
+          - "can we start a bit later?"
+          - "can we start a bit later please?"
+          - "can we start a bit later, please?"
+          - "can we start a little later?"
+          - "can we start a little later please?"
+          - "can we start a little later, please?"
+          - "can we start a little bit later?"
+          - "can we start a little bit later please?"
+          - "can we start a little bit later, please?"
+          - "can we start slightly later?"
+          - "can we start slightly later please?"
+          - "can we start slightly later, please?"
+          - "can we begin a bit later?"
+          - "can we begin a bit later please?"
+          - "can we begin a bit later, please?"
+          - "can we begin a little later?"
+          - "can we begin a little later please?"
+          - "can we begin a little later, please?"
+          - "can we begin a little bit later?"
+          - "can we begin a little bit later please?"
+          - "can we begin a little bit later, please?"
+          - "can we begin slightly later?"
+          - "can we begin slightly later please?"
+          - "can we begin slightly later, please?"
+          - "is it possible to start a bit later?"
+          - "is it possible to start a little later?"
+          - "is it possible to start a little bit later?"
+          - "is it possible to start slightly later?"
+          - "is it OK if we start a bit later?"
+          - "is it OK if we start a little later?"
+        explanation: Просьба — Could we…? Later стоит после start a bit.
+      - id: q5
+        prompt: Закажите нам, пожалуйста, такси на шесть часов.
+        answer:
+          - "could you order us a taxi for six o'clock?"
+          - "could you order us a taxi at six o'clock?"
+          - "could you order us a taxi at six?"
+          - "could you order a taxi for us for six o'clock?"
+          - "could you order a taxi for us at six o'clock?"
+          - "could you order a taxi for us at six?"
+          - "could you book us a taxi for six o'clock?"
+          - "could you book us a taxi at six o'clock?"
+          - "could you book us a taxi at six?"
+          - "could you book a taxi for us for six o'clock?"
+          - "could you book a taxi for us at six o'clock?"
+          - "could you book a taxi for us at six?"
+          - "could you get us a taxi for six o'clock?"
+          - "could you get us a taxi at six o'clock?"
+          - "could you get us a taxi at six?"
+          - "could you get a taxi for us for six o'clock?"
+          - "could you get a taxi for us at six o'clock?"
+          - "could you get a taxi for us at six?"
+          - "can you order us a taxi for six o'clock?"
+          - "can you order us a taxi at six o'clock?"
+          - "can you order us a taxi at six?"
+          - "can you order a taxi for us for six o'clock?"
+          - "can you order a taxi for us at six o'clock?"
+          - "can you order a taxi for us at six?"
+          - "can you book us a taxi for six o'clock?"
+          - "can you book us a taxi at six o'clock?"
+          - "can you book us a taxi at six?"
+          - "can you book a taxi for us for six o'clock?"
+          - "can you book a taxi for us at six o'clock?"
+          - "can you book a taxi for us at six?"
+          - "can you get us a taxi for six o'clock?"
+          - "can you get us a taxi at six o'clock?"
+          - "can you get us a taxi at six?"
+          - "can you get a taxi for us for six o'clock?"
+          - "can you get a taxi for us at six o'clock?"
+          - "can you get a taxi for us at six?"
+          - "could you please order us a taxi for six o'clock?"
+          - "could you please order us a taxi at six o'clock?"
+          - "could you please order us a taxi at six?"
+          - "could you please order a taxi for us for six o'clock?"
+          - "could you please order a taxi for us at six o'clock?"
+          - "could you please order a taxi for us at six?"
+          - "could you please book us a taxi for six o'clock?"
+          - "could you please book us a taxi at six o'clock?"
+          - "could you please book us a taxi at six?"
+          - "could you please book a taxi for us for six o'clock?"
+          - "could you please book a taxi for us at six o'clock?"
+          - "could you please book a taxi for us at six?"
+          - "could you please get us a taxi for six o'clock?"
+          - "could you please get us a taxi at six o'clock?"
+          - "could you please get us a taxi at six?"
+          - "could you please get a taxi for us for six o'clock?"
+          - "could you please get a taxi for us at six o'clock?"
+          - "could you please get a taxi for us at six?"
+          - "can you please order us a taxi for six o'clock?"
+          - "can you please order us a taxi at six o'clock?"
+          - "can you please order us a taxi at six?"
+          - "can you please order a taxi for us for six o'clock?"
+          - "can you please order a taxi for us at six o'clock?"
+          - "can you please order a taxi for us at six?"
+          - "can you please book us a taxi for six o'clock?"
+          - "can you please book us a taxi at six o'clock?"
+          - "can you please book us a taxi at six?"
+          - "can you please book a taxi for us for six o'clock?"
+          - "can you please book a taxi for us at six o'clock?"
+          - "can you please book a taxi for us at six?"
+          - "can you please get us a taxi for six o'clock?"
+          - "can you please get us a taxi at six o'clock?"
+          - "can you please get us a taxi at six?"
+          - "can you please get a taxi for us for six o'clock?"
+          - "can you please get a taxi for us at six o'clock?"
+          - "can you please get a taxi for us at six?"
+          - "could you order us a taxi for six o'clock please?"
+          - "could you order us a taxi for six o'clock, please?"
+          - "could you order us a taxi at six o'clock please?"
+          - "could you order us a taxi at six o'clock, please?"
+          - "could you order us a taxi at six please?"
+          - "could you order us a taxi at six, please?"
+          - "could you order a taxi for us for six o'clock please?"
+          - "could you order a taxi for us for six o'clock, please?"
+          - "could you order a taxi for us at six o'clock please?"
+          - "could you order a taxi for us at six o'clock, please?"
+          - "could you order a taxi for us at six please?"
+          - "could you order a taxi for us at six, please?"
+          - "could you book us a taxi for six o'clock please?"
+          - "could you book us a taxi for six o'clock, please?"
+          - "could you book us a taxi at six o'clock please?"
+          - "could you book us a taxi at six o'clock, please?"
+          - "could you book us a taxi at six please?"
+          - "could you book us a taxi at six, please?"
+          - "could you book a taxi for us for six o'clock please?"
+          - "could you book a taxi for us for six o'clock, please?"
+          - "could you book a taxi for us at six o'clock please?"
+          - "could you book a taxi for us at six o'clock, please?"
+          - "could you book a taxi for us at six please?"
+          - "could you book a taxi for us at six, please?"
+          - "could you get us a taxi for six o'clock please?"
+          - "could you get us a taxi for six o'clock, please?"
+          - "could you get us a taxi at six o'clock please?"
+          - "could you get us a taxi at six o'clock, please?"
+          - "could you get us a taxi at six please?"
+          - "could you get us a taxi at six, please?"
+          - "could you get a taxi for us for six o'clock please?"
+          - "could you get a taxi for us for six o'clock, please?"
+          - "could you get a taxi for us at six o'clock please?"
+          - "could you get a taxi for us at six o'clock, please?"
+          - "could you get a taxi for us at six please?"
+          - "could you get a taxi for us at six, please?"
+          - "can you order us a taxi for six o'clock please?"
+          - "can you order us a taxi for six o'clock, please?"
+          - "can you order us a taxi at six o'clock please?"
+          - "can you order us a taxi at six o'clock, please?"
+          - "can you order us a taxi at six please?"
+          - "can you order us a taxi at six, please?"
+          - "can you order a taxi for us for six o'clock please?"
+          - "can you order a taxi for us for six o'clock, please?"
+          - "can you order a taxi for us at six o'clock please?"
+          - "can you order a taxi for us at six o'clock, please?"
+          - "can you order a taxi for us at six please?"
+          - "can you order a taxi for us at six, please?"
+          - "can you book us a taxi for six o'clock please?"
+          - "can you book us a taxi for six o'clock, please?"
+          - "can you book us a taxi at six o'clock please?"
+          - "can you book us a taxi at six o'clock, please?"
+          - "can you book us a taxi at six please?"
+          - "can you book us a taxi at six, please?"
+          - "can you book a taxi for us for six o'clock please?"
+          - "can you book a taxi for us for six o'clock, please?"
+          - "can you book a taxi for us at six o'clock please?"
+          - "can you book a taxi for us at six o'clock, please?"
+          - "can you book a taxi for us at six please?"
+          - "can you book a taxi for us at six, please?"
+          - "can you get us a taxi for six o'clock please?"
+          - "can you get us a taxi for six o'clock, please?"
+          - "can you get us a taxi at six o'clock please?"
+          - "can you get us a taxi at six o'clock, please?"
+          - "can you get us a taxi at six please?"
+          - "can you get us a taxi at six, please?"
+          - "can you get a taxi for us for six o'clock please?"
+          - "can you get a taxi for us for six o'clock, please?"
+          - "can you get a taxi for us at six o'clock please?"
+          - "can you get a taxi for us at six o'clock, please?"
+          - "can you get a taxi for us at six please?"
+          - "can you get a taxi for us at six, please?"
+          - "please order us a taxi for six o'clock."
+          - "please order us a taxi at six o'clock."
+          - "please order us a taxi at six."
+          - "please order a taxi for us for six o'clock."
+          - "please order a taxi for us at six o'clock."
+          - "please order a taxi for us at six."
+          - "please book us a taxi for six o'clock."
+          - "please book us a taxi at six o'clock."
+          - "please book us a taxi at six."
+          - "please book a taxi for us for six o'clock."
+          - "please book a taxi for us at six o'clock."
+          - "please book a taxi for us at six."
+          - "please get us a taxi for six o'clock."
+          - "please get us a taxi at six o'clock."
+          - "please get us a taxi at six."
+          - "please get a taxi for us for six o'clock."
+          - "please get a taxi for us at six o'clock."
+          - "please get a taxi for us at six."
+          - "order us a taxi for six o'clock please."
+          - "order us a taxi for six o'clock, please."
+          - "order us a taxi at six o'clock please."
+          - "order us a taxi at six o'clock, please."
+          - "order us a taxi at six please."
+          - "order us a taxi at six, please."
+          - "order a taxi for us for six o'clock please."
+          - "order a taxi for us for six o'clock, please."
+          - "order a taxi for us at six o'clock please."
+          - "order a taxi for us at six o'clock, please."
+          - "order a taxi for us at six please."
+          - "order a taxi for us at six, please."
+          - "book us a taxi for six o'clock please."
+          - "book us a taxi for six o'clock, please."
+          - "book us a taxi at six o'clock please."
+          - "book us a taxi at six o'clock, please."
+          - "book us a taxi at six please."
+          - "book us a taxi at six, please."
+          - "book a taxi for us for six o'clock please."
+          - "book a taxi for us for six o'clock, please."
+          - "book a taxi for us at six o'clock please."
+          - "book a taxi for us at six o'clock, please."
+          - "book a taxi for us at six please."
+          - "book a taxi for us at six, please."
+          - "get us a taxi for six o'clock please."
+          - "get us a taxi for six o'clock, please."
+          - "get us a taxi at six o'clock please."
+          - "get us a taxi at six o'clock, please."
+          - "get us a taxi at six please."
+          - "get us a taxi at six, please."
+          - "get a taxi for us for six o'clock please."
+          - "get a taxi for us for six o'clock, please."
+          - "get a taxi for us at six o'clock please."
+          - "get a taxi for us at six o'clock, please."
+          - "get a taxi for us at six please."
+          - "get a taxi for us at six, please."
+        explanation: Просьба — Could you order us a taxi for six o'clock?
+

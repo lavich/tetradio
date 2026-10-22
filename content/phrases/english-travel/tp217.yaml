@@ -1,0 +1,7 @@
+id: tp217
+text: "You should reapply sunscreen after swimming."
+translation: "После купания крем нужно нанести снова."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для путешествий и общения», модуль t15
+  operation: requested-generation
+  request: Фразы модуля t15 по программе docs/curriculum-english-travel.md
