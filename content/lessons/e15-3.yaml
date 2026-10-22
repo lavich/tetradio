@@ -1,0 +1,712 @@
+title: ответ о сильных и слабых сторонах, мнение в обсуждении и несогласие с решением
+kind: lesson
+items:
+  - { kind: phrase, id: ep367 }
+  - { kind: phrase, id: ep368 }
+  - { kind: phrase, id: ep369 }
+  - { kind: phrase, id: ep370 }
+  - { kind: phrase, id: ep371 }
+  - { kind: phrase, id: ep372 }
+  - { kind: phrase, id: ep373 }
+  - { kind: phrase, id: ep374 }
+  - { kind: phrase, id: ep375 }
+blocks:
+  - type: explanation
+    id: scheme
+    title: Сильные и слабые стороны в пяти шагах
+    body: |-
+      Вопрос **What are your strengths and weaknesses?** задают почти на каждом собеседовании. Интервьюер проверяет, знаете ли вы себя и умеете ли работать над собой. Ответ укладывается примерно в 90 секунд.
+
+      **1. Сильная сторона с примером.** Назовите качество и подтвердите его случаем: **My biggest strength is that I break problems down.**
+
+      **2. Вторая сильная сторона.** Одна фраза: **I'm good at explaining technical ideas to non-technical people.**
+
+      **3. Слабая сторона.** Выберите качество, которое не мешает главной работе роли, и назовите его спокойно: **I used to spend too long on small details.**
+
+      **4. Что вы делаете.** Назовите шаг, который уже помогает: **Now I set a time limit for each task.**
+
+      **5. Итог.** Свяжите ответ с ролью: **I think these strengths fit the role.**
+    table:
+      columns:
+        - шаг
+        - примерное время
+        - язык
+      rows:
+        - - сильная сторона и пример
+          - 30 секунд
+          - My biggest strength is that I break problems down.
+        - - вторая сильная сторона
+          - 15 секунд
+          - I'm good at explaining technical ideas to non-technical people.
+        - - слабая сторона
+          - 15 секунд
+          - I used to spend too long on small details.
+        - - что вы делаете
+          - 20 секунд
+          - Now I set a time limit for each task.
+        - - итог
+          - 10 секунд
+          - I think these strengths fit the role.
+  - type: explanation
+    id: safe-opinion
+    title: Как говорить о слабости и о несогласии спокойно
+    body: |-
+      **Слабая сторона** — реальная, небольшая и с действием. Утверждение «у меня нет слабых сторон» звучит как уход от вопроса. Клише вроде *I work too hard* или *I'm a perfectionist* интервьюер слышит много раз и не получает сведений о вас. Сильнее звучит факт из практики и шаг, который вы сделали: **I used to spend too long on small details, so I now set a time limit.** Ответ без самообвинения: достаточно назвать склонность и то, что вы с ней делаете.
+
+      **Несогласие с решением** строится в четыре шага: признайте довод, назовите сомнение или свой довод, предложите проверить его фактами и скажите, что поддержите решение команды. Цель такого ответа — показать, что вы можете спорить о решении и остаться в одной команде. Говорите о решении и его последствиях. Люди, которые его приняли, в ответе не оцениваются. Ситуации и данные в уроке придуманы: в своих ответах приводите обобщённые примеры без названий клиентов и внутренних данных прежних работодателей.
+    table:
+      columns:
+        - вместо
+        - скажите
+        - почему
+      rows:
+        - - I have no weaknesses.
+          - One thing I'm working on is delegating more.
+          - слабая сторона названа спокойно
+        - - I work too hard. I'm a perfectionist.
+          - I used to spend too long on small details, so I now set a time limit.
+          - факт из практики и действие
+        - - You are wrong about the cache.
+          - I'm not sure that a cache is enough.
+          - довод о решении
+        - - Your team made a bad decision.
+          - I'd put more weight on the maintenance cost.
+          - довод вместо оценки
+        - - I will never accept this.
+          - Either way, I'll support the team's decision.
+          - готовность работать вместе
+  - type: vocabulary
+    id: words
+    title: Фразы урока
+  - type: exercise
+    id: phrase-choice
+    title: Подходящая фраза
+    instruction: Выберите фразу, которая подходит к ситуации.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы предлагаете закончить спор, посмотрев на данные.
+        options:
+          - Let's look at the evidence.
+          - Could we agree to disagree on this one?
+          - I'm happy to be proven wrong.
+        answer: Let's look at the evidence.
+        explanation: Фраза предлагает обратиться к доказательствам; остальные оставляют спор открытым или признают возможную ошибку.
+      - id: q2
+        prompt: Спор не сходится, и вы предлагаете оставить каждого при своём мнении.
+        options:
+          - Could we agree to disagree on this one?
+          - What would change your mind?
+          - Either way, I'll support the team's decision.
+        answer: Could we agree to disagree on this one?
+        explanation: Фраза предлагает остаться при своих мнениях; остальные задают вопрос или обещают поддержку.
+      - id: q3
+        prompt: Вы хотите узнать, какой довод заставил бы собеседника передумать.
+        options:
+          - What would change your mind?
+          - I'd argue that we should wait for more data.
+          - In my opinion, a rewrite would be too risky.
+        answer: What would change your mind?
+        explanation: Фраза — вопрос о доводе; остальные высказывают собственное мнение.
+      - id: q4
+        prompt: Вы признаёте, что довод собеседника справедлив и нов для вас.
+        options:
+          - That's a fair point, and I hadn't thought of that.
+          - I'd respectfully disagree.
+          - Let's look at the evidence.
+        answer: That's a fair point, and I hadn't thought of that.
+        explanation: Фраза принимает довод; остальные возражают или предлагают проверку.
+      - id: q5
+        prompt: Решение принято не так, как вы предлагали, и вы заверяете, что будете работать по нему.
+        options:
+          - Either way, I'll support the team's decision.
+          - I'm happy to be proven wrong.
+          - As far as I'm concerned, readable code matters more than clever code.
+        answer: Either way, I'll support the team's decision.
+        explanation: Фраза обещает поддержку решения; остальные говорят о готовности ошибаться и о читаемости кода.
+      - id: q6
+        prompt: Вы высказываете своё мнение о переписывании системы с нуля.
+        options:
+          - In my opinion, a rewrite would be too risky.
+          - As far as I'm concerned, readable code matters more than clever code.
+          - I'd argue that we should wait for more data.
+        answer: In my opinion, a rewrite would be too risky.
+        explanation: Фраза говорит именно о переписывании; остальные о читаемом коде и об ожидании данных.
+  - type: exercise
+    id: answer-choice
+    title: Формулировка для ответа
+    instruction: Выберите формулировку, которая подходит для собеседования.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы называете слабую сторону спокойно и говорите, что с ней делаете.
+        options:
+          - I used to spend too long on small details, so I now set a time limit.
+          - I have no weaknesses.
+          - I am bad at everything, to be honest.
+        answer: I used to spend too long on small details, so I now set a time limit.
+        explanation: Фраза называет склонность и действие; остальные отрицают вопрос или обвиняют себя.
+      - id: q2
+        prompt: Вы называете сильную сторону и подкрепляете её примером.
+        options:
+          - My biggest strength is that I break problems down; last year I split a migration into small steps.
+          - My biggest strength is everything.
+          - I am just very good, and that is all.
+        answer: My biggest strength is that I break problems down; last year I split a migration into small steps.
+        explanation: Фраза называет качество и случай; остальные ничего не подтверждают.
+      - id: q3
+        prompt: Вы не согласны с решением команды и приводите довод о самом решении.
+        options:
+          - I'm not sure that a cache is enough, because most queries are different.
+          - Whoever chose a cache did not think.
+          - This team is wrong.
+        answer: I'm not sure that a cache is enough, because most queries are different.
+        explanation: Фраза называет сомнение и причину; остальные оценивают людей.
+      - id: q4
+        prompt: Вы говорите, что готовы пересмотреть мнение после проверки.
+        options:
+          - I'm happy to be proven wrong.
+          - I never change my mind.
+          - It is not possible to prove me wrong.
+        answer: I'm happy to be proven wrong.
+        explanation: Фраза выражает готовность согласиться с доводом; остальные закрывают обсуждение.
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: На мой взгляд, переписывание с нуля было бы слишком рискованным.
+        answer:
+          - In my opinion, a rewrite would be too risky
+          - In my opinion, a full rewrite would be too risky
+          - In my opinion, a complete rewrite would be too risky
+          - In my opinion, a rewrite from scratch would be too risky
+          - In my opinion a rewrite would be too risky
+          - In my opinion a full rewrite would be too risky
+          - In my opinion a complete rewrite would be too risky
+          - In my opinion a rewrite from scratch would be too risky
+          - In my view, a rewrite would be too risky
+          - In my view, a full rewrite would be too risky
+          - In my view, a complete rewrite would be too risky
+          - In my view, a rewrite from scratch would be too risky
+          - In my view a rewrite would be too risky
+          - In my view a full rewrite would be too risky
+          - In my view a complete rewrite would be too risky
+          - In my view a rewrite from scratch would be too risky
+          - To my mind, a rewrite would be too risky
+          - To my mind, a full rewrite would be too risky
+          - To my mind, a complete rewrite would be too risky
+          - To my mind, a rewrite from scratch would be too risky
+          - To my mind a rewrite would be too risky
+          - To my mind a full rewrite would be too risky
+          - To my mind a complete rewrite would be too risky
+          - To my mind a rewrite from scratch would be too risky
+          - In my opinion, rewriting everything from scratch would be too risky
+          - In my opinion, rewriting everything would be too risky
+          - In my opinion, rewriting the system from scratch would be too risky
+          - In my opinion, rewriting the system would be too risky
+          - In my opinion, rewriting it from scratch would be too risky
+          - In my opinion, rewriting it would be too risky
+          - In my opinion, rewriting the whole system from scratch would be too risky
+          - In my opinion, rewriting the whole system would be too risky
+          - In my opinion rewriting everything from scratch would be too risky
+          - In my opinion rewriting everything would be too risky
+          - In my opinion rewriting the system from scratch would be too risky
+          - In my opinion rewriting the system would be too risky
+          - In my opinion rewriting it from scratch would be too risky
+          - In my opinion rewriting it would be too risky
+          - In my opinion rewriting the whole system from scratch would be too risky
+          - In my opinion rewriting the whole system would be too risky
+          - In my view, rewriting everything from scratch would be too risky
+          - In my view, rewriting everything would be too risky
+          - In my view, rewriting the system from scratch would be too risky
+          - In my view, rewriting the system would be too risky
+          - In my view, rewriting it from scratch would be too risky
+          - In my view, rewriting it would be too risky
+          - In my view, rewriting the whole system from scratch would be too risky
+          - In my view, rewriting the whole system would be too risky
+          - In my view rewriting everything from scratch would be too risky
+          - In my view rewriting everything would be too risky
+          - In my view rewriting the system from scratch would be too risky
+          - In my view rewriting the system would be too risky
+          - In my view rewriting it from scratch would be too risky
+          - In my view rewriting it would be too risky
+          - In my view rewriting the whole system from scratch would be too risky
+          - In my view rewriting the whole system would be too risky
+          - To my mind, rewriting everything from scratch would be too risky
+          - To my mind, rewriting everything would be too risky
+          - To my mind, rewriting the system from scratch would be too risky
+          - To my mind, rewriting the system would be too risky
+          - To my mind, rewriting it from scratch would be too risky
+          - To my mind, rewriting it would be too risky
+          - To my mind, rewriting the whole system from scratch would be too risky
+          - To my mind, rewriting the whole system would be too risky
+          - To my mind rewriting everything from scratch would be too risky
+          - To my mind rewriting everything would be too risky
+          - To my mind rewriting the system from scratch would be too risky
+          - To my mind rewriting the system would be too risky
+          - To my mind rewriting it from scratch would be too risky
+          - To my mind rewriting it would be too risky
+          - To my mind rewriting the whole system from scratch would be too risky
+          - To my mind rewriting the whole system would be too risky
+          - I think that a rewrite would be too risky
+          - I think that a full rewrite would be too risky
+          - I think that a complete rewrite would be too risky
+          - I think a rewrite would be too risky
+          - I think a full rewrite would be too risky
+          - I think a complete rewrite would be too risky
+          - I believe that a rewrite would be too risky
+          - I believe that a full rewrite would be too risky
+          - I believe that a complete rewrite would be too risky
+          - I believe a rewrite would be too risky
+          - I believe a full rewrite would be too risky
+          - I believe a complete rewrite would be too risky
+          - I think that rewriting everything from scratch would be too risky
+          - I think that rewriting everything would be too risky
+          - I think that rewriting the system from scratch would be too risky
+          - I think that rewriting the system would be too risky
+          - I think that rewriting it from scratch would be too risky
+          - I think that rewriting it would be too risky
+          - I think that rewriting the whole system from scratch would be too risky
+          - I think that rewriting the whole system would be too risky
+          - I think rewriting everything from scratch would be too risky
+          - I think rewriting everything would be too risky
+          - I think rewriting the system from scratch would be too risky
+          - I think rewriting the system would be too risky
+          - I think rewriting it from scratch would be too risky
+          - I think rewriting it would be too risky
+          - I think rewriting the whole system from scratch would be too risky
+          - I think rewriting the whole system would be too risky
+          - I believe that rewriting everything from scratch would be too risky
+          - I believe that rewriting everything would be too risky
+          - I believe that rewriting the system from scratch would be too risky
+          - I believe that rewriting the system would be too risky
+          - I believe that rewriting it from scratch would be too risky
+          - I believe that rewriting it would be too risky
+          - I believe that rewriting the whole system from scratch would be too risky
+          - I believe that rewriting the whole system would be too risky
+          - I believe rewriting everything from scratch would be too risky
+          - I believe rewriting everything would be too risky
+          - I believe rewriting the system from scratch would be too risky
+          - I believe rewriting the system would be too risky
+          - I believe rewriting it from scratch would be too risky
+          - I believe rewriting it would be too risky
+          - I believe rewriting the whole system from scratch would be too risky
+          - I believe rewriting the whole system would be too risky
+        explanation: In my opinion — «на мой взгляд»; would be too risky — условный оборот; запятая после вводной фразы необязательна.
+      - id: q2
+        prompt: Давайте посмотрим на доказательства.
+        answer:
+          - Let us look at the evidence
+          - Let us look at the data
+          - Let us look at the facts
+          - Let us take a look at the evidence
+          - Let us take a look at the data
+          - Let us take a look at the facts
+          - Let us have a look at the evidence
+          - Let us have a look at the data
+          - Let us have a look at the facts
+          - Let us examine the evidence
+          - Let us examine the data
+          - Let us examine the facts
+        explanation: Let us + глагол; evidence — неисчисляемое, артикль the нужен.
+      - id: q3
+        prompt: Справедливое замечание, я об этом не подумал.
+        answer:
+          - That is a fair point, and I had not thought of that
+          - That is a fair point, and I had not thought of it
+          - That is a fair point, and I did not think of that
+          - That is a fair point, and I did not think of it
+          - That is a fair point, and I had not thought about that
+          - That is a fair point, and I had not thought about it
+          - That is a fair point, and I did not think about that
+          - That is a fair point, and I did not think about it
+          - That is a fair point and I had not thought of that
+          - That is a fair point and I had not thought of it
+          - That is a fair point and I did not think of that
+          - That is a fair point and I did not think of it
+          - That is a fair point and I had not thought about that
+          - That is a fair point and I had not thought about it
+          - That is a fair point and I did not think about that
+          - That is a fair point and I did not think about it
+          - That is a fair point, I had not thought of that
+          - That is a fair point, I had not thought of it
+          - That is a fair point, I did not think of that
+          - That is a fair point, I did not think of it
+          - That is a fair point, I had not thought about that
+          - That is a fair point, I had not thought about it
+          - That is a fair point, I did not think about that
+          - That is a fair point, I did not think about it
+          - That is a fair point. I had not thought of that
+          - That is a fair point. I had not thought of it
+          - That is a fair point. I did not think of that
+          - That is a fair point. I did not think of it
+          - That is a fair point. I had not thought about that
+          - That is a fair point. I had not thought about it
+          - That is a fair point. I did not think about that
+          - That is a fair point. I did not think about it
+          - That is a good point, and I had not thought of that
+          - That is a good point, and I had not thought of it
+          - That is a good point, and I did not think of that
+          - That is a good point, and I did not think of it
+          - That is a good point, and I had not thought about that
+          - That is a good point, and I had not thought about it
+          - That is a good point, and I did not think about that
+          - That is a good point, and I did not think about it
+          - That is a good point and I had not thought of that
+          - That is a good point and I had not thought of it
+          - That is a good point and I did not think of that
+          - That is a good point and I did not think of it
+          - That is a good point and I had not thought about that
+          - That is a good point and I had not thought about it
+          - That is a good point and I did not think about that
+          - That is a good point and I did not think about it
+          - That is a good point, I had not thought of that
+          - That is a good point, I had not thought of it
+          - That is a good point, I did not think of that
+          - That is a good point, I did not think of it
+          - That is a good point, I had not thought about that
+          - That is a good point, I had not thought about it
+          - That is a good point, I did not think about that
+          - That is a good point, I did not think about it
+          - That is a good point. I had not thought of that
+          - That is a good point. I had not thought of it
+          - That is a good point. I did not think of that
+          - That is a good point. I did not think of it
+          - That is a good point. I had not thought about that
+          - That is a good point. I had not thought about it
+          - That is a good point. I did not think about that
+          - That is a good point. I did not think about it
+          - That is a valid point, and I had not thought of that
+          - That is a valid point, and I had not thought of it
+          - That is a valid point, and I did not think of that
+          - That is a valid point, and I did not think of it
+          - That is a valid point, and I had not thought about that
+          - That is a valid point, and I had not thought about it
+          - That is a valid point, and I did not think about that
+          - That is a valid point, and I did not think about it
+          - That is a valid point and I had not thought of that
+          - That is a valid point and I had not thought of it
+          - That is a valid point and I did not think of that
+          - That is a valid point and I did not think of it
+          - That is a valid point and I had not thought about that
+          - That is a valid point and I had not thought about it
+          - That is a valid point and I did not think about that
+          - That is a valid point and I did not think about it
+          - That is a valid point, I had not thought of that
+          - That is a valid point, I had not thought of it
+          - That is a valid point, I did not think of that
+          - That is a valid point, I did not think of it
+          - That is a valid point, I had not thought about that
+          - That is a valid point, I had not thought about it
+          - That is a valid point, I did not think about that
+          - That is a valid point, I did not think about it
+          - That is a valid point. I had not thought of that
+          - That is a valid point. I had not thought of it
+          - That is a valid point. I did not think of that
+          - That is a valid point. I did not think of it
+          - That is a valid point. I had not thought about that
+          - That is a valid point. I had not thought about it
+          - That is a valid point. I did not think about that
+          - That is a valid point. I did not think about it
+          - Fair point, and I had not thought of that
+          - Fair point, and I had not thought of it
+          - Fair point, and I did not think of that
+          - Fair point, and I did not think of it
+          - Fair point, and I had not thought about that
+          - Fair point, and I had not thought about it
+          - Fair point, and I did not think about that
+          - Fair point, and I did not think about it
+          - Fair point and I had not thought of that
+          - Fair point and I had not thought of it
+          - Fair point and I did not think of that
+          - Fair point and I did not think of it
+          - Fair point and I had not thought about that
+          - Fair point and I had not thought about it
+          - Fair point and I did not think about that
+          - Fair point and I did not think about it
+          - Fair point, I had not thought of that
+          - Fair point, I had not thought of it
+          - Fair point, I did not think of that
+          - Fair point, I did not think of it
+          - Fair point, I had not thought about that
+          - Fair point, I had not thought about it
+          - Fair point, I did not think about that
+          - Fair point, I did not think about it
+          - Fair point. I had not thought of that
+          - Fair point. I had not thought of it
+          - Fair point. I did not think of that
+          - Fair point. I did not think of it
+          - Fair point. I had not thought about that
+          - Fair point. I had not thought about it
+          - Fair point. I did not think about that
+          - Fair point. I did not think about it
+          - Good point, and I had not thought of that
+          - Good point, and I had not thought of it
+          - Good point, and I did not think of that
+          - Good point, and I did not think of it
+          - Good point, and I had not thought about that
+          - Good point, and I had not thought about it
+          - Good point, and I did not think about that
+          - Good point, and I did not think about it
+          - Good point and I had not thought of that
+          - Good point and I had not thought of it
+          - Good point and I did not think of that
+          - Good point and I did not think of it
+          - Good point and I had not thought about that
+          - Good point and I had not thought about it
+          - Good point and I did not think about that
+          - Good point and I did not think about it
+          - Good point, I had not thought of that
+          - Good point, I had not thought of it
+          - Good point, I did not think of that
+          - Good point, I did not think of it
+          - Good point, I had not thought about that
+          - Good point, I had not thought about it
+          - Good point, I did not think about that
+          - Good point, I did not think about it
+          - Good point. I had not thought of that
+          - Good point. I had not thought of it
+          - Good point. I did not think of that
+          - Good point. I did not think of it
+          - Good point. I had not thought about that
+          - Good point. I had not thought about it
+          - Good point. I did not think about that
+          - Good point. I did not think about it
+        explanation: Fair point — «справедливое замечание»; had not thought of — «не подумал об этом», запятая необязательна.
+      - id: q4
+        prompt: Может быть, оставим каждого при своём мнении по этому вопросу?
+        answer:
+          - Could we agree to disagree
+          - Could we agree to disagree on this
+          - Could we agree to disagree on this one
+          - Could we agree to disagree about this
+          - Could we agree to disagree about this one
+          - Can we agree to disagree
+          - Can we agree to disagree on this
+          - Can we agree to disagree on this one
+          - Can we agree to disagree about this
+          - Can we agree to disagree about this one
+          - Shall we agree to disagree
+          - Shall we agree to disagree on this
+          - Shall we agree to disagree on this one
+          - Shall we agree to disagree about this
+          - Shall we agree to disagree about this one
+        explanation: Agree to disagree — «остаться каждый при своём мнении».
+      - id: q5
+        prompt: Я рад, если мне докажут, что я неправ.
+        answer:
+          - I am happy to be proven wrong
+          - I am happy to be proved wrong
+          - I am glad to be proven wrong
+          - I am glad to be proved wrong
+          - I am ready to be proven wrong
+          - I am ready to be proved wrong
+          - I will be happy if you prove me wrong
+          - I will be happy if someone proves me wrong
+          - I will be happy if somebody proves me wrong
+          - I will be glad if you prove me wrong
+          - I will be glad if someone proves me wrong
+          - I will be glad if somebody proves me wrong
+        explanation: Be proven wrong — «получить доказательство, что был неправ»; proven и proved допустимы.
+      - id: q6
+        prompt: В любом случае я поддержу решение команды.
+        answer:
+          - Either way, I will support the team's decision
+          - Either way, I will support the team’s decision
+          - Either way I will support the team's decision
+          - Either way I will support the team’s decision
+          - In any case, I will support the team's decision
+          - In any case, I will support the team’s decision
+          - In any case I will support the team's decision
+          - In any case I will support the team’s decision
+          - Anyway, I will support the team's decision
+          - Anyway, I will support the team’s decision
+          - Anyway I will support the team's decision
+          - Anyway I will support the team’s decision
+          - In either case, I will support the team's decision
+          - In either case, I will support the team’s decision
+          - In either case I will support the team's decision
+          - In either case I will support the team’s decision
+          - I will support the team's decision either way
+          - I will support the team's decision in any case
+          - I will support the team's decision anyway
+          - I will support the team’s decision either way
+          - I will support the team’s decision in any case
+          - I will support the team’s decision anyway
+          - I will support the decision of the team either way
+          - I will support the decision of the team in any case
+          - I will support the decision of the team anyway
+          - Either way, I will support the decision of the team
+          - Either way I will support the decision of the team
+          - In any case, I will support the decision of the team
+          - In any case I will support the decision of the team
+          - Anyway, I will support the decision of the team
+          - Anyway I will support the decision of the team
+        explanation: Either way — «в любом случае»; the team's decision — «решение команды».
+  - type: writing
+    id: opinion
+    register: formal
+    prompt: "Напишите комментарий в обсуждении вымышленного RFC (130–170 слов): признайте довод автора, назовите сомнение, приведите довод и предложите шаг. Используйте не меньше трёх выражений урока (например, In my opinion, I would argue that, On balance, evidence). Предложение придумайте сами."
+    words:
+      min: 130
+      max: 170
+    model: |-
+      Subject: Comment on the reporting RFC
+
+      Dear all,
+
+      Thank you for the RFC. I see your point that the current reporting module is hard to maintain, and I agree that the problem is real.
+
+      However, I am not sure that a full rewrite is the right first step. In my opinion, a rewrite would be too risky, because the module has no automated tests and three teams depend on it. The last two migrations in our department also took longer than planned, which suggests that estimates for work like this are optimistic.
+
+      I would argue that we should start with a smaller change. We could add tests for the most used reports and then replace one report at a time. On balance, this plan gives us the same result with less risk.
+
+      I am happy to be proven wrong, and I am ready to help with either approach. Could we discuss the options at the next meeting?
+
+      Kind regards
+    criteria:
+      - 130–170 слов, есть тема письма, обращение, согласие с частью довода, сомнение, довод и вежливое завершение
+      - Довод автора признан до возражения (I see your point…)
+      - Возражение сформулировано вежливо и касается самого решения
+      - Приведён довод или факт, предложен смягчённый альтернативный шаг
+      - Использованы не меньше трёх выражений урока
+      - RFC и данные придуманы, реальных систем и компаний нет
+      - Формальный стиль без сокращений
+  - type: explanation
+    id: speaking-how
+    title: Как записывать ответы
+    body: |-
+      Пятнадцатый ответ вашего **банка ответов** — **What are your strengths and weaknesses?** К нему добавляется второй вопрос о несогласии с решением: **Do you agree with that decision?** Первый ответ занимает до 90 секунд, второй — до минуты.
+
+      1) Разложите первый ответ по пяти шагам: сильная сторона с примером, вторая сильная сторона, слабая сторона, что вы делаете, итог. 2) Запишите ответ вслух и уложитесь во время. 3) Переслушайте и сверьте с образцом и критериями: у слабой стороны есть действие, нет самообвинения и клише. 4) Для второго вопроса назовите довод собеседника, своё сомнение, предложение проверить и готовность поддержать решение.
+
+      Сцена в конце урока проходит на собеседовании с HR, Astrid спрашивает о сильных и слабых сторонах, затем возражает вам. Реплики Astrid записаны ниже, перед сценой; вы слушаете их по порядку и отвечаете вслух.
+  - type: speaking
+    id: strengths
+    part: interview
+    prompt: "Интервьюер спрашивает: «What are your strengths and weaknesses?» Ответьте за 90 секунд: две сильные стороны (одну с примером), одна слабая сторона и то, что вы с ней делаете."
+    seconds: 90
+    model: "Thank you for the question. My biggest strength is that I break problems down. I am analytical: I start with the logs and the metrics. At my last job, we had to migrate a large service, and I split the work into small steps, each with its own test. That made the risk easy to see, and we finished on time. I am also pragmatic: I ship a simple fix first and improve it later. As for my weakness, I used to spend too long on small details. For example, I once spent a whole afternoon on a variable name in a pull request. Now I set a time limit for each task, and I ask a colleague to check the details at the end. It works well, and my last three releases were on schedule. I think these strengths fit the role, and I am working on the weakness."
+    criteria:
+      - Шаги идут по порядку — сильная сторона с примером, вторая сильная сторона, слабая сторона, действие, итог
+      - Слабая сторона названа спокойно, есть то, что вы с ней делаете
+      - Нет клише («я перфекционист») и самообвинения
+      - Использованы не меньше двух слов урока (например, analytical, systematic, pragmatic)
+      - Пример придуман, названий компаний и внутренних цифр нет
+      - Ответ укладывается в 90 секунд
+  - type: speaking
+    id: decision
+    part: monologue
+    prompt: "Интервьюер спрашивает: «Our team has decided to keep the current database. Do you agree with that decision?» Ответьте за 60 секунд: признайте довод, назовите сомнение, предложите проверить и скажите, что поддержите решение команды."
+    seconds: 60
+    model: I see your point about keeping it. Moving the data would take months, and the team knows the current database well. But I am not sure that it will handle the growth we expect. In my opinion, it is worth testing it with the expected load before we commit. If the test shows that it copes, I would happily support the decision. If it does not, I would suggest a gradual move to a second database, one service at a time. Either way, I will support the team's decision.
+    criteria:
+      - Довод признан до возражения
+      - Сомнение названо вежливо (I'm not sure that…, In my opinion…) и касается решения
+      - Предложена проверка фактами
+      - Есть готовность поддержать решение команды
+      - Нет оценки людей, которые приняли решение
+      - Ответ укладывается в 60 секунд
+  - type: listening
+    id: scene-lines
+    title: Реплики собеседника
+    plays: 2
+    transcript:
+      - speaker: Astrid
+        text: Welcome back. Let's talk about how you work. What are your strengths and weaknesses?
+      - speaker: Astrid
+        text: Thank you. Could you give me an example of the strength you mentioned?
+      - speaker: Astrid
+        text: Now a different topic. Our engineers decided to release only on Thursdays, even though some people prefer to release every day. Do you agree with that decision?
+      - speaker: Astrid
+        text: I see. But many engineers on the team prefer Thursdays, because it gives them time to fix problems before the weekend. How would you respond to that?
+      - speaker: Astrid
+        text: That's a fair point. What would you do if the team still decided to keep Thursdays?
+      - speaker: Astrid
+        text: Thank you. That is a constructive way to talk about a disagreement. Do you have any questions for me?
+  - type: speaking
+    id: scene
+    part: roleplay
+    prompt: |-
+      Вы на собеседовании с HR, Astrid задаёт вопросы и возражает вам. Прослушайте её реплики на предыдущей странице; отвечайте на каждую по порядку и записывайте свою часть.
+      На первую реплику назовите две сильные стороны и одну слабую с действием. На вторую приведите пример. На третью вежливо не согласитесь с решением о релизах по четвергам. На четвёртую признайте довод и предложите проверку. На пятую скажите, что поддержите решение команды. На последнюю поблагодарите и задайте вопрос. Вся ваша часть — 150 секунд, каждая реплика — две-четыре фразы.
+    seconds: 150
+    model: |-
+      Astrid: Welcome back. Let's talk about how you work. What are your strengths and weaknesses?
+      You: Thank you for the question. My biggest strength is that I break problems down. I'm also good at explaining technical ideas to non-technical people. As for weaknesses, I used to spend too long on small details, so now I set a time limit for each task.
+      Astrid: Thank you. Could you give me an example of the strength you mentioned?
+      You: Last year, I split a large migration into small steps, each with its own test. That made the risk easy to see, and we finished on time.
+      Astrid: Now a different topic. Our engineers decided to release only on Thursdays, even though some people prefer to release every day. Do you agree with that decision?
+      You: I see your point about Thursdays, because a fixed day makes releases predictable. But I'm not sure that it is the safest option. In my opinion, smaller releases carry less risk, so I tend to think that releasing more often would help.
+      Astrid: I see. But many engineers on the team prefer Thursdays, because it gives them time to fix problems before the weekend. How would you respond to that?
+      You: That's a fair point, and I hadn't thought of that. Could we try small releases on other days for a month and look at the evidence?
+      Astrid: That's a fair point. What would you do if the team still decided to keep Thursdays?
+      You: Either way, I'll support the team's decision. I'd just ask to review the numbers together after a few months.
+      Astrid: Thank you. That is a constructive way to talk about a disagreement. Do you have any questions for me?
+      You: Thank you. Yes, I have one question: how does the team review its release process? I'd be glad to work with the team.
+    criteria:
+      - Ответили на все шесть реплик по порядку, каждая — две-четыре фразы
+      - В первой реплике названы две сильные стороны и слабая сторона с действием
+      - Во второй реплике есть пример
+      - В третьей реплике несогласие вежливое и касается решения (I see your point, but…, I'm not sure that…)
+      - В четвёртой реплике признан довод и предложена проверка фактами
+      - В пятой реплике названа готовность поддержать решение команды
+      - В конце есть благодарность, вопрос и готовность работать с командой
+      - Реплики интервьюера не пересказаны, ответ идёт по смыслу
+  - type: exercise
+    id: review-mixed
+    title: Повторение модулей
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: If the team ___ the cache, the search would be faster. (воображаемая ситуация)
+        options:
+          - added
+          - adds
+          - will add
+        answer: added
+        explanation: Second conditional — if + past simple, would + базовая форма.
+      - id: q2
+        prompt: «Do you agree with the plan?» → He asked me ___ I agreed with the plan.
+        options:
+          - whether
+          - that
+          - what
+        answer: whether
+        explanation: В косвенном вопросе без вопросительного слова стоит whether или if.
+      - id: q3
+        prompt: The engineer ___ proposed the change is on leave.
+        options:
+          - who
+          - which
+          - whose
+        answer: who
+        explanation: Для человека в определительном придаточном стоит who; which относится к вещам, whose требует существительного.
+      - id: q4
+        prompt: Вы не вполне уверены и говорите осторожно. Какая фраза подходит?
+        options:
+          - I'd say it depends on the size of the input.
+          - It definitely depends of the size of the input.
+          - I am completely sure it depends from the size.
+        answer: I'd say it depends on the size of the input.
+        explanation: I'd say смягчает утверждение; в остальных вариантах неверный предлог или полная уверенность.
+      - id: q5
+        prompt: If I had asked for a review, I ___ the bug. (прошлое, которого не было)
+        options:
+          - would have found
+          - would find
+          - had found
+        answer: would have found
+        explanation: Conditional 3 — would have и третья форма глагола.
+      - id: q6
+        prompt: Let me ___ the problem back in my own words.
+        options:
+          - say
+          - to say
+          - saying
+        answer: say
+        explanation: После let me стоит глагол без to.

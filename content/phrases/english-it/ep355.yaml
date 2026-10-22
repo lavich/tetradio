@@ -1,0 +1,7 @@
+id: ep355
+text: "I accept the risk, but the timeline concerns me."
+translation: "Я принимаю риск, но сроки меня беспокоят."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

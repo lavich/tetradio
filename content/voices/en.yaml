@@ -84,6 +84,7 @@ characters:
   Lukas: { gender: male, voice: Enceladus }
   Hassan: { gender: male, voice: Orus }
   Fatima: { gender: female, voice: Achernar }
+  Astrid: { gender: female, voice: Callirrhoe }
   Aisha: { gender: female, voice: Leda }
   Marco: { gender: male, voice: Puck }
   Rory: { gender: male, voice: Algieba }

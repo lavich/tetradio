@@ -1,0 +1,7 @@
+id: ep375
+text: "Either way, I'll support the team's decision."
+translation: "В любом случае я поддержу решение команды."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

@@ -1,0 +1,566 @@
+title: согласие, несогласие и смягчение — сильные стороны и спор о решении
+kind: lesson
+items:
+  - { kind: word, id: ew491 }
+  - { kind: word, id: ew492 }
+  - { kind: word, id: ew493 }
+  - { kind: word, id: ew494 }
+  - { kind: word, id: ew495 }
+  - { kind: word, id: ew496 }
+  - { kind: word, id: ew497 }
+  - { kind: word, id: ew498 }
+  - { kind: word, id: ew499 }
+  - { kind: word, id: ew500 }
+  - { kind: word, id: ew501 }
+  - { kind: word, id: ew502 }
+  - { kind: word, id: ew503 }
+  - { kind: word, id: ew504 }
+  - { kind: word, id: ew505 }
+  - { kind: word, id: ew506 }
+  - { kind: word, id: ew507 }
+  - { kind: word, id: ew508 }
+  - { kind: phrase, id: ep351 }
+  - { kind: phrase, id: ep352 }
+  - { kind: phrase, id: ep353 }
+  - { kind: phrase, id: ep354 }
+  - { kind: phrase, id: ep355 }
+  - { kind: phrase, id: ep356 }
+  - { kind: phrase, id: ep357 }
+  - { kind: phrase, id: ep358 }
+blocks:
+  - type: explanation
+    id: disagree
+    title: Согласие и несогласие — вежливо и по делу
+    body: |-
+      На собеседовании и в обсуждении RFC почти всегда есть момент, когда вы видите вопрос иначе, чем собеседник. Интервьюер слушает не только довод, но и то, как вы возражаете: уважительно ли, готовы ли выслушать, умеете ли остаться в одной команде после спора. Поэтому несогласие смягчают: сначала признают довод, затем называют свой.
+
+      **I see your point, but…** — «понимаю вашу мысль, но…»: довод признан, дальше идёт ваш. **I partly agree, but…** и **That's true, although…** — согласие с частью и оговорка. **I'm not sure that…** — сомнение вместо прямого «вы неправы»: **I'm not sure that's the right option.**
+
+      Своё мнение вводят оборотами **In my opinion…**, **As far as I'm concerned…**, **I tend to think that…** («я склонен думать»), **I'd argue that…** («я бы утверждал»). Прямое несогласие звучит вежливо с **I'd respectfully disagree.**
+
+      Говорите о решении. **I'm not sure that this design handles peak load** относится к дизайну, а замечание о том, что кто-то «не подумал о нагрузке», относится к человеку. Довод о решении интервьюер обсуждает, довод о человеке закрывает разговор.
+    table:
+      columns:
+        - степень
+        - выражение
+        - пример
+      rows:
+        - - согласие
+          - I agree. · That's a fair point.
+          - I agree, and I'd add one more risk.
+        - - согласие с частью
+          - I partly agree, but… · That's true, although…
+          - That's true, although it comes with a cost.
+        - - сомнение
+          - I'm not sure that… · I tend to think that…
+          - I tend to think that testing comes first.
+        - - несогласие
+          - I'd respectfully disagree. · I'd argue that…
+          - I'd argue that we should wait for more data.
+  - type: explanation
+    id: softening
+    title: Модальные глаголы и смягчение
+    body: |-
+      Вежливый спор строится на модальных глаголах и осторожных оборотах. **Could** и **would** делают предложение мягче приказа: **We could consider a smaller change.** **It would be safer to wait.** **Might** и **may** оставляют место сомнению: **That might be risky.** Оборот **It seems to me that…** показывает, что это ваше впечатление, и установленным фактом его никто не считает.
+
+      Союзы **but** и **although** связывают довод собеседника с вашим. После **but** стоит то, что вы хотите сказать на самом деле: **I see your point, but I'd approach it differently.** Перед **but** обычно ставят запятую. **Although** начинает придаточное: **That's true, although it comes with a cost.**
+
+      Смягчение не отменяет позицию. Если вы не согласны, назовите это: **I'd respectfully disagree** понятно, а **well, maybe, in some way, it could be so** оставляет собеседника без ответа. Одного смягчителя достаточно, а вывод должен звучать ясно.
+    table:
+      columns:
+        - слово
+        - роль
+        - пример
+      rows:
+        - - could / would
+          - мягкое предложение
+          - We could try a smaller change first.
+        - - might / may
+          - возможность, сомнение
+          - That might be risky for the release.
+        - - it seems to me that
+          - ваше впечатление
+          - It seems to me that the timeline is tight.
+        - - but / although
+          - довод и контраргумент
+          - I accept the risk, but the timeline concerns me.
+  - type: explanation
+    id: opinion-mistakes
+    title: Типичные ошибки русскоговорящих
+    body: |-
+      **I'm not agree.** По-русски «я не согласен» строится с прилагательным, и в английском добавляют be: *I'm not agree.* Agree — глагол: **I don't agree.** **I agree** и **I disagree** без be.
+
+      **Agree to вместо agree with.** С человеком и мнением — **agree with**: **I agree with you.** **I agree with the plan.** Предлог *to* стоит с предложением или условием: **I agree to the deadline.**
+
+      **By my opinion.** Русское «по моему мнению» часто даёт *by my opinion*. Верно **in my opinion**.
+
+      **Good in вместо good at.** Навык называют с at и формой на -ing: **I'm good at explaining technical ideas.** Варианты *good in explain* и *good at explain* ошибочны.
+
+      **Tend taking.** После **tend to** стоит глагол без -ing: **I tend to take on too much.**
+
+      **Ответ без глагола.** Сильную сторону называют полным предложением: **My biggest strength is that I break problems down.** Вариант *My strength: breaking problems* допустим в списке, но в устном ответе звучит обрывочно.
+    table:
+      columns:
+        - ошибка
+        - верно
+        - правило
+      rows:
+        - - I'm not agree with you.
+          - I don't agree with you.
+          - agree — глагол
+        - - I agree to you.
+          - I agree with you.
+          - agree with + человек или мнение
+        - - By my opinion, it is risky.
+          - In my opinion, it is risky.
+          - in my opinion
+        - - I'm good in explain ideas.
+          - I'm good at explaining ideas.
+          - good at + -ing
+        - - I tend taking too much.
+          - I tend to take on too much.
+          - tend to + глагол
+  - type: explanation
+    id: trait-words
+    title: Слова урока — качества и склонности
+    body: |-
+      Слова урока описывают, как человек работает и общается. Они образуют три группы.
+
+      **Стиль работы.** **Level-headed** — сохраняет спокойствие в трудной ситуации. **Detail-oriented** — замечает мелкие неточности. **Self-motivated** — берётся за дело без напоминаний. **Analytical** — разбирает проблему на части и опирается на данные, **systematic** — действует по порядку и по плану. **Pragmatic** — выбирает то, что работает в реальных условиях. **Conscientious** — внимательно выполняет обязанности. **Resilient** — быстро восстанавливается после неудач. **Curious** — хочет понять, почему всё устроено именно так.
+
+      **Общение.** **Empathetic** — понимает чувства другого. **Outgoing** — общительный, **reserved** — сдержанный. **Assertive** — прямо и вежливо отстаивает позицию. **Open-minded** — готов пересмотреть мнение. **A team player** — действует в интересах команды.
+
+      **Склонности, над которыми работают.** **Impatient** — нетерпеливый. **Overcommit** — брать на себя больше, чем можно выполнить. **Micromanage** — контролировать каждую мелочь в работе других. Слабые стороны называют спокойно и сразу говорят, что вы с ними делаете: подробности — в уроке `e15-3`.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: opinion-choice
+    title: Согласие, сомнение, смягчение
+    instruction: Выберите слово или фразу для пропуска.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ with you about the deadline. (я согласен)
+        options:
+          - agree
+          - am agree
+          - agrees
+        answer: agree
+        explanation: Agree — глагол, be не нужен; после I стоит форма без -s.
+      - id: q2
+        prompt: I'm not sure ___ this is the right option.
+        options:
+          - that
+          - what
+          - about
+        answer: that
+        explanation: После not sure придаточное вводит that; what и about здесь не подходят.
+      - id: q3
+        prompt: I tend ___ that testing comes first. (я склонен думать)
+        options:
+          - to think
+          - thinking
+          - think
+        answer: to think
+        explanation: После tend стоит to и глагол в базовой форме.
+      - id: q4
+        prompt: I'm good ___ explaining technical ideas. (хорош в)
+        options:
+          - at
+          - to
+          - on
+        answer: at
+        explanation: Навык называют сочетанием good at и формой на -ing.
+      - id: q5
+        prompt: That's true, ___ it comes with a cost. (хотя)
+        options:
+          - although
+          - despite
+          - so
+        answer: although
+        explanation: Although вводит придаточное; despite требует существительного или формы на -ing, а so меняет смысл.
+      - id: q6
+        prompt: ___ my opinion, a rewrite would be too risky. (на мой взгляд)
+        options:
+          - In
+          - By
+          - At
+        answer: In
+        explanation: Устойчивое выражение — in my opinion.
+  - type: exercise
+    id: polite-choice
+    title: Вежливое несогласие
+    instruction: Выберите формулировку, которая подходит для спокойного обсуждения решения.
+    format: choice
+    items:
+      - id: q1
+        prompt: Вы сомневаетесь, что кэш решит проблему.
+        options:
+          - I'm not sure that a cache is enough.
+          - You obviously do not understand caching.
+          - A cache is a silly idea.
+        answer: I'm not sure that a cache is enough.
+        explanation: Фраза называет сомнение и говорит о решении; остальные оценивают человека и идею.
+      - id: q2
+        prompt: Вы признаёте довод, но хотите предложить другой путь.
+        options:
+          - I see your point, but I'd approach it differently.
+          - I see your point, so I'll stop talking.
+          - I do not see any point in this.
+        answer: I see your point, but I'd approach it differently.
+        explanation: But вводит свой довод после признания чужого; остальные закрывают разговор.
+      - id: q3
+        prompt: Вы согласны только с частью довода и хотите назвать опасение.
+        options:
+          - I partly agree, but I have a concern.
+          - I fully agree, but I have a concern.
+          - I partly agree, so I have no concern.
+        answer: I partly agree, but I have a concern.
+        explanation: Partly agree совпадает с оговоркой; второй вариант говорит о полном согласии, третий отрицает опасение.
+      - id: q4
+        prompt: Вы хотите вежливо сказать, что не согласны.
+        options:
+          - I'd respectfully disagree.
+          - I will never accept this.
+          - That is wrong, and everyone knows it.
+        answer: I'd respectfully disagree.
+        explanation: Фраза называет несогласие вежливо; остальные давят и обобщают.
+      - id: q5
+        prompt: Вы не согласны с решением команды и приводите довод о самом решении.
+        options:
+          - I'd put more weight on the maintenance cost.
+          - Whoever chose this did not think.
+          - This team always decides badly.
+        answer: I'd put more weight on the maintenance cost.
+        explanation: Фраза предлагает довод о стоимости; остальные критикуют людей.
+  - type: exercise
+    id: traits-match
+    title: Качества и склонности
+    instruction: Соедините определение с английским словом. Два слова лишние.
+    format: match
+    bank:
+      - level-headed
+      - detail-oriented
+      - self-motivated
+      - empathetic
+      - reserved
+      - impatient
+      - micromanage
+      - assertive
+      - open-minded
+    items:
+      - { id: m1, prompt: "сохраняет спокойствие и ясно мыслит, когда всё идёт не по плану", answer: level-headed }
+      - { id: m2, prompt: "замечает мелкие неточности, например пропущенную проверку в коде", answer: detail-oriented }
+      - { id: m3, prompt: "берётся за работу сам, без напоминаний и внешнего давления", answer: self-motivated }
+      - { id: m4, prompt: понимает чувства другого человека, answer: empathetic }
+      - { id: m5, prompt: говорит мало и редко показывает чувства, answer: reserved }
+      - { id: m6, prompt: "раздражается, когда дело идёт медленнее, чем хотелось бы", answer: impatient }
+      - { id: m7, prompt: контролировать каждую мелочь в работе других людей, answer: micromanage }
+  - type: exercise
+    id: traits-gap
+    title: Качества в предложениях
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - analytical
+      - systematic
+      - pragmatic
+      - resilient
+      - curious
+      - conscientious
+      - a team player
+      - overcommit
+      - outgoing
+    items:
+      - id: g1
+        prompt: Before she decides, she studies the logs and the metrics, so her colleagues call her ___. (аналитичная)
+        answer: analytical
+      - id: g2
+        prompt: He always checks one module at a time, in the same order, so his approach is ___. (системный)
+        answer: systematic
+      - id: g3
+        prompt: There is no time for a perfect design, so a ___ engineer ships the simple fix first. (практичный)
+        answer: pragmatic
+      - id: g4
+        prompt: "After the failed release, she learned from it and kept going: she is ___. (устойчивая к неудачам)"
+        answer: resilient
+      - id: g5
+        prompt: He keeps asking why the service behaves this way, because he is ___. (любознательный)
+        answer: curious
+      - id: g6
+        prompt: She checks the work twice before she hands it over, because she is ___. (добросовестная)
+        answer: conscientious
+      - id: g7
+        prompt: "He shares what he knows and helps with other people's tasks: he is ___. (командный игрок)"
+        answer: a team player
+  - type: exercise
+    id: translate
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Я понимаю вашу мысль, но подошёл бы к этому иначе.
+        answer:
+          - I see your point, but I would approach it differently
+          - I see your point, but I would approach this differently
+          - I see your point, but I would do it differently
+          - I see your point, but I would go about it differently
+          - I see your point, but I would handle it differently
+          - I see your point but I would approach it differently
+          - I see your point but I would approach this differently
+          - I see your point but I would do it differently
+          - I see your point but I would go about it differently
+          - I see your point but I would handle it differently
+          - I understand your point, but I would approach it differently
+          - I understand your point, but I would approach this differently
+          - I understand your point, but I would do it differently
+          - I understand your point, but I would go about it differently
+          - I understand your point, but I would handle it differently
+          - I understand your point but I would approach it differently
+          - I understand your point but I would approach this differently
+          - I understand your point but I would do it differently
+          - I understand your point but I would go about it differently
+          - I understand your point but I would handle it differently
+          - I get your point, but I would approach it differently
+          - I get your point, but I would approach this differently
+          - I get your point, but I would do it differently
+          - I get your point, but I would go about it differently
+          - I get your point, but I would handle it differently
+          - I get your point but I would approach it differently
+          - I get your point but I would approach this differently
+          - I get your point but I would do it differently
+          - I get your point but I would go about it differently
+          - I get your point but I would handle it differently
+        explanation: I see your point — «понимаю вашу мысль»; would + глагол — мягкое предложение.
+      - id: q2
+        prompt: Я не уверен, что это подходящий вариант.
+        answer:
+          - I am not sure that this is the right option
+          - I am not sure that this is the right choice
+          - I am not sure that this is the right solution
+          - I am not sure that this is the best option
+          - I am not sure that this is the best choice
+          - I am not sure that this is the best solution
+          - I am not sure that this is a good option
+          - I am not sure that this is a good choice
+          - I am not sure that this is a good solution
+          - I am not sure that this is a suitable option
+          - I am not sure that this is a suitable choice
+          - I am not sure that this is a suitable solution
+          - I am not sure that this is the most suitable option
+          - I am not sure that this is the most suitable choice
+          - I am not sure that this is the most suitable solution
+          - I am not sure that that is the right option
+          - I am not sure that that is the right choice
+          - I am not sure that that is the right solution
+          - I am not sure that that is the best option
+          - I am not sure that that is the best choice
+          - I am not sure that that is the best solution
+          - I am not sure that that is a good option
+          - I am not sure that that is a good choice
+          - I am not sure that that is a good solution
+          - I am not sure that that is a suitable option
+          - I am not sure that that is a suitable choice
+          - I am not sure that that is a suitable solution
+          - I am not sure that that is the most suitable option
+          - I am not sure that that is the most suitable choice
+          - I am not sure that that is the most suitable solution
+          - I am not sure that it is the right option
+          - I am not sure that it is the right choice
+          - I am not sure that it is the right solution
+          - I am not sure that it is the best option
+          - I am not sure that it is the best choice
+          - I am not sure that it is the best solution
+          - I am not sure that it is a good option
+          - I am not sure that it is a good choice
+          - I am not sure that it is a good solution
+          - I am not sure that it is a suitable option
+          - I am not sure that it is a suitable choice
+          - I am not sure that it is a suitable solution
+          - I am not sure that it is the most suitable option
+          - I am not sure that it is the most suitable choice
+          - I am not sure that it is the most suitable solution
+          - I am not sure this is the right option
+          - I am not sure this is the right choice
+          - I am not sure this is the right solution
+          - I am not sure this is the best option
+          - I am not sure this is the best choice
+          - I am not sure this is the best solution
+          - I am not sure this is a good option
+          - I am not sure this is a good choice
+          - I am not sure this is a good solution
+          - I am not sure this is a suitable option
+          - I am not sure this is a suitable choice
+          - I am not sure this is a suitable solution
+          - I am not sure this is the most suitable option
+          - I am not sure this is the most suitable choice
+          - I am not sure this is the most suitable solution
+          - I am not sure that is the right option
+          - I am not sure that is the right choice
+          - I am not sure that is the right solution
+          - I am not sure that is the best option
+          - I am not sure that is the best choice
+          - I am not sure that is the best solution
+          - I am not sure that is a good option
+          - I am not sure that is a good choice
+          - I am not sure that is a good solution
+          - I am not sure that is a suitable option
+          - I am not sure that is a suitable choice
+          - I am not sure that is a suitable solution
+          - I am not sure that is the most suitable option
+          - I am not sure that is the most suitable choice
+          - I am not sure that is the most suitable solution
+          - I am not sure it is the right option
+          - I am not sure it is the right choice
+          - I am not sure it is the right solution
+          - I am not sure it is the best option
+          - I am not sure it is the best choice
+          - I am not sure it is the best solution
+          - I am not sure it is a good option
+          - I am not sure it is a good choice
+          - I am not sure it is a good solution
+          - I am not sure it is a suitable option
+          - I am not sure it is a suitable choice
+          - I am not sure it is a suitable solution
+          - I am not sure it is the most suitable option
+          - I am not sure it is the most suitable choice
+          - I am not sure it is the most suitable solution
+        explanation: Not sure that… — «не уверен, что…»; that после sure можно опустить.
+      - id: q3
+        prompt: Я отчасти согласен, но у меня есть опасение.
+        answer:
+          - I partly agree, but I have a concern
+          - I partly agree, but I have a worry
+          - I partly agree, but I have one concern
+          - I partly agree, but I have some concerns
+          - I partly agree but I have a concern
+          - I partly agree but I have a worry
+          - I partly agree but I have one concern
+          - I partly agree but I have some concerns
+          - I partially agree, but I have a concern
+          - I partially agree, but I have a worry
+          - I partially agree, but I have one concern
+          - I partially agree, but I have some concerns
+          - I partially agree but I have a concern
+          - I partially agree but I have a worry
+          - I partially agree but I have one concern
+          - I partially agree but I have some concerns
+          - I agree partly, but I have a concern
+          - I agree partly, but I have a worry
+          - I agree partly, but I have one concern
+          - I agree partly, but I have some concerns
+          - I agree partly but I have a concern
+          - I agree partly but I have a worry
+          - I agree partly but I have one concern
+          - I agree partly but I have some concerns
+          - I agree in part, but I have a concern
+          - I agree in part, but I have a worry
+          - I agree in part, but I have one concern
+          - I agree in part, but I have some concerns
+          - I agree in part but I have a concern
+          - I agree in part but I have a worry
+          - I agree in part but I have one concern
+          - I agree in part but I have some concerns
+          - I partly agree with you, but I have a concern
+          - I partly agree with you, but I have a worry
+          - I partly agree with you, but I have one concern
+          - I partly agree with you, but I have some concerns
+          - I partly agree with you but I have a concern
+          - I partly agree with you but I have a worry
+          - I partly agree with you but I have one concern
+          - I partly agree with you but I have some concerns
+          - I agree with you partly, but I have a concern
+          - I agree with you partly, but I have a worry
+          - I agree with you partly, but I have one concern
+          - I agree with you partly, but I have some concerns
+          - I agree with you partly but I have a concern
+          - I agree with you partly but I have a worry
+          - I agree with you partly but I have one concern
+          - I agree with you partly but I have some concerns
+        explanation: Partly agree — «отчасти согласен»; запятая перед but необязательна.
+      - id: q4
+        prompt: Я бы вежливо не согласился.
+        answer:
+          - I would respectfully disagree
+          - I would respectfully disagree with you
+          - I would politely disagree
+          - I would politely disagree with you
+          - I respectfully disagree
+          - I politely disagree
+        explanation: Would смягчает фразу; respectfully и politely — естественные наречия.
+      - id: q5
+        prompt: Я склонен думать, что сначала нужны тесты.
+        answer:
+          - I tend to think that testing comes first
+          - I tend to think that tests come first
+          - I tend to think that we need tests first
+          - I tend to think that tests are needed first
+          - I tend to think that we need to write tests first
+          - I tend to think that we need to test first
+          - I tend to think testing comes first
+          - I tend to think tests come first
+          - I tend to think we need tests first
+          - I tend to think tests are needed first
+          - I tend to think we need to write tests first
+          - I tend to think we need to test first
+          - I am inclined to think that testing comes first
+          - I am inclined to think that tests come first
+          - I am inclined to think that we need tests first
+          - I am inclined to think that tests are needed first
+          - I am inclined to think that we need to write tests first
+          - I am inclined to think that we need to test first
+          - I am inclined to think testing comes first
+          - I am inclined to think tests come first
+          - I am inclined to think we need tests first
+          - I am inclined to think tests are needed first
+          - I am inclined to think we need to write tests first
+          - I am inclined to think we need to test first
+          - I tend to believe that testing comes first
+          - I tend to believe that tests come first
+          - I tend to believe that we need tests first
+          - I tend to believe that tests are needed first
+          - I tend to believe that we need to write tests first
+          - I tend to believe that we need to test first
+          - I tend to believe testing comes first
+          - I tend to believe tests come first
+          - I tend to believe we need tests first
+          - I tend to believe tests are needed first
+          - I tend to believe we need to write tests first
+          - I tend to believe we need to test first
+        explanation: Tend to think — «склонен думать»; that после think можно опустить.
+      - id: q6
+        prompt: Я хорошо объясняю технические идеи людям без технической подготовки.
+        answer:
+          - I am good at explaining technical ideas to non-technical people
+          - I am good at explaining technical ideas to people who are not technical
+          - I am good at explaining technical ideas to people without a technical background
+          - I am good at explaining technical ideas to people who do not have a technical background
+          - I am good at explaining technical concepts to non-technical people
+          - I am good at explaining technical concepts to people who are not technical
+          - I am good at explaining technical concepts to people without a technical background
+          - I am good at explaining technical concepts to people who do not have a technical background
+          - I am skilled at explaining technical ideas to non-technical people
+          - I am skilled at explaining technical ideas to people who are not technical
+          - I am skilled at explaining technical ideas to people without a technical background
+          - I am skilled at explaining technical ideas to people who do not have a technical background
+          - I am skilled at explaining technical concepts to non-technical people
+          - I am skilled at explaining technical concepts to people who are not technical
+          - I am skilled at explaining technical concepts to people without a technical background
+          - I am skilled at explaining technical concepts to people who do not have a technical background
+          - I am great at explaining technical ideas to non-technical people
+          - I am great at explaining technical ideas to people who are not technical
+          - I am great at explaining technical ideas to people without a technical background
+          - I am great at explaining technical ideas to people who do not have a technical background
+          - I am great at explaining technical concepts to non-technical people
+          - I am great at explaining technical concepts to people who are not technical
+          - I am great at explaining technical concepts to people without a technical background
+          - I am great at explaining technical concepts to people who do not have a technical background
+          - I explain technical ideas to non-technical people well
+          - I explain technical ideas to people who are not technical well
+          - I explain technical ideas to people without a technical background well
+          - I explain technical concepts to non-technical people well
+          - I explain technical concepts to people who are not technical well
+          - I explain technical concepts to people without a technical background well
+        explanation: Good at + форма на -ing; non-technical people — «люди без технической подготовки».

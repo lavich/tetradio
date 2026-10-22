@@ -1,0 +1,7 @@
+id: ep359
+text: "My biggest strength is that I break problems down."
+translation: "Моя главная сильная сторона в том, что я разбиваю задачи на части."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

@@ -1,0 +1,435 @@
+title: Контрольная модуля e15
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, согласие и несогласие, слова модуля и перевод фраз. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: feedback
+    title: "Hiring review: data engineer, candidate 3"
+    text: |-
+      Hiring review: data engineer, candidate 3
+      Interview feedback · example
+
+      Overview
+      The candidate explained the pipeline design in a systematic way and answered most questions directly. The panel agrees that the candidate is a plausible fit for the team.
+
+      Strengths
+      The candidate is detail-oriented: they found a missing check in the sample schema within a few minutes. They are also open-minded; when a panel member challenged the choice of database, they asked for the argument and changed their proposal.
+
+      Concerns
+      One member has reservations about the candidate's plan to rewrite the import job in a new language. The plan is well thought out, but the candidate gave no evidence that the rewrite would pay off. Another member thinks this concern is subjective, because a similar plan worked in an earlier team.
+
+      Recommendation
+      On balance, the panel recommends a second interview, with a short task about estimates.
+    glosses:
+      - text: pipeline
+        russian: конвейер обработки данных
+      - text: sample schema
+        russian: учебная схема данных
+      - text: challenged
+        russian: поставил под сомнение
+      - text: import job
+        russian: задача импорта данных
+      - text: well thought out
+        russian: хорошо продуман
+      - text: pay off
+        russian: окупиться
+      - text: estimates
+        russian: оценки сроков и объёма работы
+  - type: exercise
+    id: feedback-tf
+    about: feedback
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The panel thinks the candidate is a plausible fit for the team.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q2
+        prompt: The candidate found a missing check in the sample schema.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q3
+        prompt: The candidate refused to change the proposal when a panel member challenged the choice of database.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: They asked for the argument and changed their proposal — кандидат выслушал довод и изменил предложение.
+      - id: q4
+        prompt: One member has reservations about the plan to rewrite the import job.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q5
+        prompt: The candidate gave evidence that the rewrite would pay off.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: The candidate gave no evidence — подтверждающих данных кандидат не привёл.
+      - id: q6
+        prompt: The panel recommends rejecting the candidate.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: The panel recommends a second interview — комиссия рекомендует второе интервью.
+  - type: listening
+    id: call
+    title: Daniel talks about his strengths and a team decision
+    plays: 2
+    transcript:
+      - speaker: Astrid
+        text: Daniel, thank you for coming. Let's start with a common question. What are your strengths and weaknesses?
+      - speaker: Daniel
+        text: Thank you. My biggest strength is that I'm curious. When a service fails, I want to understand the root cause, so I read the logs and ask questions until I know why.
+      - speaker: Astrid
+        text: Can you give an example?
+      - speaker: Daniel
+        text: Last spring, a report was slow every Monday. I traced it to a job that started at the same time as the backup, and we moved the job to the evening.
+      - speaker: Astrid
+        text: And a weakness?
+      - speaker: Daniel
+        text: I get impatient in long meetings. I used to interrupt people, so now I write my questions down and wait until the end.
+      - speaker: Astrid
+        text: That's useful. Now, our team decided to write documentation after the release, not before it. Do you agree with that?
+      - speaker: Daniel
+        text: I see your point, because writing before the release takes time. But I'm not sure that it works. In my experience, details are forgotten after the release. I'd prefer to write a short version before, and the full version after.
+      - speaker: Astrid
+        text: That's a fair point. What if the team still prefers to write everything after the release?
+      - speaker: Daniel
+        text: Then I'd follow the team's decision, and I'd keep my short notes for myself.
+      - speaker: Astrid
+        text: Thank you, Daniel. We'll be in touch next week.
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: How does Daniel describe his biggest strength?
+        options:
+          - He is curious.
+          - He is outgoing.
+          - He is reserved.
+        answer: He is curious.
+      - id: q2
+        prompt: What caused the slow report?
+        options:
+          - a job that started at the same time as the backup
+          - a missing index in the database
+          - a very long list of reports
+        answer: a job that started at the same time as the backup
+      - id: q3
+        prompt: How did the team fix the slow report?
+        options:
+          - They moved the job to the evening.
+          - They bought a faster server.
+          - They deleted the report.
+        answer: They moved the job to the evening.
+      - id: q4
+        prompt: What is Daniel's weakness?
+        options:
+          - He gets impatient in long meetings.
+          - He forgets to write documentation.
+          - He avoids asking questions.
+        answer: He gets impatient in long meetings.
+      - id: q5
+        prompt: What does Daniel suggest about the documentation?
+        options:
+          - a short version before the release and the full version after it
+          - no documentation at all
+          - the full version before the release
+        answer: a short version before the release and the full version after it
+      - id: q6
+        prompt: What would Daniel do if the team kept its decision?
+        options:
+          - follow the team's decision
+          - leave the team
+          - ignore the decision
+        answer: follow the team's decision
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Согласие, несогласие и смягчение
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: I ___ with you about the deadline. (я согласен)
+        options:
+          - agree
+          - am agree
+          - agrees
+        answer: agree
+        explanation: Agree — глагол, be не нужен; после I стоит форма без -s.
+      - id: q2
+        prompt: I'm not sure ___ this is the right option.
+        options:
+          - that
+          - what
+          - of
+        answer: that
+        explanation: После not sure придаточное вводит that.
+      - id: q3
+        prompt: Вы вежливо признаёте довод и называете своё мнение. Какая фраза подходит?
+        options:
+          - I see your point, but I'd approach it differently.
+          - I see your point, and you are wrong.
+          - I do not see any point in this.
+        answer: I see your point, but I'd approach it differently.
+        explanation: But вводит свой довод после признания чужого; остальные грубы или закрывают разговор.
+      - id: q4
+        prompt: I tend ___ that tests come first. (я склонен думать)
+        options:
+          - to think
+          - thinking
+          - think
+        answer: to think
+        explanation: После tend стоит to и глагол в базовой форме.
+      - id: q5
+        prompt: I'm good ___ explaining ideas to non-technical people. (хорош в)
+        options:
+          - at
+          - to
+          - on
+        answer: at
+        explanation: Навык называют сочетанием good at и формой на -ing.
+      - id: q6
+        prompt: That's true, ___ it comes with a cost. (хотя)
+        options:
+          - although
+          - despite
+          - so
+        answer: although
+        explanation: Although вводит придаточное; despite требует существительного, а so меняет смысл.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - evidence
+      - plausible
+      - see eye to eye
+      - back up
+      - stand by
+      - on balance
+      - far-fetched
+      - an objection
+    items:
+      - id: g1
+        prompt: The explanation sounds believable, but we have no data yet, so it is only ___. (правдоподобное)
+        answer: plausible
+      - id: g2
+        prompt: Please ___ your estimate with numbers from a similar project. (подкрепить)
+        answer: back up
+      - id: g3
+        prompt: There is no ___ that the new design is faster. (доказательства)
+        answer: evidence
+      - id: g4
+        prompt: The two engineers rarely ___, but they respect each other's arguments. (быть единого мнения)
+        answer: see eye to eye
+      - id: g5
+        prompt: I made the decision with the data I had, and I ___ it. (остаюсь при решении)
+        answer: stand by
+      - id: g6
+        prompt: I have ___ to the plan, because it does not include a rollback. (возражение)
+        answer: an objection
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Я отчасти согласен, но у меня есть опасение.
+        answer:
+          - I partly agree, but I have a concern
+          - I partly agree, but I have a worry
+          - I partly agree, but I have one concern
+          - I partly agree, but I have some concerns
+          - I partly agree but I have a concern
+          - I partly agree but I have a worry
+          - I partly agree but I have one concern
+          - I partly agree but I have some concerns
+          - I partially agree, but I have a concern
+          - I partially agree, but I have a worry
+          - I partially agree, but I have one concern
+          - I partially agree, but I have some concerns
+          - I partially agree but I have a concern
+          - I partially agree but I have a worry
+          - I partially agree but I have one concern
+          - I partially agree but I have some concerns
+          - I agree partly, but I have a concern
+          - I agree partly, but I have a worry
+          - I agree partly, but I have one concern
+          - I agree partly, but I have some concerns
+          - I agree partly but I have a concern
+          - I agree partly but I have a worry
+          - I agree partly but I have one concern
+          - I agree partly but I have some concerns
+          - I agree in part, but I have a concern
+          - I agree in part, but I have a worry
+          - I agree in part, but I have one concern
+          - I agree in part, but I have some concerns
+          - I agree in part but I have a concern
+          - I agree in part but I have a worry
+          - I agree in part but I have one concern
+          - I agree in part but I have some concerns
+          - I partly agree with you, but I have a concern
+          - I partly agree with you, but I have a worry
+          - I partly agree with you, but I have one concern
+          - I partly agree with you, but I have some concerns
+          - I partly agree with you but I have a concern
+          - I partly agree with you but I have a worry
+          - I partly agree with you but I have one concern
+          - I partly agree with you but I have some concerns
+          - I agree with you partly, but I have a concern
+          - I agree with you partly, but I have a worry
+          - I agree with you partly, but I have one concern
+          - I agree with you partly, but I have some concerns
+          - I agree with you partly but I have a concern
+          - I agree with you partly but I have a worry
+          - I agree with you partly but I have one concern
+          - I agree with you partly but I have some concerns
+        explanation: Partly agree — «отчасти согласен»; запятая перед but необязательна.
+      - id: q2
+        prompt: Что изменило бы ваше мнение?
+        answer:
+          - What would change your mind
+          - What would change your opinion
+          - What would change your view
+          - What would make you change your mind
+          - What would make you change your opinion
+          - What would persuade you to change your mind
+          - What would convince you to change your mind
+          - What could change your mind
+          - What could change your opinion
+          - What could change your view
+          - What could make you change your mind
+          - What could make you change your opinion
+          - What could persuade you to change your mind
+          - What could convince you to change your mind
+          - What might change your mind
+          - What might change your opinion
+          - What might change your view
+          - What might make you change your mind
+          - What might make you change your opinion
+          - What might persuade you to change your mind
+          - What might convince you to change your mind
+        explanation: Change your mind — «передумать»; would — условная форма.
+      - id: q3
+        prompt: Я не уверен, что это подходящий вариант.
+        answer:
+          - I am not sure that this is the right option
+          - I am not sure that this is the right choice
+          - I am not sure that this is the right solution
+          - I am not sure that this is the best option
+          - I am not sure that this is the best choice
+          - I am not sure that this is the best solution
+          - I am not sure that this is a good option
+          - I am not sure that this is a good choice
+          - I am not sure that this is a good solution
+          - I am not sure that this is a suitable option
+          - I am not sure that this is a suitable choice
+          - I am not sure that this is a suitable solution
+          - I am not sure that this is the most suitable option
+          - I am not sure that this is the most suitable choice
+          - I am not sure that this is the most suitable solution
+          - I am not sure that that is the right option
+          - I am not sure that that is the right choice
+          - I am not sure that that is the right solution
+          - I am not sure that that is the best option
+          - I am not sure that that is the best choice
+          - I am not sure that that is the best solution
+          - I am not sure that that is a good option
+          - I am not sure that that is a good choice
+          - I am not sure that that is a good solution
+          - I am not sure that that is a suitable option
+          - I am not sure that that is a suitable choice
+          - I am not sure that that is a suitable solution
+          - I am not sure that that is the most suitable option
+          - I am not sure that that is the most suitable choice
+          - I am not sure that that is the most suitable solution
+          - I am not sure that it is the right option
+          - I am not sure that it is the right choice
+          - I am not sure that it is the right solution
+          - I am not sure that it is the best option
+          - I am not sure that it is the best choice
+          - I am not sure that it is the best solution
+          - I am not sure that it is a good option
+          - I am not sure that it is a good choice
+          - I am not sure that it is a good solution
+          - I am not sure that it is a suitable option
+          - I am not sure that it is a suitable choice
+          - I am not sure that it is a suitable solution
+          - I am not sure that it is the most suitable option
+          - I am not sure that it is the most suitable choice
+          - I am not sure that it is the most suitable solution
+          - I am not sure this is the right option
+          - I am not sure this is the right choice
+          - I am not sure this is the right solution
+          - I am not sure this is the best option
+          - I am not sure this is the best choice
+          - I am not sure this is the best solution
+          - I am not sure this is a good option
+          - I am not sure this is a good choice
+          - I am not sure this is a good solution
+          - I am not sure this is a suitable option
+          - I am not sure this is a suitable choice
+          - I am not sure this is a suitable solution
+          - I am not sure this is the most suitable option
+          - I am not sure this is the most suitable choice
+          - I am not sure this is the most suitable solution
+          - I am not sure that is the right option
+          - I am not sure that is the right choice
+          - I am not sure that is the right solution
+          - I am not sure that is the best option
+          - I am not sure that is the best choice
+          - I am not sure that is the best solution
+          - I am not sure that is a good option
+          - I am not sure that is a good choice
+          - I am not sure that is a good solution
+          - I am not sure that is a suitable option
+          - I am not sure that is a suitable choice
+          - I am not sure that is a suitable solution
+          - I am not sure that is the most suitable option
+          - I am not sure that is the most suitable choice
+          - I am not sure that is the most suitable solution
+          - I am not sure it is the right option
+          - I am not sure it is the right choice
+          - I am not sure it is the right solution
+          - I am not sure it is the best option
+          - I am not sure it is the best choice
+          - I am not sure it is the best solution
+          - I am not sure it is a good option
+          - I am not sure it is a good choice
+          - I am not sure it is a good solution
+          - I am not sure it is a suitable option
+          - I am not sure it is a suitable choice
+          - I am not sure it is a suitable solution
+          - I am not sure it is the most suitable option
+          - I am not sure it is the most suitable choice
+          - I am not sure it is the most suitable solution
+        explanation: Not sure that… — «не уверен, что…»; that после sure можно опустить.

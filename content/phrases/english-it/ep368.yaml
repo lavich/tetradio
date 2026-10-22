@@ -1,0 +1,7 @@
+id: ep368
+text: "As far as I'm concerned, readable code matters more than clever code."
+translation: "Что касается меня, читаемый код важнее хитроумного."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

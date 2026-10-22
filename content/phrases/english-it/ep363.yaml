@@ -1,0 +1,7 @@
+id: ep363
+text: "I enjoy picking up unfamiliar areas of the codebase."
+translation: "Мне нравится разбираться в незнакомых частях кодовой базы."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md

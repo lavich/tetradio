@@ -1,0 +1,7 @@
+id: ep367
+text: "In my opinion, a rewrite would be too risky."
+translation: "На мой взгляд, переписывание с нуля было бы слишком рискованным."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e15
+  operation: requested-generation
+  request: Фразы модуля e15 по программе docs/curriculum-english-it.md
