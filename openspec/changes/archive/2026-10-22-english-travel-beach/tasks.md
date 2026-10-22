@@ -27,8 +27,8 @@
 - [x] 3.1 `npm run voices -- --check` по `t15-1`, `t15-2`, `t15-3`, `t15-test`, затем `npm run voices -- t15-1 t15-2 t15-3 t15-test words phrases --course=english-travel` (уроки — отдельными аргументами; ключ `GOOGLE_TTS_KEY` — из локального `.env`), респелл при необходимости (`content/voices/en.yaml`). Проверка: `--check` — «озвучить 0».
 - [x] 3.2 Бюджеты: строка «Бюджеты» `npm run content` — mp3 (max 250 000 байт, 32 кбит/с), курс, пакет, каталог (предел 40 000); `BASE_PATH=/ npm run check:bundle` (precache 1 625 000 от озвучки не зависит, `vite.config.ts:164`). При превышении предела — явный подъём с записью замера. Проверка: строка «Бюджеты» и `check:bundle` зелёные; замеры — в «Реализация».
 - [ ] 3.3 Слух: по одной реплике каждого нового персонажа, диктора, одной фразе и одному слову. Проверка: голоса разные в каждом диалоге, произношение британское; слух на устройстве остаётся за пользователем.
-- [ ] 3.4 PR озвучки: полная проверка, `gh pr checks --watch`, мерж только с разрешения пользователя.
+- [x] 3.4 PR озвучки: полная проверка, `gh pr checks --watch`, мерж только с разрешения пользователя.
 
 ## 4. Архивация
 
-- [ ] 4.1 `openspec archive english-travel-beach --yes` отдельным PR (только `openspec/`) после мержа озвучки; пункт слуха 3.3 остаётся открытым, при открытых задачах архивация идёт с `--yes` (отдельного флага пропуска проверки задач у `openspec archive` нет; `--no-validate` не нужен). Проверка: `npm run spec` зелёный, `openspec/changes/english-travel-beach` перенесён в `openspec/changes/archive/`, требования попали в `openspec/specs/course-content/spec.md`.
+- [x] 4.1 `openspec archive english-travel-beach --yes` отдельным PR (только `openspec/`) после мержа озвучки; пункт слуха 3.3 остаётся открытым, при открытых задачах архивация идёт с `--yes` (отдельного флага пропуска проверки задач у `openspec archive` нет; `--no-validate` не нужен). Проверка: `npm run spec` зелёный, `openspec/changes/english-travel-beach` перенесён в `openspec/changes/archive/`, требования попали в `openspec/specs/course-content/spec.md`.
