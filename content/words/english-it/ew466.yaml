@@ -1,0 +1,6 @@
+id: ew466
+greek: "an off-by-one error"
+russian: "ошибка на единицу: цикл выполняется на один раз больше или меньше"
+ipa: /ən ˌɒf baɪ ˈwʌn ˈerə/
+note: "чаще всего возникает на границах цикла"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

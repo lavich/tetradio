@@ -1,0 +1,7 @@
+id: ep330
+text: "I'm going to sort the input first."
+translation: "Сначала я отсортирую входные данные."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md

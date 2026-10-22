@@ -1,0 +1,6 @@
+id: ew474
+greek: "linear"
+russian: "линейный: время или память растут пропорционально размеру входа"
+ipa: /ˈlɪniə/
+note: "linear time: вход вдвое больше — времени вдвое больше; linear space — то же для памяти"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

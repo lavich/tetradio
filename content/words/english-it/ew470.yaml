@@ -1,0 +1,6 @@
+id: ew470
+greek: "backtracking"
+russian: "перебор с возвратом: пробуют вариант и откатываются, если он не подходит"
+ipa: /ˈbæktrækɪŋ/
+note: "backtracking часто сочетают с отсечением ветвей"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

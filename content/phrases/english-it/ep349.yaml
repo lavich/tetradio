@@ -1,0 +1,7 @@
+id: ep349
+text: "I'm slightly unsure about this part, so I'll test it."
+translation: "В этой части я не совсем уверен, поэтому проверю её."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md

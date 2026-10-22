@@ -1,0 +1,7 @@
+id: ep338
+text: "I'm not sure that's optimal, but it works."
+translation: "Не уверен, что это оптимально, но это работает."
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md

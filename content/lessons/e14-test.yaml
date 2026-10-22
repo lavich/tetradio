@@ -1,0 +1,449 @@
+title: Контрольная модуля e14
+kind: test
+items: []
+blocks:
+  - type: explanation
+    id: intro
+    title: Перед контрольной
+    body: |-
+      Контрольная занимает 10–15 минут: чтение, аудирование, let me, I'm going to и осторожные формулировки, слова модуля и перевод фраз. Словарь и таблицы не открывайте: так результат покажет, что уже усвоено.
+
+      Диалог звучит два раза; в вопросах к диалогу три варианта, верен один. Пояснения после ответа подскажут, что повторить.
+  - type: reading
+    id: writeup
+    title: "Solution write-up: merging two sorted lists"
+    text: |-
+      Solution write-up: merging two sorted lists
+      Interview prep notes · example
+
+      Problem
+      Two lists of numbers are sorted from the smallest to the largest. Return one sorted list that contains all the numbers.
+
+      First idea
+      A brute-force solution joins the two lists and sorts the result. It works, but sorting takes more than linear time, and it ignores the fact that both lists are already sorted.
+
+      Better idea
+      I keep one pointer in each list, starting at the first element. At each step, I compare the two numbers that the pointers show, copy the smaller one into the result and move that pointer forward. When one list is finished, I copy the rest of the other list. Every number is copied once, so the solution runs in linear time. The result needs auxiliary space of the same size as both lists together.
+
+      Checks
+      I wrote test cases for two empty lists, for one empty list and for lists with equal numbers. The first version crashed on an empty list, because it read the first element before checking the length. After I added the check, all the test cases passed.
+
+      Open point
+      My conclusion about very long lists is tentative: the result may not fit into memory. In that case, I would write the result to a file piece by piece.
+    glosses:
+      - text: sorted
+        russian: отсортированы
+      - text: smallest to the largest
+        russian: от наименьшего к наибольшему
+      - text: joins
+        russian: объединяет
+      - text: copy
+        russian: копировать
+      - text: crashed
+        russian: аварийно завершилась
+      - text: piece by piece
+        russian: по частям
+  - type: exercise
+    id: writeup-tf
+    about: writeup
+    graded: true
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: Both lists are sorted from the smallest to the largest.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q2
+        prompt: The brute-force solution makes use of the fact that the lists are sorted.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: It ignores the fact that both lists are already sorted — решение в лоб не использует то, что списки отсортированы.
+      - id: q3
+        prompt: The better solution keeps one pointer in each list.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q4
+        prompt: The better solution runs in quadratic time.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: Every number is copied once, so the solution runs in linear time — решение работает за линейное время.
+      - id: q5
+        prompt: The first version crashed on an empty list.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q6
+        prompt: The author is sure that very long lists cause no problem.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: My conclusion about very long lists is tentative — автор не уверен в этом случае и говорит об этом осторожно.
+  - type: listening
+    id: call
+    title: Ethan solves a problem aloud
+    plays: 2
+    transcript:
+      - speaker: Mark
+        text: Here is the problem, Ethan. Given a linked list, return it in reverse order. Please think out loud.
+      - speaker: Ethan
+        text: Thank you. Let me say the problem back in my own words. I get the first node of a linked list, and I need to return the first node of the reversed list. Can I change the list itself, or do I have to build a new one?
+      - speaker: Mark
+        text: You can change the list itself.
+      - speaker: Ethan
+        text: Good. Let me draw this on the board. A list of three nodes, one, two, three. After reversing, it is three, two, one.
+      - speaker: Ethan
+        text: "I'm going to traverse the list once, with three pointers: one to the previous node, one to the current node and one to the next node. At each step, I save the next node, point the current node back to the previous one and move forward."
+      - speaker: Mark
+        text: What is the time complexity?
+      - speaker: Ethan
+        text: I think it is linear, because I visit each node once. And as far as I can tell, the extra space is constant, because I only keep three pointers.
+      - speaker: Mark
+        text: Which edge case would you test first?
+      - speaker: Ethan
+        text: The empty list. Then a list with one node. In both cases, the function should return the list as it is.
+      - speaker: Mark
+        text: Good. Please go ahead and write it.
+  - type: exercise
+    id: call-q
+    about: call
+    graded: true
+    title: Аудирование
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What must Ethan do with the linked list?
+        options:
+          - reverse it
+          - sort it
+          - copy it
+        answer: reverse it
+      - id: q2
+        prompt: What does Ethan ask Mark?
+        options:
+          - whether he may change the list itself
+          - which language to use
+          - how long the list can be
+        answer: whether he may change the list itself
+      - id: q3
+        prompt: What does Ethan do to explain his idea?
+        options:
+          - He draws an example.
+          - He writes the code at once.
+          - He asks Mark to draw.
+        answer: He draws an example.
+      - id: q4
+        prompt: How many pointers does Ethan keep?
+        options:
+          - three
+          - two
+          - one
+        answer: three
+      - id: q5
+        prompt: Which time complexity does Ethan give?
+        options:
+          - linear
+          - quadratic
+          - logarithmic
+        answer: linear
+      - id: q6
+        prompt: Which edge case does Ethan name first?
+        options:
+          - the empty list
+          - a list with one node
+          - a list with two nodes
+        answer: the empty list
+  - type: exercise
+    id: grammar
+    graded: true
+    title: Let me, I'm going to и осторожные формулировки
+    instruction: Выберите правильный вариант.
+    format: choice
+    items:
+      - id: q1
+        prompt: ___ draw this on the board. (позвольте мне нарисовать)
+        options:
+          - Let me
+          - Let me to
+          - Let I
+        answer: Let me
+        explanation: После let стоит me и глагол без to.
+      - id: q2
+        prompt: I'm going to ___ the input first.
+        options:
+          - sort
+          - to sort
+          - sorting
+        answer: sort
+        explanation: После going to стоит глагол в базовой форме.
+      - id: q3
+        prompt: Вы не уверены, что решение оптимально, но оно работает. Какая фраза подходит?
+        options:
+          - I'm not sure that's optimal, but it works.
+          - This is the optimal solution, and it works.
+          - It is optimal, I'm not sure that it works.
+        answer: I'm not sure that's optimal, but it works.
+        explanation: Фраза называет сомнение и результат; остальные утверждают оптимальность или путают порядок.
+      - id: q4
+        prompt: It ___ on the size of the input.
+        options:
+          - depends
+          - depend
+          - depending
+        answer: depends
+        explanation: После it глагол стоит с окончанием -s; depends on — «зависит от».
+      - id: q5
+        prompt: Вы думаете, что решение не квадратичное. Какая фраза подходит?
+        options:
+          - I don't think it is quadratic.
+          - I think not it is quadratic.
+          - I not think it is quadratic.
+        answer: I don't think it is quadratic.
+        explanation: "Отрицание переносят в главную часть: I don't think…"
+      - id: q6
+        prompt: I'd probably ___ a hash map here.
+        options:
+          - use
+          - to use
+          - using
+        answer: use
+        explanation: После I'd (would) стоит глагол без to; probably стоит между ними.
+  - type: exercise
+    id: words
+    graded: true
+    title: Слова модуля
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - a hash map
+      - recursion
+      - a base case
+      - a binary search
+      - time complexity
+      - memoisation
+      - an off-by-one error
+      - a linked list
+    items:
+      - id: g1
+        prompt: A function that calls itself needs ___ that stops the calls. (базовый случай)
+        answer: a base case
+      - id: g2
+        prompt: A loop runs one time too many because of ___. (ошибка на единицу)
+        answer: an off-by-one error
+      - id: g3
+        prompt: Finding a name in a sorted list of a million names takes about twenty steps with ___. (бинарный поиск)
+        answer: a binary search
+      - id: g4
+        prompt: Each node stores a value and a reference to the next node, so the structure is ___. (связный список)
+        answer: a linked list
+      - id: g5
+        prompt: The function computes the same values again and again, so ___ would save the results. (мемоизация)
+        answer: memoisation
+      - id: g6
+        prompt: The number of steps grows with the size of the input. This growth is called ___. (временная сложность)
+        answer: time complexity
+  - type: exercise
+    id: translate
+    graded: true
+    title: Скажите по-английски
+    instruction: Переведите на английский. Пишите сокращения полностью (I am, I will).
+    format: text
+    items:
+      - id: q1
+        prompt: Давайте я нарисую это на доске.
+        answer:
+          - Let me draw this on the board
+          - Let me draw this on the whiteboard
+          - Let me draw that on the board
+          - Let me draw that on the whiteboard
+          - Let me draw it on the board
+          - Let me draw it on the whiteboard
+        explanation: Let me + глагол без to; draw this on the board — «нарисовать это на доске».
+      - id: q2
+        prompt: Думаю, это работает за линейное время.
+        answer:
+          - I think that this runs in linear time
+          - I think that this works in linear time
+          - I think that it runs in linear time
+          - I think that it works in linear time
+          - I think this runs in linear time
+          - I think this works in linear time
+          - I think it runs in linear time
+          - I think it works in linear time
+          - I believe that this runs in linear time
+          - I believe that this works in linear time
+          - I believe that it runs in linear time
+          - I believe that it works in linear time
+          - I believe this runs in linear time
+          - I believe this works in linear time
+          - I believe it runs in linear time
+          - I believe it works in linear time
+          - I think that this takes linear time
+          - I think that it takes linear time
+          - I think this takes linear time
+          - I think it takes linear time
+          - I believe that this takes linear time
+          - I believe that it takes linear time
+          - I believe this takes linear time
+          - I believe it takes linear time
+        explanation: I think смягчает утверждение; in linear time — «за линейное время».
+      - id: q3
+        prompt: Я не уверен, что это оптимально, но это работает.
+        answer:
+          - I am not sure that this is optimal, but it works
+          - I am not sure that this is optimal, but this works
+          - I am not sure that this is optimal but it works
+          - I am not sure that this is optimal but this works
+          - I am not sure that this is the optimal solution, but it works
+          - I am not sure that this is the optimal solution, but this works
+          - I am not sure that this is the optimal solution but it works
+          - I am not sure that this is the optimal solution but this works
+          - I am not sure that this is the best solution, but it works
+          - I am not sure that this is the best solution, but this works
+          - I am not sure that this is the best solution but it works
+          - I am not sure that this is the best solution but this works
+          - I am not sure that it is optimal, but it works
+          - I am not sure that it is optimal, but this works
+          - I am not sure that it is optimal but it works
+          - I am not sure that it is optimal but this works
+          - I am not sure that it is the optimal solution, but it works
+          - I am not sure that it is the optimal solution, but this works
+          - I am not sure that it is the optimal solution but it works
+          - I am not sure that it is the optimal solution but this works
+          - I am not sure that it is the best solution, but it works
+          - I am not sure that it is the best solution, but this works
+          - I am not sure that it is the best solution but it works
+          - I am not sure that it is the best solution but this works
+          - I am not sure this is optimal, but it works
+          - I am not sure this is optimal, but this works
+          - I am not sure this is optimal but it works
+          - I am not sure this is optimal but this works
+          - I am not sure this is the optimal solution, but it works
+          - I am not sure this is the optimal solution, but this works
+          - I am not sure this is the optimal solution but it works
+          - I am not sure this is the optimal solution but this works
+          - I am not sure this is the best solution, but it works
+          - I am not sure this is the best solution, but this works
+          - I am not sure this is the best solution but it works
+          - I am not sure this is the best solution but this works
+          - I am not sure it is optimal, but it works
+          - I am not sure it is optimal, but this works
+          - I am not sure it is optimal but it works
+          - I am not sure it is optimal but this works
+          - I am not sure it is the optimal solution, but it works
+          - I am not sure it is the optimal solution, but this works
+          - I am not sure it is the optimal solution but it works
+          - I am not sure it is the optimal solution but this works
+          - I am not sure it is the best solution, but it works
+          - I am not sure it is the best solution, but this works
+          - I am not sure it is the best solution but it works
+          - I am not sure it is the best solution but this works
+          - I am not sure if this is optimal, but it works
+          - I am not sure if this is optimal, but this works
+          - I am not sure if this is optimal but it works
+          - I am not sure if this is optimal but this works
+          - I am not sure if this is the optimal solution, but it works
+          - I am not sure if this is the optimal solution, but this works
+          - I am not sure if this is the optimal solution but it works
+          - I am not sure if this is the optimal solution but this works
+          - I am not sure if this is the best solution, but it works
+          - I am not sure if this is the best solution, but this works
+          - I am not sure if this is the best solution but it works
+          - I am not sure if this is the best solution but this works
+          - I am not sure if it is optimal, but it works
+          - I am not sure if it is optimal, but this works
+          - I am not sure if it is optimal but it works
+          - I am not sure if it is optimal but this works
+          - I am not sure if it is the optimal solution, but it works
+          - I am not sure if it is the optimal solution, but this works
+          - I am not sure if it is the optimal solution but it works
+          - I am not sure if it is the optimal solution but this works
+          - I am not sure if it is the best solution, but it works
+          - I am not sure if it is the best solution, but this works
+          - I am not sure if it is the best solution but it works
+          - I am not sure if it is the best solution but this works
+          - I am not certain that this is optimal, but it works
+          - I am not certain that this is optimal, but this works
+          - I am not certain that this is optimal but it works
+          - I am not certain that this is optimal but this works
+          - I am not certain that this is the optimal solution, but it works
+          - I am not certain that this is the optimal solution, but this works
+          - I am not certain that this is the optimal solution but it works
+          - I am not certain that this is the optimal solution but this works
+          - I am not certain that this is the best solution, but it works
+          - I am not certain that this is the best solution, but this works
+          - I am not certain that this is the best solution but it works
+          - I am not certain that this is the best solution but this works
+          - I am not certain that it is optimal, but it works
+          - I am not certain that it is optimal, but this works
+          - I am not certain that it is optimal but it works
+          - I am not certain that it is optimal but this works
+          - I am not certain that it is the optimal solution, but it works
+          - I am not certain that it is the optimal solution, but this works
+          - I am not certain that it is the optimal solution but it works
+          - I am not certain that it is the optimal solution but this works
+          - I am not certain that it is the best solution, but it works
+          - I am not certain that it is the best solution, but this works
+          - I am not certain that it is the best solution but it works
+          - I am not certain that it is the best solution but this works
+          - I am not certain this is optimal, but it works
+          - I am not certain this is optimal, but this works
+          - I am not certain this is optimal but it works
+          - I am not certain this is optimal but this works
+          - I am not certain this is the optimal solution, but it works
+          - I am not certain this is the optimal solution, but this works
+          - I am not certain this is the optimal solution but it works
+          - I am not certain this is the optimal solution but this works
+          - I am not certain this is the best solution, but it works
+          - I am not certain this is the best solution, but this works
+          - I am not certain this is the best solution but it works
+          - I am not certain this is the best solution but this works
+          - I am not certain it is optimal, but it works
+          - I am not certain it is optimal, but this works
+          - I am not certain it is optimal but it works
+          - I am not certain it is optimal but this works
+          - I am not certain it is the optimal solution, but it works
+          - I am not certain it is the optimal solution, but this works
+          - I am not certain it is the optimal solution but it works
+          - I am not certain it is the optimal solution but this works
+          - I am not certain it is the best solution, but it works
+          - I am not certain it is the best solution, but this works
+          - I am not certain it is the best solution but it works
+          - I am not certain it is the best solution but this works
+          - I am not certain if this is optimal, but it works
+          - I am not certain if this is optimal, but this works
+          - I am not certain if this is optimal but it works
+          - I am not certain if this is optimal but this works
+          - I am not certain if this is the optimal solution, but it works
+          - I am not certain if this is the optimal solution, but this works
+          - I am not certain if this is the optimal solution but it works
+          - I am not certain if this is the optimal solution but this works
+          - I am not certain if this is the best solution, but it works
+          - I am not certain if this is the best solution, but this works
+          - I am not certain if this is the best solution but it works
+          - I am not certain if this is the best solution but this works
+          - I am not certain if it is optimal, but it works
+          - I am not certain if it is optimal, but this works
+          - I am not certain if it is optimal but it works
+          - I am not certain if it is optimal but this works
+          - I am not certain if it is the optimal solution, but it works
+          - I am not certain if it is the optimal solution, but this works
+          - I am not certain if it is the optimal solution but it works
+          - I am not certain if it is the optimal solution but this works
+          - I am not certain if it is the best solution, but it works
+          - I am not certain if it is the best solution, but this works
+          - I am not certain if it is the best solution but it works
+          - I am not certain if it is the best solution but this works
+        explanation: Not sure that… — «не уверен, что…»; запятая перед but необязательна.

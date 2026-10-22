@@ -1,0 +1,6 @@
+id: ew463
+greek: "recursion"
+russian: "рекурсия: функция решает задачу, вызывая саму себя"
+ipa: /rɪˈkɜːʃn/
+note: "recursion without a base case never stops"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

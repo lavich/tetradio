@@ -1,0 +1,7 @@
+id: ep348
+text: "Does this approach make sense to you?"
+translation: "Вам понятен этот подход?"
+provenance:
+  sourceLabel: Подготовлено агентом Lexi для курса «Английский для IT», модуль e14
+  operation: requested-generation
+  request: Фразы модуля e14 по программе docs/curriculum-english-it.md

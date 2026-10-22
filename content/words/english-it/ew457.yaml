@@ -1,0 +1,6 @@
+id: ew457
+greek: "a greedy approach"
+russian: "жадный подход: на каждом шаге берут наиболее выгодный на вид вариант и не пересматривают выбор"
+ipa: /ə ˈɡriːdi əˈprəʊtʃ/
+note: "a greedy approach подходит, если локальные выборы дают общий ответ"
+source: "Лексикон курса «Английский для IT», модуль e14 (docs/curriculum-english-it.md)"

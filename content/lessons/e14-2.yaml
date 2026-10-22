@@ -1,0 +1,409 @@
+title: разбор решения задачи и решение вслух с подсказками интервьюера
+kind: lesson
+items:
+  - { kind: word, id: ew474 }
+  - { kind: word, id: ew475 }
+  - { kind: word, id: ew476 }
+  - { kind: word, id: ew477 }
+  - { kind: word, id: ew478 }
+  - { kind: word, id: ew479 }
+  - { kind: word, id: ew480 }
+  - { kind: word, id: ew481 }
+  - { kind: word, id: ew482 }
+  - { kind: word, id: ew483 }
+  - { kind: word, id: ew484 }
+  - { kind: word, id: ew485 }
+  - { kind: word, id: ew486 }
+  - { kind: word, id: ew487 }
+  - { kind: word, id: ew488 }
+  - { kind: word, id: ew489 }
+  - { kind: word, id: ew490 }
+  - { kind: phrase, id: ep334 }
+  - { kind: phrase, id: ep335 }
+  - { kind: phrase, id: ep336 }
+  - { kind: phrase, id: ep337 }
+  - { kind: phrase, id: ep338 }
+  - { kind: phrase, id: ep339 }
+  - { kind: phrase, id: ep340 }
+  - { kind: phrase, id: ep341 }
+blocks:
+  - type: explanation
+    id: complexity-words
+    title: Слова урока — рост времени, проверка, оценки
+    body: |-
+      Тексты урока разбирают решение задачи и показывают, как кандидат решает её вслух. Слова урока образуют три группы.
+
+      **Рост времени.** Сложность называют словами. **Constant** — время или память не зависят от размера входа. **Linear** — время растёт пропорционально: вход вдвое больше, времени вдвое больше. **Logarithmic** — время растёт очень медленно: при удвоении входа добавляется один шаг. **Quadratic** — время растёт как квадрат: вход вдвое больше, времени вчетверо больше. Говорят **linear time**, **quadratic time**, **constant space**.
+
+      **Проверка и ошибки.** **A test case** — вход и ожидаемый результат. **Debug** — искать и исправлять ошибки. **Reason about** — разбирать, как работает код, не запуская его. **An invariant** — условие, которое остаётся верным на каждом шаге цикла. **A counterexample** — случай, показывающий, что решение неверно. **An infinite loop** — цикл без выхода, **a stack overflow** — переполнение стека вызовов, часто из-за рекурсии без базового случая.
+
+      **Решение и осторожные оценки.** **A helper function** — вспомогательная функция, **a placeholder** — заглушка, которую заменят позже. **Prune** — отсечь ненужные варианты перебора. **Readability** — читаемость кода. **Tentative** — предварительный ответ, который вы готовы уточнить. **Arguably** — «пожалуй, можно утверждать»: осторожная оценка, с которой можно спорить.
+  - type: vocabulary
+    id: words
+    title: Слова и фразы урока
+  - type: exercise
+    id: growth-match
+    title: Рост времени и проверка
+    instruction: Соедините определение с английским словом или выражением. Два варианта лишние.
+    format: match
+    bank:
+      - constant
+      - linear
+      - logarithmic
+      - quadratic
+      - an invariant
+      - a counterexample
+      - a test case
+      - a stack overflow
+      - an infinite loop
+    items:
+      - { id: m1, prompt: "время или память не зависят от размера входа", answer: constant }
+      - { id: m2, prompt: "время растёт пропорционально размеру входа: вход вдвое больше, времени вдвое больше", answer: linear }
+      - { id: m3, prompt: "время растёт очень медленно: при удвоении входа добавляется один шаг", answer: logarithmic }
+      - { id: m4, prompt: "время растёт как квадрат размера входа: вход вдвое больше, времени вчетверо больше", answer: quadratic }
+      - { id: m5, prompt: "условие, которое остаётся верным на каждом шаге цикла", answer: an invariant }
+      - { id: m6, prompt: "случай, который показывает, что утверждение или решение неверно", answer: a counterexample }
+      - { id: m7, prompt: "вход и ожидаемый результат, по которым проверяют код", answer: a test case }
+  - type: exercise
+    id: checks-gap
+    title: Ошибки и решение
+    instruction: Вставьте слово или выражение. Два варианта лишние.
+    format: gap
+    bank:
+      - debug
+      - prune
+      - a stack overflow
+      - an infinite loop
+      - a placeholder
+      - a helper function
+      - readability
+      - tentative
+      - reason about
+    items:
+      - id: g1
+        prompt: "The loop never stops because the counter is never increased: it is ___. (бесконечный цикл)"
+        answer: an infinite loop
+      - id: g2
+        prompt: The recursive function has no base case, so the program crashes with ___. (переполнение стека)
+        answer: a stack overflow
+      - id: g3
+        prompt: The output is wrong, so I'm going to ___ the code by printing the values. (отладить)
+        answer: debug
+      - id: g4
+        prompt: The search tries many options, but I can ___ the branches that already exceed the limit. (отсечь)
+        answer: prune
+      - id: g5
+        prompt: I'll put ___ here for now, a line that returns zero and will be replaced later. (временная заглушка)
+        answer: a placeholder
+      - id: g6
+        prompt: The main function is long, so I'm moving the counting into ___. (вспомогательная функция)
+        answer: a helper function
+      - id: g7
+        prompt: Short names and small functions improve ___. (читаемость)
+        answer: readability
+  - type: explanation
+    id: reading-how
+    title: Как читать разбор решения
+    body: |-
+      Разбор решения (write-up) рассказывает, как автор пришёл к ответу. Обычно в нём есть условие, первая идея, улучшение, проверка и компромисс. Сначала найдите условие и первую идею, затем отметьте, чем автор улучшает решение и чем за это платит: временем, памятью или сложностью кода.
+
+      Читайте сложность по словам: **quadratic**, **linear**, **constant**. Обратите внимание на осторожные слова: **arguably**, **on average**, **if memory is limited** показывают, что автор не считает свой вывод единственно возможным. Слова вне списков переведены под текстом.
+  - type: reading
+    id: writeup
+    title: "Solution write-up: two numbers with a given sum"
+    text: |-
+      Solution write-up: two numbers with a given sum
+      Interview prep notes · example
+
+      Problem
+      Given a list of whole numbers and a target, return the positions of two numbers that add up to the target. There is exactly one such pair.
+
+      First idea
+      I started with a brute-force solution: for every number, scan the rest of the list and check whether the two numbers add up to the target. It works, but it takes quadratic time, because the loops are nested. The extra space is constant.
+
+      Better idea
+      While scanning the list, I keep a hash map from each number I have seen to its position. For a new number, I work out what I still need, which is the target minus that number, and do a lookup. If the hash map contains it, the pair is found. A lookup takes constant time on average, so the whole solution runs in linear time. The price is auxiliary space: the hash map can hold every number.
+
+      Checks
+      I wrote three test cases: a normal list, a list where the same number appears twice, and a list of two numbers. The second case first gave a wrong answer, because I stored a number before looking for its partner. After I changed the order, all three cases passed.
+
+      Trade-off
+      If memory is limited, the brute-force solution is arguably still a sensible choice for short lists. For long lists, I would use the hash map.
+    glosses:
+      - text: target
+        russian: заданная сумма
+      - text: whole numbers
+        russian: целые числа
+      - text: scan
+        russian: просматривать
+      - text: nested
+        russian: вложенные
+      - text: pair
+        russian: пара
+      - text: partner
+        russian: парное число, которое дополняет данное до суммы
+      - text: sensible
+        russian: разумный
+  - type: exercise
+    id: writeup-tf
+    about: writeup
+    title: Чтение
+    instruction: Верно (True) или неверно (False)?
+    format: choice
+    items:
+      - id: q1
+        prompt: The brute-force solution takes quadratic time.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q2
+        prompt: The hash map solution needs no extra space.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: The price is auxiliary space — цена решения в том, что хеш-таблица занимает дополнительную память.
+      - id: q3
+        prompt: The hash map stores each number together with its position.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q4
+        prompt: A lookup in the hash map takes constant time on average.
+        options:
+          - "True"
+          - "False"
+        answer: "True"
+      - id: q5
+        prompt: The first version of the hash map solution gave the right answer in all three test cases.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: The second case first gave a wrong answer — во втором случае ответ сначала был неверным.
+      - id: q6
+        prompt: The author recommends the hash map for every list, long or short.
+        options:
+          - "True"
+          - "False"
+        answer: "False"
+        explanation: Для коротких списков при ограниченной памяти автор считает разумным и решение в лоб.
+  - type: exercise
+    id: writeup-find
+    about: writeup
+    title: Где это сказано
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Why is the brute-force solution slow?
+        options:
+          - Its loops are nested.
+          - It uses a heap.
+          - It sorts the list many times.
+        answer: Its loops are nested.
+      - id: q2
+        prompt: What does the author look up in the hash map?
+        options:
+          - the number that is still needed
+          - the position of the target
+          - the sum of all numbers
+        answer: the number that is still needed
+      - id: q3
+        prompt: Which test case first gave a wrong answer?
+        options:
+          - the list where the same number appears twice
+          - the normal list
+          - the list of two numbers
+        answer: the list where the same number appears twice
+      - id: q4
+        prompt: What fixed the wrong answer?
+        options:
+          - looking for the partner before storing the number
+          - sorting the list first
+          - using a longer list
+        answer: looking for the partner before storing the number
+      - id: q5
+        prompt: When is the brute-force solution arguably still sensible?
+        options:
+          - for short lists when memory is limited
+          - for very long lists
+          - never
+        answer: for short lists when memory is limited
+  - type: exercise
+    id: writeup-hedging
+    about: writeup
+    title: Осторожные слова в тексте
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: In «is arguably still a sensible choice», what does arguably do?
+        options:
+          - "It softens the claim: one can argue for it."
+          - It makes the claim absolutely certain.
+          - It denies the claim.
+        answer: "It softens the claim: one can argue for it."
+        explanation: "Arguably — осторожная оценка: утверждение разумно, но с ним можно спорить."
+      - id: q2
+        prompt: Which sentence names the cost of the faster solution?
+        options:
+          - The price is auxiliary space.
+          - I wrote three test cases.
+          - There is exactly one such pair.
+        answer: The price is auxiliary space.
+        explanation: Фраза называет цену ускорения — дополнительную память.
+      - id: q3
+        prompt: What does «on average» tell us about the lookup?
+        options:
+          - Most lookups take constant time, but a few may take longer.
+          - Every lookup takes exactly the same time.
+          - Lookups never take constant time.
+        answer: Most lookups take constant time, but a few may take longer.
+        explanation: "On average — «в среднем»: обычно время константное, но отдельные случаи бывают медленнее."
+      - id: q4
+        prompt: Which word in the text describes loops inside other loops?
+        options:
+          - nested
+          - sensible
+          - whole
+        answer: nested
+        explanation: Nested — «вложенные»; из-за вложенных циклов время квадратичное.
+  - type: explanation
+    id: listening-how
+    title: Как слушать решение вслух
+    body: |-
+      Lukas решает задачу вслух, а Anders, старший инженер, задаёт вопросы и подсказывает. На собеседовании так проверяют ход мысли. Слушайте, в каком порядке идёт решение: условие своими словами, вопросы, пример, простое решение, сложность, улучшение, проверка. Отмечайте осторожные слова — **I think**, **probably**, **as far as I can tell** — и фразы **let me** и **I'm going to**.
+
+      Сначала послушайте запись целиком, затем ответьте на вопросы и проверьте себя при втором прослушивании. Транскрипт открывается после ответа.
+  - type: listening
+    id: solve
+    title: Lukas solves a problem aloud
+    plays: 2
+    transcript:
+      - speaker: Anders
+        text: Here is the problem, Lukas. Given a list of words, return the word that appears most often. Please think out loud.
+      - speaker: Lukas
+        text: Thank you. Let me say the problem back in my own words. I get a list of words, and I need to return the one that appears most often. What should I return if two words appear equally often? And can the list be empty?
+      - speaker: Anders
+        text: Return any one of them. And yes, the list can be empty. In that case, return nothing.
+      - speaker: Lukas
+        text: Good. Let me take a small example first. Cat, dog, cat. The answer is cat.
+      - speaker: Lukas
+        text: I'm going to start with a brute-force solution. For each word, I count how many times it appears in the list, and I keep the best one.
+      - speaker: Anders
+        text: What is the time complexity of that?
+      - speaker: Lukas
+        text: I think it is quadratic, because for every word I scan the whole list. The extra space is constant.
+      - speaker: Anders
+        text: Can you do better?
+      - speaker: Lukas
+        text: Let me see if I can do better. I'd probably use a hash map from each word to its count. I go through the list once, update the counts, and then take the largest one.
+      - speaker: Anders
+        text: And how fast is that?
+      - speaker: Lukas
+        text: As far as I can tell, linear time, because a lookup takes constant time on average. But it needs auxiliary space for the map.
+      - speaker: Anders
+        text: Which edge case would you test first?
+      - speaker: Lukas
+        text: The empty list. Then the example with a tie.
+      - speaker: Anders
+        text: Good. Please go ahead and write it.
+  - type: exercise
+    id: solve-q
+    about: solve
+    title: Что сказали в разговоре
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: What does Lukas have to find?
+        options:
+          - the word that appears most often
+          - the longest word
+          - the number of different words
+        answer: the word that appears most often
+      - id: q2
+        prompt: What does Lukas ask before he starts?
+        options:
+          - what to do with a tie and whether the list can be empty
+          - which language to use and how much time he has
+          - how long the words can be
+        answer: what to do with a tie and whether the list can be empty
+      - id: q3
+        prompt: What should the function return for an empty list?
+        options:
+          - nothing
+          - zero
+          - an error
+        answer: nothing
+      - id: q4
+        prompt: How does Lukas describe the brute-force solution?
+        options:
+          - quadratic time and constant extra space
+          - linear time and constant extra space
+          - quadratic time and linear extra space
+        answer: quadratic time and constant extra space
+      - id: q5
+        prompt: Which structure does Lukas choose for the better solution?
+        options:
+          - a hash map from words to counts
+          - a linked list of words
+          - a heap of words
+        answer: a hash map from words to counts
+      - id: q6
+        prompt: Which edge case does Lukas test first?
+        options:
+          - the empty list
+          - the tie
+          - a list with one word
+        answer: the empty list
+  - type: exercise
+    id: solve-hedging
+    about: solve
+    title: Осторожные слова в записи
+    instruction: Выберите правильный ответ.
+    format: choice
+    items:
+      - id: q1
+        prompt: Lukas says «I think it is quadratic». What does «I think» show?
+        options:
+          - He is fairly sure, but he gives it as an estimate.
+          - He has no idea.
+          - He is completely certain.
+        answer: He is fairly sure, but he gives it as an estimate.
+        explanation: "I think смягчает утверждение: оценка подана как предположение."
+      - id: q2
+        prompt: Anders asks «Can you do better?». What does Lukas say?
+        options:
+          - Let me see if I can do better.
+          - That is the best possible solution.
+          - I am not going to change it.
+        answer: Let me see if I can do better.
+        explanation: Let me see if… — вежливое предупреждение, что вы ищете улучшение.
+      - id: q3
+        prompt: Lukas says «As far as I can tell, linear time». What does the phrase show?
+        options:
+          - He gives an answer and marks it as his own estimate.
+          - He is sure that the answer is wrong.
+          - He refuses to answer.
+        answer: He gives an answer and marks it as his own estimate.
+        explanation: "As far as I can tell — «насколько я могу судить»: ответ дан и отмечен как оценка."
+      - id: q4
+        prompt: Lukas says «I'd probably use a hash map». What does «probably» show?
+        options:
+          - He leans towards this choice but may change it.
+          - He has already written the code.
+          - He rejects the hash map.
+        answer: He leans towards this choice but may change it.
+        explanation: "Probably — «скорее всего»: выбор сделан, но допускает изменение."
+      - id: q5
+        prompt: Which warning does Lukas give about the hash map solution?
+        options:
+          - It needs auxiliary space for the map.
+          - It is slower than the brute-force solution.
+          - It fails on an empty list.
+        answer: It needs auxiliary space for the map.
+        explanation: Lukas называет цену решения — дополнительную память.
