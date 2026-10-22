@@ -117,7 +117,7 @@ describe("карточка курса", () => {
       ["english", "H3"],
       ["travel", "H3"],
     ]);
-    const buttons = [...container.querySelectorAll("button")];
+    const buttons = [...container.querySelectorAll('button[aria-label^="Учить курс"]')];
     expect(buttons.map((button) => button.className.includes("bg-primary "))).toEqual([true, false]);
   });
   it("курс, убранный из каталога, не показывается", () => {
