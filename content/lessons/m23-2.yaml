@@ -11,6 +11,7 @@ items:
   - { kind: word, id: w880 }  # ανανεώνω
   - { kind: word, id: w877 }  # επίσημος
   - { kind: word, id: w887 }  # το παράπονο
+  - { kind: word, id: w941 }  # βεβαίως
   - { kind: phrase, id: p328 }  # Πού μπορώ να βρω το έντυπο;
   - { kind: phrase, id: p304 }  # Σας γράφω για να ρωτήσω…
 blocks:

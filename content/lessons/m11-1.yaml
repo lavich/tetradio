@@ -41,6 +41,10 @@ items:
     id: w420 # κοντός
   - kind: word
     id: w422 # σκούρος
+  - kind: word
+    id: w938
+  - kind: word
+    id: w939
   - kind: phrase
     id: p141 # Το έχετε σε άλλο χρώμα;
   - kind: phrase
