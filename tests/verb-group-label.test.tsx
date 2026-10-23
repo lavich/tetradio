@@ -36,7 +36,7 @@ afterEach(() => {
 
 const render = async (node: React.ReactNode) => act(async () => root.render(node));
 const label = () => host.querySelector("[data-testid=verb-group]");
-const shown = (node: Element) => node.querySelector("[aria-hidden]")!.textContent;
+const shown = (node: Element) => node.querySelector("[aria-hidden]")!.textContent!.replace(/\u00a0/g, " ");
 const heard = (node: Element) => {
   const copy = node.cloneNode(true) as Element;
   copy.querySelectorAll("[aria-hidden]").forEach((hidden) => hidden.remove());
@@ -97,6 +97,12 @@ describe("текст метки", () => {
     expect(shown(label()!)).toBe(seen);
     expect(heard(label()!)).toBe(spoken);
     expect(greekIn(label()!)).toEqual(greek);
+  });
+
+  it("длинная метка переносится только после « · », группа и «неправ. прош.» не разрываются", async () => {
+    await render(<VerbGroupLabel group="B1" irregular />);
+    const pieces = [...label()!.querySelectorAll("[aria-hidden] > span")].map((piece) => piece.textContent);
+    expect(pieces).toEqual(["гр. B как αγαπάω\u00a0·", "неправ. прош."]);
   });
 
   it("без группы ничего не рендерится", async () => {

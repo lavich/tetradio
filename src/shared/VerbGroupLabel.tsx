@@ -33,9 +33,15 @@ export function VerbGroupLabel({
   return (
     <span className={css.label} data-testid="verb-group">
       <span aria-hidden>
-        {known?.shown}
-        {greek(known?.greek)}
-        {irregular && (known ? " · неправ. прош." : "неправ. прош.")}
+        {known && (
+          <span className={css.piece}>
+            {known.shown}
+            {greek(known.greek)}
+            {irregular && "\u00a0·"}
+          </span>
+        )}
+        {known && irregular && " "}
+        {irregular && <span className={css.piece}>неправ. прош.</span>}
       </span>
       <span className="sr-only select-none">
         {headwordShown && ", "}
@@ -47,7 +53,6 @@ export function VerbGroupLabel({
   );
 }
 
-/** Строка с меткой перед рядом форм: без метки — прежняя строка без пустого места. */
 export function VerbGroupRow({
   verb,
   as: Tag = "div",

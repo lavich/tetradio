@@ -6,7 +6,6 @@ import { STORED_KINDS } from "../storage/kinds";
 import {
   SHIPPED_FIELDS,
   paradigmsOf,
-  ungroupedVerbsOf,
   voicedOf,
   type ContentPackage,
   type PackagePhrase,
@@ -101,7 +100,7 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         (installed.readings?.length ?? 0) >= (pack.readings?.length ?? 0) &&
         voicedOf(installed.readings) >= voicedOf(pack.readings) &&
         paradigmsOf(installed.words) >= paradigmsOf(pack.words) &&
-        ungroupedVerbsOf(installed) <= ungroupedVerbsOf(pack)
+        installed.grouped
       )
         return { status: "current", added: 0, changed: 0 };
       const result: InstallResult = { status: installed ? "updated" : "installed", added: 0, changed: 0 };
@@ -147,6 +146,7 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         phrases: pack.phrases,
         items: pack.items,
         media: pack.media,
+        grouped: true,
       };
       if (pack.lesson.kind) record.kind = pack.lesson.kind;
       if (pack.module) record.module = pack.module;

@@ -174,6 +174,8 @@ export interface InstalledPackage {
   marks?: PackageMarks;
   /** Тексты для беглого чтения, которые открывает этот урок. */
   readings?: PackageReading[];
+  /** Поставлен версией, знающей группы глаголов: пакет без групп на сервере (откат контента) не перекачивается снова. */
+  grouped?: true;
 }
 /** Модуль программы из каталога; `position` — порядок в каталоге. */
 export type StoredModule = CatalogModule & { position: number };

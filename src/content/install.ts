@@ -122,7 +122,7 @@ export function installLesson(
         (installed.readings?.length ?? 0) >= (entry.readings ?? 0) &&
         voicedOf(installed.readings) >= (entry.readingAudio ?? 0) &&
         paradigmsOf(installed.words) >= (entry.paradigms ?? 0) &&
-        !ungroupedVerbsOf(installed)
+        (installed.grouped || !ungroupedVerbsOf(installed))
       )
         return { status: "current", added: 0, changed: 0 } as InstallResult;
       const pack = parsePackage(await source.json(entry.url));

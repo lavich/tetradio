@@ -602,6 +602,9 @@ test("второй курс с полки: карточка неначатого
   const words = page.getByRole("radiogroup", { name: "Язык" });
   await expect(words.getByRole("radio")).toHaveText(["Греческий", "Английский"]);
   await expect(words.getByRole("radio", { name: "Английский" })).toHaveAttribute("aria-checked", "true");
+  await page.getByRole("link", { name: /to go/ }).click();
+  await expect(page.getByTestId("entry-sheet")).toContainText("идти, ехать");
+  await expect(page.getByTestId("entry-sheet").getByTestId("verb-group")).toHaveCount(0);
 
   await page.goto("/app/");
   await expect(page.getByTestId("course-next")).toContainText("Знакомство и είμαι");

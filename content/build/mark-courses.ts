@@ -44,7 +44,6 @@ export const cardDescriber =
       irregular: undefined,
     };
   };
-/** Карточка подсказки слова прошлого урока — одна для разметки урока и текста для чтения. */
 export const markCard = (
   ref: string,
   card: ReturnType<ReturnType<typeof cardDescriber>>,
