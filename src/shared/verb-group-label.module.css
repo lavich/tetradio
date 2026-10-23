@@ -1,0 +1,22 @@
+/* Справочная пометка учебника, а не статус: карандашная подпись в рамке, без заливки и цвета. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
+  row-gap: 4px;
+}
+.label {
+  flex: none;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font: 600 12.5px var(--font-sans);
+  font-style: normal;
+  line-height: 18px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+.ending {
+  font-family: var(--font-print);
+}

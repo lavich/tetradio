@@ -483,7 +483,11 @@ test("слова урока на слух: заглавное слово оди�
   await page.goto("/app/course/m01/m01-1?p=1");
   const words = await turnTo(page, "Слова урока");
   const verb = words.getByRole("button", { name: /^Произнести: είμαι/ });
-  await expect(verb).toHaveAccessibleName(heard("Произнести: είμαι, было ήμουν, будет θα είμαι, быть"));
+  await expect(verb).toHaveAccessibleName(
+    heard("Произнести: είμαι, неправильное прошедшее, было ήμουν, будет θα είμαι, быть"),
+  );
+  await expect(verb.getByTestId("verb-group").locator("[aria-hidden]")).toHaveText("неправ. прош.");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await expect(verb.locator("[lang=el]:not([aria-hidden] *)")).toHaveText(["είμαι", "ήμουν", "θα είμαι"]);
   await expect(words.getByRole("button", { name: /^Произнести: γεια/ })).toHaveAccessibleName(
     heard("Произнести: γεια, привет; пока"),

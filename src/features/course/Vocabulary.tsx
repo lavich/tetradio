@@ -7,6 +7,7 @@ import { playText, playWord, type PlayResult } from "../../shared/audio";
 import { noVoice, useProfile } from "../../shared/language";
 import { useAssetUrl } from "../../shared/store";
 import { VerbForms } from "../../shared/VerbForms";
+import { VerbGroupRow } from "../../shared/VerbGroupLabel";
 import { livePhrases, liveWords } from "../../storage/queries";
 import css from "./vocabulary.module.css";
 
@@ -54,15 +55,11 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                   <span className={css.vocabGreek} lang={profile.code}>
                     {word.greek}
                   </span>
-                  {word.forms ? (
-                    <VerbForms
-                      headword={word.greek}
-                      forms={word.forms}
-                      labels={false}
-                      headwordShown
-                      className={css.vocabForms}
-                    />
-                  ) : null}
+                  <VerbGroupRow verb={word} as="span" className={css.vocabForms} headwordShown>
+                    {word.forms ? (
+                      <VerbForms headword={word.greek} forms={word.forms} labels={false} headwordShown />
+                    ) : null}
+                  </VerbGroupRow>
                   {word.russian && <span className="sr-only select-none">, </span>}
                   <span className={css.vocabRu}>{word.russian}</span>
                 </span>
