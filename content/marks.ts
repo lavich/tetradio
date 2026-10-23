@@ -85,6 +85,9 @@ function dropEncliticAccent(text: string, tokens: Token[]) {
   });
   return tokens;
 }
+const ELIDED: Record<string, string> = { γι: "για" };
+const elided = (word: string, next: string | undefined) =>
+  next === "'" || next === "’" ? (ELIDED[word] ?? word) : word;
 export function tokenize(text: string): Token[] {
   const tokens: Token[] = [];
   let at = 0;
@@ -99,7 +102,7 @@ export function tokenize(text: string): Token[] {
       if (!isGreekLetter(text[at])) greek = false;
       at++;
     }
-    if (greek) tokens.push({ start, end: at, norm: norm(text.slice(start, at)) });
+    if (greek) tokens.push({ start, end: at, norm: elided(norm(text.slice(start, at)), text[at]) });
   }
   return dropEncliticAccent(text, tokens);
 }

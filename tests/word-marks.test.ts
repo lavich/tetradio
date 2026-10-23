@@ -225,6 +225,17 @@ describe("частые формы в настоящем курсе", () => {
   it("«καφέ» — «коричневый» в тексте для чтения закрыт глоссами", () => {
     expect(marksOf("καφέ", "r-m11-allagi")).toEqual(["w:w277"]);
   });
+  it("глосса «γι' αυτό» показывает перевод автора «поэтому», а не карточку αυτός", () => {
+    expect(marksOf("Γι’ αυτό", "m02-2")).toEqual([]);
+    expect(marksOf("γι' αυτό", "m11-test")).toEqual([]);
+    expect(marksOf("γι' αυτό", "m13-test")).toEqual([]);
+    expect(markedAs("γι", "r-m09-proino")).toEqual(["w:w063"]);
+    const gloss = realContent()
+      .packages.find((pack) => pack.id === "m11-test")!
+      .blocks!.flatMap((block) => ("glosses" in block && block.glosses) || [])
+      .find((entry) => entry.text === "γι' αυτό");
+    expect(gloss?.russian).toBe("поэтому");
+  });
   it("перевод αυτός — без греческих букв, с родами", () => {
     expect(realContent().words.find((w) => w.id === "w012")!.russian).toBe("он, она, оно; этот; мн. они");
   });
