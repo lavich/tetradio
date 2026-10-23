@@ -43,6 +43,8 @@ items:
     id: w931
   - kind: word
     id: w623
+  - kind: word
+    id: w940
   - kind: phrase
     id: p204
   - kind: phrase

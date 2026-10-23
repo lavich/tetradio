@@ -199,7 +199,14 @@ export function buildReadings({
         cards.set(ref, { kind: item.kind, id: item.id });
         introduced.set(ref, { at: index, label });
         const card = describe(item.kind, item.id);
-        matchCards.push({ ref, text: card.text, forms: card.forms, phrase: item.kind === "phrase", at: index });
+        matchCards.push({
+          ref,
+          text: card.text,
+          forms: card.forms,
+          paradigm: card.paradigm,
+          phrase: item.kind === "phrase",
+          at: index,
+        });
       }
       for (const block of pack.blocks ?? [])
         if ("glosses" in block && block.glosses)

@@ -17,15 +17,16 @@ export interface MarksReport {
   ambiguous: (Ambiguity & { lessonId: string })[];
   skipped: string[];
 }
-/** Текст карточки для разметки и подсказки: у слова — написание и формы, у фразы — текст. */
+/** Текст карточки для разметки и подсказки: у слова — написание, формы и таблица спряжения, у фразы — текст. */
 export const cardDescriber =
   (words: Map<string, PackageWord>, phrases: Map<string, PackagePhrase>) => (kind: LessonCardKind, id: string) => {
     if (kind === "word") {
       const word = words.get(id)!;
-      return { text: word.greek, russian: word.russian, ipa: word.ipa, forms: word.forms };
+      const paradigm = word.paradigm && [...word.paradigm.present, ...word.paradigm.past];
+      return { text: word.greek, russian: word.russian, ipa: word.ipa, forms: word.forms, paradigm };
     }
     const phrase = phrases.get(id)!;
-    return { text: phrase.text, russian: phrase.translation ?? "", ipa: "", forms: undefined };
+    return { text: phrase.text, russian: phrase.translation ?? "", ipa: "", forms: undefined, paradigm: undefined };
   };
 /** «Прошлые» — по порядку программы, а не по прогрессу учащегося: набор не зависит от устройства. */
 export function markCourses(
@@ -49,7 +50,7 @@ export function markCourses(
     const matcher = buildMatcher(
       [...cards].map(([ref, { kind, id }]) => {
         const card = describeCard(kind, id);
-        return { ref, text: card.text, forms: card.forms, phrase: kind === "phrase" };
+        return { ref, text: card.text, forms: card.forms, paradigm: card.paradigm, phrase: kind === "phrase" };
       }),
       profileOf(course.language),
     );

@@ -3441,7 +3441,7 @@
   },
   "m13-test/ticket-11.mp3": {
     "voice": "Umbriel",
-    "hash": "10d698659e328ca7"
+    "hash": "4ba31c608d1df455"
   },
   "m13-test/ticket-12.mp3": {
     "voice": "Gacrux",
@@ -29338,5 +29338,45 @@
   "words/w931.mp3": {
     "voice": "Kore",
     "hash": "9396e195df0b682b"
+  },
+  "words/w932.mp3": {
+    "voice": "Kore",
+    "hash": "a6bb5fd04fff6c73"
+  },
+  "words/w933.mp3": {
+    "voice": "Kore",
+    "hash": "6f567eeb6d23a176"
+  },
+  "words/w934.mp3": {
+    "voice": "Kore",
+    "hash": "853e1f3e78f08a2a"
+  },
+  "words/w935.mp3": {
+    "voice": "Kore",
+    "hash": "d54dd9ea332ac160"
+  },
+  "words/w936.mp3": {
+    "voice": "Kore",
+    "hash": "57183b13d24e9d34"
+  },
+  "words/w937.mp3": {
+    "voice": "Kore",
+    "hash": "f91e8a25d2c662fc"
+  },
+  "words/w938.mp3": {
+    "voice": "Kore",
+    "hash": "dbfd30ff445afd52"
+  },
+  "words/w939.mp3": {
+    "voice": "Kore",
+    "hash": "fdb5ea9af72a8b19"
+  },
+  "words/w940.mp3": {
+    "voice": "Kore",
+    "hash": "f686c8a558feff13"
+  },
+  "words/w941.mp3": {
+    "voice": "Kore",
+    "hash": "b33160fdc2c6a881"
   }
 }

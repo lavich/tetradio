@@ -5,8 +5,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import { stringify } from "yaml";
 import { buildContent } from "../content/build";
 import { buildMatcher, candidates, choose, formPieces, lessonMarks, type MatchCard } from "../content/marks";
-import { parseBlocks, type LessonBlock } from "../src/content/course";
-import { ContentError, decodeMarks, parseMarks, parsePackage } from "../src/content/schema";
+import { glossSpans, parseBlocks, tapFields, type LessonBlock } from "../src/content/course";
+import { ContentError, decodeMarks, parseMarks, parsePackage, readingBlock } from "../src/content/schema";
 import { realContent } from "./helpers/real-content";
 
 function found(text: string, cards: MatchCard[], rank: (ref: string) => number = () => 0) {
@@ -89,6 +89,261 @@ describe("поиск слова в тексте", () => {
       ),
     ).toEqual([]);
     expect(report).toEqual([["w:a", "w:b"]]);
+  });
+});
+
+describe("частые формы", () => {
+  const phone = word("w:tilefono", "το τηλέφωνο", "мн. τα τηλέφωνα");
+  const family = word("w:oikogeneia", "η οικογένεια", "мн. οι οικογένειες");
+  it("слово с ударением перед энклитикой находится без второго ударения", () => {
+    expect(found("Το τηλέφωνό μου", [phone])).toEqual(["Το τηλέφωνό→w:tilefono"]);
+    expect(found("το **τηλέφωνό** μου", [phone])).toEqual(["τηλέφωνό→w:tilefono"]);
+    expect(found("την οικογένειά μας", [family])).toEqual(["οικογένειά→w:oikogeneia"]);
+  });
+  it("второе ударение без энклитики или через конец предложения не снимается", () => {
+    expect(found("το τηλέφωνό. Μου λέει", [phone])).toEqual([]);
+    expect(found("τηλέφωνό; Μου", [phone])).toEqual([]);
+    expect(found("τηλέφωνό και", [phone])).toEqual([]);
+  });
+  it("существительное на -ές, основа из двух букв с ударением, односложное -ος, -ύς", () => {
+    const cards = [
+      word("w:kafes", "ο καφές", "мн. οι καφέδες"),
+      word("w:kanapes", "ο καναπές", "мн. οι καναπέδες"),
+      word("w:olos", "όλος", "όλος, όλη, όλο"),
+      word("w:omos", "ο ώμος", "мн. οι ώμοι"),
+      word("w:gios", "ο γιος", "мн. οι γιοι"),
+      word("w:polys", "πολύς", "πολύς, πολλή, πολύ"),
+    ];
+    expect(found("καφέ, καναπέ, όλοι, όλα, όλους, ώμο, γιο, γιους, πολλά, πολλοί", cards)).toEqual([
+      "καφέ→w:kafes",
+      "καναπέ→w:kanapes",
+      "όλοι→w:olos",
+      "όλα→w:olos",
+      "όλους→w:olos",
+      "ώμο→w:omos",
+      "γιο→w:gios",
+      "γιους→w:gios",
+      "πολλά→w:polys",
+      "πολλοί→w:polys",
+    ]);
+  });
+  it("сослагательные λέω — от «θα πω»", () => {
+    expect(found("πείτε, πεις", [word("w:leo", "λέω", "аор. είπα; буд. θα πω")])).toEqual([
+      "πείτε→w:leo",
+      "πεις→w:leo",
+    ]);
+  });
+  it("элизия «γι'» с любым апострофом — то же слово, что για", () => {
+    const cards = [word("w:gia", "για"), word("w:afto", "αυτό")];
+    expect(found("γι' αυτό, γι’ αυτό, γιʼ αυτό", cards)).toEqual([
+      "γι→w:gia",
+      "αυτό→w:afto",
+      "γι→w:gia",
+      "αυτό→w:afto",
+      "γι→w:gia",
+      "αυτό→w:afto",
+    ]);
+    expect(found("μετ' επιστροφής", [word("w:meta", "μετά")])).toEqual([]);
+  });
+  it("у наречия на -ω формы глагола не выводятся", () => {
+    expect(found("έξει", [word("w:exo", "έξω")])).toEqual([]);
+  });
+  it("формы глагола — из таблицы спряжения", () => {
+    const cards: MatchCard[] = [
+      {
+        ...word("w:doulevo", "δουλεύω", "аор. δούλεψα; буд. θα δουλέψω"),
+        paradigm: ["δουλεύω", "δουλεύεις", "δουλεύει", "δουλεύουμε", "δουλεύετε", "δουλεύουν"],
+      },
+      {
+        ...word("w:pigaino", "πηγαίνω", "аор. πήγα; буд. θα πάω"),
+        paradigm: ["πήγα", "πήγες", "πήγε", "πήγαμε", "πήγατε", "πήγαν"],
+      },
+    ];
+    expect(found("δουλεύει, πήγαμε", cards)).toEqual(["δουλεύει→w:doulevo", "πήγαμε→w:pigaino"]);
+    expect(
+      found(
+        "δουλεύει, πήγαμε",
+        cards.map(({ paradigm: _, ...card }) => card),
+      ),
+    ).toEqual([]);
+  });
+  it("глосса с омографом формы и существительным показывает перевод глоссы", () => {
+    const cards = [word("w:kafes", "ο καφές", "мн. οι καφέδες"), word("w:papoutsi", "το παπούτσι", "мн. τα παπούτσια")];
+    const text = "Η ζώνη ταιριάζει με τα καφέ παπούτσια του.";
+    const marksOf = (glosses: { text: string; russian: string }[]) =>
+      lessonMarks({
+        blocks: blocks([{ type: "reading", id: "r", title: "Τ", text, ...(glosses.length ? { glosses } : {}) }]),
+        matcher: buildMatcher(cards),
+        own: new Set(),
+        rank: () => 1,
+      }).blocks.r?.text.map((mark) => `${text.slice(mark.start, mark.start + mark.length)}→${mark.ref}`) ?? [];
+    expect(marksOf([{ text: "καφέ παπούτσια", russian: "коричневые туфли" }])).toEqual([]);
+    expect(marksOf([])).toEqual(["καφέ→w:kafes", "παπούτσια→w:papoutsi"]);
+  });
+});
+
+const withoutArticle = (span: string) => span.replace(/^(?:ο|η|το|οι|τα|τον|την|τη|του|της|των|τους|τις) /iu, "");
+function marksOf(surface: string, owner?: string) {
+  const sources = realContent().packages.flatMap((pack) => [
+    { owner: pack.id, blocks: pack.blocks ?? [], marks: pack.marks },
+    ...(pack.readings ?? []).map((reading) => ({
+      owner: reading.id,
+      blocks: [readingBlock(reading)],
+      marks: reading.marks,
+    })),
+  ]);
+  return sources
+    .filter((source) => source.marks && (owner === undefined || source.owner === owner))
+    .flatMap(({ blocks: list, marks }) =>
+      list.flatMap((block) =>
+        tapFields(block).flatMap(([field, text]) =>
+          (marks!.blocks[block.id]?.[field] ?? [])
+            .filter(([start, length]) => withoutArticle(text.slice(start, start + length)) === surface)
+            .map(([, , index]) => marks!.refs[index]),
+        ),
+      ),
+    );
+}
+const markedAs = (surface: string, owner?: string) => [...new Set(marksOf(surface, owner))];
+function placesOf(surface: string, ref: string) {
+  return realContent().packages.flatMap((pack) =>
+    [
+      { owner: pack.id, blocks: pack.blocks ?? [], marks: pack.marks },
+      ...(pack.readings ?? []).map((reading) => ({
+        owner: reading.id,
+        blocks: [readingBlock(reading)],
+        marks: reading.marks,
+      })),
+    ].flatMap(({ owner, blocks: list, marks }) =>
+      list.flatMap((block) =>
+        tapFields(block).flatMap(([field, text]) =>
+          (marks?.blocks[block.id]?.[field] ?? [])
+            .filter(
+              ([start, length, index]) => text.slice(start, start + length) === surface && marks!.refs[index] === ref,
+            )
+            .map(() => `${owner} ${block.id}.${field}`),
+        ),
+      ),
+    ),
+  );
+}
+/** Вхождения карточки в текстах пакетов курса до урока `lesson` вне глосс и вне мест, уже размеченных другой карточкой (фразой). */
+function earlierOccurrences(id: string, lesson: string) {
+  const content = realContent();
+  const word = content.words.find((entry) => entry.id === id)!;
+  const matcher = buildMatcher([{ ref: `w:${id}`, text: word.greek, forms: word.forms }]);
+  const order = content.catalog.courses.find((course) => course.lessonIds.includes(lesson))!.lessonIds;
+  const packs = new Map(content.packages.map((pack) => [pack.id, pack]));
+  const overlaps = (spans: { start: number; length: number }[], found: { start: number; length: number }) =>
+    spans.some((span) => found.start < span.start + span.length && span.start < found.start + found.length);
+  return order.slice(0, order.indexOf(lesson)).flatMap((lessonId) => {
+    const pack = packs.get(lessonId);
+    if (!pack) return [];
+    return [
+      ...(pack.blocks ?? []).map((block) => ({ block, marks: pack.marks })),
+      ...(pack.readings ?? []).map((reading) => ({ block: readingBlock(reading), marks: reading.marks })),
+    ].flatMap(({ block, marks }) =>
+      tapFields(block).flatMap(([field, text]) => {
+        const taken = [
+          ...(block.type === "reading" ? glossSpans(text, block.glosses) : []),
+          ...(marks?.blocks[block.id]?.[field] ?? []).map(([start, length]) => ({ start, length })),
+        ];
+        return candidates(text, matcher)
+          .filter((found) => !overlaps(taken, found))
+          .map((found) => `${lessonId} ${block.id}.${field}: ${text.slice(found.start, found.start + found.length)}`);
+      }),
+    );
+  });
+}
+
+describe("частые формы в настоящем курсе", () => {
+  it("формы таблицы спряжения, -ές, основа из двух букв, односложное -ος и ударение перед энклитикой", () => {
+    expect(markedAs("δουλεύει", "m02-1")).toEqual(["w:w038"]);
+    expect(markedAs("έχει", "m03-1")).toEqual(["w:w071"]);
+    expect(markedAs("γιο", "m03-1")).toEqual(["w:w088"]);
+    expect(markedAs("οικογένειά", "m03-1")).toEqual(["w:w083"]);
+    expect(markedAs("όλοι", "m03-3")).toEqual(["w:w102"]);
+    expect(markedAs("τηλέφωνό", "m04-2")).toEqual(["w:w929"]);
+    expect(markedAs("καναπέ", "m07-2")).toEqual(["w:w259"]);
+    expect(markedAs("καφέ", "m08-1")).toEqual(["w:w277"]);
+    expect(markedAs("πήγαμε", "m14-3")).toEqual(["w:w065"]);
+  });
+  it("текст для чтения размечает форму таблицы так же, как урок", () => {
+    expect(markedAs("πήγαμε", "r-m20-agonas")).toEqual(["w:w065"]);
+  });
+  it("неправильные и одиночные формы из строки форм карточки", () => {
+    expect(markedAs("τρεις", "m01-2")).toEqual(["w:w024"]);
+    expect(markedAs("τέσσερις", "m01-2")).toEqual(["w:w025"]);
+    expect(markedAs("εννιά", "m01-2")).toEqual(["w:w030"]);
+    expect(markedAs("ένας", "m01-2")).toEqual(["w:w022"]);
+    expect(markedAs("πολλά", "m03-2")).toEqual(["w:w099"]);
+    expect(markedAs("πες", "m09-2")).toEqual(["w:w069"]);
+    expect(markedAs("πείτε", "m09-2")).toEqual(["w:w069"]);
+    expect(markedAs("πάρε", "m12-1")).toEqual(["w:w145"]);
+    expect(markedAs("χρονών", "m08-k1")).toEqual(["w:w184"]);
+    expect(markedAs("μένα", "m20-1")).toEqual(["w:w010"]);
+    expect(markedAs("αυτοί", "m01-1")).toEqual(["w:w012"]);
+  });
+  it("«καφέ» — «коричневый» в тексте для чтения закрыт глоссами", () => {
+    expect(marksOf("καφέ", "r-m11-allagi")).toEqual(["w:w277"]);
+  });
+  it("глосса «γι' αυτό» показывает перевод автора «поэтому», а не карточку αυτός", () => {
+    expect(marksOf("Γι’ αυτό", "m02-2")).toEqual([]);
+    expect(marksOf("γι' αυτό", "m11-test")).toEqual([]);
+    expect(marksOf("γι' αυτό", "m13-test")).toEqual([]);
+    expect(markedAs("γι", "r-m09-proino")).toEqual(["w:w063"]);
+    const gloss = realContent()
+      .packages.find((pack) => pack.id === "m11-test")!
+      .blocks!.flatMap((block) => ("glosses" in block && block.glosses) || [])
+      .find((entry) => entry.text === "γι' αυτό");
+    expect(gloss?.russian).toBe("поэтому");
+  });
+  it("в модуле 11 «καφέ» — «коричневый» с подсказкой «кофе» только в пяти принятых местах, остальное — «πίνω καφέ»", () => {
+    const brown = placesOf("καφέ", "w:w277").filter((place) => /^(?:m11|r-m11)/.test(place));
+    expect(brown).toEqual([
+      "m11-1 colors.body",
+      "m11-1 colors.body",
+      "m11-1 colors.table.2.0",
+      "m11-1 colors.table.2.2",
+      "m11-3 dressing.body",
+      "m11-3 writing-how.body",
+      "r-m11-allagi r-m11-allagi.text",
+    ]);
+    expect(placesOf("καφέ", "w:w277").filter((place) => place.startsWith("m13-test"))).toEqual([]);
+  });
+  it("перевод αυτός — без греческих букв, с родами", () => {
+    expect(realContent().words.find((w) => w.id === "w012")!.russian).toBe("он, она, оно; этот; мн. они");
+  });
+  it("новые карточки — каждая в уроке первого появления слова", () => {
+    const lessons = {
+      w932: "m03-2",
+      w933: "m05-2",
+      w934: "m06-1",
+      w935: "m09-2",
+      w936: "m10-1",
+      w937: "m10-1",
+      w938: "m11-1",
+      w939: "m11-1",
+      w940: "m16-1",
+      w941: "m23-2",
+    };
+    for (const [id, lesson] of Object.entries(lessons)) {
+      expect(
+        realContent()
+          .packages.filter((pack) => pack.items.some((item) => item.kind === "word" && item.id === id))
+          .map((pack) => pack.id),
+        id,
+      ).toEqual([lesson]);
+      expect(earlierOccurrences(id, lesson), id).toEqual([]);
+    }
+    expect(markedAs("μην", "m16-1")).toEqual(["w:w940"]);
+    expect(markedAs("Ορίστε", "m09-2")).toEqual(["w:w935"]);
+    expect(markedAs("Έλα", "m06-1")).toEqual(["w:w934"]);
+    expect(markedAs("φρούτα", "m10-1")).toEqual(["w:w936"]);
+    expect(markedAs("ροζ", "m11-1")).toEqual(["w:w938"]);
+    expect(markedAs("βεβαίως", "m23-2")).toEqual(["w:w941"]);
+    expect(markedAs("φορές", "r-m05-mera")).toEqual(["w:w933"]);
+    expect(markedAs("δασκάλα", "m03-2")).toEqual(["w:w932"]);
   });
 });
 

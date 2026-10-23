@@ -39,6 +39,10 @@ items:
     id: w368
   - kind: word
     id: w369
+  - kind: word
+    id: w936
+  - kind: word
+    id: w937
   - kind: phrase
     id: p121
   - kind: phrase
