@@ -1,8 +1,13 @@
 import "fake-indexeddb/auto";
 import "./helpers/self";
-import { afterEach, expect, it } from "vitest";
+import { Rating } from "ts-fsrs";
+import { afterEach, describe, expect, it } from "vitest";
 import { applyPackage } from "../src/content/apply";
+import { installLesson, refreshCatalog } from "../src/content/client";
+import { nextState } from "../src/domain/learning";
+import { unitKey, wordRef } from "../src/domain/refs";
 import { AppDatabase } from "../src/storage/db";
+import { memoryFetcher } from "./helpers/content";
 import { realContent } from "./helpers/real-content";
 
 const db = new AppDatabase("tetradio-new-verbs");
@@ -50,4 +55,64 @@ it("слово, поставленное с полной таблицей, по�
   const result = await applyPackage(full, db);
   expect(result).toMatchObject({ status: "updated", added: 0, changed: 1 });
   expect((await db.words.get(full.words.find((word) => word.greek === "αρέσω")!.id))!.paradigm?.third).toBe(true);
+});
+
+describe("пакет, поставленный версией без групп", () => {
+  const built = realContent();
+  const bare = <T extends { group?: unknown; irregular?: unknown }>({ group: _g, irregular: _i, ...rest }: T) => rest;
+  const withReadingVerb = built.packages.find((pack) =>
+    pack.readings?.some((reading) => reading.marks?.cards.some((card) => card.group)),
+  )!;
+  async function installed(lessonId: string) {
+    const fetcher = memoryFetcher(built);
+    await db.open();
+    await refreshCatalog(db, fetcher);
+    expect((await installLesson(lessonId, db, fetcher)).status).toBe("installed");
+    return fetcher;
+  }
+
+  it("ставится заново той же версией: у глаголов появляется группа, прогресс и дата слова прежние", async () => {
+    const fetcher = await installed("m05-2");
+    const stale = (await db.packages.get("m05-2"))!;
+    await db.packages.put({ ...stale, words: stale.words.map(bare) });
+    const id = stale.words.find((word) => word.greek === "έρχομαι")!.id;
+    const word = (await db.words.get(id))!;
+    await db.words.put(bare(word));
+    const state = nextState(undefined, wordRef(id), Rating.Good, new Date());
+    await db.cardStates.put(state);
+
+    expect((await installLesson("m05-2", db, fetcher)).status).toBe("updated");
+    expect(await db.words.get(id)).toMatchObject({ group: "mid", irregular: true, createdAt: word.createdAt });
+    expect(await db.cardStates.get(unitKey(wordRef(id)))).toEqual(state);
+    expect((await installLesson("m05-2", db, fetcher)).status).toBe("current");
+  });
+
+  it("пакет с группами той же версии повторно не скачивается", async () => {
+    const fetcher = await installed("m05-2");
+    const requests = fetcher.requests.length;
+    expect((await installLesson("m05-2", db, fetcher)).status).toBe("current");
+    expect(fetcher.requests).toHaveLength(requests);
+  });
+
+  it("глагол без группы только в карточках подсказки урока — пакет ставится заново", async () => {
+    const fetcher = await installed("m05-2");
+    const stale = (await db.packages.get("m05-2"))!;
+    expect(stale.marks!.cards.some((card) => card.group)).toBe(true);
+    await db.packages.put({ ...stale, marks: { ...stale.marks!, cards: stale.marks!.cards.map(bare) } });
+    expect((await installLesson("m05-2", db, fetcher)).status).toBe("updated");
+    expect((await db.packages.get("m05-2"))!.marks!.cards.some((card) => card.group)).toBe(true);
+  });
+
+  it("глагол без группы только в карточках подсказки текста для чтения — пакет ставится заново", async () => {
+    const lessonId = withReadingVerb.id;
+    const fetcher = await installed(lessonId);
+    const stale = (await db.packages.get(lessonId))!;
+    const readings = stale.readings!.map((reading) =>
+      reading.marks ? { ...reading, marks: { ...reading.marks, cards: reading.marks.cards.map(bare) } } : reading,
+    );
+    await db.packages.put({ ...stale, readings });
+    expect((await installLesson(lessonId, db, fetcher)).status).toBe("updated");
+    const cards = (await db.packages.get(lessonId))!.readings!.flatMap((reading) => reading.marks?.cards ?? []);
+    expect(cards.some((card) => card.group)).toBe(true);
+  });
 });

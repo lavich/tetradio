@@ -1,6 +1,9 @@
 /** Спряжение греческого глагола правилами; где правила не уверены — `null`, и таблица задаётся в карточке. */
 import { stripAccent } from "../../src/domain/language.ts";
 import type { Paradigm, VerbGroup } from "../../src/domain/types.ts";
+import { hasParadigm } from "../../src/domain/verb-forms.ts";
+
+export { hasParadigm };
 
 const VOWELS = "αεηιουω";
 const ACUTE = "́";
@@ -113,10 +116,6 @@ export function principal(forms: string): { past?: string; future?: string } {
   }
   return out;
 }
-
-/** Глагол с лицами: безличные (βρέχει, πρέπει) спрягаются только в третьем лице, таблицы у них нет. */
-export const hasParadigm = (word: string, forms: string | undefined) =>
-  /(?:ω|ώ|μαι)$/u.test(word.normalize("NFC")) && !!forms && /(?:^|;)\s*(?:аор|прош)\./u.test(forms);
 
 export function conjugate(word: string, forms: string): Paradigm | null {
   const { past: first, future } = principal(forms);

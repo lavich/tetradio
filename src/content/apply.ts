@@ -6,6 +6,7 @@ import { STORED_KINDS } from "../storage/kinds";
 import {
   SHIPPED_FIELDS,
   paradigmsOf,
+  ungroupedVerbsOf,
   voicedOf,
   type ContentPackage,
   type PackagePhrase,
@@ -99,7 +100,8 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         installed.version === pack.version &&
         (installed.readings?.length ?? 0) >= (pack.readings?.length ?? 0) &&
         voicedOf(installed.readings) >= voicedOf(pack.readings) &&
-        paradigmsOf(installed.words) >= paradigmsOf(pack.words)
+        paradigmsOf(installed.words) >= paradigmsOf(pack.words) &&
+        ungroupedVerbsOf(installed) <= ungroupedVerbsOf(pack)
       )
         return { status: "current", added: 0, changed: 0 };
       const result: InstallResult = { status: installed ? "updated" : "installed", added: 0, changed: 0 };
@@ -117,7 +119,7 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         (card, at) => indexWord(wordFromPackage(card, at)),
         now,
         result,
-        (card, stored) => !!card.paradigm && !stored.paradigm,
+        (card, stored) => (!!card.paradigm && !stored.paradigm) || (!!card.group && !stored.group),
       );
       await applyCards(pack.phrases, database.phrases, phraseFromPackage, now, result);
       const links = pack.items.map((item) => {

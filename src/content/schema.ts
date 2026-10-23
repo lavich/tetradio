@@ -9,7 +9,8 @@ import type {
   SourceRecord,
   VerbGroup,
 } from "../domain/card-fields.ts";
-import { LESSON_CARD_KINDS } from "../domain/card-fields.ts";
+import { LESSON_CARD_KINDS, VERB_GROUPS } from "../domain/card-fields.ts";
+import { hasParadigm } from "../domain/verb-forms.ts";
 import { ContentError } from "./schema-errors.ts";
 import { sentencesOf } from "../domain/sentences.ts";
 import {
@@ -178,6 +179,14 @@ export interface PackageReading {
 /** Слова с таблицей спряжения: пакет и слово, поставленные версией без таблиц, ставятся заново. */
 export const paradigmsOf = (words: { paradigm?: unknown }[] | undefined) =>
   (words ?? []).filter((word) => word.paradigm).length;
+/** Мест глагола без группы: пакет, поставленный версией без групп, их имеет, новая сборка — нет. */
+export const ungroupedVerbsOf = (pack: Pick<ContentPackage, "words" | "marks" | "readings">) =>
+  [
+    ...pack.words.filter((word) => word.paradigm),
+    ...[pack.marks, ...(pack.readings ?? []).map((reading) => reading.marks)]
+      .flatMap((marks) => marks?.cards ?? [])
+      .filter((card) => hasParadigm(card.greek, card.forms)),
+  ].filter((verb) => !verb.group).length;
 /** Записи предложений в текстах пакета: меньше, чем в каталоге, — пакет ставился сборкой без записей. */
 export const voicedOf = (readings: Pick<PackageReading, "audio">[] | undefined) =>
   (readings ?? []).reduce((sum, reading) => sum + (reading.audio ?? []).filter(Boolean).length, 0);
@@ -404,6 +413,18 @@ function parseParadigm(input: unknown, path: string): Paradigm {
   return table;
 }
 
+function parseVerbGroup(target: { group?: VerbGroup; irregular?: true }, raw: Record<string, unknown>, path: string) {
+  if (raw.group !== undefined) {
+    if (!VERB_GROUPS.includes(raw.group as VerbGroup))
+      throw new ContentError(`${path}.group: ожидалось ${VERB_GROUPS.join(", ")}`);
+    target.group = raw.group as VerbGroup;
+  }
+  if (raw.irregular !== undefined) {
+    if (raw.irregular !== true) throw new ContentError(`${path}.irregular: ожидалось true`);
+    target.irregular = true;
+  }
+}
+
 function parseWord(input: unknown, path: string): PackageWord {
   const raw = obj(input, path);
   const segments = list(raw.segments ?? [], `${path}.segments`).map((entry, i): Segment => {
@@ -443,6 +464,7 @@ function parseWord(input: unknown, path: string): PackageWord {
   if (forms) word.forms = forms;
   const paradigm = opt(raw.paradigm, (v) => parseParadigm(v, `${path}.paradigm`));
   if (paradigm) word.paradigm = paradigm;
+  parseVerbGroup(word, raw, path);
   const source = opt(raw.source, (v) => str(v, `${path}.source`));
   if (source) word.source = source;
   const image = opt(raw.imageAssetId, (v) => str(v, `${path}.imageAssetId`));
@@ -743,6 +765,7 @@ export function parseMarks(input: unknown, blocks: LessonBlock[], items: Package
       const value = opt(card[field], (v) => str(v, `${path}.${field}`));
       if (value) parsed[field] = value;
     }
+    parseVerbGroup(parsed, card, path);
     return parsed;
   });
   unique(
@@ -792,6 +815,8 @@ export const SHIPPED_FIELDS = [
   "note",
   "forms",
   "paradigm",
+  "group",
+  "irregular",
   "segments",
   "examples",
   "imageAssetId",
