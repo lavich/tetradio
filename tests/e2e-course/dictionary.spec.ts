@@ -14,7 +14,7 @@ test("словарь: слова и фразы урока по группам, �
   await expect(lesson.getByRole("link", { name: /είμαι/ })).toBeVisible();
   await expect(lesson.getByRole("link", { name: /Πώς σε λένε;/ })).toBeVisible(); // фраза — в словаре
   await expect(lesson.getByRole("img", { name: "не начато" }).first()).toBeVisible();
-  await expect(page.getByTestId("word-count")).toHaveText("4 слова · 1 фраза");
+  await expect(page.getByTestId("word-count")).toHaveText("11 слов · 1 фраза");
 
   await page.getByRole("button", { name: /^закреплены/ }).click();
   await expect(page.getByTestId("dictionary-lesson")).toHaveCount(0);
@@ -102,4 +102,20 @@ test("лист глагола: ряд основных форм, таблица 
   await expect(cell.locator("[lang=el]")).toHaveText("ήσουν");
   await cell.click();
   await expect.poll(spoken).toContain("ήσουν");
+});
+
+test("лист слова: метка группы у глагола над рядом форм, у других слов метки нет", async ({ page }) => {
+  await page.goto("/app/words");
+  await page.getByRole("link", { name: /είμαι/ }).click();
+  const sheet = page.getByTestId("entry-sheet");
+  const label = sheet.getByTestId("verb-group");
+  await expect(label.locator("[aria-hidden]")).toHaveText("неправ. прош.");
+  const [labelBox, rowBox] = [(await label.boundingBox())!, (await sheet.getByTestId("verb-forms").boundingBox())!];
+  expect(labelBox.y + labelBox.height).toBeLessThanOrEqual(rowBox.y + 0.5);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+
+  await page.goto("/app/words");
+  await page.getByRole("link", { name: /από/ }).click();
+  await expect(page.getByTestId("entry-sheet")).toContainText("из, от");
+  await expect(page.getByTestId("entry-sheet").getByTestId("verb-group")).toHaveCount(0);
 });

@@ -7,10 +7,11 @@ import {
   type PackagePhrase,
   type PackageWord,
 } from "../../src/content/schema.ts";
-import type { Example, Gloss, Paradigm, Segment } from "../../src/domain/types.ts";
+import { VERB_GROUPS } from "../../src/domain/card-fields.ts";
+import type { Example, Gloss, Paradigm, Segment, VerbGroup } from "../../src/domain/types.ts";
 import { PROFILES, type Language } from "../../src/domain/language.ts";
 import { canonical, fail, hash, LANGUAGE, nfc, pick, text } from "./common.ts";
-import { conjugate, hasParadigm, principal } from "./paradigm.ts";
+import { conjugate, hasParadigm, irregularPast, principal, verbGroup } from "./paradigm.ts";
 import type { ContentRoot, PhraseSource, Sourced, WordSource } from "./sources.ts";
 
 export const imageAssetId = (wordId: string) => `img-${wordId}`;
@@ -96,6 +97,34 @@ function paradigmOf(
   return built;
 }
 
+/** Явное поле — только там, где правило по таблице молчит или ошибается: иначе правка таблицы оставила бы устаревшую ручную группу. */
+function groupOf(
+  src: WordSource,
+  word: string,
+  paradigm: Paradigm | undefined,
+  where: string,
+): { group?: VerbGroup; irregular?: true } {
+  if (!paradigm) {
+    for (const field of ["group", "irregular"] as const)
+      if (src[field] !== undefined)
+        fail(`${where}.${field}: группа и признак прошедшего — только у глагола с таблицей спряжения`);
+    return {};
+  }
+  const derived = verbGroup(paradigm.present);
+  if (src.group !== undefined) {
+    if (!(VERB_GROUPS as readonly unknown[]).includes(src.group))
+      fail(`${where}.group: ожидалось A, B1, B2, mid или other`);
+    if (derived) fail(`${where}.group: группа выводится из таблицы: ${derived}`);
+  } else if (!derived)
+    fail(`${where}.group: группа «${word}» не выводится из таблицы — задайте group: A, B1, B2, mid или other`);
+  const rule = irregularPast(word, paradigm.past[0]);
+  if (src.irregular !== undefined) {
+    if (typeof src.irregular !== "boolean") fail(`${where}.irregular: ожидалось true или false`);
+    if (src.irregular === rule) fail(`${where}.irregular: признак выводится из таблицы: ${String(rule)}`);
+  }
+  return { group: derived ?? (src.group as VerbGroup), ...((src.irregular ?? rule) ? { irregular: true } : {}) };
+}
+
 function describe(id: string, src: Sourced<WordSource>, language: Language, picture = false): PackageWord {
   const where = `words/${src.file}`;
   checkId(id, where);
@@ -144,6 +173,7 @@ function describe(id: string, src: Sourced<WordSource>, language: Language, pict
   if (forms) draft.forms = forms;
   const paradigm = paradigmOf(src, greek, forms, language, where);
   if (paradigm) draft.paradigm = paradigm;
+  Object.assign(draft, groupOf(src, greek, paradigm, where));
   if (source) draft.source = source;
   if (src.image || picture) draft.imageAssetId = imageAssetId(id);
   if (src.audio) draft.audioAssetId = audioAssetId(id);

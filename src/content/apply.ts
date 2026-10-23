@@ -99,7 +99,8 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         installed.version === pack.version &&
         (installed.readings?.length ?? 0) >= (pack.readings?.length ?? 0) &&
         voicedOf(installed.readings) >= voicedOf(pack.readings) &&
-        paradigmsOf(installed.words) >= paradigmsOf(pack.words)
+        paradigmsOf(installed.words) >= paradigmsOf(pack.words) &&
+        installed.grouped
       )
         return { status: "current", added: 0, changed: 0 };
       const result: InstallResult = { status: installed ? "updated" : "installed", added: 0, changed: 0 };
@@ -117,7 +118,7 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         (card, at) => indexWord(wordFromPackage(card, at)),
         now,
         result,
-        (card, stored) => !!card.paradigm && !stored.paradigm,
+        (card, stored) => (!!card.paradigm && !stored.paradigm) || (!!card.group && !stored.group),
       );
       await applyCards(pack.phrases, database.phrases, phraseFromPackage, now, result);
       const links = pack.items.map((item) => {
@@ -145,6 +146,7 @@ export async function applyPackage(pack: ContentPackage, database: AppDatabase =
         phrases: pack.phrases,
         items: pack.items,
         media: pack.media,
+        grouped: true,
       };
       if (pack.lesson.kind) record.kind = pack.lesson.kind;
       if (pack.module) record.module = pack.module;

@@ -3,6 +3,7 @@ import type { Paradigm, Word } from "../domain/types";
 import { ENDINGS, endingsOf, principalParts, splitEnding } from "../domain/verb-forms";
 import { playText, type PlayResult } from "./audio";
 import { noVoice, useProfile } from "./language";
+import { VerbGroupRow } from "./VerbGroupLabel";
 import css from "./verb-forms.module.css";
 
 function Form({
@@ -195,7 +196,7 @@ export function WordForms({
   className,
   verbsOnly = false,
 }: {
-  word: Pick<Word, "greek" | "forms" | "paradigm">;
+  word: Pick<Word, "greek" | "forms" | "paradigm" | "group" | "irregular">;
   className?: string;
   verbsOnly?: boolean;
 }) {
@@ -204,11 +205,9 @@ export function WordForms({
   if (!word.forms && !word.paradigm) return null;
   return (
     <>
-      {word.forms && (
-        <div className={className}>
-          <VerbForms headword={word.greek} forms={word.forms} onSay={say} />
-        </div>
-      )}
+      <VerbGroupRow verb={word} className={className}>
+        {word.forms && <VerbForms headword={word.greek} forms={word.forms} onSay={say} />}
+      </VerbGroupRow>
       {word.paradigm && <ParadigmTable paradigm={word.paradigm} onSay={say} />}
       {note}
     </>

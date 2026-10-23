@@ -4,6 +4,7 @@ audio: words/w207.mp3
 russian: существовать; υπάρχει — есть, имеется
 ipa: /iˈparxo/
 forms: прош. υπήρχα; буд. θα υπάρχω
+irregular: false
 paradigm:
   third: true
 note: "обычно 3 л.: υπάρχει + ед., υπάρχουν + мн."

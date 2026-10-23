@@ -4,6 +4,7 @@ audio: words/w009.mp3
 russian: быть
 ipa: /ˈime/
 forms: прош. ήμουν; буд. θα είμαι
+group: other
 paradigm:
   present: [είμαι, είσαι, είναι, είμαστε, είστε, είναι]
   past: [ήμουν, ήσουν, ήταν, ήμασταν, ήσασταν, ήταν]

@@ -76,6 +76,8 @@ test("слово урока в объяснении: звучит карточк
   await expect(sheet).toContainText("быть");
   await expect(sheet).toContainText("θα είμαι");
   await expect(sheet).not.toContainText("Из урока");
+  await expect(sheet.getByTestId("verb-group").locator("[aria-hidden]")).toHaveText("неправ. прош.");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await expect(word.first()).toHaveAttribute("aria-expanded", "true");
   // Облачко листания не перекрывает подсказку: в её середине — сама подсказка.
   const box = (await sheet.boundingBox())!;
@@ -124,6 +126,7 @@ test("слово прошлого урока не выделено, но наж�
   const sheet = page.getByRole("dialog", { name: "είμαι" });
   await expect(sheet).toContainText("Из урока 1.1");
   await expect(sheet).toContainText("быть");
+  await expect(sheet.getByTestId("verb-group").locator("[aria-hidden]")).toHaveText("неправ. прош.");
   await expect.poll(() => spoken(page)).toContain("είμαι");
 });
 

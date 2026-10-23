@@ -13,6 +13,10 @@ const LABELS: Record<string, string> = {
   прич: "причастие",
 };
 
+/** Глагол с лицами: безличные (βρέχει, πρέπει) спрягаются только в третьем лице, таблицы у них нет. */
+export const hasParadigm = (word: string, forms: string | undefined) =>
+  /(?:ω|ώ|μαι)$/u.test(word.normalize("NFC")) && !!forms && /(?:^|;)\s*(?:аор|прош)\./u.test(forms);
+
 /** Ряд «μένω → έμεινα → θα μείνω» из строки форм карточки; без глагольных помет (мн. ч., роды) — `null`. */
 export function principalParts(headword: string, forms: string | undefined): PrincipalPart[] | null {
   if (!forms) return null;

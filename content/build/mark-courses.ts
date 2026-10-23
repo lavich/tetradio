@@ -23,11 +23,41 @@ export const cardDescriber =
     if (kind === "word") {
       const word = words.get(id)!;
       const paradigm = word.paradigm && [...word.paradigm.present, ...word.paradigm.past];
-      return { text: word.greek, russian: word.russian, ipa: word.ipa, forms: word.forms, paradigm };
+      return {
+        text: word.greek,
+        russian: word.russian,
+        ipa: word.ipa,
+        forms: word.forms,
+        paradigm,
+        group: word.group,
+        irregular: word.irregular,
+      };
     }
     const phrase = phrases.get(id)!;
-    return { text: phrase.text, russian: phrase.translation ?? "", ipa: "", forms: undefined, paradigm: undefined };
+    return {
+      text: phrase.text,
+      russian: phrase.translation ?? "",
+      ipa: "",
+      forms: undefined,
+      paradigm: undefined,
+      group: undefined,
+      irregular: undefined,
+    };
   };
+export const markCard = (
+  ref: string,
+  card: ReturnType<ReturnType<typeof cardDescriber>>,
+  lesson: string,
+): MarkCard => ({
+  ref,
+  greek: card.text,
+  russian: card.russian,
+  ...(card.ipa ? { ipa: card.ipa } : {}),
+  ...(card.forms ? { forms: card.forms } : {}),
+  ...(card.group ? { group: card.group } : {}),
+  ...(card.irregular ? { irregular: card.irregular } : {}),
+  lesson,
+});
 /** «Прошлые» — по порядку программы, а не по прогрессу учащегося: набор не зависит от устройства. */
 export function markCourses(
   courses: CatalogCourse[],
@@ -82,17 +112,9 @@ export function markCourses(
             pack.id,
             encodeMarks(
               found.blocks,
-              [...used].sort().map((ref): MarkCard => {
+              [...used].sort().map((ref) => {
                 const { kind, id } = cards.get(ref)!;
-                const card = describeCard(kind, id);
-                return {
-                  ref,
-                  greek: card.text,
-                  russian: card.russian,
-                  ...(card.ipa ? { ipa: card.ipa } : {}),
-                  ...(card.forms ? { forms: card.forms } : {}),
-                  lesson: introduced.get(ref)!.label,
-                };
+                return markCard(ref, describeCard(kind, id), introduced.get(ref)!.label);
               }),
             ),
           );

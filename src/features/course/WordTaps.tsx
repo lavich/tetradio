@@ -17,6 +17,7 @@ import type { BlockMarks, WordMark } from "../../content/schema";
 import { playText, type PlayResult } from "../../shared/audio";
 import { noVoice, useProfile } from "../../shared/language";
 import { VerbForms } from "../../shared/VerbForms";
+import { VerbGroupRow } from "../../shared/VerbGroupLabel";
 import type { TapCard } from "../../storage/course";
 import css from "./word-taps.module.css";
 
@@ -366,8 +367,8 @@ function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
         </button>
       </div>
       {card.russian ? <p className={css.tipRu}>{card.russian}</p> : null}
-      {forms ? (
-        <div className={css.tipForms}>
+      <VerbGroupRow verb={card} className={css.tipForms}>
+        {forms ? (
           <VerbForms
             headword={card.greek}
             forms={forms}
@@ -376,8 +377,8 @@ function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
               void playText(form, undefined, profile).then(setResult);
             }}
           />
-        </div>
-      ) : null}
+        ) : null}
+      </VerbGroupRow>
       {result === "none" ? <p className={css.tipNote}>{noVoice(profile)}</p> : null}
       {result === "error" ? <p className={css.tipNote}>Не удалось воспроизвести произношение.</p> : null}
     </div>,

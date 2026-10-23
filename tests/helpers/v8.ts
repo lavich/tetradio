@@ -173,9 +173,11 @@ export async function seedV8(name: string): Promise<void> {
       revision,
     })),
   );
+  const inV8 = (entry: { kind: string; id: string }) =>
+    entry.kind !== "word" || lesson.words.some((word) => word.id === entry.id);
   await legacy.table("lessonItems").bulkAdd(
     v8Packages.flatMap((item) =>
-      item.items.map((entry) => ({
+      item.items.filter(inV8).map((entry) => ({
         lessonId: item.id,
         unitKey: unitKey({ kind: entry.kind, id: entry.id }),
         ref: { kind: entry.kind, id: entry.id },

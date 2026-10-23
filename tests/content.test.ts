@@ -507,3 +507,42 @@ describe("разметка слов примера", () => {
     expect(() => parsePackage(broken)).toThrow(/отрезки пересекаются или идут не по порядку/);
   });
 });
+
+describe("группа глагола в пакете", () => {
+  const demo = buildContent("tests/fixtures/course-demo");
+  const raw = (id: string) => JSON.parse(JSON.stringify(demo.packages.find((p) => p.id === id)!));
+  const eimaiAt = (pack: { words: { greek: string }[] }) => pack.words.findIndex((word) => word.greek === "είμαι");
+
+  it("группа и признак разбираются у слова, у карточки подсказки урока и текста для чтения", () => {
+    const lesson = parsePackage(raw("m01-1"));
+    expect(lesson.words[eimaiAt(lesson)]).toMatchObject({ group: "other", irregular: true });
+    const readingCard = lesson.readings!.flatMap((r) => r.marks?.cards ?? []).find((c) => c.ref === "w:eimai");
+    expect(readingCard).toMatchObject({ group: "other", irregular: true });
+    const review = parsePackage(raw("m01-r1"));
+    expect(review.marks!.cards.find((c) => c.ref === "w:eimai")).toMatchObject({ group: "other", irregular: true });
+  });
+
+  it.each([
+    ["group", "C"],
+    ["irregular", false],
+  ])("у слова %s: %s отклоняется с путём поля", (field, value) => {
+    const pack = raw("m01-1");
+    const at = eimaiAt(pack);
+    pack.words[at][field] = value;
+    expect(() => parsePackage(pack)).toThrow(new RegExp(`пакет\\.words\\[${at}\\]\\.${field}:`));
+  });
+
+  it.each([
+    ["group", "B3"],
+    ["irregular", "да"],
+  ])("у карточки подсказки %s: %s отклоняется с путём поля", (field, value) => {
+    const pack = raw("m01-r1");
+    const at = pack.marks.cards.findIndex((c: { ref: string }) => c.ref === "w:eimai");
+    pack.marks.cards[at][field] = value;
+    expect(() => parsePackage(pack)).toThrow(new RegExp(`пакет\\.marks\\.cards\\[${at}\\]\\.${field}:`));
+    const lesson = raw("m01-1");
+    const card = lesson.readings[0].marks.cards.find((c: { ref: string }) => c.ref === "w:eimai");
+    card[field] = value;
+    expect(() => parsePackage(lesson)).toThrow(new RegExp(`\\.${field}:`));
+  });
+});

@@ -1,11 +1,25 @@
 title: Слабый навык (пример)
 kind: lesson
-items: []
+items:
+  - { kind: word, id: grafo }
+  - { kind: word, id: mporo }
+  - { kind: word, id: agapao }
+  - { kind: word, id: rotao }
+  - { kind: word, id: erxomai }
+  - { kind: word, id: troo }
+  - { kind: word, id: vrexei }
 blocks:
   - type: explanation
     id: recap
     title: Повторим είμαι
     body: "Во множественном числе: Εμείς είμαστε φίλοι — «Мы друзья»."
+  - type: explanation
+    id: verbs
+    title: Глаголы (пример)
+    body: "Γράφω. Μπορείς; Αγαπάμε. Ρωτάς. Έρχεται. Τρώμε. Βρέχει."
+  - type: vocabulary
+    id: words
+    title: Слова урока
   - type: exercise
     id: again
     instruction: Ещё раз — форма είμαι.

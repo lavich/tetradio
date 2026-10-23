@@ -1,0 +1,22 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: 4px;
+}
+.label {
+  max-width: 100%;
+  padding: 0 6px;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-radius: 10px;
+  font: 600 12.5px var(--font-sans);
+  font-style: normal;
+  line-height: 18px;
+  color: var(--muted-foreground);
+}
+.piece {
+  white-space: nowrap;
+}
+.greek {
+  font-family: var(--font-print);
+}

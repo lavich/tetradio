@@ -169,6 +169,21 @@ test("звучащее предложение подсвечено в текст
   await expect(page.getByTestId("speaking")).toHaveCount(0);
 });
 
+test("глагол в тексте для чтения: в подсказке метка неправильного прошедшего, страница не шире экрана", async ({
+  page,
+}) => {
+  await voice(page);
+  await recordings(page);
+  await startCourse(page);
+  await complete(page, "m01-1");
+  await page.goto("/app/course/m01/read/r-m01-anna");
+  await page.getByRole("button", { name: "Произнести и перевести: Είσαι", exact: true }).click();
+  const sheet = page.getByRole("dialog", { name: "είμαι" });
+  await expect(sheet.getByTestId("verb-group").locator("[aria-hidden]")).toHaveText("неправ. прош.");
+  await expect(sheet.getByTestId("verb-group")).toContainText("неправильное прошедшее");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
 /** Все карточки пройденных уроков введены и отложены: плана на сегодня нет. */
 async function introduceAllCards() {
   const db = await new Promise<IDBDatabase>((resolve) => {

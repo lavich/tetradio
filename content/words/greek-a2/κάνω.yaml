@@ -4,5 +4,6 @@ audio: words/w103.mp3
 russian: делать
 ipa: /ˈkano/
 forms: аор. έκανα; буд. θα κάνω
+irregular: true
 note: Τι κάνεις; — Как дела?; κάνω ντους, κάνω βόλτα
 source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)

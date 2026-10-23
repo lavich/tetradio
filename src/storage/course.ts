@@ -8,7 +8,7 @@ import { lessonDone, tallyOf, type LessonTally } from "../domain/course";
 import { DAY_STARTS_AT, nextState, studyDay, zonedStart } from "../domain/learning";
 import { unitKey } from "../domain/refs";
 import { Rating } from "ts-fsrs";
-import type { BlockProgress, Lesson, StoredModule } from "../domain/types";
+import type { BlockProgress, Lesson, StoredModule, VerbGroup } from "../domain/types";
 import { cardsInCourse, lessonCourses, primaryCourse } from "./courses";
 import { db, type AppDatabase } from "./db";
 import { STORED_KINDS } from "./kinds";
@@ -102,6 +102,8 @@ export interface TapCard {
   russian: string;
   ipa?: string;
   forms?: string;
+  group?: VerbGroup;
+  irregular?: true;
   lesson?: string;
   audioAssetId?: string;
 }
@@ -130,6 +132,8 @@ export const courseLesson = zoned(async function courseLesson(
           russian: word.russian,
           ipa: word.ipa,
           forms: word.forms,
+          group: word.group,
+          irregular: word.irregular,
           audioAssetId: word.audioAssetId,
         },
       ]),
