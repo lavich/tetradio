@@ -57,7 +57,7 @@ const memo = (test: (char: string) => boolean) => {
   };
 };
 const isGreekLetter = memo((char) => /\p{M}/u.test(char) || (/\p{L}/u.test(char) && /\p{Script=Greek}/u.test(char)));
-const isLetter = memo((char) => /[\p{L}\p{M}]/u.test(char));
+const isLetter = memo((char) => char !== "ʼ" && /[\p{L}\p{M}]/u.test(char));
 
 const gapKey = (gap: string) => {
   const flat = gap.replace(/[’ʼ′]/g, "'").replace(/\s+/g, " ");
@@ -87,7 +87,7 @@ function dropEncliticAccent(text: string, tokens: Token[]) {
 }
 const ELIDED: Record<string, string> = { γι: "για" };
 const elided = (word: string, next: string | undefined) =>
-  next === "'" || next === "’" ? (ELIDED[word] ?? word) : word;
+  next !== undefined && "'’ʼ".includes(next) ? (ELIDED[word] ?? word) : word;
 export function tokenize(text: string): Token[] {
   const tokens: Token[] = [];
   let at = 0;
