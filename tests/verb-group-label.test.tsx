@@ -67,8 +67,15 @@ const verb = (fields: Partial<Word> = {}): Word => ({
 describe("текст метки", () => {
   it.each<{ group: VerbGroup; irregular?: true; seen: string; spoken: string; greek: string[] }>([
     { group: "A", seen: "гр. A", spoken: "группа A", greek: [] },
-    { group: "B1", seen: "гр. B -άω", spoken: "группа B, тип на -άω", greek: ["-άω", "-άω"] },
-    { group: "B2", seen: "гр. B -ώ", spoken: "группа B, тип на -ώ", greek: ["-ώ", "-ώ"] },
+    { group: "B1", seen: "гр. B как αγαπάω", spoken: "группа B, как αγαπάω", greek: ["αγαπάω", "αγαπάω"] },
+    { group: "B2", seen: "гр. B как μπορώ", spoken: "группа B, как μπορώ", greek: ["μπορώ", "μπορώ"] },
+    {
+      group: "B1",
+      irregular: true,
+      seen: "гр. B как αγαπάω · неправ. прош.",
+      spoken: "группа B, как αγαπάω, неправильное прошедшее",
+      greek: ["αγαπάω", "αγαπάω"],
+    },
     { group: "mid", seen: "на -μαι", spoken: "глагол на -μαι", greek: ["-μαι", "-μαι"] },
     {
       group: "A",

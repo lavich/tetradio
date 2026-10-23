@@ -17,6 +17,6 @@
   color: var(--muted-foreground);
   white-space: nowrap;
 }
-.ending {
+.greek {
   font-family: var(--font-print);
 }

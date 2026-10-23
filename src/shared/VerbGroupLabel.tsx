@@ -2,11 +2,11 @@ import type { ReactNode } from "react";
 import type { VerbGroup } from "../domain/types";
 import css from "./verb-group-label.module.css";
 
-const GROUPS: Record<Exclude<VerbGroup, "other">, { shown: string; spoken: string; ending?: string }> = {
+const GROUPS: Record<Exclude<VerbGroup, "other">, { shown: string; spoken: string; greek?: string }> = {
   A: { shown: "гр. A", spoken: "группа A" },
-  B1: { shown: "гр. B ", spoken: "группа B, тип на ", ending: "-άω" },
-  B2: { shown: "гр. B ", spoken: "группа B, тип на ", ending: "-ώ" },
-  mid: { shown: "на ", spoken: "глагол на ", ending: "-μαι" },
+  B1: { shown: "гр. B как ", spoken: "группа B, как ", greek: "αγαπάω" },
+  B2: { shown: "гр. B как ", spoken: "группа B, как ", greek: "μπορώ" },
+  mid: { shown: "на ", spoken: "глагол на ", greek: "-μαι" },
 };
 
 export interface VerbGroupFields {
@@ -24,9 +24,9 @@ export function VerbGroupLabel({
 }: VerbGroupFields & { headwordShown?: boolean }) {
   if (!showsVerbGroup({ group, irregular })) return null;
   const known = group === "other" ? undefined : GROUPS[group!];
-  const ending = (text?: string): ReactNode =>
+  const greek = (text?: string): ReactNode =>
     text && (
-      <span lang="el" className={css.ending}>
+      <span lang="el" className={css.greek}>
         {text}
       </span>
     );
@@ -34,13 +34,13 @@ export function VerbGroupLabel({
     <span className={css.label} data-testid="verb-group">
       <span aria-hidden>
         {known?.shown}
-        {ending(known?.ending)}
+        {greek(known?.greek)}
         {irregular && (known ? " · неправ. прош." : "неправ. прош.")}
       </span>
       <span className="sr-only select-none">
         {headwordShown && ", "}
         {known?.spoken}
-        {ending(known?.ending)}
+        {greek(known?.greek)}
         {irregular && (known ? ", неправильное прошедшее" : "неправильное прошедшее")}
       </span>
     </span>
