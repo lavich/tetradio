@@ -106,7 +106,14 @@ export function checkQuestions({ courses, modules, moduleOf, drafts, words, phra
         const ref = cardRef(item.kind, item.id);
         if (cards.has(ref)) continue;
         const card = describe(item.kind as LessonCardKind, item.id);
-        cards.set(ref, { ref, text: card.text, forms: card.forms, phrase: item.kind === "phrase", at });
+        cards.set(ref, {
+          ref,
+          text: card.text,
+          forms: card.forms,
+          paradigm: card.paradigm,
+          phrase: item.kind === "phrase",
+          at,
+        });
         if (item.kind === "word") for (const form of inflected(words.get(item.id))) known.push({ text: form, at });
       }
       for (const block of pack.blocks ?? [])

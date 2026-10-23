@@ -1,4 +1,4 @@
-/** Окончания выводятся только с тем же ударением и основой от трёх букв: лучше не найти форму, чем привязать чужое слово. */
+/** Окончания выводятся только с тем же ударением и основой от трёх букв (у имени — от двух, если ударение на основе): лучше не найти форму, чем привязать чужое слово. */
 import { glossSpans, tapFields, type LessonBlock } from "../src/content/course.ts";
 import type { BlockMarks, MarkCard, PackageMarks, WordMark } from "../src/content/schema.ts";
 import { ARTICLE_WORDS } from "./greek.ts";
@@ -8,6 +8,7 @@ export interface MatchCard {
   ref: string;
   text: string;
   forms?: string;
+  paradigm?: string[];
   phrase?: boolean;
   /** Позиция урока появления в курсе: сопоставитель курса отсекает карточки поздних уроков. */
   at?: number;
@@ -41,6 +42,7 @@ const IRREGULAR: Record<string, string[]> = {
   λέω: ["λες", "λέει", "λέμε", "λέτε", "λένε"],
   τρώω: ["τρως", "τρώει", "τρώμε", "τρώτε", "τρώνε"],
   ακούω: ["ακούς", "ακούει", "ακούμε", "ακούτε", "ακούνε", "ακούν"],
+  πω: ["πεις", "πει", "πούμε", "πείτε", "πουν"],
 };
 
 const memo = (test: (char: string) => boolean) => {
@@ -67,6 +69,22 @@ interface Token {
   end: number;
   norm: string;
 }
+const ENCLITICS = normSet("μου σου του της μας σας τους τον την τη το τα τις με σε".split(" "));
+const SENTENCE_BREAK = /[.;\u037e!?·\u0387…]/;
+const UNACCENTED: Record<string, string> = { ά: "α", έ: "ε", ή: "η", ί: "ι", ό: "ο", ύ: "υ", ώ: "ω" };
+/** Второе ударение ставит орфография перед энклитикой (τηλέφωνό μου); без энклитики это опечатка, и слово не ищется. */
+function dropEncliticAccent(text: string, tokens: Token[]) {
+  tokens.forEach((token, i) => {
+    const next = tokens[i + 1];
+    if (!next || !ENCLITICS.has(next.norm) || SENTENCE_BREAK.test(text.slice(token.end, next.start))) return;
+    const chars = [...token.norm];
+    const accents = chars.flatMap((char, at) => (UNACCENTED[char] ? [at] : []));
+    if (accents.length < 2) return;
+    chars[accents.at(-1)!] = UNACCENTED[chars[accents.at(-1)!]];
+    token.norm = chars.join("");
+  });
+  return tokens;
+}
 export function tokenize(text: string): Token[] {
   const tokens: Token[] = [];
   let at = 0;
@@ -83,7 +101,7 @@ export function tokenize(text: string): Token[] {
     }
     if (greek) tokens.push({ start, end: at, norm: norm(text.slice(start, at)) });
   }
-  return tokens;
+  return dropEncliticAccent(text, tokens);
 }
 const gapsOf = (text: string, tokens: Token[]) =>
   tokens.slice(1).map((token, i) => gapKey(text.slice(tokens[i].end, token.start)));
@@ -100,13 +118,18 @@ const stressed = (value: string) => ACCENTED.test(value);
 function inflect(word: string, gender: "m" | "f" | "n" | null, adjective = false): string[] {
   const out: string[] = [];
   const add = (stem: string, endings: string[]) => {
-    if (letters(stem) >= 3) out.push(...endings.map((ending) => stem + ending));
+    if (letters(stem) >= 3 || (letters(stem) === 2 && stressed(stem)))
+      out.push(...endings.map((ending) => stem + ending));
   };
   const cut = (n: number) => word.slice(0, word.length - n);
   if (gender === "m") {
     if (word.endsWith("ός")) add(cut(2), ["ό", "ού", "οί", "ούς", "έ"]);
     else if (word.endsWith("ος") && stressed(cut(2)))
       add(cut(2), stressOnLastStemSyllable(cut(2)) ? ["ο", "ου", "οι", "ους", "ε"] : ["ο", "οι", "ε"]);
+    // Без ударения бывает только односложное (ο γιος): ударение на нём, окончания полные.
+    else if (word.endsWith("ος") && !stressed(word) && letters(cut(2)) >= 2)
+      out.push(...["ο", "ου", "οι", "ους"].map((ending) => cut(2) + ending));
+    else if (word.endsWith("ές")) add(cut(2), ["έ"]);
     else if (word.endsWith("άς")) add(cut(2), ["ά"]);
     else if (word.endsWith("ας") && stressed(cut(2))) add(cut(2), ["α"]);
     else if (word.endsWith("ής")) add(cut(2), ["ή"]);
@@ -180,11 +203,14 @@ function greekForms(card: MatchCard, text: string, tokens: Token[], base: (surfa
   // Глагол — по пометам форм или по окончанию -ω/-ομαι; у наречий на -ω (έξω, πάνω) выведенные «формы» не слова и не встретятся.
   const verb =
     !article && (IRREGULAR[word] || /(?:аор|буд|прош)\./u.test(card.forms ?? "") || /(?:ω|ώ|ομαι)$/.test(word));
-  const derived: string[] = [];
+  const derived = (card.paradigm ?? []).flatMap((form) => form.split(/[/,]/).map((variant) => variant.trim()));
   if (gender) derived.push(...inflect(word, gender));
   if (adjective) {
     const [m, f, n] = pieces.map((piece) => piece.toLowerCase());
     derived.push(...inflect(m, "m", true), ...inflect(f, "f", true), ...inflect(n, "n", true));
+    // У -ύς множественное — от основы женского рода: πολύς, πολλή → πολλοί.
+    if (m.endsWith("ύς") && /[άή]$/.test(f))
+      derived.push(...["οί", "ούς", "ές", "ά", "ών"].map((e) => f.slice(0, -1) + e));
   }
   if (verb) {
     derived.push(...conjugate(word));
