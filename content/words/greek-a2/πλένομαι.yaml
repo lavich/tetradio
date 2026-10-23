@@ -4,4 +4,5 @@ audio: words/w668.mp3
 russian: умываться, мыться
 ipa: /ˈplenome/
 forms: аор. πλύθηκα; буд. θα πλυθώ
+irregular: true
 source: Лексикон курса, модуль 17 (docs/course/lexicon/17.tsv)

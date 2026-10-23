@@ -13,6 +13,8 @@ export interface WordSource {
   note?: string;
   forms?: string;
   paradigm?: { present?: string[]; past?: string[]; third?: boolean };
+  group?: string;
+  irregular?: boolean;
   verified?: boolean;
   source?: string;
   image?: string;
@@ -275,6 +277,8 @@ const WORD_FIELDS = {
   note: true,
   forms: true,
   paradigm: true,
+  group: true,
+  irregular: true,
   verified: true,
   source: true,
   image: true,

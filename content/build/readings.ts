@@ -4,7 +4,6 @@ import {
   readingBlock,
   type CatalogCourse,
   type ContentPackage,
-  type MarkCard,
   type PackagePhrase,
   type PackageReading,
   type PackageWord,
@@ -15,7 +14,7 @@ import type { LessonCardKind } from "../../src/domain/types.ts";
 import { isLanguage, profileOf } from "../../src/domain/language.ts";
 import { coverer, share } from "../coverage.ts";
 import { buildMatcher, encodeMarks, lessonMarks, type MatchCard } from "../marks.ts";
-import { cardDescriber } from "./mark-courses.ts";
+import { cardDescriber, markCard } from "./mark-courses.ts";
 import { mediaFor, type BuiltMedia } from "./media.ts";
 import {
   lineHash,
@@ -349,17 +348,9 @@ export function buildReadings({
     if (used.length)
       reading.marks = encodeMarks(
         found.blocks,
-        used.sort().map((ref): MarkCard => {
+        used.sort().map((ref) => {
           const { kind, id: cardId } = cards.get(ref)!;
-          const card = describe(kind, cardId);
-          return {
-            ref,
-            greek: card.text,
-            russian: card.russian,
-            ...(card.ipa ? { ipa: card.ipa } : {}),
-            ...(card.forms ? { forms: card.forms } : {}),
-            lesson: introduced.get(ref)!.label,
-          };
+          return markCard(ref, describe(kind, cardId), introduced.get(ref)!.label);
         }),
       );
     byLesson.set(src.after, [...(byLesson.get(src.after) ?? []), reading]);

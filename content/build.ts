@@ -11,6 +11,7 @@ import {
 } from "../src/content/schema.ts";
 import { LEGACY_FILE, type ArtReport } from "./art.ts";
 import { checkCardAudio, type CardVoicing } from "./build/card-audio.ts";
+import { VERB_GROUPS } from "../src/domain/card-fields.ts";
 import { buildCards } from "./build/cards.ts";
 import { checkBudgets } from "./build/budgets.ts";
 import { buildCourses } from "./build/courses.ts";
@@ -221,10 +222,16 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     for (const line of built.unfamiliar) console.log(`  ${line}`);
   }
   const tables = built.words.filter((word) => word.paradigm);
-  console.log(`Спряжение: таблицы у ${tables.length} глаголов — весь список: PARADIGM_REPORT=1 node content/build.ts`);
+  const byGroup = VERB_GROUPS.map((group) => `${group} ${tables.filter((word) => word.group === group).length}`);
+  const irregular = tables.filter((word) => word.irregular).length;
+  console.log(
+    `Спряжение: таблицы у ${tables.length} глаголов (${byGroup.join(", ")}; неправ. прош. ${irregular}) — весь список: PARADIGM_REPORT=1 node content/build.ts`,
+  );
   if (process.env.PARADIGM_REPORT)
     for (const word of tables)
-      console.log(`  ${word.greek}: ${word.paradigm!.present.join(" ")} | ${word.paradigm!.past.join(" ")}`);
+      console.log(
+        `  ${word.greek} [${word.group}${word.irregular ? " · неправ. прош." : ""}]: ${word.paradigm!.present.join(" ")} | ${word.paradigm!.past.join(" ")}`,
+      );
   // Одно слово с теми же карточками повторяется по урокам и блокам: в отчёте оно одна строка с местами.
   const groups = new Map<string, { text: string; refs: string[]; places: Map<string, number> }>();
   for (const entry of built.marks.ambiguous) {

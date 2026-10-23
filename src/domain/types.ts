@@ -16,7 +16,7 @@ import type {
   LessonBlock,
   LessonKind,
 } from "../content/course";
-import type { CardKind, Example, Paradigm, Segment } from "./card-fields.ts";
+import type { CardKind, Example, Paradigm, Segment, VerbGroup } from "./card-fields.ts";
 import type { Language } from "./language";
 
 // Значение загружает и Node при сборке контента, поэтому путь с расширением.
@@ -31,6 +31,7 @@ export type {
   ProvenanceOperation,
   Segment,
   SourceRecord,
+  VerbGroup,
 } from "./card-fields.ts";
 /**
  * Типы проверки. `listening` — узнавание написания на слух, `comprehension` — понимание значения на слух,
@@ -49,6 +50,8 @@ export interface Word {
   /** Грамматические формы строкой (мн. ч., аорист и будущее, три рода) — поставляются курсом. */
   forms?: string;
   paradigm?: Paradigm;
+  group?: VerbGroup;
+  irregular?: true;
   segments: Segment[];
   examples: Example[];
   imageAssetId?: string;

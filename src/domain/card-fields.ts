@@ -22,6 +22,9 @@ export interface Paradigm {
   past: string[];
   third?: true;
 }
+/** Группа настоящего времени: `B1` — тип -άω, `B2` — тип -ώ, `mid` — на -μαι, `other` — вне групп (είμαι). */
+export const VERB_GROUPS = ["A", "B1", "B2", "mid", "other"] as const;
+export type VerbGroup = (typeof VERB_GROUPS)[number];
 export interface Segment {
   text: string;
   ipa: string;

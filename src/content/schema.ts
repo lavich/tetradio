@@ -7,6 +7,7 @@ import type {
   ProvenanceOperation,
   Segment,
   SourceRecord,
+  VerbGroup,
 } from "../domain/card-fields.ts";
 import { LESSON_CARD_KINDS } from "../domain/card-fields.ts";
 import { ContentError } from "./schema-errors.ts";
@@ -96,6 +97,8 @@ export interface PackageWord {
   /** Грамматические формы строкой: «мн. οι δρόμοι», «аор. έγραψα; буд. θα γράψω», три рода прилагательного. */
   forms?: string;
   paradigm?: Paradigm;
+  group?: VerbGroup;
+  irregular?: true;
   segments: Segment[];
   examples: Example[];
   imageAssetId?: string;
@@ -202,6 +205,8 @@ export interface MarkCard {
   russian: string;
   ipa?: string;
   forms?: string;
+  group?: VerbGroup;
+  irregular?: true;
   lesson: string;
 }
 /** Вхождений в уроке сотни, поэтому каждое — `[начало, длина, номер в refs, first 0|1]`; чьё слово, видно по `items`. */

@@ -1,6 +1,6 @@
 /** Спряжение греческого глагола правилами; где правила не уверены — `null`, и таблица задаётся в карточке. */
 import { stripAccent } from "../../src/domain/language.ts";
-import type { Paradigm } from "../../src/domain/types.ts";
+import type { Paradigm, VerbGroup } from "../../src/domain/types.ts";
 
 const VOWELS = "αεηιουω";
 const ACUTE = "́";
@@ -124,4 +124,24 @@ export function conjugate(word: string, forms: string): Paradigm | null {
   const now = present(word.normalize("NFC"));
   const then = past(first, future);
   return now && then ? { present: now, past: then } : null;
+}
+
+/** Группа по формам «я», «ты», «мы»; сжатое настоящее (λες, ακούς) и είμαι правилам не поддаются — `null`. */
+export function verbGroup(present: string[]): VerbGroup | null {
+  const [i, you, , we] = present.map((form) => form.normalize("NFC"));
+  if (i.endsWith("μαι") && i !== "είμαι") return "mid";
+  if (you.endsWith("άς")) return "B1";
+  if ((you.endsWith("είς") || you.endsWith("εις")) && we.endsWith("ούμε")) return "B2";
+  if (i.endsWith("ω") && you.endsWith("εις") && we.endsWith("ουμε")) return "A";
+  return null;
+}
+
+/** Только окончание первой формы прошедшего: смену основы при правильном окончании (έδωσα) правило не видит. */
+export function irregularPast(headword: string, past: string): boolean {
+  const form = flat(past).toLowerCase();
+  const word = flat(headword).toLowerCase();
+  if (word.endsWith("μαι")) return !/(?:θηκα|τηκα)$/u.test(form);
+  if (/(?:σα|ξα|ψα)$/u.test(form)) return false;
+  const stem = word.replace(/(?:αω|ω)$/u, "");
+  return form !== `${stem}α` && form !== `ε${stem}α`;
 }
