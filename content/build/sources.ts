@@ -67,6 +67,7 @@ export interface CourseSource {
   short?: unknown;
   palette?: unknown;
   order?: unknown;
+  hidden?: unknown;
 }
 /** Текст для беглого чтения: `readings/<курс>/<id>.yaml`; открывается после урока `after`. */
 export interface ReadingSource {
@@ -333,6 +334,7 @@ const COURSE_FIELDS = {
   short: true,
   palette: true,
   order: true,
+  hidden: true,
 } satisfies Record<keyof CourseSource, true>;
 
 const USER_OWNED =

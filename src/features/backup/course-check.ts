@@ -31,23 +31,23 @@ function blockRowProblem(row: unknown): string | null {
   return null;
 }
 
-/** Уроки, о которых знает эта установка: каталог и модули программы — кеш, его может ещё не быть. */
-async function installedCourse(database: AppDatabase): Promise<Set<string>> {
+/** Уроки и курсы, о которых знает эта установка: каталог и модули программы — кеш, его может ещё не быть. */
+async function installedCourse(database: AppDatabase): Promise<{ lessons: Set<string>; courses: Set<string> }> {
   try {
-    const [catalog, modules] = await Promise.all([
-      database.catalog.toCollection().primaryKeys(),
-      database.modules.toArray(),
-    ]);
-    return new Set([
-      ...catalog.map(String),
-      ...modules.flatMap((module) => [
-        ...module.lessonIds,
-        ...(module.reviewIds ?? []),
-        ...(module.checkpointId ? [module.checkpointId] : []),
+    const [catalog, modules] = await Promise.all([database.catalog.toArray(), database.modules.toArray()]);
+    return {
+      lessons: new Set([
+        ...catalog.map((entry) => entry.id),
+        ...modules.flatMap((module) => [
+          ...module.lessonIds,
+          ...(module.reviewIds ?? []),
+          ...(module.checkpointId ? [module.checkpointId] : []),
+        ]),
       ]),
-    ]);
+      courses: new Set(catalog.map((entry) => entry.courseId)),
+    };
   } catch {
-    return new Set();
+    return { lessons: new Set(), courses: new Set() };
   }
 }
 
@@ -85,10 +85,19 @@ export async function courseProblem(rows: CourseRows, database: AppDatabase): Pr
   );
   if (!contentLessons.length && !orphanBlocks.length) return null;
   const installed = await installedCourse(database);
+  // Курс с уроками в копии, которого нет в каталоге (скрытый флагом `hidden`), своих уроков каталогу не предъявляет, а блоки без урока в копии могут быть его.
+  const started = new Set(rows.lessons.filter(record).map((lesson) => String(lesson.courseId)));
+  const outside = [...contentCourses].filter(
+    (id) => started.has(id) && installed.courses.size && !installed.courses.has(id),
+  );
   // Без каталога строку урока проверить не с чем: она пришла с пакетом, который могли удалить.
-  const strange = installed.size ? contentLessons.find((lesson) => !installed.has(String(lesson.id))) : undefined;
+  const strange = installed.lessons.size
+    ? contentLessons.find(
+        (lesson) => !installed.lessons.has(String(lesson.id)) && !outside.includes(String(lesson.courseId)),
+      )
+    : undefined;
   if (strange) return `Копия ссылается на урок курса ${String(strange.id)}, которого нет в каталоге.`;
-  const orphan = orphanBlocks.find((row) => !installed.has(String(row.lessonId)));
+  const orphan = outside.length ? undefined : orphanBlocks.find((row) => !installed.lessons.has(String(row.lessonId)));
   if (orphan)
     return `Копия ссылается на урок ${String(orphan.lessonId)}, которого нет ни в копии, ни в каталоге курса. Если каталог ещё не загружен, откройте «Курс» и повторите.`;
   return null;

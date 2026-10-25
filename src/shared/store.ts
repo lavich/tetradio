@@ -14,6 +14,7 @@ import type { ContentPackage } from "../content/schema";
 import { deviceTimezone, studyDay } from "../domain/learning";
 import { progress } from "../domain/stats";
 import { defaultSettings } from "../domain/types";
+import { courses } from "../storage/courses";
 import { db } from "../storage/db";
 import { dexieSource, loadSettings } from "../storage/queries";
 import { languagePlan } from "../storage/today";
@@ -27,8 +28,12 @@ export function useSettings() {
   const settings = useLiveQuery(() => loadSettings(), []);
   return { settings: settings ?? defaultSettings, ready: !!settings };
 }
-/** «Сегодня» нужно только знать, есть ли уроки: счётчик пакетов вместо чтения уроков. */
-export const useInstalledCount = () => useLiveQuery(() => db.packages.count(), []);
+/** «Сегодня» нужно знать, есть ли установленные видимые курсы; пакеты скрытого курса стартовый экран не отменяют. */
+export const useInstalledCount = () =>
+  useLiveQuery(async () => {
+    const [packages, catalog] = await Promise.all([db.packages.count(), db.catalog.count()]);
+    return packages && catalog ? (await courses()).filter((course) => course.installed).length : packages;
+  }, []);
 /** `undefined` — ещё читается, `null` — урока нет локально. */
 export const useWord = (id: string | undefined) => useLiveQuery(() => (id ? db.words.get(id) : undefined), [id]);
 export const usePhrase = (id: string | undefined) =>

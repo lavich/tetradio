@@ -7,8 +7,8 @@ declare module "vitest" {
   }
 }
 
-/** Медиа в воркеры не передаётся: тестам нужны только тексты. */
+/** Тесты проверяют контент целиком, в том числе скрытые курсы. Медиа в воркеры не передаётся: нужны только тексты. */
 export default function setup(project: TestProject) {
-  const built = buildContent("content");
+  const built = buildContent("content", { shipHidden: true });
   project.provide("realContent", { ...built, files: built.files.filter((file) => typeof file.body === "string") });
 }

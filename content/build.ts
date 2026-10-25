@@ -15,6 +15,7 @@ import { VERB_GROUPS } from "../src/domain/card-fields.ts";
 import { buildCards } from "./build/cards.ts";
 import { checkBudgets } from "./build/budgets.ts";
 import { buildCourses } from "./build/courses.ts";
+import { withoutHidden } from "./build/hidden.ts";
 import { buildLessons, checkCoverage, type VoicingReport } from "./build/lessons.ts";
 import { markCourses, type MarksReport } from "./build/mark-courses.ts";
 import { buildReadings, type ReadingReport } from "./build/readings.ts";
@@ -53,6 +54,10 @@ export interface BuiltContent {
   voicing: VoicingReport;
   cardVoicing: CardVoicing;
   readings: ReadingReport[];
+  /** Курсы с `hidden: true`: проверены сборкой, но каталог и файлы их не содержат. */
+  hidden: string[];
+  /** Полный каталог и файлы, как были бы без `hidden`: по ним считаются бюджеты. */
+  checked: { catalog: Catalog; files: BuiltFile[] };
   /** Опубликованные модули курса с полкой, где текстов для чтения меньше двух. */
   sparseReadings: string[];
   /** Вопросы к текстам с непройденными словами: «урок: задание.вопрос: слова». */
@@ -69,7 +74,10 @@ export interface BuiltContent {
  * а без него — имя файла: прогресс пользователя не зависит от переименования файлов.
  * Генератор собирает каталог, неизменяемые пакеты уроков и медиа; клиент исходники не читает.
  */
-export function buildContent(root = defaultRoot()): BuiltContent {
+export function buildContent(
+  root = defaultRoot(),
+  { shipHidden = false }: { shipHidden?: boolean } = {},
+): BuiltContent {
   const sources = readSources(root);
   checkSources(sources);
   // Письменность карточки проверяется по языку курса её папки, поэтому курсы разбираются до карточек.
@@ -81,6 +89,7 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     checkpoints,
     reviews,
     partial,
+    hidden,
     languages,
     moduleLanguages,
     courseLanguages,
@@ -117,22 +126,36 @@ export function buildContent(root = defaultRoot()): BuiltContent {
     partial,
   });
   for (const { item, body } of media.values()) files.push({ path: item.url, body, mimeType: item.mimeType });
-  const catalog: Catalog = {
-    schemaVersion: SCHEMA_VERSION,
-    generatedAt: new Date().toISOString(),
-    courses,
-    lessons: entries,
-    ...(modules.length ? { modules } : {}),
-  };
-  const catalogBody = JSON.stringify(catalog);
-  parseCatalog(JSON.parse(catalogBody));
-  files.push({ path: "content/catalog.json", body: catalogBody, mimeType: "application/json" });
-  return {
-    catalog,
+  const whole = {
+    catalog: {
+      schemaVersion: SCHEMA_VERSION,
+      generatedAt: new Date().toISOString(),
+      courses,
+      lessons: entries,
+      ...(modules.length ? { modules } : {}),
+    } satisfies Catalog,
     packages,
     files,
     words: [...words.values()],
     phrases: [...phrases.values()],
+  };
+  const withCatalog = (catalog: Catalog, list: BuiltFile[]) => {
+    const body = JSON.stringify(catalog);
+    parseCatalog(JSON.parse(body));
+    return [...list, { path: "content/catalog.json", body, mimeType: "application/json" }];
+  };
+  const checked = { catalog: whole.catalog, files: withCatalog(whole.catalog, files) };
+  const hide = hidden.size > 0 && !shipHidden;
+  const shipped = hide ? withoutHidden(whole, hidden, sources) : whole;
+  const delivered = hide ? withCatalog(shipped.catalog, shipped.files) : checked.files;
+  return {
+    catalog: shipped.catalog,
+    packages: shipped.packages,
+    files: delivered,
+    words: shipped.words,
+    phrases: shipped.phrases,
+    hidden: [...hidden],
+    checked,
     sources,
     art,
     marks: marks.report,
@@ -155,8 +178,8 @@ export const wordsOf = (content: BuiltContent, lessonId: string) => {
 export const defaultRoot = () => dirname(fileURLToPath(import.meta.url));
 
 /** Папка очищается целиком: она не хранится в репозитории и собирается перед каждой сборкой. */
-export function writeContent(publicDir = "public", root = defaultRoot()) {
-  const content = buildContent(root);
+export function writeContent(publicDir = "public", root = defaultRoot(), options: { shipHidden?: boolean } = {}) {
+  const content = buildContent(root, options);
   rmSync(join(publicDir, "content"), { recursive: true, force: true });
   for (const file of content.files) {
     const target = join(publicDir, file.path);
@@ -168,14 +191,22 @@ export function writeContent(publicDir = "public", root = defaultRoot()) {
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   // `CONTENT_ROOT` подменяет исходники для локального просмотра фикстуры; продукт — только из content/.
-  const built = writeContent("public", process.env.CONTENT_ROOT || defaultRoot());
+  // `CONTENT_SHIP_HIDDEN=1` кладёт скрытые курсы в локальную сборку для просмотра автором.
+  const built = writeContent("public", process.env.CONTENT_ROOT || defaultRoot(), {
+    shipHidden: process.env.CONTENT_SHIP_HIDDEN === "1",
+  });
   console.log(
     `Контент: ${built.packages.length} пакетов, ${built.words.length} слов, ${built.phrases.length} фраз, ${built.files.length} файлов → public/content`,
   );
   const budgets = checkBudgets(built.files, built.catalog);
   console.log(budgets.summary);
-  if (budgets.violations.length) {
-    console.error(`Бюджеты контента нарушены:\n- ${budgets.violations.join("\n- ")}`);
+  if (built.hidden.length) console.log(`Скрыты флагом hidden (проверены, не поставляются): ${built.hidden.join(", ")}`);
+  // Пределы держит и скрытый курс: иначе возврат курса сломал бы сборку.
+  const violations = built.hidden.length
+    ? checkBudgets(built.checked.files, built.checked.catalog).violations
+    : budgets.violations;
+  if (violations.length) {
+    console.error(`Бюджеты контента нарушены:\n- ${violations.join("\n- ")}`);
     process.exit(1);
   }
   console.log(`Иллюстрации: ${built.art.files}, вне палитры (art/${LEGACY_FILE}): ${built.art.legacy}`);
@@ -200,7 +231,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
         : ""),
   );
   const cards = built.cardVoicing;
-  const silentCards = built.words.length + built.phrases.length - cards.voiced;
+  const silentCards = built.sources.words.size + built.sources.phrases.size - cards.voiced;
   console.log(
     `Слова и фразы: с записью ${cards.voiced}` +
       (silentCards

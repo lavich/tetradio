@@ -10,6 +10,8 @@ import { previewPackage, refreshCatalog, wordFromPackage, type PackagePreview } 
 import { shortTitle } from "../../shared/format";
 import { AssetSourceContext, packageAssetSource, useCatalogPhase, useWordLesson } from "../../shared/store";
 import { db } from "../../storage/db";
+import { courseOfCards, courses } from "../../storage/courses";
+import { wordKeyOf } from "../../domain/refs";
 import { ProfileContext, useLessonProfile } from "../../shared/language";
 import { ExampleBox, ReadingNotes, WordSummary } from "./WordCardView";
 import ui from "../../shared/ui.module.css";
@@ -24,7 +26,14 @@ type Preview =
  */
 export function SharedWordScreen() {
   const { id = "" } = useParams();
-  const local = useLiveQuery(async () => (await db.words.get(id)) ?? null, [id]);
+  const local = useLiveQuery(async () => {
+    const word = await db.words.get(id);
+    if (!word) return null;
+    const [owner, list] = await Promise.all([courseOfCards([wordKeyOf(id)]), courses()]);
+    return !list.length || !owner.size || list.some((course) => course.id === owner.get(wordKeyOf(id)))
+      ? word
+      : "hidden";
+  }, [id]);
   const lesson = useWordLesson(id);
   const catalogSize = useLiveQuery(() => db.catalog.count(), []);
   const phase = useCatalogPhase();
@@ -54,6 +63,7 @@ export function SharedWordScreen() {
   const ready = preview.status === "ready" && preview.preview.entry.id === lessonId ? preview.preview : null;
   const source = useMemo(() => (ready ? packageAssetSource(ready.pack) : null), [ready?.pack]);
 
+  if (local === "hidden") return <Navigate to="/" replace />;
   if (local) return <Navigate to={`/words/${encodeURIComponent(id)}`} replace />;
   const loading = (
     <Screen back="Слово">
