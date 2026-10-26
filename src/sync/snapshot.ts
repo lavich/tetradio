@@ -345,7 +345,7 @@ export interface SnapshotDescription {
   blocks: number;
 }
 export const describeSnapshot = (snapshot: CompactSnapshot): SnapshotDescription => ({
-  // В выборе версии «карточки» — слова и фразы; ошибки уроков рождаются из заданий и сюда не входят.
+  // В выборе версии «карточки» — слова и фразы; состояния ошибок уроков от прежних версий сюда не входят.
   cards: snapshot.states.filter((state) => isForeign(state.ref) || state.ref.kind !== "mistake").length,
   answers: snapshot.stats.answers,
   lessons: snapshot.lessons.length,

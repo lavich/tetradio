@@ -39,7 +39,7 @@ export interface Segment {
  */
 export type CardKind = LessonCardKind | "mistake";
 export const CARD_KINDS: readonly CardKind[] = ["word", "phrase", "mistake"];
-/** Виды карточек, которые поставляет контент урока; ошибки урока рождаются из ответов учащегося. */
+/** Виды карточек, которые поставляет контент урока. */
 export type LessonCardKind = "word" | "phrase";
 export const LESSON_CARD_KINDS: readonly LessonCardKind[] = ["word", "phrase"];
 /** Происхождение подготовленного агентом материала; `request` обязателен для запрошенных преобразования и генерации. */

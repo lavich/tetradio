@@ -1,5 +1,5 @@
 // Кэш сводок: живые запросы курса перезапускаются на каждом ответе, а пакеты весят мегабайты.
-import type { ExerciseBlock, LessonBlock, LessonKind } from "../content/course";
+import type { LessonKind } from "../content/course";
 import { taskIds } from "../domain/course";
 import { skillTasks, type SkillTask } from "../domain/progress";
 import type { InstalledPackage } from "../domain/types";
@@ -12,24 +12,16 @@ export interface LessonOutline {
   course: boolean;
   tasks: string[];
   skills: SkillTask[];
-  mistakes: Set<string>;
   module?: { id: string; position: number };
   readings: string[];
   media: string[];
 }
-
-/** Задания к чтению и аудированию без текста не решить: их пункты в повторение не идут. */
-export const reviewable = (block: LessonBlock): block is ExerciseBlock => block.type === "exercise" && !block.about;
-export const mistakeId = (lessonId: string, blockId: string, itemId: string) => `${lessonId}/${blockId}/${itemId}`;
-export const mistakeIdsOf = (lessonId: string, blocks: LessonBlock[] = []) =>
-  blocks.filter(reviewable).flatMap((block) => block.items.map((item) => mistakeId(lessonId, block.id, item.id)));
 
 const outlineOf = (pack: InstalledPackage): LessonOutline => ({
   kind: pack.kind,
   course: !!pack.blocks,
   tasks: taskIds(pack.blocks ?? []),
   skills: skillTasks(pack.blocks ?? []),
-  mistakes: new Set(mistakeIdsOf(pack.lessonId, pack.blocks)),
   module: pack.module,
   readings: (pack.readings ?? []).map((reading) => reading.id),
   media: pack.media.map((item) => item.id),

@@ -38,7 +38,6 @@ const render = async (updatedAt: string) => {
         pages={[]}
         numbering={new Map()}
         items={[]}
-        mistakes={0}
         next={null}
         reading={null}
         withList={false}

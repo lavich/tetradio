@@ -269,8 +269,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await page.getByRole("button", { name: "К итогу" }).click();
   await expect(page.getByRole("heading", { name: "Урок пройден" })).toBeVisible();
   await expect(page.getByRole("list", { name: "Задания урока" }).getByRole("listitem")).toHaveCount(5);
-  // Ошибка в «Формах είμαι» ушла в повторение; ошибки в заданиях к текстам — нет.
-  await expect(page.getByTestId("lesson-mistakes")).toHaveText("Ошибки урока в повторении: 1");
+  await expect(page.getByText("Ошибки урока в повторении")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Следующий урок/ }).first()).toBeVisible();
   const lessonUrl = page.url();
   await page.getByRole("button", { name: "К модулю" }).click();

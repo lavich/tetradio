@@ -31,7 +31,7 @@ const phrase = (index: number, over: Partial<Phrase> = {}): Phrase => ({
   updatedAt: iso,
   ...over,
 });
-const dueState = (kind: "word" | "phrase", id: string): LearningState => ({
+const dueState = (kind: "word" | "phrase" | "mistake", id: string): LearningState => ({
   unitKey: unitKey({ kind, id }),
   ref: { kind, id },
   card: { ...createEmptyCard(new Date("2026-09-01")), due: new Date("2026-09-14T08:00:00Z"), state: State.Review },
@@ -90,18 +90,36 @@ describe("повторения, которые нельзя спросить", (
     expect((await db.cardStates.get(unitKey({ kind: "phrase", id: "p1" })))?.version).toBe(1);
   });
 
-  it("карточка исчезающего вида без содержимого не входит в план, её состояние остаётся", async () => {
-    const spec = KINDS.phrase;
-    spec.vanishes = true;
-    try {
-      await db.phrases.add(phrase(2));
-      await db.cardStates.bulkAdd([dueState("phrase", "p1"), dueState("phrase", "p2")]);
-      const plan = await makePlan(dexieSource(db), now);
-      expect(plan.reviews.map((review) => review.ref.id)).toEqual(["p2"]);
-      expect(plan.unavailable).toEqual([]);
-      expect(await db.cardStates.get(unitKey({ kind: "phrase", id: "p1" }))).toBeDefined();
-    } finally {
-      delete spec.vanishes;
-    }
+  it("состояния игнорируемого вида не входят в план, занятие и счётчики, но остаются в базе", async () => {
+    await db.phrases.add(phrase(2));
+    await db.cardStates.bulkAdd([
+      dueState("phrase", "p2"),
+      dueState("mistake", "l/b/q1"),
+      dueState("mistake", "l/b/q2"),
+    ]);
+    const source = dexieSource(db);
+    const plan = await makePlan(source, now);
+    expect(plan.reviews.map((review) => review.ref.id)).toEqual(["p2"]);
+    expect(plan.unavailable).toEqual([]);
+    const session = await makeSession({ source, now, random: () => 0.5 });
+    expect(session.items.map((item) => item.ref.kind)).toEqual(["phrase"]);
+    const until = new Date("2026-09-15T00:00:00Z");
+    expect((await source.dueStates(until)).map((state) => state.ref.id)).toEqual(["p2"]);
+    expect(await source.dueKeysBefore(until)).toEqual([unitKey({ kind: "phrase", id: "p2" })]);
+    const seen: string[] = [];
+    await source.eachState((state) => seen.push(state.ref.id));
+    expect(seen).toEqual(["p2"]);
+    expect(await source.cardCount()).toBe(1);
+    expect(await db.cardStates.get(unitKey({ kind: "mistake", id: "l/b/q1" }))).toBeDefined();
+  });
+
+  it("занятие по выбранным ссылкам не берёт ошибки урока", async () => {
+    await db.cardStates.add(dueState("mistake", "l/b/q1"));
+    const session = await makeSession({
+      source: dexieSource(db),
+      now,
+      refs: [{ kind: "mistake", id: "l/b/q1" }],
+    });
+    expect(session.items).toEqual([]);
   });
 });
