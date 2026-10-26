@@ -15,7 +15,7 @@
 - [x] 3.1.1 Проверка: job `worker` зелёный на PR.
 - [x] 3.2 Job `worker` в `.github/workflows/deploy.yml`: условие как у `build`, `workflow_dispatch` только с `main`; `checkout` с `ref` проверенного коммита; Environment `cloudflare`; секреты только в `env` шага выкатки; без токена — пропуск шагов через `HAS_CF` и предупреждение в Actions; `WRANGLER_SEND_METRICS=false`. Проверка: `actionlint` по обоим workflow без замечаний.
 - [x] 3.2.1 Владелец: окружение `cloudflare` с правилом ветки `main`, секреты Cloudflare перенесены в него и удалены из секретов репозитория. Проверка: `gh secret list` не показывает `CLOUDFLARE_*`, `gh secret list --env cloudflare` показывает оба.
-- [ ] 3.2.2 Проверка: после мержа job `worker` в Actions зелёный, Worker выкачен, выкатка сайта не изменилась.
+- [x] 3.2.2 Проверка: после мержа job `worker` в Actions зелёный, Worker выкачен, выкатка сайта не изменилась.
 
 ## 4. Документация и проверка
 
