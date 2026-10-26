@@ -18,6 +18,17 @@ updates:
       prefix-development: build
       include: scope
 
+  - package-ecosystem: npm
+    directory: /bot
+    schedule:
+      interval: monthly
+    groups:
+      bot:
+        patterns: ["*"]
+    commit-message:
+      prefix: build
+      include: scope
+
   - package-ecosystem: github-actions
     directory: /
     schedule:

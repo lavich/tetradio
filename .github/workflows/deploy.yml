@@ -54,6 +54,40 @@ jobs:
         with:
           path: dist
 
+  worker:
+    # Ручной запуск с другой ветки выкатил бы бота из невлитого кода с секретами окружения.
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: cloudflare
+    env:
+      # `secrets` в `if:` задачи ломает разбор всего workflow, а с ним и выкатку сайта.
+      HAS_CF: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    steps:
+      - if: env.HAS_CF != 'true'
+        run: echo '::notice::Нет CLOUDFLARE_API_TOKEN в окружении cloudflare, Worker бота не выкачен.'
+      - if: env.HAS_CF == 'true'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - if: env.HAS_CF == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: bot/package-lock.json
+      - if: env.HAS_CF == 'true'
+        run: npm ci --prefix bot
+      # Токен Cloudflare — только этому шагу: install-скрипты зависимостей его не видят.
+      - if: env.HAS_CF == 'true'
+        run: npx --prefix bot wrangler deploy --config bot/wrangler.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: "false"
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
