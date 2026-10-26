@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createHmac } from "node:crypto";
-import worker, { GREETING, UNREAD, feedbackForm, respond } from "../bot/worker";
+import worker, { GREETING, UNREAD, feedbackForm, forgetRoute, respond } from "../bot/worker";
 import { FAILED, INVITE } from "../bot/texts";
 import type { Update } from "../bot/feedback";
 import { sqlite } from "./helpers/sqlite-d1";
@@ -295,6 +295,37 @@ describe("форма приложения: /feedback", () => {
     };
     const response = await worker.fetch(request(form()), broken as unknown as Parameters<typeof worker.fetch>[1]);
     expect(response.status).toBe(502);
+  });
+
+  it("/forget: верная подпись — тема удалена, 200; чужой адрес — 403; неверная подпись — 401", async () => {
+    const forgetRequest = (body: unknown, origin = ORIGIN) =>
+      new Request("https://bot.example.workers.dev/forget", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain", Origin: origin },
+        body: JSON.stringify(body),
+      });
+    const configuredEnv = formEnv();
+    const bot = telegram();
+    await feedbackForm(request(form()), configuredEnv, bot.fetcher);
+    bot.calls.length = 0;
+    const ok = await forgetRoute(forgetRequest({ initData: signed() }), configuredEnv, bot.fetcher);
+    expect(ok.status).toBe(200);
+    expect(bot.calls.map((call) => call.split(" ")[0])).toEqual(["deleteForumTopic"]);
+    expect(
+      (await forgetRoute(forgetRequest({ initData: signed() }, "https://evil.example"), configuredEnv, bot.fetcher))
+        .status,
+    ).toBe(403);
+    const forged = signed().replace(/hash=[0-9a-f]+/, `hash=${"0".repeat(64)}`);
+    expect((await forgetRoute(forgetRequest({ initData: forged }), configuredEnv, bot.fetcher)).status).toBe(401);
+    expect((await forgetRoute(forgetRequest({}), configuredEnv, bot.fetcher)).status).toBe(400);
+  });
+
+  it("worker.fetch ведёт /forget в обработчик удаления", async () => {
+    const response = await worker.fetch(
+      new Request("https://bot.example.workers.dev/forget", { method: "OPTIONS", headers: { Origin: ORIGIN } }),
+      formEnv(),
+    );
+    expect(response.status).toBe(204);
   });
 
   it("вебхук на / по-прежнему требует секрет", async () => {

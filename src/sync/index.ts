@@ -8,7 +8,7 @@ import { currentProfile } from "../storage/profile";
 import { storageHealer } from "../storage/recovery";
 import { kvAdapter, loadCompression } from "./adapter";
 import { afterFirstExchange } from "./warm";
-import { SyncCoordinator, webLock, type SyncStatus } from "./coordinator";
+import { SyncCoordinator, webLock, type SyncStatus, webLockWait } from "./coordinator";
 import { cloudStorageTransport, disabledTransport } from "./transport";
 
 /** Отказ IndexedDB после сна WebView лечится переоткрытием базы; вылеченный отказ даёт только крошку, не отчёт. */
@@ -22,6 +22,7 @@ export const sync = new SyncCoordinator({
   adapter: kvAdapter(disabledTransport()),
   label: launchContext().platform ?? "",
   lock: webLock(`tetradio-sync-${db.name}`),
+  exclusive: webLockWait(`tetradio-sync-${db.name}`),
   recover: heal,
 });
 sync.onMissingPackages = (ids) => {
@@ -52,3 +53,8 @@ export function connectSync(app: TelegramWebApp | null) {
   sync.start();
 }
 export const useSyncStatus = (): SyncStatus => useSyncExternalStore(sync.subscribe, sync.getStatus, sync.getStatus);
+
+// Удаление данных берёт эти части отсюда: прямой импорт вынес бы координатор в отдельный чанк первого экрана.
+export { removeAllKeys } from "./adapter";
+export { LockTimeout } from "./coordinator";
+export { cloudStorageTransport, SyncError, type KeyValueTransport } from "./transport";

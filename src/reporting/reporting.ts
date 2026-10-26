@@ -1,3 +1,4 @@
+import { deleteDatabase } from "../storage/delete-database";
 import { launchContext } from "../platform/launch";
 import { LIFECYCLE_CATEGORY } from "./scrub";
 
@@ -181,6 +182,19 @@ export function setReportingEnabled(enabled: boolean) {
         console.warn("Отчёты об ошибках недоступны", error);
       });
   });
+}
+
+/** Очередь удаляется дождавшись: удаление данных перезапускает приложение сразу после. */
+export async function clearReportQueue(): Promise<void> {
+  state = "off";
+  pending = [];
+  crumbs = [];
+  removeEarly();
+  const current = sdk;
+  sdk = null;
+  generation++;
+  if (current) await current.close().catch(() => undefined);
+  await deleteDatabase(OFFLINE_DB, 5_000);
 }
 
 /** Только для тестов: ранние отчёты и крошки в очереди. */

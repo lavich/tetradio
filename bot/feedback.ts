@@ -232,12 +232,48 @@ const copyTo = (thread: number, message: Message, deps: Deps) =>
     message_id: message.message_id,
   });
 
+export async function forget(userId: number, deps: Deps): Promise<"ok" | "failed"> {
+  try {
+    const row = await deps.store.byUser(userId);
+    if (row?.thread != null) {
+      try {
+        await call(deps, "deleteForumTopic", { chat_id: Number(deps.supportChatId), message_thread_id: row.thread });
+      } catch (error) {
+        if (!(error instanceof BotApiError) || !/TOPIC_ID_INVALID|thread not found/i.test(error.message)) throw error;
+      }
+    }
+    await deps.store.forgetUser(userId);
+  } catch {
+    return "failed";
+  }
+  return "ok";
+}
+
+async function inGeneral(message: Message, deps: Deps): Promise<Reply | null> {
+  const reply = (text: string) => say(message.chat.id, text);
+  const [name, argument] = [command(message.text), words(message.text)[1] ?? ""];
+  try {
+    if (name === "/blocked") {
+      const ids = await deps.store.blockedWithoutTopic();
+      return reply(ids.length ? `Заблокированы без темы: ${ids.join(", ")}` : "Заблокированных без темы нет.");
+    }
+    if (name === "/unblock" && /^\d+$/.test(argument))
+      return reply(
+        (await deps.store.unblock(Number(argument))) ? UNBLOCKED : "Нет заблокированного пользователя с таким id.",
+      );
+  } catch {
+    return reply(notDelivered("хранилище связей недоступно"));
+  }
+  return null;
+}
+
 async function fromAuthor(message: Message, deps: Deps): Promise<Reply | null> {
-  const thread = message.message_thread_id;
-  if (!message.is_topic_message || typeof thread !== "number") return null;
   if (isService(message)) return null;
   const anonymous = message.sender_chat?.id === message.chat.id;
   if (message.from?.is_bot && !anonymous) return null;
+  if (!message.is_topic_message) return inGeneral(message, deps);
+  const thread = message.message_thread_id;
+  if (typeof thread !== "number") return null;
   const inThread = (text: string) => say(message.chat.id, text, { message_thread_id: thread });
   let row: Row | null;
   try {

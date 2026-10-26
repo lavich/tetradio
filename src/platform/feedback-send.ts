@@ -36,21 +36,23 @@ export function askWriteAccess(app: TelegramWebApp, timeout = 30_000): Promise<b
 
 export type SendResult = "ok" | "stale" | "rate" | "failed";
 
-export async function sendFeedback(
-  message: { text: string; reportId: string | null; canReply: boolean },
+interface BotRequest {
+  app?: TelegramWebApp | null;
+  launch?: LaunchContext;
+  url?: string | null;
+  fetcher?: typeof fetch;
+  timeout?: number;
+}
+
+async function postToBot(
+  body: (app: TelegramWebApp, launch: LaunchContext) => object,
   {
     app = telegramBridge(),
     launch = launchContext(),
     url = feedbackUrl(),
     fetcher = fetch,
     timeout = 15_000,
-  }: {
-    app?: TelegramWebApp | null;
-    launch?: LaunchContext;
-    url?: string | null;
-    fetcher?: typeof fetch;
-    timeout?: number;
-  } = {},
+  }: BotRequest,
 ): Promise<SendResult> {
   if (!app?.initData || !url) return "failed";
   const controller = new AbortController();
@@ -60,14 +62,7 @@ export async function sendFeedback(
     const response = await fetcher(url, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({
-        initData: app.initData,
-        text: message.text,
-        version: `${APP_VERSION} (${APP_BUILD})`,
-        platform: launch.platform ?? app.platform,
-        reportId: message.reportId,
-        canReply: message.canReply,
-      }),
+      body: JSON.stringify(body(app, launch)),
       signal: controller.signal,
     });
     if (response.ok) return "ok";
@@ -80,3 +75,22 @@ export async function sendFeedback(
     clearTimeout(timer);
   }
 }
+
+export const sendFeedback = (
+  message: { text: string; reportId: string | null; canReply: boolean },
+  request: BotRequest = {},
+) =>
+  postToBot(
+    (app, launch) => ({
+      initData: app.initData,
+      text: message.text,
+      version: `${APP_VERSION} (${APP_BUILD})`,
+      platform: launch.platform ?? app.platform,
+      reportId: message.reportId,
+      canReply: message.canReply,
+    }),
+    request,
+  );
+
+export const forgetMessages = ({ url = feedbackUrl(), ...request }: BotRequest = {}) =>
+  postToBot((app) => ({ initData: app.initData }), { ...request, url: url && new URL("forget", url).href });

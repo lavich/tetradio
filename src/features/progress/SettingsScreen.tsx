@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Screen } from "../../app/Screen";
 import { BackupSection, REPORT_BOUNDARIES } from "../backup/BackupSection";
+import { DeleteData } from "../backup/DeleteData";
 import { useHapticsSetting } from "../../platform/haptics";
 import { launchContext } from "../../platform/launch";
 import { feedbackBot } from "../../platform/feedback";
@@ -70,6 +71,7 @@ export function SettingsScreen() {
 
       <Saving />
       <BackupSection />
+      <DeleteData />
 
       <section aria-labelledby="reports" className={css.section}>
         <h2 id="reports" className={css.heading}>

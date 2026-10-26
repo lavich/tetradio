@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fromForm, handle, type Answer, type Deps, type Form, type Message } from "../bot/feedback";
+import { forget, fromForm, handle, type Answer, type Deps, type Form, type Message } from "../bot/feedback";
 import { emptyRow, type Row, type Store } from "../bot/store";
 import { ACK, BLOCKED, FAILED, GREETING, INVITE, UNBLOCKED, UNKNOWN_COMMAND } from "../bot/texts";
 
@@ -38,6 +38,24 @@ function memoryStore(rows: Row[] = []) {
     setAck: async (userId, ackAt) => write(userId, { ackAt }),
     setFb: async (userId, fb, fbAt) => write(userId, { fb, fbAt }),
     setBlocked: async (userId, blocked) => write(userId, { blocked }),
+    forgetUser: async (userId) => {
+      guard();
+      const current = byId.get(userId);
+      if (current?.blocked) write(userId, { ...emptyRow(userId), blocked: true });
+      else byId.delete(userId);
+    },
+    blockedWithoutTopic: async () => {
+      guard();
+      return [...byId.values()].filter((row) => row.blocked && row.thread === null).map((row) => row.userId);
+    },
+    unblock: async (userId) => {
+      guard();
+      const current = byId.get(userId);
+      if (!current?.blocked) return false;
+      if (current.thread === null) byId.delete(userId);
+      else write(userId, { blocked: false });
+      return true;
+    },
     claimForm: async (userId, now, interval) => {
       guard();
       const formAt = byId.get(userId)?.formAt ?? null;
@@ -486,5 +504,81 @@ describe("сообщение из формы приложения", () => {
     const broken = setup();
     broken.store.fail();
     expect(await fromForm(form(), broken.deps)).toBe("failed");
+  });
+});
+
+describe("удаление переписки", () => {
+  it("тема удалена, строки нет", async () => {
+    const { bot, store, deps } = setup([row()]);
+    expect(await forget(USER, deps)).toBe("ok");
+    expect(bot.calls).toEqual([{ method: "deleteForumTopic", body: { chat_id: GROUP, message_thread_id: 7 } }]);
+    expect(store.rows.get(USER)).toBeUndefined();
+  });
+
+  it("темы нет — ok без Bot API", async () => {
+    const { bot, deps } = setup([row({ thread: null })]);
+    expect(await forget(USER, deps)).toBe("ok");
+    expect(bot.calls).toEqual([]);
+  });
+
+  it("тема уже удалена (TOPIC_ID_INVALID) — ok", async () => {
+    const gone = { ok: false, error_code: 400, description: "Bad Request: TOPIC_ID_INVALID" };
+    const { store, deps } = setup([row()], { deleteForumTopic: [gone] });
+    expect(await forget(USER, deps)).toBe("ok");
+    expect(store.rows.get(USER)).toBeUndefined();
+  });
+
+  it("заблокированный — остаётся только отметка", async () => {
+    const { store, deps } = setup([row({ blocked: true, ackAt: 5 })]);
+    expect(await forget(USER, deps)).toBe("ok");
+    expect(store.rows.get(USER)).toEqual({ ...emptyRow(USER), blocked: true });
+  });
+
+  it("отказ Telegram или хранилища — failed, строка на месте", async () => {
+    const refused = { ok: false, error_code: 400, description: "Bad Request: not enough rights" };
+    const telegramDown = setup([row()], { deleteForumTopic: [refused] });
+    expect(await forget(USER, telegramDown.deps)).toBe("failed");
+    expect(telegramDown.store.rows.get(USER)).toBeDefined();
+    const broken = setup([row()]);
+    broken.store.fail();
+    expect(await forget(USER, broken.deps)).toBe("failed");
+  });
+});
+
+describe("команды в общей теме", () => {
+  const general = (text: string, fields: Record<string, unknown> = {}) =>
+    inTopic({ text, is_topic_message: undefined, message_thread_id: undefined, ...fields });
+
+  it("/blocked — список заблокированных без темы", async () => {
+    const { deps } = setup([row({ blocked: true, thread: null }), { ...emptyRow(77), blocked: true, thread: 9 }]);
+    expect(await handle(general("/blocked"), deps)).toEqual({
+      method: "sendMessage",
+      chat_id: GROUP,
+      text: "Заблокированы без темы: 42",
+    });
+  });
+
+  it("/unblock <id> снимает отметку, неизвестный — ответ", async () => {
+    const { store, deps } = setup([row({ blocked: true, thread: null })]);
+    expect(await handle(general("/unblock 42"), deps)).toMatchObject({ text: UNBLOCKED });
+    expect(store.rows.get(USER)).toBeUndefined();
+    expect(await handle(general("/unblock 999"), deps)).toMatchObject({
+      text: "Нет заблокированного пользователя с таким id.",
+    });
+  });
+
+  it("ответ в общей теме с message_thread_id, но без is_topic_message — тоже общая тема", async () => {
+    const { deps } = setup([row({ blocked: true, thread: null })]);
+    expect(await handle(general("/blocked", { message_thread_id: 1 }), deps)).toMatchObject({
+      text: "Заблокированы без темы: 42",
+    });
+  });
+
+  it("не цифры, обычный текст и другой бот — без ответа", async () => {
+    const { bot, deps } = setup([row({ blocked: true, thread: null })]);
+    expect(await handle(general("/unblock abc"), deps)).toBeNull();
+    expect(await handle(general("привет"), deps)).toBeNull();
+    expect(await handle(general("/blocked", { from: { id: 5, is_bot: true } }), deps)).toBeNull();
+    expect(bot.calls).toEqual([]);
   });
 });
