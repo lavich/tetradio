@@ -69,7 +69,7 @@
 
 ### 5. Мёртвый код
 
-Удаляется в этом же PR (недостижим, обратного хода данных нет): `mistakesOf`; `BlockPatch.mistakes` и запись состояния в `saveBlockProgress`; `lessonMistakes`; `mistakeCount`; `shareReviews`, `reviewShare`, `vanishes`, `vanishedKeys`; `itemExercise` и перемешивание банка; `mistakeItems`, содержимое, `facts` и `coursesOf` в `STORED_KINDS.mistake` (`tables: []`, `count` 0); `mistakeId`, `mistakeIdsOf`, `reviewable`, `LessonOutline.mistakes`; `StoredKind.coursesOf` и `ownCourses` (`SessionSource.coursesOf` — другая вещь, остаётся); блок `rest/own/home` в `dueStatesOf` сводится к домашнему курсу; пропсы `mistakes` у `LessonSummary` и «Прогресса», фильтр `kind !== "mistake"` в `ProgressScreen`.
+Удаляется в этом же PR (недостижим, обратного хода данных нет): `mistakesOf`; `BlockPatch.mistakes` и запись состояния в `saveBlockProgress`; `lessonMistakes`; `mistakeCount`; `shareReviews`, `reviewShare`, `vanishes`, `vanishedKeys`; `itemExercise` и перемешивание банка; `mistakeItems` и `coursesOf`; содержимое и `facts` в `STORED_KINDS.mistake` сведены к заглушкам (`tables: []`, `count` 0); `mistakeId`, `mistakeIdsOf`, `reviewable`, `LessonOutline.mistakes`; `StoredKind.coursesOf` и `ownCourses` (`SessionSource.coursesOf` — другая вещь, остаётся); блок `rest/own/home` в `dueStatesOf` сводится к домашнему курсу; пропсы `mistakes` у `LessonSummary` и «Прогресса», фильтр `kind !== "mistake"` в `ProgressScreen`.
 
 Остаётся: код `e`, вид в `CARD_KINDS` и `KINDS`, `describeSnapshot` (старые устройства шлют `e`), `isMistake` (неверный ответ вообще), тип проверки `item`, страховка из раздела 4. Предложение на следующий релиз: убрать страховку и вариант `SessionCard` после обновления устройств; код `e` и тип `item` не удаляются никогда (`docs/sync.md`).
 
@@ -92,4 +92,13 @@
 
 ## Реализация
 
-(заполняется при реализации: отклонения от дизайна)
+Отклонения от дизайна:
+
+- `dueStates` и `dueStatesOf` отбрасывают ignored-виды в JS после `toArray()`, а не фильтром коллекции Dexie: фильтр по индексу срока замедлил тест на большой базе в девять раз (6 с → 56 с), `toArray` — как прежде. `eachState` остался курсором с проверкой вида, `dueKeysBefore` фильтрует ключи по виду из ключа (`["mistake", …]`).
+- `dropIgnoredItems` объявляет `announceChange("finished")`, если какое-то занятие стало завершённым или закрытым: так же, как `endSession`.
+- Итог занятия: фильтр вида стоит только на ошибочных ответах («Вернутся…», «Повторить ошибки»); полоса и счёт «N из M без ошибок» считают все ответы занятия.
+- - `isPlanned` терпим к виду, которого нет в `KINDS`: история ответов хранит ссылки снятых видов (`tests/migration-v9.test.ts`), их события считаются как прежде.
+- `reviewedOn` и недельные счётчики «Прогресса» отбрасывают ответы ignored-видов (по `event.ref`); так в день обновления ответы на ошибки уроков в занятии прежней версии не считаются повторением ни «Сегодня», ни неделе.
+- Тесты: `tests/mistake-cards.test.ts` переименован в `tests/lesson-mistakes.test.ts` и переписан под новое поведение; добавлены `tests/result-ignored-kind.test.tsx` и проверка в `tests/kinds.test.ts`; e2e `mistakes.spec.ts` стал `lesson-mistakes.spec.ts`.
+
+Замеры (сборка до и после): стартовый граф 597 880 → 594 990 байт (предел 620 000), ленивые чанки первого экрана 35 525 → 35 526 байт (предел 36 000), вес первого экрана 409 664 → 408 695 байт, LCP 3 455 → 3 455 мс (прежнее предупреждение выше 3 с, не от изменения).

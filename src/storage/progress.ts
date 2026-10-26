@@ -1,4 +1,5 @@
 import type { CourseCalendar } from "../content/course";
+import { isPlanned } from "../domain/kinds";
 import { mondayOf, studyDay } from "../domain/learning";
 import { coursePace, skillProgress, type Pace, type SkillProgress } from "../domain/progress";
 import type { BlockProgress } from "../domain/types";
@@ -116,7 +117,7 @@ const courseData = zoned(async function courseData(
   );
   const next = views.find((view) => lessonsOf(view).some((lesson) => !lesson.completed));
   const events = await database.events.where("localDate").between(monday, today, true, true).toArray();
-  const planned = events.filter((event) => event.mode !== "practice");
+  const planned = events.filter((event) => event.mode !== "practice" && isPlanned(event.ref));
   const own = courseId
     ? await cardsInCourse([...new Set(planned.map((event) => event.unitKey))], courseId, database)
     : undefined;

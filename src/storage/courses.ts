@@ -5,17 +5,9 @@
 import Dexie from "dexie";
 import { DEFAULT_PALETTE, isPalette, type PaletteName } from "../content/palettes";
 import { DEFAULT_LANGUAGE, isLanguage, profileOf, type Language, type LanguageProfile } from "../domain/language";
-import { tryParseUnitKey, unitKey } from "../domain/refs";
-import {
-  CARD_KINDS,
-  type CardKind,
-  type LearningRef,
-  type Lesson,
-  type LessonItem,
-  type Session,
-} from "../domain/types";
+import { unitKey } from "../domain/refs";
+import { type CardKind, type LearningRef, type Lesson, type LessonItem, type Session } from "../domain/types";
 import { db, distinctKeys, type AppDatabase } from "./db";
-import { STORED_KINDS } from "./kinds";
 import { lessonCourses } from "./lesson-courses";
 import { zoned } from "./zone";
 import { readPending } from "./pending";
@@ -377,7 +369,7 @@ export const courseOfCards = zoned(async function courseOfCards(
   database: AppDatabase = db,
 ): Promise<Map<string, string>> {
   if (!unitKeys.length) return new Map();
-  const result = await ownCourses(unitKeys, database);
+  const result = new Map<string, string>();
   const items = await database.lessonItems.where("unitKey").anyOf(unitKeys).toArray();
   const byLesson = await lessonCourses(
     items.map((item) => item.lessonId),
@@ -389,24 +381,6 @@ export const courseOfCards = zoned(async function courseOfCards(
   }
   return result;
 });
-/** Курс карточек видов, которые знают его сами, без связей с уроками. */
-const ownCourses = zoned(async function ownCourses(
-  unitKeys: string[],
-  database: AppDatabase,
-): Promise<Map<string, string>> {
-  const result = new Map<string, string>();
-  const kinds = CARD_KINDS.filter((kind) => STORED_KINDS[kind].coursesOf);
-  if (!kinds.length) return result;
-  const refs = unitKeys.map(tryParseUnitKey);
-  for (const kind of kinds) {
-    const coursesOf = STORED_KINDS[kind].coursesOf!;
-    const ids = refs.flatMap((ref) => (ref?.kind === kind ? [ref.id] : []));
-    if (!ids.length) continue;
-    for (const [id, course] of await coursesOf(ids, database)) result.set(unitKey({ kind, id }), course);
-  }
-  return result;
-});
-
 /** Курс карточек; карточка вне уроков (связь снята обновлением) — у домашнего курса: так её повторение не теряется. */
 export const cardCourses = zoned(async function cardCourses(
   unitKeys: string[],

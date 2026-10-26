@@ -1,7 +1,7 @@
 import { DEFAULT_LANGUAGE, PROFILES, voiceFor, type Language, type Voices } from "./language";
 import { emptySkills, type SkillSummary } from "./skills";
 import { exerciseFor } from "./card-exercise";
-import { KINDS } from "./kinds";
+import { isPlanned } from "./kinds";
 import { closeSources, NO_WORDS, shuffle } from "./options";
 import { makeLanguagePlan, makePlan, originsOf, type PlanSource, type WordOrigin } from "./plan";
 import { studyDay } from "./time";
@@ -60,7 +60,7 @@ export async function makeSession({
   if (refs) {
     // Выбранным карточкам план не нужен: только источники новых, а состояния со сроком не читаются.
     const live = await source.liveKeys(refs);
-    const kept = refs.filter((ref) => live.has(unitKey(ref)));
+    const kept = refs.filter((ref) => isPlanned(ref) && live.has(unitKey(ref)));
     const states = await source.statesOf(kept);
     chosen = kept.map((ref) => ({ ref, isNew: !states.has(unitKey(ref)) }));
     origins = await originsOf(
@@ -76,7 +76,7 @@ export async function makeSession({
     // Пока есть долг паузы, новые карточки занимают только места, оставшиеся после повторений.
     const reserve = plan.pauseDebt ? 0 : Math.ceil(size / 2);
     const newOnes = plan.newRefs.slice(0, reserve);
-    const reviews = shareReviews(plan.reviews, Math.max(size - newOnes.length, plan.reviews.length ? 1 : 0));
+    const reviews = plan.reviews.slice(0, Math.max(size - newOnes.length, plan.reviews.length ? 1 : 0));
     const extraNew = plan.newRefs.slice(
       newOnes.length,
       Math.min(plan.newRefs.length, newOnes.length + Math.max(0, size - newOnes.length - reviews.length)),
@@ -175,30 +175,6 @@ export async function makeSession({
     ...(first ? { courseId: first } : {}),
     ...(sessionLanguage ? { language: sessionLanguage } : {}),
   };
-}
-
-/**
- * Места повторений: вид с долей (`reviewShare`) занимает не больше неё, пока есть повторения других видов;
- * без них свободные места снова отдаются ему. Отложенные карточки вида идут в конец: занятие всё равно перемешивается.
- */
-export function shareReviews<T extends { ref: LearningRef }>(reviews: T[], slots: number): T[] {
-  const caps = new Map<string, number>();
-  const taken: T[] = [];
-  const deferred: T[] = [];
-  for (const review of reviews) {
-    if (taken.length >= slots) break;
-    const share = KINDS[review.ref.kind].reviewShare;
-    if (share === undefined) {
-      taken.push(review);
-      continue;
-    }
-    const used = caps.get(review.ref.kind) ?? 0;
-    if (used < Math.floor(slots * share)) {
-      caps.set(review.ref.kind, used + 1);
-      taken.push(review);
-    } else deferred.push(review);
-  }
-  return [...taken, ...deferred].slice(0, slots);
 }
 
 export function spaceSingleIntroduction(items: SessionItem[]): SessionItem[] {

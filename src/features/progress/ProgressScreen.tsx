@@ -19,7 +19,6 @@ import { cardsInCourse, currentLanguage, primaryCourse } from "../../storage/cou
 import { courseProgress, languageProgress, type CourseProgress, type LanguageProgress } from "../../storage/progress";
 import { useStats } from "../../shared/store";
 import { languageDictionary, type DictionaryLesson } from "../../storage/dictionary";
-import { mistakeCount } from "../../storage/queries";
 import { entryPath } from "../words/WordsScreen";
 import { SyncLine } from "./SyncLine";
 import css from "./progress.module.css";
@@ -41,15 +40,13 @@ export function ProgressScreen() {
       progress,
       alone: started.length ? undefined : await courseProgress(now, deviceTimezone(), primary),
       words: await languageDictionary(language),
-      mistakes: await mistakeCount(ids),
       ids,
     };
   }, [studyDay(now, deviceTimezone()), deviceTimezone()]);
   const stats = useStats(now);
   const ids = data?.ids;
   const leeches = useLiveQuery(async () => {
-    // Список ведёт на страницы слов и фраз; у задания урока такой страницы нет.
-    const all = (stats?.leeches ?? []).filter((leech) => leech.ref.kind !== "mistake");
+    const all = stats?.leeches ?? [];
     if (!ids) return all;
     const own = await cardsInCourse(
       all.map((leech) => leech.unitKey),
@@ -71,7 +68,6 @@ export function ProgressScreen() {
       level={level}
       words={data.words}
       leeches={leeches ?? []}
-      mistakes={data.mistakes}
       lang={profile.code}
       started={courses.some((course) => course.pace.done > 0)}
     />
@@ -247,14 +243,12 @@ function Skills({
 function Cards({
   words,
   leeches,
-  mistakes,
   lang,
   started,
   level,
 }: {
   words: DictionaryLesson[] | undefined;
   leeches: Leech[];
-  mistakes: number;
   lang: string;
   started: boolean;
   level: 2 | 3;
@@ -281,11 +275,6 @@ function Cards({
         )}
         <Link to="/words">Словарь</Link>
       </p>
-      {mistakes ? (
-        <p className={css.plan} data-testid="mistakes-line">
-          Ошибки уроков в повторении: <b>{mistakes}</b>.
-        </p>
-      ) : null}
       {leeches.length ? (
         <p className={css.plan} data-testid="leeches">
           Не даются:{" "}
