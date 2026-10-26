@@ -3,6 +3,7 @@ import { Screen } from "../../app/Screen";
 import { BackupSection, REPORT_BOUNDARIES } from "../backup/BackupSection";
 import { useHapticsSetting } from "../../platform/haptics";
 import { launchContext } from "../../platform/launch";
+import { feedbackBot, openFeedback } from "../../platform/feedback";
 import { useLaunchMode, usePlatform } from "../../platform/platform";
 import { Button } from "@/components/ui/button";
 import { setPrimaryCourse, usePrimaryCourse, useStartedCourses } from "../../shared/courses";
@@ -99,6 +100,24 @@ export function SettingsScreen() {
           </p>
         </details>
       </section>
+
+      {feedbackBot() && (
+        <section aria-labelledby="feedback" className={css.section}>
+          <h2 id="feedback" className={css.heading}>
+            Обратная связь
+          </h2>
+          <p className={css.note}>Вопрос, ошибка в уроке или идея — напишите в чат бота, ответ придёт туда же.</p>
+          <Button
+            size="md"
+            variant="soft"
+            className="mt-2 w-auto self-start"
+            data-testid="feedback-settings"
+            onClick={() => openFeedback()}
+          >
+            Написать автору
+          </Button>
+        </section>
+      )}
 
       <About />
     </Screen>
