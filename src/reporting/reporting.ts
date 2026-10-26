@@ -114,9 +114,13 @@ export function lifecycle(message: string, data: LifecycleCrumb["data"] = {}) {
   crumbs.push(crumb);
 }
 
-function tags(): Record<string, string> {
+/** Политика конфиденциальности перечисляет эти метки; расхождение ловит `tests/privacy-page.test.ts`. */
+export const REPORT_TAGS = ["env", "app.version", "app.build", "tg.version", "tg.platform", "report.category"] as const;
+export type ReportTags = Partial<Record<(typeof REPORT_TAGS)[number], string>>;
+
+function tags(): ReportTags {
   const launch = launchContext();
-  const result: Record<string, string> = { env: launch.kind, "app.version": APP_VERSION, "app.build": APP_BUILD };
+  const result: ReportTags = { env: launch.kind, "app.version": APP_VERSION, "app.build": APP_BUILD };
   if (launch.kind === "telegram") {
     if (launch.version) result["tg.version"] = launch.version;
     if (launch.platform) result["tg.platform"] = launch.platform;

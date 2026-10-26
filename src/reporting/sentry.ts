@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/react";
-import type { CaptureHint, LifecycleCrumb, Sdk, SdkOptions } from "./reporting";
+import type { CaptureHint, LifecycleCrumb, ReportTags, Sdk, SdkOptions } from "./reporting";
 import { OFFLINE_DB } from "./reporting";
 import { filterBreadcrumb, scrubEvent } from "./scrub";
 
@@ -44,7 +44,7 @@ function capture(error: unknown, { id, category, extra, mechanism }: CaptureHint
     event_id: id,
     mechanism: { type: mechanism, handled: mechanism === "explicit" },
     captureContext: {
-      tags: category ? { "report.category": category } : {},
+      tags: category ? ({ "report.category": category } satisfies ReportTags) : {},
       extra: { ...(category ? { category } : {}), ...extra },
     },
   });

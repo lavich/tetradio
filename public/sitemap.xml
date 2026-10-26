@@ -3,4 +3,10 @@
   <url>
     <loc>https://tetradio.app/</loc>
   </url>
+  <url>
+    <loc>https://tetradio.app/privacy/</loc>
+  </url>
+  <url>
+    <loc>https://tetradio.app/privacy/en/</loc>
+  </url>
 </urlset>

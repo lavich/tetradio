@@ -79,6 +79,8 @@ export interface TelegramWebApp {
   close(): void;
   /** Bot API 6.1: открыть ссылку t.me внутри Telegram, в том числе выбор чата `t.me/share/url`. */
   openTelegramLink?(url: string): void;
+  /** Bot API 6.1: открыть внешнюю ссылку средствами Telegram (встроенный или внешний браузер — по клиенту). */
+  openLink?(url: string): void;
   /** Bot API 6.9: спросить у пользователя разрешение боту писать ему. */
   requestWriteAccess?(callback?: (granted: boolean) => void): void;
   onEvent(event: string, handler: (...args: unknown[]) => void): void;
