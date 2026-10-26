@@ -1,0 +1,8 @@
+{
+  "name": "tetradio-bot",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "wrangler": "4.152.0"
+  }
+}

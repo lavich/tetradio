@@ -1,0 +1,9 @@
+{
+  "name": "tetradio-bot",
+  "main": "worker.ts",
+  "compatibility_date": "2026-10-19",
+  "workers_dev": true,
+  "send_metrics": false,
+  "observability": { "enabled": false },
+  "vars": { "APP_URL": "https://tetradio.app/app/" }
+}
