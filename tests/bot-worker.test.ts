@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import worker, { GREETING, UNREAD } from "../bot/worker";
+import worker, { GREETING, UNREAD, respond } from "../bot/worker";
+import { FAILED, INVITE } from "../bot/texts";
+import type { Update } from "../bot/feedback";
+import { sqlite } from "./helpers/sqlite-d1";
 
 const SECRET = "s3cret_value-1";
 const APP_URL = "https://tetradio.app/app/";
@@ -114,5 +117,38 @@ describe("проверка запроса", () => {
 
   it("GET — 405", async () => {
     await silent(await worker.fetch(new Request("https://bot.example.workers.dev/"), env), 405);
+  });
+});
+
+describe("обратная связь настроена", () => {
+  const TOKEN = "123:secret-token";
+  const configured = () => ({ ...env, BOT_TOKEN: TOKEN, SUPPORT_CHAT_ID: "-1004455365743", FEEDBACK: sqlite() });
+
+  it("/start feedback — приглашение в теле ответа", async () => {
+    const response = await worker.fetch(post(message({ text: "/start feedback" })), configured());
+    expect(await response.json()).toEqual({ method: "sendMessage", chat_id: 42, text: INVITE });
+  });
+
+  it("без токена /start feedback — приветствие, как до обратной связи", async () => {
+    expect(await answer(await worker.fetch(post(message({ text: "/start feedback" })), env))).toBe(GREETING);
+  });
+
+  it("Bot API недоступен — текст о сбое без токена", async () => {
+    const offline = (async (url: string) => {
+      throw new TypeError(`fetch failed: ${url}`);
+    }) as unknown as typeof fetch;
+    const reply = await respond(message({ text: "привет" }) as unknown as Update, configured(), offline);
+    expect(reply).toEqual({ method: "sendMessage", chat_id: 42, text: FAILED });
+    expect(JSON.stringify(reply)).not.toContain(TOKEN);
+  });
+
+  it("исключение при обработке — 200 без тела", async () => {
+    const broken = configured();
+    Object.defineProperty(broken, "SUPPORT_CHAT_ID", {
+      get: () => {
+        throw new Error("config unavailable");
+      },
+    });
+    await silent(await worker.fetch(post(message({ text: "привет" })), broken));
   });
 });

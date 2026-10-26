@@ -4,6 +4,19 @@
   "compatibility_date": "2026-10-19",
   "workers_dev": true,
   "send_metrics": false,
+  // Тело обновления — сообщения пользователей: в Workers Logs оно попадать не должно.
   "observability": { "enabled": false },
-  "vars": { "APP_URL": "https://tetradio.app/app/" },
+  "vars": {
+    "APP_URL": "https://tetradio.app/app/",
+    "SUPPORT_CHAT_ID": "-1004455365743",
+    "SENTRY_EVENT_URL": "https://storewizard.sentry.io/projects/tetradio/events/",
+  },
+  "d1_databases": [
+    {
+      "binding": "FEEDBACK",
+      "database_name": "tetradio-feedback",
+      "database_id": "a1f5ff25-9e0b-4e38-b007-b9cd3982112d",
+      "migrations_dir": "migrations",
+    },
+  ],
 }
