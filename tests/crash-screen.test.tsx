@@ -25,6 +25,7 @@ afterEach(() => {
   window.location.hash = "";
   sessionStorage.clear();
   resetLaunchContext();
+  vi.unstubAllEnvs();
 });
 
 describe("экран сбоя", () => {
@@ -112,6 +113,7 @@ describe("«Написать автору» на экране сбоя", () => {
   );
 
   it("без отчёта — feedback, отчёт, пришедший после показа экрана, попадает в ссылку", () => {
+    vi.stubEnv("VITE_FEEDBACK_URL", "");
     window.location.hash = `#tgWebAppPlatform=ios&tgWebAppData=${encodeURIComponent(`user=${JSON.stringify({ id: 7 })}`)}`;
     resetLaunchContext();
     const popup = vi.spyOn(window, "open").mockImplementation(() => null);

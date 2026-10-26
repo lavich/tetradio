@@ -8,6 +8,7 @@ import {
   UNBLOCKED,
   UNKNOWN_COMMAND,
   UNREAD,
+  formText,
   header,
   notDelivered,
   openButton,
@@ -139,29 +140,17 @@ async function fromUser(message: Message, deps: Deps): Promise<Reply | null> {
     return say(chatId, FAILED);
   }
   if (row?.blocked) return null;
-  const person: Person = { ...message.from, id: chatId };
-  let current = row ?? emptyRow(chatId);
+  const current = row ?? emptyRow(chatId);
   const report = current.fb && current.fbAt !== null && deps.now() - current.fbAt < DAY ? current.fb : null;
-  const deliver = async (thread: number) => {
-    if (report) await post(deps, thread, reportLine(deps.sentryEventUrl ? `${deps.sentryEventUrl}${report}/` : report));
-    await copyTo(thread, message, deps);
-  };
   try {
-    if (current.thread === null) current = await openTopic(current, person, deps);
-    try {
-      await deliver(current.thread!);
-    } catch (error) {
-      if (!(error instanceof BotApiError) || !/thread not found/i.test(error.message)) throw error;
-      current = await openTopic(current, person, deps);
-      await deliver(current.thread!);
-    }
+    await intoTopic(current, { ...message.from, id: chatId }, report, (thread) => copyTo(thread, message, deps), deps);
   } catch {
     return say(chatId, FAILED);
   }
 
   const textual = current.ackAt === null || deps.now() - current.ackAt >= DAY;
-  const next = { ...current, ackAt: textual ? deps.now() : current.ackAt, fb: null, fbAt: null };
-  if (textual || current.fb !== null) await deps.store.save(next).catch(() => undefined);
+  if (textual) await deps.store.setAck(chatId, deps.now()).catch(() => undefined);
+  if (current.fb !== null) await deps.store.setFb(chatId, null, null).catch(() => undefined);
   return textual
     ? say(chatId, ACK)
     : {
@@ -172,21 +161,64 @@ async function fromUser(message: Message, deps: Deps): Promise<Reply | null> {
       };
 }
 
-async function rememberReport(userId: number, report: string, deps: Deps) {
-  const row = (await deps.store.byUser(userId)) ?? emptyRow(userId);
-  if (row.blocked || row.fb === report) return;
-  await deps.store.save({ ...row, fb: report, fbAt: deps.now() });
+export interface Form {
+  user: Person;
+  text: string;
+  version: string;
+  platform: string;
+  reportId: string | null;
+  canReply: boolean;
+}
+export const FORM_INTERVAL = 10_000;
+
+export async function fromForm(form: Form, deps: Deps): Promise<"ok" | "rate" | "failed"> {
+  const userId = form.user.id;
+  try {
+    const row = await deps.store.byUser(userId);
+    if (row?.blocked) return "ok";
+    if (!(await deps.store.claimForm(userId, deps.now(), FORM_INTERVAL))) return "rate";
+    const text = formText(form.version, form.platform, form.canReply, form.text);
+    await intoTopic(row ?? emptyRow(userId), form.user, form.reportId, (thread) => post(deps, thread, text), deps);
+  } catch {
+    return "failed";
+  }
+  return "ok";
 }
 
-async function openTopic(row: Row, person: Person, deps: Deps): Promise<Row> {
+async function rememberReport(userId: number, report: string, deps: Deps) {
+  const row = await deps.store.byUser(userId);
+  if (row?.blocked || row?.fb === report) return;
+  await deps.store.setFb(userId, report, deps.now());
+}
+
+async function intoTopic(
+  row: Row,
+  person: Person,
+  report: string | null,
+  payload: (thread: number) => Promise<unknown>,
+  deps: Deps,
+) {
+  const deliver = async (thread: number) => {
+    if (report) await post(deps, thread, reportLine(deps.sentryEventUrl ? `${deps.sentryEventUrl}${report}/` : report));
+    await payload(thread);
+  };
+  const thread = row.thread ?? (await openTopic(row.userId, person, deps));
+  try {
+    await deliver(thread);
+  } catch (error) {
+    if (!(error instanceof BotApiError) || !/thread not found/i.test(error.message)) throw error;
+    await deliver(await openTopic(row.userId, person, deps));
+  }
+}
+
+async function openTopic(userId: number, person: Person, deps: Deps): Promise<number> {
   const topic = (await call(deps, "createForumTopic", {
     chat_id: Number(deps.supportChatId),
     name: topicName(person),
   })) as { message_thread_id: number };
-  const next = { ...row, thread: topic.message_thread_id };
-  await deps.store.save(next);
-  await post(deps, next.thread, header(person));
-  return next;
+  await deps.store.setThread(userId, topic.message_thread_id);
+  await post(deps, topic.message_thread_id, header(person));
+  return topic.message_thread_id;
 }
 
 const post = (deps: Deps, thread: number, text: string) =>
@@ -218,7 +250,7 @@ async function fromAuthor(message: Message, deps: Deps): Promise<Reply | null> {
   const name = command(message.text);
   if (name === "/block" || name === "/unblock") {
     try {
-      await deps.store.save({ ...row, blocked: name === "/block" });
+      await deps.store.setBlocked(row.userId, name === "/block");
     } catch {
       return inThread(notDelivered("не удалось сохранить блокировку"));
     }

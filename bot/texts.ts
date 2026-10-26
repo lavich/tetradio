@@ -9,6 +9,13 @@ export const UNBLOCKED = "Разблокирован: сообщения пол�
 export const UNKNOWN_COMMAND = "Команда не отправлена пользователю. /block, /unblock — блокировка.";
 export const notDelivered = (reason: string) => `Не доставлено: ${reason}`;
 export const reportLine = (url: string) => `Отчёт: ${url}`;
+export const formText = (version: string, platform: string, canReply: boolean, text: string) =>
+  [
+    `Из приложения · ${version} · ${platform}`,
+    ...(canReply ? [] : ["ответить нельзя: бот не может писать пользователю"]),
+    "",
+    text,
+  ].join("\n");
 
 const BUTTON = "Открыть Τετράδιο";
 export const openButton = (appUrl: string) => ({

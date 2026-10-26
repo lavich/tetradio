@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import worker, { GREETING, UNREAD, respond } from "../bot/worker";
+import { createHmac } from "node:crypto";
+import worker, { GREETING, UNREAD, feedbackForm, respond } from "../bot/worker";
 import { FAILED, INVITE } from "../bot/texts";
 import type { Update } from "../bot/feedback";
 import { sqlite } from "./helpers/sqlite-d1";
@@ -150,5 +151,153 @@ describe("обратная связь настроена", () => {
       },
     });
     await silent(await worker.fetch(post(message({ text: "привет" })), broken));
+  });
+});
+
+describe("форма приложения: /feedback", () => {
+  const TOKEN = "123:secret-token";
+  const ORIGIN = "https://tetradio.app";
+  const USER = JSON.stringify({ id: 42, first_name: "Мария" });
+  const signed = (authDate = Math.floor(Date.now() / 1000) - 60) => {
+    const fields: Record<string, string> = { auth_date: String(authDate), user: USER };
+    const check = Object.keys(fields)
+      .sort()
+      .map((key) => `${key}=${fields[key]}`)
+      .join("\n");
+    const secret = createHmac("sha256", "WebAppData").update(TOKEN).digest();
+    return new URLSearchParams({
+      ...fields,
+      hash: createHmac("sha256", secret).update(check).digest("hex"),
+    }).toString();
+  };
+  const formEnv = () => ({
+    ...env,
+    BOT_TOKEN: TOKEN,
+    SUPPORT_CHAT_ID: "-1004455365743",
+    FEEDBACK: sqlite(),
+    APP_ORIGINS: ORIGIN,
+  });
+  const request = (body: unknown, origin = ORIGIN, method = "POST") =>
+    new Request("https://bot.example.workers.dev/feedback", {
+      method,
+      headers: { "Content-Type": "text/plain", ...(origin ? { Origin: origin } : {}) },
+      ...(method === "POST" ? { body: typeof body === "string" ? body : JSON.stringify(body) } : {}),
+    });
+  const form = (fields: Record<string, unknown> = {}) => ({
+    initData: signed(),
+    text: "Опечатка",
+    version: "0.1.0 (abc)",
+    platform: "ios",
+    ...fields,
+  });
+  const telegram = () => {
+    const calls: string[] = [];
+    const fetcher = (async (url: string, init: { body: string }) => {
+      calls.push(`${url.split("/").pop()} ${init.body}`);
+      return Response.json({ ok: true, result: { message_thread_id: 100, message_id: 1 } });
+    }) as unknown as typeof fetch;
+    return { calls, fetcher };
+  };
+
+  it("предзапрос с адреса приложения — разрешения CORS", async () => {
+    const response = await feedbackForm(request(null, ORIGIN, "OPTIONS"), formEnv());
+    expect(response.status).toBe(204);
+    expect(response.headers.get("Access-Control-Allow-Origin")).toBe(ORIGIN);
+    expect(response.headers.get("Access-Control-Allow-Methods")).toBe("POST");
+  });
+
+  it.each([["https://evil.example"], [""]])("чужой адрес %j — 403 без CORS", async (origin) => {
+    const bot = telegram();
+    const response = await feedbackForm(request(form(), origin), formEnv(), bot.fetcher);
+    expect(response.status).toBe(403);
+    expect(response.headers.get("Access-Control-Allow-Origin")).toBeNull();
+    expect(bot.calls).toEqual([]);
+  });
+
+  it("верная форма — 200 и сообщение в теме", async () => {
+    const bot = telegram();
+    const response = await feedbackForm(request(form()), formEnv(), bot.fetcher);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
+    expect(response.headers.get("Access-Control-Allow-Origin")).toBe(ORIGIN);
+    expect(bot.calls.map((call) => call.split(" ")[0])).toEqual(["createForumTopic", "sendMessage", "sendMessage"]);
+    expect(bot.calls[2]).toContain("Из приложения · 0.1.0 (abc) · ios");
+  });
+
+  it("повтор в 10 секунд — 429", async () => {
+    const bot = telegram();
+    const configuredEnv = formEnv();
+    await feedbackForm(request(form()), configuredEnv, bot.fetcher);
+    const response = await feedbackForm(request(form()), configuredEnv, bot.fetcher);
+    expect(response.status).toBe(429);
+    expect(await response.json()).toEqual({ error: "rate" });
+  });
+
+  it.each([
+    ["неверная подпись", { initData: signed().replace(/hash=[0-9a-f]+/, `hash=${"0".repeat(64)}`) }, 401, "stale"],
+    ["старше 7 суток", { initData: signed(Math.floor(Date.now() / 1000) - 8 * 24 * 3600) }, 401, "stale"],
+    ["пустой текст", { text: " " }, 400, "invalid"],
+  ])("%s — %i", async (_, fields, status, error) => {
+    const bot = telegram();
+    const response = await feedbackForm(request(form(fields)), formEnv(), bot.fetcher);
+    expect(response.status).toBe(status);
+    expect(await response.json()).toEqual({ error });
+    expect(bot.calls).toEqual([]);
+  });
+
+  it("Bot API отказал — 502", async () => {
+    const refusing = (async () =>
+      Response.json({ ok: false, error_code: 400, description: "Bad Request" })) as unknown as typeof fetch;
+    const response = await feedbackForm(request(form()), formEnv(), refusing);
+    expect(response.status).toBe(502);
+  });
+
+  it("без токена бота — 503", async () => {
+    const response = await feedbackForm(request(form()), { ...formEnv(), BOT_TOKEN: undefined });
+    expect(response.status).toBe(503);
+  });
+
+  it("тело больше 16 КБ — 400, в том числе без Content-Length", async () => {
+    const bot = telegram();
+    const big = JSON.stringify(form({ text: "a".repeat(17 * 1024) }));
+    const declared = await feedbackForm(request(big), formEnv(), bot.fetcher);
+    expect(declared.status).toBe(400);
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode(big));
+        controller.close();
+      },
+    });
+    const chunked = new Request("https://bot.example.workers.dev/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "text/plain", Origin: ORIGIN },
+      body: stream,
+      duplex: "half",
+    } as RequestInit);
+    expect((await feedbackForm(chunked, formEnv(), bot.fetcher)).status).toBe(400);
+    expect(bot.calls).toEqual([]);
+  });
+
+  it("worker.fetch ведёт /feedback в обработчик формы", async () => {
+    const response = await worker.fetch(request(null, ORIGIN, "OPTIONS"), formEnv());
+    expect(response.status).toBe(204);
+    expect(response.headers.get("Access-Control-Allow-Origin")).toBe(ORIGIN);
+  });
+
+  it("исключение в обработчике формы — 502", async () => {
+    const broken = {
+      ...formEnv(),
+      FEEDBACK: {
+        prepare: () => {
+          throw new Error("D1 down");
+        },
+      },
+    };
+    const response = await worker.fetch(request(form()), broken as unknown as Parameters<typeof worker.fetch>[1]);
+    expect(response.status).toBe(502);
+  });
+
+  it("вебхук на / по-прежнему требует секрет", async () => {
+    await silent(await worker.fetch(post(message({ text: "/start" }), {}), formEnv()), 401);
   });
 });

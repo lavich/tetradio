@@ -46,6 +46,7 @@ jobs:
           BUILD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
           VITE_TELEGRAM_BOT: ${{ vars.VITE_TELEGRAM_BOT }}
           VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          VITE_FEEDBACK_URL: ${{ vars.VITE_FEEDBACK_URL }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}

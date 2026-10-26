@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN form_at INTEGER;

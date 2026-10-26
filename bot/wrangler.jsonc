@@ -10,6 +10,7 @@
     "APP_URL": "https://tetradio.app/app/",
     "SUPPORT_CHAT_ID": "-1004455365743",
     "SENTRY_EVENT_URL": "https://storewizard.sentry.io/projects/tetradio/events/",
+    "APP_ORIGINS": "https://tetradio.app",
   },
   "d1_databases": [
     {
