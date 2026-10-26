@@ -1,5 +1,5 @@
-import { fromForm, handle, legacyReply, type Answer, type Deps, type Update } from "./feedback";
-import { MAX_BODY, readForm, verifyInitData } from "./form";
+import { forget, fromForm, handle, legacyReply, type Answer, type Deps, type Update } from "./feedback";
+import { MAX_BODY, readForm, readInitData, verifyInitData } from "./form";
 import { databaseStore, type Database } from "./store";
 
 export { GREETING, UNREAD } from "./texts";
@@ -79,7 +79,14 @@ async function readLimited(request: Request, limit: number): Promise<string | nu
 
 const STATUS = { ok: 200, invalid: 400, stale: 401, rate: 429, failed: 502 } as const;
 
-export async function feedbackForm(request: Request, env: Env, fetcher: typeof fetch = fetch): Promise<Response> {
+type Result = keyof typeof STATUS;
+
+async function appRoute(
+  request: Request,
+  env: Env,
+  fetcher: typeof fetch,
+  act: (raw: string, deps: Deps) => Promise<Result>,
+): Promise<Response> {
   const origin = request.headers.get("Origin") ?? "";
   const allowed = (env.APP_ORIGINS ?? "").split(",").map((item) => item.trim());
   if (!origin || !allowed.includes(origin)) return new Response(null, { status: 403 });
@@ -94,23 +101,43 @@ export async function feedbackForm(request: Request, env: Env, fetcher: typeof f
         "Access-Control-Max-Age": "86400",
       },
     });
-  const answer = (result: keyof typeof STATUS, status: number = STATUS[result]) =>
+  const answer = (result: Result, status: number = STATUS[result]) =>
     Response.json(result === "ok" ? { ok: true } : { error: result }, { status, headers: cors });
   if (request.method !== "POST") return new Response(null, { status: 405, headers: cors });
   const deps = configured(env, fetcher);
   if (!deps) return answer("failed", 503);
   const raw = await readLimited(request, MAX_BODY);
-  const form = raw === null ? null : readForm(raw);
-  if (!form) return answer("invalid");
-  const user = await verifyInitData(form.initData, env.BOT_TOKEN!, Math.floor(deps.now() / 1000));
-  if (!user) return answer("stale");
-  return answer(await fromForm({ ...form, user }, deps));
+  return answer(raw === null ? "invalid" : await act(raw, deps));
 }
+
+const signedUser = (initData: string, env: Env, deps: Deps) =>
+  verifyInitData(initData, env.BOT_TOKEN!, Math.floor(deps.now() / 1000));
+
+export const feedbackForm = (request: Request, env: Env, fetcher: typeof fetch = fetch) =>
+  appRoute(request, env, fetcher, async (raw, deps) => {
+    const form = readForm(raw);
+    if (!form) return "invalid";
+    const user = await signedUser(form.initData, env, deps);
+    return user ? fromForm({ ...form, user }, deps) : "stale";
+  });
+
+export const forgetRoute = (request: Request, env: Env, fetcher: typeof fetch = fetch) =>
+  appRoute(request, env, fetcher, async (raw, deps) => {
+    const initData = readInitData(raw);
+    if (!initData) return "invalid";
+    const user = await signedUser(initData, env, deps);
+    return user ? forget(user.id, deps) : "stale";
+  });
+
+const ROUTES: Record<string, (request: Request, env: Env) => Promise<Response>> = {
+  "/feedback": feedbackForm,
+  "/forget": forgetRoute,
+};
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    if (new URL(request.url).pathname === "/feedback")
-      return feedbackForm(request, env).catch(() => new Response(null, { status: 502 }));
+    const route = ROUTES[new URL(request.url).pathname];
+    if (route) return route(request, env).catch(() => new Response(null, { status: 502 }));
     if (request.method !== "POST") return new Response(null, { status: 405 });
     if (!sameSecret(request.headers.get("X-Telegram-Bot-Api-Secret-Token"), env.WEBHOOK_SECRET))
       return new Response(null, { status: 401 });

@@ -43,6 +43,16 @@ export function readForm(raw: string): FormBody | null {
   };
 }
 
+export function readInitData(raw: string): string | null {
+  if (raw.length > MAX_BODY) return null;
+  try {
+    const body = JSON.parse(raw) as { initData?: unknown } | null;
+    return typeof body?.initData === "string" && body.initData ? body.initData : null;
+  } catch {
+    return null;
+  }
+}
+
 const encoder = new TextEncoder();
 const hmacKey = (secret: BufferSource, usage: KeyUsage) =>
   crypto.subtle.importKey("raw", secret, { name: "HMAC", hash: "SHA-256" }, false, [usage]);

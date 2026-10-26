@@ -1,3 +1,4 @@
+import { erasePhase } from "../storage/erase-marker";
 import { lifecycle } from "../reporting/reporting";
 import type { AppDatabase } from "../storage/db";
 import type { SyncAdapter } from "./adapter";
@@ -76,6 +77,8 @@ export interface CoordinatorOptions {
   /** Лечение отказа хранилища: `true` — база переоткрыта, обмен можно повторить; `false` — отказ невылечен. */
   recover?: (error: unknown) => Promise<boolean>;
   retryBaseMs?: number;
+  /** Та же блокировка, что у обмена, но с ожиданием: удаление данных не должно пропускаться. */
+  exclusive?: (run: () => Promise<void>) => Promise<LockResult>;
 }
 const FOREIGN_KEEP_MS = 30 * 24 * 60 * 60 * 1000;
 const KEEP_REJECTED = 5;
@@ -107,7 +110,11 @@ export class SyncCoordinator {
   private retryMs: number;
   private cancelRetry: (() => void) | null = null;
   private stopHandlers: (() => void)[] = [];
-  private options: Required<Pick<CoordinatorOptions, "now" | "label" | "lock" | "online" | "schedule" | "recover">> &
+  private halted = false;
+  private started = false;
+  private options: Required<
+    Pick<CoordinatorOptions, "now" | "label" | "lock" | "online" | "schedule" | "recover" | "exclusive">
+  > &
     CoordinatorOptions;
   constructor(options: CoordinatorOptions) {
     this.options = {
@@ -123,6 +130,10 @@ export class SyncCoordinator {
         return () => clearTimeout(id);
       },
       recover: async () => false,
+      exclusive: async (run) => {
+        await run();
+        return "unsupported";
+      },
       ...options,
     };
     this.retryMs = options.retryBaseMs ?? 30000;
@@ -166,6 +177,7 @@ export class SyncCoordinator {
 
   /** Параллельные вызовы объединяются; поводы обмена перечислены в `start`. */
   exchange(): Promise<SyncStatus> {
+    if (this.halted) return Promise.resolve(this.status);
     if (this.running) {
       // Изменение во время обмена: ещё один заход сразу после текущего.
       this.again = true;
@@ -218,6 +230,11 @@ export class SyncCoordinator {
     this.update({ dirty: flags.dirty || !!flags.restored, lastConfirmedAt: flags.lastOk });
     if (!adapter.capabilities().available) {
       this.update({ phase: "disabled", reason: null });
+      return;
+    }
+    // Другая вкладка удаляет данные: публикация вернула бы их в облако.
+    if (erasePhase(this.options.database.name)) {
+      this.update({ phase: "paused", reason: "Идёт удаление данных." });
       return;
     }
     if (!this.options.online()) {
@@ -299,7 +316,7 @@ export class SyncCoordinator {
     });
     this.onFailure?.(error, kind);
     if ((kind === "format" && this.newerFormat) || kind === "stale") this.onNewerFormat?.();
-    if (kind !== "disabled" && kind !== "format") {
+    if (kind !== "disabled" && kind !== "format" && !this.halted) {
       this.cancelRetry = this.options.schedule(() => {
         void this.exchange();
       }, this.retryMs);
@@ -617,6 +634,7 @@ export class SyncCoordinator {
     if (this.status.reason) this.update({ reason: null });
     // Выбор версии — тоже обмен: не параллельно с фоновым обменом и не в двух вкладках сразу.
     while (this.running) await this.running;
+    if (this.halted || erasePhase(this.options.database.name)) return this.status;
     this.again = false;
     this.running = (async () => {
       try {
@@ -710,6 +728,8 @@ export class SyncCoordinator {
    * Ручной повтор — `exchange()`.
    */
   start() {
+    this.started = true;
+    if (this.halted) return;
     this.stop();
     let pending: (() => void) | null = null;
     const cancel = () => {
@@ -761,7 +781,46 @@ export class SyncCoordinator {
     this.cancelRetry?.();
     this.cancelRetry = null;
   }
+  /** Ни эта вкладка, ни другая не опубликуют данные, пока `work` удаляет их. */
+  async halt(work: () => Promise<void>): Promise<void> {
+    this.halted = true;
+    this.again = false;
+    this.stop();
+    while (this.running) await this.running;
+    await this.options.exclusive(work);
+  }
+  resume() {
+    this.halted = false;
+    if (this.started) this.start();
+  }
 }
+
+export class LockTimeout extends Error {}
+
+export const webLockWait =
+  (name: string, timeoutMs = 20_000) =>
+  async (run: () => Promise<void>): Promise<LockResult> => {
+    if (typeof navigator === "undefined" || !navigator.locks) {
+      await run();
+      return "unsupported";
+    }
+    // `AbortSignal.timeout` есть только с Safari 16, а Web Locks — с 15.4.
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(new DOMException("timeout", "TimeoutError")), timeoutMs);
+    try {
+      await navigator.locks.request(name, { signal: controller.signal }, async () => {
+        clearTimeout(timer);
+        await run();
+      });
+    } catch (error) {
+      if (error instanceof DOMException && (error.name === "TimeoutError" || error.name === "AbortError"))
+        throw new LockTimeout("Синхронизацией занята другая вкладка — закройте её и повторите.");
+      throw error;
+    } finally {
+      clearTimeout(timer);
+    }
+    return "acquired";
+  };
 
 /** Web Locks: одна вкладка пишет, остальные пропускают; без API — запись приостанавливается. */
 export const webLock =

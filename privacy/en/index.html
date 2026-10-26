@@ -136,15 +136,16 @@
 
       <h2 id="retention">Retention</h2>
       <ul>
-        <li>Device — until you delete the data.</li>
         <li>
-          Telegram cloud — until the snapshot is deleted; the upcoming “Удалить мои данные” (Delete my data) button will
-          delete it.
+          Device and Telegram cloud — until you delete them with “Удалить мои данные” (Delete my data) in “Настройки и
+          данные”; repeat it on every device that has progress.
         </li>
-        <li>The report queue — until sent or until reports are switched off.</li>
+        <li>The report queue — until sent, until reports are switched off or until your data is deleted.</li>
         <li>
-          The group conversation and the D1 record — until the author deletes them (the D1 record is deleted separately,
-          manually) or on your request.
+          The group conversation and the D1 record — until you tick “И переписку с автором” (And my conversation with
+          the author) when deleting your data, ask for deletion via “Написать автору”, or the author deletes them. If
+          the author blocked you in the conversation, only your id and the block flag remain after deletion — legitimate
+          interest in preventing abuse (GDPR Art. 6(1)(f)).
         </li>
         <li>Reports in Sentry — for the project’s retention period in Sentry.</li>
       </ul>
@@ -156,14 +157,17 @@
       </p>
       <ul>
         <li>
-          Data on the device is deleted by clearing Telegram’s data on the device. The snapshot in the Telegram cloud
-          cannot yet be deleted from the app: Telegram gives the author no access to it. The upcoming “Удалить мои
-          данные” button will do it.
+          Data on the device and in the Telegram cloud is deleted by the “Удалить мои данные” button in “Настройки и
+          данные”. Messages in your chat with the bot are deleted by you.
         </li>
-        <li>The author deletes the conversation and the D1 record on request via “Написать автору”.</li>
         <li>
-          A specific Sentry report can be found and deleted by its identifier from “Скопировать диагностику” (Copy
-          diagnostics) on the crash screen: without it the report cannot be linked to you.
+          The group conversation and the D1 record are deleted by the same button with “И переписку с автором” ticked,
+          or by the author on request via “Написать автору”.
+        </li>
+        <li>
+          The button does not delete Sentry reports: a specific report can be found and deleted by its identifier from
+          “Скопировать диагностику” (Copy diagnostics) on the crash screen — without it the report cannot be linked to
+          you.
         </li>
       </ul>
       <p>

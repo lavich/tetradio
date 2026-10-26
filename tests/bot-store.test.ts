@@ -52,4 +52,34 @@ describe("хранилище связей на D1", () => {
     await store.claimForm(42, 1, 10_000);
     expect(await store.byUser(42)).toEqual({ ...emptyRow(42), thread: 7, blocked: true, formAt: 1 });
   });
+
+  it("забыть: обычный пользователь — строки нет", async () => {
+    const store = databaseStore(sqlite());
+    await store.setThread(42, 7);
+    await store.setAck(42, 5);
+    await store.forgetUser(42);
+    expect(await store.byUser(42)).toBeNull();
+  });
+
+  it("забыть: у заблокированного остаётся только отметка", async () => {
+    const store = databaseStore(sqlite());
+    await store.setThread(42, 7);
+    await store.setBlocked(42, true);
+    await store.setFb(42, "abc", 1);
+    await store.forgetUser(42);
+    expect(await store.byUser(42)).toEqual({ ...emptyRow(42), blocked: true });
+    expect(await store.blockedWithoutTopic()).toEqual([42]);
+  });
+
+  it("разблокировка без темы удаляет строку, с темой — снимает отметку, неизвестный — false", async () => {
+    const store = databaseStore(sqlite());
+    await store.setBlocked(42, true);
+    await store.setThread(43, 9);
+    await store.setBlocked(43, true);
+    expect(await store.unblock(42)).toBe(true);
+    expect(await store.byUser(42)).toBeNull();
+    expect(await store.unblock(43)).toBe(true);
+    expect(await store.byUser(43)).toMatchObject({ thread: 9, blocked: false });
+    expect(await store.unblock(44)).toBe(false);
+  });
 });

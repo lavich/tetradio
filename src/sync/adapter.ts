@@ -348,3 +348,16 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
     },
   };
 }
+
+/**
+ * Все ключи CloudStorage бота — область только этого Mini App. Указатели первыми: при обрыве между пакетами
+ * не остаётся указателя на удалённые части.
+ */
+export async function removeAllKeys(transport: KeyValueTransport): Promise<void> {
+  const keys = await transport.getKeys();
+  const rank = (key: string) => (key.startsWith("p_") ? 0 : key.startsWith("cp_") ? 1 : key.startsWith("v_") ? 2 : 3);
+  for (const group of [0, 1, 2, 3]) {
+    const batch = keys.filter((key) => rank(key) === group);
+    if (batch.length) await transport.removeItems(batch);
+  }
+}

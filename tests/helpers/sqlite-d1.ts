@@ -12,6 +12,7 @@ export function sqlite(): Database {
       return {
         bind: (...values) => ({
           first: async <T>() => (statement.get(...(values as never[])) as T | undefined) ?? null,
+          all: async <T>() => ({ results: statement.all(...(values as never[])) as T[] }),
           run: async () => ({ meta: { changes: Number(statement.run(...(values as never[])).changes) } }),
         }),
       };
