@@ -69,7 +69,16 @@ export async function installPackages(
   database: AppDatabase = db,
   source: ContentFetcher = fetcher,
 ): Promise<CourseInstallResult> {
-  return (await installInTurn(lessonIds, database, source, PACKAGE_DOWNLOADS)).result;
+  // Облачный прогресс скрытого курса просит уроки, которых в каталоге нет: они ждут возврата курса, а не падают ошибкой.
+  const readListed = async () =>
+    (await database.catalog.count()) > 0 ? await database.catalog.bulkGet(lessonIds) : null;
+  let listed = await readListed();
+  if (!listed || listed.some((entry) => !entry)) {
+    await catalogSettled();
+    listed = await readListed();
+  }
+  const wanted = listed ? lessonIds.filter((_, index) => listed![index]) : lessonIds;
+  return (await installInTurn(wanted, database, source, PACKAGE_DOWNLOADS)).result;
 }
 
 async function installInTurn(lessonIds: string[], database: AppDatabase, source: ContentFetcher, parallel = 1) {

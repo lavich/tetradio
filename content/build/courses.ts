@@ -21,6 +21,7 @@ export function buildCourses(sources: ContentRoot) {
   const moduleOf = new Map<string, { id: string; position: number; draft: boolean }>();
   const moduleOwner = new Map<string, string>();
   const partial = new Set<string>();
+  const hidden = new Set<string>();
   /** Урок контрольной точки → файл модуля: точка обязана быть контрольной с оцениваемыми заданиями. */
   const checkpoints = new Map<string, string>();
   const reviews = new Map<string, string>();
@@ -46,6 +47,10 @@ export function buildCourses(sources: ContentRoot) {
   for (const [courseId, src] of sources.courses) {
     const where = `courses/${src.file}`;
     const title = text(src.title, `${where}.title`)!;
+    if (src.hidden !== undefined) {
+      if (src.hidden !== true) fail(`${where}.hidden: только true`);
+      hidden.add(courseId);
+    }
     if (src.lessons !== undefined && src.modules !== undefined) fail(`${where}: укажите либо lessons, либо modules`);
     const moduleIds: string[] = [];
     if (src.modules !== undefined) {
@@ -159,6 +164,8 @@ export function buildCourses(sources: ContentRoot) {
     if (source) course.source = source;
     courses.push(course);
   }
+  if (hidden.size && hidden.size === sources.courses.size)
+    fail("courses/: все курсы скрыты (hidden: true), показывать нечего");
   const places = new Map<number, string>();
   for (const [courseId, src] of sources.courses) {
     const order = courses.find((course) => course.id === courseId)?.order;
@@ -191,6 +198,7 @@ export function buildCourses(sources: ContentRoot) {
     checkpoints,
     reviews,
     partial,
+    hidden,
     languages,
     moduleLanguages,
     courseLanguages,

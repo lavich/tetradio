@@ -89,7 +89,8 @@ const readOrder = zoned(async (database: AppDatabase): Promise<string[]> => {
  * Курсы по порядку установки, затем остальные — по месту курса (`order`), затем по месту уроков в каталоге. Порядок не зависит от основного курса: переключатели
  * не переставляют варианты после выбора. Курс, которого нет ни в каталоге, ни на устройстве, не показывается.
  */
-export const courses = zoned(async function courses(database: AppDatabase = db): Promise<CourseEntry[]> {
+export const courses = zoned((database: AppDatabase = db): Promise<CourseEntry[]> => readCourses(database, false));
+const readCourses = zoned(async function readCourses(database: AppDatabase, hidden: boolean): Promise<CourseEntry[]> {
   const [rows, entries, installedIds, stored, pending, pauses] = await Promise.all([
     database.courses.toArray(),
     database.catalog.toArray(),
@@ -110,7 +111,8 @@ export const courses = zoned(async function courses(database: AppDatabase = db):
   const saved = new Map(stored.map((id, index) => [id, index]));
   const order = (id: string) => saved.get(id) ?? Number.MAX_SAFE_INTEGER;
   const sorted = rows
-    .filter((row) => installed.has(row.id) || rank.has(row.id))
+    // Загруженный каталог — единственный перечень курсов: курс вне его (скрытый флагом `hidden`) не показывается, данные остаются.
+    .filter((row) => (entries.length && !hidden ? rank.has(row.id) : installed.has(row.id) || rank.has(row.id)))
     .sort(
       (a, b) =>
         order(a.id) - order(b.id) ||
@@ -144,7 +146,7 @@ export const courses = zoned(async function courses(database: AppDatabase = db):
  */
 export async function rememberCourses(database: AppDatabase = db): Promise<void> {
   const [list, stored, home, startedAt] = await Promise.all([
-    courses(database),
+    readCourses(database, true),
     readOrder(database),
     database.meta.get(HOME_COURSE_KEY),
     courseStarts(database),
@@ -535,9 +537,12 @@ const offeredSessions = zoned(async function offeredSessions(
   const [list, home] = await Promise.all([courses(database), homeCourse(database)]);
   const byId = new Map(list.map((course) => [course.id, course]));
   const going = new Set(list.filter((course) => course.started && !course.pausedAt).map((course) => course.language));
+  const shown = new Set(list.map((course) => course.language));
   return active.flatMap((session) => {
     const course = byId.get(session.courseId ?? home ?? "");
     const language = session.language ?? course?.language ?? DEFAULT_LANGUAGE;
+    const owner = session.courseId ?? home;
+    if (list.length && ((!session.language && owner && !byId.has(owner)) || !shown.has(language))) return [];
     const waits = !isPracticeSession(session) && (session.language ? !going.has(language) : !!course?.pausedAt);
     return waits ? [] : [{ session, language }];
   });
