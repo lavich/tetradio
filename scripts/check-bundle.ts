@@ -119,8 +119,10 @@ if (metrics) {
 
 const precached = [...readFileSync(join(dist, "sw.js"), "utf8").matchAll(/url:"([^"]+)"/g)].map((match) => match[1]!);
 if (!precached.length) problems.push("в sw.js не найден список precache");
-const outOfScope = precached.filter((url) => /^(index|404)\.html$|^assets\/landing-/.test(url));
+const outOfScope = precached.filter((url) => /^(index|404)\.html$|^assets\/(landing|privacy)|^privacy\//.test(url));
 if (outOfScope.length) problems.push(`в precache файлы вне области service worker: ${outOfScope.join(", ")}`);
+for (const page of ["privacy/index.html", "privacy/en/index.html"])
+  if (/<script/i.test(readFileSync(join(dist, page), "utf8"))) problems.push(`${page}: политика загружает скрипт`);
 
 if (problems.length) {
   console.error(`Проверка сборки не пройдена:\n- ${problems.join("\n- ")}`);

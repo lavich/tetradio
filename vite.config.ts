@@ -123,6 +123,8 @@ export default defineConfig({
       input: {
         landing: fileURLToPath(new URL("./index.html", import.meta.url)),
         app: fileURLToPath(new URL("./app/index.html", import.meta.url)),
+        privacy: fileURLToPath(new URL("./privacy/index.html", import.meta.url)),
+        privacyEn: fileURLToPath(new URL("./privacy/en/index.html", import.meta.url)),
       },
     },
   },
@@ -160,8 +162,17 @@ export default defineConfig({
         skipWaiting: false,
         // Шрифты — только наборы символов курса (латиница, кириллица, греческий): Mini App должен открываться без сети.
         globPatterns: ["**/*.{js,css,html,svg,png,webp,json}", "**/*-{latin,cyrillic,greek}-wght-*.woff2"],
-        // Лендинг и 404.html вне области service worker (`app/`): офлайн их не открыть, кешировать незачем.
-        globIgnores: ["**/content/**", "og.png", "icon-512.png", "index.html", "404.html", "assets/landing-*"],
+        // Лендинг, политика и 404.html вне области service worker (`app/`): офлайн их не открыть, кешировать незачем.
+        globIgnores: [
+          "**/content/**",
+          "og.png",
+          "icon-512.png",
+          "index.html",
+          "404.html",
+          "assets/landing-*",
+          "privacy/**",
+          "assets/privacy*",
+        ],
         navigateFallback: "app/index.html",
         navigateFallbackDenylist: [/\/content\//],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,

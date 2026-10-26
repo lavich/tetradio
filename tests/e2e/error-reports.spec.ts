@@ -29,7 +29,7 @@ test("«Настройки и данные» описывают канал от�
   const boundaries = page.getByTestId("error-reports-boundaries");
   await expect(boundaries).toBeVisible();
   await expect(boundaries).toContainText("Sentry");
-  await expect(boundaries).toContainText("тип ошибки и стек");
+  await expect(boundaries).toContainText("тип и текст ошибки, стек");
   await expect(boundaries).toContainText("не попадают слова, переводы");
   await expect(boundaries).toContainText("идентификатор и имя пользователя Telegram");
   await expect(boundaries).toContainText("Без сети отчёт ждёт на устройстве");

@@ -45,6 +45,13 @@ describe("статичная страница лендинга", () => {
     const data = JSON.parse(html.match(/<script type="application\/json" id="lp-data">(.*?)<\/script>/s)![1]!);
     expect(data[1]).toEqual({ format: "text", answer: ["είμαι"], explanation: expect.any(String) });
   });
+  it("в конце страницы — ссылка на политику конфиденциальности", () => {
+    const html = renderLanding({ modules: [], exam: null, tasks: [] }, "TetradioBot");
+    expect(html).toMatch(
+      /<footer class="lp-close">[\s\S]*<a[^>]*href="privacy\/"[^>]*>Политика конфиденциальности<\/a>/,
+    );
+  });
+
   it("без бота — подсказка вместо ссылки; без каталога — страница без заданий", () => {
     const empty = renderLanding({ modules: [], exam: null, tasks: [] }, null);
     expect(empty).toContain("Найдите бота курса в Telegram");

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Privacy policy — Τετράδιο</title>
+    <link rel="canonical" href="https://tetradio.app/privacy/en/" />
+    <link rel="alternate" hreflang="en" href="https://tetradio.app/privacy/en/" />
+    <link rel="alternate" hreflang="ru" href="https://tetradio.app/privacy/" />
+    <link rel="alternate" hreflang="x-default" href="https://tetradio.app/privacy/" />
+    <link rel="icon" href="%BASE_URL%icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../privacy.css" />
+  </head>
+  <body>
+    <main>
+      <p class="lang"><a href="../" hreflang="ru" lang="ru">Русский</a></p>
+      <h1>Privacy policy of <span lang="el">Τετράδιο</span></h1>
+      <p class="meta">
+        Version of 26 October 2026. Covers the @TetradioBot Mini App in Telegram, the bot and the tetradio.app website.
+      </p>
+
+      <h2 id="controller">Who is responsible</h2>
+      <p>
+        The author of <span lang="el">Τετράδιο</span>. Contact: “Написать автору” (Write to the author) in the app’s
+        “Настройки и данные” (Settings and data) or a message to <a href="https://t.me/TetradioBot">@TetradioBot</a>.
+        There is no contact channel outside Telegram.
+      </p>
+
+      <h2 id="device">What is stored on your device</h2>
+      <ul>
+        <li>
+          The app database: course lessons, words and phrases, your answers, written answers, the review schedule,
+          settings. The database name contains your Telegram id.
+        </li>
+        <li>
+          Telegram’s browser storage: haptics and hint settings, update bookkeeping, scroll positions, a draft of your
+          message to the author; for the duration of a launch — Telegram launch data (id, first and last name, username,
+          language, link parameter).
+        </li>
+        <li>A queue of error reports not yet sent.</li>
+        <li>
+          The microphone is used only in “Речь” (Speaking) exercises: the recording stays in device memory and is not
+          sent anywhere.
+        </li>
+        <li>A full backup is a file you save and share yourself.</li>
+      </ul>
+
+      <h2 id="cloud">Telegram cloud</h2>
+      <p>
+        To carry your progress across devices, the app saves a snapshot to Telegram’s cloud storage (CloudStorage):
+        completed and installed lessons, task results, card states and summaries, statistics (daily — for 14 days),
+        course pauses, the device identifier and platform label. Answer history and written answers are not included.
+        Telegram runs this storage under <a href="https://telegram.org/privacy">its own policy</a>.
+      </p>
+
+      <h2 id="messages">Messages to the author</h2>
+      <p>
+        You do not enter your name, username or language: Telegram provides them. A message to the bot in its chat
+        (text, photos, files, voice messages) is copied into a separate topic of a private support group in Telegram;
+        the topic title contains your name and @username, its first message — name, @username, id and language. The
+        “Написать автору” form in the app sends Telegram’s signed launch data (it contains id, name, username, language,
+        profile photo, Premium and write-permission flags, launch time and identifiers), your text, the app version, the
+        platform, an error report identifier (from the crash screen) and whether the bot may message you. Id, first and
+        last name, username and language are used; the rest is not stored. If the bot cannot message you yet, Telegram
+        asks for permission before sending — without it the author cannot reply.
+      </p>
+      <p>
+        Messages are processed by a program on Cloudflare Workers at the nearest Cloudflare network location; when the
+        form is sent, Cloudflare sees the device’s IP address and browser. The program’s logs are off. A Cloudflare D1
+        database (Western Europe region) stores the user and topic ids, the time of the last confirmation and the last
+        form, a block flag, the error report identifier from a crash-screen link and when it was received (used for one
+        day, cleared by your next message to the bot). The program does not store message texts: they remain in your
+        chat with the bot and in the Telegram group. An error report identifier sent from the crash screen links that
+        report to you in the topic.
+      </p>
+
+      <h2 id="reports">Error reports</h2>
+      <p>
+        On a failure the app sends a report to Sentry (USA): error type and message, stack, the screen path and up to 30
+        recent navigations without parameters (paths may contain lesson or word identifiers), requests to course files
+        (path and status), Mini App and sync service events (minimising, window sizes, sync duration and size), browser
+        and system details Sentry derives from the request. Tags: <code>env</code>, <code>app.version</code>,
+        <code>app.build</code>, <code>tg.version</code>, <code>tg.platform</code>, <code>report.category</code>. Extra
+        fields: <code>category</code>, <code>kind</code>, <code>packageId</code>, <code>packageVersion</code>,
+        <code>componentStack</code>. Reports contain no words, answers, progress, launch data or Telegram name. Sentry
+        receives the connection’s IP address; whether it stores it depends on the project settings.
+      </p>
+      <p>
+        Reports are on by default and are switched off in “Настройки и данные” with “Отправлять отчёты об ошибках” (Send
+        error reports); the queue is deleted at the same time. If the app database fails to open, the setting cannot be
+        read: reports of that launch are sent regardless of the switch.
+      </p>
+
+      <h2 id="hosting">Website and other requests</h2>
+      <p>
+        Pages, lessons and audio are served by GitHub Pages; GitHub sees the IP address of requests. The app loads the
+        Telegram script from telegram.org. Google Cloud Text-to-Speech audio is prepared in advance: the app makes no
+        requests to Google. Everything else is voiced by the device’s speech synthesis; it may use the system vendor’s
+        network voices and send them the text of course phrases, without your data.
+      </p>
+
+      <h2 id="none">What the app does not use</h2>
+      <p>
+        No analytics, ads, cookies or registration. The app does not ask for your phone number, contacts, location or
+        payments. There are no automated decisions with legal effects: the review schedule is a learning feature.
+      </p>
+
+      <h2 id="purposes">Purposes and legal bases</h2>
+      <ul>
+        <li>
+          Learning and carrying progress across devices — performing what you requested by opening the course (GDPR Art.
+          6(1)(b)).
+        </li>
+        <li>
+          Error reports — legitimate interest in finding and fixing failures; reports contain no learning content or
+          Telegram data and can be switched off (Art. 6(1)(f)). Reports of a launch in which the database failed to open
+          — the same interest, without the switch.
+        </li>
+        <li>Messages to the author — replying to your request (Art. 6(1)(b) and (f)).</li>
+      </ul>
+      <p>
+        Providing data is not mandatory: the app does not work without Telegram; it works without reports and messages.
+      </p>
+
+      <h2 id="recipients">Who receives data</h2>
+      <p>
+        Processors: Sentry (reports), Cloudflare (messages to the author), GitHub (website). Telegram is an independent
+        controller of the cloud storage and the support group under
+        <a href="https://telegram.org/privacy">its own policy</a>. Sentry, Cloudflare and GitHub process data in the USA
+        as well — under the mechanisms these companies use (the EU–US Data Privacy Framework or the EU standard
+        contractual clauses): <a href="https://sentry.io/privacy/">Sentry</a>,
+        <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a>,
+        <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub</a>.
+      </p>
+
+      <h2 id="retention">Retention</h2>
+      <ul>
+        <li>Device — until you delete the data.</li>
+        <li>
+          Telegram cloud — until the snapshot is deleted; the upcoming “Удалить мои данные” (Delete my data) button will
+          delete it.
+        </li>
+        <li>The report queue — until sent or until reports are switched off.</li>
+        <li>
+          The group conversation and the D1 record — until the author deletes them (the D1 record is deleted separately,
+          manually) or on your request.
+        </li>
+        <li>Reports in Sentry — for the project’s retention period in Sentry.</li>
+      </ul>
+
+      <h2 id="rights">Your rights</h2>
+      <p>
+        You can access, rectify and erase your data, restrict and object to processing (for reports — the switch in
+        “Настройки и данные”) and receive your data in a portable form (“Сохранить полную копию”, Save a full backup).
+      </p>
+      <ul>
+        <li>
+          Data on the device is deleted by clearing Telegram’s data on the device. The snapshot in the Telegram cloud
+          cannot yet be deleted from the app: Telegram gives the author no access to it. The upcoming “Удалить мои
+          данные” button will do it.
+        </li>
+        <li>The author deletes the conversation and the D1 record on request via “Написать автору”.</li>
+        <li>
+          A specific Sentry report can be found and deleted by its identifier from “Скопировать диагностику” (Copy
+          diagnostics) on the crash screen: without it the report cannot be linked to you.
+        </li>
+      </ul>
+      <p>
+        You can lodge a complaint with the supervisory authority of your EU country or of Cyprus — the Commissioner for
+        Personal Data Protection (<span lang="el">Επίτροπος Προστασίας Δεδομένων Προσωπικού Χαρακτήρα</span>),
+        <a href="https://www.dataprotection.gov.cy/">dataprotection.gov.cy</a>.
+      </p>
+
+      <h2 id="age">Age</h2>
+      <p>The app is not intended for persons under 16. Age is not verified.</p>
+
+      <h2 id="changes">Changes</h2>
+      <p>
+        A new version is published on this page with its date; the history is in the
+        <a href="https://github.com/lavich/tetradio/commits/main/privacy">repository</a>. If the translations differ,
+        the Russian version prevails.
+      </p>
+    </main>
+  </body>
+</html>
