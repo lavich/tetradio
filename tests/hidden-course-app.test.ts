@@ -191,6 +191,16 @@ describe("облачные уроки скрытого курса", () => {
     expect(await db.packages.get("m01-1")).toBeDefined();
     expect((await courses(db)).map((course) => course.id)).toEqual(["greek-a2"]);
   });
+
+  it("новое устройство: уроки, запрошенные до загрузки каталога, ждут его и не дают ошибки", async () => {
+    const fetcher = hiddenFetcher();
+    const loading = refreshCatalog(db, fetcher);
+    const result = await installPackages(["e01-1", "m01-1"], db, fetcher);
+    await loading;
+    expect(result.failed).toBe(0);
+    expect(fetcher.requests.some((url) => url.includes("e01-1"))).toBe(false);
+    expect(await db.packages.get("m01-1")).toBeDefined();
+  });
 });
 
 describe("каталог ещё не загружался", () => {
