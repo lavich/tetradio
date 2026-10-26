@@ -5,5 +5,5 @@
   "workers_dev": true,
   "send_metrics": false,
   "observability": { "enabled": false },
-  "vars": { "APP_URL": "https://tetradio.app/app/" }
+  "vars": { "APP_URL": "https://tetradio.app/app/" },
 }
