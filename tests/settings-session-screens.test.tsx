@@ -37,6 +37,7 @@ afterEach(() => {
   window.location.hash = "";
   sessionStorage.clear();
   resetLaunchContext();
+  vi.unstubAllEnvs();
 });
 
 const mount = (screen: React.ReactNode) => {
@@ -64,7 +65,8 @@ describe("настройки", () => {
 });
 
 describe("обратная связь", () => {
-  it("раздел идёт сразу после «Отчётов об ошибках», кнопка открывает чат бота с start=feedback", async () => {
+  it("раздел идёт сразу после «Отчётов об ошибках»; без адреса формы кнопка открывает чат бота с start=feedback", async () => {
+    vi.stubEnv("VITE_FEEDBACK_URL", "");
     const popup = vi.spyOn(window, "open").mockImplementation(() => null);
     window.location.hash = `#tgWebAppPlatform=ios&tgWebAppData=${encodeURIComponent(`user=${JSON.stringify({ id: 7 })}`)}`;
     resetLaunchContext();
@@ -73,8 +75,10 @@ describe("обратная связь", () => {
     await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
     const headings = [...host.querySelectorAll("h2")].map((heading) => heading.textContent);
     expect(headings[headings.indexOf("Отчёты об ошибках") + 1]).toBe("Обратная связь");
-    expect(host.textContent).toContain("Вопрос, ошибка в уроке или идея — напишите в чат бота, ответ придёт туда же.");
-    const button = host.querySelector<HTMLButtonElement>('[data-testid="feedback-settings"]')!;
+    expect(host.textContent).toContain(
+      "Вопрос, ошибка в уроке или идея — напишите автору, ответ придёт в чат с ботом.",
+    );
+    const button = host.querySelector<HTMLButtonElement>('[data-testid="feedback-button"]')!;
     expect(button.textContent).toBe("Написать автору");
     act(() => button.click());
     expect(popup).toHaveBeenCalledWith(`https://t.me/${launchContext().bot}?start=feedback`, "_blank", "noopener");

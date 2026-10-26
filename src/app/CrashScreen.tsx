@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { launchContext } from "../platform/launch";
-import { feedbackBot, openFeedback } from "../platform/feedback";
+import { FeedbackButton } from "../features/feedback/FeedbackButton";
 import { APP_BUILD, APP_VERSION } from "../reporting/reporting";
 import ui from "../shared/ui.module.css";
 
@@ -67,11 +67,7 @@ export function CrashScreen({ title, description, error, reportId, testId }: Pro
             {text}
           </pre>
         )}
-        {feedbackBot() && (
-          <Button size="xl" variant="outline" className="mt-2" onClick={() => openFeedback(reportId)}>
-            Написать автору
-          </Button>
-        )}
+        <FeedbackButton reportId={reportId} size="xl" variant="outline" className="mt-2" />
       </main>
     </div>
   );

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { handle, type Answer, type Deps, type Message } from "../bot/feedback";
-import type { Row, Store } from "../bot/store";
+import { fromForm, handle, type Answer, type Deps, type Form, type Message } from "../bot/feedback";
+import { emptyRow, type Row, type Store } from "../bot/store";
 import { ACK, BLOCKED, FAILED, GREETING, INVITE, UNBLOCKED, UNKNOWN_COMMAND } from "../bot/texts";
 
 const GROUP = -1004455365743;
@@ -10,8 +10,16 @@ const DAY = 24 * 60 * 60 * 1000;
 const REPORT = "0123456789abcdef0123456789abcdef";
 
 function memoryStore(rows: Row[] = []) {
-  const byId = new Map(rows.map((row) => [row.userId, row]));
+  const byId = new Map(rows.map((row) => [row.userId, { ...row }]));
   let failing = false;
+  const guard = () => {
+    if (failing) throw new Error("D1 unavailable");
+  };
+  const write = (userId: number, fields: Partial<Row>) => {
+    guard();
+    store.saves++;
+    byId.set(userId, { ...(byId.get(userId) ?? emptyRow(userId)), ...fields });
+  };
   const store: Store & { rows: Map<number, Row>; saves: number; fail(): void } = {
     rows: byId,
     saves: 0,
@@ -19,17 +27,23 @@ function memoryStore(rows: Row[] = []) {
       failing = true;
     },
     byUser: async (userId) => {
-      if (failing) throw new Error("D1 unavailable");
+      guard();
       return byId.get(userId) ?? null;
     },
     byThread: async (thread) => {
-      if (failing) throw new Error("D1 unavailable");
+      guard();
       return [...byId.values()].find((row) => row.thread === thread) ?? null;
     },
-    save: async (row) => {
-      if (failing) throw new Error("D1 unavailable");
-      store.saves++;
-      byId.set(row.userId, { ...row });
+    setThread: async (userId, thread) => write(userId, { thread }),
+    setAck: async (userId, ackAt) => write(userId, { ackAt }),
+    setFb: async (userId, fb, fbAt) => write(userId, { fb, fbAt }),
+    setBlocked: async (userId, blocked) => write(userId, { blocked }),
+    claimForm: async (userId, now, interval) => {
+      guard();
+      const formAt = byId.get(userId)?.formAt ?? null;
+      if (formAt !== null && formAt > now - interval) return false;
+      write(userId, { formAt: now });
+      return true;
     },
   };
   return store;
@@ -66,15 +80,7 @@ function setup(rows: Row[] = [], answers: Record<string, Answer[]> = {}, now = N
   return { bot, store, deps, slept };
 }
 
-const row = (fields: Partial<Row> = {}): Row => ({
-  userId: USER,
-  thread: 7,
-  ackAt: null,
-  blocked: false,
-  fb: null,
-  fbAt: null,
-  ...fields,
-});
+const row = (fields: Partial<Row> = {}): Row => ({ ...emptyRow(USER), thread: 7, ...fields });
 
 let id = 1;
 const fromUser = (fields: Record<string, unknown> = { text: "привет" }): { message: Message } => ({
@@ -307,7 +313,7 @@ describe("сообщение пользователя", () => {
 
   it("связь не сохранилась после создания темы — сбой", async () => {
     const { store, deps } = setup();
-    store.save = async () => {
+    store.setThread = async () => {
       throw new Error("limit");
     };
     expect(await handle(fromUser(), deps)).toMatchObject({ text: FAILED });
@@ -370,7 +376,7 @@ describe("сообщение в группе поддержки", () => {
 
   it("блокировка не сохранилась — сказано в теме", async () => {
     const { store, deps } = setup([row()]);
-    store.save = async () => {
+    store.setBlocked = async () => {
       throw new Error("D1 unavailable");
     };
     expect(await handle(inTopic({ text: "/block" }), deps)).toMatchObject({
@@ -412,5 +418,73 @@ describe("сообщение в группе поддержки", () => {
     update.message.chat = { id: -100999, type: "supergroup" };
     expect(await handle(update, deps)).toBeNull();
     expect(bot.calls).toEqual([]);
+  });
+});
+
+describe("сообщение из формы приложения", () => {
+  const form = (fields: Partial<Form> = {}): Form => ({
+    user: { id: USER, first_name: "Мария", username: "maria", language_code: "ru" },
+    text: "Опечатка в уроке 3",
+    version: "0.1.0 (abc123)",
+    platform: "ios",
+    reportId: null,
+    canReply: true,
+    ...fields,
+  });
+
+  it("новый пользователь: тема, шапка, текст с пометкой; подтверждения в чат нет", async () => {
+    const { bot, store, deps } = setup();
+    expect(await fromForm(form(), deps)).toBe("ok");
+    expect(bot.methods()).toEqual(["createForumTopic", "sendMessage", "sendMessage"]);
+    expect(bot.calls[2].body).toEqual({
+      chat_id: GROUP,
+      message_thread_id: 100,
+      text: "Из приложения · 0.1.0 (abc123) · ios\n\nОпечатка в уроке 3",
+    });
+    expect(store.rows.get(USER)).toMatchObject({ thread: 100, formAt: NOW, ackAt: null });
+  });
+
+  it("существующая тема, отчёт и запрет писать пользователю", async () => {
+    const { bot, deps } = setup([row()]);
+    expect(await fromForm(form({ reportId: REPORT, canReply: false }), deps)).toBe("ok");
+    expect(bot.methods()).toEqual(["sendMessage", "sendMessage"]);
+    expect(bot.calls[0].body.text).toBe(`Отчёт: https://storewizard.sentry.io/projects/tetradio/events/${REPORT}/`);
+    expect(bot.calls[1].body.text).toBe(
+      "Из приложения · 0.1.0 (abc123) · ios\nответить нельзя: бот не может писать пользователю\n\nОпечатка в уроке 3",
+    );
+  });
+
+  it("удалённая тема — новая тема и повтор", async () => {
+    const thread404 = { ok: false, error_code: 400, description: "Bad Request: message thread not found" };
+    const { bot, deps } = setup([row()], { sendMessage: [thread404] });
+    expect(await fromForm(form(), deps)).toBe("ok");
+    expect(bot.methods()).toEqual(["sendMessage", "createForumTopic", "sendMessage", "sendMessage"]);
+  });
+
+  it("чаще раза в 10 секунд — rate, в группу ничего", async () => {
+    const { bot, deps } = setup([row({ formAt: NOW - 9_000 })]);
+    expect(await fromForm(form(), deps)).toBe("rate");
+    expect(bot.calls).toEqual([]);
+  });
+
+  it("два одновременных запроса — одно сообщение", async () => {
+    const { bot, deps } = setup([row()]);
+    const results = await Promise.all([fromForm(form(), deps), fromForm(form(), deps)]);
+    expect(results.sort()).toEqual(["ok", "rate"]);
+    expect(bot.methods()).toEqual(["sendMessage"]);
+  });
+
+  it("заблокированный — ok без отправки", async () => {
+    const { bot, deps } = setup([row({ blocked: true })]);
+    expect(await fromForm(form(), deps)).toBe("ok");
+    expect(bot.calls).toEqual([]);
+  });
+
+  it("сбой Bot API или хранилища — failed", async () => {
+    const refused = { ok: false, error_code: 400, description: "Bad Request: chat not found" };
+    expect(await fromForm(form(), setup([row()], { sendMessage: [refused] }).deps)).toBe("failed");
+    const broken = setup();
+    broken.store.fail();
+    expect(await fromForm(form(), broken.deps)).toBe("failed");
   });
 });

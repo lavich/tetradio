@@ -22,3 +22,13 @@ export function openFeedback(
   if (app?.openTelegramLink) app.openTelegramLink(url);
   else window.open(url, "_blank", "noopener");
 }
+
+export const feedbackUrl = (): string | null => import.meta.env.VITE_FEEDBACK_URL || null;
+
+/** Бот разработки подписывает `initData` своим токеном — обработчик формы его не примет. */
+export const formAvailable = (
+  launch: LaunchContext = launchContext(),
+  app: TelegramWebApp | null = telegramBridge(),
+  configured: string | null = CONFIGURED_BOT,
+  url: string | null = feedbackUrl(),
+) => Boolean(url && launch.kind === "telegram" && launch.bot === configured && app?.initData);

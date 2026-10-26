@@ -5,24 +5,51 @@ import { sqlite } from "./helpers/sqlite-d1";
 describe("хранилище связей на D1", () => {
   it("строка находится по пользователю и по теме", async () => {
     const store = databaseStore(sqlite());
-    await store.save({ ...emptyRow(42), thread: 7, ackAt: 1000 });
+    await store.setThread(42, 7);
+    await store.setAck(42, 1000);
     expect(await store.byUser(42)).toEqual({ ...emptyRow(42), thread: 7, ackAt: 1000 });
     expect((await store.byThread(7))?.userId).toBe(42);
     expect(await store.byUser(43)).toBeNull();
     expect(await store.byThread(8)).toBeNull();
   });
 
-  it("повторная запись обновляет строку целиком", async () => {
+  it("каждая запись меняет только свои столбцы", async () => {
     const store = databaseStore(sqlite());
-    await store.save({ ...emptyRow(42), fb: "abc", fbAt: 1 });
-    await store.save({ ...emptyRow(42), thread: 9, blocked: true });
-    expect(await store.byUser(42)).toEqual({ ...emptyRow(42), thread: 9, blocked: true });
-    expect((await store.byThread(9))?.blocked).toBe(true);
+    await store.setThread(42, 7);
+    await store.setFb(42, "abc", 5);
+    await store.setBlocked(42, true);
+    await store.setAck(42, 9);
+    expect(await store.byUser(42)).toEqual({ ...emptyRow(42), thread: 7, fb: "abc", fbAt: 5, blocked: true, ackAt: 9 });
+    await store.setBlocked(42, false);
+    await store.setFb(42, null, null);
+    expect(await store.byUser(42)).toEqual({ ...emptyRow(42), thread: 7, ackAt: 9 });
   });
 
   it("одна тема не принадлежит двум пользователям", async () => {
     const store = databaseStore(sqlite());
-    await store.save({ ...emptyRow(42), thread: 7 });
-    await expect(store.save({ ...emptyRow(43), thread: 7 })).rejects.toThrow();
+    await store.setThread(42, 7);
+    await expect(store.setThread(43, 7)).rejects.toThrow();
+  });
+
+  it("слот формы — не чаще одного раза за интервал, в том числе для нового пользователя", async () => {
+    const store = databaseStore(sqlite());
+    expect(await store.claimForm(42, 100_000, 10_000)).toBe(true);
+    expect(await store.claimForm(42, 105_000, 10_000)).toBe(false);
+    expect(await store.claimForm(42, 110_000, 10_000)).toBe(true);
+    expect((await store.byUser(42))?.formAt).toBe(110_000);
+  });
+
+  it("одновременные слоты формы — занят один", async () => {
+    const store = databaseStore(sqlite());
+    const results = await Promise.all([store.claimForm(42, 100_000, 10_000), store.claimForm(42, 100_001, 10_000)]);
+    expect(results.filter(Boolean)).toHaveLength(1);
+  });
+
+  it("слот формы не трогает остальные столбцы", async () => {
+    const store = databaseStore(sqlite());
+    await store.setThread(42, 7);
+    await store.setBlocked(42, true);
+    await store.claimForm(42, 1, 10_000);
+    expect(await store.byUser(42)).toEqual({ ...emptyRow(42), thread: 7, blocked: true, formAt: 1 });
   });
 });

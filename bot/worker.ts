@@ -1,4 +1,5 @@
-import { handle, legacyReply, type Answer, type Update } from "./feedback";
+import { fromForm, handle, legacyReply, type Answer, type Deps, type Update } from "./feedback";
+import { MAX_BODY, readForm, verifyInitData } from "./form";
 import { databaseStore, type Database } from "./store";
 
 export { GREETING, UNREAD } from "./texts";
@@ -10,6 +11,7 @@ export interface Env {
   SUPPORT_CHAT_ID?: string;
   SENTRY_EVENT_URL?: string;
   FEEDBACK?: Database;
+  APP_ORIGINS?: string;
 }
 
 function sameSecret(given: string | null, expected: string | undefined) {
@@ -31,21 +33,84 @@ const botApi = (token: string, request: typeof fetch) => async (method: string, 
     })
   ).json()) as Answer;
 
+const configured = (env: Env, request: typeof fetch): Deps | null =>
+  env.BOT_TOKEN && env.SUPPORT_CHAT_ID && env.FEEDBACK
+    ? {
+        api: botApi(env.BOT_TOKEN, request),
+        store: databaseStore(env.FEEDBACK),
+        supportChatId: env.SUPPORT_CHAT_ID,
+        sentryEventUrl: env.SENTRY_EVENT_URL ?? "",
+        appUrl: env.APP_URL,
+        now: () => Date.now(),
+        sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+      }
+    : null;
+
 export async function respond(update: Update | null, env: Env, request: typeof fetch = fetch) {
-  if (!env.BOT_TOKEN || !env.SUPPORT_CHAT_ID || !env.FEEDBACK) return legacyReply(update, env.APP_URL);
-  return handle(update, {
-    api: botApi(env.BOT_TOKEN, request),
-    store: databaseStore(env.FEEDBACK),
-    supportChatId: env.SUPPORT_CHAT_ID,
-    sentryEventUrl: env.SENTRY_EVENT_URL ?? "",
-    appUrl: env.APP_URL,
-    now: () => Date.now(),
-    sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
-  });
+  const deps = configured(env, request);
+  return deps ? handle(update, deps) : legacyReply(update, env.APP_URL);
+}
+
+/** Без Content-Length (chunked) `request.text()` прочитал бы тело любого размера. */
+async function readLimited(request: Request, limit: number): Promise<string | null> {
+  if (Number(request.headers.get("Content-Length") ?? 0) > limit) return null;
+  if (!request.body) return "";
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > limit) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(value);
+  }
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return new TextDecoder().decode(bytes);
+}
+
+const STATUS = { ok: 200, invalid: 400, stale: 401, rate: 429, failed: 502 } as const;
+
+export async function feedbackForm(request: Request, env: Env, fetcher: typeof fetch = fetch): Promise<Response> {
+  const origin = request.headers.get("Origin") ?? "";
+  const allowed = (env.APP_ORIGINS ?? "").split(",").map((item) => item.trim());
+  if (!origin || !allowed.includes(origin)) return new Response(null, { status: 403 });
+  const cors = { "Access-Control-Allow-Origin": origin, Vary: "Origin" };
+  if (request.method === "OPTIONS")
+    return new Response(null, {
+      status: 204,
+      headers: {
+        ...cors,
+        "Access-Control-Allow-Methods": "POST",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Max-Age": "86400",
+      },
+    });
+  const answer = (result: keyof typeof STATUS, status: number = STATUS[result]) =>
+    Response.json(result === "ok" ? { ok: true } : { error: result }, { status, headers: cors });
+  if (request.method !== "POST") return new Response(null, { status: 405, headers: cors });
+  const deps = configured(env, fetcher);
+  if (!deps) return answer("failed", 503);
+  const raw = await readLimited(request, MAX_BODY);
+  const form = raw === null ? null : readForm(raw);
+  if (!form) return answer("invalid");
+  const user = await verifyInitData(form.initData, env.BOT_TOKEN!, Math.floor(deps.now() / 1000));
+  if (!user) return answer("stale");
+  return answer(await fromForm({ ...form, user }, deps));
 }
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    if (new URL(request.url).pathname === "/feedback")
+      return feedbackForm(request, env).catch(() => new Response(null, { status: 502 }));
     if (request.method !== "POST") return new Response(null, { status: 405 });
     if (!sameSecret(request.headers.get("X-Telegram-Bot-Api-Secret-Token"), env.WEBHOOK_SECRET))
       return new Response(null, { status: 401 });

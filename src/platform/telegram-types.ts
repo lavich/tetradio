@@ -50,7 +50,14 @@ export interface TelegramCloudStorage {
 export interface TelegramWebApp {
   initData: string;
   initDataUnsafe: {
-    user?: { id: number; first_name: string; last_name?: string; username?: string; language_code?: string };
+    user?: {
+      id: number;
+      first_name: string;
+      last_name?: string;
+      username?: string;
+      language_code?: string;
+      allows_write_to_pm?: boolean;
+    };
     start_param?: string;
     auth_date?: number;
   };
@@ -72,6 +79,8 @@ export interface TelegramWebApp {
   close(): void;
   /** Bot API 6.1: открыть ссылку t.me внутри Telegram, в том числе выбор чата `t.me/share/url`. */
   openTelegramLink?(url: string): void;
+  /** Bot API 6.9: спросить у пользователя разрешение боту писать ему. */
+  requestWriteAccess?(callback?: (granted: boolean) => void): void;
   onEvent(event: string, handler: (...args: unknown[]) => void): void;
   offEvent(event: string, handler: (...args: unknown[]) => void): void;
   BackButton?: TelegramButton;
