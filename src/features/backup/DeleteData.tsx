@@ -17,6 +17,7 @@ import { backupName, exportFull, transferFile, TRANSFER_TEXT } from "./backup";
 
 const FAILURES: Record<EraseReason, string> = {
   messages: "Не удалось удалить переписку. Попробуйте позже.",
+  waitlist: "Не удалось удалить заявки на курсы. Проверьте сеть и повторите.",
   stale: "Перезапустите приложение и повторите.",
   unavailable: "Облако Telegram недоступно — перезапустите приложение и повторите.",
   cloud: "Не удалось удалить данные из облака Telegram. Проверьте сеть и попробуйте ещё раз.",
@@ -93,6 +94,7 @@ export function DeleteData({ erase = eraseNow }: { erase?: (withMessages: boolea
               <ul className="list-disc pl-5 text-left">
                 <li>Прогресс, слова, ответы и настройки на этом устройстве.</li>
                 {telegram && <li>Прогресс в облаке Telegram.</li>}
+                {offerMessages && <li>Заявки на курсы в работе.</li>}
                 {messages && offerMessages && <li>Ваша переписка с автором в группе поддержки.</li>}
                 {telegram && (
                   <li>На других устройствах удаление нужно повторить — иначе они снова сохранят прогресс в облако.</li>

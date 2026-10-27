@@ -1,7 +1,7 @@
 import { useEffect, useRef, type KeyboardEvent } from "react";
 import type { Language } from "../domain/language";
 import { reportError } from "../reporting/reporting";
-import { chooseShelfCourse, type CourseEntry } from "../storage/courses";
+import { chooseShelfCourse, type CourseEntry, type UpcomingEntry } from "../storage/courses";
 import { useCurrentLanguage, useLanguages, useShelfLanguage } from "./courses";
 import { cx } from "./cx";
 import css from "./course-switch.module.css";
@@ -11,6 +11,8 @@ interface Option {
   title: string;
   /** Не начат: «+» перед именем, читалка слышит «не начат». */
   unstarted?: boolean;
+  /** Курс в работе: без «+», читалка слышит «готовится». */
+  upcoming?: boolean;
   /** Вариант виден, но не выбирается: щелчок и стрелки его пропускают. Подпись видна рядом с именем. */
   disabled?: string;
 }
@@ -78,9 +80,11 @@ export function Segmented({
           aria-label={
             option.unstarted
               ? `${option.title}, не начат`
-              : option.disabled
-                ? `${option.title}, ${option.disabled}`
-                : undefined
+              : option.upcoming
+                ? `${option.title}, готовится`
+                : option.disabled
+                  ? `${option.title}, ${option.disabled}`
+                  : undefined
           }
         >
           {option.unstarted ? <span aria-hidden="true">+ </span> : null}
@@ -117,17 +121,27 @@ export function LanguageSwitch({ shelf = false }: { shelf?: boolean }) {
   );
 }
 
-export function ShelfCourseSwitch({ courses, value }: { courses: CourseEntry[]; value: string | undefined }) {
-  if (courses.length < 2) return null;
+/** Курсы языка на «Курсе»; с курсом в работе подпись — уровень: «A0 → A2 | A2 → B1». */
+export function ShelfCourseSwitch({
+  courses,
+  upcoming = [],
+  value,
+}: {
+  courses: CourseEntry[];
+  upcoming?: UpcomingEntry[];
+  value: string | undefined;
+}) {
+  if (courses.length + upcoming.length < 2 || !courses.length) return null;
+  const name = (course: CourseEntry | UpcomingEntry) =>
+    (upcoming.length ? course.level : undefined) ?? ("short" in course ? course.short : undefined) ?? course.title;
   return (
     <Segmented
       label="Курс языка"
       testId="course-switch"
-      options={courses.map((course) => ({
-        id: course.id,
-        title: course.short ?? course.title,
-        unstarted: !course.started,
-      }))}
+      options={[
+        ...courses.map((course) => ({ id: course.id, title: name(course), unstarted: !course.started })),
+        ...upcoming.map((course) => ({ id: course.id, title: name(course), upcoming: true })),
+      ]}
       value={value}
       onChange={(id) =>
         void chooseShelfCourse(id).catch((error: unknown) => void reportError(error, { category: "storage" }))

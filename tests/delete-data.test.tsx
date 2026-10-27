@@ -76,12 +76,14 @@ describe("раздел «Удаление данных»", () => {
     expect(dialog).toContain("Отчёты об ошибках после удаления снова включатся.");
     expect(dialog).toContain("Сообщения в вашем чате с ботом удаляете вы сами.");
     expect(dialog).toContain("И переписку с автором");
+    expect(dialog).toContain("Заявки на курсы в работе.");
   });
 
   it("без формы обратной связи галочки нет", async () => {
     vi.stubEnv("VITE_FEEDBACK_URL", "");
     await openDialog();
     expect(document.body.textContent).not.toContain("И переписку с автором");
+    expect(document.body.textContent).not.toContain("Заявки на курсы в работе.");
   });
 
   it("по умолчанию галочка выключена", async () => {

@@ -11,7 +11,7 @@ import { MoreCourses } from "../src/features/today/CourseLessonLine";
 import { PROFILES } from "../src/domain/language";
 import type { CourseEntry } from "../src/storage/courses";
 import { TodayScreen } from "../src/features/today/TodayScreen";
-import { setPrimaryCourse } from "../src/storage/courses";
+import { setPrimaryCourse, UPCOMING_KEY } from "../src/storage/courses";
 import { db } from "../src/storage/db";
 import { activeOf, install, lessonTitle, NOW, seedCatalog, wordId } from "./helpers/language-db";
 import { pauseCourse, resumeCourse } from "../src/storage/pause-actions";
@@ -23,9 +23,11 @@ vi.setConfig({ testTimeout: 20_000 });
 let root: Root | null = null;
 let host: HTMLElement;
 let location = "";
+let state: unknown = null;
 function Where() {
   const at = useLocation();
   location = at.pathname;
+  state = at.state;
   return null;
 }
 beforeEach(async () => {
@@ -322,6 +324,32 @@ describe("конец курса", () => {
     expect(text()).toBe(PROFILES.el.finished);
     expect(text()).toContain("M3");
     expect(host.querySelector('[data-testid="course-next"]')).toBeNull();
+  });
+  const nextLine = () => host.querySelector('[data-testid="next-course"]');
+  const upcoming = (after: string) =>
+    db.meta.put({
+      key: UPCOMING_KEY,
+      value: JSON.stringify([{ id: "greek-b1", title: "Греческий", language: "el", level: "A2 → B1", after }]),
+    });
+  it("курс пройден, у него есть курс в работе — строка и ссылка на его страницу", async () => {
+    await start([["greek"]]);
+    await finish("greek");
+    await upcoming("greek");
+    mount();
+    await until(() => !!nextLine(), "строка следующего курса");
+    expect(nextLine()!.textContent).toBe("Следующий курс — Греческий · A2 → B1: готовится. Открыть страницу курса");
+    act(() => nextLine()!.querySelector("a")!.click());
+    await until(() => location === "/course", "переход на «Курс»");
+    expect(state).toEqual({ course: "greek-b1" });
+  });
+  it("курс в работе идёт после другого курса — строки нет", async () => {
+    await start([["greek"]]);
+    await finish("greek");
+    await upcoming("other");
+    mount();
+    await until(() => !!text(), "текст конца курса");
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    expect(nextLine()).toBeNull();
   });
   it("английский курс — текст без экзамена, срока и M3", async () => {
     await start([["it"]]);

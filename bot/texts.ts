@@ -44,3 +44,14 @@ export const header = (person: Person) =>
     `id: ${person.id}`,
     ...(person.language_code ? [`язык: ${person.language_code}`] : []),
   ].join("\n");
+
+export const waitlistLine = (course: string, total: number) => `+1 · ${course} · всего ${total}`;
+export const waitlistCount = (course: string, total: number, pending: number) =>
+  `${course}: ${total}, не уведомлено ${pending}`;
+export const NO_WAITLIST = "Заявок нет.";
+export const noWaitlistFor = (course: string) => `Заявок на ${course} нет — проверьте id курса.`;
+export const NOTIFY_USAGE = "Формат: /notify <курс> <текст>";
+export const NOTIFY_TOO_LONG = "Текст длиннее 4096 символов — ничего не отправлено.";
+export const notifyReport = (sent: number, failed: number, left: number) =>
+  `Отправлено ${sent}, не доставлено ${failed}, осталось ${left} — повторите команду`;
+export const notifyStopped = (reason: string) => `Рассылка остановлена: ${reason}`;

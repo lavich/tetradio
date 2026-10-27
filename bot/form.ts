@@ -84,3 +84,15 @@ export async function verifyInitData(initData: string, token: string, nowSeconds
     return null;
   }
 }
+
+export type WaitlistBody =
+  { initData: string; action: "forget" } | { initData: string; action: "status" | "join" | "leave"; course: string };
+
+export function readWaitlist(raw: string, courses: string[]): WaitlistBody | null {
+  const initData = readInitData(raw);
+  if (!initData) return null;
+  const { action, course } = JSON.parse(raw) as { action?: unknown; course?: unknown };
+  if (action === "forget") return { initData, action };
+  if (action !== "status" && action !== "join" && action !== "leave") return null;
+  return typeof course === "string" && courses.includes(course) ? { initData, action, course } : null;
+}

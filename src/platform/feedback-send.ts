@@ -15,8 +15,8 @@ export const resetWriteAccess = () => {
  * писать можно. Ответ запоминается до конца запуска: подписанные данные запуска после него не обновляются, и без памяти
  * Telegram спрашивал бы перед каждым сообщением.
  */
-export function askWriteAccess(app: TelegramWebApp, timeout = 30_000): Promise<boolean> {
-  if (answered !== null) return Promise.resolve(answered);
+export function askWriteAccess(app: TelegramWebApp, timeout = 30_000, again = false): Promise<boolean> {
+  if (answered !== null && !(again && !answered)) return Promise.resolve(answered);
   if (app.initDataUnsafe.user?.allows_write_to_pm) return Promise.resolve(true);
   if (!app.requestWriteAccess || !app.isVersionAtLeast("6.9")) return Promise.resolve(true);
   return new Promise((resolve) => {
@@ -44,7 +44,19 @@ interface BotRequest {
   timeout?: number;
 }
 
+interface BotAnswer {
+  result: SendResult;
+  data?: Record<string, unknown>;
+}
+
 async function postToBot(
+  body: (app: TelegramWebApp, launch: LaunchContext) => object,
+  request: BotRequest,
+): Promise<SendResult> {
+  return (await askBot(body, request)).result;
+}
+
+async function askBot(
   body: (app: TelegramWebApp, launch: LaunchContext) => object,
   {
     app = telegramBridge(),
@@ -53,8 +65,8 @@ async function postToBot(
     fetcher = fetch,
     timeout = 15_000,
   }: BotRequest,
-): Promise<SendResult> {
-  if (!app?.initData || !url) return "failed";
+): Promise<BotAnswer> {
+  if (!app?.initData || !url) return { result: "failed" };
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
@@ -65,12 +77,14 @@ async function postToBot(
       body: JSON.stringify(body(app, launch)),
       signal: controller.signal,
     });
-    if (response.ok) return "ok";
-    if (response.status === 401) return "stale";
-    if (response.status === 429) return "rate";
-    return "failed";
+    const data = (await response.json().catch(() => null)) as Record<string, unknown> | null;
+    if (response.ok) return { result: "ok", data: data ?? {} };
+    // 401 без подтверждения подписи — не «устарело»: повторный запуск тут не поможет.
+    if (response.status === 401) return { result: data?.error === "stale" ? "stale" : "failed" };
+    if (response.status === 429) return { result: "rate" };
+    return { result: "failed" };
   } catch {
-    return "failed";
+    return { result: "failed" };
   } finally {
     clearTimeout(timer);
   }
@@ -94,3 +108,20 @@ export const sendFeedback = (
 
 export const forgetMessages = ({ url = feedbackUrl(), ...request }: BotRequest = {}) =>
   postToBot((app) => ({ initData: app.initData }), { ...request, url: url && new URL("forget", url).href });
+
+export type WaitlistAction = "status" | "join" | "leave" | "forget";
+
+export async function waitlist(
+  action: WaitlistAction,
+  course: string | null,
+  request: BotRequest = {},
+): Promise<{ result: SendResult; joined?: boolean }> {
+  const { url = feedbackUrl(), ...rest } = request;
+  const answer = await askBot((app) => ({ initData: app.initData, action, ...(course ? { course } : {}) }), {
+    ...rest,
+    url: url && new URL("waitlist", url).href,
+  });
+  return typeof answer.data?.joined === "boolean"
+    ? { result: answer.result, joined: answer.data.joined }
+    : { result: answer.result };
+}

@@ -24,6 +24,30 @@ export const CURRENT_STARTED_LANGUAGE_KEY = "currentStartedLanguage";
 export const HOME_COURSE_KEY = "homeCourse";
 export const PRIMARY_COURSE_KEY = "primaryCourse";
 export const SHELF_COURSE_KEY = "shelfCourse";
+/** Курсы в работе из последнего каталога, JSON. */
+export const UPCOMING_KEY = "upcomingCourses";
+
+export interface UpcomingEntry {
+  id: string;
+  title: string;
+  language: Language;
+  level?: string;
+  goal?: string;
+  after?: string;
+}
+
+export const upcomingCourses = zoned(async function upcomingCourses(
+  database: AppDatabase = db,
+): Promise<UpcomingEntry[]> {
+  try {
+    const raw: unknown = JSON.parse((await database.meta.get(UPCOMING_KEY))?.value ?? "[]");
+    return Array.isArray(raw)
+      ? raw.filter((item: UpcomingEntry) => typeof item?.id === "string" && isLanguage(item.language))
+      : [];
+  } catch {
+    return [];
+  }
+});
 
 export interface CourseEntry {
   id: string;
@@ -310,7 +334,7 @@ const readShelfChoices = zoned(async function readShelfChoices(database: AppData
     return {};
   }
 });
-const rememberShelfCourse = (course: CourseEntry, database: AppDatabase) =>
+const rememberShelfCourse = (course: { id: string; language: Language }, database: AppDatabase) =>
   database.transaction("rw", database.meta, async () =>
     database.meta.put({
       key: SHELF_COURSE_KEY,
@@ -331,8 +355,11 @@ export const shelfCourse = zoned(async function shelfCourse(database: AppDatabas
   ]);
   const own = list.filter((course) => course.language === language);
   const started = own.filter((course) => course.started);
+  const chosen = choices[language ?? ""];
+  if ((await upcomingCourses(database)).some((course) => course.id === chosen && course.language === language))
+    return chosen;
   return (
-    own.find((course) => course.id === choices[language ?? ""]) ??
+    own.find((course) => course.id === chosen) ??
     started.find((course) => course.id === primary && course.installed) ??
     started.find((course) => course.installed) ??
     started[0] ??
@@ -341,7 +368,9 @@ export const shelfCourse = zoned(async function shelfCourse(database: AppDatabas
 });
 
 export async function chooseShelfCourse(courseId: string, database: AppDatabase = db): Promise<void> {
-  const course = (await courses(database)).find((item) => item.id === courseId);
+  const course =
+    (await courses(database)).find((item) => item.id === courseId) ??
+    (await upcomingCourses(database)).find((item) => item.id === courseId);
   if (!course) return;
   await rememberShelfCourse(course, database);
   if ((await shelfLanguage(database)) !== course.language) await setCurrentLanguage(course.language, database);

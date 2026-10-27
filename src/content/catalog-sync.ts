@@ -1,4 +1,4 @@
-import { rememberCourses } from "../storage/courses";
+import { rememberCourses, UPCOMING_KEY } from "../storage/courses";
 import { db, distinctKeys, type AppDatabase, type StoredCatalogEntry } from "../storage/db";
 import { readPending } from "../sync/snapshot";
 import type { Course } from "../domain/types";
@@ -26,7 +26,10 @@ async function loadCatalog(database: AppDatabase, source: ContentFetcher): Promi
       await database.modules.bulkAdd((catalog.modules ?? []).map((module, position) => ({ ...module, position })));
       await adoptCourses(catalog, database);
       await rememberCourses(database);
-      await database.meta.put({ key: "catalogUpdatedAt", value: new Date().toISOString() });
+      await database.meta.bulkPut([
+        { key: UPCOMING_KEY, value: JSON.stringify(catalog.upcoming ?? []) },
+        { key: "catalogUpdatedAt", value: new Date().toISOString() },
+      ]);
     });
     setCatalogPhase("ready");
     return catalog;

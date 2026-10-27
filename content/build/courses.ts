@@ -1,4 +1,4 @@
-import { type CatalogCourse } from "../../src/content/schema.ts";
+import { type CatalogCourse, type CatalogUpcoming } from "../../src/content/schema.ts";
 import {
   parseCalendar,
   parseCourseChoice,
@@ -28,6 +28,7 @@ export function buildCourses(sources: ContentRoot) {
   const languages = new Map<string, Language>();
   const moduleLanguages = new Map<string, Language>();
   const courseLanguages = new Map<string, Language>();
+  const upcoming: { item: CatalogUpcoming; where: string; hidden: boolean }[] = [];
   // Курс учат целиком, поэтому смешанные языки внутри него — ошибка, а не особенность набора.
   const courseLanguage = (courseId: string, where: string, src: CourseSource, lessonIds: string[]) => {
     const own = src.language === undefined ? undefined : languageOf(src.language, `${where}.language`);
@@ -47,6 +48,11 @@ export function buildCourses(sources: ContentRoot) {
   for (const [courseId, src] of sources.courses) {
     const where = `courses/${src.file}`;
     const title = text(src.title, `${where}.title`)!;
+    if (src.upcoming !== undefined) {
+      upcoming.push(readUpcoming(courseId, title, src, where));
+      continue;
+    }
+    if (src.after !== undefined) fail(`${where}.after: поле только у курса в работе (upcoming: true)`);
     if (src.hidden !== undefined) {
       if (src.hidden !== true) fail(`${where}.hidden: только true`);
       hidden.add(courseId);
@@ -164,7 +170,7 @@ export function buildCourses(sources: ContentRoot) {
     if (source) course.source = source;
     courses.push(course);
   }
-  if (hidden.size && hidden.size === sources.courses.size)
+  if (hidden.size && hidden.size === courses.length)
     fail("courses/: все курсы скрыты (hidden: true), показывать нечего");
   const places = new Map<number, string>();
   for (const [courseId, src] of sources.courses) {
@@ -188,6 +194,14 @@ export function buildCourses(sources: ContentRoot) {
   };
   unique("short", (course) => course.short?.toLocaleLowerCase());
   unique("palette", (course) => course.palette ?? DEFAULT_PALETTE);
+  const shipped = (courseId: string) => courses.some((course) => course.id === courseId) && !hidden.has(courseId);
+  for (const { item, hidden: off } of upcoming) if (off) hidden.add(item.id);
+  for (const { item, where } of upcoming) {
+    if (item.after !== undefined && !shipped(item.after))
+      fail(`${where}.after: курса ${item.after} нет среди поставляемых курсов`);
+    if (!courses.some((course) => course.language === item.language && shipped(course.id)))
+      fail(`${where}.language: у языка ${item.language} нет поставляемого курса с уроками`);
+  }
   const place = (course: CatalogCourse) => course.order ?? Number.MAX_SAFE_INTEGER;
   courses.sort((a, b) => place(a) - place(b) || a.id.localeCompare(b.id));
   return {
@@ -199,8 +213,38 @@ export function buildCourses(sources: ContentRoot) {
     reviews,
     partial,
     hidden,
+    upcoming: upcoming.map((entry) => entry.item),
     languages,
     moduleLanguages,
     courseLanguages,
   };
+}
+
+const UPCOMING_FORBIDDEN = [
+  "lessons",
+  "modules",
+  "calendar",
+  "exam",
+  "passShare",
+  "order",
+  "short",
+  "palette",
+  "entry",
+  "pace",
+  "source",
+] as const;
+
+function readUpcoming(id: string, title: string, src: CourseSource, where: string) {
+  if (src.upcoming !== true) fail(`${where}.upcoming: только true`);
+  for (const field of UPCOMING_FORBIDDEN)
+    if (src[field] !== undefined) fail(`${where}.${field}: у курса в работе (upcoming: true) этого поля нет`);
+  if (src.hidden !== undefined && src.hidden !== true) fail(`${where}.hidden: только true`);
+  if (src.language === undefined) fail(`${where}.language: у курса в работе язык обязателен`);
+  const { level, goal } = parseCourseChoice({ level: src.level, goal: src.goal }, where);
+  const after = src.after === undefined ? undefined : text(src.after, `${where}.after`)!;
+  const item: CatalogUpcoming = { id, title, language: languageOf(src.language, `${where}.language`) };
+  if (level) item.level = level;
+  if (goal) item.goal = goal;
+  if (after) item.after = after;
+  return { item, where, hidden: src.hidden === true };
 }

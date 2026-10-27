@@ -152,7 +152,7 @@ describe("форма «Написать автору»", () => {
     [429, "Подождите несколько секунд и отправьте снова."],
     [502, "Не удалось отправить. Проверьте сеть и попробуйте ещё раз."],
   ])("ответ %i — свой текст, черновик сохранён и возвращается после перезапуска", async (status, message) => {
-    respond = async () => Response.json({}, { status });
+    respond = async () => Response.json(status === 401 ? { error: "stale" } : {}, { status });
     await open();
     await type("Важное");
     await submit();
