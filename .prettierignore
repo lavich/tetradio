@@ -22,9 +22,8 @@ content/lessons
 content/courses
 content/modules
 
-# Спецификации и проза: отдельное решение, не смешиваем с правкой кода.
+# Спецификации: отдельное решение, не смешиваем с правкой кода.
 openspec
-*.md
 
 package-lock.json
 
