@@ -74,7 +74,7 @@ TUNNEL_HOST=<имя>.trycloudflare.com npm run dev            # vite.config.ts �
 
 ## Поведение в WebView
 
-**Режимы запуска.** Приложение работает в Compact, Fullsize и Fullscreen. Режим берётся из `isFullscreen`/`isExpanded`, обновляется по `fullscreenChanged` и виден в атрибуте `data-launch-mode` на `<html>`. Во весь экран к верхнему отступу добавляются `safeAreaInset` и `contentSafeAreaInset` клиента.
+**Режимы запуска.** Приложение работает в Compact, Fullsize и Fullscreen. Режим берётся из `isFullscreen`/`isExpanded`, обновляется по `fullscreenChanged` и виден в атрибуте `data-launch-mode` на `<html>`. Во весь экран к верхнему отступу добавляются `safeAreaInset` и `contentSafeAreaInset` клиента. Шапки во весь экран нет, и iOS выбирает цвет иконок строки состояния (время, заряд) только по hex-цвету шапки; ключ `bg_color`, который шлёт bridge, даёт белые иконки. Поэтому при каждом применении темы приложение передаёт вычисленный фон страницы (`--background`) hex-строкой в `setHeaderColor` и `setBackgroundColor` (Bot API 6.9) — это перекрывает цвета, заданные в BotFather.
 
 **Сворачивание и возврат** (Bot API 8.0). Клиент присылает `deactivated`/`activated`; в старых клиентах — `visibilitychange`. На возврат приложение перечитывает тему, устойчивую высоту и отступы; состояние упражнения не трогается. Активность — атрибут `data-app-active`. Нулевая высота не отменяет последнюю положительную: `--app-height` держит прежнее значение. После нескольких циклов сна WebKit может отказать IndexedDB (`UnknownError: … without an in-progress transaction`): граница восстановления переоткрывает базу без перезагрузки, после трёх отказов за минуту показывает «Не удалось показать экран» с «Перезапустить».
 
