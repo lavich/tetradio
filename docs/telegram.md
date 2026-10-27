@@ -40,12 +40,11 @@
 
 **Без настройки.** Пока у Worker нет `BOT_TOKEN`, `SUPPORT_CHAT_ID` или `FEEDBACK`, бот отвечает как раньше: приветствием на любой `/start` и «Сообщения боту пока не читаются. Τετράδιο открывается кнопкой ниже.» на остальное.
 
-**Выкатка.** Зависимости Worker — `bot/package.json` со своим lock-файлом: `wrangler` не попадает в зависимости приложения. CI собирает Worker без выкатки (задача `worker` в `ci.yml`); `deploy.yml` после зелёного CI на `main` применяет миграции D1 из `bot/migrations/` и выкатывает его в окружении GitHub `cloudflare` с правилом ветки `main`. Миграции только добавляют: до выкатки кода с новой схемой работает прежний Worker. `CLOUDFLARE_API_TOKEN` (права `Workers Scripts: Edit` и `D1: Edit`) и `CLOUDFLARE_ACCOUNT_ID` — секреты этого окружения, не репозитория: секрет репозитория читает любой workflow любой ветки. Без токена шаги пропускаются с предупреждением в Actions, сайт выкатывается как обычно. Зависимости `bot/` Dependabot обновляет раз в месяц.
+**Выкатка.** Зависимости Worker — `bot/package.json` со своим lock-файлом: `wrangler` не попадает в зависимости приложения. CI собирает Worker без выкатки (задача `worker` в `ci.yml`); `deploy.yml` после зелёного CI на `main` применяет миграции D1 из `bot/migrations/` и выкатывает его в окружении GitHub `cloudflare` с правилом ветки `main`. Миграции только добавляют: до выкатки кода, при сбое `wrangler deploy` и после `rollback` с новой схемой работает прежний Worker. Удаление или переименование столбца — в два выпуска: сначала код перестаёт его читать, затем миграция. Сайт выкатывается независимо от задачи `worker`: если она упала, новое приложение работает со старым Worker. `CLOUDFLARE_API_TOKEN` (права `Workers Scripts: Edit` и `D1: Edit`) и `CLOUDFLARE_ACCOUNT_ID` — секреты этого окружения, не репозитория: секрет репозитория читает любой workflow любой ветки. Без токена шаги пропускаются с предупреждением в Actions, сайт выкатывается как обычно. Зависимости `bot/` Dependabot обновляет раз в месяц.
 
 Настройка — после первой выкатки Worker из CI (иначе `secret put` предложит создать пустой Worker); `wrangler` авторизуется через `npx --prefix bot wrangler login` или `CLOUDFLARE_API_TOKEN` в окружении:
 
 ```sh
-npx --prefix bot wrangler d1 migrations apply tetradio-feedback --remote --config bot/wrangler.jsonc   # первая настройка; дальше миграции применяет deploy.yml
 openssl rand -hex 32                                                    # секрет вебхука: только A-Z, a-z, 0-9, _ и -
 npx --prefix bot wrangler secret put WEBHOOK_SECRET --config bot/wrangler.jsonc
 # .env.bot (в .gitignore, значения без кавычек): BOT_TOKEN, WEBHOOK_URL=https://tetradio-bot.<поддомен>.workers.dev/, WEBHOOK_SECRET
@@ -55,7 +54,7 @@ node --env-file=.env.bot scripts/bot-webhook.ts                         # setWeb
 
 id группы — из адреса группы в web.telegram.org (`#-100…`). Скрипт печатает адрес вебхука, число ожидающих обновлений, число соединений и последнюю ошибку доставки; токен в вывод не попадает. Повторный запуск безопасен.
 
-Откат: на версию с `/waitlist` и новее — новым PR, а не `rollback`: Worker без `/waitlist` ломает «Удалить мои данные» без галочки. Ниже этой версии — `npx --prefix bot wrangler rollback <версия> --config bot/wrangler.jsonc` — на конкретную версию из `wrangler deployments list` (каждый `secret put` создаёт новую версию, «предыдущая» может оказаться той же сборкой); `node --env-file=.env.bot scripts/bot-webhook.ts --delete` — бот молчит. Утечка токена Cloudflare или `BOT_TOKEN` даёт писать от имени бота: `/revoke` в BotFather, новый `BOT_TOKEN`, перерегистрация вебхука, отзыв токена Cloudflare.
+Откат: на версию с `/waitlist` и новее — новым PR, а не `rollback`: Worker без `/waitlist` ломает «Удалить мои данные» без галочки. Ниже этой версии — `npx --prefix bot wrangler rollback <версия> --config bot/wrangler.jsonc` — на конкретную версию из `wrangler deployments list`, схема D1 при этом не откатывается (каждый `secret put` создаёт новую версию, «предыдущая» может оказаться той же сборкой); `node --env-file=.env.bot scripts/bot-webhook.ts --delete` — бот молчит. Утечка токена Cloudflare или `BOT_TOKEN` даёт писать от имени бота: `/revoke` в BotFather, новый `BOT_TOKEN`, перерегистрация вебхука, отзыв токена Cloudflare.
 
 ## Разработка внутри Telegram
 
