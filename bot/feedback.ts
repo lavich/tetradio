@@ -1,4 +1,4 @@
-import { emptyRow, type Row, type Store } from "./store";
+import { emptyRow, type Row, type Store, type WaitlistStore } from "./store";
 import {
   ACK,
   BLOCKED,
@@ -16,6 +16,7 @@ import {
   topicName,
   type Person,
 } from "./texts";
+import { notify, waitlistSummary } from "./waitlist";
 
 export interface Message {
   message_id: number;
@@ -42,6 +43,9 @@ export interface Answer {
 export interface Deps {
   api(method: string, body: object): Promise<Answer>;
   store: Store;
+  waitlist: WaitlistStore;
+  waitlistCourses: string[];
+  waitlistThread: number | null;
   supportChatId: string;
   sentryEventUrl: string;
   appUrl: string;
@@ -261,6 +265,11 @@ async function inGeneral(message: Message, deps: Deps): Promise<Reply | null> {
       return reply(
         (await deps.store.unblock(Number(argument))) ? UNBLOCKED : "Нет заблокированного пользователя с таким id.",
       );
+    if (name === "/waitlist") return reply(await waitlistSummary(deps));
+    if (name === "/notify") {
+      const text = await notify(message, deps);
+      return text === null ? null : reply(text);
+    }
   } catch {
     return reply(notDelivered("хранилище связей недоступно"));
   }

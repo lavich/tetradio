@@ -4,7 +4,7 @@ import type { Database } from "../../bot/store";
 
 export function sqlite(): Database {
   const database = new DatabaseSync(":memory:");
-  for (const file of ["0001_users.sql", "0002_form_at.sql"])
+  for (const file of ["0001_users.sql", "0002_form_at.sql", "0003_waitlist.sql"])
     database.exec(readFileSync(`bot/migrations/${file}`, "utf8"));
   return {
     prepare: (query) => {

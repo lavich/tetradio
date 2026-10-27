@@ -12,7 +12,7 @@ import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
 import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
 import { useCoursePalette, useStartedCourses } from "../../shared/courses";
-import type { CourseEntry } from "../../storage/courses";
+import { upcomingCourses, type CourseEntry } from "../../storage/courses";
 import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
@@ -87,6 +87,10 @@ export function LanguageToday({
     title.current?.focus();
   }, [shown]);
   const readings = useLiveQuery(async () => (courseId ? await courseReadings(courseId) : null), [courseId]);
+  const following = useLiveQuery(
+    async () => (courseId ? ((await upcomingCourses()).find((course) => course.after === courseId) ?? null) : null),
+    [courseId],
+  );
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,
@@ -98,7 +102,7 @@ export function LanguageToday({
   const finished = courseFinished(views ?? [], next);
   const due = plan.newRefs.length + plan.reviews.length;
   const reviewFirst = !!unfinished || due > 0;
-  if (!views || reviewed === undefined || !week || readings === undefined)
+  if (!views || reviewed === undefined || !week || readings === undefined || following === undefined)
     return <div aria-busy="true" aria-label="План дня загружается" />;
 
   const { shown: rows, more: hidden } = lessonLines([
@@ -128,9 +132,20 @@ export function LanguageToday({
       )}
       <DayNotes plan={plan} />
       {finished ? (
-        <p className={css.finished} data-testid="course-finished">
-          {profile.finished}
-        </p>
+        <>
+          <p className={css.finished} data-testid="course-finished">
+            {profile.finished}
+          </p>
+          {following ? (
+            <p className={css.finished} data-testid="next-course">
+              Следующий курс — {following.level ? `${following.title} · ${following.level}` : following.title}:
+              готовится.{" "}
+              <Link to="/course" state={{ course: following.id }} className="text-primary underline">
+                Открыть страницу курса
+              </Link>
+            </p>
+          ) : null}
+        </>
       ) : next ? (
         <LessonNext
           view={next.view}

@@ -34,7 +34,9 @@
 
 **Удаление переписки.** `POST /forget` (тот же CORS и проверка `initData`, что у `/feedback`) удаляет тему пользователя (`deleteForumTopic`, нужно право «Удаление сообщений»; `TOPIC_ID_INVALID` — тема уже удалена) и запись D1; у заблокированного остаётся только отметка. Вызывается из «Удалить мои данные» с галочкой «И переписку с автором» (`docs/account.md`, «Удаление данных»).
 
-**Хранение.** D1 `tetradio-feedback` (привязка `FEEDBACK`, миграции `bot/migrations/`): одна таблица `users` — id пользователя и темы, время последнего текстового подтверждения, блокировка, id отчёта Sentry на сутки, время последней формы. Записи точечные — каждая меняет свои столбцы: форма и вебхук пишут одну строку параллельно. Текстов нет; переписка хранится в группе Telegram. Вебхук зарегистрирован с `max_connections: 1`: обновления приходят по одному, альбом нового пользователя не создаёт несколько тем.
+**Заявки на курсы в работе.** `POST /waitlist` (тот же CORS и проверка `initData`, что у `/feedback`; `bot/waitlist.ts`): `{ initData, action, course? }`, `action` — `status`, `join`, `leave` или `forget`; `course` — из `WAITLIST_COURSES` (`bot/wrangler.jsonc`, через запятую), кроме `forget`. Ответ `200 { ok: true, joined }` (у `forget` — `{ ok: true }`), 400 `invalid`, 401 `stale`, 429 `rate` (`join`/`leave` чаще раза в 5 секунд), 502/503 `failed`. Новая запись даёт строку «+1 · <курс> · всего N» без имени и id в тему `WAITLIST_THREAD` — не чаще раза в 10 минут на пользователя, после ответа (`ctx.waitUntil`); отмена строки не даёт. В общей теме группы: `/waitlist` — по курсам «<курс>: N, не уведомлено M»; `/notify <курс> <текст>` — простой текст без форматирования (до 4096 символов, с переводами строк; на курс без заявок — «Заявок на <курс> нет — проверьте id курса.») не больше 30 неуведомлённым за вызов, кроме заблокированных автором; отметка — после каждой отправки, 403 и 400 «chat not found»/«user is deactivated» — «не доставлено», иной 400 и 429 останавливают рассылку; повторная доставка той же команды отсекается (`bot_state`); ответ «Отправлено X, не доставлено Y, осталось M — повторите команду». Расписание `triggers.crons` раз в сутки удаляет заявки через 30 дней после рассылки, заявки заблокированных автором и пустые строки частоты. Курс в работе из `content/courses` должен быть в `WAITLIST_COURSES` — это сверяет `tests/bot-waitlist.test.ts`. Приложение: страница курса в работе на «Курсе» (`src/features/course/UpcomingCourse.tsx`), `waitlist()` в `src/platform/feedback-send.ts`; «Удалить мои данные» без галочки переписки зовёт `forget` заявок, с галочкой — `/forget`, который удаляет и заявки.
+
+**Хранение.** D1 `tetradio-feedback` (привязка `FEEDBACK`, миграции `bot/migrations/`): таблица `users` — id пользователя и темы, время последнего текстового подтверждения, блокировка, id отчёта Sentry на сутки, время последней формы. Записи точечные — каждая меняет свои столбцы: форма и вебхук пишут одну строку параллельно. Текстов нет; переписка хранится в группе Telegram. Вебхук зарегистрирован с `max_connections: 1`: обновления приходят по одному, альбом нового пользователя не создаёт несколько тем.
 
 **Без настройки.** Пока у Worker нет `BOT_TOKEN`, `SUPPORT_CHAT_ID` или `FEEDBACK`, бот отвечает как раньше: приветствием на любой `/start` и «Сообщения боту пока не читаются. Τετράδιο открывается кнопкой ниже.» на остальное.
 
@@ -43,7 +45,7 @@
 Настройка — после первой выкатки Worker из CI (иначе `secret put` предложит создать пустой Worker); `wrangler` авторизуется через `npx --prefix bot wrangler login` или `CLOUDFLARE_API_TOKEN` в окружении:
 
 ```sh
-npx --prefix bot wrangler d1 migrations apply tetradio-feedback --remote --config bot/wrangler.jsonc   # схема — до выкатки кода
+npx --prefix bot wrangler d1 migrations apply tetradio-feedback --remote --config bot/wrangler.jsonc   # схема — до выкатки кода; 0003 (заявки) и Worker из ветки — до мержа: удаление данных ждёт /waitlist
 openssl rand -hex 32                                                    # секрет вебхука: только A-Z, a-z, 0-9, _ и -
 npx --prefix bot wrangler secret put WEBHOOK_SECRET --config bot/wrangler.jsonc
 # .env.bot (в .gitignore, значения без кавычек): BOT_TOKEN, WEBHOOK_URL=https://tetradio-bot.<поддомен>.workers.dev/, WEBHOOK_SECRET
@@ -53,7 +55,7 @@ node --env-file=.env.bot scripts/bot-webhook.ts                         # setWeb
 
 id группы — из адреса группы в web.telegram.org (`#-100…`). Скрипт печатает адрес вебхука, число ожидающих обновлений, число соединений и последнюю ошибку доставки; токен в вывод не попадает. Повторный запуск безопасен.
 
-Откат: `npx --prefix bot wrangler rollback <версия> --config bot/wrangler.jsonc` — на конкретную версию из `wrangler deployments list` (каждый `secret put` создаёт новую версию, «предыдущая» может оказаться той же сборкой); `node --env-file=.env.bot scripts/bot-webhook.ts --delete` — бот молчит. Утечка токена Cloudflare или `BOT_TOKEN` даёт писать от имени бота: `/revoke` в BotFather, новый `BOT_TOKEN`, перерегистрация вебхука, отзыв токена Cloudflare.
+Откат: на версию с `/waitlist` и новее — новым PR, а не `rollback`: Worker без `/waitlist` ломает «Удалить мои данные» без галочки. Ниже этой версии — `npx --prefix bot wrangler rollback <версия> --config bot/wrangler.jsonc` — на конкретную версию из `wrangler deployments list` (каждый `secret put` создаёт новую версию, «предыдущая» может оказаться той же сборкой); `node --env-file=.env.bot scripts/bot-webhook.ts --delete` — бот молчит. Утечка токена Cloudflare или `BOT_TOKEN` даёт писать от имени бота: `/revoke` в BotFather, новый `BOT_TOKEN`, перерегистрация вебхука, отзыв токена Cloudflare.
 
 ## Разработка внутри Telegram
 

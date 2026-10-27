@@ -11,7 +11,12 @@
     "SUPPORT_CHAT_ID": "-1004455365743",
     "SENTRY_EVENT_URL": "https://storewizard.sentry.io/projects/tetradio/events/",
     "APP_ORIGINS": "https://tetradio.app",
+    // id темы «Запросы курсов» в группе поддержки; пусто — строки «+1» не пишутся.
+    "WAITLIST_THREAD": "",
+    "WAITLIST_COURSES": "greek-b1",
   },
+  // Удаление заявок через 30 дней после рассылки.
+  "triggers": { "crons": ["0 3 * * *"] },
   "d1_databases": [
     {
       "binding": "FEEDBACK",

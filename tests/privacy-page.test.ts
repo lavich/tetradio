@@ -42,4 +42,14 @@ describe("политика конфиденциальности", () => {
     );
     for (const tag of used) expect(REPORT_TAGS as readonly string[], tag).toContain(tag);
   });
+
+  it("обе версии называют заявку на курс в сообщениях, целях, сроках и правах, дата редакции одна", () => {
+    const section = (html: string, id: string) => html.split(`<h2 id="${id}"`)[1].split("<h2 ")[0];
+    const words = { ru: /[Зз]аявк/, en: /[Cc]ourse request|request for a course/ };
+    for (const [lang, html] of Object.entries(pages) as ["ru" | "en", string][])
+      for (const id of ["messages", "purposes", "retention", "rights"])
+        expect(section(html, id), `${lang} ${id}`).toMatch(words[lang]);
+    expect(pages.ru).toContain("Редакция от 27 октября 2026 года.");
+    expect(pages.en).toContain("Version of 27 October 2026.");
+  });
 });

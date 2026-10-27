@@ -8,7 +8,7 @@ import { deleteDatabase } from "./delete-database";
 import { clearErase, markErase, type ErasePhase } from "./erase-marker";
 import type { Profile } from "./profile";
 
-export type EraseReason = "messages" | "stale" | "unavailable" | "cloud" | "busy";
+export type EraseReason = "messages" | "waitlist" | "stale" | "unavailable" | "cloud" | "busy";
 export class EraseFailure extends Error {
   constructor(
     readonly reason: EraseReason,
@@ -28,6 +28,8 @@ export interface EraseDeps {
   bridge(): TelegramWebApp | null;
   sync(): Promise<Halting>;
   forget(): Promise<SendResult>;
+  /** Есть, когда доступна форма «Написать автору»: заявки на курсы удаляются и без отметки переписки. */
+  leaveWaitlist?(): Promise<SendResult>;
   transport?(app: TelegramWebApp): KeyValueTransport;
   showErasing(message: string): void;
   reload(): void;
@@ -69,6 +71,9 @@ export async function eraseMyData(withMessages: boolean, deps: EraseDeps): Promi
   if (withMessages) {
     const result = await deps.forget();
     if (result !== "ok") throw new EraseFailure(result === "stale" ? "stale" : "messages", false);
+  } else if (deps.leaveWaitlist) {
+    const result = await deps.leaveWaitlist();
+    if (result !== "ok") throw new EraseFailure(result === "stale" ? "stale" : "waitlist", false);
   }
   let sync: Halting;
   try {

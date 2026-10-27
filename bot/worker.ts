@@ -1,6 +1,7 @@
 import { forget, fromForm, handle, legacyReply, type Answer, type Deps, type Update } from "./feedback";
-import { MAX_BODY, readForm, readInitData, verifyInitData } from "./form";
-import { databaseStore, type Database } from "./store";
+import { MAX_BODY, readForm, readInitData, readWaitlist, verifyInitData } from "./form";
+import { databaseStore, waitlistStore, type Database } from "./store";
+import { KEEP_NOTIFIED, fromWaitlist } from "./waitlist";
 
 export { GREETING, UNREAD } from "./texts";
 
@@ -12,7 +13,19 @@ export interface Env {
   SENTRY_EVENT_URL?: string;
   FEEDBACK?: Database;
   APP_ORIGINS?: string;
+  WAITLIST_THREAD?: string;
+  WAITLIST_COURSES?: string;
 }
+
+export interface Background {
+  waitUntil(promise: Promise<unknown>): void;
+}
+
+const list = (value: string | undefined) =>
+  (value ?? "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 
 function sameSecret(given: string | null, expected: string | undefined) {
   if (!expected || given === null) return false;
@@ -38,6 +51,9 @@ const configured = (env: Env, request: typeof fetch): Deps | null =>
     ? {
         api: botApi(env.BOT_TOKEN, request),
         store: databaseStore(env.FEEDBACK),
+        waitlist: waitlistStore(env.FEEDBACK),
+        waitlistCourses: list(env.WAITLIST_COURSES),
+        waitlistThread: Number(env.WAITLIST_THREAD) || null,
         supportChatId: env.SUPPORT_CHAT_ID,
         sentryEventUrl: env.SENTRY_EVENT_URL ?? "",
         appUrl: env.APP_URL,
@@ -80,16 +96,19 @@ async function readLimited(request: Request, limit: number): Promise<string | nu
 const STATUS = { ok: 200, invalid: 400, stale: 401, rate: 429, failed: 502 } as const;
 
 type Result = keyof typeof STATUS;
+interface Outcome {
+  result: Result;
+  body?: object;
+}
 
 async function appRoute(
   request: Request,
   env: Env,
   fetcher: typeof fetch,
-  act: (raw: string, deps: Deps) => Promise<Result>,
+  act: (raw: string, deps: Deps) => Promise<Outcome>,
 ): Promise<Response> {
   const origin = request.headers.get("Origin") ?? "";
-  const allowed = (env.APP_ORIGINS ?? "").split(",").map((item) => item.trim());
-  if (!origin || !allowed.includes(origin)) return new Response(null, { status: 403 });
+  if (!origin || !list(env.APP_ORIGINS).includes(origin)) return new Response(null, { status: 403 });
   const cors = { "Access-Control-Allow-Origin": origin, Vary: "Origin" };
   if (request.method === "OPTIONS")
     return new Response(null, {
@@ -101,13 +120,13 @@ async function appRoute(
         "Access-Control-Max-Age": "86400",
       },
     });
-  const answer = (result: Result, status: number = STATUS[result]) =>
-    Response.json(result === "ok" ? { ok: true } : { error: result }, { status, headers: cors });
+  const answer = ({ result, body }: Outcome, status: number = STATUS[result]) =>
+    Response.json(result === "ok" ? { ok: true, ...body } : { error: result }, { status, headers: cors });
   if (request.method !== "POST") return new Response(null, { status: 405, headers: cors });
   const deps = configured(env, fetcher);
-  if (!deps) return answer("failed", 503);
+  if (!deps) return answer({ result: "failed" }, 503);
   const raw = await readLimited(request, MAX_BODY);
-  return answer(raw === null ? "invalid" : await act(raw, deps));
+  return answer(raw === null ? { result: "invalid" } : await act(raw, deps));
 }
 
 const signedUser = (initData: string, env: Env, deps: Deps) =>
@@ -116,28 +135,47 @@ const signedUser = (initData: string, env: Env, deps: Deps) =>
 export const feedbackForm = (request: Request, env: Env, fetcher: typeof fetch = fetch) =>
   appRoute(request, env, fetcher, async (raw, deps) => {
     const form = readForm(raw);
-    if (!form) return "invalid";
+    if (!form) return { result: "invalid" };
     const user = await signedUser(form.initData, env, deps);
-    return user ? fromForm({ ...form, user }, deps) : "stale";
+    return { result: user ? await fromForm({ ...form, user }, deps) : "stale" };
   });
 
 export const forgetRoute = (request: Request, env: Env, fetcher: typeof fetch = fetch) =>
   appRoute(request, env, fetcher, async (raw, deps) => {
     const initData = readInitData(raw);
-    if (!initData) return "invalid";
+    if (!initData) return { result: "invalid" };
     const user = await signedUser(initData, env, deps);
-    return user ? forget(user.id, deps) : "stale";
+    return { result: user ? await forget(user.id, deps) : "stale" };
   });
 
-const ROUTES: Record<string, (request: Request, env: Env) => Promise<Response>> = {
+export const waitlistRoute = (request: Request, env: Env, fetcher: typeof fetch = fetch, ctx?: Background) =>
+  appRoute(request, env, fetcher, async (raw, deps) => {
+    const body = readWaitlist(raw, deps.waitlistCourses);
+    if (!body) return { result: "invalid" };
+    const user = await signedUser(body.initData, env, deps);
+    if (!user) return { result: "stale" };
+    const { line, ...outcome } = await fromWaitlist(user.id, body, deps);
+    if (line) {
+      // Сбой строки в группе не должен менять ответ: запись уже сохранена.
+      const sent = line().catch(() => undefined);
+      ctx?.waitUntil(sent);
+    }
+    return outcome;
+  });
+
+const ROUTES: Record<
+  string,
+  (request: Request, env: Env, fetcher: typeof fetch, ctx?: Background) => Promise<Response>
+> = {
   "/feedback": feedbackForm,
   "/forget": forgetRoute,
+  "/waitlist": waitlistRoute,
 };
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx?: Background): Promise<Response> {
     const route = ROUTES[new URL(request.url).pathname];
-    if (route) return route(request, env).catch(() => new Response(null, { status: 502 }));
+    if (route) return route(request, env, fetch, ctx).catch(() => new Response(null, { status: 502 }));
     if (request.method !== "POST") return new Response(null, { status: 405 });
     if (!sameSecret(request.headers.get("X-Telegram-Bot-Api-Secret-Token"), env.WEBHOOK_SECRET))
       return new Response(null, { status: 401 });
@@ -150,5 +188,11 @@ export default {
     // Не-2xx Telegram доставляет повторно — сообщение пришло бы в тему дважды.
     const reply = await respond(update, env).catch(() => null);
     return reply ? Response.json(reply) : new Response(null);
+  },
+
+  async scheduled(_controller: unknown, env: Env): Promise<void> {
+    if (!env.FEEDBACK) return;
+    const now = Date.now();
+    await waitlistStore(env.FEEDBACK).prune(now - KEEP_NOTIFIED, now - 24 * 60 * 60 * 1000);
   },
 };

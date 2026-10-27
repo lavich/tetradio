@@ -1,6 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { formAvailable } from "../src/platform/feedback";
-import { askWriteAccess, resetWriteAccess, sendFeedback } from "../src/platform/feedback-send";
+import {
+  askWriteAccess,
+  forgetMessages,
+  resetWriteAccess,
+  sendFeedback,
+  waitlist,
+} from "../src/platform/feedback-send";
 import type { LaunchContext } from "../src/platform/launch";
 import type { TelegramWebApp } from "../src/platform/telegram-types";
 
@@ -122,7 +128,7 @@ describe("отправка", () => {
     [502, "failed"],
     [503, "failed"],
   ])("ответ %i — %s", async (status, expected) => {
-    const { fetcher } = send(async () => Response.json({}, { status }));
+    const { fetcher } = send(async () => Response.json({ error: expected }, { status }));
     expect(
       await sendFeedback(
         { text: "x", reportId: null, canReply: true },
@@ -155,5 +161,53 @@ describe("отправка", () => {
     );
     await vi.advanceTimersByTimeAsync(15_000);
     expect(await pending).toBe("failed");
+  });
+});
+
+describe("заявка на курс", () => {
+  const reply = (response: Response) => {
+    const requests: { url: string; body: Record<string, unknown> }[] = [];
+    const fetcher = (async (url: string, init: RequestInit) => {
+      requests.push({ url, body: JSON.parse(init.body as string) as Record<string, unknown> });
+      return response;
+    }) as unknown as typeof fetch;
+    return { requests, request: { app: bridge(), launch: telegram, url: URL_, fetcher } };
+  };
+
+  it("запрос на /waitlist с действием и курсом, ответ несёт joined", async () => {
+    const { requests, request } = reply(Response.json({ ok: true, joined: true }));
+    expect(await waitlist("join", "greek-b1", request)).toEqual({ result: "ok", joined: true });
+    expect(requests[0].url).toBe("https://bot.example.workers.dev/waitlist");
+    expect(requests[0].body).toEqual({ initData: "user=%7B%7D&hash=abc", action: "join", course: "greek-b1" });
+  });
+
+  it("удаление заявок — без курса", async () => {
+    const { requests, request } = reply(Response.json({ ok: true }));
+    expect(await waitlist("forget", null, request)).toEqual({ result: "ok" });
+    expect(requests[0].body).toEqual({ initData: "user=%7B%7D&hash=abc", action: "forget" });
+  });
+
+  it.each([
+    [Response.json({ error: "stale" }, { status: 401 }), "stale"],
+    [new Response(null, { status: 401 }), "failed"],
+    [Response.json({ error: "rate" }, { status: 429 }), "rate"],
+    [Response.json({ error: "invalid" }, { status: 400 }), "failed"],
+  ])("ответ — %#", async (response, expected) => {
+    expect((await waitlist("status", "greek-b1", reply(response).request)).result).toBe(expected);
+  });
+
+  it("ответы формы и удаления переписки прежние", async () => {
+    expect(await forgetMessages(reply(Response.json({ ok: true })).request)).toBe("ok");
+    expect(await forgetMessages(reply(Response.json({ error: "stale" }, { status: 401 })).request)).toBe("stale");
+  });
+
+  it("повторный вопрос о праве писать спрашивает снова после отказа", async () => {
+    const answers = [false, true];
+    const requestWriteAccess = vi.fn((callback?: (granted: boolean) => void) => callback?.(answers.shift()!));
+    const app = bridge({ requestWriteAccess });
+    expect(await askWriteAccess(app)).toBe(false);
+    expect(await askWriteAccess(app)).toBe(false);
+    expect(await askWriteAccess(app, 30_000, true)).toBe(true);
+    expect(requestWriteAccess).toHaveBeenCalledTimes(2);
   });
 });

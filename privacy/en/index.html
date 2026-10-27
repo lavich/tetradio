@@ -17,7 +17,7 @@
       <p class="lang"><a href="../" hreflang="ru" lang="ru">Русский</a></p>
       <h1>Privacy policy of <span lang="el">Τετράδιο</span></h1>
       <p class="meta">
-        Version of 26 October 2026. Covers the @TetradioBot Mini App in Telegram, the bot and the tetradio.app website.
+        Version of 27 October 2026. Covers the @TetradioBot Mini App in Telegram, the bot and the tetradio.app website.
       </p>
 
       <h2 id="controller">Who is responsible</h2>
@@ -74,6 +74,14 @@
         chat with the bot and in the Telegram group. An error report identifier sent from the crash screen links that
         report to you in the topic.
       </p>
+      <p>
+        A request for a course in progress (“Сообщить, когда выйдет”, Notify me when it is out, on “Курс”) sends to the
+        same program your signed launch data and the course id. The same D1 database stores the user id, the course id,
+        the time of the request and of the release notice, and the time of the last request or cancellation and of the
+        last group line (to limit frequency). The requests topic of the support group gets a line with the course id and
+        the number of requests — without name, username or id. When the course is out, the bot writes to you in the
+        chat.
+      </p>
 
       <h2 id="reports">Error reports</h2>
       <p>
@@ -118,6 +126,7 @@
           — the same interest, without the switch.
         </li>
         <li>Messages to the author — replying to your request (Art. 6(1)(b) and (f)).</li>
+        <li>Course requests — telling you that the course is out, as you asked (Art. 6(1)(b)).</li>
       </ul>
       <p>
         Providing data is not mandatory: the app does not work without Telegram; it works without reports and messages.
@@ -147,6 +156,12 @@
           the author blocked you in the conversation, only your id and the block flag remain after deletion — legitimate
           interest in preventing abuse (GDPR Art. 6(1)(f)).
         </li>
+        <li>
+          A course request — until “Отменить заявку” (Cancel the request), data deletion or 30 days after the release
+          notice; the time of the last request, cancellation and group line — while a request exists and no longer than
+          two days after it is cancelled. If the author blocked you in the conversation, the request is deleted within a
+          day.
+        </li>
         <li>Reports in Sentry — for the project’s retention period in Sentry.</li>
       </ul>
 
@@ -163,6 +178,10 @@
         <li>
           The group conversation and the D1 record are deleted by the same button with “И переписку с автором” ticked,
           or by the author on request via “Написать автору”.
+        </li>
+        <li>
+          A course request is deleted by “Отменить заявку” on the course page and by “Удалить мои данные” — with or
+          without the conversation box ticked.
         </li>
         <li>
           The button does not delete Sentry reports: a specific report can be found and deleted by its identifier from

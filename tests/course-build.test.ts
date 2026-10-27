@@ -1176,3 +1176,77 @@ describe("записи ответов перевода и пропуска", () 
     expect(plan.stale).toEqual(["answers/m01-test/gone-q1.mp3"]);
   });
 });
+
+describe("курсы в работе", () => {
+  const b1 = { title: "Греческий", language: "el", level: "A2 → B1", after: "greek-a2", upcoming: true };
+  const withUpcoming = (fields: Record<string, unknown> = {}, extra: Files = {}): Files => ({
+    ...base(),
+    "courses/greek-b1.yaml": { ...b1, ...fields },
+    ...extra,
+  });
+  const catalogOf = (files: Files) =>
+    parseCatalog(JSON.parse(build(files).files.find((f) => f.path === "content/catalog.json")!.body as string));
+
+  it("курс в работе едет списком upcoming, а не среди курсов", () => {
+    const catalog = catalogOf(withUpcoming({ goal: "После A2" }));
+    expect(catalog.upcoming).toEqual([
+      { id: "greek-b1", title: "Греческий", language: "el", level: "A2 → B1", goal: "После A2", after: "greek-a2" },
+    ]);
+    expect(catalog.courses.map((course) => course.id)).toEqual(["greek-a2"]);
+  });
+
+  it("без курсов в работе поля upcoming в каталоге нет", () => {
+    expect(catalogOf(base())).not.toHaveProperty("upcoming");
+  });
+
+  it("уроки, план и поля выбора курса у курса в работе — ошибка с путём и полем", () => {
+    for (const field of [
+      "modules",
+      "lessons",
+      "calendar",
+      "exam",
+      "passShare",
+      "order",
+      "short",
+      "palette",
+      "entry",
+      "pace",
+      "source",
+    ])
+      expect(failure(withUpcoming({ [field]: field === "order" ? 2 : ["x"] }))).toMatch(
+        new RegExp(`courses/greek-b1\\.yaml\\.${field}`),
+      );
+    expect(failure(withUpcoming({ upcoming: "yes" }))).toMatch(/greek-b1\.yaml\.upcoming/);
+    expect(failure(withUpcoming({ hidden: "yes" }))).toMatch(/greek-b1\.yaml\.hidden/);
+    expect(failure(withUpcoming({ language: undefined }))).toMatch(/greek-b1\.yaml\.language/);
+    expect(failure(withUpcoming({ level: "B3" }))).toMatch(/greek-b1\.yaml\.level/);
+  });
+
+  it("предыдущий курс — поставляемый курс каталога", () => {
+    expect(failure(withUpcoming({ after: "greek-c1" }))).toMatch(/greek-b1\.yaml\.after/);
+    const hiddenEnglish: Files = {
+      "courses/english-it.yaml": { title: "Английский", language: "en", lessons: ["e1"], hidden: true },
+      "lessons/e1.yaml": { title: "Work", items: [{ kind: "word", id: "work" }] },
+      "words/english-it/work.yaml": { greek: "work", russian: "работа", forms: "—" },
+    };
+    expect(failure(withUpcoming({ after: "english-it" }, hiddenEnglish))).toMatch(/greek-b1\.yaml\.after/);
+    expect(
+      failure({ ...base(), "courses/english-b2.yaml": { title: "Английский", language: "en", upcoming: true } }),
+    ).toMatch(/english-b2\.yaml\.language/);
+    expect(
+      failure({ ...base(), "courses/greek-a2.yaml": { title: "Греческий", modules: ["m01", "m02"], after: "x" } }),
+    ).toMatch(/greek-a2\.yaml\.after/);
+  });
+
+  it("скрытый курс в работе не поставляется, с shipHidden — едет для просмотра", () => {
+    expect(catalogOf(withUpcoming({ hidden: true }))).not.toHaveProperty("upcoming");
+    const root = mkdtempSync(join(tmpdir(), "course-"));
+    roots.push(root);
+    for (const [path, value] of Object.entries(withUpcoming({ hidden: true }))) {
+      if (value === undefined) continue;
+      mkdirSync(dirname(join(root, path)), { recursive: true });
+      writeFileSync(join(root, path), value instanceof Uint8Array ? value : stringify(value));
+    }
+    expect(buildContent(root, { shipHidden: true }).catalog.upcoming?.map((course) => course.id)).toEqual(["greek-b1"]);
+  });
+});
