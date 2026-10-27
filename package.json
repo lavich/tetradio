@@ -36,7 +36,8 @@
     "voices": "node --env-file-if-exists=.env scripts/voice-dialogues.ts",
     "social-images": "node scripts/social-images.ts",
     "check:config": "node scripts/check-config.ts",
-    "check:flaky": "node scripts/check-flaky.ts"
+    "check:flaky": "node scripts/check-flaky.ts",
+    "check:licenses": "node scripts/check-licenses.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
