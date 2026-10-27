@@ -18,7 +18,7 @@ examples:
   - greek: Το δείγμα είναι απλό.
     russian: Образец простой.
     target: δείγμα
-    source: Шаблон документации Lexi (пример формата)
+    source: Шаблон документации Τετράδιο (пример формата)
     words:
       - { text: "Το", russian: "артикль ср. р." }
       - { text: "δείγμα", russian: "образец", word: w-example }
