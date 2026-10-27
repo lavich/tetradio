@@ -127,9 +127,7 @@ export function LanguageToday({
         last={last}
         primary={reviewFirst}
       />
-      {courseId && readings && (
-        <ReadingSheet courseId={courseId} readings={readings} primary={!reviewFirst && next === null} />
-      )}
+      {courseId && readings && <ReadingSheet readings={readings} primary={!reviewFirst && next === null} />}
       <DayNotes plan={plan} />
       {finished ? (
         <>

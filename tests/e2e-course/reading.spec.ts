@@ -266,7 +266,6 @@ test("«Сегодня»: лист «Чтение» — след, долг, пр
   await page.goto("/app/");
   await expect(sheet(page)).toContainText("Прочитано 1 текст");
   await expect(sheet(page)).toContainText("Следующий текст откроется после урока «Контрольная модуля 01»");
-  await expect(page.getByTestId("reading-all")).toBeVisible();
   await expect(primary(page)).toHaveCount(0);
 
   await complete(page, "m01-test");
@@ -335,8 +334,8 @@ test("«Сегодня»: порядок — повторение, чтение,
   expect(await top("cards-today")).toBeLessThan(await top("reading-sheet"));
   expect(await top("reading-sheet")).toBeLessThan(await top("course-next"));
   await expect(page.getByRole("region", { name: "Чтение" })).toBeVisible();
-  for (const link of [primary(page), page.getByTestId("reading-all")])
-    expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await expect(page.getByText("Все тексты")).toHaveCount(0);
+  expect((await primary(page).boundingBox())!.height).toBeGreaterThanOrEqual(44);
 });
 
 test("«Сегодня»: пока пакет пройденного урока не скачан, листа «Чтение» нет", async ({ page }) => {
@@ -423,11 +422,11 @@ test("раздел «Чтение»: вкладка выделена, из те�
   await expect(page).toHaveURL(/\/app\/course\/m01$/);
 });
 
-test("«Сегодня»: «Все тексты» ведёт в раздел, «Назад» из текста — обратно в список", async ({ page }) => {
+test("вкладка «Чтение» открывает раздел, «Назад» из текста — обратно в список", async ({ page }) => {
   await startCourse(page);
   await complete(page, "m01-1");
   await page.goto("/app/");
-  await page.getByTestId("reading-all").click();
+  await nav(page).getByRole("link", { name: "Чтение" }).click();
   await expect(page).toHaveURL(/\/app\/reading$/);
   await page.getByRole("link", { name: /Η Άννα/ }).click();
   await page.getByRole("button", { name: "Назад" }).click();
