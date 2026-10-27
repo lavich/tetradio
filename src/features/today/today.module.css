@@ -254,12 +254,6 @@
   background: var(--pen);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
 }
-.weekRow {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: calc(var(--cell) * 2);
-}
 
 .other {
   display: grid;

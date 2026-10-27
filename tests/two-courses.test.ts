@@ -399,6 +399,39 @@ describe("экраны курса", () => {
     expect(await reviewedOn("2026-10-08", ENGLISH, db)).toBe(2);
     expect(await reviewedOn("2026-10-08", undefined, db)).toBe(3);
   });
+  it("дни занятий за всё время: прошлые недели в days, неделя прежняя", async () => {
+    const event = (id: string, wordId: string, localDate: string): ReviewEvent => ({
+      id,
+      sessionId: "s",
+      itemId: id,
+      ref: wordRef(wordId),
+      unitKey: wordKeyOf(wordId),
+      snapshot: { greek: "", russian: "" },
+      type: "recognition",
+      mode: "scheduled",
+      rating: 3,
+      correct: true,
+      answer: "",
+      createdAt: `${localDate}T09:00:00.000Z`,
+      localDate,
+      responseTimeMs: 1000,
+    });
+    await db.events.bulkAdd([
+      event("a", "e1", "2026-09-30"),
+      event("b", "e2", "2026-10-07"),
+      event("c", "w1", "2026-09-29"),
+    ]);
+    await db.blockProgress.add({
+      key: "e1/x",
+      lessonId: "e1",
+      blockId: "x",
+      done: true,
+      updatedAt: "2026-09-28T09:00:00.000Z",
+    });
+    const english = await courseProgress(now, "UTC", ENGLISH, db);
+    expect(english.days).toEqual({ lessons: ["2026-09-28"], reviews: ["2026-09-30", "2026-10-07"] });
+    expect(english.week).toMatchObject({ lessonDays: [], reviewDays: ["2026-10-07"], cards: 1 });
+  });
   it("неделя и темп — по учебному дню: занятие после полуночи вчерашнее", async () => {
     const tz = "Asia/Nicosia";
     // Понедельник 12.10, 00:30 в Никосии — ещё воскресенье 11.10.
