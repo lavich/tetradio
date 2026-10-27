@@ -40,12 +40,12 @@
 
 **Без настройки.** Пока у Worker нет `BOT_TOKEN`, `SUPPORT_CHAT_ID` или `FEEDBACK`, бот отвечает как раньше: приветствием на любой `/start` и «Сообщения боту пока не читаются. Τετράδιο открывается кнопкой ниже.» на остальное.
 
-**Выкатка.** Зависимости Worker — `bot/package.json` со своим lock-файлом: `wrangler` не попадает в зависимости приложения. CI собирает Worker без выкатки (задача `worker` в `ci.yml`); `deploy.yml` выкатывает его после зелёного CI на `main` в окружении GitHub `cloudflare` с правилом ветки `main`. `CLOUDFLARE_API_TOKEN` (право `Workers Scripts: Edit`; выкатка с привязкой D1 проверена первой выкаткой) и `CLOUDFLARE_ACCOUNT_ID` — секреты этого окружения, не репозитория: секрет репозитория читает любой workflow любой ветки. Без токена шаги пропускаются с предупреждением в Actions, сайт выкатывается как обычно. Зависимости `bot/` Dependabot обновляет раз в месяц.
+**Выкатка.** Зависимости Worker — `bot/package.json` со своим lock-файлом: `wrangler` не попадает в зависимости приложения. CI собирает Worker без выкатки (задача `worker` в `ci.yml`); `deploy.yml` после зелёного CI на `main` применяет миграции D1 из `bot/migrations/` и выкатывает его в окружении GitHub `cloudflare` с правилом ветки `main`. Миграции только добавляют: до выкатки кода с новой схемой работает прежний Worker. `CLOUDFLARE_API_TOKEN` (права `Workers Scripts: Edit` и `D1: Edit`) и `CLOUDFLARE_ACCOUNT_ID` — секреты этого окружения, не репозитория: секрет репозитория читает любой workflow любой ветки. Без токена шаги пропускаются с предупреждением в Actions, сайт выкатывается как обычно. Зависимости `bot/` Dependabot обновляет раз в месяц.
 
 Настройка — после первой выкатки Worker из CI (иначе `secret put` предложит создать пустой Worker); `wrangler` авторизуется через `npx --prefix bot wrangler login` или `CLOUDFLARE_API_TOKEN` в окружении:
 
 ```sh
-npx --prefix bot wrangler d1 migrations apply tetradio-feedback --remote --config bot/wrangler.jsonc   # схема — до выкатки кода; 0003 (заявки) и Worker из ветки — до мержа: удаление данных ждёт /waitlist
+npx --prefix bot wrangler d1 migrations apply tetradio-feedback --remote --config bot/wrangler.jsonc   # первая настройка; дальше миграции применяет deploy.yml
 openssl rand -hex 32                                                    # секрет вебхука: только A-Z, a-z, 0-9, _ и -
 npx --prefix bot wrangler secret put WEBHOOK_SECRET --config bot/wrangler.jsonc
 # .env.bot (в .gitignore, значения без кавычек): BOT_TOKEN, WEBHOOK_URL=https://tetradio-bot.<поддомен>.workers.dev/, WEBHOOK_SECRET
