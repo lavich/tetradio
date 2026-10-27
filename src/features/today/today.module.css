@@ -73,10 +73,6 @@
   text-underline-offset: 4px;
   cursor: pointer;
 }
-.linkQuiet {
-  display: inline-flex;
-  align-items: center;
-}
 @media (hover: hover) {
   .quiet:hover:not(:disabled) {
     color: var(--foreground);

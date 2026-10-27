@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { useId } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { cx } from "../../shared/cx";
@@ -8,25 +8,14 @@ import { withCount, WORDS } from "../../shared/format";
 import { useProfile } from "../../shared/language";
 import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
-import { reportError } from "../../reporting/reporting";
-import { followCourse } from "../../storage/courses";
 import type { CourseReadings } from "../../storage/readings";
 import css from "./today.module.css";
 
 const TEXTS: [string, string, string] = ["текст", "текста", "текстов"];
 
 /** Лист «Чтение» под листом «Повторение»: непрочитанные открытые тексты — не долг перед уроком, урока он не блокирует. */
-export function ReadingSheet({
-  courseId,
-  readings,
-  primary,
-}: {
-  courseId: string;
-  readings: CourseReadings;
-  primary: boolean;
-}) {
+export function ReadingSheet({ readings, primary }: { readings: CourseReadings; primary: boolean }) {
   const heading = useId();
-  const navigate = useNavigate();
   const { code } = useProfile();
   const { open, unread, closed, closedAfter, pending } = readings;
   // Пока часть пакетов не скачана, счёт закрытых и «Нет текстов» неполны; открытых нет вовсе — лист нечему показать.
@@ -37,29 +26,6 @@ export function ReadingSheet({
       <p className={nb.meta}>Следующий текст откроется после урока «{closedAfter.title}»</p>
     ) : null;
   const downloading = pending > 0 ? <p className={nb.meta}>Часть текстов ещё скачивается.</p> : null;
-  // «Сегодня» показывает основной курс, а вкладка — выбранный: без ожидания на кадр мелькнул бы прежний.
-  const all = (
-    <Link
-      to="/reading"
-      className={cx(css.quiet, css.linkQuiet)}
-      data-testid="reading-all"
-      onClick={(event) => {
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return;
-        event.preventDefault();
-        void (async () => {
-          try {
-            await followCourse(courseId);
-          } catch (error) {
-            void reportError(error, { category: "storage" });
-          } finally {
-            void navigate("/reading");
-          }
-        })();
-      }}
-    >
-      Все тексты
-    </Link>
-  );
 
   if (first)
     return (
@@ -92,7 +58,6 @@ export function ReadingSheet({
           Читать
           {primary && <ArrowRight data-icon="inline-end" />}
         </Link>
-        {all}
       </section>
     );
 
@@ -109,7 +74,6 @@ export function ReadingSheet({
         </div>
       </div>
       {open.length ? later : null}
-      {open.length ? all : null}
     </section>
   );
 }
