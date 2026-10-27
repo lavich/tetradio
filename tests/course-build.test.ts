@@ -715,13 +715,20 @@ describe("данные курса для выбора", () => {
     parseCatalog(JSON.parse(build(files).files.find((f) => f.path === "content/catalog.json")!.body as string));
 
   it("уровень, цель, короткое имя и место едут в каталоге", () => {
-    const fields = { level: "A0 → A2", goal: "С нуля до экзамена", short: "Греческий", order: 1 };
+    const fields = {
+      level: "A0 → A2",
+      goal: "С нуля до экзамена",
+      entry: "Достаточно знать алфавит.",
+      pace: "2–3 часа в неделю",
+      short: "Греческий",
+      order: 1,
+    };
     expect(catalogOf(withCourse(fields)).courses[0]).toMatchObject(fields);
     expect(catalogOf(withCourse({ level: "B1 → B1+" })).courses[0].level).toBe("B1 → B1+");
   });
   it("без полей курса в каталоге их нет", () => {
     const course = catalogOf(base()).courses[0];
-    for (const field of ["level", "goal", "short", "order"]) expect(course).not.toHaveProperty(field);
+    for (const field of ["level", "goal", "entry", "pace", "short", "order"]) expect(course).not.toHaveProperty(field);
   });
   it("курсы в каталоге — по месту, без места — после, по id", () => {
     const ordered = { ...withCourse({ order: 1 }), ...englishCourse({ order: 2 }) };
@@ -739,6 +746,8 @@ describe("данные курса для выбора", () => {
     expect(failure(withCourse({ goal: "Первая строка\nвторая" }))).toMatch(/courses\/greek-a2\.yaml\.goal/);
     expect(failure(withCourse({ goal: "а".repeat(91) }))).toMatch(/courses\/greek-a2\.yaml\.goal/);
     expect(() => build(withCourse({ goal: "а".repeat(90) }))).not.toThrow();
+    expect(failure(withCourse({ entry: "а".repeat(91) }))).toMatch(/courses\/greek-a2\.yaml\.entry/);
+    expect(failure(withCourse({ pace: "Строка\nвторая" }))).toMatch(/courses\/greek-a2\.yaml\.pace/);
     expect(failure(withCourse({ short: "Английский для поездок" }))).toMatch(/courses\/greek-a2\.yaml\.short/);
     for (const order of [0, 1.5, "1"]) expect(failure(withCourse({ order }))).toMatch(/courses\/greek-a2\.yaml\.order/);
   });

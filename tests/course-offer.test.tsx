@@ -125,3 +125,68 @@ describe("карточка курса", () => {
     expect(offers.map((offer) => offer.title)).toEqual(["en"]);
   });
 });
+
+describe("первый экран «Сегодня»", () => {
+  const intro = (courses: Course[], entries: StoredCatalogEntry[], mods: StoredModule[]) => {
+    container = document.createElement("div");
+    root = createRoot(container);
+    act(() => root!.render(<FirstRun courses={courses} entries={entries} modules={mods} hint={false} intro />));
+    return container;
+  };
+  const greek = course("greek-a2", {
+    title: "Греческий",
+    level: "A0 → A2",
+    goal: "С нуля до экзамена ΚΕΓ A2",
+    entry: "Для начала достаточно знать греческий алфавит.",
+    pace: "2–3 часа в неделю",
+    calendar: {
+      start: "2026-10-05",
+      checkpoints: [
+        { label: "K1", title: "Контрольная A1", afterModule: 1, date: "2026-12-13" },
+        { label: "M1", title: "Пробник", afterModule: 2, date: "2027-02-13" },
+      ],
+    },
+  });
+
+  it("единственный курс — заголовок экрана, под ним цель, вход и факты курса без карточки", () => {
+    const page = intro([greek], [entry("m01-1", "greek-a2", "el", 0)], modules("greek-a2", 2, 2));
+    expect(page.querySelector("h1")?.textContent).toBe("Греческий · A0 → A2");
+    expect(page.querySelector("h1 + p")?.textContent).toBe(
+      "С нуля до экзамена ΚΕΓ A2. Для начала достаточно знать греческий алфавит.",
+    );
+    expect(page.querySelector("h1 + p [lang=el]")?.textContent).toBe("ΚΕΓ");
+    const facts = [...page.querySelectorAll("[data-testid=course-intro] > div")].map((row) => [
+      row.querySelector("dt")?.textContent,
+      row.querySelector("dd")?.textContent,
+    ]);
+    expect(facts.map(([term]) => term)).toEqual(["Программа", "Время", "Звук", "Без сети"]);
+    expect(facts[0][1]).toBe("2 модуля и 2 контрольные точки");
+    expect(facts[1][1]).toBe("2–3 часа в неделю");
+    expect(facts[2][1]).toContain("без греческого голоса");
+    expect(page.querySelector("[data-testid=first-course]")).toBeNull();
+    const offer = page.querySelector("[data-testid=course-offer]")!;
+    expect(offer.getAttribute("aria-labelledby")).toBe("today-title");
+    expect(page.querySelector("#today-title")).toBe(page.querySelector("h1"));
+  });
+
+  it("без нагрузки и календаря строки «Время» нет, программа — объём курса", () => {
+    const bare = course("greek-a2", { title: "Греческий" });
+    const page = intro([bare], [entry("m01-1", "greek-a2", "el", 0)], modules("greek-a2", 3, 3));
+    const terms = [...page.querySelectorAll("[data-testid=course-intro] dt")].map((term) => term.textContent);
+    expect(terms).toEqual(["Программа", "Звук", "Без сети"]);
+    expect(page.querySelector("[data-testid=course-intro] dd")?.textContent).toBe("3 модуля");
+    expect(page.querySelector("h1 + p")).toBeNull();
+  });
+
+  it("у нескольких курсов — общий заголовок и карточки", () => {
+    const english = course("english-it", { title: "Английский", language: "en", level: "B1 → B2" });
+    const page = intro(
+      [greek, english],
+      [entry("m01-1", "greek-a2", "el", 0), entry("e01-1", "english-it", "en", 1)],
+      [...modules("greek-a2", 2, 2), ...modules("english-it", 1, 1)],
+    );
+    expect(page.querySelector("h1")?.textContent).toBe("Выберите курс");
+    expect(page.querySelector("[data-testid=course-intro]")).toBeNull();
+    expect(page.querySelectorAll("[data-testid=first-course]")).toHaveLength(2);
+  });
+});

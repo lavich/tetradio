@@ -179,6 +179,10 @@ export interface CourseChoice {
   /** Ступени: «A0 → A2», «B1 → B1+». */
   level?: string;
   goal?: string;
+  /** С чем приходить в курс: первый экран «Сегодня». */
+  entry?: string;
+  /** Нагрузка в неделю: первый экран «Сегодня». */
+  pace?: string;
   /** Имя курса внутри его языка: заголовок полки, подпись в «Словах». */
   short?: string;
   /** Гамма обложек; без поля — гамма по умолчанию. */
@@ -201,7 +205,7 @@ const line = (value: unknown, path: string, max: number) => {
  */
 export function readCourseChoice(input: Record<string, unknown>): CourseChoice {
   const choice: CourseChoice = {};
-  for (const field of ["level", "goal", "short", "palette", "order"] as const)
+  for (const field of ["level", "goal", "entry", "pace", "short", "palette", "order"] as const)
     try {
       Object.assign(choice, parseCourseChoice({ [field]: input[field] }, "каталог"));
     } catch (error) {
@@ -218,6 +222,8 @@ export function parseCourseChoice(input: Record<string, unknown>, path: string):
     choice.level = level;
   }
   if (input.goal !== undefined) choice.goal = line(input.goal, `${path}.goal`, GOAL_MAX);
+  if (input.entry !== undefined) choice.entry = line(input.entry, `${path}.entry`, GOAL_MAX);
+  if (input.pace !== undefined) choice.pace = line(input.pace, `${path}.pace`, GOAL_MAX);
   if (input.short !== undefined) choice.short = line(input.short, `${path}.short`, SHORT_MAX);
   if (input.palette !== undefined) {
     if (!isPalette(input.palette))

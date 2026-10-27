@@ -6,9 +6,9 @@ test("первый запуск: «Учить курс» открывает «С
 }) => {
   await page.goto("/app/");
   await ready(page);
-  await expect(page.getByTestId("today-title")).toHaveText("Выберите курс");
-  await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Механики"]);
-  await expect(page.getByTestId("first-course")).toContainText("Механики");
+  await expect(page.getByTestId("today-title")).toContainText("Механики");
+  await expect(page.getByTestId("course-intro")).toContainText("Программа");
+  await expect(page.getByTestId("first-course")).toHaveCount(0);
   // Пока уроков нет, начинать нечего: кнопки занятия нет, а не пустая очередь после нажатия.
   await expect(page.getByRole("button", { name: "Повторить карточки" })).toHaveCount(0);
   await page.getByRole("button", { name: "Учить курс" }).click();

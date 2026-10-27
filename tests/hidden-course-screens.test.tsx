@@ -77,7 +77,7 @@ const open = async (path: string) => {
   await new Promise((resolve) => setTimeout(resolve, 400));
 };
 const SCREENS: Record<string, string> = {
-  "/": "Выберите курс",
+  "/": "Программа",
   "/course": "Учить курс",
   "/words": "Словарь",
   "/reading": "В этом курсе текстов нет",
@@ -97,19 +97,19 @@ describe("приложение с каталогом греческого и п�
   it("с пакетами только скрытого курса «Сегодня» предлагает выбрать курс", async () => {
     await db.packages.put({ lessonId: "english-it-1", version: "1" } as never);
     await open("/");
-    expect(text()).toContain("Выберите курс");
+    expect(host.querySelector("[data-testid=course-intro]")).not.toBeNull();
   });
 
   it("ссылка на скрытый курс ведёт на «Сегодня»", async () => {
     setCatalogPhase("ready");
     await open("/share/course/english-it");
-    expect(text()).toContain("Выберите курс");
+    expect(host.querySelector("[data-testid=course-intro]")).not.toBeNull();
     expect(text()).not.toMatch(/Для IT/);
   });
 
   it("ссылка на установленное слово скрытого курса не открывает страницу слова", async () => {
     await open("/share/word/ew1");
-    expect(text()).toContain("Выберите курс");
+    expect(host.querySelector("[data-testid=course-intro]")).not.toBeNull();
     expect(text()).not.toMatch(/commute|ездить на работу/);
   });
 });
