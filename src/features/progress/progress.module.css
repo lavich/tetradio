@@ -200,7 +200,11 @@
 .axis::before {
   content: "";
 }
+.weekFrame {
+  min-width: 0;
+}
 .weekScroll {
+  max-width: 100%;
   overflow-x: auto;
   scrollbar-width: thin;
   border-radius: 4px;
@@ -259,10 +263,15 @@
 }
 .dayFuture {
   border-style: dashed;
-  opacity: 0.5;
+  border-color: color-mix(in srgb, var(--muted-foreground) 45%, transparent);
 }
 .dayPaused {
-  background: repeating-linear-gradient(135deg, transparent 0 3px, var(--input) 3px 4.5px);
+  border-color: color-mix(in srgb, var(--muted-foreground) 45%, transparent);
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 3px,
+    color-mix(in srgb, var(--muted-foreground) 45%, transparent) 3px 4.5px
+  );
 }
 .goal {
   font-size: 11px;
@@ -288,6 +297,11 @@
   width: 12px;
   height: 12px;
   border-radius: 3px;
+}
+.legend .dayReview::after {
+  width: 4px;
+  height: 4px;
+  margin: -2px;
 }
 .weekLineNear {
   margin-top: var(--cell);

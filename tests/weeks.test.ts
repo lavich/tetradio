@@ -35,4 +35,38 @@ describe("сетка занятий по неделям", () => {
     const early = weekGrid({ lessons: ["2026-09-07"], reviews: [] }, "2026-10-06");
     expect(early.map((week) => week.month)).toEqual([8, undefined, undefined, undefined, 9]);
   });
+
+  it("в понедельник у текущей недели одна прошедшая клетка и шесть будущих", () => {
+    const weeks = weekGrid({ lessons: ["2026-10-26"], reviews: [] }, "2026-10-26");
+    expect(weeks).toHaveLength(1);
+    expect(weeks[0].days.map((day) => day.future)).toEqual([false, true, true, true, true, true, true]);
+    expect(weeks[0].days[0]).toMatchObject({ today: true, lesson: true });
+  });
+
+  it("в воскресенье будущих клеток нет", () => {
+    const [week] = weekGrid({ lessons: ["2026-10-20"], reviews: [] }, "2026-10-25");
+    expect(week.days.some((day) => day.future)).toBe(false);
+    expect(week.days[6].today).toBe(true);
+  });
+
+  it("пауза, начатая раньше первой недели, штрихует все пустые прошедшие дни", () => {
+    const [week] = weekGrid({ lessons: [], reviews: ["2026-10-21"] }, "2026-10-23", "2026-09-01");
+    expect(week.days.map((day) => day.paused)).toEqual([true, true, false, true, true, false, false]);
+  });
+
+  it("дни только в будущем, например после смены пояса, сетки не дают", () => {
+    expect(weekGrid({ lessons: ["2026-10-28"], reviews: ["2026-10-29"] }, "2026-10-27")).toEqual([]);
+  });
+
+  it("через новый год январь подписан у первой недели января", () => {
+    const weeks = weekGrid({ lessons: ["2026-12-14"], reviews: [] }, "2027-01-12");
+    expect(weeks.map((week) => week.monday)).toEqual([
+      "2026-12-14",
+      "2026-12-21",
+      "2026-12-28",
+      "2027-01-04",
+      "2027-01-11",
+    ]);
+    expect(weeks.map((week) => week.month)).toEqual([11, undefined, undefined, 0, undefined]);
+  });
 });

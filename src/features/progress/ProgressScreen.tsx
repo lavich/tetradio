@@ -88,10 +88,12 @@ export function ProgressScreen() {
     level: 2 | 3,
   ) => (
     <Weeks
+      key={profile.code}
       data={data}
       pausedAt={pausedAt}
       timezone={deviceTimezone()}
       summary={weekLine(data.week, several)}
+      language={several}
       level={level}
     />
   );

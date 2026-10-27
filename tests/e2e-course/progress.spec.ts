@@ -33,3 +33,54 @@ test("вкладка «Прогресс»: навыки по курсу, пут�
   await page.goto("/app/progress/stats");
   await expect(page).toHaveURL(/\/progress$/);
 });
+
+test("«Занятия по неделям»: 30 недель истории на 360 px — видна текущая неделя, экран не шире окна", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await page.goto("/app/");
+  await page.getByRole("button", { name: "Учить курс" }).click();
+  await expect(page.getByTestId("course-next")).toBeVisible();
+  await page.evaluate(async () => {
+    const db = await new Promise<IDBDatabase>((resolve) => {
+      const request = indexedDB.open("tetradio-mock-1");
+      request.onsuccess = () => resolve(request.result);
+    });
+    const lessonId = await new Promise<string>((resolve) => {
+      const request = db.transaction("lessons").objectStore("lessons").getAllKeys();
+      request.onsuccess = () => resolve(request.result[0] as string);
+    });
+    const tx = db.transaction("blockProgress", "readwrite");
+    for (let week = 1; week <= 30; week++)
+      for (const offset of [0, 2]) {
+        const updatedAt = new Date(Date.now() - (week * 7 - offset) * 86_400_000).toISOString();
+        const blockId = `seed-${week}-${offset}`;
+        tx.objectStore("blockProgress").put({
+          key: `${lessonId}/${blockId}`,
+          lessonId,
+          blockId,
+          done: true,
+          updatedAt,
+        });
+      }
+    await new Promise<void>((resolve) => {
+      tx.oncomplete = () => resolve();
+    });
+    db.close();
+  });
+  await page.goto("/app/progress");
+  const area = page.getByRole("region", { name: "Недели с начала занятий" });
+  await expect(area.getByRole("listitem").last()).toContainText("Эта неделя");
+  const atEnd = () =>
+    area.evaluate((element) => ({
+      overflow: element.scrollWidth > element.clientWidth,
+      end: element.scrollLeft + element.clientWidth >= element.scrollWidth - 1,
+    }));
+  expect(await atEnd()).toEqual({ overflow: true, end: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+  await expect(area).toHaveAttribute("tabindex", "0");
+
+  await page.setViewportSize({ width: 1000, height: 780 });
+  await page.setViewportSize({ width: 360, height: 780 });
+  await expect.poll(atEnd).toEqual({ overflow: true, end: true });
+});

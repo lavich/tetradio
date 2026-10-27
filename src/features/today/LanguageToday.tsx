@@ -76,8 +76,8 @@ export function LanguageToday({
   const views = useLiveQuery(() => moduleViews(courseId), [courseId]);
   const reviewed = useLiveQuery(async () => (ready ? reviewedOn(today, scope) : undefined), [today, ready, scopeKey]);
   const week = useLiveQuery(
-    async () => (ready ? lessonDays(monday, deviceTimezone(), scope) : undefined),
-    [monday, deviceTimezone(), ready, scopeKey],
+    async () => (!ready ? undefined : spread ? [] : lessonDays(monday, deviceTimezone(), scope)),
+    [monday, deviceTimezone(), ready, scopeKey, spread],
   );
   const courseProfile = useCourseProfile(courseId);
   const profile = language ? PROFILES[language] : courseProfile;

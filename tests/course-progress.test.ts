@@ -247,6 +247,45 @@ describe("прогресс языка", () => {
     expect(english.total.days.lessons).toEqual(["2026-10-05", "2026-10-13"]);
     expect(english.total.week.lessonDays).toEqual([]);
   });
+  it("дни повторения суммы — объединение курсов языка без повторов, а итог недели — только эта неделя", async () => {
+    const card = (lessonId: string, word: string) => {
+      const ref = { kind: "word" as const, id: word };
+      return { lessonId, unitKey: JSON.stringify(["word", word]), ref, position: 0 };
+    };
+    const links = [card("e01-1", "it-word"), card("c01-1", "talk-word")];
+    await db.lessonItems.bulkPut(links);
+    const answer = (id: string, link: (typeof links)[number], localDate: string) => ({
+      id,
+      sessionId: "s",
+      itemId: id,
+      ref: link.ref,
+      unitKey: link.unitKey,
+      snapshot: { greek: "", russian: "" },
+      type: "recognition" as const,
+      mode: "scheduled" as const,
+      rating: 3 as const,
+      correct: true,
+      answer: "",
+      createdAt: `${localDate}T09:00:00.000Z`,
+      localDate,
+      responseTimeMs: 900,
+    });
+    await db.events.bulkAdd([
+      answer("a", links[0], "2026-10-07"),
+      answer("b", links[1], "2026-10-07"),
+      answer("c", links[1], "2026-10-12"),
+      answer("d", links[0], "2026-10-20"),
+      answer("e", links[1], "2026-10-20"),
+    ]);
+    const english = await languageProgress(now, tz, "en", db);
+    expect(english.total.days.reviews).toEqual(["2026-10-07", "2026-10-12", "2026-10-20"]);
+    expect(english.total.week.reviewDays).toEqual(["2026-10-20"]);
+    expect(english.total.week.cards).toBe(2);
+    expect(english.courses.map((course) => course.days.reviews)).toEqual([
+      ["2026-10-07", "2026-10-20"],
+      ["2026-10-07", "2026-10-12", "2026-10-20"],
+    ]);
+  });
   it("у языка с одним курсом блок курса — прежний прогресс курса", async () => {
     const greek = await languageProgress(now, tz, "el", db);
     expect(greek.courses).toHaveLength(1);
