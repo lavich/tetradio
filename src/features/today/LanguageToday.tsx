@@ -17,7 +17,6 @@ import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
-import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import {
   courseFinished,
   lessonDays,
@@ -35,6 +34,9 @@ import { DayNotes } from "./DayNotes";
 import { lessonLines } from "./lessons";
 import { ReadingSheet } from "./ReadingSheet";
 import css from "./today.module.css";
+
+/** Ориентир курса — 2–3 занятия в неделю; точек недели не меньше трёх. */
+const WEEK_PLAN = 3;
 
 /** Возврат курса с экрана «Все курсы на паузе» меняет весь экран: фокус — на заголовок нового, а не на body. */
 export const titleFocus = { pending: false };
@@ -171,7 +173,7 @@ export function LanguageToday({
       ) : (
         <div className={cx(nb.spread, css.spread)}>
           {page}
-          <ModulePage view={next.view} current={next.lesson.id} week={week ?? []} monday={monday} today={today} />
+          <ModulePage view={next.view} current={next.lesson.id} />
         </div>
       )}
     </ProfileContext>
@@ -344,19 +346,7 @@ export function LessonNext({
   );
 }
 
-function ModulePage({
-  view,
-  current,
-  week,
-  monday,
-  today,
-}: {
-  view: ModuleView;
-  current: string;
-  week: string[];
-  monday: string;
-  today: string;
-}) {
+function ModulePage({ view, current }: { view: ModuleView; current: string }) {
   const { module } = view;
   const { code } = useProfile();
   const rows = [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : []), ...view.review];
@@ -382,15 +372,6 @@ function ModulePage({
           </li>
         ))}
       </ol>
-      <div className={css.weekRow}>
-        <span className={nb.meta}>эта неделя</span>
-        <WeekStrip
-          monday={monday}
-          today={today}
-          lessons={week}
-          label={(name, lesson) => `${name}${lesson ? ": занятие" : ""}`}
-        />
-      </div>
     </section>
   );
 }

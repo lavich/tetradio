@@ -237,6 +237,16 @@ describe("прогресс языка", () => {
     expect(week.lessonDays).toEqual(["2026-10-19", "2026-10-20"]);
     expect(week.monday).toBe("2026-10-19");
   });
+  it("дни занятий суммы — все дни уроков курсов языка за всё время", async () => {
+    const done = (lessonId: string, updatedAt: string) =>
+      db.blockProgress.put({ key: `${lessonId}/text-tf`, lessonId, blockId: "text-tf", done: true, updatedAt });
+    await done("e01-1", "2026-10-05T09:00:00.000Z");
+    await done("c01-1", "2026-10-13T09:00:00.000Z");
+    await done("m01-1", "2026-10-14T09:00:00.000Z");
+    const english = await languageProgress(now, tz, "en", db);
+    expect(english.total.days.lessons).toEqual(["2026-10-05", "2026-10-13"]);
+    expect(english.total.week.lessonDays).toEqual([]);
+  });
   it("у языка с одним курсом блок курса — прежний прогресс курса", async () => {
     const greek = await languageProgress(now, tz, "el", db);
     expect(greek.courses).toHaveLength(1);

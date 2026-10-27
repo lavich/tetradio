@@ -21,7 +21,11 @@ export interface CourseProgress {
   /** Скачаны все уроки курса: иначе доли навыков считаются по скачанным. */
   complete: boolean;
   week: { today: string; monday: string; lessonDays: string[]; reviewDays: string[]; cards: number };
+  /** Все дни уроков и плановых повторений до сегодня, по порядку. */
+  days: { lessons: string[]; reviews: string[] };
 }
+
+const FIRST_DAY = "2000-01-01";
 
 const lessonsOf = (view: ModuleView) => [
   ...view.lessons,
@@ -39,7 +43,7 @@ export interface LanguageProgress {
   /** Начатые курсы языка по порядку курсов, в том числе на паузе. */
   courses: (CourseProgress & { course: CourseEntry })[];
   /** Сумма по языку: навыки по заданиям всех курсов сразу, а не среднее их долей. */
-  total: Pick<CourseProgress, "skills" | "complete" | "week">;
+  total: Pick<CourseProgress, "skills" | "complete" | "week" | "days">;
 }
 
 export const languageProgress = zoned(async function languageProgress(
@@ -52,6 +56,8 @@ export const languageProgress = zoned(async function languageProgress(
   const data = await Promise.all(own.map((course) => courseData(now, timezone, course.id, database)));
   const today = studyDay(now, timezone);
   const events = data.flatMap((item) => item.scheduled);
+  const week = events.filter((event) => event.localDate >= mondayOf(today));
+  const union = (lists: string[][]) => [...new Set(lists.flat())].sort();
   return {
     courses: data.map((item, index) => ({ ...item.progress, course: own[index] })),
     total: {
@@ -61,8 +67,12 @@ export const languageProgress = zoned(async function languageProgress(
         today,
         monday: mondayOf(today),
         lessonDays: [...new Set(data.flatMap((item) => item.progress.week.lessonDays))].sort(),
-        reviewDays: [...new Set(events.map((event) => event.localDate))].sort(),
-        cards: new Set(events.map((event) => event.unitKey)).size,
+        reviewDays: [...new Set(week.map((event) => event.localDate))].sort(),
+        cards: new Set(week.map((event) => event.unitKey)).size,
+      },
+      days: {
+        lessons: union(data.map((item) => item.progress.days.lessons)),
+        reviews: union(data.map((item) => item.progress.days.reviews)),
       },
     },
   };
@@ -116,12 +126,14 @@ const courseData = zoned(async function courseData(
     course?.calendar,
   );
   const next = views.find((view) => lessonsOf(view).some((lesson) => !lesson.completed));
-  const events = await database.events.where("localDate").between(monday, today, true, true).toArray();
+  const events = await database.events.where("localDate").belowOrEqual(today).toArray();
   const planned = events.filter((event) => event.mode !== "practice" && isPlanned(event.ref));
   const own = courseId
     ? await cardsInCourse([...new Set(planned.map((event) => event.unitKey))], courseId, database)
     : undefined;
   const scheduled = own ? planned.filter((event) => own.has(event.unitKey)) : planned;
+  const thisWeek = scheduled.filter((event) => event.localDate >= monday);
+  const lessonsAll = await lessonDays(FIRST_DAY, timezone, courseId, database);
   const progressOf: CourseProgress = {
     views,
     current: next?.module.number ?? views.at(-1)?.module.number ?? 1,
@@ -133,10 +145,11 @@ const courseData = zoned(async function courseData(
     week: {
       today,
       monday,
-      lessonDays: await lessonDays(monday, timezone, courseId, database),
-      reviewDays: [...new Set(scheduled.map((event) => event.localDate))],
-      cards: new Set(scheduled.map((event) => event.unitKey)).size,
+      lessonDays: lessonsAll.filter((day) => day >= monday),
+      reviewDays: [...new Set(thisWeek.map((event) => event.localDate))],
+      cards: new Set(thisWeek.map((event) => event.unitKey)).size,
     },
+    days: { lessons: lessonsAll, reviews: [...new Set(scheduled.map((event) => event.localDate))].sort() },
   };
   return { progress: progressOf, inputs, scheduled };
 });

@@ -293,6 +293,11 @@ test("урок курса: задания с ключом, чтение, ауд�
 
   await page.goto("/app/progress");
   await expect(page.getByTestId("week")).toHaveText("На этой неделе: 1 занятие курса.");
+  await expect(page.getByTestId("weeks").locator("li .sr-only")).toHaveText([/^Неделя с .+: 1 день уроков/]);
+  const viewport = page.viewportSize()!;
+  await page.setViewportSize({ width: 360, height: 780 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+  await page.setViewportSize(viewport);
 
   // Пройденный урок отдаёт карточки в повторение; следующий шаг курса — контрольная модуля.
   await page.goto("/app/");
@@ -413,7 +418,6 @@ test("«Сегодня» на широком экране — разворот: 
   await page.setViewportSize({ width: 1440, height: 900 });
   const module = page.getByRole("region", { name: "Модуль 1" });
   await expect(module.getByRole("link", { name: /Знакомство и είμαι/ })).toBeVisible();
-  await expect(module.getByText("эта неделя")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(module).toHaveCount(0);
   await expect(page.getByTestId("course-next")).toContainText("Начать урок");

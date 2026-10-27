@@ -21,6 +21,7 @@ import { useStats } from "../../shared/store";
 import { languageDictionary, type DictionaryLesson } from "../../storage/dictionary";
 import { entryPath } from "../words/WordsScreen";
 import { SyncLine } from "./SyncLine";
+import { Weeks } from "./Weeks";
 import css from "./progress.module.css";
 
 const number = (value: number) => value.toLocaleString("ru-RU", { maximumFractionDigits: 1 });
@@ -72,18 +73,27 @@ export function ProgressScreen() {
       started={courses.some((course) => course.pace.done > 0)}
     />
   );
-  const tail = (week: CourseProgress["week"], several: boolean) => (
-    <>
-      <p className={css.weekLine} data-testid="week">
-        {weekLine(week, several)}
-      </p>
-      <div className={css.foot}>
-        <SyncLine />
-        <Link className={css.more} to="/progress/settings">
-          Настройки и данные
-        </Link>
-      </div>
-    </>
+  const tail = (
+    <div className={css.foot}>
+      <SyncLine />
+      <Link className={css.more} to="/progress/settings">
+        Настройки и данные
+      </Link>
+    </div>
+  );
+  const weeks = (
+    data: Pick<CourseProgress, "days" | "week">,
+    pausedAt: string | undefined,
+    several: boolean,
+    level: 2 | 3,
+  ) => (
+    <Weeks
+      data={data}
+      pausedAt={pausedAt}
+      timezone={deviceTimezone()}
+      summary={weekLine(data.week, several)}
+      level={level}
+    />
   );
   if (courses.length > 1) {
     const summary = (
@@ -91,6 +101,7 @@ export function ProgressScreen() {
         <h2 id="language-total" className={css.total}>
           Всего {profile.names.by}
         </h2>
+        {weeks(total, allPaused(courses), true, 3)}
         <Skills skills={total.skills} complete level={3} />
         {cards(3)}
       </section>
@@ -103,7 +114,7 @@ export function ProgressScreen() {
             <div className={cx(nb.page, css.page)}>
               {head}
               {summary}
-              {tail(total.week, true)}
+              {tail}
             </div>
             <div className={cx(nb.page, css.page)}>{blocks}</div>
           </div>
@@ -112,7 +123,7 @@ export function ProgressScreen() {
             {head}
             {summary}
             {blocks}
-            {tail(total.week, true)}
+            {tail}
           </div>
         )}
       </Screen>
@@ -124,7 +135,12 @@ export function ProgressScreen() {
       {courseName(courses[0].course)}
     </h2>
   );
-  const path = <Path data={one} pausedAt={courses[0]?.course.pausedAt} />;
+  const path = (
+    <>
+      <Path data={one} pausedAt={courses[0]?.course.pausedAt} />
+      {weeks(one, courses[0]?.course.pausedAt, false, 2)}
+    </>
+  );
   const ready = <Skills skills={one.skills} complete={one.complete} passShare={one.passShare} />;
   return (
     <Screen wide>
@@ -138,7 +154,7 @@ export function ProgressScreen() {
           </div>
           <div className={cx(nb.page, css.page)}>
             {cards(2)}
-            {tail(one.week, false)}
+            {tail}
           </div>
         </div>
       ) : (
@@ -148,7 +164,7 @@ export function ProgressScreen() {
           {path}
           {ready}
           {cards(2)}
-          {tail(one.week, false)}
+          {tail}
         </div>
       )}
     </Screen>
@@ -167,6 +183,15 @@ function CourseBlock({ data }: { data: LanguageProgress["courses"][number] }) {
     </section>
   );
 }
+
+/** В сумме языка пауза штрихуется, только когда стоят все курсы: с самой поздней паузы. */
+const allPaused = (courses: LanguageProgress["courses"]) =>
+  courses.every((item) => item.course.pausedAt)
+    ? courses
+        .map((item) => item.course.pausedAt!)
+        .sort()
+        .at(-1)
+    : undefined;
 
 const weekLine = ({ lessonDays, reviewDays }: CourseProgress["week"], language: boolean) => {
   if (!lessonDays.length && !reviewDays.length) return "На этой неделе занятий ещё не было.";
