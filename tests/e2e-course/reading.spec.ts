@@ -266,6 +266,7 @@ test("«Сегодня»: лист «Чтение» — след, долг, пр
   await page.goto("/app/");
   await expect(sheet(page)).toContainText("Прочитано 1 текст");
   await expect(sheet(page)).toContainText("Следующий текст откроется после урока «Контрольная модуля 01»");
+  await expect(sheet(page).getByRole("link")).toHaveCount(0);
   await expect(primary(page)).toHaveCount(0);
 
   await complete(page, "m01-test");
