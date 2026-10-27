@@ -46,7 +46,7 @@ export async function lessonOfWord(wordId: string, database: AppDatabase = db): 
   return firstLessonOf(await database.catalog.toArray(), wordId);
 }
 
-const CHOICE_FIELDS = ["level", "goal", "short", "palette", "order"] as const;
+const CHOICE_FIELDS = ["level", "goal", "entry", "pace", "short", "palette", "order"] as const;
 const sorted = (value: unknown): unknown =>
   Array.isArray(value)
     ? value.map(sorted)

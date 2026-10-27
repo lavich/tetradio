@@ -64,6 +64,8 @@ export interface CourseSource {
   calendar?: unknown;
   level?: unknown;
   goal?: unknown;
+  entry?: unknown;
+  pace?: unknown;
   short?: unknown;
   palette?: unknown;
   order?: unknown;
@@ -331,6 +333,8 @@ const COURSE_FIELDS = {
   calendar: true,
   level: true,
   goal: true,
+  entry: true,
+  pace: true,
   short: true,
   palette: true,
   order: true,
