@@ -1,3 +1,4 @@
+import { dayNumber, dayOfNumber, isDay, mergeReviewDays, type ReviewDays } from "../domain/review-days";
 import type { SkillSummary, StatsSummary, StoredType, TypeSkill } from "../domain/skills";
 import { KINDS, kindOfCode } from "../domain/kinds";
 import { FOREIGN_TYPE, TYPE_CODE, typeOfCode } from "../domain/type-codes";
@@ -99,6 +100,8 @@ interface Wire {
   st: WireState[];
   sk: WireSkill[];
   x: { d: WireDay[]; r: Record<string, string>; n: number; w: string[] };
+  /** Дни повторений: курс и номера дней от 1970-01-01 — первый как есть, дальше разности. */
+  rd?: [string, number[]][];
 }
 const encodeState = (state: CompactState): WireState => {
   const card = state.card;
@@ -238,6 +241,33 @@ const decodeBlocks = (wire: unknown): CompactBlock[] => {
     });
   });
 };
+const encodeReviewDays = (days: ReviewDays): [string, number[]][] =>
+  Object.entries(days).flatMap(([course, list]) => {
+    const numbers = [...new Set(list.filter(isDay).map(dayNumber))].sort((a, b) => a - b);
+    return numbers.length
+      ? [[course, numbers.map((number, index) => (index ? number - numbers[index - 1] : number))]]
+      : [];
+  });
+/** Поле необязательное: непонятный курс отбрасывается, остальные дни и версия применяются. */
+function decodeReviewDays(wire: unknown): ReviewDays {
+  if (!Array.isArray(wire)) return {};
+  const days: ReviewDays[] = [];
+  for (const entry of wire) {
+    if (!Array.isArray(entry) || typeof entry[0] !== "string" || !Array.isArray(entry[1])) continue;
+    let number = 0;
+    const list: string[] = [];
+    for (const [index, step] of (entry[1] as unknown[]).entries()) {
+      if (!Number.isInteger(step) || (step as number) < (index ? 1 : 0)) break;
+      number += step as number;
+      const day = dayOfNumber(number);
+      if (!isDay(day)) break;
+      list.push(day);
+    }
+    if (list.length === entry[1].length) days.push({ [entry[0]]: list });
+  }
+  return mergeReviewDays(...days);
+}
+
 /** Ключи и состояния, которые формат снимка не сохраняет, выпадают из него. */
 const alive = <T>(value: T | null): value is T => value !== null;
 
@@ -254,6 +284,8 @@ export function encodeSnapshot(snapshot: CompactSnapshot, format: number = snaps
     sk: snapshot.skills.map((entry) => encodeSkill(entry.ref, entry.skills)),
     x: encodeStats(snapshot.stats),
   };
+  const days = encodeReviewDays(snapshot.reviewDays ?? {});
+  if (days.length) wire.rd = days;
   return JSON.stringify(wire);
 }
 export class SnapshotFormatError extends Error {}
@@ -285,6 +317,7 @@ export function decodeSnapshot(text: string, expectedFormat?: number): CompactSn
     !Array.isArray(wire.cs)
   )
     throw new SnapshotFormatError("Структура снимка не соответствует формату");
+  const reviewDays = decodeReviewDays(wire.rd);
   return {
     format: SNAPSHOT_FORMAT,
     createdAt: iso(wire.c ?? 0),
@@ -294,5 +327,6 @@ export function decodeSnapshot(text: string, expectedFormat?: number): CompactSn
     states: wire.st.map((state) => decodeState(state, wire.f)).filter(alive),
     skills: wire.sk.map((skill) => decodeSkill(skill, wire.f)).filter(alive),
     stats: decodeStats(wire.x, wire.f),
+    ...(Object.keys(reviewDays).length ? { reviewDays } : {}),
   };
 }
