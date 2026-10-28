@@ -1,7 +1,7 @@
 import type { CourseCalendar } from "../content/course";
-import { isPlanned } from "../domain/kinds";
 import { mondayOf, studyDay } from "../domain/learning";
 import { coursePace, skillProgress, type Pace, type SkillProgress } from "../domain/progress";
+import { isReviewDay, readReviewDays, type ReviewDays } from "../domain/review-days";
 import type { BlockProgress } from "../domain/types";
 import { READING_PREFIX } from "../content/schema";
 import { moduleViews, type ModuleView } from "./course";
@@ -46,6 +46,8 @@ interface Review {
 /** Вся история ответов и уроков читается один раз на экран, а не на каждый курс: таблица ответов общая на все языки. */
 interface History {
   reviews: Review[];
+  /** Дни повторений базы: из облака и свёрнутые при публикациях события этого устройства. */
+  synced: ReviewDays;
   cardOwner: Map<string, string>;
   lessons: { day: string; course?: string }[];
 }
@@ -57,8 +59,7 @@ const history = zoned(async function history(now: Date, timezone: string, databa
     .where("localDate")
     .belowOrEqual(today)
     .each((event) => {
-      if (event.mode !== "practice" && isPlanned(event.ref))
-        reviews.push({ localDate: event.localDate, unitKey: event.unitKey });
+      if (isReviewDay(event)) reviews.push({ localDate: event.localDate, unitKey: event.unitKey });
     });
   const rows: { lessonId: string; day: string }[] = [];
   // Чтение днём занятий не считается: отметка «прочитано» — строка блока текста.
@@ -73,7 +74,13 @@ const history = zoned(async function history(now: Date, timezone: string, databa
       database,
     ),
   ]);
-  return { reviews, cardOwner, lessons: rows.map((row) => ({ day: row.day, course: lessonOwner.get(row.lessonId) })) };
+  const synced = readReviewDays((await database.baseSummary.get("base"))?.reviewDays);
+  return {
+    reviews,
+    synced,
+    cardOwner,
+    lessons: rows.map((row) => ({ day: row.day, course: lessonOwner.get(row.lessonId) })),
+  };
 });
 
 export interface LanguageProgress {
@@ -105,7 +112,7 @@ export const languageProgress = zoned(async function languageProgress(
         today,
         monday: mondayOf(today),
         lessonDays: [...new Set(data.flatMap((item) => item.progress.week.lessonDays))].sort(),
-        reviewDays: [...new Set(week.map((event) => event.localDate))].sort(),
+        reviewDays: union(data.map((item) => item.progress.week.reviewDays)),
         cards: new Set(week.map((event) => event.unitKey)).size,
       },
       days: {
@@ -169,6 +176,10 @@ const courseData = zoned(async function courseData(
     ? past.reviews.filter((review) => past.cardOwner.get(review.unitKey) === courseId)
     : past.reviews;
   const thisWeek = scheduled.filter((event) => event.localDate >= monday);
+  const synced = courseId ? past.synced[courseId] : Object.values(past.synced).flat();
+  const reviewDays = [
+    ...new Set([...scheduled.map((event) => event.localDate), ...(synced ?? []).filter((day) => day <= today)]),
+  ].sort();
   const lessonsAll = [
     ...new Set(past.lessons.filter((lesson) => !courseId || lesson.course === courseId).map((lesson) => lesson.day)),
   ].sort();
@@ -184,10 +195,10 @@ const courseData = zoned(async function courseData(
       today,
       monday,
       lessonDays: lessonsAll.filter((day) => day >= monday),
-      reviewDays: [...new Set(thisWeek.map((event) => event.localDate))],
+      reviewDays: reviewDays.filter((day) => day >= monday),
       cards: new Set(thisWeek.map((event) => event.unitKey)).size,
     },
-    days: { lessons: lessonsAll, reviews: [...new Set(scheduled.map((event) => event.localDate))].sort() },
+    days: { lessons: lessonsAll, reviews: reviewDays },
   };
   return { progress: progressOf, inputs, scheduled };
 });

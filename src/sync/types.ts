@@ -1,3 +1,4 @@
+import type { ReviewDays } from "../domain/review-days";
 import type { SkillSummary, StatsSummary } from "../domain/skills";
 import type { Card } from "ts-fsrs";
 import type { StoredRef } from "../domain/types";
@@ -62,6 +63,8 @@ export interface CompactSnapshot {
   states: CompactState[];
   skills: { ref: StoredRef; skills: SkillSummary }[];
   stats: StatsSummary;
+  /** Дни плановых повторений со всех устройств; прежние версии поля не знают. */
+  reviewDays?: ReviewDays;
 }
 
 /** Опубликованная версия: идентификатор, устройство, причинная база и разрешённые ветви. */
@@ -109,6 +112,8 @@ export interface BaseSummaryRow {
   asOf: string;
   versionId: string;
   stats: StatsSummary;
+  /** Нет поля — база записана прежней версией: дни собираются заново из всей истории ответов. */
+  reviewDays?: ReviewDays;
 }
 /**
  * Состояния карточек без содержимого на устройстве: пакет ещё не загружен или вид карточки этой версии незнаком.

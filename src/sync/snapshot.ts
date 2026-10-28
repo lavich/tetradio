@@ -3,6 +3,8 @@ import { READING_PREFIX } from "../content/schema";
 import type { AppDatabase } from "../storage/db";
 import { zoned } from "../storage/zone";
 import { byTime, emptySkills, emptyStats, foldSkill, foldStats, type SkillSummary } from "../domain/skills";
+import { isReviewDay, mergeReviewDays, readReviewDays, reviewDaysOf, type ReviewDays } from "../domain/review-days";
+import { cardCourses } from "../storage/courses";
 import { KINDS } from "../domain/kinds";
 import { isForeign, storedKey, unitKey } from "../domain/refs";
 import {
@@ -19,6 +21,7 @@ import { PENDING_LESSONS_KEY, readPending, type PendingLessons } from "../storag
 import type { BlockProgress } from "../domain/types";
 import {
   SNAPSHOT_FORMAT,
+  type BaseSummaryRow,
   type Clock,
   type CompactBlock,
   type CompactLesson,
@@ -137,12 +140,45 @@ const byKey = (a: { ref: StoredRef }, b: { ref: StoredRef }) => storedKey(a.ref)
 
 type Progress = Omit<CompactSnapshot, "skills" | "stats">;
 type Summary = Pick<CompactSnapshot, "skills" | "stats">;
-const PROGRESS_TABLES = ["lessons", "packages", "blockProgress", "cardStates", "cardStash", "meta"] as const;
+// Дни повторений: события, база и таблицы, по которым `cardCourses` находит курс карточки.
+const DAYS_TABLES = ["events", "baseSummary", "lessonItems", "lessons", "courses", "catalog", "meta"];
+const PROGRESS_TABLES = [
+  ...new Set(["lessons", "packages", "blockProgress", "cardStates", "cardStash", "meta", ...DAYS_TABLES]),
+];
 // Наличие карточки в сводке проверяется по таблицам содержимого всех видов.
 const SUMMARY_TABLES = ["cardSkills", "baseSummary", "events", ...CONTENT_TABLES];
 /** Таблицы сборки снимка; транзакцию чтения по ним открывает вызывающий. */
 export const SNAPSHOT_TABLES = [...new Set([...PROGRESS_TABLES, ...SUMMARY_TABLES])];
 const tables = (database: AppDatabase, names: readonly string[]) => names.map((name) => database.table(name));
+
+const SLACK_MS = 86_400_000;
+/**
+ * Запас в сутки — на часы, ушедшие назад. База без дней записана прежней версией или её нет — тогда вся история ответов.
+ */
+const knownReviewDays = zoned(async function knownReviewDays(
+  database: AppDatabase,
+  base: BaseSummaryRow | undefined,
+): Promise<ReviewDays> {
+  const since = base?.reviewDays ? Date.parse(base.asOf) - SLACK_MS : NaN;
+  const events = (
+    Number.isNaN(since)
+      ? await database.events.toArray()
+      : await database.events.where("createdAt").above(new Date(since).toISOString()).toArray()
+  ).filter(isReviewDay);
+  const owner = await cardCourses([...new Set(events.map((event) => event.unitKey))], database);
+  return mergeReviewDays(readReviewDays(base?.reviewDays), reviewDaysOf(events, owner));
+});
+/** Дописывает к дням базы дни других ветвей — например, отвергнутых в конфликте. */
+export const addReviewDays = (database: AppDatabase, extra: (ReviewDays | undefined)[]) =>
+  database.transaction("rw", tables(database, DAYS_TABLES), async () => {
+    const base = await database.baseSummary.get("base");
+    const reviewDays = mergeReviewDays(await knownReviewDays(database, base), ...extra);
+    await database.baseSummary.put({
+      ...(base ?? { id: "base", asOf: "", versionId: "", stats: emptyStats() }),
+      reviewDays,
+    });
+  });
+const withDays = (reviewDays: ReviewDays) => (Object.keys(reviewDays).length ? { reviewDays } : {});
 
 const readProgress = zoned(async function readProgress(database: AppDatabase, now: Date): Promise<Progress> {
   const packages = new Set((await database.packages.toCollection().primaryKeys()) as string[]);
@@ -159,6 +195,7 @@ const readProgress = zoned(async function readProgress(database: AppDatabase, no
   const known = new Set(rawStates.map((state) => state.unitKey));
   const states = rawStates.map(serializeState);
   for (const row of await database.cardStash.toArray()) if (!known.has(row.unitKey)) states.push(row.state);
+  const reviewDays = await knownReviewDays(database, await database.baseSummary.get("base"));
   return {
     format: SNAPSHOT_FORMAT,
     createdAt: now.toISOString(),
@@ -166,6 +203,7 @@ const readProgress = zoned(async function readProgress(database: AppDatabase, no
     packages: [...packages].sort(),
     blocks,
     states: states.sort(byKey),
+    ...withDays(reviewDays),
   };
 });
 /**
@@ -207,7 +245,7 @@ export const readSnapshot = (database: AppDatabase, now: Date) =>
 /** Новая база: отсечка — момент сборки, локальные события до неё считаются учтёнными в снимке. */
 export const commitBase = zoned(async function commitBase(
   database: AppDatabase,
-  snapshot: Summary,
+  snapshot: Summary & Pick<CompactSnapshot, "reviewDays">,
   versionId: string,
   asOf: string,
 ) {
@@ -215,7 +253,13 @@ export const commitBase = zoned(async function commitBase(
   await database.cardSkills.bulkPut(
     snapshot.skills.map((entry) => ({ unitKey: storedKey(entry.ref), ref: entry.ref, skills: entry.skills })),
   );
-  await database.baseSummary.put({ id: "base", asOf, versionId, stats: snapshot.stats });
+  await database.baseSummary.put({
+    id: "base",
+    asOf,
+    versionId,
+    stats: snapshot.stats,
+    reviewDays: snapshot.reviewDays ?? {},
+  });
 });
 /**
  * Прогресс читается без блокировки записи, затем сводки собираются и фиксируются одной транзакцией по своим таблицам:
@@ -236,7 +280,7 @@ export async function buildAndCommitMarked(
     // Часы устройства могли уйти назад: отсечка не отступает, иначе учтённые события посчитались бы снова.
     const base = await database.baseSummary.get("base");
     const asOf = base && base.asOf > progress.createdAt ? base.asOf : progress.createdAt;
-    await commitBase(database, summary, versionId, asOf);
+    await commitBase(database, { ...summary, reviewDays: progress.reviewDays }, versionId, asOf);
     return summary;
   });
   return { snapshot: { ...progress, ...summary }, mark };
@@ -258,6 +302,7 @@ export { readPending, type PendingLessons } from "../storage/pending";
  * состояния FSRS карточек, база навыков и сводок. История ответов остаётся локальной. Состояния неизвестных карточек откладываются
  * до установки пакета, а не обнуляются и не попадают в план.
  * `ifClean` — применять, только если локальных неопубликованных изменений нет; иначе `false` без записи.
+ * `reviewDays` — дни других ветвей конфликта, которые складываются с днями версии.
  */
 export async function applySnapshot(
   database: AppDatabase,
@@ -265,48 +310,47 @@ export async function applySnapshot(
   versionId: string,
   clock: Clock,
   now: Date,
-  { ifClean = false }: { ifClean?: boolean } = {},
+  { ifClean = false, reviewDays: extra = [] }: { ifClean?: boolean; reviewDays?: (ReviewDays | undefined)[] } = {},
 ): Promise<boolean> {
-  return database.transaction(
-    "rw",
-    tables(
+  return database.transaction("rw", tables(database, SNAPSHOT_TABLES), async () => {
+    if (ifClean && (await readMeta(database, META.dirty))) return false;
+    // Дни не заменяются версией, а складываются: ни обмен, ни выбор в конфликте не стирают известный день.
+    const reviewDays = mergeReviewDays(
+      await knownReviewDays(database, await database.baseSummary.get("base")),
+      snapshot.reviewDays,
+      ...extra,
+    );
+    const pending: PendingLessons = {};
+    for (const lesson of snapshot.lessons) {
+      if (await database.lessons.get(lesson.id)) await database.lessons.update(lesson.id, lessonPatch(lesson));
+      else pending[lesson.id] = lesson;
+    }
+    await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
+    const listed = new Set(snapshot.lessons.map((lesson) => lesson.id));
+    for (const lesson of await database.lessons.toArray())
+      if (lesson.completed && !listed.has(lesson.id))
+        await database.lessons.update(lesson.id, { completed: false, updatedAt: now.toISOString() });
+    await applyBlocks(database, snapshot.blocks);
+    const incoming = new Set(snapshot.states.map((state) => storedKey(state.ref)));
+    // Карточки, которых нет в выбранной версии, снова становятся новыми.
+    const local = (await database.cardStates.toCollection().primaryKeys()) as string[];
+    await database.cardStates.bulkDelete(local.filter((key) => !incoming.has(key)));
+    const known = await presentKeys(
       database,
-      SNAPSHOT_TABLES.filter((name) => name !== "events"),
-    ),
-    async () => {
-      if (ifClean && (await readMeta(database, META.dirty))) return false;
-      const pending: PendingLessons = {};
-      for (const lesson of snapshot.lessons) {
-        if (await database.lessons.get(lesson.id)) await database.lessons.update(lesson.id, lessonPatch(lesson));
-        else pending[lesson.id] = lesson;
-      }
-      await writeMeta(database, META.pendingLessons, Object.keys(pending).length ? JSON.stringify(pending) : null);
-      const listed = new Set(snapshot.lessons.map((lesson) => lesson.id));
-      for (const lesson of await database.lessons.toArray())
-        if (lesson.completed && !listed.has(lesson.id))
-          await database.lessons.update(lesson.id, { completed: false, updatedAt: now.toISOString() });
-      await applyBlocks(database, snapshot.blocks);
-      const incoming = new Set(snapshot.states.map((state) => storedKey(state.ref)));
-      // Карточки, которых нет в выбранной версии, снова становятся новыми.
-      const local = (await database.cardStates.toCollection().primaryKeys()) as string[];
-      await database.cardStates.bulkDelete(local.filter((key) => !incoming.has(key)));
-      const known = await presentKeys(
-        database,
-        snapshot.states.map((state) => state.ref),
-      );
-      await database.cardStash.clear();
-      for (const state of snapshot.states) {
-        const key = storedKey(state.ref);
-        if (known.has(key) && isKnown(state)) await database.cardStates.put(reviveState(state));
-        else await database.cardStash.put({ unitKey: key, ref: state.ref, state });
-      }
-      await commitBase(database, snapshot, versionId, now.toISOString());
-      await writeMeta(database, META.applied, versionId);
-      await writeMeta(database, META.clock, JSON.stringify(clock));
-      await writeMeta(database, META.dirty, null);
-      return true;
-    },
-  );
+      snapshot.states.map((state) => state.ref),
+    );
+    await database.cardStash.clear();
+    for (const state of snapshot.states) {
+      const key = storedKey(state.ref);
+      if (known.has(key) && isKnown(state)) await database.cardStates.put(reviveState(state));
+      else await database.cardStash.put({ unitKey: key, ref: state.ref, state });
+    }
+    await commitBase(database, { ...snapshot, reviewDays }, versionId, now.toISOString());
+    await writeMeta(database, META.applied, versionId);
+    await writeMeta(database, META.clock, JSON.stringify(clock));
+    await writeMeta(database, META.dirty, null);
+    return true;
+  });
 }
 
 /**
