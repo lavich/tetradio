@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import "fake-indexeddb/auto";
 import "./helpers/self";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type { Course, StoredModule } from "../src/domain/types";
@@ -63,9 +63,22 @@ function render(courses: Course[], entries: StoredCatalogEntry[], mods: StoredMo
 }
 
 describe("пустой каталог", () => {
-  it("пока каталог грузится — пусто, без «Проверьте сеть»", () => {
+  it("пока каталог грузится — только статус для читалки, без «Проверьте сеть»", () => {
     render([], [], []);
-    expect(container.textContent).toBe("");
+    expect(container.textContent).toBe("Загружаем курсы");
+    expect(container.querySelector("[role=status]")?.className).toContain("sr-only");
+  });
+  it("каталог грузится дольше 8 с — «Каталог ещё не загружен»", () => {
+    vi.useFakeTimers();
+    try {
+      render([], [], []);
+      act(() => {
+        vi.advanceTimersByTime(8000);
+      });
+      expect(container.textContent).toContain("Каталог ещё не загружен");
+    } finally {
+      vi.useRealTimers();
+    }
   });
   it("каталог не загрузился — «Каталог ещё не загружен»", () => {
     setCatalogPhase("error");

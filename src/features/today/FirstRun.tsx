@@ -1,4 +1,4 @@
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { GraduationCap, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
@@ -51,7 +51,14 @@ export function FirstRun({
     subscribeInstall,
     () => offers.find((offer) => coursePhase(offer.course.id).phase === "loading")?.course.id,
   );
-  if (!offers.length && catalog !== "error") return null;
+  const waiting = !offers.length && catalog !== "error";
+  const slow = useSlow(waiting);
+  if (waiting && !slow)
+    return (
+      <p className="sr-only" role="status">
+        Загружаем курсы
+      </p>
+    );
   if (!offers.length)
     return (
       <Card className="mb-3 bg-soft ring-0">
@@ -266,6 +273,17 @@ function CourseIntro({ offer }: { offer: CourseOfferView }) {
   );
 }
 
+/** Зависший без тайм-аута запрос каталога не должен оставлять пустой экран: через время — совет проверить сеть. */
+function useSlow(waiting: boolean, ms = 8000) {
+  const [slow, setSlow] = useState(false);
+  useEffect(() => {
+    if (!waiting) return setSlow(false);
+    const timer = setTimeout(() => setSlow(true), ms);
+    return () => clearTimeout(timer);
+  }, [waiting, ms]);
+  return slow;
+}
+
 /** Начало курса там, где каталог есть, а уроков курса на устройстве ещё нет: на полке — курсов языка, в модуле — одного. */
 export function CourseStart({
   courseIds,
@@ -286,12 +304,13 @@ export function CourseStart({
 }) {
   const courses = useCourses();
   const catalog = useCatalog();
-  const offered = (courses ?? []).filter((course) => !courseIds || courseIds.includes(course.id));
+  if (!courses || !catalog) return null;
+  const offered = courses.filter((course) => !courseIds || courseIds.includes(course.id));
   return (
     <FirstRun
       courses={offered}
-      entries={catalog?.entries ?? []}
-      modules={catalog?.modules ?? []}
+      entries={catalog.entries}
+      modules={catalog.modules}
       hint={hint}
       grouped={grouped}
       focus={focus}
