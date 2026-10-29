@@ -81,9 +81,10 @@ export function useFirstInteraction(): boolean {
   return done;
 }
 
+let conflictOnce = false;
 /** Диалог конфликта монтируется с первого конфликта и остаётся: чанк не грузится заново при каждом конфликте. */
 export function useSyncConflictSeen(): boolean {
-  const [seen, setSeen] = useState(false);
+  const [seen, setSeen] = useState(conflictOnce);
   useEffect(() => {
     if (seen) return;
     let live = true;
@@ -93,7 +94,9 @@ export function useSyncConflictSeen(): boolean {
         .then(({ sync }) => {
           if (!live) return;
           const check = () => {
-            if (sync.getStatus().phase === "conflict") setSeen(true);
+            if (sync.getStatus().phase !== "conflict") return;
+            conflictOnce = true;
+            setSeen(true);
           };
           unsubscribe = sync.subscribe(check);
           check();

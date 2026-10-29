@@ -127,6 +127,8 @@ export function SyncConflictDialog() {
 const FOCUS_AFTER = ["sync-status", "sync-deferred", "today-title"];
 const returnFocus = () =>
   requestAnimationFrame(() => {
+    // Запись выбора могла идти долго: фокус, который учащийся уже куда-то поставил, не отнимается.
+    if (document.activeElement && document.activeElement !== document.body) return;
     for (const id of FOCUS_AFTER) {
       const target = document.querySelector<HTMLElement>(`[data-testid=${id}]`);
       if (target) return target.focus();

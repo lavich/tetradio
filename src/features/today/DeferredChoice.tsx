@@ -4,7 +4,8 @@ import css from "./today.module.css";
 /** Пока выбор версии отложен, прогресс этого устройства не публикуется: строка не даёт об этом забыть. */
 export function DeferredChoice() {
   const status = useSyncStatus();
-  if (status.phase !== "conflict" || !status.conflict?.deferred) return null;
+  // Во время обмена фаза меняется, а отложенный конфликт остаётся: по фазе строка мигала бы при каждом возврате.
+  if (!status.conflict?.deferred) return null;
   return (
     <button
       type="button"
