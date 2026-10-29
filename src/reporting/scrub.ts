@@ -25,6 +25,18 @@ export function scrubUrl(url: string, own: string = origin()): string {
   const relative = !/^[a-z][a-z0-9+.-]*:/i.test(url);
   return relative || parsed.origin === own ? parsed.pathname : `${parsed.origin}${parsed.pathname}`;
 }
+/**
+ * Кадр ошибки без стека SDK подписывает адресом страницы, а на первом экране Mini App в нём `#tgWebAppData` с id и
+ * именем пользователя. Адрес скрипта остаётся целым: по нему Sentry сопоставляет кадр с картой кода.
+ */
+export function scrubFrameUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    return /^https?:$/.test(parsed.protocol) ? `${parsed.origin}${parsed.pathname}` : url;
+  } catch {
+    return url;
+  }
+}
 const isOwn = (url: string, own: string) => {
   try {
     return new URL(url, own || "http://localhost").origin === (own || "http://localhost");
@@ -61,7 +73,8 @@ export function filterBreadcrumb(crumb: Breadcrumb, own: string = origin()): Bre
 
 /** Имя базы владельца — `tetradio-tg-<бот>-<Telegram ID>` — попадает в тексты ошибок IndexedDB и Dexie. */
 const DATABASE_NAME = /tetradio-tg-[\w-]+/g;
-const scrubText = (text: string) => text.replace(DATABASE_NAME, "tetradio-tg-…");
+const LAUNCH_DATA = /(tgWebApp\w+)=[^\s"'&]*/g;
+const scrubText = (text: string) => text.replace(DATABASE_NAME, "tetradio-tg-…").replace(LAUNCH_DATA, "$1=…");
 const isPlain = (value: object) => {
   const proto = Object.getPrototypeOf(value);
   return proto === Object.prototype || proto === null;
@@ -82,6 +95,9 @@ export function scrubEvent<T extends ErrorEvent>(event: T, own: string = origin(
     // Служебные данные SDK не отправляются и могут ссылаться на его внутренние объекты.
     if (key !== "sdkProcessingMetadata") event[key] = scrubTexts(event[key], seen) as T[keyof T];
   delete event.user;
+  for (const exception of event.exception?.values ?? [])
+    for (const frame of exception.stacktrace?.frames ?? [])
+      if (typeof frame.filename === "string") frame.filename = scrubFrameUrl(frame.filename);
   if (event.request) {
     const url = event.request.url;
     event.request = typeof url === "string" ? { url: scrubUrl(url, own) } : {};

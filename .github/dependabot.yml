@@ -11,6 +11,9 @@ updates:
       - dependency-name: "@playwright/test"
       - dependency-name: "@fission-ai/openspec"
     groups:
+      # `@sentry/core` в корне держит одну копию ядра для `@sentry/react`: версии обновляются вместе.
+      sentry:
+        patterns: ["@sentry/*"]
       minor-and-patch:
         update-types: [minor, patch]
     commit-message:

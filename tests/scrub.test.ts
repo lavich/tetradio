@@ -98,6 +98,37 @@ describe("очистка события", () => {
     expect(out.exception?.values?.[0].value).toBe("Database tetradio-tg-… has been closed");
     expect(out.exception?.values?.[0].type).toBe("DatabaseClosedError");
   });
+
+  it("убирает данные запуска Telegram из текстов ошибок", () => {
+    const out = scrubEvent(
+      event({
+        exception: {
+          values: [
+            {
+              type: "Error",
+              value: "Rejected: https://x/app/#tgWebAppData=user%3D%7B%22id%22%3A123456789%7D&tgWebAppVersion=8.0",
+            },
+          ],
+        },
+      }),
+      ORIGIN,
+    );
+    expect(out.exception?.values?.[0].value).toBe("Rejected: https://x/app/#tgWebAppData=…&tgWebAppVersion=…");
+  });
+  it("режет параметры и фрагмент в адресах кадров, оставляя адрес скрипта целым", () => {
+    const frames = [
+      { filename: "https://tetradio.app/app/?bot=x#tgWebAppData=user%3D%7B%22id%22%3A42%7D", lineno: 0 },
+      { filename: "https://tetradio.app/assets/app-abc.js", lineno: 1 },
+      { filename: "<anonymous>" },
+    ];
+    const out = scrubEvent(event({ exception: { values: [{ type: "Error", stacktrace: { frames } }] } }), ORIGIN);
+    expect(out.exception!.values![0]!.stacktrace!.frames!.map((frame) => frame.filename)).toEqual([
+      "https://tetradio.app/app/",
+      "https://tetradio.app/assets/app-abc.js",
+      "<anonymous>",
+    ]);
+  });
+
   it("не трогает метки и не падает на пустом событии", () => {
     const out = scrubEvent(event({ tags: { env: "telegram", "tg.version": "8.0" } }), ORIGIN);
     expect(out.tags).toEqual({ env: "telegram", "tg.version": "8.0" });
