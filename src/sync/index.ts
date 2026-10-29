@@ -8,6 +8,7 @@ import { currentProfile } from "../storage/profile";
 import { storageHealer } from "../storage/recovery";
 import { kvAdapter, loadCompression } from "./adapter";
 import { afterFirstExchange } from "./warm";
+import { syncFailureReporter } from "./failure";
 import { SyncCoordinator, webLock, type SyncStatus, webLockWait } from "./coordinator";
 import { cloudStorageTransport, disabledTransport } from "./transport";
 
@@ -28,13 +29,13 @@ export const sync = new SyncCoordinator({
 sync.onMissingPackages = (ids) => {
   installPackages(ids).catch((error: unknown) => reportError(error, { category: "content" }));
 };
-// Отключённый транспорт и клиент без CloudStorage — штатные состояния, не сбои.
 // Модуль автообновления живёт в основном чанке: событие не тянет его зависимости в чанк синхронизации.
 sync.onNewerFormat = () => window.dispatchEvent(new CustomEvent("tetradio:newer-format"));
+const report = syncFailureReporter((error, kind) => reportError(error, { category: "sync", extra: { kind } }));
 sync.onFailure = (error, kind) => {
   // Удалённый чанк старой сборки лечит перезагрузка, а не разбор отчёта: повторы шли бы отчётом каждый раз.
   if (kind === "stale") lifecycle("syncStaleChunk");
-  else if (kind !== "disabled" && kind !== "unavailable") reportError(error, { category: "sync", extra: { kind } });
+  else report(error, kind);
 };
 
 export function connectSync(app: TelegramWebApp | null) {

@@ -57,7 +57,7 @@ export function eraseCloud(deps: EraseDeps): (() => Promise<void>) | null | "una
 const failureOf = (error: unknown): EraseReason =>
   error instanceof LockTimeout
     ? "busy"
-    : error instanceof SyncError && error.kind === "unavailable"
+    : error instanceof SyncError && (error.kind === "unavailable" || error.kind === "bridge")
       ? "unavailable"
       : "cloud";
 

@@ -182,6 +182,10 @@ describe("удаление моих данных в сессии", () => {
       throw new SyncError("unavailable", "no cloud");
     };
     await expect(eraseMyData(false, deps())).rejects.toMatchObject({ reason: "unavailable" });
+    cloud.removeItems = async () => {
+      throw new SyncError("bridge", "call failed");
+    };
+    await expect(eraseMyData(false, deps())).rejects.toMatchObject({ reason: "unavailable" });
     const busy = deps({
       sync: async () => ({
         halt: async () => {

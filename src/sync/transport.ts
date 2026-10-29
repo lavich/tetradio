@@ -11,9 +11,13 @@ export interface TransportLimits {
   maxKeyLength: number;
 }
 export const CLOUD_LIMITS: TransportLimits = { maxKeys: 1024, maxValueLength: 4096, maxKeyLength: 128 };
-/** `stale` — часть приложения не загрузилась: после деплоя старой сборке нужна перезагрузка. */
+/**
+ * `stale` — часть приложения не загрузилась: после деплоя старой сборке нужна перезагрузка.
+ * `unavailable` — в клиенте нет CloudStorage; `bridge` — хранилище есть, но вызов упал сразу (версия Telegram ниже 6.9
+ * или оборвана связь с клиентом).
+ */
 export type SyncErrorKind =
-  "disabled" | "unavailable" | "transport" | "limit" | "format" | "integrity" | "busy" | "stale";
+  "disabled" | "unavailable" | "bridge" | "transport" | "limit" | "format" | "integrity" | "busy" | "stale";
 export class SyncError extends Error {
   constructor(
     public kind: SyncErrorKind,
@@ -125,7 +129,15 @@ const call = <T>(
         finish(() => (error ? reject(new SyncError("transport", error)) : resolve(value ?? fallback))),
       );
     } catch (error) {
-      finish(() => reject(new SyncError("unavailable", "Telegram CloudStorage недоступен", error)));
+      finish(() =>
+        reject(
+          new SyncError(
+            "bridge",
+            "Облако Telegram не отвечает. Прогресс сохранён на этом устройстве. Если не пройдёт — перезапустите приложение.",
+            error,
+          ),
+        ),
+      );
     }
   });
 /** Официальный CloudStorage через callback API; порционные запросы укладываются в лимит одного вызова. */
