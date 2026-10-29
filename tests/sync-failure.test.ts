@@ -50,6 +50,16 @@ describe("упавший вызов CloudStorage", () => {
     expect(report.mock.calls.map(([, kind]) => kind)).toEqual(["bridge", "transport", "transport"]);
   });
 
+  it("другая причина упавшего вызова уходит в отчёты отдельно", () => {
+    const report = vi.fn();
+    const onFailure = syncFailureReporter(report);
+    const unsupported = new SyncError("bridge", "x", new Error("WebAppMethodUnsupported"));
+    onFailure(unsupported, "bridge");
+    onFailure(unsupported, "bridge");
+    onFailure(new SyncError("bridge", "x", new Error("proxy gone")), "bridge");
+    expect(report).toHaveBeenCalledTimes(2);
+  });
+
   it("повторяется по общей схеме: через 30 с, затем вдвое реже", async () => {
     const database = new AppDatabase("tetradio-sync-failure-retry");
     await database.delete();

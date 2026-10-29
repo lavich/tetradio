@@ -40,7 +40,13 @@ sync.onFailure = (error, kind) => {
 
 export function connectSync(app: TelegramWebApp | null) {
   const profile = currentProfile();
-  if (!profile.syncable || !app?.CloudStorage || typeof app.CloudStorage.getItems !== "function") {
+  // Telegram ниже 6.9 отдаёт CloudStorage, но каждый вызов бросает исключение: это клиент без облака, а не сбой.
+  if (
+    !profile.syncable ||
+    !app?.CloudStorage ||
+    typeof app.CloudStorage.getItems !== "function" ||
+    !app.isVersionAtLeast("6.9")
+  ) {
     if (profile.kind === "telegram") sync.setAdapter(kvAdapter(disabledTransport()));
     return;
   }

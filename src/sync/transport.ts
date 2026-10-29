@@ -13,8 +13,8 @@ export interface TransportLimits {
 export const CLOUD_LIMITS: TransportLimits = { maxKeys: 1024, maxValueLength: 4096, maxKeyLength: 128 };
 /**
  * `stale` — часть приложения не загрузилась: после деплоя старой сборке нужна перезагрузка.
- * `unavailable` — в клиенте нет CloudStorage; `bridge` — хранилище есть, но вызов упал сразу (версия Telegram ниже 6.9
- * или оборвана связь с клиентом).
+ * `unavailable` — в клиенте нет CloudStorage или Telegram ниже 6.9; `bridge` — хранилище есть, но вызов упал сразу
+ * (оборвана связь с клиентом или потеряны параметры запуска).
  */
 export type SyncErrorKind =
   "disabled" | "unavailable" | "bridge" | "transport" | "limit" | "format" | "integrity" | "busy" | "stale";
