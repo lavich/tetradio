@@ -1,4 +1,5 @@
 import "fake-indexeddb/auto";
+import { forgetAncestors } from "./helpers/sync";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
@@ -114,6 +115,8 @@ describe("сборка формата 5 встречает формат 6", () =
     await study(other, [false]);
     await other.sync.exchange();
     await study(old, [true, true]);
+    // Прежняя сборка слияния не знает: окно выбора, как у неё.
+    await forgetAncestors(old.db);
     const conflict = await old.sync.exchange();
     expect(conflict.phase).toBe("conflict");
     putFixture();

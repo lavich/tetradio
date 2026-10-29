@@ -12,6 +12,7 @@ import { SyncCoordinator, type CoordinatorOptions } from "../src/sync/coordinato
 import { memoryTransport, disabledTransport, SyncError, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { SNAPSHOT_FORMAT } from "../src/sync/types";
+import { forgetAncestors } from "./helpers/sync";
 import { installCompleted, installLessons, memoryFetcher, packageOf } from "./helpers/content";
 import { installLesson, refreshCatalog } from "../src/content/client";
 import type { Word } from "../src/domain/types";
@@ -237,12 +238,13 @@ describe("конфликты независимых изменений", () => {
     await tablet.sync.exchange();
     return { phone, tablet };
   }
-  it("оба устройства занимались офлайн: конфликт показывает обе ветви, ничего не складывает и не перезаписывает", async () => {
+  it("без общего предка оба устройства, занимавшиеся офлайн, получают окно: обе ветви, ничего не складывается и не перезаписывается", async () => {
     const { phone, tablet } = await pair();
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     const before = await statesOf(tablet);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const status = await tablet.sync.exchange();
     expect(status.phase).toBe("conflict");
     expect(status.conflict?.kind).toBe("diverged");
@@ -262,6 +264,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const conflict = await tablet.sync.exchange();
     const local = conflict.conflict!.branches.find((branch) => branch.local)!;
     const resolved = await tablet.sync.resolve(local.id);
@@ -278,6 +281,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const phoneStates = await statesOf(phone);
     const conflict = await tablet.sync.exchange();
     const remote = conflict.conflict!.branches.find((branch) => !branch.local)!;
@@ -300,6 +304,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const conflict = await tablet.sync.exchange();
     const remote = conflict.conflict!.branches.find((branch) => !branch.local)!;
     const answered: Promise<unknown>[] = [];
@@ -324,6 +329,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const conflict = await tablet.sync.exchange();
     await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => !branch.local)!.id);
     expect(await tablet.db.lessons.get("mech-2")).toMatchObject({ completed: false, updatedAt: now().toISOString() });
@@ -331,7 +337,7 @@ describe("конфликты независимых изменений", () => {
     const [stored] = await tablet.sync.listStored();
     expect(stored.snapshot.lessons.find((lesson) => lesson.id === "mech-2")?.completed).toBe(true);
   });
-  it("два устройства опубликовали почти одновременно: чистое устройство не принимает чужую версию молча", async () => {
+  it("два устройства опубликовали почти одновременно: чистое устройство не принимает чужую версию молча, а объединяет", async () => {
     const { phone, tablet } = await pair();
     await study(phone, [true, false]);
     await phone.sync.exchange();
@@ -342,18 +348,19 @@ describe("конфликты независимых изменений", () => {
     await study(tablet, [true, true, true]);
     expect((await tablet.sync.exchange()).phase).toBe("synced");
     for (const [key, value] of phoneKeys) cloud.store.set(key, value);
-    const phoneStates = await statesOf(phone);
     const result = await phone.sync.exchange();
-    expect(result.phase).toBe("conflict");
-    expect(result.conflict?.kind).toBe("diverged");
-    expect(result.conflict?.branches.some((branch) => branch.local)).toBe(true);
-    expect(await statesOf(phone)).toEqual(phoneStates); // ответы телефона на месте до выбора
+    expect(result.conflict).toBeNull();
+    expect((await tablet.sync.exchange()).phase).toBe("synced");
+    // Ответы обеих сторон: три общих, два телефона, три планшета.
+    expect((await stats(phone)).totals.answers).toBe(8);
+    expect((await stats(tablet)).totals.answers).toBe(8);
   });
   it("ответы, данные после обнаружения конфликта, входят в сохранённую отвергнутую версию", async () => {
     const { phone, tablet } = await pair();
     await study(phone, [true]);
     await study(tablet, [true, true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const conflict = await tablet.sync.exchange();
     const before = conflict.conflict!.branches.find((branch) => branch.local)!.snapshot.stats.answers;
     await study(tablet, [true]);
@@ -366,6 +373,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const conflict = await tablet.sync.exchange();
     const local = conflict.conflict!.branches.find((branch) => branch.local)!;
     const [first, second] = await Promise.all([tablet.sync.resolve(local.id), tablet.sync.exchange()]);
@@ -380,6 +388,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false]);
     await study(tablet, [true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     expect((await tablet.sync.exchange()).phase).toBe("conflict");
     const choice = tablet.sync.resolve("gone");
     const waiting = tablet.sync.exchange();
@@ -391,6 +400,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false]);
     await study(tablet, [true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const conflict = await tablet.sync.exchange();
     const stale = await tablet.sync.resolve("gone");
     expect(stale).toMatchObject({ phase: "conflict", reason: "Версии изменились — выберите ещё раз." });
@@ -435,6 +445,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false]);
     await study(tablet, [true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     await tablet.sync.exchange();
     expect((await tablet.sync.resolve("gone")).reason).toMatch(/Версии изменились/);
     tablet.db.close();
@@ -469,6 +480,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false]);
     await study(tablet, [true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
     const conflict = await tablet.sync.exchange();
     during = async () => {
       await study(tablet, [true]);
@@ -479,7 +491,7 @@ describe("конфликты независимых изменений", () => {
     expect(resolved.phase).toBe("synced");
     await vi.waitFor(async () => expect(await readMeta(tablet.db, META.dirty)).toBeNull());
   });
-  it("поздняя независимая ветвь после разрешения вызывает новый конфликт, а не молчаливую перезапись", async () => {
+  it("поздняя независимая ветвь после разрешения объединяется с ним, а не перезаписывает молча", async () => {
     const { phone, tablet } = await pair();
     const laptop = await device("laptop", { lessons: ["mech-1"], label: "web" });
     await laptop.sync.exchange(); // общая база у трёх устройств
@@ -487,12 +499,14 @@ describe("конфликты независимых изменений", () => {
     await study(tablet, [true]);
     await study(laptop, [true, true]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => branch.local)!.id);
     await phone.sync.exchange();
     const late = await laptop.sync.exchange();
-    expect(late.phase).toBe("conflict");
-    expect(late.conflict?.branches.filter((branch) => !branch.local)).toHaveLength(1);
+    expect(late.conflict).toBeNull();
+    // Выбор на планшете отверг ответ телефона: остаются три общих, ответ планшета и два ответа ноутбука.
+    expect((await stats(laptop)).totals.answers).toBe(6);
   });
   it("первое подключение непустой базы к непустому облаку и восстановление копии требуют выбора", async () => {
     const phone = await device("phone", { lessons: ["mech-1"] });
@@ -520,7 +534,7 @@ describe("конфликты независимых изменений", () => {
     expect((await buildAndCommit(phone.db, tick(), "phone-2")).stats.answers).toBe(2);
     expect(await phone.db.events.count()).toBe(2);
   });
-  it("конфликт двух других устройств при чистой локальной базе тоже требует выбора", async () => {
+  it("версии двух других устройств при чистой локальной базе: наблюдатель не объединяет и не публикует, окна нет", async () => {
     const { phone, tablet } = await pair();
     const clean = await device("clean", { lessons: ["mech-1"] });
     await clean.sync.exchange();
@@ -544,9 +558,10 @@ describe("конфликты независимых изменений", () => {
       snapshot,
     );
     const status = await clean.sync.exchange();
-    expect(status.phase).toBe("conflict");
-    expect(status.conflict?.kind).toBe("remote");
-    expect(status.conflict?.branches).toHaveLength(2);
+    expect(status.conflict).toBeNull();
+    expect(status.phase).toBe("idle");
+    expect(status.reason).toMatch(/объединяют/);
+    expect(cloud.store.has("p_" + (await clean.sync.deviceId()))).toBe(false);
   });
 });
 
@@ -592,6 +607,7 @@ describe("надёжность публикации и лимиты", () => {
     await study(tablet, [false]);
     await study(phone, [false]);
     await phone.sync.exchange();
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => branch.local)!.id);
     const after = await makeAdapter(cloud).listGenerations();
@@ -983,6 +999,7 @@ describe("согласование формата записи", () => {
     await turn(two, [true]);
     await turn(one, [false]);
     await study(two, [true, true]);
+    await forgetAncestors(two.db);
     const conflict = await two.sync.exchange();
     expect(conflict.phase).toBe("conflict");
     const legacy = await loadBuild(FORMAT5_BUILD);

@@ -1,4 +1,5 @@
 import "fake-indexeddb/auto";
+import { forgetAncestors } from "./helpers/sync";
 import "./helpers/self";
 import Dexie from "dexie";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -262,12 +263,25 @@ describe("пауза между устройствами", () => {
     expect((await tablet.sync.exchange()).phase).toBe("synced");
     expect(await cards(tablet)).toBe(answered);
   });
-  it("одновременные пауза с ответами на одном и ответы на другом — обычный выбор версии, пауза его не касается", async () => {
+  it("одновременные пауза с ответами на одном и ответы на другом — объединение версий, пауза его не касается", async () => {
     const { phone, tablet } = await pair();
     await study(phone, [false, true]);
     await study(tablet, [true]);
     await pauseCourse(COURSE, tick(), tablet.db);
     await phone.sync.exchange();
+    expect((await tablet.sync.exchange()).conflict).toBeNull();
+    expect(await paused(tablet)).toBe(true);
+    await phone.sync.exchange();
+    expect(await paused(phone)).toBe(true);
+  });
+
+  it("без общего предка — обычный выбор версии, пауза его не касается", async () => {
+    const { phone, tablet } = await pair();
+    await study(phone, [false, true]);
+    await study(tablet, [true]);
+    await pauseCourse(COURSE, tick(), tablet.db);
+    await phone.sync.exchange();
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     expect(conflict.conflict?.kind).toBe("diverged");
     expect(await paused(tablet)).toBe(true);

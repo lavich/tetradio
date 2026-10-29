@@ -13,6 +13,7 @@ import { kvAdapter, partKey } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport, SyncError, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
+import { forgetAncestors } from "./helpers/sync";
 import { installCompleted } from "./helpers/content";
 import { exportFull, restoreBackup } from "../src/features/backup/backup";
 
@@ -162,12 +163,15 @@ describe("пустая отметка изменений", () => {
     expect(await answers(phone)).toBe(await answers(mac));
   });
 
-  it("ответ после публикации — по-прежнему конфликт", async () => {
+  it("ответ после публикации — настоящее расхождение: объединяется, ответы обеих сторон на месте", async () => {
     const { phone, mac } = await pair();
     await study(phone, [true]);
     await study(mac, [true]);
     expect((await mac.sync.exchange()).phase).toBe("synced");
-    expect((await phone.sync.exchange()).conflict?.kind).toBe("diverged");
+    expect((await phone.sync.exchange()).conflict).toBeNull();
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    expect(await answers(phone)).toBe(5);
+    expect(await answers(mac)).toBe(5);
   });
 
   it("черновик письма у сохранённого задания не ставит отметку", async () => {
@@ -184,15 +188,15 @@ describe("пустая отметка изменений", () => {
 });
 
 describe("ответы не теряются", () => {
-  it("ответы практики после публикации — конфликт, а не молчаливое применение облака", async () => {
+  it("ответы практики после публикации объединяются с облаком, а не заменяются им молча", async () => {
     const { phone, mac } = await pair();
     await study(phone, [true, false, true], "practice");
     const before = await answers(phone);
     await study(mac, [true]);
     expect((await mac.sync.exchange()).phase).toBe("synced");
     const status = await phone.sync.exchange();
-    expect(status.conflict?.kind).toBe("diverged");
-    expect(await answers(phone)).toBe(before);
+    expect(status.conflict).toBeNull();
+    expect(await answers(phone)).toBe(before + 1);
   });
 
   it("восстановленная копия после потерянного ответа облака остаётся конфликтом `restored`", async () => {
@@ -227,7 +231,7 @@ describe("ответы не теряются", () => {
     expect(await answers(mac)).toBe(await answers(phone));
   });
 
-  it("части записаны, указатель нет: ответы публикуются заново, а при ответах на компьютере — конфликт", async () => {
+  it("части записаны, указатель нет: ответы публикуются заново, а при ответах на компьютере — объединяются", async () => {
     const { phone, mac } = await pair();
     await study(phone, [true, true]);
     const original = cloud.setItem.bind(cloud);
@@ -240,7 +244,10 @@ describe("ответы не теряются", () => {
     expect(await readMeta(phone.db, META.dirty)).not.toBeNull();
     await study(mac, [true]);
     await mac.sync.exchange();
-    expect((await phone.sync.exchange()).conflict?.kind).toBe("diverged");
+    expect((await phone.sync.exchange()).conflict).toBeNull();
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    expect(await answers(phone)).toBe(6);
+    expect(await answers(mac)).toBe(6);
   });
 
   it("указатель потерянной версии убран уборкой — новая версия всё равно получает новый номер", async () => {
@@ -265,6 +272,7 @@ describe("«Решить позже»", () => {
     await study(phone, [true]);
     await study(mac, [true]);
     await mac.sync.exchange();
+    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
     expect((await phone.sync.exchange()).conflict?.deferred).toBe(false);
     await phone.sync.deferChoice();
     expect(phone.sync.getStatus().conflict?.deferred).toBe(true);
@@ -283,6 +291,7 @@ describe("«Решить позже»", () => {
     await study(phone, [true]);
     await study(mac, [true]);
     await mac.sync.exchange();
+    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
     const seen = (await phone.sync.exchange()).conflict!.branches.filter((branch) => !branch.local).map((b) => b.id);
     await study(mac, [false]);
     await mac.sync.exchange();
@@ -298,6 +307,7 @@ describe("«Решить позже» при сбое хранилища", () =>
     await study(phone, [true]);
     await study(mac, [true]);
     await mac.sync.exchange();
+    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
     const status = await phone.sync.exchange();
     expect(status.conflict?.kind).toBe("diverged");
     const put = phone.db.meta.put.bind(phone.db.meta);
@@ -317,6 +327,7 @@ describe("время в окне выбора", () => {
     await study(mac, [true]);
     const macLast = now().toISOString();
     await mac.sync.exchange();
+    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
     const [local, remote] = (await phone.sync.exchange()).conflict!.branches;
     expect(local.description.lastAnswerAt).toBe(phoneLast);
     expect(remote.description.lastAnswerAt).toBe(macLast);
@@ -330,6 +341,7 @@ describe("время в окне выбора: уроки", () => {
     await saveBlockProgress("mech-1", "lesson-block", { done: true }, phone.db, done);
     await study(mac, [true]);
     await mac.sync.exchange();
+    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
     const [local] = (await phone.sync.exchange()).conflict!.branches;
     expect(local.description.lastAnswerAt).toBe(done.toISOString());
   });
@@ -438,6 +450,7 @@ describe("отсечка базы", () => {
     expect(await answers(phone)).toBe(before + 1);
     await study(mac, [true]);
     await mac.sync.exchange();
-    expect((await phone.sync.exchange()).conflict?.kind).toBe("diverged");
+    expect((await phone.sync.exchange()).conflict).toBeNull();
+    expect(await answers(phone)).toBe(before + 2);
   });
 });
