@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -30,10 +30,38 @@ import { dexieSource } from "../../storage/queries";
 import { courseReadings } from "../../storage/readings";
 import { sessionPath, startSession } from "../learning/session-actions";
 import { CourseCaption, CourseLessonLine, courseCaption, MoreCourses } from "./CourseLessonLine";
+import { useSyncConflictSeen } from "../../app/deferred";
 import { DayNotes } from "./DayNotes";
 import { lessonLines } from "./lessons";
 import { ReadingSheet } from "./ReadingSheet";
 import css from "./today.module.css";
+
+type DeferredChoiceModule = typeof import("./DeferredChoice");
+let deferredChoice: Promise<DeferredChoiceModule> | null = null;
+let deferredChoiceLoaded: DeferredChoiceModule["DeferredChoice"] | null = null;
+/** Чанк синхронизации не нужен первому кадру; сбой загрузки не запоминается — следующий заход на «Сегодня» повторит. */
+function useDeferredChoice(enabled: boolean) {
+  const [Choice, setChoice] = useState(() => deferredChoiceLoaded);
+  useEffect(() => {
+    if (!enabled || Choice) return;
+    let live = true;
+    deferredChoice ??= import("./DeferredChoice").catch((error: unknown) => {
+      deferredChoice = null;
+      throw error;
+    });
+    deferredChoice.then(
+      (module) => {
+        deferredChoiceLoaded = module.DeferredChoice;
+        if (live) setChoice(() => module.DeferredChoice);
+      },
+      () => undefined,
+    );
+    return () => {
+      live = false;
+    };
+  }, [enabled, Choice]);
+  return enabled ? Choice : null;
+}
 
 /** Ориентир курса — 2–3 занятия в неделю; точек недели не меньше трёх. */
 const WEEK_PLAN = 3;
@@ -62,6 +90,7 @@ export function LanguageToday({
   more?: React.ReactNode;
 }) {
   const spread = useSpread();
+  const DeferredChoice = useDeferredChoice(useSyncConflictSeen());
   const today = plan.today;
   const monday = mondayOf(today);
   const main = courses[0];
@@ -155,6 +184,7 @@ export function LanguageToday({
           caption={caption}
         />
       ) : null}
+      {DeferredChoice && <DeferredChoice />}
       {rows.length > 1 && (
         <div className={css.courseLines}>
           {rows.slice(1).map((course) => (

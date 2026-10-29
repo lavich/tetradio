@@ -23,8 +23,16 @@ export interface PointerListing {
   pointers: VersionMeta[];
   invalid: string[];
   keys: number;
+  /** Имена ключей облака на момент чтения: публикация сразу после чтения не перечитывает их. */
+  names?: string[];
   /** Версии, у указателя которых в облаке нет всех частей. */
   incomplete: string[];
+}
+export interface PublishOptions {
+  /** Ключи облака, только что прочитанные решением: без них место считается по свежему списку. */
+  keys?: string[];
+  /** Готовый указатель до записи частей: координатор запоминает начатую публикацию. */
+  beforeWrite?: (meta: VersionMeta) => Promise<void>;
 }
 export interface PublishedVersion {
   meta: VersionMeta;
@@ -40,6 +48,7 @@ export interface SyncAdapter {
   publishVersion(
     meta: Omit<VersionMeta, "parts" | "checksum" | "content">,
     snapshot: CompactSnapshot,
+    options?: PublishOptions,
   ): Promise<PublishedVersion>;
   /**
    * Меняет в собственном указателе версии `id` только поле `reads`, остальные поля сырого значения сохраняются.
@@ -56,7 +65,11 @@ export interface SyncAdapter {
    */
   removeDevice(meta: VersionMeta): Promise<boolean>;
   /** Сколько ключей займёт версия и сколько свободно с учётом собственного указателя. */
-  room(partsNeeded: number, ownDevice: string): Promise<{ free: number; needed: number; keys: number }>;
+  room(
+    partsNeeded: number,
+    ownDevice: string,
+    keys?: string[],
+  ): Promise<{ free: number; needed: number; keys: number }>;
   /**
    * Паузы курсов — отдельно от версий: ключ `cp_<устройство>` на устройство, пишет его только оно само. Значения по
    * устройствам; ключей версий и указателей эти методы не касаются.
@@ -190,7 +203,7 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
             !Array.from({ length: meta.parts }, (_, index) => partKey(meta.id, index)).every((key) => present.has(key)),
         )
         .map((meta) => meta.id);
-      return { pointers, invalid, keys: keys.length, incomplete };
+      return { pointers, invalid, keys: keys.length, names: keys, incomplete };
     },
     async readVersion(meta) {
       ensure();
@@ -229,7 +242,7 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
         throw new SyncError("integrity", `Версия ${meta.id} повреждена.`);
       }
     },
-    async publishVersion(meta, snapshot) {
+    async publishVersion(meta, snapshot, options = {}) {
       ensure();
       if (!WRITABLE_FORMATS.includes(meta.format))
         throw new SyncError("format", `Запись версии формата ${meta.format} не поддерживается.`);
@@ -251,8 +264,9 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
         throw new SyncError("limit", "Указатель версии не помещается в одно значение.");
       const pointerName = pointerKey(meta.device);
       if (!validKey(pointerName, limits)) throw new SyncError("transport", "Недопустимый идентификатор устройства.");
-      const { free, needed } = await this.room(parts.length, meta.device);
+      const { free, needed } = await this.room(parts.length, meta.device, options.keys);
       if (needed > free) throw new SyncError("limit", `В облаке нет места: нужно ${needed} ключей, свободно ${free}.`);
+      await options.beforeWrite?.(full);
       // Части публикуются до указателя: неполная запись никогда не выглядит доступной версией.
       for (let index = 0; index < parts.length; index++) await transport.setItem(partKey(meta.id, index), parts[index]);
       await transport.setItem(pointerName, pointer);
@@ -339,9 +353,9 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       await transport.removeItems([name]);
       return true;
     },
-    async room(partsNeeded, ownDevice) {
+    async room(partsNeeded, ownDevice, known) {
       ensure();
-      const keys = await transport.getKeys();
+      const keys = known ?? (await transport.getKeys());
       const hasPointer = keys.includes(pointerKey(ownDevice));
       const needed = partsNeeded + (hasPointer ? 0 : 1);
       return { free: limits.maxKeys - keys.length, needed, keys: keys.length };

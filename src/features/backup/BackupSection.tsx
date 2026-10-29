@@ -86,7 +86,12 @@ export function BackupSection() {
         const guard = await send(await exportFull(), `tetradio-before-restore-${Date.now()}.json`);
         if (!handedOver(guard))
           return setProblem(`Замена отменена: защитная копия не передана (${TRANSFER_TEXT[guard].toLowerCase()})`);
-        await restoreBackup(file, db, { cloud: { seen, read: () => cloudPrint(sync.adapter, db) } });
+        // Обмен не должен ни опубликовать, ни применить версию поверх заменяемых данных.
+        try {
+          await sync.halt(() => restoreBackup(file, db, { cloud: { seen, read: () => cloudPrint(sync.adapter, db) } }));
+        } finally {
+          sync.resume();
+        }
         setStatus("Данные восстановлены полностью.");
       },
       (error) => {

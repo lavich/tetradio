@@ -36,6 +36,15 @@ export function pausedSince(pausedAt: string, now = new Date(), timezone = devic
         .toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
         .replace(/\s*г\.$/, "");
 }
+/** «28 октября в 21:40» по часам устройства; год — если не текущий. */
+export function dateTime(iso: string, now = new Date()): string {
+  const date = new Date(iso);
+  const year = date.getFullYear() !== now.getFullYear();
+  const calendar = date
+    .toLocaleDateString("ru-RU", { day: "numeric", month: "long", ...(year && { year: "numeric" }) })
+    .replace(/\s*г\.$/, "");
+  return `${calendar} в ${date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}`;
+}
 /** «12 октября» по учебному дню: отметка в 00:30 подписана вчерашним днём, как на неделе. */
 export const eventDay = (iso: string, timezone = deviceTimezone()) => dayMonth(studyDay(new Date(iso), timezone));
 export const shortTitle = (title: string) => title.replace(/^Урок\s+/i, "");

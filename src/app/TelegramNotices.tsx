@@ -11,8 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { sync, useSyncStatus } from "../sync";
 import { readMeta } from "../sync/snapshot";
-import { when } from "../sync/status-text";
-import { CARDS, withCount } from "../shared/format";
+import { branchLine } from "../sync/status-text";
 import ui from "../shared/ui.module.css";
 
 /**
@@ -23,19 +22,22 @@ export function SyncConflictDialog() {
   const status = useSyncStatus();
   const [busy, setBusy] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [dismissed, setDismissed] = useState<string | null>(null);
+  const [hidden, setHidden] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const focused = useRef<string | null>(null);
   const conflict = status.conflict;
   const key = conflict?.branches.map((branch) => branch.id).join("|") ?? null;
+  // Отложенный выбор записан на устройстве: дальше окно прячет он, а «Выбрать версию» открывает снова.
+  useEffect(() => {
+    if (conflict?.deferred) setHidden(null);
+  }, [conflict?.deferred]);
   // Кнопка выбранной ветви исчезает вместе с ней, и фокус ушёл бы на body.
   useEffect(() => {
     if (!key || busy) return;
     if (focused.current && focused.current !== key) list.current?.querySelector("button")?.focus();
     focused.current = key;
   }, [key, busy]);
-  if (!conflict || !key || status.phase !== "conflict") return null;
-  if (dismissed === key) return null;
+  if (!conflict || !key || status.phase !== "conflict" || conflict.deferred || hidden === key) return null;
   const titles = {
     diverged: "Прогресс разошёлся между устройствами",
     initial: "В облаке уже есть прогресс",
@@ -48,6 +50,7 @@ export function SyncConflictDialog() {
       await sync.resolve(id);
     } finally {
       setBusy(null);
+      returnFocus();
     }
   };
   return (
@@ -68,11 +71,7 @@ export function SyncConflictDialog() {
           {conflict.branches.map((branch) => (
             <div key={branch.id} role="listitem" className="rounded-[14px] border border-border p-3">
               <p className="m-0 font-semibold">{branch.label}</p>
-              <p className="m-0 text-sm text-muted-foreground">
-                {when(branch.createdAt)} · {withCount(branch.description.cards, CARDS)} в обучении ·{" "}
-                {withCount(branch.description.answers, ["ответ", "ответа", "ответов"])}
-                {branch.description.lastDay ? ` · последнее занятие ${branch.description.lastDay}` : ""}
-              </p>
+              <p className="m-0 text-sm text-muted-foreground">{branchLine(branch)}</p>
               <Button
                 size="md"
                 className="mt-2"
@@ -107,8 +106,14 @@ export function SyncConflictDialog() {
             size="md"
             className="sm:w-auto"
             onClick={() => {
-              setDismissed(key);
+              setHidden(key);
               sync.dismissChoice();
+              const ids = conflict.branches.filter((branch) => !branch.local).map((branch) => branch.id);
+              // Без записи окно скрыто до перезапуска, как раньше: выбор от сбоя хранилища не теряется.
+              sync
+                .deferChoice(ids)
+                .catch((error: unknown) => console.warn("«Решить позже» не сохранено", error))
+                .finally(returnFocus);
             }}
           >
             Решить позже
@@ -118,4 +123,15 @@ export function SyncConflictDialog() {
     </AlertDialog>
   );
 }
+/** Окно исчезает целиком, а кнопки, открывшей его, может уже не быть: фокус — на строку статуса или «Сегодня». */
+const FOCUS_AFTER = ["sync-status", "sync-deferred", "today-title"];
+const returnFocus = () =>
+  requestAnimationFrame(() => {
+    // Запись выбора могла идти долго: фокус, который учащийся уже куда-то поставил, не отнимается.
+    if (document.activeElement && document.activeElement !== document.body) return;
+    for (const id of FOCUS_AFTER) {
+      const target = document.querySelector<HTMLElement>(`[data-testid=${id}]`);
+      if (target) return target.focus();
+    }
+  });
 export { readMeta };

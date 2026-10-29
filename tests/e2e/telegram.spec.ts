@@ -513,7 +513,10 @@ test.describe("аудио, копии и облако", () => {
     await expect(web.getByTestId("word-count")).toHaveText(source);
     await clean.close();
   });
-  test("расхождение версий на планшете: окно выбора вмещает текст и кнопки", async ({ page, browser }) => {
+  test("расхождение версий на планшете: окно выбора вмещает текст и кнопки, «Решить позже» — до «Выбрать версию»", async ({
+    page,
+    browser,
+  }) => {
     await openTelegram(page);
     await installLessons(page, ["mech-1"]);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
@@ -539,6 +542,65 @@ test.describe("аудио, копии и облако", () => {
       expect(box.x).toBeGreaterThanOrEqual(frame.x - 1);
       expect(box.x + box.width).toBeLessThanOrEqual(frame.x + frame.width + 1);
     }
+    // Окно открыто — конфликт уже есть, но не отложен: строки на «Сегодня» нет.
+    await expect(tablet.getByTestId("sync-deferred")).toHaveCount(0);
+    // Отложенный выбор: на «Сегодня» тихая строка открывает окно снова, фокус после «Решить позже» — на ней.
+    await dialog.getByRole("button", { name: "Решить позже" }).click();
+    await expect(dialog).toHaveCount(0);
+    // Запись «Решить позже» в базу асинхронна: перезагрузка до неё вернула бы окно.
+    await expect
+      .poll(() =>
+        tablet.evaluate(
+          (name) =>
+            new Promise((resolve) => {
+              const open = indexedDB.open(name);
+              open.onerror = () => resolve(null);
+              open.onsuccess = () => {
+                const db = open.result;
+                const get = db.transaction("meta").objectStore("meta").get("sync:later");
+                get.onsuccess = () => {
+                  resolve(get.result?.value ?? null);
+                  db.close();
+                };
+                get.onerror = () => {
+                  resolve(null);
+                  db.close();
+                };
+              };
+            }),
+          TG_DB,
+        ),
+      )
+      .not.toBeNull();
+    await tablet.goto("/app/");
+    const line = tablet.getByTestId("sync-deferred");
+    await expect(line).toHaveText("Прогресс не сохраняется в облако — выберите версию", { timeout: 15000 });
+    // Строка появляется после запуска асинхронно и не должна сдвигать главную кнопку: она стоит под ней.
+    const next = tablet.getByTestId("course-next");
+    if (await next.count()) expect((await line.boundingBox())!.y).toBeGreaterThan((await next.boundingBox())!.y);
+    await tablet.setViewportSize({ width: 360, height: 740 });
+    expect(await tablet.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+    await tablet.setViewportSize({ width: 1024, height: 768 });
+    await line.click();
+    await expect(dialog.getByRole("button", { name: "Продолжить с этой версии" }).first()).toBeVisible();
+    await dialog.getByRole("button", { name: "Решить позже" }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(line).toBeFocused();
+    // «Решить позже» переживает перезапуск; «Выбрать версию» на «Прогрессе» открывает окно снова.
+    await tablet.goto("/app/progress");
+    const status = tablet.getByTestId("sync-status");
+    await expect(status).toHaveAttribute("data-phase", "conflict", { timeout: 15000 });
+    await expect(dialog).toHaveCount(0);
+    await status.getByRole("button", { name: "Выбрать версию" }).click();
+    await expect(dialog.getByRole("button", { name: "Продолжить с этой версии" }).first()).toBeVisible();
+    // Занятие окно не перекрывает: конфликт ждёт выхода из него.
+    await tablet.goto("/app/session");
+    await expect(tablet.getByTestId("session-screen").or(tablet.locator("main"))).toBeVisible({ timeout: 15000 });
+    await expect(dialog).toHaveCount(0);
+    await tablet.goto("/app/");
+    await expect(dialog.getByRole("button", { name: "Продолжить с этой версии" }).first()).toBeVisible({
+      timeout: 15000,
+    });
     await context.close();
   });
   test("CloudStorage: статус синхронизации, перенос прогресса второму устройству, изоляция другого аккаунта", async ({

@@ -1,10 +1,32 @@
 import type { BridgeState } from "../platform/platform";
-import type { SyncStatus } from "./coordinator";
+import { CARDS, dateTime, dayMonth, withCount } from "../shared/format";
+import type { ConflictBranch, SyncStatus } from "./coordinator";
 
 export const when = (iso: string) =>
   iso
     ? new Date(iso).toLocaleString("ru-RU", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })
     : "—";
+
+/** Строка версии в окне выбора: у облачной — когда отправлена; у обеих — последний ответ, а не время сборки снимка. */
+export function branchLine(
+  { local, createdAt, description }: Pick<ConflictBranch, "local" | "createdAt" | "description">,
+  now = new Date(),
+) {
+  const last = description.lastAnswerAt
+    ? `последний ответ ${dateTime(description.lastAnswerAt, now)}`
+    : description.lastDay
+      ? `последнее занятие ${dayMonth(description.lastDay)}`
+      : null;
+  const line = [
+    !local && createdAt ? `отправлено ${dateTime(createdAt, now)}` : null,
+    last,
+    `${withCount(description.cards, CARDS)} в обучении`,
+    withCount(description.answers, ["ответ", "ответа", "ответов"]),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  return line.charAt(0).toUpperCase() + line.slice(1);
+}
 
 export const syncPhaseText = (phase: string, lastConfirmedAt: string | null) =>
   ({

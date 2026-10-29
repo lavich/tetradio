@@ -20,19 +20,25 @@ export function SyncLine() {
   const line = syncLineState(status, bridge, updating, pathname === "/");
   return (
     <>
-      <div className={css.status} role="status" data-testid="sync-status" data-phase={line.phase}>
+      <div className={css.status} role="status" data-testid="sync-status" data-phase={line.phase} tabIndex={-1}>
         <span>{line.text}</span>
-        {line.retry && (
-          <Button
-            size="sm"
-            variant={line.failed ? "soft" : "quiet"}
-            disabled={status.phase === "syncing"}
-            onClick={() => void sync.exchange()}
-            aria-label="Повторить синхронизацию"
-          >
-            <RefreshCw data-icon="inline-start" />
-            Повторить
+        {status.phase === "conflict" && status.conflict?.deferred ? (
+          <Button size="sm" variant="soft" aria-haspopup="dialog" onClick={() => void sync.reviewChoice()}>
+            Выбрать версию
           </Button>
+        ) : (
+          line.retry && (
+            <Button
+              size="sm"
+              variant={line.failed ? "soft" : "quiet"}
+              disabled={status.phase === "syncing"}
+              onClick={() => void sync.exchange()}
+              aria-label="Повторить синхронизацию"
+            >
+              <RefreshCw data-icon="inline-start" />
+              Повторить
+            </Button>
+          )
         )}
       </div>
       {status.error && line.phase !== "updating" && <p className={ui.error}>{status.error.message}</p>}

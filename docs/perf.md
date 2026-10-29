@@ -4,7 +4,7 @@
 
 ## Протокол
 
-Автоматически: `VITE_TELEGRAM_MOCK=1 npm run build && npm run lighthouse` — три прогона, медианы, пороги из `scripts/lighthouse-report.ts` (LCP > 3 с — предупреждение, > 4 с — ошибка; TBT ≤ 200 мс; вес ≤ 450 КиБ; вес ленивых чанков первого экрана ≤ 36 000 байт). Вручную — как ниже.
+Автоматически: `VITE_TELEGRAM_MOCK=1 npm run build && npm run lighthouse` — три прогона, медианы, пороги из `scripts/lighthouse-report.ts` (LCP > 3 с — предупреждение, > 4 с — ошибка; TBT ≤ 200 мс; вес ≤ 450 КиБ; вес ленивых чанков первого экрана ≤ 38 000 байт). Вручную — как ниже.
 
 ```sh
 VITE_TELEGRAM_MOCK=1 npm run build
