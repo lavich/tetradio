@@ -6,7 +6,7 @@ import { PROFILES } from "../../domain/language";
 import type { Course, StoredModule } from "../../domain/types";
 import { coursePhase, installCourse, subscribeInstall } from "../../content/client";
 import { holdUpdate } from "../../app/auto-update";
-import { useCatalog, useCoursePhase, useCourses } from "../../shared/store";
+import { useCatalog, useCatalogPhase, useCoursePhase, useCourses } from "../../shared/store";
 import type { StoredCatalogEntry } from "../../storage/db";
 import { ShareCourseButton } from "../../shared/ShareCourseButton";
 import ui from "../../shared/ui.module.css";
@@ -46,10 +46,12 @@ export function FirstRun({
   show?: string;
 }) {
   const offers = courseOffers(courses, entries, modules);
+  const catalog = useCatalogPhase();
   const loading = useSyncExternalStore(
     subscribeInstall,
     () => offers.find((offer) => coursePhase(offer.course.id).phase === "loading")?.course.id,
   );
+  if (!offers.length && catalog !== "error") return null;
   if (!offers.length)
     return (
       <Card className="mb-3 bg-soft ring-0">
