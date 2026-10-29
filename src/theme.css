@@ -1,7 +1,7 @@
 :root {
   color-scheme: light;
-  /* Шрифты встроены (офлайн, Telegram без сети): печать учебника — Literata, интерфейс — Manrope; оба с греческим и кириллицей. */
-  --font-ui: "Manrope Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Печать учебника — встроенный Literata (офлайн, Telegram без сети); интерфейс — системный шрифт: первый запуск не ждёт его файлов. */
+  --font-ui: -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
   --font-print: "Literata Variable", Georgia, serif;
   /*
    * Палитра «Τετράδιο» (docs/design/brief.md) в терминах токенов shadcn: холодная бумага в клетку, три голоса страницы —
