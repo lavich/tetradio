@@ -521,9 +521,14 @@
   margin: 0;
 }
 .lp-legal {
+  margin: 0;
   color: var(--muted-foreground);
   font-size: 14px;
+}
+.lp-legal a {
+  color: inherit;
   text-decoration: underline;
+  white-space: nowrap;
 }
 
 @media (max-width: 1023px) {

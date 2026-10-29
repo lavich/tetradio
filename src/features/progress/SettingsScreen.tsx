@@ -6,7 +6,7 @@ import { useHapticsSetting } from "../../platform/haptics";
 import { launchContext } from "../../platform/launch";
 import { feedbackBot } from "../../platform/feedback";
 import { FeedbackButton } from "../feedback/FeedbackButton";
-import { PrivacyLink } from "./PrivacyLink";
+import { PrivacyLink, ProjectLink } from "./ExternalLink";
 import { useLaunchMode, usePlatform } from "../../platform/platform";
 import { Button } from "@/components/ui/button";
 import { setPrimaryCourse, usePrimaryCourse, useStartedCourses } from "../../shared/courses";
@@ -117,7 +117,7 @@ export function SettingsScreen() {
 
       <About />
       <p className={css.note}>
-        <PrivacyLink />
+        <PrivacyLink /> · <ProjectLink />
       </p>
     </Screen>
   );

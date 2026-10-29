@@ -10,7 +10,8 @@ vi.mock("../src/platform/platform", async (original) => ({
   telegramBridge: () => env.bridge,
 }));
 
-import { PrivacyLink } from "../src/features/progress/PrivacyLink";
+import { PrivacyLink, ProjectLink } from "../src/features/progress/ExternalLink";
+import { PROJECT_URL } from "../src/shared/project";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 const ADDRESS = new URL(`${import.meta.env.BASE_URL}privacy/`, location.origin).href;
@@ -20,13 +21,13 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function render() {
+function render(link = <PrivacyLink />) {
   const host = document.body.appendChild(document.createElement("div"));
-  act(() => createRoot(host).render(<PrivacyLink />));
+  act(() => createRoot(host).render(link));
   return host.querySelector("a")!;
 }
 
-describe("ссылка на политику конфиденциальности", () => {
+describe("внешние ссылки «Настроек и данных»", () => {
   it("в Telegram 6.1+ открывается через openLink с полным адресом", () => {
     const openLink = vi.fn();
     const isVersionAtLeast = vi.fn(() => true);
@@ -59,5 +60,20 @@ describe("ссылка на политику конфиденциальност�
     document.removeEventListener("click", listen);
     expect(prevented).toBe(false);
     if (bridge) expect(bridge.openLink).not.toHaveBeenCalled();
+  });
+
+  it("«Проект на GitHub» в Telegram открывается через openLink", () => {
+    const openLink = vi.fn();
+    env.bridge = { openLink, isVersionAtLeast: () => true } as unknown as TelegramWebApp;
+    const link = render(<ProjectLink />);
+    expect(link.textContent).toBe("Проект на GitHub");
+    act(() => void link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true })));
+    expect(openLink).toHaveBeenCalledWith(PROJECT_URL);
+  });
+
+  it("«Проект на GitHub» вне Telegram — обычная ссылка в новой вкладке", () => {
+    const link = render(<ProjectLink />);
+    expect(link.getAttribute("href")).toBe(PROJECT_URL);
+    expect(link.getAttribute("target")).toBe("_blank");
   });
 });
