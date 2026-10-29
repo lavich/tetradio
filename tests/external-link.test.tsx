@@ -70,4 +70,10 @@ describe("внешние ссылки «Настроек и данных»", () 
     act(() => void link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true })));
     expect(openLink).toHaveBeenCalledWith(PROJECT_URL);
   });
+
+  it("«Проект на GitHub» вне Telegram — обычная ссылка в новой вкладке", () => {
+    const link = render(<ProjectLink />);
+    expect(link.getAttribute("href")).toBe(PROJECT_URL);
+    expect(link.getAttribute("target")).toBe("_blank");
+  });
 });

@@ -6,7 +6,7 @@ import { PROJECT_URL } from "../../shared/project";
 function ExternalLink({ href, className, children }: { href: string; className?: string; children: ReactNode }) {
   return (
     <a
-      className={`underline ${className ?? ""}`}
+      className={`whitespace-nowrap underline ${className ?? ""}`}
       href={href}
       target="_blank"
       rel="noopener"

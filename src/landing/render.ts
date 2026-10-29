@@ -142,7 +142,7 @@ ${first?.goal ? `<p class="lp-goal">Цель модуля: ${escape(first.goal)}
 <div><h3>Четыре навыка</h3><p>Чтение, аудирование, письмо и речь оцениваются по отдельности, поэтому видно, какой навык отстаёт.</p></div>
 <div><h3>План к экзамену</h3><p>Курс рассчитан на 2–3 занятия по часу в неделю и 10–15 минут повторения в день. Отставание от календаря курса показано на экране прогресса.</p></div>
 </section>
-<footer class="lp-close"><h2>Начните с тетради 01</h2>${botLink(bot, "Открыть в Telegram", true)}<p class="lp-legal"><a href="privacy/">Политика конфиденциальности</a> · <a href="${PROJECT_URL}" rel="noopener">Проект на GitHub</a></p></footer>
+<footer class="lp-close"><h2>Начните с тетради 01</h2>${botLink(bot, "Открыть в Telegram", true)}<p class="lp-legal"><a href="privacy/">Политика конфиденциальности</a> · <a href="${PROJECT_URL}">Проект на GitHub</a></p></footer>
 </div>
 </div>
 <script type="application/json" id="lp-data">${JSON.stringify(lessonData(data.tasks)).replace(/</g, "\\u003c")}</script>`;

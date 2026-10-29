@@ -528,6 +528,7 @@
 .lp-legal a {
   color: inherit;
   text-decoration: underline;
+  white-space: nowrap;
 }
 
 @media (max-width: 1023px) {
