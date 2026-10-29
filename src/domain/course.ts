@@ -75,17 +75,6 @@ export function scoreExercise(
   return { correct, almost, total: block.items.length, results };
 }
 
-/**
- * Пункты, из которых рождаются карточки ошибок: неверный непустой ответ в задании, которое понятно без текста.
- * «Почти» карточку не даёт; оценивается ли пункт в контрольной, не важно.
- */
-export const mistakesOf = (block: ExerciseBlock, answers: Record<string, string>, score: ExerciseScore) =>
-  block.about
-    ? []
-    : block.items
-        .filter((item) => score.results[item.id]?.status === "wrong" && !!answers[item.id]?.trim())
-        .map((item) => item.id);
-
 /** Блоки, которые нужно выполнить, чтобы урок считался пройденным: задания, письмо и речь. Чтение и объяснение — через свои задания. */
 export const isTask = (block: LessonBlock) =>
   block.type === "exercise" || block.type === "writing" || block.type === "speaking";

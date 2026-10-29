@@ -29,7 +29,6 @@ export function LessonSummary({
   pages,
   numbering,
   items,
-  mistakes,
   next,
   reading,
   withList,
@@ -47,8 +46,6 @@ export function LessonSummary({
   pages: LessonBlock[][];
   numbering: Map<string, number>;
   items: LessonItem[];
-  /** Пункты заданий урока, ушедшие в повторение карточками ошибок. */
-  mistakes: number;
   /** `undefined` — следующий шаг ещё не известен: кнопок нет. */
   next: ModuleLessonView | null | undefined;
   /** Первый непрочитанный открытый текст, когда следующего шага у курса нет. */
@@ -133,12 +130,6 @@ export function LessonSummary({
           <TaskRow key={row.block.id} row={row} number={numbering.get(row.block.id)} go={go} />
         ))}
       </ul>
-
-      {mistakes ? (
-        <p className={base.print} data-testid="lesson-mistakes">
-          Ошибки урока в повторении: {mistakes}
-        </p>
-      ) : null}
 
       {items.length && !withList ? (
         <section className={css.cards} aria-label="Карточки урока">

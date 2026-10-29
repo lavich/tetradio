@@ -101,6 +101,35 @@ describe("удаление моих данных в сессии", () => {
     expect(events).not.toContain("forget");
   });
 
+  const leaveWaitlist =
+    (result: "ok" | "failed" | "stale" = "ok") =>
+    async () => {
+      events.push("waitlist");
+      return result;
+    };
+
+  it("без галочки удаляются заявки на курсы, с галочкой — переписка, которая удаляет и заявки", async () => {
+    await eraseMyData(false, deps({ leaveWaitlist: leaveWaitlist() }));
+    expect(events[0]).toBe("waitlist");
+    expect(events).not.toContain("forget");
+    events = [];
+    await eraseMyData(true, deps({ leaveWaitlist: leaveWaitlist() }));
+    expect(events[0]).toBe("forget");
+    expect(events).not.toContain("waitlist");
+  });
+
+  it.each([
+    ["failed", "waitlist"],
+    ["stale", "stale"],
+  ] as const)("заявки не удалились (%s) — устройство и облако не тронуты", async (result, reason) => {
+    const failure = await eraseMyData(false, deps({ leaveWaitlist: leaveWaitlist(result) })).catch(
+      (error: unknown) => error,
+    );
+    expect(failure).toEqual(new EraseFailure(reason, false));
+    expect([...cloud.store.keys()].length).toBe(3);
+    expect(erasePhase(database.name)).toBeNull();
+  });
+
   it.each([
     ["failed", "messages"],
     ["stale", "stale"],

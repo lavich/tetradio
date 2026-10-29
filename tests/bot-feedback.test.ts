@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { forget, fromForm, handle, type Answer, type Deps, type Form, type Message } from "../bot/feedback";
-import { emptyRow, type Row, type Store } from "../bot/store";
+import { emptyRow, waitlistStore, type Row, type Store } from "../bot/store";
+import { sqlite } from "./helpers/sqlite-d1";
 import { ACK, BLOCKED, FAILED, GREETING, INVITE, UNBLOCKED, UNKNOWN_COMMAND } from "../bot/texts";
 
 const GROUP = -1004455365743;
@@ -87,6 +88,9 @@ function setup(rows: Row[] = [], answers: Record<string, Answer[]> = {}, now = N
   const deps: Deps = {
     api: bot.api,
     store,
+    waitlist: waitlistStore(sqlite()),
+    waitlistCourses: [],
+    waitlistThread: null,
     supportChatId: String(GROUP),
     sentryEventUrl: "https://storewizard.sentry.io/projects/tetradio/events/",
     appUrl: "https://tetradio.app/app/",

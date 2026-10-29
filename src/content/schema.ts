@@ -87,6 +87,17 @@ export interface Catalog {
   lessons: CatalogEntry[];
   /** Модули программы, включая черновики */
   modules?: CatalogModule[];
+  /** Курсы в работе: уроков нет, на «Курсе» — страница с заявкой. Прежний клиент поле не читает. */
+  upcoming?: CatalogUpcoming[];
+}
+
+export interface CatalogUpcoming {
+  id: string;
+  title: string;
+  language: string;
+  level?: string;
+  goal?: string;
+  after?: string;
 }
 
 export interface PackageWord {
@@ -280,6 +291,27 @@ function checkSchemaVersion(raw: Record<string, unknown>, what: string): SchemaV
   return version;
 }
 
+/** Курс в работе только показывается: неверная запись отбрасывается, а не валит каталог. */
+function readUpcoming(input: unknown, courses: CatalogCourse[]): CatalogUpcoming[] {
+  if (!Array.isArray(input)) return [];
+  const taken = new Set(courses.map((course) => course.id));
+  const list: CatalogUpcoming[] = [];
+  for (const entry of input) {
+    if (!entry || typeof entry !== "object") continue;
+    const { id, title, language, after } = entry as Record<string, unknown>;
+    if (typeof id !== "string" || !id || taken.has(id)) continue;
+    if (typeof title !== "string" || !title || typeof language !== "string" || !language) continue;
+    const { level, goal } = readCourseChoice(entry as Record<string, unknown>);
+    const item: CatalogUpcoming = { id, title, language };
+    if (level) item.level = level;
+    if (goal) item.goal = goal;
+    if (typeof after === "string" && taken.has(after)) item.after = after;
+    taken.add(id);
+    list.push(item);
+  }
+  return list;
+}
+
 export function parseCatalog(input: unknown): Catalog {
   const raw = obj(input, "каталог");
   const schemaVersion = checkSchemaVersion(raw, "Каталог");
@@ -366,6 +398,7 @@ export function parseCatalog(input: unknown): Catalog {
           throw new ContentError(`каталог.modules: урока ${lessonId} модуля ${module.id} нет в каталоге`);
     catalog.modules = modules;
   }
+  if (raw.upcoming !== undefined) catalog.upcoming = readUpcoming(raw.upcoming, courses);
   // Календарь разбирается после модулей: точка ссылается на номер модуля своего курса.
   courses.forEach((course, index) => {
     if (!calendars.has(course)) return;

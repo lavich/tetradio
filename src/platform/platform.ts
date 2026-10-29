@@ -126,6 +126,8 @@ export function applyEnvironment() {
   for (const [key, value] of Object.entries(params))
     if (typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value))
       root.style.setProperty(`--tg-theme-${key.replace(/_/g, "-")}`, value);
+  const page = pageColor();
+  if (page) adapter.chrome(page);
   const view = adapter.viewport();
   // Режим запуска виден стилям и экрану «Ещё»: во весь экран поверх контента лежат кнопки клиента и системная строка.
   if (view.mode) root.dataset.launchMode = view.mode;
@@ -151,6 +153,18 @@ export function applyEnvironment() {
   root.style.setProperty("--inset-safe-top", `${view.safeArea.top}px`);
   root.style.setProperty("--inset-content-top", `${view.contentSafeArea.top}px`);
   root.style.setProperty("--inset-bottom", `${view.safeArea.bottom + view.contentSafeArea.bottom}px`);
+}
+
+/** Фон страницы после применения темы — тот же токен `--background`, что рисует CSS; прозрачный (стили не загружены) — null. */
+function pageColor(): string | null {
+  const match = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)$/.exec(
+    getComputedStyle(document.body).backgroundColor,
+  );
+  if (!match || (match[4] !== undefined && Number(match[4]) < 1)) return null;
+  return `#${match
+    .slice(1, 4)
+    .map((part) => Number(part).toString(16).padStart(2, "0"))
+    .join("")}`;
 }
 
 /** Подписка на тему, размеры и активность адаптера; `visibilitychange` — запасной путь для клиентов без Bot API 8.0. */

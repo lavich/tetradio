@@ -12,12 +12,11 @@ import { cx } from "../../shared/cx";
 import { lessonIn, withCount } from "../../shared/format";
 import { ProfileContext, useCourseProfile, useProfile } from "../../shared/language";
 import { useCoursePalette, useStartedCourses } from "../../shared/courses";
-import type { CourseEntry } from "../../storage/courses";
+import { upcomingCourses, type CourseEntry } from "../../storage/courses";
 import { coverColor, pageDate } from "../../shared/notebook";
 import { useSpread } from "../../shared/media";
 import nb from "../../shared/notebook.module.css";
 import { Tick } from "../../shared/Tick";
-import { WEEK_PLAN, WeekStrip } from "../../shared/WeekStrip";
 import {
   courseFinished,
   lessonDays,
@@ -35,6 +34,9 @@ import { DayNotes } from "./DayNotes";
 import { lessonLines } from "./lessons";
 import { ReadingSheet } from "./ReadingSheet";
 import css from "./today.module.css";
+
+/** Ориентир курса — 2–3 занятия в неделю; точек недели не меньше трёх. */
+const WEEK_PLAN = 3;
 
 /** Возврат курса с экрана «Все курсы на паузе» меняет весь экран: фокус — на заголовок нового, а не на body. */
 export const titleFocus = { pending: false };
@@ -74,8 +76,8 @@ export function LanguageToday({
   const views = useLiveQuery(() => moduleViews(courseId), [courseId]);
   const reviewed = useLiveQuery(async () => (ready ? reviewedOn(today, scope) : undefined), [today, ready, scopeKey]);
   const week = useLiveQuery(
-    async () => (ready ? lessonDays(monday, deviceTimezone(), scope) : undefined),
-    [monday, deviceTimezone(), ready, scopeKey],
+    async () => (!ready ? undefined : spread ? [] : lessonDays(monday, deviceTimezone(), scope)),
+    [monday, deviceTimezone(), ready, scopeKey, spread],
   );
   const courseProfile = useCourseProfile(courseId);
   const profile = language ? PROFILES[language] : courseProfile;
@@ -87,6 +89,10 @@ export function LanguageToday({
     title.current?.focus();
   }, [shown]);
   const readings = useLiveQuery(async () => (courseId ? await courseReadings(courseId) : null), [courseId]);
+  const following = useLiveQuery(
+    async () => (courseId ? ((await upcomingCourses()).find((course) => course.after === courseId) ?? null) : null),
+    [courseId],
+  );
 
   const lessons = (views ?? []).flatMap((view) => [
     ...view.lessons,
@@ -98,7 +104,7 @@ export function LanguageToday({
   const finished = courseFinished(views ?? [], next);
   const due = plan.newRefs.length + plan.reviews.length;
   const reviewFirst = !!unfinished || due > 0;
-  if (!views || reviewed === undefined || !week || readings === undefined)
+  if (!views || reviewed === undefined || !week || readings === undefined || following === undefined)
     return <div aria-busy="true" aria-label="План дня загружается" />;
 
   const { shown: rows, more: hidden } = lessonLines([
@@ -123,14 +129,23 @@ export function LanguageToday({
         last={last}
         primary={reviewFirst}
       />
-      {courseId && readings && (
-        <ReadingSheet courseId={courseId} readings={readings} primary={!reviewFirst && next === null} />
-      )}
+      {courseId && readings && <ReadingSheet readings={readings} primary={!reviewFirst && next === null} />}
       <DayNotes plan={plan} />
       {finished ? (
-        <p className={css.finished} data-testid="course-finished">
-          {profile.finished}
-        </p>
+        <>
+          <p className={css.finished} data-testid="course-finished">
+            {profile.finished}
+          </p>
+          {following ? (
+            <p className={css.finished} data-testid="next-course">
+              Следующий курс — {following.level ? `${following.title} · ${following.level}` : following.title}:
+              готовится.{" "}
+              <Link to="/course" state={{ course: following.id }} className="text-primary underline">
+                Открыть страницу курса
+              </Link>
+            </p>
+          ) : null}
+        </>
       ) : next ? (
         <LessonNext
           view={next.view}
@@ -158,7 +173,7 @@ export function LanguageToday({
       ) : (
         <div className={cx(nb.spread, css.spread)}>
           {page}
-          <ModulePage view={next.view} current={next.lesson.id} week={week ?? []} monday={monday} today={today} />
+          <ModulePage view={next.view} current={next.lesson.id} />
         </div>
       )}
     </ProfileContext>
@@ -331,19 +346,7 @@ export function LessonNext({
   );
 }
 
-function ModulePage({
-  view,
-  current,
-  week,
-  monday,
-  today,
-}: {
-  view: ModuleView;
-  current: string;
-  week: string[];
-  monday: string;
-  today: string;
-}) {
+function ModulePage({ view, current }: { view: ModuleView; current: string }) {
   const { module } = view;
   const { code } = useProfile();
   const rows = [...view.lessons, ...(view.checkpoint ? [view.checkpoint] : []), ...view.review];
@@ -369,15 +372,6 @@ function ModulePage({
           </li>
         ))}
       </ol>
-      <div className={css.weekRow}>
-        <span className={nb.meta}>эта неделя</span>
-        <WeekStrip
-          monday={monday}
-          today={today}
-          lessons={week}
-          label={(name, lesson) => `${name}${lesson ? ": занятие" : ""}`}
-        />
-      </div>
     </section>
   );
 }

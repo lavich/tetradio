@@ -1,4 +1,5 @@
-import { forgetMessages } from "../platform/feedback-send";
+import { formAvailable } from "../platform/feedback";
+import { forgetMessages, waitlist } from "../platform/feedback-send";
 import { initPlatform, telegramBridge } from "../platform/platform";
 import { db } from "../storage/db";
 import { clearErase } from "../storage/erase-marker";
@@ -16,6 +17,7 @@ export const eraseDeps = (): EraseDeps => ({
   bridge: telegramBridge,
   sync: () => loadSync().then((module) => module.sync),
   forget: () => forgetMessages(),
+  ...(formAvailable() ? { leaveWaitlist: () => waitlist("forget", null).then((answer) => answer.result) } : {}),
   showErasing: (message) => showStatic(<ErasingScreen message={message} />),
   reload: restart,
 });

@@ -10,6 +10,7 @@ import { useCatalog, useCoursePhase, useCourses } from "../../shared/store";
 import type { StoredCatalogEntry } from "../../storage/db";
 import { ShareCourseButton } from "../../shared/ShareCourseButton";
 import ui from "../../shared/ui.module.css";
+import { withCount } from "../../shared/format";
 import { courseOffers, groupByLanguage, type CourseOfferView } from "./course-offers";
 
 export const OFFLINE_HINT = "Уроки загрузятся на устройство и будут доступны без сети.";
@@ -27,10 +28,13 @@ export function FirstRun({
   focus,
   onFocused,
   show,
+  intro,
 }: {
   courses: Course[];
   entries: StoredCatalogEntry[];
   modules: StoredModule[];
+  /** Первый экран «Сегодня»: единственный курс становится заголовком экрана, у нескольких — общий заголовок. */
+  intro?: boolean;
   /** Подсказка под кнопкой; стартовый экран пишет её один раз под подзаголовком. */
   hint?: boolean;
   /** Карточки под заголовком языка; на «Курсе» язык уже выбран — карточки без группы. */
@@ -57,6 +61,24 @@ export function FirstRun({
     );
   const busy = offers.find((offer) => offer.course.id === loading);
   const first = offers.find((offer) => offer.ready);
+  if (intro && offers.length === 1 && first)
+    return (
+      <>
+        <CourseIntro offer={first} />
+        <CourseOffer offer={first} level={2} main hint={false} labelledBy="today-title" />
+      </>
+    );
+  if (intro)
+    return (
+      <>
+        <h1 data-testid="today-title">Выберите курс</h1>
+        <p className="mb-1 text-muted-foreground">
+          Курсы языков с уроками по программе и ежедневным повторением карточек
+        </p>
+        <p className="mt-0 mb-6 text-sm text-muted-foreground">{OFFLINE_HINT}</p>
+        <FirstRun courses={courses} entries={entries} modules={modules} hint={false} />
+      </>
+    );
   const shown = show ? offers.filter((offer) => offer.course.id === show) : offers;
   const card = (offer: CourseOfferView, level: 2 | 3) => (
     <CourseOffer
@@ -114,14 +136,17 @@ function CourseOffer({
   waitFor,
   focused,
   onFocused,
+  labelledBy,
 }: {
   offer: CourseOfferView;
   level: 2 | 3;
   main: boolean;
   hint: boolean;
   waitFor?: CourseOfferView;
-  focused: boolean;
+  focused?: boolean;
   onFocused?: () => void;
+  /** Курс уже назван заголовком экрана: карточки нет. */
+  labelledBy?: string;
 }) {
   const { course } = offer;
   const article = useRef<HTMLElement>(null);
@@ -145,17 +170,19 @@ function CourseOffer({
       tabIndex={-1}
       className="mb-6"
       data-testid="course-offer"
-      aria-labelledby={`offer-${course.id}`}
+      aria-labelledby={labelledBy ?? `offer-${course.id}`}
     >
-      <Card className="mb-3 bg-soft ring-0" data-testid="first-course">
-        <CardHeader>
-          <Heading id={`offer-${course.id}`} className="m-0 text-xl leading-snug font-bold [overflow-wrap:anywhere]">
-            {offer.title}
-          </Heading>
-          {offer.goal ? <CardDescription className="text-foreground">{withGreek(offer.goal)}</CardDescription> : null}
-          <CardDescription className="text-foreground/75">{offer.volume}</CardDescription>
-        </CardHeader>
-      </Card>
+      {labelledBy ? null : (
+        <Card className="mb-3 bg-soft ring-0" data-testid="first-course">
+          <CardHeader>
+            <Heading id={`offer-${course.id}`} className="m-0 text-xl leading-snug font-bold [overflow-wrap:anywhere]">
+              {offer.title}
+            </Heading>
+            {offer.goal ? <CardDescription className="text-foreground">{withGreek(offer.goal)}</CardDescription> : null}
+            <CardDescription className="text-foreground/75">{offer.volume}</CardDescription>
+          </CardHeader>
+        </Card>
+      )}
       {!offer.ready ? (
         <p className={ui.note} data-testid="course-preparing">
           Готовится
@@ -203,6 +230,40 @@ function CourseOffer({
   );
 }
 
+const CHECKPOINTS: [string, string, string] = ["контрольная точка", "контрольные точки", "контрольных точек"];
+
+function CourseIntro({ offer }: { offer: CourseOfferView }) {
+  const profile = PROFILES[offer.language];
+  const checkpoints = offer.course.calendar?.checkpoints.length ?? 0;
+  const { goal, entry, pace } = offer.course;
+  const lede = [goal && `${goal}.`, entry].filter(Boolean).join(" ");
+  const facts: [string, string][] = [
+    ["Программа", checkpoints ? `${offer.volume} и ${withCount(checkpoints, CHECKPOINTS)}` : offer.volume],
+    ...(pace ? [["Время", pace] as [string, string]] : []),
+    [
+      "Звук",
+      `Слова и диалоги записаны. Формы глаголов читает синтез речи: без ${profile.voiceName} на устройстве их не слышно.`,
+    ],
+    ["Без сети", "Уроки сохраняются на устройство и открываются без сети."],
+  ];
+  return (
+    <>
+      <h1 id="today-title" data-testid="today-title" className="[overflow-wrap:anywhere]">
+        {offer.title}
+      </h1>
+      {lede ? <p className="mt-0 mb-6 text-lg leading-[1.5] text-foreground">{withGreek(lede)}</p> : null}
+      <dl className="mt-0 mb-6 border-t border-input" data-testid="course-intro">
+        {facts.map(([term, text]) => (
+          <div key={term} className="grid grid-cols-[5.75rem_1fr] gap-x-3 border-b border-input py-3">
+            <dt className="text-[12.5px] leading-6 font-semibold text-muted-foreground">{term}</dt>
+            <dd className="m-0 font-serif text-base leading-6 text-foreground">{text}</dd>
+          </div>
+        ))}
+      </dl>
+    </>
+  );
+}
+
 /** Начало курса там, где каталог есть, а уроков курса на устройстве ещё нет: на полке — курсов языка, в модуле — одного. */
 export function CourseStart({
   courseIds,
@@ -211,8 +272,10 @@ export function CourseStart({
   focus,
   onFocused,
   show,
+  intro,
 }: {
   courseIds?: string[];
+  intro?: boolean;
   hint?: boolean;
   grouped?: boolean;
   focus?: string;
@@ -232,6 +295,7 @@ export function CourseStart({
       focus={focus}
       onFocused={onFocused}
       show={show}
+      intro={intro}
     />
   );
 }

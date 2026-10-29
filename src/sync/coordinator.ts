@@ -6,6 +6,7 @@ import { dominates, mergeClocks, sameClock } from "./clock";
 import { syncEvents, type SyncEvent } from "./events";
 import {
   applySnapshot,
+  addReviewDays,
   buildAndCommitMarked,
   clearDirty,
   describeSnapshot,
@@ -694,11 +695,19 @@ export class SyncCoordinator {
     this.update({ phase: "syncing", conflict: null });
     try {
       const flags = await this.flags();
+      // Дни повторений не выбираются: в публикацию идут дни всех ветвей.
+      const reviewDays = conflict.branches
+        .filter((branch) => branch !== chosen)
+        .map((branch) => branch.snapshot.reviewDays);
       if (chosen.local) {
+        await addReviewDays(database, reviewDays);
         await this.publish(device, flags.clock, clocks, resolves, null);
       } else {
-        await applySnapshot(database, chosen.snapshot, chosen.id, chosen.meta!.clock, this.options.now());
-        await this.publish(device, chosen.meta!.clock, clocks, resolves, chosen.snapshot);
+        await applySnapshot(database, chosen.snapshot, chosen.id, chosen.meta!.clock, this.options.now(), {
+          reviewDays,
+        });
+        const merged = (await database.baseSummary.get("base"))?.reviewDays;
+        await this.publish(device, chosen.meta!.clock, clocks, resolves, { ...chosen.snapshot, reviewDays: merged });
         await this.installMissing(chosen.snapshot.packages);
       }
     } catch (error) {

@@ -82,8 +82,11 @@ jobs:
       - if: env.HAS_CF == 'true'
         run: npm ci --prefix bot
       # Токен Cloudflare — только этому шагу: install-скрипты зависимостей его не видят.
+      # Схема — до кода: новый Worker без своих таблиц отвечает 502.
       - if: env.HAS_CF == 'true'
-        run: npx --prefix bot wrangler deploy --config bot/wrangler.jsonc
+        run: |
+          npx --prefix bot wrangler d1 migrations apply tetradio-feedback --remote --config bot/wrangler.jsonc
+          npx --prefix bot wrangler deploy --config bot/wrangler.jsonc
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

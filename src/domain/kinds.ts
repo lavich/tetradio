@@ -1,6 +1,5 @@
 import type { ExercisePools } from "./options";
 import { DEFAULT_LANGUAGE, voiceFor, type Language, type LanguageProfile, type Voices } from "./language";
-import { itemExercise } from "./item-exercise";
 import { phraseExercise } from "./phrase-exercise";
 import type { SkillSummary } from "./skills";
 import { unitKey } from "./refs";
@@ -42,10 +41,8 @@ export interface KindSpec<K extends CardKind = CardKind> {
   ): Pick<SessionItem, "type" | "options"> | null;
   /** Можно ли спросить карточку, не читая её текста; без функции — вид спрашивается всегда. */
   checkable?(facts: CardFacts, context: AvailabilityContext): boolean;
-  /** Содержимое может исчезнуть, пока у карточки есть состояние: такую карточку со сроком план проверяет на наличие. */
-  vanishes?: boolean;
-  /** Доля мест повторений занятия, которую вид может занять, пока есть повторения других видов. */
-  reviewShare?: number;
+  /** Состояния вида хранятся и синхронизируются, но не входят в план, занятия и счётчики. */
+  ignored?: boolean;
 }
 
 const word: KindSpec<"word"> = {
@@ -74,16 +71,15 @@ const phrase: KindSpec<"phrase"> = {
     ((!!facts.hasAudio || voiceFor(context.hasVoice, facts.language ?? DEFAULT_LANGUAGE)) && context.phrasePool >= 4),
 };
 
-/** Ошибка урока: пункт задания из пакета; убранный обновлением пункт спросить нельзя. */
+/** Ошибка урока: больше не создаётся и не повторяется; вид читается ради состояний прежних версий и истории. */
 const mistake: KindSpec<"mistake"> = {
   code: "e",
   id: (card) => card.mistake.id,
   label: (card) => card.mistake.prompt,
   snapshot: (card) => ({ prompt: card.mistake.prompt, answer: card.mistake.answer[0] }),
   sides: (card) => ({ greek: card.mistake.answer[0], meaning: card.mistake.prompt }),
-  exercise: (card, _pools, _skills, random) => itemExercise(card.mistake, random),
-  vanishes: true,
-  reviewShare: 0.5,
+  exercise: () => null,
+  ignored: true,
 };
 
 const SPECS: { [K in CardKind]: KindSpec<K> } = { word, phrase, mistake };
@@ -93,6 +89,8 @@ const BY_CODE = new Map(Object.entries(SPECS).map(([kind, spec]) => [spec.code, 
 /** Вид по коду облака; `undefined` — вид, которого эта версия не знает. */
 export const kindOfCode = (code: string): CardKind | undefined => BY_CODE.get(code);
 
+/** История ответов хранит ссылки снятых видов, которых в `KINDS` нет: они не игнорируются, а просто учитываются как прежде. */
+export const isPlanned = (ref: Pick<LearningRef, "kind">) => !KINDS[ref.kind]?.ignored;
 export const cardKey = (card: SessionCard) => unitKey({ kind: card.kind, id: KINDS[card.kind].id(card) });
 export const cardLabel = (card: SessionCard) => KINDS[card.kind].label(card);
 export const snapshotOf = (card: SessionCard) => KINDS[card.kind].snapshot(card);

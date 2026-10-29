@@ -22,6 +22,7 @@ import { installEarlyHandlers, reportError, setReportingEnabled } from "./report
 import { bindReportingToSettings } from "./reporting/settings";
 import { db, ensureDefaults } from "./storage/db";
 import { adoptKnownForeign } from "./storage/foreign";
+import { dropIgnoredItems } from "./storage/ops";
 import { launchProfile, MOCK_USER, type Profile } from "./storage/profile";
 
 // Ранние обработчики ошибок ставятся до всего остального: отказы запуска копятся до загрузки SDK отчётов.
@@ -131,6 +132,7 @@ function start(profile: Profile) {
   const database = opened
     .then(() => ensureDefaults())
     .then(() => adoptKnownForeign(db))
+    .then(() => dropIgnoredItems(db).catch((error) => reportError(error, { category: "storage" })))
     .catch((error) => console.error("Не удалось открыть локальную базу", error));
   // Подписанные курсы догружаются следом за каталогом: новый урок появляется сам, медиа остаётся по запросу.
   refreshCatalog()

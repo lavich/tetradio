@@ -17,7 +17,7 @@ import {
   type LessonReads,
 } from "./courses";
 import { STORED_KINDS } from "./kinds";
-import { cardKey, cardLabel, KINDS } from "../domain/kinds";
+import { cardKey, cardLabel, isPlanned } from "../domain/kinds";
 import {
   LESSON_MATES_RADIUS,
   programmeOrder,
@@ -142,36 +142,11 @@ export const cardsOf = zoned(async function cardsOf(
   return cards;
 });
 
-/** Состояния карточек исчезающих видов без содержимого: план их не спрашивает, поэтому и счётчики их не видят. */
-const vanishedKeys = zoned(async function vanishedKeys(database: AppDatabase): Promise<Set<string>> {
-  const gone = new Set<string>();
-  for (const kind of CARD_KINDS.filter((kind) => KINDS[kind].vanishes)) {
-    const states = await database.cardStates.where("ref.kind").equals(kind).toArray();
-    const present = new Set(
-      await STORED_KINDS[kind].presentIds(
-        states.map((state) => state.ref.id),
-        database,
-      ),
-    );
-    for (const state of states) if (!present.has(state.ref.id)) gone.add(state.unitKey);
-  }
-  return gone;
-});
-/** Карточки ошибок уроков курса или курсов языка, которые можно спросить: убранный обновлением пункт не считается. */
-export const mistakeCount = zoned(async function mistakeCount(
-  courseId?: string | string[],
-  database: AppDatabase = db,
-): Promise<number> {
-  const states = await database.cardStates.where("ref.kind").equals("mistake").toArray();
-  const live = new Set(
-    await STORED_KINDS.mistake.presentIds(
-      states.map((state) => state.ref.id),
-      database,
-    ),
-  );
-  const keys = states.filter((state) => live.has(state.ref.id)).map((state) => state.unitKey);
-  return courseId ? (await cardsInCourse(keys, courseId, database)).size : keys.length;
-});
+const plannedOnly = (states: LearningState[]) => states.filter((state) => isPlanned(state.ref));
+const ignoredKey = (key: string) => {
+  const ref = tryParseUnitKey(key);
+  return !!ref && !isPlanned(ref);
+};
 
 export function dexieSource(database: AppDatabase = db): SessionSource & StatsSource {
   const reads = sharedReads(database);
@@ -183,7 +158,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
     statesOf: (refs) => statesOf(refs, database),
     liveKeys: (refs) => liveKeys(refs, database),
     dueStates: zoned(async (until, courseId) => {
-      const due = await database.cardStates.where("card.due").belowOrEqual(until).toArray();
+      const due = plannedOnly(await database.cardStates.where("card.due").belowOrEqual(until).toArray());
       if (!courseId) return due;
       const own = await cardsInCourse(
         due.map((state) => state.unitKey),
@@ -194,7 +169,7 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
     }),
     dueStatesOf: zoned(async (until, courseIds) => {
       const [due, items] = await Promise.all([
-        database.cardStates.where("card.due").belowOrEqual(until).toArray(),
+        database.cardStates.where("card.due").belowOrEqual(until).toArray().then(plannedOnly),
         reads.items(),
       ]);
       // Связи уже прочитаны планом: курс по ним дешевле, чем `anyOf` по тысячам ключей срока.
@@ -210,12 +185,9 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
         const course = byLesson.get(lessonOf.get(key) ?? "");
         if (course) owners.set(key, course);
       }
-      // Карточка без связей — у своего курса, если вид его знает (ошибка урока), иначе у домашнего, как в `cardCourses`.
-      const rest = keys.filter((key) => !owners.has(key));
-      const own = rest.filter((key) => !!STORED_KINDS[tryParseUnitKey(key)?.kind ?? "word"]?.coursesOf);
-      for (const [key, course] of await cardCourses(own, database)) owners.set(key, course);
-      const home = rest.length > own.length ? await homeCourse(database) : undefined;
-      if (home) for (const key of rest) if (!owners.has(key)) owners.set(key, home);
+      // Карточка без связей — у домашнего курса, как в `cardCourses`.
+      const home = keys.some((key) => !owners.has(key)) ? await homeCourse(database) : undefined;
+      if (home) for (const key of keys) if (!owners.has(key)) owners.set(key, home);
       const byCourse = new Map(courseIds.map((courseId) => [courseId, [] as LearningState[]]));
       for (const state of due) byCourse.get(owners.get(state.unitKey) ?? "")?.push(state);
       return byCourse;
@@ -284,19 +256,17 @@ export function dexieSource(database: AppDatabase = db): SessionSource & StatsSo
       return [...(base?.stats.recentByType[type] ?? []), ...local].slice(-limit);
     }),
     dueKeysBefore: zoned(async (instant) => {
-      const gone = await vanishedKeys(database);
       const keys = (await database.cardStates.where("card.due").below(instant).primaryKeys()) as string[];
-      return keys.filter((key) => !gone.has(key));
+      return keys.filter((key) => !ignoredKey(key));
     }),
     cardCount: zoned(async () => {
       let total = 0;
       for (const kind of CARD_KINDS) total += await STORED_KINDS[kind].count(database);
-      return total - (await vanishedKeys(database)).size;
+      return total;
     }),
     eachState: zoned(async (visit) => {
-      const gone = await vanishedKeys(database);
       await database.cardStates.each((state) => {
-        if (!gone.has(state.unitKey)) visit(state);
+        if (isPlanned(state.ref)) visit(state);
       });
     }),
     labelsOf: zoned(

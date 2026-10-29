@@ -1,16 +1,14 @@
 import "fake-indexeddb/auto";
 import { liveQuery } from "dexie";
-import { Rating } from "ts-fsrs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { buildContent } from "../content/build";
 import { applyPackage } from "../src/content/client";
-import { makeSession, nextState } from "../src/domain/learning";
+import { makeSession } from "../src/domain/learning";
 import { moduleViews, saveBlockProgress, type ModuleView } from "../src/storage/course";
 import { AppDatabase } from "../src/storage/db";
-import { STORED_KINDS } from "../src/storage/kinds";
 import { submitAnswer } from "./helpers/ops";
 import { courseProgress, type CourseProgress } from "../src/storage/progress";
-import { dexieSource, mistakeCount } from "../src/storage/queries";
+import { dexieSource } from "../src/storage/queries";
 import { lessonOutlines } from "../src/storage/outlines";
 import { markRead, courseReadings, moduleReadings, readingPage } from "../src/storage/readings";
 import { completeLessons, installLessons, memoryFetcher } from "./helpers/content";
@@ -73,18 +71,13 @@ describe("живые запросы курса не перечитывают п�
   });
   afterEach(() => db.close());
 
-  it("ответ в занятии пересчитывает «Прогресс» и ошибки без чтения пакетов", async () => {
+  it("ответ в занятии пересчитывает «Прогресс» без чтения пакетов", async () => {
     await completeLessons(db, ["m01-1"]);
-    const pack = (await db.packages.get("m01-1"))!;
-    const mistake = { kind: "mistake" as const, id: STORED_KINDS.mistake.packageIds({ ...pack, id: "m01-1" })[0] };
-    await db.cardStates.put(nextState(undefined, mistake, Rating.Again, new Date(now.getTime() - 86_400_000)));
     const session = await makeSession({ source: dexieSource(db), now, random: () => 0.42, courseId: "greek-a2" });
     await db.sessions.add(session);
     const progress = watch(() => courseProgress(now, tz, "greek-a2", db));
     const views = watch(() => moduleViews("greek-a2", db));
-    const mistakes = watch(() => mistakeCount("greek-a2", db));
     await settle();
-    expect(mistakes.seen.at(-1)).toBe(1);
     const before = { rows: reads.rows, progress: progress.seen.length };
 
     await submitAnswer({
@@ -102,7 +95,7 @@ describe("живые запросы курса не перечитывают п�
     expect(progress.seen.length).toBeGreaterThan(before.progress);
     expect(progress.seen.at(-1)!.week.cards).toBe(1);
     expect(reads.rows - before.rows).toBe(0);
-    [progress, views, mistakes].forEach((query) => query.stop());
+    [progress, views].forEach((query) => query.stop());
   });
 
   it("выполненное задание урока меняет счёт урока без чтения пакетов", async () => {
@@ -119,7 +112,7 @@ describe("живые запросы курса не перечитывают п�
     views.stop();
   });
 
-  it("новая версия пакета сразу меняет счёт урока, навыки и пункты ошибок", async () => {
+  it("новая версия пакета сразу меняет счёт урока и навыки", async () => {
     const progress = watch(() => courseProgress(now, tz, "greek-a2", db));
     await settle();
     const lessonOf = (data: CourseProgress | undefined) =>
@@ -127,8 +120,6 @@ describe("живые запросы курса не перечитывают п�
     const total = lessonOf(progress.seen.at(-1)).tally.total;
     const writing = progress.seen.at(-1)!.skills.find((skill) => skill.skill === "writing")!.total;
     const pack = demo.packages.find((item) => item.id === "m01-1")!;
-    const forms = `m01-1/forms/${(pack.blocks!.find((block) => block.id === "forms") as { items: { id: string }[] }).items[0].id}`;
-    expect(await STORED_KINDS.mistake.presentIds([forms], db)).toEqual([forms]);
 
     await applyPackage(
       {
@@ -141,7 +132,6 @@ describe("живые запросы курса не перечитывают п�
     await settle();
     expect(lessonOf(progress.seen.at(-1)).tally.total).toBe(total - 2);
     expect(progress.seen.at(-1)!.skills.find((skill) => skill.skill === "writing")!.total).toBeLessThan(writing);
-    expect(await STORED_KINDS.mistake.presentIds([forms], db)).toEqual([]);
     progress.stop();
   });
 
@@ -178,14 +168,14 @@ describe("живые запросы курса не перечитывают п�
 
   it("внутри транзакции записи сводка берётся из пакета, а не из памяти", async () => {
     const pack = (await db.packages.get("m01-1"))!;
-    const forms = STORED_KINDS.mistake.packageIds({ ...pack, id: "m01-1" })[0];
-    expect(await STORED_KINDS.mistake.presentIds([forms], db)).toEqual([forms]);
+    const tasks = async () => (await lessonOutlines(["m01-1"], db))[0]!.tasks.length;
+    expect(await tasks()).toBeGreaterThan(0);
     const inside = await db.transaction("rw", db.packages, async () => {
       await db.packages.put({ ...pack, blocks: [] });
-      return STORED_KINDS.mistake.presentIds([forms], db);
+      return tasks();
     });
-    expect(inside).toEqual([]);
-    expect(await STORED_KINDS.mistake.presentIds([forms], db)).toEqual([]);
+    expect(inside).toBe(0);
+    expect(await tasks()).toBe(0);
   });
 
   it("тексты для чтения читают только пакеты с нужными текстами, а не все установленные", async () => {

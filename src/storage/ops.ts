@@ -13,7 +13,7 @@ import {
   OPTION_POOL,
 } from "../domain/learning";
 import type { TextAnswerStatus } from "../domain/text-answer";
-import { snapshotOf } from "../domain/kinds";
+import { isPlanned, snapshotOf } from "../domain/kinds";
 import { PROFILES } from "../domain/language";
 import { gapOf } from "../domain/word-gap";
 import { retryItemId } from "../domain/skills";
@@ -115,7 +115,7 @@ export async function recordAnswer({
       // Позиция сессии = сколько упражнений уже отвечено; экран сам решает, когда листать дальше.
       const stored = (await database.sessions.get(session.id)) ?? session;
       const items = stored.items.map((entry) => (entry.id === item.id ? { ...entry, eventId } : entry));
-      // Пункт урока повторился бы тем же заданием через три карточки после показанного ответа: его вернёт расписание.
+      // Задание урока в занятии прежней версии повторилось бы тем же заданием через три карточки.
       const retries = item.ref.kind !== "mistake";
       if (!correct && retries && !items.some((entry) => entry.retryOf && entry.unitKey === item.unitKey)) {
         const position = items.findIndex((entry) => entry.id === item.id);
@@ -264,6 +264,21 @@ export async function skipItem(
     return answered >= items.length;
   });
   // Пропуск последнего задания завершает занятие: накопленные ответы уходят в облако.
+  if (finished) announceChange("finished");
+}
+/** Занятие прежней версии без невыполненных карточек ignored-видов: из отвеченных — завершено, пустое — закрыто. */
+export async function dropIgnoredItems(database: AppDatabase = db): Promise<void> {
+  let finished = false;
+  await database.transaction("rw", database.sessions, async () => {
+    for (const session of await database.sessions.where("status").equals("active").toArray()) {
+      const items = session.items.filter((item) => isPlanned(item.ref) || item.eventId || item.skipped);
+      if (items.length === session.items.length) continue;
+      const answered = settled(items);
+      const status = !items.length ? "ended" : answered >= items.length ? "done" : "active";
+      await database.sessions.put({ ...session, items, index: answered, status });
+      finished ||= status !== "active";
+    }
+  });
   if (finished) announceChange("finished");
 }
 /** Из копии экрана берётся только время: ответы и попытки могли записаться после того, как экран её прочитал. */

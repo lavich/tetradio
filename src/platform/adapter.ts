@@ -50,6 +50,8 @@ export interface PlatformAdapter {
   theme(): PlatformTheme;
   viewport(): PlatformViewport;
   onThemeChange(listener: () => void): () => void;
+  /** Цвет шапки и фона клиента под фон страницы, `#rrggbb`; без поддержки — no-op. */
+  chrome(color: string): void;
   onViewportChange(listener: () => void): () => void;
   /** Активность Mini App (Bot API 8.0: `activated`/`deactivated`); без поддержки — всегда активен. */
   active(): boolean;
@@ -83,6 +85,7 @@ export function webAdapter(): PlatformAdapter {
       mode: null,
     }),
     onThemeChange: () => NONE,
+    chrome: NONE,
     onViewportChange: () => NONE,
     active: () => true,
     onActiveChange: () => NONE,
@@ -136,6 +139,7 @@ export function telegramAdapter(app: TelegramWebApp): PlatformAdapter {
       else backButton!.hide();
     });
   let primary: PrimaryAction | null = null;
+  let chromeColor: string | null = null;
   const themeListeners = new Set<() => void>(),
     viewportListeners = new Set<() => void>(),
     activeListeners = new Set<(active: boolean) => void>();
@@ -230,6 +234,13 @@ export function telegramAdapter(app: TelegramWebApp): PlatformAdapter {
       return () => {
         themeListeners.delete(listener);
       };
+    },
+    chrome(color) {
+      if (color === chromeColor || !supports("6.9")) return;
+      chromeColor = color;
+      // iOS во весь экран выбирает цвет иконок строки состояния только по hex шапки: ключ `bg_color`, который шлёт bridge, даёт белые.
+      if (has(app, "setHeaderColor")) attempt(() => app.setHeaderColor!(color));
+      if (has(app, "setBackgroundColor")) attempt(() => app.setBackgroundColor!(color));
     },
     onViewportChange(listener) {
       viewportListeners.add(listener);
