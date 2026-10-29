@@ -8,7 +8,7 @@ vi.mock("../src/storage/profile", async (original) => ({
   currentProfile: () => ({ kind: "telegram", userId: 7, bot: "TetradioBot", syncable: true }),
 }));
 
-function bridge() {
+function bridge(version = "8.0") {
   const store = new Map<string, string>();
   const listeners = new Map<string, Set<() => void>>();
   type Done<T> = (error: string | null, value?: T) => void;
@@ -25,6 +25,7 @@ function bridge() {
       ),
       getKeys: (done: Done<string[]>) => done(null, [...store.keys()]),
     },
+    isVersionAtLeast: (wanted: string) => Number(version) >= Number(wanted),
     onEvent: (name: string, listener: () => void) =>
       listeners.set(name, (listeners.get(name) ?? new Set()).add(listener)),
     offEvent: (name: string, listener: () => void) => listeners.get(name)?.delete(listener),
@@ -49,6 +50,18 @@ describe("подключение облака", () => {
     await db.transaction("rw", db.meta, () => markChanged(db));
     emit("deactivated");
     await vi.waitFor(() => expect([...store.keys()].some((key) => key.startsWith("p_"))).toBe(true));
+    sync.stop();
+  });
+
+  it("Telegram ниже 6.9 — клиент без облака: хранилище не вызывается", async () => {
+    const { connectSync, sync } = await import("../src/sync");
+    const { app } = bridge("6.0");
+    const getItems = vi.fn();
+    (app.CloudStorage as unknown as { getItems: unknown }).getItems = getItems;
+    connectSync(app);
+    await sync.exchange().catch(() => undefined);
+    expect(getItems).not.toHaveBeenCalled();
+    expect(sync.getStatus().error?.kind).not.toBe("bridge");
     sync.stop();
   });
 });
