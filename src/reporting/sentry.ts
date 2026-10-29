@@ -8,7 +8,7 @@ import { filterBreadcrumb, scrubEvent } from "./scrub";
  * крошки консоли и кликов выключены у источника и дополнительно отсекаются фильтром; PII не отправляется.
  * Недоставленные события ждут в отдельной базе IndexedDB и уходят при следующем запуске с сетью.
  */
-const REPLACED = new Set(["BrowserSession", "Breadcrumbs", "Console"]);
+const REPLACED = new Set(["BrowserSession", "Breadcrumbs", "Console", "CultureContext"]);
 
 function init({ dsn, release, tags }: SdkOptions) {
   Sentry.init({
@@ -23,7 +23,9 @@ function init({ dsn, release, tags }: SdkOptions) {
       urlQueryParams: false,
       graphQL: { document: false, variables: false },
       genAI: { inputs: false, outputs: false },
+      mcp: { inputs: false, outputs: false },
       databaseQueryData: false,
+      queues: false,
       stackFrameVariables: false,
       frameContextLines: 0,
     },

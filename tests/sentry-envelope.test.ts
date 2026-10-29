@@ -21,15 +21,17 @@ const ALLOWED_PATHS = new Set([
   "breadcrumbs[].data.url",
   "breadcrumbs[].timestamp",
   "breadcrumbs[].type",
-  "contexts.culture.calendar",
-  "contexts.culture.locale",
-  "contexts.culture.timezone",
   "contexts.react.version",
   "contexts.trace.span_id",
   "contexts.trace.trace_id",
   "environment",
   "event_id",
+  "exception.values[].mechanism.data.handler",
+  "exception.values[].mechanism.data.target",
+  "exception.values[].mechanism.exception_id",
   "exception.values[].mechanism.handled",
+  "exception.values[].mechanism.parent_id",
+  "exception.values[].mechanism.source",
   "exception.values[].mechanism.synthetic",
   "exception.values[].mechanism.type",
   "exception.values[].stacktrace.frames[].colno",
@@ -67,6 +69,8 @@ function paths(value: unknown, path = "", out = new Set<string>()) {
 }
 
 type Item = { type?: string; [key: string]: unknown };
+const HASH =
+  "#tgWebAppData=user%3D%257B%2522id%2522%253A42%252C%2522username%2522%253A%2522secret_user%2522%257D&tgWebAppPlatform=ios";
 const items = () =>
   sent.flatMap((body) =>
     body
@@ -74,6 +78,18 @@ const items = () =>
       .filter(Boolean)
       .map((line) => JSON.parse(line) as Item),
   );
+const HEADER_PATHS = new Set([
+  "event_id",
+  "sdk.name",
+  "sdk.version",
+  "sent_at",
+  "trace.environment",
+  "trace.org_id",
+  "trace.public_key",
+  "trace.release",
+  "trace.trace_id",
+]);
+const headers = () => sent.map((body) => JSON.parse(body.split("\n")[0]!) as Record<string, unknown>);
 const events = () => items().filter((item) => item.event_id && item.exception) as Record<string, any>[];
 
 describe("конверт Sentry", () => {
@@ -84,6 +100,16 @@ describe("конверт Sentry", () => {
       release: "r1",
       tags: { env: "browser", "app.version": "1" },
     });
+    history.replaceState({}, "", `/app/?bot=secret${HASH}`);
+    window.dispatchEvent(new ErrorEvent("error", { message: "без стека" }));
+    const swallow = (event: ErrorEvent) => event.preventDefault();
+    window.addEventListener("error", swallow);
+    const target = new EventTarget();
+    target.addEventListener("tap", () => {
+      throw new Error("из обработчика");
+    });
+    target.dispatchEvent(new Event("tap"));
+    window.removeEventListener("error", swallow);
     document.cookie = "session=secret";
     await fetch("/content/catalog.json?initData=secret");
     await fetch("https://other.example/path?x=1");
@@ -96,13 +122,56 @@ describe("конверт Sentry", () => {
       mechanism: "explicit",
     });
     sentry.capture("строка, не Error", { id: "fedcba9876543210fedcba9876543210", mechanism: "explicit" });
+    sentry.capture(new Error("обёртка", { cause: new Error("причина") }), {
+      id: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      mechanism: "explicit",
+    });
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/content/lessons/m01-1.json?initData=secret");
+    xhr.send();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    sentry.capture(new Error("после xhr"), { id: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", mechanism: "explicit" });
     await new Promise((resolve) => setTimeout(resolve, 200));
     await sentry.close();
   });
   afterAll(() => vi.unstubAllGlobals());
 
   it("уходят только события, без сессий и прочих конвертов", () => {
-    expect(items().flatMap((item) => (item.type ? [item.type] : []))).toEqual(["event", "event"]);
+    expect(items().flatMap((item) => (item.type ? [item.type] : []))).toEqual(Array(6).fill("event"));
+  });
+
+  it("событие из каждого источника: глобальный обработчик, обёртка обработчика, причина ошибки, явный отчёт", () => {
+    const mechanisms = events().flatMap((event) => event.exception.values.map((value: any) => value.mechanism.type));
+    expect(mechanisms).toEqual(
+      expect.arrayContaining([
+        "auto.browser.global_handlers.onerror",
+        expect.stringMatching(/browserapierrors/),
+        "chained",
+        "explicit",
+      ]),
+    );
+    expect(
+      events()
+        .at(-1)!
+        .breadcrumbs.map((crumb: any) => crumb.category),
+    ).toContain("xhr");
+  });
+
+  it("заголовок конверта несёт только разрешённые поля", () => {
+    const extra = headers().flatMap((header) => [...paths(header)].filter((path) => !HEADER_PATHS.has(path)));
+    expect(extra).toEqual([]);
+  });
+
+  it("без пользователя и без определения IP по соединению", () => {
+    expect(events().map((event) => [event.user, event.sdk.settings])).toEqual(
+      Array(6).fill([undefined, { infer_ip: "never" }]),
+    );
+  });
+
+  it("без данных запуска Telegram из адреса страницы", () => {
+    const all = sent.join("\n");
+    for (const secret of ["tgWebAppData", "secret_user", "user%3D", "tgWebAppPlatform"])
+      expect(all).not.toContain(secret);
   });
 
   it("событие несёт только разрешённые поля", () => {
