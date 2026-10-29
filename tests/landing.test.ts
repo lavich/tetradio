@@ -45,10 +45,13 @@ describe("статичная страница лендинга", () => {
     const data = JSON.parse(html.match(/<script type="application\/json" id="lp-data">(.*?)<\/script>/s)![1]!);
     expect(data[1]).toEqual({ format: "text", answer: ["είμαι"], explanation: expect.any(String) });
   });
-  it("в конце страницы — ссылка на политику конфиденциальности", () => {
+  it("в конце страницы — ссылки на политику конфиденциальности и проект на GitHub", () => {
     const html = renderLanding({ modules: [], exam: null, tasks: [] }, "TetradioBot");
     expect(html).toMatch(
       /<footer class="lp-close">[\s\S]*<a[^>]*href="privacy\/"[^>]*>Политика конфиденциальности<\/a>/,
+    );
+    expect(html).toMatch(
+      /<footer class="lp-close">[\s\S]*<a href="https:\/\/github\.com\/lavich\/tetradio"[^>]*>Проект на GitHub<\/a>/,
     );
   });
 
