@@ -301,10 +301,11 @@ export const clearDirty = zoned(async function clearDirty(
 export { readPending, type PendingLessons } from "../storage/pending";
 
 /**
- * Применение целой версии одной транзакцией: настройки, предел курса, завершение уроков, блоки курса,
- * состояния FSRS карточек, база навыков и сводок. История ответов остаётся локальной. Состояния неизвестных карточек откладываются
+ * Применение целой версии одной транзакцией: завершение уроков, блоки курса, состояния FSRS карточек, база навыков и
+ * сводок, дни повторений. История ответов остаётся локальной. Состояния неизвестных карточек откладываются
  * до установки пакета, а не обнуляются и не попадают в план.
- * `ifClean` — применять, только если локальных неопубликованных изменений нет; иначе `false` без записи.
+ * `ifClean` — применять, только если локальных неопубликованных изменений и восстановленной копии нет; иначе `false`
+ * без записи.
  * `reviewDays` — дни других ветвей конфликта, которые складываются с днями версии.
  */
 export async function applySnapshot(
@@ -316,7 +317,7 @@ export async function applySnapshot(
   { ifClean = false, reviewDays: extra = [] }: { ifClean?: boolean; reviewDays?: (ReviewDays | undefined)[] } = {},
 ): Promise<boolean> {
   return database.transaction("rw", tables(database, SNAPSHOT_TABLES), async () => {
-    if (ifClean && (await readMeta(database, META.dirty))) return false;
+    if (ifClean && ((await readMeta(database, META.dirty)) || (await readMeta(database, META.restored)))) return false;
     // Дни не заменяются версией, а складываются: ни обмен, ни выбор в конфликте не стирают известный день.
     const reviewDays = mergeReviewDays(
       await knownReviewDays(database, await database.baseSummary.get("base")),
@@ -348,7 +349,10 @@ export async function applySnapshot(
       if (known.has(key) && isKnown(state)) await database.cardStates.put(reviveState(state));
       else await database.cardStash.put({ unitKey: key, ref: state.ref, state });
     }
-    await commitBase(database, { ...snapshot, reviewDays }, versionId, now.toISOString());
+    // Часы устройства могли отстать от прежней отсечки: назад она не сдвигается, иначе ответы учлись бы дважды.
+    const asOf = now.toISOString();
+    const previous = (await database.baseSummary.get("base"))?.asOf ?? "";
+    await commitBase(database, { ...snapshot, reviewDays }, versionId, previous > asOf ? previous : asOf);
     await writeMeta(database, META.applied, versionId);
     await writeMeta(database, META.clock, JSON.stringify(clock));
     await writeMeta(database, META.dirty, null);

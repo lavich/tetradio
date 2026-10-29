@@ -40,6 +40,12 @@ export const announceChange = (event: SyncEvent = "changed") => syncEvents.emit(
 const settled = (items: SessionItem[]) => items.filter((entry) => entry.eventId || entry.skipped).length;
 
 const stamp = (now: Date) => now.toISOString();
+/**
+ * Время ответа берётся до транзакции, а публикация могла за это время зафиксировать сводку с отсечкой позже него:
+ * ответ не старше отсечки выпал бы и из сводки, и из проверки неопубликованного.
+ */
+const after = (createdAt: string, cutoff: string | undefined) =>
+  cutoff && createdAt <= cutoff ? new Date(Date.parse(cutoff) + 1).toISOString() : createdAt;
 
 export interface AnswerInput {
   session: Session;
@@ -85,6 +91,7 @@ export async function recordAnswer({
     database.cardStates,
     database.sessions,
     database.meta,
+    database.baseSummary,
     async () => {
       const existing = await database.events.get(eventId);
       if (existing) return { event: existing, created: false }; // повторное нажатие не создаёт второй ответ
@@ -104,7 +111,7 @@ export async function recordAnswer({
         rating,
         correct,
         answer,
-        createdAt: stamp(now),
+        createdAt: after(stamp(now), (await database.baseSummary.get("base"))?.asOf),
         localDate: studyDay(now, timezone),
         responseTimeMs,
         before: state?.card,

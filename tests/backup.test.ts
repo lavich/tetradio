@@ -18,6 +18,7 @@ import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport } from "../src/sync/transport";
 import { readPauses } from "../src/storage/pauses";
 import { pauseCourse } from "../src/storage/pause-actions";
+import { PENDING_LESSONS_KEY } from "../src/storage/pending";
 
 const NAME = "tetradio-backup";
 /** Тестовая база называется иначе, а копия проверяется по имени базы приложения. */
@@ -60,6 +61,17 @@ describe("полная копия", () => {
     fresh.close();
     await fresh.delete();
   });
+  it("завершения неустановленных уроков прежнего состояния не переживают восстановление", async () => {
+    await installCompleted(db, ["mech-1"]);
+    const copy = asLexi(JSON.parse(await (await exportFull(db)).text()));
+    await db.meta.put({
+      key: PENDING_LESSONS_KEY,
+      value: JSON.stringify({ "mech-9": { id: "mech-9", completed: 1 } }),
+    });
+    await restoreBackup(copy, db);
+    expect(await db.meta.get(PENDING_LESSONS_KEY)).toBeUndefined();
+  });
+
   it("копия переносит паузы курсов", async () => {
     await installLessons(db, ["mech-2"]);
     await pauseCourse("english", new Date("2026-10-12T09:00:00Z"), db);

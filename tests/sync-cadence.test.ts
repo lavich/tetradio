@@ -130,6 +130,20 @@ describe("частота публикации", () => {
     // Оба сигнала сворачивания — один срочный заход, без второго полного обмена следом.
     expect(exchange.mock.calls).toEqual([[{ urgent: true }]]);
   });
+  it("сворачивание во время обмена не оставляет отложенные ответы таймеру спящего WebView", async () => {
+    const { db, sync, exchange } = await setup();
+    stop = () => sync.stop();
+    const made = await session(db);
+    await answer(db, made, 0);
+    expect(live()).toHaveLength(1);
+    const running = sync.exchange();
+    setVisibility("hidden");
+    await running;
+    await vi.waitFor(() => expect(exchange).toHaveBeenCalledTimes(2));
+    expect(live()).toHaveLength(0);
+    await vi.waitFor(async () => expect(await readMeta(db, META.dirty)).toBeNull());
+  });
+
   it("последнее задание завершает занятие — ответом или пропуском — и публикует сразу", async () => {
     for (const last of ["answer", "skip"] as const) {
       const { db, sync, exchange } = await setup();

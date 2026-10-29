@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import "fake-indexeddb/auto";
+import Dexie from "dexie";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
@@ -8,11 +9,12 @@ import { saveBlockProgress } from "../src/storage/course";
 import { submitAnswer } from "./helpers/ops";
 import { makeSession } from "../src/domain/learning";
 import { progress } from "../src/domain/stats";
-import { kvAdapter } from "../src/sync/adapter";
+import { kvAdapter, partKey } from "../src/sync/adapter";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport, SyncError, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta, writeMeta } from "../src/sync/snapshot";
 import { installCompleted } from "./helpers/content";
+import { exportFull, restoreBackup } from "../src/features/backup/backup";
 
 let cloud: MemoryTransport;
 let clockMs = Date.parse("2026-09-16T08:00:00Z");
@@ -64,6 +66,11 @@ async function study(dev: Device, answers: boolean[], mode: "scheduled" | "pract
       now: tick(),
       database: dev.db,
     });
+}
+/** Полная копия устройства в том виде, в каком её восстанавливает «Копия данных». */
+async function backupOf(dev: Device) {
+  const parsed = JSON.parse(await (await exportFull(dev.db)).text());
+  return new Blob([JSON.stringify({ ...parsed, data: { ...parsed.data, databaseName: "tetradio" } })]);
 }
 const answers = async (dev: Device) => (await progress(dexieSource(dev.db), now())).totals.answers;
 const pointerOf = async (dev: Device) => JSON.parse(cloud.store.get(`p_${await dev.sync.deviceId()}`)!);
@@ -285,6 +292,23 @@ describe("«Решить позже»", () => {
   });
 });
 
+describe("«Решить позже» при сбое хранилища", () => {
+  it("выбор откладывается до перезапуска, кнопка «Выбрать версию» остаётся", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, [true]);
+    await study(mac, [true]);
+    await mac.sync.exchange();
+    const status = await phone.sync.exchange();
+    expect(status.conflict?.kind).toBe("diverged");
+    const put = phone.db.meta.put.bind(phone.db.meta);
+    phone.db.meta.put = ((row: { key: string }) =>
+      row.key === META.later ? Promise.reject(new Error("QuotaExceededError")) : put(row as never)) as never;
+    await expect(phone.sync.deferChoice()).rejects.toThrow("QuotaExceededError");
+    phone.db.meta.put = put;
+    expect(phone.sync.getStatus().conflict?.deferred).toBe(true);
+  });
+});
+
 describe("время в окне выбора", () => {
   it("у версий — время последнего ответа", async () => {
     const { phone, mac } = await pair();
@@ -322,5 +346,98 @@ describe("публикация при сворачивании", () => {
       "getKeys",
       "getItems",
     ]);
+  });
+});
+
+describe("восстановление копии посреди обмена", () => {
+  it("копия, восстановленная во время публикации, не теряется: следующий обмен — конфликт `restored`", async () => {
+    const { phone, mac } = await pair();
+    const copy = await backupOf(phone);
+    const copied = await answers(phone);
+    await study(phone, [true, false]);
+    const original = cloud.setItem.bind(cloud);
+    let restored = false;
+    cloud.setItem = async (key, value) => {
+      if (!restored && key.startsWith("p_")) {
+        restored = true;
+        await restoreBackup(copy, phone.db);
+      }
+      return original(key, value);
+    };
+    await phone.sync.exchange();
+    cloud.setItem = original;
+    expect(restored).toBe(true);
+    await study(mac, [true]);
+    await mac.sync.exchange();
+    const status = await phone.sync.exchange();
+    expect(status.conflict?.kind).toBe("restored");
+    expect(await answers(phone)).toBe(copied);
+    await Dexie.delete("tetradio-restore");
+  });
+
+  it("копия, восстановленная во время чтения версии облака, не заменяется ею", async () => {
+    const { phone, mac } = await pair();
+    const copy = await backupOf(phone);
+    const copied = await answers(phone);
+    await study(mac, [true]);
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    const macVersion = `v_${await mac.sync.deviceId()}-`;
+    const original = cloud.getItems.bind(cloud);
+    let restored = false;
+    cloud.getItems = async (keys) => {
+      if (!restored && keys.some((key) => key.startsWith(macVersion))) {
+        restored = true;
+        await restoreBackup(copy, phone.db);
+      }
+      return original(keys);
+    };
+    await phone.sync.exchange();
+    cloud.getItems = original;
+    expect(restored).toBe(true);
+    expect(await answers(phone)).toBe(copied);
+    expect((await phone.sync.exchange()).conflict?.kind).toBe("restored");
+    await Dexie.delete("tetradio-restore");
+  });
+});
+
+describe("облако заполнилось во время записи", () => {
+  it("ошибка записи без признака лимита при полном облаке — уборка и повтор", async () => {
+    cloud = memoryTransport({ limits: { maxKeys: 40 } });
+    const { phone, mac } = await pair();
+    await study(phone, [true, false]);
+    const device = await phone.sync.deviceId();
+    const original = cloud.setItem.bind(cloud);
+    let filled = false;
+    cloud.setItem = async (key, value) => {
+      if (!filled && key.startsWith("v_")) {
+        filled = true;
+        for (let index = 0; cloud.store.size < 40; index++) cloud.store.set(partKey(`${device}-0`, index), "x");
+      }
+      try {
+        return await original(key, value);
+      } catch (error) {
+        if (error instanceof SyncError && error.kind === "limit") throw new SyncError("transport", "QUOTA_EXCEEDED");
+        throw error;
+      }
+    };
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    cloud.setItem = original;
+    expect(filled).toBe(true);
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    expect(await answers(mac)).toBe(await answers(phone));
+  });
+});
+
+describe("отсечка базы", () => {
+  it("ответ, записанный после отсечки с более поздним временем, не выпадает из сводки и уходит в облако", async () => {
+    const { phone, mac } = await pair();
+    const base = (await phone.db.baseSummary.get("base"))!;
+    await phone.db.baseSummary.put({ ...base, asOf: new Date(clockMs + 3_600_000).toISOString() });
+    const before = await answers(phone);
+    await study(phone, [false], "practice");
+    expect(await answers(phone)).toBe(before + 1);
+    await study(mac, [true]);
+    await mac.sync.exchange();
+    expect((await phone.sync.exchange()).conflict?.kind).toBe("diverged");
   });
 });

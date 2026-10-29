@@ -567,17 +567,24 @@ export class SyncCoordinator {
   /** «Решить позже»: запоминаются версии облака, которые видел учащийся, а не те, что успел найти новый обмен. */
   async deferChoice(ids = remoteIds(this.status.conflict)) {
     if (!ids.length) return;
-    await writeMeta(this.options.database, META.later, JSON.stringify(ids));
-    const conflict = this.status.conflict;
-    const current = remoteIds(conflict);
-    if (conflict && current.length && current.every((id) => ids.includes(id)))
-      this.update({ conflict: { ...conflict, deferred: true } });
+    // Не сохранилось (сбой хранилища) — откладывается хотя бы до перезапуска: окно скрыто, кнопка выбора должна быть.
+    try {
+      await writeMeta(this.options.database, META.later, JSON.stringify(ids));
+    } finally {
+      const conflict = this.status.conflict;
+      const current = remoteIds(conflict);
+      if (conflict && current.length && current.every((id) => ids.includes(id)))
+        this.update({ conflict: { ...conflict, deferred: true } });
+    }
   }
   /** «Выбрать версию»: отложенное окно открывается снова. */
   async reviewChoice() {
-    await writeMeta(this.options.database, META.later, null);
-    const conflict = this.status.conflict;
-    if (conflict?.deferred) this.update({ conflict: { ...conflict, deferred: false } });
+    try {
+      await writeMeta(this.options.database, META.later, null);
+    } finally {
+      const conflict = this.status.conflict;
+      if (conflict?.deferred) this.update({ conflict: { ...conflict, deferred: false } });
+    }
   }
   /**
    * Указатель записан, а ответ облака потерян (тайм-аут, усыплённый WebView): если свой указатель в облаке — начатая
@@ -666,6 +673,8 @@ export class SyncCoordinator {
     clock[device] = Math.max(clock[device] ?? 0, mine?.clock[device] ?? 0, issued) + 1;
     const id = `${device}-${clock[device]}`;
     const now = this.options.now();
+    // Копию могут восстановить, пока публикация идёт: снимается только та отметка, что была при сборке.
+    const restoredAt = await readMeta(database, META.restored);
     // Версия уже применена и сняла метку: любая метка после этого — изменение, которого в версии нет.
     const { snapshot, mark } = override
       ? { snapshot: override, mark: null }
@@ -702,11 +711,12 @@ export class SyncCoordinator {
       format: published.meta.format,
     });
     await database.transaction("rw", database.meta, async () => {
-      await writeMeta(database, META.applied, id);
       await writeMeta(database, META.clock, JSON.stringify(clock));
+      await writeMeta(database, META.publishing, null);
+      if ((await readMeta(database, META.restored)) !== restoredAt) return;
+      await writeMeta(database, META.applied, id);
       await clearDirty(database, mark);
       await writeMeta(database, META.restored, null);
-      await writeMeta(database, META.publishing, null);
     });
     await this.confirm();
     try {
@@ -914,8 +924,15 @@ export class SyncCoordinator {
     };
     const pagehide = () => void urgent();
     const urgent = async () => {
-      // `deactivated` и `visibilitychange` приходят оба: второй полный заход в засыпающем WebView не нужен.
-      if (this.running) return;
+      // `deactivated` и `visibilitychange` приходят оба: второй полный заход в засыпающем WebView не нужен. Но ответ,
+      // ждущий отложенного обмена, таймеру спящего WebView не доверяется — уходит заходом сразу после текущего.
+      if (this.running) {
+        if (pending) {
+          cancel();
+          this.again = true;
+        }
+        return;
+      }
       if (pending || (await readMeta(this.options.database, META.dirty))) {
         cancel();
         void this.exchange({ urgent: true });

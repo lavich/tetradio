@@ -7,6 +7,7 @@ import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { wordRef } from "../../domain/refs";
 import { cardLanguages } from "../../storage/courses";
 import { adoptKnownForeign } from "../../storage/foreign";
+import { PENDING_LESSONS_KEY } from "../../storage/pending";
 import { fillSettings, type CardKind, type LessonItem, type Settings } from "../../domain/types";
 import { syncEvents } from "../../sync/events";
 import { assertCloudUnchanged, type CloudGuard } from "./cloud-check";
@@ -242,9 +243,10 @@ export async function restoreBackup(
       "rw",
       TABLES.map((name) => database.table(name)),
       async () => {
-        // Идентификатор устройства и очередь публикации принадлежат этой установке, а не копии. Начатая публикация и
-        // отложенный выбор относятся к прежнему состоянию: восстановленная копия должна стать конфликтом заново.
-        const stale = new Set([`${SYNC_META_PREFIX}publishing`, `${SYNC_META_PREFIX}later`]);
+        // Идентификатор устройства и очередь публикации принадлежат этой установке, а не копии. Начатая публикация,
+        // отложенный выбор и завершение неустановленных уроков относятся к прежнему состоянию: восстановленная копия
+        // должна стать конфликтом заново, а уроки — завершёнными, как в копии.
+        const stale = new Set([`${SYNC_META_PREFIX}publishing`, `${SYNC_META_PREFIX}later`, PENDING_LESSONS_KEY]);
         const own = (await database.meta.where("key").startsWith(SYNC_META_PREFIX).toArray()).filter(
           (row) => !stale.has(row.key),
         );
@@ -254,7 +256,9 @@ export async function restoreBackup(
             name === "settings"
               ? (items as Settings[]).map(fillSettings)
               : name === "meta"
-                ? (items as { key: string }[]).filter((row) => !row.key.startsWith(SYNC_META_PREFIX))
+                ? (items as { key: string }[]).filter(
+                    (row) => !row.key.startsWith(SYNC_META_PREFIX) || row.key === PENDING_LESSONS_KEY,
+                  )
                 : items;
           await database.table(name).bulkAdd(rows as never[]);
         }
