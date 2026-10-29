@@ -63,7 +63,7 @@
   "devDependencies": {
     "@fission-ai/openspec": "1.13.2",
     "@playwright/test": "^1.63.0",
-    "@sentry/vite-plugin": "^5.4.0",
+    "@sentry/vite-plugin": "^11.8.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
