@@ -542,9 +542,38 @@ test.describe("аудио, копии и облако", () => {
       expect(box.x).toBeGreaterThanOrEqual(frame.x - 1);
       expect(box.x + box.width).toBeLessThanOrEqual(frame.x + frame.width + 1);
     }
-    // «Решить позже» переживает перезапуск; «Выбрать версию» на «Прогрессе» открывает окно снова.
+    await expect(tablet.getByTestId("sync-deferred")).toHaveCount(0);
+    // Отложенный выбор: на «Сегодня» тихая строка открывает окно снова, фокус после «Решить позже» — на ней.
     await dialog.getByRole("button", { name: "Решить позже" }).click();
     await expect(dialog).toHaveCount(0);
+    // Запись «Решить позже» в базу асинхронна: перезагрузка до неё вернула бы окно.
+    await expect
+      .poll(() =>
+        tablet.evaluate(
+          (name) =>
+            new Promise((resolve) => {
+              const open = indexedDB.open(name);
+              open.onsuccess = () => {
+                const get = open.result.transaction("meta").objectStore("meta").get("sync:later");
+                get.onsuccess = () => resolve(get.result?.value ?? null);
+              };
+            }),
+          TG_DB,
+        ),
+      )
+      .not.toBeNull();
+    await tablet.goto("/app/");
+    const line = tablet.getByTestId("sync-deferred");
+    await expect(line).toHaveText("Прогресс не сохраняется в облако — выберите версию", { timeout: 15000 });
+    await tablet.setViewportSize({ width: 360, height: 740 });
+    expect(await tablet.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+    await tablet.setViewportSize({ width: 1024, height: 768 });
+    await line.click();
+    await expect(dialog.getByRole("button", { name: "Продолжить с этой версии" }).first()).toBeVisible();
+    await dialog.getByRole("button", { name: "Решить позже" }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(line).toBeFocused();
+    // «Решить позже» переживает перезапуск; «Выбрать версию» на «Прогрессе» открывает окно снова.
     await tablet.goto("/app/progress");
     const status = tablet.getByTestId("sync-status");
     await expect(status).toHaveAttribute("data-phase", "conflict", { timeout: 15000 });

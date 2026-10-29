@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -30,10 +30,19 @@ import { dexieSource } from "../../storage/queries";
 import { courseReadings } from "../../storage/readings";
 import { sessionPath, startSession } from "../learning/session-actions";
 import { CourseCaption, CourseLessonLine, courseCaption, MoreCourses } from "./CourseLessonLine";
+import { useSyncConflictSeen } from "../../app/deferred";
 import { DayNotes } from "./DayNotes";
 import { lessonLines } from "./lessons";
 import { ReadingSheet } from "./ReadingSheet";
 import css from "./today.module.css";
+
+// Чанк синхронизации не нужен первому кадру: строка появляется, только когда конфликт уже был.
+const DeferredChoice = lazy(() =>
+  import("./DeferredChoice").then(
+    (module) => ({ default: module.DeferredChoice }),
+    () => ({ default: () => null }),
+  ),
+);
 
 /** Ориентир курса — 2–3 занятия в неделю; точек недели не меньше трёх. */
 const WEEK_PLAN = 3;
@@ -62,6 +71,7 @@ export function LanguageToday({
   more?: React.ReactNode;
 }) {
   const spread = useSpread();
+  const conflictSeen = useSyncConflictSeen();
   const today = plan.today;
   const monday = mondayOf(today);
   const main = courses[0];
@@ -131,6 +141,11 @@ export function LanguageToday({
       />
       {courseId && readings && <ReadingSheet readings={readings} primary={!reviewFirst && next === null} />}
       <DayNotes plan={plan} />
+      {conflictSeen && (
+        <Suspense fallback={null}>
+          <DeferredChoice />
+        </Suspense>
+      )}
       {finished ? (
         <>
           <p className={css.finished} data-testid="course-finished">

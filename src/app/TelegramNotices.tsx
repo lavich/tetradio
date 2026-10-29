@@ -110,8 +110,10 @@ export function SyncConflictDialog() {
               sync.dismissChoice();
               const ids = conflict.branches.filter((branch) => !branch.local).map((branch) => branch.id);
               // Без записи окно скрыто до перезапуска, как раньше: выбор от сбоя хранилища не теряется.
-              sync.deferChoice(ids).catch((error: unknown) => console.warn("«Решить позже» не сохранено", error));
-              returnFocus();
+              sync
+                .deferChoice(ids)
+                .catch((error: unknown) => console.warn("«Решить позже» не сохранено", error))
+                .finally(returnFocus);
             }}
           >
             Решить позже
@@ -121,7 +123,13 @@ export function SyncConflictDialog() {
     </AlertDialog>
   );
 }
-/** Окно исчезает целиком, а кнопки, открывшей его, может уже не быть: фокус — на строку статуса синхронизации. */
+/** Окно исчезает целиком, а кнопки, открывшей его, может уже не быть: фокус — на строку статуса или «Сегодня». */
+const FOCUS_AFTER = ["sync-status", "sync-deferred", "today-title"];
 const returnFocus = () =>
-  requestAnimationFrame(() => document.querySelector<HTMLElement>("[data-testid=sync-status]")?.focus());
+  requestAnimationFrame(() => {
+    for (const id of FOCUS_AFTER) {
+      const target = document.querySelector<HTMLElement>(`[data-testid=${id}]`);
+      if (target) return target.focus();
+    }
+  });
 export { readMeta };
