@@ -1,6 +1,5 @@
 import "@fontsource-variable/literata/wght.css";
 import "@fontsource-variable/literata/wght-italic.css";
-import "@fontsource-variable/manrope";
 import "./styles.css";
 import { StrictMode } from "react";
 import { BrowserRouter } from "react-router-dom";
