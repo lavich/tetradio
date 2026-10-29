@@ -1,6 +1,6 @@
 import { State, type Card } from "ts-fsrs";
 import type { CatalogModule } from "../content/course";
-import { isCheckable, KINDS, needsFacts, type AvailabilityContext, type CardFacts } from "./kinds";
+import { isCheckable, isPlanned, needsFacts, type AvailabilityContext, type CardFacts } from "./kinds";
 import type { Voices } from "./language";
 import { unitKey } from "./refs";
 import { scheduler } from "./scheduling";
@@ -158,7 +158,9 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
   const [live, states] = await Promise.all([source.liveKeys(refs), source.statesOf(refs)]);
   const candidates = refs.filter((ref) => live.has(unitKey(ref)) && !states.has(unitKey(ref)));
   const cutoff = reviewCutoff(now, source.timezone());
-  const ahead = await source.dueStates(new Date(cutoff.getTime() - 1), courseId);
+  const ahead = (await source.dueStates(new Date(cutoff.getTime() - 1), courseId)).filter((state) =>
+    isPlanned(state.ref),
+  );
   const due = ahead.filter((state) => isDue(state.card, now, cutoff));
   const wakeAt = new Date(
     Math.min(
@@ -170,11 +172,8 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     ),
   );
   const dueRefs = due.map((state) => state.ref);
-  // Слова и фразы с базы не удаляются, а слово проверяемо всегда: на большой базе план не читает их записи.
-  const [dueLive, facts] = await Promise.all([
-    source.liveKeys(dueRefs.filter((ref) => KINDS[ref.kind].vanishes)),
-    source.factsOf([...candidates, ...dueRefs].filter(needsFacts)),
-  ]);
+  // Слово проверяемо всегда: на большой базе план не читает их записи.
+  const facts = await source.factsOf([...candidates, ...dueRefs].filter(needsFacts));
   const checkable = (ref: LearningRef) => {
     if (!needsFacts(ref)) return true;
     const info = facts.get(unitKey(ref));
@@ -191,14 +190,13 @@ export async function makePlan(source: PlanSource, now: Date, options: PlanOptio
     }),
   );
 
-  const askable = due.filter((state) => !KINDS[state.ref.kind].vanishes || dueLive.has(state.unitKey));
-  for (const state of askable) if (!checkable(state.ref)) unavailable.push(state.ref);
+  for (const state of due) if (!checkable(state.ref)) unavailable.push(state.ref);
   const debt = new Map<string, number>();
   if (debtBefore !== undefined)
-    for (const state of askable)
+    for (const state of due)
       if (state.card.state === State.Review && new Date(state.card.due).getTime() < debtBefore)
         debt.set(state.unitKey, retrievability(state.card, now));
-  const reviews = askable
+  const reviews = due
     .filter((state) => checkable(state.ref))
     .map((state): PlanReview => {
       const forgotten = debt.get(state.unitKey);

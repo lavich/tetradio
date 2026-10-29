@@ -5,17 +5,9 @@
 import Dexie from "dexie";
 import { DEFAULT_PALETTE, isPalette, type PaletteName } from "../content/palettes";
 import { DEFAULT_LANGUAGE, isLanguage, profileOf, type Language, type LanguageProfile } from "../domain/language";
-import { tryParseUnitKey, unitKey } from "../domain/refs";
-import {
-  CARD_KINDS,
-  type CardKind,
-  type LearningRef,
-  type Lesson,
-  type LessonItem,
-  type Session,
-} from "../domain/types";
+import { unitKey } from "../domain/refs";
+import { type CardKind, type LearningRef, type Lesson, type LessonItem, type Session } from "../domain/types";
 import { db, distinctKeys, type AppDatabase } from "./db";
-import { STORED_KINDS } from "./kinds";
 import { lessonCourses } from "./lesson-courses";
 import { zoned } from "./zone";
 import { readPending } from "./pending";
@@ -32,6 +24,30 @@ export const CURRENT_STARTED_LANGUAGE_KEY = "currentStartedLanguage";
 export const HOME_COURSE_KEY = "homeCourse";
 export const PRIMARY_COURSE_KEY = "primaryCourse";
 export const SHELF_COURSE_KEY = "shelfCourse";
+/** Курсы в работе из последнего каталога, JSON. */
+export const UPCOMING_KEY = "upcomingCourses";
+
+export interface UpcomingEntry {
+  id: string;
+  title: string;
+  language: Language;
+  level?: string;
+  goal?: string;
+  after?: string;
+}
+
+export const upcomingCourses = zoned(async function upcomingCourses(
+  database: AppDatabase = db,
+): Promise<UpcomingEntry[]> {
+  try {
+    const raw: unknown = JSON.parse((await database.meta.get(UPCOMING_KEY))?.value ?? "[]");
+    return Array.isArray(raw)
+      ? raw.filter((item: UpcomingEntry) => typeof item?.id === "string" && isLanguage(item.language))
+      : [];
+  } catch {
+    return [];
+  }
+});
 
 export interface CourseEntry {
   id: string;
@@ -318,7 +334,7 @@ const readShelfChoices = zoned(async function readShelfChoices(database: AppData
     return {};
   }
 });
-const rememberShelfCourse = (course: CourseEntry, database: AppDatabase) =>
+const rememberShelfCourse = (course: { id: string; language: Language }, database: AppDatabase) =>
   database.transaction("rw", database.meta, async () =>
     database.meta.put({
       key: SHELF_COURSE_KEY,
@@ -339,8 +355,11 @@ export const shelfCourse = zoned(async function shelfCourse(database: AppDatabas
   ]);
   const own = list.filter((course) => course.language === language);
   const started = own.filter((course) => course.started);
+  const chosen = choices[language ?? ""];
+  if ((await upcomingCourses(database)).some((course) => course.id === chosen && course.language === language))
+    return chosen;
   return (
-    own.find((course) => course.id === choices[language ?? ""]) ??
+    own.find((course) => course.id === chosen) ??
     started.find((course) => course.id === primary && course.installed) ??
     started.find((course) => course.installed) ??
     started[0] ??
@@ -349,7 +368,9 @@ export const shelfCourse = zoned(async function shelfCourse(database: AppDatabas
 });
 
 export async function chooseShelfCourse(courseId: string, database: AppDatabase = db): Promise<void> {
-  const course = (await courses(database)).find((item) => item.id === courseId);
+  const course =
+    (await courses(database)).find((item) => item.id === courseId) ??
+    (await upcomingCourses(database)).find((item) => item.id === courseId);
   if (!course) return;
   await rememberShelfCourse(course, database);
   if ((await shelfLanguage(database)) !== course.language) await setCurrentLanguage(course.language, database);
@@ -377,7 +398,7 @@ export const courseOfCards = zoned(async function courseOfCards(
   database: AppDatabase = db,
 ): Promise<Map<string, string>> {
   if (!unitKeys.length) return new Map();
-  const result = await ownCourses(unitKeys, database);
+  const result = new Map<string, string>();
   const items = await database.lessonItems.where("unitKey").anyOf(unitKeys).toArray();
   const byLesson = await lessonCourses(
     items.map((item) => item.lessonId),
@@ -389,24 +410,6 @@ export const courseOfCards = zoned(async function courseOfCards(
   }
   return result;
 });
-/** Курс карточек видов, которые знают его сами, без связей с уроками. */
-const ownCourses = zoned(async function ownCourses(
-  unitKeys: string[],
-  database: AppDatabase,
-): Promise<Map<string, string>> {
-  const result = new Map<string, string>();
-  const kinds = CARD_KINDS.filter((kind) => STORED_KINDS[kind].coursesOf);
-  if (!kinds.length) return result;
-  const refs = unitKeys.map(tryParseUnitKey);
-  for (const kind of kinds) {
-    const coursesOf = STORED_KINDS[kind].coursesOf!;
-    const ids = refs.flatMap((ref) => (ref?.kind === kind ? [ref.id] : []));
-    if (!ids.length) continue;
-    for (const [id, course] of await coursesOf(ids, database)) result.set(unitKey({ kind, id }), course);
-  }
-  return result;
-});
-
 /** Курс карточек; карточка вне уроков (связь снята обновлением) — у домашнего курса: так её повторение не теряется. */
 export const cardCourses = zoned(async function cardCourses(
   unitKeys: string[],

@@ -266,6 +266,35 @@ describe("платформенный адаптер Telegram", () => {
     adapter.ready();
     expect(app.isExpanded).toBe(true);
   });
+  it("цвет шапки и фона клиента уходит hex-строкой один раз на цвет; старый клиент не трогается", () => {
+    const painted: string[] = [];
+    const paint = {
+      setHeaderColor: (color: string) => painted.push(`header:${color}`),
+      setBackgroundColor: (color: string) => painted.push(`bg:${color}`),
+    };
+    const adapter = telegramAdapter(fakeApp(paint as never).app);
+    adapter.chrome("#f7f7f5");
+    adapter.chrome("#f7f7f5");
+    adapter.chrome("#17212b");
+    expect(painted).toEqual(["header:#f7f7f5", "bg:#f7f7f5", "header:#17212b", "bg:#17212b"]);
+    painted.length = 0;
+    const old = { ...paint, isVersionAtLeast: (version: string) => Number(version) < 6.9 };
+    telegramAdapter(fakeApp(old as never).app).chrome("#f7f7f5");
+    expect(painted).toEqual([]);
+    expect(() => webAdapter().chrome("#f7f7f5")).not.toThrow();
+  });
+  it("отказ setHeaderColor не мешает фону клиента", () => {
+    const painted: string[] = [];
+    const broken = fakeApp({
+      setHeaderColor: () => {
+        throw new Error("WebAppHeaderColorInvalid");
+      },
+      setBackgroundColor: (color: string) => painted.push(color),
+    } as never);
+    telegramAdapter(broken.app).chrome("#f7f7f5");
+    expect(painted).toEqual(["#f7f7f5"]);
+    expect(takeConsole("warn")).toEqual([["Telegram API отклонил вызов", expect.any(Error)]]);
+  });
   it("активность: сворачивание и возврат доходят до слушателей, isActive читается, клиент без этих событий не ломает адаптер", () => {
     const { app, fire } = fakeApp();
     const adapter = telegramAdapter(app);
@@ -322,6 +351,17 @@ describe("переменные оболочки", () => {
     const zero = fakeApp({ viewportStableHeight: 0 } as never);
     setPlatform(telegramAdapter(zero.app), zero.app);
     expect(root.style.getPropertyValue("--app-height")).toBe("");
+  });
+  it("шапка клиента получает вычисленный фон страницы; прозрачный фон не передаётся", () => {
+    const painted: string[] = [];
+    const { app } = fakeApp({ setHeaderColor: (color: string) => painted.push(color) } as never);
+    document.body.style.backgroundColor = "transparent";
+    setPlatform(telegramAdapter(app), app);
+    expect(painted).toEqual([]);
+    document.body.style.backgroundColor = "#17212b";
+    applyEnvironment();
+    expect(painted).toEqual(["#17212b"]);
+    document.body.style.backgroundColor = "";
   });
 });
 

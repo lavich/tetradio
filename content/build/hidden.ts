@@ -23,6 +23,9 @@ export function withoutHidden(whole: Whole, hidden: Set<string>, sources: Conten
     catalog: {
       ...whole.catalog,
       courses: whole.catalog.courses.filter((course) => visible(course.id)),
+      ...(whole.catalog.upcoming?.some((course) => visible(course.id))
+        ? { upcoming: whole.catalog.upcoming.filter((course) => visible(course.id)) }
+        : { upcoming: undefined }),
       lessons: whole.catalog.lessons.filter((entry) => visible(entry.courseId)),
       ...(whole.catalog.modules?.some((module) => visible(module.courseId))
         ? { modules: whole.catalog.modules.filter((module) => visible(module.courseId)) }

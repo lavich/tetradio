@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ExerciseBlock } from "../../../content/course";
-import { mistakesOf, scoreExercise, type ItemResult } from "../../../domain/course";
+import { scoreExercise, type ItemResult } from "../../../domain/course";
 import { spokenAnswer, spokenChoice } from "../../../domain/spoken";
 import { shuffle } from "../../../domain/learning";
 import type { BlockProgress } from "../../../domain/types";
@@ -67,7 +67,6 @@ export function Exercise({
       done: true,
       answers,
       score: { correct: result.correct, almost: result.almost, total: result.total },
-      mistakes: mistakesOf(block, answers, result),
     });
     checking.current = false;
     if (saved) setChecked(true);

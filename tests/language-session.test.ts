@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { State } from "ts-fsrs";
 import { makeLanguagePlan, makeSession } from "../src/domain/learning";
 import { SESSION_SIZE } from "../src/domain/session";
 import { wordRef } from "../src/domain/refs";
@@ -85,16 +86,43 @@ describe("занятие языка — карточки его курсов в 
     expect(count(full.items, (item) => item.isNew)).toBe(0);
     expect(full.items.every((item) => course(item) === "it")).toBe(true);
   });
-  it("ошибки одного курса — не больше половины мест повторений занятия языка", async () => {
+  it("накопленные ошибки урока не занимают мест повторений занятия языка", async () => {
     const mistakes = Array.from({ length: 20 }, (_, i) => mistakeOf("it", i));
     const data = languageSnapshot({
       it: { mistakes, states: () => mistakes.map((item) => reviewOf(mistakeKey(item), "2026-09-10T09:00:00Z")) },
       travel: { words: 15, states: lastDue(15, "2026-09-14T09:00:00Z") },
     });
     const session = await makeSession({ source: fromSnapshot(data), now: NOW, courseIds: english, random: seeded(4) });
-    expect(session.items).toHaveLength(SESSION_SIZE);
-    expect(count(session.items, (item) => item.ref.kind === "mistake")).toBe(10);
-    expect(count(session.items, (item) => course(item) === "travel")).toBe(10);
+    expect(session.items).toHaveLength(15);
+    expect(count(session.items, (item) => item.ref.kind === "mistake")).toBe(0);
+    expect(count(session.items, (item) => course(item) === "travel")).toBe(15);
+  });
+  it("300 просроченных ошибок и ошибка с коротким шагом не меняют повторения и пробуждение плана", async () => {
+    const mistakes = Array.from({ length: 300 }, (_, i) => mistakeOf("it", i));
+    const soon = mistakeOf("it", 300);
+    const base = { travel: { words: 12, states: lastDue(12, "2026-09-14T09:00:00Z") } };
+    const clean = await makeLanguagePlan(fromSnapshot(languageSnapshot({ it: {}, ...base })), NOW, {
+      courseIds: english,
+    });
+    const noisy = await makeLanguagePlan(
+      fromSnapshot(
+        languageSnapshot({
+          it: {
+            mistakes: [...mistakes, soon],
+            states: () => [
+              ...mistakes.map((item) => reviewOf(mistakeKey(item), "2026-09-10T09:00:00Z")),
+              reviewOf(mistakeKey(soon), "2026-09-15T09:10:00Z", { state: State.Learning }),
+            ],
+          },
+          ...base,
+        }),
+      ),
+      NOW,
+      { courseIds: english },
+    );
+    expect(noisy.reviews).toHaveLength(12);
+    expect(noisy.reviews.map((review) => review.ref)).toEqual(clean.reviews.map((review) => review.ref));
+    expect(noisy.wakeAt).toEqual(clean.wakeAt);
   });
   it("варианты слова и фразы — из его курса, не из другого курса занятия", async () => {
     const data = languageSnapshot({

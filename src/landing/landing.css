@@ -520,6 +520,11 @@
   letter-spacing: -0.02em;
   margin: 0;
 }
+.lp-legal {
+  color: var(--muted-foreground);
+  font-size: 14px;
+  text-decoration: underline;
+}
 
 @media (max-width: 1023px) {
   .lp-open {

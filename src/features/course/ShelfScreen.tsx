@@ -5,7 +5,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Screen } from "../../app/Screen";
 import { ShareCourseButton } from "../../shared/ShareCourseButton";
 import { moduleViews, type ModuleView } from "../../storage/course";
-import { chooseShelfCourse, languages, shelfCourse, shelfLanguage, type CourseEntry } from "../../storage/courses";
+import {
+  chooseShelfCourse,
+  languages,
+  shelfCourse,
+  shelfLanguage,
+  upcomingCourses,
+  type CourseEntry,
+} from "../../storage/courses";
 import { db } from "../../storage/db";
 import { LanguageSwitch, ShelfCourseSwitch } from "../../shared/CourseSwitch";
 import { courseName, useCoursePalette } from "../../shared/courses";
@@ -20,6 +27,7 @@ import { coverColor, mutedCover } from "../../shared/notebook";
 import { CourseStart } from "../today/FirstRun";
 import { checkpointLabels } from "./checkpoints";
 import { ExamLine } from "./ExamLine";
+import { UpcomingCourse } from "./UpcomingCourse";
 import base from "./course.module.css";
 import css from "./shelf.module.css";
 
@@ -34,7 +42,8 @@ export function CourseScreen() {
   const shown = useLiveQuery(async () => {
     const code = await shelfLanguage();
     const language = (await languages()).find((entry) => entry.code === code) ?? null;
-    return { language, course: await shelfCourse() };
+    const upcoming = (await upcomingCourses()).filter((course) => course.language === code);
+    return { language, course: await shelfCourse(), upcoming };
   }, []);
   const language = shown?.language;
   const [status, setStatus] = useState("");
@@ -53,16 +62,25 @@ export function CourseScreen() {
   if (shown === undefined || language === undefined) return <Screen />;
   const list = language?.courses ?? [];
   const selected = list.find((course) => course.id === shown.course);
+  const next = shown.upcoming.find((course) => course.id === shown.course);
   const unstarted = list.filter((course) => !course.started).map((course) => course.id);
   return (
     <Screen>
       <h1 className="sr-only">Курс</h1>
       <LanguageSwitch shelf />
-      <ShelfCourseSwitch courses={list} value={shown.course} />
+      <ShelfCourseSwitch courses={list} upcoming={shown.upcoming} value={shown.course} />
       <p className="sr-only" role="status" data-testid="shelf-status">
         {status}
       </p>
-      {selected?.started ? (
+      {next ? (
+        <UpcomingCourse
+          key={next.id}
+          course={next}
+          previousLevel={list.find((course) => course.id === next.after)?.level}
+          focused={next.id === focus}
+          onFocused={() => setFocus(undefined)}
+        />
+      ) : selected?.started ? (
         <CourseShelf
           key={selected.id}
           course={selected}

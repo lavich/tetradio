@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
+import { isPlanned } from "../../domain/kinds";
 import { DEFAULT_LANGUAGE, PROFILES } from "../../domain/language";
 import { addDays, deviceTimezone, formatDay, isDue, reviewCutoff, studyDay } from "../../domain/learning";
 import type { LearningRef, ReviewEvent } from "../../domain/types";
@@ -51,7 +52,7 @@ export function ResultScreen() {
     PROFILES[DEFAULT_LANGUAGE];
   const result = useLiveQuery(async () => {
     const events = id ? await db.events.where("sessionId").equals(id).toArray() : [];
-    const mistakes = events.filter(isMistake);
+    const mistakes = events.filter((event) => isMistake(event) && isPlanned(event.ref));
     const mistakeRefs = [...new Map(mistakes.map((event) => [event.unitKey, event.ref])).values()];
     return { events, mistakes, mistakeRefs, states: await statesOf(mistakeRefs) };
   }, [id]);

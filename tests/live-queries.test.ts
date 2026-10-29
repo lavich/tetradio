@@ -7,14 +7,7 @@ import { makePlan, makeSession, nextState } from "../src/domain/learning";
 import { unitKey, wordRef } from "../src/domain/refs";
 import { progress } from "../src/domain/stats";
 import { wordSources } from "../src/features/words/word-exercises";
-import {
-  courseLesson,
-  lessonDays,
-  lessonMistakes,
-  moduleViews,
-  nextCourseLesson,
-  reviewedOn,
-} from "../src/storage/course";
+import { courseLesson, lessonDays, moduleViews, nextCourseLesson, reviewedOn } from "../src/storage/course";
 import {
   cardsInCourse,
   languageSession,
@@ -31,7 +24,7 @@ import { db, type StoredWord } from "../src/storage/db";
 import { dictionary, languageDictionary } from "../src/storage/dictionary";
 import { submitAnswer } from "./helpers/ops";
 import { courseProgress, languageProgress } from "../src/storage/progress";
-import { dexieSource, mistakeCount } from "../src/storage/queries";
+import { dexieSource } from "../src/storage/queries";
 import { languagePlan, sessionHomeLanguage, todayCourses, todayLanguage } from "../src/storage/today";
 import { PROFILES } from "../src/domain/language";
 import { markRead, moduleReadings, courseReadings, languageReadings, readingPage } from "../src/storage/readings";
@@ -129,7 +122,6 @@ describe("живые запросы отслеживают чтения посл
       return (await moduleViews(own?.courseId)).find((item) => item.module.id === "m01") ?? null;
     },
     "урок: страница": () => courseLesson("m01-1"),
-    "урок: ошибки": () => lessonMistakes("m01-1"),
     "урок: следующий": () => nextCourseLesson(COURSE),
     "урок: язык": async () => {
       const courseId = (await lessonCourses(["m01-1"])).get("m01-1");
@@ -146,7 +138,6 @@ describe("живые запросы отслеживают чтения посл
     "«Прогресс»": () => courseProgress(now, tz, COURSE),
     "«Прогресс»: язык": async () => languageProgress(now, tz, await currentLanguage()),
     "«Прогресс»: статистика": () => progress(dexieSource(), now),
-    "«Прогресс»: ошибки": () => mistakeCount([COURSE]),
     "«Прогресс»: трудные": async () => (await cardsInCourse([key()], [COURSE])).size,
     "слово: упражнения": () => wordSources(wordId),
     "слово: навыки": () => dexieSource().skillsOf({ kind: "word", word }),

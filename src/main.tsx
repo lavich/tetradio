@@ -3,9 +3,10 @@ import "@fontsource-variable/literata/wght-italic.css";
 import "@fontsource-variable/manrope";
 import "./styles.css";
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { registerSW } from "virtual:pwa-register";
+import { appRoot } from "./app/root";
+import { erasePhase } from "./storage/erase-marker";
 import { App } from "./app/App";
 import { autoUpdate, updateReady } from "./app/auto-update";
 import { afterStartup, afterStartupOrNeeded, loadSync } from "./app/deferred";
@@ -21,6 +22,7 @@ import { installEarlyHandlers, reportError, setReportingEnabled } from "./report
 import { bindReportingToSettings } from "./reporting/settings";
 import { db, ensureDefaults } from "./storage/db";
 import { adoptKnownForeign } from "./storage/foreign";
+import { dropIgnoredItems } from "./storage/ops";
 import { launchProfile, MOCK_USER, type Profile } from "./storage/profile";
 
 // Ранние обработчики ошибок ставятся до всего остального: отказы запуска копятся до загрузки SDK отчётов.
@@ -68,7 +70,7 @@ function setupServiceWorker(wanted: boolean) {
   }
 }
 
-const root = createRoot(document.getElementById("root")!);
+const root = appRoot();
 let stopped = false;
 let cancelSyncLoad = () => {};
 const stop = (reason: Exclude<LaunchStop, "outside-telegram">) => {
@@ -93,6 +95,14 @@ if (launch.kind === "blocked") {
 } else start(launch);
 
 function start(profile: Profile) {
+  const erasing = erasePhase(db.name);
+  if (erasing) {
+    void Promise.all([import("./storage/erase"), import("./app/erase-deps")]).then(
+      ([erase, deps]) => erase.resumeErase(erasing, deps.startupEraseDeps()),
+      () => root.render(<p className="p-6">Не удалось завершить удаление данных. Перезапустите приложение.</p>),
+    );
+    return;
+  }
   // Настройка отчётов читается из открытой базы. Если база не открылась, настройку прочитать нельзя —
   // отчёт об этом отказе уходит по умолчанию; это единственный случай без проверки настройки.
   // Без базы приложение работать не может: вместо пустой страницы показывается понятное сообщение с перезапуском.
@@ -122,6 +132,7 @@ function start(profile: Profile) {
   const database = opened
     .then(() => ensureDefaults())
     .then(() => adoptKnownForeign(db))
+    .then(() => dropIgnoredItems(db).catch((error) => reportError(error, { category: "storage" })))
     .catch((error) => console.error("Не удалось открыть локальную базу", error));
   // Подписанные курсы догружаются следом за каталогом: новый урок появляется сам, медиа остаётся по запросу.
   refreshCatalog()

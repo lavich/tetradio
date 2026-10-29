@@ -1,9 +1,6 @@
 import type { CardFacts } from "../domain/kinds";
-import type { LessonBlock } from "../content/course";
-import type { CardKind, InstalledPackage, MistakeItem, SessionCard } from "../domain/types";
+import type { CardKind, InstalledPackage, SessionCard } from "../domain/types";
 import type { AppDatabase } from "./db";
-import { lessonCourses } from "./lesson-courses";
-import { lessonOutlines, mistakeId, mistakeIdsOf, reviewable } from "./outlines";
 import { zoned } from "./zone";
 
 /**
@@ -20,11 +17,9 @@ export interface StoredKind {
   count(database: AppDatabase): Promise<number>;
   /** Карточки вида, которые ставит пакет урока. */
   packageIds(pack: PackageCards): string[];
-  /** Курс карточек вида, у которых нет связей с уроками; без него курс берётся из связей `lessonItems`. */
-  coursesOf?: (ids: string[], database: AppDatabase) => Promise<Map<string, string>>;
 }
 
-type PackageCards = Pick<InstalledPackage, "words" | "phrases"> & { id: string; blocks?: LessonBlock[] };
+type PackageCards = Pick<InstalledPackage, "words" | "phrases">;
 
 const word: StoredKind = {
   tables: ["words"],
@@ -62,58 +57,14 @@ const phrase: StoredKind = {
   packageIds: (pack) => pack.phrases.map((card) => card.id),
 };
 
-/** Пункты по идентификаторам из установленных пакетов; убранного пункта в ответе нет. */
-const mistakeItems = zoned(async function mistakeItems(
-  ids: string[],
-  database: AppDatabase,
-): Promise<Map<string, MistakeItem>> {
-  const wanted = new Set(ids);
-  const lessonIds = [...new Set(ids.map((id) => id.split("/")[0]))];
-  const items = new Map<string, MistakeItem>();
-  for (const pack of await database.packages.bulkGet(lessonIds)) {
-    for (const block of pack?.blocks ?? []) {
-      if (!pack || !reviewable(block)) continue;
-      for (const item of block.items) {
-        const id = mistakeId(pack.lessonId, block.id, item.id);
-        if (!wanted.has(id)) continue;
-        items.set(id, {
-          id,
-          lessonId: pack.lessonId,
-          format: block.format,
-          instruction: block.instruction,
-          prompt: item.prompt,
-          ...(block.format === "choice" ? { options: item.options } : block.bank ? { options: block.bank } : {}),
-          answer: item.answer,
-          ...(item.explanation ? { explanation: item.explanation } : {}),
-          ...(item.audioAssetId ? { audioAssetId: item.audioAssetId } : {}),
-        });
-      }
-    }
-  }
-  return items;
-});
+/** Ошибки урока больше не создаются; состояния прежних версий лежат как есть, без содержимого и без связи с пакетом. */
 const mistake: StoredKind = {
-  tables: ["packages"],
-  presentIds: zoned(async (ids, database) => {
-    const wanted = [...new Set(ids)];
-    const outlines = await lessonOutlines([...new Set(wanted.map((id) => id.split("/")[0]))], database);
-    const present = new Set(outlines.flatMap((outline) => [...(outline?.mistakes ?? [])]));
-    return wanted.filter((id) => present.has(id));
-  }),
-  contents: zoned(async (ids, database) =>
-    [...(await mistakeItems(ids, database)).values()].map((item) => ({ kind: "mistake" as const, mistake: item })),
-  ),
-  facts: zoned(async (ids) => new Map(ids.map((id) => [id, { kind: "mistake" as const }]))),
-  count: (database) => database.cardStates.where("ref.kind").equals("mistake").count(),
-  packageIds: (pack) => mistakeIdsOf(pack.id, pack.blocks),
-  // Курс ошибки — курс её урока: связей с уроками в `lessonItems` у неё нет.
-  coursesOf: zoned(async (ids, database) => {
-    const courses = await lessonCourses(
-      ids.map((id) => id.split("/")[0]),
-      database,
-    );
-    return new Map(ids.flatMap((id) => (courses.has(id.split("/")[0]) ? [[id, courses.get(id.split("/")[0])!]] : [])));
-  }),
+  tables: [],
+  presentIds: async (ids) => ids,
+  contents: async () => [],
+  facts: async (ids) => new Map(ids.map((id) => [id, { kind: "mistake" as const }])),
+  count: async () => 0,
+  packageIds: () => [],
 };
 
 export const STORED_KINDS: Record<CardKind, StoredKind> = { word, phrase, mistake };

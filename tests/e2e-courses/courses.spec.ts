@@ -477,26 +477,17 @@ const completeLesson = (page: Page, lessonId: string) =>
     db.close();
   }, lessonId);
 
-test("«Все тексты» открывает раздел основного курса, даже если выбран другой; у английского тексты закрыты", async ({
-  page,
-}) => {
+test("«Чтение» показывает тексты выбранного языка: у английского закрыты, у греческого открыты", async ({ page }) => {
   await installBoth(page);
   await completeLesson(page, "m01-1");
-  await page.goto("/app/words");
-  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский" }).click();
-  await expect(page.getByText("the bus", { exact: true })).toBeVisible();
-
-  await page.goto("/app/");
-  await page.getByTestId("reading-all").click();
-  await expect(page).toHaveURL(/\/app\/reading$/);
-  await expect(
-    page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Греческий" }),
-  ).toHaveAttribute("aria-checked", "true");
-  await expect(page.getByRole("link", { name: /Η Άννα/ })).toBeVisible();
-
-  await page.getByRole("radiogroup", { name: "Язык" }).getByRole("radio", { name: "Английский" }).click();
+  await page.goto("/app/reading");
+  const languages = page.getByRole("radiogroup", { name: "Язык" });
+  await languages.getByRole("radio", { name: "Английский" }).click();
   await expect(page.getByText("Ещё 1 текст откроется после урока.")).toBeVisible();
   await expect(page.getByRole("link", { name: /Η Άννα/ })).toHaveCount(0);
+
+  await languages.getByRole("radio", { name: "Греческий" }).click();
+  await expect(page.getByRole("link", { name: /Η Άννα/ })).toBeVisible();
 });
 
 test("лист «Чтение» только у основного курса: у строки второго курса его нет, у английского основного — свой", async ({

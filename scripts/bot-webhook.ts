@@ -11,7 +11,7 @@ interface Result {
 interface Answer {
   ok: boolean;
   description?: string;
-  result?: { url?: string; pending_update_count?: number; last_error_message?: string };
+  result?: { url?: string; pending_update_count?: number; max_connections?: number; last_error_message?: string };
 }
 
 const SECRET_FORMAT = /^[A-Za-z0-9_-]{1,256}$/;
@@ -57,12 +57,15 @@ export async function webhook(args: string[], env: Env, request: typeof fetch = 
         url: env.WEBHOOK_URL,
         secret_token: env.WEBHOOK_SECRET,
         allowed_updates: ["message"],
+        // Альбом — несколько обновлений: параллельная доставка создала бы по теме на каждое фото.
+        max_connections: 1,
         drop_pending_updates: true,
       });
   if (!changed) return result;
   const info = (await call("getWebhookInfo"))?.result;
   if (!info) return result;
   result.out.push(`Вебхук: ${info.url || "не задан"}`, `Ожидают доставки: ${info.pending_update_count ?? 0}`);
+  if (info.max_connections !== undefined) result.out.push(`Соединений: ${info.max_connections}`);
   if (info.last_error_message) result.out.push(hide(`Последняя ошибка доставки: ${info.last_error_message}`));
   return result;
 }

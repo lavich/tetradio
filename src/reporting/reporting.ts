@@ -1,3 +1,4 @@
+import { deleteDatabase } from "../storage/delete-database";
 import { launchContext } from "../platform/launch";
 import { LIFECYCLE_CATEGORY } from "./scrub";
 
@@ -114,9 +115,13 @@ export function lifecycle(message: string, data: LifecycleCrumb["data"] = {}) {
   crumbs.push(crumb);
 }
 
-function tags(): Record<string, string> {
+/** Политика конфиденциальности перечисляет эти метки; расхождение ловит `tests/privacy-page.test.ts`. */
+export const REPORT_TAGS = ["env", "app.version", "app.build", "tg.version", "tg.platform", "report.category"] as const;
+export type ReportTags = Partial<Record<(typeof REPORT_TAGS)[number], string>>;
+
+function tags(): ReportTags {
   const launch = launchContext();
-  const result: Record<string, string> = { env: launch.kind, "app.version": APP_VERSION, "app.build": APP_BUILD };
+  const result: ReportTags = { env: launch.kind, "app.version": APP_VERSION, "app.build": APP_BUILD };
   if (launch.kind === "telegram") {
     if (launch.version) result["tg.version"] = launch.version;
     if (launch.platform) result["tg.platform"] = launch.platform;
@@ -177,6 +182,19 @@ export function setReportingEnabled(enabled: boolean) {
         console.warn("Отчёты об ошибках недоступны", error);
       });
   });
+}
+
+/** Очередь удаляется дождавшись: удаление данных перезапускает приложение сразу после. */
+export async function clearReportQueue(): Promise<void> {
+  state = "off";
+  pending = [];
+  crumbs = [];
+  removeEarly();
+  const current = sdk;
+  sdk = null;
+  generation++;
+  if (current) await current.close().catch(() => undefined);
+  await deleteDatabase(OFFLINE_DB, 5_000);
 }
 
 /** Только для тестов: ранние отчёты и крошки в очереди. */

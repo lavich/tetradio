@@ -269,8 +269,7 @@ test("урок курса: задания с ключом, чтение, ауд�
   await page.getByRole("button", { name: "К итогу" }).click();
   await expect(page.getByRole("heading", { name: "Урок пройден" })).toBeVisible();
   await expect(page.getByRole("list", { name: "Задания урока" }).getByRole("listitem")).toHaveCount(5);
-  // Ошибка в «Формах είμαι» ушла в повторение; ошибки в заданиях к текстам — нет.
-  await expect(page.getByTestId("lesson-mistakes")).toHaveText("Ошибки урока в повторении: 1");
+  await expect(page.getByText("Ошибки урока в повторении")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Следующий урок/ }).first()).toBeVisible();
   const lessonUrl = page.url();
   await page.getByRole("button", { name: "К модулю" }).click();
@@ -294,6 +293,13 @@ test("урок курса: задания с ключом, чтение, ауд�
 
   await page.goto("/app/progress");
   await expect(page.getByTestId("week")).toHaveText("На этой неделе: 1 занятие курса.");
+  await expect(page.getByRole("region", { name: "Недели с начала занятий" }).getByRole("listitem")).toHaveText([
+    /Эта неделя: уроки в 1 день/,
+  ]);
+  const viewport = page.viewportSize()!;
+  await page.setViewportSize({ width: 360, height: 780 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+  await page.setViewportSize(viewport);
 
   // Пройденный урок отдаёт карточки в повторение; следующий шаг курса — контрольная модуля.
   await page.goto("/app/");
@@ -414,7 +420,7 @@ test("«Сегодня» на широком экране — разворот: 
   await page.setViewportSize({ width: 1440, height: 900 });
   const module = page.getByRole("region", { name: "Модуль 1" });
   await expect(module.getByRole("link", { name: /Знакомство и είμαι/ })).toBeVisible();
-  await expect(module.getByText("эта неделя")).toBeVisible();
+  await expect(module.getByText("эта неделя")).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(module).toHaveCount(0);
   await expect(page.getByTestId("course-next")).toContainText("Начать урок");

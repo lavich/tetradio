@@ -8,7 +8,7 @@ import {
   useTodayLanguage,
 } from "../../shared/courses";
 import { useInstalledCount, useLanguagePlan } from "../../shared/store";
-import { CourseStart, OFFLINE_HINT } from "./FirstRun";
+import { CourseStart } from "./FirstRun";
 
 // Блоки языков нужны, только когда уроки уже на устройстве: их код не входит в стартовый граф первого запуска и
 // грузится, как только известно, что уроки есть, — параллельно с планом дня, которого экран и так ждёт.
@@ -39,12 +39,7 @@ export function TodayScreen() {
   if (installed === 0)
     return (
       <Screen>
-        <h1 data-testid="today-title">Выберите курс</h1>
-        <p className="mb-1 text-muted-foreground">
-          Курсы языков с уроками по программе и ежедневным повторением карточек
-        </p>
-        <p className="mt-0 mb-6 text-sm text-muted-foreground">{OFFLINE_HINT}</p>
-        <CourseStart hint={false} />
+        <CourseStart intro hint={false} />
       </Screen>
     );
   if (allPaused)

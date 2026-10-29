@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Screen } from "../../app/Screen";
 import { BackupSection, REPORT_BOUNDARIES } from "../backup/BackupSection";
+import { DeleteData } from "../backup/DeleteData";
 import { useHapticsSetting } from "../../platform/haptics";
 import { launchContext } from "../../platform/launch";
+import { feedbackBot } from "../../platform/feedback";
+import { FeedbackButton } from "../feedback/FeedbackButton";
+import { PrivacyLink } from "./PrivacyLink";
 import { useLaunchMode, usePlatform } from "../../platform/platform";
 import { Button } from "@/components/ui/button";
 import { setPrimaryCourse, usePrimaryCourse, useStartedCourses } from "../../shared/courses";
@@ -67,6 +71,7 @@ export function SettingsScreen() {
 
       <Saving />
       <BackupSection />
+      <DeleteData />
 
       <section aria-labelledby="reports" className={css.section}>
         <h2 id="reports" className={css.heading}>
@@ -100,7 +105,20 @@ export function SettingsScreen() {
         </details>
       </section>
 
+      {feedbackBot() && (
+        <section aria-labelledby="feedback" className={css.section}>
+          <h2 id="feedback" className={css.heading}>
+            Обратная связь
+          </h2>
+          <p className={css.note}>Вопрос, ошибка в уроке или идея — напишите автору, ответ придёт в чат с ботом.</p>
+          <FeedbackButton reportId={null} className="mt-2 w-auto self-start" />
+        </section>
+      )}
+
       <About />
+      <p className={css.note}>
+        <PrivacyLink />
+      </p>
     </Screen>
   );
 }

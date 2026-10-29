@@ -7,7 +7,7 @@ const env = {
   WEBHOOK_URL: "https://tetradio-bot.example.workers.dev/",
   WEBHOOK_SECRET: "a".repeat(64),
 };
-const INFO = { ok: true, result: { url: env.WEBHOOK_URL, pending_update_count: 0 } };
+const INFO = { ok: true, result: { url: env.WEBHOOK_URL, pending_update_count: 0, max_connections: 1 } };
 
 function telegram(answers: Record<string, unknown>) {
   const calls: { method: string; body: Record<string, unknown> }[] = [];
@@ -32,9 +32,11 @@ describe("регистрация вебхука", () => {
       url: env.WEBHOOK_URL,
       secret_token: env.WEBHOOK_SECRET,
       allowed_updates: ["message"],
+      max_connections: 1,
       drop_pending_updates: true,
     });
     expect(printed(result)).toContain(env.WEBHOOK_URL);
+    expect(printed(result)).toContain("Соединений: 1");
     expect(printed(result)).not.toContain(TOKEN);
   });
 

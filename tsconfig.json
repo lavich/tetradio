@@ -15,7 +15,7 @@
     "allowImportingTsExtensions": true
   },
   "include": [
-    "bot/worker.ts",
+    "bot/*.ts",
     "src",
     "tests",
     "content",

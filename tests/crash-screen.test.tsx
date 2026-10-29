@@ -3,6 +3,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { Recovery } from "../src/app/Recovery";
+import { CrashScreen } from "../src/app/CrashScreen";
+import { launchContext, resetLaunchContext } from "../src/platform/launch";
 import { pendingReports, resetReporting } from "../src/reporting/reporting";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -20,6 +22,10 @@ afterEach(() => {
   container = null;
   resetReporting();
   vi.restoreAllMocks();
+  window.location.hash = "";
+  sessionStorage.clear();
+  resetLaunchContext();
+  vi.unstubAllEnvs();
 });
 
 describe("экран сбоя", () => {
@@ -91,5 +97,45 @@ describe("экран сбоя", () => {
     const shown = container.querySelector('[data-testid="diagnostics"]');
     expect(shown?.textContent).toContain("Отчёт: не отправлен"); // без адреса приёма отчёта нет
     expect(shown?.textContent).not.toContain("σπίτι");
+  });
+});
+
+describe("«Написать автору» на экране сбоя", () => {
+  const REPORT = "0123456789abcdef0123456789abcdef";
+  const screen = (reportId: string | null) => (
+    <CrashScreen
+      title="Сбой"
+      description="Что-то сломалось"
+      error={new Error("x")}
+      reportId={reportId}
+      testId="crash"
+    />
+  );
+
+  it("без отчёта — feedback, отчёт, пришедший после показа экрана, попадает в ссылку", () => {
+    vi.stubEnv("VITE_FEEDBACK_URL", "");
+    window.location.hash = `#tgWebAppPlatform=ios&tgWebAppData=${encodeURIComponent(`user=${JSON.stringify({ id: 7 })}`)}`;
+    resetLaunchContext();
+    const popup = vi.spyOn(window, "open").mockImplementation(() => null);
+    container = document.body.appendChild(document.createElement("div"));
+    root = createRoot(container);
+    act(() => root!.render(screen(null)));
+    const button = () =>
+      [...container!.querySelectorAll("button")].find((item) => item.textContent === "Написать автору")!;
+    act(() => button().click());
+    act(() => root!.render(screen(REPORT)));
+    act(() => button().click());
+    const bot = launchContext().bot;
+    expect(popup.mock.calls.map((call) => call[0])).toEqual([
+      `https://t.me/${bot}?start=feedback`,
+      `https://t.me/${bot}?start=fb_${REPORT}`,
+    ]);
+  });
+
+  it("вне Telegram без бота сборки кнопки нет", () => {
+    container = document.body.appendChild(document.createElement("div"));
+    root = createRoot(container);
+    act(() => root!.render(screen(REPORT)));
+    expect(container.textContent).not.toContain("Написать автору");
   });
 });

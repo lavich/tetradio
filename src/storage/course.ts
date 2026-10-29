@@ -5,13 +5,11 @@
 import type { CatalogModule, LessonBlock, LessonKind } from "../content/course";
 import { cardRef, decodeMarks, READING_PREFIX, type BlockMarks } from "../content/schema";
 import { lessonDone, tallyOf, type LessonTally } from "../domain/course";
-import { DAY_STARTS_AT, nextState, studyDay, zonedStart } from "../domain/learning";
-import { unitKey } from "../domain/refs";
-import { Rating } from "ts-fsrs";
+import { isPlanned } from "../domain/kinds";
+import { DAY_STARTS_AT, studyDay, zonedStart } from "../domain/learning";
 import type { BlockProgress, Lesson, StoredModule, VerbGroup } from "../domain/types";
 import { cardsInCourse, lessonCourses, primaryCourse } from "./courses";
 import { db, type AppDatabase } from "./db";
-import { STORED_KINDS } from "./kinds";
 import { announceChange, markChanged } from "./ops";
 import { lessonOutlines } from "./outlines";
 import { zoned } from "./zone";
@@ -24,65 +22,40 @@ export const blockProgressOf = zoned(async function blockProgressOf(lessonId: st
 });
 
 export type BlockPatch = Partial<Omit<BlockProgress, "key" | "lessonId" | "blockId" | "updatedAt">> & {
-  /** Неверные пункты задания: из них рождаются карточки ошибок; в запись блока не идут. */
-  mistakes?: string[];
   /** Запись без объявления изменения синхронизации: черновик по ходу набора; в запись блока не идёт. */
   quiet?: boolean;
 };
 /**
  * Сохраняет выполнение блока поверх прежнего: повторная проверка задания заменяет ответы и счёт.
- * Неверный пункт без карточки получает состояние «снова» — так он приходит в ближайшее повторение.
  * События ответа нет: урок — не занятие, и «Сегодня» не должно счесть его повторением.
  */
 export async function saveBlockProgress(
   lessonId: string,
   blockId: string,
-  { mistakes = [], quiet = false, ...patch }: BlockPatch,
+  { quiet = false, ...patch }: BlockPatch,
   database: AppDatabase = db,
   now = new Date(),
 ): Promise<BlockProgress> {
-  const saved = await database.transaction(
-    "rw",
-    database.blockProgress,
-    database.meta,
-    database.cardStates,
-    async () => {
-      for (const itemId of mistakes) {
-        const ref = { kind: "mistake" as const, id: `${lessonId}/${blockId}/${itemId}` };
-        if (!(await database.cardStates.get(unitKey(ref))))
-          await database.cardStates.put(nextState(undefined, ref, Rating.Again, now));
-      }
-      const key = blockKey(lessonId, blockId);
-      const previous = await database.blockProgress.get(key);
-      const row: BlockProgress = {
-        done: false,
-        ...previous,
-        ...patch,
-        key,
-        lessonId,
-        blockId,
-        updatedAt: now.toISOString(),
-      };
-      await database.blockProgress.put(row);
-      await markChanged(database);
-      return row;
-    },
-  );
+  const saved = await database.transaction("rw", database.blockProgress, database.meta, async () => {
+    const key = blockKey(lessonId, blockId);
+    const previous = await database.blockProgress.get(key);
+    const row: BlockProgress = {
+      done: false,
+      ...previous,
+      ...patch,
+      key,
+      lessonId,
+      blockId,
+      updatedAt: now.toISOString(),
+    };
+    await database.blockProgress.put(row);
+    await markChanged(database);
+    return row;
+  });
   if (!quiet) announceChange();
   if (saved.done) await completeIfDone(lessonId, database);
   return saved;
 }
-
-/** Карточки ошибок урока по состояниям — одинаковы на всех устройствах; убранный обновлением пункт не считается. */
-export const lessonMistakes = zoned(async function lessonMistakes(
-  lessonId: string,
-  database: AppDatabase = db,
-): Promise<number> {
-  const ids = (await database.cardStates.where("ref.kind").equals("mistake").toArray())
-    .map((state) => state.ref.id)
-    .filter((id) => id.startsWith(`${lessonId}/`));
-  return (await STORED_KINDS.mistake.presentIds(ids, database)).length;
-});
 
 export interface CourseLesson {
   id: string;
@@ -309,6 +282,7 @@ export const reviewedOn = zoned(async function reviewedOn(
   database: AppDatabase = db,
 ): Promise<number> {
   const events = await database.events.where("localDate").equals(day).toArray();
-  const keys = [...new Set(events.filter((event) => event.mode !== "practice").map((event) => event.unitKey))];
+  const planned = events.filter((event) => event.mode !== "practice" && isPlanned(event.ref));
+  const keys = [...new Set(planned.map((event) => event.unitKey))];
   return courseId ? (await cardsInCourse(keys, courseId, database)).size : keys.length;
 });

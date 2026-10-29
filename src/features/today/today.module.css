@@ -73,10 +73,6 @@
   text-underline-offset: 4px;
   cursor: pointer;
 }
-.linkQuiet {
-  display: inline-flex;
-  align-items: center;
-}
 @media (hover: hover) {
   .quiet:hover:not(:disabled) {
     color: var(--foreground);
@@ -257,12 +253,6 @@
   height: 30px;
   background: var(--pen);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
-}
-.weekRow {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: calc(var(--cell) * 2);
 }
 
 .other {

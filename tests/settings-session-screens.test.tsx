@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import "fake-indexeddb/auto";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act } from "react";
 import { createEmptyCard } from "ts-fsrs";
 import { createRoot, type Root } from "react-dom/client";
@@ -11,6 +11,7 @@ import { db } from "../src/storage/db";
 import { dexieSource, loadSettings } from "../src/storage/queries";
 import { makeSession } from "../src/domain/learning";
 import { installCompleted } from "./helpers/content";
+import { launchContext, resetLaunchContext } from "../src/platform/launch";
 
 if (!Element.prototype.scrollIntoView) Element.prototype.scrollIntoView = () => undefined;
 
@@ -32,6 +33,11 @@ afterEach(() => {
   act(() => root?.unmount());
   root = null;
   document.body.innerHTML = "";
+  vi.restoreAllMocks();
+  window.location.hash = "";
+  sessionStorage.clear();
+  resetLaunchContext();
+  vi.unstubAllEnvs();
 });
 
 const mount = (screen: React.ReactNode) => {
@@ -55,6 +61,34 @@ describe("настройки", () => {
     await act(() => new Promise((resolve) => setTimeout(resolve, 100)));
     expect(speak.checked).toBe(false);
     expect(await loadSettings()).toMatchObject({ autoSpeak: false, errorReports: false });
+  });
+});
+
+describe("обратная связь", () => {
+  it("раздел идёт сразу после «Отчётов об ошибках»; без адреса формы кнопка открывает чат бота с start=feedback", async () => {
+    vi.stubEnv("VITE_FEEDBACK_URL", "");
+    const popup = vi.spyOn(window, "open").mockImplementation(() => null);
+    window.location.hash = `#tgWebAppPlatform=ios&tgWebAppData=${encodeURIComponent(`user=${JSON.stringify({ id: 7 })}`)}`;
+    resetLaunchContext();
+    mount(<SettingsScreen />);
+    await until(() => host.textContent!.includes("Обратная связь"), "раздел обратной связи");
+    await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
+    const headings = [...host.querySelectorAll("h2")].map((heading) => heading.textContent);
+    expect(headings[headings.indexOf("Отчёты об ошибках") + 1]).toBe("Обратная связь");
+    expect(host.textContent).toContain(
+      "Вопрос, ошибка в уроке или идея — напишите автору, ответ придёт в чат с ботом.",
+    );
+    const button = host.querySelector<HTMLButtonElement>('[data-testid="feedback-button"]')!;
+    expect(button.textContent).toBe("Написать автору");
+    act(() => button.click());
+    expect(popup).toHaveBeenCalledWith(`https://t.me/${launchContext().bot}?start=feedback`, "_blank", "noopener");
+  });
+
+  it("вне Telegram без бота сборки раздела нет", async () => {
+    mount(<SettingsScreen />);
+    await until(() => host.textContent!.includes("Отчёты об ошибках"), "экран настроек");
+    await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
+    expect([...host.querySelectorAll("h2")].map((heading) => heading.textContent)).not.toContain("Обратная связь");
   });
 });
 
