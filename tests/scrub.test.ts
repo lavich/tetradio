@@ -98,6 +98,23 @@ describe("очистка события", () => {
     expect(out.exception?.values?.[0].value).toBe("Database tetradio-tg-… has been closed");
     expect(out.exception?.values?.[0].type).toBe("DatabaseClosedError");
   });
+
+  it("убирает данные запуска Telegram из текстов ошибок", () => {
+    const out = scrubEvent(
+      event({
+        exception: {
+          values: [
+            {
+              type: "Error",
+              value: "Rejected: https://x/app/#tgWebAppData=user%3D%7B%22id%22%3A123456789%7D&tgWebAppVersion=8.0",
+            },
+          ],
+        },
+      }),
+      ORIGIN,
+    );
+    expect(out.exception?.values?.[0].value).toBe("Rejected: https://x/app/#tgWebAppData=…&tgWebAppVersion=…");
+  });
   it("режет параметры и фрагмент в адресах кадров, оставляя адрес скрипта целым", () => {
     const frames = [
       { filename: "https://tetradio.app/app/?bot=x#tgWebAppData=user%3D%7B%22id%22%3A42%7D", lineno: 0 },

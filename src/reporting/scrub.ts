@@ -73,7 +73,8 @@ export function filterBreadcrumb(crumb: Breadcrumb, own: string = origin()): Bre
 
 /** Имя базы владельца — `tetradio-tg-<бот>-<Telegram ID>` — попадает в тексты ошибок IndexedDB и Dexie. */
 const DATABASE_NAME = /tetradio-tg-[\w-]+/g;
-const scrubText = (text: string) => text.replace(DATABASE_NAME, "tetradio-tg-…");
+const LAUNCH_DATA = /(tgWebApp\w+)=[^\s"'&]*/g;
+const scrubText = (text: string) => text.replace(DATABASE_NAME, "tetradio-tg-…").replace(LAUNCH_DATA, "$1=…");
 const isPlain = (value: object) => {
   const proto = Object.getPrototypeOf(value);
   return proto === Object.prototype || proto === null;
