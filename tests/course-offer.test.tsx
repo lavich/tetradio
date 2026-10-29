@@ -1,12 +1,13 @@
 // @vitest-environment jsdom
 import "fake-indexeddb/auto";
 import "./helpers/self";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type { Course, StoredModule } from "../src/domain/types";
 import type { StoredCatalogEntry } from "../src/storage/db";
 import { FirstRun } from "../src/features/today/FirstRun";
+import { resetCatalogPhase, setCatalogPhase } from "../src/content/phases";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 let root: Root | null = null;
@@ -14,6 +15,7 @@ let container: HTMLElement;
 afterEach(() => {
   act(() => root?.unmount());
   root = null;
+  resetCatalogPhase();
 });
 
 const iso = "2026-10-20T09:00:00Z";
@@ -59,6 +61,31 @@ function render(courses: Course[], entries: StoredCatalogEntry[], mods: StoredMo
     preparing: !!offer.querySelector("[data-testid=course-preparing]"),
   }));
 }
+
+describe("пустой каталог", () => {
+  it("пока каталог грузится — только статус для читалки, без «Проверьте сеть»", () => {
+    render([], [], []);
+    expect(container.textContent).toBe("Загружаем курсы");
+    expect(container.querySelector("[role=status]")?.className).toContain("sr-only");
+  });
+  it("каталог грузится дольше 8 с — «Каталог ещё не загружен»", () => {
+    vi.useFakeTimers();
+    try {
+      render([], [], []);
+      act(() => {
+        vi.advanceTimersByTime(8000);
+      });
+      expect(container.textContent).toContain("Каталог ещё не загружен");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+  it("каталог не загрузился — «Каталог ещё не загружен»", () => {
+    setCatalogPhase("error");
+    render([], [], []);
+    expect(container.textContent).toContain("Каталог ещё не загружен");
+  });
+});
 
 describe("карточка курса", () => {
   it("все поля: название с уровнем, цель, объём, без нагрузки", () => {
