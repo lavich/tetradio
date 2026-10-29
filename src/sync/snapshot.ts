@@ -19,6 +19,7 @@ import { CONTENT_TABLES, STORED_KINDS } from "../storage/kinds";
 import { blockKey } from "../storage/course";
 import { PENDING_LESSONS_KEY, readPending, type PendingLessons } from "../storage/pending";
 import type { BlockProgress } from "../domain/types";
+import { dirtyMark } from "../storage/ops";
 import {
   SNAPSHOT_FORMAT,
   type BaseSummaryRow,
@@ -245,6 +246,12 @@ export const buildSnapshot = zoned(async function buildSnapshot(
 });
 export const readSnapshot = (database: AppDatabase, now: Date) =>
   database.transaction("r", tables(database, SNAPSHOT_TABLES), () => buildSnapshot(database, now));
+/** Снимок и отметка изменений, прочитанные вместе: слияние применяется, только если отметка с тех пор не менялась. */
+export const readMarkedSnapshot = (database: AppDatabase, now: Date) =>
+  database.transaction("r", tables(database, SNAPSHOT_TABLES), async () => ({
+    mark: await readMeta(database, META.dirty),
+    snapshot: await buildSnapshot(database, now),
+  }));
 /** Новая база: отсечка — момент сборки, локальные события до неё считаются учтёнными в снимке. */
 export const commitBase = zoned(async function commitBase(
   database: AppDatabase,
@@ -307,6 +314,9 @@ export { readPending, type PendingLessons } from "../storage/pending";
  * `ifClean` — применять, только если локальных неопубликованных изменений и восстановленной копии нет; иначе `false`
  * без записи.
  * `reviewDays` — дни других ветвей конфликта, которые складываются с днями версии.
+ * Результат слияния (`merged`) применяется, только если отметка изменений та же, что при сборке локальной ветви, и
+ * оставляет новую отметку: устройство не становится «чистым», пока результат не опубликован.
+ * `chain` — запись звена цепочки предков в той же транзакции, что меняет часы.
  */
 export async function applySnapshot(
   database: AppDatabase,
@@ -314,10 +324,22 @@ export async function applySnapshot(
   versionId: string,
   clock: Clock,
   now: Date,
-  { ifClean = false, reviewDays: extra = [] }: { ifClean?: boolean; reviewDays?: (ReviewDays | undefined)[] } = {},
+  {
+    ifClean = false,
+    reviewDays: extra = [],
+    merged,
+    chain,
+  }: {
+    ifClean?: boolean;
+    reviewDays?: (ReviewDays | undefined)[];
+    merged?: { mark: string | null };
+    chain?: () => Promise<void>;
+  } = {},
 ): Promise<boolean> {
   return database.transaction("rw", tables(database, SNAPSHOT_TABLES), async () => {
     if (ifClean && ((await readMeta(database, META.dirty)) || (await readMeta(database, META.restored)))) return false;
+    if (merged && ((await readMeta(database, META.dirty)) !== merged.mark || (await readMeta(database, META.restored))))
+      return false;
     // Дни не заменяются версией, а складываются: ни обмен, ни выбор в конфликте не стирают известный день.
     const reviewDays = mergeReviewDays(
       await knownReviewDays(database, await database.baseSummary.get("base")),
@@ -355,7 +377,8 @@ export async function applySnapshot(
     await commitBase(database, { ...snapshot, reviewDays }, versionId, previous > asOf ? previous : asOf);
     await writeMeta(database, META.applied, versionId);
     await writeMeta(database, META.clock, JSON.stringify(clock));
-    await writeMeta(database, META.dirty, null);
+    await writeMeta(database, META.dirty, merged ? dirtyMark() : null);
+    await chain?.();
     return true;
   });
 }

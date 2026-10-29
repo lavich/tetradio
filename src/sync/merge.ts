@@ -155,9 +155,10 @@ function mergeStats(
   branches: StatsSummary[],
   skills: { ref: StoredRef; skills: SkillSummary }[][],
 ) {
+  // Ветви после предка не делят историю: одинаковые приросты двух сторон — разные ответы, они складываются.
   const changed = branches.filter((stats) => !same(stats, base));
   if (!changed.length) return base;
-  if (changed.every((stats) => same(stats, changed[0]))) return changed[0];
+  if (changed.length === 1) return changed[0];
   const dates = new Set([...base.days, ...branches.flatMap((stats) => stats.days)].map((day) => day.date));
   const days: DaySummary[] = [];
   for (const date of [...dates].sort()) {

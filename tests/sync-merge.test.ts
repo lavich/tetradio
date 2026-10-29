@@ -184,11 +184,11 @@ describe("слияние снимков: свойства", () => {
     return { base, x: evolve(random, base, 10), y: evolve(random, base, 20), z: evolve(random, base, 30) };
   });
 
-  it("одна ветвь, ветвь равная предку и две равные ветви дают эту ветвь", () => {
+  it("одна ветвь и ветвь, равная предку, дают эту ветвь; две равные ветви — те же состояния карточек", () => {
     for (const { base, x } of cases) {
       expect(content(merge(base, x))).toBe(content(x));
       expect(content(merge(base, base, x))).toBe(content(x));
-      expect(content(merge(base, x, x))).toBe(content(x));
+      expect(merge(base, x, x).states).toEqual(x.states);
     }
   });
 
@@ -209,10 +209,11 @@ describe("слияние снимков: свойства", () => {
     }
   });
 
-  it("повторное слияние результата с ветвью ничего не добавляет", () => {
+  it("слияние результата с его предком ничего не добавляет", () => {
     for (const { base, x, y } of cases) {
       const merged = merge(base, x, y);
-      expect(content(merge(x, merged, merged))).toBe(content(merged));
+      expect(content(merge(x, merged))).toBe(content(merged));
+      expect(content(merge(merged, merged, merged))).toBe(content(merged));
     }
   });
 });
