@@ -22,17 +22,23 @@ export function SyncLine() {
     <>
       <div className={css.status} role="status" data-testid="sync-status" data-phase={line.phase}>
         <span>{line.text}</span>
-        {line.retry && (
-          <Button
-            size="sm"
-            variant={line.failed ? "soft" : "quiet"}
-            disabled={status.phase === "syncing"}
-            onClick={() => void sync.exchange()}
-            aria-label="Повторить синхронизацию"
-          >
-            <RefreshCw data-icon="inline-start" />
-            Повторить
+        {status.phase === "conflict" && status.conflict?.deferred ? (
+          <Button size="sm" variant="soft" onClick={() => void sync.reviewChoice()}>
+            Выбрать версию
           </Button>
+        ) : (
+          line.retry && (
+            <Button
+              size="sm"
+              variant={line.failed ? "soft" : "quiet"}
+              disabled={status.phase === "syncing"}
+              onClick={() => void sync.exchange()}
+              aria-label="Повторить синхронизацию"
+            >
+              <RefreshCw data-icon="inline-start" />
+              Повторить
+            </Button>
+          )
         )}
       </div>
       {status.error && line.phase !== "updating" && <p className={ui.error}>{status.error.message}</p>}

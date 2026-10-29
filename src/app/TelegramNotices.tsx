@@ -11,8 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { sync, useSyncStatus } from "../sync";
 import { readMeta } from "../sync/snapshot";
-import { when } from "../sync/status-text";
-import { CARDS, withCount } from "../shared/format";
+import { branchLine } from "../sync/status-text";
 import ui from "../shared/ui.module.css";
 
 /**
@@ -23,7 +22,6 @@ export function SyncConflictDialog() {
   const status = useSyncStatus();
   const [busy, setBusy] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [dismissed, setDismissed] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const focused = useRef<string | null>(null);
   const conflict = status.conflict;
@@ -34,8 +32,7 @@ export function SyncConflictDialog() {
     if (focused.current && focused.current !== key) list.current?.querySelector("button")?.focus();
     focused.current = key;
   }, [key, busy]);
-  if (!conflict || !key || status.phase !== "conflict") return null;
-  if (dismissed === key) return null;
+  if (!conflict || !key || status.phase !== "conflict" || conflict.deferred) return null;
   const titles = {
     diverged: "Прогресс разошёлся между устройствами",
     initial: "В облаке уже есть прогресс",
@@ -68,11 +65,7 @@ export function SyncConflictDialog() {
           {conflict.branches.map((branch) => (
             <div key={branch.id} role="listitem" className="rounded-[14px] border border-border p-3">
               <p className="m-0 font-semibold">{branch.label}</p>
-              <p className="m-0 text-sm text-muted-foreground">
-                {when(branch.createdAt)} · {withCount(branch.description.cards, CARDS)} в обучении ·{" "}
-                {withCount(branch.description.answers, ["ответ", "ответа", "ответов"])}
-                {branch.description.lastDay ? ` · последнее занятие ${branch.description.lastDay}` : ""}
-              </p>
+              <p className="m-0 text-sm text-muted-foreground">{branchLine(branch)}</p>
               <Button
                 size="md"
                 className="mt-2"
@@ -107,8 +100,8 @@ export function SyncConflictDialog() {
             size="md"
             className="sm:w-auto"
             onClick={() => {
-              setDismissed(key);
               sync.dismissChoice();
+              void sync.deferChoice();
             }}
           >
             Решить позже

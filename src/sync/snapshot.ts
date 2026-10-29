@@ -40,6 +40,8 @@ export const META = {
   restored: "sync:restored",
   pendingLessons: PENDING_LESSONS_KEY,
   peers: "sync:peers",
+  publishing: "sync:publishing",
+  later: "sync:later",
 } as const;
 export const KEEP_DAYS = 14;
 
@@ -384,6 +386,7 @@ export interface SnapshotDescription {
   cards: number;
   answers: number;
   lastDay: string | null;
+  lastAnswerAt: string | null;
   lessons: number;
   courseLessons: number;
   blocks: number;
@@ -400,6 +403,11 @@ export const describeSnapshot = (snapshot: CompactSnapshot): SnapshotDescription
   // Отметки «прочитано» — не выполненные задания.
   blocks: snapshot.blocks.filter((block) => block.done && !block.lessonId.startsWith(READING_PREFIX)).length,
   lastDay: snapshot.stats.days.length ? snapshot.stats.days[snapshot.stats.days.length - 1].date : null,
+  lastAnswerAt: snapshot.states.reduce<string | null>(
+    (latest, state) =>
+      state.card.last_review && (!latest || state.card.last_review > latest) ? state.card.last_review : latest,
+    null,
+  ),
 });
 /** Есть ли локальный прогресс, который нельзя молча заменить облаком при первом подключении. */
 export const hasLocalProgress = async (database: AppDatabase) =>

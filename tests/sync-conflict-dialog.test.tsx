@@ -6,7 +6,15 @@ import type { SyncStatus } from "../src/sync/coordinator";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
-const description = { cards: 3, answers: 5, lastDay: "2026-10-14", lessons: 1, courseLessons: 0, blocks: 0 };
+const description = {
+  cards: 3,
+  answers: 5,
+  lastDay: "2026-10-14",
+  lastAnswerAt: "2026-10-14T18:40:00Z",
+  lessons: 1,
+  courseLessons: 0,
+  blocks: 0,
+};
 const branch = (id: string, local: boolean) => ({
   id,
   local,
@@ -36,11 +44,12 @@ vi.mock("../src/sync", () => ({
     resolve: async () => {
       store.set({
         reason: "Версии изменились — выберите ещё раз.",
-        conflict: { kind: "diverged", branches: [branch("local", true), branch("ios-3", false)] },
+        conflict: { kind: "diverged", branches: [branch("local", true), branch("ios-3", false)], deferred: false },
       });
       return store.status;
     },
     dismissChoice: () => store.set({ reason: null }),
+    deferChoice: async () => store.set({ conflict: { ...store.status.conflict!, deferred: true } }),
   },
   useSyncStatus: () => useSyncExternalStore(store.subscribe, () => store.status),
 }));
@@ -61,7 +70,7 @@ describe("окно выбора версии", () => {
       lastConfirmedAt: null,
       dirty: true,
       error: null,
-      conflict: { kind: "diverged", branches: [branch("local", true), branch("ios-2", false)] },
+      conflict: { kind: "diverged", branches: [branch("local", true), branch("ios-2", false)], deferred: false },
       keys: null,
       reason: null,
     };
@@ -79,6 +88,44 @@ describe("окно выбора версии", () => {
     const later = [...dialog().querySelectorAll("button")].find((button) => button.textContent === "Решить позже")!;
     act(() => later.click());
     expect(store.status.reason).toBeNull();
+    expect(document.querySelector("[role=alertdialog]")).toBeNull();
+  });
+  it("у версий — время последнего ответа, у облачной — время отправки, без текущего времени у своей", async () => {
+    store.status = {
+      phase: "conflict",
+      lastConfirmedAt: null,
+      dirty: true,
+      error: null,
+      conflict: { kind: "diverged", branches: [branch("local", true), branch("ios-2", false)], deferred: false },
+      keys: null,
+      reason: null,
+    };
+    const { SyncConflictDialog } = await import("../src/app/TelegramNotices");
+    container = document.body.appendChild(document.createElement("div"));
+    root = createRoot(container);
+    act(() => root!.render(<SyncConflictDialog />));
+    const [local, remote] = [...document.querySelectorAll("[role=listitem] p.text-sm")].map((line) => line.textContent);
+    const answer = new Date("2026-10-14T18:40:00Z").toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+    const sent = new Date("2026-10-15T08:00:00Z").toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+    expect(local).toBe(`последний ответ 14 октября в ${answer} · 3 карточки в обучении · 5 ответов`);
+    expect(remote).toBe(
+      `отправлено 15 октября в ${sent} · последний ответ 14 октября в ${answer} · 3 карточки в обучении · 5 ответов`,
+    );
+  });
+  it("отложенный конфликт окна не показывает", async () => {
+    store.status = {
+      phase: "conflict",
+      lastConfirmedAt: null,
+      dirty: true,
+      error: null,
+      conflict: { kind: "diverged", branches: [branch("local", true), branch("ios-2", false)], deferred: true },
+      keys: null,
+      reason: null,
+    };
+    const { SyncConflictDialog } = await import("../src/app/TelegramNotices");
+    container = document.body.appendChild(document.createElement("div"));
+    root = createRoot(container);
+    act(() => root!.render(<SyncConflictDialog />));
     expect(document.querySelector("[role=alertdialog]")).toBeNull();
   });
 });

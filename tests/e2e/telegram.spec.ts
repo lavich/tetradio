@@ -513,7 +513,10 @@ test.describe("аудио, копии и облако", () => {
     await expect(web.getByTestId("word-count")).toHaveText(source);
     await clean.close();
   });
-  test("расхождение версий на планшете: окно выбора вмещает текст и кнопки", async ({ page, browser }) => {
+  test("расхождение версий на планшете: окно выбора вмещает текст и кнопки, «Решить позже» — до «Выбрать версию»", async ({
+    page,
+    browser,
+  }) => {
     await openTelegram(page);
     await installLessons(page, ["mech-1"]);
     await seedQueue(page, [{ wordId: "w038", tested: ["recall"] }], TG_DB);
@@ -539,6 +542,15 @@ test.describe("аудио, копии и облако", () => {
       expect(box.x).toBeGreaterThanOrEqual(frame.x - 1);
       expect(box.x + box.width).toBeLessThanOrEqual(frame.x + frame.width + 1);
     }
+    // «Решить позже» переживает перезапуск; «Выбрать версию» на «Прогрессе» открывает окно снова.
+    await dialog.getByRole("button", { name: "Решить позже" }).click();
+    await expect(dialog).toHaveCount(0);
+    await tablet.goto("/app/progress");
+    const status = tablet.getByTestId("sync-status");
+    await expect(status).toHaveAttribute("data-phase", "conflict", { timeout: 15000 });
+    await expect(dialog).toHaveCount(0);
+    await status.getByRole("button", { name: "Выбрать версию" }).click();
+    await expect(dialog.getByRole("button", { name: "Продолжить с этой версии" }).first()).toBeVisible();
     await context.close();
   });
   test("CloudStorage: статус синхронизации, перенос прогресса второму устройству, изоляция другого аккаунта", async ({

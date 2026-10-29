@@ -1,7 +1,8 @@
 import { erasePhase } from "../storage/erase-marker";
 import { lifecycle } from "../reporting/reporting";
 import type { AppDatabase } from "../storage/db";
-import type { SyncAdapter } from "./adapter";
+import type { PointerListing, SyncAdapter } from "./adapter";
+import { decodeSnapshot, encodeSnapshot } from "./codec";
 import { dominates, mergeClocks, sameClock } from "./clock";
 import { syncEvents, type SyncEvent } from "./events";
 import {
@@ -52,6 +53,8 @@ export interface ConflictBranch {
 export interface SyncConflict {
   kind: "diverged" | "initial" | "restored" | "remote";
   branches: ConflictBranch[];
+  /** «Решить позже» для всех версий облака этого конфликта: окно не показывается, пока не появится новая. */
+  deferred: boolean;
 }
 export interface SyncStatus {
   phase: SyncPhase;
@@ -80,7 +83,35 @@ export interface CoordinatorOptions {
   retryBaseMs?: number;
   /** Та же блокировка, что у обмена, но с ожиданием: удаление данных не должно пропускаться. */
   exclusive?: (run: () => Promise<void>) => Promise<LockResult>;
+  /** Приложение ушло в фон по сигналу клиента (Telegram `deactivated`): `visibilitychange` в WebView приходит не всегда. */
+  background?: (listener: () => void) => () => void;
 }
+interface Publishing {
+  id: string;
+  checksum: string;
+  clock: Clock;
+  mark: string | null;
+}
+const parsePublishing = (raw: string | null): Publishing | null => {
+  try {
+    const value = raw ? JSON.parse(raw) : null;
+    return value && typeof value.id === "string" && typeof value.checksum === "string" ? value : null;
+  } catch {
+    return null;
+  }
+};
+const parseIds = (raw: string | null): string[] => {
+  try {
+    const value = raw ? JSON.parse(raw) : [];
+    return Array.isArray(value) ? value.filter((id): id is string => typeof id === "string") : [];
+  } catch {
+    return [];
+  }
+};
+const progressOf = (snapshot: CompactSnapshot) => JSON.stringify([snapshot.lessons, snapshot.blocks, snapshot.states]);
+/** Локальный прогресс проходит тот же кодек, что и опубликованный: округления формата не дают ложного различия. */
+const sameProgress = (local: CompactSnapshot, published: CompactSnapshot, format: number) =>
+  progressOf(decodeSnapshot(encodeSnapshot(local, format), format)) === progressOf(published);
 const FOREIGN_KEEP_MS = 30 * 24 * 60 * 60 * 1000;
 const KEEP_REJECTED = 5;
 export const EXCHANGE_INTERVAL_MS = 2 * 60 * 1000;
@@ -142,6 +173,10 @@ export class SyncCoordinator {
   get adapter() {
     return this.options.adapter;
   }
+  /** Источник события «приложение ушло в фон»: подключается вместе с облаком, до `start`. */
+  setBackground(background: CoordinatorOptions["background"]) {
+    this.options.background = background;
+  }
   setAdapter(adapter: SyncAdapter) {
     this.options.adapter = adapter;
     this.update({ error: null, phase: adapter.capabilities().available ? "idle" : "disabled" });
@@ -176,8 +211,11 @@ export class SyncCoordinator {
     };
   }
 
-  /** Параллельные вызовы объединяются; поводы обмена перечислены в `start`. */
-  exchange(): Promise<SyncStatus> {
+  /**
+   * Параллельные вызовы объединяются; поводы обмена перечислены в `start`. `urgent` — приложение уходит в фон: до
+   * указателя как можно меньше запросов, паузы курсов ждут следующего обмена.
+   */
+  exchange({ urgent = false }: { urgent?: boolean } = {}): Promise<SyncStatus> {
     if (this.halted) return Promise.resolve(this.status);
     if (this.running) {
       // Изменение во время обмена: ещё один заход сразу после текущего.
@@ -185,6 +223,7 @@ export class SyncCoordinator {
       return this.running;
     }
     this.again = false;
+    this.urgent = urgent;
     this.lastStart = this.options.now().getTime();
     this.running = this.run().finally(this.settle);
     return this.running;
@@ -194,6 +233,7 @@ export class SyncCoordinator {
     if (this.again && this.status.phase !== "error" && this.status.phase !== "conflict") void this.exchange();
   };
   private again = false;
+  private urgent = false;
   private lastStart = -Infinity;
   /**
    * Обмен идёт вне дерева React, поэтому граница восстановления его не прикрывает: отказ хранилища после сна
@@ -245,7 +285,7 @@ export class SyncCoordinator {
     let writes = true;
     const lock = await this.options.lock(async () => {
       this.update({ phase: "syncing", error: null, reason: null });
-      await this.exchangePauses();
+      if (!this.urgent) await this.exchangePauses();
       await this.decide(writes, 0);
     });
     if (lock === "busy") {
@@ -256,7 +296,7 @@ export class SyncCoordinator {
       // Без блокировки нельзя гарантировать одного писателя: читаем и применяем, но не публикуем.
       writes = false;
       this.update({ phase: "syncing", error: null, reason: null });
-      await this.exchangePauses();
+      if (!this.urgent) await this.exchangePauses();
       await this.decide(writes, 0);
     }
   }
@@ -328,7 +368,7 @@ export class SyncCoordinator {
   private async decide(writes: boolean, depth: number): Promise<void> {
     const { adapter, database } = this.options;
     const device = await this.deviceId();
-    const flags = await this.flags();
+    let flags = await this.flags();
     const listing = await adapter.listPointers();
     this.update({ keys: { used: listing.keys, max: adapter.capabilities().maxKeys } });
     await this.notePeers(device, listing.pointers);
@@ -344,7 +384,9 @@ export class SyncCoordinator {
       } catch (error) {
         console.warn("Объявление читаемых форматов отложено", error);
       }
-    let candidates = others.filter((pointer) => !dominates(flags.clock, pointer.clock));
+    if (await this.settlePublishing(mine)) flags = await this.flags();
+    const clockNow = flags.clock;
+    let candidates = others.filter((pointer) => !dominates(clockNow, pointer.clock));
     candidates = candidates.filter(
       (candidate) =>
         !candidates.some(
@@ -354,6 +396,14 @@ export class SyncCoordinator {
               (dominates(other.clock, candidate.clock) && !sameClock(other.clock, candidate.clock))),
         ),
     );
+    if (
+      writes &&
+      candidates.length &&
+      flags.dirty &&
+      !flags.restored &&
+      (await this.nothingUnpublished(mine, flags.clock))
+    )
+      flags = await this.flags();
     const never = flags.appliedId === null;
     const local = await hasLocalProgress(database);
     if (!candidates.length) {
@@ -388,7 +438,7 @@ export class SyncCoordinator {
           });
         }
         const snapshot = await this.localSnapshot();
-        this.conflict("restored", [
+        await this.conflict("restored", [
           {
             id: `local-${device}`,
             device,
@@ -414,7 +464,7 @@ export class SyncCoordinator {
           });
           return;
         }
-        await this.publish(device, flags.clock, [], [], null);
+        await this.publish(device, flags.clock, [], [], null, listing);
         if (depth < 1) await this.decide(writes, depth + 1); // поздняя конкурентная запись обнаруживается повторным чтением
         return;
       }
@@ -463,11 +513,11 @@ export class SyncCoordinator {
       };
     };
     if (flags.restored) {
-      this.conflict("restored", [await localBranch(), ...remote]);
+      await this.conflict("restored", [await localBranch(), ...remote]);
       return;
     }
     if (never && local) {
-      this.conflict("initial", [await localBranch(), ...remote]);
+      await this.conflict("initial", [await localBranch(), ...remote]);
       return;
     }
     // Версия облака без уже опубликованного здесь — расхождение, а не обновление: молча её применять нельзя.
@@ -493,13 +543,75 @@ export class SyncCoordinator {
         await this.installMissing(branch.snapshot.packages);
         return;
       }
-      this.conflict("remote", remote);
+      await this.conflict("remote", remote);
       return;
     }
-    this.conflict("diverged", [await localBranch(), ...remote]);
+    await this.conflict("diverged", [await localBranch(), ...remote]);
   }
-  private conflict(kind: SyncConflict["kind"], branches: ConflictBranch[]) {
-    this.update({ phase: "conflict", conflict: { kind, branches }, error: null });
+  private async conflict(kind: SyncConflict["kind"], branches: ConflictBranch[]) {
+    const later = new Set(parseIds(await readMeta(this.options.database, META.later)));
+    const remote = branches.filter((branch) => !branch.local);
+    const deferred = remote.length > 0 && remote.every((branch) => later.has(branch.id));
+    this.update({ phase: "conflict", conflict: { kind, branches, deferred }, error: null });
+  }
+  /** «Решить позже»: версии облака текущего конфликта запоминаются на устройстве. */
+  async deferChoice() {
+    const conflict = this.status.conflict;
+    if (!conflict) return;
+    const ids = conflict.branches.filter((branch) => !branch.local).map((branch) => branch.id);
+    await writeMeta(this.options.database, META.later, JSON.stringify(ids));
+    if (this.status.conflict === conflict) this.update({ conflict: { ...conflict, deferred: true } });
+  }
+  /** «Выбрать версию»: отложенное окно открывается снова. */
+  async reviewChoice() {
+    await writeMeta(this.options.database, META.later, null);
+    const conflict = this.status.conflict;
+    if (conflict?.deferred) this.update({ conflict: { ...conflict, deferred: false } });
+  }
+  /**
+   * Указатель записан, а ответ облака потерян (тайм-аут, усыплённый WebView): если свой указатель в облаке — начатая
+   * публикация, она состоялась. Иначе запись о ней снимается, и отметка изменений приведёт к новой публикации.
+   */
+  private async settlePublishing(mine: VersionMeta | null): Promise<boolean> {
+    const { database } = this.options;
+    const publishing = parsePublishing(await readMeta(database, META.publishing));
+    if (!publishing) return false;
+    const done = !!mine && mine.id === publishing.id && mine.checksum === publishing.checksum;
+    await database.transaction("rw", database.meta, async () => {
+      if (done) {
+        await writeMeta(database, META.applied, publishing.id);
+        await writeMeta(database, META.clock, JSON.stringify(publishing.clock));
+        await clearDirty(database, publishing.mark);
+        await writeMeta(database, META.restored, null);
+      }
+      await writeMeta(database, META.publishing, null);
+    });
+    return done;
+  }
+  /**
+   * Отметка изменений стоит, но всё, что есть здесь, уже лежит в своей версии облака: например, её опубликовала
+   * прежняя сборка, потеряв ответ облака. Тогда неопубликованного нет, и версия другого устройства — не расхождение.
+   */
+  private async nothingUnpublished(mine: VersionMeta | null, clock: Clock): Promise<boolean> {
+    const { adapter, database } = this.options;
+    if (!mine || !readable(mine.format)) return false;
+    const mark = await readMeta(database, META.dirty);
+    let published: CompactSnapshot;
+    try {
+      published = await adapter.readVersion(mine);
+    } catch {
+      return false;
+    }
+    if (!sameProgress(await this.localSnapshot(), published, mine.format)) return false;
+    return database.transaction("rw", database.meta, async () => {
+      if (!(await clearDirty(database, mark))) return false;
+      const own = mine.clock[mine.device] ?? 0;
+      if (own > (clock[mine.device] ?? 0)) {
+        await writeMeta(database, META.applied, mine.id);
+        await writeMeta(database, META.clock, JSON.stringify(mergeClocks(clock, mine.clock)));
+      }
+      return true;
+    });
   }
   private async confirm() {
     const at = this.options.now().toISOString();
@@ -516,18 +628,22 @@ export class SyncCoordinator {
     mergeWith: Clock[],
     resolves: string[],
     override: CompactSnapshot | null,
+    listing: PointerListing | null = null,
   ) {
     const { adapter, database } = this.options;
+    // Выбор версии в конфликте публикует без нового чтения в `decide` — облако перечитывается здесь.
+    const read = listing ?? (await adapter.listPointers());
+    const peers = await this.notePeers(device, read.pointers);
+    const mine = read.pointers.find((pointer) => pointer.device === device);
     const clock = mergeClocks(base, ...mergeWith);
-    clock[device] = (clock[device] ?? 0) + 1;
+    // Прежний номер может уже занимать версия, ответ о которой потерян: другие её применили и новую с тем же номером не увидят.
+    clock[device] = Math.max(clock[device] ?? 0, mine?.clock[device] ?? 0) + 1;
     const id = `${device}-${clock[device]}`;
     const now = this.options.now();
     // Версия уже применена и сняла метку: любая метка после этого — изменение, которого в версии нет.
     const { snapshot, mark } = override
       ? { snapshot: override, mark: null }
       : await buildAndCommitMarked(database, now, id);
-    // Облако перечитывается здесь: выбор версии в конфликте публикует без нового чтения в `decide`.
-    const peers = await this.notePeers(device, (await adapter.listPointers()).pointers);
     const meta = {
       id,
       device,
@@ -539,13 +655,16 @@ export class SyncCoordinator {
       reads: DECLARED_READS,
     };
     const started = performance.now();
+    const beforeWrite = async (full: VersionMeta) => {
+      await writeMeta(database, META.publishing, JSON.stringify({ id, checksum: full.checksum, clock, mark }));
+    };
     let published;
     try {
-      published = await adapter.publishVersion(meta, snapshot);
+      published = await adapter.publishVersion(meta, snapshot, { keys: read.names, beforeWrite });
     } catch (error) {
       if (!(error instanceof SyncError && error.kind === "limit")) throw error;
       await this.cleanup(device, clock, true);
-      published = await adapter.publishVersion(meta, snapshot);
+      published = await adapter.publishVersion(meta, snapshot, { beforeWrite });
     }
     lifecycle("syncPublished", {
       ms: Math.round(performance.now() - started),
@@ -558,6 +677,7 @@ export class SyncCoordinator {
       await writeMeta(database, META.clock, JSON.stringify(clock));
       await clearDirty(database, mark);
       await writeMeta(database, META.restored, null);
+      await writeMeta(database, META.publishing, null);
     });
     await this.confirm();
     try {
@@ -691,6 +811,7 @@ export class SyncCoordinator {
     );
     const remote = conflict.branches.filter((branch) => !branch.local);
     const resolves = remote.map((branch) => branch.id);
+    await writeMeta(database, META.later, null);
     const clocks = remote.map((branch) => branch.meta!.clock);
     this.update({ phase: "syncing", conflict: null });
     try {
@@ -758,24 +879,30 @@ export class SyncCoordinator {
       cancel();
       void this.exchange();
     };
-    const hidden = async () => {
-      if (pending || (await readMeta(this.options.database, META.dirty))) flush();
-    };
     const visibility = () => {
       if (document.visibilityState === "visible") void this.exchange();
-      else void hidden();
+      else void urgent();
     };
-    const pagehide = () => void hidden();
+    const pagehide = () => void urgent();
+    const urgent = async () => {
+      if (pending || (await readMeta(this.options.database, META.dirty))) {
+        cancel();
+        void this.exchange({ urgent: true });
+      }
+    };
     const changed = (event: SyncEvent) => {
       if (!this.status.dirty) this.update({ dirty: true });
-      if (event === "changed") soon();
-      else if (event !== "answered") flush();
+      // Ответы занятия тоже уходят по ходу: WebView закрывают, не дождавшись конца занятия.
+      if (event === "changed" || event === "answered") soon();
+      else flush();
     };
     document.addEventListener("visibilitychange", visibility);
     window.addEventListener("pagehide", pagehide);
     window.addEventListener("online", flush);
     const off = syncEvents.on(changed);
+    const offBackground = this.options.background?.(() => void urgent()) ?? (() => undefined);
     this.stopHandlers = [
+      offBackground,
       () => document.removeEventListener("visibilitychange", visibility),
       () => window.removeEventListener("pagehide", pagehide),
       () => window.removeEventListener("online", flush),

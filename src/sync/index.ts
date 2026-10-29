@@ -44,6 +44,14 @@ export function connectSync(app: TelegramWebApp | null) {
     return;
   }
   sync.setAdapter(kvAdapter(cloudStorageTransport(app.CloudStorage)));
+  sync.setBackground((listener) => {
+    try {
+      app.onEvent("deactivated", listener);
+      return () => app.offEvent("deactivated", listener);
+    } catch {
+      return () => undefined;
+    }
+  });
   afterFirstExchange(
     sync,
     () => void loadCompression().catch(() => undefined),

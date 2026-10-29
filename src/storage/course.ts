@@ -39,23 +39,24 @@ export async function saveBlockProgress(
   const saved = await database.transaction("rw", database.blockProgress, database.meta, async () => {
     const key = blockKey(lessonId, blockId);
     const previous = await database.blockProgress.get(key);
-    const row: BlockProgress = {
-      done: false,
-      ...previous,
-      ...patch,
-      key,
-      lessonId,
-      blockId,
-      updatedAt: now.toISOString(),
-    };
+    const next = { done: false, ...previous, ...patch, key, lessonId, blockId };
+    // Текст и ответы в облачную версию не входят: их правка — не изменение для синхронизации, и время записи
+    // остаётся прежним, иначе блок выглядел бы новее версии другого устройства.
+    const synced = !previous || !sameSyncedBlock(previous, next);
+    const row: BlockProgress = { ...next, updatedAt: synced ? now.toISOString() : previous.updatedAt };
     await database.blockProgress.put(row);
-    await markChanged(database);
+    if (synced) await markChanged(database);
     return row;
   });
   if (!quiet) announceChange();
   if (saved.done) await completeIfDone(lessonId, database);
   return saved;
 }
+
+const sameSyncedBlock = (a: Omit<BlockProgress, "updatedAt">, b: Omit<BlockProgress, "updatedAt">) =>
+  a.done === b.done &&
+  JSON.stringify(a.score ?? null) === JSON.stringify(b.score ?? null) &&
+  JSON.stringify(a.checks ?? []) === JSON.stringify(b.checks ?? []);
 
 export interface CourseLesson {
   id: string;
