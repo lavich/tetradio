@@ -551,6 +551,14 @@ test.describe("аудио, копии и облако", () => {
     await expect(dialog).toHaveCount(0);
     await status.getByRole("button", { name: "Выбрать версию" }).click();
     await expect(dialog.getByRole("button", { name: "Продолжить с этой версии" }).first()).toBeVisible();
+    // Занятие окно не перекрывает: конфликт ждёт выхода из него.
+    await tablet.goto("/app/session");
+    await expect(tablet.getByTestId("session-screen").or(tablet.locator("main"))).toBeVisible({ timeout: 15000 });
+    await expect(dialog).toHaveCount(0);
+    await tablet.goto("/app/");
+    await expect(dialog.getByRole("button", { name: "Продолжить с этой версии" }).first()).toBeVisible({
+      timeout: 15000,
+    });
     await context.close();
   });
   test("CloudStorage: статус синхронизации, перенос прогресса второму устройству, изоляция другого аккаунта", async ({

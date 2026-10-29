@@ -81,7 +81,7 @@ export function useFirstInteraction(): boolean {
   return done;
 }
 
-/** Диалог конфликта монтируется с первого конфликта и остаётся: его «Решить позже» живёт в состоянии диалога. */
+/** Диалог конфликта монтируется с первого конфликта и остаётся: чанк не грузится заново при каждом конфликте. */
 export function useSyncConflictSeen(): boolean {
   const [seen, setSeen] = useState(false);
   useEffect(() => {

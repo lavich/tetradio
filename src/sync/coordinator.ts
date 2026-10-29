@@ -108,14 +108,24 @@ const parseIds = (raw: string | null): string[] => {
     return [];
   }
 };
-const progressOf = (snapshot: CompactSnapshot) => JSON.stringify([snapshot.lessons, snapshot.blocks, snapshot.states]);
+/** Всё, что публикуется, кроме времени сборки и пакетов: ответы практики меняют только навыки и статистику. */
+const progressOf = ({ lessons, blocks, states, skills, stats, reviewDays }: CompactSnapshot) =>
+  JSON.stringify([lessons, blocks, states, skills, stats, reviewDays ?? null]);
 /** Локальный прогресс проходит тот же кодек, что и опубликованный: округления формата не дают ложного различия. */
-const sameProgress = (local: CompactSnapshot, published: CompactSnapshot, format: number) =>
-  progressOf(decodeSnapshot(encodeSnapshot(local, format), format)) === progressOf(published);
+const sameProgress = (local: CompactSnapshot, published: CompactSnapshot, format: number) => {
+  try {
+    return progressOf(decodeSnapshot(encodeSnapshot(local, format), format)) === progressOf(published);
+  } catch {
+    // Свой указатель старого формата здесь не записать: сравнения нет — значит, и уверенности нет.
+    return false;
+  }
+};
+const remoteIds = (conflict: SyncConflict | null) =>
+  conflict?.branches.filter((branch) => !branch.local).map((branch) => branch.id) ?? [];
 const FOREIGN_KEEP_MS = 30 * 24 * 60 * 60 * 1000;
 const KEEP_REJECTED = 5;
 export const EXCHANGE_INTERVAL_MS = 2 * 60 * 1000;
-const CHANGE_DELAY_MS = 2000;
+export const CHANGE_DELAY_MS = 2000;
 /** Страховка от бесконечного повтора: сам предел попыток лечения задаёт тот, кто его подключает. */
 const MAX_RECOVERIES = 3;
 export const STALE_CHOICE = "Версии изменились — выберите ещё раз.";
@@ -554,13 +564,14 @@ export class SyncCoordinator {
     const deferred = remote.length > 0 && remote.every((branch) => later.has(branch.id));
     this.update({ phase: "conflict", conflict: { kind, branches, deferred }, error: null });
   }
-  /** «Решить позже»: версии облака текущего конфликта запоминаются на устройстве. */
-  async deferChoice() {
-    const conflict = this.status.conflict;
-    if (!conflict) return;
-    const ids = conflict.branches.filter((branch) => !branch.local).map((branch) => branch.id);
+  /** «Решить позже»: запоминаются версии облака, которые видел учащийся, а не те, что успел найти новый обмен. */
+  async deferChoice(ids = remoteIds(this.status.conflict)) {
+    if (!ids.length) return;
     await writeMeta(this.options.database, META.later, JSON.stringify(ids));
-    if (this.status.conflict === conflict) this.update({ conflict: { ...conflict, deferred: true } });
+    const conflict = this.status.conflict;
+    const current = remoteIds(conflict);
+    if (conflict && current.length && current.every((id) => ids.includes(id)))
+      this.update({ conflict: { ...conflict, deferred: true } });
   }
   /** «Выбрать версию»: отложенное окно открывается снова. */
   async reviewChoice() {
@@ -576,17 +587,18 @@ export class SyncCoordinator {
     const { database } = this.options;
     const publishing = parsePublishing(await readMeta(database, META.publishing));
     if (!publishing) return false;
-    const done = !!mine && mine.id === publishing.id && mine.checksum === publishing.checksum;
-    await database.transaction("rw", database.meta, async () => {
+    const published = !!mine && mine.id === publishing.id && mine.checksum === publishing.checksum;
+    return database.transaction("rw", database.meta, async () => {
+      // Восстановленная после неё копия — другое состояние: оно остаётся конфликтом, а не становится этой версией.
+      const done = published && !(await readMeta(database, META.restored));
       if (done) {
         await writeMeta(database, META.applied, publishing.id);
         await writeMeta(database, META.clock, JSON.stringify(publishing.clock));
         await clearDirty(database, publishing.mark);
-        await writeMeta(database, META.restored, null);
       }
       await writeMeta(database, META.publishing, null);
+      return done;
     });
-    return done;
   }
   /**
    * Отметка изменений стоит, но всё, что есть здесь, уже лежит в своей версии облака: например, её опубликовала
@@ -595,6 +607,9 @@ export class SyncCoordinator {
   private async nothingUnpublished(mine: VersionMeta | null, clock: Clock): Promise<boolean> {
     const { adapter, database } = this.options;
     if (!mine || !readable(mine.format)) return false;
+    const base = await database.baseSummary.get("base");
+    // Ответ после сборки последнего снимка ещё не опубликован наверняка.
+    if (!base || (await database.events.where("createdAt").above(base.asOf).count())) return false;
     const mark = await readMeta(database, META.dirty);
     let published: CompactSnapshot;
     try {
@@ -612,6 +627,15 @@ export class SyncCoordinator {
       }
       return true;
     });
+  }
+  /** Место считалось по списку ключей из решения; если облако за это время заполнилось, запись падает не как `limit`. */
+  private async outOfKeys(error: SyncError, device: string) {
+    if (error.kind !== "transport") return false;
+    try {
+      return (await this.options.adapter.room(0, device)).free <= 0;
+    } catch {
+      return false;
+    }
   }
   private async confirm() {
     const at = this.options.now().toISOString();
@@ -636,8 +660,10 @@ export class SyncCoordinator {
     const peers = await this.notePeers(device, read.pointers);
     const mine = read.pointers.find((pointer) => pointer.device === device);
     const clock = mergeClocks(base, ...mergeWith);
-    // Прежний номер может уже занимать версия, ответ о которой потерян: другие её применили и новую с тем же номером не увидят.
-    clock[device] = Math.max(clock[device] ?? 0, mine?.clock[device] ?? 0) + 1;
+    // Прежний номер может уже занимать версия, ответ о которой потерян: другие её применили и новую с тем же номером не
+    // увидят. Её указатель могла убрать и уборка другого устройства — поэтому помнится и наибольший выданный номер.
+    const issued = Number(await readMeta(database, META.issued)) || 0;
+    clock[device] = Math.max(clock[device] ?? 0, mine?.clock[device] ?? 0, issued) + 1;
     const id = `${device}-${clock[device]}`;
     const now = this.options.now();
     // Версия уже применена и сняла метку: любая метка после этого — изменение, которого в версии нет.
@@ -655,14 +681,17 @@ export class SyncCoordinator {
       reads: DECLARED_READS,
     };
     const started = performance.now();
-    const beforeWrite = async (full: VersionMeta) => {
-      await writeMeta(database, META.publishing, JSON.stringify({ id, checksum: full.checksum, clock, mark }));
-    };
+    const beforeWrite = (full: VersionMeta) =>
+      database.transaction("rw", database.meta, async () => {
+        await writeMeta(database, META.publishing, JSON.stringify({ id, checksum: full.checksum, clock, mark }));
+        await writeMeta(database, META.issued, String(clock[device]));
+      });
     let published;
     try {
       published = await adapter.publishVersion(meta, snapshot, { keys: read.names, beforeWrite });
     } catch (error) {
-      if (!(error instanceof SyncError && error.kind === "limit")) throw error;
+      if (!(error instanceof SyncError) || !(error.kind === "limit" || (await this.outOfKeys(error, device))))
+        throw error;
       await this.cleanup(device, clock, true);
       published = await adapter.publishVersion(meta, snapshot, { beforeWrite });
     }
@@ -853,8 +882,8 @@ export class SyncCoordinator {
   }
 
   /**
-   * Автоматические поводы обмена: открытие и возврат, сеть, окончание занятия, сворачивание и, без занятия,
-   * прочие изменения — не чаще раза в `EXCHANGE_INTERVAL_MS`. Ответы занятия копятся на устройстве до его конца.
+   * Автоматические поводы обмена: открытие и возврат, сеть, окончание занятия, сворачивание, ответы и прочие
+   * изменения — не чаще раза в `EXCHANGE_INTERVAL_MS`.
    * Ручной повтор — `exchange()`.
    */
   start() {
@@ -885,6 +914,8 @@ export class SyncCoordinator {
     };
     const pagehide = () => void urgent();
     const urgent = async () => {
+      // `deactivated` и `visibilitychange` приходят оба: второй полный заход в засыпающем WebView не нужен.
+      if (this.running) return;
       if (pending || (await readMeta(this.options.database, META.dirty))) {
         cancel();
         void this.exchange({ urgent: true });

@@ -3,6 +3,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, useSyncExternalStore } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type { SyncStatus } from "../src/sync/coordinator";
+import { dateTime } from "../src/shared/format";
+import { branchLine } from "../src/sync/status-text";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -29,6 +31,7 @@ const store = vi.hoisted(() => {
   const listeners = new Set<() => void>();
   return {
     status: null as unknown as SyncStatus,
+    failDefer: false,
     set: (patch: Partial<SyncStatus>) => {
       store.status = { ...store.status, ...patch };
       listeners.forEach((listener) => listener());
@@ -49,7 +52,10 @@ vi.mock("../src/sync", () => ({
       return store.status;
     },
     dismissChoice: () => store.set({ reason: null }),
-    deferChoice: async () => store.set({ conflict: { ...store.status.conflict!, deferred: true } }),
+    deferChoice: async () => {
+      if (store.failDefer) throw new Error("IndexedDB недоступна");
+      store.set({ conflict: { ...store.status.conflict!, deferred: true } });
+    },
   },
   useSyncStatus: () => useSyncExternalStore(store.subscribe, () => store.status),
 }));
@@ -105,12 +111,11 @@ describe("окно выбора версии", () => {
     root = createRoot(container);
     act(() => root!.render(<SyncConflictDialog />));
     const [local, remote] = [...document.querySelectorAll("[role=listitem] p.text-sm")].map((line) => line.textContent);
-    const answer = new Date("2026-10-14T18:40:00Z").toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-    const sent = new Date("2026-10-15T08:00:00Z").toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-    expect(local).toBe(`последний ответ 14 октября в ${answer} · 3 карточки в обучении · 5 ответов`);
-    expect(remote).toBe(
-      `отправлено 15 октября в ${sent} · последний ответ 14 октября в ${answer} · 3 карточки в обучении · 5 ответов`,
-    );
+    // Дата и время — по часовому поясу устройства, как и в окне.
+    const answer = dateTime("2026-10-14T18:40:00Z");
+    const sent = dateTime("2026-10-15T08:00:00Z");
+    expect(local).toBe(`Последний ответ ${answer} · 3 карточки в обучении · 5 ответов`);
+    expect(remote).toBe(`Отправлено ${sent} · последний ответ ${answer} · 3 карточки в обучении · 5 ответов`);
   });
   it("отложенный конфликт окна не показывает", async () => {
     store.status = {
@@ -127,5 +132,53 @@ describe("окно выбора версии", () => {
     root = createRoot(container);
     act(() => root!.render(<SyncConflictDialog />));
     expect(document.querySelector("[role=alertdialog]")).toBeNull();
+  });
+  it("«Решить позже» прячет окно и при сбое записи на устройстве", async () => {
+    store.failDefer = true;
+    store.status = {
+      phase: "conflict",
+      lastConfirmedAt: null,
+      dirty: true,
+      error: null,
+      conflict: { kind: "diverged", branches: [branch("local", true), branch("ios-2", false)], deferred: false },
+      keys: null,
+      reason: null,
+    };
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const { SyncConflictDialog } = await import("../src/app/TelegramNotices");
+    container = document.body.appendChild(document.createElement("div"));
+    root = createRoot(container);
+    act(() => root!.render(<SyncConflictDialog />));
+    const later = [...document.querySelectorAll("button")].find((button) => button.textContent === "Решить позже")!;
+    await act(async () => later.click());
+    expect(document.querySelector("[role=alertdialog]")).toBeNull();
+    expect(warn).toHaveBeenCalled();
+    store.failDefer = false;
+    warn.mockRestore();
+  });
+});
+
+describe("строка версии", () => {
+  const now = new Date("2026-10-29T12:00:00Z");
+  it("без времени ответов — последнее занятие по дню, с заглавной", () => {
+    expect(branchLine({ local: true, createdAt: "", description: { ...description, lastAnswerAt: null } }, now)).toBe(
+      "Последнее занятие 14 октября · 3 карточки в обучении · 5 ответов",
+    );
+  });
+  it("без ответов и дней — только объём", () => {
+    expect(
+      branchLine(
+        { local: true, createdAt: "", description: { ...description, lastAnswerAt: null, lastDay: null } },
+        now,
+      ),
+    ).toBe("3 карточки в обучении · 5 ответов");
+  });
+  it("прошлогодняя версия — с годом", () => {
+    expect(
+      branchLine(
+        { local: false, createdAt: "2025-12-30T10:00:00Z", description: { ...description, lastAnswerAt: null } },
+        now,
+      ),
+    ).toMatch(/^Отправлено 30 декабря 2025 в /);
   });
 });

@@ -20,10 +20,10 @@ export function SyncLine() {
   const line = syncLineState(status, bridge, updating, pathname === "/");
   return (
     <>
-      <div className={css.status} role="status" data-testid="sync-status" data-phase={line.phase}>
+      <div className={css.status} role="status" data-testid="sync-status" data-phase={line.phase} tabIndex={-1}>
         <span>{line.text}</span>
         {status.phase === "conflict" && status.conflict?.deferred ? (
-          <Button size="sm" variant="soft" onClick={() => void sync.reviewChoice()}>
+          <Button size="sm" variant="soft" aria-haspopup="dialog" onClick={() => void sync.reviewChoice()}>
             Выбрать версию
           </Button>
         ) : (

@@ -41,12 +41,14 @@ async function device(name: string) {
   return { db, sync: coordinator(db, name) };
 }
 type Device = Awaited<ReturnType<typeof device>>;
-async function study(dev: Device, answers: boolean[]) {
+async function study(dev: Device, answers: boolean[], mode: "scheduled" | "practice" = "scheduled") {
+  const source = dexieSource(dev.db);
   const session = await makeSession({
-    source: dexieSource(dev.db),
+    source,
     now: tick(),
     random: () => 0.31,
-    mode: "scheduled",
+    mode,
+    ...(mode === "practice" && { refs: (await dev.db.cardStates.toArray()).map((state) => state.ref) }),
   });
   await dev.db.sessions.add(session);
   const items = session.items.filter((item) => !item.eventId).slice(0, answers.length);
@@ -133,7 +135,8 @@ describe("пустая отметка изменений", () => {
     await study(phone, [true, false]);
     loseNextPointerAck();
     await phone.sync.exchange();
-    await writeMeta(phone.db, META.publishing, null);
+    // Литерал, а не META: у прежней сборки этого ключа нет вовсе.
+    await writeMeta(phone.db, "sync:publishing", null);
     expect((await mac.sync.exchange()).phase).toBe("synced");
     await study(mac, [true, true]);
     expect((await mac.sync.exchange()).phase).toBe("synced");
@@ -173,6 +176,82 @@ describe("пустая отметка изменений", () => {
   });
 });
 
+describe("ответы не теряются", () => {
+  it("ответы практики после публикации — конфликт, а не молчаливое применение облака", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, [true, false, true], "practice");
+    const before = await answers(phone);
+    await study(mac, [true]);
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    const status = await phone.sync.exchange();
+    expect(status.conflict?.kind).toBe("diverged");
+    expect(await answers(phone)).toBe(before);
+  });
+
+  it("восстановленная копия после потерянного ответа облака остаётся конфликтом `restored`", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, [true, false]);
+    loseNextPointerAck();
+    await phone.sync.exchange();
+    await writeMeta(phone.db, META.restored, new Date(clockMs).toISOString());
+    await study(mac, [true]);
+    await mac.sync.exchange();
+    const status = await phone.sync.exchange();
+    expect(status.conflict?.kind).toBe("restored");
+  });
+
+  it("ответ во время публикации не снимается чужой отметкой и уходит повторным заходом", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, [true]);
+    const original = cloud.setItem.bind(cloud);
+    let answered = false;
+    cloud.setItem = async (key, value) => {
+      if (!answered && key.startsWith("v_")) {
+        answered = true;
+        await study(phone, [false]);
+      }
+      return original(key, value);
+    };
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    cloud.setItem = original;
+    expect(answered).toBe(true);
+    expect(await readMeta(phone.db, META.dirty)).toBeNull();
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    expect(await answers(mac)).toBe(await answers(phone));
+  });
+
+  it("части записаны, указатель нет: ответы публикуются заново, а при ответах на компьютере — конфликт", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, [true, true]);
+    const original = cloud.setItem.bind(cloud);
+    cloud.setItem = async (key, value) => {
+      if (key.startsWith("p_")) throw new SyncError("transport", "Telegram CloudStorage не ответил за 15 с.");
+      return original(key, value);
+    };
+    expect((await phone.sync.exchange()).phase).toBe("error");
+    cloud.setItem = original;
+    expect(await readMeta(phone.db, META.dirty)).not.toBeNull();
+    await study(mac, [true]);
+    await mac.sync.exchange();
+    expect((await phone.sync.exchange()).conflict?.kind).toBe("diverged");
+  });
+
+  it("указатель потерянной версии убран уборкой — новая версия всё равно получает новый номер", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, [true]);
+    loseNextPointerAck();
+    await phone.sync.exchange();
+    const ghost = (await pointerOf(phone)).id;
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    cloud.store.delete(`p_${await phone.sync.deviceId()}`);
+    await study(phone, [false]);
+    await phone.sync.exchange();
+    expect((await pointerOf(phone)).id).not.toBe(ghost);
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    expect(await answers(mac)).toBe(await answers(phone));
+  });
+});
+
 describe("«Решить позже»", () => {
   it("переживает перезапуск, пока версии облака те же; новая версия снова показывает окно", async () => {
     const { phone, mac } = await pair();
@@ -191,6 +270,19 @@ describe("«Решить позже»", () => {
     await mac.sync.exchange();
     expect((await restarted.exchange()).conflict?.deferred).toBe(false);
   });
+
+  it("откладываются версии, которые видел учащийся, а не найденные обменом позже", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, [true]);
+    await study(mac, [true]);
+    await mac.sync.exchange();
+    const seen = (await phone.sync.exchange()).conflict!.branches.filter((branch) => !branch.local).map((b) => b.id);
+    await study(mac, [false]);
+    await mac.sync.exchange();
+    await phone.sync.exchange();
+    await phone.sync.deferChoice(seen);
+    expect(phone.sync.getStatus().conflict?.deferred).toBe(false);
+  });
 });
 
 describe("время в окне выбора", () => {
@@ -204,6 +296,18 @@ describe("время в окне выбора", () => {
     const [local, remote] = (await phone.sync.exchange()).conflict!.branches;
     expect(local.description.lastAnswerAt).toBe(phoneLast);
     expect(remote.description.lastAnswerAt).toBe(macLast);
+  });
+});
+
+describe("время в окне выбора: уроки", () => {
+  it("работа по уроку без повторений — тоже последний ответ", async () => {
+    const { phone, mac } = await pair();
+    const done = tick(30);
+    await saveBlockProgress("mech-1", "lesson-block", { done: true }, phone.db, done);
+    await study(mac, [true]);
+    await mac.sync.exchange();
+    const [local] = (await phone.sync.exchange()).conflict!.branches;
+    expect(local.description.lastAnswerAt).toBe(done.toISOString());
   });
 });
 

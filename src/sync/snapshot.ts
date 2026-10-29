@@ -42,6 +42,7 @@ export const META = {
   peers: "sync:peers",
   publishing: "sync:publishing",
   later: "sync:later",
+  issued: "sync:issued",
 } as const;
 export const KEEP_DAYS = 14;
 
@@ -403,11 +404,13 @@ export const describeSnapshot = (snapshot: CompactSnapshot): SnapshotDescription
   // Отметки «прочитано» — не выполненные задания.
   blocks: snapshot.blocks.filter((block) => block.done && !block.lessonId.startsWith(READING_PREFIX)).length,
   lastDay: snapshot.stats.days.length ? snapshot.stats.days[snapshot.stats.days.length - 1].date : null,
-  lastAnswerAt: snapshot.states.reduce<string | null>(
-    (latest, state) =>
-      state.card.last_review && (!latest || state.card.last_review > latest) ? state.card.last_review : latest,
-    null,
-  ),
+  // Задания урока — тоже ответы. Время самих уроков меняет и установка пакета, поэтому оно не учитывается.
+  lastAnswerAt: [
+    ...snapshot.states.map((state) => state.card.last_review),
+    ...snapshot.blocks
+      .filter((block) => block.done || block.score || block.checks?.length)
+      .map((block) => block.updatedAt),
+  ].reduce<string | null>((latest, at) => (at && (!latest || at > latest) ? at : latest), null),
 });
 /** Есть ли локальный прогресс, который нельзя молча заменить облаком при первом подключении. */
 export const hasLocalProgress = async (database: AppDatabase) =>

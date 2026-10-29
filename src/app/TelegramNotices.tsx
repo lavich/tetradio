@@ -22,17 +22,22 @@ export function SyncConflictDialog() {
   const status = useSyncStatus();
   const [busy, setBusy] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [hidden, setHidden] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const focused = useRef<string | null>(null);
   const conflict = status.conflict;
   const key = conflict?.branches.map((branch) => branch.id).join("|") ?? null;
+  // Отложенный выбор записан на устройстве: дальше окно прячет он, а «Выбрать версию» открывает снова.
+  useEffect(() => {
+    if (conflict?.deferred) setHidden(null);
+  }, [conflict?.deferred]);
   // Кнопка выбранной ветви исчезает вместе с ней, и фокус ушёл бы на body.
   useEffect(() => {
     if (!key || busy) return;
     if (focused.current && focused.current !== key) list.current?.querySelector("button")?.focus();
     focused.current = key;
   }, [key, busy]);
-  if (!conflict || !key || status.phase !== "conflict" || conflict.deferred) return null;
+  if (!conflict || !key || status.phase !== "conflict" || conflict.deferred || hidden === key) return null;
   const titles = {
     diverged: "Прогресс разошёлся между устройствами",
     initial: "В облаке уже есть прогресс",
@@ -45,6 +50,7 @@ export function SyncConflictDialog() {
       await sync.resolve(id);
     } finally {
       setBusy(null);
+      returnFocus();
     }
   };
   return (
@@ -100,8 +106,12 @@ export function SyncConflictDialog() {
             size="md"
             className="sm:w-auto"
             onClick={() => {
+              setHidden(key);
               sync.dismissChoice();
-              void sync.deferChoice();
+              const ids = conflict.branches.filter((branch) => !branch.local).map((branch) => branch.id);
+              // Без записи окно скрыто до перезапуска, как раньше: выбор от сбоя хранилища не теряется.
+              sync.deferChoice(ids).catch((error: unknown) => console.warn("«Решить позже» не сохранено", error));
+              returnFocus();
             }}
           >
             Решить позже
@@ -111,4 +121,7 @@ export function SyncConflictDialog() {
     </AlertDialog>
   );
 }
+/** Окно исчезает целиком, а кнопки, открывшей его, может уже не быть: фокус — на строку статуса синхронизации. */
+const returnFocus = () =>
+  requestAnimationFrame(() => document.querySelector<HTMLElement>("[data-testid=sync-status]")?.focus());
 export { readMeta };

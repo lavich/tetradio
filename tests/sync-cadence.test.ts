@@ -8,7 +8,7 @@ import { endSession, skipItem } from "../src/storage/ops";
 import { submitAnswer } from "./helpers/ops";
 import { dexieSource } from "../src/storage/queries";
 import { kvAdapter } from "../src/sync/adapter";
-import { EXCHANGE_INTERVAL_MS, SyncCoordinator } from "../src/sync/coordinator";
+import { CHANGE_DELAY_MS, EXCHANGE_INTERVAL_MS, SyncCoordinator } from "../src/sync/coordinator";
 import { META, readMeta } from "../src/sync/snapshot";
 import { memoryTransport } from "../src/sync/transport";
 import { installCompleted } from "./helpers/content";
@@ -92,13 +92,20 @@ describe("частота публикации", () => {
     for (const index of [0, 1, 2]) await answer(db, made, index);
     expect(exchange).not.toHaveBeenCalled();
     expect(live()).toHaveLength(1);
-    expect(live()[0].delay).toBeLessThanOrEqual(EXCHANGE_INTERVAL_MS);
+    // Обмен запуска был только что: следующий — через интервал от его начала, а не через 2 с.
+    expect(live()[0].delay).toBe(EXCHANGE_INTERVAL_MS - 60_000);
     expect(await readMeta(db, META.dirty)).toBeTruthy(); // отметка в базе переживёт закрытие приложения
     const [first] = live();
     first.run();
     expect(exchange).toHaveBeenCalledTimes(1);
     await vi.waitFor(async () => expect(await readMeta(db, META.dirty)).toBeNull());
+    clockMs += EXCHANGE_INTERVAL_MS + 60_000;
     await answer(db, made, 3);
+    expect(
+      live()
+        .filter((timer) => timer !== first)
+        .map((timer) => timer.delay),
+    ).toEqual([CHANGE_DELAY_MS]);
     await endSession((await db.sessions.get(made.id))!, db);
     expect(exchange).toHaveBeenCalledTimes(2);
     expect(live().filter((timer) => timer !== first)).toHaveLength(0);
@@ -118,8 +125,10 @@ describe("частота публикации", () => {
     const made = await session(db);
     await answer(db, made, 0);
     background!();
-    await vi.waitFor(() => expect(exchange).toHaveBeenCalledWith({ urgent: true }));
+    setVisibility("hidden");
     await vi.waitFor(async () => expect(await readMeta(db, META.dirty)).toBeNull());
+    // Оба сигнала сворачивания — один срочный заход, без второго полного обмена следом.
+    expect(exchange.mock.calls).toEqual([[{ urgent: true }]]);
   });
   it("последнее задание завершает занятие — ответом или пропуском — и публикует сразу", async () => {
     for (const last of ["answer", "skip"] as const) {

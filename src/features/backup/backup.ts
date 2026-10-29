@@ -242,8 +242,12 @@ export async function restoreBackup(
       "rw",
       TABLES.map((name) => database.table(name)),
       async () => {
-        // Идентификатор устройства и очередь публикации принадлежат этой установке, а не копии.
-        const own = await database.meta.where("key").startsWith(SYNC_META_PREFIX).toArray();
+        // Идентификатор устройства и очередь публикации принадлежат этой установке, а не копии. Начатая публикация и
+        // отложенный выбор относятся к прежнему состоянию: восстановленная копия должна стать конфликтом заново.
+        const stale = new Set([`${SYNC_META_PREFIX}publishing`, `${SYNC_META_PREFIX}later`]);
+        const own = (await database.meta.where("key").startsWith(SYNC_META_PREFIX).toArray()).filter(
+          (row) => !stale.has(row.key),
+        );
         for (const [name, items] of payload) {
           await database.table(name).clear();
           const rows =
