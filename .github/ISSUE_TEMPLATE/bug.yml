@@ -1,0 +1,46 @@
+name: Ошибка в приложении
+description: Что-то не работает или работает не так
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Что случилось
+      description: Что вы делали и что пошло не так.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Как повторить
+      placeholder: |
+        1. Открыть «Сегодня»
+        2. Нажать «Начать урок»
+        3. …
+  - type: textarea
+    id: expected
+    attributes:
+      label: Что ожидали
+  - type: dropdown
+    id: client
+    attributes:
+      label: Где
+      options:
+        - Telegram на iPhone или iPad
+        - Telegram на Android
+        - Telegram Desktop (Windows, macOS, Linux)
+        - Telegram для macOS (App Store)
+        - Сайт tetradio.app в браузере
+        - Другое
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Устройство и версия Telegram
+      placeholder: iPhone 15, iOS 19, Telegram 12.1
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Скриншот
+      description: Перетащите картинку сюда. Если на экране сбоя есть номер отчёта — приложите его.
