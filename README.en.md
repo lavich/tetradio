@@ -32,7 +32,7 @@ npm run dev:mock   # app with a mocked Telegram: http://localhost:5173/app/
 npm test           # unit tests
 ```
 
-More (in Russian): [docs/development.md](docs/development.md). Security reports: [SECURITY.md](SECURITY.md).
+More (in Russian): [docs/development.md](docs/development.md), how to contribute — [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).
 
 ## License
 

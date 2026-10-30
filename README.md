@@ -7,7 +7,7 @@
 [![Telegram](https://img.shields.io/badge/Telegram-@TetradioBot-26A5E4?logo=telegram&logoColor=white)](https://t.me/TetradioBot)
 [![Сайт](https://img.shields.io/badge/сайт-tetradio.app-1f47b8)](https://tetradio.app)
 
-Тетрадь для тех, кто учит новогреческий с нуля и готовится к экзамену ΚΕΓ A2 на Кипре. Курс из 24 модулей с уроками, чтением, аудированием, письмом и повторением карточек — внутри Telegram, без отдельной регистрации.
+Тетрадь для тех, кто учит новогреческий с нуля и готовится к экзамену ΚΕΓ A2 на Кипре. Курс из 24 модулей с уроками, чтением, аудированием, письмом и повторением карточек — внутри Telegram.
 
 [Открыть в Telegram](https://t.me/TetradioBot) · [tetradio.app](https://tetradio.app)
 
