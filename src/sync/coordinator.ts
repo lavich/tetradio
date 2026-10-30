@@ -3,19 +3,8 @@ import { lifecycle } from "../reporting/reporting";
 import type { AppDatabase } from "../storage/db";
 import type { PointerListing, SyncAdapter } from "./adapter";
 import { decodeSnapshot, encodeSnapshot } from "./codec";
-import {
-  addConfirmedOwn,
-  addOwn,
-  confirmOwn,
-  dropLink,
-  pickAncestor,
-  readChain,
-  readLinkSnapshot,
-  setAnchor,
-  widen,
-  type AncestorLink,
-} from "./ancestors";
-import { mergeSnapshots, normalize, type MergeInput } from "./merge";
+import { reconcile } from "./reconcile";
+import { addOwn, confirmOwn, dropLink, readChain, setAnchor } from "./ancestors";
 import { dominates, mergeClocks, sameClock } from "./clock";
 import { syncEvents, type SyncEvent } from "./events";
 import {
@@ -27,7 +16,7 @@ import {
   hasLocalProgress,
   META,
   parseClock,
-  readMarkedSnapshot,
+  progressOf,
   readMeta,
   readSnapshot,
   writeMeta,
@@ -122,9 +111,6 @@ const parseIds = (raw: string | null): string[] => {
     return [];
   }
 };
-/** Всё, что публикуется, кроме времени сборки и пакетов: ответы практики меняют только навыки и статистику. */
-const progressOf = ({ lessons, blocks, states, skills, stats, reviewDays }: CompactSnapshot) =>
-  JSON.stringify([lessons, blocks, states, skills, stats, reviewDays ?? null]);
 /** Локальный прогресс проходит тот же кодек, что и опубликованный: округления формата не дают ложного различия. */
 const sameProgress = (local: CompactSnapshot, published: CompactSnapshot, format: number) => {
   try {
@@ -134,15 +120,9 @@ const sameProgress = (local: CompactSnapshot, published: CompactSnapshot, format
     return false;
   }
 };
-/** Текст звена: как в облаке (формат 6 — упакованный) или JSON формата 5, если звено собрано здесь. */
-interface VersionText {
-  text: string;
-  format: number;
-}
-const SNAPSHOT_FORMAT_TEXT = 5;
-/** Строка «До объединения» среди отложенных версий. */
-const MERGED_PREFIX = "merged-";
+import { SNAPSHOT_FORMAT_TEXT, type ReconcileHost, type VersionText } from "./reconcile-types";
 const counterOf = (id: string) => Number(id.slice(id.lastIndexOf("-") + 1)) || 0;
+
 const remoteIds = (conflict: SyncConflict | null) =>
   conflict?.branches.filter((branch) => !branch.local).map((branch) => branch.id) ?? [];
 const FOREIGN_KEEP_MS = 30 * 24 * 60 * 60 * 1000;
@@ -591,11 +571,22 @@ export class SyncCoordinator {
       return;
     }
     if (writes) {
-      const outcome = await this.reconcile(device, flags, remote, texts);
+      const outcome = await reconcile(this.reconcileHost(), device, flags, remote, texts);
       if (outcome === "done") return;
       if (outcome === "again" && depth < 3) return this.decide(writes, depth + 1);
     }
     await this.conflict("diverged", [await localBranch(), ...remote]);
+  }
+  /** Координатор для слияния: чанк слияния получает только то, что ему нужно. */
+  private reconcileHost(): ReconcileHost {
+    return {
+      database: this.options.database,
+      now: this.options.now,
+      confirm: () => this.confirm(),
+      publish: (device, clock, resolves) => this.publish(device, clock, [], resolves, null),
+      installMissing: (packages) => this.installMissing(packages),
+      report: (error) => this.onFailure?.(error, "unknown"),
+    };
   }
   /** Снимок версии и её текст в облаке; адаптер без текста — звено хранит снимок в формате записи JSON. */
   private async readBranch(meta: VersionMeta): Promise<{ snapshot: CompactSnapshot; text: string }> {
@@ -603,151 +594,6 @@ export class SyncCoordinator {
     if (adapter.readVersionText) return adapter.readVersionText(meta);
     const snapshot = await adapter.readVersion(meta);
     return { snapshot, text: encodeSnapshot(snapshot, SNAPSHOT_FORMAT_TEXT) };
-  }
-  /**
-   * Расхождение с общим предком решается без окна. Сходимость: версия облака с тем же содержанием, что здесь или в звене
-   * цепочки, принимается без публикации. Слияние: предок / здесь / облако, результат применяется с отметкой изменений и
-   * публикуется обычной публикацией. `conflict` — предка нет или слияние не удалось: окно, как раньше.
-   */
-  private async reconcile(
-    device: string,
-    flags: Awaited<ReturnType<SyncCoordinator["flags"]>>,
-    remote: ConflictBranch[],
-    texts: Map<string, VersionText>,
-  ): Promise<"done" | "again" | "conflict"> {
-    const { database } = this.options;
-    const now = this.options.now();
-    const chain = await readChain(database);
-    const { mark, snapshot: raw } = await readMarkedSnapshot(database, now);
-    let local: CompactSnapshot;
-    try {
-      local = normalize(raw);
-    } catch {
-      return "conflict";
-    }
-    const content = progressOf(local);
-    const clocks = remote.map((branch) => branch.meta!.clock);
-    if (!flags.dirty && remote.every((branch) => progressOf(branch.snapshot) === content)) {
-      const [first] = remote;
-      const clock = mergeClocks(flags.clock, ...clocks);
-      const text = texts.get(first.id)!;
-      const accepted = await database.transaction("rw", database.meta, async () => {
-        if ((await readMeta(database, META.dirty)) !== mark || (await readMeta(database, META.restored))) return false;
-        await writeMeta(database, META.clock, JSON.stringify(clock));
-        await writeMeta(database, META.applied, first.id);
-        await setAnchor(database, { id: first.id, clock, format: text.format }, text.text);
-        return true;
-      });
-      if (!accepted) return "again";
-      await this.confirm();
-      return "done";
-    }
-    if (flags.dirty)
-      for (const branch of remote)
-        for (const link of chain.filter((item) => item.confirmed)) {
-          const snapshot = await readLinkSnapshot(database, link);
-          if (!snapshot || progressOf(normalize(snapshot)) !== progressOf(branch.snapshot)) continue;
-          // Версия облака — это звено с более широкими часами: публикация отправит только своё новое поверх неё.
-          await database.transaction("rw", database.meta, async () => {
-            const clock = parseClock(await readMeta(database, META.clock));
-            await widen(database, link.id, branch.meta!.clock);
-            await writeMeta(database, META.clock, JSON.stringify(mergeClocks(clock, branch.meta!.clock)));
-          });
-          return "again";
-        }
-    const issued = Number(await readMeta(database, META.issued)) || 0;
-    const own = { ...flags.clock, [device]: Math.max(flags.clock[device] ?? 0, issued) };
-    const ancestorLink = pickAncestor(chain, flags.clock, [own, ...clocks]);
-    if (!ancestorLink) return "conflict";
-    let merged: CompactSnapshot;
-    let anchor: { id: string; clock: Clock; format: number; text: string };
-    try {
-      const ancestorSnapshot = await readLinkSnapshot(database, ancestorLink);
-      if (!ancestorSnapshot) return "conflict";
-      const ancestor: MergeInput = { snapshot: normalize(ancestorSnapshot), format: ancestorLink.format };
-      const cloud = remote.map((branch): MergeInput => ({ snapshot: branch.snapshot, format: branch.meta!.format }));
-      merged = mergeSnapshots(ancestor, [{ snapshot: local, format: SNAPSHOT_FORMAT }, ...cloud], now.toISOString());
-      anchor = await this.cloudAnchor(chain, ancestorLink, ancestor, remote, cloud, texts, now);
-    } catch (error) {
-      this.onFailure?.(error, "unknown");
-      return "conflict";
-    }
-    await this.keepBeforeMerge(device, raw, now);
-    const clock = mergeClocks(flags.clock, ...clocks);
-    const applied = await applySnapshot(database, merged, remote[0].id, clock, now, {
-      merged: { mark },
-      chain: () => setAnchor(database, { id: anchor.id, clock: anchor.clock, format: anchor.format }, anchor.text),
-    });
-    if (!applied) return "again";
-    await this.installMissing(merged.packages);
-    await this.publish(
-      device,
-      clock,
-      [],
-      remote.map((branch) => branch.id),
-      null,
-    );
-    return "again";
-  }
-  /**
-   * Опора после слияния — состояние облака без своих неопубликованных изменений: при одной ветви сама эта версия, при
-   * нескольких — их слияние со своей последней подтверждённой публикацией. Без неё новая версия облака, пришедшая до
-   * публикации слияния, не нашла бы предка.
-   */
-  private async cloudAnchor(
-    chain: AncestorLink[],
-    ancestorLink: AncestorLink,
-    ancestor: MergeInput,
-    remote: ConflictBranch[],
-    cloud: MergeInput[],
-    texts: Map<string, VersionText>,
-    now: Date,
-  ) {
-    if (remote.length === 1) {
-      const [branch] = remote;
-      const text = texts.get(branch.id)!;
-      return { id: branch.id, clock: branch.meta!.clock, format: text.format, text: text.text };
-    }
-    const lastOwn = chain.filter((link) => link.own && link.confirmed).at(-1);
-    // Своя публикация старше предка (опора новее неё) уже входит в предка.
-    const ownSnapshot =
-      lastOwn && lastOwn.id !== ancestorLink.id && dominates(lastOwn.clock, ancestorLink.clock)
-        ? await readLinkSnapshot(this.options.database, lastOwn)
-        : null;
-    const inputs = ownSnapshot ? [{ snapshot: normalize(ownSnapshot), format: lastOwn!.format }, ...cloud] : cloud;
-    const snapshot = mergeSnapshots(ancestor, inputs, now.toISOString());
-    return {
-      id: `cloud-${remote.map((branch) => branch.id).join("+")}`,
-      clock: mergeClocks(ownSnapshot ? lastOwn!.clock : {}, ...remote.map((branch) => branch.meta!.clock)),
-      format: SNAPSHOT_FORMAT_TEXT,
-      text: encodeSnapshot(snapshot, SNAPSHOT_FORMAT_TEXT),
-    };
-  }
-  /** Страховка: состояние до слияния — одна строка «До объединения» среди отложенных версий, новая заменяет прежнюю. */
-  private async keepBeforeMerge(device: string, snapshot: CompactSnapshot, now: Date) {
-    const { database } = this.options;
-    const id = `${MERGED_PREFIX}${device}-${now.getTime()}`;
-    await database.transaction("rw", database.syncVersions, async () => {
-      const previous = (await database.syncVersions.toCollection().primaryKeys()) as string[];
-      await database.syncVersions.bulkDelete(previous.filter((key) => key.startsWith(MERGED_PREFIX)));
-      await database.syncVersions.put({
-        id,
-        role: "rejected",
-        createdAt: now.toISOString(),
-        meta: {
-          id,
-          device,
-          clock: {},
-          createdAt: now.toISOString(),
-          format: SNAPSHOT_FORMAT,
-          parts: 0,
-          checksum: "",
-          resolves: [],
-        },
-        snapshot,
-        note: "До объединения",
-      });
-    });
   }
   private async conflict(kind: SyncConflict["kind"], branches: ConflictBranch[]) {
     const later = new Set(parseIds(await readMeta(this.options.database, META.later)));
@@ -841,7 +687,7 @@ export class SyncCoordinator {
       if (own > (clock[mine.device] ?? 0)) {
         await writeMeta(database, META.applied, mine.id);
         await writeMeta(database, META.clock, JSON.stringify(mergeClocks(clock, mine.clock)));
-        await addConfirmedOwn(database, { id: mine.id, clock: mine.clock, format }, text);
+        await addOwn(database, { id: mine.id, clock: mine.clock, format }, text, true);
       }
       return true;
     });

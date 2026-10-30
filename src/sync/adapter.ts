@@ -154,14 +154,12 @@ let compressionModule: Promise<typeof import("./compression")> | null = null;
  * Чанк упаковки отдельный и грузится по требованию. После деплоя WebView без service worker держит старую сборку,
  * чей чанк уже удалён: отказ — `stale` (нужна перезагрузка), а промис сбрасывается, чтобы повтор грузил заново.
  */
+export const staleChunk = (error: unknown) =>
+  new SyncError("stale", "Не удалось загрузить часть приложения: вышла новая версия. Перезапустите приложение.", error);
 export function loadCompression() {
   compressionModule ??= import("./compression").catch((error: unknown) => {
     compressionModule = null;
-    throw new SyncError(
-      "stale",
-      "Не удалось загрузить часть приложения: вышла новая версия. Перезапустите приложение.",
-      error,
-    );
+    throw staleChunk(error);
   });
   return compressionModule;
 }

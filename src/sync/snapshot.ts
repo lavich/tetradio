@@ -19,7 +19,7 @@ import { CONTENT_TABLES, STORED_KINDS } from "../storage/kinds";
 import { blockKey } from "../storage/course";
 import { PENDING_LESSONS_KEY, readPending, type PendingLessons } from "../storage/pending";
 import type { BlockProgress } from "../domain/types";
-import { dirtyMark } from "../storage/ops";
+import { dirtyMark } from "../storage/dirty";
 import {
   SNAPSHOT_FORMAT,
   type BaseSummaryRow,
@@ -46,6 +46,9 @@ export const META = {
   issued: "sync:issued",
 } as const;
 export const KEEP_DAYS = 14;
+/** Всё, что публикуется, кроме времени сборки и пакетов: ответы практики меняют только навыки и статистику. */
+export const progressOf = ({ lessons, blocks, states, skills, stats, reviewDays }: CompactSnapshot) =>
+  JSON.stringify([lessons, blocks, states, skills, stats, reviewDays ?? null]);
 
 export const serializeCard = (card: Card): SerializedCard => ({
   ...card,
@@ -246,12 +249,6 @@ export const buildSnapshot = zoned(async function buildSnapshot(
 });
 export const readSnapshot = (database: AppDatabase, now: Date) =>
   database.transaction("r", tables(database, SNAPSHOT_TABLES), () => buildSnapshot(database, now));
-/** Снимок и отметка изменений, прочитанные вместе: слияние применяется, только если отметка с тех пор не менялась. */
-export const readMarkedSnapshot = (database: AppDatabase, now: Date) =>
-  database.transaction("r", tables(database, SNAPSHOT_TABLES), async () => ({
-    mark: await readMeta(database, META.dirty),
-    snapshot: await buildSnapshot(database, now),
-  }));
 /** Новая база: отсечка — момент сборки, локальные события до неё считаются учтёнными в снимке. */
 export const commitBase = zoned(async function commitBase(
   database: AppDatabase,

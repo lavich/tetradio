@@ -27,14 +27,9 @@ import {
 } from "../domain/types";
 import { syncEvents, type SyncEvent } from "../sync/events";
 
-/**
- * Отметка «есть неопубликованные изменения» пишется в той же транзакции, что и само изменение.
- * Каждое изменение пишет новую метку: публикация снимает только ту, что прочитала при сборке снимка.
- */
-export const DIRTY_KEY = "sync:dirty";
-let changes = 0;
-export const dirtyMark = () =>
-  `${Date.now().toString(36)}-${(++changes).toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+import { DIRTY_KEY, dirtyMark } from "./dirty";
+
+export { DIRTY_KEY, dirtyMark } from "./dirty";
 export const markChanged = (database: AppDatabase) => database.meta.put({ key: DIRTY_KEY, value: dirtyMark() });
 export const announceChange = (event: SyncEvent = "changed") => syncEvents.emit(event);
 const settled = (items: SessionItem[]) => items.filter((entry) => entry.eventId || entry.skipped).length;
