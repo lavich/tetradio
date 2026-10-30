@@ -153,25 +153,59 @@ function seeded(seed: number) {
 }
 function evolve(random: () => number, from: CompactSnapshot, start: number): CompactSnapshot {
   const ids = ["a", "b", "c", "d", "e"];
+  const key = (id: string) => JSON.stringify(["word", id]);
   const states = new Map(from.states.map((s) => [s.ref.id, s]));
+  const skills = new Map(from.skills.map((entry) => [entry.ref.id, structuredClone(entry)]));
+  const lessons = new Map(from.lessons.map((lesson) => [lesson.id, lesson]));
+  const blocks = new Map(from.blocks.map((block) => [block.blockId, block]));
+  const reviewDays = structuredClone(from.reviewDays ?? {});
   let answers = from.stats.answers;
-  const days = new Map(from.stats.days.map((day) => [day.date, { ...day }]));
-  const steps = 1 + Math.floor(random() * 4);
+  const days = new Map(from.stats.days.map((day) => [day.date, { ...day, keys: [...day.keys] }]));
+  const steps = 1 + Math.floor(random() * 5);
   for (let step = 0; step < steps; step++) {
     const id = ids[Math.floor(random() * ids.length)];
     const minute = start + step;
     states.set(id, state(id, minute, Math.round(random() * 100) / 10));
+    const before = skills.get(id)?.skills ?? { types: {}, lastTypes: [], cleanAssemblies: 0 };
+    const correct = random() > 0.3;
+    const spelling = random() < 0.5;
+    const type: "spelling" | "assembly" = spelling ? "spelling" : "assembly";
+    const recent = [...(before.types[type]?.recent ?? []), correct].slice(-10);
+    skills.set(id, {
+      ref: { kind: "word", id },
+      skills: {
+        types: { ...before.types, [type]: { recent, lastAt: at(minute) } },
+        lastTypes: [...before.lastTypes, type].slice(-2),
+        cleanAssemblies:
+          spelling && !correct ? 0 : !spelling && correct ? before.cleanAssemblies + 1 : before.cleanAssemblies,
+      },
+    });
     answers++;
-    const date = `2026-09-${String(10 + Math.floor(random() * 3)).padStart(2, "0")}`;
+    const date = `2026-09-${String(1 + Math.floor(random() * 20)).padStart(2, "0")}`;
     const day = days.get(date) ?? { date, answers: 0, keys: [] };
     day.answers++;
-    if (!day.keys.includes(JSON.stringify(["word", id]))) day.keys.push(JSON.stringify(["word", id]));
+    if (!day.keys.includes(key(id))) day.keys.push(key(id));
     days.set(date, day);
+    if (random() < 0.3) (reviewDays["course"] ??= []).push(date);
+    if (random() < 0.3) {
+      const lesson = `m01-${1 + Math.floor(random() * 3)}`;
+      lessons.set(lesson, { id: lesson, completed: random() < 0.7, updatedAt: at(minute) });
+    }
+    if (random() < 0.3) {
+      const block = `b${Math.floor(random() * 3)}`;
+      blocks.set(block, { lessonId: "m01-1", blockId: block, done: random() < 0.6, updatedAt: at(minute) });
+    }
   }
   return snapshot({
     states: [...states.values()].sort((a, b) => a.ref.id.localeCompare(b.ref.id)),
+    skills: [...skills.values()].sort((a, b) => a.ref.id.localeCompare(b.ref.id)),
+    lessons: [...lessons.values()].sort((a, b) => a.id.localeCompare(b.id)),
+    blocks: [...blocks.values()].sort((a, b) => a.blockId.localeCompare(b.blockId)),
+    reviewDays: Object.fromEntries(
+      Object.entries(reviewDays).map(([course, list]) => [course, [...new Set(list)].sort()]),
+    ),
     stats: {
-      days: [...days.values()].sort((a, b) => a.date.localeCompare(b.date)),
+      days: [...days.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-14),
       recentByType: {},
       answers,
       answeredKeys: [],
@@ -180,11 +214,12 @@ function evolve(random: () => number, from: CompactSnapshot, start: number): Com
 }
 
 describe("слияние снимков: свойства", () => {
-  const cases = Array.from({ length: 60 }, (_, index) => {
+  const cases = Array.from({ length: 80 }, (_, index) => {
     const random = seeded(index + 1);
     const base = evolve(random, snapshot(), 0);
-    return { base, x: evolve(random, base, 10), y: evolve(random, base, 20), z: evolve(random, base, 30) };
+    return { base, x: evolve(random, base, 100), y: evolve(random, base, 200), z: evolve(random, base, 300) };
   });
+  const byId = <T>(items: T[], id: (item: T) => string) => new Map(items.map((item) => [id(item), item]));
 
   it("одна ветвь и ветвь, равная предку, дают эту ветвь; две равные ветви — те же состояния карточек", () => {
     for (const { base, x } of cases) {
@@ -202,20 +237,84 @@ describe("слияние снимков: свойства", () => {
     }
   });
 
-  it("ответы не теряются и не удваиваются: итог — предок плюс приросты всех ветвей", () => {
+  it("ответы не теряются и не удваиваются: итог и каждый день — предок плюс приросты всех ветвей", () => {
     for (const { base, x, y } of cases) {
       const merged = merge(base, x, y);
       expect(merged.stats.answers).toBe(x.stats.answers + y.stats.answers - base.stats.answers);
-      const perDay = (snap: CompactSnapshot) => snap.stats.days.reduce((sum, day) => sum + day.answers, 0);
-      expect(perDay(merged)).toBe(perDay(x) + perDay(y) - perDay(base));
+      const day = (snap: CompactSnapshot, date: string) => snap.stats.days.find((item) => item.date === date)?.answers;
+      for (const { date, answers } of merged.stats.days) {
+        const before = day(base, date) ?? 0;
+        expect(answers).toBe(before + (day(x, date) ?? before) - before + (day(y, date) ?? before) - before);
+      }
+      expect(merged.stats.days.length).toBeLessThanOrEqual(14);
     }
   });
 
-  it("слияние результата с его предком ничего не добавляет", () => {
+  it("изменённое одной стороной берётся с неё: карточки, уроки и блоки", () => {
     for (const { base, x, y } of cases) {
       const merged = merge(base, x, y);
-      expect(content(merge(x, merged))).toBe(content(merged));
-      expect(content(merge(merged, merged, merged))).toBe(content(merged));
+      const states = byId(merged.states, (s) => s.ref.id);
+      const lessons = byId(merged.lessons, (lesson) => lesson.id);
+      const blocks = byId(merged.blocks, (block) => block.blockId);
+      const only = <T>(pick: (snap: CompactSnapshot) => Map<string, T>, check: (id: string, value: T) => void) => {
+        const [before, left, right] = [pick(base), pick(x), pick(y)];
+        for (const [id, value] of left)
+          if (
+            JSON.stringify(value) !== JSON.stringify(before.get(id)) &&
+            JSON.stringify(right.get(id)) === JSON.stringify(before.get(id))
+          )
+            check(id, value);
+      };
+      only(
+        (snap) => byId(snap.states, (s) => s.ref.id),
+        (id, value) => expect(states.get(id)).toEqual(value),
+      );
+      only(
+        (snap) => byId(snap.lessons, (lesson) => lesson.id),
+        (id, value) => expect(lessons.get(id)).toEqual(value),
+      );
+      only(
+        (snap) => byId(snap.blocks, (block) => block.blockId),
+        (id, value) => expect(blocks.get(id)).toEqual(value),
+      );
+    }
+  });
+
+  it("пройденный урок не теряется, блок — с более поздним изменением, дни повторений объединяются", () => {
+    for (const { base, x, y } of cases) {
+      const merged = merge(base, x, y);
+      const completed = new Set(merged.lessons.filter((lesson) => lesson.completed).map((lesson) => lesson.id));
+      for (const branch of [x, y])
+        for (const lesson of branch.lessons)
+          if (
+            lesson.completed &&
+            lesson.updatedAt >= (merged.lessons.find((item) => item.id === lesson.id)?.updatedAt ?? "")
+          )
+            expect(completed.has(lesson.id)).toBe(true);
+      for (const block of merged.blocks) {
+        const latest = [x, y].flatMap((branch) => branch.blocks).filter((item) => item.blockId === block.blockId);
+        expect(latest.every((item) => item.updatedAt <= block.updatedAt)).toBe(true);
+      }
+      for (const branch of [base, x, y])
+        for (const [course, list] of Object.entries(branch.reviewDays ?? {}))
+          for (const date of list) expect(merged.reviewDays?.[course]).toContain(date);
+    }
+  });
+
+  it("навыки: по типу — последний ответ, чистые сборки не отрицательны", () => {
+    for (const { base, x, y } of cases) {
+      const merged = merge(base, x, y);
+      for (const entry of merged.skills) {
+        expect(entry.skills.cleanAssemblies).toBeGreaterThanOrEqual(0);
+        for (const [type, skill] of Object.entries(entry.skills.types)) {
+          const sides = [x, y]
+            .map(
+              (branch) => branch.skills.find((item) => item.ref.id === entry.ref.id)?.skills.types[type as "spelling"],
+            )
+            .filter((item) => !!item);
+          expect(sides.every((item) => item.lastAt <= skill!.lastAt)).toBe(true);
+        }
+      }
     }
   });
 });

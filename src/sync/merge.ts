@@ -40,12 +40,17 @@ function mergeKey<T>(
   keeps: boolean[],
   resolve: (changed: T[], base: T | undefined) => T,
 ): T | undefined {
-  const seen = values.map((value, index) => (value === undefined && keeps[index] ? base : value));
-  const changed = seen.filter((value) => !same(value, base));
+  const before = text(base);
+  const changed: { value: T | undefined; json: string }[] = [];
+  values.forEach((value, index) => {
+    if (value === undefined && keeps[index]) return;
+    const json = text(value);
+    if (json !== before) changed.push({ value, json });
+  });
   if (!changed.length) return base;
-  if (changed.every((value) => same(value, changed[0]))) return changed[0];
+  if (changed.every((entry) => entry.json === changed[0].json)) return changed[0].value;
   // Удалённое одной стороной и изменённое другой остаётся изменённым.
-  const present = changed.filter((value): value is T => value !== undefined);
+  const present = changed.flatMap((entry) => (entry.value === undefined ? [] : [entry.value]));
   return present.length === 1 ? present[0] : resolve(present, base);
 }
 function mergeMaps<T>(

@@ -244,7 +244,7 @@ describe("конфликты независимых изменений", () => {
     await study(tablet, [true, false, true]);
     const before = await statesOf(tablet);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const status = await tablet.sync.exchange();
     expect(status.phase).toBe("conflict");
     expect(status.conflict?.kind).toBe("diverged");
@@ -264,7 +264,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     const local = conflict.conflict!.branches.find((branch) => branch.local)!;
     const resolved = await tablet.sync.resolve(local.id);
@@ -281,7 +281,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const phoneStates = await statesOf(phone);
     const conflict = await tablet.sync.exchange();
     const remote = conflict.conflict!.branches.find((branch) => !branch.local)!;
@@ -304,7 +304,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     const remote = conflict.conflict!.branches.find((branch) => !branch.local)!;
     const answered: Promise<unknown>[] = [];
@@ -329,7 +329,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     await tablet.sync.resolve(conflict.conflict!.branches.find((branch) => !branch.local)!.id);
     expect(await tablet.db.lessons.get("mech-2")).toMatchObject({ completed: false, updatedAt: now().toISOString() });
@@ -351,7 +351,6 @@ describe("конфликты независимых изменений", () => {
     const result = await phone.sync.exchange();
     expect(result.conflict).toBeNull();
     expect((await tablet.sync.exchange()).phase).toBe("synced");
-    // Ответы обеих сторон: три общих, два телефона, три планшета.
     expect((await stats(phone)).totals.answers).toBe(8);
     expect((await stats(tablet)).totals.answers).toBe(8);
   });
@@ -360,7 +359,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [true]);
     await study(tablet, [true, true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     const before = conflict.conflict!.branches.find((branch) => branch.local)!.snapshot.stats.answers;
     await study(tablet, [true]);
@@ -373,7 +372,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false, true]);
     await study(tablet, [true, false, true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     const local = conflict.conflict!.branches.find((branch) => branch.local)!;
     const [first, second] = await Promise.all([tablet.sync.resolve(local.id), tablet.sync.exchange()]);
@@ -388,7 +387,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false]);
     await study(tablet, [true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     expect((await tablet.sync.exchange()).phase).toBe("conflict");
     const choice = tablet.sync.resolve("gone");
     const waiting = tablet.sync.exchange();
@@ -400,7 +399,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false]);
     await study(tablet, [true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     const stale = await tablet.sync.resolve("gone");
     expect(stale).toMatchObject({ phase: "conflict", reason: "Версии изменились — выберите ещё раз." });
@@ -445,7 +444,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false]);
     await study(tablet, [true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     await tablet.sync.exchange();
     expect((await tablet.sync.resolve("gone")).reason).toMatch(/Версии изменились/);
     tablet.db.close();
@@ -480,7 +479,7 @@ describe("конфликты независимых изменений", () => {
     await study(phone, [false]);
     await study(tablet, [true]);
     await phone.sync.exchange();
-    await forgetAncestors(tablet.db); // конфликт без общего предка: окно выбора
+    await forgetAncestors(tablet.db);
     const conflict = await tablet.sync.exchange();
     during = async () => {
       await study(tablet, [true]);
@@ -505,7 +504,6 @@ describe("конфликты независимых изменений", () => {
     await phone.sync.exchange();
     const late = await laptop.sync.exchange();
     expect(late.conflict).toBeNull();
-    // Выбор на планшете отверг ответ телефона: остаются три общих, ответ планшета и два ответа ноутбука.
     expect((await stats(laptop)).totals.answers).toBe(6);
   });
   it("первое подключение непустой базы к непустому облаку и восстановление копии требуют выбора", async () => {

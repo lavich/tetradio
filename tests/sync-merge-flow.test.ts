@@ -11,7 +11,8 @@ import { kvAdapter } from "../src/sync/adapter";
 import { readChain } from "../src/sync/ancestors";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport, SyncError, type KeyValueTransport, type MemoryTransport } from "../src/sync/transport";
-import { META, readMeta } from "../src/sync/snapshot";
+import { META, progressOf, readMeta, readSnapshot } from "../src/sync/snapshot";
+import { normalize } from "../src/sync/merge";
 import { markChanged } from "../src/storage/ops";
 import { installCompleted } from "./helpers/content";
 import { exportFull, restoreBackup } from "../src/features/backup/backup";
@@ -113,13 +114,16 @@ async function pair() {
   expect((await mac.sync.exchange()).phase).toBe("synced");
   return { phone, mac };
 }
-/** Обмены до тишины; окно выбора — ошибка теста. */
 async function settle(...devices: Device[]) {
   for (let round = 0; round < 4; round++)
     for (const dev of devices) {
       const status = await dev.sync.exchange();
       expect(status.conflict, `${dev.name}: окно выбора`).toBeNull();
     }
+  const contents = await Promise.all(
+    devices.map(async (dev) => progressOf(normalize(await readSnapshot(dev.db, now())))),
+  );
+  expect(new Set(contents).size).toBe(1);
 }
 const total = (...devices: Device[]) => devices.reduce((sum, dev) => sum + dev.given, 0);
 
@@ -230,9 +234,11 @@ describe("автоматическое слияние", () => {
       await study(phone, 1);
       expect((await phone.sync.exchange()).phase).toBe("synced");
     }
-    expect((await readChain(phone.db)).length).toBeLessThanOrEqual(4);
+    const chain = await readChain(phone.db);
+    expect(chain.filter((link) => link.own).length).toBeLessThanOrEqual(3);
+    expect(chain.filter((link) => !link.own).length).toBeLessThanOrEqual(2);
     const keys = (await phone.db.meta.toCollection().primaryKeys()) as string[];
-    expect(keys.filter((key) => key.startsWith("sync:ancestor:")).length).toBeLessThanOrEqual(4);
+    expect(keys.filter((key) => key.startsWith("sync:ancestor:")).length).toBe(chain.length);
     await study(mac, 1);
     await settle(mac, phone);
     expect(await answers(mac)).toBe(total(phone, mac));
@@ -284,7 +290,6 @@ describe("автоматическое слияние", () => {
     await mac.sync.resolve(window.conflict!.branches.find((branch) => branch.local)!.id);
     await study(phone, 1);
     await settle(phone, mac);
-    // Три общих ответа, один ответ компьютера и новый ответ телефона; два отвергнутых ответа телефона ушли.
     expect(await answers(phone)).toBe(5);
     expect(await answers(mac)).toBe(5);
   });
@@ -304,7 +309,7 @@ describe("автоматическое слияние", () => {
     expect(await answers(mac)).toBe(total(phone, mac));
   });
 
-  it("откат к прежней сборке: отложенные версии читаются, цепочка в служебных ключах ей не мешает", async () => {
+  it("эмуляция сборки отката (код ветки с её константами формата): отложенные версии читаются, цепочка в служебных ключах не мешает", async () => {
     const { phone, mac } = await pair();
     await study(phone, 1);
     await study(mac, 1);

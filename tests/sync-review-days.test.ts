@@ -225,7 +225,7 @@ describe("дни повторений: обмен и конфликт", () => {
     await phone.sync.exchange();
     nextDay();
     await study(laptop, [false]);
-    await forgetAncestors(laptop.db); // окно выбора — у расхождения без общего предка
+    await forgetAncestors(laptop.db);
     const state = await laptop.sync.exchange();
     expect(state.phase).toBe("conflict");
     const all = [...new Set([...(await localDays(phone)), ...(await localDays(laptop))])].sort();

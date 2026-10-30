@@ -272,7 +272,7 @@ describe("«Решить позже»", () => {
     await study(phone, [true]);
     await study(mac, [true]);
     await mac.sync.exchange();
-    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
+    await forgetAncestors(phone.db);
     expect((await phone.sync.exchange()).conflict?.deferred).toBe(false);
     await phone.sync.deferChoice();
     expect(phone.sync.getStatus().conflict?.deferred).toBe(true);
@@ -291,7 +291,7 @@ describe("«Решить позже»", () => {
     await study(phone, [true]);
     await study(mac, [true]);
     await mac.sync.exchange();
-    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
+    await forgetAncestors(phone.db);
     const seen = (await phone.sync.exchange()).conflict!.branches.filter((branch) => !branch.local).map((b) => b.id);
     await study(mac, [false]);
     await mac.sync.exchange();
@@ -307,7 +307,7 @@ describe("«Решить позже» при сбое хранилища", () =>
     await study(phone, [true]);
     await study(mac, [true]);
     await mac.sync.exchange();
-    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
+    await forgetAncestors(phone.db);
     const status = await phone.sync.exchange();
     expect(status.conflict?.kind).toBe("diverged");
     const put = phone.db.meta.put.bind(phone.db.meta);
@@ -327,7 +327,7 @@ describe("время в окне выбора", () => {
     await study(mac, [true]);
     const macLast = now().toISOString();
     await mac.sync.exchange();
-    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
+    await forgetAncestors(phone.db);
     const [local, remote] = (await phone.sync.exchange()).conflict!.branches;
     expect(local.description.lastAnswerAt).toBe(phoneLast);
     expect(remote.description.lastAnswerAt).toBe(macLast);
@@ -341,7 +341,7 @@ describe("время в окне выбора: уроки", () => {
     await saveBlockProgress("mech-1", "lesson-block", { done: true }, phone.db, done);
     await study(mac, [true]);
     await mac.sync.exchange();
-    await forgetAncestors(phone.db); // окно выбора — у расхождения без общего предка
+    await forgetAncestors(phone.db);
     const [local] = (await phone.sync.exchange()).conflict!.branches;
     expect(local.description.lastAnswerAt).toBe(done.toISOString());
   });
