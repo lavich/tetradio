@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Написать автору
+    url: https://t.me/TetradioBot?start=feedback
+    about: Вопрос или сообщение лично автору — в чате с ботом.
+  - name: Сообщить об уязвимости
+    url: https://github.com/lavich/tetradio/security/advisories/new
+    about: Закрыто, видит только автор.

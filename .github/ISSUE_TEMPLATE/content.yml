@@ -1,0 +1,23 @@
+name: Ошибка в уроке
+description: Опечатка, неверный ответ, перевод, звук или картинка в курсе
+labels: [content]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: Где
+      description: Курс, модуль, урок и задание (или текст в «Чтении», слово в «Словах»).
+      placeholder: Греческий A0 → A2, модуль 01, урок 1.2, задание 4
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: Что не так
+      description: Как сейчас и как правильно; если можно — с источником.
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Скриншот
