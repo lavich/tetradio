@@ -27,7 +27,7 @@ describe("бюджет Lighthouse", () => {
   });
 
   it("TBT, вес и ленивые чанки выше предела — ошибки", () => {
-    const result = verdict(runs([2000, 2000, 2000], 250, 470_000), 40_000);
+    const result = verdict(runs([2000, 2000, 2000], 250, 470_000), 42_000);
     expect(result.errors).toHaveLength(3);
   });
 

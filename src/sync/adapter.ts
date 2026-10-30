@@ -31,8 +31,8 @@ export interface PointerListing {
 export interface PublishOptions {
   /** Ключи облака, только что прочитанные решением: без них место считается по свежему списку. */
   keys?: string[];
-  /** Готовый указатель до записи частей: координатор запоминает начатую публикацию. */
-  beforeWrite?: (meta: VersionMeta) => Promise<void>;
+  /** Готовый указатель и записываемый текст до записи частей: координатор запоминает начатую публикацию. */
+  beforeWrite?: (meta: VersionMeta, text: string) => Promise<void>;
 }
 export interface PublishedVersion {
   meta: VersionMeta;
@@ -43,6 +43,8 @@ export interface SyncAdapter {
   capabilities(): SyncCapabilities;
   listPointers(): Promise<PointerListing>;
   readVersion(meta: VersionMeta): Promise<CompactSnapshot>;
+  /** Снимок и текст версии, как он лежит в облаке: звено цепочки предков хранит тот же текст. */
+  readVersionText?(meta: VersionMeta): Promise<{ snapshot: CompactSnapshot; text: string }>;
   /** Идемпотентно: повтор той же версии перезаписывает те же части и указатель. */
   /** Формат записи — `meta.format`: 5 пишется JSON, 6 — упакованным; другой — отказ `format`. */
   publishVersion(
@@ -152,14 +154,12 @@ let compressionModule: Promise<typeof import("./compression")> | null = null;
  * Чанк упаковки отдельный и грузится по требованию. После деплоя WebView без service worker держит старую сборку,
  * чей чанк уже удалён: отказ — `stale` (нужна перезагрузка), а промис сбрасывается, чтобы повтор грузил заново.
  */
+export const staleChunk = (error: unknown) =>
+  new SyncError("stale", "Не удалось загрузить часть приложения: вышла новая версия. Перезапустите приложение.", error);
 export function loadCompression() {
   compressionModule ??= import("./compression").catch((error: unknown) => {
     compressionModule = null;
-    throw new SyncError(
-      "stale",
-      "Не удалось загрузить часть приложения: вышла новая версия. Перезапустите приложение.",
-      error,
-    );
+    throw staleChunk(error);
   });
   return compressionModule;
 }
@@ -206,6 +206,9 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       return { pointers, invalid, keys: keys.length, names: keys, incomplete };
     },
     async readVersion(meta) {
+      return (await this.readVersionText!(meta)).snapshot;
+    },
+    async readVersionText(meta) {
       ensure();
       if (!(SUPPORTED_SNAPSHOT_FORMATS as readonly number[]).includes(meta.format))
         throw new SyncError(
@@ -235,7 +238,7 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
           throw new SyncError("integrity", `Содержимое версии ${meta.id} не совпадает с указателем.`);
       }
       try {
-        return decodeSnapshot(json, packed ? meta.format : undefined);
+        return { snapshot: decodeSnapshot(json, packed ? meta.format : undefined), text };
       } catch (error) {
         if (error instanceof SnapshotFormatError)
           throw new SyncError("format", "Содержимое версии не соответствует формату.");
@@ -266,7 +269,7 @@ export function kvAdapter(transport: KeyValueTransport): SyncAdapter {
       if (!validKey(pointerName, limits)) throw new SyncError("transport", "Недопустимый идентификатор устройства.");
       const { free, needed } = await this.room(parts.length, meta.device, options.keys);
       if (needed > free) throw new SyncError("limit", `В облаке нет места: нужно ${needed} ключей, свободно ${free}.`);
-      await options.beforeWrite?.(full);
+      await options.beforeWrite?.(full, text);
       // Части публикуются до указателя: неполная запись никогда не выглядит доступной версией.
       for (let index = 0; index < parts.length; index++) await transport.setItem(partKey(meta.id, index), parts[index]);
       await transport.setItem(pointerName, pointer);

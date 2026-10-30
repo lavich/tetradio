@@ -246,10 +246,14 @@ export async function restoreBackup(
         // Идентификатор устройства и очередь публикации принадлежат этой установке, а не копии. Начатая публикация,
         // отложенный выбор и завершение неустановленных уроков относятся к прежнему состоянию: восстановленная копия
         // должна стать конфликтом заново, а уроки — завершёнными, как в копии.
+        // Цепочка предков описывает прежнее состояние: у восстановленной копии общего предка с облаком нет.
         const stale = new Set([`${SYNC_META_PREFIX}publishing`, `${SYNC_META_PREFIX}later`, PENDING_LESSONS_KEY]);
-        const own = (await database.meta.where("key").startsWith(SYNC_META_PREFIX).toArray()).filter(
-          (row) => !stale.has(row.key),
+        const chain = `${SYNC_META_PREFIX}ancestor`;
+        // Ключи — до чтения значений: тексты звеньев занимают мегабайты.
+        const keys = ((await database.meta.where("key").startsWith(SYNC_META_PREFIX).primaryKeys()) as string[]).filter(
+          (key) => !key.startsWith(chain) && !stale.has(key),
         );
+        const own = (await database.meta.bulkGet(keys)).filter((row) => !!row);
         for (const [name, items] of payload) {
           await database.table(name).clear();
           const rows =

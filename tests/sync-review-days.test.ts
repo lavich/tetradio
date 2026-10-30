@@ -1,4 +1,5 @@
 import "fake-indexeddb/auto";
+import { forgetAncestors } from "./helpers/sync";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
@@ -224,6 +225,7 @@ describe("дни повторений: обмен и конфликт", () => {
     await phone.sync.exchange();
     nextDay();
     await study(laptop, [false]);
+    await forgetAncestors(laptop.db);
     const state = await laptop.sync.exchange();
     expect(state.phase).toBe("conflict");
     const all = [...new Set([...(await localDays(phone)), ...(await localDays(laptop))])].sort();
@@ -248,6 +250,21 @@ describe("дни повторений: обмен и конфликт", () => {
   it("выбор «Это устройство» публикует дни обеих ветвей", async () => {
     const { laptop, state, all } = await diverged();
     await laptop.sync.resolve(state.conflict!.branches.find((branch) => branch.local)!.id);
+    expect(flat(await published())).toEqual(all);
+  });
+  it("объединение публикует дни обеих ветвей", async () => {
+    const phone = await device("phone");
+    const laptop = await device("laptop");
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    await laptop.sync.exchange();
+    nextDay();
+    await study(phone, [true]);
+    await phone.sync.exchange();
+    nextDay();
+    await study(laptop, [false]);
+    const all = [...new Set([...(await localDays(phone)), ...(await localDays(laptop))])].sort();
+    expect((await laptop.sync.exchange()).conflict).toBeNull();
     expect(flat(await published())).toEqual(all);
   });
 });
