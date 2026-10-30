@@ -14,6 +14,7 @@ import { META, readMeta } from "../src/sync/snapshot";
 import { installCompleted } from "./helpers/content";
 import { exportFull, restoreBackup } from "../src/features/backup/backup";
 import { forgetAncestors } from "./helpers/sync";
+import { loadBuild, ROLLBACK_BUILD } from "./helpers/builds";
 
 let cloud: MemoryTransport;
 let clockMs = Date.parse("2026-09-16T08:00:00Z");
@@ -268,5 +269,56 @@ describe("автоматическое слияние", () => {
     }
     const rows = await phone.db.syncVersions.toArray();
     expect(rows.filter((row) => row.note === "До объединения")).toHaveLength(1);
+  });
+
+  it("выбор в окне распространяется как удаление: ответы отвергнутой ветви уходят, новые ответы остаются", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, 2);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    await study(mac, 1);
+    await forgetAncestors(mac.db);
+    const window = await mac.sync.exchange();
+    expect(window.conflict?.kind).toBe("diverged");
+    await mac.sync.resolve(window.conflict!.branches.find((branch) => branch.local)!.id);
+    await study(phone, 1);
+    await settle(phone, mac);
+    // Три общих ответа, один ответ компьютера и новый ответ телефона; два отвергнутых ответа телефона ушли.
+    expect(await answers(phone)).toBe(5);
+    expect(await answers(mac)).toBe(5);
+  });
+
+  it("звено, указатель которого убрала уборка, подтверждается по часам другого устройства: без удвоения", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, 2);
+    failNext((key) => key.startsWith("p_"), true);
+    expect((await phone.sync.exchange()).phase).toBe("error");
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    cloud.store.delete(await pointer(phone));
+    await study(phone, 1);
+    await study(mac, 2);
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    await settle(phone, mac);
+    expect(await answers(phone)).toBe(total(phone, mac));
+    expect(await answers(mac)).toBe(total(phone, mac));
+  });
+
+  it("откат к прежней сборке: отложенные версии читаются, цепочка в служебных ключах ей не мешает", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, 1);
+    await study(mac, 1);
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    await settle(phone, mac);
+    expect((await readChain(phone.db)).length).toBeGreaterThan(0);
+    const legacy = await loadBuild(ROLLBACK_BUILD);
+    const old = new legacy.SyncCoordinator({
+      database: phone.db,
+      adapter: legacy.kvAdapter(cloud),
+      now,
+      schedule: () => () => undefined,
+    });
+    const stored = await old.listStored();
+    expect(stored.length).toBeGreaterThan(0);
+    for (const row of stored) expect(Array.isArray(row.snapshot.states)).toBe(true);
+    expect((await old.exchange()).phase).toBe("synced");
   });
 });

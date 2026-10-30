@@ -141,14 +141,18 @@ export function commonClock(clocks: Clock[]): Clock {
   return common;
 }
 /**
- * Предок набора ветвей — подтверждённое звено, часы которого равны их общей части: тогда ни одно изменение после
- * предка не входит в две ветви, и приросты ветвей можно складывать. Нет такого звена или цепочка не сходится
- * с часами устройства — предка нет.
+ * Предок набора ветвей — подтверждённое звено, часы которого равны общей части каждой пары ветвей: тогда ни одно
+ * изменение после предка не входит в две ветви, и приросты ветвей можно складывать. Общей части всех ветвей мало: две
+ * версии облака могут делить историю, которой нет здесь. Нет такого звена или цепочка не сходится с часами устройства —
+ * предка нет.
  */
 export function pickAncestor(chain: AncestorLink[], clock: Clock, branches: Clock[]): AncestorLink | null {
   const confirmed = chainClock(chain);
   if (!confirmed || !sameClock(confirmed, clock)) return null;
   const common = commonClock(branches);
+  for (let i = 0; i < branches.length; i++)
+    for (let j = i + 1; j < branches.length; j++)
+      if (!sameClock(commonClock([branches[i], branches[j]]), common)) return null;
   return chain.find((link) => link.confirmed && sameClock(link.clock, common)) ?? null;
 }
 export async function readLinkSnapshot(database: AppDatabase, link: AncestorLink): Promise<CompactSnapshot | null> {

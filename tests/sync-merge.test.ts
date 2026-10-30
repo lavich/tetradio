@@ -143,10 +143,12 @@ describe("слияние снимков: поля", () => {
 
 /** Детерминированный генератор: свойства проверяются на одних и тех же снимках при каждом прогоне. */
 function seeded(seed: number) {
-  let value = seed;
+  let value = seed >>> 0;
   return () => {
-    value = (value * 1103515245 + 12345) % 2147483648;
-    return value / 2147483648;
+    value = (value + 0x6d2b79f5) >>> 0;
+    let mixed = Math.imul(value ^ (value >>> 15), value | 1);
+    mixed ^= mixed + Math.imul(mixed ^ (mixed >>> 7), mixed | 61);
+    return ((mixed ^ (mixed >>> 14)) >>> 0) / 4294967296;
   };
 }
 function evolve(random: () => number, from: CompactSnapshot, start: number): CompactSnapshot {

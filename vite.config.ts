@@ -104,7 +104,7 @@ const appFallback = (): Plugin => {
   };
 };
 
-const heavy = ["tests/scale.test.ts", "tests/sync-size.test.ts"];
+const heavy = ["tests/scale.test.ts", "tests/sync-size.test.ts", "tests/sync-merge-sim.test.ts"];
 
 /** HTTPS-туннель для Mini App бота разработки: разрешается только конкретный hostname из переменной окружения. */
 const tunnelHost = process.env.TUNNEL_HOST;

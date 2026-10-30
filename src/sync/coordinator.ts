@@ -709,8 +709,11 @@ export class SyncCoordinator {
       return { id: branch.id, clock: branch.meta!.clock, format: text.format, text: text.text };
     }
     const lastOwn = chain.filter((link) => link.own && link.confirmed).at(-1);
+    // Своя публикация старше предка (опора новее неё) уже входит в предка.
     const ownSnapshot =
-      lastOwn && lastOwn.id !== ancestorLink.id ? await readLinkSnapshot(this.options.database, lastOwn) : null;
+      lastOwn && lastOwn.id !== ancestorLink.id && dominates(lastOwn.clock, ancestorLink.clock)
+        ? await readLinkSnapshot(this.options.database, lastOwn)
+        : null;
     const inputs = ownSnapshot ? [{ snapshot: normalize(ownSnapshot), format: lastOwn!.format }, ...cloud] : cloud;
     const snapshot = mergeSnapshots(ancestor, inputs, now.toISOString());
     return {
