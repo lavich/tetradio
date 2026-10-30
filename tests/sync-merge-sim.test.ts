@@ -3,16 +3,15 @@ import "fake-indexeddb/auto";
 import { describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
+import { saveBlockProgress } from "../src/storage/course";
 import { submitAnswer } from "./helpers/ops";
 import { makeSession } from "../src/domain/learning";
-import { progress } from "../src/domain/stats";
 import { kvAdapter } from "../src/sync/adapter";
 import { readChain } from "../src/sync/ancestors";
-import { commonClock } from "../src/sync/ancestor-pick";
-import { sameClock } from "../src/sync/clock";
 import { SyncCoordinator, type SyncStatus } from "../src/sync/coordinator";
+import { normalize } from "../src/sync/merge";
 import { memoryTransport, SyncError, type KeyValueTransport, type MemoryTransport } from "../src/sync/transport";
-import { META, parseClock, readMeta } from "../src/sync/snapshot";
+import { KEEP_DAYS, META, progressOf, readMeta, readSnapshot } from "../src/sync/snapshot";
 import { installCompleted } from "./helpers/content";
 
 function seeded(seed: number) {
@@ -25,18 +24,18 @@ function seeded(seed: number) {
   };
 }
 
-/**
- * Случайные чередования ответов, обменов и сбоев на двух-трёх устройствах. После тишины у всех одно содержание,
- * ответов ровно столько, сколько дано, цепочка ограничена. Окно допускается только в классе «объединения с разными
- * входами»: общая часть часов ветвей не совпадает ни с одним звеном цепочки.
- */
-async function simulate(seed: number, count: number) {
+interface Run {
+  windows: number;
+  explained: boolean;
+}
+
+async function simulate(seed: number, count: number): Promise<Run> {
   const random = seeded(seed);
   const pick = <T>(items: T[]) => items[Math.floor(random() * items.length)];
   let clockMs = Date.parse("2026-09-16T08:00:00Z");
   const now = () => new Date(clockMs);
-  const tick = () => new Date((clockMs += 60000));
-  const cloud: MemoryTransport = memoryTransport();
+  const tick = (minutes = 1) => new Date((clockMs += minutes * 60000));
+  const cloud: MemoryTransport = memoryTransport({ limits: { maxKeys: 24 } });
   let failure: { match: (key: string) => boolean; ack: boolean } | null = null;
   const original = cloud.setItem.bind(cloud);
   cloud.setItem = async (key, value) => {
@@ -48,13 +47,7 @@ async function simulate(seed: number, count: number) {
     }
     await original(key, value);
   };
-  // Установка уроков на устройства — по очереди: параллельная делит общий загрузчик содержимого.
-  const make = async (index: number) => {
-    const db = new AppDatabase(`tetradio-sim-${seed}-${index}`);
-    await db.delete();
-    await db.open();
-    await installCompleted(db, ["mech-1"]);
-    const hidden = new Set<string>();
+  const coordinator = (db: AppDatabase, hidden: Set<string>) => {
     const view: KeyValueTransport = {
       ...cloud,
       getKeys: async () => (await cloud.getKeys()).filter((key) => !hidden.has(key)),
@@ -62,20 +55,34 @@ async function simulate(seed: number, count: number) {
       setItem: (key, value) => cloud.setItem(key, value),
       removeItems: (keys) => cloud.removeItems(keys),
     };
-    const sync = new SyncCoordinator({
+    return new SyncCoordinator({
       database: db,
       adapter: kvAdapter(view),
       now,
       schedule: () => () => undefined,
       retryBaseMs: 1,
     });
-    return { index, db, sync, hidden, given: 0, rejected: false };
+  };
+  const make = async (index: number) => {
+    const db = new AppDatabase(`tetradio-sim-${seed}-${index}`);
+    await db.delete();
+    await db.open();
+    await installCompleted(db, ["mech-1"]);
+    const hidden = new Set<string>();
+    return { index, db, hidden, sync: coordinator(db, hidden), given: 0, merges: [] as boolean[], publishes: 0 };
   };
   const devices: Awaited<ReturnType<typeof make>>[] = [];
   for (let index = 0; index < count; index++) devices.push(await make(index));
   type Device = (typeof devices)[number];
-  const study = async (dev: Device) => {
-    const session = await makeSession({ source: dexieSource(dev.db), now: tick(), random });
+  const days = new Set<string>();
+  const study = async (dev: Device, mode: "scheduled" | "practice") => {
+    const session = await makeSession({
+      source: dexieSource(dev.db),
+      now: tick(),
+      random,
+      mode,
+      ...(mode === "practice" && { refs: (await dev.db.cardStates.toArray()).map((state) => state.ref) }),
+    });
     await dev.db.sessions.add(session);
     const items = session.items.filter((item) => !item.eventId).slice(0, 1 + Math.floor(random() * 2));
     for (const item of items) {
@@ -91,63 +98,92 @@ async function simulate(seed: number, count: number) {
         database: dev.db,
       });
       dev.given++;
+      days.add(now().toISOString().slice(0, 10));
     }
   };
   let windows = 0;
-  /** Окно — только в разрешённом классе; оно решается выбором своей версии, и счёт ответов дальше не проверяется. */
-  const check = async (dev: Device, status: SyncStatus) => {
-    if (!status.conflict) return;
-    const clocks = status.conflict.branches.map((branch) => (branch.local ? parseClock(null) : branch.meta!.clock));
-    const local = parseClock(await readMeta(dev.db, META.clock));
-    const issued = Number(await readMeta(dev.db, META.issued)) || 0;
-    const device = await dev.sync.deviceId();
-    clocks[0] = { ...local, [device]: Math.max(local[device] ?? 0, issued) };
-    const common = commonClock(clocks);
-    const chain = await readChain(dev.db);
-    expect(status.conflict.kind, `seed ${seed}: окно ${status.conflict.kind}`).toBe("diverged");
-    // Разрешённые классы: ветви делят историю после общей части (пара версий облака поверх версии, которой здесь нет)
-    // или общей части нет среди звеньев (объединения с разными входами).
-    const shared = clocks.some((a, i) => clocks.some((b, j) => j > i && !sameClock(commonClock([a, b]), common)));
-    expect(
-      !shared && chain.some((link) => link.confirmed && sameClock(link.clock, common)),
-      `seed ${seed}: окно при общем предке`,
-    ).toBe(false);
-    windows++;
-    dev.rejected = true;
-    await dev.sync.resolve(status.conflict.branches.find((branch) => branch.local)!.id);
+  let rejected = false;
+  const exchange = async (dev: Device) => {
+    const dirty = !!(await readMeta(dev.db, META.dirty));
+    const before = (await dev.db.syncVersions.toArray())
+      .filter((row) => row.note === "До объединения")
+      .map((row) => row.id);
+    const pointer = `p_${await dev.sync.deviceId()}`;
+    const published = cloud.store.get(pointer);
+    const status: SyncStatus = await dev.sync.exchange();
+    const after = (await dev.db.syncVersions.toArray())
+      .filter((row) => row.note === "До объединения")
+      .map((row) => row.id);
+    if (after.some((id) => !before.includes(id))) dev.merges.push(dirty);
+    if (cloud.store.get(pointer) !== published) dev.publishes++;
+    if (status.conflict) {
+      expect(["diverged"], `seed ${seed}: окно ${status.conflict.kind}`).toContain(status.conflict.kind);
+      windows++;
+      const local = random() < 0.5;
+      const chosen = status.conflict.branches.find((branch) => branch.local === local)!;
+      rejected = true;
+      await dev.sync.resolve(chosen.id);
+    }
   };
-  // Первое подключение непустой базы к непустому облаку — отдельный случай с окном; устройства подключены заранее.
-  await study(devices[0]);
-  for (const dev of devices) expect((await dev.sync.exchange()).conflict).toBeNull();
-  for (let step = 0; step < 30; step++) {
+  await study(devices[0], "scheduled");
+  for (const dev of devices) {
+    await dev.sync.exchange();
+    expect(dev.sync.getStatus().conflict).toBeNull();
+  }
+  for (let step = 0; step < 40; step++) {
     const dev = pick(devices);
     const action = random();
-    if (action < 0.4) await study(dev);
-    else if (action < 0.55) {
+    if (action < 0.25) await study(dev, "scheduled");
+    else if (action < 0.32) await study(dev, "practice");
+    else if (action < 0.36)
+      await saveBlockProgress("mech-1", `b${Math.floor(random() * 4)}`, { done: true }, dev.db, tick());
+    else if (action < 0.39) tick(24 * 60);
+    else if (action < 0.42) dev.sync = coordinator(dev.db, dev.hidden);
+    else if (action < 0.52) {
       const other = pick(devices.filter((item) => item !== dev));
       dev.hidden.add(`p_${await other.sync.deviceId()}`);
-      await check(dev, await dev.sync.exchange());
+      await exchange(dev);
       dev.hidden.clear();
-    } else if (action < 0.65) {
+    } else if (action < 0.6) {
       failure = { match: (key) => key.startsWith("p_"), ack: true };
-      await check(dev, await dev.sync.exchange());
+      await exchange(dev).catch(() => undefined);
       failure = null;
-    } else if (action < 0.72) {
+    } else if (action < 0.66) {
       failure = { match: (key) => key.startsWith("v_"), ack: false };
-      await check(dev, await dev.sync.exchange());
+      await exchange(dev).catch(() => undefined);
       failure = null;
-    } else await check(dev, await dev.sync.exchange());
+    } else await exchange(dev);
   }
-  for (let round = 0; round < 6; round++) for (const dev of devices) await check(dev, await dev.sync.exchange());
-  const counts = await Promise.all(
-    devices.map(async (dev) => (await progress(dexieSource(dev.db), now())).totals.answers),
-  );
-  expect(new Set(counts).size, `seed ${seed}: у устройств разный итог ${counts.join(", ")}`).toBe(1);
-  if (!windows) expect(counts[0], `seed ${seed}: ответы`).toBe(devices.reduce((sum, dev) => sum + dev.given, 0));
-  for (const dev of devices)
-    expect((await readChain(dev.db)).filter((link) => link.confirmed).length).toBeLessThanOrEqual(4);
+  for (let round = 0; round < 6; round++) for (const dev of devices) await exchange(dev);
+  const writes = cloud.log.filter((entry) => entry.startsWith("setItem p_")).length;
+  for (const dev of devices) await exchange(dev);
+  expect(
+    cloud.log.filter((entry) => entry.startsWith("setItem p_")).length,
+    `seed ${seed}: публикации не кончаются`,
+  ).toBe(writes);
+
+  const snapshots = await Promise.all(devices.map((dev) => readSnapshot(dev.db, now())));
+  const contents = snapshots.map((snapshot) => progressOf(normalize(snapshot)));
+  expect(new Set(contents).size, `seed ${seed}: у устройств разное содержание`).toBe(1);
+  const [snapshot] = snapshots;
+  if (days.size < KEEP_DAYS)
+    expect(
+      snapshot.stats.days.reduce((sum, day) => sum + day.answers, 0),
+      `seed ${seed}: ответы по дням`,
+    ).toBe(snapshot.stats.answers);
+  const given = devices.reduce((sum, dev) => sum + dev.given, 0);
+  if (rejected) expect(snapshot.stats.answers, `seed ${seed}: ответов больше данных`).toBeLessThanOrEqual(given);
+  else expect(snapshot.stats.answers, `seed ${seed}: ответы`).toBe(given);
+  for (const dev of devices) {
+    const chain = await readChain(dev.db);
+    expect(chain.filter((link) => link.own && link.confirmed).length).toBeLessThanOrEqual(3);
+    expect(chain.filter((link) => link.own && !link.confirmed)).toEqual([]);
+    expect(chain.filter((link) => !link.own).length).toBeLessThanOrEqual(count);
+  }
+  const dirtyMerges = devices.filter((dev) => dev.merges.some((dirty) => dirty)).length;
+  const explained = dirtyMerges >= 2 || devices.some((dev) => dev.publishes > 3);
   await Promise.all(devices.map((dev) => dev.db.delete()));
-  return windows;
+  return { windows, explained };
 }
 
 describe("случайные чередования", () => {
@@ -155,19 +191,29 @@ describe("случайные чередования", () => {
     await simulate(Number(process.env.SIM_SEED), Number(process.env.SIM_COUNT ?? 3));
   });
   it(
-    "два устройства: ответы не теряются и не удваиваются, окно — редко и только в разрешённых классах",
+    "два устройства: ответы не теряются и не удваиваются, окно — только при законной истории",
     { timeout: 300_000 },
     async () => {
       let windows = 0;
-      for (let seed = 1; seed <= 150; seed++) windows += await simulate(seed, 2);
+      for (let seed = 1; seed <= 150; seed++) {
+        const run = await simulate(seed, 2);
+        if (run.windows) expect(run.explained, `seed ${seed}: окно без законной истории`).toBe(true);
+        windows += run.windows;
+      }
       expect(windows).toBeLessThanOrEqual(15);
     },
   );
   it(
-    "три устройства: ответы не теряются и не удваиваются, окно только в разрешённых классах",
+    "три устройства: ответы не теряются и не удваиваются, окно — только при законной истории",
     { timeout: 300_000 },
     async () => {
-      for (let seed = 1001; seed <= 1100; seed++) await simulate(seed, 3);
+      let windows = 0;
+      for (let seed = 1001; seed <= 1100; seed++) {
+        const run = await simulate(seed, 3);
+        if (run.windows) expect(run.explained, `seed ${seed}: окно без законной истории`).toBe(true);
+        windows += run.windows;
+      }
+      expect(windows).toBeLessThanOrEqual(15);
     },
   );
 });

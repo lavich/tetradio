@@ -131,6 +131,8 @@ export const EXCHANGE_INTERVAL_MS = 2 * 60 * 1000;
 export const CHANGE_DELAY_MS = 2000;
 /** Страховка от бесконечного повтора: сам предел попыток лечения задаёт тот, кто его подключает. */
 const MAX_RECOVERIES = 3;
+/** Объединений за заход: другие устройства могут публиковать поверх каждого, пока идёт обмен. */
+const MAX_MERGES = 3;
 export const STALE_CHOICE = "Версии изменились — выберите ещё раз.";
 const INITIAL: SyncStatus = {
   phase: "idle",
@@ -246,6 +248,8 @@ export class SyncCoordinator {
     if (this.again && this.status.phase !== "error" && this.status.phase !== "conflict") void this.exchange();
   };
   private again = false;
+  /** Объединений за один заход обмена. */
+  private merges = 0;
   private urgent = false;
   private lastStart = -Infinity;
   /**
@@ -279,6 +283,7 @@ export class SyncCoordinator {
   }
   private async cycleOnce(): Promise<void> {
     const { adapter } = this.options;
+    this.merges = 0;
     this.newerFormat = false;
     const flags = await this.flags();
     this.update({ dirty: flags.dirty || !!flags.restored, lastConfirmedAt: flags.lastOk });
@@ -550,7 +555,7 @@ export class SyncCoordinator {
           {
             ifClean: true,
             chain: () =>
-              setAnchor(database, { id: branch.id, clock: branch.meta!.clock, format: text.format }, text.text),
+              setAnchor(database, [{ id: branch.id, clock: branch.meta!.clock, format: text.format, text: text.text }]),
           },
         );
         // Локальное изменение появилось во время чтения облака: это уже расхождение, решаем заново.
@@ -573,7 +578,18 @@ export class SyncCoordinator {
     if (writes) {
       const outcome = await reconcile(this.reconcileHost(), device, flags, remote, texts);
       if (outcome === "done") return;
-      if (outcome === "again" && depth < 3) return this.decide(writes, depth + 1);
+      // Объединение опубликовано: облако перечитывается, пока другие устройства публикуют поверх, но не бесконечно.
+      if (outcome === "published") {
+        if (this.merges++ < MAX_MERGES) return this.decide(writes, 0);
+        return;
+      }
+      if (outcome === "again") {
+        if (depth < 3) return this.decide(writes, depth + 1);
+        // Ответы идут во время каждого чтения: окно здесь не нужно — отметка остаётся, обмен повторится.
+        this.update({ phase: "idle", dirty: true });
+        this.cancelRetry = this.options.schedule(() => void this.exchange(), this.retryMs);
+        return;
+      }
     }
     await this.conflict("diverged", [await localBranch(), ...remote]);
   }
@@ -645,7 +661,8 @@ export class SyncCoordinator {
         if (restored) return;
         const current = parseClock(await readMeta(database, META.clock));
         await writeMeta(database, META.clock, JSON.stringify(mergeClocks(current, clock)));
-        await writeMeta(database, META.applied, id);
+        // В облаке уже более новая своя версия — применённой остаётся она.
+        if (!mine || counterOf(mine.id) <= counterOf(id)) await writeMeta(database, META.applied, id);
         if (mark !== undefined) await clearDirty(database, mark);
         changed = true;
       };
@@ -923,14 +940,10 @@ export class SyncCoordinator {
         await addReviewDays(database, reviewDays);
         await this.publish(device, flags.clock, clocks, resolves, null);
       } else {
+        // Опора не меняется до публикации выбора: несостоявшийся выбор не должен стать предком, от которого отвергнутая
+        // ветвь вернётся объединением. Без опоры с часами выбора предка нет — окно покажется снова.
         await applySnapshot(database, chosen.snapshot, chosen.id, chosen.meta!.clock, this.options.now(), {
           reviewDays,
-          chain: () =>
-            setAnchor(
-              database,
-              { id: chosen.id, clock: chosen.meta!.clock, format: SNAPSHOT_FORMAT_TEXT },
-              encodeSnapshot(chosen.snapshot, SNAPSHOT_FORMAT_TEXT),
-            ),
         });
         const merged = (await database.baseSummary.get("base"))?.reviewDays;
         await this.publish(device, chosen.meta!.clock, clocks, resolves, { ...chosen.snapshot, reviewDays: merged });

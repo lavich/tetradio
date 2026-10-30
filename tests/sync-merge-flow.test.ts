@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import "fake-indexeddb/auto";
+import Dexie from "dexie";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AppDatabase } from "../src/storage/db";
 import { dexieSource } from "../src/storage/queries";
@@ -11,6 +12,7 @@ import { readChain } from "../src/sync/ancestors";
 import { SyncCoordinator } from "../src/sync/coordinator";
 import { memoryTransport, SyncError, type KeyValueTransport, type MemoryTransport } from "../src/sync/transport";
 import { META, readMeta } from "../src/sync/snapshot";
+import { markChanged } from "../src/storage/ops";
 import { installCompleted } from "./helpers/content";
 import { exportFull, restoreBackup } from "../src/features/backup/backup";
 import { forgetAncestors } from "./helpers/sync";
@@ -320,5 +322,63 @@ describe("автоматическое слияние", () => {
     expect(stored.length).toBeGreaterThan(0);
     for (const row of stored) expect(Array.isArray(row.snapshot.states)).toBe(true);
     expect((await old.exchange()).phase).toBe("synced");
+  });
+
+  it("почти одновременная публикация, сбой записи объединения на телефоне, компьютер объединил то же — окна нет", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, 2);
+    await study(mac, 2);
+    expect((await phone.sync.exchange()).phase).toBe("synced");
+    expect((await blind(mac, phone)).phase).toBe("synced");
+    failNext((key) => key.startsWith("v_"));
+    expect((await phone.sync.exchange()).phase).toBe("error");
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    await settle(phone, mac);
+    expect(await answers(phone)).toBe(total(phone, mac));
+    expect(await answers(mac)).toBe(total(phone, mac));
+  });
+
+  it("ответ во время каждого чтения перед объединением: окна нет, отметка остаётся, следующий обмен объединяет", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, 2);
+    await study(mac, 2);
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    const answer = () => void Dexie.ignoreTransaction(() => markChanged(phone.db));
+    phone.db.syncVersions.hook("creating", answer);
+    const busy = await phone.sync.exchange();
+    phone.db.syncVersions.hook("creating").unsubscribe(answer);
+    expect(busy.conflict).toBeNull();
+    expect(await readMeta(phone.db, META.dirty)).not.toBeNull();
+    await settle(phone, mac);
+    expect(await answers(phone)).toBe(total(phone, mac));
+    expect(await answers(mac)).toBe(total(phone, mac));
+  });
+
+  it("компьютер раз за разом публикует поверх только что опубликованного объединения — окна нет, ответы обеих сторон на месте", async () => {
+    const { phone, mac } = await pair();
+    await study(phone, 2);
+    await study(mac, 2);
+    expect((await mac.sync.exchange()).phase).toBe("synced");
+    const phonePointer = await pointer(phone);
+    const original = cloud.setItem.bind(cloud);
+    let raced = 0;
+    cloud.setItem = async (key, value) => {
+      await original(key, value);
+      if (raced < 4 && key === phonePointer) {
+        raced++;
+        await study(mac, 1);
+        mac.hidden.add(phonePointer);
+        await mac.sync.exchange();
+        mac.hidden.clear();
+      }
+    };
+    const status = await phone.sync.exchange();
+    cloud.setItem = original;
+    expect(raced).toBeGreaterThan(1);
+    expect(status.conflict).toBeNull();
+    await settle(phone, mac);
+    expect(await answers(phone)).toBe(total(phone, mac));
+    expect(await answers(mac)).toBe(total(phone, mac));
+    expect(await phone.db.cardStates.toArray()).toEqual(await mac.db.cardStates.toArray());
   });
 });

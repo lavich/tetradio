@@ -25,10 +25,10 @@ export async function widen(database: AppDatabase, id: string, clock: Clock) {
 }
 /** Часы, которые цепочка подтверждает: объединение опоры и последней своей подтверждённой публикации. */
 export function chainClock(chain: AncestorLink[]): Clock | null {
-  const anchor = chain.find((link) => !link.own);
+  const anchors = chain.filter((link) => !link.own);
   const own = ordered(chain.filter((link) => link.own && link.confirmed)).at(-1);
-  if (!anchor && !own) return null;
-  return mergeClocks(anchor?.clock ?? {}, own?.clock ?? {});
+  if (!anchors.length && !own) return null;
+  return mergeClocks(...anchors.map((link) => link.clock), own?.clock ?? {});
 }
 /** Поэлементный минимум: общая часть истории всех ветвей. */
 export function commonClock(clocks: Clock[]): Clock {
@@ -58,10 +58,10 @@ export function pickAncestor(chain: AncestorLink[], clock: Clock, branches: Cloc
 export async function readLinkSnapshot(database: AppDatabase, link: AncestorLink): Promise<CompactSnapshot | null> {
   const text = await readMeta(database, ANCESTOR_PREFIX + link.id);
   if (text === null) return null;
+  // Чанк упаковки старой сборки удалён после деплоя — это `stale`, а не испорченное звено: нужна перезагрузка.
+  const unpack = link.format === PACKED ? (await loadCompression()).unpackSnapshot : null;
   try {
-    if (link.format !== PACKED) return decodeSnapshot(text);
-    const { unpackSnapshot } = await loadCompression();
-    return decodeSnapshot(unpackSnapshot(text), PACKED);
+    return unpack ? decodeSnapshot(unpack(text), PACKED) : decodeSnapshot(text);
   } catch {
     return null;
   }

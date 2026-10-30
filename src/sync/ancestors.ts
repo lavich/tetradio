@@ -52,14 +52,22 @@ function prune(links: AncestorLink[]): AncestorLink[] {
   ];
 }
 
-/** Новая опора; свои публикации остаются: при трёх устройствах предком другой ветви может быть своя. */
+/**
+ * Новая опора — состояние облака без своих неопубликованных изменений. Рядом с ней — версии облака, из которых она
+ * собрана: следующая версия другого устройства может строиться на них, ещё не видя своих публикаций. Свои публикации
+ * остаются: при трёх устройствах предком другой ветви может быть своя.
+ */
 export async function setAnchor(
   database: AppDatabase,
-  anchor: { id: string; clock: Clock; format: number },
-  text: string,
+  anchors: { id: string; clock: Clock; format: number; text: string }[],
 ) {
-  const chain = (await readChain(database)).filter((link) => link.own && link.id !== anchor.id);
-  await writeChain(database, [{ ...anchor, own: false, confirmed: true }, ...chain], { [anchor.id]: text });
+  const ids = new Set(anchors.map((anchor) => anchor.id));
+  const chain = (await readChain(database)).filter((link) => link.own && !ids.has(link.id));
+  await writeChain(
+    database,
+    [...anchors.map(({ text: _, ...anchor }) => ({ ...anchor, own: false, confirmed: true })), ...chain],
+    Object.fromEntries(anchors.map((anchor) => [anchor.id, anchor.text])),
+  );
 }
 /** Своя публикация: начатая — звено до записи частей, подтверждается после; прочитанная из облака — сразу подтверждённая. */
 export async function addOwn(
