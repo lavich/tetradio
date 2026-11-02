@@ -171,6 +171,6 @@ test("слова в таблице объяснения нажимаются т�
   const cell = table.getByRole("button", { name: "Произнести и перевести: είσαι", exact: true });
   await expect(cell).toBeVisible();
   await cell.click();
-  await expect.poll(() => spoken(page)).toContain("είμαι");
+  await expect.poll(() => spoken(page)).toContain("είσαι");
   await expect(page.getByRole("dialog", { name: "είμαι" })).toContainText("быть");
 });

@@ -43,7 +43,12 @@ interface Open {
   keyboard: boolean;
   point?: { x: number; y: number };
   played: Promise<PlayResult>;
+  spoken: Spoken;
   seq: number;
+}
+interface Spoken {
+  text: string;
+  audioAssetId?: string;
 }
 interface TapState {
   open: Open | null;
@@ -143,16 +148,39 @@ function useInkStroke() {
   }, []);
 }
 
-function TapWord({ card, stroke, gloss, text }: { card: TapCard; stroke?: boolean; gloss?: boolean; text: string }) {
+const LEADING_ARTICLE = /^(ο|η|το|οι|τα)\s+/u;
+const bareForm = (value: string) =>
+  value
+    .normalize("NFC")
+    .toLocaleLowerCase("el")
+    .replace(/^[\p{P}\s]+|[\p{P}\s]+$/gu, "")
+    .replace(LEADING_ARTICLE, "");
+
+function TapWord({
+  card,
+  stroke,
+  gloss,
+  text,
+  spellForm,
+}: {
+  card: TapCard;
+  stroke?: boolean;
+  gloss?: boolean;
+  text: string;
+  spellForm?: boolean;
+}) {
   const { store } = useTaps()!;
   const profile = useProfile();
   const ref = useRef<HTMLSpanElement>(null);
   const active = useTapState(store, (state) => !!ref.current && state.open?.anchor === ref.current);
   const activate = (keyboard: boolean, point?: { x: number; y: number }) => {
     if (active) return store.close();
-    // Звучит карточка, а не форма из текста: то же произношение, что в словах урока и в подсказке.
-    const played = playText(card.greek, card.audioAssetId, profile);
-    store.show({ card, anchor: ref.current!, keyboard, point, played });
+    const spoken: Spoken =
+      spellForm && bareForm(text) !== bareForm(card.greek)
+        ? { text }
+        : { text: card.greek, audioAssetId: card.audioAssetId };
+    const played = playText(spoken.text, spoken.audioAssetId, profile);
+    store.show({ card, anchor: ref.current!, keyboard, point, played, spoken });
   };
   return (
     <span
@@ -188,12 +216,14 @@ export function Marked({
   from = 0,
   to = text.length,
   glosses = [],
+  spellForm,
 }: {
   text: string;
   marks: WordMark[];
   from?: number;
   to?: number;
   glosses?: GlossRange[];
+  spellForm?: boolean;
 }) {
   const taps = useTaps();
   const ranges = useMemo(() => {
@@ -226,6 +256,7 @@ export function Marked({
         gloss={!!range.gloss}
         stroke={!range.gloss && range.mark?.kind === "lesson" && range.mark.first}
         text={surface}
+        spellForm={spellForm}
       />,
     );
     at = range.start + range.length;
@@ -256,7 +287,7 @@ function Hint({ taps }: { taps: Taps }) {
 const GAP = 10;
 const EDGE = 8;
 function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
-  const { card, anchor, keyboard, point, played } = open;
+  const { card, anchor, keyboard, point, played, spoken } = open;
   const profile = useProfile();
   const sheet = useRef<HTMLDivElement>(null);
   const speak = useRef<HTMLButtonElement>(null);
@@ -333,7 +364,7 @@ function WordSheet({ open, onClose }: { open: Open; onClose: () => void }) {
 
   const again = () => {
     setResult(undefined);
-    void playText(card.greek, card.audioAssetId, profile).then(setResult);
+    void playText(spoken.text, spoken.audioAssetId, profile).then(setResult);
   };
   const forms = card.forms && profile.script.test(card.forms) ? card.forms : undefined;
   return createPortal(
