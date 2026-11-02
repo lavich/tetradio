@@ -45,5 +45,5 @@ export function Explanation({ block }: { block: ExplanationBlock }) {
 }
 
 function Cell({ blockId, field, text }: { blockId: string; field: string; text: string }) {
-  return <Marked text={text} marks={useFieldMarks(blockId, field)} />;
+  return <Marked text={text} marks={useFieldMarks(blockId, field)} spellForm />;
 }
