@@ -130,6 +130,7 @@ function say(text: string, voice: SpeechSynthesisVoice, rate: number, pitch: num
  * `source` отдаёт адрес записи реплики; пока звучит реплика, запись следующей уже скачивается.
  * `lenient` — для текстов: несыгравшая запись заменяется синтезом, строка без голоса пропускается,
  * «none» — только если не прозвучало ничего.
+ * `startAt` — с какой реплики начать: голоса говорящих распределяются по всему диалогу, а не по его остатку.
  */
 export async function playDialogue(
   lines: TranscriptLine[],
@@ -138,6 +139,7 @@ export async function playDialogue(
   source?: AssetSource,
   profile: LanguageProfile = PROFILES.el,
   lenient = false,
+  startAt = 0,
 ): Promise<DialogueResult> {
   const mine = ++run;
   for (const stop of stops) stop();
@@ -149,10 +151,11 @@ export async function playDialogue(
   };
   let voices: SpeechSynthesisVoice[] | null = null;
   let cast: ReturnType<typeof castOf> | null = null;
-  let next = fileOf(0);
-  let sounded = 0;
+  let next = fileOf(startAt);
+  let sounded = startAt > 0 ? 1 : 0;
   try {
     for (const [index, line] of lines.entries()) {
+      if (index < startAt) continue;
       if (mine !== run) return "stopped";
       onLine?.(index);
       const url = await next;

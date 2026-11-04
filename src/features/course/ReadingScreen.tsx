@@ -1,20 +1,21 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { Pause, Play } from "lucide-react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Screen } from "../../app/Screen";
 import { glossSpans } from "../../content/course";
 import type { PackageReading } from "../../content/schema";
 import { sentenceRanges, sentencesOf } from "../../domain/sentences";
-import { playDialogue, stopDialogue, type Rate } from "../../shared/dialogue";
+import type { Rate } from "../../shared/dialogue";
 import { eventDay, WORDS, withCount } from "../../shared/format";
 import { noVoice, ProfileContext, useLessonProfile, useProfile } from "../../shared/language";
 import { useAssetSource } from "../../shared/store";
 import { Tick } from "../../shared/Tick";
 import { db } from "../../storage/db";
 import { markRead, nextUnreadReading, readingPage } from "../../storage/readings";
+import { PlayerButtons } from "./blocks/PlayerButtons";
 import { readingExits, type ReadingEntry } from "./reading-groups";
+import { useDialoguePlayer } from "./useDialoguePlayer";
 import { Marked, TapHint, useFieldMarks, WordTaps } from "./WordTaps";
 import ui from "../../shared/ui.module.css";
 import base from "./course.module.css";
@@ -50,51 +51,31 @@ function Text({ reading, line }: { reading: PackageReading; line: number }) {
 function Aloud({ reading, onLine }: { reading: PackageReading; onLine: (index: number) => void }) {
   const profile = useProfile();
   const source = useAssetSource();
-  const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState<Rate>("normal");
   const [problem, setProblem] = useState<{ text: string; failure: boolean } | null>(null);
-  // Отмена приходит с задержкой: итог прошлого запуска не должен остановить новый.
-  const run = useRef(0);
-  useEffect(() => () => stopDialogue(), []);
-  const play = async () => {
-    if (playing) {
-      run.current++;
-      stopDialogue();
-      setPlaying(false);
-      onLine(-1);
-      return;
-    }
-    const mine = ++run.current;
+  const lines = useMemo(() => {
     const sentences = sentencesOf(reading.text);
     // Пакет, поставленный до смены деления на предложения, не должен звучать чужими записями со сдвигом.
     const audio = reading.audio?.length === sentences.length ? reading.audio : undefined;
-    setProblem(null);
-    setPlaying(true);
-    const result = await playDialogue(
-      sentences.map((sentence, index) => ({ text: sentence, audioAssetId: audio?.[index] ?? undefined })),
-      rate,
-      (index) => mine === run.current && onLine(index),
-      source,
-      profile,
-      true,
-    );
-    if (mine !== run.current) return;
-    setPlaying(false);
-    onLine(-1);
-    if (result === "none") setProblem({ text: noVoice(profile), failure: false });
-    if (result === "error") setProblem({ text: "Воспроизведение прервалось. Попробуйте ещё раз.", failure: true });
-  };
+    return sentences.map((text, index) => ({ text, audioAssetId: audio?.[index] ?? undefined }));
+  }, [reading.text, reading.audio]);
+  const { phase, toggle, stop } = useDialoguePlayer({
+    lines,
+    rate,
+    source,
+    profile,
+    lenient: true,
+    onLine,
+    onStart: () => setProblem(null),
+    onResult: (result) => {
+      if (result === "none") setProblem({ text: noVoice(profile), failure: false });
+      if (result === "error") setProblem({ text: "Воспроизведение прервалось. Попробуйте ещё раз.", failure: true });
+    },
+  });
   return (
     <>
       <div className={blocks.player}>
-        <button
-          type="button"
-          className={blocks.play}
-          onClick={() => void play()}
-          aria-label={playing ? "Остановить" : "Слушать"}
-        >
-          {playing ? <Pause size={20} aria-hidden /> : <Play size={20} aria-hidden />}
-        </button>
+        <PlayerButtons phase={phase} onToggle={toggle} onStop={stop} />
         <Button
           variant="quiet"
           size="sm"
@@ -166,7 +147,7 @@ export function ReadingScreen() {
           {open ? (
             <>
               <TapHint />
-              <Aloud reading={reading} onLine={setLine} />
+              <Aloud key={reading.id} reading={reading} onLine={setLine} />
               <WordTaps marks={page.marks} cards={page.cards} page={0}>
                 <Text reading={reading} line={line} />
               </WordTaps>

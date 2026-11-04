@@ -169,6 +169,42 @@ test("звучащее предложение подсвечено в текст
   await expect(page.getByTestId("speaking")).toHaveCount(0);
 });
 
+test("пауза оставляет подсветку, «Продолжить» читает то же предложение заново, «Остановить» сбрасывает", async ({
+  page,
+}) => {
+  await voice(page);
+  await recordings(page, true);
+  await startCourse(page);
+  await complete(page, "m01-1");
+  await page.goto("/app/course/m01/read/r-m01-anna");
+  await page.getByRole("button", { name: "Слушать" }).click();
+  await expect(page.getByTestId("speaking")).toHaveText("Γεια!");
+  await expect
+    .poll(() => page.evaluate(() => typeof (window as unknown as { __next?: unknown }).__next))
+    .toBe("function");
+  await page.evaluate(() => (window as unknown as { __next: () => void }).__next());
+  await expect(page.getByTestId("speaking")).toHaveText("Καλημέρα!");
+
+  await played(page);
+  await page.getByRole("button", { name: "Пауза" }).click();
+  await expect(page.getByTestId("speaking")).toHaveText("Καλημέρα!");
+  await expect(page.getByRole("button", { name: "Продолжить" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Продолжить" }).click();
+  await expect(page.getByRole("button", { name: "Пауза" })).toBeVisible();
+  await expect.poll(async () => (await played(page)).length).toBeGreaterThan(0);
+  await expect(page.getByTestId("speaking")).toHaveText("Καλημέρα!");
+
+  await page.getByRole("button", { name: "Пауза" }).click();
+  await page.getByRole("button", { name: "Остановить" }).click();
+  await expect(page.getByTestId("speaking")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Слушать" })).toBeFocused();
+  await expect(page.getByRole("button", { name: "Остановить" })).toBeDisabled();
+
+  await page.getByRole("button", { name: "Слушать" }).click();
+  await expect(page.getByTestId("speaking")).toHaveText("Γεια!");
+});
+
 test("глагол в тексте для чтения: в подсказке метка неправильного прошедшего, страница не шире экрана", async ({
   page,
 }) => {

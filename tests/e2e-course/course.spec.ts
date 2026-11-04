@@ -32,9 +32,9 @@ async function voices(page: Page, mode: "none" | "instant") {
 /** Записи реплик не скачиваются (нет сети): аудирование звучит синтезом устройства. */
 const offlineRecordings = (page: Page) => page.route("**/content/media/line-*", (route) => route.abort());
 
-/** Подменный `<audio>`: запоминает адрес и скорость каждой реплики и «доигрывает» её через миг. */
-async function recordings(page: Page) {
-  await page.addInitScript(() => {
+/** Подменный `<audio>`: запоминает адрес и скорость каждой реплики и «доигрывает» её через миг; `hold` — до `__next()`. */
+async function recordings(page: Page, hold = false) {
+  await page.addInitScript((hold) => {
     const played: { src: string; rate: number }[] = [];
     (window as unknown as { __played: typeof played }).__played = played;
     class FakeAudio extends EventTarget {
@@ -46,12 +46,14 @@ async function recordings(page: Page) {
       pause() {}
       play() {
         played.push({ src: this.src, rate: this.playbackRate });
-        setTimeout(() => this.dispatchEvent(new Event("ended")), 5);
+        const end = () => this.dispatchEvent(new Event("ended"));
+        if (hold) (window as unknown as { __next: () => void }).__next = end;
+        else setTimeout(end, 5);
         return Promise.resolve();
       }
     }
     Object.defineProperty(window, "Audio", { value: FakeAudio, configurable: true });
-  });
+  }, hold);
 }
 
 /** Демонстрационный курс: модуль 01 (урок + контрольная), модуль 02 — черновик. */
@@ -404,6 +406,33 @@ test("аудирование записями: реплики звучат фа�
   // Повторное прослушивание берёт записи с устройства, а не из сети.
   expect(files).toHaveLength(4);
   await expect(listening).not.toContainText("нет греческого голоса");
+});
+
+test("аудирование: пауза и «Продолжить» засчитываются одним прослушиванием, «Остановить» не засчитывается", async ({
+  page,
+}) => {
+  await voices(page, "none");
+  await recordings(page, true);
+  await start(page);
+  await page.getByTestId("course-next").click();
+  const listening = await turnTo(page, "Аудирование: Στο καφέ");
+  const next = () => page.evaluate(() => (window as unknown as { __next: () => void }).__next());
+  const ready = () =>
+    page.evaluate(() => typeof (window as unknown as { __next?: unknown }).__next).then((type) => type === "function");
+
+  await listening.getByRole("button", { name: "Слушать" }).click();
+  await expect.poll(ready).toBe(true);
+  await listening.getByRole("button", { name: "Пауза" }).click();
+  await expect(listening).toContainText("Прослушано 0 из 2");
+  await listening.getByRole("button", { name: "Продолжить" }).click();
+  await expect(listening.getByRole("button", { name: "Пауза" })).toBeVisible();
+  await expect.poll(async () => (await next(), await listening.textContent())).toContain("Прослушано 1 из 2");
+
+  await listening.getByRole("button", { name: "Слушать" }).click();
+  await expect(listening.getByRole("button", { name: "Пауза" })).toBeVisible();
+  await listening.getByRole("button", { name: "Остановить" }).click();
+  await expect(listening.getByRole("button", { name: "Слушать" })).toBeFocused();
+  await expect(listening).toContainText("Прослушано 1 из 2");
 });
 
 test("новый урок открывается с первой страницы, а не с первого задания после теории", async ({ page }) => {
