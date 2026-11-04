@@ -165,6 +165,19 @@ describe("аудирование записями реплик", () => {
     await playDialogue([{ speaker: "Αντρέας", text: "Μιλάτε αγγλικά;" }], "normal", undefined, source());
     expect(spoken.map((utterance) => utterance.text)).toEqual(["Μιλάτε αγγλικά?"]);
   });
+  it("с середины диалога говорящие звучат теми же тонами, что и с начала, а подсветка идёт по номерам диалога", async () => {
+    fakeAudio();
+    const spoken = fakeSynth();
+    const { playDialogue } = await load();
+    const replicas = lines.map(({ speaker, text }) => ({ speaker, text }));
+    await playDialogue(replicas, "normal", undefined, source());
+    const whole = spoken.splice(0).map((utterance) => [utterance.text, utterance.pitch]);
+    const shown: number[] = [];
+    const result = await playDialogue(replicas, "normal", (index) => shown.push(index), source(), undefined, false, 1);
+    expect(result).toBe("done");
+    expect(spoken.map((utterance) => [utterance.text, utterance.pitch])).toEqual(whole.slice(1));
+    expect(shown).toEqual([1, 2, -1]);
+  });
   it("отказ воспроизведения файла — ошибка, а не молчаливая подмена голосом", async () => {
     fakeAudio({ refuse: true });
     const spoken = fakeSynth();
