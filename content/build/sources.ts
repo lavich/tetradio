@@ -17,7 +17,6 @@ export interface WordSource {
   irregular?: boolean;
   verified?: boolean;
   source?: string;
-  image?: string;
   audio?: string;
   reading?: { text: string; ipa: string; explanation: string }[];
   examples?: {
@@ -138,7 +137,7 @@ function checkScripts(value: unknown, where: string, language: Language): void {
         !/^https?:/.test(hit[0]) &&
         !hit[0].includes("[") &&
         !hit[0].includes("/") &&
-        !/\.(?:svg|png|webp|jpe?g|mp3|ogg|m4a|wav|yaml)\b/.test(hit[0])
+        !/\.(?:mp3|ogg|m4a|wav|yaml)\b/.test(hit[0])
       )
         fail(`${where}: в слове «${hit[0]}» смешаны алфавиты — проверьте раскладку`);
     }
@@ -164,12 +163,11 @@ export interface ContentRoot {
   readings: Map<string, CourseCard<ReadingSource>>;
   courses: Map<string, Sourced<CourseSource>>;
   modules: Map<string, Sourced<ModuleSource>>;
-  /** Картинки слов из готовой библиотеки: `pictures.yaml` (слово → файл в pictures/) и подпись источника. */
-  pictures: { source: string; words: Map<string, string> };
   files: Map<string, Uint8Array>;
   /** Голоса персонажей по языку курса; без карты записи реплик не публикуются, а говорящие не проверяются. */
   voices: Map<Language, VoiceMap>;
 }
+const NO_PICTURES = "картинки слов убраны из курса (remove-word-images)";
 export function readSources(root: string): ContentRoot {
   const isYaml = (file: string) => /\.ya?ml$/.test(file);
   const list = (dir: string) => (existsSync(join(root, dir)) ? readdirSync(join(root, dir)) : []).filter(isYaml).sort();
@@ -227,29 +225,14 @@ export function readSources(root: string): ContentRoot {
     lessons.set(id, load<LessonSource>("lessons", file));
   }
   const files = new Map<string, Uint8Array>();
-  const picturesDoc = existsSync(join(root, "pictures.yaml"))
-    ? (parseYaml(readFileSync(join(root, "pictures.yaml"), "utf8"), "pictures.yaml") as {
-        source?: unknown;
-        words?: unknown;
-      })
-    : null;
-  if (picturesDoc && (typeof picturesDoc.source !== "string" || !picturesDoc.source.trim()))
-    fail("pictures.yaml: нужен source — библиотека и лицензия картинок");
-  if (picturesDoc?.words !== undefined && (typeof picturesDoc.words !== "object" || Array.isArray(picturesDoc.words)))
-    fail("pictures.yaml.words: ожидалась карта «слово: файл»");
-  const pictures = {
-    source: (picturesDoc?.source as string | undefined) ?? "",
-    words: new Map(
-      Object.entries((picturesDoc?.words ?? {}) as Record<string, unknown>).map(([id, file]) => [id, String(file)]),
-    ),
-  };
-  for (const dir of ["art", "audio", "pictures"])
-    if (existsSync(join(root, dir)))
-      for (const entry of readdirSync(join(root, dir), { recursive: true, withFileTypes: true }))
-        if (entry.isFile()) {
-          const path = relative(root, join(entry.parentPath, entry.name)).split(sep).join("/");
-          files.set(path, readFileSync(join(root, path)));
-        }
+  for (const leftover of ["pictures.yaml", "pictures", "art"])
+    if (existsSync(join(root, leftover))) fail(`${leftover}: ${NO_PICTURES}`);
+  if (existsSync(join(root, "audio")))
+    for (const entry of readdirSync(join(root, "audio"), { recursive: true, withFileTypes: true }))
+      if (entry.isFile()) {
+        const path = relative(root, join(entry.parentPath, entry.name)).split(sep).join("/");
+        files.set(path, readFileSync(join(root, path)));
+      }
   const voices = new Map<Language, VoiceMap>();
   for (const file of list("voices")) {
     const language = languageOf(basename(file, extname(file)), `voices/${file}`);
@@ -257,7 +240,7 @@ export function readSources(root: string): ContentRoot {
     parseYaml(body, `voices/${file}`);
     voices.set(language, parseVoices(body, voicesFile(language), language));
   }
-  return { words, phrases, lessons, readings, courses, modules, pictures, files, voices };
+  return { words, phrases, lessons, readings, courses, modules, files, voices };
 }
 
 export function checkSourceScripts(
@@ -287,7 +270,6 @@ const WORD_FIELDS = {
   irregular: true,
   verified: true,
   source: true,
-  image: true,
   audio: true,
   reading: true,
   examples: true,
@@ -384,7 +366,7 @@ function checkEntries(doc: object, key: string, where: string) {
 export function checkSources(sources: ContentRoot) {
   for (const src of sources.words.values()) {
     const where = `words/${src.file}`;
-    checkShape(src, WORD_FIELDS, ["reading", "examples"], where, {}, CARD_ADDED);
+    checkShape(src, WORD_FIELDS, ["reading", "examples"], where, { image: NO_PICTURES }, CARD_ADDED);
     checkEntries(src, "reading", where);
     checkEntries(src, "examples", where);
   }

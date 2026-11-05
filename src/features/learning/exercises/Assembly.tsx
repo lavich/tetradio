@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { assemblyOptions, assemblySkipMessage, checkAssembly, formatSyllables } from "../../../domain/syllables";
-import { WordArt } from "../../words/WordCardView";
 import { Tick } from "../../../shared/Tick";
 import { cx } from "../../../shared/cx";
 import { useProfile } from "../../../shared/language";
@@ -93,11 +92,7 @@ export function Assembly({
     <>
       {!result && (
         <>
-          <TaskHead
-            prompt="Собери слово"
-            meaning={word.russian}
-            art={<WordArt word={word} className={exercise.pic} />}
-          />
+          <TaskHead prompt="Собери слово" meaning={word.russian} />
           <div className={s.assembled} aria-label="Собранное слово" data-testid="assembled" lang={lang}>
             {placed.length === 0 ? (
               <span className={s.slotsHint}>Нажимай слоги по порядку</span>

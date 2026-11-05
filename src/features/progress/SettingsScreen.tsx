@@ -307,8 +307,7 @@ function About() {
         </p>
       )}
       <p className={css.note} data-testid="credits">
-        Картинки слов — Microsoft Fluent Emoji (лицензия MIT, © Microsoft Corporation). Голоса диалогов — Google Cloud
-        Text-to-Speech, остальная озвучка — синтез речи устройства.
+        Голоса диалогов — Google Cloud Text-to-Speech, остальная озвучка — синтез речи устройства.
       </p>
     </details>
   );

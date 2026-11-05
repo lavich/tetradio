@@ -443,7 +443,6 @@ describe("обновление пакета", () => {
       lesson: { ...pack.lesson, title: "Другое название" },
       words: pack.words.slice(1),
       items: pack.items.slice(1).map((item, i) => ({ ...item, position: i })),
-      media: pack.media.filter((item) => item.id !== pack.words[0].imageAssetId),
     };
     await installLesson("mech-2", db, await upgrade("mech-2", next));
     expect(await db.words.get(dropped)).toBeTruthy(); // из словаря слово не исчезает
@@ -495,28 +494,28 @@ describe("обновление пакета", () => {
 });
 
 describe("медиа и готовность офлайн", () => {
-  it("картинка скачивается при первом обращении и потом читается из базы", async () => {
+  it("запись слова скачивается при первом обращении и потом читается из базы", async () => {
     const fetcher = await installLessons(db, ["mech-2"]);
     const before = fetcher.requests.length;
-    const asset = await ensureAsset("img-w034", db, fetcher);
-    expect(asset).toMatchObject({ kind: "image", mimeType: "image/svg+xml" });
-    expect(await asset!.blob.text()).toContain("<svg");
-    await ensureAsset("img-w034", db, fetcher);
+    const asset = await ensureAsset("snd-w042", db, fetcher);
+    expect(asset).toMatchObject({ kind: "audio", mimeType: "audio/mpeg" });
+    expect(asset!.blob.size).toBeGreaterThan(0);
+    await ensureAsset("snd-w042", db, fetcher);
     expect(fetcher.requests.length).toBe(before + 1);
-    expect(await ensureAsset("img-нет", db, fetcher)).toBeNull();
+    expect(await ensureAsset("snd-нет", db, fetcher)).toBeNull();
   });
   it("новая версия файла под тем же id перекачивается; без сети остаётся прежняя", async () => {
     const fetcher = await installLessons(db, ["mech-2"]);
-    const old = await ensureAsset("img-w034", db, fetcher);
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg"><circle r="1"/></svg>';
-    const ref = (await db.media.get("img-w034"))!;
-    await db.media.put({ ...ref, url: ref.url.replace(/\.svg$/, "-v2.svg"), bytes: new Blob([svg]).size });
+    const old = await ensureAsset("snd-w042", db, fetcher);
+    const next = "запись v2";
+    const ref = (await db.media.get("snd-w042"))!;
+    await db.media.put({ ...ref, url: ref.url.replace(/\.mp3$/, "-v2.mp3"), bytes: new Blob([next]).size });
     const offline = { ...fetcher, blob: async () => Promise.reject(new Error("offline")) };
-    expect(await (await ensureAsset("img-w034", db, offline))!.blob.text()).toBe(await old!.blob.text());
-    const online = { ...fetcher, blob: async () => new Blob([svg]) };
-    const fresh = await ensureAsset("img-w034", db, online);
-    expect(await fresh!.blob.text()).toBe(svg);
-    expect((await db.assets.get("img-w034"))!.url).toMatch(/-v2\.svg$/);
+    expect(await (await ensureAsset("snd-w042", db, offline))!.blob.text()).toBe(await old!.blob.text());
+    const online = { ...fetcher, blob: async () => new Blob([next]) };
+    const fresh = await ensureAsset("snd-w042", db, online);
+    expect(await fresh!.blob.text()).toBe(next);
+    expect((await db.assets.get("snd-w042"))!.url).toMatch(/-v2\.mp3$/);
   });
   it("слова доступны локально, но урок не готов офлайн, пока обязательное медиа не скачано; повтор докачивает", async () => {
     const fetcher = await installLessons(db, ["mech-2"]);
@@ -527,7 +526,7 @@ describe("медиа и готовность офлайн", () => {
       updateAvailable: false,
     });
     const media = packageOf("mech-2").media[0];
-    const flaky = memoryFetcher(content, { [media.url]: new Blob(["<svg"], { type: "image/svg+xml" }) }); // повреждённый файл
+    const flaky = memoryFetcher(content, { [media.url]: new Blob(["x"], { type: "audio/mpeg" }) }); // повреждённый файл
     const first = await downloadLessonMedia("mech-2", db, flaky);
     expect(first).toMatchObject({ fetched: packageOf("mech-2").media.length - 1, failed: [media.id] });
     expect((await lessonReadiness("mech-2", db)).missing).toEqual([media.id]);
@@ -554,9 +553,7 @@ describe("медиа и готовность офлайн", () => {
     await db.assets.put(stray);
     const next = { ...packageOf("mech-2"), version: `${packageOf("mech-2").version}-next`, media: kept };
     next.words = next.words.map((word) =>
-      word.imageAssetId === dropped.id || word.audioAssetId === dropped.id
-        ? { ...word, imageAssetId: undefined, audioAssetId: undefined }
-        : word,
+      word.audioAssetId === dropped.id ? { ...word, audioAssetId: undefined } : word,
     );
     await installLesson("mech-2", db, await upgrade("mech-2", next));
     expect((await db.assets.toCollection().primaryKeys()).sort()).toEqual(kept.map((item) => item.id).sort());
@@ -729,7 +726,7 @@ describe("установка и обновление смешанного пак
   it("урок только из текстовых заданий готов офлайн без обязательных медиа", async () => {
     await installMixed(db);
     const readiness = await lessonReadiness(MIXED_LESSON, db);
-    // Обязательное медиа даёт только слово с картинкой; у фраз файлов нет — они не блокируют готовность.
+    // Обязательное медиа дают только записи слов; у фраз файлов нет — они не блокируют готовность.
     expect(readiness.installed).toBe(true);
     expect(readiness.required).toBe((await db.packages.get(MIXED_LESSON))!.media.filter((m) => m.required).length);
     const noWords = buildMixed({

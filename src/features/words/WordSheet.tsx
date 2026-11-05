@@ -16,7 +16,7 @@ import type { DictionaryLesson } from "../../storage/dictionary";
 import { dexieSource } from "../../storage/queries";
 import { SpeakText } from "../learning/exercises";
 import { sessionPath, startSession } from "../learning/session-actions";
-import { ExampleBox, ReadingNotes, SpeakButton, WordArt } from "./WordCardView";
+import { ExampleBox, ReadingNotes, SpeakButton } from "./WordCardView";
 import { EXERCISE_LABELS, exercisePath, useWordExercises } from "./word-exercises";
 import css from "./dictionary.module.css";
 
@@ -63,7 +63,6 @@ function WordBody({ word, courseId }: { word: Word; courseId?: string }) {
           </p>
           {word.ipa && <p className={css.ipa}>{word.ipa}</p>}
         </div>
-        <WordArt word={word} className={css.art} />
         <SpeakButton word={word} />
       </div>
       <p className={css.meaning}>{word.russian}</p>

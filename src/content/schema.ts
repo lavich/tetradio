@@ -113,7 +113,6 @@ export interface PackageWord {
   irregular?: true;
   segments: Segment[];
   examples: Example[];
-  imageAssetId?: string;
   audioAssetId?: string;
   verified: boolean;
   source?: string;
@@ -500,8 +499,6 @@ function parseWord(input: unknown, path: string): PackageWord {
   parseVerbGroup(word, raw, path);
   const source = opt(raw.source, (v) => str(v, `${path}.source`));
   if (source) word.source = source;
-  const image = opt(raw.imageAssetId, (v) => str(v, `${path}.imageAssetId`));
-  if (image) word.imageAssetId = image;
   const audio = opt(raw.audioAssetId, (v) => str(v, `${path}.audioAssetId`));
   if (audio) word.audioAssetId = audio;
   if (!word.greek.trim() || !word.russian.trim()) throw new ContentError(`${path}: у слова нет написания или перевода`);
@@ -644,9 +641,10 @@ export function parsePackage(input: unknown): ContentPackage {
   );
   const mediaIds = new Set(media.map((m) => m.id));
   for (const word of words)
-    for (const ref of [word.imageAssetId, word.audioAssetId])
-      if (ref && !mediaIds.has(ref))
-        throw new ContentError(`пакет.words: слово ${word.id} ссылается на медиа ${ref}, которого нет в пакете`);
+    if (word.audioAssetId && !mediaIds.has(word.audioAssetId))
+      throw new ContentError(
+        `пакет.words: слово ${word.id} ссылается на медиа ${word.audioAssetId}, которого нет в пакете`,
+      );
   for (const card of phrases)
     if (card.audioAssetId && !mediaIds.has(card.audioAssetId))
       throw new ContentError(
@@ -852,7 +850,6 @@ export const SHIPPED_FIELDS = [
   "irregular",
   "segments",
   "examples",
-  "imageAssetId",
   "audioAssetId",
   "verified",
   "source",

@@ -11,7 +11,6 @@ coverage/
 .wrangler/
 playwright-report/
 test-results/
-docs/art-sheet.html
 public/content/
 .playwright-mcp/
 .e2e/

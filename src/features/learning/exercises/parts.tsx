@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import type { Phrase, Word } from "../../../domain/types";
-import { ExampleBox, ReadingNotes, SpeakButton, WordArt } from "../../words/WordCardView";
+import { ExampleBox, ReadingNotes, SpeakButton } from "../../words/WordCardView";
 import ui from "../../../shared/ui.module.css";
 import { playText } from "../../../shared/audio";
 import { cx } from "../../../shared/cx";
@@ -105,7 +105,7 @@ export function GreekHead({
 }
 
 /**
- * Карточка слова на листе: написание с IPA и озвучкой, перевод, картинка, заметки о чтении и пример.
+ * Карточка слова на листе: написание с IPA и озвучкой, перевод, заметки о чтении и пример.
  * `speak` добавляет кнопку озвучки: в раскрытии после аудирования она лишняя — повтор уже есть в задании.
  */
 export function WordReveal({ word, speak, large }: { word: Word; speak?: boolean; large?: boolean }) {
@@ -118,13 +118,8 @@ export function WordReveal({ word, speak, large }: { word: Word; speak?: boolean
         </p>
         {speak && <SpeakButton word={word} quiet />}
       </div>
-      <div className={s.cardRow}>
-        <div className="min-w-0 flex-1">
-          {word.ipa && <p className={s.ipa}>{word.ipa}</p>}
-          <p className={s.meaning}>{word.russian}</p>
-        </div>
-        <WordArt word={word} className={s.pic} />
-      </div>
+      {word.ipa && <p className={s.ipa}>{word.ipa}</p>}
+      <p className={s.meaning}>{word.russian}</p>
       <WordForms word={word} className={s.forms} verbsOnly />
       <ReadingNotes word={word} bare />
       {word.examples[0] && <ExampleBox example={word.examples[0]} bare />}
@@ -207,15 +202,12 @@ export function Verdict({ status, children }: { status: Status; children: React.
     </div>
   );
 }
-/** Задание письма и сборки: перевод крупно печатью, картинка справа. */
-export function TaskHead({ prompt, meaning, art }: { prompt: string; meaning: string; art?: React.ReactNode }) {
+/** Задание письма и сборки: перевод крупно печатью. */
+export function TaskHead({ prompt, meaning }: { prompt: string; meaning: string }) {
   return (
-    <div className={s.cardRow}>
-      <div className="min-w-0 flex-1">
-        <Instruction prompt={prompt} />
-        <p className={s.task}>{meaning}</p>
-      </div>
-      {art}
+    <div>
+      <Instruction prompt={prompt} />
+      <p className={s.task}>{meaning}</p>
     </div>
   );
 }

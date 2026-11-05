@@ -26,7 +26,6 @@ test("исходные уроки, карточка слова и ручная �
   await expect(page.getByText("/o ˈfilos/")).toBeVisible();
   await expect(page.getByText("Ударение на первый слог")).toBeVisible();
   await expect(page.getByText("Ο φίλος μας είναι παντρεμένος.")).toBeVisible();
-  await expect(page.getByTestId("word-art")).toBeVisible();
   await page.getByRole("button", { name: "Потренировать слово" }).click();
   await expect(page.getByText("Новое слово")).toBeVisible();
 });

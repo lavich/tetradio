@@ -1,8 +1,9 @@
-import { copyFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { buildContent } from "../content/build";
 import { checkBudgets, BUDGETS } from "../content/build/budgets";
+import { lineHash, MANIFEST_FILE, parseVoices } from "../content/build/voices";
 import { hiddenFixture } from "./helpers/hidden-fixture";
 
 const FIXTURE = "tests/fixtures/two-courses";
@@ -25,26 +26,40 @@ const message = (root: string) => {
   return "";
 };
 
-/** Картинки у двух карточек урока скрытого курса. */
-function withEnglishArt() {
+/** Записи звука у двух карточек урока скрытого курса. */
+function withEnglishAudio() {
   const root = hiddenFixture(ENGLISH);
-  mkdirSync(join(root, "art"), { recursive: true });
-  for (const file of ["ο-φίλος.svg", "η-οικογένεια.svg"])
-    copyFileSync(join("tests/fixtures/mechanics/art", file), join(root, "art", file));
-  writeFileSync(join(root, "art/legacy.txt"), "ο-φίλος.svg\nη-οικογένεια.svg\n");
-  writeFileSync(join(root, "words/english/e0001.yaml"), "greek: to go\nrussian: идти, ехать\nimage: ο-φίλος.svg\n");
-  writeFileSync(join(root, "words/english/e0002.yaml"), "greek: the bus\nrussian: автобус\nimage: η-οικογένεια.svg\n");
+  writeFileSync(
+    join(root, "voices/en.yaml"),
+    "source: голос {voice}\nlanguage: en-GB\nprefix: en-GB-Chirp3-HD-\npools:\n  female: [Kore]\n  male: [Charon]\nnarrator: Kore\nreader: Kore\ncharacters:\n  Anna: { gender: female, voice: Kore }\n  Tom: { gender: male, voice: Charon }\n",
+  );
+  const voices = parseVoices(readFileSync(join(root, "voices/en.yaml"), "utf8"), "voices/en.yaml", "en");
+  const manifestFile = join(root, MANIFEST_FILE);
+  const manifest = JSON.parse(readFileSync(manifestFile, "utf8")) as Record<string, unknown>;
+  mkdirSync(join(root, "audio/words"), { recursive: true });
+  for (const [id, greek, russian] of [
+    ["e0001", "to go", "идти, ехать"],
+    ["e0002", "the bus", "автобус"],
+  ]) {
+    copyFileSync(join(FIXTURE, "audio/m01-1/cafe-1.mp3"), join(root, `audio/words/${id}.mp3`));
+    writeFileSync(
+      join(root, `words/english/${id}.yaml`),
+      `greek: ${greek}\nrussian: ${russian}\naudio: words/${id}.mp3\n`,
+    );
+    manifest[`words/${id}.mp3`] = { voice: "Kore", hash: lineHash(greek, "Kore", voices) };
+  }
+  writeFileSync(manifestFile, JSON.stringify(manifest));
   return root;
 }
 
 describe("скрытый курс не поставляется", () => {
   it("медиа карточек скрытого курса не поставляется", () => {
-    const root = withEnglishArt();
+    const root = withEnglishAudio();
     const all = buildContent(root, { shipHidden: true });
     const shipped = buildContent(root);
-    const art = (built: typeof all) => built.files.filter((file) => file.path.startsWith("content/media/img-e"));
-    expect(art(all)).toHaveLength(2);
-    expect(art(shipped)).toHaveLength(0);
+    const audio = (built: typeof all) => built.files.filter((file) => file.path.startsWith("content/media/snd-e"));
+    expect(audio(all)).toHaveLength(2);
+    expect(audio(shipped)).toHaveLength(0);
   });
 
   it("каталог без курса, его модулей и уроков", () => {

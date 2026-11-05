@@ -22,13 +22,11 @@ export function ensureAsset(
       try {
         blob = await source.blob(ref.url);
       } catch (error) {
-        // Без сети остаётся прежняя версия файла: лучше старая картинка или запись, чем никакой.
+        // Без сети остаётся прежняя версия файла: лучше старая запись, чем никакой.
         if (stored) return stored;
         throw error;
       }
       if (blob.size !== ref.bytes) throw new ContentError(`Файл ${ref.url} повреждён: размер не совпадает.`);
-      if (ref.mimeType === "image/svg+xml" && !(await blob.text()).includes("<svg"))
-        throw new ContentError(`Файл ${ref.url} повреждён: это не SVG.`);
       const asset: Asset = {
         id,
         kind: ref.kind,
@@ -94,7 +92,7 @@ export async function downloadLessonMedia(
   return { fetched, failed };
 }
 
-/** Без уборки каждая переозвучка или замена картинки оставляла бы на устройстве прежнюю копию. */
+/** Без уборки каждая переозвучка оставляла бы на устройстве прежнюю копию. */
 export async function pruneMedia(database: AppDatabase = db): Promise<number> {
   // Сводки из кэша могут отстать от соседней вкладки, поэтому удаление решает только полное чтение пакетов.
   const lessons = (await database.packages.toCollection().primaryKeys()) as string[];

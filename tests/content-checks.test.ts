@@ -110,34 +110,6 @@ describe("исходники: разбор и форма", () => {
   });
 });
 
-describe("картинки библиотеки", () => {
-  const picture = (svg: string): Files => ({
-    ...base(),
-    "pictures.yaml": { source: "Microsoft Fluent Emoji (Flat), MIT", words: { geia: "sun.svg" } },
-    "pictures/sun.svg": new TextEncoder().encode(svg),
-  });
-  it("чистая картинка проходит", () => {
-    expect(buildContent(write(picture('<svg viewBox="0 0 32 32"><path d="M0 0h1"/></svg>'))).packages).toHaveLength(1);
-  });
-  it.each([
-    ['<svg><image href="https://x.test/a.png"/></svg>', "растровое или встроенное"],
-    ['<svg onload="x()"><path d="M0 0"/></svg>', "обработчик события"],
-    ['<svg><path fill="url(https://x.test/a)"/></svg>', "url\\(\\) не на элемент"],
-    ["<svg><style>a{}</style></svg>", "стили"],
-    ['<svg><use xlink:href="https://x.test/a.svg"/></svg>', "ссылка не на элемент"],
-    ['<svg><use href = "https://x.test/a.svg"/></svg>', "ссылка не на элемент"],
-    ["<svg><SCRIPT>x()</SCRIPT></svg>", "скрипт"],
-    ['<svg><path style="fill:URL(https://x.test/a)"/></svg>', "url\\(\\) не на элемент"],
-  ])("%s отклоняется", (svg, reason) => {
-    expect(failure(picture(svg))).toMatch(new RegExp(`^pictures\\.yaml\\.words\\.geia: в sun\\.svg ${reason}`));
-  });
-  it("внутренняя ссылка на элемент файла допустима", () => {
-    expect(
-      buildContent(write(picture('<svg><clipPath id="a"/><path clip-path="url(#a)" d="M0 0"/></svg>'))).packages,
-    ).toHaveLength(1);
-  });
-});
-
 describe("сообщения и исходники при сборке", () => {
   it("текст после урока модуля-черновика называет причину", () => {
     const root = mkdtempSync(join(tmpdir(), "checks-"));

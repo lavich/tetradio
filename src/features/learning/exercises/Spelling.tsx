@@ -2,7 +2,6 @@ import { useEffect, useId, useState } from "react";
 import { checkAnswer, checkTextAnswer } from "../../../domain/text-answer";
 import { diffChars } from "../../../domain/spelling";
 import { maskWriting } from "../../../domain/syllables";
-import { WordArt } from "../../words/WordCardView";
 import { Tick } from "../../../shared/Tick";
 import { cx } from "../../../shared/cx";
 import { useProfile } from "../../../shared/language";
@@ -39,7 +38,7 @@ export function Corrected({ value, expected }: { value: string; expected: string
 
 /**
  * Написание слова по переводу или фразы целиком по её переводу. У фразы проверка без послаблений артиклю.
- * После ответа задание уходит с листа: перевод и картинка входят в раскрытие, отдельно они задвоились бы.
+ * После ответа задание уходит с листа: перевод входит в раскрытие, отдельно он задвоился бы.
  */
 export function Spelling({
   item,
@@ -123,11 +122,7 @@ export function Spelling({
     );
   return (
     <form id={formId} onSubmit={submit}>
-      <TaskHead
-        prompt={write}
-        meaning={prompt}
-        art={card.kind === "word" ? <WordArt word={card.word} className={exercise.pic} /> : undefined}
-      />
+      <TaskHead prompt={write} meaning={prompt} />
       <div className={cx(s.field, card.kind === "phrase" && s.fieldPhrase)}>
         <AnswerMask mask={mask} value={value} />
         <input

@@ -1,4 +1,4 @@
-/* Словарик урока: картинка на полях строки, слово печатью, формы и перевод мельче. */
+/* Словарик урока: слово печатью, формы и перевод мельче. */
 .vocab {
   list-style: none;
   margin: calc(var(--cell) / 2) 0 0;
@@ -38,12 +38,6 @@
   .vocabRow:hover {
     background: color-mix(in srgb, var(--primary) 6%, transparent);
   }
-}
-.thumb {
-  flex: none;
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
 }
 .vocabText {
   display: grid;

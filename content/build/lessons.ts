@@ -14,7 +14,6 @@ import {
   type LessonBlock,
   type LessonKind,
 } from "../../src/content/course.ts";
-import type { ArtReport } from "../art.ts";
 import { fail, LANGUAGE, nfc, text } from "./common.ts";
 import { mediaFor, type BuiltMedia } from "./media.ts";
 import type { ContentRoot, LessonItemSource } from "./sources.ts";
@@ -42,8 +41,6 @@ export interface LessonsInput {
   languages: Map<string, Language>;
   moduleOf: Map<string, { id: string; position: number; draft: boolean }>;
   media: BuiltMedia;
-  legacy: Set<string>;
-  art: ArtReport;
 }
 export interface VoicingReport {
   voiced: number;
@@ -61,7 +58,7 @@ function lineAudio(
   lessonId: string,
   where: string,
   shipped: boolean,
-  { sources, media, legacy, art, languages }: LessonsInput,
+  { sources, media, languages }: LessonsInput,
   report: VoicingReport,
   manifest: VoiceManifest,
 ) {
@@ -97,10 +94,7 @@ function lineAudio(
     }
     const assetId = `line-${lessonId}-${block.id as string}-${index + 1}`;
     const source = voices!.source.replaceAll("{voice}", voice);
-    media.set(
-      assetId,
-      mediaFor(assetId, audio as string, "audio", sources.files, { alt: "", source }, at, legacy, art),
-    );
+    media.set(assetId, mediaFor(assetId, audio as string, sources.files, source, at));
     report.voiced++;
     return assetId;
   });
@@ -108,7 +102,7 @@ function lineAudio(
 }
 
 export function buildLessons(input: LessonsInput) {
-  const { sources, words, phrases, courseOf, languages, moduleOf, media, legacy, art } = input;
+  const { sources, words, phrases, courseOf, languages, moduleOf, media } = input;
   const report: VoicingReport = {
     voiced: 0,
     unvoiced: new Map(),
@@ -173,16 +167,7 @@ export function buildLessons(input: LessonsInput) {
         const source = typeof rest.source === "string" ? rest.source : "";
         if (!source.trim()) fail(`${where}.blocks[${index}].source: у аудио нужен источник и право на использование`);
         const assetId = `snd-${id}-${rest.id as string}`;
-        const built = mediaFor(
-          assetId,
-          audio as string,
-          "audio",
-          sources.files,
-          { alt: "", source },
-          `${where}.blocks[${index}]`,
-          legacy,
-          art,
-        );
+        const built = mediaFor(assetId, audio as string, sources.files, source, `${where}.blocks[${index}]`);
         media.set(assetId, built);
         blockMedia.push(built.item);
         return { ...rest, audioAssetId: assetId };
@@ -208,12 +193,9 @@ export function buildLessons(input: LessonsInput) {
       const built = mediaFor(
         assetId,
         answer.file,
-        "audio",
         sources.files,
-        { alt: "", source: voices.source.replaceAll("{voice}", voices.narrator) },
+        voices.source.replaceAll("{voice}", voices.narrator),
         `${where}: ${answer.file} — npm run voices -- answers`,
-        legacy,
-        art,
       );
       media.set(assetId, built);
       blockMedia.push(built.item);
@@ -223,10 +205,7 @@ export function buildLessons(input: LessonsInput) {
     const packWords = items.filter((item) => item.kind === "word").map((item) => words.get(item.id)!);
     const packPhrases = items.filter((item) => item.kind === "phrase").map((item) => phrases.get(item.id)!);
     const packMedia = [
-      ...[
-        ...packWords.flatMap((word) => [word.imageAssetId, word.audioAssetId]),
-        ...packPhrases.map((p) => p.audioAssetId),
-      ]
+      ...[...packWords.map((word) => word.audioAssetId), ...packPhrases.map((p) => p.audioAssetId)]
         .filter((ref): ref is string => !!ref)
         .map((ref) => media.get(ref)!.item),
       ...blockMedia,

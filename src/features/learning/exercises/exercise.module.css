@@ -58,14 +58,6 @@
 .note {
   margin: 6px 0 0;
 }
-.cardRow > .pic {
-  flex: none;
-  width: 96px;
-  height: auto;
-  aspect-ratio: 16 / 11;
-  object-fit: cover;
-  border-radius: 10px;
-}
 .reveal {
   margin-top: 16px;
   padding-top: 12px;

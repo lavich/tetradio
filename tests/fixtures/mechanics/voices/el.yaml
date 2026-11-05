@@ -1,0 +1,9 @@
+# Диктор карточек механик; записи слов — короткая тишина из course-demo, не синтез.
+source: Синтез речи Google Cloud TTS, голос Chirp 3 HD {voice}
+language: el-GR
+prefix: el-GR-Chirp3-HD-
+pools:
+  female: [Kore]
+  male: [Charon]
+narrator: Kore
+characters: {}

@@ -181,8 +181,6 @@ describe("сборка текстов для чтения", () => {
         words: new Map(built.words.map((word) => [word.id, word])),
         phrases: new Map(built.phrases.map((phrase) => [phrase.id, phrase])),
         media: new Map(),
-        legacy: new Set(),
-        art: built.art,
       }),
     ).toThrow(/префикс r- занят/);
   });

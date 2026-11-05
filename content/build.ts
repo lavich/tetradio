@@ -9,7 +9,6 @@ import {
   type PackagePhrase,
   type PackageWord,
 } from "../src/content/schema.ts";
-import { LEGACY_FILE, type ArtReport } from "./art.ts";
 import { checkCardAudio, type CardVoicing } from "./build/card-audio.ts";
 import { VERB_GROUPS } from "../src/domain/card-fields.ts";
 import { buildCards } from "./build/cards.ts";
@@ -25,8 +24,7 @@ import { packLessons, type BuiltFile } from "./build/output.ts";
 import { checkSources, checkSourceScripts, readSources, type ContentRoot } from "./build/sources.ts";
 
 export { LANGUAGE } from "./build/common.ts";
-export { audioAssetId, imageAssetId, phraseRevisionOf, revisionOf } from "./build/cards.ts";
-export { ART_SOURCE } from "./build/media.ts";
+export { audioAssetId, phraseRevisionOf, revisionOf } from "./build/cards.ts";
 export { readSources } from "./build/sources.ts";
 export type {
   ContentRoot,
@@ -49,7 +47,6 @@ export interface BuiltContent {
   words: PackageWord[];
   phrases: PackagePhrase[];
   sources: ContentRoot;
-  art: ArtReport;
   marks: MarksReport;
   voicing: VoicingReport;
   cardVoicing: CardVoicing;
@@ -69,8 +66,8 @@ export interface BuiltContent {
 /**
  * Публикация контента. Исходники — YAML: одно слово — один файл в `words/<курс>/`, фраза — файл
  * в `phrases/<курс>/`, урок — упорядоченный список карточек в `lessons/`
- * (`words` для словарного урока либо `items` из пар `{kind, id}` для смешанного), иллюстрации и аудио —
- * отдельные файлы в `art/` и `audio/`. Идентификатор карточки — поле `id` (короткий `w001`/`p001` из лексикона),
+ * (`words` для словарного урока либо `items` из пар `{kind, id}` для смешанного), аудио — отдельные
+ * файлы в `audio/`. Идентификатор карточки — поле `id` (короткий `w001`/`p001` из лексикона),
  * а без него — имя файла: прогресс пользователя не зависит от переименования файлов.
  * Генератор собирает каталог, неизменяемые пакеты уроков и медиа; клиент исходники не читает.
  */
@@ -98,7 +95,7 @@ export function buildContent(
   checkSourceScripts(sources, courseLanguages, languages, moduleLanguages);
   const { voicing: cardVoicing, sources: voiced } = checkCardAudio(sources, courseLanguages);
   const { words, phrases } = buildCards(voiced, courseLanguages);
-  const { legacy, art, media } = buildMedia(voiced, words, phrases, cardVoicing.sources);
+  const media = buildMedia(voiced, words, phrases, cardVoicing.sources);
   const { used, lessonsForModule, drafts, voicing } = buildLessons({
     sources,
     words,
@@ -107,12 +104,10 @@ export function buildContent(
     languages,
     moduleOf,
     media,
-    legacy,
-    art,
   });
   // Слова прошлых уроков известны только после разбора всех уроков, поэтому версии считаются после разметки.
   const marks = markCourses(courses, modules, moduleOf, drafts, words, phrases);
-  const readings = buildReadings({ sources, courses, modules, moduleOf, drafts, words, phrases, media, legacy, art });
+  const readings = buildReadings({ sources, courses, modules, moduleOf, drafts, words, phrases, media });
   const unfamiliar = checkQuestions({ courses, modules, moduleOf, drafts, words, phrases });
   const { packages, entries, files } = packLessons(drafts, marks, readings.byLesson, readings.mediaOf);
   const partialModules = checkCoverage({
@@ -159,7 +154,6 @@ export function buildContent(
     hidden: [...hidden],
     checked,
     sources,
-    art,
     marks: marks.report,
     voicing,
     cardVoicing,
@@ -211,7 +205,6 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     console.error(`Бюджеты контента нарушены:\n- ${violations.join("\n- ")}`);
     process.exit(1);
   }
-  console.log(`Иллюстрации: ${built.art.files}, вне палитры (art/${LEGACY_FILE}): ${built.art.legacy}`);
   const counts = [...built.marks.lessons.values()];
   const sum = (key: "lesson" | "earlier") => counts.reduce((total, entry) => total + entry[key], 0);
   console.log(

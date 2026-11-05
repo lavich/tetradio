@@ -20,7 +20,6 @@
     "dist",
     ".e2e",
     "public/content",
-    "docs/art-sheet.html",
     ".vitest",
     "test-results",
     "playwright-report",

@@ -14,7 +14,6 @@ import { canonical, fail, hash, LANGUAGE, nfc, pick, text } from "./common.ts";
 import { conjugate, hasParadigm, irregularPast, principal, verbGroup } from "./paradigm.ts";
 import type { ContentRoot, PhraseSource, Sourced, WordSource } from "./sources.ts";
 
-export const imageAssetId = (wordId: string) => `img-${wordId}`;
 export const audioAssetId = (wordId: string) => `snd-${wordId}`;
 export const revisionOf = (word: Omit<PackageWord, "revision">) => hash(canonical(pick(word, SHIPPED_FIELDS)));
 export const phraseRevisionOf = (phrase: Omit<PackagePhrase, "revision">) =>
@@ -125,7 +124,7 @@ function groupOf(
   return { group: derived ?? (src.group as VerbGroup), ...((src.irregular ?? rule) ? { irregular: true } : {}) };
 }
 
-function describe(id: string, src: Sourced<WordSource>, language: Language, picture = false): PackageWord {
+function describe(id: string, src: Sourced<WordSource>, language: Language): PackageWord {
   const where = `words/${src.file}`;
   checkId(id, where);
   const greek = text(src.greek, `${where}.greek`)!,
@@ -175,7 +174,6 @@ function describe(id: string, src: Sourced<WordSource>, language: Language, pict
   if (paradigm) draft.paradigm = paradigm;
   Object.assign(draft, groupOf(src, greek, paradigm, where));
   if (source) draft.source = source;
-  if (src.image || picture) draft.imageAssetId = imageAssetId(id);
   if (src.audio) draft.audioAssetId = audioAssetId(id);
   return { ...draft, revision: revisionOf(draft) };
 }
@@ -238,12 +236,8 @@ function sharedAcrossCourses(
 export function buildCards(sources: ContentRoot, languages: Map<string, Language>) {
   const words = new Map<string, PackageWord>();
   const byKey = new Map<string, string>();
-  for (const [picturedId] of sources.pictures.words)
-    if (!sources.words.has(picturedId)) fail(`pictures.yaml: слова ${picturedId} нет в words/`);
   for (const [id, src] of sources.words) {
-    if (src.image && sources.pictures.words.has(id))
-      fail(`words/${src.file}: у слова своя иллюстрация и картинка из pictures.yaml — оставьте одну`);
-    const word = describe(id, src, languages.get(src.course) ?? LANGUAGE, sources.pictures.words.has(id));
+    const word = describe(id, src, languages.get(src.course) ?? LANGUAGE);
     const key = wordKey(word.greek, word.russian);
     const twin = byKey.get(key);
     if (twin)

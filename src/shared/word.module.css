@@ -1,12 +1,3 @@
-.art {
-  width: 100%;
-  aspect-ratio: 16/11;
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--art-bg);
-  display: block;
-  object-fit: cover;
-}
 .greek {
   font-size: 40px;
   font-weight: 700;

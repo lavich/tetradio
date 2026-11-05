@@ -5,7 +5,6 @@ ipa: /o paˈpus/
 forms: мн. οι παππούδες
 source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
 verified: true
-image: ο-παππούς.svg
 reading:
   - { text: "ππ", ipa: "p", explanation: "двойная согласная читается как одна" }
 examples:
