@@ -2,19 +2,21 @@ import { expect, test } from "../playwright-test";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { installLessons, ready } from "./helpers";
+import { installLessons, ready, recordPlays } from "./helpers";
 
 test("полная копия переносит слова, уроки и медиа в чистый профиль", async ({ browser }) => {
   const source = await browser.newContext();
+  await recordPlays(source);
   const page = await source.newPage();
   await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
-  // Картинку слова скачивает просмотр карточки.
+  // Запись слова скачивает первое прослушивание.
   await page.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
-  await page.getByRole("searchbox").fill("φίλος");
-  await page.getByRole("link", { name: /ο φίλος/ }).click();
-  await expect(page.getByTestId("word-art")).toBeVisible();
+  await page.getByRole("searchbox").fill("πόλη");
+  await page.getByRole("link", { name: /η πόλη/ }).click();
+  await page.getByRole("button", { name: "Послушать слово" }).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __played: string[] }).__played.length)).toBe(1);
 
   await page.getByRole("navigation").getByRole("link", { name: "Прогресс" }).click();
   await page.getByRole("link", { name: "Настройки и данные" }).click();
@@ -47,7 +49,7 @@ test("полная копия переносит слова, уроки и ме�
       "meta",
     ]),
   );
-  // Картинка «ο φίλος» скачана при просмотре карточки и входит в копию; остальные медиа не тянулись.
+  // Запись «η πόλη» скачана при прослушивании и входит в копию; остальные медиа не тянулись.
   expect(parsed.data.tables.find((table: { name: string }) => table.name === "assets").rowCount).toBe(1);
   // Курс подписан открытием урока, поэтому в профиле лежат пакеты всех его уроков — по одному на урок.
   const rows = (name: string) => parsed.data.tables.find((table: { name: string }) => table.name === name).rowCount;
@@ -56,6 +58,9 @@ test("полная копия переносит слова, уроки и ме�
   await source.close();
 
   const clean = await browser.newContext();
+  await recordPlays(clean);
+  // Запись приходит из восстановленной базы: сеть к файлам медиа закрыта.
+  await clean.route("**/content/media/**", (route) => route.abort());
   const fresh = await clean.newPage();
   await fresh.goto("/app/");
   await ready(fresh);
@@ -72,9 +77,12 @@ test("полная копия переносит слова, уроки и ме�
   expect(saved.suggestedFilename()).toContain("before-restore");
   await expect(fresh.getByText("Данные восстановлены полностью.")).toBeVisible();
   await fresh.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
-  await fresh.getByRole("searchbox").fill("φίλος");
-  await fresh.getByRole("link", { name: /ο φίλος/ }).click();
-  await expect(fresh.getByTestId("word-art")).toBeVisible();
+  await fresh.getByRole("searchbox").fill("πόλη");
+  await fresh.getByRole("link", { name: /η πόλη/ }).click();
+  await fresh.getByRole("button", { name: "Послушать слово" }).click();
+  await expect
+    .poll(() => fresh.evaluate(() => (window as unknown as { __played: string[] }).__played))
+    .toEqual([expect.stringMatching(/^blob:/)]);
   await fresh.goto("/app/words");
   await expect(fresh.getByRole("link", { name: /ο φίλος/ })).toBeVisible(); // уроки и слова на месте
   await clean.close();

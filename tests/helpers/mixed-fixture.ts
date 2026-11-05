@@ -83,7 +83,7 @@ export interface MixedFiles {
 /** Сборка смешанной фикстуры с переопределениями; исходники проекта копируются во временную папку и удаляются после. */
 export function buildMixed({ phrases = MIXED_PHRASES, lesson, mutate }: MixedFiles = {}): BuiltContent {
   const root = mkdtempSync(join(tmpdir(), "tetradio-mixed-"));
-  for (const entry of ["words", "lessons", "art", "courses", "phrases", "audio", "pictures", "pictures.yaml"])
+  for (const entry of ["words", "lessons", "courses", "phrases", "audio", "voices"])
     if (existsSync(join(FIXTURE, entry))) cpSync(join(FIXTURE, entry), join(root, entry), { recursive: true });
   mkdirSync(join(root, "phrases", "mechanics"), { recursive: true });
   for (const [id, doc] of Object.entries(phrases))

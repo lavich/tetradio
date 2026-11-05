@@ -26,7 +26,6 @@ import {
   type VoiceMap,
 } from "./voices.ts";
 import { sentencesOf } from "../../src/domain/sentences.ts";
-import type { ArtReport } from "../art.ts";
 import type { PackageMedia } from "../../src/content/schema.ts";
 import { fail } from "./common.ts";
 import type { ContentRoot, CourseCard, ReadingSource } from "./sources.ts";
@@ -153,25 +152,12 @@ interface Input {
   phrases: Map<string, PackagePhrase>;
   /** Общий словарь медиа: записи предложений попадают в него и в пакет открывающего урока. */
   media: BuiltMedia;
-  legacy: Set<string>;
-  art: ArtReport;
 }
 /**
  * Тексты курса по урокам `after`. Словарь текста — карточки и глоссы уроков курса до открывающего включительно
  * (по порядку программы): их учащийся прошёл, когда текст открылся.
  */
-export function buildReadings({
-  sources,
-  courses,
-  modules,
-  moduleOf,
-  drafts,
-  words,
-  phrases,
-  media,
-  legacy,
-  art,
-}: Input) {
+export function buildReadings({ sources, courses, modules, moduleOf, drafts, words, phrases, media }: Input) {
   const manifest = parseManifest(sources.files.get(MANIFEST_FILE));
   const mediaOf = new Map<string, PackageMedia[]>();
   for (const id of drafts.keys())
@@ -315,12 +301,9 @@ export function buildReadings({
         const built = mediaFor(
           assetId,
           file,
-          "audio",
           sources.files,
-          { alt: "", source: voices.source.replaceAll("{voice}", voice) },
+          voices.source.replaceAll("{voice}", voice),
           `${where}: ${file} — npm run voices -- readings`,
-          legacy,
-          art,
         );
         media.set(assetId, built);
         mediaOf.set(src.after, [...(mediaOf.get(src.after) ?? []), built.item]);

@@ -261,10 +261,9 @@ describe("раскрытие материала после письменног�
     expect(feedback(host)!.textContent).not.toContain("Правильно:");
   });
 
-  it("задание не задваивается: перевод и картинка только в карточке", async () => {
-    const host = await showSpelling(wordItem({ imageAssetId: "img-1" }));
+  it("задание не задваивается: перевод только в карточке", async () => {
+    const host = await showSpelling(wordItem());
     await type(host, "λάθος");
-    expect(host.querySelectorAll("img").length).toBeLessThanOrEqual(1);
     const shown = host.textContent!.split("дом").length - 1;
     expect(shown).toBe(1);
     expect(host.querySelector("input")).toBeNull();

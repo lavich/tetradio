@@ -1,4 +1,5 @@
 import { expect, test } from "../playwright-test";
+import { recordPlays } from "./helpers";
 
 /** Сколько записей в хранилищах браузерной базы: просмотр по ссылке не должен ничего в неё положить. */
 const stored = (page: import("@playwright/test").Page) =>
@@ -33,7 +34,6 @@ test.describe("ссылка на слово", () => {
     await page.goto("/app/share/word/w093");
     await expect(page.getByText("ο παππούς", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("дедушка", { exact: true })).toBeVisible();
-    await expect(page.getByTestId("word-art")).toBeVisible();
     await expect(page.getByTestId("shared-lesson")).toHaveText(/^Слово из урока 1\.4/);
     await expect(page.locator("main a[href*='/lessons']")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Потренировать слово" })).toHaveCount(0);
@@ -47,6 +47,15 @@ test.describe("ссылка на слово", () => {
       media: 0,
       assets: 0,
     });
+  });
+  test("запись слова по ссылке звучит по адресу пакета и в базу не попадает", async ({ context, page }) => {
+    await recordPlays(context);
+    await page.goto("/app/share/word/w042");
+    await page.getByRole("button", { name: "Послушать слово" }).click();
+    await expect
+      .poll(() => page.evaluate(() => (window as unknown as { __played: string[] }).__played))
+      .toEqual([expect.stringMatching(/\/content\/media\/snd-w042@\w+\.mp3$/)]);
+    expect(await stored(page)).toMatchObject({ media: 0, assets: 0 });
   });
   test("неизвестное слово — «Слово не найдено»", async ({ page }) => {
     await page.goto("/app/share/word/w99-99");

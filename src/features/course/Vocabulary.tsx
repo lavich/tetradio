@@ -5,29 +5,17 @@ import type { LessonItem } from "../../domain/types";
 import type { LanguageProfile } from "../../domain/language";
 import { playText, playWord, type PlayResult } from "../../shared/audio";
 import { noVoice, useProfile } from "../../shared/language";
-import { useAssetUrl } from "../../shared/store";
 import { VerbForms } from "../../shared/VerbForms";
 import { VerbGroupRow } from "../../shared/VerbGroupLabel";
 import { livePhrases, liveWords } from "../../storage/queries";
 import css from "./vocabulary.module.css";
-
-/** Картинка слова из библиотеки; пока файл не загружен — пустое место того же размера, чтобы строка не прыгала. */
-function Thumb({ assetId }: { assetId?: string }) {
-  const url = useAssetUrl(assetId);
-  if (!assetId) return null;
-  return url ? (
-    <img className={css.thumb} src={url} alt="" role="presentation" />
-  ) : (
-    <span className={css.thumb} aria-hidden />
-  );
-}
 
 const heard = (profile: LanguageProfile) => (result: PlayResult) => {
   if (result === "none") toast(noVoice(profile));
   if (result === "error") toast("Не удалось воспроизвести произношение.");
 };
 
-/** Слова и фразы урока списком, как в тетради-словарике: картинка, слово с артиклем, формы, перевод. */
+/** Слова и фразы урока списком, как в тетради-словарике: слово с артиклем, формы, перевод. */
 export function VocabularyList({ items }: { items: LessonItem[] }) {
   const wordIds = items.filter((item) => item.ref.kind === "word").map((item) => item.ref.id);
   const phraseIds = items.filter((item) => item.ref.kind === "phrase").map((item) => item.ref.id);
@@ -50,7 +38,6 @@ export function VocabularyList({ items }: { items: LessonItem[] }) {
                 onClick={() => void playWord(word, profile).then(heard(profile))}
               >
                 <span className="sr-only select-none">Произнести: </span>
-                <Thumb assetId={word.imageAssetId} />
                 <span className={css.vocabText}>
                   <span className={css.vocabGreek} lang={profile.code}>
                     {word.greek}

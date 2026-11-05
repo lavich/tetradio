@@ -6,7 +6,6 @@ forms: мн. οι γιατροί
 note: "о женщине: η γιατρός"
 source: Лексикон курса, модуль 03 (docs/course/lexicon/03.tsv)
 verified: true
-image: ο-γιατρός.svg
 reading:
   - { text: "γι", ipa: "ʝ", explanation: "γι перед гласной звучит как й" }
 examples:

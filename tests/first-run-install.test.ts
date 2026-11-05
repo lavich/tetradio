@@ -168,24 +168,23 @@ describe("уборка медиа", () => {
   it("мусор обновления, прерванного до уборки, удаляет следующая уборка", async () => {
     await installed();
     const shared = new Set(
-      LESSONS.filter((id) => id !== "mech-1").flatMap((id) => packageOf(id).media.map((m) => m.id)),
+      LESSONS.filter((id) => id !== "mech-2").flatMap((id) => packageOf(id).media.map((m) => m.id)),
     );
-    const dropped = packageOf("mech-1").media.find((item) => !shared.has(item.id))!;
-    const rest = packageOf("mech-1").media.filter((item) => item !== dropped);
-    const next = { ...packageOf("mech-1"), version: `${packageOf("mech-1").version}-next`, media: rest };
+    const dropped = packageOf("mech-2").media.find((item) => !shared.has(item.id))!;
+    expect(dropped).toBeDefined();
+    const rest = packageOf("mech-2").media.filter((item) => item !== dropped);
+    const next = { ...packageOf("mech-2"), version: `${packageOf("mech-2").version}-next`, media: rest };
     next.words = next.words.map((word) =>
-      word.imageAssetId === dropped.id || word.audioAssetId === dropped.id
-        ? { ...word, imageAssetId: undefined, audioAssetId: undefined }
-        : word,
+      word.audioAssetId === dropped.id ? { ...word, audioAssetId: undefined } : word,
     );
-    const url = `content/packages/mech-1@${next.version}.json`;
+    const url = `content/packages/mech-2@${next.version}.json`;
     const catalog = {
       ...content.catalog,
-      lessons: content.catalog.lessons.map((l) => (l.id === "mech-1" ? { ...l, version: next.version, url } : l)),
+      lessons: content.catalog.lessons.map((l) => (l.id === "mech-2" ? { ...l, version: next.version, url } : l)),
     };
     const updated = memoryFetcher(content, { "content/catalog.json": catalog, [url]: next });
     await refreshCatalog(db, updated);
-    await installLesson("mech-1", db, updated, false);
+    await installLesson("mech-2", db, updated, false);
     expect(await db.assets.get(dropped.id)).toBeDefined();
     await lessonOutlines(LESSONS, db);
     expect(await media.pruneMedia(db)).toBe(1);

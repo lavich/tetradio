@@ -54,7 +54,6 @@ export interface Word {
   irregular?: true;
   segments: Segment[];
   examples: Example[];
-  imageAssetId?: string;
   audioAssetId?: string;
   verified: boolean;
   source?: string;

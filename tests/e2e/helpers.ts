@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type BrowserContext, type Page } from "@playwright/test";
 
 /** Отказ хранилища как у WebKit после сна: чтение IndexedDB бросает `UnknownError` до следующего `indexedDB.open` (или навсегда). */
 export async function breakStorage(page: Page, permanent = false) {
@@ -405,3 +405,24 @@ export async function firstWords(page: Page, count: number, databaseName = "tetr
     [count, databaseName] as const,
   );
 }
+
+/** Подменный `<audio>`: запоминает адрес каждой записи и «доигрывает» её через миг. */
+export const recordPlays = (context: BrowserContext) =>
+  context.addInitScript(() => {
+    const played: string[] = [];
+    (window as unknown as { __played: string[] }).__played = played;
+    class FakeAudio extends EventTarget {
+      constructor(public src = "") {
+        super();
+      }
+      playbackRate = 1;
+      load() {}
+      pause() {}
+      play() {
+        played.push(this.src);
+        setTimeout(() => this.dispatchEvent(new Event("ended")), 5);
+        return Promise.resolve();
+      }
+    }
+    Object.defineProperty(window, "Audio", { value: FakeAudio, configurable: true });
+  });

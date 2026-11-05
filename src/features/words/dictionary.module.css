@@ -193,13 +193,6 @@
   font-size: 15px;
   color: var(--muted-foreground);
 }
-.art {
-  flex: none;
-  width: 72px;
-  height: auto;
-  aspect-ratio: 16 / 11;
-  border-radius: 10px;
-}
 .meaning {
   margin: 12px 0 0;
   font-family: var(--font-print);

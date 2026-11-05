@@ -31,7 +31,7 @@ const mixed: Record<string, unknown> = {
     { kind: "word", id: word.id, position: 1 },
     { kind: "phrase", id: "p-2", position: 2 },
   ],
-  media: content.packages[0].media.filter((item) => item.id === word.imageAssetId || item.id === word.audioAssetId),
+  media: content.packages[0].media.filter((item) => item.id === word.audioAssetId),
 };
 
 describe("смешанный пакет", () => {

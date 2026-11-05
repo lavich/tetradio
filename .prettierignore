@@ -5,7 +5,6 @@ test-results
 playwright-report
 .playwright-mcp
 tsconfig.tsbuildinfo
-docs/art-sheet.html
 
 # Файлы, которые перезаписывает не человек: prettier будет с ними воевать.
 # Эталон планировщика тест пишет сам (JSON.stringify(..., null, 1) в plan-golden.test.ts),
@@ -15,7 +14,6 @@ tests/fixtures
 
 # Исходники контента: их форму задаёт и проверяет content/build.ts,
 # переносы и кавычки там не косметика, а часть сверки с материалом.
-content/art
 content/words
 content/phrases
 content/lessons

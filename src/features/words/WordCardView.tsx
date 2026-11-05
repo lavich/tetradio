@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { Example, Word } from "../../domain/types";
 import { coreWord, stressNote, stressPosition } from "../../domain/phonetics";
 import { playWord, speakPhrase, useAudioKind, useVoice } from "../../shared/audio";
-import { useAssetSource, useAssetUrl, useWord } from "../../shared/store";
+import { useAssetSource, useWord } from "../../shared/store";
 import ui from "../../shared/ui.module.css";
 import wordCss from "../../shared/word.module.css";
 import { cx } from "../../shared/cx";
@@ -28,13 +28,6 @@ function Box({ bare, label, children }: { bare?: boolean; label?: string; childr
       <CardContent>{children}</CardContent>
     </Card>
   );
-}
-
-export function WordArt({ word, hidden, className }: { word: Word; hidden?: boolean; className?: string }) {
-  const url = useAssetUrl(hidden ? undefined : word.imageAssetId);
-  if (hidden || !word.imageAssetId) return null;
-  if (!url) return <div className={cx(wordCss.art, className)} aria-hidden />;
-  return <img className={cx(wordCss.art, className)} src={url} alt="" role="presentation" data-testid="word-art" />;
 }
 
 /** `quiet` — тихая кнопка в строке листа занятия: обводка и чернила вместо заливки. */
@@ -81,11 +74,10 @@ export function SpeakButton({
   );
 }
 
-/** Верх карточки слова: иллюстрация, написание с IPA, озвучка и перевод — общий для экрана слова и просмотра по ссылке. */
+/** Верх карточки слова: написание с IPA, озвучка и перевод — общий для экрана слова и просмотра по ссылке. */
 export function WordSummary({ word }: { word: Word }) {
   return (
     <>
-      <WordArt word={word} />
       <div className={cx(ui.row, ui.between)} style={{ margin: "16px 0 2px", gap: 12 }}>
         <div className={ui.grow} style={{ minWidth: 0 }}>
           <p className={wordCss.greek} style={{ margin: 0 }}>

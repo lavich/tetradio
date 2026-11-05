@@ -113,34 +113,3 @@ export function packageAssetSource(pack: ContentPackage): AssetSource {
 }
 export const AssetSourceContext = createContext<AssetSource>(dbAssetSource);
 export const useAssetSource = () => useContext(AssetSourceContext);
-
-export function useAssetUrl(id: string | undefined): string | null {
-  const source = useAssetSource();
-  const [url, setUrl] = useState<string | null>(null);
-  useEffect(() => {
-    let owned: string | null = null,
-      alive = true;
-    if (!id) {
-      setUrl(null);
-      return;
-    }
-    source
-      .url(id)
-      .then((next) => {
-        if (!alive) {
-          if (next) releaseAssetUrl(next);
-          return;
-        }
-        owned = next;
-        setUrl(next);
-      })
-      .catch(() => {
-        if (alive) setUrl(null);
-      });
-    return () => {
-      alive = false;
-      if (owned) releaseAssetUrl(owned);
-    };
-  }, [id, source]);
-  return url;
-}

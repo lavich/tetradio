@@ -1,14 +1,16 @@
 import { expect, test } from "../playwright-test";
-import { installLessons, ready } from "./helpers";
+import { installLessons, ready, recordPlays } from "./helpers";
 
 test("работает без сети после закрытия страницы для скачанного урока", async ({ context, page }) => {
+  await recordPlays(context);
   await page.goto("/app/");
   await ready(page);
   await installLessons(page, ["mech-2"]);
-  // Картинка слова скачивается при просмотре карточки и дальше читается из базы.
+  // Запись слова скачивается при первом прослушивании и дальше читается из базы.
   await page.goto("/app/words");
-  await page.getByRole("link", { name: /ο φίλος/ }).click();
-  await expect(page.getByTestId("word-art")).toBeVisible();
+  await page.getByRole("link", { name: /η πόλη/ }).click();
+  await page.getByRole("button", { name: "Послушать слово" }).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __played: string[] }).__played.length)).toBe(1);
   await page.goto("/app/");
   await ready(page);
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));
@@ -48,10 +50,16 @@ test("работает без сети после закрытия страни�
   await offlinePage.getByRole("navigation").getByRole("link", { name: "Слова" }).click();
   await offlinePage.getByRole("searchbox").fill("φίλος");
   await offlinePage.getByRole("link", { name: /ο φίλος/ }).click();
-  // Картинка читается из IndexedDB, а не из сети.
-  await expect(offlinePage.getByTestId("word-art")).toBeVisible();
   await expect(offlinePage.getByText("Ο φίλος μας είναι παντρεμένος.")).toBeVisible();
   await offlinePage.getByRole("button", { name: "Потренировать слово" }).click();
   await expect(offlinePage.getByText("Новое слово")).toBeVisible();
+  // Запись читается из IndexedDB, а не из сети.
+  await offlinePage.goto("/app/words");
+  await offlinePage.getByRole("searchbox").fill("πόλη");
+  await offlinePage.getByRole("link", { name: /η πόλη/ }).click();
+  await offlinePage.getByRole("button", { name: "Послушать слово" }).click();
+  await expect
+    .poll(() => offlinePage.evaluate(() => (window as unknown as { __played: string[] }).__played))
+    .toEqual([expect.stringMatching(/^blob:/)]);
   await context.setOffline(false);
 });

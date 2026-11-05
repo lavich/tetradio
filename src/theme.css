@@ -60,7 +60,6 @@
   --same-bg: #dcfce7;
   --wrong-bg: #fee2e2;
   --track: #e3e3dd;
-  --art-bg: #eef2fa;
   --speak-disabled: #c9ced8;
   --shadow: rgba(0, 0, 0, 0.22);
   --nav-bg: color-mix(in srgb, var(--card) 97%, transparent);
@@ -95,7 +94,6 @@
   --input: color-mix(in srgb, var(--foreground) 14%, transparent);
   --ring: var(--primary);
   --track: color-mix(in srgb, var(--foreground) 12%, transparent);
-  --art-bg: color-mix(in srgb, var(--primary) 8%, var(--card));
   --speak-disabled: color-mix(in srgb, var(--foreground) 25%, var(--background));
   /* Клетка и линия полей выводятся из темы клиента: тетрадь не спорит с Telegram. */
   --grid: color-mix(in srgb, var(--foreground) 9%, transparent);
